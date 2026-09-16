@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 1.4.3
+version: 1.4.4
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -11,76 +11,74 @@ description: >-
   fiber adapter panels or MTP/MPO cassettes for up to 144 fibers in 1U.
 profile: optical
 provenance:
-  method: >-
-    FIGURES FIRST, FROM THE VENDOR'S OWN DIMENSIONED DRAWING. Every number in
-    `chassis` below is read directly off page 7 of
-    working/intake/fs/fhd/datasheets/fhd-1ufce-fiber-enclosure-datasheet.pdf,
-    which carries a dimensioned front view and a dimensioned top view of this
-    exact part - the only page in the corpus that dimensions anything. Nothing
-    else about this device is measured; what is not on that page is estimated
-    and said so below, or left undrawn.
-  model: >-
-    the datasheet's own "Fiber Enclosure Capacity" table names #70361 as the
-    ordering ID for "FHD 1U slide-out rack mount enclosure", model FHD-1UFCE,
-    "4 ports", "144F". The features list on page 1 adds "Mounts to standard EIA
-    19" rack rails, holds up to 4x FAPs or MTP® Cassettes."
-  chassis: >-
-    page 7, front view: 448.0mm (17.64in) body width, dimensioned on its own
-    line below the 482.6mm (19in) rack-width line - two separate dimensions,
-    not one measured against the other. 44.0mm (1.73in) height, the only
-    figure on that view's right edge. Page 7, top view: 432.8mm (17.04in)
-    depth. All three also appear in the spec table on the same page -
-    "Dimensions (HxWxD): 1.73"x19"x17.04" (44x482.6x432.8mm)" - which is what
-    corroborates the drawing rather than the other way round. `ru: 1` from
-    that same table's "No. of Rack Spaces: 1U".
-  overall-depth: >-
-    the top view carries a second, larger depth line outside the 432.8mm body
-    - 467.2mm (18.39in). That is the envelope INCLUDING whatever projects from
-    the rear (the drawer's cable-management arm, most likely), not the body
-    depth, and the spec table's own HxWxD row confirms 432.8 as the figure it
-    means by "depth". Recorded here because the drawing shows it; not used as
-    `chassis.depth`, which the two agreeing sources both give as 432.8.
-  ears: >-
-    482.6mm (19in) on the same front-view dimension line as the 448.0mm body -
-    the standard EIA-310 rack width. Drawn as common/rack-ear@1 outside the
-    body under the optional tag `ears`, the same generic ear every other 19in
-    device in this library uses; its own 14.0mm width is that component's
-    convention, not a second measurement of this drawing.
-  bays: >-
-    FOUR IS COUNTED, NOT MEASURED. The capacity table's "4 ports" and the
-    features list's "holds up to 4x FAPs or MTP® Cassettes" agree on the
-    number; no page in this datasheet dimensions an empty bay opening. Each
-    bay is sized at 108.97 x 35.05 - the FHD module envelope, a FAMILY
-    CONSTANT common to every cassette this format admits, not a figure this
-    device measures itself or that belongs to any one cassette. It was first
-    measured off FS's own render for fs/fhd-1mtp6lcd-os2-a@1 (SKU 57016), and
-    `panel_measure` refuses to scale ANY FHD face-on render at all unless
-    that scale reproduces the same 35.05mm height - which is what makes this
-    a constant worth carrying rather than a per-cassette reading. THE RULE,
-    NOT A COUNT: every FHD cassette this library models seats in every bay's
-    `accepts`, because the FHD format defines one shared envelope for the
-    slot rather than a per-cassette one - see each bay's own `accepts` list
-    below for which cassettes that is today. The bay geometry does not
-    depend on which of them seats in it, because every FHD module this plan
-    might still add shares this one envelope by definition of the format
-    (the format's own name for it). The four bays sit contiguous across
-    the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each side, centred
-    top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 = 4.475mm.
-  front-panel-detail: >-
-    ESTIMATED BY OMISSION. Page 1's product photograph shows two extraction
-    handles near the panel ends and an FS logo left of centre, but page 7's
-    dimensioned drawing - the only source this device transcribes figures
-    from - locates none of them, and a three-quarter photograph is not a
-    source panel_measure can rectify. None of that detail is drawn; see
-    `gaps` below.
-  envelope-faces: >-
-    rear, top, bottom, left and right carry the ENVELOPE ONLY, the same
-    treatment dcp-2 gives the four sides no photograph resolved. Top and
-    bottom are 448.0 x 432.8 and left/right are 432.8 x 44.0 - both pairs
-    built from the same `chassis` figures already sourced above, not a
-    second measurement. No surface detail (screws, the slide rail, the
-    cable-management arm the 467.2mm overall depth implies) is drawn on any
-    of the five; see `gaps` below.
+  method:
+    note: >-
+      FIGURES FIRST, FROM THE VENDOR'S OWN DIMENSIONED DRAWING. Every number in `chassis` below is
+      read directly off page 7 of
+      working/intake/fs/fhd/datasheets/fhd-1ufce-fiber-enclosure-datasheet.pdf, which carries a
+      dimensioned front view and a dimensioned top view of this exact part - the only page in the
+      corpus that dimensions anything. Nothing else about this device is measured; what is not on
+      that page is estimated and said so below, or left undrawn.
+  model:
+    note: >-
+      the datasheet's own "Fiber Enclosure Capacity" table names #70361 as the ordering ID for
+      "FHD 1U slide-out rack mount enclosure", model FHD-1UFCE, "4 ports", "144F". The features
+      list on page 1 adds "Mounts to standard EIA 19" rack rails, holds up to 4x FAPs or MTP®
+      Cassettes."
+  chassis:
+    note: >-
+      page 7, front view: 448.0mm (17.64in) body width, dimensioned on its own line below the
+      482.6mm (19in) rack-width line - two separate dimensions, not one measured against the
+      other. 44.0mm (1.73in) height, the only figure on that view's right edge. Page 7, top view:
+      432.8mm (17.04in) depth. All three also appear in the spec table on the same page -
+      "Dimensions (HxWxD): 1.73"x19"x17.04" (44x482.6x432.8mm)" - which is what corroborates the
+      drawing rather than the other way round. `ru: 1` from that same table's "No. of Rack Spaces:
+      1U".
+  overall-depth:
+    note: >-
+      the top view carries a second, larger depth line outside the 432.8mm body - 467.2mm
+      (18.39in). That is the envelope INCLUDING whatever projects from the rear (the drawer's
+      cable-management arm, most likely), not the body depth, and the spec table's own HxWxD row
+      confirms 432.8 as the figure it means by "depth". Recorded here because the drawing shows
+      it; not used as `chassis.depth`, which the two agreeing sources both give as 432.8.
+  ears:
+    note: >-
+      482.6mm (19in) on the same front-view dimension line as the 448.0mm body - the standard
+      EIA-310 rack width. Drawn as common/rack-ear@1 outside the body under the optional tag
+      `ears`, the same generic ear every other 19in device in this library uses; its own 14.0mm
+      width is that component's convention, not a second measurement of this drawing.
+  bays:
+    note: >-
+      FOUR IS COUNTED, NOT MEASURED. The capacity table's "4 ports" and the features list's "holds
+      up to 4x FAPs or MTP® Cassettes" agree on the number; no page in this datasheet dimensions
+      an empty bay opening. Each bay is sized at 108.97 x 35.05 - the FHD module envelope, a
+      FAMILY CONSTANT common to every cassette this format admits, not a figure this device
+      measures itself or that belongs to any one cassette. It was first measured off FS's own
+      render for fs/fhd-1mtp6lcd-os2-a@1 (SKU 57016), and `panel_measure` refuses to scale ANY FHD
+      face-on render at all unless that scale reproduces the same 35.05mm height - which is what
+      makes this a constant worth carrying rather than a per-cassette reading. THE RULE, NOT A
+      COUNT: every FHD cassette this library models seats in every bay's `accepts`, because the
+      FHD format defines one shared envelope for the slot rather than a per-cassette one - see
+      each bay's own `accepts` list below for which cassettes that is today. The bay geometry does
+      not depend on which of them seats in it, because every FHD module this plan might still add
+      shares this one envelope by definition of the format (the format's own name for it). The
+      four bays sit contiguous across the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each
+      side, centred top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 = 4.475mm.
+  front-panel-detail:
+    confidence: estimated
+    note: >-
+      ESTIMATED BY OMISSION. Page 1's product photograph shows two extraction handles near the
+      panel ends and an FS logo left of centre, but page 7's dimensioned drawing - the only source
+      this device transcribes figures from - locates none of them, and a three-quarter photograph
+      is not a source panel_measure can rectify. None of that detail is drawn; see `gaps` below.
+  envelope-faces:
+    note: >-
+      rear, top, bottom, left and right carry the ENVELOPE ONLY, the same treatment dcp-2 gives
+      the four sides no photograph resolved. Top and bottom are 448.0 x 432.8 and left/right are
+      432.8 x 44.0 - both pairs built from the same `chassis` figures already sourced above, not a
+      second measurement. No surface detail (screws, the slide rail, the cable-management arm the
+      467.2mm overall depth implies) is drawn on any of the five; see `gaps` below.
+
 chassis:
   width: 448.0
   height: 44.0

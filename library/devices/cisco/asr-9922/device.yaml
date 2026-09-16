@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9922
-version: 1.0.11
+version: 1.0.12
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9922
@@ -16,223 +16,300 @@ description: >-
   cards in the LOWER cage, slots 10 to 19, are installed UPSIDE DOWN. Modelled as a bare cage.
 profile: networking
 provenance:
-  bay-opening-is-the-hole-not-the-reserved-space: >-
-    `size` on these bays is what the slot RESERVES - where a card is placed and what
-    L33 and L34 check it against - and it is the card's own envelope, per the
-    arbitration that a bay and its occupant carry the same size. The renderer also
-    painted that rectangle dark, so the visible opening was drawn over sheet metal at
-    each end of every slot. `opening` now carries the hole separately: 358.17 and 355.75 mm,
-    THREE cages, and they are not the same height. The upper and lower line-card cages measure y 367.83 to 726.00 and 1422.99 to 1781.15; the RP and fabric cage between them is y 898.83 to 1254.58, very slightly shorter, which is why it carries its own figure rather than the line cards'.
-    NOTHING ABOUT PLACEMENT OR CHECKING MOVES. Only what is painted dark changes, and
-    the opening is centred on the bay because a hole and the space reserved around it
-    share a centre. Where only one axis is measured the other keeps the bay's own
-    figure rather than being inferred from the occupant, which is the mistake this
-    field exists to undo.
-  chassis: >-
-    datasheet - Table 13, b-asr9k-overview-reference-guide.pdf p130. ASR 9922: chassis height 77.00
-    inches (195.58 cm), chassis width 17.60 inches (44.70 cm) with "19.0 inches (48.3 cm) including
-    chassis rack-mount flanges and front door width", chassis depth 26.3 inches (66.82 cm), "30.00
-    inches (76.20 cm) including the cable management system" and "30.62 inches (77.77 cm) with
-    front doors". Modelled as the BODY, 447.0 x 1955.8 x 668.0 mm
-  ru: datasheet - 77.00 in / 1.75 = exactly 44.00 RU, and the stencil's height_in of 7.7006 agrees
-  faces-verified-independently: >-
-    THIS CHASSIS WAS HELD BACK UNTIL ITS FACES WERE SETTLED, because Cisco's ASR 9910 masters are
-    named front and rear the wrong way round and an unverified face is not a face. Three
-    independent checks now agree that asr-9922-front IS the front. FIRST, the guide states it:
-    "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted vertically, with
-    ejector levers and captive screws at the top and bottom of each card" (Chassis Slots, p17).
-    SECOND, this master carries the CABLE MANAGEMENT TRAY with its diagonal cable slots, which is
-    front-face furniture on every chassis in this family. THIRD, its band order reproduces Figure
-    24 exactly - power shelves, line card cage, a fan pair, the RP/FC cage, a second fan pair, the
-    lower line card cage. The concern that first held it back, that the master named `-rear` shows
-    power modules where Figure 24 puts them on the front, is explained by the power system being at
-    the TOP and reachable from both faces
-  calibration: >-
-    measured - gate 1 passed. Calibrating x on 482.6 mm (the 19.0 in rack face) and y on Table 13's
-    1955.8 mm independently gives 0.20134 and 0.20144 mm/px, agreeing to 0.05 percent
-  slots: >-
-    datasheet - Figure 24 "Cisco ASR 9922 Router Slot Numbering", p39 of
-    b-asr9k-overview-reference-guide.pdf, read at 250 dpi. Top to bottom: power shelves PS0 to PS3
-    each M0 to M3; the upper line card cage, Slot 0 to Slot 9 carrying LC0 to LC9; fan trays FT0
-    and FT1; a cage of nine positions named RP0, FC0 to FC6, RP1; fan trays FT2 and FT3; and the
-    lower line card cage, Slot 10 to Slot 19 carrying LC10 to LC19. As on the ASR 9912 the RP and
-    FC positions are named by Cisco rather than numbered, so they are named here too
-  cards-upside-down: >-
-    datasheet - a real fact about this chassis that no drawing shows and nothing in the model can
-    express yet. The guide states: "For the Cisco ASR 9922 Router, line cards must be installed
-    upside down in slots 10 through 19 of the bottom card cage, whereas in slots 0 though 9 of the
-    top card cage, the line cards are installed right side up" (p26). The bays for slots 10 to 19
-    are geometrically identical to 0 to 9 and carry no rotation, because the card is inverted in
-    its own plane rather than rotated in the panel's - see gaps
-  cage-geometry: >-
-    drawing - three cages measured off the front master. Upper line cards y 367.83 to 726.00, lower
-    line cards y 1422.99 to 1781.15, both spanning x 6.36 to 440.24. The RP/FC cage sits between
-    them at y 898.83 to 1254.58, spanning x 8.98 to 438.02 - very slightly narrower, which is why
-    its nine positions are divided on their own span rather than on the line card cages'
-  slot-pitch: >-
-    measured, and NOT taken from the card guide rail on this chassis even though the rail is there.
-    Its ten rail bolts give a pitch of 44.06 with a spread of 0.11 mm, identical to the ASR 9912's
-    and confirming the two are one mechanical build. But those bolts are NOT aligned to slot
-    centres here: taking them as centres puts slot 0 thirteen millimetres inside the cage and slot
-    9 eighteen millimetres past its right edge, which is asymmetric in a way the 9912's are not.
-    So the bays divide the MEASURED CAGE evenly - 433.88 over ten is 43.388 - and the rail is used
-    only as corroboration that this generation's pitch is about 44. That asymmetry is what stopped
-    this chassis being built on the rail, and it is the same check that caught the 9910's swapped
-    faces and my own mislabelling of these bolts as printed slot IDs
-  fan-band-pitch: >-
-    drawing - the upper pair FT0 and FT1 sit at 762.30 and 808.80 mm, a 46.5 mm pitch. The lower
-    pair is placed on the same pitch from the measured start of its band, 1276.90 and 1323.40. An
-    earlier revision put FT3 at 1317.40, taken from a rule in the band scan that turned out to be
-    internal detail rather than the tray's top edge, and the two openings overlapped by a
-    millimetre - they rendered as one solid bar. LINT DID NOT SEE IT because L13 compares BAYS and
-    these are cutouts, so overlapping holes in the metal are not checked. Only the render showed it
-  power-shelves: >-
-    measured, and the component confirms it. The top band measures 0.20 to 193.40 mm - 193.2 mm for
-    four shelves, so 48.3 mm each. cisco/a9k-power-shelf-cover, built independently from the
-    stencil's own 'Power Shelf Cover' master, is 193.7 mm tall with SIXTEEN positions PM0 to PM15
-    on a 48.7 mm row pitch and a 105.05 mm column pitch. 193.2 against 193.7, and sixteen positions
-    against this chassis's four shelves of four. That settles what had been an open question about
-    which chassis that master belongs to: it is this one. Table 15 agrees on the count - "Version 2
-    power system: Up to sixteen AC power modules per system, four per tray"
-  power-module-columns: >-
-    the four columns are placed on the cover's 105.05 mm column pitch, CENTRED in the body. That
-    centring is an assumption: the cover is a rack-face part 475.12 mm wide and this chassis's body
-    is 447.0, so its column origin cannot be read straight across. Four columns at 105.05 span
-    420.2, leaving 13.4 mm each side of a 447 body, which is a plausible margin but is arithmetic
-    rather than measurement
-  side-and-top-faces: >-
-    datasheet - NAMED but not dimensioned, and drawn as regions rather than decor for that reason.
-    Figure 13 (the chassis footprint figure in b-asr9k-overview-reference-guide.pdf) shows the top plate
-    outline and the rack mounting brackets, and Figure 76 (the chassis cooling path side view) shows the
-    airflow through the side. Both name what is on those faces; NEITHER dimensions any feature on
-    them, so nothing here carries coordinates. Contrast the ASR 9906, whose HIG Figure 17 gives
-    explicit rail positions at 9.45 in and 5.00 in from the rear and where those rails ARE drawn.
-    The distinction is deliberate: a region says "this is here" and decor says "this is here, at
-    this size, in this place", and only the second needs a dimension behind it
-  bottom-face: >-
-    datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
-    footprint figure dimensions. Figure 13 dimensions 22 in (55.88 cm) from the rear. The rack mounting flange is a vertical plate spanning the
-    chassis height, so it intersects the BOTTOM plane as well as the top and appears on this face
-    as a line across the width at that depth. That is a real dimensioned feature rather than an
-    annotation of absence, which is the distinction that matters here - an earlier revision of this
-    file said the bottom was unreachable without inventing something, and that was wrong. What
-    remains true is that no BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake;
-    what this face carries is a feature dimensioned in a TOP-down figure whose geometry the bottom
-    necessarily shares. Positions are given from the REAR, which is how the figures dimension them
-  top-and-bottom-view-convention: >-
-    ON THIS CHASSIS'S TOP AND BOTTOM VIEWS, y = 0 IS THE REAR AND y = depth IS THE FRONT. Verified
-    on this chassis's own footprint figure rather than carried across from a sibling: the figure
-    prints "Rear of chassis" above the drawing and "Front of chassis" below it, read by eye because
-    that text is vector art and does not extract. Stated here because it is not derivable from the
-    file and because reading it the other way turns every depth-wise position into its complement -
-    which is exactly the error that put this family's ASR 9906 strips in the wrong half of the box.
-  strip-is-centred-on-the-plane: >-
-    the rack mounting strip is 3.9 mm thick and is placed so the DIMENSIONED PLANE PASSES THROUGH
-    ITS MIDDLE, at y = plane - 1.95. Neither edge carries the number. An earlier revision put the
-    plane on one edge, which meant the figure's dimension was 3.9 mm from where the drawing said it
-    was, and which edge differed between chassis - casa-cards found the same inconsistency across
-    the two it owns and centred them the same way
-  top-and-bottom-agree: >-
-    the rack mounting flange is one vertical plate, so it intersects the top and bottom planes at
-    the SAME depth and appears on both faces at the same y. An earlier revision drew it only on the
-    bottom, which left the two faces of one chassis disagreeing about where the chassis bolts to
-    the rack - the kind of internal inconsistency this work has spent the night finding in other
-    people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are the standard
-    this follows
-  strip-label-carries-the-number: >-
-    the region label states the figure's own dimension AND its conversion to a distance from the
-    front. That is not decoration: it is the only number in the file a reader can check the
-    geometry against, and its absence is why the ASR 9906's strips sat in the wrong half of the box
-    through two reviews before a human noticed. Where the label carried a distance - on the ASR
-    9006 and 9904 - the same error was caught in minutes
-  side-face-labels-say-when-a-position-is-UNKNOWN: >-
-    every region on a side face now states either where the feature sits or that no figure
-    dimensions it. That second half is the point. A region reading only "Vertical rack rail
-    locations" is silent about position, and silence is indistinguishable from a position that was
-    known and not written down - which is exactly how a feature ends up drawn at the wrong end with
-    nothing to contradict it. casa-cards found seven such features across two chassis where the
-    LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule compares the
-    two. Saying "present but not dimensioned" gives a reader the same thing a distance would: a
-    claim to check the drawing against
-  twelve-port-100ge: >-
-    datasheet - c78-737623's "Chassis compatibility" row reads "Compatible with the Cisco ASR 9904,
-    ASR 9910, ASR 9912, and ASR 9922 chassis". This chassis is named, so cisco/a99-12x100ge@1 joins
-    the line card bays. NOTE WHICH CHASSIS IS ABSENT: the ASR 9906. That card goes in every other
-    9900-generation chassis and not in the 9906, which is the second time a Cisco compatibility row
-    has singled that chassis out, and exactly why these lists are transcribed rather than inferred
-    from generation
-  four-hg-flex-accepted: >-
-    datasheet - the A9K-4HG-FLEX and A99-4HG-FLEX pairs added to the line card slots, and each is
-    placed on ITS OWN declared chassis list rather than on an inference from generation. The A9K
-    pair's contract names all seven chassis; the A99 pair's names five - "ASR 9922, ASR 9912, ASR
-    9910, ASR 9906 and ASR 9904" - so the two are not interchangeable even though they share an
-    envelope. A component that declares what it fits is a better source than a chassis deciding
-    what it will take
-  first-generation-fabric-accepted: >-
-    datasheet - the fabric bays gain this chassis's first-generation switch fabric card, placed on
-    the component's own attrs.chassis, which names exactly one chassis. That single-chassis
-    declaration is why it can be added without a compatibility row: the part says where it goes
-  four-port-100ge: >-
-    datasheet - c78-740092's "Chassis compatibility" row: "Compatible with the Cisco ASR 9006, ASR
-    9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". All seven, stated outright,
-    and the component's own attrs.chassis carries the same list. At 41.4 mm it fits every line card
-    bay in the family. Added to the line card slots only - a compatibility row names a chassis, not
-    a slot, and this chassis's RSP and RP positions take supervisors
-  power-module-width-corrected: >-
-    datasheet - the sixteen module bays were 95.85 x 42.80 and are now 99.62 x 42.85, the
-    shapesheet figure for BOTH axes. 95.85 was the same mixed-source error the ASR 9006 and 9010
-    power bays carried - a shapesheet height with an art-derived width - and asr9k-cards corrected
-    the component after I found three of them would not fit a shelf that holds three. This chassis
-    was missed when the others were swept, because its power bays are sixteen in a grid rather than
-    three in a row and my sweep matched on the row form. Found by asr9k-cards' fit check, which
-    compares every bay against every component it accepts; nothing in lint sees a bay narrower than
-    its occupant
-  card-envelope-headroom: >-
-    derived - 420.30 mm of clear vertical space between the structure above this card cage and the
-    structure below it, measured off this chassis's own committed geometry. Any card envelope
-    larger than that cannot be installed regardless of what its data sheet states. Used as a check
-    on the control-card lengths, not as a source for the bays
-  card-orientation: >-
-    datasheet - "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted
-    vertically, with ejector levers and captive screws at the top and bottom of each card"
-    (Chassis Slots, p17). So every bay places its component unrotated
-  card-compatibility: >-
-    datasheet - c78-743580's "Chassis compatibility" row names this chassis: "Compatible with the
-    Cisco ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". Those
-    four flex cards go in all twenty line card bays with the blank. The seven fabric bays take
-    cisco/a99-sfc3@1, which Table 23 names as "A99-SFC3 Card (ASR 9922)" - this chassis by name,
-    and the 340 W it carries is this chassis's figure rather than the 9912's lower one
-  airflow: >-
-    datasheet - "Cisco ASR 9922 Router: Front-to-rear cooling path. The inlet is at the front of
-    the middle cage, and the exhaust is at the upper and lower rear",
-    b-asr9k-overview-reference-guide.pdf p3737. Unique in the family for exhausting at BOTH ends
-  air-filter: >-
-    datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Three air filters located
-    on the front of the middle card cage". The guide adds that on this chassis and the 9912 "the
-    three air filters (left, center, and right) contain foam media" and can be removed
-    individually. Not modelled - no figure dimensions them
-  grounding: datasheet - "Top rear right side of the chassis",
-    b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 136. The same corner as the
-    ASR 9006's, and unlike the 9010, 9910 and 9912 which put theirs at the bottom
-  environmental: datasheet - Table 14, p131. The 9922 is in the narrower short-term group,
-    23 to 122 degF (-5 to 50 degC)
-  electrical: datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9922 columns only
-  weight: >-
-    datasheet - Table 13. "Chassis only - 300 pounds (136 kg)" and "Chassis: fully configured using
-    all card slots and four power modules - 1038 pounds (470.28 kg)". Note "four power modules"
-    against sixteen bays; Cisco's phrasing in this column is not consistent across the family
-  no-chassis-power-figure: >-
-    NOTE, and NARROWED. The current Table 14 says only to use the Cisco Power Calculator, so there
-    is no chassis-level figure for THIS chassis in any document held, and the module total here is
-    a floor. That is narrower than what an earlier revision of this file claimed: it said Cisco
-    publishes no chassis draw for ANY ASR 9000, and that is false. The older Ethernet Line Card
-    Installation Guide (asr9kELCIGbk.pdf, OL-17500-09) states "Power Dissipation 7600 W maximum
-    (Cisco ASR 9010 Router)" and 4556 W maximum for the ASR 9006 in its Table A-1 - a table the
-    current revision deleted. Those two chassis predate this one and no equivalent figure for this
-    model appears in either revision, so this is the vendor being silent about this chassis rather
-    than about the family
-  lifecycle: datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
-  compliance: datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+  bay-opening-is-the-hole-not-the-reserved-space:
+    note: >-
+      `size` on these bays is what the slot RESERVES - where a card is placed and what L33 and L34
+      check it against - and it is the card's own envelope, per the arbitration that a bay and its
+      occupant carry the same size. The renderer also painted that rectangle dark, so the visible
+      opening was drawn over sheet metal at each end of every slot. `opening` now carries the hole
+      separately: 358.17 and 355.75 mm, THREE cages, and they are not the same height. The upper
+      and lower line-card cages measure y 367.83 to 726.00 and 1422.99 to 1781.15; the RP and
+      fabric cage between them is y 898.83 to 1254.58, very slightly shorter, which is why it
+      carries its own figure rather than the line cards'. NOTHING ABOUT PLACEMENT OR CHECKING
+      MOVES. Only what is painted dark changes, and the opening is centred on the bay because a
+      hole and the space reserved around it share a centre. Where only one axis is measured the
+      other keeps the bay's own figure rather than being inferred from the occupant, which is the
+      mistake this field exists to undo.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 13, b-asr9k-overview-reference-guide.pdf p130. ASR 9922: chassis height
+      77.00 inches (195.58 cm), chassis width 17.60 inches (44.70 cm) with "19.0 inches (48.3 cm)
+      including chassis rack-mount flanges and front door width", chassis depth 26.3 inches (66.82
+      cm), "30.00 inches (76.20 cm) including the cable management system" and "30.62 inches
+      (77.77 cm) with front doors". Modelled as the BODY, 447.0 x 1955.8 x 668.0 mm
+  ru:
+    confidence: datasheet
+    note: >-
+      datasheet - 77.00 in / 1.75 = exactly 44.00 RU, and the stencil's height_in of 7.7006 agrees
+  faces-verified-independently:
+    note: >-
+      THIS CHASSIS WAS HELD BACK UNTIL ITS FACES WERE SETTLED, because Cisco's ASR 9910 masters
+      are named front and rear the wrong way round and an unverified face is not a face. Three
+      independent checks now agree that asr-9922-front IS the front. FIRST, the guide states it:
+      "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted vertically, with
+      ejector levers and captive screws at the top and bottom of each card" (Chassis Slots, p17).
+      SECOND, this master carries the CABLE MANAGEMENT TRAY with its diagonal cable slots, which
+      is front-face furniture on every chassis in this family. THIRD, its band order reproduces
+      Figure 24 exactly - power shelves, line card cage, a fan pair, the RP/FC cage, a second fan
+      pair, the lower line card cage. The concern that first held it back, that the master named
+      `-rear` shows power modules where Figure 24 puts them on the front, is explained by the
+      power system being at the TOP and reachable from both faces
+  calibration:
+    confidence: measured
+    note: >-
+      measured - gate 1 passed. Calibrating x on 482.6 mm (the 19.0 in rack face) and y on Table
+      13's 1955.8 mm independently gives 0.20134 and 0.20144 mm/px, agreeing to 0.05 percent
+  slots:
+    confidence: datasheet
+    note: >-
+      datasheet - Figure 24 "Cisco ASR 9922 Router Slot Numbering", p39 of
+      b-asr9k-overview-reference-guide.pdf, read at 250 dpi. Top to bottom: power shelves PS0 to
+      PS3 each M0 to M3; the upper line card cage, Slot 0 to Slot 9 carrying LC0 to LC9; fan trays
+      FT0 and FT1; a cage of nine positions named RP0, FC0 to FC6, RP1; fan trays FT2 and FT3; and
+      the lower line card cage, Slot 10 to Slot 19 carrying LC10 to LC19. As on the ASR 9912 the
+      RP and FC positions are named by Cisco rather than numbered, so they are named here too
+  cards-upside-down:
+    confidence: datasheet
+    note: >-
+      datasheet - a real fact about this chassis that no drawing shows and nothing in the model
+      can express yet. The guide states: "For the Cisco ASR 9922 Router, line cards must be
+      installed upside down in slots 10 through 19 of the bottom card cage, whereas in slots 0
+      though 9 of the top card cage, the line cards are installed right side up" (p26). The bays
+      for slots 10 to 19 are geometrically identical to 0 to 9 and carry no rotation, because the
+      card is inverted in its own plane rather than rotated in the panel's - see gaps
+  cage-geometry:
+    confidence: drawing
+    note: >-
+      drawing - three cages measured off the front master. Upper line cards y 367.83 to 726.00,
+      lower line cards y 1422.99 to 1781.15, both spanning x 6.36 to 440.24. The RP/FC cage sits
+      between them at y 898.83 to 1254.58, spanning x 8.98 to 438.02 - very slightly narrower,
+      which is why its nine positions are divided on their own span rather than on the line card
+      cages'
+  slot-pitch:
+    confidence: measured
+    note: >-
+      measured, and NOT taken from the card guide rail on this chassis even though the rail is
+      there. Its ten rail bolts give a pitch of 44.06 with a spread of 0.11 mm, identical to the
+      ASR 9912's and confirming the two are one mechanical build. But those bolts are NOT aligned
+      to slot centres here: taking them as centres puts slot 0 thirteen millimetres inside the
+      cage and slot 9 eighteen millimetres past its right edge, which is asymmetric in a way the
+      9912's are not. So the bays divide the MEASURED CAGE evenly - 433.88 over ten is 43.388 -
+      and the rail is used only as corroboration that this generation's pitch is about 44. That
+      asymmetry is what stopped this chassis being built on the rail, and it is the same check
+      that caught the 9910's swapped faces and my own mislabelling of these bolts as printed slot
+      IDs
+  fan-band-pitch:
+    confidence: drawing
+    note: >-
+      drawing - the upper pair FT0 and FT1 sit at 762.30 and 808.80 mm, a 46.5 mm pitch. The lower
+      pair is placed on the same pitch from the measured start of its band, 1276.90 and 1323.40.
+      An earlier revision put FT3 at 1317.40, taken from a rule in the band scan that turned out
+      to be internal detail rather than the tray's top edge, and the two openings overlapped by a
+      millimetre - they rendered as one solid bar. LINT DID NOT SEE IT because L13 compares BAYS
+      and these are cutouts, so overlapping holes in the metal are not checked. Only the render
+      showed it
+  power-shelves:
+    confidence: measured
+    note: >-
+      measured, and the component confirms it. The top band measures 0.20 to 193.40 mm - 193.2 mm
+      for four shelves, so 48.3 mm each. cisco/a9k-power-shelf-cover, built independently from the
+      stencil's own 'Power Shelf Cover' master, is 193.7 mm tall with SIXTEEN positions PM0 to
+      PM15 on a 48.7 mm row pitch and a 105.05 mm column pitch. 193.2 against 193.7, and sixteen
+      positions against this chassis's four shelves of four. That settles what had been an open
+      question about which chassis that master belongs to: it is this one. Table 15 agrees on the
+      count - "Version 2 power system: Up to sixteen AC power modules per system, four per tray"
+  power-module-columns:
+    note: >-
+      the four columns are placed on the cover's 105.05 mm column pitch, CENTRED in the body. That
+      centring is an assumption: the cover is a rack-face part 475.12 mm wide and this chassis's
+      body is 447.0, so its column origin cannot be read straight across. Four columns at 105.05
+      span 420.2, leaving 13.4 mm each side of a 447 body, which is a plausible margin but is
+      arithmetic rather than measurement
+  side-and-top-faces:
+    confidence: datasheet
+    note: >-
+      datasheet - NAMED but not dimensioned, and drawn as regions rather than decor for that
+      reason. Figure 13 (the chassis footprint figure in b-asr9k-overview-reference-guide.pdf)
+      shows the top plate outline and the rack mounting brackets, and Figure 76 (the chassis
+      cooling path side view) shows the airflow through the side. Both name what is on those
+      faces; NEITHER dimensions any feature on them, so nothing here carries coordinates. Contrast
+      the ASR 9906, whose HIG Figure 17 gives explicit rail positions at 9.45 in and 5.00 in from
+      the rear and where those rails ARE drawn. The distinction is deliberate: a region says "this
+      is here" and decor says "this is here, at this size, in this place", and only the second
+      needs a dimension behind it
+  bottom-face:
+    confidence: datasheet
+    note: >-
+      datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
+      footprint figure dimensions. Figure 13 dimensions 22 in (55.88 cm) from the rear. The rack
+      mounting flange is a vertical plate spanning the chassis height, so it intersects the BOTTOM
+      plane as well as the top and appears on this face as a line across the width at that depth.
+      That is a real dimensioned feature rather than an annotation of absence, which is the
+      distinction that matters here - an earlier revision of this file said the bottom was
+      unreachable without inventing something, and that was wrong. What remains true is that no
+      BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake; what this face carries
+      is a feature dimensioned in a TOP-down figure whose geometry the bottom necessarily shares.
+      Positions are given from the REAR, which is how the figures dimension them
+  top-and-bottom-view-convention:
+    note: >-
+      ON THIS CHASSIS'S TOP AND BOTTOM VIEWS, y = 0 IS THE REAR AND y = depth IS THE FRONT.
+      Verified on this chassis's own footprint figure rather than carried across from a sibling:
+      the figure prints "Rear of chassis" above the drawing and "Front of chassis" below it, read
+      by eye because that text is vector art and does not extract. Stated here because it is not
+      derivable from the file and because reading it the other way turns every depth-wise position
+      into its complement - which is exactly the error that put this family's ASR 9906 strips in
+      the wrong half of the box.
+  strip-is-centred-on-the-plane:
+    note: >-
+      the rack mounting strip is 3.9 mm thick and is placed so the DIMENSIONED PLANE PASSES
+      THROUGH ITS MIDDLE, at y = plane - 1.95. Neither edge carries the number. An earlier
+      revision put the plane on one edge, which meant the figure's dimension was 3.9 mm from where
+      the drawing said it was, and which edge differed between chassis - casa-cards found the same
+      inconsistency across the two it owns and centred them the same way
+  top-and-bottom-agree:
+    note: >-
+      the rack mounting flange is one vertical plate, so it intersects the top and bottom planes
+      at the SAME depth and appears on both faces at the same y. An earlier revision drew it only
+      on the bottom, which left the two faces of one chassis disagreeing about where the chassis
+      bolts to the rack - the kind of internal inconsistency this work has spent the night finding
+      in other people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are
+      the standard this follows
+  strip-label-carries-the-number:
+    note: >-
+      the region label states the figure's own dimension AND its conversion to a distance from the
+      front. That is not decoration: it is the only number in the file a reader can check the
+      geometry against, and its absence is why the ASR 9906's strips sat in the wrong half of the
+      box through two reviews before a human noticed. Where the label carried a distance - on the
+      ASR 9006 and 9904 - the same error was caught in minutes
+  side-face-labels-say-when-a-position-is-UNKNOWN:
+    note: >-
+      every region on a side face now states either where the feature sits or that no figure
+      dimensions it. That second half is the point. A region reading only "Vertical rack rail
+      locations" is silent about position, and silence is indistinguishable from a position that
+      was known and not written down - which is exactly how a feature ends up drawn at the wrong
+      end with nothing to contradict it. casa-cards found seven such features across two chassis
+      where the LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule
+      compares the two. Saying "present but not dimensioned" gives a reader the same thing a
+      distance would: a claim to check the drawing against
+  twelve-port-100ge:
+    confidence: datasheet
+    note: >-
+      datasheet - c78-737623's "Chassis compatibility" row reads "Compatible with the Cisco ASR
+      9904, ASR 9910, ASR 9912, and ASR 9922 chassis". This chassis is named, so
+      cisco/a99-12x100ge@1 joins the line card bays. NOTE WHICH CHASSIS IS ABSENT: the ASR 9906.
+      That card goes in every other 9900-generation chassis and not in the 9906, which is the
+      second time a Cisco compatibility row has singled that chassis out, and exactly why these
+      lists are transcribed rather than inferred from generation
+  four-hg-flex-accepted:
+    confidence: datasheet
+    note: >-
+      datasheet - the A9K-4HG-FLEX and A99-4HG-FLEX pairs added to the line card slots, and each
+      is placed on ITS OWN declared chassis list rather than on an inference from generation. The
+      A9K pair's contract names all seven chassis; the A99 pair's names five - "ASR 9922, ASR
+      9912, ASR 9910, ASR 9906 and ASR 9904" - so the two are not interchangeable even though they
+      share an envelope. A component that declares what it fits is a better source than a chassis
+      deciding what it will take
+  first-generation-fabric-accepted:
+    confidence: datasheet
+    note: >-
+      datasheet - the fabric bays gain this chassis's first-generation switch fabric card, placed
+      on the component's own attrs.chassis, which names exactly one chassis. That single-chassis
+      declaration is why it can be added without a compatibility row: the part says where it goes
+  four-port-100ge:
+    confidence: datasheet
+    note: >-
+      datasheet - c78-740092's "Chassis compatibility" row: "Compatible with the Cisco ASR 9006,
+      ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". All seven, stated
+      outright, and the component's own attrs.chassis carries the same list. At 41.4 mm it fits
+      every line card bay in the family. Added to the line card slots only - a compatibility row
+      names a chassis, not a slot, and this chassis's RSP and RP positions take supervisors
+  power-module-width-corrected:
+    confidence: datasheet
+    note: >-
+      datasheet - the sixteen module bays were 95.85 x 42.80 and are now 99.62 x 42.85, the
+      shapesheet figure for BOTH axes. 95.85 was the same mixed-source error the ASR 9006 and 9010
+      power bays carried - a shapesheet height with an art-derived width - and asr9k-cards
+      corrected the component after I found three of them would not fit a shelf that holds three.
+      This chassis was missed when the others were swept, because its power bays are sixteen in a
+      grid rather than three in a row and my sweep matched on the row form. Found by asr9k-cards'
+      fit check, which compares every bay against every component it accepts; nothing in lint sees
+      a bay narrower than its occupant
+  card-envelope-headroom:
+    note: >-
+      derived - 420.30 mm of clear vertical space between the structure above this card cage and
+      the structure below it, measured off this chassis's own committed geometry. Any card
+      envelope larger than that cannot be installed regardless of what its data sheet states. Used
+      as a check on the control-card lengths, not as a source for the bays
+  card-orientation:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted
+      vertically, with ejector levers and captive screws at the top and bottom of each card"
+      (Chassis Slots, p17). So every bay places its component unrotated
+  card-compatibility:
+    confidence: datasheet
+    note: >-
+      datasheet - c78-743580's "Chassis compatibility" row names this chassis: "Compatible with
+      the Cisco ASR 9006, ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis".
+      Those four flex cards go in all twenty line card bays with the blank. The seven fabric bays
+      take cisco/a99-sfc3@1, which Table 23 names as "A99-SFC3 Card (ASR 9922)" - this chassis by
+      name, and the 340 W it carries is this chassis's figure rather than the 9912's lower one
+  airflow:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cisco ASR 9922 Router: Front-to-rear cooling path. The inlet is at the front of
+      the middle cage, and the exhaust is at the upper and lower rear",
+      b-asr9k-overview-reference-guide.pdf p3737. Unique in the family for exhausting at BOTH ends
+  air-filter:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Three air filters
+      located on the front of the middle card cage". The guide adds that on this chassis and the
+      9912 "the three air filters (left, center, and right) contain foam media" and can be removed
+      individually. Not modelled - no figure dimensions them
+  grounding:
+    confidence: datasheet
+    note: >-
+      datasheet - "Top rear right side of the chassis", b-asr9k-hardware-installation-guide.pdf
+      p125, illustrated by Figure 136. The same corner as the ASR 9006's, and unlike the 9010,
+      9910 and 9912 which put theirs at the bottom
+  environmental:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 14, p131. The 9922 is in the narrower short-term group, 23 to 122 degF (-5
+      to 50 degC)
+  electrical:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9922 columns only
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 13. "Chassis only - 300 pounds (136 kg)" and "Chassis: fully configured
+      using all card slots and four power modules - 1038 pounds (470.28 kg)". Note "four power
+      modules" against sixteen bays; Cisco's phrasing in this column is not consistent across the
+      family
+  no-chassis-power-figure:
+    note: >-
+      NOTE, and NARROWED. The current Table 14 says only to use the Cisco Power Calculator, so
+      there is no chassis-level figure for THIS chassis in any document held, and the module total
+      here is a floor. That is narrower than what an earlier revision of this file claimed: it
+      said Cisco publishes no chassis draw for ANY ASR 9000, and that is false. The older Ethernet
+      Line Card Installation Guide (asr9kELCIGbk.pdf, OL-17500-09) states "Power Dissipation 7600
+      W maximum (Cisco ASR 9010 Router)" and 4556 W maximum for the ASR 9006 in its Table A-1 - a
+      table the current revision deleted. Those two chassis predate this one and no equivalent
+      figure for this model appears in either revision, so this is the vendor being silent about
+      this chassis rather than about the family
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
+  compliance:
+    confidence: datasheet
+    note: >-
+      datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+
 attrs:
   physical:
     weight-configured-kg: 470.28

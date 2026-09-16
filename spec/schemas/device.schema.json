@@ -99,7 +99,23 @@
    }
   },
   "provenance": {
-   "$ref": "#/$defs/provenance"
+   "type": "object",
+   "description": "WHERE EACH FIGURE ON THIS DEVICE CAME FROM, keyed by the figure. Each entry is an object, not a sentence: `note` carries the prose and `confidence` carries the word, so a rule can ask what only a reader could answer before. The rule that needed it is L15's - `maturity: verified` means no dimension may be estimated, and it was implemented as `str(value).startswith(\"estimated\")` against a corpus where 42 entries opened with the word and 80 more said it somewhere in the middle of a 566-character paragraph. `confidence` is OPTIONAL and 744 of 1688 entries do not carry one: they were migrated with the prose intact and no word invented for them, because reading 744 paragraphs and deciding measured-or-estimated by eye is how an estimate becomes a measurement. L93 counts them, and the count is meant to fall. `source` is not here yet - it wants ids on the `datasheet`/`references` entries, which is roc-ops/Portrayal#274.",
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["note"],
+    "properties": {
+     "confidence": {
+      "$ref": "#/$defs/confidence",
+      "description": "the library's word for how this figure is known, filled only where it is actually known. Absent means nobody has said - NOT that the figure is weak."
+     },
+     "note": {
+      "type": "string",
+      "description": "the prose: what was read, out of which document, at what scale, and what was rejected on the way. It is the reasoning, and it is the reason this block is long."
+     }
+    }
+   }
   },
   "attrs": {
    "type": "object",

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 1.8.6
+version: 1.8.7
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-2
@@ -10,100 +10,120 @@ description: 1RU 19-inch chassis for the DCP transponder and muxponder family. T
   the management board at the rear.
 profile: optical
 provenance:
-  model: >-
-    the product is the DCP-2; DCP-2-FB/HW is the ORDERING CODE for its base hardware
-    configuration ("Base HW, 1 RU chassis, 19in, 2-traffic slots, dual power, fan units,
-    mgmt-board" in so-ds-dcp-2-r4.3). The "/HW" suffix distinguishes it from the
-    DCP-2-ENL-7.x_SW embedded node licence ordered alongside, and is not part of the
-    model name. Recorded because the Vyve gap list names the part by its ordering code.
-    NOTE FOR THE NEXT SMARTOPTICS PART: a slash in `model:` breaks the NetBox exporter,
-    which builds a file path from it - DCP-M32-CSO-ZR+/HW will need the same treatment.
-  method: >-
-    FACT SHEET FIRST, THEN THE ARTWORK. The inventory came from
-    DCP-Series_User_Manual_14.0_A and so-ds-dcp-2-r4.3 before any figure was opened
-    (working/intake/factsheets/dcp-2.md), and the residual pass afterwards named
-    everything on both faces the sheet had not predicted. Nine residuals were found and
-    each is either promoted below with a source or written off in that sheet.
-  chassis: >-
-    datasheet and manual agree - 440mm (W) x 45mm (H) x 500mm (D), ~7kg without traffic
-    units, 1 RU. Note 45, not the 44.45 of a nominal 1RU; both documents say 45.
-  ears: >-
-    UM s3.2 - the rack brackets are a separate kit with seven part numbers and several
-    mounting depths, not integral to the chassis. The front figure (fig 2-4) spans 440
-    with no ears fitted, which is what confirms the body width. Ears are therefore drawn
-    `optional`, as on dcp-r-9d-cs.
-  ground: >-
-    UM s3.2.8 - "The front rack mount brackets include a grounding terminal ... located
-    on the right-side front rack mount(s)", M5 nut, with the surface around it left
-    unpainted. It is on the BRACKET, so it is drawn on the ear and disappears with it.
-    The manual adds that the brackets are interchangeable left to right if the ground is
-    wanted on the other side.
-  no-front-silkscreen: >-
-    the chassis front carries NO marking. "SLOT 1" and "SLOT 2" appear in UM fig 2-4 in
-    white capitals across the two openings, and the first cut of this model put them on
-    the faceplate as silkscreen. They are the FIGURE'S CALLOUT ANNOTATIONS, added to the
-    photograph to explain s2.2's slot nomination, not paint on the metal - which is
-    visible in the figure itself, where they float over the dark cavity rather than
-    sitting on any surface. The slot numbering is carried by the bay ids instead.
-  front-layout: >-
-    photo-measured - UM fig 2-4, scaled across from the 440 body. Side rails ~7 each, a
-    centre assembly at ~213-226, and slot apertures of ~206.5. The assembly centres on
-    219.8 against a true centreline of 220, which is UM s2.2's "extraction mechanism is
-    based in the center of the chassis". The apertures against a 205 DCP-404 leave 1.5 of
-    clearance - the two numbers were measured independently and confirm each other.
-  rear-layout: >-
-    photo-measured - UM figs 2-5 and 2-6. These are SEPARATE PHOTOGRAPHS and they agree
-    on the PSU fan-sticker pitch to 0.15% (352.3 and 351.8), which is what says the x axis
-    is trustworthy in both. The y axis is ~3% compressed in each (both were shot slightly
-    from above), so y is scaled from the 45mm height and never from the same factor as x.
-    Left to right: PSU bay, fan tray, management plate, PSU bay.
-  psu-positions: >-
-    the PSU sticker reads "CRPS 460W AC Gold", which names the form factor; 1U CRPS is
-    73.5 x 40. The two installed bays measure 81 and 75 for what is demonstrably the same
-    part, so the standard is worth more than either edge read. 73.5 at the measured 352.3
-    pitch puts the pair at 4.0 and 356.3, matching the right bay to under a millimetre.
-  mgmt-ports: >-
-    UM s2.6 gives the inventory - 4x RJ45 ETH1-4, 1x SFP ETH4 "shared with the electrical
-    ETH4 port and only one can be used at a time", 1x ETH0 local, 1x RS-232 console. That
-    is 6 RJ45 + 1 SFP, and the `DCP-2 Rear` stencil master reports exactly 7 connection
-    points, which is what identifies that 80mm master as the management block alone
-    rather than the 440mm face.
-  mgmt-geometry: >-
-    photo-measured from fig 2-5, which is the sharper of the two rear plates. Jack
-    apertures give a column pitch of 13.95 - the library's 13.97 RJ45 standard - and a row
-    pitch of 15.13, which is the 0.6in row pitch of a standard 2xN magjack. Aperture
-    centres: quad at x 288.26 and 302.23, rows at y 17.39 and 32.52; the ETH0/CONSOLE
-    pair at x 340.3, rows at y 17.96 and 32.33; the SFP at x 321.47, y 32.52.
-    CORROBORATED INDEPENDENTLY: scaling the `DCP-2 Rear` master on its own height rather
-    than on the rack width gives a plate 77.7 wide against ~78 measured, and its seven
-    connection points land within 1.7mm of these centres.
-  port-numbering: >-
-    silkscreen, and it is not in any manual. The gang is column-major and bottom-first -
-    ETH1 bottom-left, ETH2 top-left, ETH3 bottom-right, ETH4 top-right. UM s2.6 names the
-    four ports and never arranges them.
-  caption-size: >-
-    photo-measured, and corrected after looking at the render beside the photograph.
-    In fig 2-5 the port captions stand about 1.33mm cap-height against the 1.8 a
-    font-size of 1.9 produces, so the first cut was ~35% oversized - the same defect
-    the DCP-404's Tx/Rx captions had. Font-size is 1.45, which puts the cap height at
-    about 1.05 and the caption back in proportion to the jacks beside it.
-  eth4-shared: >-
-    silkscreen. BOTH ETH4 labels - the electrical jack's and the SFP's - are printed in a
-    box on the real faceplate while no other caption is, so the artwork itself marks the
-    shared pair that UM s2.6 describes in prose. The boxes are reproduced here.
-  power: >-
-    UM spec table, "POWER CONSUMPTION (CHASSI ONLY): DCP-2 chassis with fans and 2 PSU
-    (AC) Min: 14W Max: 17W". The manual's other rows bundle a traffic unit, which answers
-    for itself. NO AMBIENT TEMPERATURE is quoted against any DCP power figure, so none is
-    asserted.
-  slot-occupants: >-
-    the traffic slots accept smartoptics/dcp-f-a22@1 as well as the DCP-404. Both are
-    205 x 44 x 270 - the DCP traffic-unit envelope is one shared footprint, stated
-    independently by each part's own datasheet - so a slot that fits one fits the
-    other. The A22 is what makes an ILA node out of this chassis.
-  vents: >-
-    photo-measured - the rear vent area is the fan tray's own faceplate and belongs to
-    smartoptics/dcp-2-fan@1, not to the chassis. The chassis draws none of its own.
+  model:
+    note: >-
+      the product is the DCP-2; DCP-2-FB/HW is the ORDERING CODE for its base hardware
+      configuration ("Base HW, 1 RU chassis, 19in, 2-traffic slots, dual power, fan units,
+      mgmt-board" in so-ds-dcp-2-r4.3). The "/HW" suffix distinguishes it from the
+      DCP-2-ENL-7.x_SW embedded node licence ordered alongside, and is not part of the model name.
+      Recorded because the Vyve gap list names the part by its ordering code. NOTE FOR THE NEXT
+      SMARTOPTICS PART: a slash in `model:` breaks the NetBox exporter, which builds a file path
+      from it - DCP-M32-CSO-ZR+/HW will need the same treatment.
+  method:
+    note: >-
+      FACT SHEET FIRST, THEN THE ARTWORK. The inventory came from DCP-Series_User_Manual_14.0_A
+      and so-ds-dcp-2-r4.3 before any figure was opened (working/intake/factsheets/dcp-2.md), and
+      the residual pass afterwards named everything on both faces the sheet had not predicted.
+      Nine residuals were found and each is either promoted below with a source or written off in
+      that sheet.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet and manual agree - 440mm (W) x 45mm (H) x 500mm (D), ~7kg without traffic units, 1
+      RU. Note 45, not the 44.45 of a nominal 1RU; both documents say 45.
+  ears:
+    note: >-
+      UM s3.2 - the rack brackets are a separate kit with seven part numbers and several mounting
+      depths, not integral to the chassis. The front figure (fig 2-4) spans 440 with no ears
+      fitted, which is what confirms the body width. Ears are therefore drawn `optional`, as on
+      dcp-r-9d-cs.
+  ground:
+    note: >-
+      UM s3.2.8 - "The front rack mount brackets include a grounding terminal ... located on the
+      right-side front rack mount(s)", M5 nut, with the surface around it left unpainted. It is on
+      the BRACKET, so it is drawn on the ear and disappears with it. The manual adds that the
+      brackets are interchangeable left to right if the ground is wanted on the other side.
+  no-front-silkscreen:
+    note: >-
+      the chassis front carries NO marking. "SLOT 1" and "SLOT 2" appear in UM fig 2-4 in white
+      capitals across the two openings, and the first cut of this model put them on the faceplate
+      as silkscreen. They are the FIGURE'S CALLOUT ANNOTATIONS, added to the photograph to explain
+      s2.2's slot nomination, not paint on the metal - which is visible in the figure itself,
+      where they float over the dark cavity rather than sitting on any surface. The slot numbering
+      is carried by the bay ids instead.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured - UM fig 2-4, scaled across from the 440 body. Side rails ~7 each, a centre
+      assembly at ~213-226, and slot apertures of ~206.5. The assembly centres on 219.8 against a
+      true centreline of 220, which is UM s2.2's "extraction mechanism is based in the center of
+      the chassis". The apertures against a 205 DCP-404 leave 1.5 of clearance - the two numbers
+      were measured independently and confirm each other.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured - UM figs 2-5 and 2-6. These are SEPARATE PHOTOGRAPHS and they agree on the
+      PSU fan-sticker pitch to 0.15% (352.3 and 351.8), which is what says the x axis is
+      trustworthy in both. The y axis is ~3% compressed in each (both were shot slightly from
+      above), so y is scaled from the 45mm height and never from the same factor as x. Left to
+      right: PSU bay, fan tray, management plate, PSU bay.
+  psu-positions:
+    note: >-
+      the PSU sticker reads "CRPS 460W AC Gold", which names the form factor; 1U CRPS is 73.5 x
+      40. The two installed bays measure 81 and 75 for what is demonstrably the same part, so the
+      standard is worth more than either edge read. 73.5 at the measured 352.3 pitch puts the pair
+      at 4.0 and 356.3, matching the right bay to under a millimetre.
+  mgmt-ports:
+    note: >-
+      UM s2.6 gives the inventory - 4x RJ45 ETH1-4, 1x SFP ETH4 "shared with the electrical ETH4
+      port and only one can be used at a time", 1x ETH0 local, 1x RS-232 console. That is 6 RJ45 +
+      1 SFP, and the `DCP-2 Rear` stencil master reports exactly 7 connection points, which is
+      what identifies that 80mm master as the management block alone rather than the 440mm face.
+  mgmt-geometry:
+    confidence: photo-measured
+    note: >-
+      photo-measured from fig 2-5, which is the sharper of the two rear plates. Jack apertures
+      give a column pitch of 13.95 - the library's 13.97 RJ45 standard - and a row pitch of 15.13,
+      which is the 0.6in row pitch of a standard 2xN magjack. Aperture centres: quad at x 288.26
+      and 302.23, rows at y 17.39 and 32.52; the ETH0/CONSOLE pair at x 340.3, rows at y 17.96 and
+      32.33; the SFP at x 321.47, y 32.52. CORROBORATED INDEPENDENTLY: scaling the `DCP-2 Rear`
+      master on its own height rather than on the rack width gives a plate 77.7 wide against ~78
+      measured, and its seven connection points land within 1.7mm of these centres.
+  port-numbering:
+    note: >-
+      silkscreen, and it is not in any manual. The gang is column-major and bottom-first - ETH1
+      bottom-left, ETH2 top-left, ETH3 bottom-right, ETH4 top-right. UM s2.6 names the four ports
+      and never arranges them.
+  caption-size:
+    confidence: photo-measured
+    note: >-
+      photo-measured, and corrected after looking at the render beside the photograph. In fig 2-5
+      the port captions stand about 1.33mm cap-height against the 1.8 a font-size of 1.9 produces,
+      so the first cut was ~35% oversized - the same defect the DCP-404's Tx/Rx captions had.
+      Font-size is 1.45, which puts the cap height at about 1.05 and the caption back in
+      proportion to the jacks beside it.
+  eth4-shared:
+    note: >-
+      silkscreen. BOTH ETH4 labels - the electrical jack's and the SFP's - are printed in a box on
+      the real faceplate while no other caption is, so the artwork itself marks the shared pair
+      that UM s2.6 describes in prose. The boxes are reproduced here.
+  power:
+    note: >-
+      UM spec table, "POWER CONSUMPTION (CHASSI ONLY): DCP-2 chassis with fans and 2 PSU (AC) Min:
+      14W Max: 17W". The manual's other rows bundle a traffic unit, which answers for itself. NO
+      AMBIENT TEMPERATURE is quoted against any DCP power figure, so none is asserted.
+  slot-occupants:
+    note: >-
+      the traffic slots accept smartoptics/dcp-f-a22@1 as well as the DCP-404. Both are 205 x 44 x
+      270 - the DCP traffic-unit envelope is one shared footprint, stated independently by each
+      part's own datasheet - so a slot that fits one fits the other. The A22 is what makes an ILA
+      node out of this chassis.
+  vents:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the rear vent area is the fan tray's own faceplate and belongs to
+      smartoptics/dcp-2-fan@1, not to the chassis. The chassis draws none of its own.
+
 chassis:
   width: 440
   height: 45

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -16,45 +16,61 @@ description: >-
   matrix at the right. Built-in AC supply and two fixed fans on the rear.
 profile: networking
 provenance:
-  sources: MX150 Hardware Guide, the
-    MX-family datasheet (no standalone MX150 datasheet exists - recorded in
-    the intake), and the image-library photographs mx150-front-high and
-    mx150-rear-high. No mechanical drawing was available
-  chassis: 'datasheet-table - guide Table 1: 1.72 x 17.36 x 12 in (43.7 x
-    441 x 305 mm), 4.3 kg. Ears NOT MODELLED by convention'
-  scale: 'photo - both photographs are straight-on but carry extra
-    shadow/bezel rows, so x is anchored to the 441 mm width (front 3.245
-    px/mm, rear 3.184) and y positions are per-face fractions anchored to
-    the 43.7 mm height - approximate to about a millimetre'
-  front: 'photo - recessed JUNIPER/junos panel to x 45.2, hex vent fields
-    above the ports, the 2x4 RJ45 block at column centres 167.7-214.8 (15.7
-    mm measured pitch, upper jacks rotate 180 to keep both release tabs
-    reachable), RJ45 8/9 at 232.6/250.3, SFP 10/11 at 280.3/294.5, SFP+
-    uplinks 0/1 at 323.3/337.5, mini-USB CON at 352.8, vertical USB at
-    365.0, MGMT at 381.4, and the SYS/ALM/MST/PH + SPD/DX/EN lamp matrix
-    with the white beacon at the right end. LINK/ST lamp pairs sit above
-    each SFP port; ports 8/9 carry their lamps inside the jack'
-  port-numbering: 'photo - access ports print 0-11 (column pairs 01/23/45/67
-    under the RJ block, then 8, 9, 10, 11); the two SFP+ uplinks print 0 and
-    1 - a second numbering space (xe-0/1/x in the CLI), carried as printed'
-  rear: 'photo - earthing plate with two studs at the left (21.0/34.0, y 6.5,
-    approximate), ESD socket below, two fixed fan rotors at x 65/122 (r ~17),
-    the AC INPUT 100-240V 50-60Hz 3A MAX legend, power rocker at 390 and C14
-    inlet at 408. The supply is BUILT IN - no PSU bay exists on this
-    platform'
-  leds: 'guide chassis-status table: SYS green steady = Junos loaded,
-    blinking = booting; MST green steady = functioning; ALM red/amber =
-    alarm (unlit = none); PH unused (off). Port and MGMT lamp tables exist
-    in the guide; the per-port LINK/ST pairs are drawn with generic states'
-  power: 'guide specifications: maximum power consumption 140 W. The vendor
-    does not qualify an ambient - filed as max, and that reading is recorded
-    here'
-  lifecycle: 'announced - the MX150 is EOL (image-library page redirects to
-    the EOL notice; the intake''s datasheet hunt recorded no standalone
-    sheet). Per-SKU dates on the Juniper milestones page'
-  color: photo - medium grey face (#6d7175), aluminium rear
-  other-faces: 'near-blank by evidence - rail bands estimated; axis
-    conventions per viewer3d.js as on the siblings'
+  sources:
+    note: >-
+      MX150 Hardware Guide, the MX-family datasheet (no standalone MX150 datasheet exists -
+      recorded in the intake), and the image-library photographs mx150-front-high and
+      mx150-rear-high. No mechanical drawing was available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - guide Table 1: 1.72 x 17.36 x 12 in (43.7 x 441 x 305 mm), 4.3 kg. Ears
+      NOT MODELLED by convention
+  scale:
+    note: >-
+      photo - both photographs are straight-on but carry extra shadow/bezel rows, so x is anchored
+      to the 441 mm width (front 3.245 px/mm, rear 3.184) and y positions are per-face fractions
+      anchored to the 43.7 mm height - approximate to about a millimetre
+  front:
+    note: >-
+      photo - recessed JUNIPER/junos panel to x 45.2, hex vent fields above the ports, the 2x4
+      RJ45 block at column centres 167.7-214.8 (15.7 mm measured pitch, upper jacks rotate 180 to
+      keep both release tabs reachable), RJ45 8/9 at 232.6/250.3, SFP 10/11 at 280.3/294.5, SFP+
+      uplinks 0/1 at 323.3/337.5, mini-USB CON at 352.8, vertical USB at 365.0, MGMT at 381.4, and
+      the SYS/ALM/MST/PH + SPD/DX/EN lamp matrix with the white beacon at the right end. LINK/ST
+      lamp pairs sit above each SFP port; ports 8/9 carry their lamps inside the jack
+  port-numbering:
+    note: >-
+      photo - access ports print 0-11 (column pairs 01/23/45/67 under the RJ block, then 8, 9, 10,
+      11); the two SFP+ uplinks print 0 and 1 - a second numbering space (xe-0/1/x in the CLI),
+      carried as printed
+  rear:
+    note: >-
+      photo - earthing plate with two studs at the left (21.0/34.0, y 6.5, approximate), ESD
+      socket below, two fixed fan rotors at x 65/122 (r ~17), the AC INPUT 100-240V 50-60Hz 3A MAX
+      legend, power rocker at 390 and C14 inlet at 408. The supply is BUILT IN - no PSU bay exists
+      on this platform
+  leds:
+    note: >-
+      guide chassis-status table: SYS green steady = Junos loaded, blinking = booting; MST green
+      steady = functioning; ALM red/amber = alarm (unlit = none); PH unused (off). Port and MGMT
+      lamp tables exist in the guide; the per-port LINK/ST pairs are drawn with generic states
+  power:
+    note: >-
+      guide specifications: maximum power consumption 140 W. The vendor does not qualify an
+      ambient - filed as max, and that reading is recorded here
+  lifecycle:
+    note: >-
+      announced - the MX150 is EOL (image-library page redirects to the EOL notice; the intake's
+      datasheet hunt recorded no standalone sheet). Per-SKU dates on the Juniper milestones page
+  color:
+    note: >-
+      photo - medium grey face (#6d7175), aluminium rear
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as on the
+      siblings
+
 attrs:
   physical:
     weight: 4.3 kg (Table 1)

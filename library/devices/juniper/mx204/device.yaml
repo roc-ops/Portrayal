@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -17,151 +17,176 @@ description: >-
   the rear.
 profile: networking
 provenance:
-  bits-lamps: >-
-    THE BITS JACK KEEPS ITS TWO LAMPS AS SEPARATE PLACEMENTS, and it is the only jack in the
-    library that does. The RJ45 family (docs/rj45-family-design.md, #125) has four members -
-    two bare, two lamped - and no bare-with-lamps one. BITS is a timing role, so decision 3
-    puts it on std/rj45@2, the bare housing; but the hardware guide draws a link and an
-    activity lamp beside it, so led-bits-link and led-bits-act stay where they are, naming
-    the jack with for:, the same shape edgecore/as5912-54x uses for its mgmt-eth pair. One
-    jack does not earn a fifth family member. L76 does not count this as an unlamped
-    Ethernet jack (BITS is not Ethernet) and L39 lets the lamps sit inside the jack's own
-    cutout; if a second bare-with-lamps jack ever arrives, the family gains a member.
-  sources: MX204 Universal Routing Platform Hardware Guide (published 2025-11-12,
-    figures g009860/g009862/g009881/g009897/g100549 among others), HPE datasheet a00150825enw (MX
-    204/240/480/960), Juniper image-library studio photographs mx204-front-high
-    and mx204-rear-high (straight-on), and the NetBox devicetype-library MX204
-    elevations. No mechanical drawing was available
-  chassis: 'datasheet-table - Table 19: chassis 1.72 x 19 x 18.50 in (43.7 x
-    482.3 x 470 mm), 1RU; the dimension drawing g009881 (top view) reads the
-    width as 18.99 in (48.23 cm) and the depth over fan and power handles as
-    20.41 in (51.84 cm) against Table 19''s 20.43. The rack-requirements table
-    says the MOUNTING BRACKETS "extend the width to 19 in", yet drawing and
-    table agree the body itself is ~482.3 including the integral ear flanges -
-    this chassis is genuinely full-rack-width, with the front face spanning ear
-    to ear. The modelled width is the 437.0 mm BODY between the ear-flange fold
-    lines (ears are not modelled here - see ears)'
-  scale: 'drawing - the guide front view (g009860) rendered at 600 dpi measures
-    2895 x 275 px, aspect 10.53 against the true 482.3/43.7 = 11.04, so the
-    figure is stretched ~4.6% vertically and is SCHEMATIC. All positions below
-    are fractions off it anchored per axis: x at 6.003 px/mm to the 482.3 mm
-    width, y at 6.293 px/mm to the 43.7 mm height. Feature sizes come from the
-    standards registry, never from this drawing. The rear (g009862) is the same
-    art family and was measured the same way'
-  drawing-vs-photo: 'sources-disagree, and the REAL DEVICE (Juniper studio
-    photographs) wins for everything printed: the guide art labels the QSFP
-    ports 0/0-0/3 and the SFP+ ports 1/0-1/7 (CLI interface names), prints
-    10MHz / 1PPS on the SMB columns, orders the LED row ...SSD1 SSD0, puts
-    MX204 beside the Juniper logo and a junos badge at the right. The
-    photographed faceplate prints plain 0-3 and 4/5-10/11 port numbers, PPS
-    and 100MHz under the SMB columns, orders the row SSD0 SSD1, prints MX204
-    at the RIGHT end and carries no junos badge. The silkscreen below follows
-    the photograph; note the guide TEXT unambiguously calls the clock ports
-    10-MHz (pinout table, clocking topic), so the printed 100MHz legend is
-    carried as artwork while the function stays 10 MHz - see gaps'
-  ports: 'drawing + registry - four QSFP cages centred at x 76.7/95.7/114.7/
-    133.7 (measured pitch 18.93, registry qsfp-ganged pitch 19.0), aperture
-    centre y 27.5; eight SFP+ in a 2x4 belly-to-belly block, column centres
-    158.1/172.3/186.6/200.8 (pitch 14.25 per registry, measured 14.3), row
-    centres y 14.25 and 30.15; GM/PTP SFP centred at 53.15, 29.65 (aperture
-    interior read off the labelled drawing). Counts confirmed by the photograph
-    and the guide text (4 + 8 + 1)'
-  port-numbering: 'photo - QSFP ports are silkscreened 0-3; SFP+ columns are
-    silkscreened 4/5, 6/7, 8/9, 10/11 with the UPPER number on the upper port
-    (the guide art writes 1/0 over 1/1 the same way up). CLI names (et-0/0/x,
-    xe-0/1/x) are not printed on the metal'
-  port-leds: 'photo + drawing - each SFP+ column carries a lamp strip between
-    the rows: triangle-up, two lenses, triangle-down (drawing shows the four
-    marks at y 22.1 with lenses at column-centre +/-1.8). The up triangle ties
-    the left lens to the upper port and the down triangle the right lens to the
-    lower port. NO DOCUMENT DESCRIBES THESE LAMPS: searched the guide doc.md
-    for "port LED", "link and activity", "rate-selectable" near LED, and
-    "triangle"; the front-panel LED table (Table 17) covers only system LEDs.
-    States left as the component default, description records the silence. The
-    QSFP ports carry NO per-port faceplate LEDs - confirmed against the
-    photograph, not just the text (the only marks above the cages are vent
-    holes). The GM/PTP port has two stacked lamps at x 63.6 (y 26.6/32.1),
-    also undocumented'
-  mgmt-block: 'drawing - MGMT and BITS RJ45s centred at 267.6/289.7 (y 27.25),
-    CON and ToD at 312.8/336.8 (y 27.4); vertical USB-A at 352.5, 27.8; SMB
-    quad at 366.7/376.5 x 23.8/31.4 (IN row above OUT row); five status lamps
-    at y 34.2, x 387.6 (OK/FAIL), 399.1 (ONLINE), 409.4 (ALM), 417.5, 425.7;
-    recessed OFFLINE button at 435.5 and RESET pinhole at 447.0 (RESET x read
-    off the photograph between OFFLINE and the ear; not resolvable on the
-    drawing - estimated). The drawing draws OFFLINE ~3 mm above the lamp row
-    (31.3 against 34.2); both buttons are MODELLED ON the lamp centreline for
-    visual consistency, a deliberate deviation recorded here'
-  ssd-labels: 'photo - the photographed faceplate labels the 4th and 5th lamps
-    SSD0 then SSD1 left to right; the guide art swaps them. Photo carried'
-  rj45-orientation: 'drawing + photo - CON and ToD are drawn and photographed
-    contacts-UP (keyway down, std/rj45 default); MGMT and BITS are drawn
-    contacts-DOWN with two integrated LED windows at the top corners, so they
-    carry rotate 180 and a lamp pair placed over the top corners. The MGMT
-    lamps are the guide''s own "activity LED and link LED"; BITS lamp roles
-    (Activity left, Link right) are Table 17''s'
-  esd-front: 'drawing + photo - a recessed socket at 31.1, 28.9 with the ESD
-    symbol below; the guide''s "ESD Points" figure (g009865, Figure 5) marks
-    this same location. The guide art draws it as a hex-nut stud; the
-    photograph shows a plain recessed socket - photo carried'
-  ears: 'NOT MODELLED, by project convention - devices in this library are
-    drawn without rack ears. The MX204''s guide art draws integral ear flanges
-    at both ends of both faces (fold lines at x 22.65 and 459.65 on the 482.3
-    mm rack face, each flange carrying two rounded slots and, on the front, a
-    central 8.2 mm hole), and Table 19''s 19 in width is measured over them.
-    The modelled body is the 437.0 mm between the fold lines; all front and
-    rear coordinates were measured on the 482.3 mm drawing and shifted by
-    -22.65. The removable outboard brackets in the photographs are likewise
-    not modelled'
-  rear: 'drawing (g009862 at the same per-axis scales) + photo - recessed left
-    panel 24-97.7 across the full height carrying the grounding plate (lug
-    circles at 38.6 and 54.6, y 17.2), the earth symbol at 46.6, 31.6 and the
-    ESD socket at 81.4, 17.2 with its symbol above at 81.1, 6.7. Three fan
-    bays with apertures ~42 mm on a 49.1 mm pitch at x 107.8/156.9/206.0, each
-    preceded by a chassis strip printed with a fan icon (y 17.1), the bay
-    number (y 21.6) and the fan status lamp (y 28.9) at x 103.2/152.4/201.2.
-    A blank recessed plate spans 256-327.3. Two PSU bays at 334.9 and 396.3
-    (apertures measure 57.0, module width 56.6 per Table 19; the bay is sized
-    42.4 tall for the DC module, the taller of the two occupants per Table 19,
-    so the 40.1 AC face sits in it with clearance), silkscreened 0 and 1 on
-    the chassis left of each bay. A fourth small hole appears at
-    250.0, 28.9 on the drawing right of fan 2 with no icon or number above it;
-    left unmodelled and recorded here'
-  rear-axis: 'the rear view is its own face with x = 0 at ITS left edge (the
-    chassis RIGHT side seen from the front); the fan and PSU modules are
-    horizontal, so nothing mirrors. Positions are direct measurements of the
-    rear drawing, not derived from front coordinates'
-  vents: 'drawing - the hex vent fields are drawn as three simplified decor
-    rects using the shared vent pattern; the real punching follows irregular
-    staggered outlines around every feature (including sparse transition runs
-    between the port groups) that are not reproduced hole-for-hole. The small
-    3-hole columns between the RJ45 jacks are likewise simplified away'
-  color: 'photo - light Juniper grey, sampled from mx204-front-high.jpg
-    (#9a9ea3); module faces near-black charcoal, fan furniture orange'
-  power: 'guide power planning - 240 W typical at 25 C and 280 W maximum at
-    55 C for a fully loaded router (Tables 28 and 31, AC and DC alike; the
-    vendor qualifies both by ambient, not by measure). Table 32 adds the DC
-    INPUT figure at 90% efficiency: 266 W at 25 C; Table 33''s 55 C input
-    value fell outside the text layer of this extraction and is not carried.
-    Table 20 separately states maximum thermal output 1705 BTU/hour (500 W) -
-    a different scope (provisioning ceiling) that is transcribed under thermal
-    and deliberately NOT reconciled with the 280 W draw'
-  serial-label: 'guide Figure 60 shows the chassis serial-number label; its
-    figure crops without a locating dimension and the topic does not name a
-    face. Not modelled; recorded so the next reader knows it was looked for'
-  lifecycle: 'announced - Juniper lists MX204-HW-BASE end-of-sale 2027-06-15
-    and end-of-support 2032-06-30 (support.juniper.net M/MX hardware
-    milestones, mirrored by Park Place and router-switch EOL trackers,
-    searched 2026-08-26)'
-  other-faces: 'near-blank by evidence - no photograph or drawing of the
-    top, bottom or side faces exists in the intake beyond the g009881
-    top-view outline, which shows a plain slab with the mounting rails
-    pre-attached along the sides. Each face carries only its rail band(s),
-    estimated and marked so, which is also what lets the capability chain
-    count the face as drawn. Faces are sized from Table 19. Every face carries only symmetric content as far as
-    the sources show, so the axis conventions have been checked but nothing
-    asymmetric pins them. Axis conventions, checked against viewer3d.js: LEFT
-    view x = 0 is the REAR, RIGHT view x = 0 is the FRONT, top and bottom have
-    y = 0 at the FRONT with left/right mirrored between them'
+  bits-lamps:
+    note: >-
+      THE BITS JACK KEEPS ITS TWO LAMPS AS SEPARATE PLACEMENTS, and it is the only jack in the
+      library that does. The RJ45 family (docs/rj45-family-design.md, #125) has four members - two
+      bare, two lamped - and no bare-with-lamps one. BITS is a timing role, so decision 3 puts it
+      on std/rj45@2, the bare housing; but the hardware guide draws a link and an activity lamp
+      beside it, so led-bits-link and led-bits-act stay where they are, naming the jack with for:,
+      the same shape edgecore/as5912-54x uses for its mgmt-eth pair. One jack does not earn a
+      fifth family member. L76 does not count this as an unlamped Ethernet jack (BITS is not
+      Ethernet) and L39 lets the lamps sit inside the jack's own cutout; if a second
+      bare-with-lamps jack ever arrives, the family gains a member.
+  sources:
+    note: >-
+      MX204 Universal Routing Platform Hardware Guide (published 2025-11-12, figures
+      g009860/g009862/g009881/g009897/g100549 among others), HPE datasheet a00150825enw (MX
+      204/240/480/960), Juniper image-library studio photographs mx204-front-high and
+      mx204-rear-high (straight-on), and the NetBox devicetype-library MX204 elevations. No
+      mechanical drawing was available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - Table 19: chassis 1.72 x 19 x 18.50 in (43.7 x 482.3 x 470 mm), 1RU; the
+      dimension drawing g009881 (top view) reads the width as 18.99 in (48.23 cm) and the depth
+      over fan and power handles as 20.41 in (51.84 cm) against Table 19's 20.43. The
+      rack-requirements table says the MOUNTING BRACKETS "extend the width to 19 in", yet drawing
+      and table agree the body itself is ~482.3 including the integral ear flanges - this chassis
+      is genuinely full-rack-width, with the front face spanning ear to ear. The modelled width is
+      the 437.0 mm BODY between the ear-flange fold lines (ears are not modelled here - see ears)
+  scale:
+    confidence: drawing
+    note: >-
+      drawing - the guide front view (g009860) rendered at 600 dpi measures 2895 x 275 px, aspect
+      10.53 against the true 482.3/43.7 = 11.04, so the figure is stretched ~4.6% vertically and
+      is SCHEMATIC. All positions below are fractions off it anchored per axis: x at 6.003 px/mm
+      to the 482.3 mm width, y at 6.293 px/mm to the 43.7 mm height. Feature sizes come from the
+      standards registry, never from this drawing. The rear (g009862) is the same art family and
+      was measured the same way
+  drawing-vs-photo:
+    note: >-
+      sources-disagree, and the REAL DEVICE (Juniper studio photographs) wins for everything
+      printed: the guide art labels the QSFP ports 0/0-0/3 and the SFP+ ports 1/0-1/7 (CLI
+      interface names), prints 10MHz / 1PPS on the SMB columns, orders the LED row ...SSD1 SSD0,
+      puts MX204 beside the Juniper logo and a junos badge at the right. The photographed
+      faceplate prints plain 0-3 and 4/5-10/11 port numbers, PPS and 100MHz under the SMB columns,
+      orders the row SSD0 SSD1, prints MX204 at the RIGHT end and carries no junos badge. The
+      silkscreen below follows the photograph; note the guide TEXT unambiguously calls the clock
+      ports 10-MHz (pinout table, clocking topic), so the printed 100MHz legend is carried as
+      artwork while the function stays 10 MHz - see gaps
+  ports:
+    confidence: drawing
+    note: >-
+      drawing + registry - four QSFP cages centred at x 76.7/95.7/114.7/ 133.7 (measured pitch
+      18.93, registry qsfp-ganged pitch 19.0), aperture centre y 27.5; eight SFP+ in a 2x4
+      belly-to-belly block, column centres 158.1/172.3/186.6/200.8 (pitch 14.25 per registry,
+      measured 14.3), row centres y 14.25 and 30.15; GM/PTP SFP centred at 53.15, 29.65 (aperture
+      interior read off the labelled drawing). Counts confirmed by the photograph and the guide
+      text (4 + 8 + 1)
+  port-numbering:
+    note: >-
+      photo - QSFP ports are silkscreened 0-3; SFP+ columns are silkscreened 4/5, 6/7, 8/9, 10/11
+      with the UPPER number on the upper port (the guide art writes 1/0 over 1/1 the same way up).
+      CLI names (et-0/0/x, xe-0/1/x) are not printed on the metal
+  port-leds:
+    note: >-
+      photo + drawing - each SFP+ column carries a lamp strip between the rows: triangle-up, two
+      lenses, triangle-down (drawing shows the four marks at y 22.1 with lenses at column-centre
+      +/-1.8). The up triangle ties the left lens to the upper port and the down triangle the
+      right lens to the lower port. NO DOCUMENT DESCRIBES THESE LAMPS: searched the guide doc.md
+      for "port LED", "link and activity", "rate-selectable" near LED, and "triangle"; the
+      front-panel LED table (Table 17) covers only system LEDs. States left as the component
+      default, description records the silence. The QSFP ports carry NO per-port faceplate LEDs -
+      confirmed against the photograph, not just the text (the only marks above the cages are vent
+      holes). The GM/PTP port has two stacked lamps at x 63.6 (y 26.6/32.1), also undocumented
+  mgmt-block:
+    confidence: drawing
+    note: >-
+      drawing - MGMT and BITS RJ45s centred at 267.6/289.7 (y 27.25), CON and ToD at 312.8/336.8
+      (y 27.4); vertical USB-A at 352.5, 27.8; SMB quad at 366.7/376.5 x 23.8/31.4 (IN row above
+      OUT row); five status lamps at y 34.2, x 387.6 (OK/FAIL), 399.1 (ONLINE), 409.4 (ALM),
+      417.5, 425.7; recessed OFFLINE button at 435.5 and RESET pinhole at 447.0 (RESET x read off
+      the photograph between OFFLINE and the ear; not resolvable on the drawing - estimated). The
+      drawing draws OFFLINE ~3 mm above the lamp row (31.3 against 34.2); both buttons are
+      MODELLED ON the lamp centreline for visual consistency, a deliberate deviation recorded here
+  ssd-labels:
+    note: >-
+      photo - the photographed faceplate labels the 4th and 5th lamps SSD0 then SSD1 left to
+      right; the guide art swaps them. Photo carried
+  rj45-orientation:
+    confidence: drawing
+    note: >-
+      drawing + photo - CON and ToD are drawn and photographed contacts-UP (keyway down, std/rj45
+      default); MGMT and BITS are drawn contacts-DOWN with two integrated LED windows at the top
+      corners, so they carry rotate 180 and a lamp pair placed over the top corners. The MGMT
+      lamps are the guide's own "activity LED and link LED"; BITS lamp roles (Activity left, Link
+      right) are Table 17's
+  esd-front:
+    confidence: drawing
+    note: >-
+      drawing + photo - a recessed socket at 31.1, 28.9 with the ESD symbol below; the guide's
+      "ESD Points" figure (g009865, Figure 5) marks this same location. The guide art draws it as
+      a hex-nut stud; the photograph shows a plain recessed socket - photo carried
+  ears:
+    note: >-
+      NOT MODELLED, by project convention - devices in this library are drawn without rack ears.
+      The MX204's guide art draws integral ear flanges at both ends of both faces (fold lines at x
+      22.65 and 459.65 on the 482.3 mm rack face, each flange carrying two rounded slots and, on
+      the front, a central 8.2 mm hole), and Table 19's 19 in width is measured over them. The
+      modelled body is the 437.0 mm between the fold lines; all front and rear coordinates were
+      measured on the 482.3 mm drawing and shifted by -22.65. The removable outboard brackets in
+      the photographs are likewise not modelled
+  rear:
+    confidence: drawing
+    note: >-
+      drawing (g009862 at the same per-axis scales) + photo - recessed left panel 24-97.7 across
+      the full height carrying the grounding plate (lug circles at 38.6 and 54.6, y 17.2), the
+      earth symbol at 46.6, 31.6 and the ESD socket at 81.4, 17.2 with its symbol above at 81.1,
+      6.7. Three fan bays with apertures ~42 mm on a 49.1 mm pitch at x 107.8/156.9/206.0, each
+      preceded by a chassis strip printed with a fan icon (y 17.1), the bay number (y 21.6) and
+      the fan status lamp (y 28.9) at x 103.2/152.4/201.2. A blank recessed plate spans 256-327.3.
+      Two PSU bays at 334.9 and 396.3 (apertures measure 57.0, module width 56.6 per Table 19; the
+      bay is sized 42.4 tall for the DC module, the taller of the two occupants per Table 19, so
+      the 40.1 AC face sits in it with clearance), silkscreened 0 and 1 on the chassis left of
+      each bay. A fourth small hole appears at 250.0, 28.9 on the drawing right of fan 2 with no
+      icon or number above it; left unmodelled and recorded here
+  rear-axis:
+    note: >-
+      the rear view is its own face with x = 0 at ITS left edge (the chassis RIGHT side seen from
+      the front); the fan and PSU modules are horizontal, so nothing mirrors. Positions are direct
+      measurements of the rear drawing, not derived from front coordinates
+  vents:
+    confidence: drawing
+    note: >-
+      drawing - the hex vent fields are drawn as three simplified decor rects using the shared
+      vent pattern; the real punching follows irregular staggered outlines around every feature
+      (including sparse transition runs between the port groups) that are not reproduced
+      hole-for-hole. The small 3-hole columns between the RJ45 jacks are likewise simplified away
+  color:
+    note: >-
+      photo - light Juniper grey, sampled from mx204-front-high.jpg (#9a9ea3); module faces
+      near-black charcoal, fan furniture orange
+  power:
+    note: >-
+      guide power planning - 240 W typical at 25 C and 280 W maximum at 55 C for a fully loaded
+      router (Tables 28 and 31, AC and DC alike; the vendor qualifies both by ambient, not by
+      measure). Table 32 adds the DC INPUT figure at 90% efficiency: 266 W at 25 C; Table 33's 55
+      C input value fell outside the text layer of this extraction and is not carried. Table 20
+      separately states maximum thermal output 1705 BTU/hour (500 W) - a different scope
+      (provisioning ceiling) that is transcribed under thermal and deliberately NOT reconciled
+      with the 280 W draw
+  serial-label:
+    note: >-
+      guide Figure 60 shows the chassis serial-number label; its figure crops without a locating
+      dimension and the topic does not name a face. Not modelled; recorded so the next reader
+      knows it was looked for
+  lifecycle:
+    note: >-
+      announced - Juniper lists MX204-HW-BASE end-of-sale 2027-06-15 and end-of-support 2032-06-30
+      (support.juniper.net M/MX hardware milestones, mirrored by Park Place and router-switch EOL
+      trackers, searched 2026-08-26)
+  other-faces:
+    note: >-
+      near-blank by evidence - no photograph or drawing of the top, bottom or side faces exists in
+      the intake beyond the g009881 top-view outline, which shows a plain slab with the mounting
+      rails pre-attached along the sides. Each face carries only its rail band(s), estimated and
+      marked so, which is also what lets the capability chain count the face as drawn. Faces are
+      sized from Table 19. Every face carries only symmetric content as far as the sources show,
+      so the axis conventions have been checked but nothing asymmetric pins them. Axis
+      conventions, checked against viewer3d.js: LEFT view x = 0 is the REAR, RIGHT view x = 0 is
+      the FRONT, top and bottom have y = 0 at the FRONT with left/right mirrored between them
+
 attrs:
   physical:
     weight: 10.3 kg fully loaded, AC-powered chassis (Table 19)

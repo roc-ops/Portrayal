@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS5912-54X
@@ -12,35 +12,68 @@ portfolio:
 description: 48x SFP+ 10G + 6x QSFP28 100G 1U aggregation router, Broadcom Qumran-MX
 profile: networking
 provenance:
-  attrs: datasheet (Ports/Key-Components/Performance/Power/Physical sections)
-  chassis: datasheet (Dimensions WxDxH 440 x 548 x 44 mm; Weight 9.34 kg). Note this chassis is
-    NOT the 438.4 x 43.5 of the AS7726/AS7326 line - it is 440 x 44
-  port-arrangement: datasheet Interfaces figure - 48 SFP+ as 2 rows x 24 columns in three visual
-    groups of 8, and 6 QSFP28 as 2 columns x 3 rows
-  port-pitch: standard - SFP columns on the SFF-8433 basic 14.25, QSFP on the 19.0 measured from
-    TE 2322551-4. Feasibility checks out - 24 x 14.25 = 342 plus 2 x 19.0 = 38 plus the management
-    stack fits the 440mm panel
-  port-numbering: read off the unit's silkscreen in the 3D capture. SFP+ pairs read N-up / N+1-down
-    (45 up, 46 down, 47 up, 48 down), so column-major. QSFP is also column-major but NOT contiguous
-    with a row reading - the strip below QSFP row 2 reads '49 up / 50 down' and '52 up / 53 down',
-    which puts the unlabelled bottom row at 51 and 54, not 53 and 54
-  qsfp-geometry: QSFP row 2 shares its bottom edge with the SFP+ bottom row; the 12.0 and 14.5 row
-    spacings are preserved from the datasheet figure
-  qsfp-leds: between the belly-to-belly pair, per column - up arrow, two round LEDs, down arrow
-    (capture frame 0)
-  bottom-row-labels: 51 and 54 are NOT silkscreened on the unit; drawn dimmed for reference only
-  mgmt-silkscreen: an up-arrow Mgmt line over a down-arrow Console line, beneath the RJ45 stack
-  usb-area: the honeycomb stops either side of the USB port - that patch of panel is flat - and
-    the USB trident is printed to its right (owner, from the unit)
-  rear-layout: datasheet figure (PSU each end, six fans between, numbered 6..1)
-  top-bottom-sides: from the unit. Bottom label placement, the side-rail vent slots and the rear-corner
-    access panel are from IMG_2178; the top grooves and side venting from the Object Capture frames.
-    Positions are photo-measured, not measured - the chassis outline is the datasheet's 440 x 548
-    x 44
-  mgmt-leds: LNK and ACT, bracketed to the management port between the Mgmt and Console silkscreen
-    lines (IMG_2179)
-  rj45-orientation: the pair is mirrored with the latch keyways facing AWAY from each other, so
-    the upper jack is the inverted one (IMG_2179)
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet (Ports/Key-Components/Performance/Power/Physical sections)
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet (Dimensions WxDxH 440 x 548 x 44 mm; Weight 9.34 kg). Note this chassis is NOT the
+      438.4 x 43.5 of the AS7726/AS7326 line - it is 440 x 44
+  port-arrangement:
+    confidence: datasheet
+    note: >-
+      datasheet Interfaces figure - 48 SFP+ as 2 rows x 24 columns in three visual groups of 8,
+      and 6 QSFP28 as 2 columns x 3 rows
+  port-pitch:
+    note: >-
+      standard - SFP columns on the SFF-8433 basic 14.25, QSFP on the 19.0 measured from TE
+      2322551-4. Feasibility checks out - 24 x 14.25 = 342 plus 2 x 19.0 = 38 plus the management
+      stack fits the 440mm panel
+  port-numbering:
+    note: >-
+      read off the unit's silkscreen in the 3D capture. SFP+ pairs read N-up / N+1-down (45 up, 46
+      down, 47 up, 48 down), so column-major. QSFP is also column-major but NOT contiguous with a
+      row reading - the strip below QSFP row 2 reads '49 up / 50 down' and '52 up / 53 down',
+      which puts the unlabelled bottom row at 51 and 54, not 53 and 54
+  qsfp-geometry:
+    note: >-
+      QSFP row 2 shares its bottom edge with the SFP+ bottom row; the 12.0 and 14.5 row spacings
+      are preserved from the datasheet figure
+  qsfp-leds:
+    note: >-
+      between the belly-to-belly pair, per column - up arrow, two round LEDs, down arrow (capture
+      frame 0)
+  bottom-row-labels:
+    note: >-
+      51 and 54 are NOT silkscreened on the unit; drawn dimmed for reference only
+  mgmt-silkscreen:
+    note: >-
+      an up-arrow Mgmt line over a down-arrow Console line, beneath the RJ45 stack
+  usb-area:
+    note: >-
+      the honeycomb stops either side of the USB port - that patch of panel is flat - and the USB
+      trident is printed to its right (owner, from the unit)
+  rear-layout:
+    confidence: datasheet
+    note: >-
+      datasheet figure (PSU each end, six fans between, numbered 6..1)
+  top-bottom-sides:
+    note: >-
+      from the unit. Bottom label placement, the side-rail vent slots and the rear-corner access
+      panel are from IMG_2178; the top grooves and side venting from the Object Capture frames.
+      Positions are photo-measured, not measured - the chassis outline is the datasheet's 440 x
+      548 x 44
+  mgmt-leds:
+    note: >-
+      LNK and ACT, bracketed to the management port between the Mgmt and Console silkscreen lines
+      (IMG_2179)
+  rj45-orientation:
+    note: >-
+      the pair is mirrored with the latch keyways facing AWAY from each other, so the upper jack
+      is the inverted one (IMG_2179)
+
 attrs:
   performance:
     switching-capacity: 800 Gbps

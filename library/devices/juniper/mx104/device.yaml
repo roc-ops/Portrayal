@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -18,44 +18,56 @@ description: >-
   plain panel with the earthing plate.
 profile: networking
 provenance:
-  sources: MX104 Hardware Guide, the
-    MX104 datasheet, and the image-library photographs mx104-front-high and
-    mx104-rear-high. No mechanical drawing was available
-  chassis: 'datasheet-table - physical table: 6.09 in (154.7 mm) high,
-    17.22 in (437 mm) wide, 9.461 in (240 mm) deep; 9 kg bare / 14.5 kg
-    configured. NOTE the same table scrambles width/depth/height axes on the
-    module rows - the chassis row is self-consistent and carried; ears NOT
-    MODELLED (19.2 in is over the brackets)'
-  scale: 'photo - the front photograph is isotropic at 3.087 px/mm once the
-    brackets are excluded (aspect with brackets matches the 48.7 cm
-    over-brackets figure). Rows: fixed panel 0-44.4, MIC rows 44.4-76.5 and
-    76.5-108.5, PSU/RE band to 154.7. A FIRST READING put the RE rows at
-    13.9 mm - too thin to hold their photographed RJ45s - and the row
-    boundary was re-derived; positions are single-pass and approximate to
-    ~2 mm throughout'
-  fixed-panel: 'photo - ALARM DB-15 at the left, four fixed XE SFP+ cages at
-    centres 97.8-140.6 silkscreened 2/0/0-2/0/3, SYS OK lamp and
-    ONLINE/OFFLINE button, EXT REF CLOCK and ToD RJ45s at 269.9/285.5, the
-    1PPS / 10 MHz IN-OUT SMB quad inline at 311.5-334.2, and the junos badge'
-  populated-with: 'photo - slot 1/0 and 0/1 carry MIC-3D-20GE-SFP, slot 1/1
-    the MIC-3D-4CHOC3-1OC12-CE, slot 0/0 the MIC-3D-2XGE-XFP; both RE bays
-    carry the slim MX104 RE and both PSU bays the DC supply. Defaults
-    reproduce that configuration'
-  rear: 'photo - a plain panel with the two-hole earthing plate at the
-    bottom centre; nothing else. The fan tray and air filter are
-    SIDE-mounted per the guide (Figure 7/8) and appear on the left face as
-    an estimated band'
-  power: 'guide power table - the 20x1GE MIC row (26 W) was captured; the
-    chassis-level and remaining per-module rows fell outside this
-    extraction''s text layer and their L27 warnings stand. Max thermal and
-    draw figures not carried rather than guessed'
-  lifecycle: 'announced - MX104 is EOL (TSB seen in the family tables;
-    image-library page redirects). Per-SKU dates on the Juniper milestones
-    page'
-  color: photo - medium grey face and rear
-  other-faces: 'left face carries the estimated fan-tray band (side-mounted
-    cooling per the guide); other faces rail-band estimates. Axis
-    conventions per viewer3d.js as the siblings'
+  sources:
+    note: >-
+      MX104 Hardware Guide, the MX104 datasheet, and the image-library photographs
+      mx104-front-high and mx104-rear-high. No mechanical drawing was available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - physical table: 6.09 in (154.7 mm) high, 17.22 in (437 mm) wide, 9.461 in
+      (240 mm) deep; 9 kg bare / 14.5 kg configured. NOTE the same table scrambles
+      width/depth/height axes on the module rows - the chassis row is self-consistent and carried;
+      ears NOT MODELLED (19.2 in is over the brackets)
+  scale:
+    note: >-
+      photo - the front photograph is isotropic at 3.087 px/mm once the brackets are excluded
+      (aspect with brackets matches the 48.7 cm over-brackets figure). Rows: fixed panel 0-44.4,
+      MIC rows 44.4-76.5 and 76.5-108.5, PSU/RE band to 154.7. A FIRST READING put the RE rows at
+      13.9 mm - too thin to hold their photographed RJ45s - and the row boundary was re-derived;
+      positions are single-pass and approximate to ~2 mm throughout
+  fixed-panel:
+    note: >-
+      photo - ALARM DB-15 at the left, four fixed XE SFP+ cages at centres 97.8-140.6 silkscreened
+      2/0/0-2/0/3, SYS OK lamp and ONLINE/OFFLINE button, EXT REF CLOCK and ToD RJ45s at
+      269.9/285.5, the 1PPS / 10 MHz IN-OUT SMB quad inline at 311.5-334.2, and the junos badge
+  populated-with:
+    note: >-
+      photo - slot 1/0 and 0/1 carry MIC-3D-20GE-SFP, slot 1/1 the MIC-3D-4CHOC3-1OC12-CE, slot
+      0/0 the MIC-3D-2XGE-XFP; both RE bays carry the slim MX104 RE and both PSU bays the DC
+      supply. Defaults reproduce that configuration
+  rear:
+    note: >-
+      photo - a plain panel with the two-hole earthing plate at the bottom centre; nothing else.
+      The fan tray and air filter are SIDE-mounted per the guide (Figure 7/8) and appear on the
+      left face as an estimated band
+  power:
+    note: >-
+      guide power table - the 20x1GE MIC row (26 W) was captured; the chassis-level and remaining
+      per-module rows fell outside this extraction's text layer and their L27 warnings stand. Max
+      thermal and draw figures not carried rather than guessed
+  lifecycle:
+    note: >-
+      announced - MX104 is EOL (TSB seen in the family tables; image-library page redirects).
+      Per-SKU dates on the Juniper milestones page
+  color:
+    note: >-
+      photo - medium grey face and rear
+  other-faces:
+    note: >-
+      left face carries the estimated fan-tray band (side-mounted cooling per the guide); other
+      faces rail-band estimates. Axis conventions per viewer3d.js as the siblings
+
 attrs:
   physical:
     weight: 9 kg bare; 14.5 kg with power supplies, fan tray and MICs

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9906
-version: 0.4.7
+version: 0.4.8
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9906
@@ -18,265 +18,333 @@ description: >-
   gaps.
 profile: networking
 provenance:
-  bay-opening-is-the-hole-not-the-reserved-space: >-
-    `size` on these bays is what the slot RESERVES - where a card is placed and what
-    L33 and L34 check it against - and it is the card's own envelope, per the
-    arbitration that a bay and its occupant carry the same size. The renderer also
-    painted that rectangle dark, so the visible opening was drawn over sheet metal at
-    each end of every slot. `opening` now carries the hole separately: 364.32 mm,
-    the cage measured off the front master at y 94.09 to 458.41.
-    NOTHING ABOUT PLACEMENT OR CHECKING MOVES. Only what is painted dark changes, and
-    the opening is centred on the bay because a hole and the space reserved around it
-    share a centre. Where only one axis is measured the other keeps the bay's own
-    figure rather than being inferred from the occupant, which is the mistake this
-    field exists to undo.
-  chassis: >-
-    datasheet - Table 13 "Cisco ASR 9000 Series Routers Physical Descriptions",
-    b-asr9k-overview-reference-guide.pdf p130. ASR 9906: chassis height 24.39 inches (61.95 cm),
-    chassis width 17.6 inches (44.7 cm), chassis depth 28.77 inches (73.08 cm) with "31.45 inches
-    (79.88 cm) including the cable management system". Modelled as the BODY, 447.0 x 619.51 x
-    730.8 mm, taking the depth WITHOUT the cable management system since that is the chassis. Note
-    Table 13's 9906 row does not quote a flanged width at all, unlike the 9006 and 9010 rows
-  ru: >-
-    datasheet - 24.39 in / 1.75 = 13.94 RU. The chassis OCCUPIES 14 RU and is built about 0.11 in
-    under it, the same clearance allowance the ASR 9904 shows more starkly at 5.93. chassis.height
-    carries the real 619.51 mm and chassis.ru the allocation; they are deliberately not reconciled
-  stencil-disagrees-and-the-guide-wins: >-
-    NOTE - Cisco's Visio stencil records height_in 2.4500 for this master, i.e. 24.50 in, against
-    Table 13's 24.39. THE STENCIL HAS ROUNDED UP TO THE WHOLE RU (14 x 1.75 = 24.50) and the guide
-    has not. The manifest carries the guide's 24.39 because a spec table states the chassis as
-    built while a stencil states the space it occupies. The same 0.05 in rounding is on the ASR
-    9910 master; the 9904 is the case where both sources agree on the un-rounded figure
-  calibration: >-
-    measured - the front master passes gate 1. Calibrating x on 482.6 mm (the 19.0 in rack face)
-    and y on Table 13's 619.51 mm independently gives 0.20134 and 0.20062 mm/px, agreeing to
-    0.36 percent. Origin shifted in by (482.6 - 447.0) / 2 = 17.8 mm to reach the body edge
-  side-faces: >-
-    datasheet - "Figure 17: Cisco ASR 9906 Router Side View showing vertical Rack Rail Locations",
-    b-asr9k-hardware-installation-guide.pdf p31, and it is a dimensioned mechanical drawing rather
-    than a schematic. It gives an overall side extent of 27.00 in (685.8 mm) and locates two
-    vertical rack rails at 9.45 in (240.0 mm) and 5.00 in (127.0 mm) from one end. It also draws
-    two large chassis lift handles high on the face, a hatched panel low toward one end, a warning
-    label and card guide detail along the bottom. The two rails are drawn here; the handles and the
-    panel are named as regions rather than given geometry, because the figure carries no dimension
-    for either
-  side-depth-is-a-third-figure: >-
-    NOTE - Figure 17's 27.00 in (685.8 mm) is a THIRD depth for this chassis and does not match
-    either of Table 13's. Table 13 gives 28.77 in (73.08 cm) bare and 31.45 in (79.88 cm)
-    "including the cable management system"; this figure says 27.00. Most likely it measures the
-    sheet metal between the planes the rails bolt to, excluding the front cosmetics that Table 13's
-    bare figure includes - but no document says so, and chassis.depth continues to carry Table 13's
-    730.8 mm because the spec table is authoritative for overall dimensions. The rail positions are
-    used as stated, measured from the FRONT - see side-view-depth-axes-run-OPPOSITE-ways for how
-    that datum was settled, and note this sentence said "from the rear" through several revisions
-    after the geometry had been corrected
-  top-face: >-
-    datasheet - Figure 11 "Cisco ASR 9906 Router Chassis Footprint Dimensions - Top Down View",
-    b-asr9k-overview-reference-guide.pdf p26, and it is orthographic: its chassis outline measures
-    315 by 510 px for a stated 17.60 by 28.77 in, an aspect of 0.6176 against the stated 0.6117,
-    inside one percent. So it carries geometry and not just arrangement. What is on the top plate:
-    a regulatory and compliance label block toward the rear, a large rectangular access panel below
-    it, the cisco wordmark printed on the metal toward the front, and scattered bolt positions. The
-    wordmark is real silkscreen on this face and is transcribed as such
-  depth-arithmetic-closes: >-
-    datasheet - Figure 11 also settles Table 13's two depths against each other, which no single
-    number does. It dimensions the chassis at 28.77 in (73.08 cm) and then shows the cable
-    management system protruding a further 2.68 in (6.81 cm) beyond the front of the chassis.
-    28.77 + 2.68 = 31.45, which is exactly Table 13's second figure, "31.45 inches (79.88 cm)
-    including the cable management system". Two independently stated numbers and their difference
-    all agree, so the bare depth this manifest carries is confirmed rather than merely chosen.
-    CONVENTION for this face, stated so it can be corrected in one line: laid out as Figure 11
-    lays it out, front at the BOTTOM edge and rear at the top
-  bottom-face: >-
-    datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
-    footprint figure dimensions. HIG Figure 17 dimensions two vertical rack rails at 5.00 in
-    (127.0 mm) and 9.45 in (240.0 mm) from the FRONT. The rack mounting flange is a vertical plate
-    spanning the
-    chassis height, so it intersects the BOTTOM plane as well as the top and appears on this face
-    as a line across the width at that depth. That is a real dimensioned feature rather than an
-    annotation of absence, which is the distinction that matters here - an earlier revision of this
-    file said the bottom was unreachable without inventing something, and that was wrong. What
-    remains true is that no BOTTOM VIEW of any ASR 9000 chassis exists in the 78-document intake;
-    what this face carries is a feature dimensioned in a TOP-down figure whose geometry the bottom
-    necessarily shares. Positions are given from the FRONT, which is the end Figure 17 dimensions
-    from: the cable management structure protrudes past that edge, and Figure 11 separately
-    dimensions that protrusion as 2.68 in
-  top-and-bottom-view-convention: >-
-    ON THIS CHASSIS'S TOP AND BOTTOM VIEWS, y = 0 IS THE REAR AND y = depth IS THE FRONT. Verified
-    on this chassis's own footprint figure rather than carried across from a sibling: the figure
-    prints "Rear of chassis" above the drawing and "Front of chassis" below it, read by eye because
-    that text is vector art and does not extract. Stated here because it is not derivable from the
-    file and because reading it the other way turns every depth-wise position into its complement -
-    which is exactly the error that put this family's ASR 9906 strips in the wrong half of the box.
-  strip-is-centred-on-the-plane: >-
-    the rack mounting strip is 3.9 mm thick and is placed so the DIMENSIONED PLANE PASSES THROUGH
-    ITS MIDDLE, at y = plane - 1.95. Neither edge carries the number. An earlier revision put the
-    plane on one edge, which meant the figure's dimension was 3.9 mm from where the drawing said it
-    was, and which edge differed between chassis - casa-cards found the same inconsistency across
-    the two it owns and centred them the same way
-  top-and-bottom-agree: >-
-    the rack mounting flange is one vertical plate, so it intersects the top and bottom planes at
-    the SAME depth and appears on both faces at the same y. An earlier revision drew it only on the
-    bottom, which left the two faces of one chassis disagreeing about where the chassis bolts to
-    the rack - the kind of internal inconsistency this work has spent the night finding in other
-    people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are the standard
-    this follows
-  side-view-depth-axes-run-OPPOSITE-ways: >-
-    CORRECTED, and it was wrong in two ways at once. casa-cards derived the convention from
-    viewer3d.js rather than from preference, and I verified it against the same source: a right
-    view rotates [0, +pi/2, 0] so its local +x maps to world -z, putting x = 0 at the FRONT; a left
-    view rotates [0, -pi/2, 0] so x = 0 is at the REAR. The file's own comments say the same -
-    "right: face end at image left -> front" and "left: authored face-at-image-right".
-    This chassis's two rack rails are 127.0 and 240.0 mm from the FRONT. They were placed with an
-    arbitrary 56 mm offset on the right view - 78.0 and 191.0 from the front, out by 49 - and with
-    the rail's EDGE rather than its centre on the left. Both faces now use the same rule as the top
-    and bottom strips: x = depth - D - w/2 on the left, x = D - w/2 on the right, so the
-    dimensioned plane passes through the middle of the rail on every face of the box.
-    NOTHING COULD HAVE CAUGHT THIS. The region label said "5.00 in and 9.45 in from the front" and
-    was right the whole time; only the coordinates disagreed with it, and no lint rule compares a
-    label against a geometry
-  side-face-labels-say-when-a-position-is-UNKNOWN: >-
-    every region on a side face now states either where the feature sits or that no figure
-    dimensions it. That second half is the point. A region reading only "Vertical rack rail
-    locations" is silent about position, and silence is indistinguishable from a position that was
-    known and not written down - which is exactly how a feature ends up drawn at the wrong end with
-    nothing to contradict it. casa-cards found seven such features across two chassis where the
-    LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule compares the
-    two. Saying "present but not dimensioned" gives a reader the same thing a distance would: a
-    claim to check the drawing against
-  left-right-flip-checked-not-assumed: >-
-    a bottom view flips LEFT and RIGHT relative to a top view - you walk under the box, not around
-    it - so a feature that is not full-width must sit at MIRRORED x on the two faces, at
-    width - x - w, and not at the same x. The trap is that identical x on both faces LOOKS
-    consistent while being wrong. Audited rather than assumed: this chassis is the only one of the
-    seven with non-full-width features on either face - the regulatory label block and the top
-    access panel, both at x = 42.0 of a 447.0 width - and both exist on the TOP ONLY, so there is
-    no counterpart to disagree with. Their x comes from Figure 11, a view from ABOVE, whose
-    left-right therefore matches the front view's directly and needs no mirror. Every other feature
-    on every top or bottom face in this family is full-width and immune. Recorded because
-    "symmetric, so it cannot be at the wrong end" is luck rather than care, and the next
-    asymmetric feature drawn on a bottom face will not be
-  prose-lagged-the-geometry-by-three-revisions: >-
-    RECORDED AS A PROCESS FAILURE, not just a typo. When the datum misread was found and the
-    geometry corrected from the rear to the front, THREE PROVENANCE SENTENCES AND TWO REGION
-    LABELS kept saying "from the rear". The drawing was right and the words were wrong for several
-    commits, and the words are what a reader trusts most. casa-cards' new L31 caught the two LABELS
-    - it compares a label's stated position against what is drawn at that depth - but it reads
-    labels and not provenance, so the three prose sentences were invisible to it and had to be
-    found by a human reading the file.
-    The lesson is narrow and worth keeping: A CORRECTION IS NOT DONE WHEN THE GEOMETRY MOVES. Grep
-    the whole file for the wrong claim, because the number appears in the coordinates, in the
-    region label and in two or three sentences of prose, and only the first of those is what you
-    were editing
-  four-hg-flex-accepted: >-
-    datasheet - the A9K-4HG-FLEX and A99-4HG-FLEX pairs added to the line card slots, and each is
-    placed on ITS OWN declared chassis list rather than on an inference from generation. The A9K
-    pair's contract names all seven chassis; the A99 pair's names five - "ASR 9922, ASR 9912, ASR
-    9910, ASR 9906 and ASR 9904" - so the two are not interchangeable even though they share an
-    envelope. A component that declares what it fits is a better source than a chassis deciding
-    what it will take
-  four-port-100ge: >-
-    datasheet - c78-740092's "Chassis compatibility" row: "Compatible with the Cisco ASR 9006, ASR
-    9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". All seven, stated outright,
-    and the component's own attrs.chassis carries the same list. At 41.4 mm it fits every line card
-    bay in the family. Added to the line card slots only - a compatibility row names a chassis, not
-    a slot, and this chassis's RSP and RP positions take supervisors
-  card-orientation: >-
-    datasheet - stated directly, and it had been an inference until now. The Overview and
-    Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
-    every chassis in the family and gives the ejector position as the tell: "Cisco ASR 9906
-    Router: All line cards and RSP cards are front-facing and mounted vertically, with ejector
-    levers and captive screws at the top and bottom of each card. All FCs are rear-facing and
-    mounted vertically, with ejector levers and captive screws at the top and bottom of each
-    card". A bay therefore places a card component unrotated. Only the ASR 9006 and ASR 9904 are
-    horizontal; the 9010, 9906, 9910, 9912 and 9922 all stand their cards up, including the 21
-    RU 9010. This section supersedes the three-way inference an earlier revision rested on - the
-    slot figures, Figure 2's "four on each side" callout and the measured cage aspect - all of
-    which agreed with it.
-  slots: >-
-    datasheet - Figure 21 "Cisco ASR 9906 Router Slot ID Numbering", p36 of
-    b-asr9k-overview-reference-guide.pdf, read at 250 dpi because the slot IDs are artwork and do
-    not survive text extraction. Left to right: Slot 0 = RSP0, Slot 1 = Line card 0, Slot 2 = Line
-    card 1, Slot 3 = Line card 2, Slot 4 = Line card 3, Slot 5 = RSP1. THE RSP PAIR IS THE OUTER
-    PAIR - the exact inverse of the ASR 9904, which puts its RSPs in the middle with the line cards
-    outside. Five chassis and four different arrangements so far
-  card-bays: >-
-    the card openings are BAYS, converted from cutouts once cisco/a9k-slot-cover@1 was shown to fit
-    them. That took no new component: the blank carries the line card envelope, 41.4 x 395.7, which
-    is the same envelope every card in this cage uses, and the question that had held the
-    conversion up - whether a component's size is its faceplate or its slot envelope - was settled
-    as the envelope. The measured pitch is wider than the envelope by the card guide, which is
-    chassis structure and not bay. Bays are sized to the component and positioned on the measured
-    cage, matching every other chassis in this family
-  slot-geometry: >-
-    drawing - the card cage opening spans 70.59 to 331.11 mm across the body and 94.09 to 458.41 mm
-    down it. Six slots of equal width divide 260.52 mm into a 43.42 mm pitch
-  slot-pitch-confirmed-by-the-silkscreen: >-
-    measured, and independently of the division above. This master PRINTS its slot IDs in a row
-    beneath the cage - PS0, RSP0, LC0, LC1, LC2, LC3, RSP1 - and the six slot labels centre at
-    90.22, 132.29, 177.30, 220.38, 264.77 and 308.97 mm. An even six-way division of the measured
-    cage puts the centres at 92.30, 135.72, 179.14, 222.56, 265.98 and 309.40. Every one agrees
-    within 3.4 mm, and the mean label-to-label pitch of 43.75 mm sits within 0.8 percent of the
-    43.42 the cage gives. The residual spread is text centring - RSP0 and RSP1 are four characters
-    against LC's three - so the pitch is CORROBORATED rather than independently measured. That
-    distinction matters and was understated in an earlier revision: a printed label locates a slot
-    only as well as its own width allows, and on the ASR 9910 the same method gave pitches ranging
-    41.78 to 55.16 where that chassis's card guide rail gave 43.78 with a spread of 0.2. Where a
-    master draws a uniform rail, the rail is the better ruler. This file's pitch remains the even
-    division of the measured cage, with the printed row as a check on it rather than as its source. THE PRINTED ROW ALSO
-    CONFIRMS FIGURE 21's NUMBERING on the metal itself, which is a second source for the slot map
-  power-shelf: >-
-    drawing + datasheet - the power shelf is VERTICAL and runs down the LEFT of the card cage,
-    which no other chassis in this family does. Figure 21 labels it PS0 and stacks M0 at the bottom
-    through M2 at the top, and Table 15 agrees: "ASR 9906: Version 3 power system: Up to three AC
-    power modules per system". The master draws the column POPULATED, so the individual module
-    openings are not separately measured - see gaps
-  fan-trays: >-
-    datasheet + drawing - two fan trays, FT0 above FT1, to the RIGHT of the cage per Figure 21.
-    The master draws them behind a door carrying "Cisco ASR 9000 Series", the cisco logo, an OPEN
-    legend and two indicators marked FAN0 and FAN 1. As on the ASR 9006, that text belongs to the
-    door rather than to chassis metal and is deliberately not in this manifest's silkscreen
-  airflow: >-
-    datasheet - "Cisco ASR 9906 Router: Front-to-top-to-rear cooling path. The inlet is at the
-    bottom front of the chassis, and the exhaust is at the LOWER rear",
-    b-asr9k-overview-reference-guide.pdf p3731. Note the lower rear, where the 9010 and 9910 both
-    exhaust at the upper rear. The bottom of the front face carries a large hexagonal-mesh intake
-    grille in the master, which is that inlet
-  air-filter: >-
-    datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Cisco ASR 9906 Router -
-    Located underneath the card cage", removed "by simply sliding it out of the chassis". Different
-    again from the 9006 and 9904, whose filters are on the right side
-  grounding: >-
-    datasheet - "Bottom rear and left side of the chassis",
-    b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 135
-  fabric-cards: >-
-    datasheet - the rear carries fabric cards in their own cage with numbering that restarts at
-    Slot 0, as Figure 22 shows for the sibling 9910. The COUNT is not readable from any figure we
-    hold, but Table 13 supplies it independently: the 9906's configured weight is quoted for a
-    chassis "Configured with two fan trays, two RSPs, five fabric cards, and one PEM". Five. The
-    rear is not otherwise modelled - no master or figure here shows it
-  environmental: >-
-    datasheet - Table 14, p131. The 9906 shares the 9006's and 9904's wider short-term range,
-    23 to 131 degF (-5 to 55 degC)
-  electrical: datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9906 columns only
-  weight: >-
-    datasheet - Table 13, two scopes. "Chassis only - 108.02 pounds (49 kg)" and "Chassis:
-    Configured with two fan trays, two RSPs, five fabric cards, and one PEM - 251.10 pounds
-    (113.9 kg)". Note the 9906 and 9910 rows describe a SPECIFIC configuration rather than the
-    "fully configured using all card slots" phrasing the older chassis use, so the two numbers are
-    not comparable across the family
-  no-chassis-power-figure: >-
-    NOTE, and NARROWED. The current Table 14 says only to use the Cisco Power Calculator, so there
-    is no chassis-level figure for THIS chassis in any document held and the module total here is a
-    floor. That is narrower than what an earlier revision of this file claimed: it said Cisco
-    publishes no chassis draw for ANY ASR 9000, and that is false. The older Ethernet Line Card
-    Installation Guide (asr9kELCIGbk.pdf, OL-17500-09) states "Power Dissipation 7600 W maximum
-    (Cisco ASR 9010 Router)" and 4556 W maximum for the ASR 9006 in its Table A-1 - a table the
-    current revision deleted. Those two chassis predate this one and no equivalent figure for this
-    model appears in either revision, so this is the vendor being silent about this chassis rather
-    than about the family
-  lifecycle: datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
-  compliance: datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+  bay-opening-is-the-hole-not-the-reserved-space:
+    note: >-
+      `size` on these bays is what the slot RESERVES - where a card is placed and what L33 and L34
+      check it against - and it is the card's own envelope, per the arbitration that a bay and its
+      occupant carry the same size. The renderer also painted that rectangle dark, so the visible
+      opening was drawn over sheet metal at each end of every slot. `opening` now carries the hole
+      separately: 364.32 mm, the cage measured off the front master at y 94.09 to 458.41. NOTHING
+      ABOUT PLACEMENT OR CHECKING MOVES. Only what is painted dark changes, and the opening is
+      centred on the bay because a hole and the space reserved around it share a centre. Where
+      only one axis is measured the other keeps the bay's own figure rather than being inferred
+      from the occupant, which is the mistake this field exists to undo.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 13 "Cisco ASR 9000 Series Routers Physical Descriptions",
+      b-asr9k-overview-reference-guide.pdf p130. ASR 9906: chassis height 24.39 inches (61.95 cm),
+      chassis width 17.6 inches (44.7 cm), chassis depth 28.77 inches (73.08 cm) with "31.45
+      inches (79.88 cm) including the cable management system". Modelled as the BODY, 447.0 x
+      619.51 x 730.8 mm, taking the depth WITHOUT the cable management system since that is the
+      chassis. Note Table 13's 9906 row does not quote a flanged width at all, unlike the 9006 and
+      9010 rows
+  ru:
+    confidence: datasheet
+    note: >-
+      datasheet - 24.39 in / 1.75 = 13.94 RU. The chassis OCCUPIES 14 RU and is built about 0.11
+      in under it, the same clearance allowance the ASR 9904 shows more starkly at 5.93.
+      chassis.height carries the real 619.51 mm and chassis.ru the allocation; they are
+      deliberately not reconciled
+  stencil-disagrees-and-the-guide-wins:
+    note: >-
+      NOTE - Cisco's Visio stencil records height_in 2.4500 for this master, i.e. 24.50 in,
+      against Table 13's 24.39. THE STENCIL HAS ROUNDED UP TO THE WHOLE RU (14 x 1.75 = 24.50) and
+      the guide has not. The manifest carries the guide's 24.39 because a spec table states the
+      chassis as built while a stencil states the space it occupies. The same 0.05 in rounding is
+      on the ASR 9910 master; the 9904 is the case where both sources agree on the un-rounded
+      figure
+  calibration:
+    confidence: measured
+    note: >-
+      measured - the front master passes gate 1. Calibrating x on 482.6 mm (the 19.0 in rack face)
+      and y on Table 13's 619.51 mm independently gives 0.20134 and 0.20062 mm/px, agreeing to
+      0.36 percent. Origin shifted in by (482.6 - 447.0) / 2 = 17.8 mm to reach the body edge
+  side-faces:
+    confidence: datasheet
+    note: >-
+      datasheet - "Figure 17: Cisco ASR 9906 Router Side View showing vertical Rack Rail
+      Locations", b-asr9k-hardware-installation-guide.pdf p31, and it is a dimensioned mechanical
+      drawing rather than a schematic. It gives an overall side extent of 27.00 in (685.8 mm) and
+      locates two vertical rack rails at 9.45 in (240.0 mm) and 5.00 in (127.0 mm) from one end.
+      It also draws two large chassis lift handles high on the face, a hatched panel low toward
+      one end, a warning label and card guide detail along the bottom. The two rails are drawn
+      here; the handles and the panel are named as regions rather than given geometry, because the
+      figure carries no dimension for either
+  side-depth-is-a-third-figure:
+    note: >-
+      NOTE - Figure 17's 27.00 in (685.8 mm) is a THIRD depth for this chassis and does not match
+      either of Table 13's. Table 13 gives 28.77 in (73.08 cm) bare and 31.45 in (79.88 cm)
+      "including the cable management system"; this figure says 27.00. Most likely it measures the
+      sheet metal between the planes the rails bolt to, excluding the front cosmetics that Table
+      13's bare figure includes - but no document says so, and chassis.depth continues to carry
+      Table 13's 730.8 mm because the spec table is authoritative for overall dimensions. The rail
+      positions are used as stated, measured from the FRONT - see
+      side-view-depth-axes-run-OPPOSITE-ways for how that datum was settled, and note this
+      sentence said "from the rear" through several revisions after the geometry had been
+      corrected
+  top-face:
+    confidence: datasheet
+    note: >-
+      datasheet - Figure 11 "Cisco ASR 9906 Router Chassis Footprint Dimensions - Top Down View",
+      b-asr9k-overview-reference-guide.pdf p26, and it is orthographic: its chassis outline
+      measures 315 by 510 px for a stated 17.60 by 28.77 in, an aspect of 0.6176 against the
+      stated 0.6117, inside one percent. So it carries geometry and not just arrangement. What is
+      on the top plate: a regulatory and compliance label block toward the rear, a large
+      rectangular access panel below it, the cisco wordmark printed on the metal toward the front,
+      and scattered bolt positions. The wordmark is real silkscreen on this face and is
+      transcribed as such
+  depth-arithmetic-closes:
+    confidence: datasheet
+    note: >-
+      datasheet - Figure 11 also settles Table 13's two depths against each other, which no single
+      number does. It dimensions the chassis at 28.77 in (73.08 cm) and then shows the cable
+      management system protruding a further 2.68 in (6.81 cm) beyond the front of the chassis.
+      28.77 + 2.68 = 31.45, which is exactly Table 13's second figure, "31.45 inches (79.88 cm)
+      including the cable management system". Two independently stated numbers and their
+      difference all agree, so the bare depth this manifest carries is confirmed rather than
+      merely chosen. CONVENTION for this face, stated so it can be corrected in one line: laid out
+      as Figure 11 lays it out, front at the BOTTOM edge and rear at the top
+  bottom-face:
+    confidence: datasheet
+    note: >-
+      datasheet - the bottom is NOT featureless after all, and the feature is the one thing every
+      footprint figure dimensions. HIG Figure 17 dimensions two vertical rack rails at 5.00 in
+      (127.0 mm) and 9.45 in (240.0 mm) from the FRONT. The rack mounting flange is a vertical
+      plate spanning the chassis height, so it intersects the BOTTOM plane as well as the top and
+      appears on this face as a line across the width at that depth. That is a real dimensioned
+      feature rather than an annotation of absence, which is the distinction that matters here -
+      an earlier revision of this file said the bottom was unreachable without inventing
+      something, and that was wrong. What remains true is that no BOTTOM VIEW of any ASR 9000
+      chassis exists in the 78-document intake; what this face carries is a feature dimensioned in
+      a TOP-down figure whose geometry the bottom necessarily shares. Positions are given from the
+      FRONT, which is the end Figure 17 dimensions from: the cable management structure protrudes
+      past that edge, and Figure 11 separately dimensions that protrusion as 2.68 in
+  top-and-bottom-view-convention:
+    note: >-
+      ON THIS CHASSIS'S TOP AND BOTTOM VIEWS, y = 0 IS THE REAR AND y = depth IS THE FRONT.
+      Verified on this chassis's own footprint figure rather than carried across from a sibling:
+      the figure prints "Rear of chassis" above the drawing and "Front of chassis" below it, read
+      by eye because that text is vector art and does not extract. Stated here because it is not
+      derivable from the file and because reading it the other way turns every depth-wise position
+      into its complement - which is exactly the error that put this family's ASR 9906 strips in
+      the wrong half of the box.
+  strip-is-centred-on-the-plane:
+    note: >-
+      the rack mounting strip is 3.9 mm thick and is placed so the DIMENSIONED PLANE PASSES
+      THROUGH ITS MIDDLE, at y = plane - 1.95. Neither edge carries the number. An earlier
+      revision put the plane on one edge, which meant the figure's dimension was 3.9 mm from where
+      the drawing said it was, and which edge differed between chassis - casa-cards found the same
+      inconsistency across the two it owns and centred them the same way
+  top-and-bottom-agree:
+    note: >-
+      the rack mounting flange is one vertical plate, so it intersects the top and bottom planes
+      at the SAME depth and appears on both faces at the same y. An earlier revision drew it only
+      on the bottom, which left the two faces of one chassis disagreeing about where the chassis
+      bolts to the rack - the kind of internal inconsistency this work has spent the night finding
+      in other people's artefacts. casa-cards' ASR 9006 and 9904 match across both faces and are
+      the standard this follows
+  side-view-depth-axes-run-OPPOSITE-ways:
+    note: >-
+      CORRECTED, and it was wrong in two ways at once. casa-cards derived the convention from
+      viewer3d.js rather than from preference, and I verified it against the same source: a right
+      view rotates [0, +pi/2, 0] so its local +x maps to world -z, putting x = 0 at the FRONT; a
+      left view rotates [0, -pi/2, 0] so x = 0 is at the REAR. The file's own comments say the
+      same - "right: face end at image left -> front" and "left: authored face-at-image-right".
+      This chassis's two rack rails are 127.0 and 240.0 mm from the FRONT. They were placed with
+      an arbitrary 56 mm offset on the right view - 78.0 and 191.0 from the front, out by 49 - and
+      with the rail's EDGE rather than its centre on the left. Both faces now use the same rule as
+      the top and bottom strips: x = depth - D - w/2 on the left, x = D - w/2 on the right, so the
+      dimensioned plane passes through the middle of the rail on every face of the box. NOTHING
+      COULD HAVE CAUGHT THIS. The region label said "5.00 in and 9.45 in from the front" and was
+      right the whole time; only the coordinates disagreed with it, and no lint rule compares a
+      label against a geometry
+  side-face-labels-say-when-a-position-is-UNKNOWN:
+    note: >-
+      every region on a side face now states either where the feature sits or that no figure
+      dimensions it. That second half is the point. A region reading only "Vertical rack rail
+      locations" is silent about position, and silence is indistinguishable from a position that
+      was known and not written down - which is exactly how a feature ends up drawn at the wrong
+      end with nothing to contradict it. casa-cards found seven such features across two chassis
+      where the LABEL WAS RIGHT AND THE GEOMETRY WAS WRONG, and lint stayed green because no rule
+      compares the two. Saying "present but not dimensioned" gives a reader the same thing a
+      distance would: a claim to check the drawing against
+  left-right-flip-checked-not-assumed:
+    note: >-
+      a bottom view flips LEFT and RIGHT relative to a top view - you walk under the box, not
+      around it - so a feature that is not full-width must sit at MIRRORED x on the two faces, at
+      width - x - w, and not at the same x. The trap is that identical x on both faces LOOKS
+      consistent while being wrong. Audited rather than assumed: this chassis is the only one of
+      the seven with non-full-width features on either face - the regulatory label block and the
+      top access panel, both at x = 42.0 of a 447.0 width - and both exist on the TOP ONLY, so
+      there is no counterpart to disagree with. Their x comes from Figure 11, a view from ABOVE,
+      whose left-right therefore matches the front view's directly and needs no mirror. Every
+      other feature on every top or bottom face in this family is full-width and immune. Recorded
+      because "symmetric, so it cannot be at the wrong end" is luck rather than care, and the next
+      asymmetric feature drawn on a bottom face will not be
+  prose-lagged-the-geometry-by-three-revisions:
+    note: >-
+      RECORDED AS A PROCESS FAILURE, not just a typo. When the datum misread was found and the
+      geometry corrected from the rear to the front, THREE PROVENANCE SENTENCES AND TWO REGION
+      LABELS kept saying "from the rear". The drawing was right and the words were wrong for
+      several commits, and the words are what a reader trusts most. casa-cards' new L31 caught the
+      two LABELS - it compares a label's stated position against what is drawn at that depth - but
+      it reads labels and not provenance, so the three prose sentences were invisible to it and
+      had to be found by a human reading the file. The lesson is narrow and worth keeping: A
+      CORRECTION IS NOT DONE WHEN THE GEOMETRY MOVES. Grep the whole file for the wrong claim,
+      because the number appears in the coordinates, in the region label and in two or three
+      sentences of prose, and only the first of those is what you were editing
+  four-hg-flex-accepted:
+    confidence: datasheet
+    note: >-
+      datasheet - the A9K-4HG-FLEX and A99-4HG-FLEX pairs added to the line card slots, and each
+      is placed on ITS OWN declared chassis list rather than on an inference from generation. The
+      A9K pair's contract names all seven chassis; the A99 pair's names five - "ASR 9922, ASR
+      9912, ASR 9910, ASR 9906 and ASR 9904" - so the two are not interchangeable even though they
+      share an envelope. A component that declares what it fits is a better source than a chassis
+      deciding what it will take
+  four-port-100ge:
+    confidence: datasheet
+    note: >-
+      datasheet - c78-740092's "Chassis compatibility" row: "Compatible with the Cisco ASR 9006,
+      ASR 9010, ASR 9904, ASR 9906, ASR 9910, ASR 9912, and ASR 9922 chassis". All seven, stated
+      outright, and the component's own attrs.chassis carries the same list. At 41.4 mm it fits
+      every line card bay in the family. Added to the line card slots only - a compatibility row
+      names a chassis, not a slot, and this chassis's RSP and RP positions take supervisors
+  card-orientation:
+    confidence: datasheet
+    note: >-
+      datasheet - stated directly, and it had been an inference until now. The Overview and
+      Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
+      every chassis in the family and gives the ejector position as the tell: "Cisco ASR 9906
+      Router: All line cards and RSP cards are front-facing and mounted vertically, with ejector
+      levers and captive screws at the top and bottom of each card. All FCs are rear-facing and
+      mounted vertically, with ejector levers and captive screws at the top and bottom of each
+      card". A bay therefore places a card component unrotated. Only the ASR 9006 and ASR 9904 are
+      horizontal; the 9010, 9906, 9910, 9912 and 9922 all stand their cards up, including the 21
+      RU 9010. This section supersedes the three-way inference an earlier revision rested on - the
+      slot figures, Figure 2's "four on each side" callout and the measured cage aspect - all of
+      which agreed with it.
+  slots:
+    confidence: datasheet
+    note: >-
+      datasheet - Figure 21 "Cisco ASR 9906 Router Slot ID Numbering", p36 of
+      b-asr9k-overview-reference-guide.pdf, read at 250 dpi because the slot IDs are artwork and
+      do not survive text extraction. Left to right: Slot 0 = RSP0, Slot 1 = Line card 0, Slot 2 =
+      Line card 1, Slot 3 = Line card 2, Slot 4 = Line card 3, Slot 5 = RSP1. THE RSP PAIR IS THE
+      OUTER PAIR - the exact inverse of the ASR 9904, which puts its RSPs in the middle with the
+      line cards outside. Five chassis and four different arrangements so far
+  card-bays:
+    note: >-
+      the card openings are BAYS, converted from cutouts once cisco/a9k-slot-cover@1 was shown to
+      fit them. That took no new component: the blank carries the line card envelope, 41.4 x
+      395.7, which is the same envelope every card in this cage uses, and the question that had
+      held the conversion up - whether a component's size is its faceplate or its slot envelope -
+      was settled as the envelope. The measured pitch is wider than the envelope by the card
+      guide, which is chassis structure and not bay. Bays are sized to the component and
+      positioned on the measured cage, matching every other chassis in this family
+  slot-geometry:
+    confidence: drawing
+    note: >-
+      drawing - the card cage opening spans 70.59 to 331.11 mm across the body and 94.09 to 458.41
+      mm down it. Six slots of equal width divide 260.52 mm into a 43.42 mm pitch
+  slot-pitch-confirmed-by-the-silkscreen:
+    confidence: measured
+    note: >-
+      measured, and independently of the division above. This master PRINTS its slot IDs in a row
+      beneath the cage - PS0, RSP0, LC0, LC1, LC2, LC3, RSP1 - and the six slot labels centre at
+      90.22, 132.29, 177.30, 220.38, 264.77 and 308.97 mm. An even six-way division of the
+      measured cage puts the centres at 92.30, 135.72, 179.14, 222.56, 265.98 and 309.40. Every
+      one agrees within 3.4 mm, and the mean label-to-label pitch of 43.75 mm sits within 0.8
+      percent of the 43.42 the cage gives. The residual spread is text centring - RSP0 and RSP1
+      are four characters against LC's three - so the pitch is CORROBORATED rather than
+      independently measured. That distinction matters and was understated in an earlier revision:
+      a printed label locates a slot only as well as its own width allows, and on the ASR 9910 the
+      same method gave pitches ranging 41.78 to 55.16 where that chassis's card guide rail gave
+      43.78 with a spread of 0.2. Where a master draws a uniform rail, the rail is the better
+      ruler. This file's pitch remains the even division of the measured cage, with the printed
+      row as a check on it rather than as its source. THE PRINTED ROW ALSO CONFIRMS FIGURE 21's
+      NUMBERING on the metal itself, which is a second source for the slot map
+  power-shelf:
+    confidence: drawing
+    note: >-
+      drawing + datasheet - the power shelf is VERTICAL and runs down the LEFT of the card cage,
+      which no other chassis in this family does. Figure 21 labels it PS0 and stacks M0 at the
+      bottom through M2 at the top, and Table 15 agrees: "ASR 9906: Version 3 power system: Up to
+      three AC power modules per system". The master draws the column POPULATED, so the individual
+      module openings are not separately measured - see gaps
+  fan-trays:
+    confidence: datasheet
+    note: >-
+      datasheet + drawing - two fan trays, FT0 above FT1, to the RIGHT of the cage per Figure 21.
+      The master draws them behind a door carrying "Cisco ASR 9000 Series", the cisco logo, an
+      OPEN legend and two indicators marked FAN0 and FAN 1. As on the ASR 9006, that text belongs
+      to the door rather than to chassis metal and is deliberately not in this manifest's
+      silkscreen
+  airflow:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cisco ASR 9906 Router: Front-to-top-to-rear cooling path. The inlet is at the
+      bottom front of the chassis, and the exhaust is at the LOWER rear",
+      b-asr9k-overview-reference-guide.pdf p3731. Note the lower rear, where the 9010 and 9910
+      both exhaust at the upper rear. The bottom of the front face carries a large hexagonal-mesh
+      intake grille in the master, which is that inlet
+  air-filter:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 17, b-asr9k-hardware-installation-guide.pdf p228: "Cisco ASR 9906 Router -
+      Located underneath the card cage", removed "by simply sliding it out of the chassis".
+      Different again from the 9006 and 9904, whose filters are on the right side
+  grounding:
+    confidence: datasheet
+    note: >-
+      datasheet - "Bottom rear and left side of the chassis",
+      b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 135
+  fabric-cards:
+    confidence: datasheet
+    note: >-
+      datasheet - the rear carries fabric cards in their own cage with numbering that restarts at
+      Slot 0, as Figure 22 shows for the sibling 9910. The COUNT is not readable from any figure
+      we hold, but Table 13 supplies it independently: the 9906's configured weight is quoted for
+      a chassis "Configured with two fan trays, two RSPs, five fabric cards, and one PEM". Five.
+      The rear is not otherwise modelled - no master or figure here shows it
+  environmental:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 14, p131. The 9906 shares the 9006's and 9904's wider short-term range, 23
+      to 131 degF (-5 to 55 degC)
+  electrical:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 15 (AC) and Table 16 (DC), pp132-135, ASR 9906 columns only
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 13, two scopes. "Chassis only - 108.02 pounds (49 kg)" and "Chassis:
+      Configured with two fan trays, two RSPs, five fabric cards, and one PEM - 251.10 pounds
+      (113.9 kg)". Note the 9906 and 9910 rows describe a SPECIFIC configuration rather than the
+      "fully configured using all card slots" phrasing the older chassis use, so the two numbers
+      are not comparable across the family
+  no-chassis-power-figure:
+    note: >-
+      NOTE, and NARROWED. The current Table 14 says only to use the Cisco Power Calculator, so
+      there is no chassis-level figure for THIS chassis in any document held and the module total
+      here is a floor. That is narrower than what an earlier revision of this file claimed: it
+      said Cisco publishes no chassis draw for ANY ASR 9000, and that is false. The older Ethernet
+      Line Card Installation Guide (asr9kELCIGbk.pdf, OL-17500-09) states "Power Dissipation 7600
+      W maximum (Cisco ASR 9010 Router)" and 4556 W maximum for the ASR 9006 in its Table A-1 - a
+      table the current revision deleted. Those two chassis predate this one and no equivalent
+      figure for this model appears in either revision, so this is the vendor being silent about
+      this chassis rather than about the family
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      datasheet - searched. No end-of-sale or end-of-life notice for this chassis was found
+  compliance:
+    confidence: datasheet
+    note: >-
+      datasheet - data_sheet_c78-501767.pdf series compliance list, transcribed as printed
+
 attrs:
   physical:
     weight-configured-kg: 113.9

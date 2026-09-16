@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-30xb
-version: 3.0.8
+version: 3.0.9
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-30XB
@@ -14,106 +14,168 @@ description: Edgecore AGR400 (AS7946-30XB) 100GbE aggregation router. 2RU, 30 fi
   1+1 redundant PSUs and 4+1 redundant fans.
 profile: networking
 provenance:
-  sources: datasheet AGR400-AS7946-30XB-DS-R05 and quick start guide AS7946-30XB_QSG-R04, both Edgecore,
-    plus straight-on photographs of a real unit. No mechanical drawing was available
-  chassis: measured - 440 x 480 x 87 mm (2RU). The depth was contested and is now settled by
-    measuring the hardware - both the AGR400 and the AGR420 measure 480 mm. The datasheet says
-    480; the QSG Chassis section says 524 (17.3 x 20.6 x 3.4 in, self-consistent in both units)
-    and is simply wrong. An earlier pass here chose 524 on the grounds that the QSG was
-    self-consistent, which it is - consistently wrong is still wrong, and internal consistency
-    was never evidence about the metal. Three independent things agree on 480 - the tape measure,
-    both AGR420 documents, and this device's own datasheet. The AGR420 model reached the same
-    conclusion from photographs before the measurement, by matching the two bottom pans as one
-    stamping and ruling out an over-the-handles reading (the rear handles project about 17 mm,
-    not the 44 mm the difference would need)
-  depth-correction: measured - the four faces whose size is the depth (top, bottom, left, right)
-    were resized 524 -> 480, and the 59 placements on them had their depth-axis coordinate
-    rescaled by 480/524. Those positions were photo-measured off non-orthographic shots against
-    the 524 assumption and were already flagged approximate - some had drifted past 498 mm, which
-    a 480 mm chassis cannot have. Rescaling reproduces what the same method would have given with
-    the right depth; it does not make them better than approximate. Re-derive them from an
-    orthographic shot before this device goes to verified
-  scale: drawing - the QSG page-1 panel figures are orthographic. The front panel measures 2248
-    x 444 px, an aspect of 5.063 against the datasheet 440/87 = 5.057, a 0.1 percent match, so the
-    figure carries geometry and everything below is measured off it at 5.109 px/mm
-  ports: drawing - 13 QSFP apertures 18.4 x 8.8 mm on a 19.15 mm pitch and 2 SFP apertures 13.5
-    x 8.6 on a 14.3 mm pitch, each in two rows 13.0 mm apart. 26 + 4 = 30 ports, matching the datasheet
-    count and the model number
-  port-numbering: 'drawing - the pair legends read "0 <up> <down> 1" at 7x zoom on the 600dpi render:
-    the up arrow belongs to the left number and the down arrow to the right. Numbering is column-major
-    with the EVEN port on the TOP row and the odd port below it. The first pass had this inverted,
-    from reading the legend at a resolution where the two arrows merged into one'
-  port-legend-anchors: 'drawing - CONSOLE 0 is centred under the micro-USB, per the QSG
-    mgmt detail figure; its x already WAS the connector centre (404.0 + 7.5/2 = 407.75)
-    and only the anchor was missing, so left-anchored it ran under the CONSOLE 1 jack.
-    The pair arrows were also drawn 2.0mm tall against a 1.73mm digit cap; the datasheet
-    front figure shows the arrow SHORTER than the digits, as the AGR420 legend has it, so
-    they are redrawn at the AGR420 proportion. NOTE, unfixed: the figure prints TWO arrows
-    between each pair of numbers (26 up down 27); this model draws one'
-  port-classes: 'datasheet - callouts 1 to 4 on the QSG overview map the groups: ports 0-3 are 400G
-    QSFP-DD, 4-21 are 100G QSFP28, 22-25 are 100G QSFP-DD, 26-29 are SFP28'
-  mgmt-block: drawing - a ganged 2x2 RJ-45 block at 356.0, 16.8 (32.3 x 25.1) carrying BITS 0 and
-    BITS 2 above, BITS 1 and PPS/TOD below; two SMB jacks at 393.8; USB Type A on its side at 403.8;
-    MGMT and CONSOLE 1 RJ-45s at 414-416; a micro-USB CONSOLE 0 and a recessed RST button
-  status-leds: drawing - DIAG, LOC, FAN, PS0 and PS1 on a 5.1 mm pitch beneath the timing block,
-    read off the upscaled QSG detail figure
-  rear: 'drawing - rear panel figure on the same page: two stacked PSUs in a 60.1 x 75.2 mm block
-    at the left, then five fan bays on a 69.4 mm pitch, silkscreened FAN 4 down to FAN 0 left to
-    right'
-  port-leds: 'drawing - every QSFP port has two lenses and every SFP28 port one, and the ARRANGEMENT
-    DIFFERS BY FAMILY. QSFP-DD: a stacked pair outside each block, at x 13.02 and 57.06 for the
-    400G and 265.21 and 309.15 for the 100G, with y 37.19/40.22 serving the top-row port and 47.46/50.45
-    the bottom - LED1 above is speed, LED2 below is link. QSFP28: four above each column on a 4.0
-    mm pitch at offsets 4.2/8.2/12.2/16.2, the left pair serving the top port and the right pair
-    the bottom, each pair being speed then link. SFP28: two above each column at offsets 3.56 and
-    9.43, left for the top port and right for the bottom'
-  led-states: 'QSG Front LEDs section, callouts 1 to 5, re-read off the 600dpi render. Every
-    lens carries its function in attrs and its state vocabulary in structured states:, declared
-    on the group where a block shares one - eight QSFP-DD speed lamps, eighteen QSFP28 speed
-    lamps, twenty-six link lamps, four SFP28 lamps - and on the placement where it does not,
-    which here is LOC alone. The sentence the guide prints sits beside them in description:.
-    This was previously prose in attrs: {states: ...}, which no tool could read: the Explorer
-    refuses a data-states value that is not a list of tokens, so what reached the chips was
-    led-dot''s generic default and the real 100G/40G vocabulary reached nobody. One correction
-    from the re-read: the guide says LOC "flashes Amber when the command is activated" - the
-    word "locate" was the modeller''s gloss. Everything else transcribed correctly'
-  airflow: datasheet - "Supports front-to-back airflow SKUs"; every listed SKU is F
-  rj45-orientation: drawing - RJ-45 jacks are NOT all the same way up. BITS 0, BITS 2, MGMT and
-    CONSOLE 1 are keyway-UP with their contacts along the bottom; only BITS 1 and PPS/TOD, the lower
-    row of the ganged block, are keyway-down. A 2-high ganged jack mirrors its rows so both release
-    tabs stay reachable. common/rj45-shielded draws keyway-down, so the other four carry rotate
-    180
-  rj45-choice: the maintainer - use std/ before common/. The ruling was made against the v1 library, where
-    std/rj45 WAS the IEC 60603-7 16.0 x 14.0 aperture and common/rj45-shielded was one we drew,
-    putting its integrated LEDs on the CONTACTS side, which no real jack does - they always flank
-    the keyway. Both of those are retired by roc-ops/Portrayal#125, which made std/rj45@2 the jack housing itself (15.8 x
-    13.2, TE 1734264) and the unsourced 16 x 14 aperture went with it. The ruling still decides
-    this face. Five jacks are std/rj45@2; MGMT is common/rj45-eth@1, with its two LEDs as
-    mgmt-eth/led-a and led-b
-  grounding: drawing - QSG rear callout 13. An IEC earth symbol at 73.2, 26.0 with TWO studs beneath
-    it at y 39.5 and 54.2, immediately right of the PSU bay. Only the upper stud is modelled, because
-    common/ground-lug carries one stud under its symbol; the second is recorded here rather than
-    faked
-  other-faces: 'photo - the real-device photographs DO show these faces, which an earlier pass wrongly
-    assumed they did not. Top (IMG_6788): two rectangular labels near the front right and a caution
-    notice at the rear left. Bottom (IMG_6792): rivets and formed dimples, no labels. Sides (IMG_6790):
-    a cluster of rack-bracket holes near the front and rivets along the length. Positions are photo-measured
-    against the 440 mm width and are approximate - none of these shots is orthographic'
-  labels: 'photo - RECTANGULAR. common/device-label is an oval recess belonging to another platform
-    and is deliberately not used here. The artwork is placeholder blocks: the real serial, SKU and
-    MAC addresses are legible in IMG_6788 and are not transcribed'
-  rivets: photo - the quick start guide draws diamonds along the rear edges. On the real chassis
-    those are RIVET HEADS - the guide art is evidently a mock-up, not a finished unit. Placement
-    follows the guide; appearance follows the photograph
-  sources-disagree: 'NOTE - guide art and real photographs disagree in three places on this device:
-    the rear fasteners (diamonds vs rivets), the grounding landing (two diamonds vs a two-hole plate
-    under an earth symbol) and the fan bay proportions (the figure reads taller than square). Where
-    they conflict the REAL DEVICE wins. The stock renders show an AC PSU and our unit is DC, which
-    is not a conflict - both variants exist, and both are modelled'
-  spec-table: datasheet - silicon, CPU, memory, flash, SSD, BMC, capacity, buffering, power and
-    environmentals transcribed into attrs. Where the datasheet and the QSG disagree - weight 16
-    vs 14.5 kg, max power 527 vs 638 W - both numbers are carried rather than one being silently
-    chosen
+  sources:
+    confidence: datasheet
+    note: >-
+      datasheet AGR400-AS7946-30XB-DS-R05 and quick start guide AS7946-30XB_QSG-R04, both
+      Edgecore, plus straight-on photographs of a real unit. No mechanical drawing was available
+  chassis:
+    confidence: measured
+    note: >-
+      measured - 440 x 480 x 87 mm (2RU). The depth was contested and is now settled by measuring
+      the hardware - both the AGR400 and the AGR420 measure 480 mm. The datasheet says 480; the
+      QSG Chassis section says 524 (17.3 x 20.6 x 3.4 in, self-consistent in both units) and is
+      simply wrong. An earlier pass here chose 524 on the grounds that the QSG was
+      self-consistent, which it is - consistently wrong is still wrong, and internal consistency
+      was never evidence about the metal. Three independent things agree on 480 - the tape
+      measure, both AGR420 documents, and this device's own datasheet. The AGR420 model reached
+      the same conclusion from photographs before the measurement, by matching the two bottom pans
+      as one stamping and ruling out an over-the-handles reading (the rear handles project about
+      17 mm, not the 44 mm the difference would need)
+  depth-correction:
+    confidence: measured
+    note: >-
+      measured - the four faces whose size is the depth (top, bottom, left, right) were resized
+      524 -> 480, and the 59 placements on them had their depth-axis coordinate rescaled by
+      480/524. Those positions were photo-measured off non-orthographic shots against the 524
+      assumption and were already flagged approximate - some had drifted past 498 mm, which a 480
+      mm chassis cannot have. Rescaling reproduces what the same method would have given with the
+      right depth; it does not make them better than approximate. Re-derive them from an
+      orthographic shot before this device goes to verified
+  scale:
+    confidence: drawing
+    note: >-
+      drawing - the QSG page-1 panel figures are orthographic. The front panel measures 2248 x 444
+      px, an aspect of 5.063 against the datasheet 440/87 = 5.057, a 0.1 percent match, so the
+      figure carries geometry and everything below is measured off it at 5.109 px/mm
+  ports:
+    confidence: drawing
+    note: >-
+      drawing - 13 QSFP apertures 18.4 x 8.8 mm on a 19.15 mm pitch and 2 SFP apertures 13.5 x 8.6
+      on a 14.3 mm pitch, each in two rows 13.0 mm apart. 26 + 4 = 30 ports, matching the
+      datasheet count and the model number
+  port-numbering:
+    confidence: drawing
+    note: >-
+      drawing - the pair legends read "0 <up> <down> 1" at 7x zoom on the 600dpi render: the up
+      arrow belongs to the left number and the down arrow to the right. Numbering is column-major
+      with the EVEN port on the TOP row and the odd port below it. The first pass had this
+      inverted, from reading the legend at a resolution where the two arrows merged into one
+  port-legend-anchors:
+    confidence: drawing
+    note: >-
+      drawing - CONSOLE 0 is centred under the micro-USB, per the QSG mgmt detail figure; its x
+      already WAS the connector centre (404.0 + 7.5/2 = 407.75) and only the anchor was missing,
+      so left-anchored it ran under the CONSOLE 1 jack. The pair arrows were also drawn 2.0mm tall
+      against a 1.73mm digit cap; the datasheet front figure shows the arrow SHORTER than the
+      digits, as the AGR420 legend has it, so they are redrawn at the AGR420 proportion. NOTE,
+      unfixed: the figure prints TWO arrows between each pair of numbers (26 up down 27); this
+      model draws one
+  port-classes:
+    confidence: datasheet
+    note: >-
+      datasheet - callouts 1 to 4 on the QSG overview map the groups: ports 0-3 are 400G QSFP-DD,
+      4-21 are 100G QSFP28, 22-25 are 100G QSFP-DD, 26-29 are SFP28
+  mgmt-block:
+    confidence: drawing
+    note: >-
+      drawing - a ganged 2x2 RJ-45 block at 356.0, 16.8 (32.3 x 25.1) carrying BITS 0 and BITS 2
+      above, BITS 1 and PPS/TOD below; two SMB jacks at 393.8; USB Type A on its side at 403.8;
+      MGMT and CONSOLE 1 RJ-45s at 414-416; a micro-USB CONSOLE 0 and a recessed RST button
+  status-leds:
+    confidence: drawing
+    note: >-
+      drawing - DIAG, LOC, FAN, PS0 and PS1 on a 5.1 mm pitch beneath the timing block, read off
+      the upscaled QSG detail figure
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - rear panel figure on the same page: two stacked PSUs in a 60.1 x 75.2 mm block at
+      the left, then five fan bays on a 69.4 mm pitch, silkscreened FAN 4 down to FAN 0 left to
+      right
+  port-leds:
+    confidence: drawing
+    note: >-
+      drawing - every QSFP port has two lenses and every SFP28 port one, and the ARRANGEMENT
+      DIFFERS BY FAMILY. QSFP-DD: a stacked pair outside each block, at x 13.02 and 57.06 for the
+      400G and 265.21 and 309.15 for the 100G, with y 37.19/40.22 serving the top-row port and
+      47.46/50.45 the bottom - LED1 above is speed, LED2 below is link. QSFP28: four above each
+      column on a 4.0 mm pitch at offsets 4.2/8.2/12.2/16.2, the left pair serving the top port
+      and the right pair the bottom, each pair being speed then link. SFP28: two above each column
+      at offsets 3.56 and 9.43, left for the top port and right for the bottom
+  led-states:
+    note: >-
+      QSG Front LEDs section, callouts 1 to 5, re-read off the 600dpi render. Every lens carries
+      its function in attrs and its state vocabulary in structured states:, declared on the group
+      where a block shares one - eight QSFP-DD speed lamps, eighteen QSFP28 speed lamps,
+      twenty-six link lamps, four SFP28 lamps - and on the placement where it does not, which here
+      is LOC alone. The sentence the guide prints sits beside them in description:. This was
+      previously prose in attrs: {states: ...}, which no tool could read: the Explorer refuses a
+      data-states value that is not a list of tokens, so what reached the chips was led-dot's
+      generic default and the real 100G/40G vocabulary reached nobody. One correction from the
+      re-read: the guide says LOC "flashes Amber when the command is activated" - the word
+      "locate" was the modeller's gloss. Everything else transcribed correctly
+  airflow:
+    confidence: datasheet
+    note: >-
+      datasheet - "Supports front-to-back airflow SKUs"; every listed SKU is F
+  rj45-orientation:
+    confidence: drawing
+    note: >-
+      drawing - RJ-45 jacks are NOT all the same way up. BITS 0, BITS 2, MGMT and CONSOLE 1 are
+      keyway-UP with their contacts along the bottom; only BITS 1 and PPS/TOD, the lower row of
+      the ganged block, are keyway-down. A 2-high ganged jack mirrors its rows so both release
+      tabs stay reachable. common/rj45-shielded draws keyway-down, so the other four carry rotate
+      180
+  rj45-choice:
+    note: >-
+      the maintainer - use std/ before common/. The ruling was made against the v1 library, where
+      std/rj45 WAS the IEC 60603-7 16.0 x 14.0 aperture and common/rj45-shielded was one we drew,
+      putting its integrated LEDs on the CONTACTS side, which no real jack does - they always
+      flank the keyway. Both of those are retired by roc-ops/Portrayal#125, which made std/rj45@2
+      the jack housing itself (15.8 x 13.2, TE 1734264) and the unsourced 16 x 14 aperture went
+      with it. The ruling still decides this face. Five jacks are std/rj45@2; MGMT is
+      common/rj45-eth@1, with its two LEDs as mgmt-eth/led-a and led-b
+  grounding:
+    confidence: drawing
+    note: >-
+      drawing - QSG rear callout 13. An IEC earth symbol at 73.2, 26.0 with TWO studs beneath it
+      at y 39.5 and 54.2, immediately right of the PSU bay. Only the upper stud is modelled,
+      because common/ground-lug carries one stud under its symbol; the second is recorded here
+      rather than faked
+  other-faces:
+    note: >-
+      photo - the real-device photographs DO show these faces, which an earlier pass wrongly
+      assumed they did not. Top (IMG_6788): two rectangular labels near the front right and a
+      caution notice at the rear left. Bottom (IMG_6792): rivets and formed dimples, no labels.
+      Sides (IMG_6790): a cluster of rack-bracket holes near the front and rivets along the
+      length. Positions are photo-measured against the 440 mm width and are approximate - none of
+      these shots is orthographic
+  labels:
+    note: >-
+      photo - RECTANGULAR. common/device-label is an oval recess belonging to another platform and
+      is deliberately not used here. The artwork is placeholder blocks: the real serial, SKU and
+      MAC addresses are legible in IMG_6788 and are not transcribed
+  rivets:
+    note: >-
+      photo - the quick start guide draws diamonds along the rear edges. On the real chassis those
+      are RIVET HEADS - the guide art is evidently a mock-up, not a finished unit. Placement
+      follows the guide; appearance follows the photograph
+  sources-disagree:
+    note: >-
+      NOTE - guide art and real photographs disagree in three places on this device: the rear
+      fasteners (diamonds vs rivets), the grounding landing (two diamonds vs a two-hole plate
+      under an earth symbol) and the fan bay proportions (the figure reads taller than square).
+      Where they conflict the REAL DEVICE wins. The stock renders show an AC PSU and our unit is
+      DC, which is not a conflict - both variants exist, and both are modelled
+  spec-table:
+    confidence: datasheet
+    note: >-
+      datasheet - silicon, CPU, memory, flash, SSD, BMC, capacity, buffering, power and
+      environmentals transcribed into attrs. Where the datasheet and the QSG disagree - weight 16
+      vs 14.5 kg, max power 527 vs 638 W - both numbers are carried rather than one being silently
+      chosen
+
 attrs:
   physical:
     weight: 16 kg with PSUs and fans (datasheet); QSG says 14.5 kg

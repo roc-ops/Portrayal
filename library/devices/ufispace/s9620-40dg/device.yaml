@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-40dg
-version: 1.0.7
+version: 1.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-40DG
@@ -17,305 +17,320 @@ description: UfiSpace S9620-40DG - 2RU 40-port open aggregation router on Broadc
   shallow street cabinets where a normal rack-mount router will not fit
 profile: networking
 provenance:
-  sources: >-
-    THIS DEVICE HAS A DATASHEET AND NOTHING ELSE, and the whole model should be read in
-    that light. UfiSpace has not published a hardware installation guide for the S9620
-    family - the intake's own SOURCES.md carries it on a watch list beside the S9620-32E
-    and S9620-54DC for exactly this reason - so there is no component table, no dimension
-    drawing, no port-ID table, no LED table and no per-FRU wattage anywhere. What exists
-    is: the two-page datasheet (s9620-40dg-datasheet.pdf,
-    sha256 37a4789b...), and three vendor gallery renders
-    (angle, front and rear).
-    A SECOND WARNING ABOUT THE DATASHEET: its spec text is set as OUTLINED GLYPHS, so
-    pdftotext returns the headings and none of the values, and the docling conversion in
-    converted/s9620-40dg-datasheet/doc.md has the same holes - it lists 'PHYSICAL',
-    'ASIC', 'Chassis' and so on with nothing after them. Every specification quoted below
-    was read by rendering the PDF's own pages at 200-400 dpi and looking at them. Anyone
-    re-checking this file by grepping the converted text will find an empty document and
-    should not conclude the vendor published nothing.
-  front-image: >-
-    photo-measured - the front geometry rests on ONE raster, the 649 x 130 px picture
-    embedded on page 1 of the datasheet (pdfimages object 755). The same drawing appears
-    twice more at lower resolution - 510 px on page 2 and 488 px in the gallery render
-    s9620-40dg-2-front.png - and this is the largest, which is why it is the one used.
-    GATE 1: the image is exactly the chassis with no white margin, 649 x 130 px for the
-    datasheet's 440 x 89 mm. Its aspect is 4.992 against a true 4.944, 1.0 % out, so it is
-    orthographic and carries geometry; each axis is anchored to its own datasheet
-    dimension, 1.4750 px/mm across and 1.4607 down.
-    THE COST OF THE MISSING GUIDE IS RESOLUTION, and it is severe: one pixel is 0.68 mm,
-    so a 2 mm lamp is three pixels and a printed legend is four pixels tall. Positions in
-    this file are good to roughly half a millimetre and no better, and NOT ONE PRINTED
-    LEGEND ON THE PANEL IS LEGIBLE at any magnification - see the silkscreen and
-    port-numbering entries below and the gaps register. Where a house pattern would have
-    read a HIG figure at 8.6 px/mm, this model read a marketing render at 1.47.
-  port-grid: >-
-    measured, AND THE STANDARDS ARE WHAT MAKE IT SAFE. The three SFP56 blocks each show
-    five bright vertical posts in the render - the block's two ends and its three internal
-    dividers - at x 355, 376, 397, 418, 439 px for block 1, i.e. a port boundary every
-    21.0 px = 14.24 mm. SFF-8433's ganged port pitch is 14.25. That agreement to a
-    hundredth over four ports is the strongest single fact in this model: it says the
-    render is dimensionally honest AND that std/sfp-ganged is the right part, so the ports
-    are laid out on the standard's pitch anchored to the measured block origins
-    240.66 / 304.39 / 368.11 mm (block steps 63.73 and 63.72, even to within a fifth of a
-    pixel). Row pitch is 15.00, the belly-to-belly figure std/sfp-ganged records from a TE
-    ganged cage; measured here as 21.0 and 22.5 px on the two blocks that resolve it,
-    which brackets 15.00 and cannot distinguish it from 15.2.
-    The QSFP28 blocks are 1-wide x 2-high ganged cages, three across the upper band and
-    three across the lower, block centres measured at 241.5 / 284.0 / 326.5 px = 163.74 /
-    192.55 / 221.37 mm, an even 28.81 mm step. Each block's drawn aperture measures about
-    18.3 x 8.7 mm; std/qsfp-ganged's registry opening is 18.5 x 9.58, and THE REGISTRY IS
-    WHAT IS SEATED - which is why each block's silver shell in this file is 24.58 tall
-    where the render draws 23.3. That 1.3 mm is the difference between the module envelope
-    the render shades and the bezel opening the standard dimensions, not a measurement
-    error, and it is recorded rather than tuned away.
-    The four QSFP-DD cages measure centres 388.5 / 432.5 / 475.5 / 518.5 px; laid out on
-    the even 43.33 px step that fits them, 263.40 / 292.78 / 322.16 / 351.54 mm. Drawn
-    aperture 18.6 x 8.2 against std/qsfp-dd's 19.0 x 10.0, again the module face rather
-    than the opening.
-    PITCH WAS TAKEN FROM FEATURES THAT REPEAT ONCE PER PORT - the cage divider posts, the
-    lamp groups in each block's centre band - never from the shaded module faces, which
-    are narrower than the ports that own them.
-  port-numbering: >-
-    NOT SOURCED, AND THIS IS THE LARGEST SINGLE GAP. Every port on this panel is numbered
-    on the hardware: the SFP56 blocks print numerals on their teal strips, the QSFP28
-    blocks print a pair on the pale strip under each block, and each QSFP-DD cage carries a
-    blue label bar above it with a numeral on it. All of them are three or four pixels tall
-    in the only image that exists and none can be read at any magnification. There is no
-    HIG and therefore no Port Overview table. So `rel-pos` here is POSITIONAL WITHIN EACH
-    FAMILY - SFP56 0-23 left to right and upper-then-lower within a column, QSFP28 0-11
-    across the upper band then the lower, QSFP-DD 0-3 left to right - and it is NOT a claim
-    about what the vendor prints. In particular the datasheet's own '40-port' phrasing
-    suggests a single 0-39 range across all three families, which this file deliberately
-    does not assert because nothing states where it starts. No numerals are printed on the
-    drawing for the same reason.
-  port-leds: >-
-    photo-measured, and it took the ISOMETRIC render to settle. In the flat front image the
-    centre band of every block carries a regular pattern of small marks, and at 1.47 px/mm
-    a lamp, an EMI perforation and a printed numeral are the same three pixels. The vendor's
-    angle render s9620-40dg-1-angle.png resolves them and they are three different things:
-    the QSFP28 blocks' centre band is a 2-row dot matrix of EMI perforation and carries NO
-    lamps (a per-column dark-pixel count confirms it - a regular 8-across grid repeated on
-    every block, which no indicator layout looks like); the SFP56 blocks' centre band
-    carries a GREEN UP/DOWN ARROW PAIR per column, one arrow per port; and each QSFP28
-    block's lamps are the up/down arrows on the pale strip BELOW it, not in the band.
-    So: 24 arrows in the SFP56 bands (measured as green pixel groups at every column
-    centre, 12 groups 10-11 px wide, band centre y 93.5 px = 64.00 mm); 24 arrows on the
-    six QSFP28 strips (block centre +/- 6.4 mm, strips at y 51-55 and 112-116 px); and 8
-    round green lamps under the QSFP-DD brackets, two per cage at +/- 5.9 mm from the cage
-    centre, y 58 px = 39.7 mm - those eight are the clearest lamps on the panel, lit green
-    in both renders. Drawn with common/led-arrow-sm (2.25 x 2.0, the only arrow that fits
-    the measured 3.6 mm pair spacing - common/led-arrow at 3.6 wide would overlap its
-    partner) and common/led-dot. NO STATES ARE CLAIMED for any of them: with no HIG there
-    is no LED table, and colour vocabulary is not something a render can be read for.
-  dd-brackets: >-
-    measured - each PAIR of QSFP-DD cages sits inside a bright orange U, drawn open at the
-    top where the blue label bars are. Bracket A runs x 370-449 px and bracket B x 458-537,
-    both y 33-54 px: legs about 2.7 mm wide and a bottom bar about 2 mm deep, i.e.
-    250.86-304.42 mm and 310.52-364.09 mm horizontally, 22.59-36.97 vertically. It is
-    PAINT ON THE PANEL and is drawn as panel.decor, not as a part: it has no identity a
-    part number could be put to, it spans two ports, and the port lamps sit outside it.
-    Why the vendor brackets them in pairs is not stated anywhere; the datasheet's '4 x 400G
-    or 2 x 800G' is the obvious guess and is not written down as a fact.
-    THIS PARAGRAPH WAS WRITTEN BEFORE THE BRACKETS WERE DRAWN AND FOR A WHILE DESCRIBED
-    SOMETHING THE FILE DID NOT CONTAIN. The six decor rects that build the two Us - two
-    legs and a bottom bar each - were added afterwards from the numbers above, which are
-    unchanged. Anyone auditing this file should note the failure mode rather than only the
-    fix: sourced provenance for a feature is not evidence that the feature was drawn, and
-    nothing in lint, the render or the name audit could tell the two apart.
-    THE U IS BUILT AS THREE RECTS, NOT AS ONE OUTLINE, so it needs no knowledge of the
-    panel colour to cut its own middle out. The right-hand leg of each U overlaps its
-    cage's registry opening by 0.56 mm, because the aperture the render shades is narrower
-    than the SFF-8665 opening std/qsfp-dd is dimensioned to - the same 1.3 mm effect already
-    recorded for the QSFP28 shells in port-grid. Decor is painted behind the ports, so the
-    cage covers the overlap and the visible leg is 2.14 mm on that side against 2.70 on the
-    other; the measured outer extents are kept rather than nudged into symmetry.
-    COLOUR: the U is the only orange on the device and is nothing like the '#b0b5bb' of the
-    ganged shells elsewhere on this panel - a warning worth keeping, because the treatment
-    was nearly copied across from the SFP blocks instead of being looked at. In
-    s9620-40dg-2-front.png the lit face of the paint is modal (188,118,39) = '#bc7627' with
-    a shadowed side at '#8b551b' and a highlight to (253,154,40); the file carries
-    '#e2821f', the lit face brightened, which is the same treatment the teal port strips
-    ((42,153,129) measured, '#1f9e7a' written) and the QSFP-DD label bars ((71,130,188)
-    measured, '#2f6fd0' written) already had in this file. That is a rendering choice and
-    is recorded as one.
-  panel-perforation: >-
-    measured, and it is the second thing the QSFP-DD end of the panel was missing. The
-    faceplate carries hexagonal EMI perforation in three places: a patch above EACH of the
-    four QSFP-DD cages (dark runs at x 253.92-274.08 / 284.17-304.33 / 314.42-334.58 /
-    344.67-364.83 mm and y 5.5-22.9 in the 520 px render's own frame - exactly the cage
-    width, one per cage and not one per pair), a thin band above each QSFP28 block and
-    another between its two rows, and ONE CONTINUOUS BAND running below the whole QSFP-DD
-    block and above the SFP56 blocks. That band starts at the left edge of SFP56 block 1
-    and ends about 92 % of the way across the three blocks - it stops short of the last
-    SFP56 column rather than running to the end of the panel, which is why it is drawn as
-    240.66 -> 411.06 and not to 425.11. It is about 1.5 hex rows deep and is bottom-aligned
-    with the QSFP28 mid patches at 47.9 mm.
-    THE PATTERN TOKEN WAS WRONG ON EVERY ONE OF THESE AND THE ERROR WAS INVISIBLE.
-    All ten patches were first declared `pattern: holes`, which render.py draws as circles
-    filled '#3c4046' on a transparent ground. This chassis's panel measures '#373e44' in
-    the rasterised front view, so the perforation was being drawn two counts darker than
-    the metal it was cut into and could not be seen at any zoom - the declaration existed,
-    lint was satisfied, and the face rendered blank. They are now `pattern: vent`, the
-    hexagonal token the rear face already used, which is both the correct SHAPE (the
-    isometric render resolves the holes as hexagons, not circles) and dark enough to read.
-    ITS CELL IS COARSER THAN THE HARDWARE: render.py's vent hexes are 5.1 mm across on an
-    8.86 mm horizontal pitch, where the real perforation measures about 3.4 mm pitch - six
-    hex columns across a cage where the drawing gives two. The character is right and the
-    count is not, and no finer hex primitive exists to reach for.
-  right-end-feature: >-
-    photo-measured, AND IT IS NOT THE TRIANGLE THIS FILE USED TO PRINT. At the right-hand
-    end of the panel, past the last SFP56 column, sits a printed legend line with a small
-    ROUND RECESSED FEATURE below it: in s9620-40dg-2-front.png the pixels at x 485-491,
-    y 62-69 read as a bright 7 px text row (peaks 146/147/124/147) above a compact annulus
-    at (488, 66.5) - a bright rim at 194 and 248 with a darker core at 19 between them. The
-    isometric render shows the same thing at x 618-626, y 98-106 and agrees: a wide bright
-    row over a narrow bright blob. The earlier reading of a downward triangle came from
-    that silhouette - a wide row tapering to a narrow one - and there is no triangle; the
-    silkscreen path asserting one has been removed, because ink the device does not carry
-    is the one thing silkscreen must never invent.
-    Drawn as two decor rects, a 2.7 mm '#b0b5bb' disc with a 1.2 mm dark core, centred
-    (425.1, 33.5). WHAT IT IS REMAINS UNKNOWN and stays a gap: the legend above it is four
-    pixels of cap height and does not resolve, and the control for that is already
-    established in front-image and silkscreen - not one legend on this panel resolves in
-    the flat render, and the five that resolve in the isometric all sit nearer the lens and
-    face the camera more squarely than this one does. A recessed round feature with a
-    legend over it is conventionally a reset pinhole or an ESD jack; neither is written
-    down anywhere and neither is claimed here.
-  psu-bays: >-
-    measured - two supplies stacked at the LEFT END OF THE FRONT PANEL, which is the shape
-    of this platform: PSUs draw in at the front (both ordering lines say 'intake air flow')
-    and the five fans exhaust at the rear. Module plates at x 21-99 px, y 3-61 and 65-123,
-    giving a 52.9 x 39.7 face on a 42.4 mm vertical pitch. Nothing in library/components/
-    fitted - the existing UfiSpace supplies are 33.3, 50.5, 68.0, 73.0, 73.2 and 73.5 mm
-    wide - so ufispace/psu-102-ac and ufispace/psu-102-dc were built for it. The chassis
-    silkscreen reads 'PSU 0' beside the upper bay and 'PSU 1' beside the lower, printed
-    vertically; both are legible in the isometric render and neither is legible in the
-    front one.
-  left-cluster: >-
-    measured on the front render, with the isometric render used to identify what each item
-    is. Left to right along the upper row: a six-segment status lamp column at x centre
-    79.3 mm (five green segments and a yellow one at the bottom, on an even 2.53 mm pitch
-    from y 19.85 to 32.52) beside a white printed legend strip at x 81.4-86.8; the OOB
-    management RJ45 at x 89.5-105.8, y 20.5-34.9, a single 16 x 14 jack with green link
-    lamps in its lower corners; a two-high stacked jack pair in one bright shell at
-    x 109.8-126.1, y 10.3-33.6, openings 12.9 mm wide on a 12.0 mm row pitch; and a second
-    stacked block at x 131.5-147.8 holding an RJ45 over a blue USB 3.0 Type-A. Along the
-    lower row: a large gold SMA at (82.4, 45.2) with a 9.5 mm bezel, and two smaller gold
-    SMBs at (106.5, 44.8) and (128.1, 44.8) with 6.1 mm bezels.
-    THE ASSIGNMENT OF ROLES TO THE FOUR RJ45-FAMILY JACKS IS AN INFERENCE, and a strong
-    one: the datasheet lists exactly four (OOB, serial console, ToD, BITS), the isometric
-    render prints 'ToD' above the stacked pair and 'BITS' below it, and the remaining pair
-    - RJ45 over USB - is the console-plus-maintenance block. The three coax jacks likewise:
-    the datasheet lists one GNSS SMA and two SMBs, the SMA is physically the larger
-    connector and is leftmost, and for the two SMBs the isometric render's legends read
-    10MHZ then 1PPS left to right, which is also the datasheet's own list order and is
-    corroborated by the printed ink itself - the first legend measures 12 px of ink and the
-    second 9, and 10MHZ is one character longer than 1PPS.
-  silkscreen: >-
-    ONLY ONE LEGEND ON THIS PANEL WAS READ FROM THE ARTWORK: 'S9620-40DG', top left. Every
-    other string in silkscreen[] below is the DATASHEET'S OWN NAME for the interface whose
-    printed legend sits at that position. The ink is there and was measured - the extents
-    of each legend's pixels are what fixed the marks' x positions and font sizes - but at
-    four pixels of cap height the glyphs are a smear in the flat render and only marginally
-    better in the isometric one, where 'ToD', 'BITS', 'GNSS ANT', '10MHZ' and '1PPS' are
-    readable and the rest are not. So MGMT, CONSOLE and USB are transcriptions of function,
-    not of print. This is the same choice the S9321-64E made for its LED legends and it is
-    filed as a gap here for the same reason. The network pictogram under the OOB jack is
-    drawn as a path rather than guessed at as a word, because its SHAPE is legible even
-    where its meaning would have to be spelled.
-  status-leds: >-
-    measured, unnamed. Six lamps in a vertical column at x 79.3, y 19.85 / 22.39 / 24.92 /
-    27.45 / 29.98 / 32.52 - the segments measure 2.16 to 2.6 px apart and are drawn on the
-    even 2.53 mm pitch that fits them, with the drawing's scatter recorded here rather than
-    copied. Five render green and the sixth, bottom, yellow. The white legend strip
-    immediately to their right prints six names and not one of them is resolvable; with no
-    HIG there is no front-panel LED table to fall back on, so the six placements carry
-    positions, no names and no states. Naming them from a sibling platform's table would be
-    inventing a citation.
-  grounding: >-
-    measured - a circled earth symbol at (9.1, 39.4) on the front panel between the two PSU
-    legends, about 3.5 mm across, drawn with common/ground-symbol (6.0 mm, the nearest
-    library part, so it is drawn larger than the print). It is a MARK AND NOT A LUG: no
-    hardware is visible at it in either render, and common/ground-symbol is the
-    silkscreen-only component. No grounding point is visible anywhere on the rear.
-  unidentified-front-mark: >-
-    SUPERSEDED BY right-end-feature ABOVE, and left standing so the correction is visible
-    rather than tidied away. This paragraph read the mark as 'two or three characters above
-    a triangular glyph ... with no hole and no hardware near it', and drew the triangle. Re-
-    reading the same pixels one row at a time - rather than looking at an interpolated
-    enlargement of them - showed a legend line above a small round recessed feature, and no
-    triangle at all. The 'no hardware' half of the sentence was the more damaging of the
-    two: it closed off a question the image can in fact answer.
-  rear-layout: >-
-    photo-measured on the vendor's rear render s9620-40dg-3-rear.png. GATE 1 PASSES WELL
-    HERE: the chassis body spans x 20-499 and y 28-124 px, 480 x 97 px for 440 x 89 mm,
-    giving 1.0909 px/mm across and 1.0899 down - the two axes agree to 0.1 %. It is still
-    only one pixel per millimetre.
-    Five full-height fan modules fill the left 62 % of the face and the rest is blank metal
-    with one vent field at the right. Module seams at x 30, 88.5, 146.5, 203.5, 260.5 and
-    318 px - steps of 58.5 / 58 / 57 / 57 / 57.5, which is a +/- 0.7 px scatter about an
-    even 57.6 px and is drawn as the even 52.80 mm pitch it plainly is, with the scatter
-    recorded here rather than reproduced as five different gaps. First bay at 9.2 mm from
-    the chassis edge; module face 52.4 x 87.2, i.e. all but a millimetre of the chassis
-    height. Vent field at x 378.6-427.2, y 13.8-73.4.
-    The fans are numbered by the chassis: each module's flange prints 'FAN <n' and the five
-    read 0, 1, 2, 3, 4 left to right as seen from the rear. The middle three digits are
-    legible at 10x; the outer two are inferred from the run, which is why index-origin is 0
-    and why the per-bay digit is filed as a gap rather than printed.
-  fru-parts: >-
-    three components were built for this device because nothing in the library fitted, and
-    each is named for the part number the datasheet's ordering list gives:
-    ufispace/psu-102-ac (PSU-102-AISB-1, 1000 W AC, 52.9 x 39.7) and ufispace/psu-102-dc
-    (PSU-102-DISB-1, 1000 W DC, same envelope), and ufispace/fan-40802825 (FAN-40802825-HD,
-    52.4 x 87.2). The existing ufispace/fan-402825 is FAN-402825-HD at 51.5 x 42.2 - a
-    different part number and half the height - and was NOT reused despite the two faces
-    being drawn in the same design language. Checked std/ and common/ first: std/sfp-ganged,
-    std/qsfp-ganged, std/qsfp-dd, std/rj45, std/rj45-ganged, std/usb-a, std/sma, std/smb,
-    std/c14-inlet, common/led-arrow-sm, common/led-dot and common/ground-symbol all fitted
-    and are reused.
-  sides-top-bottom: >-
-    DELIBERATELY SIZE-ONLY, and this is the second thing the missing guide cost. The four
-    remaining faces are dimensioned from the datasheet's 440 x 250 x 89 and carry no
-    drawn content, because no orthographic view of any of them exists: the intake holds a
-    front elevation, a rear elevation and one isometric from the front left. That isometric
-    does show the top cover (a plain sheet with a few shallow stampings) and the left side
-    (a field of small holes), but it is a perspective view of a 250 mm-deep box seen at
-    about 30 degrees and nothing on it can be positioned along the depth axis to better
-    than a centimetre - guessing a screw pattern from it would be inventing four faces.
-    L45's size-only warnings and the level-2 capability ceiling are the honest record of
-    that. AXIS CONVENTION, stated because it was checked rather than because anything
-    asymmetric depends on it: on a top view y = 0 is the REAR, on a RIGHT view x = 0 is the
-    FRONT and on a LEFT view x = 0 is the REAR; every one of these faces is empty, so no
-    coordinate here can be at the wrong end of an axis, and the convention is written down
-    so that whoever draws them later starts from the house rule rather than from a guess.
-  chassis: >-
-    datasheet Physical / Chassis (WxDxH): '2RU, 440mm(W) x 250mm(D) x 89mm(H) or 17.32" x
-    9.84" x 3.50"', 'Weight: 8.5 kg (without FRU)'. 440 IS THE BODY, NOT THE RACK FACE:
-    it is 42 mm inside the 482.6 of a 19-inch opening, the datasheet calls it the chassis
-    rather than the rack width, and both renders show small tabs projecting about 3.5 mm
-    beyond the body at mid-height on each side - mounting furniture, not the 21 mm flanges
-    a 19-inch ear would need. Those tabs are not drawn, per the house rule that ears never
-    are. 89 mm is 0.1 mm over the 88.9 of 2 RU, which is the vendor rounding.
-  power: >-
-    datasheet Environmental / Power Supply: 'AC input: 100 to 240V, 12A', 'DC input: -40 to
-    -72V, 30A', 'Typical power: 268 Watts (no transceiver)'. The scope is the vendor's own
-    and is carried verbatim: the figure is TYPICAL, it is the box with no optics fitted,
-    and no ambient is stated. NO MAXIMUM IS PUBLISHED ANYWHERE - there is no installation
-    guide to carry the fully-configured figure the way the S9321-64E's does - so
-    power-max-w is absent rather than estimated, and power-envelope is `bare` because
-    'no transceiver' is exactly what that means. The two 1000 W ordering lines are the
-    supplies' ratings and live on their own contracts; neither they nor the fans' draw
-    (unpublished) may be added to 268.
-  attrs: >-
-    datasheet Specifications (Physical, Environmental, Performance, Regulatory Compliance)
-    and Supported Accessories, all read off the rendered pages because the embedded text is
-    outlined - see provenance.sources. The two memory rows are the vendor's own Standard
-    and Premium builds and both are carried, because dropping either would turn an ordering
-    choice into a fact. Compliance is transcribed as printed and not tidied.
-  lifecycle: >-
-    searched 2026-08-28, 'UfiSpace S9620-40DG end of life' - no announcement. The datasheet
-    is dated 20260810V01 and the platform is a current Qumran3a design; none-announced is a
-    checked state, not an absence.
+  sources:
+    note: >-
+      THIS DEVICE HAS A DATASHEET AND NOTHING ELSE, and the whole model should be read in that
+      light. UfiSpace has not published a hardware installation guide for the S9620 family - the
+      intake's own SOURCES.md carries it on a watch list beside the S9620-32E and S9620-54DC for
+      exactly this reason - so there is no component table, no dimension drawing, no port-ID
+      table, no LED table and no per-FRU wattage anywhere. What exists is: the two-page datasheet
+      (s9620-40dg-datasheet.pdf, sha256 37a4789b...), and three vendor gallery renders (angle,
+      front and rear). A SECOND WARNING ABOUT THE DATASHEET: its spec text is set as OUTLINED
+      GLYPHS, so pdftotext returns the headings and none of the values, and the docling conversion
+      in converted/s9620-40dg-datasheet/doc.md has the same holes - it lists 'PHYSICAL', 'ASIC',
+      'Chassis' and so on with nothing after them. Every specification quoted below was read by
+      rendering the PDF's own pages at 200-400 dpi and looking at them. Anyone re-checking this
+      file by grepping the converted text will find an empty document and should not conclude the
+      vendor published nothing.
+  front-image:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the front geometry rests on ONE raster, the 649 x 130 px picture embedded
+      on page 1 of the datasheet (pdfimages object 755). The same drawing appears twice more at
+      lower resolution - 510 px on page 2 and 488 px in the gallery render s9620-40dg-2-front.png
+      - and this is the largest, which is why it is the one used. GATE 1: the image is exactly the
+      chassis with no white margin, 649 x 130 px for the datasheet's 440 x 89 mm. Its aspect is
+      4.992 against a true 4.944, 1.0 % out, so it is orthographic and carries geometry; each axis
+      is anchored to its own datasheet dimension, 1.4750 px/mm across and 1.4607 down. THE COST OF
+      THE MISSING GUIDE IS RESOLUTION, and it is severe: one pixel is 0.68 mm, so a 2 mm lamp is
+      three pixels and a printed legend is four pixels tall. Positions in this file are good to
+      roughly half a millimetre and no better, and NOT ONE PRINTED LEGEND ON THE PANEL IS LEGIBLE
+      at any magnification - see the silkscreen and port-numbering entries below and the gaps
+      register. Where a house pattern would have read a HIG figure at 8.6 px/mm, this model read a
+      marketing render at 1.47.
+  port-grid:
+    confidence: measured
+    note: >-
+      measured, AND THE STANDARDS ARE WHAT MAKE IT SAFE. The three SFP56 blocks each show five
+      bright vertical posts in the render - the block's two ends and its three internal dividers -
+      at x 355, 376, 397, 418, 439 px for block 1, i.e. a port boundary every 21.0 px = 14.24 mm.
+      SFF-8433's ganged port pitch is 14.25. That agreement to a hundredth over four ports is the
+      strongest single fact in this model: it says the render is dimensionally honest AND that
+      std/sfp-ganged is the right part, so the ports are laid out on the standard's pitch anchored
+      to the measured block origins 240.66 / 304.39 / 368.11 mm (block steps 63.73 and 63.72, even
+      to within a fifth of a pixel). Row pitch is 15.00, the belly-to-belly figure std/sfp-ganged
+      records from a TE ganged cage; measured here as 21.0 and 22.5 px on the two blocks that
+      resolve it, which brackets 15.00 and cannot distinguish it from 15.2. The QSFP28 blocks are
+      1-wide x 2-high ganged cages, three across the upper band and three across the lower, block
+      centres measured at 241.5 / 284.0 / 326.5 px = 163.74 / 192.55 / 221.37 mm, an even 28.81 mm
+      step. Each block's drawn aperture measures about 18.3 x 8.7 mm; std/qsfp-ganged's registry
+      opening is 18.5 x 9.58, and THE REGISTRY IS WHAT IS SEATED - which is why each block's
+      silver shell in this file is 24.58 tall where the render draws 23.3. That 1.3 mm is the
+      difference between the module envelope the render shades and the bezel opening the standard
+      dimensions, not a measurement error, and it is recorded rather than tuned away. The four
+      QSFP-DD cages measure centres 388.5 / 432.5 / 475.5 / 518.5 px; laid out on the even 43.33
+      px step that fits them, 263.40 / 292.78 / 322.16 / 351.54 mm. Drawn aperture 18.6 x 8.2
+      against std/qsfp-dd's 19.0 x 10.0, again the module face rather than the opening. PITCH WAS
+      TAKEN FROM FEATURES THAT REPEAT ONCE PER PORT - the cage divider posts, the lamp groups in
+      each block's centre band - never from the shaded module faces, which are narrower than the
+      ports that own them.
+  port-numbering:
+    note: >-
+      NOT SOURCED, AND THIS IS THE LARGEST SINGLE GAP. Every port on this panel is numbered on the
+      hardware: the SFP56 blocks print numerals on their teal strips, the QSFP28 blocks print a
+      pair on the pale strip under each block, and each QSFP-DD cage carries a blue label bar
+      above it with a numeral on it. All of them are three or four pixels tall in the only image
+      that exists and none can be read at any magnification. There is no HIG and therefore no Port
+      Overview table. So `rel-pos` here is POSITIONAL WITHIN EACH FAMILY - SFP56 0-23 left to
+      right and upper-then-lower within a column, QSFP28 0-11 across the upper band then the
+      lower, QSFP-DD 0-3 left to right - and it is NOT a claim about what the vendor prints. In
+      particular the datasheet's own '40-port' phrasing suggests a single 0-39 range across all
+      three families, which this file deliberately does not assert because nothing states where it
+      starts. No numerals are printed on the drawing for the same reason.
+  port-leds:
+    confidence: photo-measured
+    note: >-
+      photo-measured, and it took the ISOMETRIC render to settle. In the flat front image the
+      centre band of every block carries a regular pattern of small marks, and at 1.47 px/mm a
+      lamp, an EMI perforation and a printed numeral are the same three pixels. The vendor's angle
+      render s9620-40dg-1-angle.png resolves them and they are three different things: the QSFP28
+      blocks' centre band is a 2-row dot matrix of EMI perforation and carries NO lamps (a
+      per-column dark-pixel count confirms it - a regular 8-across grid repeated on every block,
+      which no indicator layout looks like); the SFP56 blocks' centre band carries a GREEN UP/DOWN
+      ARROW PAIR per column, one arrow per port; and each QSFP28 block's lamps are the up/down
+      arrows on the pale strip BELOW it, not in the band. So: 24 arrows in the SFP56 bands
+      (measured as green pixel groups at every column centre, 12 groups 10-11 px wide, band centre
+      y 93.5 px = 64.00 mm); 24 arrows on the six QSFP28 strips (block centre +/- 6.4 mm, strips
+      at y 51-55 and 112-116 px); and 8 round green lamps under the QSFP-DD brackets, two per cage
+      at +/- 5.9 mm from the cage centre, y 58 px = 39.7 mm - those eight are the clearest lamps
+      on the panel, lit green in both renders. Drawn with common/led-arrow-sm (2.25 x 2.0, the
+      only arrow that fits the measured 3.6 mm pair spacing - common/led-arrow at 3.6 wide would
+      overlap its partner) and common/led-dot. NO STATES ARE CLAIMED for any of them: with no HIG
+      there is no LED table, and colour vocabulary is not something a render can be read for.
+  dd-brackets:
+    confidence: measured
+    note: >-
+      measured - each PAIR of QSFP-DD cages sits inside a bright orange U, drawn open at the top
+      where the blue label bars are. Bracket A runs x 370-449 px and bracket B x 458-537, both y
+      33-54 px: legs about 2.7 mm wide and a bottom bar about 2 mm deep, i.e. 250.86-304.42 mm and
+      310.52-364.09 mm horizontally, 22.59-36.97 vertically. It is PAINT ON THE PANEL and is drawn
+      as panel.decor, not as a part: it has no identity a part number could be put to, it spans
+      two ports, and the port lamps sit outside it. Why the vendor brackets them in pairs is not
+      stated anywhere; the datasheet's '4 x 400G or 2 x 800G' is the obvious guess and is not
+      written down as a fact. THIS PARAGRAPH WAS WRITTEN BEFORE THE BRACKETS WERE DRAWN AND FOR A
+      WHILE DESCRIBED SOMETHING THE FILE DID NOT CONTAIN. The six decor rects that build the two
+      Us - two legs and a bottom bar each - were added afterwards from the numbers above, which
+      are unchanged. Anyone auditing this file should note the failure mode rather than only the
+      fix: sourced provenance for a feature is not evidence that the feature was drawn, and
+      nothing in lint, the render or the name audit could tell the two apart. THE U IS BUILT AS
+      THREE RECTS, NOT AS ONE OUTLINE, so it needs no knowledge of the panel colour to cut its own
+      middle out. The right-hand leg of each U overlaps its cage's registry opening by 0.56 mm,
+      because the aperture the render shades is narrower than the SFF-8665 opening std/qsfp-dd is
+      dimensioned to - the same 1.3 mm effect already recorded for the QSFP28 shells in port-grid.
+      Decor is painted behind the ports, so the cage covers the overlap and the visible leg is
+      2.14 mm on that side against 2.70 on the other; the measured outer extents are kept rather
+      than nudged into symmetry. COLOUR: the U is the only orange on the device and is nothing
+      like the '#b0b5bb' of the ganged shells elsewhere on this panel - a warning worth keeping,
+      because the treatment was nearly copied across from the SFP blocks instead of being looked
+      at. In s9620-40dg-2-front.png the lit face of the paint is modal (188,118,39) = '#bc7627'
+      with a shadowed side at '#8b551b' and a highlight to (253,154,40); the file carries
+      '#e2821f', the lit face brightened, which is the same treatment the teal port strips
+      ((42,153,129) measured, '#1f9e7a' written) and the QSFP-DD label bars ((71,130,188)
+      measured, '#2f6fd0' written) already had in this file. That is a rendering choice and is
+      recorded as one.
+  panel-perforation:
+    confidence: measured
+    note: >-
+      measured, and it is the second thing the QSFP-DD end of the panel was missing. The faceplate
+      carries hexagonal EMI perforation in three places: a patch above EACH of the four QSFP-DD
+      cages (dark runs at x 253.92-274.08 / 284.17-304.33 / 314.42-334.58 / 344.67-364.83 mm and y
+      5.5-22.9 in the 520 px render's own frame - exactly the cage width, one per cage and not one
+      per pair), a thin band above each QSFP28 block and another between its two rows, and ONE
+      CONTINUOUS BAND running below the whole QSFP-DD block and above the SFP56 blocks. That band
+      starts at the left edge of SFP56 block 1 and ends about 92 % of the way across the three
+      blocks - it stops short of the last SFP56 column rather than running to the end of the
+      panel, which is why it is drawn as 240.66 -> 411.06 and not to 425.11. It is about 1.5 hex
+      rows deep and is bottom-aligned with the QSFP28 mid patches at 47.9 mm. THE PATTERN TOKEN
+      WAS WRONG ON EVERY ONE OF THESE AND THE ERROR WAS INVISIBLE. All ten patches were first
+      declared `pattern: holes`, which render.py draws as circles filled '#3c4046' on a
+      transparent ground. This chassis's panel measures '#373e44' in the rasterised front view, so
+      the perforation was being drawn two counts darker than the metal it was cut into and could
+      not be seen at any zoom - the declaration existed, lint was satisfied, and the face rendered
+      blank. They are now `pattern: vent`, the hexagonal token the rear face already used, which
+      is both the correct SHAPE (the isometric render resolves the holes as hexagons, not circles)
+      and dark enough to read. ITS CELL IS COARSER THAN THE HARDWARE: render.py's vent hexes are
+      5.1 mm across on an 8.86 mm horizontal pitch, where the real perforation measures about 3.4
+      mm pitch - six hex columns across a cage where the drawing gives two. The character is right
+      and the count is not, and no finer hex primitive exists to reach for.
+  right-end-feature:
+    confidence: photo-measured
+    note: >-
+      photo-measured, AND IT IS NOT THE TRIANGLE THIS FILE USED TO PRINT. At the right-hand end of
+      the panel, past the last SFP56 column, sits a printed legend line with a small ROUND
+      RECESSED FEATURE below it: in s9620-40dg-2-front.png the pixels at x 485-491, y 62-69 read
+      as a bright 7 px text row (peaks 146/147/124/147) above a compact annulus at (488, 66.5) - a
+      bright rim at 194 and 248 with a darker core at 19 between them. The isometric render shows
+      the same thing at x 618-626, y 98-106 and agrees: a wide bright row over a narrow bright
+      blob. The earlier reading of a downward triangle came from that silhouette - a wide row
+      tapering to a narrow one - and there is no triangle; the silkscreen path asserting one has
+      been removed, because ink the device does not carry is the one thing silkscreen must never
+      invent. Drawn as two decor rects, a 2.7 mm '#b0b5bb' disc with a 1.2 mm dark core, centred
+      (425.1, 33.5). WHAT IT IS REMAINS UNKNOWN and stays a gap: the legend above it is four
+      pixels of cap height and does not resolve, and the control for that is already established
+      in front-image and silkscreen - not one legend on this panel resolves in the flat render,
+      and the five that resolve in the isometric all sit nearer the lens and face the camera more
+      squarely than this one does. A recessed round feature with a legend over it is
+      conventionally a reset pinhole or an ESD jack; neither is written down anywhere and neither
+      is claimed here.
+  psu-bays:
+    confidence: measured
+    note: >-
+      measured - two supplies stacked at the LEFT END OF THE FRONT PANEL, which is the shape of
+      this platform: PSUs draw in at the front (both ordering lines say 'intake air flow') and the
+      five fans exhaust at the rear. Module plates at x 21-99 px, y 3-61 and 65-123, giving a 52.9
+      x 39.7 face on a 42.4 mm vertical pitch. Nothing in library/components/ fitted - the
+      existing UfiSpace supplies are 33.3, 50.5, 68.0, 73.0, 73.2 and 73.5 mm wide - so
+      ufispace/psu-102-ac and ufispace/psu-102-dc were built for it. The chassis silkscreen reads
+      'PSU 0' beside the upper bay and 'PSU 1' beside the lower, printed vertically; both are
+      legible in the isometric render and neither is legible in the front one.
+  left-cluster:
+    confidence: measured
+    note: >-
+      measured on the front render, with the isometric render used to identify what each item is.
+      Left to right along the upper row: a six-segment status lamp column at x centre 79.3 mm
+      (five green segments and a yellow one at the bottom, on an even 2.53 mm pitch from y 19.85
+      to 32.52) beside a white printed legend strip at x 81.4-86.8; the OOB management RJ45 at x
+      89.5-105.8, y 20.5-34.9, a single 16 x 14 jack with green link lamps in its lower corners; a
+      two-high stacked jack pair in one bright shell at x 109.8-126.1, y 10.3-33.6, openings 12.9
+      mm wide on a 12.0 mm row pitch; and a second stacked block at x 131.5-147.8 holding an RJ45
+      over a blue USB 3.0 Type-A. Along the lower row: a large gold SMA at (82.4, 45.2) with a 9.5
+      mm bezel, and two smaller gold SMBs at (106.5, 44.8) and (128.1, 44.8) with 6.1 mm bezels.
+      THE ASSIGNMENT OF ROLES TO THE FOUR RJ45-FAMILY JACKS IS AN INFERENCE, and a strong one: the
+      datasheet lists exactly four (OOB, serial console, ToD, BITS), the isometric render prints
+      'ToD' above the stacked pair and 'BITS' below it, and the remaining pair - RJ45 over USB -
+      is the console-plus-maintenance block. The three coax jacks likewise: the datasheet lists
+      one GNSS SMA and two SMBs, the SMA is physically the larger connector and is leftmost, and
+      for the two SMBs the isometric render's legends read 10MHZ then 1PPS left to right, which is
+      also the datasheet's own list order and is corroborated by the printed ink itself - the
+      first legend measures 12 px of ink and the second 9, and 10MHZ is one character longer than
+      1PPS.
+  silkscreen:
+    note: >-
+      ONLY ONE LEGEND ON THIS PANEL WAS READ FROM THE ARTWORK: 'S9620-40DG', top left. Every other
+      string in silkscreen[] below is the DATASHEET'S OWN NAME for the interface whose printed
+      legend sits at that position. The ink is there and was measured - the extents of each
+      legend's pixels are what fixed the marks' x positions and font sizes - but at four pixels of
+      cap height the glyphs are a smear in the flat render and only marginally better in the
+      isometric one, where 'ToD', 'BITS', 'GNSS ANT', '10MHZ' and '1PPS' are readable and the rest
+      are not. So MGMT, CONSOLE and USB are transcriptions of function, not of print. This is the
+      same choice the S9321-64E made for its LED legends and it is filed as a gap here for the
+      same reason. The network pictogram under the OOB jack is drawn as a path rather than guessed
+      at as a word, because its SHAPE is legible even where its meaning would have to be spelled.
+  status-leds:
+    confidence: measured
+    note: >-
+      measured, unnamed. Six lamps in a vertical column at x 79.3, y 19.85 / 22.39 / 24.92 / 27.45
+      / 29.98 / 32.52 - the segments measure 2.16 to 2.6 px apart and are drawn on the even 2.53
+      mm pitch that fits them, with the drawing's scatter recorded here rather than copied. Five
+      render green and the sixth, bottom, yellow. The white legend strip immediately to their
+      right prints six names and not one of them is resolvable; with no HIG there is no
+      front-panel LED table to fall back on, so the six placements carry positions, no names and
+      no states. Naming them from a sibling platform's table would be inventing a citation.
+  grounding:
+    confidence: measured
+    note: >-
+      measured - a circled earth symbol at (9.1, 39.4) on the front panel between the two PSU
+      legends, about 3.5 mm across, drawn with common/ground-symbol (6.0 mm, the nearest library
+      part, so it is drawn larger than the print). It is a MARK AND NOT A LUG: no hardware is
+      visible at it in either render, and common/ground-symbol is the silkscreen-only component.
+      No grounding point is visible anywhere on the rear.
+  unidentified-front-mark:
+    note: >-
+      SUPERSEDED BY right-end-feature ABOVE, and left standing so the correction is visible rather
+      than tidied away. This paragraph read the mark as 'two or three characters above a
+      triangular glyph ... with no hole and no hardware near it', and drew the triangle. Re-
+      reading the same pixels one row at a time - rather than looking at an interpolated
+      enlargement of them - showed a legend line above a small round recessed feature, and no
+      triangle at all. The 'no hardware' half of the sentence was the more damaging of the two: it
+      closed off a question the image can in fact answer.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured on the vendor's rear render s9620-40dg-3-rear.png. GATE 1 PASSES WELL HERE:
+      the chassis body spans x 20-499 and y 28-124 px, 480 x 97 px for 440 x 89 mm, giving 1.0909
+      px/mm across and 1.0899 down - the two axes agree to 0.1 %. It is still only one pixel per
+      millimetre. Five full-height fan modules fill the left 62 % of the face and the rest is
+      blank metal with one vent field at the right. Module seams at x 30, 88.5, 146.5, 203.5,
+      260.5 and 318 px - steps of 58.5 / 58 / 57 / 57 / 57.5, which is a +/- 0.7 px scatter about
+      an even 57.6 px and is drawn as the even 52.80 mm pitch it plainly is, with the scatter
+      recorded here rather than reproduced as five different gaps. First bay at 9.2 mm from the
+      chassis edge; module face 52.4 x 87.2, i.e. all but a millimetre of the chassis height. Vent
+      field at x 378.6-427.2, y 13.8-73.4. The fans are numbered by the chassis: each module's
+      flange prints 'FAN <n' and the five read 0, 1, 2, 3, 4 left to right as seen from the rear.
+      The middle three digits are legible at 10x; the outer two are inferred from the run, which
+      is why index-origin is 0 and why the per-bay digit is filed as a gap rather than printed.
+  fru-parts:
+    note: >-
+      three components were built for this device because nothing in the library fitted, and each
+      is named for the part number the datasheet's ordering list gives: ufispace/psu-102-ac
+      (PSU-102-AISB-1, 1000 W AC, 52.9 x 39.7) and ufispace/psu-102-dc (PSU-102-DISB-1, 1000 W DC,
+      same envelope), and ufispace/fan-40802825 (FAN-40802825-HD, 52.4 x 87.2). The existing
+      ufispace/fan-402825 is FAN-402825-HD at 51.5 x 42.2 - a different part number and half the
+      height - and was NOT reused despite the two faces being drawn in the same design language.
+      Checked std/ and common/ first: std/sfp-ganged, std/qsfp-ganged, std/qsfp-dd, std/rj45,
+      std/rj45-ganged, std/usb-a, std/sma, std/smb, std/c14-inlet, common/led-arrow-sm,
+      common/led-dot and common/ground-symbol all fitted and are reused.
+  sides-top-bottom:
+    note: >-
+      DELIBERATELY SIZE-ONLY, and this is the second thing the missing guide cost. The four
+      remaining faces are dimensioned from the datasheet's 440 x 250 x 89 and carry no drawn
+      content, because no orthographic view of any of them exists: the intake holds a front
+      elevation, a rear elevation and one isometric from the front left. That isometric does show
+      the top cover (a plain sheet with a few shallow stampings) and the left side (a field of
+      small holes), but it is a perspective view of a 250 mm-deep box seen at about 30 degrees and
+      nothing on it can be positioned along the depth axis to better than a centimetre - guessing
+      a screw pattern from it would be inventing four faces. L45's size-only warnings and the
+      level-2 capability ceiling are the honest record of that. AXIS CONVENTION, stated because it
+      was checked rather than because anything asymmetric depends on it: on a top view y = 0 is
+      the REAR, on a RIGHT view x = 0 is the FRONT and on a LEFT view x = 0 is the REAR; every one
+      of these faces is empty, so no coordinate here can be at the wrong end of an axis, and the
+      convention is written down so that whoever draws them later starts from the house rule
+      rather than from a guess.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet Physical / Chassis (WxDxH): '2RU, 440mm(W) x 250mm(D) x 89mm(H) or 17.32" x 9.84"
+      x 3.50"', 'Weight: 8.5 kg (without FRU)'. 440 IS THE BODY, NOT THE RACK FACE: it is 42 mm
+      inside the 482.6 of a 19-inch opening, the datasheet calls it the chassis rather than the
+      rack width, and both renders show small tabs projecting about 3.5 mm beyond the body at
+      mid-height on each side - mounting furniture, not the 21 mm flanges a 19-inch ear would
+      need. Those tabs are not drawn, per the house rule that ears never are. 89 mm is 0.1 mm over
+      the 88.9 of 2 RU, which is the vendor rounding.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet Environmental / Power Supply: 'AC input: 100 to 240V, 12A', 'DC input: -40 to
+      -72V, 30A', 'Typical power: 268 Watts (no transceiver)'. The scope is the vendor's own and
+      is carried verbatim: the figure is TYPICAL, it is the box with no optics fitted, and no
+      ambient is stated. NO MAXIMUM IS PUBLISHED ANYWHERE - there is no installation guide to
+      carry the fully-configured figure the way the S9321-64E's does - so power-max-w is absent
+      rather than estimated, and power-envelope is `bare` because 'no transceiver' is exactly what
+      that means. The two 1000 W ordering lines are the supplies' ratings and live on their own
+      contracts; neither they nor the fans' draw (unpublished) may be added to 268.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet Specifications (Physical, Environmental, Performance, Regulatory Compliance) and
+      Supported Accessories, all read off the rendered pages because the embedded text is outlined
+      - see provenance.sources. The two memory rows are the vendor's own Standard and Premium
+      builds and both are carried, because dropping either would turn an ordering choice into a
+      fact. Compliance is transcribed as printed and not tidied.
+  lifecycle:
+    note: >-
+      searched 2026-08-28, 'UfiSpace S9620-40DG end of life' - no announcement. The datasheet is
+      dated 20260810V01 and the platform is a current Qumran3a design; none-announced is a checked
+      state, not an absence.
+
 attrs:
   performance:
     switching-capacity: 2.4 Tb/s

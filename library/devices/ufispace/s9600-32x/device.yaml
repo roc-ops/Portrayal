@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -18,229 +18,237 @@ description: >-
   four hot-swap fans (3+1) and dual 1600W supplies (1+1) at the rear
 profile: networking
 provenance:
-  sources: >-
-    UfiSpace S9600-32X datasheet
-    for dimensions, weight, port inventory, platform, timing, power, environment,
-    compliance and the FRU ordering lines; S9600-32X Hardware Installation Guide
-    (s9600-32x-hig) for the overview figure (Fig 4), the port overview elevation
-    (Fig 8), the PSU and fan figures (Figs 5-7), the Component Physical Information
-    table, the two maximum-power sentences, the space-clearance paragraph, the
-    grounding section and the section 10 LED tables; three vendor product renders
-    (photos/s9600-32x-1-view, -2-view, -3-view - unlabelled, identified by content
-    as an isometric, a front and a rear) for colour, counts and the DC build.
-    Checked for a vendor 3D model before trusting any figure, per the skill: the
-    intake stages GLBs for ReadyLinks only and none for UfiSpace.
-  scale-gate: >-
-    BOTH GUIDE ELEVATIONS PASS GATE 1, which is why this model takes absolute
-    geometry off them rather than only fractions. HIG Figure 8's port overview
-    (extracted as fig-0014) has a front face of 1289 x 261 px against the stated
-    436 x 87.7 mm chassis - aspect 4.939 against a true 4.9715, 0.65% out - giving
-    2.9564 px/mm across and 2.976 px/mm down. HIG Figure 7's rear elevation
-    (fig-0013) measures 1292 x 261 px, aspect 4.950, 0.44% out, at 2.9633 and 2.976
-    px/mm. The two scales are derived independently from two figures and agree to
-    0.2%. The three product renders do NOT pass: the front render is 520 px wide,
-    a sixth of the guide figure's resolution, and is used for colour and for the
-    DC build only.
-  chassis: >-
-    datasheet - 'Chassis (W x D x H) 2RU, 436 x 762 x 87.7 mm', weight 17.73 kg
-    without FRU; the HIG Component Physical Information table repeats both
-    ('S9600-32X (W x D x H) 17.16 x 30 x 3.45 in (436 x 762 x 87.7mm)' and 'Chassis
-    without FRU 39.09lb (17.73kg)'). 436 is the BODY and not a rack face: the HIG's
-    Space Clearance section says 'The S9600-32X width is 17.16 inches (43.6cm) and
-    shipped with a rack mount brackets suitable for 19 inch (48.3cm) wide racks', so
-    the ears are additional to 436 and are not drawn. 762 mm is the chassis without
-    FRUs; the same section projects the fan handles 29 mm and the PSU handles 30 mm
-    beyond it, which is why the clearance figure is larger than the depth.
-  port-pitch: >-
-    drawing - AND TAKEN FROM THE LAMPS, NOT THE CAGE FILLS. Figure 8 draws a
-    transceiver face inside every aperture, and those fills are wider than the port
-    pitch; measuring between them puts a gutter down each block. The ruler used here
-    is the lane-lamp cluster, which repeats once per PORT COLUMN: colour detection
-    finds 32 lamps per row in the upper band at centres 294.5 to 763.0 px, in eight
-    groups of four on a 11.83 px (4.00 mm) lamp pitch. The eight group centres give
-    a within-block column pitch of 19.11, 19.11, 18.95 and 19.11 mm and a
-    block-to-block pitch of 42.45, 42.53 and 42.37 mm. 19.0 mm is the ganged QSFP
-    pitch std/qsfp-ganged records from a TE 2322551-4 cage, so the measurement
-    corroborates the standard rather than the other way round, and the manifest
-    carries 19.00 within a block and 42.45 between blocks. Column 0's left edge
-    lands at 94.00 mm.
-  row-grid: >-
-    drawing - four aperture rows on ONE 15.00 mm grid, and the SFP28 quad sits on
-    rows 1 and 2 of it. Profiling a column strictly inside a cage gives bezel
-    separators at py 131.5, 177 and 221.5 with the block running 89 to 265, i.e.
-    row centres 44.67 px (15.01 mm) apart - 15.0 to a hundredth, which is also the
-    belly-to-belly pitch std/sfp-ganged records from a TE 2007562-6. Aperture tops
-    are therefore 17.05, 32.05, 47.05 and 62.05 mm. The SFP28 shell measures
-    16.13 to 42.34 mm vertically; putting its two 10.4 mm apertures on grid rows 1
-    and 2 predicts a shell bottom of 42.45, which is 0.11 mm from the measurement,
-    so the quad is placed on the same grid rather than on a second one of its own.
-  port-numbering: >-
-    drawing - NUMBERING RUNS DOWN EACH COLUMN and the numbers are printed on the
-    LAMP BAND, not on the cages. Figure 8 prints '0 2 / 1 3', '4 6 / 5 7' and so on
-    across the upper half and '16 18 / 17 19' across the lower, so column c carries
-    port 2c over 2c+1 in the upper pair and 16+2c over 17+2c in the lower - eight
-    columns, thirty-two ports, matching the guide's Port Overview table ('0 ~ 31,
-    QSFP28, 40/100G'). But those numerals are drawn on the schematic module faces,
-    where a seated transceiver would cover them. The panel's own numbering is on the
-    eight white lozenges in the lamp band, one per column, each split into an upper
-    and a lower half: colour detection puts them at 94.0, 132.2, 136.3, 174.9,
-    178.9, 217.3, 221.6 and 260.3 mm - a single lozenge at each end of the port
-    block and a pair at each of the three inter-block webs, which is exactly eight
-    for eight columns, and each sits on the OUTER edge of its own column. The
-    numerals inside them are 2 px tall in the best figure held and cannot be read;
-    they are drawn here from the column assignment above, which the module-face
-    numerals and the NDX interface list (ce0-ce31, xe0-xe3) both give independently.
-  sfp28-breakout: >-
-    drawing/guide - the four SFP28 ports are ports 0-3 in their own run and they are
-    the four lanes of QSFP28 port 0. The guide's Port Overview says so in words:
-    'The ports 0 to 3 (labelled in yellow) breakout from the 100G port 0 (labelled
-    in green). If the ports 0 to 3 (labelled in yellow) are enabled, then the 100G
-    port 0 (labelled in green) will be disabled.' The faceplate says it in paint:
-    the quad's legend band is yellow, and the yellow continues right past the quad
-    to cover the lamp rows of the FIRST QSFP column and only that column, with an
-    orange strip under its lower row. Every other column's lamps sit on green.
-    Counting settles that the yellow-and-orange lamps belong to the QSFP column and
-    not to the quad: eight lamp groups are drawn and there are eight QSFP columns,
-    so none is spare for the SFP28 ports, which carry no lamp of their own. The
-    lamps are therefore attached to port-0 and port-1 and the sharing is described
-    rather than asserted as a wiring fact; see the sfp28-lamp-sharing gap.
-  left-cluster: >-
-    drawing - measured on Figure 8 at 2.9564 px/mm across and 2.976 down, and
-    cross-read at 4x. Down the left edge, three gold jacks on one centreline
-    (x 11.7-12.2): 1PPS SMB at y 6.4-13.4, 10MHZ SMB at 20.8-27.9 and the larger
-    GNSS ANT SMA at 33.9-43.0, measuring 7.1, 7.1 and 9.5 mm across the nut - the
-    datasheet's own split of '1 x GNSS input SMA, 1 x 1PPS input/output SMB, 1 x
-    10MHz input/output SMB', not a family assumption. To their right the ToD RJ45
-    (x 22.2-38.5, y 26.7-41.7) and a PORTRAIT USB 3.0 A receptacle (x 42.3-49.5,
-    y 27.7-41.3), with the reset pinhole at (30.4, 46.6) below them. Along the
-    bottom: the six-lamp status block at x 11.16-13.87 on a 2.45 mm pitch inside a
-    white legend panel at x 6.4-10.2, then the micro-USB console slot at x
-    18.2-26.2, the RJ45 console at 29.4-44.7 and the RJ45 management jack at
-    49.4-65.3, the last identified by the two green lamps colour detection finds in
-    its lower corners.
-  panel-metal: >-
-    drawing - THE BRIGHT SHELLS ARE PANEL, NOT PART. std/qsfp-ganged and
-    std/sfp-ganged draw the aperture and what is behind it and stop at the metal, so
-    the light shell each ganged block sits in is drawn here as panel.decor: one
-    39.0 x 56.3 mm plate per two-column QSFP block at x 93.25, 135.70, 178.15 and
-    220.60, and one 30.8 x 26.6 plate under the SFP28 quad at 53.1. Without them
-    thirty-six dark apertures sit on a dark faceplate and vanish. The thin dark seam
-    at y 43.9 is the join between each block's upper and lower two-high cage, which
-    the figure draws as a 1-2 px line. The same rule puts a silver pill behind the
-    portrait USB-A and the micro-USB, whose std/ parts draw only the opening.
-  lamp-band: >-
-    drawing - the port lamps sit on a painted band above and below the cage block,
-    py 71-88 and 262-280, i.e. 8.6-15.9 mm and 72.2-79.5 mm. Each band carries two
-    rows of lamps, the upper row serving the upper port of every stacked pair and
-    the lower row the lower: row centres measure 10.58 and 14.28 mm at the top and
-    73.80 and 77.11 at the bottom. Each row is four lamps on a 4.00 mm pitch, so
-    ufispace/lane-led-quad@1 (14.4 x 2.6, four 2.4 mm lamps on 3.94) is placed
-    unchanged - its pitch is within 1.5% of the measurement and its lamp diameter is
-    a 3 px feature in this figure and is not independently resolvable.
-  rear-layout: >-
-    drawing, and it passes the same gate the front does. Figure 7's rear elevation
-    measures 1292 x 261 px, 0.44% from the stated aspect. The four fan modules
-    repeat on a measured 84.42 mm pitch, taken from the status lamp, which is a
-    feature that repeats once per module: lamp centres at 18.39, 102.76, 187.29 and
-    271.65 mm, y 23.5. ufispace/fan-803816@1 carries its lamp at (16.2, 18.5) in a
-    82.5 x 81.5 face, which puts the bay origins at x 0.90 + 84.42k and y 3.70. The
-    PSU stack is anchored the same way: its two lamps sit at x 384.0 and y 7.9 and
-    50.4, and ufispace/psu-162-ac@1 carries its lamp at (7.0, 3.4) in a 50.5 x 40.0
-    face, giving bay origins (375.5, 3.0) and (375.5, 45.5) and a 42.5 mm stack
-    pitch. NOTE this is a SECOND, INDEPENDENT reading of the same chassis: the
-    S9600-30DX model measured its own guide's Figure 7 and got an 84.4 mm fan pitch
-    and a 43 mm PSU pitch. The agreement is corroboration because the two
-    measurements were taken from two different documents, not copied.
-  fan-part: >-
-    ufispace/fan-803816@1 is reused rather than a third near-duplicate built, and
-    the reason is recorded because the tables disagree. THIS guide's Component
-    Physical Information table gives the fan 81.5 x 122 x 81 mm (W x D x H); the
-    S9600-30DX guide gives the same part number 81 x 113 x 81.5 and the S9600-28DX
-    guide 80 x 113 x 81.5. Three chassis guides, one SKU, three tables. The library
-    part is 82.5 x 81.5, measured off the S9600-30DX rear elevation, and my own
-    elevation puts the repeating unit at 84.42 mm, which is that face plus a ~1.9 mm
-    web - the same reading. The differences between the three tables are 1.5 mm and
-    smaller, which is under a pixel and a half at this figure's 2.96 px/mm, so they
-    cannot be resolved by measuring harder. See the fan-dimensions gap.
-  psu-build: >-
-    THE GUIDE DRAWS AC AND THE PRODUCT RENDER SHOWS DC, and the two are not blended.
-    HIG Figure 7's rear elevation - the only orthographic rear the intake holds -
-    draws both bays with an appliance inlet, a mesh grille to its left, a green lamp
-    and a red bail, which is ufispace/psu-162-ac@1 exactly. The vendor's rear
-    product render (photos/s9600-32x-3-view) shows a DC build instead: two two-hole
-    lug pads behind a cover where the inlet is, and the whole face MIRRORED, grille
-    on the right. The manifest models the documented build - AC, from the figure
-    that passes the gate - and the dc configuration swaps in ufispace/psu-162-dc@1,
-    whose own contract records that no figure of a seated DC unit was available to
-    it. That render is such a figure and it disagrees with that part's layout; the
-    part is not edited from here. See the dc-psu-face-mirrored gap.
-  grounding: >-
-    HIG section 8 - 'The location for securing the grounding lug is at the rear of
-    the case and is covered with a protective label.' Figure 7 draws a silver plate
-    with two round pads at x 348.0-358.5, y 6.0-38.6, an earth symbol beside it and
-    a third round hole below, on the chassis strip between the fan bank and the PSU
-    stack; HIG Figure 4's overview names it 'Ground Lug' with a leader to that
-    strip. The plate is drawn as decor and the symbol as a placement: the lug itself
-    ships loose in the accessory kit (5 lugs on the DC build, 1 on AC) and the pad
-    is bare metal under a label until somebody bolts one on, so seating a lug
-    component here would draw hardware the shipped chassis does not wear.
-  views: >-
-    Six views. TOP: y = 0 is the REAR, per the house convention and HIG Figure 4's
-    footprint drawing, which prints the fan handles along its top edge; six long
-    stadium recesses run across the lid, proportioned off that drawing (which is 2%
-    out in aspect, so only proportions are taken from it). BOTTOM carries the
-    compliance sticker at an estimated position - no held figure shows the
-    underside; a bottom view mirrors left and right, and this face carries nothing
-    asymmetric, so nothing exposes that. LEFT (x = 0 is the REAR) and RIGHT (x = 0
-    is the FRONT) carry the five rail attachment pins per side that the HIG's rack
-    mounting section counts by name - 'The chassis has 5 attachment pins on each
-    side, for a total of 10 pins' - at estimated depths, since no figure dimensions
-    them along the chassis. Both side faces otherwise carry only symmetric content,
-    so the depth-axis conventions are stated here rather than proved by a feature.
-  attrs: >-
-    datasheet - Specifications, Performance, Environmental, Regulatory Compliance
-    and Accessories sections, transcribed into sections. Compliance strings kept
-    verbatim, semicolon-separated, untidied.
-  power: >-
-    datasheet 'Typical power: 335 Watts (no transceiver)' - the vendor's own scope,
-    so power-envelope is bare. The HIG states the maximum twice, once per build:
-    'The maximum system power consumption is 609 watts' in the DC section and
-    '621.3 watts' in the AC section, and unusually BOTH are qualified - 'Testing
-    criteria for maximum power are as follows: Temperature 45C, Optics: full
-    populated, Traffic: 100% load' appears under each. 621.3 is carried as
-    power-max-w because max means the highest, and the 12.3 W difference is recorded
-    here rather than as a conflict: they are two builds, not two readings. The
-    1600 W that appears beside them is a provisioning instruction ('a reserve of at
-    least 1600 watts on each power circuit') and is the supply's rating, not a draw.
-    These are the vendor's figures as the vendor states them and are NOT reconciled
-    against the module set; the fans publish no draw, so any total built from the
-    modelled modules is a floor.
-  second-party: >-
-    NetBox Labs NDX carries this device type (netboxlabs.com/ndx/ufispace/
-    ufispace-s9600-32x, last verified 4 April 2026) and was read for COMPLETENESS
-    only. Its field list is 2U full-depth, 17.73 kg, front-to-rear airflow, 32x
-    100gbase-x-qsfp28 (ce0-ce31), 4x 25gbase-x-sfp28 (xe0-xe3), 1x 1000base-t
-    management, one RJ45 console, four fan bays FAN0-FAN3 and two PSU bays
-    PSU0-PSU1. Every one of those is present here. They carry nothing this model
-    lacks; this model additionally carries the timing block, the USB and micro-USB
-    ports, the reset button, the six status lamps, the port lamps and the grounding
-    pad. Their interface names corroborate the 0-31 and 0-3 numbering independently.
-  vent-islands: >-
-    derived - a vent field is a perforation and the drawing said so, but the marks
-    printed inside one were floating on air (L64). The vendor interrupts the
-    perforation where it prints, so each of those marks now has a solid patch under it
-    in the chassis colour, drawn over the vent the way ufispace/s9600-72xc paints its
-    port bands over one. The patch is the printing's own footprint plus 0.4 mm, which is
-    what the S9610-36D's front render measures: its slots stop 0.4 mm outside each lamp
-    cluster and resume 0.4 mm past it. Where a vent is simply measured wider than the
-    metal it reaches, this states the metal that the printing proves is there without
-    re-measuring the field.
-  lifecycle: >-
-    searched 28 August 2026 - 'UfiSpace S9600-32X end of life end of sale
-    announcement'. No notice from UfiSpace or any reseller appears; the vendor's
-    product page, the FAQ page and the S9600 brochure are all live. NDX advertises
-    lifecycle dates behind its commercial tiers and publishes none. none-announced
-    is a real finding rather than an absence of looking.
+  sources:
+    note: >-
+      UfiSpace S9600-32X datasheet for dimensions, weight, port inventory, platform, timing,
+      power, environment, compliance and the FRU ordering lines; S9600-32X Hardware Installation
+      Guide (s9600-32x-hig) for the overview figure (Fig 4), the port overview elevation (Fig 8),
+      the PSU and fan figures (Figs 5-7), the Component Physical Information table, the two
+      maximum-power sentences, the space-clearance paragraph, the grounding section and the
+      section 10 LED tables; three vendor product renders (photos/s9600-32x-1-view, -2-view,
+      -3-view - unlabelled, identified by content as an isometric, a front and a rear) for colour,
+      counts and the DC build. Checked for a vendor 3D model before trusting any figure, per the
+      skill: the intake stages GLBs for ReadyLinks only and none for UfiSpace.
+  scale-gate:
+    note: >-
+      BOTH GUIDE ELEVATIONS PASS GATE 1, which is why this model takes absolute geometry off them
+      rather than only fractions. HIG Figure 8's port overview (extracted as fig-0014) has a front
+      face of 1289 x 261 px against the stated 436 x 87.7 mm chassis - aspect 4.939 against a true
+      4.9715, 0.65% out - giving 2.9564 px/mm across and 2.976 px/mm down. HIG Figure 7's rear
+      elevation (fig-0013) measures 1292 x 261 px, aspect 4.950, 0.44% out, at 2.9633 and 2.976
+      px/mm. The two scales are derived independently from two figures and agree to 0.2%. The
+      three product renders do NOT pass: the front render is 520 px wide, a sixth of the guide
+      figure's resolution, and is used for colour and for the DC build only.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (W x D x H) 2RU, 436 x 762 x 87.7 mm', weight 17.73 kg without FRU; the
+      HIG Component Physical Information table repeats both ('S9600-32X (W x D x H) 17.16 x 30 x
+      3.45 in (436 x 762 x 87.7mm)' and 'Chassis without FRU 39.09lb (17.73kg)'). 436 is the BODY
+      and not a rack face: the HIG's Space Clearance section says 'The S9600-32X width is 17.16
+      inches (43.6cm) and shipped with a rack mount brackets suitable for 19 inch (48.3cm) wide
+      racks', so the ears are additional to 436 and are not drawn. 762 mm is the chassis without
+      FRUs; the same section projects the fan handles 29 mm and the PSU handles 30 mm beyond it,
+      which is why the clearance figure is larger than the depth.
+  port-pitch:
+    confidence: drawing
+    note: >-
+      drawing - AND TAKEN FROM THE LAMPS, NOT THE CAGE FILLS. Figure 8 draws a transceiver face
+      inside every aperture, and those fills are wider than the port pitch; measuring between them
+      puts a gutter down each block. The ruler used here is the lane-lamp cluster, which repeats
+      once per PORT COLUMN: colour detection finds 32 lamps per row in the upper band at centres
+      294.5 to 763.0 px, in eight groups of four on a 11.83 px (4.00 mm) lamp pitch. The eight
+      group centres give a within-block column pitch of 19.11, 19.11, 18.95 and 19.11 mm and a
+      block-to-block pitch of 42.45, 42.53 and 42.37 mm. 19.0 mm is the ganged QSFP pitch
+      std/qsfp-ganged records from a TE 2322551-4 cage, so the measurement corroborates the
+      standard rather than the other way round, and the manifest carries 19.00 within a block and
+      42.45 between blocks. Column 0's left edge lands at 94.00 mm.
+  row-grid:
+    confidence: drawing
+    note: >-
+      drawing - four aperture rows on ONE 15.00 mm grid, and the SFP28 quad sits on rows 1 and 2
+      of it. Profiling a column strictly inside a cage gives bezel separators at py 131.5, 177 and
+      221.5 with the block running 89 to 265, i.e. row centres 44.67 px (15.01 mm) apart - 15.0 to
+      a hundredth, which is also the belly-to-belly pitch std/sfp-ganged records from a TE
+      2007562-6. Aperture tops are therefore 17.05, 32.05, 47.05 and 62.05 mm. The SFP28 shell
+      measures 16.13 to 42.34 mm vertically; putting its two 10.4 mm apertures on grid rows 1 and
+      2 predicts a shell bottom of 42.45, which is 0.11 mm from the measurement, so the quad is
+      placed on the same grid rather than on a second one of its own.
+  port-numbering:
+    confidence: drawing
+    note: >-
+      drawing - NUMBERING RUNS DOWN EACH COLUMN and the numbers are printed on the LAMP BAND, not
+      on the cages. Figure 8 prints '0 2 / 1 3', '4 6 / 5 7' and so on across the upper half and
+      '16 18 / 17 19' across the lower, so column c carries port 2c over 2c+1 in the upper pair
+      and 16+2c over 17+2c in the lower - eight columns, thirty-two ports, matching the guide's
+      Port Overview table ('0 ~ 31, QSFP28, 40/100G'). But those numerals are drawn on the
+      schematic module faces, where a seated transceiver would cover them. The panel's own
+      numbering is on the eight white lozenges in the lamp band, one per column, each split into
+      an upper and a lower half: colour detection puts them at 94.0, 132.2, 136.3, 174.9, 178.9,
+      217.3, 221.6 and 260.3 mm - a single lozenge at each end of the port block and a pair at
+      each of the three inter-block webs, which is exactly eight for eight columns, and each sits
+      on the OUTER edge of its own column. The numerals inside them are 2 px tall in the best
+      figure held and cannot be read; they are drawn here from the column assignment above, which
+      the module-face numerals and the NDX interface list (ce0-ce31, xe0-xe3) both give
+      independently.
+  sfp28-breakout:
+    confidence: drawing
+    note: >-
+      drawing/guide - the four SFP28 ports are ports 0-3 in their own run and they are the four
+      lanes of QSFP28 port 0. The guide's Port Overview says so in words: 'The ports 0 to 3
+      (labelled in yellow) breakout from the 100G port 0 (labelled in green). If the ports 0 to 3
+      (labelled in yellow) are enabled, then the 100G port 0 (labelled in green) will be
+      disabled.' The faceplate says it in paint: the quad's legend band is yellow, and the yellow
+      continues right past the quad to cover the lamp rows of the FIRST QSFP column and only that
+      column, with an orange strip under its lower row. Every other column's lamps sit on green.
+      Counting settles that the yellow-and-orange lamps belong to the QSFP column and not to the
+      quad: eight lamp groups are drawn and there are eight QSFP columns, so none is spare for the
+      SFP28 ports, which carry no lamp of their own. The lamps are therefore attached to port-0
+      and port-1 and the sharing is described rather than asserted as a wiring fact; see the
+      sfp28-lamp-sharing gap.
+  left-cluster:
+    confidence: drawing
+    note: >-
+      drawing - measured on Figure 8 at 2.9564 px/mm across and 2.976 down, and cross-read at 4x.
+      Down the left edge, three gold jacks on one centreline (x 11.7-12.2): 1PPS SMB at y
+      6.4-13.4, 10MHZ SMB at 20.8-27.9 and the larger GNSS ANT SMA at 33.9-43.0, measuring 7.1,
+      7.1 and 9.5 mm across the nut - the datasheet's own split of '1 x GNSS input SMA, 1 x 1PPS
+      input/output SMB, 1 x 10MHz input/output SMB', not a family assumption. To their right the
+      ToD RJ45 (x 22.2-38.5, y 26.7-41.7) and a PORTRAIT USB 3.0 A receptacle (x 42.3-49.5, y
+      27.7-41.3), with the reset pinhole at (30.4, 46.6) below them. Along the bottom: the
+      six-lamp status block at x 11.16-13.87 on a 2.45 mm pitch inside a white legend panel at x
+      6.4-10.2, then the micro-USB console slot at x 18.2-26.2, the RJ45 console at 29.4-44.7 and
+      the RJ45 management jack at 49.4-65.3, the last identified by the two green lamps colour
+      detection finds in its lower corners.
+  panel-metal:
+    confidence: drawing
+    note: >-
+      drawing - THE BRIGHT SHELLS ARE PANEL, NOT PART. std/qsfp-ganged and std/sfp-ganged draw the
+      aperture and what is behind it and stop at the metal, so the light shell each ganged block
+      sits in is drawn here as panel.decor: one 39.0 x 56.3 mm plate per two-column QSFP block at
+      x 93.25, 135.70, 178.15 and 220.60, and one 30.8 x 26.6 plate under the SFP28 quad at 53.1.
+      Without them thirty-six dark apertures sit on a dark faceplate and vanish. The thin dark
+      seam at y 43.9 is the join between each block's upper and lower two-high cage, which the
+      figure draws as a 1-2 px line. The same rule puts a silver pill behind the portrait USB-A
+      and the micro-USB, whose std/ parts draw only the opening.
+  lamp-band:
+    confidence: drawing
+    note: >-
+      drawing - the port lamps sit on a painted band above and below the cage block, py 71-88 and
+      262-280, i.e. 8.6-15.9 mm and 72.2-79.5 mm. Each band carries two rows of lamps, the upper
+      row serving the upper port of every stacked pair and the lower row the lower: row centres
+      measure 10.58 and 14.28 mm at the top and 73.80 and 77.11 at the bottom. Each row is four
+      lamps on a 4.00 mm pitch, so ufispace/lane-led-quad@1 (14.4 x 2.6, four 2.4 mm lamps on
+      3.94) is placed unchanged - its pitch is within 1.5% of the measurement and its lamp
+      diameter is a 3 px feature in this figure and is not independently resolvable.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing, and it passes the same gate the front does. Figure 7's rear elevation measures 1292
+      x 261 px, 0.44% from the stated aspect. The four fan modules repeat on a measured 84.42 mm
+      pitch, taken from the status lamp, which is a feature that repeats once per module: lamp
+      centres at 18.39, 102.76, 187.29 and 271.65 mm, y 23.5. ufispace/fan-803816@1 carries its
+      lamp at (16.2, 18.5) in a 82.5 x 81.5 face, which puts the bay origins at x 0.90 + 84.42k
+      and y 3.70. The PSU stack is anchored the same way: its two lamps sit at x 384.0 and y 7.9
+      and 50.4, and ufispace/psu-162-ac@1 carries its lamp at (7.0, 3.4) in a 50.5 x 40.0 face,
+      giving bay origins (375.5, 3.0) and (375.5, 45.5) and a 42.5 mm stack pitch. NOTE this is a
+      SECOND, INDEPENDENT reading of the same chassis: the S9600-30DX model measured its own
+      guide's Figure 7 and got an 84.4 mm fan pitch and a 43 mm PSU pitch. The agreement is
+      corroboration because the two measurements were taken from two different documents, not
+      copied.
+  fan-part:
+    note: >-
+      ufispace/fan-803816@1 is reused rather than a third near-duplicate built, and the reason is
+      recorded because the tables disagree. THIS guide's Component Physical Information table
+      gives the fan 81.5 x 122 x 81 mm (W x D x H); the S9600-30DX guide gives the same part
+      number 81 x 113 x 81.5 and the S9600-28DX guide 80 x 113 x 81.5. Three chassis guides, one
+      SKU, three tables. The library part is 82.5 x 81.5, measured off the S9600-30DX rear
+      elevation, and my own elevation puts the repeating unit at 84.42 mm, which is that face plus
+      a ~1.9 mm web - the same reading. The differences between the three tables are 1.5 mm and
+      smaller, which is under a pixel and a half at this figure's 2.96 px/mm, so they cannot be
+      resolved by measuring harder. See the fan-dimensions gap.
+  psu-build:
+    note: >-
+      THE GUIDE DRAWS AC AND THE PRODUCT RENDER SHOWS DC, and the two are not blended. HIG Figure
+      7's rear elevation - the only orthographic rear the intake holds - draws both bays with an
+      appliance inlet, a mesh grille to its left, a green lamp and a red bail, which is
+      ufispace/psu-162-ac@1 exactly. The vendor's rear product render (photos/s9600-32x-3-view)
+      shows a DC build instead: two two-hole lug pads behind a cover where the inlet is, and the
+      whole face MIRRORED, grille on the right. The manifest models the documented build - AC,
+      from the figure that passes the gate - and the dc configuration swaps in
+      ufispace/psu-162-dc@1, whose own contract records that no figure of a seated DC unit was
+      available to it. That render is such a figure and it disagrees with that part's layout; the
+      part is not edited from here. See the dc-psu-face-mirrored gap.
+  grounding:
+    note: >-
+      HIG section 8 - 'The location for securing the grounding lug is at the rear of the case and
+      is covered with a protective label.' Figure 7 draws a silver plate with two round pads at x
+      348.0-358.5, y 6.0-38.6, an earth symbol beside it and a third round hole below, on the
+      chassis strip between the fan bank and the PSU stack; HIG Figure 4's overview names it
+      'Ground Lug' with a leader to that strip. The plate is drawn as decor and the symbol as a
+      placement: the lug itself ships loose in the accessory kit (5 lugs on the DC build, 1 on AC)
+      and the pad is bare metal under a label until somebody bolts one on, so seating a lug
+      component here would draw hardware the shipped chassis does not wear.
+  views:
+    note: >-
+      Six views. TOP: y = 0 is the REAR, per the house convention and HIG Figure 4's footprint
+      drawing, which prints the fan handles along its top edge; six long stadium recesses run
+      across the lid, proportioned off that drawing (which is 2% out in aspect, so only
+      proportions are taken from it). BOTTOM carries the compliance sticker at an estimated
+      position - no held figure shows the underside; a bottom view mirrors left and right, and
+      this face carries nothing asymmetric, so nothing exposes that. LEFT (x = 0 is the REAR) and
+      RIGHT (x = 0 is the FRONT) carry the five rail attachment pins per side that the HIG's rack
+      mounting section counts by name - 'The chassis has 5 attachment pins on each side, for a
+      total of 10 pins' - at estimated depths, since no figure dimensions them along the chassis.
+      Both side faces otherwise carry only symmetric content, so the depth-axis conventions are
+      stated here rather than proved by a feature.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - Specifications, Performance, Environmental, Regulatory Compliance and
+      Accessories sections, transcribed into sections. Compliance strings kept verbatim,
+      semicolon-separated, untidied.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet 'Typical power: 335 Watts (no transceiver)' - the vendor's own scope, so
+      power-envelope is bare. The HIG states the maximum twice, once per build: 'The maximum
+      system power consumption is 609 watts' in the DC section and '621.3 watts' in the AC
+      section, and unusually BOTH are qualified - 'Testing criteria for maximum power are as
+      follows: Temperature 45C, Optics: full populated, Traffic: 100% load' appears under each.
+      621.3 is carried as power-max-w because max means the highest, and the 12.3 W difference is
+      recorded here rather than as a conflict: they are two builds, not two readings. The 1600 W
+      that appears beside them is a provisioning instruction ('a reserve of at least 1600 watts on
+      each power circuit') and is the supply's rating, not a draw. These are the vendor's figures
+      as the vendor states them and are NOT reconciled against the module set; the fans publish no
+      draw, so any total built from the modelled modules is a floor.
+  second-party:
+    note: >-
+      NetBox Labs NDX carries this device type (netboxlabs.com/ndx/ufispace/ ufispace-s9600-32x,
+      last verified 4 April 2026) and was read for COMPLETENESS only. Its field list is 2U
+      full-depth, 17.73 kg, front-to-rear airflow, 32x 100gbase-x-qsfp28 (ce0-ce31), 4x
+      25gbase-x-sfp28 (xe0-xe3), 1x 1000base-t management, one RJ45 console, four fan bays
+      FAN0-FAN3 and two PSU bays PSU0-PSU1. Every one of those is present here. They carry nothing
+      this model lacks; this model additionally carries the timing block, the USB and micro-USB
+      ports, the reset button, the six status lamps, the port lamps and the grounding pad. Their
+      interface names corroborate the 0-31 and 0-3 numbering independently.
+  vent-islands:
+    note: >-
+      derived - a vent field is a perforation and the drawing said so, but the marks printed
+      inside one were floating on air (L64). The vendor interrupts the perforation where it
+      prints, so each of those marks now has a solid patch under it in the chassis colour, drawn
+      over the vent the way ufispace/s9600-72xc paints its port bands over one. The patch is the
+      printing's own footprint plus 0.4 mm, which is what the S9610-36D's front render measures:
+      its slots stop 0.4 mm outside each lamp cluster and resume 0.4 mm past it. Where a vent is
+      simply measured wider than the metal it reaches, this states the metal that the printing
+      proves is there without re-measuring the field.
+  lifecycle:
+    note: >-
+      searched 28 August 2026 - 'UfiSpace S9600-32X end of life end of sale announcement'. No
+      notice from UfiSpace or any reseller appears; the vendor's product page, the FAQ page and
+      the S9600 brochure are all live. NDX advertises lifecycle dates behind its commercial tiers
+      and publishes none. none-announced is a real finding rather than an absence of looking.
+
 attrs:
   performance:
     switching-capacity: 2.4 Tbps

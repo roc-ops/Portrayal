@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -17,219 +17,250 @@ description: >-
   port. The rear is a plain louvred panel.
 profile: networking
 provenance:
-  port-cutouts: >-
-    DERIVED, not measured, and the distinction matters. Every one of the fifteen
-    front ports conforms to a registry standard - `rj45-ganged` 12.7 x 11.0,
-    `sfp-ganged` 14.25 x 10.4, `usb-a` 12.0 x 4.5 - and a standard connector's
-    bezel opening IS its aperture at its position. There was nothing independent
-    to measure: the hole is implied by "there is an SFP cage here", and the only
-    sourced fact is where the cage is, which the placements already carried.
-    SO THE CHECKS THAT PASS HERE ARE CIRCULAR AND SHOULD BE READ THAT WAY. L39
-    compares each hole against the standard its occupant conforms to, and against
-    where that occupant lands; both were used to generate it, so both confirm the
-    arithmetic rather than the model. What they do catch from here on is DRIFT - a
-    port moved without its hole, or a hole resized against its standard.
-    THEY ARE NOT GANGED, which was checked rather than assumed. SFF-8433 gives a
-    1xN SFP+ assembly ONE continuous opening at N x 14.25 + 1.2, and rj45-ganged
-    abuts on a 13.97 pitch. This panel's columns sit 20.5 to 47.6 apart, so no two
-    of these ports share a cutout and fifteen separate holes is right.
-    THE USB IS THE ONE THAT NEEDED THINKING ABOUT. It is placed `rotate: 90`, and
-    `rotate` pivots a part on its own pre-rotation centre, so the hole is the
-    LANDED box - (274.25, 58.95) at 4.5 x 12 - not the placement's `at` with the
-    standard's unrotated size. Deriving it the naive way put the hole 3.75mm off,
-    which is (12.0 - 4.5) / 2 and exactly the error L39 gained a check for in #32.
-    The rule caught it on the first run.
-  sources: 'the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation
-    Guide (b-asr9001-hardware-installation-guide.pdf, retitled from the ASR 9001
-    HIG and now covering the 9001, 9901, 9902 and 9903); the Cisco ASR 9001 Router
-    Data Sheet (c78-685687); and Cisco''s own Visio stencil Routers-Cisco_ASR_9000_11_15_13,
-    masters asr-9001-front and asr-9001-rear'
-  chassis: 'datasheet - the ASR 9001 data sheet''s Table 2: ''Height: 3.472 inches
-    (88.2 mm), Width: 17.42 inches (442 mm), Depth: 18.5 inches (470 mm), Weight
-    of chassis: 30.2032 lbs (13.7 kg)''. THREE SOURCES AGREE ON THE HEIGHT to 0.06
-    percent - the data sheet''s 3.472 in, the install guide''s ''Cisco ASR 9901
-    Router and Cisco ASR 9001 Router is 3.47 inches (8.8 cm)'', and the stencil
-    master''s props.height_in of 0.3472 at 1:10. So the rounding-up trap in stencil-as-metrology.md
-    does not bite this chassis: 2 RU is 3.5 in and the chassis is built 0.028 in
-    under it. chassis.width is the 442 BODY, not the 19 in rack face the stencil
-    box carries'
-  stencil-calibration: 'the asr-9001-front master calibrates to 0.66 percent between
-    its two axes - x on the 19.0 in rack face (0.18562 mm/px over 2600 px) and y
-    on the data sheet''s 88.2 mm (0.18452 mm/px over 478 px). By stencil-as-metrology.md
-    that is trustworthy but not pristine; the ASR 9904 managed 0.06 percent. CONFIRMED
-    ON SOMETHING NEVER USED AS AN INPUT: with x calibrated on the rack face, the
-    body''s left edge measures 21.0 mm, against 20.3 mm predicted by (482.6 - 442)
-    / 2 from two data sheet numbers. That is the note''s third check and it passes'
-  face-check: 'done BEFORE measuring, per the ASR 9910 lesson in stencil-as-metrology.md,
-    where Cisco''s master filenames name the wrong faces. No swap here: asr-9001-front
-    carries the MPA bays, the PSU openings, every port, the LED cluster, the fan
-    module and the ''Cisco ASR-9001'' branding, and matches Figure 7 of the guide,
-    ''Front Panel of the Cisco ASR 9001 Router''. asr-9001-rear is a plain louvred
-    panel'
-  mpa-bays: 'NOW BAYS - they were panel cutouts until cisco/a9k-mpa-blank@1 and
-    cisco/a9k-mpa-20x1ge@1 landed, because device.schema.json requires accepts with
-    minItems 1 and there was nothing legal to accept. The conversion was mechanical,
-    as the placeholder note promised: the measurements did not move. THE BAYS ARE SIZED TO THE DRAWN OPENING,
-    NOT TO THE MODULE, AND THAT IS WHY THEY SURVIVED THE MODULE CHANGING. I measured
-    these openings at 163.0 x 35.6 off the front master. The module envelope they
-    accept has since moved twice: first 33.81 x 160.02, read off the stencil
-    shapesheet under the belief that no document dimensioned an MPA, and now
-    34.54 x 161.80 x 170.18 from Cisco data sheet c78-735809 Table 3, which lists
-    every MPA by part number at 6.37 W x 1.36 H x 6.70 L and turns out to have been
-    in the intake the whole time. A 5 percent change in the part, and nothing here
-    needed editing, because a bay measured from the hole is not a restatement of
-    the card. Had these bays been set to the shapesheet figure they would now be
-    0.73 and 1.78 mm UNDER the module they accept. Clearance against the sourced
-    envelope is 1.20 along and 1.06 across - tighter than against the old figure
-    and more plausible for a module in a bay.
-    NOTE THE CORROBORATION THIS ENTRY USED TO CITE HAS BEEN RETRACTED. It claimed
-    two independently derived figures agreeing, one of them the shapesheet reading,
-    and that reading was wrong. The check is now stronger rather than weaker - a
-    measured opening against a VENDOR-STATED envelope beats two derivations - but
-    the sentence had to be rewritten, and a provenance entry citing a number that
-    has since been withdrawn is exactly the stale-words failure this file spent the
-    night finding in other people''s files.
-    THE OPENING DISAGREEMENT IS RESOLVED AND THE GEOMETRY DELIBERATELY DID NOT MOVE.
-    asr9k-cards read these openings at 162.56 x 37.80 against my 163.0 x 35.6, and
-    re-measured from scratch at an ear-inclusive 482.6 x 88.19 anchor that passes
-    gate 1 on aspect to 0.7 percent, getting 163.66 x 37.79. WE WERE EACH RIGHT ON
-    ONE AXIS: my along-card figure is 0.4 percent out against theirs at 0.7, and
-    their across-card figure is the better one against my 5.8.
-    THE REASON IS A PROPERTY OF THE STENCIL AND IS THE USEFUL PART. asr9k-cards
-    measured this stencil against known standards across eight cards: ALONG-card
-    readings carry a mean absolute error of 3.2 percent and always run slightly
-    under, while ACROSS-card readings carry 14.7 percent with the sign scattering
-    both ways - the same SFP opening is drawn at 8.96, 9.24, 10.72 and 12.04 mm on
-    four different masters. IT IS A GOOD RULER ALONG A CARD AND A BAD ONE ACROSS IT,
-    by a factor of four and a half. So a 6 percent disagreement across and 0.4
-    percent along is exactly what its accuracy predicts, and neither reading was
-    careless.
-    CITE THAT 14.7 PERCENT WITH ITS CAVEAT, WHICH asr9k-cards RAISED AGAINST THEIR
-    OWN STUDY. All seven samples are apertures of essentially ONE SIZE, nominal
-    10.00 to 10.15 mm. Their absolute errors spread 0.72 to 2.06 mm and their
-    percentage errors spread 7.2 to 20.4 - the same 2.9-fold scatter expressed two
-    ways - so with no size leverage in the sample there is no way to tell whether
-    the error SCALES with the feature or is a fixed drawing tolerance. The honest
-    quotation is ''14.7 percent mean, measured on ~10 mm apertures'', and it must not
-    be carried onto a 37 mm opening in either direction: not as 14.7 percent, which
-    may be far too harsh, and not as the ~4 percent a fixed-tolerance reading would
-    imply, which is unsupported. An earlier version of this entry quoted the bare
-    14.7 as though it transferred, and it does not.
-    THE CONCLUSION SURVIVES THE CAVEAT, which is why nothing moved. The two readings
-    differ by 2.19 mm. On the characterisation LEAST favourable to my figure - a
-    fixed absolute tolerance, mean around 1.5 mm - that gap is still about 1.5 times
-    what this instrument has demonstrated it can be wrong by, so the disagreement is
-    inside its known failure range either way. The decision rests on the data as it
-    is, not on the harshest reading of it.
-    WHICH IS ALSO WHY 37.79 IS NOT ADOPTED. That figure sits on the axis their own
-    study says is unreliable, so it is not a better number than 35.6 - it is a
-    differently-placed sample from a ruler with 14.7 percent scatter, and both
-    readings are inside that noise. Taking their along-card figure and keeping mine
-    across would be cherry-picking two measurements by axis; taking the pair whole
-    would move a working number onto the bad axis for no gain. THE BAY IS INSIDE THE
-    HOLE ON EITHER READING AND OUTSIDE NOTHING ELSE, which is all a bay has to be:
-    it clears the 34.54 module by 1.06 across, and the true opening on either
-    reading swallows the bay. If a caliper ever settles the across-card axis, 163.66
-    x 37.79 is the candidate to adopt WHOLE, and this is the note that says so. The
-    bays carry rotate 90 because the modules are drawn portrait and this chassis
-    lays them flat; the bay size is the ROTATED footprint, which is the convention
-    asr9k-cards verified with a scratch device rather than asserted. WIDENED after the XFP MPAs landed: both bays now accept 20x1ge, 2x10ge, 4x10ge and the blank. All four share the 33.81 x 160.02 envelope, so widening accepts needed no geometry change - which is the point of an envelope shared across a family. COMPLETE, AND THE LIST IS THE CHASSIS''S OWN. a9k-mpa-1x40ge landed and both bays now accept all four adapters plus the blank. THE ELIGIBILITY IS NOT INFERRED FROM THE FAMILY: the fixed-port install guide has a section headed ''Modular Port Adapters'' that says outright ''The Cisco ASR 9001 Router has two bays that support the following Modular Port Adapters (MPAs)'' and then lists exactly four - 20-Port Gigabit Ethernet, 4-Port 10 Gigabit Ethernet, 2-Port 10 Gigabit Ethernet and 1-Port 40 Gigabit Ethernet. That is a per-CHASSIS list rather than a per-family one, which is the distinction that decides what belongs here. A9K-MPA-2X40GE AND A9K-MPA-8X10GE ARE MODELLED IN THE LIBRARY AND ARE DELIBERATELY NOT ACCEPTED: a list that names four is excluding the others, and a card existing on the same 33.81 x 160.02 envelope says it would FIT, not that it is SUPPORTED. READ THE LIST IN THE PDF AND NOT IN THE TEXT DUMP - the fourth bullet is separated from the first three by a page break, so the extracted text puts a running header, a page number and a section title between them and a reader scanning the bulleted block finds only three. ONE WARNING FOR ANYONE TOUCHING THE 40GE ARTWORK: its stencil master prints BOTH ''A9K-MPA-1X40GE'' AND ''A9K-MPA-2X10GE'' on the same faceplate, so the artwork is shared and the silkscreen legend cannot be used to tell the two apart'
-  front-geometry: 'drawing-measured off the stencil master at the calibration
-    above, expressed in body coordinates. The two MPA bays are one row at y 2.6
-    to 38.2, BAY 0 at x 20.0 to 182.9 and BAY 1 at x 208.9 to 371.9, each 163.0
-    wide and separated by a 26 mm divider that carries both captive screws and both
-    BAY legends - which is what settles that the bays are SIDE BY SIDE and not stacked,
-    since the two rotated legends sit at opposite ends of one divider. The PSU openings
-    are at y 45.0 to 86.0, x 10.3 to 66.9 and 72.0 to 128.7, so 56.6 x 41.0 - against
-    cisco/a9k-750w-ac''s 55.2 x 39.9, agreeing to 2.5 percent, which is the confirmation
-    that the data sheet''s PSU PID is the part that fits'
-  port-rows: 'drawing-measured - every stacked port pair sits on the SAME two
-    rows, which is what makes the reading safe: the upper row at y 46.5 to 55.4
-    and the lower at 62.6 to 71.4, a 16.1 mm pitch, reproduced independently at
-    eight different x positions. The SFP cages measure a 15.3 mm belly-to-belly
-    pitch against the 15.00 std/sfp-ganged carries from a measured TE part'
-  sfp-plus-numbering: 'READ AT HIGH ZOOM, AND DO NOT ''FIX'' IT. The left cage
-    is SFP+ 3 over SFP+ 1 and the right cage is SFP+ 2 over SFP+ 0, so numbering
-    runs RIGHT TO LEFT along the bottom row and then right to left along the top:
-    port 0 bottom-right, 1 bottom-left, 2 top-right, 3 top-left. This looks like
-    a transcription error and is not one - it is what the stencil prints and what
-    the guide''s Figure 13 shows. It is the same class of trap as the rotated crop
-    that once reversed an entire supervisor card in this project: the obvious reading
-    is wrong and looks right. If a future reader is tempted to renumber these left-to-right,
-    the thing to do is re-read the artwork at 4x, not the manifest'
-  rear: 'drawing - the rear is a plain louvred panel and that is the finding,
-    not an omission. Horizontal vent slots across the full width, six screws and
-    the two rack ears. No connectors and no modules: on this chassis the PSUs, the
-    fan tray, both MPA bays and every port are on the FRONT'
-  airflow: 'drawing - ''the fan tray on Cisco ASR 9001 Router is located along
-    the right side of the router and circulates cool air from right-to-left through
-    the router'', which is why the fan bay sits at the right end of the front face.
-    The guide adds that ''Each power supply is also equipped with fans'''
-  side-faces: 'no figure in either document shows the top, bottom or side faces
-    of this chassis, so they are sized from the data sheet and carry only the integral
-    rack flanges. Stated rather than left blank, as on the Casa chassis'
-  depth-axis-on-side-views: 'THE FLANGE WAS AT THE WRONG END ON THREE OF THE FOUR
-    SIDE VIEWS AND THE FIX IS DERIVED, NOT GUESSED. This is a front-mounted 2 RU
-    chassis, so its integral flanges are at the FRONT - that half was never in doubt.
-    What was in doubt was which end of each view the front is, because nothing in
-    the schema, the renderer or any device file stated it, and this device answered
-    it four different ways: top had the flange at y = 0, bottom at y = 464, left
-    at x = 0 and right at x = 464. Four faces, one feature, three of them wrong,
-    and no label anywhere to check the geometry against - which is why it survived.
-    THE RENDERER IS THE AUTHORITY AND IT IS UNAMBIGUOUS. library/demo2/viewer3d.js
-    builds each face in local coordinates (x right, y up, z out of the face) and
-    orients it with a fixed rotation, with the front face at +z and the rear at
-    -z. Applying those rotations to the local axes gives the depth direction of
-    every side view outright: right is rot [0, +pi/2, 0], which sends local +x to
-    world -z, so INCREASING x ON A RIGHT VIEW RUNS TOWARDS THE REAR AND x = 0 IS
-    THE FRONT. left is rot [0, -pi/2, 0], which sends local +x to world +z, so
-    x = 0 IS THE REAR AND x = depth IS THE FRONT. top is rot [-pi/2, 0, 0], which
-    sends local +y to world -z; SVG y runs downwards so image y = 0 is local +y,
-    giving y = 0 REAR and y = depth FRONT - the same answer Figure 9 gave for the
-    ASR 9006 and 9904, now confirmed from the code as well as from the drawing.
-    The box-UV path agrees independently, and so does viewer3d.js''s own comment
-    on the component branch, ''face end at image left -> front'' for the right side.
-    Three derivations, one answer. LEFT AND RIGHT ARE OPPOSITE AND THAT IS THE TRAP
-    - they are two views of the same axis from opposite sides, so a feature at the
-    front sits at x = 0 on one and x = depth on the other. Mirroring left from right
-    by copying the x is exactly wrong, and copying it while ALSO negating it is
-    exactly right. TOP AND BOTTOM ARE NOT OPPOSITE, which is the other half of the
-    trap and the one that reads as inconsistent: looking at a chassis from below
-    flips LEFT and RIGHT, not front and back, so top and bottom share a depth axis
-    and a full-width strip has the SAME y on both'
-  din-connectors: 'THE 10MHz AND 1PPS PORTS ARE DECLARED AS PANEL CUTOUTS AND
-    NOT COMPOSED, deliberately. Table 4 of the guide gives their connector as DIN
-    1.0/2.3, and there is no std/ part for it - the registry has sma, smb, mcx and
-    f-type. Substituting one of those would name a connector Cisco does not. The
-    holes are measured (about 4 mm, centred at y 68.0) and a gap records what is
-    missing'
-  variants: 'the ASR 9001-S is a CONFIGURATION, not a second device, because the
-    rule in portfolio-taxonomy-design.md is that a new device.yaml is warranted
-    only when the sheet metal differs. It does not here: same chassis, same faceplate,
-    same four cages, with two ports and one bay disabled in software until A9K-9001-120G-LIC
-    is applied. The stencil having its own asr-9001-s-front master is not evidence
-    to the contrary - a marketing stencil drawing a variant separately says nothing
-    about the metal. What the configuration cannot express is recorded in the per-instance-config-attrs
-    gap'
-  fan-legend: 'REMOVED, do not re-add at chassis level. "ASR-9001 FAN"
-    and "STATUS" are printed on the FAN MODULE''s own faceplate and
-    cisco/asr-9001-fan already draws both inside its <g id="silkscreen">.
-    A chassis-level copy was both a duplicate and buried - it sat at
-    (414.5, 84.0), inside the fan-0 bay, so the module painted over it.
-    Text on a module''s faceplate is that module''s, not the chassis''s'
-  leds: 'drawing - eight discrete indicators, which matches the guide''s callout
-    ''Eight discrete LED indicators'' on Figure 13. Grouped as the stencil draws
-    them: RSP FAIL and LC FAIL in the left column, CRIT / MAJ / MIN in the middle,
-    EUSB / ACO / SYNC on the right. Their POSITIONS are read off the master at a
-    scale where the dots are a few pixels, so treat the grouping and the count as
-    reliable and the millimetres as approximate'
-  lifecycle: 'searched and not found, with a caveat worth stating. No end-of-sale
-    or end-of-life announcement for the ASR 9001 CHASSIS appears in the material
-    held; the one EOL bulletin in the intake covers the ASR 9000 Series 4th Generation
-    Ethernet Line Card Family, announced 2024-03-15, which is a different product.
-    A live check was not possible - cisco.com returns 403 to this machine, which
-    is why the whole intake came from the Wayback Machine - so this records ''nothing
-    found in what we hold'' rather than a confirmed absence'
+  port-cutouts:
+    note: >-
+      DERIVED, not measured, and the distinction matters. Every one of the fifteen front ports
+      conforms to a registry standard - `rj45-ganged` 12.7 x 11.0, `sfp-ganged` 14.25 x 10.4,
+      `usb-a` 12.0 x 4.5 - and a standard connector's bezel opening IS its aperture at its
+      position. There was nothing independent to measure: the hole is implied by "there is an SFP
+      cage here", and the only sourced fact is where the cage is, which the placements already
+      carried. SO THE CHECKS THAT PASS HERE ARE CIRCULAR AND SHOULD BE READ THAT WAY. L39 compares
+      each hole against the standard its occupant conforms to, and against where that occupant
+      lands; both were used to generate it, so both confirm the arithmetic rather than the model.
+      What they do catch from here on is DRIFT - a port moved without its hole, or a hole resized
+      against its standard. THEY ARE NOT GANGED, which was checked rather than assumed. SFF-8433
+      gives a 1xN SFP+ assembly ONE continuous opening at N x 14.25 + 1.2, and rj45-ganged abuts
+      on a 13.97 pitch. This panel's columns sit 20.5 to 47.6 apart, so no two of these ports
+      share a cutout and fifteen separate holes is right. THE USB IS THE ONE THAT NEEDED THINKING
+      ABOUT. It is placed `rotate: 90`, and `rotate` pivots a part on its own pre-rotation centre,
+      so the hole is the LANDED box - (274.25, 58.95) at 4.5 x 12 - not the placement's `at` with
+      the standard's unrotated size. Deriving it the naive way put the hole 3.75mm off, which is
+      (12.0 - 4.5) / 2 and exactly the error L39 gained a check for in #32. The rule caught it on
+      the first run.
+  sources:
+    note: >-
+      the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide
+      (b-asr9001-hardware-installation-guide.pdf, retitled from the ASR 9001 HIG and now covering
+      the 9001, 9901, 9902 and 9903); the Cisco ASR 9001 Router Data Sheet (c78-685687); and
+      Cisco's own Visio stencil Routers-Cisco_ASR_9000_11_15_13, masters asr-9001-front and
+      asr-9001-rear
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - the ASR 9001 data sheet's Table 2: 'Height: 3.472 inches (88.2 mm), Width: 17.42
+      inches (442 mm), Depth: 18.5 inches (470 mm), Weight of chassis: 30.2032 lbs (13.7 kg)'.
+      THREE SOURCES AGREE ON THE HEIGHT to 0.06 percent - the data sheet's 3.472 in, the install
+      guide's 'Cisco ASR 9901 Router and Cisco ASR 9001 Router is 3.47 inches (8.8 cm)', and the
+      stencil master's props.height_in of 0.3472 at 1:10. So the rounding-up trap in
+      stencil-as-metrology.md does not bite this chassis: 2 RU is 3.5 in and the chassis is built
+      0.028 in under it. chassis.width is the 442 BODY, not the 19 in rack face the stencil box
+      carries
+  stencil-calibration:
+    note: >-
+      the asr-9001-front master calibrates to 0.66 percent between its two axes - x on the 19.0 in
+      rack face (0.18562 mm/px over 2600 px) and y on the data sheet's 88.2 mm (0.18452 mm/px over
+      478 px). By stencil-as-metrology.md that is trustworthy but not pristine; the ASR 9904
+      managed 0.06 percent. CONFIRMED ON SOMETHING NEVER USED AS AN INPUT: with x calibrated on
+      the rack face, the body's left edge measures 21.0 mm, against 20.3 mm predicted by (482.6 -
+      442) / 2 from two data sheet numbers. That is the note's third check and it passes
+  face-check:
+    note: >-
+      done BEFORE measuring, per the ASR 9910 lesson in stencil-as-metrology.md, where Cisco's
+      master filenames name the wrong faces. No swap here: asr-9001-front carries the MPA bays,
+      the PSU openings, every port, the LED cluster, the fan module and the 'Cisco ASR-9001'
+      branding, and matches Figure 7 of the guide, 'Front Panel of the Cisco ASR 9001 Router'.
+      asr-9001-rear is a plain louvred panel
+  mpa-bays:
+    note: >-
+      NOW BAYS - they were panel cutouts until cisco/a9k-mpa-blank@1 and cisco/a9k-mpa-20x1ge@1
+      landed, because device.schema.json requires accepts with minItems 1 and there was nothing
+      legal to accept. The conversion was mechanical, as the placeholder note promised: the
+      measurements did not move. THE BAYS ARE SIZED TO THE DRAWN OPENING, NOT TO THE MODULE, AND
+      THAT IS WHY THEY SURVIVED THE MODULE CHANGING. I measured these openings at 163.0 x 35.6 off
+      the front master. The module envelope they accept has since moved twice: first 33.81 x
+      160.02, read off the stencil shapesheet under the belief that no document dimensioned an
+      MPA, and now 34.54 x 161.80 x 170.18 from Cisco data sheet c78-735809 Table 3, which lists
+      every MPA by part number at 6.37 W x 1.36 H x 6.70 L and turns out to have been in the
+      intake the whole time. A 5 percent change in the part, and nothing here needed editing,
+      because a bay measured from the hole is not a restatement of the card. Had these bays been
+      set to the shapesheet figure they would now be 0.73 and 1.78 mm UNDER the module they
+      accept. Clearance against the sourced envelope is 1.20 along and 1.06 across - tighter than
+      against the old figure and more plausible for a module in a bay. NOTE THE CORROBORATION THIS
+      ENTRY USED TO CITE HAS BEEN RETRACTED. It claimed two independently derived figures
+      agreeing, one of them the shapesheet reading, and that reading was wrong. The check is now
+      stronger rather than weaker - a measured opening against a VENDOR-STATED envelope beats two
+      derivations - but the sentence had to be rewritten, and a provenance entry citing a number
+      that has since been withdrawn is exactly the stale-words failure this file spent the night
+      finding in other people's files. THE OPENING DISAGREEMENT IS RESOLVED AND THE GEOMETRY
+      DELIBERATELY DID NOT MOVE. asr9k-cards read these openings at 162.56 x 37.80 against my
+      163.0 x 35.6, and re-measured from scratch at an ear-inclusive 482.6 x 88.19 anchor that
+      passes gate 1 on aspect to 0.7 percent, getting 163.66 x 37.79. WE WERE EACH RIGHT ON ONE
+      AXIS: my along-card figure is 0.4 percent out against theirs at 0.7, and their across-card
+      figure is the better one against my 5.8. THE REASON IS A PROPERTY OF THE STENCIL AND IS THE
+      USEFUL PART. asr9k-cards measured this stencil against known standards across eight cards:
+      ALONG-card readings carry a mean absolute error of 3.2 percent and always run slightly
+      under, while ACROSS-card readings carry 14.7 percent with the sign scattering both ways -
+      the same SFP opening is drawn at 8.96, 9.24, 10.72 and 12.04 mm on four different masters.
+      IT IS A GOOD RULER ALONG A CARD AND A BAD ONE ACROSS IT, by a factor of four and a half. So
+      a 6 percent disagreement across and 0.4 percent along is exactly what its accuracy predicts,
+      and neither reading was careless. CITE THAT 14.7 PERCENT WITH ITS CAVEAT, WHICH asr9k-cards
+      RAISED AGAINST THEIR OWN STUDY. All seven samples are apertures of essentially ONE SIZE,
+      nominal 10.00 to 10.15 mm. Their absolute errors spread 0.72 to 2.06 mm and their percentage
+      errors spread 7.2 to 20.4 - the same 2.9-fold scatter expressed two ways - so with no size
+      leverage in the sample there is no way to tell whether the error SCALES with the feature or
+      is a fixed drawing tolerance. The honest quotation is '14.7 percent mean, measured on ~10 mm
+      apertures', and it must not be carried onto a 37 mm opening in either direction: not as 14.7
+      percent, which may be far too harsh, and not as the ~4 percent a fixed-tolerance reading
+      would imply, which is unsupported. An earlier version of this entry quoted the bare 14.7 as
+      though it transferred, and it does not. THE CONCLUSION SURVIVES THE CAVEAT, which is why
+      nothing moved. The two readings differ by 2.19 mm. On the characterisation LEAST favourable
+      to my figure - a fixed absolute tolerance, mean around 1.5 mm - that gap is still about 1.5
+      times what this instrument has demonstrated it can be wrong by, so the disagreement is
+      inside its known failure range either way. The decision rests on the data as it is, not on
+      the harshest reading of it. WHICH IS ALSO WHY 37.79 IS NOT ADOPTED. That figure sits on the
+      axis their own study says is unreliable, so it is not a better number than 35.6 - it is a
+      differently-placed sample from a ruler with 14.7 percent scatter, and both readings are
+      inside that noise. Taking their along-card figure and keeping mine across would be
+      cherry-picking two measurements by axis; taking the pair whole would move a working number
+      onto the bad axis for no gain. THE BAY IS INSIDE THE HOLE ON EITHER READING AND OUTSIDE
+      NOTHING ELSE, which is all a bay has to be: it clears the 34.54 module by 1.06 across, and
+      the true opening on either reading swallows the bay. If a caliper ever settles the
+      across-card axis, 163.66 x 37.79 is the candidate to adopt WHOLE, and this is the note that
+      says so. The bays carry rotate 90 because the modules are drawn portrait and this chassis
+      lays them flat; the bay size is the ROTATED footprint, which is the convention asr9k-cards
+      verified with a scratch device rather than asserted. WIDENED after the XFP MPAs landed: both
+      bays now accept 20x1ge, 2x10ge, 4x10ge and the blank. All four share the 33.81 x 160.02
+      envelope, so widening accepts needed no geometry change - which is the point of an envelope
+      shared across a family. COMPLETE, AND THE LIST IS THE CHASSIS'S OWN. a9k-mpa-1x40ge landed
+      and both bays now accept all four adapters plus the blank. THE ELIGIBILITY IS NOT INFERRED
+      FROM THE FAMILY: the fixed-port install guide has a section headed 'Modular Port Adapters'
+      that says outright 'The Cisco ASR 9001 Router has two bays that support the following
+      Modular Port Adapters (MPAs)' and then lists exactly four - 20-Port Gigabit Ethernet, 4-Port
+      10 Gigabit Ethernet, 2-Port 10 Gigabit Ethernet and 1-Port 40 Gigabit Ethernet. That is a
+      per-CHASSIS list rather than a per-family one, which is the distinction that decides what
+      belongs here. A9K-MPA-2X40GE AND A9K-MPA-8X10GE ARE MODELLED IN THE LIBRARY AND ARE
+      DELIBERATELY NOT ACCEPTED: a list that names four is excluding the others, and a card
+      existing on the same 33.81 x 160.02 envelope says it would FIT, not that it is SUPPORTED.
+      READ THE LIST IN THE PDF AND NOT IN THE TEXT DUMP - the fourth bullet is separated from the
+      first three by a page break, so the extracted text puts a running header, a page number and
+      a section title between them and a reader scanning the bulleted block finds only three. ONE
+      WARNING FOR ANYONE TOUCHING THE 40GE ARTWORK: its stencil master prints BOTH
+      'A9K-MPA-1X40GE' AND 'A9K-MPA-2X10GE' on the same faceplate, so the artwork is shared and
+      the silkscreen legend cannot be used to tell the two apart
+  front-geometry:
+    confidence: drawing
+    note: >-
+      drawing-measured off the stencil master at the calibration above, expressed in body
+      coordinates. The two MPA bays are one row at y 2.6 to 38.2, BAY 0 at x 20.0 to 182.9 and BAY
+      1 at x 208.9 to 371.9, each 163.0 wide and separated by a 26 mm divider that carries both
+      captive screws and both BAY legends - which is what settles that the bays are SIDE BY SIDE
+      and not stacked, since the two rotated legends sit at opposite ends of one divider. The PSU
+      openings are at y 45.0 to 86.0, x 10.3 to 66.9 and 72.0 to 128.7, so 56.6 x 41.0 - against
+      cisco/a9k-750w-ac's 55.2 x 39.9, agreeing to 2.5 percent, which is the confirmation that the
+      data sheet's PSU PID is the part that fits
+  port-rows:
+    confidence: drawing
+    note: >-
+      drawing-measured - every stacked port pair sits on the SAME two rows, which is what makes
+      the reading safe: the upper row at y 46.5 to 55.4 and the lower at 62.6 to 71.4, a 16.1 mm
+      pitch, reproduced independently at eight different x positions. The SFP cages measure a 15.3
+      mm belly-to-belly pitch against the 15.00 std/sfp-ganged carries from a measured TE part
+  sfp-plus-numbering:
+    note: >-
+      READ AT HIGH ZOOM, AND DO NOT 'FIX' IT. The left cage is SFP+ 3 over SFP+ 1 and the right
+      cage is SFP+ 2 over SFP+ 0, so numbering runs RIGHT TO LEFT along the bottom row and then
+      right to left along the top: port 0 bottom-right, 1 bottom-left, 2 top-right, 3 top-left.
+      This looks like a transcription error and is not one - it is what the stencil prints and
+      what the guide's Figure 13 shows. It is the same class of trap as the rotated crop that once
+      reversed an entire supervisor card in this project: the obvious reading is wrong and looks
+      right. If a future reader is tempted to renumber these left-to-right, the thing to do is
+      re-read the artwork at 4x, not the manifest
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear is a plain louvred panel and that is the finding, not an omission.
+      Horizontal vent slots across the full width, six screws and the two rack ears. No connectors
+      and no modules: on this chassis the PSUs, the fan tray, both MPA bays and every port are on
+      the FRONT
+  airflow:
+    confidence: drawing
+    note: >-
+      drawing - 'the fan tray on Cisco ASR 9001 Router is located along the right side of the
+      router and circulates cool air from right-to-left through the router', which is why the fan
+      bay sits at the right end of the front face. The guide adds that 'Each power supply is also
+      equipped with fans'
+  side-faces:
+    note: >-
+      no figure in either document shows the top, bottom or side faces of this chassis, so they
+      are sized from the data sheet and carry only the integral rack flanges. Stated rather than
+      left blank, as on the Casa chassis
+  depth-axis-on-side-views:
+    note: >-
+      THE FLANGE WAS AT THE WRONG END ON THREE OF THE FOUR SIDE VIEWS AND THE FIX IS DERIVED, NOT
+      GUESSED. This is a front-mounted 2 RU chassis, so its integral flanges are at the FRONT -
+      that half was never in doubt. What was in doubt was which end of each view the front is,
+      because nothing in the schema, the renderer or any device file stated it, and this device
+      answered it four different ways: top had the flange at y = 0, bottom at y = 464, left at x =
+      0 and right at x = 464. Four faces, one feature, three of them wrong, and no label anywhere
+      to check the geometry against - which is why it survived. THE RENDERER IS THE AUTHORITY AND
+      IT IS UNAMBIGUOUS. library/demo2/viewer3d.js builds each face in local coordinates (x right,
+      y up, z out of the face) and orients it with a fixed rotation, with the front face at +z and
+      the rear at -z. Applying those rotations to the local axes gives the depth direction of
+      every side view outright: right is rot [0, +pi/2, 0], which sends local +x to world -z, so
+      INCREASING x ON A RIGHT VIEW RUNS TOWARDS THE REAR AND x = 0 IS THE FRONT. left is rot [0,
+      -pi/2, 0], which sends local +x to world +z, so x = 0 IS THE REAR AND x = depth IS THE
+      FRONT. top is rot [-pi/2, 0, 0], which sends local +y to world -z; SVG y runs downwards so
+      image y = 0 is local +y, giving y = 0 REAR and y = depth FRONT - the same answer Figure 9
+      gave for the ASR 9006 and 9904, now confirmed from the code as well as from the drawing. The
+      box-UV path agrees independently, and so does viewer3d.js's own comment on the component
+      branch, 'face end at image left -> front' for the right side. Three derivations, one answer.
+      LEFT AND RIGHT ARE OPPOSITE AND THAT IS THE TRAP - they are two views of the same axis from
+      opposite sides, so a feature at the front sits at x = 0 on one and x = depth on the other.
+      Mirroring left from right by copying the x is exactly wrong, and copying it while ALSO
+      negating it is exactly right. TOP AND BOTTOM ARE NOT OPPOSITE, which is the other half of
+      the trap and the one that reads as inconsistent: looking at a chassis from below flips LEFT
+      and RIGHT, not front and back, so top and bottom share a depth axis and a full-width strip
+      has the SAME y on both
+  din-connectors:
+    note: >-
+      THE 10MHz AND 1PPS PORTS ARE DECLARED AS PANEL CUTOUTS AND NOT COMPOSED, deliberately. Table
+      4 of the guide gives their connector as DIN 1.0/2.3, and there is no std/ part for it - the
+      registry has sma, smb, mcx and f-type. Substituting one of those would name a connector
+      Cisco does not. The holes are measured (about 4 mm, centred at y 68.0) and a gap records
+      what is missing
+  variants:
+    note: >-
+      the ASR 9001-S is a CONFIGURATION, not a second device, because the rule in
+      portfolio-taxonomy-design.md is that a new device.yaml is warranted only when the sheet
+      metal differs. It does not here: same chassis, same faceplate, same four cages, with two
+      ports and one bay disabled in software until A9K-9001-120G-LIC is applied. The stencil
+      having its own asr-9001-s-front master is not evidence to the contrary - a marketing stencil
+      drawing a variant separately says nothing about the metal. What the configuration cannot
+      express is recorded in the per-instance-config-attrs gap
+  fan-legend:
+    note: >-
+      REMOVED, do not re-add at chassis level. "ASR-9001 FAN" and "STATUS" are printed on the FAN
+      MODULE's own faceplate and cisco/asr-9001-fan already draws both inside its <g
+      id="silkscreen">. A chassis-level copy was both a duplicate and buried - it sat at (414.5,
+      84.0), inside the fan-0 bay, so the module painted over it. Text on a module's faceplate is
+      that module's, not the chassis's
+  leds:
+    confidence: drawing
+    note: >-
+      drawing - eight discrete indicators, which matches the guide's callout 'Eight discrete LED
+      indicators' on Figure 13. Grouped as the stencil draws them: RSP FAIL and LC FAIL in the
+      left column, CRIT / MAJ / MIN in the middle, EUSB / ACO / SYNC on the right. Their POSITIONS
+      are read off the master at a scale where the dots are a few pixels, so treat the grouping
+      and the count as reliable and the millimetres as approximate
+  lifecycle:
+    note: >-
+      searched and not found, with a caveat worth stating. No end-of-sale or end-of-life
+      announcement for the ASR 9001 CHASSIS appears in the material held; the one EOL bulletin in
+      the intake covers the ASR 9000 Series 4th Generation Ethernet Line Card Family, announced
+      2024-03-15, which is a different product. A live check was not possible - cisco.com returns
+      403 to this machine, which is why the whole intake came from the Wayback Machine - so this
+      records 'nothing found in what we hold' rather than a confirmed absence
+
 attrs:
   physical:
     rack-face-width-mm: '482.6'

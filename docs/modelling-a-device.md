@@ -35,10 +35,20 @@ most repeated error in the library.
 Write the source list into `provenance:` first, before a single number. Every
 number you write afterwards names its source at the moment you write it. That is
 what makes `maturity` honest, and what lets the next person know which figure
-to re-measure when something is wrong. The confidence words, used verbatim:
-`datasheet`, `drawing`, `measured`, `photo-measured`, `registry`, `borrowed`,
-`estimated`, `known-wrong`. Anything `estimated` keeps the device out of
-`verified`.
+to re-measure when something is wrong.
+
+An entry is `{confidence, note}`, not a sentence. The `note` is the prose - what
+you read and out of which figure - and `confidence` is the word, so that a rule
+can ask what previously only a reader could answer. The eight words, used
+verbatim: `datasheet`, `drawing`, `measured`, `photo-measured`, `registry`,
+`borrowed`, `estimated`, `known-wrong`. Anything `estimated` keeps the device out
+of `verified`, and L15 now reads both the word and the note, so burying
+"estimated" in the middle of a paragraph no longer hides it.
+
+**Omit `confidence` rather than guess at it.** It is optional for exactly this
+reason: a figure whose standing you do not know is a figure whose standing
+nobody has written down, and L93 counts those so they can be worked through. A
+word chosen to make the count go down is the one outcome this field is against.
 
 ### A vendor 3D model outranks every figure. Look for one first.
 
@@ -597,7 +607,11 @@ model: <Model>
 description: >-
   one paragraph
 provenance:
-  <key>: '<confidence> - <where, precisely>'
+  <key>:
+    confidence: <one of the eight words>   # omit it rather than guess
+    note: >-
+      <where, precisely: which document, which table or figure, at what scale,
+      and what you rejected on the way>
 attrs:
   physical: {...}      # sections, not a flat bag; omit any with no data
   performance: {...}

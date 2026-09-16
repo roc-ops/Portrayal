@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx240
-version: 1.1.6
+version: 1.1.7
 maturity: modelled
 manufacturer: Juniper
 model: MX240
@@ -17,60 +17,73 @@ description: >-
   rear sides.
 profile: networking
 provenance:
-  sources: MX240 Universal Routing Platform Hardware Guide (163 captioned figures), HPE datasheet a00150825enw,
-    and the Juniper image-library photographs mx240-front-high and
-    mx240-rear-high. No mechanical drawing was available
-  chassis: 'datasheet-table - guide chassis description and Table 88: 8.71 x
-    17.45 x 24.5 in (221.2 x 443 x 622 mm) to the chassis rear (703 total
-    with cable management), 23.6 kg bare / 58.1 kg maximum. Ears are NOT
-    MODELLED by project convention'
-  scale: 'photo - BOTH DAM photographs pass the orthographic gate (front
-    0.1%, rear 0.7%) and are cropped exactly to the 443 x 221.2 body, so
-    every position is a direct measurement at 3.386 px/mm. This is the first
-    device in the set whose photos carry geometry on both axes; the guide
-    figures were used for identification and vocabularies only'
-  front-rows: 'photo - top vent band 0-32.8, craft interface 32.8-75.3, card
-    cage 84.6-206.4 as four 30.45 mm slots (top to bottom: DPC2, DPC1,
-    SCB1/DPC0, SCB0 - the craft tabs and left-flange legends number them 2,
-    1, 1/0, 0), bottom band to 221.2. Card apertures span x 11.5-432.4
-    between the flanges'
-  populated-with: 'photo - the reference unit carries DPC 40xGE (DPCE-R-40GE-
-    SFP) in slot 2, DPC-R-4XGE in slot 1, and SCB-MX with RE-S-1300 in both
-    SCB slots; those exact FRUs are modelled and seated as the defaults, EOL
-    though they are, because they are what the only orthographic photograph
-    shows. Current-generation cards (MPCs, SCBE2/3, RE-S-X6) are in the
-    intake''s figures and power tables but have no orthographic imagery -
-    see gaps'
-  rear: 'photo - four PEM bays across the top (x 11.0 on a 101.9 mm pitch,
-    rows 8.9-88.6), PEM 0-3 legends on the plate below each bay, the
-    protective-earthing studs at the top right (two, vertically at 426.7,
-    y 22.2/35.4 - pitch read off the photo, approximate), the rear ESD
-    socket at 356.4, 173.6, and the vertical air-filter (left) and fan-tray
-    (right) door strips with their two-line legends on the plate. The large
-    caution-text plate between them is not transcribed'
-  esd-front: 'guide Figure 1 callout - ESD point at the front top-left;
-    placed at 8.0, 17.0 off the photograph, approximate (the socket is small
-    and dark against the dark band)'
-  power: 'guide power tables - base system 40 W, cooling 70/85 W
-    (normal/high capacity, from a dedicated PSU tap excluded from the output
-    budget), SCB-MX 185 W at 55 C, DPCE-R-40GE-SFP 335 W, DPC-R-4XGE-XFP
-    310 W (Table 93; ambient unqualified for DPC rows). No chassis-level
-    draw is published - the vendor instructs computing a budget per
-    configuration (Table 94 worked example), so no power-typical/max is
-    carried on the device and the module figures are what sums'
-  lifecycle: 'announced - the third-party EOL trackers (IT-Planet, Park
-    Place) list MX240 EOL 2020-06-30 / EOS 2026-06-30 for the older base
-    bundles while later revisions continued shipping; Juniper''s per-SKU
-    M/MX milestones page is authoritative and the milestones are per-SKU,
-    searched 2026-08-27'
-  color: 'photo - dark charcoal chassis bands, grey craft panel with the
-    light-blue accent strip, silver card faces (the 40xGE DPC is charcoal),
-    bright aluminium rear'
-  other-faces: 'near-blank by evidence - the guide side art (Figure 1) shows
-    the right side''s round-hole exhaust field; sides carry an estimated
-    vent-field band (right) and rail band (left), top and bottom rail edges
-    only. Axis conventions per viewer3d.js: LEFT view x = 0 is the REAR,
-    RIGHT view x = 0 is the FRONT, top/bottom y = 0 at the FRONT'
+  sources:
+    note: >-
+      MX240 Universal Routing Platform Hardware Guide (163 captioned figures), HPE datasheet
+      a00150825enw, and the Juniper image-library photographs mx240-front-high and
+      mx240-rear-high. No mechanical drawing was available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - guide chassis description and Table 88: 8.71 x 17.45 x 24.5 in (221.2 x
+      443 x 622 mm) to the chassis rear (703 total with cable management), 23.6 kg bare / 58.1 kg
+      maximum. Ears are NOT MODELLED by project convention
+  scale:
+    note: >-
+      photo - BOTH DAM photographs pass the orthographic gate (front 0.1%, rear 0.7%) and are
+      cropped exactly to the 443 x 221.2 body, so every position is a direct measurement at 3.386
+      px/mm. This is the first device in the set whose photos carry geometry on both axes; the
+      guide figures were used for identification and vocabularies only
+  front-rows:
+    note: >-
+      photo - top vent band 0-32.8, craft interface 32.8-75.3, card cage 84.6-206.4 as four 30.45
+      mm slots (top to bottom: DPC2, DPC1, SCB1/DPC0, SCB0 - the craft tabs and left-flange
+      legends number them 2, 1, 1/0, 0), bottom band to 221.2. Card apertures span x 11.5-432.4
+      between the flanges
+  populated-with:
+    note: >-
+      photo - the reference unit carries DPC 40xGE (DPCE-R-40GE- SFP) in slot 2, DPC-R-4XGE in
+      slot 1, and SCB-MX with RE-S-1300 in both SCB slots; those exact FRUs are modelled and
+      seated as the defaults, EOL though they are, because they are what the only orthographic
+      photograph shows. Current-generation cards (MPCs, SCBE2/3, RE-S-X6) are in the intake's
+      figures and power tables but have no orthographic imagery - see gaps
+  rear:
+    note: >-
+      photo - four PEM bays across the top (x 11.0 on a 101.9 mm pitch, rows 8.9-88.6), PEM 0-3
+      legends on the plate below each bay, the protective-earthing studs at the top right (two,
+      vertically at 426.7, y 22.2/35.4 - pitch read off the photo, approximate), the rear ESD
+      socket at 356.4, 173.6, and the vertical air-filter (left) and fan-tray (right) door strips
+      with their two-line legends on the plate. The large caution-text plate between them is not
+      transcribed
+  esd-front:
+    note: >-
+      guide Figure 1 callout - ESD point at the front top-left; placed at 8.0, 17.0 off the
+      photograph, approximate (the socket is small and dark against the dark band)
+  power:
+    note: >-
+      guide power tables - base system 40 W, cooling 70/85 W (normal/high capacity, from a
+      dedicated PSU tap excluded from the output budget), SCB-MX 185 W at 55 C, DPCE-R-40GE-SFP
+      335 W, DPC-R-4XGE-XFP 310 W (Table 93; ambient unqualified for DPC rows). No chassis-level
+      draw is published - the vendor instructs computing a budget per configuration (Table 94
+      worked example), so no power-typical/max is carried on the device and the module figures are
+      what sums
+  lifecycle:
+    note: >-
+      announced - the third-party EOL trackers (IT-Planet, Park Place) list MX240 EOL 2020-06-30 /
+      EOS 2026-06-30 for the older base bundles while later revisions continued shipping;
+      Juniper's per-SKU M/MX milestones page is authoritative and the milestones are per-SKU,
+      searched 2026-08-27
+  color:
+    note: >-
+      photo - dark charcoal chassis bands, grey craft panel with the light-blue accent strip,
+      silver card faces (the 40xGE DPC is charcoal), bright aluminium rear
+  other-faces:
+    note: >-
+      near-blank by evidence - the guide side art (Figure 1) shows the right side's round-hole
+      exhaust field; sides carry an estimated vent-field band (right) and rail band (left), top
+      and bottom rail edges only. Axis conventions per viewer3d.js: LEFT view x = 0 is the REAR,
+      RIGHT view x = 0 is the FRONT, top/bottom y = 0 at the FRONT
+
 attrs:
   physical:
     weight: 23.6 kg chassis with midplane, fan tray and air filter; 58.1 kg

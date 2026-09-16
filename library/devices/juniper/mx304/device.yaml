@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 3.0.6
+version: 3.0.7
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -18,97 +18,109 @@ description: >-
   BITS, and a GM/PTP SFP), three fan modules and the earthing terminal.
 profile: networking
 provenance:
-  sources: MX304 Universal Routing Platform Hardware Guide (figures g101366/
-    g101368/g101334/g101624 among others), MX304 datasheet (mx304-datasheet.pdf), Juniper
-    image-library studio photographs mx304-front-high, mx304-rear-ac-high and
-    mx304-rear-dc-high, and the NetBox devicetype-library MX304 elevations.
-    No mechanical drawing was available
-  chassis: 'datasheet-table - Table 22: chassis 3.5 x 17.36 x 24.01 in (88.9 x
-    440.8 x 610 mm), 2RU; 78.2 cm deep over cable-management brackets and
-    handles. The chassis-description prose says 17.63 in (44.8 cm) wide - a
-    0.7 cm disagreement with Table 22; the table is carried and the prose
-    recorded here. Fully loaded 32 kg, bare 16 kg. Ears are NOT MODELLED by
-    project convention; the modelled body is the 440.8 mm between the flange
-    folds, and the slot labels (RE 0, LMIC0, RE1/LMIC2, LMIC1) are printed on
-    the REMOVABLE BRACKETS the photographs show, so they appear nowhere on
-    this body - recorded so their absence is not read as an omission'
-  scale: 'photo + drawing, cross-anchored per axis - the guide front drawing
-    (g101366) measures aspect 5.58 against the rack face''s 5.43 and is
-    internally inconsistent in x by ~1.5%, and the front photograph is
-    ~16% COMPRESSED in y (near-axis studio shot) while consistent in x. So:
-    front x positions come from the photograph at 4.058 px/mm anchored to the
-    440.8 body, front y positions from the drawing anchored to the 88.9
-    height. The rear photograph is near-isotropic (3%) and rear positions
-    come from it at 4.236 px/mm (x) / 4.106 (y). Feature sizes come from the
-    registry and Table 22 throughout'
-  slots: 'drawing + photo - four half-width apertures in two columns of two:
-    RE 0 above LMIC 0 on the left, RE 1/LMIC2 above LMIC 1 on the right
-    (guide Figure 2 callouts name all four). Rows y 4.1-43.8 and 44.6-84.3
-    off the drawing; columns x 1.2-198.8 and 205.3-402.9 off the photograph,
-    separated by the centre rail. A one-RE system may seat a THIRD LMIC in
-    the RE 1/LMIC2 slot (guide Figure 3 shows it; hardware overview text:
-    "You can also add a third LMIC into one of the Routing Engine slots").
-    The 197.6 mm apertures take 203.5 mm module envelopes - the modules carry
-    insert: for the difference'
-  badge-strip: 'photo - the dark strip right of the module columns
-    (402.9-440.8) carries two columns of three square vent apertures, the
-    JUNIPER / MX 304 badge mid-height, and the front ESD socket at its top
-    with the symbol beside it. Positions are photo-fractions, approximate'
-  rear: 'photo (mx304-rear-ac-high) - stacked PSU bays at x 10.9 (PSU 0 above
-    PSU 1, labels printed vertically on the chassis strip right of them), the
-    fixed timing strip at 84-116, three 82.0 mm fan bays EVENLY spaced at x
-    116.4, 225.4 and 334.5 (26.9 mm label strips between and after, each
-    printing the bay''s number, lamp and fan icon), and the earthing plate
-    and rear ESD socket at the right end. A FIRST READING PUT FAN 1 AT 213.4
-    AND CALLED THE SPACING ASYMMETRIC - it had mis-assigned fan 1''s edges
-    to its grille internals; the DC rear photograph (independent shot, same
-    chassis) and a zoom on the strip between fans 1 and 2 both give the even
-    layout, and the reviewer''s instinct that routers do not stagger their
-    fans was what triggered the re-measure. The rear drawing (g101368
-    family) was measured too but its verticals mix module internals at this
-    threshold and were not used for positions'
-  timing: 'photo + guide timing topic - SMB quad at x 98.6/107.1, y 11.6/22.2
-    (rows 10 MHz above 1PPS, columns OUT left / IN right per the rotated
-    legends), BITS RJ45 centred at 101.9, 35.6, ToD at 101.3, 55.4, and the
-    GM/PTP SFP cage VERTICAL at 100.1, 74.9 with its link lamp to the left.
-    The guide NOTE says BITS and GM/PTP are currently unsupported and
-    reserved for future use - carried in attrs. GM/PTP supports 1-GbE and
-    10-GbE optics per the same topic'
-  grounding: 'guide grounding specifications + photo - two threaded holes for
-    M6 pan-head screws on 16 mm centres at the rear right, under the earth
-    symbol; the protective earthing terminal bracket attaches here. Modelled
-    as juniper/mx304-ground-plate'
-  esd: 'guide Figure 11 (ESD Points) - one point on the front badge strip
-    top, one on the rear right above the earthing plate. Both are plain
-    sockets in the photographs'
-  power: 'guide Table 25, the vendor''s own per-module table at two ambients
-    for the 3.2 Tbps two-RE + two-LMIC 100GbE configuration: REs 49/59 W
-    each, SFB+CB+PMB 155/228 (chassis internals, not a FRU here), LMICs
-    318/410 each with transceivers, fans 48/90 each; total chassis power
-    1033 W at 25 C and 1436 W at 46 C. Those totals are carried as the
-    device figures with that scope in power-envelope; Table 26 gives the
-    400GbE configuration and its totals fell outside this extraction''s text
-    layer - not carried rather than guessed'
-  fan-strips: 'photo - each fan bay''s chassis strip to its right prints the
-    fan icon, the bay number and the bicolour status lamp (Table 12: green
-    blinking = hardware init complete, green steady = ok, yellow steady =
-    faulty). The fourth strip position at the far right shares the ground
-    zone'
-  front-cover: 'not modelled - the optional front cover with air filter
-    (JNP-FLTRDR-2RU + JNP-AIRFLTR-2RU, Table 22) bolts over the entire front
-    face; the guide documents replacement procedures for both. Modelled
-    configuration is the bare front as photographed; see gaps'
-  color: 'photo - medium grey chassis (#8b8f94), bright aluminium module
-    plates, pale blue ejector levers, Juniper orange fan furniture'
-  other-faces: 'near-blank by evidence - no source shows the top, bottom or
-    side faces; each carries only an estimated mounting-rail band so the
-    capability chain counts it as drawn, sized from Table 22. Axis
-    conventions per viewer3d.js: LEFT view x = 0 is the REAR, RIGHT view
-    x = 0 is the FRONT, top and bottom y = 0 at the FRONT'
-  lifecycle: 'none-announced - searched "Juniper MX304 end of life end of
-    sale" 2026-08-26; the third-party EOL trackers list no dates and the 2022
-    NANOG thread names the MX304 as the successor replacing the MX204 and
-    MX10003. Absence of the announcement is the finding'
+  sources:
+    note: >-
+      MX304 Universal Routing Platform Hardware Guide (figures g101366/ g101368/g101334/g101624
+      among others), MX304 datasheet (mx304-datasheet.pdf), Juniper image-library studio
+      photographs mx304-front-high, mx304-rear-ac-high and mx304-rear-dc-high, and the NetBox
+      devicetype-library MX304 elevations. No mechanical drawing was available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - Table 22: chassis 3.5 x 17.36 x 24.01 in (88.9 x 440.8 x 610 mm), 2RU;
+      78.2 cm deep over cable-management brackets and handles. The chassis-description prose says
+      17.63 in (44.8 cm) wide - a 0.7 cm disagreement with Table 22; the table is carried and the
+      prose recorded here. Fully loaded 32 kg, bare 16 kg. Ears are NOT MODELLED by project
+      convention; the modelled body is the 440.8 mm between the flange folds, and the slot labels
+      (RE 0, LMIC0, RE1/LMIC2, LMIC1) are printed on the REMOVABLE BRACKETS the photographs show,
+      so they appear nowhere on this body - recorded so their absence is not read as an omission
+  scale:
+    note: >-
+      photo + drawing, cross-anchored per axis - the guide front drawing (g101366) measures aspect
+      5.58 against the rack face's 5.43 and is internally inconsistent in x by ~1.5%, and the
+      front photograph is ~16% COMPRESSED in y (near-axis studio shot) while consistent in x. So:
+      front x positions come from the photograph at 4.058 px/mm anchored to the 440.8 body, front
+      y positions from the drawing anchored to the 88.9 height. The rear photograph is
+      near-isotropic (3%) and rear positions come from it at 4.236 px/mm (x) / 4.106 (y). Feature
+      sizes come from the registry and Table 22 throughout
+  slots:
+    confidence: drawing
+    note: >-
+      drawing + photo - four half-width apertures in two columns of two: RE 0 above LMIC 0 on the
+      left, RE 1/LMIC2 above LMIC 1 on the right (guide Figure 2 callouts name all four). Rows y
+      4.1-43.8 and 44.6-84.3 off the drawing; columns x 1.2-198.8 and 205.3-402.9 off the
+      photograph, separated by the centre rail. A one-RE system may seat a THIRD LMIC in the RE
+      1/LMIC2 slot (guide Figure 3 shows it; hardware overview text: "You can also add a third
+      LMIC into one of the Routing Engine slots"). The 197.6 mm apertures take 203.5 mm module
+      envelopes - the modules carry insert: for the difference
+  badge-strip:
+    note: >-
+      photo - the dark strip right of the module columns (402.9-440.8) carries two columns of
+      three square vent apertures, the JUNIPER / MX 304 badge mid-height, and the front ESD socket
+      at its top with the symbol beside it. Positions are photo-fractions, approximate
+  rear:
+    note: >-
+      photo (mx304-rear-ac-high) - stacked PSU bays at x 10.9 (PSU 0 above PSU 1, labels printed
+      vertically on the chassis strip right of them), the fixed timing strip at 84-116, three 82.0
+      mm fan bays EVENLY spaced at x 116.4, 225.4 and 334.5 (26.9 mm label strips between and
+      after, each printing the bay's number, lamp and fan icon), and the earthing plate and rear
+      ESD socket at the right end. A FIRST READING PUT FAN 1 AT 213.4 AND CALLED THE SPACING
+      ASYMMETRIC - it had mis-assigned fan 1's edges to its grille internals; the DC rear
+      photograph (independent shot, same chassis) and a zoom on the strip between fans 1 and 2
+      both give the even layout, and the reviewer's instinct that routers do not stagger their
+      fans was what triggered the re-measure. The rear drawing (g101368 family) was measured too
+      but its verticals mix module internals at this threshold and were not used for positions
+  timing:
+    note: >-
+      photo + guide timing topic - SMB quad at x 98.6/107.1, y 11.6/22.2 (rows 10 MHz above 1PPS,
+      columns OUT left / IN right per the rotated legends), BITS RJ45 centred at 101.9, 35.6, ToD
+      at 101.3, 55.4, and the GM/PTP SFP cage VERTICAL at 100.1, 74.9 with its link lamp to the
+      left. The guide NOTE says BITS and GM/PTP are currently unsupported and reserved for future
+      use - carried in attrs. GM/PTP supports 1-GbE and 10-GbE optics per the same topic
+  grounding:
+    note: >-
+      guide grounding specifications + photo - two threaded holes for M6 pan-head screws on 16 mm
+      centres at the rear right, under the earth symbol; the protective earthing terminal bracket
+      attaches here. Modelled as juniper/mx304-ground-plate
+  esd:
+    note: >-
+      guide Figure 11 (ESD Points) - one point on the front badge strip top, one on the rear right
+      above the earthing plate. Both are plain sockets in the photographs
+  power:
+    note: >-
+      guide Table 25, the vendor's own per-module table at two ambients for the 3.2 Tbps two-RE +
+      two-LMIC 100GbE configuration: REs 49/59 W each, SFB+CB+PMB 155/228 (chassis internals, not
+      a FRU here), LMICs 318/410 each with transceivers, fans 48/90 each; total chassis power 1033
+      W at 25 C and 1436 W at 46 C. Those totals are carried as the device figures with that scope
+      in power-envelope; Table 26 gives the 400GbE configuration and its totals fell outside this
+      extraction's text layer - not carried rather than guessed
+  fan-strips:
+    note: >-
+      photo - each fan bay's chassis strip to its right prints the fan icon, the bay number and
+      the bicolour status lamp (Table 12: green blinking = hardware init complete, green steady =
+      ok, yellow steady = faulty). The fourth strip position at the far right shares the ground
+      zone
+  front-cover:
+    note: >-
+      not modelled - the optional front cover with air filter (JNP-FLTRDR-2RU + JNP-AIRFLTR-2RU,
+      Table 22) bolts over the entire front face; the guide documents replacement procedures for
+      both. Modelled configuration is the bare front as photographed; see gaps
+  color:
+    note: >-
+      photo - medium grey chassis (#8b8f94), bright aluminium module plates, pale blue ejector
+      levers, Juniper orange fan furniture
+  other-faces:
+    note: >-
+      near-blank by evidence - no source shows the top, bottom or side faces; each carries only an
+      estimated mounting-rail band so the capability chain counts it as drawn, sized from Table
+      22. Axis conventions per viewer3d.js: LEFT view x = 0 is the REAR, RIGHT view x = 0 is the
+      FRONT, top and bottom y = 0 at the FRONT
+  lifecycle:
+    note: >-
+      none-announced - searched "Juniper MX304 end of life end of sale" 2026-08-26; the
+      third-party EOL trackers list no dates and the 2022 NANOG thread names the MX304 as the
+      successor replacing the MX204 and MX10003. Absence of the announcement is the finding
+
 attrs:
   physical:
     weight: 32 kg fully loaded (two REs, two LMICs); 16 kg without FRUs

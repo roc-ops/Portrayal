@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-m32-cso-zr
-version: 1.1.5
+version: 1.1.6
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-M32-CSO-ZR+
@@ -10,95 +10,107 @@ description: 32-channel 150 GHz coherent open line system, 1RU. Mux/demux with E
   1510nm OSC filter port and a 1625nm OTDR port.
 profile: optical
 provenance:
-  method: >-
-    FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-m32-cso-zr.md.
-    The inventory and every count came from so-ds-dcp-m32-cso-zr-r1.2 and the DCP-M
-    User Manual before any drawing was opened.
-  size: >-
-    datasheet - so-ds-dcp-m32-cso-zr-r1.2, "Size (WxDxH) 440mm x 510mm x 1RU", 13 kg.
-    NOT TRANSPOSED, unlike the DCP-404's and the DCP-F-A22's, whose labels are: here the
-    labels and values are in the printed order, confirmed three ways - the ordering line
-    spells out "1RU, 19in, D=510mm", UM s13 gives labelled WIDTH/DEPTH/HEIGHT rows, and
-    the DCP-M-DE manual gives a sibling in the same shell 45mm (H) as a number.
-    THE DEPTH IS 510, NOT THE DCP-2's 500 and not the DCP-R's 505. The Vyve gap list
-    says "same 440x45x505 family shell - chassis dims can be reused"; that is wrong and
-    the datasheet is right.
-  photo-calibration: >-
-    THE MEASUREMENT FRAME FOR EVERYTHING BELOW, and it is derived rather than assumed.
-    The vendor photograph is 2.1082 px/mm with the face's x=0 at pixel 60.40 and y=0 at
-    pixel 321.5. That comes from a least-squares fit of the sixteen upper Tx/Rx strip
-    centres against the stencil's connection points, run separately on the ten strips
-    left of the mid-face gap and the six right of it: BOTH halves return 2.1082 px/mm to
-    four figures, which is what makes the scale trustworthy, and the half that also
-    agrees with the ETH0/RS232 and OSC-cage connection points to 0.2mm fixes the origin.
-    The unit in the photograph HAS NO RACK EARS - it is a bare chassis on white - so the
-    440 body is the whole of the dark plate, and thresholding that plate's edge is what
-    the earlier 2.1318 px/mm came from: it overshoots by six pixels on the left and three
-    on the right where the edge is soft. An independent check falls out of the fit rather
-    than into it: the Line port's lone strip measures 13.28 against a part that is 13.2
-    wide.
-  port-positions: >-
-    FROM THE PHOTOGRAPH, and it disagrees with the stencil in one specific place.
-    Under the calibration above the eight upper channel-pair midpoints sit on a 30.83
-    pitch to better than 0.1mm, seven times running, with one wider gap in the middle of
-    the face. The stencil's connection points agree with the photograph to 0.1mm for the
-    three pairs RIGHT of that gap and are 5.1mm to the right of it for the five pairs
-    left of it - because the stencil draws the mid-face gap 36.5 wide where the unit has
-    41.7. Everything else in the frame - the ETH0/RS232 jack centre at 15.0, the OSC cage
-    centre at 35.0 - lands on the stencil's cps to 0.2mm. So the photograph is not
-    mis-scaled; the drawing has one block in the wrong place, and the photograph is taken
-    for all 35 adapters so that the face is internally consistent.
-  stencil-defects: >-
-    SIX now, in one master, which is why nothing here is taken from it unchecked. The
-    channel numbers print 0.5 high and run past the datasheet's plan; one caption reads
-    "Rx Rx" where every other reads "Rx Tx"; the hex vent field is drawn as six cells; the
-    1510, OTDR and Line adapters are drawn in the LOWER row where the unit has them in
-    the upper; those first two are drawn 13-16mm from where they sit and NOT abutting,
-    where the unit abuts them as one pair; and the mid-face gap is 5.2mm narrow.
-  rows: >-
-    FROM THE PHOTOGRAPH. Each channel block carries a white Tx/Rx strip above the upper
-    adapters and below the lower ones; the 1510/OTDR/Line group has ONE strip, at the
-    upper position, and bare plate beneath. Rows measured: upper labels baseline 5.5,
-    upper strips 6.5, upper adapters 10.4, lower adapters 23.4, lower strips 36.0, lower
-    labels baseline 40.8.
-  channel-plan: >-
-    silkscreen, read off the photograph - D914 to D960.5 on a 150 GHz grid, sixteen per
-    row. NEITHER THE STENCIL NOR THE VYVE GAP LIST CAN BE TRUSTED HERE: the master prints
-    every number 0.5 high and ends at 961, outside the datasheet's stated plan, and the
-    gap list transcribes p.24 as "9540/9175/9200/9130", which are misreadings of the same
-    labels. Two sources wrong in different ways is why this comes off the photograph.
-  client-lamps: >-
-    smartoptics/m32-client-lamp@1, one per channel, coincident with the Tx/Rx strip -
-    THE CAPTION IS THE LAMP. See that part for the count, the manual's behaviour, the
-    elimination argument that places them, and the objection that does not defeat it.
-  line-and-osc-lamps: >-
-    THE PHOTOGRAPH SETTLES THE COUNTS THE DATASHEET LEFT OPEN, differently for each.
-    The OSC port has TWO round lamps, between a printed "Tx" on their left and "Rx" on
-    their right - visible as two unlit lenses, so common/led-dot@1 twice. The Line port
-    has ONE white strip, identical to a client channel's, so it takes the same part the
-    channels do. Both were unmodelled while the count was open; neither is now.
-    The 1510 and 1625 OTDR ports carry the same strip and get NO lamp: the datasheet's
-    VISUAL INDICATORS block names an LED for the clients, the Line and the OSC and names
-    none for those two, so their strips are drawn as printed decor.
-  connectors: >-
-    all optical ports are LC. "All optical ports are of LC connector type" (DS FRONT SIDE
-    CONNECTIONS), and UM s13 adds the polish - "Line port(s) LC/UPC connector type". That
-    is a harder statement than the DCP-F family got and it covers all 35 adapters.
-  front-management: >-
-    UM s3.7 - on this variant the console and ETH0 are on the FRONT, with ETH1 to ETH5 at
-    the rear. The DCP-M40's are all at the rear. So the DCP-2's rear ETH0-over-CONSOLE
-    pair must not be copied onto this device, and fig 2-7 and the quick-turn-up guide's
-    fig 3, which show a DCP-M40 rear, are live traps.
-  vent-fields: >-
-    three hex fields on the front, all photo-measured: an L-shaped one over the left block
-    notched around the OSC lamps and cage, a two-column one in the mid-face gap, and a
-    one-column one hard against the right edge. Each is a lighter backing rect with the
-    library's vent pattern painted over it, because the pattern draws only its holes and a
-    vent field on a plate this dark is otherwise invisible. The 62mm between the last
-    channel and the right-hand field is bare plate on the real unit, not an omission.
-  power: >-
-    datasheet POWER CONSUMPTION. Recorded on the contract rather than inferred from the
-    chassis, which is a different product.
+  method:
+    note: >-
+      FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-m32-cso-zr.md. The
+      inventory and every count came from so-ds-dcp-m32-cso-zr-r1.2 and the DCP-M User Manual
+      before any drawing was opened.
+  size:
+    confidence: datasheet
+    note: >-
+      datasheet - so-ds-dcp-m32-cso-zr-r1.2, "Size (WxDxH) 440mm x 510mm x 1RU", 13 kg. NOT
+      TRANSPOSED, unlike the DCP-404's and the DCP-F-A22's, whose labels are: here the labels and
+      values are in the printed order, confirmed three ways - the ordering line spells out "1RU,
+      19in, D=510mm", UM s13 gives labelled WIDTH/DEPTH/HEIGHT rows, and the DCP-M-DE manual gives
+      a sibling in the same shell 45mm (H) as a number. THE DEPTH IS 510, NOT THE DCP-2's 500 and
+      not the DCP-R's 505. The Vyve gap list says "same 440x45x505 family shell - chassis dims can
+      be reused"; that is wrong and the datasheet is right.
+  photo-calibration:
+    note: >-
+      THE MEASUREMENT FRAME FOR EVERYTHING BELOW, and it is derived rather than assumed. The
+      vendor photograph is 2.1082 px/mm with the face's x=0 at pixel 60.40 and y=0 at pixel 321.5.
+      That comes from a least-squares fit of the sixteen upper Tx/Rx strip centres against the
+      stencil's connection points, run separately on the ten strips left of the mid-face gap and
+      the six right of it: BOTH halves return 2.1082 px/mm to four figures, which is what makes
+      the scale trustworthy, and the half that also agrees with the ETH0/RS232 and OSC-cage
+      connection points to 0.2mm fixes the origin. The unit in the photograph HAS NO RACK EARS -
+      it is a bare chassis on white - so the 440 body is the whole of the dark plate, and
+      thresholding that plate's edge is what the earlier 2.1318 px/mm came from: it overshoots by
+      six pixels on the left and three on the right where the edge is soft. An independent check
+      falls out of the fit rather than into it: the Line port's lone strip measures 13.28 against
+      a part that is 13.2 wide.
+  port-positions:
+    note: >-
+      FROM THE PHOTOGRAPH, and it disagrees with the stencil in one specific place. Under the
+      calibration above the eight upper channel-pair midpoints sit on a 30.83 pitch to better than
+      0.1mm, seven times running, with one wider gap in the middle of the face. The stencil's
+      connection points agree with the photograph to 0.1mm for the three pairs RIGHT of that gap
+      and are 5.1mm to the right of it for the five pairs left of it - because the stencil draws
+      the mid-face gap 36.5 wide where the unit has 41.7. Everything else in the frame - the
+      ETH0/RS232 jack centre at 15.0, the OSC cage centre at 35.0 - lands on the stencil's cps to
+      0.2mm. So the photograph is not mis-scaled; the drawing has one block in the wrong place,
+      and the photograph is taken for all 35 adapters so that the face is internally consistent.
+  stencil-defects:
+    note: >-
+      SIX now, in one master, which is why nothing here is taken from it unchecked. The channel
+      numbers print 0.5 high and run past the datasheet's plan; one caption reads "Rx Rx" where
+      every other reads "Rx Tx"; the hex vent field is drawn as six cells; the 1510, OTDR and Line
+      adapters are drawn in the LOWER row where the unit has them in the upper; those first two
+      are drawn 13-16mm from where they sit and NOT abutting, where the unit abuts them as one
+      pair; and the mid-face gap is 5.2mm narrow.
+  rows:
+    note: >-
+      FROM THE PHOTOGRAPH. Each channel block carries a white Tx/Rx strip above the upper adapters
+      and below the lower ones; the 1510/OTDR/Line group has ONE strip, at the upper position, and
+      bare plate beneath. Rows measured: upper labels baseline 5.5, upper strips 6.5, upper
+      adapters 10.4, lower adapters 23.4, lower strips 36.0, lower labels baseline 40.8.
+  channel-plan:
+    note: >-
+      silkscreen, read off the photograph - D914 to D960.5 on a 150 GHz grid, sixteen per row.
+      NEITHER THE STENCIL NOR THE VYVE GAP LIST CAN BE TRUSTED HERE: the master prints every
+      number 0.5 high and ends at 961, outside the datasheet's stated plan, and the gap list
+      transcribes p.24 as "9540/9175/9200/9130", which are misreadings of the same labels. Two
+      sources wrong in different ways is why this comes off the photograph.
+  client-lamps:
+    note: >-
+      smartoptics/m32-client-lamp@1, one per channel, coincident with the Tx/Rx strip - THE
+      CAPTION IS THE LAMP. See that part for the count, the manual's behaviour, the elimination
+      argument that places them, and the objection that does not defeat it.
+  line-and-osc-lamps:
+    note: >-
+      THE PHOTOGRAPH SETTLES THE COUNTS THE DATASHEET LEFT OPEN, differently for each. The OSC
+      port has TWO round lamps, between a printed "Tx" on their left and "Rx" on their right -
+      visible as two unlit lenses, so common/led-dot@1 twice. The Line port has ONE white strip,
+      identical to a client channel's, so it takes the same part the channels do. Both were
+      unmodelled while the count was open; neither is now. The 1510 and 1625 OTDR ports carry the
+      same strip and get NO lamp: the datasheet's VISUAL INDICATORS block names an LED for the
+      clients, the Line and the OSC and names none for those two, so their strips are drawn as
+      printed decor.
+  connectors:
+    note: >-
+      all optical ports are LC. "All optical ports are of LC connector type" (DS FRONT SIDE
+      CONNECTIONS), and UM s13 adds the polish - "Line port(s) LC/UPC connector type". That is a
+      harder statement than the DCP-F family got and it covers all 35 adapters.
+  front-management:
+    note: >-
+      UM s3.7 - on this variant the console and ETH0 are on the FRONT, with ETH1 to ETH5 at the
+      rear. The DCP-M40's are all at the rear. So the DCP-2's rear ETH0-over-CONSOLE pair must not
+      be copied onto this device, and fig 2-7 and the quick-turn-up guide's fig 3, which show a
+      DCP-M40 rear, are live traps.
+  vent-fields:
+    note: >-
+      three hex fields on the front, all photo-measured: an L-shaped one over the left block
+      notched around the OSC lamps and cage, a two-column one in the mid-face gap, and a
+      one-column one hard against the right edge. Each is a lighter backing rect with the
+      library's vent pattern painted over it, because the pattern draws only its holes and a vent
+      field on a plate this dark is otherwise invisible. The 62mm between the last channel and the
+      right-hand field is bare plate on the real unit, not an omission.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet POWER CONSUMPTION. Recorded on the contract rather than inferred from the chassis,
+      which is a different product.
+
 chassis:
   width: 440
   height: 45

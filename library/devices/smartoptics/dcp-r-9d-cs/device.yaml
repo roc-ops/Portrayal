@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 2.1.5
+version: 2.1.6
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
@@ -10,59 +10,90 @@ description: 40-channel colourless/directionless ROADM line unit, 1RU. Two rows 
   RS232 management.
 profile: optical
 provenance:
-  chassis: manual DIMENSIONS (DCP-R) - 440mm (W) x 45mm (H) x 505mm (D), 1 RU
-  port-positions: stencil ShapeSheet connection points, which Visio stores as fractions of shape
-    width/height and therefore survive without the drawing scale. Resolved against the 19-inch rack
-    width the master is drawn at.
-  port-pairing: each LC duplex adapter carries two connection points about 6.6mm apart, one per
-    fiber; adapters recovered by pairing those
-  column-grid: top and bottom rows agreed across all 23 columns, so one averaged grid is used and
-    the drawing jitter discarded
-  xc-orientation: >-
-    stencil master r-9d-csx - THE BOTTOM ROW IS MIRRORED, latch tongues down against the top
-    row's up, exactly as on the 34D. The drawing already encoded it: every bottom-row port
-    prints its Tx/Rx box reversed. It could not be DRAWN until std/lc-bore@3 made the bore
-    keyed (#126), because a 4.7 square has no orientation. All 23 bottom-row adapters now
-    carry rotate: 180
-  mgmt-jack-alignment: >-
-    stencil, correcting a transcription slip. The ShapeSheet puts ETH0 and RS232 within 0.14mm
-    of the same x (fractions 0.0828 and 0.0831) and the art draws the shells flush, but the
-    model had them 1.2mm apart at 9.6 and 10.8. ETH0 moved onto RS232's x, and its rotated
-    caption with it. RS232 is the half that already matched, so it did not move
-  osc-captions: >-
-    stencil art. As on the 34D, the Tx and Rx captions sat 4.3mm and 1.9mm from their own LEDs
-    on opposite sides and threw the pair 1.65mm left of the cage. The LEDs were already right -
-    measured at 34.98 and 40.81 against the model's 34.9 and 40.7, which is what validates this
-    master's coordinate mapping to 0.1mm. Captions moved to 31.9 and 43.85
-  status-leds: >-
-    stencil art - Power and Status centres measured at 54.79 and 60.88, a 6.09mm pitch, against
-    the 5.6 the model carried. Same defect and the same correction as the 34D, and the two
-    masters agree on the pitch to 0.02mm
-  y-scale: this master is drawn 46.0mm tall against a 45mm chassis, so y was scaled by 45/46.0.
-    The 34D master needed no such correction - a reminder that masters in one stencil are not all
-    drawn to the same scale
-  channel-plan: silkscreen - channels alternate in pairs between rows, 921/922 top then 923/924
-    bottom, continuing to 960
-  markings: photo - IEC 60825 laser hazard triangles in the gap between the two port blocks, matching
-    the 34D
-  tx-rx-boxes: photo - every optical port carries a boxed Tx/Rx pair between its name and the adapter,
-    split by a divider, reversed on the bottom row
-  rear-layout: photo IMG_2181 of racked DCP-R units - PSU with integrated fan and C14 inlet at each
-    end, mirrored; honeycomb vent panel across the centre; management block right of centre. Block
-    positions are approximate to about 3mm - the photo has uncorrected perspective and partial cable
-    occlusion, so it fixes the structure and order but not exact millimetres
-  side-top-bottom: IMG_2188 shows the lid, so these now carry the real finish - a light silver body
-    with the black front panel wrapping about 12.7mm (half an inch) back along every face. Still
-    no vents, screws or lid labels - the photo shows the finish and the panel depth but not those
-    details, so they are left out rather than invented
-  psu-part: label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan sticker reads 550W Platinum
-    CRPS. So the module is a standard CRPS 1U part at 73.5 x 40 x 185, not the 84mm-wide estimate
-    taken from the racked photo, and both bays sit flush to the chassis edges
-  psu-orientation: photo - both modules are fitted the same way round, fan inboard of the inlet,
-    so the C14 sits at the far right on PSU-2 and inboard on PSU-1. They are not mirrored
-  rear-mgmt-block: stencil master dcp-r-rear, which is orthographic - a 2x2 ganged RJ45 shell (ETH
-    2 / ETH 4 over ETH 1 / ETH 3), ESD warning, Tx and Rx LEDs, an ETH 5 SFP cage and a recessed
-    RESET button
+  chassis:
+    note: >-
+      manual DIMENSIONS (DCP-R) - 440mm (W) x 45mm (H) x 505mm (D), 1 RU
+  port-positions:
+    note: >-
+      stencil ShapeSheet connection points, which Visio stores as fractions of shape width/height
+      and therefore survive without the drawing scale. Resolved against the 19-inch rack width the
+      master is drawn at.
+  port-pairing:
+    note: >-
+      each LC duplex adapter carries two connection points about 6.6mm apart, one per fiber;
+      adapters recovered by pairing those
+  column-grid:
+    note: >-
+      top and bottom rows agreed across all 23 columns, so one averaged grid is used and the
+      drawing jitter discarded
+  xc-orientation:
+    note: >-
+      stencil master r-9d-csx - THE BOTTOM ROW IS MIRRORED, latch tongues down against the top
+      row's up, exactly as on the 34D. The drawing already encoded it: every bottom-row port
+      prints its Tx/Rx box reversed. It could not be DRAWN until std/lc-bore@3 made the bore keyed
+      (#126), because a 4.7 square has no orientation. All 23 bottom-row adapters now carry
+      rotate: 180
+  mgmt-jack-alignment:
+    note: >-
+      stencil, correcting a transcription slip. The ShapeSheet puts ETH0 and RS232 within 0.14mm
+      of the same x (fractions 0.0828 and 0.0831) and the art draws the shells flush, but the
+      model had them 1.2mm apart at 9.6 and 10.8. ETH0 moved onto RS232's x, and its rotated
+      caption with it. RS232 is the half that already matched, so it did not move
+  osc-captions:
+    note: >-
+      stencil art. As on the 34D, the Tx and Rx captions sat 4.3mm and 1.9mm from their own LEDs
+      on opposite sides and threw the pair 1.65mm left of the cage. The LEDs were already right -
+      measured at 34.98 and 40.81 against the model's 34.9 and 40.7, which is what validates this
+      master's coordinate mapping to 0.1mm. Captions moved to 31.9 and 43.85
+  status-leds:
+    note: >-
+      stencil art - Power and Status centres measured at 54.79 and 60.88, a 6.09mm pitch, against
+      the 5.6 the model carried. Same defect and the same correction as the 34D, and the two
+      masters agree on the pitch to 0.02mm
+  y-scale:
+    note: >-
+      this master is drawn 46.0mm tall against a 45mm chassis, so y was scaled by 45/46.0. The 34D
+      master needed no such correction - a reminder that masters in one stencil are not all drawn
+      to the same scale
+  channel-plan:
+    note: >-
+      silkscreen - channels alternate in pairs between rows, 921/922 top then 923/924 bottom,
+      continuing to 960
+  markings:
+    note: >-
+      photo - IEC 60825 laser hazard triangles in the gap between the two port blocks, matching
+      the 34D
+  tx-rx-boxes:
+    note: >-
+      photo - every optical port carries a boxed Tx/Rx pair between its name and the adapter,
+      split by a divider, reversed on the bottom row
+  rear-layout:
+    note: >-
+      photo IMG_2181 of racked DCP-R units - PSU with integrated fan and C14 inlet at each end,
+      mirrored; honeycomb vent panel across the centre; management block right of centre. Block
+      positions are approximate to about 3mm - the photo has uncorrected perspective and partial
+      cable occlusion, so it fixes the structure and order but not exact millimetres
+  side-top-bottom:
+    note: >-
+      IMG_2188 shows the lid, so these now carry the real finish - a light silver body with the
+      black front panel wrapping about 12.7mm (half an inch) back along every face. Still no
+      vents, screws or lid labels - the photo shows the finish and the panel depth but not those
+      details, so they are left out rather than invented
+  psu-part:
+    note: >-
+      label - Gospower G1251-0550WNA, P/N CRPS0550-AH, and the fan sticker reads 550W Platinum
+      CRPS. So the module is a standard CRPS 1U part at 73.5 x 40 x 185, not the 84mm-wide
+      estimate taken from the racked photo, and both bays sit flush to the chassis edges
+  psu-orientation:
+    note: >-
+      photo - both modules are fitted the same way round, fan inboard of the inlet, so the C14
+      sits at the far right on PSU-2 and inboard on PSU-1. They are not mirrored
+  rear-mgmt-block:
+    note: >-
+      stencil master dcp-r-rear, which is orthographic - a 2x2 ganged RJ45 shell (ETH 2 / ETH 4
+      over ETH 1 / ETH 3), ESD warning, Tx and Rx LEDs, an ETH 5 SFP cage and a recessed RESET
+      button
+
 attrs:
   performance:
     channels: 40

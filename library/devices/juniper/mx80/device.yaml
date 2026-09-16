@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -17,39 +17,56 @@ description: >-
   side-pull fan tray behind the JUNIPER-branded door at the right.
 profile: networking
 provenance:
-  sources: MX5/MX10/MX40/MX80 Hardware Guide, and the image-library photographs
-    mx80-front-high and mx80-rear-high (the mx5 set is the same base asset,
-    recorded in the photo catalogue). No mechanical drawing was available
-  chassis: 'datasheet-table - the guide chassis description: 3.5 x 17.5 x
-    23.46 in (88.9 x 445 x 596 mm), 2RU. Ears NOT MODELLED by convention'
-  shared-chassis: 'guide - the MX5, MX10, MX40 and MX80 are one chassis with
-    different capacity licences and MIC entitlements (guide Figures 5-9);
-    they are modelled as ONE device with the SKUs as configurations. The
-    FIXED MX80 variant (Figure 8, 48x1GbE built in) is a different faceplate
-    and is not modelled - see gaps'
-  scale: 'photo - per-axis anchoring of the front photograph (body between
-    the ear wings anchored to 445 mm; rows to 88.9). Positions are
-    single-pass readings approximate to ~2 mm'
-  front: 'photo - MIC row y 7-41.5 with slots at x 25.0 and 193.4 (the
-    reference unit carries the 20x1GE SFP MIC and the 2x10GE XFP MIC);
-    PS 0/PS 1 at x 14.7/86.2 in the lower band; the blue RE panel from
-    162.6 to 406 carrying CONSOLE over AUX (x 190), ETHERNET over USB
-    (x 213), EXT CLK A over B (x 232), the SYS OK / RE lamps and
-    ONLINE/OFFLINE button at its left, and the four fixed XFP cages at
-    centres 261.6-349.7 with LINK lamps, silkscreened 0-3 over 0/MIC 0;
-    the MX80 badge at 355; the fan-tray door at 407-445'
-  rear: 'photo - a blank cover plate over the upper-left aperture labelled
-    MPC 0 / MIC 1, the CLK and SYNC jacks at x 68/105 (y 75), the two-hole
-    earthing plate and ESD at the right. The jacks are drawn as SMB
-    (photograph resolution cannot distinguish SMB from BNC - recorded)'
-  power: 'NOT STATED at chassis level in the extraction; per-module rows
-    were not captured either. The L27/L29 warnings stand as the record'
-  lifecycle: 'announced - the whole MX5-MX80 family is EOL (guide banners
-    and family tables); per-SKU dates on the Juniper milestones page'
-  color: 'photo - dark charcoal chassis, silver MICs, dark blue RE panel and
-    fan door (Juniper''s MX80-era styling)'
-  other-faces: 'near-blank by evidence - rail bands estimated; axis
-    conventions per viewer3d.js as the siblings'
+  sources:
+    note: >-
+      MX5/MX10/MX40/MX80 Hardware Guide, and the image-library photographs mx80-front-high and
+      mx80-rear-high (the mx5 set is the same base asset, recorded in the photo catalogue). No
+      mechanical drawing was available
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - the guide chassis description: 3.5 x 17.5 x 23.46 in (88.9 x 445 x 596
+      mm), 2RU. Ears NOT MODELLED by convention
+  shared-chassis:
+    note: >-
+      guide - the MX5, MX10, MX40 and MX80 are one chassis with different capacity licences and
+      MIC entitlements (guide Figures 5-9); they are modelled as ONE device with the SKUs as
+      configurations. The FIXED MX80 variant (Figure 8, 48x1GbE built in) is a different faceplate
+      and is not modelled - see gaps
+  scale:
+    note: >-
+      photo - per-axis anchoring of the front photograph (body between the ear wings anchored to
+      445 mm; rows to 88.9). Positions are single-pass readings approximate to ~2 mm
+  front:
+    note: >-
+      photo - MIC row y 7-41.5 with slots at x 25.0 and 193.4 (the reference unit carries the
+      20x1GE SFP MIC and the 2x10GE XFP MIC); PS 0/PS 1 at x 14.7/86.2 in the lower band; the blue
+      RE panel from 162.6 to 406 carrying CONSOLE over AUX (x 190), ETHERNET over USB (x 213), EXT
+      CLK A over B (x 232), the SYS OK / RE lamps and ONLINE/OFFLINE button at its left, and the
+      four fixed XFP cages at centres 261.6-349.7 with LINK lamps, silkscreened 0-3 over 0/MIC 0;
+      the MX80 badge at 355; the fan-tray door at 407-445
+  rear:
+    note: >-
+      photo - a blank cover plate over the upper-left aperture labelled MPC 0 / MIC 1, the CLK and
+      SYNC jacks at x 68/105 (y 75), the two-hole earthing plate and ESD at the right. The jacks
+      are drawn as SMB (photograph resolution cannot distinguish SMB from BNC - recorded)
+  power:
+    note: >-
+      NOT STATED at chassis level in the extraction; per-module rows were not captured either. The
+      L27/L29 warnings stand as the record
+  lifecycle:
+    note: >-
+      announced - the whole MX5-MX80 family is EOL (guide banners and family tables); per-SKU
+      dates on the Juniper milestones page
+  color:
+    note: >-
+      photo - dark charcoal chassis, silver MICs, dark blue RE panel and fan door (Juniper's
+      MX80-era styling)
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
+      siblings
+
 attrs:
   physical:
     weight-note: not captured in this extraction (see gaps)

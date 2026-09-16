@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: port-extender
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
@@ -13,73 +13,91 @@ description: >-
   the third-party switches that can stand in for it.
 profile: networking
 provenance:
-  size: >-
-    datasheet - MaiaEdge-Port-Extender-Datasheet-v1.pdf page 3, "Dimensions (H x W x D)
-    44 mm x 438 mm x 520 mm (1U EIA Rackmount)". NOT the PBC-2000's envelope: that box
-    is 41.27 x 437.90 x 291.08, so this one is taller and 229 mm deeper, and nothing
-    may be borrowed between them.
-  ports: >-
-    datasheet page 3 - "Tenant Ports: 48 x SFP28 10GbE / 25GbE" and "Fabric Uplink
-    Ports: 8 x QSFP28 100GbE". 48 + 8 = 56, WHICH RECONCILES THE TWO PORT COUNTS IN
-    CIRCULATION: the marketing copy says "48 ports" and the product documentation calls
-    it "a 56-port switch", and both are right.
-  arrangement: >-
-    photo-measured (COUNT ONLY) from the product render. The SFP28 field is TWO ROWS of
-    24 columns, ganged in three blocks of eight; the QSFP28 field is two rows of four,
-    in one block at the right-hand end, with visibly wider cages. Counted at 6x on the
-    render, and the counts close against the datasheet exactly - 3 x 8 x 2 = 48 and
-    4 x 2 = 8. Nothing else comes from that image: see `positions`.
-  port-ids: >-
-    EVERY PORT IS `port-N`, INCLUDING THE EIGHT UPLINKS, and that is not cosmetic.
-    dcim_export treats a placement as an interface only when its id starts with
-    `port-`; the first draft called the uplinks `uplink-49`..`uplink-56` and the NetBox
-    and Nautobot exports came out with 48 interfaces instead of 56, silently. The
-    uplink's ROLE is carried by the part it is placed from (common/qsfp28-cage@3,
-    media qsfp28) and by `numbering` below, which is where a role belongs - the id
-    carries the number the vendor addresses it by.
-  numbering: >-
-    derived, AND THE DOCUMENTATION CORROBORATES EVERY NUMBER IT NAMES. Ports run
-    column-major, top then bottom, so column N carries ports 2N-1 and 2N - the
-    arrangement std/sfp-ganged's other two-row users already draw. That puts column 21
-    at 41/42, column 24 at 47/48, and the four uplink columns at 49/50, 51/52, 53/54 and
-    55/56. prod.maiaedge.io/docs names ports 41, 42, 43, 44 and 48 among the tenant
-    ports and 51, 52, 53, 54, 55 and 56 among the uplinks, and cables a PBC's two 100G
-    interfaces to 51 and 52 - one uplink COLUMN. Every number it uses falls where this
-    scheme puts it. The scheme is still derived rather than read off the metal.
-  positions: >-
-    ESTIMATED, AND THE WORD IS EXACT. The only image of this face is a marketing render,
-    and it is not orthographic - the lid is visible, so the face is foreshortened
-    vertically. Its HORIZONTAL proportions are usable and were checked: the cage pitch
-    reads 22.2 px against a faceplate scaled on the datasheet's 438 mm, which is 14.0 mm
-    against std/sfp-ganged's measured 14.25 - 2% out, so the standard pitch is what is
-    placed rather than the reading. NOTHING VERTICAL COMES FROM THE RENDER. The two rows
-    are centred on the face and the row gap is chosen, not measured.
-  pitch: >-
-    registry - 14.25 for the tenant ports (std/sfp-ganged@1, SFF-8433 port pitch) and
-    19.0 for the uplinks (common/qsfp28-cage@3's measured ganged pitch). The blocks then
-    fill the face exactly: 4.0 margin + 3 x 114.0 + two 3.0 gaps + a 6.0 gap + 76.0 +
-    4.0 margin = 438.0. That the arithmetic closes on the datasheet width is a check,
-    not a measurement - the margins and gaps were chosen to make it close.
-  lint-l39: >-
-    EIGHT L39 WARNINGS ON THIS DEVICE ARE roc-ops/Portrayal#248, NOT A DEFECT HERE. The
-    rule checks that a part sits centred in its own opening; common/qsfp28-cage@3's
-    aperture deliberately does not, because the lamp band occupies the top 3.4 mm of the
-    part and the hole sits under it. The cutouts here are the component's own declared
-    aperture, offset (0.25, 4.2) into it, which is what `cutouts` provenance requires.
-    Do not "fix" them by centring - that would punch the hole in the wrong place to
-    quiet a rule that is itself wrong.
-  uplink-lamps: >-
-    photo-measured (count only) - FOUR lamps per uplink port, above the top row and
-    below the bottom, clearly clustered in fours at 9x on the render. That is what
-    common/qsfp28-cage@3 draws, so the part is right here - unlike on the PBC-2000,
-    where the same band had to be dropped because that chassis has none.
-  power: >-
-    datasheet page 3 - "1+1 Redundant, Hot-Swappable PSUs (100-240VAC or 180-300VDC
-    auto-ranging)" and "< 500W Maximum (Typical < 350W at 25C)".
-  thermal: >-
-    datasheet page 3 - "3+1 Redundant Fans; Front-to-Back and Back-to-Front
-    configurations available". BOTH directions are offered, so no airflow is asserted:
-    the same hole is an intake on one SKU and an exhaust on another.
+  size:
+    confidence: datasheet
+    note: >-
+      datasheet - MaiaEdge-Port-Extender-Datasheet-v1.pdf page 3, "Dimensions (H x W x D) 44 mm x
+      438 mm x 520 mm (1U EIA Rackmount)". NOT the PBC-2000's envelope: that box is 41.27 x 437.90
+      x 291.08, so this one is taller and 229 mm deeper, and nothing may be borrowed between them.
+  ports:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "Tenant Ports: 48 x SFP28 10GbE / 25GbE" and "Fabric Uplink Ports: 8 x
+      QSFP28 100GbE". 48 + 8 = 56, WHICH RECONCILES THE TWO PORT COUNTS IN CIRCULATION: the
+      marketing copy says "48 ports" and the product documentation calls it "a 56-port switch",
+      and both are right.
+  arrangement:
+    confidence: photo-measured
+    note: >-
+      photo-measured (COUNT ONLY) from the product render. The SFP28 field is TWO ROWS of 24
+      columns, ganged in three blocks of eight; the QSFP28 field is two rows of four, in one block
+      at the right-hand end, with visibly wider cages. Counted at 6x on the render, and the counts
+      close against the datasheet exactly - 3 x 8 x 2 = 48 and 4 x 2 = 8. Nothing else comes from
+      that image: see `positions`.
+  port-ids:
+    note: >-
+      EVERY PORT IS `port-N`, INCLUDING THE EIGHT UPLINKS, and that is not cosmetic. dcim_export
+      treats a placement as an interface only when its id starts with `port-`; the first draft
+      called the uplinks `uplink-49`..`uplink-56` and the NetBox and Nautobot exports came out
+      with 48 interfaces instead of 56, silently. The uplink's ROLE is carried by the part it is
+      placed from (common/qsfp28-cage@3, media qsfp28) and by `numbering` below, which is where a
+      role belongs - the id carries the number the vendor addresses it by.
+  numbering:
+    note: >-
+      derived, AND THE DOCUMENTATION CORROBORATES EVERY NUMBER IT NAMES. Ports run column-major,
+      top then bottom, so column N carries ports 2N-1 and 2N - the arrangement std/sfp-ganged's
+      other two-row users already draw. That puts column 21 at 41/42, column 24 at 47/48, and the
+      four uplink columns at 49/50, 51/52, 53/54 and 55/56. prod.maiaedge.io/docs names ports 41,
+      42, 43, 44 and 48 among the tenant ports and 51, 52, 53, 54, 55 and 56 among the uplinks,
+      and cables a PBC's two 100G interfaces to 51 and 52 - one uplink COLUMN. Every number it
+      uses falls where this scheme puts it. The scheme is still derived rather than read off the
+      metal.
+  positions:
+    confidence: estimated
+    note: >-
+      ESTIMATED, AND THE WORD IS EXACT. The only image of this face is a marketing render, and it
+      is not orthographic - the lid is visible, so the face is foreshortened vertically. Its
+      HORIZONTAL proportions are usable and were checked: the cage pitch reads 22.2 px against a
+      faceplate scaled on the datasheet's 438 mm, which is 14.0 mm against std/sfp-ganged's
+      measured 14.25 - 2% out, so the standard pitch is what is placed rather than the reading.
+      NOTHING VERTICAL COMES FROM THE RENDER. The two rows are centred on the face and the row gap
+      is chosen, not measured.
+  pitch:
+    confidence: registry
+    note: >-
+      registry - 14.25 for the tenant ports (std/sfp-ganged@1, SFF-8433 port pitch) and 19.0 for
+      the uplinks (common/qsfp28-cage@3's measured ganged pitch). The blocks then fill the face
+      exactly: 4.0 margin + 3 x 114.0 + two 3.0 gaps + a 6.0 gap + 76.0 + 4.0 margin = 438.0. That
+      the arithmetic closes on the datasheet width is a check, not a measurement - the margins and
+      gaps were chosen to make it close.
+  lint-l39:
+    note: >-
+      EIGHT L39 WARNINGS ON THIS DEVICE ARE roc-ops/Portrayal#248, NOT A DEFECT HERE. The rule
+      checks that a part sits centred in its own opening; common/qsfp28-cage@3's aperture
+      deliberately does not, because the lamp band occupies the top 3.4 mm of the part and the
+      hole sits under it. The cutouts here are the component's own declared aperture, offset
+      (0.25, 4.2) into it, which is what `cutouts` provenance requires. Do not "fix" them by
+      centring - that would punch the hole in the wrong place to quiet a rule that is itself
+      wrong.
+  uplink-lamps:
+    confidence: photo-measured
+    note: >-
+      photo-measured (count only) - FOUR lamps per uplink port, above the top row and below the
+      bottom, clearly clustered in fours at 9x on the render. That is what common/qsfp28-cage@3
+      draws, so the part is right here - unlike on the PBC-2000, where the same band had to be
+      dropped because that chassis has none.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "1+1 Redundant, Hot-Swappable PSUs (100-240VAC or 180-300VDC
+      auto-ranging)" and "< 500W Maximum (Typical < 350W at 25C)".
+  thermal:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "3+1 Redundant Fans; Front-to-Back and Back-to-Front configurations
+      available". BOTH directions are offered, so no airflow is asserted: the same hole is an
+      intake on one SKU and an exhaust on another.
+
 attrs:
   # SECTIONS FOLLOW THE LIBRARY'S, NOT THE DATASHEET'S TABLE. L68 is the rule
   # that knows: `memory` and `storage` are filed under `platform` by 53 and 51

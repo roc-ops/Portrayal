@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2010
-version: 0.2.11
+version: 0.2.12
 maturity: modelled
 manufacturer: Juniper
 model: MX2010
@@ -17,30 +17,44 @@ description: >-
   distribution modules, with fan trays behind the grilles at both ends.
 profile: networking
 provenance:
-  sources: MX2010 Hardware Guide (963 pages), the MX2000 datasheet, and the
-    studio front and rear photographs in the image library
-  chassis: 'datasheet-table - 59.50 x 19 x 36.20 in (1511.3 x 482.6 x
-    919.5 mm); the 19 in figure is the rack face, and the body is drawn
-    at 440 mm. Ears NOT MODELLED by convention'
-  front: 'photo - the studio front photograph at ~1 px/mm vertically and
-    ~1.1 horizontally: craft at y 15, EMI cover to 255, the upper cage
-    (CB-RE0, SFB 0-7, CB-RE1) at y 275 over ~405 mm, the divider, the
-    ten-slot lower cage at y 730 over ~425 mm, the LC 0-9 label strip,
-    and the intake grille at the bottom. Cards are VERTICAL: authored
-    tall with rotated jacks (the ASR-9010 pattern)'
-  upper-cage: 'guide - two CB-REs flank eight SFBs (slots 0-7); the
-    guide states eight SFBs install with seven required for line rate'
-  rear: 'photo - the rear studio photograph: fan tray 2/3 grille at the
-    top, the PDM1 zone, nine PSM bays across the middle, the PDM0 zone,
-    the air filter panel (with the fan tray 0/1 lamps) and the bottom
-    grille. The photographed unit is -48 V DC'
-  power: 'datasheet-table - the guide power overview: the -48 V pool is
-    22.5 kW with 2.5 kW reserved for PSM redundancy (8+1 across nine
-    PSMs)'
-  color: 'photo - grey chassis, dark craft band with the light-blue
-    accent, silver-grey modules'
-  other-faces: 'near-blank by evidence - rail bands estimated; axis
-    conventions per viewer3d.js as the siblings'
+  sources:
+    note: >-
+      MX2010 Hardware Guide (963 pages), the MX2000 datasheet, and the studio front and rear
+      photographs in the image library
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - 59.50 x 19 x 36.20 in (1511.3 x 482.6 x 919.5 mm); the 19 in figure is the
+      rack face, and the body is drawn at 440 mm. Ears NOT MODELLED by convention
+  front:
+    note: >-
+      photo - the studio front photograph at ~1 px/mm vertically and ~1.1 horizontally: craft at y
+      15, EMI cover to 255, the upper cage (CB-RE0, SFB 0-7, CB-RE1) at y 275 over ~405 mm, the
+      divider, the ten-slot lower cage at y 730 over ~425 mm, the LC 0-9 label strip, and the
+      intake grille at the bottom. Cards are VERTICAL: authored tall with rotated jacks (the
+      ASR-9010 pattern)
+  upper-cage:
+    note: >-
+      guide - two CB-REs flank eight SFBs (slots 0-7); the guide states eight SFBs install with
+      seven required for line rate
+  rear:
+    note: >-
+      photo - the rear studio photograph: fan tray 2/3 grille at the top, the PDM1 zone, nine PSM
+      bays across the middle, the PDM0 zone, the air filter panel (with the fan tray 0/1 lamps)
+      and the bottom grille. The photographed unit is -48 V DC
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet-table - the guide power overview: the -48 V pool is 22.5 kW with 2.5 kW reserved
+      for PSM redundancy (8+1 across nine PSMs)
+  color:
+    note: >-
+      photo - grey chassis, dark craft band with the light-blue accent, silver-grey modules
+  other-faces:
+    note: >-
+      near-blank by evidence - rail bands estimated; axis conventions per viewer3d.js as the
+      siblings
+
 attrs:
   power:
     pool-w: 22500

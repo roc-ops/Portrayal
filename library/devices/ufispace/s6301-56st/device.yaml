@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -13,197 +13,206 @@ description: UfiSpace S6301-56ST - 1RU 48-port 1G RJ45 L2/L3 OOB management swit
   150W AC or DC PSUs, 1+1 hot-swap fans, front-to-back or back-to-front airflow
 profile: networking
 provenance:
-  chassis: >-
-    datasheet - 'Chassis (WxDxH) 1RU, 440 x 440 x 43.8 mm', weight 5.62 kg without
-    FRU; the HIG Component Physical Information table repeats all three
-    ('S6301-56ST (W x D x H) 440 x 440 x 43.8mm', 'Chassis without FRU 12.39lbs
-    (5.62kg)'). 440 is the body between the ear folds, not a rack face: the HIG
-    Space Clearance section separates 'The S6301-56ST width is 17.32 inches
-    (44.0cm)' from the 'rack mount brackets suitable for 19 inch (48.3cm) wide
-    racks', and the brackets ship loose (88 x 43 x 20 mm accessories, 8 M4 screws),
-    so there is no ear extent to subtract. Depth 440 is likewise 'without the field
-    replaceable units (FRUs)'; the HIG says the fan handle projects 25 mm and the
-    PSU handle 38 mm beyond it, and those are carried as relief on the FRU
-    contracts rather than in the chassis depth.
-  front-layout: >-
-    drawing - HIG Figure 5, the front elevation carried under the H = 1.72"
-    dimension, rendered from the PDF at 600 dpi (page 9). GATE 1: the chassis in it
-    measures 2140 x 214 px, aspect 10.00 against the datasheet's 10.046 (440/43.8) -
-    0.46% out, so it is orthographic and carries geometry at 4.864 px/mm. Every
-    front number below is measured on that image. The 48 RJ45 jacks sit in four
-    6-column ganged blocks whose silver shells read directly off the drawing:
-    block left edges 26.32 / 113.91 / 201.29 / 288.67 (three independent steps of
-    87.59, 87.38, 87.38), block width 84.1, within-block column pitch 13.98 taken
-    from the silver dividers between jacks. The shell band runs y 11.5-36.0 with a
-    continuous silver bar between the rows at y 22.0-24.9; the two 11.0 mm
-    rj45-ganged rows are set inside it at y 12.0 and 24.5, which is the softer
-    axis and is recorded as drawing-constrained rather than measured. The SFP+
-    block's silver spans x 376.5-434.0 (57.6, four columns on the std 14.25 pitch)
-    with its own centre band at y 20.6-26.1. Vent holes run in two rows from
-    x 84.3 to 436.5, y 2.4-4.6 and 6.0-8.5.
-  jack-orientation: >-
-    drawing+photo - HIG Figure 5's front elevation at 3x zoom, corroborated by the
-    vendor angle render (s6301-56st-1-angle.png): the TOP RJ45 row has its keyway
-    notch UP and the gold contacts toward the centre band (rotate 180 from the std
-    default), the bottom row keyway-down; the SFP+ top row's latch nubs face the
-    centre lamp band (rotate 180), bottom row default. Read from this device's own
-    figure, not carried over from the S6301-56STP, although the two agree.
-  port-numbering: >-
-    HIG Port Overview table: 'Port ID 0~47 RJ45 ... 48~55 SFP+', and the printed
-    strip under each column pair reads '▲n  n+1▼' - even numbers top row, odd
-    bottom - read at 3x zoom off the front elevation, where '▲0  1▼ ▲2  3▼' is
-    legible under the first block. The photographs show no numerals on the ganged
-    shells themselves, so only the strip is modelled.
-  port-leds: >-
-    drawing - each RJ45 jack carries integrated lamps in the corners of its own
-    aperture (the datasheet's LED row: 'Link and Activity LEDs per port').
-    Before the RJ45 sweep std/rj45-ganged drew the opening only and the lamps,
-    sitting INSIDE the aperture, were not drawn - the MX150 and S6301-56STP
-    treatment. They now draw as led-a/led-b of common/rj45-ganged-eth@1, one
-    placement per jack. The SFP+ lamps sit in the centre band between the cage
-    rows, one ▲▼ pair per column for the upper and lower port, and are drawn with
-    common/sfp-led-pair.
-  left-cluster: >-
-    drawing - HIG Figure 5 at 4.864 px/mm, with the figure's own callouts naming
-    the three ports top to bottom: 'Mgmt. Port', 'USB', 'Console'. The silver bezel
-    plate measures x 6.4-21.2, y 7.4-38.2, and its two internal silver rails at
-    y 18.3-19.7 and 25.9-27.8 divide it into the three openings the parts are set
-    in. The management and console jacks are drawn with std/rj45-ganged inside the
-    shared plate decor because the plate is one piece of metal - three 16 mm
-    single-port bezels would not fit a 30.8 mm stack. Management jack keyway-up
-    (rotate 180), console keyway-down, both read from the figure's tab notches at
-    3x zoom. The left-edge network pictogram and the USB / IOIOI legend row under
-    the plate are approximated with the nearest glyphs, as the S9510-28DC does.
-  jack-shells: >-
-    drawing+photo - the four 12-port RJ45 blocks and the SFP+ block sit in SILVER
-    ganged shells. Measured on HIG Figure 5 as a grey (max-min < 40, max > 170)
-    mask, which returns the block outlines, the per-jack dividers on the 13.98
-    pitch and the continuous bar between the rows; corroborated in colour by the
-    vendor angle render s6301-56st-1-angle.png, where the four blocks read light
-    against the dark chassis. std/rj45-ganged and std/sfp-ganged draw the opening
-    only, so each block's shell is a panel.decor fill (#b0b5bb) sized from the
-    measurement, per the s9510-28dc silver-band precedent. Measured here on this
-    device's own figure; the S6301-56STP reached the same construction and its
-    provenance says so, but no number was copied from it.
-  buttons: >-
-    drawing - HIG Figure 5's callout 'Reset' points at a single recessed circular
-    button whose centre measures (46.3, 6.2) and whose ring is ~3.3 mm across;
-    drawn with common/reset-button (4 mm recessed pinhole), legend under it. This
-    device has NO Mode button - it has no PoE, so the S6301-56STP's LNK/SPD-vs-PoE
-    lamp toggle does not exist here, and the HIG front-panel LED table lists no
-    mode row.
-  system-leds: >-
-    drawing - HIG Figure 5: five lamps, four in a row at y centre 4.73 with x
-    centres 53.77 / 60.45 / 67.23 / 73.92, and a fifth directly under the fourth at
-    y centre 7.20, measured as green blobs on the lit render. That is exactly the
-    five the HIG front-panel LED table defines - SYS, FAN, PSU0, PSU1, ID - and the
-    table's order matches the lamp order left to right. Drawn with common/led-dot
-    (2.0 mm, nearest part) on one centreline; the drawing puts lamp 4 about 0.2 mm
-    lower than its three neighbours, which is noise at this resolution and is
-    aligned rather than copied. States transcribed from the HIG table on each
-    placement. The printed legend strings beside the lamps are below the resolution
-    of every held image - see gaps - so the table's own names are used.
-  rear-layout: >-
-    photo-measured - the vendor rear render s6301-56st-4-rear.png (1510 x 151 px,
-    aspect 10.00 vs true 10.046, 0.5% out, 3.432 px/mm), with s6301-56st-3-rear.png
-    (the blue back-to-front variant) as a second reading of the same face and HIG
-    Figure 5's rear strips as a third. Grounding column at the left edge (two M4
-    holes at (6.8, 7.9) and (6.8, 24.3) with the earth symbol below - one of the
-    HIG's two lug locations, its Figure 24). Fan module faces measured 15.2-66.7
-    and 67.65-119.15, i.e. width 51.5 exactly as the HIG component table states,
-    on a step of 52.45 recovered by cross-correlating the two identical modules
-    (correlation 0.992) rather than by eye - an eyeball read of the same image gave
-    51.3 and was wrong. PSU faces measured 322.9-373.4 and 382.9-433.4, width 50.5
-    against the table's 50.5, step 60.03. The vertical is the softer axis: the fan
-    face reads 39.9 tall against the contract's 42.2 and the PSU face 40.9 against
-    40.2, so both bays are set to the contract size centred in the 43.8 opening and
-    the difference is recorded here rather than reconciled. Vertical 'PSU0 ◄' /
-    'PSU1 ◄' legends sit on the chassis strips right of each bay. The 'FAN ◄0' /
-    'FAN ◄1' texts sit ON the fan modules' own faces in all three sources, not on
-    the chassis, and the shared fan component cannot carry a per-position legend -
-    not modelled, see gaps.
-  psu-fru: >-
-    ufispace/psu-151-dc@1 and ufispace/psu-151-ac@1 already existed in the library,
-    built from this device's own HIG (Figures 7 and 9, the Component Physical
-    Information table and this same rear render) - their contracts cite the
-    S6301-56ST by name. The rear photographs held here show the DC unit (three
-    screw terminals), which is why the DC build is the base configuration. The fan
-    FRU reuses ufispace/fan-402825@1 (S9510-28DC family): this datasheet orders
-    FAN-402825-HDN where the S9510 orders -HD, same drawn 51.5 x 42.2 face, and the
-    configuration overrides the model attr. Two skin-level deltas on that shared
-    part showed up in the matched-scale comparison against this device's rear
-    render and are recorded rather than fixed: the S6301's fan face is a hexagonal
-    honeycomb grille where the component draws a circular fan aperture, and its
-    status lamp sits low on the right-hand strip where the component draws it
-    top-left. Both belong to the shared component's art, not to this chassis's
-    geometry, and changing them would move every S9510-family device.
-  top: >-
-    drawing - HIG Figure 5's top view (D and W both dimensioned 440 mm). GATE 1
-    FAILS on this one: the drawn cover measures 2350 x 2148 px for a square object,
-    9.4% out, so no absolute scale is taken from it - every position below is a
-    FRACTION of the measured extent multiplied by 440. Four recessed stiffening
-    grooves, centres at y 130.6 / 213.1 / 292.8 / 372.5 from the rear; the two
-    nearer the rear span x 173-389, the two nearer the front x 9-397. The cover
-    screws are placed from the same fractions to about a millimetre. AXIS: y = 0 is
-    the REAR, as the figure is printed - its top edge carries the fan and PSU
-    handles. The figure also puts those fan handles at ITS left, i.e. on the same
-    side as the rear view puts them, so the vendor's top view is laid out to agree
-    with its rear elevation rather than as a true plan; it is transcribed as
-    printed, which is what the S6301-56STP and S9510-28DC top faces do, and this
-    sentence is the record that the handedness was checked rather than assumed.
-    Groove depth is not dimensioned anywhere, drawn as sink decor.
-  sides: >-
-    drawing - HIG Figure 13, which is a genuine side elevation of this chassis with
-    'Front side' and 'Rear side' labelled and a 220.5 mm dimension on it. The
-    chassis body in it measures 763 x 77 px, aspect 9.91 against the true 10.046,
-    1.4% out, so it carries geometry at 1.734 px/mm. Two rows of M4 bracket holes
-    at y 9.5 and 34.9; the four mid-chassis holes measure x 226.4 / 252.1 / 277.6 /
-    303.1, a pitch of 25.5 against the figure's own '1 inch' callout (25.4), and
-    the first of them is where the 220.5 mm dimension lands. The front bracket zone
-    is highlighted in cyan from x 1.2 to 90.0 and the rear zone symmetrically, and
-    the highlight hides the holes inside it, so the three front and three rear hole
-    pairs are placed on the measured 25.4 pitch inside the measured zone and are
-    ESTIMATED, not measured. AXIS CONVENTION: on the RIGHT view x = 0 is the FRONT;
-    on the LEFT view x = 0 is the REAR (renderer convention), so the left view
-    carries the same pattern mirrored as depth - x - width. The hole pattern is the
-    only content and it is symmetric front-to-rear about the chassis centre, so
-    getting the mirror wrong would be invisible - said here so that the axis is on
-    record as checked rather than as not mattering.
-  bottom: >-
-    deliberately size-only - no photograph or drawing of the underside exists in
-    the intake. HIG Figure 5 shows top, front and rear only; Figures 12-15 and 27
-    show the chassis from above and from the front-left; no held image looks at the
-    base. Inventing the label field this class of device usually carries would be a
-    guess. L45's size-only warning stands as the record.
-  attrs: >-
-    datasheet Specifications table and Available to Order section, with the HIG's
-    Connecting Power sections for the system maxima and its Preparation Check List
-    for the input currents. The processor and memory rows carry the vendor's two
-    build grades verbatim ('Standard : Intel Denverton 2-Core @1.6GHz Premium :
-    Intel Denverton 4-Core @1.6GHz'), because collapsing them would state a
-    configuration the vendor does not sell alone.
-  power: >-
-    datasheet gives 'Typical power: 64 Watts (no transceiver)'. The HIG's two
-    Connecting Power sections give the maxima with the testing criteria printed
-    beside them - 45C ambient, optics fully populated, 100% traffic load - hence
-    power-envelope: fully-configured. They differ by input type, not by measure or
-    scope: 'The maximum system power consumption is 111 watts' (DC Version) and
-    'The maximum system power consumption is 111.5 watts with an input voltage of
-    100-240V AC' (AC Version). That is two variants of one box, not a source
-    disagreement, so both are carried - power-max-w takes the higher AC figure and
-    power-max-dc-w the DC one. The vendor qualifies all three; nothing here is an
-    unqualified reading.
-  usb-version: >-
-    the datasheet says '1 x USB 2 .0 Type-A port' and the HIG's cabling section
-    agrees - 'Connect the USB 2.0 A Type plug'. The accessory list ships a 'USB 3.0
-    cable', which is the CABLE's rating and not the port's, so the two are not in
-    conflict and no gap is filed. (The sibling S6301-56STP does have a real
-    disagreement here, its datasheet saying USB 1.0; this device's does not.)
-  lifecycle: >-
-    searched 2026-08-28, 'UfiSpace S6301-56ST end of life' - no announcement. The
-    vendor still lists the product (ufispace.com S6301-56ST product page) and
-    distributors STORDIS, EPS Global, Pine Networks and Hardware Nation all carry
-    it as current. none-announced is a checked state, not an absence.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Chassis (WxDxH) 1RU, 440 x 440 x 43.8 mm', weight 5.62 kg without FRU; the HIG
+      Component Physical Information table repeats all three ('S6301-56ST (W x D x H) 440 x 440 x
+      43.8mm', 'Chassis without FRU 12.39lbs (5.62kg)'). 440 is the body between the ear folds,
+      not a rack face: the HIG Space Clearance section separates 'The S6301-56ST width is 17.32
+      inches (44.0cm)' from the 'rack mount brackets suitable for 19 inch (48.3cm) wide racks',
+      and the brackets ship loose (88 x 43 x 20 mm accessories, 8 M4 screws), so there is no ear
+      extent to subtract. Depth 440 is likewise 'without the field replaceable units (FRUs)'; the
+      HIG says the fan handle projects 25 mm and the PSU handle 38 mm beyond it, and those are
+      carried as relief on the FRU contracts rather than in the chassis depth.
+  front-layout:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5, the front elevation carried under the H = 1.72" dimension, rendered
+      from the PDF at 600 dpi (page 9). GATE 1: the chassis in it measures 2140 x 214 px, aspect
+      10.00 against the datasheet's 10.046 (440/43.8) - 0.46% out, so it is orthographic and
+      carries geometry at 4.864 px/mm. Every front number below is measured on that image. The 48
+      RJ45 jacks sit in four 6-column ganged blocks whose silver shells read directly off the
+      drawing: block left edges 26.32 / 113.91 / 201.29 / 288.67 (three independent steps of
+      87.59, 87.38, 87.38), block width 84.1, within-block column pitch 13.98 taken from the
+      silver dividers between jacks. The shell band runs y 11.5-36.0 with a continuous silver bar
+      between the rows at y 22.0-24.9; the two 11.0 mm rj45-ganged rows are set inside it at y
+      12.0 and 24.5, which is the softer axis and is recorded as drawing-constrained rather than
+      measured. The SFP+ block's silver spans x 376.5-434.0 (57.6, four columns on the std 14.25
+      pitch) with its own centre band at y 20.6-26.1. Vent holes run in two rows from x 84.3 to
+      436.5, y 2.4-4.6 and 6.0-8.5.
+  jack-orientation:
+    confidence: drawing
+    note: >-
+      drawing+photo - HIG Figure 5's front elevation at 3x zoom, corroborated by the vendor angle
+      render (s6301-56st-1-angle.png): the TOP RJ45 row has its keyway notch UP and the gold
+      contacts toward the centre band (rotate 180 from the std default), the bottom row
+      keyway-down; the SFP+ top row's latch nubs face the centre lamp band (rotate 180), bottom
+      row default. Read from this device's own figure, not carried over from the S6301-56STP,
+      although the two agree.
+  port-numbering:
+    note: 'HIG Port Overview table: ''Port ID 0~47 RJ45 ... 48~55 SFP+'', and the printed strip under each
+      column pair reads ''▲n  n+1▼'' - even numbers top row, odd bottom - read at 3x zoom off the front elevation,
+      where ''▲0  1▼ ▲2  3▼'' is legible under the first block. The photographs show no numerals on the ganged
+      shells themselves, so only the strip is modelled.'
+  port-leds:
+    confidence: drawing
+    note: >-
+      drawing - each RJ45 jack carries integrated lamps in the corners of its own aperture (the
+      datasheet's LED row: 'Link and Activity LEDs per port'). Before the RJ45 sweep
+      std/rj45-ganged drew the opening only and the lamps, sitting INSIDE the aperture, were not
+      drawn - the MX150 and S6301-56STP treatment. They now draw as led-a/led-b of
+      common/rj45-ganged-eth@1, one placement per jack. The SFP+ lamps sit in the centre band
+      between the cage rows, one ▲▼ pair per column for the upper and lower port, and are drawn
+      with common/sfp-led-pair.
+  left-cluster:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5 at 4.864 px/mm, with the figure's own callouts naming the three ports
+      top to bottom: 'Mgmt. Port', 'USB', 'Console'. The silver bezel plate measures x 6.4-21.2, y
+      7.4-38.2, and its two internal silver rails at y 18.3-19.7 and 25.9-27.8 divide it into the
+      three openings the parts are set in. The management and console jacks are drawn with
+      std/rj45-ganged inside the shared plate decor because the plate is one piece of metal -
+      three 16 mm single-port bezels would not fit a 30.8 mm stack. Management jack keyway-up
+      (rotate 180), console keyway-down, both read from the figure's tab notches at 3x zoom. The
+      left-edge network pictogram and the USB / IOIOI legend row under the plate are approximated
+      with the nearest glyphs, as the S9510-28DC does.
+  jack-shells:
+    confidence: drawing
+    note: >-
+      drawing+photo - the four 12-port RJ45 blocks and the SFP+ block sit in SILVER ganged shells.
+      Measured on HIG Figure 5 as a grey (max-min < 40, max > 170) mask, which returns the block
+      outlines, the per-jack dividers on the 13.98 pitch and the continuous bar between the rows;
+      corroborated in colour by the vendor angle render s6301-56st-1-angle.png, where the four
+      blocks read light against the dark chassis. std/rj45-ganged and std/sfp-ganged draw the
+      opening only, so each block's shell is a panel.decor fill (#b0b5bb) sized from the
+      measurement, per the s9510-28dc silver-band precedent. Measured here on this device's own
+      figure; the S6301-56STP reached the same construction and its provenance says so, but no
+      number was copied from it.
+  buttons:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5's callout 'Reset' points at a single recessed circular button whose
+      centre measures (46.3, 6.2) and whose ring is ~3.3 mm across; drawn with common/reset-button
+      (4 mm recessed pinhole), legend under it. This device has NO Mode button - it has no PoE, so
+      the S6301-56STP's LNK/SPD-vs-PoE lamp toggle does not exist here, and the HIG front-panel
+      LED table lists no mode row.
+  system-leds:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5: five lamps, four in a row at y centre 4.73 with x centres 53.77 /
+      60.45 / 67.23 / 73.92, and a fifth directly under the fourth at y centre 7.20, measured as
+      green blobs on the lit render. That is exactly the five the HIG front-panel LED table
+      defines - SYS, FAN, PSU0, PSU1, ID - and the table's order matches the lamp order left to
+      right. Drawn with common/led-dot (2.0 mm, nearest part) on one centreline; the drawing puts
+      lamp 4 about 0.2 mm lower than its three neighbours, which is noise at this resolution and
+      is aligned rather than copied. States transcribed from the HIG table on each placement. The
+      printed legend strings beside the lamps are below the resolution of every held image - see
+      gaps - so the table's own names are used.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the vendor rear render s6301-56st-4-rear.png (1510 x 151 px, aspect 10.00
+      vs true 10.046, 0.5% out, 3.432 px/mm), with s6301-56st-3-rear.png (the blue back-to-front
+      variant) as a second reading of the same face and HIG Figure 5's rear strips as a third.
+      Grounding column at the left edge (two M4 holes at (6.8, 7.9) and (6.8, 24.3) with the earth
+      symbol below - one of the HIG's two lug locations, its Figure 24). Fan module faces measured
+      15.2-66.7 and 67.65-119.15, i.e. width 51.5 exactly as the HIG component table states, on a
+      step of 52.45 recovered by cross-correlating the two identical modules (correlation 0.992)
+      rather than by eye - an eyeball read of the same image gave 51.3 and was wrong. PSU faces
+      measured 322.9-373.4 and 382.9-433.4, width 50.5 against the table's 50.5, step 60.03. The
+      vertical is the softer axis: the fan face reads 39.9 tall against the contract's 42.2 and
+      the PSU face 40.9 against 40.2, so both bays are set to the contract size centred in the
+      43.8 opening and the difference is recorded here rather than reconciled. Vertical 'PSU0 ◄' /
+      'PSU1 ◄' legends sit on the chassis strips right of each bay. The 'FAN ◄0' / 'FAN ◄1' texts
+      sit ON the fan modules' own faces in all three sources, not on the chassis, and the shared
+      fan component cannot carry a per-position legend - not modelled, see gaps.
+  psu-fru:
+    note: >-
+      ufispace/psu-151-dc@1 and ufispace/psu-151-ac@1 already existed in the library, built from
+      this device's own HIG (Figures 7 and 9, the Component Physical Information table and this
+      same rear render) - their contracts cite the S6301-56ST by name. The rear photographs held
+      here show the DC unit (three screw terminals), which is why the DC build is the base
+      configuration. The fan FRU reuses ufispace/fan-402825@1 (S9510-28DC family): this datasheet
+      orders FAN-402825-HDN where the S9510 orders -HD, same drawn 51.5 x 42.2 face, and the
+      configuration overrides the model attr. Two skin-level deltas on that shared part showed up
+      in the matched-scale comparison against this device's rear render and are recorded rather
+      than fixed: the S6301's fan face is a hexagonal honeycomb grille where the component draws a
+      circular fan aperture, and its status lamp sits low on the right-hand strip where the
+      component draws it top-left. Both belong to the shared component's art, not to this
+      chassis's geometry, and changing them would move every S9510-family device.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 5's top view (D and W both dimensioned 440 mm). GATE 1 FAILS on this
+      one: the drawn cover measures 2350 x 2148 px for a square object, 9.4% out, so no absolute
+      scale is taken from it - every position below is a FRACTION of the measured extent
+      multiplied by 440. Four recessed stiffening grooves, centres at y 130.6 / 213.1 / 292.8 /
+      372.5 from the rear; the two nearer the rear span x 173-389, the two nearer the front x
+      9-397. The cover screws are placed from the same fractions to about a millimetre. AXIS: y =
+      0 is the REAR, as the figure is printed - its top edge carries the fan and PSU handles. The
+      figure also puts those fan handles at ITS left, i.e. on the same side as the rear view puts
+      them, so the vendor's top view is laid out to agree with its rear elevation rather than as a
+      true plan; it is transcribed as printed, which is what the S6301-56STP and S9510-28DC top
+      faces do, and this sentence is the record that the handedness was checked rather than
+      assumed. Groove depth is not dimensioned anywhere, drawn as sink decor.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - HIG Figure 13, which is a genuine side elevation of this chassis with 'Front side'
+      and 'Rear side' labelled and a 220.5 mm dimension on it. The chassis body in it measures 763
+      x 77 px, aspect 9.91 against the true 10.046, 1.4% out, so it carries geometry at 1.734
+      px/mm. Two rows of M4 bracket holes at y 9.5 and 34.9; the four mid-chassis holes measure x
+      226.4 / 252.1 / 277.6 / 303.1, a pitch of 25.5 against the figure's own '1 inch' callout
+      (25.4), and the first of them is where the 220.5 mm dimension lands. The front bracket zone
+      is highlighted in cyan from x 1.2 to 90.0 and the rear zone symmetrically, and the highlight
+      hides the holes inside it, so the three front and three rear hole pairs are placed on the
+      measured 25.4 pitch inside the measured zone and are ESTIMATED, not measured. AXIS
+      CONVENTION: on the RIGHT view x = 0 is the FRONT; on the LEFT view x = 0 is the REAR
+      (renderer convention), so the left view carries the same pattern mirrored as depth - x -
+      width. The hole pattern is the only content and it is symmetric front-to-rear about the
+      chassis centre, so getting the mirror wrong would be invisible - said here so that the axis
+      is on record as checked rather than as not mattering.
+  bottom:
+    note: >-
+      deliberately size-only - no photograph or drawing of the underside exists in the intake. HIG
+      Figure 5 shows top, front and rear only; Figures 12-15 and 27 show the chassis from above
+      and from the front-left; no held image looks at the base. Inventing the label field this
+      class of device usually carries would be a guess. L45's size-only warning stands as the
+      record.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet Specifications table and Available to Order section, with the HIG's Connecting
+      Power sections for the system maxima and its Preparation Check List for the input currents.
+      The processor and memory rows carry the vendor's two build grades verbatim ('Standard :
+      Intel Denverton 2-Core @1.6GHz Premium : Intel Denverton 4-Core @1.6GHz'), because
+      collapsing them would state a configuration the vendor does not sell alone.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet gives 'Typical power: 64 Watts (no transceiver)'. The HIG's two Connecting Power
+      sections give the maxima with the testing criteria printed beside them - 45C ambient, optics
+      fully populated, 100% traffic load - hence power-envelope: fully-configured. They differ by
+      input type, not by measure or scope: 'The maximum system power consumption is 111 watts' (DC
+      Version) and 'The maximum system power consumption is 111.5 watts with an input voltage of
+      100-240V AC' (AC Version). That is two variants of one box, not a source disagreement, so
+      both are carried - power-max-w takes the higher AC figure and power-max-dc-w the DC one. The
+      vendor qualifies all three; nothing here is an unqualified reading.
+  usb-version:
+    note: >-
+      the datasheet says '1 x USB 2 .0 Type-A port' and the HIG's cabling section agrees -
+      'Connect the USB 2.0 A Type plug'. The accessory list ships a 'USB 3.0 cable', which is the
+      CABLE's rating and not the port's, so the two are not in conflict and no gap is filed. (The
+      sibling S6301-56STP does have a real disagreement here, its datasheet saying USB 1.0; this
+      device's does not.)
+  lifecycle:
+    note: >-
+      searched 2026-08-28, 'UfiSpace S6301-56ST end of life' - no announcement. The vendor still
+      lists the product (ufispace.com S6301-56ST product page) and distributors STORDIS, EPS
+      Global, Pine Networks and Hardware Nation all carry it as current. none-announced is a
+      checked state, not an absence.
+
 attrs:
   performance:
     switching-capacity: 130 Gbps

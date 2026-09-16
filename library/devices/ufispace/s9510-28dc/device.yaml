@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 2.0.8
+version: 2.0.9
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-28DC
@@ -14,76 +14,94 @@ description: UfiSpace S9510-28DC Disaggregated Cell Site Gateway Router - 1RU, 2
   front-service
 profile: networking
 provenance:
-  part-numbers: >-
-    CORRECTED TWICE, and the second correction reverses part of the first, so both
-    are kept. This device listed `PSU-401-DISB-1` / `PSU-401-AISB` and
-    `FAN-402825-HD` here - FRU part numbers in a field whose schema is "orderable
-    SKUs for this CONFIGURATION: model -> {part, power-cord}", meaning the CHASSIS.
-    They were a duplicate too: ufispace/psu-401-dc, psu-401-ac and fan-402825 each
-    carry their own in `attrs.model`, which is where a FRU part number belongs.
-    IT WAS NOT HARMLESS. A DCIM exporter reading the first key as the chassis model
-    filed this router as a device type called FAN-402825-HD in both target
-    libraries, and the S9510-28DC appeared in neither under its own name - see
-    roc-ops/Portrayal#21. A field carrying the wrong KIND of value is worse than an empty
-    one, because every consumer has to guess which kind it got.
-    THE FIRST FIX SAID NO CHASSIS SKU EXISTS AND THAT WAS WRONG. It is a true
-    statement about the HARDWARE INSTALLATION GUIDE - R1.9 names the product
-    `S9510-28DC` in its title, its overview and its dimensions table and prints no
-    orderable number anywhere - and a false one about the world. Two exist and the maintainer
-    supplied them: `S9510-28DC-BN0B` for DC and `S9510-28DC-BR1B` for AC. Searching
-    one document and concluding the fact does not exist is the same error the gaps
-    register records against the XFP bezel opening, made again here.
-    THE TWO DC CONFIGURATIONS SHARE A SKU because they are one chassis differently
-    populated - `dc-populated` fits optics into the first four SFP28 cages and is
-    not a different thing to order. AC is, and carries its own. That is exactly the
-    distinction #21 collapses on, so the two DC entries should fold into one device
-    type and the AC one should stand alone.
-    SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather than
-    dressed up: no UfiSpace PDF held contains either string. If a
-    UfiSpace ordering guide ever lands, it should confirm these two and may add the
-    regional variants the Edgecore SKUs show for the same class of box.
-    than merely coping.
-  chassis: datasheet (440 x 302 x 43.5mm, 4.9kg without FRU)
-  layout: drawing-inferred (HIG Fig 5/9 front drawing measured at 4.5 px/mm; pending photo overlay
-    calibration - marketing photos are low resolution)
-  sfp-pitch: drawing-inferred (~14.45mm ganged - std/sfp cutouts shoulder to shoulder; verify against
-    physical unit)
-  bits-tod-jacks: estimated (drawing shows compact stacked jacks ~11.5mm tall; modeled as two standard
-    14mm cutout ports which slightly exceeds the drawn stack - verify against physical unit)
-  timing-labels: 'drawing - BITS, the up-down pair and TOD are printed in the gutter to the
-    LEFT of the stacked jacks and RIGHT-aligned against them, and the S9510-28DC wordmark
-    ends on the same edge, one line below the lamp stack. Read off the datasheet front
-    figure (1701px embedded image, the one legible source for this panel). Re-anchored to
-    end at 130.8; left-anchored at 128.2, BITS and the wordmark ran under the jacks - which
-    are themselves modelled ~5mm oversize, see bits-tod-jacks above'
-  qsfpdd-port-numbers: 'PAID, by fixing the component rather than the labels. Ports 0-3
-    keep their numbers at baselines 38.1 and 8.8, where the datasheet front figure puts
-    them: the digit is printed on a coloured band just outside each aperture. The band
-    is faceplate paint - vendor-confirmed - so it is now four rects in panel.decor and
-    common/qsfp-cage@2 is 10.18 tall (0.6 flange + the 9.58 std/qsfp-ganged opening)
-    instead of 13.0. Silkscreen paints over decor and under components, so the numbers
-    now read. The cages for ports 0, 1 and 3 did not move. Port-2 is rotate: 180, so its
-    at: is the box top and shortening the box does not free the digit; its at: was
-    recomputed from the new height and lands at 8.8, which puts its aperture 0.08mm
-    lower than the v1 model had it - 0.4 px at the figure''s 4.5 px/mm, and the figure
-    is not self-consistent to better than that: it draws the port-2 digit sitting on the
-    aperture edge rather than clear of it. The band is still NARROWER than the aperture
-    (17.1 against 18.5); it is no longer drawn overlapping it'
-  attrs: datasheet (Specifications/Performance/Accessories sections)
-  led-semantics: 'HIG section 10, pages 20-21, transcribed rather than only cited - the citation was here and
-    the tables were not, so nobody could interpret two of these lamps. Each front-panel lamp
-    carries its own vocabulary: GNSS, SYNC and PWR each draw four distinct meanings out of two
-    colours and two behaviours, which is why a state carries a behavior as well as a color. On
-    PWR, Solid Green is "system power good" and Blinking Green is "power good but BMC power
-    fail"; a model carrying only colour collapses them into one. The management jack is declared
-    per element because its left lamp is green for 1G and its right amber for 10M/100M. The PSU
-    FRU and Fan FRU tables belong to the modules and are transcribed in their own contracts. The
-    HIG gives NO table for the port lamps, so the twenty-four led-arrow, four led-dot and two
-    qsfp-lane-leds placements keep the component default of off/on rather than an invented
-    link/activity vocabulary. Corrected after review: qsfp-lane-leds did NOT carry that
-    default when this was written - it still declared off/link/activity, unsourced, and
-    "link" had neither a colour nor a base stylesheet rule so it rendered identically to
-    "off". Fixed in common/qsfp-lane-leds v1.2.0'
+  part-numbers:
+    note: >-
+      CORRECTED TWICE, and the second correction reverses part of the first, so both are kept.
+      This device listed `PSU-401-DISB-1` / `PSU-401-AISB` and `FAN-402825-HD` here - FRU part
+      numbers in a field whose schema is "orderable SKUs for this CONFIGURATION: model -> {part,
+      power-cord}", meaning the CHASSIS. They were a duplicate too: ufispace/psu-401-dc,
+      psu-401-ac and fan-402825 each carry their own in `attrs.model`, which is where a FRU part
+      number belongs. IT WAS NOT HARMLESS. A DCIM exporter reading the first key as the chassis
+      model filed this router as a device type called FAN-402825-HD in both target libraries, and
+      the S9510-28DC appeared in neither under its own name - see roc-ops/Portrayal#21. A field
+      carrying the wrong KIND of value is worse than an empty one, because every consumer has to
+      guess which kind it got. THE FIRST FIX SAID NO CHASSIS SKU EXISTS AND THAT WAS WRONG. It is
+      a true statement about the HARDWARE INSTALLATION GUIDE - R1.9 names the product `S9510-28DC`
+      in its title, its overview and its dimensions table and prints no orderable number anywhere
+      - and a false one about the world. Two exist and the maintainer supplied them:
+      `S9510-28DC-BN0B` for DC and `S9510-28DC-BR1B` for AC. Searching one document and concluding
+      the fact does not exist is the same error the gaps register records against the XFP bezel
+      opening, made again here. THE TWO DC CONFIGURATIONS SHARE A SKU because they are one chassis
+      differently populated - `dc-populated` fits optics into the first four SFP28 cages and is
+      not a different thing to order. AC is, and carries its own. That is exactly the distinction
+      #21 collapses on, so the two DC entries should fold into one device type and the AC one
+      should stand alone. SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather
+      than dressed up: no UfiSpace PDF held contains either string. If a UfiSpace ordering guide
+      ever lands, it should confirm these two and may add the regional variants the Edgecore SKUs
+      show for the same class of box. than merely coping.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet (440 x 302 x 43.5mm, 4.9kg without FRU)
+  layout:
+    confidence: drawing
+    note: >-
+      drawing-inferred (HIG Fig 5/9 front drawing measured at 4.5 px/mm; pending photo overlay
+      calibration - marketing photos are low resolution)
+  sfp-pitch:
+    confidence: drawing
+    note: >-
+      drawing-inferred (~14.45mm ganged - std/sfp cutouts shoulder to shoulder; verify against
+      physical unit)
+  bits-tod-jacks:
+    confidence: estimated
+    note: >-
+      estimated (drawing shows compact stacked jacks ~11.5mm tall; modeled as two standard 14mm
+      cutout ports which slightly exceeds the drawn stack - verify against physical unit)
+  timing-labels:
+    confidence: drawing
+    note: >-
+      drawing - BITS, the up-down pair and TOD are printed in the gutter to the LEFT of the
+      stacked jacks and RIGHT-aligned against them, and the S9510-28DC wordmark ends on the same
+      edge, one line below the lamp stack. Read off the datasheet front figure (1701px embedded
+      image, the one legible source for this panel). Re-anchored to end at 130.8; left-anchored at
+      128.2, BITS and the wordmark ran under the jacks - which are themselves modelled ~5mm
+      oversize, see bits-tod-jacks above
+  qsfpdd-port-numbers:
+    note: >-
+      PAID, by fixing the component rather than the labels. Ports 0-3 keep their numbers at
+      baselines 38.1 and 8.8, where the datasheet front figure puts them: the digit is printed on
+      a coloured band just outside each aperture. The band is faceplate paint - vendor-confirmed -
+      so it is now four rects in panel.decor and common/qsfp-cage@2 is 10.18 tall (0.6 flange +
+      the 9.58 std/qsfp-ganged opening) instead of 13.0. Silkscreen paints over decor and under
+      components, so the numbers now read. The cages for ports 0, 1 and 3 did not move. Port-2 is
+      rotate: 180, so its at: is the box top and shortening the box does not free the digit; its
+      at: was recomputed from the new height and lands at 8.8, which puts its aperture 0.08mm
+      lower than the v1 model had it - 0.4 px at the figure's 4.5 px/mm, and the figure is not
+      self-consistent to better than that: it draws the port-2 digit sitting on the aperture edge
+      rather than clear of it. The band is still NARROWER than the aperture (17.1 against 18.5);
+      it is no longer drawn overlapping it
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet (Specifications/Performance/Accessories sections)
+  led-semantics:
+    note: >-
+      HIG section 10, pages 20-21, transcribed rather than only cited - the citation was here and
+      the tables were not, so nobody could interpret two of these lamps. Each front-panel lamp
+      carries its own vocabulary: GNSS, SYNC and PWR each draw four distinct meanings out of two
+      colours and two behaviours, which is why a state carries a behavior as well as a color. On
+      PWR, Solid Green is "system power good" and Blinking Green is "power good but BMC power
+      fail"; a model carrying only colour collapses them into one. The management jack is declared
+      per element because its left lamp is green for 1G and its right amber for 10M/100M. The PSU
+      FRU and Fan FRU tables belong to the modules and are transcribed in their own contracts. The
+      HIG gives NO table for the port lamps, so the twenty-four led-arrow, four led-dot and two
+      qsfp-lane-leds placements keep the component default of off/on rather than an invented
+      link/activity vocabulary. Corrected after review: qsfp-lane-leds did NOT carry that default
+      when this was written - it still declared off/link/activity, unsourced, and "link" had
+      neither a colour nor a base stylesheet rule so it rendered identically to "off". Fixed in
+      common/qsfp-lane-leds v1.2.0
+
 attrs:
   performance:
     switching-capacity: 800 Gbps

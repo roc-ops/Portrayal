@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: gl-8xep
-version: 2.0.5
+version: 2.0.6
 maturity: modelled
 manufacturer: ReadyLinks
 model: GL-8xEP
@@ -13,110 +13,115 @@ description: >-
   are on the front face; the other five faces are heatsink and lid.
 profile: networking
 provenance:
-  sources: >-
-    vendor GLB 3D model (KeyShot CAD export, gl-8xep.glb - 728 nodes, 435k triangles, per-part meshes at
-    millimetre scale), vendor datasheet (ReadyLinks-GL-8xEP-Datasheet.pdf,
-    converted), vendor front render (photos/gl-8xep-1-front.png), catalog
-    API snapshot (gen/readylinks-catalog.json). First device in the library
-    modelled with vendor CAD geometry as the position source.
-  chassis: >-
-    drawing (GLB body extents 160.0 x 45.32 x 165.0 mm W/H/D; front face is
-    the +x plane of the GLB scene, face width = scene z extent). The
-    datasheet states 166 x 177 x 48.3 mm overall (6.55 x 6.95 x 1.9 in) -
-    the deltas are per-axis (3.7/7.3/6.0 percent), NOT a uniform scale
-    factor, so they are protrusions and mounting furniture outside the
-    metal body (wall-mount bosses, jack noses, feet), not a unit error.
-    The modelled body is the GLB metal; the datasheet overall is recorded
-    here, unresolved per-axis, in the spirit of body-between-the-ear-folds.
-  front-layout: >-
-    drawing - every position measured from GLB mesh bounding boxes in face
-    coordinates (x from left as in the vendor render, y down from top).
-    Jack columns at x 92.6/106.5/120.5/134.5 (13.95 mm pitch), rows at
-    y 15.3/28.8; stacked rows are mirrored - the render at 15.96 px/mm
-    zoom shows the TOP row keyway-UP (rotate 180 from the std default)
-    and the bottom row keyway-down; a first draft had it inverted and
-    only the zoomed crop settled it. SFP pair is belly-to-belly with its
-    four lamp band at y 21.7; the 2.5G pair is one tall stacked
-    connector in one tall shell (GLB shell face 60.1..77.3 x 7.3..34.5;
-    contact strips at y 15.2-18.2 and 23.7-26.7 place the mouths at
-    centres ~13.5 and ~28.4, so the BOTTOM 2.5G jack nearly aligns with
-    the GbE bottom row while the top one sits ~1.8 mm above the GbE top
-    row - the maintainer's review caught the first draft placing the pair too
-    high); the silver ganged-connector shells (two 58.4 x 14.9 row
-    strips and the 2.5G shell) are drawn as decor per the s9510-28dc
-    silver-band precedent, since std/rj45-ganged draws the opening only
-    (the USB-C receptacles get the same treatment - the real parts are
-    silver shells on the black face, so a silver pill sits behind each
-    std/usb-c slot, which the maintainer's review asked for after the bare slots
-    vanished into the background; row-shell VISIBLE faces photo-measured at 9.0 px/mm - 13 mm flanges
-    starting y 9.2/22.4, so the port lamps sit on black above and below
-    them as the render shows; the GLB 14.9 mm figure is the cage body
-    behind the panel); USB-C pair at x 25.3; status lamps at
-    x 12.7, y 22.2/26.9/32.0; reset button at (150.1, 30.2). The render
-    confirms every feature and the port legends. Eight of the ten jacks
-    (the GbE/PoE row pair) are drawn with std/rj45-ganged@2 (12.7 x 11.0,
-    the bezel-less opening); the other two, the 2.5G pair, are the same
-    12.7 x 11.0 cell lamped - common/rj45-ganged-eth@1 - because the GLB
-    jack bodies are 13.4 mm on a 13.95 mm pitch inside one ganged shell
-    strip per row (58.4 x 14.9 in the GLB) - std/rj45's 16 mm bezel
-    physically cannot sit on that pitch, which L39 proved by overlap
-    before the swap.
-  port-leds: >-
-    drawing - 3.0 mm lenses above the top jack row (y 6.4) and below the
-    bottom row (y 37.2), one per column; datasheet 'ReadyLighting: 64
-    color LED per port'. Drawn with common/led-dot (2.0 mm) - lens reads
-    3.0 mm in the GLB, the closest library part is used and the delta
-    recorded here.
-  sfp-leds: >-
-    drawing - four 2.0 mm lamps in the cage centre band at y 21.7, x
-    41.5/44.3/47.9/50.8; the 3.6 mm gap splits them into pairs. WHICH pair
-    belongs to which cage is stated nowhere - assigned by adjacency (left
-    pair to the top cage XG2, right pair to XG1) and registered as a gap.
-  silkscreen: >-
-    photo-measured - legends transcribed from the vendor front render
-    (RL/SYS/PWR, USB1/USB2, XG1/XG2, 2.5G1/2.5G2, port numerals: even
-    ports numbered above the top row, odd below the bottom row; the
-    XG/2.5G labels join their ports through one BRACKET per row - a
-    horizontal bar under the label pair with a vertical drop to each
-    port, per the vendor 3D view the maintainer supplied - not four separate
-    leaders). The
-    ReadyLinks wordmark is printed as plain text like the halny HALNY
-    precedent; the render's wifi-arc logo graphic is deliberately not
-    reproduced (community-skin logo rule).
-  rear-layout: >-
-    drawing - the GLB rear is the finned end cap (15 mm deep, full width)
-    with no connectors, openings or printing; drawn as a rib field.
-    Content is symmetric, so the horizontal axis convention could not be
-    exposed by any feature - noted per the symmetric-face rule.
-  side-layout: >-
-    drawing - both sides are 15 mm finned heatsink walls running the full
-    depth (GLB side blocks 156.3 x 45.0 x 15.0). Drawn as rib fields. An
-    unidentified 9.2 x 10.2 x 7.7 mm boss sits on the right side wall near
-    the front (GLB idx22, y 7.9-18.1) - likely a security-slot or mount
-    boss, identity stated nowhere, NOT drawn; registered as a gap. On a
-    RIGHT view x=0 is the front; on a LEFT view x=0 is the rear.
-  top-layout: >-
-    drawing - lid plate (150.3 x 147.7 inset) with six 5.3 mm torx screws
-    in a 3x2 pattern; positions from GLB screw meshes. Axis convention:
-    y=0 is the REAR of the chassis, y=165 the front, matching the halny
-    top-view precedent. Screws drawn with common/screw-head (3.6 mm) -
-    GLB reads 5.3 mm, delta recorded.
-  bottom-layout: >-
-    drawing - the GLB bottom is the base pan (no openings; the internal
-    vent-grid meshes at y 9-11 are inside the enclosure, not surface
-    features). Deliberately drawn plain; only symmetric content, axis
-    noted per the symmetric-face rule.
-  power: >-
-    datasheet - 'Maxpower consumption 20W (Excluding PoE output) 240W
-    (Full PoE load)'; power-max-w carries the 240 W full-PoE-load figure
-    (envelope fully-configured, which is what a budget needs) and
-    power-self-max-w the 20 W excluding-PoE-output figure. PoE budget
-    218 W max at 25 C. Input 44-56 V DC 1.86 A is the PoE-PD electrical
-    spec; supply is dual USB-C adapters or PoE++ up to 90 W in.
-  pd-port-identity: >-
-    datasheet lists '(1) 2.5G RJ45 port (1) 2.5G RJ45 PoE PD port' but no
-    document says whether 2.5G1 or 2.5G2 is the PD port - registered as a
-    gap; neither placement claims the PD role.
+  sources:
+    note: >-
+      vendor GLB 3D model (KeyShot CAD export, gl-8xep.glb - 728 nodes, 435k triangles, per-part
+      meshes at millimetre scale), vendor datasheet (ReadyLinks-GL-8xEP-Datasheet.pdf, converted),
+      vendor front render (photos/gl-8xep-1-front.png), catalog API snapshot
+      (gen/readylinks-catalog.json). First device in the library modelled with vendor CAD geometry
+      as the position source.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing (GLB body extents 160.0 x 45.32 x 165.0 mm W/H/D; front face is the +x plane of the
+      GLB scene, face width = scene z extent). The datasheet states 166 x 177 x 48.3 mm overall
+      (6.55 x 6.95 x 1.9 in) - the deltas are per-axis (3.7/7.3/6.0 percent), NOT a uniform scale
+      factor, so they are protrusions and mounting furniture outside the metal body (wall-mount
+      bosses, jack noses, feet), not a unit error. The modelled body is the GLB metal; the
+      datasheet overall is recorded here, unresolved per-axis, in the spirit of
+      body-between-the-ear-folds.
+  front-layout:
+    confidence: drawing
+    note: >-
+      drawing - every position measured from GLB mesh bounding boxes in face coordinates (x from
+      left as in the vendor render, y down from top). Jack columns at x 92.6/106.5/120.5/134.5
+      (13.95 mm pitch), rows at y 15.3/28.8; stacked rows are mirrored - the render at 15.96 px/mm
+      zoom shows the TOP row keyway-UP (rotate 180 from the std default) and the bottom row
+      keyway-down; a first draft had it inverted and only the zoomed crop settled it. SFP pair is
+      belly-to-belly with its four lamp band at y 21.7; the 2.5G pair is one tall stacked
+      connector in one tall shell (GLB shell face 60.1..77.3 x 7.3..34.5; contact strips at y
+      15.2-18.2 and 23.7-26.7 place the mouths at centres ~13.5 and ~28.4, so the BOTTOM 2.5G jack
+      nearly aligns with the GbE bottom row while the top one sits ~1.8 mm above the GbE top row -
+      the maintainer's review caught the first draft placing the pair too high); the silver
+      ganged-connector shells (two 58.4 x 14.9 row strips and the 2.5G shell) are drawn as decor
+      per the s9510-28dc silver-band precedent, since std/rj45-ganged draws the opening only (the
+      USB-C receptacles get the same treatment - the real parts are silver shells on the black
+      face, so a silver pill sits behind each std/usb-c slot, which the maintainer's review asked
+      for after the bare slots vanished into the background; row-shell VISIBLE faces
+      photo-measured at 9.0 px/mm - 13 mm flanges starting y 9.2/22.4, so the port lamps sit on
+      black above and below them as the render shows; the GLB 14.9 mm figure is the cage body
+      behind the panel); USB-C pair at x 25.3; status lamps at x 12.7, y 22.2/26.9/32.0; reset
+      button at (150.1, 30.2). The render confirms every feature and the port legends. Eight of
+      the ten jacks (the GbE/PoE row pair) are drawn with std/rj45-ganged@2 (12.7 x 11.0, the
+      bezel-less opening); the other two, the 2.5G pair, are the same 12.7 x 11.0 cell lamped -
+      common/rj45-ganged-eth@1 - because the GLB jack bodies are 13.4 mm on a 13.95 mm pitch
+      inside one ganged shell strip per row (58.4 x 14.9 in the GLB) - std/rj45's 16 mm bezel
+      physically cannot sit on that pitch, which L39 proved by overlap before the swap.
+  port-leds:
+    confidence: drawing
+    note: >-
+      drawing - 3.0 mm lenses above the top jack row (y 6.4) and below the bottom row (y 37.2),
+      one per column; datasheet 'ReadyLighting: 64 color LED per port'. Drawn with common/led-dot
+      (2.0 mm) - lens reads 3.0 mm in the GLB, the closest library part is used and the delta
+      recorded here.
+  sfp-leds:
+    confidence: drawing
+    note: >-
+      drawing - four 2.0 mm lamps in the cage centre band at y 21.7, x 41.5/44.3/47.9/50.8; the
+      3.6 mm gap splits them into pairs. WHICH pair belongs to which cage is stated nowhere -
+      assigned by adjacency (left pair to the top cage XG2, right pair to XG1) and registered as a
+      gap.
+  silkscreen:
+    confidence: photo-measured
+    note: >-
+      photo-measured - legends transcribed from the vendor front render (RL/SYS/PWR, USB1/USB2,
+      XG1/XG2, 2.5G1/2.5G2, port numerals: even ports numbered above the top row, odd below the
+      bottom row; the XG/2.5G labels join their ports through one BRACKET per row - a horizontal
+      bar under the label pair with a vertical drop to each port, per the vendor 3D view the
+      maintainer supplied - not four separate leaders). The ReadyLinks wordmark is printed as
+      plain text like the halny HALNY precedent; the render's wifi-arc logo graphic is
+      deliberately not reproduced (community-skin logo rule).
+  rear-layout:
+    confidence: drawing
+    note: >-
+      drawing - the GLB rear is the finned end cap (15 mm deep, full width) with no connectors,
+      openings or printing; drawn as a rib field. Content is symmetric, so the horizontal axis
+      convention could not be exposed by any feature - noted per the symmetric-face rule.
+  side-layout:
+    confidence: drawing
+    note: >-
+      drawing - both sides are 15 mm finned heatsink walls running the full depth (GLB side blocks
+      156.3 x 45.0 x 15.0). Drawn as rib fields. An unidentified 9.2 x 10.2 x 7.7 mm boss sits on
+      the right side wall near the front (GLB idx22, y 7.9-18.1) - likely a security-slot or mount
+      boss, identity stated nowhere, NOT drawn; registered as a gap. On a RIGHT view x=0 is the
+      front; on a LEFT view x=0 is the rear.
+  top-layout:
+    confidence: drawing
+    note: >-
+      drawing - lid plate (150.3 x 147.7 inset) with six 5.3 mm torx screws in a 3x2 pattern;
+      positions from GLB screw meshes. Axis convention: y=0 is the REAR of the chassis, y=165 the
+      front, matching the halny top-view precedent. Screws drawn with common/screw-head (3.6 mm) -
+      GLB reads 5.3 mm, delta recorded.
+  bottom-layout:
+    confidence: drawing
+    note: >-
+      drawing - the GLB bottom is the base pan (no openings; the internal vent-grid meshes at y
+      9-11 are inside the enclosure, not surface features). Deliberately drawn plain; only
+      symmetric content, axis noted per the symmetric-face rule.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - 'Maxpower consumption 20W (Excluding PoE output) 240W (Full PoE load)';
+      power-max-w carries the 240 W full-PoE-load figure (envelope fully-configured, which is what
+      a budget needs) and power-self-max-w the 20 W excluding-PoE-output figure. PoE budget 218 W
+      max at 25 C. Input 44-56 V DC 1.86 A is the PoE-PD electrical spec; supply is dual USB-C
+      adapters or PoE++ up to 90 W in.
+  pd-port-identity:
+    confidence: datasheet
+    note: >-
+      datasheet lists '(1) 2.5G RJ45 port (1) 2.5G RJ45 PoE PD port' but no document says whether
+      2.5G1 or 2.5G2 is the PD port - registered as a gap; neither placement claims the PD role.
+
 attrs:
   physical:
     weight-kg: 1.0
