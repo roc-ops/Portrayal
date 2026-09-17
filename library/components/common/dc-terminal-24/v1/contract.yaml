@@ -19,7 +19,7 @@ unplaced: >-
   against the CSR200's with one threshold is what showed the CSR200's own part had been sized
   by eye and was wrong on both axes. Seating it needs the CSR180's faceplate, whose art is the
   low-contrast honeycomb render described in this contract's `why-this-is-not-common-dc-terminal-27`.
-size: {w: 24.19, h: 13.81, d: 14.0}
+size: {w: 24.19, h: 13.81, d: 9.1}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 attrs: {media: dc-terminal}
 provenance:
@@ -50,9 +50,10 @@ provenance:
     pitch, because no catalogue entry is in hand to round to.
   depth: >-
     estimated. The elevation is a front view and fixes nothing behind the face.
-    14.0 is what a 3-pole barrier strip with a hinged guard needs to clear a ring
-    lug; it is borrowed from common/dc-terminal-27@1, which estimated it too, and
-    nothing in the library depends on it.
+    9.1 is what the relief below actually BUILDS - the screw heads are the
+    furthest-forward thing on the part - rather than a guess at the moulding's
+    total depth including whatever sits behind the panel, which no source gives
+    and nothing in the library uses.
   cover: >-
     borrowed - common/dc-terminal-27@1. The two blocks are the same design at two
     sizes: a bright guard over a darker body with three screws resolving through
@@ -65,23 +66,86 @@ relief:
   wall: '#3a3e43'
   features:
     - node: body
-      out: 9.0
+      out: 6.6
       shape: true
       color: '#7d848c'
       confidence: estimated
       source: >-
-        common/dc-terminal-24@1's own depth key - the elevation is a front view
-        and dimensions nothing behind the face. The block is split 9.0 body plus
-        a 5.0 guard to make 14.0 because a barrier strip's guard is a lid on a
-        shorter body, not the whole part; neither figure is read from anything.
-    - node: cover
-      out: 14.0
-      lift: 9.0
-      color: '#d2d7dc'
+        THE 3D FORM IS THE READING TOO, and the first one was wrong in a way only the
+        kit showed. It was written as two full-face slabs - a `body` 9.0 proud and a
+        `cover` 14.0 proud over the whole face - so in 3D the cover buried the poles
+        and the screws, which had no relief of their own, and the block extruded as a
+        featureless pale box. The 2D face was right the whole time. What is here now is
+        the form the photograph shows: a slab, two bright lips standing proud of it
+        along the top and bottom edges, three pole blocks between them sitting just
+        below the lip line, and a screw head on each pole. Only the STEP SIZES are
+        estimated; which feature is proud of which is read off the elevation, where the
+        lips catch the light and the pole windows are in shadow.
+    - node: lip-top
+      out: 9.0
+      color: '#dde2e7'
       confidence: estimated
       source: >-
-        common/dc-terminal-24@1's own depth key - see `body`. 5.0 of guard above a
-        9.0 body, estimated to sum to the estimated 14.0.
+        common/dc-terminal-24@1's own 3D-form key - see `body`. The lip's step
+        above the block face is estimated; that it IS a step is read off the
+        elevation.
+    - node: lip-bottom
+      out: 9.0
+      color: '#dde2e7'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. The lip's step
+        above the block face is estimated; that it IS a step is read off the
+        elevation.
+    - node: mid
+      out: 7.0
+      color: '#b7bdc3'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. The band between
+        the lips, which the poles stand on.
+    - node: pole-1
+      out: 7.9
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`.
+    - node: pole-2
+      out: 7.9
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`.
+    - node: pole-3
+      out: 7.9
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`.
+    - node: screw-1
+      cyl: 1.2
+      lift: 7.9
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. A slotted head
+        standing on its pole and finishing just under the lip line.
+    - node: screw-2
+      cyl: 1.2
+      lift: 7.9
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. A slotted head
+        standing on its pole and finishing just under the lip line.
+    - node: screw-3
+      cyl: 1.2
+      lift: 7.9
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. A slotted head
+        standing on its pole and finishing just under the lip line.
 connection-points:
   dc-in: {at: [12.10, 6.91], direction: front}
 skins: [default]

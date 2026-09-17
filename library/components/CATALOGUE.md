@@ -59,8 +59,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 39 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 1 | 16 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 1 | 0 | DC barrel power inlet |
-| `common/dc-terminal-24@1` | component | inlet | 24.19 × 13.81 × 14 |  | 0 | 1 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
-| `common/dc-terminal-27@1` | component | inlet | 26.93 × 15.98 × 14 |  | 1 | 1 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
+| `common/dc-terminal-24@1` | component | inlet | 24.19 × 13.81 × 9.1 |  | 0 | 1 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
+| `common/dc-terminal-27@1` | component | inlet | 26.93 × 15.98 × 10.4 |  | 1 | 1 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
 | `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 1 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
 | `common/drive-blank-25@1` | module | blank | 17.868 × 79.4 × 25 |  | 1 | 0 | Filler for a 2.5 inch SFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
