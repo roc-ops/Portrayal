@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: filter-slot-5915-16x
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: networking
+description: >-
+  The air-filter slot cover on the AS5915-16X - the blanking plate in the filter
+  bay at the left-hand end of the faceplate, retained by two captive cross-head
+  screws. The AS5915-18X's plate is a different size with different screws and is
+  edgecore/filter-slot-5915@1; this one is narrower and does not reach the panel
+  edge.
+size: {w: 19.0, h: 42.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {power-absent: not-applicable, model: 'AS5915-16X Air Filter Slot Cover'}
+provenance:
+  size: >-
+    photo-measured FROM POSITIONS, WHICH IS ALL THIS FIGURE SUPPORTS. The
+    Edgecore CSR180 (AS5915-16X) datasheet front elevation, page 2 at 600 dpi
+    scaled by the stated 440 mm width to 9.6295 px/mm. A blanking plate is the
+    same colour as the panel around it, so it is found by scanning for the
+    strongest edges rather than by a threshold: the plate's sides read 7.8 and
+    26.8 and its top and bottom 0.7 and 43.2. Both figures here are the distance
+    between two such edges, and edge POSITIONS are the one thing this elevation
+    is good for - see the device's `figure-fidelity` gap, where its SFP cage
+    pitch reads 14.7 against an MSA figure of 14.25.
+  why-this-is-not-the-18x-plate: >-
+    The AS5915-18X's plate runs from 0.7 to 28.3 - its left edge IS the panel
+    edge - and carries slotted thumbscrews about 8.6 across with a blind boss
+    beside each. This one starts at 7.8, is 8.6 mm narrower, and its screws are
+    CROSS-HEAD and about half the diameter with no bosses. Four edges and two
+    fastener types, not a size inferred from a brightness curve.
+  fasteners: >-
+    photo-measured - two cross-head screws about 4.9 across on a common vertical
+    line at 21.5 in the panel's frame, 13.7 in the plate's, with centres at 8.4
+    and 35.3 (7.7 and 34.6 local). Off-centre to the right, as on the 18X.
+  what-is-not-here: >-
+    THE FILTER ITSELF IS NOT MODELLED, for the same reason it is not on the 18X:
+    the datasheet's ordering table lists no filter accessory for this model at
+    all, and nothing in either staged document pictures one. The bay accepts this
+    cover alone.
+  power: >-
+    NOT APPLICABLE - a blanking plate draws nothing. Stated rather than left to
+    L27 so a consumer totalling the chassis can tell a deliberate silence from an
+    unanswered question.
+elements:
+  plate: {at: [0.0, 0.0], size: [19.0, 42.5], class: filter}
+relief:
+  wall: '#2b2f33'
+  features:
+    - node: plate
+      out: 0.8
+      shape: true
+      color: '#33383d'
+      confidence: estimated
+      source: >-
+        edgecore/filter-slot-5915-16x@1's own size key - the elevation is a front
+        view and fixes nothing behind the face. 0.8 is a blanking plate sitting
+        proud of the metal it covers; nothing depends on it.
+    - node: screw-top
+      cyl: 1.6
+      lift: 0.8
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        edgecore/filter-slot-5915-16x@1's own fasteners key - the diameter and
+        centres are read off the elevation and the head's stand-off is not.
+    - node: screw-bottom
+      cyl: 1.6
+      lift: 0.8
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        edgecore/filter-slot-5915-16x@1's own fasteners key - the diameter and
+        centres are read off the elevation and the head's stand-off is not.
+skins: [default]
