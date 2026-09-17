@@ -232,9 +232,14 @@ def test_the_live_library_keeps_exactly_one_retired_major(tmp_path):
     for c in LIB.glob("components/*/*/v*/contract.yaml"):
         majors[f"{c.parts[-4]}/{c.parts[-3]}"].append(int(c.parts[-2][1:]))
     multi = {n: sorted(v) for n, v in majors.items() if len(v) > 1}
-    assert set(multi) == {"common/psu-550w", "common/usb-a"}, multi
-    assert multi["common/usb-a"] == [2, 3], \
-        "usb-a's two majors are a variant pair, not a version pair - see #264"
+    assert set(multi) == {"common/psu-550w"}, multi
+    # usb-a USED TO BE HERE, and it was the only entry that was not a version
+    # pair at all: @2 the bare receptacle, @3 the same opening in a taller
+    # silver panel bezel, told apart by a number that claims one replaced the
+    # other. #264 split @3 out as `common/usb-a-bezel@1`, so the name now has
+    # one major and this set is down to the single genuine case - psu-550w,
+    # whose retired major is kept on purpose because a device's gap argument
+    # turns on its width. A sweep for a third instance found none.
 
 
 # --- the field itself ---------------------------------------------------------

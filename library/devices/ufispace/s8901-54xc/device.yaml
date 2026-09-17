@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s8901-54xc
-version: 2.0.9
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S8901-54XC
@@ -60,8 +60,8 @@ provenance:
     note: >-
       photo-measured centres, COMPRESSED TO FIT THE REUSED PARTS: the render's bezels are mgmt
       RJ45 6.5-18.5, USB 18.6-26.0, console 26.3-37.8 (31.3 mm total), while the three parts
-      placed here stack to 35.7 mm (common/rj45-eth@1 13.2 + common/usb-a@3 9.3 + std/rj45@2 13.2;
-      before the RJ45 sweep the same trio - common/rj45-port@4, common/usb-a@3,
+      placed here stack to 35.7 mm (common/rj45-eth@1 13.2 + common/usb-a-bezel@1 9.3 + std/rj45@2 13.2;
+      before the RJ45 sweep the same trio - common/rj45-port@4, common/usb-a-bezel@1,
       common/rj45-bezel@2 - stacked to 39.1). They are placed at y 1.6 / 16.9 / 26.4 - the USB
       lands on its measured centre, the two jacks are pulled up to 2.7 mm off theirs. The same
       trade the S9510-28DC made with the same three roles. THE TWO JACKS MIRROR - in a 10x crop
@@ -474,7 +474,7 @@ views:
              window (led-a) renders on screen-right: led-a carries the physical-right/
              amber pair and led-b the physical-left/green pair, the same physical
              assignment as before the sweep'}
-        - {ref: common/usb-a@3, id: usb, at: [5.9, 16.9], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
+        - {ref: common/usb-a-bezel@1, id: usb, at: [5.9, 16.9], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
         - {ref: std/rj45@2, id: console, at: [6.5, 27.25], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console, finish: '#2b2f33'}}
         - {ref: common/reset-button@1, id: reset, at: [44.7, 3.6], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/led-rect@1, id: led-sys, at: [50.2, 2.5], for: chassis,
