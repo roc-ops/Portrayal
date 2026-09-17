@@ -15,14 +15,11 @@ profile: networking
 lint:
   waive:
     L61: >-
-      led-port-50-lane-2 sits 1.39 mm left of port 50's centre, and so it should: it is one of FOUR lamps
-      in a lane strip, and only a two-lamp set could have a member on the port's centreline. The guide
-      states the count in words - "Each QSFP28 port has four LEDs" (agr110-qsg/doc.md:174) - and all four
-      positions are read off the figure at 368.61, 371.73, 375.88 and 378.95 mm for port 48 and 388.35,
-      391.42, 395.35 and 398.53 for port 50. Lane 2 is simply the one that lands inside the rule's window;
-      lanes 1, 3 and 4 are further off and do not trip it. Centring it would move a lamp off its measurement
-      to quieten a rule, which is the trade this repository does not make. Delete this waiver if the lamps
-      are ever replaced by a single strip component built on this device's own 3.45 mm lane pitch.
+      led-qsfp-50-51-2 sits 1.62 mm left of the centre of the two ports it serves, and so it should: it
+      is one of FOUR lamps in a cluster, and only a two-lamp set could have a member on the centreline.
+      All four positions are read off the figure. Lane 2 is simply the one that lands inside the rule's
+      window; the other three are further off and do not trip it. Centring it would move a lamp off its
+      measurement to quieten a rule, which is the trade this repository does not make.
 provenance:
   sources:
     confidence: datasheet
@@ -204,23 +201,29 @@ provenance:
   qsfp-leds:
     confidence: measured
     note: >-
-      measured, and the COUNT comes from the guide's own words rather than from counting pixels: "Each
-      QSFP28 port has four LEDs that indicate valid links in the following modes" (agr110-qsg/doc.md:174).
-      That settles what an earlier draft got wrong. It drew ONE lamp per QSFP port and recorded the four
-      marks per column as an unresolved question - two lamps per port, or a four-lane column belonging
-      to one of them. The vendor answers it in prose two paragraphs above the specification table, which
-      is the rule about searching for the field name rather than the part number, and it was not searched
-      the first time. The four lamps of each upper-row port are read directly off agr110-datasheet/fig-0009
-      in the white bezel between rows 1 and 2, at 368.61, 371.73, 375.88 and 378.95 mm for port 48 and
-      388.35, 391.42, 395.35 and 398.53 for port 50 - a strip about 12.3 mm wide centred on its own column,
-      on a mean 3.45 mm lane pitch. NOTE WHAT WAS NOT USED. common/qsfp-lane-leds@1 is the library's four-triangle
-      strip and would have been the tidy answer, but it is 19.5 mm wide on a 4.4 mm lane pitch, drawing
-      inferred from a UfiSpace HIG. Seating it here would have restated that vendor's geometry as this
-      one's and overstated the pitch by 28 percent, so the lamps are four separate led-dot placements
-      on the measured positions instead. L61 warns that lane 2 of port 50 sits 1.39 mm off its port's
-      centre; that is correct by construction for one member of a four-lane set and is left standing rather
-      than silenced by moving a lamp off its reading. The states are the guide's, quoted in attrs: green
-      100G, blue 40G, one to four amber for 25G breakout and one to four purple for 10G breakout.
+      measured, and THE GUIDE AND THE ARTWORK DO NOT AGREE. The guide says, in words, "Each QSFP28 port
+      has four LEDs that indicate valid links in the following modes" (agr110-qsg/doc.md:174), and then
+      lists 1 green for 100G, 1 blue for 40G, 1-4 amber for 25G breakout and 1-4 purple for 10G breakout.
+      The figure shows something that cannot be squared with that. What the figure shows, measured the
+      same way in both dividers of the QSFP block: FOUR marks per column in the white bezel between rows
+      1 and 2, at 368.61, 371.94, 375.88 and 378.94 mm for the left column and 388.35, 391.19, 395.57
+      and 398.74 for the right; and about four more per column on the yellow bar between rows 2 and 3.
+      That is sixteen marks for six ports, and sixteen does not divide by six at any consistent per-port
+      count. Four per port would need twenty-four. SO ONLY THE UNAMBIGUOUS SET IS DRAWN. The white bezel's
+      four per column are clean, separated and consistent between the two columns, and they are placed
+      as a cluster belonging to BOTH ports of their column - `for: [port-48, port-49]` and `for: [port-50,
+      port-51]` - because which lamp serves which of the two ports the divider sits between is exactly
+      what the image does not say. The yellow bar's marks are NOT drawn: at 0.8 to 1.6 mm wide and as
+      little as 1.1 mm apart they are below what this figure resolves as separate lamps, and the library's
+      smallest lamp is 2.0 mm, so drawing them produced overlapping openings that L39 rejected - correctly.
+      Their positions are recorded in the gap instead. AN EARLIER DRAFT ASSERTED FOUR PER PORT and assigned
+      the white bezel's four to the upper port alone. That was reading the guide's sentence onto the drawing
+      rather than reading the drawing: it left ports 49, 51, 52 and 53 with no lamps at all and never
+      noticed that the second divider carried marks too. A reader of the render caught it. NOTE WHAT WAS
+      NOT USED. common/qsfp-lane-leds@1 is the library's four-triangle strip and would have been the tidy
+      answer, but it is 19.5 mm wide on a 4.4 mm lane pitch, drawing inferred from a UfiSpace HIG. Seating
+      it here would have restated that vendor's geometry as this one's. The states are the guide's, quoted
+      in attrs.
   yellow-label-strips:
     confidence: measured
     note: >-
@@ -232,16 +235,24 @@ provenance:
       the first pass was that there are TWO yellows in that figure. The label strips are saturated - about
       (235,235,40) - and sit in a band 3.0 mm tall; the datasheet's callout fill is pale and translucent
       and runs straight through the QSFP openings, which is what a device feature cannot do. Filtering
-      on saturation separates them cleanly, and the pale band is still not drawn. SIX BARS, NOT TWELVE
-      STRIPS. A first pass read each one as a PAIR of ~10 mm strips with a 1.2 mm gap, because the colour
-      run breaks in the middle - and what breaks it is the small dark glyph printed at the bar's centre,
-      not metal. Seen at 1.5x beside the reference the bars are plainly continuous. That is the same trap
-      as measuring a drawing rather than a feature: the detector found an absence of yellow and the absence
-      was ink. So: six bars about 21.0 mm wide at 134.87, 164.73, 194.59, 224.45, 254.31 and 284.61 mm,
-      band y 32.40-35.40, on a 29.87 mm pitch, each sitting under exactly two port columns; a seventh,
-      18.3 mm wide, at 345.32 in the same band, which carries no glyph; and an eighth at 363.80, 40.2
-      mm wide, in a HIGHER band at 28.80-31.80, which is the bar running between the QSFP block's second
-      and third rows. WHAT THE GLYPHS SAY IS NOT READ - see gaps.
+      on saturation separates them cleanly, and the pale band is still not drawn. THE QSFP BAR IS A BRACKET,
+      NOT A BAR. It wraps the bottom pair of QSFP28 ports on three sides: a horizontal band 48.6 mm wide
+      at y 28.89-31.80, with a leg down each end - 5.2 mm wide at 359.40 and 4.7 at 403.30, both running
+      4.0 mm below the band. Read row by row in agr110-datasheet/fig-0009 and confirmed in agr110-qsg's
+      callout-free page-1 art, which shows the same legs. A first pass drew it as a plain rectangle and
+      missed the wrap; a reader of the render caught that too. Note what is NOT drawn from the same region:
+      a 0.8 mm-wide closed yellow rectangle runs around the whole QSFP block from y 26 to 41.9 in the
+      datasheet figure and appears nowhere in the quick-start's art. Uniform hairline width, closed on
+      all four sides, present in only the document that has callouts - that is callout 2's box, and it
+      is highlighting. SIX BARS, NOT TWELVE STRIPS. A first pass read each one as a PAIR of ~10 mm strips
+      with a 1.2 mm gap, because the colour run breaks in the middle - and what breaks it is the small
+      dark glyph printed at the bar's centre, not metal. Seen at 1.5x beside the reference the bars are
+      plainly continuous. That is the same trap as measuring a drawing rather than a feature: the detector
+      found an absence of yellow and the absence was ink. So: six bars about 21.0 mm wide at 134.87, 164.73,
+      194.59, 224.45, 254.31 and 284.61 mm, band y 32.40-35.40, on a 29.87 mm pitch, each sitting under
+      exactly two port columns; a seventh, 18.3 mm wide, at 345.32 in the same band, which carries no
+      glyph; and an eighth at 363.80, 40.2 mm wide, in a HIGHER band at 28.80-31.80, which is the bar
+      running between the QSFP block's second and third rows. WHAT THE GLYPHS SAY IS NOT READ - see gaps.
   vents:
     confidence: measured
     note: >-
@@ -458,18 +469,25 @@ gaps:
     block and the last four columns unmarked. It is a lead and it is recorded as one, not as the answer.
     What settles it: a straight-on photograph of the faceplate between 130 and 310 mm, or the AS5916-54XL
     installation guide from support.edge-core.com.
-- what: qsfp-lower-port-lamps
+- what: qsfp-lamp-assignment
   scope:
   - front
-  reason: needs-photo
+  reason: sources-disagree
   wanted: >-
-    The guide states that EVERY QSFP28 port has four lamps, and only eight of the twenty-four are drawn.
-    The four belonging to each upper-row port are measured in the white bezel between rows 1 and 2. The
-    lamps of ports 49, 51, 52 and 53 are not: the band where the second bezel would fall carries one of
-    the yellow label strips in this figure and the datasheet's own callout fill crosses it, and the third
-    row has no bezel above it that any image resolves. Rather than mirror the upper pattern downward and
-    call it measured, the rule is recorded as stopping here - which is what `docs/modelling-a-device.md`
-    asks for when the evidence stops rather than the feature.
+    THE GUIDE SAYS FOUR LAMPS PER QSFP28 PORT AND THE ARTWORK SHOWS SIXTEEN MARKS FOR SIX PORTS. "Each
+    QSFP28 port has four LEDs" (agr110-qsg/doc.md:174) needs twenty-four. The figure shows four marks
+    per column in the white bezel between rows 1 and 2, and about four more per column on the yellow bracket
+    between rows 2 and 3 - sixteen, which divides by six at no consistent per-port count. Drawn: the white
+    bezel's eight, as two clusters of four, each belonging to both ports of its column, because which
+    lamp serves which of the two the divider sits between is not resolved. Not drawn: the bracket's marks,
+    measured at 371.29, 373.69, 376.32 and 378.07 mm for the left column and 391.19, 394.69 and 397.81
+    for the right - three resolved there, the fourth lost in the bracket's own edge. They are 0.8 to 1.6
+    mm wide and as little as 1.1 mm apart, which is narrower and closer than the library's smallest lamp
+    at 2.0 mm, so drawing them punched overlapping openings. A reader of the render reports these as the
+    lamps for the bottom pair of ports, which is plausible and is not what the drawing proves. Three questions,
+    one photograph: how many lamps each QSFP28 port really has, which divider serves which port, and whether
+    the bracket's marks are lamps at all rather than printing on the label. A straight-on shot of the
+    right-hand 50 mm of the faceplate answers all three.
 - what: rear-grounding-points
   scope:
   - rear
@@ -530,7 +548,9 @@ views:
       - {at: [254.31, 32.4], size: [21.0, 3.0], fill: '#e8e213', rx: 0.3}
       - {at: [284.61, 32.4], size: [21.0, 3.0], fill: '#e8e213', rx: 0.3}
       - {at: [345.32, 32.4], size: [18.27, 3.0], fill: '#e8e213', rx: 0.3}
-      - {at: [363.8, 28.8], size: [40.2, 3.0], fill: '#e8e213', rx: 0.3}
+      - {at: [359.4, 28.89], size: [48.6, 2.91], fill: '#e8e213', rx: 0.3}
+      - {at: [359.4, 31.8], size: [5.2, 4.03], fill: '#e8e213', rx: 0.3}
+      - {at: [403.3, 31.8], size: [4.7, 4.03], fill: '#e8e213', rx: 0.3}
       cutouts:
       - {id: port-0, at: [14.39, 2.47], size: [14.25, 10.4], shape: rect}
       - {id: led-port-0, at: [18.44, 14.17], size: [2.25, 2.0], shape: circle}
@@ -634,14 +654,14 @@ views:
       - {id: port-51, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
       - {id: port-52, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
       - {id: port-53, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-48-lane-1, at: [367.61, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-48-lane-2, at: [370.73, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-48-lane-3, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-48-lane-4, at: [377.95, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-50-lane-1, at: [387.35, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-50-lane-2, at: [390.42, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-50-lane-3, at: [394.35, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-50-lane-4, at: [397.53, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-48-49-1, at: [367.61, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-48-49-2, at: [370.94, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-48-49-3, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-48-49-4, at: [377.94, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-50-51-1, at: [387.35, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-50-51-2, at: [390.19, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-50-51-3, at: [394.57, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-50-51-4, at: [397.74, 14.6], size: [2.0, 2.0], shape: circle}
       - {id: led-ps0, at: [16.57, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-ps1, at: [22.47, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-diag, at: [28.38, 30.95], size: [4.6, 2.6], shape: rect}
@@ -1054,62 +1074,22 @@ views:
       - {ref: std/qsfp-ganged@1, id: port-51, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 51}
       - {ref: std/qsfp-ganged@1, id: port-52, at: [364.56, 32.01], group: qsfp28, rel-pos: 52}
       - {ref: std/qsfp-ganged@1, id: port-53, at: [383.56, 32.01], group: qsfp28, rel-pos: 53}
-      - ref: common/led-dot@1
-        id: led-port-48-lane-1
-        at: [367.61, 14.6]
-        group: port-leds
-        rel-pos: 481
-        for: port-48
-        attrs: {lane: 1}
-      - ref: common/led-dot@1
-        id: led-port-48-lane-2
-        at: [370.73, 14.6]
-        group: port-leds
-        rel-pos: 482
-        for: port-48
-        attrs: {lane: 2}
-      - ref: common/led-dot@1
-        id: led-port-48-lane-3
-        at: [374.88, 14.6]
-        group: port-leds
-        rel-pos: 483
-        for: port-48
-        attrs: {lane: 3}
-      - ref: common/led-dot@1
-        id: led-port-48-lane-4
-        at: [377.95, 14.6]
-        group: port-leds
-        rel-pos: 484
-        for: port-48
-        attrs: {lane: 4}
-      - ref: common/led-dot@1
-        id: led-port-50-lane-1
-        at: [387.35, 14.6]
-        group: port-leds
-        rel-pos: 501
-        for: port-50
-        attrs: {lane: 1}
-      - ref: common/led-dot@1
-        id: led-port-50-lane-2
-        at: [390.42, 14.6]
-        group: port-leds
-        rel-pos: 502
-        for: port-50
-        attrs: {lane: 2}
-      - ref: common/led-dot@1
-        id: led-port-50-lane-3
-        at: [394.35, 14.6]
-        group: port-leds
-        rel-pos: 503
-        for: port-50
-        attrs: {lane: 3}
-      - ref: common/led-dot@1
-        id: led-port-50-lane-4
-        at: [397.53, 14.6]
-        group: port-leds
-        rel-pos: 504
-        for: port-50
-        attrs: {lane: 4}
+      - {ref: common/led-dot@1, id: led-qsfp-48-49-1, at: [367.61, 14.6], group: port-leds, rel-pos: 481,
+        for: [port-48, port-49]}
+      - {ref: common/led-dot@1, id: led-qsfp-48-49-2, at: [370.94, 14.6], group: port-leds, rel-pos: 482,
+        for: [port-48, port-49]}
+      - {ref: common/led-dot@1, id: led-qsfp-48-49-3, at: [374.88, 14.6], group: port-leds, rel-pos: 483,
+        for: [port-48, port-49]}
+      - {ref: common/led-dot@1, id: led-qsfp-48-49-4, at: [377.94, 14.6], group: port-leds, rel-pos: 484,
+        for: [port-48, port-49]}
+      - {ref: common/led-dot@1, id: led-qsfp-50-51-1, at: [387.35, 14.6], group: port-leds, rel-pos: 485,
+        for: [port-50, port-51]}
+      - {ref: common/led-dot@1, id: led-qsfp-50-51-2, at: [390.19, 14.6], group: port-leds, rel-pos: 486,
+        for: [port-50, port-51]}
+      - {ref: common/led-dot@1, id: led-qsfp-50-51-3, at: [394.57, 14.6], group: port-leds, rel-pos: 487,
+        for: [port-50, port-51]}
+      - {ref: common/led-dot@1, id: led-qsfp-50-51-4, at: [397.74, 14.6], group: port-leds, rel-pos: 488,
+        for: [port-50, port-51]}
       - {ref: common/led-rect@1, id: led-ps0, at: [16.57, 30.95], group: leds, rel-pos: 1, for: rear/psu-0}
       - {ref: common/led-rect@1, id: led-ps1, at: [22.47, 30.95], group: leds, rel-pos: 2, for: rear/psu-1}
       - {ref: common/led-rect@1, id: led-diag, at: [28.38, 30.95], group: leds, rel-pos: 3, for: chassis}
