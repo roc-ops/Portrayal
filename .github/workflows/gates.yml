@@ -177,8 +177,16 @@ jobs:
       # unnoticed for two PRs.
       - name: exports are current
         run: |
-          if ! git diff --quiet -- library/exports; then
+          # `git diff` SEES ONLY TRACKED FILES, so a device whose configurations
+          # produce a document that has never been committed slipped straight
+          # past this gate: publish.sh wrote four new Edgecore device types and
+          # the check reported clean, because an untracked file is not a
+          # difference to `diff`. A NEW export is exactly the case this step
+          # exists to catch - it is a document a DCIM would never receive.
+          if ! git diff --quiet -- library/exports \
+             || [ -n "$(git status --porcelain --untracked-files=all -- library/exports)" ]; then
             echo "::error::library/exports is stale - run ./publish.sh and commit the result"
             git --no-pager diff --stat -- library/exports
+            git status --porcelain --untracked-files=all -- library/exports
             exit 1
           fi
