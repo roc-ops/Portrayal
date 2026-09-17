@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: csr310-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The AC power supply of the Edgecore CSR310 (AS7315-27X) - the same hot-swappable
+  1RU half-height module as the DC unit with an IEC C14 inlet in place of the
+  terminal block, marked N / earth / L beneath it. Edgecore part SPAACTN-03BG.
+size: {w: 54.1, h: 40.4, d: 300.0}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+attrs:
+  model: 'AS7315-27X AC PSU'
+  part: 'SPAACTN-03BG'
+  power-absent: not-published
+  inlet: c14
+  input: '100 V - 240 V, 5 A'
+provenance:
+  size: >-
+    borrowed - edgecore/csr310-psu-dc@1, measured off the datasheet elevation at
+    8.1477 px/mm. The two supplies share one bay, which is the whole point of an
+    ordering matrix that lists four AC SKUs and one DC SKU against a single
+    chassis, and the quick start's package-contents figure draws the AC and DC
+    variants of the same box one above the other at the same size.
+    THE ELEVATION SHOWS THE DC UNIT. The AC face is read from the quick start's
+    step 4a figure, a three-quarter view of a module being withdrawn, which is
+    legible for WHAT IS ON IT and useless for where: hence borrowed dimensions
+    and a face composed of parts whose own sizes are known.
+  inlet: >-
+    read from csr310-qsg step 4a - an IEC C14 appliance inlet with N, earth and L
+    silkscreened beneath it, one per module. Its size is std/c14-inlet@1's own,
+    which carries a SCHURTER panel cutout; the elevation does not resolve it and
+    nothing here re-measures it.
+  handle-and-latch: >-
+    borrowed - edgecore/csr310-psu-dc@1. The step 4a figure shows the same pull
+    handle down the right-hand edge and the same latch at the foot on the AC
+    module, which is what says these are one mechanical part with two faces.
+  power: >-
+    NOT PUBLISHED, exactly as on the DC unit. The chassis figures - 300 W capacity
+    and 193 W consumption - are the box's, not this supply's. The AC input range
+    is stated and carried in attrs; the output wattage is not.
+elements:
+  handle: {at: [41.5, 3.6], size: [3.5, 21.3], class: handle}
+  latch: {at: [46.5, 32.0], size: [6.5, 7.4], class: latch}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [11.0, 10.4]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: body
+      out: 1.2
+      shape: true
+      color: '#4a4f55'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's relief, WHICH ESTIMATES IT TOO - so this is
+        estimated rather than borrowed. Taking a figure from a part that guessed
+        it does not turn it into a measurement. One module, two faces, one guess.
+    - node: handle
+      out: 8.0
+      lift: 1.2
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's relief, which estimates it too - see `body`.
+    - node: latch
+      out: 4.0
+      lift: 1.2
+      color: '#8a9099'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's relief, which estimates it too - see `body`.
+skins: [default]

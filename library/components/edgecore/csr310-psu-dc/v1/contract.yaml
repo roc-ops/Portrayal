@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: csr310-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The -48 VDC power supply of the Edgecore CSR310 (AS7315-27X) - a hot-swappable
+  1RU half-height module landing its feed on a three-pole barrier terminal block,
+  with a pull handle down the right-hand edge and a latch at its foot. Edgecore
+  part CRXT-T0T12BS; the quick start calls the bare unit CRXT-T0T12B and says
+  only that part will fit.
+size: {w: 54.1, h: 40.4, d: 300.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs:
+  model: 'AS7315-27X DC PSU'
+  part: 'CRXT-T0T12BS'
+  power-absent: not-published
+  inlet: dc-terminal
+  input: '36 V - 72 V, 10 A'
+provenance:
+  size: >-
+    photo-measured - CSR310 datasheet front elevation, page 2 at 600 dpi scaled
+    by the stated 440 mm body width to 8.1477 px/mm. The face carries two of
+    these. Their left edges read 4.54 and 67.06 - a 62.52 bay pitch, confirmed
+    independently by the warning triangles printed on them, whose centres are
+    62.6 apart - and the right one ends at 121.14, giving 54.08. Height from the
+    module's own top and bottom edges at 1.6 and 42.0.
+    THE BAYS ARE NOT ADJACENT: 8.4 mm of chassis sits between them, which is why
+    the pitch and the width are measured separately rather than one derived from
+    the other.
+  depth: >-
+    estimated, and stated as the chassis depth because nothing better exists. The
+    datasheet gives the box as 300 mm deep and does not dimension the module; a
+    front elevation fixes nothing behind the face. Nothing in the library
+    consumes it.
+  terminal-block: >-
+    photo-measured, and DRAWN INTO THIS MODULE rather than placed as a shared
+    part. It reads 30.5 x 14.4 on an 8.7 pole pitch, which is a fourth size
+    beside common/dc-terminal-27@1 (27.5, 8.2) and common/dc-terminal-24@1
+    (24.6, 7.55). Those two are bolted to a faceplate and are separately
+    replaceable in the model because they are separately mounted on the hardware;
+    this one is part of a supply that comes out as one unit, so it belongs to the
+    module's own face. Splitting it out would claim a seam the hardware does not
+    have.
+  markings: >-
+    photo-measured - a general-warning triangle centred 12.8 from the module's
+    left edge and a hot-surface triangle at 31.2, both about 10.9 across, above
+    the block; the pole names are silkscreened below it as an earth symbol,
+    `Input-` and `Input+`, on the pole centres.
+  power: >-
+    NOT PUBLISHED. The datasheet gives the chassis "Power Capacity: 300 W
+    (maximum)" and the quick start "193 Watts maximum" for consumption, and
+    NEITHER is an output rating for this supply. The DC input range is stated -
+    36 to 72 V, 10 A - and is carried in attrs; the wattage is not, so L27 stands
+    on it and the hole stays visible.
+elements:
+  inlet: {at: [7.0, 19.7], size: [30.5, 14.4], class: inlet}
+  handle: {at: [41.5, 3.6], size: [3.5, 21.3], class: handle}
+  latch: {at: [46.5, 32.0], size: [6.5, 7.4], class: latch}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: body
+      out: 1.2
+      shape: true
+      color: '#4a4f55'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's own depth key - the elevation is a front view.
+        1.2 is a module face sitting proud of the chassis metal around it.
+    - node: inlet
+      out: 9.5
+      lift: 1.2
+      color: '#b7bdc3'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's own terminal-block key - the block's face is
+        measured and its depth is not. 9.5 is a three-pole barrier strip standing
+        off a supply's faceplate, matched to common/dc-terminal-27@1's estimate.
+    - node: handle
+      out: 8.0
+      lift: 1.2
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's own depth key - a pull handle deep enough for
+        fingers. Read as a handle from the elevation and from the quick start's
+        three-quarter view of the module being withdrawn; the projection is not
+        dimensioned anywhere.
+    - node: latch
+      out: 4.0
+      lift: 1.2
+      color: '#8a9099'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-psu-dc@1's own depth key - see `handle`.
+skins: [default]
