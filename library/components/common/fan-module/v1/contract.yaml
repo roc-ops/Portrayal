@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan-module
-version: 1.15.0
+version: 1.16.0
 class: fan
 behaviour: fills
 profile: networking
@@ -9,6 +9,24 @@ description: Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm le
 size: {w: 48.6, h: 40.0}
 attrs: {power-absent: not-applicable, airflow: front-to-back}
 provenance:
+  airflow-colour-convention: >-
+    EDGECORE COLOUR-CODES AIRFLOW ON THIS PART, AND SAYS SO IN EIGHT DOCUMENTS.
+    Every one carries the same Airflow Reversal instruction, word for word:
+    "Remove front-to-back (F2B) airflow fan trays (red handles) and PSUs (red
+    release latches). Install back-to-front (B2F) airflow fan trays (blue handles)
+    and PSUs (blue release latches)."
+    The seven staged are the AIS800-32D and AIS800-32O quick start guides, the
+    AMX3200's, and the DCS201, DCS240, DCS510 and DCS511 guides; the eighth is the
+    DCS204 (AS7726-32X) guide, which this library registers as a reference and
+    quotes on that device already.
+    SO THE DEFAULT ON THE FIELDS BELOW IS THE F2B COLOUR, not a neutral one, and a
+    back-to-front build overrides it per configuration. That is why the red is a
+    default rather than a fixed fill: one part, two colours, decided by which
+    airflow variant is installed.
+    IT IS A FACT ABOUT THIS PART AND NOT ABOUT ANY CHASSIS, which is why it is
+    recorded here. Three chassis in this library offer B2F builds - AS5912-54X,
+    AS7326-56X and AS7726-32X - and all three seat this same component.
+    See roc-ops/Portrayal#277.
   states: >-
     NO LAMP, BECAUSE THIS IS A GENERIC. The part is a shape standing for many vendors' 1U fan
     modules, and where a real one puts its status LED differs by vendor - the nine UfiSpace

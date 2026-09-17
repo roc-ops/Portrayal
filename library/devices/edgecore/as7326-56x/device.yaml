@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7326-56x
-version: 2.0.9
+version: 2.0.10
 maturity: modelled
 manufacturer: Edgecore
 model: AS7326-56X
@@ -130,29 +130,6 @@ chassis:
   depth: 536.0
   ru: 1
   weight-kg: 10.0
-gaps:
-- what: b2f-handle-and-latch-colour
-  scope: [fans, psus]
-  reason: vendor-silent
-  wanted: this chassis's own quick-start guide language on fan-tray handle and PSU
-    latch colour, or a photograph of a B2F unit's fan and PSU faces
-  note: >-
-    THE B2F BUILDS DRAW THEIR HANDLES AND LATCHES IN THE F2B COLOUR. The AS7726-32X's
-    quick-start guide states the convention in as many words - "Remove front-to-back
-    (F2B) airflow fan trays (red handles) and PSUs (red release latches). Install
-    back-to-front (B2F) airflow fan trays (blue handles) and PSUs (blue release
-    latches)" - and that chassis paints its b2f builds blue. This one does not, because
-    that sentence is in a DIFFERENT CHASSIS'S document and the parts being the same
-    components is not a source. What was checked here: datasheet-r10, which does not mention handles or latches at all; no
-    quick-start guide for this chassis is held. Its b2f configurations DO name a
-    distinct fan module, FAN-1U-1x1I-B (F0TZZ7656001A) against the f2b -F
-    (F0TZZ7656000A), so the build differs by part number - the colour of that
-    part's handle is simply not stated anywhere we hold. Painting these blue from the
-    7726's guide would be inheriting a colour rather than sourcing one, so the default
-    red stands until something says otherwise. What settles it: this chassis's own QSG
-    language, or a photograph of a B2F unit's fan and PSU faces. The airflow LEGEND is
-    a separate fact and is now set from the configuration's own airflow - see
-    roc-ops/Portrayal#277.
 groups:
   grounding:
     term: Point
@@ -722,10 +699,13 @@ configurations:
       psu-ac-650:
         model: YM-2651Y, C01R
         part-number: F0TZZ5654020A
+        latch-finish: '#3d7bd6'
+        latch-edge: '#234b8c'
       fan-module:
         model: FAN-1U-1x1I-B
         part-number: F0TZZ7656001A
         airflow-legend: B2F
+        handle-finish: '#3d7bd6'
   dc-f2b:
     kind: orderable
     part-numbers:
@@ -752,10 +732,12 @@ configurations:
       intake: Exhaust
       exhaust: Intake
     component-attrs:
+      psu-dc-650: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', cover-edge: '#2a5aa8'}
       fan-module:
         model: FAN-1U-1x1I-B
         part-number: F0TZZ7656001A
         airflow-legend: B2F
+        handle-finish: '#3d7bd6'
 datasheet:
   title: Edgecore DCS203 (AS7326-56X) Data Sheet R10
   url: https://www.edge-core.com/product/dcs203/
