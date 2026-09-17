@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 6.0.0
+version: 7.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -160,9 +160,12 @@ provenance:
   reset-button:
     confidence: measured
     note: >-
-      measured - a pinhole in a hexagonal recess with "Reset" printed to its right, at 50.4 mm, on the
-      system-LED band. Position read off agr110-datasheet/fig-0009 and corroborated in the quick-start's
-      section 6 zoom, where the hex outline and the legend are both legible.
+      measured - a pinhole in a hexagonal recess with "Reset" printed to its right, centred (49.43, 35.04):
+      the dark columns read 48.39 to 50.47 and the rows darker than plain chassis run 33.25 to 36.83.
+      It is BELOW the system-LED row, not on it - a first pass put it on the same band at centre 32.25,
+      nearly three millimetres high, which a reader saw before this measurement did. Position read off
+      agr110-datasheet/fig-0009 and corroborated in the quick-start's section 6 zoom, where the hex outline
+      and the legend are both legible.
   usb:
     confidence: measured
     note: >-
@@ -284,35 +287,46 @@ provenance:
       it rather than at the uplink itself: L14 is an error, not a warning, and it is right that a numeral
       220 mm from its cage is not beside what it names. The lamps ARE beside it and they carry `for: uplink-n`,
       so the chain from uplink to lamps to label holds and every mark sits next to the thing it annotates.
-      Positions by a four-lamp comb fit per bar: pitch 5.70 to 5.97 mm, mean 5.83, first lamp about 3.4
-      mm inside the bar's left edge; row centred 31.4 mm, between the port numerals above and the bar
-      below. States from the guide: 1 green 100G, 1 blue 40G, 1-4 amber 25G breakout, 1-4 purple 10G breakout
-      - the count lit IS the lane count, which is why a bar's worth of lamps is per uplink and not per
-      SFP+ port. THE BLOCK'S OWN BEZEL IS NOT FOUR LAMPS EITHER. Its four marks per column read, outside
-      in, as an up arrow, the upper port's lamp, the lower port's lamp and a down arrow - the same `(up)(down)`
-      row idiom the SFP+ numerals use, and the outer two are silkscreen rather than lit. So the bezel
-      carries one status lamp per uplink and the lane lamps live over the bars. THE BRACKET CARRIES THE
-      UPLINK LABELS AND A PHOTOGRAPH READS THEM: `2 (right-arrow)` at its left end, `0 (up)(down) 1` over
-      the left column, `3 (up)(down) 4` over the right, and `(left-arrow) 5` at its right end. The two
-      arrow-headed labels point INTO the bottom row's cages, which is how the face says that uplink 2
-      is the bottom-left cage and uplink 5 the bottom-right - the same thing the column-major reading
-      says, printed on the metal. They are drawn. EACH LANE LAMP CARRIES ITS LANE NUMBER, 0 to 3, printed
-      on the lens. Legible in a close photograph and not drawn here, for the reason the system-LED legends
-      are not drawn on their lenses either: the renderer paints a placement over its own silkscreen, so
-      ink at the lamp's centre is ink nobody sees, and L21 says so. There is no room above (the port numerals
-      sit 0.8 mm clear) or below (the label bar). Recorded rather than moved somewhere the device does
-      not print it. WHICH LAMP BELONGS TO WHICH PORT IS ALSO READ: "LED for 0,1,3,4 are on the space between
-      those ports with a single arrow up and single arrow down. The LED for port 2 and 5 on the small
-      group of 2." So the upper bezel's two lamps per column serve that column's FIRST TWO uplinks - 0
-      and 1 on the left, 3 and 4 on the right - and the bottom pair's lamps are on the bottom pair's own
-      group, not in a divider above them. UPLINK 2'S AND 5'S STATUS LAMPS ARE ABOVE THE SEVENTH YELLOW
-      BAR - the wide one at 345.32 that sits right of the USB and belongs to no uplink of its own. A reader
-      placed them there and the figure agrees: two marks, 0.77 mm wide, at 351.93 and 354.12 mm in the
-      same lamp row as every other. That is what the seventh bar is FOR, which nothing in either document
-      says and which three drafts recorded as an unexplained extra strip. All six uplinks now have a status
-      lamp: 0 and 1 in the left column's bezel, 3 and 4 in the right column's, 2 and 5 over the seventh
-      bar. The `2 (right-arrow)` and `(left-arrow) 5` labels are on the bracket's LOWER section, on its
-      legs either side of the bottom pair, not on the horizontal bar with the other four.
+      THE FOUR ARE CENTRED ON THEIR BAR, and getting that wrong is a lesson about the fit rather than
+      the face. The first comb searched pitch AND phase freely over each bar and settled on a 5.83 mm
+      pitch with the group sliding right, so the fourth lamp hung off the bar's right edge - a reader
+      saw it immediately. Re-fitting with the group CONSTRAINED to the bar's centre and only the pitch
+      free gives 4.74 to 4.96 across the six, mean 4.88, and the modelled 4.90 puts the outer lamps 7.35
+      mm either side of centre with 0.3 mm of metal between neighbours. A free parameter the geometry
+      did not need is a free parameter that absorbs the error somewhere you are not looking. The same
+      trap caught uplink 2's and 5's lamps on the seventh bar: an unconstrained two-lamp fit put one at
+      360.10, which is the QSFP bracket's bright left edge rather than a lamp. Confined to the bar's clear
+      span - it runs to 363.58 but the bracket starts at 359.40 - they read 348.17 and 354.07, a 5.90
+      mm gap. Positions by a four-lamp comb fit per bar: pitch 5.70 to 5.97 mm, mean 5.83, first lamp
+      about 3.4 mm inside the bar's left edge; row centred 31.4 mm, between the port numerals above and
+      the bar below. States from the guide: 1 green 100G, 1 blue 40G, 1-4 amber 25G breakout, 1-4 purple
+      10G breakout - the count lit IS the lane count, which is why a bar's worth of lamps is per uplink
+      and not per SFP+ port. THE BLOCK'S OWN BEZEL IS NOT FOUR LAMPS EITHER. Its four marks per column
+      read, outside in, as an up arrow, the upper port's lamp, the lower port's lamp and a down arrow
+      - the same `(up)(down)` row idiom the SFP+ numerals use, and the outer two are silkscreen rather
+      than lit. So the bezel carries one status lamp per uplink and the lane lamps live over the bars.
+      THE BRACKET CARRIES THE UPLINK LABELS AND A PHOTOGRAPH READS THEM: `2 (right-arrow)` at its left
+      end, `0 (up)(down) 1` over the left column, `3 (up)(down) 4` over the right, and `(left-arrow) 5`
+      at its right end. The two arrow-headed labels point INTO the bottom row's cages, which is how the
+      face says that uplink 2 is the bottom-left cage and uplink 5 the bottom-right - the same thing the
+      column-major reading says, printed on the metal. They are drawn. EACH LANE LAMP CARRIES ITS LANE
+      NUMBER, 0 to 3, printed on the lens. Legible in a close photograph and not drawn here, for the reason
+      the system-LED legends are not drawn on their lenses either: the renderer paints a placement over
+      its own silkscreen, so ink at the lamp's centre is ink nobody sees, and L21 says so. There is no
+      room above (the port numerals sit 0.8 mm clear) or below (the label bar). Recorded rather than moved
+      somewhere the device does not print it. WHICH LAMP BELONGS TO WHICH PORT IS ALSO READ: "LED for
+      0,1,3,4 are on the space between those ports with a single arrow up and single arrow down. The LED
+      for port 2 and 5 on the small group of 2." So the upper bezel's two lamps per column serve that
+      column's FIRST TWO uplinks - 0 and 1 on the left, 3 and 4 on the right - and the bottom pair's lamps
+      are on the bottom pair's own group, not in a divider above them. UPLINK 2'S AND 5'S STATUS LAMPS
+      ARE ABOVE THE SEVENTH YELLOW BAR - the wide one at 345.32 that sits right of the USB and belongs
+      to no uplink of its own. A reader placed them there and the figure agrees: two marks, 0.77 mm wide,
+      at 351.93 and 354.12 mm in the same lamp row as every other. That is what the seventh bar is FOR,
+      which nothing in either document says and which three drafts recorded as an unexplained extra strip.
+      All six uplinks now have a status lamp: 0 and 1 in the left column's bezel, 3 and 4 in the right
+      column's, 2 and 5 over the seventh bar. The `2 (right-arrow)` and `(left-arrow) 5` labels are on
+      the bracket's LOWER section, on its legs either side of the bottom pair, not on the horizontal bar
+      with the other four.
   yellow-label-strips:
     confidence: measured
     note: >-
@@ -704,34 +718,34 @@ views:
       - {id: uplink-4, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
       - {id: uplink-2, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
       - {id: uplink-5, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
-      - {id: led-uplink-0-lane-1, at: [135.92, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-0-lane-2, at: [141.74, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-0-lane-3, at: [147.56, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-0-lane-4, at: [153.38, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-1-lane-1, at: [165.48, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-1-lane-2, at: [171.45, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-1-lane-3, at: [177.42, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-1-lane-4, at: [183.39, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-2-lane-1, at: [195.34, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-2-lane-2, at: [201.22, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-2-lane-3, at: [207.1, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-2-lane-4, at: [212.98, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-3-lane-1, at: [225.75, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-3-lane-2, at: [231.5, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-3-lane-3, at: [237.25, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-3-lane-4, at: [243.0, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-4-lane-1, at: [255.71, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-4-lane-2, at: [261.41, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-4-lane-3, at: [267.11, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-4-lane-4, at: [272.81, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-1, at: [135.72, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-2, at: [140.62, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-3, at: [145.52, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-4, at: [150.42, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-1, at: [165.58, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-2, at: [170.48, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-3, at: [175.38, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-4, at: [180.28, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-1, at: [195.44, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-2, at: [200.34, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-3, at: [205.24, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-4, at: [210.14, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-1, at: [225.3, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-2, at: [230.2, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-3, at: [235.1, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-4, at: [240.0, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-1, at: [255.16, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-2, at: [260.06, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-3, at: [264.96, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-4, at: [269.86, 30.1], size: [4.6, 2.6], shape: rect}
       - {id: led-uplink-5-lane-1, at: [285.46, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-5-lane-2, at: [291.31, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-5-lane-3, at: [297.16, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-5-lane-4, at: [303.01, 30.1], size: [4.6, 2.6], shape: rect}
-      - {id: led-uplink-2, at: [350.93, 30.9], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-5, at: [353.12, 30.9], size: [2.0, 2.0], shape: circle}
-      - {id: led-mgmt-l, at: [408.3, 29.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-mgmt-r, at: [419.2, 29.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-5-lane-2, at: [290.36, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5-lane-3, at: [295.26, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5-lane-4, at: [300.16, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2, at: [345.87, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5, at: [351.77, 30.1], size: [4.6, 2.6], shape: rect}
+      - {id: led-mgmt-l, at: [407.2, 29.0], size: [4.6, 2.6], shape: rect}
+      - {id: led-mgmt-r, at: [420.2, 29.0], size: [4.6, 2.6], shape: rect}
       - {id: led-uplink-0, at: [370.94, 14.6], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-1, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-3, at: [390.19, 14.6], size: [2.0, 2.0], shape: circle}
@@ -741,7 +755,7 @@ views:
       - {id: led-diag, at: [28.38, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-fan, at: [34.4, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-loc, at: [40.52, 30.95], size: [4.6, 2.6], shape: rect}
-      - {id: reset, at: [48.4, 30.25], size: [4.0, 4.0], shape: circle}
+      - {id: reset, at: [47.43, 33.04], size: [4.0, 4.0], shape: circle}
       - {id: usb, at: [319.4, 36.4], size: [12.0, 4.5], shape: rect}
       - {id: mgmt-eth, at: [409.14, 3.6], size: [12.7, 11.0], shape: rect}
       - {id: console, at: [409.14, 15.7], size: [12.7, 11.0], shape: rect}
@@ -794,12 +808,12 @@ views:
     - {at: [343.2, 29.6], text: '45', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-45}
     - {at: [351.45, 29.6], text: '46', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-46}
     - {at: [357.45, 29.6], text: '47', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-47}
-    - {at: [411.0, 30.2], fill: '#e4e8eb', for: mgmt-eth, path: M -0.65 0.57785 L 0.65 0.57785 L 0 -0.57785
+    - {at: [412.8, 30.2], fill: '#e4e8eb', for: mgmt-eth, path: M -0.65 0.57785 L 0.65 0.57785 L 0 -0.57785
         Z, filled: true}
-    - {at: [412.6, 30.8], text: Mgmt, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: mgmt-eth}
-    - {at: [411.0, 32.4], fill: '#e4e8eb', for: console, path: M -0.65 -0.57785 L 0.65 -0.57785 L 0 0.57785
+    - {at: [414.2, 30.8], text: Mgmt, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: mgmt-eth}
+    - {at: [412.8, 32.4], fill: '#e4e8eb', for: console, path: M -0.65 -0.57785 L 0.65 -0.57785 L 0 0.57785
         Z, filled: true}
-    - {at: [412.6, 32.9], text: Console, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: console}
+    - {at: [414.2, 32.9], text: Console, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: console}
     - {at: [370.81, 31.0], text: '0', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-0}
     - at: [373.81, 30.45]
       fill: '#1a1d1f'
@@ -1043,7 +1057,7 @@ views:
     - {at: [30.68, 35.8], text: Diag, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-diag}
     - {at: [36.7, 35.8], text: Fan, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-fan}
     - {at: [42.82, 35.8], text: Loc, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-loc}
-    - {at: [53.6, 32.65], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb', for: reset}
+    - {at: [52.6, 35.6], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb', for: reset}
     components:
       placements:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
@@ -1202,140 +1216,140 @@ views:
       - {ref: std/qsfp-ganged@1, id: uplink-5, at: [383.56, 32.01], group: qsfp28, rel-pos: 5}
       - ref: common/led-rect@1
         id: led-uplink-0-lane-1
-        at: [135.92, 30.1]
+        at: [135.72, 30.1]
         group: port-leds
         rel-pos: 101
         for: uplink-0
         attrs: {lane: 1}
       - ref: common/led-rect@1
         id: led-uplink-0-lane-2
-        at: [141.74, 30.1]
+        at: [140.62, 30.1]
         group: port-leds
         rel-pos: 102
         for: uplink-0
         attrs: {lane: 2}
       - ref: common/led-rect@1
         id: led-uplink-0-lane-3
-        at: [147.56, 30.1]
+        at: [145.52, 30.1]
         group: port-leds
         rel-pos: 103
         for: uplink-0
         attrs: {lane: 3}
       - ref: common/led-rect@1
         id: led-uplink-0-lane-4
-        at: [153.38, 30.1]
+        at: [150.42, 30.1]
         group: port-leds
         rel-pos: 104
         for: uplink-0
         attrs: {lane: 4}
       - ref: common/led-rect@1
         id: led-uplink-1-lane-1
-        at: [165.48, 30.1]
+        at: [165.58, 30.1]
         group: port-leds
         rel-pos: 111
         for: uplink-1
         attrs: {lane: 1}
       - ref: common/led-rect@1
         id: led-uplink-1-lane-2
-        at: [171.45, 30.1]
+        at: [170.48, 30.1]
         group: port-leds
         rel-pos: 112
         for: uplink-1
         attrs: {lane: 2}
       - ref: common/led-rect@1
         id: led-uplink-1-lane-3
-        at: [177.42, 30.1]
+        at: [175.38, 30.1]
         group: port-leds
         rel-pos: 113
         for: uplink-1
         attrs: {lane: 3}
       - ref: common/led-rect@1
         id: led-uplink-1-lane-4
-        at: [183.39, 30.1]
+        at: [180.28, 30.1]
         group: port-leds
         rel-pos: 114
         for: uplink-1
         attrs: {lane: 4}
       - ref: common/led-rect@1
         id: led-uplink-2-lane-1
-        at: [195.34, 30.1]
+        at: [195.44, 30.1]
         group: port-leds
         rel-pos: 121
         for: uplink-2
         attrs: {lane: 1}
       - ref: common/led-rect@1
         id: led-uplink-2-lane-2
-        at: [201.22, 30.1]
+        at: [200.34, 30.1]
         group: port-leds
         rel-pos: 122
         for: uplink-2
         attrs: {lane: 2}
       - ref: common/led-rect@1
         id: led-uplink-2-lane-3
-        at: [207.1, 30.1]
+        at: [205.24, 30.1]
         group: port-leds
         rel-pos: 123
         for: uplink-2
         attrs: {lane: 3}
       - ref: common/led-rect@1
         id: led-uplink-2-lane-4
-        at: [212.98, 30.1]
+        at: [210.14, 30.1]
         group: port-leds
         rel-pos: 124
         for: uplink-2
         attrs: {lane: 4}
       - ref: common/led-rect@1
         id: led-uplink-3-lane-1
-        at: [225.75, 30.1]
+        at: [225.3, 30.1]
         group: port-leds
         rel-pos: 131
         for: uplink-3
         attrs: {lane: 1}
       - ref: common/led-rect@1
         id: led-uplink-3-lane-2
-        at: [231.5, 30.1]
+        at: [230.2, 30.1]
         group: port-leds
         rel-pos: 132
         for: uplink-3
         attrs: {lane: 2}
       - ref: common/led-rect@1
         id: led-uplink-3-lane-3
-        at: [237.25, 30.1]
+        at: [235.1, 30.1]
         group: port-leds
         rel-pos: 133
         for: uplink-3
         attrs: {lane: 3}
       - ref: common/led-rect@1
         id: led-uplink-3-lane-4
-        at: [243.0, 30.1]
+        at: [240.0, 30.1]
         group: port-leds
         rel-pos: 134
         for: uplink-3
         attrs: {lane: 4}
       - ref: common/led-rect@1
         id: led-uplink-4-lane-1
-        at: [255.71, 30.1]
+        at: [255.16, 30.1]
         group: port-leds
         rel-pos: 141
         for: uplink-4
         attrs: {lane: 1}
       - ref: common/led-rect@1
         id: led-uplink-4-lane-2
-        at: [261.41, 30.1]
+        at: [260.06, 30.1]
         group: port-leds
         rel-pos: 142
         for: uplink-4
         attrs: {lane: 2}
       - ref: common/led-rect@1
         id: led-uplink-4-lane-3
-        at: [267.11, 30.1]
+        at: [264.96, 30.1]
         group: port-leds
         rel-pos: 143
         for: uplink-4
         attrs: {lane: 3}
       - ref: common/led-rect@1
         id: led-uplink-4-lane-4
-        at: [272.81, 30.1]
+        at: [269.86, 30.1]
         group: port-leds
         rel-pos: 144
         for: uplink-4
@@ -1349,29 +1363,29 @@ views:
         attrs: {lane: 1}
       - ref: common/led-rect@1
         id: led-uplink-5-lane-2
-        at: [291.31, 30.1]
+        at: [290.36, 30.1]
         group: port-leds
         rel-pos: 152
         for: uplink-5
         attrs: {lane: 2}
       - ref: common/led-rect@1
         id: led-uplink-5-lane-3
-        at: [297.16, 30.1]
+        at: [295.26, 30.1]
         group: port-leds
         rel-pos: 153
         for: uplink-5
         attrs: {lane: 3}
       - ref: common/led-rect@1
         id: led-uplink-5-lane-4
-        at: [303.01, 30.1]
+        at: [300.16, 30.1]
         group: port-leds
         rel-pos: 154
         for: uplink-5
         attrs: {lane: 4}
-      - {ref: common/led-dot@1, id: led-uplink-2, at: [350.93, 30.9], group: port-leds, rel-pos: 2, for: uplink-2}
-      - {ref: common/led-dot@1, id: led-uplink-5, at: [353.12, 30.9], group: port-leds, rel-pos: 5, for: uplink-5}
-      - {ref: common/led-dot@1, id: led-mgmt-l, at: [408.3, 29.6], group: leds, rel-pos: 6, for: mgmt-eth}
-      - {ref: common/led-dot@1, id: led-mgmt-r, at: [419.2, 29.6], group: leds, rel-pos: 7, for: mgmt-eth}
+      - {ref: common/led-rect@1, id: led-uplink-2, at: [345.87, 30.1], group: port-leds, rel-pos: 2, for: uplink-2}
+      - {ref: common/led-rect@1, id: led-uplink-5, at: [351.77, 30.1], group: port-leds, rel-pos: 5, for: uplink-5}
+      - {ref: common/led-rect@1, id: led-mgmt-l, at: [407.2, 29.0], group: leds, rel-pos: 6, for: mgmt-eth}
+      - {ref: common/led-rect@1, id: led-mgmt-r, at: [420.2, 29.0], group: leds, rel-pos: 7, for: mgmt-eth}
       - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.6], group: port-leds, rel-pos: 0, for: uplink-0}
       - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.6], group: port-leds, rel-pos: 1, for: uplink-1}
       - {ref: common/led-dot@1, id: led-uplink-3, at: [390.19, 14.6], group: port-leds, rel-pos: 2, for: uplink-3}
@@ -1382,7 +1396,7 @@ views:
       - {ref: common/led-rect@1, id: led-fan, at: [34.4, 30.95], group: leds, rel-pos: 4, for: [rear/fan-0,
           rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5]}
       - {ref: common/led-rect@1, id: led-loc, at: [40.52, 30.95], group: leds, rel-pos: 5, for: chassis}
-      - {ref: common/reset-button@1, id: reset, at: [48.4, 30.25], group: mgmt, rel-pos: 4, for: chassis}
+      - {ref: common/reset-button@1, id: reset, at: [47.43, 33.04], group: mgmt, rel-pos: 4, for: chassis}
       - ref: std/usb-a@1
         id: usb
         at: [319.4, 36.4]
