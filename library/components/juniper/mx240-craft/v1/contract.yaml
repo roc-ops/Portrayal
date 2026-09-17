@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx240-craft
-version: 1.0.0
+version: 1.1.0
 class: display
 behaviour: fills
 profile: networking
@@ -17,6 +17,16 @@ attrs:
   model: MX240 Craft Interface
   power-absent: not-published
 provenance:
+  lamp-states: >-
+    THE LAMPS WERE DRAWN AND COULD NOT LIGHT. Every one of the 26 was a flat
+    fill, so the panel declared a lamp state, the viewer offered it and clicking it
+    changed no pixel - L47's first shape exactly. Each fills from the LED variable now,
+    with its drawn colour as the unlit fallback, so an unlit panel is unchanged.
+    THE VOCABULARIES ARE THE GUIDE'S, not a convention: MX240 Hardware Guide,
+    Table 7 (alarm), Table 8 (host subsystem), Table 9 (power supply), Table 10 (DPC and MPC), Table 11 (FPC), Table 12 (SCB) and Table 13 (fan). Green for functioning and red for failed throughout;
+    the OK lamp of a card slot also BLINKS while the card is transitioning online or
+    offline, which is the one state that is not simply on or off, and the minor alarm
+    is yellow against the major alarm's red. Figure 6 is the arrangement.
   power: >-
     NOT PUBLISHED. The chassis guide for this part is staged and converted, its FRU power
     requirements table is present, and THIS PART IS NOT IN IT - which is a stronger
@@ -37,9 +47,194 @@ provenance:
   slot-tabs: 'photo - the numbered oval tabs (0, 1/0, 1, 2) under the
     per-slot OK/FAIL lamp pairs are the slot identity legends; 1/0 is the
     shared SCB1/DPC0 slot'
-states:
-- ok
-- absent
+states: [absent]
+elements:
+  led-re0-master:
+    at: [95.0, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re0-online:
+    at: [95.0, 11.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re0-offline:
+    at: [95.0, 15.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-re1-master:
+    at: [127.2, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re1-online:
+    at: [127.2, 11.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re1-offline:
+    at: [127.2, 15.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-fan-ok:
+    at: [175.5, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fan-fail:
+    at: [175.5, 11.2]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem0-ok:
+    at: [228.9, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem0-fail:
+    at: [228.9, 11.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem1-ok:
+    at: [235.5, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem1-fail:
+    at: [235.5, 11.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem2-ok:
+    at: [242.4, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem2-fail:
+    at: [242.4, 11.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem3-ok:
+    at: [249.2, 6.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem3-fail:
+    at: [249.2, 11.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-alarm-minor:
+    at: [290.6, 8.2]
+    size: [6.8, 6.2]
+    class: led
+    states:
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  led-alarm-major:
+    at: [315.8, 8.1]
+    size: [6.8, 6.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-0-ok:
+    at: [86.9, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-0-fail:
+    at: [104.4, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-1-0-ok:
+    at: [115.7, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-1-0-fail:
+    at: [133.2, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-1-ok:
+    at: [150.2, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-1-fail:
+    at: [167.7, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-2-ok:
+    at: [180.8, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-2-fail:
+    at: [198.3, 24.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
 size:
   w: 420.9
   h: 42.5
