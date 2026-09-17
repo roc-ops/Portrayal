@@ -397,7 +397,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/agr420-filter-bottom@1` | module | filter | 399.5 × 9 × 12 |  | 1 | 0 | Removable BOTTOM air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr420-filter-step@1` | module | filter | 25.5 × 16.5 × 12 |  | 1 | 0 | The deep section of an Edgecore AGR420 air filter, beside the QSFP-DD column at the left of the front panel, … |
 | `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
-| `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 40.8 |  | 1 | 0 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
+| `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 0 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 
 ## fs/ (10)
 

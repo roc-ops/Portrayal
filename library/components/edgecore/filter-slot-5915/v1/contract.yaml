@@ -11,22 +11,39 @@ description: >-
   retained by two captive slotted thumbscrews. Removing it is step 1 of the
   quick start's optional air-filter procedure; the filter assembly slides into
   the same opening.
-size: {w: 27.6, h: 40.8}
+size: {w: 27.6, h: 43.2}
 size-confidence: {w: photo-measured, h: photo-measured}
 attrs: {power-absent: not-applicable, airflow: side-to-side, model: 'AS5915 Air Filter Slot Cover'}
 provenance:
   size: >-
     photo-measured - Edgecore CSR200 (AS5915-18X) datasheet front elevation,
-    page 2 at 600 dpi scaled by the stated 440 mm width to 9.6341 px/mm. The
-    plate's own edge reads 0.6-28.2 horizontally, and the fastener rows put its
-    vertical extent at 1.6-42.4. It is the first feature on the face, so nothing
-    upstream of it constrains the reading.
+    page 2 at 600 dpi scaled by the stated 440 mm width to 9.6341 px/mm. Taken
+    from the STRONGEST VERTICAL AND HORIZONTAL EDGES rather than from a bright
+    run, because a blanking plate is the same colour as the panel it sits in and
+    a threshold finds nothing: the only real edges in the first 36 mm are at
+    0.0-0.8 and 27.8-28.9, and the only horizontal ones are the panel's own at
+    -0.6 and 43.8. So the plate is 27.6 wide and FULL HEIGHT.
+    IT WAS FIRST DRAWN 40.8 TALL AND INSET 1.6 FROM THE TOP, which put a visible
+    border around it that the reference does not have. There is no top or bottom
+    seam to inset from; the plate runs the height of the face. 43.2 leaves the
+    0.4 hairline the render needs to show it as a separate panel at all.
+    A SHADING GRADIENT IS NOT AN EDGE. A rule-crop of the same region reads a
+    boundary at about 8 mm, which is what made this look 7.5 mm too wide on a
+    first re-measurement; the edge scan says there is nothing there, and the
+    CSR180 - which DOES have real edges at 7.8 and 26.8 - is what a genuine
+    narrower plate looks like.
   fasteners: >-
     photo-measured. The two captive screws read 4.23-10.37 and 32.68-38.39
-    vertically and 17.54-25.43 horizontally, so 7.0 across on centres 20.9/5.7
-    and 20.9/33.9 in the plate's own frame. The quick start corroborates the
-    count rather than the size: "Slide the air filter assembly into the slot and
-    secure it with its two captured screws" (csr200-qsg, step 9).
+    vertically and 17.54-25.43 horizontally on the elevation, so 7.0 across on
+    centres 21.5/7.3 and 21.5/35.5 in the panel's frame, which is 20.9/6.9 and
+    20.9/35.1 in the plate's own. Two smaller blind bosses sit at 13.4 on the
+    same two rows. The quick start corroborates the count rather than the size:
+    "Slide the air filter assembly into the slot and secure it with its two
+    captured screws" (csr200-qsg, step 9).
+    THE CSR180'S ARE NOT THESE. That plate is 19.0 wide with cross-head screws
+    about 4.9 across and no bosses, on a face whose plate edges are real rather
+    than a shading change - which is why this part is named for the AS5915 family
+    but sized from the 18X, and why the 16X will need its own.
   what-is-not-here: >-
     THE FILTER ITSELF IS NOT MODELLED. Edgecore sells two accessories against
     this bay - F0OEC5627002Z, an assembled module with the filter installed, and
@@ -39,7 +56,7 @@ provenance:
     L27 so that a consumer totalling the chassis can tell a deliberate silence
     from an unanswered question.
 elements:
-  plate: {at: [0.0, 0.0], size: [27.6, 40.8], class: filter}
+  plate: {at: [0.0, 0.0], size: [27.6, 43.2], class: filter}
 relief:
   wall: '#2b2f33'
   features:
