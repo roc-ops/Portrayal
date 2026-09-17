@@ -125,7 +125,8 @@ Three layers:
    **Devices take the same bump rules and not the coexistence.** A device is a
    root rather than a dependency — nothing pins `mx10016@1` — so majors do not
    need to live side by side; what a device needs is that the version tells the
-   truth. `library/devices.lock.json` records a fingerprint per device, split so
+   truth. Each device carries a `device.lock.json` beside its manifest recording a
+   fingerprint, split so
    the check can say which bump a change requires rather than only that one
    happened: `shape` (chassis dimensions, view sizes, and the position, size and
    wiring of everything placed), `names` (ids, groups, configurations), `surface`

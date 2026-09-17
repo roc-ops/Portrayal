@@ -7014,15 +7014,15 @@ def main():
     # The matrix is a PORTFOLIO view - it ranks devices against each other - so
     # printing it for a subset would invite reading a partial ranking as a whole
     # one. Say what was skipped instead.
-    # L53 IS LIBRARY-WIDE and compares against library/devices.lock.json, so a
-    # --device run cannot do it: the lock is one file describing every device and
-    # a partial check would report the unexamined ones as unchanged.
+    # L53 IS LIBRARY-WIDE and compares against the per-device locks, so a
+    # --device run cannot do it: `devicelock.check` walks every device, and a
+    # partial check would report the unexamined ones as unchanged.
     if not args.device:
         lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             lint_unplaced_majors(root)
-            if not (root / devicelock.LOCK_NAME).exists() and not list(libwalk.iter_devices([root])):
+            if not list(libwalk.iter_devices([root])):
                 continue
             for slug_, kind_, msg_ in devicelock.check(root):
                 # WARNING WHILE THE DEVICE IS STILL BEING DRAWN, ERROR ONCE IT
@@ -7033,8 +7033,12 @@ def main():
                 # promise the version exists to make. No device is verified yet,
                 # so this arms itself as the library matures rather than going
                 # red on the day it lands.
+                # THE DEVICE'S OWN LOCK, which is the file the reader has to
+                # edit. It used to name `library/devices.lock.json` - one path
+                # for all 89 findings, and the one file a contributor never
+                # opens by hand (#182).
                 (err if dev_maturity.get(slug_) == "verified" else warn)(
-                    root / devicelock.LOCK_NAME, "L53", msg_)
+                    devicelock.lock_path(root, slug_), "L53", msg_)
 
     if args.device:
         print(f"LINT: {len(matrix)} device(s) matching {args.device} - "

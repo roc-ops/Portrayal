@@ -206,8 +206,9 @@ In this order, because the second one asks a question the third one erases:
 python3 spec/tools/portrayal/devicelock.py --library library   # read what it says
 ```
 
-The lock check compares your device to `library/devices.lock.json` as
-committed and says what version bump the change needs: a patch for wording and
+The lock check compares your device to its own
+`library/devices/<vendor>/<model>/device.lock.json` as committed and says what
+version bump the change needs: a patch for wording and
 provenance, a minor for something added, a major for geometry or ids that
 moved. Bump `version:` in `device.yaml` accordingly, run the check again until
 it reports zero findings, and only then:
@@ -218,8 +219,14 @@ python3 spec/tools/portrayal/devicelock.py --library library --update
 python3 -m pytest spec/tests -q                           # after publish; it skips without dist/
 ```
 
-Commit the regenerated `library/devices.lock.json` and `library/exports/`
-with your change. CI fails on a stale export.
+Commit the regenerated `device.lock.json` and `library/exports/` with your
+change. CI fails on a stale export.
+
+`--update` rewrites **only the devices whose fingerprint moved** - usually the
+one you edited, plus any that seat a component you bumped - so `git status` is
+the list of what changed rather than one 906 KB file you have to take on trust.
+The one-file view is a build output at `library/dist/devices.lock.json`, for a
+consumer outside the checkout; it is derived, so it cannot drift.
 
 ### 6. Open the pull request
 

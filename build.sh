@@ -77,6 +77,15 @@ for ix in devices_index components_index labs_index gaps_index registry_index co
   pids+=("$!")
 done
 for pid in "${pids[@]}"; do wait "$pid"; done
+# THE LOCK, ASSEMBLED. Each device carries its own `device.lock.json` beside its
+# manifest (#182); this is the one-file view, for a consumer outside the
+# checkout that wants the whole picture in one fetch - the same reason
+# devices.json is here. Derived, so it cannot drift from the sources.
+python3 -c "
+import pathlib, sys
+from portrayal import devicelock
+devicelock.aggregate(pathlib.Path('library'), pathlib.Path(sys.argv[1]) / 'devices.lock.json')
+" "$OUT"
 # THE DCIM EXPORT IS NOT PART OF THIS BUILD, and used to be half of it: 39
 # seconds against 41 for everything else, on a stage whose output exactly one
 # test reads and nothing on the page does. `./publish.sh` is this plus the
