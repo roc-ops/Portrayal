@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 0.5.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -663,18 +663,18 @@ gaps:
     stated in words by the guide and are not in doubt.
   wanted: a dimensioned side elevation of the ASR 9006, or the air filter's own spare-part drawing
 - what: openings-awaiting-components
-  scope: [front, right]
+  scope: [right]
   reason: needs-drawing
   note: >-
-    Seven measured openings on this chassis have no occupant in the library: fan trays FT0 and FT1
-    (175.65 x 70.97 each), power modules M0 to M3 (103.22 x 46.34 each) and the right-side air
-    filter (52 x 279.63). All seven are drawn as cutouts, so the sheet metal is complete and every
-    dimension is recorded; what is absent is the parts. This is NOT the machine-findable kind of
-    gap - a missing ref lints - but the fact that these openings are cutouts rather than bays IS
-    invisible to any rule, and a reader could reasonably assume the chassis simply has no fan bays.
-    It has them; they are waiting. Cisco's own numbering for them is FT0/FT1 and M0-M3 per Figure
-    19, and the groups are ready to be reinstated with index-origin 0.
-  wanted: an ASR 9006 fan tray, the version 2 AC and DC power modules, and the chassis air filter
+    ONE OPENING IS LEFT, AND THIS NOTE USED TO SAY SEVEN. FT0 and FT1 are bays now -
+    they accept cisco/asr-9006-fan@1, whose own envelope is the measurement of these
+    very openings - and M0 to M3 became the pm-0 to pm-2 power bays some time before
+    that, which this note had not caught up with. What is still a cutout with no
+    occupant is the right-side air filter, 52 x 279.63.
+    THE ORIGINAL POINT STANDS FOR THAT ONE: a cutout with no part is invisible to
+    every rule - a missing ref lints, an absent bay does not - so a reader could
+    reasonably think this chassis has no filter. It has one; it is waiting.
+  wanted: the ASR 9006 chassis air filter, which is the last of the seven openings this gap was opened for
 - what: undocumented-faces
   scope: [bottom, left]
   reason: vendor-silent
@@ -713,6 +713,14 @@ gaps:
     seat it, and the same shape is already recorded here for the RSPs. See
     roc-ops/Portrayal#262.
 groups:
+  fan-trays:
+    term: Fan Tray
+    role: service
+    index-origin: 0
+    physical-context: Fan
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: "1+1, and the guide says it in three sentences that have to be read together (Overview and Reference Guide, 'Cisco ASR 9006 Router Fan Trays'). 'The Cisco ASR 9006 Router contains two fan trays for redundancy. If a fan tray fails, it is possible to swap a single fan tray assembly while the system is operational.' - so one may be out while the box runs. And: 'Both fan trays are required for normal system operation for the Cisco ASR 9010 Router and Cisco ASR 9006 Router. If both fan trays in the router are pulled out or are not installed, a critical alarm is raised.' - so the critical alarm is for BOTH being out, and running on one is degraded rather than normal. 1+1 is the redundancy; the second sentence is the caveat that travels with it, and is why this note quotes rather than summarises."
   slots:
     term: Slot
     role: traffic
@@ -748,13 +756,19 @@ views:
         - {at: [0, 431.7], size: [444.5, 12.8], fill: '#b4b6b8'}
       cutouts:
         - {id: shelf, at: [13.94, 385.36], size: [416.5, 46.34], shape: rect}
-        - {id: ft-0, at: [60.94, 33.66], size: [175.65, 70.97], shape: rect}
-        - {id: ft-1, at: [238.09, 33.66], size: [175.44, 70.97], shape: rect}
         - {id: esd, at: [30.0, 300.0], size: [6.0, 6.0], shape: circle}
     silkscreen:
       - {at: [33.0, 293.0], text: ESD, font-size: 4, anchor: middle}
     components:
       bays:
+        # THE TRAYS SIT BEHIND THE HINGED DOOR, which is why these two bays
+        # carry `under:`. asr-9006-fan's own `size` provenance says it: "the
+        # 9006's trays sit behind a hinged door and the master draws the door -
+        # the Cisco logo and 'Cisco ASR 9000 Series' legend at the top of that
+        # chassis are printed on it". Without it L13 reads door-over-opening as
+        # two things fighting for the same rectangle, which is what it is for.
+        - {id: ft-0, at: [60.94, 33.66], size: {w: 175.65, h: 70.97}, accepts: ['cisco/asr-9006-fan@1'], group: fan-trays, rel-pos: 0, default: cisco/asr-9006-fan@1, under: [fan-tray-door]}
+        - {id: ft-1, at: [238.09, 33.66], size: {w: 175.65, h: 70.97}, accepts: ['cisco/asr-9006-fan@1'], group: fan-trays, rel-pos: 1, default: cisco/asr-9006-fan@1, under: [fan-tray-door]}
         - {id: pm-0, at: [13.51, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-pwr-3kw-ac@1}
         - {id: pm-1, at: [152.63, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-pwr-3kw-ac@1}
         - {id: pm-2, at: [291.75, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-pwr-3kw-ac@1}

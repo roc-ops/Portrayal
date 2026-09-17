@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9922
-version: 1.1.0
+version: 1.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9922
@@ -539,6 +539,28 @@ gaps:
     number to close it would be inventing a measurement. Every other chassis its row names DOES
     seat it, and the same shape is already recorded here for the RSPs. See
     roc-ops/Portrayal#262.
+- what: power-shelves-are-not-modelled-between-the-chassis-and-the-supplies
+  scope: [power-modules]
+  reason: needs-drawing
+  wanted: positions and extents for the four power shelves on this face, so the trays become bays
+    that hold the supply bays rather than the supplies hanging directly off the chassis
+  note: >-
+    THE REAL MACHINE HAS THREE LEVELS AND THIS MODEL HAS TWO. Overview and Reference Guide,
+    "Cisco ASR 9922 Router Power Modules": "ASR-9922 supports: Four AC PEMs (power shelves).
+    Version 2 supports four power supplies and version 3 supports three power supplies", and
+    for DC "Four DC PEMs. Each PEM supports up to four power supplies." So the chassis holds
+    four shelves and each shelf holds the supplies; this face draws sixteen supply bays
+    directly, which is 4 x 4 flattened.
+    WHAT THAT COSTS IS FOUR SOURCED PARTS WITH NOWHERE TO GO. cisco/a9k-power-tray is the
+    version 2 shelf, cisco/a9k-ac-pem-v3 and cisco/a9k-dc-pem-v3 are the version 3 shelves -
+    all three drawn off stencil masters at 468.12 x 48.03 - and cisco/a9k-power-shelf-cover is
+    the blank for one. They are unplaced because there is no shelf bay to seat them in, not
+    because nobody knows where they belong: the guide names them by PID against this chassis.
+    THE SIXTEEN BAYS ARE NOT WRONG, and this is why the flattening has stood: a version 2
+    shelf holds four supplies and 4 x 4 is sixteen, so the supply positions are right for the
+    V2 build. They are wrong for V3, which puts three supplies in a shelf - twelve, not
+    sixteen - and that difference is invisible while the shelves are not there.
+    See roc-ops/Portrayal#262.
 groups:
   fan-trays:
     term: Fan Tray
@@ -619,22 +641,22 @@ views:
         - {id: fc-4, at: [250.47, 878.85], size: {w: 41.40, h: 395.70}, opening: {w: 41.4, h: 355.75}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 4, default: cisco/asr-9922-sfc110@1}
         - {id: fc-5, at: [298.14, 878.85], size: {w: 41.40, h: 395.70}, opening: {w: 41.4, h: 355.75}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 5, default: cisco/asr-9922-sfc110@1}
         - {id: fc-6, at: [345.81, 878.85], size: {w: 41.40, h: 395.70}, opening: {w: 41.4, h: 355.75}, accepts: ['cisco/asr-9922-sfc110@1', 'cisco/a99-sfc3@1'], group: fabric, rel-pos: 6, default: cisco/asr-9922-sfc110@1}
-        - {id: ps0-pm-0, at: [16.11, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-power-module-v2@1}
-        - {id: ps0-pm-1, at: [121.16, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-power-module-v2@1}
-        - {id: ps0-pm-2, at: [226.21, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-power-module-v2@1}
-        - {id: ps0-pm-3, at: [331.26, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 3, default: cisco/a9k-power-module-v2@1}
-        - {id: ps1-pm-0, at: [16.11, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 4, default: cisco/a9k-power-module-v2@1}
-        - {id: ps1-pm-1, at: [121.16, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 5, default: cisco/a9k-power-module-v2@1}
-        - {id: ps1-pm-2, at: [226.21, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 6, default: cisco/a9k-power-module-v2@1}
-        - {id: ps1-pm-3, at: [331.26, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 7, default: cisco/a9k-power-module-v2@1}
-        - {id: ps2-pm-0, at: [16.11, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 8, default: cisco/a9k-power-module-v2@1}
-        - {id: ps2-pm-1, at: [121.16, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 9, default: cisco/a9k-power-module-v2@1}
-        - {id: ps2-pm-2, at: [226.21, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 10, default: cisco/a9k-power-module-v2@1}
-        - {id: ps2-pm-3, at: [331.26, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 11, default: cisco/a9k-power-module-v2@1}
-        - {id: ps3-pm-0, at: [16.11, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 12, default: cisco/a9k-power-module-v2@1}
-        - {id: ps3-pm-1, at: [121.16, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 13, default: cisco/a9k-power-module-v2@1}
-        - {id: ps3-pm-2, at: [226.21, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 14, default: cisco/a9k-power-module-v2@1}
-        - {id: ps3-pm-3, at: [331.26, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1'], group: power-modules, rel-pos: 15, default: cisco/a9k-power-module-v2@1}
+        - {id: ps0-pm-0, at: [16.11, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-power-module-v2@1}
+        - {id: ps0-pm-1, at: [121.16, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-power-module-v2@1}
+        - {id: ps0-pm-2, at: [226.21, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-power-module-v2@1}
+        - {id: ps0-pm-3, at: [331.26, 2.92], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 3, default: cisco/a9k-power-module-v2@1}
+        - {id: ps1-pm-0, at: [16.11, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 4, default: cisco/a9k-power-module-v2@1}
+        - {id: ps1-pm-1, at: [121.16, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 5, default: cisco/a9k-power-module-v2@1}
+        - {id: ps1-pm-2, at: [226.21, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 6, default: cisco/a9k-power-module-v2@1}
+        - {id: ps1-pm-3, at: [331.26, 51.22], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 7, default: cisco/a9k-power-module-v2@1}
+        - {id: ps2-pm-0, at: [16.11, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 8, default: cisco/a9k-power-module-v2@1}
+        - {id: ps2-pm-1, at: [121.16, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 9, default: cisco/a9k-power-module-v2@1}
+        - {id: ps2-pm-2, at: [226.21, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 10, default: cisco/a9k-power-module-v2@1}
+        - {id: ps2-pm-3, at: [331.26, 99.52], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 11, default: cisco/a9k-power-module-v2@1}
+        - {id: ps3-pm-0, at: [16.11, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 12, default: cisco/a9k-power-module-v2@1}
+        - {id: ps3-pm-1, at: [121.16, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 13, default: cisco/a9k-power-module-v2@1}
+        - {id: ps3-pm-2, at: [226.21, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 14, default: cisco/a9k-power-module-v2@1}
+        - {id: ps3-pm-3, at: [331.26, 147.82], size: {w: 99.62, h: 42.85}, accepts: ['cisco/a9k-power-module-v2@1', 'cisco/pwr-2kw-dc-v2@1', 'cisco/pwr-3kw-ac-v2@1'], group: power-modules, rel-pos: 15, default: cisco/a9k-power-module-v2@1}
     regions:
       - {id: line-cards-upper, label: 'Line cards LC0 to LC9 - slots 0 to 9, right side up'}
       - {id: line-cards-lower, label: 'Line cards LC10 to LC19 - slots 10 to 19, installed UPSIDE DOWN'}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: asr-9006-fan
-version: 1.0.1
+version: 1.1.0
 class: fan
 behaviour: fills
 profile: networking
@@ -11,10 +11,6 @@ description: >-
   carries two of these for redundancy, side by side above the card cage and BEHIND A
   HINGED DOOR - which is why, uniquely in this family, no drawing of this tray exists
   anywhere: on the chassis master you see the door, not the tray.
-unplaced: >-
-  no ASR 9000 chassis in this library seats this fan tray - the ASR 9006's cooling is not
-  modelled as a bay yet, so there is nothing for it to go in. Tracked in
-  roc-ops/Portrayal#262.
 size: {w: 175.65, h: 70.97}
 attrs:
   model: 'ASR-9006-FAN'
@@ -23,6 +19,16 @@ attrs:
   power-draw-max-w: 375
   eol: 'none-announced'
 provenance:
+  seated: >-
+    SEATED IN THE OPENING ITS OWN SIZE CAME FROM. `size` above says the envelope here
+    is "asr9k-chassis's measurement of the OPENING in the ASR 9006 front master,
+    175.65 x 70.97 mm ... a sound number for the bay; it is not a measurement of the
+    part" - so FT0 and FT1 on the chassis were cutouts carrying exactly that figure,
+    and they are bays now. The chassis' own `openings-awaiting-components` gap asked
+    for this part by name and recorded Cisco's numbering, FT0/FT1 per Figure 19.
+    THE TWO OPENINGS WERE DRAWN 0.21 mm APART - 175.65 and 175.44 - which is one
+    opening measured twice in one master rather than two different holes, and the gap
+    that catalogued them already normalised both to 175.65. Both bays reserve that.
   body: >-
     NO `body:` BLOCK, AND THIS IS THE RECORD OF WHY. The renderer now admits class `cooling`
     to the set that draws a solid body and ejects (relief.js, commit 9e3d0cb), so this part
