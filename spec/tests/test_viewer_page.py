@@ -30,10 +30,22 @@ def page():
 def _page_code(text):
     """The page's script, with comments and the import line removed.
 
-    Both would otherwise be read as usage: the header comment names the shell, and
-    `from './shell.js'` looks exactly like `shell.js` being called.
+    All three would otherwise be read as usage: the header comment names the shell,
+    `from './shell.js'` looks exactly like `shell.js` being called, and so does a
+    JS line comment explaining which shell the page is running against.
+
+    THE LINE COMMENTS ARE NOT A THIRD KIND OF THE SAME MISTAKE, they are the same
+    one: this parser reads prose as code, and the fix is to stop showing it prose
+    rather than to ask contributors not to write `shell.js` in a comment. The page
+    now explains at some length which shell methods it needs and why - that is the
+    documentation the seam deserves - and every sentence of it was a false
+    `shell.js` call until this stripped them.
+
+    `(?<!:)` keeps the `https://` in the import map from being read as a comment.
     """
     src = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    src = re.sub(r"/\*.*?\*/", "", src, flags=re.S)
+    src = re.sub(r"(?<!:)//[^\n]*", "", src)
     return re.sub(r"""import\s*\{[^}]*\}\s*from\s*['"][^'"]+['"]""", "", src)
 
 
@@ -104,6 +116,42 @@ def test_the_seam_test_would_notice_a_rename():
     used = set(re.findall(r"\bshell\.([A-Za-z_$][\w$]*)", code)) - {"el"}
     assert "selectTheThing" in used, "the parser did not see the renamed call"
     assert used - returned == {"selectTheThing"}
+
+
+def _viewer_surface():
+    """What `createViewer` hands back, read out of kit/viewer3d.js."""
+    js = (KIT / "viewer3d.js").read_text()
+    body = js[js.index("export function createViewer"):]
+    ret = body[body.index("\n  return {") + len("\n  return {"):]
+    return _object_keys(ret[:ret.index("\n  };")])
+
+
+def test_the_page_only_calls_viewer_methods_the_viewer_returns(page):
+    """THE OTHER HALF OF THE SEAM, and it was not covered.
+
+    The shell half above has been checked since this file was written; the viewer
+    half had nobody watching it, which mattered the moment the page started doing
+    more than load and select. `setStates` and `setPulled` are how a lit lamp and
+    an unseated card reach the scene at all - the two things gate 5 asks a
+    contributor to look at - and a rename in viewer3d.js would take both out with
+    no failure anywhere until somebody opened the page and clicked.
+    """
+    code = _page_code(page)
+    used = set(re.findall(r"\b(?:viewer|v)\.([A-Za-z_$][\w$]*)", code))
+    returned = _viewer_surface()
+    assert used, "parsed no viewer calls at all - the parser has stopped working"
+    assert not (used - returned), (
+        f"kit/index.html calls viewer.{sorted(used - returned)} and kit/viewer3d.js "
+        f"returns {sorted(returned)}")
+
+
+def test_the_viewer_seam_test_would_notice_a_rename():
+    """Non-vacuity, for the same reason the shell one has it."""
+    returned = _viewer_surface()
+    code = _page_code(PAGE.read_text()).replace("v.setPulled", "v.setPulledTheThing")
+    used = set(re.findall(r"\b(?:viewer|v)\.([A-Za-z_$][\w$]*)", code))
+    assert "setPulledTheThing" in used, "the parser did not see the renamed call"
+    assert used - returned == {"setPulledTheThing"}
 
 
 def test_three_js_is_asked_for_by_version_and_not_bundled(page):
