@@ -1,0 +1,153 @@
+format: 1
+kind: component
+name: dc-terminal-24
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  Three-pole DC barrier terminal block with a hinged clear cover - the
+  screw-down -48 V input fitted to 1RU access and timing switches, where the
+  supply is landed on ring lugs rather than plugged in. Three screws on a 7.57
+  pitch behind a transparent guard; the pole names are silkscreened on the
+  faceplate BELOW the block, not moulded into it, so this part carries no
+  lettering and a device writes its own.
+unplaced: >-
+  the only device that carries this block is the Edgecore CSR180 (AS5915-16X), and the CSR180 is
+  not modelled yet - roc-ops/Portrayal#315. The part is here rather than waiting for it because
+  it is the EVIDENCE for a correction to common/dc-terminal-27@1: measuring these two blocks
+  against the CSR200's with one threshold is what showed the CSR200's own part had been sized
+  by eye and was wrong on both axes. Seating it needs the CSR180's faceplate, whose art is the
+  low-contrast honeycomb render described in this contract's `why-this-is-not-common-dc-terminal-27`.
+size: {w: 24.6, h: 14.4, d: 9.1}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs: {media: dc-terminal}
+provenance:
+  size: >-
+    photo-measured, READ OFF A MILLIMETRE RULE rather than a threshold - the
+    Edgecore CSR180 (AS5915-16X) datasheet elevation, page 2 at 600 dpi scaled by
+    the stated 440 mm width to 9.6295 px/mm, cropped at 25 px/mm with the rule
+    burned in. Both blocks read 24.6 x 14.4 with pole windows 6.0 x 7.4.
+  poles: >-
+    photo-measured on the same rule. Pole centres read 45.75/53.5/61.0 on the
+    left block and 84.4/91.9/99.4 on the right - a 7.55 pitch - inside bodies
+    starting at 40.2 and 78.8. As on common/dc-terminal-27@1 the poles sit about
+    0.9 mm right of the body centre, and the same asymmetry showing on all four
+    blocks across both devices is part of what says these are one design at two
+    sizes rather than a measuring artefact.
+  why-this-is-not-common-dc-terminal-27: >-
+    BECAUSE IT MEASURES DIFFERENT, AND THE ALTERNATIVE EXPLANATION WAS TESTED AND
+    FAILED. The CSR200 is the same 440 x 240 x 44 shell from the same vendor with
+    the same 48 VDC 6 A rating, and its two blocks read 26.98 x 16.08 and
+    26.88 x 15.87 on an 8.36 pole pitch - about 11 percent larger in both axes
+    than these, whose pitch is 7.57. Four instances, one threshold, one script.
+    THE OBVIOUS EXPLANATION IS THAT ONE FIGURE IS A PERSPECTIVE RENDER, and it is
+    not: panel height sampled along x is flat on both, 425-419 px across the
+    CSR200 and 425-430 across the CSR180, where a camera close enough to shrink a
+    part by 11 percent would leave a monotonic taper. And every other shared
+    feature agrees to about a millimetre - the SFP cage pitch reads 14.22 on the
+    CSR200 and 14.21 on the CSR180 against the registry's 14.25, and the system
+    lamp row, the coax jacks and the management stacks all land together.
+    So two parts, said plainly, on a measurement that a single vendor part number
+    could overturn. Neither document names one.
+  depth: >-
+    estimated. The elevation is a front view and fixes nothing behind the face.
+    9.1 is what the relief below actually BUILDS - the screw heads are the
+    furthest-forward thing on the part - rather than a guess at the moulding's
+    total depth including whatever sits behind the panel, which no source gives
+    and nothing in the library uses.
+  cover: >-
+    borrowed - common/dc-terminal-27@1. The two blocks are the same design at two
+    sizes: a bright guard over a darker body with three screws resolving through
+    it, which is what clear polycarbonate over metal looks like at this scale.
+elements:
+  pole-1: {at: [2.5, 3.6], size: [6.0, 7.4], class: terminal}
+  pole-2: {at: [10.05, 3.6], size: [6.0, 7.4], class: terminal}
+  pole-3: {at: [17.6, 3.6], size: [6.0, 7.4], class: terminal}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: body
+      out: 6.6
+      shape: true
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        THE 3D FORM IS THE READING TOO, and the first one was wrong in a way only the
+        kit showed. It was written as two full-face slabs - a `body` 9.0 proud and a
+        `cover` 14.0 proud over the whole face - so in 3D the cover buried the poles
+        and the screws, which had no relief of their own, and the block extruded as a
+        featureless pale box. The 2D face was right the whole time. What is here now is
+        the form the photograph shows: a slab, two bright lips standing proud of it
+        along the top and bottom edges, three pole blocks between them sitting just
+        below the lip line, and a screw head on each pole. Only the STEP SIZES are
+        estimated; which feature is proud of which is read off the elevation, where the
+        lips catch the light and the pole windows are in shadow.
+    - node: lip-top
+      out: 9.0
+      color: '#dde2e7'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. The lip's step
+        above the block face is estimated; that it IS a step is read off the
+        elevation.
+    - node: lip-bottom
+      out: 9.0
+      color: '#dde2e7'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. The lip's step
+        above the block face is estimated; that it IS a step is read off the
+        elevation.
+    - node: mid
+      out: 7.0
+      color: '#b7bdc3'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. The band between
+        the lips, which the poles stand on.
+    - node: pole-1
+      out: 7.9
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`.
+    - node: pole-2
+      out: 7.9
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`.
+    - node: pole-3
+      out: 7.9
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`.
+    - node: screw-1
+      cyl: 1.2
+      lift: 7.9
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. A slotted head
+        standing on its pole and finishing just under the lip line.
+    - node: screw-2
+      cyl: 1.2
+      lift: 7.9
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. A slotted head
+        standing on its pole and finishing just under the lip line.
+    - node: screw-3
+      cyl: 1.2
+      lift: 7.9
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own 3D-form key - see `body`. A slotted head
+        standing on its pole and finishing just under the lip line.
+connection-points:
+  dc-in: {at: [13.05, 7.2], direction: front}
+skins: [default]
