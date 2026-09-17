@@ -18,6 +18,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 from portrayal import lint
 from portrayal import dcim_export as dx
+from portrayal import libwalk
 
 STANDARDS = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
 
@@ -1234,7 +1235,7 @@ def test_no_lamp_placement_still_declares_for_a_lamped_rj45():
     four vendors - two discrete LEDs beside a jack that itself has none - and is
     not this."""
     LAMPED = {"common/rj45-eth@1", "common/rj45-ganged-eth@1"}
-    for f in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for f in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(f.read_text())
         for v in (d.get("views") or {}).values():
             pl = ((v or {}).get("components") or {}).get("placements") or []

@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 
 import yaml
+from portrayal import libwalk
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
@@ -64,7 +65,7 @@ def test_every_declared_configuration_in_the_library_has_a_kind():
     stops, the index carries `null` for a configuration a person wrote, which
     is the guessing coming back one device at a time."""
     missing = []
-    for f in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for f in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(f.read_text())
         for n, c in (d.get("configurations") or {}).items():
             if (c or {}).get("kind") not in ("base", "orderable", "example", "model"):

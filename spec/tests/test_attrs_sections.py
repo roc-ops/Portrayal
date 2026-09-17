@@ -18,9 +18,10 @@ LIB = SPEC.parent / "library"
 from portrayal import attrsections
 from portrayal import capability
 from portrayal import lint
+from portrayal import libwalk
 
 PROFILES = capability.load_profiles(SPEC / "schemas")
-MANIFESTS = sorted(LIB.glob("devices/*/*/device.yaml"))
+MANIFESTS = libwalk.iter_devices([LIB])
 
 
 @functools.lru_cache(maxsize=None)

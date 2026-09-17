@@ -30,13 +30,14 @@ LIB = ROOT / "library"
 
 from portrayal import dcim_export as dx
 from portrayal import lint
+from portrayal import libwalk
 
 
 @functools.lru_cache(maxsize=1)
 def _psus():
     """Every class:psu contract, parsed once: ref -> document."""
     out = {}
-    for cf in sorted(LIB.glob("components/*/*/*/contract.yaml")):
+    for cf in libwalk.iter_components([LIB]):
         d = yaml.safe_load(cf.read_text()) or {}
         if (d.get("class") or "") == "psu":
             out[f"{cf.parent.parent.parent.name}/{cf.parent.parent.name}"] = d

@@ -37,6 +37,7 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 from portrayal import lint
+from portrayal import libwalk
 
 ENUM = set(json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
            ["$defs"]["confidence"]["enum"])
@@ -45,7 +46,7 @@ ENUM = set(json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
 @pytest.fixture(scope="module")
 def devices():
     return {f"{p.parts[-3]}/{p.parts[-2]}": yaml.safe_load(p.read_text()) or {}
-            for p in sorted(LIB.glob("devices/*/*/device.yaml"))}
+            for p in libwalk.iter_devices([LIB])}
 
 
 def entries(devices):

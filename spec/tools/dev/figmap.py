@@ -38,6 +38,7 @@ import re
 import numpy as np
 import yaml
 from PIL import Image
+from portrayal import libwalk
 
 # A HYPHEN IS NOT A DIFFERENT WORD. Six headings in the intake read
 # "Front-Panel Features And Indicators", and a `front panel` pattern is silent
@@ -202,7 +203,7 @@ def main(argv=None):
         docs[pathlib.Path(doc).parent.name] = figure_context(doc)
 
     manifest, stats = {}, collections.Counter()
-    for p in sorted(glob.glob(f"{args.library}/devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([args.library]):
         d = yaml.safe_load(open(p)) or {}
         dev = p.split('devices/')[1].replace('/device.yaml', '')
         name = d.get("name")

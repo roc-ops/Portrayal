@@ -39,6 +39,7 @@ from portrayal import dcim_export as dx
 from portrayal import lint
 from portrayal.faces import face_ref                  # noqa: E402
 from portrayal.manifest import load_yaml, view_parts   # noqa: E402
+from portrayal import libwalk
 
 # `port` is a connector on a faceplate; `inlet` is power entry. Both are things a
 # DCIM has somewhere to put, which is what makes their silence worth auditing.
@@ -51,7 +52,7 @@ PORT_CLASSES = {"port", "inlet"}
 def _contracts():
     """Every component contract, parsed once: ref -> the whole document."""
     out = {}
-    for cf in sorted(LIB.glob("components/*/*/*/contract.yaml")):
+    for cf in libwalk.iter_components([LIB]):
         d = yaml.safe_load(cf.read_text()) or {}
         ref = f"{cf.parent.parent.parent.name}/{cf.parent.parent.name}"
         # Several majors of one part share a ref here on purpose: the question

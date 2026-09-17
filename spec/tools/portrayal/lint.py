@@ -102,6 +102,7 @@ from pathlib import Path
 import yaml
 
 from portrayal import attrsections as attrs_mod
+from portrayal import libwalk
 from portrayal import capability
 from portrayal import dcim_export
 from portrayal import devicelock
@@ -304,14 +305,7 @@ def contract_class(ref, lib_roots):
     188 times."""
     if ref in _CLASS_CACHE:
         return _CLASS_CACHE[ref]
-    nsname, major = ref.rsplit("@", 1)
-    cls = None
-    for r in lib_roots:
-        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-        if f.exists():
-            cls = (load_yaml(f) or {}).get("class")
-            break
-    _CLASS_CACHE[ref] = cls
+    _CLASS_CACHE[ref] = cls = (libwalk.load_contract(ref, lib_roots) or {}).get("class")
     return cls
 
 
@@ -320,32 +314,17 @@ def contract_size(ref, lib_roots):
     L21 asks per placement and a 248-placement view would re-read otherwise."""
     if ref in _SIZE_CACHE:
         return _SIZE_CACHE[ref]
-    try:
-        nsname, major = ref.rsplit("@", 1)
-    except ValueError:
-        _SIZE_CACHE[ref] = None
-        return None
-    size = None
-    for r in lib_roots:
-        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-        if f.exists():
-            size = (load_yaml(f) or {}).get("size")
-            break
-    _SIZE_CACHE[ref] = size
+    # A MALFORMED REF IS None, NOT A ValueError. This one caught the unpack
+    # locally and three siblings beside it did not; `split_ref` answers it once,
+    # for every caller.
+    _SIZE_CACHE[ref] = size = (libwalk.load_contract(ref, lib_roots) or {}).get("size")
     return size
 
 
 def contract_attrs(ref, lib_roots):
     if ref in _ATTRS_CACHE:
         return _ATTRS_CACHE[ref]
-    nsname, major = ref.rsplit("@", 1)
-    attrs = {}
-    for r in lib_roots:
-        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-        if f.exists():
-            attrs = (load_yaml(f) or {}).get("attrs") or {}
-            break
-    _ATTRS_CACHE[ref] = attrs
+    _ATTRS_CACHE[ref] = attrs = (libwalk.load_contract(ref, lib_roots) or {}).get("attrs") or {}
     return attrs
 
 
@@ -353,14 +332,8 @@ def contract_elements(ref, lib_roots):
     """The element ids a component contracts, for L20's per-element states form."""
     if ref in _ELEMENTS_CACHE:
         return _ELEMENTS_CACHE[ref]
-    nsname, major = ref.rsplit("@", 1)
-    els = set()
-    for r in lib_roots:
-        f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-        if f.exists():
-            els = set(((load_yaml(f) or {}).get("elements") or {}).keys())
-            break
-    _ELEMENTS_CACHE[ref] = els
+    _ELEMENTS_CACHE[ref] = els = set(
+        ((libwalk.load_contract(ref, lib_roots) or {}).get("elements") or {}).keys())
     return els
 
 
@@ -416,15 +389,15 @@ def paint_boxes(ref, skin, lib_roots):
     if key in _PAINT_CACHE:
         return _PAINT_CACHE[key]
     boxes = None
-    try:
-        nsname, major = ref.rsplit("@", 1)
-    except ValueError:
+    contract = libwalk.contract_path(ref, lib_roots)
+    if contract is None:
         _PAINT_CACHE[key] = None
         return None
-    for r in lib_roots:
-        base = Path(r) / "components" / nsname / f"v{major}"
-        if not (base / "contract.yaml").exists():
-            continue
+    # ONE ITERATION, because `contract_path` already searched the roots in
+    # order and answered which one holds it. The loop here was the search
+    # repeated, and its `continue` meant a ref present in a later root read its
+    # skins from a root that did not have the contract.
+    for base in [contract.parent]:
         sp = base / "skins" / f"{skin}.svg"
         if not sp.exists():
             break
@@ -763,12 +736,7 @@ def device_dependencies(dev_path, lib_roots):
 
 def resolve_component(ref, lib_roots):
     """Locate a component contract from a `ns/name@major` ref."""
-    nsname, major = ref.rsplit("@", 1)
-    for r in lib_roots:
-        c = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-        if c.exists():
-            return c
-    return None
+    return libwalk.contract_path(ref, lib_roots)
 
 
 def lint_component_mating(path, data, lib_roots):
@@ -2621,13 +2589,7 @@ def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
         if part["id"] in ids:
             err(path, "L10", f"duplicate part id {part['id']}")
         ids.add(part["id"])
-        nsname, major = part["ref"].rsplit("@", 1)
-        found = None
-        for r in lib_roots:
-            c = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-            if c.exists():
-                found = c
-                break
+        found = libwalk.contract_path(part["ref"], lib_roots)
         if not found:
             err(path, "L10", f"unresolvable part ref {part['ref']}")
             continue
@@ -5499,19 +5461,13 @@ def _aperture_of(ref, lib_roots, depth=0):
     """The opening a part presents, forwarding through a composed cage."""
     ct = contract_for_ref(ref, lib_roots) if "contract_for_ref" in globals() else None
     if ct is None:
-        nsname = None
-        try:
-            nsname, major = ref.rsplit("@", 1)
-        except ValueError:
+        f = libwalk.contract_path(ref, lib_roots)
+        if f is None:
             return None
-        for r in lib_roots:
-            f = Path(r) / "components" / nsname / f"v{major}" / "contract.yaml"
-            if f.exists():
-                try:
-                    ct = load_yaml(f) or {}
-                except yaml.YAMLError:
-                    return None
-                break
+        try:
+            ct = load_yaml(f) or {}
+        except yaml.YAMLError:
+            return None
     if not ct or depth > 3:
         return None
     conf = ct.get("conforms")
@@ -6047,9 +6003,7 @@ def lint_device(path, validator, lib_roots):
         return data
 
     def resolve(ref):
-        nsname, major = ref.rsplit("@", 1)
-        return any((Path(r) / "components" / nsname / f"v{major}" / "contract.yaml").exists()
-                   for r in lib_roots)
+        return libwalk.contract_path(ref, lib_roots) is not None
 
     lint_device_attrs(path, data)
     lint_device_module_power(path, data, lib_roots)
@@ -7068,7 +7022,7 @@ def main():
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             lint_unplaced_majors(root)
-            if not (root / devicelock.LOCK_NAME).exists() and not list(root.glob("devices/*/*/device.yaml")):
+            if not (root / devicelock.LOCK_NAME).exists() and not list(libwalk.iter_devices([root])):
                 continue
             for slug_, kind_, msg_ in devicelock.check(root):
                 # WARNING WHILE THE DEVICE IS STILL BEING DRAWN, ERROR ONCE IT

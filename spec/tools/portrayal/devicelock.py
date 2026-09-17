@@ -30,6 +30,7 @@ import sys
 import yaml
 
 from portrayal import manifest
+from portrayal import libwalk
 LOCK_NAME = "devices.lock.json"
 FORMAT = 1
 
@@ -510,7 +511,7 @@ def stale_gap_scopes(doc):
 
 
 def device_files(library: pathlib.Path):
-    return sorted(library.glob("devices/*/*/device.yaml"))
+    return list(libwalk.iter_devices([library]))
 
 
 def slug(path: pathlib.Path, library: pathlib.Path):

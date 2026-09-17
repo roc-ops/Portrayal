@@ -15,6 +15,7 @@ from pathlib import Path
 import yaml
 
 from portrayal import comparable as facts_mod
+from portrayal import libwalk
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", default="library")
@@ -23,7 +24,7 @@ def main():
 
     lib = Path(args.library)
     devices, census = [], {}
-    for man in sorted(lib.glob("devices/*/*/device.yaml")):
+    for man in libwalk.iter_devices([lib]):
         d = yaml.safe_load(man.read_text())
         if (d or {}).get("kind") != "device":
             continue

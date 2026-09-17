@@ -18,6 +18,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
 from portrayal import lint
+from portrayal import libwalk
 
 P = Path("fixture.yaml")
 
@@ -367,7 +368,7 @@ def test_a_pitch_broken_by_a_cage_division_is_not_a_defect():
 
 def test_the_library_sits_on_an_even_pitch():
     import glob as _g
-    for f in _g.glob(str(LIB / "devices/*/*/device.yaml")):
+    for f in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(Path(f).read_text()) or {}
         assert not caught("L49", lint.lint_device_bay_pitch, Path(f), d), f
 

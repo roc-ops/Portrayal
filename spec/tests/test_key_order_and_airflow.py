@@ -37,6 +37,7 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 from portrayal import lint
+from portrayal import libwalk
 
 
 def run(fn, doc):
@@ -59,7 +60,7 @@ def device(**keys):
 def test_the_library_is_in_one_order():
     """The corpus. 22 orderings became one."""
     bad = []
-    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(p.read_text()) or {}
         lint.ERRORS.clear()
         lint.lint_device_key_order(p, d)
@@ -69,7 +70,7 @@ def test_the_library_is_in_one_order():
 
 def test_there_are_manifests_to_check():
     """NON-VACUITY for the sweep above."""
-    assert len(list(LIB.glob("devices/*/*/device.yaml"))) > 80
+    assert len(list(libwalk.iter_devices([LIB]))) > 80
 
 
 def test_a_key_in_the_wrong_place_is_reported():
@@ -103,7 +104,7 @@ def test_the_template_is_written_in_the_canonical_order():
 
 def test_the_library_states_airflow_once():
     bad = []
-    for p in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(p.read_text()) or {}
         lint.ERRORS.clear()
         lint.lint_device_airflow_home(p, d)
