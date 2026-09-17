@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ndc-4x-rj45-14g
-version: 1.1.0
+version: 1.2.0
 class: nic
 behaviour: fills
 profile: server
@@ -73,6 +73,24 @@ provenance:
     THE LAMPS ARE IN THE JACK, not beside it - the ISM's figure 10 labels them on
     the housing - so they are elements of this part rather than separate
     placements on the chassis.
+  port-speeds: >-
+    DELL SILKSCREENS THE ANSWER ON THE FACEPLATE AND THE MASTER DRAWS IT. The
+    2x10gb-bt-2x1gb-ndc master prints "10Gb" in the gap between the first and
+    second jacks and "1Gb" in the gap between the third and fourth, each label
+    centred within the pair it names, with the middle gap left empty as the
+    separator. So ports 1 and 2 are 10GBASE-T and ports 3 and 4 are 1000BASE-T.
+    READ OFF THE RENDER, NOT THE FILENAME. #287 was explicit that the stencil's
+    NAME is not a source, and it is not - it gives the mix and not the order.
+    The labels are, and they are invisible to a path scan: the glyphs are
+    subpaths inside a compound path, so measuring bounding boxes finds two pairs
+    of side features that differ (5.75 x 14.08 on ports 1-2, 8.33 x 12.83 on
+    ports 3-4) without saying which pair is which. Rasterising the master and
+    looking at it answers in one step.
+    THE ISM CANNOT SETTLE THIS AND IS NOT SILENT BY OVERSIGHT: its rear-view
+    table defers the whole question - "For more information about the supported
+    configurations, see the www.dell.com/poweredgemanuals section" - because the
+    NDC is an option, and the spec sheet lists four of them (4 x 1GbE, 2 x 10GbE
+    + 2 x 1GbE, 4 x 10GbE, 2 x 25GbE) without drawing any.
   depth: >-
     estimated. Nothing held here dimensions the card behind its faceplate.
   composed-jack-shrank: >-
@@ -81,9 +99,14 @@ provenance:
 parts:
   # FOUR DELL PORTS, not four drawings of one. Each carries its own
   # two lamps and ISM table 11 with them.
-  - {ref: dell/rj45-port-14g@1, id: port-1, at: [2.57, 0.55]}
-  - {ref: dell/rj45-port-14g@1, id: port-2, at: [24.77, 0.55]}
-  - {ref: dell/rj45-port-14g@1, id: port-3, at: [46.97, 0.55]}
-  - {ref: dell/rj45-port-14g@1, id: port-4, at: [69.17, 0.55]}
+  #
+  # TWO 10GBASE-T AND TWO 1G, AND THE MASTER SAYS WHICH. The speed is on the
+  # PLACEMENT because it is a fact about this position on this card, not about
+  # the jack - the same dell/rj45-port-14g sits in all four. See
+  # provenance/port-speeds.
+  - {ref: dell/rj45-port-14g@1, id: port-1, at: [2.57, 0.55], attrs: {media: rj45, speed: 10g}}
+  - {ref: dell/rj45-port-14g@1, id: port-2, at: [24.77, 0.55], attrs: {media: rj45, speed: 10g}}
+  - {ref: dell/rj45-port-14g@1, id: port-3, at: [46.97, 0.55], attrs: {media: rj45, speed: 1g}}
+  - {ref: dell/rj45-port-14g@1, id: port-4, at: [69.17, 0.55], attrs: {media: rj45, speed: 1g}}
 size: {w: 90.3, h: 14.5, d: 60.0}
 skins: [default]
