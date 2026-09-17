@@ -1,14 +1,14 @@
 format: 1
 kind: device
-name: agr110
-version: 8.2.0
+name: agr130
+version: 0.1.0
 maturity: modelled
 manufacturer: Edgecore
-model: AS5916-54XL
-portfolio: {line: Service Provider, family: Aggregation Router, series: AGR110}
+model: AS5916-54XKS
+portfolio: {line: Service Provider, family: Aggregation Router, series: AGR130}
 description: >-
-  48x 10G SFP+ plus 6x 100G QSFP28 1RU aggregation router, sold as the AGR110, Broadcom
-  BCM88370 Qumran-MX with a BCM15K TCAM, Intel Xeon D-1518, ONIE-preloaded. All ports on the front,
+  48x 10G SFP+ plus 6x 100G QSFP28 1RU aggregation router, sold as the AGR130, Broadcom
+  BCM88375 Qumran-MX with a BCM52311 TCAM, Intel Xeon D-1548 8-core, ONIE-preloaded. All ports on the front,
   numbered from 0 with even ports on the top row; two 650 W AC or -48 VDC PSUs and six 5+1 fan
   trays from the rear, front-to-back airflow in every ordering code published.
 profile: networking
@@ -38,41 +38,50 @@ provenance:
   sources:
     confidence: datasheet
     note: >-
-      Two documents, both staged and both docling-converted, but MEASURED OFF THE PDF PAGES
-      RATHER THAN THE CONVERTED FIGURES. agr110-datasheet (the AGR110 / AS5916-54XL data sheet)
-      carries the specification list, the ordering matrix and fig-0009, a stacked front-and-rear
-      colour elevation with eight callouts and their description table; that figure is the source
-      of every horizontal number here. agr110-qsg is the AS5916-54XKS|AS5916-54XL quick start
-      guide - a TWO-MODEL document - and supplies the hardware-specification table, the power
-      ratings and, in its section 6 "Verify Switch Operation" zoom, the only legible reading of
-      the port numerals and the system-LED legends. Three vendor stock photographs
-      (photos/agr110-1..3) are 489 x 357 px and confirm nothing but colour.
+      Two documents. agr130-datasheet (the AGR130 / AS5916-54XKS data sheet) carries the
+      specification list, the ordering matrix with vendor part numbers, and fig-0006 - a stacked
+      front-and-rear colour elevation with eight callouts, the same artwork family as the
+      AGR110's. agr130-qsg is the AS5916-54XKS|AS5916-54XL quick start guide, which is THE SAME
+      DOCUMENT the AGR110 cites: one cover, one specification table, both models. Three vendor
+      stock photographs are 489 x 357 px and confirm colour only.
+  method:
+    confidence: borrowed
+    note: >-
+      THIS DEVICE IS library/devices/edgecore/agr110 WITH DIFFERENT SILICON, and the faceplate is
+      carried over wholesale. That is a strong claim, so it was tested rather than assumed, by
+      measuring the SAME FEATURES in each model's own datasheet elevation at each figure's own
+      scale and differencing them:
+      THE REAR AGREES TO 0.07 MM. Isolating the red pull bars and PSU latches by colour - eight
+      features across the face - gives AGR110 13.86, 96.78, 145.00, 193.66, 242.27, 290.88,
+      339.98, 373.19 and AGR130 13.81, 96.80, 144.98, 193.60, 242.28, 290.95, 340.01, 373.23.
+      Largest difference 0.07 mm, which is below what either figure resolves.
+      THE FRONT AGREES TO 0.2 MM. The thirteen yellow label strips, isolated the same way, land at
+      134.9/145.9, 164.7/175.8, 194.6/205.6, 224.5/235.9, 254.3/265.8, 284.6/295.7 and 345.3 on
+      the AGR110 against 134.7/145.7, 164.6/175.6, 194.5/205.5, 224.4/235.8, 254.3/265.7,
+      284.6/295.6 and 345.2 on the AGR130. Same artwork.
+      The panels themselves measure 4008 x 393 px at 9.1423 px/mm and 4005 x 394 at 9.1355 - 0.07
+      percent apart - and both datasheets state 438.4 x 501.9 x 44 mm and 9.7 kg. The callout
+      tables are identical item for item, and so is the port complement.
+      SO EVERY GEOMETRIC NUMBER BELOW IS CARRIED OVER from the AGR110 and the notes that follow
+      describe how IT was measured, which is where the evidence for them lives. What is NOT
+      carried over is the silicon, the CPU, the memory and the ordering matrix, each read from
+      this model's own datasheet, and the two facts a reader should not take on trust: this
+      device has not been photographed, and the -XKS is the timing SKU of the pair, so if
+      anything on its face differs from the -XL it is most likely to be in ports this corpus does
+      not resolve. Nothing in either document names such a port - the callout list, the ports
+      section and the transceiver list are word for word the AGR110's - but absence in a shared
+      document is weaker evidence than a photograph, and it is recorded as a gap.
   figure-choice:
     confidence: measured
     note: >-
-      Gate 1, and the prepared brief's ranked candidates were NOT used. prepare.py ranks the
-      docling-extracted figures, whose best here is agr110-datasheet/fig-0009 at 3.29 px/mm.
-      The same figure taken off a 600 dpi render of its own page (pdftocairo -png -r 600 -f 2)
-      measures at 9.12 px/mm, nearly three times the resolution, and that is what every number
-      below was read at. Panel boxes found by row/column darkness: FRONT (382,1728)-(4389,2120),
-      4008 x 393 px; REAR (386,2824)-(4385,3216), 4000 x 393 px. The two agree on width to 0.2
-      percent, which is what anchors the x scale at 9.124 px/mm on 438.4 mm.
-      THE FIGURE IS A RENDER, NOT A DRAWING, and its aspect says so: 10.18 against 9.96 for
-      438.4/44, 2.1 percent out. The tell is not the arithmetic but the art - the TOP cage row
-      shows more of its interior than the bottom row does, which happens when the camera sits
-      slightly above the face. 2.1 percent is inside the four percent at which
-      docs/modelling-a-device.md still allows fractions, so: x carries geometry directly, and
-      every y here is either a proportion of the panel's own 393 px height mapped onto 44 mm or
-      a registry figure anchored on one such proportion. No absolute vertical measurement was
-      taken from this image.
-      THE QUICK START GUIDE'S ART WAS REJECTED. Its page-1 front elevation measures 1199 x 148
-      px - aspect 8.10 against 9.96, NINETEEN percent out, vertically stretched - and
-      docs/modelling-a-device.md says that at ten percent you cannot take absolute scale at all.
-      It puts the inter-row LED bezel at 17.24 mm where the datasheet render puts it at 15.17.
-      The guide also disclaims itself in its own words, on page 1: "The switch drawings in this
-      document are for illustration only and may not match your particular switch model." So the
-      QSG is used here for TEXT ONLY - the specification table, the power ratings, and the
-      section 6 zoom, which is a photograph of the real faceplate rather than line art.
+      Gate 1, run on this model's OWN figure rather than inherited. agr130-datasheet page 2 at
+      600 dpi (pdftocairo -png -r 600 -f 2): front panel (380,1715)-(4384,2108), 4005 x 394 px;
+      rear (382,2810)-(4380,3203), 3999 x 394. Aspect 10.165 and 10.150 against 9.964 for
+      438.4/44 - 2.0 percent out, the same signature the AGR110's figure has and for the same
+      reason, because it is a render rather than a drawing. So x carries geometry at 9.136 px/mm
+      and y is proportional only. The quick start guide's art is rejected here exactly as it is
+      there, and by the same sentence printed on its page 1: "The switch drawings in this
+      document are for illustration only and may not match your particular switch model."
   chassis:
     confidence: datasheet
     note: >-
@@ -526,11 +535,11 @@ attrs:
   thermal: {airflow: front-to-back (every published ordering code), cooling: 5+1 redundant hot-swappable fan modules}
   environmental: {temperature-operating: 0 C to 40 C (32 F to 104 F), temperature-storage: -40 C to 70
       C (-40 F to 158 F), humidity-operating: 5% to 95% non-condensing}
-  platform: {asic: Broadcom BCM88370 Qumran-MX, tcam: BCM15K, cpu: 'Intel Xeon D-1518, 4-core 2.2 GHz',
-    memory: 'DDR4 SO-DIMM, 2 x 8 GB', storage: 128 GB MLC M.2 SSD, bmc: 'yes, 1 x BMC', software: 'ONIE
+  platform: {asic: Broadcom BCM88375 Qumran-MX, tcam: BCM52311, cpu: 'Intel Xeon D-1548, 8-core 2.0 GHz',
+    memory: 'DDR4 SO-DIMM, 2 x 16 GB', storage: 128 GB MLC M.2 SSD, bmc: 'yes, 1 x BMC', software: 'ONIE
       installer pre-loaded; Open Network Linux (ONL) compatible'}
   features:
-    marketing-name: AGR110
+    marketing-name: AGR130
     timing: IEEE 1588v2 and SyncE in hardware
     optics-sfp-plus: 10GBASE-SR/LR, 10G DAC/AOC, 1000BASE-T/SX/LX
     optics-qsfp28: 100GBASE-CR4/SR4/LR4/PSM4 and AOC, 40GBASE-CR4/SR4/LR4, 25GBASE-CR4 and AOC, 10GBASE-CR/SR/LR
@@ -553,15 +562,28 @@ attrs:
 chassis: {width: 438.4, height: 44.0, depth: 501.9, ru: 1, weight-kg: 9.7, color: '#2b2f33',
   airflow: front-to-back}
 gaps:
+- what: timing-sku-face-difference
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    THIS IS THE TIMING SKU OF THE PAIR and its face is drawn as the AGR110's. Nothing in either
+    document contradicts that - the callout list, the ports section and the transceiver list are
+    the AGR110's word for word, neither datasheet names a GNSS, ToD, 1PPS, BITS or SMA connector,
+    and the two elevations agree to 0.2 mm on the front and 0.07 on the rear. But the AGR130 has
+    not been photographed, and the quick start guide the pair shares is a document that describes
+    both models with one set of drawings and says so. A shared document's silence about a
+    difference is weaker evidence than a picture of the device. If the -XKS carries a timing port
+    the -XL does not, this is where it would be and this model would not show it. One photograph
+    of the AGR130's front panel closes it.
 - what: chassis-dimensions
   scope: [front, rear, top, bottom, left, right]
   reason: sources-disagree
   wanted: >-
-    agr110-datasheet/doc.md:109 states 438.4 x 501.9 x 44 mm and agr110-qsg's hardware
-    specification states 435 x 515 x 43.84 mm. All three axes differ and the depth differs by
+    agr130-datasheet/doc.md:103 states 438.4 x 501.9 x 44 mm and the quick start guide's hardware
+    specification - the one this model SHARES with the AGR110 - states 435 x 515 x 43.84 mm. All three axes differ and the depth differs by
     13 mm, which is not rounding. The datasheet is modelled, for the reasons in provenance -
     the sibling's datasheet states the same triple independently, 438.4 is the body width this
-    vendor's 1RU line uses, and the figure's own aspect prefers it - but the quick-start is not
+    vendor's 1RU line uses, and this model's own figure aspect prefers it - but the quick-start is not
     wrong for being outvoted, and the same conflict stands unresolved on agr130, which shares
     that quick-start. A tape measure on a real unit settles it in one minute.
 - what: qsfp-port-numbering
@@ -945,17 +967,17 @@ configurations:
       Two 650 W AC supplies and six fan trays, front-to-back. This is a fixed 1RU router, so the
       base configuration is the box as it is bought - supplies and fans populated, cages empty.
     part-numbers:
-      5916-54XL-O-AC-F-US: {part: FP1ZZ5654430A, power-cord: N. America}
-      5916-54XL-O-AC-F-EU: {part: FP1ZZ5654230A, power-cord: EU}
-      5916-54XL-O-AC-F-UK: {part: FP1ZZ5654330A, power-cord: UK}
-      5916-54XL-O-AC-F-JP: {part: FP1ZZ5654534A, power-cord: JP}
-      5916-54XL-O-AC-F-UN: {part: FP1ZZ56540BJA, power-cord: C13-C14}
-      5916-54XL-O-AC-F: {part: FP1ZZ56540BGA, power-cord: none listed}
-      5916-54XL-OT-AC-F-US: {part: FP1ZZ5654431A, power-cord: N. America}
-      5916-54XL-OT-AC-F-EU: {part: FP1ZZ5654231A, power-cord: EU}
-      5916-54XL-OT-AC-F-UK: {part: FP1ZZ5654331A, power-cord: UK}
-      5916-54XL-OT-AC-F-JP: {part: FP1ZZ5654535A, power-cord: JP}
-      5916-54XL-OT-AC-F-UN: {part: FP1ZZ56540BMA, power-cord: C13-C14}
+      5916-54XKS-O-AC-F-US: {part: FP1ZZ5654429A, power-cord: N. America}
+      5916-54XKS-O-AC-F-EU: {part: FP1ZZ5654229A, power-cord: EU}
+      5916-54XKS-O-AC-F-UK: {part: FP1ZZ5654329A, power-cord: UK}
+      5916-54XKS-O-AC-F-JP: {part: FP1ZZ5654533A, power-cord: JP}
+      5916-54XKS-O-AC-F-UN: {part: FP1ZZ56540BKA, power-cord: C13-C14}
+      5916-54XKS-O-AC-F: {part: FP3ZZ5654043A, power-cord: none listed}
+      5916-54XKS-OT-AC-F-US: {part: FP1ZZ5654433A, power-cord: N. America}
+      5916-54XKS-OT-AC-F-EU: {part: FP1ZZ5654232A, power-cord: EU}
+      5916-54XKS-OT-AC-F-UK: {part: FP1ZZ5654332A, power-cord: UK}
+      5916-54XKS-OT-AC-F-JP: {part: FP1ZZ5654536A, power-cord: JP}
+      5916-54XKS-OT-AC-F-UN: {part: FP1ZZ56540BQA, power-cord: C13-C14}
     bays: {psu-0: common/psu-ac-650@3, psu-1: common/psu-ac-650@3}
   dc:
     kind: orderable
@@ -963,8 +985,8 @@ configurations:
       Two -48 VDC supplies, otherwise the base box. The quick-start's DC procedure calls for #10 AWG
       wire and the grounding kit's ring lugs, and the datasheet's input range is -36 to -72 VDC.
     part-numbers:
-      5916-54XL-O-48V-F: {part: FP1ZZ56540BEA}
+      5916-54XKS-O-48V-F: {part: FP1ZZ56540BAA}
     bays: {psu-0: common/psu-dc-650@2, psu-1: common/psu-dc-650@2}
 references:
-- {title: 'Edgecore AGR110 / AS5916-54XL Data Sheet', sha256: 4a1cdf1314aa023e0bbd37e0b6d2ad3aac846221d81885e2b55406c38e9d6b19}
-- {title: 'Edgecore AS5916-54XKS | AS5916-54XL Quick Start Guide E052020-AP-R03', sha256: f3f600eee2a3e454664a820731c42af9f720776fcecaaa1c3a178815a7177e82}
+- {title: 'Edgecore AGR130 / AS5916-54XKS Data Sheet', sha256: ce97c48ccc309404e9c72612d81ab50e302f834e18489a34562e84ae1530a7a0}
+- {title: 'Edgecore AS5916-54XKS | AS5916-54XL Quick Start Guide E052020-AP-R03', sha256: 50cb3d9f07cdfaea815ae8026ea9c3356cd8e6b92f4eccdf32498c0245c2574a}
