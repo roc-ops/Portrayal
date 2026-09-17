@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-dc-650
-version: 2.4.1
+version: 2.5.0
 class: psu
 behaviour: fills
 profile: networking
@@ -9,6 +9,11 @@ description: 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 
 size: {w: 54.0, h: 40.0}
 attrs: {power-output-w: 650, input: dc, voltage: '-48v', inlet: dc-terminal}
 provenance:
+  states: >-
+    THE SAME AS THE AC SUPPLY BESIDE IT: a common/ generic seated across three
+    Edgecore families, no held document describing a status lamp on it, and a lamp
+    drawn on a generic would be one position invented for all of them. #212's
+    argument for the fan generics, unchanged. `ok` and `fail` go; `absent` stays.
   inlet: >-
     transcribed from this contract - the description names a 'terminal cover' and the face
     carries a `dc-inlet` element of class `inlet`. Nothing new was measured.
@@ -24,7 +29,7 @@ provenance:
     side art pending its own photos
   size: photo-measured (rear overlay; body ~45mm + fold-out handle)
   elements: estimated from AC v2 + angled DC photo
-states: [ok, fail, absent]
+states: [absent]
 elements:
   latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
   handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}

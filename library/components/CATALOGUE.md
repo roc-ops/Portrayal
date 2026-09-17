@@ -560,7 +560,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/mx204-psu-ac@1` | module | psu | 56.6 × 40.1 × 368.3 |  | 1 | 0 | Juniper MX204 AC power supply module, 650 W |
 | `juniper/mx204-psu-dc@1` | module | psu | 56.6 × 42.4 × 369.1 |  | 1 | 0 | Juniper MX204 DC power supply module, 650 W |
 | `juniper/mx240-air-filter@1` | module | filter | 12 × 110 |  | 1 | 0 | Juniper MX240 air filter - installs vertically at the rear left beside the air intake; only its narrow door f… |
-| `juniper/mx240-craft@1` | module | display | 420.9 × 42.5 |  | 1 | 0 | Craft interface panel for the Juniper MX240 - a hot-insertable/removable FRU spanning the chassis above the c… |
+| `juniper/mx240-craft@1` | module | display | 420.9 × 42.5 |  | 1 | 1 | Craft interface panel for the Juniper MX240 - a hot-insertable/removable FRU spanning the chassis above the c… |
 | `juniper/mx240-fan-tray@1` | module | fan | 12 × 110 |  | 1 | 0 | Juniper MX240 fan tray - a single vertical tray of three fans that slides into the rear right of the chassis;… |
 | `juniper/mx240-psu-ac@1` | module | psu | 101.5 × 79.7 |  | 1 | 0 | Juniper MX240 normal-capacity AC power supply |
 | `juniper/mx240-psu-dc@1` | module | psu | 101.5 × 79.7 |  | 2 | 0 | Juniper MX240 normal-capacity DC power supply (PEM) |

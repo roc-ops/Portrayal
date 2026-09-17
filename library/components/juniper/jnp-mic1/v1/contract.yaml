@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp-mic1
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -14,16 +14,29 @@ attrs:
   model-variants: JNP-MIC1-MACSEC
   power-draw-max-w: 85
 provenance:
+  lamp-states: >-
+    FOUR LANE LAMPS, ONE LAMP WITH NO PUBLISHED VOCABULARY, AND A BUTTON.
+    THE LANES ARE SOURCED. Table 18 (Multi-Rate Ethernet MIC LEDs) gives the link
+    behaviour - green on steadily for link up, off for no link - and then states the
+    lane scheme outright: "each individual lane LED support four states: OFF, AMBER,
+    GREEN, RED". L0 to L3 carry those three colours and off.
+    OK/FAIL IS DRAWN, NAMED BY THE GUIDE, AND NOT TABULATED FOR THIS CARD. The guide
+    uses it - "Press and hold the button (for about 5 seconds) until the MIC's
+    OK/FAIL LED goes off" - so the lamp exists and is lit while the MIC is running,
+    but no table gives its colours. Table 17 gives green and red for the MPC's
+    identically-named lamp, and that is the MPC's table: this library does not carry
+    a sentence from one card's table onto another card, which is what #277 cost.
+    It carries no states until something states them.
+    OFFLINE IS A BUTTON. "Press its OFFLINE button. Use a narrow-ended tool that fits
+    inside the opening that leads to the button." Contracted as one; the id keeps its
+    `led-` spelling because renaming an id is a major.
   size: 'datasheet-table - the guide FRU table gives the MIC 7.77 x 8.97 x
     1.65 in; 197.3 mm face width, 41.9 mm face height'
   power: 'datasheet-table - the guide power table: 80 W typical, 85 W max
     (ambient unqualified); the MACsec variant runs 110/120'
   face: 'photo - positions read off the frontwtop photograph at ~2.95 px/mm, approximate to ~2 mm; the module size itself is the vendor FRU dimension table in the MX10003 hardware guide - cages on a 20.5 mm pitch in two belly-to-belly rows,
     group lamps L0-L3 and the vertical 12XQSFP28 legend at the right'
-states:
-- ok
-- fail
-- absent
+states: [absent]
 parts:
 - {ref: std/qsfp28@1, id: port-0, at: [3.50, 6.0], rotate: 180}
 - {ref: std/qsfp28@1, id: port-1, at: [3.50, 24.0]}
@@ -37,6 +50,51 @@ parts:
 - {ref: std/qsfp28@1, id: port-9, at: [85.50, 24.0]}
 - {ref: std/qsfp28@1, id: port-10, at: [106.00, 6.0], rotate: 180}
 - {ref: std/qsfp28@1, id: port-11, at: [106.00, 24.0]}
+elements:
+  led-l0:
+    at: [130.2, 7.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-l1:
+    at: [130.2, 13.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-l2:
+    at: [130.2, 27.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-l3:
+    at: [130.2, 33.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-ok-fail:
+    at: [157.2, 11.2]
+    size: [1.6, 1.6]
+    class: led
+  led-offline:
+    at: [157.2, 29.2]
+    size: [1.6, 1.6]
+    class: button
 size:
   w: 197.3
   h: 41.9

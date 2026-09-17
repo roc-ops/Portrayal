@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-ac-650
-version: 3.11.0
+version: 3.12.0
 class: psu
 behaviour: fills
 profile: networking
@@ -9,6 +9,16 @@ description: 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet
 size: {w: 54.0, h: 40.0}
 attrs: {power-output-w: 650, input: ac}
 provenance:
+  states: >-
+    A LAMP ON A GENERIC IS A POSITION INVENTED FOR EVERY DEVICE THAT SEATS IT, which
+    is the argument #212 used to strip the three common/ fan generics and applies
+    here unchanged. This part is seated by six devices across three Edgecore families
+    - AS5912-54X, AS7326-56X, AS7726-32X, COR580, AGR110 and AGR130 - and no document
+    held for any of them describes a status lamp on the supply: the quick-start guides
+    cover PSU replacement and airflow and never a PSU LED.
+    So the drawing has no lamp because nothing measured one, and the module no longer
+    declares `ok` and `fail` it cannot show. If a per-family supply turns out to carry
+    one, it belongs on that family's own part rather than on the generic.
   power: >-
     datasheet - the Edgecore boxes this generic serves state it directly. The DCS204
     datasheet (AS7726-32X): 'PSUs: 2 redundant, load-sharing, hot-swappable 650W AC or -48
@@ -21,7 +31,7 @@ provenance:
     datasheets fix is the RATING, which the form factor and the chassis both share.
   size: photo-measured (rear overlay; body ~45mm + fold-out handle)
   inlet: standard (IEC 60320-1 via std/c14-inlet)
-states: [ok, fail, absent]
+states: [absent]
 elements:
   latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
   handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}

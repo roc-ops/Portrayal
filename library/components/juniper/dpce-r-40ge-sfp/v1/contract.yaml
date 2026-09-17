@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-r-40ge-sfp
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -22,6 +22,19 @@ attrs:
   lifecycle-note: EOL per PSN-TSB16810; modelled because it is the card the
     reference photograph carries
 provenance:
+  states: >-
+    NO HEALTH LAMP ON THIS CARD - IT IS ON THE CRAFT INTERFACE, which is the same
+    answer #212 found for the MX240's fans. MX240 hardware guide, "DPC and MPC LEDs
+    on the Craft Interface": "Each DPC or MPC has LEDs on the craft interface that
+    indicate its status. The LEDs, labeled 1/0, 1, and 2 ... are located along the
+    bottom of the craft interface." Table 10 gives them OK green and FAIL red, and
+    juniper/mx240-craft@1 now draws and lights them.
+    WHAT THIS CARD DOES DRAW IS PER-PORT, NOT PER-CARD. The `indicator-panels` group
+    is the dot-matrix link clusters between the block pairs - eighty of them - and
+    `indicator-panels` above records why they carry no individual ids: the
+    lamp-to-port mapping is not legible at photo resolution. They are link lamps for
+    forty ports, not a health lamp for the card, so they were never what `ok` and
+    `fail` were about.
   size: 'photo - 420.9 x 29.5 mm slot face (see scb-mx). Cage blocks measured
     at card-local x 76.8/151.2/249.6/323.7, each five sfp-ganged columns
     (registry 14.25 pitch; photo reads 14.3), two rows belly-to-belly at y
@@ -34,10 +47,7 @@ provenance:
     pairs carry the per-port link lamps; individual lamp-to-port mapping is
     not legible at photo resolution and the guide DPC LED table describes
     one link lamp per port. Drawn as the matrix panels without per-lamp ids'
-states:
-- ok
-- fail
-- absent
+states: [absent]
 parts:
 - {ref: std/sfp-ganged@1, id: port-0-0, at: [76.8, 4.5], rotate: 180}
 - {ref: std/sfp-ganged@1, id: port-0-2, at: [91.05, 4.5], rotate: 180}

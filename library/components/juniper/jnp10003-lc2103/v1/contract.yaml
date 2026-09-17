@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10003-lc2103
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -16,6 +16,20 @@ attrs:
   model-variants: JNP10003-LC2103-V2
   power-draw-max-w: 715
 provenance:
+  lamp-states: >-
+    TWO LAMPS AND A BUTTON, which is not how they were named. All three were flat
+    fills under the OK/FAIL, ONLINE and OFFLINE silkscreen, and `led-offline` is not
+    a lamp at all: the guide describes taking a card offline as "Press its OFFLINE
+    button. Use a narrow-ended tool that fits inside the opening that leads to the
+    button." It is a recessed button, and it is contracted as one. The id keeps its
+    `led-` spelling because renaming an id is a major and nothing is wrong with the
+    geometry - the class now says what it is.
+    THE TWO REAL LAMPS ARE THE GUIDE'S OWN: Table 17 (MX10003 MPC (Multi-Rate) LEDs)
+    and the identical LEDs row in this card's specification table - "OK/FAIL LED, one
+    bicolor: Steady green - MPC is functioning normally and the link is up. Off - MPC
+    is plugged-in but not powered on. Red - MPC has failed." ONLINE is green for
+    online. Bicolor is why OK/FAIL carries green and red on one lamp rather than the
+    ok/fail pairs other cards draw.
   qsfp-rate: >-
     the cage RATE, transcribed from this contract's own description: 'six fixed QSFP+ ports
     0-5'. Without it `cage_type` finds no media attr for the qsfp family and falls through
@@ -28,10 +42,7 @@ provenance:
   face: 'photo - positions read off the frontwtop photograph at ~2.95 px/mm, approximate to ~2 mm; the module size itself is the vendor FRU dimension table in the MX10003 hardware guide - fixed QSFP+ on a ~23.6 mm pitch; the fixed cages are
     drawn with the QSFP28 registry opening (QSFP+ and QSFP28 share the
     SFF-8663 bezel)'
-states:
-- ok
-- fail
-- absent
+states: [absent]
 bays:
   mic1:
     at: [18.0, 0.0]
@@ -48,6 +59,26 @@ parts:
 - {ref: std/qsfp28@1, id: port-4, at: [310.40, 24.0], attrs: {media: qsfp-plus}}
 - {ref: std/qsfp28@1, id: port-5, at: [334.00, 24.0], attrs: {media: qsfp-plus}}
 - {ref: std/rj45@2, id: gm-ptp, at: [363.1, 22.3], attrs: {function: GM/PTP timing}}
+elements:
+  led-ok-fail:
+    at: [391.2, 7.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-online:
+    at: [391.2, 19.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-offline:
+    at: [391.2, 31.2]
+    size: [1.6, 1.6]
+    class: button
 size:
   w: 419.1
   h: 41.9

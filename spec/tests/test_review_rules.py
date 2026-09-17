@@ -260,12 +260,27 @@ def test_ganged_cages_sharing_a_wall_are_not_reported():
     assert not caught("L46", lint.lint_component_collisions, P, ok, [str(LIB)])
 
 
-def test_a_lamp_state_nothing_draws_is_reported():
+def test_a_lamp_state_nothing_draws_is_reported(tmp_path):
     """A part may declare ok/fail, generate CSS, offer the state in the viewer
-    and change no pixel, because only `var(--led-color, ...)` lights anything."""
-    d = yaml.safe_load((LIB / "components/juniper/mx204-psu-ac/v1/contract.yaml").read_text())
+    and change no pixel, because only `var(--led-color, ...)` lights anything.
+
+    BUILT HERE RATHER THAN POINTED AT A REAL PART. This asserted against
+    juniper/mx204-psu-ac, which was a static-filled lamp until #269 lit it - so
+    fixing the library broke the test that exists to find things worth fixing.
+    A check pinned to a defect expires the moment somebody repairs it, and it
+    fails in a way that reads as a regression rather than as progress. The
+    positive case below can stay pointed at a real part: a lamp that lights is
+    not going to stop.
+    """
+    comp = tmp_path / "fx" / "v1"
+    (comp / "skins").mkdir(parents=True)
+    (comp / "skins" / "default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg">'
+        '<circle id="led-ok" cx="2" cy="2" r="1" fill="#0f1113"/></svg>')
+    d = {"name": "fx", "size": {"w": 10.0, "h": 10.0}, "states": ["ok", "fail", "absent"]}
+    (comp / "contract.yaml").write_text(yaml.safe_dump(d))
     hits = caught("L47", lint.lint_component_states_render,
-                  LIB / "components/juniper/mx204-psu-ac/v1/contract.yaml", d, [str(LIB)])
+                  comp / "contract.yaml", d, [str(LIB)])
     assert hits, "a static-filled lamp went unreported"
     assert "never light" in hits[0]
 
