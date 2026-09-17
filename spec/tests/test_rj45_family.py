@@ -245,9 +245,9 @@ def _dev(placements, groups=None):
 
 
 def l76(data):
-    lint.WARNINGS.clear()
-    lint.lint_device_rj45_lamps(pathlib.Path("d/device.yaml"), data, [str(LIB)])
-    return [w for w in lint.WARNINGS if "[L76]" in w]
+    with lint.collecting() as _found:
+        lint.lint_device_rj45_lamps(pathlib.Path("d/device.yaml"), data, [str(LIB)])
+    return [w for w in _found.warnings if "[L76]" in w]
 
 
 def test_l76_is_quiet_when_roles_and_parts_agree():
@@ -360,11 +360,11 @@ def test_rj45_wants_lamps_reads_the_contract_name_for_a_component_part():
 
 
 def l76c(name, parts):
-    lint.WARNINGS.clear()
-    lint.lint_component_rj45_lamps(
-        pathlib.Path("library/components/x/y/v1/contract.yaml"),
-        {"name": name, "parts": parts}, [str(LIB)])
-    return [w for w in lint.WARNINGS if "[L76]" in w]
+    with lint.collecting() as _found:
+        lint.lint_component_rj45_lamps(
+            pathlib.Path("library/components/x/y/v1/contract.yaml"),
+            {"name": name, "parts": parts}, [str(LIB)])
+    return [w for w in _found.warnings if "[L76]" in w]
 
 
 # I5: 368 of the library's 762 RJ45 placements sit in component contracts, and
@@ -398,12 +398,12 @@ def test_l76_follows_a_carrier_to_the_family_member_it_composes():
 
 # The family's own members compose each other by definition.
 def test_l76_does_not_census_the_family_itself():
-    lint.WARNINGS.clear()
-    lint.lint_component_rj45_lamps(
-        LIB / "components/common/rj45-eth/v1/contract.yaml",
-        yaml.safe_load((LIB / "components/common/rj45-eth/v1/contract.yaml").read_text()),
-        [str(LIB)])
-    assert [w for w in lint.WARNINGS if "[L76]" in w] == []
+    with lint.collecting() as _found:
+        lint.lint_component_rj45_lamps(
+            LIB / "components/common/rj45-eth/v1/contract.yaml",
+            yaml.safe_load((LIB / "components/common/rj45-eth/v1/contract.yaml").read_text()),
+            [str(LIB)])
+    assert [w for w in _found.warnings if "[L76]" in w] == []
 
 
 # C1: these four cards are RJ48c carrying DS1, not Ethernet. They must stay bare.

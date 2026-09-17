@@ -41,9 +41,9 @@ from portrayal import libwalk
 
 
 def run(fn, doc):
-    lint.ERRORS.clear()
-    fn("d.yaml", doc)
-    return list(lint.ERRORS)
+    with lint.collecting() as _found:
+        fn("d.yaml", doc)
+    return list(_found.errors)
 
 
 def device(**keys):

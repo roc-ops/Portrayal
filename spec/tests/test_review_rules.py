@@ -24,15 +24,9 @@ P = Path("fixture.yaml")
 
 
 def caught(code, fn, *a):
-    saved_w, saved_e = lint.WARNINGS[:], lint.ERRORS[:]
-    lint.WARNINGS.clear()
-    lint.ERRORS.clear()
-    try:
+    with lint.collecting() as got:
         fn(*a)
-        return [m for m in lint.WARNINGS + lint.ERRORS if f"[{code}]" in m]
-    finally:
-        lint.WARNINGS[:] = saved_w
-        lint.ERRORS[:] = saved_e
+    return [m for m in got.warnings + got.errors if f"[{code}]" in m]
 
 
 # --- 1. rack ears ------------------------------------------------------------

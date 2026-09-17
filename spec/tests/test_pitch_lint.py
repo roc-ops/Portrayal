@@ -32,9 +32,9 @@ L.STANDARDS.update(
 
 
 def run(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_composed_pitch(path, doc, LIB)
-    return [e for e in L.ERRORS if "[L81]" in e]
+    with L.collecting() as _found:
+        L.lint_component_composed_pitch(path, doc, LIB)
+    return [e for e in _found.errors if "[L81]" in e]
 
 
 def test_the_standards_registry_is_loaded_for_these_tests():

@@ -30,16 +30,10 @@ class _NoSchema:
 
 def l42(dev):
     """L42 is its own function, so call it directly rather than the whole pass."""
-    saved_w, saved_e = lint.WARNINGS[:], lint.ERRORS[:]
-    lint.WARNINGS.clear()
-    lint.ERRORS.clear()
-    try:
+    with lint.collecting() as got:
         lint.lint_device_silkscreen_owner(Path("fixture.yaml"), dev)
-        return [w for w in lint.WARNINGS if "[L42]" in w], \
-               [e for e in lint.ERRORS if "[L42]" in e]
-    finally:
-        lint.WARNINGS[:] = saved_w
-        lint.ERRORS[:] = saved_e
+    return ([w for w in got.warnings if "[L42]" in w],
+            [e for e in got.errors if "[L42]" in e])
 
 
 def device(maturity, marks):

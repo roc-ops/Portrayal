@@ -25,13 +25,9 @@ DEV = LIB / "devices/ufispace/s9510-28dc/device.yaml"
 
 
 def errors_for(data):
-    saved_e = lint.ERRORS[:]
-    lint.ERRORS.clear()
-    try:
+    with lint.collecting() as got:
         lint.lint_device_occupants(DEV, data, [str(LIB)])
-        return [e for e in lint.ERRORS if "[L12]" in e]
-    finally:
-        lint.ERRORS[:] = saved_e
+    return [e for e in got.errors if "[L12]" in e]
 
 
 def test_bare_and_fitted_are_the_same_device(tmp_path):

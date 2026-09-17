@@ -18,9 +18,9 @@ LIB = [str(ROOT / "library")]
 
 
 def run(doc):
-    L.WARNINGS.clear()
-    L.lint_device_cutout_derivation("t", doc, LIB)
-    return [w for w in L.WARNINGS if "L63" in w]
+    with L.collecting() as _found:
+        L.lint_device_cutout_derivation("t", doc, LIB)
+    return [w for w in _found.warnings if "L63" in w]
 
 
 def view(placements, cutouts):

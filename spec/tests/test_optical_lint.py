@@ -24,9 +24,9 @@ def run(rule, doc, code=None, path="t/contract.yaml"):
     and would quietly pass if a rule started raising under the wrong code, so
     `code` narrows to one rule when a test cares which fired.
     """
-    L.ERRORS.clear()
-    rule(path, doc, LIB)
-    return [e for e in L.ERRORS
+    with L.collecting() as _found:
+        rule(path, doc, LIB)
+    return [e for e in _found.errors
             if code is None or f"[{code}]" in e]
 
 

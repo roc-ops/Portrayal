@@ -76,9 +76,9 @@ LIB = [str(ROOT / "library")]
 
 
 def run84(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_optical_faces(path, doc)
-    return [e for e in L.ERRORS if "[L84]" in e]
+    with L.collecting() as _found:
+        L.lint_component_optical_faces(path, doc)
+    return [e for e in _found.errors if "[L84]" in e]
 
 
 def test_a_path_into_a_face_the_part_does_not_have():
@@ -169,9 +169,9 @@ def test_the_legacy_plan_spelling_does_not_contribute_either():
 
 
 def run85(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_optical_face_capacity(path, doc, LIB)
-    return [e for e in L.ERRORS if "[L85]" in e]
+    with L.collecting() as _found:
+        L.lint_component_optical_face_capacity(path, doc, LIB)
+    return [e for e in _found.errors if "[L85]" in e]
 
 
 def test_a_plan_face_carrying_fibres_is_reported_not_dropped():

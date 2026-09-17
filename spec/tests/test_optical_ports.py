@@ -17,9 +17,9 @@ LIB = [str(ROOT / "library")]
 
 
 def run86(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_optical_polish(path, doc)
-    return [e for e in L.ERRORS if "[L86]" in e]
+    with L.collecting() as _found:
+        L.lint_component_optical_polish(path, doc)
+    return [e for e in _found.errors if "[L86]" in e]
 
 
 def test_a_polished_family_needs_a_polish():
@@ -248,9 +248,9 @@ def test_a_declared_rear_kind_does_not_override_a_known_family():
 
 
 def run87(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_optical_rear_kind(path, doc)
-    return [e for e in L.ERRORS if "[L87]" in e]
+    with L.collecting() as _found:
+        L.lint_component_optical_rear_kind(path, doc)
+    return [e for e in _found.errors if "[L87]" in e]
 
 
 def test_declaring_a_splice_rear_without_a_rear_face_is_an_error():
@@ -375,9 +375,9 @@ def test_the_two_row_cassette_follows_its_front_order():
 
 
 def run88(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_optical_front_order(path, doc)
-    return [e for e in L.ERRORS if "[L88]" in e]
+    with L.collecting() as _found:
+        L.lint_component_optical_front_order(path, doc)
+    return [e for e in _found.errors if "[L88]" in e]
 
 
 TWO_ROW_PARTS = [

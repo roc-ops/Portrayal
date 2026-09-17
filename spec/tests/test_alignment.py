@@ -19,9 +19,9 @@ LIB = [str(ROOT / "library")]
 
 
 def run(doc):
-    L.WARNINGS.clear()
-    L.lint_device_alignment("t", doc, LIB)
-    return [w for w in L.WARNINGS if "L61" in w]
+    with L.collecting() as _found:
+        L.lint_device_alignment("t", doc, LIB)
+    return [w for w in _found.warnings if "L61" in w]
 
 
 def view(placements, silkscreen=()):

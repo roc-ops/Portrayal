@@ -25,13 +25,13 @@ LAMP = {"ref": "common/led-dot@1", "id": "led-sys", "at": [30.0, 20.0]}   # 2 x 
 
 
 def run(decor, placements=(), silkscreen=(), cutouts=()):
-    L.WARNINGS.clear()
-    doc = {"views": {"front": {
-        "panel": {"decor": list(decor), "cutouts": list(cutouts)},
-        "components": {"placements": list(placements)},
-        "silkscreen": list(silkscreen)}}}
-    L.lint_device_air_aperture("t", doc, LIB)
-    return [w for w in L.WARNINGS if "L64" in w]
+    with L.collecting() as _found:
+        doc = {"views": {"front": {
+            "panel": {"decor": list(decor), "cutouts": list(cutouts)},
+            "components": {"placements": list(placements)},
+            "silkscreen": list(silkscreen)}}}
+        L.lint_device_air_aperture("t", doc, LIB)
+    return [w for w in _found.warnings if "L64" in w]
 
 
 def test_a_lamp_on_a_vent_is_caught():
