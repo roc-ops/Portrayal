@@ -33,6 +33,7 @@ import sys
 import argparse
 import yaml
 from portrayal import lint as L
+from portrayal import libwalk
 # A GUARD, BECAUSE THIS FILE DOES ITS WORK AT MODULE SCOPE. It is a script and
 # reads as one, which was harmless while nothing could import it - and #179 made
 # the sweeps a package, so `import portrayal_sweeps.sweep_ids` RAN THE SWEEP.
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     total_files = total_ids = total_edits = 0
     skipped = []
 
-    for path in sorted(glob.glob(f'{LIB}/devices/*/*/device.yaml')):
+    for path in libwalk.iter_devices([LIB]):
         if ARGS.only and not any(o in path for o in ARGS.only):
             continue
         data = yaml.safe_load(open(path))

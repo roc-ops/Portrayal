@@ -21,6 +21,7 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref
+from portrayal import libwalk
 from portrayal.manifest import (view_parts, targets, split_target, component_refs,
                       presented_interface,
                       load_yaml)
@@ -99,14 +100,11 @@ class Library:
         """ref = namespace/name@major -> (contract dict, skin dir Path)."""
         if ref in self.cache:
             return self.cache[ref]
-        nsname, major = ref.rsplit("@", 1)
-        for root in self.roots:
-            base = root / "components" / nsname / f"v{major}"
-            if (base / "contract.yaml").exists():
-                contract = load_yaml(base / "contract.yaml")
-                self.cache[ref] = (contract, base / "skins")
-                return self.cache[ref]
-        raise FileNotFoundError(f"component ref not found in library path: {ref}")
+        f = libwalk.contract_path(ref, self.roots)
+        if f is None:
+            raise FileNotFoundError(f"component ref not found in library path: {ref}")
+        self.cache[ref] = (load_yaml(f), f.parent / "skins")
+        return self.cache[ref]
 
 
 def local(tag):

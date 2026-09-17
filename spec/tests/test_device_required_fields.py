@@ -36,12 +36,13 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 from portrayal import devicelock
+from portrayal import libwalk
 
 
 @pytest.fixture(scope="module")
 def devices():
     return {f"{p.parts[-3]}/{p.parts[-2]}": yaml.safe_load(p.read_text()) or {}
-            for p in sorted(LIB.glob("devices/*/*/device.yaml"))}
+            for p in libwalk.iter_devices([LIB])}
 
 
 @pytest.fixture(scope="module")

@@ -15,6 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import yaml
+from portrayal import libwalk
 
 REF = re.compile(r"\b([a-z0-9-]+)/([a-z0-9-]+)@(\d+)\b")
 
@@ -63,7 +64,7 @@ def composed_by(library):
 def seated_by(library):
     """ref -> device slugs whose manifest (or layout) names it, in any key."""
     users = defaultdict(set)
-    for dev in sorted(library.glob("devices/*/*/device.yaml")):
+    for dev in libwalk.iter_devices([library]):
         slug = f"{dev.parent.parent.name}/{dev.parent.name}"
         text = dev.read_text()
         for ns, name, major in set(REF.findall(text)):

@@ -22,8 +22,9 @@ LIB = SPEC.parent / "library"
 
 from portrayal import attrsections
 from portrayal import lint
+from portrayal import libwalk
 
-MANIFESTS = sorted(LIB.glob("devices/*/*/device.yaml"))
+MANIFESTS = libwalk.iter_devices([LIB])
 
 
 def warnings_for(man):

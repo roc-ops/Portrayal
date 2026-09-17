@@ -25,6 +25,7 @@ import functools
 import pathlib
 
 import yaml
+from portrayal import libwalk
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -34,7 +35,7 @@ LIB = ROOT / "library"
 def library():
     """((slug, path, doc), ...) for every device manifest."""
     out = []
-    for f in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for f in libwalk.iter_devices([LIB]):
         doc = yaml.safe_load(f.read_text())
         if (doc or {}).get("kind") != "device":
             continue

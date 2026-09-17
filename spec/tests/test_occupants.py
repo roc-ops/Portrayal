@@ -19,6 +19,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
 from portrayal import lint
+from portrayal import libwalk
 
 DEV = LIB / "devices/ufispace/s9510-28dc/device.yaml"
 
@@ -86,5 +87,5 @@ def test_an_occupant_must_plug_into_something():
 
 
 def test_the_library_is_clean():
-    for man in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for man in libwalk.iter_devices([LIB]):
         assert not errors_for(yaml.safe_load(man.read_text())), man

@@ -8,6 +8,7 @@ import sys
 
 
 from portrayal import devicelock as dl
+from portrayal import libwalk
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -222,7 +223,7 @@ def test_no_configuration_is_left_unclassified():
     """A consumer must be able to tell a SKU you can buy from a drawing."""
     import glob
     bad = []
-    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([ROOT / "library"]):
         import yaml as y
         d = y.safe_load(open(p)) or {}
         for n, c in (d.get("configurations") or {}).items():
@@ -233,7 +234,7 @@ def test_no_configuration_is_left_unclassified():
 
 def test_at_most_one_base_per_device():
     import glob, yaml as y
-    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([ROOT / "library"]):
         d = y.safe_load(open(p)) or {}
         bases = [n for n, c in (d.get("configurations") or {}).items()
                  if (c or {}).get("kind") == "base"]
@@ -256,7 +257,7 @@ def test_examples_never_become_device_types():
     assert names, "no exported device types found; run ./publish.sh"
     import yaml as y
     examples = set()
-    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([ROOT / "library"]):
         d = y.safe_load(open(p)) or {}
         for n, c in (d.get("configurations") or {}).items():
             if (c or {}).get("kind") == "example":
@@ -318,7 +319,7 @@ def test_every_base_leaves_its_traffic_bays_empty():
         c = y.safe_load(open(q)) or {}
         if c.get("class") == "blank":
             blanks.add(f"{q.split('components/')[1].split('/')[0]}/{c['name']}")
-    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([ROOT / "library"]):
         d = y.safe_load(open(p)) or {}
         base = next((c for c in (d.get("configurations") or {}).values()
                      if (c or {}).get("kind") == "base"), None)
@@ -336,7 +337,7 @@ def test_every_base_leaves_its_traffic_bays_empty():
 
 def test_a_base_is_always_the_default():
     import glob, yaml as y
-    for p in glob.glob(str(ROOT / "library/devices/*/*/device.yaml")):
+    for p in libwalk.iter_devices([ROOT / "library"]):
         d = y.safe_load(open(p)) or {}
         cfgs = d.get("configurations") or {}
         bases = [n for n, c in cfgs.items() if (c or {}).get("kind") == "base"]

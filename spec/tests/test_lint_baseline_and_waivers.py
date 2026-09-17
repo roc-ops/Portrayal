@@ -41,6 +41,7 @@ LIB = ROOT / "library"
 LINT = ROOT / "spec/tools/portrayal/lint.py"
 BASELINE = LIB / "lint-baseline.json"
 from portrayal import lint as L
+from portrayal import libwalk
 
 
 def run(*args):
@@ -150,7 +151,7 @@ def test_changing_a_waiver_asks_for_a_version():
 def test_waivers_have_not_become_the_answer():
     """The count that matters if this field goes wrong. One device today; a
     library where waiving is how warnings are dealt with would show here first."""
-    waived = [p for p in LIB.glob("devices/*/*/device.yaml")
+    waived = [p for p in libwalk.iter_devices([LIB])
               if ((yaml.safe_load(p.read_text()) or {}).get("lint") or {}).get("waive")]
     assert len(waived) <= 5, f"{len(waived)} devices waive a rule: {[p.parent.name for p in waived]}"
 

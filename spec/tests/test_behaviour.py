@@ -11,11 +11,12 @@ from pathlib import Path
 
 import pytest
 import yaml
+from portrayal import libwalk
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
-CONTRACTS = sorted(LIB.glob("components/*/*/*/contract.yaml"))
+CONTRACTS = list(libwalk.iter_components([LIB]))
 VALID = {"fills", "occupies", "mounts"}
 
 

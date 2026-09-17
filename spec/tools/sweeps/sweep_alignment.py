@@ -70,6 +70,7 @@ import tempfile
 
 import yaml
 from portrayal import lint as L
+from portrayal import libwalk
 # A GUARD, for the reason sweep_ids.py gives: this file does its work at module
 # scope, and importing it used to run it.
 if __name__ == "__main__":
@@ -267,7 +268,7 @@ if __name__ == "__main__":
 
     only = ARGS.only
 
-    for path in sorted(glob.glob(f'{LIB}/devices/*/*/device.yaml')):
+    for path in libwalk.iter_devices([LIB]):
         if only and not any(o in path for o in only):
             continue
         LINES.clear()

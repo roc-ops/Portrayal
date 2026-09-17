@@ -13,6 +13,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
 from portrayal import lint
+from portrayal import libwalk
 
 
 def check(dev):
@@ -109,7 +110,7 @@ def test_the_portfolio_is_clean():
     """Every device in the library passes both rules. L23 is a warning so that
     it can land without going red everywhere - but there is nothing left for it
     to say, and this is what keeps that true."""
-    for man in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for man in libwalk.iter_devices([LIB]):
         errs, warns = check(yaml.safe_load(man.read_text()))
         assert errs == [], (man, errs)
         assert warns == [], (man, warns)

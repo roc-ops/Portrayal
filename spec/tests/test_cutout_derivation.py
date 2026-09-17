@@ -13,10 +13,11 @@ import math
 import pathlib
 
 import yaml
+from portrayal import libwalk
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 STD = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
-DEVICES = sorted(glob.glob(str(ROOT / "library/devices/*/*/device.yaml")))
+DEVICES = [str(p) for p in libwalk.iter_devices([ROOT / "library"])]
 
 
 @functools.lru_cache(maxsize=None)

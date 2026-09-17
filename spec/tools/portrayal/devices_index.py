@@ -14,6 +14,7 @@ import yaml
 from portrayal import attrsections as attrs_mod
 from portrayal import capability
 from portrayal.manifest import view_parts, load_yaml
+from portrayal import libwalk
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 
@@ -133,7 +134,7 @@ def main():
 
     devices = []
     for root in args.library:
-        for man in sorted(Path(root).glob("devices/*/*/device.yaml")):
+        for man in libwalk.iter_devices([root]):
             d = load_yaml(man)
             if d.get("kind") != "device":
                 continue

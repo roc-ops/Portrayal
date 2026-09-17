@@ -45,6 +45,7 @@ import sys
 
 import yaml
 from portrayal import lint as L
+from portrayal import libwalk
 # A GUARD, for the reason sweep_ids.py gives: this file does its work at module
 # scope, and importing it used to run it.
 if __name__ == "__main__":
@@ -107,7 +108,7 @@ if __name__ == "__main__":
 
 
     total = collections.Counter()
-    for path in sorted(glob.glob(f'{LIB}/devices/*/*/device.yaml')):
+    for path in libwalk.iter_devices([LIB]):
         if ARGS.only and not any(o in path for o in ARGS.only):
             continue
         dev = path.split('devices/')[1].replace('/device.yaml', '')
