@@ -48,10 +48,12 @@ KNOWN_DIVERGENT = {
     ("Juniper", "DPC-R-4XGE-XFP"): "juniper/dpc-r-4xge-xfp-v",
     ("Juniper", "RE-S-1300-2048"): "juniper/re-s-1300-v",
     ("Juniper", "SCB-MX"): "juniper/scb-mx960-v",
-    # The same, AND the two authors number one card's forty ports differently -
-    # `port-0-0..port-3-9` against a flat `port-0..port-39`. The horizontal
-    # author's own description says "numbered per PIC (x/0..x/9, four PICs)",
-    # so the flat numbering is the one to fix. roc-ops/Portrayal#293.
+    # The same. The NUMBERING half of this one is fixed: the vertical author's
+    # flat `port-0..port-39` became `port-0-0..port-3-9` at @2, the scheme the
+    # horizontal author's description names ("numbered per PIC, x/0..x/9, four
+    # PICs"), and every one of the forty kept its position. What still pins the
+    # entry is the description, exactly as for the three above - so #293 did
+    # NOT take it off this list, and #261 is still what collapses the twins.
     ("Juniper", "DPCE-R-40GE-SFP"): "juniper/dpce-r-40ge-sfp-v",
     # ONE SKU MODELLED TWICE, at 80 mm and 82.5 mm - a real duplicate rather
     # than two authors of one card, and roc-ops/Portrayal#266 is where it is resolved.
