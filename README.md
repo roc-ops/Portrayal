@@ -94,6 +94,7 @@ source documents stay out of the repository. See `PRIOR-ART.md`.
 - `docs/failure-by-omission.md` — the audit for tools that report success by reporting nothing, and the census-and-register method it produced
 - `library/components/CATALOGUE.md` — every component on one page: size, what it conforms to,
   how many devices use it. Generated, and a test fails when it and the library disagree
+- `CHANGELOG.md` — what changed in the dist contract, the part of this repository a consumer outside it reads
 - `PRIOR-ART.md` — the research this rests on, and the gap it fills
 
 ## Status
