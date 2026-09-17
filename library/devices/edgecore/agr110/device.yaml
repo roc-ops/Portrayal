@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 3.0.0
+version: 5.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -14,6 +14,18 @@ description: >-
 profile: networking
 lint:
   waive:
+    L76: >-
+      The management jack is an Ethernet jack on a part with no lamps, and that is the point: its link
+      and activity lamps are not in the jack. They sit BELOW THE CONSOLE PORT, two rows down from the
+      housing they serve, reported by a reader looking at the hardware. Putting it on common/rj45-ganged-eth@1
+      would draw two lamps in the cell's outer corners where the metal has none, which is the defect this
+      rule exists to prevent, one level up. docs/rj45-family-design.md lists five ways the library expresses
+      jack lamps and names "deliberately left undrawn (the S6301 pair's stated position)" as one of them;
+      this is that case, and the position is stated in `management-port-lamps`. ufispace/s6301-56stp models
+      the same arrangement - bare std/rj45-ganged@2 plus separate lamps - and escapes this rule only by
+      omitting `media` from the placement, which hides the media rather than declaring it. Declaring rj45
+      and waiving the rule is the more honest of the two. Delete this waiver when a photograph resolves
+      the lamps and they can be placed.
     L61: >-
       led-qsfp-50-51-2 sits 1.62 mm left of the centre of the two ports it serves, and so it should: it
       is one of FOUR lamps in a cluster, and only a two-lamp set could have a member on the centreline.
@@ -194,7 +206,25 @@ provenance:
       2x1 block rather than two single jacks: a single jack's housing is 15.8 x 13.2 and two of those
       cannot sit 12.1 apart. The rows are mirrored, not translated - the upper jack's keyway points up
       and the lower jack's down, visible in the datasheet figure at 9.1 px/mm - which is the ganged form's
-      normal construction and the reason the top row carries rotate 180.
+      normal construction and the reason the top row carries rotate 180. THE LEGEND IS READ AT LAST, off
+      a close photograph of the hardware: `(up) Mgmt` on one line and `(down) Console` beneath it, in
+      the band under the jacks - the same up/down idiom this faceplate uses for every stacked pair. Three
+      drafts could not read it. The first invented `Mgmt (up)(down) Console` from dcs510's one-line idiom
+      and was removed for saying what nobody had seen; the second measured three lines of ink at 401-420
+      mm and recorded that it could not resolve them; this one has the words. They are drawn, at the measured
+      line spans - 404.0-418.1 for the first and 404.0-419.9 for the second. THE MANAGEMENT JACK'S LAMPS
+      ARE NOT IN THE JACK. A reader with better photographs than this corpus holds puts them BELOW THE
+      CONSOLE PORT - off the connector entirely, two rows down from the jack they serve. So the management
+      jack takes the BARE std/rj45-ganged@2 rather than common/rj45-ganged-eth@1, whose whole difference
+      is two lamps in the cell's outer corners; drawing those would put lit hardware on a housing that
+      has none. This is the S6301 arrangement exactly - ufispace/s6301-56stp's own provenance describes
+      "the OOB management jack (two lamps above it)" and models it as a bare std/rj45-ganged@2 with two
+      separate common/led-dot placements carrying `for: mgmt`. The difference here is that the S6301's
+      HIG resolves its lamp positions at 3.13 px/mm and this datasheet render does not: the band under
+      the console jack carries small marks at 407.88, 409.63 and 410.73 mm between y 27.4 and 28.6, and
+      nothing at 9.1 px/mm separates a lamp from a legend among them. So the lamps are recorded as a gap
+      rather than placed, which is the fourth of the five treatments docs/rj45-family-design.md lists
+      - deliberately undrawn, position stated.
   qsfp-block:
     confidence: measured
     note: >-
@@ -224,11 +254,14 @@ provenance:
       corpus holds reports them as 0, 1, 2, 3, 4 and 5 left to right. Six labels, six uplinks. That is
       why these ports are `uplink-0` to `uplink-5` here and not a continuation of the SFP+ block's 0-47:
       two families, each numbered from zero, which is what the vendor's own ordering line calls them -
-      "48-Port 10G with 6 x 100G QSFP28 Uplinks". WHICH BAR NAMES WHICH CAGE IS NOT READ. The cages are
-      numbered here in the obvious order - down the first column, down the second, then the separate bottom
-      row left to right - and that ordering is an assumption, recorded as a gap. The labels on the yellow
-      bracket between the block's second and third rows are the vendor's own answer to it and neither
-      document resolves them.
+      "48-Port 10G with 6 x 100G QSFP28 Uplinks". THE CAGE ORDER IS READ FROM THE HARDWARE, not inferred.
+      A reader with the switch in front of them reports it: "top to bottom on the left is 0,1,2, right
+      side is 3,4,5". So it is COLUMN-MAJOR down each column, and the separate bottom row is not a third
+      block numbered last - it holds uplink 2 on the left and uplink 5 on the right, each the last of
+      its own column. A first pass numbered the 2x2 block 0-3 and the bottom pair 4-5, which is the obvious
+      reading of the geometry and is wrong; the column is the run, not the block. What that leaves open
+      is only whether yellow bar n names uplink n. Six bars and six uplinks both numbered 0 to 5 makes
+      it the natural reading, and it is not separately confirmed.
   uplink-leds:
     confidence: measured
     note: >-
@@ -249,8 +282,22 @@ provenance:
       column read, outside in, as an up arrow, the upper port's lamp, the lower port's lamp and a down
       arrow - the same `(up)(down)` row idiom the SFP+ numerals use, and the outer two are silkscreen
       rather than lit. So the bezel carries one status lamp per uplink and the lane lamps live over the
-      bars. NOT DRAWN: the bottom two uplinks' status lamps, which sit to the LEFT of the lower-left cage
-      rather than in a divider, and are not resolved at 9.1 px/mm - see gaps.
+      bars. THE BRACKET CARRIES THE UPLINK LABELS AND A PHOTOGRAPH READS THEM: `2 (right-arrow)` at its
+      left end, `0 (up)(down) 1` over the left column, `3 (up)(down) 4` over the right, and `(left-arrow)
+      5` at its right end. The two arrow-headed labels point INTO the bottom row's cages, which is how
+      the face says that uplink 2 is the bottom-left cage and uplink 5 the bottom-right - the same thing
+      the column-major reading says, printed on the metal. They are drawn. EACH LANE LAMP CARRIES ITS
+      LANE NUMBER, 0 to 3, printed on the lens. Legible in a close photograph and not drawn here, for
+      the reason the system-LED legends are not drawn on their lenses either: the renderer paints a placement
+      over its own silkscreen, so ink at the lamp's centre is ink nobody sees, and L21 says so. There
+      is no room above (the port numerals sit 0.8 mm clear) or below (the label bar). Recorded rather
+      than moved somewhere the device does not print it. WHICH LAMP BELONGS TO WHICH PORT IS ALSO READ:
+      "LED for 0,1,3,4 are on the space between those ports with a single arrow up and single arrow down.
+      The LED for port 2 and 5 on the small group of 2." So the upper bezel's two lamps per column serve
+      that column's FIRST TWO uplinks - 0 and 1 on the left, 3 and 4 on the right - and the bottom pair's
+      lamps are on the bottom pair's own group, not in a divider above them. NOT DRAWN: uplink 2's and
+      uplink 5's status lamps. They are confirmed to exist and confirmed to be on the bottom group; where
+      exactly is not resolved at 9.1 px/mm - see gaps.
   yellow-label-strips:
     confidence: measured
     note: >-
@@ -450,49 +497,30 @@ gaps:
     which reads as a legend printed on the lens rather than beside it - unlike Reset, two centimetres
     away on the same band, which is plain white text on the chassis. It is drawn here as a lamp with its
     legend over it. Whether the real part prints on the lens or beside it is a bench photograph.
-- what: management-port-legend
+- what: management-port-lamps
   scope:
   - front
   reason: needs-photo
   wanted: >-
-    THERE IS PRINTING UNDER THE MANAGEMENT JACKS AND IT CANNOT BE READ. Three lines of it sit between
-    the ganged RJ-45 bezel and the bottom edge, roughly 401 to 420 mm across and 28 to 34 down - a short
-    mark above, two short words side by side, and a longer word beneath - measured as bright runs at 401.32-408.87,
-    410.73-411.93, 412.48-413.68 and 417.29-420.24 mm. At 9.1 px/mm none of it resolves, and the quick-start's
-    section 6 zoom, which is the only image that resolves printing on this face, crops this end of the
-    faceplate away. A first draft printed "Mgmt (up)(down) Console" here, carried over from dcs510's faceplate
-    idiom rather than read off this one. That was removed: this is not a negative reading - the ink is
-    plainly there and its extent is measured - it is an unreadable one, and inventing the words would
-    have put text on the model that nobody has seen on the device. THE TEXT WAS SEARCHED BEFORE GIVING
-    UP ON THE PIXELS, and it did not answer. Both documents were read for LED and port legends: the guide
-    yields the system-LED names, the SFP+ lamp colours and the sentence that each QSFP28 port has four
-    lamps, and the datasheet yields the callout list - and none of them names anything printed under the
-    management jacks. Rendering the page at 1600 dpi does not help either, because the figure is a raster
-    at its own limited resolution and upscaling it recovers nothing. A straight-on photograph of the right-hand
-    40 mm of the front panel settles it.
-- what: uplink-bar-to-cage-mapping
+    The management jack's link and activity lamps are BELOW THE CONSOLE PORT, not in the jack - a reader
+    with better photographs than this corpus holds sees them there, which is why the jack is modelled
+    on the bare std/rj45-ganged@2 rather than the lamped Ethernet cell. They are not placed, because the
+    datasheet render does not resolve them: the band under the console jack between y 27.4 and 28.6 carries
+    small marks at 407.88, 409.63 and 410.73 mm, 0.33 to 0.77 mm wide, and a second brighter band at 30.1
+    to 31.0 which is more likely a legend than a lamp. At 9.1 px/mm nothing separates the two kinds. The
+    same photograph that settles the legend below these jacks settles this.
+- what: uplink-lane-lamp-numerals
   scope:
   - front
-  reason: needs-photo
+  reason: needs-drawing
   wanted: >-
-    The six yellow bars name the six QSFP28 uplinks 0 to 5, and each carries its uplink's four lane lamps
-    - that much is settled. WHICH BAR NAMES WHICH CAGE IS NOT. The cages are numbered here down the first
-    column, down the second, then the separate bottom row left to right, which is the obvious order and
-    not a reading. The vendor answers it on the face: the yellow bracket between the block's second and
-    third rows carries labels identifying the bottom pair, measured at 371.29, 373.69, 376.32 and 378.07
-    mm for the left cage and 391.19, 394.69 and 397.81 for the right, and neither document resolves what
-    they say. A straight-on photograph of the right-hand 50 mm of the faceplate reads them.
-- what: uplink-status-lamps-bottom-pair
-  scope:
-  - front
-  reason: needs-photo
-  wanted: >-
-    Each uplink has a status lamp as well as its four lane lamps, and four of the six are placed: they
-    sit in the block's upper bezel, one per port, flanked by a silkscreen up and down arrow in the same
-    `(up)(down)` idiom the SFP+ numerals use. The bottom pair's are NOT placed. A reader reports them
-    to the LEFT of the lower-left cage rather than in a divider, which is where the yellow bracket's left
-    leg runs (359.4 to 364.6 mm), and nothing at 9.1 px/mm separates a lamp there from the bracket's own
-    edge. Mirroring the upper pattern downward would be a guess about a place the evidence does not reach.
+    Each of the twenty-four lane lamps carries its lane number, 0 to 3, printed on the lens - legible
+    in a close photograph of the hardware. It is not drawn, and the obstacle is the model rather than
+    the evidence: the renderer paints a placement over its own silkscreen, so ink at a lamp's centre is
+    invisible and L21 says so, and there is nowhere else for it to go - the port numerals sit 0.8 mm above
+    the lamp row and the label bar directly below it. The same is true of the five system-LED legends
+    at the other end of the face. What would fix both is a way for a lamp to carry a legend on its own
+    lens, which is a component or renderer question and not this device's to answer.
 - what: rear-grounding-points
   scope:
   - rear
@@ -656,14 +684,10 @@ views:
       - {id: led-port-47, at: [355.27, 14.17], size: [2.25, 2.0], shape: circle}
       - {id: uplink-0, at: [364.56, 2.71], size: [18.5, 9.58], shape: rect}
       - {id: uplink-1, at: [364.56, 18.91], size: [18.5, 9.58], shape: rect}
-      - {id: uplink-2, at: [383.56, 2.71], size: [18.5, 9.58], shape: rect}
-      - {id: uplink-3, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
-      - {id: uplink-4, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-3, at: [383.56, 2.71], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-4, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-2, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
       - {id: uplink-5, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
-      - {id: led-uplink-0, at: [370.94, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-1, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-2, at: [390.19, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-3, at: [394.57, 14.6], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-0-lane-1, at: [137.22, 30.4], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-0-lane-2, at: [143.04, 30.4], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-0-lane-3, at: [148.86, 30.4], size: [2.0, 2.0], shape: circle}
@@ -688,6 +712,10 @@ views:
       - {id: led-uplink-5-lane-2, at: [292.61, 30.4], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-5-lane-3, at: [298.46, 30.4], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-5-lane-4, at: [304.31, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0, at: [370.94, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-3, at: [390.19, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-4, at: [394.57, 14.6], size: [2.0, 2.0], shape: circle}
       - {id: led-ps0, at: [16.57, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-ps1, at: [22.47, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-diag, at: [28.38, 30.95], size: [4.6, 2.6], shape: rect}
@@ -746,13 +774,45 @@ views:
     - {at: [343.2, 29.6], text: '45', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-45}
     - {at: [351.45, 29.6], text: '46', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-46}
     - {at: [357.45, 29.6], text: '47', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-47}
+    - {at: [411.0, 30.2], fill: '#e4e8eb', for: mgmt-eth, path: M -0.65 0.57785 L 0.65 0.57785 L 0 -0.57785
+        Z, filled: true}
+    - {at: [412.6, 30.8], text: Mgmt, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: mgmt-eth}
+    - {at: [411.0, 32.4], fill: '#e4e8eb', for: console, path: M -0.65 -0.57785 L 0.65 -0.57785 L 0 0.57785
+        Z, filled: true}
+    - {at: [412.6, 32.9], text: Console, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: console}
+    - {at: [370.81, 31.0], text: '0', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-0}
+    - at: [373.81, 30.35]
+      fill: '#1a1d1f'
+      for:
+      - uplink-0
+      - uplink-1
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - {at: [376.81, 31.0], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-1}
+    - {at: [389.81, 31.0], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-3}
+    - at: [392.81, 30.35]
+      fill: '#1a1d1f'
+      for:
+      - uplink-3
+      - uplink-4
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - {at: [395.81, 31.0], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-4}
+    - {at: [361.0, 31.0], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-2}
+    - {at: [363.2, 30.35], fill: '#1a1d1f', for: uplink-2, path: M -0.5334 -0.6 L -0.5334 0.6 L 0.5334
+        0 Z, filled: true}
+    - {at: [404.2, 30.35], fill: '#1a1d1f', for: uplink-5, path: M 0.5334 -0.6 L 0.5334 0.6 L -0.5334
+        0 Z, filled: true}
+    - {at: [406.4, 31.0], text: '5', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-5}
     - {at: [368.61, 15.9], fill: '#1a1d1f', for: uplink-0, path: M -0.75 0.66675 L 0.75 0.66675 L 0 -0.66675
         Z, filled: true}
     - {at: [378.94, 15.9], fill: '#1a1d1f', for: uplink-1, path: M -0.75 -0.66675 L 0.75 -0.66675 L 0
         0.66675 Z, filled: true}
-    - {at: [388.35, 15.9], fill: '#1a1d1f', for: uplink-2, path: M -0.75 0.66675 L 0.75 0.66675 L 0 -0.66675
+    - {at: [388.35, 15.9], fill: '#1a1d1f', for: uplink-3, path: M -0.75 0.66675 L 0.75 0.66675 L 0 -0.66675
         Z, filled: true}
-    - {at: [398.74, 15.9], fill: '#1a1d1f', for: uplink-3, path: M -0.75 -0.66675 L 0.75 -0.66675 L 0
+    - {at: [398.74, 15.9], fill: '#1a1d1f', for: uplink-4, path: M -0.75 -0.66675 L 0.75 -0.66675 L 0
         0.66675 Z, filled: true}
     - at: [21.52, 29.6]
       fill: '#e4e8eb'
@@ -1104,14 +1164,10 @@ views:
         rel-pos: 47}
       - {ref: std/qsfp-ganged@1, id: uplink-0, at: [364.56, 2.71], group: qsfp28, rel-pos: 0}
       - {ref: std/qsfp-ganged@1, id: uplink-1, at: [364.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 1}
-      - {ref: std/qsfp-ganged@1, id: uplink-2, at: [383.56, 2.71], group: qsfp28, rel-pos: 2}
-      - {ref: std/qsfp-ganged@1, id: uplink-3, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 3}
-      - {ref: std/qsfp-ganged@1, id: uplink-4, at: [364.56, 32.01], group: qsfp28, rel-pos: 4}
+      - {ref: std/qsfp-ganged@1, id: uplink-3, at: [383.56, 2.71], group: qsfp28, rel-pos: 2}
+      - {ref: std/qsfp-ganged@1, id: uplink-4, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 3}
+      - {ref: std/qsfp-ganged@1, id: uplink-2, at: [364.56, 32.01], group: qsfp28, rel-pos: 4}
       - {ref: std/qsfp-ganged@1, id: uplink-5, at: [383.56, 32.01], group: qsfp28, rel-pos: 5}
-      - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.6], group: port-leds, rel-pos: 0, for: uplink-0}
-      - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.6], group: port-leds, rel-pos: 1, for: uplink-1}
-      - {ref: common/led-dot@1, id: led-uplink-2, at: [390.19, 14.6], group: port-leds, rel-pos: 2, for: uplink-2}
-      - {ref: common/led-dot@1, id: led-uplink-3, at: [394.57, 14.6], group: port-leds, rel-pos: 3, for: uplink-3}
       - ref: common/led-dot@1
         id: led-uplink-0-lane-1
         at: [137.22, 30.4]
@@ -1280,6 +1336,10 @@ views:
         rel-pos: 154
         for: uplink-5
         attrs: {lane: 4}
+      - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.6], group: port-leds, rel-pos: 0, for: uplink-0}
+      - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.6], group: port-leds, rel-pos: 1, for: uplink-1}
+      - {ref: common/led-dot@1, id: led-uplink-3, at: [390.19, 14.6], group: port-leds, rel-pos: 2, for: uplink-3}
+      - {ref: common/led-dot@1, id: led-uplink-4, at: [394.57, 14.6], group: port-leds, rel-pos: 3, for: uplink-4}
       - {ref: common/led-rect@1, id: led-ps0, at: [16.57, 30.95], group: leds, rel-pos: 1, for: rear/psu-0}
       - {ref: common/led-rect@1, id: led-ps1, at: [22.47, 30.95], group: leds, rel-pos: 2, for: rear/psu-1}
       - {ref: common/led-rect@1, id: led-diag, at: [28.38, 30.95], group: leds, rel-pos: 3, for: chassis}
@@ -1295,7 +1355,7 @@ views:
         attrs: {media: usb-a, role: storage}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [311.1, 31.2], rotate: 180, mirror: true, group: furniture,
         rel-pos: 3, for: usb}
-      - ref: common/rj45-ganged-eth@1
+      - ref: std/rj45-ganged@2
         id: mgmt-eth
         at: [409.14, 3.6]
         group: mgmt
