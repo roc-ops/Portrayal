@@ -19,6 +19,24 @@ attrs:
   power-absent: not-published
   airflow: side-to-side
 provenance:
+  no-face-extrusion: >-
+    edgecore/csr310-fan-tray@1's own depth key. THE TRAY FACE CARRIES NO `out` OF ITS OWN,
+    matching the two supplies it sits beside. A full-face extrusion is a slab, and a slab
+    lands in front of anything painted on or recessed into the face under it - on the AC
+    supply that was a C14 inlet, which vanished entirely; here it would be the AIRFLOW arrow,
+    which is the one thing on this tray a technician has to read. The tray sits flush in its
+    bay; the handle and the thumbscrew say how far they stand off, one at a time.
+  shared-with: >-
+    THE CSR430 (AS7515-24X) IS MODELLED WITH THIS TRAY, AND THE EVIDENCE IS WEAKER THAN FOR
+    THE SUPPLIES - say so rather than let the reuse imply more. No part number: the CSR430's
+    datasheet carries no field-replacement table and its quick start names no fan-tray part,
+    where the CSR310's datasheet names FAN-1U-1x1J-S outright. What there is, is the face:
+    read off both elevations against one rule, the handle spans 400.9-430.6 and 400.7-433.4,
+    the AIRFLOW arrow 397.6-409.9 and 398.5-410.4, the thumbscrew 421.0-429.6 and
+    424.4-430.3. Same design, same place, agreeing to about two millimetres on art at 8-9
+    px/mm - which is the noise floor, not a match to be proud of.
+    A PART NUMBER FOR THE CSR430'S TRAY WOULD SETTLE IT. Until one turns up this is an
+    identification by drawing, and the CSR430 carries it as a gap.
   size: >-
     photo-measured - CSR310 datasheet front elevation, page 2 at 600 dpi scaled
     by the stated 440 mm body width to 8.1477 px/mm. The tray's left edge reads
@@ -47,19 +65,10 @@ elements:
   thumbscrew: {at: [27.9, 31.2], size: [8.0, 8.6], class: fastener}
 relief:
   wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - see `no-face-extrusion`.
   features:
-    - node: body
-      out: 1.2
-      shape: true
-      color: '#4a4f55'
-      confidence: estimated
-      source: >-
-        edgecore/csr310-fan-tray@1's own depth key - the elevation is a front
-        view. 1.2 is a module face sitting proud of the chassis metal around it,
-        matched to edgecore/csr310-psu-dc@1 because they sit in one row.
     - node: handle
       out: 7.0
-      lift: 1.2
       color: '#8a9099'
       confidence: estimated
       source: >-
@@ -68,7 +77,6 @@ relief:
         dimensioned anywhere.
     - node: thumbscrew
       cyl: 5.0
-      lift: 1.2
       knurl: true
       color: '#6e747c'
       confidence: estimated

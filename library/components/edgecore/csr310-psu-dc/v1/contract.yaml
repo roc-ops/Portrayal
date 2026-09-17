@@ -20,6 +20,17 @@ attrs:
   inlet: dc-terminal
   input: '36 V - 72 V, 10 A'
 provenance:
+  shared-with: >-
+    THE CSR430 (AS7515-24X) TAKES THIS SAME SUPPLY, AND ITS OWN QUICK START SAYS SO BY PART
+    NUMBER: "Install one or two DC PSUs (part number CRXT-T0T12B only)" - the same sentence,
+    the same part, in a different document for a different model. The faces agree too, read
+    off both datasheets' elevations against one millimetre rule: the general-warning triangle
+    centres on 23.0 and 22.9, the hot-surface triangle on 40.3 and 40.8, the terminal block
+    measures 29.6 and 30.0 wide with its poles on 16.7/25.9/36.5 and 16.7/25.9/35.6. Every
+    pair agrees inside the reading precision of art at 8-9 px/mm.
+    THE NAME RECORDS WHERE IT WAS FIRST MODELLED, not where it is used. Renaming it for the
+    second device would rewrite a merged contract for cosmetics; the part number in `attrs`
+    is the identity.
   no-face-extrusion: >-
         edgecore/csr310-psu-dc@1's own depth key. THE MODULE FACE CARRIES NO `out` OF ITS
         OWN, and that is deliberate: a full-face extrusion is a slab, and a slab buries
