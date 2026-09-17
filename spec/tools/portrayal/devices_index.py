@@ -18,6 +18,14 @@ from portrayal import libwalk
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
 
+# WHAT A CONSUMER OUTSIDE THIS REPOSITORY CAN RELY ON. `kit/` reads
+# `devices.json` and there was no version in it, no git tag and no CHANGELOG -
+# so a consumer had no way to tell a breaking change to the dist from a Tuesday
+# (#185). This number goes up when a field a reader depends on is removed,
+# renamed or changes meaning; adding one does not move it. CHANGELOG.md records
+# what each change was.
+CONTRACT = 1
+
 # Placement and group attrs worth indexing. An allowlist, not everything: `states`
 # and `leds` hold transcribed vendor prose ("Blue = all lanes linked, Off = not
 # all lanes linked"), and folding that into the haystack makes half the portfolio
@@ -126,6 +134,24 @@ def decor_confidence(d):
     return counts
 
 
+def check_unique_names(devices):
+    """Raise if two devices share a name. A FUNCTION so a test can call it.
+
+    Written inline first, which meant the only way to test it was to rebuild
+    the check in the test - a mirror of the guard rather than the guard, and
+    this repository has spent a whole session finding out what those are worth.
+    """
+    seen = {}
+    for d in devices:
+        if d["name"] in seen:
+            raise SystemExit(
+                f"devices_index: two devices are called {d['name']!r} - "
+                f"{seen[d['name']]} and {d.get('ns')}. A device's name is its "
+                "filename in dist/, which carries no vendor, so these would "
+                "render over each other. Rename one, or give dist a namespace")
+        seen[d["name"]] = d.get("ns")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -180,8 +206,23 @@ def main():
     for e in devices:
         for k, n in e["decor-confidence"].items():
             totals[k] = totals.get(k, 0) + n
+    # A DEVICE'S NAME IS ITS FILENAME IN dist/, AND NOTHING CHECKED IT WAS
+    # UNIQUE. `library/dist/<name>.<config>.<view>.svg` carries no vendor, so
+    # two vendors shipping a model of the same name would render over each
+    # other and the index would list one of them twice - silently, because
+    # neither the build nor the picker has any way to notice (#185).
+    #
+    # FAILING IS THE ANSWER AND RENAMING IS NOT. Putting the vendor in every
+    # dist filename would break `kit/`, every doc that cites one and every URL
+    # anyone has kept, to solve a problem the library does not have yet - 89
+    # devices, 89 distinct names. A collision is a modelling decision someone
+    # has to make (rename one, or namespace the dist), and this is the line
+    # that makes them make it.
+    check_unique_names(devices)
+
     (out / "devices.json").write_text(
-        json.dumps({"devices": devices, "decor-confidence": totals},
+        json.dumps({"contract": CONTRACT, "devices": devices,
+                    "decor-confidence": totals},
                    indent=1, sort_keys=True))
     print(f"compiled {len(devices)} devices -> {out}/devices.json")
 
