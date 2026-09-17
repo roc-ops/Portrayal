@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx204-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -19,6 +19,16 @@ attrs:
   input: dedicated AC feed per inlet; breaker min 20 A (110 VAC) or 16 A (220 VAC)
   redundancy: 1+1; one PSU carries a fully configured router
 provenance:
+  lamp-states: >-
+    THE THREE LAMPS WERE DRAWN AND COULD NOT LIGHT - L47's first shape. Each fills
+    from the LED variable now with its drawn colour as the unlit fallback, so an
+    unlit module is unchanged.
+    THE VOCABULARY WAS ALREADY TRANSCRIBED HERE and is now on the lamps that show
+    it: `leds` above carries guide Table 10 (AC Power Supply Module LEDs) - AC OK
+    green steady for receiving power and off for disconnected, DC OK green steady
+    for output good and off for output off, and the `!` lamp amber steady for a
+    fault. Amber and not red, which is what the table says and what distinguishes a
+    Juniper supply fault from the red this library uses elsewhere.
   size: 'datasheet-table - Table 19: AC power supply 2.23 x 1.58 x 14.50 in
     (56.6 x 40.1 x 368.3 mm), weight 1 kg. The drawing aperture for each PSU bay
     off the 600 dpi g009862 render measures 57.0 mm wide, agreeing to 0.7%'
@@ -44,6 +54,27 @@ states:
 parts:
 - {ref: std/c14-inlet@1, id: inlet, at: [26.5, 10.0]}
 elements:
+  led-ac:
+    at: [5.5, 25.6]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc:
+    at: [5.5, 30.8]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [5.5, 36.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
   latch:
     at: [18.2, 3.2]
     size: [4.6, 33.6]

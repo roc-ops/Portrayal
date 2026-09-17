@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx80-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -16,6 +16,20 @@ attrs:
   role: ac-power-supply
   redundancy: 1+1
 provenance:
+  l47-is-correct-here: >-
+    THIS SUPPLY HAS A LAMP AND THIS DRAWING DOES NOT, so L47's warning on it is right
+    and the states stay. MX5, MX10, MX40, and MX80 hardware guide: "Each power supply
+    has a bi-color status LED located above the power switch on the power supply",
+    and Table 10 gives it BLUE on steadily for functioning normally, red blinking for
+    failed, and red for offline - blue, not the green every other supply in this
+    library uses, which is worth knowing before anyone draws it.
+    NOT DRAWN, BECAUSE THE POSITION WOULD BE INVENTED. "Above the power switch" fixes
+    it relative to the rocker this face already draws and fixes nothing else - no
+    offset, no diameter - and the face came from a photograph that does not resolve
+    it. What settles it is a straight-on photograph of the supply, or a figure that
+    dimensions the lamp. Until then the warning is the honest report: the drawing is
+    missing an indicator the hardware has, which is exactly the case #269 leaves
+    mx10003-fan and dcp-2-fan in.
   power: >-
     MX5/MX10/MX40/MX80 hardware guide, Table 12 'AC Power Supply Electrical Specifications':
     'Maximum output power | 500W' over a 90-264 VAC range, so one rating covers both lines.

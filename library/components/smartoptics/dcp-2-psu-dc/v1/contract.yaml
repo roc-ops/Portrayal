@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-2-psu-dc
-version: 1.3.1
+version: 1.4.0
 class: psu
 behaviour: fills
 profile: networking
@@ -17,6 +17,21 @@ attrs:
   power-output-w: 460
   airflow: front-to-back
 provenance:
+  lamp-states: >-
+    THE LAMP IS DRAWN, CONTRACTED, AND DELIBERATELY SILENT - and this contract said
+    why before there was anywhere to put it. `lamp` above: "What it signals is not
+    stated in any DCP document, so it is drawn unlit and carries no function attr."
+    Searched again for this change: DCP-Series_User_Manual_14.0_A has no PSU LED
+    table and exactly one sentence that touches a lamp at all, s4.2's "The chassis
+    will automatically power up as soon as the first PSU is connected. The power LED
+    turns green" - which is about the chassis coming up and does not say whether the
+    lamp meant is this module's or the chassis's own.
+    THE CRPS FORM FACTOR WOULD ANSWER IT AND IS NOT A DOCUMENT WE HOLD. The sticker
+    reads "CRPS 460W AC Gold" and that specification fixes the bi-colour behaviour,
+    but naming a standard is not citing it. So the lamp carries no states, and the
+    module no longer declares `ok` and `fail` it has no way to show. That is L47's
+    own question answered in the direction the hardware allows rather than the
+    direction that clears the warning.
   inlet: >-
     transcribed from this contract's own description: 'a three-post DC terminal in place of
     the C14 inlet', drawn here as the `dc-terminal` element. Nothing new was measured.
@@ -100,7 +115,7 @@ provenance:
     rather than one, so the form factor named on the module's own sticker does not
     settle it either; what bounds it is the chassis, which is 500 deep. Replace it the
     moment anything states one.
-states: [ok, fail, absent]
+states: [absent]
 elements:
   handle: {at: [4.5, 3.5], size: [35.5, 5.0], class: handle}
   fan-aperture: {at: [8.45, 8.0], size: [34.1, 30.0], class: vent}
