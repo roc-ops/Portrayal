@@ -297,8 +297,19 @@ def block_items(block, library, standards):
             # gang, not on the port alone. `dx-by-col` is that list, indexed by
             # the column's position in its shell; a plain `dx` is the degenerate
             # case of one value for every column.
+            #
+            # AND SOMETIMES IT DEPENDS ON THE ROW INSTEAD, for the same reason
+            # the numerals above do. A stacked block whose two lamps share the
+            # bezel BETWEEN its rows puts the upper port's lamp left of the
+            # column centre and the lower port's right of it - one y, two x,
+            # keyed to the row, which `dx-by-col` cannot say. `dx-by-row` is
+            # that knob, and where both are given they add, exactly as the
+            # numerals' two lists do.
             by_col = led.get("dx-by-col")
             dx = by_col[col % len(by_col)] if by_col else led.get("dx", 0.0)
+            by_row = led.get("dx-by-row")
+            if by_row:
+                dx += by_row[row % len(by_row)]
             lp = {"ref": led["ref"], "id": led.get("id-format", "led-{n}").format(n=n),
                   "at": [round(x + dx, 2),
                          round(y + (led.get("dy-top", led.get("dy", 0.0)) if row == 0
@@ -306,6 +317,12 @@ def block_items(block, library, standards):
             skin = led.get("skin-top") if row == 0 else led.get("skin-bottom")
             if skin:
                 lp["skin"] = skin
+            if led.get("states"):
+                # WHAT A LAMP MEANS IS THE DEVICE'S TO SAY, not the component's.
+                # The same led-arrow is a speed lamp on one face and a link lamp
+                # on the next, and a block of forty-eight shares one vocabulary,
+                # so it is said once here rather than forty-eight times below.
+                lp["states"] = led["states"]
             lp["for"] = pid
             lp["group"] = led.get("group", "port-leds")
             lp["rel-pos"] = n
