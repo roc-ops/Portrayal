@@ -122,11 +122,23 @@ def test_nothing_exported_exceeds_the_limit():
     assert not over, over
 
 
-def test_nothing_exported_is_cut_mid_word():
+@pytest.fixture(scope="module")
+def component_names():
+    """Every component's bare name, which is what an `Accepts:` list is made of."""
+    return {c.parts[-3] for c in LIB.glob("components/*/*/v*/contract.yaml")}
+
+
+def test_nothing_exported_is_cut_mid_word(component_names):
     """A description is mid-word only if it was TRUNCATED and does not say so.
-    Asserted against the length rather than against a guess: two module types
-    are naturally exactly 200 characters and end on a whole word, which a
-    heuristic sweep reported as a defect and is not one.
+
+    LENGTH ALONE CANNOT ANSWER THIS, and a band of "suspiciously close to the
+    limit" is a guess that grows false positives as the corpus does. Two module
+    types are naturally exactly 200 characters; an ASR 9006 bay that accepts
+    eleven cards lands at 198 and names every one of them - both end on a whole
+    word and neither was cut. So ask the structure instead: an `Accepts:` list
+    is made of component names, and a cut one ends on something that is a
+    PREFIX of a name rather than a name. That distinguishes "a9k-8x100g-lb-se"
+    from "a9k-40ge-l, a" without knowing how long either is.
     """
     bad = []
     seen = 0
@@ -137,8 +149,11 @@ def test_nothing_exported_is_cut_mid_word():
         # TWO MARKERS, because there are two kinds of cut: prose ends with the
         # ellipsis, a list ends with how many entries it did not name.
         says_so = t.endswith(dx.MORE) or re.search(r"\(\+\d+ more\)$", t)
-        if len(t) >= LIMIT - len(dx.MORE) and not says_so and len(t) < LIMIT:
-            bad.append(f"{p.name}: {t[-40:]!r}")
+        if says_so or not t.startswith("Accepts: "):
+            continue
+        last = t[len("Accepts: "):].split(", ")[-1].strip()
+        if last and last not in component_names:
+            bad.append(f"{p.name}: last entry {last!r} is not a component name")
     assert not bad, bad
     assert seen > 500, f"only {seen} descriptions reached the sweep"
 

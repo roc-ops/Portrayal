@@ -11,11 +11,6 @@ description: >-
   stacked blocks of ten. Cisco names the optical ports CFP2-0 and CFP2-1 rather than
   numbering them alongside the SFP+, so the two port sets are numbered independently and
   the SFP+ run 0 to 19.
-unplaced: >-
-  no ASR 9000 chassis in this library accepts this card: their slot bays name a different card
-  generation. The card itself is sourced; what is missing is the datasheet's Chassis
-  compatibility row, which says exactly which chassis take it. Tracked in
-  roc-ops/Portrayal#262.
 size: {w: 43.7, h: 395.7, d: 569.0}
 attrs:
   model: 'A9K-400G-DWDM-TR'
@@ -29,6 +24,10 @@ attrs:
   power-draw-max-w: 600
   eol: 'none-announced'
 provenance:
+  chassis-compatibility: >-
+    datasheet c78-736456, the Chassis compatibility row, which names the chassis this
+    card is supported in. That row is why the slot bays accept it; geometry is not a
+    compatibility source. See roc-ops/Portrayal#262.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 3 panel lamps at dome 0.3 (one number, carried by
