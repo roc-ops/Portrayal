@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2000-craft
-version: 1.0.0
+version: 1.1.0
 class: display
 behaviour: fills
 profile: networking
@@ -14,6 +14,48 @@ attrs:
   model: MX2000 Craft Interface
   power-absent: not-published
 provenance:
+  lamp-states: >-
+    THIRTY-FIVE LAMPS WERE DRAWN AND COULD NOT LIGHT - L47's first shape, the same
+    one the MX240, MX480 and MX960 panels had. Each fills from the LED variable now
+    with its drawn colour as the unlit fallback, so an unlit panel is unchanged.
+    THE VOCABULARIES ARE THE MX2010 GUIDE'S, which is the book this face was
+    measured against: Table 12 (host subsystem), Table 14 (line-card), Table 15
+    (SFB) and Table 18 (alarm). Green for functioning, red for failed, and both the
+    line-card and SFB lamps BLINK while the card transitions, in identical words.
+    THE RE COLUMN IS ORDERED BY ITS OWN SILKSCREEN, not by the index: led-re-0 at
+    cy 25.8 sits under MASTER at y 26.5, -1 under ONLINE, -2 under OFFLINE. So -0
+    and -1 are green and -2 is red, which is Table 12.
+    ONE LAMP PER SFB, NOT A PAIR. The guide calls it "one tricolor LED" and then
+    tabulates two labels for it, OK and FAIL, so the single drawn lamp carries
+    green, blinking and red rather than the ok/fail pairs the line cards have.
+  yellow-alarm-had-no-id: >-
+    THE PANEL DREW A WARNING ALARM AND NEVER NAMED IT - the same omission the MX960
+    had. The triangle was there in #f2c93c as a path with no id, so it was not a
+    lamp and could not light, while the red alarm beside it had been named. Table 11
+    lists MINOR ALARM and MAJOR ALARM as separate functions and Table 18 gives the
+    yellow one its behaviour. It is `led-yellow-alarm` now.
+  cb-re-lamps-have-no-published-vocabulary: >-
+    DRAWN, CONTRACTED, AND DELIBERATELY SILENT. led-cbre0 and led-cbre1 sit under
+    the CB-RE 0 and CB-RE 1 silkscreen and the guide names them - Table 11 function
+    9, "Status LEDs for the two CB-REs cards" - and then tabulates no colours for
+    them anywhere in the craft-interface section, whose contents list runs host
+    subsystem, power supply module, line-card, SFB and fan tray and stops.
+    TABLE 22 IS NOT THEIR TABLE. It is headed CB-RE LEDs and gives ONLINE green,
+    MASTER blue and OK/FAIL red - but it sits in the CB-RE card's own section and
+    includes a LINK lamp for the card's SFP+ ports, which the craft interface does
+    not have. Reading it as the craft lamp's vocabulary would be citing the card's
+    faceplate for the panel above it. They carry no states until something states
+    them; two lamps that cannot light is the honest report, and inventing green and
+    red for them would be a convention wearing a citation.
+  drawn-rows-are-a-summary: >-
+    WHAT THIS PANEL OMITS, said plainly because the lamp list now makes it
+    countable. Table 11 gives the real craft interface PSM lamps 0-8, fan-tray lamps
+    0-3 and TWO host-subsystem columns (RE0 and RE1, three lamps each). This face
+    draws none of the first two and one column of the second - `face` above already
+    called the rows "summarised" - because it was measured from studio photographs
+    at ~1.1 px/mm where those rows are not resolvable. Adding them would be
+    inventing positions. It is one component shared by the MX2008, MX2010 and
+    MX2020, and the ten line-card lamps are the MX2010's ten slots.
   size: 'photo - the MX2010 studio photographs at ~1.1 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
   power: >-
     NOT PUBLISHED. This contract's model field reads 'MX2000 Craft Interface', which is a
@@ -31,10 +73,273 @@ provenance:
     drawn as its green block. The model legend beside the brand differs
     per chassis (MX2008/MX2010/MX2020) and is OMITTED rather than
     printed wrong on two of the three'
-states:
-- ok
-- fail
-- absent
+states: [absent]
+elements:
+  led-sfb-0:
+    at: [151.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-1:
+    at: [157.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-2:
+    at: [163.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-3:
+    at: [169.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-4:
+    at: [175.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-5:
+    at: [181.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-6:
+    at: [187.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sfb-7:
+    at: [193.2, 31.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-cbre0:
+    at: [145.2, 39.0]
+    size: [1.6, 1.6]
+    class: led
+  led-cbre1:
+    at: [145.2, 45.5]
+    size: [1.6, 1.6]
+    class: led
+  led-re-0:
+    at: [249.2, 25.0]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re-1:
+    at: [249.2, 31.0]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re-2:
+    at: [249.2, 37.0]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-yellow-alarm:
+    at: [291.6, 24.0]
+    size: [8.8, 7.8]
+    class: led
+    states:
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  led-red-alarm:
+    at: [309.2, 24.7]
+    size: [7.6, 7.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-0:
+    at: [50.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-0:
+    at: [58.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-1:
+    at: [87.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-1:
+    at: [95.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-2:
+    at: [124.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-2:
+    at: [132.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-3:
+    at: [161.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-3:
+    at: [169.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-4:
+    at: [198.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-4:
+    at: [206.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-5:
+    at: [235.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-5:
+    at: [243.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-6:
+    at: [272.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-6:
+    at: [280.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-7:
+    at: [309.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-7:
+    at: [317.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-8:
+    at: [346.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-8:
+    at: [354.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc-ok-9:
+    at: [383.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc-fail-9:
+    at: [391.2, 83.2]
+    size: [1.6, 1.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
 size:
   w: 440.0
   h: 95.0
