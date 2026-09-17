@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc7e-mrate-v960
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -53,3 +53,13 @@ parts:
 size:
   w: 30.1
   h: 405.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  w and h are the MX960 vertical card slot opening (that chassis's own bays are 30.1 x 405.0),
+  not the part. Nothing measured the card: provenance/size says so in as many words, and #261
+  found the same model number drawn at two different sizes because two chassis have two
+  openings. Juniper's hardware guides for the MX240, MX480 and MX960 all state an MPC/DPC/SCB as
+  17 x 22 x 1.25 in - the MX960's own book included, which is the vendor saying it is ONE card
+  in both orientations - but those figures are rounded to the quarter inch, and 1.25 in is 31.75
+  mm against a modelled 30.45 mm slot pitch, so they cannot settle a drawing to 0.1 mm.
+  Estimated until a mechanical drawing or a ruler on a real card turns up.

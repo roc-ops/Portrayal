@@ -237,6 +237,7 @@ RULES = {
     "L94": ("device",     "a `component-attrs` key names a component the device seats, or a placement or bay it declares", "fix the key; one that matches neither sets nothing and is silently ignored"),
     "L95": ("component",  "a power supply says where power enters it", "compose an inlet part, or add `attrs.inlet` from the enum - `none` if the chassis carries it"),
     "L96": ("component",  "a module composing a pluggable cage says what rate it runs at", "add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count"),
+    "L97": ("component",  "a part that states a size says where each dimension came from", "add `size-confidence: {w: ..., h: ...}` from the confidence vocabulary, and `size-notes` where it needs a sentence"),
 }
 
 
@@ -1180,6 +1181,49 @@ def lint_component_dc_capacity(path, data, _lib_roots=None):
          "provenance. If the vendor really publishes nothing, say `power-absent: "
          "not-published` and name the documents - that is an answer. "
          "`not-applicable` is not, for a part with no bays")
+
+
+def lint_component_size_confidence(path, data, _lib_roots=None):
+    """L97: a part that states a size says where each dimension came from.
+
+    A SIZE IS THE ONE FIELD EVERYTHING DOWNSTREAM TRUSTS, and 502 of the 526
+    parts that state one said nothing about where it came from. `size-confidence`
+    has existed all along - the schema describes it, `components_index` tallies
+    it - and 24 parts used it, so the tally counted almost nothing and the gap
+    it exists to show stayed quiet. An instrument nobody fills is the shape
+    docs/failure-by-omission.md is about.
+
+    WHY PROSE CANNOT DO THIS, which is the part worth keeping. 104 Juniper
+    contracts are sized from their chassis slot rather than from the card, and
+    their `provenance/size` says so honestly:
+
+        registry + layout - the face is the slot geometry of its chassis family
+        ... NOT measured from a faceplate drawing
+
+    Any search of that prose for a confidence word finds `measured`, in the
+    sentence that exists to deny it. #261 found the group by PARSING provenance
+    rather than grepping it, and a rule that grepped would have called all 104
+    measured - which is worse than saying nothing, because it would have been
+    believed.
+
+    A CENSUS WARNING of the L92/L93 kind: it fires on what is unstated and is
+    meant to shrink. `estimated` is an answer and so is `known-wrong`; silence
+    is not, because silence reads exactly like `measured` to anything that has
+    only the number.
+    """
+    size = data.get("size") or {}
+    if not size:
+        return
+    conf = data.get("size-confidence") or {}
+    missing = [dim for dim in ("w", "h", "d") if size.get(dim) is not None and not conf.get(dim)]
+    if not missing:
+        return
+    warn(path, "L97", f"states {', '.join(missing)} and does not say where "
+         + ("they came" if len(missing) > 1 else "it came") +
+         " from. Add `size-confidence` from the vocabulary - measured, "
+         "photo-measured, drawing, datasheet, registry, borrowed, estimated, "
+         "known-wrong - with `size-notes` where it needs a sentence. A number "
+         "nobody has measured reads exactly like one somebody did")
 
 
 def lint_component_cage_rate(path, data, _lib_roots=None):
@@ -6991,6 +7035,7 @@ def main():
                 lint_component_dc_capacity(f, d)
                 lint_component_inlet(f, d, args.library)
                 lint_component_cage_rate(f, d)
+                lint_component_size_confidence(f, d)
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)

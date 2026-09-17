@@ -47,6 +47,7 @@ It has now been seen seven times in this repository, which is why it has a page:
 | `expand.py --check` | a generator nobody ran (#168) |
 | `dcim_export --modules` | 55 module types overwritten by model collision (#267) |
 | `cage_type` fallback | 1215 cage placements typed by a table default, seven cards wrong (#294) |
+| `size-confidence` | 502 of 526 parts state a size and not where it came from; 97 deny it in prose a search reads as `measured` (#261) |
 
 ## The method
 
