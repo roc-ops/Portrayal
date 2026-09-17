@@ -44,6 +44,66 @@
   .chip.on { background: var(--warn); color: #111; border-color: var(--warn); }
   /* over --hl, the selection colour the user picks, so it stays legible there */
   .node.sel .chip { border-color: #ffffff66; }
+
+  /* The kit's palette has no "good" green - the shell never needed one - so the
+     met-capability chip brings its own rather than borrowing --accent, which is
+     the selection blue and would read as "selected" on a row of flags. */
+  :root { --good: #4ade80; --good-line: #4ade8066; --good-wash: #4ade801a; }
+
+  /* the FRU bar: one button per removable unit, in the header beside the status */
+  #frus { display: flex; gap: .2rem; flex-wrap: wrap; }
+  #frus[hidden] { display: none; }        /* display:flex outranks the hidden attribute */
+  #frus button { font-family: ui-monospace, monospace; font-size: .72rem; padding: .26rem .42rem;
+                 border: 1px solid var(--control-line); background: var(--control); color: var(--ink);
+                 cursor: pointer; }
+  #frus button:hover { background: var(--control-hover); border-color: var(--control-hover-line); }
+  #frus button.on { background: var(--warn); color: #111; border-color: var(--warn); }
+
+  /* renderer diagnostics and the export bar, both over the canvas */
+  #gfx { position: absolute; bottom: .6rem; right: .7rem; z-index: 5; pointer-events: none;
+         background: color-mix(in srgb, var(--stage) 80%, transparent); border: 1px solid var(--line);
+         border-radius: 4px; padding: .25rem .45rem; font: 11px ui-monospace, monospace; color: var(--dim); }
+  #gfx.warn { color: var(--warn); border-color: var(--warn); }
+  #glx { position: absolute; bottom: .6rem; left: .7rem; z-index: 5; display: flex;
+         gap: .3rem; align-items: center; font-size: .72rem; }
+  #glx button { font: inherit; padding: .2rem .5rem; border: 1px solid var(--control-line);
+                background: var(--control); color: var(--ink); cursor: pointer; }
+  #glx button:disabled { opacity: .55; cursor: progress; }
+  #glx .msg { color: var(--dim); }
+  #glx .msg.bad { color: var(--warn); }
+
+  /* the About panel, which takes over the inspector on the chassis row */
+  #inspect .prov { color: var(--dim); font-size: .68rem; line-height: 1.45; margin: -.15rem 0 .5rem 5.4rem;
+                   border-left: 2px solid var(--line); padding-left: .45rem; }
+  #inspect .pn { margin: 0 0 .5rem .2rem; font-size: .7rem; }
+  #inspect .pn code { color: var(--ink); }
+  #inspect .pn div { color: var(--dim); }
+  #inspect .cfgname { color: var(--ink); font-weight: 600; }
+  /* Capability and gaps are read by someone deciding whether to trust the model
+     or to go and fill it in, so `blocked` and `wanted` - the two fields that say
+     what to do next - get full-width lines rather than a tooltip. */
+  #inspect .lvl { display: flex; gap: .35rem; align-items: baseline; flex-wrap: wrap; margin-bottom: .45rem; }
+  #inspect .lvl b { font-size: .95rem; color: var(--ink); }
+  #inspect .lvl .nm { color: var(--ink); }
+  #inspect .flag { border: 1px solid var(--good-line); background: var(--good-wash); color: var(--good);
+                   border-radius: 9px; padding: 0 .42rem; font-size: .64rem; }
+  /* a flag nothing could test is not a flag that failed, and must not be mistaken
+     for one at a glance - dashed, dim, and question-marked */
+  #inspect .flag.unk { border-style: dashed; border-color: var(--line); background: none; color: var(--dim); }
+  #inspect .legend { color: var(--dim); font-size: .66rem; margin: -.2rem 0 .5rem; line-height: 1.45; }
+  #inspect .blocked { border-left: 2px solid var(--warn); padding: .1rem 0 .1rem .5rem;
+                      margin: .35rem 0; line-height: 1.5; }
+  #inspect .blocked b { color: var(--warn); font-weight: 600; }
+  #inspect .gap { border: 1px solid var(--line); border-radius: 6px; padding: .4rem .5rem;
+                  margin-bottom: .45rem; line-height: 1.5; }
+  #inspect .gap .hd { display: flex; gap: .35rem; align-items: baseline; flex-wrap: wrap; margin-bottom: .2rem; }
+  #inspect .gap .what { color: var(--ink); font-weight: 600; }
+  #inspect .gap .why { border: 1px solid var(--warn); color: var(--warn); border-radius: 9px;
+                       padding: 0 .4rem; font-size: .64rem; }
+  #inspect .gap .sc { color: var(--dim); font-size: .68rem; }
+  #inspect .gap .note { color: var(--dim); font-size: .7rem; }
+  #inspect .gap .want { margin-top: .25rem; color: var(--ink); font-size: .72rem; }
+  #inspect .gap .want b { color: var(--accent); font-weight: 600; }
 </style>
 <!-- viewer3d.js imports `three` as a bare specifier; the kit resolves nothing itself. -->
 <script type="importmap">
@@ -55,7 +115,7 @@
 </head>
 <body>
 <script type="module">
-import { createShell } from './shell.js';
+import { createShell, esc } from './shell.js';
 import { statesOfEl } from './states.js';
 
 const DIST = '../library/dist';
@@ -144,6 +204,284 @@ function pushPulled() {
 }
 shell.on('pulled', pushPulled);
 
+// ---------------------------------------------------------------- About panel
+// Facts about the device that belong to no view: they are not in the drawing and
+// they are not in the tree, so there was nowhere to read them. The chassis row is
+// already the first row of the tree, so selecting it is the natural way in.
+const dim = v => (v == null ? '—' : `${(+v).toFixed(1).replace(/\.0$/, '')} mm`);
+
+// Capability and gaps are computed by the build - there is deliberately no
+// `capability:` key in a manifest - and arrive in <device>.configs.json. They are
+// written by a different hand and may not be there yet, so every branch is
+// guarded: a manifest without them reads as it did rather than showing an empty
+// heading.
+//
+// The flags need three states, not two. A flag in `flags` was tested and met; one
+// in `unknown` could never be tested at all - a device that declares no `profile:`
+// has no minimum attr set to judge `specified` against; a flag in neither was
+// tested and not met. Printing the second as a plain "no" would call a device
+// unspecified when it is merely unjudged, which is false in a way that matters.
+function capability(cap, gapList) {
+  if (!cap || cap.level == null) return '';
+  // A CAP gap carries the reason a flag could not be judged, which is exactly the
+  // tooltip. It is named for the cause rather than the flag, so this looks for the
+  // flag named in the text too - best effort, and the full sentence is under Gaps.
+  const why = f => (gapList || []).find(
+    g => g.what === f || (g.wanted || '').includes('`' + f + '`'))?.wanted || '';
+  let h = `<h3>Capability</h3>`;
+  h += `<div class="lvl"><b>level ${esc(cap.level)}</b>`
+     + (cap.name ? `<span class="nm">${esc(cap.name)}</span>` : '')
+     + (cap.flags || []).map(f => `<span class="flag" title="met">+${esc(f)}</span>`).join('')
+     + (cap.unknown || []).map(f =>
+         `<span class="flag unk" title="${esc(why(f) || 'nothing to test it against')}">?${esc(f)}</span>`).join('')
+     + `</div>`;
+  // the legend only earns its space once a `?` is on screen
+  if ((cap.unknown || []).length)
+    h += `<div class="legend">+ met · ? nothing to test it against ·`
+       + ` a flag shown by neither was tested and not met</div>`;
+  for (const b of cap.blocked || []) {
+    // `needs` is the whole point of the record - "level 4 needs rel-pos on 12
+    // placements in view rear" is a job someone can pick up.
+    h += `<div class="blocked"><b>level ${esc(b.level)}`
+       + (b.name ? ` ${esc(b.name)}` : '') + ` blocked</b>`
+       + (b.needs ? ` — needs ${esc(b.needs)}` : '') + `</div>`;
+  }
+  return h;
+}
+
+// A gap is a fact about what nobody knows, and half of them are facts about a
+// DOCUMENT rather than about the manifest - "the HIG has no port-lamp table" -
+// which no rule can ever find. `wanted` says what would close it, and that turns
+// the panel from a list of shortcomings into a list of requests.
+function gaps(list) {
+  if (!Array.isArray(list) || !list.length) return '';
+  let h = `<h3>Gaps</h3>`;
+  for (const g of list) {
+    const scope = Array.isArray(g.scope) ? g.scope.join(', ') : (g.scope || '');
+    // `because` is one field with two vocabularies and `kind` says which to read:
+    // on a declared gap it is the controlled word for who could close it, on a
+    // derived one it is the rule that found it. `reason` and `rule` were the two
+    // fields it replaced and cost nothing to keep reading.
+    const because = g.because || g.reason || g.rule;
+    h += `<div class="gap"><div class="hd"><span class="what">${esc(g.what || '')}</span>`
+       + (because ? `<span class="why">${esc(because)}</span>` : '')
+       + (g.kind ? `<span class="sc">${esc(g.kind)}</span>` : '')
+       // a count of 0 means the rule had nothing to count, not that it found
+       // nothing wrong - the gap is there, so print the gap and not the zero
+       + (g.count > 0 ? `<span class="sc">×${esc(g.count)}</span>` : '')
+       + `</div>`;
+    if (scope) h += `<div class="sc">${esc(scope)}</div>`;
+    if (g.note) h += `<div class="note">${esc(g.note)}</div>`;
+    if (g.wanted) h += `<div class="want"><b>wanted:</b> ${esc(g.wanted)}</div>`;
+    h += `</div>`;
+  }
+  return h;
+}
+
+function about(box) {
+  const meta = state.meta || {};
+  const d = shell.device() || {};
+  const ch = meta.chassis || {};
+  const prov = {...(meta.provenance || {})};
+  const attrs = meta.attrs || {};
+  const row = (k, v) => `<div class="row"><span>${esc(k)}</span><span class="v">${esc(v)}</span></div>`;
+  // A fact and its citation belong together. Whatever provenance is left over is
+  // about the modelling rather than about one fact, and goes at the bottom.
+  const cite = (...keys) => keys.map(k => {
+    const t = prov[k];
+    if (!t) return '';
+    delete prov[k];
+    return `<div class="prov">${esc(k)}: ${esc(t)}</div>`;
+  }).join('');
+
+  let h = `<h2>About</h2>`;
+  h += row('manufacturer', d.manufacturer || '');
+  h += row('model', meta.model || d.model || '');
+  const pf = d.portfolio || {};
+  if (pf.series) h += row('series', pf.series);
+  if (pf.family) h += row('family', pf.family);
+  if (pf.line) h += row('line', pf.line);
+  if (d.version) h += row('version', d.version);
+  if (d.description) h += row('description', d.description);
+
+  h += capability(meta.capability || d.capability, meta.gaps || d.gaps);
+
+  h += `<h3>Dimensions</h3>`;
+  h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
+  h += row('W × H × D', `${dim(ch.w)} × ${dim(ch.h)} × ${dim(ch.d)}`);
+  h += cite('chassis', 'dimensions', 'width', 'height', 'depth', 'ru');
+
+  // Attributes are SECTIONED, and this is where the sectioning pays: two dozen
+  // rows in one column headed "Attributes" is a wall. Unknown sections are
+  // printed after the known ones rather than dropped - this page may be older or
+  // newer than the drawing it is reading, and silently swallowing a section the
+  // manifest declares is the worst of the options.
+  const SECTIONS = ['physical', 'performance', 'power', 'thermal', 'environmental',
+                    'platform', 'features', 'management', 'compliance', 'lifecycle', 'other'];
+  const present = Object.keys(attrs).filter(s2 => attrs[s2] && Object.keys(attrs[s2]).length);
+  const akeys = present.flatMap(s2 => Object.keys(attrs[s2]));
+  for (const s2 of [...SECTIONS.filter(x => present.includes(x)),
+                    ...present.filter(x => !SECTIONS.includes(x))]) {
+    h += `<h3>${esc(s2[0].toUpperCase() + s2.slice(1))}</h3>`;
+    for (const [k, v] of Object.entries(attrs[s2])) h += row(k, v) + cite(k);
+  }
+
+  const cfgs = (meta.configs || []).filter(c => Object.keys(c['part-numbers'] || {}).length);
+  if (cfgs.length) {
+    h += `<h3>Part numbers</h3>`;
+    for (const c of cfgs) {
+      h += `<div class="pn"><span class="cfgname">${esc(c.name)}</span>`
+         + (c.description ? ` — ${esc(c.description)}` : '');
+      for (const [sku, v] of Object.entries(c['part-numbers'])) {
+        const cord = (v || {})['power-cord'];
+        h += `<div><code>${esc(sku)}</code> · ${esc((v || {}).part || '')}`
+           + (cord && cord !== 'none' ? ` · ${esc(cord)}` : '') + `</div>`;
+      }
+      h += `</div>`;
+    }
+    h += cite('configurations', 'part-numbers');
+  }
+
+  h += gaps(meta.gaps || d.gaps);
+
+  const rest = Object.keys(prov);
+  if (rest.length) {
+    h += `<h3>Provenance</h3>`;
+    for (const k of rest) h += `<div class="prov" style="margin-left:0">${esc(k)}: ${esc(prov[k])}</div>`;
+  }
+  if (!akeys.length && !rest.length)
+    h += `<div class="hint" style="padding-left:0">This manifest carries no attrs or provenance.
+          Both are optional; a device at maturity <code>modelled</code> or better has them.</div>`;
+  box.innerHTML = h;
+}
+
+// The chassis row is the device itself, so it gets the device's own facts rather
+// than the generic node inspector. Inside a module the chassis is that module's
+// faceplate and not the box, so leave it alone there.
+shell.on('inspect', ({path, box}) => {
+  if (path !== 'chassis' || state.module) return false;
+  about(box);
+  return true;
+});
+
+// ---------------------------------------------------------------- FRU bar
+// ONE BUTTON PER REMOVABLE UNIT, and this is the control that answers "does the
+// bay render what it holds". It is not the same thing as the tree's pull: a pull
+// HIDES a cover so you can see behind it, and an eject SLIDES THE UNIT OUT along
+// its own travel, which is the only way to see whether a module was modelled
+// sitting in its bay or merely painted on the face.
+//
+// frus() names each unit by its class - "Fan module", "Power supply" - which is
+// true and useless when a 2RU box has five fans and two PSUs. So the button
+// carries the unit's own PATH, which is what the tree row, the halo and the hover
+// status already call it: pressing `fan-3` and watching `fan-3` slide out needs no
+// translation. The glyph is the module's own and reports the action available
+// (eject, insert, or extend for a captive unit), and toggleFru returns the next
+// state, so the button re-labels itself as it moves.
+const fruBox = document.createElement('span');
+fruBox.id = 'frus';
+fruBox.hidden = true;
+shell.el.status.before(fruBox);
+
+function fruBar(v) {
+  fruBox.replaceChildren();
+  if (typeof v.frus !== 'function' || typeof v.toggleFru !== 'function') return;
+  for (const fru of v.frus() || []) {
+    const btn = document.createElement('button');
+    btn.dataset.fru = fru.path;
+    const paint = st => {
+      btn.textContent = `${st.icon} ${st.path}`;
+      // out units stay lit, so a chassis left half stripped still reads at a glance
+      btn.classList.toggle('on', !!st.out);
+      btn.title = `${st.label} — ${st.out ? 'insert' : 'eject'}`
+                + ` (${Math.round(st.travel)} mm travel${st.captive ? ', captive' : ''})`;
+    };
+    paint(fru);
+    btn.onclick = () => {
+      const st = v.toggleFru(fru.path);
+      if (!st) return;
+      paint(st);
+      shell.el.status.textContent = st.text || '';
+    };
+    fruBox.appendChild(btn);
+  }
+}
+
+// ------------------------------------------------------- over-canvas chrome
+// The renderer's own report, and the export the module already knows how to do.
+// Both are things `viewer3d.js` hands a host "to rebuild the chrome this module
+// gave up", in its own words, and neither had a host here to rebuild it.
+const kb = n => n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+
+function mountExtras(v) {
+  // A DIAGNOSIS AID, NOT DECORATION. WebGL1, msaa 0 and anisotropy below 4 each
+  // produce shimmer no material setting can fix, and knowing which of the three
+  // you are looking at is the difference between a driver note and a bug hunt.
+  if (typeof v.capabilities === 'function' && !host3d.querySelector('#gfx')) {
+    const gfx = document.createElement('div');
+    gfx.id = 'gfx';
+    const c = v.capabilities() || {};
+    gfx.textContent = c.text || '';
+    gfx.classList.toggle('warn', !!c.warn);
+    host3d.appendChild(gfx);
+  }
+  // A GLB is the only output of this page that survives someone not being able to
+  // run it. The module does the exporting - it owns the scene graph, and the API
+  // deliberately does not hand that out - so this is two buttons and a line.
+  if (typeof v.download !== 'function' || host3d.querySelector('#glx')) return;
+  const bar = document.createElement('div');
+  bar.id = 'glx';
+  bar.innerHTML =
+    `<button data-fmt="glb" title="Geometry and textures in one file. Opens in Quick Look, Windows 3D Viewer, PowerPoint, Blender, Sketchfab.">Download GLB</button>`
+  + `<button data-fmt="usdz" title="AR Quick Look on iPhone and iPad.">USDZ</button>`
+  + `<span class="msg"></span>`;
+  host3d.appendChild(bar);
+  const msg = bar.querySelector('.msg');
+  const all = [...bar.querySelectorAll('button')];
+  for (const b of all) b.onclick = async () => {
+    const fmt = b.dataset.fmt;
+    all.forEach(x => { x.disabled = true; });
+    msg.classList.remove('bad');
+    msg.textContent = `building ${fmt.toUpperCase()}…`;
+    try {
+      const {name, size} = await v.download(fmt);
+      msg.textContent = `${name} — ${kb(size)}`;
+    } catch (err) {
+      // USDZ is fussier than GLB, so say which one failed rather than "export failed"
+      msg.textContent = `${fmt.toUpperCase()} failed: ${err.message || err}`;
+      msg.classList.add('bad');
+    } finally {
+      all.forEach(x => { x.disabled = false; });
+    }
+  };
+}
+
+// ---------------------------------------------------------------- swap state
+// What the BUILD put in each bay, so a swap can be told from a default. Only what
+// actually changed is sent; everything else keeps the compiled geometry.
+function builtOccupant(bayId) {
+  const cfg = state.meta?.configs?.find(c => c.name === state.cfg);
+  const declared = cfg?.bays || {};
+  if (Object.prototype.hasOwnProperty.call(declared, bayId)) return declared[bayId] || null;
+  for (const bays of Object.values(state.meta?.bays || {}))
+    for (const b of bays) if (b.id === bayId) return b.default || null;
+  return null;
+}
+function swapOverrides() {
+  const out = {};
+  for (const [id, ref] of Object.entries(state.cfgBays || {}))
+    if ((ref || null) !== builtOccupant(id)) out[id] = ref || null;
+  return out;
+}
+// THE SWAP STATE IS PART OF WHAT IS ON SCREEN, so it is part of the key. A
+// runtime swap changes no file on disk - the scene is extracted from the compiled
+// faces, which know only what the built configuration says - so the overrides
+// have to travel with the load AND be visible to the early return, or sync3d
+// decides it is already showing the right thing and swapping in 3D does nothing.
+const swapKey = () => Object.entries(swapOverrides())
+  .sort(([a], [b]) => a < b ? -1 : 1)
+  .map(([k, v]) => `${k}=${v || ''}`).join(',');
+
 // ---------------------------------------------------------------- 2D / 3D
 // The scene is mounted beside the SVG stage and imported on first use, so a
 // page that never presses 3D pays for neither three.js nor a WebGL context.
@@ -180,15 +518,22 @@ async function ensureViewer() {
 async function sync3d() {
   if (mode !== '3d') return;
   const v = await ensureViewer();
-  const key = `${state.device}.${state.cfg}`;
-  if (key === loadedKey) return;
-  await v.load({ device: state.device, config: state.cfg });
-  loadedKey = key;
-  if (state.sel) v.select(state.sel);
-  // A LOAD IS A FRESH SCENE, so whatever the drawing is already showing has to
-  // be put back onto it. Both are no-ops when nothing is lit or pulled.
+  const key = `${state.device}.${state.cfg}|${swapKey()}`;
+  // BEFORE THE EARLY RETURN, AND BEFORE THE LOAD. Before the return because a
+  // lamp lit or a cover taken off while the drawing was showing is exactly the
+  // case where the device and the swaps have NOT changed and the scene still has
+  // to catch up - putting these after the return was a real bug, and the same
+  // trap the swap key has to be taught about. Before the load because the build
+  // reads them, so a scene comes up already lit instead of flashing dark and
+  // repainting itself.
   await Promise.resolve(v.setStates(liveStates())).catch(() => {});
   await Promise.resolve(v.setPulled(livePulled())).catch(() => {});
+  if (key === loadedKey) return;
+  await v.load({ device: state.device, config: state.cfg, overrides: swapOverrides() });
+  loadedKey = key;              // only once it is actually the thing on screen
+  mountExtras(v);
+  fruBar(v);
+  if (state.sel) v.select(state.sel);
 }
 
 async function setMode(m) {
@@ -197,7 +542,6 @@ async function setMode(m) {
   for (const b of modeBar.querySelectorAll('button')) b.classList.toggle('on', b.dataset.mode === m);
   shell.el.svgHost.hidden = m !== '2d';
   host3d.hidden = m !== '3d';
-  shell.el.fit.hidden = m === '3d';
   shell.emit('mode', m);
   // IN 3D THE VIEW IS NOT A CHOICE. A drawing shows one face, so picking which
   // is a real control; a scene shows every face at once, and a tree still
@@ -245,7 +589,32 @@ shell.on('device', (name, meta) => {
   if (short && mode === '3d') setMode('2d');
   else sync3d();
 });
+// Ejecting a fan does nothing you can see on a flat drawing, so the FRU bar is 3D
+// chrome and leaves with the canvas. Fit goes the other way: it measures the SVG
+// stage, and while that stage is hidden it measures 0x0 and returns without doing
+// anything - a button that silently does nothing is worse than no button.
+shell.on('mode', m => {
+  fruBox.hidden = m !== '3d';
+  shell.el.fit.hidden = m === '3d';
+});
+
 shell.on('select', path => { if (mode === '3d' && viewer) viewer.select(path); });
+
+// A SWAP IS THE SAME EVENT AS A CONFIG CHANGE as far as the scene is concerned:
+// the drawing now shows something the scene does not. In 2D sync3d returns
+// immediately and the rebuild is deferred to the mode switch, which is where the
+// cost belongs - swapping is a 2D affordance and nobody should pay for a scene
+// they are not looking at. The scene's half can fail on its own, and an unhandled
+// rejection is a silent one.
+shell.on('change', () => { sync3d().catch(err => {
+  console.warn('[portrayal] 3D swap sync failed', err);
+  shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+}); });
+shell.on('load', () => { sync3d().catch(err => {
+  console.warn('[portrayal] 3D reload failed', err);
+  shell.el.status.textContent = `3D unavailable: ${err.message || err}`;
+}); });
+
 addEventListener('resize', () => { if (mode === '3d' && viewer) viewer.resize(); });
 </script>
 </body>

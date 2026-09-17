@@ -49,10 +49,25 @@ def _page_code(text):
     return re.sub(r"""import\s*\{[^}]*\}\s*from\s*['"][^'"]+['"]""", "", src)
 
 
+def _strip_comments(src):
+    """JS with its comments taken out.
+
+    THE SAME DEFECT AS `_page_code`'S, ON THE OTHER SIDE OF THE SEAM. This parser
+    reads prose as code too: a shorthand key on a line preceded by a comment -
+    `viewer3d.js` explains `frus` with "what a host needs to rebuild the chrome
+    this module gave up" - arrives as one piece of comment-plus-name, which
+    matches no identifier, so the key silently vanishes from the surface and the
+    page is told it calls something the module does not return. Stripping is the
+    fix in both places, for the same reason: stop showing the parser prose.
+    """
+    src = re.sub(r"/\*.*?\*/", "", src, flags=re.S)
+    return re.sub(r"(?<!:)//[^\n]*", "", src)
+
+
 def _object_keys(block):
     """The keys of a JS object literal body, split on top-level commas."""
     out = set()
-    for piece in re.split(r",(?![^(]*\))", block):
+    for piece in re.split(r",(?![^(]*\))", _strip_comments(block)):
         name = piece.strip().split(":")[0].strip()
         if re.fullmatch(r"[A-Za-z_$][\w$]*", name):
             out.add(name)
