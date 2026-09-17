@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pwr-3kw-ac-v2
-version: 1.0.1
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -11,9 +11,6 @@ description: >-
   hazard label and Input, Output and Fault lamps. Four of these fill a version 2 tray.
   The AC and DC modules of this generation share one faceplate because the input lands
   on the tray.
-unplaced: >-
-  no ASR 9000 chassis in this library accepts this supply: the power bays name the V1 modules
-  their own source documented. Tracked in roc-ops/Portrayal#262.
 size: {w: 99.62, h: 42.85}
 attrs:
   model: 'PWR-3KW-AC-V2'
@@ -24,6 +21,15 @@ attrs:
   power-output-w: 3000
   eol: 'none-announced'
 provenance:
+  seated: >-
+    SEATED ON THE GUIDE'S OWN SENTENCE. Overview and Reference Guide, "Cisco ASR 9922
+    Router Power Modules": "ASR-9922 supports: ... Two different AC power
+    configurations: Version 2 power which uses ASR9K-AC-PEM-V2 power entry modules and
+    PWR-3KW-AC-V2 single-phase 220-V 20-A power supplies." That names this PID and
+    that chassis, so the ASR 9922's sixteen power bays accept it. The bay reserves
+    99.62 x 42.85 and this module is 99.62 x 42.85 - the same figure, because the
+    generic cisco/a9k-power-module-v2 those bays were built around is the same
+    envelope.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 3 panel lamps at dome 0.3 (one number, carried by

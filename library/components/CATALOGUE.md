@@ -283,7 +283,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-sip-700-8g@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 8 GB of memory |
 | `cisco/a9k-slot-cover@1` | module | blank | 41.4 × 395.7 × 25 |  | 7 | 0 | Line card and RSP/RP blank filler for a Cisco ASR 9000 modular chassis |
 | `cisco/asr-9001-fan@1` | module | fan | 54.76 × 88.19 |  | 1 | 0 | Cisco ASR 9001 fan module |
-| `cisco/asr-9006-fan@1` | module | fan | 175.65 × 70.97 |  | 0 | 0 | Cisco ASR 9006 Router fan tray |
+| `cisco/asr-9006-fan@1` | module | fan | 175.65 × 70.97 |  | 1 | 0 | Cisco ASR 9006 Router fan tray |
 | `cisco/asr-9010-fan@1` | module | fan | 444.25 × 33.32 |  | 1 | 0 | Cisco ASR 9010 Router fan tray |
 | `cisco/asr-9910-fan@1` | module | fan | 447.09 × 41.07 |  | 1 | 0 | Cisco ASR 9910 Router fan tray |
 | `cisco/asr-9912-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9912 Router Switch Fabric Card, first generation |
@@ -291,8 +291,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
-| `cisco/pwr-2kw-dc-v2@1` | module | psu | 99.62 × 42.85 |  | 0 | 0 | Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module (ASR9K-DC-PEM-V2) |
-| `cisco/pwr-3kw-ac-v2@1` | module | psu | 99.62 × 42.85 |  | 0 | 0 | Cisco ASR 9000 version 2 AC power supply, 3000 W, for a version 2 power entry module (ASR9K-AC-PEM-V2) |
+| `cisco/pwr-2kw-dc-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module (ASR9K-DC-PEM-V2) |
+| `cisco/pwr-3kw-ac-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 AC power supply, 3000 W, for a version 2 power entry module (ASR9K-AC-PEM-V2) |
 | `cisco/spa-1choc3-ce-atm@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 1-Port Channelized OC-3 ATM CEoP SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 | `cisco/spa-1xchoc48-ds3@1` | module | line-card | 34.58 × 167.87 |  | 0 | 0 | Cisco 1-Port Channelized OC48/STM16 DS3 SPA, a double-height shared port adapter for the ASR 9000 SIP-700 |
 | `cisco/spa-1xchstm1-oc3@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 1-Port Channelized OC-3/STM-1 SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
