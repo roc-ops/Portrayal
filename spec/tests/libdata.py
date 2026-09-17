@@ -57,3 +57,25 @@ def components():
         if doc:
             out.append((f"{f.parent.parent.parent.name}/{f.parent.parent.name}", f, doc))
     return tuple(out)
+
+
+def each_device():
+    """Every device as a pytest param, with its slug as the id.
+
+    THE POINT IS WHAT A FAILURE SAYS. A library-wide sweep that loops inside one
+    test and asserts on a list gives a contributor `['juniper/mx240']` and a test
+    name; they then open the test to learn what the rule was. Parametrised, the
+    failure names the device in the test id and the rule in the message, and
+    `pytest -k mx240` runs every sweep against one device - the equivalent of
+    `./build.sh --device` that the suite did not have (#184).
+
+    Use it as `@pytest.mark.parametrize("slug,path,doc", libdata.each_device())`.
+    """
+    import pytest
+    return [pytest.param(slug, path, doc, id=slug) for slug, path, doc in library()]
+
+
+def each_component():
+    """The same for component contracts, keyed `ns/name`."""
+    import pytest
+    return [pytest.param(ref, path, doc, id=ref) for ref, path, doc in components()]

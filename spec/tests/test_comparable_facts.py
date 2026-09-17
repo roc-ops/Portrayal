@@ -18,6 +18,8 @@ import sys
 
 import yaml
 
+import pytest
+
 import libdata
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -192,16 +194,19 @@ def test_the_two_devices_from_the_csv_now_compare_correctly():
     assert "switching-capacity-gbps" in s95 and "throughput-gbps" not in s95
 
 
-def test_no_device_resolves_a_peak_that_equals_its_own_typical_by_accident():
+@pytest.mark.parametrize("slug,path,doc", libdata.each_device())
+def test_no_device_resolves_a_peak_that_equals_its_own_typical_by_accident(
+        slug, path, doc):
     """A cheap tripwire for rule 1 across the whole library: if a fallback ever
     creeps back in, the first symptom is a peak reading that IS the typical
     one, sourced from a typical key."""
-    bad = []
-    for _slug, f, d in libdata.library():
-        for r in F.resolve(d).get("peak-power-w", {}).get("readings", []):
-            if "typical" in r["from"]:
-                bad.append(f"{f.parent.name}: {r['from']}")
-    assert not bad, bad
+    bad = [r["from"] for r in F.resolve(doc).get("peak-power-w", {}).get("readings", [])
+           if "typical" in r["from"]]
+    assert not bad, (
+        f"{slug}: a peak-power reading is sourced from a TYPICAL key ({bad}). "
+        "Rule 1 of comparable facts: a peak is a peak or it is absent - a "
+        "fallback to the typical figure makes the two comparable by accident. "
+        "See docs/layers-and-conformance.md on comparable facts.")
 
 
 def test_the_vocabulary_is_published_with_the_values():
