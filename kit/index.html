@@ -12,10 +12,22 @@
       python3 tools/serve.py 8931      # from the repository root
       open http://localhost:8931/kit/index.html?device=<name>
 
-  Everything it draws comes from ../library/dist. It brings no logic of its own
-  beyond the 2D/3D switch; the shell and the viewer are the kit modules the
-  README lists. The published site carries a richer page; this one exists so
-  the visual gates in docs/modelling-a-device.md can be run without it.
+  Everything it draws comes from ../library/dist. The shell and the viewer are
+  the kit modules the README lists; what this page adds is the wiring BETWEEN
+  them, because three of the things Gate 5 asks you to check live in that gap:
+
+    - a lamp's states, as chips on the tree row that owns them
+    - a pulled FRU, reaching the 3D scene and not just the drawing
+    - every face in one tree while 3D is showing every face at once
+
+  None of the three needed a change to a module. `states.js` has exported
+  `statesOfEl` all along, `viewer3d.js` has exported `setStates` and `setPulled`,
+  and `shell.js` has exported `loadFaces`, `refreshTree` and `pulledPaths` - this
+  page simply never called any of them, so a contributor checking their own work
+  could not light a lamp, could not see a card leave its bay in 3D, and could
+  only ever see the tree for the face they were pointing at. The published site's
+  explorer wires the same modules the same way; this is that wiring, kept here so
+  the visual gates in docs/modelling-a-device.md can be run without the site.
 -->
 <style>
   #mode { display: inline-flex; gap: 2px; margin-right: 8px; }
@@ -23,6 +35,15 @@
   #mode button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
   #mode button:disabled { opacity: .45; cursor: not-allowed; }
   #stage-3d { position: absolute; inset: 0; }
+  /* The tree row's state chips. Sized and coloured from the shell's own
+     variables so they read as part of its tree rather than as this page's. */
+  .chip { display: inline-block; margin-left: .3rem; padding: 0 .4rem; border: 1px solid var(--line);
+          border-radius: 9px; font-size: .64rem; color: var(--dim); cursor: pointer;
+          user-select: none; line-height: 1.35; }
+  .chip:hover { border-color: var(--warn); color: var(--ink); }
+  .chip.on { background: var(--warn); color: #111; border-color: var(--warn); }
+  /* over --hl, the selection colour the user picks, so it stays legible there */
+  .node.sel .chip { border-color: #ffffff66; }
 </style>
 <!-- viewer3d.js imports `three` as a bare specifier; the kit resolves nothing itself. -->
 <script type="importmap">
@@ -35,10 +56,93 @@
 <body>
 <script type="module">
 import { createShell } from './shell.js';
+import { statesOfEl } from './states.js';
 
 const DIST = '../library/dist';
 const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
 const state = shell.state;
+
+// ---------------------------------------------------------------- state chips
+// A lamp declares what it can be; until now nothing here could ask it to be one.
+// `statesOfEl` reads the vocabulary - that parsing is states.js's job and this
+// page does not repeat it - and a chip per state sets `state-<name>` on the live
+// element. Clicking the chip that is already on clears it, and `off` always
+// clears, because "off" is the absence of a state rather than one of its own.
+function chips(el) {
+  const states = statesOfEl(el);
+  if (!states.length) return null;
+  const span = document.createElement('span');
+  for (const st of states) {
+    const chip = document.createElement('span');
+    chip.className = 'chip' + (el.classList.contains('state-' + st) ? ' on' : '');
+    chip.textContent = st;
+    chip.title = `show this element in its ${st} state`;
+    chip.onclick = ev => {
+      ev.stopPropagation(); ev.preventDefault();
+      const was = el.classList.contains('state-' + st);
+      [...el.classList].filter(c => c.startsWith('state-')).forEach(c => el.classList.remove(c));
+      span.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      if (st !== 'off' && !was) { el.classList.add('state-' + st); chip.classList.add('on'); }
+      pushStates();
+    };
+    span.appendChild(chip);
+  }
+  return span;
+}
+// The shell offers every tree row as it builds it. A group fold owns no element
+// and so declares nothing; only a row with one gets chips.
+shell.on('row', (row, node) => {
+  if (!node.el) return;
+  const c = chips(node.el);
+  if (c) row.querySelector('.nm').after(c);
+});
+
+// A STATE IS A FACT ABOUT THE DEVICE, not about the drawing that happened to be
+// mounted when it was set, so it has to reach both stages. The chip writes a
+// class into the live SVG; the scene is rasterised from the compiled faces,
+// which carry every state's RULE and never one APPLIED - so without this a lamp
+// lit in 2D is dark in 3D on every device in the library.
+//
+// The whole drawing is read rather than the one element that changed: it is one
+// pass over a few thousand nodes for a click, it gives the same answer after a
+// swap or a config change as after a chip, and it cannot drift from what is on
+// screen the way an incrementally-maintained copy can.
+function liveStates() {
+  const out = {};
+  if (!state.svg) return out;
+  for (const el of state.svg.querySelectorAll('[data-path][class]')) {
+    const sts = [...el.classList].filter(c => c.startsWith('state-'));
+    if (sts.length) out[el.dataset.path] = sts.join(' ');
+  }
+  return out;
+}
+function pushStates() {
+  if (mode !== '3d' || !viewer) return;
+  Promise.resolve(viewer.setStates(liveStates()))
+    .catch(err => console.warn('[portrayal] 3D state sync failed', err));
+}
+
+// ---------------------------------------------------------------- pulled FRUs
+// A PULL IS A STATE THE SCENE HAS TO BE TOLD ABOUT TOO. The shell takes a part
+// out by hiding it in the drawing, which is the whole of the job in 2D and none
+// of it in 3D - the scene is built from the compiled faces, so it went on
+// showing a card the tree had already struck through. That reads as a control
+// that does nothing, and it is exactly what you need when checking that a bay
+// renders what it holds.
+//
+// Asked of the shell rather than read off `state.svg`, because the shell knows
+// every face it has loaded: a pull on a top-face part has to reach the scene
+// while the front drawing is the one mounted.
+const livePulled = () => typeof shell.pulledPaths === 'function'
+  ? shell.pulledPaths()
+  : (state.svg ? [...state.svg.querySelectorAll('[data-portrayal-pulled]')]
+      .map(e => e.dataset.path).filter(Boolean) : []);
+function pushPulled() {
+  if (mode !== '3d' || !viewer) return;
+  Promise.resolve(viewer.setPulled(livePulled()))
+    .catch(err => console.warn('[portrayal] 3D pull sync failed', err));
+}
+shell.on('pulled', pushPulled);
 
 // ---------------------------------------------------------------- 2D / 3D
 // The scene is mounted beside the SVG stage and imported on first use, so a
@@ -81,6 +185,10 @@ async function sync3d() {
   await v.load({ device: state.device, config: state.cfg });
   loadedKey = key;
   if (state.sel) v.select(state.sel);
+  // A LOAD IS A FRESH SCENE, so whatever the drawing is already showing has to
+  // be put back onto it. Both are no-ops when nothing is lit or pulled.
+  await Promise.resolve(v.setStates(liveStates())).catch(() => {});
+  await Promise.resolve(v.setPulled(livePulled())).catch(() => {});
 }
 
 async function setMode(m) {
@@ -90,6 +198,27 @@ async function setMode(m) {
   shell.el.svgHost.hidden = m !== '2d';
   host3d.hidden = m !== '3d';
   shell.el.fit.hidden = m === '3d';
+  shell.emit('mode', m);
+  // IN 3D THE VIEW IS NOT A CHOICE. A drawing shows one face, so picking which
+  // is a real control; a scene shows every face at once, and a tree still
+  // pinned to one of them listed a sixth of what was on screen - which is why
+  // an R740xd riser could not be reached from the rear it is drawn on. So the
+  // tree merges, one section per face with the 2D view's first, and the picker
+  // stands down until the drawing is back.
+  //
+  // ONLY IF THE SHELL CAN: this page is opened against whatever shell.js sits
+  // beside it, and one without loadFaces() would throw here - inside an async
+  // setMode, so sync3d never runs and 3D never comes up at all. An older shell
+  // keeps its one-view tree and its picker instead of failing.
+  const viewPick = shell.el.view.closest('label') || shell.el.view;
+  const merge = m === '3d' && typeof shell.loadFaces === 'function';
+  state.merge = merge;
+  // not `hidden`: the shell styles `label.f { display:flex }`, which outranks
+  // the UA's [hidden] rule and would leave the picker on screen
+  viewPick.style.display = merge ? 'none' : '';
+  if (merge) shell.loadFaces().then(() => shell.refreshTree())
+    .catch(err => console.warn('[portrayal] faces for the merged tree', err));
+  else shell.refreshTree();
   if (m === '2d') { shell.fit(); if (state.sel) shell.select(state.sel, true); return; }
   shell.el.status.textContent = 'loading 3D…';
   try {
