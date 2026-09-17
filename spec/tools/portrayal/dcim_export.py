@@ -1017,6 +1017,18 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         for p in scoped(view_parts(view)["placements"], cfg_name):
             pid = p["id"]
             a = attrs_of(p)
+            # A JACK THAT ALREADY EXPORTED AS A TIMING INPUT DOES NOT ALSO EXPORT
+            # AS AN INTERFACE. build_module has had this rule since #285 - "what
+            # the PLACEMENT says beats what the ref says, both ways round" - as an
+            # if/elif chain that can only take one branch. This loop is a second
+            # pass over the same placements and had no such guard, so a jack whose
+            # words name a timing function AND whose part is in FAMILY_PART came
+            # out twice under one name. It took a lamped BITS jack to show it: the
+            # bare timing jacks that fill this corpus are PART_CONSOLE, which
+            # iface_type declines, so the collision could not happen until a
+            # timing jack was drawn with an Ethernet part.
+            if pid in timing:
+                continue
             if names is not None:
                 if pid not in names:
                     continue

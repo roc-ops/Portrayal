@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: csr440-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  A rear fan module of the Edgecore CSR440 (AS7535-28XB) - a honeycomb-grilled tray with the
+  fan visible through it, a red pull handle across the foot, a captive thumbscrew above its
+  bay number, and an airflow arrow beside that number. Six of them fill the rear panel.
+size: {w: 49.0, h: 40.4, d: 300.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs:
+  model: 'AS7535-28XB Fan Module'
+  power-absent: not-published
+  airflow: side-to-side
+provenance:
+  size: >-
+    photo-measured - CSR440 datasheet REAR elevation, page 2 at 600 dpi scaled by the stated
+    438.4 mm body width to 8.9758 px/mm. The six modules are on a 50.0 pitch, taken from
+    their thumbscrews - 16.2 and 66.2 on the first two, and the printed bay numbers repeat it
+    at 17.1/67.5/117.3/167.7/217.0/267.4 - and the grille spans 20.7 to 60.9 inside the
+    first. 49.0 is the module between its dividers; the bay pitch is 50.0.
+  the-two-figures-share-one-scale: >-
+    The front and rear elevations sit on one page and measure 3933 and 3935 px wide - 0.05
+    percent apart - so 8.97 px/mm reads both. That is what lets a rear coordinate and a front
+    coordinate be compared without a second calibration.
+  grille-and-fan: >-
+    photo-measured as a shape. The grille is a honeycomb through which a single axial fan is
+    visible, with its hub and blades resolving at 8.98 px/mm. It is drawn as a vent field with
+    a fan disc behind it rather than as blades, because the blade count and angle are not
+    countable at this resolution and drawing seven would assert one.
+  depth: >-
+    estimated, stated as the chassis depth. The datasheet gives the box as 300 mm deep and
+    does not dimension the module; a rear elevation fixes nothing behind the face.
+  power: >-
+    NOT PUBLISHED. No document states a draw for a fan module. L27 stands on it.
+  the-bay-number-is-not-on-this-contract: >-
+    AND IT IS ON THE HARDWARE. Each module's left-hand strip carries its bay number and a
+    small airflow arrow, printed on the module rather than on the chassis - the rear
+    elevation shows 1 to 6 marching across at 17.1, 67.5, 117.3, 167.7, 217.0 and 267.4. One
+    contract cannot carry six different numbers, and six skins for one part would be six
+    contracts' worth of duplication to say one digit.
+    SO THE DEVICE DRAWS THEM, at those measured positions, and this note is the record that
+    they belong to the module. The visible consequence is small and real: pull a module in the
+    viewer and its number stays behind. A `skins:` list would fix it the day anything else
+    needs per-bay artwork.
+elements:
+  grille: {at: [8.7, 0.9], size: [40.2, 33.0], class: vent}
+  handle: {at: [8.4, 31.2], size: [40.5, 8.0], class: handle}
+  thumbscrew: {at: [0.6, 5.1], size: [7.2, 7.2], class: fastener}
+relief:
+  wall: '#15181b'
+  # No face-wide `out` - see edgecore/csr440-psu-ac@1 and roc-ops/Portrayal#364.
+  features:
+    - node: grille
+      vent: 40
+      confidence: estimated
+      source: >-
+        edgecore/csr440-fan@1's own grille key - the honeycomb's extent is measured off the
+        rear elevation; the depth of the cavity behind it is the fan's own and is not stated.
+    - node: handle
+      bar: 3.2
+      lift: 1.0
+      color: '#d92d20'
+      confidence: estimated
+      source: >-
+        edgecore/csr440-fan@1's own size key - a pull handle's outline is read off the
+        elevation and its projection is not. It is red on the hardware and red here.
+    - node: thumbscrew
+      cyl: 3.5
+      knurl: true
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        edgecore/csr440-fan@1's own size key - the screw's diameter and centre are read off
+        the elevation, its stand-off is not. The quick start's fan procedure begins "Loosen
+        the fan tray screw", which is what says it is captive rather than decorative.
+skins: [default]

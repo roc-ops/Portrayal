@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: csr440-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The AC power supply of the Edgecore CSR440 (AS7535-28XB) - a hot-swappable CRPS-style
+  module in a bright housing, with a C14 inlet TURNED ON ITS SIDE at the left, a wire bail
+  handle across the middle, a perforated exhaust field on the right and a coloured release
+  latch at the top. Nothing like the dark terminal-block supply of the CSR310 and CSR430,
+  which is why it is its own part.
+size: {w: 53.8, h: 39.4, d: 300.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs:
+  model: 'AS7535-28XB AC PSU'
+  power-absent: not-published
+  inlet: c14
+  input: '100V-240V, 6.0-2.4 A per PS'
+provenance:
+  size: >-
+    photo-measured - CSR440 datasheet front elevation, page 2 at 600 dpi scaled by the
+    stated 438.4 mm body width to 8.9713 px/mm. The face carries two of these: their edges
+    read 6.0-59.8 and 68.7-122.5, giving 53.8 twice and a 62.7 bay pitch, and the module
+    spans 1.9 to 41.3 vertically.
+  why-this-is-not-the-csr310-supply: >-
+    BECAUSE IT IS A DIFFERENT KIND OF SUPPLY, not a different size of the same one. The
+    CSR310 and CSR430 take a dark module with a three-pole barrier terminal block, a flat
+    handle down one edge and a latch at its foot - proven shared between those two by a part
+    number quoted in both their quick starts. This one is a bright CRPS housing with an IEC
+    C14 inlet, a wire bail handle and a perforated exhaust field. The issue that scoped this
+    device says the chassis differs from the CSR430's in width and height and warns against
+    carrying the face over; the supplies differ too, and by more.
+  inlet: >-
+    read from the elevation, and TURNED. The C14 aperture measures about 17.9 wide by 22.5
+    tall - taller than wide, where an IEC 60320 C14 panel cutout is wider than tall - and the
+    three blades sit top-left, middle-right and bottom-left. So the inlet is rotated a quarter
+    turn, which common/psu-ac-650@3 also does on its own CRPS face. Its size is
+    std/c14-inlet@1's own, which carries a SCHURTER panel cutout; nothing here re-measures it.
+  handle: >-
+    photo-measured as a shape rather than a dimension - a wire bail, drawn as a rounded bar
+    crossing the module face, read off the elevation at about 30.5 to 36.5 from the module's
+    left edge. A bail is a loop and this is a bar; the simplification is recorded because the
+    art shows a loop clearly at 8.97 px/mm.
+  power: >-
+    NOT PUBLISHED. The datasheet gives the chassis "Max: 383.6 W Minimum: 78.68 W" for
+    consumption and no output rating for a supply. The AC input range is stated per supply -
+    100V-240V, 6.0-2.4 A - and is carried in attrs; the wattage is not, so L27 stands on it.
+  the-dc-variant: >-
+    NOT DRAWN AND NOT MODELLED. Both documents say the device takes "2 x DC or AC PSUs" and
+    the datasheet gives a DC input range, but the only elevation shows AC modules and the
+    quick start's DC section pictures wiring rather than a module face. The device records
+    this as a gap rather than inventing a face for the bay to accept.
+elements:
+  handle: {at: [30.5, 12.0], size: [6.0, 16.0], class: handle}
+  latch: {at: [4.5, 1.6], size: [10.5, 4.6], class: latch}
+  vent-field: {at: [37.5, 3.5], size: [14.5, 33.0], class: vent}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [2.6, 4.7], rotate: 270}
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries the
+  # inlet's recess, which is how the CSR310's AC supply came out blank. See #364.
+  features:
+    - node: handle
+      bar: 4.0
+      lift: 2.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-ac@1's own handle key - the elevation is a front view and fixes
+        the bail's position on the face, not how far it stands off it. A bail has to clear a
+        finger.
+    - node: latch
+      out: 2.5
+      color: '#7f1d4b'
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-ac@1's own size key - the latch's outline is read off the
+        elevation and its projection is not.
+    - node: vent-field
+      vent: 28
+      confidence: estimated
+      source: >-
+        edgecore/csr440-psu-ac@1's own size key - the perforated field's extent is read off
+        the elevation; how deep the cavity behind it runs is not stated anywhere.
+skins: [default]
