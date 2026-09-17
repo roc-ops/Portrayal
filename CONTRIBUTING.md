@@ -219,6 +219,17 @@ python3 spec/tools/portrayal/devicelock.py --library library --update
 python3 -m pytest spec/tests -q                           # after publish; it skips without dist/
 ```
 
+To run every library-wide sweep against **one** device - the equivalent of
+`./build.sh --device` for the suite:
+
+```sh
+python3 -m pytest spec/tests -q -k juniper/mx204
+```
+
+The sweeps are parametrised over the library with the device's slug as the test
+id (`libdata.each_device()`), so a failure names the device in the id and the
+rule in the message rather than handing you a list of slugs and a test name.
+
 Commit the regenerated `device.lock.json` and `library/exports/` with your
 change. CI fails on a stale export.
 

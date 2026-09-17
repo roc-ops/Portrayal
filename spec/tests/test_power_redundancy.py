@@ -19,6 +19,8 @@ import sys
 
 import yaml
 
+import pytest
+
 import libdata
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -97,7 +99,8 @@ def test_bays_are_counted_across_views():
 
 # ---- what the library actually says -----------------------------------------
 
-def test_every_multi_bay_power_group_in_the_library_is_stated():
+@pytest.mark.parametrize("slug,path,doc", libdata.each_device())
+def test_every_multi_bay_power_group_in_the_library_is_stated(slug, path, doc):
     """The rollout, complete.
 
     The ASR 9001 was the last holdout and stayed unstated for a while on
@@ -105,11 +108,12 @@ def test_every_multi_bay_power_group_in_the_library_is_stated():
     chassis, and borrowing one for a two-bay box would have been a guess wearing
     a citation. The answer was in a different document - the ASR-9001 FAQ says
     "Two AC or two DC power modules for redundancy" outright."""
-    unstated = []
-    for _slug, f, d in libdata.library():
-        if run(d):
-            unstated.append(f"{f.parent.parent.name}/{f.parent.name}")
-    assert unstated == [], unstated
+    found = run(doc)
+    assert not found, (
+        f"{slug}: a power group with more than one bay does not state its "
+        f"redundancy - {[r for r, _ in found]}. A multi-bay power group says "
+        "`redundancy:` in the vendor's own form (2+2, 3+1, 1+1), cited in "
+        "provenance; see docs/modelling-a-device.md on power figures.")
 
 
 def test_a_stated_form_is_one_the_vendors_actually_use():
