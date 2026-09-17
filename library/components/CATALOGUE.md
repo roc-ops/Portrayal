@@ -426,7 +426,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/dpce-q-20ge-sfp@1` | module | line-card | 420.9 × 29.5 |  | 2 | 0 | Juniper DPCE-R-Q-20GE-SFP (EOL) - twenty SFP in two PIC groups of ten |
 | `juniper/dpce-q-20ge-sfp-v960@1` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper DPCE-R-Q-20GE-SFP (EOL) - twenty SFP in two PIC groups of ten |
 | `juniper/dpce-r-40ge-sfp@1` | module | line-card | 420.9 × 29.5 |  | 2 | 1 | Juniper DPCE-R-40GE-SFP (Gigabit Ethernet Enhanced DPC, EOL) - 40x1GbE SFP in four 2x5 blocks with per-port l… |
-| `juniper/dpce-r-40ge-sfp-v@1` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper DPCE-R-40GE-SFP as mounted in the MX960 - the same 40x1GbE DPC the MX240/MX480 seat horizontally, aut… |
+| `juniper/dpce-r-40ge-sfp-v@2` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper DPCE-R-40GE-SFP as mounted in the MX960 - the same 40x1GbE DPC the MX240/MX480 seat horizontally, aut… |
 | `juniper/jnp-lc-blnk-3@1` | module | blank | 419.1 × 41.9 |  | 1 | 0 | Juniper JNP-LC-BLNK-3 - the MX10003 LC2103 line-card slot blank cover panel (guide FRU list) |
 | `juniper/jnp-mic-blnk-3@1` | module | blank | 197.3 × 41.9 |  | 0 | 1 | Juniper JNP-MIC-BLNK-3 - the MX10003 MIC1 slot blank cover panel (guide FRU list) |
 | `juniper/jnp-mic1@1` | module | line-card | 197.3 × 41.9 |  | 0 | 1 | Juniper JNP-MIC1 Multi-Rate Ethernet MIC - 12 QSFP28 cages in two rows of six, seated in the MIC1 slot of the… |
