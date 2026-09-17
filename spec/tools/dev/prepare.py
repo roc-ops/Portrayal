@@ -39,10 +39,8 @@ import sys
 import yaml
 
 HERE = pathlib.Path(__file__).resolve().parent
-from portrayal import facts as F
-from portrayal import measure as M
-
-
+from portrayal_dev import facts as F
+from portrayal_dev import measure as M
 def stated_facts(intake, model):
     f = F.collect(intake, model)
     if not f:

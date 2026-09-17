@@ -420,7 +420,7 @@ def test_the_t1_e1_cards_ports_are_bare_jacks(rel):
     assert "port-jacks-are-bare" in d["provenance"]
 
 
-SWEEP = ROOT / "spec/tools/portrayal/sweep_rj45.py"
+SWEEP = ROOT / "spec/tools/sweeps/sweep_rj45.py"
 
 FIXTURE = textwrap.dedent("""\
 format: 1

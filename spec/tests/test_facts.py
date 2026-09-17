@@ -12,9 +12,7 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-from portrayal import facts as F
-
-
+from portrayal_dev import facts as F
 def make(tmp_path, name, body):
     d = tmp_path / "converted" / name
     d.mkdir(parents=True)

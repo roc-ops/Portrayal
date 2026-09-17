@@ -33,10 +33,9 @@ import sys
 
 from PIL import Image
 
-from portrayal import benchtile
-from portrayal import benchvlm
-from portrayal import figmap
-
+from portrayal_bench import benchtile
+from portrayal_bench import benchvlm
+from portrayal_dev import figmap
 TOL = 0.03
 
 

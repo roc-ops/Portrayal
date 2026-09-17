@@ -23,13 +23,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 import pytest  # noqa: E402
 
-from portrayal import benchdata
-from portrayal import benchgt
-from portrayal import benchscore
-from portrayal import benchtile
-from portrayal import benchvlm
-
-
+from portrayal_bench import benchdata
+from portrayal_bench import benchgt
+from portrayal_bench import benchscore
+from portrayal_bench import benchtile
+from portrayal_bench import benchvlm
 # ---- the projection ---------------------------------------------------------
 
 def test_a_placement_is_anchored_at_its_top_left():

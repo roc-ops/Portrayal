@@ -9,8 +9,7 @@ import pathlib
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-from portrayal import facts_llm as F
-
+from portrayal_dev import facts_llm as F
 DOC = [
     "## SPECS",                       # 1
     "",                               # 2

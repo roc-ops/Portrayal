@@ -25,8 +25,7 @@ import sys
 
 from PIL import Image
 
-from portrayal import benchtile
-
+from portrayal_bench import benchtile
 CLASSES = ["port"]
 
 # The same cut the harness sends a model, from the same place - train and test

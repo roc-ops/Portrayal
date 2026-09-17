@@ -12,9 +12,7 @@ import sys
 from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-from portrayal import measure as M
-
-
+from portrayal_dev import measure as M
 def figure(tmp_path, panels, size=(800, 400), callouts=True):
     """A synthetic datasheet page: one or two wide faces, plus the callout
     numerals and leader lines that made a naive bounding box useless."""

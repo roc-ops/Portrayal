@@ -24,6 +24,7 @@ waiting on a component. Go and build the standard, then come back.
 
 Usage:  audit_standards.py <vendor>/<model> [view]
 """
+import argparse
 import pathlib
 import sys
 
@@ -70,11 +71,13 @@ def verdict(ref, seen=()):
 
 
 def main():
-    if len(sys.argv) < 2:
-        raise SystemExit(__doc__.strip().splitlines()[-1])
-    dev = yaml.safe_load((ROOT / 'devices' / sys.argv[1] /
+    ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
+    ap.add_argument('device', help='<vendor>/<model>, as under library/devices')
+    ap.add_argument('view', nargs='?', help='one view; default is every view')
+    args = ap.parse_args()
+    dev = yaml.safe_load((ROOT / 'devices' / args.device /
                           'device.yaml').read_text())
-    views = [sys.argv[2]] if len(sys.argv) > 2 else list(dev['views'])
+    views = [args.view] if args.view else list(dev['views'])
     tally = {}
     for vname in views:
         view = dev['views'][vname]
@@ -88,7 +91,7 @@ def main():
                     rows.append((b['id'], ref, 'bay'))
         if not rows:
             continue
-        print(f'\n=== {sys.argv[1]} / {vname} ===')
+        print(f'\n=== {args.device} / {vname} ===')
         print(f"    {'id':<20} {'ref':<34} {'verdict':<9} why")
 
         def report(pid, ref, depth=0):

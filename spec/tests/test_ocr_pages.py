@@ -1,4 +1,4 @@
-"""The OCR sidecar, `spec/tools/portrayal/ocr_pages.py`.
+"""The OCR sidecar, `spec/tools/dev/ocr_pages.py`.
 
 Three things must hold, and each of them is a mistake this pipeline can make
 silently:
@@ -24,8 +24,7 @@ import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
-from portrayal import ocr_pages
-
+from portrayal_dev import ocr_pages
 HAS_POPPLER = all(shutil.which(t) for t in ("pdftotext", "pdftoppm", "pdfinfo"))
 needs_poppler = pytest.mark.skipif(
     not HAS_POPPLER, reason="poppler (pdftotext/pdftoppm/pdfinfo) not installed")

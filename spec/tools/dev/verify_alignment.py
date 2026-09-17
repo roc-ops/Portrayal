@@ -30,9 +30,7 @@ import yaml
 # `importlib.util.spec_from_file_location` to load a sibling by path - fifteen
 # lines standing in for one, and invisible to every tool that reads imports
 # (#178).
-from portrayal import render_standards as rstd
-
-
+from portrayal_dev import render_standards as rstd
 def families(vals, tol):
     """Group near-equal coordinates, reporting each cluster's spread.
 

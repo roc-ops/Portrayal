@@ -164,7 +164,7 @@ def _q(s: str) -> str:
 
 
 def sidecar(doc: dict) -> str:
-    L = [f"# Written by spec/tools/portrayal/ocr_pages.py - read its docstring before",
+    L = [f"# Written by spec/tools/dev/ocr_pages.py - read its docstring before",
          f"# citing anything here. Text has NO WORD BOUNDARIES; match loosely.",
          f"document: {_q(doc['document'])}",
          f"source: {_q(doc['source'])}",
