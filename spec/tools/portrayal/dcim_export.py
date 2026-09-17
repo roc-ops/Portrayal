@@ -342,6 +342,13 @@ PART_MEDIA = {
     ("qsfp28", "100g"): "100gbase-x-qsfp28",
     ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
     ("rj45-telemetry", None): "other",
+    # COPPER ETHERNET AT A STATED RATE. An 8P8C shell says nothing about speed,
+    # so these only ever apply where the PLACEMENT declares one - which is the
+    # whole point of this table. The R740xd's NDC is the case: four identical
+    # dell/rj45-port-14g of which two are 10GBASE-T, and no housing, ref or
+    # family fallback can tell them apart. #287.
+    ("rj45", "10g"): "10gbase-t",
+    ("rj45", "1g"): "1000base-t",
 }
 
 
@@ -448,10 +455,12 @@ NOT_A_DCIM_PORT = {
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
 
-    # --- a modelling gap, not an exporter one --------------------------------
-    "dell/rj45-port-14g": "the NDC's four jacks carry no speed, and Dell's own master is named "
-                          "2x10gb-bt-2x1gb - two 10GBASE-T and two 1G. The model cannot say "
-                          "which is which, so the exporter must not. roc-ops/Portrayal#287",
+    # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
+    # one": the NDC's four jacks carried no speed, so the exporter could not say
+    # which two were 10GBASE-T and rightly refused to guess. #287 closed it by
+    # reading the labels Dell's own master prints between the jacks, and the four
+    # placements now declare their speed. The entry had to go with it - a register
+    # of parts that export nothing is wrong about one that does.
 }
 
 # Both libraries take the same device-type document. They differ only in what
