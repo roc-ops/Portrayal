@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -278,18 +278,40 @@ provenance:
       measured - one USB-A storage port at 319.0 to 331.6 mm, 12.6 mm of opening against
       std/usb-a@1's 12.0, in the band at 32.9 to 37.4. Callout 5 names it "USB storage port"
       and the specification list says "1 x USB (storage)".
+      THE MARK IS PRINTED UPSIDE DOWN RELATIVE TO THE LIBRARY'S DEFAULT, and it took a
+      measurement to say so rather than an opinion, because this repository's rule is never to
+      reason about a flip in prose. Split the symbol at its own shaft and measure how far each
+      arm's terminal reaches to the right: on this device the LOWER arm reaches 316.33 mm and the
+      upper 315.45, so the lower is 0.88 mm further right. common/usb-symbol@1's default skin has
+      it the other way round - its square-tipped upper arm ends at 5.05 of 6.4 against the
+      round-tipped lower arm's 4.47, 0.58 mm further right. Opposite, therefore mirrored about
+      the shaft. The same measurement re-run against this device's own render agrees with the
+      figure to 0.2 mm.
+      It is drawn with `rotate: 180` AND `mirror: true`, which compose to a vertical flip - the
+      turn takes (x,y) to (-x,-y) and the horizontal mirror takes x back, leaving (x,-y). The
+      obvious alternative was a second skin on the shared component, and it was written and then
+      reverted: adding a skin bumps common/usb-symbol@1 to 1.1.0, and the lockfile then demands a
+      patch bump on the TEN other devices that compose it, none of which this change touches or
+      improves. A per-device flip of a symmetric mark belongs on the placement.
       THE TRIDENT IS A COMPONENT, NOT A MARK. A first draft printed it with the silkscreen
       `mark: usb` primitive, which is an arrow-like glyph and reads as neither a trident nor
       anything else; every other device in this library that prints one places
       common/usb-symbol@1 (cor580, as5912-54x, s6301-56stp, r740xd), and this was the only
       user of that mark in the tree. It is now that component, at 311.10 - the figure puts the
       printed trident at 310.9 to 317.7, immediately left of the opening.
-      THE BOTTOM VENT STOPS EITHER SIDE OF IT. Measured down the panel at x 318-332 there is no
-      honeycomb in the 37.0-43.2 band where the field runs everywhere else, so the vent is two
-      decor rectangles - 13.8 to 316.8 and 334.0 to 363.5 - rather than one that the USB is
-      drawn on top of. On the real face the lattice deforms around the opening rather than
-      simply stopping; a straight edge either side is the closest this decor model gets, and it
-      is recorded here rather than left to look deliberate.
+      THE OPENING IS IN THE VENT BAND, NOT ABOVE IT, and two drafts put it too high. The port was
+      first placed at y 32.20 and then at 33.15, both times from reading a crop by eye. Measured
+      properly - the USB column differenced against plain chassis at x 62-120, which carries
+      neither a yellow bar nor a system lamp - the shell reads BRIGHTER than the panel from 36.39
+      to 40.42 and matches it again below 41.76. So the opening is at 36.40, about 3.5 mm lower
+      than drawn, and its own silkscreen trident is NOT in line with it: that mark reads 31.91 to
+      34.48, centred 33.2, sitting in the band above. A reader of the render saw the offset before
+      the measurement did.
+      AND THE HONEYCOMB RUNS UNDER IT. The same differencing shows the vent field resuming below
+      41.76 in the USB's own columns, so the field is not broken by the port - it is NOTCHED. It
+      is three decor rectangles: the band either side at 13.8-318.5 and 332.5-363.5, and a third
+      under the opening at 318.5-332.5 from 41.3 down. An earlier draft drew a clean break all the
+      way to the panel edge, which is a straight-sided hole the metal does not have.
   vents:
     confidence: measured
     note: >-
@@ -575,8 +597,9 @@ views:
     panel:
       decor:
       - {at: [1.6, 3.5], size: [11.4, 37.0], pattern: vent, vent: 25}
-      - {at: [13.8, 37.0], size: [303.0, 6.2], pattern: vent, vent: 25}
-      - {at: [334.0, 37.0], size: [29.5, 6.2], pattern: vent, vent: 25}
+      - {at: [13.8, 37.0], size: [304.7, 6.2], pattern: vent, vent: 25}
+      - {at: [332.5, 37.0], size: [31.0, 6.2], pattern: vent, vent: 25}
+      - {at: [318.5, 41.3], size: [14.0, 1.9], pattern: vent, vent: 25}
       - {at: [425.5, 2.0], size: [11.5, 40.0], pattern: vent, vent: 25}
       - {at: [134.87, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
       - {at: [164.73, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
@@ -610,7 +633,7 @@ views:
       - {id: led-fan, at: [34.40, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-loc, at: [40.52, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: reset, at: [48.40, 30.25], size: [4.0, 4.0], shape: circle}
-      - {id: usb, at: [319.00, 32.90], size: [12.0, 4.5], shape: rect}
+      - {id: usb, at: [319.40, 36.40], size: [12.0, 4.5], shape: rect}
       - {id: mgmt-eth, at: [409.14, 3.60], size: [12.7, 11.0], shape: rect}
       - {id: console, at: [409.14, 15.70], size: [12.7, 11.0], shape: rect}
     silkscreen:
@@ -700,8 +723,8 @@ views:
           rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5]}
       - {ref: common/led-rect@1, id: led-loc, at: [40.52, 30.95], group: leds, rel-pos: 5, for: chassis}
       - {ref: common/reset-button@1, id: reset, at: [48.40, 30.25], group: mgmt, rel-pos: 4, for: chassis}
-      - {ref: std/usb-a@1, id: usb, at: [319.00, 32.90], group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: storage}}
-      - {ref: common/usb-symbol@1, id: usb-mark, at: [311.10, 33.15], group: furniture, rel-pos: 3, for: usb}
+      - {ref: std/usb-a@1, id: usb, at: [319.40, 36.40], group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: storage}}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [311.10, 31.20], rotate: 180, mirror: true, group: furniture, rel-pos: 3, for: usb}
       - {ref: common/rj45-ganged-eth@1, id: mgmt-eth, at: [409.14, 3.60], group: mgmt, rel-pos: 1, rotate: 180,
          attrs: {media: rj45, role: mgmt, speed: 100/1000base-t}}
       - {ref: std/rj45-ganged@2, id: console, at: [409.14, 15.70], group: mgmt, rel-pos: 2,
