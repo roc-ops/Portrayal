@@ -20,6 +20,14 @@ attrs:
   inlet: dc-terminal
   input: '36 V - 72 V, 10 A'
 provenance:
+  no-face-extrusion: >-
+        edgecore/csr310-psu-dc@1's own depth key. THE MODULE FACE CARRIES NO `out` OF ITS
+        OWN, and that is deliberate: a full-face extrusion is a slab, and a slab buries
+        anything that RECESSES into the face under it. On the AC sibling that is the C14
+        inlet, which is a 13 mm cavity and vanished completely behind a 1.2 mm body. The
+        module sits flush in its bay and the things that stand off it - the handle, the
+        latch, the terminal block - say so one at a time. Same lesson as the terminal
+        block's own relief, one level up.
   size: >-
     photo-measured - CSR310 datasheet front elevation, page 2 at 600 dpi scaled
     by the stated 440 mm body width to 8.1477 px/mm. The face carries two of
@@ -61,18 +69,10 @@ elements:
   latch: {at: [46.5, 32.0], size: [6.5, 7.4], class: latch}
 relief:
   wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - see `no-face-extrusion` in provenance.
   features:
-    - node: body
-      out: 1.2
-      shape: true
-      color: '#4a4f55'
-      confidence: estimated
-      source: >-
-        edgecore/csr310-psu-dc@1's own depth key - the elevation is a front view.
-        1.2 is a module face sitting proud of the chassis metal around it.
     - node: inlet
       out: 9.5
-      lift: 1.2
       color: '#b7bdc3'
       confidence: estimated
       source: >-
@@ -81,7 +81,6 @@ relief:
         off a supply's faceplate, matched to common/dc-terminal-27@1's estimate.
     - node: handle
       out: 8.0
-      lift: 1.2
       color: '#c3c9cf'
       confidence: estimated
       source: >-
@@ -91,7 +90,6 @@ relief:
         dimensioned anywhere.
     - node: latch
       out: 4.0
-      lift: 1.2
       color: '#8a9099'
       confidence: estimated
       source: >-

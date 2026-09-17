@@ -283,7 +283,7 @@ views:
     size: {w: 440.0, h: 44.0}
     panel:
       decor:
-      - {at: [239.80, 35.00], size: [21.00, 3.80], fill: '#4a4f55', rx: 0.4}
+      - {id: unidentified-indicator, at: [239.80, 35.00], size: [21.00, 3.80], fill: '#4a4f55', rx: 0.4}
       cutouts:
       - {block: sfp-plus}
       - {block: sfp28}
@@ -372,19 +372,19 @@ views:
     silkscreen:
       - {block: sfp-plus}
       - {block: sfp28}
-      - {at: [155.21, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [m1-0, m1-1]}
-      - {at: [169.46, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [m1-2, m1-3]}
-      - {at: [185.97, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-0, port-1]}
-      - {at: [200.22, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-2, port-3]}
-      - {at: [214.47, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-4, port-5]}
-      - {at: [228.72, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-6, port-7]}
-      - {at: [242.97, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-8, port-9]}
-      - {at: [257.23, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-10, port-11]}
-      - {at: [271.48, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-12, port-13]}
-      - {at: [285.73, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-14, port-15]}
-      - {at: [299.98, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-16, port-17]}
-      - {at: [314.23, 31.60], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-18, port-19]}
-      - {at: [125.50, 8.80], text: GNSS, font-size: 1.8, anchor: end, fill: '#e4e8eb', for: gnss}
+      - {at: [155.21, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [m1-0, m1-1]}
+      - {at: [169.46, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [m1-2, m1-3]}
+      - {at: [185.97, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-0, port-1]}
+      - {at: [200.22, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-2, port-3]}
+      - {at: [214.47, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-4, port-5]}
+      - {at: [228.72, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-6, port-7]}
+      - {at: [242.97, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-8, port-9]}
+      - {at: [257.23, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-10, port-11]}
+      - {at: [271.48, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-12, port-13]}
+      - {at: [285.73, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-14, port-15]}
+      - {at: [299.98, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-16, port-17]}
+      - {at: [314.23, 32.34], mark: arrow-pair, size: 1.0, gap: 0.5, fill: '#e4e8eb', for: [port-18, port-19]}
+      - {at: [127.40, 8.80], text: GNSS, font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: gnss}
       - {at: [135.90, 14.40], text: M0, font-size: 1.7, anchor: middle, fill: '#e4e8eb', for: m0-0}
       - {at: [135.90, 16.30], text: 100GBASE-R, font-size: 1.7, anchor: middle, fill: '#e4e8eb', for: m0-0}
       - {at: [135.90, 33.20], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: m0-0}
@@ -547,6 +547,8 @@ views:
       - {ref: common/led-rect@1, id: led-mgmt-link, at: [375.64, 33.15], group: leds, rel-pos: 11, for: mgmt-eth, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-rect@1, id: led-mgmt-act, at: [382.34, 33.15], group: leds, rel-pos: 12, for: mgmt-eth, states: ['off', {name: 'on', color: '#22c55e'}]}
     regions:
+    - {id: unidentified-indicator, at: [239.3, 34.5], size: {w: 22.0, h: 4.8},
+       label: 'Unidentified indicator - see the stack-id-indicator gap'}
     - {id: status-leds, at: [157.0, 32.2], size: {w: 40.0, h: 6.2}, label: System LEDs,
        members: [led-loc, led-diag, led-psu1, led-psu2, led-fan, led-alrm]}
     - {id: power, at: [3.5, 1.0], size: {w: 119.0, h: 41.6}, label: 'Power supplies (hot-swappable, 1+1)',

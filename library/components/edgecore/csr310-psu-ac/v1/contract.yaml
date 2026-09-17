@@ -18,6 +18,14 @@ attrs:
   inlet: c14
   input: '100 V - 240 V, 5 A'
 provenance:
+  no-face-extrusion: >-
+        edgecore/csr310-psu-ac@1's own depth key. THE MODULE FACE CARRIES NO `out` OF ITS
+        OWN, and that is deliberate: a full-face extrusion is a slab, and a slab buries
+        anything that RECESSES into the face under it. On the AC sibling that is the C14
+        inlet, which is a 13 mm cavity and vanished completely behind a 1.2 mm body. The
+        module sits flush in its bay and the things that stand off it - the handle, the
+        latch, the terminal block - say so one at a time. Same lesson as the terminal
+        block's own relief, one level up.
   size: >-
     borrowed - edgecore/csr310-psu-dc@1, measured off the datasheet elevation at
     8.1477 px/mm. The two supplies share one bay, which is the whole point of an
@@ -48,26 +56,16 @@ parts:
   - {ref: std/c14-inlet@1, id: inlet, at: [11.0, 10.4]}
 relief:
   wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - see `no-face-extrusion` in provenance.
   features:
-    - node: body
-      out: 1.2
-      shape: true
-      color: '#4a4f55'
-      confidence: estimated
-      source: >-
-        edgecore/csr310-psu-dc@1's relief, WHICH ESTIMATES IT TOO - so this is
-        estimated rather than borrowed. Taking a figure from a part that guessed
-        it does not turn it into a measurement. One module, two faces, one guess.
     - node: handle
       out: 8.0
-      lift: 1.2
       color: '#c3c9cf'
       confidence: estimated
       source: >-
         edgecore/csr310-psu-dc@1's relief, which estimates it too - see `body`.
     - node: latch
       out: 4.0
-      lift: 1.2
       color: '#8a9099'
       confidence: estimated
       source: >-
