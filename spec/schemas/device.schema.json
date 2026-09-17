@@ -61,39 +61,40 @@
   "datasheet": {
    "type": "object",
    "additionalProperties": false,
+   "description": "THE VENDOR DATASHEET this device was modelled from. A guide, manual or quick-start goes in `references:` instead - the distinction is what the document IS, not which came first. The `archive` field was removed in #274: it was in this schema from the start, no entry ever used it, no tool ever read it and no document ever said what it was for, which makes it a field nobody knows the rule for.",
    "properties": {
     "title": {
-     "type": "string"
-    },
+       "type": "string",
+       "description": "the document as it names itself on its own first page, not as its file is named. A reader has to be able to search for it."
+      },
     "url": {
-     "type": "string"
-    },
+       "type": "string",
+       "description": "where the document was obtained, when that is known. Absent on 43 of 96 entries and that is not a defect: a document read from a vendor portal behind a login, or received directly, has no citable address, and inventing one would be worse than omitting it."
+      },
     "sha256": {
-     "type": "string"
-    },
-    "archive": {
-     "type": "string"
-    }
+       "type": "string",
+       "description": "SHA-256 of the file AS HELD IN THE WORKING CORPUS. THE RULE IS: present exactly when the document is staged locally, absent when it was read but is not held - which is what makes a hash checkable rather than decorative. Every hash in the library satisfies it: all 37 resolve to a file under working/. A hash for a document nobody holds is a claim nobody can test, so do not add one from a vendor page. #274."
+      }
    }
   },
   "references": {
    "type": "array",
-   "description": "additional source documents (guides, HIGs) registered like the datasheet",
+   "description": "additional source documents - hardware guides, installation guides, quick-start guides, user manuals - registered exactly like the datasheet. A device may register these and no datasheet: seven ASR 9000s were modelled from two Cisco guides and no datasheet at all, and that is the honest record rather than a gap.",
    "items": {
     "type": "object",
     "additionalProperties": false,
     "properties": {
      "title": {
-      "type": "string"
+      "type": "string",
+      "description": "the document as it names itself on its own first page, not as its file is named. A reader has to be able to search for it."
      },
      "url": {
-      "type": "string"
+      "type": "string",
+      "description": "where the document was obtained, when that is known. Absent on 43 of 96 entries and that is not a defect: a document read from a vendor portal behind a login, or received directly, has no citable address, and inventing one would be worse than omitting it."
      },
      "sha256": {
-      "type": "string"
-     },
-     "archive": {
-      "type": "string"
+      "type": "string",
+      "description": "SHA-256 of the file AS HELD IN THE WORKING CORPUS. THE RULE IS: present exactly when the document is staged locally, absent when it was read but is not held - which is what makes a hash checkable rather than decorative. Every hash in the library satisfies it: all 37 resolve to a file under working/. A hash for a document nobody holds is a claim nobody can test, so do not add one from a vendor page. #274."
      }
     }
    }
