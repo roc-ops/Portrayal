@@ -123,8 +123,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 15 | 0 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
 | `common/smb-jack@1` | component | port | 7 × 7 |  | 15 | 0 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
-| `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen (v2 = composed - shell bezel wraps a std/usb-a opening core) |
-| `common/usb-a@3` | component | port | 17 × 9.3 × 13.7 |  | 9 | 0 | USB Type-A port in a silver panel bezel (v3 = bezel plate spans the component so it can abut neighboring port… |
+| `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
+| `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 9 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
 | `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 11 | 0 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
 | `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 1 | 0 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
 | `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 1 | 0 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
@@ -184,13 +184,13 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `cisco/a99-10x400ge-x-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 0 | 0 | Cisco ASR 9900 Series 4T Service Edge Line Card, 5th generation |
-| `cisco/a99-10x400ge-x-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 0 | 0 | Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation |
+| `cisco/a99-10x400ge-x-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco ASR 9900 Series 4T Service Edge Line Card, 5th generation |
+| `cisco/a99-10x400ge-x-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation |
 | `cisco/a99-12x100ge@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 4 | 0 | Cisco ASR 9000 Series 12-Port 100 Gigabit Ethernet Line Card |
 | `cisco/a99-32x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
-| `cisco/a99-32x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
-| `cisco/a99-32x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9900 Series 3.2T Service Edge Line Card, 5th generation |
-| `cisco/a99-32x100ge-x-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9900 Series 3.2T Packet Transport Line Card, 5th generation |
+| `cisco/a99-32x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
+| `cisco/a99-32x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Service Edge Line Card, 5th generation |
+| `cisco/a99-32x100ge-x-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Packet Transport Line Card, 5th generation |
 | `cisco/a99-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Service Edge Line Card, 5th generation |
 | `cisco/a99-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
 | `cisco/a99-rp-f@1` | module | supervisor | 221.84 × 39.52 |  | 0 | 0 | Cisco ASR 9900 Fixed Chassis Route Processor |
@@ -205,25 +205,25 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9903-8hg-pec@1` | module | line-card | 436.58 × 38.73 × 383.28 |  | 0 | 0 | Cisco ASR 9903 Series 800G (0.8T) Port Expansion Card |
 | `cisco/a9k-16t-8-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 16-Port 10 Gigabit Ethernet Oversubscribed Line Card |
 | `cisco/a9k-16x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
-| `cisco/a9k-16x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
+| `cisco/a9k-16x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
 | `cisco/a9k-20hg-flex-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 2T Service Edge Combo Line Card, 5th generation |
 | `cisco/a9k-20hg-flex-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 2T Packet Transport Combo Line Card, 5th generation |
-| `cisco/a9k-24x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 0 | 0 | Cisco ASR 9000 Series 24-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
+| `cisco/a9k-24x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 7 | 0 | Cisco ASR 9000 Series 24-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
 | `cisco/a9k-24x10ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 24-Port 10 Gigabit Ethernet Line Card, original generation |
-| `cisco/a9k-2x100ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 0 | 0 | Cisco ASR 9000 Series 2-Port 100 Gigabit Ethernet DX Line Card with CFP |
+| `cisco/a9k-2x100ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 2-Port 100 Gigabit Ethernet DX Line Card with CFP |
 | `cisco/a9k-36x10ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 36-Port 10 Gigabit Ethernet Line Card, original generation |
-| `cisco/a9k-400g-dwdm-tr@1` | module | line-card | 43.7 × 395.7 × 569 |  | 0 | 0 | Cisco ASR 9000 400-Gbps IPoDWDM Line Card |
+| `cisco/a9k-400g-dwdm-tr@1` | module | line-card | 43.7 × 395.7 × 569 |  | 1 | 0 | Cisco ASR 9000 400-Gbps IPoDWDM Line Card |
 | `cisco/a9k-40ge-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
 | `cisco/a9k-40ge-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
 | `cisco/a9k-40ge-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
-| `cisco/a9k-48x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 0 | 0 | Cisco ASR 9000 Series 48-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
+| `cisco/a9k-48x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 7 | 0 | Cisco ASR 9000 Series 48-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
 | `cisco/a9k-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Service Edge Line Card, 5th generation |
 | `cisco/a9k-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Packet Transport Line Card, 5th generation |
 | `cisco/a9k-4t-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
 | `cisco/a9k-4t-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
 | `cisco/a9k-4t-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
 | `cisco/a9k-4x100ge@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet LAN Line Card |
-| `cisco/a9k-4x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 0 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet Line Card with CPAK |
+| `cisco/a9k-4x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-750w-ac@1` | module | psu | 55.2 × 39.9 |  | 1 | 0 | Cisco ASR 9001 and ASR 9001-S AC power entry module, 750 W |
 | `cisco/a9k-750w-dc@1` | module | psu | 55.2 × 39.9 |  | 1 | 0 | Cisco ASR 9001 and ASR 9001-S DC power entry module, 750 W |
 | `cisco/a9k-8hg-flex-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 800G Service Edge Combo Line Card, 5th generation |
@@ -234,8 +234,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-8t-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
 | `cisco/a9k-8t-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
 | `cisco/a9k-8t-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
-| `cisco/a9k-8x100g-lb-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 0 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
-| `cisco/a9k-8x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 0 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
+| `cisco/a9k-8x100g-lb-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
+| `cisco/a9k-8x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-8x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet QSFP SE Line Card, 4th generation |
 | `cisco/a9k-8x100ge-x-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet QSFP TR Line Card, 4th generation |
 | `cisco/a9k-ac-pem-v3@1` | module | power | 468.12 × 48.03 |  | 0 | 0 | Cisco ASR 9000 version 3 AC power entry module - a power TRAY, not a supply |
@@ -426,7 +426,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/dpce-q-20ge-sfp@1` | module | line-card | 420.9 × 29.5 |  | 2 | 0 | Juniper DPCE-R-Q-20GE-SFP (EOL) - twenty SFP in two PIC groups of ten |
 | `juniper/dpce-q-20ge-sfp-v960@1` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper DPCE-R-Q-20GE-SFP (EOL) - twenty SFP in two PIC groups of ten |
 | `juniper/dpce-r-40ge-sfp@1` | module | line-card | 420.9 × 29.5 |  | 2 | 1 | Juniper DPCE-R-40GE-SFP (Gigabit Ethernet Enhanced DPC, EOL) - 40x1GbE SFP in four 2x5 blocks with per-port l… |
-| `juniper/dpce-r-40ge-sfp-v@1` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper DPCE-R-40GE-SFP as mounted in the MX960 - the same 40x1GbE DPC the MX240/MX480 seat horizontally, aut… |
+| `juniper/dpce-r-40ge-sfp-v@2` | module | line-card | 30.1 × 405 |  | 1 | 0 | Juniper DPCE-R-40GE-SFP as mounted in the MX960 - the same 40x1GbE DPC the MX240/MX480 seat horizontally, aut… |
 | `juniper/jnp-lc-blnk-3@1` | module | blank | 419.1 × 41.9 |  | 1 | 0 | Juniper JNP-LC-BLNK-3 - the MX10003 LC2103 line-card slot blank cover panel (guide FRU list) |
 | `juniper/jnp-mic-blnk-3@1` | module | blank | 197.3 × 41.9 |  | 0 | 1 | Juniper JNP-MIC-BLNK-3 - the MX10003 MIC1 slot blank cover panel (guide FRU list) |
 | `juniper/jnp-mic1@1` | module | line-card | 197.3 × 41.9 |  | 0 | 1 | Juniper JNP-MIC1 Multi-Rate Ethernet MIC - 12 QSFP28 cages in two rows of six, seated in the MIC1 slot of the… |

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 2.0.7
+version: 2.0.8
 maturity: modelled
 manufacturer: Edgecore
 model: AS5912-54X
@@ -108,6 +108,27 @@ chassis:
   depth: 548
   ru: 1
   weight-kg: 9.34
+gaps:
+- what: b2f-handle-and-latch-colour
+  scope: [fans, psus]
+  reason: vendor-silent
+  wanted: this chassis's own quick-start guide language on fan-tray handle and PSU
+    latch colour, or a photograph of a B2F unit's fan and PSU faces
+  note: >-
+    THE B2F BUILDS DRAW THEIR HANDLES AND LATCHES IN THE F2B COLOUR. The AS7726-32X's
+    quick-start guide states the convention in as many words - "Remove front-to-back
+    (F2B) airflow fan trays (red handles) and PSUs (red release latches). Install
+    back-to-front (B2F) airflow fan trays (blue handles) and PSUs (blue release
+    latches)" - and that chassis paints its b2f builds blue. This one does not, because
+    that sentence is in a DIFFERENT CHASSIS'S document and the parts being the same
+    components is not a source. What was checked here: qsg-r02, which gives the all-F2B-or-all-B2F rule and never mentions
+    handle or latch colour, and datasheet-r20, which does not mention handles or
+    latches at all. Painting these blue from the
+    7726's guide would be inheriting a colour rather than sourcing one, so the default
+    red stands until something says otherwise. What settles it: this chassis's own QSG
+    language, or a photograph of a B2F unit's fan and PSU faces. The airflow LEGEND is
+    a separate fact and is now set from the configuration's own airflow - see
+    roc-ops/Portrayal#277.
 groups:
   grounding:
     term: Point
@@ -572,6 +593,8 @@ configurations:
       5912-54X-O-AC-B-US: {part: FP3ZZ5654401A, power-cord: N. America}
     airflow: back-to-front
     description: Dual AC PSUs, back-to-front airflow (5912-54X-O-AC-B)
+    component-attrs:
+      fan-module: {airflow-legend: B2F}
     region-context:
       intake: Exhaust
       exhaust: Intake
@@ -593,6 +616,8 @@ configurations:
       5912-54X-O-48V-B: {part: FP3ZZ5654020A, power-cord: none}
     airflow: back-to-front
     description: Dual -48V DC PSUs, back-to-front airflow (5912-54X-O-48V-B)
+    component-attrs:
+      fan-module: {airflow-legend: B2F}
     region-context:
       intake: Exhaust
       exhaust: Intake

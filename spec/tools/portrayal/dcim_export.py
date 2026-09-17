@@ -427,6 +427,7 @@ NOT_A_DCIM_PORT = {
     # and iDRAC Direct, and there is nowhere honest to put them.
     "std/micro-usb": "USB maintenance port (iDRAC Direct); not a console, and no device-type field fits",
     "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via PART_CONSOLE",
+    "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
     "std/usb-c": "USB-C power input on the GL-8xEP, group `usbc-power`; power in, not a port",
 
     # --- connectors upstream has no type for ---------------------------------

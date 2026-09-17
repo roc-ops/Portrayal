@@ -12,6 +12,12 @@ description: >-
 attrs:
   model: JNP10K-LC-BLNK
 provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
+    that fills an opening: it has no indicator to light and no condition to report,
+    so `ok` was a state the viewer generated CSS for, offered as a control, and could
+    never show - this part draws no elements at all. `absent` stays, because an empty
+    slot is a real thing to draw. See roc-ops/Portrayal#269.
   size: >-
     derived - fills the 437.0 x 48.0 mm line-card aperture, which is the same
     aperture the JNP10K-LC2101 occupies and is identical across the MX10004,
@@ -35,9 +41,7 @@ provenance:
     art follows the MX-series slot blanks already in the library: a plain
     light panel with a pull at each end, at the aperture's own size. The
     OUTLINE is sourced and the DETAIL is not, which is the honest split.
-states:
-- ok
-- absent
+states: [absent]
 size:
   w: 437.0
   h: 48.0
