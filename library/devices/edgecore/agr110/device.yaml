@@ -1,0 +1,1144 @@
+format: 1
+kind: device
+name: agr110
+version: 0.1.0
+maturity: modelled
+manufacturer: Edgecore
+model: AGR110
+portfolio: {line: Service Provider, family: Aggregation Router, series: AGR110}
+description: >-
+  48x 10G SFP+ plus 6x 100G QSFP28 1RU aggregation router (vendor alias AS5916-54XL), Broadcom BCM88370
+  Qumran-MX with a BCM15K TCAM, Intel Xeon D-1518, ONIE-preloaded. All ports on the front, numbered from
+  0 with even ports on the top row; two 650 W AC or -48 VDC PSUs and six 5+1 fan trays from the rear,
+  front-to-back airflow in every ordering code published.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents, both staged and both docling-converted, but MEASURED OFF THE PDF PAGES RATHER THAN
+      THE CONVERTED FIGURES. agr110-datasheet (the AGR110 / AS5916-54XL data sheet) carries the specification
+      list, the ordering matrix and fig-0009, a stacked front-and-rear colour elevation with eight callouts
+      and their description table; that figure is the source of every horizontal number here. agr110-qsg
+      is the AS5916-54XKS|AS5916-54XL quick start guide - a TWO-MODEL document - and supplies the hardware-specification
+      table, the power ratings and, in its section 6 "Verify Switch Operation" zoom, the only legible
+      reading of the port numerals and the system-LED legends. Three vendor stock photographs (photos/agr110-1..3)
+      are 489 x 357 px and confirm nothing but colour.
+  figure-choice:
+    confidence: measured
+    note: >-
+      Gate 1, and the prepared brief's ranked candidates were NOT used. prepare.py ranks the docling-extracted
+      figures, whose best here is agr110-datasheet/fig-0009 at 3.29 px/mm. The same figure taken off a
+      600 dpi render of its own page (pdftocairo -png -r 600 -f 2) measures at 9.12 px/mm, nearly three
+      times the resolution, and that is what every number below was read at. Panel boxes found by row/column
+      darkness: FRONT (382,1728)-(4389,2120), 4008 x 393 px; REAR (386,2824)-(4385,3216), 4000 x 393 px.
+      The two agree on width to 0.2 percent, which is what anchors the x scale at 9.124 px/mm on 438.4
+      mm. THE FIGURE IS A RENDER, NOT A DRAWING, and its aspect says so: 10.18 against 9.96 for 438.4/44,
+      2.1 percent out. The tell is not the arithmetic but the art - the TOP cage row shows more of its
+      interior than the bottom row does, which happens when the camera sits slightly above the face. 2.1
+      percent is inside the four percent at which docs/modelling-a-device.md still allows fractions, so:
+      x carries geometry directly, and every y here is either a proportion of the panel's own 393 px height
+      mapped onto 44 mm or a registry figure anchored on one such proportion. No absolute vertical measurement
+      was taken from this image. THE QUICK START GUIDE'S ART WAS REJECTED. Its page-1 front elevation
+      measures 1199 x 148 px - aspect 8.10 against 9.96, NINETEEN percent out, vertically stretched -
+      and docs/modelling-a-device.md says that at ten percent you cannot take absolute scale at all. It
+      puts the inter-row LED bezel at 17.24 mm where the datasheet render puts it at 15.17. The guide
+      also disclaims itself in its own words, on page 1: "The switch drawings in this document are for
+      illustration only and may not match your particular switch model." So the QSG is used here for TEXT
+      ONLY - the specification table, the power ratings, and the section 6 zoom, which is a photograph
+      of the real faceplate rather than line art.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - "Dimensions (WxDxH): 438.4 x 501.9 x 44 mm (17.26 x 19.76 x 1.73 in)" (agr110-datasheet/doc.md:109).
+      THE TWO DOCUMENTS DISAGREE and the disagreement is recorded in gaps as sources-disagree: the shared
+      quick-start's hardware specification says "435 x 515 x 43.84 mm" (agr110-qsg/doc.md, Switch Chassis
+      / Size), which differs on all three axes, 13 mm of it in depth. The datasheet is taken for three
+      reasons. The SIBLING's datasheet states the same triple independently - agr130-datasheet/doc.md:103
+      is "438.4 x 501.9 x 44 mm" to the digit - so two documents state it and one states the other. 438.4
+      is the body width the rest of this vendor's 1RU line uses and is already the metal between the ear
+      folds, the same figure dcs510 and cor580 carry, so nothing is subtracted here and the rack ears
+      are optional placements outside it at the library's 14 mm. And the figure prefers it: the rear panel's
+      measured aspect of 10.18 sits nearer 9.96 (438.4/44) than 9.92 (435/43.84). The weights do not disagree
+      - 9.7 kg against 9.72 - so this is not two different products.
+  chassis-colour:
+    confidence: photo-measured
+    note: >-
+      photo - the chassis is black with a dark grey faceplate. Both panels of agr110-datasheet/fig-0009
+      and all three stock photographs agree. The quick-start's line art draws a light-grey shell and is
+      the odd one out, as it is on dcs510; where the guide art and the device disagree the device wins.
+  port-block-layout:
+    confidence: measured
+    note: >-
+      measured - THREE ganged blocks of eight columns by two rows, 48 ports. The blocks were found from
+      the top bezel lip (the continuous bright band at y 1.5-2.8 mm, which runs the length of a ganged
+      bezel and stops in the gap between blocks): 13.78..127.32, 130.49..243.70 and 246.44..362.16 mm,
+      widths 113.54, 113.21 and 115.72. Eight ports at the registry pitch is 114.0 and SFF-8433's own
+      1xN bezel cutout is N x 14.25 + 1.2 = 115.2, so the three measured widths bracket the standard's
+      own figure and the block count is not in doubt. Block pitch reads 116.71 and 115.95, mean 116.33,
+      against SFF-8433's C04 block-to-block minimum extrapolated to 1x8 of 116.5.
+  port-pitch:
+    confidence: registry
+    note: >-
+      registry, not measured, per the rule that a ganged pitch is a lookup. spec/schemas/standards.yaml
+      `sfp-ganged` states 14.25 as SFF-8433's B04 Basic - a dimension with no tolerance - with the 14.25
+      x 10.40 per-port opening and a measured 15.0 belly-to-belly row pitch. What this figure measures
+      is 14.0 to 14.5 column to column, and across the eight columns of the first block the fitted pitch
+      is 14.110 against the standard's 14.25. That one percent is the FIGURE's scale error, not the cage's:
+      a render whose aspect is already 2.1 percent out is not evidence against an SFF Basic dimension.
+      The blocks are therefore laid out on 14.25 and anchored so the region as a whole lands where it
+      was measured - first column centre 21.52 against a measured 21.33, last column centre 354.44 against
+      a measured 354.34 - which leaves a residue of up to 1.2 mm in the middle of each block. That residue
+      is the price of taking the standard over the render and it is recorded rather than hidden. Gutter
+      2.59 is what makes the two ends land: 23 steps of 14.25 plus two gutters over the measured span.
+  port-rows:
+    confidence: registry
+    note: >-
+      registry, anchored on one measured proportion. The white bezel band that runs between the two cage
+      rows centres at 15.17 mm of the panel's height (bright band 13.44-16.91, read as a fraction of the
+      393 px panel). With `sfp-ganged`'s measured 15.0 row pitch that puts the top row's centre at 7.67
+      and the bottom row's at 22.67, openings 10.40 tall. The check is the block's outer extent: the modelled
+      openings span 2.47 to 27.87 mm and the figure's outer bezel lips run 1.23 to 28.2, so the bezel
+      stands about 1.2 mm proud of the opening at the top and 0.3 at the bottom - an asymmetry which is
+      the camera, not the metal, and which is why no row was measured directly.
+  port-numbering:
+    confidence: drawing
+    note: >-
+      drawing, and this one is read rather than inferred. agr110-qsg's section 6 zoom prints, under the
+      first four columns, "0(up-triangle) (down-triangle)1  2(up) (down)3  4(up) (down)5  6(up) (down)7".
+      So NUMBERING STARTS AT ZERO, EVEN PORTS ARE THE TOP ROW and odd the bottom, numbered along the face
+      in column pairs, and the solid triangle beside each numeral names its row. 48 ports are 0..47. The
+      numeral glyphs measure at 17.61-19.69 and 22.42-24.50 mm under the first column (centre 21.52),
+      so they sit about 3 mm either side of their column centre with the triangle pair between them, on
+      one baseline at 29.6 mm. Note what this settles for the whole line: it is the same `n (up)(down)
+      n+1` idiom dcs510 prints, but ZERO-BASED, and the datasheet's sibling DCS500 says in words that
+      "port, fan and PSU numbering start at zero".
+  port-leds:
+    confidence: measured
+    note: >-
+      measured - ONE lamp per port, an outline triangle, both lamps of a column sharing the white bezel
+      between the two rows: the upper port's points up and sits left of the column centre, the lower port's
+      points down and sits right of it. Read in agr110-qsg's section 6 zoom, which resolves the pair inside
+      each bezel cell, and confirmed in agr110-datasheet/fig-0009 where each cell carries two marks about
+      3.9 mm apart. The lamps are drawn with common/led-arrow@1's up and down skins at +/- 1.95 mm from
+      the column centre. THIS NEEDED A TOOL CHANGE. expand.py could offset a block's lamps by their position
+      within a gang (`dx-by-col`) but not by their ROW, which is the only thing that distinguishes these
+      two - one y, two x. `dx-by-row` was added to the lamp block for it, mirroring the knob the numerals
+      already had for exactly the same reason on faces that print `n (up)(down) n+1`.
+  system-leds:
+    confidence: drawing
+    note: >-
+      drawing - FIVE lamps, left to right PS0, PS1, Diag, Fan and Loc, each drawn as a light rectangle
+      with its legend printed on it, read in agr110-qsg's section 6 zoom which labels every one. Positions
+      from agr110-datasheet/fig-0009: bright marks centred at 18.87, 24.77, 30.68, 36.70 and 42.82 mm
+      on a 5.99 mm mean pitch, in the band at 31.0-33.5 mm below the port numerals. The quick-start's
+      own semantics, in words: "When operating normally, the PSU0/PSU1, Diag, and Fan LEDs should all
+      be on green" (agr110-qsg/doc.md, section 6). WHAT IS NOT SETTLED is whether the legend is printed
+      ON the lens or beside it. The guide art draws the text inside the rectangle; that is drawn here
+      as a lamp with its text over it, and the question is recorded as a gap, because a bench photograph
+      settles it and nothing held here does.
+  reset-button:
+    confidence: measured
+    note: >-
+      measured - a pinhole in a hexagonal recess with "Reset" printed to its right, at 50.4 mm, on the
+      system-LED band. Position read off agr110-datasheet/fig-0009 and corroborated in the quick-start's
+      section 6 zoom, where the hex outline and the legend are both legible.
+  usb:
+    confidence: measured
+    note: >-
+      measured - one USB-A storage port in the silkscreen band at 319.0 to 331.6 mm, 12.6 mm of opening
+      against std/usb-a@1's 12.0, with the USB trident printed to its left at 310.9-317.7. Callout 5 of
+      the datasheet figure names it "USB storage port" and the specification list says "1 x USB (storage)".
+      Its vertical position is the least certain number on this face: the band it sits in is where the
+      datasheet's callout highlighting crosses the artwork, and 32.2 mm is a proportion off a render rather
+      than a reading off a drawing.
+  management-cluster:
+    confidence: measured
+    note: >-
+      measured - the RJ-45 management port above the RJ-45 console port, in ONE white bezel running 406.79
+      to 424.18 mm, centre 415.49. The row centres read 9.1 and 21.2 mm, a pitch of 12.1 - which is `rj45-ganged`'s
+      own measured row pitch of 12.1 to the millimetre, and that is what identifies the pair as a GANGED
+      2x1 block rather than two single jacks: a single jack's housing is 15.8 x 13.2 and two of those
+      cannot sit 12.1 apart. The rows are mirrored, not translated - the upper jack's keyway points up
+      and the lower jack's down, visible in the datasheet figure at 9.1 px/mm - which is the ganged form's
+      normal construction and the reason the top row carries rotate 180.
+  qsfp-block:
+    confidence: measured
+    note: >-
+      measured, and it is NOT one block. The six QSFP28 ports are a 2x2 stacked ganged block with a lamp
+      bezel between its rows, and a SEPARATE 1x2 row below it, which the datasheet's callout-2 highlight
+      encloses together as "6 x QSFP28 ports". Column centres read 373.81 and 392.62 mm in both the upper
+      and the lower openings - a pitch of 18.81 against the registry's 19.0 for `qsfp-ganged`, which is
+      the same one percent the SFP+ columns show and is treated the same way. Row centres read 7.5, 23.7
+      and 36.8: the upper pair are 16.2 apart with their bezel measured at 15.62 between them, and the
+      third row sits 13.1 below the second with no bezel between, which is what makes it a separate block
+      rather than a third row of the same one. The bottom vent band stops at 363.5 mm and does not run
+      under this block, which is consistent with a third row of cages reaching to 41.6.
+  qsfp-numbering:
+    confidence: estimated
+    note: >-
+      NOT READ - ASSUMED. The QSFP28 ports are numbered 48 to 53 here, continuing the SFP+ block, because
+      that is what the vendor's zero-based scheme implies and because no figure held here resolves their
+      numerals: the quick-start's section 6 zoom crops the right-hand end of the faceplate away, and at
+      9.1 px/mm the datasheet render prints their band under the callout highlighting. It is recorded
+      as a gap. Which of the two columns is the lower number, and whether the separate bottom row continues
+      the sequence or precedes it, are the same question and have the same answer: a photograph.
+  qsfp-leds:
+    confidence: estimated
+    note: >-
+      ONE lamp per port is drawn and the figure shows more. The bezel between the upper block's two rows
+      carries FOUR marks per column, about 3.5 mm apart and centred on the column, where the SFP+ bezel
+      carries two. Four marks over two ports is either two lamps per port or a four-lane column belonging
+      to one of them, and at 9.1 px/mm this image cannot tell those apart - the same question dcs510 left
+      standing on its own lane lamps. One led-dot per port is drawn at the inner mark, and the gap records
+      the other two. The separate bottom row's lamps, if it has any, are not resolved at all.
+  vents:
+    confidence: measured
+    note: >-
+      measured, and drawn as hexagonal honeycomb because that is what the figure shows at 9.1 px/mm -
+      a staggered hex lattice, legible in the quick-start's section 6 zoom as whole hexagons. Three fields:
+      a tall column at the left-hand end from 1.6 to 13.0 mm running 3.5 to 40.5; a single band along
+      the bottom from 13.8 to 363.5 mm at 36.6 to 42.2, which stops where the QSFP block starts; and a
+      column at the right-hand end from 425.5 to 437.0. The right-hand column runs nearly the full panel
+      height where the left one does not, because the left one gives way to the port block's first bezel.
+  rear-layout:
+    confidence: measured
+    note: >-
+      measured - PSU, six fan trays, PSU, with a grounding point outboard of each supply. THE FANS WERE
+      MEASURED FROM THEIR HANDLES, by colour: the six red pull bars isolate cleanly against a black chassis
+      and read at 96.56, 145.00, 193.66, 242.27, 290.88 and 340.20 mm, a pitch of 48.44 / 48.66 / 48.61
+      / 48.61 / 49.32 - mean 48.73, spread 0.88 over five gaps, which is an evenly spaced row and not
+      a staggered one. Handle width 37.0, handle centreline 30.51 mm down the face. Fitted centres are
+      96.36 + 48.73n. common/fan-module-46@1 is 46.6 x 40.0 and fits that pitch with a 2.1 mm divider
+      between trays, which is where the numerals are printed. Fan trays are numbered 0 to 5 LEFT TO RIGHT
+      with each numeral on the divider to the RIGHT of the tray it names - so the first numeral lands
+      at 119.6 mm, between trays 0 and 1, which is what the figure shows and the same convention dcs510
+      uses. Each tray prints F2B on its own faceplate at its lower right; that is module art rather than
+      chassis silkscreen and common/fan-module-46@1's skin already draws it, which the render confirms.
+      THE BAY POSITIONS WERE NOT TAKEN FROM THE HANDLE CENTRES. A first pass put the bays at handle-centre
+      minus half the tray, which assumes the component draws its handle exactly centred, and the render
+      came out 1.1 mm right of the reference all along the row. The fix was to measure THE SAME FEATURE
+      IN BOTH IMAGES: isolate the red pull bars by colour in the datasheet figure and in a rasterisation
+      of this device's own rear view at the same px/mm, and difference them. That gave bay lefts of 71.99
+      + 48.68n, and re-rendered the six bars now land within 0.33 mm of the reference's across the whole
+      row. The same method fixed both supplies, using the bright handle bar on the PSU face rather than
+      the latch, because the real latch is 1.7 mm wider than the component's and a wider feature's edge
+      is not a datum.
+  rear-power:
+    confidence: measured
+    note: >-
+      measured - two bays, PS0 at the left and PS1 at the right, each 54.0 x 40.0 on a measured opening
+      of about 55 mm. The right-hand supply's face reads 368.5 to 423.5 mm; the left-hand one is its mirror
+      about the panel centre and reads 14 to 69. THE PART IS REUSED, not rebuilt: common/psu-ac-650@3
+      is declared in its own provenance to be "a `common/` generic standing for the 650 W CRPS supply
+      across three Edgecore chassis", and this is a fourth of the same generation. Three things corroborate
+      it. The measured face is 54 to 55 mm wide against the generic's 54.0. The face arrangement matches
+      - release latch at the left, bail handle, EMI grille, then the inlet - which is what the figure
+      shows at 9.1 px/mm. And the input rating is the same number the generic cites for its other chassis:
+      this quick-start says "100-240 VAC, 50-60 Hz, 6 A maximum" (agr110-qsg/doc.md) where the DCS204
+      datasheet says "100-240 VAC at 50-60 Hz (6A/650 W max.)". NOTE WHAT WAS NOT REUSED: the edgecore/agr-*
+      components - agr-psu-ac, agr-psu-dc, agr-fan - are the AS7946 generation's parts and are 2RU geometry,
+      60.1 x 37.6 and 69.4 x 69.4. They share this device's product-line prefix and nothing else, and
+      a name is not a fit.
+  rear-grounding:
+    confidence: drawing
+    note: >-
+      drawing - callout 7 of agr110-datasheet/fig-0009 names a grounding screw and points to a round opening
+      at the lower left of the rear face, at about 7.9 mm. A second point sits at the right-hand end,
+      outboard of PS1 at 424.7 to 436.7 mm: a light plate carrying TWO holes one above the other, which
+      is what the quick-start's own packing list implies - "Grounding kit - One grounding lug, 2 M5 screws
+      and 2 washers (for AC model)" is a two-hole lug. The two are drawn alike with common/ground-lug@1
+      and they do not look alike in the figure; that difference is recorded as a gap rather than resolved
+      by choosing.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet and quick-start together. The BOX figure is "Power Consumption - 450 Watts maximum" (agr110-qsg/doc.md),
+      unqualified as to scope, so it is recorded as power-max-w with power-envelope unstated. Input ratings
+      are the quick-start's: AC "100-240 VAC, 50-60 Hz, 6 A maximum", DC "-36 - -72 VDC, 28-14 A"; the
+      datasheet gives the ranges without the currents. NO PER-MODULE POWER IS PUBLISHED. Searched both
+      documents for the field name rather than the part number - "Power", "Consumption", "Watt", "PSU"
+      - and neither states an output rating for a supply or a draw for a fan tray, which is the same silence
+      the AS7946 parts found across the same vendor's corpus. common/psu-ac-650@3 carries its own 650
+      W output from the chassis that do state it; the fan trays carry nothing and L27 stands on them,
+      which is the record that the figure is missing rather than guessed.
+  airflow:
+    confidence: datasheet
+    note: >-
+      datasheet - EVERY ordering code published for this model ends in -F: 5916-54XL-O-AC-F and its regional
+      variants, 5916-54XL-O-48V-F, and the -OT- extended-temperature pairs. So only front-to-back SKUs
+      are listed, and the trays in the figure print F2B. The quick-start describes both directions in
+      general terms - "All installed modules must have a front-to-back (F2B) airflow direction, or all
+      modules must have a back-to-front (B2F) airflow direction" - but that is the family's caution, not
+      an ordering code, and no B2F part number appears. Configurations here are therefore ac and dc, both
+      front-to-back, and the absence of a B2F SKU is stated rather than assumed away.
+attrs:
+  performance: {switching-capacity: 800 Gbps, processing-rate: 700 Mpps}
+  power: {power-max-w: 450, power-envelope: unstated, power-input-ac: '100-240 VAC, 50-60 Hz, 6 A maximum',
+    power-input-dc: '-36 to -72 VDC, 28-14 A'}
+  thermal: {airflow: front-to-back (every published ordering code), cooling: 5+1 redundant hot-swappable
+      fan modules}
+  environmental: {temperature-operating: 0 C to 40 C (32 F to 104 F), temperature-storage: -40 C to 70
+      C (-40 F to 158 F), humidity-operating: 5% to 95% non-condensing}
+  platform:
+    asic: Broadcom BCM88370 Qumran-MX
+    tcam: BCM15K
+    cpu: Intel Xeon D-1518, 4-core 2.2 GHz
+    memory: DDR4 SO-DIMM, 2 x 8 GB
+    storage: 128 GB MLC M.2 SSD
+    bmc: yes, 1 x BMC
+    software: ONIE installer pre-loaded; Open Network Linux (ONL) compatible
+  features:
+    vendor-alias: AS5916-54XL
+    timing: IEEE 1588v2 and SyncE in hardware
+    optics-sfp-plus: 10GBASE-SR/LR, 10G DAC/AOC, 1000BASE-T/SX/LX
+    optics-qsfp28: >-
+      100GBASE-CR4/SR4/LR4/PSM4 and AOC, 40GBASE-CR4/SR4/LR4, 25GBASE-CR4 and AOC, 10GBASE-CR/SR/LR
+  management:
+    mgmt-ports: 1x RJ-45 100/1000BASE-T management, 1x RJ-45 serial console, 1x USB-A storage, 1x BMC
+  compliance:
+    emissions: >-
+      EN 55032:2015+AC:2016 Class A, EN 61000-3-2:2014 Class A, EN 61000-3-3:2013, FCC Class A, VCCI Class
+      A, CE Mark, BSMI Class A CNS 13438
+    immunity: EN 55024:2010+A1:2015, IEC 61000-4-2/3/4/5/6/8/11
+    safety: UL (CSA 22.2 No 60950-1 & UL60950-1), CB (IEC/EN60950-1), BSMI Class A CNS 14336-1
+    nebs: NEBS Level 3
+    rohs: RoHS 2.0 compliant
+    taiwan-rohs: CNS 15663
+  lifecycle: {eol: none-announced}
+chassis: {width: 438.4, height: 44.0, depth: 501.9, ru: 1, weight-kg: 9.7, color: '#2b2f33', airflow: front-to-back}
+gaps:
+- what: chassis-dimensions
+  scope:
+  - front
+  - rear
+  - top
+  - bottom
+  - left
+  - right
+  reason: sources-disagree
+  wanted: >-
+    agr110-datasheet/doc.md:109 states 438.4 x 501.9 x 44 mm and agr110-qsg's hardware specification states
+    435 x 515 x 43.84 mm. All three axes differ and the depth differs by 13 mm, which is not rounding.
+    The datasheet is modelled, for the reasons in provenance - the sibling's datasheet states the same
+    triple independently, 438.4 is the body width this vendor's 1RU line uses, and the figure's own aspect
+    prefers it - but the quick-start is not wrong for being outvoted, and the same conflict stands unresolved
+    on agr130, which shares that quick-start. A tape measure on a real unit settles it in one minute.
+- what: qsfp-port-numbering
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The six QSFP28 ports are numbered 48 to 53 here on the strength of the vendor's zero-based scheme,
+    not on a reading. No figure held resolves their numerals: the quick-start's section 6 zoom crops that
+    end of the faceplate away and the datasheet render prints the band under its own callout highlighting.
+    Which column is the lower number, and whether the separate bottom row continues the sequence or precedes
+    it, need a straight-on photograph of the right-hand end of the front panel.
+- what: qsfp-lamp-count
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    The bezel between the upper QSFP block's two rows carries FOUR marks per column where the SFP+ bezel
+    carries two. That is either two lamps per port or a four-lane column serving one of them, and 9.1
+    px/mm cannot separate those. One lamp per port is drawn; the other two marks per column are not. A
+    photograph of one QSFP shell at better than 9 px/mm settles it.
+- what: system-led-legend-placement
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    The quick-start's section 6 zoom draws PS0, PS1, Diag, Fan and Loc as text INSIDE a light rectangle,
+    which reads as a legend printed on the lens rather than beside it - unlike Reset, two centimetres
+    away on the same band, which is plain white text on the chassis. It is drawn here as a lamp with its
+    legend over it. Whether the real part prints on the lens or beside it is a bench photograph.
+- what: management-port-legend
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    THERE IS PRINTING UNDER THE MANAGEMENT JACKS AND IT CANNOT BE READ. Three lines of it sit between
+    the ganged RJ-45 bezel and the bottom edge, roughly 401 to 420 mm across and 28 to 34 down - a short
+    mark above, two short words side by side, and a longer word beneath - measured as bright runs at 401.32-408.87,
+    410.73-411.93, 412.48-413.68 and 417.29-420.24 mm. At 9.1 px/mm none of it resolves, and the quick-start's
+    section 6 zoom, which is the only image that resolves printing on this face, crops this end of the
+    faceplate away. A first draft printed "Mgmt (up)(down) Console" here, carried over from dcs510's faceplate
+    idiom rather than read off this one. That was removed: this is not a negative reading - the ink is
+    plainly there and its extent is measured - it is an unreadable one, and inventing the words would
+    have put text on the model that nobody has seen on the device. A straight-on photograph of the right-hand
+    40 mm of the front panel settles it.
+- what: rear-grounding-points
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The two grounding points do not look alike. Callout 7 points to a single round opening at the lower
+    left, about 7.9 mm; the right-hand end carries a light plate with two holes one above the other, 424.7
+    to 436.7 mm, which matches the quick-start's "One grounding lug, 2 M5 screws" kit. Both are drawn
+    with common/ground-lug@1. Whether the left-hand one is a second lug pad, a single bonding screw, or
+    something else is a photograph of the rear left corner.
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds: {term: LED, role: indicator, index-origin: 0}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management cluster - the out-of-band 100/1000BASE-T RJ-45 and the RS-232 console share one ganged
+      bezel at the right-hand end of the faceplate, and the USB-A storage port sits apart from them in
+      the silkscreen band. Three media, one job: reaching and disciplining the box rather than carrying
+      its traffic. The Reset button is counted here for the same reason.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs: {redundancy: 1+1, redundancy-note: '2 redundant, load-sharing, hot-swappable AC or -48 VDC'}
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs: {redundancy: 5+1, redundancy-note: hot-swappable 5+1 redundant fan modules}
+  grounding: {term: Point, role: furniture, index-origin: 1}
+  furniture: {term: Item, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 438.4, h: 44.0}
+    panel:
+      decor:
+      - {at: [1.6, 3.5], size: [11.4, 37.0], pattern: vent, vent: 25}
+      - {at: [13.8, 36.6], size: [349.7, 5.6], pattern: vent, vent: 25}
+      - {at: [425.5, 2.0], size: [11.5, 40.0], pattern: vent, vent: 25}
+      cutouts:
+      - {id: port-0, at: [14.39, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-0, at: [18.44, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-1, at: [14.39, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-1, at: [22.34, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-2, at: [28.64, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-2, at: [32.69, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-3, at: [28.64, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-3, at: [36.59, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-4, at: [42.89, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-4, at: [46.94, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-5, at: [42.89, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-5, at: [50.84, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-6, at: [57.14, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-6, at: [61.19, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-7, at: [57.14, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-7, at: [65.09, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-8, at: [71.39, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-8, at: [75.44, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-9, at: [71.39, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-9, at: [79.34, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-10, at: [85.64, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-10, at: [89.69, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-11, at: [85.64, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-11, at: [93.59, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-12, at: [99.89, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-12, at: [103.94, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-13, at: [99.89, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-13, at: [107.84, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-14, at: [114.14, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-14, at: [118.19, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-15, at: [114.14, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-15, at: [122.09, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-16, at: [130.98, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-16, at: [135.03, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-17, at: [130.98, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-17, at: [138.93, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-18, at: [145.23, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-18, at: [149.28, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-19, at: [145.23, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-19, at: [153.18, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-20, at: [159.48, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-20, at: [163.53, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-21, at: [159.48, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-21, at: [167.43, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-22, at: [173.73, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-22, at: [177.78, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-23, at: [173.73, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-23, at: [181.68, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-24, at: [187.98, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-24, at: [192.03, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-25, at: [187.98, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-25, at: [195.93, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-26, at: [202.23, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-26, at: [206.28, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-27, at: [202.23, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-27, at: [210.18, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-28, at: [216.48, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-28, at: [220.53, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-29, at: [216.48, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-29, at: [224.43, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-30, at: [230.73, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-30, at: [234.78, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-31, at: [230.73, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-31, at: [238.68, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-32, at: [247.57, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-32, at: [251.62, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-33, at: [247.57, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-33, at: [255.52, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-34, at: [261.82, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-34, at: [265.87, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-35, at: [261.82, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-35, at: [269.77, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-36, at: [276.07, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-36, at: [280.12, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-37, at: [276.07, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-37, at: [284.02, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-38, at: [290.32, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-38, at: [294.37, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-39, at: [290.32, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-39, at: [298.27, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-40, at: [304.57, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-40, at: [308.62, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-41, at: [304.57, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-41, at: [312.52, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-42, at: [318.82, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-42, at: [322.87, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-43, at: [318.82, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-43, at: [326.77, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-44, at: [333.07, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-44, at: [337.12, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-45, at: [333.07, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-45, at: [341.02, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-46, at: [347.32, 2.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-46, at: [351.37, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-47, at: [347.32, 17.47], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-47, at: [355.27, 14.17], size: [2.25, 2.0], shape: circle}
+      - {id: port-48, at: [364.56, 2.71], size: [18.5, 9.58], shape: rect}
+      - {id: port-49, at: [364.56, 18.91], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [383.56, 2.71], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-48, at: [370.31, 14.62], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-49, at: [375.31, 14.62], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50, at: [389.31, 14.62], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51, at: [394.31, 14.62], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps0, at: [16.57, 30.95], size: [4.6, 2.6], shape: rect}
+      - {id: led-ps1, at: [22.47, 30.95], size: [4.6, 2.6], shape: rect}
+      - {id: led-diag, at: [28.38, 30.95], size: [4.6, 2.6], shape: rect}
+      - {id: led-fan, at: [34.4, 30.95], size: [4.6, 2.6], shape: rect}
+      - {id: led-loc, at: [40.52, 30.95], size: [4.6, 2.6], shape: rect}
+      - {id: reset, at: [48.4, 30.25], size: [4.0, 4.0], shape: circle}
+      - {id: usb, at: [319.0, 33.15], size: [12.0, 4.5], shape: rect}
+      - {id: mgmt-eth, at: [409.14, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: console, at: [409.14, 15.7], size: [12.7, 11.0], shape: rect}
+    silkscreen:
+    - {at: [18.52, 29.6], text: '0', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-0}
+    - {at: [24.52, 29.6], text: '1', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {at: [32.77, 29.6], text: '2', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {at: [38.77, 29.6], text: '3', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {at: [47.02, 29.6], text: '4', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {at: [53.02, 29.6], text: '5', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {at: [61.27, 29.6], text: '6', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-6}
+    - {at: [67.27, 29.6], text: '7', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-7}
+    - {at: [75.52, 29.6], text: '8', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-8}
+    - {at: [81.52, 29.6], text: '9', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-9}
+    - {at: [89.77, 29.6], text: '10', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-10}
+    - {at: [95.77, 29.6], text: '11', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-11}
+    - {at: [104.02, 29.6], text: '12', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-12}
+    - {at: [110.02, 29.6], text: '13', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-13}
+    - {at: [118.27, 29.6], text: '14', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-14}
+    - {at: [124.27, 29.6], text: '15', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-15}
+    - {at: [135.11, 29.6], text: '16', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-16}
+    - {at: [141.11, 29.6], text: '17', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-17}
+    - {at: [149.36, 29.6], text: '18', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-18}
+    - {at: [155.36, 29.6], text: '19', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-19}
+    - {at: [163.61, 29.6], text: '20', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-20}
+    - {at: [169.61, 29.6], text: '21', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-21}
+    - {at: [177.86, 29.6], text: '22', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-22}
+    - {at: [183.86, 29.6], text: '23', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-23}
+    - {at: [192.11, 29.6], text: '24', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-24}
+    - {at: [198.11, 29.6], text: '25', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-25}
+    - {at: [206.36, 29.6], text: '26', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-26}
+    - {at: [212.36, 29.6], text: '27', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-27}
+    - {at: [220.61, 29.6], text: '28', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-28}
+    - {at: [226.61, 29.6], text: '29', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-29}
+    - {at: [234.86, 29.6], text: '30', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-30}
+    - {at: [240.86, 29.6], text: '31', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-31}
+    - {at: [251.7, 29.6], text: '32', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-32}
+    - {at: [257.7, 29.6], text: '33', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-33}
+    - {at: [265.95, 29.6], text: '34', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-34}
+    - {at: [271.95, 29.6], text: '35', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-35}
+    - {at: [280.2, 29.6], text: '36', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-36}
+    - {at: [286.2, 29.6], text: '37', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-37}
+    - {at: [294.45, 29.6], text: '38', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-38}
+    - {at: [300.45, 29.6], text: '39', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-39}
+    - {at: [308.7, 29.6], text: '40', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-40}
+    - {at: [314.7, 29.6], text: '41', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-41}
+    - {at: [322.95, 29.6], text: '42', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-42}
+    - {at: [328.95, 29.6], text: '43', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-43}
+    - {at: [337.2, 29.6], text: '44', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-44}
+    - {at: [343.2, 29.6], text: '45', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-45}
+    - {at: [351.45, 29.6], text: '46', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-46}
+    - {at: [357.45, 29.6], text: '47', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-47}
+    - at: [21.52, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-0
+      - port-1
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [35.77, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-2
+      - port-3
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [50.02, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-4
+      - port-5
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [64.27, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-6
+      - port-7
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [78.52, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-8
+      - port-9
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [92.77, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-10
+      - port-11
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [107.02, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-12
+      - port-13
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [121.27, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-14
+      - port-15
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [138.1, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-16
+      - port-17
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [152.35, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-18
+      - port-19
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [166.6, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-20
+      - port-21
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [180.85, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-22
+      - port-23
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [195.1, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-24
+      - port-25
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [209.35, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-26
+      - port-27
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [223.6, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-28
+      - port-29
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [237.85, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-30
+      - port-31
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [254.69, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-32
+      - port-33
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [268.94, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-34
+      - port-35
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [283.19, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-36
+      - port-37
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [297.44, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-38
+      - port-39
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [311.69, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-40
+      - port-41
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [325.94, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-42
+      - port-43
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [340.19, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-44
+      - port-45
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - at: [354.44, 29.6]
+      fill: '#e4e8eb'
+      for:
+      - port-46
+      - port-47
+      path: >-
+        M -1.45 0.5334 L -0.25 0.5334 L -0.85 -0.5334 Z M 0.25 -0.5334 L 1.45 -0.5334 L 0.85 0.5334 Z
+      filled: true
+    - {at: [18.87, 35.8], text: PS0, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-ps0}
+    - {at: [24.77, 35.8], text: PS1, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-ps1}
+    - {at: [30.68, 35.8], text: Diag, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-diag}
+    - {at: [36.7, 35.8], text: Fan, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-fan}
+    - {at: [42.82, 35.8], text: Loc, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-loc}
+    - {at: [53.6, 32.65], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb', for: reset}
+    - at: [314.3, 35.4]
+      fill: '#e4e8eb'
+      for: usb
+      path: >-
+        M 0 1.7 L 0 -0.935 M -0.476 -0.935 L 0.476 -0.935 L 0 -1.7 Z M 0 0.17 L -0.935 -0.51 M 0 -0.17
+        L 0.935 0.34
+      stroke-width: 0.28
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
+        rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0.25], skin: right, optional: ears, group: furniture,
+        rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-0, at: [14.39, 2.47], group: sfp-plus, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: port-1, at: [14.39, 17.47], rotate: 180, group: sfp-plus, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [28.64, 2.47], group: sfp-plus, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [28.64, 17.47], rotate: 180, group: sfp-plus, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [42.89, 2.47], group: sfp-plus, rel-pos: 4}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [42.89, 17.47], rotate: 180, group: sfp-plus, rel-pos: 5}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [57.14, 2.47], group: sfp-plus, rel-pos: 6}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [57.14, 17.47], rotate: 180, group: sfp-plus, rel-pos: 7}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [71.39, 2.47], group: sfp-plus, rel-pos: 8}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [71.39, 17.47], rotate: 180, group: sfp-plus, rel-pos: 9}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [85.64, 2.47], group: sfp-plus, rel-pos: 10}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [85.64, 17.47], rotate: 180, group: sfp-plus, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [99.89, 2.47], group: sfp-plus, rel-pos: 12}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [99.89, 17.47], rotate: 180, group: sfp-plus, rel-pos: 13}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [114.14, 2.47], group: sfp-plus, rel-pos: 14}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [114.14, 17.47], rotate: 180, group: sfp-plus, rel-pos: 15}
+      - {ref: std/sfp-ganged@1, id: port-16, at: [130.98, 2.47], group: sfp-plus, rel-pos: 16}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [130.98, 17.47], rotate: 180, group: sfp-plus, rel-pos: 17}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [145.23, 2.47], group: sfp-plus, rel-pos: 18}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [145.23, 17.47], rotate: 180, group: sfp-plus, rel-pos: 19}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [159.48, 2.47], group: sfp-plus, rel-pos: 20}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [159.48, 17.47], rotate: 180, group: sfp-plus, rel-pos: 21}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [173.73, 2.47], group: sfp-plus, rel-pos: 22}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [173.73, 17.47], rotate: 180, group: sfp-plus, rel-pos: 23}
+      - {ref: std/sfp-ganged@1, id: port-24, at: [187.98, 2.47], group: sfp-plus, rel-pos: 24}
+      - {ref: std/sfp-ganged@1, id: port-25, at: [187.98, 17.47], rotate: 180, group: sfp-plus, rel-pos: 25}
+      - {ref: std/sfp-ganged@1, id: port-26, at: [202.23, 2.47], group: sfp-plus, rel-pos: 26}
+      - {ref: std/sfp-ganged@1, id: port-27, at: [202.23, 17.47], rotate: 180, group: sfp-plus, rel-pos: 27}
+      - {ref: std/sfp-ganged@1, id: port-28, at: [216.48, 2.47], group: sfp-plus, rel-pos: 28}
+      - {ref: std/sfp-ganged@1, id: port-29, at: [216.48, 17.47], rotate: 180, group: sfp-plus, rel-pos: 29}
+      - {ref: std/sfp-ganged@1, id: port-30, at: [230.73, 2.47], group: sfp-plus, rel-pos: 30}
+      - {ref: std/sfp-ganged@1, id: port-31, at: [230.73, 17.47], rotate: 180, group: sfp-plus, rel-pos: 31}
+      - {ref: std/sfp-ganged@1, id: port-32, at: [247.57, 2.47], group: sfp-plus, rel-pos: 32}
+      - {ref: std/sfp-ganged@1, id: port-33, at: [247.57, 17.47], rotate: 180, group: sfp-plus, rel-pos: 33}
+      - {ref: std/sfp-ganged@1, id: port-34, at: [261.82, 2.47], group: sfp-plus, rel-pos: 34}
+      - {ref: std/sfp-ganged@1, id: port-35, at: [261.82, 17.47], rotate: 180, group: sfp-plus, rel-pos: 35}
+      - {ref: std/sfp-ganged@1, id: port-36, at: [276.07, 2.47], group: sfp-plus, rel-pos: 36}
+      - {ref: std/sfp-ganged@1, id: port-37, at: [276.07, 17.47], rotate: 180, group: sfp-plus, rel-pos: 37}
+      - {ref: std/sfp-ganged@1, id: port-38, at: [290.32, 2.47], group: sfp-plus, rel-pos: 38}
+      - {ref: std/sfp-ganged@1, id: port-39, at: [290.32, 17.47], rotate: 180, group: sfp-plus, rel-pos: 39}
+      - {ref: std/sfp-ganged@1, id: port-40, at: [304.57, 2.47], group: sfp-plus, rel-pos: 40}
+      - {ref: std/sfp-ganged@1, id: port-41, at: [304.57, 17.47], rotate: 180, group: sfp-plus, rel-pos: 41}
+      - {ref: std/sfp-ganged@1, id: port-42, at: [318.82, 2.47], group: sfp-plus, rel-pos: 42}
+      - {ref: std/sfp-ganged@1, id: port-43, at: [318.82, 17.47], rotate: 180, group: sfp-plus, rel-pos: 43}
+      - {ref: std/sfp-ganged@1, id: port-44, at: [333.07, 2.47], group: sfp-plus, rel-pos: 44}
+      - {ref: std/sfp-ganged@1, id: port-45, at: [333.07, 17.47], rotate: 180, group: sfp-plus, rel-pos: 45}
+      - {ref: std/sfp-ganged@1, id: port-46, at: [347.32, 2.47], group: sfp-plus, rel-pos: 46}
+      - {ref: std/sfp-ganged@1, id: port-47, at: [347.32, 17.47], rotate: 180, group: sfp-plus, rel-pos: 47}
+      - {ref: common/led-arrow-sm@1, id: led-port-0, at: [18.44, 14.17], skin: up, for: port-0, group: port-leds,
+        rel-pos: 0}
+      - {ref: common/led-arrow-sm@1, id: led-port-1, at: [22.34, 14.17], skin: down, for: port-1, group: port-leds,
+        rel-pos: 1}
+      - {ref: common/led-arrow-sm@1, id: led-port-2, at: [32.69, 14.17], skin: up, for: port-2, group: port-leds,
+        rel-pos: 2}
+      - {ref: common/led-arrow-sm@1, id: led-port-3, at: [36.59, 14.17], skin: down, for: port-3, group: port-leds,
+        rel-pos: 3}
+      - {ref: common/led-arrow-sm@1, id: led-port-4, at: [46.94, 14.17], skin: up, for: port-4, group: port-leds,
+        rel-pos: 4}
+      - {ref: common/led-arrow-sm@1, id: led-port-5, at: [50.84, 14.17], skin: down, for: port-5, group: port-leds,
+        rel-pos: 5}
+      - {ref: common/led-arrow-sm@1, id: led-port-6, at: [61.19, 14.17], skin: up, for: port-6, group: port-leds,
+        rel-pos: 6}
+      - {ref: common/led-arrow-sm@1, id: led-port-7, at: [65.09, 14.17], skin: down, for: port-7, group: port-leds,
+        rel-pos: 7}
+      - {ref: common/led-arrow-sm@1, id: led-port-8, at: [75.44, 14.17], skin: up, for: port-8, group: port-leds,
+        rel-pos: 8}
+      - {ref: common/led-arrow-sm@1, id: led-port-9, at: [79.34, 14.17], skin: down, for: port-9, group: port-leds,
+        rel-pos: 9}
+      - {ref: common/led-arrow-sm@1, id: led-port-10, at: [89.69, 14.17], skin: up, for: port-10, group: port-leds,
+        rel-pos: 10}
+      - {ref: common/led-arrow-sm@1, id: led-port-11, at: [93.59, 14.17], skin: down, for: port-11, group: port-leds,
+        rel-pos: 11}
+      - {ref: common/led-arrow-sm@1, id: led-port-12, at: [103.94, 14.17], skin: up, for: port-12, group: port-leds,
+        rel-pos: 12}
+      - {ref: common/led-arrow-sm@1, id: led-port-13, at: [107.84, 14.17], skin: down, for: port-13, group: port-leds,
+        rel-pos: 13}
+      - {ref: common/led-arrow-sm@1, id: led-port-14, at: [118.19, 14.17], skin: up, for: port-14, group: port-leds,
+        rel-pos: 14}
+      - {ref: common/led-arrow-sm@1, id: led-port-15, at: [122.09, 14.17], skin: down, for: port-15, group: port-leds,
+        rel-pos: 15}
+      - {ref: common/led-arrow-sm@1, id: led-port-16, at: [135.03, 14.17], skin: up, for: port-16, group: port-leds,
+        rel-pos: 16}
+      - {ref: common/led-arrow-sm@1, id: led-port-17, at: [138.93, 14.17], skin: down, for: port-17, group: port-leds,
+        rel-pos: 17}
+      - {ref: common/led-arrow-sm@1, id: led-port-18, at: [149.28, 14.17], skin: up, for: port-18, group: port-leds,
+        rel-pos: 18}
+      - {ref: common/led-arrow-sm@1, id: led-port-19, at: [153.18, 14.17], skin: down, for: port-19, group: port-leds,
+        rel-pos: 19}
+      - {ref: common/led-arrow-sm@1, id: led-port-20, at: [163.53, 14.17], skin: up, for: port-20, group: port-leds,
+        rel-pos: 20}
+      - {ref: common/led-arrow-sm@1, id: led-port-21, at: [167.43, 14.17], skin: down, for: port-21, group: port-leds,
+        rel-pos: 21}
+      - {ref: common/led-arrow-sm@1, id: led-port-22, at: [177.78, 14.17], skin: up, for: port-22, group: port-leds,
+        rel-pos: 22}
+      - {ref: common/led-arrow-sm@1, id: led-port-23, at: [181.68, 14.17], skin: down, for: port-23, group: port-leds,
+        rel-pos: 23}
+      - {ref: common/led-arrow-sm@1, id: led-port-24, at: [192.03, 14.17], skin: up, for: port-24, group: port-leds,
+        rel-pos: 24}
+      - {ref: common/led-arrow-sm@1, id: led-port-25, at: [195.93, 14.17], skin: down, for: port-25, group: port-leds,
+        rel-pos: 25}
+      - {ref: common/led-arrow-sm@1, id: led-port-26, at: [206.28, 14.17], skin: up, for: port-26, group: port-leds,
+        rel-pos: 26}
+      - {ref: common/led-arrow-sm@1, id: led-port-27, at: [210.18, 14.17], skin: down, for: port-27, group: port-leds,
+        rel-pos: 27}
+      - {ref: common/led-arrow-sm@1, id: led-port-28, at: [220.53, 14.17], skin: up, for: port-28, group: port-leds,
+        rel-pos: 28}
+      - {ref: common/led-arrow-sm@1, id: led-port-29, at: [224.43, 14.17], skin: down, for: port-29, group: port-leds,
+        rel-pos: 29}
+      - {ref: common/led-arrow-sm@1, id: led-port-30, at: [234.78, 14.17], skin: up, for: port-30, group: port-leds,
+        rel-pos: 30}
+      - {ref: common/led-arrow-sm@1, id: led-port-31, at: [238.68, 14.17], skin: down, for: port-31, group: port-leds,
+        rel-pos: 31}
+      - {ref: common/led-arrow-sm@1, id: led-port-32, at: [251.62, 14.17], skin: up, for: port-32, group: port-leds,
+        rel-pos: 32}
+      - {ref: common/led-arrow-sm@1, id: led-port-33, at: [255.52, 14.17], skin: down, for: port-33, group: port-leds,
+        rel-pos: 33}
+      - {ref: common/led-arrow-sm@1, id: led-port-34, at: [265.87, 14.17], skin: up, for: port-34, group: port-leds,
+        rel-pos: 34}
+      - {ref: common/led-arrow-sm@1, id: led-port-35, at: [269.77, 14.17], skin: down, for: port-35, group: port-leds,
+        rel-pos: 35}
+      - {ref: common/led-arrow-sm@1, id: led-port-36, at: [280.12, 14.17], skin: up, for: port-36, group: port-leds,
+        rel-pos: 36}
+      - {ref: common/led-arrow-sm@1, id: led-port-37, at: [284.02, 14.17], skin: down, for: port-37, group: port-leds,
+        rel-pos: 37}
+      - {ref: common/led-arrow-sm@1, id: led-port-38, at: [294.37, 14.17], skin: up, for: port-38, group: port-leds,
+        rel-pos: 38}
+      - {ref: common/led-arrow-sm@1, id: led-port-39, at: [298.27, 14.17], skin: down, for: port-39, group: port-leds,
+        rel-pos: 39}
+      - {ref: common/led-arrow-sm@1, id: led-port-40, at: [308.62, 14.17], skin: up, for: port-40, group: port-leds,
+        rel-pos: 40}
+      - {ref: common/led-arrow-sm@1, id: led-port-41, at: [312.52, 14.17], skin: down, for: port-41, group: port-leds,
+        rel-pos: 41}
+      - {ref: common/led-arrow-sm@1, id: led-port-42, at: [322.87, 14.17], skin: up, for: port-42, group: port-leds,
+        rel-pos: 42}
+      - {ref: common/led-arrow-sm@1, id: led-port-43, at: [326.77, 14.17], skin: down, for: port-43, group: port-leds,
+        rel-pos: 43}
+      - {ref: common/led-arrow-sm@1, id: led-port-44, at: [337.12, 14.17], skin: up, for: port-44, group: port-leds,
+        rel-pos: 44}
+      - {ref: common/led-arrow-sm@1, id: led-port-45, at: [341.02, 14.17], skin: down, for: port-45, group: port-leds,
+        rel-pos: 45}
+      - {ref: common/led-arrow-sm@1, id: led-port-46, at: [351.37, 14.17], skin: up, for: port-46, group: port-leds,
+        rel-pos: 46}
+      - {ref: common/led-arrow-sm@1, id: led-port-47, at: [355.27, 14.17], skin: down, for: port-47, group: port-leds,
+        rel-pos: 47}
+      - {ref: std/qsfp-ganged@1, id: port-48, at: [364.56, 2.71], group: qsfp28, rel-pos: 48}
+      - {ref: std/qsfp-ganged@1, id: port-49, at: [364.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 49}
+      - {ref: std/qsfp-ganged@1, id: port-50, at: [383.56, 2.71], group: qsfp28, rel-pos: 50}
+      - {ref: std/qsfp-ganged@1, id: port-51, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 51}
+      - {ref: std/qsfp-ganged@1, id: port-52, at: [364.56, 32.01], group: qsfp28, rel-pos: 52}
+      - {ref: std/qsfp-ganged@1, id: port-53, at: [383.56, 32.01], group: qsfp28, rel-pos: 53}
+      - {ref: common/led-dot@1, id: led-port-48, at: [370.31, 14.62], group: port-leds, rel-pos: 48, for: port-48}
+      - {ref: common/led-dot@1, id: led-port-49, at: [375.31, 14.62], group: port-leds, rel-pos: 49, for: port-49}
+      - {ref: common/led-dot@1, id: led-port-50, at: [389.31, 14.62], group: port-leds, rel-pos: 50, for: port-50}
+      - {ref: common/led-dot@1, id: led-port-51, at: [394.31, 14.62], group: port-leds, rel-pos: 51, for: port-51}
+      - {ref: common/led-rect@1, id: led-ps0, at: [16.57, 30.95], group: leds, rel-pos: 1, for: rear/psu-0}
+      - {ref: common/led-rect@1, id: led-ps1, at: [22.47, 30.95], group: leds, rel-pos: 2, for: rear/psu-1}
+      - {ref: common/led-rect@1, id: led-diag, at: [28.38, 30.95], group: leds, rel-pos: 3, for: chassis}
+      - {ref: common/led-rect@1, id: led-fan, at: [34.4, 30.95], group: leds, rel-pos: 4, for: [rear/fan-0,
+          rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5]}
+      - {ref: common/led-rect@1, id: led-loc, at: [40.52, 30.95], group: leds, rel-pos: 5, for: chassis}
+      - {ref: common/reset-button@1, id: reset, at: [48.4, 30.25], group: mgmt, rel-pos: 4, for: chassis}
+      - ref: std/usb-a@1
+        id: usb
+        at: [319.0, 33.15]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: usb-a, role: storage}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt-eth
+        at: [409.14, 3.6]
+        group: mgmt
+        rel-pos: 1
+        rotate: 180
+        attrs: {media: rj45, role: mgmt, speed: 100/1000base-t}
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [409.14, 15.7]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45-serial, role: console}
+    regions:
+    - id: status-leds
+      at: [15.5, 29.5]
+      size: {w: 44.0, h: 6.5}
+      label: System LEDs
+      members:
+      - led-ps0
+      - led-ps1
+      - led-diag
+      - led-fan
+      - led-loc
+      - reset
+    - id: mgmt-block
+      at: [405.5, 2.0]
+      size: {w: 21.0, h: 28.0}
+      label: Management
+      members:
+      - mgmt-eth
+      - console
+    - id: intake
+      at: [0, 0]
+      size: {w: 438.4, h: 44.0}
+      physical-context: Intake
+      label: Front airflow (intake - every published SKU is front-to-back)
+  rear:
+    size: {w: 438.4, h: 44.0}
+    panel:
+      cutouts:
+      - {id: ground-left, at: [4.4, 27.0], size: [7.0, 14.0], shape: rect}
+      - {id: ground-right, at: [426.9, 16.3], size: [7.0, 14.0], shape: rect}
+    silkscreen:
+    - {at: [7.9, 5.2], text: PS0, font-size: 1.6, anchor: middle, fill: '#e4e8eb', for: psu-0}
+    - {at: [430.4, 5.2], text: PS1, font-size: 1.6, anchor: middle, fill: '#e4e8eb', for: psu-1}
+    - {at: [119.63, 5.6], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-0}
+    - {at: [168.31, 5.6], text: '1', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-1}
+    - {at: [216.99, 5.6], text: '2', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-2}
+    - {at: [265.67, 5.6], text: '3', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-3}
+    - {at: [314.35, 5.6], text: '4', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-4}
+    - {at: [363.03, 5.6], text: '5', font-size: 1.8, anchor: middle, fill: '#e4e8eb', for: fan-5}
+    components:
+      bays:
+      - id: psu-0
+        at: [14.16, 2.0]
+        size: {w: 54.0, h: 40.0}
+        accepts:
+        - common/psu-ac-650@3
+        - common/psu-dc-650@2
+        default: common/psu-ac-650@3
+        group: psus
+        rel-pos: 0
+      - id: psu-1
+        at: [369.88, 2.0]
+        size: {w: 54.0, h: 40.0}
+        accepts:
+        - common/psu-ac-650@3
+        - common/psu-dc-650@2
+        default: common/psu-ac-650@3
+        group: psus
+        rel-pos: 1
+      - id: fan-0
+        at: [71.99, 2.0]
+        size: {w: 46.6, h: 40.0}
+        accepts:
+        - common/fan-module-46@1
+        default: common/fan-module-46@1
+        group: fans
+        rel-pos: 0
+      - id: fan-1
+        at: [120.67, 2.0]
+        size: {w: 46.6, h: 40.0}
+        accepts:
+        - common/fan-module-46@1
+        default: common/fan-module-46@1
+        group: fans
+        rel-pos: 1
+      - id: fan-2
+        at: [169.35, 2.0]
+        size: {w: 46.6, h: 40.0}
+        accepts:
+        - common/fan-module-46@1
+        default: common/fan-module-46@1
+        group: fans
+        rel-pos: 2
+      - id: fan-3
+        at: [218.03, 2.0]
+        size: {w: 46.6, h: 40.0}
+        accepts:
+        - common/fan-module-46@1
+        default: common/fan-module-46@1
+        group: fans
+        rel-pos: 3
+      - id: fan-4
+        at: [266.71, 2.0]
+        size: {w: 46.6, h: 40.0}
+        accepts:
+        - common/fan-module-46@1
+        default: common/fan-module-46@1
+        group: fans
+        rel-pos: 4
+      - id: fan-5
+        at: [315.39, 2.0]
+        size: {w: 46.6, h: 40.0}
+        accepts:
+        - common/fan-module-46@1
+        default: common/fan-module-46@1
+        group: fans
+        rel-pos: 5
+      placements:
+      - {ref: common/ground-lug@1, id: ground-left, at: [4.4, 27.0], group: grounding, rel-pos: 1}
+      - {ref: common/ground-lug@1, id: ground-right, at: [426.9, 16.3], group: grounding, rel-pos: 2}
+    regions:
+    - id: exhaust
+      at: [0, 0]
+      size: {w: 438.4, h: 44.0}
+      physical-context: Exhaust
+      label: Rear airflow (exhaust - every published SKU is front-to-back)
+  top:
+    size: {w: 438.4, h: 501.9}
+    empty: >-
+      Nothing is documented on the top of this chassis. agr110-datasheet/fig-0009 draws the front and
+      rear elevations only, the quick-start's figures are all three-quarter views of the front or rear,
+      and the three stock photographs are 489 x 357 px front, rear and angle. No lid label, vent field
+      or fastener pattern can be read from anything held, and none is invented.
+  bottom:
+    size: {w: 438.4, h: 501.9}
+    empty: >-
+      Nothing is documented on the underside. The quick-start's rack-mount section shows brackets being
+      fixed to the SIDES of the chassis and never shows the base, so not even the foot pattern is known.
+  left:
+    size: {w: 501.9, h: 44.0}
+    empty: >-
+      Nothing is documented on the left side beyond the bracket screw holes. The quick-start's section
+      2 draws brackets attached at the mid-point of the sides but dimensions no hole, and no figure held
+      shows a bare side panel.
+  right:
+    size: {w: 501.9, h: 44.0}
+    empty: >-
+      Nothing is documented on the right side. Same reasoning as the left; the two sides are assumed to
+      be alike only in that neither is drawn.
+configurations:
+  ac:
+    kind: base
+    default: true
+    description: >-
+      Two 650 W AC supplies and six fan trays, front-to-back. This is a fixed 1RU router, so the base
+      configuration is the box as it is bought - supplies and fans populated, cages empty.
+    part-numbers:
+      5916-54XL-O-AC-F-US: {power-cord: N. America}
+      5916-54XL-O-AC-F-EU: {power-cord: EU}
+      5916-54XL-O-AC-F-UK: {power-cord: UK}
+      5916-54XL-O-AC-F-JP: {power-cord: JP}
+      5916-54XL-O-AC-F-UN: {power-cord: unterminated}
+      5916-54XL-O-AC-F: {power-cord: none listed}
+    bays: {psu-0: common/psu-ac-650@3, psu-1: common/psu-ac-650@3}
+  dc:
+    kind: orderable
+    description: >-
+      Two -48 VDC supplies, otherwise the base box. The quick-start's DC procedure calls for #10 AWG wire
+      and the grounding kit's ring lugs, and the datasheet's input range is -36 to -72 VDC.
+    part-numbers:
+      5916-54XL-O-48V-F: {}
+    bays: {psu-0: common/psu-dc-650@2, psu-1: common/psu-dc-650@2}
+references:
+- title: Edgecore AGR110 / AS5916-54XL Data Sheet
+  sha256: 4a1cdf1314aa023e0bbd37e0b6d2ad3aac846221d81885e2b55406c38e9d6b19
+- title: Edgecore AS5916-54XKS | AS5916-54XL Quick Start Guide E052020-AP-R03
+  sha256: f3f600eee2a3e454664a820731c42af9f720776fcecaaa1c3a178815a7177e82
