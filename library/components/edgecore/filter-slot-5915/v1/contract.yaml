@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: filter-slot-5915
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: networking
+description: >-
+  The air-filter slot cover on the AS5915 cell-site gateways - the blanking
+  plate that ships in the filter bay at the left-hand end of the faceplate,
+  retained by two captive slotted thumbscrews. Removing it is step 1 of the
+  quick start's optional air-filter procedure; the filter assembly slides into
+  the same opening.
+size: {w: 27.6, h: 40.8}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {power-absent: not-applicable, airflow: side-to-side, model: 'AS5915 Air Filter Slot Cover'}
+provenance:
+  size: >-
+    photo-measured - Edgecore CSR200 (AS5915-18X) datasheet front elevation,
+    page 2 at 600 dpi scaled by the stated 440 mm width to 9.6341 px/mm. The
+    plate's own edge reads 0.6-28.2 horizontally, and the fastener rows put its
+    vertical extent at 1.6-42.4. It is the first feature on the face, so nothing
+    upstream of it constrains the reading.
+  fasteners: >-
+    photo-measured. The two captive screws read 4.23-10.37 and 32.68-38.39
+    vertically and 17.54-25.43 horizontally, so 7.0 across on centres 20.9/5.7
+    and 20.9/33.9 in the plate's own frame. The quick start corroborates the
+    count rather than the size: "Slide the air filter assembly into the slot and
+    secure it with its two captured screws" (csr200-qsg, step 9).
+  what-is-not-here: >-
+    THE FILTER ITSELF IS NOT MODELLED. Edgecore sells two accessories against
+    this bay - F0OEC5627002Z, an assembled module with the filter installed, and
+    F0OEC5627001Z, the frame for field replacement - and NEITHER IS PICTURED in
+    either staged document. Drawing a second face for the bay would be inventing
+    it, so the bay accepts this cover only and the device records the absence as
+    a gap. Add the filter module when a figure or photograph of it turns up.
+  power: >-
+    NOT APPLICABLE - a blanking plate draws nothing. Stated rather than left to
+    L27 so that a consumer totalling the chassis can tell a deliberate silence
+    from an unanswered question.
+elements:
+  plate: {at: [0.0, 0.0], size: [27.6, 40.8], class: filter}
+relief:
+  wall: '#2b2f33'
+  features:
+    - node: screws
+      out: 2.4
+      color: '#c3c9cf'
+      confidence: estimated
+      source: >-
+        edgecore/filter-slot-5915@1's own fasteners key - the elevation is a
+        front view and fixes the screws' diameter and centres but nothing about
+        how far their heads stand off the plate. 2.4 is a slotted captive head.
+skins: [default]

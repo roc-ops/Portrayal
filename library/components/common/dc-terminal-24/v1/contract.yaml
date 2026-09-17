@@ -1,0 +1,87 @@
+format: 1
+kind: component
+name: dc-terminal-24
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  Three-pole DC barrier terminal block with a hinged clear cover - the
+  screw-down -48 V input fitted to 1RU access and timing switches, where the
+  supply is landed on ring lugs rather than plugged in. Three screws on a 7.57
+  pitch behind a transparent guard; the pole names are silkscreened on the
+  faceplate BELOW the block, not moulded into it, so this part carries no
+  lettering and a device writes its own.
+unplaced: >-
+  the only device that carries this block is the Edgecore CSR180 (AS5915-16X), and the CSR180 is
+  not modelled yet - roc-ops/Portrayal#315. The part is here rather than waiting for it because
+  it is the EVIDENCE for a correction to common/dc-terminal-27@1: measuring these two blocks
+  against the CSR200's with one threshold is what showed the CSR200's own part had been sized
+  by eye and was wrong on both axes. Seating it needs the CSR180's faceplate, whose art is the
+  low-contrast honeycomb render described in this contract's `why-this-is-not-common-dc-terminal-27`.
+size: {w: 24.19, h: 13.81, d: 14.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs: {media: dc-terminal}
+provenance:
+  size: >-
+    photo-measured - Edgecore CSR180 (AS5915-16X) datasheet front elevation,
+    page 2 rendered at 600 dpi and scaled by the stated 440 mm body width to
+    9.6295 px/mm, thresholded against the panel background. The face carries two
+    of these and they read 24.19 x 13.81 BOTH, to the hundredth.
+  why-this-is-not-common-dc-terminal-27: >-
+    BECAUSE IT MEASURES DIFFERENT, AND THE ALTERNATIVE EXPLANATION WAS TESTED AND
+    FAILED. The CSR200 is the same 440 x 240 x 44 shell from the same vendor with
+    the same 48 VDC 6 A rating, and its two blocks read 26.98 x 16.08 and
+    26.88 x 15.87 on an 8.36 pole pitch - about 11 percent larger in both axes
+    than these, whose pitch is 7.57. Four instances, one threshold, one script.
+    THE OBVIOUS EXPLANATION IS THAT ONE FIGURE IS A PERSPECTIVE RENDER, and it is
+    not: panel height sampled along x is flat on both, 425-419 px across the
+    CSR200 and 425-430 across the CSR180, where a camera close enough to shrink a
+    part by 11 percent would leave a monotonic taper. And every other shared
+    feature agrees to about a millimetre - the SFP cage pitch reads 14.22 on the
+    CSR200 and 14.21 on the CSR180 against the registry's 14.25, and the system
+    lamp row, the coax jacks and the management stacks all land together.
+    So two parts, said plainly, on a measurement that a single vendor part number
+    could overturn. Neither document names one.
+  pitch: >-
+    photo-measured - the three bright pole faces read 45.63/53.11/60.90 on the
+    left block and 84.47/91.74/99.48 on the right, giving four gaps of 7.48,
+    7.79, 7.27 and 7.74. 7.57 is their mean. It is NOT rounded to a catalogue
+    pitch, because no catalogue entry is in hand to round to.
+  depth: >-
+    estimated. The elevation is a front view and fixes nothing behind the face.
+    14.0 is what a 3-pole barrier strip with a hinged guard needs to clear a ring
+    lug; it is borrowed from common/dc-terminal-27@1, which estimated it too, and
+    nothing in the library depends on it.
+  cover: >-
+    borrowed - common/dc-terminal-27@1. The two blocks are the same design at two
+    sizes: a bright guard over a darker body with three screws resolving through
+    it, which is what clear polycarbonate over metal looks like at this scale.
+elements:
+  pole-1: {at: [2.55, 3.3], size: [4.2, 7.2], class: terminal}
+  pole-2: {at: [10.12, 3.3], size: [4.2, 7.2], class: terminal}
+  pole-3: {at: [17.69, 3.3], size: [4.2, 7.2], class: terminal}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: body
+      out: 9.0
+      shape: true
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own depth key - the elevation is a front view
+        and dimensions nothing behind the face. The block is split 9.0 body plus
+        a 5.0 guard to make 14.0 because a barrier strip's guard is a lid on a
+        shorter body, not the whole part; neither figure is read from anything.
+    - node: cover
+      out: 14.0
+      lift: 9.0
+      color: '#d2d7dc'
+      confidence: estimated
+      source: >-
+        common/dc-terminal-24@1's own depth key - see `body`. 5.0 of guard above a
+        9.0 body, estimated to sum to the estimated 14.0.
+connection-points:
+  dc-in: {at: [12.10, 6.91], direction: front}
+skins: [default]

@@ -274,6 +274,14 @@ PART_POWER = {
     # type in netbox and nautobot alike; the part is the -48 V receptacle taking
     # Dell 6RYJ9, which is why it is a dell/ part and not a std/ one.
     "dell/dc-terminal-6ryj9": "dc-terminal",
+    # AND SO DOES A FIXED-SUPPLY CHASSIS, where the terminal block IS the inlet
+    # and there is no module between it and the metal. The Edgecore CSR200 and
+    # CSR180 land -48 V on two three-pole barrier strips bolted to the faceplate,
+    # so the same `dc-terminal` row applies for the same reason it applies to the
+    # Dell receptacle - it is where a supply's wire is landed, and upstream has a
+    # name for exactly that.
+    "common/dc-terminal-27": "dc-terminal",
+    "common/dc-terminal-24": "dc-terminal",
     # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
     # this takes `other` - the treatment PART_RF gives an SMB timing input, which
     # says "a thing this schema has no name for" instead of naming a neighbour.
