@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 2.0.0
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -216,32 +216,41 @@ provenance:
       9.1 px/mm the datasheet render prints their band under the callout highlighting. It is recorded
       as a gap. Which of the two columns is the lower number, and whether the separate bottom row continues
       the sequence or precedes it, are the same question and have the same answer: a photograph.
-  qsfp-leds:
+  uplink-numbering:
+    confidence: drawing
+    note: >-
+      drawing - THE SIX QSFP28 UPLINKS CARRY THEIR OWN 0-BASED SEQUENCE, 0 to 5, and the evidence is the
+      yellow bars. Each bar is printed with a single numeral and a reader of better photographs than this
+      corpus holds reports them as 0, 1, 2, 3, 4 and 5 left to right. Six labels, six uplinks. That is
+      why these ports are `uplink-0` to `uplink-5` here and not a continuation of the SFP+ block's 0-47:
+      two families, each numbered from zero, which is what the vendor's own ordering line calls them -
+      "48-Port 10G with 6 x 100G QSFP28 Uplinks". WHICH BAR NAMES WHICH CAGE IS NOT READ. The cages are
+      numbered here in the obvious order - down the first column, down the second, then the separate bottom
+      row left to right - and that ordering is an assumption, recorded as a gap. The labels on the yellow
+      bracket between the block's second and third rows are the vendor's own answer to it and neither
+      document resolves them.
+  uplink-leds:
     confidence: measured
     note: >-
-      measured, and THE GUIDE AND THE ARTWORK DO NOT AGREE. The guide says, in words, "Each QSFP28 port
-      has four LEDs that indicate valid links in the following modes" (agr110-qsg/doc.md:174), and then
-      lists 1 green for 100G, 1 blue for 40G, 1-4 amber for 25G breakout and 1-4 purple for 10G breakout.
-      The figure shows something that cannot be squared with that. What the figure shows, measured the
-      same way in both dividers of the QSFP block: FOUR marks per column in the white bezel between rows
-      1 and 2, at 368.61, 371.94, 375.88 and 378.94 mm for the left column and 388.35, 391.19, 395.57
-      and 398.74 for the right; and about four more per column on the yellow bar between rows 2 and 3.
-      That is sixteen marks for six ports, and sixteen does not divide by six at any consistent per-port
-      count. Four per port would need twenty-four. SO ONLY THE UNAMBIGUOUS SET IS DRAWN. The white bezel's
-      four per column are clean, separated and consistent between the two columns, and they are placed
-      as a cluster belonging to BOTH ports of their column - `for: [port-48, port-49]` and `for: [port-50,
-      port-51]` - because which lamp serves which of the two ports the divider sits between is exactly
-      what the image does not say. The yellow bar's marks are NOT drawn: at 0.8 to 1.6 mm wide and as
-      little as 1.1 mm apart they are below what this figure resolves as separate lamps, and the library's
-      smallest lamp is 2.0 mm, so drawing them produced overlapping openings that L39 rejected - correctly.
-      Their positions are recorded in the gap instead. AN EARLIER DRAFT ASSERTED FOUR PER PORT and assigned
-      the white bezel's four to the upper port alone. That was reading the guide's sentence onto the drawing
-      rather than reading the drawing: it left ports 49, 51, 52 and 53 with no lamps at all and never
-      noticed that the second divider carried marks too. A reader of the render caught it. NOTE WHAT WAS
-      NOT USED. common/qsfp-lane-leds@1 is the library's four-triangle strip and would have been the tidy
-      answer, but it is 19.5 mm wide on a 4.4 mm lane pitch, drawing inferred from a UfiSpace HIG. Seating
-      it here would have restated that vendor's geometry as this one's. The states are the guide's, quoted
-      in attrs.
+      measured, and this is what makes the guide's sentence come out right at last. "Each QSFP28 port
+      has four LEDs that indicate valid links" (agr110-qsg/doc.md:174) needs twenty-four lamps, and twenty-four
+      is exactly what is there - FOUR IN A ROW ABOVE EACH YELLOW LABEL BAR, three hundred millimetres
+      from the cages they belong to. Two earlier drafts failed on this because both looked for the lamps
+      at the ports. The first drew one per port in the block's bezel; the second found four marks per
+      column in each of the block's two dividers, could not make sixteen divide by six, and recorded the
+      contradiction as a gap. Neither considered that a port's lamps might not be beside it. A reader
+      of the render, working from better photographs, saw that each bar has four lamps over it and that
+      the bars number the uplinks - which resolves the lamp count, the bar content and the uplink numbering
+      in one reading. Positions by a four-lamp comb fit per bar: pitch 5.70 to 5.97 mm, mean 5.83, first
+      lamp about 3.4 mm inside the bar's left edge; row centred 31.4 mm, between the port numerals above
+      and the bar below. States from the guide: 1 green 100G, 1 blue 40G, 1-4 amber 25G breakout, 1-4
+      purple 10G breakout - the count lit IS the lane count, which is why a bar's worth of lamps is per
+      uplink and not per SFP+ port. THE BLOCK'S OWN BEZEL IS NOT FOUR LAMPS EITHER. Its four marks per
+      column read, outside in, as an up arrow, the upper port's lamp, the lower port's lamp and a down
+      arrow - the same `(up)(down)` row idiom the SFP+ numerals use, and the outer two are silkscreen
+      rather than lit. So the bezel carries one status lamp per uplink and the lane lamps live over the
+      bars. NOT DRAWN: the bottom two uplinks' status lamps, which sit to the LEFT of the lower-left cage
+      rather than in a divider, and are not resolved at 9.1 px/mm - see gaps.
   yellow-label-strips:
     confidence: measured
     note: >-
@@ -262,15 +271,21 @@ provenance:
       a 0.8 mm-wide closed yellow rectangle runs around the whole QSFP block from y 26 to 41.9 in the
       datasheet figure and appears nowhere in the quick-start's art. Uniform hairline width, closed on
       all four sides, present in only the document that has callouts - that is callout 2's box, and it
-      is highlighting. SIX BARS, NOT TWELVE STRIPS. A first pass read each one as a PAIR of ~10 mm strips
-      with a 1.2 mm gap, because the colour run breaks in the middle - and what breaks it is the small
-      dark glyph printed at the bar's centre, not metal. Seen at 1.5x beside the reference the bars are
-      plainly continuous. That is the same trap as measuring a drawing rather than a feature: the detector
-      found an absence of yellow and the absence was ink. So: six bars about 21.0 mm wide at 134.87, 164.73,
-      194.59, 224.45, 254.31 and 284.61 mm, band y 32.40-35.40, on a 29.87 mm pitch, each sitting under
-      exactly two port columns; a seventh, 18.3 mm wide, at 345.32 in the same band, which carries no
-      glyph; and an eighth at 363.80, 40.2 mm wide, in a HIGHER band at 28.80-31.80, which is the bar
-      running between the QSFP block's second and third rows. WHAT THE GLYPHS SAY IS NOT READ - see gaps.
+      is highlighting. WHAT THE BARS ARE: the QSFP28 uplink port labels, one per uplink, numbered 0 to
+      5, each with that uplink's four lane lamps in a row directly above it. See `uplink-numbering` and
+      `uplink-leds`. This was open for three drafts - first dismissed as datasheet highlighting, then
+      modelled as unexplained yellow rectangles with their meaning gapped - and what settled it was a
+      reader with better photographs noticing the four lamps above each bar. The pattern the earlier drafts
+      kept circling and could not close, six labels for six of something, was six uplinks all along. SIX
+      BARS, NOT TWELVE STRIPS. A first pass read each one as a PAIR of ~10 mm strips with a 1.2 mm gap,
+      because the colour run breaks in the middle - and what breaks it is the small dark glyph printed
+      at the bar's centre, not metal. Seen at 1.5x beside the reference the bars are plainly continuous.
+      That is the same trap as measuring a drawing rather than a feature: the detector found an absence
+      of yellow and the absence was ink. So: six bars about 21.0 mm wide at 134.87, 164.73, 194.59, 224.45,
+      254.31 and 284.61 mm, band y 32.40-35.40, on a 29.87 mm pitch, each sitting under exactly two port
+      columns; a seventh, 18.3 mm wide, at 345.32 in the same band, which carries no glyph; and an eighth
+      at 363.80, 40.2 mm wide, in a HIGHER band at 28.80-31.80, which is the bar running between the QSFP
+      block's second and third rows. WHAT THE GLYPHS SAY IS NOT READ - see gaps.
   vents:
     confidence: measured
     note: >-
@@ -455,57 +470,29 @@ gaps:
     management jacks. Rendering the page at 1600 dpi does not help either, because the figure is a raster
     at its own limited resolution and upscaling it recovers nothing. A straight-on photograph of the right-hand
     40 mm of the front panel settles it.
-- what: yellow-label-strip-content
+- what: uplink-bar-to-cage-mapping
   scope:
   - front
   reason: needs-photo
   wanted: >-
-    FOURTEEN YELLOW LABEL STRIPS ARE DRAWN AND NOBODY KNOWS WHAT THEY SAY. Their positions are measured
-    and corroborated between the datasheet elevation and the quick-start's page-1 art, and each carries
-    small dark printing that neither document resolves - the datasheet figure is a raster at its own limited
-    resolution, so rendering its page at 1600 dpi recovers nothing beyond the 600 dpi read. What is known
-    about the pattern: six evenly spaced bars from 134.9 to 305.6 mm, each about 21 mm wide with ONE small
-    glyph at its centre, each sitting under exactly two port columns, on a 29.87 mm pitch - so the six
-    cover all eight columns of the second SFP+ block and the first four of the third. The run then stops
-    where the USB port interrupts the band, and resumes as a single wider strip at 345.3. A fourteenth
-    sits higher, between the QSFP block's second and third rows. The first block of ports carries none,
-    because the system LEDs and the Reset pinhole occupy that band. A reader of the rendered viewer reports
-    they look like they read 0, 1, 2, 3, 4 and 5, which would make six labels for six things - and this
-    device has exactly six QSFP28 ports. That is a hypothesis and it is written down as one; six bars
-    under the SFP+ cages would be an odd place to number the QSFP ports, and nothing held confirms or
-    refutes it. THE DOCUMENTS WERE SEARCHED AND THEY DO NOT SAY. Not "not in the one I looked in": the
-    whole staged Edgecore corpus, 72 converted documents, was searched for `yellow`, `port group`, `group`,
-    `label`, `marking`, `breakout` and `colour-coded`. This model's datasheet returns nothing for any
-    of them, its quick start guide returns only the lamp colours, and NO HARDWARE INSTALLATION GUIDE EXISTS
-    FOR IT - none is staged for any Edgecore model, and the intake's own handoff note puts the full install
-    guides behind support.edge-core.com. ONE LEAD, FROM A DIFFERENT MODEL. The DCS203 (AS7326-56X) quick
-    start guide is the only document in the corpus that uses the phrase: "All SFP28 ports (1-48) in the
-    same port group must be set to the same speed (25G or 10G)", followed by twelve groups of four (dcs203-qsg/doc.md:161-177).
-    So this vendor does mark four-port speed groups on a 48-port 1RU faceplate, and each bar here does
-    span exactly two columns, which is four ports. But the counts do not line up - twelve groups there,
-    six bars here - and the bars cover only the second SFP+ block and half the third, leaving the first
-    block and the last four columns unmarked. It is a lead and it is recorded as one, not as the answer.
-    What settles it: a straight-on photograph of the faceplate between 130 and 310 mm, or the AS5916-54XL
-    installation guide from support.edge-core.com.
-- what: qsfp-lamp-assignment
+    The six yellow bars name the six QSFP28 uplinks 0 to 5, and each carries its uplink's four lane lamps
+    - that much is settled. WHICH BAR NAMES WHICH CAGE IS NOT. The cages are numbered here down the first
+    column, down the second, then the separate bottom row left to right, which is the obvious order and
+    not a reading. The vendor answers it on the face: the yellow bracket between the block's second and
+    third rows carries labels identifying the bottom pair, measured at 371.29, 373.69, 376.32 and 378.07
+    mm for the left cage and 391.19, 394.69 and 397.81 for the right, and neither document resolves what
+    they say. A straight-on photograph of the right-hand 50 mm of the faceplate reads them.
+- what: uplink-status-lamps-bottom-pair
   scope:
   - front
-  reason: sources-disagree
+  reason: needs-photo
   wanted: >-
-    THE GUIDE SAYS FOUR LAMPS PER QSFP28 PORT AND THE ARTWORK SHOWS SIXTEEN MARKS FOR SIX PORTS. "Each
-    QSFP28 port has four LEDs" (agr110-qsg/doc.md:174) needs twenty-four. The figure shows four marks
-    per column in the white bezel between rows 1 and 2, and about four more per column on the yellow bracket
-    between rows 2 and 3 - sixteen, which divides by six at no consistent per-port count. Drawn: the white
-    bezel's eight, as two clusters of four, each belonging to both ports of its column, because which
-    lamp serves which of the two the divider sits between is not resolved. Not drawn: the bracket's marks,
-    measured at 371.29, 373.69, 376.32 and 378.07 mm for the left column and 391.19, 394.69 and 397.81
-    for the right - three resolved there, the fourth lost in the bracket's own edge. They are 0.8 to 1.6
-    mm wide and as little as 1.1 mm apart, which is narrower and closer than the library's smallest lamp
-    at 2.0 mm, so drawing them punched overlapping openings. A reader of the render reports these as the
-    lamps for the bottom pair of ports, which is plausible and is not what the drawing proves. Three questions,
-    one photograph: how many lamps each QSFP28 port really has, which divider serves which port, and whether
-    the bracket's marks are lamps at all rather than printing on the label. A straight-on shot of the
-    right-hand 50 mm of the faceplate answers all three.
+    Each uplink has a status lamp as well as its four lane lamps, and four of the six are placed: they
+    sit in the block's upper bezel, one per port, flanked by a silkscreen up and down arrow in the same
+    `(up)(down)` idiom the SFP+ numerals use. The bottom pair's are NOT placed. A reader reports them
+    to the LEFT of the lower-left cage rather than in a divider, which is where the yellow bracket's left
+    leg runs (359.4 to 364.6 mm), and nothing at 9.1 px/mm separates a lamp there from the bracket's own
+    edge. Mirroring the upper pattern downward would be a guess about a place the evidence does not reach.
 - what: rear-grounding-points
   scope:
   - rear
@@ -667,20 +654,40 @@ views:
       - {id: led-port-46, at: [351.37, 14.17], size: [2.25, 2.0], shape: circle}
       - {id: port-47, at: [347.32, 17.47], size: [14.25, 10.4], shape: rect}
       - {id: led-port-47, at: [355.27, 14.17], size: [2.25, 2.0], shape: circle}
-      - {id: port-48, at: [364.56, 2.71], size: [18.5, 9.58], shape: rect}
-      - {id: port-49, at: [364.56, 18.91], size: [18.5, 9.58], shape: rect}
-      - {id: port-50, at: [383.56, 2.71], size: [18.5, 9.58], shape: rect}
-      - {id: port-51, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
-      - {id: port-52, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
-      - {id: port-53, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
-      - {id: led-qsfp-48-49-1, at: [367.61, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-48-49-2, at: [370.94, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-48-49-3, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-48-49-4, at: [377.94, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-50-51-1, at: [387.35, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-50-51-2, at: [390.19, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-50-51-3, at: [394.57, 14.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-qsfp-50-51-4, at: [397.74, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: uplink-0, at: [364.56, 2.71], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-1, at: [364.56, 18.91], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-2, at: [383.56, 2.71], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-3, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-4, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-5, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
+      - {id: led-uplink-0, at: [370.94, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1, at: [374.88, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-2, at: [390.19, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-3, at: [394.57, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-lane-1, at: [137.22, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-lane-2, at: [143.04, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-lane-3, at: [148.86, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-lane-4, at: [154.68, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1-lane-1, at: [166.78, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1-lane-2, at: [172.75, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1-lane-3, at: [178.72, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1-lane-4, at: [184.69, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-2-lane-1, at: [196.64, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-2-lane-2, at: [202.52, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-2-lane-3, at: [208.4, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-2-lane-4, at: [214.28, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-3-lane-1, at: [227.05, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-3-lane-2, at: [232.8, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-3-lane-3, at: [238.55, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-3-lane-4, at: [244.3, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-4-lane-1, at: [257.01, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-4-lane-2, at: [262.71, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-4-lane-3, at: [268.41, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-4-lane-4, at: [274.11, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-5-lane-1, at: [286.76, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-5-lane-2, at: [292.61, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-5-lane-3, at: [298.46, 30.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-5-lane-4, at: [304.31, 30.4], size: [2.0, 2.0], shape: circle}
       - {id: led-ps0, at: [16.57, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-ps1, at: [22.47, 30.95], size: [4.6, 2.6], shape: rect}
       - {id: led-diag, at: [28.38, 30.95], size: [4.6, 2.6], shape: rect}
@@ -739,6 +746,14 @@ views:
     - {at: [343.2, 29.6], text: '45', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-45}
     - {at: [351.45, 29.6], text: '46', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-46}
     - {at: [357.45, 29.6], text: '47', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-47}
+    - {at: [368.61, 15.9], fill: '#1a1d1f', for: uplink-0, path: M -0.75 0.66675 L 0.75 0.66675 L 0 -0.66675
+        Z, filled: true}
+    - {at: [378.94, 15.9], fill: '#1a1d1f', for: uplink-1, path: M -0.75 -0.66675 L 0.75 -0.66675 L 0
+        0.66675 Z, filled: true}
+    - {at: [388.35, 15.9], fill: '#1a1d1f', for: uplink-2, path: M -0.75 0.66675 L 0.75 0.66675 L 0 -0.66675
+        Z, filled: true}
+    - {at: [398.74, 15.9], fill: '#1a1d1f', for: uplink-3, path: M -0.75 -0.66675 L 0.75 -0.66675 L 0
+        0.66675 Z, filled: true}
     - at: [21.52, 29.6]
       fill: '#e4e8eb'
       for:
@@ -1087,28 +1102,184 @@ views:
         rel-pos: 46}
       - {ref: common/led-arrow-sm@1, id: led-port-47, at: [355.27, 14.17], skin: down, for: port-47, group: port-leds,
         rel-pos: 47}
-      - {ref: std/qsfp-ganged@1, id: port-48, at: [364.56, 2.71], group: qsfp28, rel-pos: 48}
-      - {ref: std/qsfp-ganged@1, id: port-49, at: [364.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 49}
-      - {ref: std/qsfp-ganged@1, id: port-50, at: [383.56, 2.71], group: qsfp28, rel-pos: 50}
-      - {ref: std/qsfp-ganged@1, id: port-51, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 51}
-      - {ref: std/qsfp-ganged@1, id: port-52, at: [364.56, 32.01], group: qsfp28, rel-pos: 52}
-      - {ref: std/qsfp-ganged@1, id: port-53, at: [383.56, 32.01], group: qsfp28, rel-pos: 53}
-      - {ref: common/led-dot@1, id: led-qsfp-48-49-1, at: [367.61, 14.6], group: port-leds, rel-pos: 481,
-        for: [port-48, port-49]}
-      - {ref: common/led-dot@1, id: led-qsfp-48-49-2, at: [370.94, 14.6], group: port-leds, rel-pos: 482,
-        for: [port-48, port-49]}
-      - {ref: common/led-dot@1, id: led-qsfp-48-49-3, at: [374.88, 14.6], group: port-leds, rel-pos: 483,
-        for: [port-48, port-49]}
-      - {ref: common/led-dot@1, id: led-qsfp-48-49-4, at: [377.94, 14.6], group: port-leds, rel-pos: 484,
-        for: [port-48, port-49]}
-      - {ref: common/led-dot@1, id: led-qsfp-50-51-1, at: [387.35, 14.6], group: port-leds, rel-pos: 485,
-        for: [port-50, port-51]}
-      - {ref: common/led-dot@1, id: led-qsfp-50-51-2, at: [390.19, 14.6], group: port-leds, rel-pos: 486,
-        for: [port-50, port-51]}
-      - {ref: common/led-dot@1, id: led-qsfp-50-51-3, at: [394.57, 14.6], group: port-leds, rel-pos: 487,
-        for: [port-50, port-51]}
-      - {ref: common/led-dot@1, id: led-qsfp-50-51-4, at: [397.74, 14.6], group: port-leds, rel-pos: 488,
-        for: [port-50, port-51]}
+      - {ref: std/qsfp-ganged@1, id: uplink-0, at: [364.56, 2.71], group: qsfp28, rel-pos: 0}
+      - {ref: std/qsfp-ganged@1, id: uplink-1, at: [364.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 1}
+      - {ref: std/qsfp-ganged@1, id: uplink-2, at: [383.56, 2.71], group: qsfp28, rel-pos: 2}
+      - {ref: std/qsfp-ganged@1, id: uplink-3, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 3}
+      - {ref: std/qsfp-ganged@1, id: uplink-4, at: [364.56, 32.01], group: qsfp28, rel-pos: 4}
+      - {ref: std/qsfp-ganged@1, id: uplink-5, at: [383.56, 32.01], group: qsfp28, rel-pos: 5}
+      - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.6], group: port-leds, rel-pos: 0, for: uplink-0}
+      - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.6], group: port-leds, rel-pos: 1, for: uplink-1}
+      - {ref: common/led-dot@1, id: led-uplink-2, at: [390.19, 14.6], group: port-leds, rel-pos: 2, for: uplink-2}
+      - {ref: common/led-dot@1, id: led-uplink-3, at: [394.57, 14.6], group: port-leds, rel-pos: 3, for: uplink-3}
+      - ref: common/led-dot@1
+        id: led-uplink-0-lane-1
+        at: [137.22, 30.4]
+        group: port-leds
+        rel-pos: 101
+        for: uplink-0
+        attrs: {lane: 1}
+      - ref: common/led-dot@1
+        id: led-uplink-0-lane-2
+        at: [143.04, 30.4]
+        group: port-leds
+        rel-pos: 102
+        for: uplink-0
+        attrs: {lane: 2}
+      - ref: common/led-dot@1
+        id: led-uplink-0-lane-3
+        at: [148.86, 30.4]
+        group: port-leds
+        rel-pos: 103
+        for: uplink-0
+        attrs: {lane: 3}
+      - ref: common/led-dot@1
+        id: led-uplink-0-lane-4
+        at: [154.68, 30.4]
+        group: port-leds
+        rel-pos: 104
+        for: uplink-0
+        attrs: {lane: 4}
+      - ref: common/led-dot@1
+        id: led-uplink-1-lane-1
+        at: [166.78, 30.4]
+        group: port-leds
+        rel-pos: 111
+        for: uplink-1
+        attrs: {lane: 1}
+      - ref: common/led-dot@1
+        id: led-uplink-1-lane-2
+        at: [172.75, 30.4]
+        group: port-leds
+        rel-pos: 112
+        for: uplink-1
+        attrs: {lane: 2}
+      - ref: common/led-dot@1
+        id: led-uplink-1-lane-3
+        at: [178.72, 30.4]
+        group: port-leds
+        rel-pos: 113
+        for: uplink-1
+        attrs: {lane: 3}
+      - ref: common/led-dot@1
+        id: led-uplink-1-lane-4
+        at: [184.69, 30.4]
+        group: port-leds
+        rel-pos: 114
+        for: uplink-1
+        attrs: {lane: 4}
+      - ref: common/led-dot@1
+        id: led-uplink-2-lane-1
+        at: [196.64, 30.4]
+        group: port-leds
+        rel-pos: 121
+        for: uplink-2
+        attrs: {lane: 1}
+      - ref: common/led-dot@1
+        id: led-uplink-2-lane-2
+        at: [202.52, 30.4]
+        group: port-leds
+        rel-pos: 122
+        for: uplink-2
+        attrs: {lane: 2}
+      - ref: common/led-dot@1
+        id: led-uplink-2-lane-3
+        at: [208.4, 30.4]
+        group: port-leds
+        rel-pos: 123
+        for: uplink-2
+        attrs: {lane: 3}
+      - ref: common/led-dot@1
+        id: led-uplink-2-lane-4
+        at: [214.28, 30.4]
+        group: port-leds
+        rel-pos: 124
+        for: uplink-2
+        attrs: {lane: 4}
+      - ref: common/led-dot@1
+        id: led-uplink-3-lane-1
+        at: [227.05, 30.4]
+        group: port-leds
+        rel-pos: 131
+        for: uplink-3
+        attrs: {lane: 1}
+      - ref: common/led-dot@1
+        id: led-uplink-3-lane-2
+        at: [232.8, 30.4]
+        group: port-leds
+        rel-pos: 132
+        for: uplink-3
+        attrs: {lane: 2}
+      - ref: common/led-dot@1
+        id: led-uplink-3-lane-3
+        at: [238.55, 30.4]
+        group: port-leds
+        rel-pos: 133
+        for: uplink-3
+        attrs: {lane: 3}
+      - ref: common/led-dot@1
+        id: led-uplink-3-lane-4
+        at: [244.3, 30.4]
+        group: port-leds
+        rel-pos: 134
+        for: uplink-3
+        attrs: {lane: 4}
+      - ref: common/led-dot@1
+        id: led-uplink-4-lane-1
+        at: [257.01, 30.4]
+        group: port-leds
+        rel-pos: 141
+        for: uplink-4
+        attrs: {lane: 1}
+      - ref: common/led-dot@1
+        id: led-uplink-4-lane-2
+        at: [262.71, 30.4]
+        group: port-leds
+        rel-pos: 142
+        for: uplink-4
+        attrs: {lane: 2}
+      - ref: common/led-dot@1
+        id: led-uplink-4-lane-3
+        at: [268.41, 30.4]
+        group: port-leds
+        rel-pos: 143
+        for: uplink-4
+        attrs: {lane: 3}
+      - ref: common/led-dot@1
+        id: led-uplink-4-lane-4
+        at: [274.11, 30.4]
+        group: port-leds
+        rel-pos: 144
+        for: uplink-4
+        attrs: {lane: 4}
+      - ref: common/led-dot@1
+        id: led-uplink-5-lane-1
+        at: [286.76, 30.4]
+        group: port-leds
+        rel-pos: 151
+        for: uplink-5
+        attrs: {lane: 1}
+      - ref: common/led-dot@1
+        id: led-uplink-5-lane-2
+        at: [292.61, 30.4]
+        group: port-leds
+        rel-pos: 152
+        for: uplink-5
+        attrs: {lane: 2}
+      - ref: common/led-dot@1
+        id: led-uplink-5-lane-3
+        at: [298.46, 30.4]
+        group: port-leds
+        rel-pos: 153
+        for: uplink-5
+        attrs: {lane: 3}
+      - ref: common/led-dot@1
+        id: led-uplink-5-lane-4
+        at: [304.31, 30.4]
+        group: port-leds
+        rel-pos: 154
+        for: uplink-5
+        attrs: {lane: 4}
       - {ref: common/led-rect@1, id: led-ps0, at: [16.57, 30.95], group: leds, rel-pos: 1, for: rear/psu-0}
       - {ref: common/led-rect@1, id: led-ps1, at: [22.47, 30.95], group: leds, rel-pos: 2, for: rear/psu-1}
       - {ref: common/led-rect@1, id: led-diag, at: [28.38, 30.95], group: leds, rel-pos: 3, for: chassis}
