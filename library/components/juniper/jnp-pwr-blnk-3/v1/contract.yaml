@@ -11,11 +11,15 @@ description: >-
 attrs:
   model: JNP-PWR-BLNK-3
 provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
+    that fills an opening: it has no indicator to light and no condition to report,
+    so `ok` was a state the viewer generated CSS for, offered as a control, and could
+    never show - this part draws no elements at all. `absent` stays, because an empty
+    slot is a real thing to draw. See roc-ops/Portrayal#269.
   size: 'registry + layout - the PSM bay geometry; the guide names the
     part but does not dimension it separately'
-states:
-- ok
-- absent
+states: [absent]
 size:
   w: 86.7
   h: 41.4
