@@ -467,6 +467,83 @@ def _natural(name):
                  for t in re.split(r"(\d+)", str(name or "")))
 
 
+# THE DESCRIPTION FIELD IS 200 CHARACTERS AND THE CUT USED TO LAND WHEREVER IT
+# LANDED. 266 exported descriptions across the two trees ended mid-word - "120
+# Gbps of fab", "a red 'E' exh", "a9k-40ge-l, a" - and that is what a DCIM user
+# reads on the device-type page, with no way to tell a truncation from a typo
+# (#187).
+#
+# ASCII "...", NOT AN ELLIPSIS CHARACTER. Every byte of the two export trees is
+# ASCII today; introducing one non-ASCII character here would make this the file
+# that broke that, for one glyph's worth of neatness.
+LIMIT = 200
+MORE = "..."
+
+
+def first_sentence(text):
+    """The first sentence, with any issue citation taken off the end.
+
+    A CITATION IS A FACT ABOUT OUR MODEL, NOT ABOUT THE HARDWARE. `(#34)` on a
+    device-type page means nothing to the person reading it, and the sentence it
+    sits in is carried whole in `comments` a few lines below - so the reference
+    is not lost, it is where a reader who wants it will be. One description in
+    the library ends this way today; the rule is here so the next one does not
+    have to be noticed (#187).
+    """
+    text = " ".join(str(text or "").split())
+    # A SENTENCE ENDS WITH A DOT AND A SPACE, OR WITH THE TEXT. `split(".")[0]`
+    # ends it at the first dot of any kind, and 62 descriptions in the library
+    # contain a decimal before their first full stop: the MX104's device-type
+    # page read "Juniper MX104 - a 3", the MX480's "an 8RU, 7", the S9321-64E's
+    # "Tomahawk5 BCM78900 at 51". That is a worse cut than the mid-word one
+    # #187 was filed for, and it was on the same line.
+    m = re.search(r"\.(?:\s|$)", text)
+    first = text[:m.start()] if m else text
+    return re.sub(r"\s*\((?:[\w.-]+/[\w.-]+)?#\d+\)\s*$", "", first)
+
+
+def fit(text, limit=LIMIT):
+    """`text` cut to `limit`, at the last word boundary that fits.
+
+    A cut that lands inside a word reads as a typo; one that lands after a word
+    reads as what it is. Returns the text unchanged when it fits, so the vast
+    majority of descriptions are untouched.
+    """
+    text = " ".join(str(text or "").split())
+    if len(text) <= limit:
+        return text
+    head = text[:limit - len(MORE)]
+    # rsplit on whitespace rather than a regex: the boundary that matters is
+    # where a reader sees one, and a hyphenated part number is one word.
+    cut = head.rsplit(" ", 1)[0] if " " in head else head
+    return cut.rstrip(" ,;:-") + MORE
+
+
+def fit_items(prefix, items, limit=LIMIT):
+    """`prefix` plus as many comma-separated items as fit, then how many did not.
+
+    A word-boundary cut through a LIST still reads as a typo - "a9k-40ge-b,
+    a9k-40ge-e, a" is a truncation pretending to be an entry. 158 of the 266
+    were bay `Accepts:` lists, which is why this exists separately: the boundary
+    a reader sees in a list is the comma, and the count is worth more than the
+    two entries it replaces.
+    """
+    items = [str(i) for i in items]
+    whole = prefix + ", ".join(items)
+    if len(whole) <= limit:
+        return whole
+    kept = []
+    for n, item in enumerate(items):
+        tail = f" (+{len(items) - n - 1} more)"
+        trial = prefix + ", ".join(kept + [item]) + (tail if n < len(items) - 1 else "")
+        if len(trial) > limit:
+            break
+        kept.append(item)
+    if not kept:
+        return fit(whole, limit)
+    return prefix + ", ".join(kept) + f" (+{len(items) - len(kept)} more)"
+
+
 def slugify(s):
     return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", str(s).lower())).strip("-")
 
@@ -538,7 +615,7 @@ def breakout_note(breakout, n):
     parts = [f"Breakout: {modes}" if modes else "Breakout capable"]
     if child:
         parts.append(f"children {_expand(child, n)}")
-    return "; ".join(parts)[:200]
+    return fit("; ".join(parts))
 
 
 # WHICH GROUPS HOLD PORTS. A group states its `role`, and that is the structural
@@ -811,7 +888,7 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         out["airflow"] = air
 
     if dev.get("description"):
-        out["description"] = dev["description"].strip().split(".")[0][:200]
+        out["description"] = fit(first_sentence(dev["description"]))
 
     # Images, if this configuration has been rendered. front_image/rear_image are
     # booleans; the file itself is matched by slug from elevation-images/.
@@ -907,8 +984,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
             # NetBox schema allows on a bay description.
             acc = b.get("accepts") or []
             if acc:
-                short = ", ".join(a.split("/")[-1].split("@")[0] for a in acc)
-                bay["description"] = f"Accepts: {short}"[:200]
+                bay["description"] = fit_items(
+                    "Accepts: ", [a.split("/")[-1].split("@")[0] for a in acc])
             bays.append(bay)
 
     # Switch and management interfaces. With an overlay, a placement is an
@@ -1022,7 +1099,7 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         out["weight_unit"] = "kg"
 
     if contract.get("description"):
-        out["description"] = contract["description"].strip().split(".")[0][:200]
+        out["description"] = fit(first_sentence(contract["description"]))
 
     # Which interface type this card's cages actually run at. The cage ref gives
     # the floor; an attr naming a faster media raises it.
