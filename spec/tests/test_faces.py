@@ -33,9 +33,9 @@ def test_the_directions_constant_matches_the_schema():
 
 
 def run82(doc, path="t/contract.yaml"):
-    L.ERRORS.clear()
-    L.lint_component_faces_once(path, doc)
-    return [e for e in L.ERRORS if "[L82]" in e]
+    with L.collecting() as _found:
+        L.lint_component_faces_once(path, doc)
+    return [e for e in _found.errors if "[L82]" in e]
 
 
 def test_the_legacy_spelling_still_answers():
@@ -116,9 +116,9 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1"):
-    L.ERRORS.clear()
-    L.lint_component_faces_resolve(path, doc, LIB, name)
-    return [e for e in L.ERRORS if "[L83]" in e]
+    with L.collecting() as _found:
+        L.lint_component_faces_resolve(path, doc, LIB, name)
+    return [e for e in _found.errors if "[L83]" in e]
 
 
 @pytest.mark.parametrize("direction", ["plan", "rear"])

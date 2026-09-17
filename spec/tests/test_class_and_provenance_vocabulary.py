@@ -113,9 +113,9 @@ def test_the_four_mx_craft_interfaces_share_a_class(contracts):
 # --- the provenance key vocabulary -------------------------------------------
 
 def run_l92(path, doc):
-    lint.WARNINGS.clear()
-    lint.lint_component_size_sourced(path, doc)
-    return [w for w in lint.WARNINGS if "[L92]" in w]
+    with lint.collecting() as _found:
+        lint.lint_component_size_sourced(path, doc)
+    return [w for w in _found.warnings if "[L92]" in w]
 
 
 def test_a_size_with_no_note_named_for_it_is_reported():

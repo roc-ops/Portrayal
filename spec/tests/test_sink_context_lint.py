@@ -18,9 +18,9 @@ from portrayal import lint as L
 def run(doc, path="t"):
     # L77 is an err, not a warn: publish.sh gates the build on lint errors, so a
     # contract cannot put an unbuildable recess into the dist at all.
-    L.ERRORS.clear()
-    L.lint_component_sink_context(path, doc)
-    return [e for e in L.ERRORS if "L77" in e]
+    with L.collecting() as _found:
+        L.lint_component_sink_context(path, doc)
+    return [e for e in _found.errors if "L77" in e]
 
 
 def part(**kw):

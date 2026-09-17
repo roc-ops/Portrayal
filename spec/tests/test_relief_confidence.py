@@ -42,13 +42,21 @@ def plant(root, ref, features, **extra):
     return d / "contract.yaml"
 
 
-def found(path, root, code):
-    """Messages of one code raised by one contract, and nothing else."""
-    lint.WARNINGS.clear()
-    lint.ERRORS.clear()
-    lint.lint_component_relief_confidence(
-        path, yaml.safe_load(path.read_text()), [str(root)])
-    return [m for m in lint.WARNINGS + lint.ERRORS if f"[{code}]" in m]
+def found(path, root, code, stream=None):
+    """Messages of one code raised by one contract, and nothing else.
+
+    `stream` picks one side - "warnings" or "errors" - because whether a rule
+    raises a warning or an error is part of what these tests check, and the two
+    assertions that checked it used to read `lint.ERRORS` AFTER this returned.
+    That worked only because the old helper cleared the globals and never put
+    them back: the test was reading the leak that `collecting()` exists to stop.
+    """
+    with lint.collecting() as got:
+        lint.lint_component_relief_confidence(
+            path, yaml.safe_load(path.read_text()), [str(root)])
+    msgs = (got.warnings if stream == "warnings" else
+            got.errors if stream == "errors" else got.warnings + got.errors)
+    return [m for m in msgs if f"[{code}]" in m]
 
 
 def measured_origin(root, ref="acme/anvil@1", value=4.2, token="measured"):
@@ -65,7 +73,8 @@ def test_l35_counts_the_unmarked_and_does_not_name_them_all(tmp_path):
     assert len(msgs) == 1, "one line per file, not one per feature"
     assert "6 of 6" in msgs[0]
     assert "..." in msgs[0], "a long list is truncated rather than printed in full"
-    assert msgs[0] in lint.WARNINGS, "L35 is a warning - the key is optional"
+    assert msgs == found(p, tmp_path, "L35", "warnings"), \
+        "L35 is a warning - the key is optional"
 
 
 def test_l35_is_silent_once_every_feature_is_marked(tmp_path):
@@ -106,7 +115,8 @@ def test_l36_rejects_a_borrow_from_an_origin_that_only_estimated(tmp_path):
                 "source": "acme/anvil@1 - asserts a measurement it never took"}])
     msgs = found(p, tmp_path, "L36")
     assert len(msgs) == 1 and "estimated" in msgs[0]
-    assert msgs[0] in lint.ERRORS, "borrowed asserts a fact, so a failed check is an error"
+    assert msgs == found(p, tmp_path, "L36", "errors"), \
+        "borrowed asserts a fact, so a failed check is an error"
 
 
 def test_l36_rejects_a_borrow_from_an_origin_that_says_nothing(tmp_path):

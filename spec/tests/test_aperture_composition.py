@@ -36,10 +36,10 @@ def cutout(name="bore"):
 
 def warnings_for(path, root):
     """L26 warnings raised by one contract, and nothing else."""
-    lint.WARNINGS.clear()
-    data = yaml.safe_load(path.read_text())
-    lint.lint_component_aperture(path, data, [str(root)])
-    return [w for w in lint.WARNINGS if "[L26]" in w]
+    with lint.collecting() as _found:
+        data = yaml.safe_load(path.read_text())
+        lint.lint_component_aperture(path, data, [str(root)])
+    return [w for w in _found.warnings if "[L26]" in w]
 
 
 def test_a_redrawn_opening_is_named(tmp_path):

@@ -29,15 +29,9 @@ class _NoSchema:
 def l21_for(path):
     """L21 lives inline in lint_device, so the whole device pass runs and the
     result is filtered - the same way capability.py borrows these rules."""
-    saved_w, saved_e = lint.WARNINGS[:], lint.ERRORS[:]
-    lint.WARNINGS.clear()
-    lint.ERRORS.clear()
-    try:
+    with lint.collecting() as got:
         lint.lint_device(path, _NoSchema(), [str(LIB)])
-        return [w for w in lint.WARNINGS if "[L21]" in w]
-    finally:
-        lint.WARNINGS[:] = saved_w
-        lint.ERRORS[:] = saved_e
+    return [w for w in got.warnings if "[L21]" in w]
 
 
 def device(tmp_path, mark_x):

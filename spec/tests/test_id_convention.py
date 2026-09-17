@@ -16,10 +16,10 @@ LIB = [str(ROOT / "library")]
 
 
 def run(placements):
-    L.WARNINGS.clear()
-    doc = {"views": {"front": {"components": {"placements": list(placements)}}}}
-    L.lint_device_id_convention("t", doc, LIB)
-    return [w for w in L.WARNINGS if "L62" in w]
+    with L.collecting() as _found:
+        doc = {"views": {"front": {"components": {"placements": list(placements)}}}}
+        L.lint_device_id_convention("t", doc, LIB)
+    return [w for w in _found.warnings if "L62" in w]
 
 
 def p(pid, ref, **kw):

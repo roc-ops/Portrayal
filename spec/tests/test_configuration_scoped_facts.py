@@ -104,9 +104,9 @@ def test_the_drawing_disables_two_ports_and_not_six():
 # --- the rule that keeps a widened key honest ---------------------------------
 
 def run(doc):
-    lint.ERRORS.clear()
-    lint.lint_device_component_attrs_resolve("d.yaml", doc)
-    return [e for e in lint.ERRORS if "[L94]" in e]
+    with lint.collecting() as _found:
+        lint.lint_device_component_attrs_resolve("d.yaml", doc)
+    return [e for e in _found.errors if "[L94]" in e]
 
 
 def device_with(**cfg):

@@ -37,9 +37,9 @@ from portrayal import components_catalogue as cat
 
 
 def run(root):
-    lint.ERRORS.clear()
-    lint.lint_unplaced_majors(root)
-    return [e for e in lint.ERRORS if "[L89]" in e]
+    with lint.collecting() as _found:
+        lint.lint_unplaced_majors(root)
+    return [e for e in _found.errors if "[L89]" in e]
 
 
 # --- the live library ---------------------------------------------------------

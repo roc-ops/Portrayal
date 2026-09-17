@@ -31,15 +31,9 @@ def load(rel):
 
 def rules(path, data):
     """Run just the attrs rules over one manifest and hand back what they said."""
-    saved_e, saved_w = lint.ERRORS[:], lint.WARNINGS[:]
-    lint.ERRORS.clear()
-    lint.WARNINGS.clear()
-    try:
+    with lint.collecting() as got:
         lint.lint_device_attrs(path, data)
-        return lint.ERRORS[:], lint.WARNINGS[:]
-    finally:
-        lint.ERRORS[:] = saved_e
-        lint.WARNINGS[:] = saved_w
+    return got.errors, got.warnings
 
 
 def test_every_attr_is_in_a_section():

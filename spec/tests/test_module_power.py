@@ -69,22 +69,21 @@ def plant_paired_device(root, name, front, rear):
 
 
 def double_count(path, root):
-    lint.WARNINGS.clear()
-    lint.lint_device_double_count(path, yaml.safe_load(path.read_text()),
-                                  [str(root)])
-    return [w for w in lint.WARNINGS if "[L30]" in w]
+    with lint.collecting() as _found:
+        lint.lint_device_double_count(path, yaml.safe_load(path.read_text()),
+                                      [str(root)])
+    return [w for w in _found.warnings if "[L30]" in w]
 
 
 def found(path, root, code):
     """Warnings and errors of one code raised by one manifest, and nothing else."""
-    lint.WARNINGS.clear()
-    lint.ERRORS.clear()
-    data = yaml.safe_load(path.read_text())
-    if data.get("kind") == "device":
-        lint.lint_device_module_power(path, data, [str(root)])
-    else:
-        lint.lint_component_power(path, data)
-    return [m for m in lint.WARNINGS + lint.ERRORS if f"[{code}]" in m]
+    with lint.collecting() as _found:
+        data = yaml.safe_load(path.read_text())
+        if data.get("kind") == "device":
+            lint.lint_device_module_power(path, data, [str(root)])
+        else:
+            lint.lint_component_power(path, data)
+    return [m for m in _found.warnings + _found.errors if f"[{code}]" in m]
 
 
 # ---------------------------------------------------------------- L27
@@ -239,15 +238,14 @@ def test_the_ban_is_an_error_and_not_a_warning(tmp_path):
     """A warning-level ban is not a ban. It can be an error where L26 and L27
     cannot because it depends on no document nobody has - renaming a key needs
     no new information."""
-    lint.WARNINGS.clear()
-    lint.ERRORS.clear()
-    p = plant(tmp_path, "acme/psu@1", cls="psu", attrs={"watts": 650})
-    lint.lint_component_power(p, yaml.safe_load(p.read_text()))
-    assert [m for m in lint.ERRORS if "[L28]" in m]
-    assert not [m for m in lint.WARNINGS if "[L28]" in m]
-    # And L27 stands beside it, because a banned key is not a figure: the module
-    # still states nothing this library can add up. The two clear together.
-    assert len([m for m in lint.WARNINGS if "[L27]" in m]) == 1
+    with lint.collecting() as _found:
+        p = plant(tmp_path, "acme/psu@1", cls="psu", attrs={"watts": 650})
+        lint.lint_component_power(p, yaml.safe_load(p.read_text()))
+        assert [m for m in lint.ERRORS if "[L28]" in m]
+        assert not [m for m in lint.WARNINGS if "[L28]" in m]
+        # And L27 stands beside it, because a banned key is not a figure: the module
+        # still states nothing this library can add up. The two clear together.
+    assert len([m for m in _found.warnings if "[L27]" in m]) == 1
 
 
 def test_a_draw_that_contradicts_itself_is_an_error(tmp_path):

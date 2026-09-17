@@ -92,6 +92,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       what would seat it - and a part that IS reached does not still carry one
 """
 import argparse
+import types
+import contextlib
 import json
 import math
 import re
@@ -256,6 +258,52 @@ def rules_text(markdown=False):
         lines.append(f"| {c} | {scope} | {rule} | {fix} |")
     return "\n".join(lines) + "\n"
 
+
+
+@contextlib.contextmanager
+def collecting():
+    """Findings from the rules called inside this block, and nothing else.
+
+    THE DANCE THIS REPLACES was written out 32 times across the suite:
+
+        saved_e, saved_w = lint.ERRORS[:], lint.WARNINGS[:]
+        lint.ERRORS.clear(); lint.WARNINGS.clear()
+        try:
+            lint_device_alignment(path, doc, [LIB])
+            return [w for w in lint.WARNINGS if "L61" in w]
+        finally:
+            lint.ERRORS[:], lint.WARNINGS[:] = saved_e, saved_w
+
+    Most of the 32 skipped the save and the restore and only cleared, which
+    works right up until a rule under test leaves a finding behind and an
+    unrelated test three files later reads it. That failure names the wrong
+    test, which is the worst kind to debug.
+
+    NOT A CONTEXT OBJECT THREADED THROUGH THE RULES, and #302 records the
+    measurement behind that: `warn()` and `err()` are called 208 times across
+    ~95 rule functions, all of which would take the parameter, plus the 32 test
+    files - a whole-file rewrite of the project's most important gate that could
+    not be reviewed as a diff. The review's justification for it was that the
+    globals "block testing rules in isolation", and 32 files already test rules
+    in isolation. What was true is that the dance repeats and is easy to get
+    wrong. This is that, and only that.
+
+        with lint.collecting() as found:
+            lint.lint_device_alignment(path, doc, [LIB])
+        assert [w for w in found.warnings if "L61" in w]
+    """
+    saved_e, saved_w = ERRORS[:], WARNINGS[:]
+    ERRORS.clear()
+    WARNINGS.clear()
+    found = types.SimpleNamespace(errors=ERRORS, warnings=WARNINGS)
+    try:
+        yield found
+    finally:
+        # THE LISTS ARE HANDED OUT, so they are copied before being restored -
+        # a caller that reads `found.warnings` after the block would otherwise
+        # be reading whatever the outer run had collected.
+        found.errors, found.warnings = ERRORS[:], WARNINGS[:]
+        ERRORS[:], WARNINGS[:] = saved_e, saved_w
 
 
 def err(path, code, msg):
