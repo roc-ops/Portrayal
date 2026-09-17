@@ -10,6 +10,7 @@ which is the thing the fact sheet exists to stop.
 
     figmap.py <converted-dir> [out.json]
 """
+import argparse
 import json
 import pathlib
 import re
@@ -79,13 +80,17 @@ def build(conv):
 
 
 if __name__ == '__main__':
-    conv = sys.argv[1]
+    ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
+    ap.add_argument('converted', help='a docling output directory')
+    ap.add_argument('out', nargs='?', help='write the figure map here as JSON')
+    ARGS = ap.parse_args()
+    conv = ARGS.converted
     imgs, byfig = build(conv)
     print(f'{len(imgs)} images, {len(byfig)} figures identified')
     for n in sorted(byfig):
         idx, cap, ln = byfig[n]
         print(f'  Figure {n:>3}: fig-{idx:04d}.png  line {ln:>5}  {cap[:66]}')
-    if len(sys.argv) > 2:
-        pathlib.Path(sys.argv[2]).write_text(json.dumps(
+    if ARGS.out:
+        pathlib.Path(ARGS.out).write_text(json.dumps(
             {str(k): {'file': f'fig-{v[0]:04d}.png', 'caption': v[1],
                       'line': v[2]} for k, v in sorted(byfig.items())}, indent=1))

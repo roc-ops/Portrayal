@@ -36,8 +36,7 @@ import sys
 
 from PIL import Image
 
-from portrayal import benchtile
-
+from portrayal_bench import benchtile
 # THE PROMPT IS IN THE MODEL'S OWN DIALECT, AND THAT IS NOT A DETAIL.
 #
 # The first version here was a careful specification - what a cage is, what to

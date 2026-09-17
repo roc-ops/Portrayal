@@ -5325,7 +5325,7 @@ def _rj45_census(placements, groups, lib_roots, name=None):
 
 RJ45_CENSUS_MSG = ("An Ethernet jack is common/rj45-eth@1 or common/rj45-ganged-eth@1; "
                    "a console or timing jack is std/rj45@2 or std/rj45-ganged@2 "
-                   "(docs/rj45-family-design.md; spec/tools/portrayal/sweep_rj45.py)")
+                   "(docs/rj45-family-design.md; spec/tools/sweeps/sweep_rj45.py)")
 
 
 def lint_device_rj45_lamps(path, data, lib_roots):

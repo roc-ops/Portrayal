@@ -10,8 +10,7 @@ import zipfile
 from pathlib import Path
 
 SPEC = Path(__file__).resolve().parent.parent
-from portrayal import visio_geom
-
+from portrayal_dev import visio_geom
 NS = "http://schemas.microsoft.com/office/visio/2012/main"
 REL = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 
@@ -71,7 +70,7 @@ def test_geometry_renders_to_svg():
 def test_extractor_names_output_by_master(tmp_path):
     src = _stencil(tmp_path / "Test Stencil.vssx")
     out = tmp_path / "out"
-    subprocess.run([sys.executable, str(SPEC / "tools/portrayal/visio_extract.py"),
+    subprocess.run([sys.executable, str(SPEC / "tools/dev/visio_extract.py"),
                     str(src), "--out", str(out)], check=True, capture_output=True)
     stencil = out / "test-stencil"
     index = json.loads((stencil / "index.json").read_text())
@@ -88,8 +87,7 @@ def test_extractor_names_output_by_master(tmp_path):
 
 import struct  # noqa: E402
 
-from portrayal import visio_meta
-
+from portrayal_dev import visio_meta
 SHEET = f"""<?xml version='1.0' encoding='utf-8'?>
 <MasterContents xmlns='{NS}' xmlns:r='{REL}'><Shapes>
  <Shape ID='1' NameU='Cab' Type='Group'>
@@ -165,8 +163,7 @@ def test_suggest_name_uses_metadata_without_repeating_itself():
 def test_legacy_raw_dump_keeps_master_names(tmp_path, monkeypatch):
     """The raw libvisio dump names each master; the extractor must use it."""
     import base64 as _b64
-    from portrayal import visio_extract
-
+    from portrayal_dev import visio_extract
     blob = _emf_with_text("A9903", "-", "20HG")
     dump = (
         "startDocument()\n"

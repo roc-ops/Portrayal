@@ -20,9 +20,7 @@ import sys
 
 from PIL import Image
 
-from portrayal import benchvlm
-
-
+from portrayal_bench import benchvlm
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--truth", required=True)

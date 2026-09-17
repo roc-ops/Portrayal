@@ -57,8 +57,14 @@ portrayal = "portrayal.__main__:main"
 # intake tools convert vendor PDFs on what may be a different and beefier box,
 # and none of the gates need any of their dependencies. A sibling says that;
 # `portrayal.intake` would say the opposite.
-package-dir = {portrayal = "spec/tools/portrayal", portrayal_intake = "spec/tools/intake"}
-packages = ["portrayal", "portrayal_intake"]
+# THE COMPILER IS THE FIRST ENTRY AND THE OTHERS ARE NOT PART OF IT. What
+# `build.sh`, `publish.sh` and CI reach is twenty-one modules; the directory
+# held fifty, and no reader or grep could tell which mattered (#179). The
+# dependency runs one way - dev, bench and sweeps import the compiler and it
+# imports none of them - and test_tools_layout.py asserts that rather than
+# trusting it.
+package-dir = {portrayal = "spec/tools/portrayal", portrayal_intake = "spec/tools/intake", portrayal_dev = "spec/tools/dev", portrayal_bench = "spec/tools/bench", portrayal_sweeps = "spec/tools/sweeps"}
+packages = ["portrayal", "portrayal_intake", "portrayal_dev", "portrayal_bench", "portrayal_sweeps"]
 
 [tool.pytest.ini_options]
 testpaths = ["spec/tests"]

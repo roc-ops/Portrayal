@@ -19,6 +19,7 @@ runner being short of something it should have.
 Reads pytest's `-rs` short summary, which prints one `SKIPPED [n] file:line:
 reason` line per distinct reason.
 """
+import argparse
 import pathlib
 import re
 import sys
@@ -66,7 +67,8 @@ def main(report, allowlist):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print(__doc__.strip().splitlines()[-3].strip(), file=sys.stderr)
-        sys.exit(2)
-    sys.exit(main(sys.argv[1], sys.argv[2]))
+    ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
+    ap.add_argument("report", help="pytest output, with -rs so the skips are named")
+    ap.add_argument("allowed", help="the allow-list of skip reasons")
+    a = ap.parse_args()
+    sys.exit(main(a.report, a.allowed))

@@ -33,6 +33,19 @@ makes `import portrayal` resolve, for `python -m portrayal lint` and for the
 The extras are `[test]`, `[render]` (rasterising DCIM images), `[intake]` and
 `[bench]`.
 
+`spec/tools/` is four directories and the split is what the gates run:
+
+| | |
+|---|---|
+| `portrayal/` | the compiler - everything `build.sh`, `publish.sh` and CI reach, and nothing else |
+| `dev/` | modelling probes, converters and one-offs; `python3 spec/tools/dev/<tool>.py --help` |
+| `bench/` | measurement benchmarks, `pip install -e ".[bench]"` |
+| `sweeps/` | corrective migrations, each paired with the lint rule that finds its work |
+| `intake/` | vendor PDF, CAD and photo conversion, `pip install -e ".[intake]"` |
+
+The dependency runs one way: the others may import the compiler and it imports
+none of them, which a test asserts by walking the imports.
+
 If you prefer a driver to a path, `python -m portrayal` wraps the gates:
 
 ```sh

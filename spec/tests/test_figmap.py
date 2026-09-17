@@ -20,9 +20,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
-from portrayal import figmap
-
-
+from portrayal_dev import figmap
 DOC = """# S6301-56ST
 
 ## Port Overview

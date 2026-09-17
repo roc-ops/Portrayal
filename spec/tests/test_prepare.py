@@ -14,9 +14,7 @@ import sys
 from PIL import Image, ImageDraw
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-from portrayal import prepare as P
-
-
+from portrayal_dev import prepare as P
 def figure(dirpath, name, size, band):
     dirpath.mkdir(parents=True, exist_ok=True)
     im = Image.new("RGB", size, "white")

@@ -158,7 +158,10 @@ def test_the_tools_are_a_package_and_nothing_inserts_a_path():
     assert not hyphened, f"a hyphen is not an identifier: {hyphened}"
 
     setup = _pyproject()["tool"]["setuptools"]
-    assert set(setup["packages"]) == {"portrayal", "portrayal_intake"}
+    # THE COMPILER AND THE INTAKE TOOLS, which is what #178 was about. The exact
+    # set grew to five in #179 and is asserted there, by test_tools_layout.py -
+    # two tests owning one list is how a list goes stale.
+    assert {"portrayal", "portrayal_intake"} <= set(setup["packages"])
     for pkg, where in setup["package-dir"].items():
         assert (ROOT / where / "__init__.py").exists(), f"{pkg} has no __init__.py"
 
