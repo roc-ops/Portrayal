@@ -101,7 +101,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 4 | 0 | Captive pull-out information tab (default credentials / serial card) |
 | `common/qsfp-cage@2` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
 | `common/qsfp-drawing@1` | component | reference | 118 × 19 |  | 0 | 0 | QSFP orthographic views transcribed from a vendor mechanical drawing - top, side and bottom at true scale |
-| `common/qsfp-lane-leds@1` | component | led | 19.5 × 3.4 |  | 2 | 1 | QSFP port lane LED strip - four triangles, one per lane (no separate link/activity LEDs on this platform) |
+| `common/qsfp-lane-leds@1` | component | led | 19.5 × 3.4 |  | 3 | 1 | QSFP port lane LED strip - four triangles, one per lane (no separate link/activity LEDs on this platform) |
 | `common/qsfp-lane-leds-column@1` | component | led | 1.8 × 11.4 |  | 2 | 0 | QSFP port lane LED column - four round lamps stacked VERTICALLY, one per 100G lane, for faceplates that stand… |
 | `common/qsfp-pull-tab@1` | component | latch | 19 × 3.4 |  | 0 | 1 | QSFP / QSFP-DD pull tab - the flat paddle bail that wraps the module and extends forward, with an elongated o… |
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 0 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
@@ -125,7 +125,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen (v2 = composed - shell bezel wraps a std/usb-a opening core) |
 | `common/usb-a@3` | component | port | 17 × 9.3 × 13.7 |  | 9 | 0 | USB Type-A port in a silver panel bezel (v3 = bezel plate spans the component so it can abut neighboring port… |
-| `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 10 | 0 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
+| `common/usb-symbol@1` | component | silkscreen | 6.4 × 4 |  | 11 | 0 | USB trident silkscreen symbol, no hardware - the marking printed beside a USB receptacle |
 | `common/vga-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 1 | 0 | VGA receptacle as a faceplate sees it - the female HD-15 shell with a jackscrew standoff either side, which i… |
 | `common/vga-symbol@1` | component | silkscreen | 6 × 3.4 |  | 1 | 0 | The monitor mark printed beside a VGA port - a display outline flanked by two short bars, which is the form v… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 1 | 2 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
