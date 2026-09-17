@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 5.0.0
+version: 6.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -205,9 +205,9 @@ provenance:
       nobody had seen; the second measured three lines of ink at 401-420 mm and recorded that it
       could not resolve them; this one has the words. They are drawn, at the measured line spans -
       404.0-418.1 for the first and 404.0-419.9 for the second.
-      THE MANAGEMENT JACK'S LAMPS ARE NOT IN THE JACK. A reader with better photographs than this
-      corpus holds puts them BELOW THE CONSOLE PORT - off the connector entirely, two rows down
-      from the jack they serve. So the management jack takes the BARE std/rj45-ganged@2 rather
+      THE MANAGEMENT JACK'S LAMPS ARE NOT IN THE JACK. They STRADDLE THE `Mgmt` LABEL, one either
+      side, below the console port - off the connector entirely, two rows down from the jack they
+      serve. So the management jack takes the BARE std/rj45-ganged@2 rather
       than common/rj45-ganged-eth@1, whose whole difference is two lamps in the cell's outer
       corners; drawing those would put lit hardware on a housing that has none.
       This is the S6301 arrangement exactly - ufispace/s6301-56stp's own provenance describes
@@ -272,6 +272,18 @@ provenance:
       reader of the render, working from better photographs, saw that each bar has four lamps over
       it and that the bars number the uplinks - which resolves the lamp count, the bar content and
       the uplink numbering in one reading.
+      THE LAMPS ARE RECTANGULAR, not round, and they sit lower than a first pass drew them. Both
+      corrected from a reader looking at the hardware, and both then checked: running the four
+      known lamp x-positions as a comb down the panel in quarter-millimetre bands, the contrast
+      peaks at y 31.05-31.55 and is gone by 31.8, so the row centres at 31.3 and the lens is about
+      a millimetre tall. They are common/led-rect@1. The yellow bars were 0.4 mm high too - the
+      saturated-yellow rows read 32.80 to 35.83, not 32.40 - which is what left them looking
+      crowded under the port numerals.
+      EACH BAR PRINTS ITS UPLINK NUMBER, 0 to 5, centred. Drawn, and pointed at the four lane lamps
+      above it rather than at the uplink itself: L14 is an error, not a warning, and it is right
+      that a numeral 220 mm from its cage is not beside what it names. The lamps ARE beside it and
+      they carry `for: uplink-n`, so the chain from uplink to lamps to label holds and every mark
+      sits next to the thing it annotates.
       Positions by a four-lamp comb fit per bar: pitch 5.70 to 5.97 mm, mean 5.83, first lamp
       about 3.4 mm inside the bar's left edge; row centred 31.4 mm, between the port numerals
       above and the bar below. States from the guide: 1 green 100G, 1 blue 40G, 1-4 amber 25G
@@ -298,8 +310,15 @@ provenance:
       small group of 2." So the upper bezel's two lamps per column serve that column's FIRST TWO
       uplinks - 0 and 1 on the left, 3 and 4 on the right - and the bottom pair's lamps are on the
       bottom pair's own group, not in a divider above them.
-      NOT DRAWN: uplink 2's and uplink 5's status lamps. They are confirmed to exist and confirmed
-      to be on the bottom group; where exactly is not resolved at 9.1 px/mm - see gaps.
+      UPLINK 2'S AND 5'S STATUS LAMPS ARE ABOVE THE SEVENTH YELLOW BAR - the wide one at 345.32
+      that sits right of the USB and belongs to no uplink of its own. A reader placed them there
+      and the figure agrees: two marks, 0.77 mm wide, at 351.93 and 354.12 mm in the same lamp row
+      as every other. That is what the seventh bar is FOR, which nothing in either document says
+      and which three drafts recorded as an unexplained extra strip. All six uplinks now have a
+      status lamp: 0 and 1 in the left column's bezel, 3 and 4 in the right column's, 2 and 5 over
+      the seventh bar.
+      The `2 (right-arrow)` and `(left-arrow) 5` labels are on the bracket's LOWER section, on its
+      legs either side of the bottom pair, not on the horizontal bar with the other four.
   yellow-label-strips:
     confidence: measured
     note: >-
@@ -547,11 +566,11 @@ gaps:
     The management jack's link and activity lamps are BELOW THE CONSOLE PORT, not in the jack -
     a reader with better photographs than this corpus holds sees them there, which is why the
     jack is modelled on the bare std/rj45-ganged@2 rather than the lamped Ethernet cell. They are
-    not placed, because the datasheet render does not resolve them: the band under the console
-    jack between y 27.4 and 28.6 carries small marks at 407.88, 409.63 and 410.73 mm, 0.33 to
-    0.77 mm wide, and a second brighter band at 30.1 to 31.0 which is more likely a legend than a
-    lamp. At 9.1 px/mm nothing separates the two kinds. The same photograph that settles the
-    legend below these jacks settles this.
+    now placed, straddling the `Mgmt` label at 409.30 and 420.20 mm, from a reader looking at the
+    hardware. The datasheet render does not resolve them on its own - the band carries marks at
+    407.88, 409.63 and 410.73 mm and a brighter one at 30.1 to 31.0, and at 9.1 px/mm nothing
+    separates a lamp from a legend among them - so the positions bracket the label rather than
+    landing on a measured mark. What remains open is only the exact offset either side.
 - what: uplink-lane-lamp-numerals
   scope: [front]
   reason: needs-drawing
@@ -617,13 +636,13 @@ views:
       - {at: [332.5, 37.0], size: [31.0, 6.2], pattern: vent, vent: 25}
       - {at: [318.5, 41.3], size: [14.0, 1.9], pattern: vent, vent: 25}
       - {at: [425.5, 2.0], size: [11.5, 40.0], pattern: vent, vent: 25}
-      - {at: [134.87, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
-      - {at: [164.73, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
-      - {at: [194.59, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
-      - {at: [224.45, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
-      - {at: [254.31, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
-      - {at: [284.61, 32.40], size: [21.00, 3.00], fill: '#e8e213', rx: 0.3}
-      - {at: [345.32, 32.40], size: [18.27, 3.00], fill: '#e8e213', rx: 0.3}
+      - {at: [134.87, 32.80], size: [21.00, 3.03], fill: '#e8e213', rx: 0.3}
+      - {at: [164.73, 32.80], size: [21.00, 3.03], fill: '#e8e213', rx: 0.3}
+      - {at: [194.59, 32.80], size: [21.00, 3.03], fill: '#e8e213', rx: 0.3}
+      - {at: [224.45, 32.80], size: [21.00, 3.03], fill: '#e8e213', rx: 0.3}
+      - {at: [254.31, 32.80], size: [21.00, 3.03], fill: '#e8e213', rx: 0.3}
+      - {at: [284.61, 32.80], size: [21.00, 3.03], fill: '#e8e213', rx: 0.3}
+      - {at: [345.32, 32.80], size: [18.27, 3.03], fill: '#e8e213', rx: 0.3}
       - {at: [359.40, 28.89], size: [48.60, 2.91], fill: '#e8e213', rx: 0.3}
       - {at: [359.40, 31.80], size: [5.20, 4.03], fill: '#e8e213', rx: 0.3}
       - {at: [403.30, 31.80], size: [4.70, 4.03], fill: '#e8e213', rx: 0.3}
@@ -635,30 +654,34 @@ views:
       - {id: uplink-4, at: [383.56, 18.91], size: [18.5, 9.58], shape: rect}
       - {id: uplink-2, at: [364.56, 32.01], size: [18.5, 9.58], shape: rect}
       - {id: uplink-5, at: [383.56, 32.01], size: [18.5, 9.58], shape: rect}
-      - {id: led-uplink-0-lane-1, at: [137.22, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-0-lane-2, at: [143.04, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-0-lane-3, at: [148.86, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-0-lane-4, at: [154.68, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-1-lane-1, at: [166.78, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-1-lane-2, at: [172.75, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-1-lane-3, at: [178.72, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-1-lane-4, at: [184.69, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-2-lane-1, at: [196.64, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-2-lane-2, at: [202.52, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-2-lane-3, at: [208.40, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-2-lane-4, at: [214.28, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-3-lane-1, at: [227.05, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-3-lane-2, at: [232.80, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-3-lane-3, at: [238.55, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-3-lane-4, at: [244.30, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-4-lane-1, at: [257.01, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-4-lane-2, at: [262.71, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-4-lane-3, at: [268.41, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-4-lane-4, at: [274.11, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-5-lane-1, at: [286.76, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-5-lane-2, at: [292.61, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-5-lane-3, at: [298.46, 30.40], size: [2.0, 2.0], shape: circle}
-      - {id: led-uplink-5-lane-4, at: [304.31, 30.40], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-lane-1, at: [135.92, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-2, at: [141.74, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-3, at: [147.56, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-0-lane-4, at: [153.38, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-1, at: [165.48, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-2, at: [171.45, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-3, at: [177.42, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-1-lane-4, at: [183.39, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-1, at: [195.34, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-2, at: [201.22, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-3, at: [207.10, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2-lane-4, at: [212.98, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-1, at: [225.75, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-2, at: [231.50, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-3, at: [237.25, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-3-lane-4, at: [243.00, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-1, at: [255.71, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-2, at: [261.41, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-3, at: [267.11, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-4-lane-4, at: [272.81, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5-lane-1, at: [285.46, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5-lane-2, at: [291.31, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5-lane-3, at: [297.16, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-5-lane-4, at: [303.01, 30.10], size: [4.6, 2.6], shape: rect}
+      - {id: led-uplink-2, at: [350.93, 30.90], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-5, at: [353.12, 30.90], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt-l, at: [408.30, 29.60], size: [2.0, 2.0], shape: circle}
+      - {id: led-mgmt-r, at: [419.20, 29.60], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-0, at: [370.94, 14.60], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-1, at: [374.88, 14.60], size: [2.0, 2.0], shape: circle}
       - {id: led-uplink-3, at: [390.19, 14.60], size: [2.0, 2.0], shape: circle}
@@ -679,43 +702,49 @@ views:
       - {at: [411.00, 32.40], mark: arrow-down, size: 1.3, fill: '#e4e8eb', for: console}
       - {at: [412.60, 32.90], text: Console, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: console}
       - {at: [370.81, 31.00], text: '0', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-0}
-      - {at: [373.81, 30.35], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#1a1d1f', for: [uplink-0, uplink-1]}
+      - {at: [373.81, 30.45], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#1a1d1f', for: [uplink-0, uplink-1]}
       - {at: [376.81, 31.00], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-1}
       - {at: [389.81, 31.00], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-3}
-      - {at: [392.81, 30.35], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#1a1d1f', for: [uplink-3, uplink-4]}
+      - {at: [392.81, 30.45], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#1a1d1f', for: [uplink-3, uplink-4]}
       - {at: [395.81, 31.00], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-4}
-      - {at: [361.00, 31.00], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-2}
-      - {at: [363.20, 30.35], mark: arrow-right, size: 1.2, fill: '#1a1d1f', for: uplink-2}
-      - {at: [404.20, 30.35], mark: arrow-left, size: 1.2, fill: '#1a1d1f', for: uplink-5}
-      - {at: [406.40, 31.00], text: '5', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: uplink-5}
+      - {at: [145.37, 34.90], text: '0', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: [led-uplink-0-lane-1, led-uplink-0-lane-2, led-uplink-0-lane-3, led-uplink-0-lane-4]}
+      - {at: [175.23, 34.90], text: '1', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: [led-uplink-1-lane-1, led-uplink-1-lane-2, led-uplink-1-lane-3, led-uplink-1-lane-4]}
+      - {at: [205.09, 34.90], text: '2', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: [led-uplink-2-lane-1, led-uplink-2-lane-2, led-uplink-2-lane-3, led-uplink-2-lane-4]}
+      - {at: [234.95, 34.90], text: '3', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: [led-uplink-3-lane-1, led-uplink-3-lane-2, led-uplink-3-lane-3, led-uplink-3-lane-4]}
+      - {at: [264.81, 34.90], text: '4', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: [led-uplink-4-lane-1, led-uplink-4-lane-2, led-uplink-4-lane-3, led-uplink-4-lane-4]}
+      - {at: [295.11, 34.90], text: '5', font-size: 1.6, anchor: middle, fill: '#1a1d1f', for: [led-uplink-5-lane-1, led-uplink-5-lane-2, led-uplink-5-lane-3, led-uplink-5-lane-4]}
+      - {at: [360.90, 34.60], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: uplink-2}
+      - {at: [363.20, 34.05], mark: arrow-right, size: 1.3, fill: '#1a1d1f', for: uplink-2}
+      - {at: [404.20, 34.05], mark: arrow-left, size: 1.3, fill: '#1a1d1f', for: uplink-5}
+      - {at: [406.50, 34.60], text: '5', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: uplink-5}
       - {at: [368.61, 15.90], mark: arrow-up, size: 1.5, fill: '#1a1d1f', for: uplink-0}
       - {at: [378.94, 15.90], mark: arrow-down, size: 1.5, fill: '#1a1d1f', for: uplink-1}
       - {at: [388.35, 15.90], mark: arrow-up, size: 1.5, fill: '#1a1d1f', for: uplink-3}
       - {at: [398.74, 15.90], mark: arrow-down, size: 1.5, fill: '#1a1d1f', for: uplink-4}
-      - {at: [21.52, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-0, port-1]}
-      - {at: [35.77, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-2, port-3]}
-      - {at: [50.02, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-4, port-5]}
-      - {at: [64.27, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-6, port-7]}
-      - {at: [78.52, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-8, port-9]}
-      - {at: [92.77, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-10, port-11]}
-      - {at: [107.02, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-12, port-13]}
-      - {at: [121.27, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-14, port-15]}
-      - {at: [138.10, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-16, port-17]}
-      - {at: [152.35, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-18, port-19]}
-      - {at: [166.60, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-20, port-21]}
-      - {at: [180.85, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-22, port-23]}
-      - {at: [195.10, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-24, port-25]}
-      - {at: [209.35, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-26, port-27]}
-      - {at: [223.60, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-28, port-29]}
-      - {at: [237.85, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-30, port-31]}
-      - {at: [254.69, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-32, port-33]}
-      - {at: [268.94, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-34, port-35]}
-      - {at: [283.19, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-36, port-37]}
-      - {at: [297.44, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-38, port-39]}
-      - {at: [311.69, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-40, port-41]}
-      - {at: [325.94, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-42, port-43]}
-      - {at: [340.19, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-44, port-45]}
-      - {at: [354.44, 29.60], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-46, port-47]}
+      - {at: [21.52, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-0, port-1]}
+      - {at: [35.77, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-2, port-3]}
+      - {at: [50.02, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-4, port-5]}
+      - {at: [64.27, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-6, port-7]}
+      - {at: [78.52, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-8, port-9]}
+      - {at: [92.77, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-10, port-11]}
+      - {at: [107.02, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-12, port-13]}
+      - {at: [121.27, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-14, port-15]}
+      - {at: [138.10, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-16, port-17]}
+      - {at: [152.35, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-18, port-19]}
+      - {at: [166.60, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-20, port-21]}
+      - {at: [180.85, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-22, port-23]}
+      - {at: [195.10, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-24, port-25]}
+      - {at: [209.35, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-26, port-27]}
+      - {at: [223.60, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-28, port-29]}
+      - {at: [237.85, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-30, port-31]}
+      - {at: [254.69, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-32, port-33]}
+      - {at: [268.94, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-34, port-35]}
+      - {at: [283.19, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-36, port-37]}
+      - {at: [297.44, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-38, port-39]}
+      - {at: [311.69, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-40, port-41]}
+      - {at: [325.94, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-42, port-43]}
+      - {at: [340.19, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-44, port-45]}
+      - {at: [354.44, 29.05], mark: arrow-pair, size: 1.2, gap: 0.5, fill: '#e4e8eb', for: [port-46, port-47]}
       - {at: [18.87, 35.80], text: PS0, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-ps0}
       - {at: [24.77, 35.80], text: PS1, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-ps1}
       - {at: [30.68, 35.80], text: Diag, font-size: 1.15, anchor: middle, fill: '#e4e8eb', for: led-diag}
@@ -762,30 +791,34 @@ views:
       - {ref: std/qsfp-ganged@1, id: uplink-4, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 3}
       - {ref: std/qsfp-ganged@1, id: uplink-2, at: [364.56, 32.01], group: qsfp28, rel-pos: 4}
       - {ref: std/qsfp-ganged@1, id: uplink-5, at: [383.56, 32.01], group: qsfp28, rel-pos: 5}
-      - {ref: common/led-dot@1, id: led-uplink-0-lane-1, at: [137.22, 30.40], group: port-leds, rel-pos: 101, for: uplink-0, attrs: {lane: 1}}
-      - {ref: common/led-dot@1, id: led-uplink-0-lane-2, at: [143.04, 30.40], group: port-leds, rel-pos: 102, for: uplink-0, attrs: {lane: 2}}
-      - {ref: common/led-dot@1, id: led-uplink-0-lane-3, at: [148.86, 30.40], group: port-leds, rel-pos: 103, for: uplink-0, attrs: {lane: 3}}
-      - {ref: common/led-dot@1, id: led-uplink-0-lane-4, at: [154.68, 30.40], group: port-leds, rel-pos: 104, for: uplink-0, attrs: {lane: 4}}
-      - {ref: common/led-dot@1, id: led-uplink-1-lane-1, at: [166.78, 30.40], group: port-leds, rel-pos: 111, for: uplink-1, attrs: {lane: 1}}
-      - {ref: common/led-dot@1, id: led-uplink-1-lane-2, at: [172.75, 30.40], group: port-leds, rel-pos: 112, for: uplink-1, attrs: {lane: 2}}
-      - {ref: common/led-dot@1, id: led-uplink-1-lane-3, at: [178.72, 30.40], group: port-leds, rel-pos: 113, for: uplink-1, attrs: {lane: 3}}
-      - {ref: common/led-dot@1, id: led-uplink-1-lane-4, at: [184.69, 30.40], group: port-leds, rel-pos: 114, for: uplink-1, attrs: {lane: 4}}
-      - {ref: common/led-dot@1, id: led-uplink-2-lane-1, at: [196.64, 30.40], group: port-leds, rel-pos: 121, for: uplink-2, attrs: {lane: 1}}
-      - {ref: common/led-dot@1, id: led-uplink-2-lane-2, at: [202.52, 30.40], group: port-leds, rel-pos: 122, for: uplink-2, attrs: {lane: 2}}
-      - {ref: common/led-dot@1, id: led-uplink-2-lane-3, at: [208.40, 30.40], group: port-leds, rel-pos: 123, for: uplink-2, attrs: {lane: 3}}
-      - {ref: common/led-dot@1, id: led-uplink-2-lane-4, at: [214.28, 30.40], group: port-leds, rel-pos: 124, for: uplink-2, attrs: {lane: 4}}
-      - {ref: common/led-dot@1, id: led-uplink-3-lane-1, at: [227.05, 30.40], group: port-leds, rel-pos: 131, for: uplink-3, attrs: {lane: 1}}
-      - {ref: common/led-dot@1, id: led-uplink-3-lane-2, at: [232.80, 30.40], group: port-leds, rel-pos: 132, for: uplink-3, attrs: {lane: 2}}
-      - {ref: common/led-dot@1, id: led-uplink-3-lane-3, at: [238.55, 30.40], group: port-leds, rel-pos: 133, for: uplink-3, attrs: {lane: 3}}
-      - {ref: common/led-dot@1, id: led-uplink-3-lane-4, at: [244.30, 30.40], group: port-leds, rel-pos: 134, for: uplink-3, attrs: {lane: 4}}
-      - {ref: common/led-dot@1, id: led-uplink-4-lane-1, at: [257.01, 30.40], group: port-leds, rel-pos: 141, for: uplink-4, attrs: {lane: 1}}
-      - {ref: common/led-dot@1, id: led-uplink-4-lane-2, at: [262.71, 30.40], group: port-leds, rel-pos: 142, for: uplink-4, attrs: {lane: 2}}
-      - {ref: common/led-dot@1, id: led-uplink-4-lane-3, at: [268.41, 30.40], group: port-leds, rel-pos: 143, for: uplink-4, attrs: {lane: 3}}
-      - {ref: common/led-dot@1, id: led-uplink-4-lane-4, at: [274.11, 30.40], group: port-leds, rel-pos: 144, for: uplink-4, attrs: {lane: 4}}
-      - {ref: common/led-dot@1, id: led-uplink-5-lane-1, at: [286.76, 30.40], group: port-leds, rel-pos: 151, for: uplink-5, attrs: {lane: 1}}
-      - {ref: common/led-dot@1, id: led-uplink-5-lane-2, at: [292.61, 30.40], group: port-leds, rel-pos: 152, for: uplink-5, attrs: {lane: 2}}
-      - {ref: common/led-dot@1, id: led-uplink-5-lane-3, at: [298.46, 30.40], group: port-leds, rel-pos: 153, for: uplink-5, attrs: {lane: 3}}
-      - {ref: common/led-dot@1, id: led-uplink-5-lane-4, at: [304.31, 30.40], group: port-leds, rel-pos: 154, for: uplink-5, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-1, at: [135.92, 30.10], group: port-leds, rel-pos: 101, for: uplink-0, attrs: {lane: 1}}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-2, at: [141.74, 30.10], group: port-leds, rel-pos: 102, for: uplink-0, attrs: {lane: 2}}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-3, at: [147.56, 30.10], group: port-leds, rel-pos: 103, for: uplink-0, attrs: {lane: 3}}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-4, at: [153.38, 30.10], group: port-leds, rel-pos: 104, for: uplink-0, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-1, at: [165.48, 30.10], group: port-leds, rel-pos: 111, for: uplink-1, attrs: {lane: 1}}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-2, at: [171.45, 30.10], group: port-leds, rel-pos: 112, for: uplink-1, attrs: {lane: 2}}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-3, at: [177.42, 30.10], group: port-leds, rel-pos: 113, for: uplink-1, attrs: {lane: 3}}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-4, at: [183.39, 30.10], group: port-leds, rel-pos: 114, for: uplink-1, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-1, at: [195.34, 30.10], group: port-leds, rel-pos: 121, for: uplink-2, attrs: {lane: 1}}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-2, at: [201.22, 30.10], group: port-leds, rel-pos: 122, for: uplink-2, attrs: {lane: 2}}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-3, at: [207.10, 30.10], group: port-leds, rel-pos: 123, for: uplink-2, attrs: {lane: 3}}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-4, at: [212.98, 30.10], group: port-leds, rel-pos: 124, for: uplink-2, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-1, at: [225.75, 30.10], group: port-leds, rel-pos: 131, for: uplink-3, attrs: {lane: 1}}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-2, at: [231.50, 30.10], group: port-leds, rel-pos: 132, for: uplink-3, attrs: {lane: 2}}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-3, at: [237.25, 30.10], group: port-leds, rel-pos: 133, for: uplink-3, attrs: {lane: 3}}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-4, at: [243.00, 30.10], group: port-leds, rel-pos: 134, for: uplink-3, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-1, at: [255.71, 30.10], group: port-leds, rel-pos: 141, for: uplink-4, attrs: {lane: 1}}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-2, at: [261.41, 30.10], group: port-leds, rel-pos: 142, for: uplink-4, attrs: {lane: 2}}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-3, at: [267.11, 30.10], group: port-leds, rel-pos: 143, for: uplink-4, attrs: {lane: 3}}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-4, at: [272.81, 30.10], group: port-leds, rel-pos: 144, for: uplink-4, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-1, at: [285.46, 30.10], group: port-leds, rel-pos: 151, for: uplink-5, attrs: {lane: 1}}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-2, at: [291.31, 30.10], group: port-leds, rel-pos: 152, for: uplink-5, attrs: {lane: 2}}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-3, at: [297.16, 30.10], group: port-leds, rel-pos: 153, for: uplink-5, attrs: {lane: 3}}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-4, at: [303.01, 30.10], group: port-leds, rel-pos: 154, for: uplink-5, attrs: {lane: 4}}
+      - {ref: common/led-dot@1, id: led-uplink-2, at: [350.93, 30.90], group: port-leds, rel-pos: 2, for: uplink-2}
+      - {ref: common/led-dot@1, id: led-uplink-5, at: [353.12, 30.90], group: port-leds, rel-pos: 5, for: uplink-5}
+      - {ref: common/led-dot@1, id: led-mgmt-l, at: [408.30, 29.60], group: leds, rel-pos: 6, for: mgmt-eth}
+      - {ref: common/led-dot@1, id: led-mgmt-r, at: [419.20, 29.60], group: leds, rel-pos: 7, for: mgmt-eth}
       - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.60], group: port-leds, rel-pos: 0, for: uplink-0}
       - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.60], group: port-leds, rel-pos: 1, for: uplink-1}
       - {ref: common/led-dot@1, id: led-uplink-3, at: [390.19, 14.60], group: port-leds, rel-pos: 2, for: uplink-3}
