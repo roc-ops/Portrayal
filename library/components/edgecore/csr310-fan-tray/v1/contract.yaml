@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: csr310-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan tray of the Edgecore CSR310 (AS7315-27X) - a hot-swappable 1RU tray at
+  the right-hand end of the faceplate carrying the chassis's redundant fan
+  modules, with a grab handle across its top and a captive knurled thumbscrew at
+  its foot. Edgecore part FAN-1U-1x1J-S. The airflow direction is printed on its
+  face as an arrow.
+size: {w: 45.2, h: 40.4, d: 300.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs:
+  model: 'AS7315-27X Fan Tray'
+  part: 'FAN-1U-1x1J-S'
+  power-absent: not-published
+  airflow: side-to-side
+provenance:
+  size: >-
+    photo-measured - CSR310 datasheet front elevation, page 2 at 600 dpi scaled
+    by the stated 440 mm body width to 8.1477 px/mm. The tray's left edge reads
+    394.3 and it runs to the panel's own right edge at 439.5, giving 45.2; its
+    top and bottom edges read 1.6 and 42.0, the same as the supplies', which is
+    what a single row of 1RU modules looks like.
+  depth: >-
+    estimated, stated as the chassis depth because nothing better exists. The
+    datasheet gives the box as 300 mm deep and does not dimension the tray.
+  airflow-arrow: >-
+    photo-measured - an outlined arrow with the word AIRFLOW inside it, centred
+    about 9.5 from the tray's left edge and 35 down, pointing RIGHT. That
+    direction is the whole reason it is drawn: every published ordering code for
+    this model is side-to-side, and the arrow on the tray is where the hardware
+    says which way.
+  how-many-fans: >-
+    NOT STATED AND NOT DRAWN. The datasheet says "Hot swappable redundant fan
+    modules" and the FRU table sells one "Fan Tray Spare Part"; neither says how
+    many fans are inside it, and the elevation shows a closed tray with no
+    grille. So this is ONE module with no nested bays, and the count is a gap on
+    the device rather than a number invented here.
+  power: >-
+    NOT PUBLISHED. No document states a draw for the tray. L27 stands on it.
+elements:
+  handle: {at: [7.2, 4.5], size: [31.0, 3.4], class: handle}
+  thumbscrew: {at: [27.9, 31.2], size: [8.0, 8.6], class: fastener}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: body
+      out: 1.2
+      shape: true
+      color: '#4a4f55'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-fan-tray@1's own depth key - the elevation is a front
+        view. 1.2 is a module face sitting proud of the chassis metal around it,
+        matched to edgecore/csr310-psu-dc@1 because they sit in one row.
+    - node: handle
+      out: 7.0
+      lift: 1.2
+      color: '#8a9099'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-fan-tray@1's own depth key - a grab handle deep enough
+        for fingers. Read as a handle from the elevation; the projection is not
+        dimensioned anywhere.
+    - node: thumbscrew
+      cyl: 5.0
+      lift: 1.2
+      knurl: true
+      color: '#6e747c'
+      confidence: estimated
+      source: >-
+        edgecore/csr310-fan-tray@1's own depth key - a captive knurled screw. The
+        knurling is read from the elevation, where the head shows vertical ribs;
+        how far it stands off is not.
+skins: [default]

@@ -123,7 +123,15 @@ def test_the_comparison_layer_can_now_reach_them():
     when the rule landed; the R740xd made it forty-one the day its fans became
     bays with a group that quotes the technical guide's N+1, the AGR110
     forty-two, its fan group quoting the datasheet's 5+1, and its AGR130 sibling
-    forty-three."""
+    forty-three.
+
+    THE CSR310 DID NOT MAKE IT FORTY-FOUR, and that is the rule working rather
+    than failing. Its fan tray IS a bay with a redundant group, but the
+    datasheet's whole sentence is "Hot swappable redundant fan modules" - no
+    form, no count - so the group carries a note and no `redundancy`, and the
+    comparison layer correctly cannot reach it. An unstated group is an honest
+    gap; the number this test holds counts devices whose vendor said something,
+    not devices that have fans."""
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
     assert n == 43, n
