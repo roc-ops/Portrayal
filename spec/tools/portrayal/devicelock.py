@@ -31,7 +31,10 @@ import yaml
 
 from portrayal import manifest
 from portrayal import libwalk
+# The AGGREGATE's name, written into dist. A device's own lock is
+# `device.lock.json` beside its manifest - see `load_lock`.
 LOCK_NAME = "devices.lock.json"
+DEVICE_LOCK_NAME = "device.lock.json"
 FORMAT = 1
 
 
@@ -519,17 +522,64 @@ def slug(path: pathlib.Path, library: pathlib.Path):
     return str(rel)
 
 
+def lock_path(library: pathlib.Path, name: str):
+    """The lock file that sits beside one device's manifest."""
+    return library / "devices" / name / DEVICE_LOCK_NAME
+
+
 def load_lock(library: pathlib.Path):
-    p = library / LOCK_NAME
-    if not p.exists():
-        return {"format": FORMAT, "devices": {}}
-    return json.loads(p.read_text())
+    """Every device's lock, assembled - the shape `check` and `update` expect.
+
+    ONE FILE PER DEVICE, BESIDE ITS MANIFEST. The lock used to be a single
+    906 KB alphabetically sorted JSON, and every device PR inserted a 74-996
+    line entry into it. Cross-vendor inserts merged cleanly; two same-vendor
+    devices that sort adjacently conflicted in JSON the contributor never wrote,
+    and a component version bump rewrote the entry of every device that seats it
+    - which is why the RJ45 family change needed ten stacked PRs, #131-#140
+    (#182).
+
+    A device's lock now travels in that device's directory, so two devices can
+    never conflict and a reviewer sees the fingerprint beside the thing it
+    fingerprints. The aggregate is a BUILD OUTPUT: `library/dist/devices.lock.json`,
+    written by the same pass that writes the indexes, for anything outside the
+    checkout that wants one file.
+    """
+    devices = {}
+    for path in device_files(library):
+        f = lock_path(library, slug(path, library))
+        if f.exists():
+            devices[slug(path, library)] = json.loads(f.read_text())
+    return {"format": FORMAT, "devices": devices}
 
 
-def write_lock(library: pathlib.Path, lock):
-    p = library / LOCK_NAME
-    p.write_text(json.dumps(lock, indent=1, sort_keys=True) + "\n")
-    return p
+def write_entries(library: pathlib.Path, entries):
+    """Write these devices' locks and no others.
+
+    `--update` used to rewrite the whole file whatever changed, so a one-word
+    provenance fix on one device produced a diff against a 906 KB artefact and
+    a reviewer had to take on trust that the other 88 entries were untouched.
+    Only the devices in `entries` are written now, and `git status` says which.
+    """
+    written = []
+    for name, ent in sorted(entries.items()):
+        f = lock_path(library, name)
+        f.parent.mkdir(parents=True, exist_ok=True)
+        body = {"format": FORMAT, **ent}
+        f.write_text(json.dumps(body, indent=1, sort_keys=True) + "\n")
+        written.append(f)
+    return written
+
+
+def aggregate(library: pathlib.Path, out: pathlib.Path):
+    """Every device's lock in one file, for a consumer outside the checkout.
+
+    A BUILD OUTPUT AND NOT A SOURCE. It is derived from the per-device files, so
+    it cannot drift from them and nothing has to keep it in step; it is in
+    `dist/` for the same reason `devices.json` is - so a reader without a clone
+    has the whole picture in one fetch.
+    """
+    out.write_text(json.dumps(load_lock(library), indent=1, sort_keys=True) + "\n")
+    return out
 
 
 def check(library: pathlib.Path):
@@ -610,22 +660,26 @@ def check(library: pathlib.Path):
 
 
 def update(library: pathlib.Path):
+    """Re-lock the devices whose fingerprint moved, and only those."""
     versions = component_versions(library)
-    lock = load_lock(library)
-    lock["format"] = FORMAT
-    devices = lock.setdefault("devices", {})
-    changed = []
-    for path in device_files(library):
-        name = slug(path, library)
-        doc = manifest.load_yaml(path) or {}
-        now = entry(doc, versions)
-        if devices.get(name) != now:
+    known = load_lock(library)["devices"]
+    live = {slug(p, library): p for p in device_files(library)}
+    changed, writing = [], {}
+    for name, path in live.items():
+        now = entry(manifest.load_yaml(path) or {}, versions)
+        # COMPARE WITHOUT THE FORMAT MARKER, which `write_entries` adds and
+        # `entry` does not produce. Comparing with it made every device differ
+        # on the first run after the split and re-locked all 89.
+        if {k: v for k, v in (known.get(name) or {}).items() if k != "format"} != now:
             changed.append(name)
-        devices[name] = now
-    for name in sorted(set(devices) - {slug(p, library) for p in device_files(library)}):
-        del devices[name]
+            writing[name] = now
+    write_entries(library, writing)
+    # A DEVICE THAT IS GONE TAKES ITS LOCK WITH IT. With one file this was a key
+    # to delete; now it is a file, and leaving it behind would fingerprint a
+    # device that no longer exists.
+    for name in sorted(set(known) - set(live)):
+        lock_path(library, name).unlink(missing_ok=True)
         changed.append(f"{name} (removed)")
-    write_lock(library, lock)
     return changed
 
 
