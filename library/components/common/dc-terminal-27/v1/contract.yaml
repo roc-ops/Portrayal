@@ -12,33 +12,31 @@ description: >-
   pitch behind a transparent guard; the pole names are silkscreened on the
   faceplate BELOW the block, not moulded into it, so this part carries no
   lettering and a device writes its own.
-size: {w: 26.93, h: 15.98, d: 10.4}
+size: {w: 27.5, h: 15.9, d: 10.4}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 attrs: {media: dc-terminal}
 provenance:
   size: >-
-    photo-measured - Edgecore CSR200 (AS5915-18X) datasheet front elevation,
-    page 2 rendered at 600 dpi and scaled by the stated 440 mm body width to
-    9.6341 px/mm, thresholded against the PANEL BACKGROUND rather than by eye.
-    The face carries two of these and they read 26.98 x 16.08 and 26.88 x 15.87,
-    so 26.93 x 15.98 is the mean of two instances that agree to 0.2 mm.
-    AN EARLIER READING OF THIS PART SAID 28.0 x 15.2 and was wrong on both axes -
-    a crop read by eye, where the block's dark upper lip was taken for panel on
-    one axis and its shadow for body on the other. What fixed it was measuring
-    both instances with one threshold derived from the background, which is also
-    what made the CSR180's block measurably a DIFFERENT part rather than a noisy
-    reading of this one. See common/dc-terminal-24@1.
-    WHAT IT IS NOT: it is not a datasheet dimension. No Edgecore document
-    dimensions this block, and the barrier strip is a bought-in part whose own
-    maker is not named anywhere in the corpus. If the vendor part number ever
-    surfaces, its drawing supersedes every number here.
-  pitch: >-
-    photo-measured - the three bright pole faces read 44.38/52.74/61.10 on the
-    left block and 84.76/93.06/101.47 on the right, giving four gaps of 8.36,
-    8.36, 8.30 and 8.41. 8.36 is their mean and it is not rounded to a catalogue
-    figure, because no catalogue entry is in hand to round to: an earlier note
-    here called it 8.5 "the nearest of the standard barrier-strip pitches",
-    which dressed a preference as a reading.
+    photo-measured, READ OFF A MILLIMETRE RULE rather than a threshold. The
+    Edgecore CSR200 (AS5915-18X) datasheet elevation, page 2 at 600 dpi scaled by
+    the stated 440 mm width to 9.6341 px/mm, cropped at 25 px/mm with the rule
+    burned into the image. Both blocks on the face read 27.5 x 15.9 and their
+    pole windows 6.8 x 9.4.
+    TWO EARLIER READINGS OF THIS PART WERE WRONG AND BOTH WERE AUTOMATED. 28.0 x
+    15.2 came from a crop read by eye; 26.93 x 15.98 came from a background-
+    relative threshold, which found the block's bright CORE and clipped the
+    duller edge on every instance. The rule settles it because the answer is read
+    against a printed scale instead of inferred from where a brightness curve
+    crosses a number nobody chose.
+  poles: >-
+    photo-measured on the same rule, and the block IS NOT SYMMETRIC. Pole centres
+    read 44.6/52.8/61.0 on the left block and 85.2/93.4/101.6 on the right - an
+    8.2 pitch, four gaps agreeing to 0.0 - inside bodies starting at 38.0 and
+    79.0. That puts the three poles 0.9 mm right of the body's own centre, with
+    3.2 mm of end wall on the left and 1.1 on the right. The asymmetry is on BOTH
+    blocks of BOTH devices, which is why it is modelled rather than averaged
+    away; an earlier version centred them and drew the windows at 4.6 wide
+    against the 6.8 the rule gives.
   depth: >-
     estimated. The elevation is a front view and fixes nothing behind the face.
     10.4 is what the relief below actually BUILDS - the screw heads are the
@@ -51,9 +49,9 @@ provenance:
     resolving through it, which is what a clear polycarbonate guard over metal
     looks like at this scale. The hinge is inferred from the guard, not seen.
 elements:
-  pole-1: {at: [2.85, 3.8], size: [4.6, 8.4], class: terminal}
-  pole-2: {at: [11.21, 3.8], size: [4.6, 8.4], class: terminal}
-  pole-3: {at: [19.57, 3.8], size: [4.6, 8.4], class: terminal}
+  pole-1: {at: [3.2, 3.6], size: [6.8, 9.4], class: terminal}
+  pole-2: {at: [11.4, 3.6], size: [6.8, 9.4], class: terminal}
+  pole-3: {at: [19.6, 3.6], size: [6.8, 9.4], class: terminal}
 relief:
   wall: '#3a3e43'
   features:
@@ -139,5 +137,5 @@ relief:
         common/dc-terminal-27@1's own 3D-form key - see `body`. A slotted head
         standing on its pole and finishing just under the lip line.
 connection-points:
-  dc-in: {at: [13.47, 7.99], direction: front}
+  dc-in: {at: [14.8, 8.0], direction: front}
 skins: [default]
