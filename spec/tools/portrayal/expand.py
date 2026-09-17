@@ -317,6 +317,12 @@ def block_items(block, library, standards):
             skin = led.get("skin-top") if row == 0 else led.get("skin-bottom")
             if skin:
                 lp["skin"] = skin
+            if led.get("states"):
+                # WHAT A LAMP MEANS IS THE DEVICE'S TO SAY, not the component's.
+                # The same led-arrow is a speed lamp on one face and a link lamp
+                # on the next, and a block of forty-eight shares one vocabulary,
+                # so it is said once here rather than forty-eight times below.
+                lp["states"] = led["states"]
             lp["for"] = pid
             lp["group"] = led.get("group", "port-leds")
             lp["rel-pos"] = n

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 7.0.0
+version: 7.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -789,6 +789,7 @@ views:
           dy-bottom: -3.30
           skin-top: up
           skin-bottom: down
+          states: ['off', {name: link-10g, color: '#22c55e'}, {name: link-1g, color: '#fbbf24'}]
         numerals:
           dx-by-row: [4.13, 10.13]
           dy-top: 27.13
@@ -806,30 +807,30 @@ views:
       - {ref: std/qsfp-ganged@1, id: uplink-4, at: [383.56, 18.91], rotate: 180, group: qsfp28, rel-pos: 3}
       - {ref: std/qsfp-ganged@1, id: uplink-2, at: [364.56, 32.01], group: qsfp28, rel-pos: 4}
       - {ref: std/qsfp-ganged@1, id: uplink-5, at: [383.56, 32.01], group: qsfp28, rel-pos: 5}
-      - {ref: common/led-rect@1, id: led-uplink-0-lane-1, at: [135.72, 30.10], group: port-leds, rel-pos: 101, for: uplink-0, attrs: {lane: 1}}
-      - {ref: common/led-rect@1, id: led-uplink-0-lane-2, at: [140.62, 30.10], group: port-leds, rel-pos: 102, for: uplink-0, attrs: {lane: 2}}
-      - {ref: common/led-rect@1, id: led-uplink-0-lane-3, at: [145.52, 30.10], group: port-leds, rel-pos: 103, for: uplink-0, attrs: {lane: 3}}
-      - {ref: common/led-rect@1, id: led-uplink-0-lane-4, at: [150.42, 30.10], group: port-leds, rel-pos: 104, for: uplink-0, attrs: {lane: 4}}
-      - {ref: common/led-rect@1, id: led-uplink-1-lane-1, at: [165.58, 30.10], group: port-leds, rel-pos: 111, for: uplink-1, attrs: {lane: 1}}
-      - {ref: common/led-rect@1, id: led-uplink-1-lane-2, at: [170.48, 30.10], group: port-leds, rel-pos: 112, for: uplink-1, attrs: {lane: 2}}
-      - {ref: common/led-rect@1, id: led-uplink-1-lane-3, at: [175.38, 30.10], group: port-leds, rel-pos: 113, for: uplink-1, attrs: {lane: 3}}
-      - {ref: common/led-rect@1, id: led-uplink-1-lane-4, at: [180.28, 30.10], group: port-leds, rel-pos: 114, for: uplink-1, attrs: {lane: 4}}
-      - {ref: common/led-rect@1, id: led-uplink-2-lane-1, at: [195.44, 30.10], group: port-leds, rel-pos: 121, for: uplink-2, attrs: {lane: 1}}
-      - {ref: common/led-rect@1, id: led-uplink-2-lane-2, at: [200.34, 30.10], group: port-leds, rel-pos: 122, for: uplink-2, attrs: {lane: 2}}
-      - {ref: common/led-rect@1, id: led-uplink-2-lane-3, at: [205.24, 30.10], group: port-leds, rel-pos: 123, for: uplink-2, attrs: {lane: 3}}
-      - {ref: common/led-rect@1, id: led-uplink-2-lane-4, at: [210.14, 30.10], group: port-leds, rel-pos: 124, for: uplink-2, attrs: {lane: 4}}
-      - {ref: common/led-rect@1, id: led-uplink-3-lane-1, at: [225.30, 30.10], group: port-leds, rel-pos: 131, for: uplink-3, attrs: {lane: 1}}
-      - {ref: common/led-rect@1, id: led-uplink-3-lane-2, at: [230.20, 30.10], group: port-leds, rel-pos: 132, for: uplink-3, attrs: {lane: 2}}
-      - {ref: common/led-rect@1, id: led-uplink-3-lane-3, at: [235.10, 30.10], group: port-leds, rel-pos: 133, for: uplink-3, attrs: {lane: 3}}
-      - {ref: common/led-rect@1, id: led-uplink-3-lane-4, at: [240.00, 30.10], group: port-leds, rel-pos: 134, for: uplink-3, attrs: {lane: 4}}
-      - {ref: common/led-rect@1, id: led-uplink-4-lane-1, at: [255.16, 30.10], group: port-leds, rel-pos: 141, for: uplink-4, attrs: {lane: 1}}
-      - {ref: common/led-rect@1, id: led-uplink-4-lane-2, at: [260.06, 30.10], group: port-leds, rel-pos: 142, for: uplink-4, attrs: {lane: 2}}
-      - {ref: common/led-rect@1, id: led-uplink-4-lane-3, at: [264.96, 30.10], group: port-leds, rel-pos: 143, for: uplink-4, attrs: {lane: 3}}
-      - {ref: common/led-rect@1, id: led-uplink-4-lane-4, at: [269.86, 30.10], group: port-leds, rel-pos: 144, for: uplink-4, attrs: {lane: 4}}
-      - {ref: common/led-rect@1, id: led-uplink-5-lane-1, at: [285.46, 30.10], group: port-leds, rel-pos: 151, for: uplink-5, attrs: {lane: 1}}
-      - {ref: common/led-rect@1, id: led-uplink-5-lane-2, at: [290.36, 30.10], group: port-leds, rel-pos: 152, for: uplink-5, attrs: {lane: 2}}
-      - {ref: common/led-rect@1, id: led-uplink-5-lane-3, at: [295.26, 30.10], group: port-leds, rel-pos: 153, for: uplink-5, attrs: {lane: 3}}
-      - {ref: common/led-rect@1, id: led-uplink-5-lane-4, at: [300.16, 30.10], group: port-leds, rel-pos: 154, for: uplink-5, attrs: {lane: 4}}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-1, at: [135.72, 30.10], group: port-leds, rel-pos: 101, for: uplink-0, attrs: {lane: 1}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-2, at: [140.62, 30.10], group: port-leds, rel-pos: 102, for: uplink-0, attrs: {lane: 2}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-3, at: [145.52, 30.10], group: port-leds, rel-pos: 103, for: uplink-0, attrs: {lane: 3}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-0-lane-4, at: [150.42, 30.10], group: port-leds, rel-pos: 104, for: uplink-0, attrs: {lane: 4}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-1, at: [165.58, 30.10], group: port-leds, rel-pos: 111, for: uplink-1, attrs: {lane: 1}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-2, at: [170.48, 30.10], group: port-leds, rel-pos: 112, for: uplink-1, attrs: {lane: 2}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-3, at: [175.38, 30.10], group: port-leds, rel-pos: 113, for: uplink-1, attrs: {lane: 3}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-1-lane-4, at: [180.28, 30.10], group: port-leds, rel-pos: 114, for: uplink-1, attrs: {lane: 4}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-1, at: [195.44, 30.10], group: port-leds, rel-pos: 121, for: uplink-2, attrs: {lane: 1}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-2, at: [200.34, 30.10], group: port-leds, rel-pos: 122, for: uplink-2, attrs: {lane: 2}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-3, at: [205.24, 30.10], group: port-leds, rel-pos: 123, for: uplink-2, attrs: {lane: 3}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-2-lane-4, at: [210.14, 30.10], group: port-leds, rel-pos: 124, for: uplink-2, attrs: {lane: 4}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-1, at: [225.30, 30.10], group: port-leds, rel-pos: 131, for: uplink-3, attrs: {lane: 1}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-2, at: [230.20, 30.10], group: port-leds, rel-pos: 132, for: uplink-3, attrs: {lane: 2}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-3, at: [235.10, 30.10], group: port-leds, rel-pos: 133, for: uplink-3, attrs: {lane: 3}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-3-lane-4, at: [240.00, 30.10], group: port-leds, rel-pos: 134, for: uplink-3, attrs: {lane: 4}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-1, at: [255.16, 30.10], group: port-leds, rel-pos: 141, for: uplink-4, attrs: {lane: 1}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-2, at: [260.06, 30.10], group: port-leds, rel-pos: 142, for: uplink-4, attrs: {lane: 2}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-3, at: [264.96, 30.10], group: port-leds, rel-pos: 143, for: uplink-4, attrs: {lane: 3}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-4-lane-4, at: [269.86, 30.10], group: port-leds, rel-pos: 144, for: uplink-4, attrs: {lane: 4}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-1, at: [285.46, 30.10], group: port-leds, rel-pos: 151, for: uplink-5, attrs: {lane: 1}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-2, at: [290.36, 30.10], group: port-leds, rel-pos: 152, for: uplink-5, attrs: {lane: 2}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-3, at: [295.26, 30.10], group: port-leds, rel-pos: 153, for: uplink-5, attrs: {lane: 3}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
+      - {ref: common/led-rect@1, id: led-uplink-5-lane-4, at: [300.16, 30.10], group: port-leds, rel-pos: 154, for: uplink-5, attrs: {lane: 4}, states: ['off', {name: link-100g, color: '#22c55e'}, {name: link-40g, color: '#3b82f6'}, {name: link-25g, color: '#fbbf24'}, {name: link-10g, color: '#a855f7'}]}
       - {ref: common/led-rect@1, id: led-uplink-2, at: [345.87, 30.10], group: port-leds, rel-pos: 2, for: uplink-2}
       - {ref: common/led-rect@1, id: led-uplink-5, at: [351.77, 30.10], group: port-leds, rel-pos: 5, for: uplink-5}
       - {ref: common/led-rect@1, id: led-mgmt-l, at: [407.20, 29.00], group: leds, rel-pos: 6, for: mgmt-eth}
@@ -838,9 +839,9 @@ views:
       - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.60], group: port-leds, rel-pos: 1, for: uplink-1}
       - {ref: common/led-dot@1, id: led-uplink-3, at: [390.19, 14.60], group: port-leds, rel-pos: 2, for: uplink-3}
       - {ref: common/led-dot@1, id: led-uplink-4, at: [394.57, 14.60], group: port-leds, rel-pos: 3, for: uplink-4}
-      - {ref: common/led-rect@1, id: led-ps0, at: [16.57, 30.95], group: leds, rel-pos: 1, for: rear/psu-0}
-      - {ref: common/led-rect@1, id: led-ps1, at: [22.47, 30.95], group: leds, rel-pos: 2, for: rear/psu-1}
-      - {ref: common/led-rect@1, id: led-diag, at: [28.38, 30.95], group: leds, rel-pos: 3, for: chassis}
+      - {ref: common/led-rect@1, id: led-ps0, at: [16.57, 30.95], group: leds, rel-pos: 1, for: rear/psu-0, states: ['off', {name: ok, color: '#22c55e'}]}
+      - {ref: common/led-rect@1, id: led-ps1, at: [22.47, 30.95], group: leds, rel-pos: 2, for: rear/psu-1, states: ['off', {name: ok, color: '#22c55e'}]}
+      - {ref: common/led-rect@1, id: led-diag, at: [28.38, 30.95], group: leds, rel-pos: 3, for: chassis, states: ['off', {name: ok, color: '#22c55e'}]}
       - {ref: common/led-rect@1, id: led-fan, at: [34.40, 30.95], group: leds, rel-pos: 4, for: [rear/fan-0,
           rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5]}
       - {ref: common/led-rect@1, id: led-loc, at: [40.52, 30.95], group: leds, rel-pos: 5, for: chassis}
