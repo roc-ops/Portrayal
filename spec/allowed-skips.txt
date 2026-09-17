@@ -30,3 +30,11 @@ lint ran as its own CI job before this suite started
 # in the suite would have tripped it. That is the argument against a count in
 # one line.
 not staged - reference imagery lives in working/
+# The same fact about the world as the line above, for the DOCUMENTS rather than
+# the imagery. `test_source_registry` resolves every registered `sha256` against
+# the staged PDFs, which is the only way to prove the rule it enforces - a hash
+# means the file is HELD - because an entry records a hash and not a path. On a
+# clean checkout there is nothing to hash, so it skips; the other three checks in
+# that file need no corpus and run everywhere, which is why this is one skip and
+# not four.
+no working/ corpus here; this runs where the intake lives
