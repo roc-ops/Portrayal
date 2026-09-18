@@ -81,23 +81,25 @@ provenance:
     (docs/pluggables-design.md decision 4). Gated, not built: it is the MPO sibling this LC face has
     no bearing on.
   protrusion: >-
-    QSFP-DD HW Rev 6.3 Figure 52 dimensions the module referenced to Datum D, which Table 25 (section
-    7.2) defines as "Hard stop on module" - the same role SFF-8661's datum D plays for qsfp-module
-    (generic/qsfp-lc@1's own provenance.protrusion: "52.4 REF ... to datum D, the hard stop on the
-    module"). To the LEFT of Datum D, callout 4 reads "20 MAX / TYPE 1" and "35 MAX / TYPE 2" - the
-    section of the module that stands OUTSIDE the cage once seated, for a module without a heat sink
-    (Type 1) and with one (Type 2, drawn with its own heat sink in Figure 51). To the RIGHT of Datum D,
-    "58.26 REF" runs to the rear of the module housing - the same figure spec/schemas/standards.yaml's
-    qsfp-dd-module entry already carries as `depth` at `verified` confidence, and this contract's own
-    `size.d` above. The two dimensions share Datum D as a common boundary, not one figure derived from
-    the other: 20 MAX (Type 1) is used directly as `body.out` at drawing confidence, the same way
-    generic/qsfp-lc@1 used SFF-8661's own 20mm MAX nose rather than deriving one, and the same way
-    generic/sfp-lc@1 used SFF-8432's 10.0mm Recommended Maximum directly. It is deliberately NOT
-    58.26 less std/qsfp-dd's registry depth of 37.0 REF - that 37.0 is itself `estimated`
-    (spec/schemas/standards.yaml, std/qsfp-dd), so a subtraction against it would trade a drawing
-    figure for a guess. Type 1 (20 MAX, no heat sink) is used because it is the base module Figure 47
-    itself pictures and the type this generic - carrying no rate, reach or thermal envelope - stands
-    for by default; a heat-sinked variant is a fact about a vendor's product, not this shape.
+    QSFP-DD HW Rev 6.3 section 7.3 (page 84) states in text: "The dimensions that control the size of
+    the module that extends outside of the cage are listed as maximum dimensions per Note 4." Figure
+    52's Note 4 callout, attached to the dimension pair on that drawing, reads "20 MAX / TYPE 1" and
+    "35 MAX / TYPE 2" - the size of the module standing outside the cage once seated, for a module
+    without a heat sink (Type 1) and with one (Type 2, drawn with its own heat sink in Figure 51). 20
+    MAX (Type 1) is used directly as `body.out` at drawing confidence, on the strength of that text and
+    that callout - the same way generic/qsfp-lc@1 used SFF-8661's own 20mm MAX nose rather than
+    deriving one, and the same way generic/sfp-lc@1 used SFF-8432's 10.0mm Recommended Maximum
+    directly. Type 1 (20 MAX, no heat sink) is used because it is the base module Figure 47 itself
+    pictures and the type this generic - carrying no rate, reach or thermal envelope - stands for by
+    default; a heat-sinked variant is a fact about a vendor's product, not this shape.
+    NOT USED: 58.26 REF, which is the registry's module length to datum DD (Table 25: "Top surface of
+    module housing"; see provenance.size and spec/schemas/standards.yaml's qsfp-dd-module `depth-notes`)
+    and is a different datum from the one Note 4's dimension controls - the two are not read as one
+    span split at a shared tick, and no such tick is claimed here. Also NOT USED: std/qsfp-dd's registry
+    depth of 37.0, which is itself `estimated` (spec/schemas/standards.yaml, std/qsfp-dd) and stayed
+    out of this figure for the same reason it was rejected for `size.d` - a subtraction against an
+    estimated figure would trade a drawing figure for a guess. 20.0 comes from section 7.3's own text
+    and Note 4's own callout, nothing derived.
   tab: >-
     common/qsfp-pull-tab@1's own provenance carried verbatim, exactly as generic/qsfp-lc@1 carries it:
     "drawing - 19.00 MAX across the bail, 3.40 MAX thick" (size) and "drawing - 34.80 MAX forward of
@@ -119,7 +121,7 @@ relief:
       color: '#8d949c'
       confidence: drawing
       source: >-
-        QSFP-DD HW Rev 6.3 Figure 52, 20 MAX (Type 1) - see provenance.protrusion
+        QSFP-DD HW Rev 6.3 section 7.3 and Figure 52 Note 4, 20 MAX Type 1
     - node: tab
       lift: 20.0
       out: 34.80
