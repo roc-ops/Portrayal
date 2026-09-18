@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="13.55mm" height="8.55mm" viewBox="0 0 13.55 8.55">
+  <!-- Module body 13.55 x 8.55 (registry - sfp-module, SFF-8432 Table 4-3
+       designators E/S), drawn evenodd with the jack opening as a hole - no
+       bores, this is a copper face. The 3D textures this raised face with
+       alphaTest, so the hole punches through and you look into the composed
+       std/rj45-ganged@2 jack behind it rather than at a painted-on shape.
+       THE HOLE IS A PLAIN RECT, not the jack's own three-tier 8P8C cavity -
+       that belongs to the composed part's own relief. It runs 12.7 wide,
+       x 0.425 to 13.125 (std/rj45-ganged@2 centred in the 13.55 face - see
+       provenance.face), and the FULL 8.55 height of the visible face: the
+       real jack is 11.0 tall and overhangs 1.225mm above and below what
+       this flat face can show, so the opening is drawn edge to edge rather
+       than clipped to a margin that does not exist on the real part. -->
+  <path id="body" fill-rule="evenodd" fill="#9aa0a8" stroke="#6e747c" stroke-width="0.25" d="
+    M 0.6 0 h 12.35 a 0.6 0.6 0 0 1 0.6 0.6 v 7.35 a 0.6 0.6 0 0 1 -0.6 0.6 h -12.35
+    a 0.6 0.6 0 0 1 -0.6 -0.6 v -7.35 a 0.6 0.6 0 0 1 0.6 -0.6 z
+    M 0.425 0 h 12.7 v 8.55 h -12.7 z"/>
+  <!-- bail latch: the lever that unseats the module. Kept on a copper SFP -
+       the latching mechanism is the same across the family; see
+       provenance.latch. Separate piece on purpose - it pivots up to
+       release, and lies flat here because the module is seated.
+       data-fill-from lets a placement's latch-color field recolour it; the
+       literal fill is the default the drawing shows. -->
+  <rect id="bail" x="0.5" y="0.55" width="12.55" height="1.05" rx="0.5" fill="#2f5fa8"
+        stroke="#20406f" stroke-width="0.18" data-fill-from="latch-color"/>
+  <g id="silkscreen">
+    <text id="label" x="6.775" y="7.9" font-family="sans-serif" font-size="0.9"
+          text-anchor="middle" fill="#2a2f34" data-from="label"></text>
+  </g>
+</svg>

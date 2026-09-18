@@ -1,0 +1,105 @@
+format: 1
+kind: component
+name: sfp-rj45
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+conforms: sfp-module
+profile: networking
+description: >-
+  A generic copper SFP - the shape every 10GBASE-T, 1000BASE-T or other
+  copper SFP/SFP+ optic has, standing for all of them. An RJ45 jack opening
+  cut into the module body, and a bail latch lying flat because the module
+  is seated - the same latch every SFP carries, copper or fiber. Which
+  module it is - rate, reach, watts - is a fact about a vendor's product and
+  lives on the wrapper that composes this (docs/pluggables-design.md,
+  decision 5), never here.
+size: {w: 13.55, h: 8.55, d: 47.50}
+attrs: {power-absent: not-applicable, form-factor: sfp, face: rj45, media: copper}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#2f5fa8'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - sfp-module, which is SFF-8432 Rev 5.2a Table 4-3 (designator E
+    13.55 width, S 8.55 height, T 47.50 distance from positive stop to rear of
+    module). Unchanged from generic/sfp-lc@1, which this contract is copied
+    from - a copper face does not change the module's outer envelope.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a
+    shape that stands in for every module of its kind, so there is no one
+    figure to state: a 1000BASE-T SFP is under 1 W and a 10GBASE-T runs
+    several, and this single drawing is both. Any wattage here would be a
+    fiction dressed as a fact. The figure belongs on the wrapper, which knows
+    which module it is. L27 exempts by `power-absent` and this sentence is
+    why.
+  protrusion: >-
+    SFF-8432 Rev 5.2a Table 4-3 designator A, "Module length extending outside
+    of cage" (Note 4: indicated outline defines the maximum envelope outside
+    of the cage), 10.0mm Recommended Maximum - carried unchanged from
+    generic/sfp-lc@1; see that contract's own `provenance.protrusion` for the
+    full reading. A face swap does not move the body's protrusion.
+  bail-colour: >-
+    A FIELD, not a fact. Vendors colour the bail by reach and the wrapper sets
+    `latch-color`; the default here is a colour, not a claim.
+  latch: >-
+    carried unchanged from generic/sfp-lc@1's `provenance.latch` - the bail
+    geometry is a fact about the module body, not about which face is cut
+    into it. NO BAIL ON A COPPER SFP? Kept: copper SFPs carry the same
+    latching mechanism as their optical siblings, so the bail node and its
+    feature stay.
+  face: >-
+    the opening on a real copper SFP+ is cut into the 8.55 face itself and is
+    smaller than any panel jack in the library - `std/rj45-ganged@2` is 12.7
+    x 11.0 and `std/rj45@N` is 15.8 x 13.2, both because they are PANEL jacks
+    with a bezel, not a module aperture. No document in the intake corpus
+    dimensions a copper SFP's own opening, so the smaller of the two,
+    std/rj45-ganged@2, is composed centred on the face instead: `at: [0.425,
+    -1.225]` centres its 12.7 width in the 13.55 face (0.425 clear each side)
+    and its 11.0 height on the 8.55 face, overhanging 1.225mm top and bottom
+    - ESTIMATED. What would settle it is a real copper SFP drawing, e.g. a
+    10GBASE-T SFP+ datasheet's mechanical page; until then the panel
+    aperture stands in, unshrunk to force a fit that no document supports.
+  rj45-census: >-
+    L76's RJ45 family census reads any composed RJ45 as wanting lamps unless
+    its id, role, group or media names it console, timing or serial;
+    std/rj45-ganged@2 is the family's own BARE member and this jack carries
+    no link/activity lamps of its own - a copper SFP has none, the same way
+    the host bay may draw lamps beside a cage rather than inside it
+    elsewhere in the corpus. The resulting L76 warning on this contract is
+    correct and is left unsilenced rather than dodged with a media token
+    that would misstate the jack.
+parts:
+  - {ref: std/rj45-ganged@2, id: jack, at: [0.425, -1.225], lift: 10.0}
+relief:
+  features:
+    - node: body
+      out: 10.0
+      color: '#6e747c'
+      confidence: drawing
+      source: >-
+        SFF-8432 Rev 5.2a Table 4-3 designator A, module length extending
+        outside of cage, 10.0mm Recommended Maximum - see
+        provenance.protrusion
+    - node: bail
+      lift: 10.0
+      out: 14.3
+      color: '#2f5fa8'
+      confidence: estimated
+      source: >-
+        common/sfp-lc-duplex@1 - unsourced. The length key gives '0.49 in
+        [12.3] is the face height with the bail extended', which is a HEIGHT
+        across the face, not how far forward the bail reaches. 14.3 is 0.4
+        past the body's Table 4-3 protrusion and nothing states it.
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+  net: {at: [6.775, 4.275], direction: front}
+skins: [default]
