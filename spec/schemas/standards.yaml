@@ -1087,18 +1087,19 @@ standards:
       interface (qsfp), the rate never in this entry. common/qsfp-transceiver@1's
       18.35 x 8.5 came from a vendor drawing; this is the MSA that drawing follows.
   qsfp-dd-module:
-    registry: 'QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3, section 7.3, Figure 47 (Type 1 module)'
-    w: ~
-    h: ~
+    registry: 'QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3, section 7.3, Figure 47 (Type 1 module) dimensioned per Figure 52 (Drawing of the QSFP-DD module) and Figure 53 (module end face)'
+    w: 18.35
+    h: 8.5
     radius: 0.0
-    confidence: registry
-    depth: ~
-    depth-confidence: registry
-    depth-notes: 'overall module length, Figure 47 - not legible in the reachable OKF text (captions only, no dimension callouts recovered) and no local PDF held; do not fill from common/qsfp-dd-transceiver or from qsfp-module without reading Figure 47 itself'
+    confidence: verified
+    depth: 58.26
+    depth-confidence: verified
+    depth-notes: 'overall module length, Figure 52 (front tip to rear of module housing at datum DD; 58.26 REF, not toleranced) - the paddle-card fingers extend a little further right of this point but are not part of the housing envelope; w/h are toleranced +/-0.1 on the same figure and both corroborated by Figure 53''s end-view callouts (18.35 REF, 8.5 REF)'
     notes: >-
       Type 1. Types 2, 2A and 2B differ behind the bezel (section 7.3) and are
       not separate envelopes here. Same width as qsfp-module by design - the
-      QSFP-DD cage accepts a QSFP module (section 1) - but w/h/depth are left
-      unset (confidence: registry) until Figure 47 itself can be read: the
-      Hardware Spec Rev 6.3 PDF is not staged under working/specs/, see
-      working/intake/optic/msa/SOURCES.md.
+      QSFP-DD cage accepts a QSFP module (section 1) - and Figure 52 confirms
+      it: datum E is 18.35 +/-0.1 here too. Height (datum F, 8.5 +/-0.1) and
+      overall length (58.26 REF) are longer than qsfp-module - this is not a
+      QSFP+ envelope with a new name. Figure 47 itself is only an isometric
+      outline with no callouts; the numbers are Figure 52/53's.
