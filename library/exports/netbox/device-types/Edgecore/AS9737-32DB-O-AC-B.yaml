@@ -16,8 +16,10 @@ console-ports:
   - name: Console
     type: rj-45
 interfaces:
-  - name: tengig-1
+  - name: mgmt-asic
     type: 10gbase-x-sfpp
+    mgmt_only: true
+    description: 10G management port (faceplate label; not presented as a switch interface)
   - name: port-1
     type: 400gbase-x-qsfpdd
   - name: port-2
@@ -112,10 +114,10 @@ module-bays:
     description: 'Accepts: dcs240-psu-ac, dcs240-psu-dc'
 comments: '32x 400G QSFP56-DD data-centre leaf switch on an Intel Xeon D-1713NTE with an AST2600 OpenBMC,
   sold as the DCS511. Every port, both consoles, the USB and a 1PPS timing input are on the FRONT; two
-  supplies, SIX fan trays and the grounding screws are on the rear. THE TWO RIGHT-HAND CAGES ARE NOT A
-  PAIR: the datasheet''s callout 5 reads "Top: 10G SFP+ port (MAC), Bottom: 1G SFP port (CPU)", so the
-  upper one is a traffic port numbered 1 in its own space and the lower one is an out-of-band management
-  port on the CPU.
+  supplies, SIX fan trays and the grounding screws are on the rear. BOTH RIGHT-HAND CAGES ARE MANAGEMENT
+  PORTS, which is not what the quick start''s callouts suggest. The datasheet lists them under "Management
+  Ports on Port Side" - "1 x SFP+ 10G ASIC management" and "1 x SFP 1G CPU management" - and states "Switch
+  Ports: 32 x QSFP56-DD 400 GbE", a count with no SFP in it. Neither cage carries traffic.
 
 
   Configuration `ac-b2f`: Dual AC PSUs, back-to-front airflow. The guide states the colour: "Install back-to-front
@@ -136,11 +138,6 @@ comments: '32x 400G QSFP56-DD data-centre leaf switch on an Intel Xeon D-1713NTE
   40G and 4 x 10G on 10G NRZ - which is a fuller statement of what works than the datasheet''s port line
   gives.
 
-  - features.optics-sfp-plus: quick start, Port LEDs: "SFP+ 10G LEDs: Left: Green (10G), Amber (1G)".
-  Both speeds are indicated on the one lamp, so the single MAC-side cage takes 10GbE and 1GbE optics.
-  The 1G SFP management port is NOT covered by this key - it is in the `mgmt` group, which declares no
-  group media, and no staged document says what optics it takes.
-
   - lifecycle.eol: none-announced
 
   - physical.weight-note: 11.88 kg (26.16 lb), with 2 PSUs and 6 fans installed
@@ -150,7 +147,7 @@ comments: '32x 400G QSFP56-DD data-centre leaf switch on an Intel Xeon D-1713NTE
   - platform.cpu: Intel Xeon D-1713NTE, 4-core 2.2 GHz
 
 
-  Drawing version 1.0.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 2.0.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

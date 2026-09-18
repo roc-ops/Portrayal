@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs511
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9737-32DB
@@ -10,9 +10,10 @@ description: >-
   32x 400G QSFP56-DD data-centre leaf switch on an Intel Xeon D-1713NTE with an AST2600
   OpenBMC, sold as the DCS511. Every port, both consoles, the USB and a 1PPS timing input are
   on the FRONT; two supplies, SIX fan trays and the grounding screws are on the rear.
-  THE TWO RIGHT-HAND CAGES ARE NOT A PAIR: the datasheet's callout 5 reads "Top: 10G SFP+
-  port (MAC), Bottom: 1G SFP port (CPU)", so the upper one is a traffic port numbered 1 in
-  its own space and the lower one is an out-of-band management port on the CPU.
+  BOTH RIGHT-HAND CAGES ARE MANAGEMENT PORTS, which is not what the quick start's callouts
+  suggest. The datasheet lists them under "Management Ports on Port Side" - "1 x SFP+ 10G
+  ASIC management" and "1 x SFP 1G CPU management" - and states "Switch Ports: 32 x QSFP56-DD
+  400 GbE", a count with no SFP in it. Neither cage carries traffic.
 profile: networking
 provenance:
   sources:
@@ -79,20 +80,28 @@ provenance:
       falls out of them: 14.23 top-to-top and 14.10 bottom-to-bottom against the DCS240's
       14.21.
   the-two-right-hand-cages:
-    confidence: measured
+    confidence: datasheet
     note: >-
-      SAME METAL AS THE DCS240, DIFFERENT JOB. Both cage frames measure x 389.1 to 403.7 and
-      y 13.1-22.7 and 27.3-36.9, against the DCS240's modelled 389.60 + 14.25 and 12.28 /
-      26.49 + 10.4. The parts and their seats carry over unchanged.
-      WHAT DOES NOT CARRY OVER IS WHAT THEY ARE. The DCS240 has two 10G SFP+ traffic ports
-      printed 1 and 2. Here the guide's callout 4 reads "1 x 10G SFP+ port" and callout 5
-      reads "1 x 1G SFP management port", and the datasheet's own table is explicit - "Top:
-      10G SFP+ port (MAC) Bottom: 1G SFP port (CPU)". The panel prints "10G SFP+" above the
-      upper cage and "1G SFP" below the lower one, which is also where their lamps are.
-      So the upper cage is the only member of a traffic group and the lower one joins the
-      out-of-band cluster. It states its media on the placement rather than on `mgmt`,
-      because a group media of `sfp` would make L40 ask which optics run in a jack whose
-      optics no staged document mentions.
+      BOTH ARE MANAGEMENT, AND THE TWO DOCUMENTS DO NOT SAY SO EQUALLY WELL. The quick start's
+      Overview callouts read "4. 1 x 10G SFP+ port" and "5. 1 x 1G SFP management port", and
+      callout 4's silence about what the port is for reads as a traffic port beside a
+      management one. IT IS NOT. The datasheet's specification block is explicit:
+        Management Ports on Port Side:
+          1 x RJ-45 serial console / 1 x Micro USB console port
+          1 x RJ-45 1000BASE-T management
+          1 x SFP+ 10G ASIC management
+          1 x SFP 1G CPU management
+          1 x USB 3.0 storage port
+      and the same datasheet gives "Switch Ports: 32 x QSFP56-DD 400 GbE" - thirty-two, with
+      no SFP among them. The datasheet's own callout table says the same thing in short form,
+      "Top: 10G SFP+ port (MAC) Bottom: 1G SFP port (CPU)", where MAC names the side of the
+      box the jack reaches (the switch ASIC) rather than promising a traffic port.
+      So the upper cage manages the ASIC at 10G and the lower manages the CPU at 1G, and this
+      device has NO second port number space. An earlier revision of this model made the upper
+      cage a traffic port called `tengig-1` in a `sfp-plus` group; that group is gone.
+      GEOMETRY IS UNCHANGED AND STILL MEASURED. Both cage frames read x 389.1 to 403.7 and
+      y 13.1-22.7 and 27.3-36.9 on this device's own photograph, against the DCS240's modelled
+      389.60 + 14.25 and 12.28 / 26.49 + 10.4. What changed is what they are, not where.
   the-four-right-hand-lamps:
     confidence: measured
     note: >-
@@ -118,15 +127,41 @@ provenance:
       resolves them at 5.08 px/mm, rather than re-derived from the coarser picture that
       confirms them. Callout 2 names the same set - "1 x 1000BASE-T RJ-45, micro-USB/RJ-45
       console, USB" - and the panel again labels BOTH consoles, so both are drawn.
-  the-system-lamps:
-    confidence: datasheet
+  the-edge-vents-are-slots:
+    confidence: measured
     note: >-
-      THE SAME 3x2 GRID AND THE SAME UNNAMED SIXTH WINDOW as the DCS240. The System
-      LEDs/Buttons enlargement shows six windows, round in the left column and rectangular in
-      the right, and the guide's list names five: "Loc: Flashing Amber (switch locator)",
-      "Diag: Green (OK), Amber (fault)", "PS1/PS2" and "Fan". The bottom-right window carries
-      no legend in either document. It is drawn and given an id, which is what the CSR310 and
-      the DCS240 settled.
+      SLOTS, NOT HONEYCOMB, AND THE SAME MISTAKE AS THE DCS240'S FIRST PASS. Both end vents
+      were carried from edgecore/dcs240 as `pattern: vent`, which paints hexagons. This
+      device's front photograph shows small RECTANGLES in two columns at the left edge and one
+      at the right - the same slot field the top and bottom bands already use. The left field
+      measures x 1.0 to 3.6 where the carried decor claimed 1.2 to 4.8, which is also why the
+      Loc, PS1 and Fan legends were printing over it.
+      edgecore/dcs240 still draws hexagons at both ends. It is not changed here, because its
+      panel was measured off its own guide and re-reading it is that device's work, not this
+      one's.
+  the-system-lamps:
+    confidence: measured
+    note: >-
+      SIX WINDOWS, ALL ROUND, AND THE SIXTH HAS NO NAME. This device's own System LEDs/Buttons
+      enlargement on quick start page 1 resolves the cluster at 600 dpi: a 3x2 grid of SIX
+      windows, every one of them a circle, labelled Loc and Diag on the top row, PS1 and PS2
+      on the middle, and Fan on the bottom left. THE BOTTOM-RIGHT WINDOW CARRIES NO LEGEND, in
+      this enlargement or anywhere in either document, and the guide's own list names exactly
+      five: Loc, Diag, PS1/PS2, Fan. It is drawn and given an id rather than omitted, because
+      a window in the metal that the model leaves out is worse than one it labels as unknown.
+      IT IS NOT A SECOND FAN LAMP. The chassis has six fan trays and one Fan lamp; nothing in
+      either document attaches the sixth window to a tray, and inventing that reading would be
+      the model asserting something the vendor does not.
+      IT STILL LIGHTS. An earlier revision pinned it to the single state `off`, which says the
+      window is dead rather than that its meaning is unknown - a lamp nobody can turn on is a
+      worse answer than a lamp nobody can name. It now states NO `states:` override at all and
+      inherits common/led-dot@1's own `off`/`on`, which is the right shape for this: the part
+      says a lamp can be lit, and this device declines to name a colour or a meaning it has no
+      source for. The five lamps beside it override because their guide does name theirs.
+      AN EARLIER REVISION DREW THE RIGHT COLUMN AS RECTANGLES. That came from the DCS240's
+      guide, which describes its own cluster as "round in the left column, rectangular in the
+      right", and was carried here without checking. This device's enlargement shows six
+      circles, so all six are common/led-dot@1 and the cutouts are circles.
   lamps:
     confidence: datasheet
     note: >-
@@ -198,16 +233,156 @@ provenance:
       MEASURED AND CORRECT; their drawn heads are a third to a sixth of the metal's area.
       Recorded here rather than as a gap for the same reason as the derate above: what is
       missing is a part, not a fact about this device.
-  the-unnamed-green-strip:
+  the-green-tab-is-a-pull-out-card:
+    confidence: datasheet
+    note: >-
+      IT IS A PART, AND THE LIBRARY ALREADY HAD IT. A bright green bar sits at the foot of the
+      panel at x 413.7-430.6, y 40.6-42.9. Two earlier revisions of this model got it wrong in
+      two different ways: first as an unexplained `green-strip` decor with a gap asking what it
+      was, then as a `product-label` decor once callout 6 was found. Both were paint, and paint
+      has no entry in a component tree, so a reader looking at the thing could not find out
+      what it was - which is exactly the question it kept provoking.
+      IT IS common/pull-tab@1 - "Captive pull-out information tab (default credentials / serial
+      card)", 16.0 x 4.5, whose relief colour is already '#2f7d1c'. edgecore/dcs510, this
+      device's immediate sibling, seats it at [414.5, 38.4] and records the tab at
+      "414.5-431.4 x 40.6-42.5" off its own photographs; this device measures 413.7-430.6 x
+      40.6-42.9, the same tab on the same shell. The DCS510's seat is used.
+      THE CALLOUT AND THE PART ARE BOTH RIGHT. Quick start callout 6 reads "Product label" and
+      its circle sits immediately below the tab's right end with no other feature near it - the
+      same short leader as callouts 4 and 5 on the cages above. The vendor names it for what is
+      PRINTED on the card you pull out; the model draws it as the thing that pulls out. The
+      DCS510's own note says "Neither document names it", which is true of that device's
+      sources and not of this one's.
+      The white badge above it carries the Edge-corE wordmark, has no callout, and is not drawn
+      at all: this library cannot set a logo into a decor, so it rendered as a blank grey box
+      that told a reader nothing. The model number below it is drawn larger in the space.
+  the-edge-vents-are-slots:
     confidence: measured
     note: >-
-      DRAWN BECAUSE IT IS ON THE METAL AND NAMED BY NOBODY. A bright green bar sits under the
-      product label at x 413.7-430.6, y 40.6-42.9. No callout, table or caption in either
-      document mentions it.
-      IT IS NOT A DEFECT IN THIS PHOTOGRAPH: the same segmentation run over the DCS240's front
-      photograph finds the same strip at 413.3-430.3, so it is a feature of the shared shell
-      that the DCS240's model does not draw. It is drawn here as unexplained decor rather than
-      left out, on the same principle as the unnamed sixth lamp window.
+      SLOTS, NOT HONEYCOMB, AND THE SAME MISTAKE AS THE DCS240'S FIRST PASS. Both end vents
+      were carried from edgecore/dcs240 as `pattern: vent`, which paints hexagons. This
+      device's front photograph shows small RECTANGLES in two columns at the left edge and one
+      at the right - the same slot field the top and bottom bands already use. The left field
+      measures x 1.0 to 3.6 where the carried decor claimed 1.2 to 4.8, which is also why the
+      Loc, PS1 and Fan legends were printing over it.
+      edgecore/dcs240 still draws hexagons at both ends. It is not changed here, because its
+      panel was measured off its own guide and re-reading it is that device's work, not this
+      one's.
+  the-system-lamps:
+    confidence: measured
+    note: >-
+      SIX WINDOWS, ALL ROUND, AND THE SIXTH HAS NO NAME. This device's own System LEDs/Buttons
+      enlargement on quick start page 1 resolves the cluster at 600 dpi: a 3x2 grid of SIX
+      windows, every one of them a circle, labelled Loc and Diag on the top row, PS1 and PS2
+      on the middle, and Fan on the bottom left. THE BOTTOM-RIGHT WINDOW CARRIES NO LEGEND, in
+      this enlargement or anywhere in either document, and the guide's own list names exactly
+      five: Loc, Diag, PS1/PS2, Fan. It is drawn and given an id rather than omitted, because
+      a window in the metal that the model leaves out is worse than one it labels as unknown.
+      IT IS NOT A SECOND FAN LAMP. The chassis has six fan trays and one Fan lamp; nothing in
+      either document attaches the sixth window to a tray, and inventing that reading would be
+      the model asserting something the vendor does not.
+      IT STILL LIGHTS. An earlier revision pinned it to the single state `off`, which says the
+      window is dead rather than that its meaning is unknown - a lamp nobody can turn on is a
+      worse answer than a lamp nobody can name. It now states NO `states:` override at all and
+      inherits common/led-dot@1's own `off`/`on`, which is the right shape for this: the part
+      says a lamp can be lit, and this device declines to name a colour or a meaning it has no
+      source for. The five lamps beside it override because their guide does name theirs.
+      AN EARLIER REVISION DREW THE RIGHT COLUMN AS RECTANGLES. That came from the DCS240's
+      guide, which describes its own cluster as "round in the left column, rectangular in the
+      right", and was carried here without checking. This device's enlargement shows six
+      circles, so all six are common/led-dot@1 and the cutouts are circles.
+  lamps:
+    confidence: datasheet
+    note: >-
+      A RICHER TABLE THAN THE DCS240'S AND IT IS TRANSCRIBED WHOLE. quick start, QSFP-DD LEDs,
+      verbatim: "400G (50G PAM4): 1 LED Blue", "2 x 200G Breakout (50G PAM4): 1 LED Cyan, 1
+      LED Green", "4 x 100G Breakout (50G PAM4): 4 LEDs Green", "100G (25G NRZ): 1 LED Green",
+      "4 x 25G Breakout (25G NRZ): 1 LED Orange, 3 LEDs Green", "40G (10G NRZ): 1 LED Dark
+      Green", "4 x 10G Breakout (10G NRZ): 1 LED Yellow, 3 LEDs Green". SEVEN MODES where the
+      DCS240 lists four, and the two tables disagree about 200G breakout - white there, cyan
+      here - so this device's own table is used.
+      ONE LAMP PER QSFP PORT IS DRAWN AND THE METAL HAS FOUR. The state colours are the FIRST
+      lamp of each row, which is the one the table distinguishes the modes by; the trailing
+      greens are the breakout members. Drawing the real four would be 128 placements and 128
+      cutouts, and edgecore/dcs240, edgecore/dcs201 and edgecore/as5912-54x all draw one. The
+      gap below records what was left out.
+  the-rear:
+    confidence: measured
+    note: >-
+      THE DCS240'S REAR, PROVEN AGAINST THIS DEVICE'S OWN PHOTOGRAPH AT TWICE THE RESOLUTION.
+      Colour-segmenting the six red pull bars gives left edges at 76.72, 126.50, 175.82,
+      224.22, 272.63 and 321.04 mm, which least-squares to a pitch of 48.81 and a first handle
+      at 77.46; the two PSU release latches land at 57.08-66.67 and 420.13-432.92.
+      THE INSTRUMENT WAS CALIBRATED ON THE SIBLING BEFORE ITS ANSWER WAS BELIEVED. Run
+      unchanged over dcs240-3-DCS240_03.png it reads handle widths of 40.3 to 41.2 where that
+      device's modelled handle is 38.75, so it carries about +2 mm of red bleed; and it puts
+      the DCS240's own handles at 76.20, 125.51, 174.82, 223.23, 271.65 and 320.96, its
+      latches at 54.69-64.55 and 418.68-431.23. Feature for feature the two devices differ by
+      a mean of 1.1 mm with a maximum residual of 1.3 mm about that mean, on a picture where
+      one pixel is 0.46 mm and the sibling's is 0.90 mm.
+      The bay wall is therefore taken from edgecore/dcs240@1, whose 48.50 pitch came from a
+      5.08 px/mm guide figure rather than from either photograph, and this device's rear is
+      the confirmation. Its own fit differs by 0.31 mm per bay, 1.55 mm accumulated over five
+      steps, which is inside what a 2.19 px/mm colour threshold can resolve.
+  the-grounding-screws:
+    confidence: measured
+    note: >-
+      CALLOUT 7 IS A REAR FEATURE EVEN THOUGH IT IS LISTED WITH THE FRONT. The Overview list
+      runs 1-9 across both faces and item 7 reads "2 x grounding screws (maximum torque 10
+      kgf-cm)"; the guide's own procedure says where they are - "Attach the included grounding
+      wire to the grounding point on the device rear panel."
+      They are on the strip left of PS2. Scanning bright pixels in the leftmost 30 columns of
+      the rear photograph finds two blobs: x 3.20-8.68, y 22.61-28.09, and x 1.37-11.42, y
+      30.37-41.79. Centres (5.94, 25.35) and (6.40, 36.10), and the same scan puts the chassis
+      bottom edge at 43.7 mm against a stated 43.5, which is the check on the origin.
+      THE TWO HEADS ARE NOT THE SAME SIZE - about 5.5 mm and about 10 mm - because the lower
+      one has a washer fitted in this photograph and the upper one does not. What is measured
+      is where the holes are; the part drawn in them is the library's generic 3.6 mm
+      common/screw-head@1, which is what edgecore/dcs201 and edgecore/dcs202 seat on the same
+      family's rear. The gap below asks for a grounding screw sized to the metal.
+  the-airflow-derate-has-nowhere-to-live:
+    confidence: datasheet
+    note: >-
+      THE MODEL CANNOT SAY THIS AND IT IS NOT A GAP IN THE DEVICE. The guide derates hard by
+      airflow - "Operating (F2B): 0 to 45 C" against "Operating (B2F): 0 to 30 C" - a
+      fifteen-degree difference that decides whether a box can go in a hot aisle. A
+      configuration may state `airflow` but has nowhere to state what that airflow costs, and
+      `gaps.reason` has no value for a library that lacks the vocabulary: its enum names who
+      can close a gap, and the answer here is a library maintainer rather than this device.
+      Both figures are therefore carried in one `attrs.environmental.operating-temp` string so
+      that neither is lost, and both b2f configurations repeat the derate in their
+      descriptions. A reader can use it; a tool cannot.
+  the-grounding-screw-part-is-generic:
+    confidence: measured
+    note: >-
+      SAME SHAPE OF SHORTFALL, ON THE COMPONENT SIDE. The two screws photograph at about 5.5 mm
+      and about 10 mm across - the difference is a washer fitted to one of them - and the only
+      fastener in the library is common/screw-head@1 at a generic 3.6 mm, which is also what
+      edgecore/dcs201 and edgecore/dcs202 seat on this family's rear. THEIR POSITIONS ARE
+      MEASURED AND CORRECT; their drawn heads are a third to a sixth of the metal's area.
+      Recorded here rather than as a gap for the same reason as the derate above: what is
+      missing is a part, not a fact about this device.
+  the-green-bar-is-the-product-label:
+    confidence: datasheet
+    note: >-
+      CALLOUT 6 POINTS AT IT, AND I HAD IT THE WRONG WAY ROUND. A bright green bar sits at the
+      foot of the panel at x 413.7-430.6, y 40.6-42.9, and above it sit a white badge carrying
+      the Edge-corE wordmark and the silkscreened model number AS9737-32DB.
+      On the quick start's Overview the callout numbered 6, "Product label", has its leader on
+      THE GREEN BAR - the same short leader style as callout 4 on the upper cage and callout 5
+      on the lower one. The white badge above is the brand mark, not the product label, and
+      carries no callout at all.
+      An earlier revision of this model drew the badge as `product-label` and the green bar as
+      an unexplained `green-strip` with a gap asking what it was. The gap is withdrawn: the
+      source does name it, and the green bar now carries the name.
+      THE BADGE IS NOT DRAWN AT ALL. It is real metal - a white rectangle carrying the
+      Edge-corE wordmark - but this library has no way to set a vendor logo into a decor, so
+      it rendered as a blank grey box that told a reader nothing and invited exactly the
+      question "what is that?". A silkscreen that cannot carry its own text is worse than no
+      silkscreen, so the rectangle is dropped and the model number below it is drawn larger in
+      the space, which is the part of that corner a reader can actually use.
+      The same green bar is on the DCS240's front photograph at 413.3-430.3, so this reading
+      applies to that device too, which does not draw it.
   power:
     confidence: datasheet
     note: >-
@@ -243,11 +418,6 @@ attrs:
       port runs - 400G and 2 x 200G and 4 x 100G on 50G PAM4, 100G and 4 x 25G on 25G NRZ,
       and 40G and 4 x 10G on 10G NRZ - which is a fuller statement of what works than the
       datasheet's port line gives.
-    optics-sfp-plus: >-
-      quick start, Port LEDs: "SFP+ 10G LEDs: Left: Green (10G), Amber (1G)". Both speeds are
-      indicated on the one lamp, so the single MAC-side cage takes 10GbE and 1GbE optics. The
-      1G SFP management port is NOT covered by this key - it is in the `mgmt` group, which
-      declares no group media, and no staged document says what optics it takes.
   lifecycle: {eol: none-announced}
 chassis: {width: 438.4, height: 43.5, depth: 590.0, ru: 1, weight-kg: 11.88, color: '#2b2f33',
   airflow: front-to-back}
@@ -290,14 +460,6 @@ gaps:
     needs a rear elevation with dimensions, which neither staged document has. "PS1" alone
     falls in the real 9 mm gap between fan-1 and psu-1 and could be drawn; it is held back so
     that the rear is not half-labelled. edgecore/csr440 has the same gap for the same reason.
-- what: the-unnamed-green-strip
-  scope: [front]
-  reason: vendor-silent
-  wanted: >-
-    What the green bar under the product label is. It is 16.9 by 2.3 mm, it is on this device
-    and on the DCS240, and no callout, table or caption in any staged document for either
-    device mentions it. It is drawn as unexplained decor rather than omitted, because a mark
-    on the metal that the model leaves out is worse than one it labels as unknown.
 - what: dc-supply-face
   scope: [rear]
   reason: needs-photo
@@ -312,14 +474,6 @@ groups:
     role: traffic
     index-origin: 1
     attrs: {media: qsfp-dd, speed: 400g}
-  sfp-plus:
-    term: Port
-    role: traffic
-    index-origin: 1
-    description: >-
-      the single 10G SFP+ port, on the MAC rather than the CPU. It has its own number space
-      and the panel prints no digit beside it, because there is only one of it.
-    attrs: {media: sfp-plus, speed: 10g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
   mgmt:
     term: Port
@@ -328,19 +482,27 @@ groups:
     mixed: >-
       the out-of-band cluster - a 1000BASE-T RJ-45 management jack, a USB Type-A, TWO consoles
       rather than one (a micro-USB and an RJ-45, both labelled as consoles on the metal), and
-      a 1G SFP management port wired to the CPU. A 1PPS timing input sits beside them, which
-      is a different job on the same strip and has its own group.
+      TWO SFP management ports - a 10G on the switch ASIC and a 1G on the CPU. A 1PPS timing
+      input sits beside them, which is a different job on the same strip and has its own group.
   timing:
     term: Port
     role: management
     index-origin: 1
     description: >-
-      the 1PPS timing input - a single SMB coaxial jack beside the consoles, labelled "1PPS IN"
-      on the metal. It states no group media because coax is not a pluggable cage and L40's
+      the 1PPS timing input - a single SMB coaxial jack beside the consoles. THE METAL SAYS
+      "PPS", not "1PPS IN": the System LEDs enlargement prints PPS above Reset in one stack
+      beside the button, and an earlier revision of this model carried the DCS240's longer
+      legend, which on this narrower strip ran into the management housing at x 15.30. It states no group media because coax is not a pluggable cage and L40's
       optics question does not apply to it; the medium is on the placement, where the exporter
       reads it.
   leds: {term: LED, role: indicator, index-origin: 1}
-  furniture: {term: Part, role: furniture, index-origin: 1}
+  furniture:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: >-
+      the USB symbol beside the storage port and the captive pull-out information tab at the
+      foot of the panel - things you neither connect to nor read off the face.
   psus:
     term: PSU
     role: service
@@ -366,45 +528,44 @@ views:
     size: {w: 438.4, h: 43.5}
     panel:
       decor:
-      - {id: vent-left, at: [1.20, 1.00], size: [3.60, 41.50], pattern: vent, pattern-pitch: [3.80, 4.20], vent: 20}
-      - {id: vent-right, at: [433.00, 1.00], size: [4.20, 41.50], pattern: vent, pattern-pitch: [3.80, 4.20], vent: 20}
+      - {id: vent-left, at: [1.00, 1.00], size: [2.60, 41.50], pattern: slots, pattern-pitch: [1.60, 2.90], vent: 20}
+      - {id: vent-right, at: [432.80, 1.00], size: [4.40, 41.50], pattern: slots, pattern-pitch: [1.60, 2.90], vent: 20}
       - {id: vent-top, at: [38.00, 1.20], size: [348.00, 8.20], pattern: slots, pattern-pitch: [4.40, 4.60], vent: 18}
       - {id: vent-bottom, at: [38.00, 39.60], size: [348.00, 2.90], pattern: slots, pattern-pitch: [4.40, 3.20], vent: 18}
-      - {id: product-label, at: [406.90, 6.70], size: [25.00, 5.00], fill: '#d7dbdf'}
-      - {id: green-strip, at: [413.70, 40.60], size: [16.90, 2.30], fill: '#4ec72b'}
+      - {id: mgmt-stack, at: [15.30, 0.60], size: [16.80, 21.00], fill: '#e8ebee'}
       cutouts:
       - {id: led-loc, at: [6.80, 3.30], size: [2.0, 2.0], shape: circle}
-      - {id: led-diag, at: [10.10, 3.50], size: [2.8, 1.6], shape: rect}
+      - {id: led-diag, at: [10.50, 3.30], size: [2.0, 2.0], shape: circle}
       - {id: led-ps1, at: [6.80, 6.60], size: [2.0, 2.0], shape: circle}
-      - {id: led-ps2, at: [10.10, 6.80], size: [2.8, 1.6], shape: rect}
+      - {id: led-ps2, at: [10.50, 6.60], size: [2.0, 2.0], shape: circle}
       - {id: led-fan, at: [6.80, 9.90], size: [2.0, 2.0], shape: circle}
-      - {id: led-spare, at: [10.10, 10.10], size: [2.8, 1.6], shape: rect}
+      - {id: led-spare, at: [10.50, 9.90], size: [2.0, 2.0], shape: circle}
       - {id: mgmt-eth, at: [15.80, 0.80], size: [15.8, 13.2], shape: rect}
       - {id: usb-a, at: [17.70, 16.40], size: [12.0, 4.5], shape: rect}
       - {id: console-rj, at: [15.80, 27.01], size: [15.8, 13.2], shape: rect}
       - {id: console-usb, at: [5.85, 26.10], size: [7.5, 2.75], shape: rect}
       - {id: pps-in, at: [7.03, 13.28], size: [4.83, 4.83], shape: circle}
       - {id: reset, at: [7.50, 19.80], size: [4.0, 4.0], shape: circle}
-      - {id: tengig-1, at: [389.60, 12.28], size: [14.25, 10.4], shape: rect}
-      - {id: mgmt-sfp, at: [389.60, 26.49], size: [14.25, 10.4], shape: rect}
-      - {id: led-tengig-link, at: [390.93, 9.48], size: [2.0, 2.0], shape: circle}
-      - {id: led-tengig-act, at: [399.38, 9.48], size: [2.0, 2.0], shape: circle}
-      - {id: led-sfpmgmt-link, at: [390.93, 38.02], size: [2.0, 2.0], shape: circle}
-      - {id: led-sfpmgmt-act, at: [399.38, 38.02], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt-asic, at: [389.60, 12.28], size: [14.25, 10.4], shape: rect}
+      - {id: mgmt-cpu, at: [389.60, 26.49], size: [14.25, 10.4], shape: rect}
+      - {id: led-asic-link, at: [390.93, 9.48], size: [2.0, 2.0], shape: circle}
+      - {id: led-asic-act, at: [399.38, 9.48], size: [2.0, 2.0], shape: circle}
+      - {id: led-cpu-link, at: [390.93, 38.02], size: [2.0, 2.0], shape: circle}
+      - {id: led-cpu-act, at: [399.38, 38.02], size: [2.0, 2.0], shape: circle}
     silkscreen:
     - {id: silk-loc, at: [6.40, 4.61], text: 'Loc', font-size: 1.0, anchor: end, fill: '#c7ccd1', for: led-loc}
     - {id: silk-diag, at: [13.00, 4.61], text: 'Diag', font-size: 1.0, anchor: start, fill: '#c7ccd1', for: led-diag}
     - {id: silk-ps1, at: [6.40, 7.91], text: 'PS1', font-size: 1.0, anchor: end, fill: '#c7ccd1', for: led-ps1}
     - {id: silk-ps2, at: [13.00, 7.91], text: 'PS2', font-size: 1.0, anchor: start, fill: '#c7ccd1', for: led-ps2}
     - {id: silk-fan, at: [6.40, 11.21], text: 'Fan', font-size: 1.0, anchor: end, fill: '#c7ccd1', for: led-fan}
-    - {id: silk-1pps, at: [12.10, 20.30], text: '1PPS IN', font-size: 1.1, anchor: start, fill: '#c7ccd1', for: pps-in}
+    - {id: silk-pps, at: [12.10, 20.30], text: 'PPS', font-size: 1.1, anchor: start, fill: '#c7ccd1', for: pps-in}
     - {id: silk-reset, at: [12.20, 22.14], text: Reset, font-size: 1.1, anchor: start, fill: '#e4e8eb', for: reset}
     - {id: silk-microusb, at: [9.60, 24.90], text: 'Micro-USB Console', font-size: 1.0, anchor: middle, fill: '#c7ccd1', for: console-usb}
-    - {id: silk-rjconsole, at: [15.20, 24.60], text: 'RJ45 Console', font-size: 1.1, anchor: start, fill: '#c7ccd1', for: console-rj}
-    - {id: silk-mgmt, at: [33.40, 7.77], text: '1G Mgmt', font-size: 1.2, anchor: start, fill: '#c7ccd1', for: mgmt-eth}
-    - {id: silk-tengig, at: [396.70, 8.90], text: '10G SFP+', font-size: 1.1, anchor: middle, fill: '#e4e8eb', for: tengig-1}
-    - {id: silk-sfpmgmt, at: [396.70, 41.60], text: '1G SFP', font-size: 1.1, anchor: middle, fill: '#e4e8eb', for: mgmt-sfp}
-    - {id: silk-model, at: [431.00, 14.60], text: 'AS9737-32DB', font-size: 1.3, anchor: end, fill: '#e4e8eb', for: chassis}
+    - {id: silk-rjconsole, at: [15.80, 26.30], text: 'RJ45 Console', font-size: 1.1, anchor: start, fill: '#c7ccd1', for: console-rj}
+    - {id: silk-mgmt, at: [34.40, 11.20], text: '1G Mgmt', font-size: 1.2, anchor: middle, rotate: -90, fill: '#c7ccd1', for: mgmt-eth}
+    - {id: silk-asic, at: [396.70, 8.90], text: '10G SFP+', font-size: 1.1, anchor: middle, fill: '#e4e8eb', for: mgmt-asic}
+    - {id: silk-cpu, at: [396.70, 41.60], text: '1G SFP', font-size: 1.1, anchor: middle, fill: '#e4e8eb', for: mgmt-cpu}
+    - {id: silk-model, at: [419.40, 13.60], text: 'AS9737-32DB', font-size: 2.40, anchor: middle, fill: '#e4e8eb', for: chassis}
     components:
       blocks:
       - id: qsfp-dd
@@ -429,46 +590,47 @@ views:
           group: port-leds
           states: ['off', {name: '400g', color: '#3b82f6'}, {name: '200g-breakout', color: '#06b6d4'}, {name: '100g-breakout', color: '#22c55e'}, {name: '100g', color: '#22c55e'}, {name: '25g-breakout', color: '#f97316'}, {name: '40g', color: '#15803d'}, {name: '10g-breakout', color: '#eab308'}]
       placements:
-      - {ref: common/rj45-eth@1, id: mgmt-eth, at: [15.80, 0.80], group: mgmt, rel-pos: 1,
+      - {ref: common/rj45-eth@1, id: mgmt-eth, at: [15.80, 0.80], rotate: 180, group: mgmt, rel-pos: 1,
          attrs: {media: rj45, speed: 1g, role: mgmt}}
       - {ref: std/usb-a@1, id: usb-a, at: [17.70, 16.40], group: mgmt, rel-pos: 2,
          attrs: {media: usb-a, role: storage}}
-      - {ref: common/usb-symbol@1, id: usb-mark, at: [32.70, 14.60], group: furniture, rel-pos: 1}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [33.20, 16.65], group: furniture, rel-pos: 1}
+      - {ref: common/pull-tab@1, id: info-tab, at: [414.50, 38.40], group: furniture, rel-pos: 2}
       - {ref: std/rj45@2, id: console-rj, at: [15.80, 27.01], group: mgmt, rel-pos: 3,
          attrs: {media: rj45-serial, role: console}}
       - {ref: std/micro-usb@1, id: console-usb, at: [5.85, 26.10], group: mgmt, rel-pos: 4,
          attrs: {media: micro-usb-b, role: console}}
-      - {ref: std/sfp-ganged@1, id: mgmt-sfp, at: [389.60, 26.49], rotate: 180, group: mgmt, rel-pos: 5,
+      - {ref: std/sfp-ganged@1, id: mgmt-cpu, at: [389.60, 26.49], rotate: 180, group: mgmt, rel-pos: 7,
          attrs: {media: sfp, speed: 1g, role: mgmt}}
       - {ref: common/smb-jack@1, id: pps-in, at: [5.94, 12.19], group: timing, rel-pos: 1,
          attrs: {media: coax-smb, role: timing, timing: '1PPS'}}
-      - {ref: common/reset-button@1, id: reset, at: [7.50, 19.80], group: mgmt, rel-pos: 6, for: chassis}
+      - {ref: common/reset-button@1, id: reset, at: [7.50, 19.80], group: mgmt, rel-pos: 5, for: chassis}
       - {ref: common/led-dot@1, id: led-loc, at: [6.80, 3.30], group: leds, rel-pos: 1, for: chassis,
          states: ['off', {name: locate, color: '#f59e0b'}]}
-      - {ref: common/led-rect-sm@1, id: led-diag, at: [10.10, 3.50], group: leds, rel-pos: 2, for: chassis,
+      - {ref: common/led-dot@1, id: led-diag, at: [10.50, 3.30], group: leds, rel-pos: 2, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
       - {ref: common/led-dot@1, id: led-ps1, at: [6.80, 6.60], group: leds, rel-pos: 3, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-rect-sm@1, id: led-ps2, at: [10.10, 6.80], group: leds, rel-pos: 4, for: chassis,
+      - {ref: common/led-dot@1, id: led-ps2, at: [10.50, 6.60], group: leds, rel-pos: 4, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
       - {ref: common/led-dot@1, id: led-fan, at: [6.80, 9.90], group: leds, rel-pos: 5, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-rect-sm@1, id: led-spare, at: [10.10, 10.10], group: leds, rel-pos: 6, for: chassis,
-         states: ['off']}
-      - {ref: std/sfp-ganged@1, id: tengig-1, at: [389.60, 12.28], group: sfp-plus, rel-pos: 1}
-      - {ref: common/led-dot@1, id: led-tengig-link, at: [390.93, 9.48], group: port-leds, rel-pos: 33, for: tengig-1,
+      - {ref: common/led-dot@1, id: led-spare, at: [10.50, 9.90], group: leds, rel-pos: 6, for: chassis}
+      - {ref: std/sfp-ganged@1, id: mgmt-asic, at: [389.60, 12.28], group: mgmt, rel-pos: 6,
+         attrs: {media: sfp-plus, speed: 10g, role: mgmt}}
+      - {ref: common/led-dot@1, id: led-asic-link, at: [390.93, 9.48], group: port-leds, rel-pos: 33, for: mgmt-asic,
          states: ['off', {name: '10g', color: '#22c55e'}, {name: '1g', color: '#f59e0b'}]}
-      - {ref: common/led-dot@1, id: led-tengig-act, at: [399.38, 9.48], group: port-leds, rel-pos: 34, for: tengig-1,
+      - {ref: common/led-dot@1, id: led-asic-act, at: [399.38, 9.48], group: port-leds, rel-pos: 34, for: mgmt-asic,
          states: ['off', {name: activity, color: '#22c55e'}]}
-      - {ref: common/led-dot@1, id: led-sfpmgmt-link, at: [390.93, 38.02], group: port-leds, rel-pos: 35, for: mgmt-sfp,
+      - {ref: common/led-dot@1, id: led-cpu-link, at: [390.93, 38.02], group: port-leds, rel-pos: 35, for: mgmt-cpu,
          states: ['off', {name: link, color: '#f59e0b'}]}
-      - {ref: common/led-dot@1, id: led-sfpmgmt-act, at: [399.38, 38.02], group: port-leds, rel-pos: 36, for: mgmt-sfp,
+      - {ref: common/led-dot@1, id: led-cpu-act, at: [399.38, 38.02], group: port-leds, rel-pos: 36, for: mgmt-cpu,
          states: ['off', {name: activity, color: '#f59e0b'}]}
     regions:
     - {id: optics, at: [38.0, 11.5], size: {w: 348.0, h: 26.0}, label: '32 x 400G QSFP56-DD',
        members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32]}
-    - {id: right-cages, at: [387.0, 11.5], size: {w: 20.0, h: 26.0}, label: '10G SFP+ (MAC) over 1G SFP management (CPU)',
-       members: [tengig-1, mgmt-sfp]}
+    - {id: right-cages, at: [387.0, 11.5], size: {w: 20.0, h: 26.0}, label: 'SFP management: 10G on the ASIC over 1G on the CPU',
+       members: [mgmt-asic, mgmt-cpu]}
     - {id: out-of-band, at: [4.5, 0.5], size: {w: 29.0, h: 41.0}, label: 'Management, consoles and 1PPS',
        members: [mgmt-eth, usb-a, console-rj, console-usb, pps-in, reset]}
     - {id: status-leds, at: [5.5, 2.8], size: {w: 9.0, h: 10.0}, label: 'System LEDs',
