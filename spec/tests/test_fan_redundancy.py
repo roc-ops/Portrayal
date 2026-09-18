@@ -176,7 +176,13 @@ def test_the_comparison_layer_can_now_reach_them():
     guide prints the DCS201's supply tables character for character and its own rear
     photograph puts the handles on a 59.06 pitch against the DCS201's 58.82. Two devices,
     one rear, one figure, counted twice because two vendors' documents state it twice.
+
+    FORTY-EIGHT IS THE DCS240, and it is the first in this family to state 5+1 against SIX
+    bays - "5+1 redundant hot-swappable fan modules" in the datasheet, "6 x fan trays" in the
+    quick start's rear callout, and six measured bays on a 48.50 pitch. The CSR440's 5+1 was
+    the first digit form to match its bay count at all; this one matches at a different count,
+    on a different shell, with a fan of its own.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 47, n
+    assert n == 48, n
