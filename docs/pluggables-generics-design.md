@@ -146,11 +146,7 @@ Three things the shape enforces:
 
 ### 4. `std/sc-bore`
 
-The library has no SC face: `common/sc-apc` is a 24 x 26 mm moulded PON bay. A
-`std/sc-bore` at the SC simplex opening, from SENKO's public SC adapter datasheet,
-keyed as the LC bore is (@3 carries the keyed opening; this one does the same), with a
-`standards.yaml` entry `sc-simplex-receptacle` noting FOCIS 3 / IEC 61754-4 as the
-governing but unheld document. The existing `sc-apc` is untouched.
+GATED AT EXECUTION, 2026-09-18. The library has no SC face - `common/sc-apc` is a 24 x 26 mm moulded PON bay - and no free document dimensions the SC simplex keyed opening a `std/sc-bore` would need. Searched: SENKO DS-SC-000006 (plug; no front view, unlike the LC plug datasheet the LC bore was built from), DS-SC-000010 and DS-SC-000011 (adapters; housing and panel cutout only), FS SC/UPC simplex adapter and Molex 106167 (the same), TE catalogue 1307895 pp. 49-52 (the 13.0-13.5 x 18.0 SC-footprint panel cutout for adapters, not the keyed opening), and OKF (nothing). TIA-604-3 / IEC 61754-4 are paywalled. So the SC face waits for a drawing exactly as the MPO faces do, `generic/sfp-sc` is not in this plan, and `working/intake/fiber-connectors/sc/COVERAGE.md` records the search. What would settle it: a TE customer drawing of an SC simplex adapter or connector with a front view, or the standard.
 
 ### 5. One lint rule
 
