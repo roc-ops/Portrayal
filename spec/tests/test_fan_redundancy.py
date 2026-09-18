@@ -194,7 +194,15 @@ def test_the_comparison_layer_can_now_reach_them():
     photograph fit a 48.81 pitch against the DCS240's 48.50, and the same colour instrument run
     over the DCS240's photograph reads its handles 1.1 mm away on average. One rear, two
     chassis, one fan part - counted twice because two documents state it twice.
+
+    FIFTY IS THE EXP800-16O, and it is the first in this family whose bays do not butt.
+    Its datasheet says "5+1 hot-swappable redundant fans" and its quick start's rear callout
+    "6 x fan trays", so the digit form and the bay count agree as they did on the last two. What
+    is new is the wall: six trays 41.45 mm wide on a 48.92 mm pitch, with a 7.47 mm chassis rail
+    between each pair. Every other Edgecore rear counted here butts its trays edge to edge, and
+    that rail is why this is the one device in the line whose fan-bay digits can be drawn at all
+    - on the CSR440 and the DCS511 they would land inside a neighbouring bay.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 49, n
+    assert n == 50, n
