@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs201-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -101,13 +101,26 @@ relief:
   # inlet's recess, which is how the CSR310's AC supply came out blank. See #364.
   features:
     - node: handle
-      bar: 4.0
-      lift: 2.0
+      uhandle: 27.0
       color: '#2b2f33'
       confidence: estimated
       source: >-
-        edgecore/dcs201-psu-ac@1's own handle key - the elevation fixes the bail's position on
-        the face, not how far it stands off it. A bail has to clear a finger.
+        NOT SOURCED FOR THIS PART, and 27 is borrowed rather than measured. No staged document
+        for this chassis says how far its bail stands off the face. The nearest published
+        figure for a CRPS-class supply is UfiSpace's S9510-28DC HIG - "the handle for the power
+        supplies will extend outwards by 1.06 inches" - which ufispace/psu-401-ac carries at
+        datasheet confidence and ufispace/psu-102-ac borrows at estimated, exactly as here.
+        WHAT IT REPLACES WAS WORSE, AND WRONG IN KIND RATHER THAN IN DEGREE. Until this version
+        the node read `bar: 4.0, lift: 2.0` - a flat plate standing 2 mm off the panel, 4 mm
+        long - which is not what a pull-out bail does. `uhandle` is this library's vocabulary
+        for a handle you hook a finger under, and every other CRPS supply here already uses it:
+        common/psu-ac-650@3 at 9.5, celestica/psu-1600 at 14, common/psu-550w@2 at 22.85 and
+        the two ufispace/psu-102 parts at 27. These were the last holdouts.
+        THE HANDLE'S POSITION AND SIZE ARE NOT TOUCHED. Only how far it stands off the face
+        changes. The 13.0 x 26.0 outline at [7.5, 7.0] is this part's own estimate off a
+        perspective render, and the DCS201's photographs are 1.105 px/mm - a 54 mm module is
+        60 px wide there, so a bail is 7 to 14 px and cannot be resolved. Nothing held improves
+        on the estimate, so the estimate stands.
     - node: latch
       out: 2.4
       confidence: estimated
