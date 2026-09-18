@@ -1,12 +1,12 @@
 format: 1
 kind: module
 name: dcs240-psu-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
 description: >-
-  The AC power supply of the Edgecore DCS240 (AS9726-32DB) - a CRPS-style module in a bright housing with a latticed exhaust grille at the left, a wire bail handle over it, an IEC C14 inlet at the right and a coloured release latch at its foot. Rated 1000 W at 110 V and 1500 W at 230 V, which is why it is not any 650 W or 400 W part in this library.
+  The AC power supply of the Edgecore DCS240 (AS9726-32DB) - a CRPS-style module in a bright housing with a latticed exhaust grille at the left, a wire bail handle over it, an IEC C14 inlet turned on its side at the right and a coloured release latch down its right edge. Rated 1000 W at 110 V and 1500 W at 230 V, which is why it is not any 650 W or 400 W part in this library.
 size: {w: 54.4, h: 40.0}
 size-confidence: {w: photo-measured, h: estimated}
 attrs:
@@ -15,6 +15,29 @@ attrs:
   input: ac
   inlet: c14
 provenance:
+  the-face-was-remeasured-from-an-orthographic-photograph: >-
+    THREE CORRECTIONS, ALL FROM edgecore/dcs511's REAR PHOTOGRAPH. This face's elements were
+    copied from edgecore/dcs201-psu-ac@1, whose own provenance calls them "ESTIMATED POSITIONS
+    ON A MEASURED FACE" read off a 5 px/mm PERSPECTIVE render. dcs511-3-DCS511-B.png is an
+    orthographic shot of the same module at 2.19 px/mm, measured on PS2 - the supply at
+    x 12.00, far from both chassis edges and the one the DCS240's edge scan anchored on.
+    THE INLET WAS NEVER ROTATED. edgecore/dcs201-psu-ac@1, common/psu-ac-650@3 and
+    edgecore/csr440-psu-ac@1 all place std/c14-inlet@1 with `rotate: 270` and this contract
+    alone omitted it, so a 28-wide landscape inlet sat at x 30.0 on a 54.4-wide module and
+    ran 3.6 mm off the end of the part. The photograph settles the direction independently:
+    the coupler's chamfered corners and its lone earth pin BOTH point left, which is a
+    quarter turn anticlockwise. Its aperture reads 28.5 to 45.4 wide by 1.0 to 31.4 tall -
+    portrait, as the family's other three say.
+    THE BAIL IS A TALL NARROW BAR, NOT A BOX OVER THE GRILLE. It reads x 17.7-23.7 by
+    y 2.0-39.7 - 6 mm wide and nearly the full module height, standing at the grille's right
+    edge - against the 13 x 26 box at [8.0, 7.0] that was drawn across the lattice's middle.
+    THE LATCH IS A TALL VERTICAL BAR, NOT A SMALL TAB. Colour segmentation puts the red at
+    x 44.63-54.22 by y 18.52-40.44, a bar down the module's right edge, against a 9.5 x 3.4
+    tab at [40.5, 35.0]. The width was right and the height was out by a factor of six.
+    THE SIBLINGS STILL CARRY THE OLD ESTIMATES. edgecore/dcs201-psu-ac@1 and its DC sibling
+    have the same three elements at the same values and are not changed here, because their
+    devices are not in this change and the numbers above are measured on THIS chassis's
+    supply. They are worth revisiting against the same photograph.
   size: >-
     photo-measured - the DCS240 quick start guide, page 1 Overview rear elevation at 600 dpi,
     scaled by the stated 438.4 mm body width to 5.0844 px/mm. Both supplies were read with an
@@ -33,10 +56,12 @@ provenance:
     its own and its supplies are rated 1000/1500 W AC and 1600 W DC, so seating any of them
     would export a figure this vendor does not claim. A shape may be shared; a rating may not.
   elements: >-
-    ESTIMATED POSITIONS ON A MEASURED FACE. The x axis of the source carries scale and these
-    elements are small enough that reading them off a 5 px/mm elevation would be reading the
-    lighting. The lattice grille, the bail handle over it and the latch at the foot are placed
-    from the drawing's proportions within a face whose width is measured.
+    MEASURED, NOT ESTIMATED, SINCE 1.1.0. These were copied from the DCS201's supply as
+    proportions off a perspective render; they are now read off an orthographic photograph of
+    this module. See the-face-was-remeasured-from-an-orthographic-photograph above for the
+    three that moved and by how much. What is still estimated is the HEIGHT of the face, 40.0,
+    and every relief depth below - the photograph fixes where things are on the face, not how
+    far they stand off it.
   airflow-colour-convention: >-
     This device's guide states it: F2B supplies carry RED release latches and B2F supplies
     BLUE. The latch fill is therefore a default overridden per configuration. See
@@ -45,15 +70,15 @@ provenance:
     quick start: '100-127 VAC 12 A (1000 W max); 200-240 VAC 8 A (1500 W max)'.
 states: [absent]
 elements:
-  handle: {at: [8.0, 7.0], size: [13.0, 26.0], class: handle}
-  latch: {at: [40.5, 35.0], size: [9.5, 3.4], class: latch}
-  vent-field: {at: [2.4, 3.4], size: [22.0, 30.0], class: vent}
+  handle: {at: [17.70, 2.00], size: [6.00, 37.70], class: handle}
+  latch: {at: [45.40, 19.40], size: [9.00, 20.60], class: latch}
+  vent-field: {at: [4.20, 3.60], size: [19.40, 32.40], class: vent}
 
 fields:
   latch-finish: {label: Latch colour, type: text, default: '#b8324a'}
   latch-edge: {label: Latch edge colour, type: text, default: '#6e1c2c'}
 parts:
-  - {ref: std/c14-inlet@1, id: inlet, at: [30.0, 10.0]}
+  - {ref: std/c14-inlet@1, id: inlet, at: [22.95, 6.20], rotate: 270}
 relief:
   wall: '#3a3e43'
   # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries whatever is
