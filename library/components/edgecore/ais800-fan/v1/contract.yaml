@@ -1,0 +1,141 @@
+format: 1
+kind: module
+name: ais800-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  A rear fan module of the Edgecore AIS800-32D and AIS800-32O - a honeycomb-grilled black tray
+  with a large coloured U-bail across its lower half and one unlabelled lamp at its top left.
+  SEVEN fill this chassis in a 6+1 arrangement, which is one more bay than any other tray in
+  this library's Edgecore rears, and at 41.65 mm it is the narrowest of them.
+size: {w: 41.65, h: 40.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'FAN-1U-1X1P'
+  power-absent: not-published
+  airflow: front-to-back
+provenance:
+  size: >-
+    photo-measured on the AIS800-32D quick start guide, page 1 Overview REAR elevation,
+    rendered from the PDF PAGE at 600 dpi and scaled by the stated 438.4 mm body width to
+    5.0662 px/mm.
+    THE REAR ELEVATION IS ISOTROPIC AND THAT IS WHY IT IS THE ONE USED. Its face reads
+    2221 x 223 px; 2221/438.4 is 5.0662 and 223/44.0 is 5.0682 - 0.04% apart. The front
+    elevation on the same page is 1.9% out vertically, so each face is measured on its own
+    scale and this module on the rear's.
+    THE WIDTH CAME FROM A SEAM STRUCTURE READ ON TWO ROW BANDS, NOT FROM A PITCH. The tray's
+    own top frame (y 2.0-4.7 mm) and bottom frame (y 39.5-42.2) were scanned separately for
+    vertical edges and give the same answer: tray faces at 63.16-104.81, 108.17-149.82,
+    153.18-194.82, 198.18-239.63, 243.19-284.64, 288.19-329.64 and 333.39-374.84, which is
+    41.65 wide with a 3.36 mm rail between.
+    AND IT CLOSES ACROSS THE WHOLE FACE. 4.74 of chassis frame, 53.69 of PSU1, 4.73 of rail,
+    311.68 of fan block, 4.36 of rail, 53.70 of PSU2 and 5.50 of frame sum to 438.40 - the
+    stated width, to two decimal places, from seven independently measured spans.
+    THE PITCH IS MEASURED SEPARATELY AND AGREES. 2D template matching of one tray's honeycomb
+    across the block finds six of the seven at 60.60, 105.60, 150.81, 195.81, 285.82 and
+    331.02 (the seventh sits under PSU2's bail), fitting a 45.025 mm pitch with an rms of
+    0.10 mm. 41.65 of tray plus 3.36 of rail is 45.01. Two signals, one answer.
+    THE HEIGHT IS MEASURED HERE RATHER THAN BORROWED, which is unusual for this line. Strong
+    horizontal seams at y 1.38 and 42.04 bound both module types on this face; the trays read
+    40.6 and the supplies 40.66, and 40.6 is used for both. This is NOT the 40.0 that the rest
+    of this library's Edgecore 1RU modules carry as an estimate.
+  the-drawing-is-an-upscale-and-that-was-checked: >-
+    THE 600 DPI RENDER IS AN INTERPOLATION OF A 1.83 px/mm RASTER. The elevation is embedded in
+    the PDF at 832 x 108 px, so rendering the page at 600 dpi upscales it 2.8x and the apparent
+    precision is not free.
+    THE NUMBERS SURVIVE THE CHECK. Re-running the seam detector on the EMBEDDED image at its
+    native 1.8294 px/mm puts the inner rails at 150.3/153.6, 195.1/198.4, 238.9/243.3 and
+    284.8/288.1 against the upscale's 149.82/153.18, 194.82/198.18, 239.83/243.19 and
+    284.64/288.19 - every one within 0.5 mm, which is half a native pixel. Averaging a vertical
+    edge over 200 rows does buy sub-pixel localisation, and the closing arithmetic above is the
+    second confirmation.
+    WHAT DOES NOT SURVIVE IS LETTERING. A 2 mm numeral is 3.7 native pixels. See the device's
+    fan-bay-numerals gap; no numeral is drawn from this source.
+  the-handle-is-drawn-as-the-family-s-bar: >-
+    THE HARDWARE IS A CLOSED LOOP AND THE DRAWING IS A BAR, DELIBERATELY. The FRU figure shows
+    a U-bail you hook a finger under, and for eleven rounds this tray drew it as an open loop
+    with `uhandle` relief. At review it was changed to the solid bar with `bar` + `lift`
+    relief that edgecore/exp800-fan@1 and edgecore/dcs240-fan@1 carry: the loop is a lot of
+    geometry for a 3D build, it biases no measurement, and a family that draws one handle one
+    way should keep doing so. The footprint below is still the stowed loop's.
+  the-bail-is-a-bail-and-its-footprint-is-not-measurable: >-
+    THE FRU FIGURE SETTLES THE SHAPE. The quick start guide's Fan Tray Replacement figure draws
+    the tray three-quarter with the handle swung out: it is a closed U-loop you hook a finger
+    under, not the flat grip bar that edgecore/exp800-fan@1 and edgecore/dcs240-fan@1 carry.
+    `uhandle` is therefore the vocabulary rather than `bar` + `lift`.
+    ITS STOWED FOOTPRINT IS NOT DRAWN ANYWHERE. Colour-segmenting the salmon in each of the
+    seven bays of the elevation gives y 23.69-34.94, 22.31-34.74, 19.15-34.74, 17.96-34.54,
+    17.77-33.56, 17.57-32.37 and 17.57-31.98 - seven different answers for seven identical
+    parts, because the render sweeps across the image and each bail is seen at a different
+    angle. The node below spans the common band and is marked estimated. This is the same
+    effect that made the handle edges give a 47.08 mm bay pitch where the honeycomb gives
+    45.03; a posed handle is not a measurement.
+  the-lamp-has-no-legend: >-
+    ONE ROUND LENS AT THE TOP LEFT OF EVERY TRAY, at x 3.19-6.54 by y 2.31-5.74 in module
+    coordinates - a bright dome in a thin dark rim. THE AC SUPPLY'S MATCHING RING IS NOT THE
+    SAME THING, though for four rounds this contract said it was: that ring is the bail's end
+    seen in perspective, sitting exactly at the bail's root. The DC supply's lens IS a lamp,
+    at the right of its lattice where no bail is. This lens sits at the tray's top-left
+    corner, where no part of the tray's bottom-hinged bail can reach, so it is a lamp too.
+    NEITHER STAGED DOCUMENT MENTIONS IT. The quick start guide's System
+    LEDs/Buttons page lists the six chassis lamps and the RJ-45's pair and stops; the datasheet
+    names "Port LEDs", "Management Port LEDs" and "System LEDs" and no module lamp.
+    It is drawn because it is there, with the library's default off/on states rather than an
+    invented green/amber legend. See the device's module-lamp-legend gap.
+  power: >-
+    NOT PUBLISHED. Neither staged document states a per-tray figure. The datasheet gives the
+    chassis 1600 W at full load and the fan FRU part numbers FAN-1U-1X1P-F and -B with no
+    rating, so L29 stands at the chassis rather than a number being invented here.
+  airflow-colour-convention: >-
+    THIS DEVICE'S OWN GUIDE SHOWS IT RATHER THAN STATING IT. The Airflow Reversal figures draw
+    the front-to-back build with RED bails and the back-to-front build with BLUE, on both the
+    trays and the supplies, and the ordering table pairs FAN-1U-1x1P-F with front-to-back and
+    FAN-1U-1X1P-B with back-to-front. The bail fill is a default overridden per configuration,
+    as edgecore/dcs240-fan@1 and common/fan-module@1 both do. See roc-ops/Portrayal#277.
+  elements: >-
+    THE GRILLE IS MEASURED, THE BAIL IS NOT. The honeycomb's extent comes from a column and row
+    texture profile inside one bay: columns run 2.4 to 39.2 and rows 3.0 to 37.5 in module
+    coordinates. The bail's node is the common band of seven disagreeing reads, per above.
+    Every relief depth is estimated; the elevation fixes where things are on the face, never
+    how far they stand off it.
+states: [absent]
+elements:
+  grille: {at: [2.40, 3.00], size: [36.85, 34.50], class: rotor}
+  handle: {at: [1.20, 23.00], size: [39.25, 7.00], class: handle}
+  status: {at: [3.20, 2.30], size: [3.40, 3.40], class: led}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c0453f'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        edgecore/ais800-fan@1's own elements key - the honeycomb's extent is drawn and the
+        depth of the cavity behind it is not stated anywhere.
+    - node: handle
+      bar: 3.0
+      lift: 1.0
+      confidence: estimated
+      source: >-
+        edgecore/exp800-fan@1 and edgecore/dcs240-fan@1 - the family's tray handle, and NOT
+        SOURCED for the projection there either; roc-ops/Portrayal#385 is open on exactly this
+        figure across this line's trays. The hardware's grip is a closed loop hooked from
+        below, which is `uhandle`, and this contract carried that at 27 until the reviewer
+        directed the bar: the loop is a great deal of geometry for a 3D build and biases
+        nothing, and a bar standing off the face is what every other tray in this line draws.
+        The figure is a guess and is labelled one.
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is
+        'size: estimated' and the dome carries none.
+skins: [default]
+body:
+  depth: 120
+  color: '#2b2f34'
+  footprint: {at: [0, 0], size: [41.65, 40.6]}

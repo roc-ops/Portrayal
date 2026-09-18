@@ -1,11 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="26.8mm" height="19.9mm" viewBox="0 0 26.8 19.9">
-  <!-- aperture: the panel cutout, 26.80 x 19.90 max R2.5 (APP drawing 115171S1) -->
-  <rect id="opening" x="0" y="0" width="26.8" height="19.9" rx="2.5" fill="#17191c"/>
-  <!-- cavity: the coupler face. Proportional, not dimensioned - 115171S1 draws the
-       contacts and dimensions only the cutout, the flange and the body depth. -->
-  <path id="inlet-face" d="M 1.6 2.0 h 23.6 v 15.9 h -23.6 z" fill="#0d0f11"/>
-  <rect id="contact-ground" x="9.4" y="3.4" width="8.0" height="3.4" rx="0.4" fill="#7a8087"/>
-  <rect id="contact-negative" x="4.4" y="9.0" width="7.4" height="7.2" rx="0.5" fill="#7a8087"/>
-  <rect id="contact-positive" x="15.0" y="9.0" width="7.4" height="7.2" rx="0.5" fill="#7a8087"/>
-  <path d="M 13.4 7.6 V 16.2" stroke="#0d0f11" stroke-width="1.2" fill="none"/>
+  <!-- The panel cutout: 26.80 x 19.90, corners R2.5 max (APP drawing 115171S1 rev 12).
+       Through it shows the housing's front face - solid grey plastic wherever the cavity is not. -->
+  <rect id="opening" x="0" y="0" width="26.8" height="19.9" rx="2.5" fill="#858a90"/>
+  <!-- THE CAVITY IS ONE HOLE. A D, 24.10 x 17.29: flat across the bottom, sides vertical for
+       8.4 mm, then chamfers that climb 8.7 mm while coming in 3.7 - HALF the height - to a
+       flat top 16.7 wide, and every one of its six corners radiused 1.0 - the source rounds
+       them all, not just the two at the bottom. Measured on the AIS800 elevation's inlet as
+       one black component; the same diagonals are on 115171S1's front view. -->
+  <path id="inlet-face"
+    d="M 5.72 1.30 L 21.08 1.30 A 1.00 1.00 0 0 1 22.01 1.92 L 25.37 10.02 A 1.00 1.00 0 0 1 25.45 10.40 L 25.45 17.60 A 1.00 1.00 0 0 1 24.45 18.60 L 2.35 18.60 A 1.00 1.00 0 0 1 1.35 17.60 L 1.35 10.40 A 1.00 1.00 0 0 1 1.43 10.02 L 4.79 1.92 A 1.00 1.00 0 0 1 5.72 1.30 Z"
+    fill="#06070a"/>
+  <!-- THE ONE PIECE STANDING IN IT, drawn as ONE outline so it reads as one: the housing's
+       contact web, in the housing's grey. Two forks joined by a bar 1.8 mm thick. Each fork:
+       an outer tine along the bottom, a shorter inner tine above it whose tip is cut at 45 on
+       the corner facing the cavity's chamfer, a post joining the inner tine up to the bar,
+       and a bridge joining the outer tine to the inner one - which stops 2.2 mm short of the
+       bar. The black between a fork's tines is a side pocket, square, open to the cavity.
+       The black between the forks is the ground pocket and it is a T lying on its back:
+       a crossbar 7.6 wide under the bar between the two posts, a stem 5.2 wide between the
+       two bridges running down to the open bottom, and a 45-degree cut into each bridge's
+       inner-top corner where the stem widens into the crossbar. Every number is a row run
+       off the elevation's grey component, mirrored about the cutout's centreline. -->
+  <path id="contact-web" fill="#858a90" d="M 8.80 5.25 L 18.00 5.25 L 18.00 8.45 L 22.10 8.45 L 23.10 9.45 L 23.10 10.35 L 18.00 10.35 L 18.00 13.75 L 23.10 13.75 L 23.10 15.55 L 16.00 15.55 L 16.00 10.05 L 16.80 9.25 L 17.20 9.25 L 17.20 7.05 L 9.60 7.05 L 9.60 9.25 L 10.00 9.25 L 10.80 10.05 L 10.80 15.55 L 3.70 15.55 L 3.70 13.75 L 8.80 13.75 L 8.80 10.35 L 3.70 10.35 L 3.70 9.45 L 4.70 8.45 L 8.80 8.45 Z"/>
 </svg>
