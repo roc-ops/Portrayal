@@ -95,7 +95,8 @@ def build(library):
             "parts": len(parts.get(ref, ())),
             "what": first_sentence(doc.get("description")),
         })
-    order = ["std", "common"] + sorted(k for k in groups if k not in ("std", "common"))
+    order = ["std", "common", "generic"] + sorted(
+            k for k in groups if k not in ("std", "common", "generic"))
     lines = [
         "# Component catalogue",
         "",

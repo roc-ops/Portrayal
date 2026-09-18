@@ -250,3 +250,12 @@ def test_a_module_image_is_asked_for_by_a_name_the_build_publishes():
     assert not missing, (
         f"{len(missing)} of {len(asked)} module images named a drawing that is "
         f"not in the build: {missing[:4]}")
+
+
+def test_the_generic_namespace_ships():
+    """`generic/` is the third non-vendor namespace (docs/pluggables-design.md,
+    decision 3) and a consumer resolving `generic/sfp-lc@1` must find it in the
+    published registry beside `common` and `std`."""
+    ns = load("vendors.json")["namespaces"]
+    assert "generic" in ns, sorted(ns)
+    assert "representative of a class under a spec" in ns["generic"]

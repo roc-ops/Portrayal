@@ -38,6 +38,7 @@ in the vendor's namespace that `parts:` an existing one for its inlet and lamp.
 |---|---|---|
 | `std/` | apertures and cages that conform to a standard in `spec/schemas/standards.yaml`; lint checks the size against the registry | `std/qsfp28`, `std/rj45`, `std/c14-inlet` |
 | `common/` | shapes that stand for a class of part rather than one product, with no manufacturer and nothing a DCIM could order | `common/led-arrow-sm`, `common/rivet`, `common/psu-550w` |
+| `generic/` | a representative of a class under a spec: the envelope conforms to a standard (so lint checks it as `std/` is checked) and the appearance stands for every product of its kind; a vendor's product wraps one via `parts:` and adds its facts | `generic/sfp-lc`, `generic/qsfp-lc` |
 | `<vendor>/` | a manufacturer's own part: a line card, a vendor-specific PSU or fan, a faceplate, a label | `juniper/mpc7e-10g`, `ufispace/psu-132-crps-ac` |
 
 Prefer `std/` over `common/`, and `common/` over a vendor namespace, but only
@@ -235,8 +236,10 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   library ended up with one Edgecore chassis drawing its back-to-front build in
   blue and two others in red from the same vendor convention.
 - `body-left.svg`, `body-right.svg`, `body-top.svg`, `body-bottom.svg`,
-  `body-rear.svg` are optional side views for parts that have a 3D body
-  (modules, PSUs, fans); the viewer uses them to texture the box.
+  `body-rear.svg` are optional side views for parts that have a 3D body. NOTHING
+  READS THEM TODAY: `relief.js` extrudes a box from the face skin and `data-z-*`,
+  and whether these should texture that box is decided in
+  docs/pluggables-3d-design.md. Do not add them to a new part.
 - No raster images, no editor metadata, no external references. A skin is
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
   `logo-zone` element instead.
