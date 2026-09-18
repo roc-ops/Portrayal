@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: seg7-beacon-s9611
-version: 1.1.1
+version: 1.2.0
 class: display
 profile: networking
 description: Two-digit seven-segment beacon readout in a dark bezel, each digit with
@@ -43,6 +43,7 @@ elements:
     at: [1.5, 1.0]
     size: [4.3, 5.0]
     class: display
+    characters: 1
     description: >-
       the left digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle. The drawing's own face is '0'.
     states: &digit-states
@@ -67,6 +68,7 @@ elements:
     at: [7.8, 1.0]
     size: [4.3, 5.0]
     class: display
+    characters: 1
     description: >-
       the right digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle. The drawing's own face is '0'.
     states: *digit-states
@@ -74,6 +76,7 @@ elements:
     at: [5.2, 5.4]
     size: [0.6, 0.6]
     class: display
+    characters: 1
     description: >-
       the left digit's decimal point, driven separately from the digit as it is on the part. Unlit in the drawing, which is why the face reads '00' and not the vendor artwork's '8.8.'
     states:
@@ -83,6 +86,7 @@ elements:
     at: [11.5, 5.4]
     size: [0.6, 0.6]
     class: display
+    characters: 1
     description: >-
       the right digit's decimal point, driven separately from the digit as it is on the part. Unlit in the drawing, which is why the face reads '00' and not the vendor artwork's '8.8.'
     states:

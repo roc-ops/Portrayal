@@ -498,6 +498,35 @@
       },
       "minItems": 1
      },
+     "characters": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "HOW MANY CHARACTER CELLS THIS DISPLAY HAS, across one row - every display in this library is one row, and Cisco's RSP matrix is \"one row of four characters\" in the guide's own words, so there is no `rows` key until a device needs one. A display is not a lamp: a lamp has a colour vocabulary and `states` says it, and a four-character LED matrix reading INIT, BOOT and IMEM has a MESSAGE vocabulary that no list of colours can express. `characters` is the capacity - what a reading has to fit in - and it is the one number that makes `messages` checkable, because a five-character message on a four-character display is a transcription error a reader cannot see and a rule can. A seven-segment cell is `characters: 1` and carries its glyph set in `states`, each naming the segments it lights; a whole-display readout carries its strings in `messages`. Both are `class: display`, and which vocabulary fits is the difference."
+     },
+     "messages": {
+      "type": "array",
+      "minItems": 1,
+      "description": "WHAT THIS DISPLAY CAN READ, and what each reading means - the string equivalent of a lamp's `states`. Only for `class: display`, and only for a display showing whole readings rather than per-cell glyphs. Each entry is the text as the hardware prints it beside the vendor's own sentence about it, so a reader can answer \"it says PSEQ, what is wrong\" without leaving the manifest. TEXT CARRIES NO WHITESPACE, for the reason `data-states` does not: the compiled drawing publishes these on one attribute and a consumer splits them, so a reading with a space in it would arrive as two.",
+      "items": {
+       "type": "object",
+       "required": [
+        "text"
+       ],
+       "additionalProperties": false,
+       "properties": {
+        "text": {
+         "type": "string",
+         "minLength": 1,
+         "pattern": "^\\S+$",
+         "description": "the reading, exactly as the display prints it"
+        },
+        "meaning": {
+         "type": "string",
+         "description": "the vendor's own sentence about this reading, kept beside the text and never instead of it"
+        }
+       }
+      }
+     },
      "description": {
       "type": "string",
       "description": "the vendor's own sentence about this element, kept beside the state tokens - never instead of them"

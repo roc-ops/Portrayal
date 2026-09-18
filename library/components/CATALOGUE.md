@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-609 component majors in 11 namespaces.
+610 component majors in 11 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -185,7 +185,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `celestica/psu-1600@1` | module | psu | 73.5 × 40 |  | 1 | 0 | Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V output for PoE++, CRPS form factor, C14 in… |
 
-## cisco/ (138)
+## cisco/ (139)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -299,6 +299,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
+| `cisco/led-matrix-4@1` | component | display | 14 × 25 |  | 1 | 0 | The four-character LED matrix a Cisco ASR 9000 route processor shows its boot stage on, as the ASR 9901 carri… |
 | `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 2 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
 | `cisco/pwr-1p6kw-dc@1` | module | psu | 74.69 × 40.2 |  | 2 | 0 | Cisco ASR 9900 fixed-chassis 1.6 kW DC power module |
 | `cisco/pwr-2kw-dc-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module (ASR9K-DC-PEM-V2) |
