@@ -215,7 +215,21 @@ def test_the_comparison_layer_can_now_reach_them():
     modules" over six bays. It is here for the same reason the DCS202 is: the comparison layer
     counts DEVICES that state a redundancy, not distinct rears, and three devices sharing one
     fan part is a fact about the line rather than a duplicate.
+
+    FIFTY-THREE IS THE AIS800-32D, and it is the first rear in this census with SEVEN bays.
+    Its datasheet says "7 Hot-swappable fan modules with 6+1 redundant fans" twice - in the
+    feature list and in the interface callouts - and its quick start's rear callout "7 x fan
+    trays"; the rear elevation, measured on two separate row bands, has seven trays 41.65 mm
+    wide on a 45.005 mm pitch with a 3.36 mm rail between. The digit form and the bay count
+    agree, as they have on every Edgecore rear here. What the census cannot say, and the
+    device records as a gap, is which end the trays number from: the elevation is a 1.83 px/mm
+    raster and a 2 mm numeral is under four pixels.
+
+    FIFTY-FOUR IS THE AIS800-32O, the OSFP twin, and it is the DCS202/EXP400 case again: the
+    same datasheet states the same "6+1" for both models, the same rear elevation is
+    pixel-identical between the two guides, and one fan part serves both. Counted twice
+    because two devices state it, not because there are two rears.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 52, n
+    assert n == 54, n

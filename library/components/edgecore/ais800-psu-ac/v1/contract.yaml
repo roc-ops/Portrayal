@@ -1,0 +1,193 @@
+format: 1
+kind: module
+name: ais800-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style
+  module with a latticed grille across its left half, a coloured U-bail hinged down its left
+  edge, one unlabelled lamp at its top left corner, an Anderson Saf-D-Grid appliance inlet
+  standing upright at its right and a small release tab at the bottom right. NOT an IEC inlet:
+  2400 W on a 200 V line is 12 A continuous and the vendor names the connector outright.
+size: {w: 53.7, h: 40.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'PSU-AC-2400W'
+  power-output-w: 2400
+  input: ac
+provenance:
+  size: >-
+    photo-measured on the AIS800-32D quick start guide, page 1 Overview REAR elevation at
+    600 dpi, scaled by the stated 438.4 mm body width to 5.0662 px/mm. That face is isotropic
+    to 0.04% at a 44 mm height, which is why it and not the front carries these numbers - see
+    edgecore/ais800-fan@1 for the check.
+    BOTH SUPPLIES WERE READ AND THEY AGREE EXACTLY. Vertical-edge scans over the module frames
+    put PSU1 at 4.74 to 58.43 and PSU2 at 379.20 to 432.90 - 53.69 and 53.70. The first read of
+    PSU1 gave 51.2, because a strong edge at 56.06 inside the housing was taken for its right
+    frame; the symmetry with PSU2 and the closing arithmetic below identify 58.43 as the frame
+    and 56.06 as an internal seam.
+    THE ARITHMETIC CLOSES ACROSS THE WHOLE FACE: 4.74 of chassis frame, 53.69 of PSU1, 4.73 of
+    rail, 311.68 of fan block, 4.36 of rail, 53.70 of PSU2 and 5.50 of frame sum to 438.40.
+    THE HEIGHT IS MEASURED, NOT THE FAMILY'S 40.0 ESTIMATE. Strong horizontal seams at y 1.38
+    and 42.04 bound the supplies on this face, giving 40.66; the trays read 40.6 on the same
+    seams and both parts use 40.6.
+  the-inlet-is-a-saf-d-grid-and-the-vendor-says-so: >-
+    THE DATASHEET NAMES IT IN THE POWER SECTION - "AC PSU Inlet: Anderson Saf D Grid" - and the
+    elevation draws it: a dark flange about 24 mm wide by 31 tall with a blade pattern inside,
+    standing PORTRAIT, which is nothing like a C14's rounded trapezoid and three round pins.
+    std/saf-d-grid@1 carries Anderson Power Products' own panel cutout, 26.80 x 19.90 mm off
+    drawing 115171S1 rev 12, and is placed `rotate: 90` because this module mounts the
+    receptacle upright - the same placement cisco/a9k-1600w-ac@1 uses for the same reason.
+    IT IS TURNED 90, AND THE CAVITY'S CHAMFER IS WHAT SETTLES IT. std/saf-d-grid@1's housing
+    is a six-sided shield - chamfered across the TOP corners, radiused at the bottom - and this
+    elevation draws those chamfers on the RIGHT of the aperture, which is a quarter turn
+    clockwise. Both rotations were rendered and put beside the elevation to decide it.
+    AN EARLIER READING OF 270 WAS WRONG AND IS RECORDED BECAUSE IT WAS PLAUSIBLE. The ground
+    contact is a T; the elevation shows a vertical light bar at the LEFT of the aperture, which
+    was taken for the T's head and gave 270. It is not the head - it is the cavity's own left
+    wall detail. The head is the short vertical bar right of centre, with the stem running left
+    from it, which is 90. A contact pattern read at 5 px/mm is not evidence; a 3 mm chamfer on a
+    high-contrast silhouette is.
+    THE PLACEMENT ALSO MOVED, because a rotation is about the part's CENTRE. A w x h part turned
+    a quarter turn - either way - lands its aperture at (at.x + (w-h)/2, at.y - (w-h)/2), which
+    for this 26.8 x 19.9 part is 3.45 in each axis; `at` was first written as though the rotation
+    left the top-left alone, which put the aperture 2.9 mm right and 3.45 mm high of where the
+    drawing puts it. at [24.86, 8.75] lands the 19.9 x 26.8 aperture at
+    module x 28.31-48.21 by y 5.30-32.10, which is the source's cavity (face x 34.36-51.65,
+    y 8.05-32.15) centred in the cutout that Anderson centres its housing in.
+    AN EARLIER MOVE OF 3.0 MM TO THE RIGHT WAS WRONG AND IS RECORDED. It argued that the cavity
+    at 34.36-51.65 could not fit a cutout at 29.65-49.55 - but the first figure is in FACE
+    coordinates and the second in MODULE coordinates, 4.74 apart, and in one frame the cutout
+    contains the cavity with 0.03 mm to spare. The bezel then followed the cutout to the
+    module's right edge, and a comparison crop that clipped the module at 54 mm hid all of it.
+    Compare in one coordinate frame, and crop both pictures to the same window.
+    IT IS CARRIED BY THE COMPOSED PART AND NOT BY `attrs.inlet`, WHICH IS DELIBERATE. That
+    attr's vocabulary is c14, c20, dc-terminal, other and none, and its own schema note says a
+    module that draws an inlet part "needs nothing here" - L95 is satisfied by the composed
+    part's `class: inlet`. The DCIM exporter already maps std/saf-d-grid to NetBox's own
+    `saf-d-grid` power-port type, so the connector reaches an export without the enum growing a
+    value only this part would use.
+    THE MEASURED FLANGE IS THE CHECK. The drawn bezel reads 27.6 to 50.5 mm in module
+    coordinates, about 23 wide, against the part's stated 31.0 x 24.0 flange rotated to
+    24.0 x 31.0. The cutout is then centred inside it, which is where `at` below comes from.
+    WHY THE RATING FORCES IT: this library's other Edgecore supplies take a C14 at 400 to
+    1600 W. A C14 is rated 10 A at 250 V; 2400 W at the 200 V low end of this supply's stated
+    range is 12 A continuous, past what the coupler is rated to carry. The connector is not a
+    style choice.
+  power: >-
+    2400 W, FROM THE DATASHEET, AND THE INPUT FROM THE QUICK START GUIDE. The datasheet's
+    feature list reads "Hot-swappable, load-sharing, redundant 2400 W AC/DC PSUs" and its power
+    section "AC input rating: 200-240 VAC at 50-60Hz (2400 W max.)"; the quick start guide's
+    Hardware Specifications table gives "200-240 VAC, 50/60Hz, 15 A max. per PS". The ordering
+    table names the FRU as PSU-AC-2400W-F and -B.
+    ONE VOLTAGE RANGE ONLY, unlike the rest of this line. edgecore/dcs240-psu-ac@1 has a low
+    and a high rung and records the high one; this supply has no low-line rating at all, and
+    the guide adds a note that a single supply powering a fully loaded system must be on
+    200-240 VAC.
+  why-this-is-its-own-part: >-
+    THE RATING AND THE INLET, EITHER OF WHICH WOULD BE ENOUGH. Nothing in this library asserts
+    2400 W - common/psu-ac-650@3 claims 650, edgecore/dcs201-psu-ac@1 400, edgecore/dcs240-psu-ac@1
+    1500, celestica/psu-1600 1600 - and nothing in the Edgecore namespace takes a Saf-D-Grid.
+    The face is also 53.7 mm wide against the line's usual 54.4 CRPS, so the shape is not shared
+    either.
+  the-flange-is-drawn-here-and-not-in-the-part: >-
+    THE BEZEL AROUND THE HOLE BELONGS TO THIS MODULE, and std/saf-d-grid@1 deliberately does not
+    carry it: that part is sized to the 26.80 x 19.90 PANEL CUTOUT, and its own provenance notes
+    that the 31.0 x 24.0 flange "is deliberately not this part's size", the same layering
+    std/usb-a's 12.0 x 4.5 has inside common/usb-a's 17 x 7.
+    A WRAPPER PART WAS CONSIDERED AND REJECTED. A common/saf-d-grid-inlet at 31.0 x 24.0 would
+    have to give its flange a relief, and a full-face `out` is a slab that buries whatever is
+    recessed beneath it - which is how the CSR310's supply came out blank, twice. The library
+    has no vocabulary for a raised frame AROUND a hole. Drawing the bezel in this skin costs no
+    part and no relief, and it is the right home anyway: the flange's colour and finish are the
+    supply's, not the connector's.
+    IT IS THE SAME GREY AS THE PART'S OWN HOUSING FACE, deliberately: the flange and the face
+    inside the cutout are one moulding, and the elevation shows one tone across both. A first
+    cut drew the flange lighter and the two read as two parts.
+    IT IS THE PART'S STATED 31.0 x 24.0 FLANGE, turned on its side to 24.0 x 31.0 and centred on
+    the aperture, because Anderson centres them: module x 26.26-50.26 by y 3.20-34.20. That puts
+    it 3.2 mm below the module's top edge and 3.4 mm in from its right, which is where the
+    elevation draws it once the comparison is cropped to the whole module.
+    31.0 x 24.0 flange turned on its side, 24.0 x 31.0, centred on the aperture - x 27.60-51.60
+    by y 4.80-35.80.
+  the-round-feature-at-the-top-left-is-the-bail-and-not-a-lamp: >-
+    A 6 mm ANNULUS WITH A BRIGHT CENTRE reads at module x 3.4-9.5 by y 1.67-8.03 on PSU2 and
+    was drawn as a status lamp for four rounds. IT IS THE END OF THE BAIL. The bails on this
+    face are posed deployed in every figure and each is a round tube seen end-on where it
+    leaves the panel - a bright disc in a dark ring, exactly what a lamp lens looks like at
+    5 px/mm. Read against the DC figure, where the bail is stowed and no such ring exists,
+    and against this module's own art where the ring sits precisely where the deployed
+    bail's root is, it is not a lamp. No lamp is drawn. The fan trays' top-left lens sits
+    where no bail root is and is unaffected; it keeps its gap.
+  the-bail-runs-corner-to-corner-across-the-lattice: >-
+    FROM THE GRILLE'S TOP RIGHT TO ITS BOTTOM LEFT, which is what both elevations draw: PSU1's
+    bail crosses its lattice from the upper right down to the lower left, and so does PSU2's.
+    It was drawn vertical down the left edge, then horizontal through the middle, before the
+    diagonal it plainly is. The node below is the grille's box because that is the bail's
+    footprint; the skin draws the diagonal inside it, and relief hoops the box. Its exact
+    pose is not measurable - every figure poses it deployed, at a different angle in each -
+    so it is marked estimated.
+  airflow-colour-convention: >-
+    THE GUIDE SHOWS IT RATHER THAN STATING IT. The Airflow Reversal figures draw the
+    front-to-back build with RED bails and the back-to-front build with BLUE, and the ordering
+    table pairs PSU-AC-2400W-F with front-to-back and -B with back-to-front. The bail fill is a
+    default overridden per configuration. See roc-ops/Portrayal#277.
+  elements: >-
+    THE LATTICE STOPS 3.3 MM SHORT OF THE BEZEL, AND IS NEARLY THE MODULE'S FULL HEIGHT. A
+    column profile of black fraction across the module reads as alternating lattice columns from
+    x 2.0 to 22.5, then falls to 0.16, 0.10, 0.05 and zero - plain housing - before the bezel's
+    edge at 29.6. A cut in between said the holes ran to the flange at 26.1; they do not, and
+    the eye caught it before the profile did. Rows span y 3.0 to 39.7. The field is
+    [2.20, 3.00] by 20.50 x 36.00, and the bail's node is the same box, because the bail's
+    footprint is the grille's. The release tab reads x 36.5-49.0 in
+    the bottom band on PSU1 and 38.3-47.6 on PSU2; it is the small ribbed lever the FRU figure
+    shows hanging below the bottom right corner, not the long coloured bar this line's 1RU
+    supplies usually carry.
+    EVERY RELIEF DEPTH IS ESTIMATED. The elevation fixes where things are on the face and never
+    how far they stand off it.
+states: [absent]
+elements:
+  handle: {at: [2.20, 3.00], size: [20.50, 36.00], class: handle}
+  vent-field: {at: [2.20, 3.00], size: [20.50, 36.00], class: vent}
+  latch: {at: [36.50, 35.40], size: [12.50, 5.20], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#b8322c'}
+  latch-finish: {label: Latch colour, type: text, default: '#e0857f'}
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [24.86, 8.75], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries whatever is
+  # recessed beneath it, which is how the CSR310's AC supply came out blank. See #364.
+  features:
+    - node: handle
+      uhandle: 27.0
+      confidence: estimated
+      source: >-
+        NOT SOURCED FOR THIS PART, and 27 is borrowed rather than measured. No staged document
+        for this chassis says how far its bail stands off the face. The nearest published
+        figure for a CRPS-class supply is UfiSpace's S9510-28DC HIG - "the handle for the power
+        supplies will extend outwards by 1.06 inches" - which ufispace/psu-401-ac carries at
+        datasheet confidence and ufispace/psu-102-ac, edgecore/dcs240-psu-ac and its siblings
+        borrow at estimated, exactly as here. It is `uhandle` and not `bar` + `lift` so that a
+        3D build hoops it off the face - the whole point of the figure - rather than laying a
+        plate on it.
+    - node: vent-field
+      vent: 24
+      confidence: estimated
+      source: >-
+        edgecore/ais800-psu-ac@1's own elements key - the lattice's extent is drawn and the
+        depth of the cavity behind it is not stated.
+    - node: latch
+      out: 2.4
+      confidence: estimated
+      source: >-
+        edgecore/dcs240-psu-ac@1's latch, which records the same thing: outline drawn,
+        projection not stated.
+skins: [default]
+body:
+  depth: 320
+  color: '#c2c7cd'
+  footprint: {at: [0, 0], size: [53.7, 40.6]}

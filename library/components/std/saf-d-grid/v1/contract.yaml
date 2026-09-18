@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: saf-d-grid
-version: 1.0.0
+version: 1.1.0
 class: inlet
 profile: networking
 conforms: saf-d-grid
@@ -29,6 +29,13 @@ provenance:
     shallowest; the flush-mount variants run deeper and the data sheet dimensions
     those separately. std/c14-inlet's own depth is estimated because its
     datasheet does not dimension the shroud interior; this one does.
+  what-the-skin-draws: >-
+    SIX NODES, THREE OF THEM CONTACTS. `opening` is the panel cutout; `inlet-face` is the
+    coupler cavity behind it; `pocket-left` and `pocket-right` are the housing's two upper
+    keying recesses, which carry no contact and take no relief; and `contact-ground`,
+    `contact-negative` and `contact-positive` are the three blade receptacles the drawing
+    labels. The relief block below targets the three contacts, as it did before 1.1.0, so
+    nothing downstream of it changed name.
   it-also-fits-a-c14-hole: >-
     NOTE 4 OF THE DRAWING SAYS SO OUTRIGHT - "OR USE WITH IEC320 C14 PANEL
     CUT-OUTS" - and the two apertures are NOT the same number: 28.0 x 20.0
@@ -38,12 +45,59 @@ provenance:
     Saf-D-Grid in it is not a contradiction, and because conforming this part to
     `c14-inlet` to make a hole line up would put the wrong standard on it.
   coupler-face: >-
-    PROPORTIONAL, NOT DIMENSIONED, the same limitation std/c14-inlet records for
-    its shroud. The front view on 115171S1 draws the ground contact across the
-    top centre with the positive and negative below it, labelled on the drawing,
-    and dimensions the 31.0 x 24.0 flange and the 26.8 x 19.9 cutout around them -
-    but no contact position. The three slots in this skin are drawn to read
-    rather than to measure.
+    MEASURED SINCE 1.1.0, AND THE DRAWING WAS ON DISK THE WHOLE TIME. Until then this
+    key read "PROPORTIONAL, NOT DIMENSIONED" and the skin drew three rounded rectangles
+    sized to read rather than to measure. 115171S1 does not dimension the contacts, but
+    it DRAWS them, in a front view that carries its own dimensioned 31.0 x 24.0 flange -
+    so the flange calibrates the view and every feature in it can be read off.
+    HOW IT WAS READ. working/intake/standards/saf-d-grid/sdg-115171s1.pdf rendered at
+    900 dpi; the front view's flange measures 1104 x 859 px against the stated 31.0 x
+    24.0, which is 35.34 px/mm and closes to 31.24 x 24.31 - inside the line width. Scan
+    lines across the view then give, in FLANGE coordinates: the ground blade opening
+    x 11.47-19.55 by y 5.6-8.3; its stem x 13.56-17.20 (interior 13.80-17.20, centre
+    15.50 against the flange's own 15.5); the negative x 5.77-13.00 and the positive
+    x 18.00-25.25, both y 14.3-19.5; and the two upper keying pockets at x 6.7-10.3 and
+    20.7-24.3 by y 3.7-8.9. The two lower contacts are 7.23 and 7.25 wide - one part,
+    read twice - and their centres sit 6.12 either side of the flange's midline.
+    THE SKIN IS DRAWN IN THE CUTOUT'S FRAME, which is the flange's less the 2.10 x 2.05
+    the cutout is inset by, since the cutout is centred on the flange.
+    THE CAVITY IS SIX-SIDED, NOT A ROUNDED RECTANGLE, and 1.1.0's first cut got that wrong too.
+    Tracing the front view row by row gives a shield: a flat top from x 6.31 to 24.81 at y 3.04,
+    chamfers down and out to the full width at y 6.20, straight sides at x 3.60 and 27.44 - held
+    to within 0.1 mm from y 12.6 to 19.6, which is what makes them straight rather than curved -
+    and a radiused bottom at y 21.22. Those chamfers are the shape's signature: they are what a
+    reader recognises when the part is turned on its side, and they are what settles which way a
+    device has mounted it. Drawn as a rounded rectangle the part loses the only cue it has.
+    Two diagonals in the upper corners of the FLANGE are not part of this outline; they are
+    moulded gussets running from the flange's own corner down to its inner edge, and reading
+    them as the cavity is how the first trace went wrong.
+    THE CAVITY IS ONE HOLE AND THE WEB IS ONE PIECE, AND IT TOOK FIVE CUTS OF 1.1.0 TO DRAW
+    THAT. The Edgecore AIS800 elevation, which is this part rendered by a vendor's CAD, was
+    thresholded inside the inlet and gives exactly one black connected component - the cavity -
+    and exactly one grey component inside it: 212,167 px at 50.66 px/mm, x 37.36-47.75 by
+    y 10.01-30.18 mounted. Its row runs resolve into seven rectangles, mirror-symmetric: an
+    outer tine along each side edge, an inner tine beside it, a bridge joining each pair at the
+    base, and a bar joining the two bridges. Two forks and a bar. The black between a fork's
+    tines is a pocket, open into the cavity; the black between the bridges is the ground
+    pocket, and the bar is its far wall, with the contact visible in it as a lighter rectangle.
+    NOTHING IN THE CAVITY IS A HOLE IN A BLOCK. Cuts one to four drew three light shapes in a
+    black field, then blocks with painted slots, then blocks with sunk slots. All were three
+    islands with three holes, and no plug could mate with them. The Anderson drawing's front
+    view outlines the pockets, which is how they were read as blocks; its isometric shows the
+    web joined into one, and the elevation's single component is what settled it.
+    THE CHAMFERS ARE HALF THE CAVITY'S HEIGHT. Per row on the elevation the D's right edge sits
+    at 51.65 for y 12.4-27.8 and runs from (42.77, 8.05) to (51.44, 11.71) above that and its
+    mirror below: an 8.7 mm rise for a 3.7 mm run. 115171S1's front view has the same two
+    diagonals in its upper corners, from flange (4.72, 3.6) to (2.20, 11.1), which the first
+    trace dismissed as flange gussets and drew instead as a 3.2 x 2.6 corner. They are the
+    cavity. Reading them wrong halved the shape's one recognisable feature.
+    WHAT THE SHAPE MEANS. The ground is not a bar over two blades; it is a T - a wide
+    blade across the top whose stem runs down BETWEEN the positive and the negative,
+    which is the first-mate last-break geometry the family is sold on. A face drawn as
+    three separate rectangles cannot show that, and the T is what makes the part
+    recognisable against an IEC C14 at a glance.
+    WHAT IS STILL NOT SOURCED: the depth each contact sits at behind the face. The
+    relief entries below say so individually.
   the-flange-is-not-this-aperture: >-
     31.0 x 24.0 is the bezel that lands on the metal AROUND the hole, and it is
     deliberately not this part's size - the same layering the components README
@@ -72,33 +126,28 @@ relief:
   wall: '#141619'
   cavity: inlet-face
   features:
-    - node: contact-ground
+    - node: contact-web
       top: 14.0
-      color: '#c0c5cb'
+      color: '#858a90'
       confidence: estimated
       source: >-
-        std/saf-d-grid@1 itself - 115171S1 dimensions the panel cutout, the
-        flange and the body depth but NOT the contact geometry, so how far a
-        blade stands into the coupler has no source. The same gap std/c14-inlet
-        records for its pins.
-    - node: contact-positive
-      top: 14.0
-      color: '#c0c5cb'
-      confidence: estimated
-      source: >-
-        std/saf-d-grid@1 itself - 115171S1 dimensions the panel cutout, the
-        flange and the body depth but NOT the contact geometry, so how far a
-        blade stands into the coupler has no source. The same gap std/c14-inlet
-        records for its pins.
-    - node: contact-negative
-      top: 14.0
-      color: '#c0c5cb'
-      confidence: estimated
-      source: >-
-        std/saf-d-grid@1 itself - 115171S1 dimensions the panel cutout, the
-        flange and the body depth but NOT the contact geometry, so how far a
-        blade stands into the coupler has no source. The same gap std/c14-inlet
-        records for its pins.
+        std/saf-d-grid@1 itself. The web is the housing's own plastic standing in the cavity;
+        115171S1 dimensions the cutout, the flange and the body depth and never how far the
+        web stands up inside the recess, so 14.0 of a 17.0 cavity - three millimetres below
+        the face - is read off the isometric, not a dimension. It is the housing's grey and
+        not a metal, and it is ONE node, because it is one piece: the three pockets are the
+        black between its tines, not holes in three blocks, and a 3D build must show a
+        single hole with a single shape in it, which is what a plug is the inverse of.
+        IT IS ONE PATH, NOT SEVEN RECTANGLES. The first union was drawn as its parts and each
+        carried an outline, so the seams showed and it read as pieces; the web is traversed
+        once now. THE GROUND POCKET IS A T, NOT A U, and cut six got that backwards by
+        filling its corners and filleting the side pockets: the elevation's row runs show
+        the bridges stopping 2.2 mm short of the bar, so under the bar the pocket widens to
+        7.6 between the two posts, then narrows to 5.2 between the bridges and runs to the
+        open bottom, with a 45-degree cut into each bridge's inner corner where it widens.
+        The side pockets are square. Each inner tine's tip is cut at 45 on the corner facing
+        the cavity's chamfer, so the tine follows the D. A chamfer cut into the web widens a
+        pocket; one cut into a pocket narrows it, and only the first is what the part has.
 connection-points:
   mate: {at: [13.4, 9.95], direction: front}
 skins: [default]
