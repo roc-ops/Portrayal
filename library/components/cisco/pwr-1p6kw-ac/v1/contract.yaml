@@ -1,0 +1,145 @@
+format: 1
+kind: module
+name: pwr-1p6kw-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9900 fixed-chassis 1.6 kW AC power module. A single axial fan
+  behind a finger guard on the left half, a U-shaped release handle across
+  it, an IEC C14 inlet turned on its side, a release latch down the right
+  edge and one STATUS lamp. The ASR 9903 takes four of these and the ASR
+  9902 two; AC and DC modules may not be mixed in one chassis.
+size: {w: 74.69, h: 40.2}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from one source - the "ASR-9903 Rear" master, in a chassis face
+  calibrated on the data sheet body. Taking one axis from each of two sources
+  is the error that made a Cisco power module 3.66 mm too wide. See
+  provenance.size.
+attrs:
+  model: 'PWR-1.6KW-AC'
+  power-output-w: 1600
+  role: 'power-module'
+  input: 'ac'
+  inlet: 'c14'
+  fans: '1'
+  eol: 'none-announced'
+provenance:
+  input: >-
+    install guide - "AC power modules operate within the following input range:
+    High line rate: 200 V to 240 V. Low line rate: 90 V to 130 V", with the note
+    that "The Cisco ASR 9903 Router's AC power supply can handle both low line
+    voltage of 120V and high line voltage of 220V. Whenever there is a swap
+    between the two voltage types, you must first remove the power supply from
+    the chassis and apply the new voltage source." The same section gives "The
+    AC power module operates in 50 to 60 Hz and requires a minimum service of:
+    15 A for operation in North America and Japan; 10 A for international
+    operation; 13 A for operation in the UK."
+  inlet: >-
+    drawing AND registry. The master draws the inlet body 17.43 x 26.61 mm with
+    an earth pin above two flat pins - a C14 appliance inlet rotated a quarter
+    turn - so it is COMPOSED from std/c14-inlet@1 with rotate: 90 rather than
+    redrawn, and the standard supplies the aperture. `at` is the UNROTATED top
+    left that puts the landed 20.0 x 28.0 box centred on the drawn body at
+    (54.43, 17.00), because rotate pivots a placement on its own pre-rotation
+    centre.
+  switch: >-
+    THERE IS NONE ON THIS MODULE, and the guide says so rather than leaving it
+    to be inferred: "There is no power switch available on the AC PSUs for Cisco
+    ASR 9903 routers as they are plug-and-play devices. These devices are
+    directly plugged the PSU slots of the router and do not require any
+    configuration for them to work. The power LED (PWR) is available on the
+    front-side of the router." The ASR 9902's own rear DOES carry a switch under
+    an ATTENTION ON-OFF tag - Figure 158 of the same guide draws it, labelled
+    POWER - which is why the absence here is worth stating.
+  size: >-
+    drawing - Cisco's own Visio stencil Routers-Cisco_ASR_9000, master
+    "ASR-9903 Rear", where all four modules are drawn populated. The module
+    plate measures 74.69 x 40.20 mm in a chassis face calibrated on the ASR
+    9903 data sheet's 443.86 x 131.57 mm body, and the four plates come out
+    identical to 0.01 mm at x 6.37, 124.28, 242.19 and 360.11 - four readings
+    of one part. NO DOCUMENT IN THE INTAKE DIMENSIONS THIS MODULE: the
+    fixed-port Hardware Installation Guide's power chapters give input ranges,
+    cord options, terminal ratings and replacement steps and no envelope; the
+    ASR 9903 and ASR 9902 data sheets dimension the chassis and the two PECs
+    only; and the Overview and Reference Guide's power sections cover the
+    modular-chassis trays. DEPTH IS THEREFORE ABSENT rather than estimated.
+  power: >-
+    install guide - the part number states 1.6 kW and the troubleshooting
+    chapter's `show environment` confirms it as the module's rating rather than
+    a marketing round number: "Total output power capacity (N + 1) : 1600W +
+    1600W" on a chassis with two of these, above a per-module table reading
+    "0/PT0-PM0 1.6KW-AC 213.5 1.1 12.1 15.2 OK". The 12.1 V column is the
+    module's output rail; 1600 W is its capacity, not its draw.
+  lamp: >-
+    install guide - the AC-input troubleshooting table, whose LED column reads
+    "OK (Cisco ASR 9901) / STATUS (Cisco ASR 9903 and Cisco ASR 9902)" and
+    gives five states for it: "Solid Green - Power supply is on and outputting
+    power. Flashing Green - Power supply is connected to input power or FPD
+    upgrade in progress. Amber - Power supply failure, due to one of the
+    following: Over voltage, Over current, Over Temperature, Fan failure.
+    Flashing Amber - Power supply is operating but a warning condition ... High
+    temperature, High power, Slow fan. Off - Power supply is not receiving
+    power." All five are carried. ITS POSITION IS READ OFF THE MASTER BY EYE,
+    not extracted: the lamp is drawn as a stroked circle with no fill, which
+    the shape parser does not carry, so it was located on a 4x render of the
+    master at the bottom right of the inlet block. The names and the states are
+    sourced; the two coordinates are a reading of a picture.
+  redundancy: >-
+    data sheet - Table 2 of c78-744035: "1.6 kW DC power module (up to 4
+    modules), redundancy: 2+2" and "1.6 kW AC power module (up to 4 modules),
+    redundancy: AC high line (200-240V): 2+2; AC low line (90-130V): 3+1". The
+    install guide adds the constraint that decides a chassis build: "A total of
+    four AC or DC power supplies are allowed in the Cisco ASR 9903 chassis" and
+    "Mixing of AC and DC modules is not supported".
+  shared-with-the-9902: >-
+    THIS IS ONE PART ACROSS TWO CHASSIS and the guide says so in a table rather
+    than in prose. Table 2 of the fixed-port Hardware Installation Guide, "Cisco
+    ASR 9902 Router Components", lists "Power Supply Modules (AC or DC) |
+    PWR-1.6KW-AC / PWR-1.6KW-DC | 2", and the ASR 9903 data sheet's ordering
+    tables list the same two PIDs at up to four. The ASR 9902 is not modelled
+    here yet; when it is, it seats this contract rather than a copy of it.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [40.43, 7.00], rotate: 90}
+elements:
+  status:
+    at: [67.10, 32.70]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the module's STATUS lamp, one per module, at the bottom right of the
+      inlet block.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: green-blink, behavior: blinking, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blink, behavior: blinking, color: '#f5a623'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: handle
+      uhandle: 8.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-fan@1 handle - the library's one pull-handle figure. Its
+        provenance describes the handle's appearance from a photograph, not its
+        proudness
+    - node: latch
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure.
+        That contract sources the latch's ARRANGEMENT from photographs, never
+        its proudness
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own
+        provenance is 'size: estimated' and the dome carries none
+skins: [default]

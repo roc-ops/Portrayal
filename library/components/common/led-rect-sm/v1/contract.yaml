@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: led-rect-sm
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  Small rectangular per-port LED - the rounded bar a dense port row carries one
+  of beside each cage, at roughly half the area of common/led-rect. The
+  proportions are led-rect's; only the size differs, the same way led-arrow-sm
+  is led-arrow at a port row's scale.
+size: {w: 2.8, h: 1.6}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  measured off Cisco's Visio master "ASR-9903 Front", where the fixed board's
+  thirty-six per-port lamps are drawn as one rounded rectangle each, all
+  identical: the thirty-six read 2.80 or 2.81 by 1.60 mm in a chassis face
+  calibrated on the ASR 9903 data sheet's body. That is thirty-six readings of
+  one shape rather than one reading, which is why the figure is carried here as
+  a shared part instead of stretching common/led-rect's 4.6 x 2.6 to fit.
+provenance:
+  size: >-
+    drawing - see size-notes. The part is generic because the SHAPE is generic:
+    what the ASR 9903 contributes is a measured size for a bar lamp that several
+    dense port rows in this library already draw at a guess.
+  lamp-inset: >-
+    BORROWED FROM common/led-rect@1, in proportion rather than in millimetres.
+    That part insets its lamp 0.4 mm inside a 4.6 x 2.6 bezel - 8.7 percent of
+    the width and 15.4 of the height - and the same fractions on 2.8 x 1.6 give
+    0.24 and 0.25, rounded to 0.25 here. The ASR 9903 master draws the lamp as a
+    single rounded rectangle with no bezel around it, so the inset is NOT
+    measured; it is the library's existing lamp convention applied at a new size,
+    and it is flagged as such rather than presented as a reading of the artwork.
+elements:
+  lamp:
+    at: [0.25, 0.25]
+    size: [2.3, 1.1]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lamp
+      dome: 0.2
+      confidence: estimated
+      source: >-
+        common/led-rect@1 - whose own dome of 0.3 is unsourced and is described
+        there as one of five proportional guesses that scale with drawn
+        diameter. This lamp is 0.6 of led-rect's area, so 0.2 keeps that
+        proportion; it is a guess scaled from a guess and says so.
+skins: [default]
