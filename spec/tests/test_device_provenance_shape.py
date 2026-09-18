@@ -116,9 +116,9 @@ def _verified(tmp_path, provenance):
     f = tmp_path / "device.yaml"
     f.write_text(yaml.safe_dump(doc))
     schema = json.loads((ROOT / "spec/schemas/device.schema.json").read_text())
-    lint.ERRORS.clear(); lint.WARNINGS.clear()
-    lint.lint_device(f, jsonschema.Draft202012Validator(schema), [str(LIB)])
-    return [e for e in lint.ERRORS if "[L15]" in e]
+    with lint.collecting() as got:
+        lint.lint_device(f, jsonschema.Draft202012Validator(schema), [str(LIB)])
+    return [e for e in got.errors if "[L15]" in e]
 
 
 SOURCED = {"confidence": "datasheet", "note": "datasheet - the vendor's own Table 3"}

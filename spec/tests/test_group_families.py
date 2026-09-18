@@ -17,10 +17,21 @@ from portrayal import libwalk
 
 
 def check(dev):
-    """Run L22/L23 over an in-memory manifest and return (errors, warnings)."""
-    lint.ERRORS, lint.WARNINGS = [], []
-    lint.lint_device_groups(Path("test.yaml"), dev, [str(LIB)])
-    return lint.ERRORS, lint.WARNINGS
+    """Run L22/L23 over an in-memory manifest and return (errors, warnings).
+
+    THROUGH `lint.collecting()`, AND THE REASON IS THE BUG THAT WROTE IT. This
+    helper used to REBIND lint.ERRORS and lint.WARNINGS to fresh lists and then
+    leave its findings sitting in them. That works until an unrelated test in the
+    same worker reads the globals - and one does: test_lint_collecting's
+    `test_it_restores_what_was_there_before` asserts that a block leaves the
+    outer state alone, and under `pytest -n auto` it failed, naming itself, with
+    an L23 warning about a `mixed: 'management cluster'` group it had never seen.
+    That is the failure `collecting()`'s own docstring predicts, word for word,
+    and this was the last helper in the suite still hand-rolling the dance.
+    """
+    with lint.collecting() as got:
+        lint.lint_device_groups(Path("test.yaml"), dev, [str(LIB)])
+    return got.errors, got.warnings
 
 
 def device(groups, placements):

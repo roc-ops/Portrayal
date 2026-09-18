@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-1600w-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -23,7 +23,6 @@ attrs:
   power-output-w: 1600
   role: 'power-module'
   input: 'ac'
-  inlet: 'other'
   fans: '1'
   eol: 'none-announced'
 provenance:
@@ -33,16 +32,31 @@ provenance:
     Options for Cisco ASR 9901 Router", lists sixteen cords and every one of them
     is a CAB-AC-*-SG-* - CAB-AC-16A-SG-EU, -UK, -JPN, -AR and the rest at 16 A
     250 VAC, with CAB-AC-20A-SG-US and -US1 at 20 A 110 and 125 VAC. SG is
-    Cisco's Saf-D-Grid, the 16 A rectangular keyed connector, and the master
-    draws exactly that profile: a shrouded rectangular body with a stepped keyway
-    and a single contact visible, nothing like the C14 the ASR 9902 and ASR 9903
-    modules take.
-    IT IS DRAWN RATHER THAN COMPOSED, because the library has no part for it.
-    `attrs.inlet` is `other` for the reason the schema offers that value - a real
-    connector the vocabulary has no type for - and the device that seats this
-    module carries the gap that wants a std/saf-d-grid and a standards.yaml key.
-    The rating is the reason the connector is what it is: 1600 W off a 90 V low
-    line is nearly 18 A, which is past what a C14 is rated to carry.
+    Anderson's Saf-D-Grid, and the master draws that profile rather than a C14.
+    The rating is why the connector is what it is: 1600 W off a 90 V low line is
+    nearly 18 A, past what a C14 is rated to carry.
+    IT IS NOW COMPOSED RATHER THAN DRAWN. std/saf-d-grid@1 carries Anderson's own
+    panel cutout - 26.80 x 19.90, corners R2.5 max, off drawing 115171S1 - and it
+    is placed `rotate: 90` because this module mounts the receptacle upright. The
+    hand-drawn opening this replaced was a shape read off the Cisco master; the
+    standard's figure is a measurement of the connector.
+    WHICH WAY ROUND THE QUARTER TURN GOES IS NOT SOURCED. Anderson's front view
+    puts the ground contact above the positive and negative; turned upright it
+    lands on one side or the other, and the Cisco master's rendering of the
+    coupler is too stylised to say which. `rotate: 90` is a choice between two
+    equally undetermined options and the consequence is which side a 3 mm
+    contact is drawn on. A photograph of an A9K-1600W-AC's face settles it.
+    AND THE TWO AGREE, WHICH IS THE CHECK WORTH RECORDING. The Cisco master draws
+    this module's aperture 19.98 x 26.51 mm at a scale set by the ASR 9901's body
+    width alone; Anderson's cutout turned a quarter turn is 19.90 x 26.80. That
+    is 0.4 percent across and 1.1 percent down, between two documents that share
+    no author, no units convention and no measurement - and neither figure was an
+    input to the other.
+    `attrs.inlet` IS GONE RATHER THAN SET. The schema's vocabulary is c14, c20,
+    dc-terminal, other and none, and its own description says a module that
+    composes an inlet part "needs nothing here" - the composed part is the strong
+    form and carries the standard, the cutout and the size. Saying `other` beside
+    a part that names the connector exactly would be the weaker statement of two.
   input: >-
     datasheet - Table 2 of c78-740540: "Worldwide ranging AC (90-265V; 50-60 Hz)".
   size: >-
@@ -76,6 +90,8 @@ provenance:
     confirms the position: its one callout points at the lamp above the +DC mark.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [38.13, 6.51], rotate: 90}
 elements:
   ok:
     at: [64.30, 3.20]

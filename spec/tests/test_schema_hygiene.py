@@ -108,11 +108,23 @@ def _device_with(n_faults, tmp_path):
     return p
 
 
-def _schema_findings(path):
+def _all_findings(path):
+    """Every error from one lint run over `path`.
+
+    THROUGH `lint.collecting()`. Clearing the globals without restoring them
+    leaves this run's findings where the next test reads them, which
+    `collecting()`'s own docstring predicts and which
+    test_lint_collecting::test_it_restores_what_was_there_before catches - by
+    failing, under its own name, over a finding it never made.
+    """
     doc = json.loads((SCHEMAS / "device.schema.json").read_text())
-    lint.ERRORS.clear(); lint.WARNINGS.clear()
-    lint.lint_device(path, jsonschema.Draft202012Validator(doc), [str(ROOT / "library")])
-    return [e for e in lint.ERRORS if "[L1]" in e]
+    with lint.collecting() as got:
+        lint.lint_device(path, jsonschema.Draft202012Validator(doc), [str(ROOT / "library")])
+    return got.errors
+
+
+def _schema_findings(path):
+    return [e for e in _all_findings(path) if "[L1]" in e]
 
 
 def test_three_schema_faults_are_reported_as_three(tmp_path):
@@ -131,7 +143,7 @@ def test_the_run_still_stops_before_the_structural_checks(tmp_path):
     """Reporting all of them must not turn into CONTINUING past them. The checks
     after this point read a shape the schema has just called wrong, and the
     `return` is what keeps them from tripping over it."""
-    found = _schema_findings(_device_with(1, tmp_path))
-    assert len(found) == 1
-    assert not [e for e in lint.ERRORS if "[L1]" not in e], \
-        "a schema-invalid manifest should not reach the structural rules: " + str(lint.ERRORS)
+    every = _all_findings(_device_with(1, tmp_path))
+    assert len([e for e in every if "[L1]" in e]) == 1
+    assert not [e for e in every if "[L1]" not in e], \
+        "a schema-invalid manifest should not reach the structural rules: " + str(every)

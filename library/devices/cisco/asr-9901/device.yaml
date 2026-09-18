@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9901
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9901
@@ -196,9 +196,18 @@ provenance:
       rectangular body with a stepped keyway.
       THE RATING IS WHY. 1600 W off a 90 V low line is nearly eighteen amps,
       which is past what a C14 carries, so the connector is not a detail somebody
-      chose freely. cisco/a9k-1600w-ac@1 draws the opening and declares
-      `attrs.inlet: other`; the gap below wants the std/ part and its registry
-      key.
+      chose freely.
+      THE PART NOW EXISTS AND THE MODULE COMPOSES IT. std/saf-d-grid@1 carries
+      Anderson Power Products' own panel cutout - 26.80 x 19.90 mm, corners R2.5
+      max, off APP drawing 115171S1 rev 12 - and cisco/a9k-1600w-ac@1 places it
+      `rotate: 90` because this module mounts the receptacle upright. The gap this
+      file used to carry for it is closed.
+      AND THE TWO SOURCES AGREE WITHOUT EVER HAVING BEEN COMPARED. This chassis's
+      rear master draws the module's aperture 19.98 x 26.51 mm at a scale set by
+      the body width alone; Anderson's cutout turned a quarter turn is 19.90 x
+      26.80 - 0.4 percent across and 1.1 percent down, between two documents that
+      share no author, no units convention and no measurement, and neither of
+      which was an input to the other.
   cooling:
     confidence: datasheet
     note: >-
@@ -301,26 +310,6 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 gaps:
-- what: saf-d-grid-connector
-  scope: [power-modules]
-  reason: needs-drawing
-  note: >-
-    THE VENDOR IS NOT SILENT - THE REGISTRY IS. Table 11 of the fixed-port
-    Hardware Installation Guide names the AC inlet on this chassis sixteen times
-    over: every cord for the ASR 9901 is a CAB-AC-16A-SG-* or CAB-AC-20A-SG-*,
-    and SG is Cisco's Saf-D-Grid. spec/schemas/standards.yaml has no key for it -
-    c14, c20, dc-terminal and the rest are there, Saf-D-Grid is not - so
-    cisco/a9k-1600w-ac@1 draws the opening in its own skin and declares
-    `attrs.inlet: other` rather than naming a connector Cisco does not.
-    IT IS needs-drawing AND NOT vendor-silent, for the reason the ASR 9001's DIN
-    1.0/2.3 gap gives: the two tokens ask different things of a reader.
-    vendor-silent reads as closed until better documents appear; needs-drawing
-    reads as an errand somebody can run today. Saf-D-Grid is Anderson Power
-    Products' published interface and a sourced dimension exists to be found.
-  wanted: >-
-    a std/saf-d-grid part and its standards.yaml key, off the Anderson Saf-D-Grid
-    datasheet. Three other Cisco supplies in this family would use it.
-  blocks: []
 - what: chassis-height-sources-disagree
   reason: sources-disagree
   note: >-
