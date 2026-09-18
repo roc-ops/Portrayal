@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 2.0.9
+version: 2.0.10
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -809,6 +809,9 @@ configurations:
       psu-1: ufispace/psu-162-ac@1
   dc:
     kind: orderable
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     description: >-
       Dual 1600 W DC supplies (PSU-162-DESR), -40 to -72 V at 50 A, 1+1 redundant,
       each with a 60 A fast-acting fuse and a screw-type two-hole lug terminal block
@@ -823,14 +826,9 @@ configurations:
   breakout:
     kind: example
     description: >-
-      The AC build with the four SFP28 breakout ports fitted with 25G optics. QSFP28
+      The AC build with the four SFP28 breakout ports enabled. QSFP28
       port 0 is disabled while they are enabled, which is a software state the
       drawing cannot show - the cage is still there and still empty.
-    occupants:
-      sfp-0: common/sfp-lc-duplex@1
-      sfp-1: common/sfp-lc-duplex@1
-      sfp-2: common/sfp-lc-duplex@1
-      sfp-3: common/sfp-lc-duplex@1
 datasheet:
   title: UfiSpace S9600-32X Open Aggregation Router datasheet
   url: https://www.ufispace.com/products/telco/aggregation/s9600-32x-25g-100g-aggregation-router

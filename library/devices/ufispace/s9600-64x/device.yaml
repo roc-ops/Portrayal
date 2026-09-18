@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 3.0.0
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -327,6 +327,7 @@ gaps:
     off/on default. The datasheet's own footnote - "NOS integration is necessary to activate
     the specific feature" - is about timing, not lamps, so it does not even license calling
     this nos-dependent.
+    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is unaffected by that change.
   wanted: >-
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit with
     ports in known states
@@ -928,6 +929,9 @@ configurations:
     default: true
   dc:
     kind: orderable
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     description: DC build, 2x PSU-162-DESR 1600 W -40 to -72 V, exhaust supplies, front-to-back airflow
     bays:
       psu-0: ufispace/psu-162-dc@1
@@ -945,20 +949,6 @@ configurations:
         model: PSU-162-AESR
       fan-803816-hi:
         model: FAN-803816-HI
-  dc-populated:
-    kind: example
-    # the same box with optics in it. SFP28 0-3 are shown fitted because they are the
-    # break-out of QSFP28 port 0, which is the one relationship on this panel a picture
-    # explains better than a sentence: port-0 is drawn EMPTY here on purpose.
-    description: DC build fitted with 25G optics on the four SFP28 break-out ports
-    bays:
-      psu-0: ufispace/psu-162-dc@1
-      psu-1: ufispace/psu-162-dc@1
-    occupants:
-      sfp-0: common/sfp-lc-duplex@1
-      sfp-1: common/sfp-lc-duplex@1
-      sfp-2: common/sfp-lc-duplex@1
-      sfp-3: common/sfp-lc-duplex@1
 datasheet:
   title: UfiSpace S9600-64X 25G/100G Aggregation Router Datasheet
   url: https://www.ufispace.com/products/telco/aggregation/s9600-64x-25g-100g-aggregation-router
