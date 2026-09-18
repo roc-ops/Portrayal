@@ -238,6 +238,7 @@ RULES = {
     "L95": ("component",  "a power supply says where power enters it", "compose an inlet part, or add `attrs.inlet` from the enum - `none` if the chassis carries it"),
     "L96": ("component",  "a module composing a pluggable cage says what rate it runs at", "add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count"),
     "L97": ("component",  "a part that states a size says where each dimension came from", "add `size-confidence: {w: ..., h: ...}` from the confidence vocabulary, and `size-notes` where it needs a sentence"),
+    "L98": ("component",  "a character display says how wide it is, and every reading fits", "add `characters:` to the `class: display` element, and keep each `messages[].text` inside it"),
 }
 
 
@@ -1224,6 +1225,58 @@ def lint_component_size_confidence(path, data, _lib_roots=None):
          "photo-measured, drawing, datasheet, registry, borrowed, estimated, "
          "known-wrong - with `size-notes` where it needs a sentence. A number "
          "nobody has measured reads exactly like one somebody did")
+
+
+def lint_component_display(path, data, _lib_roots=None):
+    """L98 - a character display says how wide it is, and every reading fits.
+
+    A DISPLAY IS THE ONE INDICATOR THIS LIBRARY COULD NOT ASK A QUESTION OF.
+    `class: display` has existed since the Cisco route processors landed and it
+    carried a description and nothing else: thirty elements that a reader could
+    see were displays and could not ask how many characters they showed or what
+    any of them said. The ASR 9901 recorded that as a gap in so many words - "a
+    four-character LED matrix has no element class ... `class: led` takes
+    colours and this display takes strings" - and this is the other half of
+    closing it.
+
+    THE CAPACITY IS WHAT MAKES THE VOCABULARY CHECKABLE. Without `characters` a
+    `messages` list is a list of strings nobody can be wrong about; with it, a
+    five-character reading on a four-character display is a transcription error
+    a rule catches on the day it is written rather than a reader catching it
+    years later, or not. That is the whole argument for asking for a number that
+    is otherwise only ever equal to what the drawing already shows.
+
+    IT DOES NOT ASK FOR `messages`, and that is deliberate. A seven-segment cell
+    is a display whose vocabulary is per-cell glyphs and belongs in `states`; a
+    window that frames two digits is a display with no vocabulary of its own at
+    all. Requiring messages would push both into inventing one. What every
+    display can answer is how wide it is.
+    """
+    for eid, spec in (data.get("elements") or {}).items():
+        if not isinstance(spec, dict):
+            continue
+        cls = spec.get("class")
+        msgs = spec.get("messages") or []
+        cells = spec.get("characters")
+        if msgs and cls != "display":
+            err(path, "L98", f"element {eid} carries `messages` and is class "
+                             f"{cls!r}. A message vocabulary is what a DISPLAY "
+                             f"reads; a lamp's vocabulary is `states`")
+            continue
+        if cls != "display":
+            continue
+        if not cells:
+            warn(path, "L98", f"display {eid} does not say how many characters "
+                              f"it shows. Add `characters:` - it is what a "
+                              f"reading has to fit in, and the only thing that "
+                              f"makes a `messages` list checkable")
+            continue
+        for m in msgs:
+            text = str((m or {}).get("text", ""))
+            if len(text) > cells:
+                err(path, "L98", f"display {eid} shows {cells} characters and "
+                                 f"lists the reading {text!r}, which is "
+                                 f"{len(text)}. One of the two was mis-read")
 
 
 def lint_component_cage_rate(path, data, _lib_roots=None):
@@ -7036,6 +7089,7 @@ def main():
                 lint_component_inlet(f, d, args.library)
                 lint_component_cage_rate(f, d)
                 lint_component_size_confidence(f, d)
+                lint_component_display(f, d)
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)

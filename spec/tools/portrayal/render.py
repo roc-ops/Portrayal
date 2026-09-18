@@ -421,6 +421,19 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                 node.set("data-class", spec["class"])
             if spec.get("states"):
                 node.set("data-states", " ".join(state_names(spec["states"])))
+            # A DISPLAY IS NOT A LAMP AND ITS VOCABULARY IS NOT COLOURS. `states`
+            # answers "what colour can this be"; a four-character LED matrix
+            # reading INIT, BOOT or PSEQ needs "what can this say", which is a
+            # list of strings. It rides on its own attribute rather than
+            # data-states so that nothing reading lamp vocabularies is handed
+            # words it will try to paint - statesOfEl already drops a value that
+            # is not a list of tokens, and quietly dropping the only thing a
+            # display knows is the silence this exists to remove.
+            if spec.get("characters"):
+                node.set("data-characters", str(spec["characters"]))
+            if spec.get("messages"):
+                node.set("data-messages",
+                         " ".join(str(m["text"]) for m in spec["messages"]))
             if spec.get("description"):
                 node.set("data-description", spec["description"])
     for node in el.iter():

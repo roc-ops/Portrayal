@@ -104,3 +104,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L95 | component | a power supply says where power enters it | compose an inlet part, or add `attrs.inlet` from the enum - `none` if the chassis carries it |
 | L96 | component | a module composing a pluggable cage says what rate it runs at | add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count |
 | L97 | component | a part that states a size says where each dimension came from | add `size-confidence: {w: ..., h: ...}` from the confidence vocabulary, and `size-notes` where it needs a sentence |
+| L98 | component | a character display says how wide it is, and every reading fits | add `characters:` to the `class: display` element, and keep each `messages[].text` inside it |

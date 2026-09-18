@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9901
-version: 0.2.0
+version: 0.3.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9901
@@ -163,13 +163,19 @@ provenance:
       row of four characters. The matrix becomes active when the CPU powers on and
       displays the stages of the boot process, as well as displaying runtime
       information during normal operation. If there are CAN Bus Controller
-      problems, error messages are displayed." Table 25 lists what it shows -
-      INIT, BOOT, IMEM, IGEN, ICBC and a dozen failure codes.
-      IT IS DRAWN AS A WINDOW AND NOT AS A LAMP. A four-character display is not
-      a state vocabulary and this library has no element class for one, so the
-      bezel and its dark face are panel decor and a gap records what is missing.
-      Its box is read off a 2x render by eye, because the bezel is a stroked
-      rounded rectangle the parser does not carry.
+      problems, error messages are displayed." Table 25 and Table 26 list the
+      twenty-eight readings, and cisco/led-matrix-4@1 carries them.
+      IT IS A PLACED PART NOW AND NOT PANEL DECOR. It was two decor rectangles
+      until `class: display` learned to say how many characters it shows and what
+      they can read; the part carries the same two rectangles, measured the same
+      way, and the model can now be asked what the display says. Its box is read
+      off a 2x render by eye, because the bezel is a stroked rounded rectangle the
+      parser does not carry.
+      NO CUTOUT IS PUNCHED FOR IT. The bezel lands on the metal and the window is
+      the aperture, but nothing in the intake dimensions that aperture apart from
+      the drawn window, and L63 wants a cutout to restate a component's own
+      opening exactly. So the part draws its window and the panel declares no hole,
+      which is what every other display in this library does.
   power:
     confidence: datasheet
     note: >-
@@ -327,24 +333,23 @@ gaps:
   wanted: >-
     a ruler on a real ASR 9901, or a Cisco mechanical drawing.
   blocks: []
-- what: led-matrix-has-no-element-type
+- what: led-matrix-reading-axis-is-undrawn
   scope: [front]
   reason: needs-drawing
   note: >-
-    THE DISPLAY IS DOCUMENTED AND UNMODELLABLE. "The LED matrix displays one row
-    of four characters ... displays the stages of the boot process, as well as
-    displaying runtime information", and Table 25 lists what it shows: INIT,
-    BOOT, IMEM, IGEN, ICBC and a dozen failure codes. That is neither a lamp with
-    a colour vocabulary nor a static mark, and this library has no element class
-    between the two - `class: led` takes states, and a four-character display
-    takes strings.
-    SO IT IS DRAWN AS A WINDOW. The bezel and its dark face are panel decor, and
-    nothing in the model can be asked what the display reads. The nine alarm
-    lamps beside it are modelled properly; this one feature is a picture.
+    THE DISPLAY IS MODELLED AND ITS ORIENTATION IS NOT. cisco/led-matrix-4@1
+    carries the guide's "one row of four characters" and the twenty-eight
+    readings of Tables 25 and 26, so the model can be asked what this display
+    says. What neither document settles is WHICH WAY IT READS: the stencil master
+    and Figure 12's own line art both draw the window 11.0 x 22.0 - taller than
+    it is wide - and both hatch it rather than drawing glyphs in it. A row of four
+    characters in a portrait window means the matrix is mounted turned, or the
+    drawings use a generic display symbol.
+    SO THE SKIN DRAWS THE WINDOW AND NOTHING IN IT. `characters: 4` is Cisco's
+    sentence, not a reading of the artwork, and no rotation is claimed either way.
   wanted: >-
-    an element class for a character display - a size, a character count, and a
-    vocabulary of strings rather than colours. The ASR 9001 carries the same
-    display and would use it.
+    a photograph of a powered ASR 9901 front panel, or any Cisco drawing that puts
+    characters in the window.
   blocks: []
 - what: fan-bay-labels-sit-on-the-tray-flange
   scope: [rear, fan-trays]
@@ -442,6 +447,10 @@ groups:
     term: LED
     role: indicator
     index-origin: 0
+  displays:
+    term: Display
+    role: indicator
+    index-origin: 0
   power-switch:
     term: Switch
     role: service
@@ -502,8 +511,6 @@ views:
         - {at: [230.05, 49.89], size: [24.13, 30.07], fill: '#d8dadd'}
         - {at: [315.71, 69.78], size: [10.19, 10.18], fill: '#d8dadd'}
         - {at: [327.97, 69.78], size: [10.19, 10.18], fill: '#d8dadd'}
-        - {at: [388.5, 54.0], size: [14.0, 25.0], fill: '#d8dadd'}
-        - {at: [390.0, 55.5], size: [11.0, 22.0], fill: '#3c4045'}
       cutouts:
         - {id: port-0, at: [30.11, 12.73], size: [14.25, 10.4], shape: rect}
         - {id: port-1, at: [30.11, 27.77], size: [14.25, 10.4], shape: rect}
@@ -716,13 +723,15 @@ views:
         - {id: rsp-fail, ref: common/led-dot@1, at: [357.0, 73.6], for: chassis, group: alarms, rel-pos: 6}
         - {id: lc-stat, ref: common/led-dot@1, at: [366.3, 73.6], for: chassis, group: alarms, rel-pos: 7}
         - {id: sync, ref: common/led-dot@1, at: [375.7, 73.6], for: chassis, group: alarms, rel-pos: 8}
+        - {id: led-matrix, ref: cisco/led-matrix-4@1, at: [388.5, 54.0], for: chassis, group: displays, rel-pos: 0}
     regions:
       - {id: sfp, label: '1GE SFP ports - 0 to 7 at the left of the port row and 34 to 41 at the right'}
       - {id: sfp-plus, label: 'Dual-rate 1/10GE ports 8 to 19 and 22 to 33 - GRP 0 to GRP 5, four to a group'}
       - {id: qsfp28, label: '100GE QSFP28 ports 20 and 21 - the stacked pair in the middle of the port row'}
       - {id: timing, label: 'Timing - BITS/J.211 SYNC, IEEE 1588 service LAN and ToD, 10 MHz and 1 PPS'}
       - {id: mgmt, label: 'Management - two LAN ports, console, auxiliary, CMP and USB'}
-      - {id: alarms, label: 'Nine discrete alarm lamps, and the four-character LED matrix beside them'}
+      - {id: alarms, label: 'Nine discrete alarm lamps - SSD, FAN FLT, GPS, CRIT, MAJ, MIN, RSP FAIL, LC STAT and SYNC'}
+      - {id: displays, label: 'The four-character LED matrix, beside the alarm lamps at the right of the panel'}
   rear:
     size: {w: 439.93, h: 87.12}
     panel:

@@ -1,0 +1,86 @@
+format: 1
+kind: component
+name: led-matrix-4
+version: 1.0.0
+class: display
+profile: networking
+description: >-
+  The four-character LED matrix a Cisco ASR 9000 route processor shows its boot
+  stage on, as the ASR 9901 carries it on the chassis itself - a bezel with a
+  dark window, and the twenty-eight readings the hardware installation guide
+  tabulates. The RSP and RP cards in this library draw the same display inline,
+  each with its own measured bezel; this part exists because a chassis cannot
+  declare elements and the ASR 9901 has no card to put one on.
+size: {w: 14.0, h: 25.0}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  read off Cisco's Visio master "ASR-9901 Front" at 2x by eye, because the bezel
+  is a stroked rounded rectangle and the shape parser does not carry it: the
+  bezel measures 14.0 x 25.0 mm and the window inside it 11.0 x 22.0, centred to
+  0.05 mm. Those are the two rectangles the ASR 9901 model drew as panel decor
+  before this part existed, carried across unchanged.
+provenance:
+  size: >-
+    drawing - see size-notes. The figure is the stencil's, not a dimension: no
+    document in the intake dimensions the matrix on any chassis or card.
+  messages: >-
+    datasheet-table - transcribed from the Cisco ASR 9000 Series Fixed-Port
+    Routers Hardware Installation Guide, Table 25 "RSP Boot Stages and Runtime
+    Displays" (twenty-five readings) and Table 26 "RSP LED Matrix CAN Bus
+    Controller Status Display" (three). Each `meaning` is the guide's own
+    description column, shortened only where it ran to a second sentence. THE
+    TABLES ARE THE RSP's, and the guide prints them in the same chapter that
+    calls out the ASR 9901's own matrix as callout 9 of Figure 12 - the ASR 9901
+    integrates its route processor, so the RSP's vocabulary is this chassis's
+    vocabulary. That is Cisco's scoping, transcribed, and not a reading across
+    two products.
+  reading-axis: >-
+    UNKNOWN AND NOT INVENTED. The guide says "The LED matrix displays one row of
+    four characters" and both drawings of it - the stencil master and Figure 12's
+    line art - draw a window TALLER than it is wide, 11.0 x 22.0, hatched rather
+    than glyphed. A row of four characters in a portrait window means the display
+    is mounted turned, or the drawings use a generic display symbol; neither
+    document says which. So the skin draws the window and no characters in it,
+    `characters: 4` is the guide's sentence and not a reading of the artwork, and
+    nothing here claims an orientation.
+elements:
+  matrix:
+    at: [1.5, 1.5]
+    size: [11.0, 22.0]
+    class: display
+    characters: 4
+    description: >-
+      the matrix itself. "The matrix becomes active when the CPU powers on and
+      displays the stages of the boot process, as well as displaying runtime
+      information during normal operation. If there are CAN Bus Controller
+      problems, error messages are displayed."
+    messages:
+      - {text: INIT, meaning: 'Card is inserted and microcontroller is initialized.'}
+      - {text: BOOT, meaning: 'Card is powered on and CPU is booting.'}
+      - {text: IMEM, meaning: 'Starting initialization of memory.'}
+      - {text: IGEN, meaning: 'Starting initialization of card.'}
+      - {text: ICBC, meaning: 'Initializing communication with the microcontroller.'}
+      - {text: SCPI, meaning: 'Board is not plugged in properly.'}
+      - {text: STID, meaning: 'CBC was unable to read slot ID pins correctly.'}
+      - {text: PSEQ, meaning: 'CBC detected power sequencer failure.'}
+      - {text: DBPO, meaning: 'CBC detected an issue during board power up.'}
+      - {text: KPWR, meaning: 'CBC detected an issue during board power up.'}
+      - {text: LGNP, meaning: 'CBC detected an issue during board power up.'}
+      - {text: LGNI, meaning: 'CBC detected an issue during board power up.'}
+      - {text: IPNP, meaning: 'CBC detected an issue during board power up.'}
+      - {text: IPNI, meaning: 'CBC detected an issue during board power up.'}
+      - {text: RMN, meaning: 'All tests finished and ROMMON is ready for commands.'}
+      - {text: LOAD, meaning: 'Downloading Minimum Boot Image (MBI) image to CPU.'}
+      - {text: RRST, meaning: 'ROMMON rebooting board after MBI validation timeout.'}
+      - {text: MVB, meaning: 'ROMMON trying MBI validation boot.'}
+      - {text: MBI, meaning: 'Starting execution of MBI.'}
+      - {text: IOXR, meaning: 'Cisco IOS XR Software is starting execution.'}
+      - {text: LDG, meaning: 'The RSP/RP is loading (MBI started and card preparing for activity).'}
+      - {text: INCP, meaning: 'The software or configuration is incompatible with the RSP/RP.'}
+      - {text: OOSM, meaning: 'The RSP is in Out of Service, Maintenance mode.'}
+      - {text: ACT, meaning: 'The RSP is active (IOS-XR completely up and ready for traffic).'}
+      - {text: AUTH, meaning: 'The RSP failed anti-counterfeiting authentication and rebooted.'}
+      - {text: PST1, meaning: 'Failed DDR RAM memory test.'}
+      - {text: PST2, meaning: 'Failed FPGA image cyclic redundancy checking (CRC) check.'}
+      - {text: PST3, meaning: 'Failed card type and slot ID verification.'}
+skins: [default]

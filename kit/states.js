@@ -45,6 +45,30 @@ export function statesOfEl(el) {
   return toks.every(t => TOKEN.test(t)) ? toks : [];
 }
 
+// A DISPLAY IS NOT A LAMP. `states` answers "what colour can this be", and a
+// four-character LED matrix reading INIT, BOOT or PSEQ answers "what can this
+// say" - a vocabulary of strings, which no list of colours expresses. The two
+// ride separate attributes for a reason visible right above: statesOfEl throws
+// away a data-states that is not a list of tokens, so words put there would be
+// dropped silently, and a display that knows twenty-eight readings would read as
+// a display that knows nothing.
+//
+// A reading carries no whitespace - the schema enforces it - so one attribute
+// holds the whole vocabulary and splitting on spaces is exact.
+/** The readings one display admits, or [] if it does not carry any. */
+export function messagesOfEl(el) {
+  const raw = (el?.dataset?.messages || '').trim();
+  return raw ? raw.split(/\s+/) : [];
+}
+
+// Capacity, which is what makes a reading checkable: a five-character string on
+// a four-character matrix is a transcription error nobody can see by looking.
+/** How many character cells a display has, or 0 where it does not say. */
+export function charactersOfEl(el) {
+  const n = Number.parseInt(el?.dataset?.characters ?? '', 10);
+  return Number.isInteger(n) && n > 0 ? n : 0;
+}
+
 // ---------------------------------------------------------------- addressing
 
 const rootOf = el => el?.ownerSVGElement || (el?.tagName === 'svg' ? el : null);

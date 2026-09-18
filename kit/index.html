@@ -44,6 +44,10 @@
   .chip.on { background: var(--warn); color: #111; border-color: var(--warn); }
   /* over --hl, the selection colour the user picks, so it stays legible there */
   .node.sel .chip { border-color: #ffffff66; }
+  /* A display's readings are a fact to be read, not a control: nothing here can
+     make the drawing say INIT, because no skin in the library draws glyphs. */
+  .chip.ro { cursor: default; }
+  .chip.ro:hover { border-color: var(--line); color: var(--dim); }
 
   /* The kit's palette has no "good" green - the shell never needed one - so the
      met-capability chip brings its own rather than borrowing --accent, which is
@@ -116,7 +120,7 @@
 <body>
 <script type="module">
 import { createShell, esc } from './shell.js';
-import { statesOfEl } from './states.js';
+import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
 
 const DIST = '../library/dist';
 const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
@@ -149,11 +153,32 @@ function chips(el) {
   }
   return span;
 }
+
+// ------------------------------------------------------------- display badge
+// A DISPLAY IS NOT A LAMP and gets no chips: a chip sets a class, and setting
+// `state-init` on an LED matrix paints nothing, because no skin in this library
+// draws characters. What a display can answer is how wide it is and what it is
+// able to say - Cisco's four-character matrix knows twenty-eight readings off
+// Tables 25 and 26 - so the row carries that as a badge with the vocabulary in
+// its tooltip, and claims no control over it.
+function reading(el) {
+  const cells = charactersOfEl(el);
+  if (!cells) return null;
+  const msgs = messagesOfEl(el);
+  const badge = document.createElement('span');
+  badge.className = 'chip ro';
+  badge.textContent = msgs.length ? `${cells} chars, ${msgs.length} readings`
+                                  : `${cells} chars`;
+  badge.title = msgs.length ? msgs.join(', ')
+                            : 'the model records the capacity and no vocabulary';
+  return badge;
+}
+
 // The shell offers every tree row as it builds it. A group fold owns no element
 // and so declares nothing; only a row with one gets chips.
 shell.on('row', (row, node) => {
   if (!node.el) return;
-  const c = chips(node.el);
+  const c = chips(node.el) || reading(node.el);
   if (c) row.querySelector('.nm').after(c);
 });
 

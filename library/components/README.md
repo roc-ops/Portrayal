@@ -163,6 +163,18 @@ The rest earns its place:
   drive's capacity. Do not make a new skin per wattage.
 - `states` for lamps, named as tokens (`link`, `activity`, `fault`), with the
   behaviour in `behaviour`.
+- `characters` for a `class: display` element - how many character cells it
+  shows - and `messages` for what it can read, where the display reads whole
+  strings rather than per-cell glyphs. A lamp's vocabulary is colours and a
+  display's is words: Cisco's four-character LED matrix reads INIT, BOOT and
+  PSEQ, which no list of `states` expresses. A seven-segment cell is the other
+  shape - `characters: 1` with its glyph set in `states` - and lint (L98) asks
+  every display for `characters` without asking any of them for `messages`,
+  because a window framing two digits has no vocabulary of its own. Each message
+  is `{text, meaning}`, the text exactly as the hardware prints it and the
+  meaning in the vendor's own words; the text carries no whitespace, because the
+  compiled drawing publishes the whole vocabulary on one `data-messages`
+  attribute and a consumer splits it on spaces.
 - `unplaced` when nothing in the library seats the part - a sentence saying
   what would seat it and what is missing, not a flag. Lint (L89) asks for it on
   any major no device reaches, and fails again if it is still there once

@@ -28,7 +28,7 @@ Everything in `library/dist/`, documented as a contract in
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `marks.js` | annotation and callouts |
-| `states.js` | state toggling (LEDs, link states) |
+| `states.js` | state toggling (LEDs, link states) and what a display can read |
 | `share.js` | GLB and USDZ export |
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay |
