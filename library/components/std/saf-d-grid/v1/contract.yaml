@@ -1,0 +1,104 @@
+format: 1
+kind: component
+name: saf-d-grid
+version: 1.0.0
+class: inlet
+profile: networking
+conforms: saf-d-grid
+interface: saf-d-grid
+description: >-
+  Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler
+  recessed behind it, a first-mate last-break ground above a positive and a
+  negative. It sits in roughly the space an IEC C14 takes and carries several
+  times the current through it, which is why a 1.6 kW supply on a 90 V low line
+  uses one.
+size: {w: 26.8, h: 19.9, d: 17.0}
+attrs: {media: ac, input: ac}
+provenance:
+  size: >-
+    standard - Anderson Power Products drawing 115171S1 rev 12 (ECN 2024-0034,
+    2024-03-13), whose "RECOMMENDED PANEL CUT-OUT" block reads 26.80 +0.10/-0.00
+    x 19.90 +0.10/-0.00 mm, corners R2.5 MAX TYP. APP's Saf-D-Grid data sheet
+    repeats the same figure under the heading "Panel Cut Out For All Receptacle
+    Types", so one aperture serves every variant - unlike the C14 range, whose
+    cutout is series-specific.
+  depth: >-
+    standard, and MEASURED rather than estimated, which is rare for an inlet
+    here. The side view on 115171S1 dimensions the body 17.0 mm behind the panel
+    and 5.8 mm proud of it. That is the ultra-short 2006 series, which is the
+    shallowest; the flush-mount variants run deeper and the data sheet dimensions
+    those separately. std/c14-inlet's own depth is estimated because its
+    datasheet does not dimension the shroud interior; this one does.
+  it-also-fits-a-c14-hole: >-
+    NOTE 4 OF THE DRAWING SAYS SO OUTRIGHT - "OR USE WITH IEC320 C14 PANEL
+    CUT-OUTS" - and the two apertures are NOT the same number: 28.0 x 20.0
+    against this 26.8 x 19.9. A Saf-D-Grid receptacle in a C14 cutout is a part
+    in an oversized hole, which is the vendor's own allowance. It is worth
+    knowing because a chassis drawing that shows a C14-sized opening with a
+    Saf-D-Grid in it is not a contradiction, and because conforming this part to
+    `c14-inlet` to make a hole line up would put the wrong standard on it.
+  coupler-face: >-
+    PROPORTIONAL, NOT DIMENSIONED, the same limitation std/c14-inlet records for
+    its shroud. The front view on 115171S1 draws the ground contact across the
+    top centre with the positive and negative below it, labelled on the drawing,
+    and dimensions the 31.0 x 24.0 flange and the 26.8 x 19.9 cutout around them -
+    but no contact position. The three slots in this skin are drawn to read
+    rather than to measure.
+  the-flange-is-not-this-aperture: >-
+    31.0 x 24.0 is the bezel that lands on the metal AROUND the hole, and it is
+    deliberately not this part's size - the same layering the components README
+    describes for std/usb-a's 12.0 x 4.5 inside common/usb-a's 17 x 7. A wrapper
+    part carrying the flange, the latch ears and the APP marking belongs in
+    common/ when a device needs it drawn; nothing does yet.
+  rating: >-
+    data sheet and drawing together. Note 5 of 115171S1: "20A, 600V NOT FOR
+    CURRENT INTERRUPTION; 20A, 400V FOR CURRENT INTERRUPTION", temperature rating
+    105 C, housing high-temperature nylon with 30 percent glass fill to UL 94
+    V-0 and halogen free, contacts silver-plated copper alloy. The data sheet's
+    family page goes further - "up to 40A and 600V DC or AC within the same space
+    of the IEC 320 C13 & C14 system that is limited to 10A and 250 VAC" - across
+    variants this aperture does not distinguish.
+  who-uses-it: >-
+    THREE VENDORS IN THIS CORPUS, WHICH IS WHY IT IS A std/ PART AND NOT A CISCO
+    ONE. Cisco's ASR 9901 takes it on the A9K-1600W-AC, and Table 11 of the
+    fixed-port Hardware Installation Guide lists sixteen CAB-AC-*-SG-* cords for
+    it. Juniper names "SAF-D-Grid 400" in the MX960, MX2008, MX2010, MX2020,
+    QFX5120, QFX5230 and QFX5241 cord tables. Dell's PowerEdge R670, R770, R6715,
+    R6725, R7715 and R7725 technical guides list "APP/Saf-D-Grid" against their
+    277 VAC and HVDC supplies. Twenty-four staged documents mention it.
+elements:
+  opening: {at: [0.0, 0.0], size: [26.8, 19.9], class: cutout}
+relief:
+  wall: '#141619'
+  cavity: inlet-face
+  features:
+    - node: contact-ground
+      top: 14.0
+      color: '#c0c5cb'
+      confidence: estimated
+      source: >-
+        std/saf-d-grid@1 itself - 115171S1 dimensions the panel cutout, the
+        flange and the body depth but NOT the contact geometry, so how far a
+        blade stands into the coupler has no source. The same gap std/c14-inlet
+        records for its pins.
+    - node: contact-positive
+      top: 14.0
+      color: '#c0c5cb'
+      confidence: estimated
+      source: >-
+        std/saf-d-grid@1 itself - 115171S1 dimensions the panel cutout, the
+        flange and the body depth but NOT the contact geometry, so how far a
+        blade stands into the coupler has no source. The same gap std/c14-inlet
+        records for its pins.
+    - node: contact-negative
+      top: 14.0
+      color: '#c0c5cb'
+      confidence: estimated
+      source: >-
+        std/saf-d-grid@1 itself - 115171S1 dimensions the panel cutout, the
+        flange and the body depth but NOT the contact geometry, so how far a
+        blade stands into the coupler has no source. The same gap std/c14-inlet
+        records for its pins.
+connection-points:
+  mate: {at: [13.4, 9.95], direction: front}
+skins: [default]

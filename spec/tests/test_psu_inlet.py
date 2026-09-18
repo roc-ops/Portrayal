@@ -135,11 +135,26 @@ def test_the_backlog_is_named_and_shrinking():
 
     The assertion is an upper bound, not an equality: filling one in is a good
     day's work and must not fail the suite.
+
+    IT USED TO ASK THE WRONG QUESTION, and std/saf-d-grid caught it. The check
+    read a composed inlet by testing for the substring "inlet" in the part's ref,
+    which works for std/c14-inlet and std/c20-inlet and fails for every connector
+    whose name is not the word. Anderson's Saf-D-Grid is an appliance inlet called
+    Saf-D-Grid, so cisco/a9k-1600w-ac composed one and this census counted it
+    silent anyway. Searching a name measures the searcher's expectations; the
+    class is what the structure says, so that is what is read now.
     """
+    def draws_an_inlet(doc):
+        for part in (doc.get("parts") or []):
+            if not isinstance(part, dict):
+                continue
+            found = lint.resolve_component(part.get("ref", ""), [LIB])
+            if found and (yaml.safe_load(found.read_text()) or {}).get("class") == "inlet":
+                return True
+        return False
+
     silent = [ref for ref, d in _psus().items()
-              if not (d.get("attrs") or {}).get("inlet")
-              and not any(isinstance(p, dict) and "inlet" in p.get("ref", "")
-                          for p in (d.get("parts") or []))]
+              if not (d.get("attrs") or {}).get("inlet") and not draws_an_inlet(d)]
     assert len(silent) <= 10, (
         f"{len(silent)} supplies say nothing about power entry, up from 10: {sorted(silent)}")
     assert len(_psus()) >= 55, "the census did not find the catalogue"

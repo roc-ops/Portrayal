@@ -267,6 +267,13 @@ def rj45_timing_label(part):
 PART_POWER = {
     "std/c14-inlet": "iec-60320-c14",
     "std/c20-inlet": "iec-60320-c20",
+    # NOT AN IEC CONNECTOR, AND UPSTREAM HAS A ROW FOR IT ANYWAY. Anderson's
+    # Saf-D-Grid takes 20 A at 600 V through the space an IEC C14 uses for 10 A
+    # at 250, which is why Cisco's 1600 W ASR 9901 supply takes one and why
+    # Juniper and Dell both list it. `saf-d-grid` is NetBox's own
+    # PowerPortTypeChoices value, label "Saf-D-Grid", and nautobot mirrors it -
+    # so this needs none of the `other` hedging common/dc-barrel gets.
+    "std/saf-d-grid": "saf-d-grid",
     # A DC SUPPLY HAS AN INLET TOO, and this one had no row, so
     # dell/psu-1100w-dc-14g exported no power port at all while its two AC
     # siblings in the same family each exported theirs. Nothing distinguished
