@@ -1058,3 +1058,47 @@ standards:
       13.2 wide with its bores side by side. This entry closes the open question
       at docs/optical-paths-design.md:287, which read 12.90 against our 13.2 as
       though one part had been measured two ways.
+  sfp-module:
+    registry: 'SFF-8432 Rev 5.2a, Table 4-3 Dimension Table for IPF Module and Figure 4-1 IPF Module'
+    w: 13.55
+    h: 8.55
+    radius: 0.0
+    confidence: verified
+    depth: 47.50
+    depth-confidence: verified
+    depth-notes: 'overall length of the module including the latch, Table 4-3 designator T (distance from positive stop to rear of module, +/-0.20); the protrusion past a bezel is this less the cage depth (std/sfp registry 41.0)'
+    notes: >-
+      THE MODULE ENVELOPE, not a panel aperture - the first registry entry that
+      governs an occupant rather than a hole. w and h are the body a cage accepts,
+      Table 4-3 with tolerances; docs/pluggables-generics-design.md section 2.
+      Shared by SFP, SFP+ and SFP28 - the rate is electrical and never in this
+      entry. SFF-8402 (SFP28) is not held and not needed: it inherits this envelope.
+  qsfp-module:
+    registry: 'SFF-8661 Rev 2.5, Figure 5-1 Basic Views'
+    w: 18.35
+    h: 8.50
+    radius: 0.0
+    confidence: verified
+    depth: 52.4
+    depth-confidence: verified
+    depth-notes: 'overall module length, Fig 5-1 (front tip to datum D, hard stop on module; 52.4 REF, not toleranced); protrusion is this less SFF-8663 Fig 4-1 37 REF (std/qsfp28 registry depth)'
+    notes: >-
+      Shared by QSFP+, QSFP28, QSFP56 and QSFP112 - one envelope, one cage
+      interface (qsfp), the rate never in this entry. common/qsfp-transceiver@1's
+      18.35 x 8.5 came from a vendor drawing; this is the MSA that drawing follows.
+  qsfp-dd-module:
+    registry: 'QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3, section 7.3, Figure 47 (Type 1 module)'
+    w: ~
+    h: ~
+    radius: 0.0
+    confidence: registry
+    depth: ~
+    depth-confidence: registry
+    depth-notes: 'overall module length, Figure 47 - not legible in the reachable OKF text (captions only, no dimension callouts recovered) and no local PDF held; do not fill from common/qsfp-dd-transceiver or from qsfp-module without reading Figure 47 itself'
+    notes: >-
+      Type 1. Types 2, 2A and 2B differ behind the bezel (section 7.3) and are
+      not separate envelopes here. Same width as qsfp-module by design - the
+      QSFP-DD cage accepts a QSFP module (section 1) - but w/h/depth are left
+      unset (confidence: registry) until Figure 47 itself can be read: the
+      Hardware Spec Rev 6.3 PDF is not staged under working/specs/, see
+      working/intake/optic/msa/SOURCES.md.
