@@ -127,11 +127,15 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
 
     THE TWO ARRIVED TOGETHER AND THE SECOND ONE IS THE TEST OF THE FIRST. Three
     trays has only one sensible reading, 2+1, and it was still not written down,
-    because a ratio nobody published is not a ratio this library states."""
+    because a ratio nobody published is not a ratio this library states. The ASR
+    9901 made it twenty-three on the same ruling a day later - "Fan redundancy"
+    in its data sheet's Table 2, "Cisco ASR 9901 Router has three fan trays" in
+    the install guide, and no arithmetic anywhere - so all three fixed-port
+    chassis Cisco shipped with this wording are in this count together."""
     unstated = sorted(slug for slug, d in devices() if run(d))
     assert "edgecore/cor580" in unstated and "edgecore/dcs510" in unstated
-    assert "cisco/asr-9903" in unstated and "cisco/asr-9902" in unstated
-    assert len(unstated) == 22, unstated
+    assert {"cisco/asr-9901", "cisco/asr-9902", "cisco/asr-9903"} <= set(unstated)
+    assert len(unstated) == 23, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():

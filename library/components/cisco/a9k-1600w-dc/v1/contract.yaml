@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: a9k-1600w-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9901 1600 W DC power module. The AC module's mechanics - one axial
+  fan, the release latch down the right edge and one OK lamp - with a two-pole
+  DC connector in place of the Saf-D-Grid inlet, marked +DC above and -DC
+  below. The ASR 9901 takes two of these; AC and DC modules may not be mixed
+  in one chassis.
+size: {w: 71.21, h: 39.21}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from one source - the "ASR-9901 Rear" master, in a chassis face
+  calibrated on the ASR 9901 data sheet's 439.93 x 87.12 mm body, where the two
+  modules are drawn populated and measure 71.21 x 39.21 and 71.26 x 39.25 - two
+  readings of one part agreeing to 0.05 mm. Taking one axis from each of two
+  sources is the error that made a Cisco power module 3.66 mm too wide.
+attrs:
+  model: 'A9K-1600W-DC'
+  power-output-w: 1600
+  role: 'power-module'
+  input: 'dc'
+  inlet: 'dc-terminal'
+  fans: '1'
+  eol: 'none-announced'
+provenance:
+  connector: >-
+    install guide - Figure 163, "Cisco ASR 9901 DC PSU", draws this face: the fan
+    and its CLEI label on the left, a two-pole connector in the middle with +DC
+    printed above it and -DC below, the latch on the right, and the OK lamp at
+    the top right, which is the figure's only callout. THE CHASSIS REAR MASTER
+    DRAWS ONLY THE AC VARIANT, so this module's ARRANGEMENT comes from that
+    figure and its ENVELOPE is borrowed from the AC module measured off the
+    master - a borrowing across the two variants of one module family, stated
+    here rather than implied.
+  input: >-
+    datasheet - Table 2 of c78-740540: "Worldwide ranging DC (-40V to -72V)".
+  size: >-
+    drawing - see size-notes. NO DOCUMENT IN THE INTAKE DIMENSIONS THIS MODULE:
+    the Cisco ASR 9901 Router Data Sheet (c78-740540) gives the chassis envelope
+    and the two power-supply part numbers and stops, and the fixed-port Hardware
+    Installation Guide's power chapters give input ranges, cord options and
+    replacement steps and no envelope. DEPTH IS THEREFORE ABSENT rather than
+    estimated.
+    IT IS NOT THE ASR 9902'S MODULE. cisco/pwr-1p6kw-ac@1 is 74.94 x 40.91 mm and
+    carries a different part number; this is 3.7 mm narrower and 1.7 mm shorter,
+    which is what two different 1.6 kW supplies should look like rather than two
+    readings of one.
+  power: >-
+    datasheet - the part number states 1600 W and Table 2 of c78-740540 lists it
+    outright: "Power supply part number: A9K-1600W-AC, A9K-1600W-DC". The same
+    table gives the CHASSIS envelope beside it - "850 watts typical, 1100 watts
+    maximum" - which is what the box draws, not what a supply can give; the two
+    are recorded in different places for that reason.
+  lamp: >-
+    install guide - the AC-input troubleshooting table, whose LED column reads
+    "OK (Cisco ASR 9901) / STATUS (Cisco ASR 9903 and Cisco ASR 9902)" and gives
+    five states for it: "Solid Green - Power supply is on and outputting power.
+    Flashing Green - Power supply is connected to input power or FPD upgrade in
+    progress. Amber - Power supply failure, due to one of the following: Over
+    voltage, Over current, Over Temperature, Fan failure. Flashing Amber - Power
+    supply is operating but a warning condition ... High temperature, High power,
+    Slow fan. Off - Power supply is not receiving power." THE LEGEND IS OK ON
+    THIS CHASSIS AND STATUS ON THE OTHER TWO, which is Cisco's own distinction
+    and is why the element's description says OK rather than STATUS. Figure 163
+    confirms the position: its one callout points at the lamp above the +DC mark.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  ok:
+    at: [64.30, 3.20]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the module's OK lamp - Cisco's legend for this chassis, where the ASR 9902
+      and ASR 9903 modules print STATUS. One per module.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: green-blink, behavior: blinking, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: amber-blink, behavior: blinking, color: '#f5a623'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: latch
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure.
+        That contract sources the latch's ARRANGEMENT from photographs, never its
+        proudness
+    - node: ok
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own
+        provenance is 'size: estimated' and the dome carries none
+skins: [default]
