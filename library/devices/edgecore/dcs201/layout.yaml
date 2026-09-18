@@ -1,0 +1,630 @@
+format: 1
+kind: device
+name: dcs201
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: AS5835-54X
+portfolio: {line: Cloud Data Center, family: Leaf Switch, series: DCS201}
+description: >-
+  48x 10G SFP+ and 6x 100G QSFP28 data-centre leaf switch, sold as the DCS201, Broadcom
+  Trident 3 with an Intel Atom C3558. All fifty-four ports, both management jacks, the
+  console and the USB are on the FRONT; two supplies and five fan trays are on the rear.
+  Ports number 1-54 and run DOWN each column - odd on the top row, even beneath it. Ships
+  front-to-back and back-to-front, and the two builds differ in the colour of every handle
+  and latch.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents, both staged and both docling-converted, MEASURED OFF THE PDF PAGE RATHER
+      THAN THE CONVERTED FIGURES. dcs201-datasheet (the DCS201 / AS5835-54X data sheet) holds
+      the specification tables and one product shot; dcs201-qsg (the AS5835-54X Quick Start
+      Guide) holds the panel art. The guide is the richer document by far - 108 figures - and
+      page 1 carries the front and rear elevations, the enlarged System LED and Port LED
+      details, the FRU replacement pictures and the airflow-reversal pair.
+      THE GUIDE DISCLAIMS ITS OWN DRAWINGS: "The switch drawings in this document are for
+      illustration only and may not match your particular switch model." Every number below
+      that comes from a drawing is therefore checked against a stated figure or a registry
+      standard before it is used, and where the two disagree it is said so rather than
+      averaged.
+  gate-1:
+    confidence: measured
+    note: >-
+      THE ASPECT TEST FAILS, AND THE REASON IS IDENTIFIED. The front elevation on page 1,
+      rendered from the PDF page at 600 dpi, gives a face 2222 px wide by 204 px tall - an
+      aspect of 10.89 against the stated 442.5 / 43.95 = 10.07, which is 8.2% out and past the
+      4% gate. IT IS A PERSPECTIVE RENDER, NOT AN ELEVATION: the top cover is drawn as a visible
+      trapezoid above the face, and the face itself TAPERS, reading 2228 px wide at the top row
+      of cages and 2208 px at the bottom of the label strip. A drawing whose width depends on
+      the height it is measured at is not an orthographic projection, and its vertical axis
+      carries no scale.
+      SO THE TWO AXES ARE TREATED DIFFERENTLY BELOW, and which is which is stated on every
+      number.
+  the-x-axis-is-measured:
+    confidence: measured
+    note: >-
+      The horizontal axis survives, because a scale error cancels when the ruler is read at the
+      same height as the thing measured. The ruler is the SFP+ ganged pitch: 24 columns in three
+      groups of eight, whose within-group step reads 72.14 px, averaged over 21 steps in three
+      independent runs that agree to 0.07 px. Against std/sfp-ganged@1's registry width of 14.25
+      - a lookup from SFF-8433, not a measurement - that fixes 5.0636 px/mm, and every x below
+      is taken at that scale from the left face edge at page x 193.
+      IT IS CONFIRMED FRONT AGAINST REAR. The rear elevation, drawn beside the front and
+      measured by the same method, reads 2221 px across its face where the front reads 2222 -
+      0.05% apart. Two faces of one chassis agreeing to half a tenth of a percent is the check
+      that the scale is the drawing's and not the measurer's.
+  the-width-question:
+    confidence: datasheet
+    note: >-
+      ANSWERED, AND IN THE DOCUMENTS' FAVOUR. The issue that scoped this device asks whether
+      442.5 mm quotes the body or the body plus something, because it is wider than the 438.4
+      the rest of the Edgecore line uses. The front view shows no ears, no flanges and nothing
+      outboard of the chassis - the rack brackets are separate parts in the package contents -
+      so the widest thing drawn IS the body.
+      AND THE ARITHMETIC IS CONSISTENT WITH 442.5. Read against the registry SFP pitch the face
+      measures 438.8 mm, which is 0.84% under the stated width. That sounds like a contradiction
+      and is not one: the face's own taper across its height is 0.9%, the same order, so the
+      discrepancy is inside the error of a perspective drawing and cannot be used to overturn a
+      figure two documents state identically. Gate 1's job is to CHECK a stated dimension, not
+      to replace it, and 0.84% passes comfortably. 442.5 x 473.3 x 43.95 is therefore taken as
+      stated, and the residual is recorded as a gap rather than silently absorbed.
+      THIS ANSWERS IT FOR THE SIBLING TOO. dcs202 shares this shell and the three EXP models are
+      quoted at 442 by the same house style; none of them needs to re-open the question.
+  the-y-axis-is-derived:
+    confidence: estimated
+    note: >-
+      NOT MEASURED, AND NOT PRETENDED TO BE. With the vertical scale unusable, the row positions
+      come from two things that are not this drawing. The first is the registry: std/sfp-ganged@1
+      states a belly-to-belly row-pitch of 15.0, measured off TE 2007562-6, and the block uses it
+      rather than the 17.0 the figure appears to show. The second is the family: edgecore/as5912-54x,
+      the same vendor's 48x SFP+ plus 6x QSFP28 1RU leaf, puts its two rows at y 3.0 and 17.6. A
+      top row at 3.0 with a 15.0 pitch puts the second at 18.0 and the cages' lower edge at 28.4,
+      which leaves 15.5 mm for the label strip and the bottom vent - the proportions the drawing
+      does show. Every y below is that construction, and none of it is a reading.
+  port-order:
+    confidence: measured
+    note: >-
+      MEASURED, from the label strip at 600 dpi. Each column prints TWO numerals side by side on
+      one baseline - the odd number left of centre with an up arrow, the even number right of it
+      with a down arrow: "1 2 3 4 5 6 ..." reading across, but "1" and "2" both belonging to the
+      first column. The first four centre at 29.0, 37.1, 42.8 and 50.3 mm against column centres
+      of 32.75 and 47.00, so each pair straddles its own column's centre. Ports therefore run
+      DOWN each column and then right, which is what block expansion's divmod already does, and
+      the numerals take dx-by-row rather than dx-by-col.
+  the-three-groups:
+    confidence: measured
+    note: >-
+      MEASURED. The 24 columns are not evenly spaced: there is extra metal after the eighth and
+      the sixteenth. Column centres 1, 9 and 17 read 32.78, 149.70 and 266.31 mm, where a plain
+      14.25 pitch would put 9 and 17 at 146.78 and 260.78 - so each group boundary adds about
+      2.84 mm. One block with gang 8 and gutter 2.84 reproduces all three groups, landing column
+      9 within 0.08 mm and column 17 within 0.15 mm of where they are drawn.
+  the-qsfp-cluster:
+    confidence: measured
+    note: >-
+      MEASURED IN X, CONSTRUCTED IN Y, AND HAND-WRITTEN BECAUSE THE NUMBERING SPLITS. Two columns
+      centre at 385.30 and 404.36 mm - a 19.06 step against the registry's 19.0 ganged pitch -
+      and each carries THREE openings, so 49/50/51 run down the left column and 52/53/54 down the
+      right. The top two rows are one 2-high ganged shell with its numerals printed between them
+      the way the SFP+ pairs are ("49 50" on one baseline, "52 53" on the next column's); the
+      third row is a separate block below. A three-row block would print those numerals on three
+      different baselines, so the six placements are written out instead.
+  how-many-management-jacks:
+    confidence: measured
+    note: >-
+      THE TWO DOCUMENTS DISAGREE AND THE DRAWING SETTLES IT. The quick start's front callout
+      reads "2 x 1000BASE-T RJ-45 management ports" and its elevation draws two jacks stacked
+      in one bezel at the left of the face. The datasheet's Supported Transceivers and Cables
+      section lists "1 x RJ-45 100/1000BASE-T management" - one, not two, and at a different
+      speed pair.
+      TWO IS MODELLED, because the callout and the picture agree with each other against a
+      single line in a table about transceivers, and because the elevation resolves two
+      openings at 5 px/mm with a measured 12 mm pitch between them. The datasheet line is
+      recorded here rather than dismissed: if it is right, this face has one jack and a blank,
+      and what would settle it is a photograph of the left end square on.
+  the-management-pair-is-ganged:
+    confidence: measured
+    note: >-
+      MEASURED, AND IT CHANGED THE PART. The two 1000BASE-T jacks stack at the far left with
+      their openings centred 13.57 mm apart on the figure's own vertical scale - and two
+      std/rj45@2 housings are 13.2 tall, which cannot stack on a 12 mm pitch without
+      overlapping. Scaled into the constructed vertical they sit about 12.0 apart, which is
+      std/rj45-ganged@2's measured row pitch of ~12.1 from the TE 2497310-1 CAD. So this is a
+      2x1 GANGED block and not two separate jacks, and it takes the ganged part.
+  the-management-lamps-are-not-on-the-jacks:
+    confidence: measured
+    note: >-
+      MEASURED, and it is the opposite of the usual case. docs/rj45-family-design.md reserves
+      the lamped common/rj45-ganged-eth@1 for Ethernet jacks because nearly every Ethernet jack
+      carries its two lamps in the bezel corners. THIS ONE DOES NOT. The label strip below the
+      jacks prints "MGMT" between an up and a down arrow with TWO PLAIN WHITE WINDOWS beneath it
+      at 12.24 and 21.13 mm, and "1G bps" under those, and "On = link / Flash = ACT" beside them.
+      Those windows are the lamps - one per jack, named by the arrows - and they are 30 mm down
+      the face, nowhere near the bezel. So the jacks take the BARE ganged part and the two lamps
+      are placed where the metal puts them, which is also the only arrangement that does not
+      claim two holes in the same metal.
+  lamps:
+    confidence: datasheet
+    note: >-
+      quick start, System LEDs/Buttons and Port LEDs, verbatim. System: "PS1/PS2: Green (OK),
+      Amber (fault)", "OS Diag: Green (OK), Amber (fault)", "Fan: Green (OK), Amber (fault)",
+      "Loc: Flashing Amber (switch locator)", and a "Reset Button" beside them. Ports: "SFP+
+      LEDs: Green (10G), Amber (1G)", "MGMT LEDs: Green (1G)", "QSFP28 LEDs: 1 LED Green (100G),
+      1 LED Blue (40G), 1-4 LEDs Amber (25G breakout), 1-4 LEDs Purple (10G breakout)".
+      THE QSFP28 ENTRY DESCRIBES A GROUP OF FOUR WINDOWS AND ONE LAMP IS DRAWN PER PORT, which
+      is the same simplification edgecore/as5912-54x makes with six common/led-dot for six
+      cages. The breakout colours are carried as states on that one lamp rather than four
+      windows being invented at positions the art does not resolve at 5 px/mm.
+  the-rear:
+    confidence: measured
+    note: >-
+      MEASURED IN X BY THE SAME RULER, and it closes on itself. The five fan grilles centre at
+      103.6, 162.5, 221.4, 280.1 and 338.9 mm - four steps of 58.97, 58.85, 58.77 and 58.80 - so
+      the bay pitch is 58.8. The two supplies were read with an edge scan rather than a
+      threshold, because a threshold on a bright module against dark chassis clips the duller
+      edge: their frames read 16.74-71.13 and 370.78-425.37, giving 54.39 and 54.59 against the
+      54.0 the rest of this family's supplies measure. The fan block those centres imply runs
+      74.2 to 368.3, which leaves 3.5 mm to the first supply's right edge and 3.1 mm to the
+      second's left, and margins of 16.7 and 17.1 at the two ends. Four independent quantities
+      agreeing to a third of a millimetre is why these numbers are used rather than estimated.
+  the-rear-fans-are-not-the-family-part:
+    confidence: measured
+    note: >-
+      FIVE, NOT SIX, AND WIDER. The three sibling chassis - AS5912-54X, AS7326-56X and
+      AS7726-32X - each carry six common/fan-module@1 on a 48.6 pitch. This device carries five
+      on a 58.8 pitch: the quick start's rear callout reads "5 x fan trays" and the datasheet
+      "4+1 redundant fan modules". Five centres 235.3 mm apart cannot be six modules 48.6 apart,
+      which would span 194.4. So the fan is its own part and the supplies, which measure 54.0,
+      are not.
+  the-supplies-are-400-w:
+    confidence: datasheet
+    note: >-
+      STATED TWICE AND IT IS WHY THEY ARE NEW PARTS. "AC PSU / Power Rating / 100-240 VAC,
+      50-60 Hz, 400 Watts" and "48 VDC PSU / Power Rating / 48 VDC, 400 Watts", against a chassis
+      drawing "356 Watts maximum". common/psu-ac-650@3 and common/psu-dc-650@2 fit the bay
+      exactly and assert 650 W, which this vendor does not claim here. A shape may be shared; a
+      rating may not.
+  airflow-colour-convention:
+    confidence: datasheet
+    note: >-
+      THE DEVICE'S OWN GUIDE SAYS IT, which matters because roc-ops/Portrayal#277 is open against
+      two chassis that painted a back-to-front build in the front-to-back colours. Page 1,
+      Airflow Reversal, verbatim: "1. F2B Airflow - Remove front-to-back (F2B) airflow fan trays
+      (red handles) and PSUs (red release latches)." and "2. B2F Airflow - Install back-to-front
+      (B2F) airflow fan trays (blue handles) and PSUs (blue release latches)." Both b2f
+      configurations below therefore override every handle, latch and airflow legend, and the
+      quotation is on the configuration rather than in a comment.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet and quick start: "356 Watts maximum" for the chassis. Each supply is rated 400 W
+      output, so a single supply covers the chassis and the pair is redundant, which is what
+      "Redundant hot-swappable AC or -48 VDC PSUs" claims.
+attrs:
+  environmental:
+    operating-temp: '0 to 45 C'
+    storage-temp: '-40 to 70 C'
+    humidity: '5% to 95% non-condensing'
+  physical:
+    weight-note: '8.815 kg (19.43 lb), with two installed PSUs'
+  platform:
+    processor: 'Intel Atom C3558 2.2 GHz 4-core x86, 2 x 8 GB DDR4 SO-DIMM'
+    onie: 'pre-loaded, no switch software image'
+  features:
+    optics-sfp-plus: >-
+      datasheet: "48 x SFP+ switch ports, supporting 1/10 GbE (DAC, 10GBASE-SR/LR) or 1 GbE
+      (1000BASE-T/SX/LX)". Its Supported Transceivers and Cables list adds 10GBASE-RJ45 and
+      10G-DAC/AOC cable.
+    optics-qsfp28: >-
+      datasheet: "6 x 100 GbE QSFP28 switch ports, each supporting 40/100 GbE (DAC, 100GBASE
+      SR4/LR4) or 4 x 10/25 GbE (DAC or fiber breakout cable)". Its Supported Transceivers and
+      Cables list adds 40GBASE-SR4/LR4, 40G-DAC/AOC, 100GBASE-SR4/CWDM4/LR4 and 100G-DAC/AOC.
+  compliance:
+    emissions: EN 55032 Class A, EN 61000-3-2, EN 61000-3-3, AS/NZS Class A, ICES-003 Class A, FCC Class A, VCCI Class A, BSMI Class A, TEC Class A
+  lifecycle: {eol: none-announced}
+chassis: {width: 442.5, height: 43.95, depth: 473.3, ru: 1, weight-kg: 8.815, color: '#2b2f33',
+  airflow: front-to-back}
+gaps:
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. Neither staged document draws
+    any of them flat: the quick start's mounting figures show the lid and one side in
+    three-quarter view while brackets are being screwed on, which is enough to see that
+    nothing is printed or punched there and not enough to model. Each of the four therefore
+    carries an `empty:` sentence saying where I looked, per
+    docs/deliberately-empty-faces.md - EMPTY BY VERIFICATION, not by omission.
+    L45 STILL WARNS ABOUT THEM AND THIS GAP IS WHAT ANSWERS IT, because that rule exempts a
+    view a gap names rather than one carrying an `empty:` sentence. Worth saying plainly: the
+    CSR440 clears the same rule only because an unrelated chassis-weight gap happens to scope
+    all six views, which the rule's own comment calls over-exemption; this one names the four
+    faces because they are what it is about.
+    IT DOES NOT COST THE DEVICE ITS CAPABILITY LEVEL. I asserted that it did and was wrong -
+    the grader reads six views here and the 3D build is whole. A mechanical drawing would
+    still improve these four faces from honest blanks to drawn ones.
+- what: two-unbracketed-legend-boxes
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    What the last two white legend boxes say. The label strip carries six bracketed groups of
+    four - the breakout lane legend, one bracket per QSFP28 port, and they read 49 to 54 in
+    order - and then TWO MORE boxes of the same size and pitch at 362.98 and 369.01 mm, under
+    the numerals for ports 47 and 48, belonging to no bracket. At 5 px/mm their contents are
+    not legible and no table in either document accounts for a seventh pair. They are left
+    undrawn rather than guessed, and this gap is the record that they exist and where.
+- what: figure-is-a-perspective-render
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    An orthographic elevation, or a mechanical drawing. The only full-panel figures this
+    corpus holds are perspective renders: the top cover is drawn above the face and the face
+    tapers 0.9% from its top edge to its bottom. That costs the vertical axis entirely - every
+    y on both faces is constructed from the registry's row pitch and the family's idiom rather
+    than read - and it leaves the horizontal axis with a 0.84% residual against the stated
+    width, which is why the panel is 442.5 because two documents say so rather than because
+    the drawing shows it. A flat elevation would settle the row positions, the label-strip
+    height and the width residual in one pass.
+- what: sfp-plus-numeral-arrows
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A way to print a numeral and its direction arrow together. Each of the 48 SFP+ numerals is
+    drawn on the metal as a digit followed by a small up or down triangle - "1 up", "2 down" -
+    naming which row of the column the port is in. Block expansion generates the digit and has
+    no vocabulary for the glyph beside it, and hand-writing 48 marks to add it would take the
+    whole block out of generation for one triangle each. The digits are generated and the
+    arrows are not; the row is unambiguous from the numeral's own side of the column centre,
+    which is measured and correct.
+- what: qsfp-breakout-lamp-count
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The positions of the four QSFP28 breakout windows. The guide's Port LEDs table says each
+    QSFP28 port shows "1-4 LEDs Amber (25G breakout)" and "1-4 LEDs Purple (10G breakout)", so
+    there are four windows per cage, and the art at 5 px/mm shows a row of dots inside each
+    cage's bezel band without resolving where they sit. One lamp per port is drawn, carrying
+    all four vocabularies as states - the same choice edgecore/as5912-54x made on the same
+    cluster. Four windows at invented positions would be a claim about metal this figure
+    cannot support.
+- what: dc-supply-face
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    An elevation of the DC supply. The rear elevation draws the AC pair; the DC variant appears
+    only in the small three-quarter "DC Power" figure on page 2, which shows the green
+    three-pole pluggable terminal and the bail handle clearly enough to know what is there and
+    not clearly enough to measure it. edgecore/dcs201-psu-dc@1 therefore borrows its face size
+    from the AC supply, which fills the same bay, and marks every element position estimated.
+- what: fan-module-legend
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    What each fan module prints beside its airflow diamond. Every one of the five carries a
+    diamond mark in its upper right corner, and at 5 px/mm the characters next to it are not
+    legible. The convention across this vendor is an F2B or B2F legend that follows the
+    airflow variant, and that is what is drawn, from common/fan-module@1's field of the same
+    name; the DCS201's own art neither confirms nor contradicts it.
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster - two 1000BASE-T RJ-45 management jacks stacked at the left of
+      the face, and at its right an RJ-45 console port with a USB Type-A beside it. Two media
+      and three jobs, but one purpose: reaching this box when the data plane cannot.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        datasheet: "Redundant hot-swappable AC or -48 VDC PSUs". Each is rated 400 W against a
+        chassis drawing 356 W maximum, so one supply carries the box and the second is
+        redundant rather than additive.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: >-
+        datasheet, verbatim: "4+1 redundant fan modules". Five bays on the rear face, and the
+        quick start's rear callout counts them the same way - "5 x fan trays" - so the figure
+        and the bay count agree without argument.
+views:
+  front:
+    size: {w: 442.5, h: 43.95}
+    panel:
+      decor:
+      - {id: vent-left, at: [0.60, 1.00], size: [7.00, 41.90], pattern: vent, pattern-pitch: [4.40, 5.00], vent: 22}
+      - {id: vent-right, at: [429.40, 1.00], size: [12.50, 41.90], pattern: vent, pattern-pitch: [4.40, 5.00], vent: 22}
+      - {id: vent-bottom, at: [32.00, 38.20], size: [338.00, 4.40], pattern: vent, pattern-pitch: [4.40, 4.40], vent: 18}
+      - {id: product-label, at: [8.00, 38.60], size: [22.00, 4.00], fill: '#d7dbdf'}
+      - {id: lane-49-1, at: [162.02, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-49-2, at: [168.14, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-49-3, at: [173.87, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-49-4, at: [179.89, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-bracket-49, at: [161.22, 34.20], size: [23.07, 0.30], fill: '#c7ccd1'}
+      - {id: lane-50-1, at: [191.84, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-50-2, at: [197.66, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-50-3, at: [203.59, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-50-4, at: [209.61, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-bracket-50, at: [191.04, 34.20], size: [22.97, 0.30], fill: '#c7ccd1'}
+      - {id: lane-51-1, at: [221.46, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-51-2, at: [227.38, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-51-3, at: [233.31, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-51-4, at: [239.23, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-bracket-51, at: [220.66, 34.20], size: [22.97, 0.30], fill: '#c7ccd1'}
+      - {id: lane-52-1, at: [274.78, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-52-2, at: [280.71, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-52-3, at: [286.63, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-52-4, at: [292.65, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-bracket-52, at: [273.98, 34.20], size: [23.07, 0.30], fill: '#c7ccd1'}
+      - {id: lane-53-1, at: [304.41, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-53-2, at: [310.53, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-53-3, at: [316.45, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-53-4, at: [322.28, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-bracket-53, at: [303.61, 34.20], size: [23.07, 0.30], fill: '#c7ccd1'}
+      - {id: lane-54-1, at: [334.23, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-54-2, at: [340.15, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-54-3, at: [346.08, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-54-4, at: [352.00, 30.80], size: [3.60, 2.30], fill: '#e9ecef'}
+      - {id: lane-bracket-54, at: [333.43, 34.20], size: [22.97, 0.30], fill: '#c7ccd1'}
+      cutouts:
+      - {id: mgmt-1, at: [10.04, 2.64], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-2, at: [10.04, 14.60], size: [12.7, 11.0], shape: rect}
+      - {id: led-mgmt-1, at: [9.94, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: led-mgmt-2, at: [18.83, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: port-49, at: [376.05, 3.41], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [376.05, 18.41], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [376.05, 31.5], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [395.11, 3.41], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [395.11, 18.41], size: [18.5, 9.58], shape: rect}
+      - {id: port-54, at: [395.11, 31.5], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-49, at: [378.3, 13.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50, at: [378.3, 16.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51, at: [378.3, 41.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52, at: [397.36, 13.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53, at: [397.36, 16.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54, at: [397.36, 41.3], size: [2.0, 2.0], shape: circle}
+      - {id: console-rj, at: [415.91, 4.00], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [417.81, 19.50], size: [12.0, 4.5], shape: rect}
+      - {id: led-ps1, at: [49.24, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: led-ps2, at: [54.97, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: led-diag, at: [61.09, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: led-fan, at: [67.02, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: led-loc, at: [72.94, 30.80], size: [4.6, 2.6], shape: rect}
+      - {id: reset, at: [82.92, 30.90], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {id: silk-lane-49-1, at: [163.82, 32.55], text: '1', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-49-2, at: [169.94, 32.55], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-49-3, at: [175.67, 32.55], text: '3', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-49-4, at: [181.69, 32.55], text: '4', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-49, at: [172.75, 36.40], text: '49', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-50-1, at: [193.64, 32.55], text: '1', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-50-2, at: [199.46, 32.55], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-50-3, at: [205.39, 32.55], text: '3', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-50-4, at: [211.41, 32.55], text: '4', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-50, at: [202.52, 36.40], text: '50', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-51-1, at: [223.26, 32.55], text: '1', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-51-2, at: [229.18, 32.55], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-51-3, at: [235.11, 32.55], text: '3', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-51-4, at: [241.03, 32.55], text: '4', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-51, at: [232.14, 36.40], text: '51', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-52-1, at: [276.58, 32.55], text: '1', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-52-2, at: [282.51, 32.55], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-52-3, at: [288.43, 32.55], text: '3', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-52-4, at: [294.45, 32.55], text: '4', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-52, at: [285.51, 36.40], text: '52', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-53-1, at: [306.21, 32.55], text: '1', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-53-2, at: [312.33, 32.55], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-53-3, at: [318.25, 32.55], text: '3', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-53-4, at: [324.08, 32.55], text: '4', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-53, at: [315.14, 36.40], text: '53', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-54-1, at: [336.03, 32.55], text: '1', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-54-2, at: [341.95, 32.55], text: '2', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-54-3, at: [347.88, 32.55], text: '3', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-54-4, at: [353.80, 32.55], text: '4', font-size: 1.5, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-54, at: [344.91, 36.40], text: '54', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-mgmt, at: [16.40, 30.20], text: MGMT, font-size: 1.6, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-mgmt-speed, at: [16.40, 35.60], text: '1G bps', font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: chassis}
+    - {id: silk-mgmt-legend, at: [25.40, 33.00], text: 'On = link   Flash = ACT', font-size: 1.2, anchor: start, fill: '#c7ccd1', for: chassis}
+    - {id: silk-ps1, at: [51.54, 34.60], text: PS1, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: led-ps1}
+    - {id: silk-ps2, at: [57.27, 34.60], text: PS2, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: led-ps2}
+    - {id: silk-diag, at: [63.39, 34.60], text: Diag, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: led-diag}
+    - {id: silk-fan, at: [69.32, 34.60], text: Fan, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: led-fan}
+    - {id: silk-loc, at: [75.24, 34.60], text: Loc, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: led-loc}
+    - {id: silk-reset, at: [89.40, 33.33], text: Reset, font-size: 1.4, anchor: start, fill: '#e4e8eb', for: reset}
+    - {id: silk-console, at: [423.81, 30.20], text: Console, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: console-rj}
+    - {id: silk-49, at: [381.40, 30.20], text: '49', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-49}
+    - {id: silk-50, at: [389.20, 30.20], text: '50', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-50}
+    - {id: silk-51, at: [385.30, 43.20], text: '51', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-51}
+    - {id: silk-52, at: [400.46, 30.20], text: '52', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-52}
+    - {id: silk-53, at: [408.26, 30.20], text: '53', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-53}
+    - {id: silk-54, at: [404.36, 43.20], text: '54', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-54}
+    components:
+      blocks:
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [25.66, 3.00]
+        count: 48
+        rows: 2
+        pitch: registry
+        row-pitch: registry
+        gang: 8
+        gutter: 2.84
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [3.23, 11.03], dy-top: 27.20, dy-bottom: 12.20, font-size: 1.5, anchor: middle, fill: '#e4e8eb'}
+        led:
+          ref: common/led-arrow@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [1.83, 8.83]
+          dy-top: 11.10
+          dy-bottom: -3.90
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: '10g', color: '#22c55e'}, {name: '1g', color: '#f59e0b'}]
+      placements:
+      - {ref: std/rj45-ganged@2, id: mgmt-1, at: [10.04, 2.64], group: mgmt, rel-pos: 1,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/rj45-ganged@2, id: mgmt-2, at: [10.04, 14.60], rotate: 180, group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: common/led-rect@1, id: led-mgmt-1, at: [9.94, 30.80], group: leds, rel-pos: 1, for: mgmt-1,
+         states: ['off', {name: link, color: '#22c55e'}, {name: act, color: '#22c55e'}]}
+      - {ref: common/led-rect@1, id: led-mgmt-2, at: [18.83, 30.80], group: leds, rel-pos: 2, for: mgmt-2,
+         states: ['off', {name: link, color: '#22c55e'}, {name: act, color: '#22c55e'}]}
+      - {ref: std/qsfp-ganged@1, id: port-49, at: [376.05, 3.41], group: qsfp28, rel-pos: 49}
+      - {ref: std/qsfp-ganged@1, id: port-50, at: [376.05, 18.41], rotate: 180, group: qsfp28, rel-pos: 50}
+      - {ref: std/qsfp-ganged@1, id: port-51, at: [376.05, 31.50], group: qsfp28, rel-pos: 51}
+      - {ref: std/qsfp-ganged@1, id: port-52, at: [395.11, 3.41], group: qsfp28, rel-pos: 52}
+      - {ref: std/qsfp-ganged@1, id: port-53, at: [395.11, 18.41], rotate: 180, group: qsfp28, rel-pos: 53}
+      - {ref: std/qsfp-ganged@1, id: port-54, at: [395.11, 31.50], group: qsfp28, rel-pos: 54}
+      - {ref: common/led-dot@1, id: led-port-49, at: [378.30, 13.60], group: port-leds, rel-pos: 49, for: port-49,
+         states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
+      - {ref: common/led-dot@1, id: led-port-50, at: [378.30, 16.00], group: port-leds, rel-pos: 50, for: port-50,
+         states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
+      - {ref: common/led-dot@1, id: led-port-51, at: [378.30, 41.30], group: port-leds, rel-pos: 51, for: port-51,
+         states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
+      - {ref: common/led-dot@1, id: led-port-52, at: [397.36, 13.60], group: port-leds, rel-pos: 52, for: port-52,
+         states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
+      - {ref: common/led-dot@1, id: led-port-53, at: [397.36, 16.00], group: port-leds, rel-pos: 53, for: port-53,
+         states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
+      - {ref: common/led-dot@1, id: led-port-54, at: [397.36, 41.30], group: port-leds, rel-pos: 54, for: port-54,
+         states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
+      - {ref: std/rj45@2, id: console-rj, at: [415.91, 4.00], group: mgmt, rel-pos: 3,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-a@1, id: usb-a, at: [417.81, 19.50], group: mgmt, rel-pos: 4,
+         attrs: {media: usb-a, role: storage}}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [420.61, 25.00], group: furniture, rel-pos: 1}
+      - {ref: common/led-rect@1, id: led-ps1, at: [49.24, 30.80], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect@1, id: led-ps2, at: [54.97, 30.80], group: leds, rel-pos: 4, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect@1, id: led-diag, at: [61.09, 30.80], group: leds, rel-pos: 5, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect@1, id: led-fan, at: [67.02, 30.80], group: leds, rel-pos: 6, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect@1, id: led-loc, at: [72.94, 30.80], group: leds, rel-pos: 7, for: chassis,
+         states: ['off', {name: locate, color: '#f59e0b'}]}
+      - {ref: common/reset-button@1, id: reset, at: [82.92, 30.90], group: mgmt, rel-pos: 5, for: chassis}
+    regions:
+    - {id: optics, at: [24.0, 1.5], size: {w: 345.0, h: 28.0}, label: '48 x 10G SFP+',
+       members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32, port-33, port-34, port-35, port-36, port-37, port-38, port-39, port-40, port-41, port-42, port-43, port-44, port-45, port-46, port-47, port-48]}
+    - {id: uplinks, at: [374.0, 1.5], size: {w: 48.0, h: 41.0}, label: '6 x 100G QSFP28',
+       members: [port-49, port-50, port-51, port-52, port-53, port-54]}
+    - {id: out-of-band, at: [8.0, 1.5], size: {w: 16.0, h: 28.0}, label: 'Management',
+       members: [mgmt-1, mgmt-2]}
+    - {id: status-leds, at: [46.0, 29.5], size: {w: 48.0, h: 6.5}, label: 'System LEDs and reset',
+       members: [led-ps1, led-ps2, led-diag, led-fan, led-loc, reset]}
+    - {id: console-cluster, at: [413.0, 2.5], size: {w: 22.0, h: 26.0}, label: 'Console and USB',
+       members: [console-rj, usb-a]}
+  rear:
+    size: {w: 442.5, h: 43.95}
+    panel:
+      decor:
+      - {id: ground-mark, at: [4.60, 16.40], size: [4.00, 4.00], fill: 'none', stroke: '#c7ccd1', stroke-width: 0.3}
+    silkscreen:
+    - {id: silk-ground, at: [6.90, 15.60], text: PE, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: ground-screw}
+    components:
+      bays:
+      - {id: psu-2, at: [16.74, 2.00], size: {w: 54.0, h: 40.0}, group: psus, rel-pos: 2,
+         accepts: ['edgecore/dcs201-psu-ac@1', 'edgecore/dcs201-psu-dc@1'], default: 'edgecore/dcs201-psu-ac@1'}
+      - {id: fan-5, at: [74.20, 2.00], size: {w: 58.8, h: 40.0}, group: fans, rel-pos: 5,
+         accepts: ['edgecore/dcs201-fan@1'], default: 'edgecore/dcs201-fan@1'}
+      - {id: fan-4, at: [133.02, 2.00], size: {w: 58.8, h: 40.0}, group: fans, rel-pos: 4,
+         accepts: ['edgecore/dcs201-fan@1'], default: 'edgecore/dcs201-fan@1'}
+      - {id: fan-3, at: [191.84, 2.00], size: {w: 58.8, h: 40.0}, group: fans, rel-pos: 3,
+         accepts: ['edgecore/dcs201-fan@1'], default: 'edgecore/dcs201-fan@1'}
+      - {id: fan-2, at: [250.66, 2.00], size: {w: 58.8, h: 40.0}, group: fans, rel-pos: 2,
+         accepts: ['edgecore/dcs201-fan@1'], default: 'edgecore/dcs201-fan@1'}
+      - {id: fan-1, at: [309.48, 2.00], size: {w: 58.8, h: 40.0}, group: fans, rel-pos: 1,
+         accepts: ['edgecore/dcs201-fan@1'], default: 'edgecore/dcs201-fan@1'}
+      - {id: psu-1, at: [371.37, 2.00], size: {w: 54.0, h: 40.0}, group: psus, rel-pos: 1,
+         accepts: ['edgecore/dcs201-psu-ac@1', 'edgecore/dcs201-psu-dc@1'], default: 'edgecore/dcs201-psu-ac@1'}
+      placements:
+      - {ref: common/screw-head@1, id: ground-screw, at: [5.10, 21.40], group: furniture, rel-pos: 2}
+    regions:
+    - {id: power, at: [15.0, 1.0], size: {w: 57.0, h: 42.0}, label: 'Power supplies',
+       members: [psu-1, psu-2]}
+    - {id: exhaust, at: [73.0, 1.0], size: {w: 296.0, h: 42.0}, label: '4+1 fan trays',
+       members: [fan-1, fan-2, fan-3, fan-4, fan-5]}
+    - {id: ground-pad, at: [3.5, 14.0], size: {w: 7.0, h: 12.0}, label: 'Grounding screw',
+       members: [ground-screw]}
+  top:
+    size: {w: 442.5, h: 473.3}
+    empty: >-
+      Not drawn by any staged source. The quick start's mounting figures show the lid from
+      above in three-quarter view and nothing is claimed on it - no vent field, no label, no
+      screw pattern. docs/deliberately-empty-faces.md calls this the normal case for a lid.
+  bottom:
+    size: {w: 442.5, h: 473.3}
+    empty: >-
+      Not drawn by any staged source. A face that sits on rails, is never serviced and carries
+      no connectors gets no figure. The mounting section pictures the underside only as far as
+      the bracket screw holes, which belong to the brackets and not to this panel.
+  left:
+    size: {w: 473.3, h: 43.95}
+    empty: >-
+      Not drawn by any staged source, and on this chassis that is a statement rather than a
+      shrug: the DCS201 breathes FRONT TO BACK, so the side walls carry no perforation to draw.
+      The intake is the front face's own vent strips and the exhaust is the rear, which is why
+      reversing the airflow here swaps handles and latches rather than panels.
+  right:
+    size: {w: 473.3, h: 43.95}
+    empty: >-
+      Not drawn by any staged source. The other side wall, solid for the same reason.
+configurations:
+  ac-f2b:
+    kind: orderable
+    description: 'Dual 400 W AC PSUs, front-to-back airflow - red handles and red release latches'
+    default: true
+  ac-b2f:
+    kind: orderable
+    description: >-
+      Dual 400 W AC PSUs, back-to-front airflow. The quick start's Airflow Reversal section
+      states the colour, and this configuration draws it: "Install back-to-front (B2F) airflow
+      fan trays (blue handles) and PSUs (blue release latches)."
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    component-attrs:
+      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+      dcs201-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+  dc-f2b:
+    kind: orderable
+    description: 'Dual 400 W -48 VDC PSUs, front-to-back airflow - red handles and red release latches'
+    bays: {psu-1: 'edgecore/dcs201-psu-dc@1', psu-2: 'edgecore/dcs201-psu-dc@1'}
+  dc-b2f:
+    kind: orderable
+    description: >-
+      Dual 400 W -48 VDC PSUs, back-to-front airflow. Same quotation as ac-b2f: the guide
+      colours every B2F handle and latch blue, and says so on the same page.
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    bays: {psu-1: 'edgecore/dcs201-psu-dc@1', psu-2: 'edgecore/dcs201-psu-dc@1'}
+    component-attrs:
+      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+      dcs201-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+references:
+- {title: 'Edgecore DCS201 / AS5835-54X 48x10G SFP+ + 6x100G QSFP28 Data Center Switch Data Sheet'}
+- {title: 'Edgecore AS5835-54X 54-Port 10G/100G Ethernet Switch Quick Start Guide'}
