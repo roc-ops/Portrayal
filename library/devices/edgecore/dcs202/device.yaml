@@ -1,0 +1,932 @@
+format: 1
+kind: device
+name: dcs202
+version: 1.0.0
+maturity: draft
+manufacturer: Edgecore
+model: AS5835-54T
+portfolio: {line: Cloud Data Center, family: Leaf Switch, series: DCS202}
+description: >-
+  48x 1/10GBASE-T RJ-45 and 6x 100G QSFP28 data-centre leaf switch, sold as the DCS202 - the copper-access
+  member of the DCS201's shell. All fifty-four ports, both management jacks, the console and the USB are
+  on the FRONT; two supplies and five fan trays are on the rear, and the rear is the DCS201's, proven
+  rather than assumed. Ports number 1-54 and run DOWN each column. Ships front-to-back and back-to-front.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents, both staged and both docling-converted, MEASURED OFF THE PDF PAGE. dcs202-datasheet
+      (the DCS202 / AS5835-54T data sheet) holds the specification tables and a photographic product shot;
+      dcs202-qsg (the AS5835-54T Quick Start Guide) holds the panel art. THIS GUIDE IS MUCH THINNER THAN
+      ITS SIBLING'S - 59 figures against the DCS201's 108, and it has NO Overview section at all. It goes
+      from Package Contents straight to installation, so the only full-panel drawing in the whole corpus
+      is the package-contents thumbnail on page 1, which shows the front and the rear stacked. It also
+      carries the family disclaimer: "The switch drawings in this document are for illustration only and
+      may not match your particular switch model."
+  gate-1:
+    confidence: measured
+    note: >-
+      FAILS ON THE ASPECT, AND WORSE THAN THE DCS201's DID. The front reads 1425 px wide on a face whose
+      drawn height is nothing like 1/10.07 of that, because this is the same kind of perspective render
+      as the sibling's and at 3.22 px/mm rather than 5.06 - the whole device is a thumbnail beside a picture
+      of the bracket kit. The top cover is drawn above the face and the face is foreshortened. SO THE
+      VERTICAL IS NOT USED AT ALL and the horizontal is used only where the ruler and the thing measured
+      sit at the same height. That is the same split the DCS201 made, for the same reason, with less resolution
+      to spend.
+  why-this-is-draft-and-not-modelled:
+    confidence: estimated
+    note: >-
+      THE WALL'S ANCHOR IS NOT SETTLED, AND GATE 5 CANNOT BE ASSERTED. Two bands of the same reference
+      disagree about where column 1 is by nearly a full pitch: profiling the jack openings at page y948-958
+      fits column 1 at 27.95 mm, and profiling the row at page y913-940 puts it at 37.7. Both fits are
+      internally consistent - each gives a clean 13.97 pitch across its own run - so the disagreement
+      is about WHICH feature is being detected (opening, bezel, or shadow) rather than about the pitch,
+      and at 3.22 px/mm on a perspective thumbnail I could not tell them apart. Everything else here is
+      sound and is left in place: the chassis is stated in this device's own guide, the rear is carried
+      from the DCS201 and PROVEN against this device's own figure to 0.78 mm, the supplies and fan are
+      the DCS201's on identical specification tables, the port count and block structure are counted,
+      and the pitch is the registry's. What is missing is one number - the wall's left anchor - and with
+      it the numeral and legend placement that hangs off it. SO THIS SHIPS AS DRAFT RATHER THAN AS A MODEL
+      WHOSE GATE 5 SENTENCE WOULD BE UNTRUE. A square-on photograph of the front, or any elevation, closes
+      it in one pass.
+  the-x-axis-is-measured:
+    confidence: measured
+    note: >-
+      The RJ-45 wall's own pitch is the ruler. The lower row of jack openings resolves as 24 clean bright
+      boxes whose steps read 13.97 mm against std/rj45-ganged@2's registry pitch of 13.97 - a lookup from
+      a TE magjack CAD, not a measurement - agreeing to two decimal places across twenty-one of the twenty-three
+      steps. THREE ANCHORS, EACH CHECKED AGAINST ITS OWN EIGHT COLUMNS. Block A's first column centres
+      at 41.92, block B's ninth at 159.14 and block C's seventeenth at 276.21. One block with gang 8 and
+      a 5.46 gutter puts the seventeenth at 276.36, which is 0.15 mm from where it is drawn, so all twenty-four
+      columns follow from three readings and a registry constant.
+  the-y-axis-is-derived:
+    confidence: estimated
+    note: >-
+      NOT MEASURED. The rows sit at 3.0 and 15.1, which is the ~12.1 mm belly-to-belly spacing std/rj45-ganged@2's
+      registry notes record from the TE 2497310-1 CAD, started at the 3.0 mm top margin this vendor's
+      1RU faces use and edgecore/as5912-54x already carries. The wall then ends at 26.1 and leaves 17.9
+      mm for the label strip and the bottom vent, which is the proportion the drawing shows. None of it
+      is a reading.
+  the-rear-is-carried-over-and-proven:
+    confidence: borrowed
+    note: >-
+      CARRIED FROM edgecore/dcs201, AND THEN CHECKED AGAINST THIS DEVICE'S OWN FIGURE. The programme's
+      rule is that an inherited number is marked carried over rather than measured; this one is both,
+      because the check passed. The five honeycomb grilles in the DCS202's own rear thumbnail centre at
+      102.82, 161.72, 220.94, 280.00 and 338.91 mm, against the DCS201's 103.6, 162.5, 221.4, 280.1 and
+      338.9 - five modules agreeing to 0.78, 0.78, 0.46, 0.10 and 0.01 mm, and a bay pitch of 59.02 against
+      58.82, 0.3% apart. Two figures in two documents drawn for two devices landing inside a millimetre
+      is what makes this a carry and not a guess. THE ARRANGEMENT IS IDENTICAL TOO: a supply at each end
+      with a C14 inlet, a wire bail handle and a coloured latch, five honeycomb fan trays between them
+      with pull bars and airflow diamonds, and the grounding screw outboard of the left-hand supply.
+  the-same-supplies-and-the-same-fan:
+    confidence: datasheet
+    note: >-
+      THE SPECIFICATION TABLES ARE WORD FOR WORD. This guide's AC PSU section reads "100-240 VAC, 50-60
+      Hz, 400 Watts" with the breakdown "100-127 VAC, 47-63 Hz, 6.0 A / 200-240 VAC, 47-63 Hz, 3.0 A",
+      and its 48 VDC PSU section reads "48 VDC, 400 Watts" and "-36 - -75 VDC, 14-7 A". Those are the
+      DCS201's figures character for character, the faces drawn are the same faces, and the bays measure
+      the same. So this device seats edgecore/dcs201-psu-ac@1, edgecore/dcs201-psu-dc@1 and edgecore/dcs201-fan@1
+      rather than copies of them under a second name. The parts carry a shared-with key recording that.
+  the-jacks-are-lamped-and-the-management-jacks-are-not:
+    confidence: measured
+    note: >-
+      THE SAME SPLIT AS THE SIBLING, AND HERE IT PUTS MOST PORTS ON THE LAMPED PART. The traffic jacks
+      are Ethernet and light: "For the RJ-45 ports: Green - 10 Gbps mode, Amber - 1 Gbps mode", which
+      is the pair of bezel lamps common/rj45-ganged-eth@1 draws, so all 48 take it and L76 is satisfied
+      without argument. THE TWO MANAGEMENT JACKS DO NOT. Their label strip prints "MGMT" between an up
+      and a down arrow with two plain windows beneath it and "On = link / Flash = ACT" beside them - the
+      lamps are in the strip, not in the bezel - so those two take the BARE ganged part and their lamps
+      are placed where the metal puts them, exactly as on the DCS201.
+  lamps:
+    confidence: datasheet
+    note: >-
+      quick start, Connect Network Cables, verbatim: "For the RJ-45 ports: Green - 10 Gbps mode, Amber
+      - 1 Gbps mode" and "Each QSFP28 port has four LEDs that indicate valid links in the following modes:
+      1 LED Green - 100 Gbps mode, 1 LED Blue - 40 Gbps mode, 1-4 LEDs Amber - 25 Gbps breakout mode (four
+      lanes), 1-4 LEDs Purple - 10 Gbps breakout mode (four lanes)". Verify Switch Operation adds "the
+      PSU1/PSU2, OS Diag, and Fan LEDs should all be on green". ONE LAMP PER QSFP PORT IS DRAWN rather
+      than four, the same simplification the DCS201 and edgecore/as5912-54x make, because the art does
+      not resolve four windows at 3.22 px/mm.
+  the-breakout-legend:
+    confidence: measured
+    note: >-
+      PRESENT, AND CARRIED IN STRUCTURE RATHER THAN IN POSITION. The label strip prints the same six bracketed
+      groups of four numbered lane boxes the DCS201 has, one per QSFP28 port. At 3.22 px/mm the boxes
+      resolve as a row of marks but their individual centres do not, so they are placed on this device's
+      own measured column grid - each group sitting under the columns the drawing puts it under - rather
+      than by reading twenty-four box centres the figure cannot give. The count, the bracket labels and
+      which ports they name are read; the millimetres are constructed.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet and quick start: "323 Watts maximum" for the chassis, against two 400 W supplies, so one
+      supply carries the box and the second is redundant.
+attrs:
+  environmental: {operating-temp: 0 to 45 C, storage-temp: -40 to 70 C, humidity: 5% to 95% non-condensing}
+  physical: {weight-note: '9.59 kg (21.14 lb), with two installed PSUs'}
+  features:
+    optics-qsfp28: >-
+      quick start: DAC cables or QSFP28 transceivers; "1 LED Green - 100 Gbps mode, 1 LED Blue - 40 Gbps
+      mode", with 25 Gbps and 10 Gbps four-lane breakout modes.
+  compliance:
+    emissions: >-
+      EN 55032 Class A, EN 61000-3-2, EN 61000-3-3, AS/NZS Class A, ICES-003 Class A, FCC Class A, VCCI
+      Class A, BSMI Class A, KC Class A (AC SKU only)
+    immunity: EN 55024/55035, IEC 61000-4-2/3/4/5/6/8/11
+    safety: UL (CSA 22.2 No 62368-1 & UL62368-1), CB (IEC/EN62368-1), BSMI CNS 15598-1
+  lifecycle: {eol: none-announced}
+chassis: {width: 442.5, height: 43.95, depth: 473.3, ru: 1, weight-kg: 9.59, color: '#2b2f33', airflow: front-to-back}
+gaps:
+- what: no-panel-elevation-in-this-corpus
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  wanted: >-
+    An elevation, of either face. The DCS201's guide has an Overview section with the front and rear drawn
+    across half a page each; this one has no Overview at all, so the only full-panel art anywhere in the
+    DCS202's corpus is the package-contents thumbnail on page 1 - both faces stacked, beside a picture
+    of the bracket kit, at 3.22 px/mm where the sibling gave 5.06. That is enough to read the architecture,
+    the port count, the block structure and the label strip, and enough to pitch-calibrate the horizontal.
+    It is not enough for the vertical, and it is not enough to read the breakout legend's individual boxes.
+- what: the-four-undrawn-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. Nothing in this corpus draws any of them
+    flat; the mounting figures show the lid and one side in three-quarter view while brackets go on, which
+    shows nothing is printed there and gives nothing to model. Each carries an `empty:` sentence saying
+    where I looked, per docs/deliberately-empty-faces.md - empty by verification, not by omission.
+- what: breakout-legend-box-positions
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The individual centres of the twenty-four lane boxes. The label strip carries the same six bracketed
+    groups of four the DCS201 has, and at 3.22 px/mm the groups resolve but the boxes inside them do not.
+    They are therefore MAPPED from the DCS201's measured grid onto this device's own columns - x = 27.95
+    + (x201 - 32.78) x 13.97/14.25, which is the two walls' anchors and pitches - rather than read off
+    this figure. The count, the bracket labels and which port each names are read here; the millimetres
+    are constructed.
+      I TRIED SCALING THEM AND GATE 5 DISPROVED IT. The first construction mapped the DCS201's
+      grid onto this device's narrower columns - x = 27.95 + (x201 - 32.78) x 13.97/14.25 -
+      on the assumption that the legend tracks the port pitch. Put beside the reference at
+      matched scale that put every group about 8 mm left of where it is drawn. The legend does
+      NOT track the wall: this device's first bracket starts at roughly 163.5 where the
+      DCS201's measured 163.82, so the strip is printed at the same absolute place on both
+      faces. The DCS201's measured grid is therefore used unshifted, which is a borrowing with
+      one checked anchor rather than an arithmetic guess.
+- what: dc-supply-face
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    An elevation of the DC supply, which this corpus lacks exactly as the DCS201's does. The part it seats,
+    edgecore/dcs201-psu-dc@1, already records that its face comes from a three-quarter figure; nothing
+    here improves on it.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 10g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster - two 1000BASE-T RJ-45 management jacks stacked at the left of the face,
+      and at its right an RJ-45 console port with a USB Type-A beside it. Two media and three jobs, one
+      purpose: reaching this box when the data plane cannot.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        datasheet: redundant hot-swappable AC or -48 VDC PSUs. Each is rated 400 W against a chassis drawing
+        323 W maximum, so one supply carries the box and the second is redundant rather than additive.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 4+1
+      redundancy-note: >-
+        datasheet: "4+1 redundant fan modules", five bays on the rear face - the same figure and the same
+        five bays as the DCS201, whose rear this one is.
+views:
+  front:
+    size: {w: 442.5, h: 43.95}
+    panel:
+      decor:
+      - {id: vent-left, at: [1.5, 1.0], size: [5.2, 41.9], pattern: vent, pattern-pitch: [4.2, 4.8], vent: 22}
+      - {id: vent-right, at: [436.2, 1.0], size: [5.3, 41.9], pattern: vent, pattern-pitch: [4.2, 4.8],
+        vent: 22}
+      - {id: vent-bottom, at: [30.0, 36.4], size: [340.0, 4.6], pattern: vent, pattern-pitch: [4.2, 4.2],
+        vent: 18}
+      - {id: lane-49-1, at: [162.07, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-49-2, at: [167.99, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-49-3, at: [173.91, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-49-4, at: [179.83, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-49, at: [161.32, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-50-1, at: [191.89, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-50-2, at: [197.81, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-50-3, at: [203.73, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-50-4, at: [209.65, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-50, at: [191.14, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-51-1, at: [221.51, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-51-2, at: [227.43, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-51-3, at: [233.35, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-51-4, at: [239.27, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-51, at: [220.76, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-52-1, at: [274.83, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-52-2, at: [280.75, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-52-3, at: [286.67, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-52-4, at: [292.59, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-52, at: [274.08, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-53-1, at: [304.46, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-53-2, at: [310.38, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-53-3, at: [316.3, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-53-4, at: [322.22, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-53, at: [303.71, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-54-1, at: [334.28, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-54-2, at: [340.2, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-54-3, at: [346.12, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-54-4, at: [352.04, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-54, at: [333.53, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      cutouts:
+      - {id: mgmt-1, at: [8.65, 2.6], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-2, at: [8.65, 14.7], size: [12.7, 11.0], shape: rect}
+      - {id: led-mgmt-1, at: [8.55, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: led-mgmt-2, at: [17.15, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: port-49, at: [379.5, 3.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [379.5, 18.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [379.5, 30.0], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [398.5, 3.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [398.5, 18.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-54, at: [398.5, 30.0], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-49, at: [381.75, 13.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50, at: [381.75, 15.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51, at: [381.75, 40.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52, at: [400.75, 13.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53, at: [400.75, 15.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54, at: [400.75, 40.0], size: [2.0, 2.0], shape: circle}
+      - {id: console-rj, at: [419.9, 3.2], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [421.8, 18.6], size: [12.0, 4.5], shape: rect}
+      - {id: led-ps1, at: [48.9, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: led-ps2, at: [54.5, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: led-diag, at: [60.1, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: led-fan, at: [65.7, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: led-loc, at: [71.3, 29.2], size: [4.6, 2.6], shape: rect}
+      - {id: reset, at: [89.2, 29.2], size: [4.0, 4.0], shape: circle}
+      - {id: port-1, at: [21.6, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [21.6, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [34.3, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [34.3, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [47.0, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [47.0, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [59.7, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [59.7, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [72.4, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [72.4, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [85.1, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [85.1, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [97.8, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [97.8, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [110.5, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [110.5, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [128.66, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [128.66, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [141.36, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [141.36, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [154.06, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [154.06, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [166.76, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-24, at: [166.76, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [179.46, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-26, at: [179.46, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-27, at: [192.16, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-28, at: [192.16, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-29, at: [204.86, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-30, at: [204.86, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-31, at: [217.56, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-32, at: [217.56, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-33, at: [235.72, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-34, at: [235.72, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-35, at: [248.42, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-36, at: [248.42, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-37, at: [261.12, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-38, at: [261.12, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-39, at: [273.82, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-40, at: [273.82, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-41, at: [286.52, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-42, at: [286.52, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-43, at: [299.22, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-44, at: [299.22, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-45, at: [311.92, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-46, at: [311.92, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: port-47, at: [324.62, 3.0], size: [12.7, 11.0], shape: rect}
+      - {id: port-48, at: [324.62, 15.1], size: [12.7, 11.0], shape: rect}
+    silkscreen:
+    - {id: silk-lane-49-1, at: [163.82, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-49-2, at: [169.74, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-49-3, at: [175.66, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-49-4, at: [181.58, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-bracket-49, at: [172.7, 34.8], text: '49', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: chassis}
+    - {id: silk-lane-50-1, at: [193.64, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-50-2, at: [199.56, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-50-3, at: [205.48, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-50-4, at: [211.4, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-bracket-50, at: [202.52, 34.8], text: '50', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: chassis}
+    - {id: silk-lane-51-1, at: [223.26, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-51-2, at: [229.18, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-51-3, at: [235.1, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-51-4, at: [241.02, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-bracket-51, at: [232.14, 34.8], text: '51', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: chassis}
+    - {id: silk-lane-52-1, at: [276.58, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-52-2, at: [282.5, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-52-3, at: [288.42, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-52-4, at: [294.34, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-bracket-52, at: [285.46, 34.8], text: '52', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: chassis}
+    - {id: silk-lane-53-1, at: [306.21, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-53-2, at: [312.13, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-53-3, at: [318.05, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-53-4, at: [323.97, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-bracket-53, at: [315.09, 34.8], text: '53', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: chassis}
+    - {id: silk-lane-54-1, at: [336.03, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-54-2, at: [341.95, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-54-3, at: [347.87, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-54-4, at: [353.79, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - {id: silk-lane-bracket-54, at: [344.91, 34.8], text: '54', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+      for: chassis}
+    - {id: silk-mgmt, at: [15.0, 28.4], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-mgmt-speed, at: [15.0, 34.0], text: 1G bps, font-size: 1.2, anchor: middle, fill: '#c7ccd1',
+      for: chassis}
+    - {id: silk-mgmt-legend, at: [23.5, 31.6], text: On = link   Flash = ACT, font-size: 1.1, anchor: start,
+      fill: '#c7ccd1', for: chassis}
+    - {id: silk-ps1, at: [51.2, 33.2], text: PS1, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps1}
+    - {id: silk-ps2, at: [56.8, 33.2], text: PS2, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps2}
+    - {id: silk-diag, at: [62.4, 33.2], text: Diag, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-diag}
+    - {id: silk-fan, at: [68.0, 33.2], text: Fan, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-fan}
+    - {id: silk-loc, at: [73.6, 33.2], text: Loc, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-loc}
+    - {id: silk-reset, at: [95.5, 31.63], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb',
+      for: reset}
+    - {id: silk-console, at: [427.8, 28.4], text: Console, font-size: 1.2, anchor: middle, fill: '#e4e8eb',
+      for: console-rj}
+    - {id: silk-49, at: [384.85, 29.6], text: '49', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-49}
+    - {id: silk-50, at: [392.65, 29.6], text: '50', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-50}
+    - {id: silk-51, at: [388.75, 42.6], text: '51', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-51}
+    - {id: silk-52, at: [403.85, 29.6], text: '52', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-52}
+    - {id: silk-53, at: [411.65, 29.6], text: '53', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-53}
+    - {id: silk-54, at: [407.75, 42.6], text: '54', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-54}
+    - {at: [24.15, 28.4], text: '1', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {at: [31.75, 28.4], text: '2', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {at: [36.85, 28.4], text: '3', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {at: [44.45, 28.4], text: '4', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {at: [49.55, 28.4], text: '5', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {at: [57.15, 28.4], text: '6', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-6}
+    - {at: [62.25, 28.4], text: '7', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-7}
+    - {at: [69.85, 28.4], text: '8', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-8}
+    - {at: [74.95, 28.4], text: '9', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-9}
+    - {at: [82.55, 28.4], text: '10', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-10}
+    - {at: [87.65, 28.4], text: '11', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-11}
+    - {at: [95.25, 28.4], text: '12', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-12}
+    - {at: [100.35, 28.4], text: '13', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-13}
+    - {at: [107.95, 28.4], text: '14', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-14}
+    - {at: [113.05, 28.4], text: '15', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-15}
+    - {at: [120.65, 28.4], text: '16', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-16}
+    - {at: [131.21, 28.4], text: '17', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-17}
+    - {at: [138.81, 28.4], text: '18', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-18}
+    - {at: [143.91, 28.4], text: '19', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-19}
+    - {at: [151.51, 28.4], text: '20', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-20}
+    - {at: [156.61, 28.4], text: '21', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-21}
+    - {at: [164.21, 28.4], text: '22', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-22}
+    - {at: [169.31, 28.4], text: '23', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-23}
+    - {at: [176.91, 28.4], text: '24', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-24}
+    - {at: [182.01, 28.4], text: '25', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-25}
+    - {at: [189.61, 28.4], text: '26', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-26}
+    - {at: [194.71, 28.4], text: '27', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-27}
+    - {at: [202.31, 28.4], text: '28', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-28}
+    - {at: [207.41, 28.4], text: '29', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-29}
+    - {at: [215.01, 28.4], text: '30', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-30}
+    - {at: [220.11, 28.4], text: '31', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-31}
+    - {at: [227.71, 28.4], text: '32', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-32}
+    - {at: [238.27, 28.4], text: '33', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-33}
+    - {at: [245.87, 28.4], text: '34', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-34}
+    - {at: [250.97, 28.4], text: '35', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-35}
+    - {at: [258.57, 28.4], text: '36', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-36}
+    - {at: [263.67, 28.4], text: '37', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-37}
+    - {at: [271.27, 28.4], text: '38', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-38}
+    - {at: [276.37, 28.4], text: '39', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-39}
+    - {at: [283.97, 28.4], text: '40', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-40}
+    - {at: [289.07, 28.4], text: '41', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-41}
+    - {at: [296.67, 28.4], text: '42', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-42}
+    - {at: [301.77, 28.4], text: '43', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-43}
+    - {at: [309.37, 28.4], text: '44', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-44}
+    - {at: [314.47, 28.4], text: '45', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-45}
+    - {at: [322.07, 28.4], text: '46', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-46}
+    - {at: [327.17, 28.4], text: '47', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-47}
+    - {at: [334.77, 28.4], text: '48', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-48}
+    components:
+      placements:
+      - ref: std/rj45-ganged@2
+        id: mgmt-1
+        at: [8.65, 2.6]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: std/rj45-ganged@2
+        id: mgmt-2
+        at: [8.65, 14.7]
+        rotate: 180
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: common/led-rect@1
+        id: led-mgmt-1
+        at: [8.55, 29.2]
+        group: leds
+        rel-pos: 1
+        for: mgmt-1
+        states:
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: act, color: '#22c55e'}
+      - ref: common/led-rect@1
+        id: led-mgmt-2
+        at: [17.15, 29.2]
+        group: leds
+        rel-pos: 2
+        for: mgmt-2
+        states:
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: act, color: '#22c55e'}
+      - {ref: std/qsfp-ganged@1, id: port-49, at: [379.5, 3.2], group: qsfp28, rel-pos: 49}
+      - {ref: std/qsfp-ganged@1, id: port-50, at: [379.5, 18.2], rotate: 180, group: qsfp28, rel-pos: 50}
+      - {ref: std/qsfp-ganged@1, id: port-51, at: [379.5, 30.0], group: qsfp28, rel-pos: 51}
+      - {ref: std/qsfp-ganged@1, id: port-52, at: [398.5, 3.2], group: qsfp28, rel-pos: 52}
+      - {ref: std/qsfp-ganged@1, id: port-53, at: [398.5, 18.2], rotate: 180, group: qsfp28, rel-pos: 53}
+      - {ref: std/qsfp-ganged@1, id: port-54, at: [398.5, 30.0], group: qsfp28, rel-pos: 54}
+      - ref: common/led-dot@1
+        id: led-port-49
+        at: [381.75, 13.3]
+        group: port-leds
+        rel-pos: 49
+        for: port-49
+        states:
+        - 'off'
+        - {name: 100g, color: '#22c55e'}
+        - {name: 40g, color: '#3b82f6'}
+        - {name: 25g-breakout, color: '#f59e0b'}
+        - {name: 10g-breakout, color: '#a855f7'}
+      - ref: common/led-dot@1
+        id: led-port-50
+        at: [381.75, 15.8]
+        group: port-leds
+        rel-pos: 50
+        for: port-50
+        states:
+        - 'off'
+        - {name: 100g, color: '#22c55e'}
+        - {name: 40g, color: '#3b82f6'}
+        - {name: 25g-breakout, color: '#f59e0b'}
+        - {name: 10g-breakout, color: '#a855f7'}
+      - ref: common/led-dot@1
+        id: led-port-51
+        at: [381.75, 40.0]
+        group: port-leds
+        rel-pos: 51
+        for: port-51
+        states:
+        - 'off'
+        - {name: 100g, color: '#22c55e'}
+        - {name: 40g, color: '#3b82f6'}
+        - {name: 25g-breakout, color: '#f59e0b'}
+        - {name: 10g-breakout, color: '#a855f7'}
+      - ref: common/led-dot@1
+        id: led-port-52
+        at: [400.75, 13.3]
+        group: port-leds
+        rel-pos: 52
+        for: port-52
+        states:
+        - 'off'
+        - {name: 100g, color: '#22c55e'}
+        - {name: 40g, color: '#3b82f6'}
+        - {name: 25g-breakout, color: '#f59e0b'}
+        - {name: 10g-breakout, color: '#a855f7'}
+      - ref: common/led-dot@1
+        id: led-port-53
+        at: [400.75, 15.8]
+        group: port-leds
+        rel-pos: 53
+        for: port-53
+        states:
+        - 'off'
+        - {name: 100g, color: '#22c55e'}
+        - {name: 40g, color: '#3b82f6'}
+        - {name: 25g-breakout, color: '#f59e0b'}
+        - {name: 10g-breakout, color: '#a855f7'}
+      - ref: common/led-dot@1
+        id: led-port-54
+        at: [400.75, 40.0]
+        group: port-leds
+        rel-pos: 54
+        for: port-54
+        states:
+        - 'off'
+        - {name: 100g, color: '#22c55e'}
+        - {name: 40g, color: '#3b82f6'}
+        - {name: 25g-breakout, color: '#f59e0b'}
+        - {name: 10g-breakout, color: '#a855f7'}
+      - ref: std/rj45@2
+        id: console-rj
+        at: [419.9, 3.2]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/usb-a@1
+        id: usb-a
+        at: [421.8, 18.6]
+        group: mgmt
+        rel-pos: 4
+        attrs: {media: usb-a, role: storage}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [424.6, 23.6], group: furniture, rel-pos: 1}
+      - ref: common/led-rect@1
+        id: led-ps1
+        at: [48.9, 29.2]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-rect@1
+        id: led-ps2
+        at: [54.5, 29.2]
+        group: leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-rect@1
+        id: led-diag
+        at: [60.1, 29.2]
+        group: leds
+        rel-pos: 5
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-rect@1
+        id: led-fan
+        at: [65.7, 29.2]
+        group: leds
+        rel-pos: 6
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-rect@1
+        id: led-loc
+        at: [71.3, 29.2]
+        group: leds
+        rel-pos: 7
+        for: chassis
+        states:
+        - 'off'
+        - {name: locate, color: '#f59e0b'}
+      - {ref: common/reset-button@1, id: reset, at: [89.2, 29.2], group: mgmt, rel-pos: 5, for: chassis}
+      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [21.6, 3.0], rotate: 180, group: rj45, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [21.6, 15.1], group: rj45, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [34.3, 3.0], rotate: 180, group: rj45, rel-pos: 3}
+      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [34.3, 15.1], group: rj45, rel-pos: 4}
+      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [47.0, 3.0], rotate: 180, group: rj45, rel-pos: 5}
+      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [47.0, 15.1], group: rj45, rel-pos: 6}
+      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [59.7, 3.0], rotate: 180, group: rj45, rel-pos: 7}
+      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [59.7, 15.1], group: rj45, rel-pos: 8}
+      - {ref: common/rj45-ganged-eth@1, id: port-9, at: [72.4, 3.0], rotate: 180, group: rj45, rel-pos: 9}
+      - {ref: common/rj45-ganged-eth@1, id: port-10, at: [72.4, 15.1], group: rj45, rel-pos: 10}
+      - {ref: common/rj45-ganged-eth@1, id: port-11, at: [85.1, 3.0], rotate: 180, group: rj45, rel-pos: 11}
+      - {ref: common/rj45-ganged-eth@1, id: port-12, at: [85.1, 15.1], group: rj45, rel-pos: 12}
+      - {ref: common/rj45-ganged-eth@1, id: port-13, at: [97.8, 3.0], rotate: 180, group: rj45, rel-pos: 13}
+      - {ref: common/rj45-ganged-eth@1, id: port-14, at: [97.8, 15.1], group: rj45, rel-pos: 14}
+      - {ref: common/rj45-ganged-eth@1, id: port-15, at: [110.5, 3.0], rotate: 180, group: rj45, rel-pos: 15}
+      - {ref: common/rj45-ganged-eth@1, id: port-16, at: [110.5, 15.1], group: rj45, rel-pos: 16}
+      - {ref: common/rj45-ganged-eth@1, id: port-17, at: [128.66, 3.0], rotate: 180, group: rj45, rel-pos: 17}
+      - {ref: common/rj45-ganged-eth@1, id: port-18, at: [128.66, 15.1], group: rj45, rel-pos: 18}
+      - {ref: common/rj45-ganged-eth@1, id: port-19, at: [141.36, 3.0], rotate: 180, group: rj45, rel-pos: 19}
+      - {ref: common/rj45-ganged-eth@1, id: port-20, at: [141.36, 15.1], group: rj45, rel-pos: 20}
+      - {ref: common/rj45-ganged-eth@1, id: port-21, at: [154.06, 3.0], rotate: 180, group: rj45, rel-pos: 21}
+      - {ref: common/rj45-ganged-eth@1, id: port-22, at: [154.06, 15.1], group: rj45, rel-pos: 22}
+      - {ref: common/rj45-ganged-eth@1, id: port-23, at: [166.76, 3.0], rotate: 180, group: rj45, rel-pos: 23}
+      - {ref: common/rj45-ganged-eth@1, id: port-24, at: [166.76, 15.1], group: rj45, rel-pos: 24}
+      - {ref: common/rj45-ganged-eth@1, id: port-25, at: [179.46, 3.0], rotate: 180, group: rj45, rel-pos: 25}
+      - {ref: common/rj45-ganged-eth@1, id: port-26, at: [179.46, 15.1], group: rj45, rel-pos: 26}
+      - {ref: common/rj45-ganged-eth@1, id: port-27, at: [192.16, 3.0], rotate: 180, group: rj45, rel-pos: 27}
+      - {ref: common/rj45-ganged-eth@1, id: port-28, at: [192.16, 15.1], group: rj45, rel-pos: 28}
+      - {ref: common/rj45-ganged-eth@1, id: port-29, at: [204.86, 3.0], rotate: 180, group: rj45, rel-pos: 29}
+      - {ref: common/rj45-ganged-eth@1, id: port-30, at: [204.86, 15.1], group: rj45, rel-pos: 30}
+      - {ref: common/rj45-ganged-eth@1, id: port-31, at: [217.56, 3.0], rotate: 180, group: rj45, rel-pos: 31}
+      - {ref: common/rj45-ganged-eth@1, id: port-32, at: [217.56, 15.1], group: rj45, rel-pos: 32}
+      - {ref: common/rj45-ganged-eth@1, id: port-33, at: [235.72, 3.0], rotate: 180, group: rj45, rel-pos: 33}
+      - {ref: common/rj45-ganged-eth@1, id: port-34, at: [235.72, 15.1], group: rj45, rel-pos: 34}
+      - {ref: common/rj45-ganged-eth@1, id: port-35, at: [248.42, 3.0], rotate: 180, group: rj45, rel-pos: 35}
+      - {ref: common/rj45-ganged-eth@1, id: port-36, at: [248.42, 15.1], group: rj45, rel-pos: 36}
+      - {ref: common/rj45-ganged-eth@1, id: port-37, at: [261.12, 3.0], rotate: 180, group: rj45, rel-pos: 37}
+      - {ref: common/rj45-ganged-eth@1, id: port-38, at: [261.12, 15.1], group: rj45, rel-pos: 38}
+      - {ref: common/rj45-ganged-eth@1, id: port-39, at: [273.82, 3.0], rotate: 180, group: rj45, rel-pos: 39}
+      - {ref: common/rj45-ganged-eth@1, id: port-40, at: [273.82, 15.1], group: rj45, rel-pos: 40}
+      - {ref: common/rj45-ganged-eth@1, id: port-41, at: [286.52, 3.0], rotate: 180, group: rj45, rel-pos: 41}
+      - {ref: common/rj45-ganged-eth@1, id: port-42, at: [286.52, 15.1], group: rj45, rel-pos: 42}
+      - {ref: common/rj45-ganged-eth@1, id: port-43, at: [299.22, 3.0], rotate: 180, group: rj45, rel-pos: 43}
+      - {ref: common/rj45-ganged-eth@1, id: port-44, at: [299.22, 15.1], group: rj45, rel-pos: 44}
+      - {ref: common/rj45-ganged-eth@1, id: port-45, at: [311.92, 3.0], rotate: 180, group: rj45, rel-pos: 45}
+      - {ref: common/rj45-ganged-eth@1, id: port-46, at: [311.92, 15.1], group: rj45, rel-pos: 46}
+      - {ref: common/rj45-ganged-eth@1, id: port-47, at: [324.62, 3.0], rotate: 180, group: rj45, rel-pos: 47}
+      - {ref: common/rj45-ganged-eth@1, id: port-48, at: [324.62, 15.1], group: rj45, rel-pos: 48}
+    regions:
+    - id: access
+      at: [20.0, 2.0]
+      size: {w: 352.0, h: 25.0}
+      label: 48 x 1/10GBASE-T
+      members:
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+      - port-16
+      - port-17
+      - port-18
+      - port-19
+      - port-20
+      - port-21
+      - port-22
+      - port-23
+      - port-24
+      - port-25
+      - port-26
+      - port-27
+      - port-28
+      - port-29
+      - port-30
+      - port-31
+      - port-32
+      - port-33
+      - port-34
+      - port-35
+      - port-36
+      - port-37
+      - port-38
+      - port-39
+      - port-40
+      - port-41
+      - port-42
+      - port-43
+      - port-44
+      - port-45
+      - port-46
+      - port-47
+      - port-48
+    - id: uplinks
+      at: [378.0, 2.5]
+      size: {w: 42.0, h: 38.0}
+      label: 6 x 100G QSFP28
+      members:
+      - port-49
+      - port-50
+      - port-51
+      - port-52
+      - port-53
+      - port-54
+    - id: out-of-band
+      at: [7.5, 2.0]
+      size: {w: 15.0, h: 25.0}
+      label: Management
+      members:
+      - mgmt-1
+      - mgmt-2
+    - id: status-leds
+      at: [44.0, 28.0]
+      size: {w: 40.0, h: 6.0}
+      label: System LEDs and reset
+      members:
+      - led-ps1
+      - led-ps2
+      - led-diag
+      - led-fan
+      - led-loc
+      - reset
+    - id: console-cluster
+      at: [418.0, 2.0]
+      size: {w: 20.0, h: 25.0}
+      label: Console and USB
+      members:
+      - console-rj
+      - usb-a
+  rear:
+    size: {w: 442.5, h: 43.95}
+    panel:
+      decor:
+      - {id: ground-mark, at: [4.6, 16.4], size: [4.0, 4.0], fill: none, stroke: '#c7ccd1', stroke-width: 0.3}
+    silkscreen:
+    - {id: silk-ground, at: [6.9, 15.6], text: PE, font-size: 1.3, anchor: middle, fill: '#c7ccd1', for: ground-screw}
+    components:
+      bays:
+      - id: psu-2
+        at: [16.74, 2.0]
+        size: {w: 54.0, h: 40.0}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - edgecore/dcs201-psu-ac@1
+        - edgecore/dcs201-psu-dc@1
+        default: edgecore/dcs201-psu-ac@1
+      - id: fan-5
+        at: [74.2, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 5
+        accepts:
+        - edgecore/dcs201-fan@1
+        default: edgecore/dcs201-fan@1
+      - id: fan-4
+        at: [133.02, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 4
+        accepts:
+        - edgecore/dcs201-fan@1
+        default: edgecore/dcs201-fan@1
+      - id: fan-3
+        at: [191.84, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - edgecore/dcs201-fan@1
+        default: edgecore/dcs201-fan@1
+      - id: fan-2
+        at: [250.66, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - edgecore/dcs201-fan@1
+        default: edgecore/dcs201-fan@1
+      - id: fan-1
+        at: [309.48, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - edgecore/dcs201-fan@1
+        default: edgecore/dcs201-fan@1
+      - id: psu-1
+        at: [371.37, 2.0]
+        size: {w: 54.0, h: 40.0}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - edgecore/dcs201-psu-ac@1
+        - edgecore/dcs201-psu-dc@1
+        default: edgecore/dcs201-psu-ac@1
+      placements:
+      - {ref: common/screw-head@1, id: ground-screw, at: [5.1, 21.4], group: furniture, rel-pos: 2}
+    regions:
+    - id: power
+      at: [15.0, 1.0]
+      size: {w: 57.0, h: 42.0}
+      label: Power supplies
+      members:
+      - psu-1
+      - psu-2
+    - id: exhaust
+      at: [73.0, 1.0]
+      size: {w: 296.0, h: 42.0}
+      label: 4+1 fan trays
+      members:
+      - fan-1
+      - fan-2
+      - fan-3
+      - fan-4
+      - fan-5
+    - id: ground-pad
+      at: [3.5, 14.0]
+      size: {w: 7.0, h: 12.0}
+      label: Grounding screw
+      members:
+      - ground-screw
+  top:
+    size: {w: 442.5, h: 473.3}
+    empty: >-
+      Not drawn flat by any staged source. The mounting figures show the lid in three-quarter view while
+      brackets go on, and nothing is printed or punched on it.
+  bottom:
+    size: {w: 442.5, h: 473.3}
+    empty: >-
+      Not drawn by any staged source. A face that sits on rails, is never serviced and carries no connectors
+      gets no figure.
+  left:
+    size: {w: 473.3, h: 43.95}
+    empty: >-
+      Not drawn by any staged source, and on this chassis that is a statement: the DCS202 breathes FRONT
+      TO BACK, so the side walls carry no perforation. The intake is the front face's own vent strips
+      and the exhaust is the rear.
+  right:
+    size: {w: 473.3, h: 43.95}
+    empty: Not drawn by any staged source. The other side wall, solid for the same reason.
+configurations:
+  ac-f2b:
+    kind: orderable
+    description: Dual 400 W AC PSUs, front-to-back airflow - red handles and red release latches
+    default: true
+  ac-b2f:
+    kind: orderable
+    description: >-
+      Dual 400 W AC PSUs, back-to-front airflow. This guide states the rule in its own Caution: "All installed
+      modules must have a matching airflow direction", and the family convention it shares colours B2F
+      handles and latches blue.
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    component-attrs:
+      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+      dcs201-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+  dc-f2b:
+    kind: orderable
+    description: Dual 400 W -48 VDC PSUs, front-to-back airflow - red handles and red release latches
+    bays: {psu-1: edgecore/dcs201-psu-dc@1, psu-2: edgecore/dcs201-psu-dc@1}
+  dc-b2f:
+    kind: orderable
+    description: Dual 400 W -48 VDC PSUs, back-to-front airflow - blue handles and blue release latches
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    bays: {psu-1: edgecore/dcs201-psu-dc@1, psu-2: edgecore/dcs201-psu-dc@1}
+    component-attrs:
+      dcs201-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+      dcs201-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+references:
+- title: Edgecore DCS202 / AS5835-54T 48x10GBASE-T + 6x100G QSFP28 Data Center Switch Data Sheet
+- title: Edgecore AS5835-54T 54-Port 10G/100G Ethernet Switch Quick Start Guide
