@@ -1,0 +1,111 @@
+format: 1
+kind: module
+name: asr-9902-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9902 Router fan tray. One axial fan behind a hex-punched plate split
+  by a centre rib, a captive screw on the left flange, a pull handle across the
+  top, and a round STATUS lamp with its legend beside it. The ASR 9902 carries
+  three of these in a row across the lower rear, and the chassis pulls air front
+  to back through them. It is NOT the ASR 9903's tray - that one is 93.00 mm
+  wide against this 88.58 and carries a different part number.
+size: {w: 88.58, h: 82.18}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from one source - the "ASR-9902 Rear" master, in a chassis face
+  calibrated on the data sheet body. Taking one axis from each of two sources is
+  the error that made a Cisco power module 3.66 mm too wide. See provenance.size.
+attrs:
+  model: 'ASR-9902-FAN'
+  role: 'fan-tray'
+  power-draw-max-w: 72
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - Cisco's own Visio stencil Routers-Cisco_ASR_9000, master "ASR-9902
+    Rear", where all three trays are drawn populated. The tray plate measures
+    88.58 x 82.18 mm in a chassis face calibrated on the ASR 9902 data sheet's
+    439.74 x 87.63 mm body; the three plates come out identical to 0.01 mm and
+    sit at x 82.99, 175.37 and 267.75, so the reading is three measurements of
+    one part rather than one.
+    THE HEIGHT IS CORROBORATED BY A DIFFERENT TRAY. cisco/asr-9903-fan@1,
+    measured the same way off the ASR 9903's own rear master, comes out 82.72 mm
+    tall against this 82.18 - 0.7 percent apart on two chassis whose rear bays
+    are the same height - while the WIDTHS differ by 4.4 mm, which is what two
+    different part numbers should look like.
+    NO DOCUMENT IN THE INTAKE DIMENSIONS THIS TRAY: the fixed-port Hardware
+    Installation Guide's fan sections give removal and replacement steps and no
+    dimension, the ASR 9902 data sheet (c78-744663) gives the chassis envelope
+    and stops, and the Overview and Reference Guide's fan-tray dimensions cover
+    the modular chassis only. DEPTH IS THEREFORE ABSENT rather than estimated.
+  fans: >-
+    drawing AND data sheet. The master punches one hex field either side of a
+    centre rib with a single circular hub showing through it, which is one fan;
+    the data sheet's overview says the router "supports two redundant Route
+    Processors (RPs), an integrated switch fabric, 2 AC or DC power supply
+    modules, and 3 fans in redundant configuration", and three fans across three
+    trays is one each.
+  power: >-
+    install guide, and READ WHAT THE FIGURE IS. The fixed-port Hardware
+    Installation Guide's troubleshooting chapter prints a `show environment`
+    example taken on an ASR 9902 - this chassis, not a sibling - with three of
+    these installed: "0/FT0 ASR-9902-FAN 72 7 ON" under the headings "Power
+    Allocated Watts" and "Power Used Watts", and the same 72/7 on FT1. 72 W is
+    the budget the system RESERVES for the tray, which is the number a chassis
+    budget wants, and it is carried as power-draw-max-w. 7 W was one live reading
+    on one router at one moment and is NOT carried as a typical - a single sample
+    is not a distribution. The same output gives ASR-9902-LC 614/283 and
+    A99-RP-F 102/43, so the allocation figures are systematic rather than
+    incidental.
+  lamp: >-
+    drawing for the position, install guide for the states. The master draws one
+    round lens on the left flange with STATUS printed beside it, and that is the
+    whole indicator on this face. THE STATE VOCABULARY IS NOT THIS PART'S OWN:
+    Table 21 of the fixed-port guide, "LEDs at System Startup", gives the fan
+    tray exactly one row - "Fan Tray | Fan tray status LED | Green (ON): Fan Tray
+    OK." - and names no other colour, and the fan-replacement procedure adds
+    "Verify that the (green) OK status indicator on the front of the fan tray
+    goes on". So green and off are sourced and the red below is BORROWED from
+    cisco/asr-9922-fan-v3@1, whose own provenance transcribes the Overview and
+    Reference Guide's four-state fan-tray table. It is flagged as a borrowing
+    rather than presented as this tray's documented behaviour.
+  lifecycle: >-
+    searched - no end-of-life notice for ASR-9902-FAN is in the intake.
+elements:
+  status:
+    at: [14.39, 4.46]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the fan tray status lamp, printed STATUS on the flange beside it. One per
+      tray.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: handle
+      uhandle: 8.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-fan@1 handle - the library's one pull-handle figure. Its
+        provenance describes the handle's appearance from a photograph, not its
+        proudness
+    - node: screw-top
+      out: 1.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1 - whose own provenance reads "estimated - it
+        stands proud but was not measured"
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own
+        provenance is 'size: estimated' and the dome carries none
+skins: [default]

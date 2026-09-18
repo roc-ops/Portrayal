@@ -114,19 +114,24 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     conflicting fan figures in the staged corpus; the rest have no fan
     statement at all in any document we hold.
 
-    THE ASR 9903 MADE IT TWENTY-ONE, and it is a third kind of holdout worth
-    telling apart from the other two. Cisco is not silent about it and does not
-    contradict itself: the data sheet says "4 fans in redundant configuration"
-    and lists "Fan redundancy" in Table 2, and the fixed-port Hardware
-    Installation Guide gives replacement steps. What none of them gives is the
-    FORM. Four trays redundant is 3+1 or 2+2 and the difference is the whole
-    question, so the group carries the sentence and no `redundancy` - the same
-    ruling the CSR310 got for "Hot swappable redundant fan modules", applied to
-    a vendor who said more and still not enough."""
+    THE ASR 9903 MADE IT TWENTY-ONE AND THE ASR 9902 TWENTY-TWO, and they are a
+    third kind of holdout worth telling apart from the other two. Cisco is not
+    silent about either and does not contradict itself: each data sheet says the
+    chassis has its fans "in redundant configuration" and lists "Fan redundancy"
+    in Table 2, and the fixed-port Hardware Installation Guide gives replacement
+    steps. What none of them gives is the FORM. Four trays redundant is 3+1 or
+    2+2, three trays is 2+1, and the difference is the whole question - so each
+    group carries the sentence and no `redundancy`, which is the ruling the
+    CSR310 got for "Hot swappable redundant fan modules" applied to a vendor who
+    said more and still not enough.
+
+    THE TWO ARRIVED TOGETHER AND THE SECOND ONE IS THE TEST OF THE FIRST. Three
+    trays has only one sensible reading, 2+1, and it was still not written down,
+    because a ratio nobody published is not a ratio this library states."""
     unstated = sorted(slug for slug, d in devices() if run(d))
     assert "edgecore/cor580" in unstated and "edgecore/dcs510" in unstated
-    assert "cisco/asr-9903" in unstated
-    assert len(unstated) == 21, unstated
+    assert "cisco/asr-9903" in unstated and "cisco/asr-9902" in unstated
+    assert len(unstated) == 22, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
