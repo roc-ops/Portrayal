@@ -99,9 +99,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/power-button@1` | component | button | 12 × 12 |  | 2 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@1` | component | psu | 84 × 40 |  | 1 | 0 | 550W hot-swap PSU module with an integrated axial fan and its own C14 inlet, as fitted to the Smartoptics DCP… |
-| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 2 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
+| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 5 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
-| `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 6 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
+| `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 7 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
 | `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 5 | 0 | Captive pull-out information tab (default credentials / serial card) |
 | `common/qsfp-cage@2` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
