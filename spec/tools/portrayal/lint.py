@@ -333,10 +333,14 @@ AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
 # component serves the whole column and why a group is allowed to say "these are
 # SFP28" over a component whose contract can only say "sfp". Anything absent
 # answers for itself: rj45 is its own family and nothing else is in it.
+# qsfp112 IS IN THE QSFP FAMILY FOR THE SAME REASON THE REST ARE: it is the 400G
+# four-lane QSFP, one generation past qsfp56, and the cage is mechanically the
+# same - std/qsfp-ganged@1 seats it unchanged. Left out, L22 accused every one of
+# the EXP400-32X's thirty-two ports of contradicting its own group.
 MEDIA_FAMILY = {
     "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp",
     "qsfp": "qsfp", "qsfp-plus": "qsfp", "qsfp28": "qsfp", "qsfp56": "qsfp",
-    "qsfp-dd": "qsfp",
+    "qsfp112": "qsfp", "qsfp-dd": "qsfp",
 }
 
 
@@ -3443,8 +3447,14 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
 # shape as a type table with no row for a form factor. Two groups on two devices
 # escaped L40 entirely while sfp, sfp-plus, sfp28 and qsfp56 were all listed;
 # test_silent_drops.py holds the set against the media the library actually uses.
+# qsfp112 JOINED ON THE DAY IT LANDED, which is what that test is for. The
+# EXP400-32X is the library's first QSFP112 device - the 400G four-lane QSFP, one
+# generation past qsfp56 on the same cage - and adding the device without adding
+# the media would have made its port group the third to escape L40 in silence.
+# The test failed first and this line is its answer, not the other way round.
 PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp-dd", "qsfp", "qsfp28",
-                   "qsfp56", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2", "cxp"}
+                   "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2",
+                   "cxp"}
 
 
 def _bay_pitch_is_uneven(gaps):
