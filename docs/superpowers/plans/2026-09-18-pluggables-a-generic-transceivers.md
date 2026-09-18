@@ -439,7 +439,7 @@ Message names the figure and table each number came from. `working/` is not stag
 
 ---
 
-### Task 4: `std/sc-bore` and its registry entry
+### Task 4: `std/sc-bore` and its registry entry — GATED at execution (no free source dimensions the SC keyed opening; the search is recorded in spec A section 4 and in working/intake/fiber-connectors/sc/COVERAGE.md; the part, registry entry, test and dcim entries are NOT built)
 
 **Files:**
 - Create: `library/components/std/sc-bore/v1/contract.yaml`, `library/components/std/sc-bore/v1/skins/default.svg`
@@ -1135,7 +1135,7 @@ git commit -F /path/to/msg.txt
 
 ---
 
-### Task 10: `generic/sfp-lc-simplex` and `generic/sfp-sc`
+### Task 10: `generic/sfp-lc-simplex` (sfp-sc GATED — see the Task 4 ruling in the ledger: no free document dimensions the SC keyed opening, so the SC face waits for a drawing exactly as the MPO faces do; every `sfp-sc` step below is skipped)
 
 **Files:**
 - Create: `library/components/generic/sfp-lc-simplex/v1/{contract.yaml,skins/default.svg}`
