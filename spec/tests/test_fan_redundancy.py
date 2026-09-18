@@ -170,7 +170,13 @@ def test_the_comparison_layer_can_now_reach_them():
     documents agree with each other and with the metal. Its three sibling chassis carry SIX
     fans on a 48.6 pitch and are already counted here; this one is five on a 58.8 pitch,
     which is why its fan is its own part rather than the family's.
+
+    FORTY-SEVEN IS THE DCS202, the DCS201's copper sibling, which states the same "4+1
+    redundant fan modules" over the same five bays - and seats the same fan, because its
+    guide prints the DCS201's supply tables character for character and its own rear
+    photograph puts the handles on a 59.06 pitch against the DCS201's 58.82. Two devices,
+    one rear, one figure, counted twice because two vendors' documents state it twice.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 46, n
+    assert n == 47, n

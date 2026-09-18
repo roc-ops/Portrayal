@@ -2,7 +2,7 @@ format: 1
 kind: device
 name: dcs202
 version: 1.0.0
-maturity: draft
+maturity: modelled
 manufacturer: Edgecore
 model: AS5835-54T
 portfolio: {line: Cloud Data Center, family: Leaf Switch, series: DCS202}
@@ -24,6 +24,12 @@ provenance:
       DCS201's 108, and it has NO Overview section at all. It goes from Package Contents
       straight to installation, so the only full-panel drawing in the whole corpus is the
       package-contents thumbnail on page 1, which shows the front and the rear stacked.
+      AND THE DECISIVE SOURCE IS NEITHER DOCUMENT. `working/intake/edgecore/photos/` holds
+      dcs202-2-DCS202-F.png and dcs202-3-DCS202-B.png, the vendor's own square-on product
+      photographs of both faces, staged by the intake alongside the PDFs. They are small -
+      489 x 357, about 1.1 px/mm on the panel - but they are ORTHOGRAPHIC, which is the
+      property this device's guide lacks, and they are what Gate 1 and Gate 5 are taken
+      against here.
       It also carries the family disclaimer: "The switch drawings in this document are for
       illustration only and may not match your particular switch model."
   gate-1:
@@ -37,24 +43,43 @@ provenance:
       SO THE VERTICAL IS NOT USED AT ALL and the horizontal is used only where the ruler and the
       thing measured sit at the same height. That is the same split the DCS201 made, for the
       same reason, with less resolution to spend.
-  why-this-is-draft-and-not-modelled:
-    confidence: estimated
+  the-anchor-and-what-settled-it:
+    confidence: photo-measured
     note: >-
-      THE WALL'S ANCHOR IS NOT SETTLED, AND GATE 5 CANNOT BE ASSERTED. Two bands of the same
-      reference disagree about where column 1 is by nearly a full pitch: profiling the jack
-      openings at page y948-958 fits column 1 at 27.95 mm, and profiling the row at page
-      y913-940 puts it at 37.7. Both fits are internally consistent - each gives a clean 13.97
-      pitch across its own run - so the disagreement is about WHICH feature is being detected
-      (opening, bezel, or shadow) rather than about the pitch, and at 3.22 px/mm on a
-      perspective thumbnail I could not tell them apart.
-      Everything else here is sound and is left in place: the chassis is stated in this
-      device's own guide, the rear is carried from the DCS201 and PROVEN against this device's
-      own figure to 0.78 mm, the supplies and fan are the DCS201's on identical specification
-      tables, the port count and block structure are counted, and the pitch is the registry's.
-      What is missing is one number - the wall's left anchor - and with it the numeral and
-      legend placement that hangs off it.
-      SO THIS SHIPS AS DRAFT RATHER THAN AS A MODEL WHOSE GATE 5 SENTENCE WOULD BE UNTRUE. A
-      square-on photograph of the front, or any elevation, closes it in one pass.
+      THE WALL'S ANCHOR CAME FROM A SQUARE-ON PHOTOGRAPH, NOT FROM THE GUIDE. This device was
+      first written as a draft because the guide's only full-panel art is a perspective
+      thumbnail at 3.22 px/mm, and two bands of it put column 1 at 27.95 mm and at 37.7 -
+      nearly a whole pitch apart - with no way to tell which feature each band was detecting.
+      The vendor's own product photograph (DCS202-F, edge-core.com) is ORTHOGRAPHIC and
+      settles it. Its face measures 488 x 49 px for an aspect of 9.959 against the stated
+      10.068, 1.1% out, so Gate 1 passes on it. Fitting the full 24-column model to the jack
+      rows - registry pitch, gang 8, anchor and gutter free - gives column 1 at 35.25 mm and a
+      5.0 gutter at correlation 0.673, with the top six fits all inside 0.5 mm of each other.
+      AND IT EXPLAINS THE CONTRADICTION. The guide band that read 41.92, 56.05, 70.02 was
+      detecting the BRIGHT BEZEL WALLS BETWEEN columns, not the columns: subtract the half
+      pitch of 6.985 and it reads 34.94, which is the photograph's answer to 0.3 mm. The other
+      band was the same walls on the other side. Neither candidate was right and both were the
+      same mistake.
+      SO THE GUIDE'S FINER DATA IS USABLE AFTER ALL, once shifted. Its block C walls put column
+      17 at 269.23 where the model predicts 269.22, and its block B gives a 5.30 gutter against
+      the photograph's 5.0. The anchor is the photograph's, the fine structure is the guide's,
+      and the two agree across the whole wall.
+  gate-5:
+    confidence: photo-measured
+    note: >-
+      I PUT THE MODEL OVER THE REFERENCE AT MATCHED SCALE, AND HERE IS WHAT IT SHOWED. Not the
+      render beside the photograph - the two have very different textures and comparing them
+      by eye misled me three times - but the MODEL'S OWN COLUMN CENTRES drawn as ticks onto
+      the orthographic photograph at 6x. All twenty-four ticks land on jack centres across the
+      full wall, and both predicted block gaps fall inside their dividers: the first is
+      predicted at 142.53 mm against a wall pair straddling 142.4 in the photograph, and
+      column 17's left bezel wall is predicted at 262.25 against 262.59 measured.
+      THE REAR IS CHECKED THE SAME WAY, against this device's own orthographic rear
+      photograph (DCS202-B). Its five red fan handles centre at 102.22, 161.28, 220.34, 278.95
+      and 338.46 mm against the model's carried 103.60, 162.42, 221.24, 280.06 and 338.88 -
+      five modules inside 1.4 mm - and an edge scan puts the supplies' frames at 16.36-69.06
+      and 369.81-423.42 against the carried 16.74 and 371.37 at 54.0 wide. Every difference is
+      inside this photograph's own 0.9 mm per pixel.
   the-x-axis-is-measured:
     confidence: measured
     note: >-
@@ -85,6 +110,14 @@ provenance:
       0.10 and 0.01 mm, and a bay pitch of 59.02 against 58.82, 0.3% apart. Two figures in two
       documents drawn for two devices landing inside a millimetre is what makes this a carry and
       not a guess.
+      AND CONFIRMED A THIRD TIME by this device's own orthographic rear photograph, which puts
+      its fan handles on a 59.06 pitch against the DCS201's 58.82 and its supplies' frames
+      within 1.6 mm of the carried positions.
+      THE CARRIED NUMBERS ARE KEPT RATHER THAN REPLACED BY THAT PHOTOGRAPH, deliberately: the
+      DCS201's rear was read off a half-page elevation at 5.02 px/mm and the photograph is 1.1,
+      so the carry is the more precise of the two and the photograph is the check on it.
+      Swapping in coarser numbers because they are this device's own would trade accuracy for
+      provenance tidiness.
       THE ARRANGEMENT IS IDENTICAL TOO: a supply at each end with a C14 inlet, a wire bail
       handle and a coloured latch, five honeycomb fan trays between them with pull bars and
       airflow diamonds, and the grounding screw outboard of the left-hand supply.
@@ -153,17 +186,18 @@ attrs:
 chassis: {width: 442.5, height: 43.95, depth: 473.3, ru: 1, weight-kg: 9.59, color: '#2b2f33',
   airflow: front-to-back}
 gaps:
-- what: no-panel-elevation-in-this-corpus
+- what: no-panel-elevation-in-the-staged-corpus
   scope: [front, rear]
   reason: needs-drawing
   wanted: >-
-    An elevation, of either face. The DCS201's guide has an Overview section with the front
-    and rear drawn across half a page each; this one has no Overview at all, so the only
-    full-panel art anywhere in the DCS202's corpus is the package-contents thumbnail on page 1
-    - both faces stacked, beside a picture of the bracket kit, at 3.22 px/mm where the sibling
-    gave 5.06. That is enough to read the architecture, the port count, the block structure
-    and the label strip, and enough to pitch-calibrate the horizontal. It is not enough for
-    the vertical, and it is not enough to read the breakout legend's individual boxes.
+    An elevation in the STAGED documents. The DCS201's guide has an Overview with both faces
+    drawn across half a page each; this one has no Overview at all, so the only full-panel art
+    in the staged corpus is the package-contents thumbnail on page 1 - both faces stacked,
+    beside the bracket kit, at 3.22 px/mm and in perspective.
+    THE FRONT IS NO LONGER BLOCKED BY THIS: the vendor's own square-on product photograph
+    (DCS202-F) supplied the anchor the thumbnail could not, and Gate 1 passes on it at 1.1%.
+    The REAR still rests on the thumbnail plus the DCS201's proven carry-over, and a rear
+    photograph or elevation would let it be measured directly rather than inherited.
 - what: the-four-undrawn-faces
   scope: [top, bottom, left, right]
   reason: needs-drawing
@@ -246,168 +280,168 @@ views:
       decor:
       - {id: vent-left, at: [1.50, 1.00], size: [5.20, 41.90], pattern: vent, pattern-pitch: [4.20, 4.80], vent: 22}
       - {id: vent-right, at: [436.20, 1.00], size: [5.30, 41.90], pattern: vent, pattern-pitch: [4.20, 4.80], vent: 22}
-      - {id: vent-bottom, at: [30.00, 36.40], size: [340.00, 4.60], pattern: vent, pattern-pitch: [4.20, 4.20], vent: 18}
-      - {id: lane-49-1, at: [162.07, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-49-2, at: [167.99, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-49-3, at: [173.91, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-49-4, at: [179.83, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-bracket-49, at: [161.32, 32.60], size: [22.76, 0.30], fill: '#c7ccd1'}
-      - {id: lane-50-1, at: [191.89, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-50-2, at: [197.81, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-50-3, at: [203.73, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-50-4, at: [209.65, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-bracket-50, at: [191.14, 32.60], size: [22.76, 0.30], fill: '#c7ccd1'}
-      - {id: lane-51-1, at: [221.51, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-51-2, at: [227.43, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-51-3, at: [233.35, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-51-4, at: [239.27, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-bracket-51, at: [220.76, 32.60], size: [22.76, 0.30], fill: '#c7ccd1'}
-      - {id: lane-52-1, at: [274.83, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-52-2, at: [280.75, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-52-3, at: [286.67, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-52-4, at: [292.59, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-bracket-52, at: [274.08, 32.60], size: [22.76, 0.30], fill: '#c7ccd1'}
-      - {id: lane-53-1, at: [304.46, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-53-2, at: [310.38, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-53-3, at: [316.30, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-53-4, at: [322.22, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-bracket-53, at: [303.71, 32.60], size: [22.76, 0.30], fill: '#c7ccd1'}
-      - {id: lane-54-1, at: [334.28, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-54-2, at: [340.20, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-54-3, at: [346.12, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-54-4, at: [352.04, 29.20], size: [3.50, 2.20], fill: '#e9ecef'}
-      - {id: lane-bracket-54, at: [333.53, 32.60], size: [22.76, 0.30], fill: '#c7ccd1'}
+      - {id: vent-bottom, at: [30.00, 38.60], size: [340.00, 4.40], pattern: vent, pattern-pitch: [4.20, 4.20], vent: 18}
+      - {id: lane-49-1, at: [162.07, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-49-2, at: [167.99, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-49-3, at: [173.91, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-49-4, at: [179.83, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-bracket-49, at: [161.32, 34.80], size: [22.76, 0.30], fill: '#c7ccd1'}
+      - {id: lane-50-1, at: [191.89, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-50-2, at: [197.81, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-50-3, at: [203.73, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-50-4, at: [209.65, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-bracket-50, at: [191.14, 34.80], size: [22.76, 0.30], fill: '#c7ccd1'}
+      - {id: lane-51-1, at: [221.51, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-51-2, at: [227.43, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-51-3, at: [233.35, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-51-4, at: [239.27, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-bracket-51, at: [220.76, 34.80], size: [22.76, 0.30], fill: '#c7ccd1'}
+      - {id: lane-52-1, at: [274.83, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-52-2, at: [280.75, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-52-3, at: [286.67, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-52-4, at: [292.59, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-bracket-52, at: [274.08, 34.80], size: [22.76, 0.30], fill: '#c7ccd1'}
+      - {id: lane-53-1, at: [304.46, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-53-2, at: [310.38, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-53-3, at: [316.30, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-53-4, at: [322.22, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-bracket-53, at: [303.71, 34.80], size: [22.76, 0.30], fill: '#c7ccd1'}
+      - {id: lane-54-1, at: [334.28, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-54-2, at: [340.20, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-54-3, at: [346.12, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-54-4, at: [352.04, 31.40], size: [3.50, 2.20], fill: '#e9ecef'}
+      - {id: lane-bracket-54, at: [333.53, 34.80], size: [22.76, 0.30], fill: '#c7ccd1'}
       cutouts:
-      - {id: mgmt-1, at: [8.65, 2.60], size: [12.7, 11.0], shape: rect}
-      - {id: mgmt-2, at: [8.65, 14.70], size: [12.7, 11.0], shape: rect}
-      - {id: led-mgmt-1, at: [8.55, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: led-mgmt-2, at: [17.15, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: port-49, at: [379.50, 3.20], size: [18.5, 9.58], shape: rect}
-      - {id: port-50, at: [379.50, 18.20], size: [18.5, 9.58], shape: rect}
-      - {id: port-51, at: [379.50, 30.00], size: [18.5, 9.58], shape: rect}
-      - {id: port-52, at: [398.50, 3.20], size: [18.5, 9.58], shape: rect}
-      - {id: port-53, at: [398.50, 18.20], size: [18.5, 9.58], shape: rect}
-      - {id: port-54, at: [398.50, 30.00], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-49, at: [381.75, 13.30], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-50, at: [381.75, 15.80], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-51, at: [381.75, 40.00], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-52, at: [400.75, 13.30], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-53, at: [400.75, 15.80], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-54, at: [400.75, 40.00], size: [2.0, 2.0], shape: circle}
-      - {id: console-rj, at: [419.90, 3.20], size: [15.8, 13.2], shape: rect}
-      - {id: usb-a, at: [421.80, 18.60], size: [12.0, 4.5], shape: rect}
-      - {id: led-ps1, at: [48.90, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: led-ps2, at: [54.50, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: led-diag, at: [60.10, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: led-fan, at: [65.70, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: led-loc, at: [71.30, 29.20], size: [4.6, 2.6], shape: rect}
-      - {id: reset, at: [89.20, 29.20], size: [4.0, 4.0], shape: circle}
+      - {id: mgmt-1, at: [10.75, 3.60], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-2, at: [10.75, 17.20], size: [12.7, 11.0], shape: rect}
+      - {id: led-mgmt-1, at: [10.50, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: led-mgmt-2, at: [19.10, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: port-49, at: [377.10, 3.20], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [377.10, 17.60], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [377.10, 32.00], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [396.10, 3.20], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [396.10, 17.60], size: [18.5, 9.58], shape: rect}
+      - {id: port-54, at: [396.10, 32.00], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-49, at: [379.35, 13.30], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50, at: [379.35, 15.30], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51, at: [379.35, 41.80], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52, at: [398.35, 13.30], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53, at: [398.35, 15.30], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54, at: [398.35, 41.80], size: [2.0, 2.0], shape: circle}
+      - {id: console-rj, at: [418.50, 3.20], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [420.40, 18.60], size: [12.0, 4.5], shape: rect}
+      - {id: led-ps1, at: [48.90, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: led-ps2, at: [54.50, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: led-diag, at: [60.10, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: led-fan, at: [65.70, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: led-loc, at: [71.30, 31.40], size: [4.6, 2.6], shape: rect}
+      - {id: reset, at: [89.20, 31.40], size: [4.0, 4.0], shape: circle}
     silkscreen:
 
-    - {id: silk-lane-49-1, at: [163.82, 30.90], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-49-2, at: [169.74, 30.90], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-49-3, at: [175.66, 30.90], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-49-4, at: [181.58, 30.90], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-bracket-49, at: [172.70, 34.80], text: '49', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-lane-50-1, at: [193.64, 30.90], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-50-2, at: [199.56, 30.90], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-50-3, at: [205.48, 30.90], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-50-4, at: [211.40, 30.90], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-bracket-50, at: [202.52, 34.80], text: '50', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-lane-51-1, at: [223.26, 30.90], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-51-2, at: [229.18, 30.90], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-51-3, at: [235.10, 30.90], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-51-4, at: [241.02, 30.90], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-bracket-51, at: [232.14, 34.80], text: '51', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-lane-52-1, at: [276.58, 30.90], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-52-2, at: [282.50, 30.90], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-52-3, at: [288.42, 30.90], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-52-4, at: [294.34, 30.90], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-bracket-52, at: [285.46, 34.80], text: '52', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-lane-53-1, at: [306.21, 30.90], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-53-2, at: [312.13, 30.90], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-53-3, at: [318.05, 30.90], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-53-4, at: [323.97, 30.90], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-bracket-53, at: [315.09, 34.80], text: '53', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-lane-54-1, at: [336.03, 30.90], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-54-2, at: [341.95, 30.90], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-54-3, at: [347.87, 30.90], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-54-4, at: [353.79, 30.90], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
-    - {id: silk-lane-bracket-54, at: [344.91, 34.80], text: '54', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-mgmt, at: [15.00, 28.40], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-mgmt-speed, at: [15.00, 34.00], text: '1G bps', font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: chassis}
-    - {id: silk-mgmt-legend, at: [23.50, 31.60], text: 'On = link   Flash = ACT', font-size: 1.1, anchor: start, fill: '#c7ccd1', for: chassis}
-    - {id: silk-ps1, at: [51.20, 33.20], text: PS1, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps1}
-    - {id: silk-ps2, at: [56.80, 33.20], text: PS2, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps2}
-    - {id: silk-diag, at: [62.40, 33.20], text: Diag, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-diag}
-    - {id: silk-fan, at: [68.00, 33.20], text: Fan, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-fan}
-    - {id: silk-loc, at: [73.60, 33.20], text: Loc, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-loc}
-    - {id: silk-reset, at: [95.50, 31.63], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb', for: reset}
-    - {id: silk-console, at: [427.80, 28.40], text: Console, font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: console-rj}
-    - {id: silk-49, at: [384.85, 29.60], text: '49', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-49}
-    - {id: silk-50, at: [392.65, 29.60], text: '50', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-50}
-    - {id: silk-51, at: [388.75, 42.60], text: '51', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-51}
-    - {id: silk-52, at: [403.85, 29.60], text: '52', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-52}
-    - {id: silk-53, at: [411.65, 29.60], text: '53', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-53}
-    - {id: silk-54, at: [407.75, 42.60], text: '54', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-54}
+    - {id: silk-lane-49-1, at: [163.82, 33.10], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-49-2, at: [169.74, 33.10], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-49-3, at: [175.66, 33.10], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-49-4, at: [181.58, 33.10], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-49, at: [172.70, 37.00], text: '49', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-50-1, at: [193.64, 33.10], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-50-2, at: [199.56, 33.10], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-50-3, at: [205.48, 33.10], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-50-4, at: [211.40, 33.10], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-50, at: [202.52, 37.00], text: '50', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-51-1, at: [223.26, 33.10], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-51-2, at: [229.18, 33.10], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-51-3, at: [235.10, 33.10], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-51-4, at: [241.02, 33.10], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-51, at: [232.14, 37.00], text: '51', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-52-1, at: [276.58, 33.10], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-52-2, at: [282.50, 33.10], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-52-3, at: [288.42, 33.10], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-52-4, at: [294.34, 33.10], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-52, at: [285.46, 37.00], text: '52', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-53-1, at: [306.21, 33.10], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-53-2, at: [312.13, 33.10], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-53-3, at: [318.05, 33.10], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-53-4, at: [323.97, 33.10], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-53, at: [315.09, 37.00], text: '53', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-lane-54-1, at: [336.03, 33.10], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-54-2, at: [341.95, 33.10], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-54-3, at: [347.87, 33.10], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-54-4, at: [353.79, 33.10], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f', for: chassis}
+    - {id: silk-lane-bracket-54, at: [344.91, 37.00], text: '54', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-mgmt, at: [15.00, 30.60], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-mgmt-speed, at: [15.00, 36.20], text: '1G bps', font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: chassis}
+    - {id: silk-mgmt-legend, at: [25.60, 33.80], text: 'On = link   Flash = ACT', font-size: 1.1, anchor: start, fill: '#c7ccd1', for: chassis}
+    - {id: silk-ps1, at: [51.20, 35.40], text: PS1, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps1}
+    - {id: silk-ps2, at: [56.80, 35.40], text: PS2, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps2}
+    - {id: silk-diag, at: [62.40, 35.40], text: Diag, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-diag}
+    - {id: silk-fan, at: [68.00, 35.40], text: Fan, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-fan}
+    - {id: silk-loc, at: [73.60, 35.40], text: Loc, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-loc}
+    - {id: silk-reset, at: [95.50, 33.83], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb', for: reset}
+    - {id: silk-console, at: [426.40, 30.60], text: Console, font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: console-rj}
+    - {id: silk-49, at: [382.45, 30.60], text: '49', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-49}
+    - {id: silk-50, at: [390.25, 30.60], text: '50', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-50}
+    - {id: silk-51, at: [386.35, 43.40], text: '51', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-51}
+    - {id: silk-52, at: [401.45, 30.60], text: '52', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-52}
+    - {id: silk-53, at: [409.25, 30.60], text: '53', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-53}
+    - {id: silk-54, at: [405.35, 43.40], text: '54', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-54}
     components:
       blocks:
       - id: rj45
         ref: common/rj45-ganged-eth@1
-        at: [21.60, 3.00]
+        at: [28.75, 3.60]
         count: 48
         rows: 2
         pitch: registry
-        row-pitch: 12.1
+        row-pitch: 13.6
         gang: 8
-        gutter: 5.46
+        gutter: 5.30
         number-from: 1
         cutouts: true
         rotate: {top: 180}
-        numerals: {dx-by-row: [2.55, 10.15], dy-top: 25.40, dy-bottom: 13.30, font-size: 1.4, anchor: middle, fill: '#e4e8eb'}
+        numerals: {dx-by-row: [2.55, 10.15], dy-top: 27.00, dy-bottom: 13.40, font-size: 1.4, anchor: middle, fill: '#e4e8eb'}
       placements:
-      - {ref: std/rj45-ganged@2, id: mgmt-1, at: [8.65, 2.60], group: mgmt, rel-pos: 1,
+      - {ref: std/rj45-ganged@2, id: mgmt-1, at: [10.75, 3.60], group: mgmt, rel-pos: 1,
          attrs: {media: rj45, speed: 1g, role: mgmt}}
-      - {ref: std/rj45-ganged@2, id: mgmt-2, at: [8.65, 14.70], rotate: 180, group: mgmt, rel-pos: 2,
+      - {ref: std/rj45-ganged@2, id: mgmt-2, at: [10.75, 17.20], rotate: 180, group: mgmt, rel-pos: 2,
          attrs: {media: rj45, speed: 1g, role: mgmt}}
-      - {ref: common/led-rect@1, id: led-mgmt-1, at: [8.55, 29.20], group: leds, rel-pos: 1, for: mgmt-1,
+      - {ref: common/led-rect@1, id: led-mgmt-1, at: [10.50, 31.40], group: leds, rel-pos: 1, for: mgmt-1,
          states: ['off', {name: link, color: '#22c55e'}, {name: act, color: '#22c55e'}]}
-      - {ref: common/led-rect@1, id: led-mgmt-2, at: [17.15, 29.20], group: leds, rel-pos: 2, for: mgmt-2,
+      - {ref: common/led-rect@1, id: led-mgmt-2, at: [19.10, 31.40], group: leds, rel-pos: 2, for: mgmt-2,
          states: ['off', {name: link, color: '#22c55e'}, {name: act, color: '#22c55e'}]}
-      - {ref: std/qsfp-ganged@1, id: port-49, at: [379.50, 3.20], group: qsfp28, rel-pos: 49}
-      - {ref: std/qsfp-ganged@1, id: port-50, at: [379.50, 18.20], rotate: 180, group: qsfp28, rel-pos: 50}
-      - {ref: std/qsfp-ganged@1, id: port-51, at: [379.50, 30.00], group: qsfp28, rel-pos: 51}
-      - {ref: std/qsfp-ganged@1, id: port-52, at: [398.50, 3.20], group: qsfp28, rel-pos: 52}
-      - {ref: std/qsfp-ganged@1, id: port-53, at: [398.50, 18.20], rotate: 180, group: qsfp28, rel-pos: 53}
-      - {ref: std/qsfp-ganged@1, id: port-54, at: [398.50, 30.00], group: qsfp28, rel-pos: 54}
-      - {ref: common/led-dot@1, id: led-port-49, at: [381.75, 13.30], group: port-leds, rel-pos: 49, for: port-49,
+      - {ref: std/qsfp-ganged@1, id: port-49, at: [377.10, 3.20], group: qsfp28, rel-pos: 49}
+      - {ref: std/qsfp-ganged@1, id: port-50, at: [377.10, 17.60], rotate: 180, group: qsfp28, rel-pos: 50}
+      - {ref: std/qsfp-ganged@1, id: port-51, at: [377.10, 32.00], group: qsfp28, rel-pos: 51}
+      - {ref: std/qsfp-ganged@1, id: port-52, at: [396.10, 3.20], group: qsfp28, rel-pos: 52}
+      - {ref: std/qsfp-ganged@1, id: port-53, at: [396.10, 17.60], rotate: 180, group: qsfp28, rel-pos: 53}
+      - {ref: std/qsfp-ganged@1, id: port-54, at: [396.10, 32.00], group: qsfp28, rel-pos: 54}
+      - {ref: common/led-dot@1, id: led-port-49, at: [379.35, 13.30], group: port-leds, rel-pos: 49, for: port-49,
          states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
-      - {ref: common/led-dot@1, id: led-port-50, at: [381.75, 15.80], group: port-leds, rel-pos: 50, for: port-50,
+      - {ref: common/led-dot@1, id: led-port-50, at: [379.35, 15.30], group: port-leds, rel-pos: 50, for: port-50,
          states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
-      - {ref: common/led-dot@1, id: led-port-51, at: [381.75, 40.00], group: port-leds, rel-pos: 51, for: port-51,
+      - {ref: common/led-dot@1, id: led-port-51, at: [379.35, 41.80], group: port-leds, rel-pos: 51, for: port-51,
          states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
-      - {ref: common/led-dot@1, id: led-port-52, at: [400.75, 13.30], group: port-leds, rel-pos: 52, for: port-52,
+      - {ref: common/led-dot@1, id: led-port-52, at: [398.35, 13.30], group: port-leds, rel-pos: 52, for: port-52,
          states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
-      - {ref: common/led-dot@1, id: led-port-53, at: [400.75, 15.80], group: port-leds, rel-pos: 53, for: port-53,
+      - {ref: common/led-dot@1, id: led-port-53, at: [398.35, 15.30], group: port-leds, rel-pos: 53, for: port-53,
          states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
-      - {ref: common/led-dot@1, id: led-port-54, at: [400.75, 40.00], group: port-leds, rel-pos: 54, for: port-54,
+      - {ref: common/led-dot@1, id: led-port-54, at: [398.35, 41.80], group: port-leds, rel-pos: 54, for: port-54,
          states: ['off', {name: '100g', color: '#22c55e'}, {name: '40g', color: '#3b82f6'}, {name: '25g-breakout', color: '#f59e0b'}, {name: '10g-breakout', color: '#a855f7'}]}
-      - {ref: std/rj45@2, id: console-rj, at: [419.90, 3.20], group: mgmt, rel-pos: 3,
+      - {ref: std/rj45@2, id: console-rj, at: [418.50, 3.20], group: mgmt, rel-pos: 3,
          attrs: {media: rj45-serial, role: console}}
-      - {ref: std/usb-a@1, id: usb-a, at: [421.80, 18.60], group: mgmt, rel-pos: 4,
+      - {ref: std/usb-a@1, id: usb-a, at: [420.40, 18.60], group: mgmt, rel-pos: 4,
          attrs: {media: usb-a, role: storage}}
-      - {ref: common/usb-symbol@1, id: usb-mark, at: [424.60, 23.60], group: furniture, rel-pos: 1}
-      - {ref: common/led-rect@1, id: led-ps1, at: [48.90, 29.20], group: leds, rel-pos: 3, for: chassis,
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [423.20, 23.60], group: furniture, rel-pos: 1}
+      - {ref: common/led-rect@1, id: led-ps1, at: [48.90, 31.40], group: leds, rel-pos: 3, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-rect@1, id: led-ps2, at: [54.50, 29.20], group: leds, rel-pos: 4, for: chassis,
+      - {ref: common/led-rect@1, id: led-ps2, at: [54.50, 31.40], group: leds, rel-pos: 4, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-rect@1, id: led-diag, at: [60.10, 29.20], group: leds, rel-pos: 5, for: chassis,
+      - {ref: common/led-rect@1, id: led-diag, at: [60.10, 31.40], group: leds, rel-pos: 5, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-rect@1, id: led-fan, at: [65.70, 29.20], group: leds, rel-pos: 6, for: chassis,
+      - {ref: common/led-rect@1, id: led-fan, at: [65.70, 31.40], group: leds, rel-pos: 6, for: chassis,
          states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-rect@1, id: led-loc, at: [71.30, 29.20], group: leds, rel-pos: 7, for: chassis,
+      - {ref: common/led-rect@1, id: led-loc, at: [71.30, 31.40], group: leds, rel-pos: 7, for: chassis,
          states: ['off', {name: locate, color: '#f59e0b'}]}
-      - {ref: common/reset-button@1, id: reset, at: [89.20, 29.20], group: mgmt, rel-pos: 5, for: chassis}
+      - {ref: common/reset-button@1, id: reset, at: [89.20, 31.40], group: mgmt, rel-pos: 5, for: chassis}
     regions:
     - {id: access, at: [20.0, 2.0], size: {w: 352.0, h: 25.0}, label: '48 x 1/10GBASE-T',
        members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32, port-33, port-34, port-35, port-36, port-37, port-38, port-39, port-40, port-41, port-42, port-43, port-44, port-45, port-46, port-47, port-48]}

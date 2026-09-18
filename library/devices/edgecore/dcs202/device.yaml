@@ -2,7 +2,7 @@ format: 1
 kind: device
 name: dcs202
 version: 1.0.0
-maturity: draft
+maturity: modelled
 manufacturer: Edgecore
 model: AS5835-54T
 portfolio: {line: Cloud Data Center, family: Leaf Switch, series: DCS202}
@@ -21,9 +21,13 @@ provenance:
       dcs202-qsg (the AS5835-54T Quick Start Guide) holds the panel art. THIS GUIDE IS MUCH THINNER THAN
       ITS SIBLING'S - 59 figures against the DCS201's 108, and it has NO Overview section at all. It goes
       from Package Contents straight to installation, so the only full-panel drawing in the whole corpus
-      is the package-contents thumbnail on page 1, which shows the front and the rear stacked. It also
-      carries the family disclaimer: "The switch drawings in this document are for illustration only and
-      may not match your particular switch model."
+      is the package-contents thumbnail on page 1, which shows the front and the rear stacked. AND THE
+      DECISIVE SOURCE IS NEITHER DOCUMENT. `working/intake/edgecore/photos/` holds dcs202-2-DCS202-F.png
+      and dcs202-3-DCS202-B.png, the vendor's own square-on product photographs of both faces, staged
+      by the intake alongside the PDFs. They are small - 489 x 357, about 1.1 px/mm on the panel - but
+      they are ORTHOGRAPHIC, which is the property this device's guide lacks, and they are what Gate 1
+      and Gate 5 are taken against here. It also carries the family disclaimer: "The switch drawings in
+      this document are for illustration only and may not match your particular switch model."
   gate-1:
     confidence: measured
     note: >-
@@ -34,22 +38,38 @@ provenance:
       VERTICAL IS NOT USED AT ALL and the horizontal is used only where the ruler and the thing measured
       sit at the same height. That is the same split the DCS201 made, for the same reason, with less resolution
       to spend.
-  why-this-is-draft-and-not-modelled:
-    confidence: estimated
+  the-anchor-and-what-settled-it:
+    confidence: photo-measured
     note: >-
-      THE WALL'S ANCHOR IS NOT SETTLED, AND GATE 5 CANNOT BE ASSERTED. Two bands of the same reference
-      disagree about where column 1 is by nearly a full pitch: profiling the jack openings at page y948-958
-      fits column 1 at 27.95 mm, and profiling the row at page y913-940 puts it at 37.7. Both fits are
-      internally consistent - each gives a clean 13.97 pitch across its own run - so the disagreement
-      is about WHICH feature is being detected (opening, bezel, or shadow) rather than about the pitch,
-      and at 3.22 px/mm on a perspective thumbnail I could not tell them apart. Everything else here is
-      sound and is left in place: the chassis is stated in this device's own guide, the rear is carried
-      from the DCS201 and PROVEN against this device's own figure to 0.78 mm, the supplies and fan are
-      the DCS201's on identical specification tables, the port count and block structure are counted,
-      and the pitch is the registry's. What is missing is one number - the wall's left anchor - and with
-      it the numeral and legend placement that hangs off it. SO THIS SHIPS AS DRAFT RATHER THAN AS A MODEL
-      WHOSE GATE 5 SENTENCE WOULD BE UNTRUE. A square-on photograph of the front, or any elevation, closes
-      it in one pass.
+      THE WALL'S ANCHOR CAME FROM A SQUARE-ON PHOTOGRAPH, NOT FROM THE GUIDE. This device was first written
+      as a draft because the guide's only full-panel art is a perspective thumbnail at 3.22 px/mm, and
+      two bands of it put column 1 at 27.95 mm and at 37.7 - nearly a whole pitch apart - with no way
+      to tell which feature each band was detecting. The vendor's own product photograph (DCS202-F, edge-core.com)
+      is ORTHOGRAPHIC and settles it. Its face measures 488 x 49 px for an aspect of 9.959 against the
+      stated 10.068, 1.1% out, so Gate 1 passes on it. Fitting the full 24-column model to the jack rows
+      - registry pitch, gang 8, anchor and gutter free - gives column 1 at 35.25 mm and a 5.0 gutter at
+      correlation 0.673, with the top six fits all inside 0.5 mm of each other. AND IT EXPLAINS THE CONTRADICTION.
+      The guide band that read 41.92, 56.05, 70.02 was detecting the BRIGHT BEZEL WALLS BETWEEN columns,
+      not the columns: subtract the half pitch of 6.985 and it reads 34.94, which is the photograph's
+      answer to 0.3 mm. The other band was the same walls on the other side. Neither candidate was right
+      and both were the same mistake. SO THE GUIDE'S FINER DATA IS USABLE AFTER ALL, once shifted. Its
+      block C walls put column 17 at 269.23 where the model predicts 269.22, and its block B gives a 5.30
+      gutter against the photograph's 5.0. The anchor is the photograph's, the fine structure is the guide's,
+      and the two agree across the whole wall.
+  gate-5:
+    confidence: photo-measured
+    note: >-
+      I PUT THE MODEL OVER THE REFERENCE AT MATCHED SCALE, AND HERE IS WHAT IT SHOWED. Not the render
+      beside the photograph - the two have very different textures and comparing them by eye misled me
+      three times - but the MODEL'S OWN COLUMN CENTRES drawn as ticks onto the orthographic photograph
+      at 6x. All twenty-four ticks land on jack centres across the full wall, and both predicted block
+      gaps fall inside their dividers: the first is predicted at 142.53 mm against a wall pair straddling
+      142.4 in the photograph, and column 17's left bezel wall is predicted at 262.25 against 262.59 measured.
+      THE REAR IS CHECKED THE SAME WAY, against this device's own orthographic rear photograph (DCS202-B).
+      Its five red fan handles centre at 102.22, 161.28, 220.34, 278.95 and 338.46 mm against the model's
+      carried 103.60, 162.42, 221.24, 280.06 and 338.88 - five modules inside 1.4 mm - and an edge scan
+      puts the supplies' frames at 16.36-69.06 and 369.81-423.42 against the carried 16.74 and 371.37
+      at 54.0 wide. Every difference is inside this photograph's own 0.9 mm per pixel.
   the-x-axis-is-measured:
     confidence: measured
     note: >-
@@ -77,9 +97,15 @@ provenance:
       102.82, 161.72, 220.94, 280.00 and 338.91 mm, against the DCS201's 103.6, 162.5, 221.4, 280.1 and
       338.9 - five modules agreeing to 0.78, 0.78, 0.46, 0.10 and 0.01 mm, and a bay pitch of 59.02 against
       58.82, 0.3% apart. Two figures in two documents drawn for two devices landing inside a millimetre
-      is what makes this a carry and not a guess. THE ARRANGEMENT IS IDENTICAL TOO: a supply at each end
-      with a C14 inlet, a wire bail handle and a coloured latch, five honeycomb fan trays between them
-      with pull bars and airflow diamonds, and the grounding screw outboard of the left-hand supply.
+      is what makes this a carry and not a guess. AND CONFIRMED A THIRD TIME by this device's own orthographic
+      rear photograph, which puts its fan handles on a 59.06 pitch against the DCS201's 58.82 and its
+      supplies' frames within 1.6 mm of the carried positions. THE CARRIED NUMBERS ARE KEPT RATHER THAN
+      REPLACED BY THAT PHOTOGRAPH, deliberately: the DCS201's rear was read off a half-page elevation
+      at 5.02 px/mm and the photograph is 1.1, so the carry is the more precise of the two and the photograph
+      is the check on it. Swapping in coarser numbers because they are this device's own would trade accuracy
+      for provenance tidiness. THE ARRANGEMENT IS IDENTICAL TOO: a supply at each end with a C14 inlet,
+      a wire bail handle and a coloured latch, five honeycomb fan trays between them with pull bars and
+      airflow diamonds, and the grounding screw outboard of the left-hand supply.
   the-same-supplies-and-the-same-fan:
     confidence: datasheet
     note: >-
@@ -139,18 +165,19 @@ attrs:
   lifecycle: {eol: none-announced}
 chassis: {width: 442.5, height: 43.95, depth: 473.3, ru: 1, weight-kg: 9.59, color: '#2b2f33', airflow: front-to-back}
 gaps:
-- what: no-panel-elevation-in-this-corpus
+- what: no-panel-elevation-in-the-staged-corpus
   scope:
   - front
   - rear
   reason: needs-drawing
   wanted: >-
-    An elevation, of either face. The DCS201's guide has an Overview section with the front and rear drawn
-    across half a page each; this one has no Overview at all, so the only full-panel art anywhere in the
-    DCS202's corpus is the package-contents thumbnail on page 1 - both faces stacked, beside a picture
-    of the bracket kit, at 3.22 px/mm where the sibling gave 5.06. That is enough to read the architecture,
-    the port count, the block structure and the label strip, and enough to pitch-calibrate the horizontal.
-    It is not enough for the vertical, and it is not enough to read the breakout legend's individual boxes.
+    An elevation in the STAGED documents. The DCS201's guide has an Overview with both faces drawn across
+    half a page each; this one has no Overview at all, so the only full-panel art in the staged corpus
+    is the package-contents thumbnail on page 1 - both faces stacked, beside the bracket kit, at 3.22
+    px/mm and in perspective. THE FRONT IS NO LONGER BLOCKED BY THIS: the vendor's own square-on product
+    photograph (DCS202-F) supplied the anchor the thumbnail could not, and Gate 1 passes on it at 1.1%.
+    The REAR still rests on the thumbnail plus the DCS201's proven carry-over, and a rear photograph or
+    elevation would let it be measured directly rather than inherited.
 - what: the-four-undrawn-faces
   scope:
   - top
@@ -238,258 +265,258 @@ views:
       - {id: vent-left, at: [1.5, 1.0], size: [5.2, 41.9], pattern: vent, pattern-pitch: [4.2, 4.8], vent: 22}
       - {id: vent-right, at: [436.2, 1.0], size: [5.3, 41.9], pattern: vent, pattern-pitch: [4.2, 4.8],
         vent: 22}
-      - {id: vent-bottom, at: [30.0, 36.4], size: [340.0, 4.6], pattern: vent, pattern-pitch: [4.2, 4.2],
+      - {id: vent-bottom, at: [30.0, 38.6], size: [340.0, 4.4], pattern: vent, pattern-pitch: [4.2, 4.2],
         vent: 18}
-      - {id: lane-49-1, at: [162.07, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-49-2, at: [167.99, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-49-3, at: [173.91, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-49-4, at: [179.83, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-bracket-49, at: [161.32, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
-      - {id: lane-50-1, at: [191.89, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-50-2, at: [197.81, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-50-3, at: [203.73, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-50-4, at: [209.65, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-bracket-50, at: [191.14, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
-      - {id: lane-51-1, at: [221.51, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-51-2, at: [227.43, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-51-3, at: [233.35, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-51-4, at: [239.27, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-bracket-51, at: [220.76, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
-      - {id: lane-52-1, at: [274.83, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-52-2, at: [280.75, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-52-3, at: [286.67, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-52-4, at: [292.59, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-bracket-52, at: [274.08, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
-      - {id: lane-53-1, at: [304.46, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-53-2, at: [310.38, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-53-3, at: [316.3, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-53-4, at: [322.22, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-bracket-53, at: [303.71, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
-      - {id: lane-54-1, at: [334.28, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-54-2, at: [340.2, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-54-3, at: [346.12, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-54-4, at: [352.04, 29.2], size: [3.5, 2.2], fill: '#e9ecef'}
-      - {id: lane-bracket-54, at: [333.53, 32.6], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-49-1, at: [162.07, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-49-2, at: [167.99, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-49-3, at: [173.91, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-49-4, at: [179.83, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-49, at: [161.32, 34.8], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-50-1, at: [191.89, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-50-2, at: [197.81, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-50-3, at: [203.73, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-50-4, at: [209.65, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-50, at: [191.14, 34.8], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-51-1, at: [221.51, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-51-2, at: [227.43, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-51-3, at: [233.35, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-51-4, at: [239.27, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-51, at: [220.76, 34.8], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-52-1, at: [274.83, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-52-2, at: [280.75, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-52-3, at: [286.67, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-52-4, at: [292.59, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-52, at: [274.08, 34.8], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-53-1, at: [304.46, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-53-2, at: [310.38, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-53-3, at: [316.3, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-53-4, at: [322.22, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-53, at: [303.71, 34.8], size: [22.76, 0.3], fill: '#c7ccd1'}
+      - {id: lane-54-1, at: [334.28, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-54-2, at: [340.2, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-54-3, at: [346.12, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-54-4, at: [352.04, 31.4], size: [3.5, 2.2], fill: '#e9ecef'}
+      - {id: lane-bracket-54, at: [333.53, 34.8], size: [22.76, 0.3], fill: '#c7ccd1'}
       cutouts:
-      - {id: mgmt-1, at: [8.65, 2.6], size: [12.7, 11.0], shape: rect}
-      - {id: mgmt-2, at: [8.65, 14.7], size: [12.7, 11.0], shape: rect}
-      - {id: led-mgmt-1, at: [8.55, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: led-mgmt-2, at: [17.15, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: port-49, at: [379.5, 3.2], size: [18.5, 9.58], shape: rect}
-      - {id: port-50, at: [379.5, 18.2], size: [18.5, 9.58], shape: rect}
-      - {id: port-51, at: [379.5, 30.0], size: [18.5, 9.58], shape: rect}
-      - {id: port-52, at: [398.5, 3.2], size: [18.5, 9.58], shape: rect}
-      - {id: port-53, at: [398.5, 18.2], size: [18.5, 9.58], shape: rect}
-      - {id: port-54, at: [398.5, 30.0], size: [18.5, 9.58], shape: rect}
-      - {id: led-port-49, at: [381.75, 13.3], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-50, at: [381.75, 15.8], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-51, at: [381.75, 40.0], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-52, at: [400.75, 13.3], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-53, at: [400.75, 15.8], size: [2.0, 2.0], shape: circle}
-      - {id: led-port-54, at: [400.75, 40.0], size: [2.0, 2.0], shape: circle}
-      - {id: console-rj, at: [419.9, 3.2], size: [15.8, 13.2], shape: rect}
-      - {id: usb-a, at: [421.8, 18.6], size: [12.0, 4.5], shape: rect}
-      - {id: led-ps1, at: [48.9, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: led-ps2, at: [54.5, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: led-diag, at: [60.1, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: led-fan, at: [65.7, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: led-loc, at: [71.3, 29.2], size: [4.6, 2.6], shape: rect}
-      - {id: reset, at: [89.2, 29.2], size: [4.0, 4.0], shape: circle}
-      - {id: port-1, at: [21.6, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-2, at: [21.6, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-3, at: [34.3, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-4, at: [34.3, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-5, at: [47.0, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-6, at: [47.0, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-7, at: [59.7, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-8, at: [59.7, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-9, at: [72.4, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-10, at: [72.4, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-11, at: [85.1, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-12, at: [85.1, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-13, at: [97.8, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-14, at: [97.8, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-15, at: [110.5, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-16, at: [110.5, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-17, at: [128.66, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-18, at: [128.66, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-19, at: [141.36, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-20, at: [141.36, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-21, at: [154.06, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-22, at: [154.06, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-23, at: [166.76, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-24, at: [166.76, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-25, at: [179.46, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-26, at: [179.46, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-27, at: [192.16, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-28, at: [192.16, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-29, at: [204.86, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-30, at: [204.86, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-31, at: [217.56, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-32, at: [217.56, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-33, at: [235.72, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-34, at: [235.72, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-35, at: [248.42, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-36, at: [248.42, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-37, at: [261.12, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-38, at: [261.12, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-39, at: [273.82, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-40, at: [273.82, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-41, at: [286.52, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-42, at: [286.52, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-43, at: [299.22, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-44, at: [299.22, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-45, at: [311.92, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-46, at: [311.92, 15.1], size: [12.7, 11.0], shape: rect}
-      - {id: port-47, at: [324.62, 3.0], size: [12.7, 11.0], shape: rect}
-      - {id: port-48, at: [324.62, 15.1], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-1, at: [10.75, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: mgmt-2, at: [10.75, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: led-mgmt-1, at: [10.5, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: led-mgmt-2, at: [19.1, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: port-49, at: [377.1, 3.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [377.1, 17.6], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [377.1, 32.0], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [396.1, 3.2], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [396.1, 17.6], size: [18.5, 9.58], shape: rect}
+      - {id: port-54, at: [396.1, 32.0], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-49, at: [379.35, 13.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-50, at: [379.35, 15.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-51, at: [379.35, 41.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52, at: [398.35, 13.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-53, at: [398.35, 15.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-54, at: [398.35, 41.8], size: [2.0, 2.0], shape: circle}
+      - {id: console-rj, at: [418.5, 3.2], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [420.4, 18.6], size: [12.0, 4.5], shape: rect}
+      - {id: led-ps1, at: [48.9, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: led-ps2, at: [54.5, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: led-diag, at: [60.1, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: led-fan, at: [65.7, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: led-loc, at: [71.3, 31.4], size: [4.6, 2.6], shape: rect}
+      - {id: reset, at: [89.2, 31.4], size: [4.0, 4.0], shape: circle}
+      - {id: port-1, at: [28.75, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [28.75, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [41.45, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [41.45, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [54.15, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [54.15, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [66.85, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [66.85, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [79.55, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [79.55, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [92.25, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [92.25, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [104.95, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [104.95, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [117.65, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [117.65, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [135.65, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [135.65, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [148.35, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [148.35, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [161.05, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [161.05, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [173.75, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-24, at: [173.75, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [186.45, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-26, at: [186.45, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-27, at: [199.15, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-28, at: [199.15, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-29, at: [211.85, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-30, at: [211.85, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-31, at: [224.55, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-32, at: [224.55, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-33, at: [242.55, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-34, at: [242.55, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-35, at: [255.25, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-36, at: [255.25, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-37, at: [267.95, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-38, at: [267.95, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-39, at: [280.65, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-40, at: [280.65, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-41, at: [293.35, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-42, at: [293.35, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-43, at: [306.05, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-44, at: [306.05, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-45, at: [318.75, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-46, at: [318.75, 17.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-47, at: [331.45, 3.6], size: [12.7, 11.0], shape: rect}
+      - {id: port-48, at: [331.45, 17.2], size: [12.7, 11.0], shape: rect}
     silkscreen:
-    - {id: silk-lane-49-1, at: [163.82, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-49-1, at: [163.82, 33.1], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-49-2, at: [169.74, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-49-2, at: [169.74, 33.1], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-49-3, at: [175.66, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-49-3, at: [175.66, 33.1], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-49-4, at: [181.58, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-49-4, at: [181.58, 33.1], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-bracket-49, at: [172.7, 34.8], text: '49', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-lane-bracket-49, at: [172.7, 37.0], text: '49', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {id: silk-lane-50-1, at: [193.64, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-50-1, at: [193.64, 33.1], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-50-2, at: [199.56, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-50-2, at: [199.56, 33.1], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-50-3, at: [205.48, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-50-3, at: [205.48, 33.1], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-50-4, at: [211.4, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-50-4, at: [211.4, 33.1], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-bracket-50, at: [202.52, 34.8], text: '50', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-lane-bracket-50, at: [202.52, 37.0], text: '50', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {id: silk-lane-51-1, at: [223.26, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-51-1, at: [223.26, 33.1], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-51-2, at: [229.18, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-51-2, at: [229.18, 33.1], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-51-3, at: [235.1, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-51-3, at: [235.1, 33.1], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-51-4, at: [241.02, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-51-4, at: [241.02, 33.1], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-bracket-51, at: [232.14, 34.8], text: '51', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-lane-bracket-51, at: [232.14, 37.0], text: '51', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {id: silk-lane-52-1, at: [276.58, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-52-1, at: [276.58, 33.1], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-52-2, at: [282.5, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-52-2, at: [282.5, 33.1], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-52-3, at: [288.42, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-52-3, at: [288.42, 33.1], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-52-4, at: [294.34, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-52-4, at: [294.34, 33.1], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-bracket-52, at: [285.46, 34.8], text: '52', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-lane-bracket-52, at: [285.46, 37.0], text: '52', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {id: silk-lane-53-1, at: [306.21, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-53-1, at: [306.21, 33.1], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-53-2, at: [312.13, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-53-2, at: [312.13, 33.1], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-53-3, at: [318.05, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-53-3, at: [318.05, 33.1], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-53-4, at: [323.97, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-53-4, at: [323.97, 33.1], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-bracket-53, at: [315.09, 34.8], text: '53', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-lane-bracket-53, at: [315.09, 37.0], text: '53', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {id: silk-lane-54-1, at: [336.03, 30.9], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-54-1, at: [336.03, 33.1], text: '1', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-54-2, at: [341.95, 30.9], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-54-2, at: [341.95, 33.1], text: '2', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-54-3, at: [347.87, 30.9], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-54-3, at: [347.87, 33.1], text: '3', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-54-4, at: [353.79, 30.9], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
+    - {id: silk-lane-54-4, at: [353.79, 33.1], text: '4', font-size: 1.4, anchor: middle, fill: '#1a1d1f',
       for: chassis}
-    - {id: silk-lane-bracket-54, at: [344.91, 34.8], text: '54', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-lane-bracket-54, at: [344.91, 37.0], text: '54', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
       for: chassis}
-    - {id: silk-mgmt, at: [15.0, 28.4], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: chassis}
-    - {id: silk-mgmt-speed, at: [15.0, 34.0], text: 1G bps, font-size: 1.2, anchor: middle, fill: '#c7ccd1',
+    - {id: silk-mgmt, at: [15.0, 30.6], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: chassis}
+    - {id: silk-mgmt-speed, at: [15.0, 36.2], text: 1G bps, font-size: 1.2, anchor: middle, fill: '#c7ccd1',
       for: chassis}
-    - {id: silk-mgmt-legend, at: [23.5, 31.6], text: On = link   Flash = ACT, font-size: 1.1, anchor: start,
+    - {id: silk-mgmt-legend, at: [25.6, 33.8], text: On = link   Flash = ACT, font-size: 1.1, anchor: start,
       fill: '#c7ccd1', for: chassis}
-    - {id: silk-ps1, at: [51.2, 33.2], text: PS1, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps1}
-    - {id: silk-ps2, at: [56.8, 33.2], text: PS2, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps2}
-    - {id: silk-diag, at: [62.4, 33.2], text: Diag, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-diag}
-    - {id: silk-fan, at: [68.0, 33.2], text: Fan, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-fan}
-    - {id: silk-loc, at: [73.6, 33.2], text: Loc, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-loc}
-    - {id: silk-reset, at: [95.5, 31.63], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb',
+    - {id: silk-ps1, at: [51.2, 35.4], text: PS1, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps1}
+    - {id: silk-ps2, at: [56.8, 35.4], text: PS2, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-ps2}
+    - {id: silk-diag, at: [62.4, 35.4], text: Diag, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-diag}
+    - {id: silk-fan, at: [68.0, 35.4], text: Fan, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-fan}
+    - {id: silk-loc, at: [73.6, 35.4], text: Loc, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: led-loc}
+    - {id: silk-reset, at: [95.5, 33.83], text: Reset, font-size: 1.3, anchor: start, fill: '#e4e8eb',
       for: reset}
-    - {id: silk-console, at: [427.8, 28.4], text: Console, font-size: 1.2, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-console, at: [426.4, 30.6], text: Console, font-size: 1.2, anchor: middle, fill: '#e4e8eb',
       for: console-rj}
-    - {id: silk-49, at: [384.85, 29.6], text: '49', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-49}
-    - {id: silk-50, at: [392.65, 29.6], text: '50', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-50}
-    - {id: silk-51, at: [388.75, 42.6], text: '51', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-51}
-    - {id: silk-52, at: [403.85, 29.6], text: '52', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-52}
-    - {id: silk-53, at: [411.65, 29.6], text: '53', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-53}
-    - {id: silk-54, at: [407.75, 42.6], text: '54', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-54}
-    - {at: [24.15, 28.4], text: '1', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-1}
-    - {at: [31.75, 28.4], text: '2', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-2}
-    - {at: [36.85, 28.4], text: '3', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-3}
-    - {at: [44.45, 28.4], text: '4', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-4}
-    - {at: [49.55, 28.4], text: '5', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-5}
-    - {at: [57.15, 28.4], text: '6', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-6}
-    - {at: [62.25, 28.4], text: '7', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-7}
-    - {at: [69.85, 28.4], text: '8', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-8}
-    - {at: [74.95, 28.4], text: '9', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-9}
-    - {at: [82.55, 28.4], text: '10', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-10}
-    - {at: [87.65, 28.4], text: '11', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-11}
-    - {at: [95.25, 28.4], text: '12', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-12}
-    - {at: [100.35, 28.4], text: '13', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-13}
-    - {at: [107.95, 28.4], text: '14', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-14}
-    - {at: [113.05, 28.4], text: '15', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-15}
-    - {at: [120.65, 28.4], text: '16', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-16}
-    - {at: [131.21, 28.4], text: '17', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-17}
-    - {at: [138.81, 28.4], text: '18', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-18}
-    - {at: [143.91, 28.4], text: '19', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-19}
-    - {at: [151.51, 28.4], text: '20', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-20}
-    - {at: [156.61, 28.4], text: '21', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-21}
-    - {at: [164.21, 28.4], text: '22', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-22}
-    - {at: [169.31, 28.4], text: '23', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-23}
-    - {at: [176.91, 28.4], text: '24', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-24}
-    - {at: [182.01, 28.4], text: '25', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-25}
-    - {at: [189.61, 28.4], text: '26', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-26}
-    - {at: [194.71, 28.4], text: '27', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-27}
-    - {at: [202.31, 28.4], text: '28', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-28}
-    - {at: [207.41, 28.4], text: '29', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-29}
-    - {at: [215.01, 28.4], text: '30', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-30}
-    - {at: [220.11, 28.4], text: '31', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-31}
-    - {at: [227.71, 28.4], text: '32', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-32}
-    - {at: [238.27, 28.4], text: '33', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-33}
-    - {at: [245.87, 28.4], text: '34', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-34}
-    - {at: [250.97, 28.4], text: '35', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-35}
-    - {at: [258.57, 28.4], text: '36', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-36}
-    - {at: [263.67, 28.4], text: '37', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-37}
-    - {at: [271.27, 28.4], text: '38', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-38}
-    - {at: [276.37, 28.4], text: '39', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-39}
-    - {at: [283.97, 28.4], text: '40', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-40}
-    - {at: [289.07, 28.4], text: '41', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-41}
-    - {at: [296.67, 28.4], text: '42', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-42}
-    - {at: [301.77, 28.4], text: '43', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-43}
-    - {at: [309.37, 28.4], text: '44', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-44}
-    - {at: [314.47, 28.4], text: '45', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-45}
-    - {at: [322.07, 28.4], text: '46', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-46}
-    - {at: [327.17, 28.4], text: '47', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-47}
-    - {at: [334.77, 28.4], text: '48', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-48}
+    - {id: silk-49, at: [382.45, 30.6], text: '49', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-49}
+    - {id: silk-50, at: [390.25, 30.6], text: '50', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-50}
+    - {id: silk-51, at: [386.35, 43.4], text: '51', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-51}
+    - {id: silk-52, at: [401.45, 30.6], text: '52', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-52}
+    - {id: silk-53, at: [409.25, 30.6], text: '53', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-53}
+    - {id: silk-54, at: [405.35, 43.4], text: '54', font-size: 1.2, anchor: middle, fill: '#e4e8eb', for: port-54}
+    - {at: [31.3, 30.6], text: '1', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {at: [38.9, 30.6], text: '2', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {at: [44.0, 30.6], text: '3', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {at: [51.6, 30.6], text: '4', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {at: [56.7, 30.6], text: '5', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {at: [64.3, 30.6], text: '6', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-6}
+    - {at: [69.4, 30.6], text: '7', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-7}
+    - {at: [77.0, 30.6], text: '8', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-8}
+    - {at: [82.1, 30.6], text: '9', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-9}
+    - {at: [89.7, 30.6], text: '10', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-10}
+    - {at: [94.8, 30.6], text: '11', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-11}
+    - {at: [102.4, 30.6], text: '12', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-12}
+    - {at: [107.5, 30.6], text: '13', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-13}
+    - {at: [115.1, 30.6], text: '14', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-14}
+    - {at: [120.2, 30.6], text: '15', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-15}
+    - {at: [127.8, 30.6], text: '16', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-16}
+    - {at: [138.2, 30.6], text: '17', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-17}
+    - {at: [145.8, 30.6], text: '18', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-18}
+    - {at: [150.9, 30.6], text: '19', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-19}
+    - {at: [158.5, 30.6], text: '20', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-20}
+    - {at: [163.6, 30.6], text: '21', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-21}
+    - {at: [171.2, 30.6], text: '22', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-22}
+    - {at: [176.3, 30.6], text: '23', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-23}
+    - {at: [183.9, 30.6], text: '24', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-24}
+    - {at: [189.0, 30.6], text: '25', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-25}
+    - {at: [196.6, 30.6], text: '26', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-26}
+    - {at: [201.7, 30.6], text: '27', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-27}
+    - {at: [209.3, 30.6], text: '28', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-28}
+    - {at: [214.4, 30.6], text: '29', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-29}
+    - {at: [222.0, 30.6], text: '30', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-30}
+    - {at: [227.1, 30.6], text: '31', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-31}
+    - {at: [234.7, 30.6], text: '32', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-32}
+    - {at: [245.1, 30.6], text: '33', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-33}
+    - {at: [252.7, 30.6], text: '34', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-34}
+    - {at: [257.8, 30.6], text: '35', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-35}
+    - {at: [265.4, 30.6], text: '36', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-36}
+    - {at: [270.5, 30.6], text: '37', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-37}
+    - {at: [278.1, 30.6], text: '38', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-38}
+    - {at: [283.2, 30.6], text: '39', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-39}
+    - {at: [290.8, 30.6], text: '40', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-40}
+    - {at: [295.9, 30.6], text: '41', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-41}
+    - {at: [303.5, 30.6], text: '42', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-42}
+    - {at: [308.6, 30.6], text: '43', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-43}
+    - {at: [316.2, 30.6], text: '44', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-44}
+    - {at: [321.3, 30.6], text: '45', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-45}
+    - {at: [328.9, 30.6], text: '46', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-46}
+    - {at: [334.0, 30.6], text: '47', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-47}
+    - {at: [341.6, 30.6], text: '48', font-size: 1.4, anchor: middle, fill: '#e4e8eb', for: port-48}
     components:
       placements:
       - ref: std/rj45-ganged@2
         id: mgmt-1
-        at: [8.65, 2.6]
+        at: [10.75, 3.6]
         group: mgmt
         rel-pos: 1
         attrs: {media: rj45, speed: 1g, role: mgmt}
       - ref: std/rj45-ganged@2
         id: mgmt-2
-        at: [8.65, 14.7]
+        at: [10.75, 17.2]
         rotate: 180
         group: mgmt
         rel-pos: 2
         attrs: {media: rj45, speed: 1g, role: mgmt}
       - ref: common/led-rect@1
         id: led-mgmt-1
-        at: [8.55, 29.2]
+        at: [10.5, 31.4]
         group: leds
         rel-pos: 1
         for: mgmt-1
@@ -499,7 +526,7 @@ views:
         - {name: act, color: '#22c55e'}
       - ref: common/led-rect@1
         id: led-mgmt-2
-        at: [17.15, 29.2]
+        at: [19.1, 31.4]
         group: leds
         rel-pos: 2
         for: mgmt-2
@@ -507,15 +534,15 @@ views:
         - 'off'
         - {name: link, color: '#22c55e'}
         - {name: act, color: '#22c55e'}
-      - {ref: std/qsfp-ganged@1, id: port-49, at: [379.5, 3.2], group: qsfp28, rel-pos: 49}
-      - {ref: std/qsfp-ganged@1, id: port-50, at: [379.5, 18.2], rotate: 180, group: qsfp28, rel-pos: 50}
-      - {ref: std/qsfp-ganged@1, id: port-51, at: [379.5, 30.0], group: qsfp28, rel-pos: 51}
-      - {ref: std/qsfp-ganged@1, id: port-52, at: [398.5, 3.2], group: qsfp28, rel-pos: 52}
-      - {ref: std/qsfp-ganged@1, id: port-53, at: [398.5, 18.2], rotate: 180, group: qsfp28, rel-pos: 53}
-      - {ref: std/qsfp-ganged@1, id: port-54, at: [398.5, 30.0], group: qsfp28, rel-pos: 54}
+      - {ref: std/qsfp-ganged@1, id: port-49, at: [377.1, 3.2], group: qsfp28, rel-pos: 49}
+      - {ref: std/qsfp-ganged@1, id: port-50, at: [377.1, 17.6], rotate: 180, group: qsfp28, rel-pos: 50}
+      - {ref: std/qsfp-ganged@1, id: port-51, at: [377.1, 32.0], group: qsfp28, rel-pos: 51}
+      - {ref: std/qsfp-ganged@1, id: port-52, at: [396.1, 3.2], group: qsfp28, rel-pos: 52}
+      - {ref: std/qsfp-ganged@1, id: port-53, at: [396.1, 17.6], rotate: 180, group: qsfp28, rel-pos: 53}
+      - {ref: std/qsfp-ganged@1, id: port-54, at: [396.1, 32.0], group: qsfp28, rel-pos: 54}
       - ref: common/led-dot@1
         id: led-port-49
-        at: [381.75, 13.3]
+        at: [379.35, 13.3]
         group: port-leds
         rel-pos: 49
         for: port-49
@@ -527,7 +554,7 @@ views:
         - {name: 10g-breakout, color: '#a855f7'}
       - ref: common/led-dot@1
         id: led-port-50
-        at: [381.75, 15.8]
+        at: [379.35, 15.3]
         group: port-leds
         rel-pos: 50
         for: port-50
@@ -539,7 +566,7 @@ views:
         - {name: 10g-breakout, color: '#a855f7'}
       - ref: common/led-dot@1
         id: led-port-51
-        at: [381.75, 40.0]
+        at: [379.35, 41.8]
         group: port-leds
         rel-pos: 51
         for: port-51
@@ -551,7 +578,7 @@ views:
         - {name: 10g-breakout, color: '#a855f7'}
       - ref: common/led-dot@1
         id: led-port-52
-        at: [400.75, 13.3]
+        at: [398.35, 13.3]
         group: port-leds
         rel-pos: 52
         for: port-52
@@ -563,7 +590,7 @@ views:
         - {name: 10g-breakout, color: '#a855f7'}
       - ref: common/led-dot@1
         id: led-port-53
-        at: [400.75, 15.8]
+        at: [398.35, 15.3]
         group: port-leds
         rel-pos: 53
         for: port-53
@@ -575,7 +602,7 @@ views:
         - {name: 10g-breakout, color: '#a855f7'}
       - ref: common/led-dot@1
         id: led-port-54
-        at: [400.75, 40.0]
+        at: [398.35, 41.8]
         group: port-leds
         rel-pos: 54
         for: port-54
@@ -587,20 +614,20 @@ views:
         - {name: 10g-breakout, color: '#a855f7'}
       - ref: std/rj45@2
         id: console-rj
-        at: [419.9, 3.2]
+        at: [418.5, 3.2]
         group: mgmt
         rel-pos: 3
         attrs: {media: rj45-serial, role: console}
       - ref: std/usb-a@1
         id: usb-a
-        at: [421.8, 18.6]
+        at: [420.4, 18.6]
         group: mgmt
         rel-pos: 4
         attrs: {media: usb-a, role: storage}
-      - {ref: common/usb-symbol@1, id: usb-mark, at: [424.6, 23.6], group: furniture, rel-pos: 1}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [423.2, 23.6], group: furniture, rel-pos: 1}
       - ref: common/led-rect@1
         id: led-ps1
-        at: [48.9, 29.2]
+        at: [48.9, 31.4]
         group: leds
         rel-pos: 3
         for: chassis
@@ -610,7 +637,7 @@ views:
         - {name: fault, color: '#f59e0b'}
       - ref: common/led-rect@1
         id: led-ps2
-        at: [54.5, 29.2]
+        at: [54.5, 31.4]
         group: leds
         rel-pos: 4
         for: chassis
@@ -620,7 +647,7 @@ views:
         - {name: fault, color: '#f59e0b'}
       - ref: common/led-rect@1
         id: led-diag
-        at: [60.1, 29.2]
+        at: [60.1, 31.4]
         group: leds
         rel-pos: 5
         for: chassis
@@ -630,7 +657,7 @@ views:
         - {name: fault, color: '#f59e0b'}
       - ref: common/led-rect@1
         id: led-fan
-        at: [65.7, 29.2]
+        at: [65.7, 31.4]
         group: leds
         rel-pos: 6
         for: chassis
@@ -640,62 +667,62 @@ views:
         - {name: fault, color: '#f59e0b'}
       - ref: common/led-rect@1
         id: led-loc
-        at: [71.3, 29.2]
+        at: [71.3, 31.4]
         group: leds
         rel-pos: 7
         for: chassis
         states:
         - 'off'
         - {name: locate, color: '#f59e0b'}
-      - {ref: common/reset-button@1, id: reset, at: [89.2, 29.2], group: mgmt, rel-pos: 5, for: chassis}
-      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [21.6, 3.0], rotate: 180, group: rj45, rel-pos: 1}
-      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [21.6, 15.1], group: rj45, rel-pos: 2}
-      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [34.3, 3.0], rotate: 180, group: rj45, rel-pos: 3}
-      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [34.3, 15.1], group: rj45, rel-pos: 4}
-      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [47.0, 3.0], rotate: 180, group: rj45, rel-pos: 5}
-      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [47.0, 15.1], group: rj45, rel-pos: 6}
-      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [59.7, 3.0], rotate: 180, group: rj45, rel-pos: 7}
-      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [59.7, 15.1], group: rj45, rel-pos: 8}
-      - {ref: common/rj45-ganged-eth@1, id: port-9, at: [72.4, 3.0], rotate: 180, group: rj45, rel-pos: 9}
-      - {ref: common/rj45-ganged-eth@1, id: port-10, at: [72.4, 15.1], group: rj45, rel-pos: 10}
-      - {ref: common/rj45-ganged-eth@1, id: port-11, at: [85.1, 3.0], rotate: 180, group: rj45, rel-pos: 11}
-      - {ref: common/rj45-ganged-eth@1, id: port-12, at: [85.1, 15.1], group: rj45, rel-pos: 12}
-      - {ref: common/rj45-ganged-eth@1, id: port-13, at: [97.8, 3.0], rotate: 180, group: rj45, rel-pos: 13}
-      - {ref: common/rj45-ganged-eth@1, id: port-14, at: [97.8, 15.1], group: rj45, rel-pos: 14}
-      - {ref: common/rj45-ganged-eth@1, id: port-15, at: [110.5, 3.0], rotate: 180, group: rj45, rel-pos: 15}
-      - {ref: common/rj45-ganged-eth@1, id: port-16, at: [110.5, 15.1], group: rj45, rel-pos: 16}
-      - {ref: common/rj45-ganged-eth@1, id: port-17, at: [128.66, 3.0], rotate: 180, group: rj45, rel-pos: 17}
-      - {ref: common/rj45-ganged-eth@1, id: port-18, at: [128.66, 15.1], group: rj45, rel-pos: 18}
-      - {ref: common/rj45-ganged-eth@1, id: port-19, at: [141.36, 3.0], rotate: 180, group: rj45, rel-pos: 19}
-      - {ref: common/rj45-ganged-eth@1, id: port-20, at: [141.36, 15.1], group: rj45, rel-pos: 20}
-      - {ref: common/rj45-ganged-eth@1, id: port-21, at: [154.06, 3.0], rotate: 180, group: rj45, rel-pos: 21}
-      - {ref: common/rj45-ganged-eth@1, id: port-22, at: [154.06, 15.1], group: rj45, rel-pos: 22}
-      - {ref: common/rj45-ganged-eth@1, id: port-23, at: [166.76, 3.0], rotate: 180, group: rj45, rel-pos: 23}
-      - {ref: common/rj45-ganged-eth@1, id: port-24, at: [166.76, 15.1], group: rj45, rel-pos: 24}
-      - {ref: common/rj45-ganged-eth@1, id: port-25, at: [179.46, 3.0], rotate: 180, group: rj45, rel-pos: 25}
-      - {ref: common/rj45-ganged-eth@1, id: port-26, at: [179.46, 15.1], group: rj45, rel-pos: 26}
-      - {ref: common/rj45-ganged-eth@1, id: port-27, at: [192.16, 3.0], rotate: 180, group: rj45, rel-pos: 27}
-      - {ref: common/rj45-ganged-eth@1, id: port-28, at: [192.16, 15.1], group: rj45, rel-pos: 28}
-      - {ref: common/rj45-ganged-eth@1, id: port-29, at: [204.86, 3.0], rotate: 180, group: rj45, rel-pos: 29}
-      - {ref: common/rj45-ganged-eth@1, id: port-30, at: [204.86, 15.1], group: rj45, rel-pos: 30}
-      - {ref: common/rj45-ganged-eth@1, id: port-31, at: [217.56, 3.0], rotate: 180, group: rj45, rel-pos: 31}
-      - {ref: common/rj45-ganged-eth@1, id: port-32, at: [217.56, 15.1], group: rj45, rel-pos: 32}
-      - {ref: common/rj45-ganged-eth@1, id: port-33, at: [235.72, 3.0], rotate: 180, group: rj45, rel-pos: 33}
-      - {ref: common/rj45-ganged-eth@1, id: port-34, at: [235.72, 15.1], group: rj45, rel-pos: 34}
-      - {ref: common/rj45-ganged-eth@1, id: port-35, at: [248.42, 3.0], rotate: 180, group: rj45, rel-pos: 35}
-      - {ref: common/rj45-ganged-eth@1, id: port-36, at: [248.42, 15.1], group: rj45, rel-pos: 36}
-      - {ref: common/rj45-ganged-eth@1, id: port-37, at: [261.12, 3.0], rotate: 180, group: rj45, rel-pos: 37}
-      - {ref: common/rj45-ganged-eth@1, id: port-38, at: [261.12, 15.1], group: rj45, rel-pos: 38}
-      - {ref: common/rj45-ganged-eth@1, id: port-39, at: [273.82, 3.0], rotate: 180, group: rj45, rel-pos: 39}
-      - {ref: common/rj45-ganged-eth@1, id: port-40, at: [273.82, 15.1], group: rj45, rel-pos: 40}
-      - {ref: common/rj45-ganged-eth@1, id: port-41, at: [286.52, 3.0], rotate: 180, group: rj45, rel-pos: 41}
-      - {ref: common/rj45-ganged-eth@1, id: port-42, at: [286.52, 15.1], group: rj45, rel-pos: 42}
-      - {ref: common/rj45-ganged-eth@1, id: port-43, at: [299.22, 3.0], rotate: 180, group: rj45, rel-pos: 43}
-      - {ref: common/rj45-ganged-eth@1, id: port-44, at: [299.22, 15.1], group: rj45, rel-pos: 44}
-      - {ref: common/rj45-ganged-eth@1, id: port-45, at: [311.92, 3.0], rotate: 180, group: rj45, rel-pos: 45}
-      - {ref: common/rj45-ganged-eth@1, id: port-46, at: [311.92, 15.1], group: rj45, rel-pos: 46}
-      - {ref: common/rj45-ganged-eth@1, id: port-47, at: [324.62, 3.0], rotate: 180, group: rj45, rel-pos: 47}
-      - {ref: common/rj45-ganged-eth@1, id: port-48, at: [324.62, 15.1], group: rj45, rel-pos: 48}
+      - {ref: common/reset-button@1, id: reset, at: [89.2, 31.4], group: mgmt, rel-pos: 5, for: chassis}
+      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [28.75, 3.6], rotate: 180, group: rj45, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [28.75, 17.2], group: rj45, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [41.45, 3.6], rotate: 180, group: rj45, rel-pos: 3}
+      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [41.45, 17.2], group: rj45, rel-pos: 4}
+      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [54.15, 3.6], rotate: 180, group: rj45, rel-pos: 5}
+      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [54.15, 17.2], group: rj45, rel-pos: 6}
+      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [66.85, 3.6], rotate: 180, group: rj45, rel-pos: 7}
+      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [66.85, 17.2], group: rj45, rel-pos: 8}
+      - {ref: common/rj45-ganged-eth@1, id: port-9, at: [79.55, 3.6], rotate: 180, group: rj45, rel-pos: 9}
+      - {ref: common/rj45-ganged-eth@1, id: port-10, at: [79.55, 17.2], group: rj45, rel-pos: 10}
+      - {ref: common/rj45-ganged-eth@1, id: port-11, at: [92.25, 3.6], rotate: 180, group: rj45, rel-pos: 11}
+      - {ref: common/rj45-ganged-eth@1, id: port-12, at: [92.25, 17.2], group: rj45, rel-pos: 12}
+      - {ref: common/rj45-ganged-eth@1, id: port-13, at: [104.95, 3.6], rotate: 180, group: rj45, rel-pos: 13}
+      - {ref: common/rj45-ganged-eth@1, id: port-14, at: [104.95, 17.2], group: rj45, rel-pos: 14}
+      - {ref: common/rj45-ganged-eth@1, id: port-15, at: [117.65, 3.6], rotate: 180, group: rj45, rel-pos: 15}
+      - {ref: common/rj45-ganged-eth@1, id: port-16, at: [117.65, 17.2], group: rj45, rel-pos: 16}
+      - {ref: common/rj45-ganged-eth@1, id: port-17, at: [135.65, 3.6], rotate: 180, group: rj45, rel-pos: 17}
+      - {ref: common/rj45-ganged-eth@1, id: port-18, at: [135.65, 17.2], group: rj45, rel-pos: 18}
+      - {ref: common/rj45-ganged-eth@1, id: port-19, at: [148.35, 3.6], rotate: 180, group: rj45, rel-pos: 19}
+      - {ref: common/rj45-ganged-eth@1, id: port-20, at: [148.35, 17.2], group: rj45, rel-pos: 20}
+      - {ref: common/rj45-ganged-eth@1, id: port-21, at: [161.05, 3.6], rotate: 180, group: rj45, rel-pos: 21}
+      - {ref: common/rj45-ganged-eth@1, id: port-22, at: [161.05, 17.2], group: rj45, rel-pos: 22}
+      - {ref: common/rj45-ganged-eth@1, id: port-23, at: [173.75, 3.6], rotate: 180, group: rj45, rel-pos: 23}
+      - {ref: common/rj45-ganged-eth@1, id: port-24, at: [173.75, 17.2], group: rj45, rel-pos: 24}
+      - {ref: common/rj45-ganged-eth@1, id: port-25, at: [186.45, 3.6], rotate: 180, group: rj45, rel-pos: 25}
+      - {ref: common/rj45-ganged-eth@1, id: port-26, at: [186.45, 17.2], group: rj45, rel-pos: 26}
+      - {ref: common/rj45-ganged-eth@1, id: port-27, at: [199.15, 3.6], rotate: 180, group: rj45, rel-pos: 27}
+      - {ref: common/rj45-ganged-eth@1, id: port-28, at: [199.15, 17.2], group: rj45, rel-pos: 28}
+      - {ref: common/rj45-ganged-eth@1, id: port-29, at: [211.85, 3.6], rotate: 180, group: rj45, rel-pos: 29}
+      - {ref: common/rj45-ganged-eth@1, id: port-30, at: [211.85, 17.2], group: rj45, rel-pos: 30}
+      - {ref: common/rj45-ganged-eth@1, id: port-31, at: [224.55, 3.6], rotate: 180, group: rj45, rel-pos: 31}
+      - {ref: common/rj45-ganged-eth@1, id: port-32, at: [224.55, 17.2], group: rj45, rel-pos: 32}
+      - {ref: common/rj45-ganged-eth@1, id: port-33, at: [242.55, 3.6], rotate: 180, group: rj45, rel-pos: 33}
+      - {ref: common/rj45-ganged-eth@1, id: port-34, at: [242.55, 17.2], group: rj45, rel-pos: 34}
+      - {ref: common/rj45-ganged-eth@1, id: port-35, at: [255.25, 3.6], rotate: 180, group: rj45, rel-pos: 35}
+      - {ref: common/rj45-ganged-eth@1, id: port-36, at: [255.25, 17.2], group: rj45, rel-pos: 36}
+      - {ref: common/rj45-ganged-eth@1, id: port-37, at: [267.95, 3.6], rotate: 180, group: rj45, rel-pos: 37}
+      - {ref: common/rj45-ganged-eth@1, id: port-38, at: [267.95, 17.2], group: rj45, rel-pos: 38}
+      - {ref: common/rj45-ganged-eth@1, id: port-39, at: [280.65, 3.6], rotate: 180, group: rj45, rel-pos: 39}
+      - {ref: common/rj45-ganged-eth@1, id: port-40, at: [280.65, 17.2], group: rj45, rel-pos: 40}
+      - {ref: common/rj45-ganged-eth@1, id: port-41, at: [293.35, 3.6], rotate: 180, group: rj45, rel-pos: 41}
+      - {ref: common/rj45-ganged-eth@1, id: port-42, at: [293.35, 17.2], group: rj45, rel-pos: 42}
+      - {ref: common/rj45-ganged-eth@1, id: port-43, at: [306.05, 3.6], rotate: 180, group: rj45, rel-pos: 43}
+      - {ref: common/rj45-ganged-eth@1, id: port-44, at: [306.05, 17.2], group: rj45, rel-pos: 44}
+      - {ref: common/rj45-ganged-eth@1, id: port-45, at: [318.75, 3.6], rotate: 180, group: rj45, rel-pos: 45}
+      - {ref: common/rj45-ganged-eth@1, id: port-46, at: [318.75, 17.2], group: rj45, rel-pos: 46}
+      - {ref: common/rj45-ganged-eth@1, id: port-47, at: [331.45, 3.6], rotate: 180, group: rj45, rel-pos: 47}
+      - {ref: common/rj45-ganged-eth@1, id: port-48, at: [331.45, 17.2], group: rj45, rel-pos: 48}
     regions:
     - id: access
       at: [20.0, 2.0]
