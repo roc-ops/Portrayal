@@ -1,0 +1,109 @@
+format: 1
+kind: module
+name: exp800-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The AC power supply of the Edgecore EXP800-16O - a CRPS-style module in a bright housing with
+  a latticed exhaust grille, a wire bail handle over it, an IEC C14 inlet turned on its side at
+  the right, and a coloured release latch DOWN ITS LEFT EDGE rather than its right. Narrower
+  than the rest of this line's supplies at 50.6 mm.
+size: {w: 50.6, h: 40.0}
+size-confidence: {w: measured, h: estimated}
+attrs:
+  model: 'EXP800-16O AC PSU'
+  input: ac
+  inlet: c14
+provenance:
+  size: >-
+    measured on the EXP800-16O quick start guide, page 1 Overview REAR elevation at 600 dpi,
+    scaled by the datasheet's 442 mm body width to 4.9932 px/mm. That elevation reads 2207 x
+    217 px, an aspect of 10.171 against the stated 442 / 43.94 = 10.059 - 1.1% out, where the
+    FRONT elevation on the same page is 5.3% out. The rear is the good drawing on this device.
+    THE ARITHMETIC CLOSES ACROSS THE WHOLE FACE, which is why 50.6 is used rather than
+    estimated. PS1's bright frame reads 16.0 to 66.6 and PS2's 375.3 to 425.9 - both 50.6 wide.
+    The left margin is then 16.0 and the right 16.1; the gap from PS1 to the first fan bay is
+    11.1 and from the last fan bay to PS2 is 11.4. Four independent quantities agreeing to a
+    third of a millimetre.
+    THE LATCHES CONFIRM IT SEPARATELY. Colour segmentation puts the two red release latches at
+    11.42-20.03 and 370.70-379.31, each 8.61 wide - the same 4.6 mm before each module's left
+    edge, on both supplies.
+    THE HEIGHT IS NOT MEASURED. 40.0 is the family's 1RU module height and is recorded as
+    estimated.
+  why-this-is-its-own-part: >-
+    THE WIDTH, AND THE HANDEDNESS. edgecore/dcs240-psu-ac@1 is 54.4 wide and
+    edgecore/dcs201-psu-ac@1 is 54.0; this one is 50.6 on a 442 mm chassis rather than a 438.4
+    one, so neither fits the bay. AND THE LATCH IS ON THE OTHER SIDE: on this supply the red
+    release latch runs down the LEFT edge and the inlet sits at the right, where the DCS240's
+    latch is at the right. A part whose latch is on the wrong side is drawn wrong even when it
+    fits.
+  power: >-
+    NO OUTPUT RATING IS PUBLISHED, and none is asserted. The datasheet gives only "AC Input
+    Voltage: 90 to 240 VAC at 50-60 Hz" and the quick start only the system input rating,
+    "100-120 VAC, 50/60 Hz, 12 A max. per PS / 200-240 VAC, 50/60 Hz, 7.5 A max. per PS".
+    Those are INPUT maxima for the chassis, not what the supply delivers, and multiplying them
+    out would be this model inventing a wattage the vendor does not claim - which is the
+    mistake edgecore/dcs240-psu-ac@1 exists to avoid in the other direction. So this contract
+    carries no `power-output-w` at all. The vendor's product page gives the chassis a 863 W
+    maximum draw, which is recorded on the device rather than here.
+  inlet: >-
+    read from the rear elevation and TURNED, as every other CRPS supply in this library does.
+    The coupler is drawn portrait with its lone earth pin displaced LEFT of the other two,
+    which is a quarter turn anticlockwise - `rotate: 270`, the same as
+    edgecore/dcs201-psu-ac@1, common/psu-ac-650@3 and edgecore/csr440-psu-ac@1. Its size is
+    std/c14-inlet@1's own, which carries a SCHURTER panel cutout; nothing here re-measures it.
+  elements: >-
+    measured in x against the same scale, estimated in y. The grille, the bail over it and the
+    latch down the left edge are placed from the elevation's proportions within a face whose
+    width is measured. WHAT IS NOT MEASURED IS HOW FAR THE BAIL STANDS OFF, see the relief key.
+  airflow-colour-convention: >-
+    The latches on the rear photograph are red and the fan bars beside them are stamped F2B.
+    The product page offers both airflow directions, and this line's other guides state the
+    convention in words - red latches F2B, blue B2F - so the latch fill is a default overridden
+    per configuration. THIS DEVICE'S OWN GUIDE DOES NOT STATE THE COLOUR RULE. See
+    roc-ops/Portrayal#277.
+states: [absent]
+elements:
+  latch: {at: [0.00, 9.40], size: [4.30, 21.20], class: latch}
+  handle: {at: [21.40, 2.20], size: [5.60, 35.60], class: handle}
+  vent-field: {at: [5.60, 3.60], size: [14.60, 32.40], class: vent}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#c22f2f'}
+  latch-edge: {label: Latch edge colour, type: text, default: '#7a1d1d'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [22.60, 6.20], rotate: 270}
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries whatever is
+  # recessed beneath it, which is how the CSR310's AC supply came out blank. See #364.
+  features:
+    - node: handle
+      uhandle: 27.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        NOT SOURCED FOR THIS PART. No staged document for this chassis says how far its bail
+        stands off the face. The nearest published figure for a CRPS-class supply is UfiSpace's
+        S9510-28DC HIG - "the handle for the power supplies will extend outwards by 1.06
+        inches" - which ufispace/psu-401-ac carries at datasheet confidence and both
+        ufispace/psu-102 parts borrow at estimated. edgecore/dcs240-psu-ac@1,
+        edgecore/dcs201-psu-ac@1 and edgecore/csr440-psu-ac@1 were all moved onto the same
+        figure in roc-ops/Portrayal#382, so this part starts where they ended.
+    - node: latch
+      out: 2.4
+      confidence: estimated
+      source: >-
+        edgecore/exp800-psu-ac@1's own elements key - outline drawn, projection not stated.
+    - node: vent-field
+      vent: 24
+      confidence: estimated
+      source: >-
+        edgecore/exp800-psu-ac@1's own elements key - the lattice's extent is drawn and the
+        depth of the cavity behind it is not stated.
+skins: [default]
+body:
+  depth: 300
+  color: '#b9bec4'
+  footprint: {at: [0, 0], size: [50.6, 40]}

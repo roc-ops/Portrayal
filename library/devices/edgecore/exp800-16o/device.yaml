@@ -1,0 +1,813 @@
+format: 1
+kind: device
+name: exp800-16o
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: EXP800-16O
+portfolio: {line: AI/ML, family: Programmable Switch, series: EXP800}
+description: >-
+  16 x 800G OSFP programmable 1RU switch on Xsight Labs X2 silicon with an Intel Xeon D-1713NTE, sold
+  as the EXP800-16O. Every port, both the console and the management jack, the USB and a 1PPS timing input
+  are on the FRONT; two AC supplies and SIX fan trays are on the rear. THE PORTS ARE NUMBERED FROM ZERO
+  - the panel prints `0 (up) (down) 1`, `2 (up) (down) 3` and so on to 15, which is this line's only device
+  that does not start at one.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents and five photographs, all staged, plus one live vendor page. exp800-16o-qsg and exp800-16o-datasheet,
+      both docling-converted and MEASURED OFF THE PDF PAGE at 600 dpi rather than off the converted figures.
+      working/intake/edgecore/photos/ holds exp800-16o-2-EXP800-16O-F.webp and -3-EXP800-16O-B.webp, square-on
+      shots of both faces, plus an angled -A, a second -A as PNG and a three-quarter -FF. THE VENDOR PAGE
+      WAS CONSULTED AND IT EARNED ITS PLACE: www.edge-core.com/product/exp800-16o/ states a maximum power
+      draw of 863 W, and NEITHER staged document states a consumption figure at all. Without it this model
+      would carry a gap where it can carry a number.
+  gate-1:
+    confidence: measured
+    note: >-
+      THE TWO ELEVATIONS ARE NOT EQUALLY GOOD, AND NEITHER IS THE PHOTOGRAPH'S BOUNDING BOX. Both Overview
+      elevations on page 1 are orthographic - the front's width samples 2407 px at seven heights with
+      no taper - and both are drawn at very close to exactly 5 px/mm when scaled by 442 mm: the front
+      is 2211 px wide (5.0023) and the rear 2207 (4.9932). Two drawings landing within 0.14% of a round
+      5.0 is itself evidence that 442 is the width they were drawn to. THE REAR IS THE GOOD DRAWING. It
+      reads 2207 x 217 px, an aspect of 10.171 against the stated 442 / 43.94 = 10.059, 1.1% out. THE
+      FRONT IS 5.3% OUT and squashed vertically: 2211 x 210 px gives 10.574. Its y axis is therefore NOT
+      5.0023 but 210 / 43.94 = 4.7791, and every front y below is read on that second scale. THAT CORRECTION
+      IS NOT A FUDGE, AND THE APERTURE PROVES IT. At 5.0023 on both axes the OSFP openings read 22.59
+      x 12.59 against std/osfp@1's 23.1 x 13.5 - 2.2% under in x and 6.7% under in y, which is two different
+      errors. At 5.0023 by 4.7791 they read 22.59 x 13.18: 2.2% and 2.4%, ONE error in both axes, which
+      is a drawing whose cages are a little small rather than a drawing whose axes disagree.
+  the-photograph-includes-the-lid:
+    confidence: measured
+    note: >-
+      A CORRECTION TO MY OWN FIRST READING, and the reason to distrust an ink bounding box. The front
+      photograph's ink spans 104 rows, which at 960 px / 442 mm is 47.5 mm - taller than a 1RU and therefore
+      impossible. I very nearly recorded the vertical axis as unusable on that basis. ROWS 296-301 ARE
+      NOT THE FRONT FACE. They are a flat band of uniform grey, 89.6 to 89.9, whose colour saturation
+      climbs from 3 to 20 while the panel below varies from 52 to 161. Magnified they are plainly the
+      CHASSIS LID: the shot is taken very slightly from above. There is a similar sliver at the foot.
+      Excluding them the face is 93 to 98 px depending on where the seam is placed - 42.8 to 45.1 mm,
+      which brackets 43.94. So the photograph does not contradict the stated height at all; it was being
+      measured lid-to-base. The same reading applies to edgecore/dcs511's photograph, whose 98-px box
+      over a 95.3-px face was put down to edge highlight.
+  the-two-documents-disagree-about-the-chassis:
+    confidence: datasheet
+    note: >-
+      AND THE DISAGREEMENT IS 80 MM OF DEPTH, not a rounding. The datasheet's Physical section reads "Dimensions
+      (WxDxH): 442 x 509 x 44 mm (17.40 x 20.04 x 1.73 in)". The quick start's own Hardware Specifications
+      table reads "438.4 x 589 x 43.1 mm (17.26 x 23.19 x 1.7 in.)". Both are internally consistent -
+      every inch figure multiplies to its own millimetre figure - so neither is a typo. They describe
+      different boxes. THE DATASHEET IS USED, on three grounds. The live vendor product page agrees with
+      it. Both of the guide's OWN elevations scale to a round 5 px/mm at 442 and to 5.043 and 5.034 at
+      438.4. And this line's quick starts are shared between models and disclaim their own art in as many
+      words - "The drawings in this document are for illustration only and may not match your particular
+      model" - which is exactly the kind of document whose spec table can be inherited from a neighbour.
+      438.4 x 589 x 43.1 is very close to the shell edgecore/dcs240 and edgecore/dcs511 sit on. THE WEIGHTS
+      DISAGREE TOO and are recorded the same way: 10.005 kg in the datasheet against "13.48 kg (29.72
+      lb), with 2 PSUs and 6 fans installed" in the same guide table. The datasheet's figure is used because
+      its dimensions are.
+  the-optical-wall:
+    confidence: measured
+    note: >-
+      SIXTEEN PORTS AS EIGHT COLUMNS OF TWO, ON ONE UNIFORM PITCH. The cage openings segment cleanly as
+      eight dark runs 113 px wide, and their steps are 160, 160, 162, 160, 160, 160 and 160 px - a single
+      pitch of 31.99 mm with NO ganging and no gutter, which is what makes this wall different from the
+      DCS240's eight blocks of two. Column 1 opens at 98.16 mm and the wall ends at 345.04. The openings
+      read 22.59 mm wide against std/osfp@1's 23.1 and 13.18 tall against its 13.5, both about 2.3% under
+      - see gate-1 for why that consistency is the check on the y scale rather than a defect. std/osfp@1's
+      own size was measured on a UFISPACE drawing, not this one, so it is used as the part and NOT as
+      a ruler for this face. ROWS: the upper opening runs 3.14 to 16.32 mm and the lower 18.20 to 31.38,
+      a row pitch of 15.07.
+  the-ports-start-at-zero:
+    confidence: measured
+    note: >-
+      AND THIS IS THE ONLY EDGECORE DEVICE IN THE LIBRARY THAT DOES. The panel prints `0` above an up
+      arrow and a down arrow above `1` beneath the first column, then `2`/`3`, and the System LEDs enlargement
+      resolves the first pair at 600 dpi beyond argument. Sixteen ports numbered 0 to 15, two per column,
+      numbering DOWN each column. `index-origin: 0` on the group and `number-from: 0` on the block. Every
+      sibling in this line - the DCS240, the DCS511, the DCS201 - starts at 1, so this is the kind of
+      fact a family carry-over silently destroys.
+  the-timing-jack-is-drawn-smaller-than-it-is-named:
+    confidence: datasheet
+    note: >-
+      THE DATASHEET SAYS SMA AND THE DRAWING SAYS OTHERWISE. The datasheet's interface table reads "2.
+      1PPS SMA connector"; the quick start says only "1PPS timing port" and "Use a coax cable". BUT THE
+      ELEVATION DRAWS A 5 MM JACK. Colour-segmenting the gold nut on the front elevation gives 5.00 x
+      5.44 mm centred at (85.36, 25.63). common/sma-jack@1 is 9.5 mm across flats - measured on a different
+      vendor's drawing, and edgecore/dcs510 records its own SMA nuts at 8.6 mm. A 5 mm gold feature is
+      not an SMA nut. SEATING THE SMA WOULD ALSO COLLIDE. At 9.5 across the part would span x 80.6-90.1
+      by y 20.9-30.4 and the LOC lamp sits at x 80.16-82.36, y 20.30-21.55 - inside it. L13 would be right
+      to complain, and a drawing that leaves 0.6 mm between a nut and a lamp is telling us the nut is
+      small. common/smb-jack@1 is seated, at 7.0 with a 4.83 aperture, because it is the part that fits
+      what is drawn. The device's `timing` group carries the datasheet's word in its description so a
+      reader is not told the vendor said SMB. A caliper on the real jack settles it.
+  the-management-stack:
+    confidence: measured
+    note: >-
+      ONE HOUSING, TWO CONNECTORS, as on edgecore/dcs511. The bright bezel at the right of the port row
+      reads x 355.44 to 371.83 and y 11.30 to 31.80 - 16.4 by 20.5 mm, which is a 1000BASE-T RJ-45 over
+      a USB Type-A in one moulding rather than two bare parts. The datasheet lists them separately, "1
+      x RJ-45 1G BASE-T management" and "1 x USB Type A storage", and the panel prints MGMT and USB vertically
+      beside the stack. There is no stacked RJ45/USB part in this library, so the housing is drawn as
+      a decor under both, which is what the DCS511 does. THE CONSOLE IS SEPARATE AND ON THE OTHER SIDE,
+      at x 57.97-74.77 by y 18.41-32.01 - 16.8 by 13.6 against std/rj45@2's 15.8 by 13.2 - with CONSOLE
+      printed above it. One console here, where the DCS240 and DCS511 both carry two.
+  the-system-lamps:
+    confidence: measured
+    note: >-
+      FIVE WINDOWS, ALL ROUND, AND ALL FIVE ARE NAMED. The System LEDs enlargement on page 1 resolves
+      Diag and PS1 on the top row, FAN and PS2 on the middle, and LOC alone on the bottom left - a 3+2
+      grid, every one a circle, every one labelled. The guide's own list names exactly the same five.
+      THIS IS A REAL DIFFERENCE FROM THE SIBLINGS and was checked rather than assumed: the DCS240 and
+      DCS511 both draw SIX windows of which one carries no legend anywhere, and the DCS240's right column
+      is rectangular. Neither is true here. Positions off the elevation: left column centred x 81.26,
+      right column x 89.46, rows at y 14.40, 17.60 and 20.90.
+  lamps:
+    confidence: datasheet
+    note: >-
+      quick start, System LEDs/Buttons, verbatim: "OSFP Left LED: Blue (2x400G), Cyan (1x400G), Green
+      (4x200G), Magenta (2x200G), White (8x100G), Amber (4x100G), Red (8x50G)" and "OSFP Right LED: Green/Blinking
+      (link/activity), Blinking Red (no link on one or more ports)". Also "RJ-45 MGMT LEDs: Left: Amber
+      (link), Right: Green (activity)". SEVEN BREAKOUT MODES ON THE LEFT LAMP, which is the rate indicator,
+      and the right lamp is link/activity. ONE LAMP PER PORT IS DRAWN AND THE METAL HAS TWO - the enlargement
+      shows four triangles under each column, two pointing up for the top port and two down for the bottom.
+      The drawn lamp carries the LEFT lamp's seven-mode vocabulary as states, because that is the one
+      that says what the port is doing. The gap below records the other. THE LAMPS ARE TRIANGLES, not
+      dots: up-pointing for the upper row and down for the lower, which is what common/led-arrow@1's two
+      skins are for.
+  the-rear:
+    confidence: measured
+    note: >-
+      MEASURED ON THE REAR ELEVATION, WHICH IS THE GOOD ONE, and confirmed on the photograph. PS1 IS ON
+      THE LEFT AND PS2 ON THE RIGHT, which is the reverse of edgecore/dcs511 - the panel prints PS1 beside
+      the left module and PS2 beside the right, each with an airflow arrow. Getting this from the sibling
+      would have swapped them. The bay wall closes on itself. Both supply frames read 50.6 mm wide - PS1
+      at 16.0 to 66.6 and PS2 at 375.3 to 425.9 - leaving a left margin of 16.0 and a right of 16.1. The
+      six fan bays sit between them with gaps of 11.1 and 11.4. THE FAN BAYS ARE SEPARATED BY A RAIL,
+      which is why their module width and their pitch are different numbers. Seams fall in pairs about
+      7.4 mm apart, so the modules are 41.45 wide and the pitch is 48.92 - measured independently by colour-segmenting
+      the six red pull bars, whose centres fit a 48.921 pitch with residuals of 0.18 mm or less. 41.45
+      plus 7.47 is 48.92. The photograph agrees at half the resolution: its bars fit a 49.30 pitch, 0.8%
+      out.
+  the-bay-digits-are-drawable-here:
+    confidence: measured
+    note: >-
+      AND ON THIS LINE'S OTHER CHASSIS THEY ARE NOT, which is worth saying because edgecore/csr440 and
+      edgecore/dcs511 both carry a gap for exactly this. Those devices put six 48.5 mm trays on a 48.50
+      mm pitch, so their bays butt and the digits the metal prints between them land INSIDE a neighbouring
+      bay box - silkscreen over a module, which L21 is right to refuse. THIS CHASSIS HAS RAILS. The bay
+      seams fall in pairs about 7.4 mm apart, so 41.45 mm of tray alternates with 7.47 mm of chassis,
+      and a digit at a rail's centre is on metal that belongs to no module. The digit for bay 2 resolves
+      on the elevation at x 317.83-319.23, y 23.29-25.31, inside the rail that runs 315.03 to 322.44;
+      the other five are placed at their own rail centres - 122.97, 171.94, 220.80, 269.87, 318.74 and
+      367.40 - which agree with the rear photograph's digit positions to better than a millimetre. EACH
+      DIGIT NAMES THE BAY TO ITS LEFT. 6 sits in the rail right of the leftmost tray and 1 in the rail
+      right of the rightmost, which is the order the panel prints and the reverse of the bays' left-to-right
+      position.
+  power:
+    confidence: datasheet
+    note: >-
+      863 W MAXIMUM, AND IT IS NOT IN EITHER STAGED DOCUMENT. The vendor's product page states "863W"
+      as the maximum power draw. The datasheet gives only "AC Input Voltage: 90 to 240 VAC at 50-60 Hz"
+      and the quick start only the system input rating, "100-120 VAC, 50/60 Hz, 12 A max. per PS / 200-240
+      VAC, 50/60 Hz, 7.5 A max. per PS". NO PER-SUPPLY OUTPUT RATING IS PUBLISHED ANYWHERE, so edgecore/exp800-psu-ac@1
+      carries no `power-output-w`. Multiplying the input maxima out would be inventing a figure the vendor
+      does not claim.
+attrs:
+  environmental: {operating-temp: 0 to 40 C, storage-temp: -40 to 70 C, humidity: 'Operating: 0% to 95%
+      non-condensing', altitude: '0 - 10,000 feet'}
+  physical:
+    weight-note: >-
+      10.005 kg (20.05 lb) per the datasheet. The quick start's own table says 13.48 kg with two PSUs
+      and six fans installed; see the-two-documents-disagree-about-the-chassis.
+  platform: {cpu: 'Intel Xeon D-1713NTE, 4-core 2.2 GHz', switch-silicon: Xsight Labs X2, memory: 32 GB
+      DDR4 SO-DIMM with ECC, storage: 1 TB M.2 2280 NVMe SSD}
+  performance: {switching-capacity: 12.8 Tbps (full duplex), packet-buffer: 64 MB integrated}
+  features:
+    optics-osfp: >-
+      datasheet: each OSFP800 port takes 1 x 800G or breaks out to 2 x 400 GbE, 4 x 200 GbE or 8 x 100
+      GbE. Named cables and modules: "800G OSFP SR8 100 m, 800G OSFP 2 x SR4 100 m, 800G OSFP DR8 500
+      m, 800G OSFP 2 x DR4 500 m", plus DAC/AOC/AEC direct to the cage.
+  lifecycle: {eol: none-announced}
+chassis: {width: 442.0, height: 44.0, depth: 509.0, ru: 1, weight-kg: 10.005, color: '#3f4348', airflow: front-to-back}
+gaps:
+- what: the-four-undrawn-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. Nothing in this corpus draws any of them
+    flat - the mounting figures show brackets going on in three-quarter view, and the -FF photograph is
+    a three-quarter of the front. Each carries an `empty:` sentence saying where I looked, per docs/deliberately-empty-faces.md.
+- what: the-second-osfp-lamp
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The second lamp on each OSFP port. The System LEDs enlargement resolves FOUR triangles under each
+    column - two up for the upper port and two down for the lower - and the guide names both: a left lamp
+    carrying seven rate and breakout modes, and a right lamp carrying link, activity and a blinking red
+    for "no link on one or more ports". One per port is drawn and it carries the LEFT lamp's vocabulary,
+    because that is the one that says what the port is doing. Drawing both would be 32 placements and
+    32 cutouts, and edgecore/dcs240, edgecore/dcs201 and edgecore/as5912-54x all make the same simplification
+    on the same kind of cluster.
+- what: chassis-dimensions-disagree
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  wanted: >-
+    One chassis size. The datasheet says 442 x 509 x 44 mm and the quick start's own hardware table says
+    438.4 x 589 x 43.1 - eighty millimetres of depth apart, with both self-consistent in inches, so neither
+    is a typo. The datasheet's figures are used because the live vendor page agrees with them and because
+    both of the guide's own elevations scale to a round 5 px/mm at 442 and to nothing in particular at
+    438.4. A DEPTH IS THE LEAST TESTABLE OF THE THREE and this model draws no side view, so nothing here
+    would catch it if the guide is the right one. The weights disagree the same way, 10.005 kg against
+    13.48 kg with PSUs and fans installed.
+- what: the-timing-jack-type
+  scope:
+  - front
+  reason: sources-disagree
+  wanted: >-
+    Whether the 1PPS jack is an SMA or an SMB. The datasheet names it "1PPS SMA connector"; the elevation
+    draws it 5.00 x 5.44 mm, where common/sma-jack@1 is 9.5 across flats and edgecore/dcs510 measures
+    its own SMA nuts at 8.6. common/smb-jack@1 is seated because it is what fits the drawing, and seating
+    the SMA envelope would overlap the LOC lamp 0.6 mm away. A caliper on the real jack settles it in
+    one measurement.
+- what: dc-supply
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    Whether a DC supply exists. The datasheet says only "AC PSUs: 1+1 redundancy, load-sharing, hot-swappable"
+    and the quick start "2 x AC PSUs"; no DC variant is named anywhere, and no ordering table is staged
+    for this model. The other Edgecore data-centre switches in this library all offer both, so its absence
+    here is recorded rather than assumed either way. Only AC configurations are declared.
+groups:
+  osfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: >-
+      the sixteen OSFP800 ports, NUMBERED FROM ZERO. The panel prints 0 and 1 under the first column and
+      14 and 15 under the last, numbering down each column.
+    attrs: {media: osfp, speed: 800g}
+  port-leds: {term: LED, role: indicator, index-origin: 0}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster - an RJ-45 serial console at the left of the panel, and a 1000BASE-T RJ-45
+      management jack over a USB 3.0 storage port in one moulding at the right. ONE console, not the two
+      the DCS240 and DCS511 carry.
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    description: >-
+      the 1PPS timing input - a single coaxial jack beside the system lamps, labelled 1PPS on the metal.
+      THE DATASHEET CALLS IT AN SMA; the elevation draws it at 5 mm, which is SMB scale, and common/smb-jack@1
+      is seated on that basis. It states no group media because coax is not a pluggable cage and L40's
+      optics question does not apply to it.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  furniture:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: >-
+      the captive pull-out information tab at the foot of the panel - a thing you neither connect to nor
+      read off the face.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        datasheet: "AC PSUs: 1+1 redundancy, load-sharing, hot-swappable", and the quick start's rear
+        callout counts two. The vendor's product page gives the chassis an 863 W maximum draw; no per-supply
+        output rating is published, so whether one supply carries the box alone is stated by the vendor's
+        "1+1" rather than derivable here.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 5+1
+      redundancy-note: >-
+        datasheet: "5+1 hot-swappable redundant fans", and the quick start's rear callout counts six -
+        "6 x fan trays" - so the digit form and the bay count agree without argument.
+views:
+  front:
+    size: {w: 442.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-left, at: [13.0, 5.2], size: [36.6, 30.2], pattern: slots, pattern-pitch: [3.2, 3.0],
+        vent: 22}
+      - {id: vent-right, at: [390.5, 5.4], size: [36.5, 30.0], pattern: slots, pattern-pitch: [3.2, 3.0],
+        vent: 22}
+      - {id: mgmt-stack, at: [355.0, 10.9], size: [17.4, 21.4], fill: '#e8ebee'}
+      cutouts:
+      - {id: led-diag, at: [80.26, 13.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [88.46, 13.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [80.26, 16.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps2, at: [88.46, 16.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-loc, at: [80.26, 19.9], size: [2.0, 2.0], shape: circle}
+      - {id: console, at: [57.97, 18.41], size: [15.8, 13.2], shape: rect}
+      - {id: pps-in, at: [82.95, 23.22], size: [4.83, 4.83], shape: circle}
+      - {id: reset, at: [87.06, 29.6], size: [4.0, 4.0], shape: circle}
+      - {id: mgmt-eth, at: [355.9, 11.5], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [357.6, 26.5], size: [12.0, 4.5], shape: rect}
+      - {id: port-0, at: [98.16, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-0, at: [105.36, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-1, at: [98.16, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-1, at: [111.96, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-2, at: [130.15, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-2, at: [137.35, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-3, at: [130.15, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-3, at: [143.95, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-4, at: [162.14, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-4, at: [169.34, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-5, at: [162.14, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-5, at: [175.94, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-6, at: [194.13, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-6, at: [201.33, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-7, at: [194.13, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-7, at: [207.93, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-8, at: [226.12, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-8, at: [233.32, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-9, at: [226.12, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-9, at: [239.92, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-10, at: [258.11, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-10, at: [265.31, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-11, at: [258.11, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-11, at: [271.91, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-12, at: [290.1, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-12, at: [297.3, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-13, at: [290.1, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-13, at: [303.9, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-14, at: [322.09, 3.14], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-14, at: [329.29, 38.74], size: [3.6, 3.2], shape: circle}
+      - {id: port-15, at: [322.09, 18.21], size: [23.1, 13.5], shape: rect}
+      - {id: led-port-15, at: [335.89, 38.74], size: [3.6, 3.2], shape: circle}
+    silkscreen:
+    - {id: silk-console, at: [65.87, 16.9], text: CONSOLE, font-size: 1.6, anchor: middle, fill: '#e4e8eb',
+      for: console}
+    - {id: silk-diag, at: [79.46, 14.77], text: Diag, font-size: 1.2, anchor: end, fill: '#c7ccd1', for: led-diag}
+    - {id: silk-ps1, at: [91.26, 14.77], text: PS1, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: led-ps1}
+    - {id: silk-fan, at: [79.46, 17.97], text: FAN, font-size: 1.2, anchor: end, fill: '#c7ccd1', for: led-fan}
+    - {id: silk-ps2, at: [91.26, 17.97], text: PS2, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: led-ps2}
+    - {id: silk-loc, at: [79.46, 21.27], text: LOC, font-size: 1.2, anchor: end, fill: '#c7ccd1', for: led-loc}
+    - {id: silk-pps, at: [89.2, 26.0], text: 1PPS, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: pps-in}
+    - {id: silk-rst, at: [92.0, 31.97], text: RST, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: reset}
+    - {id: silk-mgmt, at: [353.6, 18.1], text: MGMT, font-size: 1.2, anchor: middle, rotate: -90, fill: '#c7ccd1',
+      for: mgmt-eth}
+    - {id: silk-usb, at: [353.6, 28.75], text: USB, font-size: 1.2, anchor: middle, rotate: -90, fill: '#c7ccd1',
+      for: usb-a}
+    - {at: [100.76, 36.34], text: '0', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-0}
+    - {at: [118.66, 36.34], text: '1', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-1}
+    - {at: [132.75, 36.34], text: '2', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-2}
+    - {at: [150.65, 36.34], text: '3', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-3}
+    - {at: [164.74, 36.34], text: '4', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-4}
+    - {at: [182.64, 36.34], text: '5', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-5}
+    - {at: [196.73, 36.34], text: '6', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-6}
+    - {at: [214.63, 36.34], text: '7', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-7}
+    - {at: [228.72, 36.34], text: '8', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-8}
+    - {at: [246.62, 36.34], text: '9', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-9}
+    - {at: [260.71, 36.34], text: '10', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-10}
+    - {at: [278.61, 36.34], text: '11', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-11}
+    - {at: [292.7, 36.34], text: '12', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-12}
+    - {at: [310.6, 36.34], text: '13', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-13}
+    - {at: [324.69, 36.34], text: '14', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-14}
+    - {at: [342.59, 36.34], text: '15', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: port-15}
+    components:
+      placements:
+      - ref: std/rj45@2
+        id: console
+        at: [57.97, 18.41]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-eth@1
+        id: mgmt-eth
+        at: [355.9, 11.5]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: std/usb-a@1
+        id: usb-a
+        at: [357.6, 26.5]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: usb-a, role: storage}
+      - ref: common/smb-jack@1
+        id: pps-in
+        at: [81.86, 22.13]
+        group: timing
+        rel-pos: 1
+        attrs: {media: coax-smb, role: timing, timing: 1PPS}
+      - {ref: common/reset-button@1, id: reset, at: [87.06, 29.6], group: mgmt, rel-pos: 4, for: chassis}
+      - ref: common/led-dot@1
+        id: led-diag
+        at: [80.26, 13.4]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-ps1
+        at: [88.46, 13.4]
+        group: leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-fan
+        at: [80.26, 16.6]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-ps2
+        at: [88.46, 16.6]
+        group: leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-loc
+        at: [80.26, 19.9]
+        group: leds
+        rel-pos: 5
+        for: chassis
+        states:
+        - 'off'
+        - {name: locate, color: '#f59e0b'}
+      - {ref: common/pull-tab@1, id: info-tab, at: [417.5, 38.5], group: furniture, rel-pos: 1}
+      - {ref: std/osfp@1, id: port-0, at: [98.16, 3.14], group: osfp, rel-pos: 0}
+      - {ref: std/osfp@1, id: port-1, at: [98.16, 18.21], group: osfp, rel-pos: 1}
+      - {ref: std/osfp@1, id: port-2, at: [130.15, 3.14], group: osfp, rel-pos: 2}
+      - {ref: std/osfp@1, id: port-3, at: [130.15, 18.21], group: osfp, rel-pos: 3}
+      - {ref: std/osfp@1, id: port-4, at: [162.14, 3.14], group: osfp, rel-pos: 4}
+      - {ref: std/osfp@1, id: port-5, at: [162.14, 18.21], group: osfp, rel-pos: 5}
+      - {ref: std/osfp@1, id: port-6, at: [194.13, 3.14], group: osfp, rel-pos: 6}
+      - {ref: std/osfp@1, id: port-7, at: [194.13, 18.21], group: osfp, rel-pos: 7}
+      - {ref: std/osfp@1, id: port-8, at: [226.12, 3.14], group: osfp, rel-pos: 8}
+      - {ref: std/osfp@1, id: port-9, at: [226.12, 18.21], group: osfp, rel-pos: 9}
+      - {ref: std/osfp@1, id: port-10, at: [258.11, 3.14], group: osfp, rel-pos: 10}
+      - {ref: std/osfp@1, id: port-11, at: [258.11, 18.21], group: osfp, rel-pos: 11}
+      - {ref: std/osfp@1, id: port-12, at: [290.1, 3.14], group: osfp, rel-pos: 12}
+      - {ref: std/osfp@1, id: port-13, at: [290.1, 18.21], group: osfp, rel-pos: 13}
+      - {ref: std/osfp@1, id: port-14, at: [322.09, 3.14], group: osfp, rel-pos: 14}
+      - {ref: std/osfp@1, id: port-15, at: [322.09, 18.21], group: osfp, rel-pos: 15}
+      - ref: common/led-arrow@1
+        id: led-port-0
+        at: [105.36, 38.74]
+        skin: up
+        states: &id001
+        - 'off'
+        - {name: 2x400g, color: '#3b82f6'}
+        - {name: 1x400g, color: '#06b6d4'}
+        - {name: 4x200g, color: '#22c55e'}
+        - {name: 2x200g, color: '#d946ef'}
+        - {name: 8x100g, color: '#f8fafc'}
+        - {name: 4x100g, color: '#f59e0b'}
+        - {name: 8x50g, color: '#ef4444'}
+        for: port-0
+        group: port-leds
+        rel-pos: 0
+      - ref: common/led-arrow@1
+        id: led-port-1
+        at: [111.96, 38.74]
+        skin: down
+        states: *id001
+        for: port-1
+        group: port-leds
+        rel-pos: 1
+      - ref: common/led-arrow@1
+        id: led-port-2
+        at: [137.35, 38.74]
+        skin: up
+        states: *id001
+        for: port-2
+        group: port-leds
+        rel-pos: 2
+      - ref: common/led-arrow@1
+        id: led-port-3
+        at: [143.95, 38.74]
+        skin: down
+        states: *id001
+        for: port-3
+        group: port-leds
+        rel-pos: 3
+      - ref: common/led-arrow@1
+        id: led-port-4
+        at: [169.34, 38.74]
+        skin: up
+        states: *id001
+        for: port-4
+        group: port-leds
+        rel-pos: 4
+      - ref: common/led-arrow@1
+        id: led-port-5
+        at: [175.94, 38.74]
+        skin: down
+        states: *id001
+        for: port-5
+        group: port-leds
+        rel-pos: 5
+      - ref: common/led-arrow@1
+        id: led-port-6
+        at: [201.33, 38.74]
+        skin: up
+        states: *id001
+        for: port-6
+        group: port-leds
+        rel-pos: 6
+      - ref: common/led-arrow@1
+        id: led-port-7
+        at: [207.93, 38.74]
+        skin: down
+        states: *id001
+        for: port-7
+        group: port-leds
+        rel-pos: 7
+      - ref: common/led-arrow@1
+        id: led-port-8
+        at: [233.32, 38.74]
+        skin: up
+        states: *id001
+        for: port-8
+        group: port-leds
+        rel-pos: 8
+      - ref: common/led-arrow@1
+        id: led-port-9
+        at: [239.92, 38.74]
+        skin: down
+        states: *id001
+        for: port-9
+        group: port-leds
+        rel-pos: 9
+      - ref: common/led-arrow@1
+        id: led-port-10
+        at: [265.31, 38.74]
+        skin: up
+        states: *id001
+        for: port-10
+        group: port-leds
+        rel-pos: 10
+      - ref: common/led-arrow@1
+        id: led-port-11
+        at: [271.91, 38.74]
+        skin: down
+        states: *id001
+        for: port-11
+        group: port-leds
+        rel-pos: 11
+      - ref: common/led-arrow@1
+        id: led-port-12
+        at: [297.3, 38.74]
+        skin: up
+        states: *id001
+        for: port-12
+        group: port-leds
+        rel-pos: 12
+      - ref: common/led-arrow@1
+        id: led-port-13
+        at: [303.9, 38.74]
+        skin: down
+        states: *id001
+        for: port-13
+        group: port-leds
+        rel-pos: 13
+      - ref: common/led-arrow@1
+        id: led-port-14
+        at: [329.29, 38.74]
+        skin: up
+        states: *id001
+        for: port-14
+        group: port-leds
+        rel-pos: 14
+      - ref: common/led-arrow@1
+        id: led-port-15
+        at: [335.89, 38.74]
+        skin: down
+        states: *id001
+        for: port-15
+        group: port-leds
+        rel-pos: 15
+    regions:
+    - id: optics
+      at: [96.0, 1.5]
+      size: {w: 251.0, h: 32.0}
+      label: 16 x 800G OSFP
+      members:
+      - port-0
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+    - id: out-of-band
+      at: [55.0, 15.0]
+      size: {w: 40.0, h: 20.0}
+      label: Console, 1PPS and system LEDs
+      members:
+      - console
+      - pps-in
+      - reset
+    - id: status-leds
+      at: [79.0, 12.5]
+      size: {w: 12.5, h: 9.5}
+      label: System LEDs
+      members:
+      - led-diag
+      - led-ps1
+      - led-fan
+      - led-ps2
+      - led-loc
+    - id: mgmt-stack
+      at: [354.0, 10.0]
+      size: {w: 19.5, h: 23.0}
+      label: Management and USB
+      members:
+      - mgmt-eth
+      - usb-a
+  rear:
+    size: {w: 442.0, h: 44.0}
+    silkscreen:
+    - {id: silk-fan-6, at: [122.97, 25.1], text: '6', font-size: 1.6, anchor: middle, fill: '#c7ccd1',
+      for: fan-6}
+    - {id: silk-fan-5, at: [171.94, 25.1], text: '5', font-size: 1.6, anchor: middle, fill: '#c7ccd1',
+      for: fan-5}
+    - {id: silk-fan-4, at: [220.8, 25.1], text: '4', font-size: 1.6, anchor: middle, fill: '#c7ccd1',
+      for: fan-4}
+    - {id: silk-fan-3, at: [269.87, 25.1], text: '3', font-size: 1.6, anchor: middle, fill: '#c7ccd1',
+      for: fan-3}
+    - {id: silk-fan-2, at: [318.74, 25.1], text: '2', font-size: 1.6, anchor: middle, fill: '#c7ccd1',
+      for: fan-2}
+    - {id: silk-fan-1, at: [367.4, 25.1], text: '1', font-size: 1.6, anchor: middle, fill: '#c7ccd1',
+      for: fan-1}
+    - {id: silk-ps1, at: [69.5, 38.6], text: PS1, font-size: 1.6, anchor: start, fill: '#c7ccd1', for: psu-1}
+    - {id: silk-ps2, at: [372.8, 38.6], text: PS2, font-size: 1.6, anchor: end, fill: '#c7ccd1', for: psu-2}
+    components:
+      bays:
+      - id: psu-1
+        at: [16.0, 1.8]
+        size: {w: 50.6, h: 40.0}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - edgecore/exp800-psu-ac@1
+        default: edgecore/exp800-psu-ac@1
+      - id: fan-6
+        at: [77.71, 1.8]
+        size: {w: 41.45, h: 40.0}
+        group: fans
+        rel-pos: 6
+        accepts:
+        - edgecore/exp800-fan@1
+        default: edgecore/exp800-fan@1
+      - id: fan-5
+        at: [126.63, 1.8]
+        size: {w: 41.45, h: 40.0}
+        group: fans
+        rel-pos: 5
+        accepts:
+        - edgecore/exp800-fan@1
+        default: edgecore/exp800-fan@1
+      - id: fan-4
+        at: [175.55, 1.8]
+        size: {w: 41.45, h: 40.0}
+        group: fans
+        rel-pos: 4
+        accepts:
+        - edgecore/exp800-fan@1
+        default: edgecore/exp800-fan@1
+      - id: fan-3
+        at: [224.47, 1.8]
+        size: {w: 41.45, h: 40.0}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - edgecore/exp800-fan@1
+        default: edgecore/exp800-fan@1
+      - id: fan-2
+        at: [273.39, 1.8]
+        size: {w: 41.45, h: 40.0}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - edgecore/exp800-fan@1
+        default: edgecore/exp800-fan@1
+      - id: fan-1
+        at: [322.31, 1.8]
+        size: {w: 41.45, h: 40.0}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - edgecore/exp800-fan@1
+        default: edgecore/exp800-fan@1
+      - id: psu-2
+        at: [375.3, 1.8]
+        size: {w: 50.6, h: 40.0}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - edgecore/exp800-psu-ac@1
+        default: edgecore/exp800-psu-ac@1
+    regions:
+    - id: power
+      at: [15.0, 1.0]
+      size: {w: 53.0, h: 42.0}
+      label: Power supply 1
+      members:
+      - psu-1
+    - id: power-2
+      at: [374.3, 1.0]
+      size: {w: 53.0, h: 42.0}
+      label: Power supply 2
+      members:
+      - psu-2
+    - id: exhaust
+      at: [76.7, 1.0]
+      size: {w: 288.0, h: 42.0}
+      label: 5+1 fan trays
+      members:
+      - fan-1
+      - fan-2
+      - fan-3
+      - fan-4
+      - fan-5
+      - fan-6
+  top:
+    size: {w: 442.0, h: 509.0}
+    empty: >-
+      Not drawn flat by any staged source. The mounting figures show brackets going onto the sides in
+      three-quarter view and nothing is printed or punched on the lid.
+  bottom:
+    size: {w: 442.0, h: 509.0}
+    empty: >-
+      Not drawn by any staged source. A face that sits on rails, is never serviced and carries no connectors
+      gets no figure.
+  left:
+    size: {w: 509.0, h: 44.0}
+    empty: >-
+      Not drawn by any staged source, and on this chassis that is a statement: the EXP800 breathes end
+      to end, so the side walls carry no perforation. The intake is the front face's own two slot fields
+      and the exhaust is the six rear trays.
+  right:
+    size: {w: 509.0, h: 44.0}
+    empty: Not drawn by any staged source. The other side wall, solid for the same reason.
+configurations:
+  ac-f2b:
+    kind: orderable
+    description: >-
+      Dual AC PSUs, front-to-back airflow - red handles and red release latches, which is the build both
+      staged photographs show and whose fan bars are stamped F2B.
+    default: true
+  ac-b2f:
+    kind: orderable
+    description: >-
+      Dual AC PSUs, back-to-front airflow. The vendor's product page offers "front-to-back or back-to-front
+      airflow options"; THIS DEVICE'S OWN GUIDE DOES NOT STATE THE COLOUR RULE, so the blue handles and
+      latches are this line's convention applied here rather than a quotation. See roc-ops/Portrayal#277.
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    component-attrs:
+      exp800-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+      exp800-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+references:
+- title: Edgecore EXP800-16O 16 x 800G OSFP Programmable Switch Data Sheet
+- title: Edgecore EXP800-16O 800G Ethernet Switch Quick Start Guide E052026-CS-R02
+- title: >-
+    Edgecore EXP800-16O product page (www.edge-core.com/product/exp800-16o/) - the 863 W maximum draw

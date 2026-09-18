@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: exp800-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  A rear fan module of the Edgecore EXP800-16O - a honeycomb-grilled tray with a single rotor
+  behind the mesh and a coloured pull bar across its middle stamped F2B. Six fill this
+  chassis. It is NARROWER than the rest of this line's trays, 41.45 mm against the DCS240's
+  48.5 and the DCS201's 58.8, because the bays here are separated by a 7.5 mm chassis rail
+  rather than butting against one another.
+size: {w: 41.45, h: 40.0}
+size-confidence: {w: measured, h: estimated}
+attrs: {model: 'EXP800-16O Fan Tray', power-absent: not-published, airflow: front-to-back}
+provenance:
+  size: >-
+    measured on the EXP800-16O quick start guide, page 1 Overview REAR elevation, rendered from
+    the PDF PAGE at 600 dpi and scaled by the datasheet's 442 mm body width to 4.9932 px/mm.
+    THE REAR ELEVATION IS THE ONE TO USE ON THIS DEVICE. It reads 2207 x 217 px, an aspect of
+    10.171 against the stated 442 / 43.94 = 10.059 - 1.1% out. The FRONT elevation on the same
+    page is 5.3% out and squashed vertically, so the rear is measured on its own scale and the
+    front on two.
+    THE WIDTH CAME FROM A SEAM STRUCTURE, NOT A PITCH. The bay seams fall in PAIRS about 7.4 mm
+    apart - (67.09, 77.71), (119.16, 126.77), (168.23, 175.64), (217.09, 224.50),
+    (315.03, 322.44) - which is a rail between bays rather than a single boundary. Module edges
+    are therefore the inner members: 77.71 to 119.16, 126.77 to 168.23, 175.64 to 217.09,
+    224.50 to 266.16, 273.57 to 315.03 and 322.44 to 363.69. Six widths of 41.45, 41.46, 41.45,
+    41.66, 41.46 and 41.25.
+    AND IT CLOSES AGAINST THE PITCH, which was measured separately. Colour-segmenting the six
+    red pull bars puts their CENTRES on a 48.921 mm pitch with residuals of 0.18 mm or less;
+    41.45 of module plus 7.47 of rail is 48.92. Two different signals, one answer.
+    CONFIRMED ON THE PHOTOGRAPH TOO, at half the resolution: the bars on
+    exp800-16o-3-EXP800-16O-B.webp fit a 49.30 mm pitch, 0.8% from the elevation's 48.92.
+    THE HEIGHT IS NOT MEASURED. 40.0 is what every 1RU module in this library's Edgecore rears
+    uses, and it is recorded as estimated rather than dressed as a reading.
+  why-this-is-not-the-dcs240-fan: >-
+    THE BAY WALL IS A DIFFERENT WALL. edgecore/dcs240-fan@1 is 48.5 mm wide on a 48.50 pitch,
+    its bays butting; this one is 41.45 on a 48.92 pitch with a rail between. Seating the
+    DCS240's tray here would overrun each bay by 7 mm and close the rails the elevation draws.
+    The chassis differs too - 442 mm against 438.4 - so the two walls have no reason to agree.
+  power: >-
+    NOT PUBLISHED. Neither staged document states a per-module figure for a fan tray. The
+    vendor's product page gives the CHASSIS a "863W" maximum draw and nothing per tray, so L29
+    stands at the chassis rather than a number being invented here.
+  airflow-colour-convention: >-
+    The bars on the rear photograph are stamped "F2B 31000" and are red. The product page
+    offers "front-to-back or back-to-front airflow options", and this line's other guides state
+    the convention in words - red handles F2B, blue B2F - so the handle fill is a default
+    overridden per configuration, as edgecore/dcs240-fan@1 and common/fan-module@1 both do.
+    THIS DEVICE'S OWN GUIDE DOES NOT STATE THE COLOUR RULE, only "Install a replacement fan
+    with matching airflow direction". The colours are the family's and are applied here on that
+    basis. See roc-ops/Portrayal#277.
+  elements: >-
+    measured in x against the same 4.9932 px/mm, estimated in y. The red bar reads 39.25 mm
+    wide on all six, which within a 41.45 module leaves 1.1 mm each side - the bar very nearly
+    fills the tray, which is why the seam pairs and not the bars gave the module width. The
+    rotor behind the mesh is drawn as a disc because that is what the art shows, and its
+    diameter is taken from the grille rather than stated anywhere.
+states: [absent]
+elements:
+  grille: {at: [2.10, 2.60], size: [37.25, 30.0], class: rotor}
+  handle: {at: [1.10, 18.40], size: [39.25, 3.2], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c22f2f'}
+  airflow-legend: {label: Airflow legend, type: text, default: 'F2B'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        edgecore/exp800-fan@1's own elements key - the grille's extent is drawn and the depth
+        of the cavity behind it is not stated anywhere.
+    - node: handle
+      bar: 3.0
+      lift: 1.0
+      confidence: estimated
+      source: >-
+        edgecore/exp800-fan@1 - NOT SOURCED. Carried from edgecore/dcs240-fan@1, which is
+        itself unsourced for the projection; roc-ops/Portrayal#385 is open on exactly this
+        figure across this line's trays. A tray's bar is a straight grip rather than a bail, so
+        `bar` is used rather than `uhandle`, but 4 mm of standoff is a guess and is labelled one.
+skins: [default]
+body:
+  depth: 120
+  color: '#33373c'
+  footprint: {at: [0, 0], size: [41.45, 40]}
