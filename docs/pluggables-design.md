@@ -37,6 +37,29 @@ Taken with Jason, 2026-09-18, in this order:
 | 7 | The compatibility LADDER is the MSAs' form/electrical compatibility (QSFP-DD HW 6.3 section 1 for the QSFP families) and drives slotting. Whether a host lights a given lane arrangement is firmware, stays `port-modes-<media>` prose on the device, and is never claimed by the registry |
 | 8 | Connectors are generics too. A plug and its boot are TWO parts that seat together at runtime; the `cable` point is one 3D point inside whichever is outermost, with a direction, and `boot.length` says how far the cable runs straight. Bend limits are reserved, not written |
 | 9 | Every pluggable protrudes - SFP, QSFP, QSFP-DD, OSFP, XFP, CFP, CFP2 - so every generic ships with `relief.features` from its MSA, not as a later pass |
+| 10 | SAME SHAPE, DIFFERENT THING is split by what it changes. A different KEY is a different interface and a different part (MPO-12 family vs MPO-16 family - they do not intermate). A different FERRULE under the same key is a separate part sharing the shell, with the count in `optical.positions` (MPO-12 vs MPO-24 two-row - the precedent is `common/mpo24-adapter`). A different FACT on the same ferrule is a field or an `optical` key on one part - lit count (`unused`), polish (APC/UPC), pin gender. Polish and gender are mating constraints and the mate check compares them |
+
+## What is one part and what is two, once
+
+The MSAs settle the MPO question directly. QSFP-DD HW 6.3 section 6.2.1: MPO-12 one
+row is TIA-604-5 / IEC 61754-7-1; MPO-12 two row (24 fibres) is TIA-604-5 / IEC
+61754-7-2; MPO-16 one row is TIA-604-18 / IEC 61754-7-3, a different key. And the
+QSFP+ spec's own receptacle figure (INF-8074 Fig 21a) shows an MPO-12 with four
+positions marked "unused" - an 8-fibre SR4 is a 12-position receptacle with eight
+lit, not a different connector. So:
+
+| differs by | example | modelled as |
+|---|---|---|
+| key | MPO-12 family vs MPO-16 family | separate interface, separate parts |
+| ferrule under one key | MPO-12 vs MPO-24 two-row | separate parts, same shell, `optical.positions` |
+| lit count on one ferrule | MPO-12 carrying 8 | one part, `optical.unused` on the module |
+| polish | LC/UPC vs LC/APC, MPO/UPC vs MPO/APC | one part, `optical.polish`; the mate check refuses a mismatch |
+| pin gender | pinned module receptacle vs unpinned plug | one part, `optical.gender`; the mate check requires opposites |
+| simplex vs duplex vs dual | LC vs dual LC vs dual duplex LC | different faces, different parts (decision 4) |
+
+Both module specs say the module-side MPO receptacle is pinned ("two alignment pins
+are present in each receptacle"; "a male MPO connector"), so every plug that lands on
+a transceiver is unpinned, and a panel adapter is where pinned meets unpinned.
 
 ## The vendor wrapper, once
 
