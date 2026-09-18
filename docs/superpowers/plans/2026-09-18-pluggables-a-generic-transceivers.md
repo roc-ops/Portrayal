@@ -476,10 +476,15 @@ COMPONENT_SCHEMA = json.loads((ROOT / "spec/schemas/component.schema.json").read
 
 
 def component_errors(path):
-    """Every component rule on one contract, the way the CLI runs them: L9 is a
-    branch of `lint.lint_component`, not a function of its own."""
+    """The rules a part test cares about, run the way the CLI runs them. L9 is a
+    branch of `lint.lint_component`, not a function of its own; L11 and L99 are
+    separate functions the CLI's component loop calls after it, so they are
+    called here too - `lint_component` alone would never raise them."""
+    d = yaml.safe_load(pathlib.Path(path).read_text())
     with lint.collecting() as got:
         lint.lint_component(path, jsonschema.Draft202012Validator(COMPONENT_SCHEMA))
+        lint.lint_component_mating(path, d, [str(ROOT / "library")])
+        lint.lint_component_generic(path, d)
         return list(got.errors)
 
 
@@ -588,10 +593,15 @@ COMPONENT_SCHEMA = json.loads((ROOT / "spec/schemas/component.schema.json").read
 
 
 def component_errors(path):
-    """Every component rule on one contract, the way the CLI runs them: L9 is a
-    branch of `lint.lint_component`, not a function of its own."""
+    """The rules a part test cares about, run the way the CLI runs them. L9 is a
+    branch of `lint.lint_component`, not a function of its own; L11 and L99 are
+    separate functions the CLI's component loop calls after it, so they are
+    called here too - `lint_component` alone would never raise them."""
+    d = yaml.safe_load(pathlib.Path(path).read_text())
     with lint.collecting() as got:
         lint.lint_component(path, jsonschema.Draft202012Validator(COMPONENT_SCHEMA))
+        lint.lint_component_mating(path, d, [str(ROOT / "library")])
+        lint.lint_component_generic(path, d)
         return list(got.errors)
 
 
@@ -1157,10 +1167,15 @@ COMPONENT_SCHEMA = json.loads((ROOT / "spec/schemas/component.schema.json").read
 
 
 def component_errors(path):
-    """Every component rule on one contract, the way the CLI runs them: L9 is a
-    branch of `lint.lint_component`, not a function of its own."""
+    """The rules a part test cares about, run the way the CLI runs them. L9 is a
+    branch of `lint.lint_component`, not a function of its own; L11 and L99 are
+    separate functions the CLI's component loop calls after it, so they are
+    called here too - `lint_component` alone would never raise them."""
+    d = yaml.safe_load(pathlib.Path(path).read_text())
     with lint.collecting() as got:
         lint.lint_component(path, jsonschema.Draft202012Validator(COMPONENT_SCHEMA))
+        lint.lint_component_mating(path, d, [str(ROOT / "library")])
+        lint.lint_component_generic(path, d)
         return list(got.errors)
 
 
@@ -1260,10 +1275,15 @@ COMPONENT_SCHEMA = json.loads((ROOT / "spec/schemas/component.schema.json").read
 
 
 def component_errors(path):
-    """Every component rule on one contract, the way the CLI runs them: L9 is a
-    branch of `lint.lint_component`, not a function of its own."""
+    """The rules a part test cares about, run the way the CLI runs them. L9 is a
+    branch of `lint.lint_component`, not a function of its own; L11 and L99 are
+    separate functions the CLI's component loop calls after it, so they are
+    called here too - `lint_component` alone would never raise them."""
+    d = yaml.safe_load(pathlib.Path(path).read_text())
     with lint.collecting() as got:
         lint.lint_component(path, jsonschema.Draft202012Validator(COMPONENT_SCHEMA))
+        lint.lint_component_mating(path, d, [str(ROOT / "library")])
+        lint.lint_component_generic(path, d)
         return list(got.errors)
 
 
