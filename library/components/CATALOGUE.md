@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-605 component majors in 11 namespaces.
+608 component majors in 11 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -38,16 +38,16 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 25 | 15 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
-| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 32 | 24 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
+| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 33 | 24 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 25 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 38 | 35 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
-| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 48 | 21 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
+| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 49 | 21 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 14 | 30 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 61 | 69 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 62 | 69 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 9 | 6 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
-| `std/smb@1` | component | port | 4.83 × 4.83 | smb | 23 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 58 | 27 | USB Type-A receptacle opening - sharp corners |
+| `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 59 | 27 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 3 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -82,7 +82,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-v-adapter@1` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 4 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 15 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 17 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 69 | 144 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 70 | 147 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 6 | 0 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 3 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
@@ -96,7 +96,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 1 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 1 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 2 | 0 | Round ON/OFF push button |
-| `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 1 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
+| `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@1` | component | psu | 84 × 40 |  | 1 | 0 | 550W hot-swap PSU module with an integrated axial fan and its own C14 inlet, as fitted to the Smartoptics DCP… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 0 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
@@ -115,7 +115,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 30 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
-| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 46 | 21 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
+| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 47 | 21 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@1` | component | port | 9.4 × 12 | sc-duplex-adapter | 0 | 3 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 56 | 2 | Generic countersunk screw head (decorative fastener) |
@@ -184,7 +184,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `celestica/psu-1600@1` | module | psu | 73.5 × 40 |  | 1 | 0 | Gospower G1482-1600WRA 1600W AC PSU (Celestica ES1010 FRU) - 54.5V output for PoE++, CRPS form factor, C14 in… |
 
-## cisco/ (135)
+## cisco/ (138)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -197,7 +197,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a99-32x100ge-x-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Packet Transport Line Card, 5th generation |
 | `cisco/a99-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Service Edge Line Card, 5th generation |
 | `cisco/a99-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
-| `cisco/a99-rp-f@1` | module | supervisor | 221.84 × 39.52 |  | 2 | 0 | Cisco ASR 9900 Fixed Chassis Route Processor |
+| `cisco/a99-rp-f@1` | module | supervisor | 221.84 × 39.52 |  | 3 | 0 | Cisco ASR 9900 Fixed Chassis Route Processor |
 | `cisco/a99-rp3-se@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Service Edge optimised, for the ASR 9912 and ASR 9922 |
 | `cisco/a99-rp3-tr@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
 | `cisco/a99-rsp-se@1` | module | supervisor | 44.2 × 403.4 × 625.6 |  | 2 | 0 | Cisco ASR 9910 and ASR 9906 Route Switch Processor, Service Edge optimised - the card Cisco's guides call the… |
@@ -207,6 +207,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a99-sfc3-t@1` | module | fabric | 43.7 × 492.1 |  | 0 | 0 | Cisco ASR 9900 Series Third Generation Switch Fabric Card for the ASR 9906 |
 | `cisco/a9903-20hg-pec@1` | module | line-card | 436.58 × 38.73 × 383.28 |  | 1 | 0 | Cisco ASR 9903 Series 2T Port Expansion Card |
 | `cisco/a9903-8hg-pec@1` | module | line-card | 436.58 × 38.73 × 383.28 |  | 1 | 0 | Cisco ASR 9903 Series 800G (0.8T) Port Expansion Card |
+| `cisco/a9k-1600w-ac@1` | module | psu | 71.21 × 39.21 |  | 1 | 0 | Cisco ASR 9901 1600 W AC power module |
+| `cisco/a9k-1600w-dc@1` | module | psu | 71.21 × 39.21 |  | 1 | 0 | Cisco ASR 9901 1600 W DC power module |
 | `cisco/a9k-16t-8-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 16-Port 10 Gigabit Ethernet Oversubscribed Line Card |
 | `cisco/a9k-16x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
 | `cisco/a9k-16x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
@@ -246,7 +248,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-cable-manager@1` | module | mechanical | 444.5 × 149.63 |  | 0 | 0 | Horizontal cable management bracket for an ASR 9000 rack |
 | `cisco/a9k-dc-pem-v3@1` | module | power | 468.12 × 48.03 |  | 0 | 0 | Cisco ASR 9000 version 3 DC power entry module - a power TRAY, not a supply |
 | `cisco/a9k-fan-tray-door@1` | module | blank | 444.5 × 70.97 × 20 |  | 1 | 0 | Hinged fan tray door for the Cisco ASR 9006 Router |
-| `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 8 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
+| `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 9 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
 | `cisco/a9k-mod160-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized |
 | `cisco/a9k-mod160-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Packet Transport Optimized |
 | `cisco/a9k-mod200-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Service Edge Optimized |
@@ -287,15 +289,16 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9001-fan@1` | module | fan | 54.76 × 88.19 |  | 1 | 0 | Cisco ASR 9001 fan module |
 | `cisco/asr-9006-fan@1` | module | fan | 175.65 × 70.97 |  | 1 | 0 | Cisco ASR 9006 Router fan tray |
 | `cisco/asr-9010-fan@1` | module | fan | 444.25 × 33.32 |  | 1 | 0 | Cisco ASR 9010 Router fan tray |
-| `cisco/asr-9902-fan@1` | module | fan | 88.58 × 82.18 |  | 1 | 0 | Cisco ASR 9902 Router fan tray |
+| `cisco/asr-9901-fan@1` | module | fan | 88.62 × 81.7 |  | 1 | 0 | Cisco ASR 9901 Router fan tray |
+| `cisco/asr-9902-fan@1` | module | fan | 88.58 × 82.18 |  | 2 | 1 | Cisco ASR 9902 Router fan tray |
 | `cisco/asr-9903-fan@1` | module | fan | 93 × 82.72 |  | 2 | 1 | Cisco ASR 9903 Router fan tray |
 | `cisco/asr-9910-fan@1` | module | fan | 447.09 × 41.07 |  | 1 | 0 | Cisco ASR 9910 Router fan tray |
 | `cisco/asr-9912-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9912 Router Switch Fabric Card, first generation |
-| `cisco/asr-9922-fan-v3@1` | module | fan | 475.95 × 38.1 × 584.2 |  | 1 | 2 | Cisco ASR 9922 Router fan tray, version 3 |
+| `cisco/asr-9922-fan-v3@1` | module | fan | 475.95 × 38.1 × 584.2 |  | 1 | 3 | Cisco ASR 9922 Router fan tray, version 3 |
 | `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
-| `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 0 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
+| `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 2 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
 | `cisco/pwr-1p6kw-dc@1` | module | psu | 74.69 × 40.2 |  | 2 | 0 | Cisco ASR 9900 fixed-chassis 1.6 kW DC power module |
 | `cisco/pwr-2kw-dc-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module (ASR9K-DC-PEM-V2) |
 | `cisco/pwr-3kw-ac-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 AC power supply, 3000 W, for a version 2 power entry module (ASR9K-AC-PEM-V2) |
@@ -390,16 +393,16 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `edgecore/agr-fan@1` | module | fan | 69.4 × 69.4 × 132 |  | 2 | 24 | Hot-swappable fan module for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
+| `edgecore/agr-fan@1` | module | fan | 69.4 × 69.4 × 132 |  | 2 | 25 | Hot-swappable fan module for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr-filter-bottom@1` | module | filter | 353.5 × 17.2 × 12 |  | 1 | 0 | Removable bottom air filter for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr-filter-top@1` | module | filter | 353.5 × 17.2 × 12 |  | 2 | 3 | Removable top air filter for the Edgecore AGR400 (AS7946-30XB) |
 | `edgecore/agr-ground-plate@1` | component | ground | 11 × 34 |  | 2 | 3 | Chassis grounding landing on the AGR400/AGR420 rear, between the PSU bay and the fans |
 | `edgecore/agr-label-caution@1` | component | sticker | 26 × 62 |  | 2 | 1 | Caution label near the rear left of the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-serial@1` | component | sticker | 74 × 100 |  | 2 | 0 | Serial number, SKU and MAC label on the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-spec@1` | component | sticker | 74 × 88 |  | 2 | 24 | Regulatory and specification label on the top cover on the Edgecore AGR400 / AGR420 |
-| `edgecore/agr-panel-screw@1` | component | screw | 8.4 × 8.4 × 3 |  | 1 | 92 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
+| `edgecore/agr-panel-screw@1` | component | screw | 8.4 × 8.4 × 3 |  | 1 | 93 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
 | `edgecore/agr-psu-ac@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 0 | AC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
-| `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 90 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
+| `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 92 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr420-filter-bottom@1` | module | filter | 399.5 × 9 × 12 |  | 1 | 0 | Removable BOTTOM air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr420-filter-step@1` | module | filter | 25.5 × 16.5 × 12 |  | 1 | 0 | The deep section of an Edgecore AGR420 air filter, beside the QSFP-DD column at the left of the front panel, … |
 | `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |

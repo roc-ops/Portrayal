@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: asr-9901-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9901 Router fan tray. One axial fan behind a hex-punched plate, a
+  captive screw on the right flange, a pull handle across the bottom, and a round
+  STATUS lamp with its legend beside it. The ASR 9901 carries three of these in a
+  row across the rear, labelled FAN 2, FAN 1 and FAN 0 left to right, and the
+  chassis pulls air front to back through them.
+size: {w: 88.62, h: 81.7}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from one source - the "ASR-9901 Rear" master, in a chassis face
+  calibrated on the ASR 9901 data sheet's 439.93 x 87.12 mm body. The three
+  plates come out identical to 0.01 mm at x 4.75, 95.74 and 186.73, so the
+  reading is three measurements of one part rather than one.
+attrs:
+  model: 'ASR-9901-FAN'
+  role: 'fan-tray'
+  eol: 'none-announced'
+provenance:
+  size: >-
+    drawing - see size-notes. NO DOCUMENT IN THE INTAKE DIMENSIONS THIS TRAY: the
+    ASR 9901 data sheet (c78-740540) lists it in the ordering table as "ASR 9901
+    Fan Tray" and gives no envelope, and the fixed-port Hardware Installation
+    Guide's fan sections give removal and replacement steps only. DEPTH IS
+    THEREFORE ABSENT rather than estimated.
+    IT IS NOT THE ASR 9902'S TRAY, WHICH IS ALMOST THE SAME SIZE. This measures
+    88.62 x 81.70 against cisco/asr-9902-fan@1's 88.58 x 82.18 - four hundredths
+    of a millimetre apart across and half a millimetre down - and they carry
+    different part numbers, ASR-9901-FAN and ASR-9902-FAN. TWO PARTS THAT CLOSE
+    IN SIZE MAY WELL BE ONE PART SOLD TWICE, and this library has no way to tell
+    from a drawing: what would settle it is a photograph of either tray's label,
+    or the two in one hand. Until then they are two contracts, because that is
+    what Cisco's ordering tables say.
+  fans: >-
+    drawing AND install guide. The master punches one hex field with a single
+    circular hub showing through it, which is one fan; the install guide says
+    "Cisco ASR 9901 Router has three fan trays" and the data sheet lists "Fan
+    redundancy" beside it, so three fans across three trays is one each.
+  lamp: >-
+    drawing for the position, install guide for the states. The master draws one
+    round lens at the bottom right with STATUS printed beside it. THE STATE
+    VOCABULARY IS NOT THIS PART'S OWN: Table 21 of the fixed-port guide gives the
+    fan tray one row - "Fan Tray | Fan tray status LED | Green (ON): Fan Tray
+    OK." - and the replacement procedure adds "Verify that the (green) OK status
+    indicator on the front of the fan tray goes on". So green and off are sourced
+    and the red below is BORROWED from cisco/asr-9922-fan-v3@1, whose own
+    provenance transcribes the Overview and Reference Guide's four-state
+    fan-tray table.
+  power: >-
+    NOT STATED, and L27 is left standing as the record. The one per-FRU
+    `show environment` in the intake was taken on an ASR 9902 and its fan rows
+    read ASR-9902-FAN; there is no ASR 9901 capture and no per-tray figure in
+    either document. Carrying the 9902's 72 W across would be an estimate wearing
+    a citation - the two trays may be one part, but "may be" is not a power
+    figure.
+  lifecycle: >-
+    searched - no end-of-life notice for ASR-9901-FAN is in the intake.
+elements:
+  status:
+    at: [72.10, 71.30]
+    size: [3.0, 3.0]
+    class: led
+    description: >-
+      the fan tray status lamp, printed STATUS on the plate beside it. One per
+      tray.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: handle
+      uhandle: 8.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-fan@1 handle - the library's one pull-handle figure. Its
+        provenance describes the handle's appearance from a photograph, not its
+        proudness
+    - node: screw-top
+      out: 1.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1 - whose own provenance reads "estimated - it
+        stands proud but was not measured"
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own
+        provenance is 'size: estimated' and the dome carries none
+skins: [default]
