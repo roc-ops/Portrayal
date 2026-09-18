@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs240-psu-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -77,13 +77,20 @@ relief:
   # recessed beneath it, which is how the CSR310's AC supply came out blank. See #364.
   features:
     - node: handle
-      bar: 4.0
-      lift: 2.0
+      uhandle: 27.0
       color: '#2b2f33'
       confidence: estimated
       source: >-
-        edgecore/dcs240-psu-dc@1's own handle key - the elevation fixes the bail's position on
-        the face, not how far it stands off it. A bail has to clear a finger.
+        NOT SOURCED FOR THIS PART, and 27 is borrowed rather than measured. No staged document
+        for this chassis says how far its bail stands off the face. The nearest published
+        figure for a CRPS-class supply is UfiSpace's S9510-28DC HIG - "the handle for the power
+        supplies will extend outwards by 1.06 inches" - which ufispace/psu-401-ac carries at
+        datasheet confidence and ufispace/psu-102-ac borrows at estimated, exactly as here.
+        WHAT IT REPLACES WAS WORSE. Until 1.1.0 this node read `bar: 4.0, lift: 2.0` - a flat
+        plate standing 2 mm off the panel - which is not what a pull-out bail does and is the
+        odd one out in this library: common/psu-ac-650@3 uses uhandle 9.5, celestica/psu-1600
+        14, common/psu-550w@2 22.85 and the two ufispace/psu-102 parts 27. The vocabulary for
+        a handle you hook a finger under is `uhandle`, and this part was not using it.
     - node: latch
       out: 2.4
       confidence: estimated

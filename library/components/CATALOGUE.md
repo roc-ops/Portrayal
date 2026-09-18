@@ -85,7 +85,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-dot@1` | component | led | 2 × 2 |  | 71 | 147 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 6 | 0 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 4 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 3 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 8 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
@@ -98,11 +98,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/power-button@1` | component | button | 12 × 12 |  | 2 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@1` | component | psu | 84 × 40 |  | 1 | 0 | 550W hot-swap PSU module with an integrated axial fan and its own C14 inlet, as fitted to the Smartoptics DCP… |
-| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 0 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
+| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 2 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 6 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
-| `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 4 | 0 | Captive pull-out information tab (default credentials / serial card) |
+| `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 5 | 0 | Captive pull-out information tab (default credentials / serial card) |
 | `common/qsfp-cage@2` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
 | `common/qsfp-drawing@1` | component | reference | 118 × 19 |  | 0 | 0 | QSFP orthographic views transcribed from a vendor mechanical drawing - top, side and bottom at true scale |
 | `common/qsfp-lane-leds@1` | component | led | 19.5 × 3.4 |  | 2 | 1 | QSFP port lane LED strip - four triangles, one per lane (no separate link/activity LEDs on this platform) |
