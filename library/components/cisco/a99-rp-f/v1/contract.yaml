@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-rp-f
-version: 1.1.2
+version: 2.0.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -79,17 +79,42 @@ provenance:
     modelled LANDSCAPE, as the master draws it and as the card installs - the ASR 9902
     is 2RU and the ASR 9903 3RU, and the RPs lie flat.
   lamps: >-
-    READ THIS BEFORE TRUSTING A LAMP POSITION. The nine legends - ACTIVE, FAIL, BOOT,
-    SYNC, CRIT on one line and PWR, SSD, GPS, MAJ/MIN below - are extracted text and
-    their positions are exact. The LAMPS THEMSELVES ARE NOT: they are drawn as small
-    strokes that the extractor cannot separate from the hex vent field around them, so
-    each lamp is placed 3.4 mm left and 1.5 mm above its own legend, which is where the
-    rendered artwork puts them by eye. The names and the count are sourced; the
-    coordinates are a consistent offset, and anyone needing better should re-measure
-    from the master. The state vocabularies are Table 5 of the Overview and Reference
-    Guide where a name matches (FAIL, CRIT, SYNC, SSD and the MAJ/MIN pair); ACTIVE,
-    BOOT, PWR and GPS have no row on that table for this card, so PWR, GPS and ACTIVE
-    take the green/off form their names imply and BOOT carries off/on.
+    MEASURED, AND THEY USED TO BE ON THE WRONG SIDE. The nine legends - ACTIVE, FAIL,
+    BOOT, SYNC, CRIT on one line and PWR, SSD, GPS, MAJ/MIN below - are extracted text
+    and their positions are exact. The LAMPS were not: they were placed 3.4 mm LEFT of
+    and 1.5 mm above their legends, by eye, and that put every one of them a whole
+    legend's width away from where the hardware has it - 12.08 mm out on ACTIVE.
+    THE MASTER CONTAINED ITS OWN CORRECTION THE WHOLE TIME. Eight of the nine lenses are
+    strokes the extractor cannot separate from the hex field around them, which is why
+    the offset was taken by eye. The ninth, ACTIVE's, is drawn as an outlined white
+    capsule and resolves cleanly, and it sits to the RIGHT of its legend.
+    HOW IT WAS CALIBRATED. The nine legend positions above are known exactly in this
+    contract's own frame, so they are the ruler: fitting them against the rendered master
+    gives 13.4845 px/mm in x with every legend landing inside 0.05 mm, and the two
+    baselines give 13.2143 px/mm in y. In that frame ACTIVE's capsule measures 3.34 x
+    1.82 mm, starts 0.30 mm after the legend's right edge, and its centre sits at 32.46
+    against a cap-height centre of 32.45 - centred on the text's own band to a hundredth
+    of a millimetre, which is not something a wrong calibration produces by accident.
+    SO THE RULE IS: centre = (the legend's right edge + 1.97, the centre of its cap
+    height), and all nine are placed on it.
+    THE SIZE IS ONE LENS MEASURED AND EIGHT INFERRED. Only ACTIVE's is resolvable, so its
+    3.34 x 1.82 is carried by all nine on the evidence of a photograph - an ASR 9902 with
+    two of these cards seated shows all nine as identical capsules, wider than tall, each
+    hard against the right of its legend. That is a photograph read for SHAPE AND
+    ARRANGEMENT, never for millimetres: it is a phone picture with keystone in it.
+    THE Y SCALE IS THE WEAK ONE and is flagged rather than left to be discovered. It rests
+    on two baselines 3.5 mm apart, where x rests on nine legends spread over 58 mm. It is
+    good enough to put a lens on a text line and no more is claimed from it.
+    AND ONE LEGEND HAD TO BE UNFLATTENED. The skin drew MAJ/MIN as a single line; the
+    master draws it as two, "MAJ/" on a baseline at 35.86 and "MIN" at 38.21, and the
+    photograph shows the same stack. Left as one line the corrected lamp landed on top of
+    its own legend, which is how the flattening was noticed at all. The lamp sits level
+    with PWR, SSD and GPS rather than centred on the stack - the photograph shows all four
+    of that row in line - and to the right of "MAJ/", the wider of the two.
+    The state vocabularies are Table 5 of the Overview and Reference Guide where a name
+    matches (FAIL, CRIT, SYNC, SSD and the MAJ/MIN pair); ACTIVE, BOOT, PWR and GPS have
+    no row on that table for this card, so PWR, GPS and ACTIVE take the green/off form
+    their names imply and BOOT carries off/on.
   power: >-
     install guide - and this figure is NOT from a specification table, so read what it
     is. The fixed-port Hardware Installation Guide's troubleshooting chapter prints a
@@ -140,8 +165,8 @@ provenance:
     take.
 elements:
   active:
-    at: [46.27, 30.52]
-    size: [2.2, 2.2]
+    at: [57.79, 31.54]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed ACTIVE. Its POSITION is the legend's, not the lamp's - see
@@ -150,8 +175,8 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   fail:
-    at: [60.76, 30.52]
-    size: [2.2, 2.2]
+    at: [69.43, 31.54]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed FAIL. Its POSITION is the legend's, not the lamp's - see
@@ -160,8 +185,8 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   boot:
-    at: [71.16, 30.52]
-    size: [2.2, 2.2]
+    at: [81.15, 31.54]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed BOOT. Its POSITION is the legend's, not the lamp's - see
@@ -170,8 +195,8 @@ elements:
     - 'off'
     - 'on'
   sync:
-    at: [82.95, 30.52]
-    size: [2.2, 2.2]
+    at: [92.72, 31.54]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed SYNC. Its POSITION is the legend's, not the lamp's - see
@@ -181,8 +206,8 @@ elements:
     - {name: amber, color: '#f5a623'}
     - 'off'
   crit:
-    at: [95.44, 30.52]
-    size: [2.2, 2.2]
+    at: [104.44, 31.54]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed CRIT. Its POSITION is the legend's, not the lamp's - see
@@ -191,8 +216,8 @@ elements:
     - {name: red, color: '#d0021b'}
     - 'off'
   pwr:
-    at: [66.36, 34.02]
-    size: [2.2, 2.2]
+    at: [75.37, 35.04]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed PWR. Its POSITION is the legend's, not the lamp's - see
@@ -201,8 +226,8 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   ssd:
-    at: [78.55, 34.02]
-    size: [2.2, 2.2]
+    at: [86.93, 35.04]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed SSD. Its POSITION is the legend's, not the lamp's - see
@@ -211,8 +236,8 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   gps:
-    at: [90.05, 34.02]
-    size: [2.2, 2.2]
+    at: [98.58, 35.04]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed GPS. Its POSITION is the legend's, not the lamp's - see
@@ -221,8 +246,8 @@ elements:
     - {name: green, color: '#39b54a'}
     - 'off'
   maj-min:
-    at: [100.74, 34.02]
-    size: [2.2, 2.2]
+    at: [109.85, 35.04]
+    size: [3.34, 1.82]
     class: led
     description: >-
       the lamp printed MAJ/MIN. Its POSITION is the legend's, not the lamp's - see
