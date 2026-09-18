@@ -209,7 +209,13 @@ def test_the_comparison_layer_can_now_reach_them():
     49.263 mm pitch against the EXP800's 48.921, and the seams either side of its fan block put
     the two supplies within 1.2 mm of where that device carries them. One rear, two chassis,
     one fan part - counted twice because two datasheets state it twice.
+
+    FIFTY-TWO IS THE EXP400-32X, the third and last of that shell, and it adds nothing new to
+    this census except a third statement of the same figure - "5+1 redundant, hot-swappable fan
+    modules" over six bays. It is here for the same reason the DCS202 is: the comparison layer
+    counts DEVICES that state a redundancy, not distinct rears, and three devices sharing one
+    fan part is a fact about the line rather than a duplicate.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 51, n
+    assert n == 52, n

@@ -1,0 +1,465 @@
+format: 1
+kind: device
+name: exp400-32x
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: EXP400-32X
+portfolio: {line: Cloud Data Center, family: Programmable Switch, series: EXP400}
+description: >-
+  32 x 400G QSFP112 programmable 1RU switch on Xsight Labs X2 with an Intel Xeon D-1713NTE,
+  sold as the EXP400-32X. All ports are on the FRONT with the console, the 1PPS jack, the
+  management jack and the USB; two AC supplies and six fan trays are on the rear. It shares
+  its 442 x 509 x 44 shell and its whole rear with edgecore/exp800-16o and seats that device's
+  fan and supply, and it shares its ENTIRE FRONT with edgecore/exp100-32x - the same thirty-two
+  QSFP cages in the same eight blocks, the same console cluster, the same management stack. The
+  two differ in what the cages take, not in where anything is.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      ONE DOCUMENT AND FIVE PHOTOGRAPHS, AND THAT IS ALL THERE IS. exp400-32x-datasheet is the
+      only staged document; there is no quick start guide, no installation guide and no LED
+      table. THIS WAS CHECKED RATHER THAN ASSUMED: the vendor's own product page at
+      www.edge-core.com/product/exp400-32x/ lists exactly one download, "EXP400-32X Datasheet
+      R01", where the sibling EXP800-16O's page lists a datasheet, a quick start guide and a
+      safety sheet.
+      THE STAGED PHOTOGRAPHS ARE THE VENDOR'S OWN, BYTE FOR BYTE. All four images the product
+      page serves - EXP400-32X-FF, -B, -F and -A under wp-content/uploads/2026/05/ - were
+      fetched and their SHA-256 digests compared against the staged copies. All four match
+      exactly, at the same 960 x 700. There is no higher-resolution photograph to be had, which
+      is what makes the system-lamp gap below a limit rather than an omission.
+      THE CHECK WAS RUN BEFORE THE BUILD THIS TIME, not after. On edgecore/exp100-32x the
+      absence of a quick start guide was discovered at the end, with the lamp cluster already
+      unresolvable; here the page was read first and said the same thing, so the limit was
+      known going in.
+      The page also states a maximum draw of 863 W, which the datasheet does not.
+  gate-1:
+    confidence: measured
+    note: >-
+      PASSES, ON A ROUND SCALE AND A CORRECTED BOUNDING BOX.
+      THE DATASHEET'S ELEVATIONS ARE DRAWN AT 10 PX/MM. Rendered from the PDF page at 600 dpi,
+      the front face reads 4422 px wide and the rear 4421; against the stated 442 mm those are
+      10.0045 and 10.0023 px/mm. Two drawings landing within 0.2% of a round 10.0 is the same
+      evidence that settled edgecore/exp800-16o's width, and it settles this one: 442 is the
+      number the art was drawn to.
+      THE PHOTOGRAPH'S INK BOX IS NOT ITS FACE, and this is the second device in a row where
+      that mattered. Its ink spans 104 rows, which at 960 px / 442 mm is 47.9 mm - taller than
+      a 1RU. Rows 296-301 are a flat band of uniform grey, 102.3 to 102.4, whose colour
+      saturation climbs from 2.9 to 5.8 while the panel below varies from 62 to 138: the
+      chassis LID, the shot being very slightly from above. The rear photograph has the same
+      band at the same rows. Excluding it the face is about 95 px = 43.7 mm against the stated
+      43.94.
+      NO TAPER: the ink spans 960 px at every height on both faces.
+      THE ELEVATIONS ARE STRETCHED VERTICALLY, as both siblings' are. Both faces read 495 px
+      tall where 43.94 mm at 10.0045 would be 439.6, so the y scale is 495 / 43.94 = 11.2654.
+      THE ROWS ARE THE EXP100'S RATHER THAN THIS DRAWING'S, and that is deliberate. Gradient
+      picks on this elevation give the upper opening 10.74 mm tall and the lower 6.21 against
+      std/qsfp-ganged@1's 9.58 - one over and one badly under, which is an instrument failing
+      rather than a measurement. The EXP100's rows were cross-checked against its photograph
+      and agree with it to 0.6 mm, so they are used; the fronts are otherwise identical to a
+      tenth of a millimetre.
+  the-optical-wall:
+    confidence: measured
+    note: >-
+      EIGHT BLOCKS OF FOUR. The bright perforated band that separates the two cage rows runs
+      the length of each block and segments cleanly on this device's elevation at 10.0045
+      px/mm; the numbers below are edgecore/exp100-32x's, whose identical wall was measured on
+      BOTH its elevation and its photograph - a factor of 4.6 apart in resolution - and agreed
+      to 0.4 mm on every block. See the-front-is-the-exp100s for this device's own reading.
+        elevation  44.68  88.96 135.84 180.12 223.90 267.68 314.16 357.94
+        photograph 45.12  89.32 136.28 180.48 223.76 267.50 314.00 358.20
+      Least squares on each gives a block pitch of 44.739 and 44.666; the block width reads
+      38.72 and 38.68. With std/qsfp-ganged@1's registry pitch of 19.0 that is GANG 2 WITH A
+      6.70 GUTTER, and the first aperture opens at 45.30.
+      AUTOCORRELATION DISAGREED AND WAS WRONG, which is worth recording. The dominant period
+      over the cage band reads 43.78 mm on the elevation and 43.74 on the photograph - both
+      about a millimetre under the edge fits. The wall's inter-block gaps are not uniform (the
+      steps read 44.2, 46.9, 44.2, 43.5, 43.7, 46.5, 44.2 on the photograph and the same
+      pattern on the elevation), and a periodic fit to an irregular comb lands below the mean
+      spacing. THE EDGES ARE MEASURED IN TWO PLACES AND THE PERIOD IS INFERRED FROM ONE; the
+      edges win.
+      ROWS are the weaker axis. The elevation puts the upper opening at 3.80 to 13.83 mm and
+      the lower at 22.33 to 32.64, a row pitch of 18.54; the photograph gives about 4.4 to 12.6
+      and 22.6 to 30.7, a pitch of 18.2. The two row tops agree within 0.6 mm and the pitches
+      within 0.35, so 4.10 and 18.40 are used. The drawn opening heights, 10.04 and 8.15
+      against std/qsfp-ganged@1's 9.58, bracket the registry figure rather than agreeing with
+      it, which is why the part's own height is drawn and not theirs.
+  the-front-is-the-exp100s-and-that-was-measured:
+    confidence: measured
+    note: >-
+      THE WHOLE FRONT CARRIES FROM edgecore/exp100-32x, AND UNLIKE THAT DEVICE'S OWN CARRY-OVER
+      THIS ONE HOLDS. roc-ops/Portrayal#322 says the three EXP models share a shell; for the
+      EXP100 that was true of the rear and false of the front, because sixteen OSFP and
+      thirty-two QSFP need different amounts of wall. Here both devices carry THIRTY-TWO QSFP
+      cages on the same 442 mm face, so there is no reason for the fronts to differ - but it
+      was measured rather than assumed.
+      THE CAGE BLOCKS LAND ON THE SAME NUMBERS. Segmenting the bright band between the two cage
+      rows on this device's own elevation at 10.0045 px/mm gives block left edges of 43.78,
+      88.96, 135.84, 180.12, 223.90, 267.68, 314.16 and 357.94 mm. The EXP100's are 44.68,
+      88.96, 135.84, 180.12, 223.90, 267.68, 314.16 and 357.94 - IDENTICAL FROM THE SECOND
+      BLOCK ONWARDS, to the hundredth of a millimetre, and 0.9 mm apart on the first where the
+      threshold clips a bezel differently.
+      THE LEFT CLUSTER IS IDENTICAL TOO, blob for blob. The bright features below x = 44 mm
+      read 9.80-14.09, 9.80-23.79, 14.19-19.39, 18.99-23.79, 29.69-36.18 and 31.19-35.18
+      against the EXP100's 9.80-14.09, 9.80-23.79, 14.19-19.39, 18.99-23.79, 29.69-36.18 and
+      31.19-35.18. Every one within 0.15 mm in y and exact in x.
+      THE 1PPS JACK IS THE SHARPEST CHECK: its gold nut segments at x 29.69-36.18, y 22.90-28.05
+      here against 29.69-36.18, 22.87-28.12 there - 0.07 mm apart on a 6 mm feature.
+      So the wall parameters are the EXP100's, which were themselves fitted to eight block
+      positions measured twice at resolutions 4.6x apart. Nothing is inherited without a second
+      reading; this device's elevation is that reading.
+  the-timing-jack-is-drawn-smaller-than-it-is-named:
+    confidence: datasheet
+    note: >-
+      THE SAME CONFLICT AS THE EXP800'S, AND THE SAME RESOLUTION. The datasheet's interface
+      table reads "2. 1PPS SMA connector". The elevation draws the jack 6.49 x 5.25 mm and the
+      photograph 5.98 x 5.07; common/sma-jack@1 is 9.5 mm across flats and edgecore/dcs510
+      measures its own SMA nuts at 8.6. A 6 mm gold feature is not an SMA nut.
+      common/smb-jack@1 is seated at 7.0 with a 4.83 aperture because it is the part that fits
+      what is drawn, and the `timing` group's description carries the vendor's word so a reader
+      is not told the vendor said SMB. A caliper on the real jack settles it.
+  the-system-lamps:
+    confidence: drawing
+    note: >-
+      FIVE LAMPS IN A 3+2 GRID, AND THIS IS THE WEAKEST THING IN THE MODEL. The datasheet's LED
+      line names them - "System LEDs: Diagnostic, Locator, PSU, and Fan Status" - and the marks
+      on the elevation fall in exactly the pattern the EXP800's enlargement resolves: three in
+      the left column, two in the right.
+      THE ONLY ELEVATION HAS CALLOUT ARROWS DRAWN THROUGH THE CLUSTER. Two of the nine leader
+      arrows land on and beside it, and at this size a 2 mm lamp and a four-character legend
+      are both about 3.4 mm wide, so which marks are windows and which are words cannot be told
+      apart from the drawing alone.
+      WHAT IS USED, AND WHY. The marks read x 27.74-31.24 and 36.23-39.48, rows y 13.79-15.14,
+      16.73-18.09 and 20.12-21.48. They are taken as the LAMPS, giving column centres 8.4 mm
+      apart - against the EXP800's measured 8.2 mm on the same cluster in the same family. That
+      agreement is the reason for the choice and not a proof of it; the legends are then placed
+      outside the columns, where there is room for them and where the EXP800 prints its own.
+      confidence is `drawing` rather than `measured` deliberately. See the gap.
+  the-management-stack:
+    confidence: measured
+    note: >-
+      ONE HOUSING, TWO CONNECTORS, as on edgecore/exp800-16o and edgecore/dcs511. The bright
+      bezel at the right of the port row reads x 410.8 to 427.5 and y 10.4 to 32.1 - a
+      1000BASE-T RJ-45 over a USB 3.0 in one moulding. The datasheet lists them separately,
+      "1 x RJ-45 1G BASE-T management" and a "USB3.0 storage port" in its callout table, and
+      the panel prints MGMT and USB above the stack.
+      There is no stacked RJ45/USB part in this library, so the housing is drawn as a decor
+      under both.
+      THE CONSOLE IS SEPARATE AND AT THE FAR LEFT, bezel x 9.75-24.24 by y 17.63-32.33 against
+      std/rj45@2's 15.8 by 13.2, with CONSOLE printed beneath it. One console, as on the
+      EXP800 and unlike the DCS240 and DCS511 which carry two.
+  the-rear-is-the-exp800s:
+    confidence: measured
+    note: >-
+      PROVEN AGAINST THIS DEVICE'S OWN ELEVATION, NOT ASSUMED. The rear drawing on datasheet
+      page 2 renders at 9.9819 px/mm and carries the same furniture: PS1 at the LEFT, six fan
+      trays numbered 6 to 1, PS2 at the right, red pull bars, red release latches at each
+      supply's left edge.
+      THE NUMBERS AGREE WHERE THEY MATTER. Colour-segmenting the six pull bars puts their
+      centres on a 49.263 mm pitch with residuals of 0.34 mm or less, against the EXP800's
+      48.921 - 0.34 apart. The full-height seams either side of the fan block put PS1's right
+      edge at 67.82 and PS2's left at 426.47, against the EXP800's 66.6 and 425.9 - within
+      1.2 mm on a 442 mm face.
+      So edgecore/exp800-fan@1 and edgecore/exp800-psu-ac@1 are seated here rather than new
+      parts being cut. The bay wall uses THIS device's own measurements - bar centre 97.24 and
+      pitch 49.263 - not the EXP800's, because they are the better reading of this rear.
+  power:
+    confidence: datasheet
+    note: >-
+      863 W MAXIMUM, FROM THE VENDOR'S PRODUCT PAGE, and the datasheet states no consumption
+      figure at all - the same situation as the EXP800 and the same number. The datasheet gives
+      only "AC Input Voltage: 90 to 240 VAC at 50-60 Hz".
+      NO PER-SUPPLY OUTPUT RATING IS PUBLISHED, so edgecore/exp800-psu-ac@1's own contract
+      carries no `power-output-w` and none is asserted here either.
+  airflow:
+    confidence: datasheet
+    note: >-
+      FRONT-TO-BACK ONLY, AND THAT IS A DIFFERENCE FROM THE SIBLING. This datasheet's feature
+      list reads "Supports front-to-back airflow direction" - one direction, singular - where
+      the EXP800's product page offers "front-to-back or back-to-front airflow options" and
+      that model carries both configurations. No B2F part number, legend or blue-handled
+      variant is named anywhere for this device, so only the F2B configuration is declared.
+attrs:
+  environmental:
+    operating-temp: '0 to 40 C'
+    storage-temp: '-40 to 70 C'
+    humidity: 'Operating: 0% to 95% non-condensing'
+    altitude: '0 - 10,000 feet'
+  physical:
+    weight-note: '10.005 kg (20.05 lb), per the datasheet'
+  platform:
+    cpu: 'Intel Xeon D-1713NTE, 4-core 2.2 GHz'
+    switch-silicon: 'Xsight Labs X2'
+    memory: '32 GB DDR4 SO-DIMM with ECC'
+    storage: '1 TB M.2 2280 NVMe SSD'
+  performance:
+    switching-capacity: '12.8 Tbps (full duplex)'
+    packet-buffer: '64 MB integrated'
+  features:
+    optics-qsfp112: >-
+      datasheet: each 400G QSFP112 port takes 1 x 400 GbE or breaks out to "2 x 200GbE, and
+      4 x 100GbE via breakout cables". The qualified list is named in full: 400G DAC, 400G AOC,
+      400G QSFP112 SR4, 200G QSFP56-SR4, and at 100G DAC, AOC, SR4, LR4, DR1, FR1 and LR1.
+      More are referred to the vendor's site.
+  lifecycle: {eol: none-announced}
+chassis: {width: 442.0, height: 44.0, depth: 509.0, ru: 1, weight-kg: 10.005, color: '#3f4348',
+  airflow: front-to-back}
+gaps:
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. The single staged document
+    draws two elevations and nothing else. Each face carries an `empty:` sentence saying where
+    I looked, per docs/deliberately-empty-faces.md.
+- what: system-lamp-positions
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    A view of the five system lamps that is not crossed by a callout arrow. This is the one
+    part of the model whose confidence is `drawing` rather than `measured`, and the reason is
+    a hard limit rather than a shortcut:
+    THE ONLY ELEVATION IS ANNOTATED OVER THE CLUSTER. Two of the datasheet's nine leader arrows
+    land on and beside the lamp grid, and at 10 px/mm a 2 mm window and a four-character legend
+    are both about 3.4 mm wide, so which marks are lamps and which are words cannot be
+    distinguished.
+    AND THERE IS NO BETTER PHOTOGRAPH TO BE HAD. The vendor's product page serves four images;
+    all four were fetched and their SHA-256 digests match the staged copies exactly, at
+    960 x 700, which is 2.1719 px/mm. That page also lists exactly ONE download for this model,
+    the datasheet - no quick start guide exists, where the sibling EXP800-16O has one with a
+    System LEDs enlargement that resolves the identical cluster at 600 dpi.
+    The marks are taken as the lamps because the resulting 8.4 mm column spacing matches the
+    EXP800's measured 8.2 mm. A quick start guide, or any photograph at 5 px/mm or better,
+    settles it in one look.
+- what: the-port-legend-word
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    The word the panel prints between each pair of port numbers. Every column carries a legend
+    of the form `N (up) WORD (down) N+1` - the numerals are clear on both sources and the
+    numbering runs 1 to 32 - but the word between them is about five characters and 1.2 mm
+    tall, which is 12 px on the elevation and 2.6 px on the photograph. It reads plausibly as
+    "Group", and edgecore/exp100-32x's identical panel carries the same unresolved word in the
+    same place - TWO DEVICES, ONE LEGEND, STILL UNREAD. Plausibly is not good enough to
+    silkscreen onto a drawing.
+    Only the numerals are drawn. The word is left off rather than guessed. Either device's
+    quick start guide would settle it; neither has one.
+- what: the-timing-jack-type
+  scope: [front]
+  reason: sources-disagree
+  wanted: >-
+    Whether the 1PPS jack is an SMA or an SMB. The datasheet names it "1PPS SMA connector"; the
+    elevation draws it 6.49 x 5.25 mm and the photograph 5.98 x 5.07, where common/sma-jack@1
+    is 9.5 across flats. common/smb-jack@1 is seated because it fits what is drawn. The same
+    conflict stands on edgecore/exp800-16o, whose datasheet uses the same words.
+- what: dc-supply-and-b2f
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    Whether a DC supply or a back-to-front build exists. The datasheet says only "Hot-swappable,
+    load-sharing, redundant AC power" and "Supports front-to-back airflow direction", and no
+    ordering table is staged. Its sibling edgecore/exp800-16o is offered in both airflows on the
+    vendor's page; nothing says this one is. Only the AC F2B configuration is declared.
+groups:
+  qsfp112:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the thirty-two QSFP112 ports, in eight blocks of four - two columns of two - numbering
+      down each column from 1 at the top left to 32 at the bottom right.
+    attrs: {media: qsfp112, speed: 400g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster - an RJ-45 serial console at the far left of the panel, and a
+      1000BASE-T RJ-45 management jack over a USB 3.0 storage port in one moulding at the
+      right.
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    description: >-
+      the 1PPS timing input - a single coaxial jack beside the system lamps. THE DATASHEET
+      CALLS IT AN SMA; the drawings put it at about 6 mm, which is SMB scale, and
+      common/smb-jack@1 is seated on that basis. It states no group media because coax is not a
+      pluggable cage and L40's optics question does not apply to it.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        datasheet: "PSUs: 2 redundant, load-sharing, hot-swappable AC PSUs". The vendor's
+        product page gives the chassis an 863 W maximum draw; no per-supply output rating is
+        published, so whether one supply carries the box alone is the vendor's claim rather
+        than something derivable here.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '5+1'
+      redundancy-note: >-
+        datasheet, twice: "5+1 redundant, hot-swappable fan modules" in the feature list and
+        "Hot-swappable 5 + 1 redundant fans" in the interface callouts, against six bays drawn
+        on the rear elevation. The digit form and the bay count agree.
+views:
+  front:
+    size: {w: 442.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-left, at: [1.20, 4.00], size: [7.00, 34.00], pattern: slots, pattern-pitch: [3.20, 3.00], vent: 20}
+      - {id: vent-right, at: [430.50, 4.00], size: [9.50, 34.00], pattern: slots, pattern-pitch: [3.20, 3.00], vent: 20}
+      - {id: mgmt-stack, at: [410.40, 10.00], size: [17.50, 22.50], fill: '#e8ebee'}
+      cutouts:
+      - {id: console, at: [9.09, 18.38], size: [15.8, 13.2], shape: rect}
+      - {id: led-diag, at: [28.45, 13.47], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [36.85, 13.47], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [28.45, 16.41], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps2, at: [36.85, 16.41], size: [2.0, 2.0], shape: circle}
+      - {id: led-loc, at: [28.45, 19.80], size: [2.0, 2.0], shape: circle}
+      - {id: pps-in, at: [30.61, 23.18], size: [4.83, 4.83], shape: circle}
+      - {id: reset, at: [31.10, 29.30], size: [4.0, 4.0], shape: circle}
+      - {id: mgmt-eth, at: [411.30, 11.00], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [413.20, 26.30], size: [12.0, 4.5], shape: rect}
+    silkscreen:
+    - {id: silk-console, at: [16.99, 34.60], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: console}
+    - {id: silk-diag, at: [27.65, 14.84], text: Diag, font-size: 1.2, anchor: end, fill: '#c7ccd1', for: led-diag}
+    - {id: silk-ps1, at: [39.65, 14.84], text: PS1, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: led-ps1}
+    - {id: silk-fan, at: [27.65, 17.78], text: FAN, font-size: 1.2, anchor: end, fill: '#c7ccd1', for: led-fan}
+    - {id: silk-ps2, at: [39.65, 17.78], text: PS2, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: led-ps2}
+    - {id: silk-loc, at: [27.65, 21.17], text: LOC, font-size: 1.2, anchor: end, fill: '#c7ccd1', for: led-loc}
+    - {id: silk-pps, at: [38.00, 25.96], text: 1PPS, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: pps-in}
+    - {id: silk-rst, at: [36.20, 31.67], text: RST, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: reset}
+    - {id: silk-mgmt, at: [415.00, 8.60], text: MGMT, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: mgmt-eth}
+    - {id: silk-usb, at: [424.50, 8.60], text: USB, font-size: 1.2, anchor: middle, fill: '#c7ccd1', for: usb-a}
+    - {id: silk-model, at: [419.40, 39.40], text: 'EXP400-32X', font-size: 2.00, anchor: middle, fill: '#e4e8eb', for: chassis}
+    components:
+      blocks:
+      - id: qsfp112
+        ref: std/qsfp-ganged@1
+        at: [45.30, 4.10]
+        count: 32
+        rows: 2
+        pitch: registry
+        row-pitch: 18.40
+        gang: 2
+        gutter: 6.70
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [4.60, 13.90], dy-top: 30.20, dy-bottom: 11.80, font-size: 1.3, anchor: middle, fill: '#e4e8eb'}
+        led:
+          ref: common/led-arrow@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [5.00, 13.50]
+          dy-top: 32.60
+          dy-bottom: 14.20
+          skin-top: up
+          skin-bottom: down
+          group: port-leds
+          states: ['off', {name: '400g', color: '#3b82f6'}, {name: '200g-breakout', color: '#06b6d4'}, {name: '100g-breakout', color: '#22c55e'}]
+      placements:
+      - {ref: std/rj45@2, id: console, at: [9.09, 18.38], group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: common/rj45-eth@1, id: mgmt-eth, at: [411.30, 11.00], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb-a, at: [413.20, 26.30], group: mgmt, rel-pos: 3,
+         attrs: {media: usb-a, role: storage}}
+      - {ref: common/smb-jack@1, id: pps-in, at: [29.52, 22.09], group: timing, rel-pos: 1,
+         attrs: {media: coax-smb, role: timing, timing: '1PPS'}}
+      - {ref: common/reset-button@1, id: reset, at: [31.10, 29.30], group: mgmt, rel-pos: 4, for: chassis}
+      - {ref: common/led-dot@1, id: led-diag, at: [28.45, 13.47], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-ps1, at: [36.85, 13.47], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-fan, at: [28.45, 16.41], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-ps2, at: [36.85, 16.41], group: leds, rel-pos: 4, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-loc, at: [28.45, 19.80], group: leds, rel-pos: 5, for: chassis,
+         states: ['off', {name: locate, color: '#f59e0b'}]}
+    regions:
+    - {id: optics, at: [44.0, 2.5], size: {w: 353.0, h: 32.0}, label: '32 x 400G QSFP112',
+       members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32]}
+    - {id: out-of-band, at: [8.0, 17.0], size: {w: 30.0, h: 18.0}, label: 'Console, 1PPS and reset',
+       members: [console, pps-in, reset]}
+    - {id: status-leds, at: [27.5, 12.5], size: {w: 12.5, h: 9.5}, label: 'System LEDs',
+       members: [led-diag, led-ps1, led-fan, led-ps2, led-loc]}
+    - {id: mgmt-stack, at: [409.5, 9.5], size: {w: 19.5, h: 23.5}, label: 'Management and USB',
+       members: [mgmt-eth, usb-a]}
+  rear:
+    size: {w: 442.0, h: 44.0}
+    silkscreen:
+    - {id: silk-fan-6, at: [122.90, 25.10], text: '6', font-size: 1.6, anchor: middle, fill: '#c7ccd1', for: fan-6}
+    - {id: silk-fan-5, at: [172.16, 25.10], text: '5', font-size: 1.6, anchor: middle, fill: '#c7ccd1', for: fan-5}
+    - {id: silk-fan-4, at: [221.43, 25.10], text: '4', font-size: 1.6, anchor: middle, fill: '#c7ccd1', for: fan-4}
+    - {id: silk-fan-3, at: [270.69, 25.10], text: '3', font-size: 1.6, anchor: middle, fill: '#c7ccd1', for: fan-3}
+    - {id: silk-fan-2, at: [319.95, 25.10], text: '2', font-size: 1.6, anchor: middle, fill: '#c7ccd1', for: fan-2}
+    - {id: silk-fan-1, at: [369.21, 25.10], text: '1', font-size: 1.6, anchor: middle, fill: '#c7ccd1', for: fan-1}
+    - {id: silk-ps1, at: [70.50, 38.60], text: PS1, font-size: 1.6, anchor: start, fill: '#c7ccd1', for: psu-1}
+    - {id: silk-ps2, at: [373.40, 38.60], text: PS2, font-size: 1.6, anchor: end, fill: '#c7ccd1', for: psu-2}
+    components:
+      bays:
+      - {id: psu-1, at: [17.22, 1.80], size: {w: 50.6, h: 40.0}, group: psus, rel-pos: 1,
+         accepts: ['edgecore/exp800-psu-ac@1'], default: 'edgecore/exp800-psu-ac@1'}
+      - {id: fan-6, at: [76.52, 1.80], size: {w: 41.45, h: 40.0}, group: fans, rel-pos: 6,
+         accepts: ['edgecore/exp800-fan@1'], default: 'edgecore/exp800-fan@1'}
+      - {id: fan-5, at: [125.78, 1.80], size: {w: 41.45, h: 40.0}, group: fans, rel-pos: 5,
+         accepts: ['edgecore/exp800-fan@1'], default: 'edgecore/exp800-fan@1'}
+      - {id: fan-4, at: [175.05, 1.80], size: {w: 41.45, h: 40.0}, group: fans, rel-pos: 4,
+         accepts: ['edgecore/exp800-fan@1'], default: 'edgecore/exp800-fan@1'}
+      - {id: fan-3, at: [224.31, 1.80], size: {w: 41.45, h: 40.0}, group: fans, rel-pos: 3,
+         accepts: ['edgecore/exp800-fan@1'], default: 'edgecore/exp800-fan@1'}
+      - {id: fan-2, at: [273.57, 1.80], size: {w: 41.45, h: 40.0}, group: fans, rel-pos: 2,
+         accepts: ['edgecore/exp800-fan@1'], default: 'edgecore/exp800-fan@1'}
+      - {id: fan-1, at: [322.84, 1.80], size: {w: 41.45, h: 40.0}, group: fans, rel-pos: 1,
+         accepts: ['edgecore/exp800-fan@1'], default: 'edgecore/exp800-fan@1'}
+      - {id: psu-2, at: [375.87, 1.80], size: {w: 50.6, h: 40.0}, group: psus, rel-pos: 2,
+         accepts: ['edgecore/exp800-psu-ac@1'], default: 'edgecore/exp800-psu-ac@1'}
+    regions:
+    - {id: power, at: [16.0, 1.0], size: {w: 53.0, h: 42.0}, label: 'Power supply 1',
+       members: [psu-1]}
+    - {id: power-2, at: [374.8, 1.0], size: {w: 53.0, h: 42.0}, label: 'Power supply 2',
+       members: [psu-2]}
+    - {id: exhaust, at: [75.5, 1.0], size: {w: 290.0, h: 42.0}, label: '5+1 fan trays',
+       members: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
+  top:
+    size: {w: 442.0, h: 509.0}
+    empty: >-
+      Not drawn by the one staged document, which carries two elevations and nothing else.
+  bottom:
+    size: {w: 442.0, h: 509.0}
+    empty: >-
+      Not drawn by any staged source. A face that sits on rails, is never serviced and carries
+      no connectors gets no figure.
+  left:
+    size: {w: 509.0, h: 44.0}
+    empty: >-
+      Not drawn by any staged source, and on this chassis that is a statement: the EXP400
+      breathes end to end, so the side walls carry no perforation. The intake is the front
+      face's own two slot fields and the exhaust is the six rear trays.
+  right:
+    size: {w: 509.0, h: 44.0}
+    empty: >-
+      Not drawn by any staged source. The other side wall, solid for the same reason.
+configurations:
+  ac-f2b:
+    kind: orderable
+    description: >-
+      Dual AC PSUs, front-to-back airflow - red handles and red release latches, which is the
+      build both staged photographs and the rear elevation show. THE ONLY CONFIGURATION
+      DECLARED: this datasheet says "Supports front-to-back airflow direction", singular, and
+      names no DC supply and no back-to-front variant. See the dc-supply-and-b2f gap.
+    default: true
+references:
+- {title: 'Edgecore EXP400-32X 32 x 400G QSFP112 Data Center Switch Data Sheet R01'}
+- {title: 'Edgecore EXP400-32X product page (www.edge-core.com/product/exp400-32x/) - the 863 W maximum draw, and the document list that shows no quick start guide exists'}
