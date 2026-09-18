@@ -1,138 +1,223 @@
 format: 1
 kind: device
-name: dcs240
-version: 1.0.1
+name: dcs511
+version: 1.0.0
 maturity: modelled
 manufacturer: Edgecore
-model: AS9726-32DB
-portfolio: {line: Cloud Data Center, family: Leaf Switch, series: DCS240}
+model: AS9737-32DB
+portfolio: {line: Cloud Data Center, family: Leaf Switch, series: DCS511}
 description: >-
-  32x 400G QSFP56-DD and 2x 10G SFP+ data-centre leaf switch, sold as the DCS240, with an ASPEED BMC on
-  the -DB variant. Every port, the management jack, both consoles, the USB and a 1PPS timing input are
-  on the FRONT; two supplies and SIX fan trays are on the rear. The QSFP ports number 1-32 down each column;
-  THE TWO SFP+ HAVE THEIR OWN NUMBER SPACE and are printed 1 and 2.
+  32x 400G QSFP56-DD data-centre leaf switch on an Intel Xeon D-1713NTE with an AST2600 OpenBMC, sold
+  as the DCS511. Every port, both consoles, the USB and a 1PPS timing input are on the FRONT; two supplies,
+  SIX fan trays and the grounding screws are on the rear. THE TWO RIGHT-HAND CAGES ARE NOT A PAIR: the
+  datasheet's callout 5 reads "Top: 10G SFP+ port (MAC), Bottom: 1G SFP port (CPU)", so the upper one
+  is a traffic port numbered 1 in its own space and the lower one is an out-of-band management port on
+  the CPU.
 profile: networking
 provenance:
   sources:
     confidence: datasheet
     note: >-
-      Two documents, both staged and both docling-converted, MEASURED OFF THE PDF PAGE rather than the
-      converted figures - dcs240-datasheet and dcs240-qsg (the AS9726-32DBS quick start guide, whose page
-      1 is English and pages 4 and 7 the same art in Chinese). THE PHOTOGRAPHS WERE OPENED FIRST THIS
-      TIME. working/intake/edgecore/photos/ holds dcs240-2-DCS240_02.png and dcs240-3-DCS240_03.png, square-on
-      shots of both faces, and dcs240-1 at an angle. They are 489 x 357, about 1.11 px/mm, and orthographic:
-      the front one reads an aspect of 9.980 against the stated 10.078, 1.0% out. HERE THE GUIDE IS THE
-      BETTER SOURCE AND THE PHOTOGRAPH IS THE CHECK, which is the reverse of the DCS202. This guide's
-      Overview elevation is effectively orthographic - see gate-1 - and gives 5.0844 px/mm against the
-      photograph's 1.11, so the measurements are taken from the guide and confirmed against the photograph.
+      Two documents and four photographs, all staged. dcs511-qsg (the AS9737-32DB quick start guide) and
+      dcs511-datasheet, both docling-converted, MEASURED OFF THE PDF PAGE rather than the converted figures.
+      working/intake/edgecore/photos/ holds dcs511-2-DCS511-F.png and dcs511-3-DCS511-B.png, square-on
+      shots of both faces, plus an angled -A and a three-quarter -FF. HERE THE PHOTOGRAPH IS THE BETTER
+      SOURCE AND THE GUIDE IS THE CHECK, which is the reverse of the DCS240. The guide's Overview elevation
+      renders at 5.09 px/mm but its cage wall sits in a band whose contrast will not segment - a mid-threshold
+      found one bright run where sixteen were wanted, and an ASCII dump of the profile showed why: the
+      whole band lies between 60 and 100 grey. The photograph is 2.19 px/mm, a third of the resolution,
+      but its cage flanges are unambiguous, and that turned out to matter more.
   gate-1:
     confidence: measured
     note: >-
-      PASSES, AND UNUSUALLY WELL FOR THIS CORPUS. The front face on page 1 reads x156-2384 and y2135-2353:
-      2229 px by 219, an aspect of 10.178 against the stated 438.4 / 43.5 = 10.078, which is 1.0% out.
-      AND THE WIDTH DOES NOT TAPER. Sampled at four heights across the face it reads 2229 px every time,
-      where the DCS201's tapered 20 px and the DCS202's thumbnail was worse. The two scales come out 5.0844
-      px/mm in x and 5.0345 in y, agreeing to 1%, so BOTH AXES CARRY GEOMETRY here and neither has to
-      be constructed. CONFIRMED FRONT AGAINST REAR: the rear face on the same page also measures 2229
-      px.
+      PASSES ON BOTH SOURCES, AND THEY AGREE ON THE RESIDUAL. The guide's page-1 Overview elevation reads
+      x180-2411 by y2139-2366 - 2232 px by 227, an aspect of 9.833 against the stated 438.4 / 43.5 = 10.078,
+      2.4% out. The photograph's chassis fills its frame at 960 by 98, an aspect of 9.796, 2.8% out. NO
+      TAPER on either: the guide's width samples 2226-2239 px across fourteen bands, and the photograph's
+      ink spans 960 at every height. Both are orthographic and both read ~2.5% short in x against y, which
+      is one figure twice rather than two independent errors.
+  the-photograph-has-square-pixels:
+    confidence: measured
+    note: >-
+      THE SCALE QUESTION THIS DEVICE TURNED ON, and I got it wrong once before the geometry caught me.
+      The photograph's 2.8% aspect deficit can be read two ways: the width is short, or the height is
+      long. I first took the height as true - 98 px for 43.5 mm, 2.2529 px/mm - and measured a row pitch
+      of 13.80, which I was ready to record as this device's own figure against the DCS240's 14.21. THE
+      BLOCK PERIOD DISPROVED IT. The QSFP wall's eight blocks sit on a period that is 2 x 19.0 + 6.0 =
+      44.0 mm by construction, and read against a width scale of 960/438.4 = 2.1898 px/mm it measures
+      44.027 over a 308 mm baseline - 0.06% out. The x scale is therefore right to a fifteenth of a pixel,
+      the width is NOT short, and the 98-px ink box is 2.7 px of shadow around a 95.3-px chassis. Rows
+      301 and 398 are the brightest in the whole face, which is what an edge highlight looks like. READ
+      WITH SQUARE PIXELS AT 2.1898 THE ROW PITCH IS 14.21, not 13.80. The lesson is that an aspect residual
+      says a face is out of square without saying which axis did it, and the thing that answers is a length
+      inside the picture whose true value you already know.
   the-optical-wall:
     confidence: measured
     note: >-
-      SIXTEEN COLUMNS FROM THREE CONSTANTS. The cage frames resolve as exactly 16 bright runs at two independent
-      bands (page y2240-2250 and y2270-2280). Column 1 centres at 48.88 mm; the within-block step averages
-      18.87 against std/qsfp-ganged@1's registry pitch of 19.0, a lookup rather than a measurement; and
-      the columns are in EIGHT BLOCKS OF TWO on a 44.0 block pitch, which is gang 2 with a 6.0 gutter.
-      The check: 48.88 + 15 x 19.0 + 7 x 6.0 = 375.88 against 375.56 measured, 0.32 mm over the whole
-      wall. ROWS ARE MEASURED TOO, because this figure's vertical axis works. The upper cage opening runs
-      12.51 to 22.45 mm and the lower 26.82 to 36.55 - heights of 9.94 and 9.73 against the registry's
-      9.58 - so the parts are centred on those openings at 12.69 and 26.90, a 14.21 row pitch.
-  the-two-sfp-plus:
+      MEASURED HERE AND IT IS THE DCS240'S WALL. The row-2 top flange resolves as fourteen clean runs
+      of 18.7 mm plus a partial at each end; the within-pair step averages 19.25 against std/qsfp-ganged@1's
+      registry pitch of 19.0, a lookup rather than a measurement, and the block step averages 44.07 over
+      six intervals. Fitting all fourteen left edges with pitch 19.0 and gutter 6.0 held fixed puts column
+      1 at 39.540 mm, rms residual 0.245, max 0.430. The DCS240's independently measured 39.63 fits the
+      same fourteen edges with the SAME rms to three decimals. The two anchors are 0.09 mm apart - a fifth
+      of a pixel on this photograph - so the DCS240's figure is used and this device's own face is what
+      proves it. A SECOND, INDEPENDENT SIGNAL AGREES. Taking the per-column minimum of both cage rows
+      and hunting valleys finds seven deep gutters at 78.09 through 342.50, steps of 43.84, 44.30, 44.29,
+      43.84, 44.30 and 43.84. Mean 44.07, which is gang 2 on a 6.0 gutter, from a threshold-free instrument
+      on a different feature. ROWS: the bright-flange centroid reads the two apertures 8.69 and 8.51 tall
+      and the gradient peak reads them 9.99 and 9.91, straddling the registry's 9.58 because one instrument
+      sits inside the rim and the other outside. THEIR MEAN RECOVERS 9.61 AND 9.48 - the known aperture
+      height to 0.03 mm, which is the check that licenses the pitch that falls out of them: 14.23 top-to-top
+      and 14.10 bottom-to-bottom against the DCS240's 14.21.
+  the-two-right-hand-cages:
     confidence: measured
     note: >-
-      NOT IN THE ISSUE'S SUMMARY, AND THEY HAVE THEIR OWN NUMBERS. Callout 4 reads "2 x 10G SFP+ ports"
-      and the panel prints `1 (up) 10G SFP+ (down) 2` beside them, so they are numbered 1 and 2 rather
-      than 33 and 34 - a second port number space on one face, as the CSR310 has. Their cages measure
-      389.23 to 402.80 mm, a 13.57 width against std/sfp-ganged@1's 14.25, and they sit on the same two
-      rows as the optics.
+      SAME METAL AS THE DCS240, DIFFERENT JOB. Both cage frames measure x 389.1 to 403.7 and y 13.1-22.7
+      and 27.3-36.9, against the DCS240's modelled 389.60 + 14.25 and 12.28 / 26.49 + 10.4. The parts
+      and their seats carry over unchanged. WHAT DOES NOT CARRY OVER IS WHAT THEY ARE. The DCS240 has
+      two 10G SFP+ traffic ports printed 1 and 2. Here the guide's callout 4 reads "1 x 10G SFP+ port"
+      and callout 5 reads "1 x 1G SFP management port", and the datasheet's own table is explicit - "Top:
+      10G SFP+ port (MAC) Bottom: 1G SFP port (CPU)". The panel prints "10G SFP+" above the upper cage
+      and "1G SFP" below the lower one, which is also where their lamps are. So the upper cage is the
+      only member of a traffic group and the lower one joins the out-of-band cluster. It states its media
+      on the placement rather than on `mgmt`, because a group media of `sfp` would make L40 ask which
+      optics run in a jack whose optics no staged document mentions.
+  the-four-right-hand-lamps:
+    confidence: measured
+    note: >-
+      FOUR WINDOWS, NOT TWO, AND THEY ARE NOT WHERE THE DCS240'S ARE. The DCS240 puts one lamp to the
+      RIGHT of each SFP cage at x 405.30. Here a brightened 20x crop shows two dark round windows ABOVE
+      the upper cage and two BELOW the lower one, centred at x 391.93 and 400.38 and at y 10.48 and 39.02,
+      about 2 mm across. They are too dim to threshold - a search for blobs above the cage found one of
+      the two and a false positive on the product label's edge - so they were read off the enlarged crop
+      and not from a segmentation. That is the weaker instrument and it is said plainly; what makes it
+      safe is that the guide independently says there are two per port: "SFP+ 10G LEDs: Left: Green (10G),
+      Amber (1G) | Right: Activity" and "SFP/RJ-45 Mgmt LEDs: Left: Amber (link) | Right: Amber (activity)".
   the-management-cluster:
-    confidence: measured
+    confidence: borrowed
     note: >-
-      MEASURED IN X FROM THE BEZEL WALLS, which are bright and unambiguous: both white bezels span 15.7
-      to 31.7 mm, centred at 23.7. The upper one holds the 1G Mgmt RJ-45 over a USB-A - the panel prints
-      "1G Mgmt" vertically with an up arrow for the jack and a USB symbol under a down arrow - and the
-      lower one holds the RJ-45 console, whose frame reads 27.01 to 40.12, a 13.31 height against std/rj45@2's
-      13.20. Callout 2 names the set: "Management Ports: 1 x 1000BASE-T RJ-45, micro-USB/RJ-45 console,
-      USB". THE CONSOLE IS A PAIR, not a choice of connector on one port: the panel labels a micro-USB
-      Console at the left and an RJ45 Console beside it, and both are drawn.
+      IDENTICAL TO THE DCS240'S AND CHECKED FEATURE BY FEATURE. The photograph's white bezels span x 15.8
+      to 32.6 against the DCS240's measured 15.7 to 31.7; the console RJ-45's frame runs y 27.0 to 40.9
+      against its 27.01 to 40.21; the reset pinhole centres at (9.7, 22.5) against (9.5, 21.8); the micro-USB
+      at (10.1, 29.1) against (9.6, 27.5). Every one is inside a millimetre, which on a 2.19 px/mm photograph
+      is two pixels. The cluster's coordinates are therefore taken from edgecore/dcs240@1, whose source
+      resolves them at 5.08 px/mm, rather than re-derived from the coarser picture that confirms them.
+      Callout 2 names the same set - "1 x 1000BASE-T RJ-45, micro-USB/RJ-45 console, USB" - and the panel
+      again labels BOTH consoles, so both are drawn.
   the-system-lamps:
-    confidence: measured
+    confidence: datasheet
     note: >-
-      A 3x2 GRID, AND THE SIXTH WINDOW HAS NO NAME. The System LEDs/Buttons enlargement shows six windows
-      in three rows of two - round in the left column, rectangular in the right - labelled Loc and Diag
-      on the top row, PS1 and PS2 on the middle, and Fan on the bottom left. The bottom right window carries
-      no legend in any figure or table. The guide's own list has exactly five: "Loc: Flashing Amber (switch
-      locator)", Diag, PS1/PS2 and Fan. Six windows are drawn because six are in the metal; the sixth
-      is given an id and a region rather than left anonymous, which is what the CSR310 learned.
+      THE SAME 3x2 GRID AND THE SAME UNNAMED SIXTH WINDOW as the DCS240. The System LEDs/Buttons enlargement
+      shows six windows, round in the left column and rectangular in the right, and the guide's list names
+      five: "Loc: Flashing Amber (switch locator)", "Diag: Green (OK), Amber (fault)", "PS1/PS2" and "Fan".
+      The bottom-right window carries no legend in either document. It is drawn and given an id, which
+      is what the CSR310 and the DCS240 settled.
   lamps:
     confidence: datasheet
     note: >-
-      quick start, Port LEDs, verbatim. "QSFP-DD LEDs: 400G: 1 LED Blue; 200G Breakout: 1 LED White, 1-2
-      LEDs Green; 100G Breakout: 1-4 LEDs Green; 50G Breakout: 1 LED Cyan". "SFP+ 10G LEDs: Left: Green
-      (link); Right: Green (10G), Amber (1G)". "RJ-45 Mgmt LEDs: Left: Green (link); Right: Green (activity)".
-      ONE LAMP PER QSFP PORT IS DRAWN AND THE METAL HAS FOUR, which is a simplification rather than a
-      limit of the source - and worth saying plainly, because on the DCS201 the same choice was forced.
-      HERE THE ART DOES RESOLVE THEM: the Port LEDs enlargement shows a vertical column of four round
-      windows beside each cage, which is exactly the "1-4 LEDs" the table describes. Drawing them would
-      be 128 placements and 128 cutouts on a face that already carries 34 ports, and edgecore/as5912-54x
-      and edgecore/dcs201 both draw one per cage with the vocabularies riding on it as states. This follows
-      them for consistency, and the four-window gap below records what was left out and where. The management
-      jack's pair ARE drawn, because they are integrated in its bezel and common/rj45-eth@1 carries them.
+      A RICHER TABLE THAN THE DCS240'S AND IT IS TRANSCRIBED WHOLE. quick start, QSFP-DD LEDs, verbatim:
+      "400G (50G PAM4): 1 LED Blue", "2 x 200G Breakout (50G PAM4): 1 LED Cyan, 1 LED Green", "4 x 100G
+      Breakout (50G PAM4): 4 LEDs Green", "100G (25G NRZ): 1 LED Green", "4 x 25G Breakout (25G NRZ):
+      1 LED Orange, 3 LEDs Green", "40G (10G NRZ): 1 LED Dark Green", "4 x 10G Breakout (10G NRZ): 1 LED
+      Yellow, 3 LEDs Green". SEVEN MODES where the DCS240 lists four, and the two tables disagree about
+      200G breakout - white there, cyan here - so this device's own table is used. ONE LAMP PER QSFP PORT
+      IS DRAWN AND THE METAL HAS FOUR. The state colours are the FIRST lamp of each row, which is the
+      one the table distinguishes the modes by; the trailing greens are the breakout members. Drawing
+      the real four would be 128 placements and 128 cutouts, and edgecore/dcs240, edgecore/dcs201 and
+      edgecore/as5912-54x all draw one. The gap below records what was left out.
   the-rear:
     confidence: measured
     note: >-
-      MEASURED BY TWO DIFFERENT SIGNALS THAT AGREE. The six red pull bars segment in colour and centre
-      at 97.16, 145.74, 194.22, 242.70, 291.28 and 339.67 mm; the honeycomb's own texture, a different
-      signal in a different band, gives 95.88, 144.36, 192.84, 241.42, 289.81 and 338.39. Both give a
-      bay pitch of 48.50 to a tenth of a millimetre. The supplies were read with an edge scan rather than
-      a threshold - a threshold on a bright module against dark chassis clips the duller edge - and their
-      frames read 12.00-66.28 and 371.73-426.21, giving 54.28 and 54.48 against a 54.4 part. IT CLOSES
-      ON ITSELF: left margin 12.0 against right margin 12.2, and the fan block between the supplies with
-      gaps of 5.4 and 9.1. Four independent quantities agreeing is why these are used rather than estimated.
-  the-rear-modules-are-new-parts:
+      THE DCS240'S REAR, PROVEN AGAINST THIS DEVICE'S OWN PHOTOGRAPH AT TWICE THE RESOLUTION. Colour-segmenting
+      the six red pull bars gives left edges at 76.72, 126.50, 175.82, 224.22, 272.63 and 321.04 mm, which
+      least-squares to a pitch of 48.81 and a first handle at 77.46; the two PSU release latches land
+      at 57.08-66.67 and 420.13-432.92. THE INSTRUMENT WAS CALIBRATED ON THE SIBLING BEFORE ITS ANSWER
+      WAS BELIEVED. Run unchanged over dcs240-3-DCS240_03.png it reads handle widths of 40.3 to 41.2 where
+      that device's modelled handle is 38.75, so it carries about +2 mm of red bleed; and it puts the
+      DCS240's own handles at 76.20, 125.51, 174.82, 223.23, 271.65 and 320.96, its latches at 54.69-64.55
+      and 418.68-431.23. Feature for feature the two devices differ by a mean of 1.1 mm with a maximum
+      residual of 1.3 mm about that mean, on a picture where one pixel is 0.46 mm and the sibling's is
+      0.90 mm. The bay wall is therefore taken from edgecore/dcs240@1, whose 48.50 pitch came from a 5.08
+      px/mm guide figure rather than from either photograph, and this device's rear is the confirmation.
+      Its own fit differs by 0.31 mm per bay, 1.55 mm accumulated over five steps, which is inside what
+      a 2.19 px/mm colour threshold can resolve.
+  the-grounding-screws:
+    confidence: measured
+    note: >-
+      CALLOUT 7 IS A REAR FEATURE EVEN THOUGH IT IS LISTED WITH THE FRONT. The Overview list runs 1-9
+      across both faces and item 7 reads "2 x grounding screws (maximum torque 10 kgf-cm)"; the guide's
+      own procedure says where they are - "Attach the included grounding wire to the grounding point on
+      the device rear panel." They are on the strip left of PS2. Scanning bright pixels in the leftmost
+      30 columns of the rear photograph finds two blobs: x 3.20-8.68, y 22.61-28.09, and x 1.37-11.42,
+      y 30.37-41.79. Centres (5.94, 25.35) and (6.40, 36.10), and the same scan puts the chassis bottom
+      edge at 43.7 mm against a stated 43.5, which is the check on the origin. THE TWO HEADS ARE NOT THE
+      SAME SIZE - about 5.5 mm and about 10 mm - because the lower one has a washer fitted in this photograph
+      and the upper one does not. What is measured is where the holes are; the part drawn in them is the
+      library's generic 3.6 mm common/screw-head@1, which is what edgecore/dcs201 and edgecore/dcs202
+      seat on the same family's rear. The gap below asks for a grounding screw sized to the metal.
+  the-airflow-derate-has-nowhere-to-live:
     confidence: datasheet
     note: >-
-      SIX FANS AT 48.5, NOT FIVE AT 58.8, AND SUPPLIES FOUR TIMES THE RATING. The rear callouts read "2
-      x AC or DC PSUs" and "6 x fan trays" where the DCS201's shell takes five, and the measured pitch
-      settles it. The supplies are rated "100-127 VAC, 12 A max. (1000 W max.)" and "220-240 VAC, 8 A
-      max. (1500 W max.)" AC, and "-48 VDC, 1600 Watts" DC, against the DCS201's 400 W and the family
-      generics' 650 W. Nothing in the library could be seated here without exporting a wattage this vendor
-      does not claim.
+      THE MODEL CANNOT SAY THIS AND IT IS NOT A GAP IN THE DEVICE. The guide derates hard by airflow -
+      "Operating (F2B): 0 to 45 C" against "Operating (B2F): 0 to 30 C" - a fifteen-degree difference
+      that decides whether a box can go in a hot aisle. A configuration may state `airflow` but has nowhere
+      to state what that airflow costs, and `gaps.reason` has no value for a library that lacks the vocabulary:
+      its enum names who can close a gap, and the answer here is a library maintainer rather than this
+      device. Both figures are therefore carried in one `attrs.environmental.operating-temp` string so
+      that neither is lost, and both b2f configurations repeat the derate in their descriptions. A reader
+      can use it; a tool cannot.
+  the-grounding-screw-part-is-generic:
+    confidence: measured
+    note: >-
+      SAME SHAPE OF SHORTFALL, ON THE COMPONENT SIDE. The two screws photograph at about 5.5 mm and about
+      10 mm across - the difference is a washer fitted to one of them - and the only fastener in the library
+      is common/screw-head@1 at a generic 3.6 mm, which is also what edgecore/dcs201 and edgecore/dcs202
+      seat on this family's rear. THEIR POSITIONS ARE MEASURED AND CORRECT; their drawn heads are a third
+      to a sixth of the metal's area. Recorded here rather than as a gap for the same reason as the derate
+      above: what is missing is a part, not a fact about this device.
+  the-unnamed-green-strip:
+    confidence: measured
+    note: >-
+      DRAWN BECAUSE IT IS ON THE METAL AND NAMED BY NOBODY. A bright green bar sits under the product
+      label at x 413.7-430.6, y 40.6-42.9. No callout, table or caption in either document mentions it.
+      IT IS NOT A DEFECT IN THIS PHOTOGRAPH: the same segmentation run over the DCS240's front photograph
+      finds the same strip at 413.3-430.3, so it is a feature of the shared shell that the DCS240's model
+      does not draw. It is drawn here as unexplained decor rather than left out, on the same principle
+      as the unnamed sixth lamp window.
+  power:
+    confidence: datasheet
+    note: >-
+      NO SWITCH-LEVEL CONSUMPTION FIGURE IS PUBLISHED, and that is a difference from the DCS240, whose
+      guide prints "Min. 396 W / Max. 714 W (w/o transceivers)". Neither staged document here states one
+      at all, so none is recorded and none is guessed. What IS stated is the supplies: "100-127VAC at
+      50-60Hz (12 A/1000 W max.)" and "200-240VAC at 50-60Hz (8 A/1500 W max.)" AC with an IEC 60320 C14
+      inlet, and "-48 VDC, 1600 Watts" with "-40 V - -75 V, 40 A maximum" DC. Those are the DCS240's ratings
+      to the digit, which is why its supply modules seat here.
   airflow-colour-convention:
     confidence: datasheet
     note: >-
       Stated in this device's own guide, in the family's words: "Remove front-to-back (F2B) airflow fan
       trays (red handles) and PSUs (red release latches)" and "Install back-to-front (B2F) airflow fan
-      trays (blue handles) and PSUs (blue release latches)". Both b2f configurations below therefore override
-      every handle, latch and legend, which is the defect roc-ops/Portrayal#277 is open about.
-  power:
-    confidence: datasheet
-    note: >-
-      quick start: "Min. (w/o transceivers): 396 W @ 100 VAC / 386 W @ 240 VAC Max. (w/o transceivers):
-      714 W @ 100 VAC / 653 W @ 240 VAC". EXCLUDING TRANSCEIVERS, and the guide says so - thirty-two 400G
-      modules are a large addition that this figure does not carry.
+      trays (blue handles) and PSUs (blue release latches)". The rear photograph shows the F2B build and
+      the handles are legibly stamped "F2B". Both b2f configurations therefore override every handle,
+      latch and legend, which is the defect roc-ops/Portrayal#277 is open about.
 attrs:
-  environmental: {operating-temp: 0 to 45 C, storage-temp: -40 to 70 C}
-  physical: {weight-note: '11.85 kg (26.12 lb), with 2 PSUs and 6 fans installed'}
+  environmental: {operating-temp: 0 to 45 C (F2B) / 0 to 30 C (B2F), storage-temp: -40 to 70 C, humidity: 'Operating:
+      5% to 95% (non-condensing)'}
+  physical: {weight-note: '11.88 kg (26.16 lb), with 2 PSUs and 6 fans installed'}
+  platform: {cpu: 'Intel Xeon D-1713NTE, 4-core 2.2 GHz', bmc: 'ASPEED AST2600 running OpenBMC, with Serial-over-LAN'}
   features:
     optics-qsfp-dd: >-
-      datasheet: each port takes 1 x 400 GbE or breaks out to 2 x 200G / 4 x 100G, and also accepts 100
-      GbE QSFP28 and 40 GbE QSFP+. THE UPPER SIXTEEN PORTS SUPPORT UP TO 24 W PER TRANSCEIVER AND THE
-      LOWER SIXTEEN DO NOT, which is a per-row fact this model has no vocabulary for and is recorded as
-      a gap.
+      datasheet: 32 x QSFP56-DD 400GbE. The guide's own LED table enumerates the modes each port runs
+      - 400G and 2 x 200G and 4 x 100G on 50G PAM4, 100G and 4 x 25G on 25G NRZ, and 40G and 4 x 10G on
+      10G NRZ - which is a fuller statement of what works than the datasheet's port line gives.
     optics-sfp-plus: >-
-      quick start, Port LEDs: 10G and 1G modes are both indicated, so the pair takes 10GbE and 1GbE optics.
+      quick start, Port LEDs: "SFP+ 10G LEDs: Left: Green (10G), Amber (1G)". Both speeds are indicated
+      on the one lamp, so the single MAC-side cage takes 10GbE and 1GbE optics. The 1G SFP management
+      port is NOT covered by this key - it is in the `mgmt` group, which declares no group media, and
+      no staged document says what optics it takes.
   lifecycle: {eol: none-announced}
-chassis: {width: 438.4, height: 43.5, depth: 590.0, ru: 1, weight-kg: 11.85, color: '#2b2f33', airflow: front-to-back}
+chassis: {width: 438.4, height: 43.5, depth: 590.0, ru: 1, weight-kg: 11.88, color: '#2b2f33', airflow: front-to-back}
 gaps:
 - what: the-four-undrawn-faces
   scope:
@@ -144,51 +229,55 @@ gaps:
   wanted: >-
     A drawing of the lid, the underside and the two side walls. Nothing in this corpus draws any of them
     flat - the mounting figures show the lid and one side in three-quarter view while brackets go on,
-    which shows nothing is printed there and gives nothing to model. Each carries an `empty:` sentence
-    saying where I looked, per docs/deliberately-empty-faces.md: empty by verification, not by omission.
+    and the -FF photograph is a three-quarter of the front. Each carries an `empty:` sentence saying where
+    I looked, per docs/deliberately-empty-faces.md: empty by verification, not by omission.
 - what: qsfp-breakout-lamp-windows
   scope:
   - front
   reason: needs-drawing
   wanted: >-
-    The four breakout windows per QSFP-DD port, drawn. The Port LEDs enlargement resolves them - a vertical
-    column of four round windows beside each cage - and the table names what they mean: "400G: 1 LED Blue;
-    200G Breakout: 1 LED White, 1-2 LEDs Green; 100G Breakout: 1-4 LEDs Green; 50G Breakout: 1 LED Cyan".
-    One lamp per port is drawn instead, carrying all four vocabularies as states, which is what edgecore/as5912-54x
-    and edgecore/dcs201 do on the same cluster. Drawing the real four would be 128 placements and 128
-    cutouts, and the enlargement fixes them relative to a cage rather than to the panel, so their absolute
-    positions would still have to be constructed. This records that the simplification is a choice here
-    and not a limit of the source.
-- what: the-24-watt-split
+    The four lamp windows per QSFP-DD port, drawn. This guide's table needs all four to say what it says
+    - "4 x 25G Breakout: 1 LED Orange, 3 LEDs Green" describes a row of four, not one lamp with four meanings
+    - and one lamp per port is drawn instead, carrying the seven modes as states coloured by each row's
+    FIRST lamp. Drawing the real four would be 128 placements and 128 cutouts on a face that already carries
+    34 ports, and the enlargement fixes them relative to a cage rather than to the panel. edgecore/dcs240,
+    edgecore/dcs201 and edgecore/as5912-54x all make the same simplification; this records that it is
+    a choice and not a limit of the source.
+- what: rear-panel-silkscreen
   scope:
-  - front
-  reason: nos-dependent
+  - rear
+  reason: needs-drawing
   wanted: >-
-    A way to say that HALF THIS WALL FEEDS MORE POWER THAN THE OTHER HALF. The datasheet states the upper
-    sixteen ports support up to 24 W per transceiver and the lower sixteen do not - a real, per-row electrical
-    fact that decides which optics can go where. The model has no vocabulary for a per-row power budget
-    on a port group: `attrs` on the group would claim it for all thirty-two, and splitting the block in
-    two to carry two attrs would misdraw a wall whose sixteen columns are one continuous pitch. It is
-    carried in the device's optics prose instead, where a reader will find it and a tool will not.
-- what: the-unlabelled-sixth-lamp
+    The six fan-bay digits, the PS1/PS2 legends and the two airflow arrows, drawn. All of them are legible
+    in the rear photograph and all were measured: the digits 6 to 1 are white blobs 3.65 mm tall centred
+    at x 122.85, 171.25, 219.66, 268.07, 316.02 and 364.42, a 48.5 pitch that matches the bay wall exactly;
+    "PS2" spans 69.41-75.81 and "PS1" 363.05-368.99, each under a small arrow at y 33.1-34.9. THEY ARE
+    NOT DRAWN BECAUSE THE BAY WALL HAS NOWHERE TO PUT THEM. Each digit sits about 2.4 mm past its bay's
+    right edge, and with six 48.5 mm trays on a 48.5 mm pitch the bays are edge to edge, so every digit
+    would land inside the NEXT bay's box - silkscreen painted over a module, which is L21's case. The
+    metal plainly has a rail there that this wall does not, and deciding whether the trays are narrower
+    than 48.5 or the pitch wider than it needs a rear elevation with dimensions, which neither staged
+    document has. "PS1" alone falls in the real 9 mm gap between fan-1 and psu-1 and could be drawn; it
+    is held back so that the rear is not half-labelled. edgecore/csr440 has the same gap for the same
+    reason.
+- what: the-unnamed-green-strip
   scope:
   - front
   reason: vendor-silent
   wanted: >-
-    What the sixth system LED window is. The System LEDs enlargement shows six windows in a 3x2 grid and
-    the guide's own list names five - Loc, Diag, PS1, PS2, Fan. The bottom-right window carries no legend
-    in any figure or table in either document. It is drawn, given an id and named in a region as an unidentified
-    indicator rather than omitted, because a mark on the metal that the model leaves out is worse than
-    one it labels as unknown.
+    What the green bar under the product label is. It is 16.9 by 2.3 mm, it is on this device and on the
+    DCS240, and no callout, table or caption in any staged document for either device mentions it. It
+    is drawn as unexplained decor rather than omitted, because a mark on the metal that the model leaves
+    out is worse than one it labels as unknown.
 - what: dc-supply-face
   scope:
   - rear
   reason: needs-photo
   wanted: >-
-    An elevation of the DC supply. The rear elevation and both rear photographs draw the AC pair; the
-    datasheet rates a -48 VDC variant at 1600 W and the package contents list a "DC power cable (included
-    with DC PSUs only)", so it certainly exists. edgecore/dcs240-psu-dc@1 therefore borrows the AC module's
-    measured face and marks its terminal estimated.
+    An elevation of the DC supply. The rear photograph draws the AC pair; the datasheet rates a -48 VDC
+    variant at 1600 W and the ordering table lists AS9737-32DB-O-48V-F and -48V-B, so it certainly exists.
+    edgecore/dcs240-psu-dc@1 is seated here and it borrows the AC module's measured face with its terminal
+    marked estimated.
 groups:
   qsfp-dd:
     term: Port
@@ -199,6 +288,9 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
+    description: >-
+      the single 10G SFP+ port, on the MAC rather than the CPU. It has its own number space and the panel
+      prints no digit beside it, because there is only one of it.
     attrs: {media: sfp-plus, speed: 10g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
   mgmt:
@@ -206,9 +298,10 @@ groups:
     role: management
     index-origin: 1
     mixed: >-
-      the out-of-band cluster - a 1000BASE-T RJ-45 management jack, a USB Type-A, and TWO consoles rather
-      than one: a micro-USB and an RJ-45, both labelled as consoles on the metal. A 1PPS timing input
-      sits beside them, which is a different job on the same strip.
+      the out-of-band cluster - a 1000BASE-T RJ-45 management jack, a USB Type-A, TWO consoles rather
+      than one (a micro-USB and an RJ-45, both labelled as consoles on the metal), and a 1G SFP management
+      port wired to the CPU. A 1PPS timing input sits beside them, which is a different job on the same
+      strip and has its own group.
   timing:
     term: Port
     role: management
@@ -226,9 +319,10 @@ groups:
     attrs:
       redundancy: 1+1
       redundancy-note: >-
-        datasheet: redundant AC or DC PSUs. Each is rated 1500 W at high line against a chassis drawing
-        at most 714 W without transceivers, so one supply carries the box and the second is redundant
-        rather than additive.
+        datasheet: "2 redundant, load-sharing, hot-swappable AC or 48VDC". Each is rated 1500 W at high
+        line, and the datasheet's own footnote says the pair is redundant only there - "200-240VAC may
+        be required for power redundancy under full loading" - so at low line the second supply may be
+        carrying load rather than standing by.
   fans:
     term: Fan
     role: service
@@ -236,8 +330,8 @@ groups:
     attrs:
       redundancy: 5+1
       redundancy-note: >-
-        datasheet: "5+1 redundant hot-swappable fan modules", and the rear callout counts six - "6 x fan
-        trays" - so the digit form and the bay count agree without argument.
+        datasheet: "Hot-swappable 5 + 1 redundant fans", and the rear callout counts six - "6 x fan trays"
+        - so the digit form and the bay count agree without argument.
 views:
   front:
     size: {w: 438.4, h: 43.5}
@@ -250,7 +344,8 @@ views:
         vent: 18}
       - {id: vent-bottom, at: [38.0, 39.6], size: [348.0, 2.9], pattern: slots, pattern-pitch: [4.4, 3.2],
         vent: 18}
-      - {id: product-label, at: [409.0, 5.0], size: [22.0, 9.0], fill: '#d7dbdf'}
+      - {id: product-label, at: [406.9, 6.7], size: [25.0, 5.0], fill: '#d7dbdf'}
+      - {id: green-strip, at: [413.7, 40.6], size: [16.9, 2.3], fill: '#4ec72b'}
       cutouts:
       - {id: led-loc, at: [6.8, 3.3], size: [2.0, 2.0], shape: circle}
       - {id: led-diag, at: [10.1, 3.5], size: [2.8, 1.6], shape: rect}
@@ -265,9 +360,11 @@ views:
       - {id: pps-in, at: [7.03, 13.28], size: [4.83, 4.83], shape: circle}
       - {id: reset, at: [7.5, 19.8], size: [4.0, 4.0], shape: circle}
       - {id: tengig-1, at: [389.6, 12.28], size: [14.25, 10.4], shape: rect}
-      - {id: tengig-2, at: [389.6, 26.49], size: [14.25, 10.4], shape: rect}
-      - {id: led-tengig-1, at: [405.3, 13.6], size: [2.0, 2.0], shape: circle}
-      - {id: led-tengig-2, at: [405.3, 27.8], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt-sfp, at: [389.6, 26.49], size: [14.25, 10.4], shape: rect}
+      - {id: led-tengig-link, at: [390.93, 9.48], size: [2.0, 2.0], shape: circle}
+      - {id: led-tengig-act, at: [399.38, 9.48], size: [2.0, 2.0], shape: circle}
+      - {id: led-sfpmgmt-link, at: [390.93, 38.02], size: [2.0, 2.0], shape: circle}
+      - {id: led-sfpmgmt-act, at: [399.38, 38.02], size: [2.0, 2.0], shape: circle}
       - {id: port-1, at: [39.63, 12.69], size: [18.5, 9.58], shape: rect}
       - {id: led-port-1, at: [77.23, 16.49], size: [2.0, 2.0], shape: circle}
       - {id: port-2, at: [39.63, 26.9], size: [18.5, 9.58], shape: rect}
@@ -348,12 +445,12 @@ views:
       for: console-rj}
     - {id: silk-mgmt, at: [33.4, 7.77], text: 1G Mgmt, font-size: 1.2, anchor: start, fill: '#c7ccd1',
       for: mgmt-eth}
-    - {id: silk-sfp, at: [396.0, 25.0], text: 10G SFP+, font-size: 1.3, anchor: middle, fill: '#e4e8eb',
-      for: chassis}
-    - {id: silk-tengig-1, at: [389.4, 25.0], text: '1', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
+    - {id: silk-tengig, at: [396.7, 8.9], text: 10G SFP+, font-size: 1.1, anchor: middle, fill: '#e4e8eb',
       for: tengig-1}
-    - {id: silk-tengig-2, at: [402.6, 25.0], text: '2', font-size: 1.3, anchor: middle, fill: '#e4e8eb',
-      for: tengig-2}
+    - {id: silk-sfpmgmt, at: [396.7, 41.6], text: 1G SFP, font-size: 1.1, anchor: middle, fill: '#e4e8eb',
+      for: mgmt-sfp}
+    - {id: silk-model, at: [431.0, 14.6], text: AS9737-32DB, font-size: 1.3, anchor: end, fill: '#e4e8eb',
+      for: chassis}
     - {at: [44.38, 24.99], text: '1', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-1}
     - {at: [53.38, 25.0], text: '2', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-2}
     - {at: [63.38, 24.99], text: '3', font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: port-3}
@@ -413,13 +510,20 @@ views:
         group: mgmt
         rel-pos: 4
         attrs: {media: micro-usb-b, role: console}
+      - ref: std/sfp-ganged@1
+        id: mgmt-sfp
+        at: [389.6, 26.49]
+        rotate: 180
+        group: mgmt
+        rel-pos: 5
+        attrs: {media: sfp, speed: 1g, role: mgmt}
       - ref: common/smb-jack@1
         id: pps-in
         at: [5.94, 12.19]
         group: timing
         rel-pos: 1
         attrs: {media: coax-smb, role: timing, timing: 1PPS}
-      - {ref: common/reset-button@1, id: reset, at: [7.5, 19.8], group: mgmt, rel-pos: 5, for: chassis}
+      - {ref: common/reset-button@1, id: reset, at: [7.5, 19.8], group: mgmt, rel-pos: 6, for: chassis}
       - ref: common/led-dot@1
         id: led-loc
         at: [6.8, 3.3]
@@ -472,29 +576,43 @@ views:
       - {ref: common/led-rect-sm@1, id: led-spare, at: [10.1, 10.1], group: leds, rel-pos: 6, for: chassis,
         states: ['off']}
       - {ref: std/sfp-ganged@1, id: tengig-1, at: [389.6, 12.28], group: sfp-plus, rel-pos: 1}
-      - {ref: std/sfp-ganged@1, id: tengig-2, at: [389.6, 26.49], rotate: 180, group: sfp-plus, rel-pos: 2}
       - ref: common/led-dot@1
-        id: led-tengig-1
-        at: [405.3, 13.6]
+        id: led-tengig-link
+        at: [390.93, 9.48]
         group: port-leds
         rel-pos: 33
         for: tengig-1
         states:
         - 'off'
-        - {name: link, color: '#22c55e'}
         - {name: 10g, color: '#22c55e'}
         - {name: 1g, color: '#f59e0b'}
       - ref: common/led-dot@1
-        id: led-tengig-2
-        at: [405.3, 27.8]
+        id: led-tengig-act
+        at: [399.38, 9.48]
         group: port-leds
         rel-pos: 34
-        for: tengig-2
+        for: tengig-1
         states:
         - 'off'
-        - {name: link, color: '#22c55e'}
-        - {name: 10g, color: '#22c55e'}
-        - {name: 1g, color: '#f59e0b'}
+        - {name: activity, color: '#22c55e'}
+      - ref: common/led-dot@1
+        id: led-sfpmgmt-link
+        at: [390.93, 38.02]
+        group: port-leds
+        rel-pos: 35
+        for: mgmt-sfp
+        states:
+        - 'off'
+        - {name: link, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-sfpmgmt-act
+        at: [399.38, 38.02]
+        group: port-leds
+        rel-pos: 36
+        for: mgmt-sfp
+        states:
+        - 'off'
+        - {name: activity, color: '#f59e0b'}
       - {ref: std/qsfp-ganged@1, id: port-1, at: [39.63, 12.69], group: qsfp-dd, rel-pos: 1}
       - {ref: std/qsfp-ganged@1, id: port-2, at: [39.63, 26.9], rotate: 180, group: qsfp-dd, rel-pos: 2}
       - {ref: std/qsfp-ganged@1, id: port-3, at: [58.63, 12.69], group: qsfp-dd, rel-pos: 3}
@@ -533,9 +651,12 @@ views:
         states: &id001
         - 'off'
         - {name: 400g, color: '#3b82f6'}
-        - {name: 200g-breakout, color: '#f8fafc'}
+        - {name: 200g-breakout, color: '#06b6d4'}
         - {name: 100g-breakout, color: '#22c55e'}
-        - {name: 50g-breakout, color: '#06b6d4'}
+        - {name: 100g, color: '#22c55e'}
+        - {name: 25g-breakout, color: '#f97316'}
+        - {name: 40g, color: '#15803d'}
+        - {name: 10g-breakout, color: '#eab308'}
         for: port-1
         group: port-leds
         rel-pos: 1
@@ -794,13 +915,13 @@ views:
       - port-30
       - port-31
       - port-32
-    - id: sfp-pair
+    - id: right-cages
       at: [387.0, 11.5]
       size: {w: 20.0, h: 26.0}
-      label: 2 x 10G SFP+
+      label: 10G SFP+ (MAC) over 1G SFP management (CPU)
       members:
       - tengig-1
-      - tengig-2
+      - mgmt-sfp
     - id: out-of-band
       at: [4.5, 0.5]
       size: {w: 29.0, h: 41.0}
@@ -825,6 +946,8 @@ views:
       - led-spare
   rear:
     size: {w: 438.4, h: 43.5}
+    silkscreen:
+    - {id: silk-ground, at: [9.2, 25.72], text: PE, font-size: 1.2, anchor: start, fill: '#c7ccd1', for: ground-screw-upper}
     components:
       bays:
       - id: psu-2
@@ -893,6 +1016,9 @@ views:
         - edgecore/dcs240-psu-ac@1
         - edgecore/dcs240-psu-dc@1
         default: edgecore/dcs240-psu-ac@1
+      placements:
+      - {ref: common/screw-head@1, id: ground-screw-upper, at: [4.14, 23.55], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: ground-screw-lower, at: [4.6, 34.3], group: furniture, rel-pos: 2}
     regions:
     - id: power
       at: [11.0, 1.0]
@@ -912,6 +1038,13 @@ views:
       - fan-4
       - fan-5
       - fan-6
+    - id: grounding
+      at: [2.5, 22.0]
+      size: {w: 8.0, h: 16.0}
+      label: 2 x grounding screws
+      members:
+      - ground-screw-upper
+      - ground-screw-lower
   top:
     size: {w: 438.4, h: 590.0}
     empty: >-
@@ -925,9 +1058,9 @@ views:
   left:
     size: {w: 590.0, h: 43.5}
     empty: >-
-      Not drawn by any staged source, and on this chassis that is a statement: the DCS240 breathes FRONT
-      TO BACK, so the side walls carry no perforation. The intake is the front face's own vent fields
-      and the exhaust is the six rear trays.
+      Not drawn by any staged source, and on this chassis that is a statement: the DCS511 breathes end
+      to end, so the side walls carry no perforation. The intake is the front face's own vent fields and
+      the exhaust is the six rear trays - or the reverse, on a B2F build.
   right:
     size: {w: 590.0, h: 43.5}
     empty: Not drawn by any staged source. The other side wall, solid for the same reason.
@@ -936,12 +1069,28 @@ configurations:
     kind: orderable
     description: Dual AC PSUs, front-to-back airflow - red handles and red release latches
     default: true
+    part-numbers:
+      AS9737-32DB-O-AC-F: {part: FP5EC8632004Z}
+      AS9737-32DB-O-AC-F-UN: {power-cord: UN}
+      AS9737-32DB-O-AC-F-EU: {power-cord: EU}
+      AS9737-32DB-O-AC-F-UK: {power-cord: UK}
+      AS9737-32DB-O-AC-F-US: {power-cord: US}
+      AS9737-32DB-O-AC-F-JP: {power-cord: JP}
+    region-context: {optics: 32 x 400G QSFP56-DD}
   ac-b2f:
     kind: orderable
     description: >-
       Dual AC PSUs, back-to-front airflow. The guide states the colour: "Install back-to-front (B2F) airflow
-      fan trays (blue handles) and PSUs (blue release latches)."
+      fan trays (blue handles) and PSUs (blue release latches)." This build is derated to 0-30 C where
+      the F2B build runs to 45 C.
     airflow: back-to-front
+    part-numbers:
+      AS9737-32DB-O-AC-B: {part: FP5EC8632005Z}
+      AS9737-32DB-O-AC-B-UN: {power-cord: UN}
+      AS9737-32DB-O-AC-B-EU: {power-cord: EU}
+      AS9737-32DB-O-AC-B-UK: {power-cord: UK}
+      AS9737-32DB-O-AC-B-US: {power-cord: US}
+      AS9737-32DB-O-AC-B-JP: {power-cord: JP}
     region-context: {exhaust: Intake}
     component-attrs:
       dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
@@ -949,16 +1098,22 @@ configurations:
   dc-f2b:
     kind: orderable
     description: Dual -48 VDC PSUs, front-to-back airflow - red handles and red release latches
+    part-numbers:
+      AS9737-32DB-O-48V-F: {part: FP5EC8632006Z}
     bays: {psu-1: edgecore/dcs240-psu-dc@1, psu-2: edgecore/dcs240-psu-dc@1}
   dc-b2f:
     kind: orderable
-    description: Dual -48 VDC PSUs, back-to-front airflow - blue handles and blue release latches
+    description: >-
+      Dual -48 VDC PSUs, back-to-front airflow - blue handles and blue release latches, and the same 0-30
+      C derate as the AC B2F build.
     airflow: back-to-front
+    part-numbers:
+      AS9737-32DB-O-48V-B: {part: FP5EC8632007Z}
     region-context: {exhaust: Intake}
     bays: {psu-1: edgecore/dcs240-psu-dc@1, psu-2: edgecore/dcs240-psu-dc@1}
     component-attrs:
       dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
       dcs240-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
 references:
-- title: Edgecore DCS240 / AS9726-32DB 32x400G QSFP56-DD Data Center Switch Data Sheet
-- title: Edgecore AS9726-32DBS 32-Port 400G Ethernet Switch Quick Start Guide
+- title: Edgecore DCS511 / AS9737-32DB 32x400G QSFP56-DD Data Center Switch Data Sheet
+- title: Edgecore AS9737-32DB 32-Port 400G Ethernet Switch Quick Start Guide

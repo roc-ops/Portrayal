@@ -186,7 +186,15 @@ def test_the_comparison_layer_can_now_reach_them():
     quick start's rear callout, and six measured bays on a 48.50 pitch. The CSR440's 5+1 was
     the first digit form to match its bay count at all; this one matches at a different count,
     on a different shell, with a fan of its own.
+
+    FORTY-NINE IS THE DCS511, which states the DCS240's figure over the DCS240's bays and
+    SEATS THE DCS240'S FAN. Its datasheet says "Hot-swappable 5 + 1 redundant fans" and its
+    quick start's rear callout says "6 x fan trays", so the digit form and the bay count agree
+    again. What is new is that nothing was measured twice: the six red handles on its own rear
+    photograph fit a 48.81 pitch against the DCS240's 48.50, and the same colour instrument run
+    over the DCS240's photograph reads its handles 1.1 mm away on average. One rear, two
+    chassis, one fan part - counted twice because two documents state it twice.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 48, n
+    assert n == 49, n
