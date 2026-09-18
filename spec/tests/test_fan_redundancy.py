@@ -140,7 +140,15 @@ def test_the_comparison_layer_can_now_reach_them():
     a form, the CSR310 does not because its datasheet gives a phrase. The number
     is meant to go up, one sourced statement at a time. A drop is the thing to
     look at.
+
+    FORTY-FIVE IS THE CSR440, and it is the first in this family whose digit form
+    and bay count agree without argument: the datasheet says 5+1 and the rear
+    face has six fan modules, so test_every_stated_fan_figure_fills_its_bays
+    checks 5+1 against six bays and is satisfied. Its CSR430 sibling had to drop
+    its own 4+1 because that figure counts FANS INSIDE ONE TRAY - true at the
+    wrong level - and the CSR310 above never had a form to check. Six removable
+    modules is the arrangement the comparison layer was built for.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 44, n
+    assert n == 45, n
