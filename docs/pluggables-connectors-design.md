@@ -22,7 +22,10 @@ seated. One connector per kind, not seventy-five; the cable is somebody else's.
 | `generic/rj45-boot` | `rj45-plug` | the plug's rear |
 
 Second batch, once the `cable` contract has been used by the cabling side: SC plug
-and boot (with `std/sc-bore` from A), MPO plug, and the DAC/AOC ends - an SFP- or
+and boot (with `std/sc-bore` from A); the MPO plugs - `generic/mpo12-plug`,
+`generic/mpo24-plug` (same key as mpo12, own part for the two-row ferrule) and
+`generic/mpo16-plug` (a different key, so a different interface), all UNPINNED
+because the module receptacles they land on carry the pins; and the DAC/AOC ends - an SFP- or
 QSFP-shaped plug with a boot and no optical face, which is the cleanest proof that
 the contract is right because it is a transceiver AND a connector.
 
@@ -102,6 +105,12 @@ cabling side asks for it.
 
 - L12 already holds `mates` to the presented `interface`; a boot on a bore or a plug
   on a plug is caught by the existing rule.
+- L12 grows two comparisons where both sides declare them, under the same rule
+  number because it is the same question: `optical.gender` must be opposite (a
+  pinned receptacle takes an unpinned plug, never pinned-to-pinned), and
+  `optical.polish` must match (an APC plug does not seat in a UPC receptacle). A
+  side that declares neither is not checked - the library has hundreds of bores
+  that predate the keys, and silence stays silence rather than becoming an error.
 - New: a part declaring `cable` must declare `direction`, and a plug must declare
   `boot` or be marked as one that takes no boot. Small, in the connection-points
   schema rather than a rule.

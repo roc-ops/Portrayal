@@ -76,10 +76,25 @@ Named form x face. A generic's name never carries a rate.
 | `generic/sfp-sc` | SC simplex | needs `std/sc-bore`, below |
 | `generic/sfp-rj45` | RJ45 | composes `std/rj45-ganged@2`'s aperture as its face |
 | `generic/qsfp-lc` | LC duplex | migrates `common/qsfp-transceiver`'s `lc` skin |
-| `generic/qsfp-mpo` | MPO | gated: needs a dimensioned MPO receptacle |
+| `generic/qsfp-mpo12` | MPO-12, one row, pinned | gated: needs a dimensioned MPO receptacle |
 | `generic/qsfp-dd-lc` | LC duplex | |
-| `generic/qsfp-dd-mpo` | MPO | gated as above |
-| `generic/osfp-mpo` | MPO | gated as above, plus the OSFP fetch |
+| `generic/qsfp-dd-mpo12` | MPO-12, one row, pinned | gated as above |
+| `generic/qsfp-dd-mpo16` | MPO-16, one row, pinned | gated as above; a different key, so a different part |
+| `generic/qsfp-dd-mpo24` | MPO-12 two row, pinned | gated as above; same key as mpo12, own part for the ferrule |
+| `generic/osfp-mpo12` | MPO-12, pinned | gated as above, plus the OSFP fetch |
+
+The face names are the QSFP-DD spec's own (HW 6.3 section 6.2, fourteen media
+dependent interfaces): `lc` (duplex LC), `mpo12`, `mpo16`, `mpo24` (the spec's
+"MPO-12 two row"), `dual-mpo12`, `dual-lc` (dual duplex LC), `dual-cs`, `quad-sn`,
+`dual-sn`, `quad-mdc`, `dual-mdc`, and BiDi variants of MPO-12, SN and MDC. Only the
+first three are day one; the rest are named here so nobody invents a second spelling
+when a 400G-DR4 or an 800G-SR8 arrives. SN, MDC and CS are connectors the library
+does not have yet and get their own bores when they come.
+
+An MPO-8 is not a part: the QSFP+ receptacle figure (INF-8074 Fig 21a) marks four
+of its twelve positions "unused", so an SR4 is `generic/qsfp-mpo12` with
+`optical.unused` on the wrapper saying which four and why. See the umbrella's
+"what is one part and what is two".
 
 Contract shape, common to all:
 
@@ -124,6 +139,10 @@ Three things the shape enforces:
   is paywalled. The generics inherit the current bores' position tokens and the
   provenance says so in the same words the existing parts use.
 - **No rate, reach, wavelength or wattage.** Enforced by lint, below.
+- **An MPO face declares `optical.positions` and `optical.gender: pinned`.** Positions
+  because a module composing the face must never restate the count (the schema's own
+  rule); gender because both module specs say the receptacle carries the alignment
+  pins, and B's plugs are the other half of that fact.
 
 ### 4. `std/sc-bore`
 
@@ -199,5 +218,6 @@ blocked on.
 - Whether `generic/sfp-rj45` composes the RJ45 aperture as a face or draws the copper
   jack's opening itself. Composing keeps one source of truth for the opening; the
   decision waits for the first drawing of a copper SFP's face.
-- The MPO receptacle dimension. The QSFP-DD spec's Fig 31 draws it and does not
-  dimension it; a public MPO adapter datasheet (SENKO, US Conec) probably does.
+- The MPO receptacle dimension. The QSFP-DD spec's Figs 28-30 draw the three MPO
+  receptacles and do not dimension them; a public MPO adapter datasheet (SENKO, US
+  Conec) probably does, and the MPO-16 one needs its own since the key differs.
