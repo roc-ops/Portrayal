@@ -14,6 +14,13 @@ P = LIB / "components/generic/sfp-lc/v1/contract.yaml"
 
 COMPONENT_SCHEMA = json.loads((ROOT / "spec/schemas/component.schema.json").read_text())
 
+# STANDARDS IS EMPTY ON A PLAIN IMPORT: lint.py fills it inside main(), so a
+# rule called directly finds no entry for any `conforms` key and L9 reports an
+# unknown key - or, worse, passes vacuously. Load it once, the way main does
+# (the pattern spec/tests/test_pitch_lint.py established).
+lint.STANDARDS.update(
+    lint.load_yaml(ROOT / "spec/schemas/standards.yaml")["standards"])
+
 
 def component_errors(path):
     """The rules a part test cares about, run the way the CLI runs them. L9 is a
