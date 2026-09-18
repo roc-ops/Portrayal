@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: power-switch-slide
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  Panel slide power switch under a hazard tag - the recessed two-position slider
+  a chassis carries where a rocker or a push button would be too easy to knock.
+  The tag beside the slider is what tells you the switch is live; this part draws
+  the frame, the slider and the tag, and the chassis prints the switch's own
+  legend beside it.
+size: {w: 30.74, h: 13.53}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes off one source - Cisco's Visio master "ASR-9902 Rear", in a chassis
+  face calibrated on the ASR 9902 data sheet's 439.74 x 87.63 mm body. That is
+  ONE reading of ONE switch, not a family measurement, which is why this part is
+  generic in shape and specific in size: the next chassis that carries a slide
+  switch should be measured rather than assumed to match.
+provenance:
+  size: >-
+    drawing - see size-notes. The frame measures 30.74 x 13.53 mm with the slider
+    2.35 mm wide at its left and the tag 16.12 x 11.34 mm filling the rest.
+  what-it-is: >-
+    install guide - Figure 154 of the Cisco ASR 9000 Series Fixed-Port Routers
+    Hardware Installation Guide, "Power Switch on the Cisco ASR 9902 Router",
+    whose callout 1 points at this assembly and reads "Power Switch". The step it
+    illustrates: "Set the power switch to the ON position. The chassis power LED
+    turns Red."
+  the-tag: >-
+    drawing - the master prints ATTENTION over ON-OFF on a yellow ground, and
+    Cisco's own photograph of the same switch prints the same two words. The tag
+    is part of the switch rather than chassis silkscreen, which is why the text
+    is in this skin: a chassis that carries this switch inherits the wording, and
+    a chassis that prints something else beside it prints that itself.
+  states: >-
+    NOT MODELLED AS LAMP STATES, deliberately. A slide switch has two positions
+    and no lamp, and the thing that reports which position it is in is a separate
+    Power Status lamp beside it - callout 2 of the same figure. Giving this part
+    an `on`/`off` element would draw a lamp the hardware does not have, which is
+    what L47 exists to catch.
+relief:
+  features:
+    - node: slider
+      out: 1.0
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure.
+        That contract sources the latch's ARRANGEMENT from photographs, never its
+        proudness, so this is a guess scaled from a guess and says so
+skins: [default]

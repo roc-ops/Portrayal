@@ -1,0 +1,934 @@
+format: 1
+kind: device
+name: asr-9902
+version: 0.1.0
+maturity: modelled
+manufacturer: Cisco
+model: ASR 9902
+portfolio:
+  line: Service Provider
+  family: Aggregation Services Router
+  series: ASR 9000 Series
+description: >-
+  Cisco ASR 9000 Series ASR 9902 Router - a 2 RU fixed-port aggregation services
+  router delivering up to 800 Gbps. Two route processors across the top and the
+  integrated fixed board below them, carrying forty-eight ports in two mirrored
+  slices: eight SFP28, three QSFP28 and one QSFP-DD and twelve SFP+ on each. The
+  rear carries two 1.6 kW power modules at the ends and three fan trays between
+  them, with the power switch on the left panel and the NEBS grounding lug on
+  the right. Airflow is front to back. Nothing seats in the front: the board is
+  part of the chassis and there is no Port Expansion Card bay, which is what
+  separates this from its 3 RU ASR 9903 sibling.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      the Cisco ASR 9902 Compact High-Performance Router Data Sheet (c78-744663,
+      2021); the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation
+      Guide (b-asr9001-hardware-installation-guide.pdf, last modified
+      2021-07-30, which despite its filename covers the 9001, 9901, 9902 and
+      9903); the Interface and Hardware Component Configuration Guide, IOS XR
+      24.x, whose Table 19 is what settles which two ports are the QSFP-DDs; and
+      Cisco's own Visio stencil Routers-Cisco_ASR_9000, masters "ASR-9902 Front"
+      and "ASR-9902 Rear".
+  face-check:
+    confidence: drawing
+    note: >-
+      done BEFORE measuring, because Cisco's master filenames name the wrong
+      faces on the ASR 9910 and nothing downstream would have caught it. No swap
+      here. "ASR-9902 Front" carries the two A99-RP-F cards, the forty-eight
+      numbered ports, the two slice bands and the CISCO / ASR 9902 branding, and
+      matches Figure 1 of the install guide, "Front Panel of the Cisco ASR 9902
+      Router". "ASR-9902 Rear" carries the two power modules, the three fan
+      trays, the power switch and the grounding lug, and matches Figure 2.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 2 of c78-744663, "Physical dimensions (includes ejector
+      bracket/lever); (H x W x D); weight": "ASR 9902 chassis (including 2 RPs, 2
+      PSUs, 3 FANs): H x W x D: 3.45 x 17.3 x 19 in.; 46.39 lb (87.63 x 439.74 x
+      482.60 mm; 21.04 kg)".
+      THE DEPTH NOTE IS A TAUTOLOGY AND IS NOT A SECOND FIGURE. Underneath the
+      row Cisco writes "Note: Excluding ejector, the depth is 19 in./482.6 mm" -
+      the same number the row already gives, so unlike the ASR 9903, where the
+      two differ by 162 mm, there is nothing here to choose between. The data
+      sheet's own overview agrees a third time: "The compact size (depth is 19
+      in., 483 mm)". So `chassis.depth` is 482.60 and no gap is opened over it.
+      WIDTH IS THE BODY: 439.74 mm is 17.3 in, not the 19 in rack face, so this
+      figure is already between the ear folds and L43 has nothing to catch.
+      HEIGHT IS THE CHASSIS AS BUILT, NOT THE RACK ALLOCATION: 87.63 mm against
+      2 RU's 88.90, built 1.27 mm under its allocation for clearance, the same
+      shortfall the ASR 9903, 9904, 9906 and 9910 show. The install guide quotes
+      the allocation instead - "Height of the ... Cisco ASR 9902 Router is 3.45
+      inches (8.77 cm)" is 87.63 and agrees, while its ASR 9903 line quotes 5.25
+      in, which is that chassis's 3 RU allocation rather than its height. The
+      data sheet figure is carried and the RU is carried separately.
+  stencil-calibration:
+    confidence: drawing
+    note: >-
+      THE TWO MASTERS CALIBRATE SEPARATELY AND THEY HAD TO BE, because their
+      shape boxes use different conventions: "ASR-9902 Front" reads 1.9 x 0.35
+      in at 1:10, which is 482.60 x 88.90 mm - the 19 in rack face by the 2 RU
+      ALLOCATION - while "ASR-9902 Rear" reads 482.60 x 87.38, which is the rack
+      face by the CHASSIS AS BUILT to within a quarter of a millimetre. One
+      stencil, one chassis, two conventions; the metrology note's rule that a
+      master's height must be checked against a document every time is what
+      caught it.
+      Both are uniform enough to measure: x against y comes out 0.24 percent
+      apart on the front and 0.29 on the rear, against 0.66 on the ASR 9001 and
+      0.06 on the ASR 9904.
+      THE MODEL IS ANCHORED ON THE DATA SHEET BODY on both faces, because the
+      body is what the views are: the front's ink spans 1568.93 x 315.59 art
+      units between the ear folds and the rear's 1562.93 x 309.49, and setting
+      each to 439.74 x 87.63 gives kx/ky of 0.280280/0.277670 and
+      0.281356/0.283143.
+      THE RULER THAT CONFIRMS IT IS INSIDE THE ARTWORK. The fixed board's twenty
+      SFP-class cage columns sit on a measured 50.85 art-unit pitch, constant to
+      0.01 over five consecutive gaps; at this scale that is 14.253 mm against
+      SFF-8433's 14.25 for a ganged SFP+ assembly - 0.02 percent, on a dimension
+      that was never an input. The cage bores then come out 9.49 x 3.53 mm and
+      the QSFP bores 18.86 x 8.83, against 9.58 x 3.56 and 19.02 x 8.92 measured
+      the same way on the ASR 9903: the same parts, agreeing to a percent across
+      two chassis.
+  the-stencil-draws-both-bodies-the-same-width:
+    confidence: drawing
+    note: >-
+      WORTH KNOWING BEFORE ANYONE RE-MEASURES EITHER CHASSIS. The ASR 9902 and
+      ASR 9903 front masters draw their chassis bodies 1568.93 and 1569.68 art
+      units wide - the same outline to 0.2 mm - while Cisco publishes 439.74 mm
+      for this chassis and 443.86 for the 9903, which is 4.12 mm apart. Both
+      cannot be right about the drawing.
+      THE SFP RULER SAYS THIS ONE IS THE HONEST FIT. Anchored on 439.74 the
+      cage pitch lands on 14.253 mm against the standard's 14.25; anchored on
+      443.86 the ASR 9903's equivalent pitch lands on 14.36, which is 0.8 percent
+      over a standard that does not vary. The likeliest reading is that one body
+      outline was drawn for one of the two chassis and reused for the other, and
+      that the ASR 9903's ports are drawn about 0.8 percent wide as a result.
+      NOTHING IS CHANGED ON THE STRENGTH OF THAT HERE. It is a measurement of
+      this master, recorded where it was made; re-reading the ASR 9903 against
+      it is roc-ops/Portrayal#374.
+  rp-slots:
+    confidence: drawing
+    note: >-
+      The two RP slots are on a 209.58 mm pitch and the bays carry that figure,
+      while the module they accept, cisco/a99-rp-f@1, declares a 221.84 mm
+      envelope, so L33 reports 12.26 mm on each. This is the same situation the
+      ASR 9903 carries and the same reason: the a99-rp-f master's art includes a
+      retention bracket at each end and its Visio shape box measures the lot,
+      and in the chassis those brackets interleave.
+      THE PITCH IS THE DRAWING'S, TWENTY-ONE TIMES OVER. Every feature of RP1
+      sits exactly 209.58 mm left of its twin on RP2 - the yellow A99-RP-F band
+      at 20.30 against 229.88, SYNC0 at 63.07 against 272.64, and nineteen more -
+      and the two plates measure 220.21 mm each, overlapping by 10.63.
+      IT IS NOT THE SAME NUMBER AS THE ASR 9903'S 211.44 AND THE DIFFERENCE IS
+      NOT PHYSICAL. In ART UNITS the two masters place the RPs identically, at
+      747.73 and 747.75 units; the mm differ only because the two chassis bodies
+      the pitch is anchored to differ by 4.12 mm. Whichever body figure is wrong -
+      see the-stencil-draws-both-bodies-the-same-width - one of the two pitches
+      is wrong with it, by about 0.9 percent. The bay is sized to the pitch
+      either way, because docs/bay-and-component-size.md is explicit that a bay
+      may exceed the opening and must never exceed the pitch.
+  fixed-board:
+    confidence: datasheet
+    note: >-
+      THE FIXED BOARD IS NOT A BAY, and Cisco is in two minds about how to say
+      so. Table 2 of the install guide lists it as a component with a part
+      number - "Fixed Board Line Card | ASR-9902-LC | 1" - and the
+      troubleshooting chapter's `show environment` gives it a slot and a power
+      allocation, "0/0 ASR-9902-LC 614 283 ON". But the data sheet calls the
+      ports "integrated" four times, the router "consists of the fixed board",
+      and the guide's replacement chapter - which has a procedure for the RPs,
+      the power modules, the fan trays and the air filter - has none for it. So
+      its forty-eight ports are placements on the chassis face, and the part
+      number and the 614 W allocation are recorded in attrs rather than on a
+      module nobody can remove.
+      THE NUMBERING IS THE GUIDE'S AND THE MASTER'S TOGETHER. Figure 119, "Cisco
+      ASR 9902 Fixed Ports", gives the arrangement by slice - "SFP28 ports; eight
+      on each slice", "QSFP28 ports; three on each slice", "QSFP-DD ports; one on
+      each slice", "SFP+ ports; twelve on each slice" - and the master prints all
+      forty-eight numerals under the cages, 0 to 23 on the blue slice-0 band and
+      24 to 47 on the purple slice-1 band. Eight plus four plus twelve is
+      twenty-four a slice, and the two readings agree port for port.
+      THE BOARD IS MIRROR-SYMMETRIC. Slice 0 runs SFP28, QSFP, SFP+ left to right
+      and slice 1 runs SFP+, QSFP, SFP28, so the two QSFP blocks sit inboard and
+      the two SFP28 blocks at the ends.
+  which-two-are-qsfp-dd:
+    confidence: datasheet
+    note: >-
+      SOURCED, NOT INFERRED, and that is worth saying because the equivalent fact
+      on the ASR 9903's 2T Port Expansion Card had to be guessed at. Table 19 of
+      the Interface and Hardware Component Configuration Guide, "Supported Line
+      Cards, Ports, and Modes" for the 400G Digital Coherent QSFP-DD optics,
+      carries a row for this chassis: "ASR-9902 | 1x100G | 11, 37 | No | No | No |
+      No | Yes". Ports 11 and 37 are the two front-panel ports that take a
+      QSFP-DD coherent module, which is one per slice and exactly what Figure
+      119's callout 5 says there should be.
+      THE DRAWING AGREES WITHOUT BEING ASKED. On the master, the EMI gasket
+      between the two bores of the cage holding ports 10 and 11 is drawn as a hex
+      mesh where every other stacked cage on the board has a slotted grid, and
+      the same is true of the cage holding 36 and 37. Two independent sources
+      landing on the same two ports is what makes this sourced rather than read.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      drawing for the count and the positions, install guide for the states.
+      FORTY-EIGHT LAMPS FOR FORTY-EIGHT PORTS, one each, all on one baseline at y
+      82.00 and all cut to 2.78 x 1.59 mm, each beside its port's direction
+      triangle - down for the upper port of a stacked pair, up for the lower. The
+      rule reaches the end of the face: port 47's lamp is at 422.43 like every
+      other, and no port on this board is without one.
+      THE STATES ARE TABLE 27 of the install guide, "Port Status and LC FAIL
+      LEDs", transcribed: "Port Status LEDs (one per port). Green - Port state is
+      up and a valid physical layer link is established. Blinking - Line activity
+      is occurring. The LED blinks green-amber-green. Red - Port state is up, but
+      there is a link loss or SFP/QSFP failure. Off - Port is administratively
+      shut down." The blinking state is carried as a green lamp with an amber
+      second colour, which is what "green-amber-green" describes.
+  slices:
+    confidence: drawing
+    note: >-
+      install guide for what they are, master for where they are. "The 48 ports
+      are grouped in slice 0 and slice 1. The slice 0 is color coded in blue, and
+      slice 1 in purple", with the note that "A slice is a logical grouping of
+      physical ports". The master paints them: a #00b0f0 band from 21.86 to
+      218.69 under ports 0 to 23 and a #cc66ff band from 226.40 to 425.33 under
+      24 to 47, each carrying its ports' numerals in white and the rate chips
+      10/25G, 100G and 10G in black.
+      THE SLICE IS WHERE PORT MODE IS SET, which is why the band is worth
+      drawing rather than treating as decoration: "The port mode configuration is
+      per slice and not per port", and the configuration guide's Table 41 gives
+      five options per slice, from the default 1x100GE, 1x100GE, 10x10GE, 10x10GE
+      through to four-by-25GE mixes.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 2 of c78-744663: "1.6 kW DC power module (up to 2
+      modules), redundancy: 1+1" and "1.6 kW AC power module (up to 2 modules),
+      redundancy: 1+1", with "Mixing of AC and DC modules is not supported". The
+      install guide adds the input ranges, shared with the ASR 9903 because it is
+      the same module: 200-240 V high line and 90-130 V low line for AC, -48 VDC
+      nominal over a -40.5 to -72 V range at 40 A maximum for DC.
+      THE ONE PER-FRU TABLE IN THE INTAKE WAS TAKEN ON THIS CHASSIS. The
+      troubleshooting chapter's `show environment` example is an ASR 9902 with
+      two supplies and three fans, and its allocations - ASR-9902-LC 614 W,
+      A99-RP-F 102 W, ASR-9902-FAN 72 W - are this chassis's own rather than a
+      sibling's. That is why cisco/asr-9902-fan@1 carries a power figure and
+      cisco/asr-9903-fan@1 does not.
+      THE CHASSIS CARRIES NO ENVELOPE FIGURE AND THIS FILE INVENTS NONE. Neither
+      document states a typical or maximum chassis draw, so there is no
+      power-max-w here and the per-module figures stand on their own.
+  cooling:
+    confidence: datasheet
+    note: >-
+      datasheet - "3 fans in redundant configuration", Table 2's Redundancy row
+      lists "Fan redundancy" with no ratio, and Airflow is "Front to back". The
+      install guide adds the filter: "The Cisco ASR 9903 and Cisco ASR 9902
+      Router have a serviceable air filter (Cisco PID: ASR-9903-FILTER and
+      ASR-9902-FILTER)."
+      THE REDUNDANCY RATIO IS NOT PUBLISHED AND IS NOT SUPPLIED. The group
+      carries a `redundancy-note` and no `redundancy`, and L69 warns that this
+      chassis does not say how many fans it can lose. Three trays described as
+      redundant is 2+1 and nothing else worth writing - but Cisco does not write
+      it, and the ruling edgecore/csr310 carries for "Hot swappable redundant fan
+      modules" applies the same way here as it does on the ASR 9903.
+  power-switch:
+    confidence: drawing
+    note: >-
+      IT IS A REAL SWITCH AND THE GUIDE NAMES IT, which is the difference between
+      this chassis and its sibling. Figure 154, "Power Switch on the Cisco ASR
+      9902 Router", callouts: "1 Power Switch, 2 Power Status", and the step it
+      illustrates reads "Set the power switch to the ON position. The chassis
+      power LED turns Red." The switch is the slider under the yellow ATTENTION /
+      ON-OFF tag on the left-hand rear panel, and the Power Status lamp is the
+      small round lens below it.
+      IT IS DRAWN AND NOT SEATED. A panel switch is not a module, so the frame
+      and its tag are panel decor and the legend is silkscreen; only the lamp is
+      a placement, because a lamp is a thing the viewer lights. The lamp's
+      POSITION is read off a 4x render of the master by eye - it is drawn as a
+      stroked circle with no fill, which the shape parser does not carry - while
+      its legend and its identity are the guide's.
+      THE MASTER AND THE GUIDE DISAGREE ABOUT ONE WORD, and only one of them is
+      printed here. Cisco's photograph prints POWER in the space under the tag
+      with the lamp below it; the Visio master prints STATUS in that same space.
+      They are not two legends in two places - they are one legend, worded twice.
+      The master's word is carried, because the master is what positions every
+      other mark on this face and printing both would put ink on the metal twice
+      over. If a photograph of a real ASR 9902 rear settles it the other way, the
+      change is one string.
+  grounding:
+    confidence: drawing
+    note: >-
+      install guide for what it is, master for where. "Cisco ASR 9902 and Cisco
+      ASR 9903 Router - One grounding lug, which has two M5 bolt holes", and
+      Figure 74, "NEBS Bonding and Grounding Points on the Cisco ASR 9902
+      Router". The rear master draws the two holes 15.95 mm apart on centres, on
+      a lug landing at the right-hand rear panel, with an IEC 60417-5019 earth
+      symbol below it and a hex bonding stud to its left. cisco/a9k-ground-pad@1
+      carries a 15.3 mm two-hole pitch, which covers it to within 0.65 mm, and it
+      is placed unrotated here because this chassis mounts the lug flat where the
+      ASR 9903 mounts it upright.
+      ONE EARTH MARK, NOT TWO. cisco/a9k-ground-pad@1 draws its own IEC
+      60417-5019 mark beside the lug, so no separate symbol is placed here; the
+      master puts the mark BELOW the lug instead, and that difference is the
+      component's drawing convention rather than a second grounding point.
+  air-filter:
+    confidence: datasheet
+    note: >-
+      NOT DRAWN, deliberately, and for the reason the ASR 9903's is not:
+      ASR-9902-FILTER mounts on the FRONT of the chassis, in front of every face
+      this model draws - Figure 178, "Install Air Filter-Cisco ASR 9902", shows
+      it sliding onto the front mounting brackets as a full-face frame. Drawing
+      it would hide the whole front view, and it is an option rather than part of
+      the chassis. ASR-9902-CAB-MGMT is left out for the reason the modelling
+      guide gives for cable management generally: it is not a panel fact.
+attrs:
+  physical:
+    rack-face-width-mm: '482.6'
+    rack-mounting: 2-post and 4-post, 19-in. and 23-in.
+  performance:
+    capacity: 800 Gbps nonblocking full-duplex
+    integrated-interfaces: 2 x QSFP-DD, 6 x QSFP28, 16 x SFP28, 24 x SFP+
+    fixed-board-part: ASR-9902-LC
+    port-rates: 1, 10, 25, 40 and 100 Gigabit Ethernet
+    slices: 2 (slice 0 colour-coded blue, slice 1 purple); port mode is set per slice
+    port-modes-sfp28: '25GbE and 10GbE dual-rate - data sheet Table 2, "16 SFP28 dual-rate ports capable of 25Gb and 10Gb Ethernet". Cisco publishes no per-optic list for this chassis and points at the Cisco Optics Compatibility Matrix, so this is the rate list and not an optics list'
+    port-modes-sfp-plus: '10GbE LAN and WAN (OTN) - data sheet Table 2, "24 SFP+ ports capable of 10Gb Ethernet (LAN) and WAN (OTN)". Configuration guide Table 41 adds 1GbE and 5x1GE_5x10GE slice modes from IOS XR 7.9.1'
+    port-modes-qsfp28: '10, 40 and 100 Gigabit Ethernet - data sheet Table 2, "6 QSFP28 ports capable of 10Gb, 40Gb, and 100Gb Ethernet". The 40G port mode needs IOS XR 7.8.x or higher'
+    port-modes-qsfp-dd: '10, 40 and 100 Gigabit Ethernet on the cage - data sheet Table 2, "2 QSFP-DD ports capable of 10Gb, 40Gb, and 100Gb Ethernet" - plus 1x100G transponder mode with a 400G digital coherent module, per Table 19 of the configuration guide, which lists ASR-9902 ports 11 and 37 and marks the 400G and muxponder modes No'
+  power:
+    power-input-ac: 200-240 VAC high line, 90-130 VAC low line, 50-60 Hz
+    power-input-dc: -48 VDC nominal, -40.5 to -72 VDC, 40 A max per module
+    power-supply-pids: PWR-1.6KW-AC, PWR-1.6KW-DC
+    power-redundancy: '1+1'
+    fixed-board-allocation-w: '614 W allocated to 0/0 ASR-9902-LC in the install guide''s show environment example; not a chassis total'
+  thermal:
+    airflow: front to back
+    air-filter: ASR-9902-FILTER, one serviceable filter on the front
+  environmental:
+    operating-temp: 5 to 40 C (41 to 104 F)
+    storage-temp: -40 to 70 C (-40 to 158 F)
+    operating-humidity: 10 to 85 percent
+    storage-humidity: 5 to 95 percent
+    operating-altitude: 0 to 4000 m
+  platform:
+    route-processor: 'A99-RP-F, two, redundant'
+    switch-fabric: one integrated
+    rp-memory: SDRAM DDR4 32 GB
+    software: Cisco IOS XR 64-bit
+  features:
+    ethernet: 10-Gbps IEEE 802.3ae, 25-Gbps IEEE 802.3by and 802.3cc, 40/100-Gbps IEEE 802.3ba, 100GE PHY monitoring, IEEE 802.x flow control, full duplex, per-port byte and packet counters
+    macsec: all forty-eight ports
+    timing: 2 x BITS RJ-45, ToD RJ-45, 10 MHz and 1 PPS SMB per RP, IEEE 1588 PTP telecom profiles and SyncE
+  management:
+    console: RJ-45 serial on each RP
+    auxiliary: RJ-45 serial on each RP
+    mgmt-ethernet: 2 x RJ-45 per RP
+    usb: 1 x USB class A per RP
+  compliance:
+    etsi: EN300 386, ETSI 300 019 Storage 1.1, Transportation 2.3, Stationary 3.1, EN55022, EN55024, EN50082-1/EN-61000-6-1
+    emc: FCC Class A, ICES 003 Class A, AS/NZS 3548 Class A, CISPR 22 (EN55022) Class A, VCCI Class A, BSMI Class A, IEC/EN 61000-3-2, IEC/EN 61000-3-3
+    railway: EN50121-4
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 439.74
+  height: 87.63
+  depth: 482.6
+  ru: 2
+  weight-kg: 21.04
+  airflow: front-to-back
+  color: '#c8cacc'
+  silk: '#231f20'
+gaps:
+- what: fan-bay-labels-sit-on-the-tray-flange
+  scope: [rear, fan-trays]
+  reason: needs-drawing
+  note: >-
+    FT0, FT1 and FT2 are printed bottom-to-top on a narrow rail at the left of
+    each tray, and the tray's own drawn plate starts on that rail rather than
+    beside it - the captive screw sits on the same strip. This model draws each
+    tray as a filled rectangle, so the three marks land under their bays and L21
+    reports them. The marks are kept where the master puts them rather than moved
+    somewhere they would render, because moving them would put ink where the
+    device has none. It is the same defect cisco/asr-9903's fan labels carry and
+    the same fix closes both.
+  wanted: >-
+    cisco/asr-9902-fan@1 drawn with its left flange cut away where the chassis
+    prints the slot label, so the mark shows through.
+  blocks: []
+- what: two-chassis-one-body-outline
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    CISCO'S OWN STENCIL AND ITS OWN DATA SHEETS DISAGREE ABOUT HOW WIDE THIS
+    CHASSIS IS RELATIVE TO ITS SIBLING. The ASR 9902 and ASR 9903 front masters
+    draw their bodies 1568.93 and 1569.68 art units wide, the same outline to 0.2
+    mm, while c78-744663 gives 439.74 mm for this chassis and c78-744035 gives
+    443.86 mm for the 9903.
+    THIS FILE TAKES THE 439.74 and the evidence for that choice is a ruler inside
+    the artwork rather than a preference: at that scale the twenty SFP-class cage
+    columns come out on a 14.253 mm pitch against SFF-8433's 14.25, while the
+    same measurement on the ASR 9903 at its own stated width lands on 14.36,
+    which is 0.8 percent over a standard that does not vary. So the 9902 is the
+    chassis the outline fits.
+    WHAT IT COSTS IF THE READING IS WRONG is about 0.9 percent on every x on this
+    face and on the RP slot pitch, which would go from 209.58 to 211.44.
+  wanted: >-
+    a Cisco mechanical drawing of either chassis, or a tape measure across a real
+    ASR 9902 and a real ASR 9903 - two numbers that would settle both models at
+    once. Tracked in roc-ops/Portrayal#374.
+  blocks: []
+- what: four-faces-carry-no-documented-feature
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    THE TOP, BOTTOM AND TWO SIDES ARE SIZED AND NOT DRAWN, and each carries an
+    `empty:` sentence saying where the search ran. What they have in common is
+    that no source in the intake ELEVATES them. The Visio stencil's 119 masters
+    are front and rear elevations and hold no plan or side view at all. The
+    install guide's figures for this chassis are two elevations, a top-view
+    FOOTPRINT (Figure 18, which dimensions the outline and draws no feature), an
+    airflow path, eight rack-mounting sequences across 19-inch and 23-inch,
+    2-post and 4-post racks, a stacking figure and an air-filter view - the
+    mounting figures show the sides at an angle and dimension nothing on them.
+    The data sheet gives the envelope.
+    WHAT IS ACTUALLY THERE, from the photographs, is a cisco wordmark and a
+    product label on the top, feet and bracket landings underneath, and a
+    bracket rail on each side. None is positioned by anything, and drawing them
+    by eye off a three-quarter render would put unmeasured furniture on four
+    faces at once.
+  wanted: >-
+    a Cisco mechanical drawing of the ASR 9902, or orthographic photographs of
+    the top and one side with something of known size in frame.
+  blocks: []
+- what: front-right-furniture-unidentified
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The furniture strip at the right of the RP row carries a captive screw, a
+    round dimple above it and a small dark circle between them, and the guide
+    names none of the three. The same two unnamed features appear on the ASR
+    9903 in the same place. They are the right shape for an ESD wrist-strap jack
+    and a captive-screw well, and calling them so would be a guess with a
+    citation attached, so they are left off the face.
+  wanted: >-
+    a callout in a Cisco figure, or a photograph of the front right corner close
+    enough to read the two features.
+  blocks: []
+- what: per-port-lamp-colour-for-the-qsfp-dd-ports
+  scope: [qsfp-dd, port-leds]
+  reason: vendor-silent
+  note: >-
+    Ports 11 and 37 get the same four-state Port Status vocabulary as the other
+    forty-six, out of Table 27, because Table 27 is written for a port and does
+    not distinguish media. WHAT IS NOT SAID is whether a lamp beside a QSFP-DD
+    running a 400G coherent module means anything different - the coherent optics
+    section of the configuration guide describes transponder and muxponder modes
+    and their alarms and never mentions the faceplate lamp. So the lamp says what
+    Table 27 says it says, and nothing here claims it reports coherent state.
+  wanted: >-
+    a Cisco LED table written for the QSFP-DD ports on this chassis.
+  blocks: []
+groups:
+  rp-slots:
+    term: RP
+    role: management
+    index-origin: 0
+    physical-context: NetworkingDevice
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide lists "Route Processors (RPs) | A99-RP-F | 2" in its ASR 9902 components table, and the data sheet c78-744663 says the router "supports two redundant Route Processors (RPs)" and lists "Route processor redundancy" in Table 2. NEITHER NAMES A FORM, and 1+1 is the reading: with exactly two slots and redundancy between them there is no other arithmetic'
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+  qsfp-dd:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp-dd, speed: 100g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+  board-status:
+    term: LED
+    role: indicator
+    index-origin: 0
+  power-modules:
+    term: PM
+    role: service
+    index-origin: 0
+    physical-context: Power Module
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'data sheet c78-744663 Table 2, twice over: "1.6 kW DC power module (up to 2 modules), redundancy: 1+1" and "1.6 kW AC power module (up to 2 modules), redundancy: 1+1". The install guide adds the constraint that decides a build: "A total of two AC or DC power supplies are allowed in the Cisco ASR 9902 chassis", and mixing AC and DC is not supported'
+  fan-trays:
+    term: FT
+    role: service
+    index-origin: 0
+    physical-context: Fan
+    attrs:
+      redundancy-note: 'NO FORM IS STATED AND NONE IS INVENTED, so this group carries a note and no `redundancy`. The data sheet says "3 fans in redundant configuration" and lists "Fan redundancy" in Table 2 with no arithmetic beside it, and the Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide gives replacement steps and no ratio. It is the ruling edgecore/csr310 carries for "Hot swappable redundant fan modules"'
+  power-switch:
+    term: Switch
+    role: service
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 439.74, h: 87.63}
+    panel:
+      decor:
+        - {at: [4.00, 48.90], size: [14.60, 30.00], fill: '#8d949c', pattern: grille, vent: 40, confidence: drawing, source: 'the hex field the front master punches at the left of the fixed board, read off the drawing at its own extent. The DEPTH is estimated: no Cisco document gives a perforation depth for any chassis in this family, and 40 is the library convention for a chassis air grille'}
+        - {at: [74.00, 48.90], size: [7.60, 30.00], fill: '#8d949c', pattern: grille, vent: 40, confidence: drawing, source: 'the hex column between the SFP28 block and the first QSFP cage. Depth estimated as above'}
+        - {at: [128.00, 48.90], size: [7.60, 30.00], fill: '#8d949c', pattern: grille, vent: 40, confidence: drawing, source: 'the hex column between the second QSFP cage and the SFP+ block. Depth estimated as above'}
+        - {at: [311.00, 48.90], size: [7.20, 30.00], fill: '#8d949c', pattern: grille, vent: 40, confidence: drawing, source: 'the hex column between slice 1''s SFP+ block and its first QSFP cage. Depth estimated as above'}
+        - {at: [364.60, 48.90], size: [7.60, 30.00], fill: '#8d949c', pattern: grille, vent: 40, confidence: drawing, source: 'the hex column between slice 1''s second QSFP cage and its SFP28 block. Depth estimated as above'}
+        - {at: [428.00, 48.90], size: [9.00, 30.00], fill: '#8d949c', pattern: grille, vent: 40, confidence: drawing, source: 'the hex column at the right end of the fixed board. Depth estimated as above'}
+        - {at: [21.86, 84.41], size: [196.83, 2.5], fill: '#00b0f0'}
+        - {at: [226.4, 84.41], size: [198.93, 2.5], fill: '#cc66ff'}
+      cutouts:
+        - {id: port-0, at: [18.24, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-1, at: [18.24, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-2, at: [32.49, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-3, at: [32.49, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-4, at: [46.74, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-5, at: [46.74, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-6, at: [60.99, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-7, at: [60.99, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-8, at: [82.8, 53.33], size: [18.5, 9.58], shape: rect}
+        - {id: port-9, at: [82.8, 69.83], size: [18.5, 9.58], shape: rect}
+        - {id: port-10, at: [109.2, 53.33], size: [18.5, 9.58], shape: rect}
+        - {id: port-11, at: [108.95, 69.62], size: [19.0, 10.0], shape: rect}
+        - {id: port-12, at: [134.82, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-13, at: [134.82, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-14, at: [149.07, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-15, at: [149.07, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-16, at: [163.32, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-17, at: [163.32, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-18, at: [177.57, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-19, at: [177.57, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-20, at: [191.82, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-21, at: [191.82, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-22, at: [206.07, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-23, at: [206.07, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-24, at: [226.33, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-25, at: [226.33, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-26, at: [240.58, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-27, at: [240.58, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-28, at: [254.83, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-29, at: [254.83, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-30, at: [269.08, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-31, at: [269.08, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-32, at: [283.33, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-33, at: [283.33, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-34, at: [297.58, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-35, at: [297.58, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-36, at: [319.09, 53.33], size: [18.5, 9.58], shape: rect}
+        - {id: port-37, at: [318.84, 69.62], size: [19.0, 10.0], shape: rect}
+        - {id: port-38, at: [345.05, 53.33], size: [18.5, 9.58], shape: rect}
+        - {id: port-39, at: [345.05, 69.83], size: [18.5, 9.58], shape: rect}
+        - {id: port-40, at: [370.8, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-41, at: [370.8, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-42, at: [385.05, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-43, at: [385.05, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-44, at: [399.3, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-45, at: [399.3, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: port-46, at: [413.55, 55.87], size: [14.25, 10.4], shape: rect}
+        - {id: port-47, at: [413.55, 66.57], size: [14.25, 10.4], shape: rect}
+        - {id: led-0, at: [21.33, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-1, at: [27.18, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-2, at: [35.55, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-3, at: [41.4, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-4, at: [49.77, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-5, at: [55.63, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-6, at: [63.99, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-7, at: [69.85, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-8, at: [87.18, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-9, at: [95.01, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-10, at: [113.15, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-11, at: [120.98, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-12, at: [138.26, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-13, at: [144.12, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-14, at: [152.51, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-15, at: [158.36, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-16, at: [166.77, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-17, at: [172.62, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-18, at: [181.02, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-19, at: [186.87, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-20, at: [195.26, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-21, at: [201.13, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-22, at: [209.52, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-23, at: [215.38, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-24, at: [229.22, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-25, at: [235.08, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-26, at: [243.47, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-27, at: [249.32, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-28, at: [257.73, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-29, at: [263.58, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-30, at: [271.98, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-31, at: [277.83, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-32, at: [286.22, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-33, at: [292.09, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-34, at: [300.48, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-35, at: [306.34, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-36, at: [323.15, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-37, at: [330.97, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-38, at: [349.12, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-39, at: [356.95, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-40, at: [373.9, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-41, at: [379.76, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-42, at: [388.12, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-43, at: [393.98, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-44, at: [402.34, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-45, at: [408.2, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-46, at: [416.58, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: led-47, at: [422.43, 82.0], size: [2.8, 1.6], shape: rect}
+        - {id: board-status, at: [10.9, 76.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [13.89, 81.45], text: STATUS, font-size: 2.0, anchor: start, for: board-status}
+      - {at: [4.30, 86.18], text: cisco, font-size: 3.2, anchor: start, fill: '#31859b', for: chassis}
+      - {at: [16.60, 86.18], text: 'ASR 9902', font-size: 3.2, anchor: start, for: chassis}
+      - {at: [44.93, 85.88], text: '10/25G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [90.99, 85.88], text: '100G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [116.96, 85.88], text: '100G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [177.0, 85.88], text: '10G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [267.96, 85.88], text: '10G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [326.96, 85.88], text: '100G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [352.93, 85.88], text: '100G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [397.5, 85.88], text: '10/25G', font-size: 1.8, anchor: start, for: chassis}
+      - {at: [22.43, 86.18], text: '0', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-0}
+      - {id: dir-0, at: [19.61, 82.2], path: 'M 19.61 82.2 L 20.65 82.2 L 20.13 83.16 Z', for: port-0}
+      - {at: [28.3, 86.18], text: '1', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-1}
+      - {id: dir-1, at: [25.36, 82.2], path: 'M 25.36 83.16 L 26.4 83.16 L 25.88 82.2 Z', for: port-1}
+      - {at: [36.65, 86.18], text: '2', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-2}
+      - {id: dir-2, at: [33.83, 82.2], path: 'M 33.83 82.2 L 34.87 82.2 L 34.35 83.16 Z', for: port-2}
+      - {at: [42.52, 86.18], text: '3', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-3}
+      - {id: dir-3, at: [39.58, 82.2], path: 'M 39.58 83.16 L 40.62 83.16 L 40.1 82.2 Z', for: port-3}
+      - {at: [50.87, 86.18], text: '4', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-4}
+      - {id: dir-4, at: [48.05, 82.2], path: 'M 48.05 82.2 L 49.09 82.2 L 48.57 83.16 Z', for: port-4}
+      - {at: [56.74, 86.18], text: '5', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-5}
+      - {id: dir-5, at: [53.8, 82.2], path: 'M 53.8 83.16 L 54.84 83.16 L 54.32 82.2 Z', for: port-5}
+      - {at: [65.09, 86.18], text: '6', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-6}
+      - {id: dir-6, at: [62.27, 82.2], path: 'M 62.27 82.2 L 63.31 82.2 L 62.79 83.16 Z', for: port-6}
+      - {at: [70.96, 86.18], text: '7', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-7}
+      - {id: dir-7, at: [68.01, 82.2], path: 'M 68.01 83.16 L 69.05 83.16 L 68.53 82.2 Z', for: port-7}
+      - {at: [88.28, 86.18], text: '8', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-8}
+      - {id: dir-8, at: [85.46, 82.2], path: 'M 85.46 82.2 L 86.5 82.2 L 85.98 83.16 Z', for: port-8}
+      - {at: [96.12, 86.18], text: '9', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-9}
+      - {id: dir-9, at: [93.17, 82.2], path: 'M 93.17 83.16 L 94.21 83.16 L 93.69 82.2 Z', for: port-9}
+      - {at: [113.76, 86.18], text: '10', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-10}
+      - {id: dir-10, at: [111.42, 82.2], path: 'M 111.42 82.2 L 112.46 82.2 L 111.94 83.16 Z', for: port-10}
+      - {at: [121.6, 86.18], text: '11', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-11}
+      - {id: dir-11, at: [119.14, 82.2], path: 'M 119.14 83.16 L 120.18 83.16 L 119.66 82.2 Z', for: port-11}
+      - {at: [138.87, 86.18], text: '12', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-12}
+      - {id: dir-12, at: [136.53, 82.2], path: 'M 136.53 82.2 L 137.57 82.2 L 137.05 83.16 Z', for: port-12}
+      - {at: [144.74, 86.18], text: '13', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-13}
+      - {id: dir-13, at: [142.28, 82.2], path: 'M 142.28 83.16 L 143.32 83.16 L 142.8 82.2 Z', for: port-13}
+      - {at: [153.12, 86.18], text: '14', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-14}
+      - {id: dir-14, at: [150.79, 82.2], path: 'M 150.79 82.2 L 151.83 82.2 L 151.31 83.16 Z', for: port-14}
+      - {at: [159.0, 86.18], text: '15', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-15}
+      - {id: dir-15, at: [156.54, 82.2], path: 'M 156.54 83.16 L 157.58 83.16 L 157.06 82.2 Z', for: port-15}
+      - {at: [167.38, 86.18], text: '16', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-16}
+      - {id: dir-16, at: [165.03, 82.2], path: 'M 165.03 82.2 L 166.07 82.2 L 165.55 83.16 Z', for: port-16}
+      - {at: [173.25, 86.18], text: '17', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-17}
+      - {id: dir-17, at: [170.79, 82.2], path: 'M 170.79 83.16 L 171.83 83.16 L 171.31 82.2 Z', for: port-17}
+      - {at: [181.63, 86.18], text: '18', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-18}
+      - {id: dir-18, at: [179.3, 82.2], path: 'M 179.3 82.2 L 180.34 82.2 L 179.82 83.16 Z', for: port-18}
+      - {at: [187.5, 86.18], text: '19', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-19}
+      - {id: dir-19, at: [185.05, 82.2], path: 'M 185.05 83.16 L 186.09 83.16 L 185.57 82.2 Z', for: port-19}
+      - {at: [195.88, 86.18], text: '20', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-20}
+      - {id: dir-20, at: [193.54, 82.2], path: 'M 193.54 82.2 L 194.58 82.2 L 194.06 83.16 Z', for: port-20}
+      - {at: [201.76, 86.18], text: '21', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-21}
+      - {id: dir-21, at: [199.29, 82.2], path: 'M 199.29 83.16 L 200.33 83.16 L 199.81 82.2 Z', for: port-21}
+      - {at: [210.14, 86.18], text: '22', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-22}
+      - {id: dir-22, at: [207.8, 82.2], path: 'M 207.8 82.2 L 208.84 82.2 L 208.32 83.16 Z', for: port-22}
+      - {at: [216.01, 86.18], text: '23', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-23}
+      - {id: dir-23, at: [213.54, 82.2], path: 'M 213.54 83.16 L 214.58 83.16 L 214.06 82.2 Z', for: port-23}
+      - {at: [229.83, 86.18], text: '24', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-24}
+      - {id: dir-24, at: [227.49, 82.2], path: 'M 227.49 82.2 L 228.53 82.2 L 228.01 83.16 Z', for: port-24}
+      - {at: [235.7, 86.18], text: '25', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-25}
+      - {id: dir-25, at: [233.24, 82.2], path: 'M 233.24 83.16 L 234.28 83.16 L 233.76 82.2 Z', for: port-25}
+      - {at: [244.08, 86.18], text: '26', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-26}
+      - {id: dir-26, at: [241.75, 82.2], path: 'M 241.75 82.2 L 242.79 82.2 L 242.27 83.16 Z', for: port-26}
+      - {at: [249.96, 86.18], text: '27', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-27}
+      - {id: dir-27, at: [247.5, 82.2], path: 'M 247.5 83.16 L 248.54 83.16 L 248.02 82.2 Z', for: port-27}
+      - {at: [258.34, 86.18], text: '28', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-28}
+      - {id: dir-28, at: [255.99, 82.2], path: 'M 255.99 82.2 L 257.03 82.2 L 256.51 83.16 Z', for: port-28}
+      - {at: [264.21, 86.18], text: '29', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-29}
+      - {id: dir-29, at: [261.75, 82.2], path: 'M 261.75 83.16 L 262.79 83.16 L 262.27 82.2 Z', for: port-29}
+      - {at: [272.59, 86.18], text: '30', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-30}
+      - {id: dir-30, at: [270.26, 82.2], path: 'M 270.26 82.2 L 271.3 82.2 L 270.78 83.16 Z', for: port-30}
+      - {at: [278.46, 86.18], text: '31', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-31}
+      - {id: dir-31, at: [276.01, 82.2], path: 'M 276.01 83.16 L 277.05 83.16 L 276.53 82.2 Z', for: port-31}
+      - {at: [286.84, 86.18], text: '32', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-32}
+      - {id: dir-32, at: [284.5, 82.2], path: 'M 284.5 82.2 L 285.54 82.2 L 285.02 83.16 Z', for: port-32}
+      - {at: [292.72, 86.18], text: '33', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-33}
+      - {id: dir-33, at: [290.25, 82.2], path: 'M 290.25 83.16 L 291.29 83.16 L 290.77 82.2 Z', for: port-33}
+      - {at: [301.1, 86.18], text: '34', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-34}
+      - {id: dir-34, at: [298.76, 82.2], path: 'M 298.76 82.2 L 299.8 82.2 L 299.28 83.16 Z', for: port-34}
+      - {at: [306.97, 86.18], text: '35', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-35}
+      - {id: dir-35, at: [304.5, 82.2], path: 'M 304.5 83.16 L 305.54 83.16 L 305.02 82.2 Z', for: port-35}
+      - {at: [323.76, 86.18], text: '36', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-36}
+      - {id: dir-36, at: [321.43, 82.2], path: 'M 321.43 82.2 L 322.47 82.2 L 321.95 83.16 Z', for: port-36}
+      - {at: [331.6, 86.18], text: '37', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-37}
+      - {id: dir-37, at: [329.14, 82.2], path: 'M 329.14 83.16 L 330.18 83.16 L 329.66 82.2 Z', for: port-37}
+      - {at: [349.73, 86.18], text: '38', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-38}
+      - {id: dir-38, at: [347.39, 82.2], path: 'M 347.39 82.2 L 348.43 82.2 L 347.91 83.16 Z', for: port-38}
+      - {at: [357.57, 86.18], text: '39', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-39}
+      - {id: dir-39, at: [355.11, 82.2], path: 'M 355.11 83.16 L 356.15 83.16 L 355.63 82.2 Z', for: port-39}
+      - {at: [374.51, 86.18], text: '40', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-40}
+      - {id: dir-40, at: [372.17, 82.2], path: 'M 372.17 82.2 L 373.21 82.2 L 372.69 83.16 Z', for: port-40}
+      - {at: [380.38, 86.18], text: '41', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-41}
+      - {id: dir-41, at: [377.92, 82.2], path: 'M 377.92 83.16 L 378.96 83.16 L 378.44 82.2 Z', for: port-41}
+      - {at: [388.73, 86.18], text: '42', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-42}
+      - {id: dir-42, at: [386.39, 82.2], path: 'M 386.39 82.2 L 387.43 82.2 L 386.91 83.16 Z', for: port-42}
+      - {at: [394.6, 86.18], text: '43', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-43}
+      - {id: dir-43, at: [392.14, 82.2], path: 'M 392.14 83.16 L 393.18 83.16 L 392.66 82.2 Z', for: port-43}
+      - {at: [402.95, 86.18], text: '44', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-44}
+      - {id: dir-44, at: [400.61, 82.2], path: 'M 400.61 82.2 L 401.65 82.2 L 401.13 83.16 Z', for: port-44}
+      - {at: [408.82, 86.18], text: '45', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-45}
+      - {id: dir-45, at: [406.36, 82.2], path: 'M 406.36 83.16 L 407.4 83.16 L 406.88 82.2 Z', for: port-45}
+      - {at: [417.17, 86.18], text: '46', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-46}
+      - {id: dir-46, at: [414.84, 82.2], path: 'M 414.84 82.2 L 415.88 82.2 L 415.36 83.16 Z', for: port-46}
+      - {at: [423.04, 86.18], text: '47', font-size: 1.7, anchor: start, fill: '#ffffff', for: port-47}
+      - {id: dir-47, at: [420.59, 82.2], path: 'M 420.59 83.16 L 421.63 83.16 L 421.11 82.2 Z', for: port-47}
+    components:
+      bays:
+        - {id: rp-0, at: [4.2, 4.49], size: {w: 209.58, h: 38.09}, accepts: ['cisco/a99-rp-f@1'], default: cisco/a99-rp-f@1, group: rp-slots, rel-pos: 0}
+        - {id: rp-1, at: [213.78, 4.5], size: {w: 209.58, h: 38.09}, accepts: ['cisco/a99-rp-f@1'], default: cisco/a99-rp-f@1, group: rp-slots, rel-pos: 1}
+      placements:
+        - {id: port-0, ref: std/sfp-ganged@1, at: [18.24, 55.87], group: sfp28, rel-pos: 0}
+        - {id: port-1, ref: std/sfp-ganged@1, at: [18.24, 66.57], group: sfp28, rel-pos: 1}
+        - {id: port-2, ref: std/sfp-ganged@1, at: [32.49, 55.87], group: sfp28, rel-pos: 2}
+        - {id: port-3, ref: std/sfp-ganged@1, at: [32.49, 66.57], group: sfp28, rel-pos: 3}
+        - {id: port-4, ref: std/sfp-ganged@1, at: [46.74, 55.87], group: sfp28, rel-pos: 4}
+        - {id: port-5, ref: std/sfp-ganged@1, at: [46.74, 66.57], group: sfp28, rel-pos: 5}
+        - {id: port-6, ref: std/sfp-ganged@1, at: [60.99, 55.87], group: sfp28, rel-pos: 6}
+        - {id: port-7, ref: std/sfp-ganged@1, at: [60.99, 66.57], group: sfp28, rel-pos: 7}
+        - {id: port-8, ref: std/qsfp-ganged@1, at: [82.8, 53.33], group: qsfp28, rel-pos: 8}
+        - {id: port-9, ref: std/qsfp-ganged@1, at: [82.8, 69.83], group: qsfp28, rel-pos: 9}
+        - {id: port-10, ref: std/qsfp-ganged@1, at: [109.2, 53.33], group: qsfp28, rel-pos: 10}
+        - {id: port-11, ref: std/qsfp-dd@1, at: [108.95, 69.62], group: qsfp-dd, rel-pos: 11}
+        - {id: port-12, ref: std/sfp-ganged@1, at: [134.82, 55.87], group: sfp-plus, rel-pos: 12}
+        - {id: port-13, ref: std/sfp-ganged@1, at: [134.82, 66.57], group: sfp-plus, rel-pos: 13}
+        - {id: port-14, ref: std/sfp-ganged@1, at: [149.07, 55.87], group: sfp-plus, rel-pos: 14}
+        - {id: port-15, ref: std/sfp-ganged@1, at: [149.07, 66.57], group: sfp-plus, rel-pos: 15}
+        - {id: port-16, ref: std/sfp-ganged@1, at: [163.32, 55.87], group: sfp-plus, rel-pos: 16}
+        - {id: port-17, ref: std/sfp-ganged@1, at: [163.32, 66.57], group: sfp-plus, rel-pos: 17}
+        - {id: port-18, ref: std/sfp-ganged@1, at: [177.57, 55.87], group: sfp-plus, rel-pos: 18}
+        - {id: port-19, ref: std/sfp-ganged@1, at: [177.57, 66.57], group: sfp-plus, rel-pos: 19}
+        - {id: port-20, ref: std/sfp-ganged@1, at: [191.82, 55.87], group: sfp-plus, rel-pos: 20}
+        - {id: port-21, ref: std/sfp-ganged@1, at: [191.82, 66.57], group: sfp-plus, rel-pos: 21}
+        - {id: port-22, ref: std/sfp-ganged@1, at: [206.07, 55.87], group: sfp-plus, rel-pos: 22}
+        - {id: port-23, ref: std/sfp-ganged@1, at: [206.07, 66.57], group: sfp-plus, rel-pos: 23}
+        - {id: port-24, ref: std/sfp-ganged@1, at: [226.33, 55.87], group: sfp-plus, rel-pos: 24}
+        - {id: port-25, ref: std/sfp-ganged@1, at: [226.33, 66.57], group: sfp-plus, rel-pos: 25}
+        - {id: port-26, ref: std/sfp-ganged@1, at: [240.58, 55.87], group: sfp-plus, rel-pos: 26}
+        - {id: port-27, ref: std/sfp-ganged@1, at: [240.58, 66.57], group: sfp-plus, rel-pos: 27}
+        - {id: port-28, ref: std/sfp-ganged@1, at: [254.83, 55.87], group: sfp-plus, rel-pos: 28}
+        - {id: port-29, ref: std/sfp-ganged@1, at: [254.83, 66.57], group: sfp-plus, rel-pos: 29}
+        - {id: port-30, ref: std/sfp-ganged@1, at: [269.08, 55.87], group: sfp-plus, rel-pos: 30}
+        - {id: port-31, ref: std/sfp-ganged@1, at: [269.08, 66.57], group: sfp-plus, rel-pos: 31}
+        - {id: port-32, ref: std/sfp-ganged@1, at: [283.33, 55.87], group: sfp-plus, rel-pos: 32}
+        - {id: port-33, ref: std/sfp-ganged@1, at: [283.33, 66.57], group: sfp-plus, rel-pos: 33}
+        - {id: port-34, ref: std/sfp-ganged@1, at: [297.58, 55.87], group: sfp-plus, rel-pos: 34}
+        - {id: port-35, ref: std/sfp-ganged@1, at: [297.58, 66.57], group: sfp-plus, rel-pos: 35}
+        - {id: port-36, ref: std/qsfp-ganged@1, at: [319.09, 53.33], group: qsfp28, rel-pos: 36}
+        - {id: port-37, ref: std/qsfp-dd@1, at: [318.84, 69.62], group: qsfp-dd, rel-pos: 37}
+        - {id: port-38, ref: std/qsfp-ganged@1, at: [345.05, 53.33], group: qsfp28, rel-pos: 38}
+        - {id: port-39, ref: std/qsfp-ganged@1, at: [345.05, 69.83], group: qsfp28, rel-pos: 39}
+        - {id: port-40, ref: std/sfp-ganged@1, at: [370.8, 55.87], group: sfp28, rel-pos: 40}
+        - {id: port-41, ref: std/sfp-ganged@1, at: [370.8, 66.57], group: sfp28, rel-pos: 41}
+        - {id: port-42, ref: std/sfp-ganged@1, at: [385.05, 55.87], group: sfp28, rel-pos: 42}
+        - {id: port-43, ref: std/sfp-ganged@1, at: [385.05, 66.57], group: sfp28, rel-pos: 43}
+        - {id: port-44, ref: std/sfp-ganged@1, at: [399.3, 55.87], group: sfp28, rel-pos: 44}
+        - {id: port-45, ref: std/sfp-ganged@1, at: [399.3, 66.57], group: sfp28, rel-pos: 45}
+        - {id: port-46, ref: std/sfp-ganged@1, at: [413.55, 55.87], group: sfp28, rel-pos: 46}
+        - {id: port-47, ref: std/sfp-ganged@1, at: [413.55, 66.57], group: sfp28, rel-pos: 47}
+        - {id: led-0, ref: common/led-rect-sm@1, at: [21.33, 82.0], for: port-0, group: port-leds, rel-pos: 0}
+        - {id: led-1, ref: common/led-rect-sm@1, at: [27.18, 82.0], for: port-1, group: port-leds, rel-pos: 1}
+        - {id: led-2, ref: common/led-rect-sm@1, at: [35.55, 82.0], for: port-2, group: port-leds, rel-pos: 2}
+        - {id: led-3, ref: common/led-rect-sm@1, at: [41.4, 82.0], for: port-3, group: port-leds, rel-pos: 3}
+        - {id: led-4, ref: common/led-rect-sm@1, at: [49.77, 82.0], for: port-4, group: port-leds, rel-pos: 4}
+        - {id: led-5, ref: common/led-rect-sm@1, at: [55.63, 82.0], for: port-5, group: port-leds, rel-pos: 5}
+        - {id: led-6, ref: common/led-rect-sm@1, at: [63.99, 82.0], for: port-6, group: port-leds, rel-pos: 6}
+        - {id: led-7, ref: common/led-rect-sm@1, at: [69.85, 82.0], for: port-7, group: port-leds, rel-pos: 7}
+        - {id: led-8, ref: common/led-rect-sm@1, at: [87.18, 82.0], for: port-8, group: port-leds, rel-pos: 8}
+        - {id: led-9, ref: common/led-rect-sm@1, at: [95.01, 82.0], for: port-9, group: port-leds, rel-pos: 9}
+        - {id: led-10, ref: common/led-rect-sm@1, at: [113.15, 82.0], for: port-10, group: port-leds, rel-pos: 10}
+        - {id: led-11, ref: common/led-rect-sm@1, at: [120.98, 82.0], for: port-11, group: port-leds, rel-pos: 11}
+        - {id: led-12, ref: common/led-rect-sm@1, at: [138.26, 82.0], for: port-12, group: port-leds, rel-pos: 12}
+        - {id: led-13, ref: common/led-rect-sm@1, at: [144.12, 82.0], for: port-13, group: port-leds, rel-pos: 13}
+        - {id: led-14, ref: common/led-rect-sm@1, at: [152.51, 82.0], for: port-14, group: port-leds, rel-pos: 14}
+        - {id: led-15, ref: common/led-rect-sm@1, at: [158.36, 82.0], for: port-15, group: port-leds, rel-pos: 15}
+        - {id: led-16, ref: common/led-rect-sm@1, at: [166.77, 82.0], for: port-16, group: port-leds, rel-pos: 16}
+        - {id: led-17, ref: common/led-rect-sm@1, at: [172.62, 82.0], for: port-17, group: port-leds, rel-pos: 17}
+        - {id: led-18, ref: common/led-rect-sm@1, at: [181.02, 82.0], for: port-18, group: port-leds, rel-pos: 18}
+        - {id: led-19, ref: common/led-rect-sm@1, at: [186.87, 82.0], for: port-19, group: port-leds, rel-pos: 19}
+        - {id: led-20, ref: common/led-rect-sm@1, at: [195.26, 82.0], for: port-20, group: port-leds, rel-pos: 20}
+        - {id: led-21, ref: common/led-rect-sm@1, at: [201.13, 82.0], for: port-21, group: port-leds, rel-pos: 21}
+        - {id: led-22, ref: common/led-rect-sm@1, at: [209.52, 82.0], for: port-22, group: port-leds, rel-pos: 22}
+        - {id: led-23, ref: common/led-rect-sm@1, at: [215.38, 82.0], for: port-23, group: port-leds, rel-pos: 23}
+        - {id: led-24, ref: common/led-rect-sm@1, at: [229.22, 82.0], for: port-24, group: port-leds, rel-pos: 24}
+        - {id: led-25, ref: common/led-rect-sm@1, at: [235.08, 82.0], for: port-25, group: port-leds, rel-pos: 25}
+        - {id: led-26, ref: common/led-rect-sm@1, at: [243.47, 82.0], for: port-26, group: port-leds, rel-pos: 26}
+        - {id: led-27, ref: common/led-rect-sm@1, at: [249.32, 82.0], for: port-27, group: port-leds, rel-pos: 27}
+        - {id: led-28, ref: common/led-rect-sm@1, at: [257.73, 82.0], for: port-28, group: port-leds, rel-pos: 28}
+        - {id: led-29, ref: common/led-rect-sm@1, at: [263.58, 82.0], for: port-29, group: port-leds, rel-pos: 29}
+        - {id: led-30, ref: common/led-rect-sm@1, at: [271.98, 82.0], for: port-30, group: port-leds, rel-pos: 30}
+        - {id: led-31, ref: common/led-rect-sm@1, at: [277.83, 82.0], for: port-31, group: port-leds, rel-pos: 31}
+        - {id: led-32, ref: common/led-rect-sm@1, at: [286.22, 82.0], for: port-32, group: port-leds, rel-pos: 32}
+        - {id: led-33, ref: common/led-rect-sm@1, at: [292.09, 82.0], for: port-33, group: port-leds, rel-pos: 33}
+        - {id: led-34, ref: common/led-rect-sm@1, at: [300.48, 82.0], for: port-34, group: port-leds, rel-pos: 34}
+        - {id: led-35, ref: common/led-rect-sm@1, at: [306.34, 82.0], for: port-35, group: port-leds, rel-pos: 35}
+        - {id: led-36, ref: common/led-rect-sm@1, at: [323.15, 82.0], for: port-36, group: port-leds, rel-pos: 36}
+        - {id: led-37, ref: common/led-rect-sm@1, at: [330.97, 82.0], for: port-37, group: port-leds, rel-pos: 37}
+        - {id: led-38, ref: common/led-rect-sm@1, at: [349.12, 82.0], for: port-38, group: port-leds, rel-pos: 38}
+        - {id: led-39, ref: common/led-rect-sm@1, at: [356.95, 82.0], for: port-39, group: port-leds, rel-pos: 39}
+        - {id: led-40, ref: common/led-rect-sm@1, at: [373.9, 82.0], for: port-40, group: port-leds, rel-pos: 40}
+        - {id: led-41, ref: common/led-rect-sm@1, at: [379.76, 82.0], for: port-41, group: port-leds, rel-pos: 41}
+        - {id: led-42, ref: common/led-rect-sm@1, at: [388.12, 82.0], for: port-42, group: port-leds, rel-pos: 42}
+        - {id: led-43, ref: common/led-rect-sm@1, at: [393.98, 82.0], for: port-43, group: port-leds, rel-pos: 43}
+        - {id: led-44, ref: common/led-rect-sm@1, at: [402.34, 82.0], for: port-44, group: port-leds, rel-pos: 44}
+        - {id: led-45, ref: common/led-rect-sm@1, at: [408.2, 82.0], for: port-45, group: port-leds, rel-pos: 45}
+        - {id: led-46, ref: common/led-rect-sm@1, at: [416.58, 82.0], for: port-46, group: port-leds, rel-pos: 46}
+        - {id: led-47, ref: common/led-rect-sm@1, at: [422.43, 82.0], for: port-47, group: port-leds, rel-pos: 47}
+        - {id: board-status, ref: common/led-dot@1, at: [10.9, 76.3], for: chassis, group: board-status, rel-pos: 0}
+    regions:
+      - {id: rp-slots, label: 'Route processors RP0 and RP1 - the top row, one either side of the centre seam'}
+      - {id: sfp28, label: 'SFP28 ports - eight at each end of the fixed board, 0-7 on slice 0 and 40-47 on slice 1'}
+      - {id: qsfp28, label: 'QSFP28 ports - three a slice, inboard of the SFP28 blocks'}
+      - {id: qsfp-dd, label: 'QSFP-DD ports 11 and 37 - one a slice, the 400G coherent-capable cages'}
+      - {id: sfp-plus, label: 'SFP+ ports 12-35 - twelve a slice, across the middle of the board'}
+  rear:
+    size: {w: 439.74, h: 87.63}
+    panel:
+      decor:
+        - {at: [1.58, 0.0], size: [77.51, 43.85], fill: '#b6babe'}
+        - {at: [360.65, 0.0], size: [77.51, 43.85], fill: '#b6babe'}
+        - {at: [391.2, 15.2], size: [33.03, 14.62], fill: '#dfe2e5'}
+        - {at: [374.65, 18.48], size: [4.35, 4.38], fill: '#4a4f55'}
+      cutouts:
+        - {id: ground-pad, at: [384.77, 12.24], size: [46.0, 20.0], shape: rect}
+        - {id: power-switch, at: [14.74, 17.18], size: [30.74, 13.53], shape: rect}
+        - {id: power-status, at: [29.10, 37.60], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [21.84, 35.72], text: STATUS, font-size: 2.0, anchor: start, for: power-status}
+      - {at: [49.96, 39.33], text: 'PM0', font-size: 5.0, anchor: start, for: pm-0}
+      - {at: [368.49, 37.26], text: 'PM1', font-size: 5.0, anchor: start, for: pm-1}
+      - {at: [67.42, 28.09], text: 'PM0', font-size: 2.6, anchor: start, for: pm-0}
+      - {at: [373.5, 8.2], text: 'PM1', font-size: 2.6, anchor: start, for: pm-1}
+      - {at: [83.46, 40.63], text: 'FT0', font-size: 2.6, anchor: start, rotate: -90, for: ft-0}
+      - {at: [175.63, 40.63], text: 'FT1', font-size: 2.6, anchor: start, rotate: -90, for: ft-1}
+      - {at: [267.91, 40.63], text: 'FT2', font-size: 2.6, anchor: start, rotate: -90, for: ft-2}
+    components:
+      bays:
+        - {id: pm-0, at: [4.14, 44.64], size: {w: 74.94, h: 40.91}, accepts: ['cisco/pwr-1p6kw-ac@1', 'cisco/pwr-1p6kw-dc@1'], default: cisco/pwr-1p6kw-ac@1, group: power-modules, rel-pos: 0}
+        - {id: pm-1, at: [359.53, 44.64], size: {w: 74.94, h: 40.91}, accepts: ['cisco/pwr-1p6kw-ac@1', 'cisco/pwr-1p6kw-dc@1'], default: cisco/pwr-1p6kw-ac@1, group: power-modules, rel-pos: 1}
+        - {id: ft-0, at: [82.99, 3.85], size: {w: 88.58, h: 82.18}, accepts: ['cisco/asr-9902-fan@1'], default: cisco/asr-9902-fan@1, group: fan-trays, rel-pos: 0}
+        - {id: ft-1, at: [175.37, 3.85], size: {w: 88.58, h: 82.18}, accepts: ['cisco/asr-9902-fan@1'], default: cisco/asr-9902-fan@1, group: fan-trays, rel-pos: 1}
+        - {id: ft-2, at: [267.75, 3.85], size: {w: 88.58, h: 82.18}, accepts: ['cisco/asr-9902-fan@1'], default: cisco/asr-9902-fan@1, group: fan-trays, rel-pos: 2}
+      placements:
+        - {id: power-switch, ref: common/power-switch-slide@1, at: [14.74, 17.18], for: chassis, group: power-switch, rel-pos: 0}
+        - {id: power-status, ref: common/led-dot@1, at: [29.10, 37.60], for: power-switch, group: power-switch, rel-pos: 1}
+        - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [384.77, 12.24], group: grounding, rel-pos: 1}
+    regions:
+      - {id: power-modules, label: 'Power modules PM0 and PM1 - one at each end of the rear'}
+      - {id: fan-trays, label: 'Fan trays FT0 to FT2 - three across the middle of the rear'}
+      - {id: power-switch, label: 'Power switch and its status lamp - on the PM0 panel, above the left-hand supply'}
+      - {id: grounding, label: 'NEBS bonding and grounding - the two-hole lug on the PM1 panel, above the right-hand supply'}
+  top:
+    empty: >-
+      the top is a plain cover. Figure 178 and Figure 96 both photograph it from above at
+      an angle and show a cisco wordmark and a product label; nothing is dimensioned, no
+      figure in the fixed-port guide elevates this face, and the data sheet gives the
+      chassis envelope only. Searched: every 'Figure' caption in the guide for 'top', the
+      ASR 9902 data sheet, and the Visio stencil, whose 119 masters are front and rear
+      elevations with no plan view at all.
+    size: {w: 439.74, h: 482.6}
+  bottom:
+    empty: >-
+      the bottom carries the feet and the bracket landings and is photographed in no
+      figure. Figure 96, 'Stacking Multiple Cisco ASR 9902 Chassis', is the closest and
+      dimensions nothing. Searched the guide's figure captions, the data sheet and the
+      stencil; nothing elevates this face.
+    size: {w: 439.74, h: 482.6}
+  left:
+    empty: >-
+      the left side is sheet metal with the mounting-bracket rail on it and no documented
+      feature. Figures 81, 82, 90 and 91 draw 19-inch and 23-inch, 2-post and 4-post
+      brackets being screwed to this side and dimension neither the brackets nor the
+      holes; Figure 18, 'Cisco ASR 9902 Router Chassis Footprint and Dimensions-Top View',
+      dimensions the footprint and not the side. Airflow is front to back, so there is no
+      side vent to draw.
+    size: {w: 482.6, h: 87.63}
+  right:
+    empty: >-
+      the right side mirrors the left: bracket rail, no vent, nothing dimensioned. Same
+      sources searched as the left face, with the same result.
+    size: {w: 482.6, h: 87.63}
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      derived - built from the group roles rather than from a vendor bundle: the
+      service and management bays keep their seats, and this chassis has no
+      traffic bay to empty because its forty-eight ports are on an integrated
+      board. Cisco publishes no base bundle for it - the ordering tables in
+      c78-744663 list the chassis, the RP, the supplies, the fan tray, the
+      mounting kits, the cable management and the filter as separate line items.
+    description: >-
+      Chassis only - what you spec before deciding what goes in it. Both route
+      processors, two AC supplies and all three fan trays are seated. The
+      forty-eight fixed-board ports are part of the chassis and are there in
+      every configuration; unlike the ASR 9903 there is no Port Expansion Card
+      bay, so there is nothing to leave out.
+  ac:
+    kind: orderable
+    description: >-
+      The AC build: two PWR-1.6KW-AC modules, 1+1. Named explicitly even though
+      the base already seats them, so that asking for the AC variant does not
+      mean knowing which flavour the base happens to carry. The module handles
+      both high line (200-240 V) and low line (90-130 V), but swapping between
+      them means pulling the supply out and back in.
+    part-numbers:
+      ASR 9902 Router, AC supplies:
+        part: ASR-9902
+    bays:
+      pm-0: cisco/pwr-1p6kw-ac@1
+      pm-1: cisco/pwr-1p6kw-ac@1
+  dc:
+    kind: orderable
+    description: >-
+      The DC build: two PWR-1.6KW-DC modules at -48 VDC, 1+1. Mixing AC and DC
+      modules in one chassis is not supported, which is why this is a
+      configuration of the whole chassis rather than a choice per bay. The
+      chassis PID is ASR-9902 either way; the supplies are separate line items.
+    part-numbers:
+      ASR 9902 Router, DC supplies:
+        part: ASR-9902
+    bays:
+      pm-0: cisco/pwr-1p6kw-dc@1
+      pm-1: cisco/pwr-1p6kw-dc@1
+references:
+  - {title: 'Cisco ASR 9902 Compact High-Performance Router Data Sheet (c78-744663, 2021)', sha256: 8fae913bff35f1b4347e69a258ed7d89879093ce1d6f6d41ee71de1d304c623a}
+  - {title: 'Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide (2021-07-30)', sha256: 8b539355306e5bd2cfd9293a07dfe3acc95cb6aa95435537225b667901ac9d13}
+  - {title: 'Interface and Hardware Component Configuration Guide for Cisco ASR 9000 Series Routers, IOS XR 24.1.x-24.4.x', sha256: f32d81a00c31212882dfac4b3c426f0af5bedd3a1f75790c33bf101b1b2e9116}
