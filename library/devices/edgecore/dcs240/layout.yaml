@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs240
-version: 1.0.2
+version: 1.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9726-32DB
@@ -99,6 +99,35 @@ provenance:
       consistency, and the four-window gap below records what was left out and where.
       The management jack's pair ARE drawn, because they are integrated in its bezel and
       common/rj45-eth@1 carries them.
+  the-pull-out-tab-and-the-end-vents:
+    confidence: measured
+    note: >-
+      TWO THINGS THIS MODEL'S FIRST PASS MISSED, both found while reviewing edgecore/dcs511 and
+      both measured here on THIS device's own page-1 Overview elevation at 5.0821 px/mm.
+      THE GREEN TAB IS A PART. Colour-segmenting the elevation finds it at x 414.00-429.74,
+      y 40.14-42.70 - 1052 green pixels, unambiguous. It is common/pull-tab@1, the library's
+      "captive pull-out information tab", which edgecore/dcs510 and edgecore/dcs511 both seat
+      at 414.5 and 413.87 on the same shell. It was not drawn at all before. The part is 4.5
+      tall against 2.75 of drawn green, so it is seated with its foot at the panel edge rather
+      than its head at the measured top; the DCS510's independently chosen 38.4 lands 0.3 mm
+      from the 38.50 that gives.
+      THE END VENTS ARE SLOTS, NOT HONEYCOMB. Both carried `pattern: vent`, which paints
+      hexagons. The elevation shows two columns of RECTANGULAR slots at the left edge on about
+      a 1.8 by 3.3 mm pitch - the same slot field the top and bottom bands already use on this
+      face. The extents are not changed: 1.20-4.80 and 433.00-437.20 are this device's own
+      measurements from the pass that got the pattern wrong, and nothing here re-measures them.
+      WHAT IS NOT CHANGED, AND WAS CHECKED. The DCS511 review also moved that device's lamps to
+      six round windows and cut its timing legend to "PPS". NEITHER APPLIES HERE: this
+      elevation plainly draws PS1 and Fan as circles in the left column and PS2 and the unnamed
+      sixth as squares in the right, and it plainly prints "1PPS IN". Two devices on one shell
+      that differ in their silkscreen, which is why each is read on its own art.
+      ONE RENAME FALLS OUT OF THE TAB. The white rectangle at [409.00, 5.00] was called
+      `product-label`, and callout 6 on this elevation gives that name to the TAB. It carries
+      the Edge-corE wordmark and is the brand badge, so it is renamed `brand-badge` and the
+      model stops using one name for two things. It is still drawn here, unlike on
+      edgecore/dcs511 where it was dropped: this library cannot set a logo into a decor, so it
+      is a blank grey box either way, and whether that is worth drawing is a judgement this
+      change does not make for a device it is only passing through.
   the-rear:
     confidence: measured
     note: >-
@@ -196,6 +225,24 @@ gaps:
     window carries no legend in any figure or table in either document. It is drawn, given an
     id and named in a region as an unidentified indicator rather than omitted, because a mark
     on the metal that the model leaves out is worse than one it labels as unknown.
+- what: end-vent-extents
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    A reading of how far the two end vent fields actually reach. Their PATTERN was corrected
+    here - they were drawn as honeycomb and the elevation plainly shows rectangular slots - but
+    their extents, 1.20 to 4.80 and 433.00 to 437.20, are still the ones set by the pass that
+    got the pattern wrong, and nothing in this change re-measures them.
+    THAT IS NOT A SAFE ASSUMPTION, because the sibling moved. edgecore/dcs511 carried these
+    same two decors and its own photograph put the left field at 1.0 to 3.6, 1.2 mm narrower,
+    which is what had its Loc, PS1 and Fan legends printing over the vent.
+    IT WAS ATTEMPTED AND IT FAILED. A darkness threshold on this elevation returns the seams
+    between slots rather than the field, and scoring columns by vertical periodicity - which
+    should find a slot field and ignore a seam - returns four columns at 5.31-6.10 mm on the
+    left, which is not where the field visibly is. At 5.08 px/mm a 1.8 mm slot column is nine
+    pixels and the anti-aliasing defeats both instruments. This device's photographs are
+    1.105 px/mm and are worse. A square-on shot at the DCS511's 2.19 px/mm or better would
+    settle it in one pass.
 - what: dc-supply-face
   scope: [rear]
   reason: needs-photo
@@ -234,7 +281,13 @@ groups:
       optics question does not apply to it; the medium is on the placement, where the exporter
       reads it.
   leds: {term: LED, role: indicator, index-origin: 1}
-  furniture: {term: Part, role: furniture, index-origin: 1}
+  furniture:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: >-
+      the USB symbol beside the storage port and the captive pull-out information tab at the
+      foot of the panel - things you neither connect to nor read off the face.
   psus:
     term: PSU
     role: service
@@ -259,11 +312,11 @@ views:
     size: {w: 438.4, h: 43.5}
     panel:
       decor:
-      - {id: vent-left, at: [1.20, 1.00], size: [3.60, 41.50], pattern: vent, pattern-pitch: [3.80, 4.20], vent: 20}
-      - {id: vent-right, at: [433.00, 1.00], size: [4.20, 41.50], pattern: vent, pattern-pitch: [3.80, 4.20], vent: 20}
+      - {id: vent-left, at: [1.20, 1.00], size: [3.60, 41.50], pattern: slots, pattern-pitch: [1.80, 3.30], vent: 20}
+      - {id: vent-right, at: [433.00, 1.00], size: [4.20, 41.50], pattern: slots, pattern-pitch: [1.80, 3.30], vent: 20}
       - {id: vent-top, at: [38.00, 1.20], size: [348.00, 8.20], pattern: slots, pattern-pitch: [4.40, 4.60], vent: 18}
       - {id: vent-bottom, at: [38.00, 39.60], size: [348.00, 2.90], pattern: slots, pattern-pitch: [4.40, 3.20], vent: 18}
-      - {id: product-label, at: [409.00, 5.00], size: [22.00, 9.00], fill: '#d7dbdf'}
+      - {id: brand-badge, at: [409.00, 5.00], size: [22.00, 9.00], fill: '#d7dbdf'}
       cutouts:
       - {id: led-loc, at: [6.80, 3.30], size: [2.0, 2.0], shape: circle}
       - {id: led-diag, at: [10.10, 3.50], size: [2.8, 1.6], shape: rect}
@@ -324,6 +377,7 @@ views:
       - {ref: std/usb-a@1, id: usb-a, at: [17.70, 16.40], group: mgmt, rel-pos: 2,
          attrs: {media: usb-a, role: storage}}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [32.70, 14.60], group: furniture, rel-pos: 1}
+      - {ref: common/pull-tab@1, id: info-tab, at: [413.87, 38.50], group: furniture, rel-pos: 2}
       - {ref: std/rj45@2, id: console-rj, at: [15.80, 27.01], group: mgmt, rel-pos: 3,
          attrs: {media: rj45-serial, role: console}}
       - {ref: std/micro-usb@1, id: console-usb, at: [5.85, 26.10], group: mgmt, rel-pos: 4,
