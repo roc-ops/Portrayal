@@ -1,0 +1,117 @@
+format: 1
+kind: module
+name: dcs201-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 400 W AC power supply of the Edgecore DCS201 (AS5835-54X) - a CRPS-style module in a
+  bright housing with a square-latticed exhaust grille at the left, a wire bail handle over
+  it, an IEC C14 inlet turned on its side at the right and a coloured release latch at its
+  foot. The same 54 x 40 face the rest of this family uses; a DIFFERENT RATING, which is why
+  it is not common/psu-ac-650@3.
+size: {w: 54.0, h: 40.0}
+size-confidence: {w: photo-measured, h: estimated}
+attrs:
+  model: 'AS5835-54X AC PSU'
+  power-output-w: 400
+  input: ac
+  inlet: c14
+provenance:
+  power: >-
+    quick start and datasheet, which agree and state ONE figure with no temperature ladder:
+    "AC PSU / Power Rating / 100-240 VAC, 50-60 Hz, 400 Watts". No ambient is given anywhere in
+    either document, so none is recorded here rather than one being chosen to finish the
+    sentence. The chassis it feeds draws "356 Watts maximum".
+  size: >-
+    photo-measured - the DCS201 quick start guide, page 1 "Overview" rear elevation, rendered
+    from the PDF PAGE at 600 dpi and scaled by the stated 442.5 mm body width to 5.0192 px/mm.
+    Both supplies were read with an edge scan rather than a threshold, because a threshold on
+    a bright module against dark chassis clips the duller edge: the left supply's frame reads
+    16.74 to 71.13 and the right's 370.78 to 425.37, giving 54.39 and 54.59 against a 54.0
+    part. Two independent reads a millimetre apart on a 442.5 mm face is agreement, so the
+    width is the family's 54.0 rather than a new number.
+    THE HEIGHT IS NOT MEASURED - the figure is a perspective render, see the device's
+    figure-is-a-perspective-render gap. 40.0 is what every 1RU module in this library's
+    Edgecore rears uses and is recorded as estimated.
+  why-this-is-not-common-psu-ac-650: >-
+    ONE NUMBER, AND IT IS THE ONE THAT MATTERS. The face is the same size and the same
+    design - bright CRPS housing, bail handle, C14 inlet, coloured latch - and the three
+    sibling chassis AS5912-54X, AS7326-56X and AS7726-32X all seat common/psu-ac-650@3 at
+    exactly this 54 x 40. But that contract asserts `power-output-w: 650`, sourced from the
+    DCS204 and DCS203 datasheets, and THIS supply is 400 W: the quick start's own
+    specification table reads "AC PSU / Power Rating / 100-240 VAC, 50-60 Hz, 400 Watts" and
+    the datasheet agrees. Seating the 650 part here would export a wattage this vendor does
+    not claim, on a chassis whose whole consumption is 356 W. A shape may be shared; a rating
+    may not.
+  inlet: >-
+    read from the rear elevation and TURNED. The C14 aperture measures about 14.5 wide by
+    25 tall where an IEC 60320 C14 panel cutout is wider than tall, so the inlet is rotated a
+    quarter turn - the same thing common/psu-ac-650@3 and edgecore/csr440-psu-ac@1 do on their
+    own CRPS faces. Its size is std/c14-inlet@1's own, which carries a SCHURTER panel cutout;
+    nothing here re-measures it.
+  elements: >-
+    ESTIMATED POSITIONS ON A MEASURED FACE. The x axis of the source figure carries scale and
+    the y axis does not, and these elements are small enough that reading them off a 5 px/mm
+    perspective render would be reading the lighting. The lattice grille, the bail handle over
+    it, the thumbnut at the foot and the latch to its right are all placed from the drawing's
+    proportions within a face whose width is measured.
+  input: >-
+    datasheet and quick start, which agree: "100-240 VAC, 50-60 Hz, 6-3 A", with the fuller
+    breakdown "100-127 VAC, 47-63 Hz, 6.0 A / 200-240 VAC, 47-63 Hz, 3.0 A".
+  the-drawings-disclaim-themselves: >-
+    The quick start prints "The switch drawings in this document are for illustration only
+    and may not match your particular switch model." That is why the rating comes from the
+    specification table and only the geometry comes from the drawing.
+  airflow-colour-convention: >-
+    The guide's Airflow Reversal section states it for the supplies as well as the fans:
+    F2B PSUs carry RED release latches and B2F PSUs carry BLUE. The latch fill is therefore a
+    default rather than a fixed colour, overridden per configuration, exactly as
+    common/psu-ac-650@3 and common/fan-module@1 do. See roc-ops/Portrayal#277.
+states: [absent]
+elements:
+  handle: {at: [7.5, 7.0], size: [13.0, 26.0], class: handle}
+  latch: {at: [40.0, 35.0], size: [9.5, 3.4], class: latch}
+  vent-field: {at: [2.2, 3.4], size: [22.0, 30.0], class: vent}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#b8324a'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [28.6, 6.2], rotate: 270}
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries the
+  # inlet's recess, which is how the CSR310's AC supply came out blank. See #364.
+  features:
+    - node: handle
+      bar: 4.0
+      lift: 2.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-ac@1's own handle key - the elevation fixes the bail's position on
+        the face, not how far it stands off it. A bail has to clear a finger.
+    - node: latch
+      out: 2.4
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-ac@1's own elements key - the latch's outline is read off the
+        drawing's proportions and its projection is not.
+    - node: vent-field
+      vent: 24
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-ac@1's own elements key - the lattice's extent is drawn and the
+        depth of the cavity behind it is not stated.
+skins: [default]
+body:
+  depth: 260
+  color: '#b9bec4'
+  footprint: {at: [0, 0], size: [54, 40]}

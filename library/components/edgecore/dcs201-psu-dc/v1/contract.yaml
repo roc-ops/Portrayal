@@ -1,0 +1,111 @@
+format: 1
+kind: module
+name: dcs201-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 400 W -48 VDC power supply of the Edgecore DCS201 (AS5835-54X) - the same 54 x 40 CRPS
+  face as the AC supply, with a THREE-POLE PLUGGABLE GREEN TERMINAL in place of the C14
+  inlet. The quick start wires it DC return, -36 to -75 VDC, Ground.
+size: {w: 54.0, h: 40.0}
+size-confidence: {w: borrowed, h: estimated}
+attrs:
+  model: 'AS5835-54X 48VDC PSU'
+  power-output-w: 400
+  input: dc
+  inlet: dc-terminal
+provenance:
+  power: >-
+    quick start and datasheet, which agree and state ONE figure with no temperature ladder:
+    "48 VDC PSU / Power Rating / 48 VDC, 400 Watts". No ambient is given, so none is recorded.
+    The same 400 W as the AC variant, feeding a chassis that draws "356 Watts maximum".
+  size: >-
+    BORROWED FROM edgecore/dcs201-psu-ac@1, WHICH MEASURED IT. The two supplies fill the same
+    two bays on the same rear face and the guide offers them as alternatives in one sentence -
+    "Install one or two AC PSUs" against "Install one or two DC PSUs", same slot, same
+    chassis - so the face is the AC module's measured 54.0 rather than a second reading. The
+    rear elevation on page 1 draws the AC pair; this variant is drawn only in the small
+    three-quarter "DC Power" figure on page 2, which is not a face to measure.
+  the-face: >-
+    READ FROM A THREE-QUARTER FIGURE, NOT AN ELEVATION, and everything below is estimated
+    because of it. The "DC Power" figure on page 2 shows a bright module with a wire bail
+    handle and a GREEN pluggable terminal where the AC supply carries its C14, with the mating
+    green plug drawn beside it being wired. The count of poles is legible - three - and the
+    guide's text confirms what they are. The grille, the handle and the latch are carried from
+    the AC supply's measured face, which is the same housing.
+  poles: >-
+    quick start, Connect Power / DC Power, verbatim: "Wire the DC terminal plug: DC return /
+    -36 - -75 VDC / Ground". Three poles, named, in that order. The package contents list
+    item 6 as a "DC power connector (included with 48 VDC PSU only)", which is the mating
+    plug the figure draws.
+  why-this-is-not-common-psu-dc-650: >-
+    Same reason as the AC side and one more. common/psu-dc-650@2 asserts 650 W and this supply
+    is 400 W - "48 VDC PSU / Power Rating / 48 VDC, 400 Watts" - and that contract's own
+    description is "blue fold-out handle, terminal cover", which is a different face from the
+    bail handle and open green terminal this guide draws.
+  why-no-composed-terminal-part: >-
+    BECAUSE THE LIBRARY HAS NO PART FOR THIS CONNECTOR AND A THREE-QUARTER FIGURE IS NO BASIS
+    FOR ONE. common/dc-terminal-27 and common/dc-terminal-24 are screw-pole barrier blocks
+    with a lip and pole windows, measured from elevations; this is a pluggable header of the
+    Phoenix kind, and the only picture of it is at an angle. The three poles are drawn in this
+    skin as the module's own element rather than invented as a shared contract that other
+    devices would then inherit.
+  input: >-
+    datasheet and quick start, which agree: "-36 - -75 VDC, 14-7 A", rated "48 VDC, 400 Watts".
+  the-drawings-disclaim-themselves: >-
+    The quick start prints "The switch drawings in this document are for illustration only
+    and may not match your particular switch model."
+  airflow-colour-convention: >-
+    As edgecore/dcs201-psu-ac@1 - the guide's Airflow Reversal section colours F2B latches RED
+    and B2F latches BLUE, so the latch fill is a default overridden per configuration. See
+    roc-ops/Portrayal#277.
+states: [absent]
+elements:
+  handle: {at: [7.5, 7.0], size: [13.0, 26.0], class: handle}
+  latch: {at: [40.0, 35.0], size: [9.5, 3.4], class: latch}
+  vent-field: {at: [2.2, 3.4], size: [22.0, 30.0], class: vent}
+  dc-inlet: {at: [28.6, 11.0], size: [20.0, 18.0], class: inlet}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#b8324a'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#3a3e43'
+  # No face-wide `out` - see edgecore/dcs201-psu-ac@1 and roc-ops/Portrayal#364.
+  features:
+    - node: handle
+      bar: 4.0
+      lift: 2.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-dc@1's own handle key, carried from the AC supply's housing.
+    - node: latch
+      out: 2.4
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-dc@1's own elements key - outline drawn, projection not stated.
+    - node: dc-inlet
+      out: 5.0
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-dc@1's own dc-inlet key. A pluggable terminal header stands proud
+        of the face - the figure shows the mating plug sliding onto it - and how far is not
+        stated, so the projection is a shape and not a reading.
+    - node: vent-field
+      vent: 24
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-psu-dc@1's own elements key, carried from the AC supply's housing.
+skins: [default]
+body:
+  depth: 260
+  color: '#b9bec4'
+  footprint: {at: [0, 0], size: [54, 40]}

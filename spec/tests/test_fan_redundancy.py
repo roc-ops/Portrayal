@@ -148,7 +148,13 @@ def test_the_comparison_layer_can_now_reach_them():
     its own 4+1 because that figure counts FANS INSIDE ONE TRAY - true at the
     wrong level - and the CSR310 above never had a form to check. Six removable
     modules is the arrangement the comparison layer was built for.
+
+    FORTY-SIX IS THE DCS201, whose datasheet says "4+1 redundant fan modules" against five
+    rear bays - and whose quick start counts them the same way, "5 x fan trays", so the two
+    documents agree with each other and with the metal. Its three sibling chassis carry SIX
+    fans on a 48.6 pitch and are already counted here; this one is five on a 58.8 pitch,
+    which is why its fan is its own part rather than the family's.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 45, n
+    assert n == 46, n

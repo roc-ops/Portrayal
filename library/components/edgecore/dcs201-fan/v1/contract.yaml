@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: dcs201-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  A rear fan module of the Edgecore DCS201 (AS5835-54X) - a honeycomb-grilled tray with a
+  pull bar across its foot and a diamond airflow legend in its upper right corner. WIDER
+  THAN THE 48.6 mm common/fan-module THE REST OF THIS FAMILY SEATS, and there are five of
+  them rather than six, which is why it is its own part.
+size: {w: 58.8, h: 40.0}
+size-confidence: {w: photo-measured, h: estimated}
+attrs: {model: 'AS5835-54X Fan Tray', power-absent: not-published, airflow: front-to-back}
+provenance:
+  size: >-
+    photo-measured - the DCS201 quick start guide, page 1 "Overview" rear elevation, rendered
+    from the PDF PAGE at 600 dpi and scaled by the stated 442.5 mm body width to 5.0192 px/mm.
+    THE WIDTH IS A PITCH, NOT AN EDGE. The five honeycomb grilles centre at 103.6, 162.5,
+    221.4, 280.1 and 338.9 mm from the left of the rear face - four steps of 58.97, 58.85,
+    58.77 and 58.80, so 58.8 within a tenth of a millimetre four times over. The block those
+    centres imply runs 74.2 to 368.3, which leaves 3.5 mm to the AC supply's right edge at
+    70.7 and 3.1 mm to the second supply's left edge at 371.4: two gaps that agree, between
+    two supplies whose own edges measure 54.4 and 54.6 against a 54.0 part. The arithmetic
+    closes on itself, which is why the pitch is taken as the module width.
+    THE HEIGHT IS NOT MEASURED. The figure is a perspective render - see the device's
+    figure-is-a-perspective-render gap - so its vertical axis carries no scale. 40.0 is the
+    height every 1RU module in this library's Edgecore rears already uses, and it is recorded
+    as estimated rather than dressed up as a reading.
+  why-this-is-not-common-fan-module: >-
+    BECAUSE IT IS A DIFFERENT SIZE AND THERE IS A DIFFERENT NUMBER OF THEM. common/fan-module@1
+    is 48.6 mm wide and the three sibling chassis that seat it - AS5912-54X, AS7326-56X and
+    AS7726-32X - each carry SIX on a 48.6 pitch. This device carries FIVE on a 58.8 pitch:
+    the quick start's rear callout says "5 x fan trays" and the datasheet says "4+1 redundant
+    fan modules". Five centres 235.3 mm apart cannot be six modules 48.6 apart, which would
+    span 194.4; the difference is forty millimetres and not a measurement error.
+    The shape is the family's - honeycomb, pull bar, airflow legend - and the size is not.
+  airflow-colour-convention: >-
+    CARRIED FROM common/fan-module@1, WHICH ALREADY CITES THIS DEVICE'S OWN GUIDE. That
+    contract records the convention as stated in eight Edgecore documents and names the
+    DCS201 quick start among the seven it has staged. This device's guide is therefore not a
+    second-hand source for it: lines 126 and 130 of the converted text read "Remove
+    front-to-back (F2B) airflow fan trays (red handles) and PSUs (red release latches)" and
+    "Install back-to-front (B2F) airflow fan trays (blue handles) and PSUs (blue release
+    latches)". So the default below is the F2B colour and a back-to-front build overrides it
+    per configuration, exactly as common/fan-module@1 does. See roc-ops/Portrayal#277.
+  power: >-
+    NOT PUBLISHED. The datasheet gives the chassis "356 Watts maximum" for consumption and
+    states no per-module figure for a fan tray, so L29 stands on it at the chassis rather than
+    a number being invented here.
+  elements: >-
+    photo-measured in x against the same 5.0192 px/mm, estimated in y for the reason the size
+    key gives. The grille reads 36.0 mm wide and sits inboard of both module edges; the pull
+    bar crosses the foot; the diamond legend is in the upper right corner on every one of the
+    five.
+states: [absent]
+elements:
+  grille: {at: [11.4, 3.0], size: [36.0, 27.5], class: rotor}
+  handle: {at: [11.4, 33.2], size: [36.0, 3.2], class: latch}
+fields:
+  handle-finish:
+    label: Handle colour
+    type: text
+    default: '#c22f2f'
+  airflow-legend:
+    label: Airflow legend
+    type: text
+    default: 'F2B'
+relief:
+  wall: '#15181b'
+  # No face-wide `out` - a slab buries everything under it. See roc-ops/Portrayal#364.
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-fan@1's own grille key - the honeycomb's extent is measured off the
+        rear elevation and the depth of the cavity behind it is not stated anywhere.
+    - node: handle
+      bar: 3.0
+      lift: 1.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        edgecore/dcs201-fan@1's own handle key - a pull bar's outline is read off the
+        elevation and its projection is not.
+skins: [default]
+body:
+  depth: 56
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [58.8, 40]}
