@@ -244,6 +244,57 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
   `logo-zone` element instead.
 
+
+## Adding an optic
+
+A transceiver in this library is a GENERIC - one drawn part per form factor and
+face under `generic/`, standing for every module of its kind and carrying no
+rate. A vendor's optic is a WRAPPER around one: it composes the generic, sets the
+generic's colour and label, and carries the facts that make it that product.
+
+```yaml
+# library/components/cisco/sfp-10g-lr/v1/contract.yaml
+format: 1
+kind: component
+name: sfp-10g-lr
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp                      # must equal the generic's
+profile: networking
+description: Cisco SFP-10G-LR, 10GBASE-LR, 1310 nm, 10 km over OS2.
+size: {w: <the generic's w>, h: <the generic's h>, d: <the generic's d>}
+attrs: {model: SFP-10G-LR, media: sfp-plus, speed: 10g, reach: 10km,
+        wavelength: 1310nm, power-draw-max-w: 1.0}
+provenance:
+  size: 'the generic it wraps - generic/sfp-lc@1 - which conforms to sfp-module'
+  power: 'datasheet - Cisco SFP-10G-LR data sheet, maximum power consumption 1 W'
+parts:
+  - {ref: generic/sfp-lc@1, id: body, at: [0, 0],
+     attrs: {latch-color: '#2f5fa8', label: SFP-10G-LR}}
+skins: [default]
+```
+
+What goes where:
+
+- **On the wrapper:** `model`, `media` (the rate family the port group speaks -
+  `sfp-plus`, `sfp28`, `qsfp28` ...), `speed`, `reach`, `wavelength`,
+  `power-draw-max-w`, and a `provenance.power` sentence naming the datasheet.
+  L99 refuses every one of these on a `generic/` part, which is how the split
+  stays true.
+- **Passed to the generic:** `latch-color` and `label`, as `attrs` on the
+  `parts:` entry. They are `fields` on the generic and the skin reads them; a
+  colour is a field, not a second drawing (#177).
+- **Never on either:** a rate in a component NAME. `sfp28-lr` is refused; the
+  name is the vendor's part number.
+
+The wrapper seats exactly where the generic would - a composed part presents the
+mate point of what it wraps (#54) - so nothing about cages, `occupants:` or L12
+changes for a vendor part. An optic whose shape is NOT the generic's (a long-body
+SC SFP+, a module with a nose heat sink) draws its own contract in the vendor
+namespace with the same `mates:` and the same connection-points, and seats the
+same way.
+
 ## What lint will say
 
 The rules most often met while adding a component: L2 (id grammar), L3 and L4
