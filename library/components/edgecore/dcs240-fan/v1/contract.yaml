@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: dcs240-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  A rear fan module of the Edgecore DCS240 (AS9726-32DB) - a honeycomb-grilled tray with a
+  single large rotor visible behind the mesh and a coloured pull bar ACROSS ITS MIDDLE rather
+  than at its foot. Six of them fill this chassis where the DCS201's shell takes five, and
+  they are narrower: 48.5 mm against 58.8.
+size: {w: 48.5, h: 40.0}
+size-confidence: {w: photo-measured, h: estimated}
+attrs: {model: 'AS9726-32DB Fan Tray', power-absent: not-published, airflow: front-to-back}
+provenance:
+  size: >-
+    photo-measured - the DCS240 quick start guide, page 1 Overview rear elevation, rendered
+    from the PDF PAGE at 600 dpi and scaled by the stated 438.4 mm body width to 5.0844 px/mm.
+    THE WIDTH IS A PITCH AND IT WAS MEASURED TWICE BY DIFFERENT MEANS. The six red pull bars
+    segment cleanly in colour and centre at 97.16, 145.74, 194.22, 242.70, 291.28 and 339.67
+    mm - five steps of 48.48, 48.48, 48.48, 48.58 and 48.38. Segmenting instead on the
+    honeycomb's own texture, which is a different signal in a different band, gives grille
+    centres of 95.88, 144.36, 192.84, 241.42, 289.81 and 338.39 - five steps of 48.48, 48.48,
+    48.58, 48.39 and 48.58. Two independent reads agreeing on 48.50 to a tenth of a millimetre
+    is why this is the module width rather than an estimate.
+    THE HEIGHT IS NOT MEASURED. 40.0 is what every 1RU module in this library's Edgecore rears
+    uses, and it is recorded as estimated rather than dressed as a reading.
+  why-this-is-not-the-dcs201-fan: >-
+    SIX AT 48.5, NOT FIVE AT 58.8. edgecore/dcs201-fan@1 is 58.8 mm wide and its chassis takes
+    five; this guide's rear callout reads "6 x fan trays" and the datasheet "5+1 redundant",
+    and the six measured centres span 242.5 mm where five of the DCS201's would span 235.2.
+    The faces differ too: this one shows one large rotor through the mesh with its pull bar
+    crossing the middle, where the DCS201's bar sits at the foot. Different shell, different
+    part.
+  power: >-
+    NOT PUBLISHED. The datasheet gives the chassis "Min. (w/o transceivers): 396 W @ 100 VAC /
+    386 W @ 240 VAC Max. (w/o transceivers): 714 W @ 100 VAC / 653 W @ 240 VAC" and states no
+    per-module figure for a fan tray, so L29 stands at the chassis rather than a number being
+    invented here.
+  airflow-colour-convention: >-
+    THIS DEVICE'S OWN GUIDE STATES IT, in the same words the rest of the family uses: "Remove
+    front-to-back (F2B) airflow fan trays (red handles) and PSUs (red release latches)" and
+    "Install back-to-front (B2F) airflow fan trays (blue handles) and PSUs (blue release
+    latches)". So the handle fill is a default overridden per configuration, as
+    common/fan-module@1 and edgecore/dcs201-fan@1 both do. See roc-ops/Portrayal#277.
+  elements: >-
+    photo-measured in x against the same scale, estimated in y. The honeycomb reads 32.45 mm
+    wide on every one of the six and the pull bar 38.75; both are centred on the module. The
+    rotor behind the mesh is drawn as a disc because that is what the art shows, and its
+    diameter is taken from the grille rather than stated anywhere.
+states: [absent]
+elements:
+  grille: {at: [8.0, 2.6], size: [32.5, 30.0], class: rotor}
+  handle: {at: [4.9, 18.4], size: [38.75, 3.2], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c22f2f'}
+  airflow-legend: {label: Airflow legend, type: text, default: 'F2B'}
+relief:
+  wall: '#15181b'
+  # No face-wide `out` - a slab buries everything under it. See roc-ops/Portrayal#364.
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        edgecore/dcs240-fan@1's own grille key - the honeycomb's extent is measured off the
+        rear elevation and the depth of the cavity behind it is not stated anywhere.
+    - node: handle
+      bar: 3.0
+      lift: 1.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        edgecore/dcs240-fan@1's own handle key - a pull bar's outline is read off the
+        elevation and its projection is not.
+skins: [default]
+body:
+  depth: 56
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [48.5, 40]}

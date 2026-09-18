@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: dcs240-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - the same 54.4 x 40 CRPS face as the AC variant with a DC terminal in place of the C14 inlet. Rated 1600 W.
+size: {w: 54.4, h: 40.0}
+size-confidence: {w: photo-measured, h: estimated}
+attrs:
+  model: 'AS9726-32DB 48VDC PSU'
+  power-output-w: 1600
+  input: dc
+  inlet: dc-terminal
+provenance:
+  size: >-
+    photo-measured - the DCS240 quick start guide, page 1 Overview rear elevation at 600 dpi,
+    scaled by the stated 438.4 mm body width to 5.0844 px/mm. Both supplies were read with an
+    EDGE SCAN rather than a threshold, because a threshold on a bright module against dark
+    chassis clips the duller edge: their frames read 12.00-66.28 and 371.73-426.21, giving
+    54.28 and 54.48. The arithmetic closes across the whole face - left margin 12.0 against a
+    right margin of 12.2, and the six fan bays between them at a 48.50 pitch - which is why
+    these are used rather than estimated.
+    THE HEIGHT IS NOT MEASURED; 40.0 is the family's 1RU module height and is marked estimated.
+  power: >-
+    quick start, 48 VDC PSU section, verbatim: "Power Rating / -48 VDC, 1600 Watts". One figure, no temperature ladder, so none is recorded.
+  why-this-is-its-own-part: >-
+    THE RATING. This face is the same 54 mm CRPS shape the rest of the Edgecore line uses, and
+    common/psu-ac-650@3, common/psu-dc-650@2, edgecore/dcs201-psu-ac@1 and its DC sibling all
+    fit the bay. They assert 650 W, 650 W, 400 W and 400 W. This chassis draws up to 714 W on
+    its own and its supplies are rated 1000/1500 W AC and 1600 W DC, so seating any of them
+    would export a figure this vendor does not claim. A shape may be shared; a rating may not.
+  elements: >-
+    ESTIMATED POSITIONS ON A MEASURED FACE. The x axis of the source carries scale and these
+    elements are small enough that reading them off a 5 px/mm elevation would be reading the
+    lighting. The lattice grille, the bail handle over it and the latch at the foot are placed
+    from the drawing's proportions within a face whose width is measured.
+  airflow-colour-convention: >-
+    This device's guide states it: F2B supplies carry RED release latches and B2F supplies
+    BLUE. The latch fill is therefore a default overridden per configuration. See
+    roc-ops/Portrayal#277.
+  input: >-
+    quick start: '-48 VDC, 1600 W'.
+states: [absent]
+elements:
+  handle: {at: [8.0, 7.0], size: [13.0, 26.0], class: handle}
+  latch: {at: [40.5, 35.0], size: [9.5, 3.4], class: latch}
+  vent-field: {at: [2.4, 3.4], size: [22.0, 30.0], class: vent}
+  dc-inlet: {at: [30.0, 12.0], size: [20.0, 16.0], class: inlet}
+
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#b8324a'}
+  latch-edge: {label: Latch edge colour, type: text, default: '#6e1c2c'}
+
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries whatever is
+  # recessed beneath it, which is how the CSR310's AC supply came out blank. See #364.
+  features:
+    - node: handle
+      bar: 4.0
+      lift: 2.0
+      color: '#2b2f33'
+      confidence: estimated
+      source: >-
+        edgecore/dcs240-psu-dc@1's own handle key - the elevation fixes the bail's position on
+        the face, not how far it stands off it. A bail has to clear a finger.
+    - node: latch
+      out: 2.4
+      confidence: estimated
+      source: >-
+        edgecore/dcs240-psu-dc@1's own elements key - outline drawn, projection not stated.
+    - node: vent-field
+      vent: 24
+      confidence: estimated
+      source: >-
+        edgecore/dcs240-psu-dc@1's own elements key - the lattice's extent is drawn and the
+        depth of the cavity behind it is not stated.
+skins: [default]
+body:
+  depth: 300
+  color: '#b9bec4'
+  footprint: {at: [0, 0], size: [54.4, 40]}
