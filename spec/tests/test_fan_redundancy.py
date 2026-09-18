@@ -202,7 +202,14 @@ def test_the_comparison_layer_can_now_reach_them():
     between each pair. Every other Edgecore rear counted here butts its trays edge to edge, and
     that rail is why this is the one device in the line whose fan-bay digits can be drawn at all
     - on the CSR440 and the DCS511 they would land inside a neighbouring bay.
+
+    FIFTY-ONE IS THE EXP100-32X, which states "5+1" twice in one document - in its feature
+    list and again in its interface callouts - against six bays on its rear elevation. It SEATS
+    THE EXP800'S TRAY, and that was proven rather than assumed: its own six pull bars fit a
+    49.263 mm pitch against the EXP800's 48.921, and the seams either side of its fan block put
+    the two supplies within 1.2 mm of where that device carries them. One rear, two chassis,
+    one fan part - counted twice because two datasheets state it twice.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 50, n
+    assert n == 51, n
