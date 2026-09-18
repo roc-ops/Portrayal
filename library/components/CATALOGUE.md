@@ -274,7 +274,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-pwr-1p5kw-dc@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
 | `cisco/a9k-pwr-2kw-dc@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
 | `cisco/a9k-pwr-3kw-ac@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
-| `cisco/a9k-rsp@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 1 | 0 | Cisco ASR 9000 Series Route Switch Processor with 4 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
+| `cisco/a9k-rsp@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 1 | 1 | Cisco ASR 9000 Series Route Switch Processor with 4 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
 | `cisco/a9k-rsp-8g@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor with 8 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
 | `cisco/a9k-rsp440-se@1` | module | supervisor | 42 × 406 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Service Edge optimised |
 | `cisco/a9k-rsp440-tr@1` | module | supervisor | 42 × 406 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised |
@@ -299,7 +299,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
-| `cisco/led-matrix-4@1` | component | display | 14 × 25 |  | 1 | 0 | The four-character LED matrix a Cisco ASR 9000 route processor shows its boot stage on, as the ASR 9901 carri… |
+| `cisco/led-matrix-4@1` | component | display | 14 × 25 |  | 1 | 1 | The four-character LED matrix a Cisco ASR 9000 route processor shows its boot stage on, as the ASR 9901 carri… |
 | `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 2 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
 | `cisco/pwr-1p6kw-dc@1` | module | psu | 74.69 × 40.2 |  | 2 | 0 | Cisco ASR 9900 fixed-chassis 1.6 kW DC power module |
 | `cisco/pwr-2kw-dc-v2@1` | module | psu | 99.62 × 42.85 |  | 1 | 0 | Cisco ASR 9000 version 2 DC power supply, 2100 W, for a version 2 power entry module (ASR9K-DC-PEM-V2) |
