@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-rp-f
-version: 1.1.1
+version: 1.1.2
 class: supervisor
 behaviour: fills
 profile: networking
@@ -104,6 +104,40 @@ provenance:
     searched - no end-of-life notice for this part number is in the intake. Cisco's
     ordering table also lists A99-RP-F-FC, the flexible-consumption variant of the same
     hardware; it is not modelled separately.
+  led-matrix: >-
+    SEARCHED AND ABSENT. THIS CARD HAS NO LED MATRIX, and the search is recorded here so
+    it is not run again: the ASR 9902 and ASR 9903 both seat this RP, both are asked for
+    a four-character matrix because their siblings have one, and the answer is no four
+    times over.
+    CISCO'S OWN CALLOUTS SCOPE IT TO THE ASR 9901. The fixed-port Hardware Installation
+    Guide's RP Front Panel Indicators section prints three chassis figures in a row.
+    Figure 165, "Cisco ASR 9902 Router Chassis Front Panel", runs to eight callouts and
+    stops at "Nine discrete LED indicators". Figure 166, "Cisco ASR 9901 Router Chassis
+    Front Panel", runs to nine, and callout 9 is "LED matrix display". Same section, same
+    page, one chassis has it and the next does not. Figure 10 (ASR 9902 front panel
+    ports, fourteen callouts) and Figure 11 (ASR 9903, twelve) name no matrix either.
+    THE STENCIL AGREES, AND IT HAS A CONVENTION FOR SAYING SO. Cisco's masters draw an
+    LED matrix as a rectangle filled with a diamond lattice - the A99-RP3-SE draws its
+    matrix landscape that way, the ASR 9901 chassis draws its own portrait the same way.
+    The "A99-RP-F" master carries no lattice-filled rectangle anywhere on the face.
+    AND SO DOES A PHOTOGRAPH OF THE REAL CARD. An ASR 9902 with two of these seated shows
+    both faceplates end to end: 10MHz and 1PPS, SYNC 0 and 1, ToD, the nine lamps, MGT
+    LAN, AUX and CONSOLE, the USB, five small apertures in an L and a round LAMP TEST
+    button. No window, no bezel, no lattice.
+    WHY THE TABLES DO NOT OVERRULE THIS. Tables 25 and 26 of the same guide are headed
+    "RSP Boot Stages and Runtime Displays" and "RSP LED Matrix CAN Bus Controller Status
+    Display", and a reader could take "RSP" to reach every route processor in the family.
+    Cisco's scoping is the per-chassis figure, not the table's title: cisco/led-matrix-4@1
+    carries those tables because the ASR 9901's figure calls a matrix out, and this card
+    does not carry them because its chassis' figure does not.
+  lamp-test: >-
+    NOT MODELLED, AND DRAWN BY CISCO. The master and the photograph both show a round
+    LAMP TEST push button at the right of the face, with five small square apertures in an
+    L beside it, and neither is in `elements`. Found while establishing that the matrix is
+    absent; recorded here rather than added, because what the five apertures ARE is not
+    stated anywhere in the intake and a button placed beside four unknowns is half a
+    reading. cisco/a9k-rsp@1 models its own lamp-test button and is the shape this would
+    take.
 elements:
   active:
     at: [46.27, 30.52]
