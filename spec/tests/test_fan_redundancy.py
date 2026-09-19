@@ -93,16 +93,20 @@ def devices():
 # the figure is allowed to disagree with, so a change to either number fails again.
 FIGURE_IS_NOT_THE_BAY_COUNT = {
     ("edgecore/ais800-64d", "fans"): 4,
+    ("edgecore/ais800-64o", "fans"): 4,
 }
 
 
 def test_every_stated_fan_figure_fills_its_bays():
-    """Not policed by the rule, but true of all 40 stated here bar one, and worth
+    """Not policed by the rule, but true of all 55 stated here bar two, and worth
     knowing when it stops being true - a figure that no longer fills the tray is
     either a modelling error or a genuinely interesting chassis.
 
-    THE AIS800-64D IS THE INTERESTING CHASSIS, and it is the first one this
-    check has found. Its datasheet says, twice, "4 hot-swappable fan modules
+    THE AIS800-64D AND ITS OSFP TWIN THE AIS800-64O ARE THE INTERESTING CHASSIS, and
+    they were the first ones this check found. They are ONE rear counted twice: the
+    two guides' rear artwork is the same image file, identical to the hundredth of a
+    pixel, and one fan part serves both - so the exemption is listed for each device
+    because each device states the figure, not because there are two rears. Its datasheet says, twice, "4 hot-swappable fan modules
     (2 fans per module), 8 fans total with 7+1 redundancy", and its quick start's
     rear callout says "4 x fan trays"; the rear elevation and the datasheet's own
     rear photograph both show four trays, 81.6 mm wide on an 85.71 mm pitch. So
@@ -137,7 +141,7 @@ def test_every_stated_fan_figure_fills_its_bays():
     assert not odd, odd
 
 
-def test_the_one_chassis_whose_figure_is_not_its_bay_count_says_so_in_prose():
+def test_the_chassis_whose_figure_is_not_their_bay_count_say_so_in_prose():
     """An exemption that only lives in a test teaches nobody. The device carries
     the explanation where a reader of the library will meet it - in the group's
     own redundancy-note - so the count and the reason travel together."""
@@ -281,7 +285,16 @@ def test_the_comparison_layer_can_now_reach_them():
     line now holds both cases: the 32-port models' "6+1" over seven single-fan trays and this
     one's "7+1" over four double-fan trays. A census that compares the digit forms alone would
     call these two the same kind of rear, which is exactly why the redundancy-note is prose.
+
+    FIFTY-SIX IS THE AIS800-64O, the OSFP twin of the one above, and it is the FIFTY-FOUR case
+    applied to the double-fan rear: the shared datasheet states the same "7+1" for both models,
+    the two guides' rear elevations are the same image file - identical bounding boxes and a
+    maximum difference of zero grey levels - and edgecore/ais800-64-fan@1 serves both. So the
+    census now holds two entries whose figure does not count bays, and they are one rear. Both
+    are listed in FIGURE_IS_NOT_THE_BAY_COUNT because the exemption is keyed to the device that
+    states the figure; if either rear is ever remodelled with a different tray count, that
+    device fails on its own and asks again.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 55, n
+    assert n == 56, n
