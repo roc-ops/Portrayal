@@ -784,6 +784,31 @@ export async function extractRelief(url, scope) {
   return {cavities, outs, domes, vents, frus, subBodies, flatLifted, cleanText};
 }
 
+// The commonest opaque colour in a raster, which is what a part is MADE of - as
+// against the one pixel at its centre, which is whatever happens to be printed
+// there. Buckets to 5 bits per channel so anti-aliased edges fall in with the
+// body they belong to, then returns the first EXACT colour seen in the winning
+// bucket, so the answer is a colour actually present in the art rather than a
+// rounded one. Subsamples on a grid: this runs once per raised node at build.
+function dominantColor(cv) {
+  const {width: W, height: H} = cv;
+  if (!W || !H) return 'rgb(128,128,128)';
+  const d = cv.getContext('2d').getImageData(0, 0, W, H).data;
+  const step = Math.max(1, Math.floor(Math.min(W, H) / 48));
+  const count = new Map(), exact = new Map();
+  for (let y = 0; y < H; y += step)
+    for (let x = 0; x < W; x += step) {
+      const i = (y * W + x) * 4;
+      if (d[i + 3] < 128) continue;                       // transparent
+      const k = (d[i] >> 3) << 10 | (d[i + 1] >> 3) << 5 | (d[i + 2] >> 3);
+      count.set(k, (count.get(k) || 0) + 1);
+      if (!exact.has(k)) exact.set(k, `rgb(${d[i]},${d[i + 1]},${d[i + 2]})`);
+    }
+  let best = null, bestN = 0;
+  for (const [k, n] of count) if (n > bestN) { bestN = n; best = k; }
+  return best === null ? 'rgb(128,128,128)' : exact.get(best);
+}
+
 export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
   const img = new Image();
   const blobUrl = URL.createObjectURL(new Blob([svgText], {type: 'image/svg+xml'}));
@@ -1114,14 +1139,17 @@ export async function buildFaceRelief(F, ctx) {
                          Math.round((f.x - o.x) * PX), Math.round((f.y - o.y) * PX));
         return cvs;
       };
-      // the side colour samples the node's centre and must read the UNPUNCHED
-      // raster, so it goes first. It is guarded by `if (!o.color)` and so never
-      // re-runs on a restyle, which is what lets one helper serve both paths.
-      if (!o.color) {
-        const px = ocv.getContext('2d').getImageData(
-          Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
-        o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
-      }
+      // THE SIDE COLOUR IS THE ART'S DOMINANT COLOUR, NOT ITS CENTRE PIXEL.
+      // It used to be the one pixel at the middle of the node's box, which is fine
+      // until something small sits exactly there - and on a fan tray something does.
+      // The AIS800-64D's handle carries its release button at dead centre, a fixed
+      // #5a2320 with no `fill-from`, so every tray took the BUTTON's colour for its
+      // whole handle: the 2D art went blue in the back-to-front build and the 3D
+      // tube stayed red, in both builds, because the pixel being read never changed.
+      // The commonest opaque colour in the node's own art is what the part is made
+      // of; a button, a legend or a screw head is by definition a minority of it.
+      // Still read from the UNPUNCHED raster, so this goes before `compose`.
+      if (!o.color) o.color = dominantColor(ocv);
       await compose(ocv);
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
