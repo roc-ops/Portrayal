@@ -121,6 +121,26 @@ def test_viewbox_covers_the_declared_panel(name, view, w, h, expected):
 # invisible there: a view that resolves to NO files skips, and a skip reads as
 # "not built" rather than as a fault.
 
+def _built_or_skip():
+    """Gate on the BUILD, never on the RESULT - the note above is why.
+
+    The base-face half of `rendered_as` resolves by SUBTRACTION from what is on
+    disk, so it needs a build to read at all, and on a fresh clone or worktree
+    `library/dist` is gitignored build output that is not there. But skipping
+    because the resolver returned nothing would defeat the test: a view that
+    resolves to no files is precisely the fault these three exist to catch, and
+    the parametrised sweep already reads that silence as "not built".
+
+    So the two are told apart. No `library/dist` at all means nobody ran
+    publish.sh and there is nothing to measure - a skip, named as such. A
+    `library/dist` that IS built and does not hold this drawing is a resolution
+    fault, and stays a hard assertion. CI builds before it runs the suite, so
+    the skip never fires there.
+    """
+    if not DIST.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+
+
 def _r740xd():
     return yaml.safe_load((DEVICES / "dell" / "r740xd" / "device.yaml").read_text())
 
@@ -146,6 +166,7 @@ def test_a_base_face_does_not_sweep_up_its_own_variants():
     """The other half of the bug, and the quieter one. The old glob measured
     all three variant drawings against the BASE front's declared size. Both
     happen to be 482.6 x 86.8 today, so it passed for the wrong reason."""
+    _built_or_skip()
     d = _r740xd()
     got = {f.name for f in rendered_as(d, "front", d["views"]["front"])}
     bound = {n for n, c in d["configurations"].items()

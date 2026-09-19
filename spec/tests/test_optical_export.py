@@ -26,6 +26,28 @@ def index():
             for e in json.loads(f.read_text())["components"]}
 
 
+def dist():
+    """A published build to read, or a skip when the tree was never built.
+
+    `Dist` raises SystemExit for a missing artefact, and pytest reports that as
+    a FAILURE - so five tests here failed rather than skipped on any fresh clone
+    or worktree, `library/dist` being gitignored build output. The message named
+    build.sh and devices.json, which reads as a broken build rather than as an
+    unbuilt one.
+
+    The gate is on the DIRECTORY and not on the individual artefact, which is
+    the distinction worth keeping: `library/dist` absent means nobody has run
+    publish.sh and there is nothing to test; `library/dist` present but short of
+    devices.json is a BROKEN build, and Dist's own exit is the right loud answer
+    to that. Only the first is a skip. CI builds before it runs the suite, so
+    this skip never fires there and the assertions below always do.
+    """
+    if not DIST.exists():
+        pytest.skip("library/dist not built - run ./publish.sh --no-images")
+    from portrayal.artifacts import Dist
+    return Dist(str(DIST))
+
+
 def test_the_index_carries_a_connectors_positions():
     """Without this the exporter cannot count a single fibre."""
     idx = index()
@@ -90,8 +112,7 @@ def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
     the old test passed through the device path while claiming to prove the
     fallback. This drives the fallback directly instead.
     """
-    from portrayal.artifacts import Dist
-    d = Dist(str(DIST))
+    d = dist()
     assert d.manufacturer_of("fs") == "FS.com"      # now via the device
     # a namespace that exists in vendors.yaml and has no device at all
     deviceless = [ns for ns in d.vendors
@@ -104,8 +125,7 @@ def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
 def test_a_namespace_with_no_vendor_is_still_not_orderable():
     """`common/` and `std/` are absent from vendors.yaml, so the property holds
     by data rather than by a special case."""
-    from portrayal.artifacts import Dist
-    d = Dist(str(DIST))
+    d = dist()
     assert d.manufacturer_of("common") is None
     assert d.manufacturer_of("std") is None
 
@@ -115,8 +135,7 @@ def test_the_device_lookup_still_wins_over_the_registry():
     Technologies` from vendors.yaml; `juniper` and `edgecore` differ the same
     way. A vendors-first lookup would rename the manufacturer on several hundred
     existing export files."""
-    from portrayal.artifacts import Dist
-    d = Dist(str(DIST))
+    d = dist()
     assert d.manufacturer_of("dell") == "Dell"
     assert d.manufacturer_of("juniper") == "Juniper"
 
@@ -124,8 +143,7 @@ def test_the_device_lookup_still_wins_over_the_registry():
 def test_a_namespace_with_no_vendor_is_still_not_orderable():
     """`common/` and `std/` are absent from vendors.yaml, so the property
     `manufacturer_of` documents holds by data rather than by a special case."""
-    from portrayal.artifacts import Dist
-    d = Dist(str(DIST))
+    d = dist()
     assert d.manufacturer_of("common") is None
     assert d.manufacturer_of("std") is None
 
@@ -352,12 +370,11 @@ def test_the_exported_module_files_carry_the_ports_the_graph_implies():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
     from portrayal import dcim_export as D
     from portrayal import optical_ports as P
-    from portrayal.artifacts import Dist
-    dist = Dist(str(DIST))
+    d = dist()
     idx = index()
     checked = 0
     for e in projecting_modules(idx):
-        man = dist.manufacturer_of(e.get("ns"))
+        man = d.manufacturer_of(e.get("ns"))
         if not man:
             continue
         model = str((e.get("attrs") or {}).get("model") or e["name"])
@@ -393,12 +410,11 @@ def test_every_fibre_map_row_names_ports_in_the_exported_file():
     if not EXPORTS.exists():
         pytest.skip("library/exports not built - run ./publish.sh --no-images")
     from portrayal import dcim_export as D
-    from portrayal.artifacts import Dist
-    dist = Dist(str(DIST))
+    d = dist()
     idx = index()
     checked = 0
     for e in projecting_modules(idx):
-        man = dist.manufacturer_of(e.get("ns"))
+        man = d.manufacturer_of(e.get("ns"))
         if not man:
             continue
         model = str((e.get("attrs") or {}).get("model") or e["name"])
