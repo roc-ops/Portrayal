@@ -289,7 +289,7 @@ def test_the_comparison_layer_can_now_reach_them():
     FIFTY-SIX IS THE AIS800-64O, the OSFP twin of the one above, and it is the FIFTY-FOUR case
     applied to the double-fan rear: the shared datasheet states the same "7+1" for both models,
     the two guides' rear elevations are the same image file - identical bounding boxes and a
-    maximum difference of zero grey levels - and edgecore/ais800-64-fan@1 serves both. So the
+    maximum difference of zero grey levels - and edgecore/fan-2u-1x1sn@1 serves both. So the
     census now holds two entries whose figure does not count bays, and they are one rear. Both
     are listed in FIGURE_IS_NOT_THE_BAY_COUNT because the exemption is keyed to the device that
     states the figure; if either rear is ever remodelled with a different tray count, that
@@ -298,7 +298,7 @@ def test_the_comparison_layer_can_now_reach_them():
     FIFTY-SEVEN IS THE EDGECORE AGR560, and it is the THIRD DEVICE ON THAT SAME REAR and the
     only one of the three whose figure does count bays. Its datasheet says "Fans:
     Hot-swappable 3+1 redundant fans" over the same four trays and the same
-    edgecore/ais800-64-fan@1 - the FRU number `FAN-2U-1x1SN-F` is printed in all three
+    edgecore/fan-2u-1x1sn@1 - the FRU number `FAN-2U-1x1SN-F` is printed in all three
     datasheets - so three machines share one tray and their vendor counts it three different
     ways: 7+1 twice, meaning rotors, and 3+1 once, meaning trays. THE AGR560 NEEDS NO
     EXEMPTION, which is the whole point of listing it here: the exemption table is not a list

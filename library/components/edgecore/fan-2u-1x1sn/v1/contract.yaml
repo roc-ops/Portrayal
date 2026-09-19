@@ -1,17 +1,19 @@
 format: 1
 kind: module
-name: ais800-64-fan
+name: fan-2u-1x1sn
 version: 1.0.0
 class: fan
 behaviour: fills
 profile: networking
 description: >-
-  A rear fan module of the Edgecore AIS800-64D and AIS800-64O - a near-square 2RU tray,
-  honeycomb across its whole face, one 80 mm rotor showing through the mesh, a wide coloured
-  pull bar sweeping across its middle with the release button set into the bar, and one
-  unlabelled lens at its top left. FOUR fill the chassis, each carrying TWO fans in series
-  behind one grille, which is why the vendor's "8 fans total with 7+1 redundancy" counts
-  twice what this library's bays do.
+  Edgecore's FAN-2U-1x1SN rear fan tray - a near-square 2RU tray, honeycomb across its whole
+  face, one 80 mm rotor showing through the mesh, a wide coloured pull bar sweeping across its
+  middle with the release button set into the bar, and one unlabelled lens at its top left.
+  FOUR fill a chassis, each carrying TWO fans in series behind one grille, which is why the
+  vendor's "8 fans total with 7+1 redundancy" counts twice what this library's bays do. It is
+  not one machine's part - the AIS800-64D, the AIS800-64O and the AGR560 all seat this same
+  tray on the same 440 x 649.2 x 87 shell - which is why it is named for the FRU their three
+  datasheets print rather than for any one of them.
 size: {w: 81.6, h: 81.2}
 size-confidence: {w: photo-measured, h: photo-measured}
 attrs:
@@ -68,6 +70,40 @@ provenance:
     The datasheet photographs both builds on one page - RED bars front-to-back, BLUE bars
     back-to-front - and pairs FAN-2U-1x1SN-F with front-to-back and -B with back-to-front.
     The bar fill is a default overridden per configuration. See roc-ops/Portrayal#277.
+  the-name-is-the-fru-because-the-tray-outlived-the-chassis: >-
+    THIS PART WAS CALLED `edgecore/ais800-64-fan` UNTIL roc-ops/Portrayal#420, and the name
+    was a claim about ownership that the library's own seats had already contradicted. The
+    AIS800-64D, the AIS800-64O and the AGR560 all seat it, and the AGR560 is an AGR, not an
+    AIS800. A fourth rear on the same shell would have inherited the same wrong surname.
+    WHAT SAYS IT IS ONE PART RATHER THAN THREE LOOKALIKES. Every one of the three datasheets
+    prints the SAME FRU in its ordering table - `FAN-2U-1x1SN-F` front-to-back and
+    `FAN-2U-1x1SN-B` back-to-front - and the guides' rear-elevation tray artwork is not merely
+    similar: the AIS800-64D's and the AIS800-64O's are the same image to a maximum difference
+    of ZERO grey levels, which spec/tests/test_fan_redundancy.py records in the census, and the
+    AGR560's guide draws the same tray on a fan-bay pitch of 85.8 against this family's 85.71.
+    So the tray is shared because the vendor shares it, not because a modeller reused a drawing.
+    WHY THE FRU AND NOT A FAMILY PREFIX. library/components/README.md's naming rule is "use the
+    vendor's model number where one exists; it is what a search will be for", and one exists.
+    The `agr-` in `edgecore/agr-fan` is the exception the same page allows - a product LINE
+    prefix - and its own contract says why it qualifies: its `model` is the placeholder
+    'AGR Fan', because no Edgecore document prints a FRU for that tray. Of the eight Edgecore
+    fans in this library only TWO carry a real vendor ordering code, this one and
+    `edgecore/ais800-fan@1`'s `FAN-1U-1X1P`; the other six carry a descriptive stand-in like
+    'AS9726-32DB Fan Tray'. So the FRU rule reaches this part and does not reach most of its
+    neighbours, which is why they keep their prefixes.
+    THE AIRFLOW SUFFIX IS DROPPED because -F and -B differ only in the handle colour, which is
+    the `handle-finish` field and a per-configuration override, not a second part.
+    THE PART DID NOT MOVE AND THE DEVICES STILL WENT MAJOR, which is the part of the cost worth
+    writing down. Nothing about the tray's geometry, elements, art or size changed - the two
+    devices' rendered rears are identical - so the rename is a NEW NAME AT v1 rather than a
+    major of the old one, and no `ais800-64-fan/v2/` exists to retire. But a bay's `accepts:`
+    and `default:` are ADDRESSING, and `devicelock` counts a composed ref that appeared or
+    vanished as exactly that: both the AIS800-64D and the AIS800-64O were asked for at least a
+    MAJOR and took 1.0.0 -> 2.0.0, and the AGR560 the same. That is the honest answer for a
+    consumer who pinned `edgecore/ais800-64-fan@1` out of `devices.json` and would otherwise
+    find it simply absent.
+    roc-ops/Portrayal#407 is why the fingerprint noticed at all: the lock digests a component's
+    CONTENTS, and the name is part of them.
 states: [absent]
 elements:
   grille: {at: [2.40, 2.60], size: [76.80, 76.40], class: rotor}
@@ -82,7 +118,7 @@ relief:
       vent: 60
       confidence: estimated
       source: >-
-        edgecore/ais800-64-fan@1's own elements key - the honeycomb's extent is drawn; two
+        edgecore/fan-2u-1x1sn@1's own elements key - the honeycomb's extent is drawn; two
         80 mm fans in series is the only thing known about the depth behind it.
     - node: handle
       uhandle: 26

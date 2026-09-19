@@ -34,6 +34,10 @@ the *published build*, not about the hardware.
   the MX104's read `Juniper MX104 - a 3` (roc-ops/Portrayal#187).
 - Module-type port lists are ordered by name rather than by where the jack is
   drawn, so a card and its rotated twin produce one document (roc-ops/Portrayal#267).
+- The Edgecore 2RU fan tray is `edgecore/fan-2u-1x1sn@1` in `components.json`
+  and in every bay that seats it; it was `edgecore/ais800-64-fan@1`, which named
+  one of the three chassis that share the part. `AIS800-64D`, `AIS800-64O` and
+  `AGR560` took a major bump for the changed bay addressing (roc-ops/Portrayal#420).
 
 ### Fixed
 - `devices_index` fails when two devices share a name. Dist filenames carry no

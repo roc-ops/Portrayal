@@ -10,7 +10,7 @@ blocks and one skin were rewritten across six bays in two devices, all three
 stayed at 1.0.0, and `devicelock --update` re-locked neither device.
 
 The fingerprint now carries a digest of the component's own files beside its
-version, so `composed-refs` reads `edgecore/ais800-64-fan@1 1.0.0+a1b2c3d4 ->
+version, so `composed-refs` reads `edgecore/fan-2u-1x1sn@1 1.0.0+a1b2c3d4 ->
 1.0.0+9f8e7d6c` - which says in one line that the contents moved and the version
 did not.
 """

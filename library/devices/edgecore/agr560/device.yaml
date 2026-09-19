@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -171,14 +171,15 @@ provenance:
       15.2 + 73.5 = 88.7, and on the datasheet's rear photograph its left edge reads 15.2 exactly. The
       four fan bays' seams read 89.4, 175.9, 261.5, 347.1 and 432.7 - a pitch of 85.8 against the 64D's
       85.71. THE FAN TRAY IS LITERALLY THE SAME PART. Both machines list the FRU as `FAN-2U-1x1SN-F` and
-      the two rear drawings' tray artwork is pixel-identical, so `edgecore/ais800-64-fan@1` is seated
-      here rather than copied. Its name says AIS800 and it is shared - see the fan-part-naming gap. THE
-      SUPPLIES ARE NEW PARTS. `PS-2202-8L` and `DD-2202-1L`, 2000 W Lite-On Titanium units, against the
-      AIS800 pair's 3000 W: a C14 inlet where that family has a C20, and a TWO-stud terminal where its
-      DC unit has six. The stud count is not read off a drawing alone - the ordering table's DC cable
-      is "6AWG PSU to 2 x Ring Terminal, 2.5m". THE REAR IS NOT CARRIED OVER as a whole: pixel-diffed
-      against the AIS800-64D's rear at matched scale, 17.7% of the face differs, which is the supplies
-      and the legend.
+      the two rear drawings' tray artwork is pixel-identical, so `edgecore/fan-2u-1x1sn@1` is seated here
+      rather than copied. THIS DEVICE IS WHY THE PART CARRIES THAT NAME: it was `edgecore/ais800-64-fan@1`
+      until roc-ops/Portrayal#420, and an AGR seating a tray named for the AIS800 is what made the old
+      name a false claim about ownership rather than a harmless family prefix. THE SUPPLIES ARE NEW PARTS.
+      `PS-2202-8L` and `DD-2202-1L`, 2000 W Lite-On Titanium units, against the AIS800 pair's 3000 W:
+      a C14 inlet where that family has a C20, and a TWO-stud terminal where its DC unit has six. The
+      stud count is not read off a drawing alone - the ordering table's DC cable is "6AWG PSU to 2 x Ring
+      Terminal, 2.5m". THE REAR IS NOT CARRIED OVER as a whole: pixel-diffed against the AIS800-64D's
+      rear at matched scale, 17.7% of the face differs, which is the supplies and the legend.
   airflow-is-front-to-back-and-there-is-no-other-build:
     confidence: datasheet
     note: >-
@@ -1755,32 +1756,32 @@ views:
         group: fans
         rel-pos: 0
         accepts:
-        - edgecore/ais800-64-fan@1
-        default: edgecore/ais800-64-fan@1
+        - edgecore/fan-2u-1x1sn@1
+        default: edgecore/fan-2u-1x1sn@1
       - id: fan-1
         at: [180.21, 4.6]
         size: {w: 81.6, h: 81.2}
         group: fans
         rel-pos: 1
         accepts:
-        - edgecore/ais800-64-fan@1
-        default: edgecore/ais800-64-fan@1
+        - edgecore/fan-2u-1x1sn@1
+        default: edgecore/fan-2u-1x1sn@1
       - id: fan-2
         at: [265.92, 4.6]
         size: {w: 81.6, h: 81.2}
         group: fans
         rel-pos: 2
         accepts:
-        - edgecore/ais800-64-fan@1
-        default: edgecore/ais800-64-fan@1
+        - edgecore/fan-2u-1x1sn@1
+        default: edgecore/fan-2u-1x1sn@1
       - id: fan-3
         at: [351.63, 4.6]
         size: {w: 81.6, h: 81.2}
         group: fans
         rel-pos: 3
         accepts:
-        - edgecore/ais800-64-fan@1
-        default: edgecore/ais800-64-fan@1
+        - edgecore/fan-2u-1x1sn@1
+        default: edgecore/fan-2u-1x1sn@1
       placements:
       - {ref: common/ground-lug@1, id: ground, at: [3.4, 30.0], group: grounding, rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
