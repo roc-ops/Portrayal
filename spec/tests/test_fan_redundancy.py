@@ -88,10 +88,32 @@ def devices():
     return libdata.devices()
 
 
+# A stated fan figure counts BAYS on every chassis here but one, and the one is
+# named rather than exempted quietly. The pair is (device, group) -> the bay count
+# the figure is allowed to disagree with, so a change to either number fails again.
+FIGURE_IS_NOT_THE_BAY_COUNT = {
+    ("edgecore/ais800-64d", "fans"): 4,
+}
+
+
 def test_every_stated_fan_figure_fills_its_bays():
-    """Not policed by the rule, but true of all 40 stated here, and worth
-    knowing if it ever stops being true - a figure that no longer fills the
-    tray is either a modelling error or a genuinely interesting chassis."""
+    """Not policed by the rule, but true of all 40 stated here bar one, and worth
+    knowing when it stops being true - a figure that no longer fills the tray is
+    either a modelling error or a genuinely interesting chassis.
+
+    THE AIS800-64D IS THE INTERESTING CHASSIS, and it is the first one this
+    check has found. Its datasheet says, twice, "4 hot-swappable fan modules
+    (2 fans per module), 8 fans total with 7+1 redundancy", and its quick start's
+    rear callout says "4 x fan trays"; the rear elevation and the datasheet's own
+    rear photograph both show four trays, 81.6 mm wide on an 85.71 mm pitch. So
+    the "7+1" counts the eight ROTORS and the rear holds four BAYS, and both
+    numbers are the vendor's.
+
+    That is why the exemption is keyed to the bay count as well as the device: if
+    the rear is ever remodelled with a different number of trays, or the figure is
+    ever re-read, this fails again and asks. Every other chassis here still has
+    one fan per tray, including the AIS800-32D two rows above it in this census,
+    whose "6+1" fills seven single-fan bays exactly."""
     odd = []
     for slug, d in devices():
         bays = {}
@@ -104,9 +126,27 @@ def test_every_stated_fan_figure_fills_its_bays():
             if not form or not (lint._group_words(name, str((g or {}).get("term") or "")) & lint.FAN_WORDS):
                 continue
             parts = form.split("+")
-            if all(p.isdigit() for p in parts) and sum(int(p) for p in parts) != bays.get(name, 0):
-                odd.append(f"{slug}:{name} {form} in {bays.get(name)} bays")
+            if not all(p.isdigit() for p in parts):
+                continue
+            seen = bays.get(name, 0)
+            if sum(int(p) for p in parts) == seen:
+                continue
+            if FIGURE_IS_NOT_THE_BAY_COUNT.get((slug, name)) == seen:
+                continue
+            odd.append(f"{slug}:{name} {form} in {seen} bays")
     assert not odd, odd
+
+
+def test_the_one_chassis_whose_figure_is_not_its_bay_count_says_so_in_prose():
+    """An exemption that only lives in a test teaches nobody. The device carries
+    the explanation where a reader of the library will meet it - in the group's
+    own redundancy-note - so the count and the reason travel together."""
+    by_slug = dict(devices())
+    for (slug, group), _ in FIGURE_IS_NOT_THE_BAY_COUNT.items():
+        d = by_slug[slug]
+        note = str((((d.get("groups") or {}).get(group) or {}).get("attrs") or {}).get("redundancy-note") or "")
+        assert "2 fans per module" in note, (slug, group)
+        assert "bay" in note.lower() and "fan" in note.lower(), (slug, group)
 
 
 def test_the_unstated_ones_are_the_ones_we_could_not_source():
@@ -229,7 +269,19 @@ def test_the_comparison_layer_can_now_reach_them():
     same datasheet states the same "6+1" for both models, the same rear elevation is
     pixel-identical between the two guides, and one fan part serves both. Counted twice
     because two devices state it, not because there are two rears.
+
+    FIFTY-FIVE IS THE AIS800-64D, AND IT IS THE FIRST DEVICE IN THIS CENSUS WHOSE REDUNDANCY
+    FIGURE DOES NOT COUNT BAYS. Its datasheet says, twice, "4 hot-swappable fan modules (2 fans
+    per module), 8 fans total with 7+1 redundancy", and its quick start's rear callout reads
+    "4 x fan trays"; the rear elevation and the datasheet's own rear photograph both give FOUR
+    trays, 81.6 mm wide on an 85.71 mm pitch. So the bay count is four and the "7+1" counts the
+    EIGHT rotors inside them, two per tray - and the device says so in its fans group rather
+    than leaving a reader to divide. Every other Edgecore rear in this census has one fan per
+    tray and gets away with the two numbers being the same; this one does not, and the AIS800
+    line now holds both cases: the 32-port models' "6+1" over seven single-fan trays and this
+    one's "7+1" over four double-fan trays. A census that compares the digit forms alone would
+    call these two the same kind of rear, which is exactly why the redundancy-note is prose.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 54, n
+    assert n == 55, n

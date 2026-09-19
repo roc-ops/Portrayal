@@ -1,0 +1,120 @@
+format: 1
+kind: module
+name: ais800-64-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 3000 W AC power supply of the Edgecore AIS800-64D and AIS800-64O - a CRPS-form module
+  in a bright housing with an octagonal wire fan guard at its left, a black pull loop hanging
+  under the guard, an IEC C20 inlet standing on its side at the right and a coloured release
+  latch down the inlet's right edge. Two stack one above the other at the left of the rear.
+  NOT the 32-port models' supply: that one is 53.7 wide with a Saf-D-Grid; this one is 73.5
+  wide and the datasheet names the inlet "IEC 60320 C20".
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'PSU-AC-3000W'
+  power-output-w: 3000
+  input: ac
+provenance:
+  size: >-
+    photo-measured on the AIS800-64D quick start guide, page 1 Overview REAR elevation,
+    rendered from the PDF page at 600 dpi and scaled by the stated 440 mm body width to
+    5.0636 px/mm - a face that is isotropic to 0.3% at the stated 87 mm height. The
+    datasheet's rear photograph (page 2, 3.67 px/mm native, 8.99 at 600 dpi) was read
+    beside it and agrees on every edge below to within 0.5 mm.
+    THE BAY IS 73.5 x 40.0 AND THAT IS THE CRPS FORM. Vertical-edge scans over the module
+    frames put the housing's left edge at 15.0-15.3 (both sources) and its right, where the
+    latch meets the rail, at 88.1-88.5, which is 73.2-73.5. Horizontal seams on the drawing
+    bound PSU1 at 4.54 and 43.84 and PSU2 at 46.01 and 84.52 - 39.3 and 38.5 - and on the
+    photograph at 4.13/43.4 and 46.6/85.9 - 39.3 and 39.3. 73.5 x 40 is the CRPS footprint
+    every 3000 W Liteon supply of this class is built to, and the reads land on it within
+    the drawing's half-pixel, so the standard figure is used and the reads are the check.
+  the-inlet-is-a-c20-on-its-side: >-
+    THE DATASHEET NAMES IT - "AC PSU Inlet: IEC 60320 C20" - and its ordering table ships
+    "IEC 60320 C19-C20 power cord" with the -UN builds, and the guide's package list says
+    "AC Power cord, type IEC C19". The photograph draws it: a dark rounded-rectangle cavity
+    24.3 wide by 31.2 tall at face x 58.3-82.6, y 6.7-37.8, which is std/c20-inlet@1's 32.4 x
+    24.4 turned a quarter turn. The pins settle WHICH quarter turn: the single earth blade
+    sits at the LEFT of the cavity at mid height and the line/neutral pair at the right,
+    one above the other, so the inlet's "up" points left, which is `rotate: 270`. The
+    placement is corrected for rotation about the part's centre - a w x h part turned a
+    quarter turn lands its aperture at (at.x + (w-h)/2, at.y - (w-h)/2), 4.0 mm here - so
+    `at` [38.9, 5.5] puts the 24.4 x 32.4 aperture at module x 42.9-67.3, y 1.5-33.9,
+    centred on the photograph's cavity at (55.1, 17.7).
+  the-guard-and-the-loop: >-
+    THE FAN GUARD IS AN OCTAGONAL WIRE FORM about 36 mm across its flats, at face x 16.5-52.5
+    by y 5.5-37 on the drawing, which puts its centre 19.3 in from the module's left edge and
+    19.2 down - i.e. centred on a 40 mm fan behind the face. Its lower quarter is crossed by
+    the pull handle: the drawing draws a grey D-shaped bar across the guard's foot at face
+    y 33.5-41.5, and the photograph shows the same thing as a black fabric loop hanging over
+    the guard. It is drawn as the bar, the way the drawing has it, in the loop's black; it is
+    black on BOTH airflow builds in the datasheet's photographs, unlike the latch, so it
+    carries no airflow colour. Its standoff is not sourced and is labelled estimated.
+  the-latch-carries-the-airflow-colour: >-
+    A 3.4 x 18.5 mm bar down the inlet's right edge at face x 85-88.5, y 15-33, RED on the
+    front-to-back photograph and BLUE on the back-to-front one (datasheet page 2, both
+    builds photographed). The datasheet's FRU table pairs PSU-AC-3000W-F with front-to-back
+    and -B with back-to-front and names no colour; the photographs are the rule here, as they
+    are for the trays. See roc-ops/Portrayal#277.
+  no-lamp: >-
+    NONE ON THIS FACE. The AIS800-32D's DC supply carries a lens at the right of its lattice;
+    this face's only round feature at the bottom right (face 84.5, 38.5 on both PSUs) is a
+    Phillips screw head on the drawing and on the photograph, matched by another at the top
+    left (20, 7.5). Both are drawn as screws. The guide's System LEDs page names no module
+    lamp.
+  power: >-
+    3000 W PER SUPPLY, in the datasheet's feature list ("redundant 3000 W AC/DC PSUs"), its
+    power section ("200-240 VAC at 50-60Hz (16 A/3000 W max.)") and the housing's own
+    "3000W" label in the photograph. Input from the guide: "200-240 VAC, 50/60 Hz, 16 A max.
+    per PS", with the note that a single supply powering a fully loaded system must be on a
+    200-240 VAC source.
+  elements: >-
+    Every position is measured on the rear elevation and checked on the photograph; every
+    depth is an estimate, because a face drawing says where things are and never how far they
+    stand off it.
+states: [absent]
+elements:
+  guard: {at: [1.30, 1.20], size: [36.00, 36.00], class: rotor}
+  handle: {at: [1.30, 29.20], size: [36.00, 8.60], class: handle}
+  inlet-flange: {at: [41.50, 0.80], size: [27.20, 34.20], class: bezel}
+  latch: {at: [70.00, 10.50], size: [3.40, 18.50], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#2a2c2f'}
+  latch-finish: {label: Latch colour, type: text, default: '#c8493c'}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [38.90, 5.50], rotate: 270}
+  - {ref: common/screw-head@1, id: screw-1, at: [3.00, 1.40]}
+  - {ref: common/screw-head@1, id: screw-2, at: [67.50, 32.40]}
+relief:
+  wall: '#3a3e43'
+  # THE FACE ITSELF GETS NO RELIEF - a full-face `out` is a slab and a slab buries whatever
+  # is recessed beneath it. See #364.
+  features:
+    - node: guard
+      vent: 30
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-ac@1's own elements key - the guard's extent is drawn, the
+        depth of the fan behind it is not stated anywhere.
+    - node: handle
+      bar: 2.0
+      lift: 1.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-fan@1 and the rest of this line's pull bars; roc-ops/Portrayal#385 is
+        open on exactly this unsourced figure. The hardware is a fabric loop lying on the
+        face, so if anything this overstates it.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-ac@1 itself - a moulded release bar proud of the inlet frame;
+        no drawing dimensions it.
+skins: [default]
+body:
+  depth: 185
+  color: '#c2c7cd'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

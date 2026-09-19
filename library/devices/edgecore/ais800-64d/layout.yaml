@@ -1,0 +1,905 @@
+format: 1
+kind: device
+name: ais800-64d
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: AIS800-64D
+portfolio: {line: AI and Data Center, family: AI/ML Switch, series: AIS800}
+description: >-
+  64 x 800G QSFP-DD800 AI and data centre 2RU switch on a Broadcom Tomahawk 5 with an Intel
+  Xeon D-1713NTE and an OpenBMC service processor, sold as the AIS800-64D. All ports are on
+  the FRONT in TWO BANKS of sixteen stacked columns, with two 25G SFP28 in-band management
+  cages, an RJ-45 management jack, a USB 3.0 Type-A storage port, an RJ-45 console, a ToD
+  jack, 1PPS and 10 MHz timing jacks, six system lamps and a reset button; two 3000 W
+  supplies and FOUR fan trays are on the rear. Its twin edgecore/ais800-64o is the same
+  chassis with an OSFP800 wall. This is NOT a taller AIS800-32D: the 32-port models are a
+  438.4 x 589 x 44 shell with seven 1RU trays and 2400 W Saf-D-Grid supplies, and this is a
+  440 x 649.2 x 87 shell with four 2RU trays and 3000 W C20 supplies. Nothing crosses over.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      A QUICK START GUIDE AND A DATASHEET, AND FOR ONCE THEY AGREE ABOUT THE CHASSIS. Both
+      are staged: ais800-64d-qsg (8 pages, bilingual, 69 figures) and ais800-64d-datasheet
+      (5 pages, 4 figures). The guide carries the Overview elevations, a System LEDs/Buttons
+      enlargement, the FRU replacement figures and a Connect Power page that draws the DC
+      supply's face; the datasheet carries photographs of BOTH airflow builds, the ordering
+      tables and the power ratings. The guide's specification table reads "440 x 649.2 x
+      87 mm (17.32 x 25.56 x 3.43 in.)" and the datasheet "44 x 64.92 x 8.7 cm (17.32 x
+      25.56 x 3.43 in.)" - the same numbers in different units, which the AIS800-32D's two
+      documents notably did not manage.
+      THE WEIGHT IS THE ONE DISAGREEMENT: the guide says 21.2 kg "with 2 PSUs and 4 fans
+      installed" and the datasheet 21.5 kg "with 2 PSUs and 4 fan modules installed". Both
+      are recorded; 21.2 is used because the guide is the document that also carries the
+      measured elevations.
+      FIVE PHOTOGRAPHS ARE STAGED and unlike the 32-port models' they are worth something:
+      at 960 x 700 over a 440 mm face they are 2.18 px/mm, but the DATASHEET's own page-2
+      photographs render at 8.99 px/mm and were measured beside the drawing throughout.
+  gate-1:
+    confidence: measured
+    note: >-
+      PASSES. The front elevation reads 2224 x 442 px at 600 dpi; 2224/440 is 5.0545 px/mm
+      and 442/87 is 5.0805 - 0.5% apart. The rear reads 2228 x 442: 5.0636 and 5.0805, 0.3%
+      apart. Each face is measured on its own x scale, and the two are 0.2% apart from each
+      other, so neither carries the other's numbers.
+      THE DRAWINGS ARE UPSCALES AND THAT WAS CHECKED, as the 32-port models' were. The
+      datasheet's page-2 photographs are embedded at 3.67 px/mm and were scanned at their
+      own scale as an independent instrument; every rear edge below agrees between the two
+      within 0.5 mm, which is what stops a 600 dpi render of a 1.8 px/mm raster from being
+      believed on its own.
+  the-optical-wall:
+    confidence: measured
+    note: >-
+      SIXTY-FOUR PORTS IN TWO BANKS OF SIXTEEN STACKED COLUMNS, and the bank structure is the
+      whole difference from the 32-port model. Each column is one bezel holding an upper
+      aperture, a bright honeycomb band and a lower aperture; the upper bank's columns are
+      legended `N (up) (down) N+1` ABOVE them and the lower bank's BELOW, so ports 1-32 are
+      the upper bank and 33-64 the lower. The guide's enlargement prints `25 (up) (down) 26`
+      over the upper bank's thirteenth column and `57 (up) (down) 58` under the lower bank's,
+      which is the arithmetic confirmed at both ends.
+      THE ASSEMBLY IS BUILT AROUND THE APERTURE'S CENTRE, NOT ITS TOP EDGE, and the first
+      model of this device was not. std/qsfp-dd@1's registry opening is 10.0 tall where this
+      panel draws 8.51; hanging the block from the drawn aperture's top edge put all 1.49 mm
+      of the surplus at the BOTTOM of every assembly, and at review that showed as a border
+      under the lower bank's screens that the upper bank's did not have, and as a gasket row
+      that could only be drawn at one end. Centring the registry aperture on the drawn one
+      splits the surplus, 0.745 mm each way, and every part of the assembly is then placed
+      from the block's own y: 0.55 mm of shell either side of the 19.0 aperture, a gasket row
+      at each end, and the screen filling exactly the space between the two apertures. The
+      two banks come out identical, which is what the hardware is.
+      ONE ROW PITCH IS USED FOR BOTH BANKS. Fitted separately they give 17.61 (upper) and
+      17.41 (lower) - 0.2 mm apart, which is one pixel on a 5.05 px/mm elevation - and the
+      hardware is plainly one cage assembly used twice. 17.51 is the mean and puts every row
+      within 0.1 mm of where it was measured.
+      THE PITCH IS 24.019 AND BOTH BANKS WERE FITTED SEPARATELY. Aperture edges scanned along
+      four separate row bands give left-edge fits of 24.0209 (upper) and 24.0171 (lower) with
+      an rms of 0.06 mm, and centre fits of 24.0194 and 24.0175 with an rms of 0.035. Four
+      independent fits inside 0.004 mm of each other is one pitch, and 24.019 is used for
+      both. There is no ganging: the residuals alternate by a tenth of a millimetre, which is
+      the drawing's half-pixel and not a block structure.
+      ROWS. Aperture spans down one column read 14.64-23.15, 32.25-40.76, 48.27-56.58 and
+      65.68-74.39 - row pitches of 17.61 within the upper bank and 17.41 within the lower,
+      33.63 between the banks. The drawn openings are 18.28 x 8.51 against std/qsfp-dd@1's
+      registry 19.0 x 10.0, the same consistent bias the EXP100 and the AIS800-32D both
+      record: the registry owns the aperture and the device owns the pitch.
+      THE INTER-ROW BAND IS DRAWN ON A BACKING RECT, for the reason
+      vent-field-needs-backing-rect exists - panel pattern decor paints only its holes, and
+      this band is BRIGHT: a white honeycomb web between the two apertures of each column,
+      reading 24.33-31.85 in the upper bank and 57.18-64.50 in the lower. Thirty-two bands,
+      one per column per bank, because the band belongs to the cage assembly and stops at the
+      dark post between columns.
+  the-port-lamps-are-one-round-window-each:
+    confidence: measured
+    note: >-
+      ONE LAMP PER PORT, ON THE POST TO THE LEFT OF ITS CAGE, and the first model of this
+      device had a strip of eight along the bezel instead - a whole component was written for
+      that and thrown away when the enlargement was read properly.
+      THE ENLARGEMENT SETTLES IT. The guide's System LEDs/Buttons page draws the last four
+      columns at 15.0 px/mm, three times the elevation's resolution. On every post it shows
+      FOUR round dots about 1.0 mm across, at y 18.42, 37.20, 51.83 and 70.68 - one level
+      with each of the four aperture rows. Scanned across the whole enlargement they appear
+      at x 322.51, 346.50 and 370.49 against column left edges of 324.91, 348.93 and 372.95:
+      2.40 mm to the LEFT of each column, on the post it shares with the column before it.
+      There is no dot 21.6 mm to the right of the last column, which is what decides that
+      they belong to the cage on their right rather than the one on their left.
+      THE LAMP PAIR IS SPREAD WIDER THAN THE PORT PAIR, and that is measured rather than
+      tidied. Within a bank the lamps sit 18.78 and 18.85 mm apart where the apertures sit
+      17.51 apart, so each lamp is about half a millimetre outboard of its own port's centre -
+      symmetric about the assembly, consistently on both banks, read at 15 px/mm. L61 says so
+      sixty-four times and the baseline records it: the hardware is what it is, and moving the
+      lamps onto the port centres would be drawing the rule rather than the panel.
+      WHAT THE FOUR COLOURS MEAN IS THE PORT'S, NOT THE LAMP'S. The guide gives one legend
+      for the port - "QSFP-DD800 LEDs: Yellow (800G), Blue (400G), White (200G), Green
+      (100G)" - and there is exactly one window, so for once the colours and the windows
+      agree: the lamp shows the port's negotiated rate. The four speed states are declared
+      on the block's lamps and nothing is invented. This is the opposite of the AIS800-32D's
+      case, where four windows shared one legend and the device had to waive L39 to say so.
+  the-triangles-are-printed-and-the-sfp-pair-s-are-not:
+    confidence: measured
+    note: >-
+      THE WALL'S ARROWS ARE SILKSCREEN. The sixty-four `(up)`/`(down)` glyphs beside the port
+      numerals are solid white, the same white and the same crispness as the numerals they
+      sit between, and every lamp on this face reads differently - a domed lens in a dark rim.
+      This is the AIS800-32D's finding applied before the fact rather than after; see
+      roc-ops/Portrayal#396, which is open on the EXP100 and EXP800 for the same marks.
+      THE SFP28 PAIR'S TWO ARE LAMPS. The management cluster's SFP28 bezel carries a white
+      band between its two cages with a `(up)` and a `(down)` moulded into it, and the guide's
+      own callout 3 points at that band and names it: "SFP28 LEDs: Green (link/activity)".
+      A glyph a vendor labels as a LED is a lamp, and common/led-arrow-sm@1 is the part.
+      THE NUMERALS ARE 2.3 MM OF CAP HEIGHT, measured on the enlargement at 15 px/mm
+      (rows 10.61-12.88), which is font-size 2.9 - not the 1.3 a first pass would guess.
+  the-management-cluster:
+    confidence: measured
+    note: >-
+      EVERY ITEM MEASURED ON THE ENLARGEMENT AT 15 px/mm, which is the best-resolved figure
+      either AIS800 model has.
+      TWO 25G SFP28 CAGES IN ONE BEZEL at x 398.45-413.20, apertures y 16.08-26.04 and
+      31.38-41.34 - 14.75 x 9.96 against std/sfp@1's 14.5 x 10.0, on a 15.30 row pitch. The
+      bezel's middle band carries the pair's two lamps.
+      AN RJ-45 MANAGEMENT JACK at 416.46-432.27 - 15.81 wide against std/rj45@2's 15.8, which
+      is as close as a drawing gets - with its own pair of lamps at the top corners, which is
+      what common/rj45-eth@1 draws.
+      A USB 3.0 TYPE-A BENEATH IT, opening 418.09-430.58 by 35.08-39.56: 12.49 x 4.48 against
+      std/usb-a@1's 12.0 x 4.5. THE TONGUE IS BLUE in both the enlargement and the datasheet
+      photograph, so the `default` skin is right and `usb2` would be a false claim. The
+      documents call it "USB3.0 storage port" and draw a Type-A; the AIS800-32D's is a
+      Type-C. Two models of one series, two different connectors, both read off their own
+      drawings.
+      A CONSOLE AND A ToD JACK STACKED at 416.25-432.53, the pair spanning y 54.14-79.41,
+      which is two std/rj45@2 at 13.2 with nothing to spare.
+      TWO SMA TIMING JACKS at 406.78-413.30, y 54.34-59.76 and 62.90-68.18 - 6.5 across
+      against std/sma@1's 6.35 - legended 1PPS above and 10MHz below.
+      SIX SYSTEM LAMPS AND A RESET BUTTON. The lamps are rounded rectangles about 1.3 x 1.0
+      in a recessed strip, each directly below its legend, on a 6.1 mm pitch from 400.3 to
+      430.8; the guide names every one. common/led-rect-sm@1 at 2.8 x 1.6 and
+      common/reset-button@1 at 4.0 are both larger than the drawing, and are seated at the
+      measured CENTRES rather than the measured sizes, as the AIS800-32D's are and for the
+      same reason: the indicator vocabulary is what a reader compares across devices.
+  the-rows-of-marks-above-each-cage-are-gasket-tabs-and-not-lamps:
+    confidence: measured
+    note: >-
+      FIVE EVENLY SPACED MARKS ALONG THE TOP EDGE OF EVERY CAGE ASSEMBLY, AND THE SAME ALONG
+      THE BOTTOM, and they were asked about in review because at a glance they read as a row
+      of small lamps.
+      THEY ARE NOT LAMPS, ON FOUR COUNTS. The guide's System LEDs/Buttons page names every
+      lamp on this face and there are exactly four kinds - "QSFP-DD800 LEDs", "RJ-45 MGMT
+      LEDs", "SFP28 LEDs" and the six "System LEDs" - and the datasheet's own summary agrees
+      ("Port LEDs: Link Status, Activity, Rate"). Five marks above and five below every port
+      would be ten more per port and 640 on the face, legended nowhere. They appear on BOTH
+      edges of each assembly, which no indicator does. They are grey metal with a chevron
+      moulded into each, where every lamp on this face is a domed lens in a dark rim. And the
+      enlargement resolves them at 15 px/mm as tabs standing on the cage's own flange, on a
+      3.66 mm pitch across the 18.28 mm cage.
+      THEY ARE THE CAGE'S EMI GASKET FINGERS - the sprung tabs that ground a transceiver's
+      shell to the cage as it slides in - which is why they ring the opening rather than sit
+      beside it. BOTH ROWS ARE DRAWN, one at each end of every assembly, as a slot field on
+      the cage shell. The first model drew only the top row, because the registry aperture
+      hung from the drawn aperture's top edge left no room under the lower opening and L44
+      correctly called a bottom band buried; centring the aperture (above) gives both ends
+      the same 0.8 mm and the rows come out symmetric.
+      THE PORT LAMP IS THE SINGLE ROUND ONE ON THE POST, one per port, and it is a different
+      thing in a different place. See the-port-lamps-are-one-round-window-each.
+  the-ac-inlet-is-named-c20-and-the-photograph-agrees-about-everything-but-the-blades:
+    confidence: datasheet
+    note: >-
+      THE DOCUMENTS NAME IT THREE TIMES: the datasheet's power section reads "AC PSU Inlet:
+      IEC 60320 C20", its ordering table ships an "IEC 60320 C19-C20 power cord" with the -UN
+      builds, and the guide's package contents list "AC Power cord, type IEC C19". That is as
+      explicit as this vendor gets, and it is why std/c20-inlet@1 is the part.
+      THE PHOTOGRAPH'S PIN GEOMETRY AGREES. Measured on the datasheet's rear photograph at
+      8.99 px/mm, the three blades sit at (74.08, 15.52), (65.68, 22.03) and (73.64, 28.98):
+      a pair 13.46 mm apart with the third blade 8.4 mm off their line, which is the C19/C20
+      triangle, and each blade is about 1 x 3 mm, which is a C19/C20 blade. The part is turned
+      so that pair stands vertical at the right and the odd blade sits at the left, which is
+      `rotate: 270` and is what the render draws.
+      WHAT DOES NOT AGREE IS THE BLADES' OWN ORIENTATION. On the photograph each blade is
+      narrow and TALL - its long axis parallel to the line joining the pair. std/c20-inlet@1
+      draws its blades across that line, so once the part is turned they come out short and
+      wide. THAT DETAIL IS UNSOURCED IN THE PART: its contract says the recess and pins are
+      "proportional from the same drawing, NOT dimensioned", and the SCHURTER drawing it cites
+      dimensions the panel cutout only. So this is the shared part's unsourced detail and not
+      a wrong part on this device, and it is not silently corrected here on the strength of
+      one photograph: eleven modules across five vendors seat std/c20-inlet@1 and they would
+      all move. See roc-ops/Portrayal#398.
+  the-rj45s-are-not-all-the-same-way-up:
+    confidence: measured
+    note: >-
+      AND THE FIRST MODEL OF THIS DEVICE HAD ALL THREE THE SAME WAY UP. The guide's LED
+      enlargement resolves each jack's keyway at 15 px/mm: MGMT has its latch slot at the TOP,
+      CONSOLE has its latch slot at the TOP, and ToD - directly below CONSOLE in the same
+      bezel - has it at the BOTTOM. The stacked pair is a mirrored module, which is the
+      ordinary way a two-high RJ-45 assembly is built, and MGMT matches the upper of the two.
+      std/rj45@2 draws tab-down, so MGMT and CONSOLE are placed `rotate: 180` and ToD is
+      placed as drawn.
+  the-panel-is-honeycombed-and-that-is-a-change-from-the-32-port-shell:
+    confidence: measured
+    note: >-
+      THE PERFORATION IS HEXAGONAL, not the slot field the AIS800-32D carries. Autocorrelation
+      of the dark mask across the top margin gives an x period of 3.59 mm and down the bottom
+      margin a row period of 3.07, which is a regular honeycomb of 3.59 mm pitch. The
+      library's `vent` motif is a hex field on an 8.86 x 5.11 tile, scaled here by
+      pattern-pitch to put its hexes on the measured 3.59; the motif's own row spacing is
+      denser than the hardware's and that is the motif's, not a reading.
+      THE FIELDS: a top band y 0.60-8.60 and a bottom band 78.50-86.50 across the port wall,
+      a left column x 0.60-5.60 between them, a right column x 433.60-439.50 outside the
+      cluster, and two fields inside the cluster itself - above the SFP28 bezel and below the
+      reset button - which the enlargement resolves hexagon by hexagon.
+      THE COLOUR IS SAMPLED FROM BOTH SOURCES AND THEY DISAGREE BY THEIR LIGHTING. Panel
+      medians between features read #5d5e62, #545559 and #616266 on the drawing and #4e4e4e,
+      #464545 and #454546 on the datasheet's photograph. The drawing's reading is used
+      because the drawing is the calibrated instrument for every other number on this face;
+      the photograph is a lit product shot and reads about 15 counts darker throughout. It is
+      darker than the AIS800-32D's measured #6a6b6e either way.
+  the-rear-closes-arithmetically:
+    confidence: measured
+    note: >-
+      AND IT WAS MEASURED TWICE, on the drawing at 5.06 px/mm and on the datasheet's rear
+      photograph at 8.99, which is the check the 32-port models could not run.
+      THE SUPPLIES ARE 73.5 x 40 AND THEY STACK. Vertical-edge scans put the housing's left
+      edge at 15.0-15.3 on both sources and its right at 88.1-88.5; horizontal seams bound
+      PSU1 at 4.54/43.84 on the drawing and 4.13/43.40 on the photograph, and PSU2 at
+      46.01/84.52 and 46.60/85.90. That is the CRPS 73.5 x 40 footprint, and the reads land
+      on it within the drawing's half-pixel.
+      THE TRAY PITCH IS 85.71 FROM THREE RAILS. The rails between trays read 176.16/180.50,
+      262.06/266.01 and 347.58/351.92 on the drawing and 176.0/180.24 and 261.43/265.67 on
+      the photograph - a 4.2 mm rail on an 85.71 pitch (85.43 by the photograph), leaving
+      81.6 for the tray face. The block runs from 94.50 to 433.23 and the chassis frame
+      picks up at 433.09.
+      THE TRAYS ARE 81.2 TALL, from seams at 4.94 and 86.10 on the drawing and 4.13 and 85.88
+      on the photograph.
+      THE BAYS ARE NUMBERED AND THIS TIME THE NUMERALS ARE LEGIBLE, which is what the
+      AIS800-32D's fan-bay-numerals gap asked for and could not have. The photograph resolves
+      a snowflake, a numeral and a right-pointing triangle silkscreened on each rail: 1, 2, 3
+      and 4 from LEFT to right, the opposite of edgecore/exp100-32x and edgecore/dcs240,
+      which both number right to left. They are drawn.
+  the-grounding-point:
+    confidence: measured
+    note: >-
+      A BRIGHT PLATE WITH TWO HOLES at the far left of the rear, x 1.34-14.47 by y 30.27-66.21
+      on the photograph, the holes at (7.2, 39.8) and (7.4, 56.0) about 4.2 across. The guide
+      says what they are: "Attach a grounding wire to the grounding point on the device rear
+      panel using two M6 screws and washers with a grounding lug (Panduit LCDXN2-14AF-E or
+      equivalent)", and the QSG's Overview callout 5 reads "2 x grounding screws". An earth
+      symbol is silkscreened above the plate at (7.4, 26.1) and the supply legend
+      "(up) PSU1 / (down) PSU2" above that.
+  power:
+    confidence: datasheet
+    note: >-
+      3000 W PER SUPPLY, stated three times: the datasheet's feature list ("Hot-swappable,
+      load-sharing, redundant 3000 W AC/DC PSUs"), its power section ("PSUs: 2 redundant,
+      load-sharing, hot-swappable 3000 W AC/DC") and the housing's own "3000W" label in the
+      rear photograph.
+      INPUT. AC: "200-240 VAC at 50-60Hz (16 A/3000 W max.)" with the inlet named outright -
+      "AC PSU Inlet: IEC 60320 C20" - and a C19-C20 cord in the -UN builds. DC: "-48 V ~
+      -60 V (80 A/3000 W max.)". There is no low-line AC rating anywhere, and the guide adds
+      that a single supply powering a fully loaded system must be on 200-240 VAC.
+      DRAW IS STATED ONCE AND IT IS A CEILING, NOT A TYPICAL: "Less than 2775 W (100% traffic
+      at 40 C ambient temperature with 100% fan speed and 64 x 18 W optics)". No typical
+      figure is published, so none is recorded - unlike the AIS800-32D, which publishes both.
+      THE PER-PORT BUDGET IS 30 W, qualified by the datasheet itself: "For all 64 ports all
+      with per-port maximum 30 W capability on both OSFP version and QSFP-DD800 version and
+      actual deployment population subject to total power distribution boundary and thermal
+      considerations."
+  airflow:
+    confidence: datasheet
+    note: >-
+      BOTH DIRECTIONS, AS SEPARATE SKUs, AND THIS TIME THE COLOUR RULE IS PHOTOGRAPHED RATHER
+      THAN DRAWN. The datasheet's page 2 carries a rear photograph of each build side by side
+      under the headings "Airflow: Front-to-back" and "Airflow: Back-to-front": red tray bars
+      and red PSU latches on the first, blue on the second. The ordering table pairs
+      PSU-AC-3000W-F and FAN-2U-1x1SN-F with front-to-back and the -B parts with back-to-front
+      and names no colour. See roc-ops/Portrayal#277.
+      THE RULE COVERS THE AC LATCH AND THE TRAY BARS AND NOTHING ELSE. Sampled on those two
+      photographs the AC latch reads #dd3d12 front-to-back and #6186db back-to-front, and the
+      tray bars #fe3c42 and #469dfb. THE DC SUPPLY'S LATCH IS GREEN AND STAYS GREEN: the only
+      images of that face are the guide's Connect Power figure and its Chinese copy, both of
+      which draw it #9cdb7d on a page with no red pixel on it, and no photograph of a DC build
+      exists in the staged corpus. The dc-b2f configuration therefore recolours the tray bars
+      and leaves the supply alone. An earlier model painted that latch red and blue by
+      analogy with the AC unit, which was the airflow rule reaching one part further than its
+      evidence.
+      THE TWO BUILDS ARE DERATED DIFFERENTLY: front-to-back 0-40 C and back-to-front 0-35 C,
+      "subject to used optics", both at 1800 m.
+attrs:
+  environmental:
+    operating-temp: '0 to 40 C (front-to-back); 0 to 35 C (back-to-front), subject to used optics'
+    storage-temp: '-40 to 70 C'
+    humidity: 'Operating: 5% to 95% non-condensing'
+    altitude: 'Operating: 1800 m'
+  physical:
+    weight-note: '21.2 kg (46.73 lb) with 2 PSUs and 4 fans installed (quick start guide); the datasheet says 21.5 kg (47.4 lb)'
+  platform:
+    cpu: 'Intel Xeon D-1713NTE Ice Lake D, 4-core 2.2 GHz, COM Type 7'
+    switch-silicon: 'Broadcom BCM78900 Tomahawk 5'
+    bmc: 'AST2600 running OpenBMC, secured by an AST1060 root of trust'
+    memory: '32 GB DDR4 SO-DIMM with ECC'
+    storage: '240 GB M.2 2280 NVMe SSD'
+    tpm: 'TPM 2.0 SPI'
+    software: 'ONIE preloaded; no NOS image ships on the device'
+  performance:
+    switching-capacity: '51.2 Tbps (102.4 Tbps full duplex)'
+    logical-ports: 'up to 320'
+    jumbo-frames: 'up to 9416 bytes'
+  power:
+    power-draw-max-w: 2775
+    power-budget-per-port-w: 30
+  features:
+    optics-qsfp-dd: >-
+      datasheet: each port takes 1 x 800 GbE on 8 lanes of 100G PAM4, or breaks out to
+      2 x 400G, 4 x 200G or 8 x 100G. Maximum 320 logical ports.
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 87.0, depth: 649.2, ru: 2, weight-kg: 21.2, color: '#5c5d61',
+  airflow: front-to-back}
+gaps:
+- what: module-lamp-legend
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the lamp on each fan tray means. Every one of the four trays carries a round lens at
+    its top left - a bright dot about 2 mm across on the datasheet's rear photograph - and
+    neither staged document mentions it. The quick start guide's System LEDs/Buttons page
+    lists the six chassis lamps and the RJ-45's pair and stops; the datasheet names port,
+    management-port and system LEDs and no module lamp. THE SUPPLIES CARRY NONE: the only
+    round features on the AC supply's face are the two Phillips screw heads at its corners,
+    which is the AIS800-32D's finding for the same vendor's supplies. The trays' lamps are
+    drawn because they are there, with the library's default off/on states.
+- what: port-lamp-speed-colours
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    Whether the port lamp's four colours are the only states it has. The guide gives
+    "QSFP-DD800 LEDs: Yellow (800G), Blue (400G), White (200G), Green (100G)" and the
+    datasheet's own summary says "Port LEDs: Link Status, Activity, Rate" - three FUNCTIONS
+    for one window and four colours for the rate alone. The four rate colours are declared
+    because they are named; whether the window also blinks for activity, and what it shows
+    for link without traffic, is not published. A port-LED table, or one photograph of a lit
+    port at a known speed, settles it.
+- what: dc-connector-identity
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the DC supply's six-bore input connector actually is. The guide's Connect Power page
+    draws the face and legends the poles - "1. -48 - -60 VDC, 2. DC return, 3. Signal +,
+    4. Signal -", with 1 on both left bores, 2 on both right, 3 on the upper centre and 4 on
+    the lower - and the datasheet gives the rating and the wire gauge. NEITHER NAMES THE
+    CONNECTOR. That is the difference from this line's AC inlets, which both documents name
+    outright (this model's "IEC 60320 C20", the AIS800-32D's "Anderson Saf D Grid"), and it
+    matters because a named part gets the manufacturer's own drawing and an unnamed one gets
+    a figure measured at 7.18 px/mm. edgecore/ais800-64-psu-dc@1 is drawn to that figure and
+    says so. A vendor drawing, an FRU page, or a photograph of the mating cable's connector
+    settles whether this is a catalogue part whose real dimensions should replace the
+    measured ones.
+- what: the-four-undrawn-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    A drawing of the lid, the underside and the two side walls. Between them the two staged
+    documents draw two elevations, a LED enlargement, four product photographs, the FRU
+    figures and a power-connection page, and not one of them shows a third face. Each carries
+    an `empty:` sentence saying where I looked, per docs/deliberately-empty-faces.md.
+groups:
+  qsfp-dd800:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the sixty-four 800G QSFP-DD800 ports, in TWO BANKS of sixteen stacked columns on a
+      uniform 24.019 mm pitch. Ports 1-32 are the upper bank, numbered down each column from
+      1 at the top left, and 33-64 the lower - odd ports the upper row of their bank and even
+      the lower, as the panel's own `N (up) (down) N+1` legends say. The upper bank's legends
+      are printed above it and the lower bank's below.
+    attrs: {media: qsfp-dd, speed: 800g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster at the right of the port wall - two 25G SFP28 in-band
+      management cages, a 1000BASE-T RJ-45 management jack, a USB 3.0 Type-A storage port,
+      an RJ-45 serial console and the reset button. The datasheet lists the SFP28 pair under
+      "Management Ports on Port Side" alongside the RJ-45s, which is why they are in this
+      group and not the traffic one.
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the three timing jacks the datasheet lists as "Timing Ports: 1PPS, 10 MHz, TOD" - two
+      SMA coaxial inputs and an RJ-45 time-of-day port. The AIS800-32D has none of these.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        datasheet: "PSUs: 2 redundant, load-sharing, hot-swappable 3000 W AC/DC". Two 3000 W
+        supplies against a stated 2775 W ceiling is a genuine 1+1, and the guide says so from
+        the other side: a single supply may power a fully loaded system provided it is on
+        200-240 VAC.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '7+1'
+      redundancy-note: >-
+        datasheet, twice: "4 hot-swappable fan modules (2 fans per module), 8 fans total with
+        7+1 redundancy", in the feature list and again in the physical section. THE BAY COUNT
+        AND THE FAN COUNT ARE DIFFERENT NUMBERS AND THIS DEVICE HAS TO SAY WHICH IT MEANS:
+        four bays are modelled, because four trays are what the rear draws and what a hand
+        removes; the 7+1 counts the EIGHT rotors inside them, two per tray. The AIS800-32D's
+        "6+1" counts seven trays of one fan each, so the two models' figures are not
+        comparable without this sentence.
+views:
+  front:
+    size: {w: 440.0, h: 87.0}
+    panel:
+      decor:
+      - {id: vent-top, at: [6.00, 0.60], size: [386.00, 8.00], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: vent-bottom, at: [6.00, 78.50], size: [386.00, 8.00], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: vent-left, at: [0.60, 8.60], size: [5.00, 69.90], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: vent-right, at: [435.00, 12.00], size: [4.50, 74.00], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: vent-cluster-top, at: [393.00, 0.60], size: [17.50, 13.90], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: vent-cluster-left, at: [393.60, 56.50], size: [12.00, 29.50], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: vent-cluster-bottom, at: [405.60, 72.60], size: [10.00, 13.40], pattern: vent, pattern-pitch: [3.59, 2.07], vent: 30}
+      - {id: cage-shell-1, at: [12.10, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-2, at: [36.12, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-3, at: [60.14, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-4, at: [84.16, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-5, at: [108.18, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-6, at: [132.20, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-7, at: [156.21, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-8, at: [180.23, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-9, at: [204.25, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-10, at: [228.27, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-11, at: [252.29, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-12, at: [276.31, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-13, at: [300.33, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-14, at: [324.35, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-15, at: [348.37, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-16, at: [372.38, 13.00], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-17, at: [12.10, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-18, at: [36.12, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-19, at: [60.14, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-20, at: [84.16, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-21, at: [108.18, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-22, at: [132.20, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-23, at: [156.21, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-24, at: [180.23, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-25, at: [204.25, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-26, at: [228.27, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-27, at: [252.29, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-28, at: [276.31, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-29, at: [300.33, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-30, at: [324.35, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-31, at: [348.37, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-shell-32, at: [372.38, 46.63], size: [20.10, 29.31], fill: '#8e949a'}
+      - {id: cage-gasket-top-1, at: [12.30, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-1, at: [12.30, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-2, at: [36.32, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-2, at: [36.32, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-3, at: [60.34, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-3, at: [60.34, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-4, at: [84.36, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-4, at: [84.36, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-5, at: [108.38, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-5, at: [108.38, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-6, at: [132.40, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-6, at: [132.40, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-7, at: [156.41, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-7, at: [156.41, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-8, at: [180.43, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-8, at: [180.43, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-9, at: [204.45, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-9, at: [204.45, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-10, at: [228.47, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-10, at: [228.47, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-11, at: [252.49, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-11, at: [252.49, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-12, at: [276.51, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-12, at: [276.51, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-13, at: [300.53, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-13, at: [300.53, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-14, at: [324.55, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-14, at: [324.55, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-15, at: [348.57, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-15, at: [348.57, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-16, at: [372.58, 13.05], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-16, at: [372.58, 41.46], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-17, at: [12.30, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-17, at: [12.30, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-18, at: [36.32, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-18, at: [36.32, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-19, at: [60.34, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-19, at: [60.34, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-20, at: [84.36, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-20, at: [84.36, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-21, at: [108.38, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-21, at: [108.38, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-22, at: [132.40, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-22, at: [132.40, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-23, at: [156.41, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-23, at: [156.41, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-24, at: [180.43, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-24, at: [180.43, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-25, at: [204.45, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-25, at: [204.45, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-26, at: [228.47, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-26, at: [228.47, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-27, at: [252.49, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-27, at: [252.49, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-28, at: [276.51, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-28, at: [276.51, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-29, at: [300.53, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-29, at: [300.53, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-30, at: [324.55, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-30, at: [324.55, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-31, at: [348.57, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-31, at: [348.57, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-top-32, at: [372.58, 46.68], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-gasket-bot-32, at: [372.58, 75.09], size: [19.70, 0.80], pattern: slots, pattern-pitch: [3.66, 0.80], vent: 6}
+      - {id: cage-band-back-1, at: [12.65, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-1, at: [12.65, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-2, at: [36.67, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-2, at: [36.67, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-3, at: [60.69, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-3, at: [60.69, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-4, at: [84.71, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-4, at: [84.71, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-5, at: [108.73, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-5, at: [108.73, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-6, at: [132.75, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-6, at: [132.75, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-7, at: [156.76, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-7, at: [156.76, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-8, at: [180.78, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-8, at: [180.78, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-9, at: [204.80, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-9, at: [204.80, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-10, at: [228.82, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-10, at: [228.82, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-11, at: [252.84, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-11, at: [252.84, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-12, at: [276.86, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-12, at: [276.86, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-13, at: [300.88, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-13, at: [300.88, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-14, at: [324.90, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-14, at: [324.90, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-15, at: [348.92, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-15, at: [348.92, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-16, at: [372.93, 23.90], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-16, at: [372.93, 23.90], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-17, at: [12.65, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-17, at: [12.65, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-18, at: [36.67, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-18, at: [36.67, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-19, at: [60.69, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-19, at: [60.69, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-20, at: [84.71, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-20, at: [84.71, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-21, at: [108.73, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-21, at: [108.73, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-22, at: [132.75, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-22, at: [132.75, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-23, at: [156.76, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-23, at: [156.76, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-24, at: [180.78, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-24, at: [180.78, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-25, at: [204.80, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-25, at: [204.80, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-26, at: [228.82, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-26, at: [228.82, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-27, at: [252.84, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-27, at: [252.84, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-28, at: [276.86, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-28, at: [276.86, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-29, at: [300.88, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-29, at: [300.88, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-30, at: [324.90, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-30, at: [324.90, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-31, at: [348.92, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-31, at: [348.92, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: cage-band-back-32, at: [372.93, 57.53], size: [19.00, 7.51], fill: '#dfe3e7'}
+      - {id: cage-band-32, at: [372.93, 57.53], size: [19.00, 7.51], pattern: vent, pattern-pitch: [2.30, 1.33], vent: 24}
+      - {id: sfp-shell, at: [397.85, 15.48], size: [15.95, 26.50], fill: '#d7dbdf'}
+      - {id: usb-bezel, at: [417.30, 34.10], size: [14.00, 6.50], fill: '#d7dbdf'}
+      - {id: led-strip, at: [394.00, 44.50], size: [40.40, 4.70], fill: '#2a2d30'}
+      - {id: model-plate, at: [411.00, 2.60], size: [25.60, 9.00], fill: '#17191c'}
+      cutouts:
+      - {id: mgmt-inband-1, at: [398.45, 16.08], size: [14.5, 10.0], shape: rect}
+      - {id: mgmt-inband-2, at: [398.45, 31.38], size: [14.5, 10.0], shape: rect}
+      - {id: led-sfp-1, at: [402.92, 27.68], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-2, at: [406.58, 27.66], size: [2.25, 2.0], shape: rect}
+      - {id: mgmt-eth, at: [416.40, 16.10], size: [15.8, 13.2], shape: rect}
+      - {id: usb-a, at: [418.30, 35.10], size: [12.0, 4.5], shape: rect}
+      - {id: reset, at: [394.00, 49.80], size: [4.0, 4.0], shape: circle}
+      - {id: led-loc, at: [398.90, 47.10], size: [2.8, 1.6], shape: rect}
+      - {id: led-diag, at: [405.00, 47.10], size: [2.8, 1.6], shape: rect}
+      - {id: led-alrm, at: [411.10, 47.10], size: [2.8, 1.6], shape: rect}
+      - {id: led-fan, at: [417.20, 47.10], size: [2.8, 1.6], shape: rect}
+      - {id: led-psu1, at: [423.30, 47.10], size: [2.8, 1.6], shape: rect}
+      - {id: led-psu2, at: [429.40, 47.10], size: [2.8, 1.6], shape: rect}
+      - {id: pps-1, at: [406.87, 53.88], size: [6.35, 6.35], shape: circle}
+      - {id: clk-10mhz, at: [406.87, 62.37], size: [6.35, 6.35], shape: circle}
+      - {id: console, at: [416.40, 53.90], size: [15.8, 13.2], shape: rect}
+      - {id: tod, at: [416.40, 67.20], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+    - {id: silk-arrow-1, at: [20.52, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-1}
+    - {id: silk-arrow-2, at: [23.90, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-2}
+    - {id: silk-arrow-3, at: [44.54, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-3}
+    - {id: silk-arrow-4, at: [47.92, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-4}
+    - {id: silk-arrow-5, at: [68.56, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-5}
+    - {id: silk-arrow-6, at: [71.94, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-6}
+    - {id: silk-arrow-7, at: [92.58, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-7}
+    - {id: silk-arrow-8, at: [95.96, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-8}
+    - {id: silk-arrow-9, at: [116.60, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-9}
+    - {id: silk-arrow-10, at: [119.98, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-10}
+    - {id: silk-arrow-11, at: [140.62, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-11}
+    - {id: silk-arrow-12, at: [144.00, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-12}
+    - {id: silk-arrow-13, at: [164.63, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-13}
+    - {id: silk-arrow-14, at: [168.01, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-14}
+    - {id: silk-arrow-15, at: [188.65, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-15}
+    - {id: silk-arrow-16, at: [192.03, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-16}
+    - {id: silk-arrow-17, at: [212.67, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-17}
+    - {id: silk-arrow-18, at: [216.05, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-18}
+    - {id: silk-arrow-19, at: [236.69, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-19}
+    - {id: silk-arrow-20, at: [240.07, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-20}
+    - {id: silk-arrow-21, at: [260.71, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-21}
+    - {id: silk-arrow-22, at: [264.09, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-22}
+    - {id: silk-arrow-23, at: [284.73, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-23}
+    - {id: silk-arrow-24, at: [288.11, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-24}
+    - {id: silk-arrow-25, at: [308.75, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-25}
+    - {id: silk-arrow-26, at: [312.13, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-26}
+    - {id: silk-arrow-27, at: [332.77, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-27}
+    - {id: silk-arrow-28, at: [336.15, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-28}
+    - {id: silk-arrow-29, at: [356.79, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-29}
+    - {id: silk-arrow-30, at: [360.17, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-30}
+    - {id: silk-arrow-31, at: [380.80, 12.88], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-31}
+    - {id: silk-arrow-32, at: [384.18, 12.88], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-32}
+    - {id: silk-arrow-33, at: [20.52, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-33}
+    - {id: silk-arrow-34, at: [23.90, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-34}
+    - {id: silk-arrow-35, at: [44.54, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-35}
+    - {id: silk-arrow-36, at: [47.92, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-36}
+    - {id: silk-arrow-37, at: [68.56, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-37}
+    - {id: silk-arrow-38, at: [71.94, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-38}
+    - {id: silk-arrow-39, at: [92.58, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-39}
+    - {id: silk-arrow-40, at: [95.96, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-40}
+    - {id: silk-arrow-41, at: [116.60, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-41}
+    - {id: silk-arrow-42, at: [119.98, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-42}
+    - {id: silk-arrow-43, at: [140.62, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-43}
+    - {id: silk-arrow-44, at: [144.00, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-44}
+    - {id: silk-arrow-45, at: [164.63, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-45}
+    - {id: silk-arrow-46, at: [168.01, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-46}
+    - {id: silk-arrow-47, at: [188.65, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-47}
+    - {id: silk-arrow-48, at: [192.03, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-48}
+    - {id: silk-arrow-49, at: [212.67, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-49}
+    - {id: silk-arrow-50, at: [216.05, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-50}
+    - {id: silk-arrow-51, at: [236.69, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-51}
+    - {id: silk-arrow-52, at: [240.07, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-52}
+    - {id: silk-arrow-53, at: [260.71, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-53}
+    - {id: silk-arrow-54, at: [264.09, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-54}
+    - {id: silk-arrow-55, at: [284.73, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-55}
+    - {id: silk-arrow-56, at: [288.11, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-56}
+    - {id: silk-arrow-57, at: [308.75, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-57}
+    - {id: silk-arrow-58, at: [312.13, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-58}
+    - {id: silk-arrow-59, at: [332.77, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-59}
+    - {id: silk-arrow-60, at: [336.15, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-60}
+    - {id: silk-arrow-61, at: [356.79, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-61}
+    - {id: silk-arrow-62, at: [360.17, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-62}
+    - {id: silk-arrow-63, at: [380.80, 78.41], text: '▲', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-63}
+    - {id: silk-arrow-64, at: [384.18, 78.41], text: '▼', font-size: 2.6, anchor: middle, fill: '#f2f4f6', for: port-64}
+    - {id: silk-sfp-1, at: [400.90, 43.40], text: '1 ▲', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: mgmt-inband-1}
+    - {id: silk-sfp-25g, at: [406.60, 43.40], text: '25G', font-size: 1.5, anchor: middle, fill: '#c7ccd1', for: mgmt-inband-1}
+    - {id: silk-sfp-2, at: [411.50, 43.40], text: '▼ 2', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: mgmt-inband-2}
+    - {id: silk-usb, at: [424.30, 43.40], text: 'SS', font-size: 1.5, anchor: middle, fill: '#c7ccd1', for: usb-a}
+    - {id: silk-usb-icon, at: [426.30, 41.80], path: 'M 0.00 0.80 a 0.18 0.18 0 1 0 0.36 0 a 0.18 0.18 0 1 0 -0.36 0 Z M 0.18 0.73 H 1.02 V 0.87 H 0.18 Z M 0.98 0.54 L 1.40 0.80 L 0.98 1.06 Z M 0.44 0.86 L 0.76 0.36 L 0.88 0.44 L 0.56 0.94 Z M 0.72 0.24 H 1.02 V 0.52 H 0.72 Z M 0.44 0.74 L 0.76 1.24 L 0.88 1.16 L 0.56 0.66 Z M 0.66 1.20 a 0.19 0.19 0 1 0 0.38 0 a 0.19 0.19 0 1 0 -0.38 0 Z', filled: true, fill: '#c7ccd1', for: usb-a}
+    - {id: silk-mgmt, at: [424.30, 15.00], text: MGMT, font-size: 1.6, anchor: middle, fill: '#e4e8eb', for: mgmt-eth}
+    - {id: silk-loc, at: [400.30, 46.60], text: LOC, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: led-loc}
+    - {id: silk-diag, at: [406.40, 46.60], text: DIAG, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: led-diag}
+    - {id: silk-alrm, at: [412.50, 46.60], text: ALRM, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: led-alrm}
+    - {id: silk-fan, at: [418.60, 46.60], text: FAN, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: led-fan}
+    - {id: silk-psu1, at: [424.70, 46.60], text: PSU1, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: led-psu1}
+    - {id: silk-psu2, at: [430.80, 46.60], text: PSU2, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: led-psu2}
+    - {id: silk-rst, at: [396.00, 54.90], text: RST, font-size: 1.3, anchor: middle, fill: '#e4e8eb', for: reset}
+    - {id: silk-1pps, at: [410.00, 52.80], text: '1PPS', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: pps-1}
+    - {id: silk-10mhz, at: [410.00, 71.30], text: '10MHz', font-size: 1.5, anchor: middle, fill: '#e4e8eb', for: clk-10mhz}
+    - {id: silk-console, at: [424.30, 52.80], text: CONSOLE, font-size: 1.6, anchor: middle, fill: '#e4e8eb', for: console}
+    - {id: silk-tod, at: [424.30, 82.50], text: TOD, font-size: 1.6, anchor: middle, fill: '#e4e8eb', for: tod}
+    - {id: silk-model, at: [424.50, 10.60], text: 'AIS800-64D', font-size: 1.9, anchor: middle, fill: '#e4e8eb', for: chassis}
+    components:
+      blocks:
+      - id: qsfp-dd800
+        ref: std/qsfp-dd@1
+        at: [12.65, 13.90]
+        count: 32
+        rows: 2
+        pitch: 24.0190
+        row-pitch: 17.51
+        number-from: 1
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [4.33, 14.74], dy-top: -1.02, dy-bottom: -18.53, font-size: 2.9, anchor: middle, fill: '#f2f4f6'}
+        led:
+          ref: common/led-dot@1
+          id-format: 'led-port-{n}'
+          dx: -3.40
+          dy-top: 3.52
+          dy-bottom: 4.79
+          group: port-leds
+          states: ['off', {name: '800g', color: '#eab308'}, {name: '400g', color: '#3b82f6'}, {name: '200g', color: '#e5e7eb'}, {name: '100g', color: '#22c55e'}]
+      - id: qsfp-dd800
+        ref: std/qsfp-dd@1
+        at: [12.65, 47.53]
+        count: 32
+        rows: 2
+        pitch: 24.0190
+        row-pitch: 17.51
+        number-from: 33
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [4.33, 14.74], dy-top: 30.88, dy-bottom: 13.37, font-size: 2.9, anchor: middle, fill: '#f2f4f6'}
+        led:
+          ref: common/led-dot@1
+          id-format: 'led-port-{n}'
+          dx: -3.40
+          dy-top: 3.3
+          dy-bottom: 4.64
+          group: port-leds
+          states: ['off', {name: '800g', color: '#eab308'}, {name: '400g', color: '#3b82f6'}, {name: '200g', color: '#e5e7eb'}, {name: '100g', color: '#22c55e'}]
+      placements:
+      - {ref: std/sfp@1, id: mgmt-inband-1, at: [398.45, 16.08], group: mgmt, rel-pos: 1,
+         attrs: {media: sfp28, speed: 25g, role: mgmt}}
+      - {ref: std/sfp@1, id: mgmt-inband-2, at: [398.45, 31.38], group: mgmt, rel-pos: 2,
+         attrs: {media: sfp28, speed: 25g, role: mgmt}}
+      - {ref: common/rj45-eth@1, id: mgmt-eth, at: [416.40, 16.10], rotate: 180, group: mgmt, rel-pos: 3,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb-a, at: [418.30, 35.10], group: mgmt, rel-pos: 4,
+         attrs: {media: usb-a, role: storage, protocol: 'USB 3.0'}}
+      - {ref: std/rj45@2, id: console, at: [416.40, 53.90], rotate: 180, group: mgmt, rel-pos: 5,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: common/reset-button@1, id: reset, at: [394.00, 49.80], group: mgmt, rel-pos: 6, for: chassis}
+      - {ref: std/sma@1, id: pps-1, at: [406.87, 53.88], group: timing, rel-pos: 1,
+         attrs: {media: coax-sma, role: timing, signal: '1PPS'}}
+      - {ref: std/sma@1, id: clk-10mhz, at: [406.87, 62.37], group: timing, rel-pos: 2,
+         attrs: {media: coax-sma, role: timing, signal: '10 MHz'}}
+      - {ref: std/rj45@2, id: tod, at: [416.40, 67.20], group: timing, rel-pos: 3,
+         attrs: {media: rj45, role: timing, signal: 'ToD'}}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-1, at: [402.92, 27.68], skin: up, group: port-leds, rel-pos: 65, for: mgmt-inband-1,
+         states: ['off', {name: link, color: '#22c55e'}, {name: activity, behavior: blinking, color: '#22c55e'}]}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-2, at: [406.58, 27.66], skin: down, group: port-leds, rel-pos: 66, for: mgmt-inband-2,
+         states: ['off', {name: link, color: '#22c55e'}, {name: activity, behavior: blinking, color: '#22c55e'}]}
+      - {ref: common/led-rect-sm@1, id: led-loc, at: [398.90, 47.10], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: locate, behavior: blinking, color: '#22c55e'}]}
+      - {ref: common/led-rect-sm@1, id: led-diag, at: [405.00, 47.10], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-rect-sm@1, id: led-alrm, at: [411.10, 47.10], group: leds, rel-pos: 3, for: chassis,
+         states: ['off', {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-rect-sm@1, id: led-fan, at: [417.20, 47.10], group: leds, rel-pos: 4, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-rect-sm@1, id: led-psu1, at: [423.30, 47.10], group: leds, rel-pos: 5, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-rect-sm@1, id: led-psu2, at: [429.40, 47.10], group: leds, rel-pos: 6, for: chassis,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+    regions:
+    - {id: optics-upper, at: [11.0, 13.0], size: {w: 382.0, h: 29.0}, label: 'Ports 1-32 (800G QSFP-DD800)',
+       members: [port-1, port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13, port-14, port-15, port-16, port-17, port-18, port-19, port-20, port-21, port-22, port-23, port-24, port-25, port-26, port-27, port-28, port-29, port-30, port-31, port-32]}
+    - {id: optics-lower, at: [11.0, 46.5], size: {w: 382.0, h: 29.0}, label: 'Ports 33-64 (800G QSFP-DD800)',
+       members: [port-33, port-34, port-35, port-36, port-37, port-38, port-39, port-40, port-41, port-42, port-43, port-44, port-45, port-46, port-47, port-48, port-49, port-50, port-51, port-52, port-53, port-54, port-55, port-56, port-57, port-58, port-59, port-60, port-61, port-62, port-63, port-64]}
+    - {id: out-of-band, at: [396.0, 14.0], size: {w: 40.0, h: 28.0}, label: 'Management, console and USB',
+       members: [mgmt-inband-1, mgmt-inband-2, mgmt-eth, usb-a]}
+    - {id: status-leds, at: [393.5, 44.5], size: {w: 42.0, h: 5.8}, label: 'System LEDs',
+       members: [led-loc, led-diag, led-alrm, led-fan, led-psu1, led-psu2]}
+    - {id: timing-and-console, at: [405.0, 53.0], size: {w: 30.0, h: 28.0}, label: 'Timing and console',
+       members: [pps-1, clk-10mhz, console, tod]}
+  rear:
+    size: {w: 440.0, h: 87.0}
+    panel:
+      decor:
+      - {id: ground-plate, at: [1.30, 30.30], size: [13.20, 35.90], fill: '#b9bec4'}
+    silkscreen:
+    - {id: silk-psu1-legend, at: [8.80, 7.60], text: '▲ PSU1', font-size: 2.0, anchor: middle, fill: '#e4e8eb', for: psu-1}
+    - {id: silk-psu2-legend, at: [8.80, 11.60], text: '▼ PSU2', font-size: 2.0, anchor: middle, fill: '#e4e8eb', for: psu-2}
+    - {id: silk-fan-1, at: [91.60, 44.00], text: '1', font-size: 2.6, anchor: middle, fill: '#e4e8eb', for: fan-1}
+    - {id: silk-fan-2, at: [178.30, 44.00], text: '2', font-size: 2.6, anchor: middle, fill: '#e4e8eb', for: fan-2}
+    - {id: silk-fan-3, at: [264.00, 44.00], text: '3', font-size: 2.6, anchor: middle, fill: '#e4e8eb', for: fan-3}
+    - {id: silk-fan-4, at: [349.70, 44.00], text: '4', font-size: 2.6, anchor: middle, fill: '#e4e8eb', for: fan-4}
+    components:
+      bays:
+      - {id: psu-1, at: [15.20, 4.30], size: {w: 73.5, h: 40.0}, group: psus, rel-pos: 1,
+         accepts: ['edgecore/ais800-64-psu-ac@1', 'edgecore/ais800-64-psu-dc@1'], default: 'edgecore/ais800-64-psu-ac@1'}
+      - {id: psu-2, at: [15.20, 45.90], size: {w: 73.5, h: 40.0}, group: psus, rel-pos: 2,
+         accepts: ['edgecore/ais800-64-psu-ac@1', 'edgecore/ais800-64-psu-dc@1'], default: 'edgecore/ais800-64-psu-ac@1'}
+      - {id: fan-1, at: [94.50, 4.60], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 1,
+         accepts: ['edgecore/ais800-64-fan@1'], default: 'edgecore/ais800-64-fan@1'}
+      - {id: fan-2, at: [180.21, 4.60], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 2,
+         accepts: ['edgecore/ais800-64-fan@1'], default: 'edgecore/ais800-64-fan@1'}
+      - {id: fan-3, at: [265.92, 4.60], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 3,
+         accepts: ['edgecore/ais800-64-fan@1'], default: 'edgecore/ais800-64-fan@1'}
+      - {id: fan-4, at: [351.63, 4.60], size: {w: 81.6, h: 81.2}, group: fans, rel-pos: 4,
+         accepts: ['edgecore/ais800-64-fan@1'], default: 'edgecore/ais800-64-fan@1'}
+      placements:
+      - {ref: common/ground-lug@1, id: ground-screw-1, at: [3.70, 32.80], group: mgmt, rel-pos: 7, for: chassis}
+      - {ref: common/ground-lug@1, id: ground-screw-2, at: [3.90, 49.00], group: mgmt, rel-pos: 8, for: chassis}
+    regions:
+    - {id: power, at: [14.5, 4.0], size: {w: 75.0, h: 82.0}, label: 'Power supplies 1 and 2',
+       members: [psu-1, psu-2]}
+    - {id: exhaust, at: [94.0, 4.0], size: {w: 340.0, h: 82.0}, label: '4 fan trays, 8 fans (7+1)',
+       members: [fan-1, fan-2, fan-3, fan-4]}
+    - {id: earth, at: [1.0, 22.0], size: {w: 14.0, h: 45.0}, label: 'Grounding point (2 x M6)',
+       members: [ground-screw-1, ground-screw-2]}
+  top:
+    size: {w: 440.0, h: 649.2}
+    empty: >-
+      Not drawn by either staged document. Between them the quick start guide and the
+      datasheet carry two elevations, a LED enlargement, four product photographs, the FRU
+      figures and a power-connection page, and none of them shows the lid.
+  bottom:
+    size: {w: 440.0, h: 649.2}
+    empty: >-
+      Not drawn by any staged source. A face that sits on slide rails, is never serviced and
+      carries no connectors gets no figure.
+  left:
+    size: {w: 649.2, h: 87.0}
+    empty: >-
+      Not drawn by any staged source, and on this chassis that is a statement rather than an
+      omission: the AIS800 breathes end to end. The intake is the front face's own honeycomb
+      fields and the exhaust is the four rear trays, so the side walls carry no perforation
+      to draw.
+  right:
+    size: {w: 649.2, h: 87.0}
+    empty: >-
+      Not drawn by any staged source. The other side wall, solid for the same reason.
+configurations:
+  ac-f2b:
+    kind: orderable
+    description: >-
+      Dual 3000 W AC PSUs, front-to-back airflow - red tray bars and red PSU latches, which
+      is the build the rear elevation and the datasheet's first rear photograph show. Rated
+      0-40 C at 1800 m.
+    default: true
+    part-numbers:
+      AIS800-64D-AF-UN: {part: FP6EC9664004Z, power-cord: 'IEC 60320 C19-C20'}
+      AIS800-64D-AF: {part: FP6EC9664002Z, power-cord: none}
+  ac-b2f:
+    kind: orderable
+    description: >-
+      Dual 3000 W AC PSUs, back-to-front airflow - blue bars and latches, which the
+      datasheet's second rear photograph shows. Derated to 0-35 C, "subject to used optics".
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    component-attrs:
+      ais800-64-fan: {handle-finish: '#3d7bd6'}
+      ais800-64-psu-ac: {latch-finish: '#3d7bd6'}
+    part-numbers:
+      AIS800-64D-AB-UN: {part: FP6EC9664005Z, power-cord: 'IEC 60320 C19-C20'}
+      AIS800-64D-AB: {part: FP6EC9664008Z, power-cord: none}
+  dc-f2b:
+    kind: orderable
+    description: >-
+      Dual 3000 W DC PSUs, front-to-back airflow. The DC supply lands -48 to -60 VDC on a
+      six-stud terminal block - feed and return doubled, plus a signal pair - and the guide
+      calls for #4 AWG / 21.2 mm2 copper. No power cord ships.
+    bays: {psu-1: 'edgecore/ais800-64-psu-dc@1', psu-2: 'edgecore/ais800-64-psu-dc@1'}
+    part-numbers:
+      AIS800-64D-DF: {part: FP6EC9664014Z}
+  dc-b2f:
+    kind: orderable
+    description: >-
+      Dual 3000 W DC PSUs, back-to-front airflow - blue tray bars. The DC supply's own release
+      latch is green in both builds and is not recoloured; see the airflow note.
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    bays: {psu-1: 'edgecore/ais800-64-psu-dc@1', psu-2: 'edgecore/ais800-64-psu-dc@1'}
+    component-attrs:
+      ais800-64-fan: {handle-finish: '#3d7bd6'}
+    part-numbers:
+      AIS800-64D-DB: {part: FP6EC9664016Z}
+references:
+- {title: 'Edgecore AIS800-64D 800 Gigabit AI & Data Center Ethernet Switch Quick Start Guide'}
+- {title: 'Edgecore AIS800 Data Center Switch AIS800-64O/AIS800-64D Data Sheet'}

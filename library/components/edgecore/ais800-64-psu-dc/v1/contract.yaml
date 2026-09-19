@@ -1,0 +1,124 @@
+format: 1
+kind: module
+name: ais800-64-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 3000 W DC power supply of the Edgecore AIS800-64D and AIS800-64O - the AC unit's
+  73.5 x 40 CRPS shell with a six-stud terminal block in place of the fan guard and inlet:
+  two rows of three M-studs under a lifting cover, honeycomb fields either side, a black
+  pull loop standing at the left and the coloured release latch at the right. Drawn from
+  the quick start guide's own Connect Power figure of this face.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'PSU-DC-3000W'
+  power-output-w: 3000
+  input: dc
+  inlet: dc-terminal
+provenance:
+  size: >-
+    CARRIED OVER from edgecore/ais800-64-psu-ac@1 - the same bay, measured there on the rear
+    elevation and the datasheet photograph at 73.5 x 40.0. Neither staged document draws the
+    DC unit in the chassis; the guide's Connect Power figure draws it alone, 625 x 358 px
+    over a body that reads 505 px wide, 6.87 px/mm on the 73.5 mm shell, and every position
+    below is read there at that scale.
+  the-terminal-block-is-measured-and-unnamed: >-
+    NO STAGED DOCUMENT NAMES THIS CONNECTOR, and that is a real difference from both of its
+    relatives. The AIS800-32D's datasheet names its AC inlet outright ("Anderson Saf D Grid")
+    and this model's names its own ("AC PSU Inlet: IEC 60320 C20"); neither says one word
+    about what the DC supply lands on. The datasheet's power section gives the rating and
+    nothing else - "DC Input rating: -48 V ~ -60 V (80 A/3000 W max.)" - and the guide adds
+    only the wire: "Use #4 AWG / 21.2 mm2 copper wire (for a -48 to -60 VDC PSU)".
+    SO IT IS DRAWN TO ITS OWN FIGURE RATHER THAN TO A STANDARD. Every number below is
+    measured on the guide's Connect Power figure, scaled by the module's own 73.5 mm width to
+    7.184 px/mm: shroud 29.79 x 25.19 at (22.69, 7.66); six bores 7.66 across on an 8.07 mm
+    column pitch and a 14.13 mm row pitch, centres (31.67 / 39.74 / 47.82) x (13.16 / 27.29);
+    a moulded bridge across the middle at y 16.57-22.97; the latch 4.87 x 14.06 at (65.43,
+    14.62); the handle loop 8.49 x 34.66 at (9.47, 3.48). If this turns out to be a catalogue
+    part, its own drawing should replace these numbers and the shape should be checked against
+    it - see the device's dc-connector-identity gap.
+  the-terminal-block: >-
+    SIX BORES, TWO ROWS OF THREE, each a round recess with a screw slot in it. The figure's legend numbers them:
+    "1. -48 - -60 VDC", "2. DC return", "3. Signal +", "4. Signal -", with 1 on BOTH
+    left-hand studs, 2 on both right-hand studs, 3 on the upper centre stud and 4 on the
+    lower centre one - so the feed and return are doubled up (two #4 AWG conductors each, per
+    the guide's wire note: "Use #4 AWG / 21.2 mm2 copper wire") and the centre pair is a
+    signal pair. Stud centres read at module (32.0, 12.4), (40.8, 12.4), (49.5, 12.4) and
+    the same three at y 27.29; the block's outer frame at x 22.69-52.48, y 7.66-32.85. No legend
+    is printed on the face in the figure - the numbers are the figure's callouts - so none is
+    silkscreened here and the semantics live in this note.
+  the-loop-the-vents-and-the-latch: >-
+    THE PULL LOOP STANDS UP THE FACE at x 9.47-17.96, a black closed loop from y 3.48 to 38.14
+    with a 3.3 x 26.2 hole through it - the AC unit's fabric loop, seen square-on here.
+    Honeycomb fields fill x 1.5-22.5 behind the loop and x 53.8-64.3 at the right.
+  the-latch-is-green-and-that-is-not-the-airflow-colour: >-
+    THE RELEASE LATCH AT x 65.43-70.30, y 14.62-28.68 IS GREEN AND IS DRAWN GREEN, which is a
+    correction: the first model painted it with the AC unit's airflow colours and the reviewer
+    caught it. It reads #9cdb7d in the guide's Connect Power figure and #a1df84 in the Chinese
+    section's copy of the same drawing, and there is not one red pixel anywhere on that page.
+    THE AIRFLOW COLOUR RULE WAS TREATED AS EVIDENCE HERE AND IS NOT. It is established for two
+    parts and only two: on the datasheet's pair of rear photographs the AC supply's latch reads
+    #dd3d12 front-to-back and #6186db back-to-front, and the tray bars #fe3c42 and #469dfb. NO
+    PHOTOGRAPH OF A DC SUPPLY IN EITHER BUILD EXISTS in the staged corpus, so nothing says this
+    latch changes colour at all - and green on the DC unit against red or blue on the AC unit
+    is the more useful convention anyway, because the two must not be mixed in one chassis.
+    It is green in both DC configurations and the device no longer overrides it.
+  no-lamp: >-
+    The round feature at the bottom right of the figure (69.4, 33.5) sits exactly where the
+    AC unit's bottom-right screw head is on the elevation and the photograph, and is drawn
+    as that screw. No module lamp is named by either document.
+  power: >-
+    3000 W per supply, from the datasheet's power section: "DC Input rating: -48 V ~ -60 V
+    (80 A/3000 W max.)"; the guide's specifications table reads "-48 - -60 VDC, 80 A max.
+    per PS".
+states: [absent]
+elements:
+  vent-left: {at: [1.50, 1.60], size: [21.00, 36.80], class: vent}
+  vent-right: {at: [53.80, 1.60], size: [10.50, 36.80], class: vent}
+  handle: {at: [9.47, 3.48], size: [8.49, 34.66], class: handle}
+  terminal: {at: [22.69, 7.66], size: [29.79, 25.19], class: terminal}
+  terminal-pocket: {at: [24.19, 9.16], size: [26.79, 22.19], class: terminal}
+  latch: {at: [65.43, 14.62], size: [4.87, 14.06], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#2a2c2f'}
+  latch-finish: {label: Latch colour, type: text, default: '#9cdb7d'}
+parts:
+  - {ref: common/screw-head@1, id: screw-1, at: [67.60, 31.70]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent-left
+      vent: 12
+      confidence: estimated
+      source: 'edgecore/ais800-64-psu-dc@1 itself - the fields are drawn, their depth is not.'
+    - node: vent-right
+      vent: 12
+      confidence: estimated
+      source: 'as vent-left'
+    - node: handle
+      bar: 3.0
+      lift: 1.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-fan@1 and the rest of this line's pull handles, and NOT SOURCED on any
+        of them - roc-ops/Portrayal#385 is open on exactly this figure. The hardware is a
+        closed loop you put two fingers through, and the first draft drew it as an outline
+        loop: at review that read as a flat oval drawn on the face rather than something
+        standing off it, which is the same correction edgecore/ais800-fan@1 took. It is drawn
+        as a solid bar with a recessed centre and given the family's bar + lift.
+    - node: terminal-pocket
+      pocket: 3.2
+      confidence: estimated
+      source: 'edgecore/ais800-psu-dc@1 - the same vendor''s DC terminal recess, also estimated.'
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'edgecore/ais800-64-psu-ac@1 - the same latch on the AC unit.'
+skins: [default]
+body:
+  depth: 185
+  color: '#c2c7cd'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}
