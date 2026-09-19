@@ -179,6 +179,31 @@ def _bay_accepts(doc):
     return out
 
 
+def _component_digest(version_dir: pathlib.Path, contract: dict) -> str:
+    """A component's own contents, so a device that seats it cannot be redrawn
+    in silence.
+
+    THE VERSION STRING WAS NOT ENOUGH. `_composed` resolved a ref to the
+    component's declared `version:`, so the guard closed on the author
+    remembering to bump - and three components were rewritten in place across
+    six bays of two devices, all three left at 1.0.0, and neither device
+    re-locked. The component has no lock of its own to catch it and no lint rule
+    asks for the bump. roc-ops/Portrayal#405.
+
+    THE CONTRACT IS HASHED AS PARSED YAML, not as bytes, because this module's
+    own rule is that "a fingerprint that fires on re-indentation would be
+    re-locked without being read" - and a comment is most of what gets edited in
+    a contract. THE SKINS ARE HASHED AS BYTES, and that asymmetry is deliberate:
+    whitespace inside an SVG path's `d=` is significant, so normalising one
+    risks missing a change that moves the drawing. A whitespace-only skin edit
+    therefore re-locks, which is the safe direction to be wrong in.
+    """
+    skins = {}
+    for skin in sorted((version_dir / "skins").glob("*.svg")):
+        skins[skin.name] = hashlib.sha256(skin.read_bytes()).hexdigest()[:16]
+    return _digest({"contract": contract, "skins": skins})
+
+
 def component_versions(library: pathlib.Path):
     """Every component's declared version, keyed the way a ref names it.
 
@@ -197,7 +222,13 @@ def component_versions(library: pathlib.Path):
         except Exception:
             continue
         vendor, name, major = ct.parts[-4], ct.parts[-3], ct.parts[-2]
-        out[f"{vendor}/{name}@{major[1:]}"] = str(doc.get("version") or "")
+        # VERSION + CONTENT, in that order, because `composed-refs` is committed
+        # beside the device and read by a human: the report prints
+        # `acme/widget@1 1.0.0+a1b2c3d4 -> 1.0.0+9f8e7d6c`, which says in one
+        # line that the contents moved and the version did not.
+        ver = str(doc.get("version") or "")
+        out[f"{vendor}/{name}@{major[1:]}"] = (
+            ver + "+" + _component_digest(ct.parent, doc))
         out.setdefault(f"{vendor}/{name}", {})[major] = doc.get("parts") or []
     return out
 
