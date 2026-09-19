@@ -688,6 +688,30 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         g.set("data-rel-pos", str(rel_pos))
     if contract.get("states"):
         g.set("data-states", " ".join(state_names(contract["states"])))
+    # EVERY DECLARED CONNECTION POINT REACHES THE DRAWING, not just `mate`.
+    # This function read `mate` to place an occupant and dropped the rest, so a
+    # part's optical-tx, power or cable point existed in the contract and in no
+    # place a consumer could reach. Spec B's cabling library needs `cable`; A's
+    # transceivers get their optical axes back for nothing.
+    #
+    # THE MARKER IS INERT ON PURPOSE. It carries no data-z-*, no data-ref, no
+    # data-path and no data-class, because relief.js decides what exists in 3D
+    # by querying the DOM for attributes - its own comment warns that every
+    # query is a chance to see data it should not - and shell.js reads
+    # `[data-ref]` as "this bay is occupied". A marker that carried either would
+    # become a phantom box or a phantom module.
+    #
+    # The point is in THIS PART'S OWN FRAME, under the group that already
+    # carries data-z-lift and data-z-out, so a consumer resolves it with the
+    # same walk relief.js uses for every feature: sum the ancestors' lifts, add
+    # the part's own out, apply the group transforms. Nothing new to compute.
+    for cp_name in sorted(contract.get("connection-points") or {}):
+        cp = (contract["connection-points"] or {})[cp_name]
+        mk = ET.SubElement(g, f"{{{SVG_NS}}}g")
+        mk.set("data-cp", cp_name)
+        mk.set("data-cp-at", f"{cp['at'][0]:g} {cp['at'][1]:g}")
+        if cp.get("direction"):
+            mk.set("data-cp-dir", cp["direction"])
     # HUNG BY ITS CENTRE WHEN A CENTRE IS GIVEN. Read left to right, the
     # transform states the intent directly: go to where this thing belongs,
     # turn it, and put its middle there.
