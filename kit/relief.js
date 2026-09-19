@@ -673,6 +673,7 @@ export async function extractRelief(url, scope) {
             cyl: el.dataset.zCyl && +el.dataset.zCyl,
             bar: el.dataset.zBar && +el.dataset.zBar,
             uhandle: el.dataset.zUhandle && +el.dataset.zUhandle,
+            dia: el.dataset.zDia && +el.dataset.zDia,
             lift: liftOf(el),
             knurl: !!el.dataset.zKnurl,
             thread: el.dataset.zThread && +el.dataset.zThread,
@@ -1130,7 +1131,13 @@ export async function buildFaceRelief(F, ctx) {
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;
-        const dia = Math.min(o.w, o.h), r = dia / 2, Rb = dia;
+        // THE NODE IS THE WHOLE HANDLE'S ART AND THE TUBE IS USUALLY THINNER THAN IT.
+        // This node has to be the entire 2D handle, because the face texture hides exactly
+        // the node carrying the relief attribute - put the attribute on an inner bar and the
+        // flat art around it stays painted on the face UNDER the geometry, which is what a
+        // reviewer saw on the AIS800-64D's trays. So where the drawn loop is taller than its
+        // tube, the contract says the diameter.
+        const dia = (o.dia && +o.dia) || Math.min(o.w, o.h), r = dia / 2, Rb = dia;
         const zBar = far - r, legH = Math.max(0.5, zBar - Rb);
         const uLen = Math.max(o.w, o.h);
         const u0 = horizontal ? o.x : o.y;
