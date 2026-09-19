@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-40ge-tx
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -16,7 +16,12 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 320 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', Dense Port Concentrators
+    section: '| Tri-Rate Enhanced DPC or Tri-Rate Enhanced Ethernet Services DPC | DPCE-R-40GE-TX DPCE-X-40GE-TX | 320W |'.
+    A maximum for the card alone, covering the -R and -X variants at one figure. No DPC row in
+    that table prints a temperature ladder, so there is no ambient to name and none is claimed.
+    mx240, mx480 and both halves of the mx960 guide print the identical row.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

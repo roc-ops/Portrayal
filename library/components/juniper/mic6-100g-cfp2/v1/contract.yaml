@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic6-100g-cfp2
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,7 +24,15 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 104 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| 100-Gigabit Ethernet MIC with CFP2 | MIC6-100G-CFP2 | 104W |'. THE BARE FIGURE IS CARRIED -
+    the MIC alone, without optics - and it is unqualified by ambient, because mx240, mx480 and both
+    halves of mx960 print no ladder beside it.
+    The MX2000-family guides add a with-optics ladder that is LOWER, not higher: '104W With optics:
+    94 W at 55 C with 100GBASE-LR4 OTN optics, 86 W at 40 C, 74 W at 25 C'. So 104 W is the worst
+    figure the corpus prints for this part, and with-optics is a different and smaller quantity
+    rather than a rung above it.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

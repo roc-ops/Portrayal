@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-3d-1x100ge-cfp
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -15,7 +15,13 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 40 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| 100-Gigabit Ethernet MIC with CFP | MIC3-3D-1X100GE-CFP | 40W |', in nine guides. A maximum
+    for the MIC alone, without optics; the row prints no temperature ladder, so there is no ambient
+    to name and none is claimed. The module reference agrees by a second route - '0.83 A @48 V
+    (40 W)'. Distinct from MIC3-100G-DWDM, whose row in the same table is with-optics only and
+    laddered - 'With optics: 91 W at 55 C, 83 W at 25 C' - a different scope, not a better figure.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

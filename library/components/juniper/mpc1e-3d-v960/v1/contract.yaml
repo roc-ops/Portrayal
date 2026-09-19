@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc1e-3d-v960
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -16,7 +16,20 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. carrier face; the MIC windows dominate it'
-  power: 'datasheet-table - the module reference model section states the requirement; 175 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', modular MPC section. This contract
+    covers the MPC1 carrier and, by its own description, the queuing variants, and the table gives
+    them different figures:
+    '| MPC1 MPC1E | MX-MPC1-3D MX-MPC1E-3D | 165W With MICs and optics: 239 W at 55 C, 227 at 40, 219 at 25 |'
+    '| MPC1Q MPC1EQ | MX-MPC1-3D-Q MX-MPC1E-3D-Q | 175W With MICs and optics: 249 W at 55 C, 237 at 40, 228 at 25 |'
+    175 W IS THE QUEUING VARIANT'S BARE FIGURE - the worst bare figure across the SKUs this faceplate
+    is said to cover - while attrs.model names MX-MPC1E-3D, whose own bare figure is 165 W. Bare means
+    the carrier alone: the ladders above are with MICs and optics, a different scope, and no bare
+    figure in this table is laddered by temperature.
+    WHETHER A CARRIER CONTRACT MAY CARRY ITS VARIANT'S WATTAGE IS UNRESOLVED - see roc-ops/Portrayal#417,
+    which collects the same question on mpc2e-3d and mpc3e-3d, each of which answered it differently.
+    The figure is left as it stands; this sentence records which row it is, so the choice is visible
+    rather than implied.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

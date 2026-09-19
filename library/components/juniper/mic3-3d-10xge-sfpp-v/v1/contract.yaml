@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-3d-10xge-sfpp-v
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,13 +9,20 @@ description: >-
   Juniper 10GbE MIC3 with SFP+ (10 ports, one PIC). Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
 attrs:
   model: MIC3-3D-10XGE-SFPP
-  power-draw-max-w: 29
+  power-draw-max-w: 29.8
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 29 W max'
+  power: >-
+    module reference model section - 'Ten 10-Gigabit Ethernet ports - Power requirement:
+    0.62 A @ 48 V (29.8 W) ... Model number: MIC3-3D-10XGE-SFPP' (mx-module-reference-p0301-0600).
+    An electrical figure, amps times volts, at no stated ambient; this MIC has no row in any chassis
+    guide's Table 93, so there is no ladder to take a rung from and none is claimed.
+    CORRECTED FROM 29 W. The vendor prints 29.8 and this contract had rounded it DOWN, which is the
+    wrong direction for a maximum. Do not read Table 93's '| 10-Gigabit Ethernet MICs with XFP | 2-Port: MIC-3D-2XGE-XFP 4-Port: MIC-3D-4XGE-XFP | 2-Port:29W 4-Port:37W |'
+    as this part: the 29 W there belongs to the two-port XFP MIC.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

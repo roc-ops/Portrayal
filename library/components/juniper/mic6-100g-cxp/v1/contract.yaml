@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic6-100g-cxp
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,7 +24,13 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 57 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| 100-Gigabit Ethernet MIC with CXP (4 Ports) | MIC6-100G-CXP | 57W |'. THE BARE FIGURE IS
+    CARRIED - the MIC alone, without optics - and it is unqualified by ambient.
+    The MX2000-family guides add '57W 49 W at 55 C with CXP SR10 optics, 49 W at 40 C, 49 W at 25 C':
+    a with-optics figure flat across all three ambients and lower than the bare one, so 57 W remains
+    the worst printed. Distinct from MIC3-3D-1X100GE-CXP at 20 W, the single-port CXP MIC.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
