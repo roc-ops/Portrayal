@@ -1,0 +1,76 @@
+format: 1
+kind: component
+name: lc-boot
+version: 1.0.0
+class: boot
+behaviour: occupies
+mates: lc-plug
+profile: networking
+description: >-
+  A strain-relief boot for an LC plug, sized to the plug BODY it wraps - not
+  the plug's front-view silhouette, which includes the latch and this does
+  not. No standard governs a boot's shape; see `provenance.standard` for why
+  this is `common/` and not `generic/`.
+size: {w: 5.58, h: 5.65}
+size-confidence: {w: borrowed, h: drawing}
+attrs: {boot-length: 15.1}
+unplaced: >-
+  seated by a device that mate-to's a seated generic/lc-plug@1 placement -
+  none does yet. spec/tests/test_chained_seats.py exercises the mechanism this
+  needs (a placement mating to another placement) with std/lc-bore@3 standing
+  in for a boot; a device manifest using this part for real is downstream of
+  this library, same as generic/lc-plug@1's own `unplaced`.
+provenance:
+  standard: >-
+    NO STANDARD GOVERNS A BOOT, which is why this is `common/lc-boot` and not
+    `generic/lc-boot`. `generic/` is for a class shape whose envelope conforms
+    to a published standard (spec/schemas/standards.yaml) and stands for every
+    product of its kind under that standard - there is no such standard for a
+    boot. A boot's size follows the cable OD and the vendor's own tooling: the
+    SENKO LC Standard 2PC datasheet (DS-LC-000004) alone lists six boot
+    options across three diameters and five colours (900um MINI, 2.0mm MINI,
+    3.0mm MINI, each also sold with a "2.0mm Original" and "3.0mm" boot), and
+    the LC-HD family lists four more. A `generic/` boot would present one of
+    those as THE class shape, which is exactly what L99 refuses for a
+    transceiver a level up. `common/` is the namespace for "shapes that stand
+    for a class of part rather than one product, with no manufacturer and
+    nothing a DCIM could order" (library/components/README.md), which is what
+    a boot is - modelled here on common/qsfp-pull-tab@1, the library's other
+    part in that position.
+  size: >-
+    w is BORROWED from generic/lc-plug@1's own `size.w` (5.58) - a boot wraps
+    around the plug body, so its outer envelope is read as the same width as
+    the body it covers, not measured on a second drawing. h is drawing - SENKO
+    DS-LC-000004 Rev A p.3, Connector Drawing, Side View, body height 5.65 (the
+    plug BODY the boot wraps, NOT the front-view overall silhouette height
+    10.43, which is a different axis and includes the latch the boot does not
+    cover). THESE ARE TWO DIFFERENT QUANTITIES FROM TWO DIFFERENT VIEWS: the
+    plug's own w/h (5.58 x 10.43) is the front-view silhouette including the
+    latch; this boot's w/h (5.58 x 5.65) is the body only, one width borrowed
+    and one height read from the side view of the same drawing.
+  boot-length: >-
+    drawing - SENKO DS-LC-000023 Rev A p.3 (XP Fit Plus, series 951), Side
+    View, an EXPLODED view whose three sub-assemblies (ferrule, body, boot) are
+    dimensioned separately: the boot is 15.1 +/-0.1 long. The same view also
+    dimensions the boot's I.D. 1.60 +/-0.05 (verified directly off the page 3
+    render at 300dpi) at the cable-exit end and a further I.D. Ø1.0 nearer the
+    body joint; neither feeds `size` or `attrs` here, since this contract's
+    envelope is the plug body it wraps, not the boot's own bore. THE BRIEF'S
+    "O.D. 2 +/-0.1" IS NOT ON THIS PAGE: the same side view carries a plain
+    (un-diametered) "6.2 +/-0.1" near that joint, read at 8x zoom to rule out
+    misreading a "2" for a "6", and nothing on the page carries a callout
+    reading "O.D." or "Ø2". The drawing wins per this task's own instruction;
+    boot-length (15.1, independently confirmed and the only figure this
+    contract states) is unaffected, since no O.D. figure enters this contract.
+  axis: >-
+    derived, same reasoning as generic/lc-plug@1's own `axis` note - the fibre
+    runs straight through the boot on the plug's optical axis, so `mate`
+    (front, where the boot meets the plug's `boot` point) and `cable` (rear,
+    where the cable continues) share one (x, y): the horizontal and vertical
+    centre of the 5.58 x 5.65 body cross-section, (2.79, 2.825).
+elements:
+  body: {at: [0.0, 0.0], size: [5.58, 5.65], class: boot}
+connection-points:
+  mate: {at: [2.79, 2.825], direction: front}
+  cable: {at: [2.79, 2.825], direction: rear}
+skins: [default]
