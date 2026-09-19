@@ -632,7 +632,21 @@
       ]
      }
     }
-   }
+   },
+   "$comment": "A `cable` point must additionally declare `direction`, layered on as an allOf branch rather than a `properties.cable` entry: `properties` and `additionalProperties` are mutually exclusive per key in JSON Schema, so naming `cable` under `properties` here would stop `additionalProperties` (the type, the direction enum, additionalProperties:false, the xy shape of `at`) from applying to it at all, leaving only `required` in force. Do not \"simplify\" this back into a plain `properties.cable` entry - that is the broken form this replaced.",
+   "allOf": [
+    {
+     "properties": {
+      "cable": {
+       "required": [
+        "at",
+        "direction"
+       ],
+       "description": "Where a cable lands. `direction` is REQUIRED here and optional elsewhere: a cable point whose whole job is to say which way the cable leaves says nothing without it."
+      }
+     }
+    }
+   ]
   },
   "states": {
    "type": "array",

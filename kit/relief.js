@@ -63,6 +63,162 @@ export function bodyBoxes(body, faceW, faceH) {
            z0: 0, z1: body.depth, color}];
 }
 
+// WHERE A CABLE LANDS, in the chassis frame. Exported as two halves on
+// purpose: the SUM is pure and is tested under bare node, the QUERY needs a
+// document and is exercised by a hand-built fake tree plus (for the real
+// compiled output) the Task 4 tests. jsdom is not a dependency here.
+//
+// `ancestors` runs OUTERMOST-LAST: index 0 is the marker's own parent, and
+// each later entry is one step further out, ending at whatever sits just
+// inside the svg - the same walk `nodeTools.liftOf` does, spelled out on
+// plain objects so it can be checked without a document. Every entry
+// contributes its own `lift` to the sum, and `z` is that sum - nothing else.
+//
+// NO `out` TERM, DELIBERATELY, AND THE REASON IS THE SEMANTICS AND NOT A
+// SURVEY. `lift` and `out` are read differently by this module and always
+// have been: a lift is RELATIVE and is summed up the ancestor chain, while
+// `data-z-out` is an ABSOLUTE distance from the panel (the rule
+// _inset_feature's docstring in render.py is built on, and the one whose
+// violation produced the dcp-f-a22 white spikes). An absolute figure cannot
+// be summed into a relative walk and cannot be added to one: an ancestor's
+// `out` already counts from the panel, so folding it in here would place the
+// point at panel + lift + out, a distance nothing measures.
+//
+// An earlier version of this function did read an outermost ancestor's `out`,
+// and an earlier version of THIS COMMENT defended dropping it by claiming
+// that no ancestor of a `cable` marker in any real drawing carries
+// data-z-out. That claim was laundered from a single drawing. Swept over
+// every built drawing in library/dist, 9 of the 23,629 connection-point
+// markers sit under an ancestor that DOES carry one - all nine in
+// dcp-2.ila-node.front.svg, under `slot-1--module--body-square` at
+// data-z-out "44.0". The argument above does not depend on how many there
+// are, which is the point: it would hold at zero and it holds at nine.
+//
+// Whether a FRONT-facing point someday needs the owner's protrusion is a spec
+// B2 question, answerable once plugs exist and declare their own relief, and
+// sourcing it would mean reading SIBLING relief nodes (generic/sfp-lc's
+// `sfp-lc--body` at "10.0", its `sfp-lc--bail` at "14.3") - a different
+// mechanism from this ancestor walk. Do not restore an `out` key here without
+// it.
+//
+// A LIFT THAT DOES NOT PARSE IS ZERO; A POINT THAT DOES NOT PARSE IS NULL,
+// and the asymmetry is deliberate. A junk lift has a safe reading - the
+// feature is not displaced - and a NaN there would silently delete the cable
+// from 3D, which is the worse failure. A junk or absent `at` has no safe
+// reading: coercing it to [0, 0] lands the cable at the part's ORIGIN, a
+// position that looks entirely plausible on a drawing and is wrong by however
+// large the part is. So it comes back `null`, which the first consumer to do
+// arithmetic on it fails on immediately, at the point of use, with the
+// marker in hand.
+export function resolveCablePoint(marker, ancestors = []) {
+  const num = v => (Number.isFinite(+v) ? +v : 0);
+  const lift = ancestors.reduce((z, a) => z + num(a && a.lift), 0);
+  const raw = marker.at || [];
+  const ok = raw.length === 2 && raw.every(v => v !== '' && v !== null && Number.isFinite(+v));
+  return {
+    name: marker.name,
+    at: ok ? [+raw[0], +raw[1]] : null,
+    dir: marker.dir ?? null,
+    lift, z: lift,
+  };
+}
+
+// Every `cable` marker in a drawing, resolved to one point per CONNECTOR.
+// This is the function a cabling library consumes; page code should not walk
+// data-cp itself.
+//
+// WHAT IS AND IS NOT RESOLVED, stated plainly because the spec's phrase
+// "resolved chassis-frame position and direction" promises more than this
+// returns. `z` IS resolved: it is the summed ancestor lift, in millimetres off
+// the panel. `at` IS NOT: it is the marker's OWN-FRAME point, exactly as the
+// part's contract declared it, with none of the group transforms between the
+// part and the svg applied. `dir` is the declared direction, unrotated.
+//
+// So the owning ELEMENT comes back as `el`, and finishing the job is the
+// consumer's: `el.getScreenCTM()` against the svg's (nodeTools' `inv` above is
+// the same idiom) maps `at` into face millimetres, and a mirrored or rotated
+// placement is handled by that matrix rather than by re-deriving it here. No
+// matrix API is invented for this - there is no consumer yet to design one
+// against, and a wrong guess at the shape would be harder to remove than the
+// absence is to fill.
+//
+// A connector can carry more than one `cable` marker at once - a boot mated
+// onto a plug both declare one, because each is the same physical connection
+// point from its own contract's point of view - and the outermost survives:
+// the boot's marker when a boot is seated, the plug's when it is not.
+//
+// A cable lands on the OUTERMOST point of a connector. Stated structurally:
+// a marker is SHADOWED when another marker sits strictly deeper on the same
+// chain - one owner path is a prefix of the other, on a "/" boundary so
+// "sfp-1" is never read as a parent of "sfp-10". This replaced a union-find
+// over a "same connector" relation that was not transitive: "a/b" and
+// "a/b/c" belong together, "a/b/c" and "a/b/d" do not, but union-find
+// merges all three through the shared middle "a/b" - a connector that
+// carries its own marker AND two marked descendants fused all three into
+// one point. Nothing in the library can build that shape yet; spec B2's
+// plugs and boots can, and this function has no other consumer.
+//
+// THE LIMIT OF THIS RULE, WRITTEN DOWN BECAUSE IT IS NOT VISIBLE FROM HERE.
+// `data-path` nests for exactly two relations: parts composed through a
+// contract's `parts:` (render.py builds the child's path as
+// `<parent>/<part id>`) and modules seated in bays (`<bay>/module`). Those
+// are the shapes this rule relates.
+//
+// It CANNOT relate a `mate-to` occupant to its host. An occupant is a
+// TOP-LEVEL SIBLING of the host in the compiled drawing - render.py appends
+// it to the view root, not under the host's group - and it gets a top-level
+// path of its own: seating on `port-4` yields `port-4-occupant`, never
+// `port-4/occupant`. Two unrelated paths, so neither shadows the other, and a
+// boot seated on a plug would come back as two cable points for one physical
+// connector.
+//
+// That shape is NOT EXPRESSIBLE TODAY and no machinery is added for it here.
+// An occupant cannot itself host an occupant: `hosts` is built only from
+// placements carrying an explicit `at` (see draw_placement's caller), and a
+// `mate-to` occupant has none. B2 has two ways to resolve it when it needs
+// to, and both are cheaper than a third grouping rule invented now:
+//   - a boot nests via `parts:` on the plug, which gives it the plug's path
+//     as a prefix, and this rule already handles it unchanged; or
+//   - the grouping keys on `data-for`, which render.py already publishes on
+//     an occupant's group (it is what nests an optic under its port in the
+//     tree), and which names the host directly.
+// Whichever B2 picks should be decided with a real boot in hand.
+const shadowed = (p, all) => all.some(q => q !== p && q.startsWith(p + '/'));
+
+export function cablePoints(svg) {
+  const markers = [...svg.querySelectorAll('[data-cp="cable"]')].map(mk => {
+    // The whole attribute, not its first two tokens: "1 2 3" is as malformed
+    // as "banana", and silently keeping the 1 and the 2 is the same class of
+    // plausible-looking wrong answer as defaulting to the origin.
+    const coords = (mk.dataset.cpAt || '').trim().split(/\s+/);
+    const marker = {name: mk.dataset.cp, at: coords.length === 2 ? coords : null,
+                    dir: mk.dataset.cpDir ?? null};
+    const ancestors = [];
+    for (let n = mk.parentElement; n && n !== svg; n = n.parentElement) {
+      ancestors.push({lift: n.dataset.zLift});
+    }
+    const owner = mk.closest('[data-path]');
+    const pt = {...resolveCablePoint(marker, ancestors),
+                path: owner ? owner.dataset.path : '', el: mk};
+    // SAID OUT LOUD, ONCE, WHERE THE OWNER IS STILL KNOWN. `at: null` is
+    // enough to stop a cable landing at the origin, but on its own it
+    // surfaces as a TypeError in someone else's library with no idea which
+    // part produced it. The compiled drawing is machine-written, so this
+    // fires only on a hand-edited or truncated one - which is precisely the
+    // case worth naming.
+    if (!pt.at)
+      console.warn(`cablePoints: ${pt.path || '(no data-path)'} declares an ` +
+                   `unreadable data-cp-at ${JSON.stringify(mk.dataset.cpAt)}; ` +
+                   `its point is null rather than [0, 0]`);
+    return pt;
+  });
+  // O(n^2) in the number of cable markers on one drawing, same as the
+  // shadow check above - fine at real-world scale (a handful of connectors
+  // per drawing), not worth optimising.
+  const paths = markers.map(m => m.path);
+  return markers.filter(m => !shadowed(m.path, paths));
+}
+
 export function configureRelief(deps, scope) {
   // THREE and the renderer are genuinely per-page and stay module-level. The
   // raster density and the FRU path set are per-VIEWER, and a second viewer
