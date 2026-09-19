@@ -72,22 +72,30 @@ export function bodyBoxes(body, faceW, faceH) {
 // each later entry is one step further out, ending at whatever sits just
 // inside the svg - the same walk `nodeTools.liftOf` does, spelled out on
 // plain objects so it can be checked without a document. Every entry
-// contributes its own `lift` to the sum, but only the LAST (outermost)
-// entry's `out` counts: `out` is written once, absolute from the panel, on
-// the outermost group of whichever occupant chain the marker sits in (see
-// the `liftOf` note above and render.py's `sink`) - nothing nested inside it
-// carries a second one, so summing `out` the way `lift` is summed would
-// double it.
+// contributes its own `lift` to the sum, and `z` is that sum - nothing else.
+//
+// NO `out` TERM, DELIBERATELY. A `cable` point declares `direction: rear`,
+// so it lands on the part's own reference plane and the ancestor lift sum
+// places it exactly. An earlier version of this function also read an
+// outermost ancestor's `out`, which looked plausible and was wrong: checked
+// against every real drawing, NO ancestor of a `cable` marker ever carries
+// data-z-out. Protrusion (generic/sfp-lc's `sfp-lc--body` at data-z-out
+// "10.0", its `sfp-lc--bail` at "14.3") lives on SIBLING relief nodes of the
+// marker, never an ancestor - there was never anything for this walk to
+// find, so the term was always zero. Whether a FRONT-facing point someday
+// needs the owner's protrusion is a spec B2 question, answerable once plugs
+// exist and declare their own relief, and sourcing it would mean reading
+// sibling nodes - a different mechanism from this ancestor walk. Do not
+// restore an `out` key here without that mechanism: a field that is always
+// zero only invites a consumer to depend on it.
 export function resolveCablePoint(marker, ancestors = []) {
   const num = v => (Number.isFinite(+v) ? +v : 0);
   const lift = ancestors.reduce((z, a) => z + num(a && a.lift), 0);
-  const outer = ancestors.length ? ancestors[ancestors.length - 1] : null;
-  const out = num(outer && outer.out);
   return {
     name: marker.name,
     at: [num(marker.at[0]), num(marker.at[1])],
     dir: marker.dir ?? null,
-    lift, out, z: lift + out,
+    lift, z: lift,
   };
 }
 
@@ -100,37 +108,55 @@ export function resolveCablePoint(marker, ancestors = []) {
 // point from its own contract's point of view - and the outermost survives:
 // the boot's marker when a boot is seated, the plug's when it is not.
 //
-// A CONNECTOR is the LEADING segment of a marker's owner path, not the
-// owner's full path. A marker is a direct child of its own part's instance
-// group (render.py's instance_group sets data-path on that same group), so
-// `closest('[data-path]')` always resolves to the OCCUPANT's own path
-// ("cage-1/plug"), and a boot seated on the plug is a further-nested
-// occupant with its own, longer path ("cage-1/plug/boot"). Grouping on the
-// full path would never collapse those two into one connector; grouping on
-// the leading segment they share ("cage-1") does.
-//
-// Deliberately does not go through nodeTools/liftOf: liftOf only sums
-// `lift`, so `out` would still need its own walk, and nodeTools' call to
-// getScreenCTM is geometry this needs none of - a marker's `at` is already
-// in its own part's frame (Task 1). One ancestor walk, done once, inside
-// resolveCablePoint.
+// TWO MARKERS SHARE A CONNECTOR WHEN ONE OWNER PATH IS THE OTHER, OR AN
+// ANCESTOR OF IT ON THE SAME CHAIN - not merely "the same leading segment".
+// Checked against real compiled drawings: a DEVICE drawing puts each port at
+// its own top-level segment ("console", "led-port-0", nested as
+// "console/opening"), but a COMPONENT drawing's top-level segment is the
+// component itself, and its features are SIBLINGS under it -
+// generic/sfp-lc's two bores are "sfp-lc/tx" and "sfp-lc/rx". Grouping by the
+// leading segment alone collapsed those two into one, turning an LC duplex
+// into a single cable point. Prefix-on-a-boundary is the rule that is right
+// in both drawing shapes without having to know which segment means what:
+// "sfp-lc/tx" and "sfp-lc/rx" are neither a prefix of the other, so they stay
+// apart; "port/plug" and "port/plug/boot" are on one chain, so they merge.
+// The trailing "/" in the check is what stops "sfp-1" from matching
+// "sfp-10" - a bare `startsWith` would wrongly merge two unrelated ports.
+const sameConnector = (a, b) => a === b || b.startsWith(a + '/') || a.startsWith(b + '/');
+
 export function cablePoints(svg) {
-  const byConnector = new Map();
-  for (const mk of svg.querySelectorAll('[data-cp="cable"]')) {
+  const markers = [...svg.querySelectorAll('[data-cp="cable"]')].map(mk => {
     const [ax, ay] = (mk.dataset.cpAt || '').trim().split(/\s+/).map(Number);
     const marker = {name: mk.dataset.cp, at: [ax, ay], dir: mk.dataset.cpDir ?? null};
     const ancestors = [];
     for (let n = mk.parentElement; n && n !== svg; n = n.parentElement) {
-      ancestors.push({lift: n.dataset.zLift, out: n.dataset.zOut});
+      ancestors.push({lift: n.dataset.zLift});
     }
-    const resolved = resolveCablePoint(marker, ancestors);
     const owner = mk.closest('[data-path]');
-    const path = owner ? owner.dataset.path : '';
-    const connector = path.split('/')[0];
-    const prev = byConnector.get(connector);
-    if (!prev || resolved.z > prev.z) byConnector.set(connector, {...resolved, path});
-  }
-  return [...byConnector.values()];
+    return {...resolveCablePoint(marker, ancestors), path: owner ? owner.dataset.path : ''};
+  });
+
+  // Union-find over the sameConnector relation: a plain Map keyed by owner
+  // path cannot express "one path is an ancestor of another", so markers are
+  // clustered pairwise instead - cheap, since a drawing has few of these.
+  const parent = markers.map((_, i) => i);
+  const find = i => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+  const union = (i, j) => { const ri = find(i), rj = find(j); if (ri !== rj) parent[ri] = rj; };
+  for (let i = 0; i < markers.length; i++)
+    for (let j = i + 1; j < markers.length; j++)
+      if (sameConnector(markers[i].path, markers[j].path)) union(i, j);
+
+  const winners = new Map();
+  markers.forEach((m, i) => {
+    const root = find(i);
+    const prev = winners.get(root);
+    // the outermost wins: greater z, and an EXPLICIT tie-break on the
+    // longer path when z ties exactly - a boot nested on a plug is the
+    // deeper of the two - so the result never depends on iteration order
+    if (!prev || m.z > prev.z || (m.z === prev.z && m.path.length > prev.path.length))
+      winners.set(root, m);
+  });
+  return [...winners.values()];
 }
 
 export function configureRelief(deps, scope) {

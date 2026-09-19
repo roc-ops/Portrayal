@@ -14,11 +14,17 @@ const m = await import('../../../kit/relief.js');
 // resolveCablePoint - pure, no DOM at all.
 //
 // The `ancestors` array is ordered OUTERMOST-LAST, matching a parentElement
-// walk from the marker up to the svg.
+// walk from the marker up to the svg. There is no `out` term: a `cable`
+// point is `direction: rear`, landing on the part's own reference plane, so
+// the ancestor lift sum places it exactly and `z` IS that sum. An ancestor
+// may still carry a stray `out` key (as `stack` does below) - it must be
+// ignored, not summed and not read from the outermost entry.
 
 const marker = {name: 'cable', at: [6.75, 4.25], dir: 'rear'};
 
-// a plug in a bore on a transceiver: 10.0 of bore lift, 14.3 of body out
+// a plug in a bore on a transceiver: 10.0 of bore lift. The `out` keys here
+// are stray - no ancestor of a real cable marker ever carries data-z-out -
+// and must not affect the sum.
 const stack = [{lift: 0}, {lift: 10.0, out: 0}, {lift: 0, out: 14.3}];
 
 const pure = {
@@ -26,7 +32,7 @@ const pure = {
   bare: m.resolveCablePoint(marker, []),
   // one lifted ancestor
   lifted: m.resolveCablePoint(marker, [{lift: 10.0}]),
-  // the full stack sums every lift on the way up
+  // the full stack sums every lift on the way up - stray `out` keys ignored
   stacked: m.resolveCablePoint(marker, stack),
   // a missing direction is null, not undefined and not a throw
   noDir: m.resolveCablePoint({name: 'cable', at: [1, 2]}, []),
@@ -45,14 +51,18 @@ const pure = {
 // A real instance group (render.py's instance_group) sets data-path on
 // ITSELF, and a connection-point marker is appended as its direct child - so
 // `mk.closest('[data-path]')` always finds the marker's own parent, which is
-// the OCCUPANT's own path ("cage-1/plug"), never the connector's. A boot
-// mated onto a plug is a further-nested occupant with its OWN, longer path
-// ("cage-1/plug/boot"). Grouping on the full closest path would therefore
-// never collapse a plug's marker and its boot's marker into one connector -
-// so cablePoints groups on the LEADING path segment instead, which both
-// share. This fake tree exists specifically to prove that collapse happens
-// for the right reason, and not because every marker was faked to report the
-// same owner.
+// the OCCUPANT's own path. Grouping by the LEADING segment of that path once
+// looked sufficient (a plug's "cage-1/plug" and a boot's "cage-1/plug/boot"
+// both lead with "cage-1") but is wrong for a component drawing, where the
+// leading segment is the COMPONENT and its features are SIBLINGS under it -
+// generic/sfp-lc's bores are "sfp-lc/tx" and "sfp-lc/rx", which a
+// leading-segment grouping wrongly collapsed into one cable point for an LC
+// duplex. The fix groups on a same-chain PREFIX instead ("sameConnector" in
+// relief.js): one path must be an ancestor of the other, not merely share a
+// leading segment. The cases below are built specifically so a
+// leading-segment grouping and a same-chain-prefix grouping disagree on at
+// least one of them - proving the fix is doing real work, not just passing
+// under either rule.
 function el(attrs, parent) {
   const dataset = {};
   for (const [k, v] of Object.entries(attrs)) {
@@ -84,16 +94,47 @@ const markerA1 = el({'data-cp': 'cable', 'data-cp-at': '1 2', 'data-cp-dir': 'fr
 const connectorB = el({'data-path': 'cage-b'}, svg);
 const markerB1 = el({'data-cp': 'cable', 'data-cp-at': '5 6'}, connectorB);
 
-// connector C: a plug seated in the cage, and a boot seated on the plug.
-// Both declare a `cable` point; the boot's extra 5mm of lift puts it further
-// out, so it must be the one that survives.
-const connectorC = el({'data-path': 'cage-c', 'data-z-out': '10'}, svg);
+// connector C: a plug seated in the cage, and a boot seated on the plug -
+// same chain, different z. Both declare a `cable` point; the boot's extra
+// 5mm of lift puts it further out, so it must be the one that survives.
+const connectorC = el({'data-path': 'cage-c'}, svg);
 const plugC = el({'data-path': 'cage-c/plug'}, connectorC);
 const markerPlug = el({'data-cp': 'cable', 'data-cp-at': '3 3', 'data-cp-dir': 'rear'}, plugC);
 const bootC = el({'data-path': 'cage-c/plug/boot', 'data-z-lift': '5'}, plugC);
 const markerBoot = el({'data-cp': 'cable', 'data-cp-at': '3 3.2', 'data-cp-dir': 'rear'}, bootC);
 
-const markers = [markerA1, markerB1, markerPlug, markerBoot];
+// connector D: a component drawing's two bores, SIBLINGS under a shared
+// leading segment ("sfp-lc"), neither a prefix of the other. THE CASE A
+// leading-segment grouping could not pass: it collapses these into one
+// point, losing the rx side of an LC duplex entirely.
+const sfpLc = el({'data-path': 'sfp-lc'}, svg);
+const boreTx = el({'data-path': 'sfp-lc/tx', 'data-z-lift': '3'}, sfpLc);
+const markerTx = el({'data-cp': 'cable', 'data-cp-at': '0 1'}, boreTx);
+const boreRx = el({'data-path': 'sfp-lc/rx', 'data-z-lift': '4'}, sfpLc);
+const markerRx = el({'data-cp': 'cable', 'data-cp-at': '0 2'}, boreRx);
+
+// connectors E/F: "sfp-1" and "sfp-10" - a bare `startsWith` (without the
+// trailing "/" boundary) would wrongly read "sfp-1" as a prefix of "sfp-10"
+// and merge two unrelated ports into one.
+const sfp1 = el({'data-path': 'sfp-1'}, svg);
+const markerSfp1 = el({'data-cp': 'cable', 'data-cp-at': '9 9'}, sfp1);
+const sfp10 = el({'data-path': 'sfp-10'}, svg);
+const markerSfp10 = el({'data-cp': 'cable', 'data-cp-at': '8 8'}, sfp10);
+
+// connector G: a plug and a boot with an EXACT z tie (no extra lift on the
+// boot). The tie-break must be explicit - the longer (deeper) path, the
+// boot's - so the winner never depends on iteration order.
+const connectorG = el({'data-path': 'cage-g'}, svg);
+const plugG = el({'data-path': 'cage-g/plug'}, connectorG);
+const markerPlugG = el({'data-cp': 'cable', 'data-cp-at': '7 7'}, plugG);
+const bootG = el({'data-path': 'cage-g/plug/boot'}, plugG);
+const markerBootG = el({'data-cp': 'cable', 'data-cp-at': '7 7.1'}, bootG);
+
+const markers = [
+  markerA1, markerB1, markerPlug, markerBoot,
+  markerTx, markerRx, markerSfp1, markerSfp10,
+  markerPlugG, markerBootG,
+];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);
   return markers;
