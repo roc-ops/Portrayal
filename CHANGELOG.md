@@ -38,6 +38,14 @@ the *published build*, not about the hardware.
   and in every bay that seats it; it was `edgecore/ais800-64-fan@1`, which named
   one of the three chassis that share the part. `AIS800-64D`, `AIS800-64O` and
   `AGR560` took a major bump for the changed bay addressing (roc-ops/Portrayal#420).
+- Five Edgecore module types export under the ordering code Edgecore prints
+  instead of a description of the part: `FAN-1U-1x1E` (was `AS5835-54X Fan
+  Tray`), `FAN-1U-1x1N` (`AS9726-32DB Fan Tray`), `FAN-1U-1x1J-S` (`AS7315-27X
+  Fan Tray`), `SPAACTN-03BG` (`AS7315-27X AC PSU`) and `CRXT-T0T12BS`
+  (`AS7315-27X DC PSU`). Both the document name and the `model` field move, in
+  `components.json` and in the NetBox and Nautobot module-type exports, so a
+  consumer matching on an old name finds nothing where it used to find a module
+  type (roc-ops/Portrayal#426).
 
 ### Fixed
 - `devices_index` fails when two devices share a name. Dist filenames carry no

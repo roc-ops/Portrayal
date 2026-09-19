@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr310-psu-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -14,12 +14,40 @@ description: >-
 size: {w: 54.1, h: 40.4, d: 300.0}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 attrs:
-  model: 'AS7315-27X DC PSU'
-  part: 'CRXT-T0T12BS'
+  model: 'CRXT-T0T12BS'
+  part: '131700000434A'
   power-absent: not-published
   inlet: dc-terminal
   input: '36 V - 72 V, 10 A'
 provenance:
+  the-model-is-the-code-edgecore-prints-and-there-are-two-of-them: >-
+    THE CSR310 DATASHEET'S FIELD REPLACEMENT UNITS TABLE GIVES `CRXT - T0T12BS` |
+    `131700000434A` | "AS7315-27X DC PSU (Black Housing)", the spaces around the hyphen being
+    the same conversion artifact as the "F an Tray" two rows below it.
+    THE GUIDES PRINT THE CODE WITHOUT THE TRAILING S, AND THAT IS NOT A TYPO. The CSR310's
+    quick start and the CSR430's both instruct "Install one or two DC PSUs (part number
+    CRXT-T0T12B only)", and the CSR310's Chinese text repeats it a third time - three
+    occurrences, two documents, two languages, all `CRXT-T0T12B`. THE TABLE'S IS THE ONE
+    RECORDED because that table is the FRU table and this attr is what a DCIM orders by, which
+    is the whole reason it was moved out of `part:`. The bare code is kept in the description
+    above so a search for either string finds this contract.
+    WHAT THE S PROBABLY IS, SAID AS A GUESS. The fan row of the same table carries a trailing
+    `-S` against a Description that reads "Fan Tray SPARE PART", and this row carries a
+    trailing `S` against a guide that calls the installable unit `CRXT-T0T12B`. Two rows
+    behaving the same way is a pattern and not a proof: no Edgecore document in the corpus
+    defines the suffix. See edgecore/csr310-fan-tray@1's the-two-columns-were-the-wrong-way-round,
+    which records the same uncertainty from the other side and, like this contract, writes
+    down the string that is printed rather than the one that would be inferred.
+    THE TABLE'S THREE COLUMNS ARE Model Number | Part Number | Description, AND THIS CONTRACT
+    HAD THE FIRST TWO SWAPPED. Until roc-ops/Portrayal#426 `model:` held the Description
+    column's prose and `part:` held the Model Number, which matters because only one of them
+    is read: `spec/tools/portrayal/dcim_export.py` keys every module type on `attrs.model` and
+    never looks at `attrs.part`, so this supply was published to NetBox and Nautobot under a
+    name with spaces in it while the orderable code sat one line below where no consumer sees
+    it. `part:` now carries the datasheet's Part Number, as the column says.
+    THE FAN TRAY OF THE SAME CHASSIS HAD THE SAME INVERSION and was corrected in the same
+    change; see edgecore/csr310-fan-tray@1's the-two-columns-were-the-wrong-way-round. Three
+    contracts in this library use `part:` and they are these three.
   shared-with: >-
     THE CSR430 (AS7515-24X) TAKES THIS SAME SUPPLY, AND ITS OWN QUICK START SAYS SO BY PART
     NUMBER: "Install one or two DC PSUs (part number CRXT-T0T12B only)" - the same sentence,

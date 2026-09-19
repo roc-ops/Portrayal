@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ais800-fan
-version: 1.0.1
+version: 1.0.2
 class: fan
 behaviour: fills
 profile: networking
@@ -45,8 +45,9 @@ provenance:
     ROC-OPS/PORTRAYAL#420 RENAMED THIS TRAY'S 2RU SIBLING AND DELIBERATELY DID NOT RENAME THIS
     ONE. That change turned `edgecore/ais800-64-fan` into `edgecore/fan-2u-1x1sn` under
     library/components/README.md's rule - "use the vendor's model number where one exists; it
-    is what a search will be for" - and of the library's EIGHT Edgecore fan contracts this one
-    and that one are the only two whose `model:` is a real vendor ordering code. Whether the
+    is what a search will be for" - and of the eight Edgecore fan contracts this library held
+    ON 2026-09-19 this one and that one were the only two whose `model:` was a real vendor
+    ordering code. Whether the
     same rule should move this part was asked in roc-ops/Portrayal#423 and ANSWERED NO; see
     that contract's
     the-name-is-the-fru-because-the-tray-outlived-the-chassis for the other side of it.
@@ -57,6 +58,18 @@ provenance:
     CSR310 (edgecore/csr310-fan-tray@1), while those three carry a chassis-derived stand-in
     like 'AS5835-54X Fan Tray' in `model:`. What is wrong there is the ATTR, which is what a
     DCIM orders by, and not the name; none of this decision turns on it.
+    DO NOT READ THAT COUNT AS CURRENT. It is a census of the Edgecore fan shelf ON 2026-09-19,
+    the day the question was decided, and it is written down because it is what the decision
+    was made on - not as a fact about the library today. The shelf had already grown to TEN
+    contracts within a day of this note: edgecore/dcs520-fan@1 arrived with #422 and
+    edgecore/eps-fan-fixed@1 with #427, both with no `model:` at all and no FRU in their
+    documents. library/components/CATALOGUE.md is the census, and it is generated; a number
+    typed into a provenance note is stale the next time somebody draws a fan.
+    THE ARGUMENT DOES NOT DEPEND ON THE NUMBER, which is the point of saying this here. What it
+    rests on is that a stand-in in `model:` is evidence about the modeller and not about the
+    vendor, so the corpus - not the contract - settles whether an FRU exists; and that the
+    three named above had one all along. roc-ops/Portrayal#426 has since put those three codes
+    in `model:`.
     WHAT TIPPED #420 WAS FALSITY, NOT THE EXISTENCE OF AN FRU. The 2RU tray is seated by the
     AIS800-64D, the AIS800-64O and the AGR560, and a machine that is an AGR cannot carry an
     `ais800-` surname. THIS tray is seated by the AIS800-32D and the AIS800-32O, both of which

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr310-psu-ac
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -12,12 +12,31 @@ description: >-
 size: {w: 54.1, h: 40.4, d: 300.0}
 size-confidence: {w: borrowed, h: borrowed, d: estimated}
 attrs:
-  model: 'AS7315-27X AC PSU'
-  part: 'SPAACTN-03BG'
+  model: 'SPAACTN-03BG'
+  part: '131700000453A'
   power-absent: not-published
   inlet: c14
   input: '100 V - 240 V, 5 A'
 provenance:
+  the-model-is-the-code-edgecore-prints: >-
+    THE CSR310 DATASHEET'S FIELD REPLACEMENT UNITS TABLE IS THE ONLY SOURCE FOR THIS SUPPLY'S
+    CODE, and it gives one row: `SP AACTN-03BG` | `131700000453A` | "AS7315-27X AC PSU (Black
+    Housing)". The space in the model number is a conversion artifact of the same kind as the
+    "F an Tray" and "Back-to-F ront" in these documents; `SPAACTN` is confirmed as an unbroken
+    prefix by the DCS511's own table, which prints `SPAACTN-01` and `SPAACTN-02`.
+    THE QUICK STARTS NAME NO AC PART. Both the CSR310's and the CSR430's give a part number
+    for the DC supply only - a safety instruction about DC wiring - and say nothing about this
+    one, so the table stands alone and this attr is scoped to it.
+    THE TABLE'S THREE COLUMNS ARE Model Number | Part Number | Description, AND THIS CONTRACT
+    HAD THE FIRST TWO SWAPPED. Until roc-ops/Portrayal#426 `model:` held the Description
+    column's prose and `part:` held the Model Number, which matters because only one of them
+    is read: `spec/tools/portrayal/dcim_export.py` keys every module type on `attrs.model` and
+    never looks at `attrs.part`, so this supply was published to NetBox and Nautobot under a
+    name with spaces in it while the orderable code sat one line below where no consumer sees
+    it. `part:` now carries the datasheet's Part Number, as the column says.
+    THE FAN TRAY OF THE SAME CHASSIS HAD THE SAME INVERSION and was corrected in the same
+    change; see edgecore/csr310-fan-tray@1's the-two-columns-were-the-wrong-way-round. Three
+    contracts in this library use `part:` and they are these three.
   shared-with: >-
     THE CSR430 (AS7515-24X) TAKES THIS SAME SUPPLY. Its datasheet draws the front twice, once
     with AC modules and once with DC, and the AC face carries the same C14 inlet marked N,

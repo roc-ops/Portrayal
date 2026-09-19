@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan-2u-1x1sn
-version: 1.0.1
+version: 1.0.2
 class: fan
 behaviour: fills
 profile: networking
@@ -87,9 +87,9 @@ provenance:
     The `agr-` in `edgecore/agr-fan` is the exception the same page allows - a product LINE
     prefix - and its own contract says why it qualifies: its `model` is the placeholder
     'AGR Fan', because no Edgecore document prints a FRU for that tray. Of the eight Edgecore
-    fans in this library only TWO RECORD a real vendor ordering code in `model:`, this one and
-    `edgecore/ais800-fan@1`'s `FAN-1U-1X1P`; the other six carry a descriptive stand-in like
-    'AS9726-32DB Fan Tray'.
+    fans this library held ON 2026-09-19 only TWO RECORDED a real vendor ordering code in
+    `model:`, this one and `edgecore/ais800-fan@1`'s `FAN-1U-1X1P`; the other six carried a
+    descriptive stand-in like 'AS9726-32DB Fan Tray'.
     THAT COUNT IS OF WHAT THE CONTRACTS RECORD, NOT OF WHAT EDGECORE PUBLISHES, which this key
     said less carefully at 420 and roc-ops/Portrayal#423 corrected. The staged datasheets DO
     print a tray FRU for three of the other six - FAN-1U-1x1E for the DCS201 and the DCS202
@@ -98,6 +98,18 @@ provenance:
     A stand-in in `model:` is therefore evidence about the modeller, not about the vendor, and
     the corpus is what settles whether an FRU exists. What is wrong in those three is the ATTR,
     which is what a DCIM orders by and what the exports are keyed on, and not the name.
+    DO NOT READ THAT COUNT AS CURRENT. It is a census of the Edgecore fan shelf ON 2026-09-19,
+    the day the question was decided, and it is written down because it is what the decision
+    was made on - not as a fact about the library today. The shelf had already grown to TEN
+    contracts within a day of this note: edgecore/dcs520-fan@1 arrived with #422 and
+    edgecore/eps-fan-fixed@1 with #427, both with no `model:` at all and no FRU in their
+    documents. library/components/CATALOGUE.md is the census, and it is generated; a number
+    typed into a provenance note is stale the next time somebody draws a fan.
+    THE ARGUMENT DOES NOT DEPEND ON THE NUMBER, which is the point of saying this here. What it
+    rests on is that a stand-in in `model:` is evidence about the modeller and not about the
+    vendor, so the corpus - not the contract - settles whether an FRU exists; and that the
+    three named above had one all along. roc-ops/Portrayal#426 has since put those three codes
+    in `model:`.
     AND THE 1RU SIBLING WAS ASKED THIS SAME QUESTION AND KEPT ITS NAME. #423 put the rule to
     `edgecore/ais800-fan@1`, the other real ordering code here, and answered NO: `FAN-1U-1x1P`
     appears in exactly two of the seventy-two converted Edgecore documents staged for this
