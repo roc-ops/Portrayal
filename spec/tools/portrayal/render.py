@@ -1081,10 +1081,16 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # `[data-ref]` as "this bay is occupied". A marker that carried either would
     # become a phantom box or a phantom module.
     #
-    # The point is in THIS PART'S OWN FRAME, under the group that already
-    # carries data-z-lift and data-z-out, so a consumer resolves it with the
-    # same walk relief.js uses for every feature: sum the ancestors' lifts, add
-    # the part's own out, apply the group transforms. Nothing new to compute.
+    # The point is in THIS PART'S OWN FRAME, under the instance group, which is
+    # the node that carries data-z-lift. It does NOT carry data-z-out: `out` is
+    # written onto SKIN NODES (see the decor loop's `r.set("data-z-out", ...)`
+    # and the relief-feature loop above), which are siblings or descendants of
+    # this marker, never its ancestors. So a consumer resolves the point the way
+    # relief.js's liftOf resolves a feature - sum data-z-lift up the ancestor
+    # chain and apply the group transforms - and finds nothing to add for
+    # protrusion on that walk. Whether a front-facing point should carry the
+    # owner's own protrusion is a spec B2 question and would need a different
+    # mechanism; see kit/relief.js's note on resolveCablePoint.
     #
     # EMITTED LAST, DELIBERATELY, AFTER EVERY `behind_at` INSERTION ABOVE HAS
     # RUN. The `behind_at = 1` initialisation above, with its "after the
@@ -1800,6 +1806,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
 
     def draw_placement(p):
+        # How far off the face the SEAT is - the aperture's own protrusion,
+        # nothing the author wrote. Kept separate from `p["lift"]` on purpose;
+        # see the trio below.
+        seat_lift = 0.0
         if p.get("mate-to") and not p.get("at"):
             host = hosts.get(p["mate-to"])
             if host is None:
@@ -1824,13 +1834,27 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                  "also present one through a composed aperture")
             p = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
                             round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
-            # WHAT THE APERTURE IS OFF THE FACE, THE OCCUPANT IS TOO. Written as
-            # data-z-lift on the occupant's own group by the instance_group call
-            # below, via `lift`, exactly as a composed part writes it - so
-            # relief.js's existing ancestor sum places it and there is one code
-            # path, not two. A `mate-to` seat had no z at all before this.
-            if hm_lift:
-                p["lift"] = (p.get("lift") or 0) + hm_lift
+            # WHAT THE APERTURE IS OFF THE FACE, THE OCCUPANT IS TOO, and
+            # carrying it takes THREE coordinated moves, not one. `parts:`
+            # composition already does the same three (see the `part.get("lift")`
+            # call in instance_group): the child's absolute figures come up by
+            # the lift (`z_inset -= lift`), the bookkeeping that folds a group
+            # lift into them is told about it (`z_group_lift += lift`), and the
+            # group itself declares the lift (`data-z-lift`), which is the only
+            # one of the three relief.js can see. Doing the first alone - which
+            # is all this did - moved nothing: the occupant's group carried no
+            # data-z-lift, so liftOf returned 0 for it and a plug seated in a
+            # 10 mm-proud bore drew buried in the transceiver body. Doing the
+            # third without the second double-counts, because relief.js SUMS
+            # data-z-lift up the ancestor chain while reading data-z-out as an
+            # absolute distance - the dcp-f-a22 white-spikes defect. The three
+            # balance; the other two are below.
+            #
+            # SCOPED TO THE SEAT. An author's `lift:` on an ordinary placement
+            # keeps exactly the meaning _inset_feature's docstring gives it -
+            # carried entirely by `back`, writing no attribute - so it stays in
+            # `p["lift"]` and out of `seat_lift`.
+            seat_lift = float(hm_lift or 0.0)
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}
@@ -1843,7 +1867,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      rotate=p.get("rotate"), mirror=bool(p.get("mirror")),
                                      palette=palette,
                                      z_inset=(p.get("inset") or 0.0)
-                                     - (p.get("lift") or 0.0),
+                                     - (p.get("lift") or 0.0) - seat_lift,
+                                     z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved)
@@ -1859,10 +1884,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     node.set("data-of", p["projection-of"] + dp[len(p["id"]):]
                              if dp.startswith(p["id"]) else p["projection-of"])
                     del node.attrib["data-path"]
+                # `data-cp*` GOES WITH THE REST. A projection is the part seen
+                # from another face; the connection point it carries is the
+                # SAME physical point the seated part already publishes, and a
+                # second copy of it is a second cable landing on one connector.
+                # It would also be unshadowable: cablePoints' rule keys on
+                # data-path ancestry and the strip above has just removed
+                # data-path, so the phantom's owner path is '' and no real
+                # marker can be a prefix of it. Zero occurrences today - no
+                # part with a connection point has a `plan` face - which is
+                # exactly why it is cheaper to close now than to diagnose later.
                 for k in list(node.attrib):
-                    if k.startswith("data-z-") or k in ("data-depth", "data-body-depth",
-                                                        "data-ref", "data-behaviour",
-                                                        "data-vent", "data-groove"):
+                    if (k.startswith("data-z-") or k.startswith("data-cp")
+                            or k in ("data-depth", "data-body-depth",
+                                     "data-ref", "data-behaviour",
+                                     "data-vent", "data-groove")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
         # that needs it is looking at a member and has no way back to `groups:`.
@@ -1876,6 +1912,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if not p.get("projection-of"):
                 sink(g, floor_of(p["in"]))
             g.set("data-in", p["in"])
+        # THE THIRD OF THE TRIO, and it runs HERE rather than beside the other
+        # two because `sink` above ASSIGNS data-z-lift for an `in:` well floor.
+        # Set earlier it would be overwritten; added to whatever is already
+        # there, a seat inside a well is the sum of the two displacements,
+        # which is what relief.js's ancestor walk would compute if they were
+        # two groups instead of one.
+        if seat_lift and not p.get("projection-of"):
+            g.set("data-z-lift", f"{float(g.get('data-z-lift') or 0) + seat_lift:g}")
         # What the lamps on this instance mean. A placement wins over its group,
         # the way attrs already do: a block of eighteen QSFP28 speed lamps says
         # its vocabulary once, and one lamp inside it may still differ.
