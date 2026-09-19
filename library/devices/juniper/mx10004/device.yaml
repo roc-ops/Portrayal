@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10004
-version: 1.0.12
+version: 2.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX10004
@@ -67,6 +67,17 @@ chassis:
   ru: 7
   color: '#565b61'
 gaps:
+  - what: rcb-which-board
+    scope: [res]
+    reason: needs-photo
+    wanted: >-
+      a photograph of a real RCB's model label. The board in this chassis's own photographs
+      carries four SFP cages numbered 0-3 and no BITS, ToD, RESET or Online/Offline
+      hardware, which matches neither Juniper faceplate figure - not Figure 46 (JNP10K-RE1
+      family, two reserved XGE cages) nor Figure 45 (JNP10K-RE3 family).
+      juniper/jnp10k-re1@2 follows the figure it is named for; the detail is in
+      provenance/which-board-the-photographs-show on that contract. The label does not
+      resolve at the scale of any photograph held here.
   - what: psu-variants
     scope: [psus]
     reason: needs-photo
@@ -153,10 +164,10 @@ views:
     components:
       bays:
         - {id: re0, at: [2.5, 20.0], size: {w: 389.0, h: 38.1},
-           accepts: [juniper/jnp10k-re1@1], default: juniper/jnp10k-re1@1,
+           accepts: [juniper/jnp10k-re1@2], default: juniper/jnp10k-re1@2,
            group: res, rel-pos: 0}
         - {id: re1, at: [2.5, 58.1], size: {w: 389.0, h: 38.1},
-           accepts: [juniper/jnp10k-re1@1], default: juniper/jnp10k-re1@1,
+           accepts: [juniper/jnp10k-re1@2], default: juniper/jnp10k-re1@2,
            group: res, rel-pos: 1}
         - {id: fpc0, at: [2.5, 118.0], size: {w: 437.0, h: 48.0},
            accepts: [juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1, juniper/jnp10k-lc-blank@1],
