@@ -63,6 +63,76 @@ export function bodyBoxes(body, faceW, faceH) {
            z0: 0, z1: body.depth, color}];
 }
 
+// WHERE A CABLE LANDS, in the chassis frame. Exported as two halves on
+// purpose: the SUM is pure and is tested under bare node, the QUERY needs a
+// document and is exercised by a hand-built fake tree plus (for the real
+// compiled output) the Task 4 tests. jsdom is not a dependency here.
+//
+// `ancestors` runs OUTERMOST-LAST: index 0 is the marker's own parent, and
+// each later entry is one step further out, ending at whatever sits just
+// inside the svg - the same walk `nodeTools.liftOf` does, spelled out on
+// plain objects so it can be checked without a document. Every entry
+// contributes its own `lift` to the sum, but only the LAST (outermost)
+// entry's `out` counts: `out` is written once, absolute from the panel, on
+// the outermost group of whichever occupant chain the marker sits in (see
+// the `liftOf` note above and render.py's `sink`) - nothing nested inside it
+// carries a second one, so summing `out` the way `lift` is summed would
+// double it.
+export function resolveCablePoint(marker, ancestors = []) {
+  const num = v => (Number.isFinite(+v) ? +v : 0);
+  const lift = ancestors.reduce((z, a) => z + num(a && a.lift), 0);
+  const outer = ancestors.length ? ancestors[ancestors.length - 1] : null;
+  const out = num(outer && outer.out);
+  return {
+    name: marker.name,
+    at: [num(marker.at[0]), num(marker.at[1])],
+    dir: marker.dir ?? null,
+    lift, out, z: lift + out,
+  };
+}
+
+// Every `cable` marker in a drawing, resolved to one point per CONNECTOR.
+// This is the function a cabling library consumes; page code should not walk
+// data-cp itself.
+//
+// A connector can carry more than one `cable` marker at once - a boot mated
+// onto a plug both declare one, because each is the same physical connection
+// point from its own contract's point of view - and the outermost survives:
+// the boot's marker when a boot is seated, the plug's when it is not.
+//
+// A CONNECTOR is the LEADING segment of a marker's owner path, not the
+// owner's full path. A marker is a direct child of its own part's instance
+// group (render.py's instance_group sets data-path on that same group), so
+// `closest('[data-path]')` always resolves to the OCCUPANT's own path
+// ("cage-1/plug"), and a boot seated on the plug is a further-nested
+// occupant with its own, longer path ("cage-1/plug/boot"). Grouping on the
+// full path would never collapse those two into one connector; grouping on
+// the leading segment they share ("cage-1") does.
+//
+// Deliberately does not go through nodeTools/liftOf: liftOf only sums
+// `lift`, so `out` would still need its own walk, and nodeTools' call to
+// getScreenCTM is geometry this needs none of - a marker's `at` is already
+// in its own part's frame (Task 1). One ancestor walk, done once, inside
+// resolveCablePoint.
+export function cablePoints(svg) {
+  const byConnector = new Map();
+  for (const mk of svg.querySelectorAll('[data-cp="cable"]')) {
+    const [ax, ay] = (mk.dataset.cpAt || '').trim().split(/\s+/).map(Number);
+    const marker = {name: mk.dataset.cp, at: [ax, ay], dir: mk.dataset.cpDir ?? null};
+    const ancestors = [];
+    for (let n = mk.parentElement; n && n !== svg; n = n.parentElement) {
+      ancestors.push({lift: n.dataset.zLift, out: n.dataset.zOut});
+    }
+    const resolved = resolveCablePoint(marker, ancestors);
+    const owner = mk.closest('[data-path]');
+    const path = owner ? owner.dataset.path : '';
+    const connector = path.split('/')[0];
+    const prev = byConnector.get(connector);
+    if (!prev || resolved.z > prev.z) byConnector.set(connector, {...resolved, path});
+  }
+  return [...byConnector.values()];
+}
+
 export function configureRelief(deps, scope) {
   // THREE and the renderer are genuinely per-page and stay module-level. The
   // raster density and the FRU path set are per-VIEWER, and a second viewer
