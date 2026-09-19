@@ -70,7 +70,7 @@ pluggable interface (directly or through a wrapper):
 ```json
 {"id": "port-7", "at": [72.86, 27.77], "interface": "sfp", "media": "sfp28",
  "group": "sfp-plus", "rel-pos": 7, "rotate": null,
- "accepts": ["generic/sfp-lc@1", "generic/sfp-lc-simplex@1", "generic/sfp-sc@1",
+ "accepts": ["generic/sfp-lc@1", "generic/sfp-lc-simplex@1",
              "cisco/sfp-10g-lr@1", "..."],
  "occupant": null}
 ```
