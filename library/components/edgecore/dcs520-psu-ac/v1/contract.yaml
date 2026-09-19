@@ -1,0 +1,115 @@
+format: 1
+kind: module
+name: dcs520-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 2400 W AC/HVDC power supply of the Edgecore DCS520 (AS9736-64D) - a TALL, NARROW
+  39.7 x 53.3 module, not the 73.5 x 40 CRPS brick the rest of this 2RU shell family
+  carries, because this machine stands one supply at each END of its rear with the four
+  fan trays between them. An Anderson Saf-D-Grid inlet fills the lower half, a wire-guard
+  vent the upper, and a black pull handle lies diagonally across the vent. THE TWO
+  SUPPLIES ARE THE SAME PART MOUNTED ONE UP AND ONE DOWN, which the guide states.
+size: {w: 39.7, h: 53.3}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  power-output-w: 2400
+  input: ac
+  inlet: other
+  input-note: 'Anderson Saf-D-Grid; also rated for 240 VDC HVDC'
+provenance:
+  size: >-
+    MEASURED ON THE DATASHEET'S REAR PHOTOGRAPH at 600 dpi, on the module's own bright
+    top and bottom rails and its own side rails rather than on anything it sits in: strong
+    edges at y 15.8 and 69.1 and at x 5.2 and 44.9, giving 39.7 x 53.3 in a bay whose
+    seams the quick start guide's rear elevation independently puts at 45.45 and 394.26.
+    THE PHOTOGRAPH'S OWN PANEL BOX WOULD NOT DO. Its bbox reads -1.33% against 440 x 87
+    where the same page's FRONT photograph reads -0.60%, because the rear view's rack-ear
+    tabs stand proud of the body top and bottom. So the rear scale is taken from the
+    chassis width alone and every number here is a feature measurement.
+  the-supply-is-tall-and-narrow-and-that-is-the-point: >-
+    THIS IS NOT THE SHELL FAMILY'S SUPPLY. The AIS800-64D, the AIS800-64O and the AGR560
+    are the same 440 x 649.2 x 87 chassis and all three stack two 73.5 x 40 CRPS bricks at
+    the LEFT of the rear with four trays to their right. The DCS520 puts one supply at each
+    END and the four trays between them, so its supply is a different shape entirely - 39.7
+    wide by 53.3 tall against 73.5 by 40. One shell, two rear architectures.
+  the-inlet-is-named-and-the-cord-is-not-the-inlet: >-
+    "AC PSU Inlet: Anderson Saf D Grid", from the datasheet's Power section. THE C20 IS THE
+    WALL END OF THE CORD, not this socket: the guide's package contents list an "HVAC/IEC
+    C20 1m power cord" and the ordering table an "HVAC to IEC 60320 C20 (1m)", which is a
+    cord with a C20 at one end and a Saf-D-Grid at the other. Reading the C20 as the
+    inlet - the obvious mistake here - would put the wrong connector on the face.
+    `attrs.inlet` is `other` because the schema's vocabulary runs c14/c20/dc-terminal and
+    has no Saf-D-Grid; `input-note` carries the name.
+  the-two-supplies-are-mirrored-and-the-guide-says-so: >-
+    "Install the replacement PSU in a matching orientation. (PSU 1 AC socket faces down,
+    and PSU 2 AC socket faces up.)" - the guide's PSU Replacement step 3, which is a
+    statement about the hardware and not about the drawing.
+    AND THE ELEVATION AGREES, measured rather than assumed: scanned down each bay, PSU 1's
+    internal features cluster at y 34.4-65.9 and PSU 2's at y 20.5-37.8, and they map onto
+    each other by reflection about the chassis mid-height to within 0.6 mm. So the device
+    seats ONE component twice and turns the second through 180 degrees.
+  power: >-
+    2400 W, from the datasheet: "PSUs: 2 redundant, load-sharing, hot-swappable 2400 W
+    AC/HVDC power supplies". Input ratings, same section: "100-127 VAC, 50/60 Hz, 12 A
+    maximum; 200-240 VAC, 50/60 Hz, 15 A maximum; HVDC: 240 VDC, 15 A maximum". No ambient
+    is given for the 2400 W figure and none is invented.
+  the-face-and-what-is-behind-it: >-
+    A WIRE-GUARD VENT fills the upper half and the photograph shows ORANGE AND BLUE WIRING
+    through it, which is drawn because it is what the part looks like and because it is the
+    clearest evidence that the guard is open rather than printed. A round status lamp sits
+    at the top right of the guard. The pull handle lies DIAGONALLY across the vent - it is
+    a rod, not a U - and the release latch is a red tab on the outboard edge.
+    THE LATCH COLOUR IS READ, not borrowed: it is unambiguously red in the datasheet's rear
+    photograph at 9 px/mm, on the only build this machine ships (one ordering code,
+    front-to-back).
+states: [absent]
+elements:
+  vent: {at: [2.20, 2.10], size: [31.60, 23.40], class: vent}
+  status: {at: [33.55, 2.55], size: [4.10, 4.10], class: led, states: ['off', 'ok', 'fault']}
+  inlet-well: {at: [6.30, 28.90], size: [28.20, 21.30], class: bezel}
+  handle: {at: [0.50, 8.60], size: [28.90, 14.50], class: handle}
+  latch: {at: [0.40, 41.20], size: [3.10, 8.60], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#24272b'}
+  latch-finish: {label: Latch colour, type: text, default: '#d5342c'}
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [7.00, 29.60]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent
+      vent: 14
+      confidence: estimated
+      source: >-
+        The guard is open - the photograph shows wiring through it - but no document gives
+        a depth. 14 matches the vent depth this library gives other Edgecore supply guards.
+    - node: inlet-well
+      pocket: 2.6
+      confidence: estimated
+      source: >-
+        The Saf-D-Grid sits in a recess whose walls the photograph shades. How deep is not
+        stated anywhere; 2.6 puts the connector's flange level with the module face, which
+        is what the photograph shows.
+    - node: handle
+      bar: 3.1
+      confidence: estimated
+      source: >-
+        A ROD LYING DIAGONALLY ACROSS THE VENT, and `bar` rather than `uhandle` because it
+        is not a U: the photograph shows a single straight rod with a short return at its
+        inboard end, anchored to the module at both ends and standing off the face along
+        its whole length, which is exactly what `bar` builds. The AIS800 supplies' handles
+        are U-shaped and were corrected to `uhandle` because `bar` left them standing on
+        nothing; this one is genuinely a bar and does not have that problem.
+        HOW FAR IT STANDS OFF IS NOT DIMENSIONED. 3.1 is the rod's own drawn thickness.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the shell family''s supply latches - drawn, not dimensioned.'
+skins: [default]
+body:
+  depth: 210
+  color: '#2f3439'
+  footprint: {at: [0, 0], size: [39.7, 53.3]}
