@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -327,7 +327,10 @@ gaps:
     off/on default. The datasheet's own footnote - "NOS integration is necessary to activate
     the specific feature" - is about timing, not lamps, so it does not even license calling
     this nos-dependent.
-    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is unaffected by that change.
+
+    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library
+    ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is
+    unaffected by that change.
   wanted: >-
     a per-NOS LED table from UfiSpace or a NOS vendor, or photographs of a live unit with
     ports in known states
@@ -924,6 +927,9 @@ views:
         - {ref: common/screw-head@1, id: rail-screw-r, at: [730.00, 42.05], group: furniture, rel-pos: 14}
 configurations:
   base:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: base
     description: the chassis as it powers on - four fans and two 1600 W AC supplies, no optics
     default: true
@@ -942,6 +948,9 @@ configurations:
       fan-803816-hi:
         model: FAN-803816-HI
   ac:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: orderable
     description: AC build, 2x PSU-162-AESR 1600 W 200-240 V on IEC C19 cords, front-to-back airflow
     component-attrs:

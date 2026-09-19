@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -320,7 +320,10 @@ gaps:
     resolved the same shape on the same vendor's artwork as a number badge with a small numeral
     in it - but at this figure's raster the badge is a shape and nothing more. The numbering
     itself is certain and is used for every id and rel-pos; only the printing is open.
-    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is unaffected by that change.
+
+    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library
+    ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is
+    unaffected by that change.
   wanted: a straight-on high-resolution photograph of the faceplate with the cages empty
 - what: psu-variant-attrs
   scope: [psu-0, psu-1]
@@ -735,6 +738,9 @@ configurations:
       fan-803816-hi:
         model: FAN-803816-HI
   ac:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: orderable
     description: Dual 1300 W AC PSUs (PSU-132-AESR), four FAN-803816-HI exhaust fan
       modules, front-to-back airflow

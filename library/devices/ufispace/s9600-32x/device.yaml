@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 2.0.10
+version: 2.0.11
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -790,6 +790,9 @@ views:
         - {ref: common/screw-head@1, id: pin-r5, at: [660.0, 42.0], group: furniture, rel-pos: 11}
 configurations:
   base:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: base
     description: >-
       The router as HIG Figure 7 draws it - four FAN-803816-HI exhaust fans and two
@@ -798,6 +801,9 @@ configurations:
       chassis-sku gap.
     default: true
   ac:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: orderable
     description: >-
       Dual 1600 W AC supplies (PSU-162-AESR), 100 to 240 V at 13 A, 1+1 redundant.
@@ -824,6 +830,9 @@ configurations:
       psu-0: ufispace/psu-162-dc@1
       psu-1: ufispace/psu-162-dc@1
   breakout:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: example
     description: >-
       The AC build with the four SFP28 breakout ports enabled. QSFP28

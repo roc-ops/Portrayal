@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-28DC
@@ -35,8 +35,10 @@ provenance:
       differently populated - `dc-populated` fitted optics into the first four SFP28 cages before
       it was removed (the library ships its models bare by policy, docs/pluggables-design.md
       decision 2), and populating it was never a different thing to order. AC is, and carries its own. That is exactly the distinction
-      #21 collapses on, so the two DC entries should fold into one device type and the AC one
-      should stand alone. SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather
+      #21 collapses on, and the fold has happened: the single DC entry and the AC entry ARE the
+      two device types this chassis has, one SKU each. The one-SKU point stands - populating a
+      chassis was never a different thing to order, which is why removing `dc-populated` cost no
+      device type. SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather
       than dressed up: no UfiSpace PDF held contains either string. If a UfiSpace ordering guide
       ever lands, it should confirm these two and may add the regional variants the Edgecore SKUs
       show for the same class of box. than merely coping.
@@ -643,6 +645,9 @@ configurations:
       fan-402825:
         model: FAN-402825-HD
   ac:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: orderable
     description: Dual 400W AC PSUs (PSU-401-AISB), front-to-back airflow
     part-numbers:
