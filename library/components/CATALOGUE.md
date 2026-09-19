@@ -298,7 +298,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-cable-manager@1` | module | mechanical | 444.5 × 149.63 |  | 0 | 0 | Horizontal cable management bracket for an ASR 9000 rack |
 | `cisco/a9k-dc-pem-v3@1` | module | power | 468.12 × 48.03 |  | 0 | 0 | Cisco ASR 9000 version 3 DC power entry module - a power TRAY, not a supply |
 | `cisco/a9k-fan-tray-door@1` | module | blank | 444.5 × 70.97 × 20 |  | 1 | 0 | Hinged fan tray door for the Cisco ASR 9006 Router |
-| `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 9 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
+| `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 10 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
 | `cisco/a9k-mod160-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized |
 | `cisco/a9k-mod160-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Packet Transport Optimized |
 | `cisco/a9k-mod200-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Service Edge Optimized |
