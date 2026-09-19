@@ -45,7 +45,8 @@ read -r STATE HEAD BASE MERGEABLE < <(gh pr view "$PR" --json state,headRefName,
 
 SHA=$(gh pr view "$PR" --json headRefOid -q .headRefOid)
 
-# 1. every check that reported must have passed, and `gates` must be among them.
+# 1. every check that reported must have passed, and the `gates` workflow must
+#    be among the things that ran and succeeded.
 #    A PR with no checks at all is the failure this script exists to catch, so
 #    an empty list is a refusal rather than a pass.
 runs=$(gh api "repos/$REPO/commits/$SHA/check-runs" -q '.check_runs[] | "\(.name)\t\(.status)\t\(.conclusion // "-")"')
@@ -53,16 +54,39 @@ runs=$(gh api "repos/$REPO/commits/$SHA/check-runs" -q '.check_runs[] | "\(.name
 echo "$runs" | while IFS=$'\t' read -r name status conclusion; do
   printf '  %-24s %s %s\n' "$name" "$status" "$conclusion"
 done
-echo "$runs" | grep -q "^gates	completed	success$" || {
-  echo "the 'gates' check has not completed successfully on $SHA"; exit 1; }
+# `gates` IS A WORKFLOW, AND THIS USED TO GREP FOR A CHECK-RUN OF THAT NAME.
+# True until #284 split it into a `lint` job and a `build` job: the workflow kept
+# the name, the check-runs took the JOBS' names, and the grep stopped matching
+# anything at all. From then on this script refused every pull request. Because
+# it fails closed, the breakage never looked like a safety failure - it looked
+# like a stuck merge, so merges went around it, and the base-freshness check
+# below has not been in the path of a single merge since.
+#
+# So ask the WORKFLOW whether it succeeded, not a job. Jobs get split and
+# renamed - that is the whole history of this line - and the workflow's name is
+# the part that is actually a contract. `any run for this SHA concluded success`
+# rather than `the latest did`, because a `push` and a `pull_request` trigger on
+# one SHA share the concurrency group in gates.yml and one of the pair gets
+# cancelled; the cancelled sibling is not a failure of the gate. Anything that
+# genuinely failed or is still in flight is caught by the two checks below,
+# which read the check-runs themselves.
+ran=$(gh api "repos/$REPO/actions/runs?head_sha=$SHA" \
+  -q '[.workflow_runs[] | select(.name=="gates" and .conclusion=="success")] | length' \
+  2>/dev/null || echo 0)
+[ "${ran:-0}" -ge 1 ] 2>/dev/null || {
+  echo "no successful 'gates' workflow run on $SHA - has it finished?"
+  gh api "repos/$REPO/actions/runs?head_sha=$SHA" \
+    -q '.workflow_runs[] | "  \(.name) \(.status)/\(.conclusion // "-")"' || true
+  exit 1; }
 bad=$(echo "$runs" | awk -F'\t' '$2=="completed" && $3!="success" && $3!="neutral" && $3!="skipped"' | wc -l | tr -d ' ')
 [ "$bad" = "0" ] || { echo "$bad check(s) did not pass"; exit 1; }
 
 # A CHECK THAT HAS NOT FINISHED IS NOT A CHECK THAT PASSED. The first version
 # looked only at `completed` rows, so a second workflow still in flight was
 # invisible and the merge went ahead on the strength of the one that had
-# finished. That never fired, because `gates` is the only check today - which is
-# exactly the kind of hole that waits for the day somebody adds a second one.
+# finished. This said "that never fired, because `gates` is the only check
+# today" - and #284 had already made two checks of it, `lint` and `build`, so
+# the day it was waiting for had arrived before the sentence was read again.
 running=$(echo "$runs" | awk -F'\t' '$2!="completed"' | wc -l | tr -d ' ')
 if [ "$running" != "0" ]; then
   echo "$running check(s) still running - wait for them rather than merging on"
