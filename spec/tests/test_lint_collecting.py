@@ -105,6 +105,25 @@ def writes_to_the_globals(src):
     def is_global(n):
         return isinstance(n, ast.Attribute) and n.attr in ("ERRORS", "WARNINGS")
 
+    def assigned(t):
+        """The things one assignment target actually writes to.
+
+        UNPACKED, because the canonical dance puts BOTH lists in one statement:
+
+            lint.ERRORS[:], lint.WARNINGS[:] = saved_e, saved_w
+
+        which is a Tuple target, and a checker that only looks at the target
+        itself sees a Tuple, finds no attribute on it, and passes the very line
+        this file's own docstring quotes as the thing to stop.
+        """
+        if isinstance(t, (ast.Tuple, ast.List)):
+            for el in t.elts:
+                yield from assigned(el)
+        elif isinstance(t, ast.Starred):
+            yield from assigned(t.value)
+        else:
+            yield t.value if isinstance(t, ast.Subscript) else t
+
     hits = []
     for n in ast.walk(ast.parse(src)):
         if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) \
@@ -114,10 +133,66 @@ def writes_to_the_globals(src):
                    else [n.target] if isinstance(n, (ast.AugAssign, ast.AnnAssign))
                    else [])
         for t in targets:
-            base = t.value if isinstance(t, ast.Subscript) else t
-            if is_global(base):
-                hits.append((n.lineno, f"assignment to {base.attr}"))
+            for base in assigned(t):
+                if is_global(base):
+                    hits.append((n.lineno, f"assignment to {base.attr}"))
     return hits
+
+
+# Every spelling of a write, because the checker above is the only thing standing
+# between the suite and the dance, and it is itself just code. The sweep it drives
+# runs over files that are all clean today, so a checker that quietly stopped
+# recognising a form would keep reporting a green tree - which is the shape of
+# failure this whole file exists to object to.
+WRITES = [
+    "lint.ERRORS.clear()",
+    "lint.WARNINGS.clear()",
+    "lint.ERRORS.append('x')",
+    "lint.ERRORS.extend(['x'])",
+    "lint.ERRORS = []",
+    "lint.ERRORS[:] = saved",
+    "lint.ERRORS += ['x']",
+    "L.ERRORS.clear()",                                  # aliased import
+    "lint.ERRORS[:], lint.WARNINGS[:] = saved_e, saved_w",   # THE canonical dance
+    "lint.ERRORS, lint.WARNINGS = [], []",
+    "a, (lint.ERRORS[:], b) = 1, (saved, 2)",            # nested unpacking
+]
+
+READS = [
+    "x = [e for e in lint.ERRORS if '[L83]' in e]",
+    "assert lint.WARNINGS == []",
+    "ALLOWED_WARNINGS = set()",                          # a Name, not the global
+    "with lint.collecting() as found:\n    pass",
+]
+
+
+@pytest.mark.parametrize("src", WRITES)
+def test_the_checker_sees_every_spelling_of_a_write(src):
+    assert writes_to_the_globals(src), f"not recognised as a write: {src}"
+
+
+@pytest.mark.parametrize("src", READS)
+def test_the_checker_leaves_reads_alone(src):
+    """A read of `lint.ERRORS` inside a `collecting()` block is the mechanism
+    working, not an offence. Flagging one would push files back to asserting on
+    the helper's copy where the live list is what they mean."""
+    assert writes_to_the_globals(src) == [], f"false positive on: {src}"
+
+
+def test_the_canonical_dance_is_the_one_it_must_never_miss():
+    """Pinned on its own because it is the form BOTH docstrings print - this
+    file's, at the top, and `lint.collecting()`'s - so it is the copy a reader
+    is most likely to paste back in. It is a Tuple target, and the first version
+    of this checker looked at the target itself, saw a Tuple, found no attribute
+    on it and passed.
+    """
+    src = ("saved_e, saved_w = lint.ERRORS[:], lint.WARNINGS[:]\n"
+           "lint.ERRORS.clear(); lint.WARNINGS.clear()\n"
+           "lint.ERRORS[:], lint.WARNINGS[:] = saved_e, saved_w\n")
+    what = [w for _, w in writes_to_the_globals(src)]
+    assert "ERRORS.clear()" in what and "WARNINGS.clear()" in what
+    assert what.count("assignment to ERRORS") == 1, what
+    assert what.count("assignment to WARNINGS") == 1, what
 
 
 def test_the_suite_no_longer_hand_rolls_the_dance():
