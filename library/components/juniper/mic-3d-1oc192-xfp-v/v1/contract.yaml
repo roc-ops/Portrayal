@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-1oc192-xfp-v
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,7 +10,7 @@ description: >-
 attrs:
   oc192: 1
   model: MIC-3D-1OC192-XFP
-  power-draw-max-w: 38
+  power-draw-max-w: 41
 provenance:
   sonet-rate: >-
     the SONET rate, transcribed from this contract's own description - an OC-192/STM-64
@@ -21,7 +21,16 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 38 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| SONET/SDH OC192/ STM64 MIC with XFP | MIC-3D-1OC192-XFP | 41 W at 131 F (55 C)
+    38.5 W at 40 C 36 W at 77 F (25 C) |'. The 55 C rung is carried, for the MIC alone
+    without optics. mx2008 prints the same three rungs.
+    CORRECTED FROM 38 W, which came from the module reference's electrical line -
+    'Power requirement: 4.25 A @9V (38.25 W)' - a DIFFERENT MEASURE at no stated ambient.
+    It lands between this row's 25 C and 40 C rungs, so it reads like a plausible maximum
+    and is 7 percent below the real one. An amps-times-volts figure in a module reference
+    is not the chassis guide's worst rung, and where both exist the ladder is the one to carry.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
