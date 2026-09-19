@@ -19,6 +19,9 @@ FIBRE_CONNECTORS = [
     "common/st-simplex-adapter/v1", "common/fc-simplex-adapter/v1",
     "common/lsh-simplex-adapter/v1", "common/mdc-adapter/v1",
     "common/fibre-splice/v1",
+    # generic/lc-plug@1 (pluggables B2, Task 4): the cable-end LC plug, not a
+    # panel adapter - simplex, `optical.positions: 1`.
+    "generic/lc-plug/v1",
 ]
 
 

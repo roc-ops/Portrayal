@@ -1,0 +1,112 @@
+format: 1
+kind: component
+name: lc-plug
+version: 1.0.0
+class: port
+mates: lc
+interface: lc-plug
+conforms: lc-plug
+optical: {positions: 1}
+profile: networking
+description: >-
+  An LC fibre plug, front view - the four-tier keyed silhouette every LC plug
+  presents: a body holding the ferrule, then a shoulder, a neck and a latch tip
+  stepping narrower as the latch tab rises off the body. Occupies an `lc`
+  receptacle (std/lc-bore and anything that composes it) at its own `mate`
+  point, and in turn presents `lc-plug` so a boot (or a bare cable, when there
+  is no boot) can seat on its rear. Drawn with NO depth - see `provenance.size`.
+size: {w: 5.58, h: 10.43}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: fiber, connector: lc}
+unplaced: >-
+  seated by a device that places it in an `lc`-presenting receptacle - none does
+  yet. common/lc-boot@1 (Task 5) mates to it via `mate-to`, and the RJ45 pair
+  (Tasks 6-7) follow the same shape; a device manifest exercising the two-part
+  fit is downstream of this library, same as generic/sfp-lc's own `unplaced`.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, against the implementation plan's own field table
+    (Task 4 lists `behaviour: occupies`). spec/tests/test_behaviour.py::
+    test_a_receptacle_does_not_move asserts `d.get("behaviour") is None` for
+    every `class: port` contract - "A `port` that gains a behaviour would be
+    given a 3D body and an eject control it has no business having" - and this
+    is a class this plug shares with std/lc-bore@3, the aperture it enters.
+    Setting `occupies` here breaks that invariant; std/lc-bore@3 itself
+    carries no `behaviour` and still seats a `mate-to` occupant correctly
+    (spec/tests/test_chained_seats.py proves it), because the mate-to
+    resolution in render.py reads `mates`/`interface` and the `mate`
+    connection-point, never `behaviour` - the field is read only by the 3D
+    viewer's eject affordance (render.py's own comment: "HOW IT MOVES, beside
+    WHAT IT IS"). Omitting it costs that one 3D affordance and nothing the
+    render pipeline needs; keeping `occupies` would have broken an existing,
+    deliberate test to gain it. Reported rather than silently patched around -
+    `class: port` doubling as both "fixed aperture" (std/lc-bore) and
+    "removable plug" (this part) is a real tension the plan did not
+    anticipate, and the durable fix is a class of its own for a plug body,
+    which is out of this task's scope.
+  optical: >-
+    optical.positions: 1 - not asked for by the plan's Task 4 table, but
+    required to keep spec/tests/test_connector_sweep.py green: its sweep keys
+    on `class: port` + `attrs.media: fiber` + no `relief.cavity`, which this
+    part matches, and its own docstring calls that shape "a connector" and
+    requires a stated capacity so L80's coverage checks do not silently drop
+    it. An LC plug is simplex - one fibre position - the same reading the
+    schema gives an LC duplex (2). Registered in that test's FIBRE_CONNECTORS
+    list in the same commit.
+  size: >-
+    drawing - SENKO DS-LC-000004 Rev A p.3, Connector Drawing, Front View
+    (UPC). 5.58 is the body width and 10.43 is the OVERALL SILHOUETTE HEIGHT,
+    body plus latch, both dimensioned without a tolerance-free reference mark.
+    DELIBERATELY NO DEPTH. The same drawing's side view gives an overall length
+    only as `(42)` - a REFERENCE dimension in parentheses, not toleranced - and
+    it is not a class figure: SENKO's XP Fit Plus 951 (DS-LC-000023) gives the
+    same reference quantity as `(38.6)` and the LC-HD 913/914 as `(43)`, three
+    different numbers for three real products because the reference spans
+    plug + boot + cable, whose length is the assembler's choice, not the
+    plug's. What DOES repeat across all three, WITH tolerances, is the body
+    height (5.65) and the latch length (8.6 +/-0.1) - both from the side view,
+    both a DIFFERENT axis than this front view's w/h and so not usable as a
+    depth here either. The class fixes the front profile and the latch; the
+    back end is the vendor's, and stating a depth from a parenthesised
+    REF would put a number in the contract that no drawing dimensions.
+  keyway: >-
+    drawing for the tier WIDTHS, estimated for the tier HEIGHTS - the same
+    split std/lc-bore@3 already uses for the aperture this plug enters, and for
+    the same reason: only the widths are dimensioned. Front view, outward from
+    the body: shoulder 4.3 +/-0.1, neck 3.3 +0.05/-0.10, latch tip 2.3 +/-0.1.
+    working/intake/fiber-connectors/lc/SOURCES.md carries the tier table
+    ("What the pair of Senko drawings agrees on") showing these three widths
+    against the LC Premium Adapter DS-LC-000010's aperture, tier for tier, the
+    adapter running 0.16-0.40 larger at every tier for clearance - that
+    agreement across two independent SENKO documents is what makes the profile
+    citable rather than eyeballed, per the SOURCES.md note it rests on. The
+    HEIGHTS of the four tiers are not dimensioned on any drawing in the corpus;
+    they are read off the front view's line art in the proportion drawn
+    (roughly tip 0.85 : neck 4.2 : shoulder 0.9 : body 4.48, summing to the
+    dimensioned 10.43) and marked `estimated` on each element below.
+  ferrule: >-
+    estimated - the concentric ferrule/spring rings in the front view scale to
+    roughly 60% of the 5.58 body width; no drawing dimensions the ferrule
+    diameter on this sheet (it is a standard 1.25mm LC ferrule, per
+    std/lc-bore@3's own `ferrule` note, which is smaller than what is drawn
+    here - the front view draws the SPRING HOUSING around the ferrule, not the
+    bare ferrule).
+  axis: >-
+    derived - the optical axis (the ferrule bore centreline) is placed at the
+    vertical centre of the BODY tier as drawn (y 5.95 to 10.43, so y 8.19),
+    which is where the front view's circle sits, and at the horizontal centre
+    of the 5.58 body (x 2.79). The `mate`, `boot` and `cable` connection
+    points all share this one (x, y): the fibre runs straight through the
+    plug from the ferrule tip to wherever it exits the rear, so a front point
+    and a rear point on one physical connector are the same axis seen from
+    two directions, not two locations.
+elements:
+  tip: {at: [1.64, 0.0], size: [2.3, 0.85], class: latch}
+  neck: {at: [1.14, 0.85], size: [3.3, 4.2], class: latch}
+  shoulder: {at: [0.64, 5.05], size: [4.3, 0.9], class: latch}
+  body: {at: [0.0, 5.95], size: [5.58, 4.48], class: port}
+connection-points:
+  mate: {at: [2.79, 8.19], direction: front}
+  boot: {at: [2.79, 8.19], direction: rear}
+  cable: {at: [2.79, 8.19], direction: rear}
+skins: [default]
