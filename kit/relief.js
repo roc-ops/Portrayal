@@ -221,9 +221,27 @@ function seatOwner(el, byPath) {
 function seatChain(owner, byPath) {
   const chain = [];
   const seen = new Set();
-  for (let cur = owner; cur && !seen.has(cur); cur = seatOwner(cur, byPath)) {
+  let cur = owner;
+  while (cur) {
+    if (seen.has(cur)) {
+      // SAID OUT LOUD, LIKE THE UNREADABLE POINT BELOW. Terminating was never
+      // in doubt - `seen` did that from the start - but terminating QUIETLY
+      // is not the same thing: a 2-cycle makes each side shadow the other, so
+      // BOTH connectors vanish from the returned list with nothing said. That
+      // is the identical failure mode an unreadable `data-cp-at` gets a
+      // warning for a few lines down, and it deserves the identical treatment.
+      // Only a hand-edited or truncated drawing can produce it - render.py
+      // refuses a `mate-to` cycle outright - which is exactly the case worth
+      // naming out loud rather than diagnosing from an absence.
+      console.warn(`cablePoints: data-for cycle - the seat chain from ` +
+                   `${owner.dataset.path || '(no data-path)'} revisits ` +
+                   `${cur.dataset.path || '(no data-path)'}; the walk stops ` +
+                   `there and connectors on this chain may be dropped`);
+      break;
+    }
     chain.push(cur);
     seen.add(cur);
+    cur = seatOwner(cur, byPath);
   }
   return chain;
 }

@@ -96,6 +96,14 @@ function el(attrs, parent) {
   return node;
 }
 
+// WHAT THE MODULE SAYS OUT LOUD, CAPTURED. cablePoints warns on an unreadable
+// `data-cp-at` and on a `data-for` cycle; both are cases where the sensible
+// return value is an absence, and an absence is exactly what a test cannot
+// tell from a bug. Collected here so the assertions can name them.
+const warnings = [];
+const realWarn = console.warn;
+console.warn = (...a) => { warnings.push(a.join(' ')); };
+
 const svg = {}; // the walk boundary: parentElement chains stop when they hit this
 
 // connector A: a bare part on the panel, one marker, no boot - the plain case
@@ -213,6 +221,27 @@ const markerCycleB = el({'data-cp': 'cable', 'data-cp-at': '6 6.1'}, cycleB);
 const cycleSelf = el({'data-path': 'cycle-self', 'data-for': 'cycle-self'}, svg);
 const markerCycleSelf = el({'data-cp': 'cable', 'data-cp-at': '6 6.2'}, cycleSelf);
 
+// connector O: A MULTI-TOKEN `data-for` WHOSE FIRST TOKEN IS CROSS-VIEW.
+// `seatOwner` handles both shapes render.py's `data_for` can emit - several
+// space-separated targets, and a device-absolute one leading with "/" - and
+// until now nothing exercised either, so the loop could have been a bare
+// `byPath.get(raw)` and every test would still have passed.
+//
+// `/rear/x` IS PLANTED AS A REAL data-path HERE ON PURPOSE. No renderer emits
+// a path beginning with a slash - that is precisely why the leading slash
+// makes a cross-view token unmistakable - but without an owner under that key
+// the `continue` is unobservable: an unplanted "/rear/x" would miss the map
+// and fall through to the next token anyway, so the guard could be deleted
+// and this fixture would not notice. With it planted, dropping the guard
+// chains plug-o to the WRONG owner (the first token wins) and the assertions
+// below fail. The second token, `cage-o`, is the host a seat really names.
+const crossView = el({'data-path': '/rear/x'}, svg);
+const markerCrossView = el({'data-cp': 'cable', 'data-cp-at': '0 7'}, crossView);
+const cageO = el({'data-path': 'cage-o'}, svg);
+const markerCageO = el({'data-cp': 'cable', 'data-cp-at': '1 1'}, cageO);
+const plugO = el({'data-path': 'plug-o', 'data-for': '/rear/x cage-o'}, svg);
+const markerPlugO = el({'data-cp': 'cable', 'data-cp-at': '1 1.5'}, plugO);
+
 const markers = [
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
@@ -222,6 +251,7 @@ const markers = [
   markerCage, markerCagePlug, markerCagePlugBoot,
   markerCageL,
   markerCycleA, markerCycleB, markerCycleSelf,
+  markerCrossView, markerCageO, markerPlugO,
 ];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);
@@ -239,8 +269,10 @@ const emptyRoot = {querySelectorAll: sel => {
 // that it is the marker element this point came from.
 const strip = pts => pts.map(({el: owner, ...rest}) => ({...rest, elIsMarker: markers.includes(owner)}));
 
-console.log(JSON.stringify({
+const result = {
   ...pure,
   points: strip(m.cablePoints(svg)),
   empty: m.cablePoints(emptyRoot),
-}));
+};
+console.warn = realWarn;
+console.log(JSON.stringify({...result, warnings}));
