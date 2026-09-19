@@ -1,0 +1,101 @@
+format: 1
+kind: component
+name: sfp-lc-simplex
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+conforms: sfp-module
+profile: networking
+description: >-
+  A generic SFP with one LC bore on its optical axis - the shape every
+  bidirectional (BiDi) SFP, SFP+ and SFP28 optic has, standing for all of
+  them. One keyed bore with the ferrule standing in it, carrying transmit and
+  receive on a single fibre, and a bail latch lying flat because the module
+  is seated. Which module it is - rate, reach, wavelength, watts - is a fact
+  about a vendor's product and lives on the wrapper that composes this
+  (docs/pluggables-design.md, decision 5), never here.
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: registry, h: registry, d: registry}
+attrs: {power-absent: not-applicable, form-factor: sfp, face: lc-simplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#2f5fa8'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - sfp-module, which is SFF-8432 Rev 5.2a Table 4-3 (designator E
+    13.55 width, S 8.55 height, T 47.50 distance from positive stop to rear of
+    module). Unchanged from generic/sfp-lc@1, which this contract is copied
+    from - a bidi face does not change the module's outer envelope.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a
+    shape that stands in for every module of its kind, so there is no one figure
+    to state: a 1000BASE-BX at 1310/1490nm is under 1 W and others run several,
+    and this single drawing is both. Any wattage here would be a fiction dressed
+    as a fact. The figure belongs on the wrapper, which knows which module it
+    is. L27 exempts by `power-absent` and this sentence is why.
+  protrusion: >-
+    SFF-8432 Rev 5.2a Table 4-3 designator A, "Module length extending outside
+    of cage" (Note 4: indicated outline defines the maximum envelope outside
+    of the cage), 10.0mm Recommended Maximum - carried unchanged from
+    generic/sfp-lc@1; see that contract's own `provenance.protrusion` for the
+    full reading. A face swap does not move the body's protrusion.
+  bail-colour: >-
+    A FIELD, not a fact. Vendors colour the bail by reach (blue is commonly
+    single-mode) and the wrapper sets `latch-color`; the default here is a
+    colour, not a claim.
+  latch: >-
+    carried unchanged from generic/sfp-lc@1's `provenance.latch` - the bail
+    geometry is a fact about the module body, not about which face is cut
+    into it, and a bidi face does not move it.
+  optical-axis: >-
+    carried unchanged from generic/sfp-lc@1's `provenance.optical-axis`. The
+    reasoning that put the LC-duplex pair's axis at y 5.70 - clear of the
+    bail below and the receptacle geometry above, std/lc-bore@3 being 6.3
+    tall and keyed - applies identically to this one bore: it sits at the
+    same y for the same clearance reason, only centred in X instead of
+    offset either side of it.
+  bores: >-
+    std/lc-bore@3, the same KEYED opening generic/sfp-lc@1 composes, CENTRED
+    on the face instead of split into a 6.35mm-apart pair: `at: [4.425,
+    1.75]` puts the bore's 4.7-wide square on the module centreline (4.425 +
+    4.7/2 = 6.775 = 13.55/2), keeping the same y as the duplex pair (1.75,
+    hence the same 5.70 optical axis - see `optical-axis` above). The bore is
+    centred because no drawing of a bidi SFP face in the intake places it
+    otherwise - ESTIMATED. What would settle it is a bidi module's own
+    mechanical drawing, e.g. a 1000BASE-BX SFP datasheet's mechanical page:
+    if a real bidi face turns out offset rather than centred, this placement
+    moves to match it.
+parts:
+  - {ref: std/lc-bore@3, id: bore, at: [4.425, 1.75], lift: 10.0, rotate: 180}
+relief:
+  features:
+    - node: body
+      out: 10.0
+      color: '#6e747c'
+      confidence: drawing
+      source: >-
+        SFF-8432 Rev 5.2a Table 4-3 designator A, module length extending
+        outside of cage, 10.0mm Recommended Maximum - see
+        provenance.protrusion
+    - node: bail
+      lift: 10.0
+      out: 14.3
+      color: '#2f5fa8'
+      confidence: estimated
+      source: >-
+        common/sfp-lc-duplex@1 - unsourced. The length key gives '0.49 in
+        [12.3] is the face height with the bail extended', which is a HEIGHT
+        across the face, not how far forward the bail reaches. 14.3 is 0.4
+        past the body's Table 4-3 protrusion and nothing states it.
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+  optical: {at: [6.775, 5.70], direction: front}
+skins: [default]

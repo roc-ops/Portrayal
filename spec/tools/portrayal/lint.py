@@ -239,6 +239,7 @@ RULES = {
     "L96": ("component",  "a module composing a pluggable cage says what rate it runs at", "add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count"),
     "L97": ("component",  "a part that states a size says where each dimension came from", "add `size-confidence: {w: ..., h: ...}` from the confidence vocabulary, and `size-notes` where it needs a sentence"),
     "L98": ("component",  "a character display says how wide it is, and every reading fits", "add `characters:` to the `class: display` element, and keep each `messages[].text` inside it"),
+    "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
 }
 
 
@@ -800,6 +801,19 @@ def lint_component_mating(path, data, lib_roots):
         if data.get(key) and "mate" not in cps:
             err(path, "L11", f"{key}: {data[key]!r} declared but no 'mate' "
                              "connection-point - nothing to align to")
+    # AN OCCUPANT MATES WITH ITS OWN POINT. A host may present a mate point
+    # FORWARDED from an aperture it composes (manifest.presented_interface);
+    # an occupant may not, and render.py says so where it seats one: "the
+    # occupant's is its own: a module is the thing that mates, not a wrapper
+    # around one". It raises on a `mate-to` placement whose occupant has no
+    # `mate`, so a contract without one is a part that cannot be seated. The
+    # renderer refuses it; lint refuses it too, at the contract rather than at
+    # the first device that tries.
+    if data.get("behaviour") == "occupies" and "mate" not in cps:
+        err(path, "L11", "behaviour: occupies and no 'mate' connection-point - "
+                         "an occupant mates with ITS OWN point, which is not "
+                         "forwarded from a composed part the way a host's is, "
+                         "and the renderer refuses to seat it without one")
     # a wrapper may re-present the interface of a receptacle it composes, but it
     # must not present a DIFFERENT one - a plug would mate with the wrapper and
     # land on the wrong geometry
@@ -1281,6 +1295,50 @@ def lint_component_display(path, data, _lib_roots=None):
                 err(path, "L98", f"display {eid} shows {cells} characters and "
                                  f"lists the reading {text!r}, which is "
                                  f"{len(text)}. One of the two was mis-read")
+
+
+GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
+                           "power-draw-max-w", "power-draw-typical-w")
+GENERIC_RATE_TOKENS = re.compile(
+    r"(^|-)(sfp28|sfp56|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
+    r"1000base[a-z0-9-]*|"
+    r"\d+g|\d+gbase[a-z0-9-]*|\d+km|\d+m)(-|$)")
+
+
+def lint_component_generic(path, data, _lib_roots=None):
+    """L99 - a generic stays generic.
+
+    A `generic/` transceiver stands for every module of its kind, which is the
+    whole reason it exists: `generic/sfp-lc` is an SFP, an SFP+ and an SFP28
+    alike, and the rate, the reach, the wavelength and the watts are facts about
+    the vendor's product that the WRAPPER carries (docs/pluggables-design.md,
+    decision 5). `common/sfp-lc-duplex` carried `mode: single-mode, reach: 30km,
+    speed: 100m` for a year - a specific module wearing a generic's name - and
+    nothing could say so. This can.
+
+    Namespace, not class: a vendor optic is SUPPOSED to carry these attrs, so the
+    rule reads the path and asks only under `generic/`.
+    """
+    if not isinstance(data, dict) or data.get("class") != "transceiver":
+        return
+    # THE NAMESPACE IS A POSITION, NOT A SUBSTRING: a contract lives at
+    # <lib>/components/<ns>/<name>/v<major>/contract.yaml, so the namespace is
+    # the fourth part from the end. Asking whether "/generic/" appears anywhere
+    # in the path made every vendor optic in a checkout under a directory
+    # NAMED generic answer yes.
+    is_generic = Path(path).parts[-4:-3] == ("generic",)
+    if not is_generic:
+        return
+    attrs = data.get("attrs") or {}
+    hit = [k for k in GENERIC_FORBIDDEN_ATTRS if k in attrs]
+    if hit:
+        err(path, "L99", f"{data.get('name')} is a generic and carries "
+                         f"{', '.join(hit)}. A generic stands for every module of "
+                         "its kind; the figure belongs on the vendor wrapper's attrs")
+    name = str(data.get("name") or "")
+    if GENERIC_RATE_TOKENS.search(name):
+        err(path, "L99", f"{name} names a rate. A generic is named by form factor "
+                         "and face - sfp-lc, qsfp-mpo12 - never by what runs in it")
 
 
 def lint_component_cage_rate(path, data, _lib_roots=None):
@@ -7100,6 +7158,7 @@ def main():
                 lint_component_cage_rate(f, d)
                 lint_component_size_confidence(f, d)
                 lint_component_display(f, d)
+                lint_component_generic(f, d)
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)

@@ -1,0 +1,148 @@
+format: 1
+kind: component
+name: qsfp-dd-lc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp-dd
+conforms: qsfp-dd-module
+profile: networking
+description: >-
+  A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800
+  and QSFP112 optic with two LC bores has, standing for all of them. Two keyed
+  bores with the ferrules standing in them, and a pull tab standing proud of
+  the body because the module is seated. Which module it is - rate, reach,
+  wavelength, watts - is a fact about a vendor's product and lives on the
+  wrapper that composes this (docs/pluggables-design.md, decision 5), never
+  here. Copies generic/qsfp-lc@1 and changes the family: same width and
+  height by design (QSFP-DD HW Rev 6.3 section 1 - the QSFP-DD cage accepts a
+  QSFP module), a longer paddle card behind the same front cross-section.
+size: {w: 18.35, h: 8.5, d: 58.26}
+size-confidence: {w: registry, h: registry, d: registry}
+attrs: {power-absent: not-applicable, form-factor: qsfp-dd, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#f2f2f2'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-dd-module, which is QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3,
+    section 7.3, Figure 47 (Type 1 module) dimensioned per Figure 52 (Drawing of the QSFP-DD module)
+    and Figure 53 (module end face): 18.35 +/-0.1 wide (datum E), 8.5 +/-0.1 high (datum F), 58.26 REF
+    deep. THE DEPTH IS THE INSERTED LENGTH, NOT THE OVERALL ONE: 58.26 REF runs from the BACK of the
+    20 MAX nose to the REAR END of the module housing, not from the module's front tip. Datum D is
+    the hard stop and is not that endpoint - Figure 52 dimensions it 10.06 +/-0.15 forward of the
+    rear end, and 48.2 MIN, the nose-back-to-D span, plus 10.06 is the 58.26. Datum DD is not a
+    length endpoint at all: Table 25 defines it as the TOP SURFACE of the module housing. The
+    paddle-card fingers extend a little further than the rear end but are not part of the housing
+    envelope, and the 20 MAX nose forward of this span is relief.body.out (see
+    provenance.protrusion), NOT inside d, so d + out is the whole module and double counts
+    nothing. Width and height are IDENTICAL to qsfp-module's 18.35 x 8.5 by design, not coincidence -
+    HW 6.3 section 1 states the QSFP-DD cage accepts a QSFP module, and Figure 52 confirms it: datum E
+    reads 18.35 +/-0.1 here too. Only the overall length differs: 58.26 REF here against qsfp-module's
+    52.4 REF, the longer paddle card behind the same front cross-section that generic/qsfp-lc@1's own
+    provenance.size describes. L9 requires the registry's exact figures, which this contract's `size`
+    is.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
+    stands in for every module of its kind, so there is no one figure to state: a 100GBASE-SR4
+    breakout optic is a few watts and a 400G ZR+ upward of 20 W, and this single drawing is both of
+    them. Any wattage written here would be a fiction dressed as a fact rather than a missing one. The
+    figure belongs on the PLACEMENT, where a device that knows which module it ships can
+    source it - the same division of labour L18 already draws for `media`, where a port
+    inheriting a family from its cage must declare the real media on the placement. L27 has
+    always exempted this contract in code; this records the reason in the data, so that a
+    consumer totalling a chassis can tell a deliberate silence from an unanswered question.
+    The chassis-level hole stays visible in L29, which is the right place for it.
+  face-lc: >-
+    QSFP-DD HW Rev 6.3 Figure 31 draws the duplex LC receptacle on a QSFP-DD module's front face, but
+    dimensions none of it - it defers to TIA-604-10 (FOCIS 10, the LC duplex interface standard),
+    which is paywalled. The receptacle sits on the same 18.35-wide face as qsfp-module's (see
+    provenance.size), so the positions here are generic/qsfp-lc@1's own: bore centres 6.25 apart at
+    [3.70, 0.95] and [9.95, 0.95], the IEC 61754-20 duplex pitch that contract already sourced off the
+    ProLabs PAN-QSFP28-100GBASE-CWDM4-C drawing. Nothing in Figure 31 or elsewhere in this document
+    contradicts that pitch; it simply never states one of its own.
+  optical-axis: >-
+    carried from generic/qsfp-lc@1 unchanged, because the face is unchanged. The bores sit at 4.90,
+    not the module's vertical centreline (4.25, half of 8.5) - std/lc-bore@3's opening is keyed and
+    6.3 tall, and a housing centred on 4.25 cannot contain it without the latch tongues rendering out
+    on bare face. The housing runs 0.65 to 7.55 (6.90 tall), the aperture 0.95 to 7.25 with a 0.30
+    frame, and the axis follows to 4.90. The figure that would settle this independently is TIA-604-10,
+    paywalled exactly as it is for generic/qsfp-lc@1; see `gap` on std/lc-bore@3.
+  silkscreen: >-
+    carried from generic/qsfp-lc@1 unchanged. The T and R positions are drawn at the same face
+    positions; their colour is the shell's own stroke colour so they render as a silkscreen rather
+    than an invisible one on a same-coloured face.
+  receptacle-housing: >-
+    carried from generic/qsfp-lc@1 unchanged - the 11.55 width and 3.40 left edge are as drawn against
+    that contract's bore centres, which this face reuses unaltered. THE HEIGHT IS NOT SOURCED here
+    either: 6.90, grown to contain the keyed opening it frames rather than measured off anything.
+  face-mpo: >-
+    the MPO face is its own part - generic/qsfp-dd-mpo12 - because a face is in the name
+    (docs/pluggables-design.md decision 4). Gated, not built: it is the MPO sibling this LC face has
+    no bearing on.
+  protrusion: >-
+    QSFP-DD HW Rev 6.3 section 7.3 (page 84) states in text: "The dimensions that control the size of
+    the module that extends outside of the cage are listed as maximum dimensions per Note 4." Figure
+    52's Note 4 callout, attached to the dimension pair on that drawing, reads "20 MAX / TYPE 1" and
+    "35 MAX / TYPE 2" - the size of the module standing outside the cage once seated, for a module
+    without a heat sink (Type 1) and with one (Type 2, drawn with its own heat sink in Figure 51). 20
+    MAX (Type 1) is used directly as `body.out` at drawing confidence, on the strength of that text and
+    that callout - the same way generic/qsfp-lc@1 used SFF-8661's own 20mm MAX nose rather than
+    deriving one, and the same way generic/sfp-lc@1 used SFF-8432's 10.0mm Recommended Maximum
+    directly. Type 1 (20 MAX, no heat sink) is used because it is the base module Figure 47 itself
+    pictures and the type this generic - carrying no rate, reach or thermal envelope - stands for by
+    default; a heat-sinked variant is a fact about a vendor's product, not this shape.
+    NOT USED, AND NOT NEEDED: 58.26 REF, this contract's `size.d`. That figure is the INSERTED
+    length - from the BACK of this same 20 MAX nose to the REAR END of the module housing, with
+    datum D, the hard stop, 10.06 +/-0.15 forward of that rear end (48.2 MIN + 10.06 = 58.26) - so
+    the nose and the 58.26 are ADJACENT spans meeting at the back of the nose, not one span split
+    at a shared tick. Nothing is subtracted and nothing is double counted: `size.d` is what sits
+    inside the cage and 20.0 is what stands outside it. Datum DD is not a length endpoint in any of
+    this: Table 25 defines it as the TOP SURFACE of the module housing, which is why neither this
+    sentence nor provenance.size reads 58.26 to it any more. See provenance.size and
+    spec/schemas/standards.yaml's qsfp-dd-module `depth-notes`, which say it the same way. Also NOT
+    USED: std/qsfp-dd's registry
+    depth of 37.0, which is itself `estimated` (spec/schemas/standards.yaml, std/qsfp-dd) and stayed
+    out of this figure for the same reason it was rejected for `size.d` - a subtraction against an
+    estimated figure would trade a drawing figure for a guess. 20.0 comes from section 7.3's own text
+    and Note 4's own callout, nothing derived.
+  tab: >-
+    common/qsfp-pull-tab@1's own provenance carried verbatim, exactly as generic/qsfp-lc@1 carries it:
+    "drawing - 19.00 MAX across the bail, 3.40 MAX thick" (size) and "drawing - 34.80 MAX forward of
+    the module body" (reach), both read off the same ProLabs mechanical drawing this component's bores
+    and face come from (see provenance.face-lc, provenance.optical-axis). NOT composed here: render
+    passes only a `parts:` entry's own static `attrs` into a composed part, so a composed
+    common/qsfp-pull-tab@1 could never take this generic's `latch-color` field - the whole point of
+    drawing a tab on a GENERIC transceiver rather than a specific one. The tab is drawn directly in
+    skins/default.svg instead, at the position generic/qsfp-lc@1 draws it at (`at: [-0.325, 2.55]`),
+    carrying the same 19.00 x 3.40 envelope and 34.80 reach as a relief feature rather than a composed
+    part's own.
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.95], rotate: 180, lift: 20.0}
+  - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}
+relief:
+  features:
+    - node: body
+      out: 20.0
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        QSFP-DD HW Rev 6.3 section 7.3 and Figure 52 Note 4, 20 MAX Type 1
+    - node: tab
+      lift: 20.0
+      out: 34.80
+      confidence: drawing
+      source: >-
+        common/qsfp-pull-tab@1 provenance - ProLabs drawing 34.80 MAX reach
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  optical-tx: {at: [6.05, 4.9], direction: front}
+  optical-rx: {at: [12.30, 4.9], direction: front}
+skins: [default]

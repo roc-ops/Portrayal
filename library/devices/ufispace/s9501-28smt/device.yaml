@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-28smt
-version: 2.0.9
+version: 3.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-28SMT
@@ -324,6 +324,10 @@ gaps:
     anything but arrangement. A 2.5G-capable SerDes on a Qumran-UX is entirely
     plausible, so this may be a capability the tables under-state rather than an
     error in the figure.
+
+    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library
+    ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is
+    unaffected by that change.
   wanted: >-
     a UfiSpace ordering guide or release note stating the SFP port speeds, or a NOS
     interface listing from a live unit
@@ -740,6 +744,9 @@ views:
 configurations:
   dc:
     kind: base
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     description: Dual 200 W DC PSUs (PSU-201-DISB), three FAN-402818-HC exhaust fan
       modules, front-to-back airflow. This is the bare working chassis - the traffic
       cages ship empty.
@@ -750,6 +757,9 @@ configurations:
       fan-402818-hc:
         model: FAN-402818-HC
   ac:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: orderable
     description: Dual 200 W AC PSUs (PSU-201-AISB), three FAN-402818-HC exhaust fan
       modules, front-to-back airflow
@@ -759,22 +769,6 @@ configurations:
     component-attrs:
       psu-201-ac:
         model: PSU-201-AISB
-      fan-402818-hc:
-        model: FAN-402818-HC
-  dc-populated:
-    kind: example
-    description: The DC build fitted with 1G optics on the first four SFP ports and
-      10G optics on the two MACsec SFP+ ports
-    occupants:
-      port-4: common/sfp-lc-duplex@1
-      port-5: common/sfp-lc-duplex@1
-      port-6: common/sfp-lc-duplex@1
-      port-7: common/sfp-lc-duplex@1
-      port-26: common/sfp-lc-duplex@1
-      port-27: common/sfp-lc-duplex@1
-    component-attrs:
-      psu-201-dc:
-        model: PSU-201-DISB
       fan-402818-hc:
         model: FAN-402818-HC
 datasheet:

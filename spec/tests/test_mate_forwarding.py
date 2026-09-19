@@ -127,8 +127,8 @@ def test_a_composed_port_is_as_deep_as_its_aperture():
 
 
 def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
-    """`qsfp-transceiver` declares `skins: [lc]` and no default, deliberately.
-    Seating it used to fail with a bare FileNotFoundError on default.svg.
+    """generic/qsfp-lc declares one skin and no default; seating it must not
+    depend on a skin being named.
 
     THE MUTATION HAPPENS ON A COPY. This test used to seat the optic by editing
     `library/devices/edgecore/as7726-32x/device.yaml` in place and restoring it
@@ -147,7 +147,7 @@ def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
     original = dev.read_text()
     m = _re.search(r"^  ac-f2b:\n", original, _re.M)
     dev.write_text(original[:m.end()]
-                   + "    occupants: {port-1: common/qsfp-transceiver@1}\n"
+                   + "    occupants: {port-1: generic/qsfp-lc@1}\n"
                    + original[m.end():])
     out = tmp_path / "out"
     r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),

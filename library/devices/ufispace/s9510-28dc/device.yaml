@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-28dc
-version: 3.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-28DC
@@ -32,10 +32,13 @@ provenance:
       `S9510-28DC-BN0B` for DC and `S9510-28DC-BR1B` for AC. Searching one document and concluding
       the fact does not exist is the same error the gaps register records against the XFP bezel
       opening, made again here. THE TWO DC CONFIGURATIONS SHARE A SKU because they are one chassis
-      differently populated - `dc-populated` fits optics into the first four SFP28 cages and is
-      not a different thing to order. AC is, and carries its own. That is exactly the distinction
-      #21 collapses on, so the two DC entries should fold into one device type and the AC one
-      should stand alone. SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather
+      differently populated - `dc-populated` fitted optics into the first four SFP28 cages before
+      it was removed (the library ships its models bare by policy, docs/pluggables-design.md
+      decision 2), and populating it was never a different thing to order. AC is, and carries its own. That is exactly the distinction
+      #21 collapses on, and the fold has happened: the single DC entry and the AC entry ARE the
+      two device types this chassis has, one SKU each. The one-SKU point stands - populating a
+      chassis was never a different thing to order, which is why removing `dc-populated` cost no
+      device type. SOURCE IS THE OWNER, NOT A DOCUMENT WE HOLD, and that is recorded rather
       than dressed up: no UfiSpace PDF held contains either string. If a UfiSpace ordering guide
       ever lands, it should confirm these two and may add the regional variants the Edgecore SKUs
       show for the same class of box. than merely coping.
@@ -150,6 +153,8 @@ gaps:
 - what: fan-position-legends
   scope: [fan-1, fan-2, fan-3, fan-4, fan-5]
   reason: needs-drawing
+  note: >-
+    Re-read 2026-09-18 when the fitted dc-populated configuration was removed - the library ships its models bare by policy (docs/pluggables-design.md decision 2) - and this gap is unaffected by that change.
   wanted: >-
     The FAN-1..FAN-5 legends were carried here as device silkscreen and are
     not: HIG Figure 8 - the same figure that corrected ufispace/fan-402825's
@@ -626,6 +631,9 @@ views:
 configurations:
   dc:
     kind: orderable
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     description: Dual 400W DC PSUs (PSU-401-DISB-1), front-to-back airflow
     default: true
     part-numbers:
@@ -636,29 +644,10 @@ configurations:
         model: PSU-401-DISB-1
       fan-402825:
         model: FAN-402825-HD
-  dc-populated:
-    kind: example
-    # THE SAME BOX WITH OPTICS IN IT. Everything here except `occupants` is the
-    # `dc` configuration repeated, and that repetition is the point worth
-    # noticing rather than hiding: `configurations` is one axis and this is a
-    # second one. Four SKUs of PSU crossed with fitted-or-bare is eight
-    # configurations describing two facts. Recorded as an issue, not solved
-    # here - #1 asked for occupants to live in a configuration and they do.
-    description: Dual 400W DC PSUs, fitted with 25G optics on the first four SFP28 ports
-    part-numbers:
-      S9510-28DC-BN0B:
-        part: S9510-28DC-BN0B
-    occupants:
-      port-4: common/sfp-lc-duplex@1
-      port-5: common/sfp-lc-duplex@1
-      port-6: common/sfp-lc-duplex@1
-      port-7: common/sfp-lc-duplex@1
-    component-attrs:
-      psu-401-dc:
-        model: PSU-401-DISB-1
-      fan-402825:
-        model: FAN-402825-HD
   ac:
+    source: >-
+      bare by policy - what is plugged in is a downstream configuration,
+      docs/pluggables-design.md decision 2
     kind: orderable
     description: Dual 400W AC PSUs (PSU-401-AISB), front-to-back airflow
     part-numbers:

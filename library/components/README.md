@@ -38,6 +38,7 @@ in the vendor's namespace that `parts:` an existing one for its inlet and lamp.
 |---|---|---|
 | `std/` | apertures and cages that conform to a standard in `spec/schemas/standards.yaml`; lint checks the size against the registry | `std/qsfp28`, `std/rj45`, `std/c14-inlet` |
 | `common/` | shapes that stand for a class of part rather than one product, with no manufacturer and nothing a DCIM could order | `common/led-arrow-sm`, `common/rivet`, `common/psu-550w` |
+| `generic/` | a representative of a class under a spec: the envelope conforms to a standard (so lint checks it as `std/` is checked) and the appearance stands for every product of its kind; a vendor's product wraps one via `parts:` and adds its facts | `generic/sfp-lc`, `generic/qsfp-lc` |
 | `<vendor>/` | a manufacturer's own part: a line card, a vendor-specific PSU or fan, a faceplate, a label | `juniper/mpc7e-10g`, `ufispace/psu-132-crps-ac` |
 
 Prefer `std/` over `common/`, and `common/` over a vendor namespace, but only
@@ -235,11 +236,85 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   library ended up with one Edgecore chassis drawing its back-to-front build in
   blue and two others in red from the same vendor convention.
 - `body-left.svg`, `body-right.svg`, `body-top.svg`, `body-bottom.svg`,
-  `body-rear.svg` are optional side views for parts that have a 3D body
-  (modules, PSUs, fans); the viewer uses them to texture the box.
+  `body-rear.svg` are optional side views for parts that have a 3D body. NOTHING
+  READS THEM TODAY: `relief.js` extrudes a box from the face skin and `data-z-*`,
+  and whether these should texture that box is decided in
+  docs/pluggables-3d-design.md. Do not add them to a new part.
 - No raster images, no editor metadata, no external references. A skin is
   geometry and fills. Vendor logos are not reproduced; contracts reserve a
   `logo-zone` element instead.
+
+
+## Adding an optic
+
+A transceiver in this library is a GENERIC - one drawn part per form factor and
+face under `generic/`, standing for every module of its kind and carrying no
+rate. A vendor's optic is a WRAPPER around one: it composes the generic, sets the
+generic's colour and label, and carries the facts that make it that product.
+
+```yaml
+# library/components/cisco/sfp-10g-lr/v1/contract.yaml
+format: 1
+kind: module
+name: sfp-10g-lr
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp                      # must equal the generic's
+profile: networking
+description: Cisco SFP-10G-LR, 10GBASE-LR, 1310 nm, 10 km over OS2.
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs: {model: SFP-10G-LR, media: sfp-plus, speed: 10g, reach: 10km,
+        wavelength: 1310nm, power-draw-max-w: 1.0}
+provenance:
+  size: >-
+    borrowed - generic/sfp-lc@1, the generic this wraps, whose own figures are
+    the sfp-module registry entry's. These are the GENERIC's numbers restated,
+    not a reading of a Cisco drawing; a wrapper that measured its own would be
+    a different shape and would not compose this generic.
+  power: 'datasheet - Cisco SFP-10G-LR data sheet, maximum power consumption 1 W'
+parts:
+  - {ref: generic/sfp-lc@1, id: body, at: [0, 0],
+     attrs: {latch-color: '#2f5fa8', label: SFP-10G-LR}}
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+skins: [default]
+```
+
+`kind: module`, not `component`: a vendor optic is an orderable thing with a
+part number, and the DCIM export emits a module type only for `kind: module`
+(`spec/tools/portrayal/artifacts.py`). The generic it wraps is not orderable
+and stays `kind: component`.
+
+What goes where:
+
+- **On the wrapper:** `model`, `media` (the rate family the port group speaks -
+  `sfp-plus`, `sfp28`, `qsfp28` ...), `speed`, `reach`, `wavelength`,
+  `power-draw-max-w`, and a `provenance.power` sentence naming the datasheet.
+  L99 refuses every one of these on a `generic/` part, which is how the split
+  stays true.
+- **Passed to the generic:** `latch-color` and `label`, as `attrs` on the
+  `parts:` entry. They are `fields` on the generic and the skin reads them; a
+  colour is a field, not a second drawing (#177).
+- **Never on either:** a rate in a component NAME. `sfp28-lr` is refused; the
+  name is the vendor's part number.
+- **Restated from the generic:** `size` (with `size-confidence: borrowed` and a
+  `provenance.size` saying whose figures they are) and the `mate`
+  connection-point. AN OCCUPANT MATES WITH ITS OWN POINT: the renderer reads
+  `connection-points.mate` off the occupant's own contract and refuses a
+  `mate-to` placement without one. Forwarding a mate point through `parts:`
+  (#54) is what a HOST does - a vendor cage presenting its composed aperture's
+  point - and it does not run the other way.
+
+The wrapper restates the generic's mate point and so seats exactly where the
+generic would - so nothing about cages, `occupants:` or L12 changes for a vendor
+part. #54's mate-forwarding is the other direction: it lets a vendor CAGE
+present the aperture it composes to an occupant, never a wrapper present its
+occupant's point. An optic whose shape is NOT the generic's (a long-body
+SC SFP+, a module with a nose heat sink) draws its own contract in the vendor
+namespace with the same `mates:` and the same connection-points, and seats the
+same way.
 
 ## What lint will say
 

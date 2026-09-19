@@ -1058,3 +1058,64 @@ standards:
       13.2 wide with its bores side by side. This entry closes the open question
       at docs/optical-paths-design.md:287, which read 12.90 against our 13.2 as
       though one part had been measured two ways.
+  sfp-module:
+    registry: 'SFF-8432 Rev 5.2a, Table 4-3 Dimension Table for IPF Module and Figure 4-1 IPF Module'
+    w: 13.55
+    h: 8.55
+    radius: 0.0
+    confidence: verified
+    depth: 47.50
+    depth-confidence: verified
+    depth-notes: 'Table 4-3 designator T, distance from positive stop to rear of module, +/-0.20 - not the overall length including the latch. The protrusion past a bezel is NOT this less the cage depth: it is Table 4-3 designator A, module length extending outside of cage (the front-of-stop distance), 10.0mm Recommended Maximum, Note 4 - T and the std/sfp registry depth (41.0) are measured from different reference points and do not subtract cleanly'
+    notes: >-
+      THE MODULE ENVELOPE, not a panel aperture - the first registry entry that
+      governs an occupant rather than a hole. w and h are the body a cage accepts,
+      Table 4-3 with tolerances; docs/pluggables-generics-design.md section 2.
+      Shared by SFP, SFP+ and SFP28 - the rate is electrical and never in this
+      entry. SFF-8402 (SFP28) is not held and not needed: it inherits this envelope.
+  qsfp-module:
+    registry: 'SFF-8661 Rev 2.5, Figure 5-1 Basic Views'
+    w: 18.35
+    h: 8.50
+    radius: 0.0
+    confidence: verified
+    depth: 52.4
+    depth-confidence: verified
+    depth-notes: 'the INSERTED length, Fig 5-1, and NOT the module''s overall
+      length: 52.4 REF runs from the BACK of the 20 MAX nose to the REAR END of
+      the module, not from the front tip. Datum D is not that far endpoint
+      either - D is the hard stop, and the same figure dimensions it 4.20 +/-0.15
+      forward of the rear end, with 48.2 MIN as the nose-back-to-D span (48.2 +
+      4.20 = 52.4). 52.4 REF is not toleranced. Forward of this span Fig 5-1 draws
+      a 20mm MAX nose under Note 1: "INDICATED DIMENSIONS DEFINE ENLARGED SECTION
+      OF TRANSCEIVER THAT EXTENDS OUTSIDE OF CAGE TO ACCOMODATE [sic] MATING PLUG
+      AND ACTUATOR MECHANISM" - a DIRECT callout for the protrusion past the cage,
+      carried as relief.body.out on the generics. THE NOSE IS NOT INSIDE THIS
+      DEPTH, so d + out is the whole module and double counts nothing. Corrected
+      here from an earlier reading that assumed no such callout existed and
+      derived 15.4 as 52.4 less SFF-8663 Fig 4-1''s 37 REF (std/qsfp28 registry
+      depth); that subtraction is superseded by the 20mm MAX figure the same
+      document states directly (roc-ops/Portrayal generic/qsfp-lc@1)'
+    notes: >-
+      Shared by QSFP+, QSFP28, QSFP56 and QSFP112 - one envelope, one cage
+      interface (qsfp), the rate never in this entry. common/qsfp-transceiver@1's
+      18.35 x 8.5 came from a vendor drawing; this is the MSA that drawing follows.
+  qsfp-dd-module:
+    registry: 'QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3, section 7.3, Figure 47 (Type 1 module) dimensioned per Figure 52 (Drawing of the QSFP-DD module) and Figure 53 (module end face)'
+    w: 18.35
+    h: 8.5
+    radius: 0.0
+    confidence: verified
+    depth: 58.26
+    depth-confidence: verified
+    depth-notes: 'the INSERTED length, Figure 52, and NOT the module''s overall length: 58.26 REF runs from the BACK of the 20 MAX nose to the REAR END of the module housing, not from the front tip. Datum D is not that far endpoint either - D is the hard stop, and Figure 52 dimensions it 10.06 +/-0.15 forward of the rear end, with 48.2 MIN as the nose-back-to-D span (48.2 + 10.06 = 58.26). Datum DD is not a length endpoint at all: Table 25 defines it as the TOP SURFACE of the module housing. 58.26 REF is not toleranced, and the paddle-card fingers extend a little further than the rear end but are not part of the housing envelope. Forward of this span sits the 20 MAX (Type 1) nose, the protrusion past the cage, carried as relief.body.out on the generic; THE NOSE IS NOT INSIDE THIS DEPTH, so d + out is the whole module and double counts nothing. w/h are toleranced +/-0.1 on the same figure and both corroborated by Figure 53''s end-view callouts (18.35 REF, 8.5 REF)'
+    notes: >-
+      Type 1. Types 2, 2A and 2B differ behind the bezel (section 7.3) and are
+      not separate envelopes here. Same width as qsfp-module by design - the
+      QSFP-DD cage accepts a QSFP module (section 1) - and Figure 52 confirms
+      it: datum E is 18.35 +/-0.1 here too. Height (datum F, 8.5 +/-0.1) is
+      also identical to qsfp-module's 8.50 - width and height match. Only the
+      overall length differs: 58.26 REF here against qsfp-module's 52.4 REF,
+      the longer paddle card behind the same front cross-section. Figure 47
+      itself is only an isometric outline with no callouts; the numbers are
+      Figure 52/53's.

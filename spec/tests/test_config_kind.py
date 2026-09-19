@@ -23,9 +23,12 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 RENDER = SPEC / "tools/portrayal/render.py"
 
-# three kinds on one device: a default orderable, a second orderable, and an
-# example population that must never read as something you can buy
-DEV = LIB / "devices/ufispace/s9510-28dc/device.yaml"
+# a base, orderable AC/DC builds, and an example breakout state - all three
+# kinds on one device, and the example must never read as something you can
+# buy. Re-pointed 2026-09-18 when the fitted dc-populated example on the
+# S9510-28DC was removed - the library ships bare (docs/pluggables-design.md
+# decision 2) - so this device is the one that still declares all three kinds.
+DEV = LIB / "devices/ufispace/s9600-32x/device.yaml"
 # declares no `configurations:` at all, so the renderer synthesises one
 BARE = LIB / "devices/juniper/mx150/device.yaml"
 
@@ -46,8 +49,8 @@ def test_every_configuration_in_the_index_carries_its_kind(tmp_path):
     want = {n: c["kind"] for n, c in src.items()}
     assert got == want, (got, want)
     # the three kinds this device declares are all distinguishable downstream
-    assert set(got.values()) == {"orderable", "example"}
-    assert got[idx["default"]] == "orderable"
+    assert set(got.values()) == {"base", "orderable", "example"}
+    assert got[idx["default"]] == "base"
 
 
 def test_a_synthesised_configuration_says_it_has_no_kind(tmp_path):
