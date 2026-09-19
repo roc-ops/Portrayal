@@ -189,7 +189,17 @@ def test_every_rendered_file_is_claimed_by_exactly_one_view():
     a real hole in this test's reach, but it is a different one, and pretending
     those files should be claimed here would only hide it behind a failure
     about variants.
+
+    Gated on the build for the same reason as the base-face test above, and it
+    is the one of the three that needed it most: both assertions here range over
+    what is ON DISK, so an unbuilt tree gave them nothing to range over and they
+    held trivially. This reported a green completeness property while checking
+    no file at all - the exact shape of blindness the note above describes, one
+    level up. The gate is still on the DIRECTORY: a built tree whose resolver
+    claims nothing while drawings sit on disk is a fault, and `missed` fires.
     """
+    _built_or_skip()
+    claimed_anywhere = 0
     for dev in sorted(DEVICES.glob("*/*/device.yaml")):
         d = yaml.safe_load(dev.read_text()) or {}
         if d.get("kind") != "device":
@@ -210,3 +220,14 @@ def test_every_rendered_file_is_claimed_by_exactly_one_view():
             missed = sorted(p.name for p in on_disk - set(claimed))
             assert not missed, \
                 f"{d['name']}: rendered but checked by no view: {missed}"
+
+        claimed_anywhere += len(claimed)
+
+    # A DIRECTORY CAN EXIST AND BE EMPTY, and `_built_or_skip` only asks whether
+    # one is there. A build that died after creating library/dist answers yes, at
+    # which point both assertions above range over nothing and hold trivially -
+    # the same silence this test was gated for, one case narrower. The base-face
+    # sibling survives that because it names a drawing it must find; this one
+    # spans the library and has nothing to name, so it asserts the total.
+    assert claimed_anywhere, \
+        "library/dist is present but holds no drawing any sized view claims - a partial build"

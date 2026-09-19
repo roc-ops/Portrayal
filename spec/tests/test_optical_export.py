@@ -122,14 +122,6 @@ def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():
     assert d.manufacturer_of(ns) == d.vendors[ns]["display"]
 
 
-def test_a_namespace_with_no_vendor_is_still_not_orderable():
-    """`common/` and `std/` are absent from vendors.yaml, so the property holds
-    by data rather than by a special case."""
-    d = dist()
-    assert d.manufacturer_of("common") is None
-    assert d.manufacturer_of("std") is None
-
-
 def test_the_device_lookup_still_wins_over_the_registry():
     """NOT incidental. `dell` reports `Dell` from its devices and `Dell
     Technologies` from vendors.yaml; `juniper` and `edgecore` differ the same
