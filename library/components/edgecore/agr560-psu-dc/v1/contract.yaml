@@ -1,0 +1,151 @@
+format: 1
+kind: module
+name: agr560-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 2000 W -48 VDC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU
+  DD-2202-1L - the AC unit's 73.5 x 40 shell and Lite-On fan with a TWO-STUD terminal block
+  where that one has a C14 inlet. Two studs, not the six of the AIS800-64D's DC supply:
+  this machine is half the power and its cable is #6 AWG where that one's is #4.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: 'DD-2202-1L'
+  power-output-w: 2000
+  input: dc
+  inlet: dc-terminal
+  efficiency: '80 PLUS Titanium'
+provenance:
+  size: >-
+    CARRIED OVER from edgecore/agr560-psu-ac@1, which measures it on the datasheet's rear
+    photograph at 600 dpi. This face is drawn by the quick start guide's rear elevation
+    instead - the two documents draw two different builds - and there the module's right
+    edge reads 88.3 against 15.2 + 73.5 = 88.7, which is the check that lets the AC unit's
+    width stand for this one.
+  the-terminal-is-named-and-then-not-described: >-
+    "DC Inlet: Amphenol Terminal", from the datasheet's Power section, and that is the whole
+    of it - no part number, no drawing, no pitch. WHAT SETTLES THE COUNT IS THE CABLE: the
+    ordering table lists the DC machine's included cable as "6AWG PSU to 2 x Ring Terminal,
+    2.5m", and the guide's Connect Power page repeats the gauge - "Use #6 AWG / 10 mm2
+    copper wire". Two ring terminals, so two studs, and the guide's rear elevation draws
+    exactly two. This is a real difference from edgecore/ais800-64-psu-dc@1, whose six studs
+    take two #4 AWG feeds and a signal pair.
+  what-is-measured-here-and-at-what-scale: >-
+    THE GUIDE'S REAR ELEVATION AT 600 dpi, 5.08 px/mm over the 440 mm face, read on the
+    LOWER of the two supplies because the callout balloons numbered 11 and 12 sit over the
+    upper one. Bay-relative: a clear bright gap at x 42.3-46.3 separating guard from block;
+    the block's left frame a hard dark line at 47.3 and its right at 66.0; two wells about
+    11.7 x 11.3 centred (55.5, 14.9) and (55.5, 28.6), a 13.7 mm stud pitch, each with a
+    small bright stud head in it. The guard, the handle and the latch are the AC unit's,
+    which the same drawing confirms at the same x either side of the connector.
+    5.08 px/mm IS NOT MUCH for a connector and the bore radius below is the softest number
+    in this file - the wells' extents are read to about a quarter of a millimetre and 5.35
+    is a round half of the measured 11.3 height. If a catalogue drawing for this Amphenol
+    part turns up it should replace these numbers outright.
+  the-latch-is-not-a-coloured-part-here-either: >-
+    #3d3d3f, BORROWED FROM edgecore/agr560-psu-ac@1 - and what it borrows is a measurement
+    that the AC unit now records properly. This file first carried the AIS800 DC supply's
+    green; the AC sibling first carried that family's red; both were the other family's
+    convention rather than this machine's evidence.
+    WHAT THE EVIDENCE SAYS: the datasheet's rear photograph, which shows the AC build at
+    9.56 px/mm, carries 133 red pixels over the whole supply column against the fan trays'
+    106,257, and the module's right margin reads a flat #3d3d3f. The release tab on this
+    shell is not a coloured part. THE GUIDE'S REAR ELEVATION - the only document that draws
+    THIS build - cannot contradict that because it draws both supplies with ZERO saturated
+    pixels while colouring the trays' handles on the same drawing.
+    So two documents, and neither puts colour on this latch. It is drawn the grey that was
+    measured, `latch-finish` stays a field, and the device carries a gap asking for a
+    photograph of the 48V SKU.
+  the-finish-is-the-ac-unit-s: >-
+    Body #8e9295, inlet/terminal surround near-black, fan guard bright - measured on the
+    datasheet photograph of the AC build and carried here, because the two supplies differ
+    in their connector and not in their sheet metal. The guide's own rear elevation draws
+    this shell considerably lighter, but it is a greyscale line render and the photograph is
+    a photograph.
+  power: >-
+    "48 VDC input range: -40 - -60 VDC (50 A/2000 W max.)", the datasheet's Power section.
+    The guide's specification table gives the range as "-48 - -60 VDC, 50 A max. per PSU" -
+    the two disagree about the bottom of the range, -40 against -48, and the datasheet's
+    wider figure is the one recorded because it is the document that also states the wattage.
+states: [absent]
+elements:
+  guard: {at: [1.00, 1.20], size: [41.90, 37.10], class: rotor}
+  handle: {at: [6.60, 22.00], size: [30.70, 15.50], class: handle}
+  terminal: {at: [47.30, 4.20], size: [18.70, 31.60], class: terminal}
+  terminal-pocket: {at: [48.60, 5.50], size: [16.10, 29.00], class: terminal}
+  latch: {at: [69.60, 10.50], size: [3.40, 18.50], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#2a2c2f'}
+  latch-finish: {label: Latch colour, type: text, default: '#3d3d3f'}
+parts:
+  - {ref: common/screw-head@1, id: screw-1, at: [3.40, 2.00]}
+  - {ref: common/screw-head@1, id: screw-2, at: [37.60, 2.00]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: guard
+      pocket: 2.4
+      confidence: estimated
+      source: >-
+        edgecore/agr560-psu-ac@1's guard on the same shell, and estimated there too - no
+        document gives a depth for this fan well.
+        `pocket` AND NOT `sink`: nothing stands above this node, so a sink would have no
+        floor to measure from and relief.js would collect it nowhere.
+    - node: handle
+      uhandle: 27
+      dia: 6.6
+      confidence: estimated
+      source: >-
+        ESTIMATED, NOT BORROWED: the chain ends at edgecore/ais800-64-psu-ac@1, which
+        records 27 as an estimate against an isometric render. The attribute
+        goes on `handle`, the whole group, because the face texture hides exactly the node
+        that carries it; `dia` states the tube's 6.6 because the group is taller than the tube.
+    - node: terminal-pocket
+      pocket: 3.2
+      confidence: estimated
+      source: >-
+        The block is a recess and the elevation shades its walls, but no document gives a
+        depth. 3.2 matches edgecore/ais800-64-psu-dc@1's block, which is the same vendor's
+        DC terminal recess and is also estimated.
+    - node: bore-1
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        The wells are drawn as round recesses with a stud down each one. HOW DEEP IS NOT
+        STATED and the connector is named but not specified - see the device's
+        dc-connector-identity gap. 3.0 below the block's own 3.2 pocket floor puts the stud
+        head level with the block face, which is what the elevation shows.
+    - node: bore-2
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        The wells are drawn as round recesses with a stud down each one. HOW DEEP IS NOT
+        STATED and the connector is named but not specified - see the device's
+        dc-connector-identity gap. 3.0 below the block's own 3.2 pocket floor puts the stud
+        head level with the block face, which is what the elevation shows.
+    - node: stud-1
+      top: 2.0
+      confidence: estimated
+      source: >-
+        As the bores - the stud rises back out of its own well and its head is what a ring
+        terminal lands on. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: stud-2
+      top: 2.0
+      confidence: estimated
+      source: >-
+        As the bores - the stud rises back out of its own well and its head is what a ring
+        terminal lands on. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        edgecore/agr560-psu-ac@1's latch on the same shell, and estimated there too - no
+        document dimensions how far this tab stands off the face.
+skins: [default]
+body:
+  depth: 185
+  color: '#c2c7cd'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

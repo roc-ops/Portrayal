@@ -1,0 +1,157 @@
+format: 1
+kind: module
+name: agr560-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 2000 W AC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU
+  PS-2202-8L - a 73.5 x 40 CRPS shell carrying a Lite-On fan at the left with its rating
+  printed on the rotor hub, an IEC 60320 C14 inlet at the right, a pull handle across the
+  foot of the fan guard and the release latch on the right edge. NOT the AIS800-64D's
+  supply: that one is 3000 W on a C20 inlet in a 36 mm guard, and this is 2000 W on a C14
+  in a 41.9 mm guard. The two share a bay size and nothing else.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'PS-2202-8L'
+  power-output-w: 2000
+  input: ac
+  inlet: c14
+  efficiency: '80 PLUS Titanium'
+provenance:
+  size: >-
+    THE BAY IS THE AIS800-64D'S AND THAT IS MEASURED, NOT ASSUMED. The AGR560 is the third
+    device on the 440 x 649.2 x 87 shell and its rear seats the supplies where its two
+    relatives do: on the quick start guide's rear elevation the module's right edge reads
+    88.3 mm against the 64D's declared 15.2 + 73.5 = 88.7, and on the datasheet's rear
+    PHOTOGRAPH the module's left edge reads 15.2 exactly. 73.5 x 40.0 is carried from
+    edgecore/ais800-64-psu-ac@1 on the strength of those two independent readings.
+  the-two-documents-draw-two-different-builds: >-
+    THE GUIDE DRAWS THE DC MACHINE AND THE DATASHEET PHOTOGRAPHS THE AC ONE, so this face
+    and its DC sibling each have exactly one source and they are different documents.
+    Everything below is read on the datasheet's page-2 photograph rendered at 600 dpi,
+    where the REAR elevation spans 4206 px over 440 mm - 9.56 px/mm, nearly twice the
+    guide's 5.08 - and the front elevation on the same page passes the aspect check at
+    +0.27%. The rear's own aspect reads -2.2% because the figure's yellow callout box
+    crosses the chassis edge, so x positions are taken on the module's own 73.5 mm width
+    rather than on the panel's, and y positions on its 40.
+    WHAT THE TWO BUILDS AGREE ABOUT is the division of the face: guard to x 42.7, connector
+    from 43.7, latch from about 66. The guide's DC drawing reads a clear bright gap at
+    42.3-46.3 and a terminal frame starting at 47.3; the photograph puts the AC inlet
+    flange at 43.7-65.7. One shell, two connectors, and the geometry either side of them
+    is the same.
+  the-fan-and-what-is-printed-on-it: >-
+    A ROUND FAN IN A 41.9 x 37.1 GUARD at (1.0, 1.2), with two cross-head screws at its top
+    corners and the rotor about 34 mm across. The hub is legible in the photograph and is
+    the only place this supply names itself: "2000W" over "LITEON" over "TITANIUM 80%", the
+    LITEON in the vendor's cyan. That is drawn here because it is what the part looks like,
+    and because it is the evidence for the 2000 W and the Titanium rating in `attrs` - the
+    datasheet's ordering table gives the FRU number PS-2202-8L and nothing about the unit.
+  the-inlet-is-named-outright: >-
+    "AC Inlet: IEC 60320 C14", from the datasheet's Power section - which is a better
+    position than the DC side is in, where the same section says only "DC Inlet: Amphenol
+    Terminal". The socket is drawn by std/c14-inlet@1 turned through 270 degrees, because
+    the photograph shows it standing tall in the flange: the dark socket reads about 15 mm
+    wide and 22 tall, which is a C14 on its side.
+    AC input ranges, same section: "100-127 VAC at 50-60 Hz (12 A/1000 W max.)" and
+    "200-240 VAC at 50-60 Hz (10 A/2000 W max.)". 2000 W is the high-line figure and is
+    what `power-output-w` carries; the note that low line is derated to 1000 W and "may not
+    support full power redundancy" is the device's to record, not this part's.
+  power: >-
+    2000 W, from the datasheet's Power section: "200-240 VAC at 50-60 Hz (10 A/2000 W
+    max.)". THE SOURCE GIVES NO AMBIENT and no ladder by temperature, so none is invented
+    here - the figure is the high-line maximum and nothing else is claimed. The same section
+    derates low line to "100-127 VAC at 50-60 Hz (12 A/1000 W max.)" with the note that PSUs
+    then "function in low-line mode and may not support full power redundancy"; that is the
+    DEVICE's to record against its power budget, not this part's rating. The photograph
+    agrees independently: the rotor hub is printed "2000W".
+  the-handle-is-the-family-s: >-
+    A RIGID PULL HANDLE ACROSS THE FOOT OF THE GUARD, the same part the AIS800 supplies
+    carry and in the same place. The photograph shows a dark bar along the bottom of the
+    fan guard at about y 30-37; it does not resolve the bend at either end, so the U is
+    borrowed from edgecore/ais800-64-psu-ac@1 rather than measured here.
+    WHY A U AND NOT A STRAP: the AIS800 pair were first modelled with a fabric loop and a
+    reviewer corrected it - every supply of this class has a rigid handle, possibly on a
+    pivot. 27 mm of projection matches every other Edgecore supply in this library.
+  the-latch-is-not-a-coloured-part-on-this-supply: >-
+    #3d3d3f, AND THAT IS A CORRECTION. This file first claimed the AIS800 family's
+    front-to-back red on the strength of red pixels near the module's right edge in the
+    datasheet's rear photograph. Counted rather than glanced at, the claim does not survive:
+    over the whole supply column, x 14 to 90, the photograph carries 133 red pixels and they
+    are a 1.2 mm vertical streak at x 51.6-52.8, which is the red WIRE visible through the
+    fan guard. The FAN TRAY beside it, measured the same way over the same face, carries
+    106,257. The trays are red; the supply is not.
+    WHAT IS ACTUALLY THERE reads #3d3d3f at 9.56 px/mm - the same dark grey as the rest of
+    the module's right margin - so the release tab on this unit is not a coloured part at
+    all. It is drawn in that grey and `latch-finish` stays a field, so a device that learns
+    otherwise can set it without a new component version.
+    THE AIRFLOW-COLOUR CONVENTION IS NOT EVIDENCE HERE and was nearly used as if it were.
+    It is established for the AIS800 pair, which ship in two airflows and photograph both.
+    This machine ships front-to-back only - all five ordering codes - so there is no colour
+    pair to read, and importing the other family's red would have been drawing the rule
+    rather than the panel.
+  the-face-is-dark-and-the-guard-is-not: >-
+    Medians on the datasheet photograph, which is the only instrument that carries colour
+    for this unit: the module's left margin #909496, the face right of the fan guard
+    #353636, the guard frame #bfd0cb. So the shell is a mid grey, the inlet flange is
+    nearly black and only the fan guard is bright - which is close to the inverse of how
+    edgecore/ais800-64-psu-ac@1 is drawn.
+    THE GUIDE'S REAR ELEVATION DRAWS THE SAME SHELL MUCH LIGHTER, and it is a stylised
+    render in greyscale rather than a photograph, so where the two disagree about FINISH the
+    photograph wins. The DC sibling takes these colours too, for the same reason: the two
+    supplies differ in their connector, not in their sheet metal.
+states: [absent]
+elements:
+  guard: {at: [1.00, 1.20], size: [41.90, 37.10], class: rotor}
+  handle: {at: [6.60, 22.00], size: [30.70, 15.50], class: handle}
+  inlet-flange: {at: [43.70, 1.20], size: [22.60, 37.10], class: bezel}
+  latch: {at: [69.60, 10.50], size: [3.40, 18.50], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#2a2c2f'}
+  latch-finish: {label: Latch colour, type: text, default: '#3d3d3f'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [44.80, 6.00], rotate: 270}
+  - {ref: common/screw-head@1, id: screw-1, at: [3.40, 2.00]}
+  - {ref: common/screw-head@1, id: screw-2, at: [37.60, 2.00]}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: guard
+      pocket: 2.4
+      confidence: estimated
+      source: >-
+        The guard is a recessed fan well - the photograph shades its side walls - but how
+        deep is nowhere stated. 2.4 matches edgecore/ais800-64-psu-ac@1, whose own figure is
+        an isometric render that dimensions nothing either (roc-ops/Portrayal#385).
+        `pocket` AND NOT `sink`: nothing stands above this node, so there is no cavity for a
+        sink to take its floor from and relief.js would collect it nowhere - the recess would
+        be declared and never built. `pocket` is the primitive for a recess in a solid face.
+    - node: handle
+      uhandle: 27
+      dia: 6.6
+      confidence: estimated
+      source: >-
+        ESTIMATED, NOT BORROWED, because the origin did not measure it either: it is
+        edgecore/ais800-64-psu-ac@1's 27, and that file records it as an estimate against an
+        isometric FRU render that dimensions nothing. What the family fixes is the range -
+        the library's other U-handles run 22-29 mm, and 27 is every other Edgecore supply's.
+        Same handle in the same place on the same bay, and
+        the reason it is `uhandle` rather than `bar` is recorded there: `bar` builds a tube
+        standing on nothing and both AIS800 supplies' handles hung in space at review.
+        THE ATTRIBUTE GOES ON `handle`, THE WHOLE GROUP, because the face texture hides
+        exactly the node that carries it - put it on the inner rect and the flat handle art
+        stays painted under the real geometry. `dia` states the tube's 6.6 because the group
+        is much taller than the tube.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-ac@1's latch on the same shell, and estimated there too - no
+        document dimensions how far this tab stands off the face.
+skins: [default]
+body:
+  depth: 185
+  color: '#c2c7cd'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

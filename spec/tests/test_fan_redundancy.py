@@ -294,7 +294,18 @@ def test_the_comparison_layer_can_now_reach_them():
     are listed in FIGURE_IS_NOT_THE_BAY_COUNT because the exemption is keyed to the device that
     states the figure; if either rear is ever remodelled with a different tray count, that
     device fails on its own and asks again.
+
+    FIFTY-SEVEN IS THE EDGECORE AGR560, and it is the THIRD DEVICE ON THAT SAME REAR and the
+    only one of the three whose figure does count bays. Its datasheet says "Fans:
+    Hot-swappable 3+1 redundant fans" over the same four trays and the same
+    edgecore/ais800-64-fan@1 - the FRU number `FAN-2U-1x1SN-F` is printed in all three
+    datasheets - so three machines share one tray and their vendor counts it three different
+    ways: 7+1 twice, meaning rotors, and 3+1 once, meaning trays. THE AGR560 NEEDS NO
+    EXEMPTION, which is the whole point of listing it here: the exemption table is not a list
+    of devices with four fan bays, it is a list of devices whose stated figure is about
+    something other than bays, and being on the same rear as two of those does not put a
+    device on it.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 56, n
+    assert n == 57, n
