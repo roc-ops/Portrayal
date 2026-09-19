@@ -236,7 +236,14 @@ def test_the_suite_no_longer_hand_rolls_the_dance():
     offenders = []
     for rel, pattern in (("spec/tests", "test_*.py"),
                          ("spec/tools/portrayal", "*.py")):
-        for f in sorted((root / rel).glob(pattern)):
+        files = sorted((root / rel).glob(pattern))
+        # A GLOB THAT MATCHES NOTHING RAISES NOTHING - it yields an empty
+        # iterator, the loop below never runs, and this gate reports a clean
+        # tree it never read. That is one rename of spec/tools/portrayal away,
+        # and it is the same green-on-a-tree-that-was-not-checked failure the
+        # WRITES list above exists to keep the checker itself out of.
+        assert files, f"{rel}/{pattern} matched no files - has the tree moved?"
+        for f in files:
             if f.name == "test_lint_collecting.py":
                 continue
             for line, what in writes_to_the_globals(f.read_text()):
