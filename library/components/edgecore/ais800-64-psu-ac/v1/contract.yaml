@@ -99,27 +99,23 @@ relief:
       source: >-
         edgecore/ais800-64-psu-ac@1's own elements key - the guard's extent is drawn, the
         depth of the fan behind it is not stated anywhere.
-    - node: handle
-      bar: 6.0
-      lift: 6.0
+    - node: handle-bar
+      uhandle: 27
       confidence: estimated
       source: >-
-        IT IS A MOULDED BAIL, NOT A FABRIC LOOP, and the old note here said the opposite. The
-        guide's PSU Replacement figure - an isometric render of a supply being withdrawn, which
-        no earlier revision of this contract used - draws a rigid grey bail on two pivot bosses
-        wrapping the bottom of the fan guard, and the datasheet's rear photographs show the
-        same grey bail in place under each guard.
-        THE BLACK THING IN THE PHOTOGRAPH IS NOT THIS PART. A thick black strap arcs over the
-        fan guard from its left side to the inlet, and reading that as the handle is what put
-        "fabric loop" in this file. It is a CORD RETAINER - it sits where a plugged C19 cord
-        would run and there is one on each supply - so it is cable management and stays undrawn
-        per the skill's rule, while the bail below the guard is the handle and is what this
-        node draws.
-        THE PROJECTION IS STILL ESTIMATED. 1.0 + 2.0 = 3 mm read as a painted strip in the 3D
-        profile and a reviewer said so; 6.0 + 6.0 = 12 mm is a bail you can get fingers behind,
-        and is deliberately less than the fan tray's 16 because the FRU figure shows this one
-        as the smaller of the two. roc-ops/Portrayal#385 stays open: the figure is an isometric
-        render and dimensions nothing.
+        A FLOATING BAR IS NOT A HANDLE - see the fan tray, which took the same correction.
+        `bar` builds a tube standing on nothing, and at review both supplies' handles hung in
+        space. `uhandle` grows the legs.
+        IT IS PUT ON `handle-bar`, the grip pad the skin already drew, because that rect IS the
+        crossbar: 20.6 x 6.6, so a 6.6 mm tube. The group's own box is the whole bail outline
+        at 33 x 20.6 and would have built a 20.6 mm tube.
+        27 MATCHES EVERY OTHER EDGECORE SUPPLY in the library - ais800-psu-ac/dc, dcs201,
+        dcs240, exp800, csr440 - and 12, which is what `lift 6 + bar 6` reached, is below the
+        1.5 x diameter a U needs before its legs have any length.
+        THE PROJECTION IS STILL AN ESTIMATE and roc-ops/Portrayal#385 stays open: the FRU
+        figure is an isometric render and dimensions nothing. What the family DOES fix is the
+        range - the library's sixty-seven other U-handles run 22-29 mm on fan trays and 27 on
+        every other Edgecore supply, the last resting on UfiSpace's published "1.06 inch".
     - node: latch
       out: 1.2
       confidence: estimated

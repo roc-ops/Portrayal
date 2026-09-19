@@ -98,21 +98,22 @@ relief:
       vent: 12
       confidence: estimated
       source: 'as vent-left'
-    - node: handle
-      bar: 6.0
-      lift: 6.0
+    - node: handle-bar
+      uhandle: 27
       confidence: estimated
       source: >-
-        MATCHED TO edgecore/ais800-64-psu-ac@1, which is the same CRPS shell and the same bay,
-        and which now carries 6.0 + 6.0 = 12 mm off the guide's PSU Replacement figure. The
-        old 1.0 + 3.0 = 4 mm read as a painted strip in the 3D profile.
-        THIS FACE IS THE ONE PLACE THE LOOP IS SEEN SQUARE-ON: the guide's Connect Power figure
-        draws it standing up the left of the DC face at x 9.47-17.96, y 3.48-38.14, a closed
-        loop with a 3.3 x 26.2 hole through it, where the AC unit's is a bail lying across the
-        bottom of its fan guard. Same family of part, turned through ninety degrees because the
-        DC face has no guard to wrap.
-        STILL ESTIMATED, and roc-ops/Portrayal#385 stays open. Neither figure dimensions the
-        standoff, and both are isometric or square-on renders rather than drawings.
+        MATCHED TO edgecore/ais800-64-psu-ac@1, which took the same correction: `bar` built a
+        tube standing on nothing and both supplies' handles hung in space at review. `uhandle`
+        grows the legs, and here they run top and bottom because this loop stands UP the face
+        rather than across it - the Connect Power figure draws it at x 9.47-17.96, y 3.48-38.14.
+        The node is already the tube's own footprint at 8.49 x 34.66, so it only needed naming.
+        27 MATCHES EVERY OTHER EDGECORE SUPPLY. It also has to clear a floor: a U's leg is
+        (far - r) - dia, so on an 8.49 mm tube anything under about 13 leaves no leg at all,
+        and the 12 this carried before was under it.
+        THE PROJECTION IS STILL AN ESTIMATE and roc-ops/Portrayal#385 stays open: the FRU
+        figure is an isometric render and dimensions nothing. What the family DOES fix is the
+        range - the library's sixty-seven other U-handles run 22-29 mm on fan trays and 27 on
+        every other Edgecore supply, the last resting on UfiSpace's published "1.06 inch".
     - node: terminal-pocket
       pocket: 3.2
       confidence: estimated

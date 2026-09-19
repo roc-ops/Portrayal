@@ -27,6 +27,14 @@
       fill="none" stroke="#43484e" stroke-width="0.3"/>
   </g>
   <g id="handle">
+    <!-- THE RELIEF NODE IS THE TUBE, NOT THE LOOP'S OUTLINE. `uhandle` takes its tube
+         diameter from the node's SHORT axis, and this group's box is 76.5 x 22 - a 22 mm
+         tube, which is not a handle. This bar is the crossbar's own footprint: it sits
+         inside the polygon at every x (the polygon's band runs 31.5-47.5 at the left end
+         and 37.5-53.5 at the right, and 39.5-45.5 is inside both), carries the same fill,
+         and is painted over by the polygon, so the 2D drawing is unchanged. -->
+    <rect id="handle-bar" x="4.60" y="39.50" width="73.40" height="6.00" rx="3.00"
+      fill="#c0453f" data-fill-from="handle-finish"/>
     <polygon points="4.60,31.50 78.00,37.50 78.00,53.50 4.60,47.50"
       fill="#c0453f" stroke="#c0453f" stroke-width="3.20" stroke-linejoin="round"
       data-fill-from="handle-finish" data-stroke-from="handle-finish"/>
