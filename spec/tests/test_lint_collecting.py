@@ -214,14 +214,40 @@ def test_the_suite_no_longer_hand_rolls_the_dance():
 
     So the rule is now the simple one: outside this file, nothing writes to the
     globals. Reads are left alone.
+
+    THE TOOLS ARE WALKED TOO, and capability.py is why: the suite went clean
+    first, which left the last copy in the tree sitting in `_rule_warnings` -
+    the function somebody greps when they want to run a rule and read what it
+    found. A gate that only watches the tests leaves the exemplar unguarded.
+
+    `lint.py` needs no exception, which is worth saying out loud rather than
+    leaving to be rediscovered: it owns the globals and touches them by bare
+    name, and `writes_to_the_globals` only sees attribute access. So this gate
+    says nothing about lint.py's own internals, which is right - `collecting()`
+    IS the save-and-restore, and something has to write it once.
+
+    `spec/tools/sweeps` is deliberately not walked. sweep_ids.py:95 clears
+    per-iteration and never restores, which the checker does flag and which is
+    nonetheless right for what it is: a one-shot CLI with no next test to leak
+    into. A gate that had to carve it out by name would be arguing about a file
+    nobody imports.
     """
     root = pathlib.Path(__file__).resolve().parents[2]
     offenders = []
-    for f in sorted((root / "spec/tests").glob("test_*.py")):
-        if f.name == "test_lint_collecting.py":
-            continue
-        for line, what in writes_to_the_globals(f.read_text()):
-            offenders.append(f"{f.name}:{line} {what}")
+    for rel, pattern in (("spec/tests", "test_*.py"),
+                         ("spec/tools/portrayal", "*.py")):
+        files = sorted((root / rel).glob(pattern))
+        # A GLOB THAT MATCHES NOTHING RAISES NOTHING - it yields an empty
+        # iterator, the loop below never runs, and this gate reports a clean
+        # tree it never read. That is one rename of spec/tools/portrayal away,
+        # and it is the same green-on-a-tree-that-was-not-checked failure the
+        # WRITES list above exists to keep the checker itself out of.
+        assert files, f"{rel}/{pattern} matched no files - has the tree moved?"
+        for f in files:
+            if f.name == "test_lint_collecting.py":
+                continue
+            for line, what in writes_to_the_globals(f.read_text()):
+                offenders.append(f"{rel}/{f.name}:{line} {what}")
     assert not offenders, (
         "these reach into lint.ERRORS/lint.WARNINGS instead of using "
         "lint.collecting():\n  " + "\n  ".join(offenders))

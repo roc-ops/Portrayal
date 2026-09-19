@@ -593,22 +593,19 @@ def _rule_warnings(path, data, lib_roots):
 
     lint.py holds the rules and this borrows them. The import is deferred
     because lint.py imports this module for the portfolio matrix, and its
-    warning list is a module global, so it is swapped out and back rather than
-    appended to - running this must not put anything into the report lint is
-    about to print.
+    findings are module globals, so the run is COLLECTED rather than appended
+    to - running this must not put anything into the report lint is about to
+    print. `lint.collecting()` is that save-clear-restore, written once.
     """
     from portrayal import lint
-    saved_e, saved_w = lint.ERRORS[:], lint.WARNINGS[:]
-    lint.ERRORS.clear()
-    lint.WARNINGS.clear()
-    try:
+    with lint.collecting() as ran:
         lint.lint_device(path, _NoSchema(), lib_roots)
-        found = {}
-        for w in lint.WARNINGS:
-            found.setdefault(w.split("[", 1)[1].split("]", 1)[0], []).append(w)
-    finally:
-        lint.ERRORS[:] = saved_e
-        lint.WARNINGS[:] = saved_w
+    # The errors go with the block, as they always did. Every code this reads
+    # is a warning - RULE_GAPS is a map of debts, and an error is not a debt,
+    # it is a manifest lint refuses. That report is lint's to print.
+    found = {}
+    for w in ran.warnings:
+        found.setdefault(w.split("[", 1)[1].split("]", 1)[0], []).append(w)
     return found
 
 
