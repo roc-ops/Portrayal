@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: eps-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable AC power supply of the Edgecore EPS121 (AS4625-54T) - a 50.4 x 38.7 module with a perforated intake, a red U-handle, a red release latch and an IEC inlet. NOT the EPS122's supply: that one is 62.3 wide, carries its own fan and is rated three times the input current.
+size: {w: 50.4, h: 38.7}
+size-confidence: {w: measured, h: measured}
+attrs:
+  input: ac
+  inlet: c14
+provenance:
+  size: >-
+    MEASURED ON THE QUICK START GUIDE'S REAR ELEVATION at 600 dpi (5.03 px/mm) on the
+    module's own side rails - the strongest vertical gradients in the bay. PSU 1 reads x 292.56-343.06 and PSU 2 x 376.46-426.76 - 50.5 and 50.3 wide on a pitch of 83.9 - and the module's top and bottom edges y 3.57 and 42.27.
+    ALL y SCALES ON THIS FAMILY USE 44.45 mm, not the specification table's 44: six
+    independent instruments fail Gate 1 at 44.0 and pass at 44.45, which is true 1RU. On a
+    44 mm face that 1.1% is half a millimetre at the bottom edge, which is the size of the
+    features being measured.
+  the-two-supplies-of-this-family-are-different-parts: >-
+    THE 54T AND THE 54P DO NOT SHARE A SUPPLY, and the documents say so before the drawings
+    do: the guide's specification table gives a per-PSU system input rating of "100-120
+    VAC, 50/60 Hz, 4 A max. / 200-240 VAC, 50/60 Hz, 2 A max." for the AS4625-54T and
+    "100-120 VAC, 50/60 Hz, 12 A max. / 200-240 VAC, 50/60 Hz, 8.5 A max." for the
+    AS4625-54P. Three times the current is not a configuration of one unit.
+    THE ELEVATIONS AGREE: measured on the same drawing at the same scale, the 54T's
+    modules are 50.4 wide and the 54P's 62.3, and the 54P's carry a fan behind the face
+    where the 54T's do not. That width difference is what a PoE budget of up to 1920 W
+    costs in sheet metal.
+  the-face: >-
+    A RED RELEASE LATCH on the outboard edge, a perforated intake, a round status lamp
+    above it, a RED U-HANDLE and the AC inlet at the inboard end. No fan is drawn behind this one's face; the 54P's supply has one.
+    The handle and latch read red on the guide's rear elevation, and this family publishes
+    ONE airflow - the datasheets list front-to-back only - so there is no second colour to
+    model and no airflow-colour convention to import from another family.
+  power: >-
+    The guide gives no per-supply wattage for this model. What it gives is the machine: "AS4625-54T: 150 W max." power consumption at 25 C, and a per-PSU input rating of 4 A at low line and 2 A at high line. NO WATTAGE IS INVENTED HERE - `power-output-w` is omitted rather than guessed, which L93 counts as an omission rather than a claim.
+states: [absent]
+elements:
+  vent: {at: [5.60, 6.50], size: [14.00, 26.50], class: vent}
+  handle: {at: [21.2, 7.30], size: [8.60, 25.00], class: handle}
+  latch: {at: [0.80, 7.74], size: [2.90, 13.16], class: latch}
+  inlet-well: {at: [31.4, 6.19], size: [17.40, 26.32], class: bezel}
+  status: {at: [12.83, 3.15], size: [2.90, 2.90], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c0453f'}
+  latch-finish: {label: Latch colour, type: text, default: '#c0453f'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [30.1, 5.35], rotate: 270}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent
+      vent: 12
+      confidence: estimated
+      source: >-
+        The intake is open but no document gives a depth. 12 matches what this library gives
+        other 1RU Edgecore supply intakes.
+    - node: handle
+      uhandle: 18
+      dia: 2.6
+      confidence: estimated
+      source: >-
+        A U standing off the face, gripped along its length and returning to the module at
+        both ends - `uhandle`, not `bar`, for the reason the AIS800 supplies record: `bar`
+        builds a tube on nothing. HOW FAR IT STANDS OFF IS NOT DIMENSIONED; 18 is the
+        shortest projection this library gives a 1RU supply handle, because a 1RU face has
+        little room for a deeper one.
+    - node: latch
+      out: 1.0
+      confidence: estimated
+      source: 'Drawn, not dimensioned - as every release tab in this library.'
+    - node: inlet-well
+      pocket: 2.2
+      confidence: estimated
+      source: >-
+        The inlet sits in a recess whose walls the elevation shades; no depth is stated.
+        2.2 puts the connector flange level with the module face.
+skins: [default]
+body:
+  depth: 180
+  color: '#8d9298'
+  footprint: {at: [0, 0], size: [50.4, 38.7]}

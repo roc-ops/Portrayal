@@ -94,6 +94,19 @@ def devices():
 FIGURE_IS_NOT_THE_BAY_COUNT = {
     ("edgecore/ais800-64d", "fans"): 4,
     ("edgecore/ais800-64o", "fans"): 4,
+    # ZERO BAYS, AND ZERO IS THE RIGHT ANSWER. The Edgecore EPS121 and EPS122 state
+    # "2+1 fixed redundant fans" over three fans that are NOT FRUs: the shared quick start
+    # guide's FRU Replacement section covers the supplies only, there is no latch, handle
+    # or seam on the rear elevation, and the Overview callouts say "fixed" in as many
+    # words. So the three fans are PLACED, not bayed - a bay is this library's way of
+    # saying a hand can take the part out - and a figure that counts rotors nobody swaps
+    # fills no bays by construction.
+    # This is a THIRD kind of entry in this table. The two AIS800 rows above are figures
+    # that count ROTORS where the bays count TRAYS; these two are figures with no bays to
+    # count at all. Both are "the figure is about something other than bays", which is what
+    # this table is for.
+    ("edgecore/eps121", "fans"): 0,
+    ("edgecore/eps122", "fans"): 0,
 }
 
 
@@ -141,15 +154,33 @@ def test_every_stated_fan_figure_fills_its_bays():
     assert not odd, odd
 
 
+# WHAT EACH EXEMPTED DEVICE MUST SAY IN ITS OWN PROSE. This started as one hard-coded
+# phrase - "2 fans per module" - asserted against every entry in the table above, which
+# worked while every entry was an AIS800. The EPS pair broke it, and rightly: their figure
+# is not about modules at all, so demanding that they say "2 fans per module" was demanding
+# they say something untrue. The test's own docstring is the argument against the old form.
+# So the REQUIRED PHRASE IS PART OF THE EXEMPTION. An exemption now declares both what the
+# bay count is and the words the device must carry to earn it, which keeps the two kinds of
+# mismatch apart: a figure that counts rotors inside trays, and a figure with no trays.
+WHAT_THE_NOTE_MUST_SAY = {
+    ("edgecore/ais800-64d", "fans"): "2 fans per module",
+    ("edgecore/ais800-64o", "fans"): "2 fans per module",
+    ("edgecore/eps121", "fans"): "THERE ARE NO BAYS",
+    ("edgecore/eps122", "fans"): "THERE ARE NO BAYS",
+}
+
+
 def test_the_chassis_whose_figure_is_not_their_bay_count_say_so_in_prose():
     """An exemption that only lives in a test teaches nobody. The device carries
     the explanation where a reader of the library will meet it - in the group's
     own redundancy-note - so the count and the reason travel together."""
     by_slug = dict(devices())
-    for (slug, group), _ in FIGURE_IS_NOT_THE_BAY_COUNT.items():
+    assert set(WHAT_THE_NOTE_MUST_SAY) == set(FIGURE_IS_NOT_THE_BAY_COUNT), (
+        "every exemption declares the words that earn it, and only exemptions do")
+    for (slug, group), phrase in WHAT_THE_NOTE_MUST_SAY.items():
         d = by_slug[slug]
         note = str((((d.get("groups") or {}).get(group) or {}).get("attrs") or {}).get("redundancy-note") or "")
-        assert "2 fans per module" in note, (slug, group)
+        assert phrase in note, (slug, group, phrase)
         assert "bay" in note.lower() and "fan" in note.lower(), (slug, group)
 
 
@@ -315,7 +346,17 @@ def test_the_comparison_layer_can_now_reach_them():
     about fans: the other three stack both supplies at the left with the four trays to their
     right, and this one puts a supply at each END with the trays between them. Same tray
     pitch to six hundredths of a millimetre, different architecture around it.
+
+    FIFTY-NINE AND SIXTY ARE THE EDGECORE EPS121 AND EPS122, and they are the first
+    entries here whose fans are not FRUs at all. Both state "2+1 fixed redundant fans" -
+    the word is the vendor's - over three fans with no bay, no latch and no replacement
+    procedure; the shared guide's FRU Replacement section covers the supplies only. They
+    are PLACED rather than bayed and they sit in FIGURE_IS_NOT_THE_BAY_COUNT at 0.
+    THAT IS WHY THE COMPARISON LAYER MATTERS HERE. A reader comparing rear serviceability
+    across this library needs "2+1, and you cannot change them" to be reachable, and it is
+    only reachable because the figure is recorded even though nothing swaps. A census that
+    only counted removable trays would report these two as having no cooling at all.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 58, n
+    assert n == 60, n

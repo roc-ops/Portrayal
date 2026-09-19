@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: eps-fan-fixed
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  One of the three FIXED fans on the rear of the Edgecore EPS121 and EPS122 (AS4625-54T and
+  AS4625-54P) - a 25.5 x 15.9 guard with a spoked rotor behind it. NOT A FRU: both
+  documents say "2+1 fixed redundant fans", the guide's FRU Replacement section covers the
+  supplies only, and there is no bay, no latch and no handle to draw. It is placed, not
+  bayed, and that is the whole point of the distinction.
+size: {w: 25.5, h: 15.9}
+size-confidence: {w: measured, h: measured}
+attrs:
+  rotors: 1
+provenance:
+  size: >-
+    MEASURED ON THE QUICK START GUIDE'S REAR ELEVATION at 600 dpi, and the two models'
+    elevations agree about it to 0.2 mm across the whole left end. The three guards read
+    y 15.28-31.15 (h 15.88) at x centres 69.8, 117.6 and 165.4 - a pitch of 47.8 - and
+    about 25.5 across.
+    ALL y SCALES ON THIS FAMILY USE 44.45 mm, not the specification table's 44: six
+    independent instruments fail Gate 1 at 44.0 and pass at 44.45, which is true 1RU. The
+    table rounds.
+  it-is-fixed-and-that-is-stated: >-
+    "2+1 fixed redundant fans", in the Overview callouts of both models. The guide's FRU
+    Replacement section has a PSU Replacement procedure and no fan procedure at all, which
+    is the same shape as celestica/es1010 - removable supplies, fixed fans.
+    SO THE DEVICE PLACES THESE RATHER THAN BAYING THEM. A bay says a hand can take the part
+    out; these cannot come out, and the redundancy figure counts rotors that are soldered
+    in rather than trays anybody swaps.
+  the-rotor-is-drawn-and-not-counted: >-
+    One rotor per guard, because one is what the elevation draws behind each guard. The
+    "2+1" is a claim about three fans, which is three guards - the figure and the guard
+    count agree, unlike the AIS800 pair's "7+1" over four trays.
+states: [absent]
+elements:
+  guard: {at: [0.60, 0.55], size: [24.30, 14.80], class: vent}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: guard
+      vent: 10
+      confidence: estimated
+      source: >-
+        The guard is open - the rotor shows through it - but no document gives a depth, and
+        on a 1RU rear there is not much depth to give. 10 is the shallowest vent this
+        library uses on a fan guard.
+skins: [default]
+body:
+  depth: 40
+  color: '#2b2f34'
+  footprint: {at: [0, 0], size: [25.5, 15.9]}
