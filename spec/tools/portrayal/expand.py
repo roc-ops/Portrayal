@@ -281,12 +281,23 @@ def block_items(block, library, standards):
             nbr = num.get("dx-by-row")
             if nbr:
                 ndx += nbr[row % len(nbr)]
+            # AND THE ANCHOR CAN DEPEND ON THE ROW TOO, for a reason the offsets
+            # cannot cover. Where a face prints `N (up)(down) N+1` the two
+            # numerals HUG THE ARROWS and grow outward, so the odd port's numeral
+            # is fixed by its RIGHT edge and the even port's by its LEFT. Anchor
+            # them both in the middle and a one-digit numeral lands 0.76 mm
+            # inboard of where a two-digit one does - measured on the AIS800-64O,
+            # where the inner edge holds to 0.03 mm across both digit counts
+            # while the centre moves by 0.76. A block numbering 1..32 carries
+            # both widths, so no single centre offset is right for all of it.
+            abr = num.get("anchor-by-row")
+            anchor = abr[row % len(abr)] if abr else num.get("anchor", "middle")
             silks.append({
                 "at": [round(x + ndx, 2),
                        round(y + (num.get("dy-top", num.get("dy", 0.0)) if row == 0
                                   else num.get("dy-bottom", num.get("dy", 0.0))), 2)],
                 "text": str(n), "font-size": num.get("font-size", 1.8),
-                "anchor": num.get("anchor", "middle"),
+                "anchor": anchor,
                 "fill": num.get("fill", "#1a1d1f"), "for": pid})
 
         if led:
