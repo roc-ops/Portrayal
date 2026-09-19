@@ -147,12 +147,13 @@ def test_std_rj45_v2_lints_clean(tmp_path):
     p = LIB / "components/std/rj45/v2/contract.yaml"
     import jsonschema, json
     schema = json.loads((ROOT / "spec/schemas/component.schema.json").read_text())
-    lint.ERRORS.clear(); lint.WARNINGS.clear()
     if not lint.STANDARDS:
         lint.STANDARDS.update(STANDARDS)
-    data = lint.lint_component(p, jsonschema.Draft202012Validator(schema))
-    lint._skin_checks(p, data)        # L3 (every element id in the skin) and L4 (viewBox = size)
-    assert not [e for e in lint.ERRORS if "[L9]" in e or "[L1]" in e or "[L3]" in e or "[L4]" in e], lint.ERRORS
+    with lint.collecting() as found:
+        data = lint.lint_component(p, jsonschema.Draft202012Validator(schema))
+        lint._skin_checks(p, data)    # L3 (every element id in the skin) and L4 (viewBox = size)
+    assert not [e for e in found.errors
+                if "[L9]" in e or "[L1]" in e or "[L3]" in e or "[L4]" in e], found.errors
 
 
 def test_std_rj45_ganged_v2_is_the_cell():

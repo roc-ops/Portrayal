@@ -23,6 +23,9 @@ and `err()` are called 208 times across ~95 rule functions, and the review's
 justification - that the globals "block testing rules in isolation" - is not
 true: 32 files already test rules in isolation, and `pytest -n 4` passes.
 """
+import ast
+import pathlib
+
 import pytest
 
 from portrayal import lint
@@ -84,21 +87,66 @@ def test_it_nests():
     assert lint.WARNINGS == []
 
 
+# List methods that write. `clear` is the one that bit us; the rest are here so
+# that the next spelling of "reach into the global and change it" is caught by
+# the same gate rather than by a test three files away.
+MUTATORS = {"clear", "append", "extend", "insert", "pop", "remove", "sort",
+            "reverse"}
+
+
+def writes_to_the_globals(src):
+    """Every place `src` mutates `lint.ERRORS`/`lint.WARNINGS` in place.
+
+    READS ARE FINE and several files make them: inside a `collecting()` block
+    `lint.ERRORS` *is* the live list, which is the whole mechanism, and
+    `test_module_power.py` reads it there deliberately. What must not appear is
+    a write, because a write is the dance no matter how it is spelled.
+    """
+    def is_global(n):
+        return isinstance(n, ast.Attribute) and n.attr in ("ERRORS", "WARNINGS")
+
+    hits = []
+    for n in ast.walk(ast.parse(src)):
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) \
+                and n.func.attr in MUTATORS and is_global(n.func.value):
+            hits.append((n.lineno, f"{n.func.value.attr}.{n.func.attr}()"))
+        targets = (n.targets if isinstance(n, ast.Assign)
+                   else [n.target] if isinstance(n, (ast.AugAssign, ast.AnnAssign))
+                   else [])
+        for t in targets:
+            base = t.value if isinstance(t, ast.Subscript) else t
+            if is_global(base):
+                hits.append((n.lineno, f"assignment to {base.attr}"))
+    return hits
+
+
 def test_the_suite_no_longer_hand_rolls_the_dance():
     """Asserted over the tree, because the next copy will not be on a list.
 
-    A file may still clear one list where the shape does not fit a helper - what
-    must not come back is the save-and-restore written out by hand.
+    WIDENED, because the first version of this gate let the thing it was written
+    to stop walk straight past it. It looked for the names `saved_e`/`saved_w`,
+    so `test_port_optics.py` - which spelled its save `saved` - was never seen.
+    And it said in as many words that a file "may still clear one list where the
+    shape does not fit a helper", which is the opposite of true: the bare clear
+    is not the mild version of the dance, it is the worse one, because it leaks
+    by construction instead of only when somebody forgets the restore.
+
+    What that cost: `test_faces.py` cleared `ERRORS`, left an L83 finding in it,
+    and `test_it_restores_what_was_there_before` above failed on that finding
+    whenever xdist happened to schedule the two files into one worker. Green on
+    one machine, red on the next, naming a test that had done nothing wrong -
+    precisely the failure the module docstring opens by describing.
+
+    So the rule is now the simple one: outside this file, nothing writes to the
+    globals. Reads are left alone.
     """
-    import ast
-    import pathlib
     root = pathlib.Path(__file__).resolve().parents[2]
     offenders = []
     for f in sorted((root / "spec/tests").glob("test_*.py")):
         if f.name == "test_lint_collecting.py":
             continue
-        names = {n.id for n in ast.walk(ast.parse(f.read_text()))
-                 if isinstance(n, ast.Name)}
-        if {"saved_e", "saved_w"} & names:
-            offenders.append(f.name)
-    assert not offenders, f"these still save and restore by hand: {offenders}"
+        for line, what in writes_to_the_globals(f.read_text()):
+            offenders.append(f"{f.name}:{line} {what}")
+    assert not offenders, (
+        "these reach into lint.ERRORS/lint.WARNINGS instead of using "
+        "lint.collecting():\n  " + "\n  ".join(offenders))
