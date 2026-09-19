@@ -5,10 +5,9 @@ std/lc-bore@3 at [1.25, 1.75] rotated 180 with the bore declaring mate at
 [2.35, 2.35] in a 4.7 x 6.3 body. The rotation centre [2.35, 3.15] and the
 translation [1.25, 1.75] are NOT hardcoded here - they are READ from the
 `transform` attribute render.py actually wrote on the bore's group, so a
-fault in how render.py composes `translate(centre) rotate(deg)
-translate(-w/2,-h/2)` - a wrong centre, a dropped rotate, a sign flip, a
-wrong translate - fails this test instead of hiding behind a static
-arithmetic identity. Applying that transform to the marker's own-frame point
+fault in how render.py composes `translate(at) rotate(deg cw/2 chh/2)` - a
+wrong centre, a dropped rotate, a sign flip, a wrong translate - fails this
+test instead of hiding behind a static arithmetic identity. Applying that transform to the marker's own-frame point
 gives [3.60, 5.70], which is exactly the value the parent contract
 independently wrote down for its optical axis. The two numbers were written
 independently and must agree, so this is a check on the RESOLUTION and not a
@@ -18,6 +17,18 @@ It also pins the thing presented_interface gets wrong: that function forwards
 `at + cm.at` and ignores `rotate`, which would put the point at [3.60, 4.10].
 Nothing shipped composes a rotated aperture, so it is not a live defect - but
 if a wrapper ever does, this arithmetic is the record of what correct means.
+
+WHICH TRANSFORM BRANCH THIS IS. render.py's instance_group emits two shapes,
+and this test reads the second:
+
+    translate(centre) rotate(deg) translate(-w/2, -h/2)   when `centre` is given
+    translate(at) rotate(deg cw/2 chh/2)                  otherwise
+
+A composed `parts:` entry is positioned by its own top-left `at`, so the bore's
+group carries the AT-argument form - a rotation about the component's own
+centre passed as rotate()'s cx/cy arguments, not a pair of translates. An
+earlier version of this docstring named the centre branch, which describes a
+bay occupant and not this fixture.
 """
 import math
 import pathlib
@@ -33,9 +44,17 @@ FIXTURE = "generic--sfp-lc--v1--default.svg"
 
 # translate(tx, ty) rotate(deg cx cy) - the exact shape render.py emits for a
 # composed part's placement transform.
+#
+# ANCHORED AT BOTH ENDS. `.match()` alone anchors only the start, so a TRAILING
+# component would be parsed away silently and the point resolved through half a
+# transform - and render.py really does append one: `mirror: true` adds
+# `translate(cw,0) scale(-1,1)` after the rotate. This fixture is not mirrored,
+# so the anchor changes nothing today; unanchored, a fixture that became
+# mirrored would go on passing while resolving the marker to the wrong side of
+# the part, which is precisely the silent success this test exists to prevent.
 TRANSFORM_RE = re.compile(
     r"translate\(\s*([-\d.]+)[,\s]+([-\d.]+)\s*\)\s*"
-    r"rotate\(\s*([-\d.]+)[,\s]+([-\d.]+)[,\s]+([-\d.]+)\s*\)"
+    r"rotate\(\s*([-\d.]+)[,\s]+([-\d.]+)[,\s]+([-\d.]+)\s*\)\s*\Z"
 )
 
 
@@ -48,7 +67,9 @@ def _parse_translate_rotate(transform):
 
     Asserts the parse succeeded - a silently-unmatched regex whose caller
     then treats a None as an identity transform would reintroduce exactly
-    the defect this test exists to catch.
+    the defect this test exists to catch. The pattern is anchored at both
+    ends, so a transform carrying a component this function cannot apply
+    (a trailing mirror, say) fails here rather than being parsed away.
     """
     m = TRANSFORM_RE.match(transform.strip())
     assert m is not None, f"could not parse transform: {transform!r}"
