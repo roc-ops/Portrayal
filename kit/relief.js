@@ -166,10 +166,15 @@ export function resolveCablePoint(marker, ancestors = []) {
 //     ANCESTRY CANNOT SEE THIS RELATIONSHIP: it is not encoded in the path,
 //     by construction, so no amount of cleverness in a prefix test finds
 //     it. What DOES record it is `data-for`, which render.py sets on every
-//     seated occupant's group to name its host's `data-path` directly (see
-//     the "for": host line on an expanded `occupants:` placement, and the
-//     `dcp-f-a22`-adjacent contract that carries it through to `data-for`).
-//     Walking `data-for` to a root groups a whole chain of seats the same
+//     seated placement's group to name its host's `data-path` directly -
+//     REGARDLESS OF HOW THE SEAT WAS AUTHORED. That last clause was once
+//     wishful: only the `occupants:` expansion wrote `for: host`, so a
+//     HAND-WRITTEN `mate-to` (which the spec offers in the same breath)
+//     carried no `data-for`, this grouping never fired for it, and a plug
+//     with a boot on it came back as two points for one connector. render.py
+//     now defaults `for` to the `mate-to` target at resolution time, so both
+//     authorings record the same fact. Walking `data-for` to a root groups a
+//     whole chain of seats the same
 //     way path-prefix already groups a composed or bayed one - do not
 //     "simplify" this back to path-prefix alone; that is exactly the
 //     regression this function exists to prevent, and it has a live test

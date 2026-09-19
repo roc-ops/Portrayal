@@ -1252,24 +1252,43 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # configuration describes the whole device, and a front-panel optic has no
     # business appearing in the rear drawing. Lint checks the host exists
     # SOMEWHERE (L12), which is the check that catches a typo.
-    here = {q.get("id") for q in parts["placements"]}
-    for host, spec in (config.get("occupants") or {}).items():
-        if host not in here:
-            continue
-        if isinstance(spec, str):
-            spec = {"ref": spec}
-        parts["placements"].append({
-            "ref": spec["ref"],
-            "id": spec.get("id") or f"{host}-occupant",
-            "mate-to": host,
-            # nests under the receptacle in the tree, the way an indicator nests
-            # under what it indicates - an optic belongs to its port
-            "for": host,
-            "group": next((q.get("group") for q in parts["placements"]
-                           if q.get("id") == host), None),
-            **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
-            **({"skin": spec["skin"]} if spec.get("skin") else {}),
-        })
+    # AN OCCUPANT CAN ITSELF BE HOSTED, so this runs to a FIXED POINT rather
+    # than over one snapshot. `here` used to be taken ONCE, before the loop
+    # appended anything, so `occupants: {port-4: plug, port-4-occupant: boot}`
+    # found no `port-4-occupant` in the snapshot and dropped the boot WITHOUT A
+    # WORD - the worst outcome available, and the one shape spec B's two-part
+    # fit is made of. Recomputing the id set each pass seats the second tier on
+    # the first, the third on the second, and so on; a pass that seats nothing
+    # ends it. What remains unseated after that is exactly what the paragraph
+    # above says to skip - a host in another view - so it is still skipped, not
+    # an error: the two cases are told apart by whether progress is possible,
+    # not by when the set was sampled.
+    remaining = dict(config.get("occupants") or {})
+    while remaining:
+        seated_now = []
+        here = {q.get("id") for q in parts["placements"]}
+        for host, spec in remaining.items():
+            if host not in here:
+                continue
+            if isinstance(spec, str):
+                spec = {"ref": spec}
+            parts["placements"].append({
+                "ref": spec["ref"],
+                "id": spec.get("id") or f"{host}-occupant",
+                "mate-to": host,
+                # nests under the receptacle in the tree, the way an indicator nests
+                # under what it indicates - an optic belongs to its port
+                "for": host,
+                "group": next((q.get("group") for q in parts["placements"]
+                               if q.get("id") == host), None),
+                **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
+                **({"skin": spec["skin"]} if spec.get("skin") else {}),
+            })
+            seated_now.append(host)
+        if not seated_now:
+            break
+        for host in seated_now:
+            del remaining[host]
 
     # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
     # occupant's plan lands here (`plan:`), and the occupant's contract names
@@ -1749,6 +1768,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     "one through a composed aperture")
             seated = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
                                  round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            # WHAT SEATS RECORDS ITS HOST, HOWEVER IT WAS AUTHORED. `occupants:`
+            # writes `for: host` when it expands (see above); a HAND-WRITTEN
+            # `mate-to` - which the spec offers in the same breath as
+            # `occupants:` - wrote nothing, so its group carried no `data-for`
+            # and cablePoints' seat-chain grouping never fired for it: a plug
+            # and the boot on it came back as TWO points for ONE connector.
+            # The host is not a guess here, it is the `mate-to` target, so the
+            # default costs nothing and closes the gap. An author's own `for:`
+            # still wins - it may name something else entirely (a port an LED
+            # belongs to), and this is a default, not an override.
+            if not seated.get("for"):
+                seated["for"] = p["mate-to"]
             # Carried to draw_placement as `host-lift` - a resolution-time fact,
             # not the `seat_lift` local that trio (z_inset / z_group_lift /
             # data-z-lift) already applies there. Named `host-lift`, not

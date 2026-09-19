@@ -17,10 +17,8 @@ or a cycle (a new one).
 import pathlib
 import subprocess
 import sys
-import tempfile
 import xml.etree.ElementTree as ET
 
-import pytest
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -81,23 +79,99 @@ def test_the_second_seat_lands_on_the_first(tmp_path):
         "rather than mated")
 
 
-def test_a_cycle_is_refused(tmp_path):
-    """Two placements mated to each other resolve nothing, forever."""
-    r, _ = _render(
+def test_a_hand_written_mate_to_records_its_host(tmp_path):
+    """`data-for` on the seat, whichever way the seat was authored.
+
+    The spec offers two authorings in one breath - "through `occupants:` or
+    `mate-to`" - but only the `occupants:` expansion wrote `for: host`. A
+    hand-written `mate-to` placement got nothing, so relief.js's `cablePoints`
+    had no `data-for` to walk, its seat-chain grouping never fired, and a plug
+    with a boot on it came back as TWO cable points for ONE connector. Path
+    ancestry cannot stand in: a seated occupant is a top-level SIBLING of its
+    host, so the three groups here carry three unrelated paths by construction.
+    """
+    r, out = _render(
         tmp_path,
-        [{"ref": "std/lc-bore@3", "id": "a", "mate-to": "b"},
-         {"ref": "std/lc-bore@3", "id": "b", "mate-to": "a"}],
-        {})
-    assert r.returncode != 0, "a mate-to cycle rendered instead of erroring"
-    assert "cycle" in r.stderr.lower(), (
-        f"the error should name the cycle; got: {r.stderr[-300:]}")
+        [{"ref": "generic/lc-plug@1", "id": "plug1",
+          "mate-to": "port-4-occupant"},
+         {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}],
+        {"port-4": "generic/sfp-lc-simplex@1"})
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
+    by_id = {el.get("id"): el for el in root.iter() if el.get("id")}
+
+    assert by_id["plug1"].get("data-for") == "port-4-occupant", (
+        "a hand-written mate-to must record its host the same way an "
+        "occupants:-authored one does")
+    assert by_id["boot1"].get("data-for") == "plug1"
+    # the occupants: authoring is unchanged - it already did this
+    assert by_id["port-4-occupant"].get("data-for") == "port-4"
 
 
-def test_a_dangling_mate_to_still_errors(tmp_path):
-    """The existing error must survive the rewrite."""
-    r, _ = _render(
+def test_an_authors_own_for_wins_over_the_mate_to_default(tmp_path):
+    """The default fills a gap; it does not overwrite a declaration.
+
+    `for:` is older than seating and means "what this part belongs to" - an LED
+    to its port. A placement that both mates something and says what it belongs
+    to is stating two different facts, and the seat must not clobber the one
+    the author wrote.
+    """
+    r, out = _render(
         tmp_path,
-        [{"ref": "std/lc-bore@3", "id": "x", "mate-to": "nope"}],
-        {})
-    assert r.returncode != 0
-    assert "nope" in r.stderr
+        [{"ref": "generic/lc-plug@1", "id": "plug1",
+          "mate-to": "port-4-occupant", "for": "port-4"}],
+        {"port-4": "generic/sfp-lc-simplex@1"})
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
+    by_id = {el.get("id"): el for el in root.iter() if el.get("id")}
+    assert by_id["plug1"].get("data-for") == "port-4"
+
+
+def test_occupants_can_chain(tmp_path):
+    """A second tier seats, rather than being dropped without a word.
+
+    `here` - the set of placement ids an occupant's host must be in - was
+    sampled ONCE, before the expansion loop appended anything. So
+    `occupants: {port-4: module, port-4-occupant: plug}` looked for
+    `port-4-occupant` in a snapshot taken before it existed, failed to find it,
+    and hit the `continue` meant for a host in ANOTHER VIEW. The plug was
+    dropped silently: no error, no warning, a drawing simply missing a part the
+    configuration asked for.
+    """
+    r, out = _render(
+        tmp_path, [],
+        {"port-4": "generic/sfp-lc-simplex@1",
+         "port-4-occupant": "generic/lc-plug@1",
+         "port-4-occupant-occupant": "common/lc-boot@1"})
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
+    by_id = {el.get("id"): el for el in root.iter() if el.get("id")}
+    for tier in ("port-4-occupant", "port-4-occupant-occupant",
+                 "port-4-occupant-occupant-occupant"):
+        assert tier in by_id, (
+            f"{tier} was dropped. occupants: must seat a tier on a tier, not "
+            f"only on a placement that existed before the loop began")
+    # and the chain is a chain: each tier records the one below it
+    assert by_id["port-4-occupant-occupant"].get("data-for") == "port-4-occupant"
+    assert (by_id["port-4-occupant-occupant-occupant"].get("data-for")
+            == "port-4-occupant-occupant")
+
+
+def test_an_occupant_for_a_host_in_another_view_is_still_skipped(tmp_path):
+    """The fixed point must not turn a documented skip into an error.
+
+    A configuration describes the WHOLE device, so the front view legitimately
+    carries `occupants:` entries whose hosts live on the rear. Those are
+    skipped, not refused - and the iteration must tell "cannot progress yet"
+    apart from "cannot progress ever" by whether a pass seated anything, not by
+    when the id set was sampled.
+    """
+    r, out = _render(
+        tmp_path, [],
+        {"port-4": "generic/sfp-lc-simplex@1",
+         "a-host-in-no-view-at-all": "generic/lc-plug@1"})
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
+    ids = {el.get("id") for el in root.iter() if el.get("id")}
+    assert "port-4-occupant" in ids, "the resolvable occupant must still seat"
+    assert "a-host-in-no-view-at-all-occupant" not in ids
