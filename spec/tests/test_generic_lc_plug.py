@@ -1,6 +1,7 @@
 """generic/lc-plug: the four-tier LC plug silhouette, front view, standing for
-every LC plug - a body holding the ferrule, then a shoulder, a neck and a
-latch tip stepping narrower toward the tab (docs/superpowers/plans/
+every LC plug - a body holding the ferrule, and above it a latch column that
+is NOT a simple taper: a 3.3 stem off the body, a 4.3 shoulder proud of it,
+then the 2.3 tab (docs/superpowers/plans/
 2026-09-19-pluggables-b2-connector-parts.md, Task 4).
 
 It occupies an `lc` receptacle at its own `mate` point (behaviour: occupies,
@@ -112,13 +113,67 @@ def test_size_says_h_includes_the_latch_unlike_rj45_plug():
 def test_the_four_tiers_are_the_part():
     d = contract()
     elems = d["elements"]
-    assert set(elems) == {"tip", "neck", "shoulder", "body"}
+    assert set(elems) == {"tip", "shoulder", "stem", "body"}
     widths = {k: v["size"][0] for k, v in elems.items()}
-    assert widths == {"tip": 2.3, "neck": 3.3, "shoulder": 4.3, "body": 5.58}
-    # narrower toward the tip, which is the latch end
-    assert widths["tip"] < widths["neck"] < widths["shoulder"] < widths["body"]
+    assert widths == {"tip": 2.3, "shoulder": 4.3, "stem": 3.3, "body": 5.58}
     heights = sum(v["size"][1] for v in elems.values())
     assert abs(heights - 10.43) < 0.01, "the four tiers must sum to the drawn 10.43"
+
+
+def test_the_tiers_run_down_the_page_in_the_drawn_order():
+    """THE ORDER IS A FACT ABOUT THE DRAWING, not a taper anyone chose.
+
+    The first cut of this contract put the 3.3 tier ABOVE the 4.3 one and
+    described a monotonic narrowing toward the tab. The drawing shows the 4.3
+    shoulder standing proud of BOTH its neighbours: reading down from the tab
+    it is 2.3, then 4.3, then 3.3, then the 5.58 body. Each width's extension
+    lines land on a different tier and the three figures are far enough apart
+    that the assignment cannot be mistaken - see provenance.keyway.
+    """
+    elems = contract()["elements"]
+    order = sorted(elems, key=lambda k: elems[k]["at"][1])
+    assert order == ["tip", "shoulder", "stem", "body"]
+    # tiers stack with no gap and no overlap
+    y = 0.0
+    for k in order:
+        assert abs(elems[k]["at"][1] - y) < 1e-9, f"{k} does not start where the tier above ends"
+        y += elems[k]["size"][1]
+    assert abs(y - 10.43) < 1e-9
+    # every tier is centred on the body's centreline
+    for k, e in elems.items():
+        assert abs(e["at"][0] + e["size"][0] / 2 - 5.58 / 2) < 1e-9, k
+    # NOT a taper: the shoulder is wider than the tier below it as well as above
+    assert elems["shoulder"]["size"][0] > elems["stem"]["size"][0]
+
+
+def test_the_body_tier_is_the_dimensioned_5_65():
+    """Summing to 10.43 does not pin a SPLIT - any four numbers can do that.
+
+    This is the assertion the first cut was missing: it checked only the sum,
+    so a body of 4.48 (1.17 short) satisfied it. The body is the one tier the
+    drawing DIMENSIONS - 5.65 on the side view, the same figure
+    common/lc-boot@1 cites for the body it wraps - so it is the one tier that
+    can be pinned against a callout rather than against a proportion.
+    """
+    d = contract()
+    body = d["elements"]["body"]
+    assert body["size"][1] == 5.65, (
+        "the body tier must be the drawing's dimensioned body height, not a "
+        "share of the overall silhouette")
+    assert abs(body["at"][1] - (10.43 - 5.65)) < 1e-9
+    # and the latch column is what is left of the dimensioned overall
+    latch = sum(v["size"][1] for k, v in d["elements"].items() if k != "body")
+    assert abs(latch - (10.43 - 5.65)) < 1e-9
+
+    # the optical axis is the body tier's centre, which is where the drawing
+    # puts the ferrule centreline - not the centre of some other split
+    axis = d["connection-points"]["mate"]["at"][1]
+    assert abs(axis - (body["at"][1] + 5.65 / 2)) <= 0.01, (
+        f"the mate point sits at {axis}, but the centre of the body tier the "
+        f"ferrule stands in is {body['at'][1] + 5.65 / 2}")
+
+    prov = " ".join(str(v) for v in d["provenance"].values())
+    assert "5.65" in prov, "provenance must cite the dimension the body is pinned to"
 
 
 def test_connection_points_share_the_optical_axis():
@@ -141,5 +196,26 @@ def test_it_lints_clean_alone():
 
 def test_skin_matches_the_four_elements():
     svg = (P.parent / "skins/default.svg").read_text()
-    for el in ("tip", "neck", "shoulder", "body"):
+    for el in ("tip", "shoulder", "stem", "body"):
         assert f'id="{el}"' in svg, el
+
+
+def test_the_skin_draws_the_tiers_where_the_contract_puts_them():
+    """A skin that kept the old split would draw a plug the contract denies."""
+    import re
+    svg = (P.parent / "skins/default.svg").read_text()
+    for el, e in contract()["elements"].items():
+        m = re.search(rf'<rect id="{el}"[^>]*>', svg)
+        assert m, el
+        got = {k: float(re.search(rf'\b{k}="([-\d.]+)"', m.group(0)).group(1))
+               for k in ("x", "y", "width", "height")}
+        assert (got["x"], got["y"], got["width"], got["height"]) == (
+            e["at"][0], e["at"][1], e["size"][0], e["size"][1]), (el, got, e)
+    # the ferrule sits on the optical axis
+    axis = contract()["connection-points"]["mate"]["at"]
+    for cid in ("ferrule", "ferrule-bore"):
+        m = re.search(rf'<circle id="{cid}"[^>]*>', svg)
+        assert m, cid
+        cx = float(re.search(r'cx="([-\d.]+)"', m.group(0)).group(1))
+        cy = float(re.search(r'cy="([-\d.]+)"', m.group(0)).group(1))
+        assert [cx, cy] == axis, (cid, cx, cy, axis)
