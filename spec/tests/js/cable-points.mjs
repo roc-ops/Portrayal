@@ -165,12 +165,37 @@ const markerWrapB = el({'data-cp': 'cable', 'data-cp-at': '4 6'}, wrapB);
 const connectorJ = el({'data-path': 'cage-j'}, svg);
 const markerJ = el({'data-cp': 'cable', 'data-cp-at': 'banana'}, connectorJ);
 
+// connector K: a CHAIN OF SEATS, not nested paths - three elements with
+// DISTINCT TOP-LEVEL data-path values ("cage", "cage-plug",
+// "cage-plug-boot"), all three siblings under the root, exactly the shape a
+// `mate-to` occupant produces (render.py appends it to the view root, not
+// the host's group). No path is a prefix of another, so the path-prefix
+// rule ALONE keeps all three - this is the case that was three points before
+// the fix and must be one after it. `data-for` is what ties them together:
+// the plug names "cage", the boot names "cage-plug", and the outermost (the
+// boot's) is the one that must survive.
+const cageRoot = el({'data-path': 'cage'}, svg);
+const markerCage = el({'data-cp': 'cable', 'data-cp-at': '2 2'}, cageRoot);
+const cagePlug = el({'data-path': 'cage-plug', 'data-for': 'cage'}, svg);
+const markerCagePlug = el({'data-cp': 'cable', 'data-cp-at': '2 2.1'}, cagePlug);
+const cagePlugBoot = el({'data-path': 'cage-plug-boot', 'data-for': 'cage-plug'}, svg);
+const markerCagePlugBoot = el({'data-cp': 'cable', 'data-cp-at': '2 2.2'}, cagePlugBoot);
+
+// connector L: a marker whose `data-for` names an element THAT DOES NOT
+// EXIST anywhere in this drawing - a typo, or a genuinely cross-view target
+// this drawing cannot resolve. The chain walk must stop cold rather than
+// throw or loop forever, and the marker must still be reported.
+const cageL = el({'data-path': 'cage-l', 'data-for': 'does-not-exist'}, svg);
+const markerCageL = el({'data-cp': 'cable', 'data-cp-at': '9 1'}, cageL);
+
 const markers = [
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
   markerPlugG, markerBootG,
   markerWrap, markerWrapA, markerWrapB,
   markerJ,
+  markerCage, markerCagePlug, markerCagePlugBoot,
+  markerCageL,
 ];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);

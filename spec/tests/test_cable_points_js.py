@@ -54,6 +54,7 @@ def test_cable_points_resolves_the_fake_drawing():
         "cage-a", "cage-b", "cage-c/plug/boot",
         "sfp-lc/tx", "sfp-lc/rx", "sfp-1", "sfp-10",
         "cage-g/plug/boot", "wrap/a", "wrap/b", "cage-j",
+        "cage-plug-boot", "cage-l",
     }
     assert "out" not in points["cage-a"]
 
@@ -111,6 +112,21 @@ def test_cable_points_resolves_the_fake_drawing():
     assert "wrap" not in points, "a marker shadowed by two children must still drop"
     assert points["wrap/a"]["at"] == [4, 5]
     assert points["wrap/b"]["at"] == [4, 6]
+
+    # A CHAIN OF SEATS: three TOP-LEVEL, UNRELATED data-path values ("cage",
+    # "cage-plug", "cage-plug-boot" - no one a prefix of another), tied
+    # together only by `data-for` ("cage-plug" names "cage", "cage-plug-boot"
+    # names "cage-plug"), exactly the shape a `mate-to` occupant produces.
+    # Path-prefix alone cannot relate these at all - this is the case that
+    # returns three points under that rule and must return one here.
+    assert "cage" not in points, "the cage's own marker must lose to its seats"
+    assert "cage-plug" not in points, "the plug's marker must lose to the boot"
+    assert points["cage-plug-boot"]["at"] == [2, 2.2]
+
+    # A `data-for` naming an owner that does not exist in this drawing (a
+    # typo, or an unresolved cross-view target) must not throw and must not
+    # spin forever - the chain walk just stops, and the marker still reports.
+    assert points["cage-l"]["at"] == [9, 1]
 
     # a drawing with no cable markers at all returns [], not a throw
     assert out["empty"] == []
