@@ -305,7 +305,17 @@ def test_the_comparison_layer_can_now_reach_them():
     of devices with four fan bays, it is a list of devices whose stated figure is about
     something other than bays, and being on the same rear as two of those does not put a
     device on it.
+
+    FIFTY-EIGHT IS THE EDGECORE DCS520, the FOURTH and last device on that 440 x 649.2 x 87
+    shell, and it needs no exemption either: "3 + 1 redundant, hot-swappable fan modules",
+    printed three times in its datasheet, over four bays. So the shell now carries four
+    devices, three product lines and TWO WAYS OF COUNTING THE SAME TRAY - 7+1 twice, meaning
+    rotors, and 3+1 twice, meaning bays.
+    AND ITS REAR IS NOT THEIR REAR, which is worth recording here because the census is
+    about fans: the other three stack both supplies at the left with the four trays to their
+    right, and this one puts a supply at each END with the trays between them. Same tray
+    pitch to six hundredths of a millimetre, different architecture around it.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 57, n
+    assert n == 58, n
