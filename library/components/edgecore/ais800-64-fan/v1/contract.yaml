@@ -83,14 +83,27 @@ relief:
         edgecore/ais800-64-fan@1's own elements key - the honeycomb's extent is drawn; two
         80 mm fans in series is the only thing known about the depth behind it.
     - node: handle
-      bar: 3.0
-      lift: 1.0
+      bar: 7.0
+      lift: 9.0
       confidence: estimated
       source: >-
-        edgecore/ais800-fan@1, edgecore/exp800-fan@1 and edgecore/dcs240-fan@1 - the family's
-        tray handle, and NOT SOURCED for the projection on any of them; roc-ops/Portrayal#385
-        is open on exactly this figure. A bar this thick probably stands off further; the
-        guess is labelled one.
+        THE SHAPE IS NOW SOURCED AND THE PROJECTION STILL IS NOT. The quick start guide's Fan
+        Tray Replacement figure - an isometric render of a tray being withdrawn, which no
+        earlier revision of this contract used - shows what this bar actually is: a moulded
+        D-LOOP ON TWO PIVOT BOSSES, lying diagonally across the grille when stowed and swinging
+        out to a hoop you put a hand through when pulled. It is rigid plastic, not a strap, and
+        the datasheet's two rear photographs show it stowed in both airflow colours.
+        THE OLD FIGURE WAS 1.0 + 3.0 = 4 mm TOTAL and that is what this correction is about: on
+        a 90 mm tray it read as paint rather than hardware, and a reviewer looking at the
+        profile view said so. 9.0 + 7.0 = 16 mm puts a 7 mm bar 9 mm clear of the grille, which
+        is a handle you can hook fingers under in the stowed position the model draws.
+        BOTH NUMBERS ARE STILL ESTIMATES AND roc-ops/Portrayal#385 STAYS OPEN. The FRU figure is
+        an isometric marketing render, so taking a millimetre off it would be measuring the
+        projection rather than the part - the trap this project records for exactly this class
+        of feature. No staged document dimensions the standoff. The one PUBLISHED figure of
+        this kind anywhere in the library is UfiSpace's S9510-28DC HIG, "the handle for the
+        power supplies will extend outwards by 1.06 inches", which edgecore/ais800-psu-dc@1
+        borrows as uhandle 27.0; 16 mm for a stowed tray loop sits below that and is meant to.
     - node: status
       dome: 0.3
       confidence: estimated

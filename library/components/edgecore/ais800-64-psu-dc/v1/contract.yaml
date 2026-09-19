@@ -99,20 +99,127 @@ relief:
       confidence: estimated
       source: 'as vent-left'
     - node: handle
-      bar: 3.0
-      lift: 1.0
+      bar: 6.0
+      lift: 6.0
       confidence: estimated
       source: >-
-        edgecore/ais800-fan@1 and the rest of this line's pull handles, and NOT SOURCED on any
-        of them - roc-ops/Portrayal#385 is open on exactly this figure. The hardware is a
-        closed loop you put two fingers through, and the first draft drew it as an outline
-        loop: at review that read as a flat oval drawn on the face rather than something
-        standing off it, which is the same correction edgecore/ais800-fan@1 took. It is drawn
-        as a solid bar with a recessed centre and given the family's bar + lift.
+        MATCHED TO edgecore/ais800-64-psu-ac@1, which is the same CRPS shell and the same bay,
+        and which now carries 6.0 + 6.0 = 12 mm off the guide's PSU Replacement figure. The
+        old 1.0 + 3.0 = 4 mm read as a painted strip in the 3D profile.
+        THIS FACE IS THE ONE PLACE THE LOOP IS SEEN SQUARE-ON: the guide's Connect Power figure
+        draws it standing up the left of the DC face at x 9.47-17.96, y 3.48-38.14, a closed
+        loop with a 3.3 x 26.2 hole through it, where the AC unit's is a bail lying across the
+        bottom of its fan guard. Same family of part, turned through ninety degrees because the
+        DC face has no guard to wrap.
+        STILL ESTIMATED, and roc-ops/Portrayal#385 stays open. Neither figure dimensions the
+        standoff, and both are isometric or square-on renders rather than drawings.
     - node: terminal-pocket
       pocket: 3.2
       confidence: estimated
       source: 'edgecore/ais800-psu-dc@1 - the same vendor''s DC terminal recess, also estimated.'
+    # THE SIX BORES HAD NO RELIEF AT ALL AND SO EXISTED ONLY IN 2D. They were drawn as six
+    # unnamed <g> inside `terminal-bores`, and a relief feature matches a SKIN NODE BY ID -
+    # so nothing resolved, nothing was extruded, and 3D showed the pocket as a flat plate
+    # with the whole connector missing. The bores and their studs now carry ids of their own.
+    # This is the general trap: art in a skin is invisible to relief unless it is NAMED, and
+    # a component whose `relief.features` list looks full can still be missing its main
+    # feature. Counting the emitted `data-z-*` nodes against what the face draws catches it.
+    - node: bore-1
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-dc@1's own Connect Power figure - the bores are drawn as round
+        recesses with a stud down each one and the figure shades their side walls, so they are
+        holes rather than printing. HOW DEEP IS NOT STATED by either document, and the connector
+        is not even named - see the device's dc-connector-identity gap. 3.0 below the block's
+        own 3.2 pocket floor puts the stud head level with the block face, which is what the
+        figure shows.
+    - node: bore-2
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-dc@1's own Connect Power figure - the bores are drawn as round
+        recesses with a stud down each one and the figure shades their side walls, so they are
+        holes rather than printing. HOW DEEP IS NOT STATED by either document, and the connector
+        is not even named - see the device's dc-connector-identity gap. 3.0 below the block's
+        own 3.2 pocket floor puts the stud head level with the block face, which is what the
+        figure shows.
+    - node: bore-3
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-dc@1's own Connect Power figure - the bores are drawn as round
+        recesses with a stud down each one and the figure shades their side walls, so they are
+        holes rather than printing. HOW DEEP IS NOT STATED by either document, and the connector
+        is not even named - see the device's dc-connector-identity gap. 3.0 below the block's
+        own 3.2 pocket floor puts the stud head level with the block face, which is what the
+        figure shows.
+    - node: bore-4
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-dc@1's own Connect Power figure - the bores are drawn as round
+        recesses with a stud down each one and the figure shades their side walls, so they are
+        holes rather than printing. HOW DEEP IS NOT STATED by either document, and the connector
+        is not even named - see the device's dc-connector-identity gap. 3.0 below the block's
+        own 3.2 pocket floor puts the stud head level with the block face, which is what the
+        figure shows.
+    - node: bore-5
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-dc@1's own Connect Power figure - the bores are drawn as round
+        recesses with a stud down each one and the figure shades their side walls, so they are
+        holes rather than printing. HOW DEEP IS NOT STATED by either document, and the connector
+        is not even named - see the device's dc-connector-identity gap. 3.0 below the block's
+        own 3.2 pocket floor puts the stud head level with the block face, which is what the
+        figure shows.
+    - node: bore-6
+      sink: 3.0
+      confidence: estimated
+      source: >-
+        edgecore/ais800-64-psu-dc@1's own Connect Power figure - the bores are drawn as round
+        recesses with a stud down each one and the figure shades their side walls, so they are
+        holes rather than printing. HOW DEEP IS NOT STATED by either document, and the connector
+        is not even named - see the device's dc-connector-identity gap. 3.0 below the block's
+        own 3.2 pocket floor puts the stud head level with the block face, which is what the
+        figure shows.
+    - node: stud-1
+      top: 2.0
+      confidence: estimated
+      source: >-
+        as the bores - the stud rises back out of its own bore and its slotted head is what a
+        screwdriver reaches. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: stud-2
+      top: 2.0
+      confidence: estimated
+      source: >-
+        as the bores - the stud rises back out of its own bore and its slotted head is what a
+        screwdriver reaches. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: stud-3
+      top: 2.0
+      confidence: estimated
+      source: >-
+        as the bores - the stud rises back out of its own bore and its slotted head is what a
+        screwdriver reaches. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: stud-4
+      top: 2.0
+      confidence: estimated
+      source: >-
+        as the bores - the stud rises back out of its own bore and its slotted head is what a
+        screwdriver reaches. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: stud-5
+      top: 2.0
+      confidence: estimated
+      source: >-
+        as the bores - the stud rises back out of its own bore and its slotted head is what a
+        screwdriver reaches. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
+    - node: stud-6
+      top: 2.0
+      confidence: estimated
+      source: >-
+        as the bores - the stud rises back out of its own bore and its slotted head is what a
+        screwdriver reaches. 2.0 off a 3.0 floor leaves it 1.0 below the block face.
     - node: latch
       out: 1.2
       confidence: estimated

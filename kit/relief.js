@@ -638,6 +638,14 @@ export async function extractRelief(url, scope) {
         kind: f.dataset.zTop ? 'top' : 'sink',
         val: +(f.dataset.zTop || f.dataset.zSink),
         color: f.dataset.zColor || '#0a0c0e',
+        // A ROUND FEATURE IN A CAVITY USED TO BUILD AS A BOX. The cavity itself has
+        // had `round` since the screw heads needed it, but the `top`/`sink` features
+        // standing in one never did, so every circular recess in the library came out
+        // square: an LC ferrule, a reset pinhole and - the one that surfaced it - the
+        // six stud bores of the AIS800-64D's DC supply. Nothing depended on the square
+        // reading; a `<circle>` is taken at its word, and `data-round` is there for a
+        // node whose art is round but whose tag is not.
+        round: f.dataset.round === '1' || f.tagName === 'circle',
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
               wallsInside: el.dataset.walls === 'inside',
@@ -996,12 +1004,28 @@ export async function buildFaceRelief(F, ctx) {
           const mats = sideMats(ft.color);
           mats[4] = new THREE.MeshBasicMaterial({map: canvasTex(ft.faceCv)});
           ft.mat = mats[4];
-          const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
+          let m;
+          if (ft.round) {
+            // CylinderGeometry's materials are [side, +Y cap, -Y cap] and it stands
+            // along Y, so the art goes on cap 1 and the whole thing lies down. Same
+            // rotation the round cavity wall above takes, for the same reason.
+            const cyl = new THREE.CylinderGeometry(ft.w / 2, ft.w / 2, hgt, 24);
+            m = new THREE.Mesh(cyl, [mats[0], mats[4], mats[5]]);
+            m.rotation.x = Math.PI / 2;
+          } else {
+            m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
+          }
           m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), c.lift - (d - hgt / 2));
           addTo(m);
         } else {   // sink: a deeper pocket beyond the floor
-          const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, ft.val),
-            new THREE.MeshLambertMaterial({color: ft.color, side: THREE.DoubleSide}));
+          const mat = new THREE.MeshLambertMaterial({color: ft.color, side: THREE.DoubleSide});
+          let m;
+          if (ft.round) {
+            m = new THREE.Mesh(new THREE.CylinderGeometry(ft.w / 2, ft.w / 2, ft.val, 24), mat);
+            m.rotation.x = Math.PI / 2;
+          } else {
+            m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, ft.val), mat);
+          }
           m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), -(d + ft.val / 2));
           addTo(m);
         }
