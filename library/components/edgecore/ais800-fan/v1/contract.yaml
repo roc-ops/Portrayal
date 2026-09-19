@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ais800-fan
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: networking
@@ -41,6 +41,54 @@ provenance:
     horizontal seams at y 1.38 and 42.04 bound both module types on this face; the trays read
     40.6 and the supplies 40.66, and 40.6 is used for both. This is NOT the 40.0 that the rest
     of this library's Edgecore 1RU modules carry as an estimate.
+  the-name-is-the-chassis-because-nothing-but-the-chassis-seats-it: >-
+    ROC-OPS/PORTRAYAL#420 RENAMED THIS TRAY'S 2RU SIBLING AND DELIBERATELY DID NOT RENAME THIS
+    ONE. That change turned `edgecore/ais800-64-fan` into `edgecore/fan-2u-1x1sn` under
+    library/components/README.md's rule - "use the vendor's model number where one exists; it
+    is what a search will be for" - and of the library's EIGHT Edgecore fan contracts this one
+    and that one are the only two whose `model:` is a real vendor ordering code. Whether the
+    same rule should move this part was asked in roc-ops/Portrayal#423 and ANSWERED NO; see
+    that contract's
+    the-name-is-the-fru-because-the-tray-outlived-the-chassis for the other side of it.
+    THAT SURVEY COUNTS WHAT THE CONTRACTS RECORD, NOT WHAT EDGECORE PUBLISHES, and anyone
+    re-running it should know the difference. The staged datasheets DO print a tray FRU for
+    three of the other six: FAN-1U-1x1E for the DCS201 and the DCS202 (edgecore/dcs201-fan@1),
+    FAN-1U-1x1N for the DCS240 and the DCS511 (edgecore/dcs240-fan@1) and FAN-1U-1x1J-S for the
+    CSR310 (edgecore/csr310-fan-tray@1), while those three carry a chassis-derived stand-in
+    like 'AS5835-54X Fan Tray' in `model:`. What is wrong there is the ATTR, which is what a
+    DCIM orders by, and not the name; none of this decision turns on it.
+    WHAT TIPPED #420 WAS FALSITY, NOT THE EXISTENCE OF AN FRU. The 2RU tray is seated by the
+    AIS800-64D, the AIS800-64O and the AGR560, and a machine that is an AGR cannot carry an
+    `ais800-` surname. THIS tray is seated by the AIS800-32D and the AIS800-32O, both of which
+    genuinely are AIS800 machines, so the name asserts nothing the library contradicts.
+    THE WHOLE LINE WAS SEARCHED FOR A THIRD CHASSIS AND THERE IS NOT ONE. `FAN-1U-1x1P` appears
+    in exactly TWO of the seventy-two converted Edgecore documents staged for this library,
+    thirty-eight of them datasheets: the AIS800-32D's and the AIS800-32O's, in their Fan FRUs
+    tables as -B/F0TEC9632007A and -F/F0TEC9632002A. The letter in `FAN-1U-1x1<letter>` is per
+    TRAY, and this line's other 1RU trays each carry their own - 1x1E on the DCS201 and DCS202,
+    1x1N on the DCS240 and DCS511, 1x1G on the DCS500, 1x1J-S on the CSR310, 1x1M on the EPS202
+    and EPS203. P is the AIS800-32's and nothing else in the line claims it. The nearest
+    lookalike is not it either: edgecore/exp800-fan@1 is 41.45 x 40.0 on a 48.92 mm pitch with
+    a 7.47 rail and six bays, against this tray's 41.65 x 40.6 on 45.03 with 3.36 and seven.
+    AND THE LIBRARY ALREADY APPLIES THE RULE THIS WAY, which is the part that settles it. The
+    SAME two ordering tables print `PSU-AC-2400W-F/-B` and `PSU-DC-2400W-F/-B` as FRUs;
+    edgecore/ais800-psu-ac@1 and edgecore/ais800-psu-dc@1 carry exactly those codes in `model:`
+    and keep the chassis-family name, as do their 3000 W siblings, and #420 left all four
+    alone. A part is renamed when its name makes a claim its seats contradict - not because an
+    ordering code exists somewhere.
+    WHAT THE RENAME WOULD HAVE COST. It is a NEW NAME AT v1, and a bay's `accepts:` and
+    `default:` are addressing, so both the AIS800-32D and the AIS800-32O would be asked for a
+    MAJOR - 1.0.0 -> 2.0.0 - for two rendered rears that would come out identical. #420 records
+    that cost in full and it is the same cost here, bought with consistency alone.
+    AND THE SEARCH THE RULE IS ABOUT ALREADY FINDS IT. The DCIM exports are keyed on `model:`,
+    not on the contract slug: this part is published to NetBox and Nautobot as
+    module-types/Edgecore/FAN-1U-1X1P.yaml and has been since it was drawn, exactly as its 2RU
+    sibling was already exported as FAN-2U-1x1SN.yaml under its old `ais800-64-fan` name. The
+    slug is internal addressing; the FRU is the external name and is already the FRU. That is
+    most of what a rename was going to buy, bought.
+    WHAT WOULD REOPEN IT: any non-AIS800 rear printing `FAN-1U-1x1P` in its own ordering table
+    or seating this contract. On that day the name is the 2RU tray's old problem and the rename
+    is warranted.
   the-drawing-is-an-upscale-and-that-was-checked: >-
     THE 600 DPI RENDER IS AN INTERPOLATION OF A 1.83 px/mm RASTER. The elevation is embedded in
     the PDF at 832 x 108 px, so rendering the page at 600 dpi upscales it 2.8x and the apparent

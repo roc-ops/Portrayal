@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan-2u-1x1sn
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: networking
@@ -87,10 +87,27 @@ provenance:
     The `agr-` in `edgecore/agr-fan` is the exception the same page allows - a product LINE
     prefix - and its own contract says why it qualifies: its `model` is the placeholder
     'AGR Fan', because no Edgecore document prints a FRU for that tray. Of the eight Edgecore
-    fans in this library only TWO carry a real vendor ordering code, this one and
+    fans in this library only TWO RECORD a real vendor ordering code in `model:`, this one and
     `edgecore/ais800-fan@1`'s `FAN-1U-1X1P`; the other six carry a descriptive stand-in like
-    'AS9726-32DB Fan Tray'. So the FRU rule reaches this part and does not reach most of its
-    neighbours, which is why they keep their prefixes.
+    'AS9726-32DB Fan Tray'.
+    THAT COUNT IS OF WHAT THE CONTRACTS RECORD, NOT OF WHAT EDGECORE PUBLISHES, which this key
+    said less carefully at 420 and roc-ops/Portrayal#423 corrected. The staged datasheets DO
+    print a tray FRU for three of the other six - FAN-1U-1x1E for the DCS201 and the DCS202
+    (edgecore/dcs201-fan@1), FAN-1U-1x1N for the DCS240 and the DCS511
+    (edgecore/dcs240-fan@1) and FAN-1U-1x1J-S for the CSR310 (edgecore/csr310-fan-tray@1).
+    A stand-in in `model:` is therefore evidence about the modeller, not about the vendor, and
+    the corpus is what settles whether an FRU exists. What is wrong in those three is the ATTR,
+    which is what a DCIM orders by and what the exports are keyed on, and not the name.
+    AND THE 1RU SIBLING WAS ASKED THIS SAME QUESTION AND KEPT ITS NAME. #423 put the rule to
+    `edgecore/ais800-fan@1`, the other real ordering code here, and answered NO: `FAN-1U-1x1P`
+    appears in exactly two of the seventy-two converted Edgecore documents staged for this
+    library and both are AIS800-32 datasheets, so unlike this tray its name asserts nothing
+    its seats contradict. See that contract's
+    the-name-is-the-chassis-because-nothing-but-the-chassis-seats-it. What tips a rename is
+    FALSITY - a seat the name denies - and not the bare existence of an ordering code; the
+    same two AIS800-32 tables print `PSU-AC-2400W-F/-B` and `PSU-DC-2400W-F/-B`, which
+    edgecore/ais800-psu-ac@1 and edgecore/ais800-psu-dc@1 carry in `model:` while keeping
+    chassis-family names, and #420 left them and their 3000 W siblings alone.
     THE AIRFLOW SUFFIX IS DROPPED because -F and -B differ only in the handle colour, which is
     the `handle-finish` field and a per-configuration override, not a second part.
     THE PART DID NOT MOVE AND THE DEVICES STILL WENT MAJOR, which is the part of the cost worth
