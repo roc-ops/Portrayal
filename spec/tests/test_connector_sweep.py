@@ -75,3 +75,50 @@ def test_the_sweep_covers_what_the_library_actually_has():
         "these are fibre connectors (class: port, attrs.media: fiber, no "
         "relief.cavity) and are not in FIBRE_CONNECTORS, so nothing above "
         f"sweeps them: {unlisted}")
+
+
+def test_a_boot_point_is_the_mate_point():
+    """A `boot` connection-point that nothing reads must not drift from `mate`.
+
+    NOTHING IN THE PIPELINE READS "boot" - not render.py, not lint.py, not
+    kit/. render.py's mate-to resolution seats an occupant by the HOST's
+    presented `mate` point and the occupant's own `mate` point, full stop. So
+    a boot mated onto a plug lands on the plug's `mate` point, and that is
+    right only because every plug in the library publishes `mate` and `boot`
+    at the same (x, y). A plug that separated them would silently seat its
+    boot on its FRONT face.
+
+    The seating rule was deliberately not changed - the difference between the
+    two points is along the axis these plug contracts refuse to state, so
+    there is nothing for a renderer to distinguish them with (see either
+    plug's provenance.boot-coincides-with-mate). This test is the other half
+    of that decision: the invariant the omission rests on, enforced across the
+    library rather than asserted in prose, so separating them fails here
+    instead of going quietly wrong in a drawing.
+    """
+    offenders = []
+    for f in sorted(LIB.rglob("contract.yaml")):
+        cps = (yaml.safe_load(f.read_text()) or {}).get("connection-points") or {}
+        if "boot" not in cps or "mate" not in cps:
+            continue
+        if cps["boot"].get("at") != cps["mate"].get("at"):
+            offenders.append(
+                f"{f.relative_to(LIB)}: mate at {cps['mate'].get('at')} but "
+                f"boot at {cps['boot'].get('at')}")
+    assert not offenders, (
+        "seating reads the host's `mate` point and never its `boot` point, so "
+        "these parts would seat a boot in the wrong place without erroring:\n  "
+        + "\n  ".join(offenders)
+        + "\nEither move them back together or teach render.py's mate-to "
+          "resolution to prefer a host's `boot` point - and give plug "
+          "contracts the depth that would make the two differ.")
+
+
+def test_both_plugs_say_the_coincidence_is_load_bearing():
+    """The prose half of the decision above, where a contract reader will see it."""
+    for rel in ("generic/lc-plug/v1", "generic/rj45-plug/v1"):
+        prov = (load(rel) or {}).get("provenance") or {}
+        assert "boot-coincides-with-mate" in prov, rel
+        note = prov["boot-coincides-with-mate"]
+        assert "test_a_boot_point_is_the_mate_point" in note, (
+            f"{rel}: the note must name the test that enforces it")

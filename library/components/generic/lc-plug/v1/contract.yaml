@@ -113,6 +113,34 @@ provenance:
     plug from the ferrule tip to wherever it exits the rear, so a front point
     and a rear point on one physical connector are the same axis seen from
     two directions, not two locations.
+  boot-coincides-with-mate: >-
+    A LOAD-BEARING COINCIDENCE, STATED SO IT CAN BE CHECKED. This contract
+    publishes a `boot` connection-point, and NOTHING READS IT - not render.py,
+    not lint.py, not kit/. Seating always positions an occupant by the HOST's
+    presented `mate` point (render.py's mate-to resolution calls
+    manifest.presented_interface and then takes the occupant's own `mate`), so
+    a boot mated onto this plug lands on the plug's `mate` point and not on
+    its `boot` point. That is correct TODAY only because the two are the same
+    (x, y) here - see provenance.axis - and it would put a boot on the plug's
+    FRONT face, silently, the day someone separates them.
+
+    THE SEATING RULE WAS NOT CHANGED, deliberately. Preferring a host's `boot`
+    point when the occupant is a boot looks like a small change and is not:
+    `presented_interface` returns an interface, a point AND a lift that all
+    belong to an APERTURE, and a rear point has no aperture and no lift story
+    to return. The real difference between a `mate` point and a `boot` point
+    is along the axis this contract deliberately does not state - there is no
+    `size.d` here, and provenance.size says why - so a renderer that
+    distinguished them would have nothing to distinguish them WITH, and the
+    2D front view in which these parts are drawn cannot show the difference
+    either. Making that change properly means giving plugs a depth and the
+    seating a front/rear axis, which is a design pass, not a patch.
+
+    So the invariant is written down instead, and
+    spec/tests/test_connector_sweep.py::test_a_boot_point_is_the_mate_point
+    enforces it across the whole library: any contract that publishes both
+    points must have them coincide. The day someone separates them is the day
+    a test fails, rather than the day a drawing goes quietly wrong.
 elements:
   tip: {at: [1.64, 0.0], size: [2.3, 0.85], class: latch}
   neck: {at: [1.14, 0.85], size: [3.3, 4.2], class: latch}
