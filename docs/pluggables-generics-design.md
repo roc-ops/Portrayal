@@ -65,6 +65,10 @@ XFP (INF-8077i) and CFP/CFP2 (CFP MSA hardware specs) are the same shape of work
 are a second batch after these four; they are not in day one because no device in the
 library needs them populated and their specs are not yet held.
 
+`osfp-module` was scoped out of this plan's execution - the OSFP MSA was never fetched
+and no built part depends on it (`generic/osfp-mpo12` is gated on the MPO receptacle
+regardless); it is the first item of the second batch.
+
 ### 3. The generics
 
 Named form x face. A generic's name never carries a rate.
@@ -73,8 +77,8 @@ Named form x face. A generic's name never carries a rate.
 |---|---|---|
 | `generic/sfp-lc` | LC duplex | migrates `common/sfp-lc-duplex` |
 | `generic/sfp-lc-simplex` | one LC (bidi) | |
-| `generic/sfp-sc` | SC simplex | needs `std/sc-bore`, below |
-| `generic/sfp-rj45` | RJ45 | composes `std/rj45-ganged@2`'s aperture as its face |
+| `generic/sfp-sc` | SC simplex | gated: needs `std/sc-bore`, which has no free dimensions - see section 4 |
+| `generic/sfp-rj45` | RJ45 | gated: no free document dimensions the RJ45 opening cut into a copper SFP's face, and every panel jack in the library (12.7 x 11.0 and larger) is taller than the 8.55 envelope the part conforms to - an outline the envelope excludes is worse than a missing part; a 10GBASE-T SFP+ mechanical drawing would settle it |
 | `generic/qsfp-lc` | LC duplex | migrates `common/qsfp-transceiver`'s `lc` skin |
 | `generic/qsfp-mpo12` | MPO-12, one row, pinned | gated: needs a dimensioned MPO receptacle |
 | `generic/qsfp-dd-lc` | LC duplex | |
@@ -134,6 +138,10 @@ Three things the shape enforces:
   MSAs - the subtraction `common/sfp-lc-duplex` already documents, with a better source
   on each side. Where an MSA gives the latch or bail its own reach, that is a second
   feature; where it does not, the feature says `estimated` and why.
+  Every generic draws the MSA's MAXIMUM protrusion - designator A's 10.0 recommended
+  maximum for SFP, the 20 MAX nose for QSFP and QSFP-DD - rather than a typical
+  module's, because the maximum is the figure the standards publish and a typical
+  figure would be an estimate.
 - **The face's optical axis is not the module centreline** and is not sourced by any
   MSA. SFF-8436 and the QSFP-DD spec both defer the LC receptacle to TIA-604-10, which
   is paywalled. The generics inherit the current bores' position tokens and the
@@ -146,7 +154,18 @@ Three things the shape enforces:
 
 ### 4. `std/sc-bore`
 
-GATED AT EXECUTION, 2026-09-18. The library has no SC face - `common/sc-apc` is a 24 x 26 mm moulded PON bay - and no free document dimensions the SC simplex keyed opening a `std/sc-bore` would need. Searched: SENKO DS-SC-000006 (plug; no front view, unlike the LC plug datasheet the LC bore was built from), DS-SC-000010 and DS-SC-000011 (adapters; housing and panel cutout only), FS SC/UPC simplex adapter and Molex 106167 (the same), TE catalogue 1307895 pp. 49-52 (the 13.0-13.5 x 18.0 SC-footprint panel cutout for adapters, not the keyed opening), and OKF (nothing). TIA-604-3 / IEC 61754-4 are paywalled. So the SC face waits for a drawing exactly as the MPO faces do, `generic/sfp-sc` is not in this plan, and `working/intake/fiber-connectors/sc/COVERAGE.md` records the search. What would settle it: a TE customer drawing of an SC simplex adapter or connector with a front view, or the standard.
+GATED AT EXECUTION, 2026-09-18. The library has no SC face - `common/sc-apc` is a 24
+x 26 mm moulded PON bay - and no free document dimensions the SC simplex keyed
+opening a `std/sc-bore` would need. Searched: SENKO DS-SC-000006 (plug; no front
+view, unlike the LC plug datasheet the LC bore was built from), DS-SC-000010 and
+DS-SC-000011 (adapters; housing and panel cutout only), FS SC/UPC simplex adapter and
+Molex 106167 (the same), TE catalogue 1307895 pp. 49-52 (the 13.0-13.5 x 18.0
+SC-footprint panel cutout for adapters, not the keyed opening), and OKF (nothing).
+TIA-604-3 / IEC 61754-4 are paywalled. So the SC face waits for a drawing exactly as
+the MPO faces do, `generic/sfp-sc` is not in this plan, and
+`working/intake/fiber-connectors/sc/COVERAGE.md` records the search. What would
+settle it: a TE customer drawing of an SC simplex adapter or connector with a front
+view, or the standard.
 
 ### 5. One lint rule
 
@@ -197,11 +216,11 @@ transceiver, not a port". `std/sc-bore` joins that skip list.
 
 1. Fetch the OSFP MSA into `working/intake/optic/msa/` beside a `SOURCES.md`; read
    SFF-8432 Table 4-3 and SFF-8661 Fig 5-1 out of OKF.
-2. `standards.yaml`: the four module entries and `sc-simplex-receptacle`. `std/sc-bore`.
+2. `standards.yaml`: the four module entries.
 3. `vendors.yaml`: the `generic` namespace. L99 and its fixture test.
 4. `generic/sfp-lc` and `generic/qsfp-lc` by migration; render each beside its MSA
    figure at matched scale (Gate 5).
-5. `sfp-lc-simplex`, `sfp-sc`, `sfp-rj45`, `qsfp-dd-lc`.
+5. `sfp-lc-simplex`, `qsfp-dd-lc`.
 6. Strip the five configs; fixture; README section and README correction.
 7. Gates: lock, lint, build, publish, catalogue, suite. One PR per numbered step where
    a step touches shipped devices.
