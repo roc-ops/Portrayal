@@ -419,10 +419,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr560-psu-ac@1` | module | psu | 73.5 × 40 |  | 1 | 1 | The 2000 W AC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU PS-2202-8L - a 73.5 x 40 CR… |
 | `edgecore/agr560-psu-dc@1` | module | psu | 73.5 × 40 |  | 1 | 0 | The 2000 W -48 VDC power supply of the Edgecore AGR560 (AS9947-36XKB), sold as the FRU DD-2202-1L - the AC un… |
-| `edgecore/ais800-64-fan@1` | module | fan | 81.6 × 81.2 |  | 3 | 0 | A rear fan module of the Edgecore AIS800-64D and AIS800-64O - a near-square 2RU tray, honeycomb across its wh… |
 | `edgecore/ais800-64-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 3 | The 3000 W AC power supply of the Edgecore AIS800-64D and AIS800-64O - a CRPS-form module in a bright housing… |
 | `edgecore/ais800-64-psu-dc@1` | module | psu | 73.5 × 40 |  | 3 | 1 | The 3000 W DC power supply of the Edgecore AIS800-64D and AIS800-64O - the AC unit's 73.5 x 40 CRPS shell wit… |
-| `edgecore/ais800-fan@1` | module | fan | 41.65 × 40.6 |  | 2 | 1 | A rear fan module of the Edgecore AIS800-32D and AIS800-32O - a honeycomb-grilled black tray with a large col… |
+| `edgecore/ais800-fan@1` | module | fan | 41.65 × 40.6 |  | 2 | 2 | A rear fan module of the Edgecore AIS800-32D and AIS800-32O - a honeycomb-grilled black tray with a large col… |
 | `edgecore/ais800-psu-ac@1` | module | psu | 53.7 × 40.6 |  | 2 | 1 | The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a latt… |
 | `edgecore/ais800-psu-dc@1` | module | psu | 53.7 × 40.6 |  | 2 | 1 | The 2400 W DC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a colo… |
 | `edgecore/csr310-fan-tray@1` | module | fan | 45.2 × 40.4 × 300 |  | 2 | 0 | The fan tray of the Edgecore CSR310 (AS7315-27X) - a hot-swappable 1RU tray at the right-hand end of the face… |
@@ -438,6 +437,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/dcs240-psu-dc@1` | module | psu | 54.4 × 40 |  | 2 | 0 | The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - the same 54.4 x 40 CRPS face as the AC varian… |
 | `edgecore/exp800-fan@1` | module | fan | 41.45 × 40 |  | 3 | 1 | A rear fan module of the Edgecore EXP800-16O - a honeycomb-grilled tray with a single rotor behind the mesh a… |
 | `edgecore/exp800-psu-ac@1` | module | psu | 50.6 × 40 |  | 3 | 0 | The AC power supply of the Edgecore EXP800-16O - a CRPS-style module in a bright housing with a latticed exha… |
+| `edgecore/fan-2u-1x1sn@1` | module | fan | 81.6 × 81.2 |  | 3 | 0 | Edgecore's FAN-2U-1x1SN rear fan tray - a near-square 2RU tray, honeycomb across its whole face, one 80 mm ro… |
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 
