@@ -188,6 +188,31 @@ const markerCagePlugBoot = el({'data-cp': 'cable', 'data-cp-at': '2 2.2'}, cageP
 const cageL = el({'data-path': 'cage-l', 'data-for': 'does-not-exist'}, svg);
 const markerCageL = el({'data-cp': 'cable', 'data-cp-at': '9 1'}, cageL);
 
+// connector M: a 2-CYCLE in data-for - two elements each naming the OTHER as
+// their host. Nothing real produces this (a `mate-to` occupant's data-for
+// names an already-positioned host; two elements cannot each be seated on
+// the other), but `cablePoints` runs in a browser against a document this
+// kit did not write, so the walk terminating is not optional - a hang here
+// is a real failure mode, not a theoretical one. seatChain's `seen` guard
+// stops each walk after two steps: cycle-a's chain is [cycle-a, cycle-b] and
+// cycle-b's is [cycle-b, cycle-a], so EACH sees the other in the other's
+// chain tail and shadows it. The sensible result asserted below is that
+// BOTH drop - symmetric, contradictory data getting zero survivors, rather
+// than an arbitrary pick decided by array order.
+const cycleA = el({'data-path': 'cycle-a', 'data-for': 'cycle-b'}, svg);
+const markerCycleA = el({'data-cp': 'cable', 'data-cp-at': '6 6'}, cycleA);
+const cycleB = el({'data-path': 'cycle-b', 'data-for': 'cycle-a'}, svg);
+const markerCycleB = el({'data-cp': 'cable', 'data-cp-at': '6 6.1'}, cycleB);
+
+// connector N: SELF-REFERENCE - an element whose data-for names itself. The
+// `seen` guard stops the walk after one step (the element is already in
+// `seen` the instant it is revisited as its own next hop), so its chain is
+// just itself and nothing shadows it. The sensible result asserted below is
+// that a self-reference behaves exactly like having no data-for at all: the
+// marker survives on its own.
+const cycleSelf = el({'data-path': 'cycle-self', 'data-for': 'cycle-self'}, svg);
+const markerCycleSelf = el({'data-cp': 'cable', 'data-cp-at': '6 6.2'}, cycleSelf);
+
 const markers = [
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
@@ -196,6 +221,7 @@ const markers = [
   markerJ,
   markerCage, markerCagePlug, markerCagePlugBoot,
   markerCageL,
+  markerCycleA, markerCycleB, markerCycleSelf,
 ];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);

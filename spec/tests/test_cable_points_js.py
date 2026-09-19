@@ -54,7 +54,7 @@ def test_cable_points_resolves_the_fake_drawing():
         "cage-a", "cage-b", "cage-c/plug/boot",
         "sfp-lc/tx", "sfp-lc/rx", "sfp-1", "sfp-10",
         "cage-g/plug/boot", "wrap/a", "wrap/b", "cage-j",
-        "cage-plug-boot", "cage-l",
+        "cage-plug-boot", "cage-l", "cycle-self",
     }
     assert "out" not in points["cage-a"]
 
@@ -127,6 +127,20 @@ def test_cable_points_resolves_the_fake_drawing():
     # typo, or an unresolved cross-view target) must not throw and must not
     # spin forever - the chain walk just stops, and the marker still reports.
     assert points["cage-l"]["at"] == [9, 1]
+
+    # A 2-CYCLE IN data-for (cycle-a names cycle-b, cycle-b names cycle-a).
+    # The subprocess call above completing at all IS the cycle test - a
+    # regression that broke the Set guard would hang node rather than fail
+    # an assertion. Each element sees the other in the other's chain tail,
+    # so each shadows the other; the sensible result is that BOTH drop
+    # rather than one winning by array order on symmetric, contradictory data.
+    assert "cycle-a" not in points, "a data-for 2-cycle must not let either side win"
+    assert "cycle-b" not in points, "a data-for 2-cycle must not let either side win"
+
+    # A SELF-REFERENCE (cycle-self names itself). The walk stops after one
+    # step, so nothing shadows it - it behaves exactly like having no
+    # data-for at all, and survives.
+    assert points["cycle-self"]["at"] == [6, 6.2]
 
     # a drawing with no cable markers at all returns [], not a throw
     assert out["empty"] == []

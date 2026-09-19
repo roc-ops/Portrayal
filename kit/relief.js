@@ -263,6 +263,17 @@ export function cablePoints(svg) {
   // shadow checks above - fine at real-world scale (a handful of connectors
   // per drawing), not worth optimising.
   const paths = entries.map(({pt}) => pt.path);
+  // THE TWO RULES ARE INDEPENDENT AND ANDED: a marker survives only if
+  // NEITHER shadows it. That is safe only because the two relations never
+  // overlap on one chain - a `data-for` never points at a PATH-DESCENDANT of
+  // its own owner (composed nesting and occupant `data-for` are disjoint in
+  // everything render.py emits today). If that ever stopped being true - a
+  // host whose `data-for` named its own composed child, say "a" pointing at
+  // "a/b" - path-prefix would shadow "a" and the chain rule would shadow
+  // "a/b" independently, and the connector would vanish with NEITHER rule
+  // aware the other fired. No runtime check for it here: the invariant holds
+  // today and a check would be dead code, but a fix that lets the two rules
+  // interact would need one.
   return entries
     .filter(({pt, owner}) =>
       !shadowed(pt.path, paths) &&
