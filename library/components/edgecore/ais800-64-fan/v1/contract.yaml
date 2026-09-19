@@ -39,8 +39,10 @@ provenance:
     and its right end at y 42-58 in face terms (a 6 mm sweep across 77 mm), with a small
     square button set into the bar's centre at (135.5, 47) on tray 1 - the release latch.
     The bar is drawn as that parallelogram in the skin; its element is the axis-aligned
-    footprint, and its relief is the family's `bar` + `lift` figure, which roc-ops/Portrayal
-    #385 already records as unsourced across this line's trays.
+    footprint, and its relief is a `uhandle` on the narrower `handle-bar` node, because the
+    guide's Fan Tray Replacement figure shows the part is a D-loop on two pivot bosses rather
+    than the flat bar the elevation flattens it into. The projection remains unsourced, which
+    roc-ops/Portrayal#385 already records across this line's trays.
   the-lens: >-
     ONE ROUND LENS AT THE TOP LEFT OF EVERY TRAY, face (99.5, 10.0) on tray 1 - a bright dot
     2 mm across on the photograph and a white dot on the drawing. Neither document names
@@ -83,14 +85,33 @@ relief:
         edgecore/ais800-64-fan@1's own elements key - the honeycomb's extent is drawn; two
         80 mm fans in series is the only thing known about the depth behind it.
     - node: handle
-      bar: 3.0
-      lift: 1.0
+      uhandle: 26
+      dia: 6.0
       confidence: estimated
       source: >-
-        edgecore/ais800-fan@1, edgecore/exp800-fan@1 and edgecore/dcs240-fan@1 - the family's
-        tray handle, and NOT SOURCED for the projection on any of them; roc-ops/Portrayal#385
-        is open on exactly this figure. A bar this thick probably stands off further; the
-        guess is labelled one.
+        IT GOES ON `handle`, THE WHOLE GROUP, AND THE TUBE DIAMETER IS SAID OUT LOUD. The face
+        texture hides exactly the node that carries the relief attribute, and nothing else - so
+        putting `uhandle` on an inner bar left the big diagonal polygon still painted on the
+        tray with the real handle standing in front of it. A reviewer saw both. The node has to
+        be the entire 2D handle, and its short axis is then the drawn loop's 22 mm height
+        rather than the tube, which is what `dia` is for.
+        A FLOATING BAR IS NOT A HANDLE, which is what `bar` builds: a tube standing off the
+        face on nothing. At review the trays' handles hung in space with no legs. `uhandle`
+        is the primitive that grows them - legs at the node's long-axis ends, two 90-degree
+        bends and a crossbar - and it is what the other sixty-seven handles in this library
+        use.
+        IT IS PUT ON `handle-bar`, NOT ON `handle`. `uhandle` takes its tube diameter from the
+        node's SHORT axis, and the handle group's box is 76.5 x 22, which would have built a
+        22 mm tube. `handle-bar` is the crossbar's own 6 mm footprint, added to the skin under
+        the polygon that draws it, so the 2D face is unchanged. The `handle-bar` idiom is
+        common/psu-ac-650@3's.
+        26 IS THE OUTER SURFACE, where the old `lift 9 + bar 7` reached 16. A U needs room for
+        its bends - the leg is (far - r) - dia long, so at this tube 16 would have left almost
+        no leg at all and the bends would have been the whole handle.
+        THE PROJECTION IS STILL AN ESTIMATE and roc-ops/Portrayal#385 stays open: the FRU
+        figure is an isometric render and dimensions nothing. What the family DOES fix is the
+        range - the library's sixty-seven other U-handles run 22-29 mm on fan trays and 27 on
+        every other Edgecore supply, the last resting on UfiSpace's published "1.06 inch".
     - node: status
       dome: 0.3
       confidence: estimated

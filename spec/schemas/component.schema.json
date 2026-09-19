@@ -323,6 +323,11 @@
         "exclusiveMinimum": 0,
         "description": "complete U-shaped tube handle this many mm proud: legs at the node's long-axis ends, continuous 90-degree bends, crossbar; tube diameter = node's short axis"
        },
+       "dia": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "description": "tube diameter for `uhandle`, when the node's short axis is not it. A handle's node has to be the WHOLE of its 2D art, because the face texture hides exactly the node that carries the relief attribute and the geometry takes over from there - so on a part that draws its handle as a wide loop, the node's short axis is the loop's height rather than the tube. Without this the choice was between a 22 mm tube and a flat handle left painted on the face underneath the real one"
+       },
        "lift": {
         "type": "number",
         "exclusiveMinimum": 0,

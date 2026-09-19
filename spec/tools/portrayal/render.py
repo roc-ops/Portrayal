@@ -748,7 +748,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
-                for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle"):
+                for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle", "dia"):
                     if feat.get(zk) is not None:
                         node.set(f"data-z-{zk}", str(feat[zk]))
                 if feat.get("profile"):
@@ -841,7 +841,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
-                for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle"):
+                for zk in ("top", "sink", "out", "dome", "vent", "cyl", "lift", "bar", "uhandle", "dia"):
                     if feat.get(zk) is not None:
                         node.set(f"data-z-{zk}", str(feat[zk]))
                 if feat.get("profile"):

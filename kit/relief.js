@@ -638,6 +638,14 @@ export async function extractRelief(url, scope) {
         kind: f.dataset.zTop ? 'top' : 'sink',
         val: +(f.dataset.zTop || f.dataset.zSink),
         color: f.dataset.zColor || '#0a0c0e',
+        // A ROUND FEATURE IN A CAVITY USED TO BUILD AS A BOX. The cavity itself has
+        // had `round` since the screw heads needed it, but the `top`/`sink` features
+        // standing in one never did, so every circular recess in the library came out
+        // square: an LC ferrule, a reset pinhole and - the one that surfaced it - the
+        // six stud bores of the AIS800-64D's DC supply. Nothing depended on the square
+        // reading; a `<circle>` is taken at its word, and `data-round` is there for a
+        // node whose art is round but whose tag is not.
+        round: f.dataset.round === '1' || f.tagName === 'circle',
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
               wallsInside: el.dataset.walls === 'inside',
@@ -665,6 +673,7 @@ export async function extractRelief(url, scope) {
             cyl: el.dataset.zCyl && +el.dataset.zCyl,
             bar: el.dataset.zBar && +el.dataset.zBar,
             uhandle: el.dataset.zUhandle && +el.dataset.zUhandle,
+            dia: el.dataset.zDia && +el.dataset.zDia,
             lift: liftOf(el),
             knurl: !!el.dataset.zKnurl,
             thread: el.dataset.zThread && +el.dataset.zThread,
@@ -773,6 +782,31 @@ export async function extractRelief(url, scope) {
   const cleanText = svg.outerHTML;
   div.remove();
   return {cavities, outs, domes, vents, frus, subBodies, flatLifted, cleanText};
+}
+
+// The commonest opaque colour in a raster, which is what a part is MADE of - as
+// against the one pixel at its centre, which is whatever happens to be printed
+// there. Buckets to 5 bits per channel so anti-aliased edges fall in with the
+// body they belong to, then returns the first EXACT colour seen in the winning
+// bucket, so the answer is a colour actually present in the art rather than a
+// rounded one. Subsamples on a grid: this runs once per raised node at build.
+function dominantColor(cv) {
+  const {width: W, height: H} = cv;
+  if (!W || !H) return 'rgb(128,128,128)';
+  const d = cv.getContext('2d').getImageData(0, 0, W, H).data;
+  const step = Math.max(1, Math.floor(Math.min(W, H) / 48));
+  const count = new Map(), exact = new Map();
+  for (let y = 0; y < H; y += step)
+    for (let x = 0; x < W; x += step) {
+      const i = (y * W + x) * 4;
+      if (d[i + 3] < 128) continue;                       // transparent
+      const k = (d[i] >> 3) << 10 | (d[i + 1] >> 3) << 5 | (d[i + 2] >> 3);
+      count.set(k, (count.get(k) || 0) + 1);
+      if (!exact.has(k)) exact.set(k, `rgb(${d[i]},${d[i + 1]},${d[i + 2]})`);
+    }
+  let best = null, bestN = 0;
+  for (const [k, n] of count) if (n > bestN) { bestN = n; best = k; }
+  return best === null ? 'rgb(128,128,128)' : exact.get(best);
 }
 
 export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
@@ -996,12 +1030,28 @@ export async function buildFaceRelief(F, ctx) {
           const mats = sideMats(ft.color);
           mats[4] = new THREE.MeshBasicMaterial({map: canvasTex(ft.faceCv)});
           ft.mat = mats[4];
-          const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
+          let m;
+          if (ft.round) {
+            // CylinderGeometry's materials are [side, +Y cap, -Y cap] and it stands
+            // along Y, so the art goes on cap 1 and the whole thing lies down. Same
+            // rotation the round cavity wall above takes, for the same reason.
+            const cyl = new THREE.CylinderGeometry(ft.w / 2, ft.w / 2, hgt, 24);
+            m = new THREE.Mesh(cyl, [mats[0], mats[4], mats[5]]);
+            m.rotation.x = Math.PI / 2;
+          } else {
+            m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, hgt), mats);
+          }
           m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), c.lift - (d - hgt / 2));
           addTo(m);
         } else {   // sink: a deeper pocket beyond the floor
-          const m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, ft.val),
-            new THREE.MeshLambertMaterial({color: ft.color, side: THREE.DoubleSide}));
+          const mat = new THREE.MeshLambertMaterial({color: ft.color, side: THREE.DoubleSide});
+          let m;
+          if (ft.round) {
+            m = new THREE.Mesh(new THREE.CylinderGeometry(ft.w / 2, ft.w / 2, ft.val, 24), mat);
+            m.rotation.x = Math.PI / 2;
+          } else {
+            m = new THREE.Mesh(new THREE.BoxGeometry(ft.w, ft.h, ft.val), mat);
+          }
           m.position.set(LX(ft.x, ft.w), LY(ft.y, ft.h), -(d + ft.val / 2));
           addTo(m);
         }
@@ -1089,14 +1139,17 @@ export async function buildFaceRelief(F, ctx) {
                          Math.round((f.x - o.x) * PX), Math.round((f.y - o.y) * PX));
         return cvs;
       };
-      // the side colour samples the node's centre and must read the UNPUNCHED
-      // raster, so it goes first. It is guarded by `if (!o.color)` and so never
-      // re-runs on a restyle, which is what lets one helper serve both paths.
-      if (!o.color) {
-        const px = ocv.getContext('2d').getImageData(
-          Math.floor(ocv.width / 2), Math.floor(ocv.height / 2), 1, 1).data;
-        o.color = `rgb(${px[0]},${px[1]},${px[2]})`;
-      }
+      // THE SIDE COLOUR IS THE ART'S DOMINANT COLOUR, NOT ITS CENTRE PIXEL.
+      // It used to be the one pixel at the middle of the node's box, which is fine
+      // until something small sits exactly there - and on a fan tray something does.
+      // The AIS800-64D's handle carries its release button at dead centre, a fixed
+      // #5a2320 with no `fill-from`, so every tray took the BUTTON's colour for its
+      // whole handle: the 2D art went blue in the back-to-front build and the 3D
+      // tube stayed red, in both builds, because the pixel being read never changed.
+      // The commonest opaque colour in the node's own art is what the part is made
+      // of; a button, a legend or a screw head is by definition a minority of it.
+      // Still read from the UNPUNCHED raster, so this goes before `compose`.
+      if (!o.color) o.color = dominantColor(ocv);
       await compose(ocv);
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
@@ -1106,7 +1159,13 @@ export async function buildFaceRelief(F, ctx) {
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
         const horizontal = o.w >= o.h;
-        const dia = Math.min(o.w, o.h), r = dia / 2, Rb = dia;
+        // THE NODE IS THE WHOLE HANDLE'S ART AND THE TUBE IS USUALLY THINNER THAN IT.
+        // This node has to be the entire 2D handle, because the face texture hides exactly
+        // the node carrying the relief attribute - put the attribute on an inner bar and the
+        // flat art around it stays painted on the face UNDER the geometry, which is what a
+        // reviewer saw on the AIS800-64D's trays. So where the drawn loop is taller than its
+        // tube, the contract says the diameter.
+        const dia = (o.dia && +o.dia) || Math.min(o.w, o.h), r = dia / 2, Rb = dia;
         const zBar = far - r, legH = Math.max(0.5, zBar - Rb);
         const uLen = Math.max(o.w, o.h);
         const u0 = horizontal ? o.x : o.y;

@@ -100,13 +100,28 @@ relief:
         edgecore/ais800-64-psu-ac@1's own elements key - the guard's extent is drawn, the
         depth of the fan behind it is not stated anywhere.
     - node: handle
-      bar: 2.0
-      lift: 1.0
+      uhandle: 27
+      dia: 6.6
       confidence: estimated
       source: >-
-        edgecore/ais800-fan@1 and the rest of this line's pull bars; roc-ops/Portrayal#385 is
-        open on exactly this unsourced figure. The hardware is a fabric loop lying on the
-        face, so if anything this overstates it.
+        IT GOES ON `handle`, THE WHOLE GROUP - see the fan tray, which took the same
+        correction. The face texture hides the node carrying the attribute and nothing else, so
+        an inner bar leaves the bail's own art painted on the face beneath the geometry. The
+        group's short axis is the drawn bail's 20.6 mm height, so `dia` states the 6.6 mm tube
+        the grip pad shows.
+        A FLOATING BAR IS NOT A HANDLE - see the fan tray, which took the same correction.
+        `bar` builds a tube standing on nothing, and at review both supplies' handles hung in
+        space. `uhandle` grows the legs.
+        IT IS PUT ON `handle-bar`, the grip pad the skin already drew, because that rect IS the
+        crossbar: 20.6 x 6.6, so a 6.6 mm tube. The group's own box is the whole bail outline
+        at 33 x 20.6 and would have built a 20.6 mm tube.
+        27 MATCHES EVERY OTHER EDGECORE SUPPLY in the library - ais800-psu-ac/dc, dcs201,
+        dcs240, exp800, csr440 - and 12, which is what `lift 6 + bar 6` reached, is below the
+        1.5 x diameter a U needs before its legs have any length.
+        THE PROJECTION IS STILL AN ESTIMATE and roc-ops/Portrayal#385 stays open: the FRU
+        figure is an isometric render and dimensions nothing. What the family DOES fix is the
+        range - the library's sixty-seven other U-handles run 22-29 mm on fan trays and 27 on
+        every other Edgecore supply, the last resting on UfiSpace's published "1.06 inch".
     - node: latch
       out: 1.2
       confidence: estimated
