@@ -255,7 +255,7 @@ generic's colour and label, and carries the facts that make it that product.
 ```yaml
 # library/components/cisco/sfp-10g-lr/v1/contract.yaml
 format: 1
-kind: component
+kind: module
 name: sfp-10g-lr
 version: 1.0.0
 class: transceiver
@@ -263,17 +263,29 @@ behaviour: occupies
 mates: sfp                      # must equal the generic's
 profile: networking
 description: Cisco SFP-10G-LR, 10GBASE-LR, 1310 nm, 10 km over OS2.
-size: {w: <the generic's w>, h: <the generic's h>, d: <the generic's d>}
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
 attrs: {model: SFP-10G-LR, media: sfp-plus, speed: 10g, reach: 10km,
         wavelength: 1310nm, power-draw-max-w: 1.0}
 provenance:
-  size: 'the generic it wraps - generic/sfp-lc@1 - which conforms to sfp-module'
+  size: >-
+    borrowed - generic/sfp-lc@1, the generic this wraps, whose own figures are
+    the sfp-module registry entry's. These are the GENERIC's numbers restated,
+    not a reading of a Cisco drawing; a wrapper that measured its own would be
+    a different shape and would not compose this generic.
   power: 'datasheet - Cisco SFP-10G-LR data sheet, maximum power consumption 1 W'
 parts:
   - {ref: generic/sfp-lc@1, id: body, at: [0, 0],
      attrs: {latch-color: '#2f5fa8', label: SFP-10G-LR}}
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
 skins: [default]
 ```
+
+`kind: module`, not `component`: a vendor optic is an orderable thing with a
+part number, and the DCIM export emits a module type only for `kind: module`
+(`spec/tools/portrayal/artifacts.py`). The generic it wraps is not orderable
+and stays `kind: component`.
 
 What goes where:
 
@@ -287,10 +299,19 @@ What goes where:
   colour is a field, not a second drawing (#177).
 - **Never on either:** a rate in a component NAME. `sfp28-lr` is refused; the
   name is the vendor's part number.
+- **Restated from the generic:** `size` (with `size-confidence: borrowed` and a
+  `provenance.size` saying whose figures they are) and the `mate`
+  connection-point. AN OCCUPANT MATES WITH ITS OWN POINT: the renderer reads
+  `connection-points.mate` off the occupant's own contract and refuses a
+  `mate-to` placement without one. Forwarding a mate point through `parts:`
+  (#54) is what a HOST does - a vendor cage presenting its composed aperture's
+  point - and it does not run the other way.
 
-The wrapper seats exactly where the generic would - a composed part presents the
-mate point of what it wraps (#54) - so nothing about cages, `occupants:` or L12
-changes for a vendor part. An optic whose shape is NOT the generic's (a long-body
+The wrapper restates the generic's mate point and so seats exactly where the
+generic would - so nothing about cages, `occupants:` or L12 changes for a vendor
+part. #54's mate-forwarding is the other direction: it lets a vendor CAGE
+present the aperture it composes to an occupant, never a wrapper present its
+occupant's point. An optic whose shape is NOT the generic's (a long-body
 SC SFP+, a module with a nose heat sink) draws its own contract in the vendor
 namespace with the same `mates:` and the same connection-points, and seats the
 same way.

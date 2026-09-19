@@ -801,6 +801,19 @@ def lint_component_mating(path, data, lib_roots):
         if data.get(key) and "mate" not in cps:
             err(path, "L11", f"{key}: {data[key]!r} declared but no 'mate' "
                              "connection-point - nothing to align to")
+    # AN OCCUPANT MATES WITH ITS OWN POINT. A host may present a mate point
+    # FORWARDED from an aperture it composes (manifest.presented_interface);
+    # an occupant may not, and render.py says so where it seats one: "the
+    # occupant's is its own: a module is the thing that mates, not a wrapper
+    # around one". It raises on a `mate-to` placement whose occupant has no
+    # `mate`, so a contract without one is a part that cannot be seated. The
+    # renderer refuses it; lint refuses it too, at the contract rather than at
+    # the first device that tries.
+    if data.get("behaviour") == "occupies" and "mate" not in cps:
+        err(path, "L11", "behaviour: occupies and no 'mate' connection-point - "
+                         "an occupant mates with ITS OWN point, which is not "
+                         "forwarded from a composed part the way a host's is, "
+                         "and the renderer refuses to seat it without one")
     # a wrapper may re-present the interface of a receptacle it composes, but it
     # must not present a DIFFERENT one - a plug would mate with the wrapper and
     # land on the wrong geometry
@@ -1288,6 +1301,7 @@ GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
                            "power-draw-max-w", "power-draw-typical-w")
 GENERIC_RATE_TOKENS = re.compile(
     r"(^|-)(sfp28|sfp56|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
+    r"1000base[a-z0-9-]*|"
     r"\d+g|\d+gbase[a-z0-9-]*|\d+km|\d+m)(-|$)")
 
 
@@ -1307,7 +1321,13 @@ def lint_component_generic(path, data, _lib_roots=None):
     """
     if not isinstance(data, dict) or data.get("class") != "transceiver":
         return
-    if Path(path).parts[-4:-3] != ("generic",) and "/generic/" not in str(path):
+    # THE NAMESPACE IS A POSITION, NOT A SUBSTRING: a contract lives at
+    # <lib>/components/<ns>/<name>/v<major>/contract.yaml, so the namespace is
+    # the fourth part from the end. Asking whether "/generic/" appears anywhere
+    # in the path made every vendor optic in a checkout under a directory
+    # NAMED generic answer yes.
+    is_generic = Path(path).parts[-4:-3] == ("generic",)
+    if not is_generic:
         return
     attrs = data.get("attrs") or {}
     hit = [k for k in GENERIC_FORBIDDEN_ATTRS if k in attrs]

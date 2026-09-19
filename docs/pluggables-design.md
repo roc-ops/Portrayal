@@ -65,19 +65,32 @@ a transceiver is unpinned, and a panel adapter is where pinned meets unpinned.
 
 ```yaml
 # library/components/cisco/sfp-10g-lr/v1/contract.yaml
+kind: module
 class: transceiver
 behaviour: occupies
 mates: sfp
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
 parts:
   - {ref: generic/sfp-lc@1, id: body, at: [0, 0],
      attrs: {latch-color: '#2f5fa8', label: SFP-10G-LR}}
 attrs: {model: SFP-10G-LR, media: sfp-plus, speed: 10g, reach: 10km,
         wavelength: 1310nm, power-draw-max-w: 1.0}
+provenance:
+  size: 'borrowed - generic/sfp-lc@1, the generic this wraps; its figures, not a Cisco drawing'
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
 ```
 
-Mate-forwarding (#54) seats the wrapper exactly where the generic would; the
+The wrapper RESTATES the generic's mate point and so seats exactly where the
+generic would. An occupant mates with its own point - the renderer reads
+`connection-points.mate` off the occupant's contract and refuses a `mate-to`
+placement without one - and mate-forwarding (#54) runs the other way, letting a
+vendor CAGE present the aperture it composes to the module that seats in it. The
 renderer already passes a `parts:` entry's `attrs` into the wrapped skin, which is
-how the latch takes its colour.
+how the latch takes its colour. `kind: module` because a vendor optic is orderable
+and the DCIM export emits module types only for `kind: module`; the generic stays
+`kind: component`.
 
 ## The ladder, once
 

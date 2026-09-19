@@ -58,3 +58,25 @@ def test_the_same_attrs_on_a_vendor_wrapper_are_fine():
 def test_a_generic_that_is_not_a_transceiver_is_not_asked():
     doc = dict(base(speed="fast"), **{"class": "connector"})
     assert run(GEN, doc) == []
+
+
+def test_l99_is_registered_as_a_component_rule():
+    assert lint.RULES["L99"][0] == "component"
+
+
+def test_1000base_in_the_name_is_a_rate():
+    """`sfp-1000base-t` names a rate as surely as `sfp28-lc` does. The token list
+    reached every `<n>G` spelling and every `<n>GBASE-x`, and walked straight past
+    the one Ethernet rate whose name is not in gigabits."""
+    errs = run(GEN, dict(base(), name="sfp-1000base-t"))
+    assert len(errs) == 1 and "names a rate" in errs[0]
+
+
+def test_a_directory_called_generic_above_the_checkout_is_not_the_namespace():
+    """THE NAMESPACE IS A POSITION, NOT A SUBSTRING. The rule used to ask whether
+    "/generic/" appeared anywhere in the path, which made every vendor optic in a
+    checkout under `~/generic/` answer yes and lose the attrs it is supposed to
+    carry."""
+    outside = pathlib.Path(
+        "/home/me/generic/Portrayal/library/components/cisco/sfp-10g-lr/v1/contract.yaml")
+    assert run(outside, base(speed="10g", reach="10km")) == []
