@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs520
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS9736-64D
@@ -181,15 +181,20 @@ gaps:
   wanted: >-
     A FAN FRU NUMBER FOR THIS MODEL. `edgecore/dcs520-fan@1` was written as its own part and it very probably
     is not one: the three other devices on this shell all seat a tray whose FRU number `FAN-2U-1x1SN-F`
-    is printed in all three of their datasheets, and this machine's tray sits on a pitch of 85.65 against
-    their 85.71 - six hundredths of a millimetre - with the same honeycomb, the same angled red bar with
-    two pairs of slots and a central button, and the same corner lamp. NEITHER DCS520 DOCUMENT PRINTS
-    A FAN PART NUMBER, so the argument that settled the other three is unavailable, and the drawings cannot
-    settle it either: scaled to a common size and normalised, 46% of pixels differ by more than a standard
-    deviation, but that is this guide drawing the tray bright with the rotor showing through the mesh
-    against the AIS800 guides drawing it dark. A test that cannot tell a different part from different
-    lighting decides nothing. One FRU list closes this. If it names `FAN-2U-1x1SN-F`, delete this component
-    and seat the shared one.
+    is printed in all three of their datasheets, and this machine's trays sit on a mean pitch of 85.58
+    against their uniform 85.71 - thirteen hundredths of a millimetre - with the same honeycomb, the same
+    angled red bar with two pairs of slots and a central button, and the same corner lamp. THE MEASUREMENTS
+    ARGUE FOR ONE PART MEASURED TWICE, NOT FOR TWO PARTS. The three gaps here run 85.54, 85.64 and 85.55,
+    a spread of a tenth of a millimetre, where the other three chassis repeat 85.71 with no spread at
+    all; and this face is 80.1 x 83.5 `measured` against the shared tray's 81.6 x 81.2 `photo-measured`,
+    a disagreement of 1.5 x 2.3 mm. Irregular spacing and a face that misses by more than the pitch does
+    are what pixel-measuring a drawing produces beside a dimensioned source. Two rulers, not two trays.
+    NEITHER DCS520 DOCUMENT PRINTS A FAN PART NUMBER, so the argument that settled the other three is
+    unavailable, and the drawings cannot settle it either: scaled to a common size and normalised, 46%
+    of pixels differ by more than a standard deviation, but that is this guide drawing the tray bright
+    with the rotor showing through the mesh against the AIS800 guides drawing it dark. A test that cannot
+    tell a different part from different lighting decides nothing. One FRU list closes this. If it names
+    `FAN-2U-1x1SN-F`, delete this component and seat the shared one.
 - what: the-reset-button
   scope:
   - front
