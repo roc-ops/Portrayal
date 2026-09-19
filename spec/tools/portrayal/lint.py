@@ -240,6 +240,7 @@ RULES = {
     "L97": ("component",  "a part that states a size says where each dimension came from", "add `size-confidence: {w: ..., h: ...}` from the confidence vocabulary, and `size-notes` where it needs a sentence"),
     "L98": ("component",  "a character display says how wide it is, and every reading fits", "add `characters:` to the `class: display` element, and keep each `messages[].text` inside it"),
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
+    "L100": ("component, device", "no key in an `attrs:` map has a null value", "add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null"),
 }
 
 
@@ -7040,6 +7041,84 @@ class _DupCounting(yaml.SafeLoader):
         return super().construct_mapping(node, deep=deep)
 
 
+def _null_attr_keys(attrs, prefix=""):
+    """Dotted keys under this `attrs:` map whose value is null.
+
+    Recursive because a device's top-level attrs is filed by section, so the
+    null sits at `power.power-inlet` rather than at the first level.
+    """
+    for key, value in attrs.items():
+        if value is None:
+            yield f"{prefix}{key}"
+        elif isinstance(value, dict):
+            yield from _null_attr_keys(value, f"{prefix}{key}.")
+
+
+def _attrs_maps(node, owner=None):
+    """Every (owner, attrs map) below here, owner being what carries it.
+
+    Generic rather than a list of the six places a schema puts an `attrs:`,
+    because the point of the rule is that nothing types these maps - a seventh
+    place would be as unguarded as the six, and would join this walk for free.
+    """
+    if isinstance(node, list):
+        for item in node:
+            yield from _attrs_maps(item, owner)
+        return
+    if not isinstance(node, dict):
+        return
+    here = node.get("id") or owner
+    for key, value in node.items():
+        if key == "attrs" and isinstance(value, dict):
+            yield here, value
+        elif isinstance(value, dict):
+            # A MAPPING KEY NAMES ITS VALUE where the value has no id of its
+            # own: `groups: {xe: {...}}` is the group called xe. Structural
+            # keys - `components`, `views` - name nothing, but they are only
+            # ever a fallback, and the dotted attr key carries the rest.
+            yield from _attrs_maps(value, value.get("id") or key)
+        elif isinstance(value, list):
+            yield from _attrs_maps(value, here)
+
+
+def lint_attrs_null(path, data):
+    """L100 - an attr with no value is a missing colon.
+
+    YAML flow style hides this completely. In a component's `parts:` list,
+
+        attrs: {media: sfp-plus, function: reserved, unused}
+
+    the last entry has no colon, so it is not part of the entry before it: it is
+    a THIRD key, `unused`, with a null value. Every `attrs:` in spec/schemas is
+    typed `{"type": "object"}` and nothing else - free-form is the point, these
+    become `data-*` on the instance - so the schema had nothing to say, and the
+    run went red much later and somewhere else. `presented_interface` returned a
+    two-tuple for the malformed part and L11 unpacked it into three names, which
+    reads as a fault in the LINTER rather than a typo in the contract.
+
+    AN ATTR THAT IS NULL CARRIES NOTHING. It flattens to no data attribute, no
+    export reads it, no renderer draws it; there is no reading of it that is not
+    this mistake, so it is an error rather than a warning.
+
+    The sibling maps that are NOT walked here are the ones a schema already
+    types: a device's `bay-attrs` and `component-attrs` take string or number,
+    and a bay itself declares no `attrs` at all in either schema, so a null in
+    those places is an L1 before it is ever an L100.
+    """
+    if not isinstance(data, dict):
+        return
+    for owner, attrs in _attrs_maps(data):
+        for key in _null_attr_keys(attrs):
+            last = key.rsplit(".", 1)[-1]
+            where = f"{owner}: " if owner else ""
+            err(path, "L100",
+                f"{where}attrs.{key} has no value. An attr that is null carries "
+                f"nothing - the usual cause is a MISSING COLON: in YAML flow "
+                f"style `{{..., {last}}}` is a key of its own with a null value, "
+                f"not part of the entry before it. Write `{last}: <value>`, or "
+                f"delete the key")
+
+
 def lint_duplicate_keys(path):
     """L32: no mapping in this file declares the same key twice."""
     loader = _DupCounting(path.read_text())
@@ -7144,6 +7223,7 @@ def main():
             # a file that would not parse has already been reported; running the
             # rest against None just buries that message under a traceback
             if d is not None:
+                lint_attrs_null(f, d)
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
                 lint_component_collisions(f, d, args.library)
@@ -7195,6 +7275,7 @@ def main():
             lint_duplicate_keys(f)
             d = lint_device(f, dev_v, args.library); n += 1
             if d is not None and d.get("kind") == "device":
+                lint_attrs_null(f, d)
                 lint_device_gap_scope(f, d)
                 lint_device_configuration_kind(f, d)
                 lint_device_top_level_skus(f, d)
