@@ -43,7 +43,7 @@ def test_cable_points_resolves_the_fake_drawing():
     assert set(points) == {
         "cage-a", "cage-b", "cage-c/plug/boot",
         "sfp-lc/tx", "sfp-lc/rx", "sfp-1", "sfp-10",
-        "cage-g/plug/boot",
+        "cage-g/plug/boot", "wrap/a", "wrap/b",
     }
     assert "out" not in points["cage-a"]
 
@@ -74,11 +74,23 @@ def test_cable_points_resolves_the_fake_drawing():
     # must keep them apart
     assert set(points) >= {"sfp-1", "sfp-10"}
 
-    # an exact z tie on one chain (plug vs boot) breaks on the longer,
-    # deeper path - the boot's - not on iteration order
+    # an exact z tie on one chain (plug vs boot): the plug's path is a
+    # strict prefix of the boot's, so the plug is shadowed regardless of z -
+    # no tie-break needed, the boot wins structurally
     assert "cage-g/plug" not in points, \
-        "a z tie must break toward the deeper (boot) path, not the plug's"
+        "the plug must be shadowed by the boot even on an exact z tie"
     assert points["cage-g/plug/boot"]["z"] == 0
+
+    # THE BRANCHING CASE: a wrapper with its own marker plus two marked
+    # children that are siblings of each other (neither a prefix of the
+    # other). The wrapper is shadowed by both children and must not survive;
+    # the children must not shadow each other. A union-find clustering over
+    # "shares a chain member" fuses all three through the wrapper and
+    # wrongly keeps only one - this is the case that tells shadowing and
+    # clustering apart.
+    assert "wrap" not in points, "a marker shadowed by two children must still drop"
+    assert points["wrap/a"]["at"] == [4, 5]
+    assert points["wrap/b"]["at"] == [4, 6]
 
     # a drawing with no cable markers at all returns [], not a throw
     assert out["empty"] == []

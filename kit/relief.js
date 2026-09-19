@@ -108,21 +108,17 @@ export function resolveCablePoint(marker, ancestors = []) {
 // point from its own contract's point of view - and the outermost survives:
 // the boot's marker when a boot is seated, the plug's when it is not.
 //
-// TWO MARKERS SHARE A CONNECTOR WHEN ONE OWNER PATH IS THE OTHER, OR AN
-// ANCESTOR OF IT ON THE SAME CHAIN - not merely "the same leading segment".
-// Checked against real compiled drawings: a DEVICE drawing puts each port at
-// its own top-level segment ("console", "led-port-0", nested as
-// "console/opening"), but a COMPONENT drawing's top-level segment is the
-// component itself, and its features are SIBLINGS under it -
-// generic/sfp-lc's two bores are "sfp-lc/tx" and "sfp-lc/rx". Grouping by the
-// leading segment alone collapsed those two into one, turning an LC duplex
-// into a single cable point. Prefix-on-a-boundary is the rule that is right
-// in both drawing shapes without having to know which segment means what:
-// "sfp-lc/tx" and "sfp-lc/rx" are neither a prefix of the other, so they stay
-// apart; "port/plug" and "port/plug/boot" are on one chain, so they merge.
-// The trailing "/" in the check is what stops "sfp-1" from matching
-// "sfp-10" - a bare `startsWith` would wrongly merge two unrelated ports.
-const sameConnector = (a, b) => a === b || b.startsWith(a + '/') || a.startsWith(b + '/');
+// A cable lands on the OUTERMOST point of a connector. Stated structurally:
+// a marker is SHADOWED when another marker sits strictly deeper on the same
+// chain - one owner path is a prefix of the other, on a "/" boundary so
+// "sfp-1" is never read as a parent of "sfp-10". This replaced a union-find
+// over a "same connector" relation that was not transitive: "a/b" and
+// "a/b/c" belong together, "a/b/c" and "a/b/d" do not, but union-find
+// merges all three through the shared middle "a/b" - a connector that
+// carries its own marker AND two marked descendants fused all three into
+// one point. Nothing in the library can build that shape yet; spec B2's
+// plugs and boots can, and this function has no other consumer.
+const shadowed = (p, all) => all.some(q => q !== p && q.startsWith(p + '/'));
 
 export function cablePoints(svg) {
   const markers = [...svg.querySelectorAll('[data-cp="cable"]')].map(mk => {
@@ -135,28 +131,11 @@ export function cablePoints(svg) {
     const owner = mk.closest('[data-path]');
     return {...resolveCablePoint(marker, ancestors), path: owner ? owner.dataset.path : ''};
   });
-
-  // Union-find over the sameConnector relation: a plain Map keyed by owner
-  // path cannot express "one path is an ancestor of another", so markers are
-  // clustered pairwise instead - cheap, since a drawing has few of these.
-  const parent = markers.map((_, i) => i);
-  const find = i => (parent[i] === i ? i : (parent[i] = find(parent[i])));
-  const union = (i, j) => { const ri = find(i), rj = find(j); if (ri !== rj) parent[ri] = rj; };
-  for (let i = 0; i < markers.length; i++)
-    for (let j = i + 1; j < markers.length; j++)
-      if (sameConnector(markers[i].path, markers[j].path)) union(i, j);
-
-  const winners = new Map();
-  markers.forEach((m, i) => {
-    const root = find(i);
-    const prev = winners.get(root);
-    // the outermost wins: greater z, and an EXPLICIT tie-break on the
-    // longer path when z ties exactly - a boot nested on a plug is the
-    // deeper of the two - so the result never depends on iteration order
-    if (!prev || m.z > prev.z || (m.z === prev.z && m.path.length > prev.path.length))
-      winners.set(root, m);
-  });
-  return [...winners.values()];
+  // O(n^2) in the number of cable markers on one drawing, same as the
+  // shadow check above - fine at real-world scale (a handful of connectors
+  // per drawing), not worth optimising.
+  const paths = markers.map(m => m.path);
+  return markers.filter(m => !shadowed(m.path, paths));
 }
 
 export function configureRelief(deps, scope) {

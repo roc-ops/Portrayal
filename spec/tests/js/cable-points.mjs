@@ -51,18 +51,18 @@ const pure = {
 // A real instance group (render.py's instance_group) sets data-path on
 // ITSELF, and a connection-point marker is appended as its direct child - so
 // `mk.closest('[data-path]')` always finds the marker's own parent, which is
-// the OCCUPANT's own path. Grouping by the LEADING segment of that path once
-// looked sufficient (a plug's "cage-1/plug" and a boot's "cage-1/plug/boot"
-// both lead with "cage-1") but is wrong for a component drawing, where the
-// leading segment is the COMPONENT and its features are SIBLINGS under it -
-// generic/sfp-lc's bores are "sfp-lc/tx" and "sfp-lc/rx", which a
-// leading-segment grouping wrongly collapsed into one cable point for an LC
-// duplex. The fix groups on a same-chain PREFIX instead ("sameConnector" in
-// relief.js): one path must be an ancestor of the other, not merely share a
-// leading segment. The cases below are built specifically so a
-// leading-segment grouping and a same-chain-prefix grouping disagree on at
-// least one of them - proving the fix is doing real work, not just passing
-// under either rule.
+// the OCCUPANT's own path. `cablePoints` keeps a marker unless a STRICTLY
+// DEEPER marker shares its chain ("shadowed" in relief.js) - a plug's
+// "cage-1/plug" is shadowed by a boot's "cage-1/plug/boot", but
+// "sfp-lc/tx" and "sfp-lc/rx" (siblings, neither a prefix of the other)
+// shadow nothing and both survive. This replaced an earlier union-find
+// clustering that computed the TRANSITIVE CLOSURE of the same-chain
+// relation, which is not transitive: a wrapper with its own marker plus two
+// marked children fused all three into one point (connector H below), a
+// shape nothing in the library can build yet but spec B2's plugs and boots
+// can. The cases below are built specifically so at least one of them tells
+// the two rules apart - proving the fix is doing real work, not just
+// passing under either one.
 function el(attrs, parent) {
   const dataset = {};
   for (const [k, v] of Object.entries(attrs)) {
@@ -122,18 +122,34 @@ const sfp10 = el({'data-path': 'sfp-10'}, svg);
 const markerSfp10 = el({'data-cp': 'cable', 'data-cp-at': '8 8'}, sfp10);
 
 // connector G: a plug and a boot with an EXACT z tie (no extra lift on the
-// boot). The tie-break must be explicit - the longer (deeper) path, the
-// boot's - so the winner never depends on iteration order.
+// boot). Under shadowing there is no tie to break - the plug's path is a
+// strict prefix of the boot's, so the plug is shadowed regardless of z, and
+// the boot must still be the one that survives.
 const connectorG = el({'data-path': 'cage-g'}, svg);
 const plugG = el({'data-path': 'cage-g/plug'}, connectorG);
 const markerPlugG = el({'data-cp': 'cable', 'data-cp-at': '7 7'}, plugG);
 const bootG = el({'data-path': 'cage-g/plug/boot'}, plugG);
 const markerBootG = el({'data-cp': 'cable', 'data-cp-at': '7 7.1'}, bootG);
 
+// connector H: THE BRANCHING CASE a union-find clustering could not pass. A
+// wrapper carries its own `cable` marker, and TWO of its children each carry
+// their own, unrelated to one another ("wrap/a" and "wrap/b" are siblings,
+// neither a prefix of the other). "wrap" is shadowed by both children, but
+// the children must not shadow each other - a clustering that groups
+// everything sharing a chain member together fuses all three through the
+// shared "wrap" and wrongly returns one point instead of two.
+const wrap = el({'data-path': 'wrap'}, svg);
+const markerWrap = el({'data-cp': 'cable', 'data-cp-at': '4 4'}, wrap);
+const wrapA = el({'data-path': 'wrap/a'}, wrap);
+const markerWrapA = el({'data-cp': 'cable', 'data-cp-at': '4 5'}, wrapA);
+const wrapB = el({'data-path': 'wrap/b'}, wrap);
+const markerWrapB = el({'data-cp': 'cable', 'data-cp-at': '4 6'}, wrapB);
+
 const markers = [
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
   markerPlugG, markerBootG,
+  markerWrap, markerWrapA, markerWrapB,
 ];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);
