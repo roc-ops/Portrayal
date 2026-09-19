@@ -422,17 +422,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/ais800-64-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 3 | The 3000 W AC power supply of the Edgecore AIS800-64D and AIS800-64O - a CRPS-form module in a bright housing… |
 | `edgecore/ais800-64-psu-dc@1` | module | psu | 73.5 × 40 |  | 3 | 1 | The 3000 W DC power supply of the Edgecore AIS800-64D and AIS800-64O - the AC unit's 73.5 x 40 CRPS shell wit… |
 | `edgecore/ais800-fan@1` | module | fan | 41.65 × 40.6 |  | 2 | 2 | A rear fan module of the Edgecore AIS800-32D and AIS800-32O - a honeycomb-grilled black tray with a large col… |
-| `edgecore/ais800-psu-ac@1` | module | psu | 53.7 × 40.6 |  | 2 | 1 | The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a latt… |
-| `edgecore/ais800-psu-dc@1` | module | psu | 53.7 × 40.6 |  | 2 | 1 | The 2400 W DC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a colo… |
-| `edgecore/csr310-fan-tray@1` | module | fan | 45.2 × 40.4 × 300 |  | 2 | 0 | The fan tray of the Edgecore CSR310 (AS7315-27X) - a hot-swappable 1RU tray at the right-hand end of the face… |
+| `edgecore/ais800-psu-ac@1` | module | psu | 53.7 × 40.6 |  | 2 | 3 | The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a latt… |
+| `edgecore/ais800-psu-dc@1` | module | psu | 53.7 × 40.6 |  | 2 | 3 | The 2400 W DC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a colo… |
+| `edgecore/csr310-fan-tray@1` | module | fan | 45.2 × 40.4 × 300 |  | 2 | 2 | The fan tray of the Edgecore CSR310 (AS7315-27X) - a hot-swappable 1RU tray at the right-hand end of the face… |
 | `edgecore/csr310-psu-ac@1` | module | psu | 54.1 × 40.4 × 300 |  | 2 | 0 | The AC power supply of the Edgecore CSR310 (AS7315-27X) - the same hot-swappable 1RU half-height module as th… |
 | `edgecore/csr310-psu-dc@1` | module | psu | 54.1 × 40.4 × 300 |  | 2 | 1 | The -48 VDC power supply of the Edgecore CSR310 (AS7315-27X) - a hot-swappable 1RU half-height module landing… |
 | `edgecore/csr440-fan@1` | module | fan | 49 × 40.4 × 300 |  | 1 | 0 | A rear fan module of the Edgecore CSR440 (AS7535-28XB) - a honeycomb-grilled tray with the fan visible throug… |
 | `edgecore/csr440-psu-ac@1` | module | psu | 53.8 × 39.4 × 300 |  | 1 | 4 | The AC power supply of the Edgecore CSR440 (AS7535-28XB) - a hot-swappable CRPS-style module in a bright hous… |
-| `edgecore/dcs201-fan@1` | module | fan | 58.8 × 40 |  | 2 | 1 | A rear fan module of the Edgecore DCS201 (AS5835-54X) - a honeycomb-grilled tray with a pull bar across its f… |
+| `edgecore/dcs201-fan@1` | module | fan | 58.8 × 40 |  | 2 | 3 | A rear fan module of the Edgecore DCS201 (AS5835-54X) - a honeycomb-grilled tray with a pull bar across its f… |
 | `edgecore/dcs201-psu-ac@1` | module | psu | 54 × 40 |  | 2 | 5 | The 400 W AC power supply of the Edgecore DCS201 (AS5835-54X) - a CRPS-style module in a bright housing with … |
 | `edgecore/dcs201-psu-dc@1` | module | psu | 54 × 40 |  | 2 | 0 | The 400 W -48 VDC power supply of the Edgecore DCS201 (AS5835-54X) - the same 54 x 40 CRPS face as the AC sup… |
-| `edgecore/dcs240-fan@1` | module | fan | 48.5 × 40 |  | 2 | 2 | A rear fan module of the Edgecore DCS240 (AS9726-32DB) - a honeycomb-grilled tray with a single large rotor v… |
+| `edgecore/dcs240-fan@1` | module | fan | 48.5 × 40 |  | 2 | 3 | A rear fan module of the Edgecore DCS240 (AS9726-32DB) - a honeycomb-grilled tray with a single large rotor v… |
 | `edgecore/dcs240-psu-ac@1` | module | psu | 54.4 × 40 |  | 2 | 3 | The AC power supply of the Edgecore DCS240 (AS9726-32DB) - a CRPS-style module in a bright housing with a lat… |
 | `edgecore/dcs240-psu-dc@1` | module | psu | 54.4 × 40 |  | 2 | 0 | The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - the same 54.4 x 40 CRPS face as the AC varian… |
 | `edgecore/dcs520-fan@1` | module | fan | 80.1 × 83.5 |  | 1 | 0 | The hot-swappable fan tray of the Edgecore DCS520 (AS9736-64D) - an 80.1 x 83.5 honeycomb face with a red pul… |
