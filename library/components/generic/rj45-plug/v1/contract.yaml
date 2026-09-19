@@ -42,6 +42,22 @@ provenance:
     length, this one is real and belongs in `size.d`. Registered at the same
     figures in spec/schemas/standards.yaml's `rj45-plug` entry
     (spec/tests/test_plug_envelopes.py pins it).
+  size-vs-lc-plug: >-
+    `h` HERE (7.93) IS THE BODY EXCLUDING THE LATCH - not a silhouette height.
+    generic/lc-plug@1's `h` (10.43) is the OPPOSITE: SENKO's front view gives
+    it as the overall silhouette INCLUDING the latch tip, because that drawing
+    dimensions the whole outline as one figure and never breaks out a
+    latch-free body height. The two numbers are not comparable as drawn: a
+    reader diffing 7.93 against 10.43 would be comparing "body only" against
+    "body plus latch" without being told so. CommScope's drawing gives NO
+    combined silhouette figure for this plug (no dimension runs from the top
+    of the body to the bottom of the latch), so there is no third number to
+    add - 7.93 + 2.77 = 10.70 would be arithmetic performed on two measured
+    figures and presented as a measurement neither drawing makes; this
+    library's first rule forbids exactly that. See `latch` below for the
+    2.77/5.89 figures themselves, and spec/schemas/standards.yaml's `rj45-plug`
+    and `lc-plug` notes for the same statement made where the registry compares
+    the two.
   sheet-2: >-
     SHEET 2 of the same drawing (2843005 rev K) dimensions the SHIELDED variant
     of the same MP-88 family and it is a genuinely different shape - .325 [8.26]
@@ -50,12 +66,32 @@ provenance:
     shielded plug is its own part when someone needs it.
   latch: >-
     drawing - same sheet, side view. The latch stands .109 [2.77] below the
-    body datum at 88 degrees REF (near-perpendicular to the body axis), its
-    root .232 [5.89] from the front; note 5 gives the terminated dimension as
-    5.89-6.15 once the cable is crimped. Carried as a `relief.features` entry
-    on the `latch` node with `out: 2.77` rather than folded into `size.h`,
-    because it is a feature that stands PROUD of the declared body box, not
-    part of it - the same reasoning std/sma@1 uses for its barrel.
+    body datum, its root .232 [5.89] from the front; note 5 gives the
+    terminated dimension as 5.89-6.15 once the cable is crimped. THE DRAWING
+    GIVES NO ANGLE FOR THE LATCH - a fix-round correction of this contract's
+    own first draft, which wrongly attached "88 degrees REF" to it. That 88
+    REF figure is real but belongs to a different feature entirely: it labels
+    the taper of the cable-entry core-out on two SKU-specific plan views lower
+    on the same sheet (bubbles 8 and 9), each captioned "THIS CORE-OUT FEATURE
+    IS APPROXIMATE ... ONLY APPLIES TO PARTS X-557972-X / X-554720-X" - a
+    different feature, a different view, and explicitly not class-wide even
+    for the core-out it does describe. Confirmed by rendering that region at
+    600dpi: no angle callout sits on the dimensioned side view the 2.77/5.89
+    latch figures come from. NOT A RELIEF FEATURE: 2.77 is an in-plane
+    displacement along the same Y (height) axis the 11.68 x 7.93 body is drawn
+    on - the latch hangs BELOW the body datum in the side view, in the SAME
+    plane as `size.w`/`size.h` - not a Z-axis protrusion out of the panel
+    face the way std/sma@1's barrel genuinely is (coaxial with the mate axis).
+    `relief.features[].out` renders as `data-z-out` (kit/relief.js), an
+    ABSOLUTE distance perpendicular to the drawn face; putting 2.77 there drew
+    a nub poking toward the viewer instead of a tab hanging below the body,
+    which is what an earlier draft of this contract did and is now corrected.
+    The latch is drawn in the `latch` skin node instead, inset within the
+    declared 11.68 x 7.93 box (L4 holds the skin's viewBox to `size` exactly,
+    so the art is schematic rather than to scale below the datum) - it is
+    part of what the face looks like, not a depth feature, and the 2.77/5.89
+    figures stay recorded here as measured facts about the part rather than
+    driving any render.
   axis: >-
     derived, following the connection-point convention generic/lc-plug@1 and
     common/lc-boot@1 introduced (Task 4/5): the `mate`, `boot` and `cable`
@@ -72,15 +108,6 @@ provenance:
     census entry there - checked, not assumed, per this task's own instruction.
 elements:
   body: {at: [0.0, 0.0], size: [11.68, 7.93], class: port}
-relief:
-  features:
-    - node: latch
-      out: 2.77
-      confidence: drawing
-      source: >-
-        CommScope 2843005 rev K, sheet 1, side view - latch stands .109 [2.77]
-        below the body datum at 88 degrees REF, root .232 [5.89] from the
-        front.
 connection-points:
   mate: {at: [5.84, 3.965], direction: front}
   boot: {at: [5.84, 3.965], direction: rear}

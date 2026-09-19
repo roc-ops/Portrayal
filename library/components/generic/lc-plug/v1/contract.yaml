@@ -69,6 +69,19 @@ provenance:
     depth here either. The class fixes the front profile and the latch; the
     back end is the vendor's, and stating a depth from a parenthesised
     REF would put a number in the contract that no drawing dimensions.
+  size-vs-rj45-plug: >-
+    `h` HERE (10.43) IS THE OVERALL SILHOUETTE INCLUDING THE LATCH - SENKO's
+    front view dimensions the whole outline as one figure and never breaks out
+    a latch-free body height. generic/rj45-plug@1's `h` (7.93) is the OPPOSITE:
+    CommScope's side view dimensions the body only, and the RJ45 plug's latch
+    (2.77 below the body datum) is a separate, additional figure with no
+    combined silhouette dimension on that drawing. The two `h` values are not
+    comparable number-for-number - a reader diffing 10.43 against 7.93 would be
+    comparing "body plus latch" against "body only" without being told so. Not
+    reconciled by arithmetic (10.43 - 8.6 latch length is not this plug's body
+    height either, since the latch runs along a different axis than it stands
+    proud on); see spec/schemas/standards.yaml's `lc-plug` and `rj45-plug`
+    notes for the same statement made where the registry compares the two.
   keyway: >-
     drawing for the tier WIDTHS, estimated for the tier HEIGHTS - the same
     split std/lc-bore@3 already uses for the aperture this plug enters, and for

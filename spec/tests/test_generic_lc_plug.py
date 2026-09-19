@@ -93,6 +93,22 @@ def test_size_says_why_there_is_no_depth():
     assert "42" in prov, "should name at least one of the disagreeing REF figures"
 
 
+def test_size_says_h_includes_the_latch_unlike_rj45_plug():
+    """Fix round 1 on Tasks 6/7, finding 3: this part's h (10.43) is a
+    silhouette INCLUDING its latch; generic/rj45-plug@1's h (7.93) is the body
+    EXCLUDING its latch. Neither is wrong, but they measure different
+    quantities and a reader comparing them needs to be told so - in both
+    contracts and in both spec/schemas/standards.yaml entries."""
+    prov = contract()["provenance"]
+    text = " ".join(str(v) for v in prov.values()).lower()
+    assert "rj45-plug" in text
+    assert "includ" in text  # "including"/"includes"
+    reg = yaml.safe_load(
+        (ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
+    assert "includ" in reg["lc-plug"]["notes"].lower()
+    assert "exclud" in reg["rj45-plug"]["notes"].lower()
+
+
 def test_the_four_tiers_are_the_part():
     d = contract()
     elems = d["elements"]

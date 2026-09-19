@@ -99,14 +99,50 @@ def test_size_is_registered_and_lints_clean():
     assert d["size"]["d"] == reg["depth"]
 
 
-def test_latch_is_a_relief_feature_not_folded_into_size():
+def test_latch_is_not_a_relief_feature():
+    """Fix round 1: the latch's 2.77 is an in-plane Y displacement (the latch
+    hangs BELOW the body datum in the drawing's side view, the same plane as
+    size.w/size.h) - not a Z protrusion out of the panel face. An earlier
+    draft of this contract carried it as `relief.features[].out`, which
+    render.js's `data-z-out` treats as an ABSOLUTE distance perpendicular to
+    the face - std/sma@1's barrel is genuinely a Z protrusion (coaxial with
+    the mate axis) and that precedent does not carry to a latch on a
+    different axis. There is no `relief:` block on this part; the 2.77/5.89
+    figures are recorded in provenance and drawn (inset, schematically) in
+    the skin instead."""
     d = contract()
-    feats = (d.get("relief") or {}).get("features") or []
-    latch = [f for f in feats if f["node"] == "latch"]
-    assert len(latch) == 1, "the latch belongs in relief.features, see provenance.latch"
-    assert latch[0]["out"] == 2.77
-    assert latch[0].get("confidence")
-    assert latch[0].get("source")
+    assert "relief" not in d
+    prov = d["provenance"]["latch"]
+    assert "2.77" in prov
+    assert "5.89" in prov
+
+
+def test_latch_has_no_angle_in_provenance():
+    """Fix round 1: '88 degrees REF' does not describe the latch - it labels
+    the cable-entry core-out taper on two SKU-specific plan views elsewhere on
+    the sheet (bubbles 8/9, 'APPROXIMATE ... ONLY APPLIES TO PARTS
+    X-557972-X / X-554720-X'), not the dimensioned side view the 2.77/5.89
+    latch figures come from. The drawing gives no angle for the latch and
+    this contract must not invent or substitute one."""
+    prov = contract()["provenance"]["latch"]
+    assert "88" not in prov or "core-out" in prov.lower()
+    assert "no angle" in prov.lower() or "no angle is given" in prov.lower()
+
+
+def test_size_says_h_excludes_the_latch_unlike_lc_plug():
+    """Fix round 1, finding 3: generic/lc-plug@1's h (10.43) is a silhouette
+    INCLUDING its latch; this part's h (7.93) is the body EXCLUDING its latch.
+    Neither number is wrong, but they measure different quantities and a
+    reader comparing them needs to be told so - in both contracts and in both
+    spec/schemas/standards.yaml entries."""
+    prov = contract()["provenance"]
+    text = " ".join(str(v) for v in prov.values()).lower()
+    assert "lc-plug" in text
+    assert "exclud" in text  # "excluding"/"excludes"
+    reg = yaml.safe_load(
+        (ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
+    assert "exclud" in reg["rj45-plug"]["notes"].lower()
+    assert "includ" in reg["lc-plug"]["notes"].lower()
 
 
 def test_connection_points_share_the_axis():
