@@ -1087,16 +1087,17 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # the part's own out, apply the group transforms. Nothing new to compute.
     #
     # EMITTED LAST, DELIBERATELY, AFTER EVERY `behind_at` INSERTION ABOVE HAS
-    # RUN. `behind_at` at :813 ("after the <title>, before the skin") is an
-    # index into `g`'s children that assumes `g` holds only the <title> when
-    # the counter is initialised, and every later `g.insert(behind_at, ...)` -
-    # behind parts, bay groups - counts on that assumption staying true for the
-    # whole function. A marker appended earlier is a child that arithmetic
-    # never accounted for, and it silently shifts every one of those inserts
-    # one slot off, which is exactly what put a base plate over parts it
-    # should sit under. Markers draw nothing, so where they land in the
-    # children list is irrelevant to draw order - which is precisely why they
-    # belong here and not mixed in with the attribute assignments above.
+    # RUN. The `behind_at = 1` initialisation above, with its "after the
+    # <title>, before the skin" comment, is an index into `g`'s children that
+    # assumes `g` holds only the <title> when the counter is initialised, and
+    # every later `g.insert(behind_at, ...)` - behind parts, bay groups -
+    # counts on that assumption staying true for the whole function. A marker
+    # appended earlier is a child that arithmetic never accounted for, and it
+    # silently shifts every one of those inserts one slot off, which is
+    # exactly what put a base plate over parts it should sit under. Markers
+    # draw nothing, so where they land in the children list is irrelevant to
+    # draw order - which is precisely why they belong here and not mixed in
+    # with the attribute assignments above.
     for cp_name in sorted(contract.get("connection-points") or {}):
         cp = (contract["connection-points"] or {})[cp_name]
         mk = ET.SubElement(g, f"{{{SVG_NS}}}g")
