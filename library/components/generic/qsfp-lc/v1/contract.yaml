@@ -31,8 +31,14 @@ unplaced: seated by configurations downstream of this library; see docs/pluggabl
 provenance:
   size: >-
     registry - qsfp-module, which is SFF-8661 Rev 2.5 Figure 5-1 Basic Views
-    (18.35 +/-0.10 wide, 8.50 +/-0.10 high, 52.4 REF front tip to datum D, the
-    hard stop on the module). common/qsfp-transceiver@1 carried the same
+    (18.35 +/-0.10 wide, 8.50 +/-0.10 high, 52.4 REF deep). THE DEPTH IS THE
+    INSERTED LENGTH, NOT THE OVERALL ONE: 52.4 REF runs from the BACK of the
+    20 MAX nose to the REAR END of the module, not from the module's front tip,
+    and not to datum D. D is the hard stop and sits 4.20 +/-0.15 forward of that
+    rear end - 48.2 MIN is the nose-back-to-D span, and 48.2 + 4.20 = 52.4. The
+    20 MAX nose forward of this span is relief.body.out (see
+    provenance.protrusion) and is NOT inside d, so d + out is the whole module
+    and double counts nothing. common/qsfp-transceiver@1 carried the same
     18.35 x 8.5 from a vendor drawing (ProLabs PAN-QSFP28-100GBASE-CWDM4-C)
     but its depth 83.2 measured a DIFFERENT quantity - the drawing's 118 REF
     overall less the 34.80 MAX tab reach, two figures off one vendor drawing
@@ -88,7 +94,7 @@ provenance:
     width and 3.4 MAX / 1.6 MAX thickness callouts on the same nose) and a 52.4 REF body
     running from the back of that nose to datum D, the hard stop on the module. Note 1,
     attached to all four of the nose's dimensions, reads "INDICATED DIMENSIONS DEFINE
-    ENLARGED SECTION OF TRANSCEIVER THAT EXTENDS OUTSIDE OF CAGE TO ACCOMMODATE MATING
+    ENLARGED SECTION OF TRANSCEIVER THAT EXTENDS OUTSIDE OF CAGE TO ACCOMODATE [sic] MATING
     PLUG AND ACTUATOR MECHANISM" - a direct callout for how far the module stands proud
     of the cage once seated, the role SFF-8432's designator A plays for sfp-module. This
     is Figure 5-1's OWN figure for the protrusion, not the subtraction
@@ -119,7 +125,7 @@ relief:
       confidence: drawing
       source: >-
         SFF-8661 Rev 2.5 Figure 5-1, Note 1 - "enlarged section of transceiver that
-        extends outside of cage to accommodate mating plug and actuator mechanism",
+        extends outside of cage to accomodate [sic] mating plug and actuator mechanism",
         the 20mm MAX nose dimension - see provenance.protrusion
     - node: tab
       lift: 20.0
