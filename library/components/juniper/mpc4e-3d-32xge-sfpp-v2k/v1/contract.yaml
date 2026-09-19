@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc4e-3d-32xge-sfpp-v2k
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -15,7 +15,16 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 610 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', fixed-configuration MPC section:
+    '| 32x10GE MPC4E | MPC4E-3D-32XGE-SFPP | 610W With optics: 607 W at 131 F (55 C), with SFPP ZR optics 584 W at 40 C, 565 W at 77 F (25 C) |'.
+    THE BARE FIGURE IS CARRIED - the card alone, without optics - and it is unqualified by ambient,
+    because no guide ladders the bare figure.
+    The corpus disagrees about the WITH-OPTICS ladder and agrees about the bare one: mx240, mx480 and
+    mx960 print 607/584/565 W at 55/40/25 C; mx2020-p0001 prints 607/590/585; mx2010-p0301 and
+    mx2020-p0301 print 610/560/550; mx2008 and mx2010-p0001 give a with-MICs-and-optics reading under
+    the part number MX-MPC4E-3D-32XGE-SFPP, which is this card spelled with an MX- prefix. All of
+    them state 610 W bare, which is why that is the figure carried and why no rung is named.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc4e-3d-2cge-8xge
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -15,7 +15,18 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 610 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', fixed-configuration MPC section:
+    '| 2x100GE + 8x10GE MPC4E | MPC4E-3D-2CGE-8XGE | 610W With optics: 607 W at 131 F (55 C), with SFPP ZR and CFP LR4 optics 584 W at 104 F (40 C), 565 W at 77 F (25 C) |'.
+    THE BARE FIGURE IS CARRIED - the card alone, without optics - and it is unqualified by ambient.
+    The corpus disagrees about the with-optics ladder - 607/584/565 W in mx240, mx480 and mx960;
+    607/590/585 in mx2020-p0001; 610/550/530 in mx2010-p0301 and mx2020-p0301 - and agrees on 610 W
+    bare, which is what is carried.
+    A SECOND ROW IN THE SAME TABLE repeats this card's part number and figure under the Component
+    heading 'ATM MIC with SFP'. That is a Juniper error, and it displaces the real ATM MIC:
+    MIC-3D-8OC3-2OC12-ATM has no entry at all in the MX240, MX480 or MX960 guides. Anyone matching
+    these tables on the Component description rather than the Part Number reads this card's 610 W as
+    a 35 W ATM MIC's.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

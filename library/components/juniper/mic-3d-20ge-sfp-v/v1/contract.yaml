@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-20ge-sfp-v
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -22,7 +22,14 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. The MIC-3D-20GE-SFP-E port-numbering figure g000930 shows the two-column PIC layout this follows'
-  power: 'datasheet-table - the module reference model section states the requirement; 37 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| Gigabit Ethernet MIC with SFP | MIC-3D-20-GE-SFP | 37W |', in nine guides. A maximum for the
+    MIC alone, without optics; the row prints no temperature ladder, so there is no ambient to name
+    and none is claimed. Note the vendor prints the part number with an extra hyphen in every copy
+    of that row - MIC-3D-20-GE-SFP - which is why a whole-token search for the real part number
+    misses it. The module reference's '0.77 A @48 V (37 W)' agrees on the value but is stated for
+    the -E and -EH extended-temperature variants, not for this part.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

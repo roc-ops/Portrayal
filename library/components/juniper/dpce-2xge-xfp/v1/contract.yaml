@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-2xge-xfp
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,13 +9,22 @@ description: >-
   Juniper DPCE-R-2XGE-XFP (EOL) - two 10GbE XFP PICs. Authored as the MX240/MX480 horizontal form.
 attrs:
   model: DPCE-R-2XGE-XFP
-  power-draw-max-w: 310
+  power-draw-max-w: 175
 provenance:
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 310 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', Dense Port Concentrators
+    section: '| 10-Gigabit Ethernet Enhanced DPC with XFP | DPCE-R-2XGE-XFP | 175W |'. An
+    unqualified maximum for the card alone. No DPC row in that table carries a temperature
+    ladder, so there is no ambient to name and none is claimed. mx240, mx480 and both halves
+    of the mx960 guide print the identical row.
+    CORRECTED FROM 310 W, which is a different card: two rows below in the same table sits
+    '| 10-Gigabit Ethernet Enhanced DPCs with XFP | DPCE-R-4XGE-XFP DPCE-X-4XGE-XFP | 310W |',
+    the FOUR-port member of the family. This card has two XFP ports and draws 175 W. The old
+    figure was 77 percent high and would have been summed into a chassis budget as if real.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

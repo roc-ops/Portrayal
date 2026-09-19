@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-40ge-tx
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -20,7 +20,13 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 41 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| Tri-Rate MIC | MIC-3D-40GE-TX | 41W |', in nine guides. A maximum for the MIC alone, without
+    optics; the row prints no temperature ladder, so there is no ambient to name and none is
+    claimed. The module reference reaches the same number by a second route - 'Power requirement:
+    0.85 A @48 V (41 W)' - which corroborates the value without adding a rung, being an electrical
+    figure at no stated ambient.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

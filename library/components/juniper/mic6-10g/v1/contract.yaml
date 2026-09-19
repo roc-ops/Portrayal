@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic6-10g
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -16,7 +16,13 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 74 W max'
+  power: >-
+    guide FRU table - MX2008 guide FRU power table: '| 10-Gigabit Ethernet MIC with SFP+ | MIC6-10G | 74W With optics: 53 W at 55 C, 40 C and 25 C with 10GBASE-SR and 10GBASE-LR optics, 66 W with 10GBASE-ER optics, 74 W with 10GBASE-ZR optics |'.
+    THE BARE FIGURE IS CARRIED - the MIC alone - and it is unqualified by ambient. The with-optics
+    figures do not ladder by temperature at all: each optic type is flat across 55 C, 40 C and 25 C,
+    and the worst of them, ZR at 74 W, equals the bare figure.
+    NOT MIC6-10G-OTN, which is 84 W in the same table. That part number EXTENDS this one, so a
+    prefix match takes the wrong row and reads 13 percent high.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

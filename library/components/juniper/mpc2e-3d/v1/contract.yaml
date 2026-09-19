@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc2e-3d
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -16,7 +16,20 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. carrier face; the MIC windows dominate it'
-  power: 'datasheet-table - the module reference model section states the requirement; 294 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', modular MPC section. This contract
+    covers the MPC2 carrier and, by its own description, the queuing AND NG variants, which the table
+    gives four different figures:
+    '| MPC2 MPC2E | MX-MPC2-3D MX-MPC2E-3D | 274W With MICs and optics: 348 W at 55 C, 329 at 40, 315 at 25 |'
+    '| MPC2Q MPC2EQ | MX-MPC2-3D-Q MX-MPC2E-3D-Q MX-MPC2-3D-EQ MX-MPC2E-3D-EQ | 294W With MICs and optics: 368 W at 55 C, 347 at 40, 333 at 25 |'
+    '| MPC2E NG | MPC2E-3D-NG | 474W With MICs and optics: 474 W at 55 C, 417 at 40, 400 at 25 |'
+    '| MPC2ENGQ | MPC2E-3D-NG-Q | 529W With MICs and optics: 529 W at 55 C, 460 at 40, 438 at 25 |'
+    294 W IS THE QUEUING VARIANT'S BARE FIGURE, while attrs.model names MX-MPC2E-3D, whose own is
+    274 W. If the description's claim to the NG variants holds, the figure is 235 W short of the worst
+    SKU it covers; if the figure is right, the description overclaims. Bare means the carrier alone;
+    the ladders are with MICs and optics, a different scope.
+    THIS IS UNRESOLVED - see roc-ops/Portrayal#417. The figure is left as it stands; this sentence
+    records which row it is and what the alternatives are.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

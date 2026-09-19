@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-q-20ge-sfp
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,7 +10,7 @@ description: >-
 attrs:
   sfp: 20
   model: DPCE-R-Q-20GE-SFP
-  power-draw-max-w: 365
+  power-draw-max-w: 200
 provenance:
   sfp-rate: >-
     the cage RATE, transcribed from this contract's own description: 'DPCE-R-Q-20GE-SFP
@@ -21,7 +21,18 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 365 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', Dense Port Concentrators
+    section: '| Gigabit Ethernet Enhanced Queuing IP Services DPCs with SFP |
+    DPCE-R-Q-20GE-SFP | 200W |'. An unqualified maximum for the card alone. No DPC row in that
+    table carries a temperature ladder, so there is no ambient to name and none is claimed.
+    mx240, mx480 and both halves of the mx960 guide print the identical row.
+    CORRECTED FROM 365 W, which is a different card: '| Gigabit Ethernet Enhanced Queuing IP
+    Services DPCs with SFP Gigabit Ethernet Enhanced Queuing Ethernet Services DPC with SFP |
+    DPCE-R-Q-40GE-SFP DPCE-X-Q-40GE-SFP | 365W |', the FORTY-port member. Note how that row's
+    Component cell OPENS with this row's entire Component cell, word for word, which is how
+    the wrong one gets picked; read the Part Number column, never the description. This card
+    has twenty SFP in two PIC groups of ten and draws 200 W. The old figure was 83 percent high.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

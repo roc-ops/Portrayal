@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-10ge-sfp-e
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -15,7 +15,12 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 45 W max'
+  power: >-
+    module reference model section - 'Power requirement: 3.75 A @ 12 V (45 W) ... Model number:
+    MIC-3D-10GE-SFP-E' (mx-module-reference-p0001-0300). An electrical figure, amps times volts,
+    at no stated ambient. This MIC has no row in any chassis guide's Table 93, so there is no
+    ladder to take a rung from and none is claimed - which also means the figure has not been
+    corroborated against a guide, unlike the MICs that do have a row.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'

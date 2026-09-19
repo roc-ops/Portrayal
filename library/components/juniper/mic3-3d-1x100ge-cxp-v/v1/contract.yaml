@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-3d-1x100ge-cxp-v
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -15,7 +15,12 @@ provenance:
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
     drawing. No faceplate figure was usable for this model'
-  power: 'datasheet-table - the module reference model section states the requirement; 20 W max'
+  power: >-
+    guide FRU table - MX240 guide Table 93 'FRU Power Requirements', MIC section:
+    '| 100-Gigabit Ethernet MIC with CXP | MIC3-3D-1X100GE-CXP | 20W |', in nine guides. A maximum
+    for the MIC alone, without optics; the row prints no temperature ladder, so there is no ambient
+    to name and none is claimed. Distinct from MIC6-100G-CXP at 57 W, the four-port CXP MIC, which
+    sits three rows below in the same table under a nearly identical Component description.
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
