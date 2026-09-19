@@ -1,0 +1,88 @@
+format: 1
+kind: component
+name: rj45-plug
+version: 1.0.0
+class: port
+mates: rj45
+interface: rj45-plug
+conforms: rj45-plug
+profile: networking
+description: >-
+  An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with
+  a spring latch on its underside that engages a jack's latch slot. Occupies a
+  `rj45` receptacle (std/rj45@2 and anything that composes it) at its own
+  `mate` point, and in turn presents `rj45-plug` so a boot (or a bare cable,
+  when there is no boot) can seat on its rear. UNLIKE generic/lc-plug@1, this
+  plug HAS a class-wide depth - see `provenance.size`.
+size: {w: 11.68, h: 7.93, d: 22.48}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: rj45, connector: rj45}
+unplaced: >-
+  seated by a device that places it in an `rj45`-presenting receptacle - none
+  does yet. common/rj45-boot@1 (Task 7) mates to it via `mate-to`, following
+  the LC pair's own shape; a device manifest exercising the two-part fit is
+  downstream of this library, same as generic/lc-plug@1's own `unplaced`.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, the same ruling carried from generic/lc-plug@1
+    (Task 4). spec/tests/test_behaviour.py::test_a_receptacle_does_not_move
+    asserts `d.get("behaviour") is None` for every `class: port` contract, a
+    class this plug shares with std/rj45@2, the housing it enters. Seating does
+    not need it - render.py's mate-to resolution reads `mates`/`interface` and
+    the `mate` connection-point, never `behaviour` - and `class: port` plus
+    `attrs.media` is how this library defines a connector
+    (spec/tests/test_connector_sweep.py). The only cost is the 3D viewer's
+    eject affordance, deferred to spec D.
+  size: >-
+    drawing - CommScope customer drawing 2843005 rev K, sheet 1, UNSHIELDED MOD
+    PLUG 8 POSITION. .460 [11.68] is the front view width; .312 [7.93] is the
+    side view BODY height (the latch is not part of this box - see `latch`
+    below); .885 [22.48] is the side view overall length, a PLAIN dimension
+    (not parenthesised), so unlike generic/lc-plug@1's reference-only overall
+    length, this one is real and belongs in `size.d`. Registered at the same
+    figures in spec/schemas/standards.yaml's `rj45-plug` entry
+    (spec/tests/test_plug_envelopes.py pins it).
+  sheet-2: >-
+    SHEET 2 of the same drawing (2843005 rev K) dimensions the SHIELDED variant
+    of the same MP-88 family and it is a genuinely different shape - .325 [8.26]
+    high by .895 [22.73] long, against sheet 1's 7.93 x 22.48. This contract is
+    built from sheet 1 ONLY; the two are never averaged or reconciled, and the
+    shielded plug is its own part when someone needs it.
+  latch: >-
+    drawing - same sheet, side view. The latch stands .109 [2.77] below the
+    body datum at 88 degrees REF (near-perpendicular to the body axis), its
+    root .232 [5.89] from the front; note 5 gives the terminated dimension as
+    5.89-6.15 once the cable is crimped. Carried as a `relief.features` entry
+    on the `latch` node with `out: 2.77` rather than folded into `size.h`,
+    because it is a feature that stands PROUD of the declared body box, not
+    part of it - the same reasoning std/sma@1 uses for its barrel.
+  axis: >-
+    derived, following the connection-point convention generic/lc-plug@1 and
+    common/lc-boot@1 introduced (Task 4/5): the `mate`, `boot` and `cable`
+    points all share one (x, y), the centre of the 11.68 x 7.93 body
+    (5.84, 3.965) - a part with no depth axis (the LC pair) has one axis seen
+    from two directions rather than two locations, and the same is true here
+    even though this part DOES carry a depth: the conductors run straight
+    through the plug from the contacts to wherever the cable exits the rear,
+    so front and rear are still the one physical axis, not two locations on
+    it. Following that pattern rather than inventing a second one.
+  census: >-
+    spec/tests/test_connector_sweep.py's sweep keys on `attrs.media == "fiber"`,
+    so an `attrs.media: rj45` part does not enter FIBRE_CONNECTORS and needs no
+    census entry there - checked, not assumed, per this task's own instruction.
+elements:
+  body: {at: [0.0, 0.0], size: [11.68, 7.93], class: port}
+relief:
+  features:
+    - node: latch
+      out: 2.77
+      confidence: drawing
+      source: >-
+        CommScope 2843005 rev K, sheet 1, side view - latch stands .109 [2.77]
+        below the body datum at 88 degrees REF, root .232 [5.89] from the
+        front.
+connection-points:
+  mate: {at: [5.84, 3.965], direction: front}
+  boot: {at: [5.84, 3.965], direction: rear}
+  cable: {at: [5.84, 3.965], direction: rear}
+skins: [default]
