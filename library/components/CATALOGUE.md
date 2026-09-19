@@ -112,7 +112,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 1 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 3 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 21 | 0 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
-| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 74 | 0 | Recessed pinhole reset button |
+| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 74 | 1 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 39 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
@@ -490,7 +490,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/jnp10k-lc480@1` | module | line-card | 437 × 48 |  | 3 | 0 | Juniper MX10K-LC480 line card - 480 Gbps, 48 SFP+ cages in two ganged rows split into two 24-port blocks, for… |
 | `juniper/jnp10k-lc9600@1` | module | line-card | 437 × 48 |  | 2 | 0 | Juniper MX10K-LC9600 line card - 9.6 Tbps, 24 QSFP56-DD cages in two rows of twelve, for the MX10004/MX10008 |
 | `juniper/jnp10k-pwr-ac2@1` | module | psu | 84 × 97 |  | 3 | 0 | Juniper JNP10K-PWR-AC2 power supply for the MX10004/MX10008 - 5.5 kW, dual C20 feeds (INP1/INP2) stacked besi… |
-| `juniper/jnp10k-re1@1` | module | supervisor | 389 × 38.1 |  | 3 | 0 | Juniper JNP10K-RE1 Routing and Control Board for the MX10004/MX10008 - a slim full-width FRU, two stacked in … |
+| `juniper/jnp10k-re1@2` | module | supervisor | 389 × 38.1 |  | 3 | 0 | Juniper JNP10K-RE1 Routing and Control Board for the MX10004, MX10008 and MX10016 - a slim full-width FRU, tw… |
 | `juniper/jnp304-blnk@1` | module | blank | 197.6 × 39.7 × 71 |  | 1 | 0 | Blank cover panel (JNP304-BLNK) for an unoccupied MX304 RE or LMIC slot |
 | `juniper/jnp304-re@1` | module | supervisor | 197.6 × 39.7 × 203.2 |  | 1 | 0 | Juniper MX304 Routing Engine (JNP304-RE), a hot-swappable half-width FRU |
 | `juniper/mic-3d-10ge-sfp-e@1` | module | line-card | 168 × 27 |  | 0 | 3 | Juniper 1G/10G Ethernet MIC with SFP+ (10 ports, one PIC) |

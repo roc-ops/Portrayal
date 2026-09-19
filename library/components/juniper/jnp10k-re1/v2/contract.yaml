@@ -1,0 +1,187 @@
+format: 1
+kind: module
+name: jnp10k-re1
+version: 2.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10K-RE1 Routing and Control Board for the MX10004, MX10008 and
+  MX10016 - a slim full-width FRU, two stacked in the top slots. PWR/STS/MASTER
+  status lamps, CONSOLE, the MGMT pair (RJ-45 and SFP) with its LINK lamp, USB,
+  DISK1/DISK2 SSD lamps, Online/Offline and RESET buttons, BITS-0 and BITS-1
+  clock jacks with their clock lamps, ToD, the 1PPS / 10MHz SMB quad, and
+  XGE-0 and XGE-1, which Juniper marks reserved and unused.
+attrs:
+  sfp: 3
+  model: JNP10K-RE1
+  power-draw-max-w: 175
+provenance:
+  size: 'bay - 389.0 x 38.1 mm, the RCB bay these chassis declare. Carried from
+    v1 unchanged: the metal is the same slot in all three chassis and nothing in
+    this rebuild questioned it'
+  power: >-
+    guide FRU power table, MX10004 guide Table 55 'Power Requirements for MX10004
+    Components': '| JNP10K-RE1 | MX10004 RCB | 100W | 175W | 175W |', whose header reads
+    'At 77 F (25 C) | At 104 F (40 C) | At 131 F (55 C)'. THE 55 C RUNG IS CARRIED, for the
+    board alone. Reading the 25 C end would have been 43 percent low.
+    175 W is the worst rung printed for this part anywhere in the corpus, and the figure is
+    chassis-dependent rather than universal: the MX10016 guide gives the same board
+    '90 W at 25 C, 155 W at 40 C, 165 W at 40 C', which is LOWER. The 195 W at 56 C in that
+    same MX10016 table belongs to JNP10K-RE1-128, a different SKU whose part number this
+    one is a prefix of.
+  face: >-
+    drawing - REBUILT AT v2 FROM JUNIPER'S OWN FIGURE. Every position here is read off
+    Figure 46 of the MX10004 hardware guide, 'JNP10K-RE1, JNP10K-RE1-LT, and JNP10K-RE1-128G
+    Routing and Control Board Faceplate' (p132), rendered from the PDF at 600 dpi rather
+    than taken from the extracted figure, which is 4.6x coarser and on which the 1PPS legend
+    reads as GPS.
+    v1 DREW A DIFFERENT BOARD. It was built from mx10004-frontwtop-high.jpg, whose RCB has
+    no BITS, ToD, RESET or Online/Offline hardware and carries FOUR SFP cages silkscreened
+    0-3 where this figure has TWO marked XGE-0 and XGE-1. See which-board-the-photographs-show below.
+  face-scale: >-
+    FRACTIONS PER AXIS, NOT ABSOLUTE SCALE. Figure 46's faceplate measures 2889 x 260 px,
+    an aspect of 11.11 against the bay's 389.0 / 38.1 = 10.21 - 8.8 percent out, which fails
+    the panel gate and means no single px/mm may be taken from it. Positions are therefore
+    fractions of the face along each axis independently: x at 2889 px / 389.0 mm, y at
+    260 px / 38.1 mm. PART SIZES ARE THE REGISTRY'S, never the drawing's, because the
+    drawn bezels run 20 to 25 percent wider than the parts they enclose.
+    The single-height jacks and cages measured y-centres of 21.0 to 21.6 and are modelled on
+    one centreline at 21.4, following the rule that a few-millimetre scatter in a schematic
+    is noise. The BITS pair, the SMB quad and the lamp columns are genuinely stacked and
+    keep their measured rows.
+  vent-field: >-
+    CARRIED FROM v1 UNREVISED, and it is the one place this face knowingly differs from
+    Figure 46. v1 draws a single uninterrupted hex field - 19 rows of 192 at a 2.0 mm pitch,
+    covering the whole 389 x 38.1 plate - and the hardware paints over it. The figure instead
+    shows clear metal around the handle-and-lamp panel at each end and around the jack
+    groups, with the perforation confined to the bands between them.
+    It was left alone because the vent is the metal rather than the hardware, the rebuild was
+    about what is installed on that metal, and re-deriving a perforation map off a drawing
+    that fails the panel gate at 8.8 percent would be inventing a boundary rather than
+    reading one. Visible in a side-by-side as vents showing where the figure has plain plate.
+  lamp-states: >-
+    guide - MX10004 hardware guide Tables 45, 46, 47, 48 and 49. PWR green on = adequate
+    power, yellow blinking = error, dark = not powered. STS green on = online and
+    functioning, yellow on = booting, yellow blinking = error. MASTER green on = primary,
+    dark = backup, so its unlit state is a reading and not an absence.
+    THE CLOCK LAMPS ARE INVERTED and the table says so plainly: 'Clock LEDs-BITS-0 and
+    BITS-1 | Red | Off | Clock is active. / On steadily | Clock is not working.' Off is the
+    healthy state. Modelled with `fault` as the only lit state so nothing can render a red
+    lamp as good news.
+    Blinking is not in this library's state vocabulary, so 'active' and 'error' collapse
+    onto their steady colours; that is a renderer limit, recorded rather than invented
+    around.
+  sfp-count: >-
+    three std/sfp@1 cages, and they do not all do the same job: one is the MGMT SFP beside
+    the management RJ-45, and two are XGE-0 and XGE-1, which the figure legend marks 'not
+    used (reserved ports)'. The count is what L96 asks for; the per-cage function is on
+    each placement.
+  lamp-naming: >-
+    the faceplate prints MASTER and the status table calls the same lamp MST. The artwork
+    is what is on the metal, so the silkscreen reads MASTER; v1 printed MST.
+  mgmt-order: >-
+    guide - 'These two ports ... are both labeled MGMT. The left management port (RJ-45) is
+    for 10/100/1000 BASE-T', which is the order the figure draws and the order modelled.
+    The same sentence places the pair 'between the clocking connections and the USB port',
+    which neither RCB figure supports - both draw MGMT left of USB with the clocking well to
+    its right. Prose is not a source for arrangement; the figure is.
+  which-board-the-photographs-show: >-
+    DO NOT "CORRECT" THIS FACE BACK TO THE PHOTOGRAPHS.
+    working/intake/juniper/mx/photos/mx10004/mx10004-frontwtop-high.jpg and
+    mx10016/mx10016-front-high.jpg both show an RCB with an MST/PWR/STS/OFF lamp column,
+    CON, the SMB quad immediately right of it, one MGMT RJ-45, one SFP, USB, an SSD door,
+    a single SSD lamp and FOUR SFP cages silkscreened 0, 1, 2 and 3. It has no BITS jacks,
+    no ToD, no RESET and no Online/Offline button. v1 of this contract modelled that board
+    faithfully.
+    Juniper's Figure 46 (RE1 family) and Figure 45 (RE3 family) both draw TWO reserved XGE
+    cages and both carry the BITS, ToD, RESET and Online/Offline hardware, so the
+    photographed board matches neither documented RCB. Its model label does not resolve at
+    the scale of either photograph, so which SKU they show is open.
+    v2 follows the figure, because the figure is captioned with this part number and this
+    contract is named for it. WHAT WOULD SETTLE IT: one photograph of a real RCB's model
+    label, or a vendor drawing for whatever those two chassis photographs show.
+states:
+- ok
+- fail
+- absent
+elements:
+  led-pwr:
+    at: [29.5, 14.5]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+  led-sts:
+    at: [29.5, 20.2]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: booting, color: '#f59e0b'},
+             {name: fault, color: '#f59e0b'}]
+  led-master:
+    at: [29.5, 26.0]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: primary, color: '#22c55e'}]
+  led-link-mgmt:
+    at: [83.7, 7.2]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}]
+  led-disk1:
+    at: [116.5, 20.2]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: present, color: '#22c55e'}]
+  led-disk2:
+    at: [116.6, 25.7]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: present, color: '#22c55e'}]
+  led-bits-1:
+    at: [197.1, 20.2]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#ef4444'}]
+  led-bits-0:
+    at: [197.1, 25.8]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#ef4444'}]
+  led-link-xge-0:
+    at: [287.1, 5.7]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}]
+  led-link-xge-1:
+    at: [310.0, 5.7]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}]
+parts:
+- {ref: std/rj45@2, id: con, at: [37.8, 14.8], attrs: {function: serial console}}
+- {ref: common/rj45-eth@1, id: mgmt, at: [59.6, 14.8], attrs: {function: out-of-band management}}
+- {ref: std/sfp@1, id: mgmt-sfp, at: [78.85, 16.4], attrs: {function: management SFP}}
+- {ref: std/usb-a@1, id: usb, at: [100.4, 19.15], rotate: 90, attrs: {function: USB service port}}
+- {ref: common/reset-button@1, id: offline, at: [127.2, 32.0], attrs: {function: online/offline}}
+- {ref: common/reset-button@1, id: reset, at: [189.1, 32.0], attrs: {function: reset}}
+- {ref: std/rj45@2, id: bits-1, at: [204.8, 7.9], attrs: {function: BITS1 timing}}
+- {ref: std/rj45@2, id: bits-0, at: [204.8, 21.4], attrs: {function: BITS0 timing}}
+- {ref: std/rj45@2, id: tod, at: [231.7, 14.8], attrs: {function: time of day}}
+- {ref: std/smb@1, id: pps-in, at: [252.7, 15.2], attrs: {function: 1PPS in}}
+- {ref: std/smb@1, id: mhz-in, at: [262.8, 15.2], attrs: {function: 10MHz in}}
+- {ref: std/smb@1, id: pps-out, at: [252.7, 24.1], attrs: {function: 1PPS out}}
+- {ref: std/smb@1, id: mhz-out, at: [262.8, 24.1], attrs: {function: 10MHz out}}
+- {ref: std/sfp@1, id: xge-0, at: [283.35, 16.4], attrs: {media: sfp-plus, function: 'reserved - Juniper marks these not used'}}
+- {ref: std/sfp@1, id: xge-1, at: [302.85, 16.4], attrs: {media: sfp-plus, function: 'reserved - Juniper marks these not used'}}
+size:
+  w: 389.0
+  h: 38.1
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  Both are the RCB BAY these three chassis declare, not a measurement of the card: the
+  MX10004, MX10008 and MX10016 all open a 389.0 x 38.1 mm slot and the board fills it.
+  `rcb-vendor-width` on mx10004 records that the vendor FRU table covers chassis, cards and
+  PSUs but never the RCB itself, so no vendor dimension for this face exists to check it
+  against. The v2 rebuild took every position off Figure 46 and did not revisit the size,
+  because the figure fails the panel gate at 8.8 percent and could not have settled it.
+skins: [default]
