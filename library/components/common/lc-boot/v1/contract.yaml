@@ -7,12 +7,14 @@ behaviour: occupies
 mates: lc-plug
 profile: networking
 description: >-
-  A strain-relief boot for an LC plug, sized to the plug BODY it wraps - not
+  A strain-relief boot for an LC plug: a 6.2 square cross-section that goes
+  AROUND the 5.58 x 5.65 plug body, with about 0.28 of wall on each side. Not
   the plug's front-view silhouette, which includes the latch and this does
-  not. No standard governs a boot's shape; see `provenance.standard` for why
-  this is `common/` and not `generic/`.
-size: {w: 5.58, h: 5.65}
-size-confidence: {w: borrowed, h: drawing}
+  not, and not the plug body either - a boot that were exactly the body it
+  wraps would have no wall at all. No standard governs a boot's shape; see
+  `provenance.standard` for why this is `common/` and not `generic/`.
+size: {w: 6.2, h: 6.2}
+size-confidence: {w: drawing, h: drawing}
 attrs: {boot-length: 15.1}
 unplaced: >-
   seated by a device that mate-to's a seated generic/lc-plug@1 placement -
@@ -38,16 +40,45 @@ provenance:
     a boot is - modelled here on common/qsfp-pull-tab@1, the library's other
     part in that position.
   size: >-
-    w is BORROWED from generic/lc-plug@1's own `size.w` (5.58) - a boot wraps
-    around the plug body, so its outer envelope is read as the same width as
-    the body it covers, not measured on a second drawing. h is drawing - SENKO
-    DS-LC-000004 Rev A p.3, Connector Drawing, Side View, body height 5.65 (the
-    plug BODY the boot wraps, NOT the front-view overall silhouette height
-    10.43, which is a different axis and includes the latch the boot does not
-    cover). THESE ARE TWO DIFFERENT QUANTITIES FROM TWO DIFFERENT VIEWS: the
-    plug's own w/h (5.58 x 10.43) is the front-view silhouette including the
-    latch; this boot's w/h (5.58 x 5.65) is the body only, one width borrowed
-    and one height read from the side view of the same drawing.
+    drawing - SENKO DS-LC-000023 Rev A p.3 (XP Fit Plus, series 951), the
+    BOOT's own figures on the boot's own sub-assembly, which is the change
+    from the first cut of this contract. It previously stated 5.58 x 5.65 -
+    the plug body EXACTLY, w borrowed from the plug's front view and h read
+    off the plug's side view - which gives a boot ZERO WALL, and is the very
+    thing common/rj45-boot@1's own provenance calls wrong ("a boot goes around
+    the outside of the part it wraps, not inside it"). It also labelled a PLUG
+    figure as `h: drawing` for the BOOT, which is a mislabel however close the
+    number.
+
+    THE HEIGHT: 6.2 +/-0.1, the plain (un-diametered) callout on the exploded
+    side view's third sub-assembly. It was previously dismissed here as
+    unattributed. It is not: it is a linear vertical dimension on the boot,
+    its two arrowheads are placed outside pointing IN at the boot's top and
+    bottom outer edges, and the pair is centred on the boot's own centreline
+    to within half a pixel at 600 dpi. The same sub-assembly carries the 15.1
+    +/-0.1 length this contract already cites, from the same left face.
+
+    CHECKED, not just read. At 600 dpi the boot's block measures 200.0 px tall
+    (edges at y 367.4 and 567.4, centreline at 467.4 - symmetric). Scaling by
+    the 15.1 length on the SAME view gives 32.05-32.20 px/mm, so that block is
+    6.21-6.24 mm. The plug body's 5.65 would need 181-182 px; it is out by 18.
+
+    THE WIDTH: 6.2, MEASURED off the top view of the same sheet rather than
+    read from a callout - nothing on this drawing dimensions the boot's width.
+    The two views are at different scales, so they are tied by a feature both
+    draw: the boot's five moulded ribs, whose pitch spans 64.8 px on the side
+    view and 79.59 px on the top view, a ratio of 1.228. The boot's block
+    measures 245.67 px across on the top view against 200.0 px tall on the
+    side view - a ratio of 1.228, THE SAME to three figures. The cross-section
+    is therefore square, and the width is the height: 6.2. That is one
+    measurement checked against a second, not a figure inferred from the
+    height and then restated as if measured.
+
+    WHAT THIS MAKES THE WALL: (6.2 - 5.65)/2 = 0.275 over the plug body's
+    height and (6.2 - 5.58)/2 = 0.31 over its width. Those are consequences
+    of two independently sourced envelopes, and no wall thickness is stated
+    anywhere in this contract - the boot's envelope is its own, not the plug's
+    plus something.
   boot-length: >-
     drawing - SENKO DS-LC-000023 Rev A p.3 (XP Fit Plus, series 951), Side
     View, an EXPLODED view whose three sub-assemblies (ferrule, body, boot) are
@@ -55,22 +86,30 @@ provenance:
     dimensions the boot's I.D. 1.60 +/-0.05 (verified directly off the page 3
     render at 300dpi) at the cable-exit end and a further I.D. Ø1.0 nearer the
     body joint; neither feeds `size` or `attrs` here, since this contract's
-    envelope is the plug body it wraps, not the boot's own bore. THE BRIEF'S
-    "O.D. 2 +/-0.1" IS NOT ON THIS PAGE: the same side view carries a plain
-    (un-diametered) "6.2 +/-0.1" near that joint, read at 8x zoom to rule out
-    misreading a "2" for a "6", and nothing on the page carries a callout
-    reading "O.D." or "Ø2". The drawing wins per this task's own instruction;
-    boot-length (15.1, independently confirmed and the only figure this
-    contract states) is unaffected, since no O.D. figure enters this contract.
+    envelope is the boot's outer block, not its bore. THE BRIEF'S
+    "O.D. 2 +/-0.1" IS NOT ON THIS PAGE: nothing on it carries a callout
+    reading "O.D." or "Ø2". The plain (un-diametered) "6.2 +/-0.1" on the same
+    side view - read at 8x zoom to rule out misreading a "2" for a "6" - is
+    the BOOT'S OUTER HEIGHT and now feeds `size`; see provenance.size for what
+    establishes that.
   axis: >-
-    derived, same reasoning as generic/lc-plug@1's own `axis` note - the fibre
-    runs straight through the boot on the plug's optical axis, so `mate`
-    (front, where the boot meets the plug's `boot` point) and `cable` (rear,
-    where the cable continues) share one (x, y): the horizontal and vertical
-    centre of the 5.58 x 5.65 body cross-section, (2.79, 2.825).
+    drawing - the side view draws the boot's centreline, and it sits at y
+    467.4 against outer edges at 367.4 and 567.4: dead centre of the block, to
+    within the line weight. So `mate` (front, where the boot meets the plug's
+    `boot` point) and `cable` (rear, where the cable continues) share one
+    (x, y), the centre of the 6.2 x 6.2 cross-section, (3.1, 3.1) - the same
+    reasoning generic/lc-plug@1's own `axis` note gives for its three points:
+    the fibre runs straight through on one axis, so a front point and a rear
+    point are one location seen from two directions.
+
+    THE PLUG'S AXIS IS 7.61 FROM THE TOP OF ITS OWN SILHOUETTE and this boot's
+    is 3.1 from the top of its own. The two are not comparable figures and
+    nothing here should try to reconcile them: each is measured in its own
+    part's frame, and it is the `mate` points that bring them together when
+    the boot is seated.
 elements:
-  body: {at: [0.0, 0.0], size: [5.58, 5.65], class: boot}
+  body: {at: [0.0, 0.0], size: [6.2, 6.2], class: boot}
 connection-points:
-  mate: {at: [2.79, 2.825], direction: front}
-  cable: {at: [2.79, 2.825], direction: rear}
+  mate: {at: [3.1, 3.1], direction: front}
+  cable: {at: [3.1, 3.1], direction: rear}
 skins: [default]
