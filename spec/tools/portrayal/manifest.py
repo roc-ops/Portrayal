@@ -130,7 +130,14 @@ def component_refs(device):
 def presented_interface(contract, resolve):
     """What a receptacle presents to a module, and where the module mates into it.
 
-    Returns `(interface, mate_at)` - or `(None, None)` when nothing does.
+    Returns (interface, mate_at, lift)
+
+    THE LIFT IS THE HOST'S PROTRUSION AT THAT POINT, and it is why this returns
+    three things now. A forwarded point belongs to a composed aperture, and that
+    aperture's `lift` is how far off the host's own face it stands. An occupant
+    positioned by the point and not displaced by the lift is seated at the panel
+    plane behind whatever the aperture is mounted on. A host that presents its
+    own point forwards nothing and lifts nothing.
 
     WHY THIS LOOKS THROUGH `parts`. Seating an optic worked end to end and was
     used by exactly one configuration on one device, out of 7,058 ports. Not
@@ -156,7 +163,7 @@ def presented_interface(contract, resolve):
     """
     mate = (contract.get("connection-points") or {}).get("mate")
     if contract.get("interface") and mate:
-        return contract["interface"], list(mate["at"])
+        return contract["interface"], list(mate["at"]), 0.0
     # A wrapper may compose several parts - a duplex adapter holds two bores -
     # and only one aperture can be the thing a module seats into. Take the first
     # that presents an interface, in declaration order, and leave the multi-mate
@@ -173,7 +180,8 @@ def presented_interface(contract, resolve):
             continue
         at = part.get("at") or [0, 0]
         cores.append((core["interface"],
-                      [round(at[0] + cm["at"][0], 4), round(at[1] + cm["at"][1], 4)]))
+                      [round(at[0] + cm["at"][0], 4), round(at[1] + cm["at"][1], 4)],
+                      float(part.get("lift") or 0)))
     if len(cores) == 1:
         return cores[0]
-    return contract.get("interface"), (list(mate["at"]) if mate else None)
+    return contract.get("interface"), (list(mate["at"]) if mate else None), 0.0

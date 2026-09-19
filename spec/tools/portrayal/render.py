@@ -1816,7 +1816,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # The host's mate point may be FORWARDED from a composed aperture -
             # see manifest.presented_interface. The occupant's is its own: a
             # module is the thing that mates, not a wrapper around one.
-            _, hm_at = presented_interface(hc, _res)
+            _, hm_at, hm_lift = presented_interface(hc, _res)
             om = (oc.get("connection-points") or {}).get("mate")
             if hm_at is None or om is None:
                 raise ValueError(f"{p['id']}: mate-to needs a 'mate' connection-point "
@@ -1824,6 +1824,13 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                  "also present one through a composed aperture")
             p = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
                             round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            # WHAT THE APERTURE IS OFF THE FACE, THE OCCUPANT IS TOO. Written as
+            # data-z-lift on the occupant's own group by the instance_group call
+            # below, via `lift`, exactly as a composed part writes it - so
+            # relief.js's existing ancestor sum places it and there is one code
+            # path, not two. A `mate-to` seat had no z at all before this.
+            if hm_lift:
+                p["lift"] = (p.get("lift") or 0) + hm_lift
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}

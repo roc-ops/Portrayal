@@ -2958,7 +2958,7 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
     # cage wraps `std/qsfp-ganged`, which is where the interface lives; reading
     # only the wrapper's own key is why 7,058 ports in this library could not be
     # populated while the mechanism to populate them worked.
-    want, _ = presented_interface(hc, _res)
+    want, _, _ = presented_interface(hc, _res)
     have = oc.get("mates")
     if not have:
         err(path, "L12", f"{where}: {occ_ref} declares no 'mates', "
@@ -3863,7 +3863,7 @@ def lint_component_forwarded_mate(path, data, lib_roots):
         q = resolve_component(ref, lib_roots)
         return load_yaml(q) if q else None
 
-    iface, at = presented_interface(data, _res)
+    iface, at, _ = presented_interface(data, _res)
     if not iface or not at:
         return
     own = [(k, v.get("at")) for k, v in (data.get("connection-points") or {}).items()

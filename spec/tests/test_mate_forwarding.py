@@ -31,12 +31,12 @@ def contract(rel):
 
 
 def test_a_direct_declaration_is_returned_unchanged():
-    iface, at = presented_interface(contract("std/qsfp-ganged/v1"), resolve)
+    iface, at, _ = presented_interface(contract("std/qsfp-ganged/v1"), resolve)
     assert iface == "qsfp" and at == [9.25, 4.79]
 
 
 def test_a_composed_cage_forwards_its_apertures_interface():
-    iface, at = presented_interface(contract("common/qsfp28-cage/v3"), resolve)
+    iface, at, _ = presented_interface(contract("common/qsfp28-cage/v3"), resolve)
     assert iface == "qsfp", "the cage wraps std/qsfp-ganged, which presents qsfp"
     assert at == [9.5, 8.99], "the aperture's mate, offset by the part's own `at`"
 
@@ -51,7 +51,7 @@ def test_the_forwarded_point_is_where_the_author_already_put_it():
         d = yaml.safe_load(open(p)) or {}
         if d.get("class") != "port" or d.get("interface"):
             continue
-        iface, at = presented_interface(d, resolve)
+        iface, at, _ = presented_interface(d, resolve)
         if not iface or not at:
             continue
         own = [v["at"] for v in (d.get("connection-points") or {}).values()]
@@ -67,7 +67,7 @@ def test_a_multi_bore_adapter_declines_rather_than_guessing():
     """`lc-duplex-adapter` composes TWO LC bores and its own point is their
     midpoint. A fibre landing on a ferrule is not a module entering a cage, and
     picking one of the two bores would be inventing which."""
-    iface, at = presented_interface(contract("common/lc-duplex-adapter/v3"), resolve)
+    iface, at, _ = presented_interface(contract("common/lc-duplex-adapter/v3"), resolve)
     assert iface is None and at is None
 
 
@@ -80,7 +80,7 @@ def test_the_optical_form_factors_can_all_host():
         d = yaml.safe_load(open(p)) or {}
         if d.get("class") != "port":
             continue
-        iface, at = presented_interface(d, resolve)
+        iface, at, _ = presented_interface(d, resolve)
         if iface and at:
             presented.add(iface)
     missing = sorted(want - presented)
@@ -94,7 +94,7 @@ def test_the_two_modelled_optics_have_a_cage_that_will_take_them():
     for p in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml")):
         d = yaml.safe_load(open(p)) or {}
         if d.get("class") == "port":
-            iface, at = presented_interface(d, resolve)
+            iface, at, _ = presented_interface(d, resolve)
             if iface and at:
                 presented.add(iface)
     for p in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml")):
@@ -113,7 +113,7 @@ def test_a_composed_port_is_as_deep_as_its_aperture():
         d = yaml.safe_load(open(p)) or {}
         if d.get("class") != "port" or d.get("interface"):
             continue
-        iface, at = presented_interface(d, resolve)
+        iface, at, _ = presented_interface(d, resolve)
         if not iface:
             continue
         if (d.get("size") or {}).get("d"):
