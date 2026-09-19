@@ -29,6 +29,16 @@ def test_the_resolver_sums_the_ancestor_chain():
     assert out["noDir"]["dir"] is None
     assert out["junk"]["z"] == 0, "a junk lift must be 0, never NaN"
 
+    # A JUNK LIFT IS 0 AND A JUNK POINT IS NULL, and the two must not be
+    # levelled. A lift has a safe default - undisplaced - while [0, 0] is a
+    # position on the part that a consumer cannot tell from a real answer.
+    for case in ("noAt", "emptyAt", "junkAt", "shortAt"):
+        assert out[case]["at"] is None, (
+            f"{case} resolved to {out[case]['at']}; an unreadable point must "
+            "be null, never the part's origin")
+    assert out["noAt"]["z"] == 2, "an unreadable point still resolves its z"
+    assert out["stringAt"]["at"] == [1.5, 2.5], "dataset values arrive as strings"
+
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 def test_cable_points_resolves_the_fake_drawing():
@@ -43,9 +53,19 @@ def test_cable_points_resolves_the_fake_drawing():
     assert set(points) == {
         "cage-a", "cage-b", "cage-c/plug/boot",
         "sfp-lc/tx", "sfp-lc/rx", "sfp-1", "sfp-10",
-        "cage-g/plug/boot", "wrap/a", "wrap/b",
+        "cage-g/plug/boot", "wrap/a", "wrap/b", "cage-j",
     }
     assert "out" not in points["cage-a"]
+
+    # THE OWNER ELEMENT COMES BACK. `at` is the marker's OWN-FRAME point, so a
+    # consumer needs the element to finish the transform itself; a point
+    # without one cannot be resolved into the chassis frame by anybody.
+    assert all(pt["elIsMarker"] for pt in out["points"]), \
+        "every point must carry the marker element it came from"
+
+    # a marker whose point does not parse is still REPORTED - dropping the
+    # connector would be its own silent failure - but with at: None
+    assert points["cage-j"]["at"] is None
 
     # a single marker resolves to its own position, direction and lift-only z
     assert points["cage-a"]["at"] == [1, 2]

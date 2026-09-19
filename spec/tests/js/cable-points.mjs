@@ -23,8 +23,11 @@ const m = await import('../../../kit/relief.js');
 const marker = {name: 'cable', at: [6.75, 4.25], dir: 'rear'};
 
 // a plug in a bore on a transceiver: 10.0 of bore lift. The `out` keys here
-// are stray - no ancestor of a real cable marker ever carries data-z-out -
-// and must not affect the sum.
+// must not affect the sum: `data-z-out` is an ABSOLUTE distance from the
+// panel while lifts are relative and summed, so an ancestor's `out` cannot be
+// folded into this walk whatever it says. Ancestors carrying one are real -
+// nine markers in the built library sit under one (see relief.js) - which is
+// why they are modelled here rather than assumed away.
 const stack = [{lift: 0}, {lift: 10.0, out: 0}, {lift: 0, out: 14.3}];
 
 const pure = {
@@ -38,6 +41,16 @@ const pure = {
   noDir: m.resolveCablePoint({name: 'cable', at: [1, 2]}, []),
   // junk lifts are zero, not NaN - a NaN z silently removes a cable from 3D
   junk: m.resolveCablePoint(marker, [{lift: 'x'}, {}, {lift: null}]),
+  // AN UNREADABLE POINT IS NULL, NOT THE ORIGIN. [0, 0] is a plausible
+  // position on any part and wrong by however big the part is, so a consumer
+  // could not tell it from a real answer. These four are the shapes a
+  // hand-edited or truncated drawing produces.
+  noAt: m.resolveCablePoint({name: 'cable'}, [{lift: 2}]),
+  emptyAt: m.resolveCablePoint({name: 'cable', at: null}, []),
+  junkAt: m.resolveCablePoint({name: 'cable', at: ['x', '2']}, []),
+  shortAt: m.resolveCablePoint({name: 'cable', at: ['1']}, []),
+  // a string pair is still a point: dataset values arrive as strings
+  stringAt: m.resolveCablePoint({name: 'cable', at: ['1.5', '2.5']}, []),
 };
 
 // ---------------------------------------------------------------------------
@@ -145,11 +158,19 @@ const markerWrapA = el({'data-cp': 'cable', 'data-cp-at': '4 5'}, wrapA);
 const wrapB = el({'data-path': 'wrap/b'}, wrap);
 const markerWrapB = el({'data-cp': 'cable', 'data-cp-at': '4 6'}, wrapB);
 
+// connector J: a marker whose point does not parse. It must still appear -
+// dropping a connector is its own silent failure - but with `at: null`, so
+// the first arithmetic on it fails at the point of use instead of putting a
+// cable on the part's origin.
+const connectorJ = el({'data-path': 'cage-j'}, svg);
+const markerJ = el({'data-cp': 'cable', 'data-cp-at': 'banana'}, connectorJ);
+
 const markers = [
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
   markerPlugG, markerBootG,
   markerWrap, markerWrapA, markerWrapB,
+  markerJ,
 ];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);
@@ -162,8 +183,13 @@ const emptyRoot = {querySelectorAll: sel => {
   return [];
 }};
 
+// `el` is the owning element itself, so it cannot be serialised - it is
+// replaced here by the one fact worth asserting across the process boundary:
+// that it is the marker element this point came from.
+const strip = pts => pts.map(({el: owner, ...rest}) => ({...rest, elIsMarker: markers.includes(owner)}));
+
 console.log(JSON.stringify({
   ...pure,
-  points: m.cablePoints(svg),
+  points: strip(m.cablePoints(svg)),
   empty: m.cablePoints(emptyRoot),
 }));
