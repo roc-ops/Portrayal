@@ -1702,7 +1702,73 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # resolve mate-to before drawing: an occupant is positioned so its `mate`
     # connection-point lands on its host's, which is what keeps centring offsets
     # out of device manifests entirely
+    #
+    # A SEATED PLACEMENT CAN ITSELF HOST. `hosts` used to be built once, from
+    # placements carrying an explicit `at`, so an occupant could never host
+    # another and a boot could not sit on a seated plug - which is the whole of
+    # spec B's two-part fit. Composition is not an alternative: `parts:` entries
+    # have no `optional` and are compile-time flattened, so a composed boot could
+    # not be chosen per connector, which is what the spec asks for.
+    #
+    # Resolution now runs to a FIXED POINT: each pass places the occupants whose
+    # hosts are known and adds them to `hosts`, until a pass places nothing. A
+    # pass that places nothing while occupants remain is either a dangling
+    # `mate-to` (the existing error, unchanged) or a cycle (a new one) - and
+    # without the cycle check the loop would not terminate.
+    #
+    # `mate_resolved` is deliberately NOT named `resolved` - `resolved` is
+    # already the component-version bag started below (search this function for
+    # `resolved = {}`) and threaded through every `instance_group` call to build
+    # `resolved-components` metadata. Reusing the name here would shadow it.
     hosts = {q["id"]: q for q in parts["placements"] if q.get("at")}
+    pending = [q for q in parts["placements"] if q.get("mate-to") and not q.get("at")]
+    mate_resolved = {}
+    while pending:
+        progressed = []
+        for p in pending:
+            host = hosts.get(p["mate-to"])
+            if host is None:
+                progressed.append(p)
+                continue
+            hc, _ = lib.resolve(host["ref"])
+            oc, _ = lib.resolve(p["ref"])
+            def _res(ref):
+                try:
+                    return lib.resolve(ref)[0]
+                except Exception:
+                    return None
+            # The host's mate point may be FORWARDED from a composed aperture -
+            # see manifest.presented_interface. The occupant's is its own: a
+            # module is the thing that mates, not a wrapper around one.
+            _, hm_at, hm_lift = presented_interface(hc, _res)
+            om = (oc.get("connection-points") or {}).get("mate")
+            if hm_at is None or om is None:
+                raise ValueError(
+                    f"{p['id']}: mate-to needs a 'mate' connection-point on both "
+                    f"{p['ref']} and {host['ref']} - the host may also present "
+                    "one through a composed aperture")
+            seated = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
+                                 round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            # Carried to draw_placement as `host-lift` - a resolution-time fact,
+            # not the `seat_lift` local that trio (z_inset / z_group_lift /
+            # data-z-lift) already applies there. Named `host-lift`, not
+            # `seat-lift`, to keep it visibly distinct from that local.
+            if hm_lift:
+                seated["host-lift"] = float(hm_lift)
+            mate_resolved[p["id"]] = seated
+            hosts[p["id"]] = seated
+        if len(progressed) == len(pending):
+            ids_in_view = {q["id"] for q in parts["placements"]}
+            missing = [p for p in progressed if p["mate-to"] not in ids_in_view]
+            if missing:
+                bad = missing[0]
+                raise ValueError(
+                    f"{bad['id']}: mate-to {bad['mate-to']!r} is not a placement "
+                    "with an explicit position in this view")
+            raise ValueError(
+                "mate-to cycle among placements: "
+                + ", ".join(sorted(p["id"] for p in progressed)))
+        pending = progressed
 
     # WHAT IS BOLTED TO THE OUTSIDE OF THE METAL PAINTS LAST. A bay draws its
     # opening - and an empty bay draws it dark - so anything mounted across that
@@ -1811,29 +1877,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # see the trio below.
         seat_lift = 0.0
         if p.get("mate-to") and not p.get("at"):
-            host = hosts.get(p["mate-to"])
-            if host is None:
+            # Resolved to a fixed point before any placement was drawn (see
+            # `mate_resolved` above `hosts`), which is what lets a seated
+            # placement itself host - a boot can now mate to an occupant, not
+            # only to something with an explicit `at`. The lookup is guarded,
+            # not a bare subscript: a `mate-to` somehow absent from
+            # `mate_resolved` must raise the SAME error a dangling `mate-to`
+            # always has, not a KeyError with a stack trace. In practice the
+            # resolution pass above already raises this for every dangling or
+            # cyclic case before drawing starts, so this is a defensive echo of
+            # that error, not its only source.
+            resolved_p = mate_resolved.get(p["id"])
+            if resolved_p is None:
                 raise ValueError(f"{p['id']}: mate-to {p['mate-to']!r} is not a "
                                  "placement with an explicit position in this view")
-            hc, _ = lib.resolve(host["ref"])
-            oc, _ = lib.resolve(p["ref"])
-            def _res(ref):
-                try:
-                    return lib.resolve(ref)[0]
-                except Exception:
-                    return None
-
-            # The host's mate point may be FORWARDED from a composed aperture -
-            # see manifest.presented_interface. The occupant's is its own: a
-            # module is the thing that mates, not a wrapper around one.
-            _, hm_at, hm_lift = presented_interface(hc, _res)
-            om = (oc.get("connection-points") or {}).get("mate")
-            if hm_at is None or om is None:
-                raise ValueError(f"{p['id']}: mate-to needs a 'mate' connection-point "
-                                 f"on both {p['ref']} and {host['ref']} - the host may "
-                                 "also present one through a composed aperture")
-            p = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
-                            round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            p = resolved_p
             # WHAT THE APERTURE IS OFF THE FACE, THE OCCUPANT IS TOO, and
             # carrying it takes THREE coordinated moves, not one. `parts:`
             # composition already does the same three (see the `part.get("lift")`
@@ -1854,7 +1912,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # keeps exactly the meaning _inset_feature's docstring gives it -
             # carried entirely by `back`, writing no attribute - so it stays in
             # `p["lift"]` and out of `seat_lift`.
-            seat_lift = float(hm_lift or 0.0)
+            seat_lift = float(p.get("host-lift") or 0.0)
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}
