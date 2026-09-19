@@ -1,0 +1,80 @@
+format: 1
+kind: component
+name: rj45-boot
+version: 1.0.0
+class: boot
+behaviour: occupies
+mates: rj45-plug
+profile: networking
+description: >-
+  A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around
+  the plug it wraps. UNLIKE common/lc-boot@1, this boot's OWN outer body is
+  dimensioned on its drawing, and it is used directly rather than borrowed
+  from the plug - see `provenance.size` for why the two boots follow different
+  rules. No standard governs a boot's shape; see `provenance.standard` for why
+  this is `common/` and not `generic/`.
+size: {w: 14.5, h: 10.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {boot-length: 26.4}
+unplaced: >-
+  seated by a device that mate-to's a seated generic/rj45-plug@1 placement -
+  none does yet. spec/tests/test_chained_seats.py exercises the mechanism this
+  needs (a placement mating to another placement); a device manifest using
+  this part for real is downstream of this library, same as
+  generic/rj45-plug@1's own `unplaced`.
+provenance:
+  standard: >-
+    NO STANDARD GOVERNS A BOOT, which is why this is `common/rj45-boot` and
+    not `generic/rj45-boot` - the same argument common/lc-boot@1 makes, in
+    this part's own terms. `generic/` is for a class shape whose envelope
+    conforms to a published standard (spec/schemas/standards.yaml); there is
+    no such standard for a strain-relief boot. EASE Electronics drawing J0072
+    rev A alone lists NINE part numbers (9134543J0070 through 9134551J0078)
+    that differ ONLY in colour - one geometry, sold as black, blue, green,
+    gray, orange, purple, red, white and yellow - which is a single vendor's
+    tooling, not a standard. A `generic/` boot would present that one vendor's
+    accessory as THE class shape, which is exactly what L99 refuses for a
+    transceiver a level up. `common/` is the namespace for "shapes that stand
+    for a class of part rather than one product, with no manufacturer and
+    nothing a DCIM could order" (library/components/README.md); modelled here
+    on common/lc-boot@1, the library's other boot.
+  size: >-
+    drawing - EASE Electronics drawing J0072 rev A (RJ45 Strain Relief Boot,
+    PVC 80P), the end view (looking into the mouth the plug enters): 14.5
+    +/-0.5 wide by 10 +/-0.5 high, with an 11.9 +/-0.5 inner opening and R1/R3
+    corner radii. THE DRAWING READS 10 +/-0.5, NOT 10 +/-0.4 - zoomed to
+    1200dpi to be sure, since the two are one stroke apart at print
+    resolution; the drawing wins per this task's own instruction, and the
+    nominal 10 is unaffected either way, only the tolerance. THE SIZE RULE IS
+    DIFFERENT FROM common/lc-boot@1: the LC boot's own outer dimensions are
+    not given on its drawing, so it BORROWED its width from the plug body it
+    wraps. This boot's own body IS dimensioned, and used directly rather than
+    borrowed, because EASE's drawing gives it - there is no reason to infer a
+    figure from the plug when the boot's own vendor states one. The result is
+    LARGER than generic/rj45-plug@1's own body (11.68 x 7.93), which is
+    correct: a boot goes around the outside of the part it wraps, not inside
+    it. The two boots are sized by different rules because they had different
+    source material, not because the corpus disagrees with itself - a later
+    "make them consistent" pass would be fixing something that is not broken.
+  boot-length: >-
+    drawing - EASE J0072, both side views, overall length 26.4 +/-0.5,
+    confirmed on each view independently (both callouts agree). The same
+    views also dimension a 15.5 +/-0.5 collar section (9 +/-0.4 through its
+    waist) and a 9 +/-0.4 / 7.8 +/-0.4 tail; neither feeds `size` or `attrs`
+    here, since this contract's envelope is the boot's mouth cross-section,
+    not its tapered profile along the length.
+  axis: >-
+    derived, following the connection-point convention generic/lc-plug@1 and
+    common/lc-boot@1 introduced (Task 4/5) and generic/rj45-plug@1 restates
+    (Task 6): `mate` (front, where the boot meets the plug's `boot` point) and
+    `cable` (rear, where the cable continues) share one (x, y) - the
+    horizontal and vertical centre of the 14.5 x 10.0 body cross-section,
+    (7.25, 5.0) - because a part with no separately-located front/rear has one
+    axis seen from two directions rather than two locations. Followed here
+    rather than re-derived.
+elements:
+  body: {at: [0.0, 0.0], size: [14.5, 10.0], class: boot}
+connection-points:
+  mate: {at: [7.25, 5.0], direction: front}
+  cable: {at: [7.25, 5.0], direction: rear}
+skins: [default]
