@@ -79,6 +79,107 @@ def test_the_second_seat_lands_on_the_first(tmp_path):
         "rather than mated")
 
 
+def _effective_lift(root, target_id):
+    """The lift relief.js would resolve for a group: data-z-lift up the ancestors.
+
+    relief.js's `liftOf` sums `data-z-lift` from a node up to the SVG root and
+    reads nothing else, so this is the whole of what a consumer sees. A seated
+    occupant is a TOP-LEVEL SIBLING of its host, not a child of it, which is
+    precisely why the sum cannot recover a host's displacement on its own and
+    why the renderer has to write the total onto the seat's own group.
+    """
+    parents = {c: p for p in root.iter() for c in p}
+    node = next(el for el in root.iter() if el.get("id") == target_id)
+    total = 0.0
+    while node is not None:
+        if node.get("data-z-lift") is not None:
+            total += float(node.get("data-z-lift"))
+        node = parents.get(node)
+    return total
+
+
+def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
+    """The SECOND link's effective lift, against a host whose aperture is lifted.
+
+    THIS IS THE ASSERTION THE OLD TEST WAS MISSING. `test_the_second_seat_lands_
+    on_the_first` checks only that two transforms DIFFER - true of any two
+    positions, including a wrong one - and the drawing is 2D, so a depth error
+    moves nothing it compares. A boot on a plug on a 10 mm-proud bore drew at
+    the panel plane, 10 mm too deep, and every test passed.
+
+    `generic/sfp-lc-simplex@1` is the fixture because it is the only library
+    part whose `presented_interface` forwards a NON-ZERO lift: it composes one
+    `std/lc-bore@3` at `lift: 10.0`, and one bore is what lets
+    `presented_interface` pick a single aperture to forward. `generic/sfp-lc@1`
+    composes TWO bores, declines to pick, and forwards 0.0 - which is why the
+    other tests here, written against it, could not have caught this.
+
+    The failure mode was NOT that the second link got a wrong number: it got NO
+    `data-z-lift` at all. `presented_interface` answers "how far off its own
+    face is this host's aperture", and returns 0.0 for any host that declares
+    its own `interface` + `mate` - which the plug does. The host's own seat
+    lift was simply dropped, and being a sibling rather than a child, nothing
+    downstream could put it back.
+    """
+    r, out = _render(
+        tmp_path,
+        [{"ref": "generic/lc-plug@1", "id": "plug1",
+          "mate-to": "port-4-occupant"},
+         {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}],
+        {"port-4": "generic/sfp-lc-simplex@1"})
+    assert r.returncode == 0, r.stderr[-800:]
+    root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
+
+    module = _effective_lift(root, "port-4-occupant")
+    plug = _effective_lift(root, "plug1")
+    boot = _effective_lift(root, "boot1")
+
+    # FIRST LINK: the module seats in the cage, and the cage's own presented
+    # aperture is flush, so the module stands where the cage does.
+    assert plug == module + 10.0, (
+        f"the plug seats in the module's bore, which stands 10.0 proud of the "
+        f"module face (std/lc-bore@3 at lift: 10.0); got {plug} against a "
+        f"module at {module}")
+
+    # SECOND LINK, the one that was broken: the boot mates the PLUG, and the
+    # plug declares its own interface + mate, so its presented aperture lift is
+    # 0.0. The boot must still stand where the plug stands - the plug's own
+    # seat lift is what it inherits, and inheriting nothing put it 10 mm inside
+    # the module.
+    assert boot == plug, (
+        f"the boot's effective lift is {boot} but the plug it wraps stands at "
+        f"{plug}. A chained seat inherits its host's presented-aperture lift "
+        f"PLUS the host's own resolved seat lift; dropping the second term "
+        f"buries the boot in the part it is supposed to wrap")
+    assert boot >= 10.0, (
+        f"the fixture is not exercising anything: the chain's lift is {boot}. "
+        f"An all-zero chain passes the equality above no matter what the "
+        f"renderer does - check generic/sfp-lc-simplex@1 still composes a "
+        f"lifted bore")
+
+
+def test_a_cycle_is_refused(tmp_path):
+    """Two placements mated to each other resolve nothing, forever."""
+    r, _ = _render(
+        tmp_path,
+        [{"ref": "std/lc-bore@3", "id": "a", "mate-to": "b"},
+         {"ref": "std/lc-bore@3", "id": "b", "mate-to": "a"}],
+        {})
+    assert r.returncode != 0, "a mate-to cycle rendered instead of erroring"
+    assert "cycle" in r.stderr.lower(), (
+        f"the error should name the cycle; got: {r.stderr[-300:]}")
+
+
+def test_a_dangling_mate_to_still_errors(tmp_path):
+    """The existing error must survive the rewrite."""
+    r, _ = _render(
+        tmp_path,
+        [{"ref": "std/lc-bore@3", "id": "x", "mate-to": "nope"}],
+        {})
+    assert r.returncode != 0
+    assert "nope" in r.stderr
+
+
 def test_a_hand_written_mate_to_records_its_host(tmp_path):
     """`data-for` on the seat, whichever way the seat was authored.
 

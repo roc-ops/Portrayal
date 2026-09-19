@@ -1784,8 +1784,22 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # not the `seat_lift` local that trio (z_inset / z_group_lift /
             # data-z-lift) already applies there. Named `host-lift`, not
             # `seat-lift`, to keep it visibly distinct from that local.
-            if hm_lift:
-                seated["host-lift"] = float(hm_lift)
+            #
+            # A CHAINED SEAT INHERITS THE WHOLE STACK, not just the last link.
+            # `presented_interface` answers one question - how far the HOST's
+            # aperture stands off the HOST's own face - and returns 0.0 whenever
+            # the host declares its own `interface` + `mate`, which every plug
+            # does. So a boot on a plug on a 10 mm-proud bore took 0.0 and sat
+            # 10 mm too deep. The host's own seat lift is the missing term, and
+            # this loop computed it when it seated the host: it is on the very
+            # dict `hosts` just handed back. Summed HERE, once, at resolution
+            # time - not in draw_placement, because an occupant is a TOP-LEVEL
+            # SIBLING of its host in the compiled drawing and relief.js's
+            # ancestor sum has no path from one to the other to walk. The
+            # attribute this ends up in has to be the absolute displacement.
+            total_lift = float(hm_lift or 0.0) + float(host.get("host-lift") or 0.0)
+            if total_lift:
+                seated["host-lift"] = total_lift
             mate_resolved[p["id"]] = seated
             hosts[p["id"]] = seated
         if len(progressed) == len(pending):
