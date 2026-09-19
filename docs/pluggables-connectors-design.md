@@ -21,10 +21,11 @@ seated. One connector per kind, not seventy-five; the cable is somebody else's.
 | `generic/rj45-plug` | `rj45` | `std/rj45-ganged@2`, `std/rj45@N`, and the vendor jacks that wrap them |
 | `common/rj45-boot` | `rj45-plug` | the plug's rear |
 
-The boots are `common/`, not `generic/`. A `generic/` part's envelope conforms to a
-published standard (`spec/schemas/standards.yaml`) and stands for every product of
-its kind under that standard; no standard governs a boot - its size follows the cable
-OD and the vendor's own tooling. SENKO's LC 2PC datasheet lists six boot options
+The boots are `common/`, not `generic/`. The namespace rule (`spec/schemas/vendors.yaml`'s
+`namespaces:` block) is that `generic/` is a representative of a class under a published
+standard, its envelope conforming to an entry in `spec/schemas/standards.yaml`, standing
+for every product of its kind rather than any one of them; no standard governs a boot - its
+size follows the cable OD and the vendor's own tooling. SENKO's LC 2PC datasheet lists six boot options
 across three diameters, the LC-HD four; Platinum Tools sells RJ45 boots for 5.5 to
 8.5mm cable. A `generic/` boot would present one vendor's accessory as the shape of a
 class that doesn't exist - the error L99 already refuses for a transceiver one level
