@@ -142,9 +142,9 @@ def test_a_bay_attrs_key_is_checked_too():
 def test_the_whole_library_passes_it():
     bad = []
     for p in libwalk.iter_devices([LIB]):
-        lint.ERRORS.clear()
-        lint.lint_device_component_attrs_resolve(p, yaml.safe_load(p.read_text()) or {})
-        bad += [e for e in lint.ERRORS if "[L94]" in e]
+        with lint.collecting() as found:
+            lint.lint_device_component_attrs_resolve(p, yaml.safe_load(p.read_text()) or {})
+        bad += [e for e in found.errors if "[L94]" in e]
     assert not bad, bad[:4]
 
 

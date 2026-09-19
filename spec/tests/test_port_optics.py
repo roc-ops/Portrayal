@@ -29,13 +29,9 @@ MANIFESTS = libwalk.iter_devices([LIB])
 
 def warnings_for(man):
     d = yaml.safe_load(man.read_text())
-    saved = lint.WARNINGS[:]
-    lint.WARNINGS.clear()
-    try:
+    with lint.collecting() as found:
         lint.lint_device_port_optics(man, d, [str(LIB)])
-        return [w for w in lint.WARNINGS if "[L40]" in w]
-    finally:
-        lint.WARNINGS[:] = saved
+    return [w for w in found.warnings if "[L40]" in w]
 
 
 def test_prose_is_not_silence():
@@ -75,13 +71,9 @@ def test_optics_prose_must_reach_a_group():
     """
     d = {"groups": {"ports": {"term": "Port", "attrs": {"media": "sfp-plus"}}},
          "attrs": {"performance": {"optics-sfp": "10GBASE-SR, 1000BASE-T"}}}
-    saved = lint.WARNINGS[:]
-    lint.WARNINGS.clear()
-    try:
+    with lint.collecting() as found:
         lint.lint_device_port_optics(Path("x"), d, [str(LIB)])
-        ws = [w for w in lint.WARNINGS if "[L40]" in w]
-    finally:
-        lint.WARNINGS[:] = saved
+    ws = [w for w in found.warnings if "[L40]" in w]
     assert any("names no port group's media" in w for w in ws), ws
     assert any("port group ports" in w for w in ws), ws
 

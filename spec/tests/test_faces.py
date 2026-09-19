@@ -115,9 +115,9 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
         f"expected 13 parts naming a plan drawing, found {len(named)}"
 
 
-def run83(doc, path="t/contract.yaml", name="t/thing@1"):
+def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
     with L.collecting() as _found:
-        L.lint_component_faces_resolve(path, doc, LIB, name)
+        L.lint_component_faces_resolve(path, doc, lib, name)
     return [e for e in _found.errors if "[L83]" in e]
 
 
@@ -166,11 +166,8 @@ def test_a_face_may_not_itself_have_a_face_of_the_same_direction(direction, tmp_
         "format: 1\nkind: component\nname: deepest\nversion: 1.0.0\n"
         "class: port\nsize: {w: 1, h: 1}\n")
 
-    L.ERRORS.clear()
-    L.lint_component_faces_resolve(
-        "t/contract.yaml", {"faces": {direction: {"ref": "t/middle@1"}}},
-        [str(tmp_path)], "t/outer@1")
-    got = [e for e in L.ERRORS if "[L83]" in e]
+    got = run83({"faces": {direction: {"ref": "t/middle@1"}}},
+                name="t/outer@1", lib=[str(tmp_path)])
     assert len(got) == 1, got
     assert f"{direction} of its own" in got[0]
 

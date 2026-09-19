@@ -62,9 +62,9 @@ def test_the_library_is_in_one_order():
     bad = []
     for p in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(p.read_text()) or {}
-        lint.ERRORS.clear()
-        lint.lint_device_key_order(p, d)
-        bad += [e for e in lint.ERRORS if "[L90]" in e]
+        with lint.collecting() as found:
+            lint.lint_device_key_order(p, d)
+        bad += [e for e in found.errors if "[L90]" in e]
     assert not bad, f"{len(bad)} manifest(s) out of order:\n" + "\n".join(bad[:5])
 
 
@@ -106,9 +106,9 @@ def test_the_library_states_airflow_once():
     bad = []
     for p in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(p.read_text()) or {}
-        lint.ERRORS.clear()
-        lint.lint_device_airflow_home(p, d)
-        bad += [e for e in lint.ERRORS if "[L91]" in e]
+        with lint.collecting() as found:
+            lint.lint_device_airflow_home(p, d)
+        bad += [e for e in found.errors if "[L91]" in e]
     assert not bad, "\n".join(bad[:5])
 
 
