@@ -1,0 +1,624 @@
+format: 1
+kind: device
+name: eps112
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: AS4625-30P
+portfolio: {line: Enterprise, family: Access Switch, series: EPS112}
+description: >-
+  24 x 1G RJ-45 PoE plus 6 x 1G/10G SFP+ 1RU access switch, sold as the EPS112 and stamped
+  AS4625-30P. ALL TWENTY-FOUR COPPER PORTS ARE PoE and they are two classes, not one: ports
+  1-16 carry 802.3at/af up to 30 W and ports 17-24 carry 802.3bt Type 4 up to 90 W, with
+  the 90 W eight marked out on the panel by an ORANGE BAND above and below them. The
+  RJ-45s sit in twelve columns of two, ganged six and six; the SFP+ uplinks are three
+  stacked pairs numbered 25-30 into the same sequence. A stacked management/console RJ-45
+  pair, a full-size Type A USB 3.0 storage port, a Reset button and six status lamps finish
+  the face. TWO HOT-SWAPPABLE 600 W AC SUPPLIES AND THREE FIXED FANS on the rear - the fans
+  are not FRUs. It is the third member of the 440 x 350.3 x 44 shell that edgecore/eps121
+  and edgecore/eps122 share, and the only one with its own quick start guide.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      THIS MODEL HAS ITS OWN GUIDE, which is what separates it from its two siblings. The
+      EPS121 and EPS122 share one quick start guide, staged twice and byte-identical (md5
+      c81e696fe001edaa86961a6660f8da00, 1343641 bytes); the EPS112's is a different
+      document - md5 569bbd26f865b2bae24a733d4046d669, 4874667 bytes, titled "AS4625-30P
+      Quick Start Guide", six pages, FrameMaker 17.0.7 - and it draws only this machine.
+      Its figures are renders of the real thing rather than line art, and its Status LEDs
+      enlargement is captioned with THIS model's name, which is what the EPS121's sixth
+      status lamp had to be left open for.
+      The datasheet (Adobe Illustrator 29.7, "2025-087-EPS112-AS4625-30P DS R03") adds the
+      Interfaces page with twelve numbered callouts, the ordering table and the power
+      figures. Four product photographs are staged, one of them a square-on rear.
+      THE GUIDE STILL DISCLAIMS ITS DRAWINGS - "Note: The drawings in this document are for
+      illustration only and may not match your particular model" - but on this model the
+      drawings and the photographs agree everywhere they overlap.
+  gate-1:
+    confidence: measured
+    note: >-
+      MEASURED AT NATIVE RESOLUTION, NOT ON THE PAGE RENDER, and that is the finding that
+      made this device's Gate 1 decisive. Rendering the pages at 600 dpi gave a datasheet
+      elevation at an apparent 9.08 px/mm and a guide elevation at 5.04; `pdfimages -list`
+      says the datasheet's elevations are embedded at 1000 px across a 440 mm face - 2.27
+      px/mm, upsampled fourfold by the renderer - while the guide's are embedded at 2460
+      and 2474 px. THE BEST INSTRUMENT ON THIS DEVICE IS THE GUIDE'S OVERVIEW FRONT
+      ELEVATION at its own 5.455 px/mm, and the page render of the datasheet is a
+      magnified copy of something coarser.
+      At native resolution the panel bboxes are: guide Overview front 2400 x 240, ratio
+      10.000; guide package-contents front 2401 x 240, ratio 10.004; guide Overview rear
+      1233 x 124, ratio 9.944; rear product photograph 954 x 95, ratio 10.042. Against
+      440 x 44 those are 0.00%, +0.04%, -0.56% and +0.42%. Against 440 x 44.45 they are
+      +1.02%, +1.06%, +0.45% and +1.44%.
+      SO THIS DEVICE IS DRAWN TO 44.00 mm, the figure both its documents publish, and its
+      two shell-mates are not. edgecore/eps121 and edgecore/eps122 record six instruments
+      that fail at 44.0 and pass at 44.45 on the OTHER guide's line art. Same shell, two
+      draughting heights, and this one's evidence is the stronger: two of its four
+      instruments are exact to four decimal places where the siblings' spread is a full
+      percent. Every y measurement in this file uses the 44.00 scale. Filed as
+      `shell-height-disagreement`.
+  the-port-wall:
+    confidence: measured
+    note: >-
+      TWENTY-FOUR RJ-45 IN TWELVE COLUMNS OF TWO, ganged six and six. Fitted by least
+      squares over all twelve columns on the mean of both rows' openings, with a per-gang
+      offset: **pitch 14.0198, gutter 7.0439, first centre 177.2888, rms 0.040 mm,
+      max residual 0.092**. That pitch is the EPS121's 14.0158 to four hundredths of a
+      millimetre, measured on a different document at a different scale, so the two
+      machines carry the same jack.
+      THE ROW PITCH IS 13.94 AND IT WAS NOT MEASURED FROM THE APERTURE CENTRES. The rows
+      mirror - the upper row's keyway points up and the lower row's down, unmistakable at
+      11.9 px/mm on the guide's own enlargement - so the two rows' dark cores are not
+      symmetric about their cells and their separation is not the pitch. What IS sharp is
+      the cream bezel plate: sampled sub-pixel at seven columns between ports it reads
+      y 11.285 to 36.300, height 25.015, with a spread of 0.02 mm. Two 11.0 mm cells fill
+      it with 3.015 between them, so the pitch is 14.015 - within four hundredths of the
+      COLUMN pitch, which is a square grid and a satisfying cross-check rather than a
+      coincidence. The enlargement agrees independently: the upper opening's top edge and
+      the lower opening's bottom edge are 295 px apart at 11.95 px/mm, or 24.69 mm against
+      the 24.94 this model predicts.
+      THEN SIX SFP+ AS THREE STACKED PAIRS at x 358.783, 376.933 and 395.083 - a pitch of
+      18.150 - with cage apertures 13.93 wide and rows at 16.500 and 32.267, a row pitch of
+      15.767. Those rows are further apart than the RJ-45 rows because the SFP block has a
+      cream divider between its cages where the RJ-45 block has none; both were measured.
+      NUMBERING IS ONE SEQUENCE: RJ-45 1-24, SFP+ 25-30, legended `N (up)(down) N+1` above
+      each column and `N (lamp)` below each port.
+  the-two-poe-classes-are-two-groups:
+    confidence: datasheet
+    note: >-
+      THE PANEL ITSELF SPLITS THE COPPER ROW IN TWO and this model follows it. The
+      datasheet's Interfaces callouts read "2. 16 x 10/100/1000BASE-T RJ-45 ports with 30 W
+      per port" and "3. 8 x 10/100/1000BASE-T RJ-45 ports with 90 W per port"; the guide's
+      Overview callouts say the same; the prose says ports 1-16 are 802.3at/af up to 30 W
+      and ports 17-24 are 802.3bt Type 4 up to 90 W.
+      AND THE FACE PRINTS IT. An orange band runs above and below ports 17-24 only -
+      measured x 288.567 to 347.417, the top band y 5.133-9.350 and the bottom y
+      37.033-42.350, colour counted over 14,807 pixels at a median of (230, 89, 25). The
+      numerals inside it are black where every other numeral on the face is white. The
+      band starts in the gap between columns 8 and 9, which is where port 17 begins.
+      So the twenty-four ports are TWO GROUPS, and the boundary is not a gang boundary -
+      the second gang holds ports 13-24 and the band takes the last four of its six
+      columns.
+      THE PER-PORT CURRENT IS PRINTED ON THE PANEL TOO, at the top right: "PoE Output:
+      57V (dc) Max., 0.55A Max/Port1~16, 1.65A Max/Port17~24". Read at 11.9 px/mm on the
+      guide's enlargement; at 5.4 px/mm on the elevation it is four lines of blur.
+  the-port-indicators:
+    confidence: measured
+    note: >-
+      THIRTY LAMPS, ONE PER PORT, IN A ROW BELOW THE PORT WALL - which is what the
+      EPS121's `the-row-under-the-ports` gap was left open for on the other guide. The
+      datasheet's callout 6 names them "Port indicators"; the guide's enlargement resolves
+      them as rounded windows with their port number printed immediately to their left.
+      Measured at 11.95 px/mm they are 3.22 x 1.60; on the elevation all thirty read
+      y 39.05-40.70 and their centres sit at plus and minus 3.67 of each RJ-45 column
+      centre and plus and minus 3.54 of each SFP column centre - two per column, the odd
+      port's to the left and the even port's to the right.
+      THE PART DRAWN IS `common/led-rect-sm@1`, which is 2.80 x 1.60. The height is exact
+      and the width is 0.42 mm short of the measurement. That is carried rather than
+      forked: the library part is explicitly "the rounded bar a dense port row carries one
+      of beside each cage", its own size came from thirty-six readings on a different
+      vendor's master, and a 0.42 mm fork for one device is a worse trade than a recorded
+      difference. IT IS ALSO THE FIRST READING OF THAT LAMP ON ANYTHING BUT THE ASR 9903
+      master it came from, so it is written down here rather than acted on: one reading
+      does not overturn thirty-six, and a second device measuring 3.2 would.
+      The guide's legend gives the vocabulary: "RJ-45 Port LEDs: Green (link), Amber (link
+      with PoE)" and "SFP+ Port LEDs: Green (10G), Amber (1G)".
+      AND THE TRAFFIC JACKS THEMSELVES ARE BARE, which is why they are `std/rj45-ganged@2`
+      and not `common/rj45-ganged-eth@1`. At 11.9 px/mm the MANAGEMENT jack shows two
+      light LED windows in the top corners of its housing, exactly where that part draws
+      led-a and led-b; the traffic jacks at the same magnification show none - a plain T
+      opening with the shell around it and nothing in the corners. That is the whole point
+      of the row below: on this machine the port lamp is not in the jack. The console jack
+      is bare too, and carries no lamp of its own anywhere.
+      THE FIRST DRAFT OF THIS FILE GOT IT WRONG and used the lamped part for all twenty-four,
+      which would have drawn forty-eight lamps the metal does not have on top of the thirty
+      it does. `spec/tests/test_rj45_family.py` caught it by asking why a separate LED
+      placement named a jack that already lights itself.
+      THIS IS THE LIBRARY'S OWN SANCTIONED SHAPE, not an exception to it.
+      `docs/rj45-family-design.md` gives a mechanical rule - Ethernet takes the lamped part -
+      and L76's census carries the matching exemption in as many words: a bare jack is not
+      "on a part with no lamps" when the view draws a `class: led` placement `for:` it
+      BESIDE the jack rather than inside it, the shape `edgecore/as5912-54x` already uses
+      for its management jack. Twenty-four of them here, and the census stays silent because
+      every one of them has its lamp declared.
+  the-management-cluster:
+    confidence: measured
+    note: >-
+      AT THE RIGHT, AND IT IS NOT THE SIBLINGS' CLUSTER. A single stacked RJ-45 pair in one
+      cream bezel carries the management port over the console port - the panel legends them
+      "(up) Mgmt" and "(down) Console" - where the EPS121 has two separate jacks. Its bezel
+      reads x 405.533-422.400 and y 11.648-36.406, aperture centre x 413.233.
+      AND THE USB IS FULL SIZE AND VERTICAL. The datasheet calls it a "Type A USB 3.0
+      storage port" where the EPS121's guide lists a Micro-USB; its metal shell reads
+      6.64 wide by 14.20 tall, centred at (430.38, 29.94), with the blue 3.0 tongue inside
+      running the tall way. A horizontal USB-A would read 13 wide and 5 tall, so the
+      orientation is not in doubt. Drawn as `std/usb-a@1` with `rotate: 90` about the
+      placement centre, the way edgecore/cor580 draws its own vertical one.
+      The Reset button is a round recess 2.6 across at (100.28, 5.49) - which is exactly
+      what `common/reset-button@1` draws inside its 4.0 cell.
+  the-status-lamps:
+    confidence: measured
+    note: >-
+      SIX LAMPS IN TWO ROWS OF THREE, and unlike the EPS121 this model's own guide shows
+      them: the Status LEDs enlargement is captioned AS4625-30P and reads, left to right,
+      System / PSU1 / FAN on the top row and LOC / PSU2 / PoE on the bottom, with the label
+      to the right of each lamp and the Reset button to their left. The datasheet's LEDs
+      section lists the same six: "System LEDs: System, PSU1, PSU2, FAN, PoE, LOC".
+      Measured on that enlargement at 12.03 px/mm - calibrated on the port-wall bezel edge
+      and port 1's aperture centre, both of which this file already knows exactly - the
+      lamps are 2.94 x 1.54 with centres at x 108.53, 116.47 and 124.41 on rows y 3.78 and
+      7.23. `common/led-rect-sm@1` is 2.80 x 1.60 against that.
+      THE PoE LAMP IS NOT A PROBLEM HERE, and it was on the sibling. This machine has PoE
+      on every copper port, so a PoE lamp is exactly what it should carry; the EPS121's
+      gap exists because that model has none and was shown the 54P's plate.
+      The legend, from the guide: "System - Green (OK), Amber (fault detected); PSU1/2 -
+      Green (OK), Amber (fault); FAN - Green (OK), Amber (fault); LOC - Blinking Amber
+      (switch locator); PoE - Green (OK), Amber (near PoE budget)".
+  the-vent-strip:
+    confidence: measured
+    note: >-
+      A SINGLE ROW OF HEXAGONAL PERFORATIONS runs along the top of the port wall, from
+      x 166.3 to 424.0 and from the top edge down to about y 5.0, with a second row clipped
+      by the panel's top edge above it. Measured on the guide's enlargement at 11.9 px/mm
+      the holes are 2.70 across on a pitch of 3.611 - twenty-two of them counted in one
+      span - and they are flat-topped hexagons with points left and right, which is the
+      orientation the renderer's own `vent` tile already uses. `pattern-pitch` scales that
+      tile to the measured 3.61; the tile's hole is 58% of its pitch where these are 75%,
+      so the lattice is right and the holes are drawn a little small. THE TILE'S ROW SPACING
+      IS ALSO ITS OWN: 0.288 of its pitch against the hardware's 0.886, so the drawn band
+      carries about two and a half rows of small hexagons where the metal carries one row of
+      large ones and a clipped second. Scaling the tile to fix that stretches the hexagons
+      into ellipses, so the scale is set from the pitch ACROSS - the structural figure, and
+      the one that was measured - and the field reads darker than the metal. Sampled on
+      matched regions the reference's vent band medians 54 and this render's 25.
+  power:
+    confidence: datasheet
+    note: >-
+      THE SUPPLY'S OWN WATTAGE IS PUBLISHED, which is unusual in this corpus. The
+      datasheet's Interfaces callouts read "11. PSU 1: 600W" and "12. PSU 2: 600W", and the
+      Power section reads "PSUs: 2 pcs 1+1 redundant, load-sharing, hot-swappable 600 W AC
+      (80Plus Platinum compliant)". The ordering table names the part: UP6001R-1079G, a
+      UMEC 600 W AC supply with an IEC 60320 C14 inlet, "for EPS112/AS4625-30P".
+      THE MACHINE'S FIGURES: maximum power consumption "Low-line: 1150 Watts, High-line:
+      1200 Watts"; input "Low-line: 8.5 A for 90 VAC~136 VAC, High-line: 4.5A for 180
+      VAC~264 VAC"; the guide's own table gives a per-PSU system input rating of
+      "100-240 VAC, 50/60 Hz, 8.5 A max." PoE budget "450 W for 1 PSU/1000 W for 2 PSU",
+      with the datasheet's own caveat that "AC PSUs are redundant in terms of system and
+      networking, but not fully redundant in terms of PoE functions and the power budget".
+      That caveat is why the psus group's redundancy note says what it says.
+  the-rear:
+    confidence: measured
+    note: >-
+      MEASURED ON THE GUIDE'S REAR ELEVATION at its native 2.80 px/mm, which is the best
+      rear instrument this device has and is coarse: one pixel is 0.36 mm. The square-on
+      rear product photograph (2.17 px/mm) was used to check every figure and agrees
+      within its own resolution.
+      THREE ROUND FAN OPENINGS, 25.1 across, at x centres 70.22, 117.91 and 165.78 - a
+      pitch of 47.87 - on y 23.22. THE EPS121 RECORDS 47.8 for the same three fans on the
+      other guide, so the fan positions are shared across the shell even though the guards
+      are drawn as rectangles there and circles here.
+      TWO SUPPLY BAYS, and the two modules' silver faces measure IDENTICALLY: x
+      270.45-343.68 and 354.76-427.99, both 73.23 wide, both y 2.55-42.79, both 40.24 tall,
+      on a pitch of 84.31. The photograph puts the handles 83.9 apart and the latches 84.8,
+      which brackets it.
+      THE GROUNDING POINT is two studs and an IEC earth symbol at the far left, x 3.95 to
+      about 22, vertically centred - the datasheet's callout 9 and the guide's callout 7.
+      SILKSCREEN: FAN1, FAN2 and FAN3 under and right of their own fans at x 84.0-90.0,
+      132.2-138.6 and 180.4-186.9 on y 39.5; PSU1 and PSU2 on the black web to the RIGHT of
+      each bay, at x 346.6-352.0 and 432.2-438.0, vertically centred. The PSU labels are
+      legible only on the photograph; the elevation blurs them.
+  finish:
+    confidence: measured
+    note: >-
+      COUNTED, NOT GLANCED AT. The front panel's plain left end medians (60, 60, 60) over
+      14,933 pixels and its mid section (63, 63, 63) over 22,331; the rear's plain middle
+      medians (70, 70, 70) over 13,104. Both faces are neutral - no blue cast - and the ten
+      levels between them are the two figures' exposure rather than two paints, so the
+      chassis carries their mean.
+      THE ONLY SATURATED COLOUR ON EITHER FACE: the orange PoE band, 14,807 pixels at a
+      median of (230, 89, 25), and the supplies' red handles and latches on the rear, 5,977
+      pixels at a median of (177, 93, 92). On the FRONT a red test finds 227 pixels and all
+      227 are the two red letters of the Edge-core wordmark; nothing else on the front face
+      is red. The port bezels median (250, 249, 245) over 23,139 pixels.
+  why-this-is-its-own-device:
+    confidence: datasheet
+    note: >-
+      IT DOES NOT NEED THE ARGUMENT ITS SIBLINGS NEEDED, because it does not share their
+      guide. The EPS121/EPS122 pair had to be separated on device attrs a configuration
+      cannot carry; this model arrives with its own six-page document, its own datasheet,
+      its own port count, its own supply and its own face. What it shares with them is the
+      shell - 440 x 350.3 x 44, the same rack kit "RKIT-L-4625 ... for EPS100/AS4625
+      series" - and the fan pitch.
+attrs:
+  environmental:
+    operating-temp: '0 to 45 C (32 to 113 F) at sea level'
+    storage-temp: '-40 to 70 C (-40 to 158 F)'
+    humidity: 'Operating: 5% to 95% non-condensing'
+  physical:
+    weight-note: '6.42 kg (14.15 lb), includes two PSUs'
+  power:
+    power-consumption: 'Low-line 1150 W max; high-line 1200 W max'
+    system-input-rating-per-psu: '100-240 VAC, 50/60 Hz, 8.5 A max'
+    poe-budget: '450 W with one PSU, 1000 W with two PSUs'
+  features:
+    optics-sfp: >-
+      Six 1G/10G SFP+ uplinks, ports 25-30. The guide's Install step lists what goes in
+      them - "10GBASE-SR, LR, CR, T" and "1000BASE-SX, LX, T" - and the datasheet adds
+      "1G BIDI up to 40 KM", "10G BIDI up to 10KM" and "10G tunable laser DWDM up to
+      80 KM". No breakout table is published, so none is stated here.
+    poe: >-
+      Ports 1-16 support IEEE 802.3at and 802.3af up to 30 W per port; ports 17-24 support
+      IEEE 802.3bt Type 4 up to 90 W per port. The panel prints the per-port current:
+      0.55 A max on ports 1-16 and 1.65 A max on ports 17-24, at 57 V dc max. 90 W needs
+      Cat 6A cabling, which the datasheet says in its own key-features list.
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 44.0, depth: 350.35, ru: 1, weight-kg: 6.42, color: '#414141',
+  airflow: front-to-back}
+gaps:
+- what: shell-height-disagreement
+  scope: [front, rear]
+  reason: sources-disagree
+  wanted: >-
+    WHICH HEIGHT THE 440 x 350.3 x 44 SHELL IS ACTUALLY BUILT TO. Four instruments on this
+    model's own documents - two of them exact to four decimal places - put its drawings at
+    440 x 44.00. Six instruments on the EPS121/EPS122's shared guide put THEIR drawings at
+    440 x 44.45 and fail at 44.0. Both families publish "44" in their specification tables
+    and both are sold as the same 1RU chassis with the same rack kit. One of the two
+    document sets is drawn a percent tall, and nothing in either settles which. A
+    dimensioned mechanical drawing, or a ruler on one real machine, closes it for all
+    three devices at once.
+- what: fan-guard-shape
+  scope: [rear]
+  reason: sources-disagree
+  wanted: >-
+    WHETHER THE THREE FIXED FANS ARE ROUND OR RECTANGULAR. This model's guide and its rear
+    photograph both draw round openings 25.1 across; the EPS121/EPS122 guide draws 25.5 x
+    15.9 rectangles at the same pitch on the same shell - 47.87 here against 47.8 there,
+    and 25.1 across against 25.5. The width and the pitch agree to within half a millimetre
+    and the SHAPE does not, which is what a single fan drawn two ways looks like. Whichever
+    is wrong, one of the two parts is drawing a guard nobody makes. A rear photograph of an
+    AS4625-54T or a mechanical drawing of the fan wall closes it.
+- what: psu-latch-overhang
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    HOW FAR THE SUPPLY'S RELEASE TAB STANDS PROUD OF ITS OWN FACE. The two modules' silver
+    faces are identical to a hundredth of a millimetre - 73.23 wide, 40.24 tall, both of
+    them - but their red tabs run to 2.5 mm past module 1's right edge and 7.5 mm past
+    module 2's. One part cannot do both, and at 2.80 px/mm the difference is seven pixels,
+    which is more than the noise. The tab is drawn inside the face here. A square-on
+    photograph of a supply out of the chassis closes it.
+groups:
+  rj45-poe-30w:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the sixteen 1G RJ-45 ports that carry IEEE 802.3at and 802.3af PoE up to 30 W -
+      ports 1 to 16, the first eight columns of the port wall. They are a separate group
+      from ports 17-24 because the panel itself separates them, with an orange band and a
+      different per-port current.
+    attrs: {media: rj45, speed: 1g, poe: '802.3at/af, 30 W per port, 0.55 A max at 57 V dc'}
+  rj45-poe-90w:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the eight 1G RJ-45 ports that carry IEEE 802.3bt Type 4 PoE up to 90 W - ports 17 to
+      24, the last four columns of the port wall, inside the orange band. The datasheet's
+      own key features note that 90 W needs Cat 6A cabling.
+    attrs: {media: rj45, speed: 1g, poe: '802.3bt Type 4, 90 W per port, 1.65 A max at 57 V dc'}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the six 1G/10G SFP+ uplinks, three stacked pairs at the right of the port wall,
+      numbered 25-30 into the same sequence as the RJ-45 ports. `index-origin` is 1
+      because the schema allows 0 or 1 and nothing else; the 25 the panel prints is carried
+      by each port's own `rel-pos`.
+    attrs: {media: sfp, speed: 10g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the thirty port indicators, one per port, in a single row below the port wall with
+      each port's number printed to its left. The datasheet's callout 6 calls them "Port
+      indicators".
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster - a stacked RJ-45 pair carrying the 100/1000BASE-T management
+      port over the RJ-45 console port, a Type A USB 3.0 storage port and the Reset button.
+      The guide legends the management jack's own lamps "Left (link), Right (activity)".
+  leds: {term: LED, role: indicator, index-origin: 1}
+  grounding: {term: Point, role: service, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        "2 pcs 1+1 redundant, load-sharing, hot-swappable 600 W AC" - two bays, either of
+        which runs the machine. THE REDUNDANCY IS NOT FULL AND THE VENDOR SAYS SO: the
+        datasheet's own note reads "AC PSUs are redundant in terms of system and
+        networking, but not fully redundant in terms of PoE functions and the power
+        budget", and the budget figures show it - 450 W with one supply against 1000 W with
+        two. Losing a supply keeps the switch up and halves what it can power.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: >-
+        "Fixed 2+1 redundant fans", from the datasheet's key features and the guide's
+        Overview callout 6. **THEY ARE NOT FRUs AND THERE ARE NO BAYS** - the guide's FRU
+        Replacement section covers the supplies only, and there is no latch, handle or seam
+        to draw. So the three fans are PLACED rather than bayed, and the 2+1 counts rotors
+        that nobody swaps. A census that asks whether this figure fills its bays will find
+        none, and that is correct.
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: vent-top, at: [166.30, 0.0], size: [256.70, 5.00], pattern: vent, pattern-pitch: [3.61, 2.08], vent: 40}
+      - {id: rj45-bezel-1, at: [168.85, 11.285], size: [87.083, 25.015], fill: '#faf9f5'}
+      - {id: rj45-bezel-2, at: [260.15, 11.285], size: [87.083, 25.015], fill: '#faf9f5'}
+      - {id: poe-band-top, at: [288.567, 5.133], size: [58.85, 4.217], fill: '#e65919'}
+      - {id: poe-band-bottom, at: [288.567, 37.033], size: [58.85, 5.317], fill: '#e65919'}
+      - {id: sfp-bezel-1, at: [351.267, 21.30], size: [14.85, 6.00], fill: '#faf9f5'}
+      - {id: sfp-bezel-2, at: [369.417, 21.30], size: [14.85, 6.00], fill: '#faf9f5'}
+      - {id: sfp-bezel-3, at: [387.567, 21.30], size: [14.85, 6.00], fill: '#faf9f5'}
+      - {id: mgmt-bezel, at: [405.533, 11.648], size: [16.867, 24.758], fill: '#faf9f5'}
+      cutouts:
+      - {block: rj45-poe-30w}
+      - {block: rj45-poe-90w}
+      - {block: sfp-plus}
+      - {id: mgmt, at: [406.88, 11.65], size: [12.70, 11.00], shape: rect}
+      - {id: console, at: [406.88, 25.41], size: [12.70, 11.00], shape: rect}
+      - {id: usb, at: [428.13, 23.94], size: [4.50, 12.00], shape: rect}
+      - {id: reset, at: [98.28, 3.49], size: [4.00, 4.00], shape: circle}
+      - {id: led-system, at: [107.13, 2.98], size: [2.80, 1.60], shape: rect}
+      - {id: led-psu1, at: [115.07, 2.98], size: [2.80, 1.60], shape: rect}
+      - {id: led-fan, at: [123.01, 2.98], size: [2.80, 1.60], shape: rect}
+      - {id: led-loc, at: [107.13, 6.43], size: [2.80, 1.60], shape: rect}
+      - {id: led-psu2, at: [115.07, 6.43], size: [2.80, 1.60], shape: rect}
+      - {id: led-poe, at: [123.01, 6.43], size: [2.80, 1.60], shape: rect}
+    silkscreen:
+    - {block: rj45-poe-30w}
+    - {block: rj45-poe-90w}
+    - {block: sfp-plus}
+    - {id: arrows-rj45-1, at: [177.289, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-1}
+    - {id: arrows-rj45-2, at: [191.309, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-3}
+    - {id: arrows-rj45-3, at: [205.328, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-5}
+    - {id: arrows-rj45-4, at: [219.348, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-7}
+    - {id: arrows-rj45-5, at: [233.368, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-9}
+    - {id: arrows-rj45-6, at: [247.388, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-11}
+    - {id: arrows-rj45-7, at: [268.452, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-13}
+    - {id: arrows-rj45-8, at: [282.471, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-15}
+    - {id: arrows-rj45-9, at: [296.491, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#1a1d1f', for: port-17}
+    - {id: arrows-rj45-10, at: [310.511, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#1a1d1f', for: port-19}
+    - {id: arrows-rj45-11, at: [324.531, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#1a1d1f', for: port-21}
+    - {id: arrows-rj45-12, at: [338.551, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#1a1d1f', for: port-23}
+    - {id: arrows-sfp-1, at: [358.783, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-25}
+    - {id: arrows-sfp-2, at: [376.933, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-27}
+    - {id: arrows-sfp-3, at: [395.083, 7.61], mark: arrow-pair, size: 1.65, gap: 0.73, fill: '#e8ecef', for: port-29}
+    - {id: num-led-1, at: [171.769, 40.41], text: '1', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-1}
+    - {id: num-led-2, at: [179.099, 40.41], text: '2', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-2}
+    - {id: num-led-3, at: [185.789, 40.41], text: '3', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-3}
+    - {id: num-led-4, at: [193.119, 40.41], text: '4', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-4}
+    - {id: num-led-5, at: [199.808, 40.41], text: '5', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-5}
+    - {id: num-led-6, at: [207.138, 40.41], text: '6', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-6}
+    - {id: num-led-7, at: [213.828, 40.41], text: '7', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-7}
+    - {id: num-led-8, at: [221.158, 40.41], text: '8', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-8}
+    - {id: num-led-9, at: [227.848, 40.41], text: '9', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-9}
+    - {id: num-led-10, at: [235.178, 40.41], text: '10', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-10}
+    - {id: num-led-11, at: [241.868, 40.41], text: '11', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-11}
+    - {id: num-led-12, at: [249.198, 40.41], text: '12', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-12}
+    - {id: num-led-13, at: [262.932, 40.41], text: '13', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-13}
+    - {id: num-led-14, at: [270.262, 40.41], text: '14', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-14}
+    - {id: num-led-15, at: [276.951, 40.41], text: '15', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-15}
+    - {id: num-led-16, at: [284.281, 40.41], text: '16', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-16}
+    - {id: num-led-17, at: [290.971, 40.41], text: '17', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-17}
+    - {id: num-led-18, at: [298.301, 40.41], text: '18', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-18}
+    - {id: num-led-19, at: [304.991, 40.41], text: '19', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-19}
+    - {id: num-led-20, at: [312.321, 40.41], text: '20', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-20}
+    - {id: num-led-21, at: [319.011, 40.41], text: '21', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-21}
+    - {id: num-led-22, at: [326.341, 40.41], text: '22', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-22}
+    - {id: num-led-23, at: [333.031, 40.41], text: '23', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-23}
+    - {id: num-led-24, at: [340.361, 40.41], text: '24', font-size: 1.8, anchor: end, fill: '#1a1d1f', for: led-24}
+    - {id: num-led-25, at: [351.433, 40.41], text: '25', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-25}
+    - {id: num-led-26, at: [360.473, 40.41], text: '26', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-26}
+    - {id: num-led-27, at: [369.583, 40.41], text: '27', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-27}
+    - {id: num-led-28, at: [378.623, 40.41], text: '28', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-28}
+    - {id: num-led-29, at: [387.733, 40.41], text: '29', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-29}
+    - {id: num-led-30, at: [396.773, 40.41], text: '30', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-30}
+    - {id: label-model, at: [7.30, 16.68], text: 'AS4625-30P', font-size: 2.4, anchor: start, fill: '#e8ecef', for: chassis}
+    - {id: label-reset, at: [102.50, 5.96], text: 'Reset', font-size: 1.5, anchor: start, fill: '#e8ecef', for: reset}
+    - {id: label-system, at: [110.25, 4.17], text: 'System', font-size: 1.25, anchor: start, fill: '#e8ecef', for: led-system}
+    - {id: label-psu1, at: [118.20, 4.17], text: 'PSU1', font-size: 1.25, anchor: start, fill: '#e8ecef', for: led-psu1}
+    - {id: label-fan, at: [126.20, 4.17], text: 'FAN', font-size: 1.25, anchor: start, fill: '#e8ecef', for: led-fan}
+    - {id: label-loc, at: [110.25, 7.62], text: 'LOC', font-size: 1.25, anchor: start, fill: '#e8ecef', for: led-loc}
+    - {id: label-psu2, at: [118.20, 7.62], text: 'PSU2', font-size: 1.25, anchor: start, fill: '#e8ecef', for: led-psu2}
+    - {id: label-poe, at: [126.20, 7.62], text: 'PoE', font-size: 1.25, anchor: start, fill: '#e8ecef', for: led-poe}
+    - {id: mark-mgmt, at: [405.26, 7.77], mark: arrow-up, size: 1.60, fill: '#e8ecef', for: mgmt}
+    - {id: label-mgmt, at: [406.48, 8.65], text: 'Mgmt', font-size: 1.6, anchor: start, fill: '#e8ecef', for: mgmt}
+    - {id: mark-console, at: [414.37, 7.77], mark: arrow-down, size: 1.60, fill: '#e8ecef', for: console}
+    - {id: label-console, at: [416.06, 8.65], text: 'Console', font-size: 1.6, anchor: start, fill: '#e8ecef', for: console}
+    - {id: label-usb, at: [430.38, 22.00], text: 'USB', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: usb}
+    - {id: label-poe-out-1, at: [424.50, 3.67], text: 'PoE Output:', font-size: 1.25, anchor: start, fill: '#e8ecef', for: chassis}
+    - {id: label-poe-out-2, at: [424.50, 5.02], text: '57V Max.,', font-size: 1.25, anchor: start, fill: '#e8ecef', for: chassis}
+    - {id: label-poe-out-3, at: [424.50, 6.37], text: '0.55A Max/Port1~16', font-size: 1.25, anchor: start, fill: '#e8ecef', for: chassis}
+    - {id: label-poe-out-4, at: [424.50, 7.72], text: '1.65A Max/Port17~24', font-size: 1.25, anchor: start, fill: '#e8ecef', for: chassis}
+    components:
+      blocks:
+      - id: rj45-poe-30w
+        ref: std/rj45-ganged@2
+        at: [170.94, 11.29]
+        count: 16
+        rows: 2
+        pitch: 14.0198
+        gang: 6
+        gutter: 7.0439
+        row-pitch: 13.94
+        rotate: {top: 180}
+        number-from: 1
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 6.35, dx-by-row: [-2.39, 2.39], anchor-by-row: [end, start], dy-top: -2.86, dy-bottom: -16.80, font-size: 2.3, fill: '#e8ecef'}
+        led:
+          ref: common/led-rect-sm@1
+          dx: 6.35
+          dx-by-row: [-5.07, 2.26]
+          dy-top: 27.76
+          dy-bottom: 13.82
+          cutout-shape: rect
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: link-poe, color: '#f59e0b'}]
+      - id: rj45-poe-90w
+        ref: std/rj45-ganged@2
+        at: [290.14, 11.29]
+        count: 8
+        rows: 2
+        pitch: 14.0198
+        row-pitch: 13.94
+        rotate: {top: 180}
+        number-from: 17
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 6.35, dx-by-row: [-2.39, 2.39], anchor-by-row: [end, start], dy-top: -2.86, dy-bottom: -16.80, font-size: 2.3, fill: '#1a1d1f'}
+        led:
+          ref: common/led-rect-sm@1
+          dx: 6.35
+          dx-by-row: [-5.07, 2.26]
+          dy-top: 27.76
+          dy-bottom: 13.82
+          cutout-shape: rect
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: link-poe, color: '#f59e0b'}]
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [351.66, 11.30]
+        count: 6
+        rows: 2
+        pitch: 18.15
+        row-pitch: 15.767
+        rotate: {bottom: 180}
+        number-from: 25
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 7.125, dx-by-row: [-2.39, 2.39], anchor-by-row: [end, start], dy-top: -2.87, dy-bottom: -18.637, font-size: 2.3, fill: '#e8ecef'}
+        led:
+          ref: common/led-rect-sm@1
+          dx: 7.125
+          dx-by-row: [-6.90, 2.14]
+          dy-top: 27.75
+          dy-bottom: 11.98
+          cutout-shape: rect
+          group: port-leds
+          states: ['off', {name: '10g', color: '#22c55e'}, {name: '1g', color: '#f59e0b'}]
+      placements:
+      - {block: rj45-poe-30w}
+      - {block: rj45-poe-90w}
+      - {block: sfp-plus}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [406.88, 11.65], rotate: 180, group: mgmt, rel-pos: 1,
+        attrs: {media: rj45, speed: 1g, role: out-of-band}}
+      - {ref: std/rj45-ganged@2, id: console, at: [406.88, 25.41], group: mgmt, rel-pos: 2,
+        attrs: {media: rj45, role: console}}
+      - {ref: std/usb-a@1, id: usb, at: [424.38, 27.69], rotate: 90, group: mgmt, rel-pos: 3,
+        attrs: {media: usb-a, role: storage}}
+      - {ref: common/reset-button@1, id: reset, at: [98.28, 3.49], group: mgmt, rel-pos: 4, for: chassis}
+      - {ref: common/led-rect-sm@1, id: led-system, at: [107.13, 2.98], group: leds, rel-pos: 1, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-psu1, at: [115.07, 2.98], group: leds, rel-pos: 2, for: rear/psu-1, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-fan, at: [123.01, 2.98], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3], states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-loc, at: [107.13, 6.43], group: leds, rel-pos: 4, for: chassis, states: ['off', {name: locate, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-psu2, at: [115.07, 6.43], group: leds, rel-pos: 5, for: rear/psu-2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-poe, at: [123.01, 6.43], group: leds, rel-pos: 6, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: near-budget, color: '#f59e0b'}]}
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0, 0], size: [440.0, 44.0], fill: '#464646'}
+    silkscreen:
+    - {id: fan-label-1, at: [87.00, 40.30], text: 'FAN1', font-size: 1.9, anchor: middle, fill: '#e8ecef', for: fan-1}
+    - {id: fan-label-2, at: [135.40, 40.30], text: 'FAN2', font-size: 1.9, anchor: middle, fill: '#e8ecef', for: fan-2}
+    - {id: fan-label-3, at: [183.65, 40.30], text: 'FAN3', font-size: 1.9, anchor: middle, fill: '#e8ecef', for: fan-3}
+    - {id: psu-label-1, at: [346.60, 24.30], text: 'PSU1', font-size: 2.0, anchor: start, fill: '#e8ecef', for: psu-1}
+    - {id: psu-label-2, at: [432.20, 24.30], text: 'PSU2', font-size: 2.0, anchor: start, fill: '#e8ecef', for: psu-2}
+    components:
+      bays:
+      - {id: psu-1, at: [270.45, 2.55], size: {w: 73.2, h: 40.2}, group: psus, rel-pos: 1,
+         accepts: [edgecore/eps112-psu-ac@1], default: edgecore/eps112-psu-ac@1}
+      - {id: psu-2, at: [354.76, 2.55], size: {w: 73.2, h: 40.2}, group: psus, rel-pos: 2,
+         accepts: [edgecore/eps112-psu-ac@1], default: edgecore/eps112-psu-ac@1}
+      placements:
+      - {ref: edgecore/eps112-fan-fixed@1, id: fan-1, at: [57.67, 10.67], group: fans, rel-pos: 1}
+      - {ref: edgecore/eps112-fan-fixed@1, id: fan-2, at: [105.36, 10.67], group: fans, rel-pos: 2}
+      - {ref: edgecore/eps112-fan-fixed@1, id: fan-3, at: [153.23, 10.67], group: fans, rel-pos: 3}
+      - {ref: common/ground-lug@1, id: ground, at: [4.55, 18.20], group: grounding, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+  top:
+    size: {w: 440.0, h: 350.35}
+    empty: >-
+      Not drawn by either staged document. Six pages of guide and four of datasheet, and
+      between them two elevations of each face, a Status LEDs page, an FRU replacement
+      figure, package contents, a mounting section and a console pinout - none of which
+      shows the lid.
+  bottom:
+    size: {w: 440.0, h: 350.35}
+    empty: >-
+      Not drawn by any staged source. The guide's package contents list "Four adhesive
+      rubber feet" for this shell, so there are feet down there, but nothing says where.
+  left:
+    size: {w: 350.35, h: 44.0}
+    empty: >-
+      Not drawn by any staged source. The machine is front-to-back, so the intake is the
+      front face's own hexagonal perforation and the exhaust is the three rear fans; the
+      side walls carry nothing to draw.
+  right:
+    size: {w: 350.35, h: 44.0}
+    empty: >-
+      Not drawn by any staged source. The other side wall, for the same reason.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships: two supplies in, every cage empty. The guide's package
+      contents say the unit "includes 2 PSUs", and its Connect Power step says "Install one
+      or two AC PSUs in the device, if they are not already installed in the factory".
+references:
+- {title: 'Edgecore AS4625-30P Quick Start Guide E092025-SW-R01'}
+- {title: 'Edgecore EPS112 / AS4625-30P Enterprise Switch Datasheet'}

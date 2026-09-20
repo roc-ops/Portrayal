@@ -1,0 +1,115 @@
+format: 1
+kind: module
+name: eps112-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable 600 W AC power supply of the Edgecore EPS112 (AS4625-30P) - a
+  73.2 x 40.2 module with a red C-handle at the inboard end, its own fan behind the face,
+  DC OK and AC OK lamps, an IEC 60320 C14 inlet and a red release latch on the outboard
+  edge. Ordered as UP6001R-1079G.
+size: {w: 73.2, h: 40.2}
+size-confidence: {w: measured, h: measured}
+attrs:
+  input: ac
+  inlet: c14
+  power-output-w: 600
+provenance:
+  size: >-
+    MEASURED ON THE QUICK START GUIDE'S REAR ELEVATION at its native resolution - the
+    embedded image is 1233 px across a 440 mm face, 2.80 px/mm. The two modules' silver
+    faces read x 270.45-343.68 and 354.76-427.99: 73.23 and 73.23, IDENTICAL, on a pitch
+    of 84.31, and both read y 2.55-42.79, height 40.24. The rear product photograph
+    (954 px, 2.17 px/mm) puts the two red handles 83.9 apart and the two latches 84.8,
+    which brackets the same pitch.
+    THE LATCH OVERHANGS THE FACE and is drawn inside it here. On the elevation the red
+    release tab runs to x 346.18 on module 1 and 435.49 on module 2 - 2.5 and 7.5 mm past
+    their own silver edges, which cannot both be true of one part. The silver face is the
+    figure the two modules agree on, so the module is 73.2 wide and the tab is drawn at its
+    right edge rather than proud of it. See the device's `psu-latch-overhang` gap.
+  power-output-w: >-
+    DATASHEET, stated twice. The Interfaces callouts read "11. PSU 1: 600W" and
+    "12. PSU 2: 600W", and the Power section reads "PSUs: 2 pcs 1+1 redundant,
+    load-sharing, hot-swappable 600 W AC (80Plus Platinum compliant)". This is one of the
+    few Edgecore supplies in this library whose own wattage is published rather than
+    inferred from a chassis figure.
+  inlet: >-
+    DATASHEET, in the ordering table: "UP6001R-1079G ... 600 W AC Power Supply (UMEC),
+    front-to-rear air-flow, 1 Year Warranty (for EPS112/AS4625-30P). Inlet Connector:
+    IEC 60320 C14." The elevation agrees - a three-pin appliance inlet 13.9 x 24.8 as
+    drawn, in a recess, with the earth pin uppermost when the module is seated.
+  the-face: >-
+    MEASURED, in the module's own coordinates, on the same elevation. A RED C-HANDLE at the
+    inboard end - a bar at x 6.07-13.93 running the full height with two stubs reaching
+    left to x 2.5 at top and bottom, each with a captive screw in its eye. A FAN behind the
+    face, its silver rotor disc reading x 14.29-34.29 and y 9.70-30.54 - a 20.4 mm disc
+    centred at (24.3, 20.1) - with black blades around it. TWO ROUND LAMPS at the top,
+    4.6 across, centred at x 47.69 and 64.84 on y 4.86, legended DC OK and AC OK on the
+    module itself; the FRU Replacement figure resolves both words. The C14 inlet's dark
+    aperture reads x 50.37-64.30, y 11.14-35.93. The red latch reads x 71.45-75.73 on
+    y 11.5-30.2.
+  finish: >-
+    MEASURED AND COUNTED. Over the whole rear elevation 5,977 pixels pass a red test
+    (R>110, R>G+40, R>B+40) and every one of them is on the two supplies - the handles and
+    the latches - with a median of (177, 93, 92). The brightest two hundred of them median
+    (195, 103, 104), so #b7655f is the lit value this part carries and the darker median is
+    the shaded side of the same plastic. NOTHING ELSE ON EITHER FACE IS RED: the chassis,
+    the fan guards and the ground point carry none.
+    THIS FAMILY PUBLISHES ONE AIRFLOW - every ordering code in the datasheet is
+    front-to-back - so there is no second colour to read and no airflow-colour convention
+    to import from the AIS800 pair, which is a trap this library has already recorded.
+  depth: >-
+    ESTIMATED. No document dimensions the module. 180 is carried from
+    `edgecore/eps-psu-poe@1`, the same shell family's 1RU supply, and is flagged as an
+    estimate there too; this part does not turn one estimate into two readings.
+states: [absent]
+elements:
+  handle: {at: [2.50, 1.15], size: [11.43, 37.30], class: handle}
+  latch: {at: [68.40, 11.50], size: [4.30, 18.70], class: latch}
+  inlet-well: {at: [45.50, 8.50], size: [24.50, 29.50], class: bezel}
+  dc-ok: {at: [45.37, 2.54], size: [4.64, 4.64], class: led, states: ['off', 'ok']}
+  ac-ok: {at: [62.51, 2.54], size: [4.64, 4.64], class: led, states: ['off', 'ok']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#b7655f'}
+  latch-finish: {label: Latch colour, type: text, default: '#b7655f'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [43.34, 13.54], rotate: 270}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: handle
+      uhandle: 18
+      dia: 2.6
+      confidence: estimated
+      source: >-
+        A bracket standing off the face, gripped along its length and returning to the
+        module at both ends - `uhandle`, not `bar`, for the reason the AIS800 supplies
+        record: `bar` builds a tube on nothing. HOW FAR IT STANDS OFF IS NOT DIMENSIONED;
+        18 is the figure `edgecore/eps-psu-poe@1` carries for the same reason, a 1RU face
+        having little room for a deeper one.
+    - node: latch
+      out: 1.0
+      confidence: estimated
+      source: 'Drawn, not dimensioned - as every release tab in this library.'
+    - node: inlet-well
+      pocket: 2.2
+      confidence: estimated
+      source: >-
+        The inlet sits in a recess whose walls the elevation shades; no depth is stated.
+        2.2 puts the connector flange level with the module face, and is the figure
+        `edgecore/eps-psu-poe@1` carries for its own inlet recess.
+    - node: dc-ok
+      dome: 0.2
+      confidence: estimated
+      source: 'The library''s panel-lamp convention; no document dimensions the lens.'
+    - node: ac-ok
+      dome: 0.2
+      confidence: estimated
+      source: 'The library''s panel-lamp convention; no document dimensions the lens.'
+skins: [default]
+body:
+  depth: 180
+  color: '#8d9298'
+  footprint: {at: [0, 0], size: [73.2, 40.2]}

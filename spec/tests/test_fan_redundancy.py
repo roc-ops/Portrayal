@@ -107,6 +107,17 @@ FIGURE_IS_NOT_THE_BAY_COUNT = {
     # this table is for.
     ("edgecore/eps121", "fans"): 0,
     ("edgecore/eps122", "fans"): 0,
+    # AND THE EPS112 IS THE THIRD OF THAT SHELL, on the same terms and from a DIFFERENT
+    # document, which is what makes it worth a line rather than a comma. The EPS121 and
+    # EPS122 share one quick start guide, so their two entries above are one reading
+    # counted twice. The EPS112 has its own six-page guide (md5
+    # 569bbd26f865b2bae24a733d4046d669) and its own datasheet, and both of them say the
+    # same thing independently: "Fixed 2+1 redundant fans" in the datasheet's key
+    # features, "2+1 fixed redundant fans" in the guide's Overview callout 6, and an FRU
+    # Replacement section that covers the supplies and has no fan procedure at all. Its
+    # rear draws three ROUND openings where the siblings' guide draws rectangles, and
+    # neither drawing gives a tray, a latch or a seam to take hold of.
+    ("edgecore/eps112", "fans"): 0,
 }
 
 
@@ -167,6 +178,7 @@ WHAT_THE_NOTE_MUST_SAY = {
     ("edgecore/ais800-64o", "fans"): "2 fans per module",
     ("edgecore/eps121", "fans"): "THERE ARE NO BAYS",
     ("edgecore/eps122", "fans"): "THERE ARE NO BAYS",
+    ("edgecore/eps112", "fans"): "THERE ARE NO BAYS",
 }
 
 
@@ -356,7 +368,15 @@ def test_the_comparison_layer_can_now_reach_them():
     across this library needs "2+1, and you cannot change them" to be reachable, and it is
     only reachable because the figure is recorded even though nothing swaps. A census that
     only counted removable trays would report these two as having no cooling at all.
+
+    SIXTY-ONE IS THE EDGECORE EPS112, the third device on the 440 x 350.3 x 44 shell and
+    the first of the three to arrive with its own document rather than the shared one. It
+    states "2+1 fixed redundant fans" in both its guide and its datasheet, over three fans
+    that nothing swaps, so it joins its two siblings in FIGURE_IS_NOT_THE_BAY_COUNT at 0.
+    Three of the sixty-one entries are now fixed fans on one shell, which is a small
+    population and a real one: this library's rear-serviceability question has an answer
+    for an access switch that cannot be serviced at the rear at all.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 60, n
+    assert n == 61, n
