@@ -264,8 +264,8 @@ def test_the_catalogue_does_not_read_the_sentence_as_a_use():
     superseded part reporting itself as composing its replacement."""
     text = (LIB / "components/common/psu-550w/v1/contract.yaml").read_text()
     assert "common/psu-550w@2" in text, "the sentence should name what replaced it"
-    assert "common/psu-550w@2" not in cat.without_unplaced(text)
-    assert "psu-550w" in cat.without_unplaced(text), \
+    assert "common/psu-550w@2" not in cat.without_non_use_refs(text)
+    assert "psu-550w" in cat.without_non_use_refs(text), \
         "only the unplaced block should be removed"
     composed = cat.composed_by(LIB)
     assert "common/psu-550w@1" not in composed.get("common/psu-550w@2", set())

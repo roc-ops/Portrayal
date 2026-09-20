@@ -399,6 +399,11 @@
    "minLength": 40,
    "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on the next one instead of on all of them. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
   },
+  "superseded-by": {
+   "type": "string",
+   "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
+   "description": "THIS PART IS RETIRED, in favour of the `ns/name@major` named here. That is a different question from `unplaced:`, which says why nothing seats a part and is also true of live parts - every `generic/` contract carries one, and it means the opposite of retirement: those are seated by configurations downstream of this library, on purpose, and are not going anywhere. `superseded-by` is the fact a reader cannot get from `unplaced:` prose, however it starts: a specific successor exists, this part should not gain new occupants, and a consumer offering parts to a user must not offer this one. Lint checks the ref names a component major that exists; it does not check that anything still references this major - that is L89's question, not this one's."
+  },
   "size": {
    "$ref": "#/$defs/wh",
    "description": "faceplate footprint in mm"

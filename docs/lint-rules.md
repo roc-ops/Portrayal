@@ -107,3 +107,4 @@ a test fails when this page and the linter disagree. A finding prints as
 | L98 | component | a character display says how wide it is, and every reading fits | add `characters:` to the `class: display` element, and keep each `messages[].text` inside it |
 | L99 | component | a generic stays generic - no rate, reach, wavelength or wattage under generic/ | move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind |
 | L100 | component, device | no key in an `attrs:` map has a null value | add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null |
+| L101 | component | a `superseded-by` names a component major that exists | fix the ref, or add the successor if it has not landed yet |

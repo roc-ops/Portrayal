@@ -72,3 +72,28 @@ def test_the_page_tells_the_reader_how_to_regenerate_it(generated):
     """A generated file that does not say it is generated gets hand-edited, and
     the edit is lost the next time somebody runs the generator."""
     assert "components_catalogue.py" in generated.split("\n\n")[1]
+
+
+def test_a_superseded_by_pointer_does_not_count_as_a_use(tmp_path):
+    """`superseded-by:` names a successor without composing it - the same
+    shape as `unplaced:` naming the part that replaced it, and the same reason
+    neither should read as a use. Without `without_non_use_refs` stripping it
+    too, a retired part's `superseded-by` line inflates its successor's
+    `in parts` count exactly the way `common/sfp-lc-duplex@1`'s did the day
+    this field landed: 1 became 2, 3 became 4, for a part that composes
+    nothing new. This builds a throwaway two-component library instead of
+    relying on the real one staying shaped this way."""
+    successor = tmp_path / "components" / "generic" / "sfp-lc" / "v1"
+    successor.mkdir(parents=True)
+    (successor / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: sfp-lc\nversion: 1.0.0\n"
+        "class: transceiver\nsize: {w: 1, h: 1}\n")
+    retired = tmp_path / "components" / "common" / "sfp-lc-duplex" / "v1"
+    retired.mkdir(parents=True)
+    (retired / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: sfp-lc-duplex\nversion: 1.0.0\n"
+        "class: transceiver\nsize: {w: 1, h: 1}\n"
+        "unplaced: superseded by generic/sfp-lc@1, which replaces it entirely\n"
+        "superseded-by: generic/sfp-lc@1\n")
+    composed = cat.composed_by(tmp_path)
+    assert composed.get("generic/sfp-lc@1", set()) == set(), composed.get("generic/sfp-lc@1")

@@ -241,6 +241,7 @@ RULES = {
     "L98": ("component",  "a character display says how wide it is, and every reading fits", "add `characters:` to the `class: display` element, and keep each `messages[].text` inside it"),
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
     "L100": ("component, device", "no key in an `attrs:` map has a null value", "add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null"),
+    "L101": ("component",  "a `superseded-by` names a component major that exists", "fix the ref, or add the successor if it has not landed yet"),
 }
 
 
@@ -2382,6 +2383,26 @@ def lint_component_faces_resolve(path, data, lib_roots, name=None):
                 f"names {direction} face {ref}, which declares a {direction} "
                 "of its own - a part has one of each direction, so this "
                 "chain says the wrong part was drawn")
+
+
+def lint_component_superseded_by(path, data, lib_roots):
+    """L101: a `superseded-by` names a component major that exists.
+
+    A dangling successor is worse than none: it reads as a working pointer to
+    a consumer that would use it to steer someone away from a retired part, and
+    fails silently right up until that consumer tries to resolve it. ERROR, not
+    warning, for the same reason L83 refuses a face that does not resolve - the
+    two fields are the same shape, a `ns/name@major` ref this rule can check
+    exactly rather than guess at.
+    """
+    if not isinstance(data, dict):
+        return
+    ref = data.get("superseded-by")
+    if not ref:
+        return
+    if not resolve_component(ref, lib_roots):
+        err(path, "L101",
+            f"superseded-by: {ref}, which is not in the library")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -7254,6 +7275,7 @@ def main():
                 lint_component_faces_resolve(
                     f, d, args.library,
                     f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
+                lint_component_superseded_by(f, d, args.library)
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_faces(f, d)
                 lint_component_optical_face_capacity(f, d, args.library)
