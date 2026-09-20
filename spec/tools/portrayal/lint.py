@@ -242,6 +242,8 @@ RULES = {
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
     "L100": ("component, device", "no key in an `attrs:` map has a null value", "add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null"),
     "L101": ("component",  "a `superseded-by` names a component major that exists", "fix the ref, or add the successor if it has not landed yet"),
+    "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
+    "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
 }
 
 
@@ -1041,6 +1043,53 @@ def _load_vendors(schemas):
 
 VENDORS, NAMESPACES = _load_vendors(
     Path(__file__).resolve().parents[2] / "schemas")
+
+
+def _load_pluggable_families(schemas):
+    """The pluggable ladder registry, or an empty one if the checkout is broken.
+
+    Loaded at import beside the vendor registry and the power roles, and for
+    the same reason: L102 and L103 must report on every media, rate and
+    interface they are asked about when this comes back empty, rather than
+    passing everything in silence because the file did not load.
+    """
+    path = Path(schemas) / "pluggables.yaml"
+    try:
+        doc = yaml.safe_load(path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    return doc.get("families") or {}
+
+
+PLUGGABLE_FAMILIES = _load_pluggable_families(
+    Path(__file__).resolve().parents[2] / "schemas")
+
+
+def _pluggable_rates():
+    """Every rate any family on the ladder claims, flattened once per call.
+
+    Cheap - nine families, at most a handful of rates each - so this is not
+    cached the way the per-component lookups above are; caching a set this
+    small would only add a place for a test's monkeypatched registry to be
+    read stale from.
+    """
+    return {r for fam in PLUGGABLE_FAMILIES.values() for r in (fam.get("rates") or [])}
+
+
+def _family_mated_by(interface):
+    """The (name, family) whose `interface` a `mates` value names, or None.
+
+    `mates` on a transceiver names the cage it plugs into by INTERFACE, the
+    same field L11 and L12 already hold a receptacle and its occupant to - so
+    this looks the value up as an interface rather than assuming it equals a
+    family's own key, which is only true of this registry by coincidence.
+    """
+    for name, fam in PLUGGABLE_FAMILIES.items():
+        if fam.get("interface") == interface:
+            return name, fam
+    return None
+
+
 DRAW_KEYS = ("power-draw-typical-w", "power-draw-max-w", "power-draw-min-w")
 SUPPLY_KEYS = ("power-output-w",)
 
@@ -2403,6 +2452,53 @@ def lint_component_superseded_by(path, data, lib_roots):
     if not resolve_component(ref, lib_roots):
         err(path, "L101",
             f"superseded-by: {ref}, which is not in the library")
+
+
+def lint_component_pluggable_rate(path, data, _lib_roots=None):
+    """L102: a part's `rate` attr, if it states one, is a rate its `mates`
+    family actually carries.
+
+    THE CAGE SAYS WHAT FITS (`mates`); THIS SAYS WHAT RUNS. `interface`/`mates`
+    already tie a plug to a receptacle (L11, L12) - a QSFP transceiver mates
+    `qsfp` and seats in anything the QSFP family's cage accepts. That is
+    mechanical compatibility, not the rate the module runs at, and R1 of the
+    pluggables design (docs/pluggables-design.md) is that a GENERIC carries no
+    rate and fits every rung of its family's ladder while a VENDOR OPTIC
+    declares one. `attrs.rate` is where a vendor optic would say so.
+
+    NOTHING IN THE LIBRARY DECLARES `rate` YET - every generic composes a cage
+    and states nothing, which is correct, and no vendor wrapper has been built
+    on top of one. This rule ships anyway: it is what makes R1 a fact the tree
+    can be held to rather than a sentence in a design doc, and it needs to be
+    in place before the first vendor optic lands with a rate outside its own
+    family, not added after. Its test drives it with synthetic contracts.
+
+    Why `rate` and not `media` or `speed`: `media` is overloaded - the two
+    retired parts (`superseded-by`, L101) carry `media: sfp`/`media: qsfp`, a
+    RATE, while every live generic carries `media: fiber`, a MEDIUM, and
+    reading `media` as the rate would look for `fiber` on a ladder and find
+    nothing. `speed` is a bitrate (`10G`, `25G`) that `GENERIC_FORBIDDEN_ATTRS`
+    already reserves for vendor parts and is a different fact from the cage
+    generation - an SFP-10G-LR has `speed: 10G` AND needs an `sfp-plus` cage.
+    """
+    if not isinstance(data, dict):
+        return
+    rate = attrs_mod.flatten(data.get("attrs")).get("rate")
+    if not rate:
+        return
+    mates = data.get("mates")
+    found = _family_mated_by(mates) if mates else None
+    if found is None:
+        err(path, "L102", f"attrs.rate: {rate!r}, but mates {mates!r} names no "
+            "family in spec/schemas/pluggables.yaml - there is nothing to check "
+            "the rate against")
+        return
+    fam_name, fam = found
+    if rate not in (fam.get("rates") or []):
+        err(path, "L102", f"attrs.rate: {rate!r} is not a rate of the "
+            f"{fam_name!r} family that mates {mates!r} names (rates: "
+            f"{fam.get('rates')}) - spec/schemas/pluggables.yaml and this part "
+            f"disagree about what {mates!r} runs")
 
 
 def lint_component_fields(path, data, _lib_roots=None):
@@ -4450,6 +4546,42 @@ def lint_vendor_registry(root):
                     "which is not itself a vendor in the registry")
 
 
+def lint_pluggable_family_interfaces(root):
+    """L103: a family's `interface` matches at least one component's
+    `interface` - the reverse of L102's question.
+
+    L102 asks whether the tree resolves against the registry; this asks
+    whether the registry resolves against the tree. A family whose cage no
+    component declares is a family the vocabulary needs without the metal to
+    back it, which is exactly `sfp-dd`'s situation today - the SFP-DD MSA
+    defines a real cage, `sfp-dd` is one of the fifteen values `media`
+    carries, and no `std/` part for it has been modelled yet.
+
+    WARNING, NOT ERROR, and deliberately the opposite of L102's severity.
+    `sfp-dd` is a correct registry entry, not a defect, and an error here
+    would fail the whole corpus for stating the vocabulary the media values
+    already demand. A warning that stays exactly one family wide, forever,
+    is a fine outcome; a warning that grows is the corpus and the registry
+    drifting apart the way L102 catches in the other direction.
+    """
+    root = Path(root)
+    comp_root = root / "components"
+    if not comp_root.is_dir():
+        return
+    interfaces = set()
+    for f in comp_root.glob("**/contract.yaml"):
+        d = load_yaml(f)
+        if isinstance(d, dict) and d.get("interface"):
+            interfaces.add(d["interface"])
+    for name, fam in sorted(PLUGGABLE_FAMILIES.items()):
+        fi = fam.get("interface")
+        if fi and fi not in interfaces:
+            warn(root / "…", "L103", f"family {name!r} names interface {fi!r}, "
+                "which no component in the library declares. Model the cage, "
+                "or leave this as the vocabulary's answer to a form factor "
+                "the library has not built yet")
+
+
 # A ref is a whole string or it is prose. `ufispace/psu-120-ac@1` appears inside
 # a sentence on the S9502 explaining why that device does NOT place it, and a
 # substring search would have read that explanation as a use - turning the one
@@ -4868,6 +5000,42 @@ def lint_device_port_optics(path, data, lib_roots):
         if k.startswith("optics-"):
             warn(path, "L40", f"`attrs.{k}` names no port group's media. The optics "
                               "are recorded and nothing can reach them")
+
+
+def lint_device_pluggable_media(path, data, _lib_roots=None):
+    """L102: a device's pluggable media names a rate spec/schemas/pluggables.yaml
+    actually carries.
+
+    PLUGGABLE_CAGES is the vocabulary of media values L40 already treats as a
+    cage rather than a fixed jack or bonded fibre - `media: fiber` and
+    `media: rj45` are not asked about here, the same filter L40 uses. Among
+    those, `test_pluggable_ladder.py` holds the registry to PLUGGABLE_CAGES
+    directly and today the two agree exactly. This rule is the same fact
+    checked from the other side, against a real device rather than the
+    vocabulary the registry was built from: a device declaring a pluggable
+    media the registry has no family for is a gap in one of the two files, and
+    the accept list Task 3 builds would silently produce nothing for that
+    port - silence being exactly the failure mode L40's own docstring warns
+    about for a missing cage.
+
+    ERROR, not warning - unlike L40's optics prose, which is real work that
+    accumulates device by device, a media the registry cannot place is a
+    contradiction between two files this repository owns, fixable in either
+    one without touching a datasheet.
+    """
+    groups = data.get("groups") or {}
+    rates = _pluggable_rates()
+    for gid, gdef in sorted(groups.items()):
+        gdef = gdef or {}
+        if gdef.get("term") != "Port":
+            continue
+        media = (gdef.get("attrs") or {}).get("media")
+        if media not in PLUGGABLE_CAGES:
+            continue
+        if media not in rates:
+            err(path, "L102", f"port group {gid} declares media {media!r}, "
+                "which PLUGGABLE_CAGES recognises as a pluggable cage but no "
+                "family in spec/schemas/pluggables.yaml carries as a rate")
 
 
 def lint_device_groups(path, data, lib_roots):
@@ -6259,6 +6427,7 @@ def lint_device(path, validator, lib_roots):
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
+    lint_device_pluggable_media(path, data)
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)
@@ -7276,6 +7445,7 @@ def main():
                     f, d, args.library,
                     f"{f.parents[2].name}/{d.get('name')}@{f.parent.name[1:]}")
                 lint_component_superseded_by(f, d, args.library)
+                lint_component_pluggable_rate(f, d)
                 lint_component_optical_endpoints(f, d, args.library)
                 lint_component_optical_faces(f, d)
                 lint_component_optical_face_capacity(f, d, args.library)
@@ -7341,6 +7511,7 @@ def main():
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             lint_unplaced_majors(root)
+            lint_pluggable_family_interfaces(root)
             if not list(libwalk.iter_devices([root])):
                 continue
             for slug_, kind_, msg_ in devicelock.check(root):

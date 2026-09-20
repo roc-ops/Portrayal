@@ -108,3 +108,5 @@ a test fails when this page and the linter disagree. A finding prints as
 | L99 | component | a generic stays generic - no rate, reach, wavelength or wattage under generic/ | move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind |
 | L100 | component, device | no key in an `attrs:` map has a null value | add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null |
 | L101 | component | a `superseded-by` names a component major that exists | fix the ref, or add the successor if it has not landed yet |
+| L102 | component, device | a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries | fix the media/rate, or add the missing rate to the family in pluggables.yaml |
+| L103 | library | a pluggable family's `interface` matches at least one component's `interface` | model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today) |
