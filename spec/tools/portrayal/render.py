@@ -1252,24 +1252,43 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # configuration describes the whole device, and a front-panel optic has no
     # business appearing in the rear drawing. Lint checks the host exists
     # SOMEWHERE (L12), which is the check that catches a typo.
-    here = {q.get("id") for q in parts["placements"]}
-    for host, spec in (config.get("occupants") or {}).items():
-        if host not in here:
-            continue
-        if isinstance(spec, str):
-            spec = {"ref": spec}
-        parts["placements"].append({
-            "ref": spec["ref"],
-            "id": spec.get("id") or f"{host}-occupant",
-            "mate-to": host,
-            # nests under the receptacle in the tree, the way an indicator nests
-            # under what it indicates - an optic belongs to its port
-            "for": host,
-            "group": next((q.get("group") for q in parts["placements"]
-                           if q.get("id") == host), None),
-            **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
-            **({"skin": spec["skin"]} if spec.get("skin") else {}),
-        })
+    # AN OCCUPANT CAN ITSELF BE HOSTED, so this runs to a FIXED POINT rather
+    # than over one snapshot. `here` used to be taken ONCE, before the loop
+    # appended anything, so `occupants: {port-4: plug, port-4-occupant: boot}`
+    # found no `port-4-occupant` in the snapshot and dropped the boot WITHOUT A
+    # WORD - the worst outcome available, and the one shape spec B's two-part
+    # fit is made of. Recomputing the id set each pass seats the second tier on
+    # the first, the third on the second, and so on; a pass that seats nothing
+    # ends it. What remains unseated after that is exactly what the paragraph
+    # above says to skip - a host in another view - so it is still skipped, not
+    # an error: the two cases are told apart by whether progress is possible,
+    # not by when the set was sampled.
+    remaining = dict(config.get("occupants") or {})
+    while remaining:
+        seated_now = []
+        here = {q.get("id") for q in parts["placements"]}
+        for host, spec in remaining.items():
+            if host not in here:
+                continue
+            if isinstance(spec, str):
+                spec = {"ref": spec}
+            parts["placements"].append({
+                "ref": spec["ref"],
+                "id": spec.get("id") or f"{host}-occupant",
+                "mate-to": host,
+                # nests under the receptacle in the tree, the way an indicator nests
+                # under what it indicates - an optic belongs to its port
+                "for": host,
+                "group": next((q.get("group") for q in parts["placements"]
+                               if q.get("id") == host), None),
+                **({"attrs": spec["attrs"]} if spec.get("attrs") else {}),
+                **({"skin": spec["skin"]} if spec.get("skin") else {}),
+            })
+            seated_now.append(host)
+        if not seated_now:
+            break
+        for host in seated_now:
+            del remaining[host]
 
     # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
     # occupant's plan lands here (`plan:`), and the occupant's contract names
@@ -1702,7 +1721,99 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # resolve mate-to before drawing: an occupant is positioned so its `mate`
     # connection-point lands on its host's, which is what keeps centring offsets
     # out of device manifests entirely
+    #
+    # A SEATED PLACEMENT CAN ITSELF HOST. `hosts` used to be built once, from
+    # placements carrying an explicit `at`, so an occupant could never host
+    # another and a boot could not sit on a seated plug - which is the whole of
+    # spec B's two-part fit. Composition is not an alternative: `parts:` entries
+    # have no `optional` and are compile-time flattened, so a composed boot could
+    # not be chosen per connector, which is what the spec asks for.
+    #
+    # Resolution now runs to a FIXED POINT: each pass places the occupants whose
+    # hosts are known and adds them to `hosts`, until a pass places nothing. A
+    # pass that places nothing while occupants remain is either a dangling
+    # `mate-to` (the existing error, unchanged) or a cycle (a new one) - and
+    # without the cycle check the loop would not terminate.
+    #
+    # `mate_resolved` is deliberately NOT named `resolved` - `resolved` is
+    # already the component-version bag started below (search this function for
+    # `resolved = {}`) and threaded through every `instance_group` call to build
+    # `resolved-components` metadata. Reusing the name here would shadow it.
     hosts = {q["id"]: q for q in parts["placements"] if q.get("at")}
+    pending = [q for q in parts["placements"] if q.get("mate-to") and not q.get("at")]
+    mate_resolved = {}
+    while pending:
+        progressed = []
+        for p in pending:
+            host = hosts.get(p["mate-to"])
+            if host is None:
+                progressed.append(p)
+                continue
+            hc, _ = lib.resolve(host["ref"])
+            oc, _ = lib.resolve(p["ref"])
+            def _res(ref):
+                try:
+                    return lib.resolve(ref)[0]
+                except Exception:
+                    return None
+            # The host's mate point may be FORWARDED from a composed aperture -
+            # see manifest.presented_interface. The occupant's is its own: a
+            # module is the thing that mates, not a wrapper around one.
+            _, hm_at, hm_lift = presented_interface(hc, _res)
+            om = (oc.get("connection-points") or {}).get("mate")
+            if hm_at is None or om is None:
+                raise ValueError(
+                    f"{p['id']}: mate-to needs a 'mate' connection-point on both "
+                    f"{p['ref']} and {host['ref']} - the host may also present "
+                    "one through a composed aperture")
+            seated = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
+                                 round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            # WHAT SEATS RECORDS ITS HOST, HOWEVER IT WAS AUTHORED. `occupants:`
+            # writes `for: host` when it expands (see above); a HAND-WRITTEN
+            # `mate-to` - which the spec offers in the same breath as
+            # `occupants:` - wrote nothing, so its group carried no `data-for`
+            # and cablePoints' seat-chain grouping never fired for it: a plug
+            # and the boot on it came back as TWO points for ONE connector.
+            # The host is not a guess here, it is the `mate-to` target, so the
+            # default costs nothing and closes the gap. An author's own `for:`
+            # still wins - it may name something else entirely (a port an LED
+            # belongs to), and this is a default, not an override.
+            if not seated.get("for"):
+                seated["for"] = p["mate-to"]
+            # Carried to draw_placement as `host-lift` - a resolution-time fact,
+            # not the `seat_lift` local that trio (z_inset / z_group_lift /
+            # data-z-lift) already applies there. Named `host-lift`, not
+            # `seat-lift`, to keep it visibly distinct from that local.
+            #
+            # A CHAINED SEAT INHERITS THE WHOLE STACK, not just the last link.
+            # `presented_interface` answers one question - how far the HOST's
+            # aperture stands off the HOST's own face - and returns 0.0 whenever
+            # the host declares its own `interface` + `mate`, which every plug
+            # does. So a boot on a plug on a 10 mm-proud bore took 0.0 and sat
+            # 10 mm too deep. The host's own seat lift is the missing term, and
+            # this loop computed it when it seated the host: it is on the very
+            # dict `hosts` just handed back. Summed HERE, once, at resolution
+            # time - not in draw_placement, because an occupant is a TOP-LEVEL
+            # SIBLING of its host in the compiled drawing and relief.js's
+            # ancestor sum has no path from one to the other to walk. The
+            # attribute this ends up in has to be the absolute displacement.
+            total_lift = float(hm_lift or 0.0) + float(host.get("host-lift") or 0.0)
+            if total_lift:
+                seated["host-lift"] = total_lift
+            mate_resolved[p["id"]] = seated
+            hosts[p["id"]] = seated
+        if len(progressed) == len(pending):
+            ids_in_view = {q["id"] for q in parts["placements"]}
+            missing = [p for p in progressed if p["mate-to"] not in ids_in_view]
+            if missing:
+                bad = missing[0]
+                raise ValueError(
+                    f"{bad['id']}: mate-to {bad['mate-to']!r} is not a placement "
+                    "with an explicit position in this view")
+            raise ValueError(
+                "mate-to cycle among placements: "
+                + ", ".join(sorted(p["id"] for p in progressed)))
+        pending = progressed
 
     # WHAT IS BOLTED TO THE OUTSIDE OF THE METAL PAINTS LAST. A bay draws its
     # opening - and an empty bay draws it dark - so anything mounted across that
@@ -1811,29 +1922,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # see the trio below.
         seat_lift = 0.0
         if p.get("mate-to") and not p.get("at"):
-            host = hosts.get(p["mate-to"])
-            if host is None:
+            # Resolved to a fixed point before any placement was drawn (see
+            # `mate_resolved` above `hosts`), which is what lets a seated
+            # placement itself host - a boot can now mate to an occupant, not
+            # only to something with an explicit `at`. The lookup is guarded,
+            # not a bare subscript: a `mate-to` somehow absent from
+            # `mate_resolved` must raise the SAME error a dangling `mate-to`
+            # always has, not a KeyError with a stack trace. In practice the
+            # resolution pass above already raises this for every dangling or
+            # cyclic case before drawing starts, so this is a defensive echo of
+            # that error, not its only source.
+            resolved_p = mate_resolved.get(p["id"])
+            if resolved_p is None:
                 raise ValueError(f"{p['id']}: mate-to {p['mate-to']!r} is not a "
                                  "placement with an explicit position in this view")
-            hc, _ = lib.resolve(host["ref"])
-            oc, _ = lib.resolve(p["ref"])
-            def _res(ref):
-                try:
-                    return lib.resolve(ref)[0]
-                except Exception:
-                    return None
-
-            # The host's mate point may be FORWARDED from a composed aperture -
-            # see manifest.presented_interface. The occupant's is its own: a
-            # module is the thing that mates, not a wrapper around one.
-            _, hm_at, hm_lift = presented_interface(hc, _res)
-            om = (oc.get("connection-points") or {}).get("mate")
-            if hm_at is None or om is None:
-                raise ValueError(f"{p['id']}: mate-to needs a 'mate' connection-point "
-                                 f"on both {p['ref']} and {host['ref']} - the host may "
-                                 "also present one through a composed aperture")
-            p = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
-                            round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            p = resolved_p
             # WHAT THE APERTURE IS OFF THE FACE, THE OCCUPANT IS TOO, and
             # carrying it takes THREE coordinated moves, not one. `parts:`
             # composition already does the same three (see the `part.get("lift")`
@@ -1854,7 +1957,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # keeps exactly the meaning _inset_feature's docstring gives it -
             # carried entirely by `back`, writing no attribute - so it stays in
             # `p["lift"]` and out of `seat_lift`.
-            seat_lift = float(hm_lift or 0.0)
+            seat_lift = float(p.get("host-lift") or 0.0)
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}

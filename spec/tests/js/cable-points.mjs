@@ -96,6 +96,14 @@ function el(attrs, parent) {
   return node;
 }
 
+// WHAT THE MODULE SAYS OUT LOUD, CAPTURED. cablePoints warns on an unreadable
+// `data-cp-at` and on a `data-for` cycle; both are cases where the sensible
+// return value is an absence, and an absence is exactly what a test cannot
+// tell from a bug. Collected here so the assertions can name them.
+const warnings = [];
+const realWarn = console.warn;
+console.warn = (...a) => { warnings.push(a.join(' ')); };
+
 const svg = {}; // the walk boundary: parentElement chains stop when they hit this
 
 // connector A: a bare part on the panel, one marker, no boot - the plain case
@@ -165,12 +173,88 @@ const markerWrapB = el({'data-cp': 'cable', 'data-cp-at': '4 6'}, wrapB);
 const connectorJ = el({'data-path': 'cage-j'}, svg);
 const markerJ = el({'data-cp': 'cable', 'data-cp-at': 'banana'}, connectorJ);
 
+// connector K: a CHAIN OF SEATS, not nested paths - three elements with
+// DISTINCT TOP-LEVEL data-path values ("cage", "cage-plug",
+// "cage-plug-boot"), all three siblings under the root, exactly the shape a
+// `mate-to` occupant produces (render.py appends it to the view root, not
+// the host's group). No path is a prefix of another, so the path-prefix
+// rule ALONE keeps all three - this is the case that was three points before
+// the fix and must be one after it. `data-for` is what ties them together:
+// the plug names "cage", the boot names "cage-plug", and the outermost (the
+// boot's) is the one that must survive.
+const cageRoot = el({'data-path': 'cage'}, svg);
+const markerCage = el({'data-cp': 'cable', 'data-cp-at': '2 2'}, cageRoot);
+const cagePlug = el({'data-path': 'cage-plug', 'data-for': 'cage'}, svg);
+const markerCagePlug = el({'data-cp': 'cable', 'data-cp-at': '2 2.1'}, cagePlug);
+const cagePlugBoot = el({'data-path': 'cage-plug-boot', 'data-for': 'cage-plug'}, svg);
+const markerCagePlugBoot = el({'data-cp': 'cable', 'data-cp-at': '2 2.2'}, cagePlugBoot);
+
+// connector L: a marker whose `data-for` names an element THAT DOES NOT
+// EXIST anywhere in this drawing - a typo, or a genuinely cross-view target
+// this drawing cannot resolve. The chain walk must stop cold rather than
+// throw or loop forever, and the marker must still be reported.
+const cageL = el({'data-path': 'cage-l', 'data-for': 'does-not-exist'}, svg);
+const markerCageL = el({'data-cp': 'cable', 'data-cp-at': '9 1'}, cageL);
+
+// connector M: a 2-CYCLE in data-for - two elements each naming the OTHER as
+// their host. Nothing real produces this (a `mate-to` occupant's data-for
+// names an already-positioned host; two elements cannot each be seated on
+// the other), but `cablePoints` runs in a browser against a document this
+// kit did not write, so the walk terminating is not optional - a hang here
+// is a real failure mode, not a theoretical one. seatChain's `seen` guard
+// stops each walk after two steps: cycle-a's chain is [cycle-a, cycle-b] and
+// cycle-b's is [cycle-b, cycle-a], so EACH sees the other in the other's
+// chain tail and shadows it. The sensible result asserted below is that
+// BOTH drop - symmetric, contradictory data getting zero survivors, rather
+// than an arbitrary pick decided by array order.
+const cycleA = el({'data-path': 'cycle-a', 'data-for': 'cycle-b'}, svg);
+const markerCycleA = el({'data-cp': 'cable', 'data-cp-at': '6 6'}, cycleA);
+const cycleB = el({'data-path': 'cycle-b', 'data-for': 'cycle-a'}, svg);
+const markerCycleB = el({'data-cp': 'cable', 'data-cp-at': '6 6.1'}, cycleB);
+
+// connector N: SELF-REFERENCE - an element whose data-for names itself. The
+// `seen` guard stops the walk after one step (the element is already in
+// `seen` the instant it is revisited as its own next hop), so its chain is
+// just itself and nothing shadows it, and the marker survives on its own.
+// ITS RETURN VALUE is what having no data-for at all would give; its output
+// is not. A self-reference is a 1-cycle, so it also trips the cycle warning
+// and the reader sees one on stderr naming cycle-self - which is right: the
+// attribute is malformed either way, and surviving is not the same as being
+// unremarkable.
+const cycleSelf = el({'data-path': 'cycle-self', 'data-for': 'cycle-self'}, svg);
+const markerCycleSelf = el({'data-cp': 'cable', 'data-cp-at': '6 6.2'}, cycleSelf);
+
+// connector O: A MULTI-TOKEN `data-for` WHOSE FIRST TOKEN IS CROSS-VIEW.
+// `seatOwner` handles both shapes render.py's `data_for` can emit - several
+// space-separated targets, and a device-absolute one leading with "/" - and
+// until now nothing exercised either, so the loop could have been a bare
+// `byPath.get(raw)` and every test would still have passed.
+//
+// `/rear/x` IS PLANTED AS A REAL data-path HERE ON PURPOSE. No renderer emits
+// a path beginning with a slash - that is precisely why the leading slash
+// makes a cross-view token unmistakable - but without an owner under that key
+// the `continue` is unobservable: an unplanted "/rear/x" would miss the map
+// and fall through to the next token anyway, so the guard could be deleted
+// and this fixture would not notice. With it planted, dropping the guard
+// chains plug-o to the WRONG owner (the first token wins) and the assertions
+// below fail. The second token, `cage-o`, is the host a seat really names.
+const crossView = el({'data-path': '/rear/x'}, svg);
+const markerCrossView = el({'data-cp': 'cable', 'data-cp-at': '0 7'}, crossView);
+const cageO = el({'data-path': 'cage-o'}, svg);
+const markerCageO = el({'data-cp': 'cable', 'data-cp-at': '1 1'}, cageO);
+const plugO = el({'data-path': 'plug-o', 'data-for': '/rear/x cage-o'}, svg);
+const markerPlugO = el({'data-cp': 'cable', 'data-cp-at': '1 1.5'}, plugO);
+
 const markers = [
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
   markerPlugG, markerBootG,
   markerWrap, markerWrapA, markerWrapB,
   markerJ,
+  markerCage, markerCagePlug, markerCagePlugBoot,
+  markerCageL,
+  markerCycleA, markerCycleB, markerCycleSelf,
+  markerCrossView, markerCageO, markerPlugO,
 ];
 svg.querySelectorAll = sel => {
   if (sel !== '[data-cp="cable"]') throw new Error('unexpected selector ' + sel);
@@ -188,8 +272,10 @@ const emptyRoot = {querySelectorAll: sel => {
 // that it is the marker element this point came from.
 const strip = pts => pts.map(({el: owner, ...rest}) => ({...rest, elIsMarker: markers.includes(owner)}));
 
-console.log(JSON.stringify({
+const result = {
   ...pure,
   points: strip(m.cablePoints(svg)),
   empty: m.cablePoints(emptyRoot),
-}));
+};
+console.warn = realWarn;
+console.log(JSON.stringify({...result, warnings}));

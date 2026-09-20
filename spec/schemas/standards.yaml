@@ -1119,3 +1119,62 @@ standards:
       the longer paddle card behind the same front cross-section. Figure 47
       itself is only an isometric outline with no callouts; the numbers are
       Figure 52/53's.
+  lc-plug:
+    registry: SENKO DS-LC-000004 Rev A, LC Plug Connector Drawing
+    w: 5.58
+    h: 10.43
+    confidence: drawing
+    source: >-
+      SENKO DS-LC-000004 Rev A p.3, Connector Drawing, Front View. 5.58 is the
+      body width; 10.43 is the overall silhouette height including the latch.
+      The latch stack is NOT a taper: reading DOWN from the tab it is 2.3
+      +/-0.1 (tip), then 4.3 +/-0.1 (shoulder, proud of both its neighbours),
+      then 3.3 +0.05 -0.10 (stem) onto the body. The side view gives body
+      height 5.65 and latch length 8.6 +/-0.1, and that 5.65 is what pins the
+      body tier of generic/lc-plug@1 - see its provenance.keyway for the
+      600 dpi re-measurement that established the order and the tier heights.
+    notes: >-
+      NO DEPTH, DELIBERATELY. An LC plug has no class-wide overall length. Three
+      SENKO drawings give it only as a REFERENCE dimension in parentheses and
+      differ every time - (42) on the 2PC 911/912, (38.6) on the XP Fit Plus 951,
+      (43) on the LC-HD 913/914 - while body height 5.65 and latch length 8.6
+      repeat across all three WITH tolerances. The class fixes the front profile
+      and the latch; the back end is the vendor's. See
+      working/intake/fiber-connectors/lc/COVERAGE.md, third pass.
+      THIS `h` (10.43) IS THE OVERALL SILHOUETTE INCLUDING THE LATCH - SENKO's
+      front view dimensions the whole outline as one figure with no separate
+      latch-free body height. Contrast rj45-plug below, whose `h` is the BODY
+      EXCLUDING its latch: the two entries measure different quantities and are
+      not comparable number-for-number.
+  rj45-plug:
+    registry: CommScope customer drawing 2843005 rev K, sheet 1 - unshielded mod plug 8 position
+    w: 11.68
+    h: 7.93
+    confidence: drawing
+    depth: 22.48
+    depth-confidence: drawing
+    source: >-
+      CommScope customer drawing 2843005 rev K, sheet 1, UNSHIELDED MOD PLUG 8
+      POSITION. .460 [11.68] front view width, .312 [7.93] side view body height,
+      .885 [22.48] overall length. The latch stands .109 [2.77] below the body
+      datum with its root .232 [5.89] from the front - no angle is given for it;
+      an earlier pass of this entry wrongly attached "88 degrees REF" to the
+      latch, which is actually a different feature's callout (see notes).
+    notes: >-
+      THE UNSHIELDED PLUG. Sheet 2 dimensions the SHIELDED variant of the same
+      family and it is a different shape - .325 [8.26] high by .895 [22.73] long.
+      A generic must not average two real shapes; the shielded plug is its own
+      part when someone needs it.
+      THIS `h` (7.93) IS THE BODY EXCLUDING THE LATCH, which stands a further
+      2.77 below the datum (root 5.89 from the front) - contrast lc-plug above,
+      whose `h` is the overall silhouette INCLUDING its latch. The drawing gives
+      no combined figure (no dimension runs from the top of the body to the
+      bottom of the latch), so there is no sourced number for "body plus latch"
+      here; 7.93 + 2.77 = 10.70 would be arithmetic on two measured figures
+      presented as a third measurement, which this library does not do. The
+      "88 degrees REF" this entry's `source` used to attach to the latch is a
+      different feature's callout: it labels the taper of the cable-entry
+      core-out on two SKU-specific plan views lower on the same sheet (bubbles
+      8 and 9, "APPROXIMATE ... ONLY APPLIES TO PARTS X-557972-X / X-554720-X"),
+      not the dimensioned side view the 2.77/5.89 latch figures come from - no
+      angle is given for the latch itself.

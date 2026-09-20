@@ -1,0 +1,226 @@
+format: 1
+kind: component
+name: lc-plug
+version: 1.0.0
+class: port
+mates: lc
+interface: lc-plug
+conforms: lc-plug
+optical: {positions: 1}
+profile: networking
+description: >-
+  An LC fibre plug, front view - the four-tier keyed silhouette every LC plug
+  presents: a body holding the ferrule, and above it a latch column that is
+  NOT a simple taper - a 3.3 stem off the body, a 4.3 shoulder standing proud
+  of it, then the 2.3 tab. Occupies an `lc` receptacle (std/lc-bore and
+  anything that composes it) at its own `mate` point, and in turn presents
+  `lc-plug` so a boot (or a bare cable, when there is no boot) can seat on its
+  rear. Drawn with NO depth - see `provenance.size`.
+size: {w: 5.58, h: 10.43}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: fiber, connector: lc}
+unplaced: >-
+  seated by a device that places it in an `lc`-presenting receptacle - none does
+  yet. common/lc-boot@1 (Task 5) mates to it via `mate-to`, and the RJ45 pair
+  (Tasks 6-7) follow the same shape; a device manifest exercising the two-part
+  fit is downstream of this library, same as generic/sfp-lc's own `unplaced`.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, against the implementation plan's own field table
+    (Task 4 lists `behaviour: occupies`). spec/tests/test_behaviour.py::
+    test_a_receptacle_does_not_move asserts `d.get("behaviour") is None` for
+    every `class: port` contract - "A `port` that gains a behaviour would be
+    given a 3D body and an eject control it has no business having" - and this
+    is a class this plug shares with std/lc-bore@3, the aperture it enters.
+    Setting `occupies` here breaks that invariant; std/lc-bore@3 itself
+    carries no `behaviour` and still seats a `mate-to` occupant correctly
+    (spec/tests/test_chained_seats.py proves it), because the mate-to
+    resolution in render.py reads `mates`/`interface` and the `mate`
+    connection-point, never `behaviour` - the field is read only by the 3D
+    viewer's eject affordance (render.py's own comment: "HOW IT MOVES, beside
+    WHAT IT IS"). Omitting it costs that one 3D affordance and nothing the
+    render pipeline needs; keeping `occupies` would have broken an existing,
+    deliberate test to gain it. Reported rather than silently patched around -
+    `class: port` doubling as both "fixed aperture" (std/lc-bore) and
+    "removable plug" (this part) is a real tension the plan did not
+    anticipate, and the durable fix is a class of its own for a plug body,
+    which is out of this task's scope.
+  optical: >-
+    optical.positions: 1 - not asked for by the plan's Task 4 table, but
+    required to keep spec/tests/test_connector_sweep.py green: its sweep keys
+    on `class: port` + `attrs.media: fiber` + no `relief.cavity`, which this
+    part matches, and its own docstring calls that shape "a connector" and
+    requires a stated capacity so L80's coverage checks do not silently drop
+    it. An LC plug is simplex - one fibre position - the same reading the
+    schema gives an LC duplex (2). Registered in that test's FIBRE_CONNECTORS
+    list in the same commit.
+  size: >-
+    drawing - SENKO DS-LC-000004 Rev A p.3, Connector Drawing, Front View
+    (UPC). 5.58 is the body width and 10.43 is the OVERALL SILHOUETTE HEIGHT,
+    body plus latch, both dimensioned without a tolerance-free reference mark.
+    DELIBERATELY NO DEPTH. The same drawing's side view gives an overall length
+    only as `(42)` - a REFERENCE dimension in parentheses, not toleranced - and
+    it is not a class figure: SENKO's XP Fit Plus 951 (DS-LC-000023) gives the
+    same reference quantity as `(38.6)` and the LC-HD 913/914 as `(43)`, three
+    different numbers for three real products because the reference spans
+    plug + boot + cable, whose length is the assembler's choice, not the
+    plug's. What DOES repeat across all three, WITH tolerances, is the body
+    height (5.65) and the latch length (8.6 +/-0.1) - both from the side view,
+    both a DIFFERENT axis than this front view's w/h and so not usable as a
+    depth here either. The class fixes the front profile and the latch; the
+    back end is the vendor's, and stating a depth from a parenthesised
+    REF would put a number in the contract that no drawing dimensions.
+  size-vs-rj45-plug: >-
+    `h` HERE (10.43) IS THE OVERALL SILHOUETTE INCLUDING THE LATCH - SENKO's
+    front view dimensions the whole outline as one figure and never breaks out
+    a latch-free body height. generic/rj45-plug@1's `h` (7.93) is the OPPOSITE:
+    CommScope's side view dimensions the body only, and the RJ45 plug's latch
+    (2.77 below the body datum) is a separate, additional figure with no
+    combined silhouette dimension on that drawing. The two `h` values are not
+    comparable number-for-number - a reader diffing 10.43 against 7.93 would be
+    comparing "body plus latch" against "body only" without being told so. Not
+    reconciled by arithmetic (10.43 - 8.6 latch length is not this plug's body
+    height either, since the latch runs along a different axis than it stands
+    proud on); see spec/schemas/standards.yaml's `lc-plug` and `rj45-plug`
+    notes for the same statement made where the registry compares the two.
+  keyway: >-
+    drawing throughout, RE-MEASURED at 600 dpi after the first cut of this
+    contract got both the ORDER and the heights of the tiers wrong. Front
+    view, SENKO DS-LC-000004 Rev A p.3.
+
+    THE ORDER. The drawing dimensions three widths - 4.3 +/-0.1, 3.3
+    +0.05/-0.10 and 2.3 +/-0.1 - and each one's extension lines land on a
+    different tier. Measured, those three pairs sit at 197, 152 and 106 px,
+    which at this sheet's scale is 4.31, 3.31 and 2.31 mm: the assignment is
+    unambiguous because the three figures are far apart. Reading DOWN from the
+    tab: 2.3, then 4.3, then 3.3, then the body. The first cut had the 3.3 and
+    the 4.3 the other way round and so described a monotonic taper the drawing
+    does not show - the 4.3 shoulder stands proud of BOTH its neighbours.
+
+    THE SCALE, and what fixes it. The 10.43 overall silhouette spans 476.5 px
+    between its two extension lines (y 583.0 and y 1059.5), so 45.686 px/mm.
+    That is one dimensioned figure used as a ruler; the three widths above are
+    a SECOND, independent quantity measured with it, and they come back within
+    0.01 of their callouts. The ruler is therefore not fitted to the art box.
+
+    THE TIER HEIGHTS, measured with that ruler:
+    tab (2.3 wide) y 583.0 to 704.7 = 2.664; shoulder (4.3 wide) 704.7 to
+    740.7 = 0.788; stem (3.3 wide) 740.7 to 801.8 = 1.338; body (5.58 wide)
+    801.8 to 1059.5 = 5.640. The body's top edge is hidden behind the stem, so
+    801.8 is not read off a pixel: a least-squares circle through 29 points of
+    the body's top-left corner arc gives centre (229.36, 851.23) and R 49.39
+    px, which predicts the body's left extreme at x 179.97 against an observed
+    180.25 - 0.28 px - and puts its top edge at y 801.84.
+
+    WHAT THE CONTRACT STATES, and why it is not just the measurement. The body
+    is the one tier the drawing DIMENSIONS - 5.65 on the side view, the figure
+    common/lc-boot@1 already cites - and the measurement above lands on it to
+    0.01 mm. So the body is stated at the DIMENSIONED 5.65, not at the
+    measured 5.640, and the three latch tiers take the remaining 4.78,
+    apportioned in the measured proportions 2.664 : 0.788 : 1.338 (whose own
+    sum, 4.790, agrees with that remainder to 0.01). Hence 2.66 / 0.79 / 1.33 /
+    5.65, summing to the dimensioned 10.43.
+
+    WHAT IS NOT MODELLED. Nothing here: the 1.4 mm stem between the shoulder
+    and the body is the tier the first cut omitted entirely, and it is in the
+    elements below. The internal line 0.6 mm below the tab's top edge is a
+    face edge on the latch, not a tier boundary, and is left to the skin.
+
+    working/intake/fiber-connectors/lc/SOURCES.md carries the tier table
+    ("What the pair of Senko drawings agrees on") showing the three widths
+    against the LC Premium Adapter DS-LC-000010's aperture, tier for tier, the
+    adapter running 0.16-0.40 larger at every tier for clearance - that
+    agreement across two independent SENKO documents is what makes the widths
+    citable rather than eyeballed.
+  ferrule: >-
+    estimated - the concentric ferrule/spring rings in the front view scale to
+    roughly 60% of the 5.58 body width; no drawing dimensions the ferrule
+    diameter on this sheet (it is a standard 1.25mm LC ferrule, per
+    std/lc-bore@3's own `ferrule` note, which is smaller than what is drawn
+    here - the front view draws the SPRING HOUSING around the ferrule, not the
+    bare ferrule).
+  axis: >-
+    DERIVED, and corroborated by measurement - not the other way round. The
+    stated 7.61 is the centre of the body tier below: 4.78 + 5.65/2 = 7.605,
+    to two decimals. It is NOT the measured figure, and an earlier draft of
+    this key opened "drawing - MEASURED, not derived", which was the one
+    mislabel this library treats as cardinal: the prose underneath was honest
+    about the arithmetic while the heading claimed a reading.
+
+    WHAT THE MEASUREMENT SAYS. The front view draws the optical axis as a
+    horizontal centreline through the ferrule, at y 931.0 in the same 600 dpi
+    render provenance.keyway measures, which is 7.617 below the silhouette's
+    top edge at y 583.0. That is 0.012 from the derived tier centre and 0.007
+    from the stated 7.61.
+
+    WHY THE DERIVED FIGURE IS THE ONE STATED, given the drawn centreline is
+    RIGHT THERE to be read. Two reasons.
+
+    First, the measurement cannot tell the two apart. At 45.686 px/mm half a
+    pixel is 0.011, and the gap being argued over is 0.012 - one pixel. A
+    number the artwork cannot resolve should not be promoted over one the
+    contract's own geometry fixes exactly; stating 7.617 would claim a
+    precision this sheet does not carry.
+
+    Second, it keeps the part internally consistent. The ferrule stands in the
+    body tier, so the axis being that tier's centre is a relation the contract
+    can hold exactly and a test can pin. Take the measured 7.617 instead and
+    the point sits 0.012 off the centre of the tier it belongs to, and the two
+    are free to drift apart on any later edit. This is also the rule
+    provenance.keyway already follows one key up - state what the pinned
+    geometry gives, use the measurement as the check - and applying a
+    different rule to the axis than to the tiers it is measured against would
+    be its own kind of inconsistency.
+
+    Either way the first cut was badly wrong: it put the points at 8.19, the
+    centre of a body tier that started 1.17 too low, which is 0.58 out from
+    the drawn centreline - far outside anything a pixel could explain.
+
+    Horizontally the centreline is at x 309.0 against a body spanning
+    180.25 to 437.75, whose centre is 309.0: dead centre, so x is 5.58/2 =
+    2.79.
+
+    The `mate`, `boot` and `cable` connection points all share this one
+    (x, y): the fibre runs straight through the plug from the ferrule tip to
+    wherever it exits the rear, so a front point and a rear point on one
+    physical connector are the same axis seen from two directions, not two
+    locations. See provenance.boot-coincides-with-mate for what the renderer
+    currently does with that.
+  boot-coincides-with-mate: >-
+    A LOAD-BEARING COINCIDENCE, STATED SO IT CAN BE CHECKED. This contract
+    publishes a `boot` connection-point, and NOTHING READS IT - not render.py,
+    not lint.py, not kit/. Seating always positions an occupant by the HOST's
+    presented `mate` point (render.py's mate-to resolution calls
+    manifest.presented_interface and then takes the occupant's own `mate`), so
+    a boot mated onto this plug lands on the plug's `mate` point and not on
+    its `boot` point. That is correct TODAY only because the two are the same
+    (x, y) here - see provenance.axis - and it would put a boot on the plug's
+    FRONT face, silently, the day someone separates them.
+
+    THE SEATING RULE WAS NOT CHANGED, deliberately. Preferring a host's `boot`
+    point when the occupant is a boot looks like a small change and is not:
+    `presented_interface` returns an interface, a point AND a lift that all
+    belong to an APERTURE, and a rear point has no aperture and no lift story
+    to return. The real difference between a `mate` point and a `boot` point
+    is along the axis this contract deliberately does not state - there is no
+    `size.d` here, and provenance.size says why - so a renderer that
+    distinguished them would have nothing to distinguish them WITH, and the
+    2D front view in which these parts are drawn cannot show the difference
+    either. Making that change properly means giving plugs a depth and the
+    seating a front/rear axis, which is a design pass, not a patch.
+
+    So the invariant is written down instead, and
+    spec/tests/test_connector_sweep.py::test_a_boot_point_is_the_mate_point
+    enforces it across the whole library: any contract that publishes both
+    points must have them coincide. The day someone separates them is the day
+    a test fails, rather than the day a drawing goes quietly wrong.
+elements:
+  tip: {at: [1.64, 0.0], size: [2.3, 2.66], class: latch}
+  shoulder: {at: [0.64, 2.66], size: [4.3, 0.79], class: latch}
+  stem: {at: [1.14, 3.45], size: [3.3, 1.33], class: latch}
+  body: {at: [0.0, 4.78], size: [5.58, 5.65], class: port}
+connection-points:
+  mate: {at: [2.79, 7.61], direction: front}
+  boot: {at: [2.79, 7.61], direction: rear}
+  cable: {at: [2.79, 7.61], direction: rear}
+skins: [default]

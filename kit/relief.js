@@ -149,44 +149,122 @@ export function resolveCablePoint(marker, ancestors = []) {
 //
 // A cable lands on the OUTERMOST point of a connector. Stated structurally:
 // a marker is SHADOWED when another marker sits strictly deeper on the same
-// chain - one owner path is a prefix of the other, on a "/" boundary so
-// "sfp-1" is never read as a parent of "sfp-10". This replaced a union-find
-// over a "same connector" relation that was not transitive: "a/b" and
-// "a/b/c" belong together, "a/b/c" and "a/b/d" do not, but union-find
-// merges all three through the shared middle "a/b" - a connector that
-// carries its own marker AND two marked descendants fused all three into
-// one point. Nothing in the library can build that shape yet; spec B2's
-// plugs and boots can, and this function has no other consumer.
+// chain. Two DIFFERENT relations record "same chain", and grouping has to
+// walk both:
 //
-// THE LIMIT OF THIS RULE, WRITTEN DOWN BECAUSE IT IS NOT VISIBLE FROM HERE.
-// `data-path` nests for exactly two relations: parts composed through a
-// contract's `parts:` (render.py builds the child's path as
-// `<parent>/<part id>`) and modules seated in bays (`<bay>/module`). Those
-// are the shapes this rule relates.
+//   - PATH ANCESTRY, the original rule: a part composed through a
+//     contract's `parts:` (render.py builds the child's path as
+//     `<parent>/<part id>`) or a module seated in a bay (`<bay>/module`)
+//     gets a `data-path` that nests under its container's, one owner path a
+//     prefix of the other, on a "/" boundary so "sfp-1" is never read as a
+//     parent of "sfp-10".
+//   - SEAT CHAINS, added here. A `mate-to` occupant is a TOP-LEVEL SIBLING
+//     of its host in the compiled drawing - render.py appends it to the
+//     view root, not under the host's group - so a boot seated on a plug
+//     seated on a cage gets THREE UNRELATED top-level paths ("cage",
+//     "cage-plug", "cage-plug-boot"), no one a prefix of another. PATH
+//     ANCESTRY CANNOT SEE THIS RELATIONSHIP: it is not encoded in the path,
+//     by construction, so no amount of cleverness in a prefix test finds
+//     it. What DOES record it is `data-for`, which render.py sets on every
+//     seated placement's group - REGARDLESS OF HOW THE SEAT WAS AUTHORED.
+//     That last clause was once wishful: only the `occupants:` expansion
+//     wrote `for: host`, so a HAND-WRITTEN `mate-to` (which the spec offers
+//     in the same breath) carried no `data-for`, this grouping never fired
+//     for it, and a plug with a boot on it came back as two points for one
+//     connector. render.py now DEFAULTS `for` to the `mate-to` target at
+//     resolution time, so both authorings record a host.
 //
-// It CANNOT relate a `mate-to` occupant to its host. An occupant is a
-// TOP-LEVEL SIBLING of the host in the compiled drawing - render.py appends
-// it to the view root, not under the host's group - and it gets a top-level
-// path of its own: seating on `port-4` yields `port-4-occupant`, never
-// `port-4/occupant`. Two unrelated paths, so neither shadows the other, and a
-// boot seated on a plug would come back as two cable points for one physical
-// connector.
+//     A DEFAULT, THOUGH, NOT AN OVERRIDE: `for:` is older than seating and
+//     means "what this part belongs to", so an author who writes one on a
+//     `mate-to` placement keeps it, and that value is what this function
+//     walks. It need not be the host - it can name any part, in any view.
+//     So do not read a seat's `data-for` as "my host"; read it as "what this
+//     part says it belongs to", which for the common case IS the host.
+//     Walking `data-for` to a root groups a
+//     whole chain of seats the same
+//     way path-prefix already groups a composed or bayed one - do not
+//     "simplify" this back to path-prefix alone; that is exactly the
+//     regression this function exists to prevent, and it has a live test
+//     (spec/tests/js/cable-points.mjs's connector K) that fails the moment
+//     it happens.
 //
-// That shape is NOT EXPRESSIBLE TODAY and no machinery is added for it here.
-// An occupant cannot itself host an occupant: `hosts` is built only from
-// placements carrying an explicit `at` (see draw_placement's caller), and a
-// `mate-to` occupant has none. B2 has two ways to resolve it when it needs
-// to, and both are cheaper than a third grouping rule invented now:
-//   - a boot nests via `parts:` on the plug, which gives it the plug's path
-//     as a prefix, and this rule already handles it unchanged; or
-//   - the grouping keys on `data-for`, which render.py already publishes on
-//     an occupant's group (it is what nests an optic under its port in the
-//     tree), and which names the host directly.
-// Whichever B2 picks should be decided with a real boot in hand.
+// Composed parts carry no `data-for` at all, so path-prefix stays as the
+// fallback - it is still the only signal for that shape, and dropping it
+// would un-group every `parts:`-composed and bay-nested case this module
+// already passed.
+//
+// An earlier version of this function used a union-find over a "same
+// connector" relation that was not transitive: "a/b" and "a/b/c" belong
+// together, "a/b/c" and "a/b/d" do not, but union-find merges all three
+// through the shared middle "a/b" - a connector that carries its own marker
+// AND two marked descendants fused all three into one point. Nothing in the
+// library can build that shape yet; spec B2's plugs and boots can, and this
+// function has no other consumer.
 const shadowed = (p, all) => all.some(q => q !== p && q.startsWith(p + '/'));
 
+// Resolve one `data-for` value to the local owner it names, or null.
+// `data-for` can carry more than one space-separated token (render.py's
+// `data_for` - a silkscreen mark can annotate several things at once) and a
+// cross-view token comes out leading with "/" (`/rear/psu-0`). BOTH SHAPES
+// REACH A SEAT. This comment used to say a `mate-to` occupant's `data-for`
+// "is never either of those - it is always exactly the bare local id of its
+// host", and that stopped being true when render.py made its `mate-to`
+// default yield to an author's explicit `for:`: a seated placement carrying
+// its own `for:` regroups its cable chain by THAT value, which may be
+// multi-token, may be cross-view, and may name something that is not its
+// host at all. Intended and tested, not a loophole - so the loop below is
+// load-bearing rather than defensive, and must not be "simplified" to a
+// single lookup on the whole attribute. Tokens are tried in order; a
+// leading-slash one names another view and is skipped, and a token this
+// drawing has no marked owner for (a typo, or a genuinely cross-view
+// target) is skipped too, not thrown on. See cable-points.mjs's connector O,
+// which plants an owner under a literal "/rear/x" so the skip is
+// observable.
+function seatOwner(el, byPath) {
+  const raw = (el.dataset && el.dataset.for) || '';
+  for (const tok of raw.split(/\s+/).filter(Boolean)) {
+    if (tok[0] === '/') continue;
+    const found = byPath.get(tok);
+    if (found) return found;
+  }
+  return null;
+}
+
+// The chain from `owner` up to its connector's root, walking `data-for` one
+// hop at a time. `seen` stops it cold on a cycle - a `data-for` that names
+// an owner already in the chain - rather than spinning forever; an
+// unresolved `data-for` (`seatOwner` returns null) ends the chain exactly
+// like a root that carries no `data-for` at all.
+function seatChain(owner, byPath) {
+  const chain = [];
+  const seen = new Set();
+  let cur = owner;
+  while (cur) {
+    if (seen.has(cur)) {
+      // SAID OUT LOUD, LIKE THE UNREADABLE POINT BELOW. Terminating was never
+      // in doubt - `seen` did that from the start - but terminating QUIETLY
+      // is not the same thing: a 2-cycle makes each side shadow the other, so
+      // BOTH connectors vanish from the returned list with nothing said. That
+      // is the identical failure mode an unreadable `data-cp-at` gets a
+      // warning for a few lines down, and it deserves the identical treatment.
+      // Only a hand-edited or truncated drawing can produce it - render.py
+      // refuses a `mate-to` cycle outright - which is exactly the case worth
+      // naming out loud rather than diagnosing from an absence.
+      console.warn(`cablePoints: data-for cycle - the seat chain from ` +
+                   `${owner.dataset.path || '(no data-path)'} revisits ` +
+                   `${cur.dataset.path || '(no data-path)'}; the walk stops ` +
+                   `there and connectors on this chain may be dropped`);
+      break;
+    }
+    chain.push(cur);
+    seen.add(cur);
+    cur = seatOwner(cur, byPath);
+  }
+  return chain;
+}
+
 export function cablePoints(svg) {
-  const markers = [...svg.querySelectorAll('[data-cp="cable"]')].map(mk => {
+  const entries = [...svg.querySelectorAll('[data-cp="cable"]')].map(mk => {
     // The whole attribute, not its first two tokens: "1 2 3" is as malformed
     // as "banana", and silently keeping the 1 and the 2 is the same class of
     // plausible-looking wrong answer as defaulting to the origin.
@@ -210,13 +288,37 @@ export function cablePoints(svg) {
       console.warn(`cablePoints: ${pt.path || '(no data-path)'} declares an ` +
                    `unreadable data-cp-at ${JSON.stringify(mk.dataset.cpAt)}; ` +
                    `its point is null rather than [0, 0]`);
-    return pt;
+    return {pt, owner};
   });
+
+  // Only an owner that itself carries a `cable` marker can compete for a
+  // connector's point, so that is the only lookup a seat chain ever needs -
+  // an intermediate host with a `data-path` but no marker of its own has
+  // nothing here to shadow or be shadowed by.
+  const byPath = new Map();
+  for (const {owner} of entries) if (owner) byPath.set(owner.dataset.path, owner);
+  const chains = entries.map(({owner}) => owner ? seatChain(owner, byPath) : []);
+
   // O(n^2) in the number of cable markers on one drawing, same as the
-  // shadow check above - fine at real-world scale (a handful of connectors
+  // shadow checks above - fine at real-world scale (a handful of connectors
   // per drawing), not worth optimising.
-  const paths = markers.map(m => m.path);
-  return markers.filter(m => !shadowed(m.path, paths));
+  const paths = entries.map(({pt}) => pt.path);
+  // THE TWO RULES ARE INDEPENDENT AND ANDED: a marker survives only if
+  // NEITHER shadows it. That is safe only because the two relations never
+  // overlap on one chain - a `data-for` never points at a PATH-DESCENDANT of
+  // its own owner (composed nesting and occupant `data-for` are disjoint in
+  // everything render.py emits today). If that ever stopped being true - a
+  // host whose `data-for` named its own composed child, say "a" pointing at
+  // "a/b" - path-prefix would shadow "a" and the chain rule would shadow
+  // "a/b" independently, and the connector would vanish with NEITHER rule
+  // aware the other fired. No runtime check for it here: the invariant holds
+  // today and a check would be dead code, but a fix that lets the two rules
+  // interact would need one.
+  return entries
+    .filter(({pt, owner}) =>
+      !shadowed(pt.path, paths) &&
+      !(owner && chains.some(ch => ch.slice(1).includes(owner))))
+    .map(({pt}) => pt);
 }
 
 export function configureRelief(deps, scope) {

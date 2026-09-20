@@ -54,6 +54,8 @@ def test_cable_points_resolves_the_fake_drawing():
         "cage-a", "cage-b", "cage-c/plug/boot",
         "sfp-lc/tx", "sfp-lc/rx", "sfp-1", "sfp-10",
         "cage-g/plug/boot", "wrap/a", "wrap/b", "cage-j",
+        "cage-plug-boot", "cage-l", "cycle-self",
+        "/rear/x", "plug-o",
     }
     assert "out" not in points["cage-a"]
 
@@ -112,5 +114,79 @@ def test_cable_points_resolves_the_fake_drawing():
     assert points["wrap/a"]["at"] == [4, 5]
     assert points["wrap/b"]["at"] == [4, 6]
 
+    # A CHAIN OF SEATS: three TOP-LEVEL, UNRELATED data-path values ("cage",
+    # "cage-plug", "cage-plug-boot" - no one a prefix of another), tied
+    # together only by `data-for` ("cage-plug" names "cage", "cage-plug-boot"
+    # names "cage-plug"), exactly the shape a `mate-to` occupant produces.
+    # Path-prefix alone cannot relate these at all - this is the case that
+    # returns three points under that rule and must return one here.
+    assert "cage" not in points, "the cage's own marker must lose to its seats"
+    assert "cage-plug" not in points, "the plug's marker must lose to the boot"
+    assert points["cage-plug-boot"]["at"] == [2, 2.2]
+
+    # A `data-for` naming an owner that does not exist in this drawing (a
+    # typo, or an unresolved cross-view target) must not throw and must not
+    # spin forever - the chain walk just stops, and the marker still reports.
+    assert points["cage-l"]["at"] == [9, 1]
+
+    # A 2-CYCLE IN data-for (cycle-a names cycle-b, cycle-b names cycle-a).
+    # The subprocess call above completing at all IS the cycle test - a
+    # regression that broke the Set guard would hang node rather than fail
+    # an assertion. Each element sees the other in the other's chain tail,
+    # so each shadows the other; the sensible result is that BOTH drop
+    # rather than one winning by array order on symmetric, contradictory data.
+    assert "cycle-a" not in points, "a data-for 2-cycle must not let either side win"
+    assert "cycle-b" not in points, "a data-for 2-cycle must not let either side win"
+
+    # A SELF-REFERENCE (cycle-self names itself). The walk stops after one
+    # step, so nothing shadows it and the marker survives. It is still a
+    # 1-cycle, so it warns as well - see
+    # test_a_data_for_cycle_is_said_out_loud; surviving and being
+    # unremarkable are not the same thing.
+    assert points["cycle-self"]["at"] == [6, 6.2]
+
+    # A MULTI-TOKEN `data-for` WITH A CROSS-VIEW TOKEN IN FRONT. "plug-o" says
+    # `data-for="/rear/x cage-o"`. The leading-slash token names another view
+    # and must be SKIPPED, not looked up; the walk must go on to "cage-o" and
+    # find the real host there. The fixture plants a marked owner under the
+    # literal path "/rear/x" so the skip is observable: without the guard the
+    # first token would win, "plug-o" would chain to the cross-view element
+    # instead, and both assertions below would fail.
+    assert "cage-o" not in points, (
+        "plug-o's second data-for token names cage-o as its host, so the "
+        "host's own marker must lose to the seat's - if it survived, the "
+        "multi-token walk stopped at the first token")
+    assert points["plug-o"]["at"] == [1, 1.5]
+    assert points["/rear/x"]["at"] == [0, 7], (
+        "the cross-view token must be skipped, not resolved - resolving it "
+        "would make /rear/x plug-o's host and shadow it")
+
     # a drawing with no cable markers at all returns [], not a throw
     assert out["empty"] == []
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_a_data_for_cycle_is_said_out_loud():
+    """A cycle drops BOTH connectors. An absence is not a diagnosis.
+
+    `seen` has always stopped the walk, so nothing hung - but a 2-cycle makes
+    each side shadow the other and both vanish from the returned list with
+    nothing said, while an unreadable `data-cp-at` a few lines away has warned
+    since it was written. Same class of malformed input, same treatment.
+    """
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True,
+                       cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    out = json.loads(p.stdout.strip().splitlines()[-1])
+    warned = out["warnings"]
+
+    cycle = [w for w in warned if "data-for cycle" in w]
+    assert cycle, (
+        f"the 2-cycle (cycle-a <-> cycle-b) dropped both connectors without a "
+        f"word; warnings were {warned}")
+    assert any("cycle-a" in w for w in cycle) and any("cycle-b" in w for w in cycle), (
+        f"the warning must name the elements on the cycle; got {cycle}")
+
+    # the pre-existing warning is still there, and the two are told apart
+    assert any("unreadable data-cp-at" in w for w in warned), (
+        f"cage-j's unparseable point stopped warning; got {warned}")

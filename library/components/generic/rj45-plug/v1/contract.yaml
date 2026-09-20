@@ -1,0 +1,143 @@
+format: 1
+kind: component
+name: rj45-plug
+version: 1.0.0
+class: port
+mates: rj45
+interface: rj45-plug
+conforms: rj45-plug
+profile: networking
+description: >-
+  An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with
+  a spring latch on its underside that engages a jack's latch slot. Occupies a
+  `rj45` receptacle (std/rj45@2 and anything that composes it) at its own
+  `mate` point, and in turn presents `rj45-plug` so a boot (or a bare cable,
+  when there is no boot) can seat on its rear. UNLIKE generic/lc-plug@1, this
+  plug HAS a class-wide depth - see `provenance.size`.
+size: {w: 11.68, h: 7.93, d: 22.48}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: rj45, connector: rj45}
+unplaced: >-
+  seated by a device that places it in an `rj45`-presenting receptacle - none
+  does yet. common/rj45-boot@1 (Task 7) mates to it via `mate-to`, following
+  the LC pair's own shape; a device manifest exercising the two-part fit is
+  downstream of this library, same as generic/lc-plug@1's own `unplaced`.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, the same ruling carried from generic/lc-plug@1
+    (Task 4). spec/tests/test_behaviour.py::test_a_receptacle_does_not_move
+    asserts `d.get("behaviour") is None` for every `class: port` contract, a
+    class this plug shares with std/rj45@2, the housing it enters. Seating does
+    not need it - render.py's mate-to resolution reads `mates`/`interface` and
+    the `mate` connection-point, never `behaviour` - and `class: port` plus
+    `attrs.media` is how this library defines a connector
+    (spec/tests/test_connector_sweep.py). The only cost is the 3D viewer's
+    eject affordance, deferred to spec D.
+  size: >-
+    drawing - CommScope customer drawing 2843005 rev K, sheet 1, UNSHIELDED MOD
+    PLUG 8 POSITION. .460 [11.68] is the front view width; .312 [7.93] is the
+    side view BODY height (the latch is not part of this box - see `latch`
+    below); .885 [22.48] is the side view overall length, a PLAIN dimension
+    (not parenthesised), so unlike generic/lc-plug@1's reference-only overall
+    length, this one is real and belongs in `size.d`. Registered at the same
+    figures in spec/schemas/standards.yaml's `rj45-plug` entry
+    (spec/tests/test_plug_envelopes.py pins it).
+  size-vs-lc-plug: >-
+    `h` HERE (7.93) IS THE BODY EXCLUDING THE LATCH - not a silhouette height.
+    generic/lc-plug@1's `h` (10.43) is the OPPOSITE: SENKO's front view gives
+    it as the overall silhouette INCLUDING the latch tip, because that drawing
+    dimensions the whole outline as one figure and never breaks out a
+    latch-free body height. The two numbers are not comparable as drawn: a
+    reader diffing 7.93 against 10.43 would be comparing "body only" against
+    "body plus latch" without being told so. CommScope's drawing gives NO
+    combined silhouette figure for this plug (no dimension runs from the top
+    of the body to the bottom of the latch), so there is no third number to
+    add - 7.93 + 2.77 = 10.70 would be arithmetic performed on two measured
+    figures and presented as a measurement neither drawing makes; this
+    library's first rule forbids exactly that. See `latch` below for the
+    2.77/5.89 figures themselves, and spec/schemas/standards.yaml's `rj45-plug`
+    and `lc-plug` notes for the same statement made where the registry compares
+    the two.
+  sheet-2: >-
+    SHEET 2 of the same drawing (2843005 rev K) dimensions the SHIELDED variant
+    of the same MP-88 family and it is a genuinely different shape - .325 [8.26]
+    high by .895 [22.73] long, against sheet 1's 7.93 x 22.48. This contract is
+    built from sheet 1 ONLY; the two are never averaged or reconciled, and the
+    shielded plug is its own part when someone needs it.
+  latch: >-
+    drawing - same sheet, side view. The latch stands .109 [2.77] below the
+    body datum, its root .232 [5.89] from the front; note 5 gives the
+    terminated dimension as 5.89-6.15 once the cable is crimped. THE DRAWING
+    GIVES NO ANGLE FOR THE LATCH - a fix-round correction of this contract's
+    own first draft, which wrongly attached "88 degrees REF" to it. That 88
+    REF figure is real but belongs to a different feature entirely: it labels
+    the taper of the cable-entry core-out on two SKU-specific plan views lower
+    on the same sheet (bubbles 8 and 9), each captioned "THIS CORE-OUT FEATURE
+    IS APPROXIMATE ... ONLY APPLIES TO PARTS X-557972-X / X-554720-X" - a
+    different feature, a different view, and explicitly not class-wide even
+    for the core-out it does describe. Confirmed by rendering that region at
+    600dpi: no angle callout sits on the dimensioned side view the 2.77/5.89
+    latch figures come from. NOT A RELIEF FEATURE: 2.77 is an in-plane
+    displacement along the same Y (height) axis the 11.68 x 7.93 body is drawn
+    on - the latch hangs BELOW the body datum in the side view, in the SAME
+    plane as `size.w`/`size.h` - not a Z-axis protrusion out of the panel
+    face the way std/sma@1's barrel genuinely is (coaxial with the mate axis).
+    `relief.features[].out` renders as `data-z-out` (kit/relief.js), an
+    ABSOLUTE distance perpendicular to the drawn face; putting 2.77 there drew
+    a nub poking toward the viewer instead of a tab hanging below the body,
+    which is what an earlier draft of this contract did and is now corrected.
+    The latch is drawn in the `latch` skin node instead, inset within the
+    declared 11.68 x 7.93 box (L4 holds the skin's viewBox to `size` exactly,
+    so the art is schematic rather than to scale below the datum) - it is
+    part of what the face looks like, not a depth feature, and the 2.77/5.89
+    figures stay recorded here as measured facts about the part rather than
+    driving any render.
+  axis: >-
+    derived, following the connection-point convention generic/lc-plug@1 and
+    common/lc-boot@1 introduced (Task 4/5): the `mate`, `boot` and `cable`
+    points all share one (x, y), the centre of the 11.68 x 7.93 body
+    (5.84, 3.965) - a part with no depth axis (the LC pair) has one axis seen
+    from two directions rather than two locations, and the same is true here
+    even though this part DOES carry a depth: the conductors run straight
+    through the plug from the contacts to wherever the cable exits the rear,
+    so front and rear are still the one physical axis, not two locations on
+    it. Following that pattern rather than inventing a second one.
+  census: >-
+    spec/tests/test_connector_sweep.py's sweep keys on `attrs.media == "fiber"`,
+    so an `attrs.media: rj45` part does not enter FIBRE_CONNECTORS and needs no
+    census entry there - checked, not assumed, per this task's own instruction.
+  boot-coincides-with-mate: >-
+    A LOAD-BEARING COINCIDENCE, STATED SO IT CAN BE CHECKED. This contract
+    publishes a `boot` connection-point, and NOTHING READS IT - not render.py,
+    not lint.py, not kit/. Seating always positions an occupant by the HOST's
+    presented `mate` point (render.py's mate-to resolution calls
+    manifest.presented_interface and then takes the occupant's own `mate`), so
+    a boot mated onto this plug lands on the plug's `mate` point and not on
+    its `boot` point. That is correct TODAY only because the two are the same
+    (x, y) here - see provenance.axis - and it would put a boot on the plug's
+    FRONT face, silently, the day someone separates them.
+
+    THE SEATING RULE WAS NOT CHANGED, deliberately. Preferring a host's `boot`
+    point when the occupant is a boot looks like a small change and is not:
+    `presented_interface` returns an interface, a point AND a lift that all
+    belong to an APERTURE, and a rear point has no aperture and no lift story
+    to return. The real difference between a `mate` point and a `boot` point
+    is along the axis this contract deliberately does not state - there is no
+    `size.d` here, and provenance.size says why - so a renderer that
+    distinguished them would have nothing to distinguish them WITH, and the
+    2D front view in which these parts are drawn cannot show the difference
+    either. Making that change properly means giving plugs a depth and the
+    seating a front/rear axis, which is a design pass, not a patch.
+
+    So the invariant is written down instead, and
+    spec/tests/test_connector_sweep.py::test_a_boot_point_is_the_mate_point
+    enforces it across the whole library: any contract that publishes both
+    points must have them coincide. The day someone separates them is the day
+    a test fails, rather than the day a drawing goes quietly wrong.
+elements:
+  body: {at: [0.0, 0.0], size: [11.68, 7.93], class: port}
+connection-points:
+  mate: {at: [5.84, 3.965], direction: front}
+  boot: {at: [5.84, 3.965], direction: rear}
+  cable: {at: [5.84, 3.965], direction: rear}
+skins: [default]
