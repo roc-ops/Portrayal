@@ -166,14 +166,21 @@ export function resolveCablePoint(marker, ancestors = []) {
 //     ANCESTRY CANNOT SEE THIS RELATIONSHIP: it is not encoded in the path,
 //     by construction, so no amount of cleverness in a prefix test finds
 //     it. What DOES record it is `data-for`, which render.py sets on every
-//     seated placement's group to name its host's `data-path` directly -
-//     REGARDLESS OF HOW THE SEAT WAS AUTHORED. That last clause was once
-//     wishful: only the `occupants:` expansion wrote `for: host`, so a
-//     HAND-WRITTEN `mate-to` (which the spec offers in the same breath)
-//     carried no `data-for`, this grouping never fired for it, and a plug
-//     with a boot on it came back as two points for one connector. render.py
-//     now defaults `for` to the `mate-to` target at resolution time, so both
-//     authorings record the same fact. Walking `data-for` to a root groups a
+//     seated placement's group - REGARDLESS OF HOW THE SEAT WAS AUTHORED.
+//     That last clause was once wishful: only the `occupants:` expansion
+//     wrote `for: host`, so a HAND-WRITTEN `mate-to` (which the spec offers
+//     in the same breath) carried no `data-for`, this grouping never fired
+//     for it, and a plug with a boot on it came back as two points for one
+//     connector. render.py now DEFAULTS `for` to the `mate-to` target at
+//     resolution time, so both authorings record a host.
+//
+//     A DEFAULT, THOUGH, NOT AN OVERRIDE: `for:` is older than seating and
+//     means "what this part belongs to", so an author who writes one on a
+//     `mate-to` placement keeps it, and that value is what this function
+//     walks. It need not be the host - it can name any part, in any view.
+//     So do not read a seat's `data-for` as "my host"; read it as "what this
+//     part says it belongs to", which for the common case IS the host.
+//     Walking `data-for` to a root groups a
 //     whole chain of seats the same
 //     way path-prefix already groups a composed or bayed one - do not
 //     "simplify" this back to path-prefix alone; that is exactly the
@@ -198,11 +205,21 @@ const shadowed = (p, all) => all.some(q => q !== p && q.startsWith(p + '/'));
 // Resolve one `data-for` value to the local owner it names, or null.
 // `data-for` can carry more than one space-separated token (render.py's
 // `data_for` - a silkscreen mark can annotate several things at once) and a
-// cross-view token comes out leading with "/" (`/rear/psu-0`); a `mate-to`
-// occupant's `data-for` is never either of those - it is always exactly the
-// bare local id of its host - but both are handled rather than assumed
-// away. A token this drawing has no marked owner for (a typo, or a
-// genuinely cross-view target) is skipped, not thrown on.
+// cross-view token comes out leading with "/" (`/rear/psu-0`). BOTH SHAPES
+// REACH A SEAT. This comment used to say a `mate-to` occupant's `data-for`
+// "is never either of those - it is always exactly the bare local id of its
+// host", and that stopped being true when render.py made its `mate-to`
+// default yield to an author's explicit `for:`: a seated placement carrying
+// its own `for:` regroups its cable chain by THAT value, which may be
+// multi-token, may be cross-view, and may name something that is not its
+// host at all. Intended and tested, not a loophole - so the loop below is
+// load-bearing rather than defensive, and must not be "simplified" to a
+// single lookup on the whole attribute. Tokens are tried in order; a
+// leading-slash one names another view and is skipped, and a token this
+// drawing has no marked owner for (a typo, or a genuinely cross-view
+// target) is skipped too, not thrown on. See cable-points.mjs's connector O,
+// which plants an owner under a literal "/rear/x" so the skip is
+// observable.
 function seatOwner(el, byPath) {
   const raw = (el.dataset && el.dataset.for) || '';
   for (const tok of raw.split(/\s+/).filter(Boolean)) {

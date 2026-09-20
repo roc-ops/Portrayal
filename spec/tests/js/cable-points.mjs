@@ -215,9 +215,12 @@ const markerCycleB = el({'data-cp': 'cable', 'data-cp-at': '6 6.1'}, cycleB);
 // connector N: SELF-REFERENCE - an element whose data-for names itself. The
 // `seen` guard stops the walk after one step (the element is already in
 // `seen` the instant it is revisited as its own next hop), so its chain is
-// just itself and nothing shadows it. The sensible result asserted below is
-// that a self-reference behaves exactly like having no data-for at all: the
-// marker survives on its own.
+// just itself and nothing shadows it, and the marker survives on its own.
+// ITS RETURN VALUE is what having no data-for at all would give; its output
+// is not. A self-reference is a 1-cycle, so it also trips the cycle warning
+// and the reader sees one on stderr naming cycle-self - which is right: the
+// attribute is malformed either way, and surviving is not the same as being
+// unremarkable.
 const cycleSelf = el({'data-path': 'cycle-self', 'data-for': 'cycle-self'}, svg);
 const markerCycleSelf = el({'data-cp': 'cable', 'data-cp-at': '6 6.2'}, cycleSelf);
 

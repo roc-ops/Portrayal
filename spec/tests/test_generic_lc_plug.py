@@ -165,15 +165,49 @@ def test_the_body_tier_is_the_dimensioned_5_65():
     latch = sum(v["size"][1] for k, v in d["elements"].items() if k != "body")
     assert abs(latch - (10.43 - 5.65)) < 1e-9
 
-    # the optical axis is the body tier's centre, which is where the drawing
-    # puts the ferrule centreline - not the centre of some other split
+    # THE AXIS IS THE BODY TIER'S CENTRE, and that is a DERIVED relation the
+    # contract holds exactly - see provenance.axis. The drawn centreline
+    # measures 7.617, which corroborates it to 0.007 but is NOT the stated
+    # figure: at 45.686 px/mm half a pixel is 0.011, so the artwork cannot
+    # resolve the 0.012 between them, and the tier centre is the one the
+    # geometry fixes. The tolerance here is tight enough to tell the two
+    # apart - swap in the measured 7.617 and this fails - because the whole
+    # point is that the point and the tier it stands in cannot drift.
     axis = d["connection-points"]["mate"]["at"][1]
-    assert abs(axis - (body["at"][1] + 5.65 / 2)) <= 0.01, (
+    assert abs(axis - (body["at"][1] + 5.65 / 2)) <= 0.005, (
         f"the mate point sits at {axis}, but the centre of the body tier the "
         f"ferrule stands in is {body['at'][1] + 5.65 / 2}")
 
     prov = " ".join(str(v) for v in d["provenance"].values())
     assert "5.65" in prov, "provenance must cite the dimension the body is pinned to"
+
+
+def test_the_axis_provenance_does_not_claim_a_reading_for_a_derived_figure():
+    """The heading and the body must agree about what 7.61 IS.
+
+    An earlier draft opened "drawing - MEASURED, not derived" over prose that
+    then did the arithmetic honestly: the stated value is the body tier's
+    centre, 4.78 + 5.65/2 = 7.605, and the drawn centreline measures 7.617.
+    Presenting a derived figure as a measurement is the one mislabel this
+    library treats as cardinal, and a heading is where a reader stops.
+    """
+    d = contract()
+    axis_prov = d["provenance"]["axis"]
+    head = axis_prov.lstrip().split(".")[0]
+    assert head.upper().startswith("DERIVED"), (
+        f"the heading must say what the number is before the prose explains "
+        f"it; it opens {head!r}")
+    assert "measured" not in head.lower(), (
+        f"the heading must not claim a reading for a derived figure; it opens "
+        f"{head!r}")
+    assert "It is NOT the measured figure" in axis_prov, (
+        "say outright that the stated value is not the measurement - the "
+        "earlier draft's prose was honest and its heading was not, and a "
+        "reader who stops at the heading is the one this protects")
+    # both figures named, so a reader can check the claim either way round
+    assert "7.605" in axis_prov and "7.617" in axis_prov
+    # and the stated value is the derived one, not the measured one
+    assert d["connection-points"]["mate"]["at"][1] == 7.61
 
 
 def test_connection_points_share_the_optical_axis():

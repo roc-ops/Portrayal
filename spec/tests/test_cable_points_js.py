@@ -139,8 +139,10 @@ def test_cable_points_resolves_the_fake_drawing():
     assert "cycle-b" not in points, "a data-for 2-cycle must not let either side win"
 
     # A SELF-REFERENCE (cycle-self names itself). The walk stops after one
-    # step, so nothing shadows it - it behaves exactly like having no
-    # data-for at all, and survives.
+    # step, so nothing shadows it and the marker survives. It is still a
+    # 1-cycle, so it warns as well - see
+    # test_a_data_for_cycle_is_said_out_loud; surviving and being
+    # unremarkable are not the same thing.
     assert points["cycle-self"]["at"] == [6, 6.2]
 
     # A MULTI-TOKEN `data-for` WITH A CROSS-VIEW TOKEN IN FRONT. "plug-o" says
