@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: eps112-fan-fixed
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  One of the three FIXED fans on the rear of the Edgecore EPS112 (AS4625-30P) - a round
+  25.1 mm guard with a five-bladed rotor behind it, set straight into the rear panel with
+  no tray, no latch and no handle. NOT A FRU: the datasheet and the guide both say "fixed
+  2+1 redundant fans", and the guide's FRU Replacement section covers the supplies only.
+  It is PLACED, not bayed.
+size: {w: 25.1, h: 25.1}
+size-confidence: {w: measured, h: measured}
+attrs:
+  rotors: 1
+provenance:
+  size: >-
+    MEASURED ON THE QUICK START GUIDE'S REAR ELEVATION at its native resolution - the
+    embedded image is 1233 px across a 440 mm face, 2.80 px/mm, which is the best rear
+    instrument this device has. The three guards read x 57.53-82.90, 105.40-130.41 and
+    153.27-178.28 - widths 25.37, 25.01 and 25.01 - and the third, which no label crowds,
+    reads y 11.18-35.25, height 24.07. A circle of 25.1 is what those five readings
+    support; the 1 mm spread is four tenths of a pixel either way at this scale.
+    THE GUARD IS ROUND, WHICH IS THE DIFFERENCE FROM THE SIBLING PART. `edgecore/eps-fan-fixed@1`
+    is a 25.5 x 15.9 RECTANGLE, measured on the AS4625-54T/54P guide's line art at 5.03 px/mm.
+    Its width and this one's agree to 0.4 mm and the two families' fan pitches agree to
+    0.07 mm - 47.87 here against 47.8 there - so these are very likely the same fan behind
+    two different drawings of it. THE SHAPES DO NOT AGREE and neither figure can be made to
+    yield the other, so this device draws what its own document draws rather than borrowing
+    a rectangle. See the device's `fan-guard-shape` gap.
+  the-fan-is-fixed-and-both-documents-say-so: >-
+    "Fixed 2+1 redundant fans" in the datasheet's Key Features, "2+1 fixed redundant fans"
+    in the guide's Overview callout 6, and the guide's FRU Replacement section has a PSU
+    Replacement procedure and no fan procedure at all. SO THE DEVICE PLACES THESE RATHER
+    THAN BAYING THEM, and the 2+1 counts rotors nobody swaps rather than trays anybody does.
+  the-rotor: >-
+    One rotor per guard - one is what the elevation and the rear product photograph both
+    draw behind each opening, five blades around a hub. Three guards, three fans, and the
+    "2+1" figure counts three; figure and guard count agree.
+  depth: >-
+    ESTIMATED. No document dimensions the rear. 40 is carried from
+    `edgecore/eps-fan-fixed@1`, the same shell family's fixed fan, and is flagged there as
+    an estimate too; this part does not turn one estimate into two readings.
+states: [absent]
+elements:
+  guard: {at: [0.55, 0.55], size: [24.00, 24.00], class: vent}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: guard
+      vent: 10
+      confidence: estimated
+      source: >-
+        The guard is open - the rotor shows through it - but no document gives a depth, and
+        on a 1RU rear there is not much depth to give. 10 is the shallowest vent this
+        library uses on a fan guard, and the same figure `edgecore/eps-fan-fixed@1` carries.
+skins: [default]
+body:
+  depth: 40
+  color: '#2b2f34'
+  footprint: {at: [0, 0], size: [25.1, 25.1]}
