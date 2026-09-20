@@ -8,11 +8,12 @@ mates: rj45-plug
 profile: networking
 description: >-
   A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around
-  the plug it wraps. UNLIKE common/lc-boot@1, this boot's OWN outer body is
-  dimensioned on its drawing, and it is used directly rather than borrowed
-  from the plug - see `provenance.size` for why the two boots follow different
-  rules. No standard governs a boot's shape; see `provenance.standard` for why
-  this is `common/` and not `generic/`.
+  the plug it wraps. Sized from the boot's OWN drawing, as common/lc-boot@1
+  now is too: `h` is the 10 body of the mouth the plug enters, EXCLUDING the
+  5.5 latch-slot tab that hangs below it, which is the same body-not-
+  silhouette choice generic/rj45-plug@1 makes for its own `h` - see
+  `provenance.size`. No standard governs a boot's shape; see
+  `provenance.standard` for why this is `common/` and not `generic/`.
 size: {w: 14.5, h: 10.0}
 size-confidence: {w: drawing, h: drawing}
 attrs: {boot-length: 26.4}
@@ -40,29 +41,67 @@ provenance:
     on common/lc-boot@1, the library's other boot.
   size: >-
     drawing - EASE Electronics drawing J0072 rev A (RJ45 Strain Relief Boot,
-    PVC 80P), the end view (looking into the mouth the plug enters): 14.5
-    +/-0.5 wide by 10 +/-0.5 high, with an 11.9 +/-0.5 inner opening and R1/R3
-    corner radii. THE DRAWING READS 10 +/-0.5, NOT 10 +/-0.4 - zoomed to
-    1200dpi to be sure, since the two are one stroke apart at print
-    resolution; the drawing wins per this task's own instruction, and the
-    nominal 10 is unaffected either way, only the tolerance. THE SIZE RULE IS
-    DIFFERENT FROM common/lc-boot@1: the LC boot's own outer dimensions are
-    not given on its drawing, so it BORROWED its width from the plug body it
-    wraps. This boot's own body IS dimensioned, and used directly rather than
-    borrowed, because EASE's drawing gives it - there is no reason to infer a
-    figure from the plug when the boot's own vendor states one. The result is
-    LARGER than generic/rj45-plug@1's own body (11.68 x 7.93), which is
-    correct: a boot goes around the outside of the part it wraps, not inside
-    it. The two boots are sized by different rules because they had different
-    source material, not because the corpus disagrees with itself - a later
-    "make them consistent" pass would be fixing something that is not broken.
+    PVC 80P), THE UPPER END VIEW, the one looking into the mouth the plug
+    enters: 14.5 +/-0.5 wide by 10 +/-0.4 high, with an 11.9 +/-0.5 inner
+    opening and an R1 corner callout.
+
+    WHICH VIEW EACH FIGURE COMES FROM, because this contract used to get it
+    wrong. It asserted "THE DRAWING READS 10 +/-0.5, NOT 10 +/-0.4 - zoomed to
+    1200dpi to be sure". BOTH ARE ON THE SHEET, on different views, and the
+    one this entry cites is the +/-0.4: the upper end view (mouth, with the
+    11.9 inner opening and R1) reads 10 +/-0.4, and the LOWER end view (the
+    cable exit, with the R3 corners and the 6.0 +/-0.4 bore) reads 10 +/-0.5.
+    The old note also collected "R1/R3 corner radii" onto one view when R1 is
+    the upper view's and R3 the lower's. The nominal 10 is the same on both,
+    so `size` never moved; what was wrong was the certainty and the citation.
+
+    THE 15.5 +/-0.5 ON THE SAME VIEW, which this contract never mentioned. The
+    mouth end view dimensions its OVERALL height as 15.5 +/-0.5, left-hand
+    side: that is the 10 body PLUS a 5.5 latch-slot tab hanging below it, 9
+    +/-0.4 wide, which is where the plug's latch sits. `size.h` here is the 10
+    BODY, not the 15.5 silhouette - the same choice generic/rj45-plug@1 makes
+    for its own `h` (body 7.93, latch a separate 2.77), and choosing it the
+    same way is what keeps a boot-against-plug comparison like-for-like: 10
+    around 7.93, both body-only. THE TAB IS NOT MODELLED. `elements` is the 10
+    body alone, so a drawing of this boot is 5.5 short of the part's real
+    silhouette in that axis. Stated here rather than quietly rounded off.
+
+    Measured at 600 dpi as a check on all of the above, with the scale fixed
+    by the dimensioned 14.5 (453 px, so 31.24 px/mm): the body's 10 spans
+    312.4 px, which is 10.00, and the inner opening comes back 11.91 against
+    its 11.9 callout. Two dimensioned figures recovered from a ruler fixed by
+    a third.
+
+    THE SIZE RULE IS NO LONGER DIFFERENT FROM common/lc-boot@1. When this was
+    written, the LC boot borrowed its width from the plug body and this one
+    did not, and that difference was recorded here as a fact about the source
+    material. The LC boot now takes its own 6.2 off its own drawing, so both
+    boots are sized from the boot's own artwork and the contrast this
+    paragraph used to draw no longer exists. The result is still LARGER than
+    generic/rj45-plug@1's own body (11.68 x 7.93), which is correct: a boot
+    goes around the outside of the part it wraps, not inside it.
   boot-length: >-
     drawing - EASE J0072, both side views, overall length 26.4 +/-0.5,
-    confirmed on each view independently (both callouts agree). The same
-    views also dimension a 15.5 +/-0.5 collar section (9 +/-0.4 through its
-    waist) and a 9 +/-0.4 / 7.8 +/-0.4 tail; neither feeds `size` or `attrs`
-    here, since this contract's envelope is the boot's mouth cross-section,
-    not its tapered profile along the length.
+    confirmed on each view independently (both callouts agree). Those side
+    views also dimension a 10.7 +/-0.5 section and a 9 +/-0.4 / 7.8 +/-0.4
+    tail; neither feeds `size` or `attrs` here, since this contract's envelope
+    is the boot's mouth cross-section, not its tapered profile along the
+    length. THE 15.5 +/-0.5 IS NOT ONE OF THESE and this note used to list it
+    as "a 15.5 collar section" among them: it is on the upper END view, in the
+    same axis as `size.h`, and it is the overall mouth height including the
+    latch-slot tab. See provenance.size, which is where it belongs.
+  bore: >-
+    drawing - the 11.9 +/-0.5 inner opening on the upper end view is a WIDTH,
+    and the drawing dimensions no height for it, so the skin's bore rect used
+    to cite the drawing for the 11.9 while its 8.5 height was invented. The
+    height is now measured off that same view at 600 dpi, on the ruler
+    provenance.size establishes (31.24 px/mm, fixed by the 14.5 and checked
+    against the 11.9 and the 10): the green inner outline spans y 1234 to 1488
+    before it steps in to the latch-slot tab, which is 254 px, so 8.13. The
+    wall above it measures 0.94 and the wall below it 0.93 - symmetric within
+    a pixel - so the skin states 8.12 centred, walls 0.94 each, summing to the
+    dimensioned 10. This is decoration and does not enter `size`; it is
+    sourced here so the skin can stop citing a callout for half a rectangle.
   axis: >-
     derived, following the connection-point convention generic/lc-plug@1 and
     common/lc-boot@1 introduced (Task 4/5) and generic/rj45-plug@1 restates
