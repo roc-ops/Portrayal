@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs201-fan
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: networking
@@ -12,8 +12,32 @@ description: >-
   them rather than six, which is why it is its own part.
 size: {w: 58.8, h: 40.0}
 size-confidence: {w: photo-measured, h: estimated}
-attrs: {model: 'AS5835-54X Fan Tray', power-absent: not-published, airflow: front-to-back}
+attrs: {model: 'FAN-1U-1x1E', power-absent: not-published, airflow: front-to-back}
 provenance:
+  the-model-is-the-fru-edgecore-prints: >-
+    THE DEFECT WAS FOUND IN roc-ops/Portrayal#423, which surveyed this line's fan FRUs while
+    deciding NOT to rename edgecore/ais800-fan@1, and noticed that the survey #420 relied on
+    had counted contracts rather than documents.
+    THIS ATTR READ 'AS5835-54X Fan Tray' UNTIL roc-ops/Portrayal#426, WHICH WAS A DESCRIPTION
+    OF THE TRAY AND NOT A THING ANYONE CAN ORDER. It named the chassis the tray was first
+    drawn for, in a field a DCIM treats as the part's model: `spec/tools/portrayal/dcim_export.py`
+    keys every module type on `attrs.model`, so this part was published to NetBox and Nautobot
+    as `module-types/Edgecore/AS5835-54X Fan Tray.yaml` - a name with a space in it that
+    matches nothing in any Edgecore price list.
+    EDGECORE PRINTS ONE. Both datasheets of the two chassis that seat this tray carry it in
+    their ordering tables, identically: `FAN-1U-1x1E-F` (F0TZZ5654009A, front-to-back) and
+    `FAN-1U-1x1E-B` (F0TZZ5654008A, back-to-front), described as "Fan Module". The DCS202's
+    table prints the same two codes as the DCS201's, which is a second confirmation that one
+    tray fills both chassis rather than two that look alike - see shared-with-the-dcs202.
+    THE AIRFLOW SUFFIX IS DROPPED, as edgecore/fan-2u-1x1sn@1 drops it: -F and -B differ in
+    the handle colour and the legend, which are this contract's `handle-finish` and
+    `airflow-legend` fields and a per-configuration override, not a second part. `FAN-1U-1x1E`
+    is therefore the family and not itself an orderable code, which is the same compromise the
+    2RU tray records.
+    THE NAME OF THE CONTRACT IS NOT TOUCHED, and that is deliberate. #423 settled that a part
+    is renamed when its name makes a claim its seats contradict, and this one is worth asking
+    about later - `dcs201-fan` is seated by the DCS202 as well - but it is a different change
+    with a different cost, and nothing here depends on it.
   shared-with-the-dcs202: >-
     SEATED BY edgecore/dcs202 (AS5835-54T) TOO, AND THE EVIDENCE IS TWO KINDS. The DCS202's
     own quick start prints the supplies' specification tables character for character - AC

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: csr310-fan-tray
-version: 1.0.0
+version: 1.0.2
 class: fan
 behaviour: fills
 profile: networking
@@ -14,11 +14,46 @@ description: >-
 size: {w: 45.2, h: 40.4, d: 300.0}
 size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
 attrs:
-  model: 'AS7315-27X Fan Tray'
-  part: 'FAN-1U-1x1J-S'
+  model: 'FAN-1U-1x1J-S'
+  part: 'F0TZZ5627001A'
   power-absent: not-published
   airflow: side-to-side
 provenance:
+  the-two-columns-were-the-wrong-way-round: >-
+    THE DEFECT WAS FOUND IN roc-ops/Portrayal#423, which surveyed this line's fan FRUs while
+    deciding NOT to rename edgecore/ais800-fan@1, and noticed that the survey #420 relied on
+    had counted contracts rather than documents.
+    THIS CONTRACT ALWAYS HAD THE FRU; IT WAS FILED UNDER THE ATTR NOTHING READS. Until
+    roc-ops/Portrayal#426 it carried `model: 'AS7315-27X Fan Tray'` with
+    `part: 'FAN-1U-1x1J-S'` beside it, which inverts the CSR310 datasheet's own Field
+    Replacement Units table. That table has three columns - Model Number, Part Number,
+    Description - and its fan row reads `FAN-1U-1x1J-S` | `F0TZZ5627001A` | "AS7315-27X Fan
+    Tray Spare Part". The code was in `part:` where the vendor calls it a MODEL number, and
+    the Description column's prose was in `model:`. The two are now the way Edgecore prints
+    them.
+    IT MATTERS BECAUSE ONLY ONE OF THEM IS READ. `spec/tools/portrayal/dcim_export.py` keys
+    every module type on `attrs.model` and does not look at `attrs.part` at all, so this tray
+    was published to NetBox and Nautobot as `module-types/Edgecore/AS7315-27X Fan Tray.yaml`
+    while the orderable code sat one line below in a field no consumer sees. `part:` is not a
+    library convention either - three contracts in the whole library use it, this one and the
+    two CSR310 supplies, which had the same inversion from the same table and were corrected
+    in the same change: see edgecore/csr310-psu-ac@1 and edgecore/csr310-psu-dc@1.
+    THE AIRFLOW SUFFIX IS NOT DROPPED HERE, unlike edgecore/dcs201-fan@1 and
+    edgecore/fan-2u-1x1sn@1. Those trays print a -F/-B pair that differs only in handle
+    colour, so the family name is what goes in the attr. This table prints ONE code with no
+    pair, and its trailing `-S` is not an airflow letter - the Description calls the row a
+    "Spare Part", so -S may well be that and not part of the tray's own designation.
+    THE DC SUPPLY IN THE SAME TABLE BEHAVES THE SAME WAY, which is the nearest thing to
+    evidence there is. Its row reads `CRXT - T0T12BS` while the CSR310's and the CSR430's
+    quick starts both instruct "Install one or two DC PSUs (part number CRXT-T0T12B only)" -
+    three occurrences across two documents and two languages, every one of them WITHOUT the
+    trailing S. Two rows of one table carrying a suffix the installation guides drop is a
+    pattern; it is not a proof, because no Edgecore document in this corpus defines the
+    suffix and no guide names this tray's code at all. So what is recorded is exactly the
+    string Edgecore prints, suffix and all, rather than a `FAN-1U-1x1J` this library would
+    have inferred from a pattern of two.
+    THE CSR430 SEATS THIS TRAY AND NAMES NO FRU. Its datasheet prints no FAN- code anywhere,
+    so the CSR310's table is the only source for both, and this attr is scoped to it.
   no-face-extrusion: >-
     edgecore/csr310-fan-tray@1's own depth key. THE TRAY FACE CARRIES NO `out` OF ITS OWN,
     matching the two supplies it sits beside. A full-face extrusion is a slab, and a slab

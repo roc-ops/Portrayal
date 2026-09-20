@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs240-fan
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: networking
@@ -12,8 +12,28 @@ description: >-
   they are narrower: 48.5 mm against 58.8.
 size: {w: 48.5, h: 40.0}
 size-confidence: {w: photo-measured, h: estimated}
-attrs: {model: 'AS9726-32DB Fan Tray', power-absent: not-published, airflow: front-to-back}
+attrs: {model: 'FAN-1U-1x1N', power-absent: not-published, airflow: front-to-back}
 provenance:
+  the-model-is-the-fru-edgecore-prints: >-
+    THE DEFECT WAS FOUND IN roc-ops/Portrayal#423, which surveyed this line's fan FRUs while
+    deciding NOT to rename edgecore/ais800-fan@1, and noticed that the survey #420 relied on
+    had counted contracts rather than documents.
+    THIS ATTR READ 'AS9726-32DB Fan Tray' UNTIL roc-ops/Portrayal#426, WHICH WAS A DESCRIPTION
+    OF THE TRAY AND NOT A THING ANYONE CAN ORDER. It named the chassis the tray was first
+    drawn for, in a field a DCIM treats as the part's model: `spec/tools/portrayal/dcim_export.py`
+    keys every module type on `attrs.model`, so this part was published to NetBox and Nautobot
+    as `module-types/Edgecore/AS9726-32DB Fan Tray.yaml`.
+    EDGECORE PRINTS ONE. The DCS240's datasheet gives `FAN-1U-1x1N-F` and `FAN-1U-1x1N-B`
+    under its Fan FRUs heading, and the DCS511's gives the same two codes under Fans - the two
+    chassis that seat this contract, agreeing on the tray. That agreement is worth more than
+    the code itself: it is the vendor saying these are one part, on two machines this library
+    already seats with one contract.
+    THE AIRFLOW SUFFIX IS DROPPED, as edgecore/fan-2u-1x1sn@1 drops it: -F and -B differ in
+    the handle colour and the legend, which are this contract's `handle-finish` and
+    `airflow-legend` fields and a per-configuration override, not a second part.
+    THE NAME OF THE CONTRACT IS NOT TOUCHED, and that is deliberate. #423 settled that a part
+    is renamed when its name makes a claim its seats contradict, and `dcs240-fan` seated by
+    the DCS511 is worth asking about later; it is a different change with a different cost.
   size: >-
     photo-measured - the DCS240 quick start guide, page 1 Overview rear elevation, rendered
     from the PDF PAGE at 600 dpi and scaled by the stated 438.4 mm body width to 5.0844 px/mm.
