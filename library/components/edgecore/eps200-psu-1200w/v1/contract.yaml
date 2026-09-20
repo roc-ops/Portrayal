@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: eps200-psu-1200w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable 1200 W AC supply of the Edgecore EPS202 and EPS203 - a 72.0 x 39.5
+  module with its own fan behind the face, a release latch and an IEC 60320 C14 inlet with
+  a cord retainer. Ordered as YPEB1200AM-1A03P10 and named for that FRU rather than for
+  either chassis that seats it; the EPS201 on the same shell takes a 150 W supply instead.
+size: {w: 72.0, h: 39.5}
+size-confidence: {w: measured, h: measured}
+attrs:
+  input: ac
+  inlet: c14
+  power-output-w: 1200
+provenance:
+  size: >-
+    MEASURED ON THE EPS203 DATASHEET'S REAR ELEVATION at its native 2.279 px/mm, which is
+    coarse: one pixel is 0.44 mm. The two modules read x 270.0-342.0 and 354.0-426.0 on the
+    column-mean profile - 72.0 each on a pitch of 84.0 - and both run y 2.5 to 42.0. The
+    rear elevation carries a mild left-to-right gradient of about 2%, so this size is good
+    to about a millimetre rather than a tenth, and says so.
+  power-output-w: >-
+    DATASHEET, stated three times and in three places that agree: the Power section's
+    "2pcs 1+1 redundant, load-sharing, hot-swappable 1200 W AC (80 PLUS Platinum
+    compliant)", the Interfaces callouts "9. PSU 2: 1200 Watts" and "10. PSU 1: 1200
+    Watts", and the ordering table's "YPEB1200AM-1A03P10 ... 1200 W AC Power Supply (3Y),
+    front-to-rear airflow ... (for EPS202/AS4630-54PE, EPS203/AS4630-54NPE). Inlet
+    Connector: IEC 60320 C14."
+    AND THE DRAWING DISAGREES WITH ALL THREE. The module's own fan hub is printed
+    "2kV 920W" in the rear elevation, legible at 12x. That is a figure on the FAN inside
+    the supply, not the supply's output, and three published statements outrank one
+    silkscreen read off a render - so 1200 is carried and the hub text is written down here
+    rather than used.
+  inlet: >-
+    DATASHEET ordering table, "Inlet Connector: IEC 60320 C14", and the elevation agrees:
+    a three-pin appliance inlet at the outboard end with a wire cord-retainer clipped over
+    it, which is drawn on both modules.
+  the-face: >-
+    MEASURED in the module's own coordinates on the same elevation. A FAN behind the face
+    at the inboard end, its guard reading about 26 mm across on centre x 17; a dark gap;
+    then the inlet recess from about x 42 to 66; and a bright vertical rail at each end
+    which is the module's own sheet-metal flange. The chassis prints PS2 and PS1 on the
+    web to the RIGHT of each bay, not on the module.
+  handle: >-
+    THERE IS NO PULL HANDLE ON THIS SUPPLY, which is worth saying because the fan trays
+    beside it have a conspicuous coloured one. The quick start guide's PSU Replacement
+    step reads "Press the release latch and remove the PSU" and its figure shows a small
+    lever at the inboard edge, not a bar across the face. Nothing coloured appears on
+    either supply in the rear elevation's pixel count.
+  depth: >-
+    ESTIMATED. No document dimensions the module. 190 is carried from the 1RU supplies this
+    library already holds and is flagged as an estimate.
+states: [absent]
+elements:
+  vent: {at: [4.00, 6.50], size: [26.00, 26.50], class: vent}
+  latch: {at: [1.00, 15.00], size: [2.60, 9.50], class: latch}
+  inlet-well: {at: [40.00, 6.00], size: [28.00, 27.50], class: bezel}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [40.00, 9.75], rotate: 0}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent
+      vent: 12
+      confidence: estimated
+      source: >-
+        The fan is open behind the face but no document gives a depth. 12 matches what this
+        library gives other 1RU Edgecore supply intakes.
+    - node: latch
+      out: 0.9
+      confidence: estimated
+      source: 'Drawn, not dimensioned - as every release tab in this library.'
+    - node: inlet-well
+      pocket: 2.2
+      confidence: estimated
+      source: >-
+        The inlet sits in a recess whose walls the elevation shades; no depth is stated.
+        2.2 puts the connector flange level with the module face.
+skins: [default]
+body:
+  depth: 190
+  color: '#8d9298'
+  footprint: {at: [0, 0], size: [72.0, 39.5]}

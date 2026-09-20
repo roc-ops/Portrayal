@@ -376,7 +376,18 @@ def test_the_comparison_layer_can_now_reach_them():
     Three of the sixty-one entries are now fixed fans on one shell, which is a small
     population and a real one: this library's rear-serviceability question has an answer
     for an access switch that cannot be serviced at the rear at all.
+
+    SIXTY-TWO IS THE EDGECORE EPS203, and it needs no exemption - which is worth a line
+    precisely because the three entries above it do. It states "Hot-swappable 2 + 1
+    redundant fan trays" in its key features and again in Interfaces callout 8, over THREE
+    BAYS, so the figure and the bay count agree the way most of this census does. Its guide
+    carries a Fan Tray Replacement procedure where the EPS1xx guide carries none.
+    SO THE EDGECORE ACCESS LINE NOW ANSWERS THE QUESTION BOTH WAYS. The EPS1xx shell puts
+    2+1 over three fans nobody can swap; the EPS20x shell puts 2+1 over three trays with a
+    thumbscrew each, and one fan module - FAN-1U-1x1M - fits all three EPS20x chassis. Same
+    vendor, same figure, same port count, opposite serviceability, and a reader comparing
+    rears can now see that from the data rather than from the prose.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 61, n
+    assert n == 62, n
