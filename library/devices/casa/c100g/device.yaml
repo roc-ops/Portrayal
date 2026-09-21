@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c100g
-version: 0.5.10
+version: 0.5.11
 maturity: modelled
 manufacturer: Casa Systems
 model: C100G
@@ -193,8 +193,8 @@ provenance:
     confidence: drawing
     note: >-
       drawing - Table A-2, "C100G capacities", states it directly rather than leaving it to be
-      inferred: "14 line card slots on front - 1 Switch and Management (SMM) module, 1 SMM
-      redundant module, 12 DOCSIS modules (any combination of DS and US modules)". front-6 and
+      inferred: front line card slots = 14: 1 Switch and Management (SMM) module, 1 redundant
+      SMM module, 12 DOCSIS modules in any combination of DS and US. front-6 and
       front-7 are the SMM pair, which the guide fixes elsewhere at "full redundancy between
       chassis slots 6 and 7"; the other twelve take the DS and US cards, and "any combination" is
       a real statement that every one of the twelve takes every DS and US card, so it is modelled
@@ -202,9 +202,9 @@ provenance:
       up to twelve slots on the C100G platform (using slots 0-5 and 8-13 for up to 96 ports)" -
       which is exactly the same twelve. Blank face plates go in any unpopulated slot, front or
       rear: "Ensure that all unpopulated slots have the blank faceplate installed". Table A-2's
-      rear half is deliberately NOT widened - "14 RF I/O slots on back - 0 to 4 RF I/O switch
-      cards for DOCSIS-module redundancy in rear slots 5 and 8, remaining 10 slots available for
-      RF I/O cards" - so front cards stay out of rear bays, which the existing rear accepts lists
+      rear half is deliberately NOT widened - rear RF I/O slots = 14: 0 to 4 RF I/O switch cards
+      for DOCSIS-module redundancy in rear slots 5 and 8, the other 10 for RF I/O cards - so
+      front cards stay out of rear bays, which the existing rear accepts lists
       already respect. Bay defaults are unchanged; this widens only what each bay is DECLARED to
       take
   vent-islands:

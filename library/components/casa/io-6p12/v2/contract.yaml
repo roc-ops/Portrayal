@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12
-version: 2.7.0
+version: 2.7.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -27,11 +27,12 @@ provenance:
     through to the front card. So a front card and its rear partner have to share the
     chassis depth - 386.0 on the C100G, 388.45 on the C40G. Two cards at 380.0 need 760,
     which is not a wide error bar, it is twice the box.
-    WHAT THE SHAPE IS, from the owner: "the front card is mostly rectangular, but the I/O
-    card is kind of L SHAPED where the top part of the top connector PASSES THROUGH THE
-    MIDPLANE and plugs into the front card, and the other one is plugged into the midplane.
-    So they ultimately kind of meet in the middle." So the rear card is a body against the
-    midplane PLUS A TONGUE at the top reaching forward through it.
+    WHAT THE SHAPE IS, as the maintainer reports it from the hardware: the front card is
+    mostly a plain rectangle, but the I/O card is L SHAPED - the top of its upper connector
+    PASSES THROUGH THE MIDPLANE and plugs into the front card, while the lower one plugs
+    into the midplane itself, so the two cards end up meeting in the middle. So the rear
+    card is a body against the midplane PLUS A TONGUE at the top reaching forward through
+    it.
     NOTE WHAT THAT DOES AND DOES NOT ALLOW, because the obvious rule is wrong. front + rear
     CAN exceed the chassis depth, by about the tongue length, because the tongue overlaps the
     front card at a height where the front card is not - they interleave rather than tile. The
@@ -128,12 +129,12 @@ provenance:
     Clearance is not close. The U pitch is 19.32 and the columns are 11.1 apart,
     so a 4.95 aperture (and even a 6.5 flange) fits with room; nothing had to be
     compressed to make the sourced size fit the figure's pitch.
-  mcx-is-recessed: 'THE OWNER, AGAINST THE HARDWARE: "the MCX connector is RECESSED
-    INTO the faceplate, so it actually doesn''t stick out from the faceplate, it''s
-    recessed from the faceplate ... whereas the US I/O and the DS I/Os have the F
-    fitting STICKING OUT of the faceplate." So the two connector families on these
-    chassis go OPPOSITE WAYS - MCX recessed, F-type proud - and that is a fact about
-    the world, recorded in his terms so it does not have to be rediscovered.
+  mcx-is-recessed: 'THE MAINTAINER, AGAINST THE HARDWARE: the MCX connector is RECESSED
+    INTO the faceplate - it does not stick out at all, it sits back from the faceplate -
+    whereas on the US I/O and DS I/O cards the F fitting is STICKING OUT of the
+    faceplate. So the two connector families on these chassis go OPPOSITE WAYS - MCX
+    recessed, F-type proud - and that is a fact about the world, recorded in his terms
+    so it does not have to be rediscovered.
     THIS SENTENCE IS COPIED FROM casa/io-6p12-sw@2, where it was written first. One
     statement from one person about one pair of connector families, restated on every
     card it applies to - not several observations that agreed.

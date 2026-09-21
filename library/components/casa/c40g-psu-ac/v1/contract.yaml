@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: c40g-psu-ac
-version: 1.4.0
+version: 1.4.1
 class: psu
 behaviour: fills
 profile: networking
@@ -19,11 +19,10 @@ attrs:
   input: 115VAC or 240VAC auto-adjusting
   redundancy: 'up to four, concurrent; the C40G-20 needs at least two'
 provenance:
-  what-it-is: '"The C40G supports up to four removable 1100W AC power supply units
-    (PSUs). The PSUs operate concurrently in the chassis. In the event of a PSU
-    failure, the remaining PSUs (up to two) provide the required power to maintain
-    system operation." The warning beside it is worth keeping: "The C40G-20 cannot
-    be sufficiently powered with less than two PSUs"'
+  what-it-is: 'The guide gives the C40G up to four removable 1100W AC power supply units
+    (PSUs), all running at once; if one fails, the PSUs left (up to two) carry the power
+    the system needs to keep running. The warning beside it is worth keeping: "The
+    C40G-20 cannot be sufficiently powered with less than two PSUs"'
   power-output-w: '1100 W, and it is an OUTPUT because this module PROVIDES power.
     A psu states power-output-w and never a draw key - they are opposite signs of
     one unit and summing across both is the category error the vocabulary exists
