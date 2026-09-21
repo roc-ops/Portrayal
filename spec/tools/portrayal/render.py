@@ -2544,6 +2544,13 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     the derived accept list and the configured occupant, if the DEFAULT
     configuration seats one.
 
+    `occupant` IS THE DEFAULT CONFIGURATION'S ANSWER and cannot be anything
+    else: these entries are view-static and `occupants:` is per-configuration.
+    Every configuration's own map is published beside its `bays` in
+    `configs[].occupants`, and that is what a consumer holding a particular
+    configuration reads. The emitted shape says so where it is documented -
+    see the `cages` key in `main()`.
+
     An entry is emitted only when the presented interface names a family in
     spec/schemas/pluggables.yaml - a placement that presents nothing (an LED,
     a jack, a fixed connector) or an interface this registry does not cover is
@@ -2713,6 +2720,19 @@ def main():
                               "kind": c.get("kind"),
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
+                              # WHAT THIS CONFIGURATION SEATS IN ITS CAGES,
+                              # keyed by placement id - the per-configuration
+                              # half of `cages[]` below, exactly as `bays`
+                              # here is the per-configuration half of `bays`
+                              # at the top level. `occupants:` is a
+                              # per-configuration key, so without this a
+                              # device offering a bare and a fitted
+                              # configuration published one of them and
+                              # dropped the other on the floor: the
+                              # view-level `cages[].occupant` can only ever
+                              # report ONE configuration's answer, and it
+                              # reports the DEFAULT one.
+                              "occupants": c.get("occupants") or {},
                               # WHICH VARIANT VIEW STANDS IN FOR A FACE on this
                               # configuration - `{front: front-lff-12}`. The
                               # `bays` map below is keyed by view name, variants
@@ -2739,6 +2759,17 @@ def main():
                  # what a pluggable placement could take, derived - never
                  # declared - from the library and spec/schemas/pluggables.yaml.
                  # Keyed by view exactly as `bays` is, variants included.
+                 #
+                 # `cages[].occupant` IS THE DEFAULT CONFIGURATION'S ANSWER,
+                 # and only that one. These entries are view-static facts -
+                 # where the cage is, what it looks like, what the library
+                 # could seat in it - and `occupants:` is not one: it is
+                 # declared per configuration. A consumer asking what a
+                 # PARTICULAR configuration seats reads
+                 # `configs[<name>].occupants`, the same way it reads
+                 # `configs[<name>].bays` rather than `bays[view][].default`;
+                 # `occupant` here is the convenience answer for the
+                 # configuration named by `default` at the top level.
                  "cages": {v: cage_entries(device, v, lib, _families, _candidates,
                                             _default_occupants)
                            for v in device["views"]}}

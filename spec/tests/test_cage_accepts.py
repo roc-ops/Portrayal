@@ -176,6 +176,38 @@ def test_the_configured_occupant_is_read_from_the_default_configuration(tmp_path
     assert empty["occupant"] is None
 
 
+def test_a_non_default_configurations_occupants_reach_configs(tmp_path):
+    """`occupants:` is a PER-CONFIGURATION key, so `cages[].occupant` - a
+    view-static entry - can only ever report one configuration's answer, and
+    it reports the default's. Every configuration's own map is published
+    beside its `bays`, as `configs[].occupants`.
+
+    The failure this pins is not hypothetical: a device offering a bare and a
+    fitted configuration (the downstream export docs/pluggables-slotting-
+    design.md names, and spec C2's first consumer) published the default's
+    occupants and dropped every other configuration's on the floor, with
+    nowhere else in the file to look. `s9510-28dc`'s `ac` is a real
+    non-default configuration."""
+    dev = tmp_path / "src" / "s9510-28dc" / "device.yaml"
+    shutil.copytree(SFP_SRC, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    assert d["configurations"]["dc"].get("default") is True
+    assert not d["configurations"]["ac"].get("default")
+    d["configurations"]["ac"]["occupants"] = {"port-4": "generic/sfp-lc@1"}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+
+    idx = _build(dev, tmp_path / "out")
+    by_name = {c["name"]: c for c in idx["configs"]}
+    assert by_name["ac"]["occupants"] == {"port-4": "generic/sfp-lc@1"}
+    # THE DEFAULT SEATS NOTHING, and says so as an empty map rather than by
+    # omitting the key - the same "empty is not absent" rule `accepts` keeps.
+    assert by_name["dc"]["occupants"] == {}
+    # AND THE VIEW-LEVEL FIELD IS UNCHANGED: it answers for `dc`, the
+    # default, which seats nothing. A consumer holding `ac` must read
+    # `configs[].occupants`, which is the whole point of the pair.
+    assert _cage(idx, "front", "port-4")["occupant"] is None
+
+
 def test_no_shipped_device_seats_an_occupant():
     """The corpus-wide fact `test_a_cage_entry_carries_the_documented_shape`
     pins one example of: after spec A, `occupants:` is empty on every

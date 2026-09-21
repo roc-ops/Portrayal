@@ -85,7 +85,12 @@ construction.
 its port group - L18's precedence, and the corpus declares it in both places.
 
 `occupant` is the configured occupant if the manifest seats one, which after A no
-shipped device does.
+shipped device does - and it is **the default configuration's** occupant, because a
+`cages[]` entry is a view-static fact while `occupants:` is declared per
+configuration. Each configuration's own map is published beside its `bays`, as
+`configs[].occupants`, and a consumer holding a particular configuration reads that
+rather than `cages[].occupant`, exactly as it already reads `configs[].bays` rather
+than a bay's view-level `default`.
 
 Sorted generics first, then vendors alphabetically, so the list reads the same on
 every device.
