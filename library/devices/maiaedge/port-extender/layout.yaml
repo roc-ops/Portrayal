@@ -1,0 +1,453 @@
+format: 1
+kind: device
+name: port-extender
+version: 1.0.0
+maturity: modelled
+manufacturer: MaiaEdge
+model: Port Extender
+description: >-
+  MaiaEdge Port Extender - a 1RU switch sold to expand a Path Border Controller's
+  physical port count. 48 SFP28 tenant ports in two rows and 8 QSFP28 fabric uplinks
+  on a black face; a bare-steel chassis with 1+1 supplies, four fans and the management
+  jacks behind. Its port roles are configured
+  from the MaiaEdge portal rather than on the box, which is what distinguishes it from
+  the third-party switches that can stand in for it.
+profile: networking
+provenance:
+  size:
+    confidence: datasheet
+    note: >-
+      datasheet - MaiaEdge-Port-Extender-Datasheet-v1.pdf page 3, "Dimensions (H x W x D) 44 mm x
+      438 mm x 520 mm (1U EIA Rackmount)". NOT the PBC-2000's envelope: that box is 41.27 x 437.90
+      x 291.08, so this one is taller and 229 mm deeper, and nothing may be borrowed between them.
+  ports:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "Tenant Ports: 48 x SFP28 10GbE / 25GbE" and "Fabric Uplink Ports: 8 x
+      QSFP28 100GbE". 48 + 8 = 56, WHICH RECONCILES THE TWO PORT COUNTS IN CIRCULATION: the
+      marketing copy says "48 ports" and the product documentation calls it "a 56-port switch",
+      and both are right.
+  port-ids:
+    note: >-
+      EVERY PORT IS `port-N`, INCLUDING THE EIGHT UPLINKS, and that is not cosmetic. dcim_export
+      treats a placement as an interface only when its id starts with `port-`; the first draft
+      called the uplinks `uplink-49`..`uplink-56` and the NetBox and Nautobot exports came out
+      with 48 interfaces instead of 56, silently. The uplink's ROLE is carried by the part it is
+      placed from (common/qsfp28-cage@3, media qsfp28) and by `numbering` below, which is where a
+      role belongs - the id carries the number the vendor addresses it by.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "1+1 Redundant, Hot-Swappable PSUs (100-240VAC or 180-300VDC
+      auto-ranging)" and "< 500W Maximum (Typical < 350W at 25C)".
+  thermal:
+    confidence: datasheet
+    note: >-
+      datasheet page 3 - "3+1 Redundant Fans; Front-to-Back and Back-to-Front configurations
+      available". BOTH directions are offered, so no airflow is asserted: the same hole is an
+      intake on one SKU and an exhaust on another.
+
+  source-render:
+    confidence: drawing
+    note: >-
+      THE FRONT IS MEASURED OFF THE DATASHEET'S OWN RENDER, which the first model never used.
+      MaiaEdge-Port-Extender-Datasheet-v1.pdf embeds a 6000 x 3373 image on page 1 (`pdfimages
+      -list` finds it; the staged 800 px marketing render is a different, angled asset), and
+      it is square to the face: scaled on the datasheet's 438 mm across (x 610 to 5552 px,
+      11.28 px/mm) it reads the face 43.2 mm tall against 44 - 1.8%, the lid showing above.
+      Measured per axis: 11.28 px/mm across, 11.07 down. Staged as
+      working/intake/maiaedge/port-extender/renders/datasheet-p1-front-render-6000.png.
+  positions:
+    confidence: drawing
+    note: >-
+      read off the page-1 render. SFP28: three blocks of eight columns by two rows starting at
+      x 5.04, 122.05 and 239.07 on the SFF-8433 14.25 mm pitch, 3.0 mm between blocks; rows at
+      y 9.62 and 23.35 (13.73 apart - the first model had 16.4). QSFP28: one block of four
+      columns by two rows at x 356.45 on the 19.0 mm ganged pitch, rows at 10.21 and 24.03.
+      THE LAMPS SET THE PITCH, NOT THE CAGES: the cage outlines read 14.33 mm apart and the
+      lamps on the face beside them 14.25, because the cages stand proud of the face and the
+      render's perspective magnifies them about 0.56% more. Corrected for that, every cage
+      centre lands on its lamp.
+  lamps:
+    confidence: drawing
+    note: >-
+      read off the page-1 render, and it settles what the first model's `tenant-port-lamps`
+      gap could not: the round features above and below the SFP rows are LAMPS, one per port -
+      dark 2.45 mm lenses with no screw slot, at y 6.96 above each top-row port and 35.76 below
+      each bottom-row one, centred on the column. Each uplink has FOUR in a row on a 4.05 mm
+      pitch, centred on the port, at y 6.45 and 36.1 - not the two-and-two band
+      common/qsfp28-cage@3 draws, which is why that part is no longer fitted
+      (maiaedge/port-extender-lane-leds@1 is). What any lamp means is not stated.
+  numbering:
+    confidence: drawing
+    note: >-
+      read off the page-1 render: every column is printed "N (up)(down) N+1" on one line
+      between the rows - odd port above, even below, 1 to 56 - with the two numerals hugging a
+      pair of arrows. That is the column-major numbering the first model derived, now read
+      rather than derived, and it agrees with every port number the product documentation
+      names (41-44 and 48 among the tenants; 51-56 among the uplinks, a PBC cabled to 51 and
+      52). Digits 1.54 mm tall, baseline y 22.23; arrows 1.5 mm each, 0.44 apart, drawn centred
+      on their column - the render puts them 0.1 to 0.3 mm left of it, which is inside what it
+      can resolve.
+  front-vents:
+    confidence: drawing
+    note: >-
+      rectangular slots along both edges: the top row from x 32.6 (past the wordmark) to 428,
+      3.9 x 2.0 mm on a 5.02 pitch; the bottom from 5.4 to 432, 2.9 x 1.7 on about 4.0,
+      interrupted by screws. `slots-h` draws its slot at a fixed 9/14 of its tile, so the
+      slots are drawn somewhat narrower than they are; the pitch and the row are right.
+  logo:
+    note: >-
+      the MaiaEdge mark sits at x 2.9 to 8.3, y 1.4 to 7.0, and IS NOT DRAWN - vendor logos
+      are not reproduced (library/components/README.md). The wordmark beside it is set as
+      text, white, x 9.7 to 25.9 with its capitals 3.2 mm tall.
+  chassis-finish:
+    confidence: photo-measured
+    note: >-
+      the MaiaEdge setup video (Step 5, "Attach Side Rails to the Port Extender", on the
+      vendor's YouTube channel) and the maintainer's stills of it: the lid, flanks and rear are
+      BARE GALVANISED STEEL, and only the front face is black. The first model drew the whole
+      box black.
+  rear:
+    confidence: estimated
+    note: >-
+      ORDER OBSERVED, POSITIONS ESTIMATED. The video shows only the right half of the rear, and
+      only obliquely at 640 x 360: from the right end, a CRPS supply (a 550W label, a C14 inlet
+      with a cord clip), two fan modules (black, honeycomb grille, blue pull handle, red tab),
+      and a small panel with two RJ45 jacks stacked one above the other; a third fan starts
+      past it. The datasheet completes the inventory - "1+1 Redundant, Hot-Swappable PSUs",
+      "3+1 Redundant Fans", and "1 x Rear CPU/BMC Shared Ethernet (RJ45) - 1 x Serial Console
+      (RJ45) - 1 x USB Type-A" - and the product documentation puts the management jack "on the
+      rear ... center of the device, at the top". So the rear is drawn SYMMETRIC: a supply at
+      each end, two fans either side, and the management panel in the middle with the Ethernet
+      jack on top. Every coordinate is chosen to fit that inventory into 438 mm with the small
+      gaps the stills show. The supply is the library's generic 550W CRPS part.
+attrs:
+  # SECTIONS FOLLOW THE LIBRARY'S, NOT THE DATASHEET'S TABLE. L68 is the rule
+  # that knows: `memory` and `storage` are filed under `platform` by 53 and 51
+  # other devices, and a second home makes the key unfindable by section. Same
+  # for `cpu` (54), `bmc` (41) and `packet-buffer` (41), which is why none of
+  # them is spelled the way the datasheet's own rows are.
+  performance:
+    switching-capacity: 2.0 Tbps
+    latency-overhead-ns: 500
+    packet-buffer: 32 MB
+  platform:
+    cpu: Intel x86, up to 8 cores
+    memory: 8-32 GB ECC DDR4
+    storage: configurable M.2 SSD
+    bmc: integrated BMC plane, IPMI 2.0 compliant
+  power:
+    input: ac-or-dc
+    power-max-w: 500
+    power-typical-w: 350
+    psu-redundancy: 1+1 hot-swappable
+  thermal:
+    fan-redundancy: 3+1
+    airflow: front-to-back or back-to-front
+  environmental:
+    operating-temp-c: '0 to 45'
+    operating-humidity: 5% to 90% non-condensing
+    mtbf-hours: 150000
+  lifecycle:
+    eol: none-announced
+chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#a9adb1'}
+gaps:
+- what: rear-positions
+  scope: [rear]
+  reason: needs-photo
+  wanted: a face-on photograph of the rear, or a mechanical drawing of it.
+  note: >-
+    EVERY REAR POSITION IS ESTIMATED, and the left half is inferred. The setup video shows
+    the right half obliquely and never the left; the order drawn - supply, two fans,
+    management panel, two fans, supply - is the right half observed and mirrored, which the
+    datasheet's inventory (two supplies, four fans) and the documentation's "center of the
+    device" management jack both support but do not prove. The fan module's size, the
+    supplies' faces and the USB port's place on the panel are all unmeasured. Tracked with
+    the maintainer's pending photographs.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: square-on photographs of the lid, the underside and a flank.
+  note: >-
+    These faces draw the envelope, in the bare steel the video shows, and nothing on it. The
+    envelope is dimensioned - 44 x 438 x 520 on page 3 of the datasheet. The video shows what
+    is on the lid - two recessed finger pulls, a product label near the middle and a yellow
+    warning sticker at the rear right corner - but only obliquely, so none of them is placed.
+groups:
+  # ONE GROUP, BECAUSE THE VENDOR NUMBERS ALL 56 IN ONE SPACE. The documentation
+  # addresses tenant ports 41-48 and uplinks 51-56 without ever restarting the
+  # count, so the uplinks are 49-56 and not 1-8 of their own group. `index-origin`
+  # takes only 0 or 1, which is the schema saying exactly this: a group's numbering
+  # starts at its first port, and a second group would have to start again. So the
+  # blocks that generate them share the group, and each port carries its media in
+  # its own attrs.
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      48 SFP28 tenant ports and 8 QSFP28 fabric uplinks, numbered 1-56 in one space.
+      The media differ and the numbering does not, so each port carries its own media
+      and speed rather than taking them from the group.
+    description: >-
+      A tenant port's ROLE is set from the MaiaEdge portal rather than on the box -
+      Customer, Internal Fabric (INNI), External Fabric (ENNI), MaiaConnect or Internet
+      (DIA) - which is what the documentation says distinguishes this switch from the
+      third-party ones that can stand in for it.
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the CPU/BMC shared Ethernet jack, the serial console and the USB port on the rear panel
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs: {redundancy: 1+1, redundancy-note: 'datasheet page 3, "1+1 Redundant, Hot-Swappable PSUs"'}
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs: {redundancy: 3+1, redundancy-note: 'datasheet page 3, "3+1 Redundant Fans"'}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 438.0, h: 44.0}
+    panel:
+      decor:
+      # EVERYTHING ON THIS FACE IS MEASURED off the datasheet's own 6000 px render
+      # - see provenance `positions`.
+      - {id: faceplate, at: [0.0, 0.0], size: [438.0, 44.0], fill: '#25292e', kind: bezel}
+      # rectangular vent slots along the top and bottom edges; the top row starts
+      # past the wordmark
+      - {id: vent-top, at: [32.6, 0.2], size: [395.5, 3.0], pattern: slots-h, pattern-pitch: [5.02, 7.27], pattern-offset: [31.7, -1.92], vent: 25}
+      - {id: vent-bottom, at: [5.4, 39.6], size: [426.7, 3.2], pattern: slots-h, pattern-pitch: [4.0, 6.22], pattern-offset: [4.69, 38.23], vent: 25}
+      # the pull tab under uplinks 53-54
+      - {id: pull-tab, at: [394.93, 39.03], size: [17.72, 4.25], fill: '#0e1012', rx: 1.4, kind: handle, out: 2.5}
+    silkscreen:
+      # THE WORDMARK, white; the mark left of it is not reproduced - see provenance `logo`
+      - {at: [9.66, 5.69], text: MaiaEdge, font-size: 3.6, fill: '#f2f4f6', anchor: start, for: chassis}
+      - {at: [12.165, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-1, port-2]}
+      - {at: [26.415, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-3, port-4]}
+      - {at: [40.665, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-5, port-6]}
+      - {at: [54.915, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-7, port-8]}
+      - {at: [69.165, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-9, port-10]}
+      - {at: [83.415, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-11, port-12]}
+      - {at: [97.665, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-13, port-14]}
+      - {at: [111.915, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-15, port-16]}
+      - {at: [129.175, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-17, port-18]}
+      - {at: [143.425, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-19, port-20]}
+      - {at: [157.675, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-21, port-22]}
+      - {at: [171.925, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-23, port-24]}
+      - {at: [186.175, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-25, port-26]}
+      - {at: [200.425, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-27, port-28]}
+      - {at: [214.675, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-29, port-30]}
+      - {at: [228.925, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-31, port-32]}
+      - {at: [246.195, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-33, port-34]}
+      - {at: [260.445, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-35, port-36]}
+      - {at: [274.695, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-37, port-38]}
+      - {at: [288.945, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-39, port-40]}
+      - {at: [303.195, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-41, port-42]}
+      - {at: [317.445, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-43, port-44]}
+      - {at: [331.695, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-45, port-46]}
+      - {at: [345.945, 21.68], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-47, port-48]}
+      - {at: [365.7, 21.91], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-49, port-50]}
+      - {at: [384.7, 21.91], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-51, port-52]}
+      - {at: [403.7, 21.91], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-53, port-54]}
+      - {at: [422.7, 21.91], mark: arrow-pair, size: 1.5, gap: 0.44, fill: '#e8ebee', for: [port-55, port-56]}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [438.0, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      blocks:
+        - id: ports
+          ref: std/sfp-ganged@1
+          at: [5.04, 9.62]
+          count: 16
+          rows: 2
+          row-pitch: 13.73
+          pitch: registry
+          number-from: 1
+          cutouts: true
+          rotate: {top: 180}
+          attrs: {media: sfp28, speed: 25g}
+          led:
+            ref: common/led-dot@1
+            id-format: led-port-{n}
+            group: port-leds
+            dx: 6.125
+            dy-top: -3.66
+            dy-bottom: 11.41
+          numerals:
+            dx: 7.125
+            dx-by-row: [-3.28, 2.68]
+            anchor-by-row: [end, start]
+            dy-top: 12.61
+            dy-bottom: -1.12
+            font-size: 2.1
+            fill: '#e8ebee'
+        - id: ports
+          ref: std/sfp-ganged@1
+          at: [122.05, 9.62]
+          count: 16
+          rows: 2
+          row-pitch: 13.73
+          pitch: registry
+          number-from: 17
+          cutouts: true
+          rotate: {top: 180}
+          attrs: {media: sfp28, speed: 25g}
+          led:
+            ref: common/led-dot@1
+            id-format: led-port-{n}
+            group: port-leds
+            dx: 6.125
+            dy-top: -3.66
+            dy-bottom: 11.41
+          numerals:
+            dx: 7.125
+            dx-by-row: [-3.28, 2.68]
+            anchor-by-row: [end, start]
+            dy-top: 12.61
+            dy-bottom: -1.12
+            font-size: 2.1
+            fill: '#e8ebee'
+        - id: ports
+          ref: std/sfp-ganged@1
+          at: [239.07, 9.62]
+          count: 16
+          rows: 2
+          row-pitch: 13.73
+          pitch: registry
+          number-from: 33
+          cutouts: true
+          rotate: {top: 180}
+          attrs: {media: sfp28, speed: 25g}
+          led:
+            ref: common/led-dot@1
+            id-format: led-port-{n}
+            group: port-leds
+            dx: 6.125
+            dy-top: -3.66
+            dy-bottom: 11.41
+          numerals:
+            dx: 7.125
+            dx-by-row: [-3.28, 2.68]
+            anchor-by-row: [end, start]
+            dy-top: 12.61
+            dy-bottom: -1.12
+            font-size: 2.1
+            fill: '#e8ebee'
+        - id: ports
+          ref: std/qsfp-ganged@1
+          at: [356.45, 10.21]
+          count: 8
+          rows: 2
+          row-pitch: 13.82
+          pitch: registry
+          number-from: 49
+          cutouts: true
+          rotate: {top: 180}
+          attrs: {media: qsfp28, speed: 100g}
+          led:
+            ref: maiaedge/port-extender-lane-leds@1
+            id-format: led-port-{n}
+            group: port-leds
+            dx: 1.95
+            dy-top: -5.0
+            dy-bottom: 10.85
+          numerals:
+            dx: 9.25
+            dx-by-row: [-3.13, 2.83]
+            anchor-by-row: [end, start]
+            dy-top: 12.02
+            dy-bottom: -1.8
+            font-size: 2.1
+            fill: '#e8ebee'
+  rear:
+    size: {w: 438.0, h: 44.0}
+    panel:
+      decor:
+      # BARE STEEL, as every still of the rear shows
+      - {id: rear-plate, at: [0.0, 0.0], size: [438.0, 44.0], fill: '#a9adb1', kind: bezel}
+      - {id: mgmt-panel, at: [200.1, 2.0], size: [37.8, 40.0], fill: '#b8bcc0', kind: label-plate}
+    silkscreen:
+      - {at: [210.9, 1.6], text: MGMT, font-size: 1.6, anchor: middle, fill: '#2b2e31', for: mgmt}
+    components:
+      # ORDER OBSERVED, POSITIONS ESTIMATED - see provenance `rear` and gaps
+      # `rear-positions`. A supply at each end, two fans either side of the
+      # management panel in the middle.
+      bays:
+      - id: psu-1
+        at: [3.0, 2.0]
+        size: {w: 73.5, h: 40.0}
+        group: psus
+        rel-pos: 1
+        accepts: [common/psu-550w@2]
+        default: common/psu-550w@2
+      - id: fan-1
+        at: [79.5, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 1
+        accepts: [maiaedge/port-extender-fan@1]
+        default: maiaedge/port-extender-fan@1
+      - id: fan-2
+        at: [138.3, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 2
+        accepts: [maiaedge/port-extender-fan@1]
+        default: maiaedge/port-extender-fan@1
+      - id: fan-3
+        at: [240.9, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 3
+        accepts: [maiaedge/port-extender-fan@1]
+        default: maiaedge/port-extender-fan@1
+      - id: fan-4
+        at: [299.7, 2.0]
+        size: {w: 58.8, h: 40.0}
+        group: fans
+        rel-pos: 4
+        accepts: [maiaedge/port-extender-fan@1]
+        default: maiaedge/port-extender-fan@1
+      - id: psu-2
+        at: [361.5, 2.0]
+        size: {w: 73.5, h: 40.0}
+        group: psus
+        rel-pos: 2
+        accepts: [common/psu-550w@2]
+        default: common/psu-550w@2
+      placements:
+      # the CPU/BMC shared Ethernet jack is the TOP one - the documentation puts
+      # it "center of the device, at the top" - with the console below it
+      - {ref: common/rj45-eth@1, id: mgmt, at: [203.0, 3.0], group: mgmt, rel-pos: 1, attrs: {role: mgmt}}
+      - {ref: std/rj45@2, id: console, at: [203.0, 17.2], group: mgmt, rel-pos: 2, attrs: {role: console}}
+      - {ref: std/usb-a@1, id: usb, at: [218.65, 7.85], rotate: 90, group: mgmt, rel-pos: 3}
+  top:
+    size: {w: 438.0, h: 520.0}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [438.0, 520.0], fill: '#a9adb1', kind: envelope}
+  bottom:
+    size: {w: 438.0, h: 520.0}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [438.0, 520.0], fill: '#a9adb1', kind: envelope}
+  left:
+    size: {w: 520.0, h: 44.0}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [520.0, 44.0], fill: '#a9adb1', kind: envelope}
+  right:
+    size: {w: 520.0, h: 44.0}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [520.0, 44.0], fill: '#a9adb1', kind: envelope}
+datasheet:
+  title: 'MaiaEdge Port Extender datasheet v1'
+  sha256: 7744f5b91250b710198fdef4010926762f4a6022e91233ff5dfaf0570de2a722
