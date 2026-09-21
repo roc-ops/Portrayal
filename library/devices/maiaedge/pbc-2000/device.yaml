@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 3.0.2
+version: 4.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -9,11 +9,12 @@ description: >-
   MaiaEdge Path Border Controller - a 1RU appliance that merges L2 switching and L3
   routing to provision deterministic private Ethernet paths over any underlying
   transport, with line-rate AES-256-GCM IPsec. Two 100GbE QSFP28 ports on the front
-  beside a console and two management jacks; two 550W supplies and a five-fan wall on
-  the back, front-to-back.
+  beside a console and two management jacks, a raised centre pane and a touch screen;
+  two 550W supplies and a one-piece five-fan tray on the back, front-to-back.
 profile: networking
 provenance:
   model-number:
+    confidence: datasheet
     note: >-
       vendor documentation - www.maiaedge.io/getting-started (getting-started.pdf), Safety
       Information: "The PBC-2000 is equipped with two redundant AC power inputs." THE DATASHEET
@@ -84,13 +85,34 @@ provenance:
   bezel:
     confidence: estimated
     note: >-
-      ESTIMATED shape, from photographs. The front face is a formed bezel, not a flat plate: it
-      slopes out to a raised band running the full width and slopes back, and two OCTAGONAL
-      windows are cut through it to the faceplate behind, each edged with a raised bead in the
-      vendor's amber. The right-hand end of the right window is the only window end unobstructed
-      by cabling in any photograph held, and is what the chamfer was read from. `shape: octagon`
-      was added to the format for this - decor and cutouts could draw a rectangle, a rounded
-      rectangle, a D-sub shell and a stadium slot, and an octagon had no shape to be.
+      ESTIMATED shape, from photographs and the maintainer's account of the hardware
+      (2026-09-21). The front is a BUILT-IN BEZEL standing about 11 mm off the faceplate, from
+      the left edge to the touch screen, with the two OCTAGONAL windows cut through it: the
+      octagons frame the faceplate behind, where the ports are. It is flat only across the
+      band level with the windows' vertical ends, and slopes back to the faceplate above and
+      below. That plate is maiaedge/pbc-2000-bezel@1 and its own provenance carries the
+      figures. v3 drew the slope as shading on a flat face; the window walls are the amber
+      bead, which is what looking into a window shows.
+      The right-hand end of the right window is the only window end unobstructed by cabling in
+      any photograph held, and is what the chamfer was read from. `shape: octagon` was added to
+      the format for this - decor and cutouts could draw a rectangle, a rounded rectangle, a
+      D-sub shell and a stadium slot, and an octagon had no shape to be.
+  lint-l21-l44-l64:
+    note: >-
+      TWO L44 WARNINGS ON THIS DEVICE ARE THE RULE MEASURING THE BEZEL'S BOX. It reads each
+      louvre field as 100% buried because maiaedge/pbc-2000-bezel@1's rectangle covers the whole
+      face; the windows the louvres are seen through are holes in that part, which a bounding
+      box cannot express. The fields are exactly where the photograph shows them. Do not move
+      them to quiet the rule.
+      AND FIVE L64 WARNINGS ARE THE SAME FIELDS FROM THE OTHER SIDE. The two 100G cages and the
+      CON, MGMT and CTRL legends sit inside the louvre fields, which L64 reads as open air end to
+      end. On the hardware the louvres are slots in metal: the ports are punched through the
+      field and the legends are printed on the bars between slots. Until v4 these were silent
+      by accident - the amber beads were device decor with `fill: none`, which the rule counted
+      as metal on top of the vents; the beads now belong to the bezel.
+      THE THREE L21 WARNINGS ARE THE THIRD FACE OF IT: CON, MGMT and CTRL read as painted over
+      by the bezel, because its box contains them. They are printed on the faceplate inside
+      the right window, and the drawing shows them there.
   louvres:
     confidence: photo-measured
     note: >-
@@ -125,11 +147,16 @@ provenance:
   rear:
     confidence: photo-measured
     note: >-
-      photo-measured (count and pitch only) - two supply modules and five 40 mm fans, read off the
-      rear photographs. The fan pitch is the one figure on this device that a photograph did
-      settle: five fans span 203.9 mm on a scale anchored to the 437.90 mm chassis width, giving
-      40.8 mm each against common/fan-module-41's known 40.9 - 0.2% out, which is what a sound
-      scale looks like. Every other rear figure is a position and is estimated.
+      photo-measured - working/intake/maiaedge/pbc/photos/pbc-rear-b.jpeg, the one rear shot
+      square enough to scale: anchored on the 437.90 mm chassis width (x 210 to 2205 px, 4.556
+      px/mm) it reads the face 41.7 mm tall against the datasheet's 41.27, 1% out. On that scale
+      the second supply's cage starts at 117.4 mm and the fan tray at 196.4. THE WHOLE REAR IS
+      BARE STEEL, ear to ear, in both rear photographs; v3 left most of it the chassis's black.
+      THE FIVE FANS ARE ONE TRAY, not five trays: one continuous plate with a thumbscrew at its
+      left end, a field-replaceable unit (the maintainer, 2026-09-21). v3 drew five
+      common/fan-module-41 trays with red pull tabs; maiaedge/pbc-2000-fan-plate@1 replaces them
+      in one bay, which is why this is 4.0.0 - the ids fan-1 to fan-5 are gone. The tray's fan
+      pitch reads 40.4 mm here against the 40.8 v3 read off the other photograph.
   power:
     confidence: datasheet
     note: >-
@@ -180,8 +207,8 @@ gaps:
   scope: [front]
   reason: needs-drawing
   wanted: >-
-    a dimension for the display and its bezel, so a real component can be built for it.
-    WHAT it is is no longer the question.
+    a dimension for the display and its frame. WHAT it is has been settled, and it is now
+    a part - maiaedge/pbc-2000-lcd@1 - rather than paint; only its SIZE is invented.
   note: >-
     IT IS A TOUCH SCREEN, and the vendor says so four times. The product documentation
     has NTP servers configurable "using the on-board web UI or the front panel's touch
@@ -189,13 +216,10 @@ gaps:
     your PBC"; the setup guide sets the management IP, gateway and netmask "using the
     touch screen on the front of the device", and reads the claim code "by navigating
     the menus on the touchscreen display (from the home screen display, tap on the Claim
-    Info button)". So it is an interactive display with a home screen and menus - not
-    the vent a first draft drew a honeycomb on, which was reading reflection.
-    STILL DRAWN AS A BLANK GREY PLATE, deliberately: this entry used to say "if it is an
-    LCD it deserves a real component rather than paint", and that is now the open work
-    rather than an open question. No source held dimensions the display or its bezel, so
-    a component would have to invent its size - and the recess it sits in is itself
-    estimated like everything else on this face.
+    Info button)". v3 drew it as a blank grey plate, which left it out of the device's
+    parts; it is placed now, as `display` in a `displays` group, so a parts list and a
+    DCIM export both see it. Its 38 x 29 frame is an estimate from the rack photograph
+    and the part says so.
 - what: front-indicator-meanings
   scope: [front]
   reason: vendor-silent
@@ -227,7 +251,11 @@ gaps:
     closer to the RETIRED common/psu-550w@1 at 84.0. An attempt to confirm the module
     seams programmatically failed, so the reading rests on an eyeball and is not
     asserted here. Either MaiaEdge fits a wider-than-CRPS module, or the eyeball is
-    wrong.
+    wrong. THE SQUARER REAR PHOTOGRAPH (pbc-rear-b.jpeg, 4.556 px/mm) NOW READS IT TOO:
+    the first supply's cage 19.3 to 102.1 mm, a 15 mm steel strip, and the second's
+    117.4 to 196.4 - 79 to 83 mm a supply, not 73.5. The second supply is placed at its
+    measured cage, centred; the 73.5 part is still what is drawn, so bare steel shows
+    either side of both supplies until the module is identified.
 - what: envelope-faces-undetailed
   scope: [top, bottom, left, right]
   reason: needs-photo
@@ -270,20 +298,19 @@ groups:
     mixed: the console and the two out-of-band management jacks, which share a bezel
   psus: {term: PSU, role: service, index-origin: 1}
   fans: {term: Fan, role: service, index-origin: 1}
+  displays: {term: Display, role: indicator, index-origin: 1}
   furniture: {term: Part, role: furniture, index-origin: 1}
 views:
   front:
     size: {w: 437.9, h: 41.27}
     panel:
       decor:
-      # THE FACE IS NOT FLAT. It slopes out of the faceplate to a raised band that
-      # runs the full width and slopes back down, the way a PowerEdge R740xd's bezel
-      # does. Three fills read as that relief; nothing dimensions the slope, so this
-      # is shading rather than a claimed depth.
-      - {id: slope-top, at: [0.0, 0.0], size: [437.9, 5.4], fill: '#191c1f', kind: bezel}
-      - {id: raised-band, at: [0.0, 5.4], size: [437.9, 30.2], fill: '#25292e', kind: bezel}
-      - {id: slope-bottom, at: [0.0, 35.6], size: [437.9, 5.67], fill: '#191c1f', kind: bezel}
-      - {id: crease-top, at: [0.0, 5.0], size: [437.9, 0.5], fill: '#31363c', kind: bezel}
+      # THIS IS THE FACEPLATE, SEEN THROUGH THE WINDOWS. The front is a built-in
+      # bezel standing 11.25 proud of it, with the two octagons cut through it -
+      # maiaedge/pbc-2000-bezel@1, placed below, which carries the relief, the
+      # amber beads and the wordmark. What is drawn here is what lies behind
+      # the bezel: the plate, and in each window its recess and louvres.
+      - {id: faceplate, at: [0.0, 0.0], size: [437.9, 41.27], fill: '#1f2226', kind: bezel}
       # THE WINDOWS ARE OCTAGONS, cut through the raised band to the faceplate behind:
       # flat top, 45-degree chamfer, short vertical end, chamfer back, flat bottom. A
       # first draft drew them as rounded rectangles and got the silhouette of the most
@@ -300,16 +327,6 @@ views:
       - {id: vent-left, at: [16.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [16.5, 8.5], vent: 20}
       - {id: window-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
       - {id: vent-right, at: [240.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [240.5, 8.5], vent: 20}
-      # the raised bead around each window, painted in the vendor's amber - the edge of
-      # the cut, not a stripe on a flat plate
-      - {id: bead-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
-      - {id: bead-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: none, stroke: '#f5b21c', stroke-width: 1.5, kind: bezel}
-      # A BLANK GREY BOX, DELIBERATELY. Nobody can put a part number to the
-      # recess at this end (see gaps `right-panel-identity`), so it draws as a
-      # plain plate: the perforated left third the first draft gave it was read
-      # off a photograph in which the surface is mostly reflection, and drawing
-      # a vent field there asserted a vent nobody has seen.
-      - {id: right-panel, at: [380.0, 8.0], size: [36.0, 25.0], fill: '#42464b', rx: 2.0, kind: recess}
       cutouts:
       - {id: port-1, at: [20.575, 20.2], size: [18.5, 9.58], shape: rect}
       - {id: port-2, at: [40.075, 20.2], size: [18.5, 9.58], shape: rect}
@@ -323,9 +340,7 @@ views:
       - {id: con, at: [266.58, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: mgmt, at: [302.32, 19.0], size: [15.8, 13.2], shape: rect}
       - {id: ctrl, at: [338.05, 19.0], size: [15.8, 13.2], shape: rect}
-      - {id: sys-led, at: [359.2, 30.2], size: [4.0, 4.0], shape: circle}
     silkscreen:
-    - {at: [196.0, 24.0], text: MaiaEdge, font-size: 9.0, fill: '#f2a71b', anchor: middle, for: chassis}
     - {at: [274.48, 15.5], text: CON, for: con}
     - {at: [310.22, 15.5], text: MGMT, for: mgmt}
     - {at: [345.95, 15.5], text: CTRL, for: ctrl}
@@ -333,6 +348,11 @@ views:
       placements:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      # THE BEZEL: one plate across the face to the touch screen, the windows
+      # cut through it, fixed rather than removable. The chassis status lamp is
+      # one of ITS parts - it sits in the bezel's lower-right notch, 6.2 proud -
+      # so the device no longer places or punches it.
+      - {ref: maiaedge/pbc-2000-bezel@1, id: bezel, at: [0.0, 0.0], group: furniture, rel-pos: 10}
       # ONE LAMP PER PORT, NOT FOUR. common/qsfp28-cage@3 carries a four-lamp
       # band, and its own provenance says what those are: the AS7726-32X's
       # per-lane breakout lamps, holes in THAT chassis's panel above the
@@ -365,29 +385,35 @@ views:
       # they do.
       - {ref: common/rj45-eth@1, id: mgmt, at: [302.32, 19.0], rotate: 180, group: mgmt, rel-pos: 3}
       - {ref: common/rj45-eth@1, id: ctrl, at: [338.05, 19.0], rotate: 180, group: mgmt, rel-pos: 4}
-      # THE STATUS LAMP IS ON THE CHAMFER, not centred on the face. The
-      # photograph puts it in the notch outside the right window's lower-right
-      # 45-degree edge, low and clear of the bead - modelled here as the
-      # chamfer's own midpoint pushed out along its normal far enough to leave a
-      # visible gap. Centring it vertically, as the first draft did, put the one
-      # lit thing on this face in a place the hardware has nothing.
-      - {ref: common/led-indicator@1, id: sys-led, at: [359.2, 30.2], for: chassis, group: furniture, rel-pos: 3}
+      # THE TOUCH SCREEN, as a part rather than paint - see gaps `right-panel-identity`
+      - {ref: maiaedge/pbc-2000-lcd@1, id: display, at: [381.0, 6.14], for: chassis, group: displays, rel-pos: 1}
   rear:
     size: {w: 437.9, h: 41.27}
     panel:
       decor:
-      - {id: blank-bracket, at: [167.0, 0.6], size: [33.0, 40.0], fill: '#8a8d91', kind: label-plate}
+      # BARE STEEL, THE WHOLE FACE. Both rear photographs show the rear as
+      # unpainted metal from ear to ear; v3 left most of it the chassis's black
+      # and put a grey bracket where the fan tray's thumbscrew end is.
+      - {id: rear-plate, at: [0.0, 0.0], size: [437.9, 41.27], fill: '#a7abaf', kind: bezel}
     components:
+      # ONE TRAY, FIVE FANS, ONE FRU. See maiaedge/pbc-2000-fan-plate@1.
+      bays:
+      - id: fan-tray
+        at: [196.4, 0.6]
+        size: {w: 240.9, h: 40.07}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - maiaedge/pbc-2000-fan-plate@1
+        default: maiaedge/pbc-2000-fan-plate@1
       placements:
       - {ref: common/rack-ear@1, id: ear-left-r, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right-r, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
       - {ref: common/psu-550w@2, id: psu-1, at: [20.0, 0.6], attrs: {slot: '1'}, group: psus, rel-pos: 1}
-      - {ref: common/psu-550w@2, id: psu-2, at: [93.5, 0.6], attrs: {slot: '2'}, group: psus, rel-pos: 2}
-      - {ref: common/fan-module-41@1, id: fan-1, at: [200.0, 0.6], group: fans, rel-pos: 1}
-      - {ref: common/fan-module-41@1, id: fan-2, at: [240.9, 0.6], group: fans, rel-pos: 2}
-      - {ref: common/fan-module-41@1, id: fan-3, at: [281.8, 0.6], group: fans, rel-pos: 3}
-      - {ref: common/fan-module-41@1, id: fan-4, at: [322.7, 0.6], group: fans, rel-pos: 4}
-      - {ref: common/fan-module-41@1, id: fan-5, at: [363.6, 0.6], group: fans, rel-pos: 5}
+      # the second supply's cage starts 117.4 mm in (pbc-rear-b.jpeg, 4.556 px/mm),
+      # and the 73.5 mm part is centred in the 79 mm it reads - see gaps
+      # `psu-module-width`
+      - {ref: common/psu-550w@2, id: psu-2, at: [120.15, 0.6], attrs: {slot: '2'}, group: psus, rel-pos: 2}
   top:
     size: {w: 437.9, h: 291.08}
     panel:
