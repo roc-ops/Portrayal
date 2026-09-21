@@ -111,9 +111,8 @@ def test_latch_2_77_is_not_a_relief_figure():
     drawn (inset, schematically) in the skin instead.
 
     Pluggables D gives the part a `relief:` block after all - the body's
-    standoff out of the jack and the latch's reach ALONG the plug axis, both
-    genuinely Z - so what this pins now is that neither in-plane figure is
-    written as a Z magnitude."""
+    standoff out of the jack, genuinely Z - so what this pins now is that
+    neither in-plane figure is written as a Z magnitude."""
     d = contract()
     for f in d["relief"]["features"]:
         for k in ("out", "lift"):
@@ -121,6 +120,19 @@ def test_latch_2_77_is_not_a_relief_figure():
     prov = d["provenance"]["latch"]
     assert "2.77" in prov
     assert "5.89" in prov
+
+
+def test_the_latch_reach_is_recorded_but_builds_nothing():
+    """The latch's reach along the plug axis (17.17 behind the front, 7.67 out
+    of the jack) was a relief feature for one pass of pluggables D; its box lay
+    wholly inside the body's and built nothing a viewer could see, so the
+    final review dropped it (final review I3). The body is the only relief
+    feature, and the figures and the reason stay in provenance."""
+    d = contract()
+    assert [f["node"] for f in d["relief"]["features"]] == ["body"]
+    prov = d["provenance"]["latch"]
+    for m in ("17.17", "7.67", "NOT A RELIEF FEATURE", "inside the body"):
+        assert m in prov, m
 
 
 def test_latch_has_no_angle_in_provenance():

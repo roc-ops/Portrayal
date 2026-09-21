@@ -4290,7 +4290,9 @@ def lint_component_seat_point(path, data, _lib_roots=None):
         # as `{True: 'body'}`, `cp.get("on")` finds nothing, and the point
         # silently lifts 0.0: the exact failure this rule exists to make loud.
         # The library already quotes it elsewhere (`states: ['off', 'on']`).
-        if isinstance(cp, dict) and True in cp:
+        # `k is True`, not `True in cp`: True == 1 == 1.0, so the membership
+        # test also matched a YAML key of 1 and called it an unquoted `on:`.
+        if isinstance(cp, dict) and any(k is True for k in cp):
             err(path, "L106", f"connection-point {name!r} has a key YAML read as "
                               "boolean true - an unquoted `on:`; write it `'on':`")
         on = cp.get("on") if isinstance(cp, dict) else None

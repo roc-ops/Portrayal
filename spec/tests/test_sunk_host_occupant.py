@@ -197,3 +197,29 @@ def test_a_sunk_cage_publishes_its_sink_as_its_lift(tmp_path):
         (tmp_path / "o" / "s9510-28dc.configs.json").read_text())["cages"]["front"]}
     assert cages["port-4"]["lift"] == pytest.approx(-FLOOR)
     assert cages["port-5"]["lift"] == 0.0
+
+
+def test_an_occupant_that_stands_in_its_sunk_hosts_well_is_refused(tmp_path):
+    """The host's sink already reaches its occupant through host-lift, so an
+    `in:` on the occupant as well would sink it twice: measured -3.46 where
+    3.27 is right (final review I2). Refused, naming both, the way a rotate
+    that disagrees with the host is refused."""
+    d = yaml.safe_load((SRC / "device.yaml").read_text())
+    for cfg in d["configurations"].values():
+        cfg["occupants"] = {"port-4": "generic/sfp-lc-simplex@1"}
+    placements = d["views"]["front"]["components"]["placements"]
+    placements.append({"ref": WELL_REF, "id": "well", "at": [120.0, 30.0]})
+    next(q for q in placements if q.get("id") == "port-4")["in"] = "well"
+    placements.append({"ref": "generic/lc-plug@1", "id": "plug",
+                       "mate-to": "port-4-occupant", "in": "well"})
+    dev = tmp_path / "device.yaml"
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    out = tmp_path / "o"
+    out.mkdir()
+    r = subprocess.run(
+        [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+         "--library", str(LIB), "--out", str(out)],
+        capture_output=True, text=True)
+    assert r.returncode != 0
+    assert "plug" in r.stderr and "'port-4-occupant'" in r.stderr, r.stderr[-800:]
+    assert "sinks with its host" in r.stderr, r.stderr[-800:]

@@ -175,6 +175,50 @@ def test_an_unquoted_on_is_an_error(tmp_path):
     assert len(errs) == 1 and "boolean" in errs[0], errs
 
 
+def test_an_integer_key_is_not_an_unquoted_on(tmp_path):
+    """`True in cp` is also true for a key of 1 or 1.0 (True == 1 in Python), so
+    the check names the key's type exactly (final review M2)."""
+    d = _plug(**{"interface-at": "boot"})
+    d["connection-points"]["boot"] = {"at": [2.79, 7.61], "direction": "rear",
+                                      "on": "body", 1: "x"}
+    errs, _ = _l105(tmp_path, d)
+    assert not any("boolean" in e for e in errs), errs
+
+
+def test_a_boolean_key_does_not_crash_the_lock_digest():
+    """The digest a contract with a bare `on:` gets must be computable, or
+    lint's library-wide lock check (devicelock.check, run before ERRORS print)
+    dies with a TypeError sorting a bool against a str and the L106 message
+    written for exactly this mistake never shows."""
+    from portrayal import devicelock
+    assert devicelock._digest({"at": [1, 2], True: "body"})
+    # json's own spelling, so the key reads the way the author typed it
+    assert devicelock._digest({True: "body"}) == devicelock._digest({"true": "body"})
+
+
+def test_lint_prints_the_unquoted_on_error_end_to_end(tmp_path):
+    """Lint's real entry point over a tiny library - one device, and
+    generic/lc-plug with its `'on':` unquoted. The unit test above calls the
+    rule directly; this one runs the path a contributor runs, which crashed in
+    devicelock before printing anything (final review I1)."""
+    import shutil
+    lib = tmp_path / "library"
+    shutil.copytree(LIB / "devices/juniper/mx10003", lib / "devices/juniper/mx10003")
+    shutil.copytree(PLUG.parent.parent, lib / "components/generic/lc-plug")
+    c = lib / "components/generic/lc-plug/v1/contract.yaml"
+    text = c.read_text()
+    assert "'on': body" in text
+    c.write_text(text.replace("'on': body", "on: body"))
+    r = subprocess.run(
+        [sys.executable, "-m", "portrayal.lint", "--schemas", str(SPEC / "schemas"),
+         "--library", str(lib)],
+        capture_output=True, text=True, cwd=ROOT,
+        env={**__import__("os").environ, "PYTHONPATH": str(SPEC / "tools")})
+    out = r.stdout + r.stderr
+    assert "Traceback" not in out, out[-1500:]
+    assert "[L106]" in out and "boolean" in out, out[-1500:]
+
+
 def test_the_rule_is_catalogued():
     assert "L106" in lint.RULES
 
@@ -182,14 +226,19 @@ def test_the_rule_is_catalogued():
 def test_no_library_contract_trips_the_rule():
     """The shipped library is clean under L106 - and the sweep measured
     something (skip-gates-and-vacuous-passes)."""
-    seen, found = 0, []
+    seen, on_points, found = 0, 0, []
     for f in sorted(LIB.glob("components/**/contract.yaml")):
         d = yaml.safe_load(f.read_text())
         seen += 1
+        # the one input the rule examines: points that name a feature
+        on_points += sum(1 for cp in (d.get("connection-points") or {}).values()
+                         if isinstance(cp, dict) and "on" in cp)
         with lint.collecting() as got:
             lint.lint_component_seat_point(f, d)
             found += [e for e in got.errors if "[L106]" in e]
     assert seen > 100
+    # two plugs x (boot + cable) and two boots x cable
+    assert on_points >= 6, on_points
     assert found == []
 
 

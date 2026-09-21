@@ -146,7 +146,6 @@ PLUGS_AND_BOOTS = [
     ("generic/lc-plug@1", "stem", 6.6, None, "estimated", ["19.70"]),
     ("generic/rj45-plug@1", "body", 13.0, None, "estimated",
      ["22.48 - 9.5", "TE 1734264", "std/rj45"]),
-    ("generic/rj45-plug@1", "latch", 7.7, None, "estimated", ["17.17", "2.77"]),
     ("common/lc-boot@1", "body", 15.1, None, "drawing", ["DS-LC-000023", "15.1"]),
     ("common/rj45-boot@1", "body", 26.4, None, "drawing", ["J0072", "26.4"]),
 ]

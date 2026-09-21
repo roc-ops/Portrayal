@@ -1902,6 +1902,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     f"{p['id']}: declares rotate {p['rotate']} but its host "
                     f"{p['mate-to']!r} is at {hrot or 0} - a seated part turns "
                     "with its host; drop the rotate")
+            # A SEATED PART ALREADY SINKS WITH A SUNK HOST - through host-lift,
+            # below - so its own `in:` would sink it a second time: -3.46 where
+            # 3.27 is right (final review I2). A host is sunk when it stands
+            # `in:` a well itself, or inherits a sink from its own host (a
+            # negative host-lift: a seat lift is otherwise never negative).
+            if p.get("in") and not host.get("projection-of") and (
+                    host.get("in") or float(host.get("host-lift") or 0.0) < 0):
+                raise ValueError(
+                    f"{p['id']}: stands in:{p['in']!r} but a seated part sinks "
+                    f"with its host {p['mate-to']!r}, which is already sunk in a "
+                    "well - drop the in:")
             seated = dict(p, at=seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
                                         hrot, oc["size"], om["at"]))
             # Omitted when the host has none, so an unrotated seat's output

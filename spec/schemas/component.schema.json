@@ -651,7 +651,7 @@
      },
      "on": {
       "$ref": "#/$defs/segment",
-      "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read only when this is the point the `interface` is presented at (`interface-at`, default `mate`); lint L106 requires the node to exist and to carry an `out`."
+      "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read on the point the `interface` is presented at (`interface-at`, default `mate`), where it sets how far a part seated there stands off, and on a `cable` point, where it sets the depth the cable leaves from (render.py writes it as `data-cp-on` for the viewer's cable points); lint L106 requires the node to exist and to carry an `out`."
      }
     }
    },

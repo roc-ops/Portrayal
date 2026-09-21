@@ -94,15 +94,26 @@ provenance:
     figures stay recorded here as measured facts about the part rather than
     driving any render.
 
-    WHAT IS A RELIEF FEATURE (pluggables D): the latch's reach ALONG THE PLUG
-    AXIS, which is Z. On the same side view, with the 22.48 as the ruler (1042
-    px at 600 dpi, 46.37 px/mm) and the .040 [1.02] reading back 1.018 as a
-    check: the latch leaves the body 4.05 behind the plug's front, its catch
-    face is at 7.93 (the dimensioned 1.02 + 5.89 from the nose step, plus a
-    measured 1.02 of nose ahead of it), and its free end - the tail a finger
-    presses - is 17.17 behind the front. None of those three is a plain
-    along-axis dimension of the latch; the 5.89 locates the catch, not the
-    tail. See the `latch` relief feature.
+    THE LATCH'S REACH ALONG THE PLUG AXIS (pluggables D), which is Z. On the
+    same side view, with the 22.48 as the ruler (1042 px at 600 dpi, 46.37
+    px/mm) and the .040 [1.02] reading back 1.018 as a check: the latch leaves
+    the body 4.05 behind the plug's front, its catch face is at 7.93 (the
+    dimensioned 1.02 + 5.89 from the nose step, plus a measured 1.02 of nose
+    ahead of it), and its free end - the tail a finger presses - is 17.17
+    behind the front. None of those three is a plain along-axis dimension of
+    the latch; the 5.89 locates the catch, not the tail. Less the same
+    estimated 9.5 of insertion the body uses (provenance.standoff), the tail
+    stands 17.17 - 9.5 = 7.67 out of the jack.
+
+    AND STILL NOT A RELIEF FEATURE. An earlier pass of pluggables D gave the
+    latch a relief feature at out 7.7 from that 7.67, and the final review
+    dropped it: the skin draws the latch inset within the 11.68 x 7.93 body
+    outline (L4 holds the skin to `size`), so its box, 0 to 7.7, lay wholly
+    inside the body's, 0 to 13.0, and built nothing a viewer could see. A
+    relief feature nothing can see is a feature nothing checks, and the real
+    fix - a notched body, or the latch as its own node below the body - is new
+    geometry no held drawing sources. So the 17.17 and 7.67 stay here, as
+    measured and estimated facts about the part, and drive no render.
   axis: >-
     derived, following the connection-point convention generic/lc-plug@1 and
     common/lc-boot@1 introduced (Task 4/5): the `mate`, `boot` and `cable`
@@ -173,18 +184,4 @@ relief:
         the latch alone allows. The contacts this face is drawn with are the
         plug's FRONT and sit in the jack; the body standing over them is the
         plug seen from the viewer's side, which is its rear.
-    - node: latch
-      out: 7.7
-      confidence: estimated
-      source: >-
-        The latch's free end is 17.17 behind the plug's front, measured on
-        CommScope 2843005 rev K sheet 1's side view with the plain 22.48 as
-        the ruler (provenance.latch); the drawing does not dimension it along
-        the axis. Less the same estimated 9.5 of insertion the body uses, the
-        tail stands 7.67 out of the jack, stated 7.7. It starts inside the
-        jack (the latch leaves the body 4.05 behind the front), so no lift.
-        Its 2.77 below the datum is in-plane Y and stays the skin's.
-        In 3D this box lies inside the body's (the skin draws the latch inset
-        within the 11.68 x 7.93 outline, which L4 holds to size), so it is not
-        visible there; the real latch hangs below the body, outside it.
 skins: [default]
