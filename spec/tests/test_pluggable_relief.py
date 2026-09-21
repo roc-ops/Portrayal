@@ -226,3 +226,11 @@ def test_latch_default_is_a_neutral_grey_the_skin_draws(ref, latch_node, body_ou
     assert 0x20 < r < 0xe0, (
         f"{ref}: {default} is too near black or white - both are in an MSA "
         f"colour code (black multi-mode, white 1550 nm)")
+    # THE OUTLINE TOO. A dark-blue stroke round a grey bail tints it blue at
+    # every zoom a bail is small at, so the latch node's stroke is held to the
+    # same exact neutrality as its fill.
+    stroke = latch.get("stroke")
+    assert stroke, f"{ref} {latch_node} has no stroke to check"
+    sr, sg, sb = _hex_rgb(stroke)
+    assert sr == sg == sb, (
+        f"{ref}: the {latch_node} stroke {stroke} is chromatic ({sr}, {sg}, {sb})")
