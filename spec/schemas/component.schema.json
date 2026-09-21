@@ -351,9 +351,13 @@
         "type": "string",
         "description": "side/body color (CSS)"
        },
+       "hole-color": {
+        "type": "string",
+        "description": "side colour of the WALLS OF HOLES in a `shape` outline, where they differ from `color`. A bezel with windows cut through it has two kinds of wall: its outer edge, in the bezel's own colour, and each window's edge - on the MaiaEdge PBC-2000 the amber bead you look past into the window. Only read beside `shape` with a `profile`; absent, the holes take `color`."
+       },
        "shape": {
         "type": "boolean",
-        "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: the rear handle's face was its real art and its sides were the bbox, so a curved moulding read as three cardboard boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way."
+        "description": "extrude the node's own OUTLINE rather than its bounding box. `out` builds a box, which is right for a lamp or a boss and wrong for anything with a contour: the rear handle's face was its real art and its sides were the bbox, so a curved moulding read as three cardboard boxes stood on end. Opt-in rather than inferred, because the box is cheaper and is the right answer for most protrusions, and guessing would silently reshape every one in the library. Companion to `round` on a cavity, which shape-punches from the node's art the same way. BESIDE `profile` / `profile-y` it cuts the sloped surface to the outline too, and drops its walls along the outline rather than the box: the MaiaEdge PBC-2000's centre pane is 15 proud with ends that ARE its windows' ends, and a box ran into the windows. Holes in the outline ARE cut - the same bezel is one sloped plate with two octagonal windows through it - and their walls take `hole-color`."
        },
        "profile": {
         "type": "array",

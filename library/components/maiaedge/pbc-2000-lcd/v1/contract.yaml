@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: pbc-2000-lcd
+version: 1.0.0
+class: display
+profile: networking
+description: >-
+  The front-panel touch screen of the MaiaEdge PBC-2000 - a dark glass display in a raised
+  frame at the right-hand end of the face, used to set the management address and read the
+  claim code. A graphical screen with menus, not a character display.
+size: {w: 38.0, h: 29.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  identity: >-
+    vendor documentation - the setup guide (www.maiaedge.io/getting-started) sets the
+    management IP, gateway and netmask "using the touch screen on the front of the device"
+    and reads the claim code by tapping the Claim Info button on its home screen; the
+    product documentation configures NTP and DNS from "the front panel display". Recorded
+    in full on the device's `right-panel-identity` gap, which this part answers.
+  size: >-
+    ESTIMATED. No source dimensions the display or its frame. The rack photograph shows a
+    frame about three-quarters of the face's height and a little wider than tall; 29 mm is
+    that fraction of the 41.27 mm chassis, and 38 keeps the photograph's aspect of about
+    1.3. Nothing here is measured, and the device's gap says so.
+  glass: >-
+    photograph - the glass sits back inside a thin frame, whose lower and right edges catch
+    the light. The honeycomb-looking texture across the glass's left third in that
+    photograph is REFLECTION, not a vent: an earlier draft drew it as one.
+  screen: >-
+    THE ELEMENT IS `class: screen`, NOT `display`, while the part itself is class display.
+    Every `display` element in this library is a CHARACTER display - L98 and
+    test_character_display ask each one how many cells it has, and Cisco's matrix and a
+    seven-segment cell both answer. A touch screen with a home screen, menus and buttons
+    has pixels rather than cells; giving it a character count to satisfy the rule would be
+    the transcription error the rule exists to catch.
+elements:
+  screen:
+    at: [2.5, 2.5]
+    size: [33.0, 24.0]
+    class: screen
+    description: >-
+      the touch screen itself - a graphical display with a home screen and menus
+      (Claim Info, network settings). What it shows is software, not hardware, so no
+      vocabulary is declared.
+relief:
+  features:
+  - node: screen
+    pocket: 1.2
+    confidence: estimated
+    source: the photograph shows the glass set back inside its frame; how far is not stated
+skins: [default]

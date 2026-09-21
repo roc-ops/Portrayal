@@ -560,7 +560,8 @@ async function ensureViewer() {
   if (viewer) return viewer;
   if (!loading) loading = (async () => {
     const { createViewer } = await import('./viewer3d.js');
-    const v = createViewer(host3d, { dist: DIST + '/' });
+    const v = createViewer(host3d, { dist: DIST + '/', background: shell.stage() });
+    shell.on('stage', c => v.setBackground(c));
     v.on('select', p => {
       if (!p) return;
       if (state.svg?.querySelector(`[data-path="${CSS.escape(p)}"]`)) return shell.select(p, false);

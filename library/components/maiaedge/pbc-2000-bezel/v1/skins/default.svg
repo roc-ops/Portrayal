@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="377.0mm" height="41.27mm" viewBox="0 0 377.0 41.27">
+  <defs>
+    <!-- THE SLOPES AS SHADING, for the flat drawing. The plate is flat only
+         across the band the octagons' vertical ends span (16.15 to 24.85) and
+         falls away to the top and bottom edges from there; in 3D the geometry
+         carries that, and in 2D this is all there is to show it. -->
+    <linearGradient id="pbc-bezel-slope" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#15181b"/>
+      <stop offset="0.391" stop-color="#262a2f"/>
+      <stop offset="0.602" stop-color="#262a2f"/>
+      <stop offset="1" stop-color="#121417"/>
+    </linearGradient>
+  </defs>
+  <!-- ONE NODE, because the kit paints a raised feature with its node's own
+       art: the beads and the wordmark ride on the plate, and a sibling would
+       be left on the faceplate 11 mm behind it. The windows are holes in the
+       plate's one path (even-odd), so the ports behind show through in 2D and
+       the kit cuts them through in 3D. The beads are unfilled, so the outline
+       finder does not mistake them for more plate. -->
+  <g id="bezel">
+    <path id="bezel-plate" fill-rule="evenodd" fill="url(#pbc-bezel-slope)"
+      d="M0 0 L377.0 0 L377.0 41.27 L0 41.27 Z M18.15 6.00 L129.85 6.00 L140.00 16.15 L140.00 24.85 L129.85 35.00 L18.15 35.00 L8.00 24.85 L8.00 16.15 Z M242.15 6.00 L353.85 6.00 L364.00 16.15 L364.00 24.85 L353.85 35.00 L242.15 35.00 L232.00 24.85 L232.00 16.15 Z"/>
+    <path id="bead-left" d="M18.15 6.00 L129.85 6.00 L140.00 16.15 L140.00 24.85 L129.85 35.00 L18.15 35.00 L8.00 24.85 L8.00 16.15 Z" fill="none" stroke="#f5b21c" stroke-width="1.5"/>
+    <path id="bead-right" d="M242.15 6.00 L353.85 6.00 L364.00 16.15 L364.00 24.85 L353.85 35.00 L242.15 35.00 L232.00 24.85 L232.00 16.15 Z" fill="none" stroke="#f5b21c" stroke-width="1.5"/>
+    <g id="wordmark-silkscreen">
+      <text id="wordmark" x="196" y="24" font-family="sans-serif" font-size="9" text-anchor="middle" fill="#f2a71b">MaiaEdge</text>
+    </g>
+  </g>
+</svg>
