@@ -247,6 +247,7 @@ RULES = {
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
+    "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
 }
 
 
@@ -5202,6 +5203,65 @@ def lint_device_provenance_confidence(path, data):
                       "a figure whose standing nobody has written down")
 
 
+# L107's quote shapes. An opening quote is not preceded by a word character and
+# is followed by non-space; a closing one is preceded by non-space and not
+# followed by a word character. So `don't` never opens or closes, the inch mark
+# in `17.32"` never opens, and `'1'` is a quoted numeral, not the start of a
+# paragraph-long run that ends at the next apostrophe.
+QUOTE_MAX_WORDS = 25
+_QUOTED = (re.compile(r'(?<!\w)"(?=\S)([^"\n]*?)(?<=\S)"(?!\w)'),
+           re.compile("\u201c([^\u201d]*)\u201d"),
+           re.compile(r"(?<!\w)'(?=\S)([^'\n]*?)(?<=\S)'(?!\w)"))
+
+
+def long_quotes(data, limit=QUOTE_MAX_WORDS, _key=""):
+    """(key path, word count, quoted text) for every quoted run in `data`'s
+    strings longer than `limit` words. Library-wide census tests call this too,
+    so the rule and the count it is held to cannot drift apart."""
+    if isinstance(data, str):
+        for rx in _QUOTED:
+            for m in rx.finditer(data):
+                n = len(m.group(1).split())
+                if n > limit:
+                    yield _key.lstrip("."), n, m.group(1)
+    elif isinstance(data, dict):
+        for k, v in data.items():
+            yield from long_quotes(v, limit, f"{_key}.{k}")
+    elif isinstance(data, list):
+        for i, v in enumerate(data):
+            yield from long_quotes(v, limit, f"{_key}[{i}]")
+
+
+def lint_quoted_prose(path, data):
+    """L107: a vendor's facts are transcribed; its prose is not reproduced.
+
+    README promises it, NOTICE rests on it, and #156 paraphrased the library
+    back into line once. Nothing held the line after that, and by 2026-09-21
+    (#451) there were 341 quoted runs over 25 words across 202 contracts and
+    manifests - 156 distinct passages, 220 of the runs Cisco guide prose, one
+    passage copied into 23 contracts. The audit that filed #451 counted 51, because it paired
+    quote marks naively; the pairing above is what makes the number real.
+
+    TWENTY-FIVE WORDS, NO EXEMPTION LIST. A lamp-state table is facts, and the
+    way to keep facts is to transcribe them - `flashing green = input present,
+    output off` - which this rule does not see, rather than to quote the table
+    and ask for an exception. A short quotation that pins a disputed word
+    ("the C-type appliance inlet") is well under the cap and stays.
+
+    A CENSUS WARNING of the L92/L93 kind: it fires on the day it lands and is
+    meant to shrink, vendor by vendor, and test_quoted_prose holds the count
+    from rising while it does. It becomes an error at zero.
+    """
+    runs = list(long_quotes(data))
+    if not runs:
+        return
+    keys = sorted({k for k, _, _ in runs})
+    warn(path, "L107", f"{len(runs)} quoted run(s) over {QUOTE_MAX_WORDS} words "
+                       f"(longest {max(n for _, n, _ in runs)}) at {', '.join(keys[:3])}"
+                       f"{', ...' if len(keys) > 3 else ''}. Paraphrase and cite the "
+                       "section; transcribe a state table as `state = meaning` pairs")
+
+
 def lint_device_component_attrs_resolve(path, data):
     """L94: a `component-attrs` key names something the device actually has.
 
@@ -7989,6 +8049,7 @@ def main():
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
                 lint_component_rj45_lamps(f, d, args.library)
+                lint_quoted_prose(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
             if args.device and not any(sel in str(f) for sel in args.device):
@@ -8011,6 +8072,7 @@ def main():
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
                 lint_device_provenance_confidence(f, d)
+                lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
