@@ -1235,6 +1235,9 @@ export function createViewer(container, opts = {}) {
 
   return {
     load, select, on, resize, dispose, setStates, setFields, fields: () => JSON.parse(JSON.stringify(FIELDS)),
+    // the backdrop, for a host that lets its reader choose one - the loop
+    // redraws every frame, so setting it is all there is to do
+    setBackground: c => { scene.background = new THREE.Color(c); },
     states: () => ({...STATES}),
     setPulled,
     pulled: () => new Set(PULLED),

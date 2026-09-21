@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-650 component majors in 12 namespaces.
+653 component majors in 13 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -71,7 +71,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/drive-carrier-35@1` | module | drive | 105.5 × 26.9 × 165.6 |  | 1 | 1 | A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both the rear bays and a 12 x 3.5 inch… |
 | `common/esd-jack@1` | component | ground | 6 × 6 |  | 10 | 0 | ESD wrist-strap grounding jack - the socket you clip an antistatic strap into before handling cards |
 | `common/fan-module@1` | module | fan | 48.6 × 40 |  | 6 | 9 | Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm left mounting tab (captive screw), honeycomb g… |
-| `common/fan-module-41@1` | module | fan | 40.9 × 40 |  | 2 | 0 | Hot-swappable 1U fan tray, 40.9mm opening on a 48.8mm pitch - honeycomb grille over one rotor, crossed by a f… |
+| `common/fan-module-41@1` | module | fan | 40.9 × 40 |  | 1 | 0 | Hot-swappable 1U fan tray, 40.9mm opening on a 48.8mm pitch - honeycomb grille over one rotor, crossed by a f… |
 | `common/fan-module-46@1` | module | fan | 46.6 × 40 |  | 4 | 1 | Hot-swappable 1U fan module, 46.6mm pitch - 44.6mm square unioned with a 2mm left mounting tab (captive screw… |
 | `common/fc-simplex-adapter@1` | component | port | 10 × 10 | fc-adapter | 0 | 0 | Panel-mount FC simplex adapter, one threaded bayonet-coupled opening, as fitted to an FS FHD FC panel |
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
@@ -86,7 +86,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
 | `common/led-dot@1` | component | led | 2 × 2 |  | 82 | 152 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 6 | 0 | Single chassis status LED |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 5 | 1 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
@@ -656,6 +656,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/re-s-2000@1` | module | supervisor | 261.8 × 27.5 |  | 0 | 1 | Juniper RE-S-2000 Routing Engine (RE-S-2000-4096, EOL) - 2.0 GHz, 4 GB |
 | `juniper/scb-mx@1` | module | supervisor | 420.9 × 29.5 |  | 2 | 1 | Juniper MX Series Switch Control Board (SCB-MX) - the fabric/control carrier for the MX240/MX480 |
 | `juniper/scb-mx960-v@1` | module | fabric | 30.1 × 405 |  | 1 | 0 | Juniper SCB-MX Switch Control Board as mounted vertically in the MX960 |
+
+## maiaedge/ (3)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `maiaedge/pbc-2000-bezel@1` | component | bezel | 377 × 41.27 |  | 1 | 0 | The built-in front bezel of the MaiaEdge PBC-2000 - one formed plate across the face from the left edge to th… |
+| `maiaedge/pbc-2000-fan-plate@1` | module | fan | 240.9 × 40.07 |  | 1 | 0 | The rear fan tray of the MaiaEdge PBC-2000 - ONE bare-steel plate carrying five 40 mm San Ace 40 fans behind … |
+| `maiaedge/pbc-2000-lcd@1` | component | display | 38 × 29 |  | 1 | 1 | The front-panel touch screen of the MaiaEdge PBC-2000 - a dark glass display in a raised frame at the right-h… |
 
 ## smartoptics/ (16)
 
