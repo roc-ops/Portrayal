@@ -1,17 +1,26 @@
 format: 1
 kind: module
 name: mpc5e-100g10g-v960
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper MPC5E-100G10G fixed MPC - two 100GbE CFP2 ports and four SFP+; the Q variant shares the faceplate. Authored as the MX960 vertical form (jacks rotated 90).
+  Juniper MPC5E-100G10G fixed MPC - two 100GbE CFP2 ports and four SFP+; the Q variant shares the faceplate. Authored as the MX960 vertical form (jacks turned on their side - rotate 90, and 270 for the left cage of each belly-to-belly pair).
 attrs:
   model: MPC5E-100G10G
   power-draw-max-w: 607
   model-variants: MPC5EQ-100G10G
 provenance:
+  stack-orientation: >-
+    The belly-to-belly cage pairs on this card follow the library's stack convention
+    (docs/pluggables-3d-design.md, S1-S4): on a card drawn on its side a pair sits left
+    and right, the left cage 270 beside the right 90, so both cage lips face the band
+    between the two cages and both bails face outward, where a thumb reaches them. Where
+    this provenance records a reading of a stack the orientation is that reading;
+    otherwise it is the rule, not an observation. A photograph of the stack that shows
+    otherwise overturns it. Turning a composed cage in place changes no box, id or
+    anything a device places, so it is a minor bump (S6).
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
@@ -36,9 +45,9 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [2.18, 32.72], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [2.18, 32.72], rotate: 270, attrs: {media: sfp-plus}}
 - {ref: std/sfp-ganged@1, id: port-0-0, at: [13.68, 32.72], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [2.18, 48.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [2.18, 48.57], rotate: 270, attrs: {media: sfp-plus}}
 - {ref: std/sfp-ganged@1, id: port-0-2, at: [13.68, 48.57], rotate: 90, attrs: {media: sfp-plus}}
 - {ref: std/cfp2@1, id: port-1-0, at: [-5.70, 86.05], rotate: 90, attrs: {media: cfp2}}
 - {ref: std/cfp2@1, id: port-2-0, at: [-5.70, 138.15], rotate: 90, attrs: {media: cfp2}}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10k-lc2101
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -14,6 +14,18 @@ attrs:
   power-draw-typical-w: 1335
   power-draw-max-w: 1425
 provenance:
+  stack-orientation: >-
+    The belly-to-belly cage pairs on this card follow the library's stack convention
+    (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate
+    0) over the lower turned 180, so both cage lips face the band between the two cages
+    and both bails face outward, where a thumb reaches them. Where this provenance
+    records a reading of a stack the orientation is that reading; otherwise it is the
+    rule, not an observation. A photograph of the stack that shows otherwise overturns
+    it. 12 pairs were drawn with the UPPER cage turned before the std cage art moved its
+    lip to the bottom of the opening; turning them to the convention keeps the lips in
+    the middle band where they were drawn, and seats every optic bail-outward. Turning a
+    composed cage in place changes no box, id or anything a device places, so it is a
+    minor bump (S6).
   size: 'datasheet-table - the family FRU table: 1.89 x 17.2 x 19.05 in;
     face drawn 437 x 48 mm'
   power: 'datasheet-table - guide power table: 1335 W at 25 C, 1425 W at
@@ -26,30 +38,30 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/qsfp28@1, id: port-0, at: [53.00, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-1, at: [53.00, 27.5]}
-- {ref: std/qsfp28@1, id: port-2, at: [73.40, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-3, at: [73.40, 27.5]}
-- {ref: std/qsfp28@1, id: port-4, at: [92.40, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-5, at: [92.40, 27.5]}
-- {ref: std/qsfp28@1, id: port-6, at: [112.80, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-7, at: [112.80, 27.5]}
-- {ref: std/qsfp28@1, id: port-8, at: [131.80, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-9, at: [131.80, 27.5]}
-- {ref: std/qsfp28@1, id: port-10, at: [152.20, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-11, at: [152.20, 27.5]}
-- {ref: std/qsfp28@1, id: port-12, at: [171.20, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-13, at: [171.20, 27.5]}
-- {ref: std/qsfp28@1, id: port-14, at: [191.60, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-15, at: [191.60, 27.5]}
-- {ref: std/qsfp28@1, id: port-16, at: [210.60, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-17, at: [210.60, 27.5]}
-- {ref: std/qsfp28@1, id: port-18, at: [231.00, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-19, at: [231.00, 27.5]}
-- {ref: std/qsfp28@1, id: port-20, at: [250.00, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-21, at: [250.00, 27.5]}
-- {ref: std/qsfp28@1, id: port-22, at: [270.40, 9.5], rotate: 180}
-- {ref: std/qsfp28@1, id: port-23, at: [270.40, 27.5]}
+- {ref: std/qsfp28@1, id: port-0, at: [53.00, 9.5]}
+- {ref: std/qsfp28@1, id: port-1, at: [53.00, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-2, at: [73.40, 9.5]}
+- {ref: std/qsfp28@1, id: port-3, at: [73.40, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-4, at: [92.40, 9.5]}
+- {ref: std/qsfp28@1, id: port-5, at: [92.40, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-6, at: [112.80, 9.5]}
+- {ref: std/qsfp28@1, id: port-7, at: [112.80, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-8, at: [131.80, 9.5]}
+- {ref: std/qsfp28@1, id: port-9, at: [131.80, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-10, at: [152.20, 9.5]}
+- {ref: std/qsfp28@1, id: port-11, at: [152.20, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-12, at: [171.20, 9.5]}
+- {ref: std/qsfp28@1, id: port-13, at: [171.20, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-14, at: [191.60, 9.5]}
+- {ref: std/qsfp28@1, id: port-15, at: [191.60, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-16, at: [210.60, 9.5]}
+- {ref: std/qsfp28@1, id: port-17, at: [210.60, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-18, at: [231.00, 9.5]}
+- {ref: std/qsfp28@1, id: port-19, at: [231.00, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-20, at: [250.00, 9.5]}
+- {ref: std/qsfp28@1, id: port-21, at: [250.00, 27.5], rotate: 180}
+- {ref: std/qsfp28@1, id: port-22, at: [270.40, 9.5]}
+- {ref: std/qsfp28@1, id: port-23, at: [270.40, 27.5], rotate: 180}
 size:
   w: 437.0
   h: 48.0
