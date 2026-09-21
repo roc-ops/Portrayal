@@ -142,15 +142,21 @@ relief:
       source: >-
         common/qsfp-pull-tab@1 provenance - ProLabs drawing 34.80 MAX reach.
         SFF-8661 Rev 2.5 was checked directly and gives only latch STRENGTH
-        (Table 5-1, 125N MIN pull to separate, latch engaged), no pull-tab
-        reach dimension - Figure 5-1's own "32 MIN" callout with Note 7
-        ("indicated dimension to include bail travel") is a minimum
-        clearance for the release mechanism's travel, not a maximum reach for
-        the tab standing proud. QSFP-DD HW Rev 6.3 Figure 52 dimensions the
-        20/35 MAX nose (see provenance.protrusion) and nothing past it - the
-        tab is not on that drawing at all. So the 34.80 stays `drawing`
-        confidence - it IS read off a drawing - but the drawing is one
-        vendor's (ProLabs), a vendor MAX, not either MSA's.
+        (Table 5-1, 125N MIN pull to separate, latch engaged) and one note
+        touching the bail at all: Figure 5-1's side-view "3.4 MAX" nose
+        thickness carries Note 6 ("indicated dimension to include bail
+        travel"), so that 3.4 MAX cross-section already allows room for the
+        bail's own travel - a THICKNESS bound, not a forward-reach dimension
+        for the tab. Note 7 ("indicated dimensions apply to openings in
+        housing") is unrelated and was misread as the bail note in an
+        earlier pass of this sentence; corrected after a 300dpi render of the
+        page matched every note number against the dimension its leader line
+        actually points to. Neither Figure 5-1 nor Table 5-1 gives a
+        forward-reach dimension for the tab. QSFP-DD HW Rev 6.3 Figure 52
+        dimensions the 20/35 MAX nose (see provenance.protrusion) and nothing
+        past it - the tab is not on that drawing at all. So the 34.80 stays
+        `drawing` confidence - it IS read off a drawing - but the drawing is
+        one vendor's (ProLabs), a vendor MAX, not either MSA's.
 connection-points:
   mate: {at: [9.175, 4.25], direction: front}
   optical-tx: {at: [6.05, 4.9], direction: front}
