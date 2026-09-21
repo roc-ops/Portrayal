@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr180
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-16X
@@ -56,13 +56,13 @@ provenance:
   cooling:
     confidence: datasheet
     note: >-
-      THIS BOX HAS NO FANS AND THAT IS WHY THE FACEPLATE LOOKS LIKE THIS. "This AS5915-16X model is a
-      passively cooled platform without fans. Deploying the unit with a front-to-back or back-to-front
-      external airflow exceeding a speed of at least 1m/s (measured at any point on the product surface)
-      is requested for cooling." So `airflow: passive` rather than a direction - the datasheet names both
-      directions as acceptable and neither as the product's - and the front plate is honeycombed edge
-      to edge where the CSR200's is solid with perforated columns. It is also why there is no FAN lamp:
-      five system lamps are printed, LOC DIAG PSU1 PSU2 ALARM, with the CSR200's FAN position simply empty.
+      THIS BOX HAS NO FANS AND THAT IS WHY THE FACEPLATE LOOKS LIKE THIS. The datasheet calls the AS5915-16X
+      a fanless, passively cooled platform and asks that it be deployed in external airflow, front-to-back
+      or back-to-front, of at least 1 m/s measured at any point on the product surface. So `airflow: passive`
+      rather than a direction - the datasheet names both directions as acceptable and neither as the product's
+      - and the front plate is honeycombed edge to edge where the CSR200's is solid with perforated columns.
+      It is also why there is no FAN lamp: five system lamps are printed, LOC DIAG PSU1 PSU2 ALARM, with
+      the CSR200's FAN position simply empty.
   panel-layout:
     confidence: photo-measured
     note: >-
@@ -88,8 +88,8 @@ attrs:
   thermal: {airflow: passive (no internal fans; 1 m/s external airflow required), cooling: passive - no
       fans of any kind}
   environmental: {temperature-operating: -40 C to 65 C (-40 F to 149 F), temperature-storage: -40 C to
-      70 C (-40 F to 158 F), humidity-operating: 5% to 95%, altitude: 5000 m at 40 C,
-    temperature-operating-transceiver: -40 C to 65 C}
+      70 C (-40 F to 158 F), humidity-operating: 5% to 95%, altitude: 5000 m at 40 C, temperature-operating-transceiver: -40
+      C to 65 C}
   platform:
     asic: Broadcom BCM88273 Qumran-UX
     cpu: Intel Atom C3308, 2-core
