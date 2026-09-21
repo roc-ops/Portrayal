@@ -1,0 +1,62 @@
+format: 1
+kind: component
+name: port-extender-lane-leds
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm
+  pitch, centred on the port, above each top-row QSFP28 uplink and below each bottom-row one.
+size: {w: 14.6, h: 2.45}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  size: >-
+    photo-measured - the Port Extender datasheet's page-1 render (MaiaEdge-Port-Extender-Datasheet-v1.pdf,
+    embedded image 6000 x 3373, staged as working/intake/maiaedge/port-extender/renders/
+    datasheet-p1-front-render-6000.png), scaled on the chassis's 438 mm at 11.28 px/mm. Each
+    lamp is a dark round lens 2.45 to 2.6 mm across; four sit on a 4.05 mm pitch, the group
+    centred on its port within 0.4 mm, for all eight uplinks.
+  semantics: >-
+    four lamps per 100G port is the QSFP28 lane count, and a breakout port lights one per lane
+    on most switches of this layout - but the datasheet says nothing about them, so each lamp
+    is declared off/on and no meaning is claimed.
+elements:
+  lamp-1:
+    at: [0.125, 0.125]
+    size: [2.2, 2.2]
+    class: led
+    states: ['off', 'on']
+  lamp-2:
+    at: [4.175, 0.125]
+    size: [2.2, 2.2]
+    class: led
+    states: ['off', 'on']
+  lamp-3:
+    at: [8.225, 0.125]
+    size: [2.2, 2.2]
+    class: led
+    states: ['off', 'on']
+  lamp-4:
+    at: [12.275, 0.125]
+    size: [2.2, 2.2]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+  - node: lamp-1
+    dome: 0.25
+    confidence: estimated
+    source: common/led-dot@1's figure - nothing held says how far a lamp stands off the face
+  - node: lamp-2
+    dome: 0.25
+    confidence: estimated
+    source: common/led-dot@1's figure - nothing held says how far a lamp stands off the face
+  - node: lamp-3
+    dome: 0.25
+    confidence: estimated
+    source: common/led-dot@1's figure - nothing held says how far a lamp stands off the face
+  - node: lamp-4
+    dome: 0.25
+    confidence: estimated
+    source: common/led-dot@1's figure - nothing held says how far a lamp stands off the face
+skins: [default]

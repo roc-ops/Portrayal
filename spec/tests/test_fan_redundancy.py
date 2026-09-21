@@ -441,7 +441,14 @@ def test_the_comparison_layer_can_now_reach_them():
     table says 'Fan-tray modules with 5 pcs of 40.5 mm x 70.14 mm 12V fans': one fan per
     tray, five trays, four needed, so here the tray count and the fan count are the same
     number and the redundancy figure means the same thing counted either way.
+
+    SIXTY-EIGHT IS THE MAIAEDGE PORT EXTENDER, a 3+1 over four bays - "3+1 Redundant Fans"
+    on its datasheet's page 3. It is the first entry whose BAYS ARE NOT MEASURED: the rear
+    is known from an oblique setup video that shows only its right half, so the four
+    modules are the datasheet's count placed symmetrically about the management panel.
+    The figure is sourced and the geometry is not, and the census compares the figure -
+    which is exactly why it can take a device whose rear is still an estimate.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 67, n
+    assert n == 68, n
