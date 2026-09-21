@@ -57,6 +57,15 @@ provenance:
       Ports 45-48 are COMBO: the twelfth stack's cages and the four RJ-45s beside it are
       bracketed together on the faceplate, and the datasheet lists '4 RJ-45/2 CSFP' combo
       ports, 'Either RJ-45 or CSFP port can be chosen at a time'.
+  copper-speed-spelling:
+    confidence: measured
+    note: >-
+      THE COPPER PORTS SAY speed 1g, NOT 1000base-t. The first draft spelled the four combo
+      jacks' speed 1000base-t, which the DCIM exporter does not type - it knows (rj45, 1g) -
+      so all four fell out of the NetBox and Nautobot exports without a word; the export
+      listed 30 interfaces where it should list 34. 1g is the library's spelling for a copper
+      traffic port. The MGMT jack is exported only through an overlay, by the exporter's own
+      rule for role: mgmt, whatever its speed says.
   cage-frames:
     confidence: photo-measured
     note: >-
@@ -178,7 +187,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45, speed: 1000base-t}
+    attrs: {media: rj45, speed: 1g}
   sfp-plus:
     term: Port
     role: traffic
@@ -482,10 +491,10 @@ views:
         - {ref: common/led-arrow-sm@1, id: led-port-46, skin: up, at: [293.26, 22.10], group: port-leds, rel-pos: 46, for: csfp-46-48}
         - {ref: common/led-arrow-sm@1, id: led-port-47, skin: down, at: [296.26, 22.10], group: port-leds, rel-pos: 47, for: csfp-45-47}
         - {ref: common/led-arrow-sm@1, id: led-port-48, skin: up, at: [299.26, 22.10], group: port-leds, rel-pos: 48, for: csfp-46-48}
-        - {ref: common/rj45-eth@1, id: port-46, at: [306.66, 9.02], rotate: 180, group: rj45-combo, rel-pos: 46, attrs: {media: rj45, speed: 1000base-t, combo-with: csfp-46-48}}
-        - {ref: std/rj45@2, id: port-45, at: [306.66, 23.98], group: rj45-combo, rel-pos: 45, attrs: {media: rj45, speed: 1000base-t, combo-with: csfp-45-47}}
-        - {ref: common/rj45-eth@1, id: port-48, at: [326.02, 9.02], rotate: 180, group: rj45-combo, rel-pos: 48, attrs: {media: rj45, speed: 1000base-t, combo-with: csfp-46-48}}
-        - {ref: std/rj45@2, id: port-47, at: [326.02, 23.98], group: rj45-combo, rel-pos: 47, attrs: {media: rj45, speed: 1000base-t, combo-with: csfp-45-47}}
+        - {ref: common/rj45-eth@1, id: port-46, at: [306.66, 9.02], rotate: 180, group: rj45-combo, rel-pos: 46, attrs: {media: rj45, speed: 1g, combo-with: csfp-46-48}}
+        - {ref: std/rj45@2, id: port-45, at: [306.66, 23.98], group: rj45-combo, rel-pos: 45, attrs: {media: rj45, speed: 1g, combo-with: csfp-45-47}}
+        - {ref: common/rj45-eth@1, id: port-48, at: [326.02, 9.02], rotate: 180, group: rj45-combo, rel-pos: 48, attrs: {media: rj45, speed: 1g, combo-with: csfp-46-48}}
+        - {ref: std/rj45@2, id: port-47, at: [326.02, 23.98], group: rj45-combo, rel-pos: 47, attrs: {media: rj45, speed: 1g, combo-with: csfp-45-47}}
         - {ref: std/sfp-ganged@1, id: port-50, at: [345.06, 10.42], rotate: 180, group: sfp-plus, rel-pos: 50, attrs: {media: sfp-plus, speed: 10g}}
         - {ref: std/sfp-ganged@1, id: port-49, at: [345.06, 25.38], group: sfp-plus, rel-pos: 49, attrs: {media: sfp-plus, speed: 10g}}
         - {ref: common/led-arrow-sm@1, id: led-port-49, skin: down, at: [346.56, 22.10], group: port-leds, rel-pos: 49, for: port-49}
@@ -499,7 +508,7 @@ views:
         - {ref: common/led-arrow-sm@1, id: led-port-53, skin: down, at: [381.67, 22.10], group: port-leds, rel-pos: 53, for: port-53}
         - {ref: common/led-arrow-sm@1, id: led-port-54, skin: up, at: [395.67, 22.10], group: port-leds, rel-pos: 54, for: port-54}
         - {ref: std/rj45@2, id: console, at: [403.45, 9.02], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/rj45@2, id: mgmt-eth, at: [403.45, 23.98], group: mgmt, rel-pos: 2, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+        - {ref: std/rj45@2, id: mgmt-eth, at: [403.45, 23.98], group: mgmt, rel-pos: 2, attrs: {media: rj45, role: mgmt, speed: 1g}}
         - {ref: common/led-rect-sm@1, id: led-pwr, at: [426.20, 15.00], group: leds, rel-pos: 1, for: chassis}
         - {ref: common/led-rect-sm@1, id: led-sys, at: [426.20, 19.90], group: leds, rel-pos: 2, for: chassis}
         - {ref: std/c14-inlet@1, id: power-in, at: [6.24, 14.64], group: power, rel-pos: 1, attrs: {media: c14, role: power}}
