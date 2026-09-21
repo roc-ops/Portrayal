@@ -25,7 +25,8 @@ def test_a_host_that_presents_its_own_point_lifts_nothing():
 
 def test_a_forwarded_point_carries_the_composed_parts_lift():
     """The whole point: the aperture is the thing that stands forward."""
-    bore = {"interface": "lc", "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
     host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx",
                        "at": [1.25, 1.75], "lift": 10.0}]}
     iface, at, lift = presented_interface(host, _res({"std/lc-bore@3": bore}))
@@ -36,8 +37,23 @@ def test_a_forwarded_point_carries_the_composed_parts_lift():
         "ignores that is buried in the transceiver body")
 
 
+def test_a_forwarded_point_goes_through_the_composed_parts_rotation():
+    """The same bore turned tongue-up, as every generic transceiver composes
+    it. The part is drawn translate(at) rotate(180 w/2 h/2), so its mate
+    (2.35, 2.35) turns about the bore's centre (2.35, 3.15) to (2.35, 3.95),
+    and lands at (1.25 + 2.35, 1.75 + 3.95) = (3.6, 5.7) - the bore's centre,
+    not the (3.6, 4.1) a plain `at + mate` gave."""
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx",
+                       "at": [1.25, 1.75], "lift": 10.0, "rotate": 180}]}
+    _, at, _ = presented_interface(host, _res({"std/lc-bore@3": bore}))
+    assert at == [3.6, 5.7]
+
+
 def test_a_composed_part_with_no_lift_forwards_zero():
-    bore = {"interface": "lc", "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
     host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx", "at": [1.25, 1.75]}]}
     _, _, lift = presented_interface(host, _res({"std/lc-bore@3": bore}))
     assert lift == 0.0
@@ -62,7 +78,7 @@ def test_a_composed_part_with_no_lift_forwards_zero():
 # effective lift is the aperture's, and the relief inside the occupant still
 # has the extent it has anywhere else.
 #
-# THE HOST IS `generic/sfp-lc-simplex@1`, and the choice is not arbitrary.
+# THE HOST IS `generic/sfp-lc-simplex@2`, and the choice is not arbitrary.
 # `std/sfp-ganged@1` presents its own `mate` point and so forwards a lift of
 # ZERO - seating on it would pass whatever this code did. `generic/sfp-lc@1`
 # composes two lifted bores, and `presented_interface` declines to pick one of
@@ -83,7 +99,7 @@ import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-HOST = "generic/sfp-lc-simplex@1"
+HOST = "generic/sfp-lc-simplex@2"
 SVG = "{http://www.w3.org/2000/svg}"
 
 # the plug's own relief, which is what proves the lift is counted ONCE. `tip`
@@ -156,7 +172,7 @@ def _lift_of(el, parent):
 def _aperture_lift():
     from portrayal.manifest import presented_interface
     contract = yaml.safe_load(
-        (LIB / "components/generic/sfp-lc-simplex/v1/contract.yaml").read_text())
+        (LIB / "components/generic/sfp-lc-simplex/v2/contract.yaml").read_text())
 
     def res(ref):
         ns, rest = ref.split("/", 1)

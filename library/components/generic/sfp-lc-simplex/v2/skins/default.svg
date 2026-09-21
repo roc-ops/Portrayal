@@ -2,7 +2,8 @@
   <!-- Module body 13.55 x 8.55 (registry - sfp-module, SFF-8432 Table 4-3
        designators E/S), drawn evenodd with ONE bore as a hole - a bidi face
        carries transmit and receive on a single fibre, so there is one bore
-       centred on the module instead of generic/sfp-lc's pair. The 3D
+       instead of generic/sfp-lc's pair, and it sits where that pair's RX
+       bore does. The 3D
        textures this raised face with alphaTest, so the hole punches through
        and you look into the composed lc-bore recess behind it rather than
        at a painted-on circle.
@@ -10,20 +11,24 @@
        placement rotates 180): tongue 2.64 x 0.69, shoulder 4.70 x 0.49, neck
        3.46 x 0.42, then the 4.70 bore square. A square hole here would show
        face metal across the latch slot behind it. The hole is
-       generic/sfp-lc@1's own tx-bore path shifted +3.175 in X (from at.x
-       1.25 to at.x 4.425), which centres its 4.7 square on x 6.775 = 13.55/2
-       - see provenance.bores on the contract. -->
+       generic/sfp-lc@1's own rx-bore path, copied exactly (at.x 7.60, the
+       4.7 square spanning x 7.60 to 12.30, centre 9.95). @1 centred it on
+       x 6.775; @2 moves it to the RX position on the maintainer's
+       observation of real simplex parts, 2026-09-21, which no document or
+       photograph in the corpus shows - see provenance.bores on the
+       contract. -->
   <path id="body" fill-rule="evenodd" fill="#9aa0a8" stroke="#6e747c" stroke-width="0.25" d="
     M 0.6 0 h 12.35 a 0.6 0.6 0 0 1 0.6 0.6 v 7.35 a 0.6 0.6 0 0 1 -0.6 0.6 h -12.35
     a 0.6 0.6 0 0 1 -0.6 -0.6 v -7.35 a 0.6 0.6 0 0 1 0.6 -0.6 z
-    M 5.455 1.75 h 2.64 v 0.69 h 1.03 v 0.49 h -0.62 v 0.42 h 0.62 v 4.7
+    M 8.63 1.75 h 2.64 v 0.69 h 1.03 v 0.49 h -0.62 v 0.42 h 0.62 v 4.7
       h -4.7 v -4.7 h 0.62 v -0.42 h -0.62 v -0.49 h 1.03 z"/>
   <!-- bail latch: the lever that unseats the module. Separate piece on purpose -
        it pivots up to release, and lies flat here because the module is seated.
        data-fill-from lets a placement's latch-color field recolour it; the
-       literal fill is the default the drawing shows. -->
-  <rect id="bail" x="0.5" y="0.55" width="12.55" height="1.05" rx="0.5" fill="#2f5fa8"
-        stroke="#20406f" stroke-width="0.18" data-fill-from="latch-color"/>
+       literal fill is the field's default, a neutral grey that claims no
+       mode - see provenance.bail-colour on the contract. -->
+  <rect id="bail" x="0.5" y="0.55" width="12.55" height="1.05" rx="0.5" fill="#6f6f6f"
+        stroke="#444444" stroke-width="0.18" data-fill-from="latch-color"/>
   <g id="silkscreen">
     <text id="label" x="6.775" y="7.9" font-family="sans-serif" font-size="0.9"
           text-anchor="middle" fill="#2a2f34" data-from="label"></text>

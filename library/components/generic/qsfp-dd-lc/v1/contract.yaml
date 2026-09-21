@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-lc
-version: 1.0.1
+version: 1.0.2
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -24,7 +24,7 @@ fields:
   latch-color:
     label: Latch colour
     type: text
-    default: '#f2f2f2'
+    default: '#6f6f6f'
   label:
     label: Module label
     type: text
@@ -124,6 +124,19 @@ provenance:
     skins/default.svg instead, at the position generic/qsfp-lc@1 draws it at (`at: [-0.325, 2.55]`),
     carrying the same 19.00 x 3.40 envelope and 34.80 reach as a relief feature rather than a composed
     part's own.
+  tab-colour: >-
+    A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
+    every chromatic default is a claim. QSFP-DD HW Rev 6.3 section 6.3
+    recommends colour-coding the pull tab by wavelength - beige for 850 nm,
+    blue for 1310 nm, white for 1550 nm - with "should", and the list is not
+    exhaustive; SFF-8661 Rev 2.5 gives no colour code at all. The near-white
+    this default used to carry (the ProLabs drawing's PULL LATCH COLOR WHITE,
+    a fact about that one part) therefore read as 1550 nm on every generic
+    drawn with it, a per-SKU fact a generic must not carry (L99). The grey is
+    in no code table: not beige, not blue, not white. A vendor wrapper, which
+    knows which module it is, sets `latch-color` to the colour its wavelength
+    calls for. Decided 2026-09-21. Both documents are held locally in the
+    maintainer's gitignored corpus.
 parts:
   - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.95], rotate: 180, lift: 20.0}
   - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}
