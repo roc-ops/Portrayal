@@ -7,7 +7,7 @@ are dead, and the docs must stop implying they are read.
 `body-top.svg`, `body-bottom.svg`, `body-left.svg`, `body-right.svg` and
 `body-rear.svg` sit in its `skins/` directory unreferenced by that list, by any
 `relief.features[].node`, and - per docs/pluggables-3d-design.md - by
-`relief.js`/`viewer3d.js` either. D1 (Jason, 2026-09-21) is to delete them, not
+`relief.js`/`viewer3d.js` either. D1 (2026-09-21) is to delete them, not
 wire them in.
 
 A LIBRARY-WIDE VERSION OF THE FIRST TEST WOULD BE WRONG. `body-*.svg` is a

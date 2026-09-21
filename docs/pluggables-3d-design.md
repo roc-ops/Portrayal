@@ -90,12 +90,12 @@ module in the same kind of cage.
 
 ## Decisions taken in D (2026-09-21)
 
-- **D1 - delete the body skins** (Jason): `common/qsfp-transceiver`'s five
+- **D1 - delete the body skins**: `common/qsfp-transceiver`'s five
   `body-*.svg` skins are deleted, not wired in. The part is retired
   (`superseded-by: generic/qsfp-lc@1`) and nothing reads them.
-- **D2 - SFF-8432 was fetched** (Jason authorised) to
-  `working/specs/sff-8432-r5.2a.pdf`. Table 4-3 designator A is "10.00
-  Recommended Maximum", with other lengths "application specific"; Figure 4-2
+- **D2 - SFF-8432 Rev 5.2a was fetched**, held locally in the maintainer's
+  gitignored corpus. Table 4-3 designator A is "10.00 Recommended Maximum",
+  with other lengths "application specific"; Figure 4-2
   is the cage latch-retention post, not the bail, so SFF-8432 does not
   dimension the bail's forward reach. Note 13 codes an exposed feature's
   colour "blue" for single mode. The held SFF-8661 Rev 2.5 gives no pull-tab
