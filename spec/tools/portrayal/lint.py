@@ -430,6 +430,15 @@ def _paint_box(el):
             # carry an odd count, both break that, so anything but M/L/Z is unsure.
             if tag == "path" and re.search(r"[^MLZ0-9eE.,+\-\s]", d):
                 return "unsure"
+            # A LETTER GLUED TO ITS NUMBER - `M0 0 L40 0` - dropped that number
+            # from the token count and shifted every pair after it, so a 40mm
+            # plate measured 20 x 20. Read the subpaths where they can be read.
+            if tag == "path":
+                rings = _subpaths(d)
+                if rings:
+                    pts = [q for r in rings for q in r]
+                    return (min(q[0] for q in pts), min(q[1] for q in pts),
+                            max(q[0] for q in pts), max(q[1] for q in pts))
             return _path_extent(d, (0, 0)) or "unsure"
     except (TypeError, ValueError):
         return "unsure"
@@ -7173,8 +7182,16 @@ def lint_device(path, validator, lib_roots):
                 x0, y0 = max(x0, 0.0), max(y0, 0.0)   # the contracted box is the limit
                 x1, y1 = min(x1, pw), min(y1, ph)
                 if x1 > x0 and y1 > y0:
-                    boxes.append((px + x0, py + y0, x1 - x0, y1 - y0, p["id"],
-                                  holes if i < skin_n else []))
+                    # only the node the windows are cut in carries them: its box
+                    # contains a whole window, where anything drawn IN one is
+                    # smaller than it and still covers what is behind it
+                    bx0, by0, bx1, by1 = px + x0, py + y0, px + x1, py + y1
+                    cut = i < skin_n and any(
+                        min(q[0] for q in h) >= bx0 - 0.01 and max(q[0] for q in h) <= bx1 + 0.01
+                        and min(q[1] for q in h) >= by0 - 0.01 and max(q[1] for q in h) <= by1 + 0.01
+                        for h in holes)
+                    boxes.append((bx0, by0, bx1 - bx0, by1 - by0, p["id"],
+                                  holes if cut else []))
         # A BAY PAINTS OVER A LEGEND TOO, and L21 had never looked at one. It
         # gathered boxes from placements alone, so a mark printed where a card
         # goes was reported as fine - and the C40G's slot numbers, all six of

@@ -230,9 +230,9 @@ def test_a_rotated_cage_is_punched_through_its_rotated_opening():
 # --------------------------------------- a skin L21 can read, holes and all ---
 
 def test_a_readable_skin_opens_its_own_paint_and_not_its_parts(tmp_path):
-    """When the skin can be read node by node, the hole goes with the skin's
-    paint and not with the parts composed over it - a lamp drawn across a
-    window still covers the legend under it."""
+    """When the skin can be read node by node, the hole goes with the node it
+    is cut in - not with the parts composed over it, and not with another node
+    the skin paints inside the window. Either still covers the legend under it."""
     comp = tmp_path / "lib" / "components" / "t" / "plate" / "v1"
     (comp / "skins").mkdir(parents=True)
     (comp / "contract.yaml").write_text(yaml.safe_dump({
@@ -243,7 +243,8 @@ def test_a_readable_skin_opens_its_own_paint_and_not_its_parts(tmp_path):
     (comp / "skins" / "default.svg").write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20">'
         '<path id="plate" fill-rule="evenodd" fill="#222" '
-        'd="M0 0 L40 0 L40 20 L0 20 Z M4 3 L36 3 L36 17 L4 17 Z"/></svg>')
+        'd="M0 0 L40 0 L40 20 L0 20 Z M4 3 L36 3 L36 17 L4 17 Z"/>'
+        '<rect id="tag" x="6" y="5" width="6" height="4" fill="#fff"/></svg>')
     roots = [str(tmp_path / "lib"), str(LIB)]
     assert lint.paint_boxes("t/plate@1", "default", roots) is not None, \
         "the point of this test is the readable-skin branch"
@@ -255,7 +256,8 @@ def test_a_readable_skin_opens_its_own_paint_and_not_its_parts(tmp_path):
         "views": {"front": {
             "size": {"w": 100, "h": 50},
             "silkscreen": [{"at": [22, 20], "text": "IN", "font-size": 3},
-                           {"at": [41, 15], "text": "L", "font-size": 2}],
+                           {"at": [41, 15], "text": "L", "font-size": 2},
+                           {"at": [19, 13], "text": "T", "font-size": 2}],
             "components": {"placements": [
                 {"ref": "t/plate@1", "id": "plate", "at": [10, 5]}]}}}}))
     with lint.collecting() as got:
@@ -263,3 +265,14 @@ def test_a_readable_skin_opens_its_own_paint_and_not_its_parts(tmp_path):
     ws = [w for w in got.warnings if "[L21]" in w]
     assert not any("'IN'" in w for w in ws), ws
     assert any("'L'" in w and "inside plate" in w for w in ws), ws
+    # and a node the skin paints INSIDE the window is not the window
+    assert any("'T'" in w and "inside plate" in w for w in ws), ws
+
+
+def test_a_letter_glued_to_its_number_does_not_shift_the_extent():
+    """`M0 0 L40 0` read by splitting on spaces dropped `M0` and `L40` and
+    paired what was left, so a 40 x 20 plate measured 20 x 20."""
+    import xml.etree.ElementTree as ET
+    el = ET.fromstring('<path xmlns="http://www.w3.org/2000/svg" fill="#222" '
+                       'd="M0 0 L40 0 L40 20 L0 20 Z"/>')
+    assert lint._paint_box(el) == (0.0, 0.0, 40.0, 20.0)
