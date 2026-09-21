@@ -436,6 +436,18 @@ Now populate. Reuse before building.
 Occupants (a transceiver in a cage) use `mate-to:` and carry no position of
 their own.
 
+A placement that presents **more than one interface** says so with
+`interfaces:`. A Compact SFP (CSFP) cage is the case that needs it: the module
+fits a standard SFP cage and carries two independent BiDi fibre connections,
+so a 24-cage switch has 48 interfaces. They belong on the host cage, not the
+optic, because the switch's silicon has both whether or not a module is
+seated - `{ref: std/sfp-ganged@1, id: csfp-1-3, interfaces: [port-1, port-3]}`.
+The DCIM export lists each interface and not the cage. The ids must be unique
+in the view and must not be a placement's or bay's id, and only a port can
+present them (L105). Breakout is different and stays a description on one
+interface: it is a mode a port is configured into, not two ports that always
+exist.
+
 ### Power figures
 
 Every module you place or build gets its power figure, and the key says which

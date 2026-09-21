@@ -245,6 +245,7 @@ RULES = {
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
+    "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
 }
 
 
@@ -5112,6 +5113,49 @@ def lint_device_pluggable_media(path, data, _lib_roots=None):
                 "family in spec/schemas/pluggables.yaml carries as a rate")
 
 
+
+def lint_device_placement_interfaces(path, data, lib_roots):
+    """L105: a placement that presents several interfaces (#443).
+
+    A CSFP cage carries two BiDi interfaces and declares them -
+    `interfaces: [port-1, port-3]` - because the switch's silicon has both
+    whether or not a module is seated. Three things can make that wrong, and
+    each is a DCIM that lists the wrong ports:
+
+    AN INTERFACE THAT IS ALSO A PLACEMENT OR BAY ID. The ECS4530's combo
+    RJ-45s were `port-45`..`port-48` - exactly the ids its twelfth stack's
+    CSFP interfaces needed. Both connectors are real and each needs its own
+    name, so one of them has to be renamed; the export would otherwise write
+    two interfaces under one name.
+
+    ONE INTERFACE PRESENTED BY TWO PLACEMENTS - the same port counted twice.
+
+    INTERFACES ON SOMETHING THAT IS NOT A PORT. A lamp or a bay filler does
+    not present a switch interface, whatever its id says.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        comps = (view or {}).get("components") or {}
+        placements = comps.get("placements") or []
+        bays = comps.get("bays") or []
+        ids = {p.get("id") for p in placements if p.get("id")} | {b.get("id") for b in bays if b.get("id")}
+        owner = {}
+        for p in placements:
+            ifs = p.get("interfaces")
+            if not ifs:
+                continue
+            ref = p.get("ref") or ""
+            if _contract(ref, lib_roots).get("class") != "port":
+                err(path, "L105", f"{vname}: {p.get('id')} presents interfaces {', '.join(ifs)} "
+                                  f"but {ref} is not a port")
+            for i in ifs:
+                if i in ids:
+                    err(path, "L105", f"{vname}: {p.get('id')} presents interface {i!r}, which is "
+                                      f"also the id of a placement or bay in this view")
+                if i in owner:
+                    err(path, "L105", f"{vname}: interface {i!r} is presented by both "
+                                      f"{owner[i]} and {p.get('id')}")
+                owner.setdefault(i, p.get("id"))
+
 def lint_device_cage_media_disagreement(path, data, lib_roots):
     """L104: a port's declared media and its cage's presented interface
     (`manifest.presented_interface`, looked through a wrapper's `parts:`
@@ -6586,6 +6630,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_port_optics(path, data, lib_roots)
     lint_device_pluggable_media(path, data)
     lint_device_cage_media_disagreement(path, data, lib_roots)
+    lint_device_placement_interfaces(path, data, lib_roots)
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ecs4530-54csfp-i
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: ECS4530-54CSFP-DC-I
@@ -59,9 +59,15 @@ provenance:
       stack the legend reads '1' and '3'; above its top cage '2' and '4': a CSFP module presents two bidirectional
       fibre ports, so 24 cages give the datasheet's 48 ports - 'by inserting a CSFP transceiver that supports
       two BIDI fiber ports, each port can connect to two CPE/IAD devices, so the total number of physical
-      ports is 48'. Stack k carries 4k+1 and 4k+3 in its bottom cage and 4k+2 and 4k+4 in its top. THE
-      LIBRARY HAS NO WAY TO GIVE ONE CAGE TWO INTERFACES, so each cage is one placement named for both
-      - csfp-1-3 - with its two port numbers in attrs; see the gap. Ports 45-48 are COMBO: the twelfth
+      ports is 48'. Stack k carries 4k+1 and 4k+3 in its bottom cage and 4k+2 and 4k+4 in its top. EACH
+      CAGE DECLARES THE TWO INTERFACES IT PRESENTS - csfp-1-3 carries `interfaces: [port-1, port-3]` (roc-ops/Portrayal#443)
+      - so the DCIM export lists port-1..port-48 and the cages themselves are not interfaces. The switch's
+      silicon has both ports whether or not a module is seated, which is why they belong to the cage and
+      not to the optic. With the SFP+ as port-49..52 and the QSFP+ as port-53/54, the export is port-1..port-54
+      - the 54 in the model number. THE COMBO JACKS ARE copper-45..copper-48. They were port-45..48 first,
+      which is exactly the ids the twelfth stack's CSFP interfaces need; both connectors are real and
+      a DCIM must cable each, so the copper jacks take their own names and each carries `combo-with` its
+      fibre interface. L105 holds interface ids apart from placement ids. Ports 45-48 are COMBO: the twelfth
       stack's cages and the four RJ-45s beside it are bracketed together on the faceplate, and the datasheet
       lists '4 RJ-45/2 CSFP' combo ports, 'Either RJ-45 or CSFP port can be chosen at a time'.
   copper-speed-spelling:
@@ -139,16 +145,6 @@ attrs:
   lifecycle: {eol: none-announced}
 chassis: {width: 440.0, height: 44.0, depth: 220.0, ru: 1, weight-kg: 3.0, color: '#26292c'}
 gaps:
-- what: csfp-dual-interface
-  scope:
-  - front
-  reason: needs-drawing
-  wanted: >-
-    A WAY TO GIVE ONE CAGE TWO INTERFACES. Each CSFP cage carries two numbered ports and the library can
-    seat only one interface per placement, so the 48 fibre ports are 24 placements named for their pairs
-    (csfp-1-3 ...) with the numbers in attrs. A DCIM export therefore sees 24 fibre interfaces where the
-    switch has 48. This wants a schema construct - a placement declaring its logical interfaces - not
-    a different drawing.
 - what: bottom-rj45-lamps
   scope:
   - front
@@ -318,10 +314,10 @@ views:
       - {id: led-port-46, at: [293.26, 22.1], size: [2.25, 2.0], shape: rect}
       - {id: led-port-47, at: [296.26, 22.1], size: [2.25, 2.0], shape: rect}
       - {id: led-port-48, at: [299.26, 22.1], size: [2.25, 2.0], shape: rect}
-      - {id: port-46, at: [306.66, 9.02], size: [15.8, 13.2], shape: rect}
-      - {id: port-45, at: [306.66, 23.98], size: [15.8, 13.2], shape: rect}
-      - {id: port-48, at: [326.02, 9.02], size: [15.8, 13.2], shape: rect}
-      - {id: port-47, at: [326.02, 23.98], size: [15.8, 13.2], shape: rect}
+      - {id: copper-46, at: [306.66, 9.02], size: [15.8, 13.2], shape: rect}
+      - {id: copper-45, at: [306.66, 23.98], size: [15.8, 13.2], shape: rect}
+      - {id: copper-48, at: [326.02, 9.02], size: [15.8, 13.2], shape: rect}
+      - {id: copper-47, at: [326.02, 23.98], size: [15.8, 13.2], shape: rect}
       - {id: port-50, at: [345.06, 10.42], size: [14.25, 10.4], shape: rect}
       - {id: port-49, at: [345.06, 25.38], size: [14.25, 10.4], shape: rect}
       - {id: led-port-49, at: [346.56, 22.1], size: [2.25, 2.0], shape: rect}
@@ -389,10 +385,10 @@ views:
     - {at: [300.39, 9.6], text: '48', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-46-48}
     - {at: [291.39, 39.2], text: '45', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-45-47}
     - {at: [300.39, 39.2], text: ●47, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-45-47}
-    - {at: [314.56, 7.8], text: ▼ 46 ▲, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-46}
-    - {at: [314.56, 39.2], text: '45', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-45}
-    - {at: [333.92, 7.8], text: ▼ 48 ▲, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-48}
-    - {at: [333.92, 39.2], text: '47', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-47}
+    - {at: [314.56, 7.8], text: ▼ 46 ▲, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: copper-46}
+    - {at: [314.56, 39.2], text: '45', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: copper-45}
+    - {at: [333.92, 7.8], text: ▼ 48 ▲, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: copper-48}
+    - {at: [333.92, 39.2], text: '47', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: copper-47}
     - {at: [352.18, 9.6], text: '50', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-50}
     - {at: [352.18, 39.2], text: '49', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-49}
     - {at: [369.78, 9.6], text: '52', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-52}
@@ -426,13 +422,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 2
-        attrs: {media: sfp, csfp: true, logical-ports: 2 4}
+        interfaces:
+        - port-2
+        - port-4
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-1-3
         at: [99.12, 25.38]
         group: csfp
         rel-pos: 1
-        attrs: {media: sfp, csfp: true, logical-ports: 1 3}
+        interfaces:
+        - port-1
+        - port-3
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-1, skin: down, at: [100.62, 22.1], group: port-leds,
         rel-pos: 1, for: csfp-1-3}
       - {ref: common/led-arrow-sm@1, id: led-port-2, skin: up, at: [103.62, 22.1], group: port-leds, rel-pos: 2,
@@ -447,13 +449,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 4
-        attrs: {media: sfp, csfp: true, logical-ports: 6 8}
+        interfaces:
+        - port-6
+        - port-8
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-5-7
         at: [116.36, 25.38]
         group: csfp
         rel-pos: 3
-        attrs: {media: sfp, csfp: true, logical-ports: 5 7}
+        interfaces:
+        - port-5
+        - port-7
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-5, skin: down, at: [117.86, 22.1], group: port-leds,
         rel-pos: 5, for: csfp-5-7}
       - {ref: common/led-arrow-sm@1, id: led-port-6, skin: up, at: [120.86, 22.1], group: port-leds, rel-pos: 6,
@@ -468,13 +476,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 6
-        attrs: {media: sfp, csfp: true, logical-ports: 10 12}
+        interfaces:
+        - port-10
+        - port-12
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-9-11
         at: [133.6, 25.38]
         group: csfp
         rel-pos: 5
-        attrs: {media: sfp, csfp: true, logical-ports: 9 11}
+        interfaces:
+        - port-9
+        - port-11
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-9, skin: down, at: [135.1, 22.1], group: port-leds,
         rel-pos: 9, for: csfp-9-11}
       - {ref: common/led-arrow-sm@1, id: led-port-10, skin: up, at: [138.1, 22.1], group: port-leds, rel-pos: 10,
@@ -489,13 +503,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 8
-        attrs: {media: sfp, csfp: true, logical-ports: 14 16}
+        interfaces:
+        - port-14
+        - port-16
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-13-15
         at: [150.84, 25.38]
         group: csfp
         rel-pos: 7
-        attrs: {media: sfp, csfp: true, logical-ports: 13 15}
+        interfaces:
+        - port-13
+        - port-15
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-13, skin: down, at: [152.34, 22.1], group: port-leds,
         rel-pos: 13, for: csfp-13-15}
       - {ref: common/led-arrow-sm@1, id: led-port-14, skin: up, at: [155.34, 22.1], group: port-leds,
@@ -510,13 +530,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 10
-        attrs: {media: sfp, csfp: true, logical-ports: 18 20}
+        interfaces:
+        - port-18
+        - port-20
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-17-19
         at: [168.08, 25.38]
         group: csfp
         rel-pos: 9
-        attrs: {media: sfp, csfp: true, logical-ports: 17 19}
+        interfaces:
+        - port-17
+        - port-19
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-17, skin: down, at: [169.58, 22.1], group: port-leds,
         rel-pos: 17, for: csfp-17-19}
       - {ref: common/led-arrow-sm@1, id: led-port-18, skin: up, at: [172.58, 22.1], group: port-leds,
@@ -531,13 +557,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 12
-        attrs: {media: sfp, csfp: true, logical-ports: 22 24}
+        interfaces:
+        - port-22
+        - port-24
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-21-23
         at: [185.32, 25.38]
         group: csfp
         rel-pos: 11
-        attrs: {media: sfp, csfp: true, logical-ports: 21 23}
+        interfaces:
+        - port-21
+        - port-23
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-21, skin: down, at: [186.82, 22.1], group: port-leds,
         rel-pos: 21, for: csfp-21-23}
       - {ref: common/led-arrow-sm@1, id: led-port-22, skin: up, at: [189.82, 22.1], group: port-leds,
@@ -552,13 +584,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 14
-        attrs: {media: sfp, csfp: true, logical-ports: 26 28}
+        interfaces:
+        - port-26
+        - port-28
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-25-27
         at: [202.56, 25.38]
         group: csfp
         rel-pos: 13
-        attrs: {media: sfp, csfp: true, logical-ports: 25 27}
+        interfaces:
+        - port-25
+        - port-27
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-25, skin: down, at: [204.06, 22.1], group: port-leds,
         rel-pos: 25, for: csfp-25-27}
       - {ref: common/led-arrow-sm@1, id: led-port-26, skin: up, at: [207.06, 22.1], group: port-leds,
@@ -573,13 +611,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 16
-        attrs: {media: sfp, csfp: true, logical-ports: 30 32}
+        interfaces:
+        - port-30
+        - port-32
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-29-31
         at: [219.81, 25.38]
         group: csfp
         rel-pos: 15
-        attrs: {media: sfp, csfp: true, logical-ports: 29 31}
+        interfaces:
+        - port-29
+        - port-31
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-29, skin: down, at: [221.31, 22.1], group: port-leds,
         rel-pos: 29, for: csfp-29-31}
       - {ref: common/led-arrow-sm@1, id: led-port-30, skin: up, at: [224.31, 22.1], group: port-leds,
@@ -594,13 +638,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 18
-        attrs: {media: sfp, csfp: true, logical-ports: 34 36}
+        interfaces:
+        - port-34
+        - port-36
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-33-35
         at: [237.04, 25.38]
         group: csfp
         rel-pos: 17
-        attrs: {media: sfp, csfp: true, logical-ports: 33 35}
+        interfaces:
+        - port-33
+        - port-35
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-33, skin: down, at: [238.54, 22.1], group: port-leds,
         rel-pos: 33, for: csfp-33-35}
       - {ref: common/led-arrow-sm@1, id: led-port-34, skin: up, at: [241.54, 22.1], group: port-leds,
@@ -615,13 +665,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 20
-        attrs: {media: sfp, csfp: true, logical-ports: 38 40}
+        interfaces:
+        - port-38
+        - port-40
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-37-39
         at: [254.28, 25.38]
         group: csfp
         rel-pos: 19
-        attrs: {media: sfp, csfp: true, logical-ports: 37 39}
+        interfaces:
+        - port-37
+        - port-39
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-37, skin: down, at: [255.78, 22.1], group: port-leds,
         rel-pos: 37, for: csfp-37-39}
       - {ref: common/led-arrow-sm@1, id: led-port-38, skin: up, at: [258.78, 22.1], group: port-leds,
@@ -636,13 +692,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 22
-        attrs: {media: sfp, csfp: true, logical-ports: 42 44}
+        interfaces:
+        - port-42
+        - port-44
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-41-43
         at: [271.52, 25.38]
         group: csfp
         rel-pos: 21
-        attrs: {media: sfp, csfp: true, logical-ports: 41 43}
+        interfaces:
+        - port-41
+        - port-43
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-41, skin: down, at: [273.02, 22.1], group: port-leds,
         rel-pos: 41, for: csfp-41-43}
       - {ref: common/led-arrow-sm@1, id: led-port-42, skin: up, at: [276.02, 22.1], group: port-leds,
@@ -657,13 +719,19 @@ views:
         rotate: 180
         group: csfp
         rel-pos: 24
-        attrs: {media: sfp, csfp: true, logical-ports: 46 48}
+        interfaces:
+        - port-46
+        - port-48
+        attrs: {media: sfp, csfp: true}
       - ref: std/sfp-ganged@1
         id: csfp-45-47
         at: [288.76, 25.38]
         group: csfp
         rel-pos: 23
-        attrs: {media: sfp, csfp: true, logical-ports: 45 47}
+        interfaces:
+        - port-45
+        - port-47
+        attrs: {media: sfp, csfp: true}
       - {ref: common/led-arrow-sm@1, id: led-port-45, skin: down, at: [290.26, 22.1], group: port-leds,
         rel-pos: 45, for: csfp-45-47}
       - {ref: common/led-arrow-sm@1, id: led-port-46, skin: up, at: [293.26, 22.1], group: port-leds,
@@ -673,31 +741,31 @@ views:
       - {ref: common/led-arrow-sm@1, id: led-port-48, skin: up, at: [299.26, 22.1], group: port-leds,
         rel-pos: 48, for: csfp-46-48}
       - ref: common/rj45-eth@1
-        id: port-46
+        id: copper-46
         at: [306.66, 9.02]
         rotate: 180
         group: rj45-combo
         rel-pos: 46
-        attrs: {media: rj45, speed: 1g, combo-with: csfp-46-48}
+        attrs: {media: rj45, speed: 1g, combo-with: port-46}
       - ref: std/rj45@2
-        id: port-45
+        id: copper-45
         at: [306.66, 23.98]
         group: rj45-combo
         rel-pos: 45
-        attrs: {media: rj45, speed: 1g, combo-with: csfp-45-47}
+        attrs: {media: rj45, speed: 1g, combo-with: port-45}
       - ref: common/rj45-eth@1
-        id: port-48
+        id: copper-48
         at: [326.02, 9.02]
         rotate: 180
         group: rj45-combo
         rel-pos: 48
-        attrs: {media: rj45, speed: 1g, combo-with: csfp-46-48}
+        attrs: {media: rj45, speed: 1g, combo-with: port-48}
       - ref: std/rj45@2
-        id: port-47
+        id: copper-47
         at: [326.02, 23.98]
         group: rj45-combo
         rel-pos: 47
-        attrs: {media: rj45, speed: 1g, combo-with: csfp-45-47}
+        attrs: {media: rj45, speed: 1g, combo-with: port-47}
       - ref: std/sfp-ganged@1
         id: port-50
         at: [345.06, 10.42]
