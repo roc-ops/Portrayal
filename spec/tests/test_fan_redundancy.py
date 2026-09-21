@@ -387,7 +387,16 @@ def test_the_comparison_layer_can_now_reach_them():
     thumbscrew each, and one fan module - FAN-1U-1x1M - fits all three EPS20x chassis. Same
     vendor, same figure, same port count, opposite serviceability, and a reader comparing
     rears can now see that from the data rather than from the prose.
+
+    SIXTY-THREE IS THE EDGECORE EPS201, the EPS203's shell-mate, and it states the same
+    "Hot-swappable 2 + 1 redundant fan trays" over the same three bays with the same
+    FAN-1U-1x1M tray in them. What it adds to this census is the AIRFLOW: it is the first
+    entry here whose fan tray ships in two directions under two part numbers, -F and -B,
+    and whose two orderable configurations differ in nothing a drawing can show but the
+    colour of the handles. Its shell-mate ships front-to-back only. So one fan part, one
+    redundancy figure, two chassis, and only one of them lets you choose which way the air
+    goes.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 62, n
+    assert n == 63, n
