@@ -197,7 +197,7 @@ def test_the_lc_boot_rear_carries_its_cable_exit():
 # colour by mode (black or beige multi-mode, blue single mode) and QSFP-DD HW
 # Rev 6.3 section 6.3 codes a pull tab by wavelength (beige 850 nm, blue 1310
 # nm, white 1550 nm). A generic that defaults to any of those claims a per-SKU
-# fact (L99), so every generic's default is an unsaturated grey that is neither
+# fact (L99), so every generic's default is an achromatic grey that is neither
 # black nor white - and the skin's literal fill, the colour a compile with no
 # field shows, is that same default, so the two cannot drift apart.
 
@@ -218,16 +218,11 @@ def test_latch_default_is_a_neutral_grey_the_skin_draws(ref, latch_node, body_ou
         f"{ref}: the skin draws {latch.get('fill')!r} but latch-color defaults "
         f"to {default!r}")
     r, g, b = _hex_rgb(default)
-    # ACHROMATIC, MEASURED AS SATURATION. #6b6f73 is the value decided, and it
-    # is a grey with a cool cast (107, 111, 115: a spread of 8, saturation
-    # 0.07), so a literal r == g == b within 2 would refuse the decided
-    # colour. What the test is for is that no default reads as a hue - blue
-    # is the one in both codes - and 0.08 admits that grey while refusing
-    # anything with a colour in it (the old blue #2f5fa8 is 0.72).
-    saturation = (max(r, g, b) - min(r, g, b)) / max(r, g, b)
-    assert saturation <= 0.08, (
-        f"{ref}: {default} is chromatic (saturation {saturation:.2f}); a "
-        f"coloured default is a mode or wavelength claim")
+    # ACHROMATIC EXACTLY: r == g == b. Blue is in both codes, and a grey with
+    # a cast is a grey leaning towards a hue, so no tolerance is given.
+    assert r == g == b, (
+        f"{ref}: {default} is chromatic ({r}, {g}, {b}); a coloured default "
+        f"is a mode or wavelength claim")
     assert 0x20 < r < 0xe0, (
         f"{ref}: {default} is too near black or white - both are in an MSA "
         f"colour code (black multi-mode, white 1550 nm)")

@@ -113,7 +113,7 @@ carried open: SFF-8432 Note 13 makes an exposed SFP colour a mode claim
 (blue = single mode), and both SFP generics defaulted `latch-color` to
 `#2f5fa8` (blue), so every generic SFP drawn with its default claimed single
 mode - a per-SKU fact L99 keeps off generics. All four generics now default
-`latch-color` to `#6b6f73`, because SFF-8432 Rev 5.2a codes blue, black and
+`latch-color` to `#6f6f6f`, because SFF-8432 Rev 5.2a codes blue, black and
 beige and QSFP-DD HW Rev 6.3 section 6.3 codes beige, blue and white, and an
 achromatic grey is in neither table; a vendor wrapper sets the colour its
 mode or wavelength calls for. D's 3D wiring is unchanged - the grey reaches
