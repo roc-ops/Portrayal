@@ -75,6 +75,10 @@ export const SHELL_CSS = `
   #hl .sw { width:0.95rem; height:0.95rem; border-radius:3px; cursor:pointer;
             border:1px solid #00000055; }
   #hl .sw.on { outline:2px solid var(--ink); outline-offset:1px; }
+  #stagebg { display:flex; align-items:center; gap:0.25rem; }
+  #stagebg .sw { width:0.95rem; height:0.95rem; border-radius:3px; cursor:pointer;
+                 border:1px solid var(--control-line); }
+  #stagebg .sw.on { outline:2px solid var(--ink); outline-offset:1px; }
   #hl input[type=color] { width:1.5rem; height:1.2rem; padding:0; border:none;
             background:none; cursor:pointer; }
   .node .tw { width:0.85rem; color:var(--dim); flex:none; text-align:center; }
@@ -130,6 +134,7 @@ const SHELL_HTML = `
   <label class="f">config <select id="cfg"></select></label>
   <label class="f">view <select id="view"></select></label>
   <span class="f" id="hl" title="Selection colour - pick one that stands out against this chassis"></span>
+  <span class="f" id="stagebg" title="Background - a dark chassis reads better on a light stage"></span>
   <button id="fit">Fit</button>
   <span class="f" id="pulled" hidden></span>
   <span class="f" id="status"></span>
@@ -682,6 +687,38 @@ export function createShell(opts = {}) {
     inp.oninput = () => setHl(inp.value);
     host.appendChild(inp);
     setHl(cur);
+  })();
+
+  // Stage background. The same argument as the selection colour, from the
+  // other side: a near-black stage suits a silver chassis and swallows a black
+  // one - the MaiaEdge PBC-2000's face is #1f2226 on a #101214 stage. So the
+  // backdrop is chosen by whoever is looking, remembered, and announced so a
+  // 3D view beside the drawing can follow it. Black is the stage as it was.
+  const STAGE_KEY = 'portrayal.stage';
+  const STAGE_SWATCHES = [['#ffffff', 'white'], ['#c5c9ce', 'light grey'],
+                          ['#3b3f45', 'dark grey'], ['#101214', 'black']];
+  let stageColor = '#101214';
+  function setStage(c) {
+    stageColor = c;
+    document.documentElement.style.setProperty('--stage', c);
+    try { localStorage.setItem(STAGE_KEY, c); } catch (e) { /* private mode */ }
+    for (const sw of body.querySelectorAll('#stagebg .sw'))
+      sw.classList.toggle('on', sw.dataset.c === c);
+    emit('stage', c);
+  }
+  (function mountStage() {
+    const host = $('#stagebg');
+    if (!host) return;
+    let cur = stageColor;
+    try { cur = localStorage.getItem(STAGE_KEY) || cur; } catch (e) { /* ignore */ }
+    for (const [c, name] of STAGE_SWATCHES) {
+      const b = document.createElement('span');
+      b.className = 'sw'; b.dataset.c = c; b.style.background = c;
+      b.title = `${name} background`;
+      b.onclick = () => setStage(c);
+      host.appendChild(b);
+    }
+    setStage(cur);
   })();
 
   let halo = null;
@@ -1359,5 +1396,6 @@ export function createShell(opts = {}) {
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),
     hl: () => hlColor,
+    stage: () => stageColor,
   };
 }
