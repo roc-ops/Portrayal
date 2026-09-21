@@ -85,4 +85,17 @@ out.clearingOneLeavesTheOther = [[...m.pulledPaths(a)], [...m.pulledPaths(b)].so
 // a scope nobody has pulled from is empty, not undefined
 out.defaultPullIsEmpty = [...m.pulledPaths()];
 
+// A CAGE SWAP GOES THROUGH THE SAME PER-SCOPE MAP AS A BAY SWAP.
+// `applyBayOverrides` (viewer3d.js) seats an occupant into a cage the same
+// way it seats a module into a bay: it rewrites the fetched face's text and
+// hands the result to THIS `setSvgOverride`/`svgSource` pair, per view, per
+// viewer. The isolation proven above for a bay swap must hold for a cage
+// swap too, or two viewers choosing different optics for the same port would
+// fight over one map exactly as #302 found for bays - the per-scope override
+// map is what a cage swap depends on to reach only the viewer that asked for
+// it.
+const cageUrl = 'front-0.svg';
+m.setSvgOverride(cageUrl, '<svg id="PORT-4-QSFP"/>', a);
+out.cageSwapStaysInItsScope = [await m.svgSource(cageUrl, a), await m.svgSource(cageUrl, b)];
+
 console.log(JSON.stringify(out));

@@ -460,3 +460,51 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
     : [];
   return {applied: n, dropped};
 }
+
+// WHICH VIEWS OF A CONFIG AN OVERRIDE MAP TOUCHES - the guard that used to
+// live inline in viewer3d.js's `applyBayOverrides`, and was bay-only: it read
+// `devIndex.bays` alone, so a cage-only override named no bay in any view,
+// every view was skipped, and the swap never reached the fetched face text the
+// 3D scene is built from - the same 2D/3D divergence this file's header
+// describes for a bay swap, now for a cage.
+//
+// It lives HERE rather than in viewer3d.js because viewer3d.js imports
+// `three`, which a plain node process cannot resolve (no import map support,
+// no `three` devDependency) - so a pure decision viewer3d.js needs cannot be
+// unit-tested from inside it without a browser. swap.js is already the seating
+// home for both a bay swap and a cage swap, so it is the home for the question
+// "which views did either kind touch" too.
+//
+// `devIndex` is the loaded `<device>.configs.json`; `devIndex.bays` and
+// `devIndex.cages` are each keyed by view. A view is rewritten when:
+//   - one of ITS BAYS is named in `overrides` - the original rule, untouched;
+//   - one of ITS CAGES is named in `overrides` - the case this function adds;
+//   - `overrides` names a nested (`/module/`) path AND the view has bays at
+//     all. A nested path is never a device bay id (nestedBays only ever
+//     produces one by walking what a device bay's OWN drawing seated - see
+//     nestedBays above), so it is found only by walking from a bay, and a
+//     view with no bays has nothing to walk, cages included.
+//
+// The view set is read off BOTH `devIndex.bays` and `devIndex.cages`, not
+// gated on `devIndex.bays` existing at all - a device that declares cages and
+// no bays anywhere (an optics-only faceplate) used to be skipped outright by
+// the old `!devIndex?.bays` guard before this function's decision was ever
+// consulted.
+export function viewsToRewrite(devIndex, overrides) {
+  const keys = Object.keys(overrides || {});
+  if (!keys.length) return [];
+  const nestedOverride = keys.some(k => k.includes('/module/'));
+  const byBays = devIndex?.bays || {};
+  const byCages = devIndex?.cages || {};
+  const views = new Set([...Object.keys(byBays), ...Object.keys(byCages)]);
+  const out = [];
+  for (const view of views) {
+    const bays = byBays[view] || [];
+    const cages = byCages[view] || [];
+    if (nestedOverride && bays.length) { out.push(view); continue; }
+    if (bays.some(b => Object.prototype.hasOwnProperty.call(overrides, b.id))
+        || cages.some(c => Object.prototype.hasOwnProperty.call(overrides, c.id)))
+      out.push(view);
+  }
+  return out;
+}
