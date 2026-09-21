@@ -15,7 +15,7 @@ still. Two things about that pair were wrong before this task:
    what lets 3D follow the art.
 
 2. The SFP bail's `source` asserted nothing SFF-8432 actually gives: D2 (see
-   docs/superpowers/plans/2026-09-21-pluggables-d-standing-proud.md) found
+   docs/pluggables-3d-design.md, "Decisions taken in D") found
    Table 4-3 designator A dimensions the *body*, not the bail, and Figure 4-2
    ("Latch Post Detail") is the cage-retention post, not the wire bail - so
    the bail's 14.3 reach stays `estimated` but the sentence has to say what
@@ -24,8 +24,8 @@ still. Two things about that pair were wrong before this task:
 This file compiles each generic the way `components_index.py` compiles
 `library/dist/components/*.svg` - `render.instance_group`, the same call, not
 a reimplementation - and reads the `data-z-*` attributes and skin fill straight
-off the result, per the plan's "Verification is compiled and counted, not
-reasoned about."
+off the result, per docs/pluggables-3d-design.md's own instruction that
+verification is "compiled and counted", not reasoned about.
 
 Every assertion here fails on at least one of today's four contracts: the two
 SFP generics still carry a hard-coded `data-z-color` on `bail` before this

@@ -16,25 +16,23 @@ body", and fifteen OTHER components - `common/psu-ac-650`, `common/fan-module`,
 `edgecore/agr-fan` among them - carry the same five names, equally unread by
 `relief.js` today, and are not being retired here. Scoping to
 `common/qsfp-transceiver` is deliberate, not a shortcut: this is the one part
-the plan (docs/superpowers/plans/2026-09-21-pluggables-d-standing-proud.md,
-task 2) actually retires, and a sweep of every `body-*.svg` in the library
-would fail on components nobody asked to touch.
+D1 (docs/pluggables-3d-design.md, "What is not a box") actually retires, and a
+sweep of every `body-*.svg` in the library would fail on components nobody
+asked to touch.
 
 The second test targets the ONE claim this task's brief calls out by name: that
 "the viewer uses them to texture the box." That exact sentence sat in
 `library/components/README.md` until #400 (spec A) replaced it with "NOTHING
-READS THEM TODAY" - and the plan doc for that spec (excluded below) still
-carries the old wording as its own historical record of what was wrong. The
-regex is deliberately narrow (`uses ... to texture ... box`) rather than a
-looser "texture" + "box" scan, because a looser one also matches
-docs/pluggables-3d-design.md's "The README says the viewer textures a box from
-them; nothing in `relief.js` ... reads them" - which is that document
+READS THEM TODAY". The regex is deliberately narrow (`uses ... to texture ...
+box`) rather than a looser "texture" + "box" scan, because a looser one also
+matches docs/pluggables-3d-design.md's "The README says the viewer textures a
+box from them; nothing in `relief.js` ... reads them" - which is that document
 QUOTING the old claim in order to refute it, not making it. That document and
-docs/pluggables-design.md are D's own decision record (docs/superpowers/plans/
-2026-09-21-pluggables-d-standing-proud.md's task-2 brief names both and says
-leave their descriptive sentences) and are excluded from the scan by name for
-the same reason docs/superpowers/plans/ is excluded wholesale: a plan or design
-doc's job is to narrate a defect, including by quoting it.
+docs/pluggables-design.md are D's own decision record and are excluded from
+the scan by name; `docs/superpowers/plans/` is excluded wholesale below for
+the same reason - it is gitignored since #453, but any plan an agent session
+still has locally is narrating a defect, including by quoting it, not
+re-asserting one.
 """
 import pathlib
 import re
@@ -50,9 +48,11 @@ EXEMPT_DOCS = {
     DOCS / "pluggables-design.md",
 }
 
-# The exact false claim #400 removed from library/components/README.md, and
-# the one docs/superpowers/plans/2026-09-18-pluggables-a-generic-transceivers.md
-# still carries verbatim as the record of what was wrong.
+# The exact false claim #400 removed from library/components/README.md. Spec
+# A's own session plan once carried it verbatim as the record of what was
+# wrong; that plan (like every other tracked one) is deleted by #453 and the
+# claim does not need to survive anywhere but here, as the regex to guard
+# against.
 STALE_CLAIM = re.compile(r"viewer\s+uses\s+(?:them|it)\s+to\s+texture\s+(?:the|a)\s+box",
                           re.IGNORECASE)
 
@@ -88,8 +88,8 @@ def test_no_doc_outside_plans_claims_the_viewer_textures_from_body_skins():
     That claim was true of nothing even before D1: docs/pluggables-3d-design.md
     already established `relief.js` never read these files. #400 already fixed
     `library/components/README.md`'s copy of the claim, so this is a regression
-    guard rather than today's fix - it is the plan's own test-first item for
-    task 2, kept here so nobody's edit reintroduces the sentence.
+    guard rather than today's fix - kept here so nobody's edit reintroduces the
+    sentence.
     """
     plans_dir = DOCS / "superpowers" / "plans"
     hits = []
