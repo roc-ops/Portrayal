@@ -121,7 +121,7 @@
 <script type="module">
 import { createShell, esc } from './shell.js';
 import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
-import { encodeSwaps, searchWith } from './swap.js';
+import { encodeSwaps, searchWith, swapOverrides as swapDelta } from './swap.js';
 
 const DIST = '../library/dist';
 const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
@@ -489,22 +489,16 @@ function mountExtras(v) {
 // function answers for both. A CAGE's built optic is this configuration's
 // `configs[].occupants[id]`, and a cage it does not name is built empty - never
 // the cage's own `occupant`, which is only the default configuration's answer.
-const isCage = id => Object.values(state.meta?.cages || {}).some(cs => cs.some(c => c.id === id));
-function builtOccupant(bayId) {
-  const cfg = state.meta?.configs?.find(c => c.name === state.cfg);
-  if (isCage(bayId)) return cfg?.occupants?.[bayId] || null;
-  const declared = cfg?.bays || {};
-  if (Object.prototype.hasOwnProperty.call(declared, bayId)) return declared[bayId] || null;
-  for (const bays of Object.values(state.meta?.bays || {}))
-    for (const b of bays) if (b.id === bayId) return b.default || null;
-  return null;
-}
+// The rule itself is swap.js's `swapOverrides`, beside `builtOccupants` - the
+// one reading of `configs[].occupants` (a ref or a `{ref, id, ...}` mapping,
+// and chained keys that are not cages) the shell's state is built from too.
+const flat = o => Object.values(o || {}).flat();
 function swapOverrides() {
-  const out = {};
-  for (const map of [state.cfgBays, state.cfgOccupants])
-    for (const [id, ref] of Object.entries(map || {}))
-      if ((ref || null) !== builtOccupant(id)) out[id] = ref || null;
-  return out;
+  return swapDelta({
+    cfg: state.meta?.configs?.find(c => c.name === state.cfg),
+    bays: flat(state.meta?.bays), cages: flat(state.meta?.cages),
+    cfgBays: state.cfgBays, cfgOccupants: state.cfgOccupants,
+  });
 }
 // THE SWAP STATE IS PART OF WHAT IS ON SCREEN, so it is part of the key. A
 // runtime swap changes no file on disk - the scene is extracted from the compiled

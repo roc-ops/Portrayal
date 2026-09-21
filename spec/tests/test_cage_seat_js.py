@@ -19,6 +19,7 @@ The cages are PICKED from the bare build's `cages[]`, not hard-coded: an
 upright and a turned cage of each form factor wherever the device has them.
 """
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -55,24 +56,65 @@ def pick(cages, ref):
     return [c for c in (upright, turned) if c]
 
 
-def components():
-    idx = json.loads((DIST / "components.json").read_text())["components"]
+def build_components(out):
+    """components.json and the compiled skins, BUILT HERE rather than read
+    from library/dist - a stale dist is a stale answer, and nothing about this
+    test would say so (the "gates measure the installed tree" hazard)."""
+    r = subprocess.run([sys.executable, "-m", "portrayal.components_index",
+                        "--library", str(LIB), "--out", str(out)],
+                       capture_output=True, text=True,
+                       env={**os.environ, "PYTHONPATH": str(SPEC / "tools")})
+    assert r.returncode == 0, r.stderr[-600:]
+    return out
+
+
+def components(dist):
+    idx = json.loads((dist / "components.json").read_text())["components"]
     return {f"{c['ns']}/{c['name']}@{c['major'].lstrip('v')}": c for c in idx}
 
 
-def skin_root(comp):
-    f = DIST / "components" / f"{comp['ns']}--{comp['name']}--{comp['major']}--default.svg"
-    root = next(e for e in ET.parse(f).iter() if e.get("id") == comp["name"])
+def local(tag):
+    return tag.rsplit("}", 1)[-1] if isinstance(tag, str) else None
+
+
+def spec_of(el):
+    """An element tree in the fake DOM's JSON form (tests/js/fake-dom.mjs)."""
+    return {"t": local(el.tag), "a": dict(el.attrib),
+            "c": [spec_of(k) for k in el if isinstance(k.tag, str)]}
+
+
+def skin_file(dist, comp):
+    return dist / "components" / f"{comp['ns']}--{comp['name']}--{comp['major']}--default.svg"
+
+
+def skin_root(dist, comp):
+    root = next(e for e in ET.parse(skin_file(dist, comp)).iter() if e.get("id") == comp["name"])
     return dict(root.attrib)
 
 
-def fitted_ports(tmp_path, name, refs):
-    """Render `name` bare and fitted; return one parity case per seated port."""
+def descendants(el):
+    """Every element below `el`, in document order, as (tag, attributes) -
+    the build's side of the children comparison. An empty <style> is dropped:
+    a standalone skin carries one and a device face does not, which seatModule
+    has always done too, and it names nothing."""
+    return [{"t": local(e.tag), "a": dict(e.attrib)} for e in el.iter()
+            if e is not el and isinstance(e.tag, str)
+            and not (local(e.tag) == "style" and not (e.text or "").strip() and not len(e))]
+
+
+def fitted_ports(tmp_path, dist, name, refs, every=False):
+    """Render `name` bare and fitted; return one parity case per seated port.
+    `every` fills EVERY cage that accepts one of `refs` (the first it
+    accepts), rather than one upright and one turned cage per ref."""
     src = LIB / "devices/ufispace" / name
     run_render(src / "device.yaml", tmp_path / f"{name}-bare")
     bare = json.loads((tmp_path / f"{name}-bare" / f"{name}.configs.json").read_text())
     cages = {c["id"]: c for c in bare["cages"]["front"]}
-    occupants = {c["id"]: ref for ref in refs for c in pick(bare["cages"]["front"], ref)}
+    if every:
+        occupants = {c["id"]: next(r for r in refs if r in c["accepts"])
+                     for c in bare["cages"]["front"] if any(r in c["accepts"] for r in refs)}
+    else:
+        occupants = {c["id"]: ref for ref in refs for c in pick(bare["cages"]["front"], ref)}
     assert occupants, f"{name}: no cage accepts any of {refs}"
 
     dev = tmp_path / f"{name}-fit" / name / "device.yaml"
@@ -82,16 +124,19 @@ def fitted_ports(tmp_path, name, refs):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     run_render(dev, tmp_path / f"{name}-fit" / "out")
     face = ET.parse(tmp_path / f"{name}-fit" / "out" / f"{name}.dc.front.svg")
-    built = {e.get("data-path"): dict(e.attrib) for e in face.iter()
-             if (e.get("data-path") or "").endswith("-occupant")}
+    occ_els = {e.get("data-path"): e for e in face.iter()
+               if (e.get("data-path") or "").endswith("-occupant")}
+    built = {k: dict(e.attrib) for k, e in occ_els.items()}
 
-    comps = components()
+    comps = components(dist)
     out = []
     for port, ref in occupants.items():
         comp = comps[ref]
         out.append({"port": port, "ref": ref, "cage": cages[port], "comp": comp,
-                    "skinRoot": skin_root(comp), "device": name,
-                    "built": built[f"{port}-occupant"]})
+                    "skinRoot": skin_root(dist, comp), "device": name,
+                    "skin": json.dumps(spec_of(ET.parse(skin_file(dist, comp)).getroot())),
+                    "built": built[f"{port}-occupant"],
+                    "builtChildren": descendants(occ_els[f"{port}-occupant"])})
     return out
 
 
@@ -113,8 +158,18 @@ def node(mode, stdin=None):
 @pytest.fixture(scope="module")
 def cases(tmp_path_factory):
     tmp = tmp_path_factory.mktemp("cage-seat")
-    return (fitted_ports(tmp, "s9510-28dc", [QSFP, SFP])
-            + fitted_ports(tmp, "s9501-28smt", [SFP]))
+    dist = build_components(tmp / "dist")
+    return (fitted_ports(tmp, dist, "s9510-28dc", [QSFP, SFP])
+            + fitted_ports(tmp, dist, "s9501-28smt", [SFP]))
+
+
+@pytest.fixture(scope="module")
+def every_case(tmp_path_factory):
+    """Every cage of both devices filled - 52 occupants at this writing."""
+    tmp = tmp_path_factory.mktemp("cage-seat-every")
+    dist = build_components(tmp / "dist")
+    return (fitted_ports(tmp, dist, "s9510-28dc", [QSFP, SFP], every=True)
+            + fitted_ports(tmp, dist, "s9501-28smt", [SFP], every=True))
 
 
 @needs_node
@@ -148,16 +203,49 @@ def test_the_kit_seats_every_optic_where_the_build_does(cases):
 
 
 @needs_node
+def test_a_kit_seated_optics_children_are_the_builds(every_case):
+    """THE CHILDREN, NOT ONLY THE GROUP. seatOccupant renames the skin's own
+    namespace into the occupant's (`sfp-lc--tx` -> `port-4-occupant--tx`,
+    `url(#...)` rewritten with it), and the 3D scene reads every child's
+    data-path and data-z-*. The final review measured all of them equal on
+    every occupant of both devices; this holds it: every descendant, in
+    document order, with EVERY attribute - id, data-path, data-z-*, url()
+    references and the rest - against what render.py wrote."""
+    cases = every_case
+    turned = sum(bool(c["cage"].get("rotate")) for c in cases)
+    assert turned and turned < len(cases), turned
+    got = node("children", json.dumps({"ports": cases}))
+    assert len(got) == len(cases) >= 50, len(got)
+    for case, g in zip(cases, got):
+        where = f"{case['device']} {case['port']} ({case['ref']})"
+        want = case["builtChildren"]
+        assert want, f"{where}: the build's occupant has no children - vacuous"
+        assert any(k.startswith("data-z-") for d in want for k in d["a"]), (
+            f"{where}: no data-z-* below the occupant - the 3D half is unchecked")
+        assert len(g["children"]) == len(want), (
+            f"{where}: kit {len(g['children'])} children, build {len(want)}")
+        for i, (k, b) in enumerate(zip(g["children"], want)):
+            assert k == b, f"{where}: child {i} differs: kit {k} vs build {b}"
+
+
+@needs_node
 def test_an_occupant_override_replaces_empties_and_leaves_alone():
     out = node("overrides")
-    assert out["before"] == {"port-4": 1, "port-5": 1, "port-6": 1, "port-7": 1, "port-8": 1}
-    assert out["applied"] == 4, "port-7 is not in the map and must not be touched"
-    assert out["refused"] == ["port-8"], (
-        "a lifted cage is refused, and the refusal is reported to the caller")
-    assert out["after"]["port-8"] == [], (
-        "a refused cage is left empty - never a half-lifted optic")
-    assert out["seatLifted"] is None
-    assert out["second"] == {"applied": 1, "refused": []}
+    assert out["before"] == {f"port-{i}": 1 for i in range(4, 11)}
+    assert out["applied"] == 5, (
+        "port-7 is not in the map and must not be touched; port-6's skin never "
+        "loaded, so nothing about it changed")
+    assert out["refused"] == ["port-8", "port-9", "port-10"], (
+        "a lifted, a mirrored and a group-states cage are each refused, and the "
+        "refusal is reported to the caller")
+    for port in ("port-8", "port-9", "port-10"):
+        assert out["after"][port] == [], (
+            f"{port}: a refused cage is left empty - never a half-seated optic")
+    assert out["seatRefused"] == [None, None, None]
+    assert out["reasons"] == [None, None, None, None, "lift", "mirror", "group-states"]
+    assert out["emptyRefused"] == {"applied": 1, "refused": [], "failed": []}, (
+        "emptying a refused cage is not a refusal")
+    assert out["second"] == {"applied": 1, "refused": [], "failed": []}
 
     [p4] = out["after"]["port-4"]
     assert p4["ref"] == "generic/sfp-lc-simplex@1:1.0.0", "one occupant, the new one"
@@ -170,7 +258,13 @@ def test_an_occupant_override_replaces_empties_and_leaves_alone():
     assert p4["transform"].startswith("translate(")
 
     assert out["after"]["port-5"] == [], "null empties the cage"
-    assert out["after"]["port-6"] == [], "an unknown ref leaves the cage empty"
+    # A FAILED LOAD IS REPORTED AND CHANGES NOTHING: the cage keeps the optic
+    # it held, so a caller's state can say what the drawing shows
+    assert out["failed"] == ["port-6"], "a skin that did not load is reported"
+    assert [o["ref"] for o in out["after"]["port-6"]] == ["generic/sfp-lc@1:1.0.0"], (
+        "a failed load must not empty the cage")
+    assert out["heldAfterFailure"] == "generic/sfp-lc@1"
+    assert out["heldWhenEmpty"] is None
     assert [o["ref"] for o in out["after"]["port-7"]] == ["generic/sfp-lc@1:1.0.0"]
     assert out["led"] == 1, "an LED data-for the same port is not an occupant"
     assert out["again"] == ["generic/sfp-lc@1:1.0.0"], (
@@ -192,3 +286,24 @@ def test_an_occupant_is_named_with_no_namespace_word():
         ["front-0--module--w0", None, None],
         [None, None, "url(#front-0--module--w0)"],
     ]
+
+
+@needs_node
+def test_overlapping_swaps_on_one_target_end_as_one_and_the_later():
+    """The final review's reproduction, held: two applies on one cage whose
+    skin loads were both in flight left TWO optics on the face (['a', 'b']),
+    and the bay path had the same shape. One mechanism - a claim per target
+    (seatClaims) plus load-before-remove - covers bays and cages."""
+    out = node("race")
+    assert out["cageInOrder"] == ["generic/b@1:1.0.0"], (
+        "two unclaimed overlapping cage swaps stacked two optics")
+    assert out["cageOutOfOrder"] == ["generic/b@1:1.0.0"], (
+        "the later request must win even when the earlier fetch resolves last")
+    assert out["cageResults"][0] == {"applied": 0, "refused": [], "failed": []}, (
+        "a stale claim is none of applied, refused or failed")
+    assert out["cageEmptiedWhileLoading"] == [], (
+        "emptying a cage while an earlier swap loads must not be undone by it")
+    assert out["bayOutOfOrder"] == ["generic/b@1"], (
+        "overlapping bay swaps must leave one module, the later one")
+    assert out["claims"] == [False, True, True], (
+        "a newer claim retires an older one on the same key and no other")

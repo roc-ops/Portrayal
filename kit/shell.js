@@ -17,7 +17,8 @@
 
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
-         rawParam, liesOver, configBayPath } from './swap.js';
+         rawParam, liesOver, seatClaims, occupantRef, refusalReason,
+         builtOccupants, configBayPath } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -166,7 +167,7 @@ export function createShell(opts = {}) {
 
   const state = {device: null, cfg: null, view: null, module: null, sel: null,
                  svg: null, meta: null, cfgBays: {}, cfgOccupants: {}, cfgFields: {},
-                 touched: new Set(), refused: {}};
+                 touched: new Set(), refused: {}, failed: {}};
 
   const handlers = {};
   const on = (name, fn) => { (handlers[name] ||= []).push(fn); };
@@ -879,11 +880,27 @@ export function createShell(opts = {}) {
       html += `<div class="row"><span>optic</span><select id="optic" data-cage="${esc(cage.id)}">${opts.join('')}</select></div>`;
       if (!accepts.length)
         html += `<div class="row" style="color:var(--warn)">no generic modelled for this cage's family yet</div>`;
+      // WHY A CHOSEN OPTIC IS NOT THERE, said where the choice was made. A
+      // refusal (swap.js `refusalReason`) leaves the cage empty; a failed load
+      // leaves it holding what it held, which the select above now shows.
       const no = state.refused?.[cage.id];
+      const why = {
+        'lift': 'this cage stands off the face, and the kit does not seat an '
+              + 'optic into a lifted cage yet',
+        'mirror': 'this cage is mirrored, and the build refuses to seat an '
+                + 'optic into a mirrored cage',
+        'group-states': "this cage's group carries lamp states, which the build "
+                      + 'applies to a seated optic and the kit does not yet',
+      };
       if (no)
         html += `<div class="row" style="color:var(--warn)">${esc(no)} was not seated &mdash; `
-              + `this cage stands off the face, and the kit does not seat an optic `
-              + `into a lifted cage yet, so it is left empty</div>`;
+              + `${why[refusalReason(cage)] || 'the kit does not seat into this cage'}, `
+              + `so it is left empty</div>`;
+      const lost = state.failed?.[cage.id];
+      if (lost)
+        html += `<div class="row" style="color:var(--warn)">${esc(lost)} was not seated &mdash; `
+              + `its drawing did not load, so the cage keeps `
+              + `${cur ? esc(cur) : 'nothing'}</div>`;
     }
     if (ref) {
       const c = compByRef(ref.split(':')[0].split('@')[0] + '@' + ref.split('@')[1].split(':')[0]);
@@ -938,6 +955,15 @@ export function createShell(opts = {}) {
   // when `key` names nothing on this face (or `ref` is not something it
   // accepts). The state is written HERE, so the drawing, the inspector's
   // select, the URL and the 3D scene all read one answer.
+  //
+  // ONE CLAIM PER KEY (swap.js `seatClaims`), taken before the await and
+  // checked after it - by the apply, before it touches the drawing, and here,
+  // before the state is written. Two swaps of one cage in flight (a select
+  // driven by the arrow keys; a view change re-seating while a swap loads)
+  // used to leave both optics on the face and the state naming whichever
+  // finished last. Now the later request owns the key and the earlier returns
+  // null having changed nothing.
+  const claim = seatClaims();
   async function seat(key, ref) {
     if (!state.svg || state.module) return null;
     ref = ref || null;
@@ -945,17 +971,31 @@ export function createShell(opts = {}) {
     const bay = cage ? null : bayFor(key);
     const target = cage || bay;
     if (!target || (ref && !(target.accepts || []).includes(ref))) return null;
+    const svg = state.svg;
+    const live = claim(key);
     if (bay) {
-      await applyOverrides(state.svg, [bay], {[key]: ref}, loadSkin);
+      await applyOverrides(svg, [bay], {[key]: ref}, loadSkin, live);
+      if (!live()) return null;
       state.cfgBays[key] = ref;
     } else {
+      const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, live);
+      if (!live()) return null;
       delete state.refused[key];
-      const {refused} = await applyOccupantOverrides(state.svg, [cage], {[key]: ref}, loadSkin);
+      delete state.failed[key];
       // A REFUSED CAGE IS LEFT EMPTY (applyOccupantOverrides removed what was
       // there and seated nothing), so the state says empty too: the select, the
       // URL and the 3D scene agree with the drawing, and the inspector says why
       // rather than leaving a silent empty cage.
       if (refused.includes(key)) { state.refused[key] = ref; ref = null; }
+      // A FAILED LOAD CHANGED NOTHING - the cage kept its optic - so the state
+      // records what the drawing still holds, not what was asked for, and the
+      // inspector says the chosen one did not load.
+      else if (failed.includes(key)) {
+        state.failed[key] = ref;
+        ref = occupantRef(svg, key);
+        console.warn(`[portrayal] ${key}: ${state.failed[key]} did not load; `
+                     + `the cage keeps ${ref || 'nothing'}`);
+      }
       state.cfgOccupants[key] = ref;
     }
     state.touched.add(key);
@@ -1162,10 +1202,13 @@ export function createShell(opts = {}) {
     state.cfgBays = Object.fromEntries(Object.entries(c?.bays || {})
       .map(([k, ref]) => [configBayPath(k), ref]));
     // the optics THIS configuration seats - `configs[].occupants`, not the
-    // cages' own `occupant`, which is the default configuration's answer
-    state.cfgOccupants = {...(c?.occupants || {})};
+    // cages' own `occupant`, which is the default configuration's answer -
+    // read through swap.js's `builtOccupants`, which reduces a mapping value
+    // to its ref and drops a chained key that names no cage
+    state.cfgOccupants = builtOccupants(c, Object.values(state.meta.cages || {}).flat());
     state.touched = new Set();
     state.refused = {};
+    state.failed = {};
     state.cfgFields = {};
   }
 

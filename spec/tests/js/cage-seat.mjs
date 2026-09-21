@@ -7,90 +7,21 @@
 // to this script with the bare build's `cages[]` and the components.json
 // entries. Checking the formula against itself would prove nothing.
 //
-// Three cases, chosen by argv[2]:
+// Cases, chosen by argv[2]:
 //   parity   - stdin JSON; per port, the kit's transform and attribute set
+//   children - stdin JSON; per port, every descendant seatOccupant builds
 //   overrides - applyOccupantOverrides on a fake DOM
 //   rename   - `segment = ''` names an occupant's children as the build does
+//   race     - two swaps in flight on one cage or bay
 //
 // jsdom is not a dependency here, so the DOM is the smallest one swap.js
-// actually uses (the idiom of nested-bays.mjs).
+// actually uses (fake-dom.mjs, the idiom of nested-bays.mjs).
 const m = await import('../../../kit/swap.js');
 const mode = process.argv[2];
 
 // ---------------------------------------------------------------- fake DOM
-class Node {
-  constructor(attrs = {}, children = []) {
-    this._attrs = {...attrs};
-    this.parentNode = null;
-    this.children = [];
-    for (const c of children) this.appendChild(c);
-  }
-  get attributes() {
-    return Object.entries(this._attrs).map(([name, value]) => ({name, value}));
-  }
-  get childNodes() { return [...this.children]; }
-  get ownerDocument() { return DOC; }
-  getAttribute(k) { return k in this._attrs ? this._attrs[k] : null; }
-  setAttribute(k, v) { this._attrs[k] = String(v); }
-  removeAttribute(k) { delete this._attrs[k]; }
-  hasAttribute(k) { return k in this._attrs; }
-  appendChild(c) {
-    if (c.parentNode) c.remove();
-    c.parentNode = this;
-    this.children.push(c);
-    return c;
-  }
-  remove() {
-    const p = this.parentNode;
-    if (!p) return;
-    p.children.splice(p.children.indexOf(this), 1);
-    this.parentNode = null;
-  }
-  after(n) {
-    if (n.parentNode) n.remove();
-    const p = this.parentNode;
-    p.children.splice(p.children.indexOf(this) + 1, 0, n);
-    n.parentNode = p;
-  }
-  *descendants() {
-    for (const c of this.children) { yield c; yield* c.descendants(); }
-  }
-  querySelectorAll(sel) {
-    const alts = sel.split(',').map(s => s.trim()).map(parseSel);
-    return [...this.descendants()].filter(n => alts.some(a => a(n)));
-  }
-  querySelector(sel) { return this.querySelectorAll(sel)[0] || null; }
-  clone() {
-    return new Node(this._attrs, this.children.map(c => c.clone()));
-  }
-}
-function parseSel(s) {
-  if (s === '*') return () => true;
-  const parts = [...s.matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)];
-  if (!parts.length || parts.map(p => p[0]).join('') !== s)
-    throw new Error('unexpected selector ' + s);
-  return n => parts.every(([, k, v]) =>
-    v === undefined ? n.hasAttribute(k) : n.getAttribute(k) === v);
-}
-function build(spec) {
-  return new Node(spec.a || {}, (spec.c || []).map(build));
-}
-const DOC = {
-  createElementNS: () => new Node(),
-  importNode: n => n.clone(),
-};
-// A skin's "text" is a JSON tree here; DOMParser is the only thing that reads it.
-globalThis.DOMParser = class {
-  parseFromString(text) {
-    const documentElement = build(JSON.parse(text));
-    return {
-      documentElement,
-      getElementById: id => [documentElement, ...documentElement.descendants()]
-        .find(n => n.getAttribute('id') === id) || null,
-    };
-  }
-};
-globalThis.CSS = {escape: s => s};
+import {Node, DOC, build, install} from './fake-dom.mjs';
+install();
 
 // ---------------------------------------------------------------- parity
 if (mode === 'parity') {
@@ -107,6 +38,22 @@ if (mode === 'parity') {
                       rotate: t[3] ? [+t[3], +t[4], +t[5]] : null} : null,
       attrs: m.occupantAttrs(cage, ref, comp, skinRoot),
     };
+  });
+  console.log(JSON.stringify(out));
+}
+
+// ---------------------------------------------------------------- children
+// seatOccupant on the real compiled skin (in fake-dom JSON form), and every
+// descendant of what it builds - the kit's side of the children comparison.
+if (mode === 'children') {
+  let raw = '';
+  for await (const chunk of process.stdin) raw += chunk;
+  const {ports} = JSON.parse(raw);
+  const empty = n => n.tagName === 'style' && !n.children.length;
+  const out = ports.map(({port, cage, ref, comp, skin}) => {
+    const g = m.seatOccupant(DOC, cage, ref, comp, skin);
+    return {port, children: [...g.descendants()].filter(n => !empty(n))
+      .map(n => ({t: n.tagName, a: Object.fromEntries(n.attributes.map(x => [x.name, x.value]))}))};
   });
   console.log(JSON.stringify(out));
 }
@@ -130,10 +77,15 @@ if (mode === 'overrides') {
     ? {comp: COMP[ref], text: skin(COMP[ref].name)} : null;
   const cage = id => ({id, mate: [10, 5], rotate: null, lift: 0,
                        'occupant-attrs': {'data-group': 'sfp28', 'data-media': 'sfp28'}});
-  const cages = ['port-4', 'port-5', 'port-6', 'port-7', 'port-8'].map(cage);
+  const cages = ['port-4', 'port-5', 'port-6', 'port-7', 'port-8', 'port-9', 'port-10']
+    .map(cage);
   // a cage whose aperture stands off the face: the kit cannot seat into it
   // without also shifting every child's absolute out, so it refuses
   cages[4].lift = 3;
+  // a mirrored cage, which the build refuses to seat at all
+  cages[5].mirror = true;
+  // a cage whose group carries lamp states the build would apply to the optic
+  cages[6]['group-states'] = true;
 
   const face = () => {
     const root = new Node({}, [
@@ -152,12 +104,14 @@ if (mode === 'overrides') {
 
   const root = face();
   const before = Object.fromEntries(cages.map(c => [c.id, occ(root, c.id).length]));
-  const {applied, refused} = await m.applyOccupantOverrides(root, cages, {
+  const {applied, refused, failed} = await m.applyOccupantOverrides(root, cages, {
     'port-4': 'generic/sfp-lc-simplex@1',     // replaced
     'port-5': null,                           // emptied
-    'port-6': 'nobody/nothing@9',             // unknown: left empty
+    'port-6': 'nobody/nothing@9',             // unknown: failed, keeps its optic
     // port-7 absent: untouched
     'port-8': 'generic/sfp-lc@1',             // lifted: refused, left empty
+    'port-9': 'generic/sfp-lc@1',             // mirrored: refused, left empty
+    'port-10': 'generic/sfp-lc@1',            // group states: refused, left empty
   }, loadSkin);
   const after = Object.fromEntries(cages.map(c => [c.id, occ(root, c.id).map(n => ({
     ref: n.getAttribute('data-ref'), id: n.getAttribute('id'),
@@ -171,10 +125,16 @@ if (mode === 'overrides') {
   const second = await m.applyOccupantOverrides(root, cages, {'port-4': 'generic/sfp-lc@1'}, loadSkin);
   const again = occ(root, 'port-4').map(n => n.getAttribute('data-ref'));
   console.log(JSON.stringify({
-    applied, refused, before, after, again, second,
-    // seatOccupant itself will not produce a half-lifted optic
-    seatLifted: m.seatOccupant(DOC, cages[4], 'generic/sfp-lc@1',
-                               COMP['generic/sfp-lc@1'], skin('sfp-lc')),
+    applied, refused, failed, before, after, again, second,
+    // seatOccupant itself will not produce a half-seated optic
+    seatRefused: [4, 5, 6].map(i => m.seatOccupant(DOC, cages[i], 'generic/sfp-lc@1',
+                                                   COMP['generic/sfp-lc@1'], skin('sfp-lc'))),
+    reasons: cages.map(m.refusalReason),
+    // what the failed cage still holds, as a caller records it
+    heldAfterFailure: m.occupantRef(root, 'port-6'),
+    heldWhenEmpty: m.occupantRef(root, 'port-5'),
+    // emptying a refused cage is not a refusal
+    emptyRefused: await m.applyOccupantOverrides(root, cages, {'port-9': null}, loadSkin),
     led: root.querySelectorAll('[data-for="port-4"]')
       .filter(n => n.getAttribute('data-class') === 'led').length,
   }));
@@ -195,4 +155,92 @@ if (mode === 'rename') {
   const dflt = mk();
   m.rename(dflt, 'sfp-lc', 'front-0');
   console.log(JSON.stringify({bare: read(bare), dflt: read(dflt)}));
+}
+
+// ---------------------------------------------------------------- race
+// TWO SWAPS IN FLIGHT ON ONE TARGET. A focused select fires `change` on every
+// arrow key, and a view change re-seats while a swap is still loading, so two
+// applies on one cage (or one bay) overlap whenever the skin fetch is slow.
+// The loads here resolve BY HAND, in whichever order a case needs.
+if (mode === 'race') {
+  const COMP = {
+    'generic/a@1': {name: 'a', version: '1.0.0', size: {w: 10, h: 8, d: 40}, mate: [5, 4]},
+    'generic/b@1': {name: 'b', version: '1.0.0', size: {w: 10, h: 8, d: 40}, mate: [5, 4]},
+  };
+  const skin = name => JSON.stringify({a: {}, c: [
+    {a: {id: name, 'data-path': name, 'data-behaviour': 'occupies'}, c: [{a: {id: `${name}--tx`}}]},
+  ]});
+  const pending = [];
+  const loadSkin = ref => new Promise(res => pending.push(
+    () => res(COMP[ref] ? {comp: COMP[ref], text: skin(COMP[ref].name)} : null)));
+  const settle = () => new Promise(r => setTimeout(r, 0));
+  const cage = {id: 'port-4', mate: [10, 5], rotate: null, lift: 0, mirror: false,
+                'group-states': false, 'occupant-attrs': {}};
+  const bay = {id: 'slot-0', at: [0, 0], size: {w: 10, h: 8}, accepts: []};
+  const face = () => new Node({}, [
+    new Node({id: 'port-4', 'data-path': 'port-4', 'data-class': 'port'}),
+    new Node({id: 'slot-0', 'data-path': 'slot-0', 'data-class': 'bay'}, [
+      new Node({id: 'slot-0--module', 'data-path': 'slot-0/module', 'data-ref': 'built:1'})]),
+    new Node({id: 'port-4-occupant', 'data-path': 'port-4-occupant', 'data-for': 'port-4',
+              'data-behaviour': 'occupies', 'data-ref': 'built:1'}),
+  ]);
+  const optics = root => root.querySelectorAll('[data-for="port-4"][data-behaviour="occupies"]')
+    .map(n => n.getAttribute('data-ref'));
+  const modules = root => root.querySelectorAll('[id="slot-0--module"]')
+    .map(n => n.getAttribute('data-ref'));
+  const claims = m.seatClaims ? m.seatClaims() : () => () => true;
+  const out = {};
+
+  // 1. a cage, loads resolving in request order, no claims at all (viewer3d's call)
+  {
+    const root = face();
+    pending.length = 0;
+    const a = m.applyOccupantOverrides(root, [cage], {'port-4': 'generic/a@1'}, loadSkin);
+    const b = m.applyOccupantOverrides(root, [cage], {'port-4': 'generic/b@1'}, loadSkin);
+    await settle(); pending[0](); pending[1]();
+    await Promise.all([a, b]);
+    out.cageInOrder = optics(root);
+  }
+  // 2. a cage, the LATER request's load resolving FIRST, with claims
+  {
+    const root = face();
+    pending.length = 0;
+    const a = m.applyOccupantOverrides(root, [cage], {'port-4': 'generic/a@1'}, loadSkin,
+                                       claims('port-4'));
+    const b = m.applyOccupantOverrides(root, [cage], {'port-4': 'generic/b@1'}, loadSkin,
+                                       claims('port-4'));
+    await settle(); pending[1](); await settle(); pending[0]();
+    const [ra, rb] = await Promise.all([a, b]);
+    out.cageOutOfOrder = optics(root);
+    out.cageResults = [ra, rb];
+  }
+  // 3. a cage emptied while an earlier swap is still loading
+  {
+    const root = face();
+    pending.length = 0;
+    const a = m.applyOccupantOverrides(root, [cage], {'port-4': 'generic/a@1'}, loadSkin,
+                                       claims('port-4'));
+    const b = m.applyOccupantOverrides(root, [cage], {'port-4': null}, loadSkin,
+                                       claims('port-4'));
+    await settle(); pending[0]();
+    await Promise.all([a, b]);
+    out.cageEmptiedWhileLoading = optics(root);
+  }
+  // 4. a bay, the same out-of-order pair - one mechanism for both kinds
+  {
+    const root = face();
+    pending.length = 0;
+    const a = m.applyOverrides(root, [bay], {'slot-0': 'generic/a@1'}, loadSkin, claims('slot-0'));
+    const b = m.applyOverrides(root, [bay], {'slot-0': 'generic/b@1'}, loadSkin, claims('slot-0'));
+    await settle(); pending[1](); await settle(); pending[0]();
+    await Promise.all([a, b]);
+    out.bayOutOfOrder = modules(root);
+  }
+  // 5. the claims themselves: a newer claim retires an older one, per key
+  {
+    const c = m.seatClaims ? m.seatClaims() : () => () => true;
+    const k1 = c('port-4'), other = c('slot-0'), k2 = c('port-4');
+    out.claims = [k1(), k2(), other()];
+  }
+  console.log(JSON.stringify(out));
 }

@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
-import { applyAllOverrides, applyOccupantOverrides, viewsToRewrite } from './swap.js';
+import { applyAllOverrides, applyOccupantOverrides, refusalReason, viewsToRewrite } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -454,18 +454,25 @@ export function createViewer(container, opts = {}) {
                      + `bay override(s) never applied - the drawing nests deeper `
                      + `than the walk goes, so 2D and 3D will disagree`, dropped);
       // A REFUSED CAGE OVERRIDE is the cage counterpart of a dropped bay one -
-      // `applyOccupantOverrides` will not half-seat an optic into a cage that
-      // stands off the face (see swap.js `isLifted`), so it leaves the cage
-      // empty rather than guess a shift formula with no real build to check it
+      // `applyOccupantOverrides` will not half-seat an optic into a cage the
+      // build does something to that the kit does not (see swap.js
+      // `refusalReason`: lifted, mirrored, or in a group carrying states), so
+      // it leaves the cage empty rather than guess with no real build to check
       // against. The cage shows nothing seated in 2D and 3D alike; only the
-      // CHOSEN swap silently failed, and that is worth saying.
-      const {applied: occApplied, refused} = await applyOccupantOverrides(
+      // CHOSEN swap silently failed, and that is worth saying. A FAILED one is
+      // a skin that did not load: the cage keeps what the build seated.
+      const {applied: occApplied, refused, failed} = await applyOccupantOverrides(
         doc.documentElement, cages, OVERRIDES, loadSkin);
       if (refused.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${refused.length} cage `
-                     + `override(s) refused - the cage stands off the face and `
-                     + `the kit will not half-seat an optic in it, so 2D and 3D `
-                     + `will disagree`, refused);
+                     + `override(s) refused - the kit does not seat an optic into `
+                     + `a lifted or mirrored cage, or one whose group carries `
+                     + `states, so the cage is left empty`,
+                     refused.map(id => `${id} (${refusalReason(cages.find(c => c.id === id))})`));
+      if (failed.length)
+        console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${failed.length} cage `
+                     + `override(s) not applied - the optic's skin did not load, `
+                     + `so the cage keeps what the build seated`, failed);
       const viewApplied = applied + occApplied;
       if (!viewApplied) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);

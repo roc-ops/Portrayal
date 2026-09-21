@@ -205,8 +205,24 @@ export function occupantTransform(cage, comp) {
 // lift 0), so a shift formula here would be arithmetic copied from the build
 // with no real build to hold it to. Until one exists, the kit does not seat an
 // optic into a lifted cage at all, and says so.
-function isLifted(cage) {
-  return !!+(cage && cage.lift);
+//
+// TWO MORE CAGES ARE REFUSED ON THE SAME PRECEDENT, and for the same reason:
+// the build does something to the optic the kit does not, and no cage in the
+// library exists to hold an implementation to.
+//   mirror        render.py RAISES for an occupant in a mirrored host (the
+//                 optic's handedness would be wrong), so the kit must not
+//                 quietly seat an un-mirrored one there;
+//   group-states  the build's `apply_states` rewrites the lamps inside a
+//                 seated optic from its host group's `states`; the kit does
+//                 not, so a kit-seated optic would carry none of them.
+// Both are published on the cage entry (render.py `cage_entries`), 0 of each
+// today. A refusal names its reason so the caller can say why.
+export function refusalReason(cage) {
+  if (!cage) return null;
+  if (+cage.lift) return 'lift';
+  if (cage.mirror) return 'mirror';
+  if (cage['group-states']) return 'group-states';
+  return null;
 }
 
 // EVERY ATTRIBUTE THE OCCUPANT <g> CARRIES except its transform, as a plain
@@ -218,7 +234,7 @@ function isLifted(cage) {
 //                                   published per cage: a `media: qsfp-dd` group
 //                                   over the contract's `media: fiber`;
 //   identity                      - id, data-path, data-ref, data-for.
-// No data-z-lift: a lifted cage never gets this far (see isLifted).
+// No data-z-lift: a lifted cage never gets this far (see refusalReason).
 // Nothing else. If the build ever writes an attribute none of these can supply,
 // the parity test fails rather than this growing a special case.
 export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${cage.id}-occupant`) {
@@ -235,9 +251,10 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${ca
 
 // The <g> that represents `ref` seated in `cage`, built from the component's
 // compiled standalone skin - the occupant's counterpart of seatModule.
-// Returns null for a lifted cage rather than a half-lifted optic (isLifted).
+// Returns null for a refused cage rather than a half-seated optic
+// (refusalReason: lifted, mirrored, or in a group that carries states).
 export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cage.id}-occupant`) {
-  if (isLifted(cage)) return null;
+  if (refusalReason(cage)) return null;
   const doc = new DOMParser().parseFromString(skinText, 'image/svg+xml');
   const root = doc.getElementById(comp.name);
   const rootAttrs = {};
@@ -250,6 +267,33 @@ export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cag
     (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
   rename(wrap, comp.name, occId, occId, '');
   return wrap;
+}
+
+// TWO SWAPS IN FLIGHT ON ONE TARGET MUST END AS ONE, AND AS THE LATER ONE.
+// Every apply below awaits a skin fetch, and a focused select fires `change`
+// on every arrow key, and a view change re-seats every touched key while a
+// swap may still be loading - so two applies on one cage or one bay overlap
+// whenever the network is slow. Removing before the await let both find the
+// old occupant gone and both insert: the face held TWO optics, the select
+// showed whichever `seat()` finished last, and that is what 3D and the URL
+// were given.
+//
+// ONE MECHANISM FOR BAYS AND CAGES: a claim per target. `seatClaims()` makes a
+// claim book; `claim(key)` takes a new claim on `key`, retiring any older one,
+// and returns a predicate that is true while that claim is still the newest.
+// Both applies take it as `isCurrent` and consult it AFTER their await, right
+// before the surgery: a stale claim touches nothing. So the later REQUEST
+// wins, whichever fetch resolves first. The caller keeps the same predicate
+// and checks it again before writing its own state, so the drawing and the
+// state are decided by the same claim. A caller with no concurrency of its
+// own (viewer3d.js applies one map to a freshly parsed face) passes nothing.
+export function seatClaims() {
+  const newest = new Map();
+  return key => {
+    const mine = (newest.get(key) || 0) + 1;
+    newest.set(key, mine);
+    return () => newest.get(key) === mine;
+  };
 }
 
 // Apply an occupant override map - cage id -> ref, or -> null/'' for an emptied
@@ -265,32 +309,53 @@ export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cag
 // LED and a port's silkscreen label are `data-for` the port too, and matching
 // on `data-for` alone would take the lamp out with the optic.
 //
-// ASYNC: it awaits `loadSkin`, so it RESOLVES TO `{applied, refused}` - await
-// it and read the result. `applied` is how many cages the map touched (the
-// count applyOverrides returns); `refused` is the ids of cages the map asked to
-// fill that the kit would not, because they are lifted (see isLifted). A
-// refused cage is left EMPTY - its old occupant removed, nothing seated - so
-// the drawing never shows an optic the 3D would place wrong. swap.js has no
-// console calls; reporting the refusal is the caller's job, as with
-// applyAllOverrides' `dropped`. Emptying a lifted cage (null) is not refused.
-export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin) {
+// LOADED FIRST, REMOVED AFTER: there is no await between taking the old optic
+// out and putting the new one in, so even two unclaimed calls cannot stack
+// (see seatClaims for which of them wins).
+//
+// ASYNC: it RESOLVES TO `{applied, refused, failed}` - await it and read the
+// result. `applied` is how many cages the map changed (the count
+// applyOverrides returns). `refused` is the ids of cages the map asked to fill
+// that the kit will not (see refusalReason); a refused cage is left EMPTY -
+// its old occupant removed, nothing seated - so the drawing never shows an
+// optic the 3D would place wrong. `failed` is the ids whose skin did not load
+// (a fetch that failed, a ref the index does not know): nothing is removed,
+// so the cage KEEPS what it held, and the caller learns the swap did not
+// happen rather than finding an empty cage its state calls seated. A stale
+// claim is none of the three - it is simply not this call's to make. swap.js
+// has no console calls; reporting is the caller's job, as with
+// applyAllOverrides' `dropped`. Emptying a refused cage (null) is not refused.
+export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
+                                             isCurrent = () => true) {
   let applied = 0;
-  const refused = [];
+  const refused = [], failed = [];
   for (const cage of cages) {
     if (!Object.prototype.hasOwnProperty.call(overrides, cage.id)) continue;
     const host = bayGroup(rootEl, cage.id);
     if (!host) continue;
+    const ref = overrides[cage.id];
+    const refuse = !!ref && !!refusalReason(cage);
+    const loaded = ref && !refuse ? await loadSkin(ref) : null;
+    if (!isCurrent(cage.id)) continue;        // a newer swap owns this cage
+    if (ref && !refuse && !loaded) { failed.push(cage.id); continue; }
     const sel = `[data-for="${CSS.escape(cage.id)}"][data-behaviour="occupies"]`;
     for (const old of [...rootEl.querySelectorAll(sel)]) old.remove();
     applied++;
-    const ref = overrides[cage.id];
+    if (refuse) { refused.push(cage.id); continue; }
     if (!ref) continue;                       // deliberately empty
-    if (isLifted(cage)) { refused.push(cage.id); continue; }
-    const loaded = await loadSkin(ref);
-    if (!loaded) continue;                    // unknown ref: leave the cage empty
     host.after(seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text));
   }
-  return {applied, refused};
+  return {applied, refused, failed};
+}
+
+// WHAT A CAGE HOLDS ON THIS FACE, as a ref without its version - what a
+// caller records when a swap `failed` and the cage kept its old optic, so its
+// state says what the drawing shows. null for an empty cage.
+export function occupantRef(rootEl, cageId) {
+  const el = rootEl.querySelector(
+    `[data-for="${CSS.escape(cageId)}"][data-behaviour="occupies"]`);
+  const ref = el?.getAttribute('data-ref') || '';
+  return ref ? ref.split(':')[0] : null;
 }
 
 // The path of a bay's opening in a compiled drawing. render.py gives the bay rect
@@ -350,18 +415,28 @@ export function configBayPath(key) {
 // they never touched that bay. Reading it the other way makes an emptied bay
 // silently re-fill itself, which is the failure in the other direction and would
 // look exactly like the bug this module exists to fix.
-export async function applyOverrides(rootEl, bays, overrides, loadSkin) {
+//
+// `isCurrent(bayId)` is a claim from seatClaims, consulted after the await
+// and before any surgery - the one mechanism a cage swap uses too. A bay
+// whose claim went stale while its skin loaded is left to the newer swap:
+// taking its module out here and seating the stale card after the newer one
+// had seated would leave the bay holding two.
+export async function applyOverrides(rootEl, bays, overrides, loadSkin, isCurrent = () => true) {
   let applied = 0;
   for (const bay of bays) {
     if (!Object.prototype.hasOwnProperty.call(overrides, bay.id)) continue;
     const g = bayGroup(rootEl, bay.id);
     if (!g) continue;
     const idBase = g.getAttribute('id') || bay.id;
+    const ref = overrides[bay.id];
+    // LOADED FIRST, REMOVED AFTER, as applyOccupantOverrides does: no await
+    // between the removal and the insert. An unknown ref still leaves the bay
+    // open, as it always has.
+    const loaded = ref ? await loadSkin(ref) : null;
+    if (!isCurrent(bay.id)) continue;         // a newer swap owns this bay
     g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
     applied++;
-    const ref = overrides[bay.id];
     if (!ref) continue;                       // deliberately empty
-    const loaded = await loadSkin(ref);
     if (!loaded) continue;                    // unknown ref: leave the bay open
     g.appendChild(seatModule(rootEl.ownerDocument, bay.id, bay, ref,
                              loaded.comp, loaded.text, idBase));
@@ -650,6 +725,64 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null, com
     for (const k of [...memo.keys()]) if (k.startsWith(key + '/')) memo.delete(k);
   }
   return {accepted, ignored};
+}
+
+// WHAT A CONFIGURATION SEATS IN EACH CAGE, as {cage id: ref | null} - the ONE
+// reading of `configs[].occupants` everything in the kit uses (shell.js's
+// state and inspector, index.html's "is this a swap" test). The schema lets a
+// value be a ref string OR a mapping `{ref, id, attrs, skin}`
+// (spec/schemas/device.schema.json, render.py's expansion reads both), and it
+// lets a key name an OCCUPANT rather than a cage - the chained form,
+// `{port-4: plug, port-4-occupant: boot}`, seats a boot on the plug. Reading
+// the map raw handed the inspector an object to compare with its option
+// strings (a seated optic shown as "empty", and swapping back to it a
+// permanent "swap"), and handed the swap test a boot on a key that is no
+// cage - so an UNTOUCHED page wrote `swap=port-4-occupant~...` on load and
+// warned about it on every reload.
+//
+// So: a value is reduced to its ref, and a key is kept only when it is a cage
+// of this device (`cages`, every view, flattened) and not an occupant another
+// entry seats (its `id`, or the build's default `<host>-occupant`). A chained
+// tier is the build's business; the kit swaps cages.
+export function builtOccupants(cfg, cages) {
+  const occ = cfg?.occupants;
+  const out = {};
+  if (!occ || typeof occ !== 'object') return out;
+  const cageIds = new Set((cages || []).map(c => c.id));
+  const refOf = v => typeof v === 'string' ? v : (v && typeof v === 'object' ? v.ref : null);
+  const occIds = new Set(Object.entries(occ).map(
+    ([k, v]) => (v && typeof v === 'object' && v.id) || `${k}-occupant`));
+  for (const [k, v] of Object.entries(occ)) {
+    if (!cageIds.has(k) || occIds.has(k)) continue;
+    out[k] = refOf(v) || null;
+  }
+  return out;
+}
+
+// WHICH ENTRIES OF THE EXPLORER'S STATE ARE SWAPS - what differs from what the
+// build seated. That map is what goes into `swap=` and to the 3D scene, so an
+// entry here that the user never made is a URL written on an untouched page.
+//   cfg            the configuration (`configs[]` entry) on screen
+//   bays, cages    the device's own, every view, flattened
+//   cfgBays        bay id / nested path -> ref|null, the state's
+//   cfgOccupants   cage id -> ref|null, the state's (builtOccupants-shaped)
+// A bay's built answer is the configuration's `bays` entry when it has one,
+// else the bay's own `default`; a cage's is builtOccupants' - a cage the
+// configuration does not name is built empty.
+export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccupants = {}}) {
+  const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+  const cageIds = new Set(cages.map(c => c.id));
+  const occ = builtOccupants(cfg, cages);
+  const built = id => {
+    if (cageIds.has(id)) return occ[id] ?? null;
+    if (own(cfg?.bays, id)) return cfg.bays[id] || null;
+    return bays.find(b => b.id === id)?.default || null;
+  };
+  const out = {};
+  for (const map of [cfgBays, cfgOccupants])
+    for (const [id, ref] of Object.entries(map || {}))
+      if ((ref || null) !== built(id)) out[id] = ref || null;
+  return out;
 }
 
 // DOES `el` LIE OVER THE PART AT `path`? - the cover half of shell.js's

@@ -66,7 +66,9 @@ def test_two_scopes_do_not_share_overrides_or_states():
 
     # A cage swap (an optic chosen for a port) rewrites a fetched face's text
     # through this same per-scope map, exactly as a bay swap does - see
-    # applyBayOverrides in kit/viewer3d.js. One viewer's cage swap must not
-    # leak into another's, the same #302 lesson as the bay case above.
-    assert out["cageSwapStaysInItsScope"] == ['<svg id="PORT-4-QSFP"/>', '<svg id="FETCHED"/>'], \
+    # applyBayOverrides in kit/viewer3d.js. The script runs that cage path
+    # itself (applyOccupantOverrides on the face viewer A fetched, stored in
+    # A's scope); viewer B must still read the build's optic off the same URL.
+    assert out["cageSwapApplied"] == 1, "the cage path seated nothing - vacuous"
+    assert out["cageSwapStaysInItsScope"] == ["generic/sfp-lc-simplex@1", "generic/sfp-lc@1"], \
         "a cage swap set in one viewer reached another's face text"
