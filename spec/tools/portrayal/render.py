@@ -24,7 +24,7 @@ from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref
 from portrayal import libwalk
 from portrayal.manifest import (view_parts, targets, split_target, component_refs,
-                      presented_interface,
+                      presented_interface, seat_point, _turn,
                       load_yaml)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
@@ -565,15 +565,6 @@ def _inset_feature(feat, back, group_lift=0.0):
     return f
 
 
-def _turn(v, rotate):
-    """Rotate vector v by `rotate` degrees, SVG convention (x' = x cos - y sin,
-    y' = x sin + y cos). Exact for the right angles the corpus uses."""
-    deg = float(rotate or 0) % 360
-    exact = {0: (1, 0), 90: (0, 1), 180: (-1, 0), 270: (0, -1)}
-    c, s = exact.get(deg, (math.cos(math.radians(deg)), math.sin(math.radians(deg))))
-    return (v[0] * c - v[1] * s, v[0] * s + v[1] * c)
-
-
 def well_floor(placements, lib, wid):
     """How deep the floor of well `wid` is, for whatever says it is `in:` one.
 
@@ -604,14 +595,6 @@ def well_floor(placements, lib, wid):
     if c.get("behaviour") == "mounts" and not (c.get("relief") or {}).get("cavity"):
         return 0.0
     return float((c.get("size") or {}).get("d") or 0.0)
-
-
-def seat_point(at, size, rotate, local):
-    """Where `local` (a point in a placement's own frame) lands in the device
-    frame, for a placement drawn translate(at) rotate(deg w/2 h/2)."""
-    cx, cy = size["w"] / 2, size["h"] / 2
-    dx, dy = _turn((local[0] - cx, local[1] - cy), rotate)
-    return [round(at[0] + cx + dx, 4), round(at[1] + cy + dy, 4)]
 
 
 def seat_at(point, rotate, occ_size, occ_mate):

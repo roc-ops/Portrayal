@@ -24,7 +24,7 @@ from portrayal import lint
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 PBC = LIB / "devices" / "maiaedge" / "pbc-2000" / "device.yaml"
-BEZEL = "maiaedge/pbc-2000-bezel@1"
+BEZEL = "maiaedge/pbc-2000-bezel@2"
 
 
 class _NoSchema:
@@ -70,13 +70,15 @@ def _write(tmp_path, doc):
 # ------------------------------------------------------------ the reading ---
 
 def test_the_bezel_has_its_two_windows():
-    """Two octagons, 132 x 29 with a 10.15 chamfer, where the device draws them."""
+    """Two octagons as the face-on photograph measured them: 36.04 tall, with
+    chamfers 19.0 (left) and 17.6 (right) across by 13.0 down - not 45 degrees."""
     holes = lint.component_openings(BEZEL, "default", [str(LIB)])
     assert len(holes) == 2
-    for h, x in zip(sorted(holes, key=lambda r: min(p[0] for p in r)), (8.0, 232.0)):
-        assert lint._poly_area(h) == pytest.approx(132 * 29 - 2 * 10.15 ** 2, abs=0.01)
+    want = ((17.0, 131.2, 19.0), (241.6, 128.0, 17.6))
+    for h, (x, w, cx) in zip(sorted(holes, key=lambda r: min(p[0] for p in r)), want):
+        assert lint._poly_area(h) == pytest.approx(w * 36.04 - 2 * cx * 13.0, abs=0.05)
         assert min(p[0] for p in h) == pytest.approx(x)
-        assert min(p[1] for p in h) == pytest.approx(6.0)
+        assert min(p[1] for p in h) == pytest.approx(2.46)
 
 
 def test_a_part_without_a_shaped_relief_has_no_openings():
@@ -97,9 +99,10 @@ def test_a_rotated_placement_turns_its_openings_about_its_centre():
     flat = lint.placed_openings({"ref": BEZEL, "at": [0, 0]}, [str(LIB)])
     half = lint.placed_openings({"ref": BEZEL, "at": [0, 0], "rotate": 180}, [str(LIB)])
     lo = lambda hs: sorted(round(min(p[0] for p in h), 6) for h in hs)
-    # 377 wide: the window at 8..140 lands at 237..369, the one at 232..364 at 13..145
-    assert lo(flat) == [8.0, 232.0]
-    assert lo(half) == [13.0, 237.0]
+    # 372 wide: the window at 17.0..148.2 lands at 223.8..355.0, and the one at
+    # 241.6..369.6 at 2.4..130.4
+    assert lo(flat) == [17.0, 241.6]
+    assert lo(half) == [2.4, 223.8]
 
 
 def test_open_area_clips_a_hole_to_the_box():
@@ -116,7 +119,8 @@ def test_pbc_louvres_are_not_buried_under_the_bezel():
 
 def test_pbc_louvres_were_buried_by_the_bezels_box(no_openings):
     ws = _run(PBC, "L44")
-    assert len(ws) == 2 and all("slots-h" in w and "100% buried" in w for w in ws), ws
+    # one field per louvre column and band - 14 in the left window, 10 in the right
+    assert len(ws) == 24 and all("slots-h" in w and "100% buried" in w for w in ws), ws
 
 
 def test_pbc_legends_in_the_window_are_not_painted_over():
@@ -126,14 +130,14 @@ def test_pbc_legends_in_the_window_are_not_painted_over():
 def test_pbc_legends_were_painted_over_by_the_bezels_box(no_openings):
     ws = _run(PBC, "L21")
     assert sorted(w.split("silkscreen ")[1].split(" at")[0] for w in ws) == [
-        "'CON'", "'CTRL'", "'MGMT'"], ws
+        "'0'", "'1'", "'100G'", "'100G'", "'1G'", "'1G'", "'CON'", "'CTRL'", "'MGMT'"], ws
     assert all("inside bezel" in w for w in ws)
 
 
 def test_pbc_cages_are_punched_through_their_cutouts():
-    """port-1 and port-2 go quiet because their cutouts are their openings. The
-    three legends are a different question - printed on the bars of a slotted
-    louvre, which L64 reads as open air end to end - and stay reported."""
+    """port-1 and port-2 go quiet because their cutouts are their openings.
+    Since v5 the legends are quiet too, for a different reason: the photograph
+    showed the louvres stop at the ports, and the fields were re-laid to match."""
     ws = _run(PBC, "L64")
     assert not any("'port-1'" in w or "'port-2'" in w for w in ws), ws
 
@@ -152,7 +156,7 @@ def test_a_mark_straddling_a_window_edge_is_still_painted_over(tmp_path, pbc):
     half a legend nobody reads."""
     doc = copy.deepcopy(pbc)
     doc["views"]["front"]["silkscreen"].append(
-        {"at": [364.0, 22.0], "text": "EDGE", "font-size": 3})
+        {"at": [238.0, 22.0], "text": "EDGE", "font-size": 3})   # across 241.6
     ws = _run(_write(tmp_path, doc), "L21")
     assert any("'EDGE'" in w and "inside bezel" in w for w in ws), ws
 
@@ -162,11 +166,11 @@ def test_a_part_the_bezel_composes_is_not_a_window(tmp_path, pbc, monkeypatch):
     a mark on the plate goes quiet, but a mark under the lamp does not: a hole
     in the skin is not a hole in the hardware composed on top of it."""
     monkeypatch.setattr(lint, "component_openings", lambda *a, **k: [
-        [(0.0, 0.0), (377.0, 0.0), (377.0, 41.27), (0.0, 41.27)]])
+        [(0.0, 0.0), (372.0, 0.0), (372.0, 41.27), (0.0, 41.27)]])
     doc = copy.deepcopy(pbc)
     doc["views"]["front"]["silkscreen"] += [
         {"at": [186.0, 22.0], "text": "X"},
-        {"at": [360.2, 32.0], "text": "L", "font-size": 2}]
+        {"at": [364.0, 34.4], "text": "L", "font-size": 2}]   # on the lamp at 362.6..366.6
     ws = _run(_write(tmp_path, doc), "L21")
     assert not any("'X'" in w for w in ws), ws
     assert any("'L'" in w and "inside bezel" in w for w in ws), ws

@@ -50,7 +50,7 @@ def _out_of(contract, node):
 FLOOR = float(_contract("std/db9/v1")["size"]["d"])
 PLUG_BODY = _out_of(_contract("generic/lc-plug/v1"), "body")
 BOOT_BODY = _out_of(_contract("common/lc-boot/v1"), "body")
-# generic/sfp-lc-simplex@1 composes std/lc-bore@3 at `lift: 10.0`; written here
+# generic/sfp-lc-simplex@2 composes std/lc-bore@3 at `lift: 10.0`; written here
 # (as test_seat_depth does) because nothing in this task may move it.
 OPTIC_PRESENTS = 10.0
 
@@ -97,7 +97,7 @@ def _outs(group):
 
 
 CHAIN = {
-    "port-4": "generic/sfp-lc-simplex@1",
+    "port-4": "generic/sfp-lc-simplex@2",
     "port-4-occupant": "generic/lc-plug@1",
     "port-4-occupant-occupant": "common/lc-boot@1",
 }
@@ -163,7 +163,7 @@ def test_a_sunk_host_that_presents_a_lift_takes_both_terms_once(tmp_path):
     plug's sink -6.73 = 15.77. Presented lift, inherited seat and the host's
     own floor - each once."""
     root, by_id = _render(
-        tmp_path, {"port-4": "generic/sfp-lc-simplex@1"}, port_in=False,
+        tmp_path, {"port-4": "generic/sfp-lc-simplex@2"}, port_in=False,
         extra=[{"ref": WELL_REF, "id": "well", "at": [120.0, 30.0]},
                {"ref": "generic/lc-plug@1", "id": "plug",
                 "mate-to": "port-4-occupant", "in": "well"},
@@ -206,7 +206,7 @@ def test_an_occupant_that_stands_in_its_sunk_hosts_well_is_refused(tmp_path):
     that disagrees with the host is refused."""
     d = yaml.safe_load((SRC / "device.yaml").read_text())
     for cfg in d["configurations"].values():
-        cfg["occupants"] = {"port-4": "generic/sfp-lc-simplex@1"}
+        cfg["occupants"] = {"port-4": "generic/sfp-lc-simplex@2"}
     placements = d["views"]["front"]["components"]["placements"]
     placements.append({"ref": WELL_REF, "id": "well", "at": [120.0, 30.0]})
     next(q for q in placements if q.get("id") == "port-4")["in"] = "well"
