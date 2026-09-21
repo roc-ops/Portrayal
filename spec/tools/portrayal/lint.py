@@ -430,6 +430,15 @@ def _paint_box(el):
             # carry an odd count, both break that, so anything but M/L/Z is unsure.
             if tag == "path" and re.search(r"[^MLZ0-9eE.,+\-\s]", d):
                 return "unsure"
+            # A LETTER GLUED TO ITS NUMBER - `M0 0 L40 0` - dropped that number
+            # from the token count and shifted every pair after it, so a 40mm
+            # plate measured 20 x 20. Read the subpaths where they can be read.
+            if tag == "path":
+                rings = _subpaths(d)
+                if rings:
+                    pts = [q for r in rings for q in r]
+                    return (min(q[0] for q in pts), min(q[1] for q in pts),
+                            max(q[0] for q in pts), max(q[1] for q in pts))
             return _path_extent(d, (0, 0)) or "unsure"
     except (TypeError, ValueError):
         return "unsure"
@@ -488,17 +497,226 @@ def paint_boxes(ref, skin, lib_roots):
         # A component composes standard hardware through `parts:`; that art paints
         # too, and the skin does not contain it.
         if boxes is not None:
-            contract = load_yaml(base / "contract.yaml") or {}
-            for p in contract.get("parts") or []:
-                psz = contract_size(p.get("ref", ""), lib_roots) or {}
-                if not (psz.get("w") and psz.get("h")):
-                    boxes = None
-                    break
-                px, py = (p.get("at") or [0, 0])[:2]
-                boxes.append((px, py, px + psz["w"], py + psz["h"]))
+            parts = composed_part_boxes(ref, lib_roots)
+            boxes = None if parts is None else boxes + parts
         break
     _PAINT_CACHE[key] = boxes
     return boxes
+
+
+def composed_part_boxes(ref, lib_roots):
+    """The boxes a component's `parts:` occupy, in component-local mm, or None
+    when one of them has no size to measure."""
+    contract = libwalk.load_contract(ref, lib_roots) or {}
+    boxes = []
+    for p in contract.get("parts") or []:
+        psz = contract_size(p.get("ref", ""), lib_roots) or {}
+        if not (psz.get("w") and psz.get("h")):
+            return None
+        px, py = (p.get("at") or [0, 0])[:2]
+        boxes.append((px, py, px + psz["w"], py + psz["h"]))
+    return boxes
+
+
+# --------------------------------------------------------------- openings ---
+#
+# A HOLE THROUGH A PART IS NOT PART OF IT, and every rule that measures a part
+# by its box says it is. maiaedge/pbc-2000-bezel@1 is the case that showed it:
+# one plate across the whole face with two octagonal windows cut through it,
+# and the ports, legends and louvres of the faceplate seen through them. By its
+# box it buries all of those - L44 read both louvre fields as 100% buried and
+# L21 read three legends as painted over, and all five were exactly where the
+# photograph puts them.
+#
+# THE HOLES ARE READ FROM THE RELIEF, NOT DECLARED A SECOND TIME. A feature
+# with `shape: true` already tells the kit to extrude its node's own outline
+# and to cut the holes in it (kit/relief.js `ringsOf`), and that is the only
+# place the format says "this part has windows". A separate list of openings
+# in the contract would be the same octagons typed twice and free to drift from
+# the art the viewer actually cuts; reading the art means the 2D rules and the
+# 3D model cannot disagree about where the windows are.
+#
+# The reading mirrors `ringsOf`: every path under the node that is filled (a
+# `fill="none"` path is a stroked line, not an area), split into subpaths, and
+# a ring whose centroid lies inside a larger one is a hole in it. Only straight
+# segments are read - M L H V Z, absolute or relative - and a transform
+# anywhere on the way is not composed. Anything else answers NO OPENINGS,
+# which is the box, which is what every rule did before: unable to read a hole
+# costs a false positive, never a missed one.
+
+_OPENINGS_CACHE = {}
+
+
+def _subpaths(d):
+    """The closed rings of a straight-segment path, or None if it has curves."""
+    toks = re.findall(r"[A-Za-z]|[-+]?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?", d or "")
+    rings, cur = [], []
+    x = y = 0.0
+    cmd, i = None, 0
+    while i < len(toks):
+        t = toks[i]
+        if t.isalpha():
+            if t not in "MmLlHhVvZz":
+                return None
+            cmd, i = t, i + 1
+            if cmd in "Zz":
+                if len(cur) > 2:
+                    rings.append(cur)
+                if cur:
+                    x, y = cur[0]
+                cur = []
+            continue
+        if cmd is None or cmd in "Zz":
+            return None
+        try:
+            if cmd in "HhVv":
+                v = float(t)
+                i += 1
+                if cmd == "H": x = v
+                elif cmd == "h": x += v
+                elif cmd == "V": y = v
+                else: y += v
+            else:
+                a, b = float(toks[i]), float(toks[i + 1])
+                i += 2
+                if cmd in "ML":
+                    x, y = a, b
+                else:
+                    x, y = x + a, y + b
+                if cmd in "Mm":
+                    if len(cur) > 2:
+                        rings.append(cur)
+                    cur = []
+                    cmd = "L" if cmd == "M" else "l"   # later pairs are line-tos
+        except (ValueError, IndexError):
+            return None
+        cur.append((x, y))
+    if len(cur) > 2:
+        rings.append(cur)
+    return rings
+
+
+def _poly_area(ring):
+    a = 0.0
+    for i in range(len(ring)):
+        x0, y0 = ring[i - 1]
+        x1, y1 = ring[i]
+        a += x0 * y1 - x1 * y0
+    return abs(a) / 2.0
+
+
+def _in_ring(pt, ring):
+    hit = False
+    for i in range(len(ring)):
+        (ax, ay), (bx, by) = ring[i], ring[i - 1]
+        if (ay > pt[1]) != (by > pt[1]) and pt[0] < (bx - ax) * (pt[1] - ay) / (by - ay) + ax:
+            hit = not hit
+    return hit
+
+
+def component_openings(ref, skin, lib_roots):
+    """The holes through a component, as polygons in component-local mm.
+
+    Read from each relief feature with `shape: true` - see the block above for
+    why the relief and not a list of its own. Empty when there are none or when
+    the art cannot be read with confidence."""
+    key = (ref, skin or "default")
+    if key in _OPENINGS_CACHE:
+        return _OPENINGS_CACHE[key]
+    _OPENINGS_CACHE[key] = holes = []
+    contract = libwalk.contract_path(ref, lib_roots) if ref else None
+    if contract is None:
+        return holes
+    feats = [f for f in (((libwalk.load_contract(ref, lib_roots) or {})
+                          .get("relief") or {}).get("features") or [])
+             if isinstance(f, dict) and f.get("shape") and f.get("node")]
+    if not feats:
+        return holes
+    try:
+        root = ET.parse(contract.parent / "skins" / f"{key[1]}.svg").getroot()
+    except (ET.ParseError, OSError):
+        return holes
+    parents = {c: p for p in root.iter() for c in p}
+    for f in feats:
+        node = next((e for e in root.iter() if e.get("id") == f["node"]), None)
+        if node is None:
+            continue
+        up, ok = node, True
+        while up is not None:
+            if up.get("transform"):
+                ok = False
+            up = parents.get(up)
+        paths = [node] if node.tag == f"{_SVG_NS}path" else list(node.iter(f"{_SVG_NS}path"))
+        rings = []
+        for q in paths:
+            if (q.get("fill") or "").strip() == "none":
+                continue
+            if q is not node and any(e.get("transform") for e in q.iter()):
+                ok = False
+            r = _subpaths(q.get("d"))
+            if r is None:
+                ok = False
+                break
+            rings.extend(r)
+        if not ok:
+            continue
+        rings.sort(key=_poly_area, reverse=True)
+        shells = []
+        for r in rings:
+            c = (sum(p[0] for p in r) / len(r), sum(p[1] for p in r) / len(r))
+            if any(_in_ring(c, s) for s in shells):
+                holes.append(r)
+            else:
+                shells.append(r)
+    return holes
+
+
+def placed_openings(p, lib_roots):
+    """A placement's openings in view mm: translate(at) rotate(deg w/2 h/2), the
+    transform render.py draws it with."""
+    if not p.get("at") or not p.get("ref"):
+        return []
+    holes = component_openings(p["ref"], p.get("skin", "default"), lib_roots)
+    if not holes:
+        return []
+    sz = contract_size(p["ref"], lib_roots) or {}
+    cx, cy = sz.get("w", 0) / 2.0, sz.get("h", 0) / 2.0
+    th = math.radians(float(p.get("rotate") or 0))
+    c, s = round(math.cos(th), 12), round(math.sin(th), 12)
+    ax, ay = p["at"][0], p["at"][1]
+    return [[(ax + cx + c * (x - cx) - s * (y - cy), ay + cy + s * (x - cx) + c * (y - cy))
+             for x, y in r] for r in holes]
+
+
+def _clip_to_box(ring, box):
+    """Sutherland-Hodgman against an axis-aligned box. The subject may be
+    concave; the area of what comes back is still the area of the overlap."""
+    x0, y0, x1, y1 = box
+    out = list(ring)
+    for inside, cut in (
+            (lambda p: p[0] >= x0, lambda a, b: (x0, a[1] + (b[1] - a[1]) * (x0 - a[0]) / (b[0] - a[0]))),
+            (lambda p: p[0] <= x1, lambda a, b: (x1, a[1] + (b[1] - a[1]) * (x1 - a[0]) / (b[0] - a[0]))),
+            (lambda p: p[1] >= y0, lambda a, b: (a[0] + (b[0] - a[0]) * (y0 - a[1]) / (b[1] - a[1]), y0)),
+            (lambda p: p[1] <= y1, lambda a, b: (a[0] + (b[0] - a[0]) * (y1 - a[1]) / (b[1] - a[1]), y1))):
+        src, out = out, []
+        for i in range(len(src)):
+            a, b = src[i - 1], src[i]
+            if inside(b):
+                if not inside(a):
+                    out.append(cut(a, b))
+                out.append(b)
+            elif inside(a):
+                out.append(cut(a, b))
+        if not out:
+            return []
+    return out
+
+
+def open_area(box, holes):
+    """How much of `box` (x0, y0, x1, y1) lies over the given holes."""
+    if not holes or box[2] <= box[0] or box[3] <= box[1]:
+        return 0.0
+    return sum(_poly_area(c) for c in (_clip_to_box(h, box) for h in holes) if len(c) > 2)
 
 
 def check_states(path, where, states, attrs, elements=None):
@@ -3834,21 +4052,25 @@ def lint_device_decor(path, view_name, view, lib_roots):
     legend ten millimetres over is a mistake.
     """
     vp = view_parts(view)
+    # (box, holes): a part's windows are not part of what buries a field. The
+    # MaiaEdge PBC-2000's louvres are seen through its bezel's two octagons,
+    # and by the bezel's box alone both fields read 100% buried.
     boxes = []
     for b in vp["bays"]:
         bb = _decor_box(b)
         if bb:
-            boxes.append(bb)
+            boxes.append((bb, []))
     for q in vp["placements"]:
         c = _instance_size(q.get("ref"), lib_roots)
         if not c or not q.get("at"):
             continue
         w, h = c
+        holes = placed_openings(q, lib_roots)
         if q.get("rotate") in (90, 270, -90):
             cx, cy = q["at"][0] + w / 2, q["at"][1] + h / 2
-            boxes.append((cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2))
+            boxes.append(((cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2), holes))
         else:
-            boxes.append((q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h))
+            boxes.append(((q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h), holes))
 
     for d in vp["decor"]:
         if not d.get("pattern"):
@@ -3860,11 +4082,13 @@ def lint_device_decor(path, view_name, view, lib_roots):
         if area <= 0:
             continue
         covered = 0.0
-        for fb in boxes:
+        for fb, holes in boxes:
             ox = min(db[2], fb[2]) - max(db[0], fb[0])
             oy = min(db[3], fb[3]) - max(db[1], fb[1])
             if ox > 0 and oy > 0:
-                covered += ox * oy
+                covered += ox * oy - open_area(
+                    (max(db[0], fb[0]), max(db[1], fb[1]),
+                     min(db[2], fb[2]), min(db[3], fb[3])), holes)
         pct = min(100.0, 100.0 * covered / area)
         if pct >= 80.0:
             warn(path, "L44", f"{view_name}: the {d['pattern']} field at "
@@ -6192,18 +6416,37 @@ def lint_device_air_aperture(path, data, lib_roots):
             if not (q.get("at") and sz):
                 continue
             w, h = sz["w"], sz["h"]
+            ax, ay = q["at"][0], q["at"][1]
+            # A PART IS PUNCHED THROUGH BY ITS APERTURE, NOT ITS BOX. L63 derives
+            # a cutout from the aperture a part presents, so a flanged cage's
+            # cutout is its opening and never its flange - and asking the cutout
+            # to contain the whole cage meant a correctly derived one could not
+            # answer this rule. The PBC-2000's two QSFP cages sit in a louvre
+            # field through cutouts that are their SFF-8661 openings exactly.
+            ap = _aperture_of(q["ref"], lib_roots)
+            ap_box = None
+            if ap:
+                (aw, ah), (ox, oy) = ap
+                corners = [(ox, oy), (ox + aw, oy + ah)]
+                if q.get("rotate"):
+                    th = math.radians(float(q["rotate"]))
+                    c, s_ = round(math.cos(th), 12), round(math.sin(th), 12)
+                    cx, cy = w / 2.0, h / 2.0
+                    corners = [(cx + c * (x - cx) - s_ * (y - cy),
+                                cy + s_ * (x - cx) + c * (y - cy)) for x, y in corners]
+                xs, ys = [ax + x for x, _ in corners], [ay + y for _, y in corners]
+                ap_box = (min(xs), min(ys), max(xs), max(ys))
             if q.get("rotate") in (90, 270, -90):
                 w, h = h, w
-            items.append(("part", str(q.get("id")),
-                          (q["at"][0], q["at"][1], q["at"][0] + w, q["at"][1] + h)))
+            items.append(("part", str(q.get("id")), (ax, ay, ax + w, ay + h), ap_box))
         for m in (view.get("silkscreen") or []):
             ext = (_text_extent(m) if m.get("text")
                    else (_path_box(m) if m.get("path") else None))
             if ext:
-                items.append(("legend", str(m.get("text") or m.get("id") or "mark"), ext))
+                items.append(("legend", str(m.get("text") or m.get("id") or "mark"), ext, None))
 
-        for kind, name, box in items:
-            if punched(box):
+        for kind, name, box, ap_box in items:
+            if punched(box) or (ap_box and punched(ap_box)):
                 continue
             frac = _air_fraction(box, decor)
             if frac < ON_AIR:
@@ -6902,6 +7145,13 @@ def lint_device(path, validator, lib_roots):
         # tested on its own, so a legend printed in the bare metal a component
         # reserves inside its own box - between two LED holes, inside an unfilled
         # moulding - is correctly left alone. See paint_boxes.
+        #
+        # AND A HOLE THROUGH A PART PAINTS NOTHING. The PBC-2000's bezel is one
+        # plate across the face with two windows cut through it, and the CON,
+        # MGMT and CTRL legends are printed on the faceplate inside one of them.
+        # A box that carries holes (see component_openings) spares a mark lying
+        # wholly in one; the parts a component composes carry none, because a
+        # lamp drawn across a window still covers what is behind it.
         boxes = []
         for p in vp["placements"]:
             if not p.get("at"):
@@ -6911,18 +7161,37 @@ def lint_device(path, validator, lib_roots):
                 continue
             px, py, pw, ph = p["at"][0], p["at"][1], sz["w"], sz["h"]
             painted = paint_boxes(p["ref"], p.get("skin", "default"), lib_roots)
+            holes = placed_openings(p, lib_roots)
+            parts = composed_part_boxes(p["ref"], lib_roots) if holes else None
             if painted is None:
-                boxes.append((px, py, pw, ph, p["id"]))
-                continue
+                if parts is None:
+                    boxes.append((px, py, pw, ph, p["id"], []))
+                    continue
+                # the skin is unreadable but the holes are not: the whole box
+                # with its windows, and each composed part solid
+                boxes.append((px, py, pw, ph, p["id"], holes))
+                painted, skin_n = parts, 0
+            else:
+                # paint_boxes puts the composed parts last
+                skin_n = len(painted) - len(parts or [])
             flip = str(p.get("rotate", 0)) == "180"
-            for x0, y0, x1, y1 in painted:
+            for i, (x0, y0, x1, y1) in enumerate(painted):
                 if flip:                      # a half turn about the box centre
                     x0, x1 = pw - x1, pw - x0
                     y0, y1 = ph - y1, ph - y0
                 x0, y0 = max(x0, 0.0), max(y0, 0.0)   # the contracted box is the limit
                 x1, y1 = min(x1, pw), min(y1, ph)
                 if x1 > x0 and y1 > y0:
-                    boxes.append((px + x0, py + y0, x1 - x0, y1 - y0, p["id"]))
+                    # only the node the windows are cut in carries them: its box
+                    # contains a whole window, where anything drawn IN one is
+                    # smaller than it and still covers what is behind it
+                    bx0, by0, bx1, by1 = px + x0, py + y0, px + x1, py + y1
+                    cut = i < skin_n and any(
+                        min(q[0] for q in h) >= bx0 - 0.01 and max(q[0] for q in h) <= bx1 + 0.01
+                        and min(q[1] for q in h) >= by0 - 0.01 and max(q[1] for q in h) <= by1 + 0.01
+                        for h in holes)
+                    boxes.append((bx0, by0, bx1 - bx0, by1 - by0, p["id"],
+                                  holes if cut else []))
         # A BAY PAINTS OVER A LEGEND TOO, and L21 had never looked at one. It
         # gathered boxes from placements alone, so a mark printed where a card
         # goes was reported as fine - and the C40G's slot numbers, all six of
@@ -6941,7 +7210,7 @@ def lint_device(path, validator, lib_roots):
                 continue
             if str(b.get("rotate", 0)) in ("90", "270", "-90"):
                 bw, bh = bh, bw
-            boxes.append((b["at"][0], b["at"][1], bw, bh, b["id"]))
+            boxes.append((b["at"][0], b["at"][1], bw, bh, b["id"], []))
         for m in vp["silkscreen"]:
             if not m.get("at"):
                 continue
@@ -6950,10 +7219,18 @@ def lint_device(path, validator, lib_roots):
             if not ext:
                 continue
             mx0, my0, mx1, my1 = ext
-            for bx, by, bw, bh, bid in boxes:
+            for bx, by, bw, bh, bid, holes in boxes:
                 ox = min(mx1, bx + bw) - max(mx0, bx)
                 oy = min(my1, by + bh) - max(my0, by)
                 if ox > SILK_TOL and oy > SILK_TOL:
+                    if holes:
+                        # what the box covers of the mark, less the tolerance
+                        # the rule already grants at each edge, lies in a window
+                        inner = (max(mx0, bx) + SILK_TOL, max(my0, by) + SILK_TOL,
+                                 min(mx1, bx + bw) - SILK_TOL, min(my1, by + bh) - SILK_TOL)
+                        area = (inner[2] - inner[0]) * (inner[3] - inner[1])
+                        if area > 0 and open_area(inner, holes) >= area - 1e-6:
+                            continue
                     what = repr(m.get("text")) if m.get("text") else (m.get("id") or "path")
                     warn(path, "L21", f"{vname}: silkscreen {what} at "
                                       f"({m['at'][0]:g}, {m['at'][1]:g}) is {oy:.2f}mm "

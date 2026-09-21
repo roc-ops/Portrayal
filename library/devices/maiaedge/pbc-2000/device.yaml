@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -97,22 +97,15 @@ provenance:
       any photograph held, and is what the chamfer was read from. `shape: octagon` was added to
       the format for this - decor and cutouts could draw a rectangle, a rounded rectangle, a
       D-sub shell and a stadium slot, and an octagon had no shape to be.
-  lint-l21-l44-l64:
+  lint-l64:
     note: >-
-      TWO L44 WARNINGS ON THIS DEVICE ARE THE RULE MEASURING THE BEZEL'S BOX. It reads each
-      louvre field as 100% buried because maiaedge/pbc-2000-bezel@1's rectangle covers the whole
-      face; the windows the louvres are seen through are holes in that part, which a bounding
-      box cannot express. The fields are exactly where the photograph shows them. Do not move
-      them to quiet the rule.
-      AND FIVE L64 WARNINGS ARE THE SAME FIELDS FROM THE OTHER SIDE. The two 100G cages and the
-      CON, MGMT and CTRL legends sit inside the louvre fields, which L64 reads as open air end to
-      end. On the hardware the louvres are slots in metal: the ports are punched through the
-      field and the legends are printed on the bars between slots. Until v4 these were silent
-      by accident - the amber beads were device decor with `fill: none`, which the rule counted
-      as metal on top of the vents; the beads now belong to the bezel.
-      THE THREE L21 WARNINGS ARE THE THIRD FACE OF IT: CON, MGMT and CTRL read as painted over
-      by the bezel, because its box contains them. They are printed on the faceplate inside
-      the right window, and the drawing shows them there.
+      THREE L64 WARNINGS ON THIS DEVICE ARE THE RULE READING A LOUVRE AS AIR. The CON, MGMT and
+      CTRL legends sit inside the right louvre field, which L64 reads as open end to end. On the
+      hardware the louvres are slots in metal and the legends are printed on the bars between
+      them. The legends are where the photograph shows them. Do not move them to quiet the rule.
+      The bezel's windows no longer draw L44 or L21, and the two cages no longer draw L64: lint
+      reads the windows from the bezel's `shape` relief, and punches a part through its cutout
+      by its opening rather than its flange.
   louvres:
     confidence: photo-measured
     note: >-
