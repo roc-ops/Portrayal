@@ -405,11 +405,11 @@ def test_the_comparison_layer_can_now_reach_them():
     and one bay pitch across THREE chassis, two of which share a shell and one of which
     does not. What travels with the tray is the cooling; what does not travel is the box.
 
-    SIXTY-FIVE IS THE EDGECORE COR550, and it is the first 4+1 in this census - every
-    entry before it is 1+1, 2+1, 3+1, 5+1 or 7+1. It states "4+1 redundant,
-    hot-swappable fan modules" in its key features and "Fans: Hot-Swappable 4+1 redundant
-    fans" in Physical and Environmental, over FIVE bays, so the figure and the bay count
-    agree.
+    SIXTY-FIVE IS THE EDGECORE COR550, a 4+1 over five bays - the same figure over the
+    same bay count as the Edgecore DCS202 and six UfiSpace chassis already here. It states
+    "4+1 redundant, hot-swappable fan modules" in its key features and "Fans:
+    Hot-Swappable 4+1 redundant fans" in Physical and Environmental, so the figure and the
+    bay count agree.
     WHAT IT ADDS IS A REDUNDANCY FIGURE WHOSE FAN COUNT IS NOT KNOWN, which is a shape this
     census has met before from the other side. edgecore/fan-2u-1x1sn@1's three chassis all
     say "4 hot-swappable fan modules (2 fans per module), 8 fans total with 7+1
