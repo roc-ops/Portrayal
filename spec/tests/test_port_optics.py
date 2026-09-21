@@ -24,7 +24,7 @@ from portrayal import attrsections
 from portrayal import lint
 from portrayal import libwalk
 
-MANIFESTS = libwalk.iter_devices([LIB])
+MANIFESTS = list(libwalk.iter_devices([LIB]))
 
 
 def warnings_for(man):

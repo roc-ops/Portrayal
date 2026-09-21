@@ -139,6 +139,64 @@ def test_nothing_hand_rolls_the_walk_or_the_grammar_any_more():
     assert not grammar, f"these still hand-roll the ref grammar: {grammar}"
 
 
+def test_the_walks_can_be_walked_twice():
+    """A caller that binds a walk once and iterates it from two tests gets a real
+    check the first time and a VACUOUS PASS every time after.
+
+    These yielded for one release. `test_attrs_sections.py` bound
+    `MANIFESTS = libwalk.iter_devices([LIB])` at module scope and six tests
+    iterated it: 114 devices on the first pass, ZERO on the other five. Nothing
+    failed - the five simply did not run, and under `-n auto` WHICH one got the
+    devices varied, so the hole moved between runs. Making them run found a
+    transceiver operating range filed under `attrs.features` on two devices, and
+    it had been invisible for months.
+
+    The sort was always the tell: `sorted()` materialised each root's whole glob
+    before the first item came out, so the laziness saved no memory and gave
+    away re-iterability for nothing.
+    """
+    for walk in (libwalk.iter_devices, libwalk.iter_components):
+        found = walk([LIB])
+        first = list(found)
+        assert first, f"{walk.__name__} found nothing - the assertion below would be vacuous"
+        assert list(found) == first, (
+            f"{walk.__name__} is exhausted by one pass; a module-scope binding "
+            f"iterated from two tests would pass the second one vacuously")
+
+
+def test_nothing_binds_a_lazy_walk_at_module_scope():
+    """Belt and braces, and it catches the NEXT lazy helper as well as this one.
+
+    Asserted over the tree because the next module-scope binding will not be on
+    a list - the same reason the hand-rolled-walk sweep above is written this
+    way. A generator expression at module scope has the identical failure mode
+    and no walk of ours has to be involved.
+    """
+    import ast
+
+    lazy = {"iter_devices", "iter_components", "map", "filter", "zip",
+            "glob", "iglob", "rglob", "finditer", "islice", "chain"}
+    offenders = []
+    for f in sorted((ROOT / "spec" / "tests").rglob("*.py")):
+        for node in ast.parse(f.read_text()).body:   # MODULE SCOPE ONLY
+            if not isinstance(node, (ast.Assign, ast.AnnAssign)) or node.value is None:
+                continue
+            v = node.value
+            if isinstance(v, ast.GeneratorExp):
+                what = "a generator expression"
+            elif isinstance(v, ast.Call):
+                fn = v.func
+                name = fn.attr if isinstance(fn, ast.Attribute) else getattr(fn, "id", None)
+                what = f"{name}()" if name in lazy else None
+            else:
+                what = None
+            if what:
+                offenders.append(f"{f.relative_to(ROOT)}:{node.lineno} binds {what}")
+    assert not offenders, (
+        "module-scope bindings that may be exhausted by the first test that "
+        f"iterates them - wrap in list(): {offenders}")
+
+
 def test_a_root_may_be_given_bare_or_in_a_list():
     """Callers carry `--library` as a list and as a single path in about equal
     numbers, and a walk that silently iterates the CHARACTERS of a string is the

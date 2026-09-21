@@ -63,22 +63,46 @@ def load_contract(ref, roots):
     return load_yaml(f) if f else None
 
 
+def _roots(roots):
+    """One root given bare, or several in a sequence - always a sequence."""
+    return [roots] if isinstance(roots, (str, Path)) else list(roots)
+
+
 def iter_devices(roots):
-    """Every device.yaml under every root, sorted, as paths.
+    """Every device.yaml under every root, sorted, as paths. A LIST.
 
     SORTED, ALWAYS. Filesystem order is not stable across machines, and this
     walk feeds the lock, the indexes and a dozen censuses whose output is
     committed - a build that differs by directory order is a diff nobody can
     review. Several of the ten hand-rolled copies sorted and several did not.
+
+    A LIST, NOT A GENERATOR, and the sort is the reason it costs nothing. This
+    yielded for one release, and `sorted()` inside a generator had already
+    materialised each root's whole glob before the first item came out - so the
+    laziness bought no memory at all. What it did buy was a walk that answers
+    114 devices on the first pass and ZERO on the second, and a caller that
+    binds it once and iterates it twice gets a real check the first time and a
+    vacuous pass every time after.
+
+    `test_attrs_sections.py` was that caller: six tests over one exhausted
+    generator, five of which had never run. Making them run found a transceiver
+    operating range filed under `attrs.features`. Under `-n auto` which test
+    goes first varies, so the vacuity was invisible AND intermittent - nothing
+    failed, and the coverage simply was not there. Re-iterability is the
+    property every caller here actually wants; none of the twenty-odd call
+    sites wants a stream.
     """
-    for r in roots if not isinstance(roots, (str, Path)) else [roots]:
-        yield from sorted(Path(r).glob("devices/*/*/device.yaml"))
+    return [f for r in _roots(roots)
+            for f in sorted(Path(r).glob("devices/*/*/device.yaml"))]
 
 
 def iter_components(roots):
-    """Every contract.yaml under every root, sorted, as paths - all majors."""
-    for r in roots if not isinstance(roots, (str, Path)) else [roots]:
-        yield from sorted(Path(r).glob("components/*/*/*/contract.yaml"))
+    """Every contract.yaml under every root, sorted, as paths - all majors.
+
+    A LIST, for the reason `iter_devices` gives at length.
+    """
+    return [f for r in _roots(roots)
+            for f in sorted(Path(r).glob("components/*/*/*/contract.yaml"))]
 
 
 def ref_of(contract_file):
