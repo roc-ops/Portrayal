@@ -58,8 +58,9 @@ provenance:
   port-pitch:
     confidence: registry
     note: >-
-      The registry's ganged-QSFP 19.00 is carried. With the pitch free the fit reads 19.08;
-      pinned to 19.00 the worst column moves 0.73 mm and the rms is unchanged at 0.30 mm.
+      The registry's ganged-QSFP 19.00 is carried. With the pitch free the fit reads 19.08,
+      rms 0.30 mm, worst column 0.69; pinned to 19.00 the rms is unchanged and the worst
+      column's residual is 0.73 - pinning costs 0.04 mm.
       The gutter between cages is measured, 7.52, and the row pitch inside a cage 14.62 -
       14.19 across the band between the upper and lower cages.
   numbering:
@@ -519,9 +520,10 @@ configurations:
   ac-b2f:
     kind: orderable
     airflow: back-to-front
-    region-context: {exhaust: Intake}
+    region-context: {intake: Exhaust, exhaust: Intake}
     description: >-
-      Dual 850 W AC supplies, back-to-front airflow - the -B ordering codes. No handle
+      Dual 850 W AC supplies, back-to-front airflow - the -B ordering codes. BOTH faces'
+      airflow regions swap: the front becomes the exhaust and the rear the intake. No handle
       colour is overridden: every rear either document draws is red, and neither shows a
       -B unit; see the fan-handle-colour-by-airflow gap.
     part-numbers:
