@@ -100,7 +100,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 1 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 2 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
-| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 5 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
+| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 14 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
@@ -665,11 +665,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/pbc-2000-ear-back@1` | component | ear | 22.6 × 41.27 |  | 1 | 1 | The back of a MaiaEdge PBC-2000 rack ear, as the rear view sees it past each side of the chassis - the black … |
 | `maiaedge/pbc-2000-fan-plate@2` | module | fan | 255.2 × 40.07 |  | 1 | 0 | The rear fan tray of the MaiaEdge PBC-2000 - ONE bare-steel plate carrying five 40 mm San Ace 40 fans behind … |
 | `maiaedge/pbc-2000-lcd@2` | component | display | 45.2 × 35.2 |  | 1 | 0 | The front-panel touch screen of the MaiaEdge PBC-2000 - a dark glass display in a raised frame at the right-h… |
-| `maiaedge/pbc-2000-psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | The 550 W CRPS supply fitted to the MaiaEdge PBC-2000 - a fan behind a four-spoke silver guard with a blue 55… |
 | `maiaedge/pbc-2000-psu-divider@1` | component | mechanical | 14.5 × 40 |  | 1 | 1 | The steel strap between the two supplies on the MaiaEdge PBC-2000's rear, held by two screws |
 | `maiaedge/pbc-2000-rear-bracket@1` | component | mechanical | 14.5 × 40 |  | 1 | 1 | The steel strap at the left end of the MaiaEdge PBC-2000's rear, held by two screws and carrying the chassis … |
 | `maiaedge/port-extender-fan@1` | module | fan | 58.8 × 40 |  | 1 | 0 | A rear fan module of the MaiaEdge Port Extender - a black 1RU module behind a honeycomb grille, with a blue p… |
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
+| `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
 
 ## smartoptics/ (16)
 

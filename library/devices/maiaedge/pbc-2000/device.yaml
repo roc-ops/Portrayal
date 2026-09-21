@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 6.0.0
+version: 7.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -153,8 +153,10 @@ provenance:
       edge. THE POSITIONS v4 TOOK FROM pbc-rear-b.jpeg WERE WRONG by up to 14 mm - in the rack,
       the side rails widened what was taken for the chassis. The whole rear is bare steel. The
       supplies and the fan tray are field-replaceable, each in its own bay; the supplies are
-      maiaedge/pbc-2000-psu-550w@2, whose face - handle along the foot, inlet in a black
-      shroud, a purple latch tab standing straight out of the face - is not common/psu-550w@2's.
+      maiaedge/psu-550w@1, whose face - handle along the foot, inlet in a black
+      shroud, a purple latch tab standing straight out of the face - is drawn from the fitted
+      modules; it is very probably a Gospower G1251-0550WN, the family common/psu-550w@2 also is
+      (see that part's `identity`).
   power:
     confidence: datasheet
     note: >-
@@ -187,6 +189,16 @@ attrs:
     eol: none-announced
 chassis: {width: 437.9, height: 41.27, depth: 291.08, ru: 1, color: '#1b1e21'}
 gaps:
+- what: psu-identity
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph of one supply's rating label - it is on the module's body, so pull one supply to take it.
+  note: >-
+    The supplies are very probably Gospower G1251-0550WN-series 550 W CRPS modules taking AC
+    or high-voltage DC through one inlet - a visual match on every feature against that
+    module's photographs (see maiaedge/psu-550w@1's `identity`), and the Port Extender
+    datasheet's "100-240VAC or 180-300VDC" is that module's range. But no document names the
+    part, so its model is not recorded and no -48 V DC option is modelled or known.
 - what: front-indicator-meanings
   scope: [front]
   reason: vendor-silent
@@ -357,16 +369,16 @@ views:
         group: psus
         rel-pos: 1
         accepts:
-        - maiaedge/pbc-2000-psu-550w@2
-        default: maiaedge/pbc-2000-psu-550w@2
+        - maiaedge/psu-550w@1
+        default: maiaedge/psu-550w@1
       - id: psu-2
         at: [107.35, 0.6]
         size: {w: 73.5, h: 40.0}
         group: psus
         rel-pos: 2
         accepts:
-        - maiaedge/pbc-2000-psu-550w@2
-        default: maiaedge/pbc-2000-psu-550w@2
+        - maiaedge/psu-550w@1
+        default: maiaedge/psu-550w@1
       - id: fan-tray
         at: [182.1, 0.6]
         size: {w: 255.2, h: 40.07}
