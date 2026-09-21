@@ -2403,6 +2403,171 @@ def resolve_views(device, cfg):
     return out
 
 
+# --- pluggable cage accept lists (Task 3) ------------------------------------
+#
+# spec/schemas/pluggables.yaml holds nine cage families - the physical envelope
+# a `media` value belongs to, the rate ladder it climbs, and (`also-accepts`)
+# which OTHER family's modules the cage takes wholesale. `cages[]` in the
+# compiled index turns that registry, plus what the LIBRARY actually carries,
+# into a per-placement accept list: what could seat here, derived, never
+# declared.
+
+
+def _pluggable_families():
+    """family name -> {interface, rates, also-accepts, source}, or {} if the
+    checkout is broken.
+
+    Read straight from the file rather than through lint.py's own copy of this
+    loader - render.py has never imported lint, and a rendered device's cage
+    list is not the place to start. The two are separate readings of the same
+    YAML, the way render.py and lint.py already both read device.yaml without
+    either going through the other.
+    """
+    try:
+        doc = yaml.safe_load((SCHEMAS / "pluggables.yaml").read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    return doc.get("families") or {}
+
+
+def _family_by_interface(families, interface):
+    """The (name, family) whose `interface` equals `interface`, or None.
+
+    A cage PRESENTS an interface (`manifest.presented_interface`); a module
+    MATES one (`mates:` on its contract). Both are checked against this, which
+    is why it takes a bare interface string rather than a component.
+    """
+    for name, fam in families.items():
+        if fam.get("interface") == interface:
+            return name, fam
+    return None
+
+
+def _pluggable_candidates(lib_roots):
+    """Every library component that could seat in SOME pluggable cage,
+    indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
+
+    BUILT ONCE PER PROCESS. `libwalk.iter_components` is a GENERATOR - the
+    same shape as `iter_devices`, which spent this very branch's last three
+    commits paying for having been bound at module scope and silently
+    yielding nothing on a second pass. Consumed here, in full, exactly once
+    per render.py invocation, so a device with 54 ports looks a candidate up
+    54 times rather than walking 633 contracts 54 times.
+
+    NOT `library/dist/components.json`. That index does not carry `mates`,
+    `interface` or `superseded-by` - it holds attrs, bays, behaviour, class,
+    conforms, description, elements, fields, files, kind, major, name, ns,
+    parts, size and skins, and none of the three fields this needs. Worse,
+    `__main__.py` runs a renderer process per device under `xargs -P` against
+    six parallel indexer pids, so that file may be stale or simply not written
+    yet while this process is running - depending on it here would be a race.
+    `libwalk` reads contracts off disk directly, which is what every renderer
+    already does for every placement it draws.
+    """
+    out = {}
+    for cf in libwalk.iter_components(lib_roots):
+        c = load_yaml(cf) or {}
+        if c.get("behaviour") != "occupies":
+            continue
+        if c.get("superseded-by"):
+            continue
+        mates = c.get("mates")
+        if not mates:
+            continue
+        out.setdefault(mates, []).append((libwalk.ref_of(cf), c))
+    return out
+
+
+def _cage_accepts(candidates, families, family, media):
+    """The accept list for one cage: every candidate its family, or a family
+    named in its `also-accepts`, offers - generics first (by namespace, never
+    a hardcoded list of names or vendors, so a partner's part appears the
+    moment it lints), then everything else alphabetically.
+
+    THE RATE CEILING APPLIES ONLY TO A DIRECT MATCH, against THIS family's own
+    ladder. `media` is a value from THIS family's vocabulary (`sfp28`,
+    `qsfp-dd`, ...); it has no meaning on a DIFFERENT family's ladder, and
+    nothing declares a rate outside its own `mates` family in the first place
+    (L102). `also-accepts` is a bare list of family names, not a per-entry
+    cutoff, and the registry's own citations say the whole foreign ladder
+    rides along: a QSFP-DD cage is "compatible with 4-lane QSFP28/QSFP112" -
+    two rungs of the QSFP family, not one capped by whatever `qsfp-dd`'s own
+    single rung happens to say.
+
+    A CANDIDATE THAT DECLARES NO `attrs.rate` FITS EVERY RUNG of whichever
+    family matched it - that is what a GENERIC is (docs/pluggables-design.md
+    decision 5), and every part in the library today is one, so this can only
+    be exercised once a vendor optic declares a rate.
+    """
+    rates = family.get("rates") or []
+    ceiling = rates.index(media) if media in rates else None
+
+    def _direct_fits(c):
+        if ceiling is None:
+            return True
+        rate = attrs_mod.flatten(c.get("attrs")).get("rate")
+        if not rate:
+            return True
+        return rate in rates and rates.index(rate) <= ceiling
+
+    refs = [ref for ref, c in candidates.get(family.get("interface"), [])
+            if _direct_fits(c)]
+    for other in family.get("also-accepts") or []:
+        other_iface = (families.get(other) or {}).get("interface")
+        if not other_iface:
+            continue
+        refs.extend(ref for ref, _c in candidates.get(other_iface, []))
+
+    def _sort_key(ref):
+        ns = ref.split("/", 1)[0]
+        return (0 if ns == "generic" else 1, ref)
+    return sorted(set(refs), key=_sort_key)
+
+
+def cage_entries(device, view_name, lib, families, candidates, default_occupants):
+    """`cages[]` for one view: one entry per placement that presents a
+    pluggable interface (`manifest.presented_interface`, looked through a
+    wrapper's own `parts:` the same way a `mate-to` occupant already is), with
+    the derived accept list and the configured occupant, if the DEFAULT
+    configuration seats one.
+
+    An entry is emitted only when the presented interface names a family in
+    spec/schemas/pluggables.yaml - a placement that presents nothing (an LED,
+    a jack, a fixed connector) or an interface this registry does not cover is
+    silently not a cage, the same way it is silently not a bay.
+    """
+    view = device["views"][view_name] or {}
+    groups = device.get("groups") or {}
+
+    def _resolve(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+
+    out = []
+    for p in view_parts(view)["placements"]:
+        contract, _skins = lib.resolve(p["ref"])
+        interface, _mate_at, _lift = presented_interface(contract, _resolve)
+        found = _family_by_interface(families, interface) if interface else None
+        if found is None:
+            continue
+        _family_name, family = found
+        # `media` is the port GROUP's declared media - the cage's ceiling on
+        # its family's ladder. A placement in no group, or in a group with no
+        # media, has NO CEILING: it accepts every rate of its family.
+        media = ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media")
+        occ = default_occupants.get(p["id"])
+        out.append({
+            "id": p["id"], "at": p["at"], "interface": interface, "media": media,
+            "group": p.get("group"), "rel-pos": p.get("rel-pos"),
+            "rotate": p.get("rotate"),
+            "accepts": _cage_accepts(candidates, families, family, media),
+            "occupant": (occ.get("ref") if isinstance(occ, dict) else occ) if occ else None,
+        })
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("device_yaml")
@@ -2455,6 +2620,14 @@ def main():
     # box rather than say it has no top or bottom face, which is the demo lying
     # instead of declining.
     cap = capability.report(Path(args.device_yaml), device, args.library, SCHEMAS)
+    # `cages[]` (Task 3) - what the library could seat in each pluggable
+    # placement, derived from spec/schemas/pluggables.yaml and the library
+    # itself. Computed ONCE per process: `_pluggable_candidates` materialises
+    # `libwalk.iter_components` in full rather than re-walking the library for
+    # every placement in every view.
+    _families = _pluggable_families()
+    _candidates = _pluggable_candidates(args.library)
+    _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
                  "capability": cap["capability"], "gaps": cap["gaps"],
                  # FACES ONLY. A view carrying `face:` is a VARIANT - the
@@ -2519,7 +2692,13 @@ def main():
                                "rotate": b.get("rotate"),
                                "at": b["at"], "size": b["size"]}
                               for b in view_parts(device["views"][v])["bays"]]
-                          for v in device["views"]}}
+                          for v in device["views"]},
+                 # what a pluggable placement could take, derived - never
+                 # declared - from the library and spec/schemas/pluggables.yaml.
+                 # Keyed by view exactly as `bays` is, variants included.
+                 "cages": {v: cage_entries(device, v, lib, _families, _candidates,
+                                            _default_occupants)
+                           for v in device["views"]}}
     (outdir / f"{device['name']}.configs.json").write_text(json.dumps(cfg_index, indent=1, sort_keys=True))
     print(f"wrote {device['name']}.configs.json")
 
