@@ -1,0 +1,132 @@
+"""Pluggables D task 1: the four generic transceivers' relief, re-sourced.
+
+Every generic transceiver in the library (sfp-lc, sfp-lc-simplex, qsfp-lc,
+qsfp-dd-lc) carries a `body` relief feature that stands the module proud of
+its cage, and a bail (SFP) or tab (QSFP, QSFP-DD) that stands proud further
+still. Two things about that pair were wrong before this task:
+
+1. The bail/tab carried a hard-coded `color` in the contract, which render.py
+   writes onto the compiled node as `data-z-color` (~render.py:823, :916).
+   kit/relief.js reads that attribute FIRST and only falls back to
+   `dominantColor()` of the node's own art when it is absent (~relief.js:1410)
+   - so a hard-coded relief colour overrides whatever `latch-color` painted
+   the art via `data-fill-from`, and a red latch in 2D stood in 3D wearing the
+   *contract's* fixed colour instead. Removing `color` from the feature is
+   what lets 3D follow the art.
+
+2. The SFP bail's `source` asserted nothing SFF-8432 actually gives: D2 (see
+   docs/superpowers/plans/2026-09-21-pluggables-d-standing-proud.md) found
+   Table 4-3 designator A dimensions the *body*, not the bail, and Figure 4-2
+   ("Latch Post Detail") is the cage-retention post, not the wire bail - so
+   the bail's 14.3 reach stays `estimated` but the sentence has to say what
+   was checked and came up empty, not just that nothing was checked.
+
+This file compiles each generic the way `components_index.py` compiles
+`library/dist/components/*.svg` - `render.instance_group`, the same call, not
+a reimplementation - and reads the `data-z-*` attributes and skin fill straight
+off the result, per the plan's "Verification is compiled and counted, not
+reasoned about."
+
+Every assertion here fails on at least one of today's four contracts: the two
+SFP generics still carry a hard-coded `data-z-color` on `bail` before this
+task's edit.
+"""
+import pathlib
+
+import pytest
+import yaml
+
+SPEC = pathlib.Path(__file__).resolve().parents[1]
+LIB = SPEC.parent / "library"
+
+from portrayal import render
+
+# (ref, the node the pull latch is drawn as, the body's `out`, substrings the
+# body's `source` sentence must cite verbatim - the MSA designator the plan's
+# D2 reading rests on)
+GENERICS = [
+    ("generic/sfp-lc@1", "bail", 10.0,
+     ["SFF-8432", "Table 4-3 designator A"]),
+    ("generic/sfp-lc-simplex@1", "bail", 10.0,
+     ["SFF-8432", "Table 4-3 designator A"]),
+    ("generic/qsfp-lc@1", "tab", 20.0,
+     ["SFF-8661", "Figure 5-1"]),
+    ("generic/qsfp-dd-lc@1", "tab", 20.0,
+     ["QSFP-DD HW", "Figure 52"]),
+]
+
+
+def _contract_path(ref):
+    nsname, major = ref.split("@")
+    ns, name = nsname.split("/")
+    return LIB / "components" / ns / name / f"v{major}" / "contract.yaml"
+
+
+def _contract(ref):
+    return yaml.safe_load(_contract_path(ref).read_text())
+
+
+def _relief_feature(ref, node):
+    data = _contract(ref)
+    for feat in data["relief"]["features"]:
+        if feat["node"] == node:
+            return feat
+    raise AssertionError(f"{ref} has no relief feature named {node!r}")
+
+
+def _compiled_nodes(ref, attrs=None):
+    """The standalone-component compile path, `render.instance_group` -
+    the same function `components_index.py` calls to write
+    `library/dist/components/*.svg` - not a reimplementation of it.
+
+    `attrs` stands in for what a placement's `fields` become by the time they
+    reach `instance_group` (see render.py's `merged` in that function): a
+    device placement's `fields.latch-color` arrives here exactly the same way,
+    through the `attrs` positional argument, so passing it directly exercises
+    the real field-to-fill path without needing a device or a config.
+    """
+    lib = render.Library([str(LIB)])
+    g, _ = render.instance_group(lib, ref, "t", [0, 0], None, attrs, None, None,
+                                  skin_name="default", palette={}, resolved={})
+    return {n.get("id"): n for n in g.iter() if n.get("id")}
+
+
+@pytest.mark.parametrize("ref,latch_node,body_out,markers", GENERICS,
+                          ids=[g[0] for g in GENERICS])
+def test_body_out_and_source_cite_the_msa_designator(ref, latch_node, body_out, markers):
+    nodes = _compiled_nodes(ref)
+    body = nodes["t--body"]
+    assert float(body.get("data-z-out")) == body_out, \
+        f"{ref} body data-z-out: {body.get('data-z-out')!r}"
+    src = _relief_feature(ref, "body")["source"]
+    for marker in markers:
+        assert marker in src, f"{ref} body source is missing {marker!r}: {src!r}"
+
+
+@pytest.mark.parametrize("ref,latch_node,body_out,markers", GENERICS,
+                          ids=[g[0] for g in GENERICS])
+def test_latch_carries_no_hardcoded_relief_color(ref, latch_node, body_out, markers):
+    """A `color` on the bail/tab feature would out-rank the art's own fill in
+    3D (relief.js prefers `data-z-color` over `dominantColor()`), so 3D would
+    never see a `latch-color` field change. Fails today for both SFP generics,
+    whose `bail` feature still carries `color: '#2f5fa8'`."""
+    nodes = _compiled_nodes(ref)
+    latch = nodes[f"t--{latch_node}"]
+    assert latch.get("data-z-color") is None, (
+        f"{ref} {latch_node} still carries data-z-color="
+        f"{latch.get('data-z-color')!r}; relief.js will use it instead of "
+        "the node's own art")
+
+
+@pytest.mark.parametrize("ref,latch_node,body_out,markers", GENERICS,
+                          ids=[g[0] for g in GENERICS])
+def test_latch_fill_follows_the_latch_color_field(ref, latch_node, body_out, markers):
+    """The colour test: a placement's `latch-color` field reaches the bail/tab
+    node's `fill` through the skin's own `data-fill-from="latch-color"`
+    (already wired on all four skins), so once the feature carries no
+    `data-z-color`, relief.js's `dominantColor()` of this node's own art
+    reads red here, not a hard-coded blue."""
+    nodes = _compiled_nodes(ref, attrs={"latch-color": "#c03030"})
+    latch = nodes[f"t--{latch_node}"]
+    assert latch.get("fill") == "#c03030", \
+        f"{ref} {latch_node} fill: {latch.get('fill')!r}"

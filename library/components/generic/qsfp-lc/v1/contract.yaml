@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lc
-version: 1.0.0
+version: 1.0.1
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -132,7 +132,15 @@ relief:
       out: 34.80
       confidence: drawing
       source: >-
-        common/qsfp-pull-tab@1 provenance - ProLabs drawing 34.80 MAX reach
+        common/qsfp-pull-tab@1 provenance - ProLabs drawing 34.80 MAX reach.
+        SFF-8661 Rev 2.5 was checked directly and gives only latch STRENGTH
+        (Table 5-1, 125N MIN pull to separate, latch engaged), no pull-tab
+        reach dimension - Figure 5-1's own "32 MIN" callout with Note 7
+        ("indicated dimension to include bail travel") is a minimum
+        clearance for the release mechanism's travel, not a maximum reach for
+        the tab standing proud. So the 34.80 stays `drawing` confidence - it
+        IS read off a drawing - but the drawing is one vendor's (ProLabs), a
+        vendor MAX, not the MSA's.
 connection-points:
   mate: {at: [9.175, 4.25], direction: front}
   optical-tx: {at: [6.05, 4.9], direction: front}
