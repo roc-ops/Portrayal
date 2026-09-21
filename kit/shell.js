@@ -16,7 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
-import { seatModule, nestedBays, configBayPath } from './swap.js';
+import { nestedBays, applyOverrides, applyOccupantOverrides, decodeSwaps, rawParam, configBayPath } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -164,7 +164,8 @@ export function createShell(opts = {}) {
   $('header h1').textContent = opts.title || 'Portrayal';
 
   const state = {device: null, cfg: null, view: null, module: null, sel: null,
-                 svg: null, meta: null, cfgBays: {}, cfgFields: {}};
+                 svg: null, meta: null, cfgBays: {}, cfgOccupants: {}, cfgFields: {},
+                 touched: new Set(), refused: {}};
 
   const handlers = {};
   const on = (name, fn) => { (handlers[name] ||= []).push(fn); };
@@ -184,6 +185,25 @@ export function createShell(opts = {}) {
   const bayFor = path => (state.meta?.bays?.[bayView()] || []).find(b => b.id === path)
     || (state.svg ? nestedBays(state.svg, compByRef).find(b => b.id === path) : null)
     || null;
+
+  // A CAGE OF THE FACE ON SCREEN, found from the port OR from the optic in it.
+  // `meta.cages` is keyed by view exactly as `meta.bays` is, so it is read
+  // through bayView() for the same reason. An optic the build (or a swap) seated
+  // is a top-level sibling of its cage - `port-4-occupant`, `data-for="port-4"`,
+  // `data-behaviour="occupies"` - so a path inside one resolves to its host
+  // through that element's `data-for`, and clicking the optic offers the same
+  // select as clicking the port. `data-for` alone is not enough: the port's
+  // LED is `data-for` it too, and must stay the LED.
+  const cagesHere = () => (state.module ? [] : state.meta?.cages?.[bayView()] || []);
+  function cageFor(path) {
+    if (path == null) return null;
+    const cages = cagesHere();
+    const own = cages.find(c => c.id === path);
+    if (own) return own;
+    const e = state.svg?.querySelector(`[data-path="${CSS.escape(path)}"]`);
+    const host = e?.closest('[data-behaviour="occupies"][data-for]')?.dataset.for;
+    return host ? cages.find(c => c.id === host) || null : null;
+  }
 
   // ---------------------------------------------------------------- stage
 
@@ -837,6 +857,7 @@ export function createShell(opts = {}) {
     if (e.dataset.members)
       html += `<div class="row"><span>members</span><code>${e.dataset.members}</code></div>`;
 
+    const cage = cageFor(path);
     if (bay) {
       const cur = (state.cfgBays?.[bay.id]) ?? bay.default ?? '';
       const opts = ['<option value="">— open —</option>']
@@ -844,6 +865,24 @@ export function createShell(opts = {}) {
       html += `<div class="row"><span>occupant</span><select id="occ">${opts.join('')}</select></div>`;
       if (!bay.accepts.length)
         html += `<div class="row" style="color:var(--warn)">no component modelled for this slot</div>`;
+    }
+    // THE OPTIC IN A CAGE, offered exactly as a module in a bay is. The current
+    // value is `cfgOccupants`, which is reset from THIS configuration's
+    // `configs[].occupants` - never `cage.occupant`, which is only the DEFAULT
+    // configuration's answer and would show another configuration's optic.
+    if (cage) {
+      const cur = state.cfgOccupants?.[cage.id] ?? '';
+      const accepts = cage.accepts || [];
+      const opts = ['<option value="">— empty —</option>']
+        .concat(accepts.map(a => `<option value="${esc(a)}"${a === cur ? ' selected' : ''}>${esc(a)}</option>`));
+      html += `<div class="row"><span>optic</span><select id="optic" data-cage="${esc(cage.id)}">${opts.join('')}</select></div>`;
+      if (!accepts.length)
+        html += `<div class="row" style="color:var(--warn)">no generic modelled for this cage's family yet</div>`;
+      const no = state.refused?.[cage.id];
+      if (no)
+        html += `<div class="row" style="color:var(--warn)">${esc(no)} was not seated &mdash; `
+              + `this cage stands off the face, and the kit does not seat an optic `
+              + `into a lifted cage yet, so it is left empty</div>`;
     }
     if (ref) {
       const c = compByRef(ref.split(':')[0].split('@')[0] + '@' + ref.split('@')[1].split(':')[0]);
@@ -853,6 +892,8 @@ export function createShell(opts = {}) {
 
     const occ = box.querySelector('#occ');
     if (occ) occ.onchange = () => swapBay(path, occ.value);
+    const optic = box.querySelector('#optic');
+    if (optic) optic.onchange = () => swapCage(optic.dataset.cage, optic.value);
     const open = box.querySelector('#open');
     if (open) open.onclick = () => openModule(ref.split(':')[0]);
   }
@@ -864,35 +905,122 @@ export function createShell(opts = {}) {
   // operation on the fetched face text before it extracts relief from it - the 3D
   // scene is built entirely out of that text, so a swap that only touched this DOM
   // was invisible in 3D on every device. Two copies of `rename` and `bayTransform`
-  // would each have been right the day they were written.
+  // would each have been right the day they were written. So a bay goes through
+  // `applyOverrides` and a cage through `applyOccupantOverrides` with a
+  // one-entry map - the very functions viewer3d applies the whole map with.
+  //
+  // The component's skin, as those functions ask for it: {comp, text}, or null
+  // for a ref that names nothing (a hand-edited `swap=` can say anything).
+  //
+  // NO `cache: 'no-store'`, for the reason dist.js gives about the JSON and
+  // relief.js now gives about the face drawings: the flag kept a rebuilt dist
+  // from going stale in development and cost every visitor a re-download of
+  // every drawing on every page load, forever. Hard-reload is the development
+  // tool for that; a permanent header is not.
+  //
+  // These fetches are still NOT memoised - they do not go through relief.js's
+  // SVG_CACHE - so seating the same module twice in one page still asks twice.
+  // Routing them through svgSource would fix that and would also subject them to
+  // the runtime override map, which is a behaviour change rather than a caching
+  // one, so it is left alone here.
+  async function loadSkin(ref) {
+    let c = null;
+    try { c = compByRef(ref); } catch (e) { return null; }   // not ns/name@major
+    if (!c) return null;
+    const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
+    const r = await fetch(`${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`);
+    return r.ok ? {comp: c, text: await r.text()} : null;
+  }
+
+  // ONE SWAP INTO THE FACE ON SCREEN, bay or cage - the single place both
+  // swapBay/swapCage and a reload go through. Returns what it touched, or null
+  // when `key` names nothing on this face (or `ref` is not something it
+  // accepts). The state is written HERE, so the drawing, the inspector's
+  // select, the URL and the 3D scene all read one answer.
+  async function seat(key, ref) {
+    if (!state.svg || state.module) return null;
+    ref = ref || null;
+    const cage = cagesHere().find(c => c.id === key);
+    const bay = cage ? null : bayFor(key);
+    const target = cage || bay;
+    if (!target || (ref && !(target.accepts || []).includes(ref))) return null;
+    if (bay) {
+      await applyOverrides(state.svg, [bay], {[key]: ref}, loadSkin);
+      state.cfgBays[key] = ref;
+    } else {
+      delete state.refused[key];
+      const {refused} = await applyOccupantOverrides(state.svg, [cage], {[key]: ref}, loadSkin);
+      // A REFUSED CAGE IS LEFT EMPTY (applyOccupantOverrides removed what was
+      // there and seated nothing), so the state says empty too: the select, the
+      // URL and the 3D scene agree with the drawing, and the inspector says why
+      // rather than leaving a silent empty cage.
+      if (refused.includes(key)) { state.refused[key] = ref; ref = null; }
+      state.cfgOccupants[key] = ref;
+    }
+    state.touched.add(key);
+    return cage ? 'cage' : 'bay';
+  }
+
   async function swapBay(bayId, ref) {
-    const bay = bayFor(bayId);
-    const g = state.svg.querySelector(`[data-path="${CSS.escape(bayId)}"]`);
-    if (!g || !bay) return;
-    // the element id, not the path - see seatModule's `idBase`
-    const idBase = g.getAttribute('id') || bayId;
-    g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
-    state.cfgBays[bayId] = ref || null;
-    if (!ref) { refreshTree(); select(bayId, true); emit('change'); return; }
-    const c = compByRef(ref);
-    const skin = c?.skins?.includes('default') ? 'default' : c?.skins?.[0];
-    // NO `cache: 'no-store'`, for the reason dist.js gives about the JSON and
-    // relief.js now gives about the face drawings: the flag kept a rebuilt dist
-    // from going stale in development and cost every visitor a re-download of
-    // every drawing on every page load, forever. Hard-reload is the development
-    // tool for that; a permanent header is not.
-    //
-    // These two fetches are still NOT memoised - they do not go through
-    // relief.js's SVG_CACHE - so seating the same module twice in one page still
-    // asks twice. Routing them through svgSource would fix that and would also
-    // subject them to the runtime override map, which is a behaviour change
-    // rather than a caching one, so it is left alone here.
-    const file = `${DIST}/components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
-    const txt = await (await fetch(file)).text();
-    g.appendChild(seatModule(document, bayId, bay, ref, c, txt, idBase));
+    if (!(await seat(bayId, ref))) return;
     refreshTree();
     select(bayId, true);
     emit('change');
+  }
+
+  // The optic in a cage, as swapBay is the module in a bay: take out what the
+  // cage holds and seat `ref` (or nothing, for '' / null).
+  async function swapCage(cageId, ref) {
+    if (!cagesHere().some(c => c.id === cageId)) return;
+    if (!(await seat(cageId, ref))) return;
+    refreshTree();
+    select(cageId, true);
+    emit('change');
+  }
+
+  // A FRESH FACE IS THE BUILD, and the swaps are not in it. Loading a face -
+  // another view, or the same one again - fetches the compiled drawing, which
+  // knows only the configuration, so every swap made since the configuration
+  // loaded is seated again. Shallowest first: a nested bay exists only once
+  // the carrier above it is seated. Keys this face does not have are skipped
+  // here and kept, because the face that has them may be the next one shown.
+  const depth = k => k.split('/module/').length;
+  const byDepth = keys => [...keys].sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : 1));
+  async function reseat() {
+    for (const key of byDepth(state.touched)) {
+      const cage = (state.meta?.cages?.[bayView()] || []).some(c => c.id === key);
+      await seat(key, cage ? state.cfgOccupants[key] : state.cfgBays[key]);
+    }
+  }
+
+  // THE SWAPS A RELOAD CARRIES (the explorer's `swap=`), taken into the state
+  // for every key that names something on this device - a bay or cage of ANY
+  // view, since the one on screen is not the only one, or a path nested in a
+  // device bay - and seated into the face on screen. Keys that name nothing
+  // here, and refs a device-level bay or cage does not accept, are ignored:
+  // a link written for another device, or edited by hand, must not seat
+  // something the inspector could never have offered.
+  async function applySwaps(map) {
+    const all = o => Object.values(o || {}).flat();
+    const cages = all(state.meta?.cages), bays = all(state.meta?.bays);
+    const ignored = [];
+    for (const key of byDepth(Object.keys(map || {}))) {
+      const ref = map[key] || null;
+      const cage = cages.find(c => c.id === key);
+      const bay = cage ? null : bays.find(b => b.id === key);
+      const nested = !cage && !bay && key.includes('/module/')
+        && bays.some(b => key.startsWith(b.id + '/module/'));
+      const target = cage || bay;
+      if ((!target && !nested) || (target && ref && !(target.accepts || []).includes(ref))) {
+        ignored.push(key); continue;
+      }
+      if (cage) state.cfgOccupants[key] = ref; else state.cfgBays[key] = ref;
+      state.touched.add(key);
+    }
+    await reseat();
+    refreshTree();
+    emit('change');
+    return {ignored};
   }
 
   function openModule(ref) { state.module = ref; loadStage(); }
@@ -965,6 +1093,7 @@ export function createShell(opts = {}) {
     const key = `${state.device}.${state.cfg}`;
     if (state.facesFor !== key) { state.faces = {}; state.facesFor = key; }
     state.faces[state.view] = svg;
+    if (!state.module) await reseat();
     // Clicking the selected thing again clears it, and clicking away from any
     // part clears it too. A selection you cannot revoke is a halo painted over
     // the hardware for the rest of the session - and on the annotate tab, one
@@ -1005,18 +1134,22 @@ export function createShell(opts = {}) {
     }
   }
 
-  async function loadDevice(name) {
+  // `want` is what a reload asks for - {config, view} off the explorer's own
+  // URL - and is honoured only where this device has it; anything else falls
+  // back to the device's default configuration and first view.
+  async function loadDevice(name, want = {}) {
     state.device = name;
     state.module = null;
     state.meta = await j(`${name}.configs.json`);
-    state.cfg = state.meta.default;
-    state.view = state.meta.views[0];
+    const has = (list, v) => v && list.includes(v);
+    state.cfg = has(state.meta.configs.map(c => c.name), want.config) ? want.config : state.meta.default;
+    state.view = has(state.meta.views, want.view) ? want.view : state.meta.views[0];
     el.cfg.innerHTML = state.meta.configs
       // the kind beside the name, so a reader can tell the bare chassis from a
       // SKU from an illustration without opening device.yaml (#66)
       .map(c => `<option value="${c.name}"${c.name === state.cfg ? ' selected' : ''}>${c.name}${c.kind ? ` · ${c.kind}` : ''}</option>`).join('');
     el.view.innerHTML = state.meta.views
-      .map(v => `<option value="${v}">${v}</option>`).join('');
+      .map(v => `<option value="${v}"${v === state.view ? ' selected' : ''}>${v}</option>`).join('');
     if (picker && picker.value !== name) picker.value = name;
     syncCfgBays();
     emit('device', name, state.meta);
@@ -1028,6 +1161,11 @@ export function createShell(opts = {}) {
     // the manifest leaves the `/module` steps out - see configBayPath
     state.cfgBays = Object.fromEntries(Object.entries(c?.bays || {})
       .map(([k, ref]) => [configBayPath(k), ref]));
+    // the optics THIS configuration seats - `configs[].occupants`, not the
+    // cages' own `occupant`, which is the default configuration's answer
+    state.cfgOccupants = {...(c?.occupants || {})};
+    state.touched = new Set();
+    state.refused = {};
     state.cfgFields = {};
   }
 
@@ -1039,8 +1177,14 @@ export function createShell(opts = {}) {
     DEVICES = DEVICES.length ? DEVICES : (await j('devices.json')).devices;
     COMPONENTS = COMPONENTS.length ? COMPONENTS : (await j('components.json')).components;
     // the tab shell picks the device and hands it over in the query string, so
-    // switching tabs keeps you on the same box
-    const want = opts.device || new URLSearchParams(location.search).get('device');
+    // switching tabs keeps you on the same box. The explorer writes its own
+    // configuration, view and swaps there too (index.html), so a reload lands
+    // where the reader was: the device, then its configuration and view, then
+    // the swaps - in that order, because which bays and cages exist depends on
+    // the first two. `swap` is read RAW: it carries its own escaping (see
+    // encodeSwaps in swap.js).
+    const q = new URLSearchParams(location.search);
+    const want = opts.device || q.get('device');
     const start = DEVICES.find(d => d.name === want)
                || DEVICES.find(d => d.name === 'c100g') || DEVICES[0];
     // Which device is the outer shell's state, and inside an iframe this header
@@ -1054,7 +1198,17 @@ export function createShell(opts = {}) {
     } else {
       el.dev.hidden = true;
     }
-    await loadDevice(start.name);
+    // READ BEFORE THE LOAD: loading announces itself, and a page that writes
+    // its location on that announcement (index.html) has rewritten `swap=`
+    // before the swaps are applied. And only for the device the URL named - a
+    // link for a device that is not here says nothing about the fallback.
+    const same = start.name === want;
+    const swaps = same ? decodeSwaps(rawParam(location.search, 'swap')) : {};
+    await loadDevice(start.name, same ? {config: q.get('config'), view: q.get('view')} : {});
+    if (Object.keys(swaps).length) {
+      const {ignored} = await applySwaps(swaps);
+      if (ignored.length) console.warn('[portrayal] swaps naming nothing on', start.name, ignored);
+    }
   })();
 
   // Esc clears the selection from anywhere. A page that binds Esc for its own
@@ -1095,6 +1249,7 @@ export function createShell(opts = {}) {
   return {
     state, el, ready, on, emit, setFields, fieldsOf,
     select, fit, refreshTree, loadFaces, loadDevice, loadStage, openModule, swapBay,
+    swapCage, cageFor, applySwaps,
     over, setPulled, pulledPaths,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),

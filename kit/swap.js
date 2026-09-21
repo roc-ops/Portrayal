@@ -508,3 +508,79 @@ export function viewsToRewrite(devIndex, overrides) {
   }
   return out;
 }
+
+// THE SWAP STATE AS A URL PARAMETER, so a swap survives a reload. A runtime
+// swap changes no file on disk - it lives in the explorer's memory - and a
+// page that forgets it on reload shows the reader the build again with nothing
+// to say that their choice was dropped.
+//
+//   swap=<key>~<ref>,<key>~<ref>,<key>~
+//
+// `~` separates key from ref, `,` separates entries, and an EMPTY ref is an
+// emptied bay or cage - the own-key rule applyOverrides states: `slot-0~` is
+// "the card was taken out", which is not the same as `slot-0` never appearing.
+// Bay ids, nested bay paths (`slot-1/module/ppm-2`) and cage ids are all
+// data-paths in one namespace, so one map carries all three.
+//
+// Each key and ref is encodeURIComponent-ed, and `~` is escaped as well:
+// encodeURIComponent leaves `~` alone (it is unreserved), and a key that
+// contained one would otherwise split in the wrong place. The result is made
+// only of unreserved characters, `%XX`, `,` and `~`, so it can sit in a query
+// string as it is - the caller must not run it through URLSearchParams, which
+// would decode it once on the way back and turn an escaped `,` into a real one.
+//
+// Keys are sorted by the rule index.html's `swapKey` uses (code-unit order),
+// so the same state always writes the same URL.
+const enc = s => encodeURIComponent(s).replace(/~/g, '%7E');
+
+export function encodeSwaps(map) {
+  if (!map || typeof map !== 'object') return '';
+  return Object.keys(map).sort((a, b) => a < b ? -1 : a > b ? 1 : 0)
+    .map(k => `${enc(k)}~${map[k] ? enc(String(map[k])) : ''}`).join(',');
+}
+
+// NEVER THROWS, and one bad entry does not take the rest with it: a `swap=`
+// value is typed, pasted and truncated by people, and the worst it may do is
+// be ignored. Unknown shapes - no `~`, two of them, an empty key, a malformed
+// escape, a non-string - are dropped entry by entry. `__proto__` is dropped
+// too, because assigning it to a plain object sets the prototype instead of a
+// key.
+export function decodeSwaps(s) {
+  const out = {};
+  if (typeof s !== 'string' || !s) return out;
+  for (const part of s.split(',')) {
+    const i = part.indexOf('~');
+    if (i <= 0 || part.indexOf('~', i + 1) >= 0) continue;
+    let k, v;
+    try {
+      k = decodeURIComponent(part.slice(0, i));
+      v = decodeURIComponent(part.slice(i + 1));
+    } catch (e) { continue; }
+    if (!k || k === '__proto__') continue;
+    out[k] = v || null;
+  }
+  return out;
+}
+
+// ONE QUERY PARAMETER, UNDECODED. The counterpart of the warning above: the
+// swap string carries its own escaping, so it is read raw.
+export function rawParam(search, name) {
+  for (const part of String(search || '').replace(/^\?/, '').split('&')) {
+    const i = part.indexOf('=');
+    if ((i < 0 ? part : part.slice(0, i)) === name) return i < 0 ? '' : part.slice(i + 1);
+  }
+  return null;
+}
+
+// A QUERY STRING WITH SOME PARAMETERS SET, every other one kept as it was
+// written. `vals` maps a name to a RAW value (already encoded), or to
+// null/'' to remove it. Other parameters - `tex`, which relief.js reads off
+// the same location - survive untouched and in their own order.
+export function searchWith(search, vals) {
+  const kept = String(search || '').replace(/^\?/, '').split('&')
+    .filter(p => p && !Object.prototype.hasOwnProperty.call(vals, p.split('=')[0]));
+  const set = Object.entries(vals).filter(([, v]) => v != null && v !== '')
+    .map(([k, v]) => `${k}=${v}`);
+  const all = [...set, ...kept];
+  return all.length ? `?${all.join('&')}` : '';
+}

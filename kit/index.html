@@ -121,6 +121,7 @@
 <script type="module">
 import { createShell, esc } from './shell.js';
 import { statesOfEl, messagesOfEl, charactersOfEl } from './states.js';
+import { encodeSwaps, searchWith } from './swap.js';
 
 const DIST = '../library/dist';
 const shell = createShell({ title: 'Portrayal explorer', dist: DIST });
@@ -482,10 +483,16 @@ function mountExtras(v) {
 }
 
 // ---------------------------------------------------------------- swap state
-// What the BUILD put in each bay, so a swap can be told from a default. Only what
-// actually changed is sent; everything else keeps the compiled geometry.
+// What the BUILD put in each bay or cage, so a swap can be told from a default.
+// Only what actually changed is sent; everything else keeps the compiled
+// geometry. Bay ids and cage ids are both data-paths in one namespace, so one
+// function answers for both. A CAGE's built optic is this configuration's
+// `configs[].occupants[id]`, and a cage it does not name is built empty - never
+// the cage's own `occupant`, which is only the default configuration's answer.
+const isCage = id => Object.values(state.meta?.cages || {}).some(cs => cs.some(c => c.id === id));
 function builtOccupant(bayId) {
   const cfg = state.meta?.configs?.find(c => c.name === state.cfg);
+  if (isCage(bayId)) return cfg?.occupants?.[bayId] || null;
   const declared = cfg?.bays || {};
   if (Object.prototype.hasOwnProperty.call(declared, bayId)) return declared[bayId] || null;
   for (const bays of Object.values(state.meta?.bays || {}))
@@ -494,8 +501,9 @@ function builtOccupant(bayId) {
 }
 function swapOverrides() {
   const out = {};
-  for (const [id, ref] of Object.entries(state.cfgBays || {}))
-    if ((ref || null) !== builtOccupant(id)) out[id] = ref || null;
+  for (const map of [state.cfgBays, state.cfgOccupants])
+    for (const [id, ref] of Object.entries(map || {}))
+      if ((ref || null) !== builtOccupant(id)) out[id] = ref || null;
   return out;
 }
 // THE SWAP STATE IS PART OF WHAT IS ON SCREEN, so it is part of the key. A
@@ -506,6 +514,38 @@ function swapOverrides() {
 const swapKey = () => Object.entries(swapOverrides())
   .sort(([a], [b]) => a < b ? -1 : 1)
   .map(([k, v]) => `${k}=${v || ''}`).join(',');
+
+// A SWAP SURVIVES A RELOAD. This page's OWN location carries the device, its
+// configuration, its view and the swaps, rewritten in place (replaceState, so
+// swapping does not fill the back button) on every swap, configuration change
+// and view change; shell.js reads them back on load in that order.
+//
+//   ?device=<name>&config=<c>&view=<v>&swap=<k>~<ref>,<k>~
+//
+// The swap string carries its own escaping (encodeSwaps in swap.js), so it is
+// written raw, and parameters this page does not own - `tex` - are kept.
+//
+// THIS PAGE MAY BE INSIDE SOMEBODY ELSE'S. The tab shell that embeds it picks
+// the device and hands it over in the query string, and its own address is not
+// this page's to write. So the encoded swap string is also announced as a
+// shell event, `swaps`, whenever it changes, for a host that wants to keep it
+// in its own URL; nothing here reaches into the parent.
+let lastSwaps = null;
+function writeLocation() {
+  if (!state.device || !state.meta) return;
+  const swaps = encodeSwaps(swapOverrides());
+  const e = encodeURIComponent;
+  const search = searchWith(location.search, {
+    device: e(state.device), config: e(state.cfg || ''), view: e(state.view || ''), swap: swaps,
+  });
+  if (search !== location.search) {
+    try { history.replaceState(history.state, '', `${location.pathname}${search}${location.hash}`); }
+    catch (err) { /* a sandboxed or file: frame may refuse; the event below still fires */ }
+  }
+  if (swaps !== lastSwaps) { lastSwaps = swaps; shell.emit('swaps', swaps); }
+}
+shell.on('change', writeLocation);
+shell.on('load', writeLocation);
 
 // ---------------------------------------------------------------- 2D / 3D
 // The scene is mounted beside the SVG stage and imported on first use, so a
