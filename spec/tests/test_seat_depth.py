@@ -100,7 +100,12 @@ def test_the_mate_point_can_sit_on_a_feature_too():
 
 
 def test_the_forwarded_path_is_unchanged():
-    bore = {"interface": "lc", "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    # UNROTATED, so the forwarded point is the plain at + mate. The composed
+    # part's size is what its rotation turns about, so the aperture carries
+    # one as every real contract does; the rotated case is in
+    # test_occupant_carries_depth.py and test_seat_rotation.py.
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
     host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx",
                        "at": [1.25, 1.75], "lift": 10.0}]}
     assert presented_interface(host, _res({"std/lc-bore@3": bore})) == \
@@ -257,7 +262,7 @@ def _effective_lift(root, target_id):
 
 
 def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
-    """Seat generic/sfp-lc-simplex@1 in an SFP cage, generic/lc-plug@1 in it and
+    """Seat generic/sfp-lc-simplex@2 in an SFP cage, generic/lc-plug@1 in it and
     common/lc-boot@1 on the plug, through the chained `occupants:` keys.
 
     The hand arithmetic: s9510-28dc's port-4 cage is flush (cage lift 0), and
@@ -277,7 +282,7 @@ def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
     d = yaml.safe_load((SRC / "device.yaml").read_text())
     for cfg in d["configurations"].values():
         cfg["occupants"] = {
-            "port-4": "generic/sfp-lc-simplex@1",
+            "port-4": "generic/sfp-lc-simplex@2",
             "port-4-occupant": "generic/lc-plug@1",
             "port-4-occupant-occupant": "common/lc-boot@1",
         }

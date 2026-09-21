@@ -47,7 +47,7 @@ from portrayal import render
 GENERICS = [
     ("generic/sfp-lc@1", "bail", 10.0,
      ["SFF-8432", "Table 4-3 designator A"]),
-    ("generic/sfp-lc-simplex@1", "bail", 10.0,
+    ("generic/sfp-lc-simplex@2", "bail", 10.0,
      ["SFF-8432", "Table 4-3 designator A"]),
     ("generic/qsfp-lc@1", "tab", 20.0,
      ["SFF-8661", "Figure 5-1"]),
@@ -189,3 +189,48 @@ def test_the_lc_boot_rear_carries_its_cable_exit():
     nodes = _compiled_nodes("common/lc-boot@1")
     body = nodes["t--body"]
     assert any(n.get("id") == "t--bore" for n in body.iter())
+
+
+# ------------------------------------------------- the neutral latch default
+#
+# Decided 2026-09-21. SFF-8432 Rev 5.2a Note 13 codes an exposed SFP feature's
+# colour by mode (black or beige multi-mode, blue single mode) and QSFP-DD HW
+# Rev 6.3 section 6.3 codes a pull tab by wavelength (beige 850 nm, blue 1310
+# nm, white 1550 nm). A generic that defaults to any of those claims a per-SKU
+# fact (L99), so every generic's default is an achromatic grey that is neither
+# black nor white - and the skin's literal fill, the colour a compile with no
+# field shows, is that same default, so the two cannot drift apart.
+
+def _hex_rgb(value):
+    v = value.strip().lstrip("#")
+    assert len(v) == 6, f"not a #rrggbb colour: {value!r}"
+    return tuple(int(v[i:i + 2], 16) for i in (0, 2, 4))
+
+
+@pytest.mark.parametrize("ref,latch_node,body_out,markers", GENERICS,
+                          ids=[g[0] for g in GENERICS])
+def test_latch_default_is_a_neutral_grey_the_skin_draws(ref, latch_node, body_out, markers):
+    default = _contract(ref)["fields"]["latch-color"]["default"]
+    # the skin's literal fill, read off a compile given NO field value
+    latch = _compiled_nodes(ref)[f"t--{latch_node}"]
+    assert latch.get("data-fill-from") == "latch-color", latch.attrib
+    assert latch.get("fill").lower() == default.lower(), (
+        f"{ref}: the skin draws {latch.get('fill')!r} but latch-color defaults "
+        f"to {default!r}")
+    r, g, b = _hex_rgb(default)
+    # ACHROMATIC EXACTLY: r == g == b. Blue is in both codes, and a grey with
+    # a cast is a grey leaning towards a hue, so no tolerance is given.
+    assert r == g == b, (
+        f"{ref}: {default} is chromatic ({r}, {g}, {b}); a coloured default "
+        f"is a mode or wavelength claim")
+    assert 0x20 < r < 0xe0, (
+        f"{ref}: {default} is too near black or white - both are in an MSA "
+        f"colour code (black multi-mode, white 1550 nm)")
+    # THE OUTLINE TOO. A dark-blue stroke round a grey bail tints it blue at
+    # every zoom a bail is small at, so the latch node's stroke is held to the
+    # same exact neutrality as its fill.
+    stroke = latch.get("stroke")
+    assert stroke, f"{ref} {latch_node} has no stroke to check"
+    sr, sg, sb = _hex_rgb(stroke)
+    assert sr == sg == sb, (
+        f"{ref}: the {latch_node} stroke {stroke} is chromatic ({sr}, {sg}, {sb})")

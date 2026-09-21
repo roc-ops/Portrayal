@@ -5,6 +5,8 @@ nested to say so. Readers do not want to know that; they want the lists. This
 is the only place that knows the nesting, so when the shape changes it changes
 here and nowhere else.
 """
+import math
+
 import yaml
 from pathlib import Path
 
@@ -127,6 +129,28 @@ def component_refs(device):
     return out
 
 
+def _turn(v, rotate):
+    """Rotate vector v by `rotate` degrees, SVG convention (x' = x cos - y sin,
+    y' = x sin + y cos). Exact for the right angles the corpus uses."""
+    deg = float(rotate or 0) % 360
+    exact = {0: (1, 0), 90: (0, 1), 180: (-1, 0), 270: (0, -1)}
+    c, s = exact.get(deg, (math.cos(math.radians(deg)), math.sin(math.radians(deg))))
+    return (v[0] * c - v[1] * s, v[0] * s + v[1] * c)
+
+
+def seat_point(at, size, rotate, local):
+    """Where `local` (a point in a placement's own frame) lands in the device
+    frame, for a placement drawn translate(at) rotate(deg w/2 h/2).
+
+    HERE AND NOT IN render.py because `presented_interface` below needs it: a
+    composed aperture is itself a placement in its host's frame, drawn by that
+    same transform, so the point it forwards has to go through it too. One
+    helper for both, so the rotation is written once; render.py imports it."""
+    cx, cy = size["w"] / 2, size["h"] / 2
+    dx, dy = _turn((local[0] - cx, local[1] - cy), rotate)
+    return [round(at[0] + cx + dx, 4), round(at[1] + cy + dy, 4)]
+
+
 def _seat_out(contract, point):
     """The `out` of the relief feature a connection point sits `on:`, or 0.0.
 
@@ -207,9 +231,16 @@ def presented_interface(contract, resolve):
         cm = (core.get("connection-points") or {}).get("mate")
         if not cm:
             continue
+        # THROUGH THE PART'S OWN PLACEMENT, rotation and all. `at + mate`
+        # was right only for an unturned part: every generic transceiver
+        # composes std/lc-bore@3 at `rotate: 180` (tongue up), and the plain
+        # sum put a plug seated in that bore 1.6 mm off the bore's centre in
+        # y - (x, 4.10) where the bore, and the part's own `optical` point,
+        # is at (x, 5.70). The part is drawn translate(at) rotate(deg w/2
+        # h/2) with its own contract's size, so its mate lands by seat_point.
         at = part.get("at") or [0, 0]
         cores.append((core["interface"],
-                      [round(at[0] + cm["at"][0], 4), round(at[1] + cm["at"][1], 4)],
+                      seat_point(at, core["size"], part.get("rotate"), cm["at"]),
                       float(part.get("lift") or 0)))
     if len(cores) == 1:
         return cores[0]

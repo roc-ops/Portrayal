@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-r-40ge-sfp
-version: 1.2.0
+version: 1.2.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -25,10 +25,10 @@ provenance:
   states: >-
     NO HEALTH LAMP ON THIS CARD - IT IS ON THE CRAFT INTERFACE, which is the same
     answer #212 found for the MX240's fans. MX240 hardware guide, "DPC and MPC LEDs
-    on the Craft Interface": "Each DPC or MPC has LEDs on the craft interface that
-    indicate its status. The LEDs, labeled 1/0, 1, and 2 ... are located along the
-    bottom of the craft interface." Table 10 gives them OK green and FAIL red, and
-    juniper/mx240-craft@1 now draws and lights them.
+    on the Craft Interface": every DPC or MPC shows its status on LEDs on the craft
+    interface, labelled 1/0, 1, 2 and onward, in a row along the bottom of the craft
+    interface. Table 10 gives them OK green and FAIL red, and juniper/mx240-craft@1 now
+    draws and lights them.
     WHAT THIS CARD DOES DRAW IS PER-PORT, NOT PER-CARD. The `indicator-panels` group
     is the dot-matrix link clusters between the block pairs - eighty of them - and
     `indicator-panels` above records why they carry no individual ids: the

@@ -157,8 +157,8 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
 // bayTransform centres the card in it. A cage has no box to centre anything in:
 // the bay transform is the wrong tool for a part that is larger than its opening
 // on purpose - a QSFP is 52 mm deep behind an 18 mm aperture, and its drawn face
-// is not the cage's. What the build does instead (render.py `seat_point` /
-// `seat_at`) is land the optic's own `mate` connection point on the cage's,
+// is not the cage's. What the build does instead (manifest.py `seat_point`,
+// render.py `seat_at`) is land the optic's own `mate` connection point on the cage's,
 // turned with the cage: the published cage carries its `mate` already in the
 // device frame with the host's rotation applied, and `occupantAt` solves for the
 // `at` that puts the optic's `mate` there while it is drawn at that same turn.

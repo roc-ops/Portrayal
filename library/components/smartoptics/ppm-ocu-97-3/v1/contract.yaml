@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ocu-97-3
-version: 1.1.1
+version: 1.1.2
 class: coupler
 behaviour: fills
 profile: optical
@@ -28,11 +28,10 @@ provenance:
     couplers where the signal is split or combined with the ratio 50% - 50% and 97% -
     3%, respectively." This one is the 97/3 member: passband 1526-1570nm,
     insertion loss 100 to 97 at most 0.3dB and 100 to 3 at most 16.6dB.
-    ds-ppm-r4.0 again: "The 97/3-coupler is intended for cases where a smaller
-    portion of the optical signal is to be connected to e.g. an Optical Channel
-    Monitoring (OCM) function." The two legs are NOT interchangeable - one is the
-    through path and one is the tap - which is why the datasheet numbers them 97 and 3
-    rather than A and B.
+    ds-ppm-r4.0 again: the 97/3 coupler is meant for tapping a small share of the
+    optical signal off to something like an Optical Channel Monitoring (OCM) function.
+    The two legs are NOT interchangeable - one is the through path and one is the tap -
+    which is why the datasheet numbers them 97 and 3 rather than A and B.
   class-choice: >-
     `coupler` RATHER THAN `filter`, which is what smartoptics/ppm-ad1-1510@1 and the
     DCMs carry. A coupler splits power and passes every wavelength in the band; a

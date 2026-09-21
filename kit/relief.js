@@ -301,7 +301,7 @@ export function bodyBoxes(body, faceW, faceH) {
 // (pluggables D). Plugs and boots declare relief, and a boot is 15.1 or 26.4
 // long: the ancestor walk put a boot's cable at the boot's FRONT face, where
 // it meets the plug, when the cable leaves from its REAR. The seated chain
-// generic/sfp-lc-simplex@1 -> generic/lc-plug@1 -> common/lc-boot@1 makes the
+// generic/sfp-lc-simplex@2 -> generic/lc-plug@1 -> common/lc-boot@1 makes the
 // arithmetic concrete: the boot's group carries data-z-lift 22.5 (the optic's
 // 10.0 plus the plug body's 12.5), the lift walk gave z 22.5, and the boot's
 // body is built from 22.5 to its data-z-out of 37.6 - 15.1 short. So a point
