@@ -423,7 +423,18 @@ def test_the_comparison_layer_can_now_reach_them():
     the shell does not carry the cooling either - which is the EPS20x lesson above with the
     terms exchanged: there, one tray crossed three boxes; here, one box shape carries three
     different trays.
+
+    SIXTY-SIX IS THE EDGECORE DCS500, a 3+1 over four bays - the commonest figure in this
+    census, carried by the AGR560 and DCS520 on this vendor's other 2RU shells and by
+    two dozen UfiSpace chassis. It states "3+1 redundant, hot-swappable fan modules" and
+    "Hot-swappable 3 + 1 redundant fans", and four trays sit between its two supplies.
+    WHAT IT ADDS IS THE NUMBERING OF THE FANS THEMSELVES. The vendor sells the chassis in
+    two series whose only stated difference is that one prints its ports, fans and
+    supplies from zero and the other from one; this is the zero-based OZ, so its trays
+    are fan-0..fan-3 even though both documents' rear drawings print 4..1. The redundancy
+    figure does not care which, which is the point: a comparison keyed on the figure is
+    safe across the two series, and one keyed on a fan's printed number is not.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 65, n
+    assert n == 66, n

@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: dcs500-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 850 W AC supply of the Edgecore DCS500 - a 50.9 x 39.4 bright-housed module with a
+  square-cell exhaust lattice, an IEC C14 inlet at its left end, a black handle standing up
+  its middle and a red release latch at its right end. Two seat in the rear's lower
+  corners, one either side of the fan trays.
+size: {w: 50.9, h: 39.4}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  input: ac
+  inlet: c14
+  power-output-w: 850
+provenance:
+  size: >-
+    PHOTO-MEASURED on the datasheet's rear elevation (2.279 px/mm). The left supply's
+    housing runs x 18.9-69.8 and y 45.8-85.1, bounded by persistent vertical edges at
+    18.87/69.78 and horizontal ones at 45.4-47.6 and 85.1; the right supply's housing reads
+    367.7-418.6, the same 50.9 to a pixel.
+    THE TWO SUPPLIES ARE DRAWN FROM DIFFERENT RENDERS, and the part follows the left one.
+    The right supply's latch overhangs its housing by about 7 mm onto the chassis where the
+    left one's sits inside it, and the two inlets sit at different heights - the same
+    module photographed twice, not two modules. The left is the one whose parts all fall
+    inside the housing, so it is the one modelled.
+    50.9 is narrower than this vendor's usual 53.7-54.4 CRPS supply and close to
+    edgecore/exp800-psu-ac@1's 50.6 - but that part is mirrored, latch at the left and inlet
+    at the right, so it is not this one.
+  power-output-w: >-
+    DATASHEET, 'Hot-swappable, load-sharing, redundant 850 W PSUs', and the guide's
+    Hardware Specifications, 'AC Power Rating 100-240Vac, 50-60Hz, 12-6A, 850 Watts'.
+  inlet: >-
+    DATASHEET ordering table, 'C13 - C14 Power Cord', and both rear elevations draw a
+    three-pin appliance inlet with a cord retainer.
+  the-face: >-
+    PHOTO-MEASURED in the module's own coordinates at 5x on the left supply. The inlet
+    recess about x 6-23, the handle a black loop about x 26-30 standing the full height,
+    the square-cell lattice to its right, and the latch x 39.5-49.9 from y 16.8 to the
+    bottom edge. The cord retainer and the hanging cord drawn in the elevation are not
+    the module and are not drawn.
+  dc-build: >-
+    THE 48 V DC SUPPLY EXISTS - the guide draws its terminal block and lists 'DC power
+    cable included with 48VDC PSU only' - but the ordering table offers it only in the
+    one-based O series (7816-64X-O-48V-F-R / -B-R), and this library's DCS500 is the
+    zero-based OZ base model, which is AC only. See the device's o-series-numbering gap.
+states: [absent]
+elements:
+  inlet: {at: [6.20, 4.60], size: [17.20, 27.40], class: connector}
+  handle: {at: [25.60, 1.20], size: [4.60, 36.00], class: handle}
+  vent: {at: [32.60, 4.40], size: [12.40, 26.20], class: vent}
+  latch: {at: [39.50, 16.80], size: [10.40, 21.60], class: latch}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#c0453f'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: handle
+      uhandle: 27
+      dia: 4.6
+      confidence: estimated
+      source: >-
+        27 is the Edgecore supply figure carried across this line (edgecore/ais800-psu-ac@1,
+        common/psu-ac-650@3), resting on UfiSpace's published 1.06 inch; not measured here.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: unsourced; the library's common latch stand-off.
+skins: [default]
+body:
+  depth: 220
+  color: '#2b2f34'

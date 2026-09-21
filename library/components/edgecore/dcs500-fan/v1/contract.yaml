@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: dcs500-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The Edgecore DCS500's rear fan tray - a 63.0 x 62.6 module, honeycomb across the face
+  over one rotor, with a red D-handle on its RIGHT edge. FOUR fill the chassis between the
+  two supplies in a 3+1 redundancy.
+size: {w: 63.0, h: 62.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  power-absent: not-published
+provenance:
+  size: >-
+    PHOTO-MEASURED on the datasheet's rear elevation (dcs500-datasheet page 2, native
+    1004 x 211; panel 999 x 199 px, 2.279 px/mm on x and 2.269 on y - isotropic to 0.42%).
+    THE PITCH COMES FROM THE WEBS, NOT THE HANDLES. Per-column texture over the bay band
+    (the honeycomb varies down a column, solid metal does not) finds the webs between
+    trays at 151.4-157.1, 219.9-224.7, 287.9-293.1 and 355.9-362.5 mm: centres on a
+    68.32 mm pitch that a straight line fits to 0.39 mm at worst. Each web is about 5.3 mm,
+    which leaves 63.0 for the tray face.
+    THE HANDLES WERE NOT USED because their left edges drift across the row - 55.4, 56.4,
+    57.0, 57.5 mm into their bays - while their RIGHT edges hold at 64.6, 63.8, 64.0 and
+    64.1. That is the lighting-gradient artefact this library met on the COR550, where a
+    curved part passes a threshold over more of itself the better lit it is; it is why the
+    handle was segmented on hue and placed by its stable edge.
+    THE HEIGHT is the grille frame's two horizontal edges inside a bay, at 22.5-23.4 and
+    85.5 mm, which the guide's own coarse rear corroborates.
+  handle: >-
+    ON THE RIGHT EDGE, about 6 mm wide over 27.7 mm of the tray's height, standing a
+    little proud of the tray into the web - its right edge reads 64.1 mm into a 63.0 bay.
+    It is drawn inside the tray's footprint; the overhang is a millimetre and does not
+    earn a second element.
+  the-rotor: >-
+    ONE ROTOR SHOWS FAINTLY. The guide's line-art rear draws a bright rotor through the mesh;
+    the datasheet's rendered rear - the measured source - shows almost none, the honeycomb
+    reading dark over a dark fan. The skin splits the difference toward the render: the
+    rotor is overlaid on the mesh at low opacity, so it is there without being the loudest
+    thing on the tray.
+  airflow: >-
+    BOTH DIRECTIONS ARE ORDERABLE - the datasheet's ordering table lists -F
+    (front-to-back) and -B (back-to-front) for every region - and NEITHER DOCUMENT SHOWS
+    WHETHER THE HANDLE COLOUR CHANGES WITH IT. Every rear drawn is red. Other Edgecore
+    lines colour the reverse build blue, but a sibling family's convention is not
+    evidence for this one, so the field defaults red and no configuration overrides it.
+  power-absent: >-
+    NOT PUBLISHED. The datasheet says 'Hot-swappable 3 + 1 redundant fans' and gives no
+    per-tray figure or FRU.
+states: [absent]
+elements:
+  grille: {at: [1.60, 1.60], size: [54.40, 59.40], class: rotor}
+  handle: {at: [57.00, 19.40], size: [6.00, 27.70], class: handle}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c0453f'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 55
+      confidence: estimated
+      source: this contract's elements key - the grille's extent is measured, the depth behind it is not.
+    - node: handle
+      uhandle: 24
+      dia: 5.0
+      confidence: estimated
+      source: >-
+        unmeasured projection, taken from the library's 22-29 mm fan-tray range; the guide's
+        figures are isometric and dimension nothing (roc-ops/Portrayal#385).
+skins: [default]
+body:
+  depth: 110
+  color: '#2b2f34'
