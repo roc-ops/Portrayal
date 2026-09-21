@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: io-6p12-sw
-version: 2.8.0
+version: 2.8.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -27,11 +27,12 @@ provenance:
     through to the front card. So a front card and its rear partner have to share the
     chassis depth - 386.0 on the C100G, 388.45 on the C40G. Two cards at 380.0 need 760,
     which is not a wide error bar, it is twice the box.
-    WHAT THE SHAPE IS, from the owner: "the front card is mostly rectangular, but the I/O
-    card is kind of L SHAPED where the top part of the top connector PASSES THROUGH THE
-    MIDPLANE and plugs into the front card, and the other one is plugged into the midplane.
-    So they ultimately kind of meet in the middle." So the rear card is a body against the
-    midplane PLUS A TONGUE at the top reaching forward through it.
+    WHAT THE SHAPE IS, as the maintainer reports it from the hardware: the front card is
+    mostly a plain rectangle, but the I/O card is L SHAPED - the top of its upper connector
+    PASSES THROUGH THE MIDPLANE and plugs into the front card, while the lower one plugs
+    into the midplane itself, so the two cards end up meeting in the middle. So the rear
+    card is a body against the midplane PLUS A TONGUE at the top reaching forward through
+    it.
     NOTE WHAT THAT DOES AND DOES NOT ALLOW, because the obvious rule is wrong. front + rear
     CAN exceed the chassis depth, by about the tongue length, because the tongue overlaps the
     front card at a height where the front card is not - they interleave rather than tile. The
@@ -149,11 +150,11 @@ provenance:
     eighteen composed jacks. Both are gone. THREE INDEPENDENT STRANDS point away from
     a raised RF section on this card and none of them existed when the 15.9 was
     written:
-    (1) THE OWNER, LOOKING AT THE HARDWARE: "on some of the 6 plus 12 I/O cards the
-        MCX connector is RECESSED INTO the faceplate, so it actually doesn''t stick
-        out from the faceplate ... whereas the US I/O and the DS I/Os have the F
-        fitting STICKING OUT". Jacks mounted on a section standing 15.9 proud would
-        stick out further than anything else on the card, which is the opposite.
+    (1) THE MAINTAINER, LOOKING AT THE HARDWARE: on some of the 6+12 I/O cards the MCX
+        connector is RECESSED INTO the faceplate and does not stick out from it, whereas
+        on the US I/O and DS I/O cards the F fitting is STICKING OUT. Jacks mounted on a
+        section standing 15.9 proud would stick out further than anything else on the
+        card, which is the opposite.
     (2) THE FIGURE DRAWS THE SAME OUTLINE ON THE PLAIN CARD. Figure 1-15, "Casa 6+12
         IO modules", and Figure 1-16, "Casa 6+12 Switch I/O modules", are the same
         artwork in this respect: both enclose the port field in one light rectangle
@@ -181,11 +182,11 @@ provenance:
     but it is wrong by the same amount the plain card is, instead of wrong in the
     opposite direction by 15.9. WANTED: a way to declare a face pocket, and then the
     pocket depth, which no figure or document gives.'
-  mcx-is-recessed: 'THE OWNER, AGAINST THE HARDWARE: "the MCX connector is RECESSED
-    INTO the faceplate, so it actually doesn''t stick out from the faceplate, it''s
-    recessed from the faceplate ... whereas the US I/O and the DS I/Os have the F
-    fitting STICKING OUT of the faceplate." Recorded here in his terms so it does not
-    have to be rediscovered, and it is a fact about the WORLD, not about a drawing.
+  mcx-is-recessed: 'THE MAINTAINER, AGAINST THE HARDWARE: the MCX connector is RECESSED
+    INTO the faceplate - it does not stick out at all, it sits back from the faceplate -
+    whereas on the US I/O and DS I/O cards the F fitting is STICKING OUT of the
+    faceplate. Recorded here in the terms the owner used so it does not have to be rediscovered, and it
+    is a fact about the WORLD, not about a drawing.
     THE FIGURES AGREE, INDEPENDENTLY. Figure 1-12, "RF IO upstream and downstream
     modules", draws all three rear I/O cards side by side and gives the two connector
     families completely different treatments: on QAM IO and US IO each F port is a HEX
@@ -209,13 +210,13 @@ provenance:
   standoff-vs-block: 'THE SWITCH CARD''S STANDOFF HEIGHT WAS NEVER MEASURED, and 9.5
     is carried here without confirmation. This entry supersedes the unresolved
     contradiction the first pass recorded; the owner has since answered the question
-    that was put to him.
-    WHAT HE SETTLED - the topology: "the comb stands in front of the RF block. So it''s
-    away from the card ... That''s what the standoffs do is they raise the comb up
-    above the faceplate and help hold the cables." So the order outward from the card
+    that was put to them.
+    WHAT THE OWNER SETTLED - the topology: the comb stands in front of the RF block, away from
+    the card, and that is what the standoffs are for - they raise the comb up above the
+    faceplate and help hold the cables. So the order outward from the card
     is FACEPLATE, RF SECTION, COMB, with the comb furthest out. That is now a sourced
     fact and should not have to be asked again.
-    WHAT HE DID NOT SETTLE - the 9.5. The `comb` entry above has him measuring the
+    WHAT THE OWNER DID NOT SETTLE - the 9.5. The `comb` entry above has the owner measuring the
     brass standoffs about 3/8in proud of the faceplate off ONE C40G rear photograph,
     and that same photograph contains PLAIN 6+12 CARDS IN SLOTS 0 AND 5 WITH NO RF
     SECTION AT ALL. On one of those, 9.5 is entirely sensible - there is nothing to

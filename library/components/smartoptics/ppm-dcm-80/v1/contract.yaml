@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-dcm-80
-version: 1.1.1
+version: 1.1.2
 class: filter
 behaviour: fills
 profile: optical
@@ -25,12 +25,12 @@ provenance:
     plates fill the SAME bay in the same carrier, and the library must not hold two
     answers for one aperture. Read that part's `size` key for how weak the figure is.
   what-it-is: >-
-    datasheet - ds-ppm-r4.0 section "DCM MODULES": "The DCM modules contain a channelized
-    Fiber Bragg Grating (FBG) dispersion compensating component that provides the
-    opposite dispersion of a 10km, 20km, 40km and 80km SM-fiber length, respectively."
-    This one is the 80km member: compensating length 80km, channel spacing 100GHz,
-    operation bandwidth 72GHz, dispersion -1238ps/nm at 196.3THz and -1423ps/nm at
-    191.3THz, insertion loss Rx to Tx at most 3dB.
+    datasheet - ds-ppm-r4.0 section "DCM MODULES": each DCM module holds a channelized
+    Fiber Bragg Grating (FBG) dispersion compensator that cancels the dispersion of 10km,
+    20km, 40km or 80km of SM fiber, one length per member. This one is the 80km member:
+    compensating length 80km, channel spacing 100GHz, operation bandwidth 72GHz,
+    dispersion -1238ps/nm at 196.3THz and -1423ps/nm at 191.3THz, insertion loss Rx to Tx
+    at most 3dB.
   ports: >-
     datasheet render and stencil master ppm-dcm-80, which agree - ONE duplex pair,
     captioned DCM above and Tx / Rx in a white box below. Two bores. The datasheet's
