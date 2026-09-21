@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: lc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: lc
 interface: lc-plug
+interface-at: boot
 conforms: lc-plug
 optical: {positions: 1}
 profile: networking
@@ -15,7 +16,8 @@ description: >-
   of it, then the 2.3 tab. Occupies an `lc` receptacle (std/lc-bore and
   anything that composes it) at its own `mate` point, and in turn presents
   `lc-plug` so a boot (or a bare cable, when there is no boot) can seat on its
-  rear. Drawn with NO depth - see `provenance.size`.
+  rear. Drawn with NO depth - see `provenance.size` - but standing out of its
+  bore in 3D by an estimated standoff, `provenance.standoff`.
 size: {w: 5.58, h: 10.43}
 size-confidence: {w: drawing, h: drawing}
 attrs: {media: fiber, connector: lc}
@@ -187,33 +189,35 @@ provenance:
     locations. See provenance.boot-coincides-with-mate for what the renderer
     currently does with that.
   boot-coincides-with-mate: >-
-    A LOAD-BEARING COINCIDENCE, STATED SO IT CAN BE CHECKED. This contract
-    publishes a `boot` connection-point, and NOTHING READS IT - not render.py,
-    not lint.py, not kit/. Seating always positions an occupant by the HOST's
-    presented `mate` point (render.py's mate-to resolution calls
-    manifest.presented_interface and then takes the occupant's own `mate`), so
-    a boot mated onto this plug lands on the plug's `mate` point and not on
-    its `boot` point. That is correct TODAY only because the two are the same
-    (x, y) here - see provenance.axis - and it would put a boot on the plug's
-    FRONT face, silently, the day someone separates them.
+    A LOAD-BEARING COINCIDENCE, AND THE `boot` POINT IS NOW READ. Until
+    pluggables D this contract published a `boot` point nothing read: seating
+    positioned a boot by the host's `mate` point, which put it on the plug's
+    FRONT face and was correct in 2D only because the two share one (x, y)
+    (provenance.axis). `interface-at: boot` now says the `lc-plug` interface
+    is presented at `boot`, so manifest.presented_interface returns THAT
+    point, and `boot.on: body` says the point sits on the body relief feature,
+    so a boot seated here stands off by the body's `out` (12.5, estimated -
+    see provenance.standoff). The front/rear distinction the old note said the
+    seating could not make is made along Z, by the relief, and not by a
+    `size.d`, which this part still does not state (provenance.size).
 
-    THE SEATING RULE WAS NOT CHANGED, deliberately. Preferring a host's `boot`
-    point when the occupant is a boot looks like a small change and is not:
-    `presented_interface` returns an interface, a point AND a lift that all
-    belong to an APERTURE, and a rear point has no aperture and no lift story
-    to return. The real difference between a `mate` point and a `boot` point
-    is along the axis this contract deliberately does not state - there is no
-    `size.d` here, and provenance.size says why - so a renderer that
-    distinguished them would have nothing to distinguish them WITH, and the
-    2D front view in which these parts are drawn cannot show the difference
-    either. Making that change properly means giving plugs a depth and the
-    seating a front/rear axis, which is a design pass, not a patch.
-
-    So the invariant is written down instead, and
+    `mate` IS UNCHANGED: the plug itself still seats INTO its bore by `mate`,
+    at the host's presented lift. And the (x, y) coincidence still carries
+    weight in 2D, where a seated boot is drawn over the plug at that point, so
     spec/tests/test_connector_sweep.py::test_a_boot_point_is_the_mate_point
-    enforces it across the whole library: any contract that publishes both
-    points must have them coincide. The day someone separates them is the day
-    a test fails, rather than the day a drawing goes quietly wrong.
+    still holds every contract that publishes both points to one (x, y).
+  standoff: >-
+    estimated - how far this plug stands out of the bore it enters, which is
+    the body feature's `out` and so the lift a boot seated on it gets. No LC
+    document held dimensions it: the standoff is the plug's length behind its
+    housing front less its insertion depth, and neither is a toleranced figure
+    on any SENKO drawing, nor does std/lc-bore@3 or the SENKO LC Premium
+    Adapter DS-LC-000010 give a depth the plug enters to. What the side view of
+    DS-LC-000004 does give is a ruler (the 8.6 +/-0.1 latch, checked by the 12.2
+    MIN) and two features that bracket the insertion - the 12.2 MIN front
+    housing, which must go in, and the taller rear housing at 13.97 (a ruler
+    reading, not a callout), which cannot - and the relief states the middle of the bracket that leaves. The
+    arithmetic is in the body feature's own source sentence.
 elements:
   tip: {at: [1.64, 0.0], size: [2.3, 2.66], class: latch}
   shoulder: {at: [0.64, 2.66], size: [4.3, 0.79], class: latch}
@@ -221,6 +225,59 @@ elements:
   body: {at: [0.0, 4.78], size: [5.58, 5.65], class: port}
 connection-points:
   mate: {at: [2.79, 7.61], direction: front}
-  boot: {at: [2.79, 7.61], direction: rear}
-  cable: {at: [2.79, 7.61], direction: rear}
+  boot: {at: [2.79, 7.61], direction: rear, 'on': body}
+  cable: {at: [2.79, 7.61], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 12.5
+      confidence: estimated
+      source: >-
+        SENKO DS-LC-000004 Rev A p.3 side view, measured at 600 dpi on a ruler
+        fixed by the toleranced 8.6 +/-0.1 latch (330 px, 38.37 px/mm) and
+        checked against a second callout, the 2X 12.2 MIN front-housing length,
+        which reads back 12.20. On that ruler the plug's rear - the joint where
+        the boot begins - is 25.6 behind the housing's front face. How far the
+        plug ENTERS its bore is not dimensioned anywhere: it is at least the
+        12.2 MIN front housing, and at most 13.97, where the taller rear
+        housing steps out and cannot follow it in - a ruler reading off the
+        same side view, on the same ruler, and not a callout: the drawing
+        dimensions no such step. So the part standing
+        outside the bore is between 25.6 - 13.97 = 11.6 and 25.6 - 12.2 =
+        13.4, and 12.5 is the middle of that bracket, an estimate and no
+        more. The overall (42), (38.6) and (43) are REFERENCE figures spanning
+        plug, boot and cable on three different SENKO products and are not
+        used; the (42) reads back 41.6 on this ruler, a check on the scan and
+        not a source. The ferrule end this face is drawn with is the plug's
+        FRONT and sits in the bore; the body standing over it is the plug seen
+        from the viewer's side, which is its rear. See provenance.standoff.
+    - node: tip
+      out: 6.6
+      confidence: estimated
+      source: >-
+        The latch, seen end-on as three tiers (tip, shoulder, stem - see
+        provenance.keyway); one Z extent for all three, because the side view
+        draws them as one moulding. SENKO DS-LC-000004 Rev A p.3 side view on
+        the ruler the body feature states: the latch trigger's rearmost edge
+        is 19.70 behind the housing front. The toleranced 8.6 +/-0.1 is the
+        latch arm from the housing front to its catch, which is INSIDE the
+        bore (8.6 is less than the 12.2 MIN that enters), so it fixes the
+        ruler and not this reach. 19.70 less the same estimated 13.1 of
+        insertion the body's 12.5 implies (25.6 - 12.5) is 6.6; the bracket
+        is 5.7 to 7.5. Estimated for the same reason the body is.
+    - node: shoulder
+      out: 6.6
+      confidence: estimated
+      source: >-
+        The latch's middle tier; same Z extent and same reasoning as `tip`
+        (SENKO DS-LC-000004 Rev A p.3 side view, trigger rear 19.70 behind the
+        housing front less an estimated 13.1 of insertion).
+    - node: stem
+      out: 6.6
+      confidence: estimated
+      source: >-
+        The latch's lowest tier, where it joins the body; same Z extent and
+        same reasoning as `tip` (SENKO DS-LC-000004 Rev A p.3 side view,
+        trigger rear 19.70 behind the housing front less an estimated 13.1 of
+        insertion).
 skins: [default]

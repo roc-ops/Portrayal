@@ -141,16 +141,19 @@ def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
         f"module face (std/lc-bore@3 at lift: 10.0); got {plug} against a "
         f"module at {module}")
 
-    # SECOND LINK, the one that was broken: the boot mates the PLUG, and the
-    # plug declares its own interface + mate, so its presented aperture lift is
-    # 0.0. The boot must still stand where the plug stands - the plug's own
-    # seat lift is what it inherits, and inheriting nothing put it 10 mm inside
-    # the module.
-    assert boot == plug, (
+    # SECOND LINK, the one that was broken: the boot mates the PLUG. The boot
+    # inherits the plug's own seat lift - inheriting nothing put it 10 mm
+    # inside the module - PLUS what the plug presents: since pluggables D the
+    # plug presents `lc-plug` at its `boot` point, `on:` its body, so the boot
+    # stands on the plug body's rear face, that feature's `out` further on.
+    plug_c = yaml.safe_load((LIB / "components/generic/lc-plug/v1/contract.yaml").read_text())
+    rear = next(f["out"] for f in plug_c["relief"]["features"] if f["node"] == "body")
+    assert boot == plug + rear, (
         f"the boot's effective lift is {boot} but the plug it wraps stands at "
-        f"{plug}. A chained seat inherits its host's presented-aperture lift "
-        f"PLUS the host's own resolved seat lift; dropping the second term "
-        f"buries the boot in the part it is supposed to wrap")
+        f"{plug} with its body's rear {rear} further on. A chained seat inherits "
+        f"its host's presented-aperture lift PLUS the host's own resolved seat "
+        f"lift; dropping the second term buries the boot in the part it is "
+        f"supposed to wrap")
     assert boot >= 10.0, (
         f"the fixture is not exercising anything: the chain's lift is {boot}. "
         f"An all-zero chain passes the equality above no matter what the "

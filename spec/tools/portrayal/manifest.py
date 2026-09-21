@@ -127,6 +127,23 @@ def component_refs(device):
     return out
 
 
+def _seat_out(contract, point):
+    """The `out` of the relief feature a connection point sits `on:`, or 0.0.
+
+    A point with no `on:` sits on the part's own face. One whose `on:` names
+    nothing, or a feature with no `out`, also answers 0.0 here - lint L106
+    refuses both, and a renderer that guessed a depth would hide the error L106
+    exists to report.
+    """
+    node = point.get("on")
+    if not node:
+        return 0.0
+    for f in ((contract.get("relief") or {}).get("features") or []):
+        if f.get("node") == node and f.get("out") is not None:
+            return float(f["out"])
+    return 0.0
+
+
 def presented_interface(contract, resolve):
     """What a receptacle presents to a module, and where the module mates into it.
 
@@ -137,7 +154,9 @@ def presented_interface(contract, resolve):
     aperture's `lift` is how far off the host's own face it stands. An occupant
     positioned by the point and not displaced by the lift is seated at the panel
     plane behind whatever the aperture is mounted on. A host that presents its
-    own point forwards nothing and lifts nothing.
+    own point forwards nothing, and lifts only when that point - `mate`, or the
+    one `interface-at` names - sits `on:` a relief feature, by that feature's
+    `out`: a boot on a plug stands on the plug body's rear face.
 
     WHY THIS LOOKS THROUGH `parts`. Seating an optic worked end to end and was
     used by exactly one configuration on one device, out of 7,058 ports. Not
@@ -161,9 +180,19 @@ def presented_interface(contract, resolve):
     passed in because lint and render each have their own resolver and neither
     should grow a second one.
     """
-    mate = (contract.get("connection-points") or {}).get("mate")
-    if contract.get("interface") and mate:
-        return contract["interface"], list(mate["at"]), 0.0
+    cps = contract.get("connection-points") or {}
+    mate = cps.get("mate")
+    # WHICH POINT, AND HOW FAR PROUD (pluggables D, D3). A plug mates INTO its
+    # receptacle at `mate` but presents its own interface - `lc-plug` - at its
+    # REAR, where a boot seats; `interface-at` names that point (default
+    # `mate`, which is every contract written before it). The point's `on:`
+    # names the relief feature it sits on, and the seat stands off by that
+    # feature's `out`, which is ABSOLUTE from this part's own face - a
+    # feature's `lift` is where it starts, not where its rear face is. Without
+    # either key this is exactly the old answer: `mate`, 0.0.
+    point = cps.get(contract.get("interface-at") or "mate")
+    if contract.get("interface") and point:
+        return contract["interface"], list(point["at"]), _seat_out(contract, point)
     # A wrapper may compose several parts - a duplex adapter holds two bores -
     # and only one aperture can be the thing a module seats into. Take the first
     # that presents an interface, in declaration order, and leave the multi-mate
