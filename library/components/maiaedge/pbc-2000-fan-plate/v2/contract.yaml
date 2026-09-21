@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: pbc-2000-fan-plate
+version: 2.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The rear fan tray of the MaiaEdge PBC-2000 - ONE bare-steel plate carrying five 40 mm
+  San Ace 40 fans behind round openings, with a thumbscrew at its left end that releases
+  it. One field-replaceable unit, not five: the fans come out together.
+size: {w: 255.2, h: 40.07}
+size-confidence: {w: photo-measured, h: estimated}
+attrs: {power-absent: not-published, airflow: front-to-back}
+provenance:
+  one-unit: >-
+    field knowledge (the maintainer, 2026-09-21): the five fans are a single tray and the
+    tray is a FRU. The photograph agrees in every particular it can show: one continuous
+    plate runs from the second supply to the chassis's right edge with no seam between
+    fans, and the only fastener a hand can turn is the thumbscrew at its left end - every
+    other screw on it is a fan's own mounting screw. maiaedge/pbc-2000 v3 drew five
+    common/fan-module-41 trays with red pull tabs, which is a different machine's fan.
+  size: >-
+    photo-measured - working/intake/maiaedge/pbc/photos/pbc-rear-faceon.jpg (the maintainer,
+    2026-09-21), square to the rear and out of the rack. Scaled per axis: 4.137 px/mm across on
+    the body's 437.9 mm (x 98 to 1910), 3.925 down on its 41.27. The scale checks against a
+    part of known width - each supply's cage reads 73.6 and 74.9 mm against the CRPS module's
+    73.5. The plate runs from x 182.1 to the right edge, so 255.2 wide once it stops 0.6 short
+    of the right flank. v1.0 read 196.4 and 240.9 off the rack photograph, where the side
+    rails made the chassis look wider than it is. The 0.6 inset at the lid, the floor and the
+    right flank is modelling rather than measurement: drawn flush, the tray's faces lay in the
+    chassis's own planes and the 3D view shimmered where they fought.
+  fans: >-
+    photo-measured - five hub labels found by colour at x 233.0, 274.8, 317.2, 359.9 and 402.4
+    on the body, a pitch of 42.35 mm (v1.0 had 40.3 from the rack photograph), so 50.9 to 220.3
+    from the plate's left edge. Each opening is 37.6 mm across and each fan is held by four
+    screws 31.8 x 33.0 apart - the San Ace 40's 32 mm hole square, read at this resolution. The
+    hub labels read SanAce40, 9GA0412P3J01, printed upside down as the fans are fitted.
+  thumbscrew: >-
+    photo-measured - the captive thumbscrew is at (21.5, 7.4) on the plate, 11.5 mm across, in
+    a black tab 15.7 wide running down 17 mm from the plate's top edge. Two small screws sit
+    left of it, near the plate's left edge.
+  power: >-
+    NOT PUBLISHED. The datasheet states no chassis draw and no per-fan figure, so L29
+    stands on it.
+elements:
+  fan-1: {at: [32.10, 1.60], size: [37.6, 37.6], class: rotor}
+  fan-2: {at: [74.45, 1.60], size: [37.6, 37.6], class: rotor}
+  fan-3: {at: [116.80, 1.60], size: [37.6, 37.6], class: rotor}
+  fan-4: {at: [159.15, 1.60], size: [37.6, 37.6], class: rotor}
+  fan-5: {at: [201.50, 1.60], size: [37.6, 37.6], class: rotor}
+  thumbscrew: {at: [15.8, 1.7], size: [11.4, 11.4], class: latch}
+relief:
+  # NO VENT ON THE FAN OPENINGS: a vent punches every dark pixel of its node,
+  # and each opening is one dark disc, so the hub label and the blades drawn
+  # over it would go with it. The fans read as art on the plate instead.
+  features:
+  - node: thumbscrew
+    cyl: 5.0
+    color: '#c3c6c9'
+    confidence: estimated
+    source: the thumbscrew's position is photo-measured; how far it stands off is not
+skins: [default]
+body:
+  depth: 30
+  color: '#b4b8bc'
+  footprint: {at: [0, 0], size: [255.2, 40.07]}

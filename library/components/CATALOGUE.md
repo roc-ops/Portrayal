@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-653 component majors in 13 namespaces.
+657 component majors in 13 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -53,7 +53,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (80)
+## common/ (79)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -100,8 +100,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 1 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 2 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
-| `common/psu-550w@1` | component | psu | 84 × 40 |  | 1 | 0 | 550W hot-swap PSU module with an integrated axial fan and its own C14 inlet, as fitted to the Smartoptics DCP… |
-| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 5 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
+| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 14 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
@@ -112,8 +111,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-lane-leds-column@1` | component | led | 1.8 × 11.4 |  | 4 | 0 | QSFP port lane LED column - four round lamps stacked VERTICALLY, one per 100G lane, for faceplates that stand… |
 | `common/qsfp-pull-tab@1` | component | latch | 19 × 3.4 |  | 0 | 4 | QSFP / QSFP-DD pull tab - the flat paddle bail that wraps the module and extends forward, with an elongated o… |
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 1 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
-| `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 3 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
-| `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 34 | 0 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
+| `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 2 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
+| `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 33 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
 | `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 82 | 1 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
@@ -657,13 +656,18 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/scb-mx@1` | module | supervisor | 420.9 × 29.5 |  | 2 | 1 | Juniper MX Series Switch Control Board (SCB-MX) - the fabric/control carrier for the MX240/MX480 |
 | `juniper/scb-mx960-v@1` | module | fabric | 30.1 × 405 |  | 1 | 0 | Juniper SCB-MX Switch Control Board as mounted vertically in the MX960 |
 
-## maiaedge/ (3)
+## maiaedge/ (8)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `maiaedge/pbc-2000-bezel@1` | component | bezel | 377 × 41.27 |  | 1 | 0 | The built-in front bezel of the MaiaEdge PBC-2000 - one formed plate across the face from the left edge to th… |
-| `maiaedge/pbc-2000-fan-plate@1` | module | fan | 240.9 × 40.07 |  | 1 | 0 | The rear fan tray of the MaiaEdge PBC-2000 - ONE bare-steel plate carrying five 40 mm San Ace 40 fans behind … |
-| `maiaedge/pbc-2000-lcd@1` | component | display | 38 × 29 |  | 1 | 1 | The front-panel touch screen of the MaiaEdge PBC-2000 - a dark glass display in a raised frame at the right-h… |
+| `maiaedge/pbc-2000-bezel@2` | component | bezel | 372 × 41.27 |  | 1 | 0 | The built-in front bezel of the MaiaEdge PBC-2000 - one formed plate across the face from the left edge to th… |
+| `maiaedge/pbc-2000-ear@1` | component | ear | 22.6 × 41.27 |  | 1 | 1 | A front rack ear of the MaiaEdge PBC-2000 - a black, textured flange either side of the face, each carrying o… |
+| `maiaedge/pbc-2000-ear-back@1` | component | ear | 22.6 × 41.27 |  | 1 | 1 | The back of a MaiaEdge PBC-2000 rack ear, as the rear view sees it past each side of the chassis - the black … |
+| `maiaedge/pbc-2000-fan-plate@2` | module | fan | 255.2 × 40.07 |  | 1 | 0 | The rear fan tray of the MaiaEdge PBC-2000 - ONE bare-steel plate carrying five 40 mm San Ace 40 fans behind … |
+| `maiaedge/pbc-2000-lcd@2` | component | display | 45.2 × 35.2 |  | 1 | 0 | The front-panel touch screen of the MaiaEdge PBC-2000 - a dark glass display in a raised frame at the right-h… |
+| `maiaedge/pbc-2000-psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | The 550 W CRPS supply fitted to the MaiaEdge PBC-2000 - a fan behind a four-spoke silver guard with a blue 55… |
+| `maiaedge/pbc-2000-psu-divider@1` | component | mechanical | 14.5 × 40 |  | 1 | 1 | The steel strap between the two supplies on the MaiaEdge PBC-2000's rear, held by two screws |
+| `maiaedge/pbc-2000-rear-bracket@1` | component | mechanical | 14.5 × 40 |  | 1 | 1 | The steel strap at the left end of the MaiaEdge PBC-2000's rear, held by two screws and carrying the chassis … |
 
 ## smartoptics/ (16)
 

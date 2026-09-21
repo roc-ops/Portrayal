@@ -101,9 +101,9 @@ is a new `v<N+1>/` directory, and **the old major is deleted once nothing
 references it** - that is what pays for the level, and L89 fails on a dead major
 left behind an `unplaced:` sentence. What keeps a retired major alive is
 something still naming it: a gap arguing from its figure, say. `common/psu-550w@1`
-is retired, seated by nothing, and stays, because the PBC-2000's
-`psu-module-width` gap argues from its 84.0 mm against the 73.5 mm of the `@2`
-that device places.
+was kept for exactly that - the PBC-2000's `psu-module-width` gap argued from its
+84.0 mm against the 73.5 mm of `@2` - and was deleted the day a square-on
+photograph measured the supplies at 73.5 and closed the gap.
 
 A change to a component changes every device that draws it. After editing a
 contract, run the lock check from the repository root and bump the devices it

@@ -224,22 +224,23 @@ def test_an_older_major_is_only_superseded_by_a_LIVE_one(tmp_path):
     assert run(tmp_path) == []
 
 
-def test_the_live_library_keeps_exactly_one_retired_major(tmp_path):
-    """The corpus side of the two tests above: #172's deletions happened, and the
-    one survivor is the one with an argument attached."""
+def test_the_live_library_keeps_no_retired_major(tmp_path):
+    """The corpus side of the two tests above: #172's deletions happened, and
+    nothing survives them. A name with two majors on disk means the old one is
+    still reachable or still argued from; there is currently neither."""
     import collections
     majors = collections.defaultdict(list)
     for c in LIB.glob("components/*/*/v*/contract.yaml"):
         majors[f"{c.parts[-4]}/{c.parts[-3]}"].append(int(c.parts[-2][1:]))
     multi = {n: sorted(v) for n, v in majors.items() if len(v) > 1}
-    assert set(multi) == {"common/psu-550w"}, multi
-    # usb-a USED TO BE HERE, and it was the only entry that was not a version
-    # pair at all: @2 the bare receptacle, @3 the same opening in a taller
-    # silver panel bezel, told apart by a number that claims one replaced the
-    # other. #264 split @3 out as `common/usb-a-bezel@1`, so the name now has
-    # one major and this set is down to the single genuine case - psu-550w,
-    # whose retired major is kept on purpose because a device's gap argument
-    # turns on its width. A sweep for a third instance found none.
+    assert multi == {}, multi
+    # psu-550w USED TO BE HERE, the one retired major kept on purpose: the
+    # PBC-2000's `psu-module-width` gap argued from @1's 84.0 mm against the
+    # 73.5 of the @2 that device placed. A square-on photograph of the PBC-2000's
+    # rear measured its supplies at 73.9 and 73.6, the gap closed, and @1 was
+    # deleted the same day - the rule working as written: kept while something
+    # argues from it, gone when nothing does. usb-a was here before that, until
+    # #264 split its @3 out as `common/usb-a-bezel@1`.
 
 
 # --- the field itself ---------------------------------------------------------
@@ -256,16 +257,33 @@ def test_the_schema_wants_a_sentence_not_a_word():
         part, unplaced="no chassis in this library has a bay that fits it; see issue 262")))
 
 
-def test_the_catalogue_does_not_read_the_sentence_as_a_use():
-    """`common/psu-550w@1` says it was superseded by `@2`, naming it. The
+def test_the_catalogue_does_not_read_the_sentence_as_a_use(tmp_path):
+    """A superseded major's `unplaced:` sentence names what replaced it. The
     catalogue counts refs in a contract's raw text on purpose - a part cited in
     provenance as the origin of a borrowed figure is worth showing - but this
     one field is about the ABSENCE of a user, so counting it would have the
-    superseded part reporting itself as composing its replacement."""
-    text = (LIB / "components/common/psu-550w/v1/contract.yaml").read_text()
-    assert "common/psu-550w@2" in text, "the sentence should name what replaced it"
-    assert "common/psu-550w@2" not in cat.without_non_use_refs(text)
-    assert "psu-550w" in cat.without_non_use_refs(text), \
+    superseded part reporting itself as composing its replacement.
+
+    Built in a scratch library: the live case, `common/psu-550w@1`, was deleted
+    once nothing argued from it, and a test of the catalogue should not depend
+    on the corpus happening to keep a retired part."""
+    old = tmp_path / "components/common/widget/v1"
+    new = tmp_path / "components/common/widget/v2"
+    for d in (old, new):
+        d.mkdir(parents=True)
+    text = (
+        "format: 1\nkind: component\nname: widget\nversion: 1.0.0\n"
+        "unplaced: >-\n"
+        "  superseded by common/widget@2, which every device now places; kept only\n"
+        "  while a gap somewhere still argues from this major's own width.\n"
+        "size: {w: 10, h: 10}\n"
+    )
+    (old / "contract.yaml").write_text(text)
+    (new / "contract.yaml").write_text(
+        "format: 1\nkind: component\nname: widget\nversion: 2.0.0\nsize: {w: 10, h: 10}\n")
+    assert "common/widget@2" in text, "the sentence should name what replaced it"
+    assert "common/widget@2" not in cat.without_non_use_refs(text)
+    assert "widget" in cat.without_non_use_refs(text), \
         "only the unplaced block should be removed"
-    composed = cat.composed_by(LIB)
-    assert "common/psu-550w@1" not in composed.get("common/psu-550w@2", set())
+    composed = cat.composed_by(tmp_path)
+    assert "common/widget@1" not in composed.get("common/widget@2", set())

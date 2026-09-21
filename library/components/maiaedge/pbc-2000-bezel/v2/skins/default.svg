@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="372.0mm" height="41.27mm" viewBox="0 0 372.0 41.27">
+  <defs>
+    <!-- THE SLOPES AS SHADING, for the flat drawing. The plate is flat only
+         across the band the octagons' vertical ends span (15.46 to 25.5) and
+         falls away to the top and bottom edges from there; in 3D the geometry
+         carries that, and in 2D this is all there is to show it. -->
+    <linearGradient id="pbc-bezel-slope" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#15181b"/>
+      <stop offset="0.3746" stop-color="#262a2f"/>
+      <stop offset="0.6179" stop-color="#262a2f"/>
+      <stop offset="1" stop-color="#121417"/>
+    </linearGradient>
+  </defs>
+  <!-- ONE NODE, because the kit paints a raised feature with its node's own
+       art: the beads and the wordmark ride on the plate, and a
+       sibling would be left on the faceplate 11 mm behind it. The windows are
+       holes in the plate's one path (even-odd), so the faceplate behind shows
+       through in 2D and the kit cuts them through in 3D. Everything else is a
+       polygon or unfilled, so the outline finder - which reads filled paths -
+       sees the plate and nothing else. -->
+  <g id="bezel">
+    <path id="bezel-plate" fill-rule="evenodd" fill="url(#pbc-bezel-slope)"
+      d="M0 0 L372.0 0 L372.0 41.27 L0 41.27 Z M36.00 2.46 L129.20 2.46 L148.20 15.46 L148.20 25.50 L129.20 38.50 L36.00 38.50 L17.00 25.50 L17.00 15.46 Z M259.20 2.46 L352.00 2.46 L369.60 15.46 L369.60 25.50 L352.00 38.50 L259.20 38.50 L241.60 25.50 L241.60 15.46 Z"/>
+    <!-- the bead: the amber lip of each cut, 2 mm wide, drawn inside the hole's
+         edge so it lies where the cut's wall is in 3D -->
+    <path id="bead-left" d="M36.31 3.46 L128.89 3.46 L147.20 15.99 L147.20 24.97 L128.89 37.50 L36.31 37.50 L18.00 24.97 L18.00 15.99 Z" fill="none" stroke="#f7c600" stroke-width="2"/>
+    <path id="bead-right" d="M259.53 3.46 L351.67 3.46 L368.60 15.96 L368.60 25.00 L351.67 37.50 L259.53 37.50 L242.60 25.00 L242.60 15.96 Z" fill="none" stroke="#f7c600" stroke-width="2"/>
+    <!-- the vendor's mark sits here on the hardware and is NOT reproduced
+         (library/components/README.md); the box is reserved, and left as plate -->
+    <rect id="logo-zone" x="156.0" y="10.4" width="18.0" height="18.5" fill="none"/>
+    <g id="wordmark-silkscreen">
+      <text id="wordmark" x="178.4" y="22.0" font-family="sans-serif" font-size="10" textLength="54.4" lengthAdjust="spacingAndGlyphs" fill="#f7c21c">MaiaEdge</text>
+    </g>
+  </g>
+</svg>
