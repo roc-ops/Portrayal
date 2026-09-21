@@ -436,11 +436,11 @@ def test_the_comparison_layer_can_now_reach_them():
     safe across the two series, and one keyed on a fan's printed number is not.
 
     SIXTY-SEVEN IS THE EDGECORE AMX3200, a 4+1 over five bays like the COR550 two entries
-    above - and the first entry in this census whose fan tray's FAN is specified by the
-    vendor rather than inferred. Its ordering table says 'Fan-tray modules with 5 pcs of
-    40.5 mm x 70.14 mm 12V fans', one fan per tray, five trays, four needed. So for once the
-    bay count, the fan count and the redundancy figure are all the vendor's own and all
-    agree, which is the case every other entry here has had to argue towards.
+    above, and one of the few whose vendor states the fans inside the trays - as the
+    AIS800-64D, AIS800-64O and AGR560 datasheets do with '2 fans per module'. Its ordering
+    table says 'Fan-tray modules with 5 pcs of 40.5 mm x 70.14 mm 12V fans': one fan per
+    tray, five trays, four needed, so here the tray count and the fan count are the same
+    number and the redundancy figure means the same thing counted either way.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))

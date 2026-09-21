@@ -11,7 +11,7 @@ description: >-
   honeycomb vent over the CFP2 cages, and a lever along its foot that locks it into the
   chassis. Two seat side by side in the 1RU chassis; either slot can take the blank cover
   instead.
-size: {w: 183.8, h: 41.9, d: 380.0}
+size: {w: 183.8, h: 41.9, d: 240.0}
 size-confidence: {w: measured, h: measured, d: estimated}
 attrs:
   model: 'AMX-3200-SLED400'
@@ -34,8 +34,12 @@ provenance:
     18.50 wide against the registry's ganged 18.50, and the CFP2 openings 41.71-42.11 x
     12.54 against the CFP2 MSA's 41.5 x 12.4. Two different standards agreeing with the
     same px/mm is what makes 2.541 a measurement of the drawing and not an assumption.
-    The depth is not published and is an estimate: most of the 430 mm chassis less the
-    rear fans and supplies.
+    THE DEPTH IS AN ESTIMATE BOUNDED BY WHAT IS BEHIND IT. Nothing publishes it; the
+    chassis is 430 deep and the rear carries 185 mm supplies (the ordering table's
+    '73.5mmW x 185mmD') and 110 mm fan trays, and the sled's width overlaps both PSU2's bay
+    and every tray's. So it can reach no further than 430 - 185 = 245 mm where a supply sits
+    behind it; 240 is that bound less a clearance. A first draft said 380, which put the
+    sled's body 135 mm inside PSU2's in the 3D build.
   ports: >-
     MEASURED. The CFP2 cages sit side by side at x 11.02 and 53.52 in the sled, y 16.85,
     42.50 apart - their shared wall is about a millimetre, closer than the registry's
@@ -133,5 +137,5 @@ relief:
       source: unsourced; the guide's Sled Replacement figure is an isometric render.
 skins: [default]
 body:
-  depth: 380
+  depth: 240
   color: '#25282c'

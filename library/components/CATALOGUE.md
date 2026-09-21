@@ -432,7 +432,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/amx-3200-ac-psu@1` | module | psu | 73.5 × 40 |  | 1 | 0 | The Edgecore AMX3200's 1200 W AC supply, ordered as AMX-3200-AC-PSU - a 73.5 x 40.0 module with its release l… |
 | `edgecore/amx-3200-fan@1` | module | fan | 42.2 × 39.7 |  | 1 | 0 | The Edgecore AMX3200's rear fan tray, ordered as AMX-3200-FAN - a 42.2 x 39.7 module, honeycomb across its fa… |
 | `edgecore/amx-3200-sled-blank@1` | module | blank | 183.8 × 41.9 |  | 1 | 0 | The blank cover panel for an unused AMX3200 sled slot - shipped one to a box ('1 x Blank cover panel accessor… |
-| `edgecore/amx-3200-sled400@1` | module | line-card | 183.8 × 41.9 × 380 |  | 1 | 0 | The Edgecore AMX3200's interface sled, ordered as AMX-3200-SLED400 - a 183.8 x 41.9 front module carrying two… |
+| `edgecore/amx-3200-sled400@1` | module | line-card | 183.8 × 41.9 × 240 |  | 1 | 0 | The Edgecore AMX3200's interface sled, ordered as AMX-3200-SLED400 - a 183.8 x 41.9 front module carrying two… |
 | `edgecore/cor550-fan@1` | module | fan | 68 × 62.3 |  | 1 | 0 | The Edgecore COR550's rear fan tray - a 68.0 x 62.3 module, honeycomb across its whole face with one rotor sh… |
 | `edgecore/cor550-lane-leds@1` | component | led | 7.2 × 3 |  | 1 | 0 | The Edgecore COR550's per-port QSFP28 lamp group - THREE round lamps in a row on a 2.70 mm pitch, sitting in … |
 | `edgecore/cor550-psu-ac@1` | module | psu | 54.5 × 40.8 |  | 1 | 1 | The hot-swappable AC supply of the Edgecore COR550 - a 54.5 x 40.8 module in the common CRPS envelope, its ow… |
