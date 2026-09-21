@@ -1,6 +1,6 @@
 """generic/rj45-plug: the unshielded RJ45 (8P8C) copper plug body, standing
-for every unshielded RJ45 plug of this shape (docs/superpowers/plans/
-2026-09-19-pluggables-b2-connector-parts.md, Task 6).
+for every unshielded RJ45 plug of this shape
+(docs/pluggables-connectors-design.md).
 
 It occupies an `rj45` receptacle at its own `mate` point (mates: rj45) and
 presents `rj45-plug` so common/rj45-boot@1 can seat on its `boot` point - or a

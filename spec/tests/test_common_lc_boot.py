@@ -1,6 +1,6 @@
 """common/lc-boot: a strain-relief boot for an LC plug, sized to the BOOT's own
 6.2 square block rather than to the plug it wraps
-(docs/superpowers/plans/2026-09-19-pluggables-b2-connector-parts.md, Task 5).
+(docs/pluggables-connectors-design.md).
 
 `class: boot` did not exist before this part; it is added to the `passive`
 role in spec/schemas/power-roles.yaml in the same commit, because L51 refuses

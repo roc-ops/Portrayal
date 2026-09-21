@@ -1,6 +1,5 @@
 """common/rj45-boot: a strain-relief boot for an RJ45 (8P8C) copper plug,
-sized to the boot's OWN body (docs/superpowers/plans/2026-09-19-pluggables-
-b2-connector-parts.md, Task 7).
+sized to the boot's OWN body (docs/pluggables-connectors-design.md).
 
 EASE Electronics J0072 rev A dimensions the mouth cross-section directly,
 14.5 x 10.0, so this contract uses those figures rather than borrowing

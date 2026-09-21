@@ -1,8 +1,7 @@
 """generic/lc-plug: the four-tier LC plug silhouette, front view, standing for
 every LC plug - a body holding the ferrule, and above it a latch column that
 is NOT a simple taper: a 3.3 stem off the body, a 4.3 shoulder proud of it,
-then the 2.3 tab (docs/superpowers/plans/
-2026-09-19-pluggables-b2-connector-parts.md, Task 4).
+then the 2.3 tab (docs/pluggables-connectors-design.md).
 
 It occupies an `lc` receptacle at its own `mate` point (behaviour: occupies,
 mates: lc) and presents `lc-plug` so common/lc-boot@1 can seat on its `boot`
