@@ -574,6 +574,38 @@ def _turn(v, rotate):
     return (v[0] * c - v[1] * s, v[0] * s + v[1] * c)
 
 
+def well_floor(placements, lib, wid):
+    """How deep the floor of well `wid` is, for whatever says it is `in:` one.
+
+    The aperture rule again: an unmounted, non-module part's `size.d` is the
+    depth of the recess it draws as, and the floor of that recess is where a
+    part on it sits. render_view emits it as a NEGATIVE data-z-lift - relief.js
+    sums lifts up the ancestor chain, so a sunk group sinks everything in it -
+    and pulls the part's own `out` figures, which are measured from the face,
+    down by the same amount so they rise from the floor instead.
+
+    Module-level so cage_entries reads the SAME floor the build sinks a cage
+    by: a cage in a well publishes that sink in its `lift`, as the mate-to
+    resolution carries it in `host-lift`.
+    """
+    q = next((z for z in placements if z.get("id") == wid), None)
+    if not q:
+        return 0.0
+    try:
+        c, _ = lib.resolve(q["ref"])
+    except Exception:
+        return 0.0
+    c = c or {}
+    # the aperture rule exactly as the emitter applies it: a module is
+    # solid, a mounted part is solid UNLESS it declares `relief.cavity` -
+    # the mid tray lifts out and is the recess its drives sit in
+    if c.get("kind") == "module":
+        return 0.0
+    if c.get("behaviour") == "mounts" and not (c.get("relief") or {}).get("cavity"):
+        return 0.0
+    return float((c.get("size") or {}).get("d") or 0.0)
+
+
 def seat_point(at, size, rotate, local):
     """Where `local` (a point in a placement's own frame) lands in the device
     frame, for a placement drawn translate(at) rotate(deg w/2 h/2)."""
@@ -1794,6 +1826,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             silk_g.append(t)
 
     extents = [0.0, 0.0, w, h]
+    # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one - see
+    # well_floor. Defined ahead of the mate-to resolution below, which reads
+    # it: a host standing in a well hands its sink to what seats on it.
+    def floor_of(wid):
+        return well_floor(parts["placements"], lib, wid)
+
     # resolve mate-to before drawing: an occupant is positioned so its `mate`
     # connection-point lands on its host's, which is what keeps centring offsets
     # out of device manifests entirely
@@ -1901,6 +1939,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # ancestor sum has no path from one to the other to walk. The
             # attribute this ends up in has to be the absolute displacement.
             total_lift = float(hm_lift or 0.0) + float(host.get("host-lift") or 0.0)
+            # AND A HOST SUNK IN A WELL TAKES ITS OCCUPANT DOWN WITH IT. A host
+            # that stands `in:` a well is sunk by the well's floor in
+            # draw_placement (`sink`, below): data-z-lift -floor on the host's
+            # group, and every data-z-out in it pulled down by floor. The
+            # occupant is a top-level sibling, so that group lift never reaches
+            # it, and it drew at the panel above a face `floor` further down.
+            # The sink is carried here as a NEGATIVE term of the same host-lift,
+            # so draw_placement's trio applies it exactly as sink() does - the
+            # `out` figures come down by it (z_inset) and the group declares it
+            # (data-z-lift) - and a chained seat inherits it once, through the
+            # host's own host-lift, rather than re-adding it per link. A
+            # projection is not sunk (draw_placement skips it), so neither is
+            # what seats on one.
+            if host.get("in") and not host.get("projection-of"):
+                total_lift -= floor_of(host["in"])
             if total_lift:
                 seated["host-lift"] = total_lift
             mate_resolved[p["id"]] = seated
@@ -1970,31 +2023,6 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if q["id"] in deferred_ids and (q["id"] in wells_in_use or
                                         any(o in every_bay or o not in deferred_ids for o in overs)):
             deferred_ids.discard(q["id"])
-
-    # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one. The
-    # aperture rule again: an unmounted, non-module part's `size.d` is the
-    # depth of the recess it draws as, and the floor of that recess is where a
-    # part on it sits. Emitted as a NEGATIVE data-z-lift - relief.js sums lifts
-    # up the ancestor chain, so a sunk group sinks everything in it - and the
-    # part's own `out` figures, which are measured from the face, are pulled
-    # down by the same amount so they rise from the floor instead.
-    def floor_of(wid):
-        q = next((z for z in parts["placements"] if z.get("id") == wid), None)
-        if not q:
-            return 0.0
-        try:
-            c, _ = lib.resolve(q["ref"])
-        except Exception:
-            return 0.0
-        c = c or {}
-        # the aperture rule exactly as the emitter applies it: a module is
-        # solid, a mounted part is solid UNLESS it declares `relief.cavity` -
-        # the mid tray lifts out and is the recess its drives sit in
-        if c.get("kind") == "module":
-            return 0.0
-        if c.get("behaviour") == "mounts" and not (c.get("relief") or {}).get("cavity"):
-            return 0.0
-        return float((c.get("size") or {}).get("d") or 0.0)
 
     # HOW TALL THE THING IN A BAY IS, so it can stand on the floor rather than
     # hang from the plane: the deepest acceptable occupant, exactly as the
@@ -2688,9 +2716,18 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
             return None
 
     out = []
-    for p in view_parts(view)["placements"]:
+    placements = view_parts(view)["placements"]
+    for p in placements:
         contract, _skins = lib.resolve(p["ref"])
         interface, mate_at, lift = presented_interface(contract, _resolve)
+        # A CAGE IN A WELL IS SUNK BY ITS FLOOR, and the mate-to resolution
+        # carries that sink into its occupant's `host-lift` (render_view). The
+        # published `lift` is documented as that same figure, so it takes the
+        # same term - and a consumer that does not seat into a lifted cage (the
+        # kit refuses any non-zero lift) declines this one rather than seating
+        # the optic at the panel above a floor it cannot see.
+        if p.get("in") and not p.get("projection-of"):
+            lift = float(lift or 0.0) - well_floor(placements, lib, p["in"])
         found = _family_by_interface(families, interface) if interface else None
         if found is None:
             continue
