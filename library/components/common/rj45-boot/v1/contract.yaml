@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45-boot
-version: 1.0.0
+version: 1.1.0
 class: boot
 behaviour: occupies
 mates: rj45-plug
@@ -115,5 +115,17 @@ elements:
   body: {at: [0.0, 0.0], size: [14.5, 10.0], class: boot}
 connection-points:
   mate: {at: [7.25, 5.0], direction: front}
-  cable: {at: [7.25, 5.0], direction: rear}
+  cable: {at: [7.25, 5.0], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 26.4
+      confidence: drawing
+      source: >-
+        EASE Electronics drawing J0072 rev A, both side views, overall length
+        26.4 +/-0.5 - the figure attrs.boot-length already carries
+        (provenance.boot-length). ABSOLUTE from this boot's own face: the
+        boot's face is the plug's rear, and the lift that puts it there comes
+        from the plug it seats on (the plug's `boot` point sits `on:` its body
+        feature), not from this number.
 skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-boot
-version: 1.0.0
+version: 1.1.0
 class: boot
 behaviour: occupies
 mates: lc-plug
@@ -111,5 +111,17 @@ elements:
   body: {at: [0.0, 0.0], size: [6.2, 6.2], class: boot}
 connection-points:
   mate: {at: [3.1, 3.1], direction: front}
-  cable: {at: [3.1, 3.1], direction: rear}
+  cable: {at: [3.1, 3.1], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 15.1
+      confidence: drawing
+      source: >-
+        SENKO DS-LC-000023 Rev A p.3 (XP Fit Plus, series 951), side view,
+        the boot sub-assembly's own length, 15.1 +/-0.1 - the figure
+        attrs.boot-length already carries (provenance.boot-length). ABSOLUTE
+        from this boot's own face: the boot's face is the plug's rear, and the
+        lift that puts it there comes from the plug it seats on (the plug's
+        `boot` point sits `on:` its body feature), not from this number.
 skins: [default]

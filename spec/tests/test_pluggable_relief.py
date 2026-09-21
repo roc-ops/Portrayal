@@ -130,3 +130,63 @@ def test_latch_fill_follows_the_latch_color_field(ref, latch_node, body_out, mar
     latch = nodes[f"t--{latch_node}"]
     assert latch.get("fill") == "#c03030", \
         f"{ref} {latch_node} fill: {latch.get('fill')!r}"
+
+
+# ---------------------------------------------------------------- Task 4
+#
+# The plugs and boots (pluggables D Task 4). Each row is (ref, node, the
+# compiled data-z-out, the compiled data-z-lift or None, the contract
+# confidence, substrings its source sentence must carry). Read off the
+# standalone compile, the same call components_index.py makes.
+PLUGS_AND_BOOTS = [
+    ("generic/lc-plug@1", "body", 12.5, None, "estimated",
+     ["DS-LC-000004", "12.2 MIN", "(42)", "REFERENCE"]),
+    ("generic/lc-plug@1", "tip", 6.6, None, "estimated", ["8.6", "19.70"]),
+    ("generic/lc-plug@1", "shoulder", 6.6, None, "estimated", ["19.70"]),
+    ("generic/lc-plug@1", "stem", 6.6, None, "estimated", ["19.70"]),
+    ("generic/rj45-plug@1", "body", 13.0, None, "estimated",
+     ["22.48 - 9.5", "TE 1734264", "std/rj45"]),
+    ("generic/rj45-plug@1", "latch", 7.7, None, "estimated", ["17.17", "2.77"]),
+    ("common/lc-boot@1", "body", 15.1, None, "drawing", ["DS-LC-000023", "15.1"]),
+    ("common/rj45-boot@1", "body", 26.4, None, "drawing", ["J0072", "26.4"]),
+]
+
+
+@pytest.mark.parametrize("ref,node,out,lift,conf,markers", PLUGS_AND_BOOTS,
+                          ids=[f"{r[0]}:{r[1]}" for r in PLUGS_AND_BOOTS])
+def test_plugs_and_boots_stand_off(ref, node, out, lift, conf, markers):
+    el = _compiled_nodes(ref)[f"t--{node}"]
+    assert float(el.get("data-z-out")) == out, f"{ref} {node}: {el.get('data-z-out')!r}"
+    assert el.get("data-z-lift") == lift
+    feat = _relief_feature(ref, node)
+    assert feat["confidence"] == conf
+    for m in markers:
+        assert m in feat["source"], f"{ref} {node} source is missing {m!r}"
+
+
+@pytest.mark.parametrize("ref", ["generic/lc-plug@1", "generic/rj45-plug@1"])
+def test_a_plug_presents_at_its_boot_on_its_body(ref):
+    """`interface-at: boot`, `boot` and `cable` both `on: body` - and `mate`
+    exactly as it was: the plug still seats INTO its receptacle by `mate`."""
+    d = _contract(ref)
+    cps = d["connection-points"]
+    assert d["interface-at"] == "boot"
+    assert cps["boot"]["on"] == "body" and cps["cable"]["on"] == "body"
+    assert set(cps["mate"]) == {"at", "direction"} and cps["mate"]["direction"] == "front"
+    assert cps["mate"]["at"] == cps["boot"]["at"], "a boot drawn over the plug in 2D"
+
+
+@pytest.mark.parametrize("ref", ["common/lc-boot@1", "common/rj45-boot@1"])
+def test_a_boots_cable_leaves_its_rear(ref):
+    cps = _contract(ref)["connection-points"]
+    assert cps["cable"]["on"] == "body"
+    assert "on" not in cps["mate"]
+
+
+def test_the_lc_boot_rear_carries_its_cable_exit():
+    """The LC boot's bore is its cable-exit I.D., the end the viewer sees, so
+    it is inside the extruded `body` node and paints on the far face rather
+    than being buried at the plug joint (relief-full-face-slab-buries-detail)."""
+    nodes = _compiled_nodes("common/lc-boot@1")
+    body = nodes["t--body"]
+    assert any(n.get("id") == "t--bore" for n in body.iter())

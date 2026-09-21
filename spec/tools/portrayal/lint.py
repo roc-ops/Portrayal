@@ -246,7 +246,7 @@ RULES = {
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
-    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`"),
+    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
 }
 
 
@@ -4285,6 +4285,14 @@ def lint_component_seat_point(path, data, _lib_roots=None):
                 ((data.get("relief") or {}).get("features") or [])
                 if isinstance(f, dict)}
     for name, cp in cps.items():
+        # AN UNQUOTED `on:` IS NOT THE KEY `on`. YAML 1.1 - which yaml.safe_load
+        # speaks - reads a bare `on` as boolean true, so `{..., on: body}` loads
+        # as `{True: 'body'}`, `cp.get("on")` finds nothing, and the point
+        # silently lifts 0.0: the exact failure this rule exists to make loud.
+        # The library already quotes it elsewhere (`states: ['off', 'on']`).
+        if isinstance(cp, dict) and True in cp:
+            err(path, "L106", f"connection-point {name!r} has a key YAML read as "
+                              "boolean true - an unquoted `on:`; write it `'on':`")
         on = cp.get("on") if isinstance(cp, dict) else None
         if on is None:
             continue

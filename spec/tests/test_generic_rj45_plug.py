@@ -99,7 +99,7 @@ def test_size_is_registered_and_lints_clean():
     assert d["size"]["d"] == reg["depth"]
 
 
-def test_latch_is_not_a_relief_feature():
+def test_latch_2_77_is_not_a_relief_figure():
     """Fix round 1: the latch's 2.77 is an in-plane Y displacement (the latch
     hangs BELOW the body datum in the drawing's side view, the same plane as
     size.w/size.h) - not a Z protrusion out of the panel face. An earlier
@@ -107,11 +107,17 @@ def test_latch_is_not_a_relief_feature():
     render.js's `data-z-out` treats as an ABSOLUTE distance perpendicular to
     the face - std/sma@1's barrel is genuinely a Z protrusion (coaxial with
     the mate axis) and that precedent does not carry to a latch on a
-    different axis. There is no `relief:` block on this part; the 2.77/5.89
-    figures are recorded in provenance and drawn (inset, schematically) in
-    the skin instead."""
+    different axis. The 2.77/5.89 figures are recorded in provenance and
+    drawn (inset, schematically) in the skin instead.
+
+    Pluggables D gives the part a `relief:` block after all - the body's
+    standoff out of the jack and the latch's reach ALONG the plug axis, both
+    genuinely Z - so what this pins now is that neither in-plane figure is
+    written as a Z magnitude."""
     d = contract()
-    assert "relief" not in d
+    for f in d["relief"]["features"]:
+        for k in ("out", "lift"):
+            assert f.get(k) not in (2.77, 5.89), (f["node"], k, f.get(k))
     prov = d["provenance"]["latch"]
     assert "2.77" in prov
     assert "5.89" in prov

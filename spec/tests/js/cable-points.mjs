@@ -51,6 +51,12 @@ const pure = {
   shortAt: m.resolveCablePoint({name: 'cable', at: ['1']}, []),
   // a string pair is still a point: dataset values arrive as strings
   stringAt: m.resolveCablePoint({name: 'cable', at: ['1.5', '2.5']}, []),
+  // A POINT ON A FEATURE (pluggables D): the boot of the seated LC chain,
+  // group lift 22.5, body built to data-z-out 37.6. `rear` is ABSOLUTE, so z
+  // is 37.6 - not 22.5 (short by the boot) and not 60.1 (the lift summed in).
+  onRear: m.resolveCablePoint({...marker, rear: '37.6'}, [{lift: 22.5}]),
+  // an unreadable `rear` keeps the part's face, like a junk lift keeps 0
+  junkRear: m.resolveCablePoint({...marker, rear: 'x'}, [{lift: 22.5}]),
 };
 
 // ---------------------------------------------------------------------------
@@ -92,6 +98,13 @@ function el(attrs, parent) {
       }
       return null;
     },
+  };
+  // only the connectors that declare `data-cp-on` get a findable child; the
+  // rest keep the smallest fake, so an unexpected lookup still throws
+  node.querySelector = sel => {
+    const hit = (node.children || []).find(c => sel === `[id="${c.id}"]`);
+    if (!node.children) throw new Error('unexpected querySelector ' + sel);
+    return hit || null;
   };
   return node;
 }
@@ -245,7 +258,34 @@ const markerCageO = el({'data-cp': 'cable', 'data-cp-at': '1 1'}, cageO);
 const plugO = el({'data-path': 'plug-o', 'data-for': '/rear/x cage-o'}, svg);
 const markerPlugO = el({'data-cp': 'cable', 'data-cp-at': '1 1.5'}, plugO);
 
+// connector P: THE SEATED LC CHAIN, as render.py compiles it for pluggables
+// D - a plug seated in an optic (group lift 10) and a boot on the plug (group
+// lift 22.5), each with a `cable` point `on:` its body, whose data-z-out is
+// absolute (plug 22.5, boot 37.6). The boot survives and lands on its REAR.
+// connector Q: the same plug, bare - its cable leaves the plug body's rear.
+// connector R: a point `on:` a node that carries no data-z-out - it keeps its
+// face and says so.
+function withFeature(owner, id, zOut) {
+  const f = el(zOut === undefined ? {} : {'data-z-out': zOut}, owner);
+  f.id = id;
+  owner.children = (owner.children || []).concat([f]);
+  return f;
+}
+const plugP = el({'data-path': 'p-plug', 'data-z-lift': '10'}, svg);
+withFeature(plugP, 'p-plug--body', '22.5');
+const markerPlugP = el({'data-cp': 'cable', 'data-cp-at': '2.79 7.61', 'data-cp-on': 'p-plug--body'}, plugP);
+const bootP = el({'data-path': 'p-plug-boot', 'data-for': 'p-plug', 'data-z-lift': '22.5'}, svg);
+withFeature(bootP, 'p-plug-boot--body', '37.6');
+const markerBootP = el({'data-cp': 'cable', 'data-cp-at': '3.1 3.1', 'data-cp-on': 'p-plug-boot--body'}, bootP);
+const plugQ = el({'data-path': 'q-plug', 'data-z-lift': '10'}, svg);
+withFeature(plugQ, 'q-plug--body', '22.5');
+const markerPlugQ = el({'data-cp': 'cable', 'data-cp-at': '2.79 7.61', 'data-cp-on': 'q-plug--body'}, plugQ);
+const partR = el({'data-path': 'r-part', 'data-z-lift': '4'}, svg);
+withFeature(partR, 'r-part--flat');
+const markerR = el({'data-cp': 'cable', 'data-cp-at': '1 1', 'data-cp-on': 'r-part--flat'}, partR);
+
 const markers = [
+  markerPlugP, markerBootP, markerPlugQ, markerR,
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
   markerPlugG, markerBootG,

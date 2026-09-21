@@ -165,6 +165,16 @@ def test_interface_at_naming_a_missing_point_is_an_error(tmp_path):
     assert len(errs) == 1 and "'nope'" in errs[0], errs
 
 
+def test_an_unquoted_on_is_an_error(tmp_path):
+    """YAML 1.1 reads a bare `on` as boolean true, so `{..., on: body}` loads
+    as `{True: 'body'}` and the point lifts 0.0 with nothing said. Found the
+    hard way writing the first real `on:` into a contract (Task 4)."""
+    d = _plug(**{"interface-at": "boot"})
+    d["connection-points"]["boot"] = {"at": [2.79, 7.61], "direction": "rear", True: "body"}
+    errs, _ = _l105(tmp_path, d)
+    assert len(errs) == 1 and "boolean" in errs[0], errs
+
+
 def test_the_rule_is_catalogued():
     assert "L106" in lint.RULES
 
@@ -197,10 +207,6 @@ def _effective_lift(root, target_id):
     return total
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "pluggables D Task 4 gives generic/lc-plug@1 its body `out` and points "
-    "`interface-at: boot` / `boot.on: body` at it; until then the plug presents "
-    "its mate point and lifts nothing"))
 def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
     """Seat generic/sfp-lc-simplex@1 in an SFP cage, generic/lc-plug@1 in it and
     common/lc-boot@1 on the plug, through the chained `occupants:` keys.
@@ -245,3 +251,49 @@ def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
     assert float(boot.get("data-z-lift")) == optic_presented + float(body_out), (
         f"the boot's data-z-lift is {boot.get('data-z-lift')}; it should stand on "
         f"the plug's rear face at {optic_presented} + {body_out}")
+
+    # THE CABLE LEAVES THE BOOT'S REAR (pluggables D Task 4). The boot's
+    # `cable` point sits `on:` its body, and render.py names that node on the
+    # marker; relief.js's cablePoints takes the node's data-z-out as z. So the
+    # node must exist inside the boot's own group and stand at the boot's
+    # lift plus its own length - 22.5 + 15.1 - not at the lift alone, which is
+    # where the lift walk used to land it (the plug joint).
+    marker = next(el for el in boot if el.get("data-cp") == "cable")
+    on = marker.get("data-cp-on")
+    assert on == "port-4-occupant-occupant-occupant--body", on
+    feat = next(el for el in boot.iter() if el.get("id") == on)
+    boot_len = next(f["out"] for f in yaml.safe_load(
+        (LIB / "components/common/lc-boot/v1/contract.yaml").read_text())
+        ["relief"]["features"] if f["node"] == "body")
+    assert float(feat.get("data-z-out")) == pytest.approx(
+        optic_presented + float(body_out) + boot_len)
+
+
+def test_an_rj45_boot_stands_on_its_plug_body(tmp_path):
+    """The RJ45 pair on s9510-28dc's `tod` jack (std/rj45@2, flush): the plug
+    stands at 0, the boot at the plug body's `out`, its rear at that plus
+    common/rj45-boot@1's 26.4."""
+    d = yaml.safe_load((SRC / "device.yaml").read_text())
+    for cfg in d["configurations"].values():
+        cfg["occupants"] = {"tod": "generic/rj45-plug@1",
+                            "tod-occupant": "common/rj45-boot@1"}
+    dev = tmp_path / "device.yaml"
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    out = tmp_path / "o"
+    out.mkdir()
+    r = subprocess.run(
+        [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+         "--library", str(LIB), "--out", str(out)],
+        capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    plug = yaml.safe_load((LIB / "components/generic/rj45-plug/v1/contract.yaml").read_text())
+    body_out = next(f["out"] for f in plug["relief"]["features"] if f["node"] == "body")
+    svgs = sorted(out.glob("s9510-28dc*.front.svg"))
+    assert svgs, "rendered no front view to measure"
+    for svg in svgs:
+        root = ET.parse(svg).getroot()
+        by_id = {el.get("id"): el for el in root.iter() if el.get("id")}
+        assert _effective_lift(root, "tod-occupant") == 0.0, svg.name
+        assert float(by_id["tod-occupant-occupant"].get("data-z-lift")) == body_out, svg.name
+        assert float(by_id["tod-occupant-occupant--body"].get("data-z-out")) == \
+            pytest.approx(body_out + 26.4), svg.name

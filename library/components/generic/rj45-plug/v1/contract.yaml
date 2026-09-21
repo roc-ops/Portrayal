@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: rj45-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: rj45
 interface: rj45-plug
+interface-at: boot
 conforms: rj45-plug
 profile: networking
 description: >-
@@ -92,6 +93,16 @@ provenance:
     part of what the face looks like, not a depth feature, and the 2.77/5.89
     figures stay recorded here as measured facts about the part rather than
     driving any render.
+
+    WHAT IS A RELIEF FEATURE (pluggables D): the latch's reach ALONG THE PLUG
+    AXIS, which is Z. On the same side view, with the 22.48 as the ruler (1042
+    px at 600 dpi, 46.37 px/mm) and the .040 [1.02] reading back 1.018 as a
+    check: the latch leaves the body 4.05 behind the plug's front, its catch
+    face is at 7.93 (the dimensioned 1.02 + 5.89 from the nose step, plus a
+    measured 1.02 of nose ahead of it), and its free end - the tail a finger
+    presses - is 17.17 behind the front. None of those three is a plain
+    along-axis dimension of the latch; the 5.89 locates the catch, not the
+    tail. See the `latch` relief feature.
   axis: >-
     derived, following the connection-point convention generic/lc-plug@1 and
     common/lc-boot@1 introduced (Task 4/5): the `mate`, `boot` and `cable`
@@ -107,37 +118,73 @@ provenance:
     so an `attrs.media: rj45` part does not enter FIBRE_CONNECTORS and needs no
     census entry there - checked, not assumed, per this task's own instruction.
   boot-coincides-with-mate: >-
-    A LOAD-BEARING COINCIDENCE, STATED SO IT CAN BE CHECKED. This contract
-    publishes a `boot` connection-point, and NOTHING READS IT - not render.py,
-    not lint.py, not kit/. Seating always positions an occupant by the HOST's
-    presented `mate` point (render.py's mate-to resolution calls
-    manifest.presented_interface and then takes the occupant's own `mate`), so
-    a boot mated onto this plug lands on the plug's `mate` point and not on
-    its `boot` point. That is correct TODAY only because the two are the same
-    (x, y) here - see provenance.axis - and it would put a boot on the plug's
-    FRONT face, silently, the day someone separates them.
+    A LOAD-BEARING COINCIDENCE, AND THE `boot` POINT IS NOW READ. Until
+    pluggables D this contract published a `boot` point nothing read: seating
+    positioned a boot by the host's `mate` point, which put it on the plug's
+    FRONT face and was correct in 2D only because the two share one (x, y)
+    (provenance.axis). `interface-at: boot` now says the `rj45-plug`
+    interface is presented at `boot`, so manifest.presented_interface returns
+    THAT point, and `boot.on: body` says the point sits on the body relief
+    feature, so a boot seated here stands off by the body's `out` (13.0,
+    estimated - see provenance.standoff).
 
-    THE SEATING RULE WAS NOT CHANGED, deliberately. Preferring a host's `boot`
-    point when the occupant is a boot looks like a small change and is not:
-    `presented_interface` returns an interface, a point AND a lift that all
-    belong to an APERTURE, and a rear point has no aperture and no lift story
-    to return. The real difference between a `mate` point and a `boot` point
-    is along the axis this contract deliberately does not state - there is no
-    `size.d` here, and provenance.size says why - so a renderer that
-    distinguished them would have nothing to distinguish them WITH, and the
-    2D front view in which these parts are drawn cannot show the difference
-    either. Making that change properly means giving plugs a depth and the
-    seating a front/rear axis, which is a design pass, not a patch.
-
-    So the invariant is written down instead, and
+    `mate` IS UNCHANGED: the plug itself still seats INTO its jack by `mate`,
+    at the host's presented lift. And the (x, y) coincidence still carries
+    weight in 2D, where a seated boot is drawn over the plug at that point, so
     spec/tests/test_connector_sweep.py::test_a_boot_point_is_the_mate_point
-    enforces it across the whole library: any contract that publishes both
-    points must have them coincide. The day someone separates them is the day
-    a test fails, rather than the day a drawing goes quietly wrong.
+    still holds every contract that publishes both points to one (x, y).
+  standoff: >-
+    estimated - how far this plug stands out of the jack it enters, which is
+    the body feature's `out` and so the lift a boot seated on it gets. It is
+    22.48 (provenance.size, a plain dimension) less the insertion depth, and
+    the insertion depth is what no held document gives. Checked and NOT found:
+    TE 1734264 rev A2, the jack std/rj45@2 sources, dimensions the housing
+    18.6 deep and a 6.5 feature on its top edge but no plug insertion or latch
+    shoulder depth; spec/schemas/standards.yaml's `rj45` entry carries that
+    18.6 as the HOUSING depth, not an insertion; CommScope 2843005 is the plug
+    alone. So `confidence: drawing` is not available - the subtraction the
+    brief allows needs both terms sourced and one is not. The estimate rests
+    on the latch: its catch face must pass the jack's front wall, so the plug
+    enters at least 7.93 (the catch face on the side view, see
+    provenance.latch), and its free end must stay outside to be pressed, so it
+    enters less than 17.17. The relief takes 7.93 plus an ASSUMED 1.5 of jack
+    front wall behind which the catch hooks, 9.5 in all, and the arithmetic is
+    in the body feature's source sentence. The bracket the latch alone
+    allows is 5.3 to 14.5.
 elements:
   body: {at: [0.0, 0.0], size: [11.68, 7.93], class: port}
 connection-points:
   mate: {at: [5.84, 3.965], direction: front}
-  boot: {at: [5.84, 3.965], direction: rear}
-  cable: {at: [5.84, 3.965], direction: rear}
+  boot: {at: [5.84, 3.965], direction: rear, 'on': body}
+  cable: {at: [5.84, 3.965], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 13.0
+      confidence: estimated
+      source: >-
+        22.48 - 9.5 = 12.98, stated 13.0. The 22.48 is CommScope 2843005 rev
+        K sheet 1's plain overall length (provenance.size); the 9.5 insertion
+        is ESTIMATED - the catch face at 7.93 (provenance.latch) plus an
+        assumed 1.5 of jack front wall - because no held document dimensions
+        how far a plug enters: TE 1734264 rev A2 gives the jack housing 18.6
+        deep and no insertion, and std/rj45's registry depth is that same
+        housing figure. See provenance.standoff for the bracket (5.3 to 14.5)
+        the latch alone allows. The contacts this face is drawn with are the
+        plug's FRONT and sit in the jack; the body standing over them is the
+        plug seen from the viewer's side, which is its rear.
+    - node: latch
+      out: 7.7
+      confidence: estimated
+      source: >-
+        The latch's free end is 17.17 behind the plug's front, measured on
+        CommScope 2843005 rev K sheet 1's side view with the plain 22.48 as
+        the ruler (provenance.latch); the drawing does not dimension it along
+        the axis. Less the same estimated 9.5 of insertion the body uses, the
+        tail stands 7.67 out of the jack, stated 7.7. It starts inside the
+        jack (the latch leaves the body 4.05 behind the front), so no lift.
+        Its 2.77 below the datum is in-plane Y and stays the skin's.
+        In 3D this box lies inside the body's (the skin draws the latch inset
+        within the 11.68 x 7.93 outline, which L4 holds to size), so it is not
+        visible there; the real latch hangs below the body, outside it.
 skins: [default]

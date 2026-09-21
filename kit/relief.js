@@ -273,7 +273,9 @@ export function bodyBoxes(body, faceW, faceH) {
 // each later entry is one step further out, ending at whatever sits just
 // inside the svg - the same walk `nodeTools.liftOf` does, spelled out on
 // plain objects so it can be checked without a document. Every entry
-// contributes its own `lift` to the sum, and `z` is that sum - nothing else.
+// contributes its own `lift` to the sum, and `z` is that sum - unless the
+// marker carries `rear`, the absolute far face of the feature it sits on,
+// which then IS `z` (see below).
 //
 // NO `out` TERM, DELIBERATELY, AND THE REASON IS THE SEMANTICS AND NOT A
 // SURVEY. `lift` and `out` are read differently by this module and always
@@ -295,12 +297,21 @@ export function bodyBoxes(body, faceW, faceH) {
 // data-z-out "44.0". The argument above does not depend on how many there
 // are, which is the point: it would hold at zero and it holds at nine.
 //
-// Whether a FRONT-facing point someday needs the owner's protrusion is a spec
-// B2 question, answerable once plugs exist and declare their own relief, and
-// sourcing it would mean reading SIBLING relief nodes (generic/sfp-lc's
-// `sfp-lc--body` at "10.0", its `sfp-lc--bail` at "14.3") - a different
-// mechanism from this ancestor walk. Do not restore an `out` key here without
-// it.
+// THAT DIFFERENT MECHANISM NOW EXISTS, AND IT REPLACES RATHER THAN SUMS
+// (pluggables D). Plugs and boots declare relief, and a boot is 15.1 or 26.4
+// long: the ancestor walk put a boot's cable at the boot's FRONT face, where
+// it meets the plug, when the cable leaves from its REAR. The seated chain
+// generic/sfp-lc-simplex@1 -> generic/lc-plug@1 -> common/lc-boot@1 makes the
+// arithmetic concrete: the boot's group carries data-z-lift 22.5 (the optic's
+// 10.0 plus the plug body's 12.5), the lift walk gave z 22.5, and the boot's
+// body is built from 22.5 to its data-z-out of 37.6 - 15.1 short. So a point
+// can now name the relief feature it sits on (the contract's `on:`, which
+// render.py emits on the marker as `data-cp-on`, the feature node's compiled
+// id), and `rear` is that node's data-z-out. `rear` is ABSOLUTE, the same
+// number relief.js builds the feature's far face at, so when it is present
+// it IS `z` - it is never added to the lift, which is what the paragraphs
+// above forbid. `lift` still comes back as the part's own face. A point with
+// no `on:`, or whose feature is missing or unreadable, keeps z = lift.
 //
 // A LIFT THAT DOES NOT PARSE IS ZERO; A POINT THAT DOES NOT PARSE IS NULL,
 // and the asymmetry is deliberate. A junk lift has a safe reading - the
@@ -316,11 +327,13 @@ export function resolveCablePoint(marker, ancestors = []) {
   const lift = ancestors.reduce((z, a) => z + num(a && a.lift), 0);
   const raw = marker.at || [];
   const ok = raw.length === 2 && raw.every(v => v !== '' && v !== null && Number.isFinite(+v));
+  const rear = marker.rear;
+  const onFace = rear === undefined || rear === null || rear === '' || !Number.isFinite(+rear);
   return {
     name: marker.name,
     at: ok ? [+raw[0], +raw[1]] : null,
     dir: marker.dir ?? null,
-    lift, z: lift,
+    lift, z: onFace ? lift : +rear,
   };
 }
 
@@ -330,8 +343,8 @@ export function resolveCablePoint(marker, ancestors = []) {
 //
 // WHAT IS AND IS NOT RESOLVED, stated plainly because the spec's phrase
 // "resolved chassis-frame position and direction" promises more than this
-// returns. `z` IS resolved: it is the summed ancestor lift, in millimetres off
-// the panel. `at` IS NOT: it is the marker's OWN-FRAME point, exactly as the
+// returns. `z` IS resolved, in millimetres off the panel: the summed ancestor
+// lift, or - for a point `on:` a relief feature - that feature's data-z-out. `at` IS NOT: it is the marker's OWN-FRAME point, exactly as the
 // part's contract declared it, with none of the group transforms between the
 // part and the svg applied. `dir` is the declared direction, unrotated.
 //
@@ -477,6 +490,20 @@ export function cablePoints(svg) {
       ancestors.push({lift: n.dataset.zLift});
     }
     const owner = mk.closest('[data-path]');
+    // THE FEATURE A POINT SITS ON is a skin node inside the same instance
+    // group as the marker (render.py's `data-cp-on`), so the lookup is scoped
+    // to the marker's own parent - never the whole drawing, where a projection
+    // or another view could carry the same id.
+    const on = mk.dataset.cpOn;
+    if (on) {
+      const host = mk.parentElement;
+      const feat = host && host.querySelector
+        ? host.querySelector(`[id="${on.replace(/"/g, '\\"')}"]`) : null;
+      if (feat && feat.dataset.zOut !== undefined) marker.rear = feat.dataset.zOut;
+      else console.warn(`cablePoints: ${owner ? owner.dataset.path : '(no data-path)'} ` +
+                        `declares its cable point on ${JSON.stringify(on)}, which ` +
+                        `carries no data-z-out here; z falls back to the part's face`);
+    }
     const pt = {...resolveCablePoint(marker, ancestors),
                 path: owner ? owner.dataset.path : '', el: mk};
     // SAID OUT LOUD, ONCE, WHERE THE OWNER IS STILL KNOWN. `at: null` is
