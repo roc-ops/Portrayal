@@ -1060,31 +1060,37 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
             # timing jack was drawn with an Ethernet part.
             if pid in timing:
                 continue
-            if names is not None:
-                if pid not in names:
-                    continue
-                name, breakout = names[pid]
-            else:
-                if group_role(p) not in PORT_ROLES or a.get("role") == "console":
-                    continue
-                if a.get("role") == "mgmt" and pid.replace("port-", "") in listed_sfp:
-                    continue
-                name, breakout = pid, None
+            if names is None and (group_role(p) not in PORT_ROLES
+                                  or a.get("role") == "console"):
+                continue
+            if names is None and a.get("role") == "mgmt" and pid.replace("port-", "") in listed_sfp:
+                continue
             t = iface_type(p, a, group_role(p))
             if t is None:                      # unknown combination: skip, do not guess
                 continue
-            iface = {"name": name, "type": t}
-            # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
-            # spelling; a group whose own role is `management` says the same
-            # thing about every port in it, and six devices only say it that way.
-            if a.get("role") == "mgmt" or group_role(p) == "management":
-                iface["mgmt_only"] = True
-            if breakout:
-                iface["description"] = breakout_note(breakout, _num(pid.rsplit("-", 1)[-1]))
-            # management first, then by faceplate number - the order a person
-            # reads the front panel in
-            ports.setdefault(name, ((0 if iface.get("mgmt_only") else 1),
-                                    _num(pid.rsplit("-", 1)[-1]), iface))
+            # ONE CAGE, SEVERAL INTERFACES (#443). A CSFP cage presents two BiDi
+            # interfaces and says so with `interfaces:`; each is exported, typed
+            # from the cage, and the cage itself is not - it is where they live,
+            # not one of them. Everything else presents exactly itself.
+            for iid in p.get("interfaces") or [pid]:
+                if names is not None:
+                    if iid not in names:
+                        continue
+                    name, breakout = names[iid]
+                else:
+                    name, breakout = iid, None
+                iface = {"name": name, "type": t}
+                # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
+                # spelling; a group whose own role is `management` says the same
+                # thing about every port in it, and six devices only say it that way.
+                if a.get("role") == "mgmt" or group_role(p) == "management":
+                    iface["mgmt_only"] = True
+                if breakout:
+                    iface["description"] = breakout_note(breakout, _num(iid.rsplit("-", 1)[-1]))
+                # management first, then by faceplate number - the order a person
+                # reads the front panel in
+                ports.setdefault(name, ((0 if iface.get("mgmt_only") else 1),
+                                        _num(iid.rsplit("-", 1)[-1]), iface))
 
     ifaces = ([i for _, _, i in sorted(ports.values(), key=lambda k: k[:2]) if i.get("mgmt_only")]
               + sorted(mgmt_sfp, key=lambda i: i["name"])
