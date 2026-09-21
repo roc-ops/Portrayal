@@ -295,6 +295,10 @@ PART_POWER = {
     # name for exactly that.
     "common/dc-terminal-27": "dc-terminal",
     "common/dc-terminal-24": "dc-terminal",
+    # A PLUGGABLE TWO-POLE BLOCK IS WHERE THE WIRE LANDS TOO, so the same row: the
+    # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
+    # plug pulled out whole rather than lugs lifted off screws.
+    "common/dc-terminal-plug-2": "dc-terminal",
     # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
     # this takes `other` - the treatment PART_RF gives an SMB timing input, which
     # says "a thing this schema has no name for" instead of naming a neighbour.
