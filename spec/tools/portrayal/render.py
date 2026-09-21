@@ -2731,6 +2731,17 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
                      if mate_at is not None else None),
             "lift": float(lift or 0.0),
             "occupant-attrs": group_side_attrs(p.get("group"), groups.get(p.get("group"))),
+            # TWO THINGS THE BUILD DOES TO A SEATED OPTIC THAT A CONSUMER MAY
+            # NOT, published so it can decline rather than seat it wrong (the
+            # kit refuses both, as it refuses a lift):
+            #   mirror        this build RAISES for an occupant in a mirrored
+            #                 host (the D3 refusal in the mate-to resolution);
+            #   group-states  the host's group carries `states`, which
+            #                 draw_placement applies to the occupant too - it
+            #                 takes its host's group - and `group_side_attrs`
+            #                 does not carry.
+            "mirror": bool(p.get("mirror")),
+            "group-states": bool((groups.get(p.get("group")) or {}).get("states")),
         })
     return out
 
@@ -2906,6 +2917,11 @@ def main():
                  #                   data-group, data-group-role,
                  #                   data-description), overlaid on what the
                  #                   occupant's own contract says.
+                 # and TWO SAY WHEN NOT TO: `mirror` (the build refuses an
+                 # occupant in a mirrored host) and `group-states` (the host's
+                 # group carries `states`, which the build applies to the
+                 # seated optic). A consumer that cannot do what the build
+                 # does for either declines to seat there.
                  "cages": {v: cage_entries(device, v, lib, _families, _candidates,
                                             _default_occupants)
                            for v in device["views"]}}

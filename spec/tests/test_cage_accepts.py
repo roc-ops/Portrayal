@@ -119,7 +119,7 @@ def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     cage = _cage(idx, "front", "m1-0")
     assert set(cage) == {"id", "at", "interface", "media", "group", "rel-pos",
                           "rotate", "accepts", "occupant",
-                          "mate", "lift", "occupant-attrs"}
+                          "mate", "lift", "occupant-attrs", "mirror", "group-states"}
     assert cage["rel-pos"] == 0
     assert cage["rotate"] is None
     # AFTER SPEC A NO SHIPPED DEVICE SEATS ONE - this is the honest value for
@@ -495,12 +495,44 @@ def test_the_lift_census():
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
     candidates = render_mod._pluggable_candidates([LIB])
-    total = nonzero = 0
+    total = nonzero = mirrored = stated = 0
     for man in libwalk.iter_devices([LIB]):
         d = render_mod.load_yaml(man)
         for v in d.get("views") or {}:
             for c in render_mod.cage_entries(d, v, lib, families, candidates, {}):
                 total += 1
                 nonzero += bool(c["lift"])
+                mirrored += c["mirror"]
+                stated += c["group-states"]
     assert total >= 3000, total
     assert nonzero == 0, nonzero
+    # THE SAME PIN FOR THE OTHER TWO REFUSALS. The kit declines a mirrored
+    # cage (the build raises for one) and a cage whose group carries `states`
+    # (the build applies them to the seated optic; kit/swap.js does not, and
+    # group_side_attrs does not publish them). The day either count moves, a
+    # cage exists that the kit will not swap - implement it against a real
+    # build with a parity test, then move the pin.
+    assert mirrored == 0, mirrored
+    assert stated == 0, stated
+
+
+def test_a_mirrored_cage_and_a_stated_group_are_published(tmp_path):
+    """`mirror` and `group-states` are read off the placement and its group,
+    not assumed: set each on a copy of csr310 and both flip, while a cage
+    left alone keeps both false."""
+    dev = tmp_path / "src" / "csr310" / "device.yaml"
+    shutil.copytree(CSR310.parent, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    host = next(q for view in d["views"].values()
+                for q in (((view or {}).get("components") or {}).get("placements") or [])
+                if q.get("id") == "m1-0")
+    host["mirror"] = True
+    d["groups"][host["group"]]["states"] = ["off", {"name": "up", "color": "#22c55e"}]
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    idx = _build(dev, tmp_path / "out")
+    cage = _cage(idx, "front", "m1-0")
+    assert cage["mirror"] is True
+    assert cage["group-states"] is True
+    others = [c for c in idx["cages"]["front"] if c.get("group") != host["group"]]
+    assert others, "no cage outside the group - the check below would pass vacuously"
+    assert not any(c["mirror"] or c["group-states"] for c in others)
