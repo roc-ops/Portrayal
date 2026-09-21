@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9902
-version: 0.1.2
+version: 0.1.3
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9902
@@ -46,24 +46,23 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - Table 2 of c78-744663, "Physical dimensions (includes ejector
-      bracket/lever); (H x W x D); weight": "ASR 9902 chassis (including 2 RPs, 2
-      PSUs, 3 FANs): H x W x D: 3.45 x 17.3 x 19 in.; 46.39 lb (87.63 x 439.74 x
-      482.60 mm; 21.04 kg)".
-      THE DEPTH NOTE IS A TAUTOLOGY AND IS NOT A SECOND FIGURE. Underneath the
-      row Cisco writes "Note: Excluding ejector, the depth is 19 in./482.6 mm" -
-      the same number the row already gives, so unlike the ASR 9903, where the
-      two differ by 162 mm, there is nothing here to choose between. The data
-      sheet's own overview agrees a third time: "The compact size (depth is 19
-      in., 483 mm)". So `chassis.depth` is 482.60 and no gap is opened over it.
-      WIDTH IS THE BODY: 439.74 mm is 17.3 in, not the 19 in rack face, so this
-      figure is already between the ear folds and L43 has nothing to catch.
-      HEIGHT IS THE CHASSIS AS BUILT, NOT THE RACK ALLOCATION: 87.63 mm against
-      2 RU's 88.90, built 1.27 mm under its allocation for clearance, the same
-      shortfall the ASR 9903, 9904, 9906 and 9910 show. The install guide quotes
-      the allocation instead - "Height of the ... Cisco ASR 9902 Router is 3.45
-      inches (8.77 cm)" is 87.63 and agrees, while its ASR 9903 line quotes 5.25
-      in, which is that chassis's 3 RU allocation rather than its height. The
-      data sheet figure is carried and the RU is carried separately.
+      bracket/lever); (H x W x D); weight": ASR 9902 chassis with 2 RPs, 2 PSUs
+      and 3 FANs, 3.45 x 17.3 x 19 in. and 46.39 lb, or 87.63 x 439.74 x 482.60
+      mm and 21.04 kg. THE DEPTH NOTE IS A TAUTOLOGY AND IS NOT A SECOND FIGURE.
+      Underneath the row Cisco writes "Note: Excluding ejector, the depth is 19
+      in./482.6 mm" - the same number the row already gives, so unlike the ASR
+      9903, where the two differ by 162 mm, there is nothing here to choose
+      between. The data sheet's own overview agrees a third time: "The compact
+      size (depth is 19 in., 483 mm)". So `chassis.depth` is 482.60 and no gap is
+      opened over it. WIDTH IS THE BODY: 439.74 mm is 17.3 in, not the 19 in rack
+      face, so this figure is already between the ear folds and L43 has nothing
+      to catch. HEIGHT IS THE CHASSIS AS BUILT, NOT THE RACK ALLOCATION: 87.63 mm
+      against 2 RU's 88.90, built 1.27 mm under its allocation for clearance, the
+      same shortfall the ASR 9903, 9904, 9906 and 9910 show. The install guide
+      quotes the allocation instead - "Height of the ... Cisco ASR 9902 Router is
+      3.45 inches (8.77 cm)" is 87.63 and agrees, while its ASR 9903 line quotes
+      5.25 in, which is that chassis's 3 RU allocation rather than its height.
+      The data sheet figure is carried and the RU is carried separately.
   stencil-calibration:
     confidence: drawing
     note: >-
@@ -179,12 +178,12 @@ provenance:
       rule reaches the end of the face: port 47's lamp is at 422.43 like every
       other, and no port on this board is without one.
       THE STATES ARE TABLE 27 of the install guide, "Port Status and LC FAIL
-      LEDs", transcribed: "Port Status LEDs (one per port). Green - Port state is
-      up and a valid physical layer link is established. Blinking - Line activity
-      is occurring. The LED blinks green-amber-green. Red - Port state is up, but
-      there is a link loss or SFP/QSFP failure. Off - Port is administratively
-      shut down." The blinking state is carried as a green lamp with an amber
-      second colour, which is what "green-amber-green" describes.
+      LEDs", transcribed: Port Status LEDs, one per port: green = port up with a
+      valid physical-layer link; blinking = line activity, the LED going
+      green-amber-green; red = port up but link lost, or an SFP/QSFP failure; off
+      = port administratively shut down. The blinking state is carried as a green
+      lamp with an amber second colour, which is what "green-amber-green"
+      describes.
   slices:
     confidence: drawing
     note: >-

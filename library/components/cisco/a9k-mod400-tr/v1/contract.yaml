@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mod400-tr
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -135,9 +135,9 @@ provenance:
     can reach it. When nested modules are supported the numbers are already here; until
     then a MOD carrier renders as a faceplate with two empty openings.
   variants: >-
-    install guide - 'Each type of card is available in -SE (Service Edge Optimized) and
-    -TR (Packet Transport Optimized) variants. The two variants are functionally
-    equivalent, but vary in configuration scale and buffer capacity.' THE STENCIL HAS
+    install guide - every card type comes in an -SE (Service Edge Optimized) and a -TR
+    (Packet Transport Optimized) variant; the two are functionally equivalent and
+    differ in configuration scale and buffer capacity. THE STENCIL HAS
     ONLY THE -SE MASTERS. The -TR is modelled on the same drawing, which that sentence
     licenses: configuration scale and buffer capacity are internal and no faceplate can
     show them. Table 35 says the same thing from the other side - every modular line
@@ -157,21 +157,20 @@ provenance:
     is the question that has to be answered before the two numbers are summed. Recorded
     rather than assumed.
   mpas: >-
-    install guide - and THIS ONE CARD HAS A SOURCED LIST, quoted in full because it is
-    the only per-carrier MPA list in the intake: 'The 400 Gigabyte Modular Line Cards
-    only support the following MPAs (Modular Port Adapters): 2-port 10GE MPA with XFP;
-    4-Port 10GE MPA with XFP; 8-port 10GE MPA with SFP+; 2-port 40GE MPA, with QSFP+;
-    1-Port 40GE MPA, with QSFP+; 20-Port 10-Gigabit Ethernet MPA with SFP+; 1-Port
-    100-Gigabit Ethernet MPA with CFP2-DCO and CPAK; 1-Port 200-Gigabit Ethernet MPA
-    with CFP2-DCO; 2-Port 100-Gigabit Ethernet MPA with CFP2-DCO and CPAK; 32-port GE
-    MPA with MACsec.' Note the word 'only'. `accepts` carries the five of those that
-    exist in this library today, plus the blank. THE DRAWING CONTRADICTS THE TEXT and
-    the text wins: the A9K-MOD400-SE master is drawn with an A9K-MPA-20X1GE seated in
-    its upper bay, and the 20-port GIGABIT Ethernet MPA is not on that list - only the
-    20-port 10-GIGABIT one is. The explanation is in the guide itself, which says of the
-    generic modular line card figure that it shows 'a 20-port Gigabit Ethernet MPA
-    installed in bay 1'. The stencil reused the generic illustration. So the master's
-    contents are ARTWORK and not a support statement, and 20x1GE is excluded here.
+    install guide - and THIS ONE CARD HAS A SOURCED LIST, listed in full because it is
+    the only per-carrier MPA list in the intake: the 400 Gigabyte Modular Line Cards
+    support ONLY these MPAs (Modular Port Adapters): 2-port 10GE with XFP; 4-port 10GE
+    with XFP; 8-port 10GE with SFP+; 2-port 40GE with QSFP+; 1-port 40GE with QSFP+;
+    20-port 10GE with SFP+; 1-port 100GE with CFP2-DCO and CPAK; 1-port 200GE with
+    CFP2-DCO; 2-port 100GE with CFP2-DCO and CPAK; 32-port GE with MACsec. Note the word
+    'only'. `accepts` carries the five of those that exist in this library today, plus
+    the blank. THE DRAWING CONTRADICTS THE TEXT and the text wins: the A9K-MOD400-SE
+    master is drawn with an A9K-MPA-20X1GE seated in its upper bay, and the 20-port
+    GIGABIT Ethernet MPA is not on that list - only the 20-port 10-GIGABIT one is. The
+    explanation is in the guide itself, which says of the generic modular line card
+    figure that it shows 'a 20-port Gigabit Ethernet MPA installed in bay 1'. The
+    stencil reused the generic illustration. So the master's contents are ARTWORK and
+    not a support statement, and 20x1GE is excluded here.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
 elements:
@@ -181,17 +180,15 @@ elements:
     class: led
     description: >-
       install guide - Table 32, 'Port Status and Line Card Status LEDs', of the Ethernet
-      Line Card Installation Guide, section 'Card Status LED (one per card)'. Green: 'Line
-      card has booted properly, and is ready to pass or is passing traffic.' Steady amber:
-      'Line card boot process is underway. When the Cisco IOS XR software finishes
-      loading, the LED turns green.' Blinking amber: 'Software configuration error has
-      occurred that prevents the line card from passing traffic. It is possible that the
-      line card is still passing traffic, but there is some degradation.' Red: 'Line card
-      has encountered a hardware error, and is not passing traffic.' Off: 'Line card is
-      powered off. The LED might turn off momentarily when switching between the states
-      described above, although the line card has not powered off.' Steady and blinking
-      amber share one colour and are not carried as two states; the distinction is
-      recorded here because it is the difference between a card booting and a card
+      Line Card Installation Guide, section 'Card Status LED (one per card)'. Green =
+      booted properly and ready to pass, or passing, traffic; steady amber = boot
+      underway, turning green once the Cisco IOS XR software finishes loading; blinking
+      amber = a software configuration error keeps the card from passing traffic, though
+      it may still be passing some in a degraded way; red = a hardware error, and no
+      traffic passing; off = powered off, though the LED can also go dark for a moment
+      while changing between the states above without the card powering off. Steady and
+      blinking amber share one colour and are not carried as two states; the distinction
+      is recorded here because it is the difference between a card booting and a card
       misconfigured. AN EARLIER VERSION OF THIS SENTENCE said Table 32 'is written for the
       fixed-port cards' and called this vocabulary a BORROWING. That was wrong. Table 32
       sits in Chapter 3, 'Verifying and Troubleshooting the Line Card Installation', which

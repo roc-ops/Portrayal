@@ -1,16 +1,16 @@
 format: 1
 kind: module
 name: a9k-sip-700
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory. A carrier for
   shared port adapters rather than a port card: the faceplate is four SPA subslots in a
-  two-by-two grid and a single Status lamp. Cisco: 'up to 2 single-width, double-height
-  SPAs, up to 4 single-width, single-height SPAs, or up to 2 double-width, single-height
-  SPAs. The Cisco ASR 9000 SIP-700 does not support double-width, double-height SPAs.'
+  two-by-two grid and a single Status lamp. Cisco: it takes up to 2 single-width
+  double-height SPAs, up to 4 single-width single-height SPAs, or up to 2 double-width
+  single-height SPAs, and does not take double-width double-height SPAs.
   Supported on all ASR 9000 Series routers except the ASR 9906.
 size: {w: 43.7, h: 395.7, d: 520.7}
 attrs:
@@ -149,23 +149,21 @@ provenance:
     the count of affected parts (2 of 24) matters more than either word.
   blank-is-a-real-part-we-do-not-have: >-
     NO DEFAULT OCCUPANT IS SET, and the reason is a missing component rather than a
-    missing decision. Cisco requires a filler: 'When a bay is not in use, a blank
-    must fill the empty bay to allow the router or switch to conform to
-    electromagnetic interference requirements... If you plan to install a SPA in a
-    bay that is not in use, you must first remove the blank.' That blank is a real
-    orderable part and this library has no component for it, so the four subslots
-    render as openings. The guide gives it neither a part number nor a dimension in
-    any section searched, so it is not buildable from what we hold. When somebody
-    builds it, the `default` goes on these four bays the way a9k-mpa-blank goes on
-    the MOD carriers' two.
+    missing decision. Cisco requires a filler: an unused bay must be closed with a
+    blank so the router or switch meets electromagnetic interference requirements,
+    and that blank has to come out before a SPA goes into the bay. That blank is a
+    real orderable part and this library has no component for it, so the four
+    subslots render as openings. The guide gives it neither a part number nor a
+    dimension in any section searched, so it is not buildable from what we hold.
+    When somebody builds it, the `default` goes on these four bays the way
+    a9k-mpa-blank goes on the MOD carriers' two.
   capacity: >-
     install guide - Table 3, 'SIP Summary', names this part '20G SPA Interface
     Processor, 4 GB memory'.
   variants: >-
-    install guide - 'There are two types of Cisco ASR 9000 SIP-700 available;
-    A9K-SIP-700 and A9K-SIP-700-8G. A9K-SIP-700 supports 4 GB of memory. A9K-SIP-700-8G
-    supports 8 GB of memory. BOTH TYPES ... ARE IDENTICAL IN APPEARANCE and can be
-    identified by the PID located on the faceplate of the SIP.' That last clause is why
+    install guide - the Cisco ASR 9000 SIP-700 comes in two types, A9K-SIP-700 with 4
+    GB of memory and A9K-SIP-700-8G with 8 GB; the two LOOK IDENTICAL and are told
+    apart only by the PID on the SIP's faceplate. That last clause is why
     both are modelled from the one master: Cisco says the faceplates differ in exactly
     one thing, the printed PID, and that is the only thing that differs between these
     two components.
@@ -178,17 +176,15 @@ provenance:
     carried.
   status-lamp: >-
     install guide - Table 32, 'Port Status and Line Card Status LEDs', of the Ethernet
-    Line Card Installation Guide, section 'Card Status LED (one per card)'. Green: 'Line
-    card has booted properly, and is ready to pass or is passing traffic.' Steady amber:
-    'Line card boot process is underway. When the Cisco IOS XR software finishes
-    loading, the LED turns green.' Blinking amber: 'Software configuration error has
-    occurred that prevents the line card from passing traffic. It is possible that the
-    line card is still passing traffic, but there is some degradation.' Red: 'Line card
-    has encountered a hardware error, and is not passing traffic.' Off: 'Line card is
-    powered off. The LED might turn off momentarily when switching between the states
-    described above, although the line card has not powered off.' Steady and blinking
-    amber share one colour and are not carried as two states; the distinction is
-    recorded here because it is the difference between a card booting and a card
+    Line Card Installation Guide, section 'Card Status LED (one per card)'. Green =
+    booted properly and ready to pass, or passing, traffic; steady amber = boot
+    underway, turning green once the Cisco IOS XR software finishes loading; blinking
+    amber = a software configuration error keeps the card from passing traffic, though
+    it may still be passing some in a degraded way; red = a hardware error, and no
+    traffic passing; off = powered off, though the LED can also go dark for a moment
+    while changing between the states above without the card powering off. Steady and
+    blinking amber share one colour and are not carried as two states; the distinction
+    is recorded here because it is the difference between a card booting and a card
     misconfigured. A SIP IS NOT AN ETHERNET LINE CARD, so the scope needs a licence and
     Cisco gives one explicitly: the SIP and SPA Hardware Installation Guide carries the
     note 'References to line cards in the router hardware installation and configuration

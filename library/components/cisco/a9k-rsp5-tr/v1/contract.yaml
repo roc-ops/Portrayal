@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp5-tr
-version: 1.4.0
+version: 1.4.1
 class: supervisor
 behaviour: fills
 profile: networking
@@ -107,14 +107,14 @@ provenance:
     configuration occupies 2 slots.'
   ports: >-
     install guide - the Overview and Reference Guide's per-card 'Front Panel and Access
-    Ports' section, corroborated feature by feature by the artwork. For the RSP5: 'Two
-    RJ-45 Sync timing ports with Link and Fault LEDs built into the RJ-45. IEEE1588
-    RJ-45 Timestamp port. Two Inter-Chassis Sync ports - nVSync1 is shared with
-    RS232/422 GPS TOD RJ-45 port. RS232/422 GPS TOD RJ-45 port for system timing input.
-    10 MHz and 1 PPS clock input SMB ports. Alarm Output DB9 port with three alarm
-    outputs. External USB2, class-A port. Two dual-speed 100/1000 Mbit Ethernet
-    Management ports. One Connectivity Management Processor (CMP) port. Two EIA/TIA-232
-    RJ232 serial RJ-45 ports - one each for Console and Auxiliary modem ports.' That is
+    Ports' section, corroborated feature by feature by the artwork. For the RSP5: two
+    RJ-45 Sync timing ports with Link and Fault LEDs built into the jack; an IEEE1588
+    RJ-45 Timestamp port; two Inter-Chassis Sync ports, nVSync1 sharing the RS232/422
+    GPS TOD RJ-45 port; that GPS TOD RJ-45 port, as system timing input; 10 MHz and 1
+    PPS clock input SMB ports; an Alarm Output DB9 with three alarm outputs; an external
+    USB2 class-A port; two dual-speed 100/1000 Mbit Ethernet Management ports; one
+    Connectivity Management Processor (CMP) port; and two EIA/TIA-232 serial RJ-45
+    ports, one for Console and one for the Auxiliary modem. That is
     ten RJ-45s, and the master draws ten. CMP: treated as Ethernet management; Cisco's
     port list names it only as the CMP port, unlike the two "100/1000 Mbit Ethernet
     Management" ports named two sentences earlier - this quote never calls the CMP
@@ -139,11 +139,10 @@ provenance:
     check. Timing coax is std/smb, sourced from the same 10-32 UNF figure the registry
     carries; the USB is std/usb-a.
   alarm-out: >-
-    install guide - 'Each RSP/RP card drives a set of three alarm output contacts. Alarm
-    circuitry on the RSP/RP activates dry contact closures that are accessible through
-    the nine-pin Alarm Out connector on the RSP/RP front panel... Both normally-open and
-    normally-closed contacts are available. Only the active RSP/RP drives the alarm
-    outputs.'
+    install guide - each RSP/RP card drives three alarm output contacts: its alarm
+    circuitry closes dry contacts reached through the nine-pin Alarm Out connector on
+    the RSP/RP front panel, both normally-open and normally-closed contacts are
+    provided, and only the active RSP/RP drives them.
   db9: >-
     CLOSED. The ALARM OUT is composed from common/db9-receptacle@1, which frames
     std/db9@1 and its sourced size E aperture, so this card no longer draws a
