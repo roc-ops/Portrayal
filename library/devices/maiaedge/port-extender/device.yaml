@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: port-extender
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
@@ -111,7 +111,8 @@ provenance:
       jack "on the rear ... center of the device, at the top". So the rear is drawn SYMMETRIC: a supply
       at each end, two fans either side, and the management panel in the middle with the Ethernet jack
       on top. Every coordinate is chosen to fit that inventory into 438 mm with the small gaps the stills
-      show. The supply is the library's generic 550W CRPS part.
+      show. The supply is maiaedge/psu-550w@1, the PBC-2000's: the video shows the same face - 550W label,
+      C14 with a cord clip - and the datasheet's input range is that part's.
 attrs:
   performance: {switching-capacity: 2.0 Tbps, latency-overhead-ns: 500, packet-buffer: 32 MB}
   platform: {cpu: 'Intel x86, up to 8 cores', memory: 8-32 GB ECC DDR4, storage: configurable M.2 SSD,
@@ -122,6 +123,19 @@ attrs:
   lifecycle: {eol: none-announced}
 chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#a9adb1'}
 gaps:
+- what: psu-identity
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    a photograph of one supply's rating label - it is on the module's body, so pull one supply to take
+    it.
+  note: >-
+    The supplies are very probably Gospower G1251-0550WN-series 550 W CRPS modules taking AC or high-voltage
+    DC through one inlet - a visual match on every feature against that module's photographs (see maiaedge/psu-550w@1's
+    `identity`), and the Port Extender datasheet's "100-240VAC or 180-300VDC" is that module's range.
+    But no document names the part, so its model is not recorded and no -48 V DC option is modelled or
+    known.
 - what: rear-positions
   scope:
   - rear
@@ -1071,8 +1085,8 @@ views:
         group: psus
         rel-pos: 1
         accepts:
-        - common/psu-550w@2
-        default: common/psu-550w@2
+        - maiaedge/psu-550w@1
+        default: maiaedge/psu-550w@1
       - id: fan-1
         at: [79.5, 2.0]
         size: {w: 58.8, h: 40.0}
@@ -1111,8 +1125,8 @@ views:
         group: psus
         rel-pos: 2
         accepts:
-        - common/psu-550w@2
-        default: common/psu-550w@2
+        - maiaedge/psu-550w@1
+        default: maiaedge/psu-550w@1
       placements:
       - ref: common/rj45-eth@1
         id: mgmt
