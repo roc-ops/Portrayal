@@ -48,6 +48,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 RENDER = SPEC / "tools/portrayal/render.py"
 
+from portrayal import libwalk
 from portrayal import render as render_mod
 
 CSR310 = LIB / "devices/edgecore/csr310/device.yaml"
@@ -179,7 +180,7 @@ def test_no_shipped_device_seats_an_occupant():
     pins one example of: after spec A, `occupants:` is empty on every
     configuration this library ships (docs/pluggables-design.md decision 2)."""
     seated = []
-    for man in LIB.glob("devices/*/*/device.yaml"):
+    for man in libwalk.iter_devices([LIB]):
         d = yaml.safe_load(man.read_text())
         for name, cfg in (d.get("configurations") or {}).items():
             if (cfg or {}).get("occupants"):
