@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 1.0.10
+version: 1.0.11
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -15,332 +15,302 @@ profile: networking
 provenance:
   sources:
     note: >-
-      Two documents, both docling-converted. cor580-datasheet (the COR580 / AS9926-24D-AS9926-24DB
-      data sheet) carries the spec list, the ordering matrix and fig-0007, a stacked
-      front-and-rear elevation with twelve callouts, in colour. cor580-qsg (the AS9926-24D |
-      AS9926-24DB quick start guide) carries fig-0007 (front elevation line art), fig-0012 (rear
-      elevation), fig-0008 (system-LED zoom), fig-0013 (port-numeral and micro-USB zoom) and
-      fig-0014 (management-cluster zoom), plus the hardware specification and LED tables. Both
-      documents letter the artwork AS9926-24D, which is this device's own vendor alias, so the
-      figure/product check passes.
+      Two documents, both docling-converted. cor580-datasheet (the COR580 / AS9926-24D-AS9926-24DB data
+      sheet) carries the spec list, the ordering matrix and fig-0007, a stacked front-and-rear elevation
+      with twelve callouts, in colour. cor580-qsg (the AS9926-24D | AS9926-24DB quick start guide) carries
+      fig-0007 (front elevation line art), fig-0012 (rear elevation), fig-0008 (system-LED zoom), fig-0013
+      (port-numeral and micro-USB zoom) and fig-0014 (management-cluster zoom), plus the hardware specification
+      and LED tables. Both documents letter the artwork AS9926-24D, which is this device's own vendor
+      alias, so the figure/product check passes.
   method:
     note: >-
-      THIS DEVICE WAS MODELLED FROM ITS SIBLING, library/devices/edgecore/dcs510 (AS9716-32D),
-      which shares this chassis shell exactly - 438.4 x 536 x 43.1 mm, two rear PSU bays, six rear
-      fan trays, the same 1RU Accton frame. Every number below is marked CARRIED OVER (taken from
-      the sibling and, where said so, corroborated against COR580's own figures) or MEASURED (read
-      here, off the figures named). The distinction is the point: an inherited number and a
-      measured one are different kinds of fact. Nothing on the FRONT face was carried over except
-      the idiom - this faceplate is not the sibling's.
+      THIS DEVICE WAS MODELLED FROM ITS SIBLING, library/devices/edgecore/dcs510 (AS9716-32D), which shares
+      this chassis shell exactly - 438.4 x 536 x 43.1 mm, two rear PSU bays, six rear fan trays, the same
+      1RU Accton frame. Every number below is marked CARRIED OVER (taken from the sibling and, where said
+      so, corroborated against COR580's own figures) or MEASURED (read here, off the figures named). The
+      distinction is the point: an inherited number and a measured one are different kinds of fact. Nothing
+      on the FRONT face was carried over except the idiom - this faceplate is not the sibling's.
   figure-choice:
     note: >-
-      Gate 1. cor580-qsg/fig-0007 panel 0, box [6,37,808,116], is orthographic to 0.19 percent
-      (1.8294 px/mm on x, 1.8329 on y) and is the reference for every VERTICAL number here.
-      cor580-datasheet/fig-0007 panel 0, box [8,111,1410,251], is 1.55 percent out - its box too
-      tall by the render's own shadow - but at 3.198 px/mm on x it is twice the quick-start's
-      resolution, so it is the source of every HORIZONTAL number. Its y readings were mapped into
-      the orthographic frame by the two-point fit y' = 1.0128 y - 0.045, anchored on the two
-      port-row centres the two figures share (17.55/31.56 there against 17.73/31.92 here); every
-      vertical number taken off the datasheet below is quoted after that map. THE PREPARED BRIEF'S
-      BAND REPORT WAS NOT USED: it profiles cor580-qsg/fig-0004, which is the Edge-core wordmark,
-      not a chassis.
+      Gate 1. cor580-qsg/fig-0007 panel 0, box [6,37,808,116], is orthographic to 0.19 percent (1.8294
+      px/mm on x, 1.8329 on y) and is the reference for every VERTICAL number here. cor580-datasheet/fig-0007
+      panel 0, box [8,111,1410,251], is 1.55 percent out - its box too tall by the render's own shadow
+      - but at 3.198 px/mm on x it is twice the quick-start's resolution, so it is the source of every
+      HORIZONTAL number. Its y readings were mapped into the orthographic frame by the two-point fit y'
+      = 1.0128 y - 0.045, anchored on the two port-row centres the two figures share (17.55/31.56 there
+      against 17.73/31.92 here); every vertical number taken off the datasheet below is quoted after that
+      map. THE PREPARED BRIEF'S BAND REPORT WAS NOT USED: it profiles cor580-qsg/fig-0004, which is the
+      Edge-core wordmark, not a chassis.
   chassis:
     note: >-
-      CARRIED OVER and independently corroborated. datasheet - 'Dimensions (WxDxH): 438.4 x 536 x
-      43.1 mm (17.25 x 21.1 in)' (cor580-datasheet/doc.md:91), corroborated by the quick-start's
-      hardware specification '438.4 x 536 x 43.1 mm (17.26 x 21.1 x 1.7 in.)' (cor580-qsg/doc.md,
-      Switch Chassis / Size). Same triple as the sibling, stated by two documents each. 438.4 is
-      already the BODY between the ear folds, so nothing is subtracted; the rack ears are optional
-      placements outside it at the library's 14 mm.
+      CARRIED OVER and independently corroborated. datasheet - 'Dimensions (WxDxH): 438.4 x 536 x 43.1
+      mm (17.25 x 21.1 in)' (cor580-datasheet/doc.md:91), corroborated by the quick-start's hardware specification
+      '438.4 x 536 x 43.1 mm (17.26 x 21.1 x 1.7 in.)' (cor580-qsg/doc.md, Switch Chassis / Size). Same
+      triple as the sibling, stated by two documents each. 438.4 is already the BODY between the ear folds,
+      so nothing is subtracted; the rack ears are optional placements outside it at the library's 14 mm.
   weight:
     confidence: measured
     note: >-
-      MEASURED against the sources, and THE TWO DISAGREE. The quick-start says '10.77 kg (23.74
-      lb), with 2 PSUs and 6 fans installed'; the datasheet says 'Weight: 11.06 kg (24.38 lb)'
-      (cor580-datasheet/doc.md:92) unqualified - and 11.06 kg is the sibling DCS510's number to
-      the gram, on a datasheet that reuses the sibling's chassis paragraph. The qualified figure
-      wins: 10.77 with supplies and fans in. This is the first thing that would have been wrong
-      had it been carried over.
+      MEASURED against the sources, and THE TWO DISAGREE. The quick-start says '10.77 kg (23.74 lb), with
+      2 PSUs and 6 fans installed'; the datasheet says 'Weight: 11.06 kg (24.38 lb)' (cor580-datasheet/doc.md:92)
+      unqualified - and 11.06 kg is the sibling DCS510's number to the gram, on a datasheet that reuses
+      the sibling's chassis paragraph. The qualified figure wins: 10.77 with supplies and fans in. This
+      is the first thing that would have been wrong had it been carried over.
   chassis-colour:
     note: >-
-      photo - black, as the sibling. The quick-start's line art (fig-0007, fig-0012) renders a
-      light-grey shell and is the odd one out; the datasheet elevation shows a black chassis with
-      a silver PSU face. Where the guide art and the device disagree the device wins.
+      photo - black, as the sibling. The quick-start's line art (fig-0007, fig-0012) renders a light-grey
+      shell and is the odd one out; the datasheet elevation shows a black chassis with a silver PSU face.
+      Where the guide art and the device disagree the device wins.
   port-count:
     confidence: measured
     note: >-
-      MEASURED, and it is NOT the sibling's. 'Switch Ports: 24 x 400 GbE QSFP-DD'
-      (cor580-datasheet/doc.md:76) and '24 x 400G QSFP-DD ports' in the quick-start overview.
-      Drawn as TWELVE columns of two, not the sibling's sixteen: the twelve cage columns are
-      countable in cor580-datasheet/fig-0007 and each column carries one numeral pair.
+      MEASURED, and it is NOT the sibling's. 'Switch Ports: 24 x 400 GbE QSFP-DD' (cor580-datasheet/doc.md:76)
+      and '24 x 400G QSFP-DD ports' in the quick-start overview. Drawn as TWELVE columns of two, not the
+      sibling's sixteen: the twelve cage columns are countable in cor580-datasheet/fig-0007 and each column
+      carries one numeral pair.
   port-numbering:
     confidence: measured
     note: >-
-      MEASURED, and it is NOT the sibling's. This faceplate numbers from ZERO. The printing is `n
-      (up)(down) n+1` on one baseline under each column - '0 (up)(down) 1' under column 1, read at
-      5x in cor580-datasheet/fig-0007, and '20 (up)(down) 21', '22 (up)(down) 23' read directly in
-      cor580-qsg/fig-0013 - so ports run 0..23, even on the TOP row and odd on the bottom,
-      column-major. `index-origin: 0` on the group and `number-from: 0` on the block. Carrying the
-      sibling's 1-origin would have mislabelled all 24.
+      MEASURED, and it is NOT the sibling's. This faceplate numbers from ZERO. The printing is `n (up)(down)
+      n+1` on one baseline under each column - '0 (up)(down) 1' under column 1, read at 5x in cor580-datasheet/fig-0007,
+      and '20 (up)(down) 21', '22 (up)(down) 23' read directly in cor580-qsg/fig-0013 - so ports run 0..23,
+      even on the TOP row and odd on the bottom, column-major. `index-origin: 0` on the group and `number-from:
+      0` on the block. Carrying the sibling's 1-origin would have mislabelled all 24.
   port-positions:
     confidence: measured
     note: >-
-      MEASURED. Column centres read off the dark cage runs in cor580-datasheet/fig-0007 panel 0 at
-      3.198 px/mm: 92.40, 111.63, 136.65, 156.04, 181.05, 200.28, 225.45, 244.53, 269.54, 288.77,
-      313.63, 332.08 mm. The five group pitches (first column of one 2-wide shell to the next) are
-      44.25, 44.40, 44.40, 44.09, 44.09 - mean 44.25 - and the six within-shell steps average
-      19.23. The within-shell pitch modelled is the REGISTRY's 19.0 (spec/schemas/standards.yaml
-      qsfp-dd states no pitch key, so w IS the pitch and instances abut), not the 19.23 measured;
-      the gutter was then solved so the LAST column lands where it was measured - 11x19.0 +
-      5*gutter = 239.68 gives gutter 6.14 - which keeps the far end of the face exact. Worst
-      residual is 0.6 mm at column 8. Row centres 17.73 and 31.92 mm are the dark cage runs in
-      cor580-qsg/fig-0007 (1.8329 px/mm, panel box [6,37,808,116]); row-pitch 14.19. The sibling's
-      block (at [38.23, 12.13], gutter 6.06, row-pitch 14.37) was not reusable and none of it was
-      reused.
+      MEASURED. Column centres read off the dark cage runs in cor580-datasheet/fig-0007 panel 0 at 3.198
+      px/mm: 92.40, 111.63, 136.65, 156.04, 181.05, 200.28, 225.45, 244.53, 269.54, 288.77, 313.63, 332.08
+      mm. The five group pitches (first column of one 2-wide shell to the next) are 44.25, 44.40, 44.40,
+      44.09, 44.09 - mean 44.25 - and the six within-shell steps average 19.23. The within-shell pitch
+      modelled is the REGISTRY's 19.0 (spec/schemas/standards.yaml qsfp-dd states no pitch key, so w IS
+      the pitch and instances abut), not the 19.23 measured; the gutter was then solved so the LAST column
+      lands where it was measured - 11x19.0 + 5*gutter = 239.68 gives gutter 6.14 - which keeps the far
+      end of the face exact. Worst residual is 0.6 mm at column 8. Row centres 17.73 and 31.92 mm are
+      the dark cage runs in cor580-qsg/fig-0007 (1.8329 px/mm, panel box [6,37,808,116]); row-pitch 14.19.
+      The sibling's block (at [38.23, 12.13], gutter 6.06, row-pitch 14.37) was not reusable and none
+      of it was reused.
   port-numeral-baseline:
     confidence: measured
     note: >-
-      MEASURED - the numeral glyphs read y 24.58-25.70 mm in cor580-datasheet/fig-0007, which puts
-      the baseline at 25.70 and the arrow pair's centre at 25.10. The numerals sit 3.1 mm either
-      side of their column centre: '20' reads at 309.57 and '21' at 315.82 against column 10's
-      measured centre of 313.63.
+      MEASURED - the numeral glyphs read y 24.58-25.70 mm in cor580-datasheet/fig-0007, which puts the
+      baseline at 25.70 and the arrow pair's centre at 25.10. The numerals sit 3.1 mm either side of their
+      column centre: '20' reads at 309.57 and '21' at 315.82 against column 10's measured centre of 313.63.
   port-leds:
     confidence: measured
     note: >-
-      MEASURED, and the sibling's PART fits. Four lamps per port on a 3.03 mm vertical pitch in a
-      column beside the cage, the columns BRACKETING each 2-wide shell exactly as on the sibling.
-      The two sub-columns in the gutter between shells 4 and 5 read at x 167.29 and 169.17 mm
-      (1.56 mm wide each, cor580-datasheet/fig-0007 at 3.198 px/mm), which puts the left column's
-      body 2.91 mm left of its cage and the right column's 20.35 mm right of its cage - hence the
-      per-column offset list. Lamp centres in one column read 12.31, 15.39, 18.47, 21.40 mm on the
-      top row and 28.01, 31.09, 34.17, 37.09 on the bottom. common/qsfp-lane-leds-column@1 is 1.8
-      x 11.4 on a 3.0 mm pitch, which is this to 0.03 mm, so the sibling's component is used
-      unchanged. The quick-start's '400G: 1 LED Blue' names what LIGHTS in 400G mode, not how many
-      lamps the metal has: fig-0013 draws four.
+      MEASURED, and the sibling's PART fits. Four lamps per port on a 3.03 mm vertical pitch in a column
+      beside the cage, the columns BRACKETING each 2-wide shell exactly as on the sibling. The two sub-columns
+      in the gutter between shells 4 and 5 read at x 167.29 and 169.17 mm (1.56 mm wide each, cor580-datasheet/fig-0007
+      at 3.198 px/mm), which puts the left column's body 2.91 mm left of its cage and the right column's
+      20.35 mm right of its cage - hence the per-column offset list. Lamp centres in one column read 12.31,
+      15.39, 18.47, 21.40 mm on the top row and 28.01, 31.09, 34.17, 37.09 on the bottom. common/qsfp-lane-leds-column@1
+      is 1.8 x 11.4 on a 3.0 mm pitch, which is this to 0.03 mm, so the sibling's component is used unchanged.
+      The quick-start's '400G: 1 LED Blue' names what LIGHTS in 400G mode, not how many lamps the metal
+      has: fig-0013 draws four.
   port-led-offset:
     note: >-
-      each lamp column is CENTRED on its port - dy = (10.0 - 11.4) / 2 = -0.70 on both rows - and,
-      exactly as on the sibling, that is a decision taken AGAINST the measurement. Mapped into the
-      orthographic frame the top row's lamp block centres at 17.03 against its ports' 17.73 and
-      the bottom row's at 32.91 against 31.92, so the two lamp columns sit 15.88 mm apart belly to
-      belly against the port rows' 14.19. THAT IS THE SIBLING'S FINDING REPRODUCED: it measured
-      16.03 against 14.1-14.4 on a different figure of a different product, and chose to centre
-      because the reading rests on peak-finding at 1.8-3.2 px/mm and on cages whose lit top lip
-      reads their height short. Two devices now show the same ~1.7 mm spread, which is the
-      strongest argument yet that it is real rather than noise - and it is still not a caliper.
-      Centred here for consistency with the sibling, and this note is the record for whoever
-      overturns both at once.
+      each lamp column is CENTRED on its port - dy = (10.0 - 11.4) / 2 = -0.70 on both rows - and, exactly
+      as on the sibling, that is a decision taken AGAINST the measurement. Mapped into the orthographic
+      frame the top row's lamp block centres at 17.03 against its ports' 17.73 and the bottom row's at
+      32.91 against 31.92, so the two lamp columns sit 15.88 mm apart belly to belly against the port
+      rows' 14.19. THAT IS THE SIBLING'S FINDING REPRODUCED: it measured 16.03 against 14.1-14.4 on a
+      different figure of a different product, and chose to centre because the reading rests on peak-finding
+      at 1.8-3.2 px/mm and on cages whose lit top lip reads their height short. Two devices now show the
+      same ~1.7 mm spread, which is the strongest argument yet that it is real rather than noise - and
+      it is still not a caliper. Centred here for consistency with the sibling, and this note is the record
+      for whoever overturns both at once.
   system-leds:
     confidence: measured
     note: >-
-      MEASURED, and NOT the sibling's geometry, semantics or label side. SYS/LOC, DIAG, FAN, PSU1,
-      PSU2 top to bottom with the RST pinhole below, every one of them labelled in
-      cor580-qsg/fig-0008. The labels are printed to the RIGHT of the lamps here; the sibling
-      prints them to the LEFT, so the anchors are reversed. Lamp centres read at y px 129, 139,
-      148.5, 158, 168 in cor580-datasheet/fig-0007 (x 112-121), which after the orthographic map
-      is 5.57, 8.68, 11.64, 14.61, 17.73 mm on a 3.04 mm pitch, x 33.6 mm; RST at 21.78. The
-      sibling's five sit at 7.70-20.63 on a 3.23 pitch and its first lamp is called Loc, not
-      SYS/LOC. LED semantics are the quick-start's own list: 'SYS/LOC: Flashing Amber (switch
-      locator) / DIAG: Green (OK), Amber (no OS or fault) / FAN: Green (OK), Amber (fault) /
-      PSU1/PSU2: Green (OK), Amber (fault)'.
+      MEASURED, and NOT the sibling's geometry, semantics or label side. SYS/LOC, DIAG, FAN, PSU1, PSU2
+      top to bottom with the RST pinhole below, every one of them labelled in cor580-qsg/fig-0008. The
+      labels are printed to the RIGHT of the lamps here; the sibling prints them to the LEFT, so the anchors
+      are reversed. Lamp centres read at y px 129, 139, 148.5, 158, 168 in cor580-datasheet/fig-0007 (x
+      112-121), which after the orthographic map is 5.57, 8.68, 11.64, 14.61, 17.73 mm on a 3.04 mm pitch,
+      x 33.6 mm; RST at 21.78. The sibling's five sit at 7.70-20.63 on a 3.23 pitch and its first lamp
+      is called Loc, not SYS/LOC. LED semantics are transcribed from the quick-start's list: SYS/LOC flashing
+      amber = switch locator; DIAG green = OK, amber = no OS or fault; FAN green = OK, amber = fault;
+      PSU1/PSU2 green = OK, amber = fault.
   seven-segment:
     confidence: measured
     note: >-
-      MEASURED - a two-digit seven-segment readout at x 40.7-58.1, y 11.3-23.4 mm, right of the
-      system LEDs. Callout 2 of cor580-datasheet/fig-0007 names it 'Dual 7-segment LED' and the
-      key-components list repeats it (cor580-datasheet/doc.md:83). The sibling has nothing here at
-      all, so common/seven-segment-dual@1 is new and carries its own measurement. WHAT THE DIGITS
-      DISPLAY is stated nowhere in either document and is not claimed.
+      MEASURED - a two-digit seven-segment readout at x 40.7-58.1, y 11.3-23.4 mm, right of the system
+      LEDs. Callout 2 of cor580-datasheet/fig-0007 names it 'Dual 7-segment LED' and the key-components
+      list repeats it (cor580-datasheet/doc.md:83). The sibling has nothing here at all, so common/seven-segment-dual@1
+      is new and carries its own measurement. WHAT THE DIGITS DISPLAY is stated nowhere in either document
+      and is not claimed.
   dip-bank:
     confidence: measured
     note: >-
-      MEASURED as geometry, UNNAMED as a thing. A strip of ten small switch cells with red caps at
-      both ends sits at x 30.4-49.4, y 32.6-36.0 mm, below the RST button. Callout 8 of
-      cor580-datasheet/fig-0007 has its leader drawn to this strip and its own list names item 8
-      'Reset button' - which the quick-start contradicts, drawing and labelling RST as the round
-      button above (fig-0008). Both cannot be right. The round button is modelled as the reset;
-      the strip is drawn as panel decor and registered as a gap rather than given a function
-      neither document states. Its printed label is two words at roughly 1 mm cap height and does
-      not resolve at 3.2 px/mm.
+      MEASURED as geometry, UNNAMED as a thing. A strip of ten small switch cells with red caps at both
+      ends sits at x 30.4-49.4, y 32.6-36.0 mm, below the RST button. Callout 8 of cor580-datasheet/fig-0007
+      has its leader drawn to this strip and its own list names item 8 'Reset button' - which the quick-start
+      contradicts, drawing and labelling RST as the round button above (fig-0008). Both cannot be right.
+      The round button is modelled as the reset; the strip is drawn as panel decor and registered as a
+      gap rather than given a function neither document states. Its printed label is two words at roughly
+      1 mm cap height and does not resolve at 3.2 px/mm.
   management-cluster:
     confidence: measured
     note: >-
-      MEASURED, and it is NOT the sibling's cluster - different parts, different order, one of
-      them rotated. Read off cor580-datasheet/fig-0007 at 3.198 px/mm and corroborated in
-      cor580-qsg/fig-0014, which labels every item. Left to right: a micro-USB console ('CONSOLE
-      0') at 350.2-359.6 x 19.6-22.4; two stacked SFP+ out-of-band cages ('OOBF 0' upper, 'OOBF 1'
-      lower) at 369.0-385.0, tops at 12.0 and 27.5, pitch 15.5; the 1000BASE-T management RJ-45
-      above the RS-232 console RJ-45 ('MGMT' / 'CONSOLE 1'), both centred on x 396.34 - the mgmt
-      jack's two bezel LED windows read at 391.34 and 401.34 and its bezel rails at 389.46 and
-      403.22, which fix that centre twice over - and a USB-A. Both RJ-45s carry WHITE bezels here
-      where the sibling's are dark - on common/rj45-port@4 that meant the default skin and not its
-      `dark` one; that part is gone with the RJ45 sweep, and its white/dark skins went with it.
-      MGMT is now common/rj45-eth@1 and CONSOLE 1 is std/rj45@2, and both draw the same dark
-      housing, so the white-versus-dark distinction the photo shows is no longer drawn. The
-      sibling's cluster shares a single shell between its mgmt RJ-45 and its USB, puts the SFP+
-      pair on the RIGHT and has no micro-USB at all. Nothing here was carried over.
+      MEASURED, and it is NOT the sibling's cluster - different parts, different order, one of them rotated.
+      Read off cor580-datasheet/fig-0007 at 3.198 px/mm and corroborated in cor580-qsg/fig-0014, which
+      labels every item. Left to right: a micro-USB console ('CONSOLE 0') at 350.2-359.6 x 19.6-22.4;
+      two stacked SFP+ out-of-band cages ('OOBF 0' upper, 'OOBF 1' lower) at 369.0-385.0, tops at 12.0
+      and 27.5, pitch 15.5; the 1000BASE-T management RJ-45 above the RS-232 console RJ-45 ('MGMT' / 'CONSOLE
+      1'), both centred on x 396.34 - the mgmt jack's two bezel LED windows read at 391.34 and 401.34
+      and its bezel rails at 389.46 and 403.22, which fix that centre twice over - and a USB-A. Both RJ-45s
+      carry WHITE bezels here where the sibling's are dark - on common/rj45-port@4 that meant the default
+      skin and not its `dark` one; that part is gone with the RJ45 sweep, and its white/dark skins went
+      with it. MGMT is now common/rj45-eth@1 and CONSOLE 1 is std/rj45@2, and both draw the same dark
+      housing, so the white-versus-dark distinction the photo shows is no longer drawn. The sibling's
+      cluster shares a single shell between its mgmt RJ-45 and its USB, puts the SFP+ pair on the RIGHT
+      and has no micro-USB at all. Nothing here was carried over.
   usb-orientation:
     confidence: measured
     note: >-
-      MEASURED - the USB-A is mounted VERTICALLY. Its blue insert reads 4.7 mm wide and 13.8 mm
-      tall (x 409.5-414.2, y 8.6-22.4) with its contact ridges running across, where a horizontal
-      USB-A would read 13 wide and 5 tall; the same proportion is unmistakable in
-      cor580-qsg/fig-0014. Drawn as std/usb-a@1 with `rotate: 90` about the placement centre
-      (410.2, 15.35), and the cutout is the rotated aperture. The sibling's USB is horizontal, and
-      carrying that would have put a 12 mm hole across a 4.7 mm opening.
+      MEASURED - the USB-A is mounted VERTICALLY. Its blue insert reads 4.7 mm wide and 13.8 mm tall (x
+      409.5-414.2, y 8.6-22.4) with its contact ridges running across, where a horizontal USB-A would
+      read 13 wide and 5 tall; the same proportion is unmistakable in cor580-qsg/fig-0014. Drawn as std/usb-a@1
+      with `rotate: 90` about the placement centre (410.2, 15.35), and the cutout is the rotated aperture.
+      The sibling's USB is horizontal, and carrying that would have put a 12 mm hole across a 4.7 mm opening.
   oob-leds:
     confidence: measured
     note: >-
-      MEASURED - one lamp per out-of-band SFP+ port, printed as `(lamp) (up)(down) (lamp)` ABOVE
-      the upper cage at y 9.5 mm. The row profiles at x 373.05 and 379.61 for the lamps with the
-      two arrow glyphs between them at 375.14 and 377.33; the group's own centre, 376.3, sits
-      within 0.7 mm of the cages' 377.0, so it is drawn on the cage centre and the lamps at
-      +/-3.28. The up/down pair is the same convention the port numerals use, so the left lamp
-      belongs to the upper cage. Semantics from the quick-start: 'SFP+ 10G OOBF LEDs: Green (10G),
-      Amber (1G)'.
+      MEASURED - one lamp per out-of-band SFP+ port, printed as `(lamp) (up)(down) (lamp)` ABOVE the upper
+      cage at y 9.5 mm. The row profiles at x 373.05 and 379.61 for the lamps with the two arrow glyphs
+      between them at 375.14 and 377.33; the group's own centre, 376.3, sits within 0.7 mm of the cages'
+      377.0, so it is drawn on the cage centre and the lamps at +/-3.28. The up/down pair is the same
+      convention the port numerals use, so the left lamp belongs to the upper cage. Semantics from the
+      quick-start: 'SFP+ 10G OOBF LEDs: Green (10G), Amber (1G)'.
   legends:
     confidence: measured
     note: >-
-      MEASURED - the two paired legends are centred as STRINGS, not on their arrows. 'MGMT
-      (up)(down) CONSOLE 1' spans 388.2-404.7 mm, whose centre 396.45 is the jacks' own centre to
-      0.05 mm, but its arrow pair therefore sits at 394.7 - 1.8 mm left of the parts it joins -
-      because CONSOLE 1 is five glyphs longer than MGMT. 'OOBF 0 (up)(down) OOBF 1' has equal
-      halves and its arrows land at 376.35 against the cages' 377.0, which is centred to a third
-      of a millimetre and is drawn on the cages. The MGMT/CONSOLE 1 string needed a decision and
-      got it twice. The vendor prints its arrows at 394.70 against the jacks' centre of 396.34 -
-      not a miss but a consequence, because CONSOLE 1 is five glyphs longer than MGMT and the
-      vendor centres the STRING, whose own span of 388.2-404.7 centres on 396.45, which is those
-      jacks to a tenth of a millimetre. Drawn at the measured 394.70 it is 1.64 mm off and L61
-      fires; drawn shifted bodily right at cap height 1.5 the arrows centre but CONSOLE 1's last
-      glyph runs into the USB trident at 407.0, which the vendor's own spacing clears. What
-      resolves both is the cap height. It reads 1.25-1.67 mm across the four strings in this
-      cluster and 1.5 was the first guess; 1.4 is equally inside that spread, and at 1.4 the
-      string can shift the 1.64 mm that puts its arrows on the jacks and still stop at 406.30,
-      clear of the trident. So: cap height 1.4 throughout the cluster, MGMT ending at 393.64,
-      arrows at 396.34, CONSOLE 1 starting at 398.74. The legend is drawn 1.64 mm right of where
-      the vendor prints it and the numbers above are the record of that; nothing on this face is
-      now nearly-but-not centred.
+      MEASURED - the two paired legends are centred as STRINGS, not on their arrows. 'MGMT (up)(down)
+      CONSOLE 1' spans 388.2-404.7 mm, whose centre 396.45 is the jacks' own centre to 0.05 mm, but its
+      arrow pair therefore sits at 394.7 - 1.8 mm left of the parts it joins - because CONSOLE 1 is five
+      glyphs longer than MGMT. 'OOBF 0 (up)(down) OOBF 1' has equal halves and its arrows land at 376.35
+      against the cages' 377.0, which is centred to a third of a millimetre and is drawn on the cages.
+      The MGMT/CONSOLE 1 string needed a decision and got it twice. The vendor prints its arrows at 394.70
+      against the jacks' centre of 396.34 - not a miss but a consequence, because CONSOLE 1 is five glyphs
+      longer than MGMT and the vendor centres the STRING, whose own span of 388.2-404.7 centres on 396.45,
+      which is those jacks to a tenth of a millimetre. Drawn at the measured 394.70 it is 1.64 mm off
+      and L61 fires; drawn shifted bodily right at cap height 1.5 the arrows centre but CONSOLE 1's last
+      glyph runs into the USB trident at 407.0, which the vendor's own spacing clears. What resolves both
+      is the cap height. It reads 1.25-1.67 mm across the four strings in this cluster and 1.5 was the
+      first guess; 1.4 is equally inside that spread, and at 1.4 the string can shift the 1.64 mm that
+      puts its arrows on the jacks and still stop at 406.30, clear of the trident. So: cap height 1.4
+      throughout the cluster, MGMT ending at 393.64, arrows at 396.34, CONSOLE 1 starting at 398.74. The
+      legend is drawn 1.64 mm right of where the vendor prints it and the numbers above are the record
+      of that; nothing on this face is now nearly-but-not centred.
   port-led-cutouts:
     note: >-
-      NOT punched, deliberately, and for the sibling's reason. common/qsfp-lane-leds-column@1
-      declares FOUR openings, so expand.py refuses to derive one hole for it - deriving from the
-      body would punch a 1.8 x 11.4 slot and claim the metal has a slot where cor580-qsg/fig-0013
-      plainly draws four windows, at a resolution (3.2 px/mm on the datasheet elevation) that
-      cannot measure any one of them. L39 stands on all 24 lamps and standing is the correct
-      outcome until somebody reads the metal on a real unit.
+      NOT punched, deliberately, and for the sibling's reason. common/qsfp-lane-leds-column@1 declares
+      FOUR openings, so expand.py refuses to derive one hole for it - deriving from the body would punch
+      a 1.8 x 11.4 slot and claim the metal has a slot where cor580-qsg/fig-0013 plainly draws four windows,
+      at a resolution (3.2 px/mm on the datasheet elevation) that cannot measure any one of them. L39
+      stands on all 24 lamps and standing is the correct outcome until somebody reads the metal on a real
+      unit.
   panel-decor:
     confidence: measured
     note: >-
-      MEASURED - the vent fields. A tall field at the left end (x 1.0-28.0, y 2.2-39.7), a block
-      right of the seven-segment window (59.6-74.2 x 11.2-22.6), a band above and a band below the
-      port field (78.0-346.0, y 1.6-10.0 and 38.2-41.8), two blocks flanking the micro-USB
-      (346.0-367.0), and a field at the right end beyond the USB (414.6-436.6), all read off
-      cor580-datasheet/fig-0007 and cor580-qsg/fig-0007. The DIP strip is drawn as decor for the
-      reason given above.
+      MEASURED - the vent fields. A tall field at the left end (x 1.0-28.0, y 2.2-39.7), a block right
+      of the seven-segment window (59.6-74.2 x 11.2-22.6), a band above and a band below the port field
+      (78.0-346.0, y 1.6-10.0 and 38.2-41.8), two blocks flanking the micro-USB (346.0-367.0), and a field
+      at the right end beyond the USB (414.6-436.6), all read off cor580-datasheet/fig-0007 and cor580-qsg/fig-0007.
+      The DIP strip is drawn as decor for the reason given above.
   info-tab:
     note: >-
-      photo - the green pull-out tab at the bottom right of the front face reads 414.4-432.5 x
-      39.9-42.7 mm in cor580-datasheet/fig-0007 and is drawn again in cor580-qsg/fig-0014. The
-      sibling has the same tab within 2 mm of the same place; this one was measured anyway, and
-      agrees. Neither document names it, so it is drawn as common/pull-tab@1 and its function is
-      not claimed.
+      photo - the green pull-out tab at the bottom right of the front face reads 414.4-432.5 x 39.9-42.7
+      mm in cor580-datasheet/fig-0007 and is drawn again in cor580-qsg/fig-0014. The sibling has the same
+      tab within 2 mm of the same place; this one was measured anyway, and agrees. Neither document names
+      it, so it is drawn as common/pull-tab@1 and its function is not claimed.
   rear-layout:
     note: >-
-      PART CARRIED, PART MEASURED, AND THE CARRIED FAN GEOMETRY WAS WRONG. The sibling's rear is
-      PSU, six fans, PSU with PSU bays at 9.0 and 372.4 (57 wide), fan bays 46.6 wide on a 48.8
-      pitch from 73.9, and grounding points at the bottom corners. That whole arrangement was
-      taken over, and this entry said 'corroborated to better than a millimetre' until the fan bay
-      was measured properly, at which point it was not. . MEASURED HERE, on
-      cor580-datasheet/fig-0007 panel 1 at 3.198 px/mm and again on an 8x crop of it at 25.7
-      px/mm: tray 6's OPENING runs 75.2 to 116.1 mm, the chassis pillar carrying the '6' runs
-      116.4 to 124.4, and tray 5's opening starts at 124.8. The fan bay is therefore 40.9 mm wide
-      at 75.2 + n x 48.79, NOT 46.6 wide at 73.9 + n x 48.8 - 5.7 mm too wide and 2.0 mm too far
-      left if inherited. The tell that sent me back to it is arithmetic, not eyesight: the
-      sibling's geometry leaves a 2.2 mm divider between trays, and the vendor prints a 3.4 mm
-      numeral on that divider. 3.4 does not fit in 2.2. The real divider is 8.3 mm and the '6' is
-      centred in it, reading 120.1 against the divider's own centre of 120.45. So this device gets
-      its own tray contract, common/fan-module-41@1, measured here; common/fan-module-46@1 is not
-      used. THE SAME ARITHMETIC IS A QUESTION ABOUT THE SIBLING, which shares this shell and
-      prints the same numerals on the same dividers, and whose own contract records reading a 46.7
-      mm frame with a 2.2 mm gap. One of the two readings is of the tray FRAME and the other of
-      the OPENING, and they cannot both be the bay. Not resolved here because DCS510's figures
-      were not opened for this run. . CORROBORATED, not merely carried: the six red fan handles
-      start at 75.98, 124.77, 173.55, 222.95, 271.73 and 320.51 mm, a pitch of 48.79, 48.78,
-      49.40, 48.78, 48.78, mean 48.79 against the carried 48.8, and they sit 0.7-1.4 mm inside the
-      openings above. The handle block's centre, 218.42, is the chassis centre to 0.8 mm. The PSU
-      faces bound at 65.4 on the left and 371.3-373.0 on the right, against the carried 66.0 /
-      372.4. . STILL CARRIED AND NOT MEASURED, listed so it is not mistaken for the above: the PSU
-      bay WIDTH of 57.0 and its left edge of 9.0 - COR580's own release latch reads from 6.57, so
-      the bay is drawn 2.4 mm right of the module's own edge, the same trade the sibling records
-      to keep the bay off the grounding lug; every VERTICAL rear number (bay y 1.5, bay height
-      40.0, lug y 26.0), because this panel is the non-orthographic one at 2.93 percent and is the
-      worst surface on the device for a y; and the PS1 legend's x of 369.0, which is the mirror of
-      the PS2 legend measured here at 69.1 rather than my own weaker reading of 365.4 off the
-      right-hand crop. Fans are numbered 6 to 1 LEFT TO RIGHT, printed on the divider to the right
-      of each tray. PS2 is the left supply and PS1 the right.
+      PART CARRIED, PART MEASURED, AND THE CARRIED FAN GEOMETRY WAS WRONG. The sibling's rear is PSU,
+      six fans, PSU with PSU bays at 9.0 and 372.4 (57 wide), fan bays 46.6 wide on a 48.8 pitch from
+      73.9, and grounding points at the bottom corners. That whole arrangement was taken over, and this
+      entry said 'corroborated to better than a millimetre' until the fan bay was measured properly, at
+      which point it was not. . MEASURED HERE, on cor580-datasheet/fig-0007 panel 1 at 3.198 px/mm and
+      again on an 8x crop of it at 25.7 px/mm: tray 6's OPENING runs 75.2 to 116.1 mm, the chassis pillar
+      carrying the '6' runs 116.4 to 124.4, and tray 5's opening starts at 124.8. The fan bay is therefore
+      40.9 mm wide at 75.2 + n x 48.79, NOT 46.6 wide at 73.9 + n x 48.8 - 5.7 mm too wide and 2.0 mm
+      too far left if inherited. The tell that sent me back to it is arithmetic, not eyesight: the sibling's
+      geometry leaves a 2.2 mm divider between trays, and the vendor prints a 3.4 mm numeral on that divider.
+      3.4 does not fit in 2.2. The real divider is 8.3 mm and the '6' is centred in it, reading 120.1
+      against the divider's own centre of 120.45. So this device gets its own tray contract, common/fan-module-41@1,
+      measured here; common/fan-module-46@1 is not used. THE SAME ARITHMETIC IS A QUESTION ABOUT THE SIBLING,
+      which shares this shell and prints the same numerals on the same dividers, and whose own contract
+      records reading a 46.7 mm frame with a 2.2 mm gap. One of the two readings is of the tray FRAME
+      and the other of the OPENING, and they cannot both be the bay. Not resolved here because DCS510's
+      figures were not opened for this run. . CORROBORATED, not merely carried: the six red fan handles
+      start at 75.98, 124.77, 173.55, 222.95, 271.73 and 320.51 mm, a pitch of 48.79, 48.78, 49.40, 48.78,
+      48.78, mean 48.79 against the carried 48.8, and they sit 0.7-1.4 mm inside the openings above. The
+      handle block's centre, 218.42, is the chassis centre to 0.8 mm. The PSU faces bound at 65.4 on the
+      left and 371.3-373.0 on the right, against the carried 66.0 / 372.4. . STILL CARRIED AND NOT MEASURED,
+      listed so it is not mistaken for the above: the PSU bay WIDTH of 57.0 and its left edge of 9.0 -
+      COR580's own release latch reads from 6.57, so the bay is drawn 2.4 mm right of the module's own
+      edge, the same trade the sibling records to keep the bay off the grounding lug; every VERTICAL rear
+      number (bay y 1.5, bay height 40.0, lug y 26.0), because this panel is the non-orthographic one
+      at 2.93 percent and is the worst surface on the device for a y; and the PS1 legend's x of 369.0,
+      which is the mirror of the PS2 legend measured here at 69.1 rather than my own weaker reading of
+      365.4 off the right-hand crop. Fans are numbered 6 to 1 LEFT TO RIGHT, printed on the divider to
+      the right of each tray. PS2 is the left supply and PS1 the right.
   rear-psu-arrows:
     confidence: measured
     note: >-
-      MEASURED, and the sibling's mark is WRONG for this device. Each PSU legend carries an arrow
-      above it, and they are MIRRORED: PS2's points LEFT and PS1's points RIGHT, each toward the
-      supply it names (verified at 14x on cor580-datasheet/fig-0007, x 210-250 and 1160-1200 px).
-      The sibling draws both as one left-pointing path and calls it an airflow arrow. Carried over
-      unchanged, PS1's arrow would have pointed away from its own supply. Drawn here with `mark:
-      arrow-left` and `mark: arrow-right`, and no claim is made about what they mean - this box
-      has only front-to-back SKUs, so an airflow arrow that reverses between two identical
-      supplies is not an airflow arrow.
+      MEASURED, and the sibling's mark is WRONG for this device. Each PSU legend carries an arrow above
+      it, and they are MIRRORED: PS2's points LEFT and PS1's points RIGHT, each toward the supply it names
+      (verified at 14x on cor580-datasheet/fig-0007, x 210-250 and 1160-1200 px). The sibling draws both
+      as one left-pointing path and calls it an airflow arrow. Carried over unchanged, PS1's arrow would
+      have pointed away from its own supply. Drawn here with `mark: arrow-left` and `mark: arrow-right`,
+      and no claim is made about what they mean - this box has only front-to-back SKUs, so an airflow
+      arrow that reverses between two identical supplies is not an airflow arrow.
   rear-ground-points:
     note: >-
-      CARRIED OVER, corroborated. The quick-start's FRU list item 7 says '2 x grounding screws'
-      and both are visible at the bottom corners of cor580-datasheet/fig-0007 panel 1; the left
-      one reads 3.1-12.5 mm in x. It is drawn at 1.0, as on the sibling, so that it does not
-      overlap the PSU bay.
+      CARRIED OVER, corroborated. The quick-start's FRU list item 7 says '2 x grounding screws' and both
+      are visible at the bottom corners of cor580-datasheet/fig-0007 panel 1; the left one reads 3.1-12.5
+      mm in x. It is drawn at 1.0, as on the sibling, so that it does not overlap the PSU bay.
   cutouts:
     note: >-
-      every hole RESTATES the aperture its occupant declares: position is the placement's own `at`
-      plus the component's aperture offset, size is the registry entry the component conforms to.
-      The 24 port holes come out of expand.py that way; the USB's is the same aperture turned
-      through the placement's own 90 degrees.
+      every hole RESTATES the aperture its occupant declares: position is the placement's own `at` plus
+      the component's aperture offset, size is the registry entry the component conforms to. The 24 port
+      holes come out of expand.py that way; the USB's is the same aperture turned through the placement's
+      own 90 degrees.
   power:
     confidence: measured
     note: >-
-      MEASURED against the sources, and THE TWO DISAGREE. The datasheet states both numbers and
-      distinguishes them - 'Max PSU power: 1300 W' and 'Max power usage: 800 W'
-      (cor580-datasheet/doc.md:109-110). The quick-start's Switch Chassis block says 'Power
-      Consumption: 1300 Watts maximum', which is the PSU rating restated in the consumption row.
-      800 W is the chassis DRAW and is what power-max-w records; 1300 W is the supply rating and
-      lives on common/psu-ac-1300@1. The vendor states no typical and no ambient, so the envelope
-      is unstated. THE SIBLING RECORDS 1300 AS ITS DRAW: carrying that over would have overstated
-      this box by 500 W.
+      MEASURED against the sources, and THE TWO DISAGREE. The datasheet states both numbers and distinguishes
+      them - 'Max PSU power: 1300 W' and 'Max power usage: 800 W' (cor580-datasheet/doc.md:109-110). The
+      quick-start's Switch Chassis block says 'Power Consumption: 1300 Watts maximum', which is the PSU
+      rating restated in the consumption row. 800 W is the chassis DRAW and is what power-max-w records;
+      1300 W is the supply rating and lives on common/psu-ac-1300@1. The vendor states no typical and
+      no ambient, so the envelope is unstated. THE SIBLING RECORDS 1300 AS ITS DRAW: carrying that over
+      would have overstated this box by 500 W.
   psu-parts:
     confidence: datasheet
     note: >-
-      datasheet - the FRU table names FSH082-610G as the AC PSU and FSJ033-610G as the DC 48 V PSU
-      (cor580-datasheet/doc.md:196-197), and AS9926-24D/24DB-FAN as the single fan tray SKU.
-      Different part numbers from the sibling's, which is why they are recorded here rather than
-      inherited.
+      datasheet - the FRU table names FSH082-610G as the AC PSU and FSJ033-610G as the DC 48 V PSU (cor580-datasheet/doc.md:196-197),
+      and AS9926-24D/24DB-FAN as the single fan tray SKU. Different part numbers from the sibling's, which
+      is why they are recorded here rather than inherited.
   airflow:
     confidence: datasheet
     note: >-
-      datasheet - every one of the sixteen ordering lines in both base-model tables says 'Front to
-      Back Airflow'. There is no back-to-front SKU. The sibling has an F2B and a B2F
-      configuration; only the first of those exists here, and the second was deleted rather than
-      carried.
+      datasheet - every one of the sixteen ordering lines in both base-model tables says 'Front to Back
+      Airflow'. There is no back-to-front SKU. The sibling has an F2B and a B2F configuration; only the
+      first of those exists here, and the second was deleted rather than carried.
   lifecycle:
     note: >-
-      searched and found nothing. One web search, 'Edgecore COR580 AS9926-24D end of life end of
-      sale announcement' (2026-08-29), returned Edgecore's 2020 Q4, 2021 May and 2022 July EOL
-      notices - none of which names this model - alongside a live product page and datasheet
-      revision R04. `eol: none-announced` means the vendor has announced nothing, not that nobody
-      looked.
+      searched and found nothing. One web search, 'Edgecore COR580 AS9926-24D end of life end of sale
+      announcement' (2026-08-29), returned Edgecore's 2020 Q4, 2021 May and 2022 July EOL notices - none
+      of which names this model - alongside a live product page and datasheet revision R04. `eol: none-announced`
+      means the vendor has announced nothing, not that nobody looked.
   views:
     note: >-
-      six views. Front and rear are modelled from the elevations above. Top, bottom, left and
-      right are sized from the datasheet triple and CARRIED OVER from the sibling, which shares
-      this shell: the lid seam, the rear vent strip and the side rail lines are ESTIMATED there
-      and are no better sourced here. No document in this intake dimensions anything on those four
-      faces.
-
+      six views. Front and rear are modelled from the elevations above. Top, bottom, left and right are
+      sized from the datasheet triple and CARRIED OVER from the sibling, which shares this shell: the
+      lid seam, the rear vent strip and the side rail lines are ESTIMATED there and are no better sourced
+      here. No document in this intake dimensions anything on those four faces.
 attrs:
   performance:
     switching-capacity: 9.6 Tbps
@@ -385,7 +355,6 @@ attrs:
     rohs: RoHS-2.0 compliant; WEEE Directive 2002/96/EC
   lifecycle: {eol: none-announced}
 chassis: {width: 438.4, height: 43.1, depth: 536.0, ru: 1, weight-kg: 10.77, color: '#2b2f33', airflow: front-to-back}
-
 gaps:
 - what: dip-switch-bank
   scope:
@@ -452,8 +421,8 @@ gaps:
   - console-1
   reason: needs-drawing
   wanted: >-
-    A bezel plate part or a skin variant for the white-bezelled RJ-45 the photo shows; the four-part
-    RJ45 family draws one dark housing.
+    A bezel plate part or a skin variant for the white-bezelled RJ-45 the photo shows; the four-part RJ45
+    family draws one dark housing.
 groups:
   qsfpdd-400g:
     term: Port
@@ -476,9 +445,7 @@ groups:
     term: PSU
     role: service
     index-origin: 1
-    attrs:
-      redundancy: '1+1'
-      redundancy-note: '1+1 redundant, load-sharing, hot-swappable'
+    attrs: {redundancy: 1+1, redundancy-note: '1+1 redundant, load-sharing, hot-swappable'}
   fans: {term: Fan, role: service, index-origin: 1}
   grounding: {term: Point, role: furniture, index-origin: 1}
   furniture:
@@ -714,7 +681,8 @@ views:
         rel-pos: 2}
       - {ref: common/led-dot@1, id: led-sys-loc, at: [32.6, 4.57], group: leds, rel-pos: 1, for: chassis}
       - {ref: common/led-dot@1, id: led-diag, at: [32.6, 7.68], group: leds, rel-pos: 2, for: chassis}
-      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 10.64], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
+      - {ref: common/led-dot@1, id: led-fan, at: [32.6, 10.64], group: leds, rel-pos: 3, for: [rear/fan-1,
+          rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
       - {ref: common/led-dot@1, id: led-psu1, at: [32.6, 13.61], group: leds, rel-pos: 4, for: rear/psu-1}
       - {ref: common/led-dot@1, id: led-psu2, at: [32.6, 16.73], group: leds, rel-pos: 5, for: rear/psu-2}
       - {ref: common/reset-button@1, id: reset, at: [31.6, 19.78], group: mgmt, rel-pos: 6, for: chassis}
@@ -815,17 +783,17 @@ views:
       - ref: common/rj45-eth@1
         id: mgmt-eth
         at: [388.44, 9.1]
-        rotate: 180
         group: mgmt
         rel-pos: 4
-        attrs: {media: rj45, speed: 1000base-t, role: mgmt}
+        attrs: {media: rj45, role: mgmt, speed: 1000base-t}
+        rotate: 180
       - ref: std/rj45@2
         id: console-1
         at: [388.44, 27.1]
-        rotate: 180
         group: mgmt
         rel-pos: 5
         attrs: {media: rj45-serial, role: console}
+        rotate: 180
       - ref: std/usb-a@1
         id: usb
         at: [404.2, 13.1]
@@ -1033,7 +1001,8 @@ configurations:
       AS9926-24D-O-48V-F: {part: FP5EC9524001Z, power-cord: none}
       AS9926-24DB-O-48V-F: {part: FP5EC9524003Z, power-cord: none}
 datasheet:
-  title: 'Edgecore COR580 (AS9926-24D/AS9926-24DB) Core Router data sheet'
+  title: Edgecore COR580 (AS9926-24D/AS9926-24DB) Core Router data sheet
   sha256: dd8995a476b4ee759c6df787fa66a1b2f66a6246396fc6bc70adf5c3fc62d781
 references:
-  - {title: 'Edgecore AS9926-24D / AS9926-24DB Network Fabric Switch Quick Start Guide', sha256: 4cef741b65559ad1aeaebaa61beaf7e8d4b2fb078feaf4fad4cb667aec67ad9a}
+- title: Edgecore AS9926-24D / AS9926-24DB Network Fabric Switch Quick Start Guide
+  sha256: 4cef741b65559ad1aeaebaa61beaf7e8d4b2fb078feaf4fad4cb667aec67ad9a

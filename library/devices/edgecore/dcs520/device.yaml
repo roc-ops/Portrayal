@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs520
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS9736-64D
@@ -77,41 +77,40 @@ provenance:
   four-lamps-a-port-and-the-count-lit-is-the-breakout:
     confidence: datasheet
     note: >-
-      THE GUIDE PRINTS THE WHOLE VOCABULARY and it is unusual enough to quote in full: "QSFP56-DD LEDs
-      - 400G (1 x 8 lanes 50G PAM4): 1 LED Blue; 200G (2 x 4 lanes 50G PAM4): 2 LEDs Cyan; 100G (4 x 2
-      lanes 50G PAM4): 4 LEDs Green; 100G (1 x 4 lanes 25G NRZ): 1 LED Green; 40G (1 x 4 lanes 10G NRZ):
-      1 LED Dark Green; 50G (2 x 2 lanes 25G NRZ): 2 LEDs Red; 25G (4 x 1 lane 25G NRZ): 4 LEDs Orange;
-      10G (4 x 1 lane 10G NRZ): 4 LEDs Yellow". SO THE NUMBER OF LAMPS LIT IS THE BREAKOUT AND THE COLOUR
-      IS THE RATE - four lamps per port, one per lane group, not one lamp per port. The guide's enlargement
-      shows exactly that: a vertical strip of four diamond windows on the post beside each cage, measured
-      about 10.85 mm tall on a 3.5 mm pitch. `common/qsfp-lane-leds-column@1` IS THAT PART - 1.8 x 11.4,
-      four lane elements stacked vertically - and it is already seated by the sibling dcs510. 64 ports
-      x 4 is 256 port lamps on this face. THE OTHER TWO LEGENDS, same page: "SFP+ 10G LEDs: Left: Green
-      (10G link), Amber (1G link); Right: Green (10G activity), Amber (1G activity)" and "RJ-45 MGMT LEDs:
-      Left: Green (1G link), Amber (10/100M link); Right: Green (1G activity), Amber (10/100M activity)".
+      THE GUIDE PRINTS THE WHOLE VOCABULARY and it is unusual enough to transcribe in full, QSFP56-DD
+      LEDs: 400G (1x8 lanes 50G PAM4) = 1 lamp blue; 200G (2x4 lanes 50G PAM4) = 2 cyan; 100G (4x2 lanes
+      50G PAM4) = 4 green; 100G (1x4 lanes 25G NRZ) = 1 green; 40G (1x4 lanes 10G NRZ) = 1 dark green;
+      50G (2x2 lanes 25G NRZ) = 2 red; 25G (4x1 lane 25G NRZ) = 4 orange; 10G (4x1 lane 10G NRZ) = 4 yellow.
+      SO THE NUMBER OF LAMPS LIT IS THE BREAKOUT AND THE COLOUR IS THE RATE - four lamps per port, one
+      per lane group, not one lamp per port. The guide's enlargement shows exactly that: a vertical strip
+      of four diamond windows on the post beside each cage, measured about 10.85 mm tall on a 3.5 mm pitch.
+      `common/qsfp-lane-leds-column@1` IS THAT PART - 1.8 x 11.4, four lane elements stacked vertically
+      - and it is already seated by the sibling dcs510. 64 ports x 4 is 256 port lamps on this face. THE
+      OTHER TWO LEGENDS, same page: "SFP+ 10G LEDs: Left: Green (10G link), Amber (1G link); Right: Green
+      (10G activity), Amber (1G activity)" and "RJ-45 MGMT LEDs: Left: Green (1G link), Amber (10/100M
+      link); Right: Green (1G activity), Amber (10/100M activity)".
   the-system-lamps-are-five-and-an-early-misreading-is-worth-recording:
     confidence: datasheet
     note: >-
       LOC, STAT, FAN, PSU1, PSU2 - five, in a VERTICAL column at the top left with the label to the left
-      of each lamp, on a 3.0 mm pitch. THE STATES ARE GIVEN: "LOC: Flashing Blue/Amber (switch locator);
-      STAT: Green (OK), Blinking Green (system booting), Amber (fault); FAN: Green (OK), Amber (fault),
-      Blinking Amber (too few fans installed); PSU1/PSU2: Green (OK), Amber (fault)". AN EARLY READING
-      OF THE DATASHEET PHOTOGRAPH AS "DIAG, FAN, LOC, PSU1, PSU2" WAS WRONG and is recorded because the
-      mistake is instructive. That silkscreen is about four pixels tall in the photograph; enlarged nine
-      times it resolves into five blurred four-character words and nothing more. The QSG's enlargement
-      prints the names legibly, the QSG's own legend text lists the same five, and the datasheet's PROSE
-      says "System LEDs: PSU1, PSU2, FAN, STAT, and LOC". Three sources agree and the fourth was never
-      readable - there is no disagreement here, only a misreading of blur.
+      of each lamp, on a 3.0 mm pitch. THE STATES ARE GIVEN: LOC flashing blue/amber = switch locator;
+      STAT green = OK, blinking green = system booting, amber = fault; FAN green = OK, amber = fault,
+      blinking amber = too few fans installed; PSU1/PSU2 green = OK, amber = fault. AN EARLY READING OF
+      THE DATASHEET PHOTOGRAPH AS "DIAG, FAN, LOC, PSU1, PSU2" WAS WRONG and is recorded because the mistake
+      is instructive. That silkscreen is about four pixels tall in the photograph; enlarged nine times
+      it resolves into five blurred four-character words and nothing more. The QSG's enlargement prints
+      the names legibly, the QSG's own legend text lists the same five, and the datasheet's PROSE says
+      "System LEDs: PSU1, PSU2, FAN, STAT, and LOC". Three sources agree and the fourth was never readable
+      - there is no disagreement here, only a misreading of blur.
   the-twenty-four-watt-ports-are-named-one-by-one:
     confidence: datasheet
     note: >-
-      "Ports 1, 2, 3, 4, 29, 30, 31, 32, 33, 34, 35, 36, 61, 62, 63, 64: 24 W per transceiver. All other
-      ports: 13 W per transceiver." - the datasheet's power section, and the interfaces table splits the
-      face the same way: "16 x 400G QSFP56-DD ports (24W) Support 400G QSFP56-DD DAC up to 2.5m" against
-      "48 x 400G QSFP56-DD ports (13W) ... up to 1m". THAT IS THE FIRST TWO AND LAST TWO COLUMNS OF EACH
-      BANK, which is exactly what the datasheet photograph's three yellow highlight boxes mark - two columns,
-      twelve columns, two columns. A stated fact and a drawn one agreeing, so the per-port attribute below
-      is not an inference.
+      Ports 1-4, 29-36 and 61-64 = 24 W per transceiver; every other port = 13 W per transceiver - the
+      datasheet's power section, and the interfaces table splits the face the same way: "16 x 400G QSFP56-DD
+      ports (24W) Support 400G QSFP56-DD DAC up to 2.5m" against "48 x 400G QSFP56-DD ports (13W) ...
+      up to 1m". THAT IS THE FIRST TWO AND LAST TWO COLUMNS OF EACH BANK, which is exactly what the datasheet
+      photograph's three yellow highlight boxes mark - two columns, twelve columns, two columns. A stated
+      fact and a drawn one agreeing, so the per-port attribute below is not an inference.
   the-rear-is-the-familys-shell-and-nobody-elses-architecture:
     confidence: measured
     note: >-
@@ -133,12 +132,12 @@ provenance:
     note: >-
       TWO 2400 W SUPPLIES against a stated draw of "287.75 W (min.), 2100 W (max.)". Input ratings: "100-127
       VAC, 50/60 Hz, 12 A maximum; 200-240 VAC, 50/60 Hz, 15 A maximum; HVDC: 240 VDC, 15 A maximum".
-      THE 1+1 CLAIM IS A HIGH-LINE CLAIM and the guide says so: "When the input voltage is 200-240 VAC
-      or 240 VDC, install one or two AC PSUs... When the input voltage is 100-127 VAC, two AC PSUs must
-      be installed". At low line the pair is not redundant. THE INLET IS A SAF-D-GRID AND THE C20 IS THE
-      WALL END OF THE CORD. The datasheet says "AC PSU Inlet: Anderson Saf D Grid"; the guide's package
-      contents list an "HVAC/IEC C20 1m power cord" and the ordering table an "HVAC to IEC 60320 C20 (1m)".
-      Reading the C20 as the inlet would put the wrong connector on the supply's face.
+      THE 1+1 CLAIM IS A HIGH-LINE CLAIM and the guide says so: at 200-240 VAC or 240 VDC one or two AC
+      PSUs may be fitted, but at 100-127 VAC both AC PSUs are required. At low line the pair is not redundant.
+      THE INLET IS A SAF-D-GRID AND THE C20 IS THE WALL END OF THE CORD. The datasheet says "AC PSU Inlet:
+      Anderson Saf D Grid"; the guide's package contents list an "HVAC/IEC C20 1m power cord" and the
+      ordering table an "HVAC to IEC 60320 C20 (1m)". Reading the C20 as the inlet would put the wrong
+      connector on the supply's face.
 attrs:
   environmental:
     operating-temp: 0 to 40 C (32 to 104 F) at sea level; 0 to 35 C (32 to 95 F) at 1828 m
