@@ -17,7 +17,7 @@
 
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
-         rawParam, configBayPath } from './swap.js';
+         rawParam, liesOver, configBayPath } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -718,10 +718,10 @@ export function createShell(opts = {}) {
       // heatsink-1. What lies over a part is what the PART declares.
       // declared on a cover: what it hides (the bezel and its drives)
       const doc = e.ownerSVGElement || e.closest('svg');
-      for (const c of doc.querySelectorAll('[data-behaviour][data-for]')) {
-        const cp = c.dataset.path;
-        if (cp && cp !== p && c.dataset.for.split(/\s+/).includes(p)) found(cp);
-      }
+      // - and NOT an occupant, which is `for` its host too but sits in it,
+      // not over it (see liesOver in swap.js)
+      for (const c of doc.querySelectorAll('[data-behaviour][data-for]'))
+        if (liesOver(c, p)) found(c.dataset.path);
     };
     visit(path);
     if (path.includes('/')) visit(path.split('/')[0]);   // a port is under what its module is under

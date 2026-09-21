@@ -651,3 +651,23 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null, com
   }
   return {accepted, ignored};
 }
+
+// DOES `el` LIE OVER THE PART AT `path`? - the cover half of shell.js's
+// `over()`, which decides what `reveal()` takes off when a part is selected.
+// A cover declares what it hides with `data-for`: the bezel names its drives,
+// the C40G's filter cover names all four PSU bays. But `data-for` is also how
+// a SEATED OPTIC names its cage, and the two are opposite relations. An
+// occupant sits IN what it is for; a cover sits OVER it. `mounts` and `fills`
+// are the behaviours of a part that goes on or in front of an opening - the
+// same reading the tree's pull control gives them - and `occupies` is the
+// behaviour of what the opening holds. Read as a cover, the optic was pulled
+// every time its port was selected, and a cage swap ends by selecting the port:
+// the optic just chosen vanished and the "removed" chip counted it.
+export function liesOver(el, path) {
+  if (!el || !path) return false;
+  const behaviour = el.getAttribute('data-behaviour');
+  if (!behaviour || behaviour === 'occupies') return false;
+  const cp = el.getAttribute('data-path');
+  return !!cp && cp !== path
+    && (el.getAttribute('data-for') || '').split(/\s+/).includes(path);
+}
