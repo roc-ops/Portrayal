@@ -114,7 +114,14 @@ for (let k = 0; k < gh.top.idx.length; k += 3) {
 for (let i = 0; i < gh.top.pos.length; i += 3)
   worstHZ = Math.max(worstHZ, Math.abs(gh.top.pos[i + 2] - bdepth(gh.top.pos[i], gh.top.pos[i + 1])));
 
+// a "hole" with nothing of the shell above it cannot be bridged, so it is not
+// cut - and must not grow a wall standing on an uncut surface either
+const stray = densify([[20, -10], [30, -10], [30, -2], [20, -2]], 0.25);
+const gs = build([{shell: densify(bez, 0.25), holes: [stray]}], bxs, bys, bdepth, 0);
+
 console.log(JSON.stringify({
+  strayHoleWall: gs.holeSkirt.pos.length,
+  strayArea: area2(gs.top.pos, gs.top.idx),
   bezelArea: area2(gh.top.pos, gh.top.idx),
   bezelWant: polyArea(bez) - polyArea(hA) - polyArea(hB),
   inHole, outOfShell, worstHZ,

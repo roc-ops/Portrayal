@@ -57,20 +57,23 @@ export function cavitySeatsOn(c, o, eps = 0.01) {
 // ends that ARE its windows' ends - chamfer, vertical, chamfer - and a box
 // either ran into the windows or stopped short of the chamfer corners.
 //
-// Every grid cell is intersected with each outline shell (Sutherland-Hodgman:
-// the cell is convex, so it can clip a concave shell), the pieces are
-// ear-clipped, and every vertex is stood at depthAt(x, y). Grid lines sit on
-// the profiles' knots, so a knee is still a knee. The skirt drops every outline
-// point from the surface to `lift`, so the walls follow the outline too.
-// Coordinates are node-local mm.
+// The region is ear-clipped ONCE, and each triangle is then cut by the grid
+// cells it crosses (Sutherland-Hodgman - triangle and cell are both convex, so
+// the cut is exact) and every vertex stood at depthAt(x, y). Grid lines sit on
+// the profiles' knots, so a knee is still a knee. Clipping the concave outline
+// by the cells first was tried and was wrong: it left edges along the cell
+// boundaries that enclosed part of a window next to its corner. The skirt
+// drops every outline point from the surface to `lift`, so the walls follow the
+// outline too. Coordinates are node-local mm.
 //
 // HOLES ARE CUT, because the bezel turned out to be the whole face: one sloped
 // plate with the two octagonal windows through it. Each hole is bridged into
 // its shell by a zero-width cut straight up from its topmost point - the
-// keyhole earcut uses - so the region is one simple polygon again and the
-// cell clipping above needs no change. The walls of holes come back apart
-// from the outer wall (`holeSkirt`), because on the hardware they are a
-// different colour: a window's edge is the amber bead.
+// keyhole earcut uses - so the region is one simple polygon again. The walls of
+// holes come back apart from the outer wall (`holeSkirt`), because on the
+// hardware they are a different colour: a window's edge is the amber bead. A
+// hole that cannot be bridged (nothing of the shell above it) is not cut, and
+// gets no wall either.
 //
 // `regions` is [{shell, holes: [ring...]}], rings as [[x, y]...].
 export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
@@ -136,11 +139,11 @@ export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
   };
 
   const orient = (r, ccw) => (signed(r) < 0) === ccw ? r.slice() : r.slice().reverse();
-  const bridge = (shell, holes) => {
+  const bridge = (shell, holes, cut) => {
     let outer = orient(tidy(shell), true);
-    const hs = holes.map(h => orient(tidy(h), false))
-      .sort((a, b) => Math.min(...a.map(p => p[1])) - Math.min(...b.map(p => p[1])));
-    for (const h of hs) {
+    const hs = holes.map((h, n) => ({h: orient(tidy(h), false), n}))
+      .sort((a, b) => Math.min(...a.h.map(p => p[1])) - Math.min(...b.h.map(p => p[1])));
+    for (const {h, n} of hs) {
       let hi = 0;
       for (let k = 1; k < h.length; k++) if (h[k][1] < h[hi][1]) hi = k;
       const [hx, hy] = h[hi];
@@ -153,6 +156,7 @@ export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
         if (y < hy && y > by) { by = y; best = k; }
       }
       if (best < 0) continue;            // no edge above it: not inside this shell
+      cut.add(n);
       const p = [hx, by];
       const loop = h.slice(hi).concat(h.slice(0, hi), [h[hi]]);
       outer = outer.slice(0, best + 1).concat([p], loop, [p], outer.slice(best + 1));
@@ -201,16 +205,18 @@ export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
     return tidy(p);
   };
 
-  const pos = [], idx = [];
+  const pos = [], idx = [], cutHoles = [];
   const put = (x, y) => { pos.push(x, y, depthAt(x, y)); return pos.length / 3 - 1; };
   for (const {shell: rawShell, holes = []} of regions) {
+    const cut = new Set();
     // TRIANGULATE THE WHOLE REGION FIRST, THEN CUT EACH TRIANGLE BY THE GRID.
     // Clipping a concave outline against a cell leaves edges running along the
     // cell boundary, and next to a window's corner those enclosed part of the
     // window. A triangle is convex, so cutting it by a cell is exact; the grid
     // is still what puts a vertex on every profile knot.
     const shell = simplify(rawShell);
-    const region = holes.length ? bridge(shell, holes.map(h => simplify(h))) : shell;
+    const region = holes.length ? bridge(shell, holes.map(h => simplify(h)), cut) : shell;
+    cutHoles.push(...holes.filter((_, n) => cut.has(n)));
     for (const tri of earclip(tidy(region))) {
       const bx0 = Math.min(tri[0][0], tri[1][0], tri[2][0]), bx1 = Math.max(tri[0][0], tri[1][0], tri[2][0]);
       const by0 = Math.min(tri[0][1], tri[1][1], tri[2][1]), by1 = Math.max(tri[0][1], tri[1][1], tri[2][1]);
@@ -243,7 +249,7 @@ export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
   };
   return {top: {pos, idx},
           skirt: wall(regions.map(r => r.shell)),
-          holeSkirt: wall(regions.flatMap(r => r.holes || []))};
+          holeSkirt: wall(cutHoles)};
 }
 
 export function bodyBoxes(body, faceW, faceH) {

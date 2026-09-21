@@ -75,3 +75,9 @@ def test_window_walls_come_back_on_their_own(out):
         "each window needs its own wall, returned apart from the outer one so it "
         "can be coloured as the bead it is"
     )
+
+
+def test_a_hole_that_cannot_be_cut_gets_no_wall(out):
+    assert out["strayHoleWall"] == 0, \
+        "an unbridged hole was left uncut but still got a wall standing on the surface"
+    assert out["strayArea"] == pytest.approx(374 * 41.27, rel=1e-3)
