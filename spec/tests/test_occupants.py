@@ -81,14 +81,15 @@ def test_the_optic_lands_where_the_mate_points_meet(tmp_path):
 
 
 def test_the_optic_lands_where_the_mate_points_meet_in_a_rotated_cage(tmp_path):
-    """The same claim on `port-2`, a `common/qsfp-cage@2` drawn at rotate 180:
+    """The same claim on `port-3`, a `common/qsfp-cage@2` drawn at rotate 180
+    (the lower of the S9510-28DC's QSFP28 pair - docs/pluggables-3d-design.md, S3):
     the optic turns with its cage (D3) and its mate point meets the cage's
     TURNED one. Before this it was seated as if upright - translate only, the
     same offset from its cage as port-0's - and missed. Both groups'
     transforms are applied numerically (rotate about the given centre, then
     translate); test_seat_rotation.py has the upright port beside it."""
     import math
-    svg = render(fitted_copy(tmp_path, {"port-2": "generic/qsfp-lc@1"}), tmp_path / "o")
+    svg = render(fitted_copy(tmp_path, {"port-3": "generic/qsfp-lc@1"}), tmp_path / "o")
 
     def device_point(path, local):
         tf = re.search(rf'<g[^>]*data-path="{path}"[^>]*transform="([^"]+)"', svg).group(1)
@@ -110,8 +111,8 @@ def test_the_optic_lands_where_the_mate_points_meet_in_a_rotated_cage(tmp_path):
                                    lambda r: lib.resolve(r)[0])
     om = yaml.safe_load((LIB / "components/generic/qsfp-lc/v1/contract.yaml")
                         .read_text())["connection-points"]["mate"]["at"]
-    hx, hy = device_point("port-2", hm)
-    ox, oy = device_point("port-2-occupant", om)
+    hx, hy = device_point("port-3", hm)
+    ox, oy = device_point("port-3-occupant", om)
     assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6, ((hx, hy), (ox, oy))
 
 

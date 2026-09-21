@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-23d
-version: 2.0.14
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-23D
@@ -21,7 +21,30 @@ description: >-
   or DC, exhaust airflow. Sold by DriveNets as the NCP-10CD packet-forwarder of its
   Network Cloud DDC.
 profile: networking
+stack-exceptions:
+- pairs: [[port-0, port-1], [port-2, port-3], [port-4, port-5], [port-6, port-7],
+    [port-8, port-9], [fabric-0, fabric-1], [fabric-2, fabric-3], [fabric-4, fabric-5],
+    [fabric-6, fabric-7], [fabric-8, fabric-9], [fabric-10, fabric-11]]
+  reason: >-
+    Drawing, in provenance.cage-orientation and its gap. The one positive reading is the row of
+    small retention tabs the datasheet render draws under the top row and under the bottom row
+    in the same relative position, which is what a common orientation looks like. It is weak
+    evidence off a 1.27 px/mm render and stands until a photograph of the empty cages settles
+    it.
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
+      the lower turned 180, so both cage lips face the band between the two cages and both bails
+      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
+      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
+      of the stack that shows otherwise overturns it. 1 pair was drawn with the UPPER cage turned
+      before the std cage art moved its lip to the bottom of the opening; turning it to the
+      convention keeps the lips in the middle band where they were drawn, and seats every optic
+      bail-outward. 11 pairs are declared in stack-exceptions with the reading that keeps them
+      otherwise.
   sources:
     note: >-
       UfiSpace S9700-23D datasheet for dimensions, weight, port inventory, platform, typical
@@ -201,7 +224,7 @@ provenance:
       USB 2.0 socket is PORTRAIT (its drawn shell is 6.1 wide by 13.7 tall) so std/usb-a is
       rotated 90; because `rotate:` pivots on the placement's own pre-rotation centre, its `at` is
       the unrotated box's top-left and not the landed one's. The two SFP+ cages are drawn
-      belly-to-belly, upper rotate: 180, on the 15.00 mm pitch their part's contract measures for
+      belly-to-belly, lower rotate: 180, on the 15.00 mm pitch their part's contract measures for
       exactly that construction - which is a different reading from the QSFP-DD blocks above,
       where no such pitch evidence exists.
   panel-metal:
@@ -744,8 +767,8 @@ views:
       - {at: [33.00, 79.20], path: 'M -0.20 0.00 L 0.90 1.10 L 1.60 1.10', for: usb}
     components:
       placements:
-        - {ref: std/sfp-ganged@1, id: sfp-0, at: [42.53, 18.40], rotate: 180, group: sfp-plus, rel-pos: 0}
-        - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.53, 33.45], group: sfp-plus, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: sfp-0, at: [42.53, 18.40], group: sfp-plus, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.53, 33.45], rotate: 180, group: sfp-plus, rel-pos: 1}
         - {ref: std/rj45-ganged@2, id: console, at: [43.15, 51.66], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [29.15, 55.13], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [43.15, 64.26], group: mgmt, rel-pos: 3, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: HIG section 10, Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity). The vocabulary is this guide''s own; only the left window resolves in the figure, so see the mgmt-jack-led-semantics gap for the position; led-oob-right: HIG section 10, Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). Placed by symmetry with the left lamp; see the mgmt-jack-led-semantics gap'}

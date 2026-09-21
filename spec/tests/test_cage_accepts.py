@@ -419,11 +419,14 @@ def test_every_entry_says_where_and_how_to_seat(tmp_path):
 
 def test_the_published_mate_is_where_the_build_seats(tmp_path):
     """The device-frame mate points test_seat_rotation.py measures off the
-    build's own transforms: port-0 upright, port-2 at rotate 180. port-2's is
-    NOT `at + mate` - that would be [239.625, 14.19], the upright answer."""
+    build's own transforms. Since common/qsfp-cage 2.1.0 draws its flange on the
+    belly side, port-0 is rotate 180 and port-2 upright (docs/pluggables-3d-design.md,
+    S3) and both draw where they did: port-0's mate is NOT `at + mate` - that
+    would be [187.075, 30.99], the upright answer - and port-2's now is."""
     idx = _build(_fitted_s9510(tmp_path), tmp_path / "out")
+    assert _cage(idx, "front", "port-0")["rotate"] == 180
     assert _cage(idx, "front", "port-0")["mate"] == [187.225, 31.59]
-    assert _cage(idx, "front", "port-2")["rotate"] == 180
+    assert _cage(idx, "front", "port-2")["rotate"] is None
     assert _cage(idx, "front", "port-2")["mate"] == [239.475, 13.59]
 
 

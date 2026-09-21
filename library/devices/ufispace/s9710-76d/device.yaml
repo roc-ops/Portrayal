@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9710-76d
-version: 1.0.13
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9710-76D
@@ -18,6 +18,18 @@ description: UfiSpace S9710-76D - 2RU high-density 400G disaggregated core and e
   Distributed Disaggregated Chassis cluster behind an S9705-48D or S9725-64E fabric.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
+      the lower turned 180, so both cage lips face the band between the two cages and both bails
+      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
+      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
+      of the stack that shows otherwise overturns it. 39 pairs were drawn with the UPPER cage
+      turned before the std cage art moved its lip to the bottom of the opening; turning them to
+      the convention keeps the lips in the middle band where they were drawn, and seats every
+      optic bail-outward.
   chassis:
     confidence: datasheet
     note: >-
@@ -68,8 +80,8 @@ provenance:
       Figure 10b as well as 10a. All four apertures are drawn about 8.1 mm tall against
       std/qsfp-dd's registry 10.0 x 19.0 - the drawn dark area is the bore, not the bezel opening
       - so the standard part is seated on the measured CENTRES rather than resized, exactly as the
-      MSA governs and the figure does not. The upper row of each band is rotate 180 so its cage
-      lip faces the seam between the rows, as a belly-to-belly stacked cage is built.
+      MSA governs and the figure does not. The lower row of each band is rotate 180 so both rows'
+      cage lips face the seam between them, as a belly-to-belly stacked cage is built.
   port-numbering:
     note: >-
       HIG Port Overview table ('Port ID 00~39 QSFP-DD 400G' for the fabric row, '00~35 QSFP-DD
@@ -690,89 +702,89 @@ views:
            attrs: {role: console},
            description: 'the second console port, labelled IOIO like the RJ45 one; needs
              the Silicon Labs CP210x USB-to-UART driver (HIG Initial System Setup)'}
-        - {ref: std/sfp-ganged@1, id: sfp-0, at: [42.47, 51.48], rotate: 180, group: sfp-plus, rel-pos: 0}
-        - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.47, 66.38], group: sfp-plus, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: sfp-0, at: [42.47, 51.48], group: sfp-plus, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.47, 66.38], rotate: 180, group: sfp-plus, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-sfp-0, at: [45.79, 49.06], for: sfp-0, group: port-leds, rel-pos: 39}
         - {ref: common/led-dot@1, id: led-sfp-1, at: [50.99, 49.06], for: sfp-1, group: port-leds, rel-pos: 40}
         # QSFP-DD fabric band - 20 columns x 2 rows, ports 0-39
-        - {ref: std/qsfp-dd@1, id: fab-0, at: [22.86, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 0}
-        - {ref: std/qsfp-dd@1, id: fab-1, at: [22.86, 23.76], group: qsfpdd-fabric, rel-pos: 1}
-        - {ref: std/qsfp-dd@1, id: fab-2, at: [41.86, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 2}
-        - {ref: std/qsfp-dd@1, id: fab-3, at: [41.86, 23.76], group: qsfpdd-fabric, rel-pos: 3}
-        - {ref: std/qsfp-dd@1, id: fab-4, at: [60.86, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: fab-5, at: [60.86, 23.76], group: qsfpdd-fabric, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: fab-6, at: [79.86, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: fab-7, at: [79.86, 23.76], group: qsfpdd-fabric, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: fab-8, at: [104.71, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: fab-9, at: [104.71, 23.76], group: qsfpdd-fabric, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: fab-10, at: [123.71, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: fab-11, at: [123.71, 23.76], group: qsfpdd-fabric, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: fab-12, at: [142.71, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 12}
-        - {ref: std/qsfp-dd@1, id: fab-13, at: [142.71, 23.76], group: qsfpdd-fabric, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: fab-14, at: [161.71, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 14}
-        - {ref: std/qsfp-dd@1, id: fab-15, at: [161.71, 23.76], group: qsfpdd-fabric, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: fab-16, at: [186.56, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 16}
-        - {ref: std/qsfp-dd@1, id: fab-17, at: [186.56, 23.76], group: qsfpdd-fabric, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: fab-18, at: [205.56, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 18}
-        - {ref: std/qsfp-dd@1, id: fab-19, at: [205.56, 23.76], group: qsfpdd-fabric, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: fab-20, at: [224.56, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 20}
-        - {ref: std/qsfp-dd@1, id: fab-21, at: [224.56, 23.76], group: qsfpdd-fabric, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: fab-22, at: [243.56, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 22}
-        - {ref: std/qsfp-dd@1, id: fab-23, at: [243.56, 23.76], group: qsfpdd-fabric, rel-pos: 23}
-        - {ref: std/qsfp-dd@1, id: fab-24, at: [268.41, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 24}
-        - {ref: std/qsfp-dd@1, id: fab-25, at: [268.41, 23.76], group: qsfpdd-fabric, rel-pos: 25}
-        - {ref: std/qsfp-dd@1, id: fab-26, at: [287.41, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 26}
-        - {ref: std/qsfp-dd@1, id: fab-27, at: [287.41, 23.76], group: qsfpdd-fabric, rel-pos: 27}
-        - {ref: std/qsfp-dd@1, id: fab-28, at: [306.41, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 28}
-        - {ref: std/qsfp-dd@1, id: fab-29, at: [306.41, 23.76], group: qsfpdd-fabric, rel-pos: 29}
-        - {ref: std/qsfp-dd@1, id: fab-30, at: [325.41, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 30}
-        - {ref: std/qsfp-dd@1, id: fab-31, at: [325.41, 23.76], group: qsfpdd-fabric, rel-pos: 31}
-        - {ref: std/qsfp-dd@1, id: fab-32, at: [350.26, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 32}
-        - {ref: std/qsfp-dd@1, id: fab-33, at: [350.26, 23.76], group: qsfpdd-fabric, rel-pos: 33}
-        - {ref: std/qsfp-dd@1, id: fab-34, at: [369.26, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 34}
-        - {ref: std/qsfp-dd@1, id: fab-35, at: [369.26, 23.76], group: qsfpdd-fabric, rel-pos: 35}
-        - {ref: std/qsfp-dd@1, id: fab-36, at: [388.26, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 36}
-        - {ref: std/qsfp-dd@1, id: fab-37, at: [388.26, 23.76], group: qsfpdd-fabric, rel-pos: 37}
-        - {ref: std/qsfp-dd@1, id: fab-38, at: [407.26, 10.78], rotate: 180, group: qsfpdd-fabric, rel-pos: 38}
-        - {ref: std/qsfp-dd@1, id: fab-39, at: [407.26, 23.76], group: qsfpdd-fabric, rel-pos: 39}
+        - {ref: std/qsfp-dd@1, id: fab-0, at: [22.86, 10.78], group: qsfpdd-fabric, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: fab-1, at: [22.86, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: fab-2, at: [41.86, 10.78], group: qsfpdd-fabric, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: fab-3, at: [41.86, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: fab-4, at: [60.86, 10.78], group: qsfpdd-fabric, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: fab-5, at: [60.86, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: fab-6, at: [79.86, 10.78], group: qsfpdd-fabric, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: fab-7, at: [79.86, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: fab-8, at: [104.71, 10.78], group: qsfpdd-fabric, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: fab-9, at: [104.71, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: fab-10, at: [123.71, 10.78], group: qsfpdd-fabric, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: fab-11, at: [123.71, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: fab-12, at: [142.71, 10.78], group: qsfpdd-fabric, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: fab-13, at: [142.71, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: fab-14, at: [161.71, 10.78], group: qsfpdd-fabric, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: fab-15, at: [161.71, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: fab-16, at: [186.56, 10.78], group: qsfpdd-fabric, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: fab-17, at: [186.56, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: fab-18, at: [205.56, 10.78], group: qsfpdd-fabric, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: fab-19, at: [205.56, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: fab-20, at: [224.56, 10.78], group: qsfpdd-fabric, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: fab-21, at: [224.56, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: fab-22, at: [243.56, 10.78], group: qsfpdd-fabric, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: fab-23, at: [243.56, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: fab-24, at: [268.41, 10.78], group: qsfpdd-fabric, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: fab-25, at: [268.41, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: fab-26, at: [287.41, 10.78], group: qsfpdd-fabric, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: fab-27, at: [287.41, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: fab-28, at: [306.41, 10.78], group: qsfpdd-fabric, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: fab-29, at: [306.41, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: fab-30, at: [325.41, 10.78], group: qsfpdd-fabric, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: fab-31, at: [325.41, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: fab-32, at: [350.26, 10.78], group: qsfpdd-fabric, rel-pos: 32}
+        - {ref: std/qsfp-dd@1, id: fab-33, at: [350.26, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 33}
+        - {ref: std/qsfp-dd@1, id: fab-34, at: [369.26, 10.78], group: qsfpdd-fabric, rel-pos: 34}
+        - {ref: std/qsfp-dd@1, id: fab-35, at: [369.26, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 35}
+        - {ref: std/qsfp-dd@1, id: fab-36, at: [388.26, 10.78], group: qsfpdd-fabric, rel-pos: 36}
+        - {ref: std/qsfp-dd@1, id: fab-37, at: [388.26, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 37}
+        - {ref: std/qsfp-dd@1, id: fab-38, at: [407.26, 10.78], group: qsfpdd-fabric, rel-pos: 38}
+        - {ref: std/qsfp-dd@1, id: fab-39, at: [407.26, 23.76], rotate: 180, group: qsfpdd-fabric, rel-pos: 39}
         # QSFP-DD service band - 18 columns x 2 rows, ports 0-35; the columns are
         # the fabric grid's columns 2-19, which is why the pitch below repeats
-        - {ref: std/qsfp-dd@1, id: svc-0, at: [60.86, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 0}
-        - {ref: std/qsfp-dd@1, id: svc-1, at: [60.86, 66.24], group: qsfpdd-service, rel-pos: 1}
-        - {ref: std/qsfp-dd@1, id: svc-2, at: [79.86, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 2}
-        - {ref: std/qsfp-dd@1, id: svc-3, at: [79.86, 66.24], group: qsfpdd-service, rel-pos: 3}
-        - {ref: std/qsfp-dd@1, id: svc-4, at: [104.71, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: svc-5, at: [104.71, 66.24], group: qsfpdd-service, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: svc-6, at: [123.71, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: svc-7, at: [123.71, 66.24], group: qsfpdd-service, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: svc-8, at: [142.71, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: svc-9, at: [142.71, 66.24], group: qsfpdd-service, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: svc-10, at: [161.71, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: svc-11, at: [161.71, 66.24], group: qsfpdd-service, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: svc-12, at: [186.56, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 12}
-        - {ref: std/qsfp-dd@1, id: svc-13, at: [186.56, 66.24], group: qsfpdd-service, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: svc-14, at: [205.56, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 14}
-        - {ref: std/qsfp-dd@1, id: svc-15, at: [205.56, 66.24], group: qsfpdd-service, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: svc-16, at: [224.56, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 16}
-        - {ref: std/qsfp-dd@1, id: svc-17, at: [224.56, 66.24], group: qsfpdd-service, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: svc-18, at: [243.56, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 18}
-        - {ref: std/qsfp-dd@1, id: svc-19, at: [243.56, 66.24], group: qsfpdd-service, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: svc-20, at: [268.41, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 20}
-        - {ref: std/qsfp-dd@1, id: svc-21, at: [268.41, 66.24], group: qsfpdd-service, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: svc-22, at: [287.41, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 22}
-        - {ref: std/qsfp-dd@1, id: svc-23, at: [287.41, 66.24], group: qsfpdd-service, rel-pos: 23}
-        - {ref: std/qsfp-dd@1, id: svc-24, at: [306.41, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 24}
-        - {ref: std/qsfp-dd@1, id: svc-25, at: [306.41, 66.24], group: qsfpdd-service, rel-pos: 25}
-        - {ref: std/qsfp-dd@1, id: svc-26, at: [325.41, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 26}
-        - {ref: std/qsfp-dd@1, id: svc-27, at: [325.41, 66.24], group: qsfpdd-service, rel-pos: 27}
-        - {ref: std/qsfp-dd@1, id: svc-28, at: [350.26, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 28}
-        - {ref: std/qsfp-dd@1, id: svc-29, at: [350.26, 66.24], group: qsfpdd-service, rel-pos: 29}
-        - {ref: std/qsfp-dd@1, id: svc-30, at: [369.26, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 30}
-        - {ref: std/qsfp-dd@1, id: svc-31, at: [369.26, 66.24], group: qsfpdd-service, rel-pos: 31}
-        - {ref: std/qsfp-dd@1, id: svc-32, at: [388.26, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 32}
-        - {ref: std/qsfp-dd@1, id: svc-33, at: [388.26, 66.24], group: qsfpdd-service, rel-pos: 33}
-        - {ref: std/qsfp-dd@1, id: svc-34, at: [407.26, 51.90], rotate: 180, group: qsfpdd-service, rel-pos: 34}
-        - {ref: std/qsfp-dd@1, id: svc-35, at: [407.26, 66.24], group: qsfpdd-service, rel-pos: 35}
+        - {ref: std/qsfp-dd@1, id: svc-0, at: [60.86, 51.90], group: qsfpdd-service, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: svc-1, at: [60.86, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: svc-2, at: [79.86, 51.90], group: qsfpdd-service, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: svc-3, at: [79.86, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: svc-4, at: [104.71, 51.90], group: qsfpdd-service, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: svc-5, at: [104.71, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: svc-6, at: [123.71, 51.90], group: qsfpdd-service, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: svc-7, at: [123.71, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: svc-8, at: [142.71, 51.90], group: qsfpdd-service, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: svc-9, at: [142.71, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: svc-10, at: [161.71, 51.90], group: qsfpdd-service, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: svc-11, at: [161.71, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: svc-12, at: [186.56, 51.90], group: qsfpdd-service, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: svc-13, at: [186.56, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: svc-14, at: [205.56, 51.90], group: qsfpdd-service, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: svc-15, at: [205.56, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: svc-16, at: [224.56, 51.90], group: qsfpdd-service, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: svc-17, at: [224.56, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: svc-18, at: [243.56, 51.90], group: qsfpdd-service, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: svc-19, at: [243.56, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: svc-20, at: [268.41, 51.90], group: qsfpdd-service, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: svc-21, at: [268.41, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: svc-22, at: [287.41, 51.90], group: qsfpdd-service, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: svc-23, at: [287.41, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: svc-24, at: [306.41, 51.90], group: qsfpdd-service, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: svc-25, at: [306.41, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: svc-26, at: [325.41, 51.90], group: qsfpdd-service, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: svc-27, at: [325.41, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: svc-28, at: [350.26, 51.90], group: qsfpdd-service, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: svc-29, at: [350.26, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: svc-30, at: [369.26, 51.90], group: qsfpdd-service, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: svc-31, at: [369.26, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: svc-32, at: [388.26, 51.90], group: qsfpdd-service, rel-pos: 32}
+        - {ref: std/qsfp-dd@1, id: svc-33, at: [388.26, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 33}
+        - {ref: std/qsfp-dd@1, id: svc-34, at: [407.26, 51.90], group: qsfpdd-service, rel-pos: 34}
+        - {ref: std/qsfp-dd@1, id: svc-35, at: [407.26, 66.24], rotate: 180, group: qsfpdd-service, rel-pos: 35}
         # one lamp cluster per PAIR of columns, above and below each band; each
         # cluster carries a window for each of the two ports it sits between
         - {ref: ufispace/qsfpdd-led-pair@1, id: leds-fab-t-0, at: [37.26, 3.77], for: [fab-0, fab-2], skin: fabric, group: port-leds, rel-pos: 1}

@@ -211,9 +211,10 @@ def test_a_cage_on_a_vent_with_no_cutout_is_caught():
 
 
 def test_a_cutout_that_is_the_cages_opening_answers_the_rule():
-    """The opening std/qsfp-ganged presents, 0.575 in and 0.6 down: exactly
+    """The opening std/qsfp-ganged presents, 0.425 in and flush with the top
+    (common/qsfp-cage@2 carries its flange at the bottom since 2.1.0): exactly
     what L63 derives, and not big enough to contain the cage's flange."""
-    cut = {"id": "q1", "at": [30.575, 15.6], "size": [18.5, 9.58]}
+    cut = {"id": "q1", "at": [30.425, 15.0], "size": [18.5, 9.58]}
     assert _air(_vent_doc([CAGE], [cut])) == []
 
 
@@ -225,8 +226,8 @@ def test_a_cutout_elsewhere_does_not():
 def test_a_rotated_cage_is_punched_through_its_rotated_opening():
     turned = dict(CAGE, rotate=90)
     # the 19.5 x 10.18 box turned about its centre (39.75, 20.09): the opening
-    # 18.5 x 9.58 at local (0.575, 0.6) lands at x 34.66..44.24, y 10.915..29.415
-    cut = {"id": "q1", "at": [34.66, 10.915], "size": [9.58, 18.5]}
+    # 18.5 x 9.58 at local (0.425, 0.0) lands at x 35.26..44.84, y 10.765..29.265
+    cut = {"id": "q1", "at": [35.26, 10.765], "size": [9.58, 18.5]}
     assert _air(_vent_doc([turned], [cut])) == []
     assert len(_air(_vent_doc([turned]))) == 1
 

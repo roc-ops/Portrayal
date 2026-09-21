@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9511-20ct
-version: 1.0.6
+version: 1.0.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9511-20CT
@@ -17,7 +17,24 @@ description: >-
   10MHz, ToD and BITS timing interfaces. Both the dual-feed DC supply and the 3+1 fans are
   FIXED, so the chassis has no bays at all
 profile: networking
+stack-exceptions:
+- pairs: [[port-0-sfp, port-1-sfp], [port-2-sfp, port-3-sfp], [port-4, port-5],
+    [port-6, port-7], [port-8, port-9], [port-10, port-11], [port-12, port-13],
+    [port-14, port-15], [port-16, port-17], [port-18, port-19]]
+  reason: >-
+    Provenance.cage-mirroring. The render-against-photograph cavity-pitch test that settled the
+    S9500-22XST and S9502-16SMT was re-run on this device after rendering, and reads the stacked
+    optical rows as sharing one orientation rather than mirroring, so neither row is turned.
 provenance:
+  stack-orientation:
+    confidence: photo-measured
+    note: >-
+      Every belly-to-belly cage pair on this face is declared in stack-exceptions. The library's
+      stack convention (docs/pluggables-3d-design.md, S1-S4) would draw each pair upper rotate 0
+      over lower 180, both cage lips into the band and both bails outward; the
+      render-against-photograph cavity-pitch reading in cage-mirroring says these rows are built
+      the same way up, so neither row is turned. A photograph of an empty cage column settles it
+      either way.
   sources:
     note: >-
       UfiSpace S9511-20CT datasheet for dimensions, weight, port inventory, platform, timing,

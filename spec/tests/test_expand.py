@@ -53,9 +53,12 @@ def test_a_generated_block_lands_where_the_library_puts_it(dev, group, start, co
     real = placements(dev, group)[start:start + count]
     block = dict(spec, id=group, count=count)
     block["number-from"] = int(str(real[0]["id"]).rsplit("-", 1)[-1])
-    rots = {p.get("rotate", 0) for p in real[::2]}
-    if rots != {0}:
-        block["rotate"] = {"top": sorted(rots)[-1]}
+    # the turn each row carries, read off the file - since the stacked-cage
+    # convention (docs/pluggables-3d-design.md, S3) that is the BOTTOM row
+    for key, row in (("top", real[::2]), ("bottom", real[1::2])):
+        rots = {p.get("rotate", 0) for p in row}
+        if rots != {0}:
+            block.setdefault("rotate", {})[key] = sorted(rots)[-1]
     gen = [p for p in E.block_items(block, LIB, STD)[0] if p.get("group") == group]
     assert [p["id"] for p in gen] == [p["id"] for p in real]
     assert [p.get("rotate", 0) for p in gen] == [p.get("rotate", 0) for p in real]

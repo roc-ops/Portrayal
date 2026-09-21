@@ -3,10 +3,12 @@
 941 of the library's 3,326 cages are drawn rotated - 940 at 180, one at 90 on
 juniper/mx304 - and until this the build seated an occupant in every one of
 them as if it were upright: `at = host.at + host_mate - occupant_mate`, with no
-`rotate` carried. On the S9510-28DC's port-2 (a `common/qsfp-cage@2` at
+`rotate` carried. On the S9510-28DC's port-2 (then a `common/qsfp-cage@2` at
 rotate 180) that put the optic at `translate(230.45,9.94)` with no rotate, the
 same offset from its cage as the upright port-0's - so its mate point missed
-the cage's turned one, and the optic was drawn the wrong way up.
+the cage's turned one, and the optic was drawn the wrong way up. Since the
+stacked-cage convention (docs/pluggables-3d-design.md, S3) the pair is upper 0
+over lower 180, so the turned cage these tests seat in is port-3.
 
 The fix is two helpers, `seat_point` (where a placement-frame point lands in
 the device frame) and `seat_at` (its inverse for the occupant). These tests pin
@@ -145,14 +147,14 @@ def device_frame_mates(svg, port, host_ref, occ_ref):
 
 def test_both_optics_mate_on_their_cages(tmp_path):
     occ = "generic/qsfp-lc@1"
-    r = run_render(fitted_copy(tmp_path, {"port-2": occ, "port-0": occ}), tmp_path / "o")
+    r = run_render(fitted_copy(tmp_path, {"port-3": occ, "port-2": occ}), tmp_path / "o")
     assert r.returncode == 0, r.stderr[-600:]
     svg = (tmp_path / "o" / "s9510-28dc.dc.front.svg").read_text()
     # THE ROTATED ONE TURNS WITH ITS HOST, the upright one does not turn.
-    assert parse_transform(transform_of(svg, "port-2"))[2][0] == 180
-    assert parse_transform(transform_of(svg, "port-2-occupant"))[2][0] == 180
-    assert parse_transform(transform_of(svg, "port-0-occupant"))[2] is None
-    for port in ("port-0", "port-2"):
+    assert parse_transform(transform_of(svg, "port-3"))[2][0] == 180
+    assert parse_transform(transform_of(svg, "port-3-occupant"))[2][0] == 180
+    assert parse_transform(transform_of(svg, "port-2-occupant"))[2] is None
+    for port in ("port-2", "port-3"):
         host_pt, occ_pt = device_frame_mates(svg, port, "common/qsfp-cage@2", occ)
         assert abs(host_pt[0] - occ_pt[0]) < 1e-6, (port, host_pt, occ_pt)
         assert abs(host_pt[1] - occ_pt[1]) < 1e-6, (port, host_pt, occ_pt)
@@ -165,7 +167,7 @@ def _front_placements(d):
 def test_a_seated_part_that_turns_away_from_its_host_is_an_error(tmp_path):
     def edit(d):
         _front_placements(d).append({"ref": "generic/qsfp-lc@1", "id": "opt-x",
-                                     "mate-to": "port-2", "rotate": 90})
+                                     "mate-to": "port-3", "rotate": 90})
     r = run_render(fitted_copy(tmp_path, {}, edit), tmp_path / "o")
     assert r.returncode != 0
     assert "turns with its host" in r.stderr
@@ -174,7 +176,7 @@ def test_a_seated_part_that_turns_away_from_its_host_is_an_error(tmp_path):
 def test_a_seated_part_that_states_its_hosts_turn_is_fine(tmp_path):
     def edit(d):
         _front_placements(d).append({"ref": "generic/qsfp-lc@1", "id": "opt-x",
-                                     "mate-to": "port-2", "rotate": 180})
+                                     "mate-to": "port-3", "rotate": 180})
     r = run_render(fitted_copy(tmp_path, {}, edit), tmp_path / "o")
     assert r.returncode == 0, r.stderr[-600:]
 

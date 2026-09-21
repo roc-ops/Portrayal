@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 2.0.9
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -13,6 +13,18 @@ description: UfiSpace S6301-56ST - 1RU 48-port 1G RJ45 L2/L3 OOB management swit
   150W AC or DC PSUs, 1+1 hot-swap fans, front-to-back or back-to-front airflow
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
+      the lower turned 180, so both cage lips face the band between the two cages and both bails
+      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
+      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
+      of the stack that shows otherwise overturns it. 4 pairs were drawn with the UPPER cage
+      turned before the std cage art moved its lip to the bottom of the opening; turning them to
+      the convention keeps the lips in the middle band where they were drawn, and seats every
+      optic bail-outward.
   chassis:
     confidence: datasheet
     note: >-
@@ -47,8 +59,9 @@ provenance:
       drawing+photo - HIG Figure 5's front elevation at 3x zoom, corroborated by the vendor angle
       render (s6301-56st-1-angle.png): the TOP RJ45 row has its keyway notch UP and the gold
       contacts toward the centre band (rotate 180 from the std default), the bottom row
-      keyway-down; the SFP+ top row's latch nubs face the centre lamp band (rotate 180), bottom
-      row default. Read from this device's own figure, not carried over from the S6301-56STP,
+      keyway-down; the SFP+ top row's latch nubs face the centre lamp band, and the bottom row's
+      face it from below - belly-to-belly, so the bottom row carries rotate: 180 under the
+      library's stack convention (docs/pluggables-3d-design.md, S3: upper rotate 0 over lower 180, both bails outward). Read from this device's own figure, not carried over from the S6301-56STP,
       although the two agree.
   port-numbering:
     note: 'HIG Port Overview table: ''Port ID 0~47 RJ45 ... 48~55 SFP+'', and the printed strip under each
@@ -541,14 +554,14 @@ views:
         - {ref: common/rj45-ganged-eth@1, id: port-45, at: [345.23, 24.5], group: ge, rel-pos: 45}
         - {ref: common/rj45-ganged-eth@1, id: port-46, at: [359.21, 12], rotate: 180, group: ge, rel-pos: 46}
         - {ref: common/rj45-ganged-eth@1, id: port-47, at: [359.21, 24.5], group: ge, rel-pos: 47}
-        - {ref: std/sfp-ganged@1, id: port-48, at: [377.00, 10.16], rotate: 180, group: sfp-plus, rel-pos: 48}
-        - {ref: std/sfp-ganged@1, id: port-49, at: [377.00, 26.11], group: sfp-plus, rel-pos: 49}
-        - {ref: std/sfp-ganged@1, id: port-50, at: [391.25, 10.16], rotate: 180, group: sfp-plus, rel-pos: 50}
-        - {ref: std/sfp-ganged@1, id: port-51, at: [391.25, 26.11], group: sfp-plus, rel-pos: 51}
-        - {ref: std/sfp-ganged@1, id: port-52, at: [405.50, 10.16], rotate: 180, group: sfp-plus, rel-pos: 52}
-        - {ref: std/sfp-ganged@1, id: port-53, at: [405.50, 26.11], group: sfp-plus, rel-pos: 53}
-        - {ref: std/sfp-ganged@1, id: port-54, at: [419.75, 10.16], rotate: 180, group: sfp-plus, rel-pos: 54}
-        - {ref: std/sfp-ganged@1, id: port-55, at: [419.75, 26.11], group: sfp-plus, rel-pos: 55}
+        - {ref: std/sfp-ganged@1, id: port-48, at: [377.00, 10.16], group: sfp-plus, rel-pos: 48}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [377.00, 26.11], rotate: 180, group: sfp-plus, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [391.25, 10.16], group: sfp-plus, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [391.25, 26.11], rotate: 180, group: sfp-plus, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [405.50, 10.16], group: sfp-plus, rel-pos: 52}
+        - {ref: std/sfp-ganged@1, id: port-53, at: [405.50, 26.11], rotate: 180, group: sfp-plus, rel-pos: 53}
+        - {ref: std/sfp-ganged@1, id: port-54, at: [419.75, 10.16], group: sfp-plus, rel-pos: 54}
+        - {ref: std/sfp-ganged@1, id: port-55, at: [419.75, 26.11], rotate: 180, group: sfp-plus, rel-pos: 55}
         - {ref: common/sfp-led-pair@1, id: led-port-48-port-49, at: [378.10, 21.3], for: [port-48, port-49], group: port-leds, rel-pos: 1}
         - {ref: common/sfp-led-pair@1, id: led-port-50-port-51, at: [392.35, 21.3], for: [port-50, port-51], group: port-leds, rel-pos: 2}
         - {ref: common/sfp-led-pair@1, id: led-port-52-port-53, at: [406.60, 21.3], for: [port-52, port-53], group: port-leds, rel-pos: 3}

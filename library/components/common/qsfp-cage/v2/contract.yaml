@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-cage
-version: 2.0.0
+version: 2.1.0
 class: port
 profile: networking
 description: Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged
@@ -20,16 +20,26 @@ provenance:
     panel. Not a new measurement - the number is the aperture's own, read through the part
     that composes it.
   size: 'drawing-inferred (S9510-28DC HIG Fig 9) for the 19.5 width and the 0.6
-    bezel flange above the opening; the height is then derived, not measured -
-    0.6 + the 9.58 standard opening of std/qsfp-ganged = 10.18. The v1 box was
-    13.0 because it painted the faceplate band as well as the cage. Below the
-    opening the figure shows the band and the port number starting immediately,
-    so this cage carries no bottom flange to speak of'
+    bezel flange on one side of the opening; the height is then derived, not
+    measured - 0.6 + the 9.58 standard opening of std/qsfp-ganged = 10.18. The v1
+    box was 13.0 because it painted the faceplate band as well as the cage. On
+    the other side of the opening the figure shows the band and the port number
+    starting immediately, so this cage carries no second flange to speak of'
+  flange-side: >-
+    the flange is on the MODULE'S BELLY side, and since 2.1.0 it is drawn at the
+    BOTTOM of the upright cage (the aperture at [0.425, 0.0]; 2.0.0 had it at
+    [0.575, 0.6], flange on top). On the S9510-28DC the flange of every QSFP28 and
+    QSFP-DD opening faces the band between the rows and the printed band faces
+    outward, which is the belly-side reading; and a pluggable cage's rotate 0 now
+    means the module seats upright, belly and cage latch at the bottom
+    (docs/pluggables-3d-design.md, S1-S2). 2.1.0 is 2.0.0's art turned through 180
+    degrees, so a placement that also turns 180 draws exactly as before - which
+    is how every device placing this part moved to it without moving a hole
   aperture: standard (SFF-8661 via std/qsfp-ganged)
 elements:
   cage: {at: [0.0, 0.0], size: [19.5, 10.18], class: cage}
 parts:
-  - {ref: std/qsfp-ganged@1, id: aperture, at: [0.575, 0.6]}
+  - {ref: std/qsfp-ganged@1, id: aperture, at: [0.425, 0.0]}
 connection-points:
-  net: {at: [9.75, 4.85], direction: front}
+  net: {at: [9.75, 5.33], direction: front}
 skins: [default]
