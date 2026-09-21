@@ -188,3 +188,44 @@ def test_a_mirrored_host_cannot_seat(tmp_path):
                    tmp_path / "o")
     assert r.returncode != 0
     assert "mirrored" in r.stderr
+
+
+# --- a chained seat in a rotated cage -------------------------------------
+
+CSR310 = LIB / "devices/edgecore/csr310"
+
+
+def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
+    """A plug in an optic's bore, and a boot on the plug, with the optic in a
+    rotate-180 cage (csr310 `m1-1`). The optic's seated dict carries the turn,
+    `hosts` hands that dict to the plug, and the plug's to the boot - so each
+    link must land its own mate on its host's TURNED mate point, and each must
+    be drawn at 180 too. `generic/sfp-lc-simplex@1` is the optic because it
+    composes ONE `std/lc-bore@3`, so it presents a single `lc-plug` mate for
+    the plug to seat in (the duplex generics present none)."""
+    dev = tmp_path / "csr310" / "device.yaml"
+    shutil.copytree(CSR310, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    cage = next(p for p in _front_placements(d) if p.get("id") == "m1-1")
+    assert cage.get("rotate") == 180, cage
+    # every configuration renders the same view, so every one seats the optic
+    # the hand-written links below mate to
+    for cfg in d["configurations"].values():
+        cfg["occupants"] = {"m1-1": "generic/sfp-lc-simplex@1"}
+    _front_placements(d).extend([
+        {"ref": "generic/lc-plug@1", "id": "plug1", "mate-to": "m1-1-occupant"},
+        {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}])
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    r = run_render(dev, tmp_path / "o")
+    assert r.returncode == 0, r.stderr[-600:]
+    svg = next((tmp_path / "o").glob("csr310.*.front.svg")).read_text()
+
+    chain = [("m1-1", cage["ref"]), ("m1-1-occupant", "generic/sfp-lc-simplex@1"),
+             ("plug1", "generic/lc-plug@1"), ("boot1", "common/lc-boot@1")]
+    for (host, host_ref), (occ, occ_ref) in zip(chain, chain[1:]):
+        assert parse_transform(transform_of(svg, occ))[2][0] == 180, occ
+        _, hm, _ = presented_interface(contract(host_ref), lambda r: contract(r))
+        om = contract(occ_ref)["connection-points"]["mate"]["at"]
+        hp = apply(transform_of(svg, host), hm)
+        op = apply(transform_of(svg, occ), om)
+        assert abs(hp[0] - op[0]) < 1e-6 and abs(hp[1] - op[1]) < 1e-6, (occ, hp, op)

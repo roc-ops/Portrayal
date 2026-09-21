@@ -43,6 +43,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -426,21 +427,63 @@ def test_the_published_mate_is_where_the_build_seats(tmp_path):
     assert _cage(idx, "front", "port-2")["mate"] == [239.475, 13.59]
 
 
-def test_occupant_attrs_are_what_the_build_wrote_from_the_host(tmp_path):
-    """Every `occupant-attrs` entry appears, with that value, on the build's
-    own seated occupant - and it carries the host group's media, overriding
-    the optic's contract `media: fiber`."""
-    import re
-    dev = _fitted_s9510(tmp_path)
+AGR560 = LIB / "devices/edgecore/agr560"
+
+
+def _seat_and_build(src, tmp_path, port, occ, drop_group=False):
+    """Copy `src`, seat `occ` in `port` on EVERY configuration, optionally
+    strip the host placement's `group`, build, and return (configs.json, the
+    default-configuration face's occupant open-tag attributes)."""
+    import xml.etree.ElementTree as ET
+    dev = tmp_path / src.name / "device.yaml"
+    shutil.copytree(src, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    for cfg in d["configurations"].values():
+        cfg["occupants"] = {port: occ}
+    if drop_group:
+        for view in d["views"].values():
+            for q in (((view or {}).get("components") or {}).get("placements") or []):
+                if q.get("id") == port:
+                    q.pop("group", None)
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     idx = _build(dev, tmp_path / "out")
-    svg = (tmp_path / "out" / "s9510-28dc.dc.front.svg").read_text()
-    for port, media in (("port-0", "qsfp-dd"), ("port-2", "qsfp28")):
-        attrs = _cage(idx, "front", port)["occupant-attrs"]
-        assert attrs["data-media"] == media
-        assert attrs["data-group-role"] == "traffic"
-        tag = re.search(rf'<g id="{port}-occupant"[^>]*>', svg).group(0)
-        for k, v in attrs.items():
-            assert f'{k}="{v}"' in tag, (port, k, v, tag)
+    root = ET.parse(tmp_path / "out" / f"{d['name']}.front.svg").getroot()
+    tag = next(el for el in root.iter() if el.get("id") == f"{port}-occupant")
+    return idx, dict(tag.attrib)
+
+
+@pytest.mark.parametrize("src, port, occ", [
+    (SFP_SRC, "port-0", "generic/qsfp-lc@1"),   # upright, qsfpdd-400g
+    (SFP_SRC, "port-2", "generic/qsfp-lc@1"),   # rotate 180, qsfp28
+    # a group carrying a `description`, which the build writes on the optic
+    (AGR560, "port-1", "generic/sfp-lc@1"),
+])
+def test_occupant_attrs_are_exactly_what_the_host_side_writes(tmp_path, src, port, occ):
+    """AN EQUALITY, BOTH WAYS. The host side is not listed here: it is what
+    the built occupant carries that the SAME occupant, built in a copy whose
+    host is in no group, does not - so a host-side write the published map
+    misses fails this just as surely as a published attr the build never
+    wrote."""
+    idx, grouped = _seat_and_build(src, tmp_path / "a", port, occ)
+    _, bare = _seat_and_build(src, tmp_path / "b", port, occ, drop_group=True)
+    host_side = {k: v for k, v in grouped.items()
+                 if k.startswith("data-") and bare.get(k) != v}
+    published = _cage(idx, "front", port)["occupant-attrs"]
+    assert host_side, "nothing differs - the check below would pass vacuously"
+    assert host_side == published
+    # the host group's media overrides the optic contract's `media: fiber`
+    assert published["data-media"] != "fiber"
+
+
+def test_a_group_description_reaches_the_occupant(tmp_path):
+    """The `data-description` branch, on a group that has one: agr560's
+    `sfp-plus` (the combo-pair note). Read from the manifest, so this fails
+    the day the group loses it rather than passing on an absent key."""
+    d = yaml.safe_load((AGR560 / "device.yaml").read_text())
+    want = d["groups"]["sfp-plus"]["description"]
+    idx, grouped = _seat_and_build(AGR560, tmp_path, "port-1", "generic/sfp-lc@1")
+    assert _cage(idx, "front", "port-1")["occupant-attrs"]["data-description"] == want
+    assert grouped["data-description"] == want
 
 
 def test_the_lift_census():

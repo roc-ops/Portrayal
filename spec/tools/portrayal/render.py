@@ -591,35 +591,38 @@ def seat_at(point, rotate, occ_size, occ_mate):
     return [round(point[0] - cx - dx, 4), round(point[1] - cy - dy, 4)]
 
 
-def group_side(grp):
-    """What a placement takes from its `groups:` entry, as the build writes it:
-    (attrs, role, description).
+def data_attrs(attrs):
+    """An attrs bag as the SVG attributes the build writes for it:
+    {data-<k>: str(v)}, in key order. The one spelling, used by
+    instance_group for every placement and by group_side_attrs for a group."""
+    return {f"data-{k}": str(v) for k, v in sorted((attrs or {}).items())}
 
-    ONE FUNCTION, TWO READERS. draw_placement puts these on every placement it
-    draws - the attrs under the placement's own (so a group's `media: qsfp-dd`
-    overrides a seated optic's contract `media: fiber`), `data-group-role`, and
-    `data-description` when the placement has none of its own. `occupant_attrs`
-    publishes the same three for a cage, so the kit can seat an optic and write
-    exactly what the build would have written. Two copies of this list would
-    be one new group key away from disagreeing about what an optic says.
+
+def group_side_attrs(group_name, grp):
+    """EVERYTHING DRAWING A PLACEMENT IN A GROUP WRITES ON IT FROM THE GROUP,
+    as {data-attr: string}: the group's attrs, `data-group`,
+    `data-group-role`, `data-description`.
+
+    ONE FUNCTION DECIDES IT, AND BOTH SIDES READ IT. draw_placement writes
+    exactly this map onto every grouped placement (a placement's own attrs and
+    description still win), and cage_entries publishes it as a cage's
+    `occupant-attrs` - because an occupant seated through `occupants:` takes
+    its host's `group` and nothing else from it (see the expansion in
+    render_view), this map IS what the host side contributes to a seated
+    optic: a group's `media: qsfp-dd` over the optic contract's `media:
+    fiber`, and so on. A new host-side write added here reaches the drawing
+    and the published cage together; one added anywhere else is caught by
+    test_cage_accepts, which diffs a built occupant against the same occupant
+    built with no group and requires the difference to equal this map.
     """
     grp = grp or {}
-    return grp.get("attrs") or {}, grp.get("role"), grp.get("description")
-
-
-def occupant_attrs(group_name, grp):
-    """The host-side `data-*` the build writes on an occupant seated through
-    `occupants:` - which takes its host's `group` and nothing else from it
-    (see the expansion in render_view). The occupant's own contract supplies
-    the rest; these are overlaid on it."""
-    gattrs, role, description = group_side(grp)
-    out = {f"data-{k}": str(v) for k, v in sorted(gattrs.items())}
+    out = data_attrs(grp.get("attrs"))
     if group_name:
         out["data-group"] = group_name
-    if role:
-        out["data-group-role"] = role
-    if description:
-        out["data-description"] = description
+    if grp.get("role"):
+        out["data-group-role"] = grp["role"]
+    if grp.get("description"):
+        out["data-description"] = grp["description"]
     return out
 
 
@@ -739,8 +742,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     merged.update(contract.get("attrs") or {})
     merged.update(extra_attrs or {})
     merged.update(attrs or {})
-    for k, v in sorted(merged.items()):
-        g.set(f"data-{k}", str(v))
+    for k, v in data_attrs(merged).items():
+        g.set(k, v)
     if group:
         g.set("data-group", group)
     if rel_pos is not None:
@@ -2047,13 +2050,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}
-        # group_side, not three reads of `grp` here: cage_entries publishes
-        # the same answer as `occupant-attrs` (see occupant_attrs).
-        gattrs, grole, gdesc = group_side(grp)
-        merged_attrs = {**gattrs, **(p.get("attrs") or {})} or None
+        # The group's attrs still go into instance_group's `attrs`, under the
+        # placement's own: text filled from attrs and the contract-attr
+        # precedence both read that merged bag. What the GROUP WRITES on this
+        # placement is group_side_attrs, below, and only that.
+        merged_attrs = {**(grp.get("attrs") or {}), **(p.get("attrs") or {})} or None
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
                                      None, merged_attrs,
-                                     p.get("group"), p.get("rel-pos"),
+                                     None, p.get("rel-pos"),
                                      skin_name=p.get("skin", "default"),
                                      rotate=p.get("rotate"), mirror=bool(p.get("mirror")),
                                      palette=palette,
@@ -2095,8 +2099,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # that needs it is looking at a member and has no way back to `groups:`.
         # A PSU bay and a line-card bay are both data-class `bay`; this is the
         # only thing that separates them. See L37.
-        if grole:
-            g.set("data-group-role", grole)
+        #
+        # THE GROUP'S SIDE, from the one function that decides it -
+        # cage_entries publishes the same map as a cage's `occupant-attrs`,
+        # so the kit seats an optic with what the build writes here. A
+        # placement's own attrs and description win over its group's: the
+        # attrs were merged that way above, and the description is set below.
+        own = data_attrs(p.get("attrs"))
+        for name, value in group_side_attrs(p.get("group"), grp).items():
+            if name not in own:
+                g.set(name, value)
         if p.get("in"):
             # a projection is flat: nothing is built from it, so it carries no
             # lift - but it keeps data-in, which the pull machinery reads
@@ -2120,9 +2132,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # The sentence the vendor wrote, kept beside the tokens rather than
         # instead of them. "Blue = 100G, Green = 40G" is not a state list and was
         # never usable as one; it is still worth carrying, so it travels as prose.
-        desc = p.get("description") or gdesc
-        if desc:
-            g.set("data-description", desc)
+        if p.get("description"):
+            g.set("data-description", p["description"])
         # what this part belongs to - an LED to its port. The tree nests on it and
         # selecting either side highlights both.
         df = data_for(p.get("for"))
@@ -2719,7 +2730,7 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
             "mate": (seat_point(p["at"], contract["size"], p.get("rotate"), mate_at)
                      if mate_at is not None else None),
             "lift": float(lift or 0.0),
-            "occupant-attrs": occupant_attrs(p.get("group"), groups.get(p.get("group"))),
+            "occupant-attrs": group_side_attrs(p.get("group"), groups.get(p.get("group"))),
         })
     return out
 
