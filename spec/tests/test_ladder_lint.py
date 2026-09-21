@@ -3,7 +3,7 @@ corpus, in both directions - and the two directions are two different rule
 numbers because they disagree about severity.
 
 L102 asks whether something IN THE TREE resolves against the registry: a
-device's pluggable `media` (a port group fact) and a part's `rate` attr (a
+device's pluggable `media` (a group fact) and a part's `rate` attr (a
 component fact) are the same underlying question - "does spec/schemas/
 pluggables.yaml have a rung for this value" - asked at the two places the
 value can appear, the way L100 asks "no attrs key is null" at both scopes
@@ -114,7 +114,7 @@ def test_every_real_component_is_clean():
     assert _l102(found.errors) == []
 
 
-# --- device scope: a port group's `media`, against the rate union ----------
+# --- device scope: a group's `media`, against the rate union --------------
 
 def run_device(doc, path="t/device.yaml"):
     with L.collecting() as found:
@@ -126,9 +126,29 @@ def test_a_group_with_no_media_is_not_asked():
     assert run_device({"groups": {"g0": {"term": "Port"}}}) == []
 
 
-def test_a_non_port_group_is_not_asked():
+def test_a_non_port_groups_non_pluggable_media_is_not_asked():
+    """A `Power` group's `iec-c14` is left alone by the MEDIA filter, not by
+    a term filter: it is not in PLUGGABLE_CAGES, so no cage question is being
+    asked and there is nothing to place on a ladder."""
     assert run_device({"groups": {"g0": {"term": "Power",
                                           "attrs": {"media": "iec-c14"}}}}) == []
+
+
+def test_a_non_port_group_carrying_a_pluggable_media_IS_asked(monkeypatch):
+    """L40's `term: Port` filter is deliberately not mirrored here. The two
+    consumers of a group's media - render.py's accept list and L104 - look
+    the group up by id and ask its term nothing, so a `term: Slot` group
+    declaring a pluggable media was consumed by both and validated by
+    neither. Same registry-stripping construction as the `Port` case below,
+    so what this proves is the term, not the media."""
+    assert "sfp56" in L.PLUGGABLE_CAGES
+    stripped = {name: dict(fam, rates=[r for r in fam["rates"] if r != "sfp56"])
+                for name, fam in L.PLUGGABLE_FAMILIES.items()}
+    monkeypatch.setattr(L, "PLUGGABLE_FAMILIES", stripped)
+    got = run_device({"groups": {"g0": {"term": "Slot",
+                                         "attrs": {"media": "sfp56"}}}})
+    assert len(got) == 1, got
+    assert "sfp56" in got[0]
 
 
 def test_a_non_pluggable_media_is_not_asked():
@@ -237,15 +257,45 @@ def test_an_empty_components_dir_warns_for_every_family(tmp_path):
     assert _families_named(got) == set(L.PLUGGABLE_FAMILIES), got
 
 
-# --- device scope: a group's `media` vs its cage's presented `interface` ----
+def test_a_registry_that_loaded_no_families_is_reported(monkeypatch):
+    """`_load_pluggable_families` returns `{}` on a broken checkout, and its
+    docstring justifies that by promising the rules reading it will not pass
+    in silence. This rule's body is a loop OVER the registry, so an empty one
+    made it report nothing at all - the check that passes by having nothing
+    to check. It now reports the empty load itself."""
+    monkeypatch.setattr(L, "PLUGGABLE_FAMILIES", {})
+    got = run_library(LIB)
+    assert len(got) == 1, got
+    assert "loaded no families" in got[0], got[0]
+    assert "spec/schemas/pluggables.yaml" in got[0], got[0]
+
+
+def test_the_walk_is_libwalks(monkeypatch):
+    """`libwalk.iter_components` is the one true component walk, and this rule
+    hand-rolled `**/contract.yaml` instead - which also matched a contract at
+    any depth, outside the components/<ns>/<name>/v<major>/ grammar. Proved
+    by making the real walk return nothing: if the rule used its own glob,
+    the real library's interfaces would still be found and only sfp-dd would
+    warn."""
+    monkeypatch.setattr(L.libwalk, "iter_components", lambda roots: [])
+    assert _families_named(run_library(LIB)) == set(L.PLUGGABLE_FAMILIES)
+
+
+# --- device scope: a port's `media` vs its cage's presented `interface` -----
 #
 # render.py's cages[] derivation (spec C1 task 3) found this, not a person:
-# giving the accept list a real audience turned "does the group's media agree
+# giving the accept list a real audience turned "does the declared media agree
 # with the cage's drawn aperture" into a question that had an answer for the
-# first time. 78 ports across 6 real devices disagree - group media qsfp-dd
-# on a placement modelled with std/qsfp-ganged@1, a QSFP aperture - and
-# render.py's precedence rule (the group's media governs) already serves the
-# right optic there; L104 is what keeps the disagreement itself visible.
+# first time. 79 ports across 7 real devices disagree - media qsfp-dd on a
+# placement modelled with std/qsfp-ganged@1, a QSFP aperture - and render.py's
+# precedence rule (the declared media governs) already serves the right optic
+# there; L104 is what keeps the disagreement itself visible.
+#
+# THE MEDIA IS READ FROM THE PLACEMENT FIRST, THEN ITS GROUP, exactly as L18
+# and render.py's `cage_entries` read it. The 79th port is the one that proves
+# it: smartoptics/dcp-sc-28p's `port-probe` declares `media: qsfp-dd` on the
+# placement itself, in a `probe` group that declares none, and a group-only
+# read saw neither the disagreement here nor the QSFP-DD optic there.
 
 def run_cage_media(doc, path="t/device.yaml"):
     with L.collecting() as found:

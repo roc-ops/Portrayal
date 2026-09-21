@@ -2499,13 +2499,22 @@ def _cage_accepts(candidates, families, family, media):
 
     THE RATE CEILING APPLIES ONLY TO A DIRECT MATCH, against THIS family's own
     ladder. `media` is a value from THIS family's vocabulary (`sfp28`,
-    `qsfp-dd`, ...); it has no meaning on a DIFFERENT family's ladder, and
-    nothing declares a rate outside its own `mates` family in the first place
-    (L102). `also-accepts` is a bare list of family names, not a per-entry
-    cutoff, and the registry's own citations say the whole foreign ladder
-    rides along: a QSFP-DD cage is "compatible with 4-lane QSFP28/QSFP112" -
-    two rungs of the QSFP family, not one capped by whatever `qsfp-dd`'s own
-    single rung happens to say.
+    `qsfp-dd`, ...); it has no meaning on a DIFFERENT family's ladder, so
+    there is nothing for a ceiling to compare a foreign candidate against -
+    and nothing declares a rate outside its own `mates` family in the first
+    place (L102). `also-accepts` is correspondingly a bare list of family
+    names, not a per-entry cutoff: the registry states no per-family cutoff
+    to apply, so none is invented here. That is the whole argument. The
+    registry's citations describe particular rungs a particular cage takes;
+    they are not a general rule about foreign ladders and are not leaned on
+    as one.
+
+    THE DAY A VENDOR OPTIC DECLARES A `rate` this becomes a real question,
+    and the fix is a `rates:` cutoff on `also-accepts` in
+    spec/schemas/pluggables.yaml - a per-family statement of how far the
+    foreign ladder actually reaches, sourced the way every other entry in
+    that file is - read here exactly as `rates` already is. Until then every
+    candidate is a generic and no list can be wrong for lack of it.
 
     A CANDIDATE THAT DECLARES NO `attrs.rate` FITS EVERY RUNG of whichever
     family matched it - that is what a GENERIC is (docs/pluggables-design.md

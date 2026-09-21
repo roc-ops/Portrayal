@@ -114,6 +114,26 @@ def test_a_dangling_superseded_by_is_an_error(tmp_path):
     assert "fs/not-a-real-part@1" in got[0]
 
 
+def test_a_self_pointer_is_an_error(tmp_path):
+    """THE ONE THAT RESOLVES AND STILL LIES. A contract at
+    `components/common/sfp-lc-duplex/v1/` naming `common/sfp-lc-duplex@1` as
+    its successor passes "the ref resolves" - the file it names is itself -
+    and a consumer following the pointer to show the replacement loops. The
+    path is a real one in the real library, so `libwalk.ref_of` has the
+    grammar it needs to recognise the part.
+
+    NOT VACUOUS: the same contract with the successor it actually carries is
+    clean below, so what fails here is the self-pointer and not the path."""
+    path = "library/components/common/sfp-lc-duplex/v1/contract.yaml"
+    got = run({"class": "transceiver",
+               "superseded-by": "common/sfp-lc-duplex@1"}, path=path)
+    assert len(got) == 1, got
+    assert "this part itself" in got[0], got[0]
+
+    assert run({"class": "transceiver",
+                "superseded-by": "generic/sfp-lc@1"}, path=path) == []
+
+
 def test_a_superseded_by_built_in_a_synthetic_library_resolves(tmp_path):
     """The rule reads the library it is handed, not a hardcoded one - a
     successor that exists only in a throwaway tree still resolves."""
