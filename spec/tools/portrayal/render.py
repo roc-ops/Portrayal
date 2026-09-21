@@ -2443,6 +2443,19 @@ def _family_by_interface(families, interface):
     return None
 
 
+def _family_by_rate(families, media):
+    """The (name, family) whose `rates` ladder carries `media`, or None.
+
+    The reverse of `_family_by_interface`: that answers whose CAGE this is,
+    this answers whose LADDER `media` is a rung of. The two usually agree -
+    see `cage_entries` for the corpus fact (lint L104) where they do not.
+    """
+    for name, fam in families.items():
+        if media in (fam.get("rates") or []):
+            return name, fam
+    return None
+
+
 def _pluggable_candidates(lib_roots):
     """Every library component that could seat in SOME pluggable cage,
     indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
@@ -2557,12 +2570,26 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         # its family's ladder. A placement in no group, or in a group with no
         # media, has NO CEILING: it accepts every rate of its family.
         media = ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media")
+        # THE GROUP'S MEDIA GOVERNS WHEN IT DISAGREES WITH THE APERTURE. A
+        # group declaring `media: qsfp-dd` on a placement modelled with
+        # `std/qsfp-ganged@1` (a QSFP aperture - the drawing may well be
+        # correct; QSFP-DD and QSFP share a face opening and differ mainly in
+        # depth) still needs to offer the QSFP-DD optic, because the group is
+        # what SAYS what the port is; the aperture only says what it looks
+        # like. `lint_device_cage_media_disagreement` (L104) flags every case
+        # this fires for, so the disagreement stays visible rather than being
+        # silently settled by this precedence rule.
+        accept_family = family
+        if media:
+            media_found = _family_by_rate(families, media)
+            if media_found and media_found[0] != _family_name:
+                accept_family = media_found[1]
         occ = default_occupants.get(p["id"])
         out.append({
             "id": p["id"], "at": p["at"], "interface": interface, "media": media,
             "group": p.get("group"), "rel-pos": p.get("rel-pos"),
             "rotate": p.get("rotate"),
-            "accepts": _cage_accepts(candidates, families, family, media),
+            "accepts": _cage_accepts(candidates, families, accept_family, media),
             "occupant": (occ.get("ref") if isinstance(occ, dict) else occ) if occ else None,
         })
     return out

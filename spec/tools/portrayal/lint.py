@@ -244,6 +244,7 @@ RULES = {
     "L101": ("component",  "a `superseded-by` names a component major that exists", "fix the ref, or add the successor if it has not landed yet"),
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
+    "L104": ("device",     "a port group's declared media and its cage's presented interface name the same pluggable family", "the group's media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the group's media is wrong"),
 }
 
 
@@ -1086,6 +1087,20 @@ def _family_mated_by(interface):
     """
     for name, fam in PLUGGABLE_FAMILIES.items():
         if fam.get("interface") == interface:
+            return name, fam
+    return None
+
+
+def _family_owning_rate(rate):
+    """The (name, family) whose `rates` ladder carries `rate`, or None.
+
+    The reverse of `_family_mated_by`: that answers "whose CAGE is this",
+    this answers "whose LADDER is this rate a rung of" - the same question
+    `test_pluggable_ladder.py`'s own `owner` dict asks of the whole registry,
+    asked here of one value at a time against a real device's group.
+    """
+    for name, fam in PLUGGABLE_FAMILIES.items():
+        if rate in (fam.get("rates") or []):
             return name, fam
     return None
 
@@ -5039,6 +5054,73 @@ def lint_device_pluggable_media(path, data, _lib_roots=None):
                 "family in spec/schemas/pluggables.yaml carries as a rate")
 
 
+def lint_device_cage_media_disagreement(path, data, lib_roots):
+    """L104: a port group's declared media and its cage's presented interface
+    (`manifest.presented_interface`, looked through a wrapper's `parts:`
+    exactly as render.py's `cages[]` does) name the SAME pluggable family.
+
+    render.py's `cages[].accepts` derivation found this, not a person: a
+    QSFP-DD cage offers `generic/qsfp-dd-lc@1`, and a QSFP one offers
+    `generic/qsfp-lc@1` (plus, on a QSFP-DD cage, the QSFP generic too,
+    through `also-accepts`) - two different lists. A group declaring
+    `media: qsfp-dd` while its placement is modelled with `std/qsfp-ganged@1`
+    (a QSFP aperture, not a QSFP-DD one) asks for the QSFP-DD optic while
+    presenting the QSFP shape, and nothing before this compared the two.
+
+    THE GROUP'S MEDIA GOVERNS the accept list (Jason's ruling, not derived):
+    the group says what the port IS; the aperture says what it looks like,
+    and for slotting an optic the former decides. render.py's cage
+    derivation already applies that precedence - see `cage_entries` there.
+    This rule does not change what gets offered; it flags the corpus fact so
+    the modelling question - is the drawing's aperture wrong, or is the
+    group's media wrong - stays visible instead of being silently settled by
+    a precedence rule nobody sees.
+
+    WARNING, NOT ERROR, the same way L103 is: QSFP-DD and QSFP share a face
+    opening and differ mainly in depth, so the DRAWING may well be correct
+    and the fix may belong in six different datasheets, not in this rule.
+    Six separate modelling questions against six sets of source documents is
+    real work that accumulates device by device, which is L40's shape, not
+    L102's.
+    """
+    groups = data.get("groups") or {}
+
+    def _res(ref):
+        p = resolve_component(ref, lib_roots)
+        return load_yaml(p) if p else None
+
+    for vname, view in sorted((data.get("views") or {}).items()):
+        for p in view_parts(view or {})["placements"]:
+            contract = _res(p.get("ref"))
+            if not contract:
+                continue
+            interface, _at, _lift = presented_interface(contract, _res)
+            if not interface:
+                continue
+            iface_found = _family_mated_by(interface)
+            if iface_found is None:
+                continue
+            media = ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media")
+            if not media:
+                continue
+            media_found = _family_owning_rate(media)
+            if media_found is None:
+                continue
+            iface_name, _iface_fam = iface_found
+            media_name, _media_fam = media_found
+            if iface_name == media_name:
+                continue
+            warn(path, "L104",
+                 f"{vname}/{p['id']}: group {p.get('group')!r} declares media "
+                 f"{media!r} (the {media_name!r} family) but the placement's "
+                 f"ref {p['ref']} presents interface {interface!r} (the "
+                 f"{iface_name!r} family) - the group's media governs the "
+                 f"accept list render.py's cages[] builds, so this port is "
+                 f"offered {media_name!r} optics over a {iface_name!r}-shaped "
+                 "aperture. Check the source: either the drawing needs the "
+                 f"{media_name!r} cage, or the group's media is wrong")
+
+
 def lint_device_groups(path, data, lib_roots):
     """L22 and L23 - what a port group promises, and what it actually holds.
 
@@ -6429,6 +6511,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_groups(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
     lint_device_pluggable_media(path, data)
+    lint_device_cage_media_disagreement(path, data, lib_roots)
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)

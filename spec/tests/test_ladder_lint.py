@@ -237,6 +237,94 @@ def test_an_empty_components_dir_warns_for_every_family(tmp_path):
     assert _families_named(got) == set(L.PLUGGABLE_FAMILIES), got
 
 
+# --- device scope: a group's `media` vs its cage's presented `interface` ----
+#
+# render.py's cages[] derivation (spec C1 task 3) found this, not a person:
+# giving the accept list a real audience turned "does the group's media agree
+# with the cage's drawn aperture" into a question that had an answer for the
+# first time. 78 ports across 6 real devices disagree - group media qsfp-dd
+# on a placement modelled with std/qsfp-ganged@1, a QSFP aperture - and
+# render.py's precedence rule (the group's media governs) already serves the
+# right optic there; L104 is what keeps the disagreement itself visible.
+
+def run_cage_media(doc, path="t/device.yaml"):
+    with L.collecting() as found:
+        L.lint_device_cage_media_disagreement(path, doc, [LIB])
+    return [w for w in found.warnings if "[L104]" in w]
+
+
+def _one_placement_device(media, ref, group="g0"):
+    return {"groups": {group: {"term": "Port", "attrs": {"media": media}}},
+            "views": {"front": {"components": {"placements": [
+                {"id": "p0", "ref": ref, "group": group, "at": [0, 0]}]}}}}
+
+
+def test_agreeing_media_and_interface_is_clean():
+    # std/sfp-ganged@1 presents `sfp`; `sfp-plus` is a rung of the SAME `sfp`
+    # family (SFF-8432), so the two name one family and nothing fires.
+    got = run_cage_media(_one_placement_device("sfp-plus", "std/sfp-ganged@1"))
+    assert got == [], got
+
+
+def test_disagreeing_media_and_interface_warns():
+    # The exact shape the real corpus has: group media qsfp-dd, aperture
+    # std/qsfp-ganged@1 (interface qsfp) - QSFP-DD and QSFP are different
+    # families.
+    got = run_cage_media(_one_placement_device("qsfp-dd", "std/qsfp-ganged@1"))
+    assert len(got) == 1, got
+    assert "front/p0" in got[0]
+    assert "qsfp-dd" in got[0] and "'qsfp'" in got[0]
+
+
+def test_a_placement_with_no_group_is_not_asked():
+    doc = {"views": {"front": {"components": {"placements": [
+        {"id": "p0", "ref": "std/qsfp-ganged@1", "at": [0, 0]}]}}}}
+    assert run_cage_media(doc) == []
+
+
+def test_a_group_with_no_media_is_not_asked_by_l104():
+    doc = {"groups": {"g0": {"term": "Port"}},
+            "views": {"front": {"components": {"placements": [
+                {"id": "p0", "ref": "std/qsfp-ganged@1", "group": "g0", "at": [0, 0]}]}}}}
+    assert run_cage_media(doc) == []
+
+
+def test_an_interface_outside_the_registry_is_not_asked():
+    """`common/lc-boot@1` mates `lc-plug`, which names no family - and a
+    placement whose OWN ref presents no registry interface either should not
+    be compared against a media value it has nothing to disagree with."""
+    doc = _one_placement_device("qsfp-dd", "common/lc-boot@1")
+    assert run_cage_media(doc) == []
+
+
+def test_a_media_the_registry_cannot_place_is_not_asked_by_l104():
+    """A media value with no family at all (L102's question) has nothing for
+    this rule to compare either - L102 already reports it, and L104 doubling
+    up on the same gap would be the same defect reported twice."""
+    doc = _one_placement_device("not-a-real-media", "std/qsfp-ganged@1")
+    assert run_cage_media(doc) == []
+
+
+def test_every_real_device_cage_media_disagreement_is_this_exact_set():
+    """The corpus count Jason measured independently (78) and the six devices
+    named in the fix-round message, pinned exactly - a wrong count, high or
+    low, fails loudly rather than needing a second manual recount."""
+    per_device = {}
+    for slug, path, doc in libdata.library():
+        n = len(run_cage_media(doc, path))
+        if n:
+            per_device[slug] = n
+    assert per_device == {
+        "edgecore/as7946-30xb": 8,
+        "edgecore/as7946-74xksb": 2,
+        "edgecore/csr440": 2,
+        "edgecore/dcs240": 32,
+        "edgecore/dcs511": 32,
+        "ufispace/s9510-28dc": 2,
+    }, per_device
+    assert sum(per_device.values()) == 78
+
+
 # --- registration ------------------------------------------------------------
 
 def test_l102_is_registered_for_both_scopes():
@@ -245,6 +333,10 @@ def test_l102_is_registered_for_both_scopes():
 
 def test_l103_is_registered_as_a_library_rule():
     assert L.RULES["L103"][0] == "library"
+
+
+def test_l104_is_registered_as_a_device_rule():
+    assert L.RULES["L104"][0] == "device"
 
 
 # --- the registry itself, loaded by lint.py exactly as pluggables.yaml holds it

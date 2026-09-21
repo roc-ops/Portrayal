@@ -239,3 +239,61 @@ def test_the_registry_load_is_not_vacuous():
     assert len(families) >= 8
     assert render_mod._family_by_interface(families, "sfp")[0] == "sfp"
     assert render_mod._family_by_interface(families, "not-a-real-interface") is None
+
+
+# --- fix round 1: the group's media governs when it disagrees with the -----
+# cage's presented interface ---------------------------------------------
+#
+# The accept list derivation surfaced a real corpus fact: 78 ports across six
+# devices (edgecore/as7946-30xb, as7946-74xksb, csr440, dcs240, dcs511,
+# ufispace/s9510-28dc) declare `media: qsfp-dd` on their port group while
+# being modelled with `std/qsfp-ganged@1`, a QSFP aperture, not a QSFP-DD
+# one. QSFP-DD and QSFP share a face opening and differ mainly in depth, so
+# the DRAWING may be correct - which family should govern the accept list is
+# Jason's ruling, not something this code derives: the group's media, because
+# the group says what the port IS and the aperture only says what it looks
+# like. `spec/tools/portrayal/lint.py`'s L104
+# (`lint_device_cage_media_disagreement`) flags every one of the 78 so the
+# modelling question - aperture wrong, or group media wrong - stays visible;
+# `spec/tests/test_ladder_lint.py` pins that count and the exact six devices.
+# This is the other half: that render.py's derivation actually serves the
+# RIGHT optic once the two disagree, checked against a real device rather
+# than the six being taken on faith.
+#
+# edgecore/csr440, placement `port-2`: `groups.qsfp-dd.attrs.media ==
+# qsfp-dd`, ref `std/qsfp-ganged@1`, which presents interface `qsfp` - one of
+# the 78, checked directly:
+#
+#     grep -n "ref: std/qsfp-ganged@1" library/devices/edgecore/csr440/device.yaml
+#
+# resolves to `port-2`, inside the `qsfp-dd` group.
+
+CSR440 = LIB / "devices/edgecore/csr440/device.yaml"
+
+
+def test_a_qsfp_shaped_cage_with_qsfp_dd_media_offers_the_qsfp_dd_optic(tmp_path):
+    idx = _build(CSR440, tmp_path)
+    cage = _cage(idx, "front", "port-2")
+    # THE DRAWING FACT IS UNCHANGED - this really is a QSFP-shaped aperture,
+    # and the entry says so honestly.
+    assert cage["interface"] == "qsfp"
+    assert cage["media"] == "qsfp-dd"
+    assert cage["group"] == "qsfp-dd"
+    # THE ACCEPT LIST FOLLOWS THE MEDIA, NOT THE APERTURE: the qsfp-dd
+    # family's own generic, plus generic/qsfp-lc@1 through qsfp-dd's
+    # `also-accepts: [qsfp]` - exactly what a genuine std/qsfp-dd@1 cage with
+    # this same media would offer (test_a_qsfp_dd_cage_accepts_its_own_generic_
+    # and_the_also_accepted_qsfp_one, above, on edgecore/dcs510).
+    assert cage["accepts"] == ["generic/qsfp-dd-lc@1", "generic/qsfp-lc@1"]
+
+
+def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
+    """The precedence rule only fires on a disagreement. `port-1` on the same
+    device is in the plain `qsfp28` group - QSFP media on a QSFP aperture,
+    the ordinary case everywhere else in this suite - and must not be
+    touched by the code path the 78 disagreeing ports exercise."""
+    idx = _build(CSR440, tmp_path)
+    cage = _cage(idx, "front", "port-1")
+    assert cage["interface"] == "qsfp"
+    assert cage["media"] == "qsfp28"
+    assert cage["accepts"] == ["generic/qsfp-lc@1"]
