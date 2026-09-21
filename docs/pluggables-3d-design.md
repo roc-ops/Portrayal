@@ -42,11 +42,12 @@ with the 2D about which bail is blue.
 
 ## What is not a box
 
-`common/qsfp-transceiver` carries six `body-*.svg` skins - top, bottom, left, right,
+`common/qsfp-transceiver` carried six `body-*.svg` skins - top, bottom, left, right,
 rear - produced by a study page (`library/demo/part.html`, since removed) whose 3D
 loft of the pull tab was verified against photographs (the maintainer's notes, not in this repository).
-The README says the viewer textures a box from them; nothing in `relief.js` or
-`viewer3d.js` reads them.
+The README used to say the viewer textures a box from them; nothing in `relief.js`
+or `viewer3d.js` ever read them, and D1 (2026-09-21) deleted the five
+`body-*.svg` files rather than wire them in - task 2 of this spec carried that out.
 
 Decision to make here, with the parts in hand: either
 
