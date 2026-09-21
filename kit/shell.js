@@ -16,7 +16,8 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
-import { nestedBays, applyOverrides, applyOccupantOverrides, decodeSwaps, rawParam, configBayPath } from './swap.js';
+import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
+         rawParam, configBayPath } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -994,27 +995,26 @@ export function createShell(opts = {}) {
   }
 
   // THE SWAPS A RELOAD CARRIES (the explorer's `swap=`), taken into the state
-  // for every key that names something on this device - a bay or cage of ANY
-  // view, since the one on screen is not the only one, or a path nested in a
-  // device bay - and seated into the face on screen. Keys that name nothing
-  // here, and refs a device-level bay or cage does not accept, are ignored:
-  // a link written for another device, or edited by hand, must not seat
-  // something the inspector could never have offered.
+  // and seated into the face on screen. What is taken is decided by swap.js's
+  // `acceptSwaps`, BEFORE anything is written: whatever the state holds goes
+  // back into `swap=` and to the 3D scene, whose applyOverrides checks no
+  // accepts, so an entry the 2D face would refuse must not get as far as the
+  // state. An entry is taken only when it names a bay or cage of this device
+  // that exists - in any view, since the one on screen is not the only one;
+  // a nested bay through what its carrier holds - and its ref is one that bay
+  // or cage accepts. A link written for another device, or edited by hand,
+  // cannot seat anything the inspector could never have offered.
   async function applySwaps(map) {
     const all = o => Object.values(o || {}).flat();
-    const cages = all(state.meta?.cages), bays = all(state.meta?.bays);
-    const ignored = [];
-    for (const key of byDepth(Object.keys(map || {}))) {
-      const ref = map[key] || null;
-      const cage = cages.find(c => c.id === key);
-      const bay = cage ? null : bays.find(b => b.id === key);
-      const nested = !cage && !bay && key.includes('/module/')
-        && bays.some(b => key.startsWith(b.id + '/module/'));
-      const target = cage || bay;
-      if ((!target && !nested) || (target && ref && !(target.accepts || []).includes(ref))) {
-        ignored.push(key); continue;
-      }
-      if (cage) state.cfgOccupants[key] = ref; else state.cfgBays[key] = ref;
+    const bays = all(state.meta?.bays);
+    const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+    // what this configuration built at a path; undefined = no answer
+    const built = p => own(state.cfgBays, p) ? state.cfgBays[p] || null
+      : bays.find(b => b.id === p)?.default ?? undefined;
+    const {accepted, ignored} = acceptSwaps(map, {bays, cages: all(state.meta?.cages), built, compByRef});
+    const cageIds = new Set(all(state.meta?.cages).map(c => c.id));
+    for (const [key, ref] of Object.entries(accepted)) {
+      if (cageIds.has(key)) state.cfgOccupants[key] = ref; else state.cfgBays[key] = ref;
       state.touched.add(key);
     }
     await reseat();

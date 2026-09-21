@@ -584,3 +584,70 @@ export function searchWith(search, vals) {
   const all = [...set, ...kept];
   return all.length ? `?${all.join('&')}` : '';
 }
+
+// WHICH ENTRIES OF A RELOADED SWAP MAP ARE REAL - the gate between a `swap=`
+// somebody wrote (or edited, or pasted from another device) and the state the
+// explorer keeps. Whatever passes is written back into the URL AND sent to the
+// 3D scene, and applyOverrides above does not check accepts: an entry the 2D
+// face would refuse, taken in anyway, is seated in 3D and not in 2D, and it
+// lives in the URL for good. So an entry is taken ONLY when it names a bay or
+// cage that exists AND its ref is one that bay or cage accepts; an empty ref
+// is always allowed for one that exists. Everything else is `ignored`.
+//
+// A NESTED BAY EXISTS BY VIRTUE OF WHAT ITS CARRIER HOLDS, so it is resolved
+// the way nestedBays resolves one off a drawing - the carrier's component and
+// its published `bays` - but from the STATE rather than the DOM, because the
+// carrier may be on a face that is not on screen. And it is resolved LEVEL BY
+// LEVEL, shallowest first - the frontier rule applyAllOverrides follows -
+// because what the carrier holds is this same map's decision when the map
+// names the carrier: `slot-1~a22,slot-1/module/ppm-1~x` is only valid once
+// `slot-1~a22` has been. A carrier entry that is itself refused leaves the
+// built carrier in charge.
+//
+//   bays, cages   the device's own, every view (flattened)
+//   built(path)   what the configuration puts at `path`: a ref, null for
+//                 built empty, or UNDEFINED for "no answer" - then the resolved
+//                 bay's own `default` is what the build seated there. Undefined
+//                 and null are different on purpose: an emptied bay is not one
+//                 that falls back to its default.
+//   compByRef     ref -> components.json entry (may throw on a malformed ref)
+export function acceptSwaps(map, {bays = [], cages = [], built = () => null, compByRef}) {
+  const accepted = {}, ignored = [];
+  const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  const comp = ref => { try { return ref ? compByRef(String(ref).split(':')[0]) : null; } catch (e) { return null; } };
+  const memo = new Map();
+  // the bay at `path` given what is decided so far, or null
+  function bayAt(path) {
+    if (memo.has(path)) return memo.get(path);
+    let bay = bays.find(b => b.id === path) || null;
+    const cut = path.lastIndexOf('/module/');
+    if (!bay && cut > 0) {
+      const carrier = path.slice(0, cut);
+      const name = path.slice(cut + '/module/'.length);
+      const holder = bayAt(carrier);
+      if (holder && name) {
+        const was = built(carrier);
+        const ref = own(accepted, carrier) ? accepted[carrier]
+                  : was !== undefined ? was
+                  : holder.default ?? null;
+        const b = comp(ref)?.bays?.[name];
+        if (b) bay = {...b, id: path};
+      }
+    }
+    memo.set(path, bay);
+    return bay;
+  }
+  const depth = k => k.split('/module/').length;
+  const keys = Object.keys(map && typeof map === 'object' ? map : {})
+    .sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : 1));
+  for (const key of keys) {
+    const ref = map[key] || null;
+    const target = cages.find(c => c.id === key) || bayAt(key);
+    if (!target || (ref && !(target.accepts || []).includes(ref))) { ignored.push(key); continue; }
+    accepted[key] = ref;
+    // a decided carrier changes what is nested under it: forget what was
+    // resolved beneath it before this decision
+    for (const k of [...memo.keys()]) if (k.startsWith(key + '/')) memo.delete(k);
+  }
+  return {accepted, ignored};
+}
