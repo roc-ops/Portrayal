@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: asr-9010-fan
-version: 1.0.1
+version: 1.0.2
 class: fan
 behaviour: fills
 profile: networking
@@ -88,21 +88,18 @@ provenance:
     coincidence rather than corroboration, this is the number to re-derive first.
   lamp: >-
     install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators':
-    'After fan tray insertion into the chassis, the LED lights up temporarily appearing
-    yellow. During normal operation: The LED lights green to indicate that all fans in
-    the module are operating normally. The LED lights red to indicate a fan failure or
-    another fault in the fan tray module.' Four states; yellow is the insertion state
+    yellow, briefly = just inserted into the chassis; then, in normal operation, green
+    = all fans in the module running normally; red = a fan failure or another fault in
+    the fan tray module. Four states; yellow is the insertion state
     and is real.
   fans: >-
     install guide - 'Cisco ASR 9010 Router Fan Trays' in the Overview and Reference
-    Guide: 'The Cisco ASR 9010 Router contains two fan trays for redundancy... The fan
-    tray contains 12 axial 120-mm (4.72-in) fans. There is a fan control board at the
-    back end of each tray with a single power/data connector that connects with the
-    backplane. The fan tray aligns through two guide pins inside the chassis, and it is
-    secured by two captive screws... The maximum weight of the fan tray is 13.82 lb
-    (6.29 kg).' The guide adds that 'Both fan trays are required for normal system
-    operation for the Cisco ASR 9010 Router and Cisco ASR 9006 Router. If both fan trays
-    in the router are pulled out or are not installed, a critical alarm is raised.'
+    Guide: the ASR 9010 has two fan trays for redundancy; each holds 12 axial 120-mm
+    (4.72-in) fans and, at its back end, a fan control board whose single power/data
+    connector mates with the backplane; a tray locates on two guide pins inside the
+    chassis, is held by two captive screws, and weighs at most 13.82 lb (6.29 kg). The
+    guide adds that both fan trays are needed for normal operation of the ASR 9010 and
+    the ASR 9006, and having both pulled or missing raises a critical alarm.
   power: >-
     install guide - Table 24 of the Overview and Reference Guide, and THERE ARE TWO ROWS
     because there are two generations of this tray. 'ASR 9010 Fan Tray V1': 200 W at 25

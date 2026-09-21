@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-4hg-flex-tr
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -102,26 +102,24 @@ provenance:
     every cage, with an assertion that the result is a permutation of 0..n-1; on all six
     masters it is, first time.
   leds: >-
-    install guide - 'All Ethernet line cards have port Status LEDs on their front
-    panels. Each SFP or XFP port has an adjacent LED to indicate the status of the
-    associated port. In addition, each line card has a single tristate Status LED to
-    display card status.' The card lamp's four states are Table 32 of the Ethernet Line
-    Card Installation Guide, transcribed - note its amber is TWO states, steady during
-    boot and blinking for a software configuration error. PER-PORT lamps are NOT
-    modelled on these three cards: the masters draw a narrow 5.4 mm strip between each
-    pair of rows rather than a discrete lamp per port, and which part of that strip
-    belongs to which port is not resolvable from the drawing. That is a gap, and it is
-    different from the QSFP cards, where each port's lamp is drawn separately and IS
-    modelled.
+    install guide - every Ethernet line card has port Status LEDs on its front panel,
+    one beside each SFP or XFP port showing that port's status, plus a single tristate
+    Status LED per card for card status. The card lamp's four states are Table 32 of
+    the Ethernet Line Card Installation Guide, transcribed - note its amber is TWO
+    states, steady during boot and blinking for a software configuration error.
+    PER-PORT lamps are NOT modelled on these three cards: the masters draw a narrow 5.4
+    mm strip between each pair of rows rather than a discrete lamp per port, and which
+    part of that strip belongs to which port is not resolvable from the drawing. That
+    is a gap, and it is different from the QSFP cards, where each port's lamp is drawn
+    separately and IS modelled.
   ports: >-
     install guide and datasheet, and they agree. The guide's '400G Combo Multi-Rate Line
-    Card' section: 'The 400G combo multi-rate line card has 44 ports: 24 SFP+ ports
-    capable of 10GE; 16 SPF28 ports capable of 10GE or 25GE; 4 QSFP+ or QSFP28 ports
-    capable of 40GE or 100GE', with Figure 25 callouts '24 SFP+ ports (2 groups of 12)',
-    '16 SFP28 ports (2 groups of 8)' and '4 QSFP28/QSFP+ ports (2 groups of 2)'. The
-    datasheet says the same from the other side: '4 QSFP28 ports capable of 40Gb and
-    100Gb Ethernet traffic support. 16 SFP28 ports capable of 10Gb and 25Gb Ethernet
-    traffic support. 24 SFP+ ports capable of 10Gb Ethernet traffic support.'
+    Card' section: the card has 44 ports - 24 SFP+ at 10GE, 16 SFP28 at 10GE or 25GE,
+    and 4 QSFP+ or QSFP28 at 40GE or 100GE, with Figure 25 callouts '24 SFP+ ports (2
+    groups of 12)', '16 SFP28 ports (2 groups of 8)' and '4 QSFP28/QSFP+ ports (2 groups
+    of 2)'. The datasheet says the same from the other side: 4 QSFP28 ports for 40 and
+    100 Gb Ethernet, 16 SFP28 ports for 10 and 25 Gb Ethernet, and 24 SFP+ ports for 10
+    Gb Ethernet.
   which-ports: >-
     WHICH four are the QSFPs was derived from the artwork and then found to match the
     guide exactly, which is the strongest check here. The master draws four cages at
@@ -131,9 +129,9 @@ provenance:
     40GE QSFP+ or 100GE QSFP28 modules.' Two sources, one answer, neither fitted to the
     other.
   colour-groups: >-
-    the guide gives the colour scheme in full - 'Ports 0-5 (blue), 10-15 (red), 20-25
-    (magenta), 30-35 (orange) support 10GE SFP+ modules; Ports 6-9 (blue), 16-19 (red),
-    26-29 (magenta), 36-39 (orange) support 10GE/25GE SFP28 modules' - and it is NOT
+    the guide gives the colour scheme in full - 10GE SFP+ modules on ports 0-5 blue,
+    10-15 red, 20-25 magenta and 30-35 orange; 10GE/25GE SFP28 modules on ports 6-9
+    blue, 16-19 red, 26-29 magenta and 36-39 orange - and it is NOT
     drawn here, for the reason the QSFP cards' group boxes are not: the stencil builds
     those outlines from many short stroked segments rather than closed rectangles, and a
     box drawn to look right is a line no measurement supports. The grouping is a fact

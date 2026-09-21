@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-24x10ge-1g-se
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -92,18 +92,16 @@ provenance:
   frame: >-
     the card is modelled PORTRAIT - x across the card's thickness, y along its width -
     which is the stencil's own frame and casa's. WHICH WAY A CHASSIS CARRIES IT is the
-    Overview and Reference Guide's 'Chassis Slots' section, quoted because an earlier
-    version of this note had it wrong for three chassis out of seven: 'Cisco ASR 9010
-    Router: All line cards and RSP cards are front-facing and mounted VERTICALLY, with
-    ejector levers and captive screws at the top and bottom of each card. Cisco ASR 9006
-    Router and Cisco ASR 9904 Router: All chassis line cards and RSP cards are front-
-    facing and mounted HORIZONTALLY, with ejector levers and captive screws at the left
-    and right ends of each card. Cisco ASR 9906 Router: ... mounted vertically ... Cisco
-    ASR 9910 Router: ... vertically ... Cisco ASR 9922 Router: ... vertically ... Cisco
-    ASR 9912 Router: ... vertically.' So only the ASR 9006 and the ASR 9904 lay their
-    cards flat and rotate the bay; the other five place this component unrotated. The
-    ejector-lever wording is the tell and it is why the guide is worth quoting rather
-    than paraphrasing - 'top and bottom' means vertical, 'left and right ends' means
+    Overview and Reference Guide's 'Chassis Slots' section, set out here because an
+    earlier version of this note had it wrong for three chassis out of seven: on the ASR
+    9010 every line card and RSP card faces the front and stands VERTICALLY, its ejector
+    levers and captive screws at the card's top and bottom; on the ASR 9006 and the ASR
+    9904 every line card and RSP card faces the front and lies HORIZONTALLY, its levers
+    and screws at the card's left and right ends; and the ASR 9906, ASR 9910, ASR 9922
+    and ASR 9912 are each given as vertical. So only the ASR 9006 and the ASR 9904 lay
+    their cards flat and rotate the bay; the other five place this component unrotated.
+    The ejector-lever wording is the tell and it is why the guide's own terms are kept -
+    'top and bottom' means vertical, 'left and right ends' means
     horizontal, and the RU height of a chassis does not decide it.
   cages: >-
     composed from std/, not drawn. These masters draw a cage as a STROKED grey rectangle
@@ -125,17 +123,16 @@ provenance:
     every cage, with an assertion that the result is a permutation of 0..n-1; on all six
     masters it is, first time.
   leds: >-
-    install guide - 'All Ethernet line cards have port Status LEDs on their front
-    panels. Each SFP or XFP port has an adjacent LED to indicate the status of the
-    associated port. In addition, each line card has a single tristate Status LED to
-    display card status.' The card lamp's four states are Table 32 of the Ethernet Line
-    Card Installation Guide, transcribed - note its amber is TWO states, steady during
-    boot and blinking for a software configuration error. PER-PORT lamps are NOT
-    modelled on these three cards: the masters draw a narrow 5.4 mm strip between each
-    pair of rows rather than a discrete lamp per port, and which part of that strip
-    belongs to which port is not resolvable from the drawing. That is a gap, and it is
-    different from the QSFP cards, where each port's lamp is drawn separately and IS
-    modelled.
+    install guide - every Ethernet line card has port Status LEDs on its front panel,
+    one beside each SFP or XFP port showing that port's status, plus a single tristate
+    Status LED per card for card status. The card lamp's four states are Table 32 of
+    the Ethernet Line Card Installation Guide, transcribed - note its amber is TWO
+    states, steady during boot and blinking for a software configuration error.
+    PER-PORT lamps are NOT modelled on these three cards: the masters draw a narrow 5.4
+    mm strip between each pair of rows rather than a discrete lamp per port, and which
+    part of that strip belongs to which port is not resolvable from the drawing. That
+    is a gap, and it is different from the QSFP cards, where each port's lamp is drawn
+    separately and IS modelled.
   ports: >-
     datasheet - Cisco ASR 9000 Series 24-Port and 48-Port Dual-Rate 10GE/1GE Line Card
     Data Sheet: 'Port density: 24 ports and 48 ports of 10 Gigabit/1 Gigabit Ethernet

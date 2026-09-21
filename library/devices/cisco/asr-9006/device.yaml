@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -106,12 +106,12 @@ provenance:
     note: >-
       datasheet - stated directly, and it had been an inference until now. The Overview and
       Reference Guide's "Chassis Slots" section (b-asr9k-overview-reference-guide.pdf p17) names
-      every chassis in the family and gives the ejector position as the tell: "Cisco ASR 9006
-      Router and Cisco ASR 9904 Router: All chassis line cards and RSP cards are front-facing and
-      mounted horizontally, with ejector levers and captive screws at the left and right ends of
-      each card". A bay therefore places a card component rotated. Only the ASR 9006 and ASR 9904
-      are horizontal; the 9010, 9906, 9910, 9912 and 9922 all stand their cards up, including the
-      21 RU 9010. This section supersedes the three-way inference an earlier revision rested on -
+      every chassis in the family and gives the ejector position as the tell: on the ASR 9006 and
+      the ASR 9904 every line card and RSP card faces the front and lies horizontally, with
+      ejector levers and captive screws at the card's left and right ends. A bay therefore places
+      a card component rotated. Only the ASR 9006 and ASR 9904 are horizontal; the 9010, 9906,
+      9910, 9912 and 9922 all stand their cards up, including the 21 RU 9010. This section
+      supersedes the three-way inference an earlier revision rested on -
       the slot figures, Figure 2's "four on each side" callout and the measured cage aspect - all
       of which agreed with it.
   slots:
@@ -186,10 +186,9 @@ provenance:
       drawing + datasheet - one power shelf below the cage, 13.94 to 430.44 mm across the body and
       385.36 to 431.70 mm down it. Modelled with FOUR module bays M0 to M3 because that is what
       Figure 19 numbers and what Figure 3 draws ("Version 2 Power Tray Shown", "Four AC/DC or
-      DC/DC power modules"). The guide states the split in words on p3: "The version 1 power
-      system has three power modules in the single power tray. The version 2 power system has four
-      power modules in the single power tray", and notes "The ASR 9006 chassis does not support
-      version 3 power modules"
+      DC/DC power modules"). The guide states the split in words on p3: the version 1 power system
+      has three power modules in its single power tray, the version 2 system four, and notes "The
+      ASR 9006 chassis does not support version 3 power modules"
   stencil-is-one-generation-behind:
     note: >-
       NOTE, and it matters - the ASR-9006-AC Front master draws THREE power modules, not four. It
@@ -220,10 +219,10 @@ provenance:
   airflow:
     confidence: datasheet
     note: >-
-      datasheet - "Cisco ASR 9006 Router: Side-to-top to rear cooling path. The inlet is at the
-      right side of the chassis, and the exhaust is at the upper rear",
-      b-asr9k-overview-reference-guide.pdf p3725, repeated at p2827. Hence chassis.airflow side, a
-      right-side intake grille on the right view and the exhaust grille on the rear
+      datasheet - ASR 9006 cooling runs side-to-top-to-rear, drawing in at the chassis's right
+      side and exhausting at the upper rear, b-asr9k-overview-reference-guide.pdf p3725, repeated
+      at p2827. Hence chassis.airflow side, a right-side intake grille on the right view and the
+      exhaust grille on the rear
   environmental:
     confidence: datasheet
     note: >-
@@ -270,13 +269,12 @@ provenance:
       EOL9675 (Amended), "End-of-Sale and End-of-Life Announcement for the Cisco ASR 9000 Series
       Version 1 Power Bundles and Devices", updated 23 December 2019, lists ASR-9006-AC and
       ASR-9006-DC as end-of-sale, replaced by ASR-9006-AC-V2 and ASR-9006-DC-V2. But its migration
-      section says verbatim: "The Cisco ASR 9006 and ASR 9010 chassis continue their regular
-      support as part of the Cisco ASR 9000 Series, and these can continue to be purchased
-      together with the Version 2 AC or DC power trays ... Only those products related to Version
-      1 power bundles and devices are part of this end-of-sale notice." So the CHASSIS has no EoL
-      announced; the version 1 POWER BUNDLE PID does. Both facts are recorded, because recording
-      only the first would read as "nobody looked" and only the second would retire a product
-      Cisco still sells
+      section says: the ASR 9006 and ASR 9010 chassis stay in regular support within the ASR 9000
+      Series and can still be bought with the Version 2 AC or DC power trays, and only products
+      tied to Version 1 power bundles and devices fall under the end-of-sale notice. So the
+      CHASSIS has no EoL announced; the version 1 POWER BUNDLE PID does. Both facts are recorded,
+      because recording only the first would read as "nobody looked" and only the second would
+      retire a product Cisco still sells
   air-filter:
     confidence: datasheet
     note: >-
@@ -428,9 +426,9 @@ provenance:
       datasheet + component contract - slots 0 to 5 accept cisco/a9k-slot-cover@1, and the claim
       is checked rather than assumed. That component is Cisco's line card and RSP/RP blank filler,
       part numbers A9K-LC-FILR and A9K-LC-FILR-V2, sourced from the Ethernet Line Card
-      Installation Guide's own removal procedure: "If the line card slot is to remain empty,
-      install a line card blank (Product Number A9K-LC-FILR) to keep the chassis dust free and to
-      maintain proper airflow". Its contract measures the PLATE at 42.05 x 362.24 mm inside a
+      Installation Guide's own removal procedure: a line card slot that is to stay empty gets a
+      line card blank (Product Number A9K-LC-FILR), which keeps the chassis free of dust and the
+      airflow correct. Its contract measures the PLATE at 42.05 x 362.24 mm inside a
       395.7 mm envelope that is Cisco's stated line-card width "including ejector bracket/lever".
       Against this chassis: the plate's 362.24 mm covers the 352.59 mm cage opening with about 4.8
       mm of overlap onto the rails each side, and its 42.05 mm sits inside the 46.61 mm slot pitch
@@ -720,7 +718,7 @@ groups:
     physical-context: Fan
     attrs:
       redundancy: '1+1'
-      redundancy-note: "1+1, and the guide says it in three sentences that have to be read together (Overview and Reference Guide, 'Cisco ASR 9006 Router Fan Trays'). 'The Cisco ASR 9006 Router contains two fan trays for redundancy. If a fan tray fails, it is possible to swap a single fan tray assembly while the system is operational.' - so one may be out while the box runs. And: 'Both fan trays are required for normal system operation for the Cisco ASR 9010 Router and Cisco ASR 9006 Router. If both fan trays in the router are pulled out or are not installed, a critical alarm is raised.' - so the critical alarm is for BOTH being out, and running on one is degraded rather than normal. 1+1 is the redundancy; the second sentence is the caveat that travels with it, and is why this note quotes rather than summarises."
+      redundancy-note: "1+1, and the guide says it in three sentences that have to be read together (Overview and Reference Guide, 'Cisco ASR 9006 Router Fan Trays'). The ASR 9006 has two fan trays for redundancy, and a single failed fan tray assembly can be swapped while the system runs - so one may be out while the box runs. And: both fan trays are needed for normal operation of the ASR 9010 and the ASR 9006, and having both pulled or missing raises a critical alarm - so the critical alarm is for BOTH being out, and running on one is degraded rather than normal. 1+1 is the redundancy; the second sentence is the caveat that travels with it, and is why this note sets them out rather than summarising."
   slots:
     term: Slot
     role: traffic

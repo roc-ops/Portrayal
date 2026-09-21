@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pwr-1p6kw-ac
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -30,13 +30,11 @@ provenance:
   input: >-
     install guide - "AC power modules operate within the following input range:
     High line rate: 200 V to 240 V. Low line rate: 90 V to 130 V", with the note
-    that "The Cisco ASR 9903 Router's AC power supply can handle both low line
-    voltage of 120V and high line voltage of 220V. Whenever there is a swap
-    between the two voltage types, you must first remove the power supply from
-    the chassis and apply the new voltage source." The same section gives "The
-    AC power module operates in 50 to 60 Hz and requires a minimum service of:
-    15 A for operation in North America and Japan; 10 A for international
-    operation; 13 A for operation in the UK."
+    that the ASR 9903's AC power supply handles both 120 V low line and 220 V
+    high line, and changing from one to the other means first removing the
+    supply from the chassis and then applying the new source. The same section
+    gives 50 to 60 Hz operation and a minimum service of 15 A in North America
+    and Japan, 10 A internationally and 13 A in the UK.
   inlet: >-
     drawing AND registry. The master draws the inlet body 17.43 x 26.61 mm with
     an earth pin above two flat pins - a C14 appliance inlet rotated a quarter
@@ -47,13 +45,12 @@ provenance:
     centre.
   switch: >-
     THERE IS NONE ON THIS MODULE, and the guide says so rather than leaving it
-    to be inferred: "There is no power switch available on the AC PSUs for Cisco
-    ASR 9903 routers as they are plug-and-play devices. These devices are
-    directly plugged the PSU slots of the router and do not require any
-    configuration for them to work. The power LED (PWR) is available on the
-    front-side of the router." The ASR 9902's own rear DOES carry a switch under
-    an ATTENTION ON-OFF tag - Figure 158 of the same guide draws it, labelled
-    POWER - which is why the absence here is worth stating.
+    to be inferred: the AC PSUs for ASR 9903 routers have no power switch, being
+    plug-and-play devices that go straight into the router's PSU slots and need
+    no configuration to work, and the power LED (PWR) is on the router's front.
+    The ASR 9902's own rear DOES carry a switch under an ATTENTION ON-OFF tag -
+    Figure 158 of the same guide draws it, labelled POWER - which is why the
+    absence here is worth stating.
   size: >-
     drawing - Cisco's own Visio stencil Routers-Cisco_ASR_9000, master
     "ASR-9903 Rear", where all four modules are drawn populated. The module
@@ -76,13 +73,12 @@ provenance:
   lamp: >-
     install guide - the AC-input troubleshooting table, whose LED column reads
     "OK (Cisco ASR 9901) / STATUS (Cisco ASR 9903 and Cisco ASR 9902)" and
-    gives five states for it: "Solid Green - Power supply is on and outputting
-    power. Flashing Green - Power supply is connected to input power or FPD
-    upgrade in progress. Amber - Power supply failure, due to one of the
-    following: Over voltage, Over current, Over Temperature, Fan failure.
-    Flashing Amber - Power supply is operating but a warning condition ... High
-    temperature, High power, Slow fan. Off - Power supply is not receiving
-    power." All five are carried. ITS POSITION IS READ OFF THE MASTER BY EYE,
+    gives five states for it: solid green = on and outputting power; flashing
+    green = connected to input power, or an FPD upgrade in progress; amber =
+    power supply failure from over-voltage, over-current, over-temperature or
+    fan failure; flashing amber = operating, but under a warning condition (high
+    temperature, high power, slow fan); off = not receiving power. All five are
+    carried. ITS POSITION IS READ OFF THE MASTER BY EYE,
     not extracted: the lamp is drawn as a stroked circle with no fill, which
     the shape parser does not carry, so it was located on a 4x render of the
     master at the bottom right of the inlet block. The names and the states are

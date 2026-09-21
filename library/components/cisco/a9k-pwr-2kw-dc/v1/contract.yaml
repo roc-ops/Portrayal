@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-pwr-2kw-dc
-version: 1.0.1
+version: 1.0.2
 class: psu
 behaviour: fills
 profile: networking
@@ -80,12 +80,11 @@ provenance:
     install guide - the Overview and Reference Guide's 'Power Module Status Indicators',
     which gives one table for the version 1 module and a second for version 2 and says
     'The status indicators for the version 3 power module are similar'. Both tables read
-    the same and are transcribed here: Input LED - 'ON continuously when the input
-    voltage is present and within the correct range. BLINKING when the input voltage is
-    out of acceptable range. OFF when no input voltage is present.' Output LED - 'ON
-    when the power module output voltage is present. BLINKING when the power module is
-    in a power limit or overcurrent condition.' Fault LED - 'ON indicates that a power
-    supply failure has occurred.' Note what Cisco does NOT give: a colour for any of the
+    the same and are transcribed here: Input LED: on = input voltage present and within
+    the correct range; blinking = input voltage outside the acceptable range; off = no
+    input voltage. Output LED: on = output voltage present; blinking = the module is in
+    a power-limit or over-current condition. Fault LED: on = a power supply failure has
+    occurred. Note what Cisco does NOT give: a colour for any of the
     three. So the states are on/blinking/off and no colour is asserted.
   power: >-
     ASR 9000 version 1 DC power module. THE PART NUMBER SAYS 2 kW AND THE TABLES SAY 2100 W,

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9922
-version: 1.2.1
+version: 1.2.2
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9922
@@ -47,8 +47,8 @@ provenance:
       THIS CHASSIS WAS HELD BACK UNTIL ITS FACES WERE SETTLED, because Cisco's ASR 9910 masters
       are named front and rear the wrong way round and an unverified face is not a face. Three
       independent checks now agree that asr-9922-front IS the front. FIRST, the guide states it:
-      "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted vertically, with
-      ejector levers and captive screws at the top and bottom of each card" (Chassis Slots, p17).
+      on the ASR 9922 every RP, FC and LC faces the front and stands vertically, with ejector
+      levers and captive screws at the card's top and bottom (Chassis Slots, p17).
       SECOND, this master carries the CABLE MANAGEMENT TRAY with its diagonal cable slots, which
       is front-face furniture on every chassis in this family. THIRD, its band order reproduces
       Figure 24 exactly - power shelves, line card cage, a fan pair, the RP/FC cage, a second fan
@@ -73,11 +73,11 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - a real fact about this chassis that no drawing shows and nothing in the model
-      can express yet. The guide states: "For the Cisco ASR 9922 Router, line cards must be
-      installed upside down in slots 10 through 19 of the bottom card cage, whereas in slots 0
-      though 9 of the top card cage, the line cards are installed right side up" (p26). The bays
-      for slots 10 to 19 are geometrically identical to 0 to 9 and carry no rotation, because the
-      card is inverted in its own plane rather than rotated in the panel's - see gaps
+      can express yet. The guide states: on the ASR 9922, line cards go in upside down in slots
+      10 through 19 of the bottom card cage and right side up in slots 0 through 9 of the top
+      card cage (p26). The bays for slots 10 to 19 are geometrically identical to 0 to 9 and
+      carry no rotation, because the card is inverted in its own plane rather than rotated in the
+      panel's - see gaps
   cage-geometry:
     confidence: drawing
     note: >-
@@ -244,8 +244,8 @@ provenance:
   card-orientation:
     confidence: datasheet
     note: >-
-      datasheet - "Cisco ASR 9922 Router: All RP, FCs, and LCs are front-facing and mounted
-      vertically, with ejector levers and captive screws at the top and bottom of each card"
+      datasheet - on the ASR 9922 every RP, FC and LC faces the front and stands vertically,
+      with ejector levers and captive screws at the card's top and bottom
       (Chassis Slots, p17). So every bay places its component unrotated
   card-compatibility:
     confidence: datasheet
@@ -258,9 +258,9 @@ provenance:
   airflow:
     confidence: datasheet
     note: >-
-      datasheet - "Cisco ASR 9922 Router: Front-to-rear cooling path. The inlet is at the front of
-      the middle cage, and the exhaust is at the upper and lower rear",
-      b-asr9k-overview-reference-guide.pdf p3737. Unique in the family for exhausting at BOTH ends
+      datasheet - ASR 9922 cooling runs front-to-rear, drawing in at the front of the middle cage
+      and exhausting at the upper and lower rear, b-asr9k-overview-reference-guide.pdf p3737.
+      Unique in the family for exhausting at BOTH ends
   air-filter:
     confidence: datasheet
     note: >-
@@ -459,15 +459,15 @@ gaps:
   scope: [slots]
   reason: needs-hardware
   note: >-
-    The guide states that "line cards must be installed upside down in slots 10 through 19 of the
-    bottom card cage, whereas in slots 0 though 9 of the top card cage, the line cards are
-    installed right side up". This is a real property of the chassis and the model cannot currently
-    express it. The bays for 10 to 19 are geometrically identical to 0 to 9 and carry no rotation,
-    because the card is inverted about its own long axis rather than rotated in the plane of the
-    panel - a `rotate: 180` would spin the faceplate end for end, which is a different thing and
-    would put the ejectors at the wrong ends. So a card rendered in slot 15 will show its ports and
-    its part number the same way up as one in slot 5, and on real hardware it would not. Anyone
-    reading port positions off the lower cage should know that.
+    The guide states that line cards are installed upside down in slots 10 through 19 of the bottom
+    card cage but right side up in slots 0 through 9 of the top card cage. This is a real property
+    of the chassis and the model cannot currently express it. The bays for 10 to 19 are
+    geometrically identical to 0 to 9 and carry no rotation, because the card is inverted about its
+    own long axis rather than rotated in the plane of the panel - a `rotate: 180` would spin the
+    faceplate end for end, which is a different thing and would put the ejectors at the wrong ends.
+    So a card rendered in slot 15 will show its ports and its part number the same way up as one in
+    slot 5, and on real hardware it would not. Anyone reading port positions off the lower cage
+    should know that.
   wanted: a mirror or flip transform on a bay, distinct from rotation, or a photograph settling
     exactly which way an inverted card reads
 - what: rp-positions-have-no-occupant-that-fits
