@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
-import { applyAllOverrides } from './swap.js';
+import { applyAllOverrides, applyOccupantOverrides, refusalReason, viewsToRewrite } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -404,9 +404,21 @@ export function createViewer(container, opts = {}) {
   // The overrides are cleared first ON PURPOSE: svgSource consults the override
   // map ahead of its cache, so reading a face here while a previous build's
   // override still stood would re-swap an already-swapped document.
+  //
+  // A CAGE SWAP IS SEATED HERE TOO, not only a bay swap. Before this, `swap.js`
+  // could put an optic into a cage on the LIVE 2D DOM (shell.js) but this
+  // module never called it, so a port's chosen occupant applied in 2D and
+  // stayed whatever the configuration built in 3D - the same divergence a bay
+  // swap had before `applyAllOverrides` existed, one seat lower.
   async function applyBayOverrides(cfg) {
     clearSvgOverrides(SCOPE);
-    if (COMP || !devIndex?.bays || !Object.keys(OVERRIDES).length) return 0;
+    if (COMP || !Object.keys(OVERRIDES).length) return 0;
+    // WHICH VIEWS THIS MAP TOUCHES, bays and cages together - see
+    // `viewsToRewrite` in swap.js for why the decision lives there instead of
+    // here (it needs to be unit-testable under node, and this file imports
+    // `three`, which a plain node process cannot resolve).
+    const views = viewsToRewrite(devIndex, OVERRIDES);
+    if (!views.length) return 0;
     const byRef = ref => (COMP_INDEX || []).find(
       c => `${c.ns}/${c.name}@${c.major.slice(1)}` === ref.split(':')[0]);
     const loadSkin = async ref => {
@@ -417,16 +429,9 @@ export function createViewer(container, opts = {}) {
       return {comp: c, text: await svgSource(url, SCOPE)};
     };
     let total = 0;
-    // A NESTED OVERRIDE IS NOT IN ANY DEVICE'S BAY LIST, so the cheap guard
-    // below cannot see one and every view it names would be skipped - the swap
-    // would apply in 2D and the 3D scene, which is built from this text and not
-    // from that DOM, would keep the old occupant. Nested paths are the ones
-    // carrying `/module/`, which no device bay id ever does, so recognising them
-    // costs a string test rather than a parse of every view.
-    const nestedOverride = Object.keys(OVERRIDES).some(k => k.includes('/module/'));
-    for (const [view, bays] of Object.entries(devIndex.bays)) {
-      if (!nestedOverride
-          && !bays.some(b => Object.prototype.hasOwnProperty.call(OVERRIDES, b.id))) continue;
+    for (const view of views) {
+      const bays = devIndex.bays?.[view] || [];
+      const cages = devIndex.cages?.[view] || [];
       const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
@@ -448,9 +453,30 @@ export function createViewer(container, opts = {}) {
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${dropped.length} nested `
                      + `bay override(s) never applied - the drawing nests deeper `
                      + `than the walk goes, so 2D and 3D will disagree`, dropped);
-      if (!applied) continue;
+      // A REFUSED CAGE OVERRIDE is the cage counterpart of a dropped bay one -
+      // `applyOccupantOverrides` will not half-seat an optic into a cage the
+      // build does something to that the kit does not (see swap.js
+      // `refusalReason`: lifted, mirrored, or in a group carrying states), so
+      // it leaves the cage empty rather than guess with no real build to check
+      // against. The cage shows nothing seated in 2D and 3D alike; only the
+      // CHOSEN swap silently failed, and that is worth saying. A FAILED one is
+      // a skin that did not load: the cage keeps what the build seated.
+      const {applied: occApplied, refused, failed} = await applyOccupantOverrides(
+        doc.documentElement, cages, OVERRIDES, loadSkin);
+      if (refused.length)
+        console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${refused.length} cage `
+                     + `override(s) refused - the kit does not seat an optic into `
+                     + `a lifted or mirrored cage, or one whose group carries `
+                     + `states, so the cage is left empty`,
+                     refused.map(id => `${id} (${refusalReason(cages.find(c => c.id === id))})`));
+      if (failed.length)
+        console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${failed.length} cage `
+                     + `override(s) not applied - the optic's skin did not load, `
+                     + `so the cage keeps what the build seated`, failed);
+      const viewApplied = applied + occApplied;
+      if (!viewApplied) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
-      total += applied;
+      total += viewApplied;
     }
     return total;
   }

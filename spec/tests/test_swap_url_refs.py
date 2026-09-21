@@ -39,3 +39,17 @@ def test_a_seated_module_keeps_its_references_pointing_at_its_own_ids():
         # a reference to something outside the component is left alone
         "url(#portrayal-vent)",
     ], out["refs"]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_an_optic_seated_in_a_cage_keeps_its_references_too():
+    """A cage has no `module` namespace word - `rename(..., segment='')` - and
+    the reference pass has to follow the spelling the ids actually took."""
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True,
+                       cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    out = json.loads(p.stdout.strip().splitlines()[-1])
+
+    assert out["cageIds"] == ["port-4-occupant--w0"], out["cageIds"]
+    assert out["cageRefs"] == ["url(#port-4-occupant--w0)", "url(#portrayal-vent)"], out["cageRefs"]
+    assert not out["cageDangling"], out["cageDangling"]

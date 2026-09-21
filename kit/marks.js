@@ -7,7 +7,13 @@
 // vocabulary. Everything here is a pure function over an SVG root and such a
 // document - no UI, no globals, no shell.
 //
-//   {v:1, device, config, view, legend, crop, marks:[{select, color, state, label, lamp}]}
+//   {v:1, device, config, view, legend, crop, marks:[{select, color, state, label, lamp}],
+//    swaps:{path: ref|null}}
+//
+// `swaps` is what the reader changed in the drawing before marking it up: bay
+// and cage paths mapped to the component seated there, null for one emptied.
+// Only what differs from the configuration's build - the configuration already
+// says the rest - so an un-swapped document carries `{}`.
 //
 // `color` and `lamp` are both colours and they are not the same kind of thing.
 // `color` is INK: a ring the reader is meant to notice, drawn around the part.
@@ -116,7 +122,26 @@ export function normalise(doc) {
       // never painted is worse than no swatch.
       lamp: HEX_RE.test(str(m.lamp)) ? str(m.lamp).toLowerCase() : '',
     })),
+    swaps: swapsOf(d.swaps),
   };
+}
+
+// A SWAP MAP is {path: ref} with null for an emptied bay or cage - the own-key
+// rule swap.js's applyOverrides states, so an emptied entry is KEPT as null
+// rather than dropped. Anything else is dropped entry by entry: a value that is
+// neither a string nor empty is not a component reference, and a key that is
+// empty (or `__proto__`, which a plain object turns into its prototype) names
+// no part of any drawing.
+function swapsOf(s) {
+  const out = {};
+  if (!s || typeof s !== 'object' || Array.isArray(s)) return out;
+  for (const [k, v] of Object.entries(s)) {
+    const key = str(k);
+    if (!key || key === '__proto__') continue;
+    if (v == null || v === '') out[key] = null;
+    else if (typeof v === 'string' && str(v)) out[key] = str(v);
+  }
+  return out;
 }
 
 /**
@@ -1152,10 +1177,17 @@ export function encode(doc) {
   // decodes with a[6] undefined, which is exactly "no crop", and an object
   // legend rides in slot 4 where the boolean was.
   const cropped = d.crop ? [d.crop.x, d.crop.y, d.crop.w, d.crop.h] : 0;
-  const json = JSON.stringify([1, d.device, d.config, d.view,
-                               d.legend && typeof d.legend === 'object' ? d.legend
-                                                                        : (d.legend ? 1 : 0),
-                               marks, cropped]);
+  const a = [1, d.device, d.config, d.view,
+             d.legend && typeof d.legend === 'object' ? d.legend : (d.legend ? 1 : 0),
+             marks, cropped];
+  // Slot 7, and ONLY WHEN THERE IS ONE - trimTail's convention for the marks,
+  // applied to the document. A link written before swaps existed has no slot 7
+  // and decodes to `{}`, and an un-swapped document encodes to exactly the bytes
+  // it did before, so every link already shared stays the link it was. Keys are
+  // sorted so one state is one string.
+  const swapKeys = Object.keys(d.swaps).sort((x, y) => x < y ? -1 : x > y ? 1 : 0);
+  if (swapKeys.length) a.push(Object.fromEntries(swapKeys.map(k => [k, d.swaps[k]])));
+  const json = JSON.stringify(a);
   let packed = json;
   for (const [long, short] of TOKENS) packed = packed.split(long).join(short);
   return PREFIX + b64url(packed);
@@ -1185,6 +1217,7 @@ export function decode(input) {
       crop: c,
       marks: (a[5] || []).map(m => ({select: m[0], color: m[1], state: m[2],
                                      label: m[3], id: m[4], lamp: m[5]})),
+      swaps: a[7],                   // absent on an older link: normalise gives {}
     });
   } catch (e) {
     return null;                     // a truncated or hand-edited hash is not fatal

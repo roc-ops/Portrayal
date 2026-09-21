@@ -43,6 +43,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -117,7 +118,8 @@ def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     idx = _build(CSR310, tmp_path)
     cage = _cage(idx, "front", "m1-0")
     assert set(cage) == {"id", "at", "interface", "media", "group", "rel-pos",
-                          "rotate", "accepts", "occupant"}
+                          "rotate", "accepts", "occupant",
+                          "mate", "lift", "occupant-attrs", "mirror", "group-states"}
     assert cage["rel-pos"] == 0
     assert cage["rotate"] is None
     # AFTER SPEC A NO SHIPPED DEVICE SEATS ONE - this is the honest value for
@@ -381,3 +383,156 @@ def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
     assert cage["interface"] == "qsfp"
     assert cage["media"] == "qsfp28"
     assert cage["accepts"] == ["generic/qsfp-lc@1"]
+
+
+# --- C2 Task 1: where an occupant mates, published --------------------------
+#
+# Three keys let the kit seat an optic without re-deriving the build: `mate`
+# (the cage's presented mate point in the DEVICE frame, rotation applied),
+# `lift` (its presented lift, the build's `host-lift`) and `occupant-attrs`
+# (what the build writes on a seated occupant from the host's side). Checked
+# against the build's own seat - test_seat_rotation.py measures the two
+# S9510-28DC ports this pins - and across the whole library.
+
+def _fitted_s9510(tmp_path):
+    dev = tmp_path / "src" / "s9510-28dc" / "device.yaml"
+    shutil.copytree(SFP_SRC, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    d["configurations"]["dc"]["occupants"] = {"port-0": "generic/qsfp-lc@1",
+                                              "port-2": "generic/qsfp-lc@1"}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    return dev
+
+
+def test_every_entry_says_where_and_how_to_seat(tmp_path):
+    idx = _build(_fitted_s9510(tmp_path), tmp_path / "out")
+    entries = [c for v in idx["cages"].values() for c in v]
+    assert entries, "no cages - the checks below would pass vacuously"
+    for c in entries:
+        assert isinstance(c["mate"], list) and len(c["mate"]) == 2, c
+        assert all(isinstance(v, (int, float)) for v in c["mate"]), c
+        assert isinstance(c["lift"], float), c
+        assert isinstance(c["occupant-attrs"], dict), c
+        assert all(isinstance(k, str) and k.startswith("data-") and isinstance(v, str)
+                   for k, v in c["occupant-attrs"].items()), c
+
+
+def test_the_published_mate_is_where_the_build_seats(tmp_path):
+    """The device-frame mate points test_seat_rotation.py measures off the
+    build's own transforms: port-0 upright, port-2 at rotate 180. port-2's is
+    NOT `at + mate` - that would be [239.625, 14.19], the upright answer."""
+    idx = _build(_fitted_s9510(tmp_path), tmp_path / "out")
+    assert _cage(idx, "front", "port-0")["mate"] == [187.225, 31.59]
+    assert _cage(idx, "front", "port-2")["rotate"] == 180
+    assert _cage(idx, "front", "port-2")["mate"] == [239.475, 13.59]
+
+
+AGR560 = LIB / "devices/edgecore/agr560"
+
+
+def _seat_and_build(src, tmp_path, port, occ, drop_group=False):
+    """Copy `src`, seat `occ` in `port` on EVERY configuration, optionally
+    strip the host placement's `group`, build, and return (configs.json, the
+    default-configuration face's occupant open-tag attributes)."""
+    import xml.etree.ElementTree as ET
+    dev = tmp_path / src.name / "device.yaml"
+    shutil.copytree(src, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    for cfg in d["configurations"].values():
+        cfg["occupants"] = {port: occ}
+    if drop_group:
+        for view in d["views"].values():
+            for q in (((view or {}).get("components") or {}).get("placements") or []):
+                if q.get("id") == port:
+                    q.pop("group", None)
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    idx = _build(dev, tmp_path / "out")
+    root = ET.parse(tmp_path / "out" / f"{d['name']}.front.svg").getroot()
+    tag = next(el for el in root.iter() if el.get("id") == f"{port}-occupant")
+    return idx, dict(tag.attrib)
+
+
+@pytest.mark.parametrize("src, port, occ", [
+    (SFP_SRC, "port-0", "generic/qsfp-lc@1"),   # upright, qsfpdd-400g
+    (SFP_SRC, "port-2", "generic/qsfp-lc@1"),   # rotate 180, qsfp28
+    # a group carrying a `description`, which the build writes on the optic
+    (AGR560, "port-1", "generic/sfp-lc@1"),
+])
+def test_occupant_attrs_are_exactly_what_the_host_side_writes(tmp_path, src, port, occ):
+    """AN EQUALITY, BOTH WAYS. The host side is not listed here: it is what
+    the built occupant carries that the SAME occupant, built in a copy whose
+    host is in no group, does not - so a host-side write the published map
+    misses fails this just as surely as a published attr the build never
+    wrote."""
+    idx, grouped = _seat_and_build(src, tmp_path / "a", port, occ)
+    _, bare = _seat_and_build(src, tmp_path / "b", port, occ, drop_group=True)
+    host_side = {k: v for k, v in grouped.items()
+                 if k.startswith("data-") and bare.get(k) != v}
+    published = _cage(idx, "front", port)["occupant-attrs"]
+    assert host_side, "nothing differs - the check below would pass vacuously"
+    assert host_side == published
+    # the host group's media overrides the optic contract's `media: fiber`
+    assert published["data-media"] != "fiber"
+
+
+def test_a_group_description_reaches_the_occupant(tmp_path):
+    """The `data-description` branch, on a group that has one: agr560's
+    `sfp-plus` (the combo-pair note). Read from the manifest, so this fails
+    the day the group loses it rather than passing on an absent key."""
+    d = yaml.safe_load((AGR560 / "device.yaml").read_text())
+    want = d["groups"]["sfp-plus"]["description"]
+    idx, grouped = _seat_and_build(AGR560, tmp_path, "port-1", "generic/sfp-lc@1")
+    assert _cage(idx, "front", "port-1")["occupant-attrs"]["data-description"] == want
+    assert grouped["data-description"] == want
+
+
+def test_the_lift_census():
+    """RECORDS the published lift across every cage in the library, computed
+    by the same `cage_entries` main() writes. 3,326 cages at this writing, and
+    NONE presents a lift: no cage wrapper composes its aperture with a `lift`
+    today. The day one does, this count moves and the kit's data-z-lift path
+    stops being dead code - which is the point of pinning it."""
+    lib = render_mod.Library([str(LIB)])
+    families = render_mod._pluggable_families()
+    candidates = render_mod._pluggable_candidates([LIB])
+    total = nonzero = mirrored = stated = 0
+    for man in libwalk.iter_devices([LIB]):
+        d = render_mod.load_yaml(man)
+        for v in d.get("views") or {}:
+            for c in render_mod.cage_entries(d, v, lib, families, candidates, {}):
+                total += 1
+                nonzero += bool(c["lift"])
+                mirrored += c["mirror"]
+                stated += c["group-states"]
+    assert total >= 3000, total
+    assert nonzero == 0, nonzero
+    # THE SAME PIN FOR THE OTHER TWO REFUSALS. The kit declines a mirrored
+    # cage (the build raises for one) and a cage whose group carries `states`
+    # (the build applies them to the seated optic; kit/swap.js does not, and
+    # group_side_attrs does not publish them). The day either count moves, a
+    # cage exists that the kit will not swap - implement it against a real
+    # build with a parity test, then move the pin.
+    assert mirrored == 0, mirrored
+    assert stated == 0, stated
+
+
+def test_a_mirrored_cage_and_a_stated_group_are_published(tmp_path):
+    """`mirror` and `group-states` are read off the placement and its group,
+    not assumed: set each on a copy of csr310 and both flip, while a cage
+    left alone keeps both false."""
+    dev = tmp_path / "src" / "csr310" / "device.yaml"
+    shutil.copytree(CSR310.parent, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    host = next(q for view in d["views"].values()
+                for q in (((view or {}).get("components") or {}).get("placements") or [])
+                if q.get("id") == "m1-0")
+    host["mirror"] = True
+    d["groups"][host["group"]]["states"] = ["off", {"name": "up", "color": "#22c55e"}]
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    idx = _build(dev, tmp_path / "out")
+    cage = _cage(idx, "front", "m1-0")
+    assert cage["mirror"] is True
+    assert cage["group-states"] is True
+    others = [c for c in idx["cages"]["front"] if c.get("group") != host["group"]]
+    assert others, "no cage outside the group - the check below would pass vacuously"
+    assert not any(c["mirror"] or c["group-states"] for c in others)

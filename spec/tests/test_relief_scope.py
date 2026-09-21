@@ -63,3 +63,12 @@ def test_two_scopes_do_not_share_overrides_or_states():
     assert out["clearingOneLeavesTheOther"] == [[], ["fan-0", "psu-2"]], \
         "putting one viewer's covers back stripped another's"
     assert out["defaultPullIsEmpty"] == []
+
+    # A cage swap (an optic chosen for a port) rewrites a fetched face's text
+    # through this same per-scope map, exactly as a bay swap does - see
+    # applyBayOverrides in kit/viewer3d.js. The script runs that cage path
+    # itself (applyOccupantOverrides on the face viewer A fetched, stored in
+    # A's scope); viewer B must still read the build's optic off the same URL.
+    assert out["cageSwapApplied"] == 1, "the cage path seated nothing - vacuous"
+    assert out["cageSwapStaysInItsScope"] == ["generic/sfp-lc-simplex@1", "generic/sfp-lc@1"], \
+        "a cage swap set in one viewer reached another's face text"

@@ -85,4 +85,44 @@ out.clearingOneLeavesTheOther = [[...m.pulledPaths(a)], [...m.pulledPaths(b)].so
 // a scope nobody has pulled from is empty, not undefined
 out.defaultPullIsEmpty = [...m.pulledPaths()];
 
+// A CAGE SWAP GOES THROUGH THE SAME PER-SCOPE MAP AS A BAY SWAP, and this
+// runs the cage path itself rather than the bay case under another name.
+// `applyBayOverrides` (viewer3d.js) takes a face's text from svgSource in its
+// OWN scope, seats the cage override with `applyOccupantOverrides`, and hands
+// the rewritten text back to `setSvgOverride` in that scope. Exactly that is
+// done here for viewer A choosing a simplex optic for port-4; viewer B, which
+// chose nothing, must still read the build's optic off the same URL. Two
+// viewers choosing different optics for the same port fighting over one map
+// is the #302 lesson for bays, and a cage swap depends on the same seat.
+// The face is the fake DOM's JSON form (fake-dom.mjs); nothing else about
+// relief.js reads it.
+const {install} = await import('./fake-dom.mjs');
+install();
+const swap = await import('../../../kit/swap.js');
+const cageUrl = 'dev.default.front.svg';
+const builtFace = JSON.stringify({t: 'svg', a: {}, c: [
+  {a: {id: 'port-4', 'data-path': 'port-4', 'data-class': 'port'}},
+  {a: {id: 'port-4-occupant', 'data-path': 'port-4-occupant', 'data-for': 'port-4',
+       'data-behaviour': 'occupies', 'data-ref': 'generic/sfp-lc@1:1.0.0'}},
+]});
+const simplex = {name: 'sfp-lc-simplex', version: '1.0.0',
+                 size: {w: 13.55, h: 8.55, d: 47.5}, mate: [6.775, 4.275]};
+const loadSkin = async ref => ref === 'generic/sfp-lc-simplex@1' ? {comp: simplex,
+  text: JSON.stringify({a: {}, c: [{a: {id: 'sfp-lc-simplex', 'data-path': 'sfp-lc-simplex',
+                                        'data-behaviour': 'occupies'}}]})} : null;
+m.clearSvgCache();
+globalThis.fetch = async u => ({ ok: true,
+  text: async () => u === cageUrl ? builtFace : '<svg id="FETCHED"/>' });
+const cages = [{id: 'port-4', mate: [10, 5], rotate: null, lift: 0, mirror: false,
+                'group-states': false, 'occupant-attrs': {}}];
+const doc = new DOMParser().parseFromString(await m.svgSource(cageUrl, a), 'image/svg+xml');
+const {applied} = await swap.applyOccupantOverrides(
+  doc.documentElement, cages, {'port-4': 'generic/sfp-lc-simplex@1'}, loadSkin);
+m.setSvgOverride(cageUrl, new XMLSerializer().serializeToString(doc), a);
+const seatedIn = async scope => swap.occupantRef(
+  new DOMParser().parseFromString(await m.svgSource(cageUrl, scope), 'image/svg+xml')
+    .documentElement, 'port-4');
+out.cageSwapApplied = applied;
+out.cageSwapStaysInItsScope = [await seatedIn(a), await seatedIn(b)];
+
 console.log(JSON.stringify(out));
