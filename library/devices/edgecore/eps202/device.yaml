@@ -1,281 +1,184 @@
 format: 1
 kind: device
-name: eps203
-version: 1.0.1
+name: eps202
+version: 1.0.0
 maturity: modelled
 manufacturer: Edgecore
-model: AS4630-54NPE
-portfolio: {line: Enterprise, family: Access Switch, series: EPS203}
+model: AS4630-54PE
+portfolio: {line: Enterprise, family: Access Switch, series: EPS202}
 description: >-
-  54-port multi-gigabit PoE access switch, 1RU, sold as the EPS203 and stamped AS4630-54NPE. ITS COPPER
-  ROW IS NOT ONE RATE: 36 ports run 100M/1G/2.5G and the last 12 run 1G/2.5G/5G/10GBASE-T, and the split
-  falls exactly on a ganged-block boundary - three gangs of six columns and then a fourth. All forty-eight
-  deliver up to 90 W of PoE. Four 10G/25G SFP28 uplinks and two 100G QSFP28 stacking ports finish the
-  face, numbered 49-52 and 53-54 into the same sequence. A stacked management/console RJ-45 pair, a Type-A
-  USB storage port, STK M/S and Reset buttons and eight status lamps sit at the left and centre. TWO HOT-SWAPPABLE
-  1200 W AC SUPPLIES AND THREE HOT-SWAPPABLE FAN TRAYS on the rear, front-to-back only. It shares its
-  438 x 474 x 44 shell with edgecore/eps201.
+  54-port Gigabit PoE access switch, 1RU, sold as the EPS202 and stamped AS4630-54PE. 48 x 10/100/1000BASE-T
+  RJ-45 in twenty-four columns of two, ganged six and six and six and six, ALL of them delivering up to
+  90 W under IEEE 802.3at and 802.3bt - one rate and one PoE class, which is what separates it from both
+  its shell-mates. Four 10G/25G SFP28 uplinks and two 100G QSFP28 stacking ports numbered 49-52 and 53-54
+  into the same sequence. TWO HOT-SWAPPABLE 1200 W AC SUPPLIES AND THREE HOT-SWAPPABLE FAN TRAYS on the
+  rear, front-to-back only. IT IS 32 mm SHALLOWER THAN ITS TWO SIBLINGS - 438 x 442 x 43.7 against 438
+  x 474 x 44 - and its FACE is theirs.
 profile: networking
 provenance:
-  sources:
-    confidence: datasheet
-    note: >-
-      EACH OF THE THREE EPS20x MODELS HAS ITS OWN GUIDE AND ITS OWN DATASHEET - six distinct files, no
-      two sharing a hash, unlike the EPS121/EPS122 pair. This model's are eps203-qsg.pdf (md5 5d12d3c155d2c7f797d9dc9d1dfee0df)
-      and eps203-datasheet.pdf (md5 2de53f6bea0e8050273532607423eaf0). THE TWO DOCUMENTS DISAGREE ABOUT
-      THE MODEL NAME PRINTED ON THE PANEL. The datasheet's front elevation prints `AS4630-54NPE`, legible
-      at 10x; the guide's port enlargement prints `AS4630-54NPEM`. The datasheet's body uses the shorter
-      spelling nineteen times including its title block and every one of its seven ordering codes; the
-      guide uses each spelling six times. The shorter one is drawn here because it is what this device's
-      own elevation carries and what the ordering codes buy, and the disagreement is recorded as a gap
-      rather than resolved by preference.
   gate-1:
-    confidence: measured
+    confidence: borrowed
     note: >-
-      THIS IS THE ONLY EPS20x FIGURE THAT IS DRAWN STRAIGHT, and finding that out is what decided which
-      of the three to model first. NONE OF THE THREE QUICK START GUIDES CONTAINS A SQUARE-ON ELEVATION
-      - their Overview figures are three-quarter renders with the lid visible - so the only candidates
-      for absolute geometry are the datasheets' Interfaces pages, embedded at about 1000 px across a 438
-      mm face. That is 2.29 px/mm, one pixel to 0.44 mm, and less than half the instrument the EPS112
-      had. SO EACH CANDIDATE WAS TESTED FOR ORTHOGRAPHY RATHER THAN JUST FOR ASPECT. Fitting the twenty-four
-      RJ-45 column positions with `first + pitch*i + gutter*(i//6)`, over every row and four thresholds
-      in each figure: this one's best fit has an **rms of 0.121 mm** and adding a quadratic term in i
-      buys nothing (it implies a local-pitch change of -0.7% across the row, which is noise at this scale).
-      The EPS201's best fit over 114 candidate rows is **rms 0.674 mm** and its quadratic implies **-5.0%**;
-      the EPS202's is **rms 0.675 mm** at **+3.8%**. Those two figures are photographed at an angle, and
-      a linear fit on them returns a pitch that is simply wrong - 13.65 mm on the EPS201 against this
-      figure's 14.07 for the same jack. THE ASPECT AGREES with the published dimensions once the figure
-      is known to be straight: the body reads 1002 x 100 px, ratio 10.020 against 438/44 = 9.955, which
-      is +0.66% - within the one pixel that a 100-px-tall figure can resolve. Every measurement in this
-      file uses 2.2877 px/mm with the panel origin at (1, 2). THE CROSS-CHECK THAT MATTERS: the fitted
-      pitch of 14.0706 agrees with the EPS112's 14.0198 and the EPS121's 14.0158 - two other Edgecore
-      access switches, measured on different documents at different scales - to five hundredths of a millimetre.
-      That is the same RJ-45 jack, and it is an independent confirmation that this figure's scale is right.
-  the-port-wall:
-    confidence: measured
-    note: >-
-      FORTY-EIGHT RJ-45 IN TWENTY-FOUR COLUMNS OF TWO, ganged six and six and six and six. Fitted over
-      all twenty-four columns on the bright dividers between ports: **pitch 14.0706, gutter 4.1518, first
-      centre 34.5102, rms 0.121 mm, max residual 0.215**. The residuals show no bow, which is the test
-      the other two figures fail. THE ROWS MIRROR, and which row is rotated was measured rather than assumed.
-      On the guide's left-end enlargement the upper row's wide body occupies its cell from +3.45 to +10.36
-      mm, where `std/rj45-ganged@2` rotated 180 puts it at +3.67 to +10.5 and unrotated would put it at
-      +0.5 to +7.33; the lower row's reads +0.95 to +7.85, which is the unrotated case. So `rotate: {top:
-      180}`, the same way round as the EPS112. THE ROW PITCH IS 13.92 AND COMES FROM THE BEZEL PLATE,
-      not from the aperture centres, for the reason the EPS112 records: mirrored rows are not symmetric
-      about their cells. The plate reads y 11.802 to 36.719 at two independent columns - height 24.916
-      - and two 11.0 mm cells fill it with 2.92 between them. The EPS112's plate is 25.015 and its row
-      pitch 13.94, measured on a different document; the two agree to a tenth of a millimetre, which is
-      what one shared jack housing should do. THEN FOUR SFP28 as two stacked pairs at x 388.83 and 403.25
-      - cage apertures 13.55 wide, rows at 16.61 and 30.82 - and TWO QSFP28 as one stacked pair at x 422.48,
-      its cage 17.92 wide against `std/qsfp-ganged@1`'s 18.5, rows at 16.61 and 31.70.
-  the-two-copper-rates-are-two-groups:
+      THE FACE IS `edgecore/eps203`'s, AND THE EVIDENCE FOR THAT IS BETTER THAN THE EVIDENCE THIS DEVICE'S
+      OWN ELEVATION COULD GIVE. Its own datasheet figures are the worst of the family. All four read between
+      -3.7% and -6.2% on aspect against 438 x 43.7, and fitting the twenty-four RJ-45 column positions
+      of its front elevation gives a straight-line rms of 0.695 mm with a quadratic term implying the
+      local pitch GROWS 3.8% across the row - the opposite direction from the EPS201's -5.0%, and the
+      same kind of fault. THE SHELL IS NOT SHARED AND THE FACE IS, which is the distinction that took
+      the work. The chassis is 32 mm shallower and 0.3 mm lower than the EPS201's and EPS203's, so nothing
+      could be assumed. But the three quick start guides turn out to share artwork, and the sharing is
+      exact: this guide's button-and-lamp enlargement is BYTE-IDENTICAL to the EPS203's (md5 45c69467154e...),
+      as are its PSU-replacement figure and the fan-tray figure all three carry. Its left-end port enlargement
+      is NOT byte-identical - the port indicators are drawn white here and pale blue there - but registered
+      against the EPS203's it needs ZERO pixels of shift, and the port aperture centres in the two come
+      out at the same pixels to a tenth: 263.5, 422.0, 508.0 and 614.0 in both. Two renders of one face.
+      A SCALE-FREE CHECK AGREES. The ratio of column pitch to jack aperture, which needs no calibration
+      at all, reads 1.1778 on this guide's enlargement, 1.1778 on the EPS203's and 1.1776 on the EPS201's,
+      against the 1.1814 the EPS203's measured geometry gives. AND THE HOMOGRAPHY TEST, WHICH PASSES FOR
+      THE EPS201, FAILS HERE - which is worth recording because it is the test that would otherwise have
+      been called decisive. Assuming this device's columns sit at the EPS203's positions, the best 1D
+      perspective transform explains its datasheet elevation to only 0.484 mm rms, against 0.171 for the
+      EPS201 and 0.069 for the EPS203 on itself; freeing the gutter ratio gets to 0.455 and wants a different
+      one. THAT IS THIS FIGURE'S DISTORTION, NOT A DIFFERENT WALL - the two enlargements settle it - but
+      a reader who only had the elevations would have concluded otherwise, and so would I have. EVERY
+      FRONT-FACE FIGURE IN THIS FILE IS THE EPS203's, measured on its datasheet elevation at 2.2877 px/mm
+      (24-column fit, rms 0.121 mm) and on its guide's enlargements at 7.5 to 10.0 px/mm.
+  the-height-nobody-can-resolve:
     confidence: datasheet
     note: >-
-      THE DATASHEET SPLITS THE COPPER ROW AND THE SPLIT LANDS ON A GANG BOUNDARY. Its Interfaces callouts
-      read "3. 36 x 100M/1000M/2.5G ports" and "4. 12 x 1G/2.5G/5G/10GBASE-T ports", and on the elevation
-      callout 3's bracket covers the first three gangs and callout 4's the fourth. Eighteen columns then
-      six columns; thirty-six ports then twelve. So ports 1-36 and 37-48 are two groups, and unlike the
-      EPS112 - where the PoE split fell in the middle of a gang - here the metal and the grouping agree.
-      BOTH GROUPS CARRY PoE UP TO 90 W. The prose is explicit: "all RJ-45 Ethernet ports can support up
-      to 90 W Power-over-Ethernet" and "up to 90 Watts ... for all 48 RJ-45 ports, including the 10G ports".
-      The key-features list gives the standards per group - 802.3af/at and bt Type 3/Type 4 on both -
-      which is why the rate, not the PoE, is what separates them.
-  the-status-lamps-and-buttons:
+      THE PUBLISHED HEIGHT IS 43.7 AND THE SIBLINGS' IS 44.0, and the difference is 0.3 mm on figures
+      whose finest pixel is 0.44. Both are roundings of inch values - this datasheet prints "43.8 x 44.2
+      x 4.37 cm (17.24 x 17.40 x 1.72 in)" and the siblings' print 1.73 in - and neither is 1RU's 44.45.
+      `chassis.height` CARRIES 43.7 because that is what this device publishes, and every y figure on
+      the face is the EPS203's, placed from the TOP edge. Nothing in any staged figure says whether the
+      missing 0.3 mm comes off the top or the bottom, and at these resolutions nothing could.
+  the-shallower-shell:
+    confidence: datasheet
+    note: >-
+      438 x 442 x 43.7 against the EPS201's and EPS203's 438 x 474 x 44. THIRTY-TWO MILLIMETRES IS NOT
+      A ROUNDING, and the issue that scoped this work says so in as many words. What it does not change
+      is the face: the rear is the EPS203's too - same three fan-tray bays on the same pitch, same two
+      1200 W supplies on the same 84 mm pitch - and the depth goes somewhere neither elevation shows.
+      THE RACK KIT NAMES ALL THREE ANYWAY: "RKIT-100G-SLIDE ... For EPS200 series/AS4630-54TE/54PE/54NPE".
+      A slide kit that fits a 442 mm and a 474 mm chassis is a statement about the rails, not about the
+      boxes.
+  ports:
+    confidence: datasheet
+    note: >-
+      "48 x 10/100/1000BASE-T ports, 4 x 10G/25G SFP28 uplink ports, and 2 x 100G QSFP28 stacking ports
+      (stacking capability subject to NOS implementations); plus the 48 x 10/100/1000BASE-T ports fully
+      support IEEE 802.3at and IEEE 802.3bt Power-over-Ethernet". ONE RATE AND ONE PoE CLASS, which is
+      this model's own shape. The EPS201 on the same face has the same 48 x 1G and NO PoE; the EPS203
+      has the same 48 sockets split 36 at 2.5G and 12 at 10G with 90 W on all of them. Three machines,
+      one port wall, three different answers to what comes out of it.
+  power:
+    confidence: datasheet
+    note: >-
+      "2pcs 1+1 redundant, load-sharing, hot-swappable 1200W AC (80 PLUS Platinum compliant)" - the same
+      YPEB1200AM-1A03P10 the EPS203 takes, and its ordering table names both chassis: "(for EPS202/AS4630-54PE,
+      EPS203/AS4630-54NPE)". Maximum power consumption "Low-line: 1710 Watts High-line: 1710 Watts" -
+      the same figure at both lines, which is unusual enough to be worth quoting rather than paraphrasing
+      - and a PoE budget with a 30 W guard band of "750 W for 1 PSU/1500 W for 2 PSU", again the same
+      at both lines.
+  airflow:
     confidence: measured
     note: >-
-      EIGHT LAMPS IN TWO ROWS OF FOUR, and the datasheet's own list names only seven. The panel reads
-      System / PSU1 / STK1 / FAN across the top and PRI / PSU2 / STK2 / PoE across the bottom, with each
-      label to the right of its lamp; the datasheet's LEDs section lists "PRI, PSU1, PSU2, STK1, STK2,
-      FAN, PoE" and omits System. Eight are drawn because eight is what the panel shows, and the guide's
-      legend names all eight. MEASURED ON THE GUIDE'S BUTTON/LAMP ENLARGEMENT at 10.0422 px/mm - calibrated
-      on four port-column centres this file already knows exactly, with a fit rms of 0.11 px, or 0.011
-      mm. The lamps are 2.888 x 1.494, on x centres 154.18, 162.05, 170.01 and 177.88 - a pitch of 7.90
-      - with rows centred y 3.74 and 7.22. TWO ROUND BUTTONS to their left: STK M/S at x 136.61 and Reset
-      at x 145.97, both about 2.2 mm across on y 5.0. The guide legends them "STK M/S button" and "Reset
-      button" and gives the stacking behaviour with the STK1/STK2 lamps. THE LAMP ROWS ARE DRAWN 0.70
-      mm ABOVE WHERE THE ENLARGEMENT PUTS THEM, and that is a reconciliation rather than a reading. The
-      enlargement's y is anchored on the bezel plate and gives rows at 3.74 and 7.22; the elevation puts
-      the port-numeral band at 7.43 to 8.74, which would have the lower lamp row painting over the numerals
-      for columns nine to eleven. The two crops disagree by about half a millimetre and the elevation
-      is the one whose y is not borrowed, so the lamps move. Both figures are written down here so the
-      next reader can take the other view. THE `Mgmt (up) (down) Console` LEGEND'S x IS NOT MEASURED.
-      It is present and its reading order is unambiguous, but the only crop that shows it is the guide's
-      left-end enlargement, whose x scale could not be tied down: its port openings imply 7.53 px/mm and
-      its indicator spacing implies 6.9, a nine percent disagreement that no anchor in the crop resolves.
-      The four marks are placed symmetrically about the jack pair's measured centre instead.
-  the-port-indicators:
+      "Front-to-back airflow only", and the drawing agrees where the EPS201's does not. Counted on this
+      model's own rear elevation: 2,547 pixels pass a red test at a median of (238, 43, 40), and the blue
+      test finds 1,074 which are the supplies' inlet shadows rather than any handle. The EPS203 is the
+      same - red, front-to-back only. The EPS201 is the one that ships both and draws blue.
+  the-psu-hub-label-that-corrects-the-eps203:
     confidence: measured
     note: >-
-      ONE INDICATOR PER PORT in a row below the port wall, with the port's number printed to its left
-      - the datasheet's callout 6 on the EPS201's identical face calls them "Port indicators", and the
-      guide's legend gives the vocabulary: "RJ-45 Port LEDs: Green (link), Blinking (activity)", "SFP28
-      Port LEDs: White (25G), Green (10G), Blinking (activity)", "QSFP28 Port LEDs: White (100G), Green
-      (40G link), Blinking (activity)". THE ROW IS MEASURED AND THE PER-PORT OFFSETS ARE DERIVED, and
-      the difference is worth stating. The band reads y 38.75 to 40.34 on the guide's enlargement, where
-      y is anchored on the bezel plate and does not depend on that crop's x scale; the count is one per
-      port, legible. THE INDIVIDUAL OFFSETS ARE NOT MEASURABLE HERE: on the elevation at 2.29 px/mm a
-      2 mm window and a 3 mm digit are four and six pixels and the band resolves into 78 undifferentiated
-      marks across 48 ports. So each port's indicator is placed at a quarter-pitch either side of its
-      column centre - 3.518 mm - which is where the EPS112's are, measured at 11.9 px/mm on the same vendor's
-      same legend style. Derived from a measurement of a sibling, not measured here, and said so.
-  the-vent:
-    confidence: measured
-    note: >-
-      A HEXAGONAL PERFORATION BAND along the top of the face, y 0.1 to 5.4. Measured on the guide's left-end
-      enlargement at 7.53 px/mm, where eight separate rows of the image agree: **pitch 3.717 mm with a
-      coefficient of variation of 0.009**, holes 2.39 across. The EPS112's are 3.611 and 2.70 - the same
-      perforation tooling at a slightly different pitch. THE BAND'S ENDS ARE THE WEAK FIGURE. On the elevation
-      the band reads dark from about x 26 to the right end with the button and lamp plate interrupting
-      it, and at 2.29 px/mm the segment boundaries are good to about a millimetre. Two rects are drawn,
-      x 26-128 and 192-382, and that is the accuracy claimed.
+      THE SUPPLY'S FAN HUB IS PRINTED WITH THE SUPPLY'S WATTAGE, and this device is what proves it. Its
+      rear elevation prints **"2kV 1200W"** on each hub, legible at 12x, and its supply is the 1200 W
+      YPEB1200AM-1A03P10. THAT CORRECTS WHAT `edgecore/eps203` SAYS ABOUT THE SAME PART. The EPS203 takes
+      the same supply - its ordering table names both chassis - and its rear elevation prints "2kV 920W"
+      on the same hub. Faced with one drawing against three published statements of 1200 W, that file
+      carried 1200 and explained the 920 as a figure belonging to the FAN rather than to the supply. The
+      explanation was wrong: the label tracks the supply, and this second render of the same part shows
+      it doing so. The conclusion was right for the wrong reason, which is worth saying out loud. SO WHAT
+      THE EPS203'S "920W" IS is an inconsistency between two documents rendering one part, and the EPS203's
+      provenance now says that instead. A photograph of a real YPEB1200AM's hub would say which render
+      is stale.
   the-rear:
     confidence: measured
     note: >-
-      MEASURED ON THIS MODEL'S OWN REAR ELEVATION at 2.2785 px/mm - 998 px across 438 mm - and it is the
-      weaker of the two figures: its aspect reads -2.66% against 438 x 44, and the three fan-tray handles
-      measure 38.18, 37.74 and 37.30 wide, a 2% spread in one direction. So the rear carries about a millimetre
-      of slack where the front carries a tenth, and every figure below is stated at that accuracy. THE
-      BAY NUMBERS ARE OBSERVED AND NOT DRAWN. The elevation prints a small fan glyph and a numeral - 1,
-      2, 3 - on the chassis web beside each tray, at about x 88, 137 and 186. At 2.28 px/mm that web is
-      one millimetre wide, which is two pixels and less than the figure's own gradient, so any placement
-      would either sit on the tray - where a seated module hides it, which is the thing lint's overlap
-      rule exists to catch - or be invented. The marks are recorded here instead of drawn. THREE FAN TRAY
-      BAYS at x 46.1, 94.1 and 142.4 on a pitch of 48.15, each 39.5 wide and running y 2.5 to 42.0. THE
-      WIDTH IS NOT THE PITCH: there is an 8.6 mm chassis web between trays, which a first pass through
-      this figure missed by reading each seam as the end of the tray before it rather than the start of
-      the tray after. The EPS201's rear, measured the same way, gives all six edges - 47.4-86.4, 95.1-134.2,
-      143.6-182.6 - and the handle settles it, because a 38-to-40 mm bar cannot be bolted to a 47.5 mm
-      tray and leave the seams where they are. A BLANK PLATE from about x 192 to 268 with a single screw.
-      TWO SUPPLY BAYS at x 270.0 and 354.0, 72.0 wide on a pitch of 84.0, and the chassis prints PS2 and
-      PS1 on the web to the right of each. THE GROUNDING POINT is a plate at the far left, x 4 to 44,
-      with two holes and an IEC earth symbol - the datasheet's callout 11.
-  finish-and-airflow:
-    confidence: measured
-    note: >-
-      COUNTED, AND ON THIS FAMILY THE COLOUR IS A CLAIM ABOUT AIRFLOW. Over the whole rear elevation 2,748
-      pixels pass a red test (R>110, R>G+40, R>B+40) at a median of (239, 57, 39), and every one of them
-      is on the three fan-tray handles; the chassis, the blank plate, the ground point and the two supplies
-      carry none. THE PROSE CONFIRMS IT INDEPENDENTLY, which is what keeps this from being the AIS800
-      convention imported on faith. This model's datasheet reads "Front-to-back airflow only" and all
-      seven of its ordering codes are -F. Its shell-mate the EPS201 ships both - eight codes, four -F
-      and four -B, and two fan part numbers - and its datasheet's rear draws the handles BLUE while its
-      own guide's fan-replacement figure draws them RED. Red is front-to-back, blue is back-to-front,
-      and this machine only comes one way.
-  power:
-    confidence: datasheet
-    note: >-
-      THE SUPPLY IS 1200 W AND THE DRAWING SAYS OTHERWISE. Three published statements agree: the Power
-      section's "2pcs 1+1 redundant, load-sharing, hot-swappable 1200 W AC (80 PLUS Platinum compliant)",
-      the Interfaces callouts "9. PSU 2: 1200 Watts" and "10. PSU 1: 1200 Watts", and the ordering table's
-      "YPEB1200AM-1A03P10 ... 1200 W AC Power Supply (3Y)". The rear elevation prints "2kV 920W" on each
-      supply's fan hub, legible at 12x, and three published statements outrank one silkscreen on a render,
-      so 1200 is carried and the hub text is recorded. WHAT THE HUB TEXT IS was worked out afterwards,
-      on `edgecore/eps202`, and this note is corrected rather than left as it was. That machine takes
-      the SAME supply - the ordering table names both chassis - and its rear elevation prints "2kV 1200W"
-      on the same hub. So the label tracks the supply's output, not the fan, and this figure's "920W"
-      is an inconsistency between two renders of one part rather than a different quantity. The conclusion
-      here was right; the first explanation of it was not. THE MACHINE'S FIGURES: maximum power consumption
-      "Low-line: 2000 Watts High-line: 2400 Watts"; input "Low-line: 15A for 90VAC-136VAC (1000 Watts)
-      High-line: 8.A for 180VAC -264VAC (1200 Watts)", the high-line current printed with a missing digit
-      in the source; PoE budget with a 30 W guard band "Low-line: 700 W for 1 PSU/1700 W for 2 PSU, High-line:
-      900 W for 1 PSU/2100 W for 2 PSU".
-  why-the-parts-are-named-for-their-FRUs:
-    confidence: datasheet
-    note: >-
-      THE ORDERING TABLES NAME THE PARTS AND SAY WHICH CHASSIS TAKE THEM. `FAN-1U-1x1M` is listed in all
-      three EPS20x datasheets as "Fan Module ... (for EPS201/AS4630-54TE, EPS202/AS4630-54PE, EPS203/AS4630-54NPE)"
-      - one tray in three chassis - so the part is `edgecore/eps200-fan-tray@1` rather than being named
-      after this one. `YPEB1200AM-1A03P10` is "1200 W AC Power Supply (3Y) ... (for EPS202/AS4630-54PE,
-      EPS203/AS4630-54NPE)" - two chassis, not three, because the EPS201 takes a 150 W `YM-1151D` instead
-      - so it is `edgecore/eps200-psu-1200w@1`. This is the ruling roc-ops/Portrayal#426 made for the
-      2RU fan tray applied before the second chassis arrives rather than after.
+      MEASURED ON THIS MODEL'S OWN REAR ELEVATION at 2.2763 px/mm, and it agrees with the EPS203's within
+      the slack both figures carry. THREE FAN TRAY BAYS at x 47.0, 96.0 and 144.5 - a pitch of 48.75 against
+      the EPS203's 48.15 and the EPS201's 48.1 - with the red handles reading 47.4-86.1, 96.6-134.9 and
+      145.9-183.2, widths 38.7, 38.2 and 37.3. The 2% spread in those widths is the figure's gradient,
+      the same one the other two rears carry. TWO SUPPLY BAYS carrying the 1200 W module: its silver face
+      reads 280.7-301.4 and 364.6-382.2 in the parts the mask catches, 83.9 apart, which is the EPS203's
+      84.0 pitch. The bays are drawn at the EPS203's measured 270.0 and 354.0 because that figure resolves
+      their edges and this one does not.
 attrs:
   environmental: {operating-temp: 0 to 45 C (32 to 113 F), storage-temp: -40 to 70 C (-40 to 158 F), humidity: 'Operating:
-      5% to 90% non-condensing'}
-  physical: {weight-note: 8.5 kg (18.74 lb)}
+      5% to 95% non-condensing'}
+  physical: {weight-note: '7.67 kg (16.91 lb), with two installed PSUs'}
   power:
-    power-consumption: Low-line 2000 W max; high-line 2400 W max
-    system-input-rating-per-psu: Low-line 15 A for 90-136 VAC (1000 W); high-line 180-264 VAC (1200 W)
-    poe-budget: >-
-      With a 30 W guard band - low-line 700 W with one PSU, 1700 W with two; high-line 900 W with one,
-      2100 W with two
+    power-consumption: 1710 W maximum at both low and high line
+    poe-budget: With a 30 W guard band - 750 W with one PSU, 1500 W with two, at both low and high line
   features:
     optics-sfp: >-
-      Four 10G/25G SFP28 uplinks, ports 49-52. The datasheet's transceiver list gives 10GBASE-RJ-45, 10G
-      DAC/AOC, 25GBASE-SR/LR, 25G DAC/AOC, 40GBASE-SR4/LR4, 40G DAC/AOC, 100GBASE-SR4/CWDM4/LR4 and 100G
-      DAC/AOC for the chassis as a whole; no per-cage breakout table is published, so none is stated here.
+      Four 10G/25G SFP28 uplinks, ports 49-52. No per-cage breakout table is published, so none is stated
+      here.
     optics-qsfp28: >-
-      Two 100G QSFP28 ports, 53-54, sold as stacking ports - "subject to NOS implementation, also can
-      be used as data transmission ports". Whether stacking is available is a software question the hardware
-      cannot answer, which is why it is here and not in a group's role.
+      Two 100G QSFP28 ports, 53-54, sold as stacking ports and qualified by the datasheet itself - "stacking
+      capability subject to NOS implementations".
     poe: >-
-      All forty-eight RJ-45 ports deliver up to 90 W. The key-features list gives the standards per rate
-      group: 36 x 1G/2.5G at IEEE 802.3af/at and bt Type 3/Type 4 90 W, and 12 x 1G/2.5G/5G/10G at the
-      same. Cat 6 cabling, per the datasheet's prose.
+      All forty-eight RJ-45 ports support IEEE 802.3at and IEEE 802.3bt, up to 90 W per port depending
+      on the budget. Cat 6 cabling, per the datasheet's prose. ONE CLASS ACROSS ALL FORTY-EIGHT, unlike
+      the EPS203 which splits the same sockets by rate.
   lifecycle: {eol: none-announced}
-chassis: {width: 438.0, height: 44.0, depth: 474.0, ru: 1, weight-kg: 8.5, color: '#3c3f43', airflow: front-to-back}
+chassis: {width: 438.0, height: 43.7, depth: 442.0, ru: 1, weight-kg: 7.67, color: '#3c3f43', airflow: front-to-back}
 gaps:
-- what: the-model-name-on-the-panel
-  scope:
-  - front
-  reason: sources-disagree
-  wanted: >-
-    WHICH SPELLING THE METAL CARRIES. The datasheet's front elevation prints `AS4630-54NPE` and the quick
-    start guide's port enlargement prints `AS4630-54NPEM`, both legible at 10x, and the two are renders
-    of the same face by the same vendor. The datasheet's body, its title block and all seven of its ordering
-    codes use the shorter form, so that is what is drawn - but a trailing M on a silkscreen is exactly
-    the kind of thing an ordering code drops. A photograph of a real unit's right-hand end closes it.
-- what: the-eps20x-front-elevations
+- what: the-eps202-front-elevation
   scope:
   - front
   reason: needs-drawing
   wanted: >-
-    A SQUARE-ON ELEVATION OF THE EPS201 AND THE EPS202. Neither model's own datasheet figure is orthographic:
-    fitting their twenty-four RJ-45 columns gives rms 0.674 and 0.675 mm against this model's 0.121, with
-    quadratic terms implying the local pitch changes -5.0% and +3.8% across the row. Their quick start
-    guides contain no square-on figure at all. This device's face is measurable and theirs are not, which
-    is why it is modelled first; the EPS201 shares this exact shell and could be carried from here, but
-    the EPS202 is 32 mm shallower and 0.3 mm lower and cannot be assumed to share it.
-- what: the-port-indicator-offsets
+    A SQUARE-ON ELEVATION OF THIS MACHINE. All four of its datasheet figures read between -3.7% and -6.2%
+    on aspect, and fitting its front elevation's twenty-four RJ-45 columns gives a straight-line rms of
+    0.695 mm with a quadratic implying the local pitch grows 3.8% across the row. Its guide has no square-on
+    elevation at all. EVERY FRONT-FACE FIGURE IN THIS FILE IS CARRIED FROM `edgecore/eps203`, on the evidence
+    that the two guides' port enlargements place the apertures at the same pixels. One orthographic drawing
+    of this face would turn the whole file from borrowed to measured.
+- what: where-the-missing-0-3-mm-goes
   scope:
   - front
-  reason: needs-drawing
-  wanted: >-
-    WHERE EACH PORT'S INDICATOR SITS RELATIVE TO ITS COLUMN. The row is measured - y 38.75 to 40.34, one
-    window per port, number to its left - but at 2.29 px/mm the elevation resolves the band into 78 undifferentiated
-    marks across 48 ports, and the guide's enlargement of that end is calibrated too loosely in x to place
-    them. They are drawn at a quarter-pitch either side of each column centre because that is where the
-    EPS112's are, measured at 11.9 px/mm. One enlargement of this device's lower edge closes it.
-- what: the-rear-figure-gradient
-  scope:
   - rear
   reason: needs-drawing
   wanted: >-
-    A REAR ELEVATION WITHOUT THE 2 PERCENT GRADIENT. The three fan-tray handles - the sharpest repeated
-    feature on the face - measure 38.18, 37.74 and 37.30 wide left to right, and the figure's aspect reads
-    -2.66% where the front's reads +0.66%. Nothing on the rear is wrong by more than about a millimetre,
-    and nothing on it is better than that either. The fan and supply pitches are the reliable figures;
-    their individual widths are not.
+    WHETHER THIS CHASSIS IS SHORTER AT THE TOP OR THE BOTTOM. It publishes 43.7 mm where its two shell-mates
+    publish 44.0, and every face figure here is placed from the top edge because that is where the EPS203's
+    measurements are anchored. Three tenths of a millimetre is two thirds of one pixel on the best EPS20x
+    figure, so no staged drawing can say. A dimensioned mechanical drawing closes it, and closes the same
+    question for the other two at the same time.
+- what: the-depth-that-is-32-mm-shorter
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    WHAT THE 32 mm COMES OFF. This chassis is 442 mm deep against its shell-mates' 474, and its front
+    face and its rear face are both theirs - same port wall, same fan bays, same supply bays on the same
+    pitch. So the difference is entirely in the sides, the lid and the floor, and not one staged figure
+    draws any of them. Four undrawn faces is the normal state for this corpus; here it is the specific
+    thing that would explain what makes this model different.
 groups:
-  rj45-2g5:
+  rj45-1g:
     term: Port
     role: traffic
     index-origin: 1
     description: >-
-      the thirty-six 100M/1G/2.5G RJ-45 ports - the datasheet's callout 3 - which are the first three
-      ganged blocks of six columns, ports 1 to 36. They deliver up to 90 W of PoE, the same as the twelve
-      beside them; what separates the two groups is rate.
-    attrs: {media: rj45, speed: 2.5g, poe: 'IEEE 802.3af/at and bt Type 3/Type 4, up to 90 W per port'}
-  rj45-10g:
-    term: Port
-    role: traffic
-    index-origin: 1
-    description: >-
-      the twelve 1G/2.5G/5G/10GBASE-T RJ-45 ports - the datasheet's callout 4 - which are the fourth ganged
-      block, ports 37 to 48. The datasheet is explicit that these carry PoE too: "up to 90 Watts ... for
-      all 48 RJ-45 ports, including the 10G ports".
-    attrs: {media: rj45, speed: 10g, poe: 'IEEE 802.3af/at and bt Type 3/Type 4, up to 90 W per port'}
+      the forty-eight 10/100/1000BASE-T RJ-45 ports, twenty-four columns of two ganged six and six and
+      six and six, numbered 1-48 down each column. ALL FORTY-EIGHT CARRY PoE at one class - IEEE 802.3at
+      and 802.3bt up to 90 W - which is this model's own shape: edgecore/eps201 has the same forty-eight
+      with none, and edgecore/eps203 splits the same sockets by rate.
+    attrs: {media: rj45, speed: 1g, poe: 'IEEE 802.3at and 802.3bt, up to 90 W per port'}
   sfp28:
     term: Port
     role: traffic
@@ -289,10 +192,8 @@ groups:
     role: traffic
     index-origin: 1
     description: >-
-      the two 100G QSFP28 ports, one stacked pair, numbered 53-54. The datasheet sells them as stacking
-      ports "subject to NOS implementation" and adds that they "also can be used as data transmission
-      ports", so the role here is traffic and the stacking claim lives in attrs where a reader can see
-      whose claim it is.
+      the two 100G QSFP28 ports, one stacked pair, numbered 53-54. Sold as stacking ports and qualified
+      by the datasheet - "stacking capability subject to NOS implementations".
     attrs: {media: qsfp28, speed: 100g}
   port-leds:
     term: LED
@@ -300,14 +201,15 @@ groups:
     index-origin: 1
     description: >-
       the fifty-four port indicators, one per port, in a row below the port wall with each port's number
-      printed to its left.
+      printed to its left. THIS GUIDE DRAWS THEM WHITE where the EPS203's draws them pale blue, on artwork
+      that is otherwise the same face at the same pixels.
   mgmt:
     term: Port
     role: management
     index-origin: 1
     mixed: >-
       the out-of-band cluster at the left - a stacked RJ-45 pair carrying the management port over the
-      console port, and a Type-A USB storage port above them. The datasheet's callouts 1, 7 and 2.
+      console port, and a Type-A USB storage port above them.
   buttons: {term: Button, role: service, index-origin: 1}
   leds: {term: LED, role: indicator, index-origin: 1}
   grounding: {term: Point, role: service, index-origin: 1}
@@ -319,11 +221,10 @@ groups:
     attrs:
       redundancy: 1+1
       redundancy-note: >-
-        "2pcs 1+1 redundant, load-sharing, hot-swappable 1200 W AC", two bays, either of which runs the
-        switch. THE PoE BUDGET IS NOT 1+1 AND THE DATASHEET SAYS SO: it publishes the budget twice over,
-        "700 W for 1 PSU/1700 W for 2 PSU" at low line and "900 W for 1 PSU/2100 W for 2 PSU" at high
-        line. Losing a supply keeps the switch up and takes more than half the power it can deliver to
-        attached devices.
+        "2pcs 1+1 redundant, load-sharing, hot-swappable 1200W AC", two bays, either of which runs the
+        switch. THE PoE BUDGET IS NOT 1+1 AND THE DATASHEET SAYS SO: "750 W for 1 PSU/1500 W for 2 PSU"
+        with a 30 W guard band, the same at both line voltages. Losing a supply keeps the switch up and
+        halves what it can deliver to attached devices.
   fans:
     term: Fan
     role: service
@@ -331,14 +232,12 @@ groups:
     attrs:
       redundancy: 2+1
       redundancy-note: >-
-        "Hot-swappable 2 + 1 redundant fan trays", in the key features and in Interfaces callout 8, over
-        THREE BAYS - so the figure and the bay count agree and no exemption is needed. Unlike the EPS1xx
-        family's fixed fans these are FRUs: the guide carries a Fan Tray Replacement procedure, "Loosen
-        the fan tray screw. Remove fan tray from the chassis. Install replacement fan with matching airflow
-        direction."
+        "Hot-swappable 2 + 1 redundant fan trays", over THREE BAYS - figure and bay count agree. The tray
+        is FAN-1U-1x1M, the same part all three EPS20x chassis take, and this model's ordering table lists
+        only the front-to-back variant because this model ships only that way.
 views:
   front:
-    size: {w: 438.0, h: 44.0}
+    size: {w: 438.0, h: 43.7}
     panel:
       decor:
       - {id: vent-left, at: [26.0, 0.2], size: [102.0, 5.2], pattern: vent, pattern-pitch: [3.72, 2.14],
@@ -842,7 +741,7 @@ views:
       for: led-53}
     - {id: num-led-54, at: [425.13, 40.103], text: '54', font-size: 1.8, anchor: end, fill: '#e8ecef',
       for: led-54}
-    - {id: label-model, at: [436.0, 4.6], text: AS4630-54NPE, font-size: 1.6, anchor: end, fill: '#e8ecef',
+    - {id: label-model, at: [436.0, 4.6], text: AS4630-54PE, font-size: 1.6, anchor: end, fill: '#e8ecef',
       for: chassis}
     - {id: label-stk, at: [136.61, 2.2], text: STK M/S, font-size: 1.1, anchor: middle, fill: '#e8ecef',
       for: btn-stk}
@@ -870,42 +769,54 @@ views:
       for: console}
     components:
       placements:
-      - {ref: std/rj45-ganged@2, id: port-1, at: [28.16, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 1}
-      - {ref: std/rj45-ganged@2, id: port-2, at: [28.16, 25.72], group: rj45-2g5, rel-pos: 2}
-      - {ref: std/rj45-ganged@2, id: port-3, at: [42.23, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 3}
-      - {ref: std/rj45-ganged@2, id: port-4, at: [42.23, 25.72], group: rj45-2g5, rel-pos: 4}
-      - {ref: std/rj45-ganged@2, id: port-5, at: [56.3, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 5}
-      - {ref: std/rj45-ganged@2, id: port-6, at: [56.3, 25.72], group: rj45-2g5, rel-pos: 6}
-      - {ref: std/rj45-ganged@2, id: port-7, at: [70.37, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 7}
-      - {ref: std/rj45-ganged@2, id: port-8, at: [70.37, 25.72], group: rj45-2g5, rel-pos: 8}
-      - {ref: std/rj45-ganged@2, id: port-9, at: [84.44, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 9}
-      - {ref: std/rj45-ganged@2, id: port-10, at: [84.44, 25.72], group: rj45-2g5, rel-pos: 10}
-      - {ref: std/rj45-ganged@2, id: port-11, at: [98.51, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 11}
-      - {ref: std/rj45-ganged@2, id: port-12, at: [98.51, 25.72], group: rj45-2g5, rel-pos: 12}
-      - {ref: std/rj45-ganged@2, id: port-13, at: [116.74, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 13}
-      - {ref: std/rj45-ganged@2, id: port-14, at: [116.74, 25.72], group: rj45-2g5, rel-pos: 14}
-      - {ref: std/rj45-ganged@2, id: port-15, at: [130.81, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 15}
-      - {ref: std/rj45-ganged@2, id: port-16, at: [130.81, 25.72], group: rj45-2g5, rel-pos: 16}
-      - {ref: std/rj45-ganged@2, id: port-17, at: [144.88, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 17}
-      - {ref: std/rj45-ganged@2, id: port-18, at: [144.88, 25.72], group: rj45-2g5, rel-pos: 18}
-      - {ref: std/rj45-ganged@2, id: port-19, at: [158.95, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 19}
-      - {ref: std/rj45-ganged@2, id: port-20, at: [158.95, 25.72], group: rj45-2g5, rel-pos: 20}
-      - {ref: std/rj45-ganged@2, id: port-21, at: [173.02, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 21}
-      - {ref: std/rj45-ganged@2, id: port-22, at: [173.02, 25.72], group: rj45-2g5, rel-pos: 22}
-      - {ref: std/rj45-ganged@2, id: port-23, at: [187.09, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 23}
-      - {ref: std/rj45-ganged@2, id: port-24, at: [187.09, 25.72], group: rj45-2g5, rel-pos: 24}
-      - {ref: std/rj45-ganged@2, id: port-25, at: [205.31, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 25}
-      - {ref: std/rj45-ganged@2, id: port-26, at: [205.31, 25.72], group: rj45-2g5, rel-pos: 26}
-      - {ref: std/rj45-ganged@2, id: port-27, at: [219.38, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 27}
-      - {ref: std/rj45-ganged@2, id: port-28, at: [219.38, 25.72], group: rj45-2g5, rel-pos: 28}
-      - {ref: std/rj45-ganged@2, id: port-29, at: [233.45, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 29}
-      - {ref: std/rj45-ganged@2, id: port-30, at: [233.45, 25.72], group: rj45-2g5, rel-pos: 30}
-      - {ref: std/rj45-ganged@2, id: port-31, at: [247.52, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 31}
-      - {ref: std/rj45-ganged@2, id: port-32, at: [247.52, 25.72], group: rj45-2g5, rel-pos: 32}
-      - {ref: std/rj45-ganged@2, id: port-33, at: [261.59, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 33}
-      - {ref: std/rj45-ganged@2, id: port-34, at: [261.59, 25.72], group: rj45-2g5, rel-pos: 34}
-      - {ref: std/rj45-ganged@2, id: port-35, at: [275.66, 11.8], rotate: 180, group: rj45-2g5, rel-pos: 35}
-      - {ref: std/rj45-ganged@2, id: port-36, at: [275.66, 25.72], group: rj45-2g5, rel-pos: 36}
+      - {ref: std/rj45-ganged@2, id: port-1, at: [28.16, 11.8], rotate: 180, group: rj45-1g, rel-pos: 1}
+      - {ref: std/rj45-ganged@2, id: port-2, at: [28.16, 25.72], group: rj45-1g, rel-pos: 2}
+      - {ref: std/rj45-ganged@2, id: port-3, at: [42.23, 11.8], rotate: 180, group: rj45-1g, rel-pos: 3}
+      - {ref: std/rj45-ganged@2, id: port-4, at: [42.23, 25.72], group: rj45-1g, rel-pos: 4}
+      - {ref: std/rj45-ganged@2, id: port-5, at: [56.3, 11.8], rotate: 180, group: rj45-1g, rel-pos: 5}
+      - {ref: std/rj45-ganged@2, id: port-6, at: [56.3, 25.72], group: rj45-1g, rel-pos: 6}
+      - {ref: std/rj45-ganged@2, id: port-7, at: [70.37, 11.8], rotate: 180, group: rj45-1g, rel-pos: 7}
+      - {ref: std/rj45-ganged@2, id: port-8, at: [70.37, 25.72], group: rj45-1g, rel-pos: 8}
+      - {ref: std/rj45-ganged@2, id: port-9, at: [84.44, 11.8], rotate: 180, group: rj45-1g, rel-pos: 9}
+      - {ref: std/rj45-ganged@2, id: port-10, at: [84.44, 25.72], group: rj45-1g, rel-pos: 10}
+      - {ref: std/rj45-ganged@2, id: port-11, at: [98.51, 11.8], rotate: 180, group: rj45-1g, rel-pos: 11}
+      - {ref: std/rj45-ganged@2, id: port-12, at: [98.51, 25.72], group: rj45-1g, rel-pos: 12}
+      - {ref: std/rj45-ganged@2, id: port-13, at: [116.74, 11.8], rotate: 180, group: rj45-1g, rel-pos: 13}
+      - {ref: std/rj45-ganged@2, id: port-14, at: [116.74, 25.72], group: rj45-1g, rel-pos: 14}
+      - {ref: std/rj45-ganged@2, id: port-15, at: [130.81, 11.8], rotate: 180, group: rj45-1g, rel-pos: 15}
+      - {ref: std/rj45-ganged@2, id: port-16, at: [130.81, 25.72], group: rj45-1g, rel-pos: 16}
+      - {ref: std/rj45-ganged@2, id: port-17, at: [144.88, 11.8], rotate: 180, group: rj45-1g, rel-pos: 17}
+      - {ref: std/rj45-ganged@2, id: port-18, at: [144.88, 25.72], group: rj45-1g, rel-pos: 18}
+      - {ref: std/rj45-ganged@2, id: port-19, at: [158.95, 11.8], rotate: 180, group: rj45-1g, rel-pos: 19}
+      - {ref: std/rj45-ganged@2, id: port-20, at: [158.95, 25.72], group: rj45-1g, rel-pos: 20}
+      - {ref: std/rj45-ganged@2, id: port-21, at: [173.02, 11.8], rotate: 180, group: rj45-1g, rel-pos: 21}
+      - {ref: std/rj45-ganged@2, id: port-22, at: [173.02, 25.72], group: rj45-1g, rel-pos: 22}
+      - {ref: std/rj45-ganged@2, id: port-23, at: [187.09, 11.8], rotate: 180, group: rj45-1g, rel-pos: 23}
+      - {ref: std/rj45-ganged@2, id: port-24, at: [187.09, 25.72], group: rj45-1g, rel-pos: 24}
+      - {ref: std/rj45-ganged@2, id: port-25, at: [205.31, 11.8], rotate: 180, group: rj45-1g, rel-pos: 25}
+      - {ref: std/rj45-ganged@2, id: port-26, at: [205.31, 25.72], group: rj45-1g, rel-pos: 26}
+      - {ref: std/rj45-ganged@2, id: port-27, at: [219.38, 11.8], rotate: 180, group: rj45-1g, rel-pos: 27}
+      - {ref: std/rj45-ganged@2, id: port-28, at: [219.38, 25.72], group: rj45-1g, rel-pos: 28}
+      - {ref: std/rj45-ganged@2, id: port-29, at: [233.45, 11.8], rotate: 180, group: rj45-1g, rel-pos: 29}
+      - {ref: std/rj45-ganged@2, id: port-30, at: [233.45, 25.72], group: rj45-1g, rel-pos: 30}
+      - {ref: std/rj45-ganged@2, id: port-31, at: [247.52, 11.8], rotate: 180, group: rj45-1g, rel-pos: 31}
+      - {ref: std/rj45-ganged@2, id: port-32, at: [247.52, 25.72], group: rj45-1g, rel-pos: 32}
+      - {ref: std/rj45-ganged@2, id: port-33, at: [261.59, 11.8], rotate: 180, group: rj45-1g, rel-pos: 33}
+      - {ref: std/rj45-ganged@2, id: port-34, at: [261.59, 25.72], group: rj45-1g, rel-pos: 34}
+      - {ref: std/rj45-ganged@2, id: port-35, at: [275.66, 11.8], rotate: 180, group: rj45-1g, rel-pos: 35}
+      - {ref: std/rj45-ganged@2, id: port-36, at: [275.66, 25.72], group: rj45-1g, rel-pos: 36}
+      - {ref: std/rj45-ganged@2, id: port-37, at: [293.89, 11.8], rotate: 180, group: rj45-1g, rel-pos: 37}
+      - {ref: std/rj45-ganged@2, id: port-38, at: [293.89, 25.72], group: rj45-1g, rel-pos: 38}
+      - {ref: std/rj45-ganged@2, id: port-39, at: [307.96, 11.8], rotate: 180, group: rj45-1g, rel-pos: 39}
+      - {ref: std/rj45-ganged@2, id: port-40, at: [307.96, 25.72], group: rj45-1g, rel-pos: 40}
+      - {ref: std/rj45-ganged@2, id: port-41, at: [322.03, 11.8], rotate: 180, group: rj45-1g, rel-pos: 41}
+      - {ref: std/rj45-ganged@2, id: port-42, at: [322.03, 25.72], group: rj45-1g, rel-pos: 42}
+      - {ref: std/rj45-ganged@2, id: port-43, at: [336.1, 11.8], rotate: 180, group: rj45-1g, rel-pos: 43}
+      - {ref: std/rj45-ganged@2, id: port-44, at: [336.1, 25.72], group: rj45-1g, rel-pos: 44}
+      - {ref: std/rj45-ganged@2, id: port-45, at: [350.17, 11.8], rotate: 180, group: rj45-1g, rel-pos: 45}
+      - {ref: std/rj45-ganged@2, id: port-46, at: [350.17, 25.72], group: rj45-1g, rel-pos: 46}
+      - {ref: std/rj45-ganged@2, id: port-47, at: [364.24, 11.8], rotate: 180, group: rj45-1g, rel-pos: 47}
+      - {ref: std/rj45-ganged@2, id: port-48, at: [364.24, 25.72], group: rj45-1g, rel-pos: 48}
       - ref: common/led-rect-sm@1
         id: led-1
         at: [29.59, 38.75]
@@ -1161,102 +1072,87 @@ views:
         for: port-36
         group: port-leds
         rel-pos: 36
-      - {ref: std/rj45-ganged@2, id: port-37, at: [293.89, 11.8], rotate: 180, group: rj45-10g, rel-pos: 37}
-      - {ref: std/rj45-ganged@2, id: port-38, at: [293.89, 25.72], group: rj45-10g, rel-pos: 38}
-      - {ref: std/rj45-ganged@2, id: port-39, at: [307.96, 11.8], rotate: 180, group: rj45-10g, rel-pos: 39}
-      - {ref: std/rj45-ganged@2, id: port-40, at: [307.96, 25.72], group: rj45-10g, rel-pos: 40}
-      - {ref: std/rj45-ganged@2, id: port-41, at: [322.03, 11.8], rotate: 180, group: rj45-10g, rel-pos: 41}
-      - {ref: std/rj45-ganged@2, id: port-42, at: [322.03, 25.72], group: rj45-10g, rel-pos: 42}
-      - {ref: std/rj45-ganged@2, id: port-43, at: [336.1, 11.8], rotate: 180, group: rj45-10g, rel-pos: 43}
-      - {ref: std/rj45-ganged@2, id: port-44, at: [336.1, 25.72], group: rj45-10g, rel-pos: 44}
-      - {ref: std/rj45-ganged@2, id: port-45, at: [350.17, 11.8], rotate: 180, group: rj45-10g, rel-pos: 45}
-      - {ref: std/rj45-ganged@2, id: port-46, at: [350.17, 25.72], group: rj45-10g, rel-pos: 46}
-      - {ref: std/rj45-ganged@2, id: port-47, at: [364.24, 11.8], rotate: 180, group: rj45-10g, rel-pos: 47}
-      - {ref: std/rj45-ganged@2, id: port-48, at: [364.24, 25.72], group: rj45-10g, rel-pos: 48}
       - ref: common/led-rect-sm@1
         id: led-37
         at: [295.32, 38.75]
-        states: &id002
-        - 'off'
-        - {name: link, color: '#22c55e'}
-        - {name: activity, color: '#22c55e'}
+        states: *id001
         for: port-37
         group: port-leds
         rel-pos: 37
       - ref: common/led-rect-sm@1
         id: led-38
         at: [302.36, 38.74]
-        states: *id002
+        states: *id001
         for: port-38
         group: port-leds
         rel-pos: 38
       - ref: common/led-rect-sm@1
         id: led-39
         at: [309.39, 38.75]
-        states: *id002
+        states: *id001
         for: port-39
         group: port-leds
         rel-pos: 39
       - ref: common/led-rect-sm@1
         id: led-40
         at: [316.43, 38.74]
-        states: *id002
+        states: *id001
         for: port-40
         group: port-leds
         rel-pos: 40
       - ref: common/led-rect-sm@1
         id: led-41
         at: [323.46, 38.75]
-        states: *id002
+        states: *id001
         for: port-41
         group: port-leds
         rel-pos: 41
       - ref: common/led-rect-sm@1
         id: led-42
         at: [330.5, 38.74]
-        states: *id002
+        states: *id001
         for: port-42
         group: port-leds
         rel-pos: 42
       - ref: common/led-rect-sm@1
         id: led-43
         at: [337.53, 38.75]
-        states: *id002
+        states: *id001
         for: port-43
         group: port-leds
         rel-pos: 43
       - ref: common/led-rect-sm@1
         id: led-44
         at: [344.57, 38.74]
-        states: *id002
+        states: *id001
         for: port-44
         group: port-leds
         rel-pos: 44
       - ref: common/led-rect-sm@1
         id: led-45
         at: [351.6, 38.75]
-        states: *id002
+        states: *id001
         for: port-45
         group: port-leds
         rel-pos: 45
       - ref: common/led-rect-sm@1
         id: led-46
         at: [358.64, 38.74]
-        states: *id002
+        states: *id001
         for: port-46
         group: port-leds
         rel-pos: 46
       - ref: common/led-rect-sm@1
         id: led-47
         at: [365.67, 38.75]
-        states: *id002
+        states: *id001
         for: port-47
         group: port-leds
         rel-pos: 47
       - ref: common/led-rect-sm@1
         id: led-48
         at: [372.71, 38.74]
-        states: *id002
+        states: *id001
         for: port-48
         group: port-leds
         rel-pos: 48
@@ -1267,7 +1163,7 @@ views:
       - ref: common/led-rect-sm@1
         id: led-49
         at: [383.82, 38.75]
-        states: &id003
+        states: &id002
         - 'off'
         - {name: 25g, color: '#e8ecef'}
         - {name: 10g, color: '#22c55e'}
@@ -1277,21 +1173,21 @@ views:
       - ref: common/led-rect-sm@1
         id: led-50
         at: [391.03, 38.75]
-        states: *id003
+        states: *id002
         for: port-50
         group: port-leds
         rel-pos: 50
       - ref: common/led-rect-sm@1
         id: led-51
         at: [398.24, 38.75]
-        states: *id003
+        states: *id002
         for: port-51
         group: port-leds
         rel-pos: 51
       - ref: common/led-rect-sm@1
         id: led-52
         at: [405.45, 38.75]
-        states: *id003
+        states: *id002
         for: port-52
         group: port-leds
         rel-pos: 52
@@ -1300,7 +1196,7 @@ views:
       - ref: common/led-rect-sm@1
         id: led-53
         at: [416.58, 38.75]
-        states: &id004
+        states: &id003
         - 'off'
         - {name: 100g, color: '#e8ecef'}
         - {name: 40g, color: '#22c55e'}
@@ -1310,7 +1206,7 @@ views:
       - ref: common/led-rect-sm@1
         id: led-54
         at: [425.58, 38.75]
-        states: *id004
+        states: *id003
         for: port-54
         group: port-leds
         rel-pos: 54
@@ -1416,25 +1312,25 @@ views:
         - 'off'
         - {name: ok, color: '#22c55e'}
         - {name: fault, color: '#f59e0b'}
-      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture,
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [438, 0.25], skin: right, optional: ears, group: furniture,
         rel-pos: 2}
   rear:
-    size: {w: 438.0, h: 44.0}
+    size: {w: 438.0, h: 43.7}
     panel:
       decor:
-      - {id: rear-plate, at: [0, 0], size: [438.0, 44.0], fill: '#3c3f43'}
-      - {id: blank-plate, at: [192.0, 2.5], size: [76.0, 39.5], fill: '#33363a'}
+      - {id: rear-plate, at: [0, 0], size: [438.0, 43.7], fill: '#3c3f43'}
+      - {id: blank-plate, at: [192.0, 2.2], size: [76.0, 39.5], fill: '#33363a'}
     silkscreen:
-    - {id: psu-label-2, at: [344.0, 23.0], text: PS2, font-size: 2.0, anchor: start, fill: '#e8ecef',
+    - {id: psu-label-2, at: [344.0, 22.85], text: PS2, font-size: 2.0, anchor: start, fill: '#e8ecef',
       for: psu-2}
-    - {id: psu-label-1, at: [428.0, 23.0], text: PS1, font-size: 2.0, anchor: start, fill: '#e8ecef',
+    - {id: psu-label-1, at: [428.0, 22.85], text: PS1, font-size: 2.0, anchor: start, fill: '#e8ecef',
       for: psu-1}
     components:
       bays:
       - id: fan-1
-        at: [46.1, 2.5]
+        at: [47.0, 2.2]
         size: {w: 39.5, h: 39.5}
         group: fans
         rel-pos: 1
@@ -1442,7 +1338,7 @@ views:
         - edgecore/eps200-fan-tray@1
         default: edgecore/eps200-fan-tray@1
       - id: fan-2
-        at: [94.1, 2.5]
+        at: [96.0, 2.2]
         size: {w: 39.5, h: 39.5}
         group: fans
         rel-pos: 2
@@ -1450,7 +1346,7 @@ views:
         - edgecore/eps200-fan-tray@1
         default: edgecore/eps200-fan-tray@1
       - id: fan-3
-        at: [142.4, 2.5]
+        at: [144.5, 2.2]
         size: {w: 39.5, h: 39.5}
         group: fans
         rel-pos: 3
@@ -1458,7 +1354,7 @@ views:
         - edgecore/eps200-fan-tray@1
         default: edgecore/eps200-fan-tray@1
       - id: psu-2
-        at: [270.0, 2.5]
+        at: [270.0, 2.2]
         size: {w: 72.0, h: 39.5}
         group: psus
         rel-pos: 2
@@ -1466,7 +1362,7 @@ views:
         - edgecore/eps200-psu-1200w@1
         default: edgecore/eps200-psu-1200w@1
       - id: psu-1
-        at: [354.0, 2.5]
+        at: [354.0, 2.2]
         size: {w: 72.0, h: 39.5}
         group: psus
         rel-pos: 1
@@ -1474,41 +1370,43 @@ views:
         - edgecore/eps200-psu-1200w@1
         default: edgecore/eps200-psu-1200w@1
       placements:
-      - {ref: common/ground-lug@1, id: ground, at: [12.0, 15.0], group: grounding, rel-pos: 1}
-      - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
+      - {ref: common/ground-lug@1, id: ground, at: [12.0, 14.85], group: grounding, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture,
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: rear-ear-right, at: [438, 0.25], skin: right, optional: ears, group: furniture,
         rel-pos: 2}
   top:
-    size: {w: 438.0, h: 474.0}
+    size: {w: 438.0, h: 442.0}
     empty: >-
       Not drawn square-on by either staged document. The quick start guide's Overview and FRU figures
       are three-quarter renders and do show the lid - a plain sheet with two long pressed seams - but
       a three-quarter view gives no dimension to place them at, and this device's whole geometry problem
       is that its family's figures are not orthographic.
   bottom:
-    size: {w: 438.0, h: 474.0}
+    size: {w: 438.0, h: 442.0}
     empty: >-
       Not drawn by any staged source. The guide's package contents list a rack mounting kit of two front-post
       and two rear-post brackets and a screw kit, and no rubber feet, so what is underneath is unrecorded
       rather than known to be bare.
   left:
-    size: {w: 474.0, h: 44.0}
+    size: {w: 442.0, h: 43.7}
     empty: >-
       Not drawn by any staged source. The machine is front-to-back, so the intake is the front face's
       own perforation band and the exhaust is the three rear trays; the side walls carry nothing either
       document shows.
   right:
-    size: {w: 474.0, h: 44.0}
+    size: {w: 442.0, h: 43.7}
     empty: Not drawn by any staged source. The other side wall, for the same reason.
 configurations:
   base:
     kind: base
     default: true
     description: >-
-      The chassis as it ships: two supplies and three fan trays in, every cage empty. All seven ordering
-      codes are front-to-back, so there is no second airflow configuration to describe - unlike the EPS201
-      on the same shell, which has four of each.
+      The chassis as it ships: two 1200 W supplies and three fan trays in, every cage empty. ONE AIRFLOW
+      ONLY, which is the difference from edgecore/eps201 on the same face: this model's datasheet reads
+      "Front-to-back airflow only" and its rear elevation draws the red handles to match, counted at 2,547
+      pixels with a median of (238, 43, 40) and not one blue. The EPS201 ships four front-to-back codes
+      and four back-to-front and needs two configurations; this one needs none.
 references:
-- {title: Edgecore AS4630-54NPE Quick Start Guide}
-- {title: Edgecore EPS203 / AS4630-54NPE Enterprise Switch Datasheet}
+- {title: Edgecore AS4630-54PE Quick Start Guide}
+- {title: Edgecore EPS202 / AS4630-54PE Enterprise Switch Datasheet}

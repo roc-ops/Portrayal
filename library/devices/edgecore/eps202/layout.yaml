@@ -1,0 +1,540 @@
+format: 1
+kind: device
+name: eps202
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: AS4630-54PE
+portfolio: {line: Enterprise, family: Access Switch, series: EPS202}
+description: >-
+  54-port Gigabit PoE access switch, 1RU, sold as the EPS202 and stamped AS4630-54PE.
+  48 x 10/100/1000BASE-T RJ-45 in twenty-four columns of two, ganged six and six and six
+  and six, ALL of them delivering up to 90 W under IEEE 802.3at and 802.3bt - one rate and
+  one PoE class, which is what separates it from both its shell-mates. Four 10G/25G SFP28
+  uplinks and two 100G QSFP28 stacking ports numbered 49-52 and 53-54 into the same
+  sequence. TWO HOT-SWAPPABLE 1200 W AC SUPPLIES AND THREE HOT-SWAPPABLE FAN TRAYS on the
+  rear, front-to-back only.
+  IT IS 32 mm SHALLOWER THAN ITS TWO SIBLINGS - 438 x 442 x 43.7 against 438 x 474 x 44 -
+  and its FACE is theirs.
+profile: networking
+provenance:
+  gate-1:
+    confidence: borrowed
+    note: >-
+      THE FACE IS `edgecore/eps203`'s, AND THE EVIDENCE FOR THAT IS BETTER THAN THE
+      EVIDENCE THIS DEVICE'S OWN ELEVATION COULD GIVE.
+      Its own datasheet figures are the worst of the family. All four read between -3.7%
+      and -6.2% on aspect against 438 x 43.7, and fitting the twenty-four RJ-45 column
+      positions of its front elevation gives a straight-line rms of 0.695 mm with a
+      quadratic term implying the local pitch GROWS 3.8% across the row - the opposite
+      direction from the EPS201's -5.0%, and the same kind of fault.
+      THE SHELL IS NOT SHARED AND THE FACE IS, which is the distinction that took the work.
+      The chassis is 32 mm shallower and 0.3 mm lower than the EPS201's and EPS203's, so
+      nothing could be assumed. But the three quick start guides turn out to share
+      artwork, and the sharing is exact: this guide's button-and-lamp enlargement is
+      BYTE-IDENTICAL to the EPS203's (md5 45c69467154e...), as are its PSU-replacement
+      figure and the fan-tray figure all three carry. Its left-end port enlargement is NOT
+      byte-identical - the port indicators are drawn white here and pale blue there - but
+      registered against the EPS203's it needs ZERO pixels of shift, and the port aperture
+      centres in the two come out at the same pixels to a tenth: 263.5, 422.0, 508.0 and
+      614.0 in both. Two renders of one face.
+      A SCALE-FREE CHECK AGREES. The ratio of column pitch to jack aperture, which needs no
+      calibration at all, reads 1.1778 on this guide's enlargement, 1.1778 on the EPS203's
+      and 1.1776 on the EPS201's, against the 1.1814 the EPS203's measured geometry gives.
+      AND THE HOMOGRAPHY TEST, WHICH PASSES FOR THE EPS201, FAILS HERE - which is worth
+      recording because it is the test that would otherwise have been called decisive.
+      Assuming this device's columns sit at the EPS203's positions, the best 1D perspective
+      transform explains its datasheet elevation to only 0.484 mm rms, against 0.171 for
+      the EPS201 and 0.069 for the EPS203 on itself; freeing the gutter ratio gets to 0.455
+      and wants a different one. THAT IS THIS FIGURE'S DISTORTION, NOT A DIFFERENT WALL -
+      the two enlargements settle it - but a reader who only had the elevations would have
+      concluded otherwise, and so would I have.
+      EVERY FRONT-FACE FIGURE IN THIS FILE IS THE EPS203's, measured on its datasheet
+      elevation at 2.2877 px/mm (24-column fit, rms 0.121 mm) and on its guide's
+      enlargements at 7.5 to 10.0 px/mm.
+  the-height-nobody-can-resolve:
+    confidence: datasheet
+    note: >-
+      THE PUBLISHED HEIGHT IS 43.7 AND THE SIBLINGS' IS 44.0, and the difference is 0.3 mm
+      on figures whose finest pixel is 0.44. Both are roundings of inch values - this
+      datasheet prints "43.8 x 44.2 x 4.37 cm (17.24 x 17.40 x 1.72 in)" and the siblings'
+      print 1.73 in - and neither is 1RU's 44.45.
+      `chassis.height` CARRIES 43.7 because that is what this device publishes, and every y
+      figure on the face is the EPS203's, placed from the TOP edge. Nothing in any staged
+      figure says whether the missing 0.3 mm comes off the top or the bottom, and at these
+      resolutions nothing could.
+  the-shallower-shell:
+    confidence: datasheet
+    note: >-
+      438 x 442 x 43.7 against the EPS201's and EPS203's 438 x 474 x 44. THIRTY-TWO
+      MILLIMETRES IS NOT A ROUNDING, and the issue that scoped this work says so in as many
+      words. What it does not change is the face: the rear is the EPS203's too - same three
+      fan-tray bays on the same pitch, same two 1200 W supplies on the same 84 mm pitch -
+      and the depth goes somewhere neither elevation shows.
+      THE RACK KIT NAMES ALL THREE ANYWAY: "RKIT-100G-SLIDE ... For EPS200
+      series/AS4630-54TE/54PE/54NPE". A slide kit that fits a 442 mm and a 474 mm chassis
+      is a statement about the rails, not about the boxes.
+  ports:
+    confidence: datasheet
+    note: >-
+      "48 x 10/100/1000BASE-T ports, 4 x 10G/25G SFP28 uplink ports, and 2 x 100G QSFP28
+      stacking ports (stacking capability subject to NOS implementations); plus the 48 x
+      10/100/1000BASE-T ports fully support IEEE 802.3at and IEEE 802.3bt Power-over-Ethernet".
+      ONE RATE AND ONE PoE CLASS, which is this model's own shape. The EPS201 on the same
+      face has the same 48 x 1G and NO PoE; the EPS203 has the same 48 sockets split 36 at
+      2.5G and 12 at 10G with 90 W on all of them. Three machines, one port wall, three
+      different answers to what comes out of it.
+  power:
+    confidence: datasheet
+    note: >-
+      "2pcs 1+1 redundant, load-sharing, hot-swappable 1200W AC (80 PLUS Platinum
+      compliant)" - the same YPEB1200AM-1A03P10 the EPS203 takes, and its ordering table
+      names both chassis: "(for EPS202/AS4630-54PE, EPS203/AS4630-54NPE)".
+      Maximum power consumption "Low-line: 1710 Watts High-line: 1710 Watts" - the same
+      figure at both lines, which is unusual enough to be worth quoting rather than
+      paraphrasing - and a PoE budget with a 30 W guard band of "750 W for 1 PSU/1500 W for
+      2 PSU", again the same at both lines.
+  airflow:
+    confidence: measured
+    note: >-
+      "Front-to-back airflow only", and the drawing agrees where the EPS201's does not.
+      Counted on this model's own rear elevation: 2,547 pixels pass a red test at a median
+      of (238, 43, 40), and the blue test finds 1,074 which are the supplies' inlet
+      shadows rather than any handle. The EPS203 is the same - red, front-to-back only.
+      The EPS201 is the one that ships both and draws blue.
+  the-psu-hub-label-that-corrects-the-eps203:
+    confidence: measured
+    note: >-
+      THE SUPPLY'S FAN HUB IS PRINTED WITH THE SUPPLY'S WATTAGE, and this device is what
+      proves it. Its rear elevation prints **"2kV 1200W"** on each hub, legible at 12x, and
+      its supply is the 1200 W YPEB1200AM-1A03P10.
+      THAT CORRECTS WHAT `edgecore/eps203` SAYS ABOUT THE SAME PART. The EPS203 takes the
+      same supply - its ordering table names both chassis - and its rear elevation prints
+      "2kV 920W" on the same hub. Faced with one drawing against three published statements
+      of 1200 W, that file carried 1200 and explained the 920 as a figure belonging to the
+      FAN rather than to the supply. The explanation was wrong: the label tracks the
+      supply, and this second render of the same part shows it doing so. The conclusion was
+      right for the wrong reason, which is worth saying out loud.
+      SO WHAT THE EPS203'S "920W" IS is an inconsistency between two documents rendering
+      one part, and the EPS203's provenance now says that instead. A photograph of a real
+      YPEB1200AM's hub would say which render is stale.
+  the-rear:
+    confidence: measured
+    note: >-
+      MEASURED ON THIS MODEL'S OWN REAR ELEVATION at 2.2763 px/mm, and it agrees with the
+      EPS203's within the slack both figures carry.
+      THREE FAN TRAY BAYS at x 47.0, 96.0 and 144.5 - a pitch of 48.75 against the EPS203's
+      48.15 and the EPS201's 48.1 - with the red handles reading 47.4-86.1, 96.6-134.9 and
+      145.9-183.2, widths 38.7, 38.2 and 37.3. The 2% spread in those widths is the
+      figure's gradient, the same one the other two rears carry.
+      TWO SUPPLY BAYS carrying the 1200 W module: its silver face reads 280.7-301.4 and
+      364.6-382.2 in the parts the mask catches, 83.9 apart, which is the EPS203's 84.0
+      pitch. The bays are drawn at the EPS203's measured 270.0 and 354.0 because that
+      figure resolves their edges and this one does not.
+attrs:
+  environmental:
+    operating-temp: '0 to 45 C (32 to 113 F)'
+    storage-temp: '-40 to 70 C (-40 to 158 F)'
+    humidity: 'Operating: 5% to 95% non-condensing'
+  physical:
+    weight-note: '7.67 kg (16.91 lb), with two installed PSUs'
+  power:
+    power-consumption: '1710 W maximum at both low and high line'
+    poe-budget: 'With a 30 W guard band - 750 W with one PSU, 1500 W with two, at both low and high line'
+  features:
+    optics-sfp: >-
+      Four 10G/25G SFP28 uplinks, ports 49-52. No per-cage breakout table is published, so
+      none is stated here.
+    optics-qsfp28: >-
+      Two 100G QSFP28 ports, 53-54, sold as stacking ports and qualified by the datasheet
+      itself - "stacking capability subject to NOS implementations".
+    poe: >-
+      All forty-eight RJ-45 ports support IEEE 802.3at and IEEE 802.3bt, up to 90 W per
+      port depending on the budget. Cat 6 cabling, per the datasheet's prose. ONE CLASS
+      ACROSS ALL FORTY-EIGHT, unlike the EPS203 which splits the same sockets by rate.
+  lifecycle: {eol: none-announced}
+chassis: {width: 438.0, height: 43.7, depth: 442.0, ru: 1, weight-kg: 7.67, color: '#3c3f43',
+  airflow: front-to-back}
+gaps:
+- what: the-eps202-front-elevation
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A SQUARE-ON ELEVATION OF THIS MACHINE. All four of its datasheet figures read between
+    -3.7% and -6.2% on aspect, and fitting its front elevation's twenty-four RJ-45 columns
+    gives a straight-line rms of 0.695 mm with a quadratic implying the local pitch grows
+    3.8% across the row. Its guide has no square-on elevation at all. EVERY FRONT-FACE
+    FIGURE IN THIS FILE IS CARRIED FROM `edgecore/eps203`, on the evidence that the two
+    guides' port enlargements place the apertures at the same pixels. One orthographic
+    drawing of this face would turn the whole file from borrowed to measured.
+- what: where-the-missing-0-3-mm-goes
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    WHETHER THIS CHASSIS IS SHORTER AT THE TOP OR THE BOTTOM. It publishes 43.7 mm where
+    its two shell-mates publish 44.0, and every face figure here is placed from the top
+    edge because that is where the EPS203's measurements are anchored. Three tenths of a
+    millimetre is two thirds of one pixel on the best EPS20x figure, so no staged drawing
+    can say. A dimensioned mechanical drawing closes it, and closes the same question for
+    the other two at the same time.
+- what: the-depth-that-is-32-mm-shorter
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    WHAT THE 32 mm COMES OFF. This chassis is 442 mm deep against its shell-mates' 474, and
+    its front face and its rear face are both theirs - same port wall, same fan bays, same
+    supply bays on the same pitch. So the difference is entirely in the sides, the lid and
+    the floor, and not one staged figure draws any of them. Four undrawn faces is the
+    normal state for this corpus; here it is the specific thing that would explain what
+    makes this model different.
+groups:
+  rj45-1g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the forty-eight 10/100/1000BASE-T RJ-45 ports, twenty-four columns of two ganged six
+      and six and six and six, numbered 1-48 down each column. ALL FORTY-EIGHT CARRY PoE at
+      one class - IEEE 802.3at and 802.3bt up to 90 W - which is this model's own shape:
+      edgecore/eps201 has the same forty-eight with none, and edgecore/eps203 splits the
+      same sockets by rate.
+    attrs: {media: rj45, speed: 1g, poe: 'IEEE 802.3at and 802.3bt, up to 90 W per port'}
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the four 10G/25G SFP28 uplinks, two stacked pairs, numbered 49-52 into the same
+      sequence as the copper ports.
+    attrs: {media: sfp, speed: 25g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the two 100G QSFP28 ports, one stacked pair, numbered 53-54. Sold as stacking ports
+      and qualified by the datasheet - "stacking capability subject to NOS implementations".
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the fifty-four port indicators, one per port, in a row below the port wall with each
+      port's number printed to its left. THIS GUIDE DRAWS THEM WHITE where the EPS203's
+      draws them pale blue, on artwork that is otherwise the same face at the same pixels.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the out-of-band cluster at the left - a stacked RJ-45 pair carrying the management
+      port over the console port, and a Type-A USB storage port above them.
+  buttons: {term: Button, role: service, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  grounding: {term: Point, role: service, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        "2pcs 1+1 redundant, load-sharing, hot-swappable 1200W AC", two bays, either of
+        which runs the switch. THE PoE BUDGET IS NOT 1+1 AND THE DATASHEET SAYS SO: "750 W
+        for 1 PSU/1500 W for 2 PSU" with a 30 W guard band, the same at both line voltages.
+        Losing a supply keeps the switch up and halves what it can deliver to attached
+        devices.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: >-
+        "Hot-swappable 2 + 1 redundant fan trays", over THREE BAYS - figure and bay count
+        agree. The tray is FAN-1U-1x1M, the same part all three EPS20x chassis take, and
+        this model's ordering table lists only the front-to-back variant because this model
+        ships only that way.
+views:
+  front:
+    size: {w: 438.0, h: 43.7}
+    panel:
+      decor:
+      - {id: vent-left, at: [26.00, 0.20], size: [102.00, 5.20], pattern: vent, pattern-pitch: [3.72, 2.14], vent: 40}
+      - {id: vent-right, at: [192.00, 0.20], size: [224.00, 5.20], pattern: vent, pattern-pitch: [3.72, 2.14], vent: 40}
+      - {id: rj45-bezel-1, at: [27.10, 11.80], size: [87.20, 24.92], fill: '#e9e6e1'}
+      - {id: rj45-bezel-2, at: [114.30, 11.80], size: [88.70, 24.92], fill: '#e9e6e1'}
+      - {id: rj45-bezel-3, at: [203.00, 11.80], size: [88.30, 24.92], fill: '#e9e6e1'}
+      - {id: rj45-bezel-4, at: [291.30, 11.80], size: [86.60, 24.92], fill: '#e9e6e1'}
+      - {id: mgmt-bezel, at: [6.56, 11.80], size: [17.48, 24.92], fill: '#e9e6e1'}
+      cutouts:
+      - {block: rj45-1g}
+      - {block: sfp28}
+      - {block: qsfp28}
+      - {id: mgmt, at: [8.95, 11.80], size: [12.70, 11.00], shape: rect}
+      - {id: console, at: [8.95, 25.72], size: [12.70, 11.00], shape: rect}
+      - {id: usb, at: [9.50, 3.75], size: [12.00, 4.50], shape: rect}
+      - {id: btn-stk, at: [134.61, 3.00], size: [4.00, 4.00], shape: circle}
+      - {id: btn-reset, at: [143.97, 3.00], size: [4.00, 4.00], shape: circle}
+      - {id: led-system, at: [152.78, 2.24], size: [2.80, 1.60], shape: rect}
+      - {id: led-psu1, at: [160.65, 2.24], size: [2.80, 1.60], shape: rect}
+      - {id: led-stk1, at: [168.61, 2.24], size: [2.80, 1.60], shape: rect}
+      - {id: led-fan, at: [176.48, 2.24], size: [2.80, 1.60], shape: rect}
+      - {id: led-pri, at: [152.78, 5.72], size: [2.80, 1.60], shape: rect}
+      - {id: led-psu2, at: [160.65, 5.72], size: [2.80, 1.60], shape: rect}
+      - {id: led-stk2, at: [168.61, 5.72], size: [2.80, 1.60], shape: rect}
+      - {id: led-poe, at: [176.48, 5.72], size: [2.80, 1.60], shape: rect}
+    silkscreen:
+    - {block: rj45-1g}
+    - {block: sfp28}
+    - {block: qsfp28}
+    - {id: arrows-rj45-1, at: [34.51, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-1}
+    - {id: arrows-rj45-2, at: [48.581, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-3}
+    - {id: arrows-rj45-3, at: [62.651, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-5}
+    - {id: arrows-rj45-4, at: [76.722, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-7}
+    - {id: arrows-rj45-5, at: [90.793, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-9}
+    - {id: arrows-rj45-6, at: [104.863, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-11}
+    - {id: arrows-rj45-7, at: [123.086, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-13}
+    - {id: arrows-rj45-8, at: [137.156, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-15}
+    - {id: arrows-rj45-9, at: [151.227, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-17}
+    - {id: arrows-rj45-10, at: [165.297, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-19}
+    - {id: arrows-rj45-11, at: [179.368, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-21}
+    - {id: arrows-rj45-12, at: [193.439, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-23}
+    - {id: arrows-rj45-13, at: [211.661, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-25}
+    - {id: arrows-rj45-14, at: [225.732, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-27}
+    - {id: arrows-rj45-15, at: [239.802, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-29}
+    - {id: arrows-rj45-16, at: [253.873, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-31}
+    - {id: arrows-rj45-17, at: [267.943, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-33}
+    - {id: arrows-rj45-18, at: [282.014, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-35}
+    - {id: arrows-rj45-19, at: [300.236, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-37}
+    - {id: arrows-rj45-20, at: [314.307, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-39}
+    - {id: arrows-rj45-21, at: [328.378, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-41}
+    - {id: arrows-rj45-22, at: [342.448, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-43}
+    - {id: arrows-rj45-23, at: [356.519, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-45}
+    - {id: arrows-rj45-24, at: [370.589, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-47}
+    - {id: arrows-sfp-1, at: [388.83, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-49}
+    - {id: arrows-sfp-2, at: [403.25, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-51}
+    - {id: arrows-qsfp-1, at: [422.48, 8.09], mark: arrow-pair, size: 1.3, gap: 0.6, fill: '#e8ecef', for: port-53}
+    - {id: num-led-1, at: [29.142, 40.103], text: '1', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-1}
+    - {id: num-led-2, at: [36.178, 40.103], text: '2', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-2}
+    - {id: num-led-3, at: [43.213, 40.103], text: '3', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-3}
+    - {id: num-led-4, at: [50.249, 40.103], text: '4', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-4}
+    - {id: num-led-5, at: [57.283, 40.103], text: '5', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-5}
+    - {id: num-led-6, at: [64.319, 40.103], text: '6', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-6}
+    - {id: num-led-7, at: [71.354, 40.103], text: '7', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-7}
+    - {id: num-led-8, at: [78.39, 40.103], text: '8', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-8}
+    - {id: num-led-9, at: [85.425, 40.103], text: '9', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-9}
+    - {id: num-led-10, at: [92.461, 40.103], text: '10', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-10}
+    - {id: num-led-11, at: [99.495, 40.103], text: '11', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-11}
+    - {id: num-led-12, at: [106.531, 40.103], text: '12', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-12}
+    - {id: num-led-13, at: [117.718, 40.103], text: '13', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-13}
+    - {id: num-led-14, at: [124.754, 40.103], text: '14', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-14}
+    - {id: num-led-15, at: [131.788, 40.103], text: '15', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-15}
+    - {id: num-led-16, at: [138.824, 40.103], text: '16', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-16}
+    - {id: num-led-17, at: [145.859, 40.103], text: '17', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-17}
+    - {id: num-led-18, at: [152.895, 40.103], text: '18', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-18}
+    - {id: num-led-19, at: [159.929, 40.103], text: '19', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-19}
+    - {id: num-led-20, at: [166.965, 40.103], text: '20', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-20}
+    - {id: num-led-21, at: [174.0, 40.103], text: '21', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-21}
+    - {id: num-led-22, at: [181.036, 40.103], text: '22', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-22}
+    - {id: num-led-23, at: [188.071, 40.103], text: '23', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-23}
+    - {id: num-led-24, at: [195.107, 40.103], text: '24', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-24}
+    - {id: num-led-25, at: [206.293, 40.103], text: '25', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-25}
+    - {id: num-led-26, at: [213.329, 40.103], text: '26', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-26}
+    - {id: num-led-27, at: [220.364, 40.103], text: '27', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-27}
+    - {id: num-led-28, at: [227.4, 40.103], text: '28', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-28}
+    - {id: num-led-29, at: [234.434, 40.103], text: '29', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-29}
+    - {id: num-led-30, at: [241.47, 40.103], text: '30', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-30}
+    - {id: num-led-31, at: [248.505, 40.103], text: '31', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-31}
+    - {id: num-led-32, at: [255.541, 40.103], text: '32', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-32}
+    - {id: num-led-33, at: [262.575, 40.103], text: '33', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-33}
+    - {id: num-led-34, at: [269.611, 40.103], text: '34', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-34}
+    - {id: num-led-35, at: [276.646, 40.103], text: '35', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-35}
+    - {id: num-led-36, at: [283.682, 40.103], text: '36', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-36}
+    - {id: num-led-37, at: [294.868, 40.103], text: '37', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-37}
+    - {id: num-led-38, at: [301.904, 40.103], text: '38', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-38}
+    - {id: num-led-39, at: [308.939, 40.103], text: '39', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-39}
+    - {id: num-led-40, at: [315.975, 40.103], text: '40', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-40}
+    - {id: num-led-41, at: [323.01, 40.103], text: '41', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-41}
+    - {id: num-led-42, at: [330.046, 40.103], text: '42', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-42}
+    - {id: num-led-43, at: [337.08, 40.103], text: '43', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-43}
+    - {id: num-led-44, at: [344.116, 40.103], text: '44', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-44}
+    - {id: num-led-45, at: [351.151, 40.103], text: '45', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-45}
+    - {id: num-led-46, at: [358.187, 40.103], text: '46', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-46}
+    - {id: num-led-47, at: [365.221, 40.103], text: '47', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-47}
+    - {id: num-led-48, at: [372.257, 40.103], text: '48', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-48}
+    - {id: num-led-49, at: [383.375, 40.103], text: '49', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-49}
+    - {id: num-led-50, at: [390.585, 40.103], text: '50', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-50}
+    - {id: num-led-51, at: [397.795, 40.103], text: '51', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-51}
+    - {id: num-led-52, at: [405.005, 40.103], text: '52', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-52}
+    - {id: num-led-53, at: [416.13, 40.103], text: '53', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-53}
+    - {id: num-led-54, at: [425.13, 40.103], text: '54', font-size: 1.8, anchor: end, fill: '#e8ecef', for: led-54}
+    - {id: label-model, at: [436.00, 4.60], text: 'AS4630-54PE', font-size: 1.6, anchor: end, fill: '#e8ecef', for: chassis}
+    - {id: label-stk, at: [136.61, 2.20], text: 'STK M/S', font-size: 1.1, anchor: middle, fill: '#e8ecef', for: btn-stk}
+    - {id: label-reset, at: [145.97, 2.20], text: 'Reset', font-size: 1.1, anchor: middle, fill: '#e8ecef', for: btn-reset}
+    - {id: label-system, at: [156.08, 3.38], text: 'System', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-system}
+    - {id: label-psu1, at: [163.95, 3.38], text: 'PSU1', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-psu1}
+    - {id: label-stk1, at: [171.91, 3.38], text: 'STK1', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-stk1}
+    - {id: label-fan, at: [179.78, 3.38], text: 'FAN', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-fan}
+    - {id: label-pri, at: [156.08, 6.86], text: 'PRI', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-pri}
+    - {id: label-psu2, at: [163.95, 6.86], text: 'PSU2', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-psu2}
+    - {id: label-stk2, at: [171.91, 6.86], text: 'STK2', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-stk2}
+    - {id: label-poe, at: [179.78, 6.86], text: 'PoE', font-size: 1.1, anchor: start, fill: '#e8ecef', for: led-poe}
+    - {id: mark-mgmt, at: [13.00, 39.55], mark: arrow-up, size: 1.2, fill: '#e8ecef', for: mgmt}
+    - {id: label-mgmt, at: [12.30, 40.10], text: 'Mgmt', font-size: 1.3, anchor: end, fill: '#e8ecef', for: mgmt}
+    - {id: mark-console, at: [17.60, 39.55], mark: arrow-down, size: 1.2, fill: '#e8ecef', for: console}
+    - {id: label-console, at: [18.30, 40.10], text: 'Console', font-size: 1.3, anchor: start, fill: '#e8ecef', for: console}
+    components:
+      blocks:
+      - id: rj45-1g
+        ref: std/rj45-ganged@2
+        at: [28.16, 11.80]
+        count: 48
+        rows: 2
+        pitch: 14.0706
+        gang: 6
+        gutter: 4.1518
+        row-pitch: 13.92
+        rotate: {top: 180}
+        number-from: 1
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 6.35, dx-by-row: [-2.2, 2.2], anchor-by-row: [end, start], dy-top: -3.06, dy-bottom: -16.98, font-size: 1.8, fill: '#e8ecef'}
+        led:
+          ref: common/led-rect-sm@1
+          dx: 6.35
+          dx-by-row: [-4.918, 2.118]
+          dy-top: 26.945
+          dy-bottom: 13.025
+          cutout-shape: rect
+          group: port-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e'}]
+      - id: sfp28
+        ref: std/sfp-ganged@1
+        at: [381.705, 11.41]
+        count: 4
+        rows: 2
+        pitch: 14.42
+        row-pitch: 14.21
+        rotate: {bottom: 180}
+        number-from: 49
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 7.125, dx-by-row: [-2.2, 2.2], anchor-by-row: [end, start], dy-top: -2.67, dy-bottom: -16.88, font-size: 1.8, fill: '#e8ecef'}
+        led:
+          ref: common/led-rect-sm@1
+          dx: 7.125
+          dx-by-row: [-5.005, 2.205]
+          dy-top: 27.335
+          dy-bottom: 13.125
+          cutout-shape: rect
+          group: port-leds
+          states: ['off', {name: '25g', color: '#e8ecef'}, {name: '10g', color: '#22c55e'}]
+      - id: qsfp28
+        ref: std/qsfp-ganged@1
+        at: [413.23, 11.82]
+        count: 2
+        rows: 2
+        pitch: 18.5
+        row-pitch: 15.09
+        rotate: {bottom: 180}
+        number-from: 53
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 9.25, dx-by-row: [-2.2, 2.2], anchor-by-row: [end, start], dy-top: -3.08, dy-bottom: -18.17, font-size: 1.8, fill: '#e8ecef'}
+        led:
+          ref: common/led-rect-sm@1
+          dx: 9.25
+          dx-by-row: [-5.9, 3.1]
+          dy-top: 26.925
+          dy-bottom: 11.835
+          cutout-shape: rect
+          group: port-leds
+          states: ['off', {name: '100g', color: '#e8ecef'}, {name: '40g', color: '#22c55e'}]
+      placements:
+      - {block: rj45-1g}
+      - {block: sfp28}
+      - {block: qsfp28}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [8.95, 11.80], rotate: 180, group: mgmt, rel-pos: 1,
+        attrs: {media: rj45, speed: 1g, role: out-of-band}}
+      - {ref: std/rj45-ganged@2, id: console, at: [8.95, 25.72], group: mgmt, rel-pos: 2,
+        attrs: {media: rj45, role: console}}
+      - {ref: std/usb-a@1, id: usb, at: [9.50, 3.75], group: mgmt, rel-pos: 3,
+        attrs: {media: usb-a, role: storage}}
+      - {ref: common/reset-button@1, id: btn-stk, at: [134.61, 3.00], group: buttons, rel-pos: 1, for: chassis}
+      - {ref: common/reset-button@1, id: btn-reset, at: [143.97, 3.00], group: buttons, rel-pos: 2, for: chassis}
+      - {ref: common/led-rect-sm@1, id: led-system, at: [152.78, 2.24], group: leds, rel-pos: 1, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-psu1, at: [160.65, 2.24], group: leds, rel-pos: 2, for: rear/psu-1, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-stk1, at: [168.61, 2.24], group: leds, rel-pos: 3, for: port-53, states: ['off', {name: active, color: '#22c55e'}]}
+      - {ref: common/led-rect-sm@1, id: led-fan, at: [176.48, 2.24], group: leds, rel-pos: 4, for: [rear/fan-1, rear/fan-2, rear/fan-3], states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-pri, at: [152.78, 5.72], group: leds, rel-pos: 5, for: chassis, states: ['off', {name: primary, color: '#22c55e'}, {name: secondary, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-psu2, at: [160.65, 5.72], group: leds, rel-pos: 6, for: rear/psu-2, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-rect-sm@1, id: led-stk2, at: [168.61, 5.72], group: leds, rel-pos: 7, for: port-54, states: ['off', {name: active, color: '#22c55e'}]}
+      - {ref: common/led-rect-sm@1, id: led-poe, at: [176.48, 5.72], group: leds, rel-pos: 8, for: chassis, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.10], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [438, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+  rear:
+    size: {w: 438.0, h: 43.7}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0, 0], size: [438.0, 43.7], fill: '#3c3f43'}
+      - {id: blank-plate, at: [192.00, 2.20], size: [76.00, 39.50], fill: '#33363a'}
+    silkscreen:
+    - {id: psu-label-2, at: [344.00, 22.85], text: 'PS2', font-size: 2.0, anchor: start, fill: '#e8ecef', for: psu-2}
+    - {id: psu-label-1, at: [428.00, 22.85], text: 'PS1', font-size: 2.0, anchor: start, fill: '#e8ecef', for: psu-1}
+    components:
+      bays:
+      - {id: fan-1, at: [47.00, 2.20], size: {w: 39.5, h: 39.5}, group: fans, rel-pos: 1,
+         accepts: [edgecore/eps200-fan-tray@1], default: edgecore/eps200-fan-tray@1}
+      - {id: fan-2, at: [96.00, 2.20], size: {w: 39.5, h: 39.5}, group: fans, rel-pos: 2,
+         accepts: [edgecore/eps200-fan-tray@1], default: edgecore/eps200-fan-tray@1}
+      - {id: fan-3, at: [144.50, 2.20], size: {w: 39.5, h: 39.5}, group: fans, rel-pos: 3,
+         accepts: [edgecore/eps200-fan-tray@1], default: edgecore/eps200-fan-tray@1}
+      - {id: psu-2, at: [270.00, 2.20], size: {w: 72.0, h: 39.5}, group: psus, rel-pos: 2,
+         accepts: [edgecore/eps200-psu-1200w@1], default: edgecore/eps200-psu-1200w@1}
+      - {id: psu-1, at: [354.00, 2.20], size: {w: 72.0, h: 39.5}, group: psus, rel-pos: 1,
+         accepts: [edgecore/eps200-psu-1200w@1], default: edgecore/eps200-psu-1200w@1}
+      placements:
+      - {ref: common/ground-lug@1, id: ground, at: [12.00, 14.85], group: grounding, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.10], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: common/rack-ear@1, id: rear-ear-right, at: [438, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+  top:
+    size: {w: 438.0, h: 442.0}
+    empty: >-
+      Not drawn square-on by either staged document. The quick start guide's Overview and
+      FRU figures are three-quarter renders and do show the lid - a plain sheet with two
+      long pressed seams - but a three-quarter view gives no dimension to place them at,
+      and this device's whole geometry problem is that its family's figures are not
+      orthographic.
+  bottom:
+    size: {w: 438.0, h: 442.0}
+    empty: >-
+      Not drawn by any staged source. The guide's package contents list a rack mounting kit
+      of two front-post and two rear-post brackets and a screw kit, and no rubber feet, so
+      what is underneath is unrecorded rather than known to be bare.
+  left:
+    size: {w: 442.0, h: 43.7}
+    empty: >-
+      Not drawn by any staged source. The machine is front-to-back, so the intake is the
+      front face's own perforation band and the exhaust is the three rear trays; the side
+      walls carry nothing either document shows.
+  right:
+    size: {w: 442.0, h: 43.7}
+    empty: >-
+      Not drawn by any staged source. The other side wall, for the same reason.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships: two 1200 W supplies and three fan trays in, every cage empty.
+      ONE AIRFLOW ONLY, which is the difference from edgecore/eps201 on the same face: this
+      model's datasheet reads "Front-to-back airflow only" and its rear elevation draws the
+      red handles to match, counted at 2,547 pixels with a median of (238, 43, 40) and not
+      one blue. The EPS201 ships four front-to-back codes and four back-to-front and needs
+      two configurations; this one needs none.
+references:
+- {title: 'Edgecore AS4630-54PE Quick Start Guide'}
+- {title: 'Edgecore EPS202 / AS4630-54PE Enterprise Switch Datasheet'}

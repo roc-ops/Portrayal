@@ -396,7 +396,15 @@ def test_the_comparison_layer_can_now_reach_them():
     colour of the handles. Its shell-mate ships front-to-back only. So one fan part, one
     redundancy figure, two chassis, and only one of them lets you choose which way the air
     goes.
+
+    SIXTY-FOUR IS THE EDGECORE EPS202, which completes the EPS20x trio, and it is the one
+    whose SHELL is not shared: 438 x 442 x 43.7 against its two siblings' 438 x 474 x 44,
+    thirty-two millimetres shallower. It states the same "Hot-swappable 2 + 1 redundant fan
+    trays" over the same three bays with the same FAN-1U-1x1M tray, front-to-back only.
+    SO THE CENSUS NOW CARRIES A CASE IT DID NOT HAVE: one fan tray, one redundancy figure
+    and one bay pitch across THREE chassis, two of which share a shell and one of which
+    does not. What travels with the tray is the cooling; what does not travel is the box.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 63, n
+    assert n == 64, n
