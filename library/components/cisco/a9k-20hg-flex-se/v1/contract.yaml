@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-20hg-flex-se
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -23,6 +23,15 @@ attrs:
   operating-temp: '5 to 40 C'
   eol: 'none-announced'
 provenance:
+  stack-orientation: >-
+    The belly-to-belly cage pairs on this card follow the library's stack convention
+    (docs/pluggables-3d-design.md, S1-S4): on a card drawn on its side a pair sits left
+    and right, the left cage 270 beside the right 90, so both cage lips face the band
+    between the two cages and both bails face outward, where a thumb reaches them. Where
+    this provenance records a reading of a stack the orientation is that reading;
+    otherwise it is the rule, not an observation. A photograph of the stack that shows
+    otherwise overturns it. Turning a composed cage in place changes no box, id or
+    anything a device places, so it is a minor bump (S6).
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 21 panel lamps at dome 0.3 (one number, carried
@@ -519,12 +528,12 @@ relief:
         estimated' and the dome carries none
 parts:
   - {ref: std/qsfp-dd@1, id: p0, at: [6.6, 38.31], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p1, at: [5.26, 88.68], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p2, at: [5.26, 107.24], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p3, at: [5.26, 125.83], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p4, at: [5.26, 144.4], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p5, at: [5.26, 162.96], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p6, at: [5.26, 181.54], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p1, at: [5.26, 88.68], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p2, at: [5.26, 107.24], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p3, at: [5.26, 125.83], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p4, at: [5.26, 144.4], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p5, at: [5.26, 162.96], rotate: 270}
+  - {ref: std/qsfp-ganged@1, id: p6, at: [5.26, 181.54], rotate: 270}
   - {ref: std/qsfp-dd@1, id: p7, at: [6.6, 212.03], rotate: 90}
   - {ref: std/qsfp-dd@1, id: p8, at: [6.6, 263.17], rotate: 90}
   - {ref: std/qsfp-ganged@1, id: p9, at: [6.85, 310.31], rotate: 90}

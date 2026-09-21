@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-rsp880-se
-version: 1.4.1
+version: 1.5.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -28,6 +28,15 @@ attrs:
   weight-kg: 8.07
   sfp-plus: 4
 provenance:
+  stack-orientation: >-
+    The belly-to-belly cage pairs on this card follow the library's stack convention
+    (docs/pluggables-3d-design.md, S1-S4): on a card drawn on its side a pair sits left
+    and right, the left cage 270 beside the right 90, so both cage lips face the band
+    between the two cages and both bails face outward, where a thumb reaches them. Where
+    this provenance records a reading of a stack the orientation is that reading;
+    otherwise it is the rule, not an observation. A photograph of the stack that shows
+    otherwise overturns it. Turning a composed cage in place changes no box, id or
+    anything a device places, so it is a minor bump (S6).
   usb-orientation: >-
     CORRECTED at 1.1.0 - the USB-A carried `rotate: 90`, which stands a 12.0 x
     4.5 receptacle on end as 4.5 x 12.0 and makes it 1.60 mm taller than the
@@ -155,7 +164,8 @@ provenance:
     the ICS and MGT LAN jacks are STACKED PAIRS in one bezel, not two singles side by
     side, and the pair MIRRORS: read at high zoom the upper jack's keyway points up and
     the lower one's points down, so both release tabs stay reachable. The upper of each
-    pair is therefore placed at rotate 270 and everything else at 90. This is the
+    pair is therefore placed at rotate 270 and the other jacks at 90 (the SFP cages follow
+    the stacked-cage convention in stack-orientation). This is the
     failure that was caught by eye on the AGR400's RJ-45s and would have linted clean
     here too. Which jack is 0: the artwork prints '0' beside the upper of each pair and
     '1' beside the lower, and ICS0 sits above ICS1/TOD under the GPS bracket.
@@ -532,9 +542,9 @@ parts:
   - {ref: std/smb@1, id: gps-1pps, at: [11.0, 184.09]}
   - {ref: std/usb-a@1, id: usb, at: [12.13, 234.04]}
   - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [22.64, 89.83], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [9.18, 89.83], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [9.18, 89.83], rotate: 270}
   - {ref: std/sfp-ganged@1, id: sfp-plus-2, at: [22.64, 105.43], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [9.18, 105.43], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [9.18, 105.43], rotate: 270}
   - {ref: common/db9-receptacle@1, id: alarm-out, at: [1.42, 205.635], rotate: 90}
 body:
   depth: 628.9
