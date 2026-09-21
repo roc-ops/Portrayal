@@ -61,3 +61,15 @@ def test_swapping_back_to_a_mapping_form_optic_is_no_swap(out):
 
 def test_a_bays_built_answer_is_its_configuration_entry_else_its_default(out):
     assert out["bays"] == [{}, {"slot-0": "x/other@1"}, {"slot-1": None}]
+
+
+def test_a_configuration_seated_nested_bay_is_what_the_build_put_there(out):
+    # the manifest keys it slot-1/ppm-1, the drawing slot-1/module/ppm-1; read
+    # raw, the swap test missed the entry, fell back to the bay's default and
+    # wrote a swap= (and a 3D override) on an untouched ila-node page
+    assert out["nestedBuilt"] == {"slot-1/module/ppm-1": "x/ppm-1510@1"}
+    assert out["nestedUntouched"] == {}
+    assert out["nestedUntouchedSwap"] == ""
+    assert out["nestedAsBuilt"] == {}, "the module the configuration seats is no swap"
+    assert out["nestedSwapped"] == {"slot-1/module/ppm-1": "x/cover@1"}
+    assert out["noBays"] == [{}, {}, {}]

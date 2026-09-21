@@ -18,7 +18,7 @@
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
-         builtOccupants, configBayPath } from './swap.js';
+         builtOccupants, builtBays } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -1103,8 +1103,11 @@ export function createShell(opts = {}) {
     const all = o => Object.values(o || {}).flat();
     const bays = all(state.meta?.bays);
     const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
-    // what this configuration built at a path; undefined = no answer
-    const built = p => own(state.cfgBays, p) ? state.cfgBays[p] || null
+    // what this configuration BUILT at a path - the configuration's own map,
+    // through builtBays (a nested key is the manifest's, not the drawing's),
+    // not the state, which a swap has already moved; undefined = no answer
+    const cb = builtBays((state.meta?.configs || []).find(c => c.name === state.cfg));
+    const built = p => own(cb, p) ? cb[p] || null
       : bays.find(b => b.id === p)?.default ?? undefined;
     const {accepted, ignored} = acceptSwaps(map, {bays, cages: all(state.meta?.cages), built, compByRef});
     const cageIds = new Set(all(state.meta?.cages).map(c => c.id));
@@ -1257,9 +1260,9 @@ export function createShell(opts = {}) {
     state.cfgGen++;
     const c = state.meta.configs.find(c => c.name === state.cfg);
     // keyed by the drawing's path, which is what the picker looks a bay up by;
-    // the manifest leaves the `/module` steps out - see configBayPath
-    state.cfgBays = Object.fromEntries(Object.entries(c?.bays || {})
-      .map(([k, ref]) => [configBayPath(k), ref]));
+    // the manifest leaves the `/module` steps out - see swap.js's builtBays,
+    // the one reading of `configs[].bays`
+    state.cfgBays = builtBays(c);
     // the optics THIS configuration seats - `configs[].occupants`, not the
     // cages' own `occupant`, which is the default configuration's answer -
     // read through swap.js's `builtOccupants`, which reduces a mapping value

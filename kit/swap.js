@@ -405,6 +405,20 @@ export function configBayPath(key) {
   return String(key).split('/').join('/module/');
 }
 
+// WHAT A CONFIGURATION SEATS IN EACH BAY, keyed by the DRAWING's path - the ONE
+// reading of `configs[].bays`, as builtOccupants is of `configs[].occupants`.
+// Every reader goes through it: shell.js's state, the swap test
+// (`swapOverrides`) and the reload filter (applySwaps' `built`). A reader that
+// took the map raw compared `slot-1/module/ppm-1` with the manifest's
+// `slot-1/ppm-1`, found no entry, fell back to the bay's default - and an
+// UNTOUCHED dcp-2 ila-node page decided the PPM the build put there was a
+// swap, wrote it into `swap=` and sent it to the 3D scene as an override.
+export function builtBays(cfg) {
+  const bays = cfg?.bays;
+  if (!bays || typeof bays !== 'object') return {};
+  return Object.fromEntries(Object.entries(bays).map(([k, ref]) => [configBayPath(k), ref]));
+}
+
 // Apply a whole override map to one compiled face. `overrides` is bay id -> ref,
 // or -> null/'' for an emptied bay; bays it does not mention keep whatever the
 // configuration built. `loadSkin(ref)` returns {comp, text} or null.
@@ -766,16 +780,18 @@ export function builtOccupants(cfg, cages) {
 //   bays, cages    the device's own, every view, flattened
 //   cfgBays        bay id / nested path -> ref|null, the state's
 //   cfgOccupants   cage id -> ref|null, the state's (builtOccupants-shaped)
-// A bay's built answer is the configuration's `bays` entry when it has one,
+// A bay's built answer is the configuration's `bays` entry (read through
+// builtBays, so a nested key meets the drawing's path) when it has one,
 // else the bay's own `default`; a cage's is builtOccupants' - a cage the
 // configuration does not name is built empty.
 export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccupants = {}}) {
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
   const cageIds = new Set(cages.map(c => c.id));
   const occ = builtOccupants(cfg, cages);
+  const cb = builtBays(cfg);
   const built = id => {
     if (cageIds.has(id)) return occ[id] ?? null;
-    if (own(cfg?.bays, id)) return cfg.bays[id] || null;
+    if (own(cb, id)) return cb[id] || null;
     return bays.find(b => b.id === id)?.default || null;
   };
   const out = {};

@@ -34,7 +34,7 @@ out.collision = m.builtOccupants({occupants: {'port-4': 'a', 'port-4-occupant': 
                                  [...cages, {id: 'port-4-occupant'}]);
 
 // THE UNTOUCHED PAGE: the state as syncCfgBays builds it, compared with the build
-const untouched = {cfg, bays, cages, cfgBays: {...cfg.bays},
+const untouched = {cfg, bays, cages, cfgBays: m.builtBays(cfg),
                    cfgOccupants: m.builtOccupants(cfg, cages)};
 out.untouched = m.swapOverrides(untouched);
 out.untouchedSwap = m.encodeSwaps(out.untouched);
@@ -55,4 +55,19 @@ out.bays = [
   m.swapOverrides({...untouched, cfgBays: {'slot-0': 'x/other@1'}}),
   m.swapOverrides({...untouched, cfgBays: {'slot-1': null}}),
 ];
+
+// A NESTED BAY THE CONFIGURATION SEATS: the manifest keys it without the
+// `/module` step (`slot-1/ppm-1`), the drawing - and so the state and every
+// bay id - with it. The dcp-2 ila-node shape: the carrier's default holds a
+// dummy cover, the configuration seats a real PPM.
+const nBays = [{id: 'slot-1', default: 'x/carrier@1', accepts: ['x/carrier@1']}];
+const nCfg = {name: 'ila-node', bays: {'slot-1/ppm-1': 'x/ppm-1510@1'}};
+out.nestedBuilt = m.builtBays(nCfg);
+const nUntouched = {cfg: nCfg, bays: nBays, cages: [], cfgBays: m.builtBays(nCfg), cfgOccupants: {}};
+out.nestedUntouched = m.swapOverrides(nUntouched);
+out.nestedUntouchedSwap = m.encodeSwaps(out.nestedUntouched);
+// the drawing's key seated as built is no swap; a different module there is one
+out.nestedAsBuilt = m.swapOverrides({...nUntouched, cfgBays: {'slot-1/module/ppm-1': 'x/ppm-1510@1'}});
+out.nestedSwapped = m.swapOverrides({...nUntouched, cfgBays: {'slot-1/module/ppm-1': 'x/cover@1'}});
+out.noBays = [m.builtBays({}), m.builtBays(null), m.builtBays({bays: 'junk'})];
 console.log(JSON.stringify(out));
