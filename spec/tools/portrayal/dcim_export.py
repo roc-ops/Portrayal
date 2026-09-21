@@ -711,11 +711,17 @@ def iface_type(p, attrs, group_role=None):
            "sfp" if "sfp" in ref else None)
     if fam is None:
         return None
+    # A MANAGEMENT JACK IS ETHERNET ON THE DEVICE'S WORD, BEFORE THE GUARD BELOW.
+    # The guard keeps ToD, BITS and serial jacks on the bare part out of the DCIM,
+    # and it asks for a speed because a timing input has none to give. `role: mgmt`
+    # is a stronger statement than a speed - it says what the jack is FOR - and the
+    # AS5912-54X and CSR310 say it with no speed, so behind the guard they never
+    # typed at all.
+    if fam == "rj45" and attrs.get("role") == "mgmt":
+        return "1000base-t"                    # a copper management port is 1G
     if (fam == "rj45" and "-eth" not in ref
             and group_role != "traffic" and not attrs.get("speed")):
         return None
-    if fam == "rj45" and attrs.get("role") == "mgmt":
-        return "1000base-t"                    # a copper management port is 1G
     # A DEFAULT IS A GUESS, so only the families that have a settled one carry it.
     # An OSFP is 400G or 800G and nothing makes one likelier, so an OSFP that does
     # not say its speed does not type - which is this function's own rule.
@@ -1026,9 +1032,17 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
     # Switch and management interfaces. With an overlay, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
     # the overlay says so, not because a media attr happened to match. Without
-    # one, every `port-N` that is not console or management is an interface
-    # under its faceplate id: unspecific, but a fact about the metal rather than
-    # a convention borrowed from a NOS the box may not run.
+    # one, every port that is not a console is an interface under its faceplate
+    # id: unspecific, but a fact about the metal rather than a convention borrowed
+    # from a NOS the box may not run.
+    #
+    # MANAGEMENT PORTS INCLUDED, however the device spells them. This loop used to
+    # skip `attrs.role: mgmt` while the lines below mark a `management` group's
+    # ports mgmt_only - two spellings of one fact, one exported and one dropped.
+    # 99 management ports on 70 devices were missing for it. The 10G management
+    # SFPs are the exception: `mgmt_sfp` above already lists them, with a note that
+    # the faceplate port is not a switch interface, so they are not listed twice.
+    listed_sfp = {i["name"] for i in mgmt_sfp}
     ports = {}
     for view in views_for(dev, cfg_name):
         for p in scoped(view_parts(view)["placements"], cfg_name):
@@ -1051,7 +1065,9 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                     continue
                 name, breakout = names[pid]
             else:
-                if group_role(p) not in PORT_ROLES or a.get("role") in ("mgmt", "console"):
+                if group_role(p) not in PORT_ROLES or a.get("role") == "console":
+                    continue
+                if a.get("role") == "mgmt" and pid.replace("port-", "") in listed_sfp:
                     continue
                 name, breakout = pid, None
             t = iface_type(p, a, group_role(p))
