@@ -176,6 +176,17 @@ export function nestedBays(rootEl, compByRef) {
   return out;
 }
 
+// A CONFIGURATION'S BAY KEY IS NOT A DRAWING PATH. device.yaml keys a nested
+// bay without the `/module` steps - `slot-1/ppm-1`, `riser-1/slot-1` - which is
+// what render.py's seating and lint's L8 both read, while the drawing, and so
+// every bay id here, puts `module` between the steps: `slot-1/module/ppm-1`.
+// Looking a configuration's occupant up by the drawing's id missed every nested
+// one, and the picker showed the bay's default over the module actually built
+// into the face - the dcp-2 ila-node's PPM-AD1-1510 read as the dummy cover.
+export function configBayPath(key) {
+  return String(key).split('/').join('/module/');
+}
+
 // Apply a whole override map to one compiled face. `overrides` is bay id -> ref,
 // or -> null/'' for an emptied bay; bays it does not mention keep whatever the
 // configuration built. `loadSkin(ref)` returns {comp, text} or null.
