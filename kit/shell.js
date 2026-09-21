@@ -165,9 +165,18 @@ export function createShell(opts = {}) {
   };
   $('header h1').textContent = opts.title || 'Portrayal';
 
+  // `cfgGen` counts every wholesale replacement of cfgBays/cfgOccupants/touched
+  // (syncCfgBays, the only place that does it - see there). It exists because
+  // that replacement runs SYNCHRONOUSLY, strictly before the loadStage() that
+  // follows it gets as far as its own `await fetch` and reassigns `state.svg`:
+  // a seat() started on the old configuration, captured mid-flight, can have
+  // its skin resolve inside that window, when the claim is still live and
+  // `state.svg` has not moved yet either. `svg === state.svg` alone cannot see
+  // that window; `cfgGen` can, because it changes at the exact moment the
+  // objects a stale write would land in are swapped out from under it.
   const state = {device: null, cfg: null, view: null, module: null, sel: null,
                  svg: null, meta: null, cfgBays: {}, cfgOccupants: {}, cfgFields: {},
-                 touched: new Set(), refused: {}, failed: {}};
+                 touched: new Set(), refused: {}, failed: {}, cfgGen: 0};
 
   const handlers = {};
   const on = (name, fn) => { (handlers[name] ||= []).push(fn); };
@@ -968,12 +977,27 @@ export function createShell(opts = {}) {
   // book is per-key, not per-face, so a config or view change that never
   // touches `key` leaves its claim untouched and `live()` alone keeps
   // answering true. `svg` is captured here too - the face this call started
-  // on - and `svg === state.svg` after the await is the second half of the
-  // same freshness test: not just "am I still the newest claim on this key"
-  // but "is the face I am about to write into still on screen". Both must
-  // hold before state is written; loadStage always mounts a fresh element, so
-  // any reload (same view, another view, another config, opening a module)
+  // on - and `svg === state.svg` after the await is another freshness test:
+  // not just "am I still the newest claim on this key" but "is the face I am
+  // about to write into still on screen". loadStage always mounts a fresh
+  // element, so any reload (same view, another view, opening a module)
   // changes the identity and fails this the same way.
+  //
+  // THE SVG CHECK ALONE MISSES ONE WINDOW: `syncCfgBays` (a configuration
+  // change) resets `cfgBays`/`cfgOccupants`/`touched` to the NEW
+  // configuration's values SYNCHRONOUSLY, and only the `loadStage()` after it
+  // reassigns `state.svg` - and that happens later, after its own `await
+  // fetch`. A `seat()` started on the OLD configuration whose skin load
+  // resolves inside that window sees `svg === state.svg` still true (the old
+  // face is still on screen) and would write its ref into the NEW
+  // configuration's freshly-reset objects. `cfgGen`, bumped first thing
+  // inside `syncCfgBays`, closes exactly that window: it changes at the
+  // instant the objects a write would land in are swapped, not when the face
+  // eventually catches up. Kept alongside the svg check rather than in place
+  // of it - `cfgGen` only moves on a configuration change, so it does not
+  // catch a plain view change or opening a module, both of which replace
+  // `state.svg` (and so must retire an in-flight write) without going through
+  // `syncCfgBays` at all.
   const claim = seatClaims();
   async function seat(key, ref) {
     if (!state.svg || state.module) return null;
@@ -983,8 +1007,9 @@ export function createShell(opts = {}) {
     const target = cage || bay;
     if (!target || (ref && !(target.accepts || []).includes(ref))) return null;
     const svg = state.svg;
+    const gen = state.cfgGen;
     const live = claim(key);
-    const onFace = () => live() && svg === state.svg;
+    const onFace = () => live() && svg === state.svg && gen === state.cfgGen;
     if (bay) {
       await applyOverrides(svg, [bay], {[key]: ref}, loadSkin, onFace);
       if (!onFace()) return null;
@@ -1040,23 +1065,25 @@ export function createShell(opts = {}) {
   const depth = k => k.split('/module/').length;
   const byDepth = keys => [...keys].sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : 1));
   async function reseat() {
-    // THE FACE THIS RESEAT STARTED ON. `seat()`'s own `svg === state.svg`
-    // check catches a face change while ONE key's skin is loading, but not
-    // this: each iteration's ref comes from `state.cfgOccupants`/`cfgBays`,
-    // read fresh and synchronously right before the call, no await in
-    // between. If a config change lands between iterations - the previous
-    // `await seat()` returns into a page that has already run syncCfgBays and
-    // loadStage - `state.svg` is already the NEW face and `seat()` sees no
-    // mismatch, so it would go ahead and read the NEW configuration's answer
-    // for a key from the OLD touched set: undefined for a key it never
-    // touched (seat(key, null) - a spurious empty of a cage the new build may
-    // have filled), or, worse, another key's own value by coincidence. So the
-    // loop itself, not just the call inside it, has to notice its face is
-    // gone and stop - the remaining keys are for whatever reseat the new
+    // THE FACE AND CONFIGURATION THIS RESEAT STARTED ON. `seat()`'s own
+    // checks catch a change while ONE key's skin is loading, but not this:
+    // each iteration's ref comes from `state.cfgOccupants`/`cfgBays`, read
+    // fresh and synchronously right before the call, no await in between. If
+    // a configuration change lands between iterations, `syncCfgBays` has
+    // already reset those to the NEW configuration's values - and bumped
+    // `cfgGen` - possibly before `state.svg` has caught up (the same window
+    // `seat()`'s comment describes), so `svg` alone cannot be trusted to
+    // catch it here either. Either one moving means this loop would go ahead
+    // and read the NEW configuration's answer for a key from the OLD touched
+    // set: undefined for a key it never touched (seat(key, null) - a
+    // spurious empty of a cage the new build may have filled), or, worse,
+    // another key's own value by coincidence. So the loop itself, not just
+    // the call inside it, has to notice its face or configuration moved on
+    // and stop - the remaining keys are for whatever reseat the new
     // config's own loadStage already ran.
-    const svg = state.svg;
+    const svg = state.svg, gen = state.cfgGen;
     for (const key of byDepth(state.touched)) {
-      if (svg !== state.svg) return;
+      if (svg !== state.svg || gen !== state.cfgGen) return;
       const cage = (state.meta?.cages?.[bayView()] || []).some(c => c.id === key);
       await seat(key, cage ? state.cfgOccupants[key] : state.cfgBays[key]);
     }
@@ -1224,6 +1251,10 @@ export function createShell(opts = {}) {
     await loadStage();
   }
   function syncCfgBays() {
+    // BUMPED FIRST, before any of the objects below are replaced, so a
+    // seat()/reseat() that captured the old `cfgGen` sees the mismatch no
+    // matter how early after this point its continuation runs.
+    state.cfgGen++;
     const c = state.meta.configs.find(c => c.name === state.cfg);
     // keyed by the drawing's path, which is what the picker looks a bay up by;
     // the manifest leaves the `/module` steps out - see configBayPath
