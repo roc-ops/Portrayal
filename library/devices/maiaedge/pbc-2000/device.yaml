@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 4.0.1
+version: 5.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -9,8 +9,9 @@ description: >-
   MaiaEdge Path Border Controller - a 1RU appliance that merges L2 switching and L3
   routing to provision deterministic private Ethernet paths over any underlying
   transport, with line-rate AES-256-GCM IPsec. Two 100GbE QSFP28 ports on the front
-  beside a console and two management jacks, a raised centre pane and a touch screen;
-  two 550W supplies and a one-piece five-fan tray on the back, front-to-back.
+  beside a console and two management jacks, behind a built-in bezel, with a touch screen
+  beside it; two hot-swap 550W supplies and a one-piece five-fan tray on the back,
+  front-to-back.
 profile: networking
 provenance:
   model-number:
@@ -86,70 +87,74 @@ provenance:
     confidence: estimated
     note: >-
       ESTIMATED shape, from photographs and the maintainer's account of the hardware
-      (2026-09-21). The front is a BUILT-IN BEZEL standing about 11 mm off the faceplate, from
-      the left edge to the touch screen, with the two OCTAGONAL windows cut through it: the
+      (2026-09-21), and since v5 photo-measured in plan. The front is a BUILT-IN BEZEL standing
+      about 11 mm off the faceplate, from the left edge to the touch screen, with the two
+      OCTAGONAL windows cut through it: the
       octagons frame the faceplate behind, where the ports are. It is flat only across the
       band level with the windows' vertical ends, and slopes back to the faceplate above and
-      below. That plate is maiaedge/pbc-2000-bezel@1 and its own provenance carries the
+      below. That plate is maiaedge/pbc-2000-bezel@2 and its own provenance carries the
       figures. v3 drew the slope as shading on a flat face; the window walls are the amber
       bead, which is what looking into a window shows.
-      The right-hand end of the right window is the only window end unobstructed by cabling in
-      any photograph held, and is what the chamfer was read from. `shape: octagon` was added to
-      the format for this - decor and cutouts could draw a rectangle, a rounded rectangle, a
-      D-sub shell and a stadium slot, and an octagon had no shape to be.
-  lint-l64:
-    note: >-
-      THREE L64 WARNINGS ON THIS DEVICE ARE THE RULE READING A LOUVRE AS AIR. The CON, MGMT and
-      CTRL legends sit inside the right louvre field, which L64 reads as open end to end. On the
-      hardware the louvres are slots in metal and the legends are printed on the bars between
-      them. The legends are where the photograph shows them. Do not move them to quiet the rule.
-      The bezel's windows no longer draw L44 or L21, and the two cages no longer draw L64: lint
-      reads the windows from the bezel's `shape` relief, and punches a part through its cutout
-      by its opening rather than its flange.
+      THE OCTAGONS ARE NOT REGULAR: the face-on photograph puts each chamfer at about 19 mm
+      across for 13 down, where `shape: octagon` cuts 45 degrees. So the windows are no longer
+      decor shapes at all - they are holes in the bezel's own art, drawn to the measured
+      corners.
   louvres:
     confidence: photo-measured
     note: >-
-      photo-measured (COUNT ONLY) - each window carries a grid of short horizontal slots, EIGHT
-      ROWS DEEP AND FIVE COLUMNS ACROSS, counted on the rack photograph and confirmed by the
-      maintainer against the hardware. One column of the left window, isolated and
-      contrast-normalised, reads eight slots between the beads; the unobstructed band above the
-      transceivers reads four ribs, so five columns. The PITCH IS NOT MEASURED: it is those counts
-      divided into the window as modelled, and the window itself is estimated. What the count
-      corrects is a shape, not a dimension - the marketing render draws the field as full-width
-      louvres and the first draft copied it, so this face wore a texture the hardware does not
-      have.
+      photo-measured - eight rows of horizontal slots in each window, 3.85 mm apart, in columns
+      about 25.4 mm apart (left window) and 24.6 (right) with ribs about 2.5 mm wide between
+      them. THE SLOTS STOP AT THE PORTS: full-width rows run above and below the ports, and
+      beside and between the ports and jacks there are only short slots in the gaps. The counts
+      v4 carried (eight by five) were right; the pitch, the slot width and the gaps were not
+      measured until the face-on photograph.
   port-lamps:
     note: >-
-      field knowledge (the maintainer, 2026-09-15), corroborated NEGATIVELY by both sources held -
-      ONE lamp per 100G port. The photograph shows the louvres running straight up to the cage
-      flange with no lamp band above it, and the vendor's UI view draws each port with nothing
-      above it either; neither shows where the one lamp sits, because the transceivers' pull tabs
-      cover that corner. So the COUNT is the maintainer's and the POSITION is estimated. This is
-      why the plain common/qsfp-cage@2 is fitted rather than common/qsfp28-cage@3, whose four
-      lamps belong to the AS7726-32X's panel by its own provenance and are not a property of any
-      cage.
+      field knowledge (the maintainer, 2026-09-15) - ONE lamp per 100G port - and the face-on
+      photograph now rules out where v4 drew it: above each cage is the printed "0" and "1", and
+      there is no lamp there. The one lit opening near the ports is the slot left of port 0, in
+      which the vendor's UI view draws a column of four lamps; those four are placed in it. Two
+      of them may be the port lamps the maintainer counts, but nothing says which, so all four
+      carry `for: chassis` and the separate port lamps v4 drew are gone. See gaps
+      `front-indicator-meanings`.
   layout:
-    confidence: estimated
+    confidence: photo-measured
     note: >-
-      ESTIMATED, AND THE WORD IS EXACT. The ORDER and GROUPING of everything on the front face are
-      read off photographs of a unit in service (see gaps `front-positions`); the POSITIONS are a
-      plausible arrangement consistent with them and with each component's own size. No position
-      here is a measurement. The one position that is better than that is the chassis status lamp:
-      the photograph puts it unambiguously in the notch outside the right window's lower-right
-      chamfer, and it is placed against that edge rather than against a coordinate.
+      photo-measured - working/intake/maiaedge/pbc/photos/pbc-front-faceon.jpg (the maintainer,
+      2026-09-21), the first square-on view of this face, which closed the `front-face-positions`
+      gap v4 carried. Deskewed 0.93 degrees and scaled PER AXIS: 4.004 px/mm across on the
+      smooth body between the textured ears (437.9 mm), 4.139 down on the face's own edges
+      (41.27). The 3.4% between them is the photograph's aspect, not the hardware's; the vertical
+      figure checks against the USB opening's standard 12.0 mm to 2.5%. Read on those scales:
+      the windows (see maiaedge/pbc-2000-bezel@2), the two 100G cages at x 40.35 and 61.95 - a
+      21.6 mm pitch, not abutting as v4 drew them - with "0"/"1" printed above and "100G" below;
+      the status slot at x 34.3 to 37.6; the USB opening at x 261.3; CON, MGMT and CTRL centred
+      at 289.45, 316.15 and 342.35 on a 26.3 mm pitch (v4 had 35.7), each captioned above and
+      the two Ethernet jacks "1G" below; the touch screen at x 373.5 to 416.9. EVERY FRONT
+      POSITION v4 CARRIED WAS WRONG by 5 to 25 mm, which is what "estimated" meant.
+  jack-height:
+    confidence: photo-measured
+    note: >-
+      THE JACKS ARE DRAWN 1.1 MM HIGHER THAN THE PHOTOGRAPH PUTS THEM, deliberately. The
+      photograph shows each jack's opening 10.3 mm tall between its caption above (y 20.1 to
+      22.7) and "1G" below (y 35.1 to 36.6); the library's RJ45 parts are the 13.2 mm housing,
+      which cannot fit between the two captions. The housing is set with its foot on the "1G"
+      line at y 35.0, and the three captions above are lowered 1.1 mm to clear it. The opening
+      the housing frames is where the photograph shows the jack to within that.
   rear:
     confidence: photo-measured
     note: >-
-      photo-measured - working/intake/maiaedge/pbc/photos/pbc-rear-b.jpeg, the one rear shot
-      square enough to scale: anchored on the 437.90 mm chassis width (x 210 to 2205 px, 4.556
-      px/mm) it reads the face 41.7 mm tall against the datasheet's 41.27, 1% out. On that scale
-      the second supply's cage starts at 117.4 mm and the fan tray at 196.4. THE WHOLE REAR IS
-      BARE STEEL, ear to ear, in both rear photographs; v3 left most of it the chassis's black.
-      THE FIVE FANS ARE ONE TRAY, not five trays: one continuous plate with a thumbscrew at its
-      left end, a field-replaceable unit (the maintainer, 2026-09-21). v3 drew five
-      common/fan-module-41 trays with red pull tabs; maiaedge/pbc-2000-fan-plate@1 replaces them
-      in one bay, which is why this is 4.0.0 - the ids fan-1 to fan-5 are gone. The tray's fan
-      pitch reads 40.4 mm here against the 40.8 v3 read off the other photograph.
+      photo-measured - working/intake/maiaedge/pbc/photos/pbc-rear-faceon.jpg, square to the
+      rear and out of the rack. Scaled per axis: 4.137 px/mm across on the body's 437.9 mm (x 98
+      to 1910), 3.925 down on its 41.27; the scale checks against a part of known width, each
+      supply's cage reading 74.9 and 73.6 mm against the CRPS module's 73.5. Left to right: a
+      steel strap with the ground stud (x 0 to 17.5), supply 1 (cage 17.8 to 92.7), a steel
+      strap (92.7 to 107.3), supply 2 (107.3 to 180.9), and the fan tray from 182.1 to the right
+      edge. THE POSITIONS v4 TOOK FROM pbc-rear-b.jpeg WERE WRONG by up to 14 mm - in the rack,
+      the side rails widened what was taken for the chassis. The whole rear is bare steel. The
+      supplies and the fan tray are field-replaceable, each in its own bay; the supplies are
+      maiaedge/pbc-2000-psu-550w@1, whose face - handle along the foot, inlet in a black
+      shroud, tall purple latch - is not common/psu-550w@2's.
   power:
     confidence: datasheet
     note: >-
@@ -182,73 +187,20 @@ attrs:
     eol: none-announced
 chassis: {width: 437.9, height: 41.27, depth: 291.08, ru: 1, color: '#1b1e21'}
 gaps:
-- what: front-face-positions
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    a face-on photograph of the front with nothing plugged in, or a mechanical drawing
-    from MaiaEdge. Either settles the whole face in one step.
-  note: >-
-    EVERY POSITION ON THE FRONT FACE IS ESTIMATED. The only sources held are a
-    three-quarter marketing render and photographs of a unit racked in service, and
-    neither is orthographic. panel_measure refuses the photograph outright, and
-    hand-anchoring it gives width- and height-derived scales that disagree far beyond
-    its 3% gate - the RJ45 jacks read 11.5 mm against their known 15.8 because the
-    right of the frame is further from the lens. So the ORDER of the face is evidence
-    and the coordinates are not. Tracked as roc-ops/Portrayal#247.
-- what: right-panel-identity
-  scope: [front]
-  reason: needs-drawing
-  wanted: >-
-    a dimension for the display and its frame. WHAT it is has been settled, and it is now
-    a part - maiaedge/pbc-2000-lcd@1 - rather than paint; only its SIZE is invented.
-  note: >-
-    IT IS A TOUCH SCREEN, and the vendor says so four times. The product documentation
-    has NTP servers configurable "using the on-board web UI or the front panel's touch
-    screen" and DNS "by navigating the menus on the front panel display on the front of
-    your PBC"; the setup guide sets the management IP, gateway and netmask "using the
-    touch screen on the front of the device", and reads the claim code "by navigating
-    the menus on the touchscreen display (from the home screen display, tap on the Claim
-    Info button)". v3 drew it as a blank grey plate, which left it out of the device's
-    parts; it is placed now, as `display` in a `displays` group, so a parts list and a
-    DCIM export both see it. Its 38 x 29 frame is an estimate from the rack photograph
-    and the part says so.
 - what: front-indicator-meanings
   scope: [front]
   reason: vendor-silent
-  wanted: an LED table, or a photograph of the unit powered down so the louvres read clean.
+  wanted: an LED table, or a photograph of the unit powered up with the transceivers out.
   note: >-
-    THREE DIFFERENT THINGS GLOW ON THIS FACE and two of them are modelled. The
-    vendor's UI view draws a deliberate column of four round lamps immediately left of
-    port 0, which the rack photograph could not show because the transceivers' pull
-    tabs and their fibre cover that corner - those four are modelled, and WHAT EACH ONE
-    MEANS is unknown, so they carry `for: chassis` rather than an invented identity.
-    Each 100G port also carries ONE lamp (provenance `port-lamps`); its count is the
-    maintainer's and NEITHER SOURCE SHOWS WHERE IT SITS, so it is drawn above the cage
-    - the one place both sources rule out a four-lamp band - and that position is a
-    guess. Separately the photograph shows red and green points scattered at irregular
-    positions and heights across BOTH vent fields; those are internal board LEDs
-    glowing through the louvres, not a panel array - they do not line up and they sit
-    at several louvre heights - and they are deliberately not drawn. No document held
-    carries an LED table for any of the three.
-- what: psu-module-width
-  scope: [rear]
-  reason: sources-disagree
-  wanted: >-
-    a face-on rear photograph, or the vendor's part number for the supply. The answer
-    decides which of the library's two 550W majors this device should carry.
-  note: >-
-    common/psu-550w@2 is placed, being the maintained major and the 73.5 mm CRPS 1U
-    standard width. The rear photograph disagrees: on the scale the five fans validate
-    to 0.2%, the two-supply block reads about 171 mm, or 85.5 mm each, which is far
-    closer to the RETIRED common/psu-550w@1 at 84.0. An attempt to confirm the module
-    seams programmatically failed, so the reading rests on an eyeball and is not
-    asserted here. Either MaiaEdge fits a wider-than-CRPS module, or the eyeball is
-    wrong. THE SQUARER REAR PHOTOGRAPH (pbc-rear-b.jpeg, 4.556 px/mm) NOW READS IT TOO:
-    the first supply's cage 19.3 to 102.1 mm, a 15 mm steel strip, and the second's
-    117.4 to 196.4 - 79 to 83 mm a supply, not 73.5. The second supply is placed at its
-    measured cage, centred; the 73.5 part is still what is drawn, so bare steel shows
-    either side of both supplies until the module is identified.
+    WHAT THE LAMPS MEAN IS UNKNOWN. The slot left of port 0 is one light-pipe opening
+    (photographed square-on), and the vendor's UI view draws four lamps in a column there;
+    all four carry `for: chassis`. The maintainer counts one lamp per 100G port, and the
+    photograph shows no lamp anywhere else near the ports, so two of the four are probably
+    those - but nothing says which, and an invented mapping would be worse than none. The
+    chassis status lamp on the bezel beside the right window is modelled. Red and green points
+    seen through the louvres in the rack photograph are internal board LEDs and are
+    deliberately not drawn. The touch screen is maiaedge/pbc-2000-lcd@2 and what it shows is
+    software.
 - what: envelope-faces-undetailed
   scope: [top, bottom, left, right]
   reason: needs-photo
@@ -262,16 +214,6 @@ gaps:
     pattern, no rail. The flat rect asserts the box and claims nothing about its
     surface, which is what lets the device carry a rack elevation and a 3D box without
     inventing detail.
-- what: wordmark-logo-mark
-  scope: [front]
-  reason: needs-drawing
-  wanted: the MaiaEdge mark as vector art, or a face-on photograph square enough to trace it from.
-  note: >-
-    The centre band carries the word MaiaEdge in the vendor's amber, sized and coloured
-    to match the photograph. The LOGO MARK that sits immediately left of it - a
-    stylised angular glyph - is not drawn. Approximating a company's mark from a
-    perspective photograph would be drawing something nobody can check, and a wrong
-    logo is worse than an absent one.
 - what: chassis-power-draw
   reason: vendor-silent
   wanted: a chassis draw or input figure from MaiaEdge.
@@ -289,7 +231,11 @@ groups:
     role: management
     index-origin: 1
     mixed: the console and the two out-of-band management jacks, which share a bezel
-  psus: {term: PSU, role: service, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs: {redundancy: 1+1, redundancy-note: 'datasheet page 3, "Redundant Power Supply: Yes"; the setup guide, "equipped with two redundant AC power inputs"'}
   fans: {term: Fan, role: service, index-origin: 1}
   displays: {term: Display, role: indicator, index-origin: 1}
   furniture: {term: Part, role: furniture, index-origin: 1}
@@ -299,114 +245,143 @@ views:
     panel:
       decor:
       # THIS IS THE FACEPLATE, SEEN THROUGH THE WINDOWS. The front is a built-in
-      # bezel standing 11.25 proud of it, with the two octagons cut through it -
-      # maiaedge/pbc-2000-bezel@1, placed below, which carries the relief, the
-      # amber beads and the wordmark. What is drawn here is what lies behind
-      # the bezel: the plate, and in each window its recess and louvres.
+      # bezel standing 11.25 proud of it with the two octagons cut through it -
+      # maiaedge/pbc-2000-bezel@2, placed below, which carries the relief, the
+      # amber beads, the mark and the wordmark. What is drawn here is what lies
+      # behind the bezel: the plate, and in each window the louvred panel.
+      # EVERY POSITION BELOW IS PHOTO-MEASURED - see provenance `layout`.
       - {id: faceplate, at: [0.0, 0.0], size: [437.9, 41.27], fill: '#1f2226', kind: bezel}
-      # THE WINDOWS ARE OCTAGONS, cut through the raised band to the faceplate behind:
-      # flat top, 45-degree chamfer, short vertical end, chamfer back, flat bottom. A
-      # first draft drew them as rounded rectangles and got the silhouette of the most
-      # recognisable thing on this device wrong.
-      # THE LOUVRES ARE EIGHT ROWS DEEP AND FIVE COLUMNS ACROSS in each window,
-      # counted off the photograph (see provenance `louvres`), and they run the
-      # whole window with the ports punched through them. `slots-h` is a 14 x 8
-      # tile, so without a pitch this field came out as somebody else's grille -
-      # three coarse rows of stubby dashes. 115/5 and 24/8 give the counts
-      # exactly; the offset puts the lattice's first cell on the rect's own
-      # corner, and the rect is inset far enough that all four of its corners
-      # clear the octagon's chamfers.
-      - {id: window-left, at: [8.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
-      - {id: vent-left, at: [16.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [16.5, 8.5], vent: 20}
-      - {id: window-right, at: [232.0, 6.0], size: [132.0, 29.0], shape: octagon, fill: '#111316', kind: recess}
-      - {id: vent-right, at: [240.5, 8.5], size: [115.0, 24.0], pattern: slots-h, pattern-pitch: [23.0, 3.0], pattern-offset: [240.5, 8.5], vent: 20}
+      # the louvred panel behind each window is the same dark grey as the bezel;
+      # its slots are black. Drawn a little larger than the cut, which the bezel
+      # trims.
+      - {id: window-left-panel, at: [16.5, 2.0], size: [132.2, 37.0], fill: '#5c6066', kind: recess}
+      - {id: window-right-panel, at: [241.1, 2.0], size: [129.0, 37.0], fill: '#5c6066', kind: recess}
+      # THE LOUVRES STOP AT THE PORTS. Full-width slots run above and below the
+      # ports in each window; beside and between the ports and jacks the
+      # photograph shows only short slots in the gaps. `slots-h` draws its slot
+      # at a fixed 9/14 of its tile, so each field widens its tile until its one
+      # slot is the field's width. Rows are the photograph's, 3.85 mm apart, and
+      # every field shares one row phase so a row reads straight across.
+      - {id: louvre-left-top-1, at: [14.6, 2], size: [23.5, 14.9], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [8.072, 1.5], vent: 20}
+      - {id: louvre-left-top-2, at: [40.1, 2], size: [23.5, 14.9], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [33.572, 1.5], vent: 20}
+      - {id: louvre-left-top-3, at: [65.5, 2], size: [23.5, 14.9], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [58.972, 1.5], vent: 20}
+      - {id: louvre-left-top-4, at: [90.9, 2], size: [23.5, 14.9], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [84.372, 1.5], vent: 20}
+      - {id: louvre-left-top-5, at: [116.3, 2], size: [23.5, 14.9], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [109.772, 1.5], vent: 20}
+      - {id: louvre-left-mid-1, at: [19.7, 16.9], size: [13, 15.4], pattern: slots-h, pattern-pitch: [20.222, 3.85], pattern-offset: [16.089, 1.5], vent: 20}
+      - {id: louvre-left-mid-2, at: [83.2, 16.9], size: [5.8, 15.4], pattern: slots-h, pattern-pitch: [9.022, 3.85], pattern-offset: [81.589, 1.5], vent: 20}
+      - {id: louvre-left-mid-3, at: [90.9, 16.9], size: [23.5, 15.4], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [84.372, 1.5], vent: 20}
+      - {id: louvre-left-mid-4, at: [116.3, 16.9], size: [23.5, 15.4], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [109.772, 1.5], vent: 20}
+      - {id: louvre-left-low-1, at: [14.6, 32.3], size: [23.5, 6.7], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [8.072, 1.5], vent: 20}
+      - {id: louvre-left-low-2, at: [40.1, 32.3], size: [23.5, 6.7], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [33.572, 1.5], vent: 20}
+      - {id: louvre-left-low-3, at: [65.5, 32.3], size: [23.5, 6.7], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [58.972, 1.5], vent: 20}
+      - {id: louvre-left-low-4, at: [90.9, 32.3], size: [23.5, 6.7], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [84.372, 1.5], vent: 20}
+      - {id: louvre-left-low-5, at: [116.3, 32.3], size: [23.5, 6.7], pattern: slots-h, pattern-pitch: [36.556, 3.85], pattern-offset: [109.772, 1.5], vent: 20}
+      - {id: louvre-right-top-1, at: [243, 2], size: [22.8, 17.5], pattern: slots-h, pattern-pitch: [35.467, 3.85], pattern-offset: [236.667, 1.5], vent: 20}
+      - {id: louvre-right-top-2, at: [267.7, 2], size: [22.8, 17.5], pattern: slots-h, pattern-pitch: [35.467, 3.85], pattern-offset: [261.367, 1.5], vent: 20}
+      - {id: louvre-right-top-3, at: [292.3, 2], size: [22.8, 17.5], pattern: slots-h, pattern-pitch: [35.467, 3.85], pattern-offset: [285.967, 1.5], vent: 20}
+      - {id: louvre-right-top-4, at: [316.9, 2], size: [22.8, 17.5], pattern: slots-h, pattern-pitch: [35.467, 3.85], pattern-offset: [310.567, 1.5], vent: 20}
+      - {id: louvre-right-top-5, at: [341.6, 2], size: [22.8, 17.5], pattern: slots-h, pattern-pitch: [35.467, 3.85], pattern-offset: [335.267, 1.5], vent: 20}
+      - {id: louvre-right-low-1, at: [244, 19.5], size: [14.5, 19.5], pattern: slots-h, pattern-pitch: [22.556, 3.85], pattern-offset: [239.972, 1.5], vent: 20}
+      - {id: louvre-right-low-2, at: [268, 19.5], size: [12.9, 19.5], pattern: slots-h, pattern-pitch: [20.067, 3.85], pattern-offset: [264.417, 1.5], vent: 20}
+      - {id: louvre-right-low-3, at: [297.5, 19.5], size: [9.2, 19.5], pattern: slots-h, pattern-pitch: [14.311, 3.85], pattern-offset: [294.944, 1.5], vent: 20}
+      - {id: louvre-right-low-4, at: [327.3, 19.5], size: [5.6, 19.5], pattern: slots-h, pattern-pitch: [8.711, 3.85], pattern-offset: [325.744, 1.5], vent: 20}
+      - {id: louvre-right-low-5, at: [353.5, 19.5], size: [9.6, 19.5], pattern: slots-h, pattern-pitch: [14.933, 3.85], pattern-offset: [350.833, 1.5], vent: 20}
+      # the light-pipe slot left of port 0 - one opening, with the four status
+      # lamps the vendor's UI view draws in a column standing in it
+      - {id: status-window, at: [34.3, 18.75], size: [3.3, 9.0], fill: '#0a0b0d', kind: recess}
       cutouts:
-      - {id: port-1, at: [20.575, 20.2], size: [18.5, 9.58], shape: rect}
-      - {id: port-2, at: [40.075, 20.2], size: [18.5, 9.58], shape: rect}
-      - {id: port-led-1, at: [28.75, 16.0], size: [2.0, 2.0], shape: circle}
-      - {id: port-led-2, at: [48.25, 16.0], size: [2.0, 2.0], shape: circle}
-      - {id: usb, at: [242.15, 19.6], size: [4.5, 12.0], shape: rect}
-      - {id: status-1, at: [16.0, 13.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-2, at: [16.0, 17.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-3, at: [16.0, 21.6], size: [2.0, 2.0], shape: circle}
-      - {id: status-4, at: [16.0, 25.6], size: [2.0, 2.0], shape: circle}
-      - {id: con, at: [266.58, 19.0], size: [15.8, 13.2], shape: rect}
-      - {id: mgmt, at: [302.32, 19.0], size: [15.8, 13.2], shape: rect}
-      - {id: ctrl, at: [338.05, 19.0], size: [15.8, 13.2], shape: rect}
+      - {id: port-1, at: [40.925, 19.26], size: [18.5, 9.58], shape: rect}
+      - {id: port-2, at: [62.525, 19.26], size: [18.5, 9.58], shape: rect}
+      - {id: status-1, at: [34.95, 18.85], size: [2.0, 2.0], shape: circle}
+      - {id: status-2, at: [34.95, 21.1], size: [2.0, 2.0], shape: circle}
+      - {id: status-3, at: [34.95, 23.35], size: [2.0, 2.0], shape: circle}
+      - {id: status-4, at: [34.95, 25.6], size: [2.0, 2.0], shape: circle}
+      - {id: usb, at: [261.3, 22.58], size: [4.5, 12.0], shape: rect}
+      - {id: con, at: [281.55, 21.8], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [308.25, 21.8], size: [15.8, 13.2], shape: rect}
+      - {id: ctrl, at: [334.45, 21.8], size: [15.8, 13.2], shape: rect}
     silkscreen:
-    - {at: [274.48, 15.5], text: CON, for: con}
-    - {at: [310.22, 15.5], text: MGMT, for: mgmt}
-    - {at: [345.95, 15.5], text: CTRL, for: ctrl}
+    - {at: [50.1, 18.4], text: '0', font-size: 3.0, anchor: middle, for: port-1}
+    - {at: [71.7, 18.4], text: '1', font-size: 3.0, anchor: middle, for: port-2}
+    - {at: [50.1, 32.0], text: 100G, font-size: 3.6, anchor: middle, for: port-1}
+    - {at: [71.7, 32.0], text: 100G, font-size: 3.6, anchor: middle, for: port-2}
+    - {at: [289.45, 21.5], text: CON, font-size: 3.4, anchor: middle, for: con}
+    - {at: [316.15, 21.5], text: MGMT, font-size: 3.4, anchor: middle, for: mgmt}
+    - {at: [342.35, 21.5], text: CTRL, font-size: 3.4, anchor: middle, for: ctrl}
+    - {at: [316.15, 36.6], text: 1G, font-size: 2.0, anchor: middle, for: mgmt}
+    - {at: [342.35, 36.6], text: 1G, font-size: 2.0, anchor: middle, for: ctrl}
     components:
       placements:
-      - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
-      - {ref: common/rack-ear@1, id: ear-right, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+      # BLACK TEXTURED EARS WITH A CAPTIVE THUMBSCREW EACH - the face-on
+      # photograph; v4 wore the library's plain silver ear
+      - {ref: maiaedge/pbc-2000-ear@1, id: ear-left, at: [-22.6, 0.0], skin: left, optional: ears, group: furniture, rel-pos: 1}
+      - {ref: maiaedge/pbc-2000-ear@1, id: ear-right, at: [437.9, 0.0], skin: right, optional: ears, group: furniture, rel-pos: 2}
       # THE BEZEL: one plate across the face to the touch screen, the windows
       # cut through it, fixed rather than removable. The chassis status lamp is
-      # one of ITS parts - it sits in the bezel's lower-right notch, 6.2 proud -
-      # so the device no longer places or punches it.
-      - {ref: maiaedge/pbc-2000-bezel@1, id: bezel, at: [0.0, 0.0], group: furniture, rel-pos: 10}
-      # ONE LAMP PER PORT, NOT FOUR. common/qsfp28-cage@3 carries a four-lamp
-      # band, and its own provenance says what those are: the AS7726-32X's
-      # per-lane breakout lamps, holes in THAT chassis's panel above the
-      # aperture. This chassis has no such band - the louvres run straight up to
-      # the cage flange in the photograph, and the vendor's own UI view draws
-      # the ports with nothing above them - so the plain cage is the right part
-      # and the single lamp is placed beside it.
-      - {ref: common/qsfp-cage@2, id: port-1, at: [20.0, 19.6], group: qsfp28, rel-pos: 1}
-      - {ref: common/qsfp-cage@2, id: port-2, at: [39.5, 19.6], group: qsfp28, rel-pos: 2}
-      - {ref: common/led-dot@1, id: port-led-1, at: [28.75, 16.0], for: port-1, group: furniture, rel-pos: 8}
-      - {ref: common/led-dot@1, id: port-led-2, at: [48.25, 16.0], for: port-2, group: furniture, rel-pos: 9}
-      # THE BARE RECEPTACLE, NOT THE BEZELLED ONE. common/usb-a-bezel@1 wraps the
-      # opening in a silver plate that spans the part so it can abut its
-      # neighbours' bezels - that is the S9510-28DC's face, where the USB and
-      # the jacks share one strip of metal. Here the photograph shows a narrow
-      # slot straight through the faceplate with no plate around it, so the
-      # standard aperture is the whole part.
-      - {ref: std/usb-a@1, id: usb, at: [238.4, 23.35], rotate: 90, skin: usb2, group: mgmt, rel-pos: 1}
-      - {ref: common/led-dot@1, id: status-1, at: [16.0, 13.6], for: chassis, group: furniture, rel-pos: 4}
-      - {ref: common/led-dot@1, id: status-2, at: [16.0, 17.6], for: chassis, group: furniture, rel-pos: 5}
-      - {ref: common/led-dot@1, id: status-3, at: [16.0, 21.6], for: chassis, group: furniture, rel-pos: 6}
-      - {ref: common/led-dot@1, id: status-4, at: [16.0, 25.6], for: chassis, group: furniture, rel-pos: 7}
-      - {ref: std/rj45@2, id: con, at: [266.58, 19.0], group: mgmt, rel-pos: 2}
-      # THE TWO ETHERNET JACKS ARE FITTED TAB UP. The photograph reads their
-      # contacts along the BOTTOM of the opening and the latch slot at the top;
-      # the part is drawn tab down, which is how the console jack beside them
-      # does sit. A jack fitted the other way up is the same jack turned through
-      # 180 degrees, not a reflection of it, so that is what is declared - and
-      # the two lamps travel with it to the other side, because on the hardware
-      # they do.
-      - {ref: common/rj45-eth@1, id: mgmt, at: [302.32, 19.0], rotate: 180, group: mgmt, rel-pos: 3}
-      - {ref: common/rj45-eth@1, id: ctrl, at: [338.05, 19.0], rotate: 180, group: mgmt, rel-pos: 4}
-      # THE TOUCH SCREEN, as a part rather than paint - see gaps `right-panel-identity`
-      - {ref: maiaedge/pbc-2000-lcd@1, id: display, at: [381.0, 6.14], for: chassis, group: displays, rel-pos: 1}
+      # one of ITS parts - it sits outside the right window's lower-right
+      # chamfer, on the bezel's slope - so the device neither places nor punches it.
+      - {ref: maiaedge/pbc-2000-bezel@2, id: bezel, at: [0.0, 0.0], group: furniture, rel-pos: 10}
+      # THE PLAIN CAGE, silver in the photograph, on the photograph's 21.6 mm
+      # pitch - the two do not abut; there is a millimetre of panel between them
+      - {ref: common/qsfp-cage@2, id: port-1, at: [40.35, 18.66], group: qsfp28, rel-pos: 1}
+      - {ref: common/qsfp-cage@2, id: port-2, at: [61.95, 18.66], group: qsfp28, rel-pos: 2}
+      # THE BARE RECEPTACLE, NOT THE BEZELLED ONE, and the white USB 2.0 tongue -
+      # see provenance `usb`
+      - {ref: std/usb-a@1, id: usb, at: [257.55, 26.33], rotate: 90, skin: usb2, group: mgmt, rel-pos: 1}
+      - {ref: common/led-dot@1, id: status-1, at: [34.95, 18.85], for: chassis, group: furniture, rel-pos: 4}
+      - {ref: common/led-dot@1, id: status-2, at: [34.95, 21.1], for: chassis, group: furniture, rel-pos: 5}
+      - {ref: common/led-dot@1, id: status-3, at: [34.95, 23.35], for: chassis, group: furniture, rel-pos: 6}
+      - {ref: common/led-dot@1, id: status-4, at: [34.95, 25.6], for: chassis, group: furniture, rel-pos: 7}
+      - {ref: std/rj45@2, id: con, at: [281.55, 21.8], group: mgmt, rel-pos: 2}
+      # THE TWO ETHERNET JACKS ARE FITTED TAB UP - the latch slot is at the top
+      # of the opening and the contacts along the bottom in the face-on
+      # photograph, the console jack the other way about. A jack fitted the other
+      # way up is the same jack turned through 180 degrees, not a reflection.
+      - {ref: common/rj45-eth@1, id: mgmt, at: [308.25, 21.8], rotate: 180, group: mgmt, rel-pos: 3}
+      - {ref: common/rj45-eth@1, id: ctrl, at: [334.45, 21.8], rotate: 180, group: mgmt, rel-pos: 4}
+      # THE TOUCH SCREEN, as a part rather than paint - see gaps `front-indicator-meanings`
+      - {ref: maiaedge/pbc-2000-lcd@2, id: display, at: [372.6, 2.8], for: chassis, group: displays, rel-pos: 1}
   rear:
     size: {w: 437.9, h: 41.27}
     panel:
       decor:
-      # BARE STEEL, THE WHOLE FACE. Both rear photographs show the rear as
-      # unpainted metal from ear to ear; v3 left most of it the chassis's black
-      # and put a grey bracket where the fan tray's thumbscrew end is.
+      # BARE STEEL, THE WHOLE FACE, as both rear photographs show
       - {id: rear-plate, at: [0.0, 0.0], size: [437.9, 41.27], fill: '#a7abaf', kind: bezel}
     components:
-      # ONE TRAY, FIVE FANS, ONE FRU. See maiaedge/pbc-2000-fan-plate@1.
+      # TWO HOT-SWAP SUPPLIES AND ONE FAN TRAY, each a field-replaceable unit in
+      # its own bay. Positions photo-measured - see provenance `rear`.
       bays:
+      - id: psu-1
+        at: [18.5, 0.6]
+        size: {w: 73.5, h: 40.0}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - maiaedge/pbc-2000-psu-550w@1
+        default: maiaedge/pbc-2000-psu-550w@1
+      - id: psu-2
+        at: [107.35, 0.6]
+        size: {w: 73.5, h: 40.0}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - maiaedge/pbc-2000-psu-550w@1
+        default: maiaedge/pbc-2000-psu-550w@1
       - id: fan-tray
-        at: [196.4, 0.6]
-        size: {w: 240.9, h: 40.07}
+        at: [182.1, 0.6]
+        size: {w: 255.2, h: 40.07}
         group: fans
         rel-pos: 1
         accepts:
-        - maiaedge/pbc-2000-fan-plate@1
-        default: maiaedge/pbc-2000-fan-plate@1
+        - maiaedge/pbc-2000-fan-plate@2
+        default: maiaedge/pbc-2000-fan-plate@2
       placements:
-      - {ref: common/rack-ear@1, id: ear-left-r, at: [-14.0, -1.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
-      - {ref: common/rack-ear@1, id: ear-right-r, at: [437.9, -1.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
-      - {ref: common/psu-550w@2, id: psu-1, at: [20.0, 0.6], attrs: {slot: '1'}, group: psus, rel-pos: 1}
-      # the second supply's cage starts 117.4 mm in (pbc-rear-b.jpeg, 4.556 px/mm),
-      # and the 73.5 mm part is centred in the 79 mm it reads - see gaps
-      # `psu-module-width`
-      - {ref: common/psu-550w@2, id: psu-2, at: [120.15, 0.6], attrs: {slot: '2'}, group: psus, rel-pos: 2}
+      - {ref: maiaedge/pbc-2000-ear-back@1, id: ear-left-r, at: [-22.6, 0.0], optional: ears, group: furniture, rel-pos: 1}
+      - {ref: maiaedge/pbc-2000-ear-back@1, id: ear-right-r, at: [437.9, 0.0], optional: ears, group: furniture, rel-pos: 2}
+      # the steel strap at the left end, with the ground stud, and the one
+      # between the supplies
+      - {ref: maiaedge/pbc-2000-rear-bracket@1, id: ground-strap, at: [1.45, 0.6], group: furniture, rel-pos: 3}
+      - {ref: maiaedge/pbc-2000-psu-divider@1, id: psu-divider, at: [92.75, 0.6], group: furniture, rel-pos: 4}
   top:
     size: {w: 437.9, h: 291.08}
     panel:

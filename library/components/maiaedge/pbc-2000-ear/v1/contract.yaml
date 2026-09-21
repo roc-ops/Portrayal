@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: pbc-2000-ear
+version: 1.0.0
+class: ear
+behaviour: mounts
+profile: networking
+description: >-
+  A front rack ear of the MaiaEdge PBC-2000 - a black, textured flange either side of the face,
+  each carrying one captive thumbscrew that fastens the chassis to the rack. Skins left and
+  right; the same flange seen from behind is maiaedge/pbc-2000-ear-back@1.
+size: {w: 22.6, h: 41.27}
+size-confidence: {w: datasheet, h: datasheet}
+provenance:
+  size: >-
+    datasheet - page 3 gives the chassis 17.24 in wide and the total "with ears and tabs" 19.02
+    in, so each ear stands 0.89 in (22.6 mm) past the chassis side. The height is the chassis's
+    41.27. The face-on photograph (working/intake/maiaedge/pbc/photos/pbc-front-faceon.jpg)
+    reads the flanges 21.7 and 17.5 mm wide at their bends, which is the perspective of a
+    flange folded toward the rack rather than a different part.
+  finish: >-
+    photograph - black and speckle-textured, plainly a different finish from the smooth face
+    beside it. The generic common/rack-ear@1 this device wore until v5 is a plain silver ear.
+  thumbscrew: >-
+    photograph for the part, standard for the position. One captive Phillips thumbscrew per ear,
+    about 10 mm across the head with a knurled collar. It is drawn on the EIA-310 rack-hole
+    line, 13.6 mm outside the chassis side (the 465.1 mm hole spacing less the 437.9 mm body,
+    halved), and at the ear's centre height, which is where the photograph puts both - the
+    hand-held photograph's own reading of it drifts 3 mm between the two ends.
+relief:
+  features:
+  - node: thumbscrew
+    cyl: 8.0
+    knurl: true
+    color: '#1d1e20'
+    confidence: estimated
+    source: >-
+      the head and collar are photographed square-on; how far they stand off the flange is
+      not stated, and 8 mm is a captive thumbscrew's usual reach
+skins: [left, right]

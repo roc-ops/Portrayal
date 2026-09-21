@@ -1,0 +1,97 @@
+format: 1
+kind: component
+name: pbc-2000-bezel
+version: 2.0.0
+class: bezel
+behaviour: mounts
+profile: networking
+description: >-
+  The built-in front bezel of the MaiaEdge PBC-2000 - one formed plate across the face from
+  the left edge to the touch screen, standing off the faceplate and cut through by the two
+  octagonal windows the ports are seen through, and carrying the MaiaEdge wordmark. Flat only across a narrow band level with
+  the windows' vertical ends, where the wordmark is, and sloping back to the faceplate
+  above and below it. Fixed to the chassis, not a removable cover.
+# NO `d`. On a component a depth is read as a hole of that depth behind its box,
+# which is what a port aperture is; the plate stands ON the faceplate, and how
+# far is `out` below.
+size: {w: 372.0, h: 41.27}
+size-confidence: {w: photo-measured, h: datasheet}
+provenance:
+  shape: >-
+    field knowledge (the maintainer, 2026-09-21), from the hardware, in two passes. First: the
+    pane where the wordmark sits stands out from the faceplate and slopes back, and the sides
+    of the octagons facing it are its edges - drawn from that, as a pane between the windows,
+    and looked at in 3D. Second, correcting it: the profile runs ALL THE WAY ACROSS, "up into
+    about the LCD on the right", and the octagons FRAME the faceplate underneath - a bezel
+    attached in front of it, built in rather than removable. So the windows are holes in this
+    part, not the ends of it. `behaviour: mounts` is the format's word for exactly this - it
+    attaches to the surface and stands on it, as a rack ear and a bolted panel do - and it does
+    not claim the part comes off. It also makes it paint over what it stands in front of,
+    which is why the status lamp on its chamfer is one of its parts rather than the device's.
+  photograph: >-
+    photo-measured - working/intake/maiaedge/pbc/photos/pbc-front-faceon.jpg (the maintainer,
+    2026-09-21), the first square-on view of this face. Deskewed 0.93 degrees and scaled PER
+    AXIS: 4.004 px/mm across (the smooth body between the textured ears, 437.9 mm) and 4.139
+    px/mm down (the face's top and bottom edges, 41.27 mm). The two disagree by 3.4%, which is
+    the photograph's own aspect and not the hardware's; the vertical figure agrees with the USB
+    opening's standard 12.0 mm to 2.5%. Every figure below is read on those two scales.
+  windows: >-
+    photo-measured - the amber bead traced row by row. THE WINDOWS ARE TALLER AND THEIR ENDS ARE
+    NOT 45 DEGREES, which is what v1.0 got wrong: each runs y 2.46 to 38.5 (36.0 mm, against
+    29), its chamfers run about 19 mm across for 13 down, and the short vertical end between
+    them is y 15.46 to 25.5. Left window x 17.0 to 148.2 (chamfer 19.0); right x 241.6 to 369.6
+    (chamfer 17.6). The two read 3.2 mm apart in width, which is inside what a hand-held
+    photograph can promise across 437.9 mm; each is drawn as measured rather than averaged.
+  profile: >-
+    field knowledge (the maintainer, 2026-09-21): the flat face is only as tall as the octagons'
+    short vertical ends - y 15.46 to 25.5, as measured above - and the plate tapers from there
+    to the top and bottom edges rather than cutting across. The photograph shows exactly that
+    band: the plate reads lighter across the wordmark and darker above and below.
+  depth: >-
+    estimated. The maintainer put the stand-off at half to three-quarters of an inch, and on
+    seeing 15 mm in 3D asked for it 25% closer to the face: 11.25. The datasheet bounds it -
+    page 3 gives the chassis 11.46 in deep and the total "with ears and tabs" 12.13 in, 17.0
+    mm more, which is the most anything may stand off the face.
+  size: >-
+    photo-measured in width, datasheet in height. The bezel runs from the chassis's left edge
+    to the touch screen's frame, which the photograph puts at x 372.6; the plate stops at 372.
+    The height is the chassis's 41.27, page 3 of the datasheet.
+  bead: >-
+    photo-measured - the amber lip is about 2 mm wide around each cut, drawn inside the hole's
+    edge; in 3D the cut's wall carries the colour (`hole-color`).
+  walls: >-
+    the window walls are the vendor's amber, because that is the edge of the cut on the
+    hardware - looking into a window you see the amber bead's depth. The outer edge is the
+    plate's own dark finish.
+  logo-zone: >-
+    photo-measured - the MaiaEdge mark sits immediately left of the wordmark, at x 156.0 to
+    174.0 and y 10.4 to 28.9 on the face-on photograph. IT IS NOT DRAWN: vendor logos are not
+    reproduced (library/components/README.md, "Vendor logos are not reproduced; contracts
+    reserve a `logo-zone` element instead"), so the box is reserved here and left as plate.
+  wordmark: >-
+    photo-measured - "MaiaEdge" runs x 178.4 to 232.8 with its capitals 7.2 mm tall and its
+    baseline at y 22.0, so it is set 10 mm high and fitted to its measured length. Printed ON
+    the bezel, which is why it is here and not on the device's silkscreen: on the faceplate it
+    would sit 11 mm behind the surface it is read on.
+  status-lamp: >-
+    the chassis status lamp is IN the bezel, outside the right window's lower-right chamfer.
+    Photo-measured at x 363.0 to 366.2, y 32.0 to 35.3, so its centre is (364.6, 33.65); it is
+    lifted 5.44 mm, the plate's stand-off there (11.25 at the flat band, falling to 0 at the
+    bottom edge).
+elements:
+  logo-zone: {at: [156.0, 10.4], size: [18.0, 18.5], class: label}
+relief:
+  features:
+  - node: bezel
+    out: 11.25
+    profile-y: [[0, 0], [15.46, 11.25], [25.5, 11.25], [41.27, 0]]
+    shape: true
+    color: '#1d2024'
+    hole-color: '#f7c600'
+    confidence: estimated
+    source: >-
+      the maintainer's account of the hardware (provenance `shape`, `profile`, `depth`),
+      bounded by the datasheet's 17.0 mm between chassis depth and total depth
+skins: [default]
+parts:
+- {ref: common/led-indicator@1, id: status, at: [362.6, 31.65], lift: 5.44}
