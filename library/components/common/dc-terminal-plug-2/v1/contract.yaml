@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: dc-terminal-plug-2
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a
+  matching two-way screw-clamp plug seated in it, held by a flange screw at each
+  end. The -48 V input of the Edgecore ECS4530-54CSFP-DC-I. Not a barrier strip:
+  the wires land in the plug, which pulls out whole, where common/dc-terminal-24@1
+  and -27@1 take ring lugs under screws behind a clear cover. The pole names are
+  silkscreened on the faceplate below it, so the part carries none.
+size: {w: 32.1, h: 17.6, d: 15.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs: {media: dc-terminal}
+provenance:
+  size: >-
+    PHOTO-MEASURED on the ECS4530 datasheet's DC-I front elevation (page 3, native
+    1000 px across a 440 mm face, 2.273 px/mm) at 5x: the green housing runs x 5.7-37.8
+    and y 12.3-29.9 on that face. The depth is not visible and is estimated.
+  the-face: >-
+    PHOTO-MEASURED at the same scale, so good to about half a millimetre: a flange
+    screw at each top corner (centres about 5.3 and 26.0 mm across, 4.9 down, 4.8 mm
+    heads), the two-way plug body between them at x 10.1-20.7 over y 5.3-16.3 with its
+    two wire entries, a gold contact either side of it at y 11.9, and the header's
+    latch slot across the top of the plug.
+  poles: >-
+    FACEPLATE LEGEND, not the part: '-  -48V~-60V = 6A Max  +' printed under the block,
+    negative at the left. The datasheet gives 'DC Power Input (-48~-60 V)'.
+elements:
+  body: {at: [0.0, 0.0], size: [32.1, 17.6], class: connector}
+  plug: {at: [10.10, 5.30], size: [10.60, 11.00], class: connector}
+skins: [default]
