@@ -42,11 +42,12 @@ with the 2D about which bail is blue.
 
 ## What is not a box
 
-`common/qsfp-transceiver` carries six `body-*.svg` skins - top, bottom, left, right,
+`common/qsfp-transceiver` carried six `body-*.svg` skins - top, bottom, left, right,
 rear - produced by a study page (`library/demo/part.html`, since removed) whose 3D
 loft of the pull tab was verified against photographs (the maintainer's notes, not in this repository).
-The README says the viewer textures a box from them; nothing in `relief.js` or
-`viewer3d.js` reads them.
+The README used to say the viewer textures a box from them; nothing in `relief.js`
+or `viewer3d.js` ever read them, and D1 (2026-09-21) deleted the five
+`body-*.svg` files rather than wire them in - task 2 of this spec carried that out.
 
 Decision to make here, with the parts in hand: either
 
@@ -86,6 +87,33 @@ module in the same kind of cage.
 3. The body-skin decision, and the code or the deletion that follows it.
 4. Plug and boot standoff once B lands.
 5. XFP/CFP/CFP2 when their generics exist.
+
+## Decisions taken in D (2026-09-21)
+
+- **D1 - delete the body skins**: `common/qsfp-transceiver`'s five
+  `body-*.svg` skins are deleted, not wired in. The part is retired
+  (`superseded-by: generic/qsfp-lc@1`) and nothing reads them.
+- **D2 - SFF-8432 Rev 5.2a was fetched**, held locally in the maintainer's
+  gitignored corpus. Table 4-3 designator A is "10.00 Recommended Maximum",
+  with other lengths "application specific"; Figure 4-2
+  is the cage latch-retention post, not the bail, so SFF-8432 does not
+  dimension the bail's forward reach. Note 13 codes an exposed feature's
+  colour "blue" for single mode. The held SFF-8661 Rev 2.5 gives no pull-tab
+  reach either - its bail-travel note is Note 6, "3.4 MAX".
+- **D3 - seating depth by naming the feature**: a connection point may carry
+  `on: <relief node>`; a boot seated there lifts by that feature's `out`
+  (`interface-at`, `on:`, L106).
+- **D4 - out of scope**: 2D side views showing a seated module's protrusion
+  (see Open questions below); XFP/CFP/CFP2 (no generics exist); the OSFP MSA
+  fetch (no OSFP generic exists); changing the generics' default latch
+  colour (see below).
+
+Open item carried to the final report, not decided here: SFF-8432 Note 13
+makes an exposed SFP colour a mode claim (blue = single mode). Both SFP
+generics default `latch-color` to `#2f5fa8` (blue), so every generic SFP
+drawn with its default claims single mode - a per-SKU fact L99 keeps off
+generics. D wires the colour through to 3D faithfully and does not change
+the default.
 
 ## Open questions
 

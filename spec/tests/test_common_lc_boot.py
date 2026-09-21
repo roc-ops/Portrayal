@@ -116,7 +116,9 @@ def test_the_skin_is_the_contract():
     svg = (P.parent / "skins/default.svg").read_text()
     d = contract()
     body = d["elements"]["body"]
-    m = re.search(r'<rect id="body"[^>]*>', svg)
+    # the body is a group since pluggables D (its bore paints on the rear
+    # face the `body` feature extrudes); its outline is the group's rect
+    m = re.search(r'<g id="body"[^>]*>\s*<rect [^>]*>', svg)
     assert m
     got = {k: float(re.search(rf'\b{k}="([-\d.]+)"', m.group(0)).group(1))
            for k in ("x", "y", "width", "height")}

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc
-version: 1.0.0
+version: 1.0.1
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -132,18 +132,24 @@ relief:
       confidence: drawing
       source: >-
         SFF-8432 Rev 5.2a Table 4-3 designator A, module length extending
-        outside of cage, 10.0mm Recommended Maximum - see
-        provenance.protrusion
+        outside of cage, 10.0mm Recommended Maximum - other lengths are
+        application specific - see provenance.protrusion
     - node: bail
       lift: 10.0
       out: 14.3
-      color: '#2f5fa8'
       confidence: estimated
       source: >-
-        common/sfp-lc-duplex@1 - unsourced. The length key gives '0.49 in
-        [12.3] is the face height with the bail extended', which is a HEIGHT
+        SFF-8432 Rev 5.2a checked directly (not just carried from
+        common/sfp-lc-duplex@1): Table 4-3 designator A is 10.00 RECOMMENDED
+        MAXIMUM for "module length extending outside of cage", with "other
+        lengths are application specific" - the body's protrusion, not the
+        bail's. Figure 4-2 "Latch Post Detail" is the cage-retention post, a
+        different part, not the wire bail. Neither gives a figure the bail's
+        forward reach could rest on. common/sfp-lc-duplex@1's length key gives
+        '0.49 in [12.3] is the face height with the bail extended', a HEIGHT
         across the face, not how far forward the bail reaches. 14.3 is 0.4
-        past the body's Table 4-3 protrusion and nothing states it.
+        past the body's 10.0 and stays estimated on that basis - a bail that
+        clears the body it hinges from, nothing more precise than that.
 connection-points:
   mate: {at: [6.775, 4.275], direction: front}
   optical-tx: {at: [3.60, 5.70], direction: front}

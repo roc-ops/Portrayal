@@ -42,7 +42,22 @@ def _stable(value):
     """A value in a form two runs agree on. Sorts mappings, keeps sequence order
     because a sequence's order is part of what a device says."""
     if isinstance(value, dict):
-        return {k: _stable(value[k]) for k in sorted(value, key=str)}
+        # A KEY THAT IS NOT A STRING must not crash the digest. YAML 1.1 reads a
+        # bare `on:` as boolean true, and json.dumps(sort_keys=True) cannot
+        # order True against a str: the TypeError killed lint's lock check
+        # before it printed L106, the message written for that very mistake.
+        # A bool key takes json's own spelling ("true"/"false"), and a dict
+        # whose keys are still of mixed kinds has the rest spelled the same
+        # way. Both cases crashed before, so no digest that exists moves: an
+        # all-string or all-numeric mapping is left exactly as it was.
+        def key(k):
+            return "true" if k is True else "false" if k is False else k
+        keys = {key(k): k for k in value}
+        if any(isinstance(k, str) for k in keys) and \
+                not all(isinstance(k, str) for k in keys):
+            keys = {(k if isinstance(k, str) else json.dumps(k)): v
+                    for k, v in keys.items()}
+        return {k: _stable(value[keys[k]]) for k in sorted(keys, key=str)}
     if isinstance(value, list):
         return [_stable(v) for v in value]
     if isinstance(value, float) and value.is_integer():

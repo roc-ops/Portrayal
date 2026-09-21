@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qsfp-transceiver
-version: 1.1.0
+version: 1.1.1
 class: transceiver
 behaviour: occupies
 profile: networking
@@ -79,6 +79,19 @@ provenance:
     between them) and nothing else, so there is nothing yet to build it from
   latch-features: drawing - 4.20 +/-0.15 and 2.00 +/-0.15 steps at the cage end,
     29.60 +/-0.10 to the latch shoulder, 48.20 MIN to datum D
+  skins: D1 (2026-09-21, docs/pluggables-3d-design.md) deleted
+    body-top.svg, body-bottom.svg, body-left.svg, body-right.svg and
+    body-rear.svg. They were never in this contract's `skins:` list (only `lc`
+    is), never named by a `relief.features[].node`, and - per
+    docs/pluggables-3d-design.md - never read by relief.js or viewer3d.js
+    either; a study page once lofted them for a since-removed demo. Bumped
+    PATCH, not major, because the versioning rule protects a consumer who
+    might hold a reference to an addressable skin, and none can - this major
+    is retired (see `superseded-by` above), unplaced, and confirmed by
+    test_cage_accepts.py to be composed by nothing in the tree. Deleting art
+    nothing declared, addressed or read is the "a skin redrawn" case the
+    README calls a patch, not the "an element moved or was renamed" case it
+    calls a major.
 elements: {}
 relief:
   wall: '#4a4f55'

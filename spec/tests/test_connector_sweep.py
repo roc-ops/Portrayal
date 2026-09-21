@@ -78,23 +78,19 @@ def test_the_sweep_covers_what_the_library_actually_has():
 
 
 def test_a_boot_point_is_the_mate_point():
-    """A `boot` connection-point that nothing reads must not drift from `mate`.
+    """A plug's `boot` point stays on its `mate` point's (x, y).
 
-    NOTHING IN THE PIPELINE READS "boot" - not render.py, not lint.py, not
-    kit/. render.py's mate-to resolution seats an occupant by the HOST's
-    presented `mate` point and the occupant's own `mate` point, full stop. So
-    a boot mated onto a plug lands on the plug's `mate` point, and that is
-    right only because every plug in the library publishes `mate` and `boot`
-    at the same (x, y). A plug that separated them would silently seat its
-    boot on its FRONT face.
+    UNTIL PLUGGABLES D NOTHING READ "boot": seating put a boot on the host's
+    presented `mate` point, and this test was what kept that from putting a
+    boot on a plug's FRONT face. Both plugs now say `interface-at: boot`, so
+    manifest.presented_interface returns the `boot` point and the depth
+    between the plug's two ends is carried along Z by the `on: body` relief
+    feature - the seating DOES distinguish them now.
 
-    The seating rule was deliberately not changed - the difference between the
-    two points is along the axis these plug contracts refuse to state, so
-    there is nothing for a renderer to distinguish them with (see either
-    plug's provenance.boot-coincides-with-mate). This test is the other half
-    of that decision: the invariant the omission rests on, enforced across the
-    library rather than asserted in prose, so separating them fails here
-    instead of going quietly wrong in a drawing.
+    The invariant stays, for a narrower reason: a plug's front and rear are one
+    physical axis seen from two directions (either plug's provenance.axis),
+    and in the 2D front view a boot is drawn over the plug at that point. A
+    boot point that drifted in (x, y) would draw the boot off the plug's axis.
     """
     offenders = []
     for f in sorted(LIB.rglob("contract.yaml")):
@@ -106,12 +102,9 @@ def test_a_boot_point_is_the_mate_point():
                 f"{f.relative_to(LIB)}: mate at {cps['mate'].get('at')} but "
                 f"boot at {cps['boot'].get('at')}")
     assert not offenders, (
-        "seating reads the host's `mate` point and never its `boot` point, so "
-        "these parts would seat a boot in the wrong place without erroring:\n  "
-        + "\n  ".join(offenders)
-        + "\nEither move them back together or teach render.py's mate-to "
-          "resolution to prefer a host's `boot` point - and give plug "
-          "contracts the depth that would make the two differ.")
+        "a plug's front and rear are one axis, and a boot is drawn over the "
+        "plug there in 2D; these parts put the two ends at different (x, y):\n  "
+        + "\n  ".join(offenders))
 
 
 def test_both_plugs_say_the_coincidence_is_load_bearing():
