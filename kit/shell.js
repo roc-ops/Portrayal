@@ -963,6 +963,17 @@ export function createShell(opts = {}) {
   // used to leave both optics on the face and the state naming whichever
   // finished last. Now the later request owns the key and the earlier returns
   // null having changed nothing.
+  //
+  // A KEY CAN STILL BE CLAIMED ON A FACE THAT NO LONGER EXISTS: the claim
+  // book is per-key, not per-face, so a config or view change that never
+  // touches `key` leaves its claim untouched and `live()` alone keeps
+  // answering true. `svg` is captured here too - the face this call started
+  // on - and `svg === state.svg` after the await is the second half of the
+  // same freshness test: not just "am I still the newest claim on this key"
+  // but "is the face I am about to write into still on screen". Both must
+  // hold before state is written; loadStage always mounts a fresh element, so
+  // any reload (same view, another view, another config, opening a module)
+  // changes the identity and fails this the same way.
   const claim = seatClaims();
   async function seat(key, ref) {
     if (!state.svg || state.module) return null;
@@ -973,13 +984,14 @@ export function createShell(opts = {}) {
     if (!target || (ref && !(target.accepts || []).includes(ref))) return null;
     const svg = state.svg;
     const live = claim(key);
+    const onFace = () => live() && svg === state.svg;
     if (bay) {
-      await applyOverrides(svg, [bay], {[key]: ref}, loadSkin, live);
-      if (!live()) return null;
+      await applyOverrides(svg, [bay], {[key]: ref}, loadSkin, onFace);
+      if (!onFace()) return null;
       state.cfgBays[key] = ref;
     } else {
-      const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, live);
-      if (!live()) return null;
+      const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, onFace);
+      if (!onFace()) return null;
       delete state.refused[key];
       delete state.failed[key];
       // A REFUSED CAGE IS LEFT EMPTY (applyOccupantOverrides removed what was
@@ -1028,7 +1040,23 @@ export function createShell(opts = {}) {
   const depth = k => k.split('/module/').length;
   const byDepth = keys => [...keys].sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : 1));
   async function reseat() {
+    // THE FACE THIS RESEAT STARTED ON. `seat()`'s own `svg === state.svg`
+    // check catches a face change while ONE key's skin is loading, but not
+    // this: each iteration's ref comes from `state.cfgOccupants`/`cfgBays`,
+    // read fresh and synchronously right before the call, no await in
+    // between. If a config change lands between iterations - the previous
+    // `await seat()` returns into a page that has already run syncCfgBays and
+    // loadStage - `state.svg` is already the NEW face and `seat()` sees no
+    // mismatch, so it would go ahead and read the NEW configuration's answer
+    // for a key from the OLD touched set: undefined for a key it never
+    // touched (seat(key, null) - a spurious empty of a cage the new build may
+    // have filled), or, worse, another key's own value by coincidence. So the
+    // loop itself, not just the call inside it, has to notice its face is
+    // gone and stop - the remaining keys are for whatever reseat the new
+    // config's own loadStage already ran.
+    const svg = state.svg;
     for (const key of byDepth(state.touched)) {
+      if (svg !== state.svg) return;
       const cage = (state.meta?.cages?.[bayView()] || []).some(c => c.id === key);
       await seat(key, cage ? state.cfgOccupants[key] : state.cfgBays[key]);
     }
