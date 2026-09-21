@@ -5447,7 +5447,7 @@ def lint_device_cage_media_disagreement(path, data, lib_roots):
     (a QSFP aperture, not a QSFP-DD one) asks for the QSFP-DD optic while
     presenting the QSFP shape, and nothing before this compared the two.
 
-    THE DECLARED MEDIA GOVERNS the accept list (Jason's ruling, not derived):
+    THE DECLARED MEDIA GOVERNS the accept list (the maintainer's ruling, not derived):
     the media says what the port IS; the aperture says what it looks like,
     and for slotting an optic the former decides. render.py's cage
     derivation already applies that precedence - see `cage_entries` there.

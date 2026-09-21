@@ -286,9 +286,9 @@ def test_the_registry_load_is_not_vacuous():
 # being modelled with `std/qsfp-ganged@1`, a QSFP aperture, not a QSFP-DD
 # one. QSFP-DD and QSFP share a face opening and differ mainly in depth, so
 # the DRAWING may be correct - which family should govern the accept list is
-# Jason's ruling, not something this code derives: the group's media, because
-# the group says what the port IS and the aperture only says what it looks
-# like. `spec/tools/portrayal/lint.py`'s L104
+# the maintainer's ruling, not something this code derives: the group's
+# media, because the group says what the port IS and the aperture only says
+# what it looks like. `spec/tools/portrayal/lint.py`'s L104
 # (`lint_device_cage_media_disagreement`) flags every one of the 78 so the
 # modelling question - aperture wrong, or group media wrong - stays visible;
 # `spec/tests/test_ladder_lint.py` pins that count and the exact six devices.
