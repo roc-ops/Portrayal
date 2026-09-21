@@ -1,6 +1,6 @@
 # Pluggables: generics, connectors, slotting, 3D
 
-Status: design agreed with Jason, 2026-09-18. Four specs, each its own document,
+Status: design agreed 2026-09-18. Four specs, each its own document,
 built in the order below. This page holds what they share and why they are
 split; the detail is in each one.
 
@@ -24,7 +24,7 @@ the compiled drawing, so nothing downstream can find where a cable would land.
 
 ## Decisions
 
-Taken with Jason, 2026-09-18, in this order:
+Taken 2026-09-18, in this order:
 
 | # | decision |
 |---|---|
@@ -105,10 +105,10 @@ A cage's ceiling is its port group's `media`, declared on every port group alrea
 
 ## Sources held
 
-In OKF's `ndv-standards` bundle: SFF-8432 Rev 5.2a (SFP+ module and cage; Fig 4-1,
+Held locally, not in this repository: SFF-8432 Rev 5.2a (SFP+ module and cage; Fig 4-1,
 Table 4-3), SFF-8661 Rev 2.5 (QSFP module; Fig 5-1), SFF-8663 Rev 1.7 (QSFP28 cage),
 QSFP-DD/QSFP-DD800/QSFP112 HW Rev 6.3 (section 7.3 module form factors, Figs 47-50).
-On disk under `working/intake/fiber-connectors/lc`: SENKO DS-LC-000004 (LC plug,
+In the maintainer's intake corpus (`working/`, never tracked): SENKO DS-LC-000004 (LC plug,
 toleranced), TE 2271178, the SENKO technical brochure. Not held: the OSFP MSA (free,
 fetch), a TE RJ45 plug drawing (free, fetch), IEC 61754-20 and IEC 60603-7 (paywalled -
 they gate aperture keyways, not plug or module bodies), TIA-604-10 (paywalled - the

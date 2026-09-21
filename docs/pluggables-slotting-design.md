@@ -1,6 +1,6 @@
 # Pluggables C: slotting in the kit
 
-Status: design agreed with Jason, 2026-09-18. Part of [pluggables-design.md](pluggables-design.md).
+Status: design agreed 2026-09-18. Part of [pluggables-design.md](pluggables-design.md).
 Depends on A for parts to offer. Written now so it survives; refined when A lands.
 
 ## Goal
