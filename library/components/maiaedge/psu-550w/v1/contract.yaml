@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: psu-550w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a
+  four-spoke silver guard with a blue 550W CRPS Platinum label on its hub, a black U handle along
+  the foot, and a vertical C14 inlet in a black shroud with a purple latch tab standing straight
+  out beside it. Takes AC or high-voltage DC through the same inlet. Very probably a Gospower
+  G1251-0550WN-series module; not confirmed.
+size: {w: 73.5, h: 40.0, d: 185.0}
+size-confidence: {w: registry, h: registry, d: registry}
+conforms: crps-1u
+attrs: {power-output-w: 550, input: ac, input-voltage: '100-240 VAC or 180-300 VDC', efficiency: platinum, form-factor: crps-1u, power-absent: not-published}
+provenance:
+  size: >-
+    registry - the CRPS 1U module envelope, 73.5 x 40 x 185, the same as common/psu-550w@2. The
+    face-on rear photograph confirms the width: the two cages read 74.9 and 73.6 mm on a scale
+    taken from the chassis's own 437.9, which is the module plus its cage lip.
+  identity: >-
+    A VISUAL MATCH, NOT A CONFIRMED PART NUMBER. No MaiaEdge document names the supply and its
+    rating label is on the body, hidden in the bay; the hub sticker reads only 550W, CRPS and
+    Platinum. Compared on 2026-09-21 against the product photographs of five 550 W CRPS
+    families: Senao ERA55-CPA2V-BF (square-hole grille - no), Advanced Energy CSU550AP (red
+    latch, proud handle - no), Great Wall GW-CRPS550 (stock images only - undecided), Bel PEC550
+    (same layout and a purple latch, but a grey hub - close), and Gospower G1251-0550WNI (a used
+    unit's listing photographs: blue round hub label, black U handle, vertical C14, purple latch
+    tab standing out of the face - every feature this part draws). Its rating label reads model
+    G1251-0550WNI, P/N CRPS0550-AN, with both AC INPUT and DC INPUT lines. Gospower lists the
+    G1251-0550WNA as a Platinum 550 W CRPS module with "AC+HVDC input" and a 185 x 73.5 x 40 body.
+    common/psu-550w@2 is a G1251-0550WNA too, photographed in the Smartoptics DCP. So `model` is
+    NOT set: an export would publish it as the part's identity, and a photograph of this unit's
+    own label is what would earn it.
+  input: >-
+    datasheet - the Port Extender's page 3: "1+1 Redundant, Hot-Swappable PSUs (100-240VAC or
+    180-300VDC auto-ranging)". One supply takes both, through the same C14 inlet; the DC is
+    high-voltage DC (240/380 V data-centre power), not -48 V. The PBC-2000's datasheet says only
+    "Internal: AC, DC", and this is taken to be the same supply saying the same thing: both
+    devices' photographs show this face and no other, and the PBC-2000's setup guide describes
+    "two redundant AC power inputs". No -48 V DC supply for either device is known.
+  seats: >-
+    renamed from maiaedge/pbc-2000-psu-550w@2 when the Port Extender's setup video showed the same
+    supply in that chassis: a part is named for what it is, and a name that says pbc-2000 would
+    be wrong on the other device it fills.
+  why-not-common-psu-550w: >-
+    PROBABLY THE SAME MODULE, DRAWN DIFFERENTLY - and that is a question to settle, not to paper
+    over. common/psu-550w@2 is a Gospower G1251-0550WNA photographed in the Smartoptics DCP; it
+    draws the handle as a bar across the fan's middle and the latch as a small blue tab at the
+    top right. This part draws what the PBC-2000's square-on photograph
+    (working/intake/maiaedge/pbc/photos/pbc-rear-faceon.jpg) and the Gospower listing both show:
+    the handle folded along the fan's foot, the inlet in a black shroud, and a purple latch tab
+    standing out beside it. If the two are one module, one of them is drawn wrong; until the DCP's
+    own photographs are compared against these, they stay two parts rather than one being
+    guessed into the other.
+  latch: >-
+    field knowledge (the maintainer, 2026-09-21) - THE LATCH STANDS OUT OF THE FACE, it does not
+    lie on it. @1 drew it as a flat plate 11.7 x 22.7 over the shroud's right side, read off the
+    face-on photograph; that broad purple area is the tab's SIDE, seen from the camera, which
+    stood to the right of both supplies and so saw each tab's flank spread leftward from its
+    root. The root is the shroud's right edge, x 63.2 to 65.7; the tab is 22.7 mm tall there
+    and stands 14 mm proud. (That correction made maiaedge/pbc-2000-psu-550w@2; the rename to
+    this part followed the same day.)
+  rating: >-
+    photograph - the hub label reads 550W, CRPS and Platinum, on both supplies. The unit's own
+    rating label is not in view, so its manufacturer and part number are not recorded.
+  elements: >-
+    photo-measured on the rear photograph's per-axis scales (4.137 px/mm across, 3.925 down),
+    relative to each module's left edge and averaged over the two: guard 0.6 to 39.4, fan hub
+    centred at (20.0, 17.7) with the label 18.1 mm across; handle along the foot from y 30.4;
+    shroud 40.3 to 65.7 across and to y 32.4 down; latch 54.0 to 65.7 by 8.1 to 30.8; two round
+    openings below the shroud at x 54.5 and 66.8, the right-hand one with a grey lens, which is
+    taken to be the supply's status lamp.
+  power: >-
+    NOT PUBLISHED as a draw. 550 W is the supply's output rating, not what it imposes.
+states: [ok, fail, absent]
+elements:
+  latch: {at: [63.2, 8.1], size: [2.5, 22.7], class: latch}
+  handle: {at: [0.6, 30.4], size: [38.4, 9.2], class: handle}
+  led: {at: [64.5, 34.3], size: [4.6, 4.6], class: led}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [38.55, 5.75], rotate: 90}
+relief:
+  features:
+  - node: handle
+    out: 2.5
+    confidence: estimated
+    source: the handle is photographed folded flat; its thickness off the face is not stated
+  - node: latch
+    out: 14.0
+    color: '#2f3372'
+    confidence: estimated
+    source: >-
+      the maintainer, 2026-09-21: the latch points toward the user, perpendicular to the face.
+      Its reach is not stated; 14 mm is a CRPS inlet latch's usual throw
+connection-points:
+  power: {at: [52.55, 15.75], direction: rear}
+body:
+  depth: 185.0
+  color: '#b9bec4'
+skins: [default]

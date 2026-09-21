@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: port-extender
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
@@ -121,7 +121,9 @@ provenance:
       rear ... center of the device, at the top". So the rear is drawn SYMMETRIC: a supply at
       each end, two fans either side, and the management panel in the middle with the Ethernet
       jack on top. Every coordinate is chosen to fit that inventory into 438 mm with the small
-      gaps the stills show. The supply is the library's generic 550W CRPS part.
+      gaps the stills show. The supply is maiaedge/psu-550w@1, the PBC-2000's: the video shows
+      the same face - 550W label, C14 with a cord clip - and the datasheet's input range is that
+      part's.
 attrs:
   # SECTIONS FOLLOW THE LIBRARY'S, NOT THE DATASHEET'S TABLE. L68 is the rule
   # that knows: `memory` and `storage` are filed under `platform` by 53 and 51
@@ -153,6 +155,16 @@ attrs:
     eol: none-announced
 chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#a9adb1'}
 gaps:
+- what: psu-identity
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph of one supply's rating label - it is on the module's body, so pull one supply to take it.
+  note: >-
+    The supplies are very probably Gospower G1251-0550WN-series 550 W CRPS modules taking AC
+    or high-voltage DC through one inlet - a visual match on every feature against that
+    module's photographs (see maiaedge/psu-550w@1's `identity`), and the Port Extender
+    datasheet's "100-240VAC or 180-300VDC" is that module's range. But no document names the
+    part, so its model is not recorded and no -48 V DC option is modelled or known.
 - what: rear-positions
   scope: [rear]
   reason: needs-photo
@@ -385,8 +397,8 @@ views:
         size: {w: 73.5, h: 40.0}
         group: psus
         rel-pos: 1
-        accepts: [common/psu-550w@2]
-        default: common/psu-550w@2
+        accepts: [maiaedge/psu-550w@1]
+        default: maiaedge/psu-550w@1
       - id: fan-1
         at: [79.5, 2.0]
         size: {w: 58.8, h: 40.0}
@@ -420,8 +432,8 @@ views:
         size: {w: 73.5, h: 40.0}
         group: psus
         rel-pos: 2
-        accepts: [common/psu-550w@2]
-        default: common/psu-550w@2
+        accepts: [maiaedge/psu-550w@1]
+        default: maiaedge/psu-550w@1
       placements:
       # the CPU/BMC shared Ethernet jack is the TOP one - the documentation puts
       # it "center of the device, at the top" - with the console below it
