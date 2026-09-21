@@ -68,20 +68,30 @@ export function bayTransform(bay, c) {
 // paths with the id base put every descendant of a swapped module at a path
 // nothing could address. `pathBase` defaults to `idBase`, so a device bay - and
 // the existing caller in the tests - reads exactly as before.
-export function rename(wrap, name, idBase, pathBase = idBase) {
+//
+// `segment` IS THE WORD THE BUILD INSERTS, and an occupant has none. A module in
+// a bay lives one namespace level down - `front-0--module--plate` - because the
+// bay is an opening that holds something. An optic seated through `occupants:`
+// is a TOP-LEVEL placement of its own, `port-4-occupant`, and render.py names
+// its children `port-4-occupant--tx` / `port-4-occupant/tx` with nothing in
+// between. `''` means exactly that; the default keeps every bay caller
+// byte-identical.
+export function rename(wrap, name, idBase, pathBase = idBase, segment = 'module') {
+  const idHead = segment ? `${idBase}--${segment}` : idBase;
+  const pathHead = segment ? `${pathBase}/${segment}` : pathBase;
   const renamed = new Map();
   for (const el of wrap.querySelectorAll('[id],[data-path]')) {
     const id = el.getAttribute('id');
     if (id === name) el.removeAttribute('id');
     else if (id && id.startsWith(name + '--')) {
-      const to = `${idBase}--module--${id.slice(name.length + 2)}`;
+      const to = `${idHead}--${id.slice(name.length + 2)}`;
       renamed.set(id, to);
       el.setAttribute('id', to);
     }
     const dp = el.getAttribute('data-path');
-    if (dp === name) el.setAttribute('data-path', `${pathBase}/module`);
+    if (dp === name) el.setAttribute('data-path', pathHead);
     else if (dp && dp.startsWith(name + '/'))
-      el.setAttribute('data-path', `${pathBase}/module/${dp.slice(name.length + 1)}`);
+      el.setAttribute('data-path', `${pathHead}/${dp.slice(name.length + 1)}`);
   }
   // RENAMING A DEFINITION IS HALF THE JOB. A skin that clips, masks or fills by
   // reference carries `clip-path="url(#drive-carrier-25--w0)"` beside the
@@ -138,6 +148,128 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
     (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
   rename(wrap, comp.name, idBase, bayId);
   return wrap;
+}
+
+// SEATING AN OPTIC IN A CAGE is the other half of this module, and it is NOT
+// seatModule with a different argument.
+//
+// PLACED BY MATE POINTS, NOT BY A BAY BOX. A bay is an opening with a size, and
+// bayTransform centres the card in it. A cage has no box to centre anything in:
+// the bay transform is the wrong tool for a part that is larger than its opening
+// on purpose - a QSFP is 52 mm deep behind an 18 mm aperture, and its drawn face
+// is not the cage's. What the build does instead (render.py `seat_point` /
+// `seat_at`) is land the optic's own `mate` connection point on the cage's,
+// turned with the cage: the published cage carries its `mate` already in the
+// device frame with the host's rotation applied, and `occupantAt` solves for the
+// `at` that puts the optic's `mate` there while it is drawn at that same turn.
+// That one formula is repeated from the build, and its parity is proved against
+// a real build (spec/tests/test_cage_seat_js.py), not against itself.
+//
+// A SIBLING, NOT A CHILD. The build draws an occupant as a top-level placement
+// beside its host, carrying `data-for="<cage>"` - that is the shape every
+// consumer already reads. relief.js's `cablePoints` walks `data-for` to group a
+// plug and the boot on it into one connector, and its lift is summed up the
+// ANCESTOR chain; nested inside the cage, the optic would inherit the cage's
+// lift twice and stop being the thing `data-for` names. So a swap removes the
+// `data-for` occupant wherever it is and inserts the new one next to its host.
+function turn([x, y], rotate) {
+  const deg = (((+rotate || 0) % 360) + 360) % 360;
+  const exact = {0: [1, 0], 90: [0, 1], 180: [-1, 0], 270: [0, -1]};
+  const [c, s] = exact[deg] || [Math.cos(deg * Math.PI / 180), Math.sin(deg * Math.PI / 180)];
+  return [x * c - y * s, x * s + y * c];
+}
+
+// render.py's `seat_at`, for a published cage and a components.json entry.
+export function occupantAt(cage, comp) {
+  const cx = comp.size.w / 2, cy = comp.size.h / 2;
+  const [dx, dy] = turn([comp.mate[0] - cx, comp.mate[1] - cy], cage.rotate);
+  const r4 = v => Math.round(v * 1e4) / 1e4;
+  return [r4(cage.mate[0] - cx - dx), r4(cage.mate[1] - cy - dy)];
+}
+
+// The same shape as render.py's placement transform: the occupant turns about
+// its OWN centre, with its host's rotate.
+export function occupantTransform(cage, comp) {
+  const [x, y] = occupantAt(cage, comp);
+  return `translate(${x},${y})`
+       + (cage.rotate ? ` rotate(${cage.rotate} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
+}
+
+// Python's `f"{v:g}"`, which is how the build spells a lift.
+function fmtG(v) {
+  return String(Number((+v).toPrecision(6)));
+}
+
+// EVERY ATTRIBUTE THE OCCUPANT <g> CARRIES except its transform, as a plain
+// {name: value} map so it can be checked without a DOM. Three sources, in the
+// order the build layers them:
+//   the skin root's data-*        - what the optic says about itself (copied as
+//                                   seatModule copies them: data-path excluded);
+//   cage['occupant-attrs']        - render.py's `group_side_attrs` for the host,
+//                                   published per cage: a `media: qsfp-dd` group
+//                                   over the contract's `media: fiber`;
+//   identity                      - id, data-path, data-ref, data-for, and
+//                                   data-z-lift only when the cage stands off.
+// Nothing else. If the build ever writes an attribute none of these can supply,
+// the parity test fails rather than this growing a special case.
+export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${cage.id}-occupant`) {
+  const out = {};
+  for (const [k, v] of Object.entries(skinRootAttrs || {}))
+    if (k.startsWith('data-') && k !== 'data-path') out[k] = v;
+  Object.assign(out, cage['occupant-attrs'] || {});
+  out['id'] = occId;
+  out['data-path'] = occId;
+  out['data-ref'] = `${ref}:${comp.version}`;
+  out['data-for'] = cage.id;
+  if (+cage.lift) out['data-z-lift'] = fmtG(cage.lift);
+  return out;
+}
+
+// The <g> that represents `ref` seated in `cage`, built from the component's
+// compiled standalone skin - the occupant's counterpart of seatModule.
+export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cage.id}-occupant`) {
+  const doc = new DOMParser().parseFromString(skinText, 'image/svg+xml');
+  const root = doc.getElementById(comp.name);
+  const rootAttrs = {};
+  if (root) for (const a of [...root.attributes]) rootAttrs[a.name] = a.value;
+  const wrap = ownerDoc.createElementNS(NS, 'g');
+  for (const [k, v] of Object.entries(occupantAttrs(cage, ref, comp, rootAttrs, occId)))
+    wrap.setAttribute(k, v);
+  wrap.setAttribute('transform', occupantTransform(cage, comp));
+  for (const n of [...doc.documentElement.childNodes])
+    (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
+  rename(wrap, comp.name, occId, occId, '');
+  return wrap;
+}
+
+// Apply an occupant override map - cage id -> ref, or -> null/'' for an emptied
+// cage - to one compiled face. `cages` is the published `cages[view]` list and
+// `loadSkin(ref)` returns {comp, text} or null (it may return a promise).
+//
+// The OWN-KEY rule is applyOverrides': `{port-4: null}` means the optic was
+// pulled and must remove the built one, where an absent key means nobody
+// touched that cage.
+//
+// WHAT IS REMOVED is the element that is `data-for` the cage AND
+// `data-behaviour="occupies"` - the build's occupant or a previous swap's. An
+// LED and a port's silkscreen label are `data-for` the port too, and matching
+// on `data-for` alone would take the lamp out with the optic.
+export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin) {
+  let applied = 0;
+  for (const cage of cages) {
+    if (!Object.prototype.hasOwnProperty.call(overrides, cage.id)) continue;
+    const host = bayGroup(rootEl, cage.id);
+    if (!host) continue;
+    const sel = `[data-for="${CSS.escape(cage.id)}"][data-behaviour="occupies"]`;
+    for (const old of [...rootEl.querySelectorAll(sel)]) old.remove();
+    applied++;
+    const ref = overrides[cage.id];
+    if (!ref) continue;                       // deliberately empty
+    const loaded = await loadSkin(ref);
+    if (!loaded) continue;                    // unknown ref: leave the cage empty
+    host.after(seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text));
+  }
+  return applied;
 }
 
 // The path of a bay's opening in a compiled drawing. render.py gives the bay rect

@@ -40,6 +40,23 @@ const refs = nodes
   .map(n => n.getAttribute('clip-path') || n.getAttribute('fill'))
   .filter(Boolean);
 
+// A CAGE HAS NO NAMESPACE WORD. An optic seated in `port-4` is the top-level
+// `port-4-occupant`, and rename's `segment = ''` names its children
+// `port-4-occupant--w0` - the second pass has to follow that spelling too, or
+// every clipped optic a swap seats draws unclipped the way the drive carrier did.
+const optic = [
+  el({id: 'sfp-lc', 'data-path': 'sfp-lc'}),
+  el({id: 'sfp-lc--w0'}),                                 // <clipPath>
+  el({'clip-path': 'url(#sfp-lc--w0)', 'data-path': 'sfp-lc/face'}),
+  el({fill: 'url(#portrayal-vent)'}),
+];
+m.rename({querySelectorAll: () => optic}, 'sfp-lc', 'port-4-occupant',
+         'port-4-occupant', '');
+const cageIds = optic.map(n => n.getAttribute('id')).filter(Boolean);
+const cageRefs = optic
+  .map(n => n.getAttribute('clip-path') || n.getAttribute('fill'))
+  .filter(Boolean);
+
 console.log(JSON.stringify({
   ids,
   refs,
@@ -47,4 +64,9 @@ console.log(JSON.stringify({
   dangling: refs
     .map(r => (r.match(/url\(#([^)]*)\)/) || [])[1])
     .filter(id => id && id.startsWith('drive-') && !ids.includes(id)),
+  cageIds,
+  cageRefs,
+  cageDangling: cageRefs
+    .map(r => (r.match(/url\(#([^)]*)\)/) || [])[1])
+    .filter(id => id && id !== 'portrayal-vent' && !cageIds.includes(id)),
 }));
