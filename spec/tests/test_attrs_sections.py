@@ -21,7 +21,7 @@ from portrayal import lint
 from portrayal import libwalk
 
 PROFILES = capability.load_profiles(SPEC / "schemas")
-MANIFESTS = libwalk.iter_devices([LIB])
+MANIFESTS = list(libwalk.iter_devices([LIB]))
 
 
 @functools.lru_cache(maxsize=None)

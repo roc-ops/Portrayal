@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr180
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-16X
@@ -100,7 +100,7 @@ attrs:
   power: {power-envelope: unstated, power-input-dc: '36 V - 72 V, 6 A'}
   thermal: {airflow: passive (no internal fans; 1 m/s external airflow required), cooling: passive - no fans of any kind}
   environmental: {temperature-operating: -40 C to 65 C (-40 F to 149 F), temperature-storage: -40 C to 70 C (-40 F to 158 F),
-    humidity-operating: 5% to 95%, altitude: 5000 m at 40 C}
+    humidity-operating: 5% to 95%, altitude: 5000 m at 40 C, temperature-operating-transceiver: -40 C to 65 C}
   platform: {asic: Broadcom BCM88273 Qumran-UX, cpu: 'Intel Atom C3308, 2-core', memory: DDR4 8 GB,
     storage: 32 GB M.2 SSD, oscillator: Stratum 3E compliant OCXO, software: 'ONIE installer pre-loaded;
       Open Network Linux (ONL) compatible'}
@@ -110,7 +110,6 @@ attrs:
     timing-ports: ToD/1PPS (RJ-45), 1PPS I/O (SMB), 10MHz I/O (SMB)
     optics-sfp-plus: 10GBASE-SR/LR/ER/ZR, 10G DAC/AOC
     optics-sfp: 1000BASE-SX/LX/EX/ZX
-    transceiver-temperature: -40 C to 65 C
   management: {mgmt-ports: '1x RJ-45 1000BASE-T management, 1x RJ-45 serial console, 1x USB 2.0 storage'}
   compliance:
     emissions: >-
