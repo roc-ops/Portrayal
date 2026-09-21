@@ -7,6 +7,7 @@ One SVG per view. Deterministic output: no timestamps; tool version stamped in
 import argparse
 import copy
 import json
+import math
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -562,6 +563,64 @@ def _inset_feature(feat, back, group_lift=0.0):
             if f.get(k) is not None:
                 f[k] = round(top - (f.get("lift") or 0.0), 4)
     return f
+
+
+def _turn(v, rotate):
+    """Rotate vector v by `rotate` degrees, SVG convention (x' = x cos - y sin,
+    y' = x sin + y cos). Exact for the right angles the corpus uses."""
+    deg = float(rotate or 0) % 360
+    exact = {0: (1, 0), 90: (0, 1), 180: (-1, 0), 270: (0, -1)}
+    c, s = exact.get(deg, (math.cos(math.radians(deg)), math.sin(math.radians(deg))))
+    return (v[0] * c - v[1] * s, v[0] * s + v[1] * c)
+
+
+def seat_point(at, size, rotate, local):
+    """Where `local` (a point in a placement's own frame) lands in the device
+    frame, for a placement drawn translate(at) rotate(deg w/2 h/2)."""
+    cx, cy = size["w"] / 2, size["h"] / 2
+    dx, dy = _turn((local[0] - cx, local[1] - cy), rotate)
+    return [round(at[0] + cx + dx, 4), round(at[1] + cy + dy, 4)]
+
+
+def seat_at(point, rotate, occ_size, occ_mate):
+    """The `at` that lands an occupant's `occ_mate` on `point` when the
+    occupant is drawn translate(at) rotate(deg w/2 h/2) - the inverse of
+    seat_point for the occupant."""
+    cx, cy = occ_size["w"] / 2, occ_size["h"] / 2
+    dx, dy = _turn((occ_mate[0] - cx, occ_mate[1] - cy), rotate)
+    return [round(point[0] - cx - dx, 4), round(point[1] - cy - dy, 4)]
+
+
+def group_side(grp):
+    """What a placement takes from its `groups:` entry, as the build writes it:
+    (attrs, role, description).
+
+    ONE FUNCTION, TWO READERS. draw_placement puts these on every placement it
+    draws - the attrs under the placement's own (so a group's `media: qsfp-dd`
+    overrides a seated optic's contract `media: fiber`), `data-group-role`, and
+    `data-description` when the placement has none of its own. `occupant_attrs`
+    publishes the same three for a cage, so the kit can seat an optic and write
+    exactly what the build would have written. Two copies of this list would
+    be one new group key away from disagreeing about what an optic says.
+    """
+    grp = grp or {}
+    return grp.get("attrs") or {}, grp.get("role"), grp.get("description")
+
+
+def occupant_attrs(group_name, grp):
+    """The host-side `data-*` the build writes on an occupant seated through
+    `occupants:` - which takes its host's `group` and nothing else from it
+    (see the expansion in render_view). The occupant's own contract supplies
+    the rest; these are overlaid on it."""
+    gattrs, role, description = group_side(grp)
+    out = {f"data-{k}": str(v) for k, v in sorted(gattrs.items())}
+    if group_name:
+        out["data-group"] = group_name
+    if role:
+        out["data-group-role"] = role
+    if description:
+        out["data-description"] = description
+    return out
 
 
 def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None):
@@ -1766,8 +1825,35 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     f"{p['id']}: mate-to needs a 'mate' connection-point on both "
                     f"{p['ref']} and {host['ref']} - the host may also present "
                     "one through a composed aperture")
-            seated = dict(p, at=[round(host["at"][0] + hm_at[0] - om["at"][0], 4),
-                                 round(host["at"][1] + hm_at[1] - om["at"][1], 4)])
+            # A SEATED PART TURNS WITH ITS HOST (docs/pluggables-slotting-
+            # design.md, D3). 941 of the library's cages are drawn rotated -
+            # 940 at 180, one at 90 - and this used to seat every one of them
+            # as if upright: `host.at + host_mate - occupant_mate`, no rotate
+            # carried, so the optic's mate point missed the cage's TURNED one
+            # and the optic was drawn the wrong way up. The host's mate point
+            # is now taken into the device frame with the host's own rotation
+            # (seat_point), and the occupant is solved to land its mate there
+            # while drawn at that same rotation (seat_at). At rotate 0 the two
+            # reduce exactly to the old formula, so no unrotated seat moves.
+            hrot = host.get("rotate")
+            if host.get("mirror"):
+                raise ValueError(
+                    f"{p['id']}: its host {p['mate-to']!r} is mirrored, and a "
+                    "mirrored host cannot seat an occupant - handedness of a "
+                    "seated part is not a question the seating rule answers")
+            if p.get("rotate") is not None and \
+                    float(p["rotate"]) % 360 != float(hrot or 0) % 360:
+                raise ValueError(
+                    f"{p['id']}: declares rotate {p['rotate']} but its host "
+                    f"{p['mate-to']!r} is at {hrot or 0} - a seated part turns "
+                    "with its host; drop the rotate")
+            seated = dict(p, at=seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
+                                        hrot, oc["size"], om["at"]))
+            # Omitted when the host has none, so an unrotated seat's output
+            # does not change. A chained seat (a boot on a plug in a rotated
+            # cage) inherits it: `hosts` holds this dict.
+            if hrot:
+                seated["rotate"] = hrot
             # WHAT SEATS RECORDS ITS HOST, HOWEVER IT WAS AUTHORED. `occupants:`
             # writes `for: host` when it expands (see above); a HAND-WRITTEN
             # `mate-to` - which the spec offers in the same breath as
@@ -1961,7 +2047,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if p.get("optional") and p["optional"] not in include:
             return
         grp = dev_groups.get(p.get("group")) or {}
-        gattrs = grp.get("attrs") or {}
+        # group_side, not three reads of `grp` here: cage_entries publishes
+        # the same answer as `occupant-attrs` (see occupant_attrs).
+        gattrs, grole, gdesc = group_side(grp)
         merged_attrs = {**gattrs, **(p.get("attrs") or {})} or None
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
                                      None, merged_attrs,
@@ -2007,8 +2095,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # that needs it is looking at a member and has no way back to `groups:`.
         # A PSU bay and a line-card bay are both data-class `bay`; this is the
         # only thing that separates them. See L37.
-        if grp.get("role"):
-            g.set("data-group-role", grp["role"])
+        if grole:
+            g.set("data-group-role", grole)
         if p.get("in"):
             # a projection is flat: nothing is built from it, so it carries no
             # lift - but it keeps data-in, which the pull machinery reads
@@ -2032,7 +2120,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # The sentence the vendor wrote, kept beside the tokens rather than
         # instead of them. "Blue = 100G, Green = 40G" is not a state list and was
         # never usable as one; it is still worth carrying, so it travels as prose.
-        desc = p.get("description") or grp.get("description")
+        desc = p.get("description") or gdesc
         if desc:
             g.set("data-description", desc)
         # what this part belongs to - an LED to its port. The tree nests on it and
@@ -2577,7 +2665,7 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     out = []
     for p in view_parts(view)["placements"]:
         contract, _skins = lib.resolve(p["ref"])
-        interface, _mate_at, _lift = presented_interface(contract, _resolve)
+        interface, mate_at, lift = presented_interface(contract, _resolve)
         found = _family_by_interface(families, interface) if interface else None
         if found is None:
             continue
@@ -2623,6 +2711,15 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
             "rotate": p.get("rotate"),
             "accepts": _cage_accepts(candidates, families, accept_family, media),
             "occupant": (occ.get("ref") if isinstance(occ, dict) else occ) if occ else None,
+            # WHERE AN OCCUPANT MATES, in the device frame with the cage's own
+            # rotation applied - the point the build's `mate-to` resolution
+            # seats on (seat_point), so a consumer seating an optic here lands
+            # it where the build would. `lift` is the host's presented lift,
+            # what that resolution carries as `host-lift`.
+            "mate": (seat_point(p["at"], contract["size"], p.get("rotate"), mate_at)
+                     if mate_at is not None else None),
+            "lift": float(lift or 0.0),
+            "occupant-attrs": occupant_attrs(p.get("group"), groups.get(p.get("group"))),
         })
     return out
 
@@ -2779,6 +2876,25 @@ def main():
                  # `configs[<name>].bays` rather than `bays[view][].default`;
                  # `occupant` here is the convenience answer for the
                  # configuration named by `default` at the top level.
+                 #
+                 # THREE KEYS SAY HOW TO SEAT ONE, so a consumer (kit/swap.js)
+                 # can put an optic in a cage without re-deriving the build:
+                 #   mate            [x, y], where an occupant's own `mate`
+                 #                   point lands, in the DEVICE frame with the
+                 #                   cage's `rotate` applied (seat_point). An
+                 #                   occupant takes the cage's `rotate` too
+                 #                   (D3), and its `at` is seat_at(mate, rotate,
+                 #                   occupant size, occupant mate).
+                 #   lift            float, the cage's presented lift - what
+                 #                   `mate-to` resolution carries as
+                 #                   `host-lift`, and the occupant's
+                 #                   data-z-lift when non-zero.
+                 #   occupant-attrs  {data-attr: string}, every attribute the
+                 #                   build writes on a seated occupant from the
+                 #                   HOST's side (its group's attrs,
+                 #                   data-group, data-group-role,
+                 #                   data-description), overlaid on what the
+                 #                   occupant's own contract says.
                  "cages": {v: cage_entries(device, v, lib, _families, _candidates,
                                             _default_occupants)
                            for v in device["views"]}}

@@ -80,6 +80,41 @@ def test_the_optic_lands_where_the_mate_points_meet(tmp_path):
     assert abs((hy + hm[1]) - (oy + om[1])) < 0.01
 
 
+def test_the_optic_lands_where_the_mate_points_meet_in_a_rotated_cage(tmp_path):
+    """The same claim on `port-2`, a `common/qsfp-cage@2` drawn at rotate 180:
+    the optic turns with its cage (D3) and its mate point meets the cage's
+    TURNED one. Before this it was seated as if upright - translate only, the
+    same offset from its cage as port-0's - and missed. Both groups'
+    transforms are applied numerically (rotate about the given centre, then
+    translate); test_seat_rotation.py has the upright port beside it."""
+    import math
+    svg = render(fitted_copy(tmp_path, {"port-2": "generic/qsfp-lc@1"}), tmp_path / "o")
+
+    def device_point(path, local):
+        tf = re.search(rf'<g[^>]*data-path="{path}"[^>]*transform="([^"]+)"', svg).group(1)
+        m = re.fullmatch(r"translate\(([^,]+),([^)]+)\) rotate\(([^ ]+) ([^ ]+) ([^)]+)\)", tf)
+        assert m, (path, tf)
+        tx, ty, deg, cx, cy = (float(v) for v in m.groups())
+        assert deg == 180
+        c, s_ = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+        x, y = local
+        return (tx + cx + (x - cx) * c - (y - cy) * s_,
+                ty + cy + (x - cx) * s_ + (y - cy) * c)
+
+    # The cage's point is FORWARDED from the aperture it composes, so it is
+    # read the way the build reads it (manifest.presented_interface).
+    from portrayal.manifest import presented_interface
+    from portrayal.render import Library
+    lib = Library([str(LIB)])
+    _, hm, _ = presented_interface(lib.resolve("common/qsfp-cage@2")[0],
+                                   lambda r: lib.resolve(r)[0])
+    om = yaml.safe_load((LIB / "components/generic/qsfp-lc/v1/contract.yaml")
+                        .read_text())["connection-points"]["mate"]["at"]
+    hx, hy = device_point("port-2", hm)
+    ox, oy = device_point("port-2-occupant", om)
+    assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6, ((hx, hy), (ox, oy))
+
+
 def test_the_interface_check_reaches_a_configuration(tmp_path):
     """A QSFP generic declared into an SFP cage is an error wherever it was
     declared - right about position, silent about fit would be the worse half."""

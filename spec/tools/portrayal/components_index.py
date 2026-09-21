@@ -140,6 +140,14 @@ def main():
                 "_detail": {"provenance": data.get("provenance") or {},
                             "relief": data.get("relief") or {}},
             }
+            # WHERE IT MATES, in its own frame - the contract's own `mate.at`,
+            # never a forwarded one: an occupant mates with its own point
+            # (L11). A consumer seating it in a cage solves its `at` from this
+            # and the cage's published `mate` (render.seat_at). Omitted when
+            # the contract has no mate point.
+            cmate = (data.get("connection-points") or {}).get("mate")
+            if cmate and cmate.get("at") is not None:
+                entry["mate"] = list(cmate["at"])
             files = {}
             for skin in entry["skins"]:
                 if not (cf.parent / "skins" / f"{skin}.svg").exists():
