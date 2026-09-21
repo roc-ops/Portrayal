@@ -22,19 +22,17 @@ provenance:
   stack-orientation:
     confidence: estimated
     note: >-
-      The belly-to-belly cage pairs on this face follow the library's stack convention
-      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
-      the lower turned 180, so both cage lips face the band between the two cages and both bails
-      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
-      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
-      of the stack that shows otherwise overturns it. 1 pair was drawn with the UPPER cage turned
-      before the std cage art moved its lip to the bottom of the opening; turning it to the
-      convention keeps the lips in the middle band where they were drawn, and seats every optic
-      bail-outward. common/qsfp-cage@2 carries a bezel flange on the belly side, drawn at the
-      bottom of the upright cage since 2.1.0; each lower QSFP28 cage turned with the convention
-      and draws as before, and each upper one kept its opening where it was measured, its box
-      moving 0.15 right and 0.6 down so the flange now sits on the belly side, in the band between
-      the rows.
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (mgmt-sfp-0/mgmt-sfp-1), the 8
+      QSFP pairs (port-0/port-1 to port-14/port-15), the 7 QSFP-DD pairs (port-16/port-17 to
+      port-28/port-29). 1 of these were drawn with the upper cage turned before the std cage art
+      moved its lip to the bottom of the opening; turning them keeps the lips in the middle band
+      where they were drawn and seats every optic bail-outward. common/qsfp-cage@3 draws its bezel
+      flange on the belly side with the opening centred across it; every opening stays where it
+      was measured, so each upper cage's box moves 0.075 across and 0.6 down and its flange now
+      sits in the band between the rows.
   sources:
     note: >-
       UfiSpace S9600-30DX datasheet for dimensions, weight, port inventory, platform, timing,
@@ -82,8 +80,9 @@ provenance:
     note: >-
       drawing - four columns, each a pair of 2-high stacked cages: one band spanning grid rows 1-2
       and another spanning rows 3-4. Aperture runs measure 43.43-62.09, 66.82-85.47, 90.21-108.86
-      and 113.59-132.25 mm, all 18.66 wide on a 23.39 pitch, so common/qsfp-cage@2 (19.5) is
-      centred on each at lefts 43.01 + 23.39k. NUMBERING RUNS DOWN EACH COLUMN, not across the
+      and 113.59-132.25 mm, all 18.66 wide on a 23.39 pitch, so common/qsfp-cage@3 (19.5) is
+      centred on each, box lefts 43.085 + 23.39k (43.01 under @2, whose opening sat 0.075 off
+      the box centre). NUMBERING RUNS DOWN EACH COLUMN, not across the
       row: the green label band above the upper pair reads '▲ 0 ⊙⊙ 1 ▼', '▲ 2 ⊙⊙ 3 ▼' and so on,
       so column k carries ports 2k over 2k+1 in the upper band and 8+2k over 9+2k in the lower.
       Read at 5x off the photograph and confirmed against HIG Figure 8, which prints 0 2 4 6
@@ -637,22 +636,22 @@ views:
         - {ref: common/led-dot@1, id: led-port-27, at: [282.6, 50.83], for: port-27, group: port-leds, rel-pos: 28}
         - {ref: common/led-dot@1, id: led-port-28, at: [288.73, 36.12], for: port-28, group: port-leds, rel-pos: 29}
         - {ref: common/led-dot@1, id: led-port-29, at: [288.73, 50.83], for: port-29, group: port-leds, rel-pos: 30}
-        - {ref: common/qsfp-cage@2, id: port-0, at: [43.16, 15.77], group: qsfp28, rel-pos: 0}
-        - {ref: common/qsfp-cage@2, id: port-1, at: [43.01, 30.43], rotate: 180, group: qsfp28, rel-pos: 1}
-        - {ref: common/qsfp-cage@2, id: port-8, at: [43.16, 45.74], group: qsfp28, rel-pos: 8}
-        - {ref: common/qsfp-cage@2, id: port-9, at: [43.01, 60.55], rotate: 180, group: qsfp28, rel-pos: 9}
-        - {ref: common/qsfp-cage@2, id: port-2, at: [66.55, 15.77], group: qsfp28, rel-pos: 2}
-        - {ref: common/qsfp-cage@2, id: port-3, at: [66.4, 30.43], rotate: 180, group: qsfp28, rel-pos: 3}
-        - {ref: common/qsfp-cage@2, id: port-10, at: [66.55, 45.74], group: qsfp28, rel-pos: 10}
-        - {ref: common/qsfp-cage@2, id: port-11, at: [66.4, 60.55], rotate: 180, group: qsfp28, rel-pos: 11}
-        - {ref: common/qsfp-cage@2, id: port-4, at: [89.94, 15.77], group: qsfp28, rel-pos: 4}
-        - {ref: common/qsfp-cage@2, id: port-5, at: [89.79, 30.43], rotate: 180, group: qsfp28, rel-pos: 5}
-        - {ref: common/qsfp-cage@2, id: port-12, at: [89.94, 45.74], group: qsfp28, rel-pos: 12}
-        - {ref: common/qsfp-cage@2, id: port-13, at: [89.79, 60.55], rotate: 180, group: qsfp28, rel-pos: 13}
-        - {ref: common/qsfp-cage@2, id: port-6, at: [113.32, 15.77], group: qsfp28, rel-pos: 6}
-        - {ref: common/qsfp-cage@2, id: port-7, at: [113.17, 30.43], rotate: 180, group: qsfp28, rel-pos: 7}
-        - {ref: common/qsfp-cage@2, id: port-14, at: [113.32, 45.74], group: qsfp28, rel-pos: 14}
-        - {ref: common/qsfp-cage@2, id: port-15, at: [113.17, 60.55], rotate: 180, group: qsfp28, rel-pos: 15}
+        - {ref: common/qsfp-cage@3, id: port-0, at: [43.085, 15.77], group: qsfp28, rel-pos: 0}
+        - {ref: common/qsfp-cage@3, id: port-1, at: [43.085, 30.43], rotate: 180, group: qsfp28, rel-pos: 1}
+        - {ref: common/qsfp-cage@3, id: port-8, at: [43.085, 45.74], group: qsfp28, rel-pos: 8}
+        - {ref: common/qsfp-cage@3, id: port-9, at: [43.085, 60.55], rotate: 180, group: qsfp28, rel-pos: 9}
+        - {ref: common/qsfp-cage@3, id: port-2, at: [66.475, 15.77], group: qsfp28, rel-pos: 2}
+        - {ref: common/qsfp-cage@3, id: port-3, at: [66.475, 30.43], rotate: 180, group: qsfp28, rel-pos: 3}
+        - {ref: common/qsfp-cage@3, id: port-10, at: [66.475, 45.74], group: qsfp28, rel-pos: 10}
+        - {ref: common/qsfp-cage@3, id: port-11, at: [66.475, 60.55], rotate: 180, group: qsfp28, rel-pos: 11}
+        - {ref: common/qsfp-cage@3, id: port-4, at: [89.865, 15.77], group: qsfp28, rel-pos: 4}
+        - {ref: common/qsfp-cage@3, id: port-5, at: [89.865, 30.43], rotate: 180, group: qsfp28, rel-pos: 5}
+        - {ref: common/qsfp-cage@3, id: port-12, at: [89.865, 45.74], group: qsfp28, rel-pos: 12}
+        - {ref: common/qsfp-cage@3, id: port-13, at: [89.865, 60.55], rotate: 180, group: qsfp28, rel-pos: 13}
+        - {ref: common/qsfp-cage@3, id: port-6, at: [113.245, 15.77], group: qsfp28, rel-pos: 6}
+        - {ref: common/qsfp-cage@3, id: port-7, at: [113.245, 30.43], rotate: 180, group: qsfp28, rel-pos: 7}
+        - {ref: common/qsfp-cage@3, id: port-14, at: [113.245, 45.74], group: qsfp28, rel-pos: 14}
+        - {ref: common/qsfp-cage@3, id: port-15, at: [113.245, 60.55], rotate: 180, group: qsfp28, rel-pos: 15}
         - {ref: std/qsfp-dd@1, id: port-16, at: [143.63, 30.52], group: qsfpdd-100g, rel-pos: 16}
         - {ref: std/qsfp-dd@1, id: port-17, at: [143.63, 45.23], rotate: 180, group: qsfpdd-100g, rel-pos: 17}
         - {ref: std/qsfp-dd@1, id: port-18, at: [163.12, 30.52], group: qsfpdd-100g, rel-pos: 18}

@@ -140,6 +140,17 @@ def test_an_exception_that_names_no_pair_is_itself_a_finding():
     assert "not a checked belly-to-belly pair" in msg
 
 
+def test_an_exception_on_a_pair_that_already_conforms_is_a_finding():
+    """An exception says the stack is built otherwise; a pair drawn upper 0 over
+    lower 180 contradicts that, whatever the reason says."""
+    doc = {"parts": [_cage("a", (0, 0)), _cage("b", (0, 15), 180)],
+           "stack-exceptions": [{"pair": ["a", "b"], "reason": "x" * 40}]}
+    (msg,) = _findings(doc)
+    assert "already follows the convention" in msg
+    doc["parts"][1] = _cage("b", (0, 15))
+    assert _findings(doc) == []
+
+
 def test_the_device_form_reads_views_and_a_view_scoped_exception():
     view = {"components": {"placements": [_cage("a", (0, 0)), _cage("b", (0, 15))]}}
     doc = {"views": {"front": view}}

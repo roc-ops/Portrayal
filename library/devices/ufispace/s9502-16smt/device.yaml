@@ -23,17 +23,15 @@ stack-exceptions:
     Photo-measured, in provenance.cage-mirroring. This device's own front photograph gives a
     cavity pitch of 15.4-15.8 mm between the stacked rows, against 15.8 for two cages the same
     way round and 12.7 or 17.3 for a mirrored pair - the render-against-photograph test that
-    settled the S9500-22XST. The rows share one orientation, so neither is turned.
+    settled the S9500-22XST. The rows share one orientation, so neither is turned. Like that
+    test, it assumes the real cavity sits off-centre as std/sfp-ganged's does; a centred one
+    would read the same either way.
 provenance:
   stack-orientation:
     confidence: photo-measured
     note: >-
-      Every belly-to-belly cage pair on this face is declared in stack-exceptions. The library's
-      stack convention (docs/pluggables-3d-design.md, S1-S4) would draw each pair upper rotate 0
-      over lower 180, both cage lips into the band and both bails outward; the
-      render-against-photograph cavity-pitch reading in cage-mirroring says these rows are built
-      the same way up, so neither row is turned. A photograph of an empty cage column settles it
-      either way.
+      Declared in stack-exceptions with the reading that keeps them otherwise: the 6 SFP pairs
+      (port-4/port-5 to port-14/port-15).
   sources:
     note: >-
       UfiSpace S9502-16SMT datasheet for dimensions, weight, port inventory, platform, timing,
@@ -153,6 +151,7 @@ provenance:
       backwards on the S9500-22XST last night and caught only by the matched-scale render; it is
       applied the corrected way round here and re-checked the same way.
   cage-mirroring:
+    confidence: photo-measured
     note: >-
       The stacked SFP and SFP+ rows are drawn UNMIRRORED, which is what the same
       render-against-photograph test established on the S9500-22XST: rotating a std/sfp-ganged

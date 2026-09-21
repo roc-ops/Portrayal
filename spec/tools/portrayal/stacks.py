@@ -45,8 +45,10 @@ and in a component contract:
 
 Several pairs that share one reason go in one entry as `pairs: [[a, b], [c, d]]`.
 A device may add `view:` where the same ids pair in more than one view. An
-entry naming ids that are not a checked pair is itself a finding, so an
-exception cannot outlive the stack it excused.
+entry naming ids that are not a checked pair is itself a finding, and so is
+one on a pair that already follows the convention - an exception says the stack
+is built otherwise, and a conforming pair contradicts that - so an exception
+cannot outlive the stack it excused, nor sit on one its reading never turned.
 """
 
 # face family by presented interface; anything not here is out of scope
@@ -225,6 +227,17 @@ def findings(doc, resolve, is_device):
         e = excepted(exc, pr, vname)
         if e is not None:
             hit.add((vname, key) if (vname, key) in exc else (None, key))
+            # AN EXCEPTION SAYS THE STACK IS BUILT OTHERWISE, so one on a pair
+            # that already follows the convention contradicts its own reason:
+            # either the pair was turned and the exception left behind, or the
+            # reading was never applied. Both are findings, not silence.
+            if conforms(pr):
+                where = f"{vname}: " if vname else ""
+                msgs.append(
+                    f"{where}stack-exceptions names {pr['first']['id']}/{pr['second']['id']}, "
+                    f"which already follows the convention ({state(pr)}) - an exception is "
+                    f"for a pair built otherwise; remove it, or turn the pair the way its "
+                    f"reason says")
             continue
         if conforms(pr):
             continue

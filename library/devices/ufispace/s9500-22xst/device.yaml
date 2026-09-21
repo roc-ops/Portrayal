@@ -23,18 +23,21 @@ stack-exceptions:
     Photo-measured, in provenance.cage-mirroring. Rendering the model and the front photograph
     to the same 8 px/mm, the two rows' dark cavities sit 15.4 mm apart - what two cages the same
     way round give (15.0), not a mirrored pair (12.7 or 17.3). The SFP+ and SFP28 rows are built
-    the same way up, so neither row is turned.
+    the same way up, so neither row is turned. The test assumes the real cage's dark cavity sits
+    off-centre in its opening the way std/sfp-ganged's does; a real cavity that is centred would
+    read 15.0 either way, so a photograph of an empty cage is still wanted.
 provenance:
   stack-orientation:
     confidence: estimated
     note: >-
-      The belly-to-belly cage pairs on this face follow the library's stack convention
-      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
-      the lower turned 180, so both cage lips face the band between the two cages and both bails
-      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
-      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
-      of the stack that shows otherwise overturns it. 8 pairs are declared in stack-exceptions
-      with the reading that keeps them otherwise.
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 QSFP pair (port-20/port-21). Declared in
+      stack-exceptions with the reading that keeps them otherwise: the 8 SFP pairs (port-4/port-5
+      to port-18/port-19). The QSFP28 pair has no reading of its own - the cavity-pitch test is
+      blind to std/qsfp28's symmetric cavity - so it takes the rule, and the unmirrored SFP rows
+      beside it are a reason to photograph it.
   sources:
     note: >-
       UfiSpace S9500-22XST datasheet for dimensions, weight, port inventory, platform, timing,

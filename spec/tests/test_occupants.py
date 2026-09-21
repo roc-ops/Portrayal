@@ -81,7 +81,7 @@ def test_the_optic_lands_where_the_mate_points_meet(tmp_path):
 
 
 def test_the_optic_lands_where_the_mate_points_meet_in_a_rotated_cage(tmp_path):
-    """The same claim on `port-3`, a `common/qsfp-cage@2` drawn at rotate 180
+    """The same claim on `port-3`, a `common/qsfp-cage@3` drawn at rotate 180
     (the lower of the S9510-28DC's QSFP28 pair - docs/pluggables-3d-design.md, S3):
     the optic turns with its cage (D3) and its mate point meets the cage's
     TURNED one. Before this it was seated as if upright - translate only, the
@@ -107,7 +107,7 @@ def test_the_optic_lands_where_the_mate_points_meet_in_a_rotated_cage(tmp_path):
     from portrayal.manifest import presented_interface
     from portrayal.render import Library
     lib = Library([str(LIB)])
-    _, hm, _ = presented_interface(lib.resolve("common/qsfp-cage@2")[0],
+    _, hm, _ = presented_interface(lib.resolve("common/qsfp-cage@3")[0],
                                    lambda r: lib.resolve(r)[0])
     om = yaml.safe_load((LIB / "components/generic/qsfp-lc/v1/contract.yaml")
                         .read_text())["connection-points"]["mate"]["at"]

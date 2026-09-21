@@ -155,7 +155,7 @@ def test_both_optics_mate_on_their_cages(tmp_path):
     assert parse_transform(transform_of(svg, "port-3-occupant"))[2][0] == 180
     assert parse_transform(transform_of(svg, "port-2-occupant"))[2] is None
     for port in ("port-2", "port-3"):
-        host_pt, occ_pt = device_frame_mates(svg, port, "common/qsfp-cage@2", occ)
+        host_pt, occ_pt = device_frame_mates(svg, port, "common/qsfp-cage@3", occ)
         assert abs(host_pt[0] - occ_pt[0]) < 1e-6, (port, host_pt, occ_pt)
         assert abs(host_pt[1] - occ_pt[1]) < 1e-6, (port, host_pt, occ_pt)
 

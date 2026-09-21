@@ -82,9 +82,9 @@ def test_a_bucket_of_three_families_is_a_warning_that_names_them():
     """The S9510-28DC as it was: `ports` holding QSFP-DD/400G, QSFP28/100G and
     SFP28/25G, which is why it could carry no attrs at all."""
     _, warns = check(device({"ports": {"term": "Port"}}, [
-        {"id": "port-0", "ref": "common/qsfp-cage@2", "group": "ports",
+        {"id": "port-0", "ref": "common/qsfp-cage@3", "group": "ports",
          "attrs": {"media": "qsfp-dd", "speed": "400g"}},
-        {"id": "port-2", "ref": "common/qsfp-cage@2", "group": "ports",
+        {"id": "port-2", "ref": "common/qsfp-cage@3", "group": "ports",
          "attrs": {"media": "qsfp28", "speed": "100g"}},
         {"id": "port-4", "ref": "std/sfp-ganged@1", "group": "ports",
          "attrs": {"media": "sfp28", "speed": "25g"}},

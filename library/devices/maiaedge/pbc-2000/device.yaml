@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 7.0.0
+version: 8.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -34,13 +34,13 @@ provenance:
     confidence: registry
     note: >-
       registry - each opening is the APERTURE the component declares, not the component's outline:
-      common/qsfp-cage@2 is 19.5 x 10.18 of metal around an 18.5 x 9.58 hole offset (0.425, 0.0)
+      common/qsfp-cage@3 is 19.5 x 10.18 of metal around an 18.5 x 9.58 hole offset (0.5, 0.0)
       into it, and a USB-A is 17.0 x 9.3 around a 12.0 x 4.5 hole at (2.5, 2.4). The first draft
-      punched the outlines and test_cutout_derivation caught all three. common/qsfp-cage@2 draws its
-      flange on the belly side, at the bottom of the upright cage, since 2.1.0, so the two cages'
-      at moved 0.15 right and 0.6 down to keep the openings where they were measured; single cages
-      stay upright (docs/pluggables-3d-design.md, S3), which is the rule and not a reading The numerals and
-      100G legends, which were centred on the cage boxes, moved with them.
+      punched the outlines and test_cutout_derivation caught all three. common/qsfp-cage@3 draws its
+      flange on the belly side, at the bottom of the upright cage, with the opening centred across
+      it, so the two cages' at moved 0.075 right and 0.6 down to keep the openings where they were
+      measured; single cages stay upright (docs/pluggables-3d-design.md, S3), which is the rule and
+      not a reading. The numerals and 100G legends stay where the hardware prints them.
   numbering:
     note: >-
       MaiaEdge's own management UI (working/intake/maiaedge/pbc/renders/ui-port-view.png) numbers
@@ -317,10 +317,10 @@ views:
       - {id: mgmt, at: [308.25, 21.8], size: [15.8, 13.2], shape: rect}
       - {id: ctrl, at: [334.45, 21.8], size: [15.8, 13.2], shape: rect}
     silkscreen:
-    - {at: [50.25, 18.4], text: '0', font-size: 3.0, anchor: middle, for: port-1}
-    - {at: [71.85, 18.4], text: '1', font-size: 3.0, anchor: middle, for: port-2}
-    - {at: [50.25, 32.0], text: 100G, font-size: 3.6, anchor: middle, for: port-1}
-    - {at: [71.85, 32.0], text: 100G, font-size: 3.6, anchor: middle, for: port-2}
+    - {at: [50.1, 18.4], text: '0', font-size: 3.0, anchor: middle, for: port-1}
+    - {at: [71.7, 18.4], text: '1', font-size: 3.0, anchor: middle, for: port-2}
+    - {at: [50.1, 32.0], text: 100G, font-size: 3.6, anchor: middle, for: port-1}
+    - {at: [71.7, 32.0], text: 100G, font-size: 3.6, anchor: middle, for: port-2}
     - {at: [289.45, 21.5], text: CON, font-size: 3.4, anchor: middle, for: con}
     - {at: [316.15, 21.5], text: MGMT, font-size: 3.4, anchor: middle, for: mgmt}
     - {at: [342.35, 21.5], text: CTRL, font-size: 3.4, anchor: middle, for: ctrl}
@@ -339,8 +339,8 @@ views:
       - {ref: maiaedge/pbc-2000-bezel@2, id: bezel, at: [0.0, 0.0], group: furniture, rel-pos: 10}
       # THE PLAIN CAGE, silver in the photograph, on the photograph's 21.6 mm
       # pitch - the two do not abut; there is a millimetre of panel between them
-      - {ref: common/qsfp-cage@2, id: port-1, at: [40.5, 19.26], group: qsfp28, rel-pos: 1}
-      - {ref: common/qsfp-cage@2, id: port-2, at: [62.1, 19.26], group: qsfp28, rel-pos: 2}
+      - {ref: common/qsfp-cage@3, id: port-1, at: [40.425, 19.26], group: qsfp28, rel-pos: 1}
+      - {ref: common/qsfp-cage@3, id: port-2, at: [62.025, 19.26], group: qsfp28, rel-pos: 2}
       # THE BARE RECEPTACLE, NOT THE BEZELLED ONE, and the white USB 2.0 tongue -
       # see provenance `usb`
       - {ref: std/usb-a@1, id: usb, at: [257.55, 26.33], rotate: 90, skin: usb2, group: mgmt, rel-pos: 1}

@@ -4232,8 +4232,9 @@ def lint_component_forwarded_mate(path, data, lib_roots):
     When they disagree the wrapper's own point was placed by eye and the
     aperture's was measured, so the drawing and the mating will part company: a
     cable drawn to the declared point and a module seated on the forwarded one.
-    `common/qsfp-cage@2` is out by 0.54 mm vertically, which is small, real, and
-    exactly the kind of thing nobody finds by looking.
+    `common/qsfp-cage@2` was out by 0.54 mm vertically, which is small, real, and
+    exactly the kind of thing nobody finds by looking (@3 puts the point on the
+    aperture's).
 
     A warning: which of the two is right is a question about the part, and the
     fix is sometimes to move the declared point and sometimes to correct the

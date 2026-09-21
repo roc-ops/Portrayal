@@ -21,30 +21,19 @@ description: >-
   or DC, exhaust airflow. Sold by DriveNets as the NCP-10CD packet-forwarder of its
   Network Cloud DDC.
 profile: networking
-stack-exceptions:
-- pairs: [[port-0, port-1], [port-2, port-3], [port-4, port-5], [port-6, port-7],
-    [port-8, port-9], [fabric-0, fabric-1], [fabric-2, fabric-3], [fabric-4, fabric-5],
-    [fabric-6, fabric-7], [fabric-8, fabric-9], [fabric-10, fabric-11]]
-  reason: >-
-    Drawing, in provenance.cage-orientation and its gap. The one positive reading is the row of
-    small retention tabs the datasheet render draws under the top row and under the bottom row
-    in the same relative position, which is what a common orientation looks like. It is weak
-    evidence off a 1.27 px/mm render and stands until a photograph of the empty cages settles
-    it.
 provenance:
   stack-orientation:
     confidence: estimated
     note: >-
-      The belly-to-belly cage pairs on this face follow the library's stack convention
-      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
-      the lower turned 180, so both cage lips face the band between the two cages and both bails
-      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
-      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
-      of the stack that shows otherwise overturns it. 1 pair was drawn with the UPPER cage turned
-      before the std cage art moved its lip to the bottom of the opening; turning it to the
-      convention keeps the lips in the middle band where they were drawn, and seats every optic
-      bail-outward. 11 pairs are declared in stack-exceptions with the reading that keeps them
-      otherwise.
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (sfp-0/sfp-1), the 11 QSFP-DD
+      pairs (port-0/port-1 to fabric-10/fabric-11). 1 of these were drawn with the upper cage
+      turned before the std cage art moved its lip to the bottom of the opening; turning them
+      keeps the lips in the middle band where they were drawn and seats every optic bail-outward.
+      Its cage-orientation note and gap hold a hint (retention tabs under both rows) but no
+      reading of the tabs, so the QSFP-DD rows take the rule and the gap stays open.
   sources:
     note: >-
       UfiSpace S9700-23D datasheet for dimensions, weight, port inventory, platform, typical
@@ -133,17 +122,17 @@ provenance:
       photograph.
   cage-orientation:
     note: >-
-      NOT RESOLVED BY ANY IMAGE HELD, and drawn unrotated rather than mirrored - stated here
-      because the sibling S9600-56DX draws its 2-high blocks mirrored and nobody should 'fix' one
-      to match the other. At 3.14 px/mm a QSFP-DD cage is 31 px tall and its lip is one or two of
+      NOT RESOLVED BY ANY IMAGE HELD, so the rows take the library's stack convention
+      (docs/pluggables-3d-design.md, S3-S4: upper rotate 0 over lower 180) - the rule, not a
+      reading - until a photograph settles it. At 3.14 px/mm a QSFP-DD cage is 31 px tall and its lip is one or two of
       them; the luminance profile down a column of empty cages (bottom panel of Figure 8, fabric
       column 1) reads a bright edge at the top cage's BOTTOM and bright edges at both the top AND
       bottom of the lower cage, which is consistent with either arrangement. The one positive
       reading is the row of small retention tabs the drawing puts UNDER each cage: in the
       datasheet's product render they appear under the top row and under the bottom row in the
       same relative position, which is what a common orientation looks like and not what
-      belly-to-belly looks like. That is weak evidence off a 1.27 px/mm render and it is recorded
-      as a gap rather than asserted.
+      belly-to-belly looks like. That is a hint off a 1.27 px/mm render, not a reading of the
+      cages' tabs, so it is recorded as a gap rather than asserted and does not overturn the rule.
   bands:
     confidence: drawing
     note: >-
@@ -462,11 +451,12 @@ gaps:
     pixels and the luminance profile is consistent with both. The only positive reading
     is the row of small retention tabs the datasheet render draws under the top row and
     under the bottom row in the same relative position, which points to a common
-    orientation, and that is why both rows are drawn unrotated here. The sibling
-    S9600-56DX draws its 2-high blocks MIRRORED on its own figure's stronger evidence
-    (a graded bezel band above one row and below the other, plus a white EMI strip
-    between them), so the two models differ deliberately and neither should be changed
-    to match the other without new evidence.
+    orientation - a hint, not a reading of the cages' tabs. Until a photograph settles
+    it the rows follow the library's stack convention, the lower row rotate 180
+    (docs/pluggables-3d-design.md, S4), which is also how the sibling S9600-56DX draws
+    its 2-high blocks on its own figure's stronger evidence (a graded bezel band above
+    one row and below the other, plus a white EMI strip between them). If the photograph
+    shows a common orientation, the pairs go into stack-exceptions with it.
   wanted: a straight-on high-resolution photograph of the faceplate with the cages empty
 - what: port-led-semantics
   scope: [qsfpdd-service, qsfpdd-fabric, port-leds]
@@ -803,47 +793,47 @@ views:
            group: status-leds, rel-pos: 4}
         - {ref: std/qsfp-dd@1, id: port-0, at: [99.45, 34.17], group: qsfpdd-service, rel-pos: 0}
         - {ref: common/led-dot@1, id: led-port-0, at: [105.95, 30.13], for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 1}
-        - {ref: std/qsfp-dd@1, id: port-1, at: [99.45, 48.86], group: qsfpdd-service, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: port-1, at: [99.45, 48.86], rotate: 180, group: qsfpdd-service, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-port-1, at: [109.95, 30.13], for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 2}
         - {ref: std/qsfp-dd@1, id: port-2, at: [118.45, 34.17], group: qsfpdd-service, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-2, at: [124.95, 30.13], for: port-2, attrs: {port: '2'}, group: port-leds, rel-pos: 3}
-        - {ref: std/qsfp-dd@1, id: port-3, at: [118.45, 48.86], group: qsfpdd-service, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: port-3, at: [118.45, 48.86], rotate: 180, group: qsfpdd-service, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-port-3, at: [128.95, 30.13], for: port-3, attrs: {port: '3'}, group: port-leds, rel-pos: 4}
         - {ref: std/qsfp-dd@1, id: port-4, at: [141.97, 34.17], group: qsfpdd-service, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-port-4, at: [148.47, 30.13], for: port-4, attrs: {port: '4'}, group: port-leds, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: port-5, at: [141.97, 48.86], group: qsfpdd-service, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: port-5, at: [141.97, 48.86], rotate: 180, group: qsfpdd-service, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-port-5, at: [152.47, 30.13], for: port-5, attrs: {port: '5'}, group: port-leds, rel-pos: 6}
         - {ref: std/qsfp-dd@1, id: port-6, at: [160.97, 34.17], group: qsfpdd-service, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-port-6, at: [167.47, 30.13], for: port-6, attrs: {port: '6'}, group: port-leds, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: port-7, at: [160.97, 48.86], group: qsfpdd-service, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: port-7, at: [160.97, 48.86], rotate: 180, group: qsfpdd-service, rel-pos: 7}
         - {ref: common/led-dot@1, id: led-port-7, at: [171.47, 30.13], for: port-7, attrs: {port: '7'}, group: port-leds, rel-pos: 8}
         - {ref: std/qsfp-dd@1, id: port-8, at: [184.48, 34.17], group: qsfpdd-service, rel-pos: 8}
         - {ref: common/led-dot@1, id: led-port-8, at: [190.98, 30.13], for: port-8, attrs: {port: '8'}, group: port-leds, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: port-9, at: [184.48, 48.86], group: qsfpdd-service, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: port-9, at: [184.48, 48.86], rotate: 180, group: qsfpdd-service, rel-pos: 9}
         - {ref: common/led-dot@1, id: led-port-9, at: [194.98, 30.13], for: port-9, attrs: {port: '9'}, group: port-leds, rel-pos: 10}
         - {ref: std/qsfp-dd@1, id: fabric-0, at: [246.82, 34.17], group: qsfpdd-fabric, rel-pos: 0}
         - {ref: common/led-dot@1, id: led-fabric-0, at: [253.32, 30.13], for: fabric-0, attrs: {port: '0'}, group: port-leds, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: fabric-1, at: [246.82, 48.86], group: qsfpdd-fabric, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: fabric-1, at: [246.82, 48.86], rotate: 180, group: qsfpdd-fabric, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-fabric-1, at: [257.32, 30.13], for: fabric-1, attrs: {port: '1'}, group: port-leds, rel-pos: 12}
         - {ref: std/qsfp-dd@1, id: fabric-2, at: [265.82, 34.17], group: qsfpdd-fabric, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-fabric-2, at: [272.32, 30.13], for: fabric-2, attrs: {port: '2'}, group: port-leds, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: fabric-3, at: [265.82, 48.86], group: qsfpdd-fabric, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: fabric-3, at: [265.82, 48.86], rotate: 180, group: qsfpdd-fabric, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-fabric-3, at: [276.32, 30.13], for: fabric-3, attrs: {port: '3'}, group: port-leds, rel-pos: 14}
         - {ref: std/qsfp-dd@1, id: fabric-4, at: [289.33, 34.17], group: qsfpdd-fabric, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-fabric-4, at: [295.83, 30.13], for: fabric-4, attrs: {port: '4'}, group: port-leds, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: fabric-5, at: [289.33, 48.86], group: qsfpdd-fabric, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: fabric-5, at: [289.33, 48.86], rotate: 180, group: qsfpdd-fabric, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-fabric-5, at: [299.83, 30.13], for: fabric-5, attrs: {port: '5'}, group: port-leds, rel-pos: 16}
         - {ref: std/qsfp-dd@1, id: fabric-6, at: [308.33, 34.17], group: qsfpdd-fabric, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-fabric-6, at: [314.83, 30.13], for: fabric-6, attrs: {port: '6'}, group: port-leds, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: fabric-7, at: [308.33, 48.86], group: qsfpdd-fabric, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: fabric-7, at: [308.33, 48.86], rotate: 180, group: qsfpdd-fabric, rel-pos: 7}
         - {ref: common/led-dot@1, id: led-fabric-7, at: [318.83, 30.13], for: fabric-7, attrs: {port: '7'}, group: port-leds, rel-pos: 18}
         - {ref: std/qsfp-dd@1, id: fabric-8, at: [331.85, 34.17], group: qsfpdd-fabric, rel-pos: 8}
         - {ref: common/led-dot@1, id: led-fabric-8, at: [338.35, 30.13], for: fabric-8, attrs: {port: '8'}, group: port-leds, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: fabric-9, at: [331.85, 48.86], group: qsfpdd-fabric, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: fabric-9, at: [331.85, 48.86], rotate: 180, group: qsfpdd-fabric, rel-pos: 9}
         - {ref: common/led-dot@1, id: led-fabric-9, at: [342.35, 30.13], for: fabric-9, attrs: {port: '9'}, group: port-leds, rel-pos: 20}
         - {ref: std/qsfp-dd@1, id: fabric-10, at: [350.85, 34.17], group: qsfpdd-fabric, rel-pos: 10}
         - {ref: common/led-dot@1, id: led-fabric-10, at: [357.35, 30.13], for: fabric-10, attrs: {port: '10'}, group: port-leds, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: fabric-11, at: [350.85, 48.86], group: qsfpdd-fabric, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: fabric-11, at: [350.85, 48.86], rotate: 180, group: qsfpdd-fabric, rel-pos: 11}
         - {ref: common/led-dot@1, id: led-fabric-11, at: [361.35, 30.13], for: fabric-11, attrs: {port: '11'}, group: port-leds, rel-pos: 22}
         - {ref: std/qsfp-dd@1, id: fabric-12, at: [374.37, 34.17], group: qsfpdd-fabric, rel-pos: 12}
         - {ref: common/led-dot@1, id: led-fabric-12, at: [380.87, 30.13], for: fabric-12, attrs: {port: '12'}, group: port-leds, rel-pos: 23}
