@@ -22,8 +22,9 @@ the same way round the belly axis, overlapping across it, and the nearest such
 cage along it. A row pair stacks in y, a column pair in x. A cage turned 90
 beside a cage turned 0 is not a pair - they have no common belly axis, and a
 card whose cages sit side by side for some other reason is not forced into
-one. Pairing is greedy from the top-left, which is right for every stack the
-library has: two-high rows and two-wide columns, repeated.
+one. Pairing is greedy - rows from the top, columns from the left - which is
+right for every stack the library has: two-high rows and two-wide columns,
+repeated, and six faces with a separate single row under a stack.
 
 QSFP AND QSFP-DD ARE ONE FACE FAMILY - they share the bezel opening, and a QSFP
 cage over a QSFP-DD cage (cisco/asr-9902) stacks belly-to-belly like any other.
@@ -118,8 +119,16 @@ def pairs(found):
     second (lower / right), each a cage dict. Skipped families pair too, so a
     census can count them; `checked(pair)` says whether L108 holds one."""
     out, used = [], set()
-    for a in sorted(found, key=lambda c: (round(c["x0"], 2), round(c["y0"], 2))):
-        if a["id"] in used or a["rotate"] % 90:
+    # ROWS FROM THE TOP, COLUMNS FROM THE LEFT - the axis a stack runs along
+    # first. Sorting everything by x first let a cage 0.15 mm left of the one
+    # above it start the walk and take the cage below it, stealing the stack's
+    # lower half (a wrapper whose box sits off its hole does exactly that).
+    rows = sorted((c for c in found if c["rotate"] in (0, 180)),
+                  key=lambda c: (round(c["y0"], 1), round(c["x0"], 1)))
+    cols = sorted((c for c in found if c["rotate"] in (90, 270)),
+                  key=lambda c: (round(c["x0"], 1), round(c["y0"], 1)))
+    for a in rows + cols:
+        if a["id"] in used:
             continue
         kind = "row" if a["rotate"] in (0, 180) else "column"
         best, best_d = None, None
