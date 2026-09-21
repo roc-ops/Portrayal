@@ -2566,10 +2566,26 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         if found is None:
             continue
         _family_name, family = found
-        # `media` is the port GROUP's declared media - the cage's ceiling on
-        # its family's ladder. A placement in no group, or in a group with no
-        # media, has NO CEILING: it accepts every rate of its family.
-        media = ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media")
+        # `media` is the port's declared media - the cage's ceiling on its
+        # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
+        # then its group's, which is the precedence lint.py has applied since
+        # L18 (`declared = (p.get("attrs") or {}).get("media") or
+        # gattrs.get("media")`) and L22/L23 read the same way. The corpus
+        # declares a port's media in both places - 83 cage placements across 22
+        # devices declare one their group does not, 48 of them on
+        # `maiaedge/port-extender`, whose `ports` group says in its own `mixed:`
+        # note that each port carries its own media rather than the group's -
+        # and L22 makes a placement/group contradiction an ERROR, so
+        # the two can never disagree and reading the placement first is
+        # strictly safe and strictly more informative. A placement in no group
+        # that declares none of its own has NO CEILING: it accepts every rate
+        # of its family.
+        #
+        # NOT the contract's own `attrs.media`: that is the ambiguous family
+        # token (`std/sfp-ganged@1` says `sfp`), and reading it here would cap
+        # every SFP cage at the lowest rung of its ladder.
+        media = ((p.get("attrs") or {}).get("media")
+                 or ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media"))
         # THE GROUP'S MEDIA GOVERNS WHEN IT DISAGREES WITH THE APERTURE. A
         # group declaring `media: qsfp-dd` on a placement modelled with
         # `std/qsfp-ganged@1` (a QSFP aperture - the drawing may well be

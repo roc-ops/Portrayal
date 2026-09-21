@@ -3,8 +3,9 @@
 A device's compiled index gains one entry per placement that presents a
 pluggable interface, each carrying an `accepts` list computed from THREE
 inputs that have each been wrong in this project before: a part's `mates`, a
-wrapper's presented interface (`manifest.presented_interface`), and a port
-group's declared `media`. Nothing consumes this list until spec C2 - the same
+wrapper's presented interface (`manifest.presented_interface`), and a port's
+declared `media` - read from the placement first, then from its group, which
+is the precedence L18 has applied since long before this. Nothing consumes this list until spec C2 - the same
 shape spec B1 shipped a kit accessor in, tested only against hand-built
 fakes, where a latent defect survived until B2 became its first real
 consumer (docs/... the C1 plan says so directly). These tests are what stands
@@ -286,6 +287,56 @@ def test_a_qsfp_shaped_cage_with_qsfp_dd_media_offers_the_qsfp_dd_optic(tmp_path
     # this same media would offer (test_a_qsfp_dd_cage_accepts_its_own_generic_
     # and_the_also_accepted_qsfp_one, above, on edgecore/dcs510).
     assert cage["accepts"] == ["generic/qsfp-dd-lc@1", "generic/qsfp-lc@1"]
+
+
+# --- final review F1: the media is read from the PLACEMENT first, then its --
+# group ------------------------------------------------------------------
+#
+# The corpus declares a port's media in TWO places and lint.py has read them
+# in this order since L18 (`(p.get("attrs") or {}).get("media") or
+# gattrs.get("media")`); L22 makes a placement/group contradiction an ERROR,
+# so the two can never disagree and the placement is simply the more specific
+# answer. 83 cage placements across 22 devices declare a media their group
+# does not, and on exactly ONE of them it changes the accept list:
+#
+# smartoptics/dcp-sc-28p, placement `port-probe`:
+#
+#     grep -n "id: port-probe" library/devices/smartoptics/dcp-sc-28p/device.yaml
+#
+# resolves to `{ref: std/qsfp-ganged@1, id: port-probe, attrs: {media:
+# qsfp-dd, role: probe}, group: probe}` - a QSFP aperture whose `probe` group
+# declares NO media of its own, only the description "the QSFP-DD probe
+# port". Read from the group alone this cage published `media: null` and
+# offered `generic/qsfp-lc@1` only, omitting the QSFP-DD optic that actually
+# belongs in it - quietly wrong rather than empty, which is the failure mode
+# the whole precedence rule exists to prevent.
+
+DCP_SC_28P = LIB / "devices/smartoptics/dcp-sc-28p/device.yaml"
+
+
+def test_a_placement_declared_media_governs_when_the_group_declares_none(tmp_path):
+    idx = _build(DCP_SC_28P, tmp_path)
+    cage = _cage(idx, "front", "port-probe")
+    # THE DRAWING FACT IS UNCHANGED, exactly as on csr440 above: a QSFP-shaped
+    # aperture, reported honestly.
+    assert cage["interface"] == "qsfp"
+    assert cage["group"] == "probe"
+    # READ FROM THE PLACEMENT. `null` here - the value a group-only read
+    # published - is the defect this pins.
+    assert cage["media"] == "qsfp-dd"
+    assert cage["accepts"] == ["generic/qsfp-dd-lc@1", "generic/qsfp-lc@1"]
+
+
+def test_the_probe_group_itself_declares_no_media(tmp_path):
+    """NOT VACUOUS: the assertion above would pass unchanged if `probe` had
+    quietly gained an `attrs.media` of its own, which would make it a copy of
+    the csr440 case rather than the placement-declared one. Read from the
+    manifest, so it fails the day that changes."""
+    d = yaml.safe_load(DCP_SC_28P.read_text())
+    assert "media" not in ((d["groups"]["probe"].get("attrs")) or {})
+    placement = next(p for p in d["views"]["front"]["components"]["placements"]
+                     if p["id"] == "port-probe")
+    assert placement["attrs"]["media"] == "qsfp-dd"
 
 
 def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):

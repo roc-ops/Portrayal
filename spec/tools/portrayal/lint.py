@@ -244,7 +244,7 @@ RULES = {
     "L101": ("component",  "a `superseded-by` names a component major that exists", "fix the ref, or add the successor if it has not landed yet"),
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
-    "L104": ("device",     "a port group's declared media and its cage's presented interface name the same pluggable family", "the group's media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the group's media is wrong"),
+    "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
 }
 
 
@@ -5055,31 +5055,37 @@ def lint_device_pluggable_media(path, data, _lib_roots=None):
 
 
 def lint_device_cage_media_disagreement(path, data, lib_roots):
-    """L104: a port group's declared media and its cage's presented interface
+    """L104: a port's declared media and its cage's presented interface
     (`manifest.presented_interface`, looked through a wrapper's `parts:`
     exactly as render.py's `cages[]` does) name the SAME pluggable family.
+
+    THE MEDIA IS READ FROM THE PLACEMENT FIRST, THEN ITS GROUP - L18's
+    precedence, and render.py's `cage_entries` reads it the same way, so this
+    rule reaches exactly the ports whose accept list that derivation governs.
+    Reading only the group left a placement-declared media both unchecked
+    here and, before the same fix in render.py, unserved there.
 
     render.py's `cages[].accepts` derivation found this, not a person: a
     QSFP-DD cage offers `generic/qsfp-dd-lc@1`, and a QSFP one offers
     `generic/qsfp-lc@1` (plus, on a QSFP-DD cage, the QSFP generic too,
-    through `also-accepts`) - two different lists. A group declaring
+    through `also-accepts`) - two different lists. A port declaring
     `media: qsfp-dd` while its placement is modelled with `std/qsfp-ganged@1`
     (a QSFP aperture, not a QSFP-DD one) asks for the QSFP-DD optic while
     presenting the QSFP shape, and nothing before this compared the two.
 
-    THE GROUP'S MEDIA GOVERNS the accept list (Jason's ruling, not derived):
-    the group says what the port IS; the aperture says what it looks like,
+    THE DECLARED MEDIA GOVERNS the accept list (Jason's ruling, not derived):
+    the media says what the port IS; the aperture says what it looks like,
     and for slotting an optic the former decides. render.py's cage
     derivation already applies that precedence - see `cage_entries` there.
     This rule does not change what gets offered; it flags the corpus fact so
     the modelling question - is the drawing's aperture wrong, or is the
-    group's media wrong - stays visible instead of being silently settled by
+    declared media wrong - stays visible instead of being silently settled by
     a precedence rule nobody sees.
 
     WARNING, NOT ERROR, the same way L103 is: QSFP-DD and QSFP share a face
     opening and differ mainly in depth, so the DRAWING may well be correct
-    and the fix may belong in six different datasheets, not in this rule.
-    Six separate modelling questions against six sets of source documents is
+    and the fix may belong in seven different datasheets, not in this rule.
+    Seven separate modelling questions against seven sets of source documents is
     real work that accumulates device by device, which is L40's shape, not
     L102's.
     """
@@ -5100,7 +5106,12 @@ def lint_device_cage_media_disagreement(path, data, lib_roots):
             iface_found = _family_mated_by(interface)
             if iface_found is None:
                 continue
-            media = ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media")
+            # THE PLACEMENT'S OWN MEDIA FIRST, then its group's - L18's
+            # precedence (`:6583`), which render.py's `cage_entries` reads the
+            # same way. Reading only the group made this rule blind at exactly
+            # the ports that declare their media on the placement instead.
+            media = ((p.get("attrs") or {}).get("media")
+                     or ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media"))
             if not media:
                 continue
             media_found = _family_owning_rate(media)
@@ -5110,15 +5121,20 @@ def lint_device_cage_media_disagreement(path, data, lib_roots):
             media_name, _media_fam = media_found
             if iface_name == media_name:
                 continue
+            # NAME WHERE THE MEDIA WAS READ FROM. Saying "group 'probe'
+            # declares media qsfp-dd" of a port that declares it on the
+            # placement sends the reader to a group that says nothing.
+            where = ("the placement" if (p.get("attrs") or {}).get("media")
+                     else f"group {p.get('group')!r}")
             warn(path, "L104",
-                 f"{vname}/{p['id']}: group {p.get('group')!r} declares media "
+                 f"{vname}/{p['id']}: {where} declares media "
                  f"{media!r} (the {media_name!r} family) but the placement's "
                  f"ref {p['ref']} presents interface {interface!r} (the "
-                 f"{iface_name!r} family) - the group's media governs the "
+                 f"{iface_name!r} family) - the declared media governs the "
                  f"accept list render.py's cages[] builds, so this port is "
                  f"offered {media_name!r} optics over a {iface_name!r}-shaped "
                  "aperture. Check the source: either the drawing needs the "
-                 f"{media_name!r} cage, or the group's media is wrong")
+                 f"{media_name!r} cage, or the declared media is wrong")
 
 
 def lint_device_groups(path, data, lib_roots):

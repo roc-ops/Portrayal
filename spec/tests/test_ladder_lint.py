@@ -306,9 +306,10 @@ def test_a_media_the_registry_cannot_place_is_not_asked_by_l104():
 
 
 def test_every_real_device_cage_media_disagreement_is_this_exact_set():
-    """The corpus count Jason measured independently (78) and the six devices
-    named in the fix-round message, pinned exactly - a wrong count, high or
-    low, fails loudly rather than needing a second manual recount."""
+    """The corpus count and the seven devices it falls on, pinned exactly - a
+    wrong count, high or low, fails loudly rather than needing a second manual
+    recount. 78 across six devices when L104 read only the port group; the
+    79th, `smartoptics/dcp-sc-28p`, declares its media on the placement."""
     per_device = {}
     for slug, path, doc in libdata.library():
         n = len(run_cage_media(doc, path))
@@ -320,9 +321,24 @@ def test_every_real_device_cage_media_disagreement_is_this_exact_set():
         "edgecore/csr440": 2,
         "edgecore/dcs240": 32,
         "edgecore/dcs511": 32,
+        "smartoptics/dcp-sc-28p": 1,
         "ufispace/s9510-28dc": 2,
     }, per_device
-    assert sum(per_device.values()) == 78
+    assert sum(per_device.values()) == 79
+
+
+def test_a_placement_declared_media_is_read_before_its_group():
+    """The placement's own `attrs.media` is L18's first source and L104's, so
+    a port that declares its media there - with no group media at all - is
+    compared, not skipped. Without this the corpus's 79th disagreement, and
+    the wrong accept list it produced, were both invisible."""
+    doc = {"groups": {"g0": {"term": "Port"}},
+           "views": {"front": {"components": {"placements": [
+               {"id": "p0", "ref": "std/qsfp-ganged@1", "group": "g0",
+                "at": [0, 0], "attrs": {"media": "qsfp-dd"}}]}}}}
+    got = run_cage_media(doc)
+    assert len(got) == 1, got
+    assert "the placement declares media" in got[0], got[0]
 
 
 # --- registration ------------------------------------------------------------
