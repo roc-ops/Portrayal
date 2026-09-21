@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: eps201-psu-150w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable 150 W AC supply of the Edgecore EPS201 - a 51.3 x 39.5 module with a
+  coloured release latch at the inboard edge, a perforated intake, a recessed pull slot
+  and an IEC 60320 C14 inlet with a cord retainer. Ordered as YM-1151D, in two airflows:
+  A03R front-to-rear and A02R back-to-front. Twenty-one millimetres narrower than the
+  1200 W supply its EPS202 and EPS203 shell-mates take, which is what eight times the
+  output costs in sheet metal.
+size: {w: 51.3, h: 39.5}
+size-confidence: {w: measured, h: estimated}
+attrs:
+  input: ac
+  inlet: c14
+  power-output-w: 150
+provenance:
+  size: >-
+    MEASURED ON THE EPS201 DATASHEET'S REAR ELEVATION at its native 2.2808 px/mm - 999 px
+    across a 438 mm face - which is coarse and, like every EPS20x figure, carries a mild
+    left-to-right gradient of about 2%. The two modules read x 291.1-342.4 and 374.4-425.7,
+    both 51.3 wide on a pitch of 83.3, and their blue latches read 291.12-297.26 and
+    375.74-382.32, which puts the same pitch on the sharpest feature they have. The HEIGHT
+    is carried from the fan trays and the 1200 W supply on the same family's rears, which
+    all run y 2.5 to 42.0 - the module's own top and bottom edges are lost against the bay
+    at this resolution, so 39.5 is stated as estimated rather than measured.
+  power-output-w: >-
+    DATASHEET, AND THE DATASHEET CONTRADICTS ITSELF ONCE. Three places say 150: the
+    Interfaces callouts "11. PSU 2: 150 W" and "12. PSU 1: 150 W", the ordering table's
+    "YM-1151D A03R ... 150W AC Power Supply FRU", and the Physical section's "Maximum
+    Power Consumption: 150 Watts" for the whole machine. One place says otherwise - the
+    Power section's "2pcs 1+1 redundant, load-sharing, hot-swappable 1200 W AC (80 PLUS
+    Silver compliant)" - and 1200 W is what this family's OTHER two models take.
+    150 IS CARRIED. A supply cannot be rated eight times the machine's own maximum
+    consumption, the part number YM-1151D is a 150 W unit, and the 1200 W sentence is
+    word-for-word the one in the EPS202's and EPS203's datasheets, which is what a
+    copy-paste between three sibling documents looks like. Recorded as a gap on the device
+    so the disagreement travels with it.
+  inlet: >-
+    DATASHEET ordering table - the EPS201's own entry does not print the inlet type, but
+    the elevation draws a three-pin appliance inlet with a wire cord-retainer clipped over
+    it on both modules, and the two shell-mates' tables name IEC 60320 C14 for the same
+    position on the same rear.
+  finish: >-
+    MEASURED AND COUNTED, and the colour is a claim about airflow. Over the whole rear
+    elevation 4,860 pixels pass a blue test (B>110, B>R+30, B>G+15) at a median of
+    (107, 151, 214), and ZERO pass a red test - the exact mirror of the EPS203's rear,
+    where 2,748 pixels are red and none blue. This model ships BOTH airflows: eight
+    ordering codes, four -F and four -B, and two supply part numbers, A03R front-to-rear
+    and A02R back-to-front. Its datasheet's rear elevation draws the -B build and its own
+    quick start guide's FRU figure draws the -F one in red. So `latch-finish` is a field,
+    and the default here is the blue the datasheet draws.
+  depth: >-
+    ESTIMATED. No document dimensions the module. 190 is carried from the 1RU supplies this
+    library already holds and is flagged as an estimate.
+states: [absent]
+elements:
+  latch: {at: [0.60, 12.00], size: [2.60, 15.00], class: latch}
+  vent: {at: [4.20, 7.50], size: [6.40, 27.00], class: vent}
+  slot: {at: [12.00, 8.40], size: [33.00, 4.20], class: handle}
+  inlet-well: {at: [19.50, 15.00], size: [29.00, 22.50], class: bezel}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#ef3927'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [20.00, 16.20], rotate: 0}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent
+      vent: 12
+      confidence: estimated
+      source: >-
+        The intake is open but no document gives a depth. 12 matches what this library
+        gives other 1RU Edgecore supply intakes.
+    - node: slot
+      pocket: 2.0
+      confidence: estimated
+      source: >-
+        A recessed finger slot, not a bar standing off the face - `pocket`, because the
+        elevation shades its inside and there is nothing to grip in front of the metal.
+        The guide's PSU Replacement step is "Press the release latch and remove the PSU".
+    - node: latch
+      out: 0.9
+      confidence: estimated
+      source: 'Drawn, not dimensioned - as every release tab in this library.'
+    - node: inlet-well
+      pocket: 2.2
+      confidence: estimated
+      source: >-
+        The inlet sits in a recess whose walls the elevation shades; no depth is stated.
+        2.2 puts the connector flange level with the module face.
+skins: [default]
+body:
+  depth: 190
+  color: '#8d9298'
+  footprint: {at: [0, 0], size: [51.3, 39.5]}
