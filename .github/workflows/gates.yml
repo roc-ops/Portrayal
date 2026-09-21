@@ -24,6 +24,15 @@ on:
 # The saving is bought instead where it helps every run: a pip cache, a lint job
 # that fails in half a minute, and one lint per run instead of three.
 
+# READ-ONLY, AND PINNED BY SHA (#456). Neither job writes anything back - no
+# comment, no status beyond its own, no push - so the token gets `contents: read`
+# and nothing else, whatever the repository default happens to be. Once this
+# repository is public, a pull request from a fork runs this file; a tag like
+# `@v4` is a pointer its owner can move, a commit SHA is not. The comment beside
+# each pin says which release it is, so a bump is a deliberate edit.
+permissions:
+  contents: read
+
 # A second push to a PR makes the first run pointless - it is testing a tree
 # nobody will merge.
 concurrency:
@@ -39,8 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
           python-version: '3.12'
       # ONLY WHAT LINT IMPORTS, which is the point of this job existing. The
@@ -62,9 +71,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
         with:
           python-version: '3.12'
           cache: pip
@@ -74,7 +83,7 @@ jobs:
       # and each carries `skipif(shutil.which("node") is None)`, so before this
       # line the suite depended on the runner image happening to ship it - and
       # the day it stopped, fourteen files would have gone quiet rather than red.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4.4.0
         with:
           node-version: '20'
 
