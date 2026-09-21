@@ -16,7 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
-import { seatModule, nestedBays } from './swap.js';
+import { seatModule, nestedBays, configBayPath } from './swap.js';
 import { jdist } from './dist.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -1024,7 +1024,10 @@ export function createShell(opts = {}) {
   }
   function syncCfgBays() {
     const c = state.meta.configs.find(c => c.name === state.cfg);
-    state.cfgBays = {...(c?.bays || {})};
+    // keyed by the drawing's path, which is what the picker looks a bay up by;
+    // the manifest leaves the `/module` steps out - see configBayPath
+    state.cfgBays = Object.fromEntries(Object.entries(c?.bays || {})
+      .map(([k, ref]) => [configBayPath(k), ref]));
     state.cfgFields = {};
   }
 
