@@ -292,6 +292,54 @@ def test_the_s9110_exports_its_out_of_band_jack():
     assert oob == [{"name": "oob", "type": "1000base-t", "mgmt_only": True}], oob
 
 
+# --- a management port exports however the device spells it -------------------
+#
+# The collector says "EITHER WAY OF SAYING IT COUNTS" - `attrs.role: mgmt` on the
+# port, or `role: management` on its group - and marks both mgmt_only. But the
+# loop in front of it SKIPPED any port whose own attrs said `role: mgmt`, so the
+# same port exported or vanished by which of two equivalent spellings a device
+# chose. 99 management ports on 70 devices were missing: every device that says
+# it per port, while the EPS201, which says it only through its group, exported
+# its own. #37dac1f4 counted "76 ports plus two management" as the goal; this is
+# the rest of that.
+
+def test_a_management_port_on_the_bare_jack_is_ethernet_when_the_device_says_so():
+    """The guard that keeps ToD, BITS and serial jacks out of the DCIM asks for a
+    speed because a timing input has none to give. `role: mgmt` is a stronger
+    statement than a speed - the device is saying what the jack is FOR - and the
+    AS5912-54X and CSR310 say it with no speed at all."""
+    assert dx.iface_type(_pl("std/rj45@2"), {"role": "mgmt"}, "management") == "1000base-t"
+    assert dx.iface_type(_pl("std/rj45@2"), {}, "management") is None
+
+
+@pytest.mark.parametrize("model,port", [
+    ("COR550", "mgmt-eth"),                 # role: mgmt on the port, lamped part
+    ("ECS4530-54CSFP", "mgmt-eth"),         # role: mgmt, bare part, speed 1g
+    ("5912-54X-O-AC-F", "mgmt-eth"),         # AS5912-54X: role: mgmt, bare part, no speed
+    ("AS4630-54TE-O-AC-F-EU", "mgmt"),      # role only on the group: always worked
+])
+def test_a_management_port_exports_however_the_device_spells_it(model, port):
+    d = _export(model)
+    if d is None:
+        pytest.skip(f"{model} is not in this library")
+    hit = [i for i in (d.get("interfaces") or []) if i["name"] == port]
+    assert hit == [{"name": port, "type": "1000base-t", "mgmt_only": True}], \
+        (model, [i["name"] for i in (d.get("interfaces") or []) if i.get("mgmt_only")])
+
+
+def test_a_10g_management_sfp_is_listed_once():
+    """These already export through their own path, with a description saying the
+    faceplate port is not a switch interface. Letting role: mgmt through the main
+    collector must not list them a second time under a switch-port type."""
+    d = _export("7326-56X-O-AC-F")
+    if d is None:
+        pytest.skip("AS7326-56X is not in this library")
+    names = [i["name"] for i in (d.get("interfaces") or [])]
+    for n in ("57", "58", "port-57", "port-58"):
+        assert names.count(n) <= 1, (n, names.count(n))
+    assert sum(1 for n in names if n in ("57", "port-57")) == 1, names
+
+
 # --- where the cord goes in (#286) -------------------------------------------
 #
 # `power-ports` used to be written in exactly one place - build_module - so 0 of
