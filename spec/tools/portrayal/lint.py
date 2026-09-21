@@ -4577,9 +4577,10 @@ def lint_pluggable_family_interfaces(root):
         fi = fam.get("interface")
         if fi and fi not in interfaces:
             warn(root / "…", "L103", f"family {name!r} names interface {fi!r}, "
-                "which no component in the library declares. Model the cage, "
-                "or leave this as the vocabulary's answer to a form factor "
-                "the library has not built yet")
+                "which no component in the library declares - model the cage, "
+                "or leave it as the vocabulary's answer to a form factor not "
+                "yet built, per this family's own `source` in "
+                "spec/schemas/pluggables.yaml")
 
 
 # A ref is a whole string or it is prose. `ufispace/psu-120-ac@1` appears inside
