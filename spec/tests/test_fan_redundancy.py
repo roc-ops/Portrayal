@@ -434,7 +434,14 @@ def test_the_comparison_layer_can_now_reach_them():
     are fan-0..fan-3 even though both documents' rear drawings print 4..1. The redundancy
     figure does not care which, which is the point: a comparison keyed on the figure is
     safe across the two series, and one keyed on a fan's printed number is not.
+
+    SIXTY-SEVEN IS THE EDGECORE AMX3200, a 4+1 over five bays like the COR550 two entries
+    above - and the first entry in this census whose fan tray's FAN is specified by the
+    vendor rather than inferred. Its ordering table says 'Fan-tray modules with 5 pcs of
+    40.5 mm x 70.14 mm 12V fans', one fan per tray, five trays, four needed. So for once the
+    bay count, the fan count and the redundancy figure are all the vendor's own and all
+    agree, which is the case every other entry here has had to argue towards.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 66, n
+    assert n == 67, n

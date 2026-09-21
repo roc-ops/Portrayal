@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-644 component majors in 12 namespaces.
+649 component majors in 12 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -22,7 +22,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 1 | 36 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 2 | 10 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
-| `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 6 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
+| `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 7 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
 | `std/cxp@1` | component | port | 27 × 10 × 92 | cxp | 0 | 3 | CXP cage cutout - the module envelope of the CXP MSA, the aperture the module seats through |
 | `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 16 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
 | `std/drive-25@1` | component | drive | 15 × 69.85 × 100.45 | drive-25 | 1 | 2 | 2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier: 69.85 wide by 15.00 thick, drawn s… |
@@ -38,17 +38,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 30 | 15 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
-| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 42 | 24 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
+| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 42 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 25 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 50 | 36 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 51 | 36 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 55 | 21 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 18 | 30 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 19 | 30 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 71 | 69 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 12 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 73 | 27 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 74 | 27 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 5 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -57,7 +57,7 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 41 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
+| `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 42 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 1 | 16 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 1 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 2 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
@@ -68,13 +68,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/drive-blank-35@1` | module | blank | 105.5 × 26.9 × 25 |  | 1 | 0 | Filler for a 3.5 inch LFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-carrier-25@1` | module | drive | 17.868 × 79.4 × 123.7 |  | 1 | 1 | Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's front bays present them - two ill… |
 | `common/drive-carrier-35@1` | module | drive | 105.5 × 26.9 × 165.6 |  | 1 | 1 | A 3.5 inch hot-swap drive in its carrier, drawn wide - the orientation both the rear bays and a 12 x 3.5 inch… |
-| `common/esd-jack@1` | component | ground | 6 × 6 |  | 9 | 0 | ESD wrist-strap grounding jack - the socket you clip an antistatic strap into before handling cards |
+| `common/esd-jack@1` | component | ground | 6 × 6 |  | 10 | 0 | ESD wrist-strap grounding jack - the socket you clip an antistatic strap into before handling cards |
 | `common/fan-module@1` | module | fan | 48.6 × 40 |  | 6 | 9 | Hot-swappable 1U fan module — 44.6mm square unioned with a 4mm left mounting tab (captive screw), honeycomb g… |
 | `common/fan-module-41@1` | module | fan | 40.9 × 40 |  | 2 | 0 | Hot-swappable 1U fan tray, 40.9mm opening on a 48.8mm pitch - honeycomb grille over one rotor, crossed by a f… |
 | `common/fan-module-46@1` | module | fan | 46.6 × 40 |  | 4 | 1 | Hot-swappable 1U fan module, 46.6mm pitch - 44.6mm square unioned with a 2mm left mounting tab (captive screw… |
 | `common/fc-simplex-adapter@1` | component | port | 10 × 10 | fc-adapter | 0 | 0 | Panel-mount FC simplex adapter, one threaded bayonet-coupled opening, as fitted to an FS FHD FC panel |
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
-| `common/ground-lug@1` | component | ground | 7 × 14 |  | 32 | 1 | Chassis grounding point with earth symbol above the stud |
+| `common/ground-lug@1` | component | ground | 7 × 14 |  | 33 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-symbol@1` | component | ground | 6 × 6 |  | 42 | 0 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 1 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@1` | component | mechanical | 14.8 × 19.3 | keystone-opening | 0 | 0 | A generic snap-in keystone clip opening, as fitted to an FS FHD keystone panel |
@@ -87,7 +87,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-dot@1` | component | led | 2 × 2 |  | 81 | 152 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 6 | 0 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 15 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 16 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 8 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
@@ -102,7 +102,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/psu-550w@1` | component | psu | 84 × 40 |  | 1 | 0 | 550W hot-swap PSU module with an integrated axial fan and its own C14 inlet, as fitted to the Smartoptics DCP… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 5 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
-| `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 12 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
+| `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 14 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
 | `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 8 | 0 | Captive pull-out information tab (default credentials / serial card) |
 | `common/qsfp-cage@2` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
@@ -112,12 +112,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-pull-tab@1` | component | latch | 19 × 3.4 |  | 0 | 4 | QSFP / QSFP-DD pull tab - the flat paddle bail that wraps the module and extends forward, with an elongated o… |
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 1 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 3 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
-| `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 30 | 0 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
+| `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 31 | 0 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
 | `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 82 | 1 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 42 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 43 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 53 | 21 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@1` | component | port | 9.4 × 12 | sc-duplex-adapter | 0 | 3 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
@@ -128,7 +128,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sfp-led-pair@1` | component | led | 12 × 4 |  | 4 | 0 | Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between |
 | `common/sfp-plus-cage@2` | component | port | 16 × 10 × 41 |  | 4 | 2 | SFP+ cage (v2 = composed - bezel wraps a std/sfp cutout core) |
 | `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 21 | 0 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
-| `common/smb-jack@1` | component | port | 7 × 7 |  | 26 | 0 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
+| `common/smb-jack@1` | component | port | 7 × 7 |  | 27 | 0 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
 | `common/usb-a-bezel@1` | component | port | 17 × 9.3 × 13.7 |  | 9 | 0 | USB Type-A port in a silver panel bezel - the plate spans the component so it can abut neighboring port bezel… |
@@ -404,7 +404,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/system-id-button-14g@1` | component | button | 7 × 7 |  | 1 | 0 | The system identification button on the rear of a 14th-generation PowerEdge - pressed to make the machine ann… |
 | `dell/thumbscrew-blue-14g@1` | component | screw | 11.5 × 11.5 × 16 |  | 1 | 2 | Dell's blue captive thumbscrew - the ringed hand-turned fastener that retains a rear drive cage on a 14G Powe… |
 
-## edgecore/ (52)
+## edgecore/ (57)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -426,8 +426,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/ais800-64-psu-ac@1` | module | psu | 73.5 × 40 |  | 2 | 3 | The 3000 W AC power supply of the Edgecore AIS800-64D and AIS800-64O - a CRPS-form module in a bright housing… |
 | `edgecore/ais800-64-psu-dc@1` | module | psu | 73.5 × 40 |  | 3 | 1 | The 3000 W DC power supply of the Edgecore AIS800-64D and AIS800-64O - the AC unit's 73.5 x 40 CRPS shell wit… |
 | `edgecore/ais800-fan@1` | module | fan | 41.65 × 40.6 |  | 2 | 5 | A rear fan module of the Edgecore AIS800-32D and AIS800-32O - a honeycomb-grilled black tray with a large col… |
-| `edgecore/ais800-psu-ac@1` | module | psu | 53.7 × 40.6 |  | 2 | 5 | The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a latt… |
+| `edgecore/ais800-psu-ac@1` | module | psu | 53.7 × 40.6 |  | 2 | 7 | The 2400 W AC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a latt… |
 | `edgecore/ais800-psu-dc@1` | module | psu | 53.7 × 40.6 |  | 2 | 3 | The 2400 W DC power supply of the Edgecore AIS800-32D and AIS800-32O - a bright CRPS-style module with a colo… |
+| `edgecore/amx-3200-48v-psu@1` | module | psu | 73.5 × 40 |  | 1 | 0 | The Edgecore AMX3200's 1200 W DC supply, ordered as AMX-3200-48V-PSU - a 73.5 x 40.0 module with its release … |
+| `edgecore/amx-3200-ac-psu@1` | module | psu | 73.5 × 40 |  | 1 | 0 | The Edgecore AMX3200's 1200 W AC supply, ordered as AMX-3200-AC-PSU - a 73.5 x 40.0 module with its release l… |
+| `edgecore/amx-3200-fan@1` | module | fan | 42.2 × 39.7 |  | 1 | 0 | The Edgecore AMX3200's rear fan tray, ordered as AMX-3200-FAN - a 42.2 x 39.7 module, honeycomb across its fa… |
+| `edgecore/amx-3200-sled-blank@1` | module | blank | 183.8 × 41.9 |  | 1 | 0 | The blank cover panel for an unused AMX3200 sled slot - shipped one to a box ('1 x Blank cover panel accessor… |
+| `edgecore/amx-3200-sled400@1` | module | line-card | 183.8 × 41.9 × 380 |  | 1 | 0 | The Edgecore AMX3200's interface sled, ordered as AMX-3200-SLED400 - a 183.8 x 41.9 front module carrying two… |
 | `edgecore/cor550-fan@1` | module | fan | 68 × 62.3 |  | 1 | 0 | The Edgecore COR550's rear fan tray - a 68.0 x 62.3 module, honeycomb across its whole face with one rotor sh… |
 | `edgecore/cor550-lane-leds@1` | component | led | 7.2 × 3 |  | 1 | 0 | The Edgecore COR550's per-port QSFP28 lamp group - THREE round lamps in a row on a 2.70 mm pitch, sitting in … |
 | `edgecore/cor550-psu-ac@1` | module | psu | 54.5 × 40.8 |  | 1 | 1 | The hot-swappable AC supply of the Edgecore COR550 - a 54.5 x 40.8 module in the common CRPS envelope, its ow… |
@@ -457,7 +462,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/eps201-psu-150w@1` | module | psu | 51.3 × 39.5 |  | 1 | 0 | The hot-swappable 150 W AC supply of the Edgecore EPS201 - a 51.3 x 39.5 module with a coloured release latch… |
 | `edgecore/exp800-fan@1` | module | fan | 41.45 × 40 |  | 3 | 1 | A rear fan module of the Edgecore EXP800-16O - a honeycomb-grilled tray with a single rotor behind the mesh a… |
 | `edgecore/exp800-psu-ac@1` | module | psu | 50.6 × 40 |  | 3 | 1 | The AC power supply of the Edgecore EXP800-16O - a CRPS-style module in a bright housing with a latticed exha… |
-| `edgecore/fan-2u-1x1sn@1` | module | fan | 81.6 × 81.2 |  | 4 | 6 | Edgecore's FAN-2U-1x1SN rear fan tray - a near-square 2RU tray, honeycomb across its whole face, one 80 mm ro… |
+| `edgecore/fan-2u-1x1sn@1` | module | fan | 81.6 × 81.2 |  | 4 | 7 | Edgecore's FAN-2U-1x1SN rear fan tray - a near-square 2RU tray, honeycomb across its whole face, one 80 mm ro… |
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 

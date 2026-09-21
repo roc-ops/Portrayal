@@ -1,0 +1,137 @@
+format: 1
+kind: module
+name: amx-3200-sled400
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  The Edgecore AMX3200's interface sled, ordered as AMX-3200-SLED400 - a 183.8 x 41.9 front
+  module carrying two 400G CFP2-DCO line ports and eight 100G QSFP28 client ports, a
+  honeycomb vent over the CFP2 cages, and a lever along its foot that locks it into the
+  chassis. Two seat side by side in the 1RU chassis; either slot can take the blank cover
+  instead.
+size: {w: 183.8, h: 41.9, d: 380.0}
+size-confidence: {w: measured, h: measured, d: estimated}
+attrs:
+  model: 'AMX-3200-SLED400'
+  role: transponder-muxponder
+  cfp2: '2'
+  qsfp28: '8'
+  capacity: 1.6 Tbps per sled
+  optics-qsfp28: 100GBASE-SR4, 100GBASE-LR4, 100GBASE-ER4; AOC/DAC
+  optics-cfp2: 400G CFP2-DCO coherent (OIF 400ZR, OpenZR+, OpenROADM); 1000/2000 km long-haul
+  port-modes-qsfp28: 1x 40GbE / 100GbE, OTU4
+  port-modes-cfp2: 100G / 200G / 300G / 400G coherent over DP-16QAM, DP-8QAM, DP-QPSK
+  power-absent: not-published
+provenance:
+  size: >-
+    MEASURED on the quick start guide's front elevation (amx3200-qsg page 1, native 1133 x
+    123; panel 1114 x 111 px, 2.541 px/mm on x and 2.552 on y - square to 0.42%). The two
+    sleds' outer edges read x 59.03-242.81 and 247.53-431.7 on persistent vertical edges -
+    183.8 wide on a 188.5 pitch - and the sled field runs y 1.18-43.1.
+    THE SCALE IS CONFIRMED BY TWO STANDARD APERTURES AT ONCE. The QSFP28 openings measure
+    18.50 wide against the registry's ganged 18.50, and the CFP2 openings 41.71-42.11 x
+    12.54 against the CFP2 MSA's 41.5 x 12.4. Two different standards agreeing with the
+    same px/mm is what makes 2.541 a measurement of the drawing and not an assumption.
+    The depth is not published and is an estimate: most of the 430 mm chassis less the
+    rear fans and supplies.
+  ports: >-
+    MEASURED. The CFP2 cages sit side by side at x 11.02 and 53.52 in the sled, y 16.85,
+    42.50 apart - their shared wall is about a millimetre, closer than the registry's
+    45.0 CFP2 floor, which that entry itself calls 'a layout floor read from vendor
+    faceplates, not an MSA figure'. The QSFP28s are two 2x2 ganged cages, columns on the
+    registry's 19.00 pitch (18.89 measured) with a 3.12 gutter, rows 15.29 apart.
+  pitch-note: >-
+    THE TWO CFP2 CAGES SIT 42.50 APART, under the registry's 45.00 CFP2 floor, and that is
+    what the metal does: their openings read 70.05-111.76 and 112.55-154.66 on the guide's
+    front, a shared wall about a millimetre thick, confirmed by the datasheet photograph
+    where the two cages touch. The registry calls its 45.0 'a layout floor read from vendor
+    faceplates, not an MSA figure' - this faceplate is one it had not read.
+  power: >-
+    NOT PUBLISHED, searched in both documents: the datasheet gives the system's 'Max system
+    power consumption 850 W' and the supplies' 1200 W, and the guide gives per-supply input
+    ratings; neither gives a figure for a sled, and the ordering table's SLED400 line says
+    only '2 x 400G CFP+8 x 100G sled'.
+  cfp2-dco-is-a-cfp2: >-
+    THE LINE PORTS ARE CFP2 CAGES; DCO IS WHAT GOES IN THEM. Issue #340 expected CFP2-DCO
+    to need a new registry entry. It does not: OIF-CFP2-DCO-01.0, the implementation
+    agreement for the digital coherent optic, specifies its module in the CFP2 form factor
+    of the CFP MSA's CFP2 hardware specification, which is the registry's `cfp2` entry
+    already - and the drawn openings measure to that entry within a pixel. DCO names the
+    coherent DSP inside the module, not a different cage. So the ports are std/cfp2@1 with
+    media cfp2, and 'CFP2-DCO 400G' is recorded as the optics the device supports.
+  numbering: >-
+    PHOTOGRAPHED, AND THE GUIDE DISAGREES. The datasheet's product photograph (page 1,
+    2000 px across) prints CFP2-1 and CFP2-2 under the line ports and 3 up 4 down, 5 up 6
+    down, 7 up 8 down, 9 up 10 down under the client columns - one sled numbered 1-10,
+    line ports first. The guide's line-art front prints 1 up 2 down ... 7 up 8 down,
+    numbering the QSFP28s alone. The photograph is of the hardware and the drawing carries
+    the vendor's 'for illustration only' disclaimer, so this part follows the photograph;
+    the device records the disagreement.
+  lamps: >-
+    PHOTOGRAPHED at 3x on the datasheet's photograph and seen again in the guide: every
+    client column's white belly strip carries an up-arrow, FOUR small windows and a
+    down-arrow, and each CFP2 has one small window beside its legend. The datasheet says
+    'Sled Port LEDs: Link Status, Activity, Speed' and the guide 'CFP2 LEDs: Green
+    (link/activity)' and 'QSFP28 LEDs: Green (link/activity)'. Which of a column's four
+    windows belongs to which of its two ports is not stated; the windows are named by the
+    column they sit in, not assigned. Their positions within the strip are read at 2.5
+    px/mm and good to about half a millimetre.
+  lever: >-
+    THE GUIDE AND THE PHOTOGRAPH DRAW DIFFERENT LEVERS. The guide's Sled Removal text says
+    'Press the blue release latch on the lever and rotate it to its out position' and its
+    art draws a blue latch; the datasheet photograph shows a silver lever with a
+    thumbscrew at its end. The part draws the guide's blue latch, because it is the one
+    the vendor's own procedure describes in words, and keeps the colour a field.
+states: [absent]
+parts:
+  - {id: port-1, ref: std/cfp2@1, at: [11.02, 16.85], attrs: {media: cfp2}}
+  - {id: port-2, ref: std/cfp2@1, at: [53.52, 16.85], attrs: {media: cfp2}}
+  - {id: port-3, ref: std/qsfp-ganged@1, at: [99.12, 5.00], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-4, ref: std/qsfp-ganged@1, at: [99.12, 20.29], attrs: {media: qsfp28}}
+  - {id: port-5, ref: std/qsfp-ganged@1, at: [118.12, 5.00], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-6, ref: std/qsfp-ganged@1, at: [118.12, 20.29], attrs: {media: qsfp28}}
+  - {id: port-7, ref: std/qsfp-ganged@1, at: [140.24, 5.00], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-8, ref: std/qsfp-ganged@1, at: [140.24, 20.29], attrs: {media: qsfp28}}
+  - {id: port-9, ref: std/qsfp-ganged@1, at: [159.24, 5.00], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-10, ref: std/qsfp-ganged@1, at: [159.24, 20.29], attrs: {media: qsfp28}}
+elements:
+  vent: {at: [2.80, 3.10], size: [92.80, 10.30], class: vent}
+  lever: {at: [0.80, 35.60], size: [78.70, 2.20], class: handle}
+  latch: {at: [79.50, 34.80], size: [33.10, 3.60], class: latch}
+  lamp-cfp2-1: {at: [34.77, 33.92], size: [1.40, 1.00], class: led, states: ['off', 'on']}
+  lamp-cfp2-2: {at: [77.27, 33.92], size: [1.40, 1.00], class: led, states: ['off', 'on']}
+  lamp-3-4-1: {at: [104.37, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-3-4-2: {at: [106.57, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-3-4-3: {at: [108.77, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-3-4-4: {at: [110.97, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-5-6-1: {at: [123.37, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-5-6-2: {at: [125.57, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-5-6-3: {at: [127.77, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-5-6-4: {at: [129.97, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-7-8-1: {at: [145.49, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-7-8-2: {at: [147.69, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-7-8-3: {at: [149.89, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-7-8-4: {at: [152.09, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-9-10-1: {at: [164.49, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-9-10-2: {at: [166.69, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-9-10-3: {at: [168.89, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+  lamp-9-10-4: {at: [171.09, 16.80], size: [1.40, 1.20], class: led, states: ['off', 'on']}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#2f7fd6'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: vent
+      vent: 20
+      confidence: estimated
+      source: the vent's extent is measured; nothing dimensions what is behind it.
+    - node: latch
+      out: 2.0
+      confidence: estimated
+      source: unsourced; the guide's Sled Replacement figure is an isometric render.
+skins: [default]
+body:
+  depth: 380
+  color: '#25282c'

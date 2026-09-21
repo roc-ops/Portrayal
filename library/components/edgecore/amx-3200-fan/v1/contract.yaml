@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: amx-3200-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The Edgecore AMX3200's rear fan tray, ordered as AMX-3200-FAN - a 42.2 x 39.7 module,
+  honeycomb across its face over one 40.5 mm fan, with a red handle swept across its
+  middle and a small lens at its top left. FIVE fill the rear in a 4+1 redundancy,
+  numbered 5 to 1 from left to right.
+size: {w: 42.2, h: 39.7}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: 'AMX-3200-FAN'
+  power-absent: not-published
+  airflow: front-to-back
+provenance:
+  size: >-
+    PHOTO-MEASURED ON THREE REARS THAT AGREE. On the guide's rear elevation (2.536 px/mm)
+    the trays' frames read 97.0-139.2, 147.4-189.6, 197.9-240.1, 248.4-290.6 and
+    298.8-341.0: 42.2 wide on a 50.45 pitch, the webs between them 8.2. The two rear
+    PRODUCT PHOTOGRAPHS (the AC and DC builds, 2.19 px/mm) put the same frames at
+    97.3-138.4 ... 298.2-339.3, pitch 50.4, and the red handles' left edges fall on
+    97.8, 148.2, 198.7, 249.2 and 299.6 - 50.45 again. The height is the frame's, y
+    1.9-41.6.
+    THE FAN INSIDE IS STATED. The datasheet's ordering table says 'Fan-tray modules with 5
+    pcs of 40.5 mm x 70.14 mm 12V fans' - one 40.5 mm fan per tray, which is what the
+    face shows: one rotor behind the mesh.
+  handle: >-
+    A RED BAR SWEPT DIAGONALLY ACROSS THE TRAY, about 8.7 thick, high at its left end (y
+    15.2-23.9) and low at its right (24.0-32.7), 40.6 wide overall, with its
+    release set into the bar - the guide says 'Pull the handle release latch'. The same
+    idiom as edgecore/fan-2u-1x1sn@1 on this vendor's larger trays, at 1RU scale.
+  airflow: >-
+    ONLY FRONT-TO-BACK IS ORDERABLE - every AMX3200 ordering code ends -F - so the handle
+    has one colour.
+  power-absent: >-
+    NOT PUBLISHED. The ordering table gives the fan's size and voltage and no power.
+states: [absent]
+elements:
+  grille: {at: [1.20, 1.20], size: [39.80, 37.30], class: rotor}
+  handle: {at: [0.80, 15.20], size: [40.60, 17.50], class: handle}
+  status: {at: [3.90, 2.20], size: [2.20, 2.20], class: led}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c7282c'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 60
+      confidence: estimated
+      source: the grille's extent is measured; the depth behind it is the fan's own 70.14 mm, not the grille's.
+    - node: handle-bar
+      uhandle: 18
+      dia: 5.0
+      confidence: estimated
+      source: >-
+        unmeasured projection, below the library's 22-29 mm fan-tray range because a 1RU
+        tray has less room; the guide's figures are isometric (roc-ops/Portrayal#385).
+skins: [default]
+body:
+  depth: 110
+  color: '#2b2f34'
