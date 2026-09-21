@@ -28,6 +28,15 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#286, roc-ops/Portrayal#285).
 
 ### Changed
+- A pluggable cage's `rotate`, and so `cages[].rotate`, has one meaning: 0 is a
+  module seated upright, bail at the top and belly at the bottom. Every
+  belly-to-belly SFP/QSFP/QSFP-DD stack is drawn upper 0 over lower 180, or left
+  270 beside right 90 on a card drawn on its side, so an optic seated by its
+  cage's turn has its bail outward; the std cage skins draw their lip at the
+  bottom of the opening, `common/qsfp-cage@2` its flange, and lint L108 holds
+  the rule. 62 devices took a major bump for turned or re-anchored placements
+  and 85 cards a minor; OSFP stacks are left as drawn
+  (docs/pluggables-3d-design.md, S1-S8).
 - Exported `description` fields are cut at a word boundary with a trailing
   `...`, and bay `Accepts:` lists at a whole entry with `(+N more)`. 266
   descriptions used to end mid-word, and 62 were cut at a decimal point —
