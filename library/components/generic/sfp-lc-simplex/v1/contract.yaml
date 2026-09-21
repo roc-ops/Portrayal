@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc-simplex
-version: 1.0.1
+version: 1.0.2
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -22,7 +22,7 @@ fields:
   latch-color:
     label: Latch colour
     type: text
-    default: '#2f5fa8'
+    default: '#6b6f73'
   label:
     label: Module label
     type: text
@@ -48,9 +48,17 @@ provenance:
     generic/sfp-lc@1; see that contract's own `provenance.protrusion` for the
     full reading. A face swap does not move the body's protrusion.
   bail-colour: >-
-    A FIELD, not a fact. Vendors colour the bail by reach (blue is commonly
-    single-mode) and the wrapper sets `latch-color`; the default here is a
-    colour, not a claim.
+    A FIELD, not a fact, and the default is a NEUTRAL GREY (#6b6f73) because
+    every chromatic default is a claim. SFF-8432 Rev 5.2a Note 13 makes the
+    colour of an exposed SFP feature a mode code - black or beige for
+    multi-mode, blue for single mode, and it says "shall" - so the blue this
+    default used to carry told every generic SFP drawn with it that it was
+    single mode. That is a per-SKU fact, and a generic stands for every SKU of
+    its shape (L99). The grey is in no code table: not blue, not black, not
+    beige. A vendor wrapper, which knows which module it is, sets
+    `latch-color` to the colour its mode or wavelength calls for. Decided
+    2026-09-21. SFF-8432 Rev 5.2a is held locally in the maintainer's
+    gitignored corpus.
   latch: >-
     carried unchanged from generic/sfp-lc@1's `provenance.latch` - the bail
     geometry is a fact about the module body, not about which face is cut

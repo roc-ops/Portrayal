@@ -106,14 +106,18 @@ module in the same kind of cage.
 - **D4 - out of scope**: 2D side views showing a seated module's protrusion
   (see Open questions below); XFP/CFP/CFP2 (no generics exist); the OSFP MSA
   fetch (no OSFP generic exists); changing the generics' default latch
-  colour (see below).
+  colour (see below - since settled).
 
-Open item carried to the final report, not decided here: SFF-8432 Note 13
-makes an exposed SFP colour a mode claim (blue = single mode). Both SFP
-generics default `latch-color` to `#2f5fa8` (blue), so every generic SFP
-drawn with its default claims single mode - a per-SKU fact L99 keeps off
-generics. D wires the colour through to 3D faithfully and does not change
-the default.
+SETTLED 2026-09-21 - the latch colour default is a neutral grey. The item D
+carried open: SFF-8432 Note 13 makes an exposed SFP colour a mode claim
+(blue = single mode), and both SFP generics defaulted `latch-color` to
+`#2f5fa8` (blue), so every generic SFP drawn with its default claimed single
+mode - a per-SKU fact L99 keeps off generics. All four generics now default
+`latch-color` to `#6b6f73`, because SFF-8432 Rev 5.2a codes blue, black and
+beige and QSFP-DD HW Rev 6.3 section 6.3 codes beige, blue and white, and an
+achromatic grey is in neither table; a vendor wrapper sets the colour its
+mode or wavelength calls for. D's 3D wiring is unchanged - the grey reaches
+3D the same way any `latch-color` does.
 
 ## Open questions
 
