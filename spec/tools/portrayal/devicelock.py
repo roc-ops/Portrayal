@@ -371,6 +371,12 @@ def buckets(doc, versions=None):
             # the gate says about this device (#180). Conditional, like the two
             # above: a device that waives nothing is not rehashed for the key.
             **({"lint": doc.get("lint")} if doc.get("lint") else {}),
+            # A STACK EXCEPTION IS THE SAME KIND OF CLAIM as a waiver - it says a
+            # belly-to-belly pair is built otherwise than L108's convention, and
+            # why - so it is fingerprinted the same way, and conditionally, so
+            # the devices that declare none are not rehashed for the key.
+            **({"stack-exceptions": doc.get("stack-exceptions")}
+               if doc.get("stack-exceptions") else {}),
             "attrs": doc.get("attrs"),
             "provenance": doc.get("provenance"),
             "groups": doc.get("groups"),
