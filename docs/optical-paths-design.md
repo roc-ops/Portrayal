@@ -61,7 +61,7 @@ attr, checkable as a graph.
 
 ## Decisions
 
-Taken with Jason, 2026-09-11/12, in this order:
+Taken 2026-09-11/12, in this order:
 
 | # | decision |
 |---|---|
@@ -321,7 +321,7 @@ by section D's table, which used to claim it.
 
 ## Sources
 
-Staged under `working/intake/fs/fhd/` - `SOURCES.md`, `COVERAGE.md`,
+Staged in the maintainer's gitignored `working/intake/fs/fhd/` - `SOURCES.md`, `COVERAGE.md`,
 `CATALOGUE.tsv`, five converted PDFs, 139 product images, and a Visio stencil
 that turned out to be perspective marketing art with no connection points.
 Read `COVERAGE.md` before modelling: the module envelope came from product

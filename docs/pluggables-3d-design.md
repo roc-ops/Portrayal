@@ -1,6 +1,6 @@
 # Pluggables D: standing proud in 3D
 
-Status: design agreed with Jason, 2026-09-18. Part of [pluggables-design.md](pluggables-design.md).
+Status: design agreed 2026-09-18. Part of [pluggables-design.md](pluggables-design.md).
 Depends on A and B. Written now so it survives; refined when they land.
 
 ## Goal
@@ -44,7 +44,7 @@ with the 2D about which bail is blue.
 
 `common/qsfp-transceiver` carries six `body-*.svg` skins - top, bottom, left, right,
 rear - produced by a study page (`library/demo/part.html`, since removed) whose 3D
-loft of the pull tab was verified against photographs (`working/notes/HANDOFF-qsfp.md`).
+loft of the pull tab was verified against photographs (the maintainer's notes, not in this repository).
 The README says the viewer textures a box from them; nothing in `relief.js` or
 `viewer3d.js` reads them.
 

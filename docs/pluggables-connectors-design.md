@@ -1,6 +1,6 @@
 # Pluggables B: connectors and the cable point
 
-Status: design agreed with Jason, 2026-09-18. Part of [pluggables-design.md](pluggables-design.md).
+Status: design agreed 2026-09-18. Part of [pluggables-design.md](pluggables-design.md).
 Depends on A for the bores the plugs seat in. Written now so it survives; refined
 when A lands.
 
