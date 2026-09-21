@@ -1,0 +1,63 @@
+# Which cage family a media value belongs to, and what a cage at a given rate
+# accepts below it on the same family's ladder.
+#
+# `lint.PLUGGABLE_CAGES` is the vocabulary L40 already asks about - fifteen
+# media values that name a pluggable cage rather than a fixed jack or bare
+# fibre. That set says a value IS a cage; it says nothing about which cages
+# are the SAME cage at different rates, or which cage accepts which other
+# cage's module. An SFP28 port takes an SFP-plus module and an SFP-DD cage
+# takes a single-row SFP, and neither fact lives anywhere until this file
+# states it.
+#
+# NINE FAMILIES, not fifteen, because the fifteen values are RATES and a
+# family is the physical envelope one cage cuts once. `sfp`, `sfp-plus`,
+# `sfp28` and `sfp56` are one cage, electrically faster each generation; a
+# device that says `media: sfp28` is naming the rate its cage was cut for; a
+# lower rate still seats and links up, which is `rates:` in ascending order.
+#
+# THE VOCABULARY GOVERNS, NOT THE LIBRARY. `sfp-dd` is the one family here
+# with no `std/` cage behind it. It is still a family, because `sfp-dd` is a
+# value `PLUGGABLE_CAGES` already carries and a value in that vocabulary
+# needs a home on some ladder or L40's question has nowhere to land. Its
+# `source` says so rather than implying a cage this library has not modelled.
+#
+# `qsfp-dd800` IS DELIBERATELY ABSENT. It is not a rate any device declares
+# and it is not in `PLUGGABLE_CAGES` - and `PLUGGABLE_CAGES` IS the rate
+# vocabulary this registry covers, not a design document's guess at where
+# that vocabulary is going. Add it the day a device needs it, not before.
+#
+# Every `source` says what the family rests on, including when that is
+# nothing held in `working/`. Five families - `osfp`, `xfp`, `cfp`, `cfp2` and
+# `cxp` - have NO CAGE-DEFINING MSA AT ALL in the corpus; their `source` says
+# NOT HELD and names the `std/` cage that justifies the family's existence
+# instead. `sfp` and `sfp-dd` say NOT HELD too, for the MSA their own source
+# names (SFF-8432, the SFP-DD MSA) - a held document can still be cited
+# wrongly, which is what SFF-8663 vs `qsfp56` turned out to be below, and
+# marking a citation unheld is what stops that happening quietly a second
+# time. A registry that implied we hold documents we do not is the laundering
+# this library refuses everywhere else, and a ladder is not an exception.
+format: 1
+families:
+  sfp:
+    interface: sfp
+    rates: [sfp, sfp-plus, sfp28, sfp56]
+    source: 'SFF-8432 - not held; one cage interface across sfp/sfp-plus/sfp28/sfp56, the rate is electrical; std/sfp exists'
+  sfp-dd:
+    interface: sfp-dd
+    rates: [sfp-dd]
+    also-accepts: [sfp]
+    source: 'SFP-DD MSA - not held; an SFP-DD cage accepts a single-row SFP by industry convention. NO CAGE IN THE LIBRARY YET; the family exists because sfp-dd is in the media vocabulary'
+  qsfp:
+    interface: qsfp
+    rates: [qsfp, qsfp28, qsfp56, qsfp112]
+    source: 'SFF-8661 gives the QSFP+ module envelope; SFF-8663 covers the QSFP+ 28 Gb/s cage (Style A), qsfp28 only - qsfp56 has no MSA held here, but QSFP-DD HW 6.3 sections 9.2 and 9.4.1 both designate one cage a "QSFP28/56 Style A cage": one designation covering both rates; QSFP-DD HW 6.3 section 9 - a QSFP112 cage is backward compatible to QSFP28 and QSFP+'
+  qsfp-dd:
+    interface: qsfp-dd
+    rates: [qsfp-dd]
+    also-accepts: [qsfp]
+    source: 'QSFP-DD HW 6.3 section 1 - QSFP-DD cages are compatible with 4-lane QSFP28/QSFP112'
+  osfp: {interface: osfp, rates: [osfp], source: 'OSFP MSA - not held; the family is here because osfp is in the media vocabulary and std/osfp exists'}
+  xfp:  {interface: xfp,  rates: [xfp],  source: 'XFP MSA - not held; std/xfp exists'}
+  cfp:  {interface: cfp,  rates: [cfp],  source: 'CFP MSA - not held; std/cfp exists'}
+  cfp2: {interface: cfp2, rates: [cfp2], source: 'CFP MSA - not held; std/cfp2 exists'}
+  cxp:  {interface: cxp,  rates: [cxp],  source: 'CXP - not held; std/cxp exists'}

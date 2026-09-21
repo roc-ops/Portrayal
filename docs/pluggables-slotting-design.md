@@ -79,8 +79,18 @@ pluggable interface (directly or through a wrapper):
 `behaviour: occupies` whose `mates` equals the cage's presented interface, and whose
 own rate (its `media` attr, or none for a generic) is at or below the cage's `media`
 on the family's ladder, plus the `also-accepts` families. Vendor-blind by
-construction. `occupant` is the configured occupant if the manifest seats one, which
-after A no shipped device does.
+construction.
+
+`media` is the port's declared media, read from the placement first and then from
+its port group - L18's precedence, and the corpus declares it in both places.
+
+`occupant` is the configured occupant if the manifest seats one, which after A no
+shipped device does - and it is **the default configuration's** occupant, because a
+`cages[]` entry is a view-static fact while `occupants:` is declared per
+configuration. Each configuration's own map is published beside its `bays`, as
+`configs[].occupants`, and a consumer holding a particular configuration reads that
+rather than `cages[].occupant`, exactly as it already reads `configs[].bays` rather
+than a bay's view-level `default`.
 
 Sorted generics first, then vendors alphabetically, so the list reads the same on
 every device.
