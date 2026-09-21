@@ -25,7 +25,8 @@ def test_a_host_that_presents_its_own_point_lifts_nothing():
 
 def test_a_forwarded_point_carries_the_composed_parts_lift():
     """The whole point: the aperture is the thing that stands forward."""
-    bore = {"interface": "lc", "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
     host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx",
                        "at": [1.25, 1.75], "lift": 10.0}]}
     iface, at, lift = presented_interface(host, _res({"std/lc-bore@3": bore}))
@@ -36,8 +37,23 @@ def test_a_forwarded_point_carries_the_composed_parts_lift():
         "ignores that is buried in the transceiver body")
 
 
+def test_a_forwarded_point_goes_through_the_composed_parts_rotation():
+    """The same bore turned tongue-up, as every generic transceiver composes
+    it. The part is drawn translate(at) rotate(180 w/2 h/2), so its mate
+    (2.35, 2.35) turns about the bore's centre (2.35, 3.15) to (2.35, 3.95),
+    and lands at (1.25 + 2.35, 1.75 + 3.95) = (3.6, 5.7) - the bore's centre,
+    not the (3.6, 4.1) a plain `at + mate` gave."""
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx",
+                       "at": [1.25, 1.75], "lift": 10.0, "rotate": 180}]}
+    _, at, _ = presented_interface(host, _res({"std/lc-bore@3": bore}))
+    assert at == [3.6, 5.7]
+
+
 def test_a_composed_part_with_no_lift_forwards_zero():
-    bore = {"interface": "lc", "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
     host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx", "at": [1.25, 1.75]}]}
     _, _, lift = presented_interface(host, _res({"std/lc-bore@3": bore}))
     assert lift == 0.0

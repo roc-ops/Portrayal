@@ -100,7 +100,12 @@ def test_the_mate_point_can_sit_on_a_feature_too():
 
 
 def test_the_forwarded_path_is_unchanged():
-    bore = {"interface": "lc", "connection-points": {"mate": {"at": [2.35, 2.35]}}}
+    # UNROTATED, so the forwarded point is the plain at + mate. The composed
+    # part's size is what its rotation turns about, so the aperture carries
+    # one as every real contract does; the rotated case is in
+    # test_occupant_carries_depth.py and test_seat_rotation.py.
+    bore = {"interface": "lc", "size": {"w": 4.7, "h": 6.3},
+            "connection-points": {"mate": {"at": [2.35, 2.35]}}}
     host = {"parts": [{"ref": "std/lc-bore@3", "id": "tx",
                        "at": [1.25, 1.75], "lift": 10.0}]}
     assert presented_interface(host, _res({"std/lc-bore@3": bore})) == \
