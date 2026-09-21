@@ -7,6 +7,9 @@ is_full_depth: true
 description: MaiaEdge Port Extender - a 1RU switch sold to expand a Path Border Controller's physical
   port count
 interfaces:
+  - name: mgmt
+    type: 1000base-t
+    mgmt_only: true
   - name: port-1
     type: 25gbase-x-sfp28
   - name: port-2
@@ -119,10 +122,30 @@ interfaces:
     type: 100gbase-x-qsfp28
   - name: port-56
     type: 100gbase-x-qsfp28
+module-bays:
+  - name: Fan 1
+    position: '1'
+    description: 'Accepts: port-extender-fan'
+  - name: Fan 2
+    position: '2'
+    description: 'Accepts: port-extender-fan'
+  - name: Fan 3
+    position: '3'
+    description: 'Accepts: port-extender-fan'
+  - name: Fan 4
+    position: '4'
+    description: 'Accepts: port-extender-fan'
+  - name: PSU 1
+    position: '1'
+    description: 'Accepts: psu-550w'
+  - name: PSU 2
+    position: '2'
+    description: 'Accepts: psu-550w'
 comments: 'MaiaEdge Port Extender - a 1RU switch sold to expand a Path Border Controller''s physical port
-  count. 48 SFP28 tenant ports in two rows and 8 QSFP28 fabric uplinks on the front; 1+1 supplies and
-  a 3+1 fan tray behind. Its port roles are configured from the MaiaEdge portal rather than on the box,
-  which is what distinguishes it from the third-party switches that can stand in for it.
+  count. 48 SFP28 tenant ports in two rows and 8 QSFP28 fabric uplinks on a black face; a bare-steel chassis
+  with 1+1 supplies, four fans and the management jacks behind. Its port roles are configured from the
+  MaiaEdge portal rather than on the box, which is what distinguishes it from the third-party switches
+  that can stand in for it.
 
 
   Facts carried in the model that this schema has no field for:
@@ -162,7 +185,7 @@ comments: 'MaiaEdge Port Extender - a 1RU switch sold to expand a Path Border Co
   - thermal.fan-redundancy: 3+1
 
 
-  Drawing version 0.1.1. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 1.0.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

@@ -241,6 +241,11 @@ def block_items(block, library, standards):
             p["rotate"] = rot_by_row[row]
         p["group"] = block["id"]
         p["rel-pos"] = n
+        # A PORT'S OWN ATTRS, when its group cannot hold them: two blocks of
+        # different media that share one numbering share one group, and a group
+        # has one media. A copy per port, so editing one never reaches another.
+        if block.get("attrs"):
+            p["attrs"] = dict(block["attrs"])
         placements.append(p)
 
         if ap:
