@@ -12,6 +12,11 @@
   "size"
  ],
  "additionalProperties": false,
+ "dependentRequired": {
+  "interface-at": [
+   "interface"
+  ]
+ },
  "properties": {
   "format": {
    "const": 1
@@ -52,6 +57,10 @@
   "interface": {
    "$ref": "#/$defs/segment",
    "description": "this component IS a receptacle presenting this mating interface, e.g. sfp, qsfp, rj45, iec-c14. Occupants declare the same key via `mates`. Deliberately not an enum - a new interface is a new key, not a schema change."
+  },
+  "interface-at": {
+   "$ref": "#/$defs/segment",
+   "description": "WHICH connection point the `interface` is presented at; default `mate`. Allowed only beside `interface`. A plug mates INTO its receptacle at `mate` and presents its own interface to a boot at its REAR (`boot`), which is a different point: this names it. Paired with that point's `on:`, it is how a part seated on a plug lands on the plug's rear face rather than inside it."
   },
   "mates": {
    "$ref": "#/$defs/segment",
@@ -639,6 +648,10 @@
        "left",
        "right"
       ]
+     },
+     "on": {
+      "$ref": "#/$defs/segment",
+      "description": "the `relief.features[]` node this point sits on. A part seated at this point stands off by that feature's `out` - ABSOLUTE from this part's own face, so a feature's `lift` does not add to it. Read only when this is the point the `interface` is presented at (`interface-at`, default `mate`); lint L106 requires the node to exist and to carry an `out`."
      }
     }
    },

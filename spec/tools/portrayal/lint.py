@@ -246,6 +246,7 @@ RULES = {
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
+    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`"),
 }
 
 
@@ -4260,6 +4261,43 @@ def lint_component_forwarded_mate(path, data, lib_roots):
          "wrong; the aperture's own figure is the measured one")
 
 
+def lint_component_seat_point(path, data, _lib_roots=None):
+    """L106: the point an interface is presented at, and the feature it sits on.
+
+    `presented_interface` presents a contract's own `interface` at the point
+    `interface-at` names (default `mate`), and lifts a part seated there by the
+    `out` of the relief feature that point sits `on:` (pluggables D, D3). Both
+    are names, and a name that points at nothing does not fail loudly anywhere
+    else: an `interface-at` naming no point falls back to the old `mate`
+    answer, and an `on:` naming no feature - or one with no `out` - lifts 0.0.
+    Either way a boot is drawn inside the plug it wraps and nothing says so.
+
+    ERRORS, not warnings: there is no reading of a dangling name that is right.
+    A feature with no `out` does not stand proud, so it has no rear face to
+    seat on; `sink`, `top` and `lift` answer other questions.
+    """
+    cps = data.get("connection-points") or {}
+    at = data.get("interface-at")
+    if at is not None and at not in cps:
+        err(path, "L106", f"interface-at: {at!r} names no connection point - "
+                          f"declared: {', '.join(sorted(cps)) or 'none'}")
+    features = {f.get("node"): f for f in
+                ((data.get("relief") or {}).get("features") or [])
+                if isinstance(f, dict)}
+    for name, cp in cps.items():
+        on = cp.get("on") if isinstance(cp, dict) else None
+        if on is None:
+            continue
+        f = features.get(on)
+        if f is None:
+            err(path, "L106", f"connection-point {name!r} is on: {on!r}, which is "
+                              "no relief.features[] node of this part")
+        elif f.get("out") is None:
+            err(path, "L106", f"connection-point {name!r} is on: {on!r}, which has "
+                              "no `out` - a part seated there needs the depth of "
+                              "the feature's rear face to stand on")
+
+
 def lint_device_power_redundancy(path, data):
     """L66: a power group with more than one bay states its redundancy.
 
@@ -7912,6 +7950,7 @@ def main():
                 lint_component_size_sourced(f, d)
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
+                lint_component_seat_point(f, d)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)
