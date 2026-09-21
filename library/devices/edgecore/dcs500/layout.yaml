@@ -1,0 +1,537 @@
+format: 1
+kind: device
+name: dcs500
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: DCS500
+portfolio: {line: Data Center, family: Data Center Switch, series: DCS500}
+description: >-
+  64 x 100G QSFP28 2RU top-of-rack or spine switch (vendor alias AS7816-64X, OZ series),
+  Broadcom BCM56970 Tomahawk 2 with an Intel Xeon D-1518, ONIE-preloaded. Every port is on
+  the front, in sixteen 2x2 ganged cages; two 850 W AC supplies sit in the rear's lower
+  corners either side of four 3+1 fan trays, in either airflow direction. Port, fan and
+  PSU numbering start at zero on this series.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents, both docling-converted. dcs500-datasheet (the DCS500 / AS7816-64X data
+      sheet) carries the spec list, the nine-callout Interfaces table, the ordering table and
+      on page 2 a colour front and rear elevation, 1004 px wide each. dcs500-qsg (the
+      AS7816-64X quick start guide, six pages) carries small line-art front and rear
+      elevations (600 and 591 px), an enlargement of the front's left end at 8.68 px/mm, a
+      DC terminal-block figure and the hardware specification table. Both letter the
+      artwork AS7816-64X, this device's vendor alias. The guide carries the vendor's
+      standard 'drawings ... are for illustration only' disclaimer, which turns out to
+      matter here - see the numbering note.
+  figure-choice:
+    confidence: measured
+    note: >-
+      Gate 1, and the datasheet's two elevations are not equally trustworthy.
+      THE REAR IS SQUARE: panel 999 x 199 px, aspect +0.42% against 438.4/87.7, 2.279 px/mm
+      on x and 2.269 on y. THE FRONT IS NOT AND IS CROPPED FLUSH: its ink fills the whole
+      1004 x 198 image, +1.44% on aspect. So the front's box was not trusted as the body
+      until something else said so.
+      A SCALE-FREE RATIO SAYS SO. The first-to-last cage-block span, divided by panel width,
+      reads 0.7271 on the datasheet front and 0.7281 on the guide's front - whose own box is
+      square to 0.15% - so the datasheet image IS the full width and x scales at 2.290 px/mm.
+      Its HEIGHT is the part that is short: the guide puts the two cage strips 0.340 and
+      0.677 of the way down the panel, the datasheet 0.359 and 0.692, the pattern of about
+      1.5 mm cropped off the datasheet's top edge. So every vertical position is the
+      datasheet's pixel distance at its x scale, anchored so the midline between the two
+      cage strips falls where the guide puts it, at 44.6 mm.
+      ORTHOGRAPHIC: the sixteen column centres fit x = first + pitch*i + gutter*(i//2) to
+      0.57 px rms, and a quadratic term buys 0.27 px - under 0.9% across the whole row.
+  chassis:
+    confidence: datasheet
+    note: >-
+      DATASHEET 'Dimensions (WxDxH): 43.84 x 58.0 x 8.77 cm (17.26 x 22.83 x 3.45 in)' and the
+      guide's 'Size (WxDxH) 438.4 x 580 x 87.7 mm' - two documents, one triple. 438.4 is the
+      body; the ears are placed outside it.
+  weight:
+    confidence: datasheet
+    note: >-
+      '14.11 kg (31.1 lb)' in the datasheet, and the guide qualifies the same figure 'with
+      two installed PSUs', so it is the populated machine.
+  port-pitch:
+    confidence: registry
+    note: >-
+      The registry's ganged-QSFP 19.00 is carried. With the pitch free the fit reads 19.08;
+      pinned to 19.00 the worst column moves 0.73 mm and the rms is unchanged at 0.30 mm.
+      The gutter between cages is measured, 7.52, and the row pitch inside a cage 14.62 -
+      14.19 across the band between the upper and lower cages.
+  numbering:
+    confidence: datasheet
+    note: >-
+      THE DATASHEET SELLS TWO SERIES THAT DIFFER IN WHAT IS PRINTED. Its ordering table's
+      AS7816-64X-OZ base model says 'port, fan and PSU numbering start at zero'; the
+      AS7816-64X-O base model says 'start at one', and Interfaces callouts 7 and 9 give both
+      PSU namings side by side. Issue #330 asks for the zero-based declaration, and the OZ
+      is the base model listed first, so this is the OZ: ports 0-63, PSU 0 and 1, fans 0-3.
+      THE DRAWINGS DO NOT AGREE WITH EACH OTHER. The datasheet's elevations are the O
+      series - ports 1..64, 'PSU 1' and 'PSU 2', fans 4..1. The guide's front enlargement is
+      the OZ - '1 (up) (down) 32', '33', '35', 'PSU 0', 'PSU 1' - which is the silkscreen
+      modelled here. But the guide's own REAR prints fans 4..1, one-based, on the same page
+      set whose front is zero-based. The words beat the drawings: fans are 0..3, printed
+      right to left, and the disagreement is a gap.
+      THE ORDER IS COLUMN-MAJOR WITHIN EACH HALF. The upper cages' top row carries the even
+      ports 0..30 and their bottom row the odd 1..31; the lower cages carry 32..62 over
+      33..63. The between-cage band prints each column as 'n (up) (down) m' - the upper
+      cage's lower port and the lower cage's upper one - and the outer rows are numbered
+      above and below.
+  port-leds:
+    confidence: photo-measured
+    note: >-
+      FOUR ROUND LAMPS PER PORT ON THE OUTER ROWS, measured at 8.68 px/mm on the guide's
+      enlargement - see edgecore/dcs500-lane-leds@1. They sit on the faceplate above the
+      top row (centres at 13.4 mm) and below the bottom row (76.7 mm), centred on their
+      columns, which the datasheet's elevation confirms at its own resolution.
+      THE TWO INNER ROWS' LAMPS ARE NOT LOCATED and are not drawn - see the gap. The band
+      between the cages carries only the 'n (up) (down) m' legend at every magnification
+      either document offers.
+  cage-frames:
+    confidence: photo-measured
+    note: >-
+      Each 2x2 ganged cage is drawn inside a bright metal frame, measured at 5x on the
+      datasheet's front for the first block - x 29.3-69.0, y 17.3-42.6 for the upper cage
+      and 47.0-72.3 for the lower - and repeated on the block lattice. The white strip across
+      each frame's middle is the cage's belly between its two ports.
+  arrows-and-lamp-cutouts:
+    confidence: photo-measured
+    note: >-
+      TWO LINT RULES STAND ON PURPOSE. L61 x 16: each between-cage arrow pair sits 0.93 mm
+      left of its column, which is where the guide's 8.68 px/mm enlargement puts it - the
+      up-arrow 3.0 mm left of centre and the down-arrow 1.15 mm right, hugging a one-digit
+      numeral on the left and a two-digit one on the right. Centring it would be tidier and
+      wrong. L39 x 32: the outer-row lamp part declares four openings, and the toolchain
+      deliberately does not guess whether they are four holes or one slot - the same
+      standing warning the COR580 (24) and COR550 (40) carry. The side-face rails are
+      ESTIMATED: neither document draws a side, and two recessed rails are this shell
+      family's usual sheet-metal return.
+  front-ends:
+    confidence: photo-measured
+    note: >-
+      LEFT END, at 5x on the datasheet and checked against the guide's enlargement: the
+      Reset pinhole at (23.1, 42.6) under its legend, and five system lamps in a column at
+      x 23.1 - Loc, Diag, Fan, PSU 0, PSU 1 - at y 51.8, 54.7, 57.6, 60.8 and 63.9, their
+      legends right-aligned 1.7 mm to the left. A honeycomb vent field runs down the edge
+      below them.
+      RIGHT END: the Mgmt RJ-45 stacked over the Console RJ-45 in one bezel at x 391.7
+      (17.0 x 24.9), legended Mgmt above and Console below; the USB-A standing on end at
+      (414.4, 27.8), 6.1 x 14.0 with its trident beneath; another honeycomb edge vent; and
+      the pull-out product tab at the bottom right, drawn orange in the guide.
+      THE PORT FIELD SITS ON A LIGHTER PLATE: sampled #35373c against the outer panel's
+      #2d2d31, its edges at x 9.4 and 386.9 and y 11.2 and 73.2 on the datasheet's profiles.
+      The upper lamp row is on it; the lower lamp row, the lower numerals and both
+      perforation rows are on the outer panel. The management cluster is off it.
+      THE MGMT JACK IS LAMPED AND THE CONSOLE IS NOT. The datasheet states 'Management Port
+      LED: Green (10M/100M/1G), Flashing: Activity' and nothing for the console, which is
+      also L76's Ethernet-lamped, console-bare convention.
+  perforation:
+    confidence: photo-measured
+    note: >-
+      A row of round holes runs along the top and the bottom of the port field (y 8.8 and
+      82.5, x 28.7-388.8), and a denser perforated patch sits at the very top of the middle
+      of the panel on the guide's front, x 119.6-296.6 - which the datasheet's front cannot
+      show, its top 1.5 mm being cropped. Holes 2.2 mm on a 3.06 mm pitch on the rows, measured at 5x; the patch's
+      pitch does not resolve at 1.36 px/mm and is drawn as fine perforation.
+  rear:
+    confidence: photo-measured
+    note: >-
+      MEASURED on the datasheet's rear at 2.279 px/mm. The supplies sit in the LOWER
+      corners, housings x 18.9-69.8 and 367.7-418.6, y 45.8-85.1. The four fan trays fill
+      the middle on a 68.32 mm pitch fitted on the webs between them - see
+      edgecore/dcs500-fan@1 - from x 88.58, y 22.9-85.5. Above each supply a grounding
+      plate carries two screws under a ground symbol, and the upper band carries each
+      tray's numeral. The chassis prints each supply's name above its outer top corner.
+attrs:
+  performance:
+    switching-capacity: 6.4 Tbps (12.8 Tbps full duplex)
+    forwarding-rate: 4.2 bpps
+    packet-buffer: 42 MB integrated
+    jumbo-frames: up to 9 KB
+    port-modes-qsfp28: 1x 100GbE or 1x 40GbE, or breakout 4x 25GbE / 4x 10GbE (128 logical ports max)
+  power:
+    power-max-w: 850
+    power-envelope: unstated
+    power-input-ac: 100-240 VAC, 50-60 Hz, 12-6 A
+    power-redundancy: 1+1 redundant, load-sharing, hot-swappable
+  thermal:
+    airflow: front-to-back or back-to-front, by SKU
+  environmental:
+    temperature-operating: 0 C to 45 C (32 F to 113 F)
+    temperature-storage: -40 C to 70 C (-40 F to 158 F)
+    humidity-operating: 5% to 95% non-condensing
+  platform:
+    asic: Broadcom BCM56970 Tomahawk 2
+    cpu: Intel Xeon D-1518, 4-core 2.2 GHz
+    memory: 2x 8 GB DDR4-2133 ECC SO-DIMM
+    boot-flash: 2x 16 MB SPI
+    storage: 32 GB M.2 MLC SSD (reserve mSATA connector)
+    software: ONIE installer pre-loaded; open-source and commercial NOS options
+  features:
+    marketing-name: DCS500
+    vendor-alias: AS7816-64X (OZ series - numbering from zero)
+    optics-qsfp28: 100GBASE-CR4/AOC/SR4/LR4/CWDM4/PSM4, 40GBASE-CR4/SR4/LR4, 100G DAC, 40G DAC/AOC
+  management:
+    mgmt-ports: 1x RJ-45 serial console, 1x RJ-45 1000BASE-T management, 1x USB Type-A storage
+  compliance:
+    emc: CE Mark, EN 55032, AS/NZS CISPR 32, EN 55024, EN 61000-3-2, EN 61000-3-3, FCC Part 15 Subpart B Class A, VCCI Class A
+    safety: CB, UL (CSA 22.2 No 62368-1; UL 62368-1), CNS15598-1
+    nebs: GR63-CORE (pre-test)
+    rohs: RoHS-6 compliant; WEEE Directive 2002/96/EC
+  lifecycle: {eol: none-announced}
+chassis: {width: 438.4, height: 87.7, depth: 580.0, ru: 2, weight-kg: 14.11, color: '#2d2d31',
+  airflow: front-to-back}
+gaps:
+  - what: o-series-numbering
+    scope: [front, rear]
+    reason: sources-disagree
+    wanted: >-
+      THE ONE-BASED AS7816-64X-O SERIES IS NOT MODELLED, and the documents disagree about
+      which numbering they draw. The ordering table sells two base models whose only
+      stated difference is that the O prints ports, fans and supplies from one and the OZ
+      from zero; it also offers the 48 V DC supply only in the O series. The datasheet's
+      elevations are the O, the guide's front enlargement is the OZ, and the guide's rear
+      prints fans 4..1 beside a front that says PSU 0. This device is the OZ and prints fans
+      3..0 on the datasheet's word. A second device, or a silkscreen that can vary by
+      configuration, would carry the O; a photograph of a real OZ rear settles its fan
+      legend.
+  - what: inner-row-port-leds
+    scope: [front]
+    reason: needs-photo
+    wanted: >-
+      WHERE THE LAMPS OF THE TWO INNER PORT ROWS ARE. The vendor states four lamps per port
+      and the outer rows show them, four round lamps above the top row and below the
+      bottom. The inner rows - the upper cages' bottom row and the lower cages' top row -
+      show none in either document: the band between the cages carries only the numeral
+      and arrow legend, and each cage's white belly strip carries six round features per
+      column, which is neither four nor eight and matches the cage's own light-pipe and
+      vent pattern. 32 ports' lamps are therefore not drawn. A close photograph of one
+      column of a real unit would settle it.
+  - what: fan-handle-colour-by-airflow
+    scope: [rear]
+    reason: vendor-silent
+    wanted: >-
+      WHETHER THE BACK-TO-FRONT BUILD'S FAN HANDLES ARE A DIFFERENT COLOUR. Both airflows
+      are orderable (-F and -B) and every rear either document draws has red handles.
+      Other Edgecore lines colour the reverse build blue, but a sibling family's convention
+      is not evidence for this one, so both configurations draw red.
+  - what: fan-and-psu-ordering-codes
+    scope: [rear]
+    reason: vendor-silent
+    wanted: >-
+      FRU CODES FOR THE FAN TRAY AND THE 850 W SUPPLY. The ordering table lists chassis
+      SKUs only; the guide's replacement text names no part. Both FRUs are named for the
+      chassis because no code exists to use instead.
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+  port-leds: {term: LED, role: indicator, index-origin: 0}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the right-hand end of the faceplate - the 1000BASE-T management RJ-45 stacked over the
+      RS-232 console RJ-45 in one bezel, and a USB-A storage port beside them.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: service, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: redundant, load-sharing, hot-swappable
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: 3+1 redundant, hot-swappable fan modules
+  grounding: {term: Point, role: furniture, index-origin: 0}
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: the rack ears and the pull-out product tab.
+views:
+  front:
+    size: {w: 438.4, h: 87.7}
+    panel:
+      decor:
+        - {at: [9.40, 11.20], size: [377.50, 62.00], fill: '#35373c', rx: 0.6}
+        - {at: [29.29, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [29.29, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [74.81, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [74.81, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [120.33, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [120.33, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [165.85, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [165.85, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [211.37, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [211.37, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [256.89, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [256.89, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [302.41, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [302.41, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [347.93, 17.20], size: [39.30, 25.50], fill: '#aeb3b8', rx: 0.5}
+        - {at: [347.93, 46.60], size: [39.30, 25.90], fill: '#aeb3b8', rx: 0.5}
+        - {at: [29.59, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [29.59, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [75.11, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [75.11, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [120.63, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [120.63, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [166.15, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [166.15, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [211.67, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [211.67, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [257.19, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [257.19, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [302.71, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [302.71, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [348.23, 27.56], size: [38.50, 5.04], fill: '#e3e6e9'}
+        - {at: [348.23, 56.38], size: [38.50, 5.23], fill: '#e3e6e9'}
+        - {at: [1.20, 44.20], size: [7.60, 41.00], fill: '#3e4247'}
+        - {at: [1.20, 44.20], size: [7.60, 41.00], pattern: vent, vent: 22}
+        - {at: [427.40, 43.00], size: [10.00, 40.00], fill: '#3e4247'}
+        - {at: [427.40, 43.00], size: [10.00, 40.00], pattern: vent, vent: 22}
+        - {at: [28.70, 8.30], size: [360.10, 2.20], pattern: holes, pattern-pitch: [3.06, 2.20], vent: 22}
+        - {at: [28.70, 82.30], size: [360.10, 2.20], pattern: holes, pattern-pitch: [3.06, 2.20], vent: 22}
+        - {at: [119.60, 0.80], size: [177.00, 4.40], pattern: holes, pattern-pitch: [1.60, 1.50], vent: 22}
+        - {at: [391.70, 14.80], size: [17.00, 27.90], fill: '#d7dadd', rx: 0.4}
+      cutouts:
+        - {block: qsfp28}
+        - {id: reset, at: [21.10, 40.60], size: [4.0, 4.0], shape: circle}
+        - {id: led-loc, at: [22.10, 50.80], size: [2.0, 2.0], shape: circle}
+        - {id: led-diag, at: [22.10, 53.70], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan, at: [22.10, 56.60], size: [2.0, 2.0], shape: circle}
+        - {id: led-psu0, at: [22.10, 59.80], size: [2.0, 2.0], shape: circle}
+        - {id: led-psu1, at: [22.10, 62.90], size: [2.0, 2.0], shape: circle}
+        - {id: mgmt-eth, at: [392.32, 15.57], size: [15.8, 13.2], shape: rect}
+        - {id: console, at: [392.32, 28.97], size: [15.8, 13.2], shape: rect}
+        - {id: usb, at: [415.22, 28.78], size: [4.5, 12.0], shape: rect}
+    silkscreen:
+      - {block: qsfp28}
+      - {at: [38.41, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-1, port-32]}
+      - {at: [57.41, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-3, port-34]}
+      - {at: [83.93, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-5, port-36]}
+      - {at: [102.93, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-7, port-38]}
+      - {at: [129.45, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-9, port-40]}
+      - {at: [148.45, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-11, port-42]}
+      - {at: [174.97, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-13, port-44]}
+      - {at: [193.97, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-15, port-46]}
+      - {at: [220.49, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-17, port-48]}
+      - {at: [239.49, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-19, port-50]}
+      - {at: [266.01, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-21, port-52]}
+      - {at: [285.01, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-23, port-54]}
+      - {at: [311.53, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-25, port-56]}
+      - {at: [330.53, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-27, port-58]}
+      - {at: [357.05, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-29, port-60]}
+      - {at: [376.05, 45.05], mark: arrow-pair, size: 1.2, gap: 2.95, fill: '#d8dcdf', for: [port-31, port-62]}
+      - {at: [23.10, 40.10], text: Reset, font-size: 1.4, anchor: middle, fill: '#d8dcdf', for: reset}
+      - {at: [21.00, 52.30], text: Loc, font-size: 1.4, anchor: end, fill: '#d8dcdf', for: led-loc}
+      - {at: [21.00, 55.20], text: Diag, font-size: 1.4, anchor: end, fill: '#d8dcdf', for: led-diag}
+      - {at: [21.00, 58.10], text: Fan, font-size: 1.4, anchor: end, fill: '#d8dcdf', for: led-fan}
+      - {at: [21.00, 61.30], text: PSU 0, font-size: 1.4, anchor: end, fill: '#d8dcdf', for: led-psu0}
+      - {at: [21.00, 64.40], text: PSU 1, font-size: 1.4, anchor: end, fill: '#d8dcdf', for: led-psu1}
+      - {at: [400.22, 13.10], text: Mgmt, font-size: 1.4, anchor: middle, fill: '#d8dcdf', for: mgmt-eth}
+      - {at: [400.22, 44.20], text: Console, font-size: 1.4, anchor: middle, fill: '#d8dcdf', for: console}
+      - {at: [417.47, 43.60], mark: usb, size: 3.0, fill: '#d8dcdf', for: usb}
+    components:
+      blocks:
+        - id: qsfp28
+          ref: std/qsfp-ganged@1
+          at: [30.09, 17.98]
+          count: 32
+          rows: 2
+          row-pitch: 14.62
+          pitch: registry
+          gang: 2
+          gutter: 7.52
+          number-from: 0
+          cutouts: true
+          rotate: {top: 180}
+          numerals:
+            dx: 9.25
+            dx-by-row: [0.0, -3.9]
+            anchor-by-row: [middle, end]
+            dy-top: -2.38
+            dy-bottom: 13.0
+            font-size: 1.5
+            fill: '#d8dcdf'
+        - id: qsfp28
+          ref: std/qsfp-ganged@1
+          at: [30.09, 46.80]
+          count: 32
+          rows: 2
+          row-pitch: 14.62
+          pitch: registry
+          gang: 2
+          gutter: 7.52
+          number-from: 32
+          cutouts: true
+          rotate: {top: 180}
+          numerals:
+            dx: 9.25
+            dx-by-row: [2.4, 0.0]
+            anchor-by-row: [start, middle]
+            dy-top: -1.2
+            dy-bottom: 18.19
+            font-size: 1.5
+            fill: '#d8dcdf'
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0.1], skin: right, optional: ears, group: furniture, rel-pos: 2}
+        - {block: qsfp28}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-0, at: [32.14, 12.40], group: port-leds, rel-pos: 0, for: port-0}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-2, at: [51.14, 12.40], group: port-leds, rel-pos: 2, for: port-2}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-4, at: [77.66, 12.40], group: port-leds, rel-pos: 4, for: port-4}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-6, at: [96.66, 12.40], group: port-leds, rel-pos: 6, for: port-6}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-8, at: [123.18, 12.40], group: port-leds, rel-pos: 8, for: port-8}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-10, at: [142.18, 12.40], group: port-leds, rel-pos: 10, for: port-10}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-12, at: [168.70, 12.40], group: port-leds, rel-pos: 12, for: port-12}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-14, at: [187.70, 12.40], group: port-leds, rel-pos: 14, for: port-14}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-16, at: [214.22, 12.40], group: port-leds, rel-pos: 16, for: port-16}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-18, at: [233.22, 12.40], group: port-leds, rel-pos: 18, for: port-18}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-20, at: [259.74, 12.40], group: port-leds, rel-pos: 20, for: port-20}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-22, at: [278.74, 12.40], group: port-leds, rel-pos: 22, for: port-22}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-24, at: [305.26, 12.40], group: port-leds, rel-pos: 24, for: port-24}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-26, at: [324.26, 12.40], group: port-leds, rel-pos: 26, for: port-26}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-28, at: [350.78, 12.40], group: port-leds, rel-pos: 28, for: port-28}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-30, at: [369.78, 12.40], group: port-leds, rel-pos: 30, for: port-30}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-33, at: [32.14, 75.70], group: port-leds, rel-pos: 33, for: port-33}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-35, at: [51.14, 75.70], group: port-leds, rel-pos: 35, for: port-35}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-37, at: [77.66, 75.70], group: port-leds, rel-pos: 37, for: port-37}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-39, at: [96.66, 75.70], group: port-leds, rel-pos: 39, for: port-39}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-41, at: [123.18, 75.70], group: port-leds, rel-pos: 41, for: port-41}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-43, at: [142.18, 75.70], group: port-leds, rel-pos: 43, for: port-43}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-45, at: [168.70, 75.70], group: port-leds, rel-pos: 45, for: port-45}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-47, at: [187.70, 75.70], group: port-leds, rel-pos: 47, for: port-47}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-49, at: [214.22, 75.70], group: port-leds, rel-pos: 49, for: port-49}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-51, at: [233.22, 75.70], group: port-leds, rel-pos: 51, for: port-51}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-53, at: [259.74, 75.70], group: port-leds, rel-pos: 53, for: port-53}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-55, at: [278.74, 75.70], group: port-leds, rel-pos: 55, for: port-55}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-57, at: [305.26, 75.70], group: port-leds, rel-pos: 57, for: port-57}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-59, at: [324.26, 75.70], group: port-leds, rel-pos: 59, for: port-59}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-61, at: [350.78, 75.70], group: port-leds, rel-pos: 61, for: port-61}
+        - {ref: edgecore/dcs500-lane-leds@1, id: led-port-63, at: [369.78, 75.70], group: port-leds, rel-pos: 63, for: port-63}
+        - {ref: common/reset-button@1, id: reset, at: [21.10, 40.60], group: buttons, rel-pos: 1, for: chassis}
+        - {ref: common/led-dot@1, id: led-loc, at: [22.10, 50.80], group: leds, rel-pos: 1, for: chassis}
+        - {ref: common/led-dot@1, id: led-diag, at: [22.10, 53.70], group: leds, rel-pos: 2, for: chassis}
+        - {ref: common/led-dot@1, id: led-fan, at: [22.10, 56.60], group: leds, rel-pos: 3, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3]}
+        - {ref: common/led-dot@1, id: led-psu0, at: [22.10, 59.80], group: leds, rel-pos: 4, for: rear/psu-0}
+        - {ref: common/led-dot@1, id: led-psu1, at: [22.10, 62.90], group: leds, rel-pos: 5, for: rear/psu-1}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [392.32, 15.57], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+        - {ref: std/rj45@2, id: console, at: [392.32, 28.97], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/usb-a@1, id: usb, at: [411.47, 32.53], rotate: 90, group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: storage}}
+        - {ref: common/pull-tab@1, id: info-tab, at: [390.50, 83.20], group: furniture, rel-pos: 3}
+    regions:
+      - {id: status-cluster, at: [10.0, 38.0], size: {w: 16.0, h: 28.0}, label: System status,
+         members: [reset, led-loc, led-diag, led-fan, led-psu0, led-psu1]}
+      - {id: mgmt-block, at: [389.0, 10.0], size: {w: 32.0, h: 36.0}, label: Management,
+         members: [mgmt-eth, console, usb]}
+      - {id: intake, at: [0, 0], size: {w: 438.4, h: 87.7}, physical-context: Intake,
+         label: Front airflow (front-to-back build)}
+  rear:
+    size: {w: 438.4, h: 87.7}
+    panel:
+      decor:
+        - {at: [42.10, 25.60], size: [31.60, 12.30], fill: '#c9cdd1', rx: 0.4}
+        - {at: [362.90, 25.60], size: [31.60, 12.30], fill: '#c9cdd1', rx: 0.4}
+      cutouts:
+        - {id: ground-1, at: [51.20, 28.70], size: [14.0, 7.0], shape: rect}
+        - {id: ground-0, at: [370.60, 28.70], size: [14.0, 7.0], shape: rect}
+    silkscreen:
+      - {at: [58.20, 19.00], mark: ground, size: 3.0, fill: '#d8dcdf', for: ground-1}
+      - {at: [377.60, 19.00], mark: ground, size: 3.0, fill: '#d8dcdf', for: ground-0}
+      - {at: [24.10, 41.10], text: PSU 1, font-size: 2.4, anchor: start, fill: '#d8dcdf', for: psu-1}
+      - {at: [418.60, 41.10], text: PSU 0, font-size: 2.4, anchor: end, fill: '#d8dcdf', for: psu-0}
+      - {at: [120.08, 18.40], text: '3', font-size: 2.6, anchor: middle, fill: '#d8dcdf', for: fan-3}
+      - {at: [188.40, 18.40], text: '2', font-size: 2.6, anchor: middle, fill: '#d8dcdf', for: fan-2}
+      - {at: [256.72, 18.40], text: '1', font-size: 2.6, anchor: middle, fill: '#d8dcdf', for: fan-1}
+      - {at: [325.04, 18.40], text: '0', font-size: 2.6, anchor: middle, fill: '#d8dcdf', for: fan-0}
+    components:
+      bays:
+        - {id: psu-1, at: [18.87, 45.80], size: {w: 50.9, h: 39.4}, accepts: [edgecore/dcs500-psu-ac@1], group: psus, rel-pos: 1, default: edgecore/dcs500-psu-ac@1}
+        - {id: fan-3, at: [88.58, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 3, default: edgecore/dcs500-fan@1}
+        - {id: fan-2, at: [156.90, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 2, default: edgecore/dcs500-fan@1}
+        - {id: fan-1, at: [225.22, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 1, default: edgecore/dcs500-fan@1}
+        - {id: fan-0, at: [293.54, 22.90], size: {w: 63.0, h: 62.6}, accepts: [edgecore/dcs500-fan@1], group: fans, rel-pos: 0, default: edgecore/dcs500-fan@1}
+        - {id: psu-0, at: [367.70, 45.80], size: {w: 50.9, h: 39.4}, accepts: [edgecore/dcs500-psu-ac@1], group: psus, rel-pos: 0, default: edgecore/dcs500-psu-ac@1}
+      placements:
+        - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.1], skin: left, optional: ears, group: furniture, rel-pos: 4}
+        - {ref: common/rack-ear@1, id: rear-ear-right, at: [438.4, 0.1], skin: right, optional: ears, group: furniture, rel-pos: 5}
+        - {ref: common/ground-lug@1, id: ground-1, at: [54.70, 25.20], rotate: 90, group: grounding, rel-pos: 1}
+        - {ref: common/ground-lug@1, id: ground-0, at: [374.10, 25.20], rotate: 90, group: grounding, rel-pos: 0}
+    regions:
+      - {id: exhaust, at: [88.58, 0], size: {w: 267.96, h: 87.7}, physical-context: Exhaust,
+         label: Fan tray exhaust (front-to-back build), members: [fan-0, fan-1, fan-2, fan-3]}
+  top:
+    size: {w: 438.4, h: 580.0}
+    panel:
+      decor:
+        - {at: [12.0, 548.0], size: [414.4, 20.0], pattern: vent, vent: 20}
+  bottom:
+    size: {w: 438.4, h: 580.0}
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.0, 190.0], group: furniture, rel-pos: 6}
+  left:
+    size: {w: 580.0, h: 87.7}
+    panel:
+      decor:
+        - {at: [0.0, 3.0], size: [580.0, 1.6], fill: '#1b1e21', sink: 1}
+        - {at: [0.0, 83.1], size: [580.0, 1.6], fill: '#1b1e21', sink: 1}
+  right:
+    size: {w: 580.0, h: 87.7}
+    panel:
+      decor:
+        - {at: [0.0, 3.0], size: [580.0, 1.6], fill: '#1b1e21', sink: 1}
+        - {at: [0.0, 83.1], size: [580.0, 1.6], fill: '#1b1e21', sink: 1}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships: two 850 W AC supplies and four fan trays in, every cage
+      empty. THE AIRFLOW IS WHAT THE ORDERING CODES VARY, so the two orderable builds below
+      carry it - ten OZ codes, five front-to-back and five back-to-front across five power
+      cord regions - and nothing else in the table differs.
+  ac-f2b:
+    kind: orderable
+    description: >-
+      Dual 850 W AC supplies, front-to-back airflow - the -F ordering codes.
+    part-numbers:
+      7816-64X-OZ-AC-F-US: {part: FP3AT7664403A, power-cord: US}
+      7816-64X-OZ-AC-F-EU: {part: FP3AT7664200A, power-cord: EU}
+      7816-64X-OZ-AC-F-UK: {part: FP3AT7664300A, power-cord: UK}
+      7816-64X-OZ-AC-F-JP: {part: FP3AT7664500A, power-cord: JP}
+      7816-64X-OZ-AC-F-UN: {part: FP3AT7664004A, power-cord: UN}
+  ac-b2f:
+    kind: orderable
+    airflow: back-to-front
+    region-context: {exhaust: Intake}
+    description: >-
+      Dual 850 W AC supplies, back-to-front airflow - the -B ordering codes. No handle
+      colour is overridden: every rear either document draws is red, and neither shows a
+      -B unit; see the fan-handle-colour-by-airflow gap.
+    part-numbers:
+      7816-64X-OZ-AC-B-US: {part: FP3AT7664402A, power-cord: US}
+      7816-64X-OZ-AC-B-EU: {part: FP3AT7664201A, power-cord: EU}
+      7816-64X-OZ-AC-B-UK: {part: FP3AT7664301A, power-cord: UK}
+      7816-64X-OZ-AC-B-JP: {part: FP3AT7664501A, power-cord: JP}
+      7816-64X-OZ-AC-B-UN: {part: FP3AT7664005A, power-cord: UN}
+datasheet:
+  title: Edgecore DCS500 (AS7816-64X) Data Center Switch data sheet
+  sha256: 0f768fc126651d01ea6821a55abe8ee61a26040d40704952ddbfe710d1f57c43
+references:
+  - {title: 'Edgecore AS7816-64X 64-Port 100G Top-of-Rack Switch Quick Start Guide', sha256: 2708f8e14d6a01ea947f0ca927097a15acf4596659f5590aede25c2280e2a762}

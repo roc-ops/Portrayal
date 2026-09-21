@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: dcs500-lane-leds
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  The Edgecore DCS500's per-port QSFP28 lamp row - FOUR round lamps in a line on a 4.30 mm
+  pitch, printed on the faceplate outside the cage, above a top-row port and below a
+  bottom-row one. One lamp per breakout lane, as the vendor states.
+size: {w: 14.4, h: 2.0}
+size-confidence: {w: photo-measured, h: estimated}
+provenance:
+  size: >-
+    PHOTO-MEASURED on the quick start guide's front close-up (dcs500-qsg, the Verify
+    Switch Operation enlargement of the left end, native 853 x 566). Its two lower-row
+    columns, legended 33 and 35, sit 165 px apart centre to centre, which against the
+    ganged-QSFP 19.00 mm column pitch is 8.68 px/mm - four times the datasheet's
+    elevation. Under each column four round lamps sit at x 410, 448, 485 and 522 px: a
+    37.3 px pitch, 4.30 mm, lamps about 12 px (1.4 mm) across, and the four centred on the
+    column to a pixel (mean 466 against the legend's 467). The datasheet's own front
+    elevation shows the same four-dot rows above the top row and below the bottom row at
+    2.29 px/mm, where the pitch reads 4.3-4.4 and nothing finer.
+    THE HEIGHT IS AN ALLOWANCE, not a reading: a lamp and a margin.
+    common/qsfp-lane-leds@1 has the right COUNT and nearly the right pitch (4.4) but draws
+    triangles; ufispace/lane-led-quad@1 has round lamps on a 3.94 pitch. Neither is this
+    face, so neither is reused.
+  semantics: >-
+    DATASHEET, 'QSFP28 Port LEDs: LED1: Blue (100 G), Orange (40 G), White (25 G), Green
+    (10 G); LED2~LED4: White (25 G), Green (10 G)', and the guide's 'Each QSFP28 port has
+    four LEDs ... 1 LED Blue - 100 Gbps mode, 1 LED Orange - 40 Gbps mode, 1-4 LEDs White
+    - 25 Gbps breakout mode, 1-4 LEDs Green - 10 Gbps breakout mode, 1 and 3 LED Magenta -
+    50 Gbps breakout mode (two lanes)'. Four lamps, one per lane, lane 1 the multi-colour
+    one. Which END of the row is lane 1 is not stated; the elements are numbered left to
+    right and no more is claimed.
+elements:
+  lane-1: {at: [0.05, 0.30], size: [1.40, 1.40], class: led, states: ['off', 'on']}
+  lane-2: {at: [4.35, 0.30], size: [1.40, 1.40], class: led, states: ['off', 'on']}
+  lane-3: {at: [8.65, 0.30], size: [1.40, 1.40], class: led, states: ['off', 'on']}
+  lane-4: {at: [12.95, 0.30], size: [1.40, 1.40], class: led, states: ['off', 'on']}
+relief:
+  features:
+    - {node: lane-1, dome: 0.25, confidence: estimated, source: common/led-dot@1 - the library's one unsourced panel-lamp figure}
+    - {node: lane-2, dome: 0.25, confidence: estimated, source: as lane-1}
+    - {node: lane-3, dome: 0.25, confidence: estimated, source: as lane-1}
+    - {node: lane-4, dome: 0.25, confidence: estimated, source: as lane-1}
+skins: [default]
