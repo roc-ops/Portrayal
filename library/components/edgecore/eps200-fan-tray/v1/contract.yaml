@@ -1,0 +1,96 @@
+format: 1
+kind: module
+name: eps200-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable fan tray of the Edgecore EPS200 series - a 47.5 x 39.5 module with a
+  honeycomb face, one rotor behind it, a captive thumbscrew and a coloured pull bar that
+  runs nearly the full width of the tray.
+  Ordered as FAN-1U-1x1M, and the SAME PART IN ALL THREE CHASSIS: the ordering tables of
+  the EPS201, EPS202 and EPS203 each list it as "Fan Module ... (for EPS201/AS4630-54TE,
+  EPS202/AS4630-54PE, EPS203/AS4630-54NPE)". Named for the FRU rather than for one of the
+  three that seat it.
+size: {w: 39.5, h: 39.5}
+size-confidence: {w: measured, h: measured}
+attrs:
+  rotors: 1
+provenance:
+  size: >-
+    MEASURED ON TWO REAR ELEVATIONS, THE EPS203'S AND THE EPS201'S, by the same method on
+    both - both native, both about 2.28 px/mm, one pixel to 0.44 mm.
+    THE TRAY IS 39.5 WIDE AND THE PITCH IS 48.1, WHICH MEANS THERE IS AN 8.6 mm CHASSIS WEB
+    BETWEEN TRAYS. The EPS201's rear gives all six edges cleanly as dips in the column-mean
+    profile - 47.4 to 86.4, 95.1 to 134.2 and 143.6 to 182.6, so three trays of 39.0 on a
+    pitch of 48.1 - and the EPS203's gives the three left edges at 46.1, 94.1 and 142.4, a
+    pitch of 48.15. Two documents, two machines, one answer for the pitch and one for the
+    width.
+    THE FIRST DRAFT OF THIS PART READ 47.5 AND WAS WRONG, and the error is worth recording
+    because it is a class: the EPS203's seams were read as tray boundaries when the seam is
+    the START of the next tray, not the END of this one. What caught it was measuring the
+    EPS201's rear the same way and getting six edges instead of four; what confirms it is
+    the handle, which reads 38 to 40 wide on both machines and cannot be wider than the tray
+    it is bolted to.
+    THE 2 PERCENT SPREAD IN THE HANDLE WIDTHS IS THE FIGURE, NOT THE METAL - 38.18, 37.74
+    and 37.30 left to right on the EPS203, 39.90, 39.46 and 39.02 on the EPS201. Both rear
+    elevations carry a mild left-to-right gradient of the same kind that makes the EPS201's
+    and EPS202's FRONT elevations unusable; on these rears it is about 2%, which is 0.8 mm
+    on a tray, and it is why this part's size carries a millimetre of slack rather than a
+    tenth.
+  handle-colour: >-
+    MEASURED AND COUNTED, and on this family the colour is a CLAIM ABOUT AIRFLOW rather
+    than a style. Over the EPS203's whole rear elevation 2,748 pixels pass a red test
+    (R>110, R>G+40, R>B+40) with a median of (239, 57, 39), and every one of them is on the
+    three tray handles - the chassis, the blank plate, the ground point and the two supplies
+    carry none.
+    THE PROSE CONFIRMS WHAT THE COLOUR SAYS, which is what makes this different from
+    importing a sibling family's convention. The EPS203's datasheet reads "Front-to-back
+    airflow only" and its seven ordering codes are all -F; its rear is drawn red. The
+    EPS201 ships BOTH airflows - eight ordering codes, four -F and four -B, and two fan
+    part numbers, FAN-1U-1x1M-F and FAN-1U-1x1M-B - and its datasheet's rear elevation
+    draws the handles BLUE while its own quick start guide's fan-replacement figure draws
+    them RED. So red is front-to-back and blue is back-to-front on this family too, and
+    `handle-finish` is a field because one part serves both.
+  it-is-a-FRU-and-the-guide-says-how: >-
+    "Hot-swappable 2 + 1 redundant fan trays" in the datasheet's key features and in its
+    Interfaces callout 8, and the quick start guide carries a Fan Tray Replacement
+    procedure - "Loosen the fan tray screw. Remove fan tray from the chassis. Install
+    replacement fan with matching airflow direction." So these are BAYED, not placed, which
+    is the opposite of the EPS1xx family's fixed fans.
+  depth: >-
+    ESTIMATED. No document dimensions the tray. 55 is the shortest 1RU fan-tray depth this
+    library carries and is flagged as an estimate.
+states: [absent]
+elements:
+  vent: {at: [2.00, 2.20], size: [35.50, 35.10], class: vent}
+  handle: {at: [0.50, 28.60], size: [38.50, 5.30], class: handle}
+  screw: {at: [34.20, 3.00], size: [4.00, 4.00], class: fastener}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#ef3927'}
+parts: []
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: vent
+      vent: 14
+      confidence: estimated
+      source: >-
+        The face is open honeycomb with a rotor turning behind it, but no document gives a
+        depth. 14 is what this library gives other 1RU fan-tray grilles.
+    - node: handle
+      bar: 2.6
+      confidence: estimated
+      source: >-
+        A straight pull bar standing off the face, gripped along its length - `bar`, and it
+        has the tray behind it to stand on. How far it projects is not dimensioned.
+    - node: screw
+      cyl: 1.4
+      confidence: estimated
+      source: 'A captive thumbscrew, drawn and not dimensioned.'
+skins: [default]
+body:
+  depth: 55
+  color: '#2b2f34'
+  footprint: {at: [0, 0], size: [39.5, 39.5]}
