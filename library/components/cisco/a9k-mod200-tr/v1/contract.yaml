@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mod200-tr
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -134,9 +134,9 @@ provenance:
     can reach it. When nested modules are supported the numbers are already here; until
     then a MOD carrier renders as a faceplate with two empty openings.
   variants: >-
-    install guide - 'Each type of card is available in -SE (Service Edge Optimized) and
-    -TR (Packet Transport Optimized) variants. The two variants are functionally
-    equivalent, but vary in configuration scale and buffer capacity.' THE STENCIL HAS
+    install guide - every card type comes in an -SE (Service Edge Optimized) and a -TR
+    (Packet Transport Optimized) variant; the two are functionally equivalent and
+    differ in configuration scale and buffer capacity. THE STENCIL HAS
     ONLY THE -SE MASTERS. The -TR is modelled on the same drawing, which that sentence
     licenses: configuration scale and buffer capacity are internal and no faceplate can
     show them. Table 35 says the same thing from the other side - every modular line
@@ -182,17 +182,15 @@ elements:
     class: led
     description: >-
       install guide - Table 32, 'Port Status and Line Card Status LEDs', of the Ethernet
-      Line Card Installation Guide, section 'Card Status LED (one per card)'. Green: 'Line
-      card has booted properly, and is ready to pass or is passing traffic.' Steady amber:
-      'Line card boot process is underway. When the Cisco IOS XR software finishes
-      loading, the LED turns green.' Blinking amber: 'Software configuration error has
-      occurred that prevents the line card from passing traffic. It is possible that the
-      line card is still passing traffic, but there is some degradation.' Red: 'Line card
-      has encountered a hardware error, and is not passing traffic.' Off: 'Line card is
-      powered off. The LED might turn off momentarily when switching between the states
-      described above, although the line card has not powered off.' Steady and blinking
-      amber share one colour and are not carried as two states; the distinction is
-      recorded here because it is the difference between a card booting and a card
+      Line Card Installation Guide, section 'Card Status LED (one per card)'. Green =
+      booted properly and ready to pass, or passing, traffic; steady amber = boot
+      underway, turning green once the Cisco IOS XR software finishes loading; blinking
+      amber = a software configuration error keeps the card from passing traffic, though
+      it may still be passing some in a degraded way; red = a hardware error, and no
+      traffic passing; off = powered off, though the LED can also go dark for a moment
+      while changing between the states above without the card powering off. Steady and
+      blinking amber share one colour and are not carried as two states; the distinction
+      is recorded here because it is the difference between a card booting and a card
       misconfigured. AN EARLIER VERSION OF THIS SENTENCE said Table 32 'is written for the
       fixed-port cards' and called this vocabulary a BORROWING. That was wrong. Table 32
       sits in Chapter 3, 'Verifying and Troubleshooting the Line Card Installation', which

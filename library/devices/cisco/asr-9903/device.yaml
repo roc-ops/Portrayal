@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9903
-version: 0.1.2
+version: 0.1.3
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9903
@@ -46,9 +46,9 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - Table 2 of c78-744035, "Physical dimensions (includes ejector
-      bracket/lever); (H x W x D); weight": "ASR 9903 chassis (including 2 RPs, 4
-      PSUs, 4 FANs): 5.18 x 17.475 x 30 in.; 81.62 lb (131.57 mm x 443.86 mm x
-      762 mm; 37 kg)", with the note underneath: "Excluding ejector, the depth is
+      bracket/lever); (H x W x D); weight": ASR 9903 chassis with 2 RPs, 4 PSUs
+      and 4 FANs, 5.18 x 17.475 x 30 in. and 81.62 lb, or 131.57 x 443.86 x 762
+      mm and 37 kg, with the note underneath: "Excluding ejector, the depth is
       23.62 in/600 mm".
       DEPTH IS THE 600, NOT THE 762, and the difference is not an ejector in the
       ordinary sense - 162 mm is far too much for one. The data sheet's own
@@ -126,10 +126,10 @@ provenance:
     confidence: drawing
     note: >-
       THE FIXED BOARD IS NOT A BAY. The install guide's overview is explicit:
-      "Fixed Board - also known as a Line Card (LC0). The Fixed Board contains
-      sixteen 100GE QSFP28 ports and twenty 10GE SFP+ ports. It is integrated
-      with the chassis and provides up to 1.6-Tbps throughput." So its
-      thirty-six ports are placements on the chassis face, not a module's own,
+      the Fixed Board, also called a Line Card (LC0), carries sixteen 100GE
+      QSFP28 ports and twenty 10GE SFP+ ports, is integrated with the chassis,
+      and gives up to 1.6 Tbps of throughput. So its thirty-six ports are
+      placements on the chassis face, not a module's own,
       and there is nothing to seat or remove.
       THE NUMBERING IS THE GUIDE'S, NOT AN INFERENCE. Figure 120, "Cisco ASR
       9903 Fixed Ports", labels callout 1 "QSFP28 ports (0-15)" and callout 2
@@ -171,12 +171,12 @@ provenance:
       the end of the face: the last SFP+ port, 35, has its lamp at 426.74 like
       every other, and no port on this board is without one.
       THE STATES ARE TABLE 27 of the install guide, "Port Status and LC FAIL
-      LEDs", transcribed: "Port Status LEDs (one per port). Green - Port state is
-      up and a valid physical layer link is established. Blinking - Line activity
-      is occurring. The LED blinks green-amber-green. Red - Port state is up, but
-      there is a link loss or SFP/QSFP failure. Off - Port is administratively
-      shut down." The blinking state is carried as a green lamp with an amber
-      second colour, which is what "green-amber-green" describes.
+      LEDs", transcribed: Port Status LEDs, one per port: green = port up with a
+      valid physical-layer link; blinking = line activity, the LED going
+      green-amber-green; red = port up but link lost, or an SFP/QSFP failure; off
+      = port administratively shut down. The blinking state is carried as a green
+      lamp with an amber second colour, which is what "green-amber-green"
+      describes.
   port-modes:
     confidence: drawing
     note: >-
@@ -212,15 +212,14 @@ provenance:
   cooling:
     confidence: datasheet
     note: >-
-      datasheet - "The Cisco ASR 9903 Router is a compact router that supports
-      two redundant Route Processors (RP), two integrated switch fabrics, 4 AC or
-      DC power supply modules, and 4 fans in redundant configuration", and
+      datasheet - the ASR 9903 is a compact router with two redundant Route
+      Processors (RP), two integrated switch fabrics, 4 AC or DC power supply
+      modules and 4 fans in a redundant configuration, and
       Table 2's Redundancy row lists "Fan redundancy" with no ratio. Airflow is
       "Front to back" in the same table, and the install guide adds the filter:
-      "The Cisco ASR 9903 and Cisco ASR 9902 Router have a serviceable air filter
-      (Cisco PID: ASR-9903-FILTER and ASR-9902-FILTER). The air filter is a
-      single component. It removes dust from the room air drawn into the chassis
-      by the fan trays."
+      the ASR 9903 and ASR 9902 each have a serviceable air filter (Cisco PID
+      ASR-9903-FILTER and ASR-9902-FILTER), a single component that takes the
+      dust out of the room air the fan trays pull into the chassis.
       THE REDUNDANCY RATIO IS NOT PUBLISHED AND IS NOT SUPPLIED. Cisco names the
       property and not the arithmetic, so the `fan-trays` group carries a
       `redundancy-note` and NO `redundancy`, and L69 warns that this chassis does
@@ -336,8 +335,8 @@ gaps:
   note: >-
     TWO CISCO DOCUMENTS GIVE THIS CHASSIS TWO MAXIMUM WEIGHTS and they are not
     reconcilable as different scopes. Table 2 of the ASR 9903 data sheet
-    (c78-744035) reads "ASR 9903 chassis (including 2 RPs, 4 PSUs, 4 FANs): 5.18
-    x 17.475 x 30 in.; 81.62 lb (131.57 mm x 443.86 mm x 762 mm; 37 kg)". The
+    (c78-744035) gives ASR 9903 chassis with 2 RPs, 4 PSUs and 4 FANs, 5.18 x
+    17.475 x 30 in. and 81.62 lb, or 131.57 x 443.86 x 762 mm and 37 kg. The
     fixed-port Hardware Installation Guide's Lifting Guidelines read "A
     fully-configured Cisco ASR 9903 can weigh as much as 70 pounds (31.75 kg)".
     Both are maxima and the guide's scope is the WIDER of the two - "fully
@@ -379,12 +378,12 @@ gaps:
     WHAT IT IS, IS NOT SAID FOR THIS CHASSIS. The identical assembly on the ASR
     9902's REAR is captioned in Figure 158 of the same guide with POWER printed
     under it and a lamp beside it, so on that chassis it is a power switch. For
-    the ASR 9903 the guide says only "There is no power switch available on the
-    AC and DC PSUs for the Cisco ASR 9903 routers as they are plug-and-play
-    devices ... The power LED (PWR) is available on the front-side of the
-    router", which places a PWR lamp on the front and names no switch. So the
-    recess and its tag are drawn as panel decor and silkscreen, exactly as the
-    artwork has them, and nothing here asserts that they are a switch.
+    the ASR 9903 the guide says only that the AC and DC PSUs for ASR 9903
+    routers have no power switch, being plug-and-play, and that the power LED
+    (PWR) is on the router's front, which places a PWR lamp on the front and
+    names no switch. So the recess and its tag are drawn as panel decor and
+    silkscreen, exactly as the artwork has them, and nothing here asserts that
+    they are a switch.
   wanted: >-
     a callout naming this feature on the ASR 9903, or a photograph of the front
     left corner.

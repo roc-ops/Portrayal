@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-8hg-flex-se
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -82,18 +82,16 @@ provenance:
   frame: >-
     the card is modelled PORTRAIT - x across the card's thickness, y along its width -
     which is the stencil's own frame and casa's. WHICH WAY A CHASSIS CARRIES IT is the
-    Overview and Reference Guide's 'Chassis Slots' section, quoted because an earlier
-    version of this note had it wrong for three chassis out of seven: 'Cisco ASR 9010
-    Router: All line cards and RSP cards are front-facing and mounted VERTICALLY, with
-    ejector levers and captive screws at the top and bottom of each card. Cisco ASR 9006
-    Router and Cisco ASR 9904 Router: All chassis line cards and RSP cards are
-    front-facing and mounted HORIZONTALLY, with ejector levers and captive screws at the
-    left and right ends of each card. Cisco ASR 9906 Router: ... mounted vertically ...
-    Cisco ASR 9910 Router: ... vertically ... Cisco ASR 9922 Router: ... vertically ...
-    Cisco ASR 9912 Router: ... vertically.' So only the ASR 9006 and the ASR 9904 lay
+    Overview and Reference Guide's 'Chassis Slots' section, set out here because an
+    earlier version of this note had it wrong for three chassis out of seven: on the ASR
+    9010 every line card and RSP card faces the front and stands VERTICALLY, its ejector
+    levers and captive screws at the card's top and bottom; on the ASR 9006 and the ASR
+    9904 every line card and RSP card faces the front and lies HORIZONTALLY, its levers
+    and screws at the card's left and right ends; and the ASR 9906, ASR 9910, ASR 9922
+    and ASR 9912 are each given as vertical. So only the ASR 9006 and the ASR 9904 lay
     their cards flat and rotate the bay; the other five place this component unrotated.
-    The ejector-lever wording is the tell and it is why the guide is worth quoting
-    rather than paraphrasing - 'top and bottom' means vertical, 'left and right ends'
+    The ejector-lever wording is the tell and it is why the guide's own terms are
+    kept - 'top and bottom' means vertical, 'left and right ends'
     means horizontal, and the RU height of a chassis does not decide it.
   cages: >-
     composed from std/, not drawn. Ganged QSFP pitch measures 18.73 mm off the art
@@ -102,9 +100,9 @@ provenance:
     carried, which leaves a nominal 0.23 mm wall. Aperture size is a governed dimension
     and a drawing is not the place to take it from.
   leds: >-
-    install guide - 'Each line card has a single tristate Status LED to display card
-    status. Each ... port on the line card has a port status LED visible on the front
-    panel.' The state vocabulary on both is Table 32, 'Port Status and Line Card Status
+    install guide - each line card carries one tristate Status LED showing card status,
+    and each port on the card has its own port status LED visible on the front panel.
+    The state vocabulary on both is Table 32, 'Port Status and Line Card Status
     LEDs', of the Ethernet Line Card Installation Guide, transcribed rather than
     summarised: the card lamp's amber is TWO states, steady during boot and blinking for
     a software configuration error.

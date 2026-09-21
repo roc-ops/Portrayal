@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pwr-1p6kw-dc
-version: 1.0.0
+version: 1.0.1
 class: psu
 behaviour: fills
 profile: networking
@@ -29,12 +29,11 @@ attrs:
   eol: 'none-announced'
 provenance:
   input: >-
-    install guide - "The system accepts a nominal input voltage of -48 VDC with
-    an operational tolerance range of -40.5 VDC to -72 VDC. One dedicated,
-    commensurately rated DC power source is required for each power module
-    connection", and the connection itself is rated "40A maximum (ASR 9901,
-    9902, 9903)". Each module takes two cables, one source and one return, and
-    Cisco recommends 20-A-rated high-strand-count copper.
+    install guide - nominal input is -48 VDC, operating across -40.5 VDC to -72
+    VDC, with one dedicated DC source of matching rating needed for each power
+    module connection, and the connection itself is rated "40A maximum (ASR
+    9901, 9902, 9903)". Each module takes two cables, one source and one return,
+    and Cisco recommends 20-A-rated high-strand-count copper.
   connector: >-
     drawing - and READ WHAT THE DRAWING IS BEFORE TRUSTING IT. The figure this
     face is taken from is captioned "Figure 159: Cisco ASR 9903 AC-Input Power
@@ -69,13 +68,12 @@ provenance:
   lamp: >-
     install guide - the AC-input troubleshooting table, whose LED column reads
     "OK (Cisco ASR 9901) / STATUS (Cisco ASR 9903 and Cisco ASR 9902)" and
-    gives five states for it: "Solid Green - Power supply is on and outputting
-    power. Flashing Green - Power supply is connected to input power or FPD
-    upgrade in progress. Amber - Power supply failure, due to one of the
-    following: Over voltage, Over current, Over Temperature, Fan failure.
-    Flashing Amber - Power supply is operating but a warning condition ... High
-    temperature, High power, Slow fan. Off - Power supply is not receiving
-    power." All five are carried. ITS POSITION IS READ OFF THE MASTER BY EYE,
+    gives five states for it: solid green = on and outputting power; flashing
+    green = connected to input power, or an FPD upgrade in progress; amber =
+    power supply failure from over-voltage, over-current, over-temperature or
+    fan failure; flashing amber = operating, but under a warning condition (high
+    temperature, high power, slow fan); off = not receiving power. All five are
+    carried. ITS POSITION IS READ OFF THE MASTER BY EYE,
     not extracted: the lamp is drawn as a stroked circle with no fill, which
     the shape parser does not carry, so it was located on a 4x render of the
     master at the bottom right of the inlet block. The names and the states are

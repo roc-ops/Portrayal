@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-4x100ge
-version: 1.0.1
+version: 1.0.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -69,12 +69,12 @@ provenance:
     is withholding rather than one nobody has measured.
   size: >-
     datasheet - Cisco ASR 9000 4-port 100GE LAN line card data sheet (c78-740092), Table
-    2: 'Physical dimensions (H x W x D); weight: 4-port 100 Gigabit Ethernet LAN line
-    card: 14.5 x 1.63 x 22.02 in.; 19.7 lb (368.3 mm x 41.4 mm x 559.3 mm; 8.9 kg)'.
-    Same axis order and same missing qualifier as the A99-12X100GE sheet, and the same
-    three numbers to the tenth - H is the long dimension, 368.3 is the plate, and the
-    card is modelled at the family's ejector-inclusive 395.7. Depth 559.3 is the sheet's
-    own.
+    2: physical dimensions (H x W x D) and weight of the 4-port 100 Gigabit Ethernet LAN
+    line card, 14.5 x 1.63 x 22.02 in. and 19.7 lb, or 368.3 x 41.4 x 559.3 mm and 8.9
+    kg. Same axis order and same missing qualifier as the A99-12X100GE sheet, and the
+    same three numbers to the tenth - H is the long dimension, 368.3 is the plate, and
+    the card is modelled at the family's ejector-inclusive 395.7. Depth 559.3 is the
+    sheet's own.
   identity: >-
     TWO DIFFERENT CARDS SHARE THIS PART NUMBER'S ROOT and getting them mixed up would
     put a CPAK aperture on a QSFP28 card. Cisco's own data sheets separate them:
@@ -100,23 +100,21 @@ provenance:
   frame: >-
     the card is modelled PORTRAIT - x across the card's thickness, y along its width -
     which is the stencil's own frame and casa's. WHICH WAY A CHASSIS CARRIES IT is the
-    Overview and Reference Guide's 'Chassis Slots' section, quoted because an earlier
-    version of this note had it wrong for three chassis out of seven: 'Cisco ASR 9010
-    Router: All line cards and RSP cards are front-facing and mounted VERTICALLY, with
-    ejector levers and captive screws at the top and bottom of each card. Cisco ASR 9006
-    Router and Cisco ASR 9904 Router: All chassis line cards and RSP cards are
-    front-facing and mounted HORIZONTALLY, with ejector levers and captive screws at the
-    left and right ends of each card. Cisco ASR 9906 Router: ... mounted vertically ...
-    Cisco ASR 9910 Router: ... vertically ... Cisco ASR 9922 Router: ... vertically ...
-    Cisco ASR 9912 Router: ... vertically.' So only the ASR 9006 and the ASR 9904 lay
+    Overview and Reference Guide's 'Chassis Slots' section, set out here because an
+    earlier version of this note had it wrong for three chassis out of seven: on the ASR
+    9010 every line card and RSP card faces the front and stands VERTICALLY, its ejector
+    levers and captive screws at the card's top and bottom; on the ASR 9006 and the ASR
+    9904 every line card and RSP card faces the front and lies HORIZONTALLY, its levers
+    and screws at the card's left and right ends; and the ASR 9906, ASR 9910, ASR 9922
+    and ASR 9912 are each given as vertical. So only the ASR 9006 and the ASR 9904 lay
     their cards flat and rotate the bay; the other five place this component unrotated.
-    The ejector-lever wording is the tell and it is why the guide is worth quoting
-    rather than paraphrasing - 'top and bottom' means vertical, 'left and right ends'
+    The ejector-lever wording is the tell and it is why the guide's own terms are
+    kept - 'top and bottom' means vertical, 'left and right ends'
     means horizontal, and the RU height of a chassis does not decide it.
   leds: >-
-    install guide - 'Each line card has a single tristate Status LED to display card
-    status. Each ... port on the line card has a port status LED visible on the front
-    panel.' The state vocabulary on both is Table 32, 'Port Status and Line Card Status
+    install guide - each line card carries one tristate Status LED showing card status,
+    and each port on the card has its own port status LED visible on the front panel.
+    The state vocabulary on both is Table 32, 'Port Status and Line Card Status
     LEDs', of the Ethernet Line Card Installation Guide, transcribed rather than
     summarised: the card lamp's amber is TWO states, steady during boot and blinking for
     a software configuration error.

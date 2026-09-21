@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: asr-9006-fan
-version: 1.1.0
+version: 1.1.1
 class: fan
 behaviour: fills
 profile: networking
@@ -21,14 +21,14 @@ attrs:
 provenance:
   seated: >-
     SEATED IN THE OPENING ITS OWN SIZE CAME FROM. `size` above says the envelope here
-    is "asr9k-chassis's measurement of the OPENING in the ASR 9006 front master,
-    175.65 x 70.97 mm ... a sound number for the bay; it is not a measurement of the
-    part" - so FT0 and FT1 on the chassis were cutouts carrying exactly that figure,
-    and they are bays now. The chassis' own `openings-awaiting-components` gap asked
-    for this part by name and recorded Cisco's numbering, FT0/FT1 per Figure 19.
-    THE TWO OPENINGS WERE DRAWN 0.21 mm APART - 175.65 and 175.44 - which is one
-    opening measured twice in one master rather than two different holes, and the gap
-    that catalogued them already normalised both to 175.65. Both bays reserve that.
+    is the OPENING that asr9k-chassis measured in the ASR 9006 front master, 175.65 x
+    70.97 mm, sound for the bay but not a measurement of the part - so FT0 and FT1 on
+    the chassis were cutouts carrying exactly that figure, and they are bays now. The
+    chassis' own `openings-awaiting-components` gap asked for this part by name and
+    recorded Cisco's numbering, FT0/FT1 per Figure 19. THE TWO OPENINGS WERE DRAWN
+    0.21 mm APART - 175.65 and 175.44 - which is one opening measured twice in one
+    master rather than two different holes, and the gap that catalogued them already
+    normalised both to 175.65. Both bays reserve that.
   body: >-
     NO `body:` BLOCK, AND THIS IS THE RECORD OF WHY. The renderer now admits class `cooling`
     to the set that draws a solid body and ejects (relief.js, commit 9e3d0cb), so this part
@@ -93,22 +93,21 @@ provenance:
   arrangement: >-
     NOT SOURCED, and this is the weakest thing in the component. No document in the
     intake and no master in the stencil shows this faceplate. What IS sourced is the
-    inventory: 'The fan tray contains six axial 92-mm (3.62-in) fans... The fan tray
-    aligns through two guide pins inside the chassis, and is secured by ONE captive
-    screw... A finger guard is adjacent to the front of most of the fans' (Overview and
-    Reference Guide, 'Cisco ASR 9006 Router Fan Trays'), plus the Run/Fail status LED
-    every tray in the family carries. Where each of those sits on the face is a drawing
-    decision of mine, not a measurement. Note one thing that rules out the obvious
+    inventory: the fan tray holds six 92-mm (3.62-in) axial fans, locates on two guide
+    pins inside the chassis, is held by ONE captive screw, and has a finger guard next
+    to the front of most of its fans (Overview and Reference Guide, 'Cisco ASR 9006
+    Router Fan Trays'), plus the Run/Fail status LED every tray in the family carries.
+    Where each of those sits on the face is a drawing decision of mine, not a
+    measurement. Note one thing that rules out the obvious
     layout: six 92 mm fans CANNOT be laid out on a 175.65 x 70.97 face - two across is
     already 184 mm - so the fans sit behind the plate in depth and the face is a vent,
     which is what is drawn. Anyone with a photograph of an ASR 9006 with its fan door
     open can replace this face outright.
   lamp: >-
     install guide - the Overview and Reference Guide's 'Fan Tray Status Indicators':
-    'After fan tray insertion into the chassis, the LED lights up temporarily appearing
-    yellow. During normal operation: The LED lights green to indicate that all fans in
-    the module are operating normally. The LED lights red to indicate a fan failure or
-    another fault in the fan tray module.' Four states; yellow is the insertion state
+    yellow, briefly = just inserted into the chassis; then, in normal operation, green
+    = all fans in the module running normally; red = a fan failure or another fault in
+    the fan tray module. Four states; yellow is the insertion state
     and is real.
   power: >-
     install guide - Table 24 of the Overview and Reference Guide, row 'ASR 9006 Fan Tray
