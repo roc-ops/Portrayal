@@ -119,3 +119,9 @@ Contributions are accepted under the
 [Developer Certificate of Origin](https://developercertificate.org/): by signing
 off a commit (`git commit -s`) you certify that you wrote the change or have
 the right to submit it under this licence. There is no CLA.
+
+## Trademarks
+
+Vendor and product names are trademarks of their owners and are used only to
+identify the hardware each drawing describes. Portrayal is independent and is
+not affiliated with or endorsed by any vendor it models; see `NOTICE`.

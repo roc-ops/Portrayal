@@ -44,7 +44,7 @@ Evidence the gap is real and wanted:
 | [RacksDB](https://github.com/rackslab/RacksDB) (MIT, active) | YAML-in-Git infrastructure DB with SVG/PNG rendering incl. axonometric | Equipment-in-rack granularity only; philosophically aligned |
 | [Rackula](https://github.com/RackulaLives/Rackula) (MIT, very active, ~1.7k stars) | Homelab rack designer consuming devicetype-library **raster** images | Devices are pictures; ports not addressable. Shows third-party appetite for visuals on that data backbone |
 | [WireViz](https://github.com/wireviz/WireViz) (GPL-3, active, 5.2k stars) | YAML → cable/harness SVG with every pin identified + auto-BOM | Adjacent domain; Graphviz-rendered so weak output-side SVG addressability. Strongest *pattern* validation |
-| rackdiag / Rack-Visualization / ESnet react-network-diagrams / switch-config-render | Various rack/panel SVG generators | All schematic, niche, and dead or dormant |
+| rackdiag / Rack-Visualization / ESnet react-network-diagrams / switch-config-render | Various rack/panel SVG generators | All schematic and niche; inactive or dormant when surveyed |
 
 Confirmed absent: any community library of structured (ID-bearing) SVG faceplates for
 network hardware; any open schema for port positions on a device face; any vendor
@@ -54,8 +54,8 @@ publishing openly licensed component-structured vector faceplates.
 
 NetBox Labs launched NDX after this research was written. It is the same
 `devicetype-library` backbone with a large curated enrichment layer on top, and
-it is worth reading carefully because it is the closest thing to a competitor
-this project has - and it is not one.
+it is worth reading carefully because it is the project nearest to this one -
+and it works on a different axis.
 
 **What it confirms.** NDX scaled the *data* axis enormously and did not move on
 the *geometry* axis at all. The 2023 discussion in which the devicetype-library
@@ -69,12 +69,14 @@ and heuristic derivation; ours `datasheet / drawing / measured / photo-measured 
 registry / borrowed / estimated / known-wrong`. Automated extraction with human review for high-priority
 vendors. Convergent design is reassuring.
 
-**Where we are ahead, and it is not cosmetic.** Their interfaces are named once
-per device (`cd0`, `ce0`, `xe0`). On white-box hardware the NOS is chosen
-separately from the box and the same silicon gets different names under ArcOS and
-SONiC, which is why we carry per-NOS overlays. Their model cannot express it.
-They also do not model USB, timing or grounding hardware, and there is no gaps
-register - nothing that says *this is unknown, and here is what would close it*.
+**Where the two models differ.** NDX names interfaces once per device (`cd0`,
+`ce0`, `xe0`). On white-box hardware the NOS is chosen separately from the box
+and the same silicon gets different names under ArcOS and SONiC, which is why
+this library carries per-NOS overlays; a single name per interface does not
+express that. NDX's scope also leaves out USB, timing and grounding hardware,
+and it has no gaps register - nothing that says *this is unknown, and here is
+what would close it*. Those are differences of scope rather than of quality: NDX
+is a data catalogue, and this is a geometry library.
 
 **What we should take.** Sectioned attributes (see issue on attr sections): our
 `attrs` is a flat bag of 74 keys across 13 devices with visible drift -
@@ -103,8 +105,8 @@ manifest (`.fzp`) + per-view SVGs; each named connector declares `svgId` (the
 clickable graphic) and `terminalId` (exact attachment point) per view, and `<buses>`
 model internal connectivity. Shipped with a lint tool (FritzingCheckPart) that
 cross-checks manifest↔SVG ID consistency — mandatory glue for this architecture.
-Fritzing is alive (1.0.7/1.0.8 released 2026). Weaknesses: XML, connector-centric,
-opaque ID conventions.
+Fritzing is alive (1.0.7/1.0.8 released 2026). Poor fit for this use: XML,
+connector-centric, opaque ID conventions.
 
 **(b) Annotations inside the SVG** — the VCV Rack model. Panel SVG in mm units with a
 hidden `components` layer; **fill color encodes component type**, Inkscape label is
