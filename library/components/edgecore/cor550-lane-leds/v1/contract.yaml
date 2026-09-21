@@ -1,0 +1,84 @@
+format: 1
+kind: component
+name: cor550-lane-leds
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  The Edgecore COR550's per-port QSFP28 lamp group - THREE round lamps in a row on a
+  2.70 mm pitch, sitting in the white legend strip that runs between the two ports of a
+  column. Each 100G port has its own group; the top port's sits left of the column centre
+  and the bottom port's right of it, which is why one strip carries twelve lamps across a
+  four-port block.
+size: {w: 7.2, h: 3.0}
+size-confidence: {w: photo-measured, h: estimated}
+provenance:
+  size: >-
+    PHOTO-MEASURED ON ONE DOCUMENT ONLY, and that one is not the better of the two, which
+    is the first thing to know about this part.
+    THE QUICK START GUIDE DOES NOT DRAW THESE LAMPS AT ALL. Its front elevation is line
+    art and the strip between the port rows is plain white. The lamps exist only in the
+    datasheet's rendered front elevation (cor550-datasheet page 2, native 1000 x 195,
+    panel 999 x 195 px at 2.2705 px/mm) - which is also the figure whose panel box is
+    1.30% out on aspect where the guide's is 0.13%. So the geometry of the FACE is taken
+    from the guide and the existence and spacing of these lamps from the datasheet, and
+    the two roles are not swapped.
+    THE COUNT IS THREE AND THE FIT IS WHAT SAYS SO. A block's strip carries twelve dots.
+    Their centres in the left-hand block read 6.83, 9.25, 12.33, 16.30, 19.38, 21.80,
+    25.99, 28.41, 31.27, 35.46, 38.54 and 40.74 mm. Twelve EVENLY spaced would sit on a
+    3.083 pitch, and the residuals against that are structured rather than random
+    (-0.66, -0.66, +0.22, +0.22, -0.44, +0.67 ...), so they are not evenly spaced. They
+    are four groups of three: 2.70 mm within a group and a 4.19 mm step between groups,
+    the group centres landing at 9.47, 19.16, 28.56 and 38.25 - a 9.59 pitch, which is
+    half the 19.0 column pitch to a tenth. FOUR LAMPS PER PORT DOES NOT FIT: at the same
+    2.70 pitch a four-lamp group spans 8.1 mm and would leave 1.5 mm between groups where
+    4.19 is measured.
+    THE HEIGHT IS NOT A READING. The lamps are 2-4 px across at this resolution, which is
+    0.9-1.8 mm and cannot distinguish a 1.3 mm lamp from a 1.6 mm one. 3.0 is the group's
+    allowance inside the 6.75 mm legend strip, chosen so the lamps sit clear of the strip's
+    edges, and it is marked estimated because that is what it is.
+  semantics: >-
+    THE VENDOR STATES COLOURS BY SPEED AND NEVER STATES A LAMP COUNT, which is why the
+    states here are the library's off/on default and nothing more is claimed. The quick
+    start guide's Status LEDs panel reads "QSFP28 Port LEDs: Blue - 100G, Yellow - 40G,
+    Cyan - 2 x 50G, Magenta - 4 x 25G, Green - 4 x 10G" - five colours for five breakout
+    modes, said of the port and not of any one lamp. WHICH LAMP SHOWS WHICH LANE IS NOT
+    PUBLISHED, and three lamps against a four-lane breakout is exactly the case where
+    guessing would be wrong; the device records it as a gap rather than inventing a
+    legend. common/qsfp-lane-leds@1 is NOT reused for the same reason - it is four
+    triangles on a 4.4 pitch, and both its count and its pitch contradict what this
+    machine draws.
+elements:
+  lamp-1:
+    at: [0.40, 0.80]
+    size: [1.40, 1.40]
+    class: led
+    states: ['off', 'on']
+  lamp-2:
+    at: [3.10, 0.80]
+    size: [1.40, 1.40]
+    class: led
+    states: ['off', 'on']
+  lamp-3:
+    at: [5.80, 0.80]
+    size: [1.40, 1.40]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lamp-1
+      dome: 0.25
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure, whose own provenance is
+        'size: estimated' and which carries no dome of its own. Nothing in either COR550
+        document says how far a lamp stands off the face.
+    - node: lamp-2
+      dome: 0.25
+      confidence: estimated
+      source: as lamp-1 - the same unsourced library figure.
+    - node: lamp-3
+      dome: 0.25
+      confidence: estimated
+      source: as lamp-1 - the same unsourced library figure.
+skins: [default]

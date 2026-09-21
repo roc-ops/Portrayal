@@ -1,0 +1,126 @@
+format: 1
+kind: module
+name: cor550-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The Edgecore COR550's rear fan tray - a 68.0 x 62.3 module, honeycomb across its whole
+  face with one rotor showing through the mesh, and a narrow red D-handle standing on its
+  INBOARD edge rather than sweeping across the face the way this vendor's 2RU trays
+  usually do. FIVE fill the chassis in a 4+1 redundancy, numbered FAN 0 at the outboard
+  end and FAN 4 beside the supplies, which is right to left across the rear elevation.
+size: {w: 68.0, h: 62.3}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  power-absent: not-published
+  airflow: front-to-back
+provenance:
+  size: >-
+    PHOTO-MEASURED, and both documents agree on the height where only one is trusted for
+    the width.
+    THE WIDTH COMES FROM THE PITCH. Persistent vertical-edge scans through the bay bodies
+    put the five trays' inboard frames at 84.52, 152.46, 221.97, 290.31 and 358.24 on the
+    quick start guide's rear elevation (cor550-qsg page 1, native 1123 x 233, panel
+    1114 x 220 px at 2.5318 px/mm). A straight line through those five fits to 0.37 mm rms
+    - under one pixel - at a pitch of 68.53, and adding a quadratic term buys 0.03 mm and
+    implies -0.49% of curvature across the whole row, which is nothing. The last tray's
+    outboard frame reads 426.57, so the tray face is 68.0 and the web between trays is
+    about half a millimetre.
+    THE HEIGHT IS THE ONE BOTH DOCUMENTS FIX. Horizontal-edge scans inside a bay find the
+    grille frame at 11.07-13.45 and 73.95-75.14 on the quick start guide, and at
+    11.21-13.01 and 73.10-74.89 on the datasheet's own rear (cor550-datasheet page 2,
+    998 x 194 px at 2.2682 px/mm). Two independent renders putting the same two seams
+    within 0.9 mm of each other is what makes 62.3 a measurement rather than a guess.
+    THE TRAY DOES NOT FILL THE BAY HEIGHT, which is worth saying because its two nearest
+    in-tree relatives do. The AGR560 and DCS520 sit on the same 440 x 87 shell and take
+    trays 81.2 and 83.5 tall; this one leaves about 12 mm of chassis rail above it and
+    another 12 below, and the FAN n legend is printed on the lower rail rather than on the
+    tray. Five 68 mm trays where those two chassis take four 80 mm ones is the same
+    exchange from the other side.
+  the-handle-is-on-the-edge-and-is-narrow: >-
+    MEASURED BY HUE, not by brightness, and the first reading was wrong in an instructive
+    way. Thresholding the latch on red CHANNEL brightness made the five handles come out
+    4.74, 4.74, 5.92, 8.69 and 11.85 mm wide across the row - a smooth widening that reads
+    exactly like a perspective render, and was taken for one. It is lighting: the rear is
+    lit from the right, so the same part passes a brightness threshold over more of its
+    curve the further right it sits. Segmenting instead on the chroma fraction
+    (R - max(G,B)) / (R+G+B), which does not care how brightly a part is lit, the widths
+    stop trending. The handle is about 4.3 mm wide over 28.1 mm of the tray's height,
+    standing on the tray's inboard edge, with a small release button below it at about
+    [3.6, 39.1].
+    THAT MATTERS BEYOND THIS PART. The bogus widening was the only evidence the rear
+    elevation was a perspective render; once it went, the fan-frame fit above came back
+    orthographic to a third of a pixel. See `is-the-figure-orthographic`.
+  power-absent: >-
+    NOT PUBLISHED. The datasheet says "Fans: Hot-Swappable 4+1 redundant fans" and
+    "4+1 redundant, hot-swappable fan modules" and gives no per-tray rating; there is no
+    ordering table in either document. The quick start guide's Fan Tray Replacement
+    procedure names no FRU either.
+  the-rotor-radius-is-an-estimate: >-
+    21 mm, BY EYE AGAINST THE RENDER, and not measured. The rotor is a bright field seen
+    THROUGH the honeycomb, and every threshold that separates it from the tray is defeated
+    by the rear's left-to-right lighting gradient: a local-mean threshold per tray returns
+    the whole 64 mm window on four trays out of five. What is measured is that a bright
+    disc is there and that it covers roughly three fifths of the tray's width on both
+    documents. The blades and the hub are drawn to match at that radius and are drawn, not
+    read - no document dimensions either.
+  one-rotor-per-tray: >-
+    ONE, as far as the face shows. A single hub is visible through the mesh, its honeycomb
+    disc reading about 38.7 mm across on the column profile. Whether a second fan sits
+    behind it in series - as edgecore/fan-2u-1x1sn@1 carries on this vendor's other 2RU
+    trays, where the datasheet says so in words - is NOT stated for this machine: the
+    COR550's datasheet says "4+1 redundant fans" and nothing about fans per module. So the
+    bay count is five and the fan count is not claimed.
+  airflow: >-
+    DATASHEET, "Front-to-back airflow SKU, carrier grade fan filter", and the quick start
+    guide's Caution, "Make sure all installed modules have a matching airflow direction
+    (front-toback)". Only the one direction is published for this machine, so unlike this
+    vendor's other trays there is no second handle colour to override; the field is kept
+    so a back-to-front build can use it without a major if one is ever documented.
+  the-name-is-the-chassis-because-no-document-names-the-fru: >-
+    Same position as edgecore/cor550-psu-ac@1: README.md's rule prefers the vendor's
+    ordering code and neither staged document prints one for this tray. It is NOT shared
+    with the 440 x 87 shell's other two rears - edgecore/fan-2u-1x1sn@1 is 81.6 x 81.2 on
+    an 85.71 pitch and edgecore/dcs520-fan@1 is 80.1 x 83.5 - so nothing is being
+    duplicated by drawing a new one.
+states: [absent]
+elements:
+  grille: {at: [2.00, 2.00], size: [64.00, 58.30], class: rotor}
+  handle: {at: [0.00, 17.80], size: [4.50, 28.10], class: handle}
+  release: {at: [3.60, 39.10], size: [3.20, 5.50], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#c0453f'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 55
+      confidence: estimated
+      source: >-
+        this contract's own elements key - the honeycomb's extent is drawn and measured,
+        and nothing in either document dimensions the depth behind it.
+    - node: handle
+      uhandle: 24
+      dia: 4.3
+      confidence: estimated
+      source: >-
+        ESTIMATED, and narrower than this vendor's other 2RU trays because the handle
+        itself is. The library's sixty-odd U-handles run 22-29 mm of projection on fan
+        trays; 24 is taken from that range rather than from a drawing, because the quick
+        start guide's Fan Tray Replacement figure is an isometric render that dimensions
+        nothing - roc-ops/Portrayal#385, still open across this line.
+        `dia` is the measured 4.3 mm face width, which is the one number here that is a
+        reading. `uhandle` rather than `bar` for the reason edgecore/fan-2u-1x1sn@1 gives:
+        a bar builds a tube standing on nothing.
+    - node: release
+      out: 1.2
+      confidence: estimated
+      source: >-
+        unsourced. The guide says "Press the release latch in the fan tray handle" and
+        draws it flush; 1.2 is the library's common button stand-off.
+skins: [default]
+body:
+  depth: 110
+  color: '#2b2f34'

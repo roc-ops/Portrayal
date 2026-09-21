@@ -404,7 +404,26 @@ def test_the_comparison_layer_can_now_reach_them():
     SO THE CENSUS NOW CARRIES A CASE IT DID NOT HAVE: one fan tray, one redundancy figure
     and one bay pitch across THREE chassis, two of which share a shell and one of which
     does not. What travels with the tray is the cooling; what does not travel is the box.
+
+    SIXTY-FIVE IS THE EDGECORE COR550, and it is the first 4+1 in this census - every
+    entry before it is 1+1, 2+1, 3+1, 5+1 or 7+1. It states "4+1 redundant,
+    hot-swappable fan modules" in its key features and "Fans: Hot-Swappable 4+1 redundant
+    fans" in Physical and Environmental, over FIVE bays, so the figure and the bay count
+    agree.
+    WHAT IT ADDS IS A REDUNDANCY FIGURE WHOSE FAN COUNT IS NOT KNOWN, which is a shape this
+    census has met before from the other side. edgecore/fan-2u-1x1sn@1's three chassis all
+    say "4 hot-swappable fan modules (2 fans per module), 8 fans total with 7+1
+    redundancy" - the vendor counting FANS where the bays count TRAYS, which is why those
+    entries read 7+1 over four bays. The COR550 is the same vendor on a 2RU shell with one
+    rotor visible per tray and NO per-module fan count published anywhere, so 4+1 over five
+    bays is all that can be said. If it turned out to carry two fans a tray like its
+    shell-neighbours, the vendor's own figure would have been 9+1 and it is not.
+    AND ITS TRAY IS ITS OWN. The AGR560 and the DCS520 sit on the same 440 x 87 shell and
+    take four trays about 80 mm wide; this takes five at 68.0 x 62.3 on a 68.53 pitch. So
+    the shell does not carry the cooling either - which is the EPS20x lesson above with the
+    terms exchanged: there, one tray crossed three boxes; here, one box shape carries three
+    different trays.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 64, n
+    assert n == 65, n

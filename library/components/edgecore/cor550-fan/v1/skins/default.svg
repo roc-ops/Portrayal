@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="68mm" height="62.3mm" viewBox="0 0 68 62.3">
+  <!-- The COR550's rear fan tray: honeycomb over the whole face with one rotor behind it,
+       and the narrow red D-handle standing on the tray's inboard (left) edge. The mesh is
+       drawn as HOLES over a lighter backing, because pattern decor paints only its holes
+       and the webbing between them is whatever is underneath - a dark backing here makes
+       the whole tray read as a flat black rectangle. -->
+  <defs>
+    <pattern id="cor550-fan-mesh" width="4.345" height="7.525" patternUnits="userSpaceOnUse">
+      <path d="M 0.000 -2.125 L -1.841 -1.062 L -1.841 1.062 L 0.000 2.125 L 1.841 1.062 L 1.841 -1.062 Z" fill="#0b0d0f"/>
+      <path d="M 4.345 -2.125 L 2.504 -1.062 L 2.504 1.062 L 4.345 2.125 L 6.186 1.062 L 6.186 -1.062 Z" fill="#0b0d0f"/>
+      <path d="M 2.172 1.637 L 0.332 2.701 L 0.332 4.825 L 2.172 5.888 L 4.013 4.825 L 4.013 2.701 Z" fill="#0b0d0f"/>
+      <path d="M 0.000 5.400 L -1.841 6.463 L -1.841 8.587 L 0.000 9.651 L 1.841 8.587 L 1.841 6.463 Z" fill="#0b0d0f"/>
+      <path d="M 4.345 5.400 L 2.504 6.463 L 2.504 8.587 L 4.345 9.651 L 6.186 8.587 L 6.186 6.463 Z" fill="#0b0d0f"/>
+    </pattern>
+  </defs>
+  <rect id="body" x="0" y="0" width="68" height="62.3" rx="0.5"
+    fill="#2b2f34" stroke="#1b1e22" stroke-width="0.4"/>
+  <rect x="0.7" y="0.7" width="66.6" height="60.9" rx="0.35"
+    fill="none" stroke="#3d4147" stroke-width="0.22"/>
+  <g id="grille">
+    <rect id="grille-back" x="2.00" y="2.00" width="64.00" height="58.30" rx="0.4" fill="#9aa1a8"/>
+    <circle id="rotor-disc" cx="36.50" cy="31.15" r="21.00" fill="#d2d7db" stroke="#aeb4ba" stroke-width="0.3"/>
+    <g stroke="#7c838a" stroke-width="0.55" fill="none">
+      <path d="M 36.5 31.15 m -18.9 0 a 18.9 18.9 0 0 1 12.6 -13.9 q -3.8 8.8 -12.6 13.9 z"/>
+      <path d="M 36.5 31.15 m 18.9 0 a 18.9 18.9 0 0 1 -12.6 13.9 q 3.8 -8.8 12.6 -13.9 z"/>
+      <path d="M 36.5 31.15 m 0 -18.9 a 18.9 18.9 0 0 1 13.9 12.6 q -8.8 -3.8 -13.9 -12.6 z"/>
+      <path d="M 36.5 31.15 m 0 18.9 a 18.9 18.9 0 0 1 -13.9 -12.6 q 8.8 3.8 13.9 12.6 z"/>
+    </g>
+    <circle id="rotor-hub" cx="36.50" cy="31.15" r="6.20" fill="#8d949b" stroke="#6b7178" stroke-width="0.25"/>
+    <circle cx="36.50" cy="31.15" r="2.40" fill="#5c6269"/>
+    <rect id="grille-holes" x="2.00" y="2.00" width="64.00" height="58.30" fill="url(#cor550-fan-mesh)"/>
+    <!-- THE ROTOR HAS TO SHOW THROUGH THE HOLES, not sit behind them. Both
+         references show a bright disc across the middle of the mesh: the cells
+         over the rotor are lit by it, and at a 4.34 mm cell over a 53 mm rotor
+         there are only about twelve of them across, so a rotor painted under an
+         opaque hole pattern disappears completely - which is what the first
+         draft did. Drawn again over the mesh at low opacity, it lightens the
+         holes it covers and leaves the web alone. -->
+    <circle cx="36.50" cy="31.15" r="21.00" fill="#e6eaec" fill-opacity="0.42"/>
+    <circle cx="36.50" cy="31.15" r="6.20" fill="#aab1b8" fill-opacity="0.55"/>
+  </g>
+  <g id="handle">
+    <rect x="0.00" y="17.80" width="4.50" height="28.10" rx="2.20"
+      fill="#c0453f" stroke="#7d2b27" stroke-width="0.28"
+      data-fill-from="handle-finish"/>
+    <rect x="1.20" y="19.60" width="2.10" height="24.50" rx="1.00"
+      fill="none" stroke="#e2867f" stroke-width="0.32"/>
+  </g>
+  <g id="release">
+    <rect x="3.60" y="39.10" width="3.20" height="5.50" rx="0.7"
+      fill="#8f3833" stroke="#5e2421" stroke-width="0.25"/>
+  </g>
+</svg>

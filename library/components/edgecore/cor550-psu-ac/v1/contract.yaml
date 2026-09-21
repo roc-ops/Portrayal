@@ -1,0 +1,129 @@
+format: 1
+kind: module
+name: cor550-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable AC supply of the Edgecore COR550 - a 54.5 x 40.8 module in the common
+  CRPS envelope, its own fan behind a honeycomb vent at the inboard end, a black D-handle
+  laid across that vent, an IEC 60320 C14 inlet standing on end at the outboard end, and a
+  red release latch beside it. TWO stack in one column at the left of the rear face, PSU1
+  above PSU0. Named for the chassis because no staged COR550 document prints an ordering
+  code for the supply; see `the-name-is-the-chassis-because-no-document-names-the-fru`.
+size: {w: 54.5, h: 40.8}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  input: ac
+  inlet: c14
+  power-absent: not-published
+provenance:
+  size: >-
+    PHOTO-MEASURED ON TWO DOCUMENTS THAT AGREE, both rear elevations, and the agreement is
+    what makes the height trustworthy where one figure alone would not.
+    WIDTH. Vertical-edge scans across both PSU faces put the module's own flanges at
+    13.82 and 68.32 on the quick start guide's rear (cor550-qsg page 1, native embedded
+    image 1123 x 233, panel 1114 x 220 px at 2.5318 px/mm), which is 54.5.
+    HEIGHT. Horizontal-edge scans down the middle of the faces (x 20-62 mm) find three
+    bands and nothing else: a top frame at 0-3.6, the seam between the two modules at
+    42.3-45.9, and the bottom at 84.6-86.2. The datasheet's own rear (cor550-datasheet
+    page 2, 998 x 194 px at 2.2682 px/mm) finds the same three at 0-4.5, 41.3-45.3 and
+    83.4-84.8. Taking the seam centre at 43.6 and the frames symmetric gives 40.8 per
+    module, seated at y 2.2 and 44.2.
+    THE FIRST READING WAS 41.6 AND IT WAS WRONG, which is worth recording because it was
+    wrong in a way that looked fine. It came from the outer extent of the dark blob that
+    is the module, which includes the frame the module sits in; the edge bands above are
+    the frame itself and bound it from the inside. 40.8 also lands in the library's CRPS
+    cluster - twelve Edgecore supplies between 53.7 x 39.4 and 54.4 x 40.6 - where 41.6
+    would have been the outlier, and that cluster is a check on the reading rather than
+    its source.
+  the-face: >-
+    PHOTO-MEASURED in the module's own coordinates on the quick start guide's rear, and
+    coarse: one pixel is 0.395 mm, so nothing here is good to better than about half a
+    millimetre.
+    THE VENT is the honeycomb field at the inboard end. Its individual cells resolve - a
+    4.35 mm hexagon pitch, the same mesh the fan trays use - and they run from x 3.2 to
+    about 26 over y 2.5 to 38.1.
+    THE HANDLE is a black loop laid ACROSS the vent rather than beside it, which is why
+    the vent's dark blob breaks into two pieces either side of it. It reads about 6 mm
+    wide over 32 mm of the face's height at x 8-14. It is drawn over the vent in the skin
+    for that reason.
+    THE INLET is a dark recess 17.0 x 24.9 at [31.6, 5.7] - PORTRAIT, standing on its end,
+    which is unusual enough to say out loud. A C14 is about 24 x 19 landscape, and the
+    elevation draws this one turned a quarter turn with the earth pin outboard. Both
+    documents draw it the same way.
+    THE LATCH is the red tab at [38.7, 18.8], 11.4 wide, running from there to the face's
+    lower edge. Its bright inner highlight at [39.9, 20.3] is the moulded finger grip.
+  power-absent: >-
+    NOT PUBLISHED. The datasheet gives the SYSTEM figure - "Power Consumption: 1400 W
+    (Max), 1100 W (Typical)" - and its Power section says only "1+1 Redundant,
+    Load-Sharing, and Hot-Swappable PSUs / AC Power Supply: Input Voltage: 90 to 264 VAC
+    at 50~60 Hz". Neither document states a per-supply output, and neither carries an
+    ordering table. A 1+1 pair for a 1400 W machine has to be at least 1400 W each, but
+    that is arithmetic about the chassis and not a reading of this part, so nothing is
+    claimed here.
+  inlet: >-
+    PHOTO-MEASURED. Both rear elevations draw a three-pin appliance inlet, and the
+    quick start guide's Package Contents lists "3. 2 x Power cord". C14 is the
+    identification of a drawn three-pin inlet at this size and is stated at that
+    confidence rather than as a reading of a printed code.
+  the-name-is-the-chassis-because-no-document-names-the-fru: >-
+    library/components/README.md's rule is to use the vendor's model number where one
+    exists. NONE DOES HERE. The COR550 datasheet has no ordering table at all - it ends at
+    Regulatory Compliance and Warranty - and the quick start guide's PSU Replacement
+    procedure says "Install replacement PSU with matching airflow direction" without
+    naming a part. Grepping the seventy-odd staged Edgecore documents for a PSU code
+    against this envelope finds codes belonging to other chassis, not to this one.
+    So this takes the chassis name, and the exception in README.md that
+    `edgecore/agr-psu-ac@1` uses - a product-LINE prefix where no FRU is published - is
+    not available either, because the COR line has exactly one member here. If a COR550
+    ordering table ever lands, this part should be renamed to the FRU and the devices
+    should take the major that costs; edgecore/fan-2u-1x1sn@1's
+    `the-name-is-the-fru-because-the-tray-outlived-the-chassis` is the precedent for both
+    the rename and its price.
+  the-dc-build-is-not-drawn: >-
+    The datasheet offers "48 VDC Power Supply: Input Voltage: 40 to 72 VDC" beside the AC
+    one, and BOTH staged documents draw the AC machine - the quick start guide's Overview
+    calls out "8. 2 x AC PSUs" and both rear elevations show C14 inlets. There is
+    therefore no DC face to model, and no `cor550-psu-dc` is written rather than one being
+    invented from a sibling's terminal block. The device records this as a gap.
+states: [absent]
+elements:
+  vent: {at: [3.00, 2.50], size: [23.00, 35.60], class: vent}
+  handle: {at: [8.00, 4.20], size: [6.00, 32.00], class: handle}
+  inlet: {at: [31.60, 5.70], size: [17.00, 24.90], class: connector}
+  latch: {at: [38.70, 18.80], size: [11.40, 22.00], class: latch}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#c0453f'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: vent
+      vent: 40
+      confidence: estimated
+      source: >-
+        this contract's own elements key - the honeycomb's EXTENT is drawn and measured,
+        and the depth behind it is the supply's own fan, which no document dimensions.
+    - node: handle
+      uhandle: 27
+      dia: 6.0
+      confidence: estimated
+      source: >-
+        27 is the Edgecore supply figure this library already carries on every other
+        member of the family, resting on UfiSpace's published 1.06 inch for the same
+        CRPS handle; common/psu-ac-650@3 and edgecore/ais800-psu-ac@1 both use it.
+        NOT MEASURED HERE. The quick start guide's PSU Replacement figure is an isometric
+        render that dimensions nothing, which is what roc-ops/Portrayal#385 records across
+        this line. `uhandle` rather than `bar` for the reason
+        edgecore/fan-2u-1x1sn@1 gives at length: a bar builds a tube standing on nothing.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: >-
+        unsourced. The latch is drawn flush in both elevations and the replacement figure
+        does not dimension it; 1.5 is the library's common latch stand-off.
+skins: [default]
+body:
+  depth: 250
+  color: '#2b2f34'
