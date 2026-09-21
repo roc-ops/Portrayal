@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -124,9 +124,9 @@ provenance:
   the-combo-is-stated-not-inferred:
     confidence: datasheet
     note: >-
-      THE GUIDE SAYS IT IN WORDS: "The 10G SFP+ ports are grouped with 100G QSFP28 ports 0
-      and 1. Either the SFP+ ports or the QSFP28 ports may be used, but concurrent operation
-      of both types is not supported."
+      THE GUIDE SAYS IT IN WORDS: the 10G SFP+ ports share a group with 100G QSFP28 ports 0
+      and 1, and either the SFP+ ports or those QSFP28 ports can be used, never both types
+      at once.
       AND THE PANEL DRAWS IT. The numbering band over the SFP+ quad and over QSFP28 column 0
       is ONE CONTINUOUS PINK STRIPE running x 10.51 to 66.22 - across the quad, across the
       gap between the blocks, and across the first QSFP28 column - where every other band on
@@ -286,9 +286,9 @@ attrs:
       Cyan (25G), Yellow (10G)". The ordering text calls the cage QSFP56-DD - eight lanes
       of 50G PAM4 - while the panel legends it QSFP-DD 400G; the panel's wording is used.
     combo: >-
-      quick start guide: "The 10G SFP+ ports are grouped with 100G QSFP28 ports 0 and 1.
-      Either the SFP+ ports or the QSFP28 ports may be used, but concurrent operation of
-      both types is not supported."
+      quick start guide: the 10G SFP+ ports share a group with 100G QSFP28 ports 0 and 1;
+      either the SFP+ ports or those QSFP28 ports can be used, and the two types cannot
+      run at the same time.
   compliance:
     emissions: 'EN 55032, EN 61000-3-2, EN 61000-3-3, FCC Title 47 Part 15 Subpart B Class A'
     immunity: 'EN 55024, EN 55035, IEC 61000-4-2/3/4/5/6/8/11'
@@ -349,9 +349,8 @@ groups:
     description: >-
       the four 10G SFP+ ports, a single ganged quad of two columns by two rows at the left
       of the face, numbered 0-3 down each column. THEY ARE HALF OF A COMBO PAIR: the guide
-      says "The 10G SFP+ ports are grouped with 100G QSFP28 ports 0 and 1. Either the SFP+
-      ports or the QSFP28 ports may be used, but concurrent operation of both types is not
-      supported", and the panel prints one continuous pink band across this quad and QSFP28
+      says these ports share a group with 100G QSFP28 ports 0 and 1, and that either the
+      SFP+ ports or those QSFP28 ports can be used but not both types at once, and the panel prints one continuous pink band across this quad and QSFP28
       column 0 to say the same thing.
     attrs: {media: sfp, speed: 10g}
   qsfp28:

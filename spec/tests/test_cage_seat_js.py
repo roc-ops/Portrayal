@@ -248,7 +248,7 @@ def test_an_occupant_override_replaces_empties_and_leaves_alone():
     assert out["second"] == {"applied": 1, "refused": [], "failed": []}
 
     [p4] = out["after"]["port-4"]
-    assert p4["ref"] == "generic/sfp-lc-simplex@1:1.0.0", "one occupant, the new one"
+    assert p4["ref"] == "generic/sfp-lc-simplex@2:2.0.0", "one occupant, the new one"
     assert p4["id"] == p4["path"] == "port-4-occupant"
     assert p4["besideHost"] == "port-4", "seated as the host's next sibling"
     assert p4["media"] == "sfp28" and p4["group"] == "sfp28", (

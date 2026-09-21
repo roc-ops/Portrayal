@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs520
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS9736-64D
@@ -90,12 +90,11 @@ provenance:
   four-lamps-a-port-and-the-count-lit-is-the-breakout:
     confidence: datasheet
     note: >-
-      THE GUIDE PRINTS THE WHOLE VOCABULARY and it is unusual enough to quote in full:
-      "QSFP56-DD LEDs - 400G (1 x 8 lanes 50G PAM4): 1 LED Blue; 200G (2 x 4 lanes 50G
-      PAM4): 2 LEDs Cyan; 100G (4 x 2 lanes 50G PAM4): 4 LEDs Green; 100G (1 x 4 lanes 25G
-      NRZ): 1 LED Green; 40G (1 x 4 lanes 10G NRZ): 1 LED Dark Green; 50G (2 x 2 lanes 25G
-      NRZ): 2 LEDs Red; 25G (4 x 1 lane 25G NRZ): 4 LEDs Orange; 10G (4 x 1 lane 10G NRZ):
-      4 LEDs Yellow".
+      THE GUIDE PRINTS THE WHOLE VOCABULARY and it is unusual enough to transcribe in full,
+      QSFP56-DD LEDs: 400G (1x8 lanes 50G PAM4) = 1 lamp blue; 200G (2x4 lanes 50G PAM4) =
+      2 cyan; 100G (4x2 lanes 50G PAM4) = 4 green; 100G (1x4 lanes 25G NRZ) = 1 green; 40G
+      (1x4 lanes 10G NRZ) = 1 dark green; 50G (2x2 lanes 25G NRZ) = 2 red; 25G (4x1 lane
+      25G NRZ) = 4 orange; 10G (4x1 lane 10G NRZ) = 4 yellow.
       SO THE NUMBER OF LAMPS LIT IS THE BREAKOUT AND THE COLOUR IS THE RATE - four lamps
       per port, one per lane group, not one lamp per port. The guide's enlargement shows
       exactly that: a vertical strip of four diamond windows on the post beside each cage,
@@ -112,9 +111,9 @@ provenance:
     note: >-
       LOC, STAT, FAN, PSU1, PSU2 - five, in a VERTICAL column at the top left with the
       label to the left of each lamp, on a 3.0 mm pitch.
-      THE STATES ARE GIVEN: "LOC: Flashing Blue/Amber (switch locator); STAT: Green (OK),
-      Blinking Green (system booting), Amber (fault); FAN: Green (OK), Amber (fault),
-      Blinking Amber (too few fans installed); PSU1/PSU2: Green (OK), Amber (fault)".
+      THE STATES ARE GIVEN: LOC flashing blue/amber = switch locator; STAT green = OK,
+      blinking green = system booting, amber = fault; FAN green = OK, amber = fault,
+      blinking amber = too few fans installed; PSU1/PSU2 green = OK, amber = fault.
       AN EARLY READING OF THE DATASHEET PHOTOGRAPH AS "DIAG, FAN, LOC, PSU1, PSU2" WAS
       WRONG and is recorded because the mistake is instructive. That silkscreen is about
       four pixels tall in the photograph; enlarged nine times it resolves into five blurred
@@ -125,8 +124,8 @@ provenance:
   the-twenty-four-watt-ports-are-named-one-by-one:
     confidence: datasheet
     note: >-
-      "Ports 1, 2, 3, 4, 29, 30, 31, 32, 33, 34, 35, 36, 61, 62, 63, 64: 24 W per
-      transceiver. All other ports: 13 W per transceiver." - the datasheet's power section,
+      Ports 1-4, 29-36 and 61-64 = 24 W per transceiver; every other port = 13 W per
+      transceiver - the datasheet's power section,
       and the interfaces table splits the face the same way: "16 x 400G QSFP56-DD ports
       (24W) Support 400G QSFP56-DD DAC up to 2.5m" against "48 x 400G QSFP56-DD ports
       (13W) ... up to 1m".
@@ -159,9 +158,8 @@ provenance:
       TWO 2400 W SUPPLIES against a stated draw of "287.75 W (min.), 2100 W (max.)".
       Input ratings: "100-127 VAC, 50/60 Hz, 12 A maximum; 200-240 VAC, 50/60 Hz, 15 A
       maximum; HVDC: 240 VDC, 15 A maximum".
-      THE 1+1 CLAIM IS A HIGH-LINE CLAIM and the guide says so: "When the input voltage is
-      200-240 VAC or 240 VDC, install one or two AC PSUs... When the input voltage is
-      100-127 VAC, two AC PSUs must be installed". At low line the pair is not redundant.
+      THE 1+1 CLAIM IS A HIGH-LINE CLAIM and the guide says so: at 200-240 VAC or 240 VDC
+      one or two AC PSUs may be fitted, but at 100-127 VAC both AC PSUs are required. At low line the pair is not redundant.
       THE INLET IS A SAF-D-GRID AND THE C20 IS THE WALL END OF THE CORD. The datasheet says
       "AC PSU Inlet: Anderson Saf D Grid"; the guide's package contents list an "HVAC/IEC
       C20 1m power cord" and the ordering table an "HVAC to IEC 60320 C20 (1m)". Reading

@@ -63,7 +63,7 @@ if (mode === 'overrides') {
   const COMP = {
     'generic/sfp-lc@1': {name: 'sfp-lc', version: '1.0.0',
                          size: {w: 13.55, h: 8.55, d: 47.5}, mate: [6.775, 4.275]},
-    'generic/sfp-lc-simplex@1': {name: 'sfp-lc-simplex', version: '1.0.0',
+    'generic/sfp-lc-simplex@2': {name: 'sfp-lc-simplex', version: '2.0.0',
                                  size: {w: 13.55, h: 8.55, d: 47.5}, mate: [6.775, 4.275]},
   };
   const skin = name => JSON.stringify({a: {}, c: [
@@ -105,7 +105,7 @@ if (mode === 'overrides') {
   const root = face();
   const before = Object.fromEntries(cages.map(c => [c.id, occ(root, c.id).length]));
   const {applied, refused, failed} = await m.applyOccupantOverrides(root, cages, {
-    'port-4': 'generic/sfp-lc-simplex@1',     // replaced
+    'port-4': 'generic/sfp-lc-simplex@2',     // replaced
     'port-5': null,                           // emptied
     'port-6': 'nobody/nothing@9',             // unknown: failed, keeps its optic
     // port-7 absent: untouched

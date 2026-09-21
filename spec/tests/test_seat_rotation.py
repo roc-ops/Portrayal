@@ -200,7 +200,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     rotate-180 cage (csr310 `m1-1`). The optic's seated dict carries the turn,
     `hosts` hands that dict to the plug, and the plug's to the boot - so each
     link must land its own mate on its host's TURNED mate point, and each must
-    be drawn at 180 too. `generic/sfp-lc-simplex@1` is the optic because it
+    be drawn at 180 too. `generic/sfp-lc-simplex@2` is the optic because it
     composes ONE `std/lc-bore@3`, so it presents a single `lc-plug` mate for
     the plug to seat in (the duplex generics present none)."""
     dev = tmp_path / "csr310" / "device.yaml"
@@ -211,7 +211,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     # every configuration renders the same view, so every one seats the optic
     # the hand-written links below mate to
     for cfg in d["configurations"].values():
-        cfg["occupants"] = {"m1-1": "generic/sfp-lc-simplex@1"}
+        cfg["occupants"] = {"m1-1": "generic/sfp-lc-simplex@2"}
     _front_placements(d).extend([
         {"ref": "generic/lc-plug@1", "id": "plug1", "mate-to": "m1-1-occupant"},
         {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}])
@@ -220,7 +220,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     assert r.returncode == 0, r.stderr[-600:]
     svg = next((tmp_path / "o").glob("csr310.*.front.svg")).read_text()
 
-    chain = [("m1-1", cage["ref"]), ("m1-1-occupant", "generic/sfp-lc-simplex@1"),
+    chain = [("m1-1", cage["ref"]), ("m1-1-occupant", "generic/sfp-lc-simplex@2"),
              ("plug1", "generic/lc-plug@1"), ("boot1", "common/lc-boot@1")]
     for (host, host_ref), (occ, occ_ref) in zip(chain, chain[1:]):
         assert parse_transform(transform_of(svg, occ))[2][0] == 180, occ
@@ -229,3 +229,63 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
         hp = apply(transform_of(svg, host), hm)
         op = apply(transform_of(svg, occ), om)
         assert abs(hp[0] - op[0]) < 1e-6 and abs(hp[1] - op[1]) < 1e-6, (occ, hp, op)
+
+    # AND THE PLUG LANDS IN THE BORE, not merely on whatever point
+    # presented_interface forwards. The optic's own `optical` point is the
+    # bore's centre, declared independently of the composition, so the plug's
+    # mate must land on it in the device frame too. Before the forwarded point
+    # went through the composed bore's rotate: 180, it sat 1.6 mm off it.
+    optical = contract("generic/sfp-lc-simplex@2")["connection-points"]["optical"]["at"]
+    want = apply(transform_of(svg, "m1-1-occupant"), optical)
+    got = apply(transform_of(svg, "plug1"), contract("generic/lc-plug@1")["connection-points"]["mate"]["at"])
+    assert abs(want[0] - got[0]) < 1e-6 and abs(want[1] - got[1]) < 1e-6, (want, got)
+
+
+# --- a plug seats in the bore's centre, for every generic ------------------
+
+from portrayal import libwalk  # noqa: E402
+
+LC_BORE = "std/lc-bore@3"
+
+
+def _generics_with_a_rotated_lc_bore():
+    """Every generic contract composing std/lc-bore@3 at a non-zero rotate, as
+    (ref, part, the optical point that part is the bore of). Walked, not
+    listed: a generic added later joins by composing the bore."""
+    out = []
+    for f in libwalk.iter_components([str(LIB)]):
+        ref = libwalk.ref_of(f)
+        if not ref.startswith("generic/"):
+            continue
+        c = contract(ref)
+        bores = [q for q in (c.get("parts") or [])
+                 if q.get("ref") == LC_BORE and float(q.get("rotate") or 0) % 360]
+        cps = c.get("connection-points") or {}
+        for q in bores:
+            # one bore is the part's `optical`; a pair is optical-<id>
+            name = "optical" if len(bores) == 1 else f"optical-{q['id']}"
+            out.append((ref, q, cps[name]["at"]))
+    return out
+
+
+ROTATED_BORES = _generics_with_a_rotated_lc_bore()
+
+
+def test_the_walk_found_the_rotated_bores():
+    """Not vacuous: the four generic transceivers compose seven, all at 180."""
+    refs = {r for r, _, _ in ROTATED_BORES}
+    assert {"generic/sfp-lc@1", "generic/sfp-lc-simplex@2", "generic/qsfp-lc@1",
+            "generic/qsfp-dd-lc@1"} <= refs, refs
+    assert len(ROTATED_BORES) >= 7, ROTATED_BORES
+
+
+@pytest.mark.parametrize("ref,part,optical", ROTATED_BORES,
+                         ids=[f"{r}:{q['id']}" for r, q, _ in ROTATED_BORES])
+def test_a_plug_in_a_rotated_bore_lands_on_its_optical_point(ref, part, optical):
+    """presented_interface on a host holding just this one bore - the case a
+    single-bore host is, and the one a plug seats by - must forward the bore's
+    centre, which the generic declares as its optical point."""
+    _, at, _ = presented_interface({"parts": [part]}, lambda r: contract(r))
+    assert at == pytest.approx(optical, abs=1e-6), (
+        f"{ref} {part['id']}: a plug seated in this bore lands at {at}, but the "
+        f"bore's optical point is {optical}")

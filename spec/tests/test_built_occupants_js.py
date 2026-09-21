@@ -53,7 +53,7 @@ def test_an_untouched_page_writes_no_swap(out):
 
 
 def test_swapping_back_to_a_mapping_form_optic_is_no_swap(out):
-    assert out["away"] == {"port-4": "generic/sfp-lc-simplex@1"}
+    assert out["away"] == {"port-4": "generic/sfp-lc-simplex@2"}
     assert out["back"] == {}, "the configured optic, chosen again, is not a swap"
     assert out["emptied"] == {"port-4": None}
     assert out["filled"] == {"port-6": "generic/sfp-lc@1"}

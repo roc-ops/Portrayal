@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-sw-bdm-b
-version: 1.6.0
+version: 1.6.1
 class: switch
 behaviour: fills
 profile: networking
@@ -28,11 +28,12 @@ provenance:
     through to the front card. So a front card and its rear partner have to share the
     chassis depth - 386.0 on the C100G, 388.45 on the C40G. Two cards at 380.0 need 760,
     which is not a wide error bar, it is twice the box.
-    WHAT THE SHAPE IS, from the owner: "the front card is mostly rectangular, but the I/O
-    card is kind of L SHAPED where the top part of the top connector PASSES THROUGH THE
-    MIDPLANE and plugs into the front card, and the other one is plugged into the midplane.
-    So they ultimately kind of meet in the middle." So the rear card is a body against the
-    midplane PLUS A TONGUE at the top reaching forward through it.
+    WHAT THE SHAPE IS, as the maintainer reports it from the hardware: the front card is
+    mostly a plain rectangle, but the I/O card is L SHAPED - the top of its upper connector
+    PASSES THROUGH THE MIDPLANE and plugs into the front card, while the lower one plugs
+    into the midplane itself, so the two cards end up meeting in the middle. So the rear
+    card is a body against the midplane PLUS A TONGUE at the top reaching forward through
+    it.
     NOTE WHAT THAT DOES AND DOES NOT ALLOW, because the obvious rule is wrong. front + rear
     CAN exceed the chassis depth, by about the tongue length, because the tongue overlaps the
     front card at a height where the front card is not - they interleave rather than tile. The

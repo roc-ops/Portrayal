@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc-simplex
-version: 1.0.1
+version: 2.0.0
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -22,7 +22,7 @@ fields:
   latch-color:
     label: Latch colour
     type: text
-    default: '#2f5fa8'
+    default: '#6f6f6f'
   label:
     label: Module label
     type: text
@@ -48,9 +48,17 @@ provenance:
     generic/sfp-lc@1; see that contract's own `provenance.protrusion` for the
     full reading. A face swap does not move the body's protrusion.
   bail-colour: >-
-    A FIELD, not a fact. Vendors colour the bail by reach (blue is commonly
-    single-mode) and the wrapper sets `latch-color`; the default here is a
-    colour, not a claim.
+    A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
+    every chromatic default is a claim. SFF-8432 Rev 5.2a Note 13 makes the
+    colour of an exposed SFP feature a mode code - black or beige for
+    multi-mode, blue for single mode, and it says "shall" - so the blue this
+    default used to carry told every generic SFP drawn with it that it was
+    single mode. That is a per-SKU fact, and a generic stands for every SKU of
+    its shape (L99). The grey is in no code table: not blue, not black, not
+    beige. A vendor wrapper, which knows which module it is, sets
+    `latch-color` to the colour its mode or wavelength calls for. Decided
+    2026-09-21. SFF-8432 Rev 5.2a is held locally in the maintainer's
+    gitignored corpus.
   latch: >-
     carried unchanged from generic/sfp-lc@1's `provenance.latch` - the bail
     geometry is a fact about the module body, not about which face is cut
@@ -60,21 +68,27 @@ provenance:
     reasoning that put the LC-duplex pair's axis at y 5.70 - clear of the
     bail below and the receptacle geometry above, std/lc-bore@3 being 6.3
     tall and keyed - applies identically to this one bore: it sits at the
-    same y for the same clearance reason, only centred in X instead of
-    offset either side of it.
+    same y for the same clearance reason, and at the duplex RX bore's x (see
+    `bores` below).
   bores: >-
-    std/lc-bore@3, the same KEYED opening generic/sfp-lc@1 composes, CENTRED
-    on the face instead of split into a 6.35mm-apart pair: `at: [4.425,
-    1.75]` puts the bore's 4.7-wide square on the module centreline (4.425 +
-    4.7/2 = 6.775 = 13.55/2), keeping the same y as the duplex pair (1.75,
-    hence the same 5.70 optical axis - see `optical-axis` above). The bore is
-    centred because no drawing of a bidi SFP face in the intake places it
-    otherwise - ESTIMATED. What would settle it is a bidi module's own
-    mechanical drawing, e.g. a 1000BASE-BX SFP datasheet's mechanical page:
-    if a real bidi face turns out offset rather than centred, this placement
-    moves to match it.
+    std/lc-bore@3, the same KEYED opening generic/sfp-lc@1 composes, IN THE
+    PLACE OF THAT PART'S RX BORE: `at: [7.60, 1.75]`, generic/sfp-lc@1's own
+    `rx` placement, so the bore's 4.7-wide square spans x 7.60 to 12.30 and
+    its centre is (9.95, 5.70), the duplex part's `optical-rx`. Same y as the
+    duplex pair (1.75, hence the same 5.70 optical axis - see `optical-axis`
+    above). CORRECTED IN @2 (2026-09-21). @1 centred the bore on the module
+    (`at: [4.425, 1.75]`, centre x 6.775 = 13.55/2) because no drawing of a
+    bidi SFP face in the intake placed it otherwise; that was a guess, and the
+    maintainer's observation of real simplex parts, 2026-09-21, is that a
+    simplex LC SFP's bore is not centred but sits where the duplex's RX bore
+    does. THAT OBSERVATION IS THE WHOLE SOURCE: no document or photograph in
+    the corpus shows a simplex SFP face - a search of the staged photographs
+    found none - so the placement rests on it and on nothing drawn. What would
+    corroborate it is a bidi module's own mechanical drawing, e.g. a
+    1000BASE-BX SFP datasheet's mechanical page, or an orthographic photograph
+    of one; if either disagrees, this placement is the thing it argues with.
 parts:
-  - {ref: std/lc-bore@3, id: bore, at: [4.425, 1.75], lift: 10.0, rotate: 180}
+  - {ref: std/lc-bore@3, id: bore, at: [7.60, 1.75], lift: 10.0, rotate: 180}
 relief:
   features:
     - node: body
@@ -105,5 +119,5 @@ relief:
         the body's protrusion or the bail's reach past it.
 connection-points:
   mate: {at: [6.775, 4.275], direction: front}
-  optical: {at: [6.775, 5.70], direction: front}
+  optical: {at: [9.95, 5.70], direction: front}
 skins: [default]

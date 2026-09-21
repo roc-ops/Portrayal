@@ -43,8 +43,17 @@ def rule_errors(path, *rules):
     return [e for e in errs if any(f"[{r}]" in e for r in rules)]
 
 
+# the live major of each generic read here - sfp-lc-simplex went to @2 when its
+# bore moved to the duplex's RX position (2026-09-21)
+MAJOR = {"sfp-lc": 1, "sfp-lc-simplex": 2}
+
+
+def contract_path(name):
+    return LIB / f"components/generic/{name}/v{MAJOR[name]}/contract.yaml"
+
+
 def contract(name):
-    return yaml.safe_load((LIB / f"components/generic/{name}/v1/contract.yaml").read_text())
+    return yaml.safe_load(contract_path(name).read_text())
 
 
 def test_bidi_has_one_lc_bore_and_one_optical_point():
@@ -66,5 +75,54 @@ def test_both_share_the_sfp_envelope_and_protrude():
 
 def test_both_lint_clean():
     for name in ("sfp-lc-simplex",):
-        p = LIB / f"components/generic/{name}/v1/contract.yaml"
+        p = contract_path(name)
         assert rule_errors(p, "L9", "L11", "L99") == [], name
+
+
+# --- the simplex bore sits where the duplex's RX bore does ------------------
+#
+# Corrected in @2 on the maintainer's observation of real simplex parts,
+# 2026-09-21 (no document or photograph in the corpus shows it - see
+# provenance.bores). Everything here is read off the two contracts and their
+# compiles, so the duplex part stays the one source for where RX is.
+
+def _compiled(ref):
+    from portrayal import render
+    lib = render.Library([str(LIB)])
+    g, _ = render.instance_group(lib, ref, "t", [0, 0], None, None, None, None,
+                                 skin_name="default", palette={}, resolved={})
+    return {n.get("id"): n for n in g.iter() if n.get("id")}
+
+
+def test_the_simplex_bore_is_the_duplex_rx_bore():
+    duplex, simplex = contract("sfp-lc"), contract("sfp-lc-simplex")
+    rx = next(p for p in duplex["parts"] if p["id"] == "rx")
+    (bore,) = simplex["parts"]
+    assert bore["ref"] == rx["ref"]
+    assert bore["at"] == rx["at"], (
+        f"the simplex bore is at {bore['at']}; the duplex RX bore is at {rx['at']}")
+    assert bore["rotate"] == rx["rotate"] and bore["lift"] == rx["lift"]
+    # its optical point is the duplex's optical-rx, and the module's own mate
+    # into its cage did not move with it
+    assert (simplex["connection-points"]["optical"]["at"]
+            == duplex["connection-points"]["optical-rx"]["at"])
+    assert (simplex["connection-points"]["mate"]
+            == duplex["connection-points"]["mate"])
+
+
+def test_the_simplex_hole_is_the_duplex_rx_hole():
+    """The compiled face's evenodd path: its second subpath (the one hole) is
+    exactly the duplex face's third (the RX hole, after the outline and TX)."""
+    import re
+
+    def holes(ref):
+        d = _compiled(ref)["t--body"].get("d")
+        return [" ".join(s.split()) for s in re.findall(r"M[^M]*", d)]
+
+    duplex = holes("generic/sfp-lc@1")
+    simplex = holes("generic/sfp-lc-simplex@2")
+    assert len(duplex) == 3 and len(simplex) == 2, (len(duplex), len(simplex))
+    assert simplex[0] == duplex[0], "the module outline changed"
+    assert simplex[1] == duplex[2], (
+        f"the simplex hole {simplex[1]!r} is not the duplex RX hole {duplex[2]!r}")
+    assert simplex[1] != duplex[1], "the hole is the TX one"

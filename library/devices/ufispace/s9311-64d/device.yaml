@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 3.0.9
+version: 3.0.10
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
@@ -335,11 +335,9 @@ gaps:
   reason: sources-disagree
   note: >-
     The HIG states the 110 V AC per-supply output twice and differently. Section 7 says
-    'If power input for AC power supply is only 110V, there will only be 1000 watts per
-    power supply and will not be enough power for the power supply to be changed while
-    the switch is in operation.' Section 9's AC note says 'If only a 110V AC power source
-    is available, the S9311-64D can still be powered with both PSUs providing 1200 watts
-    each for a total output of 2400 watts.' Same measure, same scope, two values. Neither
+    that on a 110 V input each AC supply gives only 1000 W, too little for a supply to be
+    swapped while the switch runs. Section 9's AC note says that on a 110 V source the
+    S9311-64D still runs on both PSUs at 1200 W each, 2400 W in total. Same measure, same scope, two values. Neither
     is the number this manifest carries - power-output-w on the PSU contracts is the
     2400 W nameplate from the datasheet's ordering lines, at the 200-240 V input the
     datasheet specifies - but a reader budgeting a 110 V feed needs to know the guide

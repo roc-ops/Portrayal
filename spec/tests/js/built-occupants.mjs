@@ -8,7 +8,7 @@
 const m = await import('../../../kit/swap.js');
 
 const cages = [
-  {id: 'port-4', accepts: ['generic/sfp-lc@1', 'generic/sfp-lc-simplex@1']},
+  {id: 'port-4', accepts: ['generic/sfp-lc@1', 'generic/sfp-lc-simplex@2']},
   {id: 'port-5', accepts: ['generic/sfp-lc@1']},
   {id: 'port-6', accepts: ['generic/sfp-lc@1']},
 ];
@@ -42,7 +42,7 @@ out.untouchedSearch = m.searchWith('?device=d&config=fitted',
                                    {device: 'd', config: 'fitted', swap: out.untouchedSwap});
 
 // swapping AWAY from the mapping-form optic and BACK to it is no swap
-const away = {...untouched, cfgOccupants: {...untouched.cfgOccupants, 'port-4': 'generic/sfp-lc-simplex@1'}};
+const away = {...untouched, cfgOccupants: {...untouched.cfgOccupants, 'port-4': 'generic/sfp-lc-simplex@2'}};
 out.away = m.swapOverrides(away);
 const back = {...untouched, cfgOccupants: {...untouched.cfgOccupants, 'port-4': 'generic/sfp-lc@1'}};
 out.back = m.swapOverrides(back);

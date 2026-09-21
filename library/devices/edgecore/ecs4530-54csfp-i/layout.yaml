@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ecs4530-54csfp-i
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: ECS4530-54CSFP-DC-I
@@ -63,8 +63,8 @@ provenance:
       READ OFF THE ELEVATION, and each CSFP cage carries TWO numbers. Under the bottom cage of
       the first stack the legend reads '1' and '3'; above its top cage '2' and '4': a CSFP
       module presents two bidirectional fibre ports, so 24 cages give the datasheet's 48
-      ports - 'by inserting a CSFP transceiver that supports two BIDI fiber ports, each port can
-      connect to two CPE/IAD devices, so the total number of physical ports is 48'. Stack k
+      ports - the datasheet explains that a CSFP transceiver carries two BIDI fibre ports, so
+      each cage reaches two CPE/IAD devices and the physical port total is 48. Stack k
       carries 4k+1 and 4k+3 in its bottom cage and 4k+2 and 4k+4 in its top.
       EACH CAGE DECLARES THE TWO INTERFACES IT PRESENTS - csfp-1-3 carries
       `interfaces: [port-1, port-3]` (roc-ops/Portrayal#443) - so the DCIM export lists
