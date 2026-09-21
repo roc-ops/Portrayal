@@ -105,9 +105,9 @@ const builtFace = JSON.stringify({t: 'svg', a: {}, c: [
   {a: {id: 'port-4-occupant', 'data-path': 'port-4-occupant', 'data-for': 'port-4',
        'data-behaviour': 'occupies', 'data-ref': 'generic/sfp-lc@1:1.0.0'}},
 ]});
-const simplex = {name: 'sfp-lc-simplex', version: '1.0.0',
+const simplex = {name: 'sfp-lc-simplex', version: '2.0.0',
                  size: {w: 13.55, h: 8.55, d: 47.5}, mate: [6.775, 4.275]};
-const loadSkin = async ref => ref === 'generic/sfp-lc-simplex@1' ? {comp: simplex,
+const loadSkin = async ref => ref === 'generic/sfp-lc-simplex@2' ? {comp: simplex,
   text: JSON.stringify({a: {}, c: [{a: {id: 'sfp-lc-simplex', 'data-path': 'sfp-lc-simplex',
                                         'data-behaviour': 'occupies'}}]})} : null;
 m.clearSvgCache();
@@ -117,7 +117,7 @@ const cages = [{id: 'port-4', mate: [10, 5], rotate: null, lift: 0, mirror: fals
                 'group-states': false, 'occupant-attrs': {}}];
 const doc = new DOMParser().parseFromString(await m.svgSource(cageUrl, a), 'image/svg+xml');
 const {applied} = await swap.applyOccupantOverrides(
-  doc.documentElement, cages, {'port-4': 'generic/sfp-lc-simplex@1'}, loadSkin);
+  doc.documentElement, cages, {'port-4': 'generic/sfp-lc-simplex@2'}, loadSkin);
 m.setSvgOverride(cageUrl, new XMLSerializer().serializeToString(doc), a);
 const seatedIn = async scope => swap.occupantRef(
   new DOMParser().parseFromString(await m.svgSource(cageUrl, scope), 'image/svg+xml')

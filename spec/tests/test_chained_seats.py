@@ -107,7 +107,7 @@ def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
     moves nothing it compares. A boot on a plug on a 10 mm-proud bore drew at
     the panel plane, 10 mm too deep, and every test passed.
 
-    `generic/sfp-lc-simplex@1` is the fixture because it is the only library
+    `generic/sfp-lc-simplex@2` is the fixture because it is the only library
     part whose `presented_interface` forwards a NON-ZERO lift: it composes one
     `std/lc-bore@3` at `lift: 10.0`, and one bore is what lets
     `presented_interface` pick a single aperture to forward. `generic/sfp-lc@1`
@@ -126,7 +126,7 @@ def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
         [{"ref": "generic/lc-plug@1", "id": "plug1",
           "mate-to": "port-4-occupant"},
          {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}],
-        {"port-4": "generic/sfp-lc-simplex@1"})
+        {"port-4": "generic/sfp-lc-simplex@2"})
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
 
@@ -157,7 +157,7 @@ def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
     assert boot >= 10.0, (
         f"the fixture is not exercising anything: the chain's lift is {boot}. "
         f"An all-zero chain passes the equality above no matter what the "
-        f"renderer does - check generic/sfp-lc-simplex@1 still composes a "
+        f"renderer does - check generic/sfp-lc-simplex@2 still composes a "
         f"lifted bore")
 
 
@@ -199,7 +199,7 @@ def test_a_hand_written_mate_to_records_its_host(tmp_path):
         [{"ref": "generic/lc-plug@1", "id": "plug1",
           "mate-to": "port-4-occupant"},
          {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}],
-        {"port-4": "generic/sfp-lc-simplex@1"})
+        {"port-4": "generic/sfp-lc-simplex@2"})
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
     by_id = {el.get("id"): el for el in root.iter() if el.get("id")}
@@ -224,7 +224,7 @@ def test_an_authors_own_for_wins_over_the_mate_to_default(tmp_path):
         tmp_path,
         [{"ref": "generic/lc-plug@1", "id": "plug1",
           "mate-to": "port-4-occupant", "for": "port-4"}],
-        {"port-4": "generic/sfp-lc-simplex@1"})
+        {"port-4": "generic/sfp-lc-simplex@2"})
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
     by_id = {el.get("id"): el for el in root.iter() if el.get("id")}
@@ -244,7 +244,7 @@ def test_occupants_can_chain(tmp_path):
     """
     r, out = _render(
         tmp_path, [],
-        {"port-4": "generic/sfp-lc-simplex@1",
+        {"port-4": "generic/sfp-lc-simplex@2",
          "port-4-occupant": "generic/lc-plug@1",
          "port-4-occupant-occupant": "common/lc-boot@1"})
     assert r.returncode == 0, r.stderr[-800:]
@@ -272,7 +272,7 @@ def test_an_occupant_for_a_host_in_another_view_is_still_skipped(tmp_path):
     """
     r, out = _render(
         tmp_path, [],
-        {"port-4": "generic/sfp-lc-simplex@1",
+        {"port-4": "generic/sfp-lc-simplex@2",
          "a-host-in-no-view-at-all": "generic/lc-plug@1"})
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()

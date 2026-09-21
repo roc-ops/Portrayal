@@ -62,7 +62,7 @@ def test_a_composed_part_with_no_lift_forwards_zero():
 # effective lift is the aperture's, and the relief inside the occupant still
 # has the extent it has anywhere else.
 #
-# THE HOST IS `generic/sfp-lc-simplex@1`, and the choice is not arbitrary.
+# THE HOST IS `generic/sfp-lc-simplex@2`, and the choice is not arbitrary.
 # `std/sfp-ganged@1` presents its own `mate` point and so forwards a lift of
 # ZERO - seating on it would pass whatever this code did. `generic/sfp-lc@1`
 # composes two lifted bores, and `presented_interface` declines to pick one of
@@ -83,7 +83,7 @@ import yaml
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
-HOST = "generic/sfp-lc-simplex@1"
+HOST = "generic/sfp-lc-simplex@2"
 SVG = "{http://www.w3.org/2000/svg}"
 
 # the plug's own relief, which is what proves the lift is counted ONCE. `tip`
@@ -156,7 +156,7 @@ def _lift_of(el, parent):
 def _aperture_lift():
     from portrayal.manifest import presented_interface
     contract = yaml.safe_load(
-        (LIB / "components/generic/sfp-lc-simplex/v1/contract.yaml").read_text())
+        (LIB / "components/generic/sfp-lc-simplex/v2/contract.yaml").read_text())
 
     def res(ref):
         ns, rest = ref.split("/", 1)

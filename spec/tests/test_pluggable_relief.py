@@ -47,7 +47,7 @@ from portrayal import render
 GENERICS = [
     ("generic/sfp-lc@1", "bail", 10.0,
      ["SFF-8432", "Table 4-3 designator A"]),
-    ("generic/sfp-lc-simplex@1", "bail", 10.0,
+    ("generic/sfp-lc-simplex@2", "bail", 10.0,
      ["SFF-8432", "Table 4-3 designator A"]),
     ("generic/qsfp-lc@1", "tab", 20.0,
      ["SFF-8661", "Figure 5-1"]),
