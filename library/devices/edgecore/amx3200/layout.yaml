@@ -1,0 +1,338 @@
+format: 1
+kind: device
+name: amx3200
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: AMX3200
+portfolio: {line: Service Provider, family: Coherent Transponder and Muxponder, series: AMX3200}
+description: >-
+  1RU coherent transponder and muxponder with two front interface sleds, each carrying two
+  400G CFP2-DCO line ports and eight 100G QSFP28 client ports (3.2 Tbps full duplex),
+  Intel Atom C3508, ONIE-preloaded. A management panel at the left end; two 1200 W AC or
+  -48 VDC supplies at the ends of the rear with five 4+1 fan trays between them,
+  front-to-back only.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Two documents and six product photographs. amx3200-datasheet (the AMX3200 coherent
+      transponder and muxponder data sheet) carries the spec list, a 2000 px product
+      photograph of the front taken from slightly above, and an ordering table that - unusually
+      for this vendor - names the FRUs: AMX-3200-SLED400, AMX-3200-FAN, AMX-3200-AC-PSU and
+      AMX-3200-48V-PSU, with the supply's 73.5 mm width and the fans' 40.5 mm size. amx3200-qsg
+      (the 400G Transponder and Muxponder AMX3200 quick start guide, four pages) carries
+      line-art front and rear elevations, the Overview callouts and the FRU procedures. The
+      staged photographs include a straight-on front and straight-on rears of the AC and the DC
+      build, 960 px wide.
+  figure-choice:
+    confidence: measured
+    note: >-
+      Gate 1. THE GUIDE'S FRONT SETS THE FRONT: panel 1114 x 111 px, aspect -0.42% against
+      438.4/43.5, 2.541 px/mm on x and 2.552 on y. Two standard apertures confirm the scale
+      independently - the QSFP28 openings measure 18.50 against the registry's 18.50 and the
+      CFP2 openings 41.7-42.1 x 12.54 against the MSA's 41.5 x 12.4. The guide's REAR is
+      -1.48% on aspect, so every rear number is checked against the two straight-on rear
+      photographs, and they agree on the fan pitch to 0.05 mm. The datasheet's front
+      photograph is taken from above and is used for what it alone shows - the printed port
+      numbering and the lamp windows - not for geometry.
+  chassis:
+    confidence: datasheet
+    note: >-
+      DATASHEET 'Dimensions (WxDxH): 438.4 mm x 430 mm x 43.5 mm' and the guide's '438.4 x 430
+      x 43.5 mm (17.26 x 16.93 x 1.71 in.)'. Two documents, one triple; 438.4 is the body.
+  weight:
+    confidence: datasheet
+    note: >-
+      '10.28 kg (22.66 lb), with 2 PSUs and 5 fans installed' in the datasheet; the guide says
+      the same figure 'with 2 sleds, 2 PSUs, and 5 fans installed', so it is the populated
+      machine.
+  bays:
+    confidence: measured
+    note: >-
+      THIS IS A BAY DEVICE. The two sleds are field-replaceable modules - the guide has a Sled
+      Removal and Installation procedure and ships a blank cover for an unused slot - so each
+      front slot is a bay that accepts edgecore/amx-3200-sled400@1 or
+      edgecore/amx-3200-sled-blank@1, and the ports live on the sled, addressed
+      sled-1/module/port-3 and so on. The slots read x 59.03-242.81 and 247.53-431.7 on the
+      guide's front, 183.8 wide on a 188.5 pitch; the chassis prints SLED1 and SLED2 on the
+      narrow strips to the right of each.
+      THE PORTS' OPTICS AND MODES ARE ON THE SLED'S CONTRACT, not in this device's attrs:
+      every traffic port lives on an AMX-3200-SLED400, and a device-level optics key names
+      no port group of the device's own.
+  numbering:
+    confidence: photo-measured
+    note: >-
+      THE PHOTOGRAPH AND THE GUIDE NUMBER THE SLED DIFFERENTLY. The datasheet's photograph
+      prints CFP2-1, CFP2-2 and then 3 up 4 down ... 9 up 10 down: each sled numbered 1-10 with
+      its line ports first. The guide's line art prints the client ports 1-8. This device
+      follows the photograph, which is of the hardware; see the gap. Supplies (PSU2 left, PSU1
+      right) and fans (5 to 1 from the left) are numbered from one, as the rear prints them.
+  management-panel:
+    confidence: measured
+    note: >-
+      MEASURED on the guide's front at 5x and matched to the straight-on photograph: the
+      RS-232 console RJ-45 at the top left over the 1G SFP out-of-band port ('CONSOLE up down
+      SFP'); the 1000BASE-T MGMT RJ-45 over a USB-A ('MGMT up down USB'); the Edge-core
+      wordmark above them; the 4 mm banana receptacle, the guide's callout 2, at the top
+      right - which is the ESD wrist-strap jack, common/esd-jack@1, whose own provenance
+      identifies the equipment-side ESD point as exactly a 4 mm banana; two gold coaxial 1PPS jacks labelled SLED1-1PPS and SLED2-1PPS, one per sled; and
+      four rectangular system lamps across the foot - PSU, DIAG, FAN, LOC - over the model
+      name. Honeycomb vents run down the left edge and along the bottom.
+      THE MGMT JACK IS LAMPED AND THE CONSOLE IS NOT: 'MGMT LEDs: Left: Green (link/act),
+      Right: Green (1G speed)', and nothing for the console - L76's convention too.
+  rear:
+    confidence: photo-measured
+    note: >-
+      Measured on the guide's rear and on both rear photographs. PSU2 at x 14.3 and PSU1 at
+      350.6, each 73.5 x 40.0; five fan trays from x 97.0 on a 50.45 pitch; each module's label
+      printed vertically in the web to its RIGHT with an arrow pointing back at it - 'PSU2',
+      '5' ... '1', 'PSU1'. The protective earth is a single stud under an earth symbol on the
+      strip at the far left; the guide asks for a #8 AWG wire to it.
+attrs:
+  performance:
+    capacity: 3.2 Tbps full duplex (1.6 Tbps per sled)
+    jumbo-frames: up to 9216 bytes
+  power:
+    power-max-w: 850
+    power-envelope: unstated
+    power-input-ac: 100-240 VAC, 50-60 Hz (10.0 A max per PS at 100-127 V, 8.0 A at 200-240 V)
+    power-input-dc: -40 to -72 VDC, 40 A max per PS
+    power-redundancy: 1+1 redundant, load-sharing, hot-swappable 1200 W supplies
+  thermal:
+    airflow: front-to-back
+  environmental:
+    temperature-operating: 0 C to 45 C (32 F to 113 F)
+    temperature-storage: -40 C to 70 C (-40 F to 158 F)
+    humidity-operating: 5% to 95% non-condensing
+  platform:
+    cpu: Intel Atom C3508
+    memory: DDR4 SO-DIMM 8 GB (up to 16 GB)
+    boot-flash: 2x 16 MB SPI
+    storage: 128 GB M.2 MLC SSD
+    tpm: TPM 2.0
+    software: ONIE installer pre-loaded; open-source and commercial NOS options
+  features:
+    marketing-name: AMX3200
+    timing: IEEE 1588v2 PTP up to Class C; 1PPS output per sled
+    sleds: 2x AMX-3200-SLED400 (2x 400G CFP2-DCO + 8x 100G QSFP28 each); a blank cover for an unused slot
+  management:
+    mgmt-ports: >-
+      1x RJ-45 RS-232 console, 1x RJ-45 100/1000BASE-T management, 1x 1G SFP management,
+      1x USB 2.0, 2x 1PPS coaxial (one per sled), 1x 4 mm banana receptacle
+  compliance:
+    emc: EN 55032 Class A, EN 300 386 Class A, EN 61000-3-2, EN 61000-3-3, VCCI Class A, AS/NZS Class A, ICES-003 Class A, FCC Class A, BSMI Class A
+    immunity: EN 55024/55035, EN 300 386, IEC 61000-4-2/3/4/5/6/8/11
+  lifecycle: {eol: none-announced}
+
+chassis: {width: 438.4, height: 43.5, depth: 430.0, ru: 1, weight-kg: 10.28, color: '#2b2e33',
+  airflow: front-to-back}
+gaps:
+  - what: sled-port-numbering
+    scope: [front]
+    reason: sources-disagree
+    wanted: >-
+      THE PRINTED NUMBERS OF THE SLED'S PORTS. The datasheet's photograph numbers each sled
+      1-10 - CFP2-1, CFP2-2, then 3 up 4 down ... 9 up 10 down - and the guide's line art
+      numbers the QSFP28 ports 1-8 on their own. The photograph is modelled. Which one the
+      shipping silkscreen carries, and which one a NOS uses, would be settled by a photograph
+      of a current unit or the NOS port map.
+  - what: qsfp-lamp-assignment
+    scope: [front]
+    reason: vendor-silent
+    wanted: >-
+      WHICH OF A CLIENT COLUMN'S FOUR LAMP WINDOWS BELONGS TO WHICH PORT. Each column's belly
+      strip carries an up-arrow, four windows and a down-arrow; the vendor says 'QSFP28 LEDs:
+      Green (link/activity)' and nothing about which window is whose. The windows are drawn and
+      named by column, not assigned.
+  - what: sled-blank-face
+    scope: [front]
+    reason: needs-photo
+    wanted: >-
+      THE FACE OF THE BLANK COVER. The guide ships one and requires it over an unused slot but
+      neither document draws it; edgecore/amx-3200-sled-blank@1 is a plain plate.
+  - what: sled-lever-revision
+    scope: [front]
+    reason: sources-disagree
+    wanted: >-
+      WHICH LEVER THE SLED CARRIES. The guide draws and describes a blue release latch on the
+      lever; the datasheet's photograph shows a silver lever with a thumbscrew. The blue
+      latch, the one the vendor's procedure names in words, is drawn.
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the management panel at the left end - the RS-232 console RJ-45, the 1G SFP and the
+      1000BASE-T RJ-45 out-of-band ports, a USB-A, the two per-sled 1PPS coaxial jacks and the
+      4 mm banana receptacle.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  sleds:
+    term: Slot
+    role: service
+    index-origin: 1
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 1+1 redundant, load-sharing, hot-swappable
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '4+1'
+      redundancy-note: 4+1 redundant, one 40.5 mm fan per tray
+  grounding: {term: Point, role: furniture, index-origin: 1}
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: the rack ears and the Edge-core wordmark.
+views:
+  front:
+    size: {w: 438.4, h: 43.5}
+    panel:
+      decor:
+        - {at: [0.80, 2.00], size: [3.60, 34.00], fill: '#3e4247'}
+        - {at: [0.80, 2.00], size: [3.60, 34.00], pattern: vent, vent: 22}
+        - {at: [4.40, 38.30], size: [48.80, 3.40], pattern: holes, pattern-pitch: [2.70, 3.40], vent: 22}
+        - {at: [24.90, 4.80], size: [19.00, 3.10], fill: '#d8dcdf', rx: 0.3}
+        - {at: [54.70, 1.18], size: [4.33, 41.93], fill: '#1b1e21'}
+        - {at: [242.81, 1.18], size: [4.72, 41.93], fill: '#1b1e21'}
+        - {at: [431.70, 1.18], size: [5.90, 41.93], fill: '#1b1e21'}
+      cutouts:
+        - {id: console, at: [7.10, 4.30], size: [15.8, 13.2], shape: rect}
+        - {id: oob-sfp, at: [7.95, 21.10], size: [14.5, 10.0], shape: rect}
+        - {id: mgmt-eth, at: [25.90, 10.30], size: [15.8, 13.2], shape: rect}
+        - {id: usb, at: [27.60, 24.60], size: [12.0, 4.5], shape: rect}
+        - {id: esd, at: [44.20, 3.90], size: [6.0, 6.0], shape: circle}
+        - {id: sled1-1pps, at: [44.18, 16.58], size: [4.83, 4.83], shape: circle}
+        - {id: sled2-1pps, at: [44.18, 24.78], size: [4.83, 4.83], shape: circle}
+        - {id: led-psu, at: [8.10, 33.20], size: [2.8, 1.6], shape: rect}
+        - {id: led-diag, at: [14.40, 33.20], size: [2.8, 1.6], shape: rect}
+        - {id: led-fan, at: [21.10, 33.20], size: [2.8, 1.6], shape: rect}
+        - {id: led-loc, at: [27.50, 33.20], size: [2.8, 1.6], shape: rect}
+    silkscreen:
+      - {at: [14.95, 20.30], text: 'CONSOLE ▲  ▼ SFP', font-size: 1.2, anchor: middle, fill: '#d8dcdf', for: [console, oob-sfp]}
+      - {at: [33.80, 9.30], text: 'MGMT ▲  ▼ USB', font-size: 1.2, anchor: middle, fill: '#d8dcdf', for: [mgmt-eth, usb]}
+      - {at: [46.60, 15.60], text: SLED1-1PPS, font-size: 1.0, anchor: middle, fill: '#d8dcdf', for: sled1-1pps}
+      - {at: [46.60, 31.90], text: SLED2-1PPS, font-size: 1.0, anchor: middle, fill: '#d8dcdf', for: sled2-1pps}
+      - {at: [9.50, 36.50], text: PSU, font-size: 1.1, anchor: middle, fill: '#d8dcdf', for: led-psu}
+      - {at: [15.80, 36.50], text: DIAG, font-size: 1.1, anchor: middle, fill: '#d8dcdf', for: led-diag}
+      - {at: [22.50, 36.50], text: FAN, font-size: 1.1, anchor: middle, fill: '#d8dcdf', for: led-fan}
+      - {at: [28.90, 36.50], text: LOC, font-size: 1.1, anchor: middle, fill: '#d8dcdf', for: led-loc}
+      - {at: [46.60, 36.60], text: AMX3200, font-size: 1.4, anchor: middle, fill: '#d8dcdf', for: chassis}
+      - {at: [245.17, 21.75], text: SLED1, font-size: 1.6, anchor: middle, rotate: -90, fill: '#d8dcdf', for: sled-1}
+      - {at: [434.65, 21.75], text: SLED2, font-size: 1.6, anchor: middle, rotate: -90, fill: '#d8dcdf', for: sled-2}
+    components:
+      bays:
+        - {id: sled-1, at: [59.03, 1.18], size: {w: 183.8, h: 41.9}, accepts: [edgecore/amx-3200-sled400@1, edgecore/amx-3200-sled-blank@1], group: sleds, rel-pos: 1, default: edgecore/amx-3200-sled400@1}
+        - {id: sled-2, at: [247.53, 1.18], size: {w: 183.8, h: 41.9}, accepts: [edgecore/amx-3200-sled400@1, edgecore/amx-3200-sled-blank@1], group: sleds, rel-pos: 2, default: edgecore/amx-3200-sled400@1}
+      placements:
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.0], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [438.4, 0.0], skin: right, optional: ears, group: furniture, rel-pos: 2}
+        - {ref: std/rj45@2, id: console, at: [7.10, 4.30], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/sfp@1, id: oob-sfp, at: [7.95, 21.10], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: out-of-band}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [25.90, 10.30], group: mgmt, rel-pos: 3, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+        - {ref: std/usb-a@1, id: usb, at: [27.60, 24.60], group: mgmt, rel-pos: 4, attrs: {media: usb-a, role: storage}}
+        - {ref: common/smb-jack@1, id: sled1-1pps, at: [43.10, 15.50], group: mgmt, rel-pos: 5, attrs: {media: coax, role: timing}}
+        - {ref: common/smb-jack@1, id: sled2-1pps, at: [43.10, 23.70], group: mgmt, rel-pos: 6, attrs: {media: coax, role: timing}}
+        - {ref: common/esd-jack@1, id: esd, at: [44.20, 3.90], group: grounding, rel-pos: 2}
+        - {ref: common/led-rect-sm@1, id: led-psu, at: [8.10, 33.20], group: leds, rel-pos: 1, for: [rear/psu-1, rear/psu-2]}
+        - {ref: common/led-rect-sm@1, id: led-diag, at: [14.40, 33.20], group: leds, rel-pos: 2, for: chassis}
+        - {ref: common/led-rect-sm@1, id: led-fan, at: [21.10, 33.20], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5]}
+        - {ref: common/led-rect-sm@1, id: led-loc, at: [27.50, 33.20], group: leds, rel-pos: 4, for: chassis}
+    regions:
+      - {id: mgmt-panel, at: [0, 0], size: {w: 54.7, h: 43.5}, label: Management,
+         members: [console, oob-sfp, mgmt-eth, usb, esd, sled1-1pps, sled2-1pps, led-psu, led-diag, led-fan, led-loc]}
+      - {id: intake, at: [0, 0], size: {w: 438.4, h: 43.5}, physical-context: Intake, label: Front airflow intake}
+  rear:
+    size: {w: 438.4, h: 43.5}
+    panel:
+      cutouts:
+        - {id: ground, at: [3.60, 24.00], size: [7.0, 14.0], shape: rect}
+    silkscreen:
+      - {at: [7.10, 21.30], mark: ground, size: 4.0, fill: '#d8dcdf', for: ground}
+      - {at: [92.40, 21.75], text: '▲ PSU2', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: psu-2}
+      - {at: [143.30, 21.75], text: '▲ 5', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: fan-5}
+      - {at: [193.75, 21.75], text: '▲ 4', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: fan-4}
+      - {at: [244.20, 21.75], text: '▲ 3', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: fan-3}
+      - {at: [294.65, 21.75], text: '▲ 2', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: fan-2}
+      - {at: [345.10, 21.75], text: '▲ 1', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: fan-1}
+      - {at: [431.20, 21.75], text: '▲ PSU1', font-size: 2.0, anchor: middle, rotate: -90, fill: '#d8dcdf', for: psu-1}
+    components:
+      bays:
+        - {id: psu-2, at: [14.30, 1.75], size: {w: 73.5, h: 40.0}, accepts: [edgecore/amx-3200-ac-psu@1, edgecore/amx-3200-48v-psu@1], group: psus, rel-pos: 2, default: edgecore/amx-3200-ac-psu@1}
+        - {id: fan-5, at: [97.00, 1.90], size: {w: 42.2, h: 39.7}, accepts: [edgecore/amx-3200-fan@1], group: fans, rel-pos: 5, default: edgecore/amx-3200-fan@1}
+        - {id: fan-4, at: [147.45, 1.90], size: {w: 42.2, h: 39.7}, accepts: [edgecore/amx-3200-fan@1], group: fans, rel-pos: 4, default: edgecore/amx-3200-fan@1}
+        - {id: fan-3, at: [197.90, 1.90], size: {w: 42.2, h: 39.7}, accepts: [edgecore/amx-3200-fan@1], group: fans, rel-pos: 3, default: edgecore/amx-3200-fan@1}
+        - {id: fan-2, at: [248.35, 1.90], size: {w: 42.2, h: 39.7}, accepts: [edgecore/amx-3200-fan@1], group: fans, rel-pos: 2, default: edgecore/amx-3200-fan@1}
+        - {id: fan-1, at: [298.80, 1.90], size: {w: 42.2, h: 39.7}, accepts: [edgecore/amx-3200-fan@1], group: fans, rel-pos: 1, default: edgecore/amx-3200-fan@1}
+        - {id: psu-1, at: [350.60, 1.75], size: {w: 73.5, h: 40.0}, accepts: [edgecore/amx-3200-ac-psu@1, edgecore/amx-3200-48v-psu@1], group: psus, rel-pos: 1, default: edgecore/amx-3200-ac-psu@1}
+      placements:
+        - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0.0], skin: left, optional: ears, group: furniture, rel-pos: 3}
+        - {ref: common/rack-ear@1, id: rear-ear-right, at: [438.4, 0.0], skin: right, optional: ears, group: furniture, rel-pos: 4}
+        - {ref: common/ground-lug@1, id: ground, at: [3.60, 24.00], group: grounding, rel-pos: 1}
+    regions:
+      - {id: exhaust, at: [97.0, 0], size: {w: 244.0, h: 43.5}, physical-context: Exhaust, label: Fan tray exhaust,
+         members: [fan-1, fan-2, fan-3, fan-4, fan-5]}
+  top:
+    size: {w: 438.4, h: 430.0}
+    panel:
+      decor:
+        - {at: [12.0, 400.0], size: [414.4, 20.0], pattern: vent, vent: 20}
+  bottom:
+    size: {w: 438.4, h: 430.0}
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.0, 120.0], group: furniture, rel-pos: 5}
+  left:
+    size: {w: 430.0, h: 43.5}
+    panel:
+      decor:
+        - {at: [0.0, 2.5], size: [430.0, 1.4], fill: '#1b1e21', sink: 1}
+        - {at: [0.0, 39.6], size: [430.0, 1.4], fill: '#1b1e21', sink: 1}
+  right:
+    size: {w: 430.0, h: 43.5}
+    panel:
+      decor:
+        - {at: [0.0, 2.5], size: [430.0, 1.4], fill: '#1b1e21', sink: 1}
+        - {at: [0.0, 39.6], size: [430.0, 1.4], fill: '#1b1e21', sink: 1}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      Two AMX-3200-SLED400 sleds, two 1200 W AC supplies and five fan trays - the machine the
+      guide's front and rear elevations draw.
+  ac-f2b:
+    kind: orderable
+    description: >-
+      AMX3200-O-AC-F and its regional cord variants: dual 1200 W AC supplies, front-to-back,
+      'Sled configuration OTN Supported: 2 x 400G CFP + 8 x 100G QSFP28'.
+    part-numbers:
+      AMX3200-O-AC-F: {power-cord: none}
+      AMX3200-O-AC-F-US: {power-cord: US}
+      AMX3200-O-AC-F-UN: {power-cord: UN}
+      AMX3200-O-AC-F-EU: {power-cord: EU}
+      AMX3200-O-AC-F-JP: {power-cord: JP}
+      AMX3200-O-AC-F-CN: {power-cord: CN}
+      AMX3200-O-AC-F-TW: {power-cord: TW}
+  dc-f2b:
+    kind: orderable
+    description: >-
+      AMX3200-O-48V-F: dual 1200 W -48 VDC supplies with blue latches and terminal blocks,
+      front-to-back - the build the DC rear photograph shows.
+    bays: {psu-1: 'edgecore/amx-3200-48v-psu@1', psu-2: 'edgecore/amx-3200-48v-psu@1'}
+    part-numbers:
+      AMX3200-O-48V-F: {power-cord: DC power cord}
+datasheet:
+  title: Edgecore AMX3200 Coherent Transponder and Muxponder data sheet
+  sha256: 30e6af36815e1d282a6327b1802af1aef9fec5ae8264bbd336f82ee24dffabde
+references:
+  - {title: 'Edgecore AMX3200 400G Transponder and Muxponder Quick Start Guide', sha256: fdc2de4eebf9ddca6e0d5b109ba0598fa2dab6f97e807737c4f56df315ac3840}

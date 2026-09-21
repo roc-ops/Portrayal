@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: amx-3200-ac-psu
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The Edgecore AMX3200's 1200 W AC supply, ordered as AMX-3200-AC-PSU - a 73.5 x 40.0
+  module with its release latch at the left edge, its IEC C14 inlet
+  beside it, its own fan behind a guard at the right, and a black U-handle under the
+  fan. Two seat at the ends of the rear, PSU2 at the left and PSU1 at the right.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: photo-measured}
+attrs:
+  model: 'AMX-3200-AC-PSU'
+  input: ac
+  inlet: c14
+  power-output-w: 1200
+provenance:
+  size: >-
+    DATASHEET for the width: the ordering table's '1200 W AC PSU ... (73.5mmW x
+    185mmD)'. The guide's rear (2.536 px/mm) reads the two bays 72.9 and 72.9 wide, within
+    a pixel and a half of it. The 40.0 height is photo-measured: the face fills the 43.5 mm
+    chassis less its frame, 40.0 against a 73.5 width on the rear photographs to the
+    pixel.
+  the-face: >-
+    PHOTO-MEASURED at 5x on the AC rear product photograph (2.19 px/mm,
+    isotropic in the face to 1%). THE GUIDE'S LINE ART IS WRONG ABOUT THE HANDLE: it
+    draws a bar laid across the fan guard, and both photographs show a black U-handle
+    UNDER the guard, x 31.3-71.3 over y 30.5-39.2. The part follows the photographs.
+  inlet: >-
+    PHOTOGRAPHED: an IEC C14 inlet standing on end with a wire cord retainer, and the guide's
+    Package Contents lists 'AC power cord, type IEC C13 (included with AC PSUs only)'.
+  power-output-w: >-
+    DATASHEET, 'PSU capacity 1200 W (Max system power consumption 850 W)' and the ordering
+    table's '1200 W AC PSU'.
+states: [absent]
+elements:
+  latch: {at: [1.40, 10.70], size: [8.90, 18.60], class: latch}
+  inlet: {at: [10.60, 8.30], size: [18.80, 28.50], class: connector}
+  status: {at: [4.60, 1.80], size: [2.80, 2.80], class: led}
+  fan: {at: [33.10, 0.30], size: [35.80, 35.80], class: vent}
+  handle: {at: [31.30, 30.50], size: [40.00, 8.70], class: handle}
+fields:
+  latch-finish: {label: Latch colour, type: text, default: '#4fbf49'}
+relief:
+  wall: '#15181b'
+  features:
+    - node: handle
+      uhandle: 27
+      dia: 4.0
+      confidence: estimated
+      source: >-
+        27 is the Edgecore supply figure this library carries on its other CRPS supplies
+        (edgecore/ais800-psu-ac@1, common/psu-ac-650@3); not measured here.
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: unsourced; the library's common latch stand-off.
+skins: [default]
+body:
+  depth: 185
+  color: '#2b2f34'
