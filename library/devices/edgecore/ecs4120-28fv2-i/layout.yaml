@@ -1,0 +1,444 @@
+format: 1
+kind: device
+name: ecs4120-28fv2-i
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: ECS4120-28Fv2-I
+portfolio: {line: Campus, family: Access Switch, series: ECS4120}
+description: >-
+  1RU half-depth hardened L2 Gigabit fibre access switch, rated -10 to 65 C: 24 x 1G SFP in
+  twelve two-high stacks, four RJ-45 combo ports sharing the last four, 4 x 10G SFP+, and an
+  RS-232 console beside an out-of-band RJ-45. BOTH its power inputs are on the front - an
+  IEC C14 inlet and a -48 to -60 V pluggable DC terminal - and the rear carries only two
+  fixed fans.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      ONE DOCUMENT, AND NO DATASHEET WAS EVER PUBLISHED - the product page carries the quick
+      start guide, safety notes and firmware only. ecs4120-28fv2-i-qsg is the ECS4120 Series
+      guide, nine pages, trilingual (English, simplified and traditional Chinese) and covering
+      four models (28T, 52T, 28Fv2, 28Fv2-I). Its 72 embedded images reduce to 19 unique ones
+      of useful size once the three languages' repeats are removed by content hash, so no
+      figure is counted as more than one piece of evidence. Three 489 px product photographs
+      of this model are staged.
+      ISSUE #343 SAID THE CHASSIS IS 'NOT STATED IN ANY STAGED DOCUMENT', AND IT IS STATED.
+      The guide's Hardware Specifications table gives '28Fv2/28Fv2-I: 44.0 x 22.0 x 4.4 cm
+      (17.32 x 8.66 x 1.73 in)', '2.82 kg (6.22 lb)', the -I's own operating range, its AC and
+      DC input ratings and its 60 W maximum - enough for the whole attrs block below.
+  figure-choice:
+    confidence: measured
+    note: >-
+      Gate 1. THE GUIDE DRAWS THIS VARIANT BY NAME: embedded image q-004, 1811 x 220, whose
+      name bar reads ECS4120-28Fv2-I (its sibling q-002 reads ECS4120-28Fv2). The face is drawn
+      front-on under a lid shown in perspective; it spans x 0-1806 and y 47-217 below the
+      lid seam. 1807 px across 440 mm is 4.107 px/mm.
+      THE BOX IS NOT SQUARE, SO THE FEATURES DECIDE. 171 px of face height would be 41.6 mm
+      at that scale against the stated 44. Two standard features were read on both axes: the
+      MGMT and Console bezels measure 15.83 mm across against the RJ-45 housing's 15.8, and the
+      two ports of an SFP stack sit 64 px apart - 15.55 mm isotropically, 3.7% over the
+      registry's 15.0 belly-to-belly pitch, where the box's own vertical scale would make it
+      16.5, 10% over. So the drawing is read isotropically at 4.107 px/mm and anchored on its
+      bottom edge (y 217 = 44.0 mm); the top 2.7 mm under the lid seam is the chamfer the lid
+      is drawn over. Vertical positions are the least certain numbers here, to about 1.5 mm.
+      THE CAGES KEEP THE REGISTRY'S GEOMETRY and the lamps are placed to clear it. A two-high
+      stack of std/sfp-ganged openings, 10.4 tall on the registry's 15.0 row pitch, spans
+      25.4 mm where the drawn frame spans 24.4 - the drawing is squashed vertically, as the box
+      said. So the stacks run y 13.0-38.4 and the lamps sit 0.2 mm clear under them at 39.6,
+      about 0.35 mm lower than drawn, rather than overlapping the cage they serve.
+      ORTHOGRAPHIC: the twelve stacks' lamp pairs fit a straight line to 0.21 px on a 71.48 px
+      (17.405 mm) pitch.
+  chassis:
+    confidence: datasheet
+    note: >-
+      The guide's Hardware Specifications, '28Fv2/28Fv2-I: 44.0 x 22.0 x 4.4 cm' and '2.82 kg
+      (6.22 lb)'. One document, stated once, shared with the non-I 28Fv2.
+  ports-and-numbering:
+    confidence: photo-measured
+    note: >-
+      READ OFF THE FACEPLATE. Twelve two-high SFP stacks, each legended 'n (up) n+1 (down)'
+      beneath its two lamps: the top cage is the odd port and the bottom the even, 1-24. Two
+      two-high RJ-45 stacks legended 21/22 and 23/24, and four single SFP+ cages under a '10G'
+      bracket legended 25-28. The guide's transceiver list is 1000BASE optics (ET4202-*) and
+      10GBASE optics (ET5402-*), which is the 1G/10G split.
+      THE COMBO PAIRING IS THE FACEPLATE'S, NOT THE GUIDE'S. The same numbers 21-24 are printed
+      under the eleventh and twelfth SFP stacks AND under the two RJ-45 stacks, which is how
+      this vendor marks combo ports. Neither the converted text nor the PDF's own text layer
+      contains 'combo', 'shared' or 'either' - two searches - so this rests on the legend alone
+      and is recorded as such; the copper jacks are named copper-21..24 and their group says what they share.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      One white oval lamp per port under every SFP and RJ-45 stack, a pair 5.97 mm apart,
+      each over its own legend - so each is assigned to the port its legend names. The SFP+
+      ports' lamps are not under them: they sit in a 3 x 2 block to the left of MGMT with
+      DIAG and PWR, legended '25 27 DIAG' above and '26 28 PWR' below. The guide's 'On/Blinking
+      Green - Port has a valid link' is the only lamp semantics given, and its 'PWR and DIAG'
+      are the -I's system lamps.
+  left-end:
+    confidence: photo-measured
+    note: >-
+      BOTH INPUTS ARE ON THE FRONT, as the drawing and all three photographs show, though the
+      guide's generic text says 'the AC input socket on the back of the switch' - that sentence
+      covers the 28T and 52T it shares the page with. An IEC C14 inlet in a recess at x
+      4.1-36.0; a ground stud with its symbol at x 47; and a green two-pole pluggable DC
+      terminal at [64.8, 17.5], 32.6 x 18.0 - which is common/dc-terminal-plug-2@1 from the
+      ECS4530-54CSFP-DC-I to within 0.5 mm (32.1 x 17.6), so the part is reused rather than
+      drawn again. Its poles are printed '+' left and '-' right with '(DC)-48~-60V;3.0A'
+      between - the opposite order to the ECS4530-DC-I's, which is a faceplate fact and not the
+      part's.
+  vents:
+    confidence: photo-measured
+    note: >-
+      A row of 54 vertical slots across the top of the port field, x 103.7-370.6, 2.43 mm wide
+      on a 4.99 mm pitch, running from the lid seam down to about 8.8 mm.
+  rear:
+    confidence: photo-measured
+    note: >-
+      THE WEAKEST NUMBERS HERE. No figure draws this model's rear; the only evidence is the
+      489 px rear product photograph at about 1.08 px/mm. It shows two fixed fans behind
+      honeycomb guards centred at 109.8 and 236.1 mm, each about 51.7 x 26.9, from y 5.4 - to
+      a millimetre and a half at best. No handles or seams: fixed fans, drawn as the panel's
+      perforation. The guide contains no 'fan' at all, in its converted text or its PDF text
+      layer.
+attrs:
+  power:
+    power-max-w: 60
+    power-envelope: unstated
+    power-input-ac: 100-240 VAC, 50/60 Hz, 1.2 A
+    power-input-dc: -48 to -60 VDC, 3.0 A
+  environmental:
+    temperature-operating: -10 C to 65 C (14 F to 149 F)
+    temperature-storage: -40 C to 70 C (-40 F to 158 F)
+    humidity-operating: 5% to 95% non-condensing
+  features:
+    marketing-name: ECS4120-28Fv2-I
+    optics-sfp: 1000BASE-SX/LX/EX/ZX and 1000BASE-T (ET4202-SX/LX/EX/ZX/RJ45)
+    optics-sfp-plus: 10GBASE-SR/LR/ER/ZR and 10GBASE-T (ET5402-SR/LR/ER/ZR/RJ45)
+  management:
+    mgmt-ports: 1x RJ-45 console (115200 8N1), 1x RJ-45 out-of-band management
+  compliance:
+    emc: EN 55032 Class A, EN IEC 61000-3-2 Class A, EN 61000-3-3, FCC Class A, VCCI Class A, CE Mark
+    immunity: EN 55035, IEC 61000-4-2/3/4/5/6/8/11
+    safety: UL/CUL (UL 62368-1, CAN/CSA C22.2 No. 62368-1), CB (IEC 62368-1/EN 62368-1), BSMI (CNS15998-1)
+    tec: TEC Certified ID 379400891
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 44.0, depth: 220.0, ru: 1, weight-kg: 2.82, color: '#5c6166'}
+gaps:
+  - what: ac-rating-silkscreen
+    scope: [front]
+    reason: sources-disagree
+    wanted: >-
+      THE AC RATING PRINTED UNDER THE INLET. The -I's own figure prints '100-240V~;50/60Hz;1.0A'
+      and the guide's specification gives '28Fv2-I: 100-240 VAC, 50/60 Hz 1.2 A' (1.0 A is the
+      non-I 28Fv2's). The silkscreen is modelled as the figure prints it and the attr as the
+      specification states it; a photograph of a real unit's legend settles which is printed.
+  - what: mgmt-port-lamps
+    scope: [front]
+    reason: needs-photo
+    wanted: >-
+      WHETHER THE MGMT JACK HAS LAMPS. It is Ethernet, which this library draws lamped, but the
+      figure draws it plain at 4.1 px/mm - where corner windows would be visible - and gives it
+      no separate lamp. Drawn bare as seen; L76 stands.
+  - what: rear-geometry
+    scope: [rear]
+    reason: needs-drawing
+    wanted: >-
+      A MEASURABLE REAR. The fan guards are read off a 489 px product photograph; nothing
+      dimensions them and no figure draws this rear.
+  - what: airflow-direction
+    scope: [rear]
+    reason: vendor-silent
+    wanted: >-
+      WHICH WAY THE FANS BLOW. Searched in the converted text and the PDF's own text layer:
+      neither says anything about fans or airflow. Unstated rather than guessed.
+  - what: ordering-codes
+    scope: [front]
+    reason: vendor-silent
+    wanted: >-
+      No datasheet and no ordering table exists for this model, so there are no part numbers
+      to attach to an orderable configuration; the device offers its base configuration only.
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+  rj45-combo:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      combo ports - copper-21..24 share their port numbers with the SFP cages port-21..24
+      printed beside them, one or the other in use at a time.
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the out-of-band management RJ-45 beside the RS-232 console RJ-45 at the right-hand end.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  power: {term: Inlet, role: service, index-origin: 1}
+  grounding: {term: Point, role: furniture, index-origin: 1}
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+    description: the rack brackets.
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+        - {at: [103.73, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [108.72, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [113.71, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [118.70, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [123.69, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [128.68, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [133.67, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [138.66, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [143.65, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [148.64, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [153.63, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [158.62, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [163.61, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [168.60, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [173.59, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [178.58, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [183.57, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [188.56, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [193.55, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [198.54, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [203.53, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [208.52, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [213.51, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [218.50, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [223.49, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [228.48, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [233.47, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [238.46, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [243.45, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [248.44, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [253.43, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [258.42, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [263.41, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [268.40, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [273.39, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [278.38, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [283.37, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [288.36, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [293.35, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [298.34, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [303.33, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [308.32, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [313.31, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [318.30, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [323.29, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [328.28, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [333.27, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [338.26, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [343.25, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [348.24, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [353.23, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [358.22, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [363.21, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [368.20, 2.70], size: [2.43, 6.10], fill: '#1b1e21'}
+        - {at: [2.19, 5.04], size: [19.97, 3.65], fill: '#e4e7ea', rx: 0.3}
+        - {at: [4.14, 15.51], size: [31.90, 24.11], fill: '#2a2d31', rx: 0.6}
+        - {at: [113.44, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [113.44, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [130.85, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [130.85, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [148.25, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [148.25, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [165.66, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [165.66, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [183.06, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [183.06, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [200.47, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [200.47, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [217.87, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [217.87, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [235.28, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [235.28, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [252.68, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [252.68, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [270.09, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [270.09, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [287.49, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [287.49, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [304.90, 12.70], size: [14.90, 26.00], fill: '#d4d8db', rx: 0.4}
+        - {at: [304.90, 23.40], size: [14.90, 4.60], fill: '#eef0f2'}
+        - {at: [322.10, 11.90], size: [17.40, 26.70], fill: '#d4d8db', rx: 0.4}
+        - {at: [341.55, 11.90], size: [17.40, 26.70], fill: '#d4d8db', rx: 0.4}
+        - {at: [362.55, 25.10], size: [31.17, 0.30], fill: '#e4e7ea'}
+        - {at: [399.56, 25.10], size: [31.17, 0.30], fill: '#e4e7ea'}
+      cutouts:
+        - {block: sfp}
+        - {block: rj45-combo}
+        - {id: port-25, at: [362.85, 28.30], size: [14.5, 10.0], shape: rect}
+        - {id: port-26, at: [380.55, 28.30], size: [14.5, 10.0], shape: rect}
+        - {id: port-27, at: [398.25, 28.30], size: [14.5, 10.0], shape: rect}
+        - {id: port-28, at: [415.95, 28.30], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-25, at: [381.28, 11.96], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-27, at: [386.15, 11.96], size: [2.0, 2.0], shape: circle}
+        - {id: led-diag, at: [391.02, 11.96], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-26, at: [381.28, 16.83], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-28, at: [386.15, 16.83], size: [2.0, 2.0], shape: circle}
+        - {id: led-pwr, at: [391.02, 16.83], size: [2.0, 2.0], shape: circle}
+        - {id: mgmt-eth, at: [396.40, 8.54], size: [15.8, 13.2], shape: rect}
+        - {id: console, at: [414.90, 8.54], size: [15.8, 13.2], shape: rect}
+        - {id: power-ac, at: [6.09, 17.57], size: [28.0, 20.0], shape: rect}
+        - {id: power-dc, at: [65.04, 17.67], size: [32.1, 17.6], shape: rect}
+        - {id: ground, at: [43.60, 15.10], size: [7.0, 14.0], shape: rect}
+    silkscreen:
+      - {at: [117.91, 42.40], text: '1▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-1}
+      - {at: [123.87, 42.40], text: '2▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-2}
+      - {at: [135.32, 42.40], text: '3▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-3}
+      - {at: [141.28, 42.40], text: '4▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-4}
+      - {at: [152.72, 42.40], text: '5▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-5}
+      - {at: [158.68, 42.40], text: '6▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-6}
+      - {at: [170.13, 42.40], text: '7▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-7}
+      - {at: [176.09, 42.40], text: '8▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-8}
+      - {at: [187.53, 42.40], text: '9▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-9}
+      - {at: [193.49, 42.40], text: '10▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-10}
+      - {at: [204.94, 42.40], text: '11▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-11}
+      - {at: [210.90, 42.40], text: '12▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-12}
+      - {at: [222.34, 42.40], text: '13▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-13}
+      - {at: [228.30, 42.40], text: '14▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-14}
+      - {at: [239.75, 42.40], text: '15▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-15}
+      - {at: [245.71, 42.40], text: '16▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-16}
+      - {at: [257.15, 42.40], text: '17▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-17}
+      - {at: [263.11, 42.40], text: '18▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-18}
+      - {at: [274.56, 42.40], text: '19▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-19}
+      - {at: [280.52, 42.40], text: '20▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-20}
+      - {at: [291.96, 42.40], text: '21▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-21}
+      - {at: [297.92, 42.40], text: '22▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-22}
+      - {at: [309.37, 42.40], text: '23▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-23}
+      - {at: [315.33, 42.40], text: '24▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: port-24}
+      - {at: [327.75, 42.40], text: '21▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: copper-21}
+      - {at: [333.85, 42.40], text: '22▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: copper-22}
+      - {at: [347.20, 42.40], text: '23▲', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: copper-23}
+      - {at: [353.30, 42.40], text: '24▼', font-size: 1.2, anchor: middle, fill: '#e4e7ea', for: copper-24}
+      - {at: [370.10, 41.60], text: '25', font-size: 1.4, anchor: middle, fill: '#e4e7ea', for: port-25}
+      - {at: [387.80, 41.60], text: '26', font-size: 1.4, anchor: middle, fill: '#e4e7ea', for: port-26}
+      - {at: [405.50, 41.60], text: '27', font-size: 1.4, anchor: middle, fill: '#e4e7ea', for: port-27}
+      - {at: [423.20, 41.60], text: '28', font-size: 1.4, anchor: middle, fill: '#e4e7ea', for: port-28}
+      - {at: [396.65, 25.75], text: '10G', font-size: 1.3, anchor: middle, fill: '#e4e7ea', for: [port-25, port-26, port-27, port-28]}
+      - {at: [382.28, 10.20], text: '25', font-size: 1.1, anchor: middle, fill: '#e4e7ea', for: led-port-25}
+      - {at: [387.15, 10.20], text: '27', font-size: 1.1, anchor: middle, fill: '#e4e7ea', for: led-port-27}
+      - {at: [392.02, 10.20], text: 'DIAG', font-size: 1.1, anchor: middle, fill: '#e4e7ea', for: led-diag}
+      - {at: [382.28, 21.55], text: '26', font-size: 1.1, anchor: middle, fill: '#e4e7ea', for: led-port-26}
+      - {at: [387.15, 21.55], text: '28', font-size: 1.1, anchor: middle, fill: '#e4e7ea', for: led-port-28}
+      - {at: [392.02, 21.55], text: 'PWR', font-size: 1.1, anchor: middle, fill: '#e4e7ea', for: led-pwr}
+      - {at: [404.30, 23.50], text: 'MGMT', font-size: 1.4, anchor: middle, fill: '#e4e7ea', for: mgmt-eth}
+      - {at: [422.80, 23.50], text: 'Console', font-size: 1.4, anchor: middle, fill: '#e4e7ea', for: console}
+      - {at: [47.10, 34.75], mark: ground, size: 3.4, fill: '#e4e7ea', for: ground}
+      - {at: [2.20, 11.60], text: 'ECS4120-28Fv2-I', font-size: 1.6, anchor: start, fill: '#e4e7ea', for: chassis}
+      - {at: [20.09, 41.00], text: '100-240V~;50/60Hz;1.0A', font-size: 1.3, anchor: middle, fill: '#e4e7ea', for: power-ac}
+      - {at: [69.95, 37.10], text: '+', font-size: 1.8, anchor: middle, fill: '#e4e7ea', for: power-dc}
+      - {at: [93.50, 37.10], text: '-', font-size: 1.8, anchor: middle, fill: '#e4e7ea', for: power-dc}
+      - {at: [81.09, 39.40], text: '⎓-48~-60V;3.0A', font-size: 1.3, anchor: middle, fill: '#e4e7ea', for: power-dc}
+    components:
+      blocks:
+        - id: sfp
+          ref: std/sfp-ganged@1
+          at: [113.77, 13.00]
+          count: 24
+          rows: 2
+          row-pitch: 15.0
+          pitch: 17.405
+          number-from: 1
+          cutouts: true
+          rotate: {top: 180}
+          led:
+            ref: common/led-dot@1
+            id-format: led-port-{n}
+            group: port-leds
+            dx-by-row: [3.145, 9.105]
+            dy-top: 25.6
+            dy-bottom: 10.6
+        - id: rj45-combo
+          ref: std/rj45@2
+          at: [322.90, 12.00]
+          count: 4
+          rows: 2
+          row-pitch: 13.2
+          pitch: 19.45
+          number-from: 21
+          id-format: copper-{n}
+          cutouts: true
+          rotate: {top: 180}
+          led:
+            ref: common/led-dot@1
+            id-format: led-copper-{n}
+            group: port-leds
+            dx-by-row: [3.85, 9.95]
+            dy-top: 26.6
+            dy-bottom: 13.4
+      placements:
+        - {block: sfp}
+        - {block: rj45-combo}
+        - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
+        - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
+        - {ref: common/sfp-plus-cage@2, id: port-25, at: [362.10, 28.30], group: sfp-plus, rel-pos: 25}
+        - {ref: common/sfp-plus-cage@2, id: port-26, at: [379.80, 28.30], group: sfp-plus, rel-pos: 26}
+        - {ref: common/sfp-plus-cage@2, id: port-27, at: [397.50, 28.30], group: sfp-plus, rel-pos: 27}
+        - {ref: common/sfp-plus-cage@2, id: port-28, at: [415.20, 28.30], group: sfp-plus, rel-pos: 28}
+        - {ref: common/led-dot@1, id: led-port-25, at: [381.28, 11.96], group: port-leds, rel-pos: 40, for: port-25}
+        - {ref: common/led-dot@1, id: led-port-27, at: [386.15, 11.96], group: port-leds, rel-pos: 41, for: port-27}
+        - {ref: common/led-dot@1, id: led-diag, at: [391.02, 11.96], group: leds, rel-pos: 42, for: chassis}
+        - {ref: common/led-dot@1, id: led-port-26, at: [381.28, 16.83], group: port-leds, rel-pos: 43, for: port-26}
+        - {ref: common/led-dot@1, id: led-port-28, at: [386.15, 16.83], group: port-leds, rel-pos: 44, for: port-28}
+        - {ref: common/led-dot@1, id: led-pwr, at: [391.02, 16.83], group: leds, rel-pos: 45, for: chassis}
+        - {ref: std/rj45@2, id: mgmt-eth, at: [396.40, 8.54], group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1g}}
+        - {ref: std/rj45@2, id: console, at: [414.90, 8.54], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/c14-inlet@1, id: power-ac, at: [6.09, 17.57], group: power, rel-pos: 1, attrs: {media: c14, role: power}}
+        - {ref: common/dc-terminal-plug-2@1, id: power-dc, at: [65.04, 17.67], group: power, rel-pos: 2, attrs: {media: dc-terminal, role: power}}
+        - {ref: common/ground-lug@1, id: ground, at: [43.60, 15.10], group: grounding, rel-pos: 1}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+        - {at: [97.80, 6.90], size: [24.00, 24.00], rx: 12.0, fill: '#8e949a'}
+        - {at: [83.95, 5.40], size: [51.70, 26.90], pattern: vent, vent: 40}
+        - {at: [224.10, 6.90], size: [24.00, 24.00], rx: 12.0, fill: '#8e949a'}
+        - {at: [210.25, 5.40], size: [51.70, 26.90], pattern: vent, vent: 40}
+  top:
+    size: {w: 440.0, h: 220.0}
+    panel:
+      decor:
+        - {at: [2.0, 20.0], size: [436.0, 1.2], fill: '#3e4247', sink: 1}
+  bottom:
+    size: {w: 440.0, h: 220.0}
+    components:
+      placements:
+        - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.0, 7.0], group: furniture, rel-pos: 3}
+  left:
+    size: {w: 220.0, h: 44.0}
+    panel:
+      decor:
+        - {at: [0.0, 2.5], size: [220.0, 1.4], fill: '#3e4247', sink: 1}
+  right:
+    size: {w: 220.0, h: 44.0}
+    panel:
+      decor:
+        - {at: [0.0, 2.5], size: [220.0, 1.4], fill: '#3e4247', sink: 1}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The machine as the guide draws and specifies it, AC and DC inputs both fitted, every
+      cage empty. No ordering table exists to name an orderable build.
+references:
+  - {title: 'Edgecore ECS4120 Series 28-Port and 52-Port L2 Gigabit Ethernet Switches Quick Start Guide', sha256: 5e6be7749223fe5ea8b133614b15dc1598a6fde06f5792df041896e7f1c1adf9}
