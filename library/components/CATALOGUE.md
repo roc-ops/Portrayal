@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-657 component majors in 13 namespaces.
+659 component majors in 13 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -38,17 +38,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 30 | 15 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
-| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 44 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
+| `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 45 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 25 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 54 | 36 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 55 | 36 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 55 | 21 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 19 | 30 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 74 | 69 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 12 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
-| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 74 | 27 | USB Type-A receptacle opening - sharp corners |
+| `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 75 | 27 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 5 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
@@ -85,7 +85,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-v-adapter@1` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 4 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 82 | 152 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 153 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 5 | 1 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
@@ -100,7 +100,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 1 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 2 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
-| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
+| `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 5 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
 | `common/psu-ac-1300@1` | module | psu | 57 × 40 |  | 2 | 0 | 1300W AC PSU module, CRPS form factor (composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 14 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
@@ -117,7 +117,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 45 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 46 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 53 | 21 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@1` | component | port | 9.4 × 12 | sc-duplex-adapter | 0 | 3 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
@@ -656,7 +656,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `juniper/scb-mx@1` | module | supervisor | 420.9 × 29.5 |  | 2 | 1 | Juniper MX Series Switch Control Board (SCB-MX) - the fabric/control carrier for the MX240/MX480 |
 | `juniper/scb-mx960-v@1` | module | fabric | 30.1 × 405 |  | 1 | 0 | Juniper SCB-MX Switch Control Board as mounted vertically in the MX960 |
 
-## maiaedge/ (8)
+## maiaedge/ (10)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -665,9 +665,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/pbc-2000-ear-back@1` | component | ear | 22.6 × 41.27 |  | 1 | 1 | The back of a MaiaEdge PBC-2000 rack ear, as the rear view sees it past each side of the chassis - the black … |
 | `maiaedge/pbc-2000-fan-plate@2` | module | fan | 255.2 × 40.07 |  | 1 | 0 | The rear fan tray of the MaiaEdge PBC-2000 - ONE bare-steel plate carrying five 40 mm San Ace 40 fans behind … |
 | `maiaedge/pbc-2000-lcd@2` | component | display | 45.2 × 35.2 |  | 1 | 0 | The front-panel touch screen of the MaiaEdge PBC-2000 - a dark glass display in a raised frame at the right-h… |
-| `maiaedge/pbc-2000-psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | The 550 W CRPS supply fitted to the MaiaEdge PBC-2000 - a fan behind a four-spoke silver guard with a blue 55… |
+| `maiaedge/pbc-2000-psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 1 | 0 | The 550 W CRPS supply fitted to the MaiaEdge PBC-2000 - a fan behind a four-spoke silver guard with a blue 55… |
 | `maiaedge/pbc-2000-psu-divider@1` | component | mechanical | 14.5 × 40 |  | 1 | 1 | The steel strap between the two supplies on the MaiaEdge PBC-2000's rear, held by two screws |
 | `maiaedge/pbc-2000-rear-bracket@1` | component | mechanical | 14.5 × 40 |  | 1 | 1 | The steel strap at the left end of the MaiaEdge PBC-2000's rear, held by two screws and carrying the chassis … |
+| `maiaedge/port-extender-fan@1` | module | fan | 58.8 × 40 |  | 1 | 0 | A rear fan module of the MaiaEdge Port Extender - a black 1RU module behind a honeycomb grille, with a blue p… |
+| `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 
 ## smartoptics/ (16)
 

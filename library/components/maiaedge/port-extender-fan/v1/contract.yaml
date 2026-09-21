@@ -1,0 +1,50 @@
+format: 1
+kind: module
+name: port-extender-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  A rear fan module of the MaiaEdge Port Extender - a black 1RU module behind a honeycomb
+  grille, with a blue pull handle across its foot and a red tab at its lower right. Four fill
+  the rear, 3+1 redundant.
+size: {w: 58.8, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {power-absent: not-published, airflow: front-to-back}
+provenance:
+  appearance: >-
+    photograph - the MaiaEdge setup video (Step 5, "Attach Side Rails to the Port Extender", on
+    MaiaEdge's YouTube channel; frames staged in working/intake/maiaedge/port-extender/video/)
+    and the maintainer's stills of it (photos/still-rear-quarter.png). Two modules are in view,
+    side by side between the management panel and a supply: black, a honeycomb grille, a
+    curved blue pull handle, and a red tab at the lower right, which on this layout is the
+    usual mark of front-to-back air.
+  size: >-
+    ESTIMATED. Every rear view held is steeply oblique and 640 x 360, so no module is measured.
+    58.8 x 40 is the width that lets the datasheet's inventory - two CRPS supplies, four fans
+    and the management panel - fill the 438 mm rear with the gaps the stills show; it is the
+    DCS201's fan width, and nothing here says it is the same part.
+  count: >-
+    datasheet page 3, "3+1 Redundant Fans". Four modules.
+  power: NOT PUBLISHED per fan; the datasheet gives the chassis "< 500W Maximum" only.
+states: [absent]
+elements:
+  grille: {at: [6.0, 2.6], size: [46.8, 26.0], class: rotor}
+  handle: {at: [5.2, 28.5], size: [48.4, 9.0], class: handle}
+relief:
+  features:
+  - node: grille
+    vent: 20
+    confidence: estimated
+    source: the grille is photographed; the depth behind it is not stated anywhere
+  - node: handle
+    out: 3.0
+    color: '#3d8fd6'
+    confidence: estimated
+    source: the handle is photographed obliquely; how far it stands off is not stated
+skins: [default]
+body:
+  depth: 60
+  color: '#1b1d20'
+  footprint: {at: [0, 0], size: [58.8, 40]}
