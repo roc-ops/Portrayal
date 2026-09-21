@@ -60,14 +60,19 @@ MACHINE_PATH = re.compile(
     r"|[A-Za-z]:\\+Users\\+)")
 
 # An address a person can be reached at. The domain must end in letters, so a
-# component ref at a version (`three@0.160.0`, `usb-a@2`) is not one.
+# component ref at a version (`three@0.160.0`, `usb-a@2`) is not one, and it
+# must not end in a file extension, so a retina asset (`icon@2x.png`) is not.
 EMAIL = re.compile(r"\b[A-Za-z0-9._%+-]+@((?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,})\b")
+FILE_EXTENSIONS = frozenset({"png", "svg", "jpg", "jpeg", "webp", "gif", "js", "mjs",
+                             "json", "yaml", "yml", "md", "css", "html", "glb", "py"})
 EMAIL_DOMAINS_ALLOWED = ("example.com", "example.org", "example.net",
                          "users.noreply.github.com", "anthropic.com")
 
 
 def _allowed_email(m):
     local, domain = m.group(0).split("@", 1)
+    if domain.rsplit(".", 1)[-1].lower() in FILE_EXTENSIONS:
+        return True                        # a file name, not a mailbox
     if domain.lower() == "github.com" and local == "git":
         return True                        # an ssh remote, not a person
     return any(domain.lower() == d or domain.lower().endswith("." + d)
@@ -238,6 +243,7 @@ def test_the_path_pattern_fires_on_what_it_should_and_nothing_else(sample, shoul
     ("git@github.com:roc-ops/Portrayal.git", False),       # an ssh remote
     ("three@0.160.0/build/three.module.js", False),        # a package at a version
     ("common/usb-a@2", False),                             # a component ref
+    ("kit/icon@2x.png", False),                            # a retina asset
 ])
 def test_the_email_pattern_fires_on_what_it_should_and_nothing_else(sample, should_fire):
     fired = any(not _allowed_email(m) for m in EMAIL.finditer(sample))
