@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 1.0.16
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7726-32X
@@ -12,6 +12,15 @@ portfolio:
 description: 32x QSFP28 1U spine/ToR switch, Broadcom Trident 3 (BCM56870)
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
+      the lower turned 180, so both cage lips face the band between the two cages and both bails
+      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
+      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
+      of the stack that shows otherwise overturns it.
   cpu:
     confidence: datasheet
     note: >-
@@ -306,7 +315,7 @@ views:
         - {ref: std/rj45@2, id: console, at: [362.6, 26.05], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6, for: [mgmt-sfp-1, mgmt-sfp-2]}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
-        - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
+        - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [381, 25.5], rotate: 180, group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/usb-a@2, id: usb, at: [394, 16.5], group: mgmt, rel-pos: 5, rotate: 270}
         - {ref: common/pull-tab@1, id: info-tab, at: [381, 38.6], group: furniture, rel-pos: 3}
     regions:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr200
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-18X
@@ -30,6 +30,14 @@ lint:
       cell. The numerals on the neighbouring column are placed by the same generated rule and pass. Centring
       on the bore would move a measured mark to quieten a rule.
 provenance:
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention (docs/pluggables-3d-design.md,
+      S1-S4): a row pair is the upper cage upright (rotate 0) over the lower turned 180, so both cage
+      lips face the band between the two cages and both bails face outward, where a thumb reaches them.
+      All 7 pairs carry port lamps pointing up over down, which is belly-to-belly. A photograph of the
+      stack that shows otherwise overturns it.
   sources:
     confidence: datasheet
     note: >-
@@ -125,8 +133,8 @@ attrs:
   thermal: {airflow: side-to-side (the only published ordering code), cooling: built-in redundant fan
       modules (not field-replaceable)}
   environmental: {temperature-operating: -40 C to 70 C (-40 F to 158 F), temperature-storage: -40 C to
-      85 C (-40 F to 185 F), humidity-operating: 5% to 95% non-condensing, altitude: 5000 m at 40 C,
-    temperature-operating-transceiver: -40 C to 65 C}
+      85 C (-40 F to 185 F), humidity-operating: 5% to 95% non-condensing, altitude: 5000 m at 40 C, temperature-operating-transceiver: -40
+      C to 65 C}
   platform:
     asic: Broadcom BCM88272 Qumran-UX
     cpu: Intel Atom C3308, 2-core

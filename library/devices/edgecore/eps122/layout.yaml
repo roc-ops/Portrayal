@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps122
-version: 1.0.1
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54P
@@ -10,6 +10,15 @@ description: >-
   48 x 1G RJ-45 PoE plus 6 x 1G/10G SFP+ 1RU access switch, sold as the EPS122 and stamped AS4625-54P. All ports on the front in TWO ROWS OF TWENTY-FOUR COLUMNS ganged in three blocks of eight, numbered 1-48, with the SFP+ uplinks numbered 49-54. THE RJ-45 ROW IS TWO PoE CLASSES AND THE PANEL SAYS WHICH: ports 1-40 at 30 W and ports 41-48 at 90 W, the latter marked with an orange band and legended "0.53A Max/Port1-40, 1.85A Max/Port41-48". An RJ-45 management jack over an RJ-45 console, a Micro-USB storage port, a Reset button and six status lamps. TWO HOT-SWAPPABLE SUPPLIES AND THREE FIXED FANS on the rear. Its sibling edgecore/eps121 is the same chassis without PoE.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
+      the lower turned 180, so both cage lips face the band between the two cages and both bails
+      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
+      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
+      of the stack that shows otherwise overturns it.
   sources:
     confidence: datasheet
     note: >-
@@ -320,6 +329,7 @@ views:
         number-from: 49
         id-format: 'port-{n}'
         cutouts: true
+        rotate: {bottom: 180}
         numerals: {dx: 7.13, dx-by-row: [-2.45, 2.45], dy-top: -1.27, dy-bottom: -16.85, font-size: 1.7, anchor: middle, fill: '#e8ecef'}
       placements:
       - {block: rj45}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr430
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7515-24X
@@ -13,6 +13,15 @@ description: >-
   the fan tray - with side-to-side airflow. Ports number 0-23 in one range, the four QSFP28s first.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention (docs/pluggables-3d-design.md,
+      S1-S4): a row pair is the upper cage upright (rotate 0) over the lower turned 180, so both cage
+      lips face the band between the two cages and both bails face outward, where a thumb reaches them.
+      10 of the 12 pairs carry port lamps pointing up over down, which is belly-to-belly; for the other
+      2 the orientation is the reading recorded in this provenance where there is one, and otherwise the
+      rule, not an observation. A photograph of the stack that shows otherwise overturns it.
   sources:
     confidence: datasheet
     note: >-

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ecs4530-54csfp-i
-version: 2.0.1
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: ECS4530-54CSFP-DC-I
@@ -14,6 +14,16 @@ description: >-
   fixed rear fans in different places.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention (docs/pluggables-3d-design.md,
+      S1-S4): a row pair is the upper cage upright (rotate 0) over the lower turned 180, so both cage
+      lips face the band between the two cages and both bails face outward, where a thumb reaches them.
+      All 15 pairs carry port lamps pointing up over down, which is belly-to-belly. A photograph of the
+      stack that shows otherwise overturns it. 15 pairs were drawn with the UPPER cage turned before the
+      std cage art moved its lip to the bottom of the opening; turning them to the convention keeps the
+      lips in the middle band where they were drawn, and seats every optic bail-outward.
   sources:
     confidence: datasheet
     note: >-
@@ -419,7 +429,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-2-4
         at: [99.12, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 2
         interfaces:
@@ -429,6 +438,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-1-3
         at: [99.12, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 1
         interfaces:
@@ -446,7 +456,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-6-8
         at: [116.36, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 4
         interfaces:
@@ -456,6 +465,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-5-7
         at: [116.36, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 3
         interfaces:
@@ -473,7 +483,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-10-12
         at: [133.6, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 6
         interfaces:
@@ -483,6 +492,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-9-11
         at: [133.6, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 5
         interfaces:
@@ -500,7 +510,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-14-16
         at: [150.84, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 8
         interfaces:
@@ -510,6 +519,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-13-15
         at: [150.84, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 7
         interfaces:
@@ -527,7 +537,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-18-20
         at: [168.08, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 10
         interfaces:
@@ -537,6 +546,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-17-19
         at: [168.08, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 9
         interfaces:
@@ -554,7 +564,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-22-24
         at: [185.32, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 12
         interfaces:
@@ -564,6 +573,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-21-23
         at: [185.32, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 11
         interfaces:
@@ -581,7 +591,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-26-28
         at: [202.56, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 14
         interfaces:
@@ -591,6 +600,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-25-27
         at: [202.56, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 13
         interfaces:
@@ -608,7 +618,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-30-32
         at: [219.81, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 16
         interfaces:
@@ -618,6 +627,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-29-31
         at: [219.81, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 15
         interfaces:
@@ -635,7 +645,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-34-36
         at: [237.04, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 18
         interfaces:
@@ -645,6 +654,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-33-35
         at: [237.04, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 17
         interfaces:
@@ -662,7 +672,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-38-40
         at: [254.28, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 20
         interfaces:
@@ -672,6 +681,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-37-39
         at: [254.28, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 19
         interfaces:
@@ -689,7 +699,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-42-44
         at: [271.52, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 22
         interfaces:
@@ -699,6 +708,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-41-43
         at: [271.52, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 21
         interfaces:
@@ -716,7 +726,6 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-46-48
         at: [288.76, 10.42]
-        rotate: 180
         group: csfp
         rel-pos: 24
         interfaces:
@@ -726,6 +735,7 @@ views:
       - ref: std/sfp-ganged@1
         id: csfp-45-47
         at: [288.76, 25.38]
+        rotate: 180
         group: csfp
         rel-pos: 23
         interfaces:
@@ -769,13 +779,13 @@ views:
       - ref: std/sfp-ganged@1
         id: port-50
         at: [345.06, 10.42]
-        rotate: 180
         group: sfp-plus
         rel-pos: 50
         attrs: {media: sfp-plus, speed: 10g}
       - ref: std/sfp-ganged@1
         id: port-49
         at: [345.06, 25.38]
+        rotate: 180
         group: sfp-plus
         rel-pos: 49
         attrs: {media: sfp-plus, speed: 10g}
@@ -786,13 +796,13 @@ views:
       - ref: std/sfp-ganged@1
         id: port-52
         at: [362.65, 10.42]
-        rotate: 180
         group: sfp-plus
         rel-pos: 52
         attrs: {media: sfp-plus, speed: 10g}
       - ref: std/sfp-ganged@1
         id: port-51
         at: [362.65, 25.38]
+        rotate: 180
         group: sfp-plus
         rel-pos: 51
         attrs: {media: sfp-plus, speed: 10g}
@@ -803,13 +813,13 @@ views:
       - ref: std/qsfp-ganged@1
         id: port-54
         at: [380.54, 10.83]
-        rotate: 180
         group: qsfp-plus
         rel-pos: 54
         attrs: {media: qsfp, speed: 20g}
       - ref: std/qsfp-ganged@1
         id: port-53
         at: [380.54, 25.79]
+        rotate: 180
         group: qsfp-plus
         rel-pos: 53
         attrs: {media: qsfp, speed: 20g}

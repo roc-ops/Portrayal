@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs500
-version: 1.0.1
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: DCS500
@@ -14,6 +14,18 @@ description: >-
   PSU numbering start at zero on this series.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The belly-to-belly cage pairs on this face follow the library's stack convention
+      (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage upright (rotate 0) over
+      the lower turned 180, so both cage lips face the band between the two cages and both bails
+      face outward, where a thumb reaches them. Where this provenance records a reading of a stack
+      the orientation is that reading; otherwise it is the rule, not an observation. A photograph
+      of the stack that shows otherwise overturns it. 32 pairs were drawn with the UPPER cage
+      turned before the std cage art moved its lip to the bottom of the opening; turning them to
+      the convention keeps the lips in the middle band where they were drawn, and seats every
+      optic bail-outward.
   sources:
     confidence: datasheet
     note: >-
@@ -360,7 +372,7 @@ views:
           gutter: 7.52
           number-from: 0
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           numerals:
             dx: 9.25
             dx-by-row: [0.0, -3.9]
@@ -380,7 +392,7 @@ views:
           gutter: 7.52
           number-from: 32
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           numerals:
             dx: 9.25
             dx-by-row: [2.4, 0.0]
