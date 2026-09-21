@@ -1,11 +1,11 @@
 """L107: a vendor's facts are transcribed, its prose is not reproduced (#451).
 
 README promises it and NOTICE rests on it. #156 paraphrased the library back
-into line once and nothing held it there, so this is the thing that holds it: a
-census over every contract and manifest, an upper bound that each vendor's
-paraphrasing pass lowers, and cases proving the quote pairing finds what it
-should and nothing else - because a sweep that passes by finding nothing also
-passes when its pattern has stopped matching.
+into line once and nothing held it there. L107 landed as a census warning over
+341 quoted runs (#472), the library was paraphrased vendor by vendor, and at
+zero the rule became an error. These tests hold the zero, and prove the quote
+pairing finds what it should and nothing else - because a sweep that passes by
+finding nothing also passes when its pattern has stopped matching.
 """
 import pathlib
 
@@ -17,11 +17,6 @@ from portrayal import lint
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
-# THE CEILING. 341 runs on the day L107 landed (2026-09-21). Lower it in the
-# same commit that paraphrases some - an upper bound, not an equality, so
-# fixing one never fails the suite, and adding one always does.
-CEILING = 341
-
 
 def _manifests():
     for p in sorted(LIB.glob("components/**/contract.yaml")):
@@ -30,42 +25,33 @@ def _manifests():
         yield p
 
 
-def _runs():
-    out = []
-    for p in _manifests():
-        for key, n, text in lint.long_quotes(yaml.safe_load(p.read_text())):
-            out.append((str(p.relative_to(LIB)), key, n, text))
-    return out
-
-
 def test_l107_is_registered():
     assert lint.RULES["L107"][0] == "component, device"
 
 
-def test_the_census_reads_the_library():
-    """NON-VACUITY: the walk found the library, and the census found the
-    backlog it is holding - if it read nothing, every bound below passes."""
+def test_the_walk_reads_the_library():
+    """NON-VACUITY: the zero below means nothing if the walk found nothing."""
     assert sum(1 for _ in _manifests()) > 700
-    assert _runs(), "no long quotations anywhere - retire this census and make L107 an error"
 
 
-def test_the_backlog_does_not_grow():
-    runs = _runs()
-    assert len(runs) <= CEILING, (
-        f"{len(runs)} quoted runs over {lint.QUOTE_MAX_WORDS} words, up from {CEILING}. "
-        "Paraphrase the new one and cite the section; a state table is transcribed as "
-        "`state = meaning` pairs, not quoted.\n  " +
-        "\n  ".join(f"{p} {k} ({n} words)" for p, k, n, _ in runs[:10]))
+def test_no_contract_or_manifest_quotes_a_long_passage():
+    runs = [(str(p.relative_to(LIB)), key, n)
+            for p in _manifests()
+            for key, n, _ in lint.long_quotes(yaml.safe_load(p.read_text()))]
+    assert not runs, (
+        f"{len(runs)} quoted run(s) over {lint.QUOTE_MAX_WORDS} words. Paraphrase and cite "
+        "the section; a state table is transcribed as `state = meaning` pairs, not quoted.\n  " +
+        "\n  ".join(f"{p} {k} ({n} words)" for p, k, n in runs[:10]))
 
 
-def test_the_distinct_passages_do_not_grow():
-    """TWO NUMBERS, BECAUSE MOST OF THE BACKLOG IS COPIES. One guide paragraph
-    sits in 23 contracts, so the run count above moves by 23 when that one
-    passage is paraphrased and by 1 when a new passage arrives. Counting the
-    distinct passages as well means a new one cannot hide inside the slack a
-    big paraphrase leaves under the run ceiling."""
-    distinct = {t for _, _, _, t in _runs()}
-    assert len(distinct) <= 156, f"{len(distinct)} distinct long quotations, up from 156"
+def test_l107_is_an_error_not_a_warning():
+    """The census is over: a long quotation fails the build rather than joining
+    a baseline. Planted, because the library itself now has none to find."""
+    data = {"provenance": {"lamp": '"' + " ".join(["word"] * 30) + '"'}}
+    with lint.collecting() as found:
+        lint.lint_quoted_prose("planted/contract.yaml", data)
+    assert [e for e in found.errors if "[L107]" in e]
+    assert not [w for w in found.warnings if "[L107]" in w]
 
 
 @pytest.mark.parametrize("text,runs", [

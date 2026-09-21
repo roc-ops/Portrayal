@@ -5248,15 +5248,17 @@ def lint_quoted_prose(path, data):
     and ask for an exception. A short quotation that pins a disputed word
     ("the C-type appliance inlet") is well under the cap and stays.
 
-    A CENSUS WARNING of the L92/L93 kind: it fires on the day it lands and is
-    meant to shrink, vendor by vendor, and test_quoted_prose holds the count
-    from rising while it does. It becomes an error at zero.
+    IT WAS A CENSUS FOR ONE DAY. It landed as a warning of the L92/L93 kind
+    with test_quoted_prose holding the count from rising (#472), the vendors
+    were paraphrased in three passes (#475, #477, #478) and the five shared
+    parts in the last one, and at zero it became an error - so the next long
+    quotation fails the build instead of joining a backlog.
     """
     runs = list(long_quotes(data))
     if not runs:
         return
     keys = sorted({k for k, _, _ in runs})
-    warn(path, "L107", f"{len(runs)} quoted run(s) over {QUOTE_MAX_WORDS} words "
+    err(path, "L107", f"{len(runs)} quoted run(s) over {QUOTE_MAX_WORDS} words "
                        f"(longest {max(n for _, n, _ in runs)}) at {', '.join(keys[:3])}"
                        f"{', ...' if len(keys) > 3 else ''}. Paraphrase and cite the "
                        "section; transcribe a state table as `state = meaning` pairs")
