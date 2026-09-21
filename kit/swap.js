@@ -195,9 +195,18 @@ export function occupantTransform(cage, comp) {
        + (cage.rotate ? ` rotate(${cage.rotate} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
 }
 
-// Python's `f"{v:g}"`, which is how the build spells a lift.
-function fmtG(v) {
-  return String(Number((+v).toPrecision(6)));
+// A LIFTED CAGE IS REFUSED, NOT HALF-SEATED. For a cage whose aperture stands
+// off the face by L, the build does two things to the optic it seats: it writes
+// `data-z-lift=L` on the occupant group, AND it rewrites every child's
+// `data-z-out` to `out + L` (render.py's `_inset_feature`, called with
+// z_inset=-L) - because `out` is absolute and `lift` is summed. Copying the
+// first without the second puts every `out` face of the optic L mm short in 3D.
+// Nothing in the library has a lifted cage today (every published cage has
+// lift 0), so a shift formula here would be arithmetic copied from the build
+// with no real build to hold it to. Until one exists, the kit does not seat an
+// optic into a lifted cage at all, and says so.
+function isLifted(cage) {
+  return !!+(cage && cage.lift);
 }
 
 // EVERY ATTRIBUTE THE OCCUPANT <g> CARRIES except its transform, as a plain
@@ -208,8 +217,8 @@ function fmtG(v) {
 //   cage['occupant-attrs']        - render.py's `group_side_attrs` for the host,
 //                                   published per cage: a `media: qsfp-dd` group
 //                                   over the contract's `media: fiber`;
-//   identity                      - id, data-path, data-ref, data-for, and
-//                                   data-z-lift only when the cage stands off.
+//   identity                      - id, data-path, data-ref, data-for.
+// No data-z-lift: a lifted cage never gets this far (see isLifted).
 // Nothing else. If the build ever writes an attribute none of these can supply,
 // the parity test fails rather than this growing a special case.
 export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${cage.id}-occupant`) {
@@ -221,13 +230,14 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${ca
   out['data-path'] = occId;
   out['data-ref'] = `${ref}:${comp.version}`;
   out['data-for'] = cage.id;
-  if (+cage.lift) out['data-z-lift'] = fmtG(cage.lift);
   return out;
 }
 
 // The <g> that represents `ref` seated in `cage`, built from the component's
 // compiled standalone skin - the occupant's counterpart of seatModule.
+// Returns null for a lifted cage rather than a half-lifted optic (isLifted).
 export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cage.id}-occupant`) {
+  if (isLifted(cage)) return null;
   const doc = new DOMParser().parseFromString(skinText, 'image/svg+xml');
   const root = doc.getElementById(comp.name);
   const rootAttrs = {};
@@ -254,8 +264,18 @@ export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cag
 // `data-behaviour="occupies"` - the build's occupant or a previous swap's. An
 // LED and a port's silkscreen label are `data-for` the port too, and matching
 // on `data-for` alone would take the lamp out with the optic.
+//
+// ASYNC: it awaits `loadSkin`, so it RESOLVES TO `{applied, refused}` - await
+// it and read the result. `applied` is how many cages the map touched (the
+// count applyOverrides returns); `refused` is the ids of cages the map asked to
+// fill that the kit would not, because they are lifted (see isLifted). A
+// refused cage is left EMPTY - its old occupant removed, nothing seated - so
+// the drawing never shows an optic the 3D would place wrong. swap.js has no
+// console calls; reporting the refusal is the caller's job, as with
+// applyAllOverrides' `dropped`. Emptying a lifted cage (null) is not refused.
 export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin) {
   let applied = 0;
+  const refused = [];
   for (const cage of cages) {
     if (!Object.prototype.hasOwnProperty.call(overrides, cage.id)) continue;
     const host = bayGroup(rootEl, cage.id);
@@ -265,11 +285,12 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin)
     applied++;
     const ref = overrides[cage.id];
     if (!ref) continue;                       // deliberately empty
+    if (isLifted(cage)) { refused.push(cage.id); continue; }
     const loaded = await loadSkin(ref);
     if (!loaded) continue;                    // unknown ref: leave the cage empty
     host.after(seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text));
   }
-  return applied;
+  return {applied, refused};
 }
 
 // The path of a bay's opening in a compiled drawing. render.py gives the bay rect

@@ -130,7 +130,10 @@ if (mode === 'overrides') {
     ? {comp: COMP[ref], text: skin(COMP[ref].name)} : null;
   const cage = id => ({id, mate: [10, 5], rotate: null, lift: 0,
                        'occupant-attrs': {'data-group': 'sfp28', 'data-media': 'sfp28'}});
-  const cages = ['port-4', 'port-5', 'port-6', 'port-7'].map(cage);
+  const cages = ['port-4', 'port-5', 'port-6', 'port-7', 'port-8'].map(cage);
+  // a cage whose aperture stands off the face: the kit cannot seat into it
+  // without also shifting every child's absolute out, so it refuses
+  cages[4].lift = 3;
 
   const face = () => {
     const root = new Node({}, [
@@ -149,11 +152,12 @@ if (mode === 'overrides') {
 
   const root = face();
   const before = Object.fromEntries(cages.map(c => [c.id, occ(root, c.id).length]));
-  const applied = await m.applyOccupantOverrides(root, cages, {
+  const {applied, refused} = await m.applyOccupantOverrides(root, cages, {
     'port-4': 'generic/sfp-lc-simplex@1',     // replaced
     'port-5': null,                           // emptied
     'port-6': 'nobody/nothing@9',             // unknown: left empty
     // port-7 absent: untouched
+    'port-8': 'generic/sfp-lc@1',             // lifted: refused, left empty
   }, loadSkin);
   const after = Object.fromEntries(cages.map(c => [c.id, occ(root, c.id).map(n => ({
     ref: n.getAttribute('data-ref'), id: n.getAttribute('id'),
@@ -164,10 +168,13 @@ if (mode === 'overrides') {
     besideHost: root.children[root.children.indexOf(n) - 1]?.getAttribute('id'),
   }))]));
   // a second swap replaces the first swap's occupant, not stacks beside it
-  await m.applyOccupantOverrides(root, cages, {'port-4': 'generic/sfp-lc@1'}, loadSkin);
+  const second = await m.applyOccupantOverrides(root, cages, {'port-4': 'generic/sfp-lc@1'}, loadSkin);
   const again = occ(root, 'port-4').map(n => n.getAttribute('data-ref'));
   console.log(JSON.stringify({
-    applied, before, after, again,
+    applied, refused, before, after, again, second,
+    // seatOccupant itself will not produce a half-lifted optic
+    seatLifted: m.seatOccupant(DOC, cages[4], 'generic/sfp-lc@1',
+                               COMP['generic/sfp-lc@1'], skin('sfp-lc')),
     led: root.querySelectorAll('[data-for="port-4"]')
       .filter(n => n.getAttribute('data-class') === 'led').length,
   }));

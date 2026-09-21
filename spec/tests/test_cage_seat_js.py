@@ -4,8 +4,9 @@
 cage in 2D and 3D alike. It repeats ONE formula from render.py - `seat_at`, as
 `occupantAt` - and assembles the occupant's attributes from three published
 sources: the skin root's `data-*`, the cage's `occupant-attrs` (render.py's
-`group_side_attrs`), and identity (`data-ref`, `data-for`, `id`/`data-path`,
-`data-z-lift` when the cage stands off). A formula checked against itself
+`group_side_attrs`), and identity (`data-ref`, `data-for`, `id`/`data-path`).
+A LIFTED cage is refused rather than half-seated - the build also shifts every
+child's absolute `out`, and no lifted cage exists to hold that to. A formula checked against itself
 proves nothing, so both halves are held to a REAL build: a fitted copy is
 rendered, and what render.py wrote on every occupant is the expected answer.
 
@@ -149,8 +150,14 @@ def test_the_kit_seats_every_optic_where_the_build_does(cases):
 @needs_node
 def test_an_occupant_override_replaces_empties_and_leaves_alone():
     out = node("overrides")
-    assert out["before"] == {"port-4": 1, "port-5": 1, "port-6": 1, "port-7": 1}
-    assert out["applied"] == 3, "port-7 is not in the map and must not be touched"
+    assert out["before"] == {"port-4": 1, "port-5": 1, "port-6": 1, "port-7": 1, "port-8": 1}
+    assert out["applied"] == 4, "port-7 is not in the map and must not be touched"
+    assert out["refused"] == ["port-8"], (
+        "a lifted cage is refused, and the refusal is reported to the caller")
+    assert out["after"]["port-8"] == [], (
+        "a refused cage is left empty - never a half-lifted optic")
+    assert out["seatLifted"] is None
+    assert out["second"] == {"applied": 1, "refused": []}
 
     [p4] = out["after"]["port-4"]
     assert p4["ref"] == "generic/sfp-lc-simplex@1:1.0.0", "one occupant, the new one"
