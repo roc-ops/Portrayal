@@ -1,0 +1,805 @@
+format: 1
+kind: device
+name: ecs4530-54csfp
+version: 1.0.0
+maturity: modelled
+manufacturer: Edgecore
+model: ECS4530-54CSFP
+portfolio: {line: Campus, family: Aggregation Switch, series: ECS4530}
+description: >-
+  1RU half-depth L2+/L3-lite Gigabit fibre access switch: 24 CSFP cages in 12 two-high stacks, each cage
+  carrying two bidirectional fibre ports (48 in all), four RJ-45 combo ports sharing four of them, 4 x
+  10G SFP+ and 2 x 20G QSFP+ uplinks, and an RS-232 console over an out-of-band RJ-45. Its AC inlet is
+  on the FRONT, at the left end; the rear carries only three fixed fans.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      ONE DOCUMENT, and it covers two machines. ecs4530-54csfp-datasheet (the ECS4530 Series data sheet)
+      is a two-column comparison of the ECS4530-54CSFP and the ECS4530-54CSFP-DC-I; the staged -I datasheet
+      is byte-identical. There is no quick start guide. Page 3 carries four elevations 1000 px wide -
+      both variants' fronts and both rears - and three product photographs of each variant are staged
+      at 489 px, too small to measure (1.1 px/mm) but enough to say which rear belongs to which front:
+      the base's fans read at 28%, 54% and 79% of the width in its own rear photograph, which is the rear
+      whose fans are at 121.6, 239.5 and 351.1 mm, and not the -I rear, whose fans sit elsewhere. Issue
+      #341 warned 'expect to reach Gate 1 and find nothing measurable'. That turned out pessimistic: the
+      page-3 elevations measure, and the next note says how well.
+  figure-choice:
+    confidence: measured
+    note: >-
+      Gate 1. The base's front elevation is cropped flush - ink fills all 1000 px - and reads -1.96% on
+      aspect against 440/44, so its box was not trusted until features said so. THEY DO, THREE WAYS. At
+      2.273 px/mm (440 mm across the image) the QSFP+ opening measures 18.48 mm against the ganged-QSFP
+      18.50, the RJ-45 cavities 12.3 against the jack's 11.91 cavity, and - most tellingly - the two rows
+      of every SFP stack sit 14.96 mm apart against the registry's measured 15.0 belly-to-belly SFP row
+      pitch. So x scales at 2.273 and y uses the same scale, with the elevation's 102 rows holding about
+      0.9 mm of margin. THE REAR IS WORSE: +5.26% on aspect. Only its x positions are used.
+  chassis:
+    confidence: datasheet
+    note: >-
+      DATASHEET, 'Dimension (W x D x H) cm 44 x 22 x 4.4' in both columns, 'Rack Space 19"' and 'Weight
+      3 kg'. The only size source, stated once per variant and identical.
+  numbering:
+    confidence: photo-measured
+    note: >-
+      READ OFF THE ELEVATION, and each CSFP cage carries TWO numbers. Under the bottom cage of the first
+      stack the legend reads '1' and '3'; above its top cage '2' and '4': a CSFP module presents two bidirectional
+      fibre ports, so 24 cages give the datasheet's 48 ports - 'by inserting a CSFP transceiver that supports
+      two BIDI fiber ports, each port can connect to two CPE/IAD devices, so the total number of physical
+      ports is 48'. Stack k carries 4k+1 and 4k+3 in its bottom cage and 4k+2 and 4k+4 in its top. THE
+      LIBRARY HAS NO WAY TO GIVE ONE CAGE TWO INTERFACES, so each cage is one placement named for both
+      - csfp-1-3 - with its two port numbers in attrs; see the gap. Ports 45-48 are COMBO: the twelfth
+      stack's cages and the four RJ-45s beside it are bracketed together on the faceplate, and the datasheet
+      lists '4 RJ-45/2 CSFP' combo ports, 'Either RJ-45 or CSFP port can be chosen at a time'.
+  copper-speed-spelling:
+    confidence: measured
+    note: >-
+      THE COPPER PORTS SAY speed 1g, NOT 1000base-t. The first draft spelled the four combo jacks' speed
+      1000base-t, which the DCIM exporter does not type - it knows (rj45, 1g) - so all four fell out of
+      the NetBox and Nautobot exports without a word; the export listed 30 interfaces where it should
+      list 34. 1g is the library's spelling for a copper traffic port. The MGMT jack is exported only
+      through an overlay, by the exporter's own rule for role: mgmt, whatever its speed says.
+  cage-frames:
+    confidence: photo-measured
+    note: >-
+      Every stack sits in a bright cage frame, measured at 4x on the first: x 98.4-113.3, y 10.6-36.5,
+      14.9 wide about the 14.25 openings; repeated on the stack lattice and drawn 19.7 wide about the
+      QSFP+ stack.
+  csfp-is-an-sfp-cage:
+    confidence: registry
+    note: >-
+      THE CAGES ARE SFP CAGES; CSFP IS WHAT GOES IN THEM. The Compact SFP is a module form that fits the
+      standard SFP cage, which is the whole of its point - so the cages are std/sfp-ganged@1 (two-high
+      stacks, the registry's 15.0 row pitch, measured here at 14.96) with media sfp and a csfp attr, the
+      same decision the AMX3200 made for CFP2-DCO.
+  port-lamps:
+    confidence: photo-measured
+    note: >-
+      EACH STACK'S BELLY STRIP CARRIES FOUR TRIANGLE LAMPS, down-up-down-up, which is one per logical
+      port and says whose it is: a down-arrow points at the bottom cage and an up-arrow at the top, and
+      each sits on the same side as that port's printed number - 1 left and 3 right below, 2 left and
+      4 right above. So the lamps are assigned, not guessed, by the two things the faceplate itself says
+      about them. The SFP+ stacks carry one arrow per port the same way, and the QSFP+ stack a down-arrow,
+      four small windows and an up-arrow; the four windows are drawn and not given to a port.
+  rj45s:
+    confidence: photo-measured
+    note: >-
+      THE TOP COMBO JACKS SHOW LIT LAMPS AND THE BOTTOM ONES SHOW NONE. The elevation draws two green
+      windows in the upper corners of the jacks for 46 and 48, at 307.5, 318.5, 326.9 and 338.3 mm, and
+      nothing at all in the corners of 45, 47, the console or MGMT. The top jacks are the lamped part;
+      the rest are drawn bare because that is what the metal shows, which leaves three Ethernet jacks
+      on a bare part and L76 standing - see the gap.
+  left-end:
+    confidence: photo-measured
+    note: >-
+      THE POWER INLET IS ON THE FRONT. An IEC C14 inlet at the left end with its rating printed below
+      it ('~100-240 V; 50/60Hz; 3 A'), a ground stud with its symbol beside it, the Edge-core wordmark
+      and the model name above, and the legend '(dot) SFP LED indicator' explaining the dots beside some
+      port numbers. A honeycomb vent row runs along the top of the port field.
+  rear:
+    confidence: photo-measured
+    note: >-
+      THREE FIXED FANS behind honeycomb guards punched in the rear panel, rotors showing through, centred
+      at 121.6, 239.5 and 351.1 mm on x. The rear elevation is +5.26% off aspect, so its vertical positions
+      are read on its OWN vertical scale (95 rows for 44 mm, 2.159 px/mm) rather than the front's: the
+      guards run y 2.3-32.4, high on the panel rather than centred on it, which is what the elevation
+      plainly draws. A first draft centred them on the chassis height by assumption, and the matched-scale
+      comparison showed it wrong. They are not trays - nothing in the datasheet calls them hot-swappable,
+      and the rear shows no handles or seams - so they are drawn as the panel's own perforation, not as
+      modules.
+attrs:
+  performance:
+    switching-capacity: 256 Gbps
+    forwarding-rate: 190.48 Mpps
+    mac-table: 16K
+    jumbo-frames: 10 KB
+    port-modes-qsfp: >-
+      20G uplink - the datasheet says '20G QSFP+ Uplink' and nothing about the optics or modes behind
+      it
+    port-modes-sfp-plus: 1G / 10G; 10GBASE-SR/LR/ZR/ER, 1000BASE-SX/LX/LHX/ZX, 10G DAC/AOC
+  power: {power-max-w: 75.4, power-envelope: unstated, power-input-ac: '100-240 VAC, 50-60 Hz'}
+  environmental: {temperature-operating: 0 C to 50 C, temperature-storage: -40 C to 70 C, humidity-operating: 10%
+      to 90% non-condensing, humidity-storage: 10% to 90% non-condensing}
+  platform: {flash: 2 GB, dram: 2 GB}
+  features:
+    marketing-name: ECS4530-54CSFP
+    optics-sfp: 1G CSFP (two bidirectional fibre ports per module); 1000BASE-SX/LX/LHX/ZX; DDM
+    port-summary: 24 CSFP cages (48 x 1G BiDi fibre), 4 x RJ-45 combo, 4 x 10G SFP+, 2 x 20G QSFP+
+  management: {mgmt-ports: '1x RJ-45 console, 1x RJ-45 GE out-of-band management'}
+  compliance: {emc: 'FCC Class A, CE', rohs: RoHS; WEEE}
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 44.0, depth: 220.0, ru: 1, weight-kg: 3.0, color: '#26292c'}
+gaps:
+- what: csfp-dual-interface
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    A WAY TO GIVE ONE CAGE TWO INTERFACES. Each CSFP cage carries two numbered ports and the library can
+    seat only one interface per placement, so the 48 fibre ports are 24 placements named for their pairs
+    (csfp-1-3 ...) with the numbers in attrs. A DCIM export therefore sees 24 fibre interfaces where the
+    switch has 48. This wants a schema construct - a placement declaring its logical interfaces - not
+    a different drawing.
+- what: bottom-rj45-lamps
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    WHETHER THE BOTTOM RJ-45s HAVE LAMPS. The combo jacks 45 and 47 and the MGMT jack are Ethernet, which
+    this library draws lamped, but the elevation shows lit windows only on the top jacks and nothing in
+    the corners of the bottom ones at 2.27 px/mm. They are drawn bare, as seen, and L76 stands. A close
+    photograph of one stack settles it.
+- what: airflow-direction
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    WHICH WAY THE FANS BLOW. The datasheet's Cooling line is empty for both variants and the rear shows
+    fixed fans with no arrows. Unstated rather than guessed.
+- what: ordering-codes
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    THE DATASHEET CARRIES NO ORDERING TABLE, so there are no part numbers to attach to an orderable configuration;
+    the device offers its base configuration only.
+groups:
+  csfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+  rj45-combo:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp, speed: 20g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the RS-232 console RJ-45 stacked over the GE out-of-band management RJ-45 at the right-hand end.
+  leds: {term: LED, role: indicator, index-origin: 1}
+  power: {term: Inlet, role: service, index-origin: 1}
+  grounding: {term: Point, role: furniture, index-origin: 1}
+  furniture: {term: Item, role: furniture, index-origin: 1, description: the rack ears.}
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {at: [98.8, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [116.04, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [133.28, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [150.52, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [167.76, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [185.0, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [202.24, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [219.48, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [236.72, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [253.96, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [271.2, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [288.44, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [344.73, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [362.33, 10.0], size: [14.9, 26.5], fill: '#aeb3b8', rx: 0.4}
+      - {at: [379.94, 10.4], size: [19.7, 26.0], fill: '#aeb3b8', rx: 0.4}
+      - {at: [7.48, 3.08], size: [21.12, 5.72], fill: '#d8dcdf', rx: 0.3}
+      - {at: [94.6, 1.0], size: [330.0, 5.5], pattern: vent, vent: 22}
+      - {at: [98.85, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [116.09, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [133.33, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [150.57, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [167.81, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [185.05, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [202.29, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [219.53, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [236.77, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [254.01, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [271.25, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [288.49, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [344.78, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [362.38, 20.82], size: [14.8, 4.56], fill: '#d9dcdf'}
+      - {at: [380.29, 20.82], size: [19.0, 4.56], fill: '#d9dcdf'}
+      - {at: [385.89, 22.5], size: [1.2, 1.0], fill: '#3a3e43'}
+      - {at: [388.09, 22.5], size: [1.2, 1.0], fill: '#3a3e43'}
+      - {at: [390.29, 22.5], size: [1.2, 1.0], fill: '#3a3e43'}
+      - {at: [392.49, 22.5], size: [1.2, 1.0], fill: '#3a3e43'}
+      cutouts:
+      - {id: csfp-2-4, at: [99.12, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-1-3, at: [99.12, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-1, at: [100.62, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-2, at: [103.62, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-3, at: [106.62, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-4, at: [109.62, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-6-8, at: [116.36, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-5-7, at: [116.36, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-5, at: [117.86, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-6, at: [120.86, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-7, at: [123.86, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-8, at: [126.86, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-10-12, at: [133.6, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-9-11, at: [133.6, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-9, at: [135.1, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-10, at: [138.1, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-11, at: [141.1, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-12, at: [144.1, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-14-16, at: [150.84, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-13-15, at: [150.84, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-13, at: [152.34, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-14, at: [155.34, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-15, at: [158.34, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-16, at: [161.34, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-18-20, at: [168.08, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-17-19, at: [168.08, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-17, at: [169.58, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-18, at: [172.58, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-19, at: [175.58, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-20, at: [178.58, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-22-24, at: [185.32, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-21-23, at: [185.32, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-21, at: [186.82, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-22, at: [189.82, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-23, at: [192.82, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-24, at: [195.82, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-26-28, at: [202.56, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-25-27, at: [202.56, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-25, at: [204.06, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-26, at: [207.06, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-27, at: [210.06, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-28, at: [213.06, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-30-32, at: [219.81, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-29-31, at: [219.81, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-29, at: [221.31, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-30, at: [224.31, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-31, at: [227.31, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-32, at: [230.31, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-34-36, at: [237.04, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-33-35, at: [237.04, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-33, at: [238.54, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-34, at: [241.54, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-35, at: [244.54, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-36, at: [247.54, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-38-40, at: [254.28, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-37-39, at: [254.28, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-37, at: [255.78, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-38, at: [258.78, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-39, at: [261.78, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-40, at: [264.78, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-42-44, at: [271.52, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-41-43, at: [271.52, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-41, at: [273.02, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-42, at: [276.02, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-43, at: [279.02, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-44, at: [282.02, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: csfp-46-48, at: [288.76, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: csfp-45-47, at: [288.76, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-45, at: [290.26, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-46, at: [293.26, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-47, at: [296.26, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-48, at: [299.26, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: port-46, at: [306.66, 9.02], size: [15.8, 13.2], shape: rect}
+      - {id: port-45, at: [306.66, 23.98], size: [15.8, 13.2], shape: rect}
+      - {id: port-48, at: [326.02, 9.02], size: [15.8, 13.2], shape: rect}
+      - {id: port-47, at: [326.02, 23.98], size: [15.8, 13.2], shape: rect}
+      - {id: port-50, at: [345.06, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: port-49, at: [345.06, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-49, at: [346.56, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-50, at: [355.56, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: port-52, at: [362.65, 10.42], size: [14.25, 10.4], shape: rect}
+      - {id: port-51, at: [362.65, 25.38], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-51, at: [364.15, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-52, at: [373.15, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: port-54, at: [380.54, 10.83], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [380.54, 25.79], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-53, at: [381.67, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-port-54, at: [395.67, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: console, at: [403.45, 9.02], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt-eth, at: [403.45, 23.98], size: [15.8, 13.2], shape: rect}
+      - {id: led-pwr, at: [426.2, 15.0], size: [2.8, 1.6], shape: rect}
+      - {id: led-sys, at: [426.2, 19.9], size: [2.8, 1.6], shape: rect}
+      - {id: power-in, at: [6.24, 14.64], size: [28.0, 20.0], shape: rect}
+      - {id: ground, at: [44.9, 13.7], size: [7.0, 14.0], shape: rect}
+    silkscreen:
+    - {at: [101.75, 9.6], text: ●2, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-2-4}
+    - {at: [110.75, 9.6], text: '4', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-2-4}
+    - {at: [101.75, 39.2], text: '1', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-1-3}
+    - {at: [110.75, 39.2], text: ●3, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-1-3}
+    - {at: [118.99, 9.6], text: ●6, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-6-8}
+    - {at: [127.99, 9.6], text: '8', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-6-8}
+    - {at: [118.99, 39.2], text: '5', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-5-7}
+    - {at: [127.99, 39.2], text: ●7, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-5-7}
+    - {at: [136.23, 9.6], text: ●10, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-10-12}
+    - {at: [145.23, 9.6], text: '12', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-10-12}
+    - {at: [136.23, 39.2], text: '9', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-9-11}
+    - {at: [145.23, 39.2], text: ●11, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-9-11}
+    - {at: [153.47, 9.6], text: ●14, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-14-16}
+    - {at: [162.47, 9.6], text: '16', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-14-16}
+    - {at: [153.47, 39.2], text: '13', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-13-15}
+    - {at: [162.47, 39.2], text: ●15, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-13-15}
+    - {at: [170.71, 9.6], text: ●18, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-18-20}
+    - {at: [179.71, 9.6], text: '20', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-18-20}
+    - {at: [170.71, 39.2], text: '17', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-17-19}
+    - {at: [179.71, 39.2], text: ●19, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-17-19}
+    - {at: [187.95, 9.6], text: ●22, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-22-24}
+    - {at: [196.95, 9.6], text: '24', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-22-24}
+    - {at: [187.95, 39.2], text: '21', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-21-23}
+    - {at: [196.95, 39.2], text: ●23, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-21-23}
+    - {at: [205.19, 9.6], text: ●26, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-26-28}
+    - {at: [214.19, 9.6], text: '28', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-26-28}
+    - {at: [205.19, 39.2], text: '25', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-25-27}
+    - {at: [214.19, 39.2], text: ●27, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-25-27}
+    - {at: [222.43, 9.6], text: ●30, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-30-32}
+    - {at: [231.43, 9.6], text: '32', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-30-32}
+    - {at: [222.43, 39.2], text: '29', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-29-31}
+    - {at: [231.43, 39.2], text: ●31, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-29-31}
+    - {at: [239.67, 9.6], text: ●34, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-34-36}
+    - {at: [248.67, 9.6], text: '36', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-34-36}
+    - {at: [239.67, 39.2], text: '33', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-33-35}
+    - {at: [248.67, 39.2], text: ●35, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-33-35}
+    - {at: [256.91, 9.6], text: ●38, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-38-40}
+    - {at: [265.91, 9.6], text: '40', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-38-40}
+    - {at: [256.91, 39.2], text: '37', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-37-39}
+    - {at: [265.91, 39.2], text: ●39, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-37-39}
+    - {at: [274.15, 9.6], text: ●42, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-42-44}
+    - {at: [283.15, 9.6], text: '44', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-42-44}
+    - {at: [274.15, 39.2], text: '41', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-41-43}
+    - {at: [283.15, 39.2], text: ●43, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-41-43}
+    - {at: [291.39, 9.6], text: ●46, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-46-48}
+    - {at: [300.39, 9.6], text: '48', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-46-48}
+    - {at: [291.39, 39.2], text: '45', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-45-47}
+    - {at: [300.39, 39.2], text: ●47, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: csfp-45-47}
+    - {at: [314.56, 7.8], text: ▼ 46 ▲, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-46}
+    - {at: [314.56, 39.2], text: '45', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-45}
+    - {at: [333.92, 7.8], text: ▼ 48 ▲, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-48}
+    - {at: [333.92, 39.2], text: '47', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-47}
+    - {at: [352.18, 9.6], text: '50', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-50}
+    - {at: [352.18, 39.2], text: '49', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-49}
+    - {at: [369.78, 9.6], text: '52', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-52}
+    - {at: [369.78, 39.2], text: '51', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-51}
+    - {at: [389.79, 9.6], text: '54', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-54}
+    - {at: [389.79, 39.2], text: '53', font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: port-53}
+    - {at: [411.35, 7.8], text: Console, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: console}
+    - {at: [411.35, 39.2], text: MGMT, font-size: 1.3, anchor: middle, fill: '#d8dcdf', for: mgmt-eth}
+    - {at: [429.6, 16.23], text: PWR, font-size: 1.4, anchor: start, fill: '#d8dcdf', for: led-pwr}
+    - {at: [429.6, 21.13], text: SYS, font-size: 1.4, anchor: start, fill: '#d8dcdf', for: led-sys}
+    - at: [48.4, 31.9]
+      fill: '#d8dcdf'
+      for: ground
+      path: >-
+        M 0 -1.87 L 0 -0.34 M -1.7 -0.34 L 1.7 -0.34 M -1.054 0.408 L 1.054 0.408 M -0.476 1.156 L 0.476
+        1.156
+      stroke-width: 0.28
+    - {at: [7.5, 12.4], text: ECS4530-54CSFP, font-size: 2.0, anchor: start, fill: '#d8dcdf', for: chassis}
+    - {at: [20.24, 37.9], text: ~100-240 V; 50/60Hz; 3 A, font-size: 1.3, anchor: middle, fill: '#d8dcdf',
+      for: power-in}
+    - {at: [72.1, 38.9], text: ● SFP LED indicator, font-size: 1.4, anchor: start, fill: '#d8dcdf', for: chassis}
+    components:
+      placements:
+      - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture,
+        rel-pos: 1}
+      - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture,
+        rel-pos: 2}
+      - ref: std/sfp-ganged@1
+        id: csfp-2-4
+        at: [99.12, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 2
+        attrs: {media: sfp, csfp: true, logical-ports: 2 4}
+      - ref: std/sfp-ganged@1
+        id: csfp-1-3
+        at: [99.12, 25.38]
+        group: csfp
+        rel-pos: 1
+        attrs: {media: sfp, csfp: true, logical-ports: 1 3}
+      - {ref: common/led-arrow-sm@1, id: led-port-1, skin: down, at: [100.62, 22.1], group: port-leds,
+        rel-pos: 1, for: csfp-1-3}
+      - {ref: common/led-arrow-sm@1, id: led-port-2, skin: up, at: [103.62, 22.1], group: port-leds, rel-pos: 2,
+        for: csfp-2-4}
+      - {ref: common/led-arrow-sm@1, id: led-port-3, skin: down, at: [106.62, 22.1], group: port-leds,
+        rel-pos: 3, for: csfp-1-3}
+      - {ref: common/led-arrow-sm@1, id: led-port-4, skin: up, at: [109.62, 22.1], group: port-leds, rel-pos: 4,
+        for: csfp-2-4}
+      - ref: std/sfp-ganged@1
+        id: csfp-6-8
+        at: [116.36, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 4
+        attrs: {media: sfp, csfp: true, logical-ports: 6 8}
+      - ref: std/sfp-ganged@1
+        id: csfp-5-7
+        at: [116.36, 25.38]
+        group: csfp
+        rel-pos: 3
+        attrs: {media: sfp, csfp: true, logical-ports: 5 7}
+      - {ref: common/led-arrow-sm@1, id: led-port-5, skin: down, at: [117.86, 22.1], group: port-leds,
+        rel-pos: 5, for: csfp-5-7}
+      - {ref: common/led-arrow-sm@1, id: led-port-6, skin: up, at: [120.86, 22.1], group: port-leds, rel-pos: 6,
+        for: csfp-6-8}
+      - {ref: common/led-arrow-sm@1, id: led-port-7, skin: down, at: [123.86, 22.1], group: port-leds,
+        rel-pos: 7, for: csfp-5-7}
+      - {ref: common/led-arrow-sm@1, id: led-port-8, skin: up, at: [126.86, 22.1], group: port-leds, rel-pos: 8,
+        for: csfp-6-8}
+      - ref: std/sfp-ganged@1
+        id: csfp-10-12
+        at: [133.6, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 6
+        attrs: {media: sfp, csfp: true, logical-ports: 10 12}
+      - ref: std/sfp-ganged@1
+        id: csfp-9-11
+        at: [133.6, 25.38]
+        group: csfp
+        rel-pos: 5
+        attrs: {media: sfp, csfp: true, logical-ports: 9 11}
+      - {ref: common/led-arrow-sm@1, id: led-port-9, skin: down, at: [135.1, 22.1], group: port-leds,
+        rel-pos: 9, for: csfp-9-11}
+      - {ref: common/led-arrow-sm@1, id: led-port-10, skin: up, at: [138.1, 22.1], group: port-leds, rel-pos: 10,
+        for: csfp-10-12}
+      - {ref: common/led-arrow-sm@1, id: led-port-11, skin: down, at: [141.1, 22.1], group: port-leds,
+        rel-pos: 11, for: csfp-9-11}
+      - {ref: common/led-arrow-sm@1, id: led-port-12, skin: up, at: [144.1, 22.1], group: port-leds, rel-pos: 12,
+        for: csfp-10-12}
+      - ref: std/sfp-ganged@1
+        id: csfp-14-16
+        at: [150.84, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 8
+        attrs: {media: sfp, csfp: true, logical-ports: 14 16}
+      - ref: std/sfp-ganged@1
+        id: csfp-13-15
+        at: [150.84, 25.38]
+        group: csfp
+        rel-pos: 7
+        attrs: {media: sfp, csfp: true, logical-ports: 13 15}
+      - {ref: common/led-arrow-sm@1, id: led-port-13, skin: down, at: [152.34, 22.1], group: port-leds,
+        rel-pos: 13, for: csfp-13-15}
+      - {ref: common/led-arrow-sm@1, id: led-port-14, skin: up, at: [155.34, 22.1], group: port-leds,
+        rel-pos: 14, for: csfp-14-16}
+      - {ref: common/led-arrow-sm@1, id: led-port-15, skin: down, at: [158.34, 22.1], group: port-leds,
+        rel-pos: 15, for: csfp-13-15}
+      - {ref: common/led-arrow-sm@1, id: led-port-16, skin: up, at: [161.34, 22.1], group: port-leds,
+        rel-pos: 16, for: csfp-14-16}
+      - ref: std/sfp-ganged@1
+        id: csfp-18-20
+        at: [168.08, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 10
+        attrs: {media: sfp, csfp: true, logical-ports: 18 20}
+      - ref: std/sfp-ganged@1
+        id: csfp-17-19
+        at: [168.08, 25.38]
+        group: csfp
+        rel-pos: 9
+        attrs: {media: sfp, csfp: true, logical-ports: 17 19}
+      - {ref: common/led-arrow-sm@1, id: led-port-17, skin: down, at: [169.58, 22.1], group: port-leds,
+        rel-pos: 17, for: csfp-17-19}
+      - {ref: common/led-arrow-sm@1, id: led-port-18, skin: up, at: [172.58, 22.1], group: port-leds,
+        rel-pos: 18, for: csfp-18-20}
+      - {ref: common/led-arrow-sm@1, id: led-port-19, skin: down, at: [175.58, 22.1], group: port-leds,
+        rel-pos: 19, for: csfp-17-19}
+      - {ref: common/led-arrow-sm@1, id: led-port-20, skin: up, at: [178.58, 22.1], group: port-leds,
+        rel-pos: 20, for: csfp-18-20}
+      - ref: std/sfp-ganged@1
+        id: csfp-22-24
+        at: [185.32, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 12
+        attrs: {media: sfp, csfp: true, logical-ports: 22 24}
+      - ref: std/sfp-ganged@1
+        id: csfp-21-23
+        at: [185.32, 25.38]
+        group: csfp
+        rel-pos: 11
+        attrs: {media: sfp, csfp: true, logical-ports: 21 23}
+      - {ref: common/led-arrow-sm@1, id: led-port-21, skin: down, at: [186.82, 22.1], group: port-leds,
+        rel-pos: 21, for: csfp-21-23}
+      - {ref: common/led-arrow-sm@1, id: led-port-22, skin: up, at: [189.82, 22.1], group: port-leds,
+        rel-pos: 22, for: csfp-22-24}
+      - {ref: common/led-arrow-sm@1, id: led-port-23, skin: down, at: [192.82, 22.1], group: port-leds,
+        rel-pos: 23, for: csfp-21-23}
+      - {ref: common/led-arrow-sm@1, id: led-port-24, skin: up, at: [195.82, 22.1], group: port-leds,
+        rel-pos: 24, for: csfp-22-24}
+      - ref: std/sfp-ganged@1
+        id: csfp-26-28
+        at: [202.56, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 14
+        attrs: {media: sfp, csfp: true, logical-ports: 26 28}
+      - ref: std/sfp-ganged@1
+        id: csfp-25-27
+        at: [202.56, 25.38]
+        group: csfp
+        rel-pos: 13
+        attrs: {media: sfp, csfp: true, logical-ports: 25 27}
+      - {ref: common/led-arrow-sm@1, id: led-port-25, skin: down, at: [204.06, 22.1], group: port-leds,
+        rel-pos: 25, for: csfp-25-27}
+      - {ref: common/led-arrow-sm@1, id: led-port-26, skin: up, at: [207.06, 22.1], group: port-leds,
+        rel-pos: 26, for: csfp-26-28}
+      - {ref: common/led-arrow-sm@1, id: led-port-27, skin: down, at: [210.06, 22.1], group: port-leds,
+        rel-pos: 27, for: csfp-25-27}
+      - {ref: common/led-arrow-sm@1, id: led-port-28, skin: up, at: [213.06, 22.1], group: port-leds,
+        rel-pos: 28, for: csfp-26-28}
+      - ref: std/sfp-ganged@1
+        id: csfp-30-32
+        at: [219.81, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 16
+        attrs: {media: sfp, csfp: true, logical-ports: 30 32}
+      - ref: std/sfp-ganged@1
+        id: csfp-29-31
+        at: [219.81, 25.38]
+        group: csfp
+        rel-pos: 15
+        attrs: {media: sfp, csfp: true, logical-ports: 29 31}
+      - {ref: common/led-arrow-sm@1, id: led-port-29, skin: down, at: [221.31, 22.1], group: port-leds,
+        rel-pos: 29, for: csfp-29-31}
+      - {ref: common/led-arrow-sm@1, id: led-port-30, skin: up, at: [224.31, 22.1], group: port-leds,
+        rel-pos: 30, for: csfp-30-32}
+      - {ref: common/led-arrow-sm@1, id: led-port-31, skin: down, at: [227.31, 22.1], group: port-leds,
+        rel-pos: 31, for: csfp-29-31}
+      - {ref: common/led-arrow-sm@1, id: led-port-32, skin: up, at: [230.31, 22.1], group: port-leds,
+        rel-pos: 32, for: csfp-30-32}
+      - ref: std/sfp-ganged@1
+        id: csfp-34-36
+        at: [237.04, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 18
+        attrs: {media: sfp, csfp: true, logical-ports: 34 36}
+      - ref: std/sfp-ganged@1
+        id: csfp-33-35
+        at: [237.04, 25.38]
+        group: csfp
+        rel-pos: 17
+        attrs: {media: sfp, csfp: true, logical-ports: 33 35}
+      - {ref: common/led-arrow-sm@1, id: led-port-33, skin: down, at: [238.54, 22.1], group: port-leds,
+        rel-pos: 33, for: csfp-33-35}
+      - {ref: common/led-arrow-sm@1, id: led-port-34, skin: up, at: [241.54, 22.1], group: port-leds,
+        rel-pos: 34, for: csfp-34-36}
+      - {ref: common/led-arrow-sm@1, id: led-port-35, skin: down, at: [244.54, 22.1], group: port-leds,
+        rel-pos: 35, for: csfp-33-35}
+      - {ref: common/led-arrow-sm@1, id: led-port-36, skin: up, at: [247.54, 22.1], group: port-leds,
+        rel-pos: 36, for: csfp-34-36}
+      - ref: std/sfp-ganged@1
+        id: csfp-38-40
+        at: [254.28, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 20
+        attrs: {media: sfp, csfp: true, logical-ports: 38 40}
+      - ref: std/sfp-ganged@1
+        id: csfp-37-39
+        at: [254.28, 25.38]
+        group: csfp
+        rel-pos: 19
+        attrs: {media: sfp, csfp: true, logical-ports: 37 39}
+      - {ref: common/led-arrow-sm@1, id: led-port-37, skin: down, at: [255.78, 22.1], group: port-leds,
+        rel-pos: 37, for: csfp-37-39}
+      - {ref: common/led-arrow-sm@1, id: led-port-38, skin: up, at: [258.78, 22.1], group: port-leds,
+        rel-pos: 38, for: csfp-38-40}
+      - {ref: common/led-arrow-sm@1, id: led-port-39, skin: down, at: [261.78, 22.1], group: port-leds,
+        rel-pos: 39, for: csfp-37-39}
+      - {ref: common/led-arrow-sm@1, id: led-port-40, skin: up, at: [264.78, 22.1], group: port-leds,
+        rel-pos: 40, for: csfp-38-40}
+      - ref: std/sfp-ganged@1
+        id: csfp-42-44
+        at: [271.52, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 22
+        attrs: {media: sfp, csfp: true, logical-ports: 42 44}
+      - ref: std/sfp-ganged@1
+        id: csfp-41-43
+        at: [271.52, 25.38]
+        group: csfp
+        rel-pos: 21
+        attrs: {media: sfp, csfp: true, logical-ports: 41 43}
+      - {ref: common/led-arrow-sm@1, id: led-port-41, skin: down, at: [273.02, 22.1], group: port-leds,
+        rel-pos: 41, for: csfp-41-43}
+      - {ref: common/led-arrow-sm@1, id: led-port-42, skin: up, at: [276.02, 22.1], group: port-leds,
+        rel-pos: 42, for: csfp-42-44}
+      - {ref: common/led-arrow-sm@1, id: led-port-43, skin: down, at: [279.02, 22.1], group: port-leds,
+        rel-pos: 43, for: csfp-41-43}
+      - {ref: common/led-arrow-sm@1, id: led-port-44, skin: up, at: [282.02, 22.1], group: port-leds,
+        rel-pos: 44, for: csfp-42-44}
+      - ref: std/sfp-ganged@1
+        id: csfp-46-48
+        at: [288.76, 10.42]
+        rotate: 180
+        group: csfp
+        rel-pos: 24
+        attrs: {media: sfp, csfp: true, logical-ports: 46 48}
+      - ref: std/sfp-ganged@1
+        id: csfp-45-47
+        at: [288.76, 25.38]
+        group: csfp
+        rel-pos: 23
+        attrs: {media: sfp, csfp: true, logical-ports: 45 47}
+      - {ref: common/led-arrow-sm@1, id: led-port-45, skin: down, at: [290.26, 22.1], group: port-leds,
+        rel-pos: 45, for: csfp-45-47}
+      - {ref: common/led-arrow-sm@1, id: led-port-46, skin: up, at: [293.26, 22.1], group: port-leds,
+        rel-pos: 46, for: csfp-46-48}
+      - {ref: common/led-arrow-sm@1, id: led-port-47, skin: down, at: [296.26, 22.1], group: port-leds,
+        rel-pos: 47, for: csfp-45-47}
+      - {ref: common/led-arrow-sm@1, id: led-port-48, skin: up, at: [299.26, 22.1], group: port-leds,
+        rel-pos: 48, for: csfp-46-48}
+      - ref: common/rj45-eth@1
+        id: port-46
+        at: [306.66, 9.02]
+        rotate: 180
+        group: rj45-combo
+        rel-pos: 46
+        attrs: {media: rj45, speed: 1g, combo-with: csfp-46-48}
+      - ref: std/rj45@2
+        id: port-45
+        at: [306.66, 23.98]
+        group: rj45-combo
+        rel-pos: 45
+        attrs: {media: rj45, speed: 1g, combo-with: csfp-45-47}
+      - ref: common/rj45-eth@1
+        id: port-48
+        at: [326.02, 9.02]
+        rotate: 180
+        group: rj45-combo
+        rel-pos: 48
+        attrs: {media: rj45, speed: 1g, combo-with: csfp-46-48}
+      - ref: std/rj45@2
+        id: port-47
+        at: [326.02, 23.98]
+        group: rj45-combo
+        rel-pos: 47
+        attrs: {media: rj45, speed: 1g, combo-with: csfp-45-47}
+      - ref: std/sfp-ganged@1
+        id: port-50
+        at: [345.06, 10.42]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 50
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: port-49
+        at: [345.06, 25.38]
+        group: sfp-plus
+        rel-pos: 49
+        attrs: {media: sfp-plus, speed: 10g}
+      - {ref: common/led-arrow-sm@1, id: led-port-49, skin: down, at: [346.56, 22.1], group: port-leds,
+        rel-pos: 49, for: port-49}
+      - {ref: common/led-arrow-sm@1, id: led-port-50, skin: up, at: [355.56, 22.1], group: port-leds,
+        rel-pos: 50, for: port-50}
+      - ref: std/sfp-ganged@1
+        id: port-52
+        at: [362.65, 10.42]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 52
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: port-51
+        at: [362.65, 25.38]
+        group: sfp-plus
+        rel-pos: 51
+        attrs: {media: sfp-plus, speed: 10g}
+      - {ref: common/led-arrow-sm@1, id: led-port-51, skin: down, at: [364.15, 22.1], group: port-leds,
+        rel-pos: 51, for: port-51}
+      - {ref: common/led-arrow-sm@1, id: led-port-52, skin: up, at: [373.15, 22.1], group: port-leds,
+        rel-pos: 52, for: port-52}
+      - ref: std/qsfp-ganged@1
+        id: port-54
+        at: [380.54, 10.83]
+        rotate: 180
+        group: qsfp-plus
+        rel-pos: 54
+        attrs: {media: qsfp, speed: 20g}
+      - ref: std/qsfp-ganged@1
+        id: port-53
+        at: [380.54, 25.79]
+        group: qsfp-plus
+        rel-pos: 53
+        attrs: {media: qsfp, speed: 20g}
+      - {ref: common/led-arrow-sm@1, id: led-port-53, skin: down, at: [381.67, 22.1], group: port-leds,
+        rel-pos: 53, for: port-53}
+      - {ref: common/led-arrow-sm@1, id: led-port-54, skin: up, at: [395.67, 22.1], group: port-leds,
+        rel-pos: 54, for: port-54}
+      - ref: std/rj45@2
+        id: console
+        at: [403.45, 9.02]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/rj45@2
+        id: mgmt-eth
+        at: [403.45, 23.98]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, role: mgmt, speed: 1g}
+      - {ref: common/led-rect-sm@1, id: led-pwr, at: [426.2, 15.0], group: leds, rel-pos: 1, for: chassis}
+      - {ref: common/led-rect-sm@1, id: led-sys, at: [426.2, 19.9], group: leds, rel-pos: 2, for: chassis}
+      - ref: std/c14-inlet@1
+        id: power-in
+        at: [6.24, 14.64]
+        group: power
+        rel-pos: 1
+        attrs: {media: c14, role: power}
+      - {ref: common/ground-lug@1, id: ground, at: [44.9, 13.7], group: grounding, rel-pos: 1}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {at: [109.1, 4.85], size: [25.0, 25.0], rx: 12.5, fill: '#8e949a'}
+      - {at: [101.8, 2.3], size: [39.6, 30.1], pattern: vent, vent: 40}
+      - {at: [227.0, 4.85], size: [25.0, 25.0], rx: 12.5, fill: '#8e949a'}
+      - {at: [219.7, 2.3], size: [39.6, 30.1], pattern: vent, vent: 40}
+      - {at: [338.6, 4.85], size: [25.0, 25.0], rx: 12.5, fill: '#8e949a'}
+      - {at: [331.3, 2.3], size: [39.6, 30.1], pattern: vent, vent: 40}
+  top:
+    size: {w: 440.0, h: 220.0}
+    panel:
+      decor:
+      - {at: [2.0, 20.0], size: [436.0, 1.2], fill: '#1b1e21', sink: 1}
+  bottom:
+    size: {w: 440.0, h: 220.0}
+    components:
+      placements:
+      - {ref: common/compliance-sticker@1, id: bottom-label, at: [110.0, 7.0], group: furniture, rel-pos: 3}
+  left:
+    size: {w: 220.0, h: 44.0}
+    panel:
+      decor:
+      - {at: [0.0, 2.5], size: [220.0, 1.4], fill: '#1b1e21', sink: 1}
+  right:
+    size: {w: 220.0, h: 44.0}
+    panel:
+      decor:
+      - {at: [0.0, 2.5], size: [220.0, 1.4], fill: '#1b1e21', sink: 1}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The AC machine as the datasheet's base column describes it, every cage empty. No ordering table
+      exists to name an orderable build.
+datasheet:
+  title: Edgecore ECS4530 Series L2+/L3 Lite Gigabit Ethernet CSFP Switch data sheet
+  sha256: c1cb306520292e0a4cff5b850fca7c802db3608e89901b42c11be8fbfc2e439b

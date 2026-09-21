@@ -80,6 +80,12 @@ IFACE_TYPE = {
     ("qsfp", "200g"): "200gbase-x-qsfp56",  # s9301-32db, s9601-104bc: media qsfp56
     ("qsfp", "100g"): "100gbase-x-qsfp28",
     ("qsfp", "40g"): "40gbase-x-qsfpp",
+    # A 20G QSFP+ IS STILL A QSFP+ CAGE. The ECS4530-54CSFP's two uplinks are sold as
+    # '20G QSFP+ Uplink' - a 40G-class cage the switch runs at half rate - and a DCIM
+    # interface type names the slot's standard, not the rate a vendor configures in it,
+    # which is why every other QSFP+ here is 40gbase-x-qsfpp too. There is no 20G QSFP
+    # standard to name instead.
+    ("qsfp", "20g"): "40gbase-x-qsfpp",
     # XFP predates SFP+ and is nobody's substring, so the family test simply did
     # not look for it and the MX80's ports never typed. PART_IFACE has spelled it
     # this way all along for module ports; a test holds the two in step.
