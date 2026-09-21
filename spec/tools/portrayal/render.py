@@ -821,6 +821,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-profile-y", ",".join(f"{y:g}:{o:g}" for y, o in feat["profile-y"]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("hole-color"):
+                    node.set("data-z-hole-color", feat["hole-color"])
                 if feat.get("pocket"):
                     # A POCKET IS A CAVITY THE KIT ALREADY KNOWS HOW TO BUILD.
                     # relief.js collects every `[data-depth]` as a recess with
@@ -914,6 +916,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-profile-y", ",".join(f"{y:g}:{o:g}" for y, o in feat["profile-y"]))
                 if feat.get("color"):
                     node.set("data-z-color", feat["color"])
+                if feat.get("hole-color"):
+                    node.set("data-z-hole-color", feat["hole-color"])
                 if feat.get("pocket"):
                     # A POCKET IS A CAVITY THE KIT ALREADY KNOWS HOW TO BUILD.
                     # relief.js collects every `[data-depth]` as a recess with

@@ -51,6 +51,201 @@ export function cavitySeatsOn(c, o, eps = 0.01) {
     && c.x + c.w <= o.x + o.w + eps && c.y + c.h <= o.y + o.h + eps;
 }
 
+// A DEPTH THAT VARIES ACROSS A NODE, INSIDE THE NODE'S OWN OUTLINE. `profile`
+// and `profile-y` built their height field over the bounding box, so a sloped
+// moulding could only be a rectangle; the MaiaEdge PBC-2000's centre pane has
+// ends that ARE its windows' ends - chamfer, vertical, chamfer - and a box
+// either ran into the windows or stopped short of the chamfer corners.
+//
+// Every grid cell is intersected with each outline shell (Sutherland-Hodgman:
+// the cell is convex, so it can clip a concave shell), the pieces are
+// ear-clipped, and every vertex is stood at depthAt(x, y). Grid lines sit on
+// the profiles' knots, so a knee is still a knee. The skirt drops every outline
+// point from the surface to `lift`, so the walls follow the outline too.
+// Coordinates are node-local mm.
+//
+// HOLES ARE CUT, because the bezel turned out to be the whole face: one sloped
+// plate with the two octagonal windows through it. Each hole is bridged into
+// its shell by a zero-width cut straight up from its topmost point - the
+// keyhole earcut uses - so the region is one simple polygon again and the
+// cell clipping above needs no change. The walls of holes come back apart
+// from the outer wall (`holeSkirt`), because on the hardware they are a
+// different colour: a window's edge is the amber bead.
+//
+// `regions` is [{shell, holes: [ring...]}], rings as [[x, y]...].
+export function shapedHeightField(regions, xs, ys, depthAt, lift = 0) {
+  const clip = (poly, keep, cut) => {
+    const out = [];
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], b = poly[(i + 1) % poly.length];
+      const ia = keep(a), ib = keep(b);
+      if (ia) out.push(a);
+      if (ia !== ib) out.push(cut(a, b));
+    }
+    return out;
+  };
+  const atX = (x) => (a, b) => [x, a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0])];
+  const atY = (y) => (a, b) => [a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]), y];
+  const signed = r => {
+    let s = 0;
+    for (let i = 0, j = r.length - 1; i < r.length; j = i++)
+      s += (r[j][0] - r[i][0]) * (r[j][1] + r[i][1]);
+    return s / 2;
+  };
+  const tidy = poly => {
+    const out = [];
+    for (const p of poly) {
+      const q = out[out.length - 1];
+      if (!q || Math.abs(q[0] - p[0]) > 1e-9 || Math.abs(q[1] - p[1]) > 1e-9) out.push(p);
+    }
+    while (out.length > 1 && Math.abs(out[0][0] - out[out.length - 1][0]) < 1e-9
+           && Math.abs(out[0][1] - out[out.length - 1][1]) < 1e-9) out.pop();
+    return out;
+  };
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const earclip = (poly) => {
+    // counter-clockwise in a y-down frame is clockwise on paper; normalise so
+    // every convex corner has a positive cross product
+    const P = signed(poly) < 0 ? poly.slice().reverse() : poly.slice();
+    const idx = P.map((_, i) => i), tris = [];
+    let guard = 0;
+    while (idx.length > 3 && guard++ < 10000) {
+      let found = false;
+      for (let k = 0; k < idx.length; k++) {
+        const i0 = idx[(k + idx.length - 1) % idx.length], i1 = idx[k], i2 = idx[(k + 1) % idx.length];
+        const [a, b, c] = [P[i0], P[i1], P[i2]];
+        const cr = cross(a, b, c);
+        if (cr < -1e-12) continue;                    // reflex corner
+        if (Math.abs(cr) <= 1e-12) { idx.splice(k, 1); found = true; break; }  // collinear: drop it
+        let blocked = false;
+        for (const j of idx) {
+          if (j === i0 || j === i1 || j === i2) continue;
+          const p = P[j];
+          if (cross(a, b, p) > 1e-12 && cross(b, c, p) > 1e-12 && cross(c, a, p) > 1e-12) { blocked = true; break; }
+        }
+        if (blocked) continue;
+        tris.push([a, b, c]);
+        idx.splice(k, 1);
+        found = true;
+        break;
+      }
+      if (!found) break;
+    }
+    if (idx.length === 3) tris.push(idx.map(i => P[i]));
+    return tris;
+  };
+
+  const orient = (r, ccw) => (signed(r) < 0) === ccw ? r.slice() : r.slice().reverse();
+  const bridge = (shell, holes) => {
+    let outer = orient(tidy(shell), true);
+    const hs = holes.map(h => orient(tidy(h), false))
+      .sort((a, b) => Math.min(...a.map(p => p[1])) - Math.min(...b.map(p => p[1])));
+    for (const h of hs) {
+      let hi = 0;
+      for (let k = 1; k < h.length; k++) if (h[k][1] < h[hi][1]) hi = k;
+      const [hx, hy] = h[hi];
+      let best = -1, by = -Infinity;
+      for (let k = 0; k < outer.length; k++) {
+        const a = outer[k], b = outer[(k + 1) % outer.length];
+        const lo = Math.min(a[0], b[0]), up = Math.max(a[0], b[0]);
+        if (!(hx >= lo && hx < up)) continue;
+        const y = a[1] + (b[1] - a[1]) * (hx - a[0]) / (b[0] - a[0]);
+        if (y < hy && y > by) { by = y; best = k; }
+      }
+      if (best < 0) continue;            // no edge above it: not inside this shell
+      const p = [hx, by];
+      const loop = h.slice(hi).concat(h.slice(0, hi), [h[hi]]);
+      outer = outer.slice(0, best + 1).concat([p], loop, [p], outer.slice(best + 1));
+    }
+    return outer;
+  };
+
+  // Douglas-Peucker: the outline arrives sampled every 0.25 mm, and the ear
+  // clipper below is quadratic in it. Walls keep every sample; only the
+  // triangulation works from the simplified ring.
+  const simplify = (r, eps = 0.02) => {
+    if (r.length < 4) return r.slice();
+    const keep = new Array(r.length).fill(false);
+    const seg = (p, a, b) => {
+      const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
+      return L < 1e-12 ? Math.hypot(p[0] - a[0], p[1] - a[1])
+                       : Math.abs(dy * p[0] - dx * p[1] + b[0] * a[1] - b[1] * a[0]) / L;
+    };
+    const stack = [[0, r.length - 1]];
+    keep[0] = keep[r.length - 1] = true;
+    // split the closed ring at its far point so the open run has two ends
+    let far = 0, fd = -1;
+    for (let k = 1; k < r.length; k++) {
+      const d = Math.hypot(r[k][0] - r[0][0], r[k][1] - r[0][1]);
+      if (d > fd) { fd = d; far = k; }
+    }
+    keep[far] = true;
+    stack.length = 0; stack.push([0, far], [far, r.length - 1]);
+    while (stack.length) {
+      const [i0, i1] = stack.pop();
+      let bi = -1, bd = eps;
+      for (let k = i0 + 1; k < i1; k++) {
+        const d = seg(r[k], r[i0], r[i1]);
+        if (d > bd) { bd = d; bi = k; }
+      }
+      if (bi >= 0) { keep[bi] = true; stack.push([i0, bi], [bi, i1]); }
+    }
+    return r.filter((_, k) => keep[k]);
+  };
+  const cutTriangle = (tri, x0, x1, y0, y1) => {
+    let p = tri;
+    p = clip(p, q => q[0] >= x0, atX(x0));
+    if (p.length) p = clip(p, q => q[0] <= x1, atX(x1));
+    if (p.length) p = clip(p, q => q[1] >= y0, atY(y0));
+    if (p.length) p = clip(p, q => q[1] <= y1, atY(y1));
+    return tidy(p);
+  };
+
+  const pos = [], idx = [];
+  const put = (x, y) => { pos.push(x, y, depthAt(x, y)); return pos.length / 3 - 1; };
+  for (const {shell: rawShell, holes = []} of regions) {
+    // TRIANGULATE THE WHOLE REGION FIRST, THEN CUT EACH TRIANGLE BY THE GRID.
+    // Clipping a concave outline against a cell leaves edges running along the
+    // cell boundary, and next to a window's corner those enclosed part of the
+    // window. A triangle is convex, so cutting it by a cell is exact; the grid
+    // is still what puts a vertex on every profile knot.
+    const shell = simplify(rawShell);
+    const region = holes.length ? bridge(shell, holes.map(h => simplify(h))) : shell;
+    for (const tri of earclip(tidy(region))) {
+      const bx0 = Math.min(tri[0][0], tri[1][0], tri[2][0]), bx1 = Math.max(tri[0][0], tri[1][0], tri[2][0]);
+      const by0 = Math.min(tri[0][1], tri[1][1], tri[2][1]), by1 = Math.max(tri[0][1], tri[1][1], tri[2][1]);
+      for (let j = 0; j + 1 < ys.length; j++) {
+        if (ys[j + 1] <= by0 || ys[j] >= by1) continue;
+        for (let i = 0; i + 1 < xs.length; i++) {
+          if (xs[i + 1] <= bx0 || xs[i] >= bx1) continue;
+          const p = cutTriangle(tri, xs[i], xs[i + 1], ys[j], ys[j + 1]);
+          if (p.length < 3 || Math.abs(signed(p)) < 1e-9) continue;
+          for (let k = 1; k + 1 < p.length; k++) {      // convex: a fan will do
+            if (Math.abs(cross(p[0], p[k], p[k + 1])) < 1e-9) continue;
+            idx.push(put(...p[0]), put(...p[k]), put(...p[k + 1]));
+          }
+        }
+      }
+    }
+  }
+  const wall = rings => {
+    const spos = [], sidx = [];
+    for (const ring of rings) {
+      const base = spos.length / 6;
+      for (const [x, y] of ring) spos.push(x, y, depthAt(x, y), x, y, lift);
+      for (let k = 0; k < ring.length; k++) {
+        const a = 2 * (base + k), b = a + 1;
+        const c = 2 * (base + (k + 1) % ring.length), d = c + 1;
+        sidx.push(a, b, c, b, d, c);
+      }
+    }
+    return {pos: spos, idx: sidx};
+  };
+  return {top: {pos, idx},
+          skirt: wall(regions.map(r => r.shell)),
+          holeSkirt: wall(regions.flatMap(r => r.holes || []))};
+}
+
 export function bodyBoxes(body, faceW, faceH) {
   const color = body.color || '#3a3f44';
   if (body.boxes && body.boxes.length) {
@@ -936,6 +1131,7 @@ export async function extractRelief(url, scope) {
             knurl: !!el.dataset.zKnurl,
             thread: el.dataset.zThread && +el.dataset.zThread,
             color: el.dataset.zColor || null,
+            holeColor: el.dataset.zHoleColor || null,
             rings: el.dataset.zShape ? ringsOf(el) : null,
             profile: el.dataset.zProfile
               ? el.dataset.zProfile.split(',').map(p => p.split(':').map(Number)) : null,
@@ -1539,45 +1735,84 @@ export async function buildFaceRelief(F, ctx) {
           return [...set].sort((a, b) => a - b);
         };
         const xs = knots(px, o.w), ys = knots(py, o.h);
-        const nx = xs.length, ny = ys.length;
-        const pos = [], uvs = [], idx = [];
-        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-          pos.push(LX(o.x + xs[i], 0), LY(o.y + ys[j], 0), depthAt(xs[i], ys[j]));
-          uvs.push(xs[i] / o.w, 1 - ys[j] / o.h);
+        if (o.rings && o.rings.length) {
+          // `shape: true` beside a profile: the same surface, cut to the
+          // node's outline, with its walls along the outline rather than the
+          // box - see shapedHeightField
+          const local = r => r.map(([x, y]) => [x - o.x, y - o.y]);
+          const regions = o.rings.map(r => ({shell: local(r.shell), holes: r.holes.map(local)}));
+          const g = shapedHeightField(regions, xs, ys, depthAt, o.lift);
+          const toWorld = (P) => {
+            const out = [];
+            for (let i = 0; i < P.length; i += 3)
+              out.push(LX(o.x + P[i], 0), LY(o.y + P[i + 1], 0), P[i + 2]);
+            return out;
+          };
+          const front = new THREE.BufferGeometry();
+          front.setAttribute('position', new THREE.Float32BufferAttribute(toWorld(g.top.pos), 3));
+          const uvs = [];
+          for (let i = 0; i < g.top.pos.length; i += 3)
+            uvs.push(g.top.pos[i] / o.w, 1 - g.top.pos[i + 1] / o.h);
+          front.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+          front.setIndex(g.top.idx);
+          front.computeVertexNormals();
+          faceTex.side = THREE.DoubleSide;
+          addTo(new THREE.Mesh(front, faceTex));
+          const skirt = new THREE.BufferGeometry();
+          skirt.setAttribute('position', new THREE.Float32BufferAttribute(toWorld(g.skirt.pos), 3));
+          skirt.setIndex(g.skirt.idx);
+          skirt.computeVertexNormals();
+          addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
+          if (g.holeSkirt.idx.length) {
+            // a window's edge is its own colour - the PBC-2000's amber bead
+            const hs = new THREE.BufferGeometry();
+            hs.setAttribute('position', new THREE.Float32BufferAttribute(toWorld(g.holeSkirt.pos), 3));
+            hs.setIndex(g.holeSkirt.idx);
+            hs.computeVertexNormals();
+            addTo(new THREE.Mesh(hs, new THREE.MeshLambertMaterial(
+              {color: o.holeColor || o.color, side: THREE.DoubleSide})));
+          }
+        } else {
+          const nx = xs.length, ny = ys.length;
+          const pos = [], uvs = [], idx = [];
+          for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+            pos.push(LX(o.x + xs[i], 0), LY(o.y + ys[j], 0), depthAt(xs[i], ys[j]));
+            uvs.push(xs[i] / o.w, 1 - ys[j] / o.h);
+          }
+          for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) {
+            const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1;
+            idx.push(a, c, b, b, c, d);
+          }
+          const front = new THREE.BufferGeometry();
+          front.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+          front.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+          front.setIndex(idx);
+          front.computeVertexNormals();
+          faceTex.side = THREE.DoubleSide;   // a mirrored face reverses the winding
+          addTo(new THREE.Mesh(front, faceTex));
+          // skirts: the perimeter dropped to the face, so the ends and the rails
+          // are the slopes the profiles give them and not open edges
+          const sp = [], si = [];
+          const ring = [];
+          for (let i = 0; i < nx; i++) ring.push([xs[i], ys[0]]);
+          for (let j = 1; j < ny; j++) ring.push([xs[nx - 1], ys[j]]);
+          for (let i = nx - 2; i >= 0; i--) ring.push([xs[i], ys[ny - 1]]);
+          for (let j = ny - 2; j > 0; j--) ring.push([xs[0], ys[j]]);
+          for (let k = 0; k < ring.length; k++) {
+            const [x, y] = ring[k];
+            sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
+                    LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
+          }
+          for (let k = 0; k < ring.length; k++) {
+            const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
+            si.push(a, b, c, b, d, c);
+          }
+          const skirt = new THREE.BufferGeometry();
+          skirt.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+          skirt.setIndex(si);
+          skirt.computeVertexNormals();
+          addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
         }
-        for (let j = 0; j + 1 < ny; j++) for (let i = 0; i + 1 < nx; i++) {
-          const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1;
-          idx.push(a, c, b, b, c, d);
-        }
-        const front = new THREE.BufferGeometry();
-        front.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-        front.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
-        front.setIndex(idx);
-        front.computeVertexNormals();
-        faceTex.side = THREE.DoubleSide;   // a mirrored face reverses the winding
-        addTo(new THREE.Mesh(front, faceTex));
-        // skirts: the perimeter dropped to the face, so the ends and the rails
-        // are the slopes the profiles give them and not open edges
-        const sp = [], si = [];
-        const ring = [];
-        for (let i = 0; i < nx; i++) ring.push([xs[i], ys[0]]);
-        for (let j = 1; j < ny; j++) ring.push([xs[nx - 1], ys[j]]);
-        for (let i = nx - 2; i >= 0; i--) ring.push([xs[i], ys[ny - 1]]);
-        for (let j = ny - 2; j > 0; j--) ring.push([xs[0], ys[j]]);
-        for (let k = 0; k < ring.length; k++) {
-          const [x, y] = ring[k];
-          sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
-                  LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
-        }
-        for (let k = 0; k < ring.length; k++) {
-          const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
-          si.push(a, b, c, b, d, c);
-        }
-        const skirt = new THREE.BufferGeometry();
-        skirt.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
-        skirt.setIndex(si);
-        skirt.computeVertexNormals();
-        addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
       } else if (o.rings && o.rings.length) {
         // THE SHAPE, NOT THE BOX. `shape: true` on the feature. The face art was
         // always the node's own; it was the SIDES that followed the bounding box,
