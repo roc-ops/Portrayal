@@ -11,7 +11,7 @@
 //
 // Cases, chosen by argv[2]:
 //   parity    - stdin JSON; nestedCages + applyOccupantOverrides on the built
-//               face, and per key what the kit seated: parent, transform,
+//               face with its optics stripped, and per key what the kit seated: parent, transform,
 //               attributes, children, and how many optics the cage holds
 //   overrides - applyOccupantOverrides on a nested key, on a fake DOM
 //   race      - two swaps in flight on one nested cage
@@ -37,6 +37,8 @@ if (mode === 'parity') {
     const cages = m.nestedCages(root, compByRef);
     const loadSkin = async ref => comps[ref] && skins[ref]
       ? {comp: comps[ref], text: skins[ref]} : null;
+    const before = Object.fromEntries(Object.keys(overrides)
+      .map(k => [k, occupantsOf(root, k).length]));
     const res = await m.applyOccupantOverrides(root, cages, overrides, loadSkin);
     const empty = n => n.tagName === 'style' && !n.children.length;
     const seated = {};
@@ -59,7 +61,7 @@ if (mode === 'parity') {
                        mirror: cage.mirror} : null,
       };
     }
-    out.push({device, result: res, cageIds: cages.map(c => c.id), seated});
+    out.push({device, before, result: res, cageIds: cages.map(c => c.id), seated});
   }
   console.log(JSON.stringify(out));
 }

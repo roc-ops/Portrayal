@@ -16,9 +16,10 @@ turns is complete: the C100G's SMM-300GM (cages at 90 in an upright bay), a
 C40G card (cages at 90 in a bay at 90 - a half turn on the page), and the
 MX304's LMIC16 (cages upright and at 180).
 
-The kit is handed the BUILT face - with the build's own optics in it - and
-the same override map, so it must find each cage, remove what the build
-seated and seat its own in the same parent. Every number and attribute it
+The kit is handed the BUILT face with EVERY optic taken out of it (the
+build's own stay behind as the reference) and the same override map, so it
+must find each cage off the card and seat its own in the same parent - an
+optic the kit did not seat cannot be in the face to be compared. Every number and attribute it
 writes is compared with what render.py wrote, and both optics' composed
 device-frame maps are compared as well, so a kit optic in the right parent
 at the wrong place cannot pass.
@@ -64,6 +65,21 @@ def spec_of(el):
     """An element tree in the fake DOM's JSON form (tests/js/fake-dom.mjs)."""
     return {"t": local(el.tag), "a": dict(el.attrib),
             "c": [spec_of(k) for k in el if isinstance(k.tag, str)]}
+
+
+def without_occupants(el):
+    """`el` in fake-dom form with EVERY seated optic taken out - what the kit is
+    handed. The build's optics stay in `built` as the reference; left in the
+    face, a kit that counted a card cage as applied and seated nothing would
+    leave the build's optic standing, identical to the answer, and pass."""
+    return {"t": local(el.tag), "a": dict(el.attrib),
+            "c": [without_occupants(k) for k in el
+                  if isinstance(k.tag, str) and k.get("data-behaviour") != "occupies"]}
+
+
+def count_occupants(spec):
+    return (spec["a"].get("data-behaviour") == "occupies") + sum(
+        count_occupants(k) for k in spec["c"])
 
 
 def descendants(el):
@@ -179,7 +195,8 @@ def fitted(tmp, dist_comps, dist, vendor, name, config, bays, occupants, card_re
     skins = {r: json.dumps(spec_of(ET.parse(skin_file(dist, dist_comps[r])).getroot()))
              for r in occupants.values()}
     return {"device": name, "card": card_ref, "built": built,
-            "payload": {"device": name, "face": spec_of(root), "comps": comps, "skins": skins,
+            "payload": {"device": name, "face": without_occupants(root), "comps": comps,
+                        "skins": skins,
                         "overrides": {drawing_key(k): r for k, r in occupants.items()}}}
 
 
@@ -219,6 +236,11 @@ def test_the_matrix_is_the_one_claimed(parity):
 def test_the_kit_seats_an_optic_on_a_card_where_the_build_does(parity):
     cases, got = parity
     assert [g["device"] for g in got] == [c["device"] for c in cases]
+    # the kit starts from a face with NO optic in it, so whatever it holds after
+    # is what the kit seated - never the build's left standing
+    for case, g in zip(cases, got):
+        assert count_occupants(case["payload"]["face"]) == 0, case["device"]
+        assert all(v == 0 for v in g["before"].values()), (case["device"], g["before"])
     worst, n = 0.0, 0
     for case, g in zip(cases, got):
         assert g["result"] == {"applied": len(case["built"]), "refused": [], "failed": []}, (
@@ -234,7 +256,7 @@ def test_the_kit_seats_an_optic_on_a_card_where_the_build_does(parity):
             assert entry["mate"] == pub["mate"] and entry["rotate"] == pub.get("rotate"), where
             assert entry["modulePath"] == want["parent"] and entry["moduleIsElement"], where
             assert entry["carrier"] == case["card"], where
-            # ONE optic - the build's was removed, the kit's put in its place
+            # ONE optic, and it is the kit's: the face it was handed had none
             assert have["count"] == 1, f"{where}: {have['count']} optics in the cage"
             # THE SAME PARENT: the card's group, where render.py appends it
             assert have["parent"] == want["parent"] == key.rsplit("/", 1)[0], (

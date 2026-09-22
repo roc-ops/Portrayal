@@ -487,6 +487,17 @@ export function nestedCages(rootEl, compByRef) {
 
 // relief.js's reading of depth: `data-z-lift` summed up the ancestor chain,
 // from the card's group to the root.
+//
+// THE THIRD SPELLING OF ONE WALK, on purpose, and the other two are
+// relief.js's `nodeTools(svg).liftOf` (the 3D extractor, on `dataset` and
+// `parentElement` of a live SVG) and `resolveCablePoint`'s `ancestors` sum
+// (cablePoints, over a plain list). Not shared: liftOf reads `dataset` and
+// stops at its own svg, the cable sum takes no DOM at all, and this one must
+// walk a parsed face or a fake-dom tree that has only getAttribute and
+// parentNode - three callers with three shapes of input, and a helper for a
+// four-line loop would be a new module for all of them to import. If the
+// rule changes - an ancestor stops counting, `out` starts to - it changes in
+// all three.
 function seatDepth(el) {
   let total = 0;
   for (let n = el; n && typeof n.getAttribute === 'function'; n = n.parentNode)
