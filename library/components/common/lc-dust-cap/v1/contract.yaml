@@ -1,0 +1,101 @@
+format: 1
+kind: component
+name: lc-dust-cap
+version: 1.0.0
+class: cap
+behaviour: occupies
+mates: lc
+profile: networking
+description: >-
+  The white dust cap an idle LC port ships with - a 4.7 square lump plugging
+  the bore square, with a rounded-square inset moulded into its front. An
+  OCCUPANT of the bore it plugs (std/lc-bore@3 and anything composing it), so
+  it comes out, swaps for a plug, or leaves the port empty. It was drawn as
+  part of common/lc-duplex-adapter until @4 took it off; its figures move here
+  unchanged. No standard governs a cap's shape, only the interface it plugs,
+  which is why this is `common/` and not `generic/` - the argument
+  common/lc-boot@1 makes at length for a boot.
+size: {w: 4.7, h: 4.7}
+size-confidence: {w: photo-measured, h: photo-measured}
+unplaced: >-
+  nothing declares it yet. A cap is the SHIPPED state of an idle port and is
+  declared as the bore's `default:` on the adapter that composes it
+  (docs/pluggables-caps-design.md, "The shipped default"); that step is the
+  adapters' own, and until it lands no device reaches this part. It is
+  exercised as a configured occupant in spec/tests/test_dust_caps.py, on the
+  Smartoptics bores this reading came off.
+provenance:
+  size: >-
+    MOVED, NOT RE-DERIVED, from common/lc-duplex-adapter@4's own
+    `provenance.dust-caps`: 'one simplex cap per bore, 4.7 x 4.7 over each bore
+    square (x 1.125 and 7.375, y 3.15), white #e9ecef'. The 4.7 square is the
+    bore square of std/lc-bore@3 - the cap plugs the opening and is the size of
+    it - so the figure is as good as that opening's, which is dimensioned twice
+    over on two independent documents (std/lc-bore@3's own `provenance.size`).
+    The reading it came from is a photograph, which is why it is
+    photo-measured here rather than borrowing the bore's `drawing`.
+  mate: >-
+    the centre of the 4.7 square, (2.35, 2.35) - the same point std/lc-bore@3
+    puts its own `mate` at, because the cap plugs that square concentrically.
+    Seating it on a Smartoptics bore reproduces the position @3 drew the cap
+    at: the bore's mate lands at (3.475, 5.5) in the adapter, and a cap whose
+    own mate is its centre is then drawn at (1.125, 3.15), which is the `at`
+    the adapter's own `elements` carried.
+  thickness: >-
+    6.35, THE CAP'S OWN PROUDNESS, and it is a subtraction rather than a new
+    reading. common/lc-duplex-adapter@4 records the cap's front at `out: 9.525`
+    - an ABSOLUTE distance from the panel - standing on a bezel whose own `out`
+    is 3.175. As an occupant the cap is seated AT that bezel (the bore's
+    presented lift is 3.175, which the build puts on the cap's group as
+    `data-z-lift`), so what belongs in this contract is the difference:
+    9.525 - 3.175 = 6.35. The adapter's own note already gives that number as
+    the cap's thickness - 'a quarter inch proud of it is 3.175 + 6.35 = 9.525,
+    and the cap is 6.35 thick'.
+  inset: >-
+    2.7 x 2.7 centred on the cap's front, 0.9 deep. From the same
+    `provenance.dust-caps` key: 'a 2.7 x 2.7 inset 0.9 deep (estimated)'. THE
+    DEPTH IS THE ONLY INVENTED FIGURE - the adapter's reading fixes that there
+    IS 'a rounded-square inset moulded into its front' and nothing about how
+    deep. A POCKET AND NOT A SINK: a `sink` measures down from a cavity floor
+    and means nothing outside one, and the cap is a solid lump; written as a
+    sink the inset was collected by nothing and never built (#230).
+  colour: >-
+    #e9ecef for the cap and #d3d8dd for the inset, carried across from
+    common/lc-duplex-adapter@3's skin, which sampled them off the issue's own
+    photograph of a capped DCP port.
+  spigot: >-
+    NOT MODELLED. common/lc-duplex-adapter@4: 'The spigot that seats it into
+    the bore is not modelled - it sits inside the recess and is never visible'.
+    This part is the lump that shows, and its depth is the part that stands
+    outside the bore.
+elements:
+  body: {at: [0.0, 0.0], size: [4.7, 4.7], class: cap}
+connection-points:
+  mate: {at: [2.35, 2.35], direction: front}
+relief:
+  features:
+    - node: body
+      out: 6.35
+      color: '#e9ecef'
+      confidence: photo-measured
+      source: >-
+        common/lc-duplex-adapter@4's `provenance.dust-caps` - 'photo - unused
+        ports carry a white cap standing about a quarter inch proud of the jack
+        face'. THE JACK FACE IS THE BEZEL'S FRONT, and this cap is seated on
+        it, so the quarter inch IS this figure: 6.35. The adapter carried it as
+        an absolute 9.525 from the panel because the cap was part of the
+        adapter; an occupant's relief is measured from its own seat, and the
+        seat already carries the bezel's 3.175.
+    - node: inset
+      pocket: 0.9
+      lift: 6.35
+      confidence: estimated
+      source: >-
+        common/lc-duplex-adapter@4's `provenance.dust-caps` fixes that there is
+        'a rounded-square inset moulded into its front' and nothing about how
+        deep; only the 0.9 is invented. Lifted to 6.35 - the cap's own front -
+        because it is moulded INTO that front and lifts are summed down the
+        tree, so a pocket written at the cap's face sits at the face and cuts
+        back into it. Written without the lift it would sit at the cap's seat,
+        behind its own front by the whole thickness.
+skins: [default]

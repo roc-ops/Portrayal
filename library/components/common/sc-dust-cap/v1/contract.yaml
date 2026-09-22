@@ -1,0 +1,97 @@
+format: 1
+kind: component
+name: sc-dust-cap
+version: 1.0.0
+class: cap
+behaviour: occupies
+mates: sc
+profile: networking
+description: >-
+  The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter
+  raised grip across its middle for finger and thumb. An OCCUPANT of the
+  opening it plugs (std/sc-bore@1 and anything composing it), so it comes out,
+  swaps for a plug, or leaves the port empty. It was drawn as part of
+  common/sc-duplex-adapter until @3 took it off; its figures move here
+  unchanged. `common/` for the reason common/lc-boot@1 gives: no standard
+  governs a cap's shape, only the interface it plugs.
+size: {w: 8.8, h: 11.45}
+size-confidence: {w: photo-measured, h: photo-measured}
+unplaced: >-
+  nothing declares it yet. A cap is the SHIPPED state of an idle port and is
+  declared as the bore's `default:` on the adapter that composes it
+  (docs/pluggables-caps-design.md, "The shipped default"); that step is the
+  adapters' own, and until it lands no device reaches this part. It is
+  exercised as a configured occupant in spec/tests/test_dust_caps.py, on the
+  FHD SC cassette adapter this reading came off.
+provenance:
+  size: >-
+    MOVED, NOT RE-DERIVED, from common/sc-duplex-adapter@4's own
+    `provenance.dust-caps`: 'photo-measured on 57058.main.jpg - one black cap
+    fills each cell inside the blue frame, 8.8 x 11.45 (at 0.3, 0.9 and
+    0.3, 13.6)'.
+  mate: >-
+    (4.40, 5.45), AND IT IS NOT THE CAP'S CENTRE IN Y. The cap is centred
+    across the adapter's 9.4 frame but sits 0.275 low in its 12.7 cell: the
+    adapter puts the std/sc-bore@1 opening at (0.06, 1.85) and the cap at
+    (0.3, 0.9), so the bore's own mate at (4.64, 4.5) lands at (4.70, 6.35) in
+    the adapter while the cap's own centre is at (4.70, 6.625). This point is
+    the BORE's, expressed in the cap's frame, because that is what seats the
+    cap where the photograph puts it - drawn at (0.3, 0.9), which is the `at`
+    the adapter's own `elements` carried. The 0.275 is in the photo-measured
+    reading and is kept rather than tidied away.
+  thickness: >-
+    2.3, THE CAP'S OWN PROUDNESS, and it is a subtraction rather than a new
+    reading. common/sc-duplex-adapter@4 records the caps' fronts at `out: 3.3`
+    - an ABSOLUTE distance from the panel - standing on a frame whose own `out`
+    is 1.0. As an occupant the cap is seated AT that frame (the bore's
+    presented lift is 1.0, which the build puts on the cap's group as
+    `data-z-lift`), so what belongs here is 3.3 - 1.0 = 2.3. The adapter's own
+    relief already carried 2.3 as the lift its grip needed to reach the cap's
+    front, which is the same quantity seen from the other end.
+  grip: >-
+    3.9 x 7.0 centred on the cap, standing 0.5 proud of its face, from the same
+    `provenance.dust-caps` key - 'with a lighter raised grip 3.9 x 7.0 on its
+    centre ... Their fronts stood at `out: 3.3` on the frame's 1.0 and the
+    grips at 3.8'. 3.8 - 1.0 = 2.8 here, which is 0.5 in front of the cap's own
+    2.3. THAT 0.5 IS A GUESS and the adapter says so: 'How far it stands is not
+    shown; 0.5 is a guess, and only that it is raised is read off the render'.
+  colour: >-
+    #2b2c2e for the cap and #46484b for the grip, carried across from
+    common/sc-duplex-adapter@2's skin, which sampled them off 57058.main.jpg at
+    rgb(40,41,42) and rgb(70,72,75).
+  depth-confidence: >-
+    ESTIMATED, and inherited as such. Both figures this subtracts are marked
+    `estimated` on the adapter - read off FS's OBLIQUE side photograph of SKU
+    57058, not an orthographic one - so the difference is no better than they
+    are.
+elements:
+  body: {at: [0.0, 0.0], size: [8.8, 11.45], class: cap}
+connection-points:
+  mate: {at: [4.40, 5.45], direction: front}
+relief:
+  features:
+    - node: body
+      out: 2.3
+      color: '#2b2c2e'
+      confidence: estimated
+      source: >-
+        common/sc-duplex-adapter@4's `provenance.dust-caps` - 'Their fronts
+        stood at `out: 3.3` on the frame's 1.0 ... estimated off FS's oblique
+        side photo 57058.C'. The adapter carried the absolute 3.3 because the
+        cap was part of the adapter; an occupant's relief is measured from its
+        own seat, and the seat carries the frame's 1.0, so the cap's own figure
+        is 3.3 - 1.0 = 2.3.
+    - node: grip
+      out: 2.8
+      lift: 2.3
+      color: '#46484b'
+      confidence: estimated
+      source: >-
+        common/sc-duplex-adapter@4's `provenance.dust-caps` - 'the grips at
+        3.8', against the caps' 3.3 on the frame's 1.0: 3.8 - 1.0 = 2.8 here.
+        It is RAISED, not recessed, so it carries `out` and not `pocket`, and
+        it stands on the cap's own front - hence `lift: 2.3`, which lifts are
+        summed down the tree to reach. Written without that lift it would start
+        at the cap's seat and be built inside out, which is the fault the
+        adapter's own note records finding.
+skins: [default]

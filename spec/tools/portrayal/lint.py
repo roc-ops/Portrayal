@@ -255,7 +255,7 @@ RULES = {
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L110": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
     "L111": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
-    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint", "place the bores at the interface pitch spec/schemas/standards.yaml records and put `mate` on their midpoint - or drop the `interface:`, because an adapter off the pitch presents no duplex connector"),
+    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint and its bores at the depth that point presents", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector"),
 }
 
 
@@ -5752,12 +5752,23 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     `lc-duplex`, however its contract is written (docs/pluggables-caps-
     design.md, "The duplex host").
 
-    Three ways for the claim to be false, and all three are errors because a
+    Four ways for the claim to be false, and all four are errors because a
     wrong one offers the wrong part:
       - the wrong NUMBER of spanned parts (the registry's `spans.count`);
       - the wrong PITCH between their composed mate points;
       - a `mate` of its own that is not their MIDPOINT, which is where a duplex
-        connector's own mate lands and so where the build seats it.
+        connector's own mate lands and so where the build seats it;
+      - a spanned bore standing at a DEPTH other than the one this slot
+        presents, which is the depth a duplex connector rests on.
+
+    THE DEPTH ARM IS THE ONE A DRAWING CANNOT SHOW. A duplex cap and a simplex
+    cap are the same distance off the panel, because they plug the same hole in
+    the same face: the adapter presents `lc-duplex` at the `out` of whatever
+    relief feature its own `mate` sits `on:`, and its bores are lifted onto
+    that same face by their placements. Let the two disagree and a duplex cap
+    floats in front of, or sinks behind, the simplex cap it replaces - by a
+    figure no view of the front reveals. Both library adapters were held to
+    this by a test naming them; a rule holds the next one too.
 
     MEASURED ON THE COMPOSED MATE POINTS, not on `at`. A stacked pair and a
     side-by-side pair are the same interface turned, and their placements
@@ -5819,6 +5830,20 @@ def lint_component_spanned_geometry(path, data, lib_roots):
         err(path, "L112", f"presents {iface!r} at {list(own['at'])}, but the "
             f"midpoint of {', '.join(ids)} is {[round(c, 4) for c in mid]} - a "
             "duplex connector seats on the midpoint of the pair it fills")
+    # AND AT THE SAME DEPTH. What this slot presents is the `out` of the
+    # feature its own point sits `on:`; what a bore stands at is its
+    # placement's `lift`. A connector spanning the pair rests on the face the
+    # pair is let into, so the two are one number.
+    presented = presented_interface(data, _res)[2]
+    places = {q.get("id"): q for q in data.get("parts") or []}
+    for bid in ids:
+        got = float((places.get(bid) or {}).get("lift") or 0.0)
+        if abs(got - presented) > SPAN_TOLERANCE:
+            err(path, "L112", f"presents {iface!r} at a lift of {presented:g}, "
+                f"but its bore {bid!r} is placed at lift {got:g} - a connector "
+                "spanning the pair rests on the same face the pair is let "
+                "into, so a simplex part in the bore and a duplex part over "
+                "both would stand at different depths")
 
 
 def _spanned_default_overlap(path, where, placement, contract, resolve):
