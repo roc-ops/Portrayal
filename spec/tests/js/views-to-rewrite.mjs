@@ -38,6 +38,11 @@ out.noBaysDevice = m.viewsToRewrite(noBaysDevice, {'port-4': 'generic/sfp-lc@1'}
 // walking a device bay's own drawing (nestedBays in swap.js)
 out.nested = m.viewsToRewrite(devIndex, {'slot-1/module/ppm-1': 'generic/ppm@1'}).sort();
 
+// a cage on a seated card (#484) is a nested path too - its view is found
+// only by walking from a bay - and it is ALONE in the map when the card is
+// the build's and only its optic was chosen
+out.nestedCage = m.viewsToRewrite(devIndex, {'slot-1/module/xg0': 'generic/sfp-lc@1'}).sort();
+
 // an override naming nothing this device has touches no view
 out.miss = m.viewsToRewrite(devIndex, {'nope': 'x'});
 

@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
-import { applyAllOverrides, applyOccupantOverrides, refusalReason, viewsToRewrite } from './swap.js';
+import { applyFaceOverrides, refusalReason, viewsToRewrite } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -441,14 +441,12 @@ export function createViewer(container, opts = {}) {
       // `applyAllOverrides` for why a fixed number of passes is the wrong shape
       // for this. shell.js never needed it: `bayFor` re-reads the live drawing
       // on every lookup, so the gap here was always a 2D/3D divergence.
-      const {applied, dropped} = await applyAllOverrides(
-        doc.documentElement, bays, OVERRIDES, loadSkin, byRef);
-      // A DROPPED OVERRIDE IS THE ONE FAILURE THIS FILE MUST NOT SWALLOW. It
-      // means the drawing nests deeper than the walk was allowed to go, so the
-      // 2D face shows the swap and this scene does not - silently, and looking
-      // exactly like a viewer that simply did not update. render.py cannot build
-      // a face deeper than MAX_BAY_DEPTH, so reaching this at all says the
-      // drawing is not one it produced.
+      // THEN THE CAGES OF THE FACE AS IT NOW STANDS, a card's as well as the
+      // device's (#484): `applyFaceOverrides` in swap.js reads a seated card's
+      // cages off this document after its bays settle. Handed `cages[view]`
+      // alone, an optic chosen on a card was seated in 2D and never here.
+      const {applied: viewApplied, dropped, refused, failed, cages: faceCages} =
+        await applyFaceOverrides(doc.documentElement, {bays, cages}, OVERRIDES, loadSkin, byRef);
       if (dropped.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${dropped.length} nested `
                      + `bay override(s) never applied - the drawing nests deeper `
@@ -461,19 +459,16 @@ export function createViewer(container, opts = {}) {
       // against. The cage shows nothing seated in 2D and 3D alike; only the
       // CHOSEN swap silently failed, and that is worth saying. A FAILED one is
       // a skin that did not load: the cage keeps what the build seated.
-      const {applied: occApplied, refused, failed} = await applyOccupantOverrides(
-        doc.documentElement, cages, OVERRIDES, loadSkin);
       if (refused.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${refused.length} cage `
                      + `override(s) refused - the kit does not seat an optic into `
                      + `a lifted or mirrored cage, or one whose group carries `
                      + `states, so the cage is left empty`,
-                     refused.map(id => `${id} (${refusalReason(cages.find(c => c.id === id))})`));
+                     refused.map(id => `${id} (${refusalReason(faceCages.find(c => c.id === id))})`));
       if (failed.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${failed.length} cage `
                      + `override(s) not applied - the optic's skin did not load, `
                      + `so the cage keeps what the build seated`, failed);
-      const viewApplied = applied + occApplied;
       if (!viewApplied) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
       total += viewApplied;

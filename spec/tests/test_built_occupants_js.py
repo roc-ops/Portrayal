@@ -73,3 +73,28 @@ def test_a_configuration_seated_nested_bay_is_what_the_build_put_there(out):
     assert out["nestedAsBuilt"] == {}, "the module the configuration seats is no swap"
     assert out["nestedSwapped"] == {"slot-1/module/ppm-1": "x/cover@1"}
     assert out["noBays"] == [{}, {}, {}]
+
+
+def test_a_configuration_seated_card_optic_is_keyed_by_the_drawing(out):
+    # front-6/xg0 in the manifest is front-6/module/xg0 on the face; the
+    # chained tiers (the <key>-occupant form and a custom id) are not cages
+    assert out["cardBuilt"] == {"front-6/module/xg0": "generic/sfp-lc@1",
+                                "front-6/module/cg0": "generic/qsfp-lc@1",
+                                "port-4": "generic/sfp-lc@1"}
+
+
+def test_an_untouched_page_with_a_card_optic_writes_no_swap(out):
+    assert out["cardUntouched"] == {}
+    assert "swap=" not in out["cardUntouchedSearch"], out["cardUntouchedSearch"]
+
+
+def test_a_card_optic_is_a_swap_only_when_it_differs_from_the_build(out):
+    assert out["cardAway"] == {"front-6/module/xg0": "generic/sfp-lc-simplex@2"}
+    assert out["cardBack"] == {}, "the configured optic, chosen again, is not a swap"
+    assert out["cardEmptied"] == {"front-6/module/xg0": None}
+    assert out["cardFilled"] == {"front-6/module/xg1": "generic/sfp-lc@1"}
+
+
+def test_an_optic_on_a_swapped_card_is_always_a_swap(out):
+    assert out["cardOnSwappedCarrier"] == {"front-6": "casa/smm-b@1",
+                                           "front-6/module/xg0": "generic/sfp-lc@1"}

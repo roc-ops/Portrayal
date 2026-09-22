@@ -114,7 +114,7 @@ from portrayal import stacks
 from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
-                      component_refs, load_yaml,
+                      component_refs, load_yaml, nested_key_host,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -3371,6 +3371,23 @@ def lint_device_occupants(path, data, lib_roots):
         for host_id, spec in ((cfg or {}).get("occupants") or {}).items():
             ref = spec if isinstance(spec, str) else (spec or {}).get("ref")
             where = f"configurations/{cname}/occupants/{host_id}"
+            if "/" in host_id:
+                # A CAGE ON A SEATED CARD (#484, R2), keyed by the card's
+                # module-less path. Walked down THIS configuration's bays to the
+                # module it reaches by manifest.nested_key_host - the walk the
+                # build's module_key_prefix / occupants_under answer from the
+                # other end - and a chained key to the occupant it names.
+                def _res(r):
+                    q = resolve_component(r, lib_roots)
+                    return load_yaml(q) if q else None
+                try:
+                    host_ref, _mref, _mpath = nested_key_host(host_id, data, cfg or {}, _res)
+                except ValueError as e:
+                    err(path, "L12", f"configurations/{cname}/{e}")
+                    continue
+                if ref:
+                    _mate_check(path, where, ref, host_ref, lib_roots)
+                continue
             if host_id not in hosts:
                 err(path, "L12", f"{where}: names no placement in any view of this "
                                  "device. An occupant plugs into something")

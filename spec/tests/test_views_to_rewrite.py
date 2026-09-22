@@ -36,6 +36,8 @@ def test_views_to_rewrite():
         "a device with cages and no bays anywhere must not be skipped outright"
     assert out["nested"] == ["front-0", "front-1"], \
         "a nested override must rewrite every view with bays, not views with only cages"
+    assert out["nestedCage"] == ["front-0", "front-1"], \
+        "a cage on a seated card must rewrite every view with bays"
     assert out["miss"] == []
     assert out["empty"] == []
     assert out["emptyDevIndex"] == []
