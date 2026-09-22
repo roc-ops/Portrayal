@@ -1,16 +1,16 @@
 format: 1
 kind: component
 name: fhd-1mtp24-lc-af-rear
-version: 1.0.0
+version: 2.0.0
 class: cassette
 description: >-
   The back of FS FHD-1MTP12LCDOS2AF (SKU 68549): the MTP-24 cassette's
   body seen from behind, with its polarity label reading Type AF.
-size: {w: 99.0, h: 31.0, d: 2.0}
-size-confidence: {w: estimated, h: estimated, d: estimated}
+size: {w: 99.0, h: 31.0}
+size-confidence: {w: estimated, h: estimated}
 size-notes: >-
   NOT MEASURED, AND NOT MEASURABLE FROM WHAT IS HELD - the same finding
-  fhd-1mtp6lcd-rear@2 and fhd-2mtp12-lc-rear@1 both record for their own rear
+  fhd-1mtp6lcd-rear@3 and fhd-2mtp12-lc-rear@2 both record for their own rear
   faces. 57023.E.jpg is the closest thing to a face-on rear render in the
   corpus and it still fails `panel_measure.validate()`: `plate()` locks onto
   the connector's own mounting flange rather than the enclosure's full
@@ -19,14 +19,24 @@ size-notes: >-
   all, and 57023.F.jpg is a front-corner crop that shows no rear geometry.
   Nor can the faceplate supply one, for the same reason both sibling rears
   give: the faceplate OVERHANGS the body, so the rear face is narrower than
-  108.97 x 35.05 by an amount nobody has measured. 99.0 x 31.0 x 2.0 REUSES
-  fhd-1mtp6lcd-rear@2's own figures rather than a third proportional read -
+  108.97 x 35.05 by an amount nobody has measured. 99.0 x 31.0 REUSES
+  fhd-1mtp6lcd-rear@3's own figures rather than a third proportional read -
   that source is itself `estimated`, not measured, so carrying it across is
   recorded as `estimated` here too, not `borrowed` (which this library
   reserves for a figure whose origin actually measured something), the same
-  distinction fhd-2mtp12-lc-rear@1 already draws for its own reuse of the
+  distinction fhd-2mtp12-lc-rear@2 already draws for its own reuse of the
   same number. A face-on photograph of the back, square to the mounting
   flange rather than the connector band, settles it.
+
+  NO DEPTH IS DECLARED, AND THAT IS THE READING. This contract is a FACE - the
+  drawing of a back, not a part with a back of its own - and render.py turns a
+  `size.d` on a fixed component into `data-depth`, an aperture as big as the
+  whole face. The kit then builds THAT pit and drops the recesses inside it,
+  because it takes only the innermost cavity of a nest: the estimated `d: 2.0`
+  carried until now swallowed the recesses composed onto this face, so a
+  bulkhead's mouth was not built at all and the whole back sat 2 mm below the
+  cassette's edge in 3D. The depth of the body this face closes belongs to the
+  cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
 parts:
   - {id: mtp, ref: common/mpo24-flange-adapter@1, at: [3.0, 14.3]}
@@ -34,7 +44,7 @@ provenance:
   twin: >-
     photo - FS's top-rear render of SKU 68549 shows the same body, MTP-24,
     flange and "1-24" legend in the same places as SKU 57023's, with the label
-    reading "Type AF". Geometry carried across from fs/fhd-1mtp24-lc-rear@2.
+    reading "Type AF". Geometry carried across from fs/fhd-1mtp24-lc-rear@3.
   size: >-
     see size-notes.
   parts: >-

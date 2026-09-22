@@ -1,16 +1,16 @@
 format: 1
 kind: component
 name: fhd-1mtp12-sc-rear
-version: 2.0.0
+version: 3.0.0
 class: cassette
 description: >-
   The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from
   behind, carrying its single MTP-12 trunk adapter.
-size: {w: 99.0, h: 31.0, d: 2.0}
-size-confidence: {w: estimated, h: estimated, d: estimated}
+size: {w: 99.0, h: 31.0}
+size-confidence: {w: estimated, h: estimated}
 size-notes: >-
   NOT MEASURED, AND NOT MEASURABLE FROM WHAT IS HELD - the identical
-  situation fs/fhd-1mtp6lcd-rear@2 already documents for SKU 57016, and the
+  situation fs/fhd-1mtp6lcd-rear@3 already documents for SKU 57016, and the
   same numbers are reused rather than re-guessed, for a reason stronger than
   "the family shares a rear": 57058.D.jpg is the only rear view held here
   too, it is the same top-rear three-quarter composition, and panel_measure
@@ -19,12 +19,22 @@ size-notes: >-
   independent SKUs' rear renders failing panel_measure's own scale-validity
   check by the identical percentage is strong evidence they were shot from
   the same rig against the same physical rear tooling, which is exactly what
-  99.0 x 31.0 x 2.0 already assumes. It still cannot be scaled on the
+  99.0 x 31.0 already assumes. It still cannot be scaled on the
   faceplate, because the faceplate OVERHANGS the body - the rear face is the
   body, and the body is narrower by an amount nobody has measured. 99.0 x
   31.0 is proportion read off that render against the known 108.97 x 35.05
-  front, carried over from fs/fhd-1mtp6lcd-rear@2 rather than re-derived. A
+  front, carried over from fs/fhd-1mtp6lcd-rear@3 rather than re-derived. A
   face-on photograph of the back settles it for either SKU.
+
+  NO DEPTH IS DECLARED, AND THAT IS THE READING. This contract is a FACE - the
+  drawing of a back, not a part with a back of its own - and render.py turns a
+  `size.d` on a fixed component into `data-depth`, an aperture as big as the
+  whole face. The kit then builds THAT pit and drops the recesses inside it,
+  because it takes only the innermost cavity of a nest: the estimated `d: 2.0`
+  carried until now swallowed the recesses composed onto this face, so a
+  bulkhead's mouth was not built at all and the whole back sat 2 mm below the
+  cassette's edge in 3D. The depth of the body this face closes belongs to the
+  cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
 parts:
   - {id: mtp, ref: common/mpo-flange-adapter@1, at: [3.0, 14.3]}

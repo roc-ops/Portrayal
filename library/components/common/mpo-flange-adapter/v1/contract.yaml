@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo-flange-adapter
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: >-
@@ -24,9 +24,42 @@ size-notes: >-
 attrs: {media: fiber, connector: mpo}
 optical:
   positions: 12
+relief:
+  features:
+    # ESTIMATED, ALL THREE. FS's rear renders are shot from above the cassette,
+    # which is what makes their widths readings and their depths not: nothing
+    # held dimensions how far this bulkhead stands off a cassette back, or how
+    # deep its opening is. The ORDER is what the render does show - the flange
+    # is proud of the back, the housing proud of the flange, and the opening
+    # recessed into the housing with the ferrule face inside it - so the three
+    # figures are one guess at a stack, not three readings.
+    - node: flange
+      out: 2.0
+      confidence: estimated
+      source: >-
+        common/mpo-flange-adapter@1's own size-notes - the rear render shows the flange
+        standing off the cassette back by about the thickness of its own
+        chamfer. 2.0 is that, read to the nearest millimetre and no finer.
+    - node: housing
+      out: 3.5
+      lift: 2.0
+      confidence: estimated
+      source: >-
+        the same render: the moulded housing stands proud of the flange it is
+        screwed through. 1.5 above the flange's 2.0.
+    - node: opening
+      pocket: 3.0
+      lift: 3.5
+      confidence: estimated
+      source: >-
+        the keyed opening is a recess in the housing's front, with the plug's
+        end face at its bottom - a depth nothing here dimensions. 3.0 keeps the
+        ferrule face below the housing, which is what the render shows.
 parts:
-  - {ref: common/screw-head@1, id: screw-left, at: [0.7, 3.7]}
-  - {ref: common/screw-head@1, id: screw-right, at: [25.7, 3.7]}
+  # lifted onto the flange's own face (relief, above), or they sit at the
+  # cassette's back and the flange stands over them
+  - {ref: common/screw-head@1, id: screw-left, at: [0.7, 3.7], lift: 2.0}
+  - {ref: common/screw-head@1, id: screw-right, at: [25.7, 3.7], lift: 2.0}
 connection-points:
   optical: {at: [15.0, 5.5], direction: front}
 provenance:

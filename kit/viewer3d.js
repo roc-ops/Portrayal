@@ -563,7 +563,7 @@ export function createViewer(container, opts = {}) {
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
                                 faceMM,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
-                                bodyBoxMesh,
+                                bodyBoxMesh, dist: DIST,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];

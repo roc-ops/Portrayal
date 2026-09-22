@@ -1,14 +1,13 @@
 format: 1
 kind: component
-name: fhd-1mtp6lcd-u-rear
-version: 1.0.0
+name: fhd-1mtp6lcd-rear
+version: 3.0.0
 class: cassette
 description: >-
-  The back of FS FHD-1MTP6LCDOS2U (SKU 182641): the universal-polarity
-  cassette's body seen from behind - the MTP and its 1-12 legend, and no
-  polarity label.
-size: {w: 99.0, h: 31.0, d: 2.0}
-size-confidence: {w: estimated, h: estimated, d: estimated}
+  The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from
+  behind, carrying its single MTP-12 trunk adapter.
+size: {w: 99.0, h: 31.0}
+size-confidence: {w: estimated, h: estimated}
 size-notes: >-
   NOT MEASURED, AND NOT MEASURABLE FROM WHAT IS HELD. 57016.D.jpg is the only
   rear view and it is a top-rear three-quarter: the lid recedes and the face is
@@ -18,17 +17,20 @@ size-notes: >-
   body, and the body is narrower by an amount nobody has measured. 99.0 x 31.0
   is proportion read off that render against the known 108.97 x 35.05 front. A
   face-on photograph of the back settles it.
+
+  NO DEPTH IS DECLARED, AND THAT IS THE READING. This contract is a FACE - the
+  drawing of a back, not a part with a back of its own - and render.py turns a
+  `size.d` on a fixed component into `data-depth`, an aperture as big as the
+  whole face. The kit then builds THAT pit and drops the recesses inside it,
+  because it takes only the innermost cavity of a nest: the estimated `d: 2.0`
+  carried until now swallowed the recesses composed onto this face, so a
+  bulkhead's mouth was not built at all and the whole back sat 2 mm below the
+  cassette's edge in 3D. The depth of the body this face closes belongs to the
+  cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
 parts:
   - {id: mtp, ref: common/mpo-flange-adapter@1, at: [3.0, 14.3]}
 provenance:
-  twin: >-
-    photo - FS's top-rear render of SKU 182641 shows the same body, MTP, flange
-    and "1-12" legend as SKU 57016's, and NO polarity label: where the Type A
-    and AF backs carry a bordered "Type A"/"Type AF", this one carries only a
-    round "please do not tear up" seal on the lid edge, which is not printing
-    on this face and is not drawn. Geometry carried across from
-    fs/fhd-1mtp6lcd-rear@2.
   size: >-
     see size-notes.
   parts: >-
