@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ocu-50-50
-version: 1.1.1
+version: 1.2.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -59,7 +59,7 @@ provenance:
     render and off the DCP-F stencil master, both scaled on the 55.4 width, and both
     put the two-adapter block in the right-hand half with the left half bare.
     THE ADAPTER IS THE LIBRARY'S, NOT THE ARTWORK'S. Both drawings space a pair's
-    bores about 7.25 apart where common/lc-duplex-adapter@3 spaces them 6.25 - the
+    bores about 7.25 apart where common/lc-duplex-adapter@4 spaces them 6.25 - the
     IEC 61754-20 / TIA-604-10 FOCIS 10 pitch verified in standards.yaml, not the 6.6
     this same Smartoptics DCP-R stencil reads for it. The connector is the part the
     library already owns, so only the POSITIONS are taken from these renders.
@@ -105,8 +105,8 @@ elements:
 parts:
   # the left adapter carries the common port and one dead position; the right one
   # carries both legs. That is the datasheet's arrangement, not a convenience.
-  - {ref: common/lc-duplex-adapter@3, id: common, at: [22.50, 4.0], attrs: {role: common}}
-  - {ref: common/lc-duplex-adapter@3, id: split, at: [35.70, 4.0], attrs: {role: split}}
+  - {ref: common/lc-duplex-adapter@4, id: common, at: [22.50, 4.0], attrs: {role: common}}
+  - {ref: common/lc-duplex-adapter@4, id: split, at: [35.70, 4.0], attrs: {role: split}}
 optical:
   # THE PART'S FUNCTION, WHICH USED TO BE A STRING. See ppm-ocu-97-3@1 - the same
   # coupler at the symmetric ratio, which is why neither leg is the main path and

@@ -1,14 +1,15 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 2.0.0
+version: 3.0.0
 class: port
 profile: networking
 description: >-
   LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS
   fits to FHD cassettes and adapter panels. A blue body standing proud of the
-  plate, each port turned with its latch slot to the LEFT, and one white duplex
-  dust cap plugging both. Not the same part as common/lc-duplex-adapter@3,
+  plate, each port turned with its latch slot to the LEFT. The white duplex
+  dust cap FS ships over both ports is an occupant, not part of this adapter -
+  see provenance.dust-caps. Not the same part as common/lc-duplex-adapter@4,
   which is wider and puts its bores side by side.
 size: {w: 9.28, h: 13.75}
 conforms: fhd-lc-cassette
@@ -25,8 +26,6 @@ size-notes: >-
   compiled as an aperture, a pit behind its whole box; how far this body stands
   OUT of the plate is carried by `relief` instead, where it belongs.
 attrs: {media: fiber, connector: lc}
-elements:
-  cap: {at: [2.92, 0.75], size: [5.85, 12.25], class: cap}
 optical:
   positions: 2
 relief:
@@ -40,44 +39,13 @@ relief:
         view, not an orthographic one, so the reading is scaled on the
         110.24 mm body depth along the same axis (5.5 px/mm) and is an
         estimate: about 7 px, 1.2 mm.
-    # the duplex cap seats into both bores and stands well proud of the body
-    - node: cap
-      out: 5.5
-      lift: 1.2
-      color: '#e7e9ec'
-      confidence: estimated
-      source: >-
-        57016.C.jpg, the same oblique side view and the same 5.5 px/mm as the
-        bezel: the white caps run about 30 px past the faceplate, 5.5 mm. `out`
-        is a distance from the panel, so the cap's front is at 5.5 and it
-        stands on the bezel's front at 1.2.
-    # THE INSETS ARE DRAWN INSIDE THE CAP'S GROUP, and a lift is SUMMED down
-    # the tree: the cap's 1.2 plus each inset's own 4.3 puts the recess at the
-    # cap's front, 5.5. Written as 5.5 it summed to 6.7 and floated in front of
-    # the cap.
-    - node: cap-inset-tx
-      pocket: 0.6
-      lift: 4.3
-      confidence: estimated
-      source: >-
-        FS's face-on render 57016.main.jpg shows a rounded-square inset moulded
-        into the cap in front of each port; its depth is not shown anywhere.
-        It sits AT the cap's front, 5.5, because it is moulded into it.
-    - node: cap-inset-rx
-      pocket: 0.6
-      lift: 4.3
-      confidence: estimated
-      source: lc-duplex-v-adapter@2's own cap-inset-tx reading, the lower port's inset.
 parts:
   # TURNED 90: std/lc-bore@3 draws its latch tongue DOWN, and rotate 90 swings
   # it to the LEFT, which is where FS's own render puts every port's stepped
   # latch slot (57016.main.jpg, beside the cap). Lifted onto the raised bezel so
-  # each bore recesses from the proud face, as common/lc-duplex-adapter@3 does.
-  # BEHIND the skin, so in 2D the bezel's holes frame them and the cap paints
-  # over them - drawn in the default order, each bore's dark opening landed on
-  # top of the white cap and the cap read as an outline round two black squares.
-  - {id: tx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2, behind: true}
-  - {id: rx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2, behind: true}
+  # each bore recesses from the proud face, as common/lc-duplex-adapter@4 does.
+  - {id: tx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
+  - {id: rx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
 connection-points:
   optical:
     at: [4.64, 6.875]
@@ -100,10 +68,14 @@ provenance:
     render puts at 2.92-8.77 of the 9.28 body; that leaves the latch slot
     running out to x 1.90. v1 placed the bores tongue-down at 6.75 apart, which
     was the defect this major fixes.
-  cap: >-
-    photo-measured on 57016.main.jpg at the same 5.78 px/mm the plate gives
-    (86-716 px across 108.97 mm): the cap spans 2.92-8.77 across the body and
-    covers both ports top to bottom, 0.75-13.0 of the 13.75. One cap, not two.
+  dust-caps: >-
+    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; the pluggables connectors work seats it (a `common/` cap part, and a default occupant per port). The reading is kept here for that part: photo-measured on 57016.main.jpg at the same 5.78 px/mm the
+    plate gives (86-716 px across 108.97 mm): ONE white duplex cap, not two,
+    spanning 2.92-8.77 across the body and 0.75-13.0 of its 13.75 - over both
+    stacked ports - white #e7e9ec, with a rounded-square inset 3.6 x 4.4 in
+    front of each port. Its front stood at `out: 5.5` on the bezel's 1.2,
+    estimated off FS's oblique side photo 57016.C (about 30 px past the plate
+    at 5.5 px/mm); the insets 0.6 deep, estimated.
   colour: >-
     sampled off 57016.main.jpg: the adapter body's median blue is
     rgb(45,145,216), #2d91d8, and the cap rgb(231,231,233). The blue is FS's

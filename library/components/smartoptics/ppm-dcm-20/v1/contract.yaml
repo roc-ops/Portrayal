@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-dcm-20
-version: 1.1.2
+version: 1.2.0
 class: filter
 behaviour: fills
 profile: optical
@@ -43,7 +43,7 @@ provenance:
     datasheet renders, all scaled on the 55.4 width; the eight readings mean 11.09 and
     the adapter is placed at 4.50 so its centre lands there.
     THE ADAPTER IS THE LIBRARY'S, NOT THE ARTWORK'S. Both drawings space the pair's
-    bores about 7.2 apart where common/lc-duplex-adapter@3 spaces them 6.25 - the
+    bores about 7.2 apart where common/lc-duplex-adapter@4 spaces them 6.25 - the
     IEC 61754-20 / TIA-604-10 FOCIS 10 pitch verified in standards.yaml, not the 6.6
     this same Smartoptics DCP-R stencil reads for it. The connector is the part the
     library already owns, so only the POSITION is taken from these renders.
@@ -86,13 +86,13 @@ provenance:
 elements:
   caption-dcm: {at: [4.50, 16.2], size: [13.2, 2.05], class: marking}
 parts:
-  - {ref: common/lc-duplex-adapter@3, id: dcm, at: [4.50, 4.0], attrs: {role: dcm}}
+  - {ref: common/lc-duplex-adapter@4, id: dcm, at: [4.50, 4.0], attrs: {role: dcm}}
 optical:
   # RX IN, TX OUT, THROUGH THE GRATING. ds-ppm-r4.0's flow figure for these
   # modules draws Rx entering and Tx leaving, and says so in prose: "Signals
   # entering the module are denoted Rx. Signals exiting the module are denoted
   # Tx." Bore 1 is Tx and bore 2 is Rx - the order the faceplate captions them
-  # and the order common/lc-duplex-adapter@3 composes its bores.
+  # and the order common/lc-duplex-adapter@4 composes its bores.
   #
   # ONE PATH, NOT TWO. A DCM is not a duplex pass-through; it is a single fibre
   # path through a Bragg grating that applies 20km of opposite dispersion. Both

@@ -43,8 +43,8 @@ def test_the_mpo_standard_records_the_measured_pitch():
 
 
 def test_the_sc_duplex_adapter_presents_two_fibres():
-    c = contract("common/sc-duplex-adapter@2")
-    assert c is not None, "common/sc-duplex-adapter@2 not built"
+    c = contract("common/sc-duplex-adapter@3")
+    assert c is not None, "common/sc-duplex-adapter@3 not built"
     assert (c.get("optical") or {}).get("positions") == 2
 
 

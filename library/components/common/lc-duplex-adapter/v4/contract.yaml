@@ -1,15 +1,15 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.4.2
+version: 4.0.0
 class: port
 profile: networking
 description: >-
   Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side,
   as used for Tx/Rx pairs on optical line cards. The body stands proud of the
-  faceplate; the bores recess from that raised face, not from the panel. Both
-  bores carry a white dust cap, which is how an unused port ships and sits.
-  Distinct from sfp-lc-duplex, which is a pluggable transceiver.
+  faceplate; the bores recess from that raised face, not from the panel. The
+  dust caps an unused port ships with are occupants of the bores, not part of
+  this adapter - see provenance.dust-caps. Distinct from sfp-lc-duplex, which is a pluggable transceiver.
 size: {w: 13.2, h: 11.0}
 size-confidence: {w: measured, h: measured}
 attrs: {media: fiber, connector: lc-duplex}
@@ -60,89 +60,25 @@ provenance:
     of one shared bore part
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
-  dust-caps: photo - unused ports carry a white cap standing about a quarter
-    inch proud of the jack face, with a rounded-square inset moulded into its
-    front. The spigot that seats it into the bore is not modelled separately -
-    it sits inside the recess and is never visible
-elements:
-  # x matches the bores' corrected, correctly-centred position (parts:, below)
-  # so the caps still plug the sockets they sit over rather than a socket
-  # 0.300mm to one side of them.
-  cap-tx: {at: [1.125, 3.15], size: [4.7, 4.7], class: cap}
-  cap-rx: {at: [7.375, 3.15], size: [4.7, 4.7], class: cap}
+  dust-caps: >-
+    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; the pluggables connectors work seats it (a `common/` cap part, and a default occupant per port). The reading is kept here for that part: photo - unused ports carry a white cap standing about a
+    quarter inch proud of the jack face, with a rounded-square inset moulded
+    into its front. As @3 drew them: one simplex cap per bore, 4.7 x 4.7 over
+    each bore square (x 1.125 and 7.375, y 3.15), white #e9ecef, front at
+    `out: 9.525` on the bezel's 3.175 (3.175 + the photographed quarter inch),
+    and a 2.7 x 2.7 inset 0.9 deep (estimated). The spigot that seats it into
+    the bore is not modelled - it sits inside the recess and is never visible
 relief:
   features:
     - node: bezel
       out: 3.175
       confidence: photo-measured
       source: >-
-        common/lc-duplex-adapter@3's own stand-off key - 'photo - the adapter body sits
+        common/lc-duplex-adapter@4's own stand-off key - 'photo - the adapter body sits
         about an eighth of an inch proud of the faceplate, not the quarter inch first
         modelled'. 3.175 is that eighth of an inch. A photograph read to the nearest eighth,
         and it CORRECTED an earlier quarter-inch guess, which is why it is photo-measured
         rather than estimated.
-    # caps seat into the bore and stand a quarter inch proud of the jack face
-    - node: cap-tx
-      out: 9.525
-      lift: 3.175
-      color: '#e9ecef'
-      confidence: photo-measured
-      source: >-
-        common/lc-duplex-adapter@3's own dust-caps key - 'photo - unused ports carry a white
-        cap standing about a quarter inch proud of the jack face'. THE JACK FACE IS THE
-        BEZEL'S FRONT, at 3.175, so a quarter inch proud of it is 3.175 + 6.35 = 9.525, and
-        the cap is 6.35 thick.
-        IT READ 6.35 AND THAT WAS THE QUARTER INCH USED AS AN ABSOLUTE. `out` is a distance
-        from the PANEL, not a height above whatever the part sits on, so writing the
-        measured proudness straight into it put the cap's front at 6.35 - an eighth of an
-        inch proud of the jack, half what the photograph says. The note that shipped with
-        it reinterpreted the reading as 'measured from the faceplate and not from the jack'
-        rather than recording it; the provenance key says jack face, and the provenance key
-        is the reading.
-        WHAT CONFIRMS IT: cap-tx-inset has always sat at 9.525, because the inset is
-        moulded into the cap's FRONT and 9.525 is where that front is. The two agree now
-        and disagreed before, and NOBODY SAW IT BECAUSE THE INSET WAS NEVER DRAWN - it was
-        written as a `sink`, which means nothing outside a cavity, so the one feature whose
-        position contradicted the cap's was built by nothing. #230, fixed alongside this.
-    - node: cap-rx
-      out: 9.525
-      lift: 3.175
-      color: '#e9ecef'
-      confidence: photo-measured
-      source: >-
-        common/lc-duplex-adapter@3's own dust-caps key - the same 'about a quarter inch
-        proud' reading as cap-tx, resolved the same way. ONE reading covering both caps,
-        not two.
-    # the moulded square recessed into each cap front. DRAWN INSIDE ITS CAP'S
-    # GROUP, and a lift is SUMMED down the tree while `out` and `pocket` stay
-    # where they are: the cap's 3.175 plus the inset's own 6.35 puts the recess
-    # at the cap's front, 9.525. Written as 9.525 inside the group it would sum
-    # to 12.7 and float in front of the cap. POCKET AND NOT SINK: a
-    # `sink` measures down from a CAVITY FLOOR and means nothing outside one, and
-    # the cap is a solid lump standing on the faceplate. Written as a sink it was
-    # collected by nothing and the inset was never built (#230); `pocket` is the
-    # key for a recess in an otherwise solid face. Same depth, same position, right
-    # word.
-    - node: cap-tx-inset
-      pocket: 0.9
-      lift: 6.35
-      confidence: estimated
-      source: >-
-        common/lc-duplex-adapter@3 - the dust-caps key fixes that there IS 'a rounded-square
-        inset moulded into its front' and nothing about how deep. It sits at 9.525, 3.175 +
-        6.35, both photo-measured; only the 0.9 depth is invented. The 6.35 written here is
-        the part of that the inset adds to its cap's 3.175, because it is drawn inside the
-        cap's group and the kit sums lifts down the tree.
-        THIS POSITION WAS RIGHT WHILE cap-tx's `out` WAS NOT, and it is what caught it: an
-        inset moulded into the cap's front must sit AT that front, and 9.525 is where the
-        photograph puts it. The cap said 6.35. They agree now.
-    - node: cap-rx-inset
-      pocket: 0.9
-      lift: 6.35
-      confidence: estimated
-      source: >-
-        common/lc-duplex-adapter@3 - as cap-tx-inset, and lifted the same 6.35 off its cap. The
-        inset's existence is photographed, its depth is not.
 optical:
   # TWO BORES, SO TWO FIBRE POSITIONS, and position order is the order the bores
   # are composed below: 1 is `tx`, 2 is `rx`. Stated here so no module composing
@@ -153,11 +89,8 @@ parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face.
   # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
   # fitted and how the issue's own photograph shows it; @3 draws it down.
-  # BEHIND the skin, so in 2D the bezel's holes frame them and the caps paint
-  # over them - drawn in the default order, appended after the skin, each
-  # bore's dark opening, sleeve and ferrule landed on top of its white cap.
-  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180, behind: true}
-  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180, behind: true}
+  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180}
 connection-points:
   # the midpoint of the two ferrule centres (3.475 and 9.725) - which is,
   # correctly, the 13.2-wide body's own centre (6.6). It was 6.6 originally

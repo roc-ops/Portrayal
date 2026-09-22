@@ -112,8 +112,10 @@ def test_power_and_status_do_not_run_together():
 def test_both_roadms_took_a_major_bump_for_the_moved_ports():
     # Ports moved, so consumers keyed to positions break. devicelock asks for a
     # major and it is right to; this keeps the reason attached to the number.
+    # AT LEAST that major: a later one (3.0.0, when the adapters' dust caps
+    # became occupants) does not undo it.
     for name in ROADMS:
-        assert dev(name)["version"].startswith("2."), name
+        assert int(dev(name)["version"].split(".")[0]) >= 2, name
 
 
 def test_the_corrections_are_sourced_in_provenance():
