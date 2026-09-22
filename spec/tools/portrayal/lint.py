@@ -114,7 +114,7 @@ from portrayal import stacks
 from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
-                      component_refs, load_yaml, nested_key_host,
+                      component_refs, load_yaml, nested_key_host, chained_occupant_ref,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -3362,13 +3362,34 @@ def lint_device_occupants(path, data, lib_roots):
     Hosts are gathered across every view for the same reason - a configuration
     describes the whole device, and `port-4` being on the front is not something
     the configuration should have to know.
+
+    A DEVICE-LEVEL KEY CAN NAME A CHAINED OCCUPANT TOO - `port-4-occupant` is
+    the plug seated on the optic `port-4` seats, and render.py's occupants
+    expansion runs to a fixed point to draw exactly that. Once `host_id` is
+    not a placement, `chained_occupant_ref` walks this configuration's own
+    device-level occupants for the one that produced it - the same resolver
+    `nested_key_host` uses for a cage on a seated card, shared rather than
+    reimplemented so the two directions cannot disagree about what a chained
+    key names.
     """
     hosts = {}
     for vname, view in (data.get("views") or {}).items():
         for q in view_parts(view or {})["placements"]:
             hosts.setdefault(q.get("id"), (vname, q))
+
+    def terminal(h):
+        q = hosts.get(h)
+        return q[1]["ref"] if q else None
+
     for cname, cfg in (data.get("configurations") or {}).items():
-        for host_id, spec in ((cfg or {}).get("occupants") or {}).items():
+        cfg = cfg or {}
+        occupants = cfg.get("occupants") or {}
+        # Candidates a device-level chain can resolve against: the OTHER
+        # device-level keys of this same configuration - a nested ("/") key
+        # belongs to a module and is resolved by nested_key_host instead.
+        siblings = {k: (v if isinstance(v, dict) else {"ref": v})
+                    for k, v in occupants.items() if "/" not in k}
+        for host_id, spec in occupants.items():
             ref = spec if isinstance(spec, str) else (spec or {}).get("ref")
             where = f"configurations/{cname}/occupants/{host_id}"
             if "/" in host_id:
@@ -3381,24 +3402,33 @@ def lint_device_occupants(path, data, lib_roots):
                     q = resolve_component(r, lib_roots)
                     return load_yaml(q) if q else None
                 try:
-                    host_ref, _mref, _mpath = nested_key_host(host_id, data, cfg or {}, _res)
+                    host_ref, _mref, _mpath = nested_key_host(host_id, data, cfg, _res)
                 except ValueError as e:
                     err(path, "L12", f"configurations/{cname}/{e}")
                     continue
                 if ref:
                     _mate_check(path, where, ref, host_ref, lib_roots)
                 continue
-            if host_id not in hosts:
-                err(path, "L12", f"{where}: names no placement in any view of this "
-                                 "device. An occupant plugs into something")
+            if host_id in hosts:
+                vname, host = hosts[host_id]
+                if not host.get("at"):
+                    err(path, "L12", f"{where}: host has no explicit position")
+                    continue
+                if ref:
+                    _mate_check(path, where, ref, host["ref"], lib_roots)
                 continue
-            vname, host = hosts[host_id]
-            if not host.get("at"):
-                err(path, "L12", f"{where}: host has no explicit position "
-                                 "(occupants cannot host occupants)")
+            try:
+                host_ref = chained_occupant_ref(host_id, siblings, terminal)
+            except KeyError:
+                err(path, "L12", f"{where}: names no placement in any view of "
+                                 "this device, and no occupant of this "
+                                 "configuration seats it either")
+                continue
+            except ValueError as e:
+                err(path, "L12", f"{where}: occupant chain cycles back to {e}")
                 continue
             if ref:
-                _mate_check(path, where, ref, host["ref"], lib_roots)
+                _mate_check(path, where, ref, host_ref, lib_roots)
 
 
 def lint_device_overlap(path, view_name, view, lib_roots):
