@@ -164,10 +164,15 @@ def test_a_chained_key_whose_ref_does_not_mate_is_an_l12_error(tmp_path):
 
 def test_a_chained_key_naming_an_occupant_no_key_seats_is_an_error(tmp_path):
     """`port-4-occupant` with no `port-4` (or anything else producing that
-    id) names nothing - a typo, not a chain."""
+    id) names nothing - a typo, not a chain. The OLD "names no placement in
+    any view" wording is a substring of the new message too (see below), so
+    this asserts the clause only the new chain-lookup path prints - the one
+    the old code never reasoned about at all, because it never went looking
+    for a sibling occupant to begin with."""
     dev = fitted_copy(tmp_path, {"port-4-occupant": "generic/lc-plug@1"})
     errs = errors_for(dev, yaml.safe_load(dev.read_text()))
-    assert any("names no placement in any view" in e for e in errs), errs
+    assert any("no occupant of this configuration seats it either" in e
+               for e in errs), errs
 
 
 def test_a_spec_with_id_renames_the_chain(tmp_path):

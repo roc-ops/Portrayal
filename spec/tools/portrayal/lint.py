@@ -3312,7 +3312,9 @@ def lint_device_mating(path, view_name, view, lib_roots):
             continue
         if not host.get("at"):
             err(path, "L12", f"{view_name}/{p['id']}: mate-to {target!r} has no "
-                             "explicit position (occupants cannot host occupants)")
+                             "explicit position (this pass reads one view's "
+                             "declared placements and does not walk a mate-to "
+                             "chain the way render.py's fixed point does)")
             continue
         _mate_check(path, f"{view_name}/{p['id']}", p["ref"], host["ref"], lib_roots)
 
