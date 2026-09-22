@@ -2978,7 +2978,16 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
     and plugs alike, never a boot, which mates a plug - and its `media` is
     None. Everything else - `mate`, `lift`, `rotate`, `mirror`,
     `group-states`, `occupant-attrs` - is the same answer to the same question.
+
+    A PLACEMENT SEATED BY `mate-to` HAS NO `at` in this frame - the build
+    solves its position from its host's mate point - so it is not published
+    here. Its own slots ride on it in components.json (component_cages), the
+    way a seated transceiver's two `lc` bores do. Before B3 no seated
+    placement presented a registered interface, so this never arose; a
+    std/lc-bore@3 seated by `mate-to` (test_chained_seats.py) is the first.
     """
+    if "at" not in p:
+        return None
     contract, _skins = lib.resolve(p["ref"])
 
     def _resolve(ref):

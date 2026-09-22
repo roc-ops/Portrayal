@@ -105,6 +105,18 @@ def test_the_two_modelled_optics_have_a_cage_that_will_take_them():
             f"{d['name']} mates {d['mates']!r} and no port presents it"
 
 
+# A PORT EXEMPT FROM THE DEPTH RULE, with the reason. Every entry must still be
+# a port that would otherwise fail, or the exemption is stale.
+SHALLOW_BY_DESIGN = {
+    # std/mpo@1 presents `mpo` since 1.1.0 (B3), so this adapter now forwards
+    # it. Its face is a raised flange (`bezel`, out 1.2) on a cassette, and a
+    # `size.d` on a fixed part without behaviour carves a hole behind its whole
+    # 13.8 x 9.4 bbox; std/mpo@1's own cavity is the recess a plug seats in.
+    "common/mpo-adapter/v1/contract.yaml":
+        "raised flange; the composed aperture's own cavity is the recess",
+}
+
+
 def test_a_composed_port_is_as_deep_as_its_aperture():
     """With mating working, a module actually seats - and a cage with no depth
     puts it in a flat patch painted on the panel rather than a recess."""
@@ -123,6 +135,9 @@ def test_a_composed_port_is_as_deep_as_its_aperture():
                 for part in (d.get("parts") or [])}
         if deep - {None}:
             shallow.append(p.split("components/")[1])
+    stale = sorted(set(SHALLOW_BY_DESIGN) - set(shallow))
+    assert not stale, f"exempt but no longer shallow - drop the exemption: {stale}"
+    shallow = [p for p in shallow if p not in SHALLOW_BY_DESIGN]
     assert not shallow, f"composed ports with an aperture depth but none of their own: {shallow}"
 
 
