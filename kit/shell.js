@@ -18,7 +18,8 @@
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
-         builtOccupants, builtBays, faceCages, cageAt, pruneCarrier } from './swap.js';
+         builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
+         freshBaysUnder } from './swap.js';
 import { jdist } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 
@@ -1008,16 +1009,19 @@ export function createShell(opts = {}) {
   // both read from the state. The rule is swap.js's `pruneCarrier`. The card
   // that goes in is a fresh seat of its component with nothing in its cages,
   // and when it is the BUILD's own card no swap names it at all, so the optics
-  // the configuration put in it are recorded as emptied - or 3D, handed
-  // nothing, would still show them.
+  // the configuration put in it are recorded as emptied, and the modules it
+  // put in the card's own bays as the defaults a fresh seat holds there
+  // (swap.js's `freshBaysUnder`) - or 3D, handed nothing, would still show them.
   function dropUnder(key, ref) {
     const cfg = (state.meta?.configs || []).find(c => c.name === state.cfg);
     const cb = builtBays(cfg);
     const builtRef = Object.prototype.hasOwnProperty.call(cb, key) ? cb[key] || null
       : bayFor(key)?.default ?? null;
-    const rebuilt = ref && ref === builtRef
+    const again = ref && ref === builtRef;
+    const rebuilt = again
       ? builtOccupants(cfg, Object.values(state.meta?.cages || {}).flat()) : {};
-    Object.assign(state, pruneCarrier(state, key, rebuilt));
+    const fresh = again ? freshBaysUnder(cfg, key, ref, compByRef) : {};
+    Object.assign(state, pruneCarrier(state, key, rebuilt, fresh));
     // and a swap still loading under it is no longer anyone's to make: its
     // claim retired, it neither touches the drawing nor writes the state
     claim.retireUnder(key);

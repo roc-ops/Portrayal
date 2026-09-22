@@ -1022,21 +1022,81 @@ export function builtOccupants(cfg, cages) {
 // on the new card was "no swap", 3D was handed the card alone and showed the
 // cage empty. The bays are therefore decided first, and a cage key under a bay
 // that differs is measured against nothing.
-export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccupants = {}}) {
+//
+// A NESTED BAY FOLLOWS THE SAME RULE. Under a carrier the state has swapped,
+// the bay's built answer is what a fresh seat of the NEW carrier holds there -
+// its component's `default` - never the configuration's entry for the old
+// carrier's bay of the same id: read that way, choosing the module the build
+// had put there was "no swap", `swap=` recorded only the carrier and 3D showed
+// the new carrier's default. On the build's own carrier a bay the
+// configuration does not name is built at its component's default too. Both
+// need `compByRef` (the component index); without it a nested bay's default
+// reads as empty, which still gets the swapped-carrier case right for any
+// module that is chosen.
+//
+// Bays are decided SHALLOWEST FIRST, whatever order the state map holds them
+// in, so a carrier is in `out` before anything under it asks.
+export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccupants = {},
+                              compByRef = null}) {
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
   const cageIds = new Set(cages.map(c => c.id));
   const occ = builtOccupants(cfg, cages);
   const cb = builtBays(cfg);
   const out = {};
   const swappedAbove = id => Object.keys(out).some(k => id.startsWith(k + '/module/'));
+  const defaultIn = (carrierRef, id) => nestedDefault(compByRef, carrierRef, id);
   const built = id => {
     if (cageIds.has(id) || own(occ, id)) return swappedAbove(id) ? null : occ[id] ?? null;
+    const carrier = carrierOf(id);
+    if (carrier != null && swappedAbove(id))
+      return defaultIn(own(cfgBays, carrier) ? cfgBays[carrier] : built(carrier), id);
     if (own(cb, id)) return cb[id] || null;
+    if (carrier != null) return defaultIn(built(carrier), id);
     return bays.find(b => b.id === id)?.default || null;
   };
-  for (const map of [cfgBays, cfgOccupants])
-    for (const [id, ref] of Object.entries(map || {}))
+  const depth = id => id.split('/module/').length;
+  const bayEntries = Object.entries(cfgBays || {}).sort(([a], [b]) => depth(a) - depth(b));
+  for (const entries of [bayEntries, Object.entries(cfgOccupants || {})])
+    for (const [id, ref] of entries)
       if ((ref || null) !== built(id)) out[id] = ref || null;
+  return out;
+}
+
+// The bay path a nested key sits in - `slot-1` for `slot-1/module/ppm-1` - or
+// null for a device's own bay.
+function carrierOf(id) {
+  const cut = String(id).lastIndexOf('/module/');
+  return cut < 0 ? null : String(id).slice(0, cut);
+}
+
+// The bay at `id` in a fresh seat of `carrierRef`: the component's own
+// declaration (components.json `bays`), or null when there is no index, no
+// such component (compByRef throws on a ref that is not ns/name@major) or no
+// such bay.
+function nestedBay(compByRef, carrierRef, id) {
+  if (!compByRef || !carrierRef) return null;
+  let comp = null;
+  try { comp = compByRef(carrierRef); } catch (e) { comp = null; }
+  return comp?.bays?.[String(id).slice(carrierOf(id).length + '/module/'.length)] || null;
+}
+const nestedDefault = (compByRef, carrierRef, id) =>
+  nestedBay(compByRef, carrierRef, id)?.default || null;
+
+// WHAT A FRESH SEAT OF `ref` IN `carrier` HOLDS IN THE CONFIGURATION'S NESTED
+// BAYS under it - `pruneCarrier`'s `freshBays` when the ref going back in is
+// the build's own. Keyed by the drawing's path (builtBays), each at the
+// component's default, level by level: a bay two deep is read off whatever
+// the fresh seat holds in the bay above it, and is left out when that holds
+// nothing or has no such bay. Only the configuration's keys: a bay it does
+// not name was built at its default already, so a fresh seat changes nothing.
+export function freshBaysUnder(cfg, carrier, ref, compByRef) {
+  const refAt = path => path === carrier ? ref
+    : nestedDefault(compByRef, refAt(carrierOf(path)), path);
+  const out = {};
+  for (const k of Object.keys(builtBays(cfg)).filter(k => underCarrier(k, carrier))) {
+    const bay = nestedBay(compByRef, refAt(carrierOf(k)), k);
+    if (bay) out[k] = bay.default || null;
+  }
   return out;
 }
 
@@ -1055,6 +1115,11 @@ export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccu
 // build's optics. So each entry of `builtUnder` (builtOccupants' reading of
 // this configuration) under `carrier` that is not empty is recorded as
 // emptied, which is what the face shows. The caller passes it only then.
+// `freshBays` is the same case for the configuration's NESTED BAYS under the
+// carrier (freshBaysUnder): a fresh seat holds each at its component's
+// default, not at the module the build put there, so each is recorded at
+// that default - or 3D, handed nothing, would keep the build's module while
+// 2D shows the default.
 //
 // PURE: returns a new slice; the one it is handed is not changed.
 // Is `key` under the bay `carrier` - `front-6/module/...` - the one reading
@@ -1063,7 +1128,7 @@ export function underCarrier(key, carrier) {
   return String(key).startsWith(`${carrier}/module/`);
 }
 
-export function pruneCarrier(slice, carrier, builtUnder = {}) {
+export function pruneCarrier(slice, carrier, builtUnder = {}, freshBays = {}) {
   const under = k => underCarrier(k, carrier);
   const keep = o => Object.fromEntries(Object.entries(o || {}).filter(([k]) => !under(k)));
   const out = {cfgBays: keep(slice?.cfgBays), cfgOccupants: keep(slice?.cfgOccupants),
@@ -1071,6 +1136,8 @@ export function pruneCarrier(slice, carrier, builtUnder = {}) {
                refused: keep(slice?.refused), failed: keep(slice?.failed)};
   for (const [k, ref] of Object.entries(builtUnder || {}))
     if (ref && under(k)) { out.cfgOccupants[k] = null; out.touched.add(k); }
+  for (const [k, ref] of Object.entries(freshBays || {}))
+    if (under(k)) { out.cfgBays[k] = ref || null; out.touched.add(k); }
   return out;
 }
 
