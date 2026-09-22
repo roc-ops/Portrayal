@@ -907,6 +907,20 @@ export function bodyRole(path, behaviour) {
   return {sub: segs[0]};
 }
 
+// WHICH FRU A PATH RIDES WITH: the longest `/`-boundary prefix of `path`
+// that is a FRU key (`fruKeys` has(), a Set or an object's key test). A
+// card's optic is a FRU inside the card's (bodyRole), so the first segment
+// alone - the card's bay - would leave a marker on the optic behind when
+// only the optic is pulled. null when nothing on the path is a FRU.
+export function fruFor(path, has) {
+  const segs = String(path || '').split('/');
+  for (let n = segs.length; n > 0; n--) {
+    const k = segs.slice(0, n).join('/');
+    if (k && has(k)) return k;
+  }
+  return null;
+}
+
 // THE BODY OF A SEATED OPTIC THAT DECLARES NONE: an `occupies` part with no
 // `body:` block is one box, its own face outline (`w` x `h`, the element's drawn
 // box on the face) run back from the face to the module's own depth - the
@@ -1276,9 +1290,16 @@ export async function extractRelief(url, scope) {
   // A CARD'S OPTICS ARE NOT THE CARD'S ART: each is a FRU of its own
   // (bodyRole), so the card's plane is cut without them.
   const OWN_FRU = '[data-behaviour="occupies"][data-ref]';
+  // THE BODY NODE'S SIDE COLOUR FIRST: on the SFP skins it stands 10 mm out
+  // of the cage as a relief feature whose sides are its `data-z-color`
+  // (#6e747c, the `outs` colour above), and the box behind the face is the
+  // same shell - in its fill (#9aa0a8) a pulled optic read as two parts. Then
+  // the fill, as computed, for a body node that states no side colour.
   const bodyFill = el => {
     const n = el.id && el.querySelector(`[id="${CSS.escape(el.id)}--body"]`);
-    const f = n ? getComputedStyle(n).fill : '';
+    if (!n) return null;
+    if (n.dataset.zColor) return n.dataset.zColor;
+    const f = getComputedStyle(n).fill;
     return f && f !== 'none' && !f.startsWith('url(') ? f : null;
   };
   for (const el of q(BODY_SELECTOR)) {
@@ -1321,8 +1342,8 @@ export async function extractRelief(url, scope) {
                // `data-depth` is a cavity's and is not read here)
                behaviour: el.dataset.behaviour || null,
                depth: el.dataset.behaviour === 'occupies' ? +el.dataset.depth || null : null,
-               // and its colour: the fill of its skin's own `<name>--body` node,
-               // as painted (computed, so a class or a state is honoured)
+               // and its colour: its skin's own `<name>--body` node's side
+               // colour, else its fill (bodyFill)
                bodyColor: el.dataset.behaviour === 'occupies' ? bodyFill(el) : null,
                cls: el.dataset.class, lift: liftOf(el), shelf,
                bodyDepth: +el.dataset.bodyDepth || null, ...frect,
@@ -2070,7 +2091,7 @@ export async function buildFaceRelief(F, ctx) {
       facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
       // A SEATED OPTIC WITH NO `body:` (opticBody): one box behind its face, in
-      // its body node's fill; an optic whose skin names no body node is
+      // its body node's side colour (bodyFill); an optic whose skin names no body node is
       // coloured as a derived relief side is, the dominant colour of its art.
       if (ob) {
         const m = new THREE.Mesh(new THREE.BoxGeometry(ob.w, ob.h, ob.depth), opticMat);

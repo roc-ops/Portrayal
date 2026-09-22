@@ -62,3 +62,13 @@ def test_nothing_that_is_not_a_body_less_optic_gets_one(out):
     b = out["body"]
     for k in ("declared", "module", "legacy", "noDepth", "zeroSize", "nothing"):
         assert b[k] is None, k
+
+
+def test_a_marker_rides_with_the_deepest_fru_on_its_path(out):
+    f = out["fruFor"]
+    assert f["cardOptic"] == f["cardOpticPart"] == "front-6/module/xg0-occupant"
+    assert f["cardCage"] == f["card"] == f["bay"] == "front-6"
+    assert f["prefixNotSegment"] is None, "front-60 is not under front-6"
+    assert f["deviceOptic"] == "port-4-occupant"
+    assert f["module"] == "psu-1"
+    assert f["none"] is None and f["empty"] is None

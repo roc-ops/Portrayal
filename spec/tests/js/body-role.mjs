@@ -2,7 +2,7 @@
 // decision kit/relief.js's extractRelief makes for every fills/occupies
 // instance, factored out as `bodyRole` so it can be held here (#484).
 globalThis.location = { search: '' };
-const {bodyRole, opticBody} = await import('../../../kit/relief.js');
+const {bodyRole, opticBody, fruFor} = await import('../../../kit/relief.js');
 const cases = {
   deviceOptic: ['port-4-occupant', 'occupies'],
   deviceChained: ['port-5-occupant-occupant', 'occupies'],
@@ -29,5 +29,20 @@ out.body = {
   noDepth: opticBody({behaviour: 'occupies', body: null, depth: null, w: 8, h: 13}),
   zeroSize: opticBody({behaviour: 'occupies', body: null, depth: 47.5, w: 0, h: 13}),
   nothing: opticBody(),
+};
+// which FRU group a selection marker rides with: the longest FRU prefix
+const keys = new Set(['front-6', 'front-6/module/xg0-occupant', 'port-4-occupant', 'psu-1']);
+const has = k => keys.has(k);
+out.fruFor = {
+  cardOptic: fruFor('front-6/module/xg0-occupant', has),
+  cardOpticPart: fruFor('front-6/module/xg0-occupant/tx', has),
+  cardCage: fruFor('front-6/module/xg0', has),
+  card: fruFor('front-6/module', has),
+  bay: fruFor('front-6', has),
+  prefixNotSegment: fruFor('front-60/module', has),
+  deviceOptic: fruFor('port-4-occupant/tx', has),
+  module: fruFor('psu-1/module/status', has),
+  none: fruFor('chassis/label', has),
+  empty: fruFor('', has),
 };
 console.log(JSON.stringify(out));
