@@ -465,17 +465,22 @@ def nested_key_host(key, device, cfg, resolve):
 
     A chained key (`front-6/xg0-occupant`) names the occupant seated on
     another key of the same instance, and resolves to that occupant's ref -
-    however many hops long, via `chained_occupant_ref`. The HEAD may be a
-    chained occupant too (`port-1510-occupant/a`, a composed part of a seated
-    plug), resolved the same way against this configuration's device-level
-    occupants."""
+    however many hops long, via `chained_occupant_ref`. ANY SEGMENT may be a
+    chained occupant, not only the last: the head (`port-1510-occupant/a`, a
+    composed part of a plug seated on a device placement) is resolved against
+    this configuration's device-level occupants, and a segment mid-walk
+    (`bay-1/lc01-occupant/a`, the same plug seated on an adapter in a
+    cassette) against the keys of the instance reached so far. Resolving only
+    the head made this function refuse keys the build seats."""
     segs = key.split("/")
     host_id = segs[-1]
     views = resolve_views(device, cfg)
     bays = {b["id"]: b for _face, (_n, v) in views.items()
             for b in view_parts(v)["bays"]}
-    # a placement seated by mate-to is an occupant, and slots inside an
-    # occupant stay chained keys (P3), so only a placement with its own `at`
+    # A placement seated by mate-to has no `at`, so it is not a placement this
+    # map can offer: an occupant is named by the CHAINED key that produced it
+    # (P3), which is what the `else` branch below and the mid-walk branch in
+    # the loop resolve. Only a placement with its own `at` belongs here.
     placements = {q.get("id"): q for _face, (_n, v) in views.items()
                   for q in view_parts(v)["placements"] if q.get("at") and q.get("ref")}
     cfg_bays = (cfg or {}).get("bays") or {}
@@ -515,9 +520,35 @@ def nested_key_host(key, device, cfg, resolve):
             continue
         q = next((q for q in (c or {}).get("parts") or [] if q.get("id") == seg), None)
         if q is None or not q.get("ref"):
-            raise ValueError(f"occupants/{key}: names no cage - {where!r} "
-                             f"holds {ref or 'nothing'}, which has no bay or "
-                             f"part {seg!r}")
+            # A SEATED OCCUPANT MID-WALK, the same thing the head branch above
+            # and the terminal block below already resolve, and the reason this
+            # is here rather than only in those two: `bay-1/lc01-occupant/a` is
+            # half `a` of a duplex plug seated on the adapter `lc01` in the
+            # cassette in `bay-1`, and the build seats it - the plug's instance
+            # is drawn at `bay-1/module/lc01-occupant` and carries the keys
+            # whose prefix is its own. Resolving a chained occupant only at
+            # segs[0] made this function refuse a key the build accepted, so
+            # lint failed a seat that rendered.
+            #
+            # SCOPE IS THIS INSTANCE'S OWN KEYS, `occupants_under` the path
+            # reached so far - the same scope the terminal block uses - and the
+            # chain grounds on a part of the contract reached so far.
+            here = {p.get("id"): p for p in (c or {}).get("parts") or []}
+            mine = {h: s for h, (_k, s) in
+                    occupants_under(slot_key_prefix(path),
+                                    (cfg or {}).get("occupants")).items()
+                    if s is not None}
+            try:
+                ref = chained_occupant_ref(
+                    seg, mine,
+                    lambda h: here[h]["ref"] if h in here else None)
+            except (KeyError, ValueError):
+                raise ValueError(f"occupants/{key}: names no cage - {where!r} "
+                                 f"holds {ref or 'nothing'}, which has no bay "
+                                 f"or part {seg!r}, and no occupant seated "
+                                 "there produces it")
+            where, path, in_bays = f"{where}/{seg}", f"{path}/{seg}", False
+            continue
         where, path, ref, in_bays = f"{where}/{seg}", f"{path}/{seg}", q["ref"], False
     if not ref:
         raise ValueError(f"occupants/{key}: names no cage - bay {where!r} is "

@@ -35,10 +35,12 @@ import pytest
 import yaml
 
 from test_nested_occupants import (LIB, by_path, device_point, is_inside)
-from test_slot_defaults import _copy, build, face
+from test_slot_defaults import _copy, build, face, run
 from test_connector_slots import comps                                # noqa: F401
 
-from portrayal.manifest import load_yaml, presented_interface, seat_point
+from portrayal import lint
+from portrayal.manifest import (load_yaml, nested_key_host,
+                                presented_interface, seat_point)
 
 SPEC = LIB.parent / "spec"
 
@@ -293,7 +295,14 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     root, parents = face(build(dev, tmp_path / "o", LIB), "dcp-r-34d-cs", "default")
     occ = occupant(root, "port-1510", DUPLEX)
     adapter = by_path(root, "port-1510")
-    assert is_inside(parents, occ, parents[adapter]) or occ is not None
+    # A DEVICE-LEVEL OCCUPANT IS A TOP-LEVEL SIBLING OF ITS HOST, not a
+    # descendant - docs/pluggables-connectors-design.md says so outright, and
+    # it is why the seat's whole stack of lift has to be written onto the
+    # occupant's own group rather than inherited. Asserted rather than assumed
+    # because the numbers below are computed through each one's own ancestors,
+    # and they would be wrong in a different way if the two were nested.
+    assert not is_inside(parents, occ, adapter)
+    assert parents[occ] is parents[adapter]
 
     plug, bore = contract(DUPLEX), contract("std/lc-bore@3")
     half = contract(LC)
@@ -361,7 +370,6 @@ def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):
     for half_id in ("a", "b"):
         boot = occupant(root, f"port-1510-occupant/{half_id}", BOOT)
         assert is_inside(parents, boot, plug)
-        q = next(p for p in contract(DUPLEX)["parts"] if p["id"] == half_id)
         hx, hy = device_point(parents, by_path(root, f"port-1510-occupant/{half_id}"),
                               bpt)
         ox, oy = device_point(parents, boot,
@@ -369,6 +377,87 @@ def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):
         assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6, half_id
         # and it stands off by the plug body's own `out`, not at the plug face
         assert float(boot.get("data-z-lift")) == pytest.approx(blift, abs=1e-6)
+
+
+def l12(dev):
+    """L12 on one device, the idiom spec/tests/test_deep_slots.py uses. Every
+    key containing a slash goes through manifest.nested_key_host from here."""
+    data = yaml.safe_load(dev.read_text())
+    with lint.collecting() as got:
+        lint.lint_device_occupants(dev, data, [str(LIB)])
+    return [e for e in got.errors if "[L12]" in e]
+
+
+def test_a_boot_on_a_half_seated_in_a_bay_builds_and_lints(tmp_path):
+    """THE SEAT THIS TASK WAS ASKED FOR, and the one the review page will show:
+    a duplex plug on the adapter `lc01` in the cassette in `bay-1`, with a boot
+    on half `a`. The key is `bay-1/lc01-occupant/a`.
+
+    IT IS A DIFFERENT CASE FROM THE DCP ONE ABOVE, and the difference is where
+    the chained occupant sits in the key: at the HEAD when the plug is seated
+    on a device placement (`port-1510-occupant/a`), and MID-WALK here, after a
+    bay. `nested_key_host` resolved a chained occupant only at the head in the
+    first cut of this work, so this key BUILT and FAILED L12 - lint refusing a
+    seat that rendered, which is the one thing a resolver shared by both sides
+    exists to prevent. Both halves of it are checked here, in one test, so
+    neither can go green alone.
+
+    The build: the boot is drawn inside the plug's own group at
+    `bay-1/module/lc01-occupant/a-occupant`, lands its mate on the half's
+    presented point, and stands off by the plug body's own `out`.
+    The resolver: it answers the half's ref, the plug's ref, and the drawing
+    path the build actually used.
+    L12: clean."""
+    occupants = {"bay-1/lc01": DUPLEX, "bay-1/lc01-occupant/a": BOOT}
+    dev = fhd(tmp_path, LC_CASSETTE, occupants)
+
+    # 1. the resolver, and it answers the path the build draws at
+    data = yaml.safe_load(dev.read_text())
+
+    def _res(r):
+        try:
+            return contract(r)
+        except Exception:
+            return None
+    host_ref, module_ref, module_path = nested_key_host(
+        "bay-1/lc01-occupant/a", data, data["configurations"]["base"], _res)
+    assert (host_ref, module_ref) == (LC, DUPLEX)
+    assert module_path == "bay-1/module/lc01-occupant"
+
+    # 2. L12 over the same key
+    assert l12(dev) == []
+
+    # 3. the build
+    root, parents = face(build(dev, tmp_path / "o", LIB), "fhd-1ufce", "base")
+    plug = occupant(root, "bay-1/module/lc01", DUPLEX)
+    boot = occupant(root, "bay-1/module/lc01-occupant/a", BOOT)
+    assert is_inside(parents, boot, plug)
+    _, bpt, blift = presented_interface(contract(LC), contract)
+    assert blift > 0, "the plug presents no standoff, so this checks nothing"
+    hx, hy = device_point(parents, by_path(root, "bay-1/module/lc01-occupant/a"), bpt)
+    ox, oy = device_point(parents, boot,
+                          contract(BOOT)["connection-points"]["mate"]["at"])
+    assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6
+    assert float(boot.get("data-z-lift")) == pytest.approx(blift, abs=1e-6)
+    # half `b` was not keyed, so nothing is seated on it - a default nobody
+    # declared must not appear, and this is the guard that says so
+    drawn = {n.get("data-path") for n in root.iter()}
+    assert "bay-1/module/lc01-occupant/a-occupant" in drawn, "nothing was seated"
+    assert "bay-1/module/lc01-occupant/b-occupant" not in drawn
+
+
+def test_a_key_under_a_seated_occupant_that_reaches_nothing_is_still_an_error(tmp_path):
+    """The widening must not turn a typo into silence. `bay-1/lc01-occupant/zz`
+    names no part of the plug and no occupant seated on it, in a position the
+    resolver now walks rather than refusing outright - so the refusal has to
+    come from the right place and name the right thing."""
+    dev = fhd(tmp_path, LC_CASSETTE, {"bay-1/lc01": DUPLEX,
+                                      "bay-1/lc01-occupant/zz": BOOT})
+    errs = l12(dev)
+    assert len(errs) == 1 and "occupants/bay-1/lc01-occupant/zz" in errs[0], errs
+    r = run(dev, tmp_path / "o", LIB)
+    assert r.returncode != 0
+    assert "occupants/bay-1/lc01-occupant/zz" in r.stderr, r.stderr[-600:]
 
 
 def test_the_sc_plug_seats_in_an_fhd_sc_cassette_bore(tmp_path):
