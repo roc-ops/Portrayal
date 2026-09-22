@@ -2878,6 +2878,12 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     return out
 
 
+# What a device cage carries and a component's own cage does not: each is a
+# fact of a device frame (a configured occupant, a port group, a group
+# position) that a contract never states.
+COMPONENT_CAGE_DROPS = ("occupant", "group", "rel-pos")
+
+
 def component_cages(contract, lib, families, candidates):
     """A component's OWN cages, in its own frame: one entry per `parts:` entry
     that presents a pluggable interface, by the same core as a device view's
@@ -2894,8 +2900,10 @@ def component_cages(contract, lib, families, candidates):
     NO GROUP, NO OCCUPANT. A contract declares no `groups:`, so `media` is the
     part's own `attrs.media` (a part that declares none has no ceiling) and
     `occupant-attrs` is what group_side_attrs yields for no group - empty. A
-    contract seats no occupant, so `occupant` is null; which optic a card's
-    cage holds is a configuration's answer, not the card's.
+    contract seats no occupant: which optic a card's cage holds is a
+    configuration's answer, not the card's. So the three keys only a device
+    frame can fill - `occupant`, `group`, `rel-pos` - are DROPPED here rather
+    than published as nulls that look like answers (COMPONENT_CAGE_DROPS).
 
     THE PART'S OWN `lift` IS ADDED, where a device placement's is not. The two
     words mean different things: a device placement's `lift:` is carried by
@@ -2912,6 +2920,8 @@ def component_cages(contract, lib, families, candidates):
         entry = cage_entry(p, lib, families, candidates,
                            extra_lift=float(p.get("lift") or 0.0))
         if entry is not None:
+            for k in COMPONENT_CAGE_DROPS:
+                entry.pop(k, None)
             out.append(entry)
     return out
 

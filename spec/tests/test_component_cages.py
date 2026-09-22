@@ -140,14 +140,27 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
             assert c["accepts"] == device_cage["accepts"], (ref, c["id"])
 
 
-def test_a_card_cage_has_no_group_and_no_occupant(index):
-    """R3: a contract declares no `groups:` and seats nothing, so the host
-    side contributes nothing to a seated optic and there is no default."""
+CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
+             "accepts", "occupant-attrs", "mirror", "group-states"}
+
+
+def test_a_card_cage_carries_exactly_the_r1_keys(index):
+    """R1's list and nothing else: `occupant`, `group` and `rel-pos` are facts
+    of a device frame, and a null there would read as an answer."""
+    checked = 0
+    for ref, entry in index.items():
+        for c in entry.get("cages") or []:
+            assert set(c) == CAGE_KEYS, (ref, c["id"], sorted(set(c) ^ CAGE_KEYS))
+            checked += 1
+    assert checked > 0
+
+
+def test_a_card_cage_has_no_group_side_attrs(index):
+    """R3: a contract declares no `groups:`, so the host side contributes
+    nothing to a seated optic."""
     for ref in NAMED:
         for c in index[ref]["cages"]:
             assert c["occupant-attrs"] == {}
-            assert c["occupant"] is None
-            assert c["group"] is None
             assert c["group-states"] is False
 
 
@@ -157,7 +170,7 @@ def test_every_component_cage_is_the_device_answer_for_the_same_placement(
     `cage_entries` - the device path - builds for the same part placed on a
     one-placement device, except `lift`, which on a card also carries the
     part's own `lift` (a composed part's lift is written as data-z-lift; a
-    device placement's is not)."""
+    device placement's is not), and the device-frame keys a card drops."""
     checked = 0
     for ref, entry in index.items():
         for cage in entry.get("cages") or []:
@@ -168,7 +181,8 @@ def test_every_component_cage_is_the_device_answer_for_the_same_placement(
                                             candidates, {})
             assert cage["lift"] == dev["lift"] + float(p.get("lift") or 0.0), (ref, p["id"])
             assert {k: v for k, v in cage.items() if k != "lift"} == \
-                {k: v for k, v in dev.items() if k != "lift"}, (ref, p["id"])
+                {k: v for k, v in dev.items() if k != "lift"
+                 and k not in render_mod.COMPONENT_CAGE_DROPS}, (ref, p["id"])
             checked += 1
     assert checked > 0
 
