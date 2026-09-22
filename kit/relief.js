@@ -1462,7 +1462,10 @@ export async function buildFaceRelief(F, ctx) {
       return (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
     };
     for (const c of cavities) {
-      curOwner = c.owner;
+      // AN OPEN BAY'S MOUTH IS THE CHASSIS'S. It has no data-path of its own, so
+      // ownerOf() answers with the bay's path, and a FRU group is keyed by that
+      // same path - the collar went out with the cassette and a tree pull hid it.
+      curOwner = c.hollow ? null : c.owner;
       // an open bay's mouth is a short collar, not a pocket: walls deep enough
       // to meet the rear passage, which stops INTO - 2 short of the face
       const d = c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
