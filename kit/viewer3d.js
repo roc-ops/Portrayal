@@ -27,7 +27,7 @@ import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief, bodyBoxes } from './relief.js';
+         buildFaceRelief, bodyBoxes, fruFor } from './relief.js';
 import { applyFaceOverrides, refusalReason, viewsToRewrite } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
@@ -882,7 +882,8 @@ export function createViewer(container, opts = {}) {
     hl.position.set(lx, ly, 0.8);
     // ride with the module if it is a FRU, so ejecting it does not leave the
     // marker behind on the chassis
-    const owner = FRU_GROUPS[path.split('/')[0]];
+    // (the longest prefix that is one - a card's optic is a FRU inside its card)
+    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
     (owner || grp).add(hl);
     if (o.frame !== false) frameOn(grp, lx, ly, w, h);
     return true;
