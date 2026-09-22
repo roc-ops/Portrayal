@@ -847,9 +847,12 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     declares none (R3). Keys used are added to `occ_used`, which render_view
     reads to report a key nothing seated."""
     prefix = slot_key_prefix(path)
-    pending = (occupants_under(prefix, occupants)
-               if occupants and prefix is not None else {})
-    shipped_refs = set()
+    # {host id: (key, spec, chain)} - `chain` is the refs already seated ON
+    # THIS ONE SEAT, innermost last, which is what tells a default that loops
+    # back on itself from two sibling slots shipping the same part.
+    pending = {h: (key, spec, ())
+               for h, (key, spec) in (occupants_under(prefix, occupants).items()
+                                      if occupants and prefix is not None else ())}
     # AND WHAT EACH SLOT SHIPS HOLDING (B3, "The shipped default"): a part's
     # resolved default (manifest.slot_default) seats unless the configuration
     # keys that part - a configured key, `""` included, wins. Keyed None: a
@@ -861,8 +864,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             continue
         shipped = slot_default(q, lib.resolve(q["ref"])[0])
         if shipped:
-            pending[q["id"]] = (None, {"ref": shipped})
-            shipped_refs.add(shipped)
+            pending[q["id"]] = (None, {"ref": shipped}, ())
     if not pending:
         return
     hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
@@ -874,7 +876,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         return f"occupants/{key}" if key else f"{path}/{host_id}: default"
     while pending:
         seated_now, chained = [], {}
-        for host_id, (key, spec) in pending.items():
+        for host_id, (key, spec, chain) in pending.items():
             host = hosts.get(host_id)
             if host is None:
                 continue
@@ -903,18 +905,25 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             # default a boot onto its own rear slot, and it ships that boot
             # however it got here - composed, configured, or seated as another
             # part's default. The configuration keys this one by the produced
-            # id (`tx-occupant`), so it stays overridable; `shipped_refs` stops
-            # a default that names a part defaulting back at it from looping.
+            # id (`tx-occupant`), so it stays overridable. The guard is the
+            # CHAIN, not a set of refs seen anywhere in this instance: two
+            # sibling bores shipping the same plug each ship its boot, and
+            # only a default that names a part already seated on THIS seat is
+            # a cycle.
             ships = (lib.resolve(spec["ref"])[0] or {}).get("default")
-            if ships and local not in pending and ships not in shipped_refs:
-                shipped_refs.add(ships)
-                chained[local] = (None, {"ref": ships})
+            here = chain + (spec["ref"],)
+            if ships and ships in here:
+                raise ValueError(
+                    f"{path}/{host_id}: default {ships} is a cycle - "
+                    + " ships ".join(here + (ships,)))
+            if ships and local not in pending:
+                chained[local] = (None, {"ref": ships}, here)
             if occ_used is not None and key:
                 occ_used.add(key)
             seated_now.append(host_id)
         if not seated_now:
             raise ValueError(
-                ", ".join(sorted(_label(h, k) for h, (k, _) in pending.items()))
+                ", ".join(sorted(_label(h, k) for h, (k, _, _c) in pending.items()))
                 + f": names no cage on {path} (or no occupant seated before it)")
         for host_id in seated_now:
             del pending[host_id]
@@ -1654,8 +1663,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # an error: the two cases are told apart by whether progress is possible,
     # not by when the set was sampled.
     remaining = dict(config.get("occupants") or {})
-    # which ids in `remaining` are a default rather than a configuration's key
-    shipped_ids, shipped_refs = set(), set()
+    # {id: chain} for the ids in `remaining` that are a default rather than a
+    # configuration's key - `chain` being the refs already seated on that one
+    # seat, which is what tells a loop from two slots shipping the same part
+    shipped = {}
     # A PLACED SLOT SHIPS HOLDING ITS DEFAULT (B3, "The shipped default"): the
     # placed component's top-level `default:` (manifest.slot_default - a
     # device placement declares none of its own) seats unless this
@@ -1669,15 +1680,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 or (q.get("optional") and q["optional"] not in include)):
             continue
         try:
-            shipped = slot_default(q, lib.resolve(q["ref"])[0])
+            ships = slot_default(q, lib.resolve(q["ref"])[0])
         except (FileNotFoundError, ValueError, KeyError):
             continue
-        if shipped:
-            remaining[q["id"]] = shipped
-            shipped_ids.add(q["id"])
+        if ships:
+            remaining[q["id"]] = ships
+            shipped[q["id"]] = ()
     while remaining:
         seated_now = []
-        chained = {}
+        chained, chains = {}, {}
         here = {q.get("id") for q in parts["placements"]}
         for host, spec in remaining.items():
             if host not in here:
@@ -1686,7 +1697,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # `occupants/<id>: names no component` would name a key nobody
             # wrote. The same `_label` reading the nested path uses.
             spec = occupant_spec(host, spec,
-                                 label=f"{host}: default" if host in shipped_ids else None)
+                                 label=f"{host}: default" if host in shipped else None)
             if spec is None:            # "" empties the slot (P4)
                 seated_now.append(host)
                 continue
@@ -1694,12 +1705,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # AND WHAT THE OCCUPANT ITSELF SHIPS HOLDING (B3): a plug whose
             # contract defaults a boot onto its own rear slot brings the boot
             # with it here too, keyed by the produced id so a configuration
-            # can still empty it. `shipped_refs` stops a cycle of defaults.
+            # can still empty it. The guard is this seat's own CHAIN, so two
+            # ports shipping the same plug each ship its boot.
             ships = (lib.resolve(spec["ref"])[0] or {}).get("default")
-            if (ships and oid not in remaining and oid not in here
-                    and ships not in shipped_refs):
-                shipped_refs.add(ships)
+            chain = shipped.get(host, ()) + (spec["ref"],)
+            if ships and ships in chain:
+                raise ValueError(f"{host}: default {ships} is a cycle - "
+                                 + " ships ".join(chain + (ships,)))
+            if ships and oid not in remaining and oid not in here:
                 chained[oid] = ships
+                chains[oid] = chain
             parts["placements"].append({
                 "ref": spec["ref"],
                 "id": oid,
@@ -1719,7 +1734,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # and L12 catches the typo. A DEFAULT IS NOT THAT CASE: its host is
             # a placement in THIS view by construction, so one left unseated is
             # a fault in this loop and must not vanish without a word.
-            left = sorted(h for h in remaining if h in shipped_ids)
+            left = sorted(h for h in remaining if h in shipped)
             if left:
                 raise ValueError(
                     ", ".join(f"{h}: default {remaining[h]!r}" for h in left)
@@ -1728,7 +1743,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         for host in seated_now:
             del remaining[host]
         remaining.update(chained)
-        shipped_ids.update(chained)
+        shipped.update(chains)
 
     # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
     # occupant's plan lands here (`plan:`), and the occupant's contract names

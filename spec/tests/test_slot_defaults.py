@@ -507,3 +507,76 @@ def test_a_bay_module_whose_parts_ship_defaults_is_fine(tmp_path, lib):
     dev, _ = fhd(tmp_path, "test/capped-cassette@1")
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}
+
+
+# --- two slots shipping the same part, and a real cycle ---------------------------------
+
+def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, booted):
+    """THE GUARD IS THE CHAIN, NOT THE REF. Both bores of an adapter ship the
+    same plug, and that plug ships a boot: two plugs and TWO boots. A guard
+    that deduped by ref value would seat the second plug and drop its boot."""
+    def both(c):
+        for pid in ("tx", "rx"):
+            _part(c, pid)["default"] = "test/booted-plug@1"
+    _copy(booted, V_ADAPTER, 4, "twice-booted-adapter", both)
+    _copy(booted, CASSETTE, 3, "twice-booted-cassette",
+          lambda c: _part(c, "lc01").update({"ref": "test/twice-booted-adapter@1"}))
+    dev, _ = fhd(tmp_path, "test/twice-booted-cassette@1")
+    root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
+    assert occupants_drawn(root) == {
+        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/tx-occupant-occupant": BOOT,
+        "bay-1/module/lc01/rx-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/rx-occupant-occupant": BOOT}
+
+
+def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_path, booted):
+    """The same on the device-level path: two ports shipping one plug."""
+    def h_adapter(c):
+        c["interface"] = "lc"
+        c["default"] = "test/booted-plug@1"
+        c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
+                                                         "direction": "front"}
+    _copy(booted, H_ADAPTER, 4, "booted-hadapter", h_adapter)
+    dev = dcp(tmp_path)
+    d = yaml.safe_load(dev.read_text())
+    n = 0
+    for view in d["views"].values():
+        for p in ((view or {}).get("components") or {}).get("placements") or []:
+            if p.get("id") in ("port-1510", "port-line"):
+                p["ref"] = "test/booted-hadapter@1"
+                n += 1
+    assert n == 2, "the two ports are no longer placed once each"
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    root, _ = face(build(dev, tmp_path / "o", booted), "dcp-r-34d-cs", "default")
+    assert occupants_drawn(root) == {
+        "port-1510-occupant": "test/booted-plug@1",
+        "port-1510-occupant-occupant": BOOT,
+        "port-line-occupant": "test/booted-plug@1",
+        "port-line-occupant-occupant": BOOT}
+
+
+@pytest.fixture
+def looping(lib):
+    """A plug whose own default is itself - a cycle of one link."""
+    _copy(lib, "generic/lc-plug", 1, "loop-plug", _set(default="test/loop-plug@1"))
+    _copy(lib, V_ADAPTER, 4, "looping-adapter",
+          lambda c: _part(c, "tx").update({"default": "test/loop-plug@1"}))
+    _copy(lib, CASSETTE, 3, "looping-cassette",
+          lambda c: _part(c, "lc01").update({"ref": "test/looping-adapter@1"}))
+    return lib
+
+
+def test_a_default_that_loops_back_on_one_seat_is_an_error(tmp_path, looping):
+    dev, _ = fhd(tmp_path, "test/looping-cassette@1")
+    r = run(dev, tmp_path / "o", looping)
+    assert r.returncode != 0
+    assert "test/loop-plug@1 is a cycle" in r.stderr, r.stderr[-800:]
+    assert "bay-1/module/lc01/tx" in r.stderr
+
+
+def test_a_device_level_default_that_loops_is_an_error(tmp_path, looping):
+    r = run(dcp(tmp_path, {"port-1510": "test/loop-plug@1"}), tmp_path / "o", looping)
+    assert r.returncode != 0
+    assert "test/loop-plug@1 is a cycle" in r.stderr, r.stderr[-800:]
+    assert "port-1510" in r.stderr
