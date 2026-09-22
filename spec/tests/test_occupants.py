@@ -130,6 +130,75 @@ def test_an_occupant_must_plug_into_something(tmp_path):
     assert any("names no placement in any view" in e for e in errs), errs
 
 
+# --- a device-level occupants key can itself be chained ----------------------
+#
+# `occupants: {port-4: optic, port-4-occupant: plug, port-4-occupant-occupant:
+# boot}` is exactly what render.py's fixed-point expansion draws (test_chained_
+# seats.py exercises the build side; test_seat_depth.py's chained mate-to does
+# too). L12 used to know only about placements gathered from the views, so a
+# key naming a chained occupant read as "names no placement in any view" - the
+# wrong error for a manifest the renderer built without complaint. The fix
+# shares manifest.chained_occupant_ref with nested_key_host (#484's cage-on-a-
+# card resolver) rather than growing a second walk of the same shape.
+
+def test_a_device_level_chain_lints_clean(tmp_path):
+    dev = fitted_copy(tmp_path, {
+        "port-4": "generic/sfp-lc-simplex@2",
+        "port-4-occupant": "generic/lc-plug@1",
+        "port-4-occupant-occupant": "common/lc-boot@1",
+    })
+    assert errors_for(dev, yaml.safe_load(dev.read_text())) == []
+
+
+def test_a_chained_key_whose_ref_does_not_mate_is_an_l12_error(tmp_path):
+    """A boot seated directly on the optic - the plug it wraps skipped - mates
+    'lc-plug' against a host that presents 'lc'. The chain must be walked to
+    reach the mismatch at all: before the fix, this key read as unhosted."""
+    dev = fitted_copy(tmp_path, {
+        "port-4": "generic/sfp-lc-simplex@2",
+        "port-4-occupant": "common/lc-boot@1",
+    })
+    errs = errors_for(dev, yaml.safe_load(dev.read_text()))
+    assert any("mates 'lc-plug'" in e and "presents 'lc'" in e for e in errs), errs
+
+
+def test_a_chained_key_naming_an_occupant_no_key_seats_is_an_error(tmp_path):
+    """`port-4-occupant` with no `port-4` (or anything else producing that
+    id) names nothing - a typo, not a chain. The OLD "names no placement in
+    any view" wording is a substring of the new message too (see below), so
+    this asserts the clause only the new chain-lookup path prints - the one
+    the old code never reasoned about at all, because it never went looking
+    for a sibling occupant to begin with."""
+    dev = fitted_copy(tmp_path, {"port-4-occupant": "generic/lc-plug@1"})
+    errs = errors_for(dev, yaml.safe_load(dev.read_text()))
+    assert any("no occupant of this configuration seats it either" in e
+               for e in errs), errs
+
+
+def test_a_spec_with_id_renames_the_chain(tmp_path):
+    """`id:` is what a chained key names, not `<host>-occupant` - the same
+    override `occupant_local_id` honours for the nested (card) branch."""
+    dev = fitted_copy(tmp_path, {
+        "port-4": {"ref": "generic/sfp-lc-simplex@2", "id": "the-plug-spot"},
+        "the-plug-spot": "generic/lc-plug@1",
+    })
+    assert errors_for(dev, yaml.safe_load(dev.read_text())) == []
+
+
+def test_a_chain_cycling_back_on_itself_is_an_error(tmp_path):
+    """Two keys, neither a placement, each named as the other's occupant by
+    `id:` - the chain never grounds. render.py's own fixed-point expansion
+    just drops a device-level occupant that never resolves (occupants for a
+    host in another view are skipped, not an error); L12 is the check that
+    catches what would otherwise silently vanish from the drawing."""
+    dev = fitted_copy(tmp_path, {
+        "loop-a": {"ref": "generic/lc-plug@1", "id": "loop-b"},
+        "loop-b": {"ref": "common/lc-boot@1", "id": "loop-a"},
+    })
+    errs = errors_for(dev, yaml.safe_load(dev.read_text()))
+    assert any("cycles back" in e for e in errs), errs
+
+
 def test_the_library_is_clean():
     for man in libwalk.iter_devices([LIB]):
         assert not errors_for(man, yaml.safe_load(man.read_text())), man
