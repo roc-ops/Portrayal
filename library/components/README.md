@@ -217,7 +217,7 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   | not a skin | what it is instead |
   |---|---|
   | wattage, capacity, any printed value | a `field`, filled through a `data-from` node |
-  | **colour** | a `field`, through `data-fill-from` and `data-stroke-from` |
+  | **colour** | a `field`, through `data-fill-from`, `data-stroke-from` and `data-stroke-derive` |
   | orientation | the placement rotates |
   | a different shape | a different component |
 
@@ -235,6 +235,26 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   A skin per colour also has to be CHOSEN, once per placement, which is how the
   library ended up with one Edgecore chassis drawing its back-to-front build in
   blue and two others in red from the same vendor convention.
+
+  The three colour attributes on a skin node, each naming a field:
+
+  | attribute | what the field's value sets |
+  |---|---|
+  | `data-fill-from="<key>"` | the node's `fill` |
+  | `data-stroke-from="<key>"` | the node's `stroke` - a second field, for a part whose outline is chosen separately |
+  | `data-stroke-derive="<key>"` | the node's `stroke`, as a fixed darker shade of `<key>`'s colour - an outline that follows its fill with no second field to keep in step |
+
+  An empty or absent value leaves what the skin draws, so every node keeps its
+  literal `fill`/`stroke` and the skin stays a valid drawing on its own. The
+  shade is one exact rule, the same at build (`render.py` `stroke_shade`) and at
+  runtime (`kit/fields.js` `strokeShade`): each RGB channel times 61/100, rounded
+  half up - `(c * 61 + 50) // 100` - so the generic latch grey `#6f6f6f` gives
+  `#444444`. It accepts `#rgb` and `#rrggbb`; any other colour syntax has no
+  shade and leaves the stroke as drawn. With the field unset the build draws the
+  shade of the node's drawn default, so write the literal `stroke` as that shade.
+  A viewer that changes a field at runtime (`shell.setFields`, the 3D viewer's
+  `setFields`) applies the same rule, and clearing a value restores the drawn
+  colour.
 - `body-left.svg`, `body-right.svg`, `body-top.svg`, `body-bottom.svg`,
   `body-rear.svg` are optional side views for parts that have a 3D body. NOTHING
   READS THEM TODAY: `relief.js` extrudes a box from the face skin and `data-z-*`,

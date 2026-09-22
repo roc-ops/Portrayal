@@ -3,7 +3,8 @@
 // A field is something a part's contract declares (`fields`, carried in
 // components.json) and its skin is wired to: a `data-from` node whose TEXT is the
 // value, a `data-fill-from` node whose FILL is, a `data-stroke-from` node whose
-// STROKE is. render.py's `fill_from_attrs` applies all three when a drawing is
+// STROKE is, a `data-stroke-derive` node whose stroke is a darker shade of it
+// (below). render.py's `fill_from_attrs` applies all four when a drawing is
 // built; this applies the same rule when a viewer changes one afterwards.
 //
 // ONE HELPER FOR BOTH HALVES. shell.js paints the 2D drawing the page shows and
@@ -31,6 +32,27 @@
 //
 // A stash of the EMPTY STRING means the node had no such attribute, so restoring
 // removes it rather than writing `fill=""`.
+
+// AN OUTLINE DERIVED FROM ITS FILL (#482). `data-stroke-derive="<key>"` draws a
+// node's stroke as a fixed darker shade of that key's colour, so a latch given
+// any colour gets an edge that goes with it without a second field to keep in
+// step. ONE EXACT RULE, the same as render.py's `stroke_shade` and held to it
+// byte for byte by spec/tests/test_stroke_derive.py: each channel times 61/100,
+// rounded half up, in integers - (c * 61 + 50) / 100, floored. #6f6f6f, the
+// generic latch's grey, lands on #444444. Accepted: `#rgb` and `#rrggbb`, either
+// case, with surrounding space; anything else has no shade (null), and the
+// stroke is left as drawn. Always answers lowercase `#rrggbb`.
+export function strokeShade(colour) {
+  const m = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(String(colour ?? '').trim());
+  if (!m) return null;
+  let h = m[1];
+  if (h.length === 3) h = [...h].map(c => c + c).join('');
+  let out = '#';
+  for (const i of [0, 2, 4])
+    out += Math.floor((parseInt(h.slice(i, i + 2), 16) * 61 + 50) / 100)
+      .toString(16).padStart(2, '0');
+  return out.toLowerCase();
+}
 
 const esc = s => (typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : String(s));
 const STASH = {fill: 'data-portrayal-fill', stroke: 'data-portrayal-stroke'};
@@ -70,6 +92,11 @@ export function paintFields(el, vals) {
       if (colour) paint(n, 'fill', colour); else restore(n, 'fill');
     for (const n of el.querySelectorAll(`[data-stroke-from="${key}"]`))
       if (colour) paint(n, 'stroke', colour); else restore(n, 'stroke');
+    // the build already drew the shade of the default, so "as drawn" is right
+    // both for an empty value and for one with no shade
+    const shade = strokeShade(colour);
+    for (const n of el.querySelectorAll(`[data-stroke-derive="${key}"]`))
+      if (shade) paint(n, 'stroke', shade); else restore(n, 'stroke');
   }
   return el;
 }

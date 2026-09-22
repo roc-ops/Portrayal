@@ -444,6 +444,32 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
                     lambda m: f"url(#{renamed.get(m.group(1), m.group(1))})", val))
 
 
+# A DERIVED OUTLINE IS ONE EXACT RULE, written twice - here for the build and in
+# kit/fields.js `strokeShade` for a viewer that changes a colour afterwards - and
+# spec/tests/test_stroke_derive.py holds the two to identical output. Each channel
+# is multiplied by 61/100 and rounded half up, in integers so neither language's
+# rounding of a binary fraction can differ: (c * 61 + 50) // 100. 0.61 is chosen
+# so the generic latch's grey #6f6f6f lands exactly on the #444444 its outline
+# was drawn with by hand. Accepted: `#rgb` and `#rrggbb`, either case, with
+# surrounding space; anything else (a name, rgb(), a var()) has no shade and
+# leaves the stroke as drawn. The answer is always lowercase `#rrggbb`.
+STROKE_DERIVE_NUM, STROKE_DERIVE_DEN = 61, 100
+_HEX_COLOUR = re.compile(r"#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})")
+
+
+def stroke_shade(colour):
+    """The outline `data-stroke-derive` draws for a fill of `colour`, or None."""
+    m = _HEX_COLOUR.fullmatch(str(colour or "").strip())
+    if not m:
+        return None
+    h = m.group(1)
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    return "#" + "".join(
+        f"{(int(h[i:i + 2], 16) * STROKE_DERIVE_NUM + STROKE_DERIVE_DEN // 2) // STROKE_DERIVE_DEN:02x}"
+        for i in (0, 2, 4))
+
+
 def fill_from_attrs(root, attrs):
     """Fill skin nodes marked `data-from` or `data-fill-from` from this
     instance's merged attrs.
@@ -475,7 +501,30 @@ def fill_from_attrs(root, attrs):
     nothing.
     """
     parents = {c: p for p in root.iter() for c in p}
+    # the fill each colour field is DRAWN with, read before anything is painted:
+    # a derived outline with no value set follows the drawing's own default
+    drawn = {}
+    for node in root.iter():
+        k = node.get("data-fill-from")
+        if k is not None and k not in drawn and node.get("fill"):
+            drawn[k] = node.get("fill")
     for node in list(root.iter()):
+        # AN OUTLINE THAT FOLLOWS ITS FILL WITHOUT A FIELD OF ITS OWN. A latch
+        # whose colour is a field needs an edge that goes with whatever colour
+        # it is given - the generic transceivers' red latch wore the dark blue
+        # outline of the fill it used to have (#482). `data-stroke-from` would
+        # make that a second field for every wrapper to keep in step with the
+        # first; `data-stroke-derive` names the colour field and draws the
+        # outline as a fixed darker shade of it (`stroke_shade`). With the field
+        # unset it is the shade of the drawn default, so the compiled default
+        # and the hand-written literal cannot disagree.
+        derive = node.get("data-stroke-derive")
+        if derive is not None:
+            src = attrs.get(derive)
+            src = drawn.get(derive) if src in (None, "") else src
+            shade = stroke_shade(src)
+            if shade:
+                node.set("stroke", shade)
         paint = node.get("data-fill-from")
         if paint is not None and attrs.get(paint) not in (None, ""):
             node.set("fill", str(attrs[paint]).strip())
