@@ -249,6 +249,7 @@ RULES = {
     "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
+    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
 }
 
@@ -2422,6 +2423,80 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
             if total != 100:
                 err(path, "L79", f"path {i} from {p['from']} splits into ratios "
                                  f"summing to {total:g}, not 100")
+
+
+# THE THREE POLARITIES FS BUILDS, as the fibre each front port takes, port by
+# port, within one rear connector of n positions. Port p is the vendor's printed
+# number (odd = the lower bore of a stacked duplex). Read off FS's own cassette
+# diagrams (the FHD universal-polarity blog's Method A and Method B figures):
+# Type A is straight through; AF swaps each duplex pair - port 1 takes fibre 2
+# and port 2 takes fibre 1; universal pairs fibre j with fibre n+1-j, so port 1
+# takes fibre 1 and port 2 fibre 12.
+POLARITY_PATTERNS = {
+    "a": lambda n: list(range(1, n + 1)),
+    "af": lambda n: [p + 1 if p % 2 else p - 1 for p in range(1, n + 1)],
+    "universal": lambda n: [(p + 1) // 2 if p % 2 else n + 1 - p // 2
+                            for p in range(1, n + 1)],
+}
+
+
+def lint_component_optical_polarity(path, data, lib_roots):
+    """L109: a declared polarity is what the paths wire.
+
+    `optical.polarity` was a name the schema accepted and nothing checked - the
+    design note always said "checked against the paths, never a substitute for
+    them", and until this rule nobody did the checking.
+
+    IT READS PORT NUMBERS, NOT BORES. A port's number is its adapter's place in
+    the front order plus the position within the adapter (optical_ports
+    `front_label`), so this rule trusts that position 1 IS the port the vendor
+    prints first. Whether it is - which bore of a stacked adapter is position 1
+    - is the adapter's contract to get right, and a test pins it for the FS
+    stacked adapters (the lower bore, FS's odd port). The two FHD adapters had
+    it the other way round until this rule's first use exposed it.
+
+    Only rear connectors reached from the front are compared, one at a time,
+    port order against the pattern for that connector's width. A polarity this
+    table does not know is not judged - it is still a claim, just not one this
+    rule can test.
+    """
+    opt = data.get("optical") or {}
+    pol = str(opt.get("polarity") or "").lower()
+    pattern = POLARITY_PATTERNS.get(pol)
+    if pattern is None or not opt.get("paths"):
+        return
+
+    def load_ref(ref):
+        f = resolve_component(ref, lib_roots)
+        return load_yaml(f) if f else None
+
+    by_rear = {}
+    for p in opt["paths"]:
+        eps = [p.get("from"), p.get("to")]
+        front = next((e for e in eps if e and ":" not in e), None)
+        rear = next((e for e in eps if e and ":" in e), None)
+        if not front or not rear:
+            continue
+        label = optical_ports.front_label(data, front, load_ref)
+        if label is None:
+            continue
+        _face, rpart, rpos = optical.split_endpoint(rear)
+        by_rear.setdefault(rpart, []).append((int(label), int(rpos)))
+    for rpart, pairs in sorted(by_rear.items()):
+        pairs.sort()
+        ports = [pt for pt, _ in pairs]
+        base = ports[0] - 1
+        n = len(pairs)
+        if ports != list(range(base + 1, base + n + 1)):
+            continue            # not one contiguous run of ports - not a cassette pattern
+        got = [f for _, f in pairs]
+        want = pattern(n)
+        if got != want:
+            first = next(i for i in range(n) if got[i] != want[i])
+            err(path, "L109", f"declares polarity {pol!r}, but port {base + first + 1} takes "
+                              f"{rpart} fibre {got[first]} where {pol!r} puts fibre "
+                              f"{want[first]} (ports {base + 1}-{base + n} wire "
+                              f"{got}); the paths are the evidence - fix them or the claim")
 
 
 def lint_component_optical_coverage(path, data, lib_roots):
@@ -8155,6 +8230,7 @@ def main():
                 lint_component_optical_front_order(f, d)
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
+                lint_component_optical_polarity(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)

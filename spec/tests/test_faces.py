@@ -207,9 +207,12 @@ def test_the_index_carries_a_parts_other_faces():
     # cassette plan's whole reason for widening this file past `plan` -
     # joining the 13 that carry the `plan:`/`faces.plan` sugar instead. A
     # future rear or plan face bumps this again.
+    # 23, not 18: the FHD polarity twins - fhd-1mtp6lcd-os2-af, -os2-u,
+    # fhd-2mtp12-lc-os2-af, -os2-u and fhd-1mtp24-lc-os2-af - each declare
+    # `faces.rear`, their Type A twins' bodies in Type AF or universal wiring.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 18, \
-        f"expected exactly 18 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 23, \
+        f"expected exactly 23 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

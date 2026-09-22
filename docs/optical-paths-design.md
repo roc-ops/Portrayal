@@ -297,7 +297,7 @@ Recorded rather than decided, because both need evidence we do not have:
 
 **The LC pitch** was settled in plan 4: `standards.yaml`'s `fhd-lc-cassette`
 entry records the measured 12.92 floor off FS SKU 57016, and
-`common/lc-duplex-v-adapter@3` is the 9.28-wide stacked adapter FS actually
+`common/lc-duplex-v-adapter@4` is the 9.28-wide stacked adapter FS actually
 ships, so the 13.2-wide shared adapter is no longer composed at a 12.90 pitch.
 
 **The FMT-N's 16.93".** The fixed enclosure's render carries a fourth dimension,

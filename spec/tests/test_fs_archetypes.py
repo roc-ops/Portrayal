@@ -156,7 +156,7 @@ SC = "fs/fhd-1mtp12-sc-os2-a/v1"
 
 
 def test_the_sc_cassette_is_the_first_user_of_the_sc_adapter():
-    """`common/sc-duplex-adapter@3` was measured and then composed by nothing.
+    """`common/sc-duplex-adapter@4` was measured and then composed by nothing.
 
     Its 13.0 pitch floor has never been checked against a real layout, because
     L81 reads `conforms` off a composed part and nothing composed it.
@@ -164,7 +164,7 @@ def test_the_sc_cassette_is_the_first_user_of_the_sc_adapter():
     c = contract(SC)
     assert c is not None, "fs/fhd-1mtp12-sc-os2-a@1 not built"
     refs = [p["ref"] for p in c["parts"]]
-    assert refs.count("common/sc-duplex-adapter@3") == 6, refs
+    assert refs.count("common/sc-duplex-adapter@4") == 6, refs
 
 
 def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
@@ -172,7 +172,7 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
     one is not uniform, and that is the finding, not a bug in this test.
 
     The six centres are 57058.main.jpg's own render, the same image
-    common/sc-duplex-adapter@3's pitch floor (13.0, `pitch-kind: floor`) was
+    common/sc-duplex-adapter@4's pitch floor (13.0, `pitch-kind: floor`) was
     set from. Reproducing them here for the first real cassette shows the
     floor is the MEAN of five noisy gaps (12.71-13.22), not their minimum:
     the narrowest gap sits 0.29 under it. Lint stays clean not because the
@@ -192,7 +192,7 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
     assert L.STANDARDS["sc-duplex-adapter"]["pitch"] == 13.0
     c = contract(SC)
     xs = sorted(float(p["at"][0]) for p in c["parts"]
-                if p["ref"] == "common/sc-duplex-adapter@3")
+                if p["ref"] == "common/sc-duplex-adapter@4")
     gaps = [round(xs[i] - xs[i - 1], 2) for i in range(1, len(xs))]
     assert len(set(gaps)) > 1, \
         f"expected the render's own measurement noise, got a uniform {gaps}"
