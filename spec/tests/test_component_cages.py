@@ -166,7 +166,10 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
 
 
 CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
-             "accepts", "occupant-attrs", "mirror", "group-states", "kind"}
+             "accepts", "occupant-attrs", "mirror", "group-states", "kind",
+             # what this slot ships holding (B3), null where it ships empty -
+             # a fact of the contract, so it is published here too
+             "default"}
 
 
 def test_a_card_cage_carries_exactly_the_r1_keys(index):
@@ -176,6 +179,8 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
     for ref, entry in index.items():
         for c in entry.get("cages") or []:
             assert set(c) == CAGE_KEYS, (ref, c["id"], sorted(set(c) ^ CAGE_KEYS))
+            # nothing in the library declares a default yet (B3 task 3)
+            assert c["default"] is None, (ref, c["id"])
             checked += 1
     assert checked > 0
 
