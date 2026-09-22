@@ -24,6 +24,22 @@ FIBRE_CONNECTORS = [
     # generic/lc-plug@1 (pluggables B2, Task 4): the cable-end LC plug, not a
     # panel adapter - simplex, `optical.positions: 1`.
     "generic/lc-plug/v1",
+    # THE FOUR CABLE-END PLUGS OF B3 (docs/pluggables-caps-design.md, "Parts"),
+    # which arrive with the dust caps they swap for. Each is a connector by
+    # this sweep's own test - `class: port`, `attrs.media: fiber`, no
+    # `relief.cavity` - so each needs a capacity, and each one's capacity is a
+    # different number, which is the point of stating it per part:
+    #   lc-duplex-plug  2  - two halves, one fibre each
+    #   sc-plug         1  - simplex, like the LC plug above
+    #   mpo12-plug     12  - the ferrule's row
+    #   mpo24-plug     24  - the same housing, a two-row ferrule
+    # The two MPO plugs are two parts for one outline BECAUSE the count lives
+    # here: `optical.positions` is the only field that tells them apart, so a
+    # missing one would silently merge them in every coverage check.
+    "generic/lc-duplex-plug/v1",
+    "generic/sc-plug/v1",
+    "generic/mpo12-plug/v1",
+    "generic/mpo24-plug/v1",
 ]
 
 

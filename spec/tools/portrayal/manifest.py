@@ -465,7 +465,10 @@ def nested_key_host(key, device, cfg, resolve):
 
     A chained key (`front-6/xg0-occupant`) names the occupant seated on
     another key of the same instance, and resolves to that occupant's ref -
-    however many hops long, via `chained_occupant_ref`."""
+    however many hops long, via `chained_occupant_ref`. The HEAD may be a
+    chained occupant too (`port-1510-occupant/a`, a composed part of a seated
+    plug), resolved the same way against this configuration's device-level
+    occupants."""
     segs = key.split("/")
     host_id = segs[-1]
     views = resolve_views(device, cfg)
@@ -483,8 +486,26 @@ def nested_key_host(key, device, cfg, resolve):
         where, path = segs[0], segs[0]
         ref, in_bays = placements[segs[0]]["ref"], False
     else:
-        raise ValueError(f"occupants/{key}: {segs[0]!r} is no bay in any view "
-                         "this configuration draws, and no placement either")
+        # A SEATED OCCUPANT CAN BE THE HEAD TOO: `port-1510-occupant/a` is half
+        # `a` of the duplex plug seated at `port-1510`. The head is resolved by
+        # the SAME chained walk a bare chained key takes (chained_occupant_ref
+        # over this configuration's device-level occupants), and `path` is the
+        # occupant's own drawing path, which is its placement id - instance_group
+        # falls back to `inst_id` when no path is passed, so the build names the
+        # instance exactly this. Reached only when the head is neither a bay nor
+        # a placement, so nothing that resolved before resolves differently.
+        try:
+            ref = chained_occupant_ref(
+                segs[0],
+                {k: (v if isinstance(v, dict) else {"ref": v})
+                 for k, v in ((cfg or {}).get("occupants") or {}).items()
+                 if "/" not in k and v != ""},
+                lambda h: placements[h]["ref"] if h in placements else None)
+        except (KeyError, ValueError):
+            raise ValueError(f"occupants/{key}: {segs[0]!r} is no bay in any view "
+                             "this configuration draws, no placement either, and "
+                             "no occupant of this configuration seats it")
+        where, path, in_bays = segs[0], segs[0], False
     for seg in segs[1:-1]:
         c = resolve(ref) if ref else None
         nb = ((c or {}).get("bays") or {}).get(seg) if in_bays else None

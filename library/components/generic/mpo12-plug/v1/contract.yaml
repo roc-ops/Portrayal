@@ -1,0 +1,187 @@
+format: 1
+kind: component
+name: mpo12-plug
+version: 1.0.0
+class: port
+mates: mpo
+interface: mpo-plug
+interface-at: boot
+conforms: mpo-plug
+optical: {positions: 12}
+profile: networking
+description: >-
+  A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing
+  with the MT ferrule standing in its window and the key rib across the top
+  face. UNPINNED: the pins live on the module receptacle this lands in, so
+  this is the female half - stated in `provenance.gender` and not as a field,
+  because the schema carries no key for it yet. Occupies an `mpo`
+  aperture (std/mpo@1 and anything composing it) at its own `mate` point, and
+  presents `mpo-plug` at its rear so a boot or a bare cable can seat there -
+  the shape generic/lc-plug@1 already has, with nothing built yet to take it
+  up. generic/mpo24-plug@1 is the same housing with a two-row ferrule; the
+  fibre count is a property of the ferrule and not of the outline, which is
+  why they are two parts and not one with an attr.
+size: {w: 12.5, h: 7.6}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: fiber, connector: mpo}
+unplaced: >-
+  seated by a device that places it in an `mpo`-presenting aperture - none
+  does yet. Every MPO aperture in the library today is on a cassette's REAR
+  face (common/mpo-adapter@1 on fs/fhd-2mtp12-lc-rear@1), so
+  spec/tests/test_fibre_plugs.py seats it as a configured occupant on a
+  throwaway cassette whose FRONT carries the same adapter, the fixture
+  spec/tests/test_dust_caps.py already uses for common/mpo-dust-cap@1.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, for the reason generic/lc-plug@1 states at length in
+    its own `provenance.behaviour`: spec/tests/test_behaviour.py::
+    test_a_receptacle_does_not_move asserts `behaviour is None` for every
+    `class: port` contract, and nothing in the mate-to resolution reads the
+    field.
+  source: >-
+    US Conec customer drawing C20044 rev B, KIT, MTP CONNECTOR, UNIVERSAL,
+    SHORT, RIBBON, HIGH SPRING FORCE, sheet 2 - front (end-on) view, plan view
+    and SECTION A-A - corroborated by C20851 rev D, the 5.3-5.7 mm round-cable
+    kit of the same connector, which prints the same two figures. The first
+    MPO plug source this corpus has held: the B3 design's own intake note says
+    'No MPO plug source is held'.
+    BOTH SHEETS ARE MARKED N.T.S. and both say DIMENSIONS FOR REFERENCE ONLY,
+    which is why the printed callouts govern here and every measurement in
+    this contract is stated as a check on them rather than as a source.
+  size: >-
+    drawing, both axes, PRINTED CALLOUTS. 7.6 is dimensioned on the front view
+    (its extension lines are the silhouette's own top and bottom flats) and
+    12.5 on the plan view, whose extension lines run along the connector's
+    outline, 124.38 pt apart. C20851 prints 7.6 and 12.5 for the same
+    connector on a different cable.
+    CHECKED ON A SECOND QUANTITY, and the check needed doing properly. On the
+    front view the silhouette's ends are arcs; taking the Bezier CONTROL
+    points gives 12.82, which overstates it - evaluating the curves gives
+    12.404 on the ruler the printed 7.6 fixes (9.9237 pt/mm), 0.8% from the
+    printed 12.5. The plan view's own scale, from its printed 12.5 over the
+    extension lines it dimensions, is 9.950 pt/mm - 0.27% from the front
+    view's - so the two views are at one scale and the printed pair and the
+    drawn outline are the same object measured twice.
+    NO DEPTH, the reading standards.yaml's `lc-plug`, `sc-plug` and `mpo-plug`
+    all take: C20044 prints 25.6 for the connector body and C20851 prints 60.3
+    overall for the same connector on round cable, so what is behind the
+    housing is the cable assembly's length and not the interface's. The 25.6
+    is used once, in `provenance.standoff`.
+  aperture-contradiction: >-
+    THIS PLUG DOES NOT FIT THE APERTURE THE LIBRARY DRAWS, AND THE APERTURE IS
+    THE SIDE TO DOUBT. std/mpo@1 is 7.8 x 5.6 at `confidence: estimated`, and
+    spec/schemas/standards.yaml's `mpo-adapter` entry says of the same reading
+    that the detection 'catches a bevelled interior and reads 5.4 to 8.5 across
+    the rows'. A 12.5 x 7.6 connector cannot enter a 7.8 x 5.6 opening.
+    WHAT IS ON EACH SIDE. Here: two printed callouts on two customer drawings
+    from the manufacturer of the connector, cross-checked against the drawn
+    outline. There: one reading off a vendor's product render, at estimated
+    confidence, whose own note brackets the same axis between 5.4 and 8.5 -
+    a bracket 7.8 and 5.6 BOTH fall inside.
+    IT IS NOT A NEW SUSPICION. common/mpo-dust-cap@1's
+    `provenance.aperture-doubt` reached it from a different direction in the
+    task before this one - that a port's visible content on FS's render reads
+    12.8 by 8.1, 'an aspect a 7.8 x 5.6 opening does not have', and that the
+    two thresholds look like two readings of ONE axis. 12.5 x 7.6 printed here
+    is what that hypothesis predicted, to 0.3 and 0.5 of a figure that cap
+    itself calls an upper bound.
+    WHAT THIS PART DOES ABOUT IT: NOTHING, DELIBERATELY. It is drawn at the
+    size its own source prints and is NOT fitted to std/mpo@1. Re-deriving
+    that aperture is its own piece of work - it changes a published `conforms:`
+    and every adapter composing it - and it is reported rather than done here.
+    US Conec's own MTP adapter drawing C10783 rev B draws the opening a
+    connector enters and puts no callout on it, as every SC and LC adapter
+    drawing in this corpus does with its own; measured on the two rulers that
+    sheet prints (14.9 body width and 9.8 body height, which agree to 0.13%),
+    the content inside the adapter body reaches 13.8 by 8.2 - consistent with
+    a 12.5 x 7.6 connector entering it, and not with 7.8 x 5.6. That
+    measurement is recorded as corroboration and is not a derivation of the
+    aperture: the opening itself carries no dimension on that sheet either.
+  key: >-
+    MEASURED, and WHICH FACE CARRIES IT IS A CONVENTION ARGUMENT AND NOT A
+    READING - stated because the key is the whole of an MPO's polarity. On the
+    front view, on the ruler the printed 7.6 fixes, a rectangular moulding
+    4.39 wide and 0.90 tall sits across the top of the housing, its outer edge
+    0.42 below the silhouette's top flat, centred on the housing to 0.02.
+    Those spans are measured.
+    THE SAME SHEET DRAWS A DIFFERENT MOULDING ON THE OPPOSITE FACE, at the
+    same distance from the outline and the same width, with its own bevels;
+    no callout names either, and an MPO has ONE key. Only one is drawn here.
+    The top is chosen because US Conec's own MTP adapter drawing C10783 rev B
+    draws its opening's key notch on one long wall only - measured, the top
+    wall carries a step the bottom wall does not - and the two drawings are the
+    same manufacturer's third-angle views of mating parts. That is a
+    convention argument about which way up the two sheets are drawn, not a
+    measurement, and if it is wrong the key is on the other face and nothing
+    else in this contract changes.
+  ferrule: >-
+    measured, undimensioned. The window in the housing that the MT ferrule
+    stands in is drawn as a stepped opening; its innermost rectangle measures
+    6.10 by 2.50 on the ruler above, centred on the housing in both axes to
+    0.02, inside a 7.42 by 3.50 outer step. 6.10 x 2.50 is what is drawn here.
+    WHAT IS NOT DRAWN, AND WHAT IS NOT EVIDENCE. The front view also draws
+    twelve fibre bores in a row and two guide-pin bores flanking them; on the
+    same ruler the bores are 0.12 across at a 0.249 pitch and the pin bores
+    0.70-0.80 across, 4.59 apart. Those agree closely with the figures an MT
+    ferrule is commonly quoted at (0.125 fibre, 0.25 pitch, 0.7 pin, 4.6 pin
+    pitch) - THAT IS GENERAL KNOWLEDGE AND NO DOCUMENT HELD IN THIS CORPUS
+    STATES IT, so it is recorded as the reason somebody might look and not
+    used as evidence for the scale. The in-corpus check on the scale is the
+    printed 12.5, above. None of the bores is drawn: at 0.12 mm they are
+    smaller than the line weight of the face they would sit on, and the fibre
+    count is carried by `optical.positions` instead.
+  gender: >-
+    UNPINNED, as the B design says every MPO plug in this library is: the
+    module receptacles these land on carry the pins. C20044's kit table offers
+    both a PIN CLAMP (male) and a PIN SPACER (female) in the SAME housing, and
+    C20044's own front view draws the two guide-pin BORES rather than pins, so
+    the drawing is of both halves and unpinned is this contract's choice, taken
+    to match the B design rather than read off the sheet.
+    STATED IN PROSE ONLY, BECAUSE THERE IS NOWHERE ELSE TO STATE IT.
+    docs/pluggables-connectors-design.md reserves `optical.gender` for L12 to
+    compare, and spec/schemas/component.schema.json's `optical` block does not
+    carry the key yet (`additionalProperties: false`), so the claim cannot be
+    written as a field without a schema change this task does not make. Adding
+    the key, and the L12 comparison with it, belongs with the first part that
+    declares the other side of the pair - std/mpo@1 declares no gender either,
+    so there is nothing for it to disagree with today.
+  standoff: >-
+    ESTIMATED - how far this plug stands out of the aperture it enters, which
+    is the body feature's `out`. No document held here dimensions it.
+    WHAT IS PRINTED. C20044's SECTION A-A dimensions the connector body 25.6
+    long, with the guide pins standing a further 1.9 off its front face and a
+    1.0 step. US Conec's MTP adapter C10783 rev B prints 20.7 for the adapter
+    overall.
+    THE BRACKET. An adapter takes a connector from each face and the two
+    ferrules butt at the split sleeve between them, so one connector enters
+    about half of the 20.7 - 10.35 - and cannot enter more than all of it. So
+    the part standing outside is between 25.6 - 20.7 = 4.9 (a plug pushed
+    clean through, which is not a state the hardware has) and 25.6 - 10.35 =
+    15.25. 15.2 is adopted, on the mid-plane assumption.
+    WHAT THE ASSUMPTION IS WORTH. No drawing states it. The same adapter
+    prints 12.4 for a sub-length of its own 20.7, so its mouldings are not
+    symmetric about its midpoint - that figure is the flange, not the sleeve,
+    and where the sleeve sits is not dimensioned. So the mid-plane is about
+    where two ferrules meet and not about the adapter body, and the figure is
+    an estimate and no more.
+elements:
+  body: {at: [0.0, 0.0], size: [12.5, 7.6], class: port}
+connection-points:
+  mate: {at: [6.25, 3.8], direction: front}
+  boot: {at: [6.25, 3.8], direction: rear, 'on': body}
+  cable: {at: [6.25, 3.8], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 15.2
+      confidence: estimated
+      source: >-
+        generic/mpo12-plug@1's own `provenance.standoff` - the printed 25.6
+        connector body less half the printed 20.7 adapter, on the stated
+        assumption that two ferrules meet at the adapter's mid-plane. ABSOLUTE
+        from this part's own face: std/mpo@1 puts its `mate` on nothing and so
+        presents a lift of 0.0, which is why common/mpo-dust-cap@1's own
+        figures are absolute from the panel too, and why this one has to clear
+        common/mpo-adapter@1's bezel by being larger than it rather than by
+        inheriting anything.
+skins: [default]

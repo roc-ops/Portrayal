@@ -1225,3 +1225,97 @@ standards:
       8 and 9, "APPROXIMATE ... ONLY APPLIES TO PARTS X-557972-X / X-554720-X"),
       not the dimensioned side view the 2.77/5.89 latch figures come from - no
       angle is given for the latch itself.
+  sc-plug:
+    registry: Hirose HSC series catalogue, SC Type Fiber Optic Connectors, simplex
+      plug housing front view (HSC-PH2/PH3/PH0.9). JIS C 5973 (F04) and IEC 61754-4
+      govern the interface and neither is held here.
+    w: 8.3
+    h: 9.0
+    confidence: drawing
+    tiers:
+      - {name: body, w: 7.4, h: 9.0}
+      - {name: key, w: 0.9, h: 1.8}
+    source: >-
+      Hirose's HSC catalogue page draws the simplex plug end-on and dimensions
+      four figures on that one view: 9 (the housing height), 7.4 (the housing
+      width, excluding the key), 0.9 (how far the key stands off the housing's
+      long wall) and 1.8 (the key's own height). w here is the bounding box,
+      7.4 + 0.9, the way `sc-simplex-receptacle`'s 8.39 is 7.5 + 0.89 and
+      `lc-duplex-receptacle`'s w/h include its latch tiers.
+      MEASURED FROM THE VECTOR PATH AS A CHECK, not read off a raster. The front
+      view is vector art; on the ruler the printed 9 fixes (22.66 pt, 2.5178
+      pt/mm) the housing comes out 7.399 wide, the key 0.902 by 1.803, and the
+      drawn centreline sits at the housing's own centre to half a pixel - three
+      printed figures read back to 0.01 mm from a scale fixed by the fourth.
+      The key is centred on the housing's long wall, not offset.
+    notes: >-
+      THE PLUG AND THE OPENING ARE TWO ENTRIES AND THEY DISAGREE BY THE
+      CLEARANCE, which is the point of holding both. `sc-simplex-receptacle`
+      is 7.5 -0.0/-0.1 by 9 +0.1/-0.0 with a 0.89 slot; this plug is 7.4 by 9
+      with a 0.9 key. The 0.1 of width is the fit, and the plus-only tolerance
+      on the opening's 9 is what lets a 9 plug pass a 9 hole. A component
+      drawing the plug therefore cannot `conforms:` to the receptacle entry -
+      L9 allows 0.05 and the width is out by 0.09 - which is why this entry
+      exists rather than the plug borrowing the hole's figures.
+      THE KEY IS SHORTER THAN ITS SLOT: 1.8 against the receptacle's 2.1,
+      0.3 of clearance along the same wall. Neither document tolerances either
+      figure; TIA-604-3 (FOCIS 3) or IEC 61754-4 would.
+      NO DEPTH. The same catalogue prints 25 from the plug's front face to
+      where the boot begins and 36.5 overall, both on one product's side view,
+      and they differ across the family (25/33, 25/36.5, 25/55 for the four
+      variants on that page) because the length behind the housing is the
+      cable assembly's, not the interface's - the same reason `lc-plug` above
+      carries no depth. The 25 is used by generic/sc-plug@1 for how far the
+      plug stands out of a panel, where it is bracketed and marked estimated.
+      HOUSING CORNERS ARE CHAMFERED about 0.5 on the drawn front view and no
+      callout dimensions them; a component drawing this profile as a plain
+      rectangle is not in conflict with this entry, which holds the envelope.
+  mpo-plug:
+    registry: US Conec customer drawings C20044 rev B and C20851 rev D, KIT, MTP
+      CONNECTOR, UNIVERSAL - front view and plan view of the connector housing.
+      IEC 61754-7 / TIA-604-5 FOCIS 5 govern the interface and are not held here.
+    w: 12.5
+    h: 7.6
+    confidence: drawing
+    source: >-
+      Both drawings print the same pair for the standard MTP connector
+      housing: 7.6 on the front (end-on) view, 12.5 on the plan view, whose
+      extension lines land on the connector's own outline. Two US Conec
+      drawings of the same connector in two cable variants, one figure each
+      way, no disagreement.
+      CHECKED ON A SECOND QUANTITY. On C20044 the front view's drawn
+      silhouette, evaluated from the Bezier path rather than from its control
+      points, measures 12.404 wide on the ruler the printed 7.6 fixes (9.9237
+      pt/mm) - 0.8% from the printed 12.5, on a sheet marked N.T.S. The plan
+      view's own scale, taken from its printed 12.5 over the extension lines
+      it dimensions, is 9.950 pt/mm, 0.27% from the front view's: the two
+      views are at one scale, so the printed pair and the drawn outline are
+      the same object measured twice.
+    notes: >-
+      THIS IS THE STANDARD MTP CONNECTOR HOUSING, NOT AN AVERAGE OF THE
+      FAMILY, and the variants are recorded rather than blended - the rule
+      `rj45-plug` states for its shielded sibling. US Conec's MTP PRO
+      (C18712 rev B, C21024 rev B) prints 12.8 x 8.0 for the same two axes,
+      and SENKO's MPO-PLUS 702 series datasheet dimensions 8.20 across its own
+      front view. Three products, three outer shells; what they share is the
+      ferrule and the opening, not the moulding a hand grips. A part needing
+      the PRO or the SENKO shell is its own part.
+      FIBRE COUNT IS A PROPERTY OF THE FERRULE, not of the housing: MPO-8,
+      -12 and -24 share this outline and are told apart by
+      `optical.positions`. MPO-16 and -32 are keyed differently and are not
+      this entry.
+      NO DEPTH. C20044 prints 25.6 for the connector body and 1.9 for the
+      guide pins standing off its face; C20851 prints 60.3 overall for the
+      same connector on round cable. The 25.6 is the connector, the rest is
+      the cable assembly's, so no class depth is stated here - the same
+      reading `lc-plug` and `sc-plug` above take.
+      THIS ENTRY IS NOT `mpo-adapter`, AND THE TWO DO NOT AGREE. That entry
+      holds the panel APERTURE at 7.8 x 5.6, `confidence: estimated`, read off
+      an FS render whose own note says the detection 'reads 5.4 to 8.5 across
+      the rows'. A 12.5 x 7.6 connector cannot enter a 7.8 x 5.6 opening, so
+      one of the two is wrong, and it is not this one: these figures are
+      printed callouts on a connector manufacturer's own drawings. See
+      common/mpo-dust-cap@1's `provenance.aperture-doubt`, which predicted
+      exactly this from a different direction, and generic/mpo12-plug@1's
+      `provenance.aperture-contradiction`. Re-deriving `mpo-adapter` is not
+      this entry's business and has not been done.

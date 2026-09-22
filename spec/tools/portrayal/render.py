@@ -971,7 +971,14 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 rotate=hrot or None, palette=palette, inst_palette=inst_palette,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                path=f"{path}/{local}", resolved=resolved)
+                path=f"{path}/{local}", resolved=resolved,
+                # AND A SLOT INSIDE WHAT WAS JUST SEATED, keyed under the
+                # occupant's own path - `bay-1/lc01-occupant/a`, half `a` of a
+                # duplex plug seated on the adapter `lc01`. The same widening
+                # draw_placement makes for a device-level seat, made here so
+                # the two directions cannot disagree about whether a composed
+                # part of an occupant is reachable.
+                occupants=occupants, occ_used=occ_used)
             if lift:
                 og.set("data-z-lift", f"{lift:g}")
             og.set("data-for", f"{path}/{host_id}")
@@ -2541,11 +2548,33 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved,
                                      # A SLOT ON A PLACED PART (B3): `port-1510/tx`,
-                                     # an adapter placed directly. Not on an
-                                     # occupant - slots inside a seated part stay
-                                     # chained keys (P3) - nor on a projection,
-                                     # which is a part seen from another face.
-                                     occupants=None if (p.get("mate-to") or p.get("projection-of"))
+                                     # an adapter placed directly - and, since
+                                     # the duplex plug, A SLOT ON A SEATED PART
+                                     # TOO: `port-1510-occupant/a` is half `a`
+                                     # of the plug seated at `port-1510`, where
+                                     # a boot lands.
+                                     #
+                                     # P3 SAID "slots inside a seated part stay
+                                     # chained keys" and that is still true -
+                                     # `port-1510-occupant` IS the chained key,
+                                     # and this only lets it carry a part id
+                                     # after it. It was a blanket `None` here
+                                     # because until now every occupant that
+                                     # could host presented ONE interface, so
+                                     # the bare chained key said everything
+                                     # there was to say. generic/lc-duplex-plug@1
+                                     # composes TWO generic/lc-plug@1, each with
+                                     # its own rear point, and the bare key
+                                     # cannot name which: the plug as a whole
+                                     # presents nothing (presented_interface
+                                     # declines to pick between two composed
+                                     # parts), so a boot keyed there has no
+                                     # point to mate to at all.
+                                     #
+                                     # A projection is still excluded: it is a
+                                     # part seen from another face, and the
+                                     # thing seated on it belongs to that face.
+                                     occupants=None if p.get("projection-of")
                                      else nested_occupants,
                                      occ_used=nested_used)
         # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
@@ -2687,6 +2716,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                             if not q.get("mate-to") and not q.get("projection-of")}
     drawn_placements = {q.get("id") for _face, (_n, v) in resolve_views(device, config).items()
                         for q in view_parts(v)["placements"] if q.get("at")}
+    # AND THE OCCUPANTS THOSE PLACEMENTS SEAT. A device-level occupant is a
+    # placement the build SYNTHESISES, so no view lists it - but it is a real
+    # drawing path in whichever view holds its host, and since the duplex plug
+    # it can carry keys of its own (`port-1510-occupant/a`, one half of a
+    # seated plug). Without this the view that does NOT hold the host reports
+    # such a key as naming nothing, which is the same false alarm the loop
+    # above already avoids for the host's own key.
+    drawn_placements |= {occupant_local_id(k, v if isinstance(v, dict) else {})
+                         for k, v in (config.get("occupants") or {}).items()
+                         if "/" not in k and v != ""}
     # the views THIS configuration draws: a bay only on an unbound variant
     # face is not drawn anywhere, so a key naming it is reported, not skipped
     drawn_bays = {b["id"] for _face, (_n, v) in resolve_views(device, config).items()

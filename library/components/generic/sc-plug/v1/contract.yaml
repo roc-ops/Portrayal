@@ -1,0 +1,170 @@
+format: 1
+kind: component
+name: sc-plug
+version: 1.0.0
+class: port
+mates: sc
+interface: sc-plug
+interface-at: boot
+conforms: sc-plug
+optical: {positions: 1}
+profile: networking
+description: >-
+  An SC fibre plug, front view - the square keyed silhouette an SC connector
+  presents end-on: a 7.4 x 9.0 housing with the 2.5 mm ferrule on its axis and
+  a 0.9 x 1.8 key standing off one long wall, drawn to the LEFT unrotated so it
+  enters std/sc-bore@1, whose keyway is on the left unrotated too. Occupies an
+  `sc` receptacle (std/sc-bore@1 and anything composing it) at its own `mate`
+  point, and in turn presents `sc-plug` so a boot (or a bare cable) can seat on
+  its rear - the shape generic/lc-plug@1 already has, with no `common/sc-boot`
+  built yet to take it up. Drawn with NO depth - see `provenance.size` - but
+  standing out of its opening in 3D by an estimated standoff,
+  `provenance.standoff`.
+size: {w: 8.3, h: 9.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: fiber, connector: sc}
+unplaced: >-
+  seated by a device that places it in an `sc`-presenting receptacle - none
+  does yet. A configured occupant on an FHD SC cassette exercises it in
+  spec/tests/test_fibre_plugs.py, the way generic/lc-plug@1's own `unplaced`
+  describes; a device manifest showing a patched SC port is downstream of this
+  library.
+provenance:
+  behaviour: >-
+    DELIBERATELY OMITTED, for the reason generic/lc-plug@1 states at length in
+    its own `provenance.behaviour`: spec/tests/test_behaviour.py::
+    test_a_receptacle_does_not_move asserts `behaviour is None` for every
+    `class: port` contract, and the mate-to resolution in render.py reads
+    `mates`/`interface` and the `mate` point, never `behaviour`. This plug is
+    the same shape of part as that one and takes the same answer rather than
+    inventing a second.
+  source: >-
+    Hirose HSC series catalogue, SC Type Fiber Optic Connectors, the simplex
+    plug page - the FIRST DIMENSIONED SC PLUG FRONT VIEW this corpus has held.
+    Hirose states the series is JIS C 5973 (F04) compliant, IEC 61754-4
+    compliant, and 'fully intermateable with NTT's SC products', which is what
+    makes one manufacturer's plug usable as the class shape here; neither
+    standard is held in this checkout.
+    WHAT THE EARLIER INTAKE COULD NOT FIND. The SC pass of 2026-09-18 read five
+    datasheets from three manufacturers (SENKO DS-SC-000006, DS-SC-000010,
+    DS-SC-000011, an FS.com adapter, a Molex duplex adapter) and recorded the
+    plug front view as NOT FOUND - correctly: SENKO's own SC plug datasheet
+    DS-SC-000006 draws side-view silhouettes only and has no end-on view at
+    all. The catalogue this reads is a fourth manufacturer and draws one.
+  size: >-
+    drawing, both axes, and the two numbers are PRINTED CALLOUTS on that front
+    view rather than anything scaled. The view dimensions four figures: 9 (the
+    housing height), 7.4 (the housing width, excluding the key), 0.9 (how far
+    the key stands off the housing's long wall) and 1.8 (the key's height).
+    `size` is the bounding box, 7.4 + 0.9 by 9.0 - the same convention
+    spec/schemas/standards.yaml's `sc-simplex-receptacle` uses for the opening
+    (7.5 body + 0.89 keyway = 8.39) and `lc-duplex-receptacle` for its tiers.
+    CHECKED ON THE DRAWN GEOMETRY, which is vector art and not a raster. On the
+    ruler the printed 9 fixes - the housing spans 22.66 pt, 2.5178 pt/mm - the
+    housing reads 7.399 wide, the key 0.902 by 1.803. Three printed figures
+    read back to 0.01 mm from a scale fixed by the fourth, so the ruler is not
+    fitted to the art box.
+    DELIBERATELY NO DEPTH, the reading generic/lc-plug@1 and
+    standards.yaml's `lc-plug` already take for the same reason. The same
+    catalogue page draws four SC plug variants and prints 25 / 33, 25 / 36.5
+    and 25 / 55 for them: the 25 (front face to where the boot begins) repeats,
+    the overall does not, because the length behind the housing is the cable
+    assembly's choice. A class depth stated from one of the three would be a
+    number no interface fixes. The 25 IS used, once, in
+    `provenance.standoff` - for how far the plug stands out of a panel, where
+    it is bracketed and marked estimated.
+  keyway: >-
+    drawing. The key is on the housing's long wall, CENTRED on it: the drawn
+    key spans y 640.80-645.34 pt against a housing spanning 631.74-654.40, so
+    both have their centre at 643.07 - dead centre, to within the line weight.
+    Its height is therefore (9.0 - 1.8)/2 = 3.6 from the housing's top edge.
+    THE KEY IS DRAWN LEFT AND THAT IS A CHOICE ABOUT ORIENTATION, not a
+    reading: Hirose draws it on the right of its own front view, and a
+    connector drawn end-on can be seen from either side. Left is what makes
+    this part seat unrotated in std/sc-bore@1, whose own description says
+    'Key slot to the LEFT when unrotated' and whose `mate` at (4.64, 4.5) is
+    the centre of the 7.5 body with the 0.89 slot to its left. Turning the
+    plug instead would put its key in the wall the bore has no slot in.
+    WHAT THE KEY FITS. `sc-simplex-receptacle` records the slot as 0.89 by
+    2.1: 0.011 narrower than this key and 0.3 taller. The width is two
+    documents rounding the same nominal differently (Hirose prints 0.9;
+    SENKO's 0.889 is a vector measurement of a feature no callout touches),
+    and the height is real clearance. Neither document tolerances either; IEC
+    61754-4 or TIA-604-3 would.
+  axis: >-
+    drawing. The front view draws the optical centreline as a cross through
+    the ferrule, and its vertical arm sits at x 263.96 pt against a housing
+    spanning 254.65-273.28, whose centre is 263.965 - dead centre. So the
+    ferrule axis is the centre of the 7.4 housing, which in this part's own
+    frame (key first, then housing) is 0.9 + 7.4/2 = 4.6, and 9.0/2 = 4.5
+    down. It lands on std/sc-bore@1's own `mate` at (4.64, 4.5), which is that
+    opening's body centre: the two are 0.04 apart in x because the plug is 0.1
+    narrower than the hole, and it is the MATE POINTS that bring them
+    together, not the outlines.
+    The `mate`, `boot` and `cable` points share this one (x, y) for the reason
+    generic/lc-plug@1's own `axis` note gives: the fibre runs straight through
+    the connector, so a front point and a rear point are one axis seen from two
+    directions.
+  standoff: >-
+    ESTIMATED - how far this plug stands out of the opening it enters, which is
+    the body feature's `out` and so the lift a boot seated on it would get. No
+    document held here dimensions it, and the bracket below is what the
+    catalogue's own side view leaves.
+    THE RULER. The side view of the same plug prints 25 from the front face to
+    where the boot begins and 36.5 overall. The 25 spans 63.10 pt, so 2.524
+    pt/mm, and on that ruler the printed 36.5 reads back 36.50 and the
+    housing's height reads 8.98 against the front view's printed 9 - one
+    dimensioned figure used as a ruler, two independent quantities checked
+    against it.
+    WHAT THE BRACKET IS. How far an SC plug enters its adapter is not
+    dimensioned on any document held here. It is AT LEAST 10.0, because the
+    latch window the adapter's clips catch runs 6.20 to 10.00 behind the front
+    face on that ruler and a clip cannot catch a window outside the adapter.
+    It is AT MOST 14.0, because that is where the 9.0-tall housing ends and the
+    connector steps in to 7.0 wide, and nothing narrower than the opening fills
+    it. So the part standing outside is between 25.0 - 14.0 = 11.0 and
+    25.0 - 10.0 = 15.0, and 13.0 is the middle of that bracket, an estimate and
+    no more - the same arithmetic, on the same kind of evidence, that
+    generic/lc-plug@1's own standoff records.
+    WHAT IS NOT DRAWN, AND WHY THE NUMBER IS NOT LARGER. This face is the
+    7.4 x 9.0 housing that goes INTO the opening. The push-pull grip and the
+    boot behind it are a further 11.5 of connector on the same side view and
+    are not this part's silhouette, the same omission generic/lc-plug@1 makes.
+  face-detail-gap: >-
+    the housing's corners are CHAMFERED on the drawn front view - about 0.5 on
+    each of the four, measured, and no callout dimensions them - and the
+    ferrule is drawn as concentric circles (the 2.5 mm SC ferrule, the figure
+    std/sc-bore@1 already carries for the opening this enters, against LC's
+    1.25). The chamfers are drawn in the skin and the `elements` hold the plain
+    envelope, which is what `conforms: sc-plug` is checked against; the latch
+    window in the housing's side wall is on a different axis than this view and
+    is not drawn.
+elements:
+  key: {at: [0.0, 3.6], size: [0.9, 1.8], class: latch}
+  body: {at: [0.9, 0.0], size: [7.4, 9.0], class: port}
+connection-points:
+  mate: {at: [4.6, 4.5], direction: front}
+  boot: {at: [4.6, 4.5], direction: rear, 'on': body}
+  cable: {at: [4.6, 4.5], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 13.0
+      confidence: estimated
+      source: >-
+        generic/sc-plug@1's own `provenance.standoff` - the printed 25 from the
+        front face to the boot joint, less an insertion bracketed at 10.0 to
+        14.0 by the latch window and by where the 9.0-tall housing ends. 13.0
+        is the middle of the 11.0-15.0 that leaves. ABSOLUTE from this part's
+        own face: std/sc-bore@1 puts its `mate` on nothing and so presents a
+        lift of 0.0, and whatever lift the adapter composing it gives the bore
+        arrives with the seat rather than from this number.
+    - node: key
+      out: 13.0
+      confidence: estimated
+      source: >-
+        The key is a rib moulded along the housing's own long wall, so it has
+        the housing's Z extent and takes the same figure and the same estimate
+        as `body` (generic/sc-plug@1's `provenance.standoff`). Written without
+        it the key would be flat art beside a solid plug.
+skins: [default]
