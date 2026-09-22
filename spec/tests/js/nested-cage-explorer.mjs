@@ -9,6 +9,7 @@
 //              and on a cage's own parts, and on what is no cage
 //   prune    - pruneCarrier on the explorer's state slice
 //   face     - applyFaceOverrides, the per-face pass viewer3d runs
+//   race     - a card replaced while an optic swap on it is still loading
 const m = await import('../../../kit/swap.js');
 const mode = process.argv[2];
 
@@ -197,4 +198,44 @@ if (mode === 'face') {
                           xg0: occupantsOf(root, 'front-6/module/xg0').length};
   }
   console.log(JSON.stringify(out));
+}
+
+// THE CARD GOES WHILE ITS OPTIC IS LOADING. shell.js's order: seat() takes a
+// claim on the nested key and awaits the optic's skin; a bay swap replaces the
+// card and prunes (dropUnder), which retires every claim under the bay. The
+// optic swap then resolves - and must touch neither the old card nor, by its
+// claim, the state. A new swap on the new card still lands.
+if (mode === 'race') {
+  const pending = [];
+  const slowSkin = ref => new Promise(res => pending.push(() => res(
+    OPTIC[ref] ? {comp: OPTIC[ref], text: opticSkin(OPTIC[ref].name)} : null)));
+  const settle = () => new Promise(r => setTimeout(r, 0));
+  const root = face();
+  const claims = m.seatClaims();
+  const key = 'front-6/module/xg0';
+  const live = claims(key);
+  const optic = m.applyOccupantOverrides(root, m.nestedCages(root, compByRef),
+                                         {[key]: 'generic/sfp-lc@1'}, slowSkin, live);
+  await settle();
+  const oldCard = root.querySelector('[data-path="front-6/module"]');
+  const bays = [{id: 'front-6', at: [0, 0], size: {w: 30, h: 300}, accepts: ['casa/card@1']}];
+  await m.applyOverrides(root, bays, {'front-6': 'casa/card@1'}, loadSkin, claims('front-6'));
+  claims.retireUnder('front-6');              // where the shell prunes
+  const other = claims('front-60/module/xg0'); // a prefix of front-6, not under it
+  claims.retireUnder('front-6');
+  pending[0]();
+  const res = await optic;
+  // read now: the new swap below takes a newer claim on the same key
+  const liveAfter = live(), otherLive = other();
+  const oldOptics = oldCard.children.filter(n => n.getAttribute('data-behaviour') === 'occupies'
+    && n.getAttribute('data-for') === key).length;
+  const newCard = root.querySelector('[data-path="front-6/module"]');
+  const staleOnFace = occupantsOf(root, key).length;
+  const again = await m.applyOccupantOverrides(root, m.nestedCages(root, compByRef),
+                                               {[key]: 'generic/sfp-lc@1'}, loadSkin, claims(key));
+  console.log(JSON.stringify({
+    liveAfter, otherLive, res, oldOptics, staleOnFace,
+    replaced: newCard !== oldCard,
+    again, landed: occupantsOf(root, key).map(n => n.parentNode === newCard),
+  }));
 }

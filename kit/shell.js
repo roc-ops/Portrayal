@@ -1018,6 +1018,9 @@ export function createShell(opts = {}) {
     const rebuilt = ref && ref === builtRef
       ? builtOccupants(cfg, Object.values(state.meta?.cages || {}).flat()) : {};
     Object.assign(state, pruneCarrier(state, key, rebuilt));
+    // and a swap still loading under it is no longer anyone's to make: its
+    // claim retired, it neither touches the drawing nor writes the state
+    claim.retireUnder(key);
   }
 
   // ONE SWAP INTO THE FACE ON SCREEN, bay or cage - the single place both

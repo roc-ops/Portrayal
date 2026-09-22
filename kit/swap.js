@@ -307,13 +307,25 @@ export function seatOccupant(ownerDoc, cage, ref, comp, skinText,
 // and checks it again before writing its own state, so the drawing and the
 // state are decided by the same claim. A caller with no concurrency of its
 // own (viewer3d.js applies one map to a freshly parsed face) passes nothing.
+//
+// A CARRIER'S CLAIMS GO WITH IT. `claim.retireUnder(carrier)` retires every
+// claim keyed under a bay (underCarrier, the rule pruneCarrier drops state
+// by): an optic swap on a card still loading when the card is replaced or
+// emptied would otherwise pass its checks after the await, append its optic
+// to the card that left, and write its ref into the state under the NEW card
+// - 2D empty, state and 3D holding it. The caller retires them where it
+// prunes.
 export function seatClaims() {
   const newest = new Map();
-  return key => {
+  const claim = key => {
     const mine = (newest.get(key) || 0) + 1;
     newest.set(key, mine);
     return () => newest.get(key) === mine;
   };
+  claim.retireUnder = carrier => {
+    for (const [k, n] of newest) if (underCarrier(k, carrier)) newest.set(k, n + 1);
+  };
+  return claim;
 }
 
 // Apply an occupant override map - cage id -> ref, or -> null/'' for an emptied
@@ -1045,8 +1057,14 @@ export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccu
 // emptied, which is what the face shows. The caller passes it only then.
 //
 // PURE: returns a new slice; the one it is handed is not changed.
+// Is `key` under the bay `carrier` - `front-6/module/...` - the one reading
+// pruneCarrier and seatClaims' retireUnder share.
+export function underCarrier(key, carrier) {
+  return String(key).startsWith(`${carrier}/module/`);
+}
+
 export function pruneCarrier(slice, carrier, builtUnder = {}) {
-  const under = k => String(k).startsWith(`${carrier}/module/`);
+  const under = k => underCarrier(k, carrier);
   const keep = o => Object.fromEntries(Object.entries(o || {}).filter(([k]) => !under(k)));
   const out = {cfgBays: keep(slice?.cfgBays), cfgOccupants: keep(slice?.cfgOccupants),
                touched: new Set([...(slice?.touched || [])].filter(k => !under(k))),

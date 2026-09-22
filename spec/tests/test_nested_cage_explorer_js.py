@@ -121,3 +121,16 @@ def test_the_3d_pass_reads_cages_off_the_card_it_just_seated():
 def test_the_3d_pass_seats_nothing_on_an_emptied_card():
     e = run("face")["carrierEmptied"]
     assert e == {"applied": 1, "xg0": 0}
+
+
+def test_a_card_replaced_while_its_optic_loads_takes_the_swap_with_it():
+    out = run("race")
+    assert out["replaced"]
+    assert out["liveAfter"] is False, \
+        "the optic swap's claim outlived its card: the shell would write its ref under the new card"
+    assert out["otherLive"] is True, "front-60 is not under front-6"
+    assert out["oldOptics"] == 0, "the stale optic was appended to the card that left"
+    assert out["staleOnFace"] == 0
+    assert out["res"] == {"applied": 0, "refused": [], "failed": []}
+    assert out["again"]["applied"] == 1 and out["landed"] == [True], \
+        "a new swap on the new card must still land"
