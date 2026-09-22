@@ -696,7 +696,106 @@ def group_side_attrs(group_name, grp):
     return out
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None):
+def module_key_prefix(path):
+    """The module-less key prefix a configuration uses for what is in the
+    module drawn at `path` - `front-6/module` -> `front-6`, `riser-1/module/
+    slot-1/module` -> `riser-1/slot-1` - or None when `path` is not a module
+    seated in a bay. The same stripping as a nested bay's `bay_path`."""
+    if not path or not path.endswith("/module"):
+        return None
+    return (path[:-len("/module")] + "/").replace("/module/", "/")[:-1]
+
+
+def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
+                           occ_used, z_inset, z_group_lift, palette, inst_palette,
+                           skin_overrides, attr_overrides, resolved):
+    """Seat the configuration's occupants keyed to THIS module's cages - and,
+    to a fixed point, to occupants already seated in them (a plug in the
+    optic, a boot on the plug) - inside the module's instance group `g`.
+
+    Each is the device-level `mate-to` seat restated in the card's frame: the
+    host's presented mate point taken through the host's rotation
+    (seat_point), the occupant solved to land its own `mate` there while drawn
+    at that rotation (seat_at), the host's presented lift plus whatever lift
+    the host already stands at carried by the same trio draw_placement applies
+    (z_inset / z_group_lift / data-z-lift), and `data-for` naming the host's
+    path. A composed cage's own `lift` counts, because the occupant sits
+    BESIDE the cage's group and not in it - the figure component_cages
+    publishes as the cage's `lift`. Keys used are added to `occ_used`, which
+    render_view reads to report a key nothing seated."""
+    prefix = module_key_prefix(path)
+    if not occupants or prefix is None:
+        return
+    mine = {}
+    for key, spec in occupants.items():
+        rest = key[len(prefix) + 1:] if key.startswith(prefix + "/") else None
+        if rest and "/" not in rest:
+            mine[rest] = (key, {"ref": spec} if isinstance(spec, str) else spec)
+    if not mine:
+        return
+
+    def _res(r):
+        try:
+            return lib.resolve(r)[0]
+        except Exception:
+            return None
+
+    hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
+                       "mirror": bool(q.get("mirror")),
+                       "lift": float(q.get("lift") or 0.0)}
+             for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
+    pending = dict(mine)
+    while pending:
+        seated_now = []
+        for host_id, (key, spec) in pending.items():
+            host = hosts.get(host_id)
+            if host is None:
+                continue
+            if mirror or host["mirror"]:
+                raise ValueError(
+                    f"occupants/{key}: its host {path}/{host_id} is mirrored, and "
+                    "a mirrored host cannot seat an occupant - handedness of a "
+                    "seated part is not a question the seating rule answers")
+            hc, _ = lib.resolve(host["ref"])
+            oc, _ = lib.resolve(spec["ref"])
+            _, hm_at, hm_lift = presented_interface(hc, _res)
+            om = (oc.get("connection-points") or {}).get("mate")
+            if hm_at is None or om is None:
+                raise ValueError(
+                    f"occupants/{key}: names no cage - seating needs a 'mate' "
+                    f"connection-point on both {spec['ref']} and {host['ref']} "
+                    f"({path}/{host_id})")
+            hrot = host["rotate"]
+            at = seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
+                         hrot, oc["size"], om["at"])
+            lift = float(hm_lift or 0.0) + host["lift"]
+            local = spec.get("id") or f"{host_id}-occupant"
+            og, _ = instance_group(
+                lib, spec["ref"], f"{inst_id}--{local}", at, None, spec.get("attrs"),
+                None, None, skin_name=spec.get("skin", "default"),
+                rotate=hrot or None, palette=palette, inst_palette=inst_palette,
+                z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
+                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
+                path=f"{path}/{local}", resolved=resolved)
+            if lift:
+                og.set("data-z-lift", f"{lift:g}")
+            og.set("data-for", f"{path}/{host_id}")
+            g.append(og)
+            hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
+                            "mirror": False, "lift": lift}
+            if occ_used is not None:
+                occ_used.add(key)
+            seated_now.append(host_id)
+        if not seated_now:
+            raise ValueError(
+                "occupants/" + ", ".join(sorted(k for k, _ in pending.values()))
+                + f": names no cage on {contract.get('name') or path} seated at "
+                f"{path} (or no occupant seated before it)")
+        for host_id in seated_now:
+            del pending[host_id]
+
+
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -1176,7 +1275,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             skin_overrides=skin_overrides, attr_overrides=attr_overrides,
             path=f"{path}/{bay_id}/module", resolved=resolved, depth=depth + 1,
             z_inset=z_inset - occ_lift, z_group_lift=z_group_lift + occ_lift,
-            seated=seated, bay_attrs=bay_attrs)
+            seated=seated, bay_attrs=bay_attrs,
+            occupants=occupants, occ_used=occ_used)
         # BEHIND THE FACEPLATE, NOT ON IT. Appending is right for a drive in a
         # cage and wrong for a card in a riser: what shows of a PCIe bracket is
         # its working area through a punched window and its retention tab clear
@@ -1204,6 +1304,18 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             behind_at += 1
         else:
             g.append(sub)
+    # AN OPTIC IN A CAGE ON A SEATED CARD (#484, R2). A configuration's
+    # `occupants:` keys such a cage by the MODULE-LESS path - `front-6/xg0` -
+    # the convention its nested `bays:` keys already use (bay_path above), and
+    # this is the module those keys address when `path` is `<bay>/module`.
+    # Seated INSIDE g, which carries this instance's translate/rotate, so the
+    # occupant inherits the bay transform exactly as the card's own parts do
+    # and nothing here composes it by hand; the mate points are the card-frame
+    # ones, solved by the same seat_point/seat_at as a device-level seat and
+    # published by component_cages as this cage's `mate`.
+    _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
+                           occ_used, z_inset, z_group_lift, palette, inst_palette,
+                           skin_overrides, attr_overrides, resolved)
     # EVERY DECLARED CONNECTION POINT REACHES THE DRAWING, not just `mate`.
     # This function read `mate` to place an occupant and dropped the rest, so a
     # part's optical-tx, power or cable point existed in the contract and in no
@@ -2283,6 +2395,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
 
     ordered = _stacked(parts["placements"])
 
+    # OCCUPANTS KEYED INSIDE A SEATED MODULE (#484, R2) - `front-6/xg0` - go
+    # down with the bay's module and are seated in its instance group; the
+    # device-level expansion above never matches them (no placement id holds
+    # a slash). `nested_used` collects what seated, for the check after the
+    # bays are drawn.
+    nested_occupants = {k: v for k, v in (config.get("occupants") or {}).items()
+                        if "/" in k}
+    nested_used = set()
+    this_view_bays = {b["id"] for b in parts["bays"]}
+    every_view_bays = {b["id"] for v in (device.get("views") or {}).values()
+                       for b in view_parts(v or {})["bays"]}
+
     def draw_bay(b):
         bay_lift = 0.0
         bay_g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
@@ -2400,7 +2524,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                          skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                          path=f"{b['id']}/module", resolved=resolved,
                                          seated=config.get("bays"),
-                                         bay_attrs=config.get("bay-attrs"))
+                                         bay_attrs=config.get("bay-attrs"),
+                                         occupants=nested_occupants,
+                                         occ_used=nested_used)
             bay_g.append(g)
         df = data_for(b.get("for"))
         if df:
@@ -2433,6 +2559,22 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             draw_placement(item)
         else:
             draw_bay(item)
+
+    # A NESTED KEY THAT SEATED NOTHING IS AN ERROR, not a skip. A key whose bay
+    # is on another face belongs to that face's drawing, as a device-level
+    # occupant does; one whose bay is on THIS face and seated nothing names a
+    # bay that is empty or holds a module without that cage, and a key whose
+    # bay is on no face at all is a typo. Keys on a seated module that name no
+    # cage are raised where the module is drawn (_seat_nested_occupants).
+    for key in sorted(set(nested_occupants) - nested_used):
+        top = key.split("/", 1)[0]
+        if top in this_view_bays:
+            raise ValueError(
+                f"occupants/{key}: names no cage - bay {top!r} seats no module "
+                "carrying it in this configuration")
+        if top not in every_view_bays:
+            raise ValueError(
+                f"occupants/{key}: {top!r} is no bay in any view of this device")
 
     # second pass: the surface-mounted parts, now safely in front of the openings
     for p in ordered:
