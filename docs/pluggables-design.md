@@ -30,7 +30,7 @@ Taken 2026-09-18, in this order:
 | # | decision |
 |---|---|
 | 1 | Transceivers are GENERICS drawn once per form factor and face. A vendor's optic WRAPS a generic via `parts:` and carries the vendor's facts in its own `attrs`; a vendor may draw their own outlier instead. One contribution mechanism, no third path |
-| 2 | Portrayal builds the slotting mechanism and ships its device models BARE. Populating is a downstream tool's job; the five configs that seat optics today are stripped |
+| 2 | Portrayal builds the slotting mechanism and ships its device models BARE. Populating is a downstream tool's job; the five configs that seat optics today are stripped. AMENDED by B3 (docs/pluggables-caps-design.md, decision 5): a slot's `default:` occupant, such as a shipped dust cap, is the product's shipped state, like a bay's blank; Portrayal still ships no configured optic, plug or cable |
 | 3 | A new namespace `generic/` - *representative of a class under a spec*: the envelope is standard, the appearance stands for every part of its kind. The future home of DIMMs, PCIe cards, CPUs and anything else interchangeable across vendors under a spec. Existing `common/` parts are not migrated in this work |
 | 4 | Colour and label are FIELDS on a generic (`data-fill-from` / `data-from`), set by the wrapper. The FACE is not: bores are parts and parts are emitted for every skin, so the face is in the component's name - `sfp-lc`, `sfp-sc`, `qsfp-mpo` |
 | 5 | A generic carries NO rate. `generic/sfp-lc` is SFP, SFP+ and SFP28 alike; the rate is the wrapper's attr. This is already how the cages work: every SFP-family cage presents `interface: sfp` and L12 compares interface only |

@@ -305,6 +305,37 @@ def seated_ref(cfg_bays, bay_path, bay):
     return (cfg_bays or {}).get(bay_path, (bay or {}).get("default"))
 
 
+def slot_default(part, contract):
+    """The ref a slot ships holding, or None - the shipped default (B3,
+    docs/pluggables-caps-design.md, "The shipped default").
+
+    `part` is the `parts:` entry (or device placement) that places the slot and
+    `contract` the placed component's. The entry's own `default:` wins - a
+    composer overriding the placed component's TOP-LEVEL default, `""` for
+    none - and otherwise the component's top-level `default:` stands. That is
+    the whole of what a composer can say (P5): the defaults declared INSIDE the
+    placed component, on its own `parts:`, are that component's, and only a
+    configuration's `occupants:` reaches past them."""
+    if "default" in (part or {}):
+        return part["default"] or None
+    return (contract or {}).get("default") or None
+
+
+def drawn_refs(contract):
+    """Every ref a contract draws without a configuration asking: each part's
+    `ref`, each part's `default:`, and its own top-level `default:` (which its
+    composer draws unless it overrides it). Over-inclusive for a dependency
+    walk on purpose - a default is drawn like a composed part."""
+    out = []
+    for part in (contract or {}).get("parts") or []:
+        for r in (part.get("ref"), part.get("default")):
+            if r:
+                out.append(str(r).split(":")[0])
+    if (contract or {}).get("default"):
+        out.append(str(contract["default"]).split(":")[0])
+    return out
+
+
 def occupant_spec(key, spec):
     """An `occupants:` value as a dict with a `ref`, or ValueError naming the key.
     An empty string empties the slot (B3, P4): None, and nothing is seated."""

@@ -115,6 +115,7 @@ from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml, nested_key_host, chained_occupant_ref,
+                      drawn_refs, slot_default,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -251,6 +252,7 @@ RULES = {
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
+    "L110": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
 }
 
 
@@ -1012,9 +1014,8 @@ def device_dependencies(dev_path, lib_roots):
             sp = cp.parent / "skins" / f"{sk}.svg"
             if sp.exists():
                 files.add(sp)
-        for part in (spec.get("parts") or []):
-            if part.get("ref"):
-                queue.append(part["ref"].split(":")[0])
+        # a part's ref and every default it ships holding (drawn_refs)
+        queue.extend(drawn_refs(spec))
     return files
 
 
@@ -5619,6 +5620,80 @@ def lint_component_stack_orientation(path, data, lib_roots):
     _stack_findings(path, data, lib_roots, False)
 
 
+_SLOT_CORE = {}
+
+
+def _slot_core(lib_roots):
+    """(render module, Library, families, connectors, candidates) for
+    `lib_roots`, built once per process and only when a `default:` exists.
+
+    L110 ASKS THE BUILD'S OWN QUESTION: what does this slot accept? The answer
+    is render.slot_entry's - the one core behind components.json `cages` and a
+    device's `cages[]` - so a default lint passes is one the published accept
+    list offers. Imported here, not at module scope: render.py has never
+    imported lint, and nothing else in lint needs the renderer."""
+    key = tuple(str(r) for r in lib_roots)
+    if key not in _SLOT_CORE:
+        from portrayal import render as _render
+        _SLOT_CORE[key] = (_render, _render.Library(list(key)),
+                           _render._pluggable_families(), _render._connector_registry(),
+                           _render._pluggable_candidates(list(key)))
+    return _SLOT_CORE[key]
+
+
+def lint_component_slot_defaults(path, data, lib_roots):
+    """L110: a `default:` sits on a slot and names what that slot accepts.
+
+    A default is the shipped state of the product (B3, docs/pluggables-caps-
+    design.md, "The shipped default") and the build seats it in every
+    configuration that does not key the slot, so a wrong one is drawn
+    everywhere. Two ways to write one wrong:
+
+    ON A PART THAT IS NO SLOT. `default:` on a `parts:` entry whose component
+    presents no pluggables family and no registered connector interface - or
+    at the top level of a component that presents none - names an occupant
+    with nowhere to seat.
+
+    NOT IN THE ACCEPT LIST. The slot's `accepts`, as slot_entry derives it for
+    components.json: a cage's family ladder, a connector slot's `mates:`
+    candidates. A boot does not mate a bore; a plug of the wrong family does
+    not fit the cage.
+
+    `""` ships a slot empty: it still has to be on a slot, and accepts
+    nothing it needs checking against."""
+    own = data.get("default")
+    entries = [q for q in (data.get("parts") or [])
+               if isinstance(q, dict) and "default" in q]
+    if own is None and not entries:
+        return
+    render_mod, lib, families, connectors, candidates = _slot_core(lib_roots)
+
+    def check(where, placement, want):
+        try:
+            entry = render_mod.slot_entry(placement, lib, families, connectors,
+                                          candidates)
+        except (FileNotFoundError, ValueError, KeyError):
+            return                      # a bad ref is L5's to report
+        if entry is None:
+            err(path, "L110", f"{where}: default {want!r} - {placement['ref']} "
+                "presents no slot (no pluggables family and no registered "
+                "connector interface), so there is nowhere to seat it")
+            return
+        if want and want.split(":")[0] not in entry["accepts"]:
+            err(path, "L110", f"{where}: default {want!r} is not in this "
+                f"{entry['kind']} slot's accepts ({entry['interface']}: "
+                f"{', '.join(entry['accepts']) or 'nothing'})")
+
+    for q in entries:
+        if q.get("ref") and "at" in q:
+            check(f"parts/{q.get('id')}", q, q.get("default"))
+    if own is not None:
+        ref = (f"{path.parents[2].name}/{data.get('name')}@{path.parent.name[1:]}"
+               if len(path.parents) > 2 else None)
+        if ref:
+            check("default", {"ref": ref, "id": "default", "at": [0, 0]}, own)
+
+
 def lint_device_placement_interfaces(path, data, lib_roots):
     """L105: a placement that presents several interfaces (#443).
 
@@ -8212,6 +8287,7 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_seat_point(f, d)
                 lint_component_stack_orientation(f, d, args.library)
+                lint_component_slot_defaults(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)

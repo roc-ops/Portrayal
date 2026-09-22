@@ -58,6 +58,10 @@
    "$ref": "#/$defs/segment",
    "description": "this component IS a receptacle presenting this mating interface, e.g. sfp, qsfp, rj45, iec-c14. Occupants declare the same key via `mates`. Deliberately not an enum - a new interface is a new key, not a schema change."
   },
+  "default": {
+   "type": "string",
+   "description": "what this component's OWN presented slot ships holding - a ref its accept list contains (L110). Requires the component to be a slot (an `interface` in spec/schemas/pluggables.yaml or connectors.yaml). A composer's `parts:` entry `default:` overrides it; a configuration's `occupants:` overrides both."
+  },
   "interface-at": {
    "$ref": "#/$defs/segment",
    "description": "WHICH connection point the `interface` is presented at; default `mate`. Allowed only beside `interface`. A plug mates INTO its receptacle at `mate` and presents its own interface to a boot at its REAR (`boot`), which is a different point: this names it. Paired with that point's `on:`, it is how a part seated on a plug lands on the plug's rear face rather than inside it."
@@ -664,6 +668,10 @@
      "mirror": {
       "type": "boolean",
       "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"
+     },
+     "default": {
+      "type": "string",
+      "description": "what this slot SHIPS HOLDING - a component ref its accept list contains (L110), or \"\" for nothing. The product's shipped state, like a bay's blank: drawn in every configuration unless that configuration's `occupants:` keys this slot. Overrides the placed component's own top-level `default:` and nothing inside it (docs/pluggables-caps-design.md, The shipped default)."
      },
      "states": {
       "type": "object",

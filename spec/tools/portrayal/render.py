@@ -27,7 +27,7 @@ from portrayal.manifest import (view_parts, targets, split_target, component_ref
                       presented_interface, seat_point, _turn,
                       load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
-                      occupant_spec, nested_key_host)
+                      occupant_spec, nested_key_host, slot_default, drawn_refs)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -817,15 +817,29 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     declares none (R3). Keys used are added to `occ_used`, which render_view
     reads to report a key nothing seated."""
     prefix = slot_key_prefix(path)
-    if not occupants or prefix is None:
-        return
-    pending = occupants_under(prefix, occupants)
+    pending = (occupants_under(prefix, occupants)
+               if occupants and prefix is not None else {})
+    # AND WHAT EACH SLOT SHIPS HOLDING (B3, "The shipped default"): a part's
+    # resolved default (manifest.slot_default) seats unless the configuration
+    # keys that part - a configured key, `""` included, wins. Keyed None: a
+    # default is no `occupants:` key, so nothing is added to `occ_used` for it.
+    # Seated whether or not any configuration reached this instance, because
+    # a default is the product's shipped state, like a composed part.
+    for q in contract.get("parts") or []:
+        if not q.get("id") or not q.get("at") or q["id"] in pending:
+            continue
+        shipped = slot_default(q, lib.resolve(q["ref"])[0])
+        if shipped:
+            pending[q["id"]] = (None, {"ref": shipped})
     if not pending:
         return
     hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
                        "mirror": bool(mirror or q.get("mirror")),
                        "host-lift": float(q.get("lift") or 0.0)}
              for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
+
+    def _label(host_id, key):
+        return f"occupants/{key}" if key else f"{path}/{host_id}: default"
     while pending:
         seated_now = []
         for host_id, (key, spec) in pending.items():
@@ -837,7 +851,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                     occ_used.add(key)
                 seated_now.append(host_id)
                 continue
-            at, hrot, lift = solve_seat(lib, f"occupants/{key}", spec["ref"],
+            at, hrot, lift = solve_seat(lib, _label(host_id, key), spec["ref"],
                                         f"{path}/{host_id}", host)
             local = occupant_local_id(host_id, spec)
             og, _ = instance_group(
@@ -853,12 +867,12 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             g.append(og)
             hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
                             "host-lift": lift}
-            if occ_used is not None:
+            if occ_used is not None and key:
                 occ_used.add(key)
             seated_now.append(host_id)
         if not seated_now:
             raise ValueError(
-                "occupants/" + ", ".join(sorted(k for k, _ in pending.values()))
+                ", ".join(sorted(_label(h, k) for h, (k, _) in pending.items()))
                 + f": names no cage on {path} (or no occupant seated before it)")
         for host_id in seated_now:
             del pending[host_id]
@@ -1595,6 +1609,24 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # an error: the two cases are told apart by whether progress is possible,
     # not by when the set was sampled.
     remaining = dict(config.get("occupants") or {})
+    # A PLACED SLOT SHIPS HOLDING ITS DEFAULT (B3, "The shipped default"): the
+    # placed component's top-level `default:` (manifest.slot_default - a
+    # device placement declares none of its own) seats unless this
+    # configuration keys the placement, `""` included. Only a slot with its
+    # own `at` in this drawing: not an occupant (P3), not a projection (a part
+    # seen from another face), not an optional part this build leaves out. A
+    # ref that does not resolve is left for draw_placement to report.
+    for q in parts["placements"]:
+        if (not q.get("id") or not q.get("at") or q.get("mate-to")
+                or q.get("projection-of") or q["id"] in remaining
+                or (q.get("optional") and q["optional"] not in include)):
+            continue
+        try:
+            shipped = slot_default(q, lib.resolve(q["ref"])[0])
+        except (FileNotFoundError, ValueError, KeyError):
+            continue
+        if shipped:
+            remaining[q["id"]] = shipped
     while remaining:
         seated_now = []
         here = {q.get("id") for q in parts["placements"]}
@@ -2798,9 +2830,8 @@ def _inputs(device, device_yaml, lib):
         if skins is not None:
             files.add(Path(skins).parent / "contract.yaml")
             files.update(Path(skins).glob("*.svg"))
-        for part in ((contract or {}).get("parts") or []):
-            if part.get("ref"):
-                queue.append(part["ref"].split(":")[0])
+        # a part's ref and every default it ships holding (drawn_refs)
+        queue.extend(drawn_refs(contract))
     return {f for f in files if f.exists()}
 
 
@@ -3128,6 +3159,11 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
         "mirror": bool(p.get("mirror")),
         "group-states": bool((group or {}).get("states")),
         "kind": kind,
+        # WHAT THE SLOT SHIPS HOLDING (B3, P5): the placement's own `default:`
+        # over the placed component's top-level one (manifest.slot_default),
+        # or None. The build seats it in every configuration that does not key
+        # this slot; `occupant` stays the configured answer alone.
+        "default": slot_default(p, contract),
     }
 
 

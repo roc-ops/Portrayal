@@ -244,7 +244,8 @@ def component_versions(library: pathlib.Path):
         ver = str(doc.get("version") or "")
         out[f"{vendor}/{name}@{major[1:]}"] = (
             ver + "+" + _component_digest(ct.parent, doc))
-        out.setdefault(f"{vendor}/{name}", {})[major] = doc.get("parts") or []
+        # what this major draws: its parts and the defaults they ship holding
+        out.setdefault(f"{vendor}/{name}", {})[major] = manifest.drawn_refs(doc)
     return out
 
 
@@ -275,9 +276,7 @@ def _composed(doc, versions):
             continue
         seen[ref] = versions.get(ref, "?")
         base, _, major = ref.partition("@")
-        for part in (versions.get(base) or {}).get(f"v{major}", []):
-            if part.get("ref"):
-                todo.append(part["ref"])
+        todo.extend((versions.get(base) or {}).get(f"v{major}", []))
     return dict(sorted(seen.items()))
 
 
