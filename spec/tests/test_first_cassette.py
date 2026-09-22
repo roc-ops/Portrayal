@@ -173,12 +173,12 @@ def test_the_cassette_names_the_render_it_was_measured_from():
 def test_the_cassette_has_a_rear_face():
     c = contract(CASSETTE)
     assert ((c.get("faces") or {}).get("rear") or {}).get("ref") == \
-        "fs/fhd-1mtp6lcd-rear@2"
+        "fs/fhd-1mtp6lcd-rear@3"
 
 
 def test_the_rear_face_carries_one_mtp():
-    c = contract("fs/fhd-1mtp6lcd-rear/v2")
-    assert c is not None, "fs/fhd-1mtp6lcd-rear@2 not built"
+    c = contract("fs/fhd-1mtp6lcd-rear/v3")
+    assert c is not None, "fs/fhd-1mtp6lcd-rear@3 not built"
     mtps = [p for p in c["parts"] if p["ref"] == "common/mpo-flange-adapter@1"]
     assert len(mtps) == 1, [p["ref"] for p in c["parts"]]
 
@@ -189,7 +189,7 @@ def test_the_rear_face_admits_it_was_never_measured():
     An estimate that does not say it is one is the failure this whole library is
     built to avoid, and a rear face is where it would be easiest to hide.
     """
-    c = contract("fs/fhd-1mtp6lcd-rear/v2")
+    c = contract("fs/fhd-1mtp6lcd-rear/v3")
     sc = c.get("size-confidence") or {}
     assert sc.get("w") == "estimated" and sc.get("h") == "estimated"
     assert "3.77" in (c.get("size-notes") or ""), \
@@ -296,7 +296,7 @@ def test_the_rear_mtp_is_where_its_provenance_says_it_is():
     across the width the adapter sits well left of the middle. The x is the
     reading; the y is still a proportion of an estimated face.
     """
-    rear = contract("fs/fhd-1mtp6lcd-rear/v2")
+    rear = contract("fs/fhd-1mtp6lcd-rear/v3")
     mtp = next(p for p in rear["parts"] if p["id"] == "mtp")
     adapter = contract("common/mpo-flange-adapter/v1")
     cx = float(mtp["at"][0]) + adapter["size"]["w"] / 2

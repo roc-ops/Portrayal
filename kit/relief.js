@@ -2155,6 +2155,41 @@ export async function buildFaceRelief(F, ctx) {
         mesh.position.set(LX(f.x + fp.at[0], fp.size[0]),
                           LY(f.y + fp.at[1], fp.size[1]), zf - d / 2 - 0.05);
         fg.add(mesh);
+        // A MODULE'S BACK IS A FACE, NOT A PICTURE. `body.sides.rear` is a
+        // compiled drawing - for a cassette it IS the module's rear face, the
+        // same one the chassis projects through an open back - so it carries
+        // relief: a flanged MTP stands off it, its opening recesses into it.
+        // Painted flat as a side texture, the back of a pulled cassette read as
+        // a photograph glued to a box. This runs the ordinary face pass over
+        // that drawing and hangs the result on the back of the body, inside the
+        // FRU group, so it comes out with the module. Turned a half turn, like
+        // the chassis's own rear face: the art is drawn as seen from behind.
+        // NOT FOR A LIFTED MODULE, whose face is not the panel and whose body
+        // box is placed off it, and NOT FOR A BACK'S OWN BACK: `ctx.back` stops
+        // the recursion at one level, so a rear drawing that itself seats a
+        // module cannot walk backwards for ever.
+        const backSrc = meta.body.sides && meta.body.sides.rear;
+        if (backSrc && ctx.dist && !f.lift && !ctx.back) {
+          const key = `back:${f.path}`;
+          const back = {view: key, fw: () => fp.size[0], fh: () => fp.size[1],
+                        deep: () => d, pos: () => [0, 0, 0], rot: [0, Math.PI, 0]};
+          const before = meshes.length;
+          await buildFaceRelief(back, {...ctx, src: ctx.dist + backSrc, deep: d,
+                                       back: true});
+          if (meshes.length > before) {
+            const bg = meshes.pop();
+            bg.position.set(LX(f.x + fp.at[0], fp.size[0]),
+                            LY(f.y + fp.at[1], fp.size[1]), zf - d - 0.05);
+            fg.add(bg);
+          }
+          // and the box's own back takes the face's punched texture, so the
+          // recesses the pass just built are not covered by a flat copy of
+          // the same art
+          if (faceCv[key] && Array.isArray(mesh.material))
+            mesh.material[5] = new THREE.MeshBasicMaterial(
+              {map: canvasTex(faceCv[key]), transparent: true, alphaTest: 0.1,
+               alphaToCoverage: true});
+        }
       }
       // empty bay: interior surfaces only, so it never occludes the module's
       // own cavities (the C14 inlet pins live inside this volume)

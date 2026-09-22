@@ -22,7 +22,7 @@ def cassette(pol, fibres):
              for i in range(1, 7)]
     paths = [{"from": f"lc{(p - 1) // 2 + 1}.{2 - p % 2}", "to": f"rear:mtp.{fibres[p - 1]}"}
              for p in range(1, 13)]
-    return {"parts": parts, "faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@2"}},
+    return {"parts": parts, "faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@3"}},
             "optical": {"polarity": pol, "paths": paths}}
 
 

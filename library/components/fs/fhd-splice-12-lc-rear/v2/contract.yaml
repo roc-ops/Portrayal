@@ -1,20 +1,20 @@
 format: 1
 kind: component
 name: fhd-splice-12-lc-rear
-version: 1.0.1
+version: 2.0.0
 class: cassette
 description: >-
   The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the
   cassette body seen from behind, carrying its fusion-splice tray in place of
-  the MTP trunk adapter fhd-1mtp6lcd-rear@2 carries.
-size: {w: 99.0, h: 31.0, d: 2.0}
-size-confidence: {w: estimated, h: estimated, d: estimated}
+  the MTP trunk adapter fhd-1mtp6lcd-rear@3 carries.
+size: {w: 99.0, h: 31.0}
+size-confidence: {w: estimated, h: estimated}
 size-notes: >-
   NOT MEASURED, AND NOTHING TO MEASURE IT FROM. No photograph of SKU 382907,
   front or back, is held anywhere in working/intake/fs/fhd/photos - not a
   three-quarter render, not even a product thumbnail - and no per-SKU
   datasheet for it was staged (working/intake/fs/fhd/COVERAGE.md records
-  that). 99.0 x 31.0 x 2.0 reuses fhd-1mtp6lcd-rear@2's own figures whole, on
+  that). 99.0 x 31.0 reuses fhd-1mtp6lcd-rear@3's own figures whole, on
   the reasoning that every FHD cassette shares one body envelope regardless of
   what its rear carries - but that source contract is itself marked ESTIMATED
   throughout (proportion read off a three-quarter render panel_measure
@@ -23,6 +23,16 @@ size-notes: >-
   library's vocabulary reserves for reuse of a MEASURED figure. A face-on
   photograph of this SKU's back, or of any splice cassette's back, settles
   it.
+
+  NO DEPTH IS DECLARED, AND THAT IS THE READING. This contract is a FACE - the
+  drawing of a back, not a part with a back of its own - and render.py turns a
+  `size.d` on a fixed component into `data-depth`, an aperture as big as the
+  whole face. The kit then builds THAT pit and drops the recesses inside it,
+  because it takes only the innermost cavity of a nest: the estimated `d: 2.0`
+  carried until now swallowed the recesses composed onto this face, so a
+  bulkhead's mouth was not built at all and the whole back sat 2 mm below the
+  cassette's edge in 3D. The depth of the body this face closes belongs to the
+  cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
 parts:
   - {id: splice, ref: common/fibre-splice@1, at: [19.5, 5.5]}
@@ -30,7 +40,7 @@ provenance:
   size: >-
     see size-notes. No image of this part exists.
   parts: >-
-    ONE SPLICE TRAY, CENTRED, for the same reason fhd-1mtp6lcd-rear@2 centres
+    ONE SPLICE TRAY, CENTRED, for the same reason fhd-1mtp6lcd-rear@3 centres
     its one MTP adapter: centring is what a drawing with no photograph to
     read can defend, not a coincidence. A 60.0 x 20.0 common/fibre-splice@1
     centred in the 99.0 x 31.0 face sits at ((99.0-60.0)/2, (31.0-20.0)/2) =
@@ -38,6 +48,6 @@ provenance:
     ways. Nothing here is a measurement.
   face-detail-gap: >-
     no legend, label or fastener is drawn - there is no render or photograph
-    of this SKU's rear to read one off, unlike fhd-1mtp6lcd-rear@2's
+    of this SKU's rear to read one off, unlike fhd-1mtp6lcd-rear@3's
     three-quarter view of 57016.
 skins: [default]

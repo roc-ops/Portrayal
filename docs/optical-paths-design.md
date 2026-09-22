@@ -137,7 +137,7 @@ A bare `rear:` sibling handles one more direction and then stops scaling. So:
 ```yaml
 faces:
   plan: {ref: dell/riser-card-14g@1}     # what `plan:` means today
-  rear: {ref: fs/fhd-1mtp6lcd-rear@2}
+  rear: {ref: fs/fhd-1mtp6lcd-rear@3}
 ```
 
 with `plan:` kept as sugar for `faces.plan`. Blast radius is small - 13
