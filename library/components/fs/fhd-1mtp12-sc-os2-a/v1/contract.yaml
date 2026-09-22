@@ -1,13 +1,13 @@
 format: 1
 kind: module
 name: fhd-1mtp12-sc-os2-a
-version: 1.3.0
+version: 1.4.0
 class: cassette
 behaviour: fills
 description: >-
   FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A
   polarity. FS SKU 57058. The first component in this library to compose
-  common/sc-duplex-adapter@3.
+  common/sc-duplex-adapter@4.
 size: {w: 108.97, h: 35.05, d: 117.86}
 size-confidence: {w: photo-measured, h: photo-measured, d: drawing}
 size-notes: >-
@@ -35,12 +35,12 @@ body:
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
-  - {id: sc1, ref: common/sc-duplex-adapter@3, at: [15.81, 4.825]}
-  - {id: sc2, ref: common/sc-duplex-adapter@3, at: [28.52, 4.825]}
-  - {id: sc3, ref: common/sc-duplex-adapter@3, at: [41.65, 4.825]}
-  - {id: sc4, ref: common/sc-duplex-adapter@3, at: [54.61, 4.825]}
-  - {id: sc5, ref: common/sc-duplex-adapter@3, at: [67.58, 4.825]}
-  - {id: sc6, ref: common/sc-duplex-adapter@3, at: [80.80, 4.825]}
+  - {id: sc1, ref: common/sc-duplex-adapter@4, at: [15.81, 4.825]}
+  - {id: sc2, ref: common/sc-duplex-adapter@4, at: [28.52, 4.825]}
+  - {id: sc3, ref: common/sc-duplex-adapter@4, at: [41.65, 4.825]}
+  - {id: sc4, ref: common/sc-duplex-adapter@4, at: [54.61, 4.825]}
+  - {id: sc5, ref: common/sc-duplex-adapter@4, at: [67.58, 4.825]}
+  - {id: sc6, ref: common/sc-duplex-adapter@4, at: [80.80, 4.825]}
 faces:
   rear: {ref: fs/fhd-1mtp12-sc-rear@2}
 optical:
@@ -88,7 +88,7 @@ provenance:
     noise scale as the x measurement, that centring is the reading here, the
     same pattern fs/fhd-1mtp6lcd-os2-a@1's own `at.y` provenance uses.
   pitch-note: >-
-    common/sc-duplex-adapter@3 composes six-across at an IRREGULAR pitch -
+    common/sc-duplex-adapter@4 composes six-across at an IRREGULAR pitch -
     the raw measured centres, not a uniform multiple. THIS NOTE IS WHY L81
     STAYS SILENT, though, not the irregular spacing: `lint_component_composed_pitch`
     returns before it ever looks at a gap once `provenance.pitch-note` is
@@ -109,7 +109,7 @@ provenance:
     defect in this cassette.
   face-detail-gap: >-
     THE SIX SC CUTOUTS ARE NOT DRAWN HERE, for the same reason as the LC
-    cassette's plate: each composed common/sc-duplex-adapter@3 draws its own
+    cassette's plate: each composed common/sc-duplex-adapter@4 draws its own
     blue frame, two SC openings and their caps at its `at` position, and a
     second copy here would drift the day one is edited and the other is not.
     THE TWO THUMB-KNOBS ARE DRAWN, REUSING THE LC CASSETTE'S OWN BY-EYE

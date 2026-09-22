@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sc-duplex-adapter
-version: 3.0.0
+version: 4.0.0
 class: port
 profile: networking
 description: >-
@@ -45,11 +45,20 @@ parts:
   # Each opening centred across the 9.4 frame (7.5 opening at x 0.95-8.45, its
   # key slot cut out through the left wall) and centred in its 12.7 cell.
   # Lifted onto the raised frame so each recesses from the proud face.
-  - {id: tx, ref: std/sc-bore@1, at: [0.06, 1.85], lift: 1.0}
-  - {id: rx, ref: std/sc-bore@1, at: [0.06, 14.55], lift: 1.0}
+  - {id: tx, ref: std/sc-bore@1, at: [0.06, 14.55], lift: 1.0}
+  - {id: rx, ref: std/sc-bore@1, at: [0.06, 1.85], lift: 1.0}
 connection-points:
   optical: {at: [4.7, 12.7], direction: front}
 provenance:
+  position-order: >-
+    POSITION 1 IS THE LOWER BORE, because FS prints the lower bore of each
+    stacked adapter as the ODD port (1 below 2 at the left end of the panel,
+    11 below 12 at the right) and a fibre position's number is the port
+    number every consumer of the optical model shows. Positions follow the
+    order the bores are composed, so `tx` - composed first - sits below. Until
+    this major the upper bore was composed first: every Type A path was
+    "straight through" by number while fibre 1 surfaced at the port FS prints
+    as 2, a Type AF wiring on the hardware under a Type A label.
   size: >-
     photo-measured, both axes - see size-notes. v1's height was 12.0, read off
     the render's proportions rather than any pixel span, and it was wrong by

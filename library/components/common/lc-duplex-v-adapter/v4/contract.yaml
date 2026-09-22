@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 3.0.0
+version: 4.0.0
 class: port
 profile: networking
 description: >-
@@ -44,13 +44,22 @@ parts:
   # it to the LEFT, which is where FS's own render puts every port's stepped
   # latch slot (57016.main.jpg, beside the cap). Lifted onto the raised bezel so
   # each bore recesses from the proud face, as common/lc-duplex-adapter@4 does.
-  - {id: tx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
-  - {id: rx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
+  - {id: tx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
+  - {id: rx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
 connection-points:
   optical:
     at: [4.64, 6.875]
     direction: front
 provenance:
+  position-order: >-
+    POSITION 1 IS THE LOWER BORE, because FS prints the lower bore of each
+    stacked adapter as the ODD port (1 below 2 at the left end of the panel,
+    11 below 12 at the right) and a fibre position's number is the port
+    number every consumer of the optical model shows. Positions follow the
+    order the bores are composed, so `tx` - composed first - sits below. Until
+    this major the upper bore was composed first: every Type A path was
+    "straight through" by number while fibre 1 surfaced at the port FS prints
+    as 2, a Type AF wiring on the hardware under a Type A label.
   size: >-
     see size-notes. Width AND height are both photo-measured, each with a spread
     of 0.00 across all six adapters on the same validated render.
