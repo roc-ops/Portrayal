@@ -5,8 +5,20 @@
        middle, and the opening is keyed at the middle of its top edge. -->
   <path id="flange" fill="#17191c" stroke="#08090a" stroke-width="0.2"
         d="M 1.2 0 H 28.8 L 30 1.2 V 9.8 L 28.8 11 H 1.2 L 0 9.8 V 1.2 Z"/>
-  <rect id="housing" x="6.5" y="0.3" width="17.0" height="10.4" rx="0.6"
-        fill="#202326" stroke="#0c0d0e" stroke-width="0.2"/>
+  <!-- THE HOUSING IS A RING, NOT A LID. It stands 3.5 off the back (the
+       contract's relief), and render.py raises a node with `out` to the END of
+       the instance group whenever the component composes parts - here the two
+       screws - so whatever this shape covers is covered in the drawing too. As
+       a plain rect it painted over the opening, the plug and the whole MT end
+       face: the port read as a blank slab in 2D, and in 3D as well, because a
+       cavity's floor is cut from its own group rendered standalone. The keyed
+       opening is an evenodd HOLE in it instead, the pattern
+       common/lc-duplex-v-adapter@4 uses for its bores, so the end face behind
+       shows through however late this paints. -->
+  <path id="housing" fill-rule="evenodd" fill="#202326" stroke="#0c0d0e" stroke-width="0.2"
+        d="M 7.1 0.3 H 22.9 Q 23.5 0.3 23.5 0.9 V 10.1 Q 23.5 10.7 22.9 10.7
+           H 7.1 Q 6.5 10.7 6.5 10.1 V 0.9 Q 6.5 0.3 7.1 0.3 Z
+           M 8.45 2.0 H 13.5 V 1.3 H 16.5 V 2.0 H 21.55 V 9.0 H 8.45 Z"/>
   <path id="opening" fill="#0b0c0e" stroke="#2c3035" stroke-width="0.2"
         d="M 8.45 2.0 H 13.5 V 1.3 H 16.5 V 2.0 H 21.55 V 9.0 H 8.45 Z"/>
   <!-- THE PLUG'S END FACE, as seen through the opening: the grey plug
