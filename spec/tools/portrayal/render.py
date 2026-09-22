@@ -2736,6 +2736,107 @@ def _cage_accepts(candidates, families, family, media):
     return sorted(set(refs), key=_sort_key)
 
 
+def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
+               occupant=None):
+    """ONE cage entry for ONE placement, or None when it is not a cage - the
+    core that a device view's `cages[]` (cage_entries) and a component's own
+    `cages` (component_cages, which components_index.py publishes) both call,
+    so a cage on a card and a cage on a switch face are the same answer to
+    the same question.
+
+    `p` is a placement dict - a device view's placement, or a contract's
+    `parts:` entry, which has the same keys that matter here (`ref`, `id`,
+    `at`, `rotate`, `attrs`, `mirror`). Everything that is a FACT OF THE
+    FRAME the placement sits in is handed in rather than looked up, because
+    the two frames answer it differently:
+      group       the placement's port group ({} or None where it has none -
+                  a component carries no `groups:`, so a card cage's media is
+                  its part's own `attrs.media` and its occupant-attrs are
+                  empty);
+      extra_lift  added to the presented lift - a device cage's well sink
+                  (negative), a composed part's own `lift` (see
+                  component_cages);
+      occupant    the configured occupant, if any.
+    `mate` and `at` are in the frame `p["at"]` is written in.
+    """
+    contract, _skins = lib.resolve(p["ref"])
+
+    def _resolve(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+
+    interface, mate_at, lift = presented_interface(contract, _resolve)
+    found = _family_by_interface(families, interface) if interface else None
+    if found is None:
+        return None
+    _family_name, family = found
+    # `media` is the port's declared media - the cage's ceiling on its
+    # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
+    # then its group's, which is the precedence lint.py has applied since
+    # L18 (`declared = (p.get("attrs") or {}).get("media") or
+    # gattrs.get("media")`) and L22/L23 read the same way. The corpus
+    # declares a port's media in both places - 83 cage placements across 22
+    # devices declare one their group does not, 48 of them on
+    # `maiaedge/port-extender`, whose `ports` group says in its own `mixed:`
+    # note that each port carries its own media rather than the group's -
+    # and L22 makes a placement/group contradiction an ERROR, so
+    # the two can never disagree and reading the placement first is
+    # strictly safe and strictly more informative. A placement in no group
+    # that declares none of its own has NO CEILING: it accepts every rate
+    # of its family.
+    #
+    # NOT the contract's own `attrs.media`: that is the ambiguous family
+    # token (`std/sfp-ganged@1` says `sfp`), and reading it here would cap
+    # every SFP cage at the lowest rung of its ladder.
+    media = ((p.get("attrs") or {}).get("media")
+             or ((group or {}).get("attrs") or {}).get("media"))
+    # THE GROUP'S MEDIA GOVERNS WHEN IT DISAGREES WITH THE APERTURE. A
+    # group declaring `media: qsfp-dd` on a placement modelled with
+    # `std/qsfp-ganged@1` (a QSFP aperture - the drawing may well be
+    # correct; QSFP-DD and QSFP share a face opening and differ mainly in
+    # depth) still needs to offer the QSFP-DD optic, because the group is
+    # what SAYS what the port is; the aperture only says what it looks
+    # like. `lint_device_cage_media_disagreement` (L104) flags every case
+    # this fires for, so the disagreement stays visible rather than being
+    # silently settled by this precedence rule.
+    accept_family = family
+    if media:
+        media_found = _family_by_rate(families, media)
+        if media_found and media_found[0] != _family_name:
+            accept_family = media_found[1]
+    return {
+        "id": p["id"], "at": p["at"], "interface": interface, "media": media,
+        "group": p.get("group"), "rel-pos": p.get("rel-pos"),
+        "rotate": p.get("rotate"),
+        "accepts": _cage_accepts(candidates, families, accept_family, media),
+        "occupant": (occupant.get("ref") if isinstance(occupant, dict) else occupant)
+                    if occupant else None,
+        # WHERE AN OCCUPANT MATES, in the frame the placement is written in
+        # (the device's for a device cage, the card's for a component's own)
+        # with the cage's own rotation applied - the point the build's `mate-to` resolution
+        # seats on (seat_point), so a consumer seating an optic here lands
+        # it where the build would. `lift` is the host's presented lift,
+        # what that resolution carries as `host-lift`.
+        "mate": (seat_point(p["at"], contract["size"], p.get("rotate"), mate_at)
+                 if mate_at is not None else None),
+        "lift": float(lift or 0.0) + float(extra_lift or 0.0),
+        "occupant-attrs": group_side_attrs(p.get("group"), group),
+        # TWO THINGS THE BUILD DOES TO A SEATED OPTIC THAT A CONSUMER MAY
+        # NOT, published so it can decline rather than seat it wrong (the
+        # kit refuses both, as it refuses a lift):
+        #   mirror        this build RAISES for an occupant in a mirrored
+        #                 host (the D3 refusal in the mate-to resolution);
+        #   group-states  the host's group carries `states`, which
+        #                 draw_placement applies to the occupant too - it
+        #                 takes its host's group - and `group_side_attrs`
+        #                 does not carry.
+        "mirror": bool(p.get("mirror")),
+        "group-states": bool((group or {}).get("states")),
+    }
+
+
 def cage_entries(device, view_name, lib, families, candidates, default_occupants):
     """`cages[]` for one view: one entry per placement that presents a
     pluggable interface (`manifest.presented_interface`, looked through a
@@ -2757,92 +2858,61 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     """
     view = device["views"][view_name] or {}
     groups = device.get("groups") or {}
-
-    def _resolve(ref):
-        try:
-            return lib.resolve(ref)[0]
-        except Exception:
-            return None
-
     out = []
     placements = view_parts(view)["placements"]
     for p in placements:
-        contract, _skins = lib.resolve(p["ref"])
-        interface, mate_at, lift = presented_interface(contract, _resolve)
         # A CAGE IN A WELL IS SUNK BY ITS FLOOR, and the mate-to resolution
         # carries that sink into its occupant's `host-lift` (render_view). The
         # published `lift` is documented as that same figure, so it takes the
         # same term - and a consumer that does not seat into a lifted cage (the
         # kit refuses any non-zero lift) declines this one rather than seating
         # the optic at the panel above a floor it cannot see.
+        extra = 0.0
         if p.get("in") and not p.get("projection-of"):
-            lift = float(lift or 0.0) - well_floor(placements, lib, p["in"])
-        found = _family_by_interface(families, interface) if interface else None
-        if found is None:
-            continue
-        _family_name, family = found
-        # `media` is the port's declared media - the cage's ceiling on its
-        # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
-        # then its group's, which is the precedence lint.py has applied since
-        # L18 (`declared = (p.get("attrs") or {}).get("media") or
-        # gattrs.get("media")`) and L22/L23 read the same way. The corpus
-        # declares a port's media in both places - 83 cage placements across 22
-        # devices declare one their group does not, 48 of them on
-        # `maiaedge/port-extender`, whose `ports` group says in its own `mixed:`
-        # note that each port carries its own media rather than the group's -
-        # and L22 makes a placement/group contradiction an ERROR, so
-        # the two can never disagree and reading the placement first is
-        # strictly safe and strictly more informative. A placement in no group
-        # that declares none of its own has NO CEILING: it accepts every rate
-        # of its family.
-        #
-        # NOT the contract's own `attrs.media`: that is the ambiguous family
-        # token (`std/sfp-ganged@1` says `sfp`), and reading it here would cap
-        # every SFP cage at the lowest rung of its ladder.
-        media = ((p.get("attrs") or {}).get("media")
-                 or ((groups.get(p.get("group")) or {}).get("attrs") or {}).get("media"))
-        # THE GROUP'S MEDIA GOVERNS WHEN IT DISAGREES WITH THE APERTURE. A
-        # group declaring `media: qsfp-dd` on a placement modelled with
-        # `std/qsfp-ganged@1` (a QSFP aperture - the drawing may well be
-        # correct; QSFP-DD and QSFP share a face opening and differ mainly in
-        # depth) still needs to offer the QSFP-DD optic, because the group is
-        # what SAYS what the port is; the aperture only says what it looks
-        # like. `lint_device_cage_media_disagreement` (L104) flags every case
-        # this fires for, so the disagreement stays visible rather than being
-        # silently settled by this precedence rule.
-        accept_family = family
-        if media:
-            media_found = _family_by_rate(families, media)
-            if media_found and media_found[0] != _family_name:
-                accept_family = media_found[1]
-        occ = default_occupants.get(p["id"])
-        out.append({
-            "id": p["id"], "at": p["at"], "interface": interface, "media": media,
-            "group": p.get("group"), "rel-pos": p.get("rel-pos"),
-            "rotate": p.get("rotate"),
-            "accepts": _cage_accepts(candidates, families, accept_family, media),
-            "occupant": (occ.get("ref") if isinstance(occ, dict) else occ) if occ else None,
-            # WHERE AN OCCUPANT MATES, in the device frame with the cage's own
-            # rotation applied - the point the build's `mate-to` resolution
-            # seats on (seat_point), so a consumer seating an optic here lands
-            # it where the build would. `lift` is the host's presented lift,
-            # what that resolution carries as `host-lift`.
-            "mate": (seat_point(p["at"], contract["size"], p.get("rotate"), mate_at)
-                     if mate_at is not None else None),
-            "lift": float(lift or 0.0),
-            "occupant-attrs": group_side_attrs(p.get("group"), groups.get(p.get("group"))),
-            # TWO THINGS THE BUILD DOES TO A SEATED OPTIC THAT A CONSUMER MAY
-            # NOT, published so it can decline rather than seat it wrong (the
-            # kit refuses both, as it refuses a lift):
-            #   mirror        this build RAISES for an occupant in a mirrored
-            #                 host (the D3 refusal in the mate-to resolution);
-            #   group-states  the host's group carries `states`, which
-            #                 draw_placement applies to the occupant too - it
-            #                 takes its host's group - and `group_side_attrs`
-            #                 does not carry.
-            "mirror": bool(p.get("mirror")),
-            "group-states": bool((groups.get(p.get("group")) or {}).get("states")),
-        })
+            extra = -well_floor(placements, lib, p["in"])
+        entry = cage_entry(p, lib, families, candidates,
+                           group=groups.get(p.get("group")), extra_lift=extra,
+                           occupant=default_occupants.get(p["id"]))
+        if entry is not None:
+            out.append(entry)
+    return out
+
+
+def component_cages(contract, lib, families, candidates):
+    """A component's OWN cages, in its own frame: one entry per `parts:` entry
+    that presents a pluggable interface, by the same core as a device view's
+    `cages[]` (cage_entry). components_index.py publishes it on the
+    component, so a module swapped into a bay at runtime brings its cages
+    with it (#484) - a configuration cannot say where the cages of a card it
+    does not seat are.
+
+    A WRAPPER INSIDE A COMPONENT IS LOOKED THROUGH exactly as a device wrapper
+    is: `presented_interface` reads the part's contract and, failing its own
+    interface, its one composed aperture. Nothing deeper is walked, on either
+    side.
+
+    NO GROUP, NO OCCUPANT. A contract declares no `groups:`, so `media` is the
+    part's own `attrs.media` (a part that declares none has no ceiling) and
+    `occupant-attrs` is what group_side_attrs yields for no group - empty. A
+    contract seats no occupant, so `occupant` is null; which optic a card's
+    cage holds is a configuration's answer, not the card's.
+
+    THE PART'S OWN `lift` IS ADDED, where a device placement's is not. The two
+    words mean different things: a device placement's `lift:` is carried by
+    `back` and writes no attribute (see render_view), while a composed part's
+    is written as `data-z-lift` on its group (instance_group), which raises
+    everything in it. An occupant seated inside the card sits BESIDE the cage
+    group, not in it, so it takes that raise only if the published figure
+    carries it - and a consumer that refuses a lifted cage then refuses it
+    for the right reason rather than seating the optic 44 mm under a shelf
+    card's raised cage.
+    """
+    out = []
+    for p in contract.get("parts") or []:
+        entry = cage_entry(p, lib, families, candidates,
+                           extra_lift=float(p.get("lift") or 0.0))
+        if entry is not None:
+            out.append(entry)
     return out
 
 
