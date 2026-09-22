@@ -182,14 +182,14 @@ def test_a_plan_face_carrying_fibres_is_reported_not_dropped():
     twice or a direction the optical model has not been extended to, and both
     want a human, not a shrug.
     """
-    doc = {"faces": {"plan": {"ref": "fs/fhd-1mtp6lcd-rear@1"}}}
+    doc = {"faces": {"plan": {"ref": "fs/fhd-1mtp6lcd-rear@2"}}}
     got = run85(doc)
     assert len(got) == 1, got
     assert "plan" in got[0]
 
 
 def test_a_rear_face_carrying_fibres_is_the_point():
-    assert run85({"faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@1"}}}) == []
+    assert run85({"faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@2"}}}) == []
 
 
 def test_a_plan_face_with_no_optical_parts_is_quiet():

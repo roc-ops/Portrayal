@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: fhd-1mtp24-lc-rear
+version: 2.0.0
+class: cassette
+description: >-
+  The back of FS FHD-1X24MTPLCOS2A (SKU 57023): the cassette body seen from
+  behind, carrying its single MTP-24 trunk adapter.
+size: {w: 99.0, h: 31.0, d: 2.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: >-
+  NOT MEASURED, AND NOT MEASURABLE FROM WHAT IS HELD - the same finding
+  fhd-1mtp6lcd-rear@2 and fhd-2mtp12-lc-rear@1 both record for their own rear
+  faces. 57023.E.jpg is the closest thing to a face-on rear render in the
+  corpus and it still fails `panel_measure.validate()`: `plate()` locks onto
+  the connector's own mounting flange rather than the enclosure's full
+  mounting ears, and that band scales to 4.66% off the known 35.05 mm height
+  (limit 3.0%). 57023.D.jpg is a three-quarter side view with no scale at
+  all, and 57023.F.jpg is a front-corner crop that shows no rear geometry.
+  Nor can the faceplate supply one, for the same reason both sibling rears
+  give: the faceplate OVERHANGS the body, so the rear face is narrower than
+  108.97 x 35.05 by an amount nobody has measured. 99.0 x 31.0 x 2.0 REUSES
+  fhd-1mtp6lcd-rear@2's own figures rather than a third proportional read -
+  that source is itself `estimated`, not measured, so carrying it across is
+  recorded as `estimated` here too, not `borrowed` (which this library
+  reserves for a figure whose origin actually measured something), the same
+  distinction fhd-2mtp12-lc-rear@1 already draws for its own reuse of the
+  same number. A face-on photograph of the back, square to the mounting
+  flange rather than the connector band, settles it.
+attrs: {media: fiber}
+parts:
+  - {id: mtp, ref: common/mpo24-flange-adapter@1, at: [3.0, 14.3]}
+provenance:
+  size: >-
+    see size-notes.
+  parts: >-
+    THE MTP SITS AT THE LEFT, NOT IN THE MIDDLE. v1 centred it and said so as a
+    choice, not a reading. The rear render (57023.D.jpg) is a top-rear
+    three-quarter, but the camera is ABOVE the cassette, not beside it, so the
+    face is not foreshortened across its width: scaled on the 108.97 faceplate
+    that overhangs it (627 px, 5.75 px/mm), the body is 98.2 wide - against
+    this contract's 99 - and the adapter's centre is 18 mm from the body's left
+    edge, its screw flange spanning about 4 to 32. `at.x` 3.0 puts the 30.0
+    wide common/mpo24-flange-adapter@1 - the flanged bulkhead the render shows, not
+    the panel tile v1 composed - with its centre at 18.0. HEIGHT IS STILL AN ESTIMATE: the render does
+    foreshorten vertically, so the centre's 0.64 of the way down the face is a
+    proportion of an estimated 31, giving `at.y` 14.3 (centre 19.8), which is
+    the same 'a little below the middle' v1 recorded and did not act on.
+  face-detail-gap: >-
+    Drawn now, by the same across-the-width reading: the `1-24` port-range
+    legend above the adapter, centred on it, and the `Type A` polarity label,
+    a bordered box spanning 37.5-60.6 of the width. Their heights are
+    proportion on an estimated face, as the adapter's is. Still not drawn: the
+    `MALE` warranty seal on the lid edge, which is a sticker over the join
+    rather than printing on this face, and the two thumb-screws, which are on
+    the faceplate that overhangs this body, not on it.
+skins: [default]

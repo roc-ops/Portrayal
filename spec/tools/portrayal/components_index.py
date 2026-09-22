@@ -192,6 +192,16 @@ def main():
                         fname = f"{ns}--{data['name']}--{major}--body-{side}.svg"
                         (out / "components" / fname).write_text(sp2.read_text())
                         sides[side] = f"components/{fname}"
+                # A MODULE WITH A REAR FACE HAS ITS BACK DRAWN ALREADY. When no
+                # `body-rear.svg` says otherwise, the body's back is that face's
+                # compiled drawing, so a pulled cassette carries its MTP out
+                # with it instead of leaving a blank box. Same file the device
+                # build projects through an open back.
+                rref = face_ref(data, "rear")
+                if "rear" not in sides and rref:
+                    rns, rest = rref.split("/", 1)
+                    rname, rmaj = rest.split("@")
+                    sides["rear"] = f"components/{rns}--{rname}--v{rmaj}--default.svg"
                 entry["body"] = {**data["body"], "sides": sides}
             # A PART'S OTHER DRAWINGS, flattened to refs. The viewer resolves
             # them against this same index, so the nested `{ref: ...}` form

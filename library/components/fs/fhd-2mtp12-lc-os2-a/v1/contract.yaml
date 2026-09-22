@@ -1,8 +1,9 @@
 format: 1
 kind: module
 name: fhd-2mtp12-lc-os2-a
-version: 1.1.0
+version: 1.2.0
 class: cassette
+behaviour: fills
 description: >-
   FS FHD-2X12MTPLCOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres,
   OS2, Type A polarity. FS SKU 57341.
@@ -21,6 +22,13 @@ size-notes: >-
 attrs: {media: fiber, model: FHD-2X12MTPLCOS2A, vendor-sku: '57341'}
 body:
   depth: 117.86
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
+  # overhangs the cassette on every side (FS's rear renders show its edge
+  # standing out round the body), and the back of the body is the rear face,
+  # 99 x 31, centred behind the 108.97 x 35.05 plate. Estimated with that face
+  # - see its own size-notes. It is what a pulled cassette's box is drawn as,
+  # and what its rear face is painted on.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
   - {id: lc01, ref: common/lc-duplex-v-adapter@2, at: [17.22, 18.66]}
   - {id: lc02, ref: common/lc-duplex-v-adapter@2, at: [30.07, 18.66]}

@@ -1141,6 +1141,18 @@ export async function extractRelief(url, scope) {
       }));
       return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
               wallsInside: el.dataset.walls === 'inside',
+              // A HOLE A BAY IS SEEN THROUGH (render.py's `rear:`) is a passage
+              // to the front of the chassis. Whatever the bay holds stands in it
+              // as its own body, back painted, and leaves with it when pulled;
+              // with nothing there the passage is open to the front. So no
+              // floor and no back are built - a painted floor would stay behind
+              // a pulled cassette, and close the slot when it was empty.
+              seeThrough: !!el.dataset.rearOf || !!el.querySelector(':scope > [data-projection]'),
+              // AN OPEN BAY'S MOUTH (render.py `data-see-through`): the passage
+              // behind it is the rear hole's, so this builds no floor and no
+              // back - only a short collar of wall where the passage, which the
+              // depth clamp stops just short of the face, would leave a gap.
+              hollow: el.dataset.seeThrough === '1',
               lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
@@ -1256,8 +1268,11 @@ export async function extractRelief(url, scope) {
     // module would stand on the card below it. Read off the bay, which is the
     // module's parent.
     const shelf = !!(el.parentElement && el.parentElement.dataset && el.parentElement.dataset.shelf);
+    // an OPEN-BACKED bay leaves no box behind a pulled module either - its
+    // passage is the rear hole's, and a box would close it (see `hollow`)
+    const openBack = !!(el.parentElement && el.parentElement.dataset && el.parentElement.dataset.openBack);
     frus.push({path, ref: el.dataset.ref.split(':')[0],
-               cls: el.dataset.class, lift: liftOf(el), shelf,
+               cls: el.dataset.class, lift: liftOf(el), shelf, openBack,
                bodyDepth: +el.dataset.bodyDepth || null, ...frect,
                // its own art, so the plane can be cut to the module's SHAPE
                svgText: nodeSvg(el, frect),
@@ -1448,7 +1463,9 @@ export async function buildFaceRelief(F, ctx) {
     };
     for (const c of cavities) {
       curOwner = c.owner;
-      const d = Math.min(c.d, INTO - 2);
+      // an open bay's mouth is a short collar, not a pocket: walls deep enough
+      // to meet the rear passage, which stops INTO - 2 short of the face
+      const d = c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
       // floor + feature art comes from the cavity group rendered standalone, so
       // raised bezel plates (drawn over the cavity on the face) never leak in
       const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h, PX);
@@ -1474,7 +1491,7 @@ export async function buildFaceRelief(F, ctx) {
                        Math.round(c.x * PX), Math.round(c.y * PX));
         pctx.globalCompositeOperation = 'source-over';
         facePunch[F.view].push({kind: 'shape', svg: c.cavSvg,
-                                x: c.x, y: c.y, w: c.w, h: c.h});
+                                x: c.x, y: c.y, w: c.w, h: c.h, mouth: !!c.hollow});
       }
       // walls are double-sided: the interior is the recess, and the exterior is
       // the cage/housing body seen through neighboring vent holes. The back face
@@ -1510,6 +1527,7 @@ export async function buildFaceRelief(F, ctx) {
                       {owner: c.owner, x: c.x, y: c.y, d, lift: c.lift});
       walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
       addTo(walls);
+      if (c.seeThrough || c.hollow) continue;
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
         new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
@@ -1933,7 +1951,22 @@ export async function buildFaceRelief(F, ctx) {
     curOwner = null;
     for (const f of frus) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
-      const faceCrop = crop(f.lift ? artCv : cv, f, PX);
+      // AN OPEN-BACKED BAY'S MOUTH HAS ALREADY BEEN PUNCHED OUT OF `cv`, and it
+      // is the size of the whole slot - so cropping `cv` gave the module an
+      // empty plane: adapters floating in front of an open passage and no
+      // faceplate. Cut from the pristine art instead, and re-open only the
+      // module's own cavities (the mouth is the bay's hole, not the module's).
+      const faceCrop = crop(f.lift || f.openBack ? artCv : cv, f, PX);
+      if (f.openBack && !f.lift) {
+        const x0 = faceCrop.getContext('2d');
+        for (const p of facePunch[F.view]) {
+          if (p.mouth || !(p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y)) continue;
+          x0.globalCompositeOperation = 'destination-out';
+          x0.drawImage(await rasterize(p.svg, p.w, p.h, PX),
+                       Math.round((p.x - f.x) * PX), Math.round((p.y - f.y) * PX));
+          x0.globalCompositeOperation = 'source-over';
+        }
+      }
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
       // full-height slots over one low-profile slot - an L - and its box
       // takes in the top-left corner of a power supply; riser 1's brackets
@@ -1964,7 +1997,10 @@ export async function buildFaceRelief(F, ctx) {
       // or a drive in the tray lies inside its well's own punch, and replaying
       // that punch would cut the whole plane away. Only a module at the face
       // has cavities of its own to re-open.
-      const punchesHere = f.lift ? [] : facePunch[F.view].filter(p =>
+      // AN OPEN BAY'S MOUTH IS NOT THE MODULE'S. It is the bay's own hole, the
+      // size of the whole slot, and replaying it here cut the entire faceplate
+      // out of every module seated in an open-backed bay.
+      const punchesHere = f.lift ? [] : facePunch[F.view].filter(p => !p.mouth &&
         p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y);
       reg(f.svgText, async text => {
         const c2 = await rasterize(text, f.w, f.h, PX);
@@ -2009,6 +2045,7 @@ export async function buildFaceRelief(F, ctx) {
       // the bay is as deep as the thing that goes in it, not 60 mm
       const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
       if (f.shelf) continue;   // a shelf, not a hole: nothing is left behind
+      if (f.openBack) continue;   // a passage: the rear hole's walls are its sides
       // a body in pieces is a riser, and behind an unseated riser is the
       // chassis interior, not a hole: nothing is left behind here either
       if (meta.body && meta.body.boxes) continue;

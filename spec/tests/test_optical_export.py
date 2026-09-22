@@ -100,7 +100,7 @@ def test_the_cassette_is_an_orderable_module():
 def test_the_rear_face_is_not_separately_orderable():
     """A face is a drawing of the part, not a second product to order."""
     idx = index()
-    assert idx["fs/fhd-1mtp6lcd-rear@1"]["kind"] == "component"
+    assert idx["fs/fhd-1mtp6lcd-rear@2"]["kind"] == "component"
 
 
 def test_the_registry_fallback_still_answers_for_a_deviceless_namespace():

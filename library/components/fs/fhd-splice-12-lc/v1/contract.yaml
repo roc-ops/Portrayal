@@ -1,8 +1,9 @@
 format: 1
 kind: module
 name: fhd-splice-12-lc
-version: 1.1.0
+version: 1.2.0
 class: cassette
+behaviour: fills
 description: >-
   FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers. FS SKU 382907. Twelve
   trunk fibres fusion-spliced inside the cassette to six LC duplex adapters on
@@ -29,6 +30,13 @@ size-notes: >-
 attrs: {media: fiber, model: FHD Fiber Splice Cassette, vendor-sku: '382907'}
 body:
   depth: 110.24
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
+  # overhangs the cassette on every side (FS's rear renders show its edge
+  # standing out round the body), and the back of the body is the rear face,
+  # 99 x 31, centred behind the 108.97 x 35.05 plate. Estimated with that face
+  # - see its own size-notes. It is what a pulled cassette's box is drawn as,
+  # and what its rear face is painted on.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
   - {id: lc1, ref: common/lc-duplex-v-adapter@2, at: [17.545, 10.65]}
   - {id: lc2, ref: common/lc-duplex-v-adapter@2, at: [30.465, 10.65]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 1.5.0
+version: 1.6.0
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -77,7 +77,21 @@ provenance:
       the four sides no photograph resolved. Top and bottom are 448.0 x 432.8 and left/right are
       432.8 x 44.0 - both pairs built from the same `chassis` figures already sourced above, not a
       second measurement. No surface detail (screws, the slide rail, the cable-management arm the
-      467.2mm overall depth implies) is drawn on any of the five; see `gaps` below.
+      467.2mm overall depth implies) is drawn on any of the five; see `gaps` below. THE REAR
+      IS NOW THE EXCEPTION: it carries the open back behind each slot - see `rear-opening`.
+  rear-opening:
+    confidence: estimated
+    note: >-
+      REPORTED, NOT PHOTOGRAPHED. The owner of this model reports that the drawer's back is
+      open behind the slots, a hole roughly the size of a cassette faceplate through which the
+      cassettes' backs and MTP trunks are seen and reached - which is what the trunk cables
+      leaving from the back of the drawer need. No image held shows the rear; every FS
+      photograph of 70361 is of the front, the door or the pulled-out drawer. So the four holes
+      are each the front bay's own 108.97 x 35.05 at the bay's own height, mirrored left to
+      right because the back is seen from behind; their real outline, and whether it is one
+      hole or four, is still open (the `envelope-face-detail` gap). Each runs 431.8 in - the
+      432.8 drawer less a 1.0 front plate, which is ESTIMATED - so the slot is a passage the
+      cassette's own 110.24 or 117.86 mm body stands in, open front to back when it is out.
 
 chassis:
   width: 448.0
@@ -146,6 +160,12 @@ gaps:
       on one trunk instead of two narrower ones, not a different opening,
       and the same 117.86 mm body depth fs/fhd-2mtp12-lc-os2-a@1 already
       carries - so the gap stands unchanged a fourth time.
+      NARROWED, NOT CLOSED, when the rear gained its opening: the owner of
+      the model reports the back is open behind the slots, so the rear now
+      draws one hole per bay and the cassettes' backs through it (see
+      `provenance.rear-opening`). What the report cannot give is the
+      opening's real outline - four holes or one, the bay's size or not -
+      and nothing held shows the rear, so the photograph is still wanted.
     wanted: >-
       a rear photograph (the cassettes seat from the front but the trunk
       cables leave from the back of the drawer) and a lid/side photograph,
@@ -181,6 +201,7 @@ views:
             - fs/fhd-1mtp24-lc-os2-a@1
           group: slots
           rel-pos: 1
+          rear: {view: rear, at: [337.955, 6.5], cutout: back-1}
         - id: bay-2
           at: [115.03, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -192,6 +213,7 @@ views:
             - fs/fhd-1mtp24-lc-os2-a@1
           group: slots
           rel-pos: 2
+          rear: {view: rear, at: [228.985, 6.5], cutout: back-2}
         - id: bay-3
           at: [224.00, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -203,6 +225,7 @@ views:
             - fs/fhd-1mtp24-lc-os2-a@1
           group: slots
           rel-pos: 3
+          rear: {view: rear, at: [120.015, 6.5], cutout: back-3}
         - id: bay-4
           at: [332.97, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -214,6 +237,7 @@ views:
             - fs/fhd-1mtp24-lc-os2-a@1
           group: slots
           rel-pos: 4
+          rear: {view: rear, at: [11.045, 6.5], cutout: back-4}
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [448.0, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
@@ -225,6 +249,17 @@ views:
     panel:
       decor:
         - {at: [0, 0], size: [448.0, 44.0], fill: '#1b1e21'}
+      # THE BACK IS OPEN behind every slot, so the cassettes' backs - and their
+      # MTP trunks - are reached from the rear. One hole per front bay, the
+      # bay's own size, MIRRORED: seen from behind, bay-1 is on the right. Each
+      # runs the length of the drawer to the back of the 1.0 front plate, so a
+      # slot is a passage: a seated cassette's body stands in it, and an empty
+      # one is open front to back. See provenance.rear-opening.
+      cutouts:
+        - {id: back-1, at: [332.97, 4.475], size: [108.97, 35.05], depth: 431.8}
+        - {id: back-2, at: [224.00, 4.475], size: [108.97, 35.05], depth: 431.8}
+        - {id: back-3, at: [115.03, 4.475], size: [108.97, 35.05], depth: 431.8}
+        - {id: back-4, at: [6.06, 4.475], size: [108.97, 35.05], depth: 431.8}
 
   top:
     size:

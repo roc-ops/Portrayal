@@ -1,8 +1,9 @@
 format: 1
 kind: module
 name: fhd-1mtp6lcd-os2-a
-version: 1.1.0
+version: 1.2.0
 class: cassette
+behaviour: fills
 description: >-
   FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A
   polarity. FS SKU 57016.
@@ -17,6 +18,13 @@ size-notes: >-
 attrs: {media: fiber, model: FHD-1MTP6LCDOS2A, vendor-sku: '57016'}
 body:
   depth: 110.24
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
+  # overhangs the cassette on every side (FS's rear renders show its edge
+  # standing out round the body), and the back of the body is the rear face,
+  # 99 x 31, centred behind the 108.97 x 35.05 plate. Estimated with that face
+  # - see its own size-notes. It is what a pulled cassette's box is drawn as,
+  # and what its rear face is painted on.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
   - {id: lc1, ref: common/lc-duplex-v-adapter@2, at: [15.81, 10.66]}
   - {id: lc2, ref: common/lc-duplex-v-adapter@2, at: [28.70, 10.66]}
@@ -25,7 +33,7 @@ parts:
   - {id: lc5, ref: common/lc-duplex-v-adapter@2, at: [67.55, 10.66]}
   - {id: lc6, ref: common/lc-duplex-v-adapter@2, at: [80.44, 10.66]}
 faces:
-  rear: {ref: fs/fhd-1mtp6lcd-rear@1}
+  rear: {ref: fs/fhd-1mtp6lcd-rear@2}
 optical:
   media: os2
   polarity: a

@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes } from './relief.js';
-import { applyAllOverrides, applyOccupantOverrides, refusalReason, viewsToRewrite } from './swap.js';
+import { applyAllOverrides, applyOccupantOverrides, applyRearOverrides, refusalReason, viewsToRewrite } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -477,6 +477,24 @@ export function createViewer(container, opts = {}) {
       if (!viewApplied) continue;
       setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
       total += viewApplied;
+    }
+    // A SWAPPED BAY SEEN FROM BEHIND. A rear hole names the front bay it shows
+    // (render.py's `rear:`), and a view with no bays of its own is not in
+    // `views` above - so without this pass the back of the drawer kept the
+    // module the build seated. Walked over every face, since the hole is on a
+    // face the swapped bay is not; a face already rewritten above is read back
+    // from its override, which svgSource returns first.
+    for (const view of ALL_VIEWS) {
+      const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
+      let text;
+      try { text = await svgSource(url, SCOPE); } catch { continue; }
+      if (!text.includes('data-rear-of')) continue;
+      const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+      if (doc.querySelector('parsererror')) continue;
+      const n = await applyRearOverrides(doc.documentElement, OVERRIDES, loadSkin, byRef);
+      if (!n) continue;
+      setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
+      total += n;
     }
     return total;
   }
