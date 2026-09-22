@@ -7,8 +7,11 @@ behaviour: occupies
 mates: mpo
 profile: networking
 description: >-
-  The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding filling
-  the opening, with a raised saddle grip across it to pull it out by. An
+  The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding drawn
+  across the port's visible content, with a raised saddle grip to pull it out
+  by. How much of that content is the cap and how much is the aperture's own
+  bevelled mouth is NOT settled here, so 12.8 x 8.1 is an upper bound on the
+  cap's face rather than a measurement of it (`size-notes`). An
   OCCUPANT of the aperture it plugs (std/mpo@1 and anything composing it), so
   it comes out, swaps for a plug, or leaves the port empty. THE ONLY ONE OF THE
   FOUR CAPS THAT IS NEW: the MPO adapters never drew a cap, so this is read off
@@ -65,23 +68,32 @@ provenance:
     ESTIMATED, BOTH AXES - see size-notes for the render, the orthographic
     check, the scale, and which of two readings the figures assume.
     WHAT THIS PART DOES NOT CLAIM. It does not claim to overhang the aperture
-    it plugs: 8.09 on the short axis sits INSIDE the 8.5 std/mpo@1 reports as
-    where that aperture's bevel starts, which is what an object standing in the
-    mouth does and not what a flange lying over it does. How the cap's face and
-    the mouth relate is simply not settled by these renders, and the drawing
-    here - a cap the size of the port's visible content, inside
-    common/mpo-adapter@1's 13.8 x 9.4 - is the adopted reading and not a
-    finding.
+    it plugs. HOW THE CAP'S FACE AND THE MOUTH RELATE IS NOT SETTLED, and it
+    cannot be settled from here, because the only comparison available depends
+    on a reading of std/mpo@1 that this contract itself calls into question
+    (see `aperture-doubt`). Conditionally: IF that part's 5.4-to-8.5 bracket is
+    a reading of ONE port's short axis, where 8.5 is the outer edge of the
+    bevel, then 8.09 here sits inside it - which is what an object standing in
+    the mouth does and not what a flange lying over it does. IF the bracket is
+    instead the spread of a detection run across the two rows, which is what
+    that part's own note literally says, the two numbers measure different
+    things and the comparison says nothing at all. Neither reading is
+    established. The drawing here - a cap the size of the port's visible
+    content, inside common/mpo-adapter@1's 13.8 x 9.4 - is the adopted reading
+    and not a finding, and it is not evidence for either branch.
   aperture-doubt: >-
     A HYPOTHESIS ABOUT std/mpo@1, RECORDED BECAUSE IT IS WORTH TESTING AND NOT
     BECAUSE ANYTHING HERE ESTABLISHES IT. std/mpo@1 is 7.8 x 5.6 at
     `confidence: estimated`, and standards.yaml's `mpo-adapter` entry says the
     detection 'catches a bevelled interior and reads 5.4 to 8.5 across the
     rows'. Both 7.8 and 5.6 fall inside that one bracket, and on the same
-    render the port's long axis reads 12.8 against a short axis of 8.1 - while
-    published MPO connector bodies are around 12.4 by 6.4. That is consistent
-    with 7.8 and 5.6 being two thresholds on ONE axis rather than two axes, and
-    it would mean the aperture is drawn far too short. IT IS A SUSPICION, NOT A
+    render the port's long axis reads 12.8 against a short axis of 8.1 - an
+    aspect a 7.8 x 5.6 opening does not have. (An MPO connector body is
+    commonly quoted at about 12.4 by 6.4; THAT IS GENERAL KNOWLEDGE AND NO
+    DOCUMENT HELD IN THIS CORPUS STATES IT, so it is mentioned as the reason
+    somebody might look and not used as evidence.) That is consistent with 7.8
+    and 5.6 being two thresholds on ONE axis rather than two axes, and it would
+    mean the aperture is drawn far too short. IT IS A SUSPICION, NOT A
     FINDING: nothing here re-derives std/mpo@1, that part's own note describes
     a reading across the rows rather than along one port, and a caliper or
     IEC 61754-7 settles it. Nothing on this cap depends on the answer.
@@ -120,10 +132,18 @@ provenance:
     figure already measured from the plate - double-counting it, and landing
     above the ceiling its own arithmetic set. The derivation is withdrawn
     rather than patched.
-    WHAT THE RENDERS DO SUPPORT is a comparison inside one image, which
-    perspective leaves standing: the saddle rises above the plate by roughly
-    the width of the port it plugs. `out: 8.0` on the grip IS that width
-    (8.1), and it is an estimate with no dimensioned source - not a reading.
+    SO `out: 8.0` ON THE GRIP IS A MODELLING CHOICE, NOT A READING OF
+    ANYTHING. No document held here dimensions an MTP cap, and no render held
+    here can be made to. A ratio inside one image was offered for it in an
+    earlier pass - that the saddle rises by roughly the width of the port - and
+    it is withdrawn too: protrusion against in-plane width is exactly the
+    quantity the paragraph above says cannot be separated without the view
+    angle, the only ratio this file ever printed came out nearer 1.4 port
+    widths, and the identification of which pixels are the saddle is itself
+    unsupported. What constrains 8.0 is only this: it must stand taller than
+    the cap's own face, so the grip reads as a grip, and it must be plausible
+    for something a hand pulls a cap out by. Anything in that range would draw
+    the same picture, and nothing here prefers 8.0 over its neighbours.
     THE CAP'S OWN FACE, 2.5, IS WEAKER STILL and nothing whatever dimensions
     it: it is set so the cap's face shows at the adapter face rather than
     sitting behind common/mpo-adapter@1's own estimated 1.2 bezel, which is the
@@ -177,12 +197,12 @@ relief:
       color: '#b3b6bc'
       confidence: estimated
       source: >-
-        common/mpo-dust-cap@1's own `provenance.depth`. NOT A READING: every
-        view along this axis is a perspective render and none of them can be
-        unfolded, so no figure is derived from one. 8.0 is the comparison the
-        renders do support, that the saddle rises above the plate by roughly
-        the width of the port it plugs, and that width is 8.1. RAISED, not
-        recessed, so `out` and not `pocket`, and it stands on the cap's own
-        front - hence `lift: 2.5`, which lifts are summed down the tree to
-        reach.
+        common/mpo-dust-cap@1's own `provenance.depth`. A MODELLING CHOICE AND
+        NOT A READING: every view along this axis is a perspective render, none
+        of them can be unfolded, and no document held here dimensions an MTP
+        cap - so 8.0 is derived from nothing. It is constrained only by having
+        to stand taller than the cap's face, so the grip reads as a grip, and
+        by being plausible for a pull grip. RAISED, not recessed, so `out` and
+        not `pocket`, and it stands on the cap's own front - hence `lift: 2.5`,
+        which lifts are summed down the tree to reach.
 skins: [default]

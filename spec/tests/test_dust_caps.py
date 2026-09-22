@@ -171,25 +171,37 @@ def test_the_mpo_cap_marks_every_figure_it_carries_estimated():
     assert "HYPOTHESIS" in doubt and "NOT A FINDING" in doubt
 
 
-def test_the_mpo_caps_depth_figures_do_not_out_run_their_own_basis():
-    """IMPORTANT 1 of the task 5 review, held by a test rather than by prose.
+def test_the_mpo_caps_depth_figures_are_declared_choices_that_stack_right():
+    """IMPORTANT 1 of the task 5 review, and what a test can and cannot do here.
 
-    The grip's `out` is not derived from any pixel reading - every view along
-    that axis is a perspective render - so what it must do is stay inside the
-    one comparison the contract does claim: the saddle rises above the plate by
-    roughly the width of the port it plugs. The seat is the panel (std/mpo@1
-    presents no lift), so `out` is measured from the panel and the adapter's
-    bezel is NOT added to it a second time."""
+    THERE IS NOTHING TO CHECK THE GRIP'S `out` AGAINST. No document held here
+    dimensions an MTP cap and no render held here can be unfolded, so 8.0 is a
+    MODELLING CHOICE - and a test that compared it to another figure in the
+    same file would be checking the contract against itself and would keep
+    passing however wrong the figure was. This does not do that. It holds the
+    two things that stay true whatever the number is, and it holds the contract
+    to SAYING the number is a choice:
+
+      - the ordering the drawing depends on - the saddle stands in front of the
+        cap's face, and the cap's face in front of the adapter bezel it would
+        otherwise be buried behind;
+      - the arithmetic fault the first review caught - the seat is the panel
+        (std/mpo@1 presents no lift), so the bezel is never added on top of a
+        figure already measured from the panel.
+
+    Whether 8.0 is the RIGHT height is open until something dimensions the
+    part, and `provenance.depth` says so rather than this test pretending."""
     c = contract(MPO_CAP)
-    grip = feature(MPO_CAP, "grip")["out"]
-    body = feature(MPO_CAP, "body")["out"]
+    grip = feature(MPO_CAP, "grip")
+    body = feature(MPO_CAP, "body")
     bezel = feature("common/mpo-adapter@1", "bezel")["out"]
-    assert grip == pytest.approx(c["size"]["h"], abs=0.2), \
-        "the grip no longer stands at the width its own basis names"
-    assert body < grip, "the saddle has to stand in front of the cap's face"
-    assert body > bezel, "the cap's face would sit behind the adapter bezel"
-    # and nothing in the file quietly adds the bezel on top of a plate reading
-    assert f"{grip + bezel:g}" not in c["provenance"]["depth"]
+    assert body["out"] < grip["out"], "the saddle has to stand in front of the cap's face"
+    assert body["out"] > bezel, "the cap's face would sit behind the adapter bezel"
+    # the figure is declared a choice, in the key and on the feature itself
+    assert "MODELLING CHOICE" in c["provenance"]["depth"]
+    assert "MODELLING CHOICE" in grip["source"] and "NOT A READING" in grip["source"]
+    # and nothing in the file quietly adds the bezel on top of a panel reading
+    assert f"{grip['out'] + bezel:g}" not in c["provenance"]["depth"]
 
 
 @pytest.mark.parametrize("ref,node,inner", [(LC_CAP, "inset", "pocket"),

@@ -96,7 +96,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 6 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
-| `common/mpo-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo | 0 | 0 | The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding filling the opening, with a raised sadd… |
+| `common/mpo-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo | 0 | 0 | The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding drawn across the port's visible content… |
 | `common/mpo-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 8 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/mpo24-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 3 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 0 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
