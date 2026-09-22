@@ -98,9 +98,8 @@ def _matrix(tf):
     return m
 
 
-def device_point(parents, el, local):
-    """`local`, a point in `el`'s own frame, in the device frame: every
-    transform from `el` up to the root, composed."""
+def device_matrix(parents, el):
+    """Every transform from `el` up to the root, composed into one affine map."""
     chain = []
     node = el
     while node is not None:
@@ -109,6 +108,12 @@ def device_point(parents, el, local):
     m = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
     for node in reversed(chain):
         m = _mul(m, _matrix(node.get("transform")))
+    return m
+
+
+def device_point(parents, el, local):
+    """`local`, a point in `el`'s own frame, in the device frame."""
+    m = device_matrix(parents, el)
     x, y = local
     return (m[0][0] * x + m[0][1] * y + m[0][2], m[1][0] * x + m[1][1] * y + m[1][2])
 
@@ -160,11 +165,32 @@ def assert_seated(root, parents, card_path, card_ref, cage):
     hx, hy = device_point(parents, host, cage_mate(host))
     ox, oy = device_point(parents, occ, own_mate(occ))
     assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6, ((hx, hy), (ox, oy))
+    # AND IT TURNS WITH ITS CAGE. The generic optics put `mate` at their own
+    # centre, so a landing check alone cannot see orientation: an optic drawn
+    # upright in a turned cage lands its centre on the same point. The linear
+    # part of the composed map (rotation, and any mirror) must be the cage's.
+    assert_same_turn(parents, occ, host)
     # and what the component publishes for the kit lands on the same point
     pub = published_cage(card_ref, cage)
     px, py = device_point(parents, card, pub["mate"])
     assert abs(px - hx) < 1e-6 and abs(py - hy) < 1e-6, ((px, py), (hx, hy))
     return (hx, hy), (ox, oy)
+
+
+def assert_same_turn(parents, occ, host):
+    mo, mh = device_matrix(parents, occ), device_matrix(parents, host)
+    for i in range(2):
+        for j in range(2):
+            assert abs(mo[i][j] - mh[i][j]) < 1e-9, ("turn", mo, mh)
+
+
+def effective_lift(parents, el):
+    """relief.js's liftOf: data-z-lift summed up the ancestor chain."""
+    total, node = 0.0, el
+    while node is not None:
+        total += float(node.get("data-z-lift") or 0)
+        node = parents.get(node)
+    return total
 
 
 C100G_OCC = {"front-6/xg0": "generic/sfp-lc@1", "front-6/cg0": "generic/qsfp-lc@1"}
@@ -209,6 +235,7 @@ def test_a_chained_seat_on_a_nested_optic(tmp_path):
         hx, hy = device_point(parents, host, hm)
         ox, oy = device_point(parents, occ, own_mate(occ))
         assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6, (host_p, (hx, hy), (ox, oy))
+        assert_same_turn(parents, occ, host)
     # the chain carries the stack of lifts, as a device-level chain does: the
     # plug stands on what the optic presents, the boot on the plug body AND on
     # what the plug already stands at. Both non-zero, so neither passes by
@@ -240,3 +267,82 @@ def test_an_empty_bay_seats_no_nested_optic(tmp_path):
                       {"front-6/xg0": "generic/sfp-lc@1"})
     r = run(dev, tmp_path / "o")
     assert r.returncode != 0 and "front-6/xg0" in r.stderr, r.stderr[-800:]
+
+
+def test_a_raised_cage_on_a_card_lifts_its_optic(tmp_path):
+    """smartoptics/dcp-404's cages are composed at `lift: 44` - the raised
+    shelf. The optic sits BESIDE the cage group, not in it, so it takes that
+    raise only through its own data-z-lift: the published cage `lift`, and
+    its effective lift is the card's plus that, where the cage's own is."""
+    dev = shutil.copytree(LIB / "devices/smartoptics/dcp-2", tmp_path / "dcp-2") / "device.yaml"
+    d = yaml.safe_load(dev.read_text())
+    d["configurations"]["dcp-404-x1"]["occupants"] = {"slot-1/c1": "generic/qsfp-lc@1"}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    root, parents = render(dev, tmp_path / "o", "dcp-2", "dcp-404-x1")
+    assert_seated(root, parents, "slot-1/module", "smartoptics/dcp-404@1", "c1")
+    pub = published_cage("smartoptics/dcp-404@1", "c1")
+    assert pub["lift"] == 44.0
+    occ = by_path(root, "slot-1/module/c1-occupant")
+    card = by_path(root, "slot-1/module")
+    assert float(occ.get("data-z-lift")) == pub["lift"]
+    assert effective_lift(parents, occ) == pytest.approx(effective_lift(parents, card) + pub["lift"])
+
+
+def test_a_bay_only_on_an_unbound_variant_face_is_reported(tmp_path):
+    """The R740xd's LFF drive bays live on the `front-lff-12` variant, which
+    the default configuration does not bind: no drawing shows them, so a key
+    naming one is an error, not a silent skip."""
+    dev = shutil.copytree(LIB / "devices/dell/r740xd", tmp_path / "r740xd") / "device.yaml"
+    d = yaml.safe_load(dev.read_text())
+    cfg = next(n for n, c in d["configurations"].items() if c.get("default"))
+    assert "front-lff-12" not in (d["configurations"][cfg].get("views") or {}).values()
+    d["configurations"][cfg]["occupants"] = {"lff-drive-0/port": "generic/sfp-lc@1"}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    r = run(dev, tmp_path / "o")
+    assert r.returncode != 0
+    assert "lff-drive-0/port" in r.stderr and "no bay in any view" in r.stderr, r.stderr[-800:]
+
+
+def test_a_spec_without_a_ref_names_its_key(tmp_path):
+    dev = fitted_copy(tmp_path, "c100g", "base", {"front-6": "casa/smm-300gm@1"},
+                      {"front-6/xg0": {"attrs": {"speed": "10G"}}})
+    r = run(dev, tmp_path / "o")
+    assert r.returncode != 0
+    assert "occupants/front-6/xg0: names no component" in r.stderr, r.stderr[-800:]
+    assert "KeyError" not in r.stderr
+
+
+# --- lint L12 reaches a nested key -------------------------------------------
+
+from portrayal import lint
+
+
+def l12(dev):
+    data = yaml.safe_load(dev.read_text())
+    with lint.collecting() as got:
+        lint.lint_device_occupants(dev, data, [str(LIB)])
+    return [e for e in got.errors if "[L12]" in e]
+
+
+def test_lint_a_valid_nested_key_and_its_chain_lint_clean(tmp_path):
+    dev = fitted_copy(tmp_path, "c100g", "base", {"front-6": "casa/smm-300gm@1"},
+                      {"front-6/xg0": "generic/sfp-lc-simplex@2",
+                       "front-6/xg0-occupant": "generic/lc-plug@1",
+                       "front-6/xg0-occupant-occupant": "common/lc-boot@1",
+                       "front-6/cg0": "generic/qsfp-lc@1"})
+    assert l12(dev) == []
+
+
+@pytest.mark.parametrize("occ, why", [
+    ({"front-6/xg0": "generic/qsfp-lc@1"}, "presents 'sfp'"),      # wrong optic
+    ({"front-6/xg99": "generic/sfp-lc@1"}, "names no cage"),        # no such cage
+    ({"front-7/xg0": "generic/sfp-lc@1"}, "names no cage"),         # blank plate
+    ({"front-99/xg0": "generic/sfp-lc@1"}, "no bay in any view"),  # no such bay
+    ({"front-6/xg0": "generic/sfp-lc@1",
+      "front-6/xg0-occupant": "generic/lc-plug@1"},                 # the chain reaches the optic,
+     "host generic/sfp-lc@1 presents no 'interface'"),              # which presents nothing
+])
+def test_lint_a_bad_nested_key_is_an_l12_error(tmp_path, occ, why):
+    dev = fitted_copy(tmp_path, "c100g", "base", {"front-6": "casa/smm-300gm@1"}, occ)
+    got = l12(dev)
+    assert got and any(why in e for e in got), got

@@ -25,7 +25,9 @@ from portrayal.faces import face_ref
 from portrayal import libwalk
 from portrayal.manifest import (view_parts, targets, split_target, component_refs,
                       presented_interface, seat_point, _turn,
-                      load_yaml)
+                      load_yaml, resolve_views, module_key_prefix,
+                      seated_ref, occupants_under, occupant_local_id,
+                      occupant_spec)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -696,14 +698,99 @@ def group_side_attrs(group_name, grp):
     return out
 
 
-def module_key_prefix(path):
-    """The module-less key prefix a configuration uses for what is in the
-    module drawn at `path` - `front-6/module` -> `front-6`, `riser-1/module/
-    slot-1/module` -> `riser-1/slot-1` - or None when `path` is not a module
-    seated in a bay. The same stripping as a nested bay's `bay_path`."""
-    if not path or not path.endswith("/module"):
-        return None
-    return (path[:-len("/module")] + "/").replace("/module/", "/")[:-1]
+def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
+               floor_of=None):
+    """WHERE ONE OCCUPANT SEATS ON ONE HOST: (at, rotate, lift), in the frame
+    the host's `at` is written in, with every rule a seat is held to.
+
+    THE ONE SEATING RULE, called by render_view's `mate-to` resolution for a
+    device-level seat and by _seat_nested_occupants for a seat on a card, so
+    the two cannot drift apart - the plan's "nothing about seating is solved
+    twice". `host` is a placement-shaped dict: `ref`, `at`, `rotate`,
+    `mirror`, `in`, `projection-of`, and `host-lift` - what the host itself
+    already stands at (a seated host's own seat lift; a composed cage's own
+    `lift`, which a sibling occupant does not inherit). `who` and
+    `host_name` are only for the messages.
+
+    The host's mate point - possibly FORWARDED from a composed aperture (see
+    manifest.presented_interface) - is taken through the host's rotation
+    (seat_point), and the occupant is solved to land its own `mate` there
+    while drawn at that same rotation (seat_at). `lift` is the host's
+    presented lift plus its `host-lift`, less the floor of a well it stands
+    `in:` (floor_of, device frame only)."""
+    hc, _ = lib.resolve(host["ref"])
+    oc, _ = lib.resolve(occ_ref)
+
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+    # The host's mate point may be FORWARDED from a composed aperture -
+    # see manifest.presented_interface. The occupant's is its own: a
+    # module is the thing that mates, not a wrapper around one.
+    _, hm_at, hm_lift = presented_interface(hc, _res)
+    om = (oc.get("connection-points") or {}).get("mate")
+    if hm_at is None or om is None:
+        raise ValueError(
+            f"{who}: mate-to needs a 'mate' connection-point on both "
+            f"{occ_ref} and {host['ref']} - the host may also present "
+            "one through a composed aperture")
+    # A SEATED PART TURNS WITH ITS HOST (docs/pluggables-slotting-
+    # design.md, D3). 941 of the library's cages are drawn rotated -
+    # 940 at 180, one at 90 - and this used to seat every one of them
+    # as if upright: `host.at + host_mate - occupant_mate`, no rotate
+    # carried, so the optic's mate point missed the cage's TURNED one
+    # and the optic was drawn the wrong way up. At rotate 0 seat_point
+    # and seat_at reduce exactly to the old formula, so no unrotated
+    # seat moves.
+    hrot = host.get("rotate")
+    if host.get("mirror"):
+        raise ValueError(
+            f"{who}: its host {host_name!r} is mirrored, and a "
+            "mirrored host cannot seat an occupant - handedness of a "
+            "seated part is not a question the seating rule answers")
+    if occ_rotate is not None and \
+            float(occ_rotate) % 360 != float(hrot or 0) % 360:
+        raise ValueError(
+            f"{who}: declares rotate {occ_rotate} but its host "
+            f"{host_name!r} is at {hrot or 0} - a seated part turns "
+            "with its host; drop the rotate")
+    # A SEATED PART ALREADY SINKS WITH A SUNK HOST - through host-lift,
+    # below - so its own `in:` would sink it a second time: -3.46 where
+    # 3.27 is right (final review I2). A host is sunk when it stands
+    # `in:` a well itself, or inherits a sink from its own host (a
+    # negative host-lift: a seat lift is otherwise never negative).
+    if occ_in and not host.get("projection-of") and (
+            host.get("in") or float(host.get("host-lift") or 0.0) < 0):
+        raise ValueError(
+            f"{who}: stands in:{occ_in!r} but a seated part sinks "
+            f"with its host {host_name!r}, which is already sunk in a "
+            "well - drop the in:")
+    at = seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
+                 hrot, oc["size"], om["at"])
+    # A CHAINED SEAT INHERITS THE WHOLE STACK, not just the last link.
+    # `presented_interface` answers one question - how far the HOST's
+    # aperture stands off the HOST's own face - and returns 0.0 whenever
+    # the host declares its own `interface` + `mate`, which every plug
+    # does. So a boot on a plug on a 10 mm-proud bore took 0.0 and sat
+    # 10 mm too deep. The host's own seat lift is the missing term, and
+    # the caller computed it when it seated the host. Summed HERE, once,
+    # at resolution time, because an occupant is a SIBLING of its host in
+    # the compiled drawing and relief.js's ancestor sum has no path from
+    # one to the other to walk.
+    lift = float(hm_lift or 0.0) + float(host.get("host-lift") or 0.0)
+    # AND A HOST SUNK IN A WELL TAKES ITS OCCUPANT DOWN WITH IT. A host
+    # that stands `in:` a well is sunk by the well's floor in
+    # draw_placement (`sink`): data-z-lift -floor on the host's group,
+    # and every data-z-out in it pulled down by floor. The occupant is a
+    # sibling, so that group lift never reaches it; the sink is carried
+    # as a NEGATIVE term of the same lift, and a chained seat inherits it
+    # once, through the host's own host-lift, rather than re-adding it
+    # per link. A projection is not sunk, so neither is what seats on one.
+    if host.get("in") and not host.get("projection-of"):
+        lift -= floor_of(host["in"])
+    return at, hrot, lift
 
 
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
@@ -713,63 +800,34 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     to a fixed point, to occupants already seated in them (a plug in the
     optic, a boot on the plug) - inside the module's instance group `g`.
 
-    Each is the device-level `mate-to` seat restated in the card's frame: the
-    host's presented mate point taken through the host's rotation
-    (seat_point), the occupant solved to land its own `mate` there while drawn
-    at that rotation (seat_at), the host's presented lift plus whatever lift
-    the host already stands at carried by the same trio draw_placement applies
-    (z_inset / z_group_lift / data-z-lift), and `data-for` naming the host's
-    path. A composed cage's own `lift` counts, because the occupant sits
-    BESIDE the cage's group and not in it - the figure component_cages
-    publishes as the cage's `lift`. Keys used are added to `occ_used`, which
-    render_view reads to report a key nothing seated."""
+    Each seat is solve_seat - the device-level rule, in the card's frame -
+    carried by the same trio draw_placement applies (z_inset / z_group_lift /
+    data-z-lift), with `data-for` naming the host's path. A composed cage's
+    own `lift` is its `host-lift`, because the occupant sits BESIDE the
+    cage's group and not in it - the figure component_cages publishes as the
+    cage's `lift`. A mirrored card mirrors every cage on it, so it refuses as
+    a mirrored cage does. Nothing here takes a port group: a contract
+    declares none (R3). Keys used are added to `occ_used`, which render_view
+    reads to report a key nothing seated."""
     prefix = module_key_prefix(path)
     if not occupants or prefix is None:
         return
-    mine = {}
-    for key, spec in occupants.items():
-        rest = key[len(prefix) + 1:] if key.startswith(prefix + "/") else None
-        if rest and "/" not in rest:
-            mine[rest] = (key, {"ref": spec} if isinstance(spec, str) else spec)
-    if not mine:
+    pending = occupants_under(prefix, occupants)
+    if not pending:
         return
-
-    def _res(r):
-        try:
-            return lib.resolve(r)[0]
-        except Exception:
-            return None
-
     hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
-                       "mirror": bool(q.get("mirror")),
-                       "lift": float(q.get("lift") or 0.0)}
+                       "mirror": bool(mirror or q.get("mirror")),
+                       "host-lift": float(q.get("lift") or 0.0)}
              for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
-    pending = dict(mine)
     while pending:
         seated_now = []
         for host_id, (key, spec) in pending.items():
             host = hosts.get(host_id)
             if host is None:
                 continue
-            if mirror or host["mirror"]:
-                raise ValueError(
-                    f"occupants/{key}: its host {path}/{host_id} is mirrored, and "
-                    "a mirrored host cannot seat an occupant - handedness of a "
-                    "seated part is not a question the seating rule answers")
-            hc, _ = lib.resolve(host["ref"])
-            oc, _ = lib.resolve(spec["ref"])
-            _, hm_at, hm_lift = presented_interface(hc, _res)
-            om = (oc.get("connection-points") or {}).get("mate")
-            if hm_at is None or om is None:
-                raise ValueError(
-                    f"occupants/{key}: names no cage - seating needs a 'mate' "
-                    f"connection-point on both {spec['ref']} and {host['ref']} "
-                    f"({path}/{host_id})")
-            hrot = host["rotate"]
-            at = seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
-                         hrot, oc["size"], om["at"])
-            lift = float(hm_lift or 0.0) + host["lift"]
-            local = spec.get("id") or f"{host_id}-occupant"
+            at, hrot, lift = solve_seat(lib, f"occupants/{key}", spec["ref"],
+                                        f"{path}/{host_id}", host)
+            local = occupant_local_id(host_id, spec)
             og, _ = instance_group(
                 lib, spec["ref"], f"{inst_id}--{local}", at, None, spec.get("attrs"),
                 None, None, skin_name=spec.get("skin", "default"),
@@ -782,15 +840,14 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             og.set("data-for", f"{path}/{host_id}")
             g.append(og)
             hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
-                            "mirror": False, "lift": lift}
+                            "host-lift": lift}
             if occ_used is not None:
                 occ_used.add(key)
             seated_now.append(host_id)
         if not seated_now:
             raise ValueError(
                 "occupants/" + ", ".join(sorted(k for k, _ in pending.values()))
-                + f": names no cage on {contract.get('name') or path} seated at "
-                f"{path} (or no occupant seated before it)")
+                + f": names no cage on {path} (or no occupant seated before it)")
         for host_id in seated_now:
             del pending[host_id]
 
@@ -1249,7 +1306,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # meaning empty. Before this a riser's slots only ever held their
         # default, so no configuration could put a card in one.
         bay_path = f"{path}/{bay_id}".replace("/module/", "/") if path else bay_id
-        occupant = (seated or {}).get(bay_path, bay.get("default"))
+        occupant = seated_ref(seated, bay_path, bay)
         if not occupant or depth >= MAX_BAY_DEPTH:
             continue
         bw, bh = bay_size(bay)
@@ -1528,11 +1585,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         for host, spec in remaining.items():
             if host not in here:
                 continue
-            if isinstance(spec, str):
-                spec = {"ref": spec}
+            spec = occupant_spec(host, spec)
             parts["placements"].append({
                 "ref": spec["ref"],
-                "id": spec.get("id") or f"{host}-occupant",
+                "id": occupant_local_id(host, spec),
                 "mate-to": host,
                 # nests under the receptacle in the tree, the way an indicator nests
                 # under what it indicates - an optic belongs to its port
@@ -2013,58 +2069,13 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if host is None:
                 progressed.append(p)
                 continue
-            hc, _ = lib.resolve(host["ref"])
-            oc, _ = lib.resolve(p["ref"])
-            def _res(ref):
-                try:
-                    return lib.resolve(ref)[0]
-                except Exception:
-                    return None
-            # The host's mate point may be FORWARDED from a composed aperture -
-            # see manifest.presented_interface. The occupant's is its own: a
-            # module is the thing that mates, not a wrapper around one.
-            _, hm_at, hm_lift = presented_interface(hc, _res)
-            om = (oc.get("connection-points") or {}).get("mate")
-            if hm_at is None or om is None:
-                raise ValueError(
-                    f"{p['id']}: mate-to needs a 'mate' connection-point on both "
-                    f"{p['ref']} and {host['ref']} - the host may also present "
-                    "one through a composed aperture")
-            # A SEATED PART TURNS WITH ITS HOST (docs/pluggables-slotting-
-            # design.md, D3). 941 of the library's cages are drawn rotated -
-            # 940 at 180, one at 90 - and this used to seat every one of them
-            # as if upright: `host.at + host_mate - occupant_mate`, no rotate
-            # carried, so the optic's mate point missed the cage's TURNED one
-            # and the optic was drawn the wrong way up. The host's mate point
-            # is now taken into the device frame with the host's own rotation
-            # (seat_point), and the occupant is solved to land its mate there
-            # while drawn at that same rotation (seat_at). At rotate 0 the two
-            # reduce exactly to the old formula, so no unrotated seat moves.
-            hrot = host.get("rotate")
-            if host.get("mirror"):
-                raise ValueError(
-                    f"{p['id']}: its host {p['mate-to']!r} is mirrored, and a "
-                    "mirrored host cannot seat an occupant - handedness of a "
-                    "seated part is not a question the seating rule answers")
-            if p.get("rotate") is not None and \
-                    float(p["rotate"]) % 360 != float(hrot or 0) % 360:
-                raise ValueError(
-                    f"{p['id']}: declares rotate {p['rotate']} but its host "
-                    f"{p['mate-to']!r} is at {hrot or 0} - a seated part turns "
-                    "with its host; drop the rotate")
-            # A SEATED PART ALREADY SINKS WITH A SUNK HOST - through host-lift,
-            # below - so its own `in:` would sink it a second time: -3.46 where
-            # 3.27 is right (final review I2). A host is sunk when it stands
-            # `in:` a well itself, or inherits a sink from its own host (a
-            # negative host-lift: a seat lift is otherwise never negative).
-            if p.get("in") and not host.get("projection-of") and (
-                    host.get("in") or float(host.get("host-lift") or 0.0) < 0):
-                raise ValueError(
-                    f"{p['id']}: stands in:{p['in']!r} but a seated part sinks "
-                    f"with its host {p['mate-to']!r}, which is already sunk in a "
-                    "well - drop the in:")
-            seated = dict(p, at=seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
-                                        hrot, oc["size"], om["at"]))
+            # THE ONE SEATING RULE (solve_seat): the mate points, the turn,
+            # the mirror / rotate / in: refusals and the lift, shared with a
+            # seat on a card (_seat_nested_occupants).
+            at, hrot, total_lift = solve_seat(
+                lib, p["id"], p["ref"], p["mate-to"], host,
+                occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of)
+            seated = dict(p, at=at)
             # Omitted when the host has none, so an unrotated seat's output
             # does not change. A chained seat (a boot on a plug in a rotated
             # cage) inherits it: `hosts` holds this dict.
@@ -2086,35 +2097,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # not the `seat_lift` local that trio (z_inset / z_group_lift /
             # data-z-lift) already applies there. Named `host-lift`, not
             # `seat-lift`, to keep it visibly distinct from that local.
-            #
-            # A CHAINED SEAT INHERITS THE WHOLE STACK, not just the last link.
-            # `presented_interface` answers one question - how far the HOST's
-            # aperture stands off the HOST's own face - and returns 0.0 whenever
-            # the host declares its own `interface` + `mate`, which every plug
-            # does. So a boot on a plug on a 10 mm-proud bore took 0.0 and sat
-            # 10 mm too deep. The host's own seat lift is the missing term, and
-            # this loop computed it when it seated the host: it is on the very
-            # dict `hosts` just handed back. Summed HERE, once, at resolution
-            # time - not in draw_placement, because an occupant is a TOP-LEVEL
-            # SIBLING of its host in the compiled drawing and relief.js's
-            # ancestor sum has no path from one to the other to walk. The
-            # attribute this ends up in has to be the absolute displacement.
-            total_lift = float(hm_lift or 0.0) + float(host.get("host-lift") or 0.0)
-            # AND A HOST SUNK IN A WELL TAKES ITS OCCUPANT DOWN WITH IT. A host
-            # that stands `in:` a well is sunk by the well's floor in
-            # draw_placement (`sink`, below): data-z-lift -floor on the host's
-            # group, and every data-z-out in it pulled down by floor. The
-            # occupant is a top-level sibling, so that group lift never reaches
-            # it, and it drew at the panel above a face `floor` further down.
-            # The sink is carried here as a NEGATIVE term of the same host-lift,
-            # so draw_placement's trio applies it exactly as sink() does - the
-            # `out` figures come down by it (z_inset) and the group declares it
-            # (data-z-lift) - and a chained seat inherits it once, through the
-            # host's own host-lift, rather than re-adding it per link. A
-            # projection is not sunk (draw_placement skips it), so neither is
-            # what seats on one.
-            if host.get("in") and not host.get("projection-of"):
-                total_lift -= floor_of(host["in"])
+            # The sum and the well sink are solve_seat's; see there.
             if total_lift:
                 seated["host-lift"] = total_lift
             mate_resolved[p["id"]] = seated
@@ -2404,8 +2387,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                         if "/" in k}
     nested_used = set()
     this_view_bays = {b["id"] for b in parts["bays"]}
-    every_view_bays = {b["id"] for v in (device.get("views") or {}).values()
-                       for b in view_parts(v or {})["bays"]}
+    # the views THIS configuration draws: a bay only on an unbound variant
+    # face is not drawn anywhere, so a key naming it is reported, not skipped
+    drawn_bays = {b["id"] for _face, (_n, v) in resolve_views(device, config).items()
+                  for b in view_parts(v)["bays"]}
 
     def draw_bay(b):
         bay_lift = 0.0
@@ -2467,7 +2452,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         opening.set("x", f"{ox:g}"); opening.set("y", f"{oy:g}")
         opening.set("width", f"{op['w']:g}"); opening.set("height", f"{op['h']:g}")
         opening.set("fill", "#101214")
-        default = (config.get("bays") or {}).get(b["id"], b.get("default"))
+        default = seated_ref(config.get("bays"), b["id"], b)
         if not default:
             # AN EMPTY BAY IS A HOLE, NOT A BLACK RECTANGLE. Without a depth the
             # opening is a flat dark patch painted on the panel, so in 3D an
@@ -2572,9 +2557,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             raise ValueError(
                 f"occupants/{key}: names no cage - bay {top!r} seats no module "
                 "carrying it in this configuration")
-        if top not in every_view_bays:
+        if top not in drawn_bays:
             raise ValueError(
-                f"occupants/{key}: {top!r} is no bay in any view of this device")
+                f"occupants/{key}: {top!r} is no bay in any view this "
+                "configuration draws")
 
     # second pass: the surface-mounted parts, now safely in front of the openings
     for p in ordered:
@@ -2712,27 +2698,6 @@ def is_stale(device, device_yaml, lib, configs, default_cfg, outdir):
     oldest_out = min(o.stat().st_mtime_ns for o in outs)
     return newest_in >= oldest_out
 
-
-
-def resolve_views(device, cfg):
-    """{face: (view-name, view)} for one configuration.
-
-    A view carrying `face:` is a VARIANT and appears only when bound, because
-    rendering it unbound would emit `<device>.<config>.front-12-lff.svg` - a
-    file named after a panel rather than a face, which no consumer asks for.
-    Everything else keeps its own name, so a device with no bindings behaves
-    exactly as it did before this existed.
-    """
-    views = device.get("views") or {}
-    out = {}
-    for face, vname in ((cfg or {}).get("views") or {}).items():
-        if vname in views:
-            out[face] = (vname, views[vname] or {})
-    for vname, v in views.items():
-        if (v or {}).get("face"):
-            continue
-        out.setdefault(vname, (vname, v or {}))
-    return out
 
 
 # --- pluggable cage accept lists (Task 3) ------------------------------------
