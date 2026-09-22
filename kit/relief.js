@@ -885,6 +885,28 @@ export function crop(cv, r, pxmm = PXMM) {
   return c;
 }
 
+// WHAT A REMOVABLE PART'S BODY IS BUILT AS, from its path and behaviour - the
+// decision extractRelief makes for every `fills` / `occupies` instance:
+//   {fru}           its own ejectable group, keyed `fru`: a module in a chassis
+//                   bay (`front-6/module` -> `front-6`), an optic on a device
+//                   cage (`port-4-occupant`) - one or two segments, as ever;
+//   {fru, nested}   an optic seated on a CARD (`front-6/module/xg0-occupant`,
+//                   #484): a FRU of its own, keyed by its full path, whose group
+//                   sits inside the card's (or, for a tier chained on another
+//                   optic, inside that optic's) - so it is pulled on its own and
+//                   still leaves with the card;
+//   {sub}           a module in a module's bay: not a FRU, it comes out with
+//                   its carrier `sub`, and is built only from `body.boxes`.
+// Deeper than two segments used to mean {sub} for everything, and a generic
+// optic declares no boxes, so a card's optic had no body and no pull at all.
+export function bodyRole(path, behaviour) {
+  const segs = String(path || '').split('/');
+  if (!segs[0]) return null;
+  if (segs.length <= 2) return {fru: segs[0]};
+  if (behaviour === 'occupies') return {fru: segs.join('/'), nested: true};
+  return {sub: segs[0]};
+}
+
 // THE MEASURING TOOLS FOR ONE PARSED FACE, shared between the build and the
 // lamp animator. Both need the same answers - where a node sits in face mm,
 // how far off the face it starts, which part owns it, and how to render it
@@ -938,9 +960,14 @@ export function nodeTools(svg) {
   // one behind a bolted-on cover would punch a hole in the chassis. But TAGGING
   // every mesh with the part that produced it costs nothing and is what lets a
   // cover be hidden without being ejected.
+  // An optic on a card (bodyRole `nested`) is a FRU of its own, so what it
+  // draws is owned by it and not by the card's bay.
   const ownerOf = el => {
     const a = el.closest('[data-path]');
     if (!a) return null;
+    const o = el.closest('[data-behaviour="occupies"][data-ref]');
+    const own = o && bodyRole(o.dataset.path, 'occupies');
+    if (own && own.nested) return own.fru;
     return a.dataset.path.split('/')[0] || null;
   };
   // A NODE RENDERED ALONE LOSES THE SCOPE ITS RULES WERE WRITTEN IN, and that is
@@ -985,7 +1012,10 @@ export function nodeTools(svg) {
   };
   // The `<!--art-->` marker separates the shared stylesheet from the node's
   // own art, so lamps.js can lay an unlit copy of the art under the live one.
-  const nodeSvg = (el, rect) => {
+  // `hide` is a selector for descendants that are drawn by something else: a
+  // card's own art leaves out the optics seated on it, which are FRUs of their
+  // own (bodyRole) and cut their own plane.
+  const nodeSvg = (el, rect, hide = null) => {
     const m = inv.multiply(el.getScreenCTM());
     const clone = el.cloneNode(true);
     clone.removeAttribute('transform');   // the CTM below already includes it
@@ -994,6 +1024,7 @@ export function nodeTools(svg) {
     for (const r of clone.querySelectorAll(
         '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[data-z-dome][data-z-lift]'))
       r.style.display = 'none';
+    if (hide) for (const r of clone.querySelectorAll(hide)) r.style.display = 'none';
     const live = scopeWrap(el,
         `<g transform="matrix(${m.a} ${m.b} ${m.c} ${m.d} ${m.e - rect.x} ${m.f - rect.y})">` +
         clone.outerHTML + `</g>`);
@@ -1226,14 +1257,18 @@ export async function extractRelief(url, scope) {
   // it hides on its own path. Collected beside the FRUs and built into the
   // owner's ejection group.
   const subBodies = [];
+  // A CARD'S OPTICS ARE NOT THE CARD'S ART: each is a FRU of its own
+  // (bodyRole), so the card's plane is cut without them.
+  const OWN_FRU = '[data-behaviour="occupies"][data-ref]';
   for (const el of q(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
     const full = el.dataset.path || '';
-    const path = full.split('/')[0];
-    if (!path) continue;
+    const role = bodyRole(full, el.dataset.behaviour);
+    if (!role) continue;
+    const path = role.fru || role.sub;
     // a module in a chassis bay is `bay/module`; one in a module's bay is
     // `bay/module/slot/module` - the third segment is what makes it nested
-    if (full.split('/').length > 2) {
+    if (role.sub) {
       // the body index lives with the builder; every nested module is
       // recorded here and the builder keeps the ones that declare boxes
       const m = inv.multiply(el.getScreenCTM());
@@ -1256,11 +1291,15 @@ export async function extractRelief(url, scope) {
     // module would stand on the card below it. Read off the bay, which is the
     // module's parent.
     const shelf = !!(el.parentElement && el.parentElement.dataset && el.parentElement.dataset.shelf);
-    frus.push({path, ref: el.dataset.ref.split(':')[0],
+    // a nested FRU's group goes inside its host's: the optic it is chained
+    // on, else the card's bay
+    const within = role.nested ? [el.dataset.for, full.split('/')[0]] : null;
+    const hide = el.querySelector(OWN_FRU) ? OWN_FRU : null;
+    frus.push({path, ref: el.dataset.ref.split(':')[0], within,
                cls: el.dataset.class, lift: liftOf(el), shelf,
                bodyDepth: +el.dataset.bodyDepth || null, ...frect,
                // its own art, so the plane can be cut to the module's SHAPE
-               svgText: nodeSvg(el, frect),
+               svgText: nodeSvg(el, frect, hide),
                // THE MODULE'S OWN FRAME, not its drawn box. A riser's slot
                // brackets hang 13.4 mm outboard of its plate, so the bbox
                // starts 13.4 left of the contract's origin - and a body box
@@ -1423,9 +1462,12 @@ export async function buildFaceRelief(F, ctx) {
       () => new THREE.MeshLambertMaterial({color: c}));
     // each FRU gets a subgroup so its art and relief travel together when ejected
     const fruGroups = {};
+    // a card's optic rides in the card's group (bodyRole `nested`): pulled on
+    // its own, and gone with the card - every other FRU hangs off the face
+    const hostOf = f => (f.within || []).map(p => p && fruGroups[p]).find(Boolean) || grp;
     for (const f of frus) {
       const fg = new THREE.Group();
-      grp.add(fg);
+      hostOf(f).add(fg);
       fruGroups[f.path] = fg;
       FRU_GROUPS[f.path] = fg;
       const bd = BODY_META[f.ref];
@@ -1931,7 +1973,13 @@ export async function buildFaceRelief(F, ctx) {
       }
     }
     curOwner = null;
-    for (const f of frus) {   // move the FRU's face art into its group; leave a bay
+    // DEEPEST FIRST: a card's optic cuts its plane off the face before the
+    // card punches its own shape out (the card's art leaves the optic out, but
+    // its punch would still clear the optic's pixels). The sort is stable, so
+    // every FRU of one depth - all of them, on a face with no card optic -
+    // keeps the order it always had.
+    const segsOf = f => f.path.split('/').length;
+    for (const f of [...frus].sort((a, b) => segsOf(b) - segsOf(a))) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
       const faceCrop = crop(f.lift ? artCv : cv, f, PX);
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
@@ -2021,7 +2069,8 @@ export async function buildFaceRelief(F, ctx) {
       // pulled with the tray, and four dark boxes were left hanging where it
       // had been, hiding the board.
       bay.userData.portrayalPath = f.path;
-      grp.add(bay);
+      // an optic's cage is on its card, so the hole behind it leaves with the card
+      (f.within ? fruGroups[f.path].parent : grp).add(bay);
     }
     for (const s of subBodies) {
       const body = BODY_META[s.ref];
