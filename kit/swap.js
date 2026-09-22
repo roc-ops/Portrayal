@@ -172,6 +172,9 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
 // ANCESTOR chain; nested inside the cage, the optic would inherit the cage's
 // lift twice and stop being the thing `data-for` names. So a swap removes the
 // `data-for` occupant wherever it is and inserts the new one next to its host.
+// A CAGE ON A CARD is the one exception, and it is the build's too (#484): the
+// optic is a child of the CARD's group - still a sibling of its cage, never
+// inside it - so it takes the card's translate and turn (nestedCages).
 function turn([x, y], rotate) {
   const deg = (((+rotate || 0) % 360) + 360) % 360;
   const exact = {0: [1, 0], 90: [0, 1], 180: [-1, 0], 270: [0, -1]};
@@ -201,7 +204,7 @@ export function occupantTransform(cage, comp) {
 // `data-z-out` to `out + L` (render.py's `_inset_feature`, called with
 // z_inset=-L) - because `out` is absolute and `lift` is summed. Copying the
 // first without the second puts every `out` face of the optic L mm short in 3D.
-// Nothing in the library has a lifted cage today (every published cage has
+// No DEVICE cage in the library is lifted today (every one publishes
 // lift 0), so a shift formula here would be arithmetic copied from the build
 // with no real build to hold it to. Until one exists, the kit does not seat an
 // optic into a lifted cage at all, and says so.
@@ -217,9 +220,14 @@ export function occupantTransform(cage, comp) {
 //                 not, so a kit-seated optic would carry none of them.
 // Both are published on the cage entry (render.py `cage_entries`), 0 of each
 // today. A refusal names its reason so the caller can say why.
+//
+// ON A CARD, depth is a second term (nestedCages' `seat-depth`: the card's own
+// sunk or raised seat), refused on its own and not only through the sum -
+// a cage raised 3 mm on a card sunk 3 mm sums to 0, but the build writes
+// data-z-lift 3 on that optic and the kit would write none.
 export function refusalReason(cage) {
   if (!cage) return null;
-  if (+cage.lift) return 'lift';
+  if (+cage.lift || +cage['seat-depth']) return 'lift';
   if (cage.mirror) return 'mirror';
   if (cage['group-states']) return 'group-states';
   return null;
@@ -237,13 +245,20 @@ export function refusalReason(cage) {
 // No data-z-lift: a lifted cage never gets this far (see refusalReason).
 // Nothing else. If the build ever writes an attribute none of these can supply,
 // the parity test fails rather than this growing a special case.
-export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${cage.id}-occupant`) {
+//
+// AN ID AND A PATH ARE TWO ARGUMENTS, as they are for rename: a device-level
+// occupant is `port-4-occupant` at both, but one seated on a card is the
+// element `front-6--module--xg0-occupant` at the path
+// `front-6/module/xg0-occupant` (occupantNames). `occPath` defaults to
+// `occId`, so a device cage reads exactly as before.
+export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occupantNames(cage).id,
+                              occPath = cage.moduleId ? occupantNames(cage).path : occId) {
   const out = {};
   for (const [k, v] of Object.entries(skinRootAttrs || {}))
     if (k.startsWith('data-') && k !== 'data-path') out[k] = v;
   Object.assign(out, cage['occupant-attrs'] || {});
   out['id'] = occId;
-  out['data-path'] = occId;
+  out['data-path'] = occPath;
   out['data-ref'] = `${ref}:${comp.version}`;
   out['data-for'] = cage.id;
   return out;
@@ -253,19 +268,24 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = `${ca
 // compiled standalone skin - the occupant's counterpart of seatModule.
 // Returns null for a refused cage rather than a half-seated optic
 // (refusalReason: lifted, mirrored, or in a group that carries states).
-export function seatOccupant(ownerDoc, cage, ref, comp, skinText, occId = `${cage.id}-occupant`) {
+// `occId` / `occPath` default to occupantNames(cage): the bare
+// `<cage>-occupant` for a device cage, the module-qualified pair for a cage
+// on a seated card (nestedCages).
+export function seatOccupant(ownerDoc, cage, ref, comp, skinText,
+                             occId = occupantNames(cage).id,
+                             occPath = cage.moduleId ? occupantNames(cage).path : occId) {
   if (refusalReason(cage)) return null;
   const doc = new DOMParser().parseFromString(skinText, 'image/svg+xml');
   const root = doc.getElementById(comp.name);
   const rootAttrs = {};
   if (root) for (const a of [...root.attributes]) rootAttrs[a.name] = a.value;
   const wrap = ownerDoc.createElementNS(NS, 'g');
-  for (const [k, v] of Object.entries(occupantAttrs(cage, ref, comp, rootAttrs, occId)))
+  for (const [k, v] of Object.entries(occupantAttrs(cage, ref, comp, rootAttrs, occId, occPath)))
     wrap.setAttribute(k, v);
   wrap.setAttribute('transform', occupantTransform(cage, comp));
   for (const n of [...doc.documentElement.childNodes])
     (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
-  rename(wrap, comp.name, occId, occId, '');
+  rename(wrap, comp.name, occId, occPath, '');
   return wrap;
 }
 
@@ -297,7 +317,9 @@ export function seatClaims() {
 }
 
 // Apply an occupant override map - cage id -> ref, or -> null/'' for an emptied
-// cage - to one compiled face. `cages` is the published `cages[view]` list and
+// cage - to one compiled face. `cages` is the published `cages[view]` list,
+// and may carry cages on seated cards too (nestedCages: keyed by the drawing's
+// path, `front-6/module/xg0`, and seated INSIDE the card's group), and
 // `loadSkin(ref)` returns {comp, text} or null (it may return a promise).
 //
 // The OWN-KEY rule is applyOverrides': `{port-4: null}` means the optic was
@@ -333,6 +355,12 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     if (!Object.prototype.hasOwnProperty.call(overrides, cage.id)) continue;
     const host = bayGroup(rootEl, cage.id);
     if (!host) continue;
+    // A CAGE ON A CARD SEATS INSIDE THE CARD. Its module group is re-found
+    // by path HERE, not taken from the entry, and must still hold the card
+    // the entry was read from: a bay swap between nestedCages and this call
+    // replaces that group, and a cage of the card that left is no cage.
+    const card = cage.moduleId ? cardOf(rootEl, cage) : null;
+    if (cage.moduleId && !card) continue;
     const ref = overrides[cage.id];
     const refuse = !!ref && !!refusalReason(cage);
     const loaded = ref && !refuse ? await loadSkin(ref) : null;
@@ -343,7 +371,12 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     applied++;
     if (refuse) { refused.push(cage.id); continue; }
     if (!ref) continue;                       // deliberately empty
-    host.after(seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text));
+    const occ = seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text);
+    // a device cage's optic is its host's next sibling; a card cage's is the
+    // LAST CHILD of the card's group, where render.py appends it (after the
+    // card's own parts), so it takes the card's translate and turn
+    if (card) card.appendChild(occ);
+    else host.after(occ);
   }
   return {applied, refused, failed};
 }
@@ -392,6 +425,92 @@ export function nestedBays(rootEl, compByRef) {
     if (bay) out.push({...bay, id: path});
   }
   return out;
+}
+
+// THE CAGES ON THE CARDS THAT ARE SEATED, read off the drawing the way
+// nestedBays reads their bays, and for the same reason: which cages exist on a
+// modular chassis is a property of what its bays hold, so it is in no device
+// manifest (#484). Every seated module group - `<bay path>/module` with a
+// `data-ref` - is looked up in the index, and each of the component's own
+// `cages` (components.json, in the COMPONENT's frame) becomes an entry keyed
+// by the drawing's path: `front-6/module/xg0`.
+//
+// THE CAGE IS NOT MOVED INTO THE DEVICE FRAME. The optic is seated inside the
+// card's group (applyOccupantOverrides), which already carries the bay's
+// translate and turn, so occupantTransform runs on the component-frame `mate`
+// and `rotate` unchanged - render.py's _seat_nested_occupants does the same
+// with the same seat_point/seat_at. Solving the bay transform here a second
+// time is the two-generators problem this file exists to avoid.
+//
+// The entry's host is the PLACEMENT at that path, never a composed child of it:
+// on the SMM-8x10G the cage node is `front-2/module/xg0/cage`, and the
+// placement `front-2/module/xg0` is what the build names in `data-for`.
+//
+// REFUSED ON THE EFFECTIVE FACTS (R4), which are the card's as well as the
+// cage's, because the kit copies the optic's skin verbatim:
+//   lift    the cage's own (a composed cage's lift is in it already), PLUS
+//           every `data-z-lift` from the card's group up. A card in a sunk or
+//           raised bay has every child's absolute `out` shifted by that depth
+//           in the build (draw_bay's pass, a nested bay's z_inset), and an
+//           optic seated there by the build is shifted with them;
+//   mirror  the cage's own, or the card drawn mirrored (its own transform):
+//           the build refuses both, as it refuses a mirrored device cage.
+// `group-states` is the cage's own - a component declares no groups.
+//
+// Each entry adds, to the component's cage: `seat-depth` (that ancestor sum;
+// `lift` becomes the effective figure), `id` (the drawing path), `cage`
+// (the component-local id), `module` (the card's group element), `modulePath`,
+// `moduleId` (its element id, which names the optic) and `carrier` (the ref
+// without its version, which applyOccupantOverrides re-checks).
+export function nestedCages(rootEl, compByRef) {
+  const out = [];
+  for (const mod of rootEl.querySelectorAll('[data-ref]')) {
+    const modulePath = mod.getAttribute('data-path') || '';
+    if (!modulePath.endsWith('/module')) continue;
+    const carrier = (mod.getAttribute('data-ref') || '').split(':')[0];
+    let comp = null;
+    try { comp = carrier ? compByRef(carrier) : null; } catch (e) { comp = null; }
+    const cages = comp?.cages;
+    if (!Array.isArray(cages) || !cages.length) continue;
+    const depth = seatDepth(mod);
+    const mirrored = /scale\(\s*-/.test(mod.getAttribute('transform') || '');
+    for (const c of cages) {
+      const id = `${modulePath}/${c.id}`;
+      if (!bayGroup(rootEl, id)) continue;    // a cage the skin never drew
+      out.push({...c, id, cage: c.id, lift: (+c.lift || 0) + depth, 'seat-depth': depth,
+                mirror: !!c.mirror || mirrored,
+                module: mod, modulePath, moduleId: mod.getAttribute('id') || '', carrier});
+    }
+  }
+  return out;
+}
+
+// relief.js's reading of depth: `data-z-lift` summed up the ancestor chain,
+// from the card's group to the root.
+function seatDepth(el) {
+  let total = 0;
+  for (let n = el; n && typeof n.getAttribute === 'function'; n = n.parentNode)
+    total += +(n.getAttribute('data-z-lift') || 0) || 0;
+  return total;
+}
+
+// The card's group a nested cage sits in, if it is still the card the cage was
+// read from; null otherwise.
+function cardOf(rootEl, cage) {
+  const mod = bayGroup(rootEl, cage.modulePath);
+  const ref = (mod?.getAttribute('data-ref') || '').split(':')[0];
+  return mod && ref === cage.carrier ? mod : null;
+}
+
+// WHAT AN OCCUPANT IS CALLED, as render.py names it. On a device cage the id
+// and the path are one string, `port-4-occupant`. On a card the build names it
+// inside the card's namespace (instance_group with `<card id>--<cage>-occupant`
+// and `<card path>/<cage>-occupant`), so the two diverge:
+// `front-6--module--xg0-occupant` at `front-6/module/xg0-occupant`.
+export function occupantNames(cage) {
+  if (cage?.moduleId)
+    return {id: `${cage.moduleId}--${cage.cage}-occupant`, path: `${cage.id}-occupant`};
+  return {id: `${cage.id}-occupant`, path: `${cage.id}-occupant`};
 }
 
 // A CONFIGURATION'S BAY KEY IS NOT A DRAWING PATH. device.yaml keys a nested
