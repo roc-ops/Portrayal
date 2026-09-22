@@ -2778,7 +2778,9 @@ def lint_component_fields(path, data, _lib_roots=None):
     paint itself from an attr no form is ever offered. `data-stroke-from` joined
     them in #177, for the same reason and with the same standing: a coloured part
     is a fill AND an outline, and a mechanism that could only say half of it
-    would have produced blue handles wearing dark red edges.
+    would have produced blue handles wearing dark red edges. `data-stroke-derive`
+    (#482), an outline drawn as a shade of a colour field, is read the same way:
+    a skin deriving from a key no contract declares is deriving from nothing.
     """
     fields = data.get("fields") or {}
     skins_dir = path.parent / "skins"
@@ -2788,7 +2790,7 @@ def lint_component_fields(path, data, _lib_roots=None):
         if not sp.exists():
             continue
         text = sp.read_text(errors="replace")
-        keys = set(re.findall(r'data-(?:fill-|stroke-)?from="([^"]+)"', text))
+        keys = set(re.findall(r'data-(?:(?:fill-|stroke-)?from|stroke-derive)="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys:
