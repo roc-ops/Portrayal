@@ -793,6 +793,36 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     return at, hrot, lift
 
 
+def refuse_bay_module_default(lib, ref, where):
+    """A module seated in a BAY may not ship an occupant on its own slot.
+
+    A default is the product's shipped state and seats wherever the part is
+    placed or composed (B3, "The shipped default") - but the rule that makes
+    that safe is that a configuration can always override it, and a bay
+    module's OWN slot has no key today: `occupants:` keys a part id under a
+    bay (`bay-1/lc01`), never the seated module itself, so `bay-1` names no
+    slot and neither the build nor L12 can empty one. Seating it anyway would
+    put an occupant in every drawing that nothing could take out, and
+    dropping it silently is the fault this refusal exists to stop: the same
+    contract would ship its cap as a composed part and lose it in a bay.
+
+    So it is an ERROR that names the default, not a silent drop. Nothing in
+    the library declares one; whoever needs it gives a bay module's slot a
+    key first. The defaults declared INSIDE such a module - on its own
+    `parts:` - are unaffected and seat as they do anywhere else.
+    """
+    try:
+        shipped = (lib.resolve(ref)[0] or {}).get("default")
+    except (FileNotFoundError, ValueError, KeyError):
+        return                          # a bad ref is reported where it is drawn
+    if shipped:
+        raise ValueError(
+            f"{where}: {ref} ships holding {shipped} on its own slot, and a "
+            "module seated in a bay has no slot key a configuration could "
+            "override (B3) - compose it as a part, or place it, to seat that "
+            "default")
+
+
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
                            skin_overrides, attr_overrides, resolved):
@@ -819,6 +849,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     prefix = slot_key_prefix(path)
     pending = (occupants_under(prefix, occupants)
                if occupants and prefix is not None else {})
+    shipped_refs = set()
     # AND WHAT EACH SLOT SHIPS HOLDING (B3, "The shipped default"): a part's
     # resolved default (manifest.slot_default) seats unless the configuration
     # keys that part - a configured key, `""` included, wins. Keyed None: a
@@ -831,6 +862,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         shipped = slot_default(q, lib.resolve(q["ref"])[0])
         if shipped:
             pending[q["id"]] = (None, {"ref": shipped})
+            shipped_refs.add(shipped)
     if not pending:
         return
     hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
@@ -841,7 +873,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     def _label(host_id, key):
         return f"occupants/{key}" if key else f"{path}/{host_id}: default"
     while pending:
-        seated_now = []
+        seated_now, chained = [], {}
         for host_id, (key, spec) in pending.items():
             host = hosts.get(host_id)
             if host is None:
@@ -867,6 +899,16 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             g.append(og)
             hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
                             "host-lift": lift}
+            # AND WHAT THE OCCUPANT ITSELF SHIPS HOLDING. A plug's contract may
+            # default a boot onto its own rear slot, and it ships that boot
+            # however it got here - composed, configured, or seated as another
+            # part's default. The configuration keys this one by the produced
+            # id (`tx-occupant`), so it stays overridable; `shipped_refs` stops
+            # a default that names a part defaulting back at it from looping.
+            ships = (lib.resolve(spec["ref"])[0] or {}).get("default")
+            if ships and local not in pending and ships not in shipped_refs:
+                shipped_refs.add(ships)
+                chained[local] = (None, {"ref": ships})
             if occ_used is not None and key:
                 occ_used.add(key)
             seated_now.append(host_id)
@@ -876,6 +918,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 + f": names no cage on {path} (or no occupant seated before it)")
         for host_id in seated_now:
             del pending[host_id]
+        pending.update(chained)
 
 
 def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None):
@@ -1337,6 +1380,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         occupant = seated_ref(seated, bay_path, bay)
         if not occupant or depth >= MAX_BAY_DEPTH:
             continue
+        # a module's OWN default has no key inside a bay (B3)
+        refuse_bay_module_default(lib, occupant, f"{path}/{bay_id}")
         bw, bh = bay_size(bay)
         b_at = bay["at"]
         if bay.get("rotate") in (90, 270):
@@ -1609,6 +1654,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # an error: the two cases are told apart by whether progress is possible,
     # not by when the set was sampled.
     remaining = dict(config.get("occupants") or {})
+    # which ids in `remaining` are a default rather than a configuration's key
+    shipped_ids, shipped_refs = set(), set()
     # A PLACED SLOT SHIPS HOLDING ITS DEFAULT (B3, "The shipped default"): the
     # placed component's top-level `default:` (manifest.slot_default - a
     # device placement declares none of its own) seats unless this
@@ -1627,19 +1674,35 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             continue
         if shipped:
             remaining[q["id"]] = shipped
+            shipped_ids.add(q["id"])
     while remaining:
         seated_now = []
+        chained = {}
         here = {q.get("id") for q in parts["placements"]}
         for host, spec in remaining.items():
             if host not in here:
                 continue
-            spec = occupant_spec(host, spec)
+            # A DEFAULT IS NO CONFIGURATION KEY, so it is not reported as one:
+            # `occupants/<id>: names no component` would name a key nobody
+            # wrote. The same `_label` reading the nested path uses.
+            spec = occupant_spec(host, spec,
+                                 label=f"{host}: default" if host in shipped_ids else None)
             if spec is None:            # "" empties the slot (P4)
                 seated_now.append(host)
                 continue
+            oid = occupant_local_id(host, spec)
+            # AND WHAT THE OCCUPANT ITSELF SHIPS HOLDING (B3): a plug whose
+            # contract defaults a boot onto its own rear slot brings the boot
+            # with it here too, keyed by the produced id so a configuration
+            # can still empty it. `shipped_refs` stops a cycle of defaults.
+            ships = (lib.resolve(spec["ref"])[0] or {}).get("default")
+            if (ships and oid not in remaining and oid not in here
+                    and ships not in shipped_refs):
+                shipped_refs.add(ships)
+                chained[oid] = ships
             parts["placements"].append({
                 "ref": spec["ref"],
-                "id": occupant_local_id(host, spec),
+                "id": oid,
                 "mate-to": host,
                 # nests under the receptacle in the tree, the way an indicator nests
                 # under what it indicates - an optic belongs to its port
@@ -1651,9 +1714,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             })
             seated_now.append(host)
         if not seated_now:
+            # A CONFIGURED KEY WHOSE HOST IS IN ANOTHER VIEW IS SKIPPED (see
+            # above) - a front-panel optic has no business in the rear drawing,
+            # and L12 catches the typo. A DEFAULT IS NOT THAT CASE: its host is
+            # a placement in THIS view by construction, so one left unseated is
+            # a fault in this loop and must not vanish without a word.
+            left = sorted(h for h in remaining if h in shipped_ids)
+            if left:
+                raise ValueError(
+                    ", ".join(f"{h}: default {remaining[h]!r}" for h in left)
+                    + ": nothing seated it - its slot is in this drawing")
             break
         for host in seated_now:
             del remaining[host]
+        remaining.update(chained)
+        shipped_ids.update(chained)
 
     # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
     # occupant's plan lands here (`plan:`), and the occupant's contract names
@@ -2624,6 +2699,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # THE OCCUPANT'S OWN VALUES: a configuration's `bay-attrs` reach the
             # part seated in THIS bay, the way a placement's `attrs` reach a
             # placed part - a supply's wattage, a drive's capacity
+            # a module's OWN default has no key inside a bay (B3)
+            refuse_bay_module_default(lib, default, f"bays/{b['id']}")
             g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
                                          None, (config.get("bay-attrs") or {}).get(b["id"]), None, None,
                                          rotate=b.get("rotate"), palette=palette,

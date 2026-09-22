@@ -336,15 +336,19 @@ def drawn_refs(contract):
     return out
 
 
-def occupant_spec(key, spec):
+def occupant_spec(key, spec, label=None):
     """An `occupants:` value as a dict with a `ref`, or ValueError naming the key.
-    An empty string empties the slot (B3, P4): None, and nothing is seated."""
+    An empty string empties the slot (B3, P4): None, and nothing is seated.
+
+    `label` replaces `occupants/<key>` in that message, for a value that is not
+    a configuration's key at all - a slot's shipped `default:`, which no
+    `occupants:` entry named."""
     if spec == "":
         return None
     spec = {"ref": spec} if isinstance(spec, str) else spec
     if not isinstance(spec, dict) or not spec.get("ref"):
-        raise ValueError(f"occupants/{key}: names no component - give a ref, "
-                         "or {ref: ..., attrs: ...}")
+        raise ValueError(f"{label or f'occupants/{key}'}: names no component - "
+                         "give a ref, or {ref: ..., attrs: ...}")
     return spec
 
 

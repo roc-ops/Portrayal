@@ -382,3 +382,128 @@ def test_lint_a_top_level_default_on_a_component_that_is_no_slot(lib):
     _copy(lib, V_ADAPTER, 4, "bad-self", _set(default=PLUG))
     got = l110(lib, "test/bad-self@1")
     assert got and "no slot" in got[0], got
+
+
+# --- a default on a part that got there some other way -------------------------------
+
+BOOT = "common/lc-boot@1"
+
+
+@pytest.fixture
+def booted(lib):
+    """A plug whose contract ships a boot on its own rear slot, and an adapter
+    whose bore ships that plug."""
+    _copy(lib, "generic/lc-plug", 1, "booted-plug", _set(default=BOOT))
+
+    def capped(c):
+        _part(c, "tx")["default"] = "test/booted-plug@1"
+    _copy(lib, V_ADAPTER, 4, "booted-adapter", capped)
+    _copy(lib, CASSETTE, 3, "booted-cassette",
+          lambda c: _part(c, "lc01").update({"ref": "test/booted-adapter@1"}))
+    return lib
+
+
+def test_a_configured_occupant_brings_its_own_default(tmp_path, booted):
+    """The occupant path: a plug seated by a configuration ships its boot,
+    whatever seated the plug (the nested seat, inside the cassette)."""
+    dev, _ = fhd(tmp_path, "test/capped-cassette@1",
+                 {"bay-1/lc01/tx": "test/booted-plug@1"})
+    root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
+    assert occupants_drawn(root) == {
+        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/tx-occupant-occupant": BOOT}
+
+
+def test_a_default_occupant_brings_its_own_default(tmp_path, booted):
+    """And a plug seated as the BORE's default ships the same boot: two
+    defaults, one on the other, neither configured."""
+    dev, _ = fhd(tmp_path, "test/booted-cassette@1")
+    root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
+    assert occupants_drawn(root) == {
+        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/tx-occupant-occupant": BOOT}
+
+
+def test_a_configuration_empties_a_chained_default(tmp_path, booted):
+    """The chained default stays addressable: the produced id empties it."""
+    dev, _ = fhd(tmp_path, "test/booted-cassette@1",
+                 {"bay-1/lc01/tx-occupant": ""})
+    root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
+    assert occupants_drawn(root) == {
+        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1"}
+
+
+def test_a_device_level_occupant_brings_its_own_default(tmp_path, booted):
+    """The same on the device-level path, where the occupant is expanded into
+    a mate-to placement."""
+    out = build(dcp(tmp_path, {"port-1510": "test/booted-plug@1"}),
+                tmp_path / "o", booted)
+    root, _ = face(out, "dcp-r-34d-cs", "default")
+    assert occupants_drawn(root) == {"port-1510-occupant": "test/booted-plug@1",
+                                     "port-1510-occupant-occupant": BOOT}
+
+
+def test_a_device_level_chained_default_is_addressable(tmp_path, booted):
+    out = build(dcp(tmp_path, {"port-1510": "test/booted-plug@1",
+                               "port-1510-occupant": ""}),
+                tmp_path / "o", booted)
+    root, _ = face(out, "dcp-r-34d-cs", "default")
+    assert occupants_drawn(root) == {"port-1510-occupant": "test/booted-plug@1"}
+
+
+def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
+    """The placed slot's own default ships its boot too: port-1510 defaults to
+    the plug (test/self-hplug@1 below is the same adapter, defaulted)."""
+    def h_adapter(c):
+        c["interface"] = "lc"
+        c["default"] = "test/booted-plug@1"
+        c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
+                                                         "direction": "front"}
+    _copy(booted, H_ADAPTER, 4, "booted-hadapter", h_adapter)
+    dev = dcp(tmp_path)
+    d = yaml.safe_load(dev.read_text())
+    for view in d["views"].values():
+        for p in ((view or {}).get("components") or {}).get("placements") or []:
+            if p.get("id") == "port-1510":
+                p["ref"] = "test/booted-hadapter@1"
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    root, _ = face(build(dev, tmp_path / "o", booted), "dcp-r-34d-cs", "default")
+    assert occupants_drawn(root) == {"port-1510-occupant": "test/booted-plug@1",
+                                     "port-1510-occupant-occupant": BOOT}
+
+
+# --- a bay module's own default has no key, and is refused -----------------------------
+
+def test_a_bay_module_shipping_a_default_is_an_error(tmp_path, lib):
+    """A module seated in a BAY may not ship an occupant on its own slot: a
+    bay module's slot has no `occupants:` key, so nothing could empty it.
+    Refused by name rather than dropped in silence (B3)."""
+    dev, _ = fhd(tmp_path, "test/self-adapter@1")
+    r = run(dev, tmp_path / "o", lib)
+    assert r.returncode != 0
+    assert "test/self-adapter@1 ships holding generic/lc-plug@1" in r.stderr, r.stderr[-800:]
+    assert "bay-1" in r.stderr and "no slot key" in r.stderr
+
+
+def test_a_module_in_a_nested_bay_is_refused_the_same_way(tmp_path, lib):
+    """The same refusal one level down, where a card's own bay seats it."""
+    dev = shutil.copytree(LIB / "devices/cisco/asr-9010",
+                          tmp_path / "asr-9010") / "device.yaml"
+    d = yaml.safe_load(dev.read_text())
+    cfg = d["configurations"]["ac"]
+    cfg["bays"] = {**(cfg.get("bays") or {}), "slot-0": "cisco/a9k-mod160-tr@1",
+                   "slot-0/bay-0": "test/self-adapter@1"}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    r = run(dev, tmp_path / "o", lib)
+    assert r.returncode != 0
+    assert "test/self-adapter@1 ships holding generic/lc-plug@1" in r.stderr, r.stderr[-800:]
+    assert "slot-0/module/bay-0" in r.stderr
+
+
+def test_a_bay_module_whose_parts_ship_defaults_is_fine(tmp_path, lib):
+    """Only the module's OWN slot is refused: the defaults declared inside it,
+    on its `parts:`, seat as they do anywhere else - which is the whole of the
+    cassette case above."""
+    dev, _ = fhd(tmp_path, "test/capped-cassette@1")
+    root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
+    assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}
