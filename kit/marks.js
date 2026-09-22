@@ -8,12 +8,19 @@
 // document - no UI, no globals, no shell.
 //
 //   {v:1, device, config, view, legend, crop, marks:[{select, color, state, label, lamp}],
-//    swaps:{path: ref|null}}
+//    swaps:{path: ref|null}, fields:{path: {key: value|null}}}
 //
 // `swaps` is what the reader changed in the drawing before marking it up: bay
 // and cage paths mapped to the component seated there, null for one emptied.
 // Only what differs from the configuration's build - the configuration already
 // says the rest - so an un-swapped document carries `{}`.
+//
+// `fields` is what the reader WROTE ON the parts: an optic's `latch-color` and
+// `label`, a supply's wattage - whatever a part declares in its contract's
+// `fields`. The shape is the shell's own `state.cfgFields` and what the 3D
+// viewer's `setFields` takes, so a host writes it from one and a reader replays
+// it with `shell.setFields(path, vals)` per entry. A value of null is kept, as
+// "cleared" - the shell reads it as empty. An unfielded document carries `{}`.
 //
 // `color` and `lamp` are both colours and they are not the same kind of thing.
 // `color` is INK: a ring the reader is meant to notice, drawn around the part.
@@ -123,7 +130,35 @@ export function normalise(doc) {
       lamp: HEX_RE.test(str(m.lamp)) ? str(m.lamp).toLowerCase() : '',
     })),
     swaps: swapsOf(d.swaps),
+    fields: fieldsOf(d.fields),
   };
+}
+
+// A FIELD MAP is {path: {key: value}}, normalised the way a swap map is: entry by
+// entry, so one bad entry does not take the good ones with it. A path or a key
+// that is empty, or `__proto__`, names nothing; a part's entry that is not a
+// plain object is dropped; a value that is a string is kept (control characters
+// stripped, as for a label - but NOT trimmed, and an empty string is a value:
+// it is how a reader hides a label), null is kept as "cleared", and anything
+// else - a number, an object - is dropped. A part left with no keys is dropped,
+// so an unfielded document is `{}` however it arrived.
+function fieldsOf(f) {
+  const out = {};
+  if (!f || typeof f !== 'object' || Array.isArray(f)) return out;
+  for (const [p, vals] of Object.entries(f)) {
+    const path = str(p);
+    if (!path || path === '__proto__') continue;
+    if (!vals || typeof vals !== 'object' || Array.isArray(vals)) continue;
+    const kept = {};
+    for (const [k, v] of Object.entries(vals)) {
+      const key = str(k);
+      if (!key || key === '__proto__') continue;
+      if (v === null) kept[key] = null;
+      else if (typeof v === 'string') kept[key] = v.replace(/[\u0000-\u001f\u007f]/g, '');
+    }
+    if (Object.keys(kept).length) out[path] = kept;
+  }
+  return out;
 }
 
 // A SWAP MAP is {path: ref} with null for an emptied bay or cage - the own-key
@@ -1185,8 +1220,18 @@ export function encode(doc) {
   // and decodes to `{}`, and an un-swapped document encodes to exactly the bytes
   // it did before, so every link already shared stays the link it was. Keys are
   // sorted so one state is one string.
-  const swapKeys = Object.keys(d.swaps).sort((x, y) => x < y ? -1 : x > y ? 1 : 0);
+  const sorted = o => Object.keys(o).sort((x, y) => x < y ? -1 : x > y ? 1 : 0);
+  const swapKeys = sorted(d.swaps);
+  const fieldPaths = sorted(d.fields);
+  // Slot 8, the fields, by the same rule. A document with fields and no swaps
+  // still needs a slot 7 to stand in front of it, and it is 0 - the value an
+  // un-cropped slot 6 already uses, which decode reads as no swaps - so every
+  // link without fields keeps its bytes.
   if (swapKeys.length) a.push(Object.fromEntries(swapKeys.map(k => [k, d.swaps[k]])));
+  else if (fieldPaths.length) a.push(0);
+  if (fieldPaths.length)
+    a.push(Object.fromEntries(fieldPaths.map(p =>
+      [p, Object.fromEntries(sorted(d.fields[p]).map(k => [k, d.fields[p][k]]))])));
   const json = JSON.stringify(a);
   let packed = json;
   for (const [long, short] of TOKENS) packed = packed.split(long).join(short);
@@ -1218,6 +1263,7 @@ export function decode(input) {
       marks: (a[5] || []).map(m => ({select: m[0], color: m[1], state: m[2],
                                      label: m[3], id: m[4], lamp: m[5]})),
       swaps: a[7],                   // absent on an older link: normalise gives {}
+      fields: a[8],                  // likewise; 0 in slot 7 when only fields are set
     });
   } catch (e) {
     return null;                     // a truncated or hand-edited hash is not fatal
