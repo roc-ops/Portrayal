@@ -18,7 +18,7 @@
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
-         builtOccupants, builtBays } from './swap.js';
+         builtOccupants, builtBays, faceCages, cageAt, pruneCarrier } from './swap.js';
 import { jdist } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 
@@ -206,20 +206,21 @@ export function createShell(opts = {}) {
   // A CAGE OF THE FACE ON SCREEN, found from the port OR from the optic in it.
   // `meta.cages` is keyed by view exactly as `meta.bays` is, so it is read
   // through bayView() for the same reason. An optic the build (or a swap) seated
-  // is a top-level sibling of its cage - `port-4-occupant`, `data-for="port-4"`,
-  // `data-behaviour="occupies"` - so a path inside one resolves to its host
-  // through that element's `data-for`, and clicking the optic offers the same
+  // names its cage with `data-for` and `data-behaviour="occupies"`, so a path
+  // inside one resolves to its host, and clicking the optic offers the same
   // select as clicking the port. `data-for` alone is not enough: the port's
   // LED is `data-for` it too, and must stay the LED.
+  //
+  // A CAGE ON A SEATED CARD is one too (#484): `front-6/module/xg0`, read off
+  // the drawing by swap.js's `nestedCages` as `bayFor` reads a nested bay, for
+  // the same reason - which cages exist depends on what the bays hold. The
+  // rule for both kinds, and for a click inside either optic, is swap.js's
+  // `cageAt` over `faceCages`, the list the 3D pass seats through as well.
   const cagesHere = () => (state.module ? [] : state.meta?.cages?.[bayView()] || []);
+  const cagesOnFace = () => (state.module ? [] : faceCages(state.svg, cagesHere(), compByRef));
   function cageFor(path) {
-    if (path == null) return null;
-    const cages = cagesHere();
-    const own = cages.find(c => c.id === path);
-    if (own) return own;
-    const e = state.svg?.querySelector(`[data-path="${CSS.escape(path)}"]`);
-    const host = e?.closest('[data-behaviour="occupies"][data-for]')?.dataset.for;
-    return host ? cages.find(c => c.id === host) || null : null;
+    if (path == null || state.module) return null;
+    return cageAt(state.svg, path, cagesHere(), compByRef);
   }
 
   // ---------------------------------------------------------------- stage
@@ -1001,6 +1002,24 @@ export function createShell(opts = {}) {
     return r.ok ? {comp: c, text: await r.text()} : null;
   }
 
+  // A CARD REPLACED OR EMPTIED TAKES ITS OPTICS WITH IT (#484 R5): every entry
+  // keyed under the bay - a card cage's optic, a nested bay's module - leaves
+  // the state, so it leaves `swap=` and the 3D override map with it, which are
+  // both read from the state. The rule is swap.js's `pruneCarrier`. The card
+  // that goes in is a fresh seat of its component with nothing in its cages,
+  // and when it is the BUILD's own card no swap names it at all, so the optics
+  // the configuration put in it are recorded as emptied - or 3D, handed
+  // nothing, would still show them.
+  function dropUnder(key, ref) {
+    const cfg = (state.meta?.configs || []).find(c => c.name === state.cfg);
+    const cb = builtBays(cfg);
+    const builtRef = Object.prototype.hasOwnProperty.call(cb, key) ? cb[key] || null
+      : bayFor(key)?.default ?? null;
+    const rebuilt = ref && ref === builtRef
+      ? builtOccupants(cfg, Object.values(state.meta?.cages || {}).flat()) : {};
+    Object.assign(state, pruneCarrier(state, key, rebuilt));
+  }
+
   // ONE SWAP INTO THE FACE ON SCREEN, bay or cage - the single place both
   // swapBay/swapCage and a reload go through. Returns what it touched, or null
   // when `key` names nothing on this face (or `ref` is not something it
@@ -1044,7 +1063,7 @@ export function createShell(opts = {}) {
   async function seat(key, ref) {
     if (!state.svg || state.module) return null;
     ref = ref || null;
-    const cage = cagesHere().find(c => c.id === key);
+    const cage = cagesOnFace().find(c => c.id === key);
     const bay = cage ? null : bayFor(key);
     const target = cage || bay;
     if (!target || (ref && !(target.accepts || []).includes(ref))) return null;
@@ -1055,6 +1074,9 @@ export function createShell(opts = {}) {
     if (bay) {
       await applyOverrides(svg, [bay], {[key]: ref}, loadSkin, onFace);
       if (!onFace()) return null;
+      const was = Object.prototype.hasOwnProperty.call(state.cfgBays, key)
+        ? state.cfgBays[key] : bay.default ?? null;
+      if ((was || null) !== ref) dropUnder(key, ref);
       state.cfgBays[key] = ref;
     } else {
       const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, onFace);
@@ -1091,7 +1113,7 @@ export function createShell(opts = {}) {
   // The optic in a cage, as swapBay is the module in a bay: take out what the
   // cage holds and seat `ref` (or nothing, for '' / null).
   async function swapCage(cageId, ref) {
-    if (!cagesHere().some(c => c.id === cageId)) return;
+    if (!cagesOnFace().some(c => c.id === cageId)) return;
     if (!(await seat(cageId, ref))) return;
     refreshTree();
     select(cageId, true);
@@ -1126,7 +1148,12 @@ export function createShell(opts = {}) {
     const svg = state.svg, gen = state.cfgGen;
     for (const key of byDepth(state.touched)) {
       if (svg !== state.svg || gen !== state.cfgGen) return;
-      const cage = (state.meta?.cages?.[bayView()] || []).some(c => c.id === key);
+      // a key a card swap pruned while this loop ran is no longer the state's
+      if (!state.touched.has(key)) continue;
+      // a cage's answer is in cfgOccupants and a bay's in cfgBays - every
+      // write puts a key in exactly one - which also sorts a card's cage from
+      // a nested bay, whose keys look alike
+      const cage = Object.prototype.hasOwnProperty.call(state.cfgOccupants, key);
       await seat(key, cage ? state.cfgOccupants[key] : state.cfgBays[key]);
     }
   }
@@ -1151,10 +1178,18 @@ export function createShell(opts = {}) {
     const cb = builtBays((state.meta?.configs || []).find(c => c.name === state.cfg));
     const built = p => own(cb, p) ? cb[p] || null
       : bays.find(b => b.id === p)?.default ?? undefined;
-    const {accepted, ignored} = acceptSwaps(map, {bays, cages: all(state.meta?.cages), built, compByRef});
-    const cageIds = new Set(all(state.meta?.cages).map(c => c.id));
+    const {accepted, ignored, cages} = acceptSwaps(map, {bays, cages: all(state.meta?.cages), built, compByRef});
+    // `cages` says which accepted keys are cages - a card's among them, whose
+    // key looks like a nested bay's. Shallowest first (acceptSwaps' order), so
+    // a card the link swaps drops what the build had under it (dropUnder)
+    // BEFORE the link's own optic for that card is written.
+    const cageKeys = new Set(cages);
     for (const [key, ref] of Object.entries(accepted)) {
-      if (cageIds.has(key)) state.cfgOccupants[key] = ref; else state.cfgBays[key] = ref;
+      if (cageKeys.has(key)) state.cfgOccupants[key] = ref;
+      else {
+        dropUnder(key, ref);
+        state.cfgBays[key] = ref;
+      }
       state.touched.add(key);
     }
     await reseat();

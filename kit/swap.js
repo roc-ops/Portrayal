@@ -485,6 +485,43 @@ export function nestedCages(rootEl, compByRef) {
   return out;
 }
 
+// EVERY CAGE OF THE FACE AS IT STANDS: the device's own (`cages[view]`, from
+// the index) and those on the cards seated right now (nestedCages, off the
+// drawing). What the explorer offers a select for and seats through, and what
+// the 3D pass applies an override map to - one list, so the two cannot
+// disagree about which cages exist. No face, no card cages.
+export function faceCages(rootEl, deviceCages = [], compByRef) {
+  return [...(deviceCages || []), ...(rootEl ? nestedCages(rootEl, compByRef) : [])];
+}
+
+// WHICH CAGE `path` NAMES on this face, or null - the explorer's inspector
+// asks it of every selection. From the element at `path` upward, the first
+// that is either
+//   a cage itself - the cage, or one of its own parts (`port-4/opening`,
+//                   the SMM-8x10G's composed `front-2/module/xg0/cage`), or
+//   an optic      - `data-behaviour="occupies"` with a `data-for`, which
+//                   names the cage it sits in: a click on the optic, or on
+//                   anything inside it, offers the same select as the cage.
+// `data-for` alone is not enough: a port's LED is `data-for` it too, and must
+// stay the LED. Walked by `parentNode` and read by `getAttribute`, so a
+// parsed face and the fake DOM the tests use answer as the live page does. A
+// card is a `fills` module, not an optic, so a card's own plate names no cage.
+export function cageAt(rootEl, path, deviceCages = [], compByRef) {
+  if (path == null || !rootEl) return null;
+  const cages = faceCages(rootEl, deviceCages, compByRef);
+  const byId = id => cages.find(c => c.id === id) || null;
+  const own = byId(path);
+  if (own) return own;
+  for (let n = bayGroup(rootEl, path); n && n !== rootEl && typeof n.getAttribute === 'function';
+       n = n.parentNode) {
+    const hit = byId(n.getAttribute('data-path'));
+    if (hit) return hit;
+    const host = n.getAttribute('data-behaviour') === 'occupies' && n.getAttribute('data-for');
+    if (host) return byId(host);
+  }
+  return null;
+}
+
 // relief.js's reading of depth: `data-z-lift` summed up the ancestor chain,
 // from the card's group to the root.
 //
@@ -728,6 +765,25 @@ export function viewsToRewrite(devIndex, overrides) {
   return out;
 }
 
+// ONE FACE, EVERY OVERRIDE: what viewer3d.js does to each fetched face text
+// before the scene is cut from it, here so node can run it (viewer3d imports
+// `three`). Bays first, every level (applyAllOverrides), and THEN the cages -
+// the device's and those on the cards now seated (faceCages), read off the
+// face after the bays settled, so a cage on a card this same map seats is the
+// new card's and not the one that left. Handed only the device's cages, the
+// pass seated no optic on any card: 2D showed the choice and 3D did not.
+// Resolves to applyAllOverrides' `{applied, dropped}` plus
+// applyOccupantOverrides' `refused` / `failed` (applied summed), and the
+// `cages` it applied to, so a caller can say why one was refused.
+export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overrides,
+                                         loadSkin, compByRef) {
+  const {applied, dropped} = await applyAllOverrides(rootEl, bays, overrides, loadSkin, compByRef);
+  const all = faceCages(rootEl, cages, compByRef);
+  const occ = await applyOccupantOverrides(rootEl, all, overrides, loadSkin);
+  return {applied: applied + occ.applied, dropped, refused: occ.refused, failed: occ.failed,
+          cages: all};
+}
+
 // THE SWAP STATE AS A URL PARAMETER, so a swap survives a reload. A runtime
 // swap changes no file on disk - it lives in the explorer's memory - and a
 // page that forgets it on reload shows the reader the build again with nothing
@@ -830,12 +886,23 @@ export function searchWith(search, vals) {
 //                 and null are different on purpose: an emptied bay is not one
 //                 that falls back to its default.
 //   compByRef     ref -> components.json entry (may throw on a malformed ref)
+//
+// A CAGE ON A SEATED CARD (#484) is resolved by the same walk, because it
+// exists for the same reason a nested bay does: `front-6/module/xg0` is a cage
+// only while what `front-6` holds - this map's decision, else the build's -
+// is a component whose own `cages` (components.json) name `xg0`. It is looked
+// for after the card's bays, and it is a leaf: nothing is nested under an
+// optic, so a key below a cage names nothing.
+//
+// Returns `{accepted, ignored, cages}`: `cages` is the accepted keys that are
+// cages, device or card, so the caller files each where it belongs - a card
+// cage's key looks like a nested bay's, and only this walk knows which it is.
 export function acceptSwaps(map, {bays = [], cages = [], built = () => null, compByRef}) {
-  const accepted = {}, ignored = [];
+  const accepted = {}, ignored = [], cageKeys = [];
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
   const comp = ref => { try { return ref ? compByRef(String(ref).split(':')[0]) : null; } catch (e) { return null; } };
   const memo = new Map();
-  // the bay at `path` given what is decided so far, or null
+  // the bay or card cage at `path` given what is decided so far, or null
   function bayAt(path) {
     if (memo.has(path)) return memo.get(path);
     let bay = bays.find(b => b.id === path) || null;
@@ -844,13 +911,16 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null, com
       const carrier = path.slice(0, cut);
       const name = path.slice(cut + '/module/'.length);
       const holder = bayAt(carrier);
-      if (holder && name) {
+      if (holder && !holder.isCage && name) {
         const was = built(carrier);
         const ref = own(accepted, carrier) ? accepted[carrier]
                   : was !== undefined ? was
                   : holder.default ?? null;
-        const b = comp(ref)?.bays?.[name];
+        const c = comp(ref);
+        const b = c?.bays?.[name];
+        const cage = b ? null : (Array.isArray(c?.cages) ? c.cages : []).find(g => g.id === name);
         if (b) bay = {...b, id: path};
+        else if (cage) bay = {...cage, id: path, isCage: true};
       }
     }
     memo.set(path, bay);
@@ -861,14 +931,16 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null, com
     .sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : 1));
   for (const key of keys) {
     const ref = map[key] || null;
-    const target = cages.find(c => c.id === key) || bayAt(key);
+    const device = cages.find(c => c.id === key);
+    const target = device || bayAt(key);
     if (!target || (ref && !(target.accepts || []).includes(ref))) { ignored.push(key); continue; }
     accepted[key] = ref;
+    if (device || target.isCage) cageKeys.push(key);
     // a decided carrier changes what is nested under it: forget what was
     // resolved beneath it before this decision
     for (const k of [...memo.keys()]) if (k.startsWith(key + '/')) memo.delete(k);
   }
-  return {accepted, ignored};
+  return {accepted, ignored, cages: cageKeys};
 }
 
 // WHAT A CONFIGURATION SEATS IN EACH CAGE, as {cage id: ref | null} - the ONE
@@ -888,17 +960,33 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null, com
 // of this device (`cages`, every view, flattened) and not an occupant another
 // entry seats (its `id`, or the build's default `<host>-occupant`). A chained
 // tier is the build's business; the kit swaps cages.
+//
+// A KEY ON A SEATED CARD (#484) is the manifest's module-less path,
+// `front-6/xg0`, and is returned at the DRAWING's, `front-6/module/xg0` -
+// configBayPath, the translation builtBays makes for a nested bay key - so the
+// state, the swap test and the 3D map all meet the path nestedCages reads off
+// the face. Read raw it matched no cage, the state held nothing for a cage the
+// build had filled, and the inspector showed that optic as empty (#440's
+// lesson, one level down). It is not checked against `cages`, which are the
+// device's own: the build refuses a nested key that names no host
+// (render.py's _seat_nested_occupants), so a shipped configuration's nested
+// keys are real. Its chained tiers are dropped by the same rule, inside the
+// card's namespace - `front-6/xg0-occupant`, or `front-6/<id>`.
 export function builtOccupants(cfg, cages) {
   const occ = cfg?.occupants;
   const out = {};
   if (!occ || typeof occ !== 'object') return out;
   const cageIds = new Set((cages || []).map(c => c.id));
   const refOf = v => typeof v === 'string' ? v : (v && typeof v === 'object' ? v.ref : null);
-  const occIds = new Set(Object.entries(occ).map(
-    ([k, v]) => (v && typeof v === 'object' && v.id) || `${k}-occupant`));
+  const occIds = new Set(Object.entries(occ).map(([k, v]) => {
+    const cut = k.lastIndexOf('/');
+    const local = (v && typeof v === 'object' && v.id) || `${k.slice(cut + 1)}-occupant`;
+    return cut < 0 ? local : `${k.slice(0, cut)}/${local}`;
+  }));
   for (const [k, v] of Object.entries(occ)) {
-    if (!cageIds.has(k) || occIds.has(k)) continue;
-    out[k] = refOf(v) || null;
+    const nested = k.includes('/');
+    if (!(nested || cageIds.has(k)) || occIds.has(k)) continue;
+    out[nested ? configBayPath(k) : k] = refOf(v) || null;
   }
   return out;
 }
@@ -914,20 +1002,57 @@ export function builtOccupants(cfg, cages) {
 // builtBays, so a nested key meets the drawing's path) when it has one,
 // else the bay's own `default`; a cage's is builtOccupants' - a cage the
 // configuration does not name is built empty.
+//
+// A CAGE ON A CARD THE STATE HAS SWAPPED was never populated by the build: the
+// card in that bay is a fresh seat of its component, whose cages hold nothing.
+// So its built answer is empty, whatever the configuration put in the old
+// card's cage of the same id - read the other way, the configured optic chosen
+// on the new card was "no swap", 3D was handed the card alone and showed the
+// cage empty. The bays are therefore decided first, and a cage key under a bay
+// that differs is measured against nothing.
 export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccupants = {}}) {
   const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
   const cageIds = new Set(cages.map(c => c.id));
   const occ = builtOccupants(cfg, cages);
   const cb = builtBays(cfg);
+  const out = {};
+  const swappedAbove = id => Object.keys(out).some(k => id.startsWith(k + '/module/'));
   const built = id => {
-    if (cageIds.has(id)) return occ[id] ?? null;
+    if (cageIds.has(id) || own(occ, id)) return swappedAbove(id) ? null : occ[id] ?? null;
     if (own(cb, id)) return cb[id] || null;
     return bays.find(b => b.id === id)?.default || null;
   };
-  const out = {};
   for (const map of [cfgBays, cfgOccupants])
     for (const [id, ref] of Object.entries(map || {}))
       if ((ref || null) !== built(id)) out[id] = ref || null;
+  return out;
+}
+
+// AN OPTIC CANNOT OUTLIVE THE CARD IT SAT IN (#484 R5). Replacing or emptying
+// what the bay `carrier` holds drops every entry keyed under it -
+// `front-6/module/...`, card cages and nested bays alike - from the explorer's
+// state slice: `cfgBays`, `cfgOccupants`, `touched`, and the `refused` /
+// `failed` notes. Everything else reads that state (swapOverrides for `swap=`
+// and the 3D override map, the inspector's select), so this is the one place
+// the drop happens. The carrier's own key is the caller's to write.
+//
+// `builtUnder` is for the one case a drop is not enough: the card put back is
+// the BUILD's own card. It is a fresh seat of the component, so it holds none
+// of the optics the configuration put in it - but with the carrier back to
+// its built ref no swap names the card, and 3D, handed nothing, would show the
+// build's optics. So each entry of `builtUnder` (builtOccupants' reading of
+// this configuration) under `carrier` that is not empty is recorded as
+// emptied, which is what the face shows. The caller passes it only then.
+//
+// PURE: returns a new slice; the one it is handed is not changed.
+export function pruneCarrier(slice, carrier, builtUnder = {}) {
+  const under = k => String(k).startsWith(`${carrier}/module/`);
+  const keep = o => Object.fromEntries(Object.entries(o || {}).filter(([k]) => !under(k)));
+  const out = {cfgBays: keep(slice?.cfgBays), cfgOccupants: keep(slice?.cfgOccupants),
+               touched: new Set([...(slice?.touched || [])].filter(k => !under(k))),
+               refused: keep(slice?.refused), failed: keep(slice?.failed)};
+  for (const [k, ref] of Object.entries(builtUnder || {}))
+    if (ref && under(k)) { out.cfgOccupants[k] = null; out.touched.add(k); }
   return out;
 }
 

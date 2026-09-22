@@ -70,4 +70,38 @@ out.nestedUntouchedSwap = m.encodeSwaps(out.nestedUntouched);
 out.nestedAsBuilt = m.swapOverrides({...nUntouched, cfgBays: {'slot-1/module/ppm-1': 'x/ppm-1510@1'}});
 out.nestedSwapped = m.swapOverrides({...nUntouched, cfgBays: {'slot-1/module/ppm-1': 'x/cover@1'}});
 out.noBays = [m.builtBays({}), m.builtBays(null), m.builtBays({bays: 'junk'})];
+
+// AN OPTIC THE CONFIGURATION SEATS IN A CARD'S CAGE (#484): the manifest keys
+// it without the `/module` step (`front-6/xg0`), the drawing - and so the
+// explorer's state, the swap map and the 3D overrides - with it. The c100g
+// shape: the card is configured, and so are optics in two of its cages, one
+// of them in the mapping form with a custom id, each with a tier chained on.
+const cBays = [{id: 'front-6', default: 'casa/blank@1', accepts: ['casa/blank@1', 'casa/smm@1']}];
+const cCfg = {name: 'fitted', bays: {'front-6': 'casa/smm@1'}, occupants: {
+  'front-6/xg0': 'generic/sfp-lc@1',
+  'front-6/xg0-occupant': 'generic/boot@1',          // chained on xg0's optic
+  'front-6/cg0': {ref: 'generic/qsfp-lc@1', id: 'uplink'},
+  'front-6/uplink': 'generic/boot@1',                // chained on the custom id
+  'port-4': 'generic/sfp-lc@1',
+}};
+out.cardBuilt = m.builtOccupants(cCfg, cages);
+const cUntouched = {cfg: cCfg, bays: cBays, cages, cfgBays: m.builtBays(cCfg),
+                    cfgOccupants: m.builtOccupants(cCfg, cages)};
+out.cardUntouched = m.swapOverrides(cUntouched);
+out.cardUntouchedSearch = m.searchWith('?device=c100g&config=fitted',
+  {device: 'c100g', config: 'fitted', swap: m.encodeSwaps(out.cardUntouched)});
+// the built optic, chosen away and back, is no swap; emptied, it is one
+const withCard = occ => m.swapOverrides({...cUntouched,
+  cfgOccupants: {...cUntouched.cfgOccupants, ...occ}});
+out.cardAway = withCard({'front-6/module/xg0': 'generic/sfp-lc-simplex@2'});
+out.cardBack = withCard({'front-6/module/xg0': 'generic/sfp-lc@1'});
+out.cardEmptied = withCard({'front-6/module/xg0': null});
+out.cardFilled = withCard({'front-6/module/xg1': 'generic/sfp-lc@1'});
+// ON A CARD THE STATE HAS SWAPPED, the build's optics are not there: a fresh
+// card is seated from its component, whose cages hold nothing. So an optic
+// chosen there IS a swap even when it names what the build put in the old
+// card's cage of the same id - or 3D, handed only the card, shows it empty.
+out.cardOnSwappedCarrier = m.swapOverrides({...cUntouched,
+  cfgBays: {'front-6': 'casa/smm-b@1'},
+  cfgOccupants: {'front-6/module/xg0': 'generic/sfp-lc@1'}});
 console.log(JSON.stringify(out));
