@@ -83,14 +83,19 @@ def test_a_cap_is_an_occupying_cap_that_mates_one_interface(ref):
     assert ref.startswith("common/"), "no standard governs a cap's shape"
 
 
-def test_the_four_caps_are_the_libraryts_only_caps_and_there_are_four():
+def test_the_four_caps_are_the_librarys_only_caps_and_there_are_four():
     """A census, and it asserts it measured something. `class: cap` is new with
-    this work; if a fifth appears it needs its own paragraph here."""
+    this work; if a fifth appears it needs its own paragraph here.
+
+    KEYED FROM THE PATH, not from a guessed namespace: a cap added under
+    `generic/` or a vendor would otherwise be reported as a missing `common/`
+    one, which sends the reader to the wrong question."""
     found = {}
     for f in (LIB / "components").rglob("v*/contract.yaml"):
         c = load_yaml(f) or {}
         if c.get("class") == "cap":
-            found[f"common/{c['name']}@{c['version'].split('.')[0]}"] = c
+            ns = f.parents[2].name
+            found[f"{ns}/{c['name']}@{c['version'].split('.')[0]}"] = c
     assert len(found) == 4, sorted(found)
     assert set(found) == set(MATES), sorted(found)
     for ref, c in found.items():
@@ -143,18 +148,48 @@ def test_the_adapter_still_states_the_reading_these_figures_came_from(ref):
     assert f"out: {ABSOLUTE_OUT[ref]:g}" in note, note
 
 
-def test_the_mpo_cap_claims_no_adapter_reading_and_marks_its_depth_estimated():
-    """The fourth cap has no adapter to take figures from. Its face is measured
-    off a render checked orthographic first; its depth is not, and the contract
-    must not launder the one into the other."""
+def test_the_mpo_cap_marks_every_figure_it_carries_estimated():
+    """The fourth cap has no adapter to take figures from, and neither of its
+    two questions is settled by the renders it is read off: the pixel spans are
+    measured but WHAT they measure is a reading, and no view along the depth
+    axis can be unfolded at all. So every figure on it is `estimated`, and the
+    contract has to say which reading each one assumes rather than dressing an
+    interpretation as a measurement."""
     c = contract(MPO_CAP)
-    assert set(c["size-confidence"].values()) == {"photo-measured"}
+    assert set(c["size-confidence"].values()) == {"estimated"}
     assert feature(MPO_CAP, "body")["confidence"] == "estimated"
     assert feature(MPO_CAP, "grip")["confidence"] == "estimated"
+    notes = c["size-notes"]
+    # the check that makes the spans worth anything, and the two readings
+    assert "ORTHOGRAPHIC FIRST" in notes and "quadratic" in notes
+    assert "EXCLUDED" in notes and "NOT EXCLUDED" in notes
     depth = c["provenance"]["depth"]
     assert "ESTIMATED" in depth and "PERSPECTIVE" in depth
-    notes = c["size-notes"]
-    assert "ORTHOGRAPHIC FIRST" in notes and "quadratic" in notes
+    assert "withdrawn" in depth, "the retracted derivation has to stay retracted"
+    # the doubt about std/mpo@1 is a hypothesis, and is filed as one
+    doubt = c["provenance"]["aperture-doubt"]
+    assert "HYPOTHESIS" in doubt and "NOT A FINDING" in doubt
+
+
+def test_the_mpo_caps_depth_figures_do_not_out_run_their_own_basis():
+    """IMPORTANT 1 of the task 5 review, held by a test rather than by prose.
+
+    The grip's `out` is not derived from any pixel reading - every view along
+    that axis is a perspective render - so what it must do is stay inside the
+    one comparison the contract does claim: the saddle rises above the plate by
+    roughly the width of the port it plugs. The seat is the panel (std/mpo@1
+    presents no lift), so `out` is measured from the panel and the adapter's
+    bezel is NOT added to it a second time."""
+    c = contract(MPO_CAP)
+    grip = feature(MPO_CAP, "grip")["out"]
+    body = feature(MPO_CAP, "body")["out"]
+    bezel = feature("common/mpo-adapter@1", "bezel")["out"]
+    assert grip == pytest.approx(c["size"]["h"], abs=0.2), \
+        "the grip no longer stands at the width its own basis names"
+    assert body < grip, "the saddle has to stand in front of the cap's face"
+    assert body > bezel, "the cap's face would sit behind the adapter bezel"
+    # and nothing in the file quietly adds the bezel on top of a plate reading
+    assert f"{grip + bezel:g}" not in c["provenance"]["depth"]
 
 
 @pytest.mark.parametrize("ref,node,inner", [(LC_CAP, "inset", "pocket"),
