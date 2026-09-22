@@ -1,0 +1,85 @@
+format: 1
+kind: component
+name: sc-bore
+version: 1.0.0
+class: port
+interface: sc
+profile: networking
+description: >-
+  One SC opening - the rectangular hole an SC plug's housing enters, with the
+  key slot cut into one long wall and the 2.5 mm ferrule standing in its
+  sleeve. Key slot to the LEFT when unrotated. The SC counterpart of
+  std/lc-bore@3: the part a panel adapter composes so the opening is drawn
+  once and drawn right.
+size: {w: 8.39, h: 9.0, d: 6.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+size-notes: >-
+  7.5 x 9.0 is the opening, printed on SENKO's SC Premium Adapter drawing
+  (DS-SC-000010 Rev A, front view, `7.5 -0.0/-0.1` and `9 +0.1/-0.0`) and
+  cross-checked on its SC TOP Adapter (DS-SC-000011 Rev A), whose front view
+  prints the same 7.5 on its own opening. The extra 0.89 of width is the key
+  slot, and see `provenance.keyway`. The 6.0 depth is not from either drawing:
+  it is deep enough that the ferrule face sits below the opening, which is
+  what looking into an SC port shows.
+conforms: sc-simplex-receptacle
+attrs: {media: fiber, connector: sc}
+provenance:
+  size: >-
+    drawing for w and h, estimated for d - see size-notes. The two callouts'
+    witness lines land on the opening's walls, not on the 9.4 x 12.8 adapter
+    body, which has callouts of its own; the plus-only tolerance on the 9 is
+    the tolerance of a hole a plug has to pass. The front view is vector art,
+    and measured at the scale its printed 22 overall fixes (checked against its
+    9.4 -0.2 body, which comes out 9.285), the opening is 7.508 x 9.046 - the
+    printed figures to 0.05.
+  keyway: >-
+    drawing for the width, measured for the depth. DS-SC-000011's top view
+    prints a `2.1` slot with a rounded end in the adapter's side wall;
+    DS-SC-000010's front view draws the same slot as a notch 2.103 tall,
+    centred on the opening, running 0.889 from the opening's wall to the body
+    edge. Neither document tolerances it; IEC 61754-4 would.
+  sleeve: >-
+    drawing, undimensioned. DS-SC-000010 draws concentric circles of 2.695,
+    3.302, 3.528 and 4.685 dia at the opening's centre - the sleeve bore, the
+    sleeve, and the moulded collar that carries it. The ferrule is the 2.5 mm
+    SC/FC ferrule, which is what tells an SC face from an LC one at a glance.
+  hooks: >-
+    drawing, simplified. The two moulded latch fingers that grip the plug sit
+    above and below the collar on DS-SC-000010. They are drawn here as one bar
+    each across the opening, at the heights the drawing puts them and not
+    their outline, which is a detail of hooks and ramps a face-on drawing at
+    this scale does not need.
+elements:
+  bore: {at: [0.0, 0.0], size: [8.39, 9.0], class: cutout}
+relief:
+  wall: '#4a4f55'
+  cavity: bore
+  features:
+    - node: collar
+      top: 3.8
+      confidence: estimated
+      source: >-
+        std/sc-bore@1's own sleeve reading - the collar's DIAMETER is drawn on
+        DS-SC-000010, its height is not. 3.8 of the 6.0 cavity puts it well
+        back from the opening, where it sits in a real adapter.
+    - node: ferrule
+      top: 4.8
+      color: '#e8ecef'
+      confidence: estimated
+      source: >-
+        NOT MEASURED. The ferrule face stands proud of the collar and 1.2 below
+        the opening, the same relationship std/lc-bore@3 gives its own ferrule
+        (3.6 in a 4.5 cavity); no SC source dimensions it.
+    - node: hook-upper
+      top: 5.2
+      confidence: estimated
+      source: >-
+        std/sc-bore@1's own hooks reading - where the fingers are is drawn,
+        how far back they sit is not.
+    - node: hook-lower
+      top: 5.2
+      confidence: estimated
+      source: std/sc-bore@1's own hooks reading, the same estimate as hook-upper.
+connection-points:
+  mate: {at: [4.64, 4.5], direction: front}
+skins: [default]
