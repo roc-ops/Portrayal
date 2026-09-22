@@ -907,6 +907,22 @@ export function bodyRole(path, behaviour) {
   return {sub: segs[0]};
 }
 
+// THE BODY OF A SEATED OPTIC THAT DECLARES NONE: an `occupies` part with no
+// `body:` block is one box, its own face outline (`w` x `h`, the element's drawn
+// box on the face) run back from the face to the module's own depth - the
+// `data-depth` its skin root carries, the contract's size.d (47.5 on the SFP
+// generics). It stands inside the cage's recess, which keeps its own depth,
+// and it is built into the optic's FRU group so it comes out with the optic.
+// Anything else - a module, a part with a `body:` block, an optic with no
+// depth - gets null and is built as it always was.
+//   {behaviour, body, depth, w, h} -> {w, h, depth} | null
+export function opticBody({behaviour, body, depth, w, h} = {}) {
+  if (behaviour !== 'occupies' || body) return null;
+  const d = +depth, bw = +w, bh = +h;
+  if (!(d > 0) || !(bw > 0) || !(bh > 0)) return null;
+  return {w: bw, h: bh, depth: d};
+}
+
 // THE MEASURING TOOLS FOR ONE PARSED FACE, shared between the build and the
 // lamp animator. Both need the same answers - where a node sits in face mm,
 // how far off the face it starts, which part owns it, and how to render it
@@ -1260,6 +1276,11 @@ export async function extractRelief(url, scope) {
   // A CARD'S OPTICS ARE NOT THE CARD'S ART: each is a FRU of its own
   // (bodyRole), so the card's plane is cut without them.
   const OWN_FRU = '[data-behaviour="occupies"][data-ref]';
+  const bodyFill = el => {
+    const n = el.id && el.querySelector(`[id="${CSS.escape(el.id)}--body"]`);
+    const f = n ? getComputedStyle(n).fill : '';
+    return f && f !== 'none' && !f.startsWith('url(') ? f : null;
+  };
   for (const el of q(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
     const full = el.dataset.path || '';
@@ -1296,6 +1317,13 @@ export async function extractRelief(url, scope) {
     const within = role.nested ? [el.dataset.for, full.split('/')[0]] : null;
     const hide = el.querySelector(OWN_FRU) ? OWN_FRU : null;
     frus.push({path, ref: el.dataset.ref.split(':')[0], within,
+               // an optic's own depth, for opticBody (on anything else
+               // `data-depth` is a cavity's and is not read here)
+               behaviour: el.dataset.behaviour || null,
+               depth: el.dataset.behaviour === 'occupies' ? +el.dataset.depth || null : null,
+               // and its colour: the fill of its skin's own `<name>--body` node,
+               // as painted (computed, so a class or a state is honoured)
+               bodyColor: el.dataset.behaviour === 'occupies' ? bodyFill(el) : null,
                cls: el.dataset.class, lift: liftOf(el), shelf,
                bodyDepth: +el.dataset.bodyDepth || null, ...frect,
                // its own art, so the plane can be cut to the module's SHAPE
@@ -1992,6 +2020,11 @@ export async function buildFaceRelief(F, ctx) {
       // masked by the module's own art, exactly as a cavity's punch is: what
       // the module paints comes with it, and what it does not stays.
       const mask = await rasterize(f.svgText, f.w, f.h, PX);
+      // a seated optic with no `body:` gets one (opticBody, built below)
+      const ob = opticBody({behaviour: f.behaviour, body: FRU_META[f.path].body,
+                            depth: f.depth, w: f.w, h: f.h});
+      const opticMat = ob
+        ? new THREE.MeshLambertMaterial({color: f.bodyColor || dominantColor(mask)}) : null;
       const mctx = faceCrop.getContext('2d');
       mctx.globalCompositeOperation = 'destination-in';
       mctx.drawImage(mask, 0, 0, faceCrop.width, faceCrop.height);
@@ -2025,6 +2058,7 @@ export async function buildFaceRelief(F, ctx) {
           x2.globalCompositeOperation = 'source-over';
         }
         remap(plane.material, c2);
+        if (opticMat && !f.bodyColor) recolourBody(true, [opticMat], c2);
       });
       // CLEAR, never fill: an opaque patch on the chassis face would occlude
       // everything behind it (the module's own cavities, pins, bay interior)
@@ -2035,6 +2069,15 @@ export async function buildFaceRelief(F, ctx) {
       pctx.globalCompositeOperation = 'source-over';
       facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: f.x, y: f.y, w: f.w, h: f.h});
       const meta = FRU_META[f.path];
+      // A SEATED OPTIC WITH NO `body:` (opticBody): one box behind its face, in
+      // its body node's fill; an optic whose skin names no body node is
+      // coloured as a derived relief side is, the dominant colour of its art.
+      if (ob) {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(ob.w, ob.h, ob.depth), opticMat);
+        m.position.set(LX(f.x, f.w), LY(f.y, f.h), zf - ob.depth / 2 - 0.05);
+        m.userData.portrayalPath = f.path;
+        fg.add(m);
+      }
       if (meta.body && meta.body.boxes) {
         // THE BODY IN PIECES, each a plain box in the FRU's group so the
         // riser's PCB and connectors come out with its plate. Side art is

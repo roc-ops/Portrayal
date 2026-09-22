@@ -49,3 +49,16 @@ def test_a_modules_own_parts_and_nested_modules_ride_with_the_carrier(out):
 
 def test_no_path_no_role(out):
     assert out["empty"] is None and out["nul"] is None
+
+
+def test_a_seated_optic_without_a_body_block_gets_one_box_its_own_depth(out):
+    b = out["body"]
+    assert b["sfp"] == {"w": 8.55, "h": 13.55, "depth": 47.5}
+    assert b["qsfp"] == {"w": 18.35, "h": 8.5, "depth": 52.4}
+    assert b["qsfpdd"] == {"w": 18.35, "h": 8.5, "depth": 58.26}
+
+
+def test_nothing_that_is_not_a_body_less_optic_gets_one(out):
+    b = out["body"]
+    for k in ("declared", "module", "legacy", "noDepth", "zeroSize", "nothing"):
+        assert b[k] is None, k

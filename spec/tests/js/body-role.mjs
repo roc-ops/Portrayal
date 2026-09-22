@@ -2,7 +2,7 @@
 // decision kit/relief.js's extractRelief makes for every fills/occupies
 // instance, factored out as `bodyRole` so it can be held here (#484).
 globalThis.location = { search: '' };
-const {bodyRole} = await import('../../../kit/relief.js');
+const {bodyRole, opticBody} = await import('../../../kit/relief.js');
 const cases = {
   deviceOptic: ['port-4-occupant', 'occupies'],
   deviceChained: ['port-5-occupant-occupant', 'occupies'],
@@ -16,5 +16,18 @@ const cases = {
   empty: ['', 'occupies'],
   nul: [null, 'fills'],
 };
-console.log(JSON.stringify(Object.fromEntries(
-  Object.entries(cases).map(([k, [p, b]]) => [k, bodyRole(p, b)]))));
+const out = Object.fromEntries(Object.entries(cases).map(([k, [p, b]]) => [k, bodyRole(p, b)]));
+// the body a seated optic with no `body:` block gets: its face outline, run
+// back to its own depth (the skin root's data-depth, the contract's size.d)
+out.body = {
+  sfp: opticBody({behaviour: 'occupies', body: null, depth: 47.5, w: 8.55, h: 13.55}),
+  qsfp: opticBody({behaviour: 'occupies', body: null, depth: 52.4, w: 18.35, h: 8.5}),
+  qsfpdd: opticBody({behaviour: 'occupies', body: null, depth: 58.26, w: 18.35, h: 8.5}),
+  declared: opticBody({behaviour: 'occupies', body: {depth: 70}, depth: 47.5, w: 8, h: 13}),
+  module: opticBody({behaviour: 'fills', body: null, depth: 60, w: 30, h: 300}),
+  legacy: opticBody({behaviour: null, body: null, depth: 60, w: 30, h: 300}),
+  noDepth: opticBody({behaviour: 'occupies', body: null, depth: null, w: 8, h: 13}),
+  zeroSize: opticBody({behaviour: 'occupies', body: null, depth: 47.5, w: 0, h: 13}),
+  nothing: opticBody(),
+};
+console.log(JSON.stringify(out));
