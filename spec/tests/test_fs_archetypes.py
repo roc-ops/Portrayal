@@ -214,10 +214,10 @@ MTP24 = "fs/fhd-1mtp24-lc-os2-a/v1"
 def test_the_library_has_an_mpo_wider_than_twelve():
     """`common/mpo-adapter@1` is 12 positions and the catalogue needs 8, 12, 16
     and 24 across 48 modules. This is the first part that needs another."""
-    a = contract("common/mpo24-adapter/v1")
-    assert a is not None, "common/mpo24-adapter@1 not built"
+    a = contract("common/mpo24-flange-adapter/v1")
+    assert a is not None, "common/mpo24-flange-adapter@1 not built"
     assert a["optical"]["positions"] == 24
-    twelve = contract("common/mpo-adapter/v1")
+    twelve = contract("common/mpo-flange-adapter/v1")
     assert twelve["optical"]["positions"] == 12, "the 12 must stay a 12"
 
 

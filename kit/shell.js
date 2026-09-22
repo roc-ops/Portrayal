@@ -16,7 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
-import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decodeSwaps,
+import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
          freshBaysUnder } from './swap.js';
@@ -1163,6 +1163,15 @@ export function createShell(opts = {}) {
       const cage = Object.prototype.hasOwnProperty.call(state.cfgOccupants, key);
       await seat(key, cage ? state.cfgOccupants[key] : state.cfgBays[key]);
     }
+    // A SWAPPED BAY SEEN FROM BEHIND. This face may have no bays and still
+    // show one: a rear hole names the front bay whose module's back it holds
+    // (render.py's `rear:`). `seat` looks for the bay on this face and so never
+    // reaches it; the swapped bays are re-seated through the hole instead.
+    if (svg !== state.svg || gen !== state.cfgGen || !svg?.querySelector('[data-rear-of]')) return;
+    const rear = {};
+    for (const key of state.touched)
+      if (Object.prototype.hasOwnProperty.call(state.cfgBays, key)) rear[key] = state.cfgBays[key];
+    if (Object.keys(rear).length) await applyRearOverrides(svg, rear, loadSkin, compByRef);
   }
 
   // THE SWAPS A RELOAD CARRIES (the explorer's `swap=`), taken into the state

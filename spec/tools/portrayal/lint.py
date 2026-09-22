@@ -213,7 +213,7 @@ RULES = {
     "L69": ("device",     "a cooling group with more than one bay says how many fans it can lose", "add `attrs.redundancy` (e.g. `n+1`) and a note"),
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it"),
     "L71": ("component",  "a body box reaches no further than the part says it is deep", "shrink the body box or raise `body.depth`"),
-    "L72": ("device",     "a bay's `plan:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates"),
+    "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates"),
     "L73": ("component",  "a field prints somewhere, and what prints is a field", "add a `data-from` text node for each field, or remove the field"),
     "L74": ("component",  "a lamp that declares states is painted from the lamp-colour variable", "fill or stroke the lamp node with `var(--led-color, <off colour>)`, not a literal colour"),
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description"),
@@ -3663,7 +3663,7 @@ def _is_class(placement, cls, lib_roots):
     return bool(cp) and (load_yaml(cp) or {}).get("class") == cls
 
 
-def lint_device_cutouts(path, view_name, view, lib_roots):
+def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
     """L39: the panel's holes must agree with what goes in them.
 
     Cutouts became real data so that a whole class of error could be checked
@@ -3810,8 +3810,11 @@ def lint_device_cutouts(path, view_name, view, lib_roots):
     #    A warning: it reports work not done rather than work done wrongly, and
     #    what belongs in a given hole is a modelling question with a source
     #    behind it, not something a linter can decide.
+    #    A BAY ON ANOTHER FACE CAN FILL ONE. An open back is a hole whose
+    #    contents are seated from the front - a bay's `rear:` names the cutout
+    #    it is seen through - so `seen_through` counts as filled.
     filled = {q.get("id") for q in placements} | {
-        b.get("id") for b in view_parts(view)["bays"]}
+        b.get("id") for b in view_parts(view)["bays"]} | set(seen_through)
     for cid, cb in boxes.items():
         if cid in filled:
             continue
@@ -7075,7 +7078,11 @@ def lint_device(path, validator, lib_roots):
                                  f"(manufacturing order), not {' > '.join(k for k in keys if k in order)}")
         lint_device_mating(path, vname, view, lib_roots)
         lint_device_overlap(path, vname, view, lib_roots)
-        lint_device_cutouts(path, vname, view, lib_roots)
+        through = {(b.get("rear") or {}).get("cutout")
+                   for ov in (data.get("views") or {}).values()
+                   for b in view_parts(ov)["bays"]
+                   if (b.get("rear") or {}).get("view") == vname}
+        lint_device_cutouts(path, vname, view, lib_roots, through - {None})
         lint_device_decor(path, vname, view, lib_roots)
         vp = view_parts(view)
         seen = set()
@@ -7640,8 +7647,9 @@ FIT_TOL = 0.05          # a rounding difference is not a misfit
 
 
 def lint_device_plan(path, data, lib_roots):
-    """L72: a bay's `plan:` lands in a view that exists, in a well that is
-    there, and its occupants have a plan to land.
+    """L72: a bay's `plan:` or `rear:` lands in a view that exists, in a well
+    (or, for `rear:`, a cutout with a depth) that is there, and its occupants
+    have that face to land.
 
     The projection is drawn from what the bay's occupants declare, so a bay
     that says `plan:` while none of what it accepts carries `plan.ref` draws
@@ -7649,8 +7657,8 @@ def lint_device_plan(path, data, lib_roots):
     """
     views = data.get("views") or {}
     for vname, view in views.items():
-        for b in view_parts(view)["bays"]:
-            pl = b.get("plan")
+        for b, face in ((b, f) for b in view_parts(view)["bays"] for f in ("plan", "rear")):
+            pl = b.get(face)
             if not pl:
                 continue
             tv = views.get(pl.get("view"))
@@ -7660,6 +7668,17 @@ def lint_device_plan(path, data, lib_roots):
                 continue
             tp = view_parts(tv)
             there = {q.get("id") for q in (*tp["placements"], *tp["bays"])}
+            # A REAR PROJECTION IS SEEN THROUGH A HOLE, and a hole with no depth
+            # is only paint: render.py refuses it, so say so here first.
+            if face == "rear":
+                cuts = {c.get("id"): c for c in ((tv.get("panel") or {}).get("cutouts") or [])}
+                cut = cuts.get(pl.get("cutout"))
+                if cut is None:
+                    err(path, "L72", f"{vname}: {b['id']} is seen from behind through cutout "
+                                     f"{pl.get('cutout')!r}, which is not in {pl['view']}")
+                elif not cut.get("depth"):
+                    err(path, "L72", f"{vname}: {b['id']} is seen through cutout {cut['id']}, "
+                                     "which has no `depth` - a painted hole cannot show a back set in")
             if pl.get("in") and pl["in"] not in there:
                 err(path, "L72", f"{vname}: {b['id']} projects `in:` {pl['in']}, which is "
                                  f"not in {pl['view']}")
@@ -7671,14 +7690,14 @@ def lint_device_plan(path, data, lib_roots):
             for ref in (b.get("accepts") or []):
                 cp = resolve_component(ref, lib_roots)
                 c = (load_yaml(cp) or {}) if cp else {}
-                pref = face_ref(c, "plan")
+                pref = face_ref(c, face)
                 if pref:
                     if not resolve_component(pref, lib_roots):
-                        err(path, "L72", f"{vname}: {ref} names plan {pref}, which is not in the library")
+                        err(path, "L72", f"{vname}: {ref} names {face} {pref}, which is not in the library")
                     have.append(ref)
             if not have:
                 warn(path, "L72", f"{vname}: {b['id']} projects into {pl['view']} but none of "
-                                  f"what it accepts carries `plan.ref` - nothing will be drawn")
+                                  f"what it accepts carries `faces.{face}` - nothing will be drawn")
 
 
 def lint_device_bay_fit(path, data, lib_roots):

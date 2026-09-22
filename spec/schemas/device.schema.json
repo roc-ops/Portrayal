@@ -792,6 +792,15 @@
            "type": "number",
            "description": "corner radius for rect"
           },
+          "depth": {
+           "type": "number",
+           "exclusiveMinimum": 0,
+           "description": "mm the hole runs into the chassis. Without it a cutout is painted dark and nothing more; with it the 3D kit builds a recess this deep and lays whatever is drawn inside the hole on its floor. A cutout a bay's `rear:` names is a PASSAGE instead: walls only, no floor, so the module's own body stands in it and an empty slot is open through to the front."
+          },
+          "wall": {
+           "type": "string",
+           "description": "colour of the recess walls, with `depth`"
+          },
           "empty": {
            "type": "boolean",
            "description": "a hole with deliberately nothing in it (a blanked-off option). Without this, a cutout no placement sits in is a lint finding"
@@ -1017,6 +1026,27 @@
             },
             "mirror": {
              "type": "boolean"
+            }
+           }
+          },
+          "rear": {
+           "type": "object",
+           "additionalProperties": false,
+           "required": [
+            "view",
+            "at",
+            "cutout"
+           ],
+           "description": "WHERE THIS BAY'S OCCUPANT IS SEEN FROM BEHIND, through an open back. The occupant's contract names what draws its back (`faces.rear`); this says which view that lands in, where - its top-left in that view's mm - and which of that view's panel `cutouts` it is seen through. The projection is drawn INSIDE the cutout for the 2D rear; in 3D the cutout is a passage and the module's own body, its back painted with the same face, stands in it at its real depth. Like `plan:`, the result is a PROJECTION: `data-of`, no data-path, and nothing built from it. The cutout must declare a `depth` (L72).",
+           "properties": {
+            "view": {
+             "type": "string"
+            },
+            "at": {
+             "$ref": "#/$defs/xy"
+            },
+            "cutout": {
+             "$ref": "#/$defs/segment"
             }
            }
           },

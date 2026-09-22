@@ -173,13 +173,13 @@ def test_the_cassette_names_the_render_it_was_measured_from():
 def test_the_cassette_has_a_rear_face():
     c = contract(CASSETTE)
     assert ((c.get("faces") or {}).get("rear") or {}).get("ref") == \
-        "fs/fhd-1mtp6lcd-rear@1"
+        "fs/fhd-1mtp6lcd-rear@2"
 
 
 def test_the_rear_face_carries_one_mtp():
-    c = contract("fs/fhd-1mtp6lcd-rear/v1")
-    assert c is not None, "fs/fhd-1mtp6lcd-rear@1 not built"
-    mtps = [p for p in c["parts"] if p["ref"] == "common/mpo-adapter@1"]
+    c = contract("fs/fhd-1mtp6lcd-rear/v2")
+    assert c is not None, "fs/fhd-1mtp6lcd-rear@2 not built"
+    mtps = [p for p in c["parts"] if p["ref"] == "common/mpo-flange-adapter@1"]
     assert len(mtps) == 1, [p["ref"] for p in c["parts"]]
 
 
@@ -189,7 +189,7 @@ def test_the_rear_face_admits_it_was_never_measured():
     An estimate that does not say it is one is the failure this whole library is
     built to avoid, and a rear face is where it would be easiest to hide.
     """
-    c = contract("fs/fhd-1mtp6lcd-rear/v1")
+    c = contract("fs/fhd-1mtp6lcd-rear/v2")
     sc = c.get("size-confidence") or {}
     assert sc.get("w") == "estimated" and sc.get("h") == "estimated"
     assert "3.77" in (c.get("size-notes") or ""), \
@@ -289,19 +289,17 @@ def test_the_registry_centres_are_the_contracts_centres():
 
 
 def test_the_rear_mtp_is_where_its_provenance_says_it_is():
-    """The provenance says centred; centred is what the placement must be.
+    """The provenance says 18 mm from the left; that is where the placement puts it.
 
-    It used to say the adapter sits slightly below the vertical centre while
-    placing it exactly on both axes - and since every number on that face is an
-    estimate awaiting a face-on photograph, the provenance is the only record
-    of what was intended.
+    v1 centred the adapter and said centring was a choice. The rear render is
+    shot from above, which foreshortens the height but not the width, and
+    across the width the adapter sits well left of the middle. The x is the
+    reading; the y is still a proportion of an estimated face.
     """
-    rear = contract("fs/fhd-1mtp6lcd-rear/v1")
+    rear = contract("fs/fhd-1mtp6lcd-rear/v2")
     mtp = next(p for p in rear["parts"] if p["id"] == "mtp")
-    adapter = contract("common/mpo-adapter/v1")
+    adapter = contract("common/mpo-flange-adapter/v1")
     cx = float(mtp["at"][0]) + adapter["size"]["w"] / 2
-    cy = float(mtp["at"][1]) + adapter["size"]["h"] / 2
-    assert (round(cx, 3), round(cy, 3)) == (round(rear["size"]["w"] / 2, 3),
-                                            round(rear["size"]["h"] / 2, 3)), \
-        f"provenance says centred, placement puts it at ({cx}, {cy})"
-    assert "CENTRED" in rear["provenance"]["parts"]
+    assert round(cx, 1) == 18.0, f"the MTP's centre is at x {cx}, not 18.0"
+    assert cx < rear["size"]["w"] / 3, "the MTP sits in the left third of the face"
+    assert "18 mm from the body's left" in " ".join(rear["provenance"]["parts"].split())

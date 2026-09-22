@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-660 component majors in 13 namespaces.
+661 component majors in 13 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -33,7 +33,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 12 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 5 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
 | `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 0 | Micro-USB Type-B receptacle, as used for a console port |
-| `std/mpo@1` | component | port | 7.8 × 5.6 × 9 | mpo-adapter | 0 | 3 | One MPO/MTP adapter opening in a panel - the aperture, not the adapter |
+| `std/mpo@1` | component | port | 7.8 × 5.6 × 9 | mpo-adapter | 0 | 4 | One MPO/MTP adapter opening in a panel - the aperture, not the adapter |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 0 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
@@ -54,7 +54,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (79)
+## common/ (80)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -92,8 +92,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
-| `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 8 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
-| `common/mpo24-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 2 | Panel-mount MPO/MTP adapter carrying TWENTY-FOUR fibres in one ferrule - the same shell common/mpo-adapter@1 … |
+| `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 6 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
+| `common/mpo-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 2 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
+| `common/mpo24-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 2 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 0 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
 | `common/pcie-card-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 9 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 6 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
@@ -122,7 +123,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 53 | 21 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@2` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 2 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
-| `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 57 | 6 | Generic countersunk screw head (decorative fastener) |
+| `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 57 | 8 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 0 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 3 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
 | `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 1 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
@@ -472,11 +473,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `fs/fhd-1mtp12-sc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A polarity |
-| `fs/fhd-1mtp12-sc-rear@1` | component | cassette | 99 × 31 × 2 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |
+| `fs/fhd-1mtp12-sc-rear@2` | component | cassette | 99 × 31 × 2 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-1mtp24-lc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1X24MTPLCOS2A - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
-| `fs/fhd-1mtp24-lc-rear@1` | component | cassette | 99 × 31 × 2 |  | 0 | 1 | The back of FS FHD-1X24MTPLCOS2A (SKU 57023): the cassette body seen from behind, carrying its single MTP-24 … |
+| `fs/fhd-1mtp24-lc-rear@2` | component | cassette | 99 × 31 × 2 |  | 0 | 1 | The back of FS FHD-1X24MTPLCOS2A (SKU 57023): the cassette body seen from behind, carrying its single MTP-24 … |
 | `fs/fhd-1mtp6lcd-os2-a@1` | module | cassette | 108.97 × 35.05 × 110.24 |  | 1 | 3 | FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A polarity |
-| `fs/fhd-1mtp6lcd-rear@1` | component | cassette | 99 × 31 × 2 |  | 0 | 2 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
+| `fs/fhd-1mtp6lcd-rear@2` | component | cassette | 99 × 31 × 2 |  | 0 | 2 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-2mtp12-lc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-2X12MTPLCOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
 | `fs/fhd-2mtp12-lc-rear@1` | component | cassette | 99 × 31 × 2 |  | 0 | 1 | The back of FS FHD-2X12MTPLCOS2A (SKU 57341): the cassette body seen from behind, carrying its two MTP-12 tru… |
 | `fs/fhd-splice-12-lc@1` | module | cassette | 108.97 × 35.05 × 110.24 |  | 1 | 0 | FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers |

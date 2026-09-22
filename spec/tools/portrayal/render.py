@@ -1613,12 +1613,23 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # from it. The occupants of the occupant's own bays come along at the
     # offsets those bays declare, lowest slot first so the top card paints
     # last. A mirrored plan mirrors the offsets about the plan's own width.
+    #
+    # `rear:` IS THE SAME PROJECTION FROM THE OTHER END. A drawer whose back is
+    # open shows the backs of the cassettes it holds; the occupant's contract
+    # names what draws its back (`faces.rear`), and the bay says where that
+    # lands in the rear view and which panel `cutout` it is seen through. The
+    # projection is drawn INSIDE that cutout, for the 2D rear. In 3D the cutout
+    # is a passage the length of the chassis and the module's own body - its
+    # back painted with this same face - stands in it at its real depth, so
+    # nothing is built from the projection. No slots of slots: nothing seated
+    # in a cassette has a back of its own to show.
     cfg_bays = config.get("bays") or {}
     for other_name, other in (device.get("views") or {}).items():
         if other_name == view_name:
             continue
-        for b in view_parts(other)["bays"]:
-            pl = b.get("plan")
+        for b, direction in ((b, d) for b in view_parts(other)["bays"]
+                             for d in ("plan", "rear")):
+            pl = b.get(direction)
             if not pl or pl.get("view") != view_name:
                 continue
             if b.get("only-in") and config_name not in b["only-in"]:
@@ -1627,8 +1638,14 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if not occ:
                 continue
             oc, _ = lib.resolve(occ)
-            pref = face_ref(oc or {}, "plan")
+            pref = face_ref(oc or {}, direction)
             if not pref:
+                continue
+            if direction == "rear":
+                parts["placements"].append({
+                    "ref": pref, "id": f"{b['id']}-rear", "at": list(pl["at"]),
+                    "projection-of": f"{b['id']}/module",
+                    "cutout": pl["cutout"]})
                 continue
             pc, _ = lib.resolve(pref)
             pw = float((pc.get("size") or {}).get("w") or 0)
@@ -1939,10 +1956,36 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 e.set("width", f"{cw_:g}"); e.set("height", f"{ch_:g}")
                 if c.get("rx") is not None:
                     e.set("rx", f"{c['rx']:g}")
+            e.set("fill", "#101214")
+            if c.get("depth"):
+                # A HOLE WITH A BACK TO IT. The kit builds a `data-depth` group
+                # as a recess and lays the group's own art on its floor, so the
+                # rect becomes the group's `hole` - the mouth the face texture
+                # punches - and anything later drawn INTO the group (a rear
+                # projection) is what the recess shows at its far end.
+                hole = e
+                cut_g.remove(hole)
+                e = ET.SubElement(cut_g, f"{{{SVG_NS}}}g")
+                e.set("data-depth", f"{float(c['depth']):g}")
+                e.set("data-cavity", "hole")
+                # WHAT THE KIT NEEDS TO RE-SEAT IT. A runtime swap changes the
+                # front bay and nothing else, so a hole a bay is seen through
+                # says which bay and where its projection goes - what a swap
+                # needs to redraw the back it shows in 2D.
+                rear_of = next(((b["id"], b["rear"]["at"])
+                                for ov in (device.get("views") or {}).values()
+                                for b in view_parts(ov)["bays"]
+                                if (b.get("rear") or {}).get("view") == view_name
+                                and b["rear"].get("cutout") == c["id"]), None)
+                if rear_of:
+                    e.set("data-rear-of", rear_of[0])
+                    e.set("data-rear-at", f"{rear_of[1][0]:g},{rear_of[1][1]:g}")
+                e.set("data-wall", c.get("wall") or "#2a2d31")
+                hole.set("id", f"cutout--{c['id']}--hole")
+                e.append(hole)
             e.set("id", f"cutout--{c['id']}")
             e.set("data-path", f"cutout:{c['id']}")
             e.set("data-class", "cutout")
-            e.set("fill", "#101214")
 
     # SILKSCREEN. On the real part the panel is punched, the silkscreen is printed
     # onto it, and only then are the modules installed - so chassis silkscreen paints
@@ -2479,6 +2522,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if depths:
                 opening.set("data-depth", f"{max(depths):g}")
                 opening.set("data-wall", "#2a2e31")
+        # A BAY WITH AN OPEN BACK IS A PASSAGE, NOT A POCKET. When the bay is
+        # seen from behind (`rear:`), the rear-panel hole it names runs the
+        # length of the chassis with walls of its own, so a pocket here - walls,
+        # a dark floor, a back - would close the passage at the front: an empty
+        # slot read as a black rectangle instead of daylight at the far end, and
+        # a pulled module left the same dark box behind. The kit punches this
+        # opening and builds nothing else for it.
+        if b.get("rear"):
+            bay_g.set("data-open-back", "1")
+            opening.set("data-see-through", "1")
+            # occupied or not: a pulled module must leave the same mouth an
+            # empty build does, so the collar is there to meet the passage
+            if opening.get("data-depth") is None:
+                opening.set("data-depth", f"{occupant_depth(b):g}")
+                opening.set("data-wall", "#2a2e31")
         if default:
             # THE BAY'S CENTRE, and nothing else. instance_group hangs the
             # occupant by its own middle, so there is no origin to solve for and
@@ -2566,6 +2624,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     for p in ordered:
         if p["id"] in deferred_ids:
             draw_placement(p)
+
+    # A REAR PROJECTION GOES INTO THE HOLE IT IS SEEN THROUGH (see `rear:`).
+    for p in parts["placements"]:
+        if not p.get("cutout"):
+            continue
+        g = next((n for n in svg if n.get("id") == p["id"]), None)
+        cg = svg.find(f".//*[@id='cutout--{p['cutout']}']")
+        if g is None or cg is None:
+            raise ValueError(f"{p['id']}: rear projection names cutout "
+                             f"{p['cutout']!r}, which is not in this view")
+        if cg.get("data-depth") is None:
+            raise ValueError(f"{p['id']}: cutout {p['cutout']!r} has no `depth`, "
+                             "so it is a painted hole and cannot show a back set in")
+        svg.remove(g)
+        cg.append(g)
 
     if palette or inst_palette:
         kf_name = seq_css_name

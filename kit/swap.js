@@ -150,6 +150,61 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
   return wrap;
 }
 
+// A BAY SEEN FROM BEHIND. render.py draws a seated module's back (`faces.rear`)
+// inside the rear-panel hole its bay names, as a projection, and deepens the
+// hole to the back of that module. A swap changes the front bay only - there is
+// no bay on the rear face for applyOverrides to find - so without this the rear
+// kept showing the module the BUILD seated: a 24-fibre cassette swapped in still
+// showed a 1-12 MTP from behind.
+//
+// The hole carries what a swap needs (`data-rear-of`, `data-rear-at`); the new
+// module's rear face comes from its components.json entry. Built the way
+// render.py builds a projection: `data-of` in place of `data-path`, and nothing
+// the kit would extract as relief. In 3D the back is the module body's own.
+export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef) {
+  let applied = 0;
+  const NSX = 'http://www.w3.org/2000/svg';
+  for (const hole of rootEl.querySelectorAll('[data-rear-of]')) {
+    const bayId = hole.getAttribute('data-rear-of');
+    if (!Object.prototype.hasOwnProperty.call(overrides, bayId)) continue;
+    const ref = overrides[bayId];
+    const comp = ref ? compByRef(ref) : null;
+    const rearRef = comp?.faces?.rear || null;
+    const loaded = rearRef ? await loadSkin(rearRef) : null;
+    for (const old of hole.querySelectorAll(':scope > [data-projection]')) old.remove();
+    applied++;
+    if (!loaded) continue;            // emptied, or a module with no back to show
+    const doc = new DOMParser().parseFromString(loaded.text, 'image/svg+xml');
+    const [x, y] = hole.getAttribute('data-rear-at').split(',').map(Number);
+    const wrap = rootEl.ownerDocument.createElementNS(NSX, 'g');
+    wrap.setAttribute('id', `${bayId}-rear`);
+    wrap.setAttribute('transform', `translate(${x},${y})`);
+    wrap.setAttribute('data-projection', '1');
+    wrap.setAttribute('data-of', `${bayId}/module`);
+    const name = loaded.comp.name;
+    const root = doc.getElementById(name);
+    for (const n of [...doc.documentElement.childNodes])
+      (n === root ? [...n.childNodes] : [n])
+        .forEach(k => wrap.appendChild(rootEl.ownerDocument.importNode(k, true)));
+    for (const el of wrap.querySelectorAll('*')) {
+      const id = el.getAttribute('id');
+      if (id && id.startsWith(name + '--')) el.setAttribute('id', `${bayId}-rear--${id.slice(name.length + 2)}`);
+      const dp = el.getAttribute('data-path');
+      if (dp != null) {
+        el.setAttribute('data-of', `${bayId}/module` + (dp.startsWith(name + '/') ? dp.slice(name.length) : ''));
+        el.removeAttribute('data-path');
+      }
+      for (const a of [...el.attributes])
+        if (a.name.startsWith('data-z-') || a.name.startsWith('data-cp')
+            || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
+                'data-vent', 'data-groove'].includes(a.name))
+          el.removeAttribute(a.name);
+    }
+    hole.appendChild(wrap);
+  }
+  return applied;
+}
+
 // SEATING AN OPTIC IN A CAGE is the other half of this module, and it is NOT
 // seatModule with a different argument.
 //
