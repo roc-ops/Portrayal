@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ppm-ad1-1510
-version: 1.1.0
+version: 1.2.0
 class: filter
 behaviour: fills
 profile: optical
@@ -44,7 +44,7 @@ provenance:
   port-positions: >-
     stencil master, scaled on the 55.4 width. Duplex centres at 12.17, 29.10 and
     42.30. The measured spacing between the EDFA and Line pairs is 12.74 and they
-    abut in the drawing, so they are placed at common/lc-duplex-adapter@3's own
+    abut in the drawing, so they are placed at common/lc-duplex-adapter@4's own
     13.2 abutting pitch rather than at the 3.5%-short figure the render gives.
   marking: >-
     stencil master - the part number is silkscreened VERTICALLY UP THE RIGHT-HAND
@@ -56,7 +56,7 @@ provenance:
     ds-ppm-r4.0 and DCP-F UM s4.7.1 agree the part is named 1510 and operates at
     1511nm. Both numbers are the vendor's; the attr carries the operating wavelength.
   bores: >-
-    via common/lc-duplex-adapter@3, itself measured off the Smartoptics DCP-R stencil -
+    via common/lc-duplex-adapter@4, itself measured off the Smartoptics DCP-R stencil -
     the same vendor's drawing of the same connector, which is why it is preferred here
     over a generic.
   face-layout: >-
@@ -84,9 +84,9 @@ elements:
   caption-edfa: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
   caption-line: {at: [35.70, 16.2], size: [13.2, 2.05], class: marking}
 parts:
-  - {ref: common/lc-duplex-adapter@3, id: osc, at: [5.57, 4.0], attrs: {role: osc}}
-  - {ref: common/lc-duplex-adapter@3, id: edfa, at: [22.50, 4.0], attrs: {role: edfa}}
-  - {ref: common/lc-duplex-adapter@3, id: line, at: [35.70, 4.0], attrs: {role: line}}
+  - {ref: common/lc-duplex-adapter@4, id: osc, at: [5.57, 4.0], attrs: {role: osc}}
+  - {ref: common/lc-duplex-adapter@4, id: edfa, at: [22.50, 4.0], attrs: {role: edfa}}
+  - {ref: common/lc-duplex-adapter@4, id: line, at: [35.70, 4.0], attrs: {role: line}}
 relief:
   wall: '#22262a'
   features:

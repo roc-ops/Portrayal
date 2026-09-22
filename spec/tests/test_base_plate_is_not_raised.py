@@ -59,7 +59,7 @@ def test_the_base_plate_is_drawn_first(fname, plate):
     assert want, f"{fname}: no element ending --{plate}; ids were {ids}"
     at = ids.index(want[0])
     # A COMPOSED PART PLACED `behind: true` IS DRAWN BEFORE THE PLATE ON
-    # PURPOSE, and shows through a hole cut in it: lc-duplex-adapter@3 puts its
+    # PURPOSE, and shows through a hole cut in it: lc-duplex-adapter@4 puts its
     # bores there so the dust caps paint over them. That is the one thing
     # allowed ahead of the plate - a composed part (it carries data-ref) under
     # a plate that has holes (evenodd) to show it through. Anything else there
