@@ -1373,8 +1373,10 @@ export function createShell(opts = {}) {
   // (components.json `fields`) and its skin is wired to - `data-from` for text,
   // `data-fill-from` / `data-stroke-from` for colour - and the value lands on the
   // group as `data-<key>`. `setFields('psu-1/module', {watts: '750W'})`; an empty
-  // value hides a text node and puts a colour back to what was drawn; null
-  // clears the part's fields and its colours with them. The rule is fields.js's,
+  // value hides a text node and puts a colour back to what was drawn. null drops
+  // the part from cfgFields and restores its COLOURS as drawn; its text keeps the
+  // last value written, here and in 3D alike (nothing stashes drawn text - a gap
+  // that predates the colour rule). The rule is fields.js's,
   // shared with the 3D side; the host mirrors the same map into the 3D viewer's
   // setFields.
   function setFields(path, vals) {

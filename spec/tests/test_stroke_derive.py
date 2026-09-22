@@ -98,6 +98,19 @@ def test_the_build_derives_from_the_drawn_default_when_unset():
         assert (n.get("fill"), n.get("stroke")) == ("#6f6f6f", "#444444"), attrs
 
 
+def test_a_blank_colour_is_an_empty_one():
+    """A whitespace-only value used to paint fill="" - an invisible node - where
+    the runtime trims it and leaves the drawing. One rule for both."""
+    root = ET.Element("g")
+    a = ET.SubElement(root, "rect", {"fill": "#6f6f6f", "stroke": "#8c1f1f",
+                                     "data-fill-from": "c", "data-stroke-from": "c"})
+    b = ET.SubElement(root, "rect", {"fill": "#6f6f6f", "stroke": "#20406f",
+                                     "data-stroke-derive": "c"})
+    fill_from_attrs(root, {"c": "   "})
+    assert (a.get("fill"), a.get("stroke")) == ("#6f6f6f", "#8c1f1f")
+    assert b.get("stroke") == "#444444", "a blank value must derive from the drawn default"
+
+
 def test_a_colour_with_no_shade_leaves_the_stroke():
     root, n = _node("#123456")
     fill_from_attrs(root, {"latch-color": "red"})

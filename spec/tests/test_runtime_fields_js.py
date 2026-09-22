@@ -93,6 +93,33 @@ def test_an_inner_part_keeps_its_own_value(out):
     assert out["nested"] == ["#c22f2f", "#2255aa"]
 
 
+def test_a_repaint_recolours_a_derived_body(out):
+    """The bail is a `bar` tube with no face texture: its whole colour is the
+    material's, so a repaint that only redrew textures left it grey (#481)."""
+    assert out["recolour"] == "rgb(194,47,47)"
+    assert out["recolourSeen"] == ["rgb(194,47,47)"] * 2
+    assert out["recolourStated"] == [None, None], "a data-z-color was overridden"
+    assert out["recolourNone"] is None
+
+
+def test_the_repaint_path_recolours_and_every_body_material_is_collected():
+    """STATIC, because the geometry half needs WebGL: in buildFaceRelief's loop
+    over raised nodes, the repaint registered with `reg` calls recolourBody, and
+    no material is built from `o.color` except through bodyMat (or sideMats,
+    which is collected) - a new branch that built its own would never repaint."""
+    text = (ROOT / "kit/relief.js").read_text()
+    start = text.index("for (const o of outs) {")
+    end = text.index("for (const f of frus) {", start)
+    loop = text[start:end]
+    reg = loop[loop.index("reg(o.svgText,"):]
+    reg = reg[:reg.index("{mat: faceTex")]
+    assert "recolourBody(derived, bodyMats," in reg, "the repaint no longer recolours the body"
+    built = re.findall(r"MeshLambertMaterial\(\{\s*color:\s*o\.color[^}]*\}", loop)
+    assert built == ["MeshLambertMaterial({color: o.color, ...extra}"], (
+        f"a material is built from o.color outside bodyMat: {built}")
+    assert "bodyMats.push(...mats" in loop, "the box's side materials are not collected"
+
+
 def test_both_runtime_paths_use_the_one_rule():
     for name in ("shell.js", "relief.js"):
         text = (ROOT / "kit" / name).read_text()

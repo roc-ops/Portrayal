@@ -1302,6 +1302,19 @@ function dominantColor(cv) {
   return best === null ? 'rgb(128,128,128)' : exact.get(best);
 }
 
+// THE REPAINT HALF OF A DERIVED SIDE COLOUR (#481), on its own so it can be
+// checked without WebGL: when the art chose the colour (no `data-z-color`), every
+// material it went into takes the dominant colour of the repainted art. It runs
+// on EVERY restyle of the node, not only a field change - a lamp state or a pull
+// that changes the node's art moves its sides with it, which is the same reading
+// the build makes. Returns the colour set, or null when nothing was derived.
+export function recolourBody(derived, mats, cv) {
+  if (!derived || !mats || !mats.length) return null;
+  const c = dominantColor(cv);
+  for (const m of mats) m.color.set(c);
+  return c;
+}
+
 export async function rasterize(svgText, wmm, hmm, pxmm = PXMM, flipX = false, flipY = false) {
   const img = new Image();
   const blobUrl = URL.createObjectURL(new Blob([svgText], {type: 'image/svg+xml'}));
@@ -1667,10 +1680,7 @@ export async function buildFaceRelief(F, ctx) {
           async text => {
             const cvs = await rasterize(text, o.w, o.h, PX);
             // unpunched, as at build: `compose` below erases the seated cavities
-            if (derived && bodyMats.length) {
-              const c = dominantColor(cvs);
-              for (const m of bodyMats) m.color.set(c);
-            }
+            recolourBody(derived, bodyMats, cvs);
             remap(faceTex, await compose(cvs));
           },
           {mat: faceTex, w: o.w, h: o.h, path: o.owner});

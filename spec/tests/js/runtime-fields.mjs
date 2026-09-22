@@ -107,4 +107,19 @@ R.setNodeFields({'slot-1/module/port-2': {'latch-color': '#2255aa'},
 R.applyNodeFields(nested, scope);
 out.nested = [look(nested, 'handle').fill, look(nested, 'inner').fill];
 
+// ----------------------------------------------------------- the 3D side colour
+// recolourBody is the repaint half of a derived side colour. A canvas stub whose
+// pixels are all one colour stands in for the repainted raster.
+const canvasOf = (r, g, b) => ({width: 8, height: 8, getContext: () => ({
+  getImageData: () => ({data: Uint8ClampedArray.from({length: 8 * 8 * 4},
+    (_, i) => [r, g, b, 255][i % 4])})})});
+const mat = () => ({seen: null, color: {set(c) { this.owner.seen = c; }}});
+const mats = [mat(), mat()];
+for (const m of mats) m.color.owner = m;
+out.recolour = R.recolourBody(true, mats, canvasOf(194, 47, 47));
+out.recolourSeen = mats.map(m => m.seen);
+const kept = [mat()]; kept[0].color.owner = kept[0];
+out.recolourStated = [R.recolourBody(false, kept, canvasOf(194, 47, 47)), kept[0].seen];
+out.recolourNone = R.recolourBody(true, [], canvasOf(1, 2, 3));
+
 console.log(JSON.stringify(out));

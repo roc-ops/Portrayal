@@ -501,6 +501,13 @@ def fill_from_attrs(root, attrs):
     nothing.
     """
     parents = {c: p for p in root.iter() for c in p}
+
+    # A BLANK COLOUR IS AN EMPTY ONE. "  " is not in (None, ""), and stripping it
+    # used to paint fill="" - an invisible node, the one outcome the rule above
+    # exists to prevent. kit/fields.js trims before it asks, so the build does too.
+    def colour(key):
+        v = attrs.get(key)
+        return "" if v is None else str(v).strip()
     # the fill each colour field is DRAWN with, read before anything is painted:
     # a derived outline with no value set follows the drawing's own default
     drawn = {}
@@ -520,14 +527,13 @@ def fill_from_attrs(root, attrs):
         # and the hand-written literal cannot disagree.
         derive = node.get("data-stroke-derive")
         if derive is not None:
-            src = attrs.get(derive)
-            src = drawn.get(derive) if src in (None, "") else src
+            src = colour(derive) or drawn.get(derive)
             shade = stroke_shade(src)
             if shade:
                 node.set("stroke", shade)
         paint = node.get("data-fill-from")
-        if paint is not None and attrs.get(paint) not in (None, ""):
-            node.set("fill", str(attrs[paint]).strip())
+        if paint is not None and colour(paint):
+            node.set("fill", colour(paint))
         # AND THE OUTLINE WITH IT. A coloured part is not a fill on its own: every
         # red latch in this library is `fill="#c22f2f" stroke="#8c1f1f"`, and the
         # blue variant changed both. Converting those skins to an attr with only
@@ -535,8 +541,8 @@ def fill_from_attrs(root, attrs):
         # outline - a drawing nobody would have written by hand, arrived at by a
         # mechanism that could only say half of what the art said (#177).
         line = node.get("data-stroke-from")
-        if line is not None and attrs.get(line) not in (None, ""):
-            node.set("stroke", str(attrs[line]).strip())
+        if line is not None and colour(line):
+            node.set("stroke", colour(line))
         key = node.get("data-from")
         if key is None:
             continue
