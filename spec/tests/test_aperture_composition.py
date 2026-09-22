@@ -190,7 +190,9 @@ def test_a_pitch_only_standard_yields_no_aperture_from_the_registry():
     assert lint.STANDARDS["sc-duplex-adapter"].get("w") is None, \
         "this test is vacuous unless the entry really carries no envelope"
     lib = [str(SPEC.parent / "library")]
-    got = lint._aperture_of("common/sc-duplex-adapter@1", lib)
-    assert got == ((9.4, 12.0), (0.0, 0.0)), got
+    got = lint._aperture_of("common/sc-duplex-adapter@2", lib)
+    # @2 composes TWO std/sc-bore@1, and two openings are not one aperture,
+    # so the walk falls through to the body: the 9.4 x 25.4 frame.
+    assert got == ((9.4, 25.4), (0.0, 0.0)), got
     # and an entry that DOES carry an envelope still answers from the registry
     assert lint._aperture_of("std/lc-bore@3", lib) == ((4.7, 6.3), (0.0, 0.0))

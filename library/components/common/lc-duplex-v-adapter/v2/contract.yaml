@@ -1,0 +1,115 @@
+format: 1
+kind: component
+name: lc-duplex-v-adapter
+version: 2.0.0
+class: port
+profile: networking
+description: >-
+  LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS
+  fits to FHD cassettes and adapter panels. A blue body standing proud of the
+  plate, each port turned with its latch slot to the LEFT, and one white duplex
+  dust cap plugging both. Not the same part as common/lc-duplex-adapter@3,
+  which is wider and puts its bores side by side.
+size: {w: 9.28, h: 13.75}
+conforms: fhd-lc-cassette
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  WIDTH AND HEIGHT ARE BOTH MEASURED, each with a spread of 0.00 across all six
+  adapters on FS's face-on render of SKU 57016 - scaled on the 108.97 mm FHD
+  faceplate and validated against its 35.05 mm height to 1.02%. The width is
+  9.28. The height comes from a luminance profile down the centre of each
+  adapter, which separates it cleanly from the plate (bare plate 44-46, adapter
+  100-247): top edge 10.66, bottom edge 24.41, height 13.75, identical to the
+  pixel on all six.
+  NO DEPTH IS RECORDED in `size`. A part with `size.d` and no behaviour is
+  compiled as an aperture, a pit behind its whole box; how far this body stands
+  OUT of the plate is carried by `relief` instead, where it belongs.
+attrs: {media: fiber, connector: lc}
+elements:
+  cap: {at: [2.92, 0.75], size: [5.85, 12.25], class: cap}
+optical:
+  positions: 2
+relief:
+  features:
+    - node: bezel
+      out: 1.2
+      confidence: estimated
+      source: >-
+        FS's side photograph of SKU 57016 (57016.C.jpg), which shows the blue
+        adapter bodies standing just proud of the faceplate. It is an oblique
+        view, not an orthographic one, so the reading is scaled on the
+        110.24 mm body depth along the same axis (5.5 px/mm) and is an
+        estimate: about 7 px, 1.2 mm.
+    # the duplex cap seats into both bores and stands well proud of the body
+    - node: cap
+      out: 5.5
+      lift: 1.2
+      color: '#e7e9ec'
+      confidence: estimated
+      source: >-
+        57016.C.jpg, the same oblique side view and the same 5.5 px/mm as the
+        bezel: the white caps run about 30 px past the faceplate, 5.5 mm. `out`
+        is a distance from the panel, so the cap's front is at 5.5 and it
+        stands on the bezel's front at 1.2.
+    # THE INSETS ARE DRAWN INSIDE THE CAP'S GROUP, and a lift is SUMMED down
+    # the tree: the cap's 1.2 plus each inset's own 4.3 puts the recess at the
+    # cap's front, 5.5. Written as 5.5 it summed to 6.7 and floated in front of
+    # the cap.
+    - node: cap-inset-tx
+      pocket: 0.6
+      lift: 4.3
+      confidence: estimated
+      source: >-
+        FS's face-on render 57016.main.jpg shows a rounded-square inset moulded
+        into the cap in front of each port; its depth is not shown anywhere.
+        It sits AT the cap's front, 5.5, because it is moulded into it.
+    - node: cap-inset-rx
+      pocket: 0.6
+      lift: 4.3
+      confidence: estimated
+      source: lc-duplex-v-adapter@2's own cap-inset-tx reading, the lower port's inset.
+parts:
+  # TURNED 90: std/lc-bore@3 draws its latch tongue DOWN, and rotate 90 swings
+  # it to the LEFT, which is where FS's own render puts every port's stepped
+  # latch slot (57016.main.jpg, beside the cap). Lifted onto the raised bezel so
+  # each bore recesses from the proud face, as common/lc-duplex-adapter@3 does.
+  # BEHIND the skin, so in 2D the bezel's holes frame them and the cap paints
+  # over them - drawn in the default order, each bore's dark opening landed on
+  # top of the white cap and the cap read as an outline round two black squares.
+  - {id: tx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2, behind: true}
+  - {id: rx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2, behind: true}
+connection-points:
+  optical:
+    at: [4.64, 6.875]
+    direction: front
+provenance:
+  size: >-
+    see size-notes. Width AND height are both photo-measured, each with a spread
+    of 0.00 across all six adapters on the same validated render.
+  parts: >-
+    THE TWO BORES ARE STACKED, ON THE LC DUPLEX PITCH, AND TURNED LATCH-LEFT.
+    Stacked: a 6x crop of 57016.main.jpg shows one white dust cap over two
+    ports one above the other, and the faceplate numbering agrees - 2 above 1
+    at the left end, 12 above 11 at the right. Turned: the same crop shows each
+    port's stepped latch slot to the LEFT of the cap, so std/lc-bore@3 (tongue
+    down unrotated) is placed at rotate 90, which makes each bore 6.3 wide and
+    4.7 tall. Pitch: the two ferrules sit 6.25 apart, the duplex pitch
+    `lc-duplex-receptacle` records from IEC 61754-20 - a stacked duplex adapter
+    is the same duplex pair stood on end - centred on the body at y 3.75 and
+    10.0. Across: the ferrule is at x 5.85, the centre of the cap, which the
+    render puts at 2.92-8.77 of the 9.28 body; that leaves the latch slot
+    running out to x 1.90. v1 placed the bores tongue-down at 6.75 apart, which
+    was the defect this major fixes.
+  cap: >-
+    photo-measured on 57016.main.jpg at the same 5.78 px/mm the plate gives
+    (86-716 px across 108.97 mm): the cap spans 2.92-8.77 across the body and
+    covers both ports top to bottom, 0.75-13.0 of the 13.75. One cap, not two.
+  colour: >-
+    sampled off 57016.main.jpg: the adapter body's median blue is
+    rgb(45,145,216), #2d91d8, and the cap rgb(231,231,233). The blue is FS's
+    UPC colour; an APC adapter would be green.
+  face-detail-gap: >-
+    No dimensioned drawing of this adapter has been obtained. The 9.28 x 13.75
+    outline is measured, the cap is photo-measured, the stand-off heights come
+    from an oblique photograph and are estimates.
+skins: [default]
