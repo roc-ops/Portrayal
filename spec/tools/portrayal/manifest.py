@@ -271,21 +271,32 @@ def resolve_views(device, cfg):
 #
 # A configuration's `occupants:` may key a cage on a card seated in a bay by the
 # card's MODULE-LESS path - `front-6/xg0` - the convention its nested `bays:`
-# keys already use. The build finds those keys from the module it is drawing
-# (module_key_prefix, occupants_under); lint finds the module from the key
-# (nested_key_host). Both read a bay's occupant with seated_ref and name a
+# keys already use - and, since B3, a slot at any depth, part ids after the
+# bays (`bay-1/lc01/tx`). The build finds those keys from the instance it is
+# drawing (slot_key_prefix, occupants_under); lint finds the instance from
+# the key (nested_key_host). Both read a bay's occupant with seated_ref and name a
 # seated occupant with occupant_local_id, so the two directions cannot come to
 # disagree about which module a key reaches or which occupant a chained key
 # names.
 
+def slot_key_prefix(path):
+    """The key prefix a configuration uses for what is on the instance drawn
+    at `path`: the path with every `module` step dropped (B3, P1) -
+    `bay-1/module/lc01` -> `bay-1/lc01`, `front-6/module` -> `front-6`, a
+    device placement's `port-3` -> `port-3` - or None when there is no path.
+    A slot at any depth is keyed this way: part ids from the device's
+    placement or bay down to the slot, a seated bay's `module` left out."""
+    if not path:
+        return None
+    return "/".join(s for s in path.split("/") if s != "module")
+
+
 def module_key_prefix(path):
-    """The module-less key prefix a configuration uses for what is in the
-    module drawn at `path` - `front-6/module` -> `front-6`, `riser-1/module/
-    slot-1/module` -> `riser-1/slot-1` - or None when `path` is not a module
-    seated in a bay. The same stripping as a nested bay's `bay_path`."""
+    """slot_key_prefix, but only for a module seated in a bay (`front-6/module`,
+    `riser-1/module/slot-1/module`); None for any other path."""
     if not path or not path.endswith("/module"):
         return None
-    return (path[:-len("/module")] + "/").replace("/module/", "/")[:-1]
+    return slot_key_prefix(path)
 
 
 def seated_ref(cfg_bays, bay_path, bay):
@@ -295,7 +306,10 @@ def seated_ref(cfg_bays, bay_path, bay):
 
 
 def occupant_spec(key, spec):
-    """An `occupants:` value as a dict with a `ref`, or ValueError naming the key."""
+    """An `occupants:` value as a dict with a `ref`, or ValueError naming the key.
+    An empty string empties the slot (B3, P4): None, and nothing is seated."""
+    if spec == "":
+        return None
     spec = {"ref": spec} if isinstance(spec, str) else spec
     if not isinstance(spec, dict) or not spec.get("ref"):
         raise ValueError(f"occupants/{key}: names no component - give a ref, "
@@ -311,9 +325,10 @@ def occupant_local_id(host_id, spec):
 
 def occupants_under(prefix, occupants):
     """{local host id: (key, spec)} for the `occupants:` keys that name a host
-    directly in the module whose key prefix is `prefix` - `front-6/xg0` under
+    directly on the instance whose key prefix is `prefix` - `front-6/xg0` under
     `front-6`, but not `front-6/slot-1/xg0`, which belongs to the module in
-    that nested bay."""
+    that nested bay, nor `bay-1/lc01/tx`, which belongs to the adapter `lc01`.
+    A key that empties its slot (P4) comes back with spec None."""
     out = {}
     for key, spec in (occupants or {}).items():
         rest = key[len(prefix) + 1:] if key.startswith(prefix + "/") else None
@@ -364,47 +379,72 @@ def chained_occupant_ref(host_id, occupants, terminal):
 
 
 def nested_key_host(key, device, cfg, resolve):
-    """Walk a module-less `occupants:` key down the configuration's bays to its
-    host: (host_ref, module_ref, module_path). `resolve(ref)` returns a
-    contract or None. Raises ValueError saying what the key failed to reach.
+    """Walk a module-less `occupants:` key down to its host: (host_ref,
+    module_ref, module_path). `resolve(ref)` returns a contract or None.
+    Raises ValueError saying what the key failed to reach.
+
+    The key's head is a bay in a view this configuration draws, or a device
+    placement in one (an adapter placed directly, `port-1510/tx`). After a
+    head bay, each segment is a nested bay of the module reached so far, and
+    once a segment is not, every segment is a PART id of the contract reached
+    so far (B3, deep addressing): `bay-1/lc01/tx` is the part `tx` of the part
+    `lc01` of whatever `bay-1` seats. `module_ref` and `module_path` are the
+    contract and the drawing path of the innermost instance holding the slot -
+    `bay-1/module/lc01` - which is where the build draws the occupant.
 
     A chained key (`front-6/xg0-occupant`) names the occupant seated on
-    another key of the same module, and resolves to that occupant's ref -
+    another key of the same instance, and resolves to that occupant's ref -
     however many hops long, via `chained_occupant_ref`."""
     segs = key.split("/")
     host_id = segs[-1]
-    bays = {b["id"]: b for _face, (_n, v) in resolve_views(device, cfg).items()
+    views = resolve_views(device, cfg)
+    bays = {b["id"]: b for _face, (_n, v) in views.items()
             for b in view_parts(v)["bays"]}
-    if segs[0] not in bays:
-        raise ValueError(f"occupants/{key}: {segs[0]!r} is no bay in any view "
-                         "this configuration draws")
+    # a placement seated by mate-to is an occupant, and slots inside an
+    # occupant stay chained keys (P3), so only a placement with its own `at`
+    placements = {q.get("id"): q for _face, (_n, v) in views.items()
+                  for q in view_parts(v)["placements"] if q.get("at") and q.get("ref")}
     cfg_bays = (cfg or {}).get("bays") or {}
-    bay_path, path = segs[0], f"{segs[0]}/module"
-    ref = seated_ref(cfg_bays, bay_path, bays[segs[0]])
+    if segs[0] in bays:
+        where, path = segs[0], f"{segs[0]}/module"
+        ref, in_bays = seated_ref(cfg_bays, where, bays[segs[0]]), True
+    elif segs[0] in placements:
+        where, path = segs[0], segs[0]
+        ref, in_bays = placements[segs[0]]["ref"], False
+    else:
+        raise ValueError(f"occupants/{key}: {segs[0]!r} is no bay in any view "
+                         "this configuration draws, and no placement either")
     for seg in segs[1:-1]:
         c = resolve(ref) if ref else None
-        nb = ((c or {}).get("bays") or {}).get(seg)
-        if not isinstance(nb, dict):
-            raise ValueError(f"occupants/{key}: names no cage - {bay_path!r} "
-                             f"seats {ref or 'nothing'}, which has no bay {seg!r}")
-        bay_path, path = f"{bay_path}/{seg}", f"{path}/{seg}/module"
-        ref = seated_ref(cfg_bays, bay_path, nb)
+        nb = ((c or {}).get("bays") or {}).get(seg) if in_bays else None
+        if isinstance(nb, dict):
+            where, path = f"{where}/{seg}", f"{path}/{seg}/module"
+            ref = seated_ref(cfg_bays, where, nb)
+            continue
+        q = next((q for q in (c or {}).get("parts") or [] if q.get("id") == seg), None)
+        if q is None or not q.get("ref"):
+            raise ValueError(f"occupants/{key}: names no cage - {where!r} "
+                             f"holds {ref or 'nothing'}, which has no bay or "
+                             f"part {seg!r}")
+        where, path, ref, in_bays = f"{where}/{seg}", f"{path}/{seg}", q["ref"], False
     if not ref:
-        raise ValueError(f"occupants/{key}: names no cage - bay {bay_path!r} is "
+        raise ValueError(f"occupants/{key}: names no cage - bay {where!r} is "
                          "empty in this configuration")
     module = resolve(ref)
     if module is None:
-        raise ValueError(f"occupants/{key}: {bay_path!r} seats {ref}, which "
+        raise ValueError(f"occupants/{key}: {where!r} holds {ref}, which "
                          "does not resolve")
     parts = {q.get("id"): q for q in module.get("parts") or []}
     if host_id in parts:
         return parts[host_id]["ref"], ref, path
     mine = {h: s for h, (_k, s) in
-            occupants_under(module_key_prefix(path), (cfg or {}).get("occupants")).items()}
+            occupants_under(slot_key_prefix(path), (cfg or {}).get("occupants")).items()
+            if s is not None}
     try:
         host_ref = chained_occupant_ref(
             host_id, mine, lambda h: (parts[h]["ref"] if h in parts else None))
     except (KeyError, ValueError):
-        raise ValueError(f"occupants/{key}: names no cage on {ref} seated at "
-                         f"{bay_path!r}")
+        raise ValueError(f"occupants/{key}: names no cage on {ref} at "
+                         f"{where!r} - no part {host_id!r}, and no occupant "
+                         "seated there produces it")
     return host_ref, ref, path

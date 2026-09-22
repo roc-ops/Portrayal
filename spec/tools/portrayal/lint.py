@@ -3464,17 +3464,21 @@ def lint_device_occupants(path, data, lib_roots):
         # Candidates a device-level chain can resolve against: the OTHER
         # device-level keys of this same configuration - a nested ("/") key
         # belongs to a module and is resolved by nested_key_host instead.
+        # A key whose value is "" empties its slot (P4) and produces nothing
+        # a chain could name.
         siblings = {k: (v if isinstance(v, dict) else {"ref": v})
-                    for k, v in occupants.items() if "/" not in k}
+                    for k, v in occupants.items() if "/" not in k and v != ""}
         for host_id, spec in occupants.items():
             ref = spec if isinstance(spec, str) else (spec or {}).get("ref")
             where = f"configurations/{cname}/occupants/{host_id}"
             if "/" in host_id:
                 # A CAGE ON A SEATED CARD (#484, R2), keyed by the card's
-                # module-less path. Walked down THIS configuration's bays to the
-                # module it reaches by manifest.nested_key_host - the walk the
-                # build's module_key_prefix / occupants_under answer from the
-                # other end - and a chained key to the occupant it names.
+                # module-less path, or a slot at any depth (B3): walked down
+                # THIS configuration's bays, then the parts of what they seat,
+                # or from a placement down its parts, by
+                # manifest.nested_key_host - the walk the build's
+                # slot_key_prefix / occupants_under answer from the other end -
+                # and a chained key to the occupant it names.
                 def _res(r):
                     q = resolve_component(r, lib_roots)
                     return load_yaml(q) if q else None

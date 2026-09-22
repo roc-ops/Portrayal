@@ -25,9 +25,9 @@ from portrayal.faces import face_ref
 from portrayal import libwalk
 from portrayal.manifest import (view_parts, targets, split_target, component_refs,
                       presented_interface, seat_point, _turn,
-                      load_yaml, resolve_views, module_key_prefix,
+                      load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
-                      occupant_spec)
+                      occupant_spec, nested_key_host)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -796,9 +796,16 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
                            skin_overrides, attr_overrides, resolved):
-    """Seat the configuration's occupants keyed to THIS module's cages - and,
+    """Seat the configuration's occupants keyed to THIS instance's slots - and,
     to a fixed point, to occupants already seated in them (a plug in the
-    optic, a boot on the plug) - inside the module's instance group `g`.
+    optic, a boot on the plug) - inside the instance group `g`.
+
+    Called for EVERY instance with a path (B3, deep addressing): a module in
+    a bay, a part composed at any depth, a device placement. Its keys are the
+    ones whose prefix is slot_key_prefix(path) - `bay-1/lc01/tx` is seated by
+    the adapter drawn at `bay-1/module/lc01` - so an occupant is drawn inside
+    the innermost group holding its slot. A key whose value is "" empties the
+    slot (P4): it counts as used when its host exists and draws nothing.
 
     Each seat is solve_seat - the device-level rule, in the card's frame -
     carried by the same trio draw_placement applies (z_inset / z_group_lift /
@@ -809,7 +816,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     a mirrored cage does. Nothing here takes a port group: a contract
     declares none (R3). Keys used are added to `occ_used`, which render_view
     reads to report a key nothing seated."""
-    prefix = module_key_prefix(path)
+    prefix = slot_key_prefix(path)
     if not occupants or prefix is None:
         return
     pending = occupants_under(prefix, occupants)
@@ -824,6 +831,11 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         for host_id, (key, spec) in pending.items():
             host = hosts.get(host_id)
             if host is None:
+                continue
+            if spec is None:
+                if occ_used is not None:
+                    occ_used.add(key)
+                seated_now.append(host_id)
                 continue
             at, hrot, lift = solve_seat(lib, f"occupants/{key}", spec["ref"],
                                         f"{path}/{host_id}", host)
@@ -1098,7 +1110,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                               path=f"{path}/{part['id']}", resolved=resolved)
+                               path=f"{path}/{part['id']}", resolved=resolved,
+                               # a slot on a composed part, at any depth (B3)
+                               occupants=occupants, occ_used=occ_used)
         # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
         # declares what a lamp IS and can only guess what it MEANS - the same
         # reasoning apply_states already carries for device placements, and the
@@ -1365,6 +1379,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # `occupants:` keys such a cage by the MODULE-LESS path - `front-6/xg0` -
     # the convention its nested `bays:` keys already use (bay_path above), and
     # this is the module those keys address when `path` is `<bay>/module`.
+    # AND A SLOT AT ANY DEPTH (B3): every instance with a path seats the keys
+    # whose prefix is its own slot key, a composed adapter's bores included.
     # Seated INSIDE g, which carries this instance's translate/rotate, so the
     # occupant inherits the bay transform exactly as the card's own parts do
     # and nothing here composes it by hand; the mate points are the card-frame
@@ -1586,6 +1602,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if host not in here:
                 continue
             spec = occupant_spec(host, spec)
+            if spec is None:            # "" empties the slot (P4)
+                seated_now.append(host)
+                continue
             parts["placements"].append({
                 "ref": spec["ref"],
                 "id": occupant_local_id(host, spec),
@@ -2296,7 +2315,15 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                                     resolved=resolved)
+                                     resolved=resolved,
+                                     # A SLOT ON A PLACED PART (B3): `port-1510/tx`,
+                                     # an adapter placed directly. Not on an
+                                     # occupant - slots inside a seated part stay
+                                     # chained keys (P3) - nor on a projection,
+                                     # which is a part seen from another face.
+                                     occupants=None if (p.get("mate-to") or p.get("projection-of"))
+                                     else nested_occupants,
+                                     occ_used=nested_used)
         # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
         # data-path becomes data-of, naming the seated part on the face that
         # holds it; no relief, no ref, no behaviour, so the kit builds nothing
@@ -2425,12 +2452,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # OCCUPANTS KEYED INSIDE A SEATED MODULE (#484, R2) - `front-6/xg0` - go
     # down with the bay's module and are seated in its instance group; the
     # device-level expansion above never matches them (no placement id holds
-    # a slash). `nested_used` collects what seated, for the check after the
-    # bays are drawn.
+    # a slash). So do slots at any depth (B3), and a slot on a placed part
+    # (`port-1510/tx`) goes down with that placement. `nested_used` collects
+    # what seated, for the check after the bays are drawn.
     nested_occupants = {k: v for k, v in (config.get("occupants") or {}).items()
                         if "/" in k}
     nested_used = set()
     this_view_bays = {b["id"] for b in parts["bays"]}
+    this_view_placements = {q["id"] for q in parts["placements"]
+                            if not q.get("mate-to") and not q.get("projection-of")}
+    drawn_placements = {q.get("id") for _face, (_n, v) in resolve_views(device, config).items()
+                        for q in view_parts(v)["placements"] if q.get("at")}
     # the views THIS configuration draws: a bay only on an unbound variant
     # face is not drawn anywhere, so a key naming it is reported, not skipped
     drawn_bays = {b["id"] for _face, (_n, v) in resolve_views(device, config).items()
@@ -2604,27 +2636,46 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         else:
             draw_bay(item)
 
-    # A NESTED KEY THAT SEATED NOTHING IS AN ERROR, not a skip. A key whose bay
-    # is on another face belongs to that face's drawing, as a device-level
-    # occupant does; one whose bay is on THIS face and seated nothing names a
-    # bay that is empty or holds a module without that cage, and a key whose
-    # bay is on no face at all is a typo. Keys on a seated module that name no
-    # cage are raised where the module is drawn (_seat_nested_occupants).
-    for key in sorted(set(nested_occupants) - nested_used):
-        top = key.split("/", 1)[0]
-        if top in this_view_bays:
-            raise ValueError(
-                f"occupants/{key}: names no cage - bay {top!r} seats no module "
-                "carrying it in this configuration")
-        if top not in drawn_bays:
-            raise ValueError(
-                f"occupants/{key}: {top!r} is no bay in any view this "
-                "configuration draws")
-
     # second pass: the surface-mounted parts, now safely in front of the openings
     for p in ordered:
         if p["id"] in deferred_ids:
             draw_placement(p)
+
+    # A NESTED KEY THAT SEATED NOTHING IS AN ERROR, not a skip - checked once
+    # both passes have drawn, since a keyed placement may be a deferred one.
+    # A key whose bay or placement is on another face belongs to that face's
+    # drawing, as a device-level occupant does; one whose bay or placement is
+    # on THIS face and seated nothing names a bay that is empty or a part
+    # without that slot, and a key whose head is on no face at all is a typo. Keys on a seated module that name no
+    # cage are raised where the module is drawn (_seat_nested_occupants).
+    # The resolver lint uses (manifest.nested_key_host) says what a dangling
+    # key failed to reach - `'lc99'` - where it can; the generic message is
+    # the fallback for a key it resolves that still seated nothing here.
+    def _dangling(key, fallback):
+        def _res(r):
+            try:
+                return lib.resolve(r)[0]
+            except Exception:
+                return None
+        try:
+            nested_key_host(key, device, config, _res)
+        except ValueError as e:
+            return ValueError(str(e))
+        return ValueError(fallback)
+    for key in sorted(set(nested_occupants) - nested_used):
+        top = key.split("/", 1)[0]
+        if top in this_view_bays:
+            raise _dangling(
+                key, f"occupants/{key}: names no cage - bay {top!r} seats no module "
+                "carrying it in this configuration")
+        if top in this_view_placements:
+            raise _dangling(
+                key, f"occupants/{key}: names no slot on placement {top!r} in "
+                "this configuration")
+        if top not in drawn_bays and top not in drawn_placements:
+            raise ValueError(
+                f"occupants/{key}: {top!r} is no bay in any view this "
+                "configuration draws, and no placement either")
 
     # A REAR PROJECTION GOES INTO THE HOLE IT IS SEEN THROUGH (see `rear:`).
     for p in parts["placements"]:
