@@ -1979,7 +1979,8 @@ export async function buildFaceRelief(F, ctx) {
     // every FRU of one depth - all of them, on a face with no card optic -
     // keeps the order it always had.
     const segsOf = f => f.path.split('/').length;
-    for (const f of [...frus].sort((a, b) => segsOf(b) - segsOf(a))) {   // move the FRU's face art into its group; leave a bay
+    frus.sort((a, b) => segsOf(b) - segsOf(a));   // the groups above are already made
+    for (const f of frus) {   // move the FRU's face art into its group; leave a bay
       const fg = fruGroups[f.path];
       const faceCrop = crop(f.lift ? artCv : cv, f, PX);
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
