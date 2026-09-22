@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 3.4.1
+version: 3.4.2
 class: port
 profile: networking
 description: >-
@@ -113,30 +113,36 @@ relief:
         common/lc-duplex-adapter@3's own dust-caps key - the same 'about a quarter inch
         proud' reading as cap-tx, resolved the same way. ONE reading covering both caps,
         not two.
-    # the moulded square recessed into each cap front. POCKET AND NOT SINK: a
+    # the moulded square recessed into each cap front. DRAWN INSIDE ITS CAP'S
+    # GROUP, and a lift is SUMMED down the tree while `out` and `pocket` stay
+    # where they are: the cap's 3.175 plus the inset's own 6.35 puts the recess
+    # at the cap's front, 9.525. Written as 9.525 inside the group it would sum
+    # to 12.7 and float in front of the cap. POCKET AND NOT SINK: a
     # `sink` measures down from a CAVITY FLOOR and means nothing outside one, and
     # the cap is a solid lump standing on the faceplate. Written as a sink it was
     # collected by nothing and the inset was never built (#230); `pocket` is the
-    # key for a recess in an otherwise solid face. Same depth, same lift, right
+    # key for a recess in an otherwise solid face. Same depth, same position, right
     # word.
     - node: cap-tx-inset
       pocket: 0.9
-      lift: 9.525
+      lift: 6.35
       confidence: estimated
       source: >-
         common/lc-duplex-adapter@3 - the dust-caps key fixes that there IS 'a rounded-square
-        inset moulded into its front' and nothing about how deep. The 9.525 lift is 3.175 +
-        6.35, both photo-measured; only the 0.9 depth is invented.
-        THIS LIFT WAS RIGHT WHILE cap-tx's `out` WAS NOT, and it is what caught it: an inset
-        moulded into the cap's front must sit AT that front, and 9.525 is where the
+        inset moulded into its front' and nothing about how deep. It sits at 9.525, 3.175 +
+        6.35, both photo-measured; only the 0.9 depth is invented. The 6.35 written here is
+        the part of that the inset adds to its cap's 3.175, because it is drawn inside the
+        cap's group and the kit sums lifts down the tree.
+        THIS POSITION WAS RIGHT WHILE cap-tx's `out` WAS NOT, and it is what caught it: an
+        inset moulded into the cap's front must sit AT that front, and 9.525 is where the
         photograph puts it. The cap said 6.35. They agree now.
     - node: cap-rx-inset
       pocket: 0.9
-      lift: 9.525
+      lift: 6.35
       confidence: estimated
       source: >-
-        common/lc-duplex-adapter@3 - as cap-tx-inset. The inset's existence is photographed,
-        its depth is not.
+        common/lc-duplex-adapter@3 - as cap-tx-inset, and lifted the same 6.35 off its cap. The
+        inset's existence is photographed, its depth is not.
 optical:
   # TWO BORES, SO TWO FIBRE POSITIONS, and position order is the order the bores
   # are composed below: 1 is `tx`, 2 is `rx`. Stated here so no module composing
@@ -147,8 +153,11 @@ parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face.
   # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
   # fitted and how the issue's own photograph shows it; @3 draws it down.
-  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180}
-  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180}
+  # BEHIND the skin, so in 2D the bezel's holes frame them and the caps paint
+  # over them - drawn in the default order, appended after the skin, each
+  # bore's dark opening, sleeve and ferrule landed on top of its white cap.
+  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180, behind: true}
+  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180, behind: true}
 connection-points:
   # the midpoint of the two ferrule centres (3.475 and 9.725) - which is,
   # correctly, the 13.2-wide body's own centre (6.6). It was 6.6 originally

@@ -34,8 +34,8 @@ BASE_PLATE = {
 NONDRAWING = ("title", "defs", "style", "desc", "metadata")
 
 
-def top_level_ids(text):
-    """Ids of the instance group's direct children, in draw order."""
+def top_level(text):
+    """(id, attrs) of the instance group's direct children, in draw order."""
     out = []
     for m in re.finditer(r"\n    <(\w+)([^>]*?)/?>", text):
         tag, attrs = m.group(1), m.group(2)
@@ -43,7 +43,7 @@ def top_level_ids(text):
             continue
         idm = re.search(r'id="([^"]+)"', attrs)
         if idm:
-            out.append(idm.group(1))
+            out.append((idm.group(1), attrs))
     return out
 
 
@@ -52,15 +52,32 @@ def test_the_base_plate_is_drawn_first(fname, plate):
     f = DIST / fname
     if not f.exists():
         pytest.skip(f"{fname} not built")
-    ids = top_level_ids(f.read_text())
+    kids = top_level(f.read_text())
+    ids = [i for i, _ in kids]
     assert ids, f"{fname}: no drawable children found"
     want = [i for i in ids if i.endswith(f"--{plate}")]
     assert want, f"{fname}: no element ending --{plate}; ids were {ids}"
-    assert ids[0] == want[0], (
-        f"{fname}: base plate {want[0]} is drawn at index {ids.index(want[0])} "
-        f"of {len(ids)} instead of first. Everything before it is painted over. "
-        f"Draw order: {ids}"
+    at = ids.index(want[0])
+    # A COMPOSED PART PLACED `behind: true` IS DRAWN BEFORE THE PLATE ON
+    # PURPOSE, and shows through a hole cut in it: lc-duplex-adapter@3 puts its
+    # bores there so the dust caps paint over them. That is the one thing
+    # allowed ahead of the plate - a composed part (it carries data-ref) under
+    # a plate that has holes (evenodd) to show it through. Anything else there
+    # is the skin's own art, painted over.
+    ahead = kids[:at]
+    plate_attrs = kids[at][1]
+    skin_ahead = [i for i, a in ahead if "data-ref=" not in a]
+    assert not skin_ahead, (
+        f"{fname}: base plate {want[0]} is drawn at index {at} of {len(ids)} "
+        f"instead of first, after the skin's own {skin_ahead}. Everything "
+        f"before it is painted over. Draw order: {ids}"
     )
+    if ahead:
+        assert 'fill-rule="evenodd"' in plate_attrs, (
+            f"{fname}: composed parts {[i for i, _ in ahead]} are drawn behind "
+            f"base plate {want[0]}, which has no evenodd holes to show them "
+            f"through, so they are painted over. Draw order: {ids}"
+        )
 
 
 def test_the_dcp_404_face_is_inside_the_node_that_carries_its_relief():
