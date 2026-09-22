@@ -322,13 +322,55 @@ def occupants_under(prefix, occupants):
     return out
 
 
+def chained_occupant_ref(host_id, occupants, terminal):
+    """Resolve `host_id` - a host id a caller has already found is not itself
+    a terminal - to the ref of whatever hosts it, by walking `occupants`
+    ({key: spec}, all in the SAME scope: a configuration's device-level
+    occupants for a device-level key, or `occupants_under` a module's prefix
+    for a nested one) for the entry whose own produced id
+    (`occupant_local_id`) equals it - a plug named by the optic's key, a boot
+    named by the plug's.
+
+    `terminal(id)` answers a ref for anything the chain can ground on that is
+    not itself a chained occupant - a placement, or inside a seated module,
+    one of the module's own parts - or None to keep walking.
+
+    Returns the ref of the entry that immediately hosts `host_id`: one hop,
+    which is the whole answer `_mate_check` needs, because that entry's own
+    host is that entry's own problem, checked when IT is linted. The walk
+    continues past that hop only to confirm the chain is well-founded - it
+    stops at a terminal, or a dead end (again, not this key's problem) - so
+    that a chain which instead loops back on itself is caught here rather
+    than left to recurse forever the day two keys name each other.
+
+    Raises KeyError(host_id) when nothing in `occupants` produces `host_id`
+    at all, and ValueError(id) naming the id the chain revisits."""
+    match = next((k for k, spec in occupants.items()
+                  if occupant_local_id(k, spec) == host_id), None)
+    if match is None:
+        raise KeyError(host_id)
+    ref = occupants[match]["ref"]
+    seen, cur = {host_id}, match
+    while terminal(cur) is None:
+        if cur in seen:
+            raise ValueError(cur)
+        seen.add(cur)
+        nxt = next((k for k, spec in occupants.items()
+                    if occupant_local_id(k, spec) == cur), None)
+        if nxt is None:
+            break
+        cur = nxt
+    return ref
+
+
 def nested_key_host(key, device, cfg, resolve):
     """Walk a module-less `occupants:` key down the configuration's bays to its
     host: (host_ref, module_ref, module_path). `resolve(ref)` returns a
     contract or None. Raises ValueError saying what the key failed to reach.
 
     A chained key (`front-6/xg0-occupant`) names the occupant seated on
-    another key of the same module, and resolves to that occupant's ref."""
+    another key of the same module, and resolves to that occupant's ref -
+    however many hops long, via `chained_occupant_ref`."""
     segs = key.split("/")
     host_id = segs[-1]
     bays = {b["id"]: b for _face, (_n, v) in resolve_views(device, cfg).items()
@@ -357,10 +399,12 @@ def nested_key_host(key, device, cfg, resolve):
     parts = {q.get("id"): q for q in module.get("parts") or []}
     if host_id in parts:
         return parts[host_id]["ref"], ref, path
-    mine = occupants_under(module_key_prefix(path), (cfg or {}).get("occupants"))
-    below = next((s for h, (_k, s) in mine.items()
-                  if occupant_local_id(h, s) == host_id), None)
-    if below is None:
+    mine = {h: s for h, (_k, s) in
+            occupants_under(module_key_prefix(path), (cfg or {}).get("occupants")).items()}
+    try:
+        host_ref = chained_occupant_ref(
+            host_id, mine, lambda h: (parts[h]["ref"] if h in parts else None))
+    except (KeyError, ValueError):
         raise ValueError(f"occupants/{key}: names no cage on {ref} seated at "
                          f"{bay_path!r}")
-    return below["ref"], ref, path
+    return host_ref, ref, path
