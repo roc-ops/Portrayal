@@ -10,6 +10,7 @@ split; the detail is in each one.
 | B | [pluggables-connectors-design.md](pluggables-connectors-design.md) | LC and RJ45 plugs and boots, a `cable` point published into the compiled drawing, occupants that carry depth | A |
 | C | [pluggables-slotting-design.md](pluggables-slotting-design.md) | cages swappable in the kit's inspector, accept lists derived from `interface:` plus a ladder registry, vendor-blind | A |
 | D | [pluggables-3d-design.md](pluggables-3d-design.md) | every pluggable standing proud of its cage in 3D, plugs standing off their bores, the body-skin decision | A, B |
+| B3 | [pluggables-caps-design.md](pluggables-caps-design.md) | dust caps as connectors in one connector slot per port, shipped as each adapter's default; SC and MPO plugs; the duplex LC host; the kit seating at a lift | B, C, D |
 
 ## What is wrong today
 
