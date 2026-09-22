@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc
-version: 1.0.3
+version: 1.0.4
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -122,7 +122,12 @@ provenance:
     beige. A vendor wrapper, which knows which module it is, sets
     `latch-color` to the colour its mode or wavelength calls for. Decided
     2026-09-21. SFF-8432 Rev 5.2a is held locally in the maintainer's
-    gitignored corpus.
+    gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The bail node carries
+    `data-stroke-derive: latch-color`, so its stroke is a fixed darker shade of
+    whatever colour the field is given - each channel x 61/100, rounded half
+    up (render.py `stroke_shade`) - and #444444 for this default, the shade
+    of #6f6f6f. It was a literal (#444444) that no field moved, so any
+    `latch-color` but the default was drawn with the default's edge (#482).
   latch: >-
     drawing (2.18 in [55.4] overall; 0.49 in [12.3] is the face height with the
     bail extended, which is why the module reads taller than 8.5 when

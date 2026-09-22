@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-lc
-version: 1.0.2
+version: 1.0.3
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -136,7 +136,12 @@ provenance:
     in no code table: not beige, not blue, not white. A vendor wrapper, which
     knows which module it is, sets `latch-color` to the colour its wavelength
     calls for. Decided 2026-09-21. Both documents are held locally in the
-    maintainer's gitignored corpus.
+    maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The tab node carries
+    `data-stroke-derive: latch-color`, so its stroke is a fixed darker shade of
+    whatever colour the field is given - each channel x 61/100, rounded half
+    up (render.py `stroke_shade`) - and #444444 for this default, the shade
+    of #6f6f6f. It was a literal (#9a9a9a) that no field moved, so any
+    `latch-color` but the default was drawn with the default's edge (#482).
 parts:
   - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.95], rotate: 180, lift: 20.0}
   - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}

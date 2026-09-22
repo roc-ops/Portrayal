@@ -20,6 +20,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, acceptSwaps, decode
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays } from './swap.js';
 import { jdist } from './dist.js';
+import { paintFields, unpaintFields } from './fields.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -1368,24 +1369,31 @@ export function createShell(opts = {}) {
     if (state.sel != null) select(null, false);
   });
 
-  // WRITE ON A PART in the 2D drawings: a field is a `data-from` text node the
-  // part declares (components.json `fields`), the value replaces its text and
-  // lands on the group as `data-<key>`. `setFields('psu-1/module', {watts:
-  // '750W'})`; an empty value hides the node; null clears the part's fields.
-  // The host mirrors the same map into the 3D viewer's setFields.
+  // WRITE ON A PART in the 2D drawings: a field is a node the part declares
+  // (components.json `fields`) and its skin is wired to - `data-from` for text,
+  // `data-fill-from` / `data-stroke-from` for colour - and the value lands on the
+  // group as `data-<key>`. `setFields('psu-1/module', {watts: '750W'})`; an empty
+  // value hides a text node and puts a colour back to what was drawn. null drops
+  // the part from cfgFields and restores its COLOURS as drawn; its text keeps the
+  // last value written, here and in 3D alike (nothing stashes drawn text - a gap
+  // that predates the colour rule). The rule is fields.js's,
+  // shared with the 3D side; the host mirrors the same map into the 3D viewer's
+  // setFields.
   function setFields(path, vals) {
     if (!vals) delete state.cfgFields[path];
     else state.cfgFields[path] = {...(state.cfgFields[path] || {}), ...vals};
     for (const d of faceDocs())
       for (const el of d.querySelectorAll(
           `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
-        for (const [k, v] of Object.entries(vals || {})) {
-          const val = v == null ? '' : String(v);
-          el.setAttribute(`data-${k}`, val);
-          for (const t of el.querySelectorAll(`[data-from="${CSS.escape(k)}"]`)) {
-            t.textContent = val;
-            if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
-          }
+        if (vals) paintFields(el, vals);
+        else {
+          unpaintFields(el);
+          // a part seated INSIDE this one keeps its own fields: restoring the
+          // outer part's colours reached into it, so its own are put back on
+          for (const [inner, iv] of Object.entries(state.cfgFields))
+            if (inner.startsWith(path + '/'))
+              for (const n of el.querySelectorAll(`[data-path="${CSS.escape(inner)}"]`))
+                paintFields(n, iv);
         }
     emit('fields', {path, fields: state.cfgFields[path] || null, all: state.cfgFields});
     emit('change');
