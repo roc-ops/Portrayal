@@ -10,6 +10,8 @@
 // rather than threaded through every signature, so the function bodies are the
 // same code that has been running in the device viewer.
 
+import { paintFields, unpaintFields } from './fields.js';
+
 let THREE, renderer, PXMM, FRU_PATHS;
 
 // A BODY THAT IS NOT ONE BOX. A module's `body` is a box the size of its face
@@ -679,13 +681,15 @@ export function setNodeStates(map, scope) {
 }
 export function clearNodeStates(scope) { _sc(scope).states.clear(); }
 
-// WHAT A VIEWER HAS WRITTEN ON A PART. A field is a `data-from` text node the
-// part declares (`fields` in its contract, carried in components.json): a
-// supply's wattage, a drive's capacity. The value replaces the node's text and
-// lands on the part's group as `data-<key>`, in the parsed document and in
-// every texture redrawn from it - the same route a lamp state takes. Keyed by
-// the part's data-path; a map of key -> value per part; an empty value hides
-// the node, as render.py's fill does.
+// WHAT A VIEWER HAS WRITTEN ON A PART. A field is a node the part declares
+// (`fields` in its contract, carried in components.json) and its skin is wired
+// to: a `data-from` node's text, a `data-fill-from` node's fill, a
+// `data-stroke-from` node's stroke - a supply's wattage, an optic's latch
+// colour. The value lands in the parsed document and on the part's group as
+// `data-<key>`, and in every texture redrawn from it - the same route a lamp
+// state takes. Keyed by the part's data-path; a map of key -> value per part.
+// The rule itself is fields.js's, shared with the 2D drawing so the two cannot
+// drift: an empty value hides a text node and puts a colour back as drawn.
 export function setNodeFields(map, scope) {
   const st = _sc(scope).fields || (_sc(scope).fields = new Map());
   st.clear();
@@ -693,22 +697,24 @@ export function setNodeFields(map, scope) {
     if (vals && Object.keys(vals).length) st.set(path, {...vals});
 }
 export function nodeFields(scope) { return new Map(_sc(scope).fields || []); }
+// COLOURS ARE PUT BACK FIRST, over the whole document, for the reason
+// applyNodeStates clears first: the registry is the whole truth, and a part
+// taken OUT of it arrives as a path that is no longer there. A repaint that
+// only visited registered paths would paint a latch red and never paint it grey
+// again - and the LOD records repaint from their own last output, so the red
+// would be permanent. The drawn colour is stashed on the node, so this needs no
+// memory of its own. Outer parts before inner ones, so an optic seated in a
+// module keeps its own value for a key the module also sets.
 export function applyNodeFields(root, scope) {
   if (!root) return root;
+  unpaintFields(root);
   const st = _sc(scope).fields;
   if (!st || !st.size) return root;
-  for (const [path, vals] of st)
+  for (const [path, vals] of [...st].sort(([a], [b]) => a.length - b.length))
     // the part on the face that holds it, and its projections on the others
     for (const el of root.querySelectorAll(
         `[data-path="${CSS.escape(path)}"],[data-projection][data-of="${CSS.escape(path)}"]`))
-      for (const [k, v] of Object.entries(vals)) {
-        const val = v == null ? '' : String(v);
-        el.setAttribute(`data-${k}`, val);
-        for (const t of el.querySelectorAll(`[data-from="${CSS.escape(k)}"]`)) {
-          t.textContent = val;
-          if (val) t.removeAttribute('display'); else t.setAttribute('display', 'none');
-        }
-      }
+      paintFields(el, vals);
   return root;
 }
 export function nodeStates(scope) { return new Map(_sc(scope).states); }
@@ -1636,12 +1642,37 @@ export async function buildFaceRelief(F, ctx) {
       // The commonest opaque colour in the node's own art is what the part is made
       // of; a button, a legend or a screw head is by definition a minority of it.
       // Still read from the UNPUNCHED raster, so this goes before `compose`.
-      if (!o.color) o.color = dominantColor(ocv);
+      //
+      // AND IT IS READ AGAIN ON EVERY REPAINT, when the art is what chose it. A
+      // field can recolour the node after the build - an optic's latch set red
+      // from a host page - and a repaint that only redrew the face texture left
+      // every side of the part, and the whole of a `bar` bail that has no face
+      // texture at all, the grey it was built in (#481). So each material this
+      // node's colour went into is collected in `bodyMats`, and a repaint sets
+      // them from the repainted art. A `data-z-color` is a statement rather than
+      // a reading and is never overridden; the thread and knurl textures, which
+      // bake the colour into a canvas of their own, are not re-cut.
+      const derived = !o.color;
+      if (derived) o.color = dominantColor(ocv);
+      const bodyMats = [];
+      const bodyMat = (extra = {}) => {
+        const m = new THREE.MeshLambertMaterial({color: o.color, ...extra});
+        bodyMats.push(m);
+        return m;
+      };
       await compose(ocv);
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
       reg(o.svgText,
-          async text => remap(faceTex, await compose(await rasterize(text, o.w, o.h, PX))),
+          async text => {
+            const cvs = await rasterize(text, o.w, o.h, PX);
+            // unpunched, as at build: `compose` below erases the seated cavities
+            if (derived && bodyMats.length) {
+              const c = dominantColor(cvs);
+              for (const m of bodyMats) m.color.set(c);
+            }
+            remap(faceTex, await compose(cvs));
+          },
           {mat: faceTex, w: o.w, h: o.h, path: o.owner});
       if (o.uhandle !== undefined && o.uhandle !== '') {
         const far = +o.uhandle;
@@ -1658,7 +1689,7 @@ export async function buildFaceRelief(F, ctx) {
         const u0 = horizontal ? o.x : o.y;
         const a = u0 + r, b = u0 + uLen - r;          // leg centerlines (svg coords)
         const cc = horizontal ? o.y + o.h / 2 : o.x + o.w / 2;  // cross-axis center
-        const mat = new THREE.MeshLambertMaterial({color: o.color});
+        const mat = bodyMat();
         const P = (u, z) => horizontal
           ? [u - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - cc), z]
           : [cc - fw / 2, (F.flipLY ? -1 : 1) * (fh / 2 - u), z];
@@ -1690,8 +1721,7 @@ export async function buildFaceRelief(F, ctx) {
       } else if (o.bar !== undefined && o.bar !== '') {
         // round tube along the node's long axis, lift..lift+bar off the face
         const len = Math.max(o.w, o.h), r = o.bar / 2;
-        const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 16),
-          new THREE.MeshLambertMaterial({color: o.color}));
+        const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 16), bodyMat());
         if (o.w >= o.h) m.rotation.z = Math.PI / 2;   // horizontal bar
         m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + r);
         addTo(m);
@@ -1732,7 +1762,7 @@ export async function buildFaceRelief(F, ctx) {
           ktex.magFilter = THREE.NearestFilter;
           side = new THREE.MeshLambertMaterial({map: ktex});
         } else {
-          side = new THREE.MeshLambertMaterial({color: o.color});
+          side = bodyMat();
         }
         const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, o.cyl, 24),
           [side, faceTex, side]);
@@ -1795,15 +1825,16 @@ export async function buildFaceRelief(F, ctx) {
           skirt.setAttribute('position', new THREE.Float32BufferAttribute(toWorld(g.skirt.pos), 3));
           skirt.setIndex(g.skirt.idx);
           skirt.computeVertexNormals();
-          addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
+          addTo(new THREE.Mesh(skirt, bodyMat({side: THREE.DoubleSide})));
           if (g.holeSkirt.idx.length) {
             // a window's edge is its own colour - the PBC-2000's amber bead
             const hs = new THREE.BufferGeometry();
             hs.setAttribute('position', new THREE.Float32BufferAttribute(toWorld(g.holeSkirt.pos), 3));
             hs.setIndex(g.holeSkirt.idx);
             hs.computeVertexNormals();
-            addTo(new THREE.Mesh(hs, new THREE.MeshLambertMaterial(
-              {color: o.holeColor || o.color, side: THREE.DoubleSide})));
+            addTo(new THREE.Mesh(hs, o.holeColor
+              ? new THREE.MeshLambertMaterial({color: o.holeColor, side: THREE.DoubleSide})
+              : bodyMat({side: THREE.DoubleSide})));
           }
         } else {
           const nx = xs.length, ny = ys.length;
@@ -1844,7 +1875,7 @@ export async function buildFaceRelief(F, ctx) {
           skirt.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
           skirt.setIndex(si);
           skirt.computeVertexNormals();
-          addTo(new THREE.Mesh(skirt, new THREE.MeshLambertMaterial({color: o.color, side: THREE.DoubleSide})));
+          addTo(new THREE.Mesh(skirt, bodyMat({side: THREE.DoubleSide})));
         }
       } else if (o.rings && o.rings.length) {
         // THE SHAPE, NOT THE BOX. `shape: true` on the feature. The face art was
@@ -1875,13 +1906,14 @@ export async function buildFaceRelief(F, ctx) {
         }
         uv.needsUpdate = true;
         const m = new THREE.Mesh(
-          geo, [faceTex, new THREE.MeshLambertMaterial({color: o.color})]);
+          geo, [faceTex, bodyMat()]);
         m.position.set(0, 0, o.lift);
         addTo(m);
       } else {
         // box: lift..out (lift defaults to 0 = sits on the face)
         const depth = o.out - o.lift;
         const mats = sideMats(o.color);
+        bodyMats.push(...mats.filter((_, i) => i !== 4));
         mats[4] = faceTex;
         const m = new THREE.Mesh(new THREE.BoxGeometry(o.w, o.h, depth), mats);
         m.position.set(LX(o.x, o.w), LY(o.y, o.h), o.lift + depth / 2);

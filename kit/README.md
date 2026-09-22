@@ -32,6 +32,7 @@ Everything in `library/dist/`, documented as a contract in
 | `share.js` | GLB and USDZ export |
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay |
+| `fields.js` | writing a field on a part at runtime - its text and its colour, the build's rule, for 2D and 3D alike |
 | `devsel.js` | device selection and filtering |
 | `dist.js` | artifact fetching and URL construction |
 
