@@ -115,7 +115,7 @@ from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml, nested_key_host, chained_occupant_ref,
-                      drawn_refs, slot_default,
+                      drawn_refs,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
 
@@ -5685,6 +5685,8 @@ def lint_component_slot_defaults(path, data, lib_roots):
                 f"{', '.join(entry['accepts']) or 'nothing'})")
 
     for q in entries:
+        # `ref`, `id` and `at` are required of a `parts:` entry (the schema
+        # says so); an entry missing one is L1's finding, not this rule's
         if q.get("ref") and "at" in q:
             check(f"parts/{q.get('id')}", q, q.get("default"))
     if own is not None:
