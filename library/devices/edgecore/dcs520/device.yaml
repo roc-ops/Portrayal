@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs520
-version: 1.0.3
+version: 1.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS9736-64D
@@ -18,6 +18,13 @@ description: >-
   two rear architectures.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage
+      upright (rotate 0) over the lower turned 180, so both cage lips face the band between the two cages
+      and both bails face outward. Decided by the rule, not an observation, so a photograph of the stack
+      overturns it: the 32 QSFP-DD pairs (port-1/port-2 to port-63/port-64), the 1 SFP pair (port-65/port-66).
   sources:
     confidence: datasheet
     note: >-

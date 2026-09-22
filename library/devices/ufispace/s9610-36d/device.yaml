@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-36d
-version: 3.0.14
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-36D
@@ -19,7 +19,30 @@ description: >-
   deep buffer, an OP2 external TCAM and a Stratum 3E OCXO; four hot-swap fans
   (3+1) and dual 3000 W PSUs (1+1) at the rear, orderable AC or DC
 profile: networking
+stack-exceptions:
+- pairs: [[port-0, port-1], [port-2, port-3], [port-4, port-5], [port-6, port-7],
+    [port-8, port-9], [port-10, port-11], [port-12, port-13], [port-14, port-15],
+    [port-16, port-17], [port-18, port-19], [port-20, port-21], [port-22, port-23],
+    [port-24, port-25], [port-26, port-27], [port-28, port-29], [port-30, port-31],
+    [port-32, port-33], [port-34, port-35]]
+  reason: >-
+    Drawing, in provenance (the QSFP-DD block). A 14x crop of one column shows two DIFFERENT
+    features in each aperture - the EMI gasket strip along the top inside edge and a thinner
+    strip along the bottom - and the same one on top in BOTH apertures, so the pair is built the
+    same way up, visibly unlike the mirrored SFP+ pair beside it in the same crop. Neither
+    QSFP-DD row is turned.
 provenance:
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the reading of the cages
+      recorded in this provenance: the 1 SFP pair (sfp-0/sfp-1). 1 of these were drawn with the
+      upper cage turned before the std cage art moved its lip to the bottom of the opening;
+      turning them keeps the lips in the middle band where they were drawn and seats every optic
+      bail-outward. Declared in stack-exceptions with the reading that keeps them otherwise: the
+      18 QSFP-DD pairs (port-0/port-1 to port-34/port-35).
   sources:
     note: >-
       UfiSpace S9610-36D datasheet for dimensions, weight, port inventory, platform, power,
@@ -118,7 +141,8 @@ provenance:
       lower jack's is at the BOTTOM - so with std/rj45-ganged drawing its keyway at the bottom,
       the OOB jack is rotate: 180 and the console jack is unrotated. The stacked SFP+ pair mirrors
       too: the upper cage's bright latch tab hangs DOWN into the silver band between the two and
-      the lower cage's points UP, so sfp-0 is rotate: 180 and sfp-1 is not. The QSFP-DD rows do
+      the lower cage's points UP, and std/sfp-ganged draws its lip at the bottom of an upright
+      opening, so sfp-1 is rotate: 180 and sfp-0 is not. The QSFP-DD rows do
       NOT mirror; see qsfp-layout. std/rj45-ganged (12.7 x 11) is used rather than std/rj45 (16 mm
       bezel) because the two jacks sit on a 19.4 mm stack pitch with a USB 3.0 socket between
       them, which a 16 mm bezel cannot do. The USB socket is LANDSCAPE here - its aperture
@@ -730,8 +754,8 @@ views:
         - {ref: std/usb-a@1, id: usb, at: [21.1, 60.2], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb3}}
         - {ref: std/rj45-ganged@2, id: console, at: [20.8, 66.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [30.3, 42.3], for: usb, group: furniture, rel-pos: 1}
-        - {ref: std/sfp-ganged@1, id: sfp-0, at: [41.78, 51.0], rotate: 180, group: sfp-plus, rel-pos: 0}
-        - {ref: std/sfp-ganged@1, id: sfp-1, at: [41.78, 65.9], group: sfp-plus, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: sfp-0, at: [41.78, 51.0], group: sfp-plus, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: sfp-1, at: [41.78, 65.9], rotate: 180, group: sfp-plus, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-sfp-left, for: [sfp-0, sfp-1], at: [45.14, 49.49], group: port-leds, rel-pos: 39}
         - {ref: common/led-dot@1, id: led-sfp-right, for: [sfp-0, sfp-1], at: [51.02, 49.49], group: port-leds, rel-pos: 40}
         - {ref: common/led-dot@1, id: led-port-0, for: port-0, at: [78.45, 44.41], group: port-leds, rel-pos: 1}

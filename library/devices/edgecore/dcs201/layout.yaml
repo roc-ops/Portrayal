@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs201
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: AS5835-54X
@@ -15,6 +15,15 @@ description: >-
   and latch.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the port lamps, which point up
+      over down: the 24 SFP pairs (port-1/port-2 to port-47/port-48). Decided by the rule, not an
+      observation, so a photograph of the stack overturns it: the 2 QSFP pairs (port-49/port-50
+      and port-52/port-53).
   sources:
     confidence: datasheet
     note: >-

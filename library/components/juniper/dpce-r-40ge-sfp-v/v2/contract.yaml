@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-r-40ge-sfp-v
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -9,13 +9,20 @@ description: >-
   Juniper DPCE-R-40GE-SFP as mounted in the MX960 - the same 40x1GbE DPC
   the MX240/MX480 seat horizontally, authored vertically for the MX960's
   card cage: four banks of ten SFP cages in two columns of five, every
-  cage a single std/sfp rotated 90. Ports are numbered per PIC
+  cage a single std/sfp rotated 90 (270 for the left cage of each belly-to-belly pair). Ports are numbered per PIC
   (x/0..x/9, four PICs), the same scheme the horizontal author uses.
 attrs:
   sfp: 40
   model: DPCE-R-40GE-SFP
   power-draw-max-w: 333
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 20 SFP pairs (port-0-0/port-0-1 to port-3-8/port-3-9). Turning a composed cage
+    in place changes no box, id or anything a device places, so it is a minor bump (S6).
   sfp-rate: >-
     the cage RATE, transcribed from this contract's own description: 'the same 40x1GbE DPC
     the MX240/MX480 seat horizontally'. Without it `cage_type` finds no media attr for the
@@ -32,45 +39,45 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/sfp@1, id: port-0-0, at: [1.75, 41.0], rotate: 90}
+- {ref: std/sfp@1, id: port-0-0, at: [1.75, 41.0], rotate: 270}
 - {ref: std/sfp@1, id: port-0-1, at: [13.75, 41.0], rotate: 90}
-- {ref: std/sfp@1, id: port-0-2, at: [1.75, 57.5], rotate: 90}
+- {ref: std/sfp@1, id: port-0-2, at: [1.75, 57.5], rotate: 270}
 - {ref: std/sfp@1, id: port-0-3, at: [13.75, 57.5], rotate: 90}
-- {ref: std/sfp@1, id: port-0-4, at: [1.75, 74.0], rotate: 90}
+- {ref: std/sfp@1, id: port-0-4, at: [1.75, 74.0], rotate: 270}
 - {ref: std/sfp@1, id: port-0-5, at: [13.75, 74.0], rotate: 90}
-- {ref: std/sfp@1, id: port-0-6, at: [1.75, 90.5], rotate: 90}
+- {ref: std/sfp@1, id: port-0-6, at: [1.75, 90.5], rotate: 270}
 - {ref: std/sfp@1, id: port-0-7, at: [13.75, 90.5], rotate: 90}
-- {ref: std/sfp@1, id: port-0-8, at: [1.75, 107.0], rotate: 90}
+- {ref: std/sfp@1, id: port-0-8, at: [1.75, 107.0], rotate: 270}
 - {ref: std/sfp@1, id: port-0-9, at: [13.75, 107.0], rotate: 90}
-- {ref: std/sfp@1, id: port-1-0, at: [1.75, 133.0], rotate: 90}
+- {ref: std/sfp@1, id: port-1-0, at: [1.75, 133.0], rotate: 270}
 - {ref: std/sfp@1, id: port-1-1, at: [13.75, 133.0], rotate: 90}
-- {ref: std/sfp@1, id: port-1-2, at: [1.75, 149.5], rotate: 90}
+- {ref: std/sfp@1, id: port-1-2, at: [1.75, 149.5], rotate: 270}
 - {ref: std/sfp@1, id: port-1-3, at: [13.75, 149.5], rotate: 90}
-- {ref: std/sfp@1, id: port-1-4, at: [1.75, 166.0], rotate: 90}
+- {ref: std/sfp@1, id: port-1-4, at: [1.75, 166.0], rotate: 270}
 - {ref: std/sfp@1, id: port-1-5, at: [13.75, 166.0], rotate: 90}
-- {ref: std/sfp@1, id: port-1-6, at: [1.75, 182.5], rotate: 90}
+- {ref: std/sfp@1, id: port-1-6, at: [1.75, 182.5], rotate: 270}
 - {ref: std/sfp@1, id: port-1-7, at: [13.75, 182.5], rotate: 90}
-- {ref: std/sfp@1, id: port-1-8, at: [1.75, 199.0], rotate: 90}
+- {ref: std/sfp@1, id: port-1-8, at: [1.75, 199.0], rotate: 270}
 - {ref: std/sfp@1, id: port-1-9, at: [13.75, 199.0], rotate: 90}
-- {ref: std/sfp@1, id: port-2-0, at: [1.75, 225.0], rotate: 90}
+- {ref: std/sfp@1, id: port-2-0, at: [1.75, 225.0], rotate: 270}
 - {ref: std/sfp@1, id: port-2-1, at: [13.75, 225.0], rotate: 90}
-- {ref: std/sfp@1, id: port-2-2, at: [1.75, 241.5], rotate: 90}
+- {ref: std/sfp@1, id: port-2-2, at: [1.75, 241.5], rotate: 270}
 - {ref: std/sfp@1, id: port-2-3, at: [13.75, 241.5], rotate: 90}
-- {ref: std/sfp@1, id: port-2-4, at: [1.75, 258.0], rotate: 90}
+- {ref: std/sfp@1, id: port-2-4, at: [1.75, 258.0], rotate: 270}
 - {ref: std/sfp@1, id: port-2-5, at: [13.75, 258.0], rotate: 90}
-- {ref: std/sfp@1, id: port-2-6, at: [1.75, 274.5], rotate: 90}
+- {ref: std/sfp@1, id: port-2-6, at: [1.75, 274.5], rotate: 270}
 - {ref: std/sfp@1, id: port-2-7, at: [13.75, 274.5], rotate: 90}
-- {ref: std/sfp@1, id: port-2-8, at: [1.75, 291.0], rotate: 90}
+- {ref: std/sfp@1, id: port-2-8, at: [1.75, 291.0], rotate: 270}
 - {ref: std/sfp@1, id: port-2-9, at: [13.75, 291.0], rotate: 90}
-- {ref: std/sfp@1, id: port-3-0, at: [1.75, 317.0], rotate: 90}
+- {ref: std/sfp@1, id: port-3-0, at: [1.75, 317.0], rotate: 270}
 - {ref: std/sfp@1, id: port-3-1, at: [13.75, 317.0], rotate: 90}
-- {ref: std/sfp@1, id: port-3-2, at: [1.75, 333.5], rotate: 90}
+- {ref: std/sfp@1, id: port-3-2, at: [1.75, 333.5], rotate: 270}
 - {ref: std/sfp@1, id: port-3-3, at: [13.75, 333.5], rotate: 90}
-- {ref: std/sfp@1, id: port-3-4, at: [1.75, 350.0], rotate: 90}
+- {ref: std/sfp@1, id: port-3-4, at: [1.75, 350.0], rotate: 270}
 - {ref: std/sfp@1, id: port-3-5, at: [13.75, 350.0], rotate: 90}
-- {ref: std/sfp@1, id: port-3-6, at: [1.75, 366.5], rotate: 90}
+- {ref: std/sfp@1, id: port-3-6, at: [1.75, 366.5], rotate: 270}
 - {ref: std/sfp@1, id: port-3-7, at: [13.75, 366.5], rotate: 90}
-- {ref: std/sfp@1, id: port-3-8, at: [1.75, 383.0], rotate: 90}
+- {ref: std/sfp@1, id: port-3-8, at: [1.75, 383.0], rotate: 270}
 - {ref: std/sfp@1, id: port-3-9, at: [13.75, 383.0], rotate: 90}
 size:
   w: 30.1

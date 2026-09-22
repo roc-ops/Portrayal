@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-400g-dwdm-tr
-version: 1.0.1
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,6 +24,13 @@ attrs:
   power-draw-max-w: 600
   eol: 'none-announced'
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 10 SFP pairs (p0/p1 to p18/p19). Turning a composed cage in place changes no
+    box, id or anything a device places, so it is a minor bump (S6).
   chassis-compatibility: >-
     datasheet c78-736456, the Chassis compatibility row, which names the chassis this
     card is supported in. That row is why the slot bays accept it; geometry is not a
@@ -212,25 +219,25 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/sfp@1, id: p0, at: [8.97, 205.78], rotate: 90}
+  - {ref: std/sfp@1, id: p0, at: [8.97, 205.78], rotate: 270}
   - {ref: std/sfp@1, id: p1, at: [21.01, 205.78], rotate: 90}
-  - {ref: std/sfp@1, id: p2, at: [8.97, 220.42], rotate: 90}
+  - {ref: std/sfp@1, id: p2, at: [8.97, 220.42], rotate: 270}
   - {ref: std/sfp@1, id: p3, at: [21.01, 220.42], rotate: 90}
-  - {ref: std/sfp@1, id: p4, at: [8.97, 234.81], rotate: 90}
+  - {ref: std/sfp@1, id: p4, at: [8.97, 234.81], rotate: 270}
   - {ref: std/sfp@1, id: p5, at: [21.01, 234.81], rotate: 90}
-  - {ref: std/sfp@1, id: p6, at: [8.97, 249.47], rotate: 90}
+  - {ref: std/sfp@1, id: p6, at: [8.97, 249.47], rotate: 270}
   - {ref: std/sfp@1, id: p7, at: [21.01, 249.47], rotate: 90}
-  - {ref: std/sfp@1, id: p8, at: [8.97, 264.12], rotate: 90}
+  - {ref: std/sfp@1, id: p8, at: [8.97, 264.12], rotate: 270}
   - {ref: std/sfp@1, id: p9, at: [21.01, 264.12], rotate: 90}
-  - {ref: std/sfp@1, id: p10, at: [8.97, 283.84], rotate: 90}
+  - {ref: std/sfp@1, id: p10, at: [8.97, 283.84], rotate: 270}
   - {ref: std/sfp@1, id: p11, at: [21.01, 283.84], rotate: 90}
-  - {ref: std/sfp@1, id: p12, at: [8.97, 298.24], rotate: 90}
+  - {ref: std/sfp@1, id: p12, at: [8.97, 298.24], rotate: 270}
   - {ref: std/sfp@1, id: p13, at: [21.01, 298.24], rotate: 90}
-  - {ref: std/sfp@1, id: p14, at: [8.97, 312.89], rotate: 90}
+  - {ref: std/sfp@1, id: p14, at: [8.97, 312.89], rotate: 270}
   - {ref: std/sfp@1, id: p15, at: [21.01, 312.89], rotate: 90}
-  - {ref: std/sfp@1, id: p16, at: [8.97, 327.55], rotate: 90}
+  - {ref: std/sfp@1, id: p16, at: [8.97, 327.55], rotate: 270}
   - {ref: std/sfp@1, id: p17, at: [21.01, 327.55], rotate: 90}
-  - {ref: std/sfp@1, id: p18, at: [8.97, 341.94], rotate: 90}
+  - {ref: std/sfp@1, id: p18, at: [8.97, 341.94], rotate: 270}
   - {ref: std/sfp@1, id: p19, at: [21.01, 341.94], rotate: 90}
 body:
   depth: 569.0

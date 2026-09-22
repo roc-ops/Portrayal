@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-16smt
-version: 1.0.7
+version: 1.0.8
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-16SMT
@@ -16,7 +16,22 @@ description: >-
   Broadcom Qumran-UX at 32 Gbps; power is a FIXED 1+1 supply, not a FRU, and the rear is
   six passive convection grilles
 profile: networking
+stack-exceptions:
+- pairs: [[port-4, port-5], [port-6, port-7], [port-8, port-9], [port-10, port-11],
+    [port-12, port-13], [port-14, port-15]]
+  reason: >-
+    Photo-measured, in provenance.cage-mirroring. This device's own front photograph gives a
+    cavity pitch of 15.4-15.8 mm between the stacked rows, against 15.8 for two cages the same
+    way round and 12.7 or 17.3 for a mirrored pair - the render-against-photograph test that
+    settled the S9500-22XST. The rows share one orientation, so neither is turned. Like that
+    test, it assumes the real cavity sits off-centre as std/sfp-ganged's does; a centred one
+    would read the same either way.
 provenance:
+  stack-orientation:
+    confidence: photo-measured
+    note: >-
+      Declared in stack-exceptions with the reading that keeps them otherwise: the 6 SFP pairs
+      (port-4/port-5 to port-14/port-15).
   sources:
     note: >-
       UfiSpace S9502-16SMT datasheet for dimensions, weight, port inventory, platform, timing,
@@ -136,6 +151,7 @@ provenance:
       backwards on the S9500-22XST last night and caught only by the matched-scale render; it is
       applied the corrected way round here and re-checked the same way.
   cage-mirroring:
+    confidence: photo-measured
     note: >-
       The stacked SFP and SFP+ rows are drawn UNMIRRORED, which is what the same
       render-against-photograph test established on the S9500-22XST: rotating a std/sfp-ganged

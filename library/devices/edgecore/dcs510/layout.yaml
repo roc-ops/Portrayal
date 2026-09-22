@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs510
-version: 1.0.10
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: DCS510
@@ -12,6 +12,16 @@ description: >-
   and back-to-front airflow SKUs.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (mgmt-sfp-1/mgmt-sfp-2), the 16
+      QSFP-DD pairs (port-1/port-2 to port-31/port-32). 16 of these were drawn with the upper cage
+      turned before the std cage art moved its lip to the bottom of the opening; turning them
+      keeps the lips in the middle band where they were drawn and seats every optic bail-outward.
   sources:
     note: >-
       Two documents, both docling-converted. dcs510-datasheet (the DCS510 / AS9716-32D data sheet)
@@ -445,7 +455,7 @@ views:
         gutter: 6.06
         number-from: 1
         cutouts: true
-        rotate: {top: 180}
+        rotate: {bottom: 180}
         led:
           ref: common/qsfp-lane-leds-column@1
           id-format: led-port-{n}
@@ -480,7 +490,7 @@ views:
         - {ref: std/usb-a@1, id: usb, at: [393.3, 15.95], group: mgmt, rel-pos: 5, attrs: {media: usb-a, role: storage}}
         - {ref: std/rj45@2, id: console, at: [389.5, 26.95], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}, rotate: 180}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [409.3, 11.9], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
-        - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [409.3, 26.6], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
+        - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-2, at: [409.3, 26.6], rotate: 180, group: mgmt, rel-pos: 4, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}
         - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [412.95, 8.3], group: leds, rel-pos: 6, for: mgmt-sfp-1}
         - {ref: common/led-dot@1, id: led-mgmt-sfp-2, at: [419.65, 8.3], group: leds, rel-pos: 7, for: mgmt-sfp-2}
         - {ref: common/pull-tab@1, id: info-tab, at: [414.5, 38.4], group: furniture, rel-pos: 3}

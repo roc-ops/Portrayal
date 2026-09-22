@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-16t-8-b
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -19,6 +19,13 @@ attrs:
   weight-kg: 8.165
   eol: 'none-announced'
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 8 SFP pairs (p0/p1 to p14/p15). Turning a composed cage in place changes no box,
+    id or anything a device places, so it is a minor bump (S6).
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 4 ejector brackets, their levers and the grip
@@ -168,21 +175,21 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [6.46, 90.2], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p0, at: [6.46, 90.2], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p1, at: [22.43, 90.2], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p2, at: [6.46, 104.58], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p2, at: [6.46, 104.58], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p3, at: [22.43, 104.58], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p4, at: [6.46, 118.98], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p4, at: [6.46, 118.98], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p5, at: [22.43, 118.98], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p6, at: [6.46, 133.36], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p6, at: [6.46, 133.36], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p7, at: [22.43, 133.36], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p8, at: [6.46, 258.06], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p8, at: [6.46, 258.06], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p9, at: [22.43, 258.06], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p10, at: [6.46, 272.45], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p10, at: [6.46, 272.45], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p11, at: [22.43, 272.45], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p12, at: [6.46, 286.85], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p12, at: [6.46, 286.85], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p13, at: [22.43, 286.85], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p14, at: [6.46, 301.24], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p14, at: [6.46, 301.24], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p15, at: [22.43, 301.24], rotate: 90}
 body:
   depth: 520.7

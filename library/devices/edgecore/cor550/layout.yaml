@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 1.0.1
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
@@ -15,6 +15,17 @@ description: >-
   front-to-back only.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (oob-0/oob-1), the 20 QSFP pairs
+      (port-0/port-1 to port-38/port-39), the 6 QSFP-DD pairs (fab-0/fab-1 to fab-10/fab-11). 26
+      of these were drawn with the upper cage turned before the std cage art moved its lip to the
+      bottom of the opening; turning them keeps the lips in the middle band where they were drawn
+      and seats every optic bail-outward.
   sources:
     confidence: datasheet
     note: >-
@@ -585,7 +596,7 @@ views:
           gutter: 4.70
           number-from: 0
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           led:
             ref: edgecore/cor550-lane-leds@1
             id-format: led-port-{n}
@@ -612,7 +623,7 @@ views:
           gutter: 4.75
           number-from: 12
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           led:
             ref: edgecore/cor550-lane-leds@1
             id-format: led-port-{n}
@@ -639,7 +650,7 @@ views:
           gutter: 4.70
           number-from: 20
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           led:
             ref: edgecore/cor550-lane-leds@1
             id-format: led-port-{n}
@@ -666,7 +677,7 @@ views:
           gutter: 4.75
           number-from: 32
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           led:
             ref: edgecore/cor550-lane-leds@1
             id-format: led-port-{n}
@@ -694,7 +705,7 @@ views:
           number-from: 0
           id-format: fab-{n}
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
@@ -716,7 +727,7 @@ views:
         - {ref: common/led-dot@1, id: led-fab-m, at: [265.09, 37.96], group: port-lamps, rel-pos: 52, for: fab-12}
         - {ref: common/led-dot@1, id: led-fab-n, at: [265.09, 41.08], group: port-lamps, rel-pos: 53, for: fab-12}
         - {ref: common/sfp-plus-cage@2, id: oob-0, at: [377.85, 19.83], group: mgmt, rel-pos: 1, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
-        - {ref: common/sfp-plus-cage@2, id: oob-1, at: [377.85, 35.32], group: mgmt, rel-pos: 2, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
+        - {ref: common/sfp-plus-cage@2, id: oob-1, at: [377.85, 35.32], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
         - {ref: common/smb-jack@1, id: timing-coax, at: [396.60, 36.80], group: mgmt, rel-pos: 3, attrs: {media: coax, role: timing}}
         - {ref: common/seven-segment-dual@1, id: status-display, at: [406.51, 29.50], group: displays, rel-pos: 1, for: chassis}
         - {ref: std/usb-a@1, id: usb, at: [424.85, 12.25], rotate: 90, group: mgmt, rel-pos: 4, attrs: {media: usb-a, role: storage}}

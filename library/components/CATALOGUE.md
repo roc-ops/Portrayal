@@ -105,7 +105,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/psu-ac-650@3` | module | psu | 54 × 40 |  | 6 | 14 | 650W AC PSU module (v3 = composed - bezel art wraps a std/c14-inlet core) |
 | `common/psu-dc-650@2` | module | psu | 54 × 40 |  | 6 | 3 | 650W -48V DC PSU module - blue fold-out handle, terminal cover (v2 = photo-measured 54mm) |
 | `common/pull-tab@1` | component | tab | 16 × 4.5 |  | 8 | 0 | Captive pull-out information tab (default credentials / serial card) |
-| `common/qsfp-cage@2` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
+| `common/qsfp-cage@3` | component | port | 19.5 × 10.18 × 37 |  | 6 | 0 | Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged aperture (v2 = the cage only - the coloured b… |
 | `common/qsfp-drawing@1` | component | reference | 118 × 19 |  | 0 | 0 | QSFP orthographic views transcribed from a vendor mechanical drawing - top, side and bottom at true scale |
 | `common/qsfp-lane-leds@1` | component | led | 19.5 × 3.4 |  | 2 | 3 | QSFP port lane LED strip - four triangles, one per lane (no separate link/activity LEDs on this platform) |
 | `common/qsfp-lane-leds-column@1` | component | led | 1.8 × 11.4 |  | 4 | 0 | QSFP port lane LED column - four round lamps stacked VERTICALLY, one per 100G lane, for faceplates that stand… |
@@ -124,7 +124,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/screw-head@1` | component | screw | 3.6 × 3.6 × 0.7 |  | 57 | 6 | Generic countersunk screw head (decorative fastener) |
 | `common/serial-symbol@1` | component | silkscreen | 7.2 × 2.6 |  | 0 | 0 | The IOIOI mark printed beside a serial port - alternating bars and rings, which is how a vendor says "this on… |
 | `common/seven-segment-dual@1` | component | display | 17.4 × 12.1 |  | 3 | 0 | Two-digit seven-segment status display behind one window - the code readout an Accton/Edgecore faceplate prin… |
-| `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 2 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
+| `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 1 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
 | `common/sfp-led-pair@1` | component | led | 12 × 4 |  | 4 | 0 | Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between |
 | `common/sfp-plus-cage@2` | component | port | 16 × 10 × 41 |  | 5 | 2 | SFP+ cage (v2 = composed - bezel wraps a std/sfp cutout core) |
 | `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 21 | 0 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |

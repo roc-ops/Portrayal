@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc7e-mrate
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -11,6 +11,16 @@ attrs:
   model: MPC7E-MRATE
   power-draw-max-w: 545
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 6 QSFP pairs
+    (port-0-0/port-0-1 to port-1-4/port-1-5). 6 of these were drawn with the upper cage
+    turned before the std cage art moved its lip to the bottom of the opening; turning
+    them keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
@@ -38,18 +48,18 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/qsfp28@1, id: port-0-0, at: [44.00, 3.60], rotate: 180, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-1, at: [44.00, 14.95], attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-2, at: [65.50, 3.60], rotate: 180, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-3, at: [65.50, 14.95], attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-4, at: [87.00, 3.60], rotate: 180, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-5, at: [87.00, 14.95], attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-0, at: [115.50, 3.60], rotate: 180, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-1, at: [115.50, 14.95], attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-2, at: [137.00, 3.60], rotate: 180, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-3, at: [137.00, 14.95], attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-4, at: [158.50, 3.60], rotate: 180, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-5, at: [158.50, 14.95], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-0, at: [44.00, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-1, at: [44.00, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-2, at: [65.50, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-3, at: [65.50, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-4, at: [87.00, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-5, at: [87.00, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-0, at: [115.50, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-1, at: [115.50, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-2, at: [137.00, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-3, at: [137.00, 14.95], rotate: 180, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-4, at: [158.50, 3.60], attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-5, at: [158.50, 14.95], rotate: 180, attrs: {media: qsfp28}}
 size:
   w: 420.9
   h: 29.5

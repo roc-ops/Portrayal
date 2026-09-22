@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: port-extender
-version: 2.0.0
+version: 3.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
@@ -14,6 +14,17 @@ description: >-
   the third-party switches that can stand in for it.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 24 SFP pairs (port-1/port-2 to
+      port-47/port-48), the 4 QSFP pairs (port-49/port-50 to port-55/port-56). 24 of these were
+      drawn with the upper cage turned before the std cage art moved its lip to the bottom of the
+      opening; turning them keeps the lips in the middle band where they were drawn and seats
+      every optic bail-outward.
   size:
     confidence: datasheet
     note: >-
@@ -283,7 +294,7 @@ views:
           pitch: registry
           number-from: 1
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           attrs: {media: sfp28, speed: 25g}
           led:
             ref: common/led-dot@1
@@ -309,7 +320,7 @@ views:
           pitch: registry
           number-from: 17
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           attrs: {media: sfp28, speed: 25g}
           led:
             ref: common/led-dot@1
@@ -335,7 +346,7 @@ views:
           pitch: registry
           number-from: 33
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           attrs: {media: sfp28, speed: 25g}
           led:
             ref: common/led-dot@1
@@ -361,7 +372,7 @@ views:
           pitch: registry
           number-from: 49
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           attrs: {media: qsfp28, speed: 100g}
           led:
             ref: maiaedge/port-extender-lane-leds@1

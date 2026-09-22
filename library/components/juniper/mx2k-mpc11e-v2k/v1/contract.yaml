@@ -1,16 +1,23 @@
 format: 1
 kind: module
 name: mx2k-mpc11e-v2k
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper MX2K-MPC11E fixed MPC for the MX2010/MX2020 - forty QSFP28 cages in four five-row PIC segments. Authored as the MX2000 vertical form, seated through its adapter card (jacks rotated 90).
+  Juniper MX2K-MPC11E fixed MPC for the MX2010/MX2020 - forty QSFP28 cages in four five-row PIC segments. Authored as the MX2000 vertical form, seated through its adapter card (jacks turned on their side - rotate 90, and 270 for the left cage of each belly-to-belly pair).
 attrs:
   model: MX2K-MPC11E
   power-draw-max-w: 1980
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 20 QSFP pairs (port-0-1/port-0-0 to port-3-9/port-3-8). Turning a composed cage
+    in place changes no box, id or anything a device places, so it is a minor bump (S6).
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
@@ -30,45 +37,45 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/qsfp28@1, id: port-0-1, at: [2.50, 28.88], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-1, at: [2.50, 28.88], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-0-0, at: [18.50, 28.88], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-3, at: [2.50, 48.77], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-3, at: [2.50, 48.77], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-0-2, at: [18.50, 48.77], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-5, at: [2.50, 68.67], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-5, at: [2.50, 68.67], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-0-4, at: [18.50, 68.67], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-7, at: [2.50, 88.57], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-7, at: [2.50, 88.57], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-0-6, at: [18.50, 88.57], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-0-9, at: [2.50, 108.47], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-9, at: [2.50, 108.47], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-0-8, at: [18.50, 108.47], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-1, at: [2.50, 128.88], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-1, at: [2.50, 128.88], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-1-0, at: [18.50, 128.88], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-3, at: [2.50, 148.78], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-3, at: [2.50, 148.78], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-1-2, at: [18.50, 148.78], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-5, at: [2.50, 168.68], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-5, at: [2.50, 168.68], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-1-4, at: [18.50, 168.68], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-7, at: [2.50, 188.57], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-7, at: [2.50, 188.57], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-1-6, at: [18.50, 188.57], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-1-9, at: [2.50, 208.47], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-9, at: [2.50, 208.47], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-1-8, at: [18.50, 208.47], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-2-1, at: [2.50, 228.88], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-2-1, at: [2.50, 228.88], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-2-0, at: [18.50, 228.88], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-2-3, at: [2.50, 248.78], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-2-3, at: [2.50, 248.78], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-2-2, at: [18.50, 248.78], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-2-5, at: [2.50, 268.68], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-2-5, at: [2.50, 268.68], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-2-4, at: [18.50, 268.68], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-2-7, at: [2.50, 288.57], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-2-7, at: [2.50, 288.57], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-2-6, at: [18.50, 288.57], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-2-9, at: [2.50, 308.48], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-2-9, at: [2.50, 308.48], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-2-8, at: [18.50, 308.48], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-3-1, at: [2.50, 328.88], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-3-1, at: [2.50, 328.88], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-3-0, at: [18.50, 328.88], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-3-3, at: [2.50, 348.77], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-3-3, at: [2.50, 348.77], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-3-2, at: [18.50, 348.77], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-3-5, at: [2.50, 368.68], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-3-5, at: [2.50, 368.68], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-3-4, at: [18.50, 368.68], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-3-7, at: [2.50, 388.57], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-3-7, at: [2.50, 388.57], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-3-6, at: [18.50, 388.57], rotate: 90, attrs: {media: qsfp28}}
-- {ref: std/qsfp28@1, id: port-3-9, at: [2.50, 408.48], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-3-9, at: [2.50, 408.48], rotate: 270, attrs: {media: qsfp28}}
 - {ref: std/qsfp28@1, id: port-3-8, at: [18.50, 408.48], rotate: 90, attrs: {media: qsfp28}}
 size:
   w: 41.0

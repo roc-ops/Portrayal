@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs240
-version: 1.1.2
+version: 1.1.3
 maturity: modelled
 manufacturer: Edgecore
 model: AS9726-32DB
@@ -14,6 +14,14 @@ description: >-
   printed 1 and 2.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (tengig-1/tengig-2), the 16 QSFP
+      pairs (port-1/port-2 to port-31/port-32).
   sources:
     confidence: datasheet
     note: >-

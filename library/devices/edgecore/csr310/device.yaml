@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr310
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7315-27X
@@ -14,6 +14,14 @@ description: >-
   tray; side-to-side airflow.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage
+      upright (rotate 0) over the lower turned 180, so both cage lips face the band between the two cages
+      and both bails face outward. Decided by the port lamps, which point up over down: the 12 SFP pairs
+      (m1-0/m1-1 to port-18/port-19). Decided by the rule, not an observation, so a photograph of the
+      stack overturns it: the 1 QSFP pair (stack-0/stack-1).
   sources:
     confidence: datasheet
     note: >-

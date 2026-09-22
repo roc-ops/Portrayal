@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-32e
-version: 1.1.6
+version: 1.1.7
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-32E
@@ -15,7 +15,22 @@ description: UfiSpace S9620-32E - 2RU 32-port 100/200/400/800G QSFP-DD open aggr
   with an AST2620 BMC, 1+1 hot-swap 3200W AC or DC PSUs, 3+1 hot-swap fans,
   front-to-back airflow
 profile: networking
+stack-exceptions:
+- pairs: [[port-0, port-1], [port-2, port-3], [port-4, port-5], [port-6, port-7],
+    [port-8, port-9], [port-10, port-11], [port-12, port-13], [port-14, port-15],
+    [port-16, port-17], [port-18, port-19], [port-20, port-21], [port-22, port-23],
+    [port-24, port-25], [port-26, port-27], [port-28, port-29], [port-30, port-31]]
+  reason: >-
+    Measured, in provenance.port-rows (confidence: measured): cross-correlating the upper cage
+    against the flipped lower one in the render scores 0.952, against 0.972 for the two the same
+    way up, so the rows read as built the same way up and neither row is turned. A marginal
+    reading, and the only one held; a photograph of an empty cage column settles it.
 provenance:
+  stack-orientation:
+    confidence: photo-measured
+    note: >-
+      Declared in stack-exceptions with the reading that keeps them otherwise: the 16 QSFP-DD
+      pairs (port-0/port-1 to port-30/port-31).
   sources:
     note: >-
       THIS DEVICE HAS NO HARDWARE INSTALLATION GUIDE. UfiSpace has published one for every other
@@ -85,7 +100,7 @@ provenance:
       assumed. The cage art itself is symmetric top to bottom (cross-correlating the upper cage
       against the flipped lower one scores 0.952 against 0.972 the same way up), so no port
       carries rotate: 180, unlike the belly-to-belly bands of the S9321-64E where the seam is
-      visible.
+      visible. The pairs are declared in stack-exceptions on this reading.
   port-numbering:
     confidence: measured
     note: >-

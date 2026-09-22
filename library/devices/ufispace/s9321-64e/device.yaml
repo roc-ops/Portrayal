@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64e
-version: 1.1.7
+version: 2.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64E
@@ -16,6 +16,17 @@ description: UfiSpace S9321-64E - 2RU 64-port 200/400/800G QSFP-DD AI/ML data-ce
   DC PSUs, 3+1 hot-swap fans, front-to-back airflow
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the reading of the cages
+      recorded in this provenance: the 32 QSFP-DD pairs (port-0/port-1 to port-62/port-63).
+      Decided by the rule, not an observation, so a photograph of the stack overturns it: the 1
+      SFP pair (port-64/port-65). 33 of these were drawn with the upper cage turned before the std
+      cage art moved its lip to the bottom of the opening; turning them keeps the lips in the
+      middle band where they were drawn and seats every optic bail-outward.
   chassis:
     confidence: datasheet
     note: >-
@@ -65,9 +76,9 @@ provenance:
       pitch of 13.5 - and the 17.3 version put a 7 mm gap down the middle of every block that the
       reference does not have, which is what the matched-scale comparison showed and nothing else
       would have. std/qsfp-dd's registry 19.0 x 10.0 opening is seated on the corrected centres;
-      the QSFP-DD MSA governs the opening size and the figure does not. The upper row of each band
-      is rotate 180 so its cage lip faces the seam, as both rows do on the hardware and as the
-      figure draws them.
+      the QSFP-DD MSA governs the opening size and the figure does not. The lower row of each band
+      is rotate 180 so both rows' cage lips face the seam, as they do on the hardware and as the
+      figure draws them (std/qsfp-dd draws its lip at the bottom of an upright opening).
   port-numbering:
     note: >-
       HIG Port Overview table: 'Port ID 0~63 QSFP-DD or OSFP ... 64~65 SFP28', and HIG Figure 8
@@ -695,74 +706,74 @@ views:
            attrs: {role: console},
            description: 'the second console port, labelled IOIO like the RJ45 one; needs
              the Silicon Labs CP210x USB-to-UART driver (HIG Initial System Setup)'}
-        - {ref: std/sfp-ganged@1, id: port-64, at: [41.42, 33.7], rotate: 180, group: sfp28, rel-pos: 64}
-        - {ref: std/sfp-ganged@1, id: port-65, at: [41.42, 48.8], group: sfp28, rel-pos: 65}
+        - {ref: std/sfp-ganged@1, id: port-64, at: [41.42, 33.7], group: sfp28, rel-pos: 64}
+        - {ref: std/sfp-ganged@1, id: port-65, at: [41.42, 48.8], rotate: 180, group: sfp28, rel-pos: 65}
         - {ref: common/led-dot@1, id: led-port-64, at: [44.83, 27.53], for: port-64, group: port-leds, rel-pos: 65}
         - {ref: common/led-dot@1, id: led-port-65, at: [50.68, 27.53], for: port-65, group: port-leds, rel-pos: 66}
-        - {ref: std/qsfp-dd@1, id: port-0, at: [60.60, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 0}
-        - {ref: std/qsfp-dd@1, id: port-1, at: [60.60, 30.90], group: qsfpdd-800g, rel-pos: 1}
-        - {ref: std/qsfp-dd@1, id: port-32, at: [60.60, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 32}
-        - {ref: std/qsfp-dd@1, id: port-33, at: [60.60, 65.50], group: qsfpdd-800g, rel-pos: 33}
-        - {ref: std/qsfp-dd@1, id: port-2, at: [83.56, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 2}
-        - {ref: std/qsfp-dd@1, id: port-3, at: [83.56, 30.90], group: qsfpdd-800g, rel-pos: 3}
-        - {ref: std/qsfp-dd@1, id: port-34, at: [83.56, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 34}
-        - {ref: std/qsfp-dd@1, id: port-35, at: [83.56, 65.50], group: qsfpdd-800g, rel-pos: 35}
-        - {ref: std/qsfp-dd@1, id: port-4, at: [106.51, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: port-5, at: [106.51, 30.90], group: qsfpdd-800g, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: port-36, at: [106.51, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 36}
-        - {ref: std/qsfp-dd@1, id: port-37, at: [106.51, 65.50], group: qsfpdd-800g, rel-pos: 37}
-        - {ref: std/qsfp-dd@1, id: port-6, at: [129.47, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: port-7, at: [129.47, 30.90], group: qsfpdd-800g, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: port-38, at: [129.47, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 38}
-        - {ref: std/qsfp-dd@1, id: port-39, at: [129.47, 65.50], group: qsfpdd-800g, rel-pos: 39}
-        - {ref: std/qsfp-dd@1, id: port-8, at: [152.43, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: port-9, at: [152.43, 30.90], group: qsfpdd-800g, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: port-40, at: [152.43, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 40}
-        - {ref: std/qsfp-dd@1, id: port-41, at: [152.43, 65.50], group: qsfpdd-800g, rel-pos: 41}
-        - {ref: std/qsfp-dd@1, id: port-10, at: [175.38, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: port-11, at: [175.38, 30.90], group: qsfpdd-800g, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: port-42, at: [175.38, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 42}
-        - {ref: std/qsfp-dd@1, id: port-43, at: [175.38, 65.50], group: qsfpdd-800g, rel-pos: 43}
-        - {ref: std/qsfp-dd@1, id: port-12, at: [198.34, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 12}
-        - {ref: std/qsfp-dd@1, id: port-13, at: [198.34, 30.90], group: qsfpdd-800g, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: port-44, at: [198.34, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 44}
-        - {ref: std/qsfp-dd@1, id: port-45, at: [198.34, 65.50], group: qsfpdd-800g, rel-pos: 45}
-        - {ref: std/qsfp-dd@1, id: port-14, at: [221.30, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 14}
-        - {ref: std/qsfp-dd@1, id: port-15, at: [221.30, 30.90], group: qsfpdd-800g, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: port-46, at: [221.30, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 46}
-        - {ref: std/qsfp-dd@1, id: port-47, at: [221.30, 65.50], group: qsfpdd-800g, rel-pos: 47}
-        - {ref: std/qsfp-dd@1, id: port-16, at: [244.26, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 16}
-        - {ref: std/qsfp-dd@1, id: port-17, at: [244.26, 30.90], group: qsfpdd-800g, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: port-48, at: [244.26, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 48}
-        - {ref: std/qsfp-dd@1, id: port-49, at: [244.26, 65.50], group: qsfpdd-800g, rel-pos: 49}
-        - {ref: std/qsfp-dd@1, id: port-18, at: [267.21, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 18}
-        - {ref: std/qsfp-dd@1, id: port-19, at: [267.21, 30.90], group: qsfpdd-800g, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: port-50, at: [267.21, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 50}
-        - {ref: std/qsfp-dd@1, id: port-51, at: [267.21, 65.50], group: qsfpdd-800g, rel-pos: 51}
-        - {ref: std/qsfp-dd@1, id: port-20, at: [290.17, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 20}
-        - {ref: std/qsfp-dd@1, id: port-21, at: [290.17, 30.90], group: qsfpdd-800g, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: port-52, at: [290.17, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 52}
-        - {ref: std/qsfp-dd@1, id: port-53, at: [290.17, 65.50], group: qsfpdd-800g, rel-pos: 53}
-        - {ref: std/qsfp-dd@1, id: port-22, at: [313.13, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 22}
-        - {ref: std/qsfp-dd@1, id: port-23, at: [313.13, 30.90], group: qsfpdd-800g, rel-pos: 23}
-        - {ref: std/qsfp-dd@1, id: port-54, at: [313.13, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 54}
-        - {ref: std/qsfp-dd@1, id: port-55, at: [313.13, 65.50], group: qsfpdd-800g, rel-pos: 55}
-        - {ref: std/qsfp-dd@1, id: port-24, at: [336.08, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 24}
-        - {ref: std/qsfp-dd@1, id: port-25, at: [336.08, 30.90], group: qsfpdd-800g, rel-pos: 25}
-        - {ref: std/qsfp-dd@1, id: port-56, at: [336.08, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 56}
-        - {ref: std/qsfp-dd@1, id: port-57, at: [336.08, 65.50], group: qsfpdd-800g, rel-pos: 57}
-        - {ref: std/qsfp-dd@1, id: port-26, at: [359.04, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 26}
-        - {ref: std/qsfp-dd@1, id: port-27, at: [359.04, 30.90], group: qsfpdd-800g, rel-pos: 27}
-        - {ref: std/qsfp-dd@1, id: port-58, at: [359.04, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 58}
-        - {ref: std/qsfp-dd@1, id: port-59, at: [359.04, 65.50], group: qsfpdd-800g, rel-pos: 59}
-        - {ref: std/qsfp-dd@1, id: port-28, at: [382.00, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 28}
-        - {ref: std/qsfp-dd@1, id: port-29, at: [382.00, 30.90], group: qsfpdd-800g, rel-pos: 29}
-        - {ref: std/qsfp-dd@1, id: port-60, at: [382.00, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 60}
-        - {ref: std/qsfp-dd@1, id: port-61, at: [382.00, 65.50], group: qsfpdd-800g, rel-pos: 61}
-        - {ref: std/qsfp-dd@1, id: port-30, at: [404.96, 17.40], rotate: 180, group: qsfpdd-800g, rel-pos: 30}
-        - {ref: std/qsfp-dd@1, id: port-31, at: [404.96, 30.90], group: qsfpdd-800g, rel-pos: 31}
-        - {ref: std/qsfp-dd@1, id: port-62, at: [404.96, 52.00], rotate: 180, group: qsfpdd-800g, rel-pos: 62}
-        - {ref: std/qsfp-dd@1, id: port-63, at: [404.96, 65.50], group: qsfpdd-800g, rel-pos: 63}
+        - {ref: std/qsfp-dd@1, id: port-0, at: [60.60, 17.40], group: qsfpdd-800g, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: port-1, at: [60.60, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: port-32, at: [60.60, 52.00], group: qsfpdd-800g, rel-pos: 32}
+        - {ref: std/qsfp-dd@1, id: port-33, at: [60.60, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 33}
+        - {ref: std/qsfp-dd@1, id: port-2, at: [83.56, 17.40], group: qsfpdd-800g, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: port-3, at: [83.56, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: port-34, at: [83.56, 52.00], group: qsfpdd-800g, rel-pos: 34}
+        - {ref: std/qsfp-dd@1, id: port-35, at: [83.56, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 35}
+        - {ref: std/qsfp-dd@1, id: port-4, at: [106.51, 17.40], group: qsfpdd-800g, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: port-5, at: [106.51, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: port-36, at: [106.51, 52.00], group: qsfpdd-800g, rel-pos: 36}
+        - {ref: std/qsfp-dd@1, id: port-37, at: [106.51, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 37}
+        - {ref: std/qsfp-dd@1, id: port-6, at: [129.47, 17.40], group: qsfpdd-800g, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: port-7, at: [129.47, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: port-38, at: [129.47, 52.00], group: qsfpdd-800g, rel-pos: 38}
+        - {ref: std/qsfp-dd@1, id: port-39, at: [129.47, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 39}
+        - {ref: std/qsfp-dd@1, id: port-8, at: [152.43, 17.40], group: qsfpdd-800g, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: port-9, at: [152.43, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: port-40, at: [152.43, 52.00], group: qsfpdd-800g, rel-pos: 40}
+        - {ref: std/qsfp-dd@1, id: port-41, at: [152.43, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 41}
+        - {ref: std/qsfp-dd@1, id: port-10, at: [175.38, 17.40], group: qsfpdd-800g, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: port-11, at: [175.38, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: port-42, at: [175.38, 52.00], group: qsfpdd-800g, rel-pos: 42}
+        - {ref: std/qsfp-dd@1, id: port-43, at: [175.38, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 43}
+        - {ref: std/qsfp-dd@1, id: port-12, at: [198.34, 17.40], group: qsfpdd-800g, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: port-13, at: [198.34, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: port-44, at: [198.34, 52.00], group: qsfpdd-800g, rel-pos: 44}
+        - {ref: std/qsfp-dd@1, id: port-45, at: [198.34, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 45}
+        - {ref: std/qsfp-dd@1, id: port-14, at: [221.30, 17.40], group: qsfpdd-800g, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: port-15, at: [221.30, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: port-46, at: [221.30, 52.00], group: qsfpdd-800g, rel-pos: 46}
+        - {ref: std/qsfp-dd@1, id: port-47, at: [221.30, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 47}
+        - {ref: std/qsfp-dd@1, id: port-16, at: [244.26, 17.40], group: qsfpdd-800g, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: port-17, at: [244.26, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: port-48, at: [244.26, 52.00], group: qsfpdd-800g, rel-pos: 48}
+        - {ref: std/qsfp-dd@1, id: port-49, at: [244.26, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 49}
+        - {ref: std/qsfp-dd@1, id: port-18, at: [267.21, 17.40], group: qsfpdd-800g, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: port-19, at: [267.21, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: port-50, at: [267.21, 52.00], group: qsfpdd-800g, rel-pos: 50}
+        - {ref: std/qsfp-dd@1, id: port-51, at: [267.21, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 51}
+        - {ref: std/qsfp-dd@1, id: port-20, at: [290.17, 17.40], group: qsfpdd-800g, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: port-21, at: [290.17, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: port-52, at: [290.17, 52.00], group: qsfpdd-800g, rel-pos: 52}
+        - {ref: std/qsfp-dd@1, id: port-53, at: [290.17, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 53}
+        - {ref: std/qsfp-dd@1, id: port-22, at: [313.13, 17.40], group: qsfpdd-800g, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: port-23, at: [313.13, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: port-54, at: [313.13, 52.00], group: qsfpdd-800g, rel-pos: 54}
+        - {ref: std/qsfp-dd@1, id: port-55, at: [313.13, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 55}
+        - {ref: std/qsfp-dd@1, id: port-24, at: [336.08, 17.40], group: qsfpdd-800g, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: port-25, at: [336.08, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: port-56, at: [336.08, 52.00], group: qsfpdd-800g, rel-pos: 56}
+        - {ref: std/qsfp-dd@1, id: port-57, at: [336.08, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 57}
+        - {ref: std/qsfp-dd@1, id: port-26, at: [359.04, 17.40], group: qsfpdd-800g, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: port-27, at: [359.04, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: port-58, at: [359.04, 52.00], group: qsfpdd-800g, rel-pos: 58}
+        - {ref: std/qsfp-dd@1, id: port-59, at: [359.04, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 59}
+        - {ref: std/qsfp-dd@1, id: port-28, at: [382.00, 17.40], group: qsfpdd-800g, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: port-29, at: [382.00, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: port-60, at: [382.00, 52.00], group: qsfpdd-800g, rel-pos: 60}
+        - {ref: std/qsfp-dd@1, id: port-61, at: [382.00, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 61}
+        - {ref: std/qsfp-dd@1, id: port-30, at: [404.96, 17.40], group: qsfpdd-800g, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: port-31, at: [404.96, 30.90], rotate: 180, group: qsfpdd-800g, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: port-62, at: [404.96, 52.00], group: qsfpdd-800g, rel-pos: 62}
+        - {ref: std/qsfp-dd@1, id: port-63, at: [404.96, 65.50], rotate: 180, group: qsfpdd-800g, rel-pos: 63}
         - {ref: common/led-dot@1, id: led-port-0, at: [62.30, 9.13], for: port-0, group: port-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-port-1, at: [75.90, 9.13], for: port-1, group: port-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-2, at: [85.26, 9.13], for: port-2, group: port-leds, rel-pos: 3}

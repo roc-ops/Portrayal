@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc
-version: 1.0.2
+version: 1.0.3
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -144,20 +144,23 @@ relief:
         application specific - see provenance.protrusion
     - node: bail
       lift: 10.0
-      out: 14.3
+      bar: 1.05
       confidence: estimated
       source: >-
-        SFF-8432 Rev 5.2a checked directly (not just carried from
-        common/sfp-lc-duplex@1): Table 4-3 designator A is 10.00 RECOMMENDED
-        MAXIMUM for "module length extending outside of cage", with "other
-        lengths are application specific" - the body's protrusion, not the
-        bail's. Figure 4-2 "Latch Post Detail" is the cage-retention post, a
-        different part, not the wire bail. Neither gives a figure the bail's
-        forward reach could rest on. common/sfp-lc-duplex@1's length key gives
-        '0.49 in [12.3] is the face height with the bail extended', a HEIGHT
-        across the face, not how far forward the bail reaches. 14.3 is 0.4
-        past the body's 10.0 and stays estimated on that basis - a bail that
-        clears the body it hinges from, nothing more precise than that.
+        A ROUND BAR, NOT A BOX. The bail is the release mechanism: a thin round
+        bar across the top of the face, carried on side arms that run down to a
+        lever underneath; only the coloured crossbar is drawn. It is built as a
+        `bar` - a tube along the node's long axis resting on the body face at
+        lift 10.0 - so it stands just proud of the module, where the earlier
+        `out: 14.3` extruded the whole node into a box 4.3 mm deep over the top
+        of the face. Decided 2026-09-21 on a side-by-side of a 0.5 mm and a
+        1.05 mm tube. The diameter is the 2D bail's own drawn height (1.05, the
+        node's short axis), so 2D and 3D agree - it is not a measured wire
+        diameter. SFF-8432 Rev 5.2a was checked and does not dimension the
+        bail: Table 4-3 designator A (10.00 Recommended Maximum) is the body's
+        protrusion, and Figure 4-2 "Latch Post Detail" is the cage-retention
+        post, a different part. No staged photograph shows a bail closely
+        enough to measure.
 connection-points:
   mate: {at: [6.775, 4.275], direction: front}
   optical-tx: {at: [3.60, 5.70], direction: front}

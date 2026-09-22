@@ -119,9 +119,85 @@ achromatic grey is in neither table; a vendor wrapper sets the colour its
 mode or wavelength calls for. D's 3D wiring is unchanged - the grey reaches
 3D the same way any `latch-color` does.
 
+## Stacked cages: one orientation (2026-09-21)
+
+Since C2 a seated optic takes its host cage's `rotate`, so a cage's turn IS the
+optic's orientation, and the library drew its belly-to-belly stacks five ways.
+Each entry says whose it is: a MAINTAINER DECISION, or an IMPLEMENTATION RULING
+taken while applying those decisions across the library. All are dated 2026-09-21.
+
+- **S1 - which side the lip is on** (maintainer decision): in a belly-to-belly SFP/QSFP/QSFP-DD
+  stack the cage's latch tab (the `cage-lip` in a std skin) sits on the
+  MODULE'S BELLY side, opposite the bail. In a real stack both tabs hang into
+  the band between the rows and both bails - the release levers - face
+  OUTWARD, where a thumb reaches them.
+- **S2 - what `rotate: 0` means on a pluggable cage** (maintainer decision): the module seats
+  upright, bail / pull tab at the top, belly and latch at the bottom. Every
+  generic transceiver already drew its bail at the top; the std cage skins drew
+  their `cage-lip` near the TOP, on the bail's side, which is why sessions that
+  matched a photograph turned the UPPER cage to put its lip in the middle band -
+  and since C2 seated that upper optic upside down. The six skins with a lip
+  (`std/sfp`, `std/sfp-ganged`, `std/qsfp28`, `std/qsfp56`, `std/qsfp-ganged`,
+  `std/qsfp-dd`) now draw it at the BOTTOM of the opening; a skin redrawn, a
+  patch bump each, nothing addressable moved.
+- **S3 - the convention** (maintainer decision for row pairs; implementation ruling
+  for column pairs and mixed stacks): a row pair is upper 0 over lower 180. A column pair,
+  on a card drawn on its side, is LEFT 270 beside RIGHT 90: `rotate: 90` turns
+  an upright cage's bail from the top to the right (SVG turns clockwise) and
+  270 to the left, so outward is left and right. A column pair is the two
+  cages whose bellies face each other ACROSS the stack, never two cages down a
+  column; cages side by side for any other reason are not forced into a pair.
+  QSFP over QSFP-DD is a pair - one face family, one bezel opening.
+- **S4 - the evidence order** (maintainer decision, including the flip rule where
+  there is no evidence; applying it to component cards is an implementation
+  ruling), for device faces and component cards alike: a
+  recorded photo or drawing reading of the stack first (a reading that the
+  tabs point into the middle band IS belly-to-belly; only a reading that the
+  two cages are built the same way round keeps them the same), then the port
+  lamps (`common/led-arrow*` `for:` each port - up over down is belly-to-belly),
+  then the rule, with a note saying the orientation is the rule and not an
+  observation, so a later photograph can overturn it.
+- **S5 - the exception is declared by the pair** (maintainer decision that exceptions
+  are declared; the key's shape is an implementation ruling): `stack-exceptions:` - a
+  top-level list in a device manifest (or its layout.yaml) and in a component
+  contract, each entry `pair: [a, b]` or `pairs: [[a, b], ...]` with the
+  `reason:` that overturns the convention. Lint L108 holds every other pair to
+  S3; an entry that names no pair is a finding, and so is one on a pair that already
+  follows the convention, because an exception says the stack is built otherwise. The pairing is one module,
+  `spec/tools/portrayal/stacks.py`, read by the rule and by its tests.
+- **S6 - a component that turns an internal cage is a MINOR bump** (implementation
+  ruling): the card's
+  box, ids and everything a device places are unchanged, so a device that
+  placed the card is not wrong. A device that turns a placed cage takes the
+  device rule as written - geometry, a major. A part that MOVES an opening or a
+  connection point inside its box is a major by the component rule, not this one:
+  `common/qsfp-cage` went to v3 for its flange.
+- **S7 - OSFP is out** (implementation ruling; the maintainer's list of skins to
+  redraw included `std/osfp`, and this sets it aside pending the open question below): `std/osfp@1` keeps its skin and every OSFP stack is left
+  as drawn. Its art already draws a latch slot at the BOTTOM of the opening,
+  which a mirrored lip would cover and which may be a different convention,
+  and no OSFP generic exists to seat. L108 skips OSFP and says so.
+- **S8 - three-high faces** (implementation ruling): six devices carry a two-high stack with a separate
+  single row under it. The pairing takes stacks from the top, which each
+  device's provenance confirms, even where the separate row sits closer to the
+  stack than the stack's rows sit to each other - nearest-gap pairing was
+  tried and is wrong on all of them. `test_stack_orientation.py` lists them.
+
+- **S9 - what counts as a recorded reading** (implementation ruling): only a
+  reading of which way the cages face - their tabs, lip, gasket or cavity - taken
+  off a named figure or photograph, as a measurement or an observed crop, with its
+  confidence in provenance. A gap, a hint, an analogy with a sibling, symmetric art
+  or a claim about construction (two separate shells) is not one: those stacks take
+  the rule, and the note says the question is open. Only a reading can make an
+  exception, and each device's `stack-orientation` note names, block by block,
+  whether the lamps, a reading or the rule decided it.
+
 ## Open questions
 
 - Whether a seated module's protrusion should be visible in the 2D SIDE views the
   library renders for every device (left/right faces). It would be correct and it is
   cheap once `out` is right; it is also the first time a face would show an occupant
   of another face, which is the `plan:` mechanism's territory.
+- Which way `std/osfp@1`'s art faces (S7): whether its bottom latch slot is the
+  belly-side feature the other cages' lips are, and so whether OSFP stacks take
+  the same convention.

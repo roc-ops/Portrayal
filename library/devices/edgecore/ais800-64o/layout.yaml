@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 2.0.2
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
@@ -21,6 +21,14 @@ description: >-
   legend row above them.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the port lamps, which point up
+      over down: the 1 SFP pair (mgmt-inband-1/mgmt-inband-2). OSFP stacks are left as drawn (S7):
+      the 32 OSFP pairs (port-1/port-2 to port-63/port-64).
   sources:
     confidence: datasheet
     note: >-
@@ -551,7 +559,7 @@ views:
       placements:
       - {ref: std/sfp@1, id: mgmt-inband-1, at: [398.45, 16.08], group: mgmt, rel-pos: 1,
          attrs: {media: sfp28, speed: 25g, role: mgmt}}
-      - {ref: std/sfp@1, id: mgmt-inband-2, at: [398.45, 31.38], group: mgmt, rel-pos: 2,
+      - {ref: std/sfp@1, id: mgmt-inband-2, at: [398.45, 31.38], rotate: 180, group: mgmt, rel-pos: 2,
          attrs: {media: sfp28, speed: 25g, role: mgmt}}
       - {ref: common/rj45-eth@1, id: mgmt-eth, at: [416.40, 16.10], rotate: 180, group: mgmt, rel-pos: 3,
          attrs: {media: rj45, speed: 1g, role: mgmt}}

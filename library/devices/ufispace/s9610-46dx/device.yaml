@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 3.0.13
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
@@ -21,6 +21,17 @@ description: >-
   AC or DC, exhaust airflow
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the reading of the cages
+      recorded in this provenance: the 4 SFP pairs (port-46/port-47 to mgmt-sfp-2/mgmt-sfp-3), the
+      20 QSFP pairs (port-0/port-1 to port-38/port-39), the 3 QSFP-DD pairs (port-40/port-41 to
+      port-44/port-45). 27 of these were drawn with the upper cage turned before the std cage art
+      moved its lip to the bottom of the opening; turning them keeps the lips in the middle band
+      where they were drawn and seats every optic bail-outward.
   sources:
     note: >-
       UfiSpace S9610-46DX datasheet for dimensions, weight, port inventory, platform, power,
@@ -116,8 +127,8 @@ provenance:
       the left block (figure x 310-470, y 30-245) shows each upper module's dotted EMI/latch band
       BELOW its face and each lower module's ABOVE its face, with a plain white gap between them:
       the two rows mirror, detail facing the strip. std/qsfp-ganged, std/qsfp-dd and
-      std/sfp-ganged all draw their cage lip near the TOP of the opening, so the UPPER port of
-      every belly-to-belly pair is rotate: 180 and the lower is unrotated. The BITS and ToD jacks
+      std/sfp-ganged all draw their cage lip at the BOTTOM of an upright opening, so the LOWER
+      port of every belly-to-belly pair is rotate: 180 and the upper is unrotated. The BITS and ToD jacks
       were checked the same way at 12x: the upper jack's latch keyway points UP and the lower
       jack's points DOWN, and std/rj45-ganged draws its keyway at the bottom, so BITS is rotate:
       180 and ToD is not. The console and out-of-band jacks both draw pins at the top and keyway
@@ -820,64 +831,64 @@ views:
            description: 'HIG Front Panel LED table, ID row - Off (no power), Solid Blue (Reserved), Blinking Blue (beacon feature enabled). Solid Blue is carried because the table prints it, even though the vendor names no meaning for it',
            group: status-leds, rel-pos: 6}
         # --- 40x QSFP28, five columns per block, four rows on two 2x2-per-column
-        #     assemblies; upper port of each belly-to-belly pair is rotate: 180
-        - {ref: std/qsfp-ganged@1, id: port-0, at: [101.16, 16.32], rotate: 180, group: qsfp28, rel-pos: 0}
-        - {ref: std/qsfp-ganged@1, id: port-1, at: [101.16, 30.39], group: qsfp28, rel-pos: 1}
-        - {ref: std/qsfp-ganged@1, id: port-20, at: [101.16, 47.40], rotate: 180, group: qsfp28, rel-pos: 20}
-        - {ref: std/qsfp-ganged@1, id: port-21, at: [101.16, 61.47], group: qsfp28, rel-pos: 21}
-        - {ref: std/qsfp-ganged@1, id: port-2, at: [124.55, 16.32], rotate: 180, group: qsfp28, rel-pos: 2}
-        - {ref: std/qsfp-ganged@1, id: port-3, at: [124.55, 30.39], group: qsfp28, rel-pos: 3}
-        - {ref: std/qsfp-ganged@1, id: port-22, at: [124.55, 47.40], rotate: 180, group: qsfp28, rel-pos: 22}
-        - {ref: std/qsfp-ganged@1, id: port-23, at: [124.55, 61.47], group: qsfp28, rel-pos: 23}
-        - {ref: std/qsfp-ganged@1, id: port-4, at: [147.95, 16.32], rotate: 180, group: qsfp28, rel-pos: 4}
-        - {ref: std/qsfp-ganged@1, id: port-5, at: [147.95, 30.39], group: qsfp28, rel-pos: 5}
-        - {ref: std/qsfp-ganged@1, id: port-24, at: [147.95, 47.40], rotate: 180, group: qsfp28, rel-pos: 24}
-        - {ref: std/qsfp-ganged@1, id: port-25, at: [147.95, 61.47], group: qsfp28, rel-pos: 25}
-        - {ref: std/qsfp-ganged@1, id: port-6, at: [171.34, 16.32], rotate: 180, group: qsfp28, rel-pos: 6}
-        - {ref: std/qsfp-ganged@1, id: port-7, at: [171.34, 30.39], group: qsfp28, rel-pos: 7}
-        - {ref: std/qsfp-ganged@1, id: port-26, at: [171.34, 47.40], rotate: 180, group: qsfp28, rel-pos: 26}
-        - {ref: std/qsfp-ganged@1, id: port-27, at: [171.34, 61.47], group: qsfp28, rel-pos: 27}
-        - {ref: std/qsfp-ganged@1, id: port-8, at: [194.73, 16.32], rotate: 180, group: qsfp28, rel-pos: 8}
-        - {ref: std/qsfp-ganged@1, id: port-9, at: [194.73, 30.39], group: qsfp28, rel-pos: 9}
-        - {ref: std/qsfp-ganged@1, id: port-28, at: [194.73, 47.40], rotate: 180, group: qsfp28, rel-pos: 28}
-        - {ref: std/qsfp-ganged@1, id: port-29, at: [194.73, 61.47], group: qsfp28, rel-pos: 29}
-        - {ref: std/qsfp-ganged@1, id: port-10, at: [314.91, 16.32], rotate: 180, group: qsfp28, rel-pos: 10}
-        - {ref: std/qsfp-ganged@1, id: port-11, at: [314.91, 30.39], group: qsfp28, rel-pos: 11}
-        - {ref: std/qsfp-ganged@1, id: port-30, at: [314.91, 47.40], rotate: 180, group: qsfp28, rel-pos: 30}
-        - {ref: std/qsfp-ganged@1, id: port-31, at: [314.91, 61.47], group: qsfp28, rel-pos: 31}
-        - {ref: std/qsfp-ganged@1, id: port-12, at: [338.30, 16.32], rotate: 180, group: qsfp28, rel-pos: 12}
-        - {ref: std/qsfp-ganged@1, id: port-13, at: [338.30, 30.39], group: qsfp28, rel-pos: 13}
-        - {ref: std/qsfp-ganged@1, id: port-32, at: [338.30, 47.40], rotate: 180, group: qsfp28, rel-pos: 32}
-        - {ref: std/qsfp-ganged@1, id: port-33, at: [338.30, 61.47], group: qsfp28, rel-pos: 33}
-        - {ref: std/qsfp-ganged@1, id: port-14, at: [361.70, 16.32], rotate: 180, group: qsfp28, rel-pos: 14}
-        - {ref: std/qsfp-ganged@1, id: port-15, at: [361.70, 30.39], group: qsfp28, rel-pos: 15}
-        - {ref: std/qsfp-ganged@1, id: port-34, at: [361.70, 47.40], rotate: 180, group: qsfp28, rel-pos: 34}
-        - {ref: std/qsfp-ganged@1, id: port-35, at: [361.70, 61.47], group: qsfp28, rel-pos: 35}
-        - {ref: std/qsfp-ganged@1, id: port-16, at: [385.09, 16.32], rotate: 180, group: qsfp28, rel-pos: 16}
-        - {ref: std/qsfp-ganged@1, id: port-17, at: [385.09, 30.39], group: qsfp28, rel-pos: 17}
-        - {ref: std/qsfp-ganged@1, id: port-36, at: [385.09, 47.40], rotate: 180, group: qsfp28, rel-pos: 36}
-        - {ref: std/qsfp-ganged@1, id: port-37, at: [385.09, 61.47], group: qsfp28, rel-pos: 37}
-        - {ref: std/qsfp-ganged@1, id: port-18, at: [408.48, 16.32], rotate: 180, group: qsfp28, rel-pos: 18}
-        - {ref: std/qsfp-ganged@1, id: port-19, at: [408.48, 30.39], group: qsfp28, rel-pos: 19}
-        - {ref: std/qsfp-ganged@1, id: port-38, at: [408.48, 47.40], rotate: 180, group: qsfp28, rel-pos: 38}
-        - {ref: std/qsfp-ganged@1, id: port-39, at: [408.48, 61.47], group: qsfp28, rel-pos: 39}
+        #     assemblies; lower port of each belly-to-belly pair is rotate: 180
+        - {ref: std/qsfp-ganged@1, id: port-0, at: [101.16, 16.32], group: qsfp28, rel-pos: 0}
+        - {ref: std/qsfp-ganged@1, id: port-1, at: [101.16, 30.39], rotate: 180, group: qsfp28, rel-pos: 1}
+        - {ref: std/qsfp-ganged@1, id: port-20, at: [101.16, 47.40], group: qsfp28, rel-pos: 20}
+        - {ref: std/qsfp-ganged@1, id: port-21, at: [101.16, 61.47], rotate: 180, group: qsfp28, rel-pos: 21}
+        - {ref: std/qsfp-ganged@1, id: port-2, at: [124.55, 16.32], group: qsfp28, rel-pos: 2}
+        - {ref: std/qsfp-ganged@1, id: port-3, at: [124.55, 30.39], rotate: 180, group: qsfp28, rel-pos: 3}
+        - {ref: std/qsfp-ganged@1, id: port-22, at: [124.55, 47.40], group: qsfp28, rel-pos: 22}
+        - {ref: std/qsfp-ganged@1, id: port-23, at: [124.55, 61.47], rotate: 180, group: qsfp28, rel-pos: 23}
+        - {ref: std/qsfp-ganged@1, id: port-4, at: [147.95, 16.32], group: qsfp28, rel-pos: 4}
+        - {ref: std/qsfp-ganged@1, id: port-5, at: [147.95, 30.39], rotate: 180, group: qsfp28, rel-pos: 5}
+        - {ref: std/qsfp-ganged@1, id: port-24, at: [147.95, 47.40], group: qsfp28, rel-pos: 24}
+        - {ref: std/qsfp-ganged@1, id: port-25, at: [147.95, 61.47], rotate: 180, group: qsfp28, rel-pos: 25}
+        - {ref: std/qsfp-ganged@1, id: port-6, at: [171.34, 16.32], group: qsfp28, rel-pos: 6}
+        - {ref: std/qsfp-ganged@1, id: port-7, at: [171.34, 30.39], rotate: 180, group: qsfp28, rel-pos: 7}
+        - {ref: std/qsfp-ganged@1, id: port-26, at: [171.34, 47.40], group: qsfp28, rel-pos: 26}
+        - {ref: std/qsfp-ganged@1, id: port-27, at: [171.34, 61.47], rotate: 180, group: qsfp28, rel-pos: 27}
+        - {ref: std/qsfp-ganged@1, id: port-8, at: [194.73, 16.32], group: qsfp28, rel-pos: 8}
+        - {ref: std/qsfp-ganged@1, id: port-9, at: [194.73, 30.39], rotate: 180, group: qsfp28, rel-pos: 9}
+        - {ref: std/qsfp-ganged@1, id: port-28, at: [194.73, 47.40], group: qsfp28, rel-pos: 28}
+        - {ref: std/qsfp-ganged@1, id: port-29, at: [194.73, 61.47], rotate: 180, group: qsfp28, rel-pos: 29}
+        - {ref: std/qsfp-ganged@1, id: port-10, at: [314.91, 16.32], group: qsfp28, rel-pos: 10}
+        - {ref: std/qsfp-ganged@1, id: port-11, at: [314.91, 30.39], rotate: 180, group: qsfp28, rel-pos: 11}
+        - {ref: std/qsfp-ganged@1, id: port-30, at: [314.91, 47.40], group: qsfp28, rel-pos: 30}
+        - {ref: std/qsfp-ganged@1, id: port-31, at: [314.91, 61.47], rotate: 180, group: qsfp28, rel-pos: 31}
+        - {ref: std/qsfp-ganged@1, id: port-12, at: [338.30, 16.32], group: qsfp28, rel-pos: 12}
+        - {ref: std/qsfp-ganged@1, id: port-13, at: [338.30, 30.39], rotate: 180, group: qsfp28, rel-pos: 13}
+        - {ref: std/qsfp-ganged@1, id: port-32, at: [338.30, 47.40], group: qsfp28, rel-pos: 32}
+        - {ref: std/qsfp-ganged@1, id: port-33, at: [338.30, 61.47], rotate: 180, group: qsfp28, rel-pos: 33}
+        - {ref: std/qsfp-ganged@1, id: port-14, at: [361.70, 16.32], group: qsfp28, rel-pos: 14}
+        - {ref: std/qsfp-ganged@1, id: port-15, at: [361.70, 30.39], rotate: 180, group: qsfp28, rel-pos: 15}
+        - {ref: std/qsfp-ganged@1, id: port-34, at: [361.70, 47.40], group: qsfp28, rel-pos: 34}
+        - {ref: std/qsfp-ganged@1, id: port-35, at: [361.70, 61.47], rotate: 180, group: qsfp28, rel-pos: 35}
+        - {ref: std/qsfp-ganged@1, id: port-16, at: [385.09, 16.32], group: qsfp28, rel-pos: 16}
+        - {ref: std/qsfp-ganged@1, id: port-17, at: [385.09, 30.39], rotate: 180, group: qsfp28, rel-pos: 17}
+        - {ref: std/qsfp-ganged@1, id: port-36, at: [385.09, 47.40], group: qsfp28, rel-pos: 36}
+        - {ref: std/qsfp-ganged@1, id: port-37, at: [385.09, 61.47], rotate: 180, group: qsfp28, rel-pos: 37}
+        - {ref: std/qsfp-ganged@1, id: port-18, at: [408.48, 16.32], group: qsfp28, rel-pos: 18}
+        - {ref: std/qsfp-ganged@1, id: port-19, at: [408.48, 30.39], rotate: 180, group: qsfp28, rel-pos: 19}
+        - {ref: std/qsfp-ganged@1, id: port-38, at: [408.48, 47.40], group: qsfp28, rel-pos: 38}
+        - {ref: std/qsfp-ganged@1, id: port-39, at: [408.48, 61.47], rotate: 180, group: qsfp28, rel-pos: 39}
         # --- 6x QSFP-DD in one 3x2 assembly in the middle of the panel
-        - {ref: std/qsfp-dd@1, id: port-40, at: [224.79, 30.18], rotate: 180, group: qsfpdd-400g, rel-pos: 40}
-        - {ref: std/qsfp-dd@1, id: port-41, at: [224.79, 44.25], group: qsfpdd-400g, rel-pos: 41}
-        - {ref: std/qsfp-dd@1, id: port-42, at: [254.63, 30.18], rotate: 180, group: qsfpdd-400g, rel-pos: 42}
-        - {ref: std/qsfp-dd@1, id: port-43, at: [254.63, 44.25], group: qsfpdd-400g, rel-pos: 43}
-        - {ref: std/qsfp-dd@1, id: port-44, at: [284.48, 30.18], rotate: 180, group: qsfpdd-400g, rel-pos: 44}
-        - {ref: std/qsfp-dd@1, id: port-45, at: [284.48, 44.25], group: qsfpdd-400g, rel-pos: 45}
+        - {ref: std/qsfp-dd@1, id: port-40, at: [224.79, 30.18], group: qsfpdd-400g, rel-pos: 40}
+        - {ref: std/qsfp-dd@1, id: port-41, at: [224.79, 44.25], rotate: 180, group: qsfpdd-400g, rel-pos: 41}
+        - {ref: std/qsfp-dd@1, id: port-42, at: [254.63, 30.18], group: qsfpdd-400g, rel-pos: 42}
+        - {ref: std/qsfp-dd@1, id: port-43, at: [254.63, 44.25], rotate: 180, group: qsfpdd-400g, rel-pos: 43}
+        - {ref: std/qsfp-dd@1, id: port-44, at: [284.48, 30.18], group: qsfpdd-400g, rel-pos: 44}
+        - {ref: std/qsfp-dd@1, id: port-45, at: [284.48, 44.25], rotate: 180, group: qsfpdd-400g, rel-pos: 45}
         # --- 4x SFP28/SFP-DD, 2x2, inside the yellow field
-        - {ref: std/sfp-ganged@1, id: port-46, at: [58.36, 15.91], rotate: 180, group: sfp28, rel-pos: 46}
-        - {ref: std/sfp-ganged@1, id: port-47, at: [58.36, 29.98], group: sfp28, rel-pos: 47}
-        - {ref: std/sfp-ganged@1, id: port-48, at: [76.42, 15.91], rotate: 180, group: sfp28, rel-pos: 48}
-        - {ref: std/sfp-ganged@1, id: port-49, at: [76.42, 29.98], group: sfp28, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-46, at: [58.36, 15.91], group: sfp28, rel-pos: 46}
+        - {ref: std/sfp-ganged@1, id: port-47, at: [58.36, 29.98], rotate: 180, group: sfp28, rel-pos: 47}
+        - {ref: std/sfp-ganged@1, id: port-48, at: [76.42, 15.91], group: sfp28, rel-pos: 48}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [76.42, 29.98], rotate: 180, group: sfp28, rel-pos: 49}
         # --- 4x 10G SFP+ management, 2x2, numbered 0-3 in their own run
-        - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [67.97, 45.52], rotate: 180, group: sfp-plus-mgmt, rel-pos: 0}
-        - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [67.97, 60.93], group: sfp-plus-mgmt, rel-pos: 1}
-        - {ref: std/sfp-ganged@1, id: mgmt-sfp-2, at: [82.23, 45.52], rotate: 180, group: sfp-plus-mgmt, rel-pos: 2}
-        - {ref: std/sfp-ganged@1, id: mgmt-sfp-3, at: [82.23, 60.93], group: sfp-plus-mgmt, rel-pos: 3}
+        - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [67.97, 45.52], group: sfp-plus-mgmt, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [67.97, 60.93], rotate: 180, group: sfp-plus-mgmt, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: mgmt-sfp-2, at: [82.23, 45.52], group: sfp-plus-mgmt, rel-pos: 2}
+        - {ref: std/sfp-ganged@1, id: mgmt-sfp-3, at: [82.23, 60.93], rotate: 180, group: sfp-plus-mgmt, rel-pos: 3}
         # --- port lamps: one per port. QSFP28 in the printed green bands,
         #     QSFP-DD in the blue light-pipe strips, SFP28 in the yellow band,
         #     SFP+ management in the grey band between its two rows.

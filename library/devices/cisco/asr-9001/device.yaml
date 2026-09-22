@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 1.0.10
+version: 2.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -17,6 +17,14 @@ description: >-
   port. The rear is a plain louvred panel.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 3 SFP pairs (cluster-1/cluster-0 to
+      sfp-plus-2/sfp-plus-0).
   port-cutouts:
     note: >-
       DERIVED, not measured, and the distinction matters. Every one of the fifteen front ports
@@ -440,11 +448,11 @@ views:
         - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [250.85, 45.45], group: mgmt, rel-pos: 6}
         - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [250.85, 61.5], group: mgmt, rel-pos: 7, rotate: 180}
         - {ref: std/sfp-ganged@1, id: cluster-1, at: [318.675, 45.75], group: cluster, rel-pos: 1}
-        - {ref: std/sfp-ganged@1, id: cluster-0, at: [318.675, 61.8], group: cluster, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: cluster-0, at: [318.675, 61.8], rotate: 180, group: cluster, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [341.675, 45.75], group: sfp-plus, rel-pos: 3}
-        - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [341.675, 61.8], group: sfp-plus, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: sfp-plus-1, at: [341.675, 61.8], rotate: 180, group: sfp-plus, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: sfp-plus-2, at: [362.175, 45.75], group: sfp-plus, rel-pos: 2}
-        - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [362.175, 61.8], group: sfp-plus, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: sfp-plus-0, at: [362.175, 61.8], rotate: 180, group: sfp-plus, rel-pos: 0}
         - {ref: std/usb-a@1, id: usb, at: [270.5, 62.7], rotate: 90, group: mgmt, rel-pos: 8}
         - {ref: common/led-dot@1, id: led-rsp-fail, at: [281.0, 49.5], group: system-leds, rel-pos: 1, for: chassis, states: ['off', {name: rsp-failed, color: '#d0342c'}, {name: rsp-up, color: '#39b54a'}]}
         - {ref: common/led-dot@1, id: led-lc-fail, at: [281.0, 66.0], group: system-leds, rel-pos: 2, for: chassis, states: ['off', {name: lc-failed, color: '#d0342c'}, {name: lc-up, color: '#39b54a'}]}

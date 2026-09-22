@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps122
-version: 1.0.1
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54P
@@ -16,6 +16,13 @@ description: >-
   Its sibling edgecore/eps121 is the same chassis without PoE.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage
+      upright (rotate 0) over the lower turned 180, so both cage lips face the band between the two cages
+      and both bails face outward. Decided by the rule, not an observation, so a photograph of the stack
+      overturns it: the 3 SFP pairs (port-49/port-50 to port-53/port-54).
   sources:
     confidence: datasheet
     note: >-
@@ -613,11 +620,11 @@ views:
       - {ref: common/rj45-ganged-eth@1, id: port-47, at: [344.25, 13.37], group: rj45-poe-hi, rel-pos: 47}
       - {ref: common/rj45-ganged-eth@1, id: port-48, at: [344.25, 25.47], group: rj45-poe-hi, rel-pos: 48}
       - {ref: std/sfp-ganged@1, id: port-49, at: [363.07, 11.47], group: sfp-plus, rel-pos: 49}
-      - {ref: std/sfp-ganged@1, id: port-50, at: [363.07, 27.05], group: sfp-plus, rel-pos: 50}
+      - {ref: std/sfp-ganged@1, id: port-50, at: [363.07, 27.05], rotate: 180, group: sfp-plus, rel-pos: 50}
       - {ref: std/sfp-ganged@1, id: port-51, at: [380.85, 11.47], group: sfp-plus, rel-pos: 51}
-      - {ref: std/sfp-ganged@1, id: port-52, at: [380.85, 27.05], group: sfp-plus, rel-pos: 52}
+      - {ref: std/sfp-ganged@1, id: port-52, at: [380.85, 27.05], rotate: 180, group: sfp-plus, rel-pos: 52}
       - {ref: std/sfp-ganged@1, id: port-53, at: [398.63, 11.47], group: sfp-plus, rel-pos: 53}
-      - {ref: std/sfp-ganged@1, id: port-54, at: [398.63, 27.05], group: sfp-plus, rel-pos: 54}
+      - {ref: std/sfp-ganged@1, id: port-54, at: [398.63, 27.05], rotate: 180, group: sfp-plus, rel-pos: 54}
       - ref: common/rj45-ganged-eth@1
         id: mgmt
         at: [418.65, 13.25]

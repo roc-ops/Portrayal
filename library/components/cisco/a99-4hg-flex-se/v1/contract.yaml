@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-4hg-flex-se
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -26,6 +26,14 @@ attrs:
   chassis: 'ASR 9922, ASR 9912, ASR 9910, ASR 9906 and ASR 9904'
   eol: 'none-announced'
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 2 QSFP pairs (p41/p40 and p43/p42), the 20 SFP pairs (p0/p10 to p29/p39).
+    Turning a composed cage in place changes no box, id or anything a device places, so
+    it is a minor bump (S6).
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 4 ejector brackets, their levers and the grip
@@ -228,16 +236,16 @@ relief:
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
 parts:
-  - {ref: std/sfp-ganged@1, id: p0, at: [7.88, 32.91], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p1, at: [7.88, 47.11], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p2, at: [7.88, 61.32], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p3, at: [7.88, 75.52], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p4, at: [7.88, 89.72], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p5, at: [7.88, 103.94], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p6, at: [8.19, 122.35], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p7, at: [8.19, 136.39], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p8, at: [8.19, 150.43], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p9, at: [8.19, 164.48], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p0, at: [7.88, 32.91], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p1, at: [7.88, 47.11], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p2, at: [7.88, 61.32], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p3, at: [7.88, 75.52], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p4, at: [7.88, 89.72], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p5, at: [7.88, 103.94], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p6, at: [8.19, 122.35], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p7, at: [8.19, 136.39], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p8, at: [8.19, 150.43], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p9, at: [8.19, 164.48], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p10, at: [23.73, 32.91], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p11, at: [23.73, 47.11], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p12, at: [23.73, 61.32], rotate: 90}
@@ -248,16 +256,16 @@ parts:
   - {ref: std/sfp-ganged@1, id: p17, at: [23.43, 136.39], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p18, at: [23.43, 150.43], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p19, at: [23.43, 164.48], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p20, at: [7.88, 205.92], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p21, at: [7.88, 220.12], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p22, at: [7.88, 234.32], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p23, at: [7.88, 248.54], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p24, at: [7.88, 262.74], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p25, at: [7.88, 276.95], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p26, at: [8.19, 295.35], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p27, at: [8.19, 309.39], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p28, at: [8.19, 323.44], rotate: 90}
-  - {ref: std/sfp-ganged@1, id: p29, at: [8.19, 337.48], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: p20, at: [7.88, 205.92], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p21, at: [7.88, 220.12], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p22, at: [7.88, 234.32], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p23, at: [7.88, 248.54], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p24, at: [7.88, 262.74], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p25, at: [7.88, 276.95], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p26, at: [8.19, 295.35], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p27, at: [8.19, 309.39], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p28, at: [8.19, 323.44], rotate: 270}
+  - {ref: std/sfp-ganged@1, id: p29, at: [8.19, 337.48], rotate: 270}
   - {ref: std/sfp-ganged@1, id: p30, at: [23.73, 205.92], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p31, at: [23.73, 220.12], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p32, at: [23.73, 234.32], rotate: 90}
@@ -269,9 +277,9 @@ parts:
   - {ref: std/sfp-ganged@1, id: p38, at: [23.43, 323.44], rotate: 90}
   - {ref: std/sfp-ganged@1, id: p39, at: [23.43, 337.48], rotate: 90}
   - {ref: std/qsfp-ganged@1, id: p40, at: [22.01, 185.75], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p41, at: [4.84, 185.75], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p41, at: [4.84, 185.75], rotate: 270}
   - {ref: std/qsfp-ganged@1, id: p42, at: [22.01, 358.77], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p43, at: [4.84, 358.77], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p43, at: [4.84, 358.77], rotate: 270}
 body:
   depth: 609.6
   color: '#b9bec4'

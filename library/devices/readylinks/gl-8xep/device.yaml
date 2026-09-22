@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: gl-8xep
-version: 2.0.6
+version: 3.0.0
 maturity: modelled
 manufacturer: ReadyLinks
 model: GL-8xEP
@@ -13,6 +13,16 @@ description: >-
   are on the front face; the other five faces are heatsink and lid.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (xg2/xg1). 1 of these were drawn
+      with the upper cage turned before the std cage art moved its lip to the bottom of the
+      opening; turning them keeps the lips in the middle band where they were drawn and seats
+      every optic bail-outward.
   sources:
     note: >-
       vendor GLB 3D model (KeyShot CAD export, gl-8xep.glb - 728 nodes, 435k triangles, per-part
@@ -297,8 +307,8 @@ views:
       - {ref: std/rj45-ganged@2, id: port-7, at: [128.15, 23.3], group: gbe-poe, rel-pos: 7}
       - {ref: common/rj45-ganged-eth@1, id: eth-2g5-2, at: [62.35, 8], rotate: 180, group: rj45-2g5, rel-pos: 2}
       - {ref: common/rj45-ganged-eth@1, id: eth-2g5-1, at: [62.35, 22.9], group: rj45-2g5, rel-pos: 1}
-      - {ref: std/sfp@1, id: xg2, at: [38.9, 9.7], rotate: 180, group: sfp-plus, rel-pos: 2}
-      - {ref: std/sfp@1, id: xg1, at: [38.9, 23.7], group: sfp-plus, rel-pos: 1}
+      - {ref: std/sfp@1, id: xg2, at: [38.9, 9.7], group: sfp-plus, rel-pos: 2}
+      - {ref: std/sfp@1, id: xg1, at: [38.9, 23.7], rotate: 180, group: sfp-plus, rel-pos: 1}
       - {ref: std/usb-c@1, id: usb2, at: [21.1, 20.5], group: usbc-power, rel-pos: 2}
       - {ref: std/usb-c@1, id: usb1, at: [21.1, 31.4], group: usbc-power, rel-pos: 1}
       - {ref: common/reset-button@1, id: reset, at: [148.1, 28.2], for: chassis, group: buttons, rel-pos: 1}

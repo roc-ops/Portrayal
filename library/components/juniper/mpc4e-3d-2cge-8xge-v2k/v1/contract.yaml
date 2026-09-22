@@ -1,16 +1,23 @@
 format: 1
 kind: module
 name: mpc4e-3d-2cge-8xge-v2k
-version: 1.1.2
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
-  Juniper MPC4E-3D-2CGE-8XGE fixed MPC - two 100GbE CFP ports and eight SFP+ in interleaved PICs. Authored as the MX2000 vertical form, seated through its adapter card (jacks rotated 90).
+  Juniper MPC4E-3D-2CGE-8XGE fixed MPC - two 100GbE CFP ports and eight SFP+ in interleaved PICs. Authored as the MX2000 vertical form, seated through its adapter card (jacks turned on their side - rotate 90, and 270 for the left cage of each belly-to-belly pair).
 attrs:
   model: MPC4E-3D-2CGE-8XGE
   power-draw-max-w: 610
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 4 SFP pairs (port-0-1/port-0-0 to port-2-3/port-2-2). Turning a composed cage in
+    place changes no box, id or anything a device places, so it is a minor bump (S6).
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
@@ -35,14 +42,14 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [5.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-1, at: [5.38, 26.73], rotate: 270, attrs: {media: sfp-plus}}
 - {ref: std/sfp-ganged@1, id: port-0-0, at: [21.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [5.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, at: [5.38, 42.57], rotate: 270, attrs: {media: sfp-plus}}
 - {ref: std/sfp-ganged@1, id: port-0-2, at: [21.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
 - {ref: std/cfp@1, id: port-1-0, at: [-20.50, 99.70], rotate: 90, attrs: {media: cfp}}
-- {ref: std/sfp-ganged@1, id: port-2-1, at: [5.38, 160.03], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-1, at: [5.38, 160.03], rotate: 270, attrs: {media: sfp-plus}}
 - {ref: std/sfp-ganged@1, id: port-2-0, at: [21.38, 160.03], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-2-3, at: [5.38, 175.88], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-3, at: [5.38, 175.88], rotate: 270, attrs: {media: sfp-plus}}
 - {ref: std/sfp-ganged@1, id: port-2-2, at: [21.38, 175.88], rotate: 90, attrs: {media: sfp-plus}}
 - {ref: std/cfp@1, id: port-3-0, at: [-20.50, 233.00], rotate: 90, attrs: {media: cfp}}
 size:

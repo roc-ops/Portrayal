@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 1.0.1
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
@@ -14,6 +14,16 @@ description: >-
   of it, front-to-back only.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper cage
+      upright (rotate 0) over the lower turned 180, so both cage lips face the band between the two cages
+      and both bails face outward. Decided by the rule, not an observation, so a photograph of the stack
+      overturns it: the 1 SFP pair (oob-0/oob-1), the 20 QSFP pairs (port-0/port-1 to port-38/port-39),
+      the 6 QSFP-DD pairs (fab-0/fab-1 to fab-10/fab-11). 26 of these were drawn with the upper cage turned
+      before the std cage art moved its lip to the bottom of the opening; turning them keeps the lips
+      in the middle band where they were drawn and seats every optic bail-outward.
   sources:
     confidence: datasheet
     note: >-
@@ -804,18 +814,18 @@ views:
         rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.25], skin: right, optional: ears, group: furniture,
         rel-pos: 2}
-      - {ref: std/qsfp-ganged@1, id: port-0, at: [4.56, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 0}
-      - {ref: std/qsfp-ganged@1, id: port-1, at: [4.56, 35.73], group: qsfp28-100g, rel-pos: 1}
-      - {ref: std/qsfp-ganged@1, id: port-2, at: [23.56, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 2}
-      - {ref: std/qsfp-ganged@1, id: port-3, at: [23.56, 35.73], group: qsfp28-100g, rel-pos: 3}
-      - {ref: std/qsfp-ganged@1, id: port-4, at: [47.26, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 4}
-      - {ref: std/qsfp-ganged@1, id: port-5, at: [47.26, 35.73], group: qsfp28-100g, rel-pos: 5}
-      - {ref: std/qsfp-ganged@1, id: port-6, at: [66.26, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 6}
-      - {ref: std/qsfp-ganged@1, id: port-7, at: [66.26, 35.73], group: qsfp28-100g, rel-pos: 7}
-      - {ref: std/qsfp-ganged@1, id: port-8, at: [89.96, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 8}
-      - {ref: std/qsfp-ganged@1, id: port-9, at: [89.96, 35.73], group: qsfp28-100g, rel-pos: 9}
-      - {ref: std/qsfp-ganged@1, id: port-10, at: [108.96, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 10}
-      - {ref: std/qsfp-ganged@1, id: port-11, at: [108.96, 35.73], group: qsfp28-100g, rel-pos: 11}
+      - {ref: std/qsfp-ganged@1, id: port-0, at: [4.56, 20.24], group: qsfp28-100g, rel-pos: 0}
+      - {ref: std/qsfp-ganged@1, id: port-1, at: [4.56, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 1}
+      - {ref: std/qsfp-ganged@1, id: port-2, at: [23.56, 20.24], group: qsfp28-100g, rel-pos: 2}
+      - {ref: std/qsfp-ganged@1, id: port-3, at: [23.56, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 3}
+      - {ref: std/qsfp-ganged@1, id: port-4, at: [47.26, 20.24], group: qsfp28-100g, rel-pos: 4}
+      - {ref: std/qsfp-ganged@1, id: port-5, at: [47.26, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 5}
+      - {ref: std/qsfp-ganged@1, id: port-6, at: [66.26, 20.24], group: qsfp28-100g, rel-pos: 6}
+      - {ref: std/qsfp-ganged@1, id: port-7, at: [66.26, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 7}
+      - {ref: std/qsfp-ganged@1, id: port-8, at: [89.96, 20.24], group: qsfp28-100g, rel-pos: 8}
+      - {ref: std/qsfp-ganged@1, id: port-9, at: [89.96, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 9}
+      - {ref: std/qsfp-ganged@1, id: port-10, at: [108.96, 20.24], group: qsfp28-100g, rel-pos: 10}
+      - {ref: std/qsfp-ganged@1, id: port-11, at: [108.96, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 11}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-0, at: [5.41, 30.6], for: port-0, group: port-lamps,
         rel-pos: 0}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-1, at: [15.01, 30.6], for: port-1, group: port-lamps,
@@ -840,14 +850,14 @@ views:
         rel-pos: 10}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-11, at: [119.41, 30.6], for: port-11, group: port-lamps,
         rel-pos: 11}
-      - {ref: std/qsfp-ganged@1, id: port-12, at: [293.0, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 12}
-      - {ref: std/qsfp-ganged@1, id: port-13, at: [293.0, 35.73], group: qsfp28-100g, rel-pos: 13}
-      - {ref: std/qsfp-ganged@1, id: port-14, at: [312.0, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 14}
-      - {ref: std/qsfp-ganged@1, id: port-15, at: [312.0, 35.73], group: qsfp28-100g, rel-pos: 15}
-      - {ref: std/qsfp-ganged@1, id: port-16, at: [335.75, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 16}
-      - {ref: std/qsfp-ganged@1, id: port-17, at: [335.75, 35.73], group: qsfp28-100g, rel-pos: 17}
-      - {ref: std/qsfp-ganged@1, id: port-18, at: [354.75, 20.24], rotate: 180, group: qsfp28-100g, rel-pos: 18}
-      - {ref: std/qsfp-ganged@1, id: port-19, at: [354.75, 35.73], group: qsfp28-100g, rel-pos: 19}
+      - {ref: std/qsfp-ganged@1, id: port-12, at: [293.0, 20.24], group: qsfp28-100g, rel-pos: 12}
+      - {ref: std/qsfp-ganged@1, id: port-13, at: [293.0, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 13}
+      - {ref: std/qsfp-ganged@1, id: port-14, at: [312.0, 20.24], group: qsfp28-100g, rel-pos: 14}
+      - {ref: std/qsfp-ganged@1, id: port-15, at: [312.0, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 15}
+      - {ref: std/qsfp-ganged@1, id: port-16, at: [335.75, 20.24], group: qsfp28-100g, rel-pos: 16}
+      - {ref: std/qsfp-ganged@1, id: port-17, at: [335.75, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 17}
+      - {ref: std/qsfp-ganged@1, id: port-18, at: [354.75, 20.24], group: qsfp28-100g, rel-pos: 18}
+      - {ref: std/qsfp-ganged@1, id: port-19, at: [354.75, 35.73], rotate: 180, group: qsfp28-100g, rel-pos: 19}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-12, at: [293.85, 30.6], for: port-12, group: port-lamps,
         rel-pos: 12}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-13, at: [303.45, 30.6], for: port-13, group: port-lamps,
@@ -864,18 +874,18 @@ views:
         rel-pos: 18}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-19, at: [365.2, 30.6], for: port-19, group: port-lamps,
         rel-pos: 19}
-      - {ref: std/qsfp-ganged@1, id: port-20, at: [4.56, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 20}
-      - {ref: std/qsfp-ganged@1, id: port-21, at: [4.56, 66.32], group: qsfp28-100g, rel-pos: 21}
-      - {ref: std/qsfp-ganged@1, id: port-22, at: [23.56, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 22}
-      - {ref: std/qsfp-ganged@1, id: port-23, at: [23.56, 66.32], group: qsfp28-100g, rel-pos: 23}
-      - {ref: std/qsfp-ganged@1, id: port-24, at: [47.26, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 24}
-      - {ref: std/qsfp-ganged@1, id: port-25, at: [47.26, 66.32], group: qsfp28-100g, rel-pos: 25}
-      - {ref: std/qsfp-ganged@1, id: port-26, at: [66.26, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 26}
-      - {ref: std/qsfp-ganged@1, id: port-27, at: [66.26, 66.32], group: qsfp28-100g, rel-pos: 27}
-      - {ref: std/qsfp-ganged@1, id: port-28, at: [89.96, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 28}
-      - {ref: std/qsfp-ganged@1, id: port-29, at: [89.96, 66.32], group: qsfp28-100g, rel-pos: 29}
-      - {ref: std/qsfp-ganged@1, id: port-30, at: [108.96, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 30}
-      - {ref: std/qsfp-ganged@1, id: port-31, at: [108.96, 66.32], group: qsfp28-100g, rel-pos: 31}
+      - {ref: std/qsfp-ganged@1, id: port-20, at: [4.56, 50.83], group: qsfp28-100g, rel-pos: 20}
+      - {ref: std/qsfp-ganged@1, id: port-21, at: [4.56, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 21}
+      - {ref: std/qsfp-ganged@1, id: port-22, at: [23.56, 50.83], group: qsfp28-100g, rel-pos: 22}
+      - {ref: std/qsfp-ganged@1, id: port-23, at: [23.56, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 23}
+      - {ref: std/qsfp-ganged@1, id: port-24, at: [47.26, 50.83], group: qsfp28-100g, rel-pos: 24}
+      - {ref: std/qsfp-ganged@1, id: port-25, at: [47.26, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 25}
+      - {ref: std/qsfp-ganged@1, id: port-26, at: [66.26, 50.83], group: qsfp28-100g, rel-pos: 26}
+      - {ref: std/qsfp-ganged@1, id: port-27, at: [66.26, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 27}
+      - {ref: std/qsfp-ganged@1, id: port-28, at: [89.96, 50.83], group: qsfp28-100g, rel-pos: 28}
+      - {ref: std/qsfp-ganged@1, id: port-29, at: [89.96, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 29}
+      - {ref: std/qsfp-ganged@1, id: port-30, at: [108.96, 50.83], group: qsfp28-100g, rel-pos: 30}
+      - {ref: std/qsfp-ganged@1, id: port-31, at: [108.96, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 31}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-20, at: [5.41, 61.19], for: port-20, group: port-lamps,
         rel-pos: 20}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-21, at: [15.01, 61.19], for: port-21, group: port-lamps,
@@ -900,14 +910,14 @@ views:
         rel-pos: 30}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-31, at: [119.41, 61.19], for: port-31, group: port-lamps,
         rel-pos: 31}
-      - {ref: std/qsfp-ganged@1, id: port-32, at: [293.0, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 32}
-      - {ref: std/qsfp-ganged@1, id: port-33, at: [293.0, 66.32], group: qsfp28-100g, rel-pos: 33}
-      - {ref: std/qsfp-ganged@1, id: port-34, at: [312.0, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 34}
-      - {ref: std/qsfp-ganged@1, id: port-35, at: [312.0, 66.32], group: qsfp28-100g, rel-pos: 35}
-      - {ref: std/qsfp-ganged@1, id: port-36, at: [335.75, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 36}
-      - {ref: std/qsfp-ganged@1, id: port-37, at: [335.75, 66.32], group: qsfp28-100g, rel-pos: 37}
-      - {ref: std/qsfp-ganged@1, id: port-38, at: [354.75, 50.83], rotate: 180, group: qsfp28-100g, rel-pos: 38}
-      - {ref: std/qsfp-ganged@1, id: port-39, at: [354.75, 66.32], group: qsfp28-100g, rel-pos: 39}
+      - {ref: std/qsfp-ganged@1, id: port-32, at: [293.0, 50.83], group: qsfp28-100g, rel-pos: 32}
+      - {ref: std/qsfp-ganged@1, id: port-33, at: [293.0, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 33}
+      - {ref: std/qsfp-ganged@1, id: port-34, at: [312.0, 50.83], group: qsfp28-100g, rel-pos: 34}
+      - {ref: std/qsfp-ganged@1, id: port-35, at: [312.0, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 35}
+      - {ref: std/qsfp-ganged@1, id: port-36, at: [335.75, 50.83], group: qsfp28-100g, rel-pos: 36}
+      - {ref: std/qsfp-ganged@1, id: port-37, at: [335.75, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 37}
+      - {ref: std/qsfp-ganged@1, id: port-38, at: [354.75, 50.83], group: qsfp28-100g, rel-pos: 38}
+      - {ref: std/qsfp-ganged@1, id: port-39, at: [354.75, 66.32], rotate: 180, group: qsfp28-100g, rel-pos: 39}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-32, at: [293.85, 61.19], for: port-32, group: port-lamps,
         rel-pos: 32}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-33, at: [303.45, 61.19], for: port-33, group: port-lamps,
@@ -924,18 +934,18 @@ views:
         rel-pos: 38}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-39, at: [365.2, 61.19], for: port-39, group: port-lamps,
         rel-pos: 39}
-      - {ref: std/qsfp-dd@1, id: fab-0, at: [135.3, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 0}
-      - {ref: std/qsfp-dd@1, id: fab-1, at: [135.3, 50.22], group: qsfpdd-fabric, rel-pos: 1}
-      - {ref: std/qsfp-dd@1, id: fab-2, at: [154.3, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 2}
-      - {ref: std/qsfp-dd@1, id: fab-3, at: [154.3, 50.22], group: qsfpdd-fabric, rel-pos: 3}
-      - {ref: std/qsfp-dd@1, id: fab-4, at: [180.43, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 4}
-      - {ref: std/qsfp-dd@1, id: fab-5, at: [180.43, 50.22], group: qsfpdd-fabric, rel-pos: 5}
-      - {ref: std/qsfp-dd@1, id: fab-6, at: [199.43, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 6}
-      - {ref: std/qsfp-dd@1, id: fab-7, at: [199.43, 50.22], group: qsfpdd-fabric, rel-pos: 7}
-      - {ref: std/qsfp-dd@1, id: fab-8, at: [225.56, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 8}
-      - {ref: std/qsfp-dd@1, id: fab-9, at: [225.56, 50.22], group: qsfpdd-fabric, rel-pos: 9}
-      - {ref: std/qsfp-dd@1, id: fab-10, at: [244.56, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 10}
-      - {ref: std/qsfp-dd@1, id: fab-11, at: [244.56, 50.22], group: qsfpdd-fabric, rel-pos: 11}
+      - {ref: std/qsfp-dd@1, id: fab-0, at: [135.3, 35.52], group: qsfpdd-fabric, rel-pos: 0}
+      - {ref: std/qsfp-dd@1, id: fab-1, at: [135.3, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 1}
+      - {ref: std/qsfp-dd@1, id: fab-2, at: [154.3, 35.52], group: qsfpdd-fabric, rel-pos: 2}
+      - {ref: std/qsfp-dd@1, id: fab-3, at: [154.3, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 3}
+      - {ref: std/qsfp-dd@1, id: fab-4, at: [180.43, 35.52], group: qsfpdd-fabric, rel-pos: 4}
+      - {ref: std/qsfp-dd@1, id: fab-5, at: [180.43, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 5}
+      - {ref: std/qsfp-dd@1, id: fab-6, at: [199.43, 35.52], group: qsfpdd-fabric, rel-pos: 6}
+      - {ref: std/qsfp-dd@1, id: fab-7, at: [199.43, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 7}
+      - {ref: std/qsfp-dd@1, id: fab-8, at: [225.56, 35.52], group: qsfpdd-fabric, rel-pos: 8}
+      - {ref: std/qsfp-dd@1, id: fab-9, at: [225.56, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 9}
+      - {ref: std/qsfp-dd@1, id: fab-10, at: [244.56, 35.52], group: qsfpdd-fabric, rel-pos: 10}
+      - {ref: std/qsfp-dd@1, id: fab-11, at: [244.56, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 11}
       - {ref: std/qsfp-dd@1, id: fab-12, at: [269.58, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 12}
       - {ref: common/led-dot@1, id: led-fab-a, at: [132.1, 37.96], group: port-lamps, rel-pos: 40, for: [
           fab-0, fab-2]}
@@ -972,6 +982,7 @@ views:
       - ref: common/sfp-plus-cage@2
         id: oob-1
         at: [377.85, 35.32]
+        rotate: 180
         group: mgmt
         rel-pos: 2
         attrs: {media: sfp-plus, speed: 10g, role: out-of-band}

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx304-lmic16
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -23,6 +23,16 @@ attrs:
   cli-naming: 'Junos 24.4R1+: MIC 0/PIC 0 and MIC 1/PIC 1 (MRATE LC-MIC
     16x100G/4x400G); earlier: PIC 0/PIC 1'
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 8 QSFP-DD pairs
+    (port-0/port-1 to port-14/port-15). 8 of these were drawn with the upper cage turned
+    before the std cage art moved its lip to the bottom of the opening; turning them
+    keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
   size: 'datasheet-table + photo - Table 22: LMIC envelope 8.01 x 1.58 x 13.07
     in (203.5 x 40.1 x 332 mm); the drawn face is the 197.6 mm visible plate
     (see jnp304-re - same slot geometry), envelope carried in attrs'
@@ -33,8 +43,8 @@ provenance:
     of the same populated scope, not a vendor "typical"'
   cages: 'photo - mx304-front-high.jpg: four quad blocks with left edges at
     20.0/62.1/107.7/150.1 mm (block width 37.7, two 19.0 mm qsfp-dd columns
-    on an 18.7 mm pitch, shared wall), top row y 3.7 rotate 180, bottom row
-    y 22.5, belly to belly. Cage size is the registry''s qsfp-dd'
+    on an 18.7 mm pitch, shared wall), top row y 3.7, bottom row
+    y 22.5 rotate 180, belly to belly. Cage size is the registry''s qsfp-dd'
   port-speeds: 'guide Figure 27 (port-speed diagram) + photo, agreeing
     independently: the 400G/100G-capable cages are the TOP-LEFT cage of
     blocks 1 and 3 and the TOP-RIGHT cage of blocks 2 and 4 - ports 0, 6, 8
@@ -49,22 +59,22 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/qsfp-dd@1, id: port-0, at: [20.0, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-1, at: [20.0, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-2, at: [38.7, 3.7], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-3, at: [38.7, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-4, at: [62.1, 3.7], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-5, at: [62.1, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-6, at: [80.8, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-7, at: [80.8, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-8, at: [107.7, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-9, at: [107.7, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-10, at: [126.4, 3.7], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-11, at: [126.4, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-12, at: [150.1, 3.7], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-13, at: [150.1, 22.5]}
-- {ref: std/qsfp-dd@1, id: port-14, at: [168.8, 3.7], rotate: 180, attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-15, at: [168.8, 22.5]}
+- {ref: std/qsfp-dd@1, id: port-0, at: [20.0, 3.7], attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-1, at: [20.0, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-2, at: [38.7, 3.7]}
+- {ref: std/qsfp-dd@1, id: port-3, at: [38.7, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-4, at: [62.1, 3.7]}
+- {ref: std/qsfp-dd@1, id: port-5, at: [62.1, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-6, at: [80.8, 3.7], attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-7, at: [80.8, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-8, at: [107.7, 3.7], attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-9, at: [107.7, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-10, at: [126.4, 3.7]}
+- {ref: std/qsfp-dd@1, id: port-11, at: [126.4, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-12, at: [150.1, 3.7]}
+- {ref: std/qsfp-dd@1, id: port-13, at: [150.1, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-14, at: [168.8, 3.7], attrs: {speed: 400g-capable}}
+- {ref: std/qsfp-dd@1, id: port-15, at: [168.8, 22.5], rotate: 180}
 elements:
   lever-left:
     at: [1.6, 3.3]

@@ -110,6 +110,7 @@ from portrayal import dcim_export
 from portrayal import devicelock
 from portrayal import optical
 from portrayal import optical_ports
+from portrayal import stacks
 from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
@@ -248,6 +249,7 @@ RULES = {
     "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
+    "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
 }
 
 
@@ -4230,8 +4232,9 @@ def lint_component_forwarded_mate(path, data, lib_roots):
     When they disagree the wrapper's own point was placed by eye and the
     aperture's was measured, so the drawing and the mating will part company: a
     cable drawn to the declared point and a module seated on the forwarded one.
-    `common/qsfp-cage@2` is out by 0.54 mm vertically, which is small, real, and
-    exactly the kind of thing nobody finds by looking.
+    `common/qsfp-cage@2` was out by 0.54 mm vertically, which is small, real, and
+    exactly the kind of thing nobody finds by looking (@3 puts the point on the
+    aperture's).
 
     A warning: which of the two is right is a question about the part, and the
     fix is sometimes to move the declared point and sometimes to correct the
@@ -5446,6 +5449,41 @@ def lint_device_pluggable_media(path, data, _lib_roots=None):
                 "which PLUGGABLE_CAGES recognises as a pluggable cage but no "
                 "family in spec/schemas/pluggables.yaml carries as a rate")
 
+
+
+def _stack_findings(path, data, lib_roots, is_device):
+    """L108: every belly-to-belly cage pair faces the library's way, or says why not.
+
+    THE CONVENTION IS ONE MEANING OF `rotate` (docs/pluggables-3d-design.md,
+    the stacked-cage decisions of 2026-09-21): 0 is a module seated upright,
+    bail at the top and belly at the bottom, which is how every std cage skin
+    and every generic transceiver draws. A seated optic takes its cage's turn,
+    so a stack drawn the other way round seats its optics with their bails in
+    the band between the rows, where no thumb reaches them. Before this rule
+    the library drew 1,721 device stacks and 838 card stacks five different
+    ways, some to match a photograph under the old art and some by analogy.
+
+    THE PAIRING IS stacks.py's, and the tests read the same module - a rule and
+    a census that disagreed about what a pair is would each pass on its own.
+    Exceptions are per pair, in `stack-exceptions:`, and one that names no
+    checked pair is a finding too. OSFP stacks are skipped, and the message
+    says so, because std/osfp@1's art may follow a different convention.
+    """
+    def resolve(ref):
+        c = _contract(ref.split(":")[0], lib_roots) if ref else {}
+        return c or None
+    for msg in stacks.findings(data, resolve, is_device):
+        err(path, "L108", msg)
+
+
+def lint_device_stack_orientation(path, data, lib_roots):
+    """L108 for a device manifest's views. See `_stack_findings`."""
+    _stack_findings(path, data, lib_roots, True)
+
+
+def lint_component_stack_orientation(path, data, lib_roots):
+    """L108 for the cages a component composes. See `_stack_findings`."""
+    _stack_findings(path, data, lib_roots, False)
 
 
 def lint_device_placement_interfaces(path, data, lib_roots):
@@ -6984,6 +7022,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_pluggable_media(path, data)
     lint_device_cage_media_disagreement(path, data, lib_roots)
     lint_device_placement_interfaces(path, data, lib_roots)
+    lint_device_stack_orientation(path, data, lib_roots)
     lint_device_config_scope(path, data)
     lint_device_silkscreen_owner(path, data)
     lint_device_rack_ears(path, data)
@@ -8023,6 +8062,7 @@ def main():
                 lint_component_role(f, d)
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_seat_point(f, d)
+                lint_component_stack_orientation(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)

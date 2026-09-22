@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9110-32x
-version: 2.0.8
+version: 2.0.9
 maturity: modelled
 manufacturer: UfiSpace
 model: S9110-32X
@@ -17,6 +17,14 @@ description: >-
   Intel Denverton, BMC-managed white box (ToR / spine-leaf / DCI).
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 16 QSFP pairs (port-0/port-1 to
+      port-30/port-31).
   sources:
     confidence: datasheet
     note: >-

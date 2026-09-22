@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ecs4120-28fv2-i
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: ECS4120-28Fv2-I
@@ -14,6 +14,16 @@ description: >-
   fixed fans.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 12 SFP pairs (port-1/port-2 to
+      port-23/port-24). 12 of these were drawn with the upper cage turned before the std cage art
+      moved its lip to the bottom of the opening; turning them keeps the lips in the middle band
+      where they were drawn and seats every optic bail-outward.
   sources:
     confidence: datasheet
     note: >-
@@ -359,7 +369,7 @@ views:
           pitch: 17.405
           number-from: 1
           cutouts: true
-          rotate: {top: 180}
+          rotate: {bottom: 180}
           led:
             ref: common/led-dot@1
             id-format: led-port-{n}

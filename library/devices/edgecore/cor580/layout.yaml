@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 1.0.11
+version: 2.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -13,6 +13,16 @@ description: >-
   only.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (oob-0/oob-1), the 12 QSFP-DD
+      pairs (port-0/port-1 to port-22/port-23). 12 of these were drawn with the upper cage turned
+      before the std cage art moved its lip to the bottom of the opening; turning them keeps the
+      lips in the middle band where they were drawn and seats every optic bail-outward.
   sources:
     note: >-
       Two documents, both docling-converted. cor580-datasheet (the COR580 / AS9926-24D-AS9926-24DB
@@ -568,7 +578,7 @@ views:
         gutter: 6.14
         number-from: 0
         cutouts: true
-        rotate: {top: 180}
+        rotate: {bottom: 180}
         led:
           ref: common/qsfp-lane-leds-column@1
           id-format: led-port-{n}
@@ -597,7 +607,7 @@ views:
         - {block: qsfpdd-400g}
         - {ref: std/micro-usb@1, id: console-0, at: [350.95, 19.33], group: mgmt, rel-pos: 1, attrs: {media: micro-usb-b, role: console}}
         - {ref: common/sfp-plus-cage@2, id: oob-0, at: [369.0, 12.0], group: mgmt, rel-pos: 2, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
-        - {ref: common/sfp-plus-cage@2, id: oob-1, at: [369.0, 27.5], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
+        - {ref: common/sfp-plus-cage@2, id: oob-1, at: [369.0, 27.5], rotate: 180, group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
         - {ref: common/led-dot@1, id: led-oob-0, at: [372.72, 8.5], group: leds, rel-pos: 6, for: oob-0}
         - {ref: common/led-dot@1, id: led-oob-1, at: [379.28, 8.5], group: leds, rel-pos: 7, for: oob-1}
         - {ref: common/rj45-eth@1, id: mgmt-eth, at: [388.44, 9.1], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 1000base-t}, rotate: 180}

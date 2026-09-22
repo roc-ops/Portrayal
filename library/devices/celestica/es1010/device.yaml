@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1010
-version: 2.0.8
+version: 3.0.0
 maturity: modelled
 manufacturer: Celestica
 model: ES1010
@@ -9,6 +9,14 @@ description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25
   Broadcom TD3.X2, fixed 2+1 fans, 1+1 hot-swap AC PSUs
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 2 SFP pairs (port-49/port-50 and
+      port-51/port-52).
   chassis:
     confidence: datasheet
     note: >-
@@ -277,9 +285,9 @@ views:
         - {ref: common/rj45-ganged-eth@1, id: port-47, at: [348.11, 16.1], group: rj45-1g, rel-pos: 47}
         - {ref: common/rj45-ganged-eth@1, id: port-48, at: [348.11, 28.1], rotate: 180, group: rj45-1g, rel-pos: 48}
         - {ref: std/sfp-ganged@1, id: port-49, at: [374.8, 3.0], group: sfp28, rel-pos: 49}
-        - {ref: std/sfp-ganged@1, id: port-50, at: [374.8, 19.0], group: sfp28, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [374.8, 19.0], rotate: 180, group: sfp28, rel-pos: 50}
         - {ref: std/sfp-ganged@1, id: port-51, at: [389.05, 3.0], group: sfp28, rel-pos: 51}
-        - {ref: std/sfp-ganged@1, id: port-52, at: [389.05, 19.0], group: sfp28, rel-pos: 52}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [389.05, 19.0], rotate: 180, group: sfp28, rel-pos: 52}
         - {ref: std/usb-a@1, id: usb-1, at: [328.5, 6.0], group: mgmt, rel-pos: 1, attrs: {role: storage, speed: usb3}}
         - {ref: common/led-dot@1, id: led-sys, at: [349.8, 6.2], for: chassis, attrs: {role: system}, group: status-leds, rel-pos: 1}
         - {ref: std/sfp@1, id: mgmt-sfp, at: [355.5, 4.6], group: mgmt, rel-pos: 2, attrs: {media: sfp, role: mgmt-combo, combo-with: mgmt}}

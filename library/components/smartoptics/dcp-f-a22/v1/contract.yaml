@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-f-a22
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -17,6 +17,13 @@ attrs:
   power-draw-max-w: 35
   laser-class: '1'
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 1 SFP pair
+    (sfp-1/sfp-2). Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
   method: >-
     FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-f-a22.md. The
     sheet was written from the manuals alone and concluded that no document in the
@@ -231,7 +238,7 @@ parts:
   - {ref: common/lc-duplex-adapter@3, id: edfa, at: [88.08, 23.8], lift: 44.0, attrs: {role: edfa}}
   - {ref: common/lc-duplex-adapter@3, id: ocm, at: [113.98, 23.8], lift: 44.0, attrs: {role: monitor}}
   - {ref: std/sfp@1, id: sfp-1, at: [130.75, 10.0], lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
-  - {ref: std/sfp@1, id: sfp-2, at: [130.75, 24.0], lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
+  - {ref: std/sfp@1, id: sfp-2, at: [130.75, 24.0], rotate: 180, lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 100m-1g}}
 relief:
   features:
     # THE LEFT BLOCK, WHOSE TOP SLOPES BACK TO THE CHASSIS. `profile-y` reads down

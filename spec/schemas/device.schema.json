@@ -112,6 +112,62 @@
     }
    }
   },
+  "stack-exceptions": {
+   "type": "array",
+   "description": "A BELLY-TO-BELLY CAGE STACK THAT IS NOT DRAWN THE LIBRARY'S WAY, and why. Lint L108 holds every stacked SFP/QSFP/QSFP-DD cage pair to one convention - a row pair upper rotate 0 over lower rotate 180, a column pair (cages turned on their side) left 270 beside right 90, so both bails face outward - and this is the one place a device, its layout.yaml, or a component contract says a pair is otherwise. Each entry names the pair (or several pairs that share one reason) by id and carries the reading that overturns the convention. The pairing is spec/tools/portrayal/stacks.py; OSFP stacks are not checked. See docs/pluggables-3d-design.md, the stacked-cage decisions.",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "reason"
+    ],
+    "oneOf": [
+     {
+      "required": [
+       "pair"
+      ]
+     },
+     {
+      "required": [
+       "pairs"
+      ]
+     }
+    ],
+    "properties": {
+     "pair": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "description": "the two cage ids, upper then lower (or left then right)"
+     },
+     "pairs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       },
+       "minItems": 2,
+       "maxItems": 2
+      },
+      "description": "several pairs that share one reason"
+     },
+     "reason": {
+      "type": "string",
+      "minLength": 40,
+      "description": "the recorded reading that overturns the convention - a photograph, a drawing, the lamps - cited, not a preference"
+     },
+     "view": {
+      "type": "string",
+      "description": "the view the pair is in, where the same ids pair in more than one"
+     }
+    }
+   }
+  },
   "provenance": {
    "type": "object",
    "description": "WHERE EACH FIGURE ON THIS DEVICE CAME FROM, keyed by the figure. Each entry is an object, not a sentence: `note` carries the prose and `confidence` carries the word, so a rule can ask what only a reader could answer before. The rule that needed it is L15's - `maturity: verified` means no dimension may be estimated, and it was implemented as `str(value).startswith(\"estimated\")` against a corpus where 42 entries opened with the word and 80 more said it somewhere in the middle of a 566-character paragraph. `confidence` is OPTIONAL and 744 of 1688 entries do not carry one: they were migrated with the prose intact and no word invented for them, because reading 744 paragraphs and deciding measured-or-estimated by eye is how an estimate becomes a measurement. L93 counts them, and the count is meant to fall. `source` is not here yet - it wants ids on the `datasheet`/`references` entries, which is roc-ops/Portrayal#274.",

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64eo
-version: 1.0.10
+version: 1.0.11
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64EO
@@ -19,6 +19,14 @@ description: >-
   from the S9321-64E, which is the same chassis with 64 QSFP-DD
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the rule, not an observation,
+      so a photograph of the stack overturns it: the 1 SFP pair (port-64/port-65). OSFP stacks are
+      left as drawn (S7): the 32 OSFP pairs (port-0/port-1 to port-62/port-63).
   sources:
     note: >-
       UfiSpace S9321-64EO datasheet for dimensions, weight, port inventory, platform, timing,

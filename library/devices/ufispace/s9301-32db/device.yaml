@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32db
-version: 2.0.10
+version: 2.0.11
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32DB
@@ -16,6 +16,14 @@ description: >-
   DC and in front-to-back or back-to-front airflow
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the reading of the cages
+      recorded in this provenance: the 1 SFP pair (port-sfp-0/port-sfp-1), the 4 QSFP-DD pairs
+      (port-24/port-25 to port-30/port-31), the 12 QSFP pairs (port-0/port-1 to port-22/port-23).
   sources:
     note: >-
       UfiSpace S9301-32DB datasheet for dimensions, weight, port inventory, platform, power,

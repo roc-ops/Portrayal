@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr430
-version: 1.0.1
+version: 1.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7515-24X
@@ -14,6 +14,15 @@ description: >-
   Ports number 0-23 in one range, the four QSFP28s first.
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the port lamps, which point up
+      over down: the 10 SFP pairs (port-4/port-5 to port-22/port-23). Decided by the rule, not an
+      observation, so a photograph of the stack overturns it: the 2 QSFP pairs (port-0/port-1 and
+      port-2/port-3).
   sources:
     confidence: datasheet
     note: >-

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-102xc
-version: 2.0.9
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-102XC
@@ -17,6 +17,17 @@ description: UfiSpace S9601-102XC 25G/100G Disaggregated Open Aggregation Router
   Icelake-D host CPU, 64 GB of memory and two 256 GB SSDs
 profile: networking
 provenance:
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the
+      upper cage upright (rotate 0) over the lower turned 180, so both cage lips face the band
+      between the two cages and both bails face outward. Decided by the port lamps, which point up
+      over down: the 49 SFP pairs (mport-0/mport-1 to port-94/port-95). Decided by the rule, not
+      an observation, so a photograph of the stack overturns it: the 3 QSFP pairs (port-96/port-97
+      to port-100/port-101). 52 of these were drawn with the upper cage turned before the std cage
+      art moved its lip to the bottom of the opening; turning them keeps the lips in the middle
+      band where they were drawn and seats every optic bail-outward.
   sources:
     confidence: datasheet
     note: >-
@@ -109,9 +120,9 @@ provenance:
       two-high block in Figure 8 drawn EMPTY, and at 5x its two apertures are unmistakably
       mirrored: the upper opening's latch nose protrudes DOWNWARD into the central land and the
       lower opening's protrudes UPWARD, the two facing each other so both bails stay reachable.
-      std/sfp-ganged carries its cage lip and module slot in the upper half of its 10.4 mm
-      opening, so a nose-down row is the part turned through 180 degrees. Every top row on this
-      face is therefore drawn rotate: 180 and every bottom row unrotated. The 96 traffic cages are
+      std/sfp-ganged carries its cage lip at the BOTTOM of an upright 10.4 mm opening, so a
+      nose-down row is the part unturned and a nose-up row is the part turned through 180 degrees.
+      Every bottom row on this face is therefore drawn rotate: 180 and every top row unrotated. The 96 traffic cages are
       drawn with modules seated and the figure repeats ONE module glyph, pull tab at the bottom,
       in all four rows - that is the artwork reusing a symbol, not the metal, and it is the weaker
       evidence about an aperture than an aperture drawn open. Recorded as the
@@ -155,8 +166,8 @@ provenance:
       column positions are the sibling's reading of this artwork and my shell measurements bracket
       them to a few tenths at both ends. The QSFP rows are CENTRED ON THE SFP ROWS rather than
       aligned to their tops - a taller port on the same centreline - so each 9.58 mm cage sits
-      0.41 above its SFP neighbour's 10.4 mm one, at y 16.26, 31.71, 46.31 and 61.51. Top rows are
-      rotated 180 for the same reason the SFP top rows are.
+      0.41 above its SFP neighbour's 10.4 mm one, at y 16.26, 31.71, 46.31 and 61.51. Bottom rows
+      are rotated 180 for the same reason the SFP bottom rows are.
   qsfp28-lamps:
     confidence: drawing
     note: >-
@@ -483,7 +494,7 @@ gaps:
   note: >-
     The 96 traffic cages are drawn with modules seated, and Figure 8 repeats one module
     glyph - pull tab at the bottom - in all four rows, so the figure says nothing about
-    the metal behind them. They are drawn here as mirrored pairs (top row rotate 180)
+    the metal behind them. They are drawn here as mirrored pairs (bottom row rotate 180)
     on two grounds: the management SFP+ pair in the same figure IS drawn open and IS
     mirrored, and a two-high ganged cage mirrors so that both rows' bails stay
     reachable. That is an inference across the panel from one block, and if it is wrong
@@ -865,119 +876,119 @@ views:
            description: 'HIG ID row - OFF (no power), Blinking Blue (enable beacon
              feature). Two rows, and the blue is the only colour this lamp is documented
              to show', group: status-leds, rel-pos: 6}
-        - {ref: std/sfp-ganged@1, id: mport-0, at: [26.09, 15.33], rotate: 180, group: sfp-plus-mgmt, rel-pos: 0}
-        - {ref: std/sfp-ganged@1, id: mport-1, at: [26.09, 31.09], group: sfp-plus-mgmt, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: mport-0, at: [26.09, 15.33], group: sfp-plus-mgmt, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: mport-1, at: [26.09, 31.09], rotate: 180, group: sfp-plus-mgmt, rel-pos: 1}
         - {ref: common/led-arrow-sm@1, id: led-mport-0, at: [30.565, 27.41], skin: up, for: mport-0, group: port-leds, rel-pos: 103}
         - {ref: common/led-arrow-sm@1, id: led-mport-1, at: [34.265, 27.41], skin: down, for: mport-1, group: port-leds, rel-pos: 104}
-        - {ref: std/qsfp-ganged@1, id: port-96, at: [392.3, 16.26], rotate: 180, group: qsfp28, rel-pos: 96}
-        - {ref: std/qsfp-ganged@1, id: port-97, at: [392.3, 31.71], group: qsfp28, rel-pos: 97}
-        - {ref: std/qsfp-ganged@1, id: port-98, at: [411.3, 16.26], rotate: 180, group: qsfp28, rel-pos: 98}
-        - {ref: std/qsfp-ganged@1, id: port-99, at: [411.3, 31.71], group: qsfp28, rel-pos: 99}
-        - {ref: std/qsfp-ganged@1, id: port-100, at: [392.3, 46.31], rotate: 180, group: qsfp28, rel-pos: 100}
-        - {ref: std/qsfp-ganged@1, id: port-101, at: [392.3, 61.51], group: qsfp28, rel-pos: 101}
+        - {ref: std/qsfp-ganged@1, id: port-96, at: [392.3, 16.26], group: qsfp28, rel-pos: 96}
+        - {ref: std/qsfp-ganged@1, id: port-97, at: [392.3, 31.71], rotate: 180, group: qsfp28, rel-pos: 97}
+        - {ref: std/qsfp-ganged@1, id: port-98, at: [411.3, 16.26], group: qsfp28, rel-pos: 98}
+        - {ref: std/qsfp-ganged@1, id: port-99, at: [411.3, 31.71], rotate: 180, group: qsfp28, rel-pos: 99}
+        - {ref: std/qsfp-ganged@1, id: port-100, at: [392.3, 46.31], group: qsfp28, rel-pos: 100}
+        - {ref: std/qsfp-ganged@1, id: port-101, at: [392.3, 61.51], rotate: 180, group: qsfp28, rel-pos: 101}
         - {ref: ufispace/lane-led-quad@1, id: led-port-96, at: [394.35, 26], for: port-96, attrs: {port: '96'}, group: port-leds, rel-pos: 105}
         - {ref: ufispace/lane-led-quad@1, id: led-port-97, at: [394.35, 28.8], for: port-97, attrs: {port: '97'}, group: port-leds, rel-pos: 106}
         - {ref: ufispace/lane-led-quad@1, id: led-port-98, at: [413.35, 26], for: port-98, attrs: {port: '98'}, group: port-leds, rel-pos: 107}
         - {ref: ufispace/lane-led-quad@1, id: led-port-99, at: [413.35, 28.8], for: port-99, attrs: {port: '99'}, group: port-leds, rel-pos: 108}
         - {ref: ufispace/lane-led-quad@1, id: led-port-100, at: [394.35, 55.9], for: port-100, attrs: {port: '100'}, group: port-leds, rel-pos: 109}
         - {ref: ufispace/lane-led-quad@1, id: led-port-101, at: [394.35, 58.7], for: port-101, attrs: {port: '101'}, group: port-leds, rel-pos: 110}
-# ---- SFP28 cages: top rows rotate 180 so the two rows' bails face the land ----
-        - {ref: std/sfp-ganged@1, id: port-0, at: [43.7, 15.85], rotate: 180, group: sfp28, rel-pos: 0}
-        - {ref: std/sfp-ganged@1, id: port-1, at: [43.7, 31.3], group: sfp28, rel-pos: 1}
-        - {ref: std/sfp-ganged@1, id: port-2, at: [57.95, 15.85], rotate: 180, group: sfp28, rel-pos: 2}
-        - {ref: std/sfp-ganged@1, id: port-3, at: [57.95, 31.3], group: sfp28, rel-pos: 3}
-        - {ref: std/sfp-ganged@1, id: port-4, at: [72.2, 15.85], rotate: 180, group: sfp28, rel-pos: 4}
-        - {ref: std/sfp-ganged@1, id: port-5, at: [72.2, 31.3], group: sfp28, rel-pos: 5}
-        - {ref: std/sfp-ganged@1, id: port-6, at: [86.45, 15.85], rotate: 180, group: sfp28, rel-pos: 6}
-        - {ref: std/sfp-ganged@1, id: port-7, at: [86.45, 31.3], group: sfp28, rel-pos: 7}
-        - {ref: std/sfp-ganged@1, id: port-8, at: [100.7, 15.85], rotate: 180, group: sfp28, rel-pos: 8}
-        - {ref: std/sfp-ganged@1, id: port-9, at: [100.7, 31.3], group: sfp28, rel-pos: 9}
-        - {ref: std/sfp-ganged@1, id: port-10, at: [114.95, 15.85], rotate: 180, group: sfp28, rel-pos: 10}
-        - {ref: std/sfp-ganged@1, id: port-11, at: [114.95, 31.3], group: sfp28, rel-pos: 11}
-        - {ref: std/sfp-ganged@1, id: port-12, at: [129.2, 15.85], rotate: 180, group: sfp28, rel-pos: 12}
-        - {ref: std/sfp-ganged@1, id: port-13, at: [129.2, 31.3], group: sfp28, rel-pos: 13}
-        - {ref: std/sfp-ganged@1, id: port-14, at: [143.45, 15.85], rotate: 180, group: sfp28, rel-pos: 14}
-        - {ref: std/sfp-ganged@1, id: port-15, at: [143.45, 31.3], group: sfp28, rel-pos: 15}
-        - {ref: std/sfp-ganged@1, id: port-16, at: [157.7, 15.85], rotate: 180, group: sfp28, rel-pos: 16}
-        - {ref: std/sfp-ganged@1, id: port-17, at: [157.7, 31.3], group: sfp28, rel-pos: 17}
-        - {ref: std/sfp-ganged@1, id: port-18, at: [171.95, 15.85], rotate: 180, group: sfp28, rel-pos: 18}
-        - {ref: std/sfp-ganged@1, id: port-19, at: [171.95, 31.3], group: sfp28, rel-pos: 19}
-        - {ref: std/sfp-ganged@1, id: port-20, at: [186.2, 15.85], rotate: 180, group: sfp28, rel-pos: 20}
-        - {ref: std/sfp-ganged@1, id: port-21, at: [186.2, 31.3], group: sfp28, rel-pos: 21}
-        - {ref: std/sfp-ganged@1, id: port-22, at: [200.45, 15.85], rotate: 180, group: sfp28, rel-pos: 22}
-        - {ref: std/sfp-ganged@1, id: port-23, at: [200.45, 31.3], group: sfp28, rel-pos: 23}
-        - {ref: std/sfp-ganged@1, id: port-24, at: [217.85, 15.85], rotate: 180, group: sfp28, rel-pos: 24}
-        - {ref: std/sfp-ganged@1, id: port-25, at: [217.85, 31.3], group: sfp28, rel-pos: 25}
-        - {ref: std/sfp-ganged@1, id: port-26, at: [232.1, 15.85], rotate: 180, group: sfp28, rel-pos: 26}
-        - {ref: std/sfp-ganged@1, id: port-27, at: [232.1, 31.3], group: sfp28, rel-pos: 27}
-        - {ref: std/sfp-ganged@1, id: port-28, at: [246.35, 15.85], rotate: 180, group: sfp28, rel-pos: 28}
-        - {ref: std/sfp-ganged@1, id: port-29, at: [246.35, 31.3], group: sfp28, rel-pos: 29}
-        - {ref: std/sfp-ganged@1, id: port-30, at: [260.6, 15.85], rotate: 180, group: sfp28, rel-pos: 30}
-        - {ref: std/sfp-ganged@1, id: port-31, at: [260.6, 31.3], group: sfp28, rel-pos: 31}
-        - {ref: std/sfp-ganged@1, id: port-32, at: [274.85, 15.85], rotate: 180, group: sfp28, rel-pos: 32}
-        - {ref: std/sfp-ganged@1, id: port-33, at: [274.85, 31.3], group: sfp28, rel-pos: 33}
-        - {ref: std/sfp-ganged@1, id: port-34, at: [289.1, 15.85], rotate: 180, group: sfp28, rel-pos: 34}
-        - {ref: std/sfp-ganged@1, id: port-35, at: [289.1, 31.3], group: sfp28, rel-pos: 35}
-        - {ref: std/sfp-ganged@1, id: port-36, at: [303.35, 15.85], rotate: 180, group: sfp28, rel-pos: 36}
-        - {ref: std/sfp-ganged@1, id: port-37, at: [303.35, 31.3], group: sfp28, rel-pos: 37}
-        - {ref: std/sfp-ganged@1, id: port-38, at: [317.6, 15.85], rotate: 180, group: sfp28, rel-pos: 38}
-        - {ref: std/sfp-ganged@1, id: port-39, at: [317.6, 31.3], group: sfp28, rel-pos: 39}
-        - {ref: std/sfp-ganged@1, id: port-40, at: [331.85, 15.85], rotate: 180, group: sfp28, rel-pos: 40}
-        - {ref: std/sfp-ganged@1, id: port-41, at: [331.85, 31.3], group: sfp28, rel-pos: 41}
-        - {ref: std/sfp-ganged@1, id: port-42, at: [346.1, 15.85], rotate: 180, group: sfp28, rel-pos: 42}
-        - {ref: std/sfp-ganged@1, id: port-43, at: [346.1, 31.3], group: sfp28, rel-pos: 43}
-        - {ref: std/sfp-ganged@1, id: port-44, at: [360.35, 15.85], rotate: 180, group: sfp28, rel-pos: 44}
-        - {ref: std/sfp-ganged@1, id: port-45, at: [360.35, 31.3], group: sfp28, rel-pos: 45}
-        - {ref: std/sfp-ganged@1, id: port-46, at: [374.6, 15.85], rotate: 180, group: sfp28, rel-pos: 46}
-        - {ref: std/sfp-ganged@1, id: port-47, at: [374.6, 31.3], group: sfp28, rel-pos: 47}
-        - {ref: std/sfp-ganged@1, id: port-48, at: [43.7, 45.9], rotate: 180, group: sfp28, rel-pos: 48}
-        - {ref: std/sfp-ganged@1, id: port-49, at: [43.7, 61.1], group: sfp28, rel-pos: 49}
-        - {ref: std/sfp-ganged@1, id: port-50, at: [57.95, 45.9], rotate: 180, group: sfp28, rel-pos: 50}
-        - {ref: std/sfp-ganged@1, id: port-51, at: [57.95, 61.1], group: sfp28, rel-pos: 51}
-        - {ref: std/sfp-ganged@1, id: port-52, at: [72.2, 45.9], rotate: 180, group: sfp28, rel-pos: 52}
-        - {ref: std/sfp-ganged@1, id: port-53, at: [72.2, 61.1], group: sfp28, rel-pos: 53}
-        - {ref: std/sfp-ganged@1, id: port-54, at: [86.45, 45.9], rotate: 180, group: sfp28, rel-pos: 54}
-        - {ref: std/sfp-ganged@1, id: port-55, at: [86.45, 61.1], group: sfp28, rel-pos: 55}
-        - {ref: std/sfp-ganged@1, id: port-56, at: [100.7, 45.9], rotate: 180, group: sfp28, rel-pos: 56}
-        - {ref: std/sfp-ganged@1, id: port-57, at: [100.7, 61.1], group: sfp28, rel-pos: 57}
-        - {ref: std/sfp-ganged@1, id: port-58, at: [114.95, 45.9], rotate: 180, group: sfp28, rel-pos: 58}
-        - {ref: std/sfp-ganged@1, id: port-59, at: [114.95, 61.1], group: sfp28, rel-pos: 59}
-        - {ref: std/sfp-ganged@1, id: port-60, at: [129.2, 45.9], rotate: 180, group: sfp28, rel-pos: 60}
-        - {ref: std/sfp-ganged@1, id: port-61, at: [129.2, 61.1], group: sfp28, rel-pos: 61}
-        - {ref: std/sfp-ganged@1, id: port-62, at: [143.45, 45.9], rotate: 180, group: sfp28, rel-pos: 62}
-        - {ref: std/sfp-ganged@1, id: port-63, at: [143.45, 61.1], group: sfp28, rel-pos: 63}
-        - {ref: std/sfp-ganged@1, id: port-64, at: [157.7, 45.9], rotate: 180, group: sfp28, rel-pos: 64}
-        - {ref: std/sfp-ganged@1, id: port-65, at: [157.7, 61.1], group: sfp28, rel-pos: 65}
-        - {ref: std/sfp-ganged@1, id: port-66, at: [171.95, 45.9], rotate: 180, group: sfp28, rel-pos: 66}
-        - {ref: std/sfp-ganged@1, id: port-67, at: [171.95, 61.1], group: sfp28, rel-pos: 67}
-        - {ref: std/sfp-ganged@1, id: port-68, at: [186.2, 45.9], rotate: 180, group: sfp28, rel-pos: 68}
-        - {ref: std/sfp-ganged@1, id: port-69, at: [186.2, 61.1], group: sfp28, rel-pos: 69}
-        - {ref: std/sfp-ganged@1, id: port-70, at: [200.45, 45.9], rotate: 180, group: sfp28, rel-pos: 70}
-        - {ref: std/sfp-ganged@1, id: port-71, at: [200.45, 61.1], group: sfp28, rel-pos: 71}
-        - {ref: std/sfp-ganged@1, id: port-72, at: [217.85, 45.9], rotate: 180, group: sfp28, rel-pos: 72}
-        - {ref: std/sfp-ganged@1, id: port-73, at: [217.85, 61.1], group: sfp28, rel-pos: 73}
-        - {ref: std/sfp-ganged@1, id: port-74, at: [232.1, 45.9], rotate: 180, group: sfp28, rel-pos: 74}
-        - {ref: std/sfp-ganged@1, id: port-75, at: [232.1, 61.1], group: sfp28, rel-pos: 75}
-        - {ref: std/sfp-ganged@1, id: port-76, at: [246.35, 45.9], rotate: 180, group: sfp28, rel-pos: 76}
-        - {ref: std/sfp-ganged@1, id: port-77, at: [246.35, 61.1], group: sfp28, rel-pos: 77}
-        - {ref: std/sfp-ganged@1, id: port-78, at: [260.6, 45.9], rotate: 180, group: sfp28, rel-pos: 78}
-        - {ref: std/sfp-ganged@1, id: port-79, at: [260.6, 61.1], group: sfp28, rel-pos: 79}
-        - {ref: std/sfp-ganged@1, id: port-80, at: [274.85, 45.9], rotate: 180, group: sfp28, rel-pos: 80}
-        - {ref: std/sfp-ganged@1, id: port-81, at: [274.85, 61.1], group: sfp28, rel-pos: 81}
-        - {ref: std/sfp-ganged@1, id: port-82, at: [289.1, 45.9], rotate: 180, group: sfp28, rel-pos: 82}
-        - {ref: std/sfp-ganged@1, id: port-83, at: [289.1, 61.1], group: sfp28, rel-pos: 83}
-        - {ref: std/sfp-ganged@1, id: port-84, at: [303.35, 45.9], rotate: 180, group: sfp28, rel-pos: 84}
-        - {ref: std/sfp-ganged@1, id: port-85, at: [303.35, 61.1], group: sfp28, rel-pos: 85}
-        - {ref: std/sfp-ganged@1, id: port-86, at: [317.6, 45.9], rotate: 180, group: sfp28, rel-pos: 86}
-        - {ref: std/sfp-ganged@1, id: port-87, at: [317.6, 61.1], group: sfp28, rel-pos: 87}
-        - {ref: std/sfp-ganged@1, id: port-88, at: [331.85, 45.9], rotate: 180, group: sfp28, rel-pos: 88}
-        - {ref: std/sfp-ganged@1, id: port-89, at: [331.85, 61.1], group: sfp28, rel-pos: 89}
-        - {ref: std/sfp-ganged@1, id: port-90, at: [346.1, 45.9], rotate: 180, group: sfp28, rel-pos: 90}
-        - {ref: std/sfp-ganged@1, id: port-91, at: [346.1, 61.1], group: sfp28, rel-pos: 91}
-        - {ref: std/sfp-ganged@1, id: port-92, at: [360.35, 45.9], rotate: 180, group: sfp28, rel-pos: 92}
-        - {ref: std/sfp-ganged@1, id: port-93, at: [360.35, 61.1], group: sfp28, rel-pos: 93}
-        - {ref: std/sfp-ganged@1, id: port-94, at: [374.6, 45.9], rotate: 180, group: sfp28, rel-pos: 94}
-        - {ref: std/sfp-ganged@1, id: port-95, at: [374.6, 61.1], group: sfp28, rel-pos: 95}
+# ---- SFP28 cages: bottom rows rotate 180 so both rows' lips face the land, bails out ----
+        - {ref: std/sfp-ganged@1, id: port-0, at: [43.7, 15.85], group: sfp28, rel-pos: 0}
+        - {ref: std/sfp-ganged@1, id: port-1, at: [43.7, 31.3], rotate: 180, group: sfp28, rel-pos: 1}
+        - {ref: std/sfp-ganged@1, id: port-2, at: [57.95, 15.85], group: sfp28, rel-pos: 2}
+        - {ref: std/sfp-ganged@1, id: port-3, at: [57.95, 31.3], rotate: 180, group: sfp28, rel-pos: 3}
+        - {ref: std/sfp-ganged@1, id: port-4, at: [72.2, 15.85], group: sfp28, rel-pos: 4}
+        - {ref: std/sfp-ganged@1, id: port-5, at: [72.2, 31.3], rotate: 180, group: sfp28, rel-pos: 5}
+        - {ref: std/sfp-ganged@1, id: port-6, at: [86.45, 15.85], group: sfp28, rel-pos: 6}
+        - {ref: std/sfp-ganged@1, id: port-7, at: [86.45, 31.3], rotate: 180, group: sfp28, rel-pos: 7}
+        - {ref: std/sfp-ganged@1, id: port-8, at: [100.7, 15.85], group: sfp28, rel-pos: 8}
+        - {ref: std/sfp-ganged@1, id: port-9, at: [100.7, 31.3], rotate: 180, group: sfp28, rel-pos: 9}
+        - {ref: std/sfp-ganged@1, id: port-10, at: [114.95, 15.85], group: sfp28, rel-pos: 10}
+        - {ref: std/sfp-ganged@1, id: port-11, at: [114.95, 31.3], rotate: 180, group: sfp28, rel-pos: 11}
+        - {ref: std/sfp-ganged@1, id: port-12, at: [129.2, 15.85], group: sfp28, rel-pos: 12}
+        - {ref: std/sfp-ganged@1, id: port-13, at: [129.2, 31.3], rotate: 180, group: sfp28, rel-pos: 13}
+        - {ref: std/sfp-ganged@1, id: port-14, at: [143.45, 15.85], group: sfp28, rel-pos: 14}
+        - {ref: std/sfp-ganged@1, id: port-15, at: [143.45, 31.3], rotate: 180, group: sfp28, rel-pos: 15}
+        - {ref: std/sfp-ganged@1, id: port-16, at: [157.7, 15.85], group: sfp28, rel-pos: 16}
+        - {ref: std/sfp-ganged@1, id: port-17, at: [157.7, 31.3], rotate: 180, group: sfp28, rel-pos: 17}
+        - {ref: std/sfp-ganged@1, id: port-18, at: [171.95, 15.85], group: sfp28, rel-pos: 18}
+        - {ref: std/sfp-ganged@1, id: port-19, at: [171.95, 31.3], rotate: 180, group: sfp28, rel-pos: 19}
+        - {ref: std/sfp-ganged@1, id: port-20, at: [186.2, 15.85], group: sfp28, rel-pos: 20}
+        - {ref: std/sfp-ganged@1, id: port-21, at: [186.2, 31.3], rotate: 180, group: sfp28, rel-pos: 21}
+        - {ref: std/sfp-ganged@1, id: port-22, at: [200.45, 15.85], group: sfp28, rel-pos: 22}
+        - {ref: std/sfp-ganged@1, id: port-23, at: [200.45, 31.3], rotate: 180, group: sfp28, rel-pos: 23}
+        - {ref: std/sfp-ganged@1, id: port-24, at: [217.85, 15.85], group: sfp28, rel-pos: 24}
+        - {ref: std/sfp-ganged@1, id: port-25, at: [217.85, 31.3], rotate: 180, group: sfp28, rel-pos: 25}
+        - {ref: std/sfp-ganged@1, id: port-26, at: [232.1, 15.85], group: sfp28, rel-pos: 26}
+        - {ref: std/sfp-ganged@1, id: port-27, at: [232.1, 31.3], rotate: 180, group: sfp28, rel-pos: 27}
+        - {ref: std/sfp-ganged@1, id: port-28, at: [246.35, 15.85], group: sfp28, rel-pos: 28}
+        - {ref: std/sfp-ganged@1, id: port-29, at: [246.35, 31.3], rotate: 180, group: sfp28, rel-pos: 29}
+        - {ref: std/sfp-ganged@1, id: port-30, at: [260.6, 15.85], group: sfp28, rel-pos: 30}
+        - {ref: std/sfp-ganged@1, id: port-31, at: [260.6, 31.3], rotate: 180, group: sfp28, rel-pos: 31}
+        - {ref: std/sfp-ganged@1, id: port-32, at: [274.85, 15.85], group: sfp28, rel-pos: 32}
+        - {ref: std/sfp-ganged@1, id: port-33, at: [274.85, 31.3], rotate: 180, group: sfp28, rel-pos: 33}
+        - {ref: std/sfp-ganged@1, id: port-34, at: [289.1, 15.85], group: sfp28, rel-pos: 34}
+        - {ref: std/sfp-ganged@1, id: port-35, at: [289.1, 31.3], rotate: 180, group: sfp28, rel-pos: 35}
+        - {ref: std/sfp-ganged@1, id: port-36, at: [303.35, 15.85], group: sfp28, rel-pos: 36}
+        - {ref: std/sfp-ganged@1, id: port-37, at: [303.35, 31.3], rotate: 180, group: sfp28, rel-pos: 37}
+        - {ref: std/sfp-ganged@1, id: port-38, at: [317.6, 15.85], group: sfp28, rel-pos: 38}
+        - {ref: std/sfp-ganged@1, id: port-39, at: [317.6, 31.3], rotate: 180, group: sfp28, rel-pos: 39}
+        - {ref: std/sfp-ganged@1, id: port-40, at: [331.85, 15.85], group: sfp28, rel-pos: 40}
+        - {ref: std/sfp-ganged@1, id: port-41, at: [331.85, 31.3], rotate: 180, group: sfp28, rel-pos: 41}
+        - {ref: std/sfp-ganged@1, id: port-42, at: [346.1, 15.85], group: sfp28, rel-pos: 42}
+        - {ref: std/sfp-ganged@1, id: port-43, at: [346.1, 31.3], rotate: 180, group: sfp28, rel-pos: 43}
+        - {ref: std/sfp-ganged@1, id: port-44, at: [360.35, 15.85], group: sfp28, rel-pos: 44}
+        - {ref: std/sfp-ganged@1, id: port-45, at: [360.35, 31.3], rotate: 180, group: sfp28, rel-pos: 45}
+        - {ref: std/sfp-ganged@1, id: port-46, at: [374.6, 15.85], group: sfp28, rel-pos: 46}
+        - {ref: std/sfp-ganged@1, id: port-47, at: [374.6, 31.3], rotate: 180, group: sfp28, rel-pos: 47}
+        - {ref: std/sfp-ganged@1, id: port-48, at: [43.7, 45.9], group: sfp28, rel-pos: 48}
+        - {ref: std/sfp-ganged@1, id: port-49, at: [43.7, 61.1], rotate: 180, group: sfp28, rel-pos: 49}
+        - {ref: std/sfp-ganged@1, id: port-50, at: [57.95, 45.9], group: sfp28, rel-pos: 50}
+        - {ref: std/sfp-ganged@1, id: port-51, at: [57.95, 61.1], rotate: 180, group: sfp28, rel-pos: 51}
+        - {ref: std/sfp-ganged@1, id: port-52, at: [72.2, 45.9], group: sfp28, rel-pos: 52}
+        - {ref: std/sfp-ganged@1, id: port-53, at: [72.2, 61.1], rotate: 180, group: sfp28, rel-pos: 53}
+        - {ref: std/sfp-ganged@1, id: port-54, at: [86.45, 45.9], group: sfp28, rel-pos: 54}
+        - {ref: std/sfp-ganged@1, id: port-55, at: [86.45, 61.1], rotate: 180, group: sfp28, rel-pos: 55}
+        - {ref: std/sfp-ganged@1, id: port-56, at: [100.7, 45.9], group: sfp28, rel-pos: 56}
+        - {ref: std/sfp-ganged@1, id: port-57, at: [100.7, 61.1], rotate: 180, group: sfp28, rel-pos: 57}
+        - {ref: std/sfp-ganged@1, id: port-58, at: [114.95, 45.9], group: sfp28, rel-pos: 58}
+        - {ref: std/sfp-ganged@1, id: port-59, at: [114.95, 61.1], rotate: 180, group: sfp28, rel-pos: 59}
+        - {ref: std/sfp-ganged@1, id: port-60, at: [129.2, 45.9], group: sfp28, rel-pos: 60}
+        - {ref: std/sfp-ganged@1, id: port-61, at: [129.2, 61.1], rotate: 180, group: sfp28, rel-pos: 61}
+        - {ref: std/sfp-ganged@1, id: port-62, at: [143.45, 45.9], group: sfp28, rel-pos: 62}
+        - {ref: std/sfp-ganged@1, id: port-63, at: [143.45, 61.1], rotate: 180, group: sfp28, rel-pos: 63}
+        - {ref: std/sfp-ganged@1, id: port-64, at: [157.7, 45.9], group: sfp28, rel-pos: 64}
+        - {ref: std/sfp-ganged@1, id: port-65, at: [157.7, 61.1], rotate: 180, group: sfp28, rel-pos: 65}
+        - {ref: std/sfp-ganged@1, id: port-66, at: [171.95, 45.9], group: sfp28, rel-pos: 66}
+        - {ref: std/sfp-ganged@1, id: port-67, at: [171.95, 61.1], rotate: 180, group: sfp28, rel-pos: 67}
+        - {ref: std/sfp-ganged@1, id: port-68, at: [186.2, 45.9], group: sfp28, rel-pos: 68}
+        - {ref: std/sfp-ganged@1, id: port-69, at: [186.2, 61.1], rotate: 180, group: sfp28, rel-pos: 69}
+        - {ref: std/sfp-ganged@1, id: port-70, at: [200.45, 45.9], group: sfp28, rel-pos: 70}
+        - {ref: std/sfp-ganged@1, id: port-71, at: [200.45, 61.1], rotate: 180, group: sfp28, rel-pos: 71}
+        - {ref: std/sfp-ganged@1, id: port-72, at: [217.85, 45.9], group: sfp28, rel-pos: 72}
+        - {ref: std/sfp-ganged@1, id: port-73, at: [217.85, 61.1], rotate: 180, group: sfp28, rel-pos: 73}
+        - {ref: std/sfp-ganged@1, id: port-74, at: [232.1, 45.9], group: sfp28, rel-pos: 74}
+        - {ref: std/sfp-ganged@1, id: port-75, at: [232.1, 61.1], rotate: 180, group: sfp28, rel-pos: 75}
+        - {ref: std/sfp-ganged@1, id: port-76, at: [246.35, 45.9], group: sfp28, rel-pos: 76}
+        - {ref: std/sfp-ganged@1, id: port-77, at: [246.35, 61.1], rotate: 180, group: sfp28, rel-pos: 77}
+        - {ref: std/sfp-ganged@1, id: port-78, at: [260.6, 45.9], group: sfp28, rel-pos: 78}
+        - {ref: std/sfp-ganged@1, id: port-79, at: [260.6, 61.1], rotate: 180, group: sfp28, rel-pos: 79}
+        - {ref: std/sfp-ganged@1, id: port-80, at: [274.85, 45.9], group: sfp28, rel-pos: 80}
+        - {ref: std/sfp-ganged@1, id: port-81, at: [274.85, 61.1], rotate: 180, group: sfp28, rel-pos: 81}
+        - {ref: std/sfp-ganged@1, id: port-82, at: [289.1, 45.9], group: sfp28, rel-pos: 82}
+        - {ref: std/sfp-ganged@1, id: port-83, at: [289.1, 61.1], rotate: 180, group: sfp28, rel-pos: 83}
+        - {ref: std/sfp-ganged@1, id: port-84, at: [303.35, 45.9], group: sfp28, rel-pos: 84}
+        - {ref: std/sfp-ganged@1, id: port-85, at: [303.35, 61.1], rotate: 180, group: sfp28, rel-pos: 85}
+        - {ref: std/sfp-ganged@1, id: port-86, at: [317.6, 45.9], group: sfp28, rel-pos: 86}
+        - {ref: std/sfp-ganged@1, id: port-87, at: [317.6, 61.1], rotate: 180, group: sfp28, rel-pos: 87}
+        - {ref: std/sfp-ganged@1, id: port-88, at: [331.85, 45.9], group: sfp28, rel-pos: 88}
+        - {ref: std/sfp-ganged@1, id: port-89, at: [331.85, 61.1], rotate: 180, group: sfp28, rel-pos: 89}
+        - {ref: std/sfp-ganged@1, id: port-90, at: [346.1, 45.9], group: sfp28, rel-pos: 90}
+        - {ref: std/sfp-ganged@1, id: port-91, at: [346.1, 61.1], rotate: 180, group: sfp28, rel-pos: 91}
+        - {ref: std/sfp-ganged@1, id: port-92, at: [360.35, 45.9], group: sfp28, rel-pos: 92}
+        - {ref: std/sfp-ganged@1, id: port-93, at: [360.35, 61.1], rotate: 180, group: sfp28, rel-pos: 93}
+        - {ref: std/sfp-ganged@1, id: port-94, at: [374.6, 45.9], group: sfp28, rel-pos: 94}
+        - {ref: std/sfp-ganged@1, id: port-95, at: [374.6, 61.1], rotate: 180, group: sfp28, rel-pos: 95}
 # ---- SFP28 lane lamps ----
         - {ref: common/led-arrow-sm@1, id: led-port-0, at: [48.175, 27.77], skin: up, for: port-0, attrs: {port: '0'}, group: port-leds, rel-pos: 1}
         - {ref: common/led-arrow-sm@1, id: led-port-1, at: [51.875, 27.77], skin: down, for: port-1, attrs: {port: '1'}, group: port-leds, rel-pos: 2}

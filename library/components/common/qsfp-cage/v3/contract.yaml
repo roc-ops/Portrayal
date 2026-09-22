@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: qsfp-cage
+version: 3.0.0
+class: port
+profile: networking
+description: Plain QSFP cage (no lane LEDs) - bezel around a std/qsfp-ganged
+  aperture (v2 = the cage only - the coloured band under each aperture is PRINTED
+  ON THE FACEPLATE, not part of the cage assembly, so it moved out to the device's
+  panel.decor and the box no longer claims the 3mm of panel it sits on; the skin
+  variants existed only to carry that band's colour and collapse into one; v3 = the
+  flange on the belly side, at the bottom of the upright cage, and the opening centred
+  across it)
+size: {w: 19.5, h: 10.18, d: 37.0}
+size-confidence: {w: drawing, h: drawing, d: registry}
+attrs: {media: qsfp28, speed: 100g}
+provenance:
+  depth: >-
+    derived - the std/qsfp-ganged@1 aperture this composes is 37.0 mm deep, and a bezel
+    around an aperture is as deep as the aperture. Stated so the 3D view has a recess to
+    extrude and a seated module has a hole to sit in: with the mating fix in #54 a module
+    now actually seats here, and a cage with no depth put it in a flat patch painted on the
+    panel. Not a new measurement - the number is the aperture's own, read through the part
+    that composes it.
+  size: 'drawing-inferred (S9510-28DC HIG Fig 9) for the 19.5 width and the 0.6
+    bezel flange on one side of the opening; the height is then derived, not
+    measured - 0.6 + the 9.58 standard opening of std/qsfp-ganged = 10.18. The v1
+    box was 13.0 because it painted the faceplate band as well as the cage. On
+    the other side of the opening the figure shows the band and the port number
+    starting immediately, so this cage carries no second flange to speak of'
+  flange-side: >-
+    the flange is on the MODULE'S BELLY side, and since 3.0.0 it is drawn at the
+    BOTTOM of the upright cage, with the opening centred across the box: the
+    aperture at [0.5, 0.0], where 2.0.0 had it at [0.575, 0.6] with the flange on
+    top. On the S9510-28DC the flange of every QSFP28 and QSFP-DD opening faces the
+    band between the rows and the printed band faces outward, which is the
+    belly-side reading, and a pluggable cage's rotate 0 now means the module seats
+    upright, belly and cage latch at the bottom (docs/pluggables-3d-design.md,
+    S1-S2). No note records the 0.575/0.425 split across the width as a reading -
+    the size note gives the 19.5 width and the 0.6 flange only - so v3 centres the hole,
+    and a device that kept its hole where it was measured moves its box by at most
+    0.075 across and the 0.6 flange along. A major, because the aperture and the
+    `net` point moved inside the part (library/components/README.md)
+  aperture: standard (SFF-8661 via std/qsfp-ganged)
+elements:
+  cage: {at: [0.0, 0.0], size: [19.5, 10.18], class: cage}
+parts:
+  - {ref: std/qsfp-ganged@1, id: aperture, at: [0.5, 0.0]}
+connection-points:
+  net: {at: [9.75, 4.79], direction: front}
+skins: [default]

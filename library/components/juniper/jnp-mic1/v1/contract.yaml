@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp-mic1
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -14,6 +14,16 @@ attrs:
   model-variants: JNP-MIC1-MACSEC
   power-draw-max-w: 85
 provenance:
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 6 QSFP pairs
+    (port-0/port-1 to port-10/port-11). 6 of these were drawn with the upper cage turned
+    before the std cage art moved its lip to the bottom of the opening; turning them
+    keeps the lips in the middle band where they were drawn and seats every optic
+    bail-outward. Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
   lamp-states: >-
     FOUR LANE LAMPS, ONE LAMP WITH NO PUBLISHED VOCABULARY, AND A BUTTON.
     THE LANES ARE SOURCED. Table 18 (Multi-Rate Ethernet MIC LEDs) gives the link
@@ -38,18 +48,18 @@ provenance:
     group lamps L0-L3 and the vertical 12XQSFP28 legend at the right'
 states: [absent]
 parts:
-- {ref: std/qsfp28@1, id: port-0, at: [3.50, 6.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-1, at: [3.50, 24.0]}
-- {ref: std/qsfp28@1, id: port-2, at: [24.00, 6.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-3, at: [24.00, 24.0]}
-- {ref: std/qsfp28@1, id: port-4, at: [44.50, 6.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-5, at: [44.50, 24.0]}
-- {ref: std/qsfp28@1, id: port-6, at: [65.00, 6.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-7, at: [65.00, 24.0]}
-- {ref: std/qsfp28@1, id: port-8, at: [85.50, 6.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-9, at: [85.50, 24.0]}
-- {ref: std/qsfp28@1, id: port-10, at: [106.00, 6.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-11, at: [106.00, 24.0]}
+- {ref: std/qsfp28@1, id: port-0, at: [3.50, 6.0]}
+- {ref: std/qsfp28@1, id: port-1, at: [3.50, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-2, at: [24.00, 6.0]}
+- {ref: std/qsfp28@1, id: port-3, at: [24.00, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-4, at: [44.50, 6.0]}
+- {ref: std/qsfp28@1, id: port-5, at: [44.50, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-6, at: [65.00, 6.0]}
+- {ref: std/qsfp28@1, id: port-7, at: [65.00, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-8, at: [85.50, 6.0]}
+- {ref: std/qsfp28@1, id: port-9, at: [85.50, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-10, at: [106.00, 6.0]}
+- {ref: std/qsfp28@1, id: port-11, at: [106.00, 24.0], rotate: 180}
 elements:
   led-l0:
     at: [130.2, 7.2]
