@@ -132,7 +132,44 @@ configuration of its own manifest, which already exists.
 - Whether the accept list should also carry the `optics-<media>` prose the device
   holds, as a hint rather than a filter. Probably yes, as a tooltip, since it is the
   one thing the device knows that the registry does not.
-- Whether a cage inside a seated module (an SFP on a line card in a bay) is offered.
-  It should be - the nested-bay work (#nested-bays) already resolves paths through a
-  seated module - but it is the case most likely to have a lift bug and gets its own
-  test.
+- ~~Whether a cage inside a seated module (an SFP on a line card in a bay) is
+  offered.~~ Answered 2026-09-22 (#484): yes. See "A cage on a seated card" below.
+
+## A cage on a seated card (#484, decided 2026-09-22)
+
+The 22 modular chassis have no device-level cage - every port is on a card in a
+bay - so until this they could not be offered an optic at all. Five rulings:
+
+- **R1 - cages ride on the component.** `components.json` gives each component
+  its own `cages: [{id, at, mate, lift, rotate, interface, media, accepts,
+  occupant-attrs, mirror, group-states}]` in the component's frame, computed by
+  the same core as a device view's `cages[view][]` (`cage_entry`, called by
+  `cage_entries` and `component_cages`). A module swapped in at runtime brings
+  its cages with it; no per-configuration nested `cages[]` exists.
+- **R2 - the build seats nested occupants.** A configuration's `occupants:` may
+  key a cage on a seated module by the module-less path, the convention nested
+  `bays:` keys already use: `front-6/xg0`. The build draws the optic INSIDE the
+  module's instance group, at `front-6/module/xg0-occupant` (id
+  `front-6--module--xg0-occupant`, `data-for="front-6/module/xg0"`), so it
+  inherits the bay transform instead of solving it again. Its position, turn,
+  refusals and lift come from `solve_seat`, the one seating rule the
+  device-level `mate-to` resolution also calls, and chained keys
+  (`front-6/xg0-occupant` for a plug, `front-6/xg0-occupant-occupant` for its
+  boot) resolve to a fixed point within the card. A key that seats nothing is an
+  error: a cage the module does not carry, an empty bay, a bay on no face this
+  configuration draws (an unbound variant face included). Lint L12 walks the
+  same key down the configuration's bays (`manifest.nested_key_host`) and holds
+  the optic to the cage's interface. This is the parity reference the kit's
+  seating is held to, and it lets a downstream manifest ship a populated card.
+- **R3 - media on a card cage** is the part's own `attrs.media`: a component
+  declares no port groups, so a card cage's `occupant-attrs` is what
+  `group_side_attrs` yields for no group - empty.
+- **R4 - depth.** A nested cage's effective lift is the module's own seat depth
+  plus the cage's presented lift. Census of the library: 7 card cages carry a
+  non-zero `lift`, all on smartoptics DCP cards (the four client cages and the
+  line cage of `dcp-404`, the two SFP cages of `dcp-f-a22`), each at 44.0 - the
+  raised shelf. The kit refuses them with its reason, exactly as it refuses a
+  lifted device cage (no half-lift); the build seats them, lifted.
+- **R5 - pruning.** Replacing or emptying a carrier drops every swap keyed under
+  its path (`front-6/module/...`) from state, `swap=` and the 3D override map: an
+  optic cannot outlive the card it sat in.

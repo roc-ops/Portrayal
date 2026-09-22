@@ -21,7 +21,8 @@ from portrayal.manifest import load_yaml
 
 from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
-                    seq_css_name, state_rule)
+                    seq_css_name, state_rule, component_cages,
+                    _pluggable_families, _pluggable_candidates)
 
 
 def _confidence_counts(data):
@@ -47,6 +48,11 @@ def main():
     out = Path(args.out)
     (out / "components").mkdir(parents=True, exist_ok=True)
     lib = Library(args.library)
+    # READ ONCE, from the library itself, as render.py reads them per device -
+    # never from a device's rendered configs.json: __main__.py runs this
+    # indexer alongside the renderers, so nothing they write exists yet.
+    families = _pluggable_families()
+    candidates = _pluggable_candidates(args.library)
     index = []
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
@@ -140,6 +146,17 @@ def main():
                 "_detail": {"provenance": data.get("provenance") or {},
                             "relief": data.get("relief") or {}},
             }
+            # ITS OWN CAGES, in its own frame (#484): one per part that
+            # presents a pluggable interface, by the same core as a device
+            # view's `cages[]` (render.cage_entry), with the same keys. A card
+            # swapped into a bay at runtime brings them with it; no
+            # configuration of the chassis can say where a card's cages are
+            # when it is not the card that configuration seats. `occupant` is
+            # always null and `occupant-attrs` empty - a contract seats
+            # nothing and declares no groups. Omitted when there are none.
+            cages = component_cages(data, lib, families, candidates)
+            if cages:
+                entry["cages"] = cages
             # WHERE IT MATES, in its own frame - the contract's own `mate.at`,
             # never a forwarded one: an occupant mates with its own point
             # (L11). A consumer seating it in a cage solves its `at` from this
