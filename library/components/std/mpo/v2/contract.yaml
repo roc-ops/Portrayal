@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo
-version: 2.0.1
+version: 2.0.2
 interface: mpo
 class: port
 profile: networking
@@ -22,7 +22,9 @@ unplaced: >-
   composing it is common/mpo-adapter@2, the panel tile, which is itself waiting
   for one of FS's MTP adapter panels to be modelled - see its own `unplaced`.
   The flanged bulkhead the cassette rears use draws the plug's end face rather
-  than this punched aperture, so it does not compose this part.
+  than this punched aperture, so it does not compose this part; it presents
+  `mpo` itself, with this part's 12.9 x 8.0 as its opening
+  (common/mpo-flange-adapter@2's `provenance.opening`).
 provenance:
   size: >-
     ESTIMATED, BOTH AXES, AND DERIVED RATHER THAN READ. No drawing held here

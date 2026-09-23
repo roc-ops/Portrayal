@@ -188,7 +188,7 @@ def test_the_cassette_has_a_rear_face():
 def test_the_rear_face_carries_one_mtp():
     c = contract("fs/fhd-1mtp6lcd-rear/v3")
     assert c is not None, "fs/fhd-1mtp6lcd-rear@3 not built"
-    mtps = [p for p in c["parts"] if p["ref"] == "common/mpo-flange-adapter@1"]
+    mtps = [p for p in c["parts"] if p["ref"] == "common/mpo-flange-adapter@2"]
     assert len(mtps) == 1, [p["ref"] for p in c["parts"]]
 
 
@@ -307,7 +307,7 @@ def test_the_rear_mtp_is_where_its_provenance_says_it_is():
     """
     rear = contract("fs/fhd-1mtp6lcd-rear/v3")
     mtp = next(p for p in rear["parts"] if p["id"] == "mtp")
-    adapter = contract("common/mpo-flange-adapter/v1")
+    adapter = contract("common/mpo-flange-adapter/v2")
     cx = float(mtp["at"][0]) + adapter["size"]["w"] / 2
     assert round(cx, 1) == 18.0, f"the MTP's centre is at x {cx}, not 18.0"
     assert cx < rear["size"]["w"] / 3, "the MTP sits in the left third of the face"

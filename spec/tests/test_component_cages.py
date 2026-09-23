@@ -95,12 +95,23 @@ def _presents(lib, families, part):
     return iface, mate_at, lift
 
 
-def _forwarded_connector(lib, contract):
+def _faces(index):
+    """Every ref some component names as one of its `faces:`, read off the
+    contracts, not off the indexer's own helper."""
+    return {((_contract(ref).get("faces") or {}).get(k) or {}).get("ref")
+            for ref in index for k in ("plan", "rear")} - {None}
+
+
+def _forwarded_connector(lib, contract, face=False):
     """The part id a contract presents as its OWN connector slot by
     forwarding (B3, P2) - published where the contract is placed, never on
     the contract itself - or None. Read off `presented_interface` here, not
     off render's helper: a contract without its own interface that presents
-    a connector interface anyway got it from its one composed aperture."""
+    a connector interface anyway got it from its one composed aperture.
+    A FACE forwards nothing (B3, Task 7i): nothing places a cassette's back,
+    so its one bulkhead is published on the back itself."""
+    if face:
+        return None
     def _res(ref):
         try:
             return lib.resolve(ref)[0]
@@ -229,8 +240,11 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     components / 2171 cages when this was written; the live count is what is
     asserted, and that it is not zero."""
     want_components, want_cages, forwarded = 0, 0, 0
+    faces = _faces(index)
+    # the six single-MTP FHD backs, each ONE bulkhead a wrapper would forward
+    assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 6
     for ref, entry in index.items():
-        skip = _forwarded_connector(lib, _contract(ref))
+        skip = _forwarded_connector(lib, _contract(ref), face=ref in faces)
         forwarded += skip is not None
         n = sum(1 for p in _contract(ref).get("parts") or []
                 if p["id"] != skip and _presents(lib, families, p))

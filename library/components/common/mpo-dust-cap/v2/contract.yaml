@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo-dust-cap
-version: 2.0.1
+version: 2.0.2
 class: cap
 behaviour: occupies
 mates: mpo
@@ -60,10 +60,13 @@ size-notes: >-
 unplaced: >-
   nothing declares it yet. A cap is the SHIPPED state of an idle port and is
   declared as the aperture's `default:` on the adapter that composes it
-  (docs/pluggables-caps-design.md, "The shipped default"); no library part
-  presents an `mpo` slot today (the FHD cassette rears use a flanged adapter
-  that does not compose std/mpo@2), so no device reaches this part. It is
-  exercised as a configured occupant in spec/tests/test_dust_caps.py.
+  (docs/pluggables-caps-design.md, "The shipped default"). The FHD cassette
+  rears' flanged bulkheads (common/mpo-flange-adapter@2 and
+  common/mpo24-flange-adapter@2) present an `mpo` slot and offer this cap, and
+  their default is declared in a later step; until then no device reaches
+  this part. It is exercised as a configured occupant in
+  spec/tests/test_dust_caps.py and, on a real cassette's back, in
+  spec/tests/test_rear_slots.py.
 provenance:
   size: >-
     ESTIMATED, BOTH AXES - see size-notes for the render, the orthographic

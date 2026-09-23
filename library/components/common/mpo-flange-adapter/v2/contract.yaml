@@ -1,0 +1,147 @@
+format: 1
+kind: component
+name: mpo-flange-adapter
+version: 2.0.0
+class: port
+# THE ADAPTER IS ITSELF AN `mpo` SLOT (B3, docs/pluggables-caps-design.md, "The
+# MPO opening"). It declares the interface and its own `mate` rather than
+# composing std/mpo@2, because what shows through the opening is the internal
+# MTP's dark end face, not std/mpo's pale sleeve - so the end face stays the
+# floor of an empty port, and a cap or plug seated here is drawn over it. No
+# `default:` yet: what FS ships in this port is declared separately.
+interface: mpo
+profile: networking
+description: >-
+  Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by
+  two screws, a raised housing, and a keyed opening - as FS fits to the back of
+  its FHD MTP cassettes. The opening is an `mpo` slot: an MPO cap or plug
+  seats in it, in front of the housing. Not common/mpo-adapter@2, which is one opening tile in
+  FS's continuous MTP adapter panel and has no flange of its own.
+size: {w: 30.0, h: 11.0}
+size-confidence: {w: photo-measured, h: estimated}
+size-notes: >-
+  Read across the width of FS's rear render of SKU 57016 (57016.D.jpg), scaled
+  on the 108.97 mm faceplate that overhangs the cassette body (627 px, 5.75
+  px/mm). The render is shot from above the cassette, which foreshortens its
+  height and not its width, so the widths are readings and the heights are not.
+  The flange runs about 4.1 to 32.3 on the body, 28.2 across, and is taken as
+  30.0 to include its chamfered ends. The two screws sit about 24 apart - close
+  to the 25.0 flange hole pattern the `mpo-adapter` registry entry records off
+  US Conec's C9857 drawing - so they are placed 25.0 apart on the part's centre.
+  The 11.0 height is proportion on an estimated cassette back, not a reading.
+attrs: {media: fiber, connector: mpo}
+optical:
+  positions: 12
+relief:
+  features:
+    # ESTIMATED, ALL THREE. FS's rear renders are shot from above the cassette,
+    # which is what makes their widths readings and their depths not: nothing
+    # held dimensions how far this bulkhead stands off a cassette back, or how
+    # deep its opening is. The ORDER is what the render does show - the flange
+    # is proud of the back, the housing proud of the flange, and the opening
+    # recessed into the housing with the ferrule face inside it - so the three
+    # figures are one guess at a stack, not three readings.
+    - node: flange
+      out: 2.0
+      confidence: estimated
+      source: >-
+        common/mpo-flange-adapter@2's own size-notes - the rear render shows the flange
+        standing off the cassette back by about the thickness of its own
+        chamfer. 2.0 is that, read to the nearest millimetre and no finer.
+    - node: housing
+      out: 3.5
+      lift: 2.0
+      confidence: estimated
+      source: >-
+        the same render: the moulded housing stands proud of the flange it is
+        screwed through. 1.5 above the flange's 2.0.
+    - node: opening
+      pocket: 3.0
+      lift: 3.5
+      confidence: estimated
+      source: >-
+        the keyed opening is a recess in the housing's front, with the plug's
+        end face at its bottom - a depth nothing here dimensions. 3.0 keeps the
+        ferrule face below the housing, which is what the render shows.
+parts:
+  # lifted onto the flange's own face (relief, above), or they sit at the
+  # cassette's back and the flange stands over them
+  - {ref: common/screw-head@1, id: screw-left, at: [0.7, 3.7], lift: 2.0}
+  - {ref: common/screw-head@1, id: screw-right, at: [25.7, 3.7], lift: 2.0}
+connection-points:
+  # WHERE AN MPO CAP OR PLUG SEATS: the centre of the opening, `on:` the
+  # housing, so the seat stands at the housing's front face (3.5) and the
+  # occupant is drawn in front of it, not buried in the ring. The quoted
+  # `'on'` is the key - YAML 1.1 reads a bare `on` as true. See provenance.mate.
+  mate: {at: [15.0, 5.5], direction: front, 'on': housing}
+  optical: {at: [15.0, 5.5], direction: front}
+provenance:
+  size: >-
+    see size-notes - photo-measured across, estimated up.
+  parts: >-
+    photo-read, with the spacing corroborated. The screws are 25.0 apart, centred
+    on the part (centres 2.5 and 27.5), which is US Conec C9857's flange pattern
+    and within a millimetre of the 24 read off the render.
+  opening: >-
+    std/mpo@2's 12.9 x 8.0, ESTIMATED ON BOTH AXES AND DERIVED, NOT READ - and
+    cited from that part rather than measured here. No drawing held dimensions
+    an MPO adapter's mouth; std/mpo@2's `provenance.size` takes the printed
+    12.5 x 7.6 MPO plug envelope (US Conec C20044 rev B, C20851 rev D) and adds
+    0.40 on each axis, the top of the clearance SENKO's LC adapter/plug pair
+    shows (DS-LC-000010 Rev A against DS-LC-000004 Rev A). ITS PER-AXIS NOTE
+    APPLIES HERE UNCHANGED: every undimensioned reading of the long axis sits
+    below 12.9, so it is probably 0.03 to 0.08 too wide, and every reading of
+    the short axis sits above 8.0, so it may be 0.09 to 0.22 too small.
+    CENTRED ON (15.0, 5.5), where @1's opening was: x 8.55 to 21.45, y 1.5 to
+    9.5, inside the housing ring (x 6.5 to 23.5, y 0.3 to 10.7) with 2.05 of
+    ring each side and 1.2 below.
+    @1 DREW 13.1 x 7.0. The width was photo-read off FS's rear render of SKU
+    57016 (the opening spans about 11.0 to 24.1 on the cassette body); the
+    height was proportion on a render shot from above. Neither is kept: a
+    printed 12.5 x 7.6 plug, and the 12.8 x 8.1 cap common/mpo-dust-cap@2
+    draws, overhang a 7.0 opening, so a seated occupant would have been drawn
+    over the ring. The render's 13.1 is 0.2 wider than the estimate and the two
+    are not reconciled - an estimate is not made a measurement by agreeing
+    with one. With the dust cap off the opening is dark, the plug's end face
+    showing through it, which is why this part draws that end face and does
+    not compose std/mpo@2, whose pale sleeve is what FS's front adapter panels
+    show.
+  key: >-
+    THE KEY SLOT IS @1's, KEPT: 3.0 wide and 0.7 tall at the middle of the
+    opening's top edge, now x 13.5 to 16.5, y 0.8 to 1.5 - moved up 0.5 with
+    that edge and not otherwise changed. It is proportion off the same render,
+    not a measurement.
+    CHECKED AGAINST THE PLUG'S KEY. generic/mpo12-plug@1 and
+    generic/mpo24-plug@1 draw their key on the TOP long face, and a plug seated
+    here lands its mate on (15.0, 5.5) unturned, so its key is on the same side
+    as this slot: the polarity agrees. THE WIDTHS DO NOT. The plug's key is
+    4.39 wide (measured off C20044), centred - x 12.81 to 17.19 when seated -
+    against this slot's 3.0. It does not stop the plug entering: the plug's key
+    moulding sits inside its printed 7.6 envelope (std/mpo@2's
+    `provenance.key`), 0.42 below its top flat, so it stands at y 2.12 to 3.02
+    here, inside the opening and clear of the slot. Recorded rather than
+    resolved: a keyway width is not dimensioned by any document held, and
+    widening the slot to fit a key that never enters it would be a figure made
+    up to agree.
+  mate: >-
+    the centre of the 12.9 x 8.0 opening, (8.55 + 12.9/2, 1.5 + 8.0/2) =
+    (15.0, 5.5) - the same point `optical` names, and no better than the
+    ESTIMATED opening it is the centre of. `on: housing` puts the seat at the
+    housing's front face, 3.5 off the cassette back (relief), so a seated
+    part's own `out` is taken from there: common/mpo-dust-cap@2's 2.5 face
+    stands at 6.0 and a generic MPO plug's 15.2 body at 18.7, both in front of
+    the ring. Nothing is lifted twice - the housing's `lift: 2.0` is where it
+    starts, its `out` of 3.5 is absolute, and the seat takes the `out`.
+  history: >-
+    MAJOR 2.0.0: the opening changed (13.1 x 7.0 to std/mpo@2's 12.9 x 8.0),
+    and the part became an `mpo` slot (`interface`, and a `mate` on the
+    housing). @1 declared neither, so nothing could be seated here; the only
+    MPO slot in the library was common/mpo-adapter@2, which waits for an
+    adapter panel. The flange, the housing, the screws, the pocket depth and
+    the 12-fibre end face are unchanged.
+  ferrule: >-
+    standard, not measured: the MT ferrule's 6.4 x 2.5 face, fibres on its 0.25
+    pitch, guide pins 4.6 apart - the figures every MPO/MTP end-face drawing
+    uses. Drawn MALE, because FS's cassettes are MTP (Male) and the trunk
+    plugged into this adapter is the female half.
+skins: [default]

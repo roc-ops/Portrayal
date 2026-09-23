@@ -24,7 +24,7 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref
 from portrayal import libwalk
-from portrayal.manifest import (view_parts, targets, split_target, component_refs,
+from portrayal.manifest import (back_hosts, back_parts, key_on_back, view_parts, targets, split_target, component_refs,
                       presented_interface, seat_point, _turn,
                       load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
@@ -955,6 +955,21 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             return lib.resolve(ref)[0]
         except (FileNotFoundError, ValueError, KeyError):
             return None
+    # A KEY ON THE MODULE'S BACK IS SEATED BY THE REAR DRAWING (B3, Task 7i).
+    # `bay-1/mtp1` names the MTP bulkhead on a cassette's back
+    # (manifest.back_parts), which this instance - the cassette seen from the
+    # front - does not draw. The rear view draws the back as a projection at
+    # the module's own path and seats the key there (draw_placement), so here
+    # it is handed on, the way render_view hands a key whose bay is on another
+    # face to that face - with every occupant chained on it
+    # (manifest.back_hosts). NOT counted as used here: render_view's check
+    # asks manifest.key_on_back, and refuses one whose bay shows no back.
+    back = back_parts(contract, _res) if (path or "").endswith("/module") else {}
+    if back and prefix is not None:
+        for host_id in (back_hosts(prefix, occupants, back) - set(hosts)) & set(pending):
+            pending.pop(host_id)
+    if not pending:
+        return
     for host_id, (_k, spec, _c) in pending.items():
         q = hosts.get(host_id)
         if spec is None or q is None or prefix is None:
@@ -2500,6 +2515,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if node.get("data-z-out") is not None:
                 node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
 
+    def back_occupants(p):
+        """The keys a module's back seats (B3, Task 7i): those whose host is
+        on the back (manifest.back_hosts), at any depth. The module's front
+        keys are left to the front drawing, where they are checked."""
+        prefix = slot_key_prefix(p["projection-of"])
+        back = {q["id"] for q in lib.resolve(p["ref"])[0].get("parts") or []
+                if q.get("id")}
+        on_back = back_hosts(prefix, nested_occupants, back)
+        return {k: v for k, v in nested_occupants.items()
+                if not k.startswith(prefix + "/")
+                or k[len(prefix) + 1:].split("/")[0] in on_back}
+
     def draw_placement(p):
         # How far off the face the SEAT is - the aperture's own protrusion,
         # nothing the author wrote. Kept separate from `p["lift"]` on purpose;
@@ -2550,6 +2577,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # precedence both read that merged bag. What the GROUP WRITES on this
         # placement is group_side_attrs, below, and only that.
         merged_attrs = {**(grp.get("attrs") or {}), **(p.get("attrs") or {})} or None
+        rear_face = bool(p.get("projection-of") and p.get("cutout"))
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
                                      None, merged_attrs,
                                      None, p.get("rel-pos"),
@@ -2586,11 +2614,22 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      # parts), so a boot keyed there has no
                                      # point to mate to at all.
                                      #
-                                     # A projection is still excluded: it is a
-                                     # part seen from another face, and the
+                                     # A `plan` projection is still excluded: it
+                                     # is a part seen from another face, and the
                                      # thing seated on it belongs to that face.
-                                     occupants=None if p.get("projection-of")
-                                     else nested_occupants,
+                                     #
+                                     # A MODULE'S BACK IS NOT (B3, Task 7i). What
+                                     # is seated in a cassette's rear MTP is seen
+                                     # from behind and from nowhere else, so the
+                                     # `rear:` projection seats it: drawn at the
+                                     # module's own path (`bay-1/module`), its
+                                     # slots take the module-less keys
+                                     # (`bay-1/mtp1`) the front drawing hands on
+                                     # (_seat_nested_occupants).
+                                     path=p["projection-of"] if rear_face else None,
+                                     occupants=(back_occupants(p) if rear_face
+                                                else None if p.get("projection-of")
+                                                else nested_occupants),
                                      occ_used=nested_used)
         # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
         # data-path becomes data-of, naming the seated part on the face that
@@ -2601,8 +2640,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             for node in g.iter():
                 dp = node.get("data-path")
                 if dp is not None:
-                    node.set("data-of", p["projection-of"] + dp[len(p["id"]):]
-                             if dp.startswith(p["id"]) else p["projection-of"])
+                    # a back is drawn AT the seated part's path already (see
+                    # `rear_face` above), so its paths are kept as they are
+                    own = p["projection-of"]
+                    node.set("data-of", dp if dp == own or dp.startswith(own + "/")
+                             else own + dp[len(p["id"]):] if dp.startswith(p["id"])
+                             else own)
                     del node.attrib["data-path"]
                 # `data-cp*` GOES WITH THE REST. A projection is the part seen
                 # from another face; the connection point it carries is the
@@ -2942,8 +2985,19 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         except ValueError as e:
             return ValueError(str(e))
         return ValueError(fallback)
+    def _res_key(r):
+        try:
+            return lib.resolve(r)[0]
+        except Exception:
+            return None
     for key in sorted(set(nested_occupants) - nested_used):
         top = key.split("/", 1)[0]
+        if top in this_view_bays and key_on_back(key, device, config, _res_key):
+            # ON THE MODULE'S BACK, so the rear drawing seats it (B3, Task
+            # 7i) - provided the bay shows its back somewhere; the resolver
+            # raises when it does not, rather than the key vanishing
+            nested_key_host(key, device, config, _res_key)
+            continue
         if top in this_view_bays:
             raise _dangling(
                 key, f"occupants/{key}: names no cage - bay {top!r} seats no module "
@@ -3521,7 +3575,7 @@ def _forwarded_part(contract, lib):
     return cores[0] if len(cores) == 1 else None
 
 
-def component_cages(contract, lib, families, candidates, connectors=None):
+def component_cages(contract, lib, families, candidates, connectors=None, face=False):
     """A component's OWN cages, in its own frame: one entry per `parts:` entry
     that presents a pluggable interface, by the same core as a device view's
     `cages[]` (cage_entry). components_index.py publishes it on the
@@ -3565,11 +3619,21 @@ def component_cages(contract, lib, families, candidates, connectors=None):
     frame above it lists that cage and dropping it here would lose it
     entirely (#484). Whether a cage wrapper should follow P2 is a question for
     the cage side; this does not change it.
+
+    A FACE DRAWING FORWARDS NOTHING (B3, Task 7i). `face` is True for a
+    component some module names as one of its `faces:` - a cassette's back.
+    P2 publishes a forwarded slot in the frame that PLACES the wrapper, and
+    nothing places a face: the module's back is drawn at the module's own
+    path, never as a `parts:` entry. So a back composing ONE bulkhead - six
+    FHD single-MTP backs compose `common/mpo-flange-adapter@2` and nothing
+    else - would publish its only slot nowhere, while the two- and three-MTP
+    backs published theirs. On a face the bulkhead is published as its own
+    slot, under the id the build keys it by (`bay-1/mtp`).
     """
     if connectors is None:
         connectors = _connector_registry()
     fwd = _forwarded_part(contract, lib)
-    forwarded = (fwd[0] if fwd and fwd[1] in (connectors or {})
+    forwarded = (fwd[0] if not face and fwd and fwd[1] in (connectors or {})
                  and _family_by_interface(families, fwd[1]) is None else None)
     out = []
     for p in contract.get("parts") or []:

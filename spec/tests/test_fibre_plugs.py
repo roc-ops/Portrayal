@@ -260,15 +260,12 @@ def _accepts(comps, interface):
     return out
 
 
-# THE MPO PLUGS ARE CHECKED ON A COMPOSER BUILT HERE, not across the library:
-# since main moved the FHD cassette rears to common/mpo-flange-adapter@1 (#497,
-# #499), which composes no std/mpo, and marked common/mpo-adapter
-# `unplaced`, no library part publishes an mpo slot, and `_accepts` would find
-# nothing to ask.
-IN_LIBRARY = sorted(r for r in MATES if MATES[r] != "mpo")
-
-
-@pytest.mark.parametrize("ref", IN_LIBRARY)
+# ALL FOUR ARE CHECKED ACROSS THE LIBRARY. The MPO plugs were not, while no
+# library part published an mpo slot (the FHD cassette rears' flanged
+# bulkheads presented nothing); since common/mpo-flange-adapter@2 and
+# common/mpo24-flange-adapter@2 present `mpo`, every FHD cassette back
+# publishes one per bulkhead, and `_accepts` has real slots to ask.
+@pytest.mark.parametrize("ref", sorted(MATES))
 def test_a_plug_is_offered_by_every_slot_of_its_interface(comps, ref):
     for accepts in _accepts(comps, MATES[ref]):
         assert ref in accepts, (ref, accepts)

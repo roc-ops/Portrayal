@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo12-plug
-version: 1.0.2
+version: 1.0.3
 class: port
 mates: mpo
 interface: mpo-plug
@@ -26,13 +26,12 @@ size-confidence: {w: drawing, h: drawing}
 attrs: {media: fiber, connector: mpo}
 unplaced: >-
   seated by a device that places it in an `mpo`-presenting aperture - none
-  does yet. No library part presents an `mpo` slot today: the FHD cassette
-  rears use common/mpo-flange-adapter@1 and common/mpo24-flange-adapter@1,
-  which draw the plug's end face and compose no std/mpo@2, and
-  common/mpo-adapter@2 waits for an adapter panel to be modelled. So
-  spec/tests/test_fibre_plugs.py seats it as a configured occupant on a
-  throwaway cassette whose FRONT carries common/mpo-adapter@2, the fixture
-  spec/tests/test_dust_caps.py uses for common/mpo-dust-cap@2.
+  does yet. The slots exist: the FHD cassette rears' flanged bulkheads,
+  common/mpo-flange-adapter@2 and common/mpo24-flange-adapter@2, present `mpo`
+  and offer this plug, but a plug is what a configuration seats, not what a
+  cassette ships. So spec/tests/test_rear_slots.py seats it as a configured
+  occupant on a real cassette's back, and spec/tests/test_fibre_plugs.py on a
+  throwaway cassette whose FRONT carries common/mpo-adapter@2.
 provenance:
   behaviour: >-
     DELIBERATELY OMITTED, for the reason generic/lc-plug@2 states at length in

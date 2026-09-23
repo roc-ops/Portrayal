@@ -90,14 +90,14 @@ def test_the_wrapper_is_the_slot_where_it_is_composed(comps):
     """The other half of P2: the forwarded aperture is not lost, it is
     published once - as the wrapper's own placement, in its composer's frame.
 
-    ON A COMPOSER BUILT HERE, because the library no longer has one: the FHD
-    cassette rears that composed common/mpo-adapter@1 moved to
-    common/mpo-flange-adapter@1 on main (#497, #499), which draws the plug's
-    end face and composes no std/mpo, and mpo-adapter (@2 since the aperture
-    was corrected) is now
-    `unplaced`. So no library part publishes an mpo slot today; the forwarding
-    is exercised on the real wrapper contract instead, and any library slot
-    that does appear is held to the same shape."""
+    ON A COMPOSER BUILT HERE, because the library has no composer of the
+    wrapper: the FHD cassette rears that composed common/mpo-adapter@1 moved
+    to the flanged bulkhead on main (#497, #499), which presents `mpo` itself
+    (common/mpo-flange-adapter@2) rather than forwarding a std/mpo, and
+    mpo-adapter (@2 since the aperture was corrected) is `unplaced`. So the
+    forwarding is exercised on the real wrapper contract, and every mpo slot
+    the library does publish - one per bulkhead on each cassette back - is
+    held to the same shape."""
     lib = render_mod.Library([str(LIB)])
     composer = {"size": {"w": 80.0, "h": 30.0},
                 "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@2",

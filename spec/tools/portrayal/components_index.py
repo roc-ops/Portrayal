@@ -41,6 +41,16 @@ def _confidence_counts(data):
     return counts
 
 
+def named_as_faces(roots):
+    """Every part some module draws as one of its FACES - a cassette's back -
+    which component_cages publishes whole (its `face` note): nothing places a
+    face, so a slot it forwarded would be published nowhere."""
+    return {r for root in roots
+            for cf in Path(root).glob("components/*/*/v*/contract.yaml")
+            for k in DIRECTIONS
+            if (r := face_ref(load_yaml(cf) or {}, k))}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -56,6 +66,7 @@ def main():
     connectors = _connector_registry()
     candidates = _pluggable_candidates(args.library)
     index = []
+    faces_named = named_as_faces(args.library)
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
             data = load_yaml(cf)
@@ -157,7 +168,8 @@ def main():
             # when it is not the card that configuration seats. `occupant` is
             # always null and `occupant-attrs` empty - a contract seats
             # nothing and declares no groups. Omitted when there are none.
-            cages = component_cages(data, lib, families, candidates, connectors)
+            cages = component_cages(data, lib, families, candidates, connectors,
+                                    face=ref in faces_named)
             if cages:
                 entry["cages"] = cages
             # WHERE IT MATES, in its own frame - the contract's own `mate.at`,

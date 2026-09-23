@@ -473,6 +473,68 @@ def occupant_local_id(host_id, spec):
     return spec.get("id") or f"{host_id}-occupant"
 
 
+def back_parts(contract, resolve):
+    """{part id: parts entry} of the drawing of `contract`'s BACK - the
+    component its `faces.rear` names - or {} when it has none.
+
+    A SLOT ON A MODULE'S BACK IS KEYED LIKE ONE ON ITS FRONT (B3, Task 7i).
+    The build draws a seated module's back as a projection of the module
+    (render.py `rear:`), so the back's parts are published under the module's
+    own path - `bay-1/module/mtp1`, a cassette's MTP bulkhead - and a slot on
+    one is keyed by the same module-less path, `bay-1/mtp1`. One namespace
+    for the two faces, which is the one the drawing already publishes. A key
+    is looked up on the front first, so a back part sharing a front part's id
+    could not be addressed; no module does that, and
+    spec/tests/test_rear_slots.py holds every module in the library to it."""
+    ref = (((contract or {}).get("faces") or {}).get("rear") or {}).get("ref")
+    back = resolve(ref) if ref else None
+    return {q["id"]: q for q in (back or {}).get("parts") or [] if q.get("id")}
+
+
+def back_hosts(prefix, occupants, back):
+    """The host ids under `prefix` that are on a module's BACK: the ids of
+    `back` (back_parts) and, to a fixed point, the produced id of every
+    occupant keyed on one of them - `mtp1-occupant`, a plug seated in the
+    bulkhead `mtp1`, which a boot can be keyed on in turn. The build splits a
+    module's keys between its two drawings by this set, so the front and the
+    back cannot both claim a key or both let one fall."""
+    on = set(back)
+    under = occupants_under(prefix, occupants) if prefix is not None else {}
+    grew = True
+    while grew:
+        grew = False
+        for host, (_key, spec) in under.items():
+            if host in on and spec is not None:
+                oid = occupant_local_id(host, spec)
+                if oid not in on:
+                    on.add(oid)
+                    grew = True
+    return on
+
+
+def key_on_back(key, device, cfg, resolve):
+    """Whether a module-less `occupants:` key names a slot on the BACK of the
+    module seated in its head bay - `bay-1/mtp1`, or anything keyed under an
+    occupant seated there (back_hosts). The front drawing hands such a key to
+    the rear one, and render_view asks this to know it was handed on rather
+    than dropped. A front part or nested bay of the same id wins, as it does
+    in nested_key_host."""
+    segs = key.split("/")
+    if len(segs) < 2:
+        return False
+    bays = {b["id"]: b for _face, (_n, v) in resolve_views(device, cfg).items()
+            for b in view_parts(v)["bays"]}
+    if segs[0] not in bays:
+        return False
+    ref = seated_ref((cfg or {}).get("bays"), segs[0], bays[segs[0]])
+    module = resolve(ref) if ref else None
+    back = back_parts(module, resolve)
+    front = {q.get("id") for q in (module or {}).get("parts") or []}
+    if not back or segs[1] in front or segs[1] in ((module or {}).get("bays") or {}):
+        return False
+    return segs[1] in back_hosts(segs[0], (cfg or {}).get("occupants"), back)
+
+
 def occupants_under(prefix, occupants):
     """{local host id: (key, spec)} for the `occupants:` keys that name a host
     directly on the instance whose key prefix is `prefix` - `front-6/xg0` under
@@ -639,12 +701,27 @@ def nested_key_host(key, device, cfg, resolve):
     parts = {q.get("id"): q for q in module.get("parts") or []}
     if host_id in parts:
         return parts[host_id]["ref"], ref, path
+    # A SLOT ON THE MODULE'S BACK (back_parts), or an occupant chained on
+    # one: only a module seated straight into a device bay has a back the
+    # build draws, and only where that bay says where its back is seen
+    # (`rear:`) - otherwise the key would seat nowhere, silently. A back part
+    # is held by the back's own component, drawn at the module's path.
+    back = back_parts(module, resolve) if len(segs) == 2 and in_bays else {}
     mine = {h: s for h, (_k, s) in
             occupants_under(slot_key_prefix(path), (cfg or {}).get("occupants")).items()
             if s is not None}
+    if host_id in back_hosts(slot_key_prefix(path), (cfg or {}).get("occupants"), back):
+        drawn = {vname for _face, (vname, _v) in views.items()}
+        if (bays[segs[0]].get("rear") or {}).get("view") not in drawn:
+            raise ValueError(f"occupants/{key}: {host_id!r} is on the back of "
+                             f"{ref}, and bay {segs[0]!r} shows no back in any "
+                             "view this configuration draws (no `rear:`)")
+        if host_id in back:
+            return back[host_id]["ref"], module["faces"]["rear"]["ref"], path
     try:
         host_ref = chained_occupant_ref(
-            host_id, mine, lambda h: (parts[h]["ref"] if h in parts else None))
+            host_id, mine, lambda h: (parts[h]["ref"] if h in parts
+                                      else back[h]["ref"] if h in back else None))
     except (KeyError, ValueError):
         raise ValueError(f"occupants/{key}: names no cage on {ref} at "
                          f"{where!r} - no part {host_id!r}, and no occupant "

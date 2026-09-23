@@ -112,6 +112,22 @@ adapter's opening runs over its plug (SENKO DS-LC-000010 against DS-LC-000004,
 `@1`'s opening was. A test holds both plugs inside the opening on a build, in the
 device frame.
 
+**The cassette rears are MPO slots (2026-09-23).** The FHD MTP cassettes carry
+their trunk connectors on their backs, in the flanged bulkheads
+`common/mpo-flange-adapter` and `common/mpo24-flange-adapter`. At `@1` those drew
+the internal MTP's dark end face in a 13.1 x 7.0 opening and presented nothing, so
+the library had no `mpo` slot a device reached. At `@2` each bulkhead presents
+`mpo` itself, with its `mate` at the centre of the opening `on:` the housing: a
+seated cap or plug stands in front of the housing, at the housing's 3.5 plus its
+own `out`. The end face stays drawn as the floor of an empty port, which is why the
+bulkhead does not compose `std/mpo@2`, whose pale sleeve is the front-panel
+adapter's. The opening is `std/mpo@2`'s 12.9 x 8.0, cited as that part's estimate,
+not re-read, and its per-axis note applies. The key slot `@1` drew is kept. It is on
+the same long face as the plugs' key, so the polarity agrees, but it is narrower
+(3.0 against the plug key's 4.39). The plug key lies inside the plug's own envelope,
+so it never reaches the slot. Ten cassette backs compose the bulkheads, and each
+publishes one slot per bulkhead. The default cap is declared in a later step.
+
 ## The connector slot
 
 ### What is a slot
@@ -323,6 +339,18 @@ placement to the slot, with the `module` of each seated bay dropped, as nested
 `bays:` keys already are. So `bay-1/lc01/tx` is the TX bore of adapter `lc01` in
 the cassette in `bay-1`, and `bay-1/lc01` is that adapter's duplex slot.
 
+**A slot on a module's back is keyed the same way (2026-09-23).** A cassette's back
+is the component its `faces.rear` names, and the build draws it as a projection of
+the module, at the module's own path. So its bulkhead is published as
+`bay-1/module/mtp1`, and its slot key is `bay-1/mtp1`. The two faces share one
+namespace, the one the drawing already publishes, and no module in the library uses
+one id on both faces (a test holds that). The front drawing hands a key on the back,
+and any occupant chained on it, to the rear drawing, which seats it. A key on a back
+whose bay declares no `rear:` is refused by the build and by L12, not dropped. A
+back that composes one bulkhead publishes that bulkhead as its own slot, not as a
+forwarded one (P2): nothing places a face, so a forwarded slot would be published
+nowhere.
+
 One resolver maps a key to its slot, and the build, L12 and the kit all call it: it
 generalises `manifest.nested_key_host`, which today stops at one level, and
 `chained_occupant_ref` stays the rule for a key that names an occupant rather than
@@ -393,10 +421,9 @@ Two lessons from building the caps as the adapter's relief carry over:
    `generic/mpo12-plug`, `generic/mpo24-plug`.
 7. The adapters (decision 9): if they still draw caps, remove them as majors
    (`lc-duplex-adapter@4`, `lc-duplex-v-adapter@3`, `sc-duplex-adapter@3`),
-   declare the default caps, and repoint the 18 components that compose them. No
-   library part presents an `mpo` slot yet - the FHD cassette rears use flanged
-   adapters that draw the plug's end face and compose no `std/mpo` - so the MPO
-   default waits for a host. Until this step, a bore under a
+   declare the default caps, and repoint the 18 components that compose them. The
+   MPO default goes on the flanged bulkheads of the FHD cassette rears, which
+   present `mpo` at `@2` (see "The MPO opening"). Until this step, a bore under a
    drawn cap declares no default, so no port is ever capped twice.
 8. The kit: lifted seating with its parity test, `nestedSlots`, the swap, exclusion
    and pruning.
