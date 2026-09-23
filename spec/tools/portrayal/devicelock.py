@@ -145,6 +145,35 @@ def _placement_skins(doc):
     return out
 
 
+def _placement_attrs(doc):
+    """The facts each placed thing states about itself, keyed the same way.
+
+    THESE WERE NOT FINGERPRINTED AT ALL. A group's `attrs` sit in `surface`, but
+    the same facts stated one port at a time - `speed`, `media`, `usb` - could
+    be rewritten and the lock said nothing: `speed: 100m-1g` retyped as `1g` on
+    a placement made `required_bump` return None. #519 found it by retyping the
+    speed vocabulary across the library, where some sixty devices had to be
+    patch-bumped by hand so that one version number never covered two contents.
+
+    `surface`, and so a patch, for the reason a group's `attrs` are: a fact a
+    reader and an export see, not a coordinate or an id anything addresses by.
+
+    HASHED AS ITS OWN KEY AND NOT FOLDED INTO `surface`, because 98 of the 124
+    devices carry placement attrs today and folding them in rehashes every one
+    of those surfaces - a patch demanded of each for a field the lock learned,
+    not a change the device made. `required_bump` reads the key only when the
+    old lock has it, the way it reads `composed`.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        view = view or {}
+        for kind in ("bays", "placements"):
+            for item in ((view.get("components") or {}).get(kind) or []):
+                if item.get("attrs") is not None:
+                    out[f"{vname}/{kind}/{item.get('id')}"] = item["attrs"]
+    return out
+
+
 def _placement_groups(doc):
     """Which group each placed thing belongs to, keyed the same way.
 
@@ -318,7 +347,9 @@ def buckets(doc, versions=None):
 
     `surface` is everything a reader sees and no consumer computes with -
     silkscreen text, decor, description, provenance, maturity, attrs, portfolio.
-    Patch.
+    Patch. A placement's own `attrs` are the same kind of fact and take the same
+    bump, but are hashed under `placement-attrs` beside it - see
+    `_placement_attrs` for the migration that costs.
 
     `gaps` is hashed on its own because it is the one part of a device that
     makes a CLAIM ABOUT THE WORLD rather than about the drawing, so it needs to
@@ -406,6 +437,9 @@ def buckets(doc, versions=None):
             # actually states, so the 24 with no colour are not billed for one.
             **chassis_surface,
         }),
+        # SURFACE IN MEANING, A KEY OF ITS OWN IN THE LOCK - see
+        # `_placement_attrs` for why it is not inside the digest above.
+        "placement-attrs": _digest(_placement_attrs(doc)),
         "gaps": _digest(doc.get("gaps") or []),
         # WHAT THIS DEVICE DRAWS THAT LIVES SOMEWHERE ELSE. Hashed apart from
         # `surface` because it is not this file's content at all - nothing in
@@ -451,8 +485,14 @@ def required_bump(old, new):
         # field existed must not report every device in the library at once.
         composed_moved = ("composed" in old
                           and old["composed"] != new["composed"])
+        # SAME GUARD, SAME REASON: a lock written before placement attrs were
+        # fingerprinted has no key to compare, and reading its absence as a
+        # change would bill 98 devices for the lock learning a field.
+        attrs_moved = ("placement-attrs" in old
+                       and old["placement-attrs"] != new["placement-attrs"])
         return "patch" if old.get("surface") != new["surface"] or \
                           old.get("gaps") != new["gaps"] or composed_moved \
+                          or attrs_moved \
             else None
     # ANYTHING REMOVED IS BREAKING, whichever set it left: an id, a group or a
     # configuration name can each be held by something outside this repository.
@@ -670,6 +710,9 @@ def check(library: pathlib.Path):
             if was.get("surface") != now["surface"]:
                 what.append("surface (silkscreen, decor, provenance, attrs, "
                             "portfolio, skins)")
+            if "placement-attrs" in was and \
+                    was["placement-attrs"] != now["placement-attrs"]:
+                what.append("placement attrs")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in
