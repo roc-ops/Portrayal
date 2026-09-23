@@ -16,16 +16,36 @@ from portrayal import lint
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = [str(ROOT / "library")]
+AF24 = ROOT / "library/components/fs/fhd-1mtp24-lc-os2-af/v3/contract.yaml"
+
+
+def paths_for(order, fibres):
+    """Port p takes MTP fibre fibres[p-1]; port p is bore 1 (odd p) or 2 (even p)
+    of adapter order[(p-1)//2] - FS's printed numbering, the lower bore odd."""
+    return [{"from": f"{order[(p - 1) // 2]}.{2 - p % 2}", "to": f"rear:mtp.{fibres[p - 1]}"}
+            for p in range(1, len(fibres) + 1)]
 
 
 def cassette(pol, fibres):
     """A six-adapter FHD LC cassette whose port p takes MTP fibre fibres[p-1]."""
     parts = [{"id": f"lc{i}", "ref": "common/lc-duplex-v-adapter@4", "at": [15.81 + 12.9 * (i - 1), 10.66]}
              for i in range(1, 7)]
-    paths = [{"from": f"lc{(p - 1) // 2 + 1}.{2 - p % 2}", "to": f"rear:mtp.{fibres[p - 1]}"}
-             for p in range(1, 13)]
     return {"parts": parts, "faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@3"}},
-            "optical": {"polarity": pol, "paths": paths}}
+            "optical": {"polarity": pol, "paths": paths_for([p["id"] for p in parts], fibres)}}
+
+
+def rewired(contract, fibres, pol=None):
+    """The real contract, its paths replaced and (if given) its polarity claim."""
+    d = yaml.safe_load(contract.read_text())
+    d["optical"]["paths"] = paths_for(d["optical"]["front-order"], fibres)
+    if pol:
+        d["optical"]["polarity"] = pol
+    return d
+
+
+def wired(n, pol, fibres):
+    """An n-fibre cassette claiming `pol`: the synthetic MTP-12, or the real MTP-24 AF."""
+    return cassette(pol, fibres) if n == 12 else rewired(AF24, fibres, pol)
 
 
 def l109(data):
@@ -39,16 +59,18 @@ def l109(data):
     return [m for r, m in got if r == "L109"]
 
 
+@pytest.mark.parametrize("n", [12, 24])
 @pytest.mark.parametrize("pol", ["a", "af", "universal"])
-def test_each_pattern_passes_under_its_own_name(pol):
-    assert l109(cassette(pol, lint.POLARITY_PATTERNS[pol](12))) == []
+def test_each_pattern_passes_under_its_own_name(pol, n):
+    assert l109(wired(n, pol, lint.POLARITY_PATTERNS[pol](n))) == []
 
 
-@pytest.mark.parametrize("claimed,wired", [(c, w) for c in ("a", "af", "universal")
-                                           for w in ("a", "af", "universal") if c != w])
-def test_each_pattern_fails_under_every_other_name(claimed, wired):
-    msgs = l109(cassette(claimed, lint.POLARITY_PATTERNS[wired](12)))
-    assert msgs, f"{wired} wiring declared {claimed!r} passed"
+@pytest.mark.parametrize("n", [12, 24])
+@pytest.mark.parametrize("claimed,wiring", [(c, w) for c in ("a", "af", "universal")
+                                            for w in ("a", "af", "universal") if c != w])
+def test_each_pattern_fails_under_every_other_name(claimed, wiring, n):
+    msgs = l109(wired(n, claimed, lint.POLARITY_PATTERNS[wiring](n)))
+    assert msgs, f"{n}-fibre {wiring} wiring declared {claimed!r} passed"
 
 
 def test_the_patterns_are_fs_s_diagrams():
@@ -67,29 +89,11 @@ def test_a_24_fibre_af_exchanges_the_rows_as_well_as_the_pairs():
     assert sorted(af) == list(range(1, 25))
 
 
-AF24 = ROOT / "library/components/fs/fhd-1mtp24-lc-os2-af/v3/contract.yaml"
-
-
-def rewired(contract, fibres):
-    """The contract with port p (lcNN.1 odd, lcNN.2 even) wired to fibres[p-1]."""
-    d = yaml.safe_load(contract.read_text())
-    order = d["optical"]["front-order"]
-    d["optical"]["paths"] = [
-        {"from": f"{order[(p - 1) // 2]}.{2 - p % 2}", "to": f"rear:mtp.{fibres[p - 1]}"}
-        for p in range(1, 25)]
-    return d
-
-
 def test_the_pair_swap_alone_fails_a_24_fibre_af():
     # What the part wired until 3.0.1: right for an MTP-12, wrong for this one.
     pair_swap = [p + 1 if p % 2 else p - 1 for p in range(1, 25)]
     msgs = l109(rewired(AF24, pair_swap))
     assert msgs and "port 1 takes mtp fibre 2 where 'af' puts fibre 14" in msgs[0], msgs
-
-
-@pytest.mark.parametrize("wired", ["a", "universal"])
-def test_other_wirings_fail_a_24_fibre_af(wired):
-    assert l109(rewired(AF24, lint.POLARITY_PATTERNS[wired](24)))
 
 
 def test_every_fs_cassette_wires_its_declared_polarity():
