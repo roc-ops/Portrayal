@@ -19,7 +19,7 @@ import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
-         freshBaysUnder, seatFace, faceQueue, swapOverrides } from './swap.js';
+         freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath } from './swap.js';
 import { jdist } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 
@@ -276,22 +276,30 @@ export function createShell(opts = {}) {
 
   // The compiled SVG carries the hierarchy already: every meaningful node has a
   // data-path, '/' separated. Build the tree from that rather than from the
-  // contracts, so what you see listed is exactly what is drawn.
+  // contracts, so what you see listed is exactly what is drawn - including
+  // what only a projection draws, a cassette's rear MTPs (swap.js faceEntries).
   function buildTree(root) {
-    const nodes = [...root.querySelectorAll('[data-path]')];
+    const entries = faceEntries(root);
+    const nodes = entries.map(x => x.el);
     const byPath = new Map();
     // document order = manifest order, and the manifest is now written in the order
     // the part is made. That is a better group ordering than the alphabet: it put
     // qsfp28 (ports 4-21) ahead of qsfpdd-400g (ports 0-3) purely on spelling.
     nodes.forEach((e, i) => { if (e.__docIdx === undefined) e.__docIdx = i; });
-    for (const e of nodes) {
-      const path = e.dataset.path;
-      if (!byPath.has(path)) byPath.set(path, {path, el: e, kids: []});
+    for (const {path, el: e, projected} of entries) {
+      if (!byPath.has(path)) byPath.set(path, {path, el: e, kids: [], projected});
     }
     const roots = [];
     for (const n of byPath.values()) {
       const cut = n.path.lastIndexOf('/');
       let parent = cut < 0 ? null : byPath.get(n.path.slice(0, cut));
+      // A PROJECTION LISTS UNDER WHAT IT IS SEEN THROUGH. `bay-1/module` on the
+      // rear face has no `bay-1` there to nest in; it is drawn inside the panel
+      // cutout the bay names, and that cutout is where the reader looks for it.
+      if (!parent && n.projected) {
+        const home = byPath.get(ownerPath(n.el.parentNode));
+        if (home && home !== n) parent = home;
+      }
       // `for:` in the manifest - an LED belongs to its port, a button to its module.
       // Nest under the first target, so an indicator lists under the thing it
       // indicates rather than in a pile of 52 LEDs somewhere else in the tree.
@@ -826,16 +834,21 @@ export function createShell(opts = {}) {
     reveal(path);
     for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('sel', r.dataset.path === path);
     const q = `[data-path="${CSS.escape(path)}"]`;
+    const qo = `[data-of="${CSS.escape(path)}"]`;
+    // the part where it is drawn as a part; failing that, as a projection - a
+    // cassette's rear MTP is drawn nowhere else, and is still something to point at
     const target = path == null ? null
       : (state.svg?.querySelector(q)
          || Object.values(state.faces || {}).map(f => f.querySelector(q)).find(Boolean)
+         || state.svg?.querySelector(qo)
+         || Object.values(state.faces || {}).map(f => f.querySelector(qo)).find(Boolean)
          || null);
     // THE SAME PART ON ANOTHER FACE: a projection carries `data-of` naming
     // the seated part, so selecting the part marks its projections too, and
     // clicking a projection selects the part it is of (see the hit test).
     for (const d of faceDocs()) {
       for (const e of d.querySelectorAll('[data-portrayal-selected]')) e.removeAttribute('data-portrayal-selected');
-      if (path != null) for (const e of d.querySelectorAll(`[data-projection][data-of="${CSS.escape(path)}"]`)) e.setAttribute('data-portrayal-selected', '');
+      if (path != null) for (const e of d.querySelectorAll(qo)) e.setAttribute('data-portrayal-selected', '');
     }
     if (halo) { halo.remove(); halo = null; }
     // getScreenCTM is null while the SVG is hidden, which is exactly what a page
@@ -1385,11 +1398,11 @@ export function createShell(opts = {}) {
     // anywhere; see below.
     svg.addEventListener('click', ev => {
       if (dragged) return;              // this click is the end of a pan
-      // a click on a projection is a click on the part it projects
-      const proj = ev.target.closest('[data-projection][data-of]');
-      if (proj && !ev.target.closest('[data-path]')?.contains(proj)) { select(proj.dataset.of); return; }
-      const hit = ev.target.closest('[data-path]');
-      const path = hit ? hit.dataset.path : null;
+      // the nearest part - and a click on a projection is a click on the
+      // part it projects. A projection drawn INSIDE a part (a cassette's back
+      // in its rear cutout) is nearer than that part, so it wins; the old test
+      // read the containment backwards and selected the cutout.
+      const path = ownerPath(ev.target);
       select(path && path !== state.sel ? path : null, false);
     });
     fit();

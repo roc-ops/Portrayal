@@ -45,8 +45,11 @@ export class Node {
     for (const c of this.children) { yield c; yield* c.descendants(); }
   }
   querySelectorAll(sel) {
+    // `:scope > X` is X among the children only - applyRearOverrides' form
+    const kid = sel.match(/^:scope > (.*)$/);
+    if (kid) { const t = parseSel(kid[1]); return this.children.filter(t); }
     const alts = sel.split(',').map(s => s.trim()).map(parseSel);
-    return [...this.descendants()].filter(n => alts.some(a => a(n, this)));
+    return [...this.descendants()].filter(n => alts.some(a => a(n)));
   }
   querySelector(sel) { return this.querySelectorAll(sel)[0] || null; }
   clone() {
@@ -56,12 +59,6 @@ export class Node {
 
 function parseSel(s) {
   if (s === '*') return () => true;
-  // `:scope > [...]` - a direct child of the node queried (applyRearOverrides)
-  const child = s.match(/^:scope\s*>\s*(.+)$/);
-  if (child) {
-    const inner = parseSel(child[1]);
-    return (n, scope) => n.parentNode === scope && inner(n);
-  }
   const parts = [...s.matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)];
   if (!parts.length || parts.map(p => p[0]).join('') !== s)
     throw new Error('unexpected selector ' + s);

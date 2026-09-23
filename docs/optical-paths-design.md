@@ -130,7 +130,11 @@ generalises it rather than inventing beside it.
 Today a component says `plan: {ref: ...}` - *"this part seen from above, as
 another component"* - and a bay says `plan: {view, at, in, under, mirror}` for
 where that projection lands. The renderer emits it carrying `data-of` and no
-data-path, so the tree lists the part once and the 3D kit builds nothing from it.
+data-path, so the part stays one part - selecting it marks its projections - and
+the 3D kit builds nothing from it. Each face's tree still lists what that face
+draws: a projected path the face does not also draw as a part is a row under
+what it is drawn in - a cassette's back and its MTPs under the rear cutout they
+are seen through - and a click on it selects it.
 
 A bare `rear:` sibling handles one more direction and then stops scaling. So:
 
