@@ -40,7 +40,7 @@ A node is either:
   bores, simplex sleeves, MDC and splice positions. An element builds nothing
   in 3D, which is what the shuttered adapter needs.
 
-`class: fibre` joins the closed class vocabulary as a passive class.
+`fibre` is an element class, like `cutout` and `label`; element classes are not part of the component class vocabulary in `power-roles.yaml`.
 
 ## Decisions taken (2026-09-23)
 
