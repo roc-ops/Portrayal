@@ -49,7 +49,7 @@ import yaml
 
 from portrayal.artifacts import Dist
 
-from portrayal.manifest import view_parts, config_airflow
+from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import optical_ports
 from portrayal.faces import face_ref
 
@@ -65,10 +65,19 @@ from portrayal.faces import face_ref
 # 80 QSFP56, 72 SFP56. An absent row reads exactly like a port that does not
 # exist.
 #
-# NOT EVERY MISS IS A MISSING ROW. The MX304's GM/PTP port declares its speed as
-# "1g/10g (reserved for future use per the guide)" because that is what Juniper
-# says about it - a PTP grandmaster clock input in a `timing` group, unsupported.
-# It is right that it does not type. Do not add a row to make it.
+# THE MX304's GM/PTP PORT NOW TYPES, and that is the speed vocabulary's doing.
+# It used to declare "1g/10g (reserved for future use per the guide)", which
+# matched no row, and this comment called the miss correct. It is an SFP cage
+# that takes 1-GbE and 10-GbE optics in a `management`-role group, so under the
+# closed set it is `10g` - the caveat moved to its description - and it exports
+# as a management-only 10gbase-x-sfpp, which is what the metal is. That Juniper
+# does not yet support it is a fact about the software, not the port.
+#
+# ONE SPELLING PER RATE (#512). The keys below are spelled from the closed set in
+# spec/schemas/speeds.yaml, which lint L110 holds the library to and a test holds
+# this table to. A second spelling of 1G copper used to need its own row here,
+# and `100/1000base-t` never got one - so the CSR180's and CSR200's eight 1G
+# copper ports exported nothing.
 IFACE_TYPE = {
     ("sfp", "50g"): "50gbase-x-sfp56",      # s9620-40dg, s9620-54dc: media sfp56
     ("sfp", "25g"): "25gbase-x-sfp28",
@@ -92,8 +101,7 @@ IFACE_TYPE = {
     ("xfp", "10g"): "10gbase-x-xfp",
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "2.5g"): "2.5gbase-t",
-    ("rj45", "1g"): "1000base-t",
-    ("rj45", "100m-1g"): "1000base-t",      # a 10/100/1000 port is 1000base-t
+    ("rj45", "1g"): "1000base-t",           # a 10/100/1000 port is `1g`, so 1000base-t
 }
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 
@@ -449,8 +457,8 @@ NOT_A_DCIM_PORT = {
     "common/lc-duplex-adapter": "single-faced modules have no trunk to terminate on, and the "
                                 "device pass has no fibre path; optical-paths-design.md C3",
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
-    "common/sc-apc": "PON; the model says `10g-pon`, and upstream separates xg-pon "
-                     "(10G/2.5G) from xgs-pon (10G/10G). Typing it would pick one",
+    "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
+                     "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
 
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
@@ -667,7 +675,14 @@ def breakout_note(breakout, n):
 # THE TWO SETS ARE EXHAUSTIVE OVER THE SCHEMA'S ENUM, and a test holds that. A
 # sixth role must be classified by whoever adds it rather than falling silently
 # to one side - which is the whole defect this replaced, one level up.
-PORT_ROLES = {"traffic", "management", "service"}
+#
+# `fabric` IS A PORT ROLE (#510). The interconnect ports on a distributed
+# chassis - a DDC line-card box's uplinks to its fabric boxes, and every port on
+# the fabric box - are cabled like any other port, so a DCIM that tracks cables
+# needs them as interfaces. They export exactly as they did when they sat in
+# `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
+# fabric is the data path, not the way you reach the box.
+PORT_ROLES = {"traffic", "fabric", "management", "service"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 
@@ -691,7 +706,7 @@ def iface_type(p, attrs, group_role=None):
       - its group's role is `traffic` - the ReadyLinks GL-8xEP's eight PoE ports,
         group `gbe-poe`, media rj45 / speed 1g / PoE; or
       - the device states an Ethernet SPEED for it. Exactly one placement in the
-        library does, the S9110-32X's out-of-band management jack at 100m-1g,
+        library does, the S9110-32X's out-of-band management jack at 1g,
         and all 64 timing and serial jacks state none - a ToD or BITS input has
         no Ethernet speed to give. The port is modelled on the bare part BY
         DESIGN, with its two lamps placed separately above the jack where a
@@ -752,6 +767,11 @@ def comments_for(dev, cfg_name, cfg):
         lines += [dev["description"].strip(), ""]
     if cfg and cfg.get("description"):
         lines += [f"Configuration `{cfg_name}`: {cfg['description'].strip()}", ""]
+    # THE OTHER NAMES A DCIM USER MIGHT SEARCH FOR - the AS number, the
+    # marketing name, the OEM's name (#514). NetBox and Nautobot device types
+    # have one `model`, so the rest go where a reader of the record sees them.
+    if alias_names(dev):
+        lines += ["Also sold or listed as: " + ", ".join(alias_names(dev)), ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):

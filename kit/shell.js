@@ -397,14 +397,18 @@ export function createShell(opts = {}) {
     'usb-a': 'USB-A', 'usb-c': 'USB-C', 'sc-apc': 'SC/APC', 'fiber': 'fibre',
     'coax': 'coax', 'ac': 'AC',
   };
-  const SPEED = {'1000base-t': '1000BASE-T', '10g-pon': '10G-PON', 'usb3': 'USB 3'};
+  // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
+  // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is
+  // no per-value table to keep in step. USB generation and PON flavour are
+  // their own attrs (data-usb, data-pon), so they are read on their own:
+  // "USB-A 3.0", "SC/APC 10G XGS-PON".
   const mediaLabel = m => MEDIA[m] || m.toUpperCase();
-  const speedLabel = s => SPEED[s] || s.toUpperCase();
   function portLabel(e) {
     const m = e.dataset.media;
     if (!m) return null;
-    return e.dataset.speed ? `${mediaLabel(m)} ${speedLabel(e.dataset.speed)}`
-                           : mediaLabel(m);
+    const d = e.dataset;
+    return [mediaLabel(m), d.usb, d.speed && d.speed.toUpperCase(),
+            d.pon && d.pon.toUpperCase()].filter(Boolean).join(' ');
   }
 
   // The targets of this node that live in another view, spelled as the manifest
@@ -473,7 +477,10 @@ export function createShell(opts = {}) {
   // a lamp reports a changing state, a legend never changes - and it is not
   // `furniture` either, because furniture is what you neither connect to nor
   // read, and reading is the whole job of a legend.
-  const ROLE = {traffic: 0, management: 1, service: 2, indicator: 3,
+  // `fabric` ranks WITH traffic: on a distributed chassis the interconnect
+  // ports are the other half of why the box exists, and on a fabric box they are
+  // all of it. The group's document order places them within the rank.
+  const ROLE = {traffic: 0, fabric: 0, management: 1, service: 2, indicator: 3,
                 furniture: 4, marking: 5};
   function roleOf(e) {
     const r = e && e.dataset.groupRole;

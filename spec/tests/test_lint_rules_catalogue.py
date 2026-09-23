@@ -29,7 +29,7 @@ MENTIONED = set(re.findall(r"\bL\d+\b", CODE))
 
 
 def test_every_code_the_linter_raises_is_in_the_catalogue():
-    missing = sorted(RAISED - set(lint.RULES), key=lambda c: int(c[1:]))
+    missing = sorted(RAISED - set(lint.RULES) - set(lint.RESERVED), key=lambda c: int(c[1:]))
     assert not missing, f"raised in lint.py but not in RULES: {missing}"
 
 
@@ -46,8 +46,14 @@ def test_catalogue_literal_has_no_duplicate_keys():
 
 
 def test_catalogue_codes_are_contiguous_from_L0():
-    codes = sorted(int(c[1:]) for c in lint.RULES)
+    # a RESERVED code is a rule being written on another branch, not a gap
+    codes = sorted(int(c[1:]) for c in set(lint.RULES) | set(lint.RESERVED))
     assert codes == list(range(codes[-1] + 1)), "a gap in the numbering means a rule was deleted without its entry, or vice versa"
+
+
+def test_a_reserved_code_leaves_reserved_when_its_rule_lands():
+    landed = sorted(set(lint.RULES) & set(lint.RESERVED))
+    assert not landed, f"in RULES and still RESERVED - delete the reservation: {landed}"
 
 
 def test_every_entry_has_scope_rule_and_fix():

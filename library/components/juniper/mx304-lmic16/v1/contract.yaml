@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx304-lmic16
-version: 1.1.0
+version: 1.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -59,22 +59,22 @@ states:
 - fail
 - absent
 parts:
-- {ref: std/qsfp-dd@1, id: port-0, at: [20.0, 3.7], attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-1, at: [20.0, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-2, at: [38.7, 3.7]}
-- {ref: std/qsfp-dd@1, id: port-3, at: [38.7, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-4, at: [62.1, 3.7]}
-- {ref: std/qsfp-dd@1, id: port-5, at: [62.1, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-6, at: [80.8, 3.7], attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-7, at: [80.8, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-8, at: [107.7, 3.7], attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-9, at: [107.7, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-10, at: [126.4, 3.7]}
-- {ref: std/qsfp-dd@1, id: port-11, at: [126.4, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-12, at: [150.1, 3.7]}
-- {ref: std/qsfp-dd@1, id: port-13, at: [150.1, 22.5], rotate: 180}
-- {ref: std/qsfp-dd@1, id: port-14, at: [168.8, 3.7], attrs: {speed: 400g-capable}}
-- {ref: std/qsfp-dd@1, id: port-15, at: [168.8, 22.5], rotate: 180}
+- {ref: std/qsfp-dd@1, id: port-0, at: [20.0, 3.7], attrs: {speed: 400g}}
+- {ref: std/qsfp-dd@1, id: port-1, at: [20.0, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-2, at: [38.7, 3.7], attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-3, at: [38.7, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-4, at: [62.1, 3.7], attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-5, at: [62.1, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-6, at: [80.8, 3.7], attrs: {speed: 400g}}
+- {ref: std/qsfp-dd@1, id: port-7, at: [80.8, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-8, at: [107.7, 3.7], attrs: {speed: 400g}}
+- {ref: std/qsfp-dd@1, id: port-9, at: [107.7, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-10, at: [126.4, 3.7], attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-11, at: [126.4, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-12, at: [150.1, 3.7], attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-13, at: [150.1, 22.5], rotate: 180, attrs: {speed: 100g}}
+- {ref: std/qsfp-dd@1, id: port-14, at: [168.8, 3.7], attrs: {speed: 400g}}
+- {ref: std/qsfp-dd@1, id: port-15, at: [168.8, 22.5], rotate: 180, attrs: {speed: 100g}}
 elements:
   lever-left:
     at: [1.6, 3.3]

@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: csr430
-version: 1.0.2
+version: 1.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS7515-24X
+aliases:
+- {name: CSR430, kind: marketing}
 portfolio: {line: Service Provider, family: Cell Site Router, series: CSR430}
 description: >-
   20x 25G SFP28 and 4x 100G QSFP28 cell site router, sold as the CSR430, Broadcom BCM88284 Qumran-2U with
@@ -114,7 +116,6 @@ attrs:
     storage: 128 GB mSATA SSD
     software: ONIE installer pre-loaded; Open Network Linux (ONL) compatible
   features:
-    marketing-name: CSR430
     standards: 5G eCPRI, TSN and SRv6 enabled; O-RAN fronthaul
     timing: IEEE1588v2 and SyncE at Class C accuracy; integrated GNSS
     timing-ports: ToD/1PPS (RJ-45), 1PPS I/O (SMB), 10MHz I/O (SMB), GNSS antenna (SMA)
@@ -752,7 +753,7 @@ views:
         rotate: 180
         group: mgmt
         rel-pos: 1
-        attrs: {media: rj45, role: mgmt, speed: 1000base-t}
+        attrs: {media: rj45, role: mgmt, speed: 1g}
       - ref: std/rj45-ganged@2
         id: console
         at: [340.15, 20.0]
