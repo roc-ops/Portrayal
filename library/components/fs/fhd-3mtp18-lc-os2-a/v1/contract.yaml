@@ -10,10 +10,12 @@ description: >-
 size: {w: 108.97, h: 35.05, d: 117.86}
 size-confidence: {w: photo-measured, h: photo-measured, d: drawing}
 size-notes: >-
-  The faceplate is the FHD module face, 108.97 x 35.05, and 105333.main.jpg
-  passes spec/tools/intake/panel_measure.py's check against it (height 2.76%
-  off, inside the 3% limit). The 117.86 depth is FS's own dimension line on
-  105333.B.jpg, which reads 4.29in x 1.38in x 4.64in.
+  The faceplate is the FHD module face, 108.97 x 35.05. 105333.main.jpg is shot
+  from a raised camera - the body's top shows - so
+  spec/tools/intake/panel_measure.py refuses its height (+4.01%, as #506 left
+  the tool); it is read ACROSS only, framed on plate()'s median edges, where
+  the row comes out centred to 0.01 mm. The 117.86 depth is FS's own dimension
+  line on 105333.B.jpg, which reads 4.29in x 1.38in x 4.64in.
 attrs: {media: fiber, model: FHD-3MTP18LCDOS2A, vendor-sku: '105333'}
 body:
   depth: 117.86
@@ -87,24 +89,25 @@ optical:
     - {from: lc18.2, to: 'rear:mtp1.12'}
 provenance:
   size: >-
-    see size-notes - the FHD module face, validated on 105333.main.jpg; the
-    depth is FS's dimension line on 105333.B.jpg.
+    see size-notes - the FHD module face; 105333.main.jpg is read across only,
+    its height being refused; the depth is FS's dimension line on 105333.B.jpg.
   face-legends: >-
     SIX NUMBERS, THE ENDS OF THE THREE ROWS: `25`, `13` and `1` down the left
     and `36`, `24` and `12` down the right, top to bottom - so the BOTTOM row
     is 1-12, the middle 13-24 and the top 25-36, as on the 12- and 24-fibre
     plates. One number per row end, not a pair: these adapters are side by
-    side, so a row end is one port. Measured on 105333.main.jpg, the render
-    that passes panel_measure's check (105335.main.jpg agrees to 0.2 mm and is
-    not used). Across, in the plate frame: each side's digits centre on one
-    column, x 11.32 and 97.89 in the corrected frame (#503/#506). Up, from the
-    row seams, in units of the row pitch, so the frame's vertical shortfall
-    cancels: the `25`/`36` baselines sit 0.333 pitch above the first seam,
-    `13`/`24` 0.623 below it and `1`/`12` 1.666 below it - 7.86, 18.96 and
-    31.05 on the 11.6 pitch. The middle pair sits half a millimetre higher in
-    its row than the other two, and is drawn so; both renders show it. Cap
-    height 2.35 (2.29 in the short frame), so 3.15 type at the family's
-    2.61/3.5 ratio; regular weight, as FS prints them.
+    side, so a row end is one port. Measured ACROSS on 105333.main.jpg in the
+    corrected frame - its height is refused, which does not touch an across
+    reading - and 105335.main.jpg agrees to 0.2 mm and is not used. Across, in
+    the plate frame: each side's digits centre on one column, x 11.32 and 97.89
+    in the corrected frame (#503/#506). Up, from the row seams, in units of the
+    row pitch, so the frame's vertical shortfall cancels: the `25`/`36`
+    baselines sit 0.333 pitch above the first seam, `13`/`24` 0.623 below it
+    and `1`/`12` 1.666 below it - 7.86, 18.96 and 31.05 on the 11.6 pitch. The
+    middle pair sits half a millimetre higher in its row than the other two,
+    and is drawn so; both renders show it. Cap height 2.35 (2.29 in the short
+    frame), so 3.15 type at the family's 2.61/3.5 ratio; regular weight, as FS
+    prints them.
   parts: >-
     EIGHTEEN common/lc-duplex-shuttered-adapter@1, three rows of three abutting
     PAIRS. ACROSS, MEASURED on 105333.main.jpg in panel_measure's frame as #503
