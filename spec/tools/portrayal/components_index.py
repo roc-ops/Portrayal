@@ -23,6 +23,26 @@ from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule, component_cages,
                     _pluggable_families, _pluggable_candidates)
+from portrayal import libwalk  # noqa: E402
+
+
+def fibre_ends(data, load_ref):
+    """`{endpoint: {"to": far endpoint, "label": front number or None}}`."""
+    from portrayal import optical_ports
+    ends = {}
+    for p in data["optical"]["paths"]:
+        a, b = p.get("from"), p.get("to")
+        # A SPLITTER'S `to` IS A LIST of {at, ratio}, one path fanning out to
+        # several endpoints rather than the single far end this shape assumes
+        # (smartoptics/ppm-ocu-50-50, ppm-ocu-97-3). Not this task's shape;
+        # skipped rather than guessed at.
+        if not isinstance(a, str) or not isinstance(b, str):
+            continue
+        la = optical_ports.front_label(data, a, load_ref)
+        lb = optical_ports.front_label(data, b, load_ref)
+        ends[a] = {"to": b, "label": la if la is not None else lb}
+        ends[b] = {"to": a, "label": lb if lb is not None else la}
+    return ends
 
 
 def _confidence_counts(data):
@@ -53,6 +73,7 @@ def main():
     # indexer alongside the renderers, so nothing they write exists yet.
     families = _pluggable_families()
     candidates = _pluggable_candidates(args.library)
+    load_ref = lambda ref: libwalk.load_contract(ref, args.library)  # noqa: E731
     index = []
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
@@ -238,6 +259,13 @@ def main():
             # widened again by the first consumer that wanted the rest.
             if data.get("optical"):
                 entry["optical"] = data["optical"]
+                # THE FIBRE ENDS, NUMBERED ONCE. The explorer labels a fibre by
+                # its far end and its vendor front number; the number is
+                # optical_ports.front_label's rule and nobody else's, so it is
+                # written here beside the paths rather than re-derived in the
+                # kit.
+                if data["optical"].get("paths"):
+                    entry["optical"] = {**data["optical"], "ends": fibre_ends(data, load_ref)}
             index.append(entry)
     totals = {}
     for e in index:
