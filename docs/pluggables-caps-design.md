@@ -240,13 +240,21 @@ runs on the body's own box, as the shuttered adapter's does. `@4` drew it inset
 the stroke. Moving the outline is a drawing change, and so is the extra 0.03; the
 part says both.
 
-**The placements did not move; the ferrules moved inside them.** Every composer
-keeps its adapter where its own source put it: three Smartoptics devices place it
-directly, and nine modules compose it. Every fibre position, bore mate, duplex
-seat and seated cap or plug on that chain moves 0.32 along the adapter's own
-vertical axis. It moves down on a row placed unturned and up on a row placed at
-`rotate: 180`. Nothing else on those faces moves. A source that fixes the axis
-would move it again; the two stencil readings lie 0.54 apart.
+**The fibres did not move; the bodies moved around them.** The first cut of
+this change kept every placement and let the fibres move 0.32 inside the body.
+That was reversed the same day. The fibre positions on these faces are what the
+devices resolved from a source: the stencil ShapeSheet connection points on the
+DCP-R units. The 5.82 reading re-derives the body around a fibre, not the fibre.
+So every placement of the adapter moved 0.32 toward its own latch side. That is
+up on an unturned row and down on a row at `rotate: 180`, and each device's panel
+cutout moved with its adapter. The three Smartoptics devices place the adapter
+directly (117 placements) and nine modules compose it (16). Every optical point,
+bore mate, duplex seat and seated cap or plug is exactly where `@4` had it, and a
+test holds all of them to those figures on real builds. What moved is the body,
+its outline and its keyways. On the DCP-R units that brings each body within the
+line of its Tx/Rx caption frame, which the model draws closer to the ferrule than
+the stencil does. A source that fixes the axis would move the bodies again; the
+two stencil readings lie 0.54 apart.
 
 ### The shipped default
 
