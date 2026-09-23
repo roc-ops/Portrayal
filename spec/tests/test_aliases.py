@@ -134,6 +134,11 @@ def test_the_hcl_names_the_issue_asked_about_resolve():
     for man, d in _all_devices():
         for n in alias_names(d):
             by.setdefault(n.casefold(), []).append(d["name"])
+    # DCS560 ALSO NAMED THE AS9817-64D QSFP-DD800 BUILD. Until that box is
+    # mapped to its drawing it resolves to the OSFP one alone - the one the
+    # Arrcus HCL's "DCS560 / AS9817-64O" row means. Mapping the other adds it
+    # to a second device, and L111 then demands `shared: true` on both, which
+    # is when this line changes.
     for name, want in [("AS9817-64O", "ais800-64o"), ("DCS560", "ais800-64o"),
                        ("AS9716-32D", "dcs510"), ("CSR440", "csr440"),
                        ("DCS203", "as7326-56x"), ("NCP-40C", "s9700-53dx")]:
