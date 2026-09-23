@@ -219,10 +219,41 @@ def _accepts(comps, interface):
     return out
 
 
-@pytest.mark.parametrize("ref", sorted(MATES))
+# THE MPO PLUGS ARE CHECKED ON A COMPOSER BUILT HERE, not across the library:
+# since main moved the FHD cassette rears to common/mpo-flange-adapter@1 (#497,
+# #499), which composes no std/mpo@1, and marked common/mpo-adapter@1
+# `unplaced`, no library part publishes an mpo slot, and `_accepts` would find
+# nothing to ask.
+IN_LIBRARY = sorted(r for r in MATES if MATES[r] != "mpo")
+
+
+@pytest.mark.parametrize("ref", IN_LIBRARY)
 def test_a_plug_is_offered_by_every_slot_of_its_interface(comps, ref):
     for accepts in _accepts(comps, MATES[ref]):
         assert ref in accepts, (ref, accepts)
+
+
+def test_an_mpo_slot_offers_both_mpo_plugs(comps):
+    """The real wrapper, common/mpo-adapter@1, composed into a throwaway
+    composer: its forwarded std/mpo@1 aperture is the slot, and the slot's
+    accept list - built from `mates`, as every connector slot's is - offers
+    both plugs. Any mpo slot the library does publish is held to the same."""
+    from portrayal import render as render_mod
+    lib = render_mod.Library([str(LIB)])
+    composer = {"size": {"w": 80.0, "h": 30.0},
+                "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@1",
+                           "at": [20.0, 12.0]}]}
+    [slot] = render_mod.component_cages(composer, lib,
+                                        render_mod._pluggable_families(),
+                                        render_mod._pluggable_candidates([str(LIB)]),
+                                        render_mod._connector_registry())
+    assert slot["interface"] == "mpo"
+    held = [slot["accepts"]] + [c["accepts"] for comp in comps.values()
+                                for c in comp.get("cages") or []
+                                if c.get("kind") == "connector"
+                                and c.get("interface") == "mpo"]
+    for accepts in held:
+        assert MPO12 in accepts and MPO24 in accepts, accepts
 
 
 def test_a_duplex_slot_offers_the_duplex_parts_and_not_the_simplex_ones(comps):
