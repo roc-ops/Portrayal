@@ -276,6 +276,22 @@ def resolve_views(device, cfg):
         out.setdefault(vname, (vname, v or {}))
     return out
 
+
+def config_airflow(device, cfg):
+    """The airflow one configuration is built with, or None.
+
+    `configurations.<name>.airflow` is stated only where a build differs from
+    the chassis (L91), so the chassis value is the answer everywhere else. The
+    SVG root's `data-airflow`, the `configs[].airflow` in `<device>.configs.json`
+    and the DCIM export all read it here, so the drawing, the index and the
+    export cannot come to disagree about which way a build breathes. The value
+    is the library's own vocabulary - front-to-back, back-to-front, side,
+    passive - and None where the device states nothing.
+    """
+    return ((cfg or {}).get("airflow")
+            or ((device or {}).get("chassis") or {}).get("airflow")
+            or None)
+
 # --- occupants keyed inside a seated module (#484, R2) -----------------------
 #
 # A configuration's `occupants:` may key a cage on a card seated in a bay by the

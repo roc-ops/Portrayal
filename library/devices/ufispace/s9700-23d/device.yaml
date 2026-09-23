@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-23d
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-23D
@@ -563,7 +563,7 @@ groups:
       OpenZR+ on six of them, and they break out to 4x100G
   qsfpdd-fabric:
     term: Port
-    role: service
+    role: fabric
     index-origin: 0
     attrs: {media: qsfp-dd, speed: 400g}
     description: >-
@@ -571,15 +571,13 @@ groups:
       explicit that they 'are only for connecting with fabric ports of the S9705-48D
       fabric switch'. They carry no customer traffic: they are the interconnect that
       turns a rack of these boxes into one distributed disaggregated chassis, and they
-      take DAC, AEC and AOC only. `role: service` rather than `traffic` follows the
-      library's existing split for the same distinction one scale up: juniper/mx2020
-      roles its Switch Fabric Board slots `service` and its MPC slots `traffic`. What
-      is a board there is a port here, but the question is the same one - this block is
-      what keeps a cluster working, not what a customer plugs into - and it is the one
-      thing that tells a reader which half of this faceplate is which.
-      (`fabric` does appear in spec/schemas/power-roles.yaml, but that file assigns
-      POWER classes to draw/supply sets and says nothing about group roles; it is not
-      the precedent for this choice and must not be read as one.)
+      take DAC, AEC and AOC only. `role: fabric`, the group-role for exactly this: the
+      cell interconnect of a distributed chassis, ports only. It is not `traffic`,
+      because no customer plugs in here, and it is no longer `service`, which this
+      block borrowed from juniper/mx2020's Switch Fabric Board slots - a fabric CARD
+      stays `service`, a fabric PORT does not. It is the one thing that tells a reader
+      which half of this faceplate is which, and the same value marks the fabric bank
+      on every other DDC and VDR box in the library.
   sfp-plus:
     term: Port
     role: management

@@ -473,7 +473,10 @@ export function createShell(opts = {}) {
   // a lamp reports a changing state, a legend never changes - and it is not
   // `furniture` either, because furniture is what you neither connect to nor
   // read, and reading is the whole job of a legend.
-  const ROLE = {traffic: 0, management: 1, service: 2, indicator: 3,
+  // `fabric` ranks WITH traffic: on a distributed chassis the interconnect
+  // ports are the other half of why the box exists, and on a fabric box they are
+  // all of it. The group's document order places them within the rank.
+  const ROLE = {traffic: 0, fabric: 0, management: 1, service: 2, indicator: 3,
                 furniture: 4, marking: 5};
   function roleOf(e) {
     const r = e && e.dataset.groupRole;
