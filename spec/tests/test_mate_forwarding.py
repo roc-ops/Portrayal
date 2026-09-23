@@ -70,7 +70,7 @@ def test_a_multi_bore_adapter_presents_its_own_interface_not_a_bore():
     midpoint the contract declares (B3, "The duplex host"). The forwarding path
     is untouched; this contract no longer reaches it, because a contract that
     declares its own interface and point forwards nothing."""
-    d = contract("common/lc-duplex-adapter/v4")
+    d = contract("common/lc-duplex-adapter/v5")
     iface, at, _ = presented_interface(d, resolve)
     assert iface == "lc-duplex" != resolve(d["parts"][0]["ref"])["interface"]
     assert at == list(d["connection-points"]["mate"]["at"])

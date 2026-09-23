@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-m32-cso-zr
-version: 2.0.2
+version: 3.0.0
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-M32-CSO-ZR+
@@ -132,6 +132,10 @@ gaps:
     occupants of the bores now, not part of the adapter, which moves nothing the
     elimination rests on - the adapter body and its position are unchanged - so
     the gap stands.
+    RE-READ when common/lc-duplex-adapter moved its ferrule axis 0.32 inside the
+    body (@5, to hold the bulkhead keyway): the adapter's outline and its
+    placement are unchanged, and the strip the lamps are placed on is placed
+    off the adapter's position, not its ferrules - so the gap stands.
   wanted: >-
     a photograph of a unit CARRYING TRAFFIC. Every image held shows Power and Status
     green while every client strip is white, which says the channels are dark, not that
@@ -303,73 +307,73 @@ views:
         - {ref: common/led-rect@1, id: led-status, at: [55.70, 36.00], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
         - {ref: common/laser-warning@1, id: warn-laser, at: [266.30, 36.60], attrs: {marking: laser}, group: markings, rel-pos: 1}
         - {ref: common/warning-triangle@1, id: warn-general, at: [272.30, 36.60], attrs: {marking: general}, group: markings, rel-pos: 2}
-        - {ref: common/lc-duplex-adapter@4, id: port-1510, at: [66.06, 10.4], group: line, attrs: {role: 1510}, rel-pos: 2}
-        - {ref: common/lc-duplex-adapter@4, id: port-otdr, at: [79.26, 10.4], group: line, attrs: {role: otdr}, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@4, id: port-line, at: [97.09, 10.4], group: line, attrs: {role: line}, rel-pos: 4}
+        - {ref: common/lc-duplex-adapter@5, id: port-1510, at: [66.06, 10.4], group: line, attrs: {role: 1510}, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@5, id: port-otdr, at: [79.26, 10.4], group: line, attrs: {role: otdr}, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@5, id: port-line, at: [97.09, 10.4], group: line, attrs: {role: line}, rel-pos: 4}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-port-line, at: [97.09, 6.5], for: port-line, attrs: {function: line}, group: line-leds, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@4, id: ch-914, at: [114.92, 10.4], group: channels, attrs: {channel: '914'}, rel-pos: 1}
+        - {ref: common/lc-duplex-adapter@5, id: ch-914, at: [114.92, 10.4], group: channels, attrs: {channel: '914'}, rel-pos: 1}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-914, at: [114.92, 6.5], for: ch-914, group: client-leds, rel-pos: 1}
-        - {ref: common/lc-duplex-adapter@4, id: ch-915p5, at: [128.12, 10.4], group: channels, attrs: {channel: '915.5'}, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@5, id: ch-915p5, at: [128.12, 10.4], group: channels, attrs: {channel: '915.5'}, rel-pos: 2}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-915p5, at: [128.12, 6.5], for: ch-915p5, group: client-leds, rel-pos: 2}
-        - {ref: common/lc-duplex-adapter@4, id: ch-920, at: [145.75, 10.4], group: channels, attrs: {channel: '920'}, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@5, id: ch-920, at: [145.75, 10.4], group: channels, attrs: {channel: '920'}, rel-pos: 3}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-920, at: [145.75, 6.5], for: ch-920, group: client-leds, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@4, id: ch-921p5, at: [158.95, 10.4], group: channels, attrs: {channel: '921.5'}, rel-pos: 4}
+        - {ref: common/lc-duplex-adapter@5, id: ch-921p5, at: [158.95, 10.4], group: channels, attrs: {channel: '921.5'}, rel-pos: 4}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-921p5, at: [158.95, 6.5], for: ch-921p5, group: client-leds, rel-pos: 4}
-        - {ref: common/lc-duplex-adapter@4, id: ch-926, at: [176.58, 10.4], group: channels, attrs: {channel: '926'}, rel-pos: 5}
+        - {ref: common/lc-duplex-adapter@5, id: ch-926, at: [176.58, 10.4], group: channels, attrs: {channel: '926'}, rel-pos: 5}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-926, at: [176.58, 6.5], for: ch-926, group: client-leds, rel-pos: 5}
-        - {ref: common/lc-duplex-adapter@4, id: ch-927p5, at: [189.78, 10.4], group: channels, attrs: {channel: '927.5'}, rel-pos: 6}
+        - {ref: common/lc-duplex-adapter@5, id: ch-927p5, at: [189.78, 10.4], group: channels, attrs: {channel: '927.5'}, rel-pos: 6}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-927p5, at: [189.78, 6.5], for: ch-927p5, group: client-leds, rel-pos: 6}
-        - {ref: common/lc-duplex-adapter@4, id: ch-932, at: [207.41, 10.4], group: channels, attrs: {channel: '932'}, rel-pos: 7}
+        - {ref: common/lc-duplex-adapter@5, id: ch-932, at: [207.41, 10.4], group: channels, attrs: {channel: '932'}, rel-pos: 7}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-932, at: [207.41, 6.5], for: ch-932, group: client-leds, rel-pos: 7}
-        - {ref: common/lc-duplex-adapter@4, id: ch-933p5, at: [220.61, 10.4], group: channels, attrs: {channel: '933.5'}, rel-pos: 8}
+        - {ref: common/lc-duplex-adapter@5, id: ch-933p5, at: [220.61, 10.4], group: channels, attrs: {channel: '933.5'}, rel-pos: 8}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-933p5, at: [220.61, 6.5], for: ch-933p5, group: client-leds, rel-pos: 8}
-        - {ref: common/lc-duplex-adapter@4, id: ch-938, at: [238.25, 10.4], group: channels, attrs: {channel: '938'}, rel-pos: 9}
+        - {ref: common/lc-duplex-adapter@5, id: ch-938, at: [238.25, 10.4], group: channels, attrs: {channel: '938'}, rel-pos: 9}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-938, at: [238.25, 6.5], for: ch-938, group: client-leds, rel-pos: 9}
-        - {ref: common/lc-duplex-adapter@4, id: ch-939p5, at: [251.45, 10.4], group: channels, attrs: {channel: '939.5'}, rel-pos: 10}
+        - {ref: common/lc-duplex-adapter@5, id: ch-939p5, at: [251.45, 10.4], group: channels, attrs: {channel: '939.5'}, rel-pos: 10}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-939p5, at: [251.45, 6.5], for: ch-939p5, group: client-leds, rel-pos: 10}
-        - {ref: common/lc-duplex-adapter@4, id: ch-944, at: [279.99, 10.4], group: channels, attrs: {channel: '944'}, rel-pos: 11}
+        - {ref: common/lc-duplex-adapter@5, id: ch-944, at: [279.99, 10.4], group: channels, attrs: {channel: '944'}, rel-pos: 11}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-944, at: [279.99, 6.5], for: ch-944, group: client-leds, rel-pos: 11}
-        - {ref: common/lc-duplex-adapter@4, id: ch-945p5, at: [293.19, 10.4], group: channels, attrs: {channel: '945.5'}, rel-pos: 12}
+        - {ref: common/lc-duplex-adapter@5, id: ch-945p5, at: [293.19, 10.4], group: channels, attrs: {channel: '945.5'}, rel-pos: 12}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-945p5, at: [293.19, 6.5], for: ch-945p5, group: client-leds, rel-pos: 12}
-        - {ref: common/lc-duplex-adapter@4, id: ch-950, at: [310.82, 10.4], group: channels, attrs: {channel: '950'}, rel-pos: 13}
+        - {ref: common/lc-duplex-adapter@5, id: ch-950, at: [310.82, 10.4], group: channels, attrs: {channel: '950'}, rel-pos: 13}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-950, at: [310.82, 6.5], for: ch-950, group: client-leds, rel-pos: 13}
-        - {ref: common/lc-duplex-adapter@4, id: ch-951p5, at: [324.02, 10.4], group: channels, attrs: {channel: '951.5'}, rel-pos: 14}
+        - {ref: common/lc-duplex-adapter@5, id: ch-951p5, at: [324.02, 10.4], group: channels, attrs: {channel: '951.5'}, rel-pos: 14}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-951p5, at: [324.02, 6.5], for: ch-951p5, group: client-leds, rel-pos: 14}
-        - {ref: common/lc-duplex-adapter@4, id: ch-956, at: [341.65, 10.4], group: channels, attrs: {channel: '956'}, rel-pos: 15}
+        - {ref: common/lc-duplex-adapter@5, id: ch-956, at: [341.65, 10.4], group: channels, attrs: {channel: '956'}, rel-pos: 15}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-956, at: [341.65, 6.5], for: ch-956, group: client-leds, rel-pos: 15}
-        - {ref: common/lc-duplex-adapter@4, id: ch-957p5, at: [354.85, 10.4], group: channels, attrs: {channel: '957.5'}, rel-pos: 16}
+        - {ref: common/lc-duplex-adapter@5, id: ch-957p5, at: [354.85, 10.4], group: channels, attrs: {channel: '957.5'}, rel-pos: 16}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-957p5, at: [354.85, 6.5], for: ch-957p5, group: client-leds, rel-pos: 16}
-        - {ref: common/lc-duplex-adapter@4, id: ch-917, at: [114.92, 23.4], group: channels, attrs: {channel: '917'}, rel-pos: 17}
+        - {ref: common/lc-duplex-adapter@5, id: ch-917, at: [114.92, 23.4], group: channels, attrs: {channel: '917'}, rel-pos: 17}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-917, at: [114.92, 36.0], for: ch-917, group: client-leds, rel-pos: 17}
-        - {ref: common/lc-duplex-adapter@4, id: ch-918p5, at: [128.12, 23.4], group: channels, attrs: {channel: '918.5'}, rel-pos: 18}
+        - {ref: common/lc-duplex-adapter@5, id: ch-918p5, at: [128.12, 23.4], group: channels, attrs: {channel: '918.5'}, rel-pos: 18}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-918p5, at: [128.12, 36.0], for: ch-918p5, group: client-leds, rel-pos: 18}
-        - {ref: common/lc-duplex-adapter@4, id: ch-923, at: [145.75, 23.4], group: channels, attrs: {channel: '923'}, rel-pos: 19}
+        - {ref: common/lc-duplex-adapter@5, id: ch-923, at: [145.75, 23.4], group: channels, attrs: {channel: '923'}, rel-pos: 19}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-923, at: [145.75, 36.0], for: ch-923, group: client-leds, rel-pos: 19}
-        - {ref: common/lc-duplex-adapter@4, id: ch-924p5, at: [158.95, 23.4], group: channels, attrs: {channel: '924.5'}, rel-pos: 20}
+        - {ref: common/lc-duplex-adapter@5, id: ch-924p5, at: [158.95, 23.4], group: channels, attrs: {channel: '924.5'}, rel-pos: 20}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-924p5, at: [158.95, 36.0], for: ch-924p5, group: client-leds, rel-pos: 20}
-        - {ref: common/lc-duplex-adapter@4, id: ch-929, at: [176.58, 23.4], group: channels, attrs: {channel: '929'}, rel-pos: 21}
+        - {ref: common/lc-duplex-adapter@5, id: ch-929, at: [176.58, 23.4], group: channels, attrs: {channel: '929'}, rel-pos: 21}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-929, at: [176.58, 36.0], for: ch-929, group: client-leds, rel-pos: 21}
-        - {ref: common/lc-duplex-adapter@4, id: ch-930p5, at: [189.78, 23.4], group: channels, attrs: {channel: '930.5'}, rel-pos: 22}
+        - {ref: common/lc-duplex-adapter@5, id: ch-930p5, at: [189.78, 23.4], group: channels, attrs: {channel: '930.5'}, rel-pos: 22}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-930p5, at: [189.78, 36.0], for: ch-930p5, group: client-leds, rel-pos: 22}
-        - {ref: common/lc-duplex-adapter@4, id: ch-935, at: [207.41, 23.4], group: channels, attrs: {channel: '935'}, rel-pos: 23}
+        - {ref: common/lc-duplex-adapter@5, id: ch-935, at: [207.41, 23.4], group: channels, attrs: {channel: '935'}, rel-pos: 23}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-935, at: [207.41, 36.0], for: ch-935, group: client-leds, rel-pos: 23}
-        - {ref: common/lc-duplex-adapter@4, id: ch-936p5, at: [220.61, 23.4], group: channels, attrs: {channel: '936.5'}, rel-pos: 24}
+        - {ref: common/lc-duplex-adapter@5, id: ch-936p5, at: [220.61, 23.4], group: channels, attrs: {channel: '936.5'}, rel-pos: 24}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-936p5, at: [220.61, 36.0], for: ch-936p5, group: client-leds, rel-pos: 24}
-        - {ref: common/lc-duplex-adapter@4, id: ch-941, at: [238.25, 23.4], group: channels, attrs: {channel: '941'}, rel-pos: 25}
+        - {ref: common/lc-duplex-adapter@5, id: ch-941, at: [238.25, 23.4], group: channels, attrs: {channel: '941'}, rel-pos: 25}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-941, at: [238.25, 36.0], for: ch-941, group: client-leds, rel-pos: 25}
-        - {ref: common/lc-duplex-adapter@4, id: ch-942p5, at: [251.45, 23.4], group: channels, attrs: {channel: '942.5'}, rel-pos: 26}
+        - {ref: common/lc-duplex-adapter@5, id: ch-942p5, at: [251.45, 23.4], group: channels, attrs: {channel: '942.5'}, rel-pos: 26}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-942p5, at: [251.45, 36.0], for: ch-942p5, group: client-leds, rel-pos: 26}
-        - {ref: common/lc-duplex-adapter@4, id: ch-947, at: [279.99, 23.4], group: channels, attrs: {channel: '947'}, rel-pos: 27}
+        - {ref: common/lc-duplex-adapter@5, id: ch-947, at: [279.99, 23.4], group: channels, attrs: {channel: '947'}, rel-pos: 27}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-947, at: [279.99, 36.0], for: ch-947, group: client-leds, rel-pos: 27}
-        - {ref: common/lc-duplex-adapter@4, id: ch-948p5, at: [293.19, 23.4], group: channels, attrs: {channel: '948.5'}, rel-pos: 28}
+        - {ref: common/lc-duplex-adapter@5, id: ch-948p5, at: [293.19, 23.4], group: channels, attrs: {channel: '948.5'}, rel-pos: 28}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-948p5, at: [293.19, 36.0], for: ch-948p5, group: client-leds, rel-pos: 28}
-        - {ref: common/lc-duplex-adapter@4, id: ch-953, at: [310.82, 23.4], group: channels, attrs: {channel: '953'}, rel-pos: 29}
+        - {ref: common/lc-duplex-adapter@5, id: ch-953, at: [310.82, 23.4], group: channels, attrs: {channel: '953'}, rel-pos: 29}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-953, at: [310.82, 36.0], for: ch-953, group: client-leds, rel-pos: 29}
-        - {ref: common/lc-duplex-adapter@4, id: ch-954p5, at: [324.02, 23.4], group: channels, attrs: {channel: '954.5'}, rel-pos: 30}
+        - {ref: common/lc-duplex-adapter@5, id: ch-954p5, at: [324.02, 23.4], group: channels, attrs: {channel: '954.5'}, rel-pos: 30}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-954p5, at: [324.02, 36.0], for: ch-954p5, group: client-leds, rel-pos: 30}
-        - {ref: common/lc-duplex-adapter@4, id: ch-959, at: [341.65, 23.4], group: channels, attrs: {channel: '959'}, rel-pos: 31}
+        - {ref: common/lc-duplex-adapter@5, id: ch-959, at: [341.65, 23.4], group: channels, attrs: {channel: '959'}, rel-pos: 31}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-959, at: [341.65, 36.0], for: ch-959, group: client-leds, rel-pos: 31}
-        - {ref: common/lc-duplex-adapter@4, id: ch-960p5, at: [354.85, 23.4], group: channels, attrs: {channel: '960.5'}, rel-pos: 32}
+        - {ref: common/lc-duplex-adapter@5, id: ch-960p5, at: [354.85, 23.4], group: channels, attrs: {channel: '960.5'}, rel-pos: 32}
         - {ref: smartoptics/m32-client-lamp@1, id: lamp-ch-960p5, at: [354.85, 36.0], for: ch-960p5, group: client-leds, rel-pos: 32}
   rear:
     size:

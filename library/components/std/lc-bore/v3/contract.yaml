@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-bore
-version: 3.0.1
+version: 3.0.2
 class: port
 interface: lc
 profile: networking
@@ -52,8 +52,8 @@ provenance:
     RETAINED rather than re-derived, because it is still close to the ceiling on both
     faces after the move - the room the axis freed above the bore was taken by the
     aperture sliding down to clear the bail, not by a taller stack. common/lc-duplex-adapter@4
-    composes this part and so draws a shorter keyway than its own hardware has - its
-    own `bores` note says why it has not moved to the bulkhead aperture. A seated
+    composed this part and so drew a shorter keyway than its own hardware has; @5
+    composes the bulkhead aperture instead, its ferrule axis moved to hold it. A seated
     generic/lc-plug@2 is drawn with its latch compressed to the BULKHEAD keyway's
     end, 5.71 from the ferrule, so in this receptacle it runs 1.76 past the drawn
     keyway; that is this understatement showing, not a fault in the plug.
@@ -61,8 +61,9 @@ provenance:
     THIS IS THE TRANSCEIVER RECEPTACLE. std/lc-bulkhead-bore@1 is the BULKHEAD
     aperture: the same square, widths and mate, with the full 3.36 keyway a
     panel adapter carries, measured off SENKO DS-LC-000010. A transceiver
-    composes this part; a panel adapter composes that one, except where its own
-    outline cannot hold the longer keyway (common/lc-duplex-adapter@4).
+    composes this part; a panel adapter composes that one - every panel adapter
+    in the library now does, common/lc-duplex-adapter@5 since its ferrule axis
+    moved to hold the longer keyway (that part's provenance.axis).
   gap: >-
     NOT STATED BY ANYONE, and this is a fact about the corpus rather than about one book.
     Five documents draw this receptacle and none dimensions its latch slot - QSFP-DD

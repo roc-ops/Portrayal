@@ -135,7 +135,7 @@ def test_a_plug_seats_on_a_directly_placed_adapter(tmp_path):
     `<placement>/tx` is a live key: seated inside that placement's group."""
     root, parents = render(direct(tmp_path, {"port-1510/tx": PLUG}), tmp_path / "o",
                            "dcp-r-34d-cs", "default")
-    assert_seated_on_bore(root, parents, "port-1510", "tx", "common/lc-duplex-adapter@4",
+    assert_seated_on_bore(root, parents, "port-1510", "tx", "common/lc-duplex-adapter@5",
                           "port-1510/tx")
     assert occupant_paths(root) == ["port-1510/tx-occupant"]
 
@@ -181,7 +181,7 @@ def test_lint_the_same_keys_lint_clean(tmp_path, make, occ):
 
 @pytest.mark.parametrize("make, occ, why", [
     (fhd, {"bay-1/lc01/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
-    (direct, {"port-1510/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bore@3 presents 'lc'"),
+    (direct, {"port-1510/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
     (fhd, {"bay-1/lc01/tx/nope": PLUG}, "occupants/bay-1/lc01/tx/nope"),
     (fhd, {"bay-1/lc99/tx": PLUG}, "'lc99'"),
     (a22, {"slot-1/nope/tx": PLUG}, "'nope'"),

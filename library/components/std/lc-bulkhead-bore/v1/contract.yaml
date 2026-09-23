@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-bulkhead-bore
-version: 1.0.0
+version: 1.0.1
 class: port
 interface: lc
 profile: networking
@@ -72,10 +72,13 @@ provenance:
     THIS IS THE BULKHEAD APERTURE. std/lc-bore@3 is the TRANSCEIVER receptacle:
     same square, same widths, same mate, a 1.60 keyway fitted to an 8.5 module
     face. A panel adapter composes this part; a transceiver composes that one.
-    common/lc-duplex-v-adapter@5 (the FS FHD cassettes) composes this.
-    common/lc-duplex-adapter@4 (Smartoptics) does NOT yet: at its drawn axis the
-    5.71 reach runs 0.21 past its 11.0 outline, and its own `bores` note says
-    why the bores were not moved.
+    common/lc-duplex-v-adapter@5 (the FS FHD cassettes),
+    common/lc-duplex-shuttered-adapter@2 (FS's 36-fibre cassettes) and
+    common/lc-duplex-adapter@5 (Smartoptics) compose this. The Smartoptics
+    adapter's @4 did not: at its drawn axis the 5.71 reach ran 0.21 past its
+    11.0 outline, so @5 moved its ferrule axis 0.32 away from the latch side
+    (its provenance.axis says from what reading, and by how much is a drawing
+    constraint).
   ferrule: standard (LC uses a 1.25mm ferrule; SC and FC use 2.5mm)
   depth: estimated (std/lc-bore@3's figure - recess deep enough that the ferrule
     face sits below the surrounding surface)

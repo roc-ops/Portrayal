@@ -202,11 +202,10 @@ free-state variant would be additive.
 fit an 8.5 module face. `std/lc-bulkhead-bore@1` has the same square, widths and
 mate, with the 3.36 keyway measured off the vector line art of SENKO's LC Premium
 Adapter (DS-LC-000010). A panel adapter composes the bulkhead aperture unless its
-own outline cannot hold it. The FS FHD adapter (`lc-duplex-v-adapter@5`) does.
-The Smartoptics adapter stays on the receptacle for now: at its drawn axis the
-longer keyway would run 0.21 past its outline, and its stencil does not settle
-where its ferrules really sit. A seated plug in a transceiver receptacle runs past
-the drawn keyway, which is that receptacle's understatement showing.
+own outline cannot hold it. The FS FHD adapter (`lc-duplex-v-adapter@5`) does, and
+so does the Smartoptics one since its `@5` moved its ferrule axis (see "The
+Smartoptics axis" below). A seated plug in a transceiver receptacle runs past the
+drawn keyway, which is that receptacle's understatement showing.
 
 **Duplex parts stay on the canonical axis, latches up.** `generic/lc-duplex-plug@2`
 composes its two halves at `rotate: 180`, so the pair runs across with both latches
@@ -214,15 +213,50 @@ up. Each host's derived axis then carries the latches onto its bores' keyway
 side: 0 on the Smartoptics adapter (bores turned tongue-up), 270 on the FS one
 (bores turned tongue-left).
 
+### The Smartoptics axis
+
+Added 2026-09-23, when the review page showed a seated plug running past the
+Smartoptics adapter's outline.
+
+**The Smartoptics adapter composes the bulkhead aperture, and its ferrules moved
+to hold it.** `common/lc-duplex-adapter@4` drew its axis at y 5.5, the middle of
+its 11.0 outline, on the transceiver receptacle; the bulkhead keyway reaches 5.71
+from the axis and would have run 0.21 past the edge. `@5` composes
+`std/lc-bulkhead-bore@1` with the axis at 5.82 from the latch-side edge.
+
+**The axis figure is the stencil's direct ferrule reading, and it is an
+estimate.** The DCP-R stencil master R-34D-CS, raster art at 8.86 px/mm, draws the
+ferrule 5.79 from the latch-side edge of each adapter. Re-read across its 34
+cross-connect adapters that figure spans 5.75 to 6.03, depending on the adapter and
+on which pixel counts as the housing's edge. A second figure, 6.33, can be inferred
+by standing SENKO's keyway on the end of the art's own keyway. It was rejected: the
+art's keyway is the draftsman's, reaching 5.11 from its ferrule rather than
+SENKO's 5.71, so it says nothing about where the ferrule sits.
+
+**The last 0.03 is a drawing constraint, not a reading.** The bezel outline now
+runs on the body's own box, as the shuttered adapter's does. `@4` drew it inset
+0.1, a seam with no source. Its 0.2 stroke covers the top 0.10 of the part, and at
+5.79 the keyway would cut into that by 0.02. At 5.82 the keyway ends 0.01 clear of
+the stroke. Moving the outline is a drawing change, and so is the extra 0.03; the
+part says both.
+
+**The placements did not move; the ferrules moved inside them.** Every composer
+keeps its adapter where its own source put it: three Smartoptics devices place it
+directly, and nine modules compose it. Every fibre position, bore mate, duplex
+seat and seated cap or plug on that chain moves 0.32 along the adapter's own
+vertical axis. It moves down on a row placed unturned and up on a row placed at
+`rotate: 180`. Nothing else on those faces moves. A source that fixes the axis
+would move it again; the two stencil readings lie 0.54 apart.
+
 ### The shipped default
 
 A slot's default is declared on the part that presents it, in the component that
 composes it:
 
 ```yaml
-# library/components/common/lc-duplex-adapter/v4/contract.yaml
+# library/components/common/lc-duplex-adapter/v5/contract.yaml
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180,
+  - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180,
      default: common/lc-dust-cap@1}
 ```
 

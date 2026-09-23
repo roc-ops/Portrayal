@@ -48,7 +48,7 @@ MPO_CAP = "common/mpo-dust-cap@2"
 # each one against the sentence it was taken from, so this table cannot drift
 # away from its source in silence.
 ABSOLUTE_OUT = {LC_CAP: 9.525, LC_DUPLEX_CAP: 5.5, SC_CAP: 3.3}
-ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 4),
+ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 5),
               LC_DUPLEX_CAP: ("common/lc-duplex-v-adapter", 5),
               SC_CAP: ("common/sc-duplex-adapter", 4)}
 MATES = {LC_CAP: "lc", LC_DUPLEX_CAP: "lc-duplex", SC_CAP: "sc", MPO_CAP: "mpo"}
@@ -288,7 +288,7 @@ def test_a_feature_inside_a_cap_is_lifted_onto_the_caps_own_front(ref, node, inn
 # --- the devices the caps are seated on ------------------------------------------------
 
 def dcp(tmp_path, occupants):
-    """smartoptics/dcp-r-34d-cs, which PLACES common/lc-duplex-adapter@4 as
+    """smartoptics/dcp-r-34d-cs, which PLACES common/lc-duplex-adapter@5 as
     port-1510, with a configuration seating caps in its bores."""
     dev = shutil.copytree(LIB / "devices" / DCP, tmp_path / "dcp") / "device.yaml"
     d = yaml.safe_load(dev.read_text())
@@ -498,7 +498,7 @@ def l112(ref, root=None):
     return [e for e in got.errors if "[L112]" in e]
 
 
-@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 4),
+@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 5),
                                         ("common/lc-duplex-v-adapter", 5)])
 def test_both_library_adapters_lift_their_bores_to_the_depth_they_present(name, major):
     """What a test used to say about these two by name, now asked by the rule -
@@ -510,7 +510,7 @@ def test_both_library_adapters_lift_their_bores_to_the_depth_they_present(name, 
     assert l112(f"{name}@{major}") == []
 
 
-@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 4),
+@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 5),
                                         ("common/lc-duplex-v-adapter", 5)])
 def test_lint_refuses_a_bore_at_a_different_depth_from_the_slot(tmp_path, name, major):
     """The fault the rule exists for: the bores drop to the panel while the

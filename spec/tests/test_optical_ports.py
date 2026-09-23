@@ -140,8 +140,8 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
     contract = {
         "name": "t-coupler",
         "parts": [
-            {"id": "common", "ref": "common/lc-duplex-adapter@4"},
-            {"id": "split", "ref": "common/lc-duplex-adapter@4"},
+            {"id": "common", "ref": "common/lc-duplex-adapter@5"},
+            {"id": "split", "ref": "common/lc-duplex-adapter@5"},
         ],
         "optical": {
             "polish": "upc",
@@ -150,7 +150,7 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
                               {"at": "split.2", "ratio": 50}]}],
         },
     }
-    known = {"common/lc-duplex-adapter@4": {"optical": {"positions": 2}}}
+    known = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}}}
     doc = D.build_module(contract, "Vendor", known.get)
     assert "front-ports" not in doc
     assert "rear-ports" not in doc
@@ -209,13 +209,13 @@ def test_a_split_carries_its_ratio():
 def test_a_splice_rear_exports_as_one_splice_port():
     """C2, and upstream's own convention: the devicetype-library ships ADC's
     PPP-SC-SM with `rear-ports: [{name, type: splice, positions: 1}]`."""
-    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@4",
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@5",
                         "at": [0, 0]}],
              "faces": {"rear": {"ref": "t/splice-rear@1"}},
              "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
                          "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
                                    {"from": "lc1.2", "to": "rear:splice.2"}]}}
-    known = {"common/lc-duplex-adapter@4": {"optical": {"positions": 2}},
+    known = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}},
              "common/fibre-splice@1": {"optical": {"positions": 2}},
              "t/splice-rear@1": {"parts": [{"id": "splice",
                                             "ref": "common/fibre-splice@1"}]}}
@@ -230,13 +230,13 @@ def test_a_declared_rear_kind_does_not_override_a_known_family():
     rear face would export both as `type: splice`. The connector family wins
     when it is known; `rear-kind` is only the fallback for a part - like a
     splice tray - that composes nothing `FAMILY` recognises."""
-    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@4",
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@5",
                         "at": [0, 0]}],
              "faces": {"rear": {"ref": "t/mixed-rear@1"}},
              "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
                          "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
                                    {"from": "lc1.2", "to": "rear:mtp.1"}]}}
-    known = {"common/lc-duplex-adapter@4": {"optical": {"positions": 2}},
+    known = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}},
              "common/fibre-splice@1": {"optical": {"positions": 2}},
              "common/mpo-adapter@2": {"optical": {"positions": 12}},
              "t/mixed-rear@1": {"parts": [

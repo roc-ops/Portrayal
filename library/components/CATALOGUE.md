@@ -83,10 +83,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/keystone-clip@1` | component | mechanical | 14.8 × 19.3 | keystone-opening | 0 | 0 | A generic snap-in keystone clip opening, as fitted to an FS FHD keystone panel |
 | `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 4 | 3 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 7 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
-| `common/lc-duplex-adapter@4` | component | port | 13.2 × 11 | lc-duplex | 3 | 19 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
+| `common/lc-duplex-adapter@5` | component | port | 13.2 × 11 | lc-duplex | 3 | 12 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 0 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
-| `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 2 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
-| `common/lc-duplex-v-adapter@5` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 23 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 4 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
+| `common/lc-duplex-v-adapter@5` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 22 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 1 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
@@ -150,7 +150,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `generic/lc-duplex-plug@2` | component | port | 11.83 × 8.535 | lc-duplex | 0 | 0 | An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a duplex LC adapter at once |
-| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 9 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
+| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 8 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 2 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 1 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
 | `generic/qsfp-dd-lc@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |

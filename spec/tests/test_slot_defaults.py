@@ -38,7 +38,7 @@ PLUG = "generic/lc-plug@2"
 OTHER = "test/other-plug@1"
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a"
 V_ADAPTER = "common/lc-duplex-v-adapter"     # what the cassette composes (@5)
-H_ADAPTER = "common/lc-duplex-adapter"       # what dcp-r-34d-cs places (@4)
+H_ADAPTER = "common/lc-duplex-adapter"       # what dcp-r-34d-cs places (@5)
 
 
 # --- the throwaway library ---------------------------------------------------------
@@ -118,7 +118,7 @@ def lib(tmp_path):
         c["default"] = PLUG
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(root, H_ADAPTER, 4, "self-hadapter", h_adapter)
+    _copy(root, H_ADAPTER, 5, "self-hadapter", h_adapter)
     return root
 
 
@@ -467,7 +467,7 @@ def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
         c["default"] = "test/booted-plug@1"
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(booted, H_ADAPTER, 4, "booted-hadapter", h_adapter)
+    _copy(booted, H_ADAPTER, 5, "booted-hadapter", h_adapter)
     dev = dcp(tmp_path)
     d = yaml.safe_load(dev.read_text())
     for view in d["views"].values():
@@ -545,7 +545,7 @@ def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_pa
         c["default"] = "test/booted-plug@1"
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(booted, H_ADAPTER, 4, "booted-hadapter", h_adapter)
+    _copy(booted, H_ADAPTER, 5, "booted-hadapter", h_adapter)
     dev = dcp(tmp_path)
     d = yaml.safe_load(dev.read_text())
     n = 0

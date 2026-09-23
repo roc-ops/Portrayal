@@ -62,11 +62,11 @@ POSITIONS = {DUPLEX: 2, SC: 1, MPO12: 12, MPO24: 24}
 # describes its outline - which is a claim the contract has to defend in prose
 CONFORMS = {DUPLEX: None, SC: "sc-plug", MPO12: "mpo-plug", MPO24: "mpo-plug"}
 
-DCP = "smartoptics/dcp-r-34d-cs"      # places common/lc-duplex-adapter@4
+DCP = "smartoptics/dcp-r-34d-cs"      # places common/lc-duplex-adapter@5
 FHD = "fs/fhd-1ufce"
 LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@5
 SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
-H_ADAPTER = "common/lc-duplex-adapter@4"
+H_ADAPTER = "common/lc-duplex-adapter@5"
 
 
 def contract(ref):
@@ -357,7 +357,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     """THE ASSERTION THE COMPOSITION EXISTS FOR, and it is made in the DEVICE
     frame rather than on the contract's own arithmetic.
 
-    `common/lc-duplex-adapter@4` composes two std/lc-bore@3 at `rotate: 180`,
+    `common/lc-duplex-adapter@5` composes two std/lc-bulkhead-bore@1 at `rotate: 180`,
     6.25 apart. The plug composes two generic/lc-plug@2 6.25 apart, each turned
     180 so its latch stands up (the canonical axis).
     Neither contract knows about the other; what has to be true is that once
@@ -377,7 +377,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     assert not is_inside(parents, occ, adapter)
     assert parents[occ] is parents[adapter]
 
-    plug, bore = contract(DUPLEX), contract("std/lc-bore@3")
+    plug, bore = contract(DUPLEX), contract("std/lc-bulkhead-bore@1")
     half = contract(LC)
     bores = {q["id"]: q for q in contract(H_ADAPTER)["parts"]}
     pairs = [("a", "tx"), ("b", "rx")]

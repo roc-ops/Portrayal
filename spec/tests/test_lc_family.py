@@ -34,6 +34,7 @@ NECK = (3.46, 0.42)
 SHOULDER = (4.7, 0.49)
 TONGUE = (2.64, 0.69)
 APERTURE = (4.7, 6.3)
+LC_BORES = ("std/lc-bore@", "std/lc-bulkhead-bore@")
 
 
 def contract(ref):
@@ -125,13 +126,15 @@ def test_every_invented_relief_magnitude_says_it_is_invented():
 def test_the_three_faces_compose_the_bore_tongue_up():
     # Every receptacle in the corpus is drawn latch-up; the part draws it down,
     # so each placement turns it. A placement that forgets is upside down.
-    for ref, ids in (("common/lc-duplex-adapter@4", ("tx", "rx")),
-                     ("common/sfp-lc-duplex@1", ("lc-a", "lc-b")),
-                     ("common/qsfp-transceiver@1", ("tx", "rx"))):
-        parts = {p["id"]: p for p in contract(ref)["parts"] if p["ref"].startswith("std/lc-bore@")}
+    # The panel adapter composes the BULKHEAD aperture since its @5 (B3, "The
+    # Smartoptics axis"); the transceivers keep the receptacle.
+    for ref, bore, ids in (("common/lc-duplex-adapter@5", "std/lc-bulkhead-bore@1", ("tx", "rx")),
+                           ("common/sfp-lc-duplex@1", "std/lc-bore@3", ("lc-a", "lc-b")),
+                           ("common/qsfp-transceiver@1", "std/lc-bore@3", ("tx", "rx"))):
+        parts = {p["id"]: p for p in contract(ref)["parts"] if p["ref"].startswith(LC_BORES)}
         assert set(parts) == set(ids), ref
         for p in parts.values():
-            assert p["ref"] == "std/lc-bore@3", ref
+            assert p["ref"] == bore, ref
             assert p["rotate"] == 180, ref
 
 
@@ -144,13 +147,17 @@ def test_the_adapter_bore_centres_sit_on_the_verified_pitch():
     # there from a plan arithmetic error (13.2/2 - 6.25/2 computed as 3.175
     # instead of 3.475) that left the pair 0.300 off the body's own centre;
     # review caught it. The dust caps moved with them, so they still plug the
-    # bore SQUARE, which still starts at y 3.15.
-    c = contract("common/lc-duplex-adapter@4")
+    # bore SQUARE. That square started at y 3.15 until @5 put the bulkhead
+    # aperture here and moved the ferrule axis from 5.5 to 5.82 to hold its
+    # keyway (the contract's provenance.axis): the x centres did not move.
+    c = contract("common/lc-duplex-adapter@5")
     parts = {p["id"]: p for p in c["parts"]}
     for pid, x in (("tx", 1.125), ("rx", 7.375)):
-        assert parts[pid]["at"] == [x, 1.55]
-        # at.y + tongue+shoulder+neck = the square's top edge, rotated
-        assert round(parts[pid]["at"][1] + 1.60, 6) == 3.15
+        assert parts[pid]["at"] == [x, 0.11]
+        # at.y + tongue+shoulder+neck (1.42 + 1.19 + 0.75) = the square's top
+        # edge, rotated; the square runs 4.7 on to 2.35 past the ferrule axis
+        assert round(parts[pid]["at"][1] + 3.36, 6) == 3.47
+        assert round(3.47 + 2.35, 6) == 5.82
     # the caps that used to plug that square are occupants now, not the
     # adapter's own elements - see the contract's provenance.dust-caps
     assert not any(k.startswith("cap") for k in (c.get("elements") or {}))
@@ -164,9 +171,10 @@ def test_the_adapter_bore_pair_is_centred_in_the_body():
     # relationship, not the literal coordinates, so this survives the next
     # legitimate move of either the pitch or the body width: the pair's
     # midpoint must equal the body's own centre.
-    c = contract("common/lc-duplex-adapter@4")
-    bore_w = contract("std/lc-bore@3")["size"]["w"]
-    xs = sorted(p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bore@3")
+    c = contract("common/lc-duplex-adapter@5")
+    bore_w = contract("std/lc-bulkhead-bore@1")["size"]["w"]
+    xs = sorted(p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bulkhead-bore@1")
+    assert len(xs) == 2, xs
     centres = [x + bore_w / 2 for x in xs]
     midpoint = sum(centres) / 2
     assert round(midpoint, 6) == round(c["size"]["w"] / 2, 6), (
@@ -209,15 +217,18 @@ def ferrule_centres(ref):
     """Where each composed bore's ferrule actually lands on the parent face.
 
     The ferrule sits at (2.35, 2.35) in the bore's own frame; rotate: 180 turns
-    the part about its own centre, which puts it at (2.35, 6.3 - 2.35).
+    the part about its own centre, which puts it at (2.35, h - 2.35) - h 6.3
+    for the receptacle, 8.06 for the bulkhead aperture.
     """
     out = []
     for p in contract(ref)["parts"]:
-        if not p["ref"].startswith("std/lc-bore@"):
+        if not p["ref"].startswith(LC_BORES):
             continue
         x, y = p["at"]
         assert p.get("rotate") == 180, ref
-        out.append((round(x + 2.35, 6), round(y + APERTURE[1] - 2.35, 6)))
+        bore = contract(p["ref"])
+        mx, my = bore["connection-points"]["mate"]["at"]
+        out.append((round(x + bore["size"]["w"] - mx, 6), round(y + bore["size"]["h"] - my, 6)))
     return sorted(out)
 
 
@@ -230,7 +241,7 @@ def test_the_declared_optical_point_is_where_the_ferrules_actually_are():
     even when prose cannot, so check them: whatever the placements resolve to
     is what `optical` has to say, on all three faces.
     """
-    for ref, keys in (("common/lc-duplex-adapter@4", ["optical"]),
+    for ref, keys in (("common/lc-duplex-adapter@5", ["optical"]),
                       ("common/sfp-lc-duplex@1", ["optical"]),
                       ("common/qsfp-transceiver@1", ["optical-tx", "optical-rx"])):
         centres = ferrule_centres(ref)

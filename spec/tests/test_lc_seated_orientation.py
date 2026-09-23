@@ -19,8 +19,10 @@ bore, spanning axis, duplex half) is in the answer:
   (a) a seated plug's latch lies on the same side of its mate as the host
       bore's keyway, for every simplex plug in a bore and every half of a
       duplex plug in an adapter slot;
-  (b) on a bulkhead aperture, the seated plug reaches no further along the
-      latch axis than the bore's own outline does, to 0.05;
+  (b) the seated plug reaches no further along the latch axis than its
+      bore's own outline does, to 0.05 - on every LC adapter the library
+      places, the Smartoptics one included, and each of those bores is the
+      bulkhead aperture;
   (c) the same latch-side check for the SC plug in its bore - a guard, since
       both are drawn key-left and already agree;
   (d) L112's latch-side arm: the axis a duplex host derives puts a duplex
@@ -55,7 +57,7 @@ DUPLEX = "generic/lc-duplex-plug@2"
 SC = "generic/sc-plug@1"
 BULKHEAD = "std/lc-bulkhead-bore@1"
 RECEPTACLE = "std/lc-bore@3"
-H_ADAPTER = "common/lc-duplex-adapter@4"        # Smartoptics, side by side
+H_ADAPTER = "common/lc-duplex-adapter@5"        # Smartoptics, side by side
 V_ADAPTER = "common/lc-duplex-v-adapter@5"      # FS FHD cassettes, stacked
 S_ADAPTER = "common/lc-duplex-shuttered-adapter@2"  # FS 36-fibre, side by side
 LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"
@@ -242,7 +244,8 @@ def wrong_side(pairs):
 
 def overrun(pairs, bore_prefix):
     """{plug path: how far its silhouette runs past its bore's outline along
-    the bore's latch axis}, for the plugs seated in bores `bore_prefix` names."""
+    the bore's latch axis}, for the plugs seated in bores `bore_prefix` names
+    (a prefix or a tuple of them)."""
     out = {}
     for (el, _mate, _latch, corners), (bel, bmate, side, reach) in pairs:
         if _ref(bel).startswith(bore_prefix):
@@ -343,26 +346,37 @@ def test_a_duplex_plug_with_unturned_halves_is_caught(tmp_path):
 
 # --- (b) the seated latch stays inside the bulkhead keyway -------------------------
 
-@pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36"])
+LC_BORES = ("std/lc-bulkhead-bore@", "std/lc-bore@")
+
+
+@pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path, which):
-    """On the FS cassettes, whose adapters compose the bulkhead aperture: the
-    compressed latch runs no further along the latch axis than the keyway
-    does. Measured on the plug's whole drawn silhouette, not only its tip."""
+    """On the FS cassettes and on the Smartoptics DCP, whose adapters compose
+    the bulkhead aperture: the compressed latch runs no further along the
+    latch axis than the keyway does. Measured on the plug's whole drawn
+    silhouette, not only its tip, against WHATEVER LC bore it landed in - so
+    an adapter still on the transceiver receptacle is measured too, and fails
+    here by that receptacle's short keyway rather than being skipped."""
     svg, parents = build_lc(tmp_path, which)
-    got = overrun(seated_pairs(svg, parents), "std/lc-bulkhead-bore@")
+    pairs = seated_pairs(svg, parents)
+    got = overrun(pairs, LC_BORES)
     assert len(got) == EXPECTED[which] > 0, got
     assert all(v <= TOL for v in got.values()), got
+    landed = sorted({_ref(b[0]) for _p, b in pairs})
+    assert landed == [BULKHEAD], landed
 
 
-def test_a_free_latch_overruns_the_bulkhead_keyway(tmp_path):
+@pytest.mark.parametrize("which", ["fhd", "dcp"])
+def test_a_free_latch_overruns_the_bulkhead_keyway(tmp_path, which):
     """Non-vacuity for (b): a plug drawn with its latch FREE reaches 7.605
     from its axis, 1.9 past the bulkhead keyway, and the same measurement finds
-    every one while the seated duplex halves beside them stay inside."""
+    every one while the seated duplex halves beside them stay inside - on the
+    FS cassette and on the Smartoptics adapter, both turns of its row."""
     root = tmp_path / "lib"
-    svg, parents = build_lc(tmp_path, "fhd", simplex=_free_latch(root), root=root)
-    got = overrun(seated_pairs(svg, parents, root), "std/lc-bulkhead-bore@")
+    svg, parents = build_lc(tmp_path, which, simplex=_free_latch(root), root=root)
+    got = overrun(seated_pairs(svg, parents, root), LC_BORES)
     simplex = {k: v for k, v in got.items() if k.endswith("-occupant")}
-    assert len(simplex) == len(LC_SIMPLEX_KEYS["fhd"]) > 0, got
+    assert len(simplex) == len(LC_SIMPLEX_KEYS[which]) > 0, got
     assert all(v == pytest.approx(7.605 - 5.71, abs=0.01) for v in simplex.values()), got
     assert all(v <= TOL for k, v in got.items() if k not in simplex), got
 
@@ -378,15 +392,52 @@ def test_the_seated_latch_reaches_exactly_the_bulkhead_keyway_end():
     assert plug["size"]["h"] - pm[1] > pm[1], "the plug is not drawn latch down"
 
 
-def test_in_the_transceiver_receptacle_the_latch_overruns_the_drawn_keyway():
-    """Recorded, not hidden: std/lc-bore@3's 1.60 stack is a known
-    understatement (its own `short-keyway`), so the seated latch runs past it,
-    and the plug says so."""
-    plug, bore = contract(LC), contract(RECEPTACLE)
-    reach = plug["size"]["h"] - plug["connection-points"]["mate"]["at"][1]
-    keyway = bore["size"]["h"] - bore["connection-points"]["mate"]["at"][1]
-    assert reach - keyway > 1.0
-    assert "std/lc-bore@3" in plug["provenance"]["receptacle"]
+def _outline(ref):
+    """The adapter skin's bezel OUTLINE - the first subpath of `#bezel`, a
+    rectangle - as (x0, y0, x1, y1), and that path's stroke width."""
+    ns, rest = ref.split("/", 1)
+    name, major = rest.split("@")
+    skin = ET.parse(LIB / "components" / ns / name / f"v{major}" / "skins" / "default.svg")
+    bezel = next(e for e in skin.iter() if e.get("id") == "bezel")
+    head = re.match(r"\s*M\s*([\d.]+)\s+([\d.]+)\s*h\s*([\d.]+)\s*v\s*([\d.]+)\s*h\s*-",
+                    bezel.get("d"))
+    assert head, bezel.get("d")[:60]
+    x, y, w, h = (float(g) for g in head.groups())
+    return (x, y, x + w, y + h), float(bezel.get("stroke-width"))
+
+
+def test_the_smartoptics_adapters_keyway_fits_inside_its_outline():
+    """THE FIT, pinned where the overrun used to be (B3, "The Smartoptics
+    axis"). The adapter composes the bulkhead aperture, turned 180 so its
+    keyway runs UP from each ferrule; the keyway's end - the bore box's edge
+    farthest from its mate - lies inside the bezel outline AND clear of that
+    outline's stroke, and the rest of each bore box inside the outline too.
+    Read off the contract and the skin, so it holds whatever device places
+    the part."""
+    c = contract(H_ADAPTER)
+    bulk = contract(BULKHEAD)
+    (x0, y0, x1, y1), sw = _outline(H_ADAPTER)
+    inner = (x0 + sw / 2, y0 + sw / 2, x1 - sw / 2, y1 - sw / 2)
+    bores = [q for q in c["parts"] if q["id"] in ("tx", "rx")]
+    assert len(bores) == 2
+    bw, bh = bulk["size"]["w"], bulk["size"]["h"]
+    bmx, bmy = bulk["connection-points"]["mate"]["at"]
+    for q in bores:
+        assert q["ref"] == BULKHEAD, q
+        assert q.get("rotate") == 180, q
+        ax, ay = q["at"]
+        # rotate 180 about the box centre: the box stays put, the mate flips
+        mate = (ax + bw - bmx, ay + bh - bmy)
+        keyway_end = ay                        # the box edge the tongue reaches
+        assert mate[1] - keyway_end == pytest.approx(bh - bmy, abs=1e-9)
+        assert keyway_end >= inner[1] - 1e-9, (q["id"], keyway_end, inner[1])
+        assert inner[0] <= ax and ax + bw <= inner[2], q
+        assert ay + bh <= inner[3], q
+    # the seat moved with the bores: the pair's midpoint is still the mate
+    mx = sum(ax + bw - bmx for ax, _ay in (q["at"] for q in bores)) / 2
+    my = bores[0]["at"][1] + bh - bmy
+    assert c["connection-points"]["mate"]["at"] == pytest.approx([mx, my], abs=1e-9)
+    assert c["connection-points"]["optical"]["at"] == pytest.approx([mx, my], abs=1e-9)
 
 
 # --- (c) the SC guard --------------------------------------------------------------

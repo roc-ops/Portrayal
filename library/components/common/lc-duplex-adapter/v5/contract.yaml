@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 4.1.1
+version: 5.0.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): a duplex connector - a duplex dust cap, a duplex plug -
@@ -47,41 +47,58 @@ provenance:
     standards.yaml's own note corroborates the result: 'a duplex pair spans
     pitch plus the body width (10.95)', which leaves 1.125 each side of 13.2.
   bores: >-
-    std/lc-bore@3 - the KEYED opening, 4.7 wide by 6.3, whose first tier is the 4.7
-    square from the ProLabs CWDM4 section A-A. This composed @1 (4.6 x 4.4,
-    proportional, unsourced), then @2 (4.7 square) when the two versions were
-    collapsed, and now @3 when that square turned out to be one tier of four (#126).
-    THE CENTRE HAS NOT MOVED VERTICALLY ACROSS ANY OF IT, and the dust caps still
-    plug the bore square, which still starts at y 3.15; the 1.60 of keyway is new
-    material above it. The HORIZONTAL centres DID move, twice - from (3.3, 5.5) and
-    (9.9, 5.5) to (3.175, 5.5) and (9.425, 5.5) when the pitch was corrected to the
-    verified standard, and then to (3.475, 5.5) and (9.725, 5.5) when review caught
-    that the first correction had mis-centred the pair in the 13.2-wide body by
-    0.300; see `bore-spacing` above for both moves. Each placement carries rotate: 180
-    so the latch tongue points up, as a panel-mount adapter is fitted. THE KEYWAY
-    THIS DRAWS IS SHORTER THAN THIS PART'S OWN HARDWARE: @3 is sized for a
-    transceiver face and SENKO's bulkhead adapter DS-LC-000010 carries a 3.36 stack
-    rather than 1.60. That is recorded on @3 under `short-keyway`.
-    WHY THIS ADAPTER DOES NOT COMPOSE std/lc-bulkhead-bore@1, which is the bulkhead
-    aperture and what common/lc-duplex-v-adapter@5 composes. Its keyway ends 5.71
-    from the ferrule axis, and this part's axis is at y 5.5 of an 11.0 outline with
-    the tongue toward y 0: the keyway would run 0.21 past the edge. Moving the
-    bores away from the latch side would fix that, and the stencil this part is
-    measured off does not settle by how much. Its art (DCP-R master R-34D-CS, about
-    8.86 px/mm on the 11.5 row pitch) draws each adapter about 10.0 tall - not this
-    part's 11.0, which is the row pitch less a gap - with the ferrule 5.79 from the
-    latch-side edge and 4.26 from the other; read that way the axis clears the
-    keyway by 0.08, less than one pixel of the art (0.11). Read instead off the
-    art's own keyway, which ends 0.62 inside its housing, the axis would sit 6.33
-    from the edge. The art's bore is the drafter's (its keyway reaches 5.11 from
-    its ferrule, not SENKO's 5.71), so the two readings disagree by 0.6 and
-    neither is a measurement of where this adapter's ferrule sits. And moving the
-    ferrules inside this part moves the fibre position of every one of its
-    composers - three devices and nine modules - each placed off its own
-    source, unless every placement moves with them. Left on @3
-    until a source fixes the axis; a seated generic/lc-plug@2's compressed latch
-    reaches 0.21 past this outline in the meantime, which is the same gap seen
-    from the plug
+    std/lc-bulkhead-bore@1 SINCE THIS MAJOR - the BULKHEAD aperture, whose keyway ends
+    5.71 from the ferrule axis (measured off SENKO's LC Premium Adapter,
+    DS-LC-000010; that part's `keyway` note). @4 composed std/lc-bore@3, the
+    TRANSCEIVER receptacle, whose 1.60 keyway is cut short to fit a module face, so
+    a seated plug's compressed latch ran 1.76 past the keyway this part drew and
+    0.21 past its outline. Before that the bore was @1 (4.6 x 4.4, proportional,
+    unsourced), @2 (the 4.7 square) and @3 (#126).
+    THE FERRULE AXIS MOVED FOR IT, 0.32 AWAY FROM THE LATCH SIDE: from y 5.5 to
+    5.82, so the bores' mates are now (3.475, 5.82) and (9.725, 5.82) and so are
+    every fibre position and duplex seat on this part - see `axis`. The HORIZONTAL
+    centres are unchanged: 3.475 and 9.725, the verified 6.25 pitch centred in the
+    13.2 body (see `bore-spacing`). Each placement carries rotate: 180 so the latch
+    tongue points up, as a panel-mount adapter is fitted; `at` is the unrotated
+    box's corner and the turn is about its centre, so a bore at [1.125, 0.11] has
+    its mate at (1.125 + 2.35, 0.11 + 5.71) and its keyway end at y 0.11.
+  axis: >-
+    ESTIMATED - 5.82 FROM THE LATCH-SIDE EDGE: the stencil's direct ferrule
+    reading, 5.79, plus the smallest move that clears the outline's stroke.
+    THE READING. The DCP-R stencil master R-34D-CS is raster art at 8.86 px/mm
+    (its two rows of ferrules stand 102.0 px apart against the 11.5 row pitch).
+    It draws each adapter about 10.0 tall - not this part's 11.0, which is the
+    row pitch less a gap - with the ferrule 5.79 from the latch-side edge and
+    4.26 from the other, so the axis is placed 5.79 from this part's latch-side
+    edge and the extra height of the model falls on the far side. The reading
+    is of a DRAWING, not of the hardware, and it is soft: re-read across the
+    stencil's 34 cross-connect adapters it spans 5.75 to 6.03, by adapter and by
+    which pixel is taken as the housing's edge (the art's pixel is 0.11), and
+    5.79 lies inside that spread. A second figure
+    could be read, 6.33, by standing the SENKO keyway on the end of the art's own
+    keyway, which stops 0.62 inside its housing; it is not used, because the
+    art's bore is the drafter's - its keyway reaches 5.11 from its ferrule, not
+    SENKO's 5.71 - so that is a reading of the drawing's keyway, not of where the
+    ferrule sits.
+    THE MOVE. At 5.79 the keyway ends at y 0.08. The bezel outline is drawn on
+    the body's own box with a 0.2 stroke, so the stroke covers y 0 to 0.10 inside
+    the part, and at 5.79 the keyway would cut into it by 0.02. The axis is
+    therefore 0.03 further from the latch edge than the reading: at 5.82 the
+    keyway ends at y 0.11, 0.01 clear of the stroke. The 0.03 is a drawing
+    constraint, not a measurement, and a source that fixes the axis replaces
+    both figures.
+    THE OUTLINE WAS MOVED FIRST, and that too is a DRAWING change, not a
+    reading: @4 drew the bezel outline inset 0.1 all round, a seam between
+    abutting adapters with no source, whose stroke reached y 0.2 - and at the
+    reading's 5.79 the keyway would have cut it by 0.12. The outline is now the
+    13.2 x 11.0 box itself, as common/lc-duplex-shuttered-adapter@2 draws its
+    own for the same reason; two abutting outlines share one stroke as the
+    seam.
+    WHAT MOVED WITH IT. Every placement of this part stays where its composer put
+    it, off that composer's own source; only the ferrules move inside the body, so
+    every optical position and every seated dust cap or plug on the Smartoptics
+    chain moves 0.32 along the adapter's own vertical axis - down on a row placed
+    unturned, up on a row placed at rotate 180 - and nothing else moves.
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
   dust-caps: >-
@@ -98,7 +115,7 @@ relief:
       out: 3.175
       confidence: photo-measured
       source: >-
-        common/lc-duplex-adapter@4's own stand-off key - 'photo - the adapter body sits
+        this part's own stand-off key - 'photo - the adapter body sits
         about an eighth of an inch proud of the faceplate, not the quarter inch first
         modelled'. 3.175 is that eighth of an inch. A photograph read to the nearest eighth,
         and it CORRECTED an earlier quarter-inch guess, which is why it is photo-measured
@@ -110,25 +127,29 @@ optical:
   # to mistype a number the adapter already knows.
   positions: 2
 parts:
-  # lifted onto the raised bezel, so each bore recesses from the proud face.
-  # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
-  # fitted and how the issue's own photograph shows it; @3 draws it down.
-  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180}
-  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180}
+  # THE BULKHEAD APERTURE, lifted onto the raised bezel, so each bore recesses
+  # from the proud face. rotate 180 puts the latch tongue UP, which is how a
+  # panel-mount adapter is fitted and how the issue's own photograph shows it;
+  # the bore is drawn tongue down. `at` is the unrotated box's corner and the
+  # turn is about its centre: each mate lands at y 0.11 + 5.71 = 5.82 (see
+  # provenance.axis), each keyway ends at y 0.11.
+  - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bulkhead-bore@1, id: rx, at: [7.375, 0.11], lift: 3.175, rotate: 180}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
-  # points, which the pair's placements put at (3.475, 5.5) and (9.725, 5.5) -
+  # points, which the pair's placements put at (3.475, 5.82) and (9.725, 5.82) -
   # the same point `optical` already names, and for the same reason. The
   # quoted `'on'` is the depth - YAML 1.1 reads a bare `on` as true - and it
   # says the bores recess from the raised face, each lifted onto it by the
   # 3.175 of `relief`, so a part seated across both stands on that face too
   # and not at the panel behind it.
-  mate: {at: [6.6, 5.5], direction: front, 'on': bezel}
-  # the midpoint of the two ferrule centres (3.475 and 9.725) - which is,
+  mate: {at: [6.6, 5.82], direction: front, 'on': bezel}
+  # the midpoint of the two ferrule centres (3.475 and 9.725, both at y 5.82
+  # since this major - provenance.axis) - which is,
   # correctly, the 13.2-wide body's own centre (6.6). It was 6.6 originally
   # (from the uncorrected 6.6 stencil pitch, itself centred), moved to 6.3 when
   # the pitch was corrected to the verified standard but the pair was
   # mis-centred by a plan arithmetic error, and is now back to 6.6 - genuinely
   # the body centre this time, because the bores are.
-  optical: {at: [6.6, 5.5], direction: front}
+  optical: {at: [6.6, 5.82], direction: front}
 skins: [default]

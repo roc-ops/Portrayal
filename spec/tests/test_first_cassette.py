@@ -108,7 +108,7 @@ def test_the_ports_are_turned_latch_left_on_the_duplex_pitch():
 def test_its_two_ports_are_stacked_not_side_by_side():
     """THE REASON THIS COMPONENT EXISTS.
 
-    `common/lc-duplex-adapter@4` puts its bores side by side. A 6x crop of
+    `common/lc-duplex-adapter@5` puts its bores side by side. A 6x crop of
     57016.main.jpg shows one dust cap over two ports one ABOVE the other, and
     the faceplate numbers agree - evens along the top, odds along the bottom.
     If a later edit lays these out abreast, this is what says so.

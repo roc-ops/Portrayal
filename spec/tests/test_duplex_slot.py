@@ -37,7 +37,7 @@ from portrayal.render import (_connector_registry, _pluggable_candidates,
 
 ADAPTER = "common/lc-duplex-adapter"        # side by side; dcp-r-34d-cs places it
 V_ADAPTER = "common/lc-duplex-v-adapter"    # stacked; the FHD cassette composes it
-MAJOR = {ADAPTER: 4, V_ADAPTER: 5}
+MAJOR = {ADAPTER: 5, V_ADAPTER: 5}
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a@3"
 PLUG = "generic/lc-plug@2"                  # mates lc - one bore
 DUPLEX = "test/duplex-plug@1"               # mates lc-duplex - the pair
@@ -514,7 +514,7 @@ def test_a_slot_that_spans_nothing_still_publishes_its_placements_rotate(lib):
 
 def dcp2(tmp_path, occupants):
     """smartoptics/dcp-2 in its ILA-node configuration - a dcp-f-a22 in
-    `slot-1`, which composes two `common/lc-duplex-adapter@4` on a raised
+    `slot-1`, which composes two `common/lc-duplex-adapter@5` on a raised
     block - with one configuration carrying `occupants`. `slot-1/edfa` is the
     first adapter's own spanning slot, three levels down."""
     dev = shutil.copytree(LIB / "devices/smartoptics/dcp-2",
