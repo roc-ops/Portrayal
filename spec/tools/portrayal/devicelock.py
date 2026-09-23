@@ -178,8 +178,8 @@ def _placement_attrs(doc):
 #
 # `_placements` hashes where a part is and what it is, `_placement_groups`,
 # `_placement_skins` and `_placement_attrs` three more of its keys - and that
-# left thirteen keys of a placement, and the ones a bay shares with it, that
-# could be rewritten with `required_bump` returning None. `rel-pos` alone is
+# left thirteen keys of a placement, the ones a bay shares with it, and five a
+# bay alone states, that could be rewritten with `required_bump` returning None. `rel-pos` alone is
 # stated 11,522 times. Each is sorted by what `render.py`, `expand.py`,
 # `dcim_export.py` and `lint.py` do with it, not by how its name reads.
 #
@@ -196,12 +196,29 @@ def _placement_attrs(doc):
 #   `interfaces`      the DCIM export emits one interface per id INSTEAD OF the
 #                     placement's own, so even adding it retires a name a
 #                     consumer holds (#443). Addressing, but never additive.
+#   `opening`         (bay) the hole `render.py` punches, centred in `size`;
+#                     the kit cuts it and an empty bay shows exactly it
+#   `floor`           (bay) the shelf an occupant stands on in its well - it
+#                     sets the occupant's `data-z-lift`, as `in` does
+#   `plan`, `rear`    (bay) where the occupant is PROJECTED on another face -
+#                     a view, an `at` there, and for `rear` the cutout it is
+#                     seen through, which also makes the bay an open-back
+#                     passage in 3D. Coordinates on a face, so a move is a
+#                     slot moving, just on the other side of the chassis
 # ADDRESSING - `for` and `rel-pos`. What a part is bound to (`data-for`, which
 # the explorer tree nests on) and its ENTITY-MIB position under its parent.
 # Rebinding or renumbering is major like a group moving; STATING a `for` where
 # there was none is additive, the case `_placement_groups` draws, because
 # nothing could have been held by a value that was not there - and stating a
 # `rel-pos` asks for nothing at all (see `_addressing_bump`).
+#   `interface`       (bay) the key an occupant's `mates` must name to seat -
+#                     the open-form-factor stand-in for `accepts`, and sorted
+#                     as `accepts` is: `_bay_accepts` sits in `names`, so this
+#                     is addressing. Changing or dropping it withdraws every
+#                     occupant it admitted (major); stating one where there
+#                     was none only admits more, like `accepts` growing (minor).
+#                     Nothing reads it yet but the schema; it is hashed now so
+#                     the first bay to state one is not stated in silence.
 # SURFACE - what a reader sees and nothing computes a coordinate or an address
 # from. Patch.
 #   `states`, `description`  what a lamp's colours mean, and the vendor's words
@@ -210,14 +227,20 @@ def _placement_attrs(doc):
 #   `frames`                 a lint declaration (L13); draws nothing
 #
 # TOGETHER WITH THE KEYS ALREADY HASHED THESE ARE EXHAUSTIVE OVER THE SCHEMA'S
-# placement properties, and test_lock_sees_placement_keys.py holds that - the
-# same guard CHASSIS_SHAPE/CHASSIS_SURFACE have, so a new placement key has to
-# be sorted by whoever adds it rather than default into "hashed nowhere".
+# placement AND bay properties, and test_lock_sees_placement_keys.py holds that
+# - the same guard CHASSIS_SHAPE/CHASSIS_SURFACE have, so a new key on either
+# has to be sorted by whoever adds it rather than default into "hashed nowhere".
+# One set of three serves both kinds, because `_placement_keys` walks bays and
+# placements alike and a key means the same thing on either.
 PLACEMENT_HASHED = {"ref", "id", "at", "rotate", "mirror", "mate-to", "skin",
                     "group", "attrs"}
+# What `_placements`, `_placement_groups` and `_bay_accepts` already read off a
+# bay. `ref` and `mate-to` are read too, but a bay's schema has neither.
+BAY_HASHED = {"id", "at", "size", "rotate", "mirror", "default", "accepts",
+              "group"}
 PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
-                      "interfaces"}
-PLACEMENT_ADDRESSING = {"for", "rel-pos"}
+                      "interfaces", "opening", "floor", "plan", "rear"}
+PLACEMENT_ADDRESSING = {"for", "rel-pos", "interface"}
 PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
                      "frames"}
 
@@ -228,10 +251,13 @@ PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
 # list, or re-spelling one would read as a rebind and ask for a major. This
 # module's first rule is that a change of spelling is not a change.
 # `interfaces` is NOT here: the DCIM export emits them in the order written.
+# A bay's `plan:` carries an `under` of its own, which is the same set.
 _SET_VALUED = {"for", "under", "frames", "only-in"}
 
 
 def _spelled_once(key, value):
+    if key == "plan" and isinstance(value, dict) and value.get("under"):
+        return {**value, "under": _spelled_once("under", value["under"])}
     if key not in _SET_VALUED:
         return value
     return sorted(value if isinstance(value, list) else [value], key=str)
@@ -588,8 +614,9 @@ def entry(doc, versions=None):
 
 
 def _addressing_bump(old, new):
-    """What `for` and `rel-pos` demand: major when a value a placement stated
-    changes or goes, minor when `for` is stated where there was none.
+    """What `for`, `rel-pos` and a bay's `interface` demand: major when a value
+    a placement stated changes or goes, minor when a `for` or an `interface` is
+    stated where there was none.
 
     STATING A `rel-pos` WHERE THERE WAS NONE ASKS FOR NOTHING, which is the
     ruling test_device_versioning.py already holds: six of the eight chassis
@@ -608,8 +635,9 @@ def _addressing_bump(old, new):
         if any(now.get(key) != value for key, value in was.items()
                if key in still_here):
             return "major"              # rebound, renumbered or unstated
-    if set(now_all.get("for") or {}) - set(was_all.get("for") or {}):
-        return "minor"                  # bound where it was not
+    for field in ("for", "interface"):
+        if set(now_all.get(field) or {}) - set(was_all.get(field) or {}):
+            return "minor"              # bound, or opened, where it was not
     return None
 
 
@@ -890,9 +918,10 @@ def check(library: pathlib.Path):
             if "placement-geometry" in was and \
                     was["placement-geometry"] != now["placement-geometry"]:
                 what.append("placement geometry (inset, lift, in, under, "
-                            "only-in, optional, interfaces)")
+                            "only-in, optional, interfaces, opening, floor, "
+                            "plan, rear)")
             if _addressing_bump(was, now) is not None:
-                what.append("placement addressing (for, rel-pos)")
+                what.append("placement addressing (for, rel-pos, interface)")
             if "placement-surface" in was and \
                     was["placement-surface"] != now["placement-surface"]:
                 what.append("placement surface (states, description, "

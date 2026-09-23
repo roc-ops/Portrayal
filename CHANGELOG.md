@@ -52,6 +52,13 @@ the *published build*, not about the hardware.
   cases can be told apart); `states`, `description`, `provenance`,
   `physical-context` and `frames` (a patch). Editing any of them used to ask for
   no bump at all.
+- The same three keys now cover the keys only a bay states: `opening`,
+  `floor`, `plan` and `rear` in `placement-geometry` (a major), and
+  `interface` in `placement-addressing` (a major when changed or removed, a
+  minor when stated where there was none). The eight devices whose bays state
+  one - six Cisco ASR 9000s, the R740xd and the FHD 1U enclosure - were
+  re-locked, and only their `placement-geometry` moved. No device version
+  changed (roc-ops/Portrayal#537).
 - `devices.json` carries `contract: 1` — the first version a consumer can check
   (roc-ops/Portrayal#185).
 - `library/dist/devices.lock.json`: every device's fingerprint in one file,
