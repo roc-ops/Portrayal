@@ -262,7 +262,7 @@ def test_the_skin_draws_the_tiers_where_the_contract_puts_them():
 
 
 def test_the_fibre_position_is_the_ferrule_on_the_axis():
-    """L110: the plug's one fibre is node `1`, the group around the ferrule
+    """L112: the plug's one fibre is node `1`, the group around the ferrule
     end, and its element box is centred on the optical axis."""
     import re
     fibres = {k: v for k, v in contract()["elements"].items() if v.get("class") == "fibre"}

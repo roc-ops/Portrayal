@@ -181,7 +181,12 @@ def main():
                 # already in face order (`lc1`..`lc6`), and silently wrong past
                 # nine of them (`"lc10" < "lc4"`). Carried here now, omitted
                 # when the contract has none, matching `id`/`attrs`.
-                "parts": [{k: p[k] for k in ("ref", "id", "at", "attrs") if k in p}
+                # AND `group`, beside the card's own `groups:` below (#511): a
+                # card's port says what it is FOR through the card's group, and
+                # the DCIM module export reads this index, not the contract - so
+                # a group published nowhere here would type every card port as
+                # if it had none, and mark no management port mgmt_only.
+                "parts": [{k: p[k] for k in ("ref", "id", "at", "attrs", "group") if k in p}
                           for p in data.get("parts") or []],
                 # SPLIT OFF BELOW, not dropped. Both are carried on the entry so
                 # everything downstream of here (relief-confidence, the defect
@@ -196,11 +201,16 @@ def main():
             # swapped into a bay at runtime brings them with it; no
             # configuration of the chassis can say where a card's cages are
             # when it is not the card that configuration seats. `occupant` is
-            # always null and `occupant-attrs` empty - a contract seats
-            # nothing and declares no groups. Omitted when there are none.
+            # dropped - a contract seats nothing - and `occupant-attrs` is the
+            # card group's side for a cage in one of the card's own `groups:`
+            # (#511), empty otherwise. Omitted when there are none.
             cages = component_cages(data, lib, families, candidates)
             if cages:
                 entry["cages"] = cages
+            # THE CARD'S OWN PORT GROUPS (#511), in the device `groups:` shape.
+            # Omitted when the contract declares none, like `cages`.
+            if data.get("groups"):
+                entry["groups"] = data["groups"]
             # WHERE IT MATES, in its own frame - the contract's own `mate.at`,
             # never a forwarded one: an occupant mates with its own point
             # (L11). A consumer seating it in a cage solves its `at` from this

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2000-cb-re-v
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -15,6 +15,14 @@ attrs:
   power-draw-typical-w: 150
   power-draw-max-w: 250
 provenance:
+  speed: 'guide - MX2010 and MX2020 hardware guides, CB-RE Components: each CB-RE has one 10/100/1000-Mbps
+    Ethernet port for a management network; the RJ-45 pinout section says the same of the MGMT
+    port. Carried as 1g. The SFP cage modelled as sfp-mgmt carries NO speed: the same guides
+    describe the CB-RE SFP+ ports as XGE-0/XGE-1 for hardware diagnostics, which the photograph
+    cannot confirm, so no rate is stated'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
   size: 'photo - the MX2010 studio photographs at ~1.1 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
   power: >-
     MX2020 hardware guide, Table 80 'FRU DC Power Requirements': '| CB-RE | REMX2K-X8-64G |
@@ -37,13 +45,26 @@ states:
 - ok
 - fail
 - absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the BITS external clock jack
 parts:
-- {ref: std/rj45@2, id: console, at: [15.1, 55.4], rotate: 90, attrs: {function: serial console}}
-- {ref: std/rj45@2, id: aux, at: [15.1, 78.4], rotate: 90, attrs: {function: auxiliary console}}
-- {ref: common/rj45-eth@1, id: mgmt, at: [15.1, 118.4], rotate: 90, attrs: {function: out-of-band management}}
-- {ref: std/rj45@2, id: bits, at: [15.1, 141.4], rotate: 90, attrs: {function: BITS timing}}
-- {ref: std/usb-a@1, id: usb, at: [20.75, 230.0], attrs: {function: USB service port}}
-- {ref: std/sfp@1, id: sfp-mgmt, at: [15.0, 262.0], rotate: 90, attrs: {function: management SFP}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [15.1, 55.4], rotate: 90, attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [15.1, 78.4], rotate: 90, attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [15.1, 118.4], rotate: 90, attrs: {speed: 1g, media: rj45, function: out-of-band management}}
+- {ref: std/rj45@2, id: bits, group: timing, at: [15.1, 141.4], rotate: 90, attrs: {media: rj48, function: BITS timing}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [20.75, 230.0], attrs: {function: USB service port}}
+- {ref: std/sfp@1, id: sfp-mgmt, group: mgmt, at: [15.0, 262.0], rotate: 90, attrs: {function: management SFP}}
 size:
   w: 55.0
   h: 405.0
