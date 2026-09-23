@@ -273,14 +273,22 @@ export function createShell(opts = {}) {
     let on = false, sx = 0, sy = 0, px = 0, py = 0;
     const st = el.svgHost;
     st.addEventListener('pointerdown', e => { on = true; sx = e.clientX - panX; sy = e.clientY - panY;
-                                              px = e.clientX; py = e.clientY; dragged = false;
-                                              st.setPointerCapture(e.pointerId); });
+                                              px = e.clientX; py = e.clientY; dragged = false; });
     st.addEventListener('pointermove', e => { if (!on) return;
+                                              // released outside the stage before it became a drag, so
+                                              // nothing captured the pointerup
+                                              if (!e.buttons) { on = false; return; }
                                               // a few pixels of travel is a tremor, not a drag; without
                                               // this every click on a part reads as a pan and never
                                               // reaches the selection handler
-                                              if (Math.abs(e.clientX - px) + Math.abs(e.clientY - py) > 4)
+                                              if (!dragged && Math.abs(e.clientX - px) + Math.abs(e.clientY - py) > 4) {
                                                 dragged = true;
+                                                // CAPTURE ONLY ONCE IT IS A DRAG. Captured on pointerdown,
+                                                // the pointerup - and so the click - lands on this host
+                                                // div, and the <svg>'s click listener never hears a real
+                                                // mouse click on a part: only tree clicks selected.
+                                                st.setPointerCapture(e.pointerId);
+                                              }
                                               panX = e.clientX - sx; panY = e.clientY - sy; applyTransform(); });
     st.addEventListener('pointerup', () => { on = false; });
   })();
