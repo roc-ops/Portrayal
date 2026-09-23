@@ -43,9 +43,9 @@ def test_an_optic_on_a_card_is_its_own_fru(out):
 
 
 def test_an_occupant_two_segments_down_is_its_own_fru(out):
-    """B3 Task 10c: `xc01/tx-occupant` was keyed `xc01` - both bore caps of
+    """B3 Task 10c: `xc01/1-occupant` was keyed `xc01` - both bore caps of
     an adapter, and the adapter's own art, came out as one part."""
-    assert out["boreCap"] == {"fru": "xc01/tx-occupant", "nested": True}
+    assert out["boreCap"] == {"fru": "xc01/1-occupant", "nested": True}
     assert out["loneBackCap"] == {"fru": "fhd-2mtp12-lc-rear/mtp1-occupant", "nested": True}
 
 

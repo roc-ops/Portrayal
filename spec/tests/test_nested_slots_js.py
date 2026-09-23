@@ -5,7 +5,7 @@
 card in a bay, a cassette, an adapter composed in either, an adapter placed on
 the device - that is not inside a `data-for` group (P3). Each entry carries the
 drawing path as `id` and the configuration's module-less key as `key` (P1:
-`bay-1/module/lc1/tx` is `bay-1/lc1/tx`). The explorer offers only the free
+`bay-1/module/lc1/1` is `bay-1/lc1/1`). The explorer offers only the free
 level of a duplex adapter (L115's exclusion), marks the shipped default, and
 takes a swap through the one seating path the build is held to.
 
@@ -56,17 +56,17 @@ REAR_KEYS = {"bay-1/mtp1": MPO12, "bay-2/mtp2": "", "bay-3/mtp2": MPO24}
 # configuration name -> (bays, occupants) added to a tmp copy of the device
 FHD_CONFIGS = {
     "plug": (POP, {"bay-1/lc1": PLUG}),
-    "simplex": (POP, {"bay-1/lc1": "", "bay-1/lc1/tx": SIMPLEX}),
+    "simplex": (POP, {"bay-1/lc1": "", "bay-1/lc1/1": SIMPLEX}),
     "swapped": ({**POP, "bay-2": CASS12}, {}),
     "swapplug": ({**POP, "bay-2": CASS12}, {"bay-2/lc01": PLUG}),
     "shut": ({**POP, "bay-3": SHUT}, {}),
-    "shutplug": ({**POP, "bay-3": SHUT}, {"bay-3/lc01/tx": SIMPLEX}),
+    "shutplug": ({**POP, "bay-3": SHUT}, {"bay-3/lc01/1": SIMPLEX}),
     "rear": (MIX, {}),
     "rearplug": (MIX, REAR_KEYS),
 }
 DCP_CONFIGS = {
-    "tx": (None, {"xc01/tx": SIMPLEX}),
-    "duplex": (None, {"xc01/tx": "", "xc01/rx": "", "xc01": PLUG}),
+    "tx": (None, {"xc01/1": SIMPLEX}),
+    "duplex": (None, {"xc01/1": "", "xc01/2": "", "xc01": PLUG}),
 }
 SKINS = [PLUG, SIMPLEX, DCAP, CAP, CASS6, CASS12, SHUT, MCAP, MPO12, MPO24]
 
@@ -191,14 +191,14 @@ def ver(world, ref):
 def test_nested_slots_reads_every_slot_off_a_real_fhd_face(world):
     c = scenario(world, "census")
     duplex = [i for i in c["all"] if re.fullmatch(r"bay-[1-4]/module/lc[1-6]", i)]
-    bores = [i for i in c["all"] if re.fullmatch(r"bay-[1-4]/module/lc[1-6]/(tx|rx)", i)]
+    bores = [i for i in c["all"] if re.fullmatch(r"bay-[1-4]/module/lc[1-6]/(1|2)", i)]
     assert len(duplex) == 24 and len(bores) == 48 and len(c["all"]) == 72, c["all"]
     # the shipped duplex cap fills every adapter slot, so its bores are hidden
     assert sorted(c["offered"]) == sorted(duplex)
     assert c["lc1"] == {**c["lc1"], "id": "bay-1/module/lc1", "key": "bay-1/lc1", "kind": "connector",
-                        "default": DCAP, "bores": ["tx", "rx"], "accepts": [DCAP, PLUG],
+                        "default": DCAP, "bores": ["1", "2"], "accepts": [DCAP, PLUG],
                         "modulePath": "bay-1/module", "moduleId": "bay-1--module", "carrier": CASS6}
-    assert c["tx"]["key"] == "bay-1/lc1/tx" and c["tx"]["carrier"] == "common/lc-duplex-v-adapter@6"
+    assert c["tx"]["key"] == "bay-1/lc1/1" and c["tx"]["carrier"] == "common/lc-duplex-v-adapter@6"
     assert c["tx"]["modulePath"] == "bay-1/module/lc1"
     assert c["helperSame"], "nestedSlots differs from the entry Task 9's parity was built on"
     assert c["alias"], "nestedCages is no longer an alias of nestedSlots"
@@ -210,7 +210,7 @@ def test_nested_slots_on_the_dcp_offers_the_capped_bores_not_the_adapter(world):
     cages = world["meta"]["dcp-r-34d-cs"]["cages"]["front"]
     spanning = [g["id"] for g in cages if g.get("bores")]
     assert len(spanning) >= 36, spanning
-    assert sorted(c["dcpAll"]) == sorted(f"{s}/{b}" for s in spanning for b in ("tx", "rx"))
+    assert sorted(c["dcpAll"]) == sorted(f"{s}/{b}" for s in spanning for b in ("1", "2"))
     assert c["dcpHelperSame"]
     offered = set(c["dcpOffered"])
     assert not offered & set(spanning), "an adapter offered while both its bores hold caps"
@@ -266,12 +266,12 @@ def test_a_click_on_the_plug_names_its_slot(world):
 def test_emptying_the_adapter_offers_its_bores_and_a_simplex_plug_is_the_builds(world):
     s = scenario(world, "fhdSimplex")
     assert s["before"] == ["bay-1/module/lc1"]
-    assert sorted(s["emptied"]) == ["bay-1/module/lc1", "bay-1/module/lc1/rx", "bay-1/module/lc1/tx"]
-    assert sorted(s["after"]) == ["bay-1/module/lc1/rx", "bay-1/module/lc1/tx"]
+    assert sorted(s["emptied"]) == ["bay-1/module/lc1", "bay-1/module/lc1/1", "bay-1/module/lc1/2"]
+    assert sorted(s["after"]) == ["bay-1/module/lc1/1", "bay-1/module/lc1/2"]
     assert s["res"] == {"applied": 1, "refused": [], "failed": []}
     assert s["lc1"] == 0
     assert s["tx"]["count"] == 1, "a second simplex swap stacked"
-    bad, _ = parity(world, "fhd:simplex", "bay-1/module/lc1/tx", s["tx"])
+    bad, _ = parity(world, "fhd:simplex", "bay-1/module/lc1/1", s["tx"])
     assert not bad, "\n".join(bad[:8])
 
 
@@ -280,9 +280,9 @@ def test_emptying_the_adapter_offers_its_bores_and_a_simplex_plug_is_the_builds(
 @needs_node
 def test_a_plug_in_a_lifted_dcp_bore_is_the_builds(world):
     s = scenario(world, "dcpBore")
-    assert sorted(s["before"]) == ["xc01/rx", "xc01/tx"]
+    assert sorted(s["before"]) == ["xc01/1", "xc01/2"]
     assert s["res"] == {"applied": 1, "refused": [], "failed": []}
-    bad, want = parity(world, "dcp:tx", "xc01/tx", s["tx"])
+    bad, want = parity(world, "dcp:tx", "xc01/1", s["tx"])
     assert not bad, "\n".join(bad[:8])
     assert want["attrs"]["data-z-lift"] == "3.175"
     assert s["back"] == [ver(world, CAP)], "the plug stayed under the cap"
@@ -292,8 +292,8 @@ def test_a_plug_in_a_lifted_dcp_bore_is_the_builds(world):
 @needs_node
 def test_a_duplex_plug_across_two_emptied_dcp_bores_is_the_builds(world):
     s = scenario(world, "dcpDuplex")
-    assert sorted(s["oneEmpty"]) == ["xc01/rx", "xc01/tx"], "one bore still capped: no adapter level"
-    assert sorted(s["bothEmpty"]) == ["xc01", "xc01/rx", "xc01/tx"]
+    assert sorted(s["oneEmpty"]) == ["xc01/1", "xc01/2"], "one bore still capped: no adapter level"
+    assert sorted(s["bothEmpty"]) == ["xc01", "xc01/1", "xc01/2"]
     assert s["res"] == {"applied": 1, "refused": [], "failed": []}
     assert s["after"] == ["xc01"]
     assert s["click"] == "xc01"
@@ -340,8 +340,8 @@ def test_a_shuttered_cassette_offers_plugs_and_empty_and_ships_nothing(world):
     assert s["options"][0] == {"value": "", "label": "— empty —", "selected": True}
     assert [o["value"] for o in s["boreOptions"][1:]] == [CAP, SIMPLEX]
     assert s["res"] == {"applied": 1, "refused": [], "failed": []}
-    assert sorted(s["after"]) == ["bay-3/module/lc01/rx", "bay-3/module/lc01/tx"]
-    bad, _ = parity(world, "fhd:shutplug", "bay-3/module/lc01/tx", s["tx"])
+    assert sorted(s["after"]) == ["bay-3/module/lc01/1", "bay-3/module/lc01/2"]
+    bad, _ = parity(world, "fhd:shutplug", "bay-3/module/lc01/1", s["tx"])
     assert not bad, "\n".join(bad[:8])
 
 
@@ -375,21 +375,21 @@ def test_accept_swaps_resolves_slot_keys_after_their_carrier(world):
     a = scenario(world, "accept")
     f = a["fhd"]
     assert f["accepted"] == {"bay-1": CASS12, "bay-1/module/lc01": PLUG,
-                             "bay-3/module/lc1": None, "bay-3/module/lc1/tx": SIMPLEX}
-    assert sorted(f["ignored"]) == ["bay-1/module/lc1", "bay-2/module/lc1/tx",
-                                    "bay-4/module/lc1-occupant/a", "bay-4/module/lc1/tx",
+                             "bay-3/module/lc1": None, "bay-3/module/lc1/1": SIMPLEX}
+    assert sorted(f["ignored"]) == ["bay-1/module/lc1", "bay-2/module/lc1/1",
+                                    "bay-4/module/lc1-occupant/a", "bay-4/module/lc1/1",
                                     "bay-4/module/lc2"]
-    assert sorted(f["cages"]) == ["bay-1/module/lc01", "bay-3/module/lc1", "bay-3/module/lc1/tx"]
+    assert sorted(f["cages"]) == ["bay-1/module/lc01", "bay-3/module/lc1", "bay-3/module/lc1/1"]
     assert a["fhdOrderFree"]
 
 
 @needs_node
 def test_accept_swaps_on_the_dcp_needs_the_placement_and_holds_the_exclusion(world):
     a = scenario(world, "accept")
-    assert a["dcpBore"]["accepted"] == {"xc01/tx": SIMPLEX}
-    assert a["dcpBoreNoRef"]["ignored"] == ["xc01/tx"]
+    assert a["dcpBore"]["accepted"] == {"xc01/1": SIMPLEX}
+    assert a["dcpBoreNoRef"]["ignored"] == ["xc01/1"]
     assert a["dcpDuplexCapped"]["ignored"] == ["xc01"]
-    assert a["dcpDuplexFree"]["accepted"] == {"xc01": PLUG, "xc01/rx": None, "xc01/tx": None}
+    assert a["dcpDuplexFree"]["accepted"] == {"xc01": PLUG, "xc01/2": None, "xc01/1": None}
 
 
 # ------------------------------------------- swap=, and the 3D map
@@ -403,12 +403,12 @@ def test_the_delta_measures_a_slot_against_what_it_ships(world):
     assert d["emptiedBack"] == {"bay-1/module/lc1": None}
     assert d["capBack"] == {}, "the shipped cap put back is no swap"
     assert d["plugged"] == {"bay-1/module/lc1": PLUG}
-    assert d["simplex"] == {"bay-1/module/lc1": None, "bay-1/module/lc1/tx": SIMPLEX}
+    assert d["simplex"] == {"bay-1/module/lc1": None, "bay-1/module/lc1/1": SIMPLEX}
     assert d["fresh"] == {"bay-1": CASS12}, "a fresh cassette's shipped cap is no swap"
     assert d["freshEmptied"] == {"bay-1": CASS12, "bay-1/module/lc01": None}
-    assert d["dcpEmptied"] == {"xc01/tx": None}
+    assert d["dcpEmptied"] == {"xc01/1": None}
     assert d["dcpCap"] == {}
-    assert d["dcpDuplex"] == {"xc01": PLUG, "xc01/rx": None, "xc01/tx": None}
+    assert d["dcpDuplex"] == {"xc01": PLUG, "xc01/2": None, "xc01/1": None}
 
 
 @needs_node
@@ -443,9 +443,9 @@ def test_a_slot_on_a_device_placement_names_its_view(world):
 @needs_node
 def test_a_configurations_deep_keys_meet_the_drawings_paths(world):
     b = scenario(world, "builtKeys")
-    assert b["fhd"] == {"bay-1/module/lc1/tx": SIMPLEX, "bay-1/module/lc1": None,
+    assert b["fhd"] == {"bay-1/module/lc1/1": SIMPLEX, "bay-1/module/lc1": None,
                         "bay-2/module/lc3": PLUG}
-    assert b["dcp"] == {"xc01/tx": None, "xc01/rx": None, "xc01": PLUG, "port-1510/tx": SIMPLEX}
+    assert b["dcp"] == {"xc01/1": None, "xc01/2": None, "xc01": PLUG, "port-1510/1": SIMPLEX}
 
 
 @needs_node
@@ -542,14 +542,14 @@ def test_seat_face_seats_slot_keys_as_the_build_does(world):
     assert fhd["res"]["refused"] == [] and fhd["res"]["failed"] == [] and fhd["res"]["dropped"] == []
     bad, _ = parity(world, "fhd:swapplug", "bay-2/module/lc01", fhd["lc01"])
     assert not bad, "\n".join(bad[:8])
-    bad, _ = parity(world, "fhd:simplex", "bay-1/module/lc1/tx", fhd["tx"])
+    bad, _ = parity(world, "fhd:simplex", "bay-1/module/lc1/1", fhd["tx"])
     assert not bad, "\n".join(bad[:8])
     assert fhd["lc01Paths"] == 1, "the cassette's shipped cap stayed under the plug"
     assert fhd["lc1"] == 0 and fhd["lc1Paths"] == 0, "the emptied cap is still there"
     assert fhd["stale"] == 0, "an occupant still names the cassette's own namespace"
     tx = f["tx"]
     assert tx["res"] == {"applied": 1, "refused": [], "failed": []}
-    bad, _ = parity(world, "dcp:tx", "xc01/tx", tx["seated"])
+    bad, _ = parity(world, "dcp:tx", "xc01/1", tx["seated"])
     assert not bad, "\n".join(bad[:8])
     assert tx["paths"] == 1
     dx = f["duplex"]
@@ -606,7 +606,7 @@ def test_the_build_and_the_kit_answer_every_candidate_slot_alike(world):
     assert "s9510-30xc:ac port-0/aperture" in refused
     assert "c40g:bdm-3plus1 front-2/xg0/cage" in refused
     assert "c40g:bdm-3plus1 front-2/xg0" in accepted
-    assert "dcp:default xc01/tx" in accepted and "fhd:populated bay-1/lc1/tx" in accepted
+    assert "dcp:default xc01/1" in accepted and "fhd:populated bay-1/lc1/1" in accepted
     # THE BACKS (Task 10b): every MTP bulkhead the rear draws, on two 2 x
     # MTP-12 backs, the 36-fibre cassette's three and a single-MTP back - and
     # the near misses around them, which all three refuse

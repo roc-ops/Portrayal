@@ -273,7 +273,7 @@ def spanned_slots(contract, resolve, connectors):
     both is an error the build and lint each refuse.
 
     The ids are LOCAL to this contract, because that is how a configuration
-    addresses them: the bore beside a slot keyed `bay-1/lc01` is `bay-1/lc01/tx`.
+    addresses them: the bore beside a slot keyed `bay-1/lc01` is `bay-1/lc01/1`.
 
     ONLY A CONTRACT PRESENTING THE SPANNING INTERFACE AS ITS OWN names bores. A
     wrapper that FORWARDS a spanned slot (P2, `render._forwarded_part`) is not
@@ -322,7 +322,7 @@ def slot_in_slot(carrier, host_id, resolve):
     Keying the aperture again one level down names the same opening twice;
     the build refuses it, L12 reports it, and the kit never offers it. The one
     slot that may sit inside a slot is a BORE a spanning slot names
-    (spanned_slots): the duplex adapter's `tx` and `rx`, the other level of
+    (spanned_slots): the duplex adapter's `1` and `2`, the other level of
     the same opening, which L115 keeps exclusive of it.
 
     `carrier` is the contract of the instance holding `host_id` - a device
@@ -483,7 +483,7 @@ def config_airflow(device, cfg):
 # A configuration's `occupants:` may key a cage on a card seated in a bay by the
 # card's MODULE-LESS path - `front-6/xg0` - the convention its nested `bays:`
 # keys already use - and, since B3, a slot at any depth, part ids after the
-# bays (`bay-1/lc01/tx`). The build finds those keys from the instance it is
+# bays (`bay-1/lc01/1`). The build finds those keys from the instance it is
 # drawing (slot_key_prefix, occupants_under); lint finds the instance from
 # the key (nested_key_host). Both read a bay's occupant with seated_ref and name a
 # seated occupant with occupant_local_id, so the two directions cannot come to
@@ -651,7 +651,7 @@ def occupants_under(prefix, occupants):
     """{local host id: (key, spec)} for the `occupants:` keys that name a host
     directly on the instance whose key prefix is `prefix` - `front-6/xg0` under
     `front-6`, but not `front-6/slot-1/xg0`, which belongs to the module in
-    that nested bay, nor `bay-1/lc01/tx`, which belongs to the adapter `lc01`.
+    that nested bay, nor `bay-1/lc01/1`, which belongs to the adapter `lc01`.
     A key that empties its slot (P4) comes back with spec None."""
     out = {}
     for key, spec in (occupants or {}).items():
@@ -708,10 +708,10 @@ def nested_key_host(key, device, cfg, resolve):
     Raises ValueError saying what the key failed to reach.
 
     The key's head is a bay in a view this configuration draws, or a device
-    placement in one (an adapter placed directly, `port-1510/tx`). After a
+    placement in one (an adapter placed directly, `port-1510/1`). After a
     head bay, each segment is a nested bay of the module reached so far, and
     once a segment is not, every segment is a PART id of the contract reached
-    so far (B3, deep addressing): `bay-1/lc01/tx` is the part `tx` of the part
+    so far (B3, deep addressing): `bay-1/lc01/1` is the part `1` of the part
     `lc01` of whatever `bay-1` seats. `module_ref` and `module_path` are the
     contract and the drawing path of the innermost instance holding the slot -
     `bay-1/module/lc01` - which is where the build draws the occupant.

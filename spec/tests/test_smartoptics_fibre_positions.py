@@ -10,7 +10,9 @@ the body, and each composer keeps the one its own source measured:
     photograph's channel positions; the A22 carrier likewise. Their placements
     moved the BODY 0.32 toward its latch side, so every optical point and every
     bore and duplex mate inside a placed lc-duplex-adapter equals the build
-    before the move (origin/main at #509, with @4), to 1e-6.
+    before the move, to 1e-6. The fixture was first measured off origin/main at
+    #509 (@4) and re-measured at #537 (@5, whose bores are numbered 1 and 2):
+    only the bore ids changed, every point agreed to 1e-6.
   * THE BODY, where the source is the body. The eight PPM modules measured
     the adapter block on five renders, so their placements are @4's, and on
     the dcp-2 build their adapter bodies stand where they did while the fibres

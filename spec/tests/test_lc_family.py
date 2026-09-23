@@ -128,7 +128,7 @@ def test_the_three_faces_compose_the_bore_tongue_up():
     # so each placement turns it. A placement that forgets is upside down.
     # The panel adapter composes the BULKHEAD aperture since its @6 (B3, "The
     # Smartoptics axis"); the transceivers keep the receptacle.
-    for ref, bore, ids in (("common/lc-duplex-adapter@6", "std/lc-bulkhead-bore@1", ("tx", "rx")),
+    for ref, bore, ids in (("common/lc-duplex-adapter@6", "std/lc-bulkhead-bore@1", ("1", "2")),
                            ("common/sfp-lc-duplex@1", "std/lc-bore@3", ("lc-a", "lc-b")),
                            ("common/qsfp-transceiver@1", "std/lc-bore@3", ("tx", "rx"))):
         parts = {p["id"]: p for p in contract(ref)["parts"] if p["ref"].startswith(LC_BORES)}
@@ -152,7 +152,7 @@ def test_the_adapter_bore_centres_sit_on_the_verified_pitch():
     # keyway (the contract's provenance.axis): the x centres did not move.
     c = contract("common/lc-duplex-adapter@6")
     parts = {p["id"]: p for p in c["parts"]}
-    for pid, x in (("tx", 1.125), ("rx", 7.375)):
+    for pid, x in (("1", 1.125), ("2", 7.375)):
         assert parts[pid]["at"] == [x, 0.11]
         # at.y + tongue+shoulder+neck (1.42 + 1.19 + 0.75) = the square's top
         # edge, rotated; the square runs 4.7 on to 2.35 past the ferrule axis

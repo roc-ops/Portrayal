@@ -28,7 +28,7 @@ skin exactly.
 THE FRU RULING (docs/pluggables-caps-design.md, "The kit", 2026-09-23): an
 occupant is a part of its own, pulled by its own path - the rule #484 gave
 an optic on a card, now for every depth, so a Smartoptics bore's cap is
-`xc01/tx-occupant` and not the whole `xc01` adapter. On a module's BACK an
+`xc01/1-occupant` and not the whole `xc01` adapter. On a module's BACK an
 occupant is not a FRU: the back is drawn inside the module's own FRU, in the
 back component's namespace, and rides out with the module.
 """
@@ -65,8 +65,8 @@ BODY_CLASSES = {"psu", "fan", "tab", "power", "cooling"}
 FHD = {
     "plug": (POP, {"bay-1/lc1": PLUG},
              {"bay-1/module/lc1": PLUG}),
-    "simplex": (POP, {"bay-1/lc1": "", "bay-1/lc1/tx": SIMPLEX},
-                {"bay-1/module/lc1": "", "bay-1/module/lc1/tx": SIMPLEX}),
+    "simplex": (POP, {"bay-1/lc1": "", "bay-1/lc1/1": SIMPLEX},
+                {"bay-1/module/lc1": "", "bay-1/module/lc1/1": SIMPLEX}),
     # a cassette swapped in carries its caps, and the shuttered adapter's and
     # the v-adapter's mate markers carry `data-cp-on` (rename's)
     "swapplug": ({**POP, "bay-2": CASS12}, {"bay-2/lc01": PLUG},
@@ -84,9 +84,9 @@ FHD = {
                "bay-4/module/mtp": MPO12}),
 }
 DCP = {
-    "tx": ({"xc01/tx": SIMPLEX}, {"xc01/tx": SIMPLEX}),
-    "duplex": ({"xc01/tx": "", "xc01/rx": "", "xc01": PLUG},
-               {"xc01/tx": "", "xc01/rx": "", "xc01": PLUG}),
+    "tx": ({"xc01/1": SIMPLEX}, {"xc01/1": SIMPLEX}),
+    "duplex": ({"xc01/1": "", "xc01/2": "", "xc01": PLUG},
+               {"xc01/1": "", "xc01/2": "", "xc01": PLUG}),
 }
 
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
@@ -317,13 +317,13 @@ def roles(world):
 
 @needs_node
 def test_a_smartoptics_bore_cap_is_its_own_part(roles):
-    """dcp-r-34d-cs ships 72 bore caps at `xcNN/tx-occupant` / `rx-occupant`
+    """dcp-r-34d-cs ships 72 bore caps at `xcNN/1-occupant` / `2-occupant`
     (and on port-1510/port-line): each is a FRU keyed by its own path, not by
     the adapter it sits in - which pulled both caps of an adapter, 36 times."""
     sets, out = roles
     g = got(out, "dcp")
     caps = [r for r in g["roles"] if r["behaviour"] == "occupies"]
-    assert len(caps) == 72 and all(re.fullmatch(r"[\w-]+/(tx|rx)-occupant", c["path"]) for c in caps)
+    assert len(caps) == 72 and all(re.fullmatch(r"[\w-]+/(1|2)-occupant", c["path"]) for c in caps)
     for c in caps:
         assert c["role"] == {"fru": c["path"], "nested": True}, c
     assert len({c["role"]["fru"] for c in caps}) == 72
@@ -352,7 +352,7 @@ def test_a_plug_in_a_front_slot_is_its_own_part(roles):
     occupant - `data-for` its slot, at `<slot>-occupant` - and is pulled by
     its own path like the cap (the controller's ruling, B3 Task 10c)."""
     _, out = roles
-    for name, path, ref in (("dcp:tx", "xc01/tx-occupant", SIMPLEX),
+    for name, path, ref in (("dcp:tx", "xc01/1-occupant", SIMPLEX),
                             ("fhd:plug", "bay-1/module/lc1-occupant", PLUG)):
         g = got(out, name)
         [r] = [r for r in g["roles"] if r["path"] == path]
@@ -360,7 +360,7 @@ def test_a_plug_in_a_front_slot_is_its_own_part(roles):
         assert r["role"] == {"fru": path, "nested": True}, r
         assert path in g["frus"], (name, g["frus"])
     # the cap beside it on the same adapter is still its own part
-    assert "xc01/rx-occupant" in got(out, "dcp:tx")["frus"]
+    assert "xc01/2-occupant" in got(out, "dcp:tx")["frus"]
 
 
 @needs_node

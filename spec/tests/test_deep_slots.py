@@ -3,10 +3,10 @@ addressing - docs/pluggables-caps-design.md).
 
 A configuration's `occupants:` keys a slot by the path of PART IDS from the
 device's placement or bay down to the slot, with the `module` step of every
-seated bay dropped (manifest.slot_key_prefix): `bay-1/lc01/tx` is the TX bore
+seated bay dropped (manifest.slot_key_prefix): `bay-1/lc01/1` is bore 1
 of adapter `lc01` in the cassette seated in `bay-1`. The occupant is drawn
 inside the innermost instance group holding the slot, at
-`bay-1/module/lc01/tx-occupant`, so it inherits every transform above it and
+`bay-1/module/lc01/1-occupant`, so it inherits every transform above it and
 nothing is solved twice.
 
 Every test seats on a COPY in tmp_path. Positions are held numerically, by
@@ -97,7 +97,7 @@ def occupant_paths(root):
     ("front-6/module", "front-6"),
     ("riser-1/module/slot-1/module", "riser-1/slot-1"),
     ("port-3", "port-3"),
-    ("port-3/tx", "port-3/tx"),
+    ("port-3/1", "port-3/1"),
     (None, None),
     ("", None),
 ])
@@ -106,8 +106,8 @@ def test_the_slot_key_drops_every_module_step(path, key):
 
 
 def test_an_empty_string_empties():
-    assert occupant_spec("bay-1/lc01/tx", "") is None
-    assert occupant_spec("bay-1/lc01/tx", PLUG) == {"ref": PLUG}
+    assert occupant_spec("bay-1/lc01/1", "") is None
+    assert occupant_spec("bay-1/lc01/1", PLUG) == {"ref": PLUG}
 
 
 # --- depth three: bay, cassette, adapter, bore ----------------------------------
@@ -116,11 +116,11 @@ def test_a_plug_seats_on_a_bore_in_a_cassette_in_a_bay(tmp_path):
     adapter = part(CASSETTE, "lc01")
     assert adapter["at"] == [17.24, 18.66]
     # the adapter ships a duplex cap on its own slot, emptied first (L115)
-    root, parents = render(fhd(tmp_path, {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG}),
+    root, parents = render(fhd(tmp_path, {"bay-1/lc01": "", "bay-1/lc01/1": PLUG}),
                            tmp_path / "o", "fhd-1ufce", "base")
-    assert_seated_on_bore(root, parents, "bay-1/module/lc01", "tx", adapter["ref"],
-                          "bay-1/lc01/tx")
-    assert occupant_paths(root) == ["bay-1/module/lc01/tx-occupant"]
+    assert_seated_on_bore(root, parents, "bay-1/module/lc01", "1", adapter["ref"],
+                          "bay-1/lc01/1")
+    assert occupant_paths(root) == ["bay-1/module/lc01/1-occupant"]
 
 
 def test_the_same_at_depth_four_on_a_raised_carrier(tmp_path):
@@ -128,35 +128,35 @@ def test_the_same_at_depth_four_on_a_raised_carrier(tmp_path):
     card seated in the DCP-2's slot: bay, card, adapter, bore."""
     edfa = part("smartoptics/dcp-f-a22@2", "edfa")
     assert edfa["lift"] == 44.0
-    root, parents = render(a22(tmp_path, {"slot-1/edfa/tx": PLUG}), tmp_path / "o",
+    root, parents = render(a22(tmp_path, {"slot-1/edfa/1": PLUG}), tmp_path / "o",
                            "dcp-2", "ila-node")
-    assert_seated_on_bore(root, parents, "slot-1/module/edfa", "tx", edfa["ref"],
-                          "slot-1/edfa/tx")
-    assert occupant_paths(root) == ["slot-1/module/edfa/tx-occupant"]
+    assert_seated_on_bore(root, parents, "slot-1/module/edfa", "1", edfa["ref"],
+                          "slot-1/edfa/1")
+    assert occupant_paths(root) == ["slot-1/module/edfa/1-occupant"]
 
 
 def test_a_plug_seats_on_a_directly_placed_adapter(tmp_path):
     """Three Smartoptics devices place an adapter as a device placement, so
-    `<placement>/tx` is a live key: seated inside that placement's group."""
-    root, parents = render(direct(tmp_path, {"port-1510/tx": PLUG}), tmp_path / "o",
+    `<placement>/1` is a live key: seated inside that placement's group."""
+    root, parents = render(direct(tmp_path, {"port-1510/1": PLUG}), tmp_path / "o",
                            "dcp-r-34d-cs", "default")
-    assert_seated_on_bore(root, parents, "port-1510", "tx", "common/lc-duplex-adapter@6",
-                          "port-1510/tx")
-    assert occupant_paths(root) == ["port-1510/tx-occupant"]
+    assert_seated_on_bore(root, parents, "port-1510", "1", "common/lc-duplex-adapter@6",
+                          "port-1510/1")
+    assert occupant_paths(root) == ["port-1510/1-occupant"]
 
 
 def test_an_empty_string_seats_nothing(tmp_path):
-    root, _ = render(fhd(tmp_path, {"bay-1/lc01/tx": ""}), tmp_path / "o",
+    root, _ = render(fhd(tmp_path, {"bay-1/lc01/1": ""}), tmp_path / "o",
                      "fhd-1ufce", "base")
-    by_path(root, "bay-1/module/lc01/tx")       # the bore is drawn, and
+    by_path(root, "bay-1/module/lc01/1")       # the bore is drawn, and
     assert occupant_paths(root) == []           # nothing is seated on it
 
 
 @pytest.mark.parametrize("make, key, why", [
-    (fhd, "bay-1/lc01/tx/nope", "bay-1/lc01/tx/nope"),     # deeper than anything
-    (fhd, "bay-1/lc99/tx", "'lc99'"),                       # no such adapter
-    (a22, "slot-1/edfa/tx/nope", "slot-1/edfa/tx/nope"),
-    (a22, "slot-1/nope/tx", "'nope'"),
+    (fhd, "bay-1/lc01/1/nope", "bay-1/lc01/1/nope"),     # deeper than anything
+    (fhd, "bay-1/lc99/1", "'lc99'"),                       # no such adapter
+    (a22, "slot-1/edfa/1/nope", "slot-1/edfa/1/nope"),
+    (a22, "slot-1/nope/1", "'nope'"),
     (direct, "port-1510/nope", "port-1510/nope"),           # no such bore
 ])
 def test_a_key_reaching_nothing_is_an_error(tmp_path, make, key, why):
@@ -175,21 +175,21 @@ def l12(dev):
 
 
 @pytest.mark.parametrize("make, occ", [
-    (fhd, {"bay-1/lc01/tx": PLUG, "bay-1/lc01/tx-occupant": "common/lc-boot@1"}),
-    (fhd, {"bay-1/lc01/tx": ""}),
-    (a22, {"slot-1/edfa/tx": PLUG}),
-    (direct, {"port-1510/tx": PLUG}),
+    (fhd, {"bay-1/lc01/1": PLUG, "bay-1/lc01/1-occupant": "common/lc-boot@1"}),
+    (fhd, {"bay-1/lc01/1": ""}),
+    (a22, {"slot-1/edfa/1": PLUG}),
+    (direct, {"port-1510/1": PLUG}),
 ])
 def test_lint_the_same_keys_lint_clean(tmp_path, make, occ):
     assert l12(make(tmp_path, occ)) == []
 
 
 @pytest.mark.parametrize("make, occ, why", [
-    (fhd, {"bay-1/lc01/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
-    (direct, {"port-1510/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
-    (fhd, {"bay-1/lc01/tx/nope": PLUG}, "occupants/bay-1/lc01/tx/nope"),
-    (fhd, {"bay-1/lc99/tx": PLUG}, "'lc99'"),
-    (a22, {"slot-1/nope/tx": PLUG}, "'nope'"),
+    (fhd, {"bay-1/lc01/1": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
+    (direct, {"port-1510/1": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
+    (fhd, {"bay-1/lc01/1/nope": PLUG}, "occupants/bay-1/lc01/1/nope"),
+    (fhd, {"bay-1/lc99/1": PLUG}, "'lc99'"),
+    (a22, {"slot-1/nope/1": PLUG}, "'nope'"),
 ])
 def test_lint_a_bad_deep_key_is_an_l12_error(tmp_path, make, occ, why):
     got = l12(make(tmp_path, occ))

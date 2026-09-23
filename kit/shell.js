@@ -242,7 +242,7 @@ export function createShell(opts = {}) {
   }
 
   // THE REF OF A DEVICE PLACEMENT, off whichever face draws it - the one fact
-  // about a slot on the device (`xc01/tx`) that no index publishes
+  // about a slot on the device (`xc01/1`) that no index publishes
   // (configs.json's cages carry no ref). What swap.js's slotResolver asks
   // when there is no drawing to read the slot off.
   // Only faces of the device and configuration on screen: `syncCfgBays` runs

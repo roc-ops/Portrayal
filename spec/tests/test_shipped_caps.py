@@ -62,7 +62,7 @@ DUPLEX = "generic/lc-duplex-plug@2"
 MPO12 = "generic/mpo12-plug@1"
 
 # adapter -> (the level that ships the cap, the cap). "self" is the adapter's
-# own slot; "bores" is each of its two composed bores, `tx` and `rx`.
+# own slot; "bores" is each of its two composed bores, `1` and `2`.
 SHIPS = {
     "common/lc-duplex-adapter@6": ("bores", LC_CAP),
     "common/lc-duplex-v-adapter@6": ("self", DUPLEX_CAP),
@@ -73,7 +73,7 @@ SHIPS = {
 }
 SHUTTERED = "common/lc-duplex-shuttered-adapter@2"
 ADAPTERS = tuple(SHIPS) + (SHUTTERED,)
-BORES = ("tx", "rx")
+BORES = ("1", "2")
 REF = re.compile(r"^[a-z0-9-]+/[a-z0-9.+-]+@\d+$")
 
 
@@ -321,13 +321,13 @@ def test_the_census_fails_on_an_adapter_that_ships_nothing(tmp_path):
     lc-duplex-v-adapter@5 WITHOUT its default. Told that copy ships the duplex
     cap, the census finds every port bare."""
     root = tmp_path / "lib"
-    _copy(root, "common/lc-duplex-v-adapter", 5, "bare-v", lambda c: c.pop("default"))
+    _copy(root, "common/lc-duplex-v-adapter", 6, "bare-v", lambda c: c.pop("default"))
 
     def repoint(c):
         for q in c["parts"]:
             if q["ref"] == "common/lc-duplex-v-adapter@6":
                 q["ref"] = "test/bare-v@1"
-    _copy(root, "fs/fhd-2mtp12-lc-os2-a", 3, "bare-cassette", repoint)
+    _copy(root, "fs/fhd-2mtp12-lc-os2-a", 4, "bare-cassette", repoint)
     g = compiled_face("test/bare-cassette@1", root)
     counts, bad = census_problems(g, {**SHIPS, "test/bare-v@1": ("self", DUPLEX_CAP)})
     assert counts["test/bare-v@1"] == len(bad) == 12, bad
@@ -345,13 +345,13 @@ def test_the_census_fails_on_a_cap_at_the_wrong_level(tmp_path):
         for q in c["parts"]:
             if q.get("id") in BORES:
                 q["default"] = LC_CAP
-    _copy(root, "common/lc-duplex-v-adapter", 5, "bored-v", bores_instead)
+    _copy(root, "common/lc-duplex-v-adapter", 6, "bored-v", bores_instead)
 
     def repoint(c):
         for q in c["parts"]:
             if q["ref"] == "common/lc-duplex-v-adapter@6":
                 q["ref"] = "test/bored-v@1"
-    _copy(root, "fs/fhd-2mtp12-lc-os2-a", 3, "bored-cassette", repoint)
+    _copy(root, "fs/fhd-2mtp12-lc-os2-a", 4, "bored-cassette", repoint)
     g = compiled_face("test/bored-cassette@1", root)
     _counts, bad = census_problems(g, {**SHIPS, "test/bored-v@1": ("self", DUPLEX_CAP)})
     # each of the twelve adapters: its own slot bare, and both bores wrongly capped
@@ -362,7 +362,7 @@ def test_the_drawn_cap_check_finds_a_cap_the_adapter_draws(tmp_path):
     """Non-vacuity for (b): an element classed `cap` added to a copy of the
     Smartoptics adapter's skin is found, because no occupant holds it."""
     root = tmp_path / "lib"
-    dst = _copy(root, "common/lc-duplex-adapter", 5, "drawn-cap", lambda c: None).parent
+    dst = _copy(root, "common/lc-duplex-adapter", 6, "drawn-cap", lambda c: None).parent
     skin = dst / "skins" / "default.svg"
     text = skin.read_text()
     assert text.count("</svg>") == 1
@@ -371,7 +371,7 @@ def test_the_drawn_cap_check_finds_a_cap_the_adapter_draws(tmp_path):
 
     def repoint(c):
         c["parts"][0]["ref"] = "test/drawn-cap@1"
-    _copy(root, "smartoptics/ppm-dcm-40", 1, "drawn-cap-dcm", repoint)
+    _copy(root, "smartoptics/ppm-dcm-40", 2, "drawn-cap-dcm", repoint)
     g = compiled_face("test/drawn-cap-dcm@1", root)
     assert len(adapters_in(g, ("test/drawn-cap@1",))) == 1
     found = no_drawn_cap_outside_an_occupant(g, refs=("test/drawn-cap@1",))
@@ -525,15 +525,15 @@ def test_a_seated_dcm_shows_its_forwarded_adapters_two_bore_caps(tmp_path):
     """ppm-dcm-40 in ppm-1 and ppm-dcm-10 in ppm-2: each module composes ONE
     Smartoptics adapter (`dcm`) and forwards its `lc-duplex`, publishing no
     slot of its own - and each ships two simplex caps, one per bore, drawn in
-    the module at `<bay>/module/dcm/tx|rx`, the adapter's own slot empty."""
+    the module at `<bay>/module/dcm/1|2`, the adapter's own slot empty."""
     out = build(_dcp2(tmp_path, {"slot-1/ppm-1": DCMS[2], "slot-1/ppm-2": DCMS[0]}),
                 tmp_path / "o", LIB)
     root = ET.parse(out / "dcp-2.ila-node.front.svg").getroot()
     held = seats(root)
     for bay in ("ppm-1", "ppm-2"):
         dcm = f"slot-1/module/{bay}/module/dcm"
-        assert held.get(f"{dcm}/tx") == [LC_CAP], (dcm, dict(held))
-        assert held.get(f"{dcm}/rx") == [LC_CAP]
+        assert held.get(f"{dcm}/1") == [LC_CAP], (dcm, dict(held))
+        assert held.get(f"{dcm}/2") == [LC_CAP]
         assert held.get(dcm, []) == []
 
 
@@ -542,12 +542,12 @@ def test_a_dcms_bore_cap_is_still_keyed_by_a_configuration(tmp_path):
     cannot offer them (the module publishes no slot): `""` empties one, and a
     plug replaces the other."""
     out = build(_dcp2(tmp_path, {"slot-1/ppm-1": DCMS[2]},
-                      {"slot-1/ppm-1/dcm/tx": "", "slot-1/ppm-1/dcm/rx": LC}),
+                      {"slot-1/ppm-1/dcm/1": "", "slot-1/ppm-1/dcm/2": LC}),
                 tmp_path / "o", LIB)
     held = seats(ET.parse(out / "dcp-2.ila-node.front.svg").getroot())
     dcm = "slot-1/module/ppm-1/module/dcm"
-    assert held.get(f"{dcm}/tx", []) == []
-    assert held.get(f"{dcm}/rx") == [LC]
+    assert held.get(f"{dcm}/1", []) == []
+    assert held.get(f"{dcm}/2") == [LC]
 
 
 def test_a_dcms_own_top_level_default_is_still_refused(tmp_path):
@@ -555,9 +555,9 @@ def test_a_dcms_own_top_level_default_is_still_refused(tmp_path):
     duplex cap, seated in an A22 bay, fails the build naming the default -
     a bay module's own slot has no key a configuration could empty."""
     root = tmp_path / "lib"
-    _copy(root, "smartoptics/ppm-dcm-40", 1, "capped-dcm",
+    _copy(root, "smartoptics/ppm-dcm-40", 2, "capped-dcm",
           lambda c: c.__setitem__("default", DUPLEX_CAP))
-    _copy(root, "smartoptics/dcp-f-a22", 1, "a22-dcm",
+    _copy(root, "smartoptics/dcp-f-a22", 2, "a22-dcm",
           lambda c: [b["accepts"].append("test/capped-dcm@1") for b in c["bays"].values()])
     dev = shutil.copytree(LIB / "devices/smartoptics/dcp-2", tmp_path / "dcp-2") / "device.yaml"
     d = yaml.safe_load(dev.read_text())
@@ -578,10 +578,10 @@ def test_a_dcms_own_top_level_default_is_still_refused(tmp_path):
 
 def test_an_fs_port_is_emptied_and_replaced_front_and_rear(tmp_path):
     """The FS 2 x MTP-12 LC cassette in bay-1. Front: lc01 emptied, lc02 given
-    a duplex plug, lc03 emptied so a simplex plug takes its tx bore. Rear:
+    a duplex plug, lc03 emptied so a simplex plug takes its bore 1. Rear:
     mtp1 given an MPO plug, mtp2 emptied. Everything unkeyed keeps its cap."""
     occ = {"bay-1/lc01": "", "bay-1/lc02": DUPLEX,
-           "bay-1/lc03": "", "bay-1/lc03/tx": LC,
+           "bay-1/lc03": "", "bay-1/lc03/1": LC,
            "bay-1/mtp1": MPO12, "bay-1/mtp2": ""}
     dev = shutil.copytree(LIB / "devices/fs/fhd-1ufce", tmp_path / "fhd-1ufce") / "device.yaml"
     d = yaml.safe_load(dev.read_text())
@@ -593,8 +593,8 @@ def test_an_fs_port_is_emptied_and_replaced_front_and_rear(tmp_path):
     m = "bay-1/module"
     assert front.get(f"{m}/lc01", []) == []
     assert front.get(f"{m}/lc02") == [DUPLEX]
-    assert front.get(f"{m}/lc03", []) == [] and front.get(f"{m}/lc03/tx") == [LC]
-    assert front.get(f"{m}/lc03/rx", []) == []
+    assert front.get(f"{m}/lc03", []) == [] and front.get(f"{m}/lc03/1") == [LC]
+    assert front.get(f"{m}/lc03/2", []) == []
     capped = [h for h, v in front.items() if v == [DUPLEX_CAP]]
     assert len(capped) == 12 - 3 > 0, capped
     rear = seats(ET.parse(out / "fhd-1ufce.base.rear.svg").getroot())
@@ -604,7 +604,7 @@ def test_an_fs_port_is_emptied_and_replaced_front_and_rear(tmp_path):
 
 
 def test_a_smartoptics_port_is_emptied_and_replaced(tmp_path):
-    """dcp-r-34d-cs: xc01's tx bore emptied and its rx bore given a plug;
+    """dcp-r-34d-cs: xc01's bore 1 emptied and its bore 2 given a plug;
     port-1510's two bores emptied so a duplex plug takes the adapter. Every
     other bore keeps its cap."""
     dev = shutil.copytree(LIB / "devices/smartoptics/dcp-r-34d-cs",
@@ -612,14 +612,14 @@ def test_a_smartoptics_port_is_emptied_and_replaced(tmp_path):
     d = yaml.safe_load(dev.read_text())
     assert not d.get("configurations")
     d["configurations"] = {"default": {"kind": "base", "default": True, "occupants": {
-        "xc01/tx": "", "xc01/rx": LC,
-        "port-1510/tx": "", "port-1510/rx": "", "port-1510": DUPLEX}}}
+        "xc01/1": "", "xc01/2": LC,
+        "port-1510/1": "", "port-1510/2": "", "port-1510": DUPLEX}}}
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = build(dev, tmp_path / "o", LIB)
     root = ET.parse(out / "dcp-r-34d-cs.default.front.svg").getroot()
     held = seats(root)
-    assert held.get("xc01/tx", []) == [] and held.get("xc01/rx") == [LC]
-    assert held.get("port-1510/tx", []) == [] and held.get("port-1510/rx", []) == []
+    assert held.get("xc01/1", []) == [] and held.get("xc01/2") == [LC]
+    assert held.get("port-1510/1", []) == [] and held.get("port-1510/2", []) == []
     assert held.get("port-1510") == [DUPLEX]
     adapters = adapters_in(root, ("common/lc-duplex-adapter@6",))
     capped = [h for h, v in held.items() if v == [LC_CAP]]
@@ -654,7 +654,7 @@ def test_the_unplaced_mpo_tile_ships_its_cap_where_a_panel_composes_it(tmp_path)
                 q["ref"] = "common/mpo-adapter@2"
             if q["id"] == "lc02":
                 q["ref"], q["default"] = "common/mpo-adapter@2", ""
-    _copy(root, "fs/fhd-2mtp12-lc-os2-a", 3, "mpo-panel", tiles)
+    _copy(root, "fs/fhd-2mtp12-lc-os2-a", 4, "mpo-panel", tiles)
     g = compiled_face("test/mpo-panel@1", root)
     held = seats(g)
     tiles_ = adapters_in(g, ("common/mpo-adapter@2",))

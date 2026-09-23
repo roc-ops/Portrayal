@@ -90,16 +90,16 @@ def _set(**kw):
 def lib(tmp_path):
     root = tmp_path / "lib"
 
-    # a bore default on a composed part: tx ships plugged, rx does not
+    # a bore default on a composed part: bore 1 ships plugged, bore 2 does not
     def capped(c):
-        _part(c, "tx")["default"] = PLUG
-    _copy(root, V_ADAPTER, 5, "capped-adapter", _unshipped(capped))
+        _part(c, "1")["default"] = PLUG
+    _copy(root, V_ADAPTER, 6, "capped-adapter", _unshipped(capped))
 
     def cassette_with(ref):
         def edit(c):
             _part(c, "lc01")["ref"] = ref
         return edit
-    _copy(root, CASSETTE, 3, "capped-cassette", cassette_with("test/capped-adapter@1"))
+    _copy(root, CASSETTE, 4, "capped-cassette", cassette_with("test/capped-adapter@1"))
 
     _copy(root, "generic/lc-plug", 2, "other-plug", lambda c: None)
 
@@ -107,17 +107,17 @@ def lib(tmp_path):
     _copy(root, "std/lc-bore", 3, "defaulted-bore", _set(default=PLUG))
 
     # an adapter that IS a slot (top-level default) and whose bores are slots
-    # with defaults of their own: tx overridden by this adapter's parts entry,
-    # rx left to the bore's own top-level default
+    # with defaults of their own: bore 1 overridden by this adapter's parts
+    # entry, bore 2 left to the bore's own top-level default
     def self_adapter(c):
         c["interface"] = "lc"
         c["default"] = PLUG
         c.setdefault("connection-points", {})["mate"] = {"at": [4.64, 6.875],
                                                          "direction": "front"}
-        tx, rx = _part(c, "tx"), _part(c, "rx")
+        tx, rx = _part(c, "1"), _part(c, "2")
         tx["ref"] = rx["ref"] = "test/defaulted-bore@1"
         tx["default"] = OTHER
-    _copy(root, V_ADAPTER, 5, "self-adapter", _unshipped(self_adapter))
+    _copy(root, V_ADAPTER, 6, "self-adapter", _unshipped(self_adapter))
 
     # the composer: lc01 overrides the adapter's own default, lc02 leaves it,
     # lc03 empties it
@@ -128,7 +128,7 @@ def lib(tmp_path):
             p["ref"] = "test/self-adapter@1"
             p.pop("default", None)
             p.update(extra)
-    _copy(root, CASSETTE, 3, "composer-cassette", composer)
+    _copy(root, CASSETTE, 4, "composer-cassette", composer)
 
     # an adapter that is NOT itself a slot - no interface of its own, so its
     # two `lc` bores (each test/defaulted-bore@1, which ships PLUG at its own
@@ -137,16 +137,16 @@ def lib(tmp_path):
     def plain_adapter(c):
         for k in ("interface", "interface-at", "spans"):
             c.pop(k, None)
-        tx, rx = _part(c, "tx"), _part(c, "rx")
+        tx, rx = _part(c, "1"), _part(c, "2")
         tx["ref"] = rx["ref"] = "test/defaulted-bore@1"
-    _copy(root, V_ADAPTER, 5, "plain-adapter", _unshipped(plain_adapter))
+    _copy(root, V_ADAPTER, 6, "plain-adapter", _unshipped(plain_adapter))
 
     def plain_cassette(c):
         for pid in ("lc01", "lc02", "lc03"):
             p = _part(c, pid)
             p["ref"] = "test/plain-adapter@1"
             p.pop("default", None)
-    _copy(root, CASSETTE, 3, "plain-cassette", plain_cassette)
+    _copy(root, CASSETTE, 4, "plain-cassette", plain_cassette)
 
     # the same adapter shape at device level, for dcp-r-34d-cs's port-1510
     def h_adapter(c):
@@ -154,7 +154,7 @@ def lib(tmp_path):
         c["default"] = PLUG
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(root, H_ADAPTER, 5, "self-hadapter", _unshipped(h_adapter))
+    _copy(root, H_ADAPTER, 6, "self-hadapter", _unshipped(h_adapter))
     return root
 
 
@@ -265,36 +265,36 @@ def test_an_unconfigured_bore_draws_its_default_in_every_configuration(tmp_path,
     out = build(dev, tmp_path / "o", lib)
     for cfg in configs:
         root, parents = face(out, "fhd-1ufce", cfg)
-        assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}, cfg
-        assert_seated(root, parents, "bay-1/module/lc01", "tx", "std/lc-bore@3", lib)
+        assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": PLUG}, cfg
+        assert_seated(root, parents, "bay-1/module/lc01", "1", "std/lc-bore@3", lib)
 
 
 def test_an_empty_string_empties_a_default(tmp_path, lib):
-    dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/tx": ""})
+    dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/1": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    by_path(root, "bay-1/module/lc01/tx")           # the bore is drawn,
+    by_path(root, "bay-1/module/lc01/1")           # the bore is drawn,
     assert occupants_drawn(root) == {}              # and nothing seated on it
 
 
 def test_a_configured_occupant_replaces_a_default(tmp_path, lib):
-    dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/tx": OTHER})
+    dev, _ = fhd(tmp_path, "test/capped-cassette@1", {"bay-1/lc01/1": OTHER})
     out = build(dev, tmp_path / "o", lib)
     root, parents = face(out, "fhd-1ufce", "base")
-    assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": OTHER}
-    assert_seated(root, parents, "bay-1/module/lc01", "tx", "std/lc-bore@3", lib)
+    assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": OTHER}
+    assert_seated(root, parents, "bay-1/module/lc01", "1", "std/lc-bore@3", lib)
     # the override is the configuration's alone: the other one ships the default
     root, _ = face(out, "fhd-1ufce", "populated")
-    assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}
+    assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": PLUG}
 
 
 def test_a_configured_chain_seats_on_a_default(tmp_path, lib):
     """A boot keyed on the default plug's produced id seats on it."""
     dev, _ = fhd(tmp_path, "test/capped-cassette@1",
-                 {"bay-1/lc01/tx-occupant": "common/lc-boot@1"})
+                 {"bay-1/lc01/1-occupant": "common/lc-boot@1"})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {
-        "bay-1/module/lc01/tx-occupant": PLUG,
-        "bay-1/module/lc01/tx-occupant-occupant": "common/lc-boot@1"}
+        "bay-1/module/lc01/1-occupant": PLUG,
+        "bay-1/module/lc01/1-occupant-occupant": "common/lc-boot@1"}
 
 
 # --- precedence (P5) -----------------------------------------------------------------
@@ -305,10 +305,10 @@ EXPECTED_COMPOSED = {
     # lc02: the adapter's own top-level default
     "bay-1/module/lc02-occupant": PLUG,
     # lc03: the composer's "" empties it - no lc03-occupant
-    # and on every adapter, the composer does NOT reach its bores: tx is the
-    # adapter's parts entry (OTHER), rx is the bore's own top-level default
+    # and on every adapter, the composer does NOT reach its bores: 1 is the
+    # adapter's parts entry (OTHER), 2 is the bore's own top-level default
     **{f"bay-1/module/lc0{n}/{b}-occupant": want
-       for n in (1, 2, 3) for b, want in (("tx", OTHER), ("rx", PLUG))},
+       for n in (1, 2, 3) for b, want in (("1", OTHER), ("2", PLUG))},
 }
 
 
@@ -317,7 +317,7 @@ def test_a_composer_overrides_the_top_level_default_only(tmp_path, lib):
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     assert occupants_drawn(root) == EXPECTED_COMPOSED
     assert_seated(root, parents, "bay-1/module", "lc01", "test/self-adapter@1", lib)
-    assert_seated(root, parents, "bay-1/module/lc02", "rx", "test/defaulted-bore@1", lib)
+    assert_seated(root, parents, "bay-1/module/lc02", "2", "test/defaulted-bore@1", lib)
 
 
 def test_a_configuration_overrides_a_composers_empty_default(tmp_path, lib):
@@ -335,27 +335,27 @@ def test_a_configuration_reaches_a_grandchild_default(tmp_path, lib):
     """A configuration empties a default two levels down - the bore's OWN
     top-level default (test/defaulted-bore@1 ships PLUG), on an adapter in the
     cassette in bay-1 - and nothing else moves. The adapter,
-    test/plain-adapter@1, presents no slot of its own, so `bay-1/lc01/rx` is a
+    test/plain-adapter@1, presents no slot of its own, so `bay-1/lc01/2` is a
     slot and not a slot inside one (a key on test/self-adapter@1's bores is
     refused - the next test)."""
-    dev, _ = fhd(tmp_path, "test/plain-cassette@1", {"bay-1/lc01/rx": ""})
+    dev, _ = fhd(tmp_path, "test/plain-cassette@1", {"bay-1/lc01/2": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    want = {f"bay-1/module/lc0{n}/{b}-occupant": PLUG for n in (1, 2, 3) for b in ("tx", "rx")}
-    del want["bay-1/module/lc01/rx-occupant"]
+    want = {f"bay-1/module/lc0{n}/{b}-occupant": PLUG for n in (1, 2, 3) for b in ("1", "2")}
+    del want["bay-1/module/lc01/2-occupant"]
     assert occupants_drawn(root) == want
 
 
 def test_the_same_grandchild_on_real_parts(tmp_path, lib):
     """And on the library's own: the SC cassette's sc-duplex-adapter@4 ships
-    a cap in each bore and presents no slot of its own. `bay-1/sc1/tx: ""`
+    a cap in each bore and presents no slot of its own. `bay-1/sc1/1: ""`
     empties that bore; the other 23 keep their caps."""
-    dev, _ = fhd(tmp_path, "fs/fhd-1mtp12-sc-os2-a@3", {"bay-1/sc1/tx": ""})
+    dev, _ = fhd(tmp_path, "fs/fhd-1mtp12-sc-os2-a@3", {"bay-1/sc1/1": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     held = {n.get("data-for"): n.get("data-ref").rsplit(":", 1)[0] for n in root.iter()
             if (n.get("data-path") or "").startswith("bay-1/module/sc")
             and (n.get("data-path") or "").endswith("-occupant")}
-    assert "bay-1/module/sc1/tx" not in held
-    assert held["bay-1/module/sc1/rx"] == "common/sc-dust-cap@1"
+    assert "bay-1/module/sc1/1" not in held
+    assert held["bay-1/module/sc1/2"] == "common/sc-dust-cap@1"
     assert sum(ref == "common/sc-dust-cap@1" for ref in held.values()) == len(held) > 10
 
 
@@ -364,10 +364,10 @@ def test_a_key_on_a_bore_the_slot_does_not_span_is_refused(tmp_path, lib):
     bores it does not span. Its bores' defaults still seat - they are the
     part's own - but a configuration may not key one: that names a slot
     inside a slot, which the build refuses, naming the slot to key instead."""
-    dev, _ = fhd(tmp_path, "test/composer-cassette@1", {"bay-1/lc01/rx": ""})
+    dev, _ = fhd(tmp_path, "test/composer-cassette@1", {"bay-1/lc01/2": ""})
     r = run(dev, tmp_path / "o", lib)
     assert r.returncode != 0
-    assert "occupants/bay-1/lc01/rx" in r.stderr and "key 'bay-1/lc01' instead" in r.stderr, \
+    assert "occupants/bay-1/lc01/2" in r.stderr and "key 'bay-1/lc01' instead" in r.stderr, \
         r.stderr[-600:]
 
 
@@ -403,10 +403,10 @@ def _cages(root, ref):
 
 def test_components_json_publishes_the_resolved_default(lib):
     capped = _cages(lib, "test/capped-adapter@1")
-    assert {k: e["default"] for k, e in capped.items()} == {"tx": PLUG, "rx": None}
-    assert PLUG in capped["tx"]["accepts"]
+    assert {k: e["default"] for k, e in capped.items()} == {"1": PLUG, "2": None}
+    assert PLUG in capped["1"]["accepts"]
     self_ = _cages(lib, "test/self-adapter@1")
-    assert {k: e["default"] for k, e in self_.items()} == {"tx": OTHER, "rx": PLUG}
+    assert {k: e["default"] for k, e in self_.items()} == {"1": OTHER, "2": PLUG}
     comp = _cages(lib, "test/composer-cassette@1")
     got = {k: comp[k]["default"] for k in ("lc01", "lc02", "lc03")}
     assert got == {"lc01": OTHER, "lc02": PLUG, "lc03": None}
@@ -449,10 +449,10 @@ def test_lint_the_throwaway_defaults_are_clean(lib, ref):
 
 def test_lint_a_default_the_slot_does_not_accept(lib):
     def bad(c):
-        _part(c, "tx")["default"] = "common/lc-boot@1"      # mates lc-plug
-    _copy(lib, V_ADAPTER, 5, "bad-adapter", _unshipped(bad))
+        _part(c, "1")["default"] = "common/lc-boot@1"      # mates lc-plug
+    _copy(lib, V_ADAPTER, 6, "bad-adapter", _unshipped(bad))
     got = l110(lib, "test/bad-adapter@1")
-    assert got and "tx" in got[0] and "common/lc-boot@1" in got[0], got
+    assert got and "1" in got[0] and "common/lc-boot@1" in got[0], got
 
 
 def test_lint_a_top_level_default_the_slot_does_not_accept(lib):
@@ -468,7 +468,7 @@ def test_lint_a_default_on_a_part_that_is_no_slot(lib):
         # answers this question
         p = _part(c, "lc01")
         p["ref"], p["default"] = "common/fibre-splice@1", PLUG
-    _copy(lib, CASSETTE, 3, "bad-cassette", bad)
+    _copy(lib, CASSETTE, 4, "bad-cassette", bad)
     got = l110(lib, "test/bad-cassette@1")
     assert got and "lc01" in got[0] and "no slot" in got[0], got
 
@@ -476,7 +476,7 @@ def test_lint_a_default_on_a_part_that_is_no_slot(lib):
 def test_lint_a_top_level_default_on_a_component_that_is_no_slot(lib):
     # the CASSETTE, which presents no interface of its own and composes twelve
     # apertures rather than one, so it forwards nothing either
-    _copy(lib, CASSETTE, 3, "bad-self", _set(default=PLUG))
+    _copy(lib, CASSETTE, 4, "bad-self", _set(default=PLUG))
     got = l110(lib, "test/bad-self@1")
     assert got and "no slot" in got[0], got
 
@@ -493,9 +493,9 @@ def booted(lib):
     _copy(lib, "generic/lc-plug", 2, "booted-plug", _set(default=BOOT))
 
     def capped(c):
-        _part(c, "tx")["default"] = "test/booted-plug@1"
-    _copy(lib, V_ADAPTER, 5, "booted-adapter", _unshipped(capped))
-    _copy(lib, CASSETTE, 3, "booted-cassette",
+        _part(c, "1")["default"] = "test/booted-plug@1"
+    _copy(lib, V_ADAPTER, 6, "booted-adapter", _unshipped(capped))
+    _copy(lib, CASSETTE, 4, "booted-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/booted-adapter@1"}))
     return lib
 
@@ -504,11 +504,11 @@ def test_a_configured_occupant_brings_its_own_default(tmp_path, booted):
     """The occupant path: a plug seated by a configuration ships its boot,
     whatever seated the plug (the nested seat, inside the cassette)."""
     dev, _ = fhd(tmp_path, "test/capped-cassette@1",
-                 {"bay-1/lc01/tx": "test/booted-plug@1"})
+                 {"bay-1/lc01/1": "test/booted-plug@1"})
     root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {
-        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1",
-        "bay-1/module/lc01/tx-occupant-occupant": BOOT}
+        "bay-1/module/lc01/1-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/1-occupant-occupant": BOOT}
 
 
 def test_a_default_occupant_brings_its_own_default(tmp_path, booted):
@@ -517,17 +517,17 @@ def test_a_default_occupant_brings_its_own_default(tmp_path, booted):
     dev, _ = fhd(tmp_path, "test/booted-cassette@1")
     root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {
-        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1",
-        "bay-1/module/lc01/tx-occupant-occupant": BOOT}
+        "bay-1/module/lc01/1-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/1-occupant-occupant": BOOT}
 
 
 def test_a_configuration_empties_a_chained_default(tmp_path, booted):
     """The chained default stays addressable: the produced id empties it."""
     dev, _ = fhd(tmp_path, "test/booted-cassette@1",
-                 {"bay-1/lc01/tx-occupant": ""})
+                 {"bay-1/lc01/1-occupant": ""})
     root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {
-        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1"}
+        "bay-1/module/lc01/1-occupant": "test/booted-plug@1"}
 
 
 def test_a_device_level_occupant_brings_its_own_default(tmp_path, booted):
@@ -556,7 +556,7 @@ def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
         c["default"] = "test/booted-plug@1"
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(booted, H_ADAPTER, 5, "booted-hadapter", _unshipped(h_adapter))
+    _copy(booted, H_ADAPTER, 6, "booted-hadapter", _unshipped(h_adapter))
     dev = dcp(tmp_path)
     d = yaml.safe_load(dev.read_text())
     for view in d["views"].values():
@@ -603,7 +603,7 @@ def test_a_bay_module_whose_parts_ship_defaults_is_fine(tmp_path, lib):
     cassette case above."""
     dev, _ = fhd(tmp_path, "test/capped-cassette@1")
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}
+    assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": PLUG}
 
 
 # --- two slots shipping the same part, and a real cycle ---------------------------------
@@ -613,18 +613,18 @@ def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, b
     same plug, and that plug ships a boot: two plugs and TWO boots. A guard
     that deduped by ref value would seat the second plug and drop its boot."""
     def both(c):
-        for pid in ("tx", "rx"):
+        for pid in ("1", "2"):
             _part(c, pid)["default"] = "test/booted-plug@1"
-    _copy(booted, V_ADAPTER, 5, "twice-booted-adapter", _unshipped(both))
-    _copy(booted, CASSETTE, 3, "twice-booted-cassette",
+    _copy(booted, V_ADAPTER, 6, "twice-booted-adapter", _unshipped(both))
+    _copy(booted, CASSETTE, 4, "twice-booted-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/twice-booted-adapter@1"}))
     dev, _ = fhd(tmp_path, "test/twice-booted-cassette@1")
     root, _ = face(build(dev, tmp_path / "o", booted), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {
-        "bay-1/module/lc01/tx-occupant": "test/booted-plug@1",
-        "bay-1/module/lc01/tx-occupant-occupant": BOOT,
-        "bay-1/module/lc01/rx-occupant": "test/booted-plug@1",
-        "bay-1/module/lc01/rx-occupant-occupant": BOOT}
+        "bay-1/module/lc01/1-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/1-occupant-occupant": BOOT,
+        "bay-1/module/lc01/2-occupant": "test/booted-plug@1",
+        "bay-1/module/lc01/2-occupant-occupant": BOOT}
 
 
 def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_path, booted):
@@ -634,7 +634,7 @@ def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_pa
         c["default"] = "test/booted-plug@1"
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(booted, H_ADAPTER, 5, "booted-hadapter", _unshipped(h_adapter))
+    _copy(booted, H_ADAPTER, 6, "booted-hadapter", _unshipped(h_adapter))
     dev = dcp(tmp_path)
     d = yaml.safe_load(dev.read_text())
     n = 0
@@ -657,9 +657,9 @@ def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_pa
 def looping(lib):
     """A plug whose own default is itself - a cycle of one link."""
     _copy(lib, "generic/lc-plug", 2, "loop-plug", _set(default="test/loop-plug@1"))
-    _copy(lib, V_ADAPTER, 5, "looping-adapter",
-          _unshipped(lambda c: _part(c, "tx").update({"default": "test/loop-plug@1"})))
-    _copy(lib, CASSETTE, 3, "looping-cassette",
+    _copy(lib, V_ADAPTER, 6, "looping-adapter",
+          _unshipped(lambda c: _part(c, "1").update({"default": "test/loop-plug@1"})))
+    _copy(lib, CASSETTE, 4, "looping-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/looping-adapter@1"}))
     return lib
 
@@ -669,7 +669,7 @@ def test_a_default_that_loops_back_on_one_seat_is_an_error(tmp_path, looping):
     r = run(dev, tmp_path / "o", looping)
     assert r.returncode != 0
     assert "test/loop-plug@1 is a cycle" in r.stderr, r.stderr[-800:]
-    assert "bay-1/module/lc01/tx" in r.stderr
+    assert "bay-1/module/lc01/1" in r.stderr
 
 
 def test_a_device_level_default_that_loops_is_an_error(tmp_path, looping):

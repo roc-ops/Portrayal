@@ -292,7 +292,7 @@ composes it:
 ```yaml
 # library/components/common/lc-duplex-adapter/v6/contract.yaml
 parts:
-  - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180,
+  - {ref: std/lc-bulkhead-bore@1, id: '1', at: [1.125, 0.11], lift: 3.175, rotate: 180,
      default: common/lc-dust-cap@1}
 ```
 
@@ -309,7 +309,7 @@ cites the source that shows the product shipping capped:
 
 | adapter | ships | on | source |
 |---|---|---|---|
-| `common/lc-duplex-adapter@6` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `tx` and `rx` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore |
+| `common/lc-duplex-adapter@6` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `1` and `2` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore |
 | `common/lc-duplex-v-adapter@6` (FS FHD, stacked) | `common/lc-duplex-dust-cap@2` | the adapter's own slot | FS's face-on render of SKU 57016: one white moulding across both stacked ports of every adapter |
 | `common/sc-duplex-adapter@5` (FS FHD SC) | `common/sc-dust-cap@1` | each opening | FS's face-on render of SKU 57058: a black cap in each of the twelve openings |
 | `common/mpo-adapter@2` (FS MTP panel tile) | `common/mpo-dust-cap@2` | the slot it forwards from `std/mpo@2` | FS's face-on renders of SKU 35510: all twelve ports capped. Nothing places the tile yet, so the default seats nowhere until a panel composes it |
@@ -318,14 +318,14 @@ cites the source that shows the product shipping capped:
 
 The two LC adapters ship at opposite levels because the products do: Smartoptics
 fits two simplex caps, FS one duplex moulding. So on a Smartoptics port a duplex
-plug needs both bores emptied first (`<port>/tx: ""`, `<port>/rx: ""`), and on an
+plug needs both bores emptied first (`<port>/1: ""`, `<port>/2: ""`), and on an
 FS port a simplex plug needs the adapter's own slot emptied (`bay-1/lc01: ""`);
 L115 refuses the build otherwise, naming the key.
 
 A default seats however its part got there, so the four Smartoptics `ppm-dcm-*`
 modules, which forward `lc-duplex` from their one composed adapter and publish no
 slot of their own, still show two bore caps when seated in the DCP-F-A22's bays.
-The build reaches those bores by their deep key (`slot-1/ppm-1/dcm/tx`); the
+The build reaches those bores by their deep key (`slot-1/ppm-1/dcm/1`); the
 explorer cannot offer them, because the module publishes no slot. A bay module's
 OWN top-level default is still refused.
 
@@ -368,7 +368,7 @@ A cassette's bore is three levels down: device bay, cassette, adapter, bore. #48
 addressed a cage one level into a seated module (`front-6/xg0`). The same rule
 extends to any depth: a slot's key is the path of part ids from the device's
 placement to the slot, with the `module` of each seated bay dropped, as nested
-`bays:` keys already are. So `bay-1/lc01/tx` is the TX bore of adapter `lc01` in
+`bays:` keys already are. So `bay-1/lc01/1` is bore 1 of adapter `lc01` in
 the cassette in `bay-1`, and `bay-1/lc01` is that adapter's duplex slot.
 
 **A slot on a module's back is keyed the same way (2026-09-23).** A cassette's back
@@ -389,7 +389,7 @@ publishes that aperture as a slot, at the wrapper's key (`port-0`,
 `front-2/xg0`). The wrapper's component still lists the aperture among its own
 cages, which would make `port-0/aperture` a second key for one opening. It is
 not one: a slot whose carrier is itself a placed slot is a slot only when the
-carrier's `bores` name it - a duplex adapter's `tx` and `rx`, the other level
+carrier's `bores` name it - a duplex adapter's `1` and `2`, the other level
 of the same opening. The build refuses an `occupants:` key on any other slot
 inside a slot, naming the carrier's key to use instead; L12 reports it as an
 error; the explorer never offers it. A module seated in a bay is not a placed
@@ -468,7 +468,7 @@ Two lessons from building the caps as the adapter's relief carry over:
   optic seated on a card a part of its own: it is ejected by its own path and
   leaves with the card. A dust cap is seated the same way (`occupies`), so it
   follows the same rule at every depth. A cap in a bore of an adapter placed on
-  the device is pulled as `xc01/tx-occupant`. The kit used to key any
+  the device is pulled as `xc01/1-occupant`. The kit used to key any
   two-segment path by its first segment. So both caps of a Smartoptics adapter,
   and the adapter's own art, came out as one part called `xc01`, 36 times on a
   DCP-R. On a module's back, no occupant is a part of its own. The back is drawn
@@ -477,7 +477,7 @@ Two lessons from building the caps as the adapter's relief carry over:
   A PLUG IN A FRONT SLOT IS PULLED THE SAME WAY (ruled 2026-09-23). A plug
   declares no behaviour, by its own ruling, so the kit knows it as it knows
   any occupant: `data-for` its slot, at the `<slot>-occupant` name the build
-  gives it. A simplex plug in a bore is pulled as `xc01/tx-occupant`, a
+  gives it. A simplex plug in a bore is pulled as `xc01/1-occupant`, a
   duplex plug in an FHD slot as `bay-1/module/lc1-occupant`. No library part
   changed for this.
 - **How far a cap or a plug is pulled (2026-09-23).** A part that declares a

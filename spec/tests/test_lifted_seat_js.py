@@ -62,7 +62,7 @@ needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not i
 FACES = [
     ("dcp-2 ila-node", "smartoptics/dcp-2", "ila-node",
      {"slot-1/sfp-1": SFP, "slot-1/sfp-2": SFP,
-      "slot-1/edfa": DUPLEX, "slot-1/edfa/tx": "", "slot-1/edfa/rx": ""}),
+      "slot-1/edfa": DUPLEX, "slot-1/edfa/1": "", "slot-1/edfa/2": ""}),
     ("dcp-2 dcp-404-x1", "smartoptics/dcp-2", "dcp-404-x1",
      {"slot-1/c1": QSFP, "slot-1/c2": QSFP, "slot-1/c3": QSFP, "slot-1/c4": QSFP,
       "slot-1/line": QSFPDD}),
@@ -320,7 +320,7 @@ def test_every_case_is_a_lifted_slot_the_kit_used_to_refuse(parity):
                       "dcp-r-34d-cs default": 72, "fhd-1ufce populated": 24}, counts
     # the seven lifted CAGES (kind cage, not connector) of the library, all here
     cages = {k for c, g in zip(cases, got) for k, h in g["seated"].items()
-             if h["entry"] and not k.rsplit("/", 1)[1] in ("tx", "rx")
+             if h["entry"] and not k.rsplit("/", 1)[1] in ("1", "2")
              and (h["entry"]["lift"] == 44)}
     assert len(cages) == 7, sorted(cages)
     lifts, depths = set(), set()

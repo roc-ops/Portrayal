@@ -121,7 +121,7 @@ await scenario('census', async () => {
   return {
     all: slots.map(s => s.id), offered: free.map(s => s.id),
     lc1: plain(slots.find(s => s.id === 'bay-1/module/lc1')),
-    tx: plain(slots.find(s => s.id === 'bay-1/module/lc1/tx')),
+    tx: plain(slots.find(s => s.id === 'bay-1/module/lc1/1')),
     helperSame: JSON.stringify(helper.map(plain)) === JSON.stringify(slots.map(plain)),
     alias: JSON.stringify(m.nestedCages(root, compByRef).map(plain))
          === JSON.stringify(free.map(plain)),
@@ -167,7 +167,7 @@ await scenario('clickPlug', async () => {
   const key = 'bay-1/module/lc1';
   await swap(root, fhdCages, key, PLUG);
   const hit = m.cageAt(root, `${key}-occupant/a`, fhdCages, compByRef);
-  const bore = m.cageAt(root, `${key}/tx`, fhdCages, compByRef);
+  const bore = m.cageAt(root, `${key}/1`, fhdCages, compByRef);
   return {plugPart: hit?.id ?? null, bore: bore?.id ?? null,
           options: hit && m.slotOptions ? m.slotOptions(hit, PLUG) : null};
 });
@@ -178,10 +178,10 @@ await scenario('fhdSimplex', async () => {
   const before = offered(root, fhdCages).filter(id => id.startsWith('bay-1/module/lc1'));
   await swap(root, fhdCages, 'bay-1/module/lc1', null);
   const emptied = offered(root, fhdCages).filter(id => id.startsWith('bay-1/module/lc1'));
-  const res = await swap(root, fhdCages, 'bay-1/module/lc1/tx', SIMPLEX);
+  const res = await swap(root, fhdCages, 'bay-1/module/lc1/1', SIMPLEX);
   const after = offered(root, fhdCages).filter(id => id.startsWith('bay-1/module/lc1'));
-  const again = await swap(root, fhdCages, 'bay-1/module/lc1/tx', SIMPLEX);
-  return {before, emptied, after, res, again, tx: seated(root, 'bay-1/module/lc1/tx'),
+  const again = await swap(root, fhdCages, 'bay-1/module/lc1/1', SIMPLEX);
+  return {before, emptied, after, res, again, tx: seated(root, 'bay-1/module/lc1/1'),
           lc1: occupantsAt(root, 'bay-1/module/lc1').length};
 });
 
@@ -189,19 +189,19 @@ await scenario('fhdSimplex', async () => {
 await scenario('dcpBore', async () => {
   const root = face('dcp:default');
   const before = offered(root, dcpCages).filter(id => id.startsWith('xc01'));
-  const res = await swap(root, dcpCages, 'xc01/tx', SIMPLEX);
-  const tx = seated(root, 'xc01/tx');
-  const again = await swap(root, dcpCages, 'xc01/tx', CAP);
-  const back = occupantsAt(root, 'xc01/tx').map(n => n.getAttribute('data-ref'));
-  await swap(root, dcpCages, 'xc01/tx', SIMPLEX);
-  return {before, res, tx, again, back, final: occupantsAt(root, 'xc01/tx').length};
+  const res = await swap(root, dcpCages, 'xc01/1', SIMPLEX);
+  const tx = seated(root, 'xc01/1');
+  const again = await swap(root, dcpCages, 'xc01/1', CAP);
+  const back = occupantsAt(root, 'xc01/1').map(n => n.getAttribute('data-ref'));
+  await swap(root, dcpCages, 'xc01/1', SIMPLEX);
+  return {before, res, tx, again, back, final: occupantsAt(root, 'xc01/1').length};
 });
 
 await scenario('dcpDuplex', async () => {
   const root = face('dcp:default');
-  await swap(root, dcpCages, 'xc01/tx', null);
+  await swap(root, dcpCages, 'xc01/1', null);
   const oneEmpty = offered(root, dcpCages).filter(id => id.startsWith('xc01'));
-  await swap(root, dcpCages, 'xc01/rx', null);
+  await swap(root, dcpCages, 'xc01/2', null);
   const bothEmpty = offered(root, dcpCages).filter(id => id.startsWith('xc01'));
   const res = await swap(root, dcpCages, 'xc01', PLUG);
   const after = offered(root, dcpCages).filter(id => id.startsWith('xc01'));
@@ -242,11 +242,11 @@ await scenario('shuttered', async () => {
   const mine = slots.filter(s => s.id.startsWith('bay-3/module/'));
   const lc01 = mine.find(s => s.id === 'bay-3/module/lc01');
   const filled = mine.filter(s => m.occupantsOf(root, s).length).map(s => s.id);
-  const res = await swap(root, fhdCages, 'bay-3/module/lc01/tx', SIMPLEX);
+  const res = await swap(root, fhdCages, 'bay-3/module/lc01/1', SIMPLEX);
   return {n: mine.length, ids: mine.map(s => s.id).slice(0, 3), filled,
           defaults: [...new Set(mine.map(s => s.default ?? null))],
-          options: m.slotOptions(lc01, ''), boreOptions: m.slotOptions(mine.find(s => s.id === 'bay-3/module/lc01/tx'), ''),
-          res, tx: seated(root, 'bay-3/module/lc01/tx'),
+          options: m.slotOptions(lc01, ''), boreOptions: m.slotOptions(mine.find(s => s.id === 'bay-3/module/lc01/1'), ''),
+          res, tx: seated(root, 'bay-3/module/lc01/1'),
           after: m.faceCages(root, fhdCages, compByRef, {offered: true}).map(s => s.id)
             .filter(id => id.startsWith('bay-3/module/lc01'))};
 });
@@ -295,11 +295,11 @@ await scenario('accept', async () => {
     'bay-1': CASS12,
     'bay-1/module/lc01': PLUG,            // on the NEW cassette in bay-1
     'bay-1/module/lc1': PLUG,             // the OLD cassette's slot: gone
-    'bay-2/module/lc1/tx': SIMPLEX,       // its adapter still holds its cap
+    'bay-2/module/lc1/1': SIMPLEX,       // its adapter still holds its cap
     'bay-3/module/lc1': '',               // emptied ...
-    'bay-3/module/lc1/tx': SIMPLEX,       // ... so its bore is free
+    'bay-3/module/lc1/1': SIMPLEX,       // ... so its bore is free
     'bay-4/module/lc1-occupant/a': 'common/lc-boot@1',   // P3: inside an occupant
-    'bay-4/module/lc1/tx': 'common/lc-dust-cap@1',        // blocked by the shipped duplex cap
+    'bay-4/module/lc1/1': 'common/lc-dust-cap@1',        // blocked by the shipped duplex cap
     'bay-4/module/lc2': 'generic/sfp-lc@1',               // not something the slot accepts
   };
   const a = m.acceptSwaps(map, fhd);
@@ -311,10 +311,10 @@ await scenario('accept', async () => {
   const noRef = {...dcp, placementRef: undefined};
   return {
     fhd: a, fhdOrderFree: JSON.stringify(a) === JSON.stringify(b),
-    dcpBore: m.acceptSwaps({'xc01/tx': SIMPLEX}, dcp),
-    dcpBoreNoRef: m.acceptSwaps({'xc01/tx': SIMPLEX}, noRef),
+    dcpBore: m.acceptSwaps({'xc01/1': SIMPLEX}, dcp),
+    dcpBoreNoRef: m.acceptSwaps({'xc01/1': SIMPLEX}, noRef),
     dcpDuplexCapped: m.acceptSwaps({'xc01': PLUG}, dcp),
-    dcpDuplexFree: m.acceptSwaps({'xc01': PLUG, 'xc01/tx': '', 'xc01/rx': ''}, dcp),
+    dcpDuplexFree: m.acceptSwaps({'xc01': PLUG, 'xc01/1': '', 'xc01/2': ''}, dcp),
     dcpCfg: dcpCfg.name,
   };
 });
@@ -338,22 +338,22 @@ await scenario('delta', async () => {
     emptiedBack: m.decodeSwaps(m.encodeSwaps(emptied)),
     capBack: d({'bay-1/module/lc1': DCAP}),
     plugged: d({'bay-1/module/lc1': PLUG}),
-    simplex: d({'bay-1/module/lc1': null, 'bay-1/module/lc1/tx': SIMPLEX}),
+    simplex: d({'bay-1/module/lc1': null, 'bay-1/module/lc1/1': SIMPLEX}),
     // on a cassette the state swapped, what a fresh seat ships is no swap
     fresh: d({'bay-1/module/lc01': DCAP}, {'bay-1': CASS12}),
     freshEmptied: d({'bay-1/module/lc01': null}, {'bay-1': CASS12}),
-    dcpEmptied: dcp({'xc01/tx': null}),
-    dcpCap: dcp({'xc01/tx': CAP}),
-    dcpDuplex: dcp({'xc01/tx': null, 'xc01/rx': null, 'xc01': PLUG}),
+    dcpEmptied: dcp({'xc01/1': null}),
+    dcpCap: dcp({'xc01/1': CAP}),
+    dcpDuplex: dcp({'xc01/1': null, 'xc01/2': null, 'xc01': PLUG}),
   };
 });
 
 // ------------------------------------------------------- pruning
 await scenario('prune', async () => {
   const slice = {cfgBays: {'bay-1': CASS6, 'bay-2': CASS6},
-                 cfgOccupants: {'bay-1/module/lc1': PLUG, 'bay-1/module/lc2/tx': SIMPLEX,
+                 cfgOccupants: {'bay-1/module/lc1': PLUG, 'bay-1/module/lc2/1': SIMPLEX,
                                 'bay-1/module/lc2': null, 'bay-2/module/lc1': null},
-                 touched: new Set(['bay-1/module/lc1', 'bay-1/module/lc2/tx', 'bay-1/module/lc2',
+                 touched: new Set(['bay-1/module/lc1', 'bay-1/module/lc2/1', 'bay-1/module/lc2',
                                    'bay-2/module/lc1']),
                  refused: {}, failed: {}};
   const p = m.pruneCarrier(slice, 'bay-1');
@@ -390,16 +390,16 @@ await scenario('queue', async () => {
 // ----------------------------------- which views the 3D pass rewrites
 await scenario('views', async () => {
   const dev = {bays: {front: []}, cages: {front: dcpCages, rear: []}};
-  return {bore: m.viewsToRewrite(dev, {'xc01/tx': SIMPLEX}),
+  return {bore: m.viewsToRewrite(dev, {'xc01/1': SIMPLEX}),
           fhd: m.viewsToRewrite({bays: {front: input.bays['fhd-1ufce'], rear: []}, cages: {}},
-                                {'bay-1/module/lc1/tx': SIMPLEX})};
+                                {'bay-1/module/lc1/1': SIMPLEX})};
 });
 
 // ------------------------- a configuration's deep keys, at the drawing's path
 await scenario('builtKeys', async () => {
-  const cfg = {bays: {'bay-1': CASS6}, occupants: {'bay-1/lc1/tx': SIMPLEX, 'bay-1/lc1': '',
+  const cfg = {bays: {'bay-1': CASS6}, occupants: {'bay-1/lc1/1': SIMPLEX, 'bay-1/lc1': '',
                                                    'bay-2/lc3': PLUG}};
-  const dcp = {occupants: {'xc01/tx': '', 'xc01/rx': '', 'xc01': PLUG, 'port-1510/tx': SIMPLEX}};
+  const dcp = {occupants: {'xc01/1': '', 'xc01/2': '', 'xc01': PLUG, 'port-1510/1': SIMPLEX}};
   return {
     fhd: m.builtOccupants(cfg, fhdCages, {bays: input.bays['fhd-1ufce'], compByRef}),
     dcp: m.builtOccupants(dcp, dcpCages, {bays: input.bays['dcp-r-34d-cs'], compByRef}),
@@ -415,24 +415,24 @@ await scenario('seatFace', async () => {
   const fhdRoot = face('fhd:populated');
   const fhdBays = input.bays['fhd-1ufce'];
   const map = {'bay-2': CASS12, 'bay-2/module/lc01': PLUG,
-               'bay-1/module/lc1': '', 'bay-1/module/lc1/tx': SIMPLEX};
+               'bay-1/module/lc1': '', 'bay-1/module/lc1/1': SIMPLEX};
   const fr = await m.seatFace(fhdRoot, {bays: fhdBays, cages: fhdCages}, map, loadSkin, compByRef);
   const byPathCount = (root, p) => root.querySelectorAll(`[data-path="${p}"]`).length;
   const stale = r => r.querySelectorAll('[data-for]')
     .filter(n => /^fhd-/.test(n.getAttribute('data-for') || '')).length;
   const tx = await (async () => {
     const root = face('dcp:default');
-    const res = await m.seatFace(root, {bays: [], cages: dcpCages}, {'xc01/tx': SIMPLEX}, loadSkin, compByRef);
+    const res = await m.seatFace(root, {bays: [], cages: dcpCages}, {'xc01/1': SIMPLEX}, loadSkin, compByRef);
     return {res: {applied: res.applied, refused: res.refused, failed: res.failed},
-            seated: seated(root, 'xc01/tx'), paths: byPathCount(root, 'xc01/tx-occupant')};
+            seated: seated(root, 'xc01/1'), paths: byPathCount(root, 'xc01/1-occupant')};
   })();
   const duplex = await (async () => {
     const root = face('dcp:default');
     const res = await m.seatFace(root, {bays: [], cages: dcpCages},
-                                 {'xc01/tx': '', 'xc01/rx': '', 'xc01': PLUG}, loadSkin, compByRef);
+                                 {'xc01/1': '', 'xc01/2': '', 'xc01': PLUG}, loadSkin, compByRef);
     return {res: {applied: res.applied, refused: res.refused, failed: res.failed},
-            seated: seated(root, 'xc01'), bores: byPathCount(root, 'xc01/tx-occupant')
-              + byPathCount(root, 'xc01/rx-occupant')};
+            seated: seated(root, 'xc01'), bores: byPathCount(root, 'xc01/1-occupant')
+              + byPathCount(root, 'xc01/2-occupant')};
   })();
   return {
     fhd: {res: {applied: fr.applied, refused: fr.refused, failed: fr.failed, dropped: fr.dropped},
@@ -440,7 +440,7 @@ await scenario('seatFace', async () => {
           lc01Paths: byPathCount(fhdRoot, 'bay-2/module/lc01-occupant'),
           lc1: occupantsAt(fhdRoot, 'bay-1/module/lc1').length,
           lc1Paths: byPathCount(fhdRoot, 'bay-1/module/lc1-occupant'),
-          tx: seated(fhdRoot, 'bay-1/module/lc1/tx'),
+          tx: seated(fhdRoot, 'bay-1/module/lc1/1'),
           stale: stale(fhdRoot)},
     tx, duplex,
   };

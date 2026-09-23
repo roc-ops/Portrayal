@@ -40,7 +40,7 @@ from portrayal.render import (_connector_registry, _pluggable_candidates,
 
 ADAPTER = "common/lc-duplex-adapter"        # side by side; dcp-r-34d-cs places it
 V_ADAPTER = "common/lc-duplex-v-adapter"    # stacked; the FHD cassette composes it
-MAJOR = {ADAPTER: 5, V_ADAPTER: 5}
+MAJOR = {ADAPTER: 6, V_ADAPTER: 6}
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a@4"
 PLUG = "generic/lc-plug@2"                  # mates lc - one bore
 DUPLEX = "test/duplex-plug@1"               # mates lc-duplex - the pair
@@ -144,7 +144,7 @@ def test_an_adapter_sits_its_bores_at_the_duplex_pitch(lib, name):
 @pytest.mark.parametrize("name", [ADAPTER, V_ADAPTER])
 def test_an_adapter_names_the_bores_its_own_slot_spans(lib, name):
     c = contract(lib, f"{name}@{MAJOR[name]}")
-    assert spanned_slots(c, resolver(lib), _connector_registry()) == ["tx", "rx"]
+    assert spanned_slots(c, resolver(lib), _connector_registry()) == ["1", "2"]
 
 
 # --- the published entries ----------------------------------------------------------
@@ -161,7 +161,7 @@ def test_the_adapter_slot_is_published_with_the_bores_it_spans(lib):
     entry = cages(lib, CASSETTE)["lc01"]
     assert entry["kind"] == "connector"
     assert entry["interface"] == "lc-duplex"
-    assert entry["bores"] == ["tx", "rx"]
+    assert entry["bores"] == ["1", "2"]
     assert DUPLEX in entry["accepts"] and PLUG not in entry["accepts"]
 
 
@@ -169,7 +169,7 @@ def test_an_adapter_declaring_its_own_interface_still_publishes_its_bores(lib):
     """P2 is about FORWARDING: a component presenting its own interface
     forwards nothing, so every part it composes is still a slot of its own."""
     got = cages(lib, f"{V_ADAPTER}@{MAJOR[V_ADAPTER]}")
-    assert sorted(got) == ["rx", "tx"]
+    assert sorted(got) == ["1", "2"]
     for e in got.values():
         assert e["kind"] == "connector" and e["interface"] == "lc"
         assert PLUG in e["accepts"] and DUPLEX not in e["accepts"]
@@ -191,7 +191,7 @@ def test_every_adapter_a_module_composes_names_its_bores(lib):
     got = cages(lib, "smartoptics/dcp-f-a22@2")
     spanning = {i: e["bores"] for i, e in got.items()
                 if e["interface"] == "lc-duplex"}
-    assert spanning and all(b == ["tx", "rx"] for b in spanning.values()), got
+    assert spanning and all(b == ["1", "2"] for b in spanning.values()), got
     assert [e["bores"] for i, e in got.items() if i not in spanning] == \
         [[] for i in got if i not in spanning]
 
@@ -199,15 +199,15 @@ def test_every_adapter_a_module_composes_names_its_bores(lib):
 # --- the build refuses both levels --------------------------------------------------
 
 def capped_cassette(root):
-    """A cassette copy whose lc01 is an adapter shipping a cap on its tx bore,
+    """A cassette copy whose lc01 is an adapter shipping a cap on its bore 1,
     so that bore is filled with no configuration saying so."""
     def capped(c):
-        _part(c, "tx")["default"] = PLUG
+        _part(c, "1")["default"] = PLUG
     _copy(root, V_ADAPTER, MAJOR[V_ADAPTER], "capped-adapter", _unshipped(capped))
 
     def swap(c):
         _part(c, "lc01")["ref"] = "test/capped-adapter@1"
-    _copy(root, CASSETTE.split("@")[0], 3, "capped-cassette", swap)
+    _copy(root, CASSETTE.split("@")[0], 4, "capped-cassette", swap)
     return "test/capped-cassette@1"
 
 
@@ -238,26 +238,26 @@ def refuses(dev, tmp_path, lib_root, key, bore):
 
 def test_a_composed_adapter_refuses_its_slot_and_a_bore(tmp_path, lib):
     dev, _ = fhd(tmp_path, CASSETTE,
-                 {"bay-1/lc01": DUPLEX, "bay-1/lc01/tx": PLUG})
-    refuses(dev, tmp_path, lib, "bay-1/lc01", "tx")
+                 {"bay-1/lc01": DUPLEX, "bay-1/lc01/1": PLUG})
+    refuses(dev, tmp_path, lib, "bay-1/lc01", "1")
 
 
 def test_a_placed_adapter_refuses_its_slot_and_a_bore(tmp_path, lib):
-    # tx's shipped cap emptied, so the one conflict is the configured rx
-    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": PLUG})
-    refuses(dev, tmp_path, lib, "port-1510", "rx")
+    # bore 1's shipped cap emptied, so the one conflict is the configured 2
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/1": "", "port-1510/2": PLUG})
+    refuses(dev, tmp_path, lib, "port-1510", "2")
 
 
 def test_a_shipped_bore_counts_as_filled(tmp_path, lib):
     """After defaults resolve: nothing keys the bore, the adapter ships a cap
     in it, and the configuration fills the adapter's own slot."""
     dev, _ = fhd(tmp_path, capped_cassette(lib), {"bay-1/lc01": DUPLEX})
-    refuses(dev, tmp_path, lib, "bay-1/lc01", "tx")
+    refuses(dev, tmp_path, lib, "bay-1/lc01", "1")
 
 
 def test_emptying_the_shipped_bore_lets_the_duplex_connector_seat(tmp_path, lib):
     dev, _ = fhd(tmp_path, capped_cassette(lib),
-                 {"bay-1/lc01": DUPLEX, "bay-1/lc01/tx": ""})
+                 {"bay-1/lc01": DUPLEX, "bay-1/lc01/1": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {"bay-1/module/lc01-occupant": DUPLEX}
 
@@ -273,16 +273,16 @@ def test_filling_only_the_adapter_slot_builds(tmp_path, lib):
 def test_filling_only_the_bores_builds(tmp_path, lib):
     # the adapter ships a duplex cap on its own slot, emptied first
     dev, _ = fhd(tmp_path, CASSETTE,
-                 {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG, "bay-1/lc01/rx": PLUG})
+                 {"bay-1/lc01": "", "bay-1/lc01/1": PLUG, "bay-1/lc01/2": PLUG})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG,
-                                     "bay-1/module/lc01/rx-occupant": PLUG}
+    assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": PLUG,
+                                     "bay-1/module/lc01/2-occupant": PLUG}
 
 
 def test_emptying_the_adapter_slot_is_not_filling_it(tmp_path, lib):
-    dev, _ = fhd(tmp_path, CASSETTE, {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG})
+    dev, _ = fhd(tmp_path, CASSETTE, {"bay-1/lc01": "", "bay-1/lc01/1": PLUG})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}
+    assert occupants_drawn(root) == {"bay-1/module/lc01/1-occupant": PLUG}
 
 
 # --- L115 ---------------------------------------------------------------------------
@@ -306,15 +306,15 @@ def l111_component(root, ref):
 
 def test_l111_reports_a_configuration_filling_both_levels(tmp_path, lib):
     dev, _ = fhd(tmp_path, CASSETTE,
-                 {"bay-1/lc01": DUPLEX, "bay-1/lc01/tx": PLUG})
+                 {"bay-1/lc01": DUPLEX, "bay-1/lc01/1": PLUG})
     got = l111_device(dev, lib)
-    assert got and "bay-1/lc01" in got[0] and "bay-1/lc01/tx" in got[0], got
+    assert got and "bay-1/lc01" in got[0] and "bay-1/lc01/1" in got[0], got
 
 
 def test_l111_reports_a_placed_adapter_too(tmp_path, lib):
-    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": PLUG})
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/1": "", "port-1510/2": PLUG})
     got = l111_device(dev, lib)
-    assert got and "port-1510/rx" in got[0], got
+    assert got and "port-1510/2" in got[0], got
 
 
 def test_l111_reports_a_configured_bore_over_a_shipped_adapter_slot(tmp_path, lib):
@@ -326,18 +326,18 @@ def test_l111_reports_a_configured_bore_over_a_shipped_adapter_slot(tmp_path, li
 
     def swap(c):
         _part(c, "lc01")["ref"] = "test/capped-duplex@1"
-    _copy(lib, CASSETTE.split("@")[0], 3, "duplex-cassette", swap)
-    dev, _ = fhd(tmp_path, "test/duplex-cassette@1", {"bay-1/lc01/tx": PLUG})
+    _copy(lib, CASSETTE.split("@")[0], 4, "duplex-cassette", swap)
+    dev, _ = fhd(tmp_path, "test/duplex-cassette@1", {"bay-1/lc01/1": PLUG})
     got = l111_device(dev, lib)
-    assert got and "bay-1/lc01/tx" in got[0], got
+    assert got and "bay-1/lc01/1" in got[0], got
     # and the build says the same thing
-    refuses(dev, tmp_path, lib, "bay-1/lc01", "tx")
+    refuses(dev, tmp_path, lib, "bay-1/lc01", "1")
 
 
 def test_l111_is_clean_for_one_level_at_a_time(tmp_path, lib):
     for occ in ({"bay-1/lc01": DUPLEX},
-                {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG, "bay-1/lc01/rx": PLUG},
-                {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG}):
+                {"bay-1/lc01": "", "bay-1/lc01/1": PLUG, "bay-1/lc01/2": PLUG},
+                {"bay-1/lc01": "", "bay-1/lc01/1": PLUG}):
         dev, _ = fhd(tmp_path / str(abs(hash(str(occ)))), CASSETTE, occ)
         assert l111_device(dev, lib) == [], occ
 
@@ -345,19 +345,19 @@ def test_l111_is_clean_for_one_level_at_a_time(tmp_path, lib):
 def test_l111_reports_a_contract_shipping_both_levels(lib):
     def both(c):
         c["default"] = DUPLEX
-        _part(c, "tx")["default"] = PLUG
+        _part(c, "1")["default"] = PLUG
     _copy(lib, V_ADAPTER, MAJOR[V_ADAPTER], "greedy-adapter", both)
     got = l111_component(lib, "test/greedy-adapter@1")
-    assert got and "tx" in got[0], got
+    assert got and "1" in got[0], got
 
 
 def test_l111_reports_a_composer_shipping_over_shipped_bores(lib):
-    capped_cassette(lib)                # test/capped-adapter@1 ships a cap on tx
+    capped_cassette(lib)                # test/capped-adapter@1 ships a cap on bore 1
 
     def over(c):
         p = _part(c, "lc01")
         p["ref"], p["default"] = "test/capped-adapter@1", DUPLEX
-    _copy(lib, CASSETTE.split("@")[0], 3, "greedy-cassette", over)
+    _copy(lib, CASSETTE.split("@")[0], 4, "greedy-cassette", over)
     got = l111_component(lib, "test/greedy-cassette@1")
     assert got and "lc01" in got[0], got
 
@@ -388,8 +388,8 @@ def test_l112_reports_bores_off_the_duplex_pitch(lib):
     """The defect the rule exists for: an adapter drawn to a vendor stencil
     rather than to the interface standard."""
     def narrow(c):
-        rx = _part(c, "rx")
-        rx["at"] = [rx["at"][0], round(_part(c, "tx")["at"][1] + 6.0, 4)]
+        rx = _part(c, "2")
+        rx["at"] = [rx["at"][0], round(_part(c, "1")["at"][1] + 6.0, 4)]
     _copy(lib, V_ADAPTER, MAJOR[V_ADAPTER], "narrow-adapter", narrow)
     got = l112(lib, "test/narrow-adapter@1")
     assert got and "6.0" in got[0] and str(duplex_pitch()) in got[0], got
@@ -405,7 +405,7 @@ def test_l112_reports_a_mate_off_the_midpoint(lib):
 
 def test_l112_reports_the_wrong_number_of_bores(lib):
     def one(c):
-        c["parts"] = [_part(c, "tx")]
+        c["parts"] = [_part(c, "1")]
     _copy(lib, ADAPTER, MAJOR[ADAPTER], "lonely-adapter", one)
     got = l112(lib, "test/lonely-adapter@1")
     assert got and "spans 2" in got[0], got
@@ -447,7 +447,7 @@ def bore_axis(root, ref):
 
 
 # 270 FOR THE STACKED ADAPTER, NOT 90 - and 270 is the right answer. Since
-# common/lc-duplex-v-adapter@6 the LOWER bore is composed first (`tx`, the port
+# common/lc-duplex-v-adapter@6 the LOWER bore is composed first (`1`, the port
 # FS prints as odd), so the first-to-last direction runs UP the plate, and the
 # turn that carries the canonical across axis onto it is 270. That turn puts a
 # duplex part's half `a` in the lower bore (port 1) and swings its latch, drawn
@@ -500,7 +500,7 @@ def test_a_spanning_slot_publishes_the_axis_its_bores_lie_on(lib, composer, slot
     assert placement.get("rotate") is None
     assert placement["ref"] == f"{adapter}@{MAJOR[adapter]}"
     entry = cages(lib, composer)[slot]
-    assert entry["bores"] == ["tx", "rx"]
+    assert entry["bores"] == ["1", "2"]
     assert entry["rotate"] == AXIS[adapter]
 
 
@@ -548,7 +548,7 @@ def seat_duplex(tmp_path, lib_root, where, name, config, key, ref):
         dev, _ = fhd(tmp_path, CASSETTE, {key: ref})
     else:
         # the Smartoptics adapter ships a cap in each bore, emptied first
-        dev = dcp2(tmp_path, {key: ref, f"{key}/tx": "", f"{key}/rx": ""})
+        dev = dcp2(tmp_path, {key: ref, f"{key}/1": "", f"{key}/2": ""})
     return face(build(dev, tmp_path / "o", lib_root), name, config)
 
 
@@ -638,7 +638,7 @@ def test_the_coverage_check_fails_on_a_mutated_published_rotate(tmp_path, lib,
     A HALF TURN IS NOT TESTED, and the reason is a real limit of this check: a
     duplex part is a pair on an axis, so turning it 180 maps the pair onto
     itself and leaves both bores covered. What 180 changes is WHICH half lands
-    on which bore - tx against rx - and coverage cannot see that. The order is
+    on which bore - 1 against 2 - and coverage cannot see that. The order is
     held instead by `spanning_axis` reading the bores in declaration order and
     by the plug's halves being checked against the bores by name in
     spec/tests/test_fibre_plugs.py."""

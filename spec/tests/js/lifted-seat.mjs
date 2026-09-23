@@ -13,8 +13,8 @@
 //
 // WHERE THE SLOT ENTRY COMES FROM: the kit's own nestedSlots (B3 Task 10a),
 // which reads a slot off ANY carrier - a card (`<bay>/module`), an adapter
-// placed on the device (`xc01/tx`), one composed on a card
-// (`slot-1/module/edfa/tx`). Task 9 built those entries here, in
+// placed on the device (`xc01/1`), one composed on a card
+// (`slot-1/module/edfa/1`). Task 9 built those entries here, in
 // `slotEntries` below, because nothing in the kit found them yet; the helper
 // is kept as the reference the kit's entry is checked against, field for
 // field, on every carrier the parity seats into.

@@ -808,8 +808,8 @@ export function nestedBays(rootEl, compByRef) {
 // path. The carrier is any instance, at any depth:
 //   a card in a bay           `front-6/module` -> `front-6/module/xg0`;
 //   a cassette in a bay       `bay-1/module`   -> `bay-1/module/lc1`;
-//   an adapter composed in it `bay-1/module/lc1` -> `bay-1/module/lc1/tx`;
-//   an adapter on the device  `xc01`           -> `xc01/tx`;
+//   an adapter composed in it `bay-1/module/lc1` -> `bay-1/module/lc1/1`;
+//   an adapter on the device  `xc01`           -> `xc01/1`;
 //   a module's back           `bay-1/module`   -> `bay-1/module/mtp1`, drawn as
 //                             a projection on the rear face (backSlotsOf).
 //
@@ -936,7 +936,7 @@ export const nestedCages = (rootEl, compByRef, opts) => nestedSlots(rootEl, comp
 
 // A CONFIGURATION'S KEY FOR A DRAWING PATH (P1): the path with every
 // `module` step dropped - manifest.slot_key_prefix, the build's own reading.
-// `bay-1/module/lc1/tx` -> `bay-1/lc1/tx`; `xc01/tx` stays as it is.
+// `bay-1/module/lc1/1` -> `bay-1/lc1/1`; `xc01/1` stays as it is.
 export function slotKey(path) {
   return String(path).split('/').filter(s => s !== 'module').join('/');
 }
@@ -1261,7 +1261,7 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
 //   - one of ITS BAYS is named in `overrides` - the original rule, untouched;
 //   - one of ITS CAGES is named in `overrides` - the case this function adds;
 //   - a key names a slot ON one of its cages - a bore of a duplex adapter
-//     placed on the device, `xc01/tx` (B3): no `/module/` in it, and no cage
+//     placed on the device, `xc01/1` (B3): no `/module/` in it, and no cage
 //     of that id, so it named no view and 3D never saw the swap;
 //   - `overrides` names a nested (`/module/`) path AND the view has bays at
 //     all. A nested path is never a device bay id (nestedBays only ever
@@ -1725,8 +1725,8 @@ export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.defaul
 // card's namespace - `front-6/xg0-occupant`, or `front-6/<id>`.
 //
 // A SLOT AT ANY DEPTH (B3, P1) is keyed the same way, part ids after the
-// bays - `bay-1/lc1/tx` - and the drawing puts `module` only after a BAY:
-// `bay-1/module/lc1/tx`, not configBayPath's `bay-1/module/lc1/module/tx`.
+// bays - `bay-1/lc1/1` - and the drawing puts `module` only after a BAY:
+// `bay-1/module/lc1/1`, not configBayPath's `bay-1/module/lc1/module/1`.
 // Which steps are bays is the configuration's population's answer, so with
 // `ctx` ({bays: the device's own, flattened; compByRef}) each key is walked
 // through slotResolver, the bays at what this configuration seats in them.
@@ -1811,7 +1811,7 @@ function keyPath(cfg, cages, {bays = [], compByRef, placementRef} = {}) {
 // slotResolver with the bays at what the STATE seats, so a slot on a swapped
 // cassette is measured against that cassette's cap. Emptying a shipped cap
 // is then a swap (`lc1~`) and putting it back is none. `placementRef` is
-// slotResolver's: a slot on a device placement (`xc01/tx`) needs the
+// slotResolver's: a slot on a device placement (`xc01/1`) needs the
 // placement's ref to find what it ships.
 export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccupants = {},
                               compByRef = null, placementRef = () => null}) {

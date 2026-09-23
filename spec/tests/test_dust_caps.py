@@ -34,8 +34,8 @@ from portrayal.manifest import load_yaml, presented_interface
 
 DCP = "smartoptics/dcp-r-34d-cs"
 FHD = "fs/fhd-1ufce"
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"     # twelve lc-duplex-v-adapter@5
-SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"     # six sc-duplex-adapter@4
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"     # twelve lc-duplex-v-adapter@6
+SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"     # six sc-duplex-adapter@5
 
 LC_CAP = "common/lc-dust-cap@1"
 LC_DUPLEX_CAP = "common/lc-duplex-dust-cap@2"
@@ -54,7 +54,7 @@ ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 5),
 MATES = {LC_CAP: "lc", LC_DUPLEX_CAP: "lc-duplex", SC_CAP: "sc", MPO_CAP: "mpo"}
 # WHICH PART EACH CAP SEATS ON inside its adapter: a bore id, or None where the
 # cap spans the adapter's own slot.
-BORE_OF = {LC_CAP: "tx", LC_DUPLEX_CAP: None, SC_CAP: "tx"}
+BORE_OF = {LC_CAP: "1", LC_DUPLEX_CAP: None, SC_CAP: "1"}
 
 
 def contract(ref):
@@ -323,7 +323,7 @@ def lib(tmp_path):
                       {"id": "mtp2", "ref": "common/mpo-adapter@2", "at": [60.0, 12.0]}]
         for k in ("optical", "faces"):
             c.pop(k, None)
-    _copy(root, "fs/fhd-1mtp12-sc-os2-a", 2, "mpo-cassette", mpo_front)
+    _copy(root, "fs/fhd-1mtp12-sc-os2-a", 3, "mpo-cassette", mpo_front)
     return root
 
 
@@ -355,10 +355,10 @@ def front_of(parents, occ, node):
 def test_the_lc_cap_stands_where_the_adapter_drew_it(tmp_path):
     """Both bores of the Smartoptics adapter, at the lift the bezel presents,
     with the cap's front back at the adapter's old absolute 9.525."""
-    dev = dcp(tmp_path, {"port-1510/tx": LC_CAP, "port-1510/rx": LC_CAP})
+    dev = dcp(tmp_path, {"port-1510/1": LC_CAP, "port-1510/2": LC_CAP})
     root, parents = face(build(dev, tmp_path / "o", LIB), "dcp-r-34d-cs", "default")
     want = seat_lift(LC_CAP)
-    for bore in ("tx", "rx"):
+    for bore in ("1", "2"):
         occ = occupant(root, parents, f"port-1510/{bore}", LC_CAP)
         out, lift = front_of(parents, occ, inside(occ, "body"))
         assert lift == pytest.approx(want, abs=1e-6)
@@ -387,9 +387,9 @@ def test_the_duplex_cap_stands_where_the_fhd_adapter_drew_it(tmp_path):
 def test_the_sc_cap_and_its_grip_stand_where_the_adapter_drew_them(tmp_path):
     """The SC cap's raised grip is the one feature of the four that stands in
     FRONT of its cap rather than cutting into it: 3.8 against the cap's 3.3."""
-    dev = fhd(tmp_path, SC_CASSETTE, {"bay-1/sc1/tx": SC_CAP})
+    dev = fhd(tmp_path, SC_CASSETTE, {"bay-1/sc1/1": SC_CAP})
     root, parents = face(build(dev, tmp_path / "o", LIB), "fhd-1ufce", "base")
-    occ = occupant(root, parents, "bay-1/module/sc1/tx", SC_CAP)
+    occ = occupant(root, parents, "bay-1/module/sc1/1", SC_CAP)
     out, lift = front_of(parents, occ, inside(occ, "body"))
     assert lift == pytest.approx(seat_lift(SC_CAP), abs=1e-6)
     assert out == pytest.approx(ABSOLUTE_OUT[SC_CAP], abs=1e-6)
@@ -421,9 +421,9 @@ def test_the_mpo_cap_seats_at_the_panel_because_its_aperture_presents_no_lift(tm
 # --- the 3D rule the spec asks for ------------------------------------------------------
 
 SEATINGS = [
-    (LC_CAP, DCP, "dcp-r-34d-cs", "default", "port-1510/tx", "port-1510/tx"),
+    (LC_CAP, DCP, "dcp-r-34d-cs", "default", "port-1510/1", "port-1510/1"),
     (LC_DUPLEX_CAP, FHD, "fhd-1ufce", "base", "bay-1/lc01", "bay-1/module/lc01"),
-    (SC_CAP, FHD, "fhd-1ufce", "base", "bay-1/sc1/tx", "bay-1/module/sc1/tx"),
+    (SC_CAP, FHD, "fhd-1ufce", "base", "bay-1/sc1/1", "bay-1/module/sc1/1"),
     (MPO_CAP, FHD, "fhd-1ufce", "base", "bay-1/mtp1", "bay-1/module/mtp1"),
 ]
 CASSETTE_FOR = {LC_DUPLEX_CAP: LC_CASSETTE, SC_CAP: SC_CASSETTE,
@@ -524,4 +524,4 @@ def test_lint_refuses_a_bore_at_a_different_depth_from_the_slot(tmp_path, name, 
     _copy(root, name, major, "flat-adapter", sunk)
     got = l112("test/flat-adapter@1", root)
     assert got and "lift" in got[0] and "same face" in got[0], got
-    assert any("'tx'" in e for e in got) and any("'rx'" in e for e in got), got
+    assert any("'1'" in e for e in got) and any("'2'" in e for e in got), got

@@ -64,8 +64,8 @@ CONFORMS = {DUPLEX: None, SC: "sc-plug", MPO12: "mpo-plug", MPO24: "mpo-plug"}
 
 DCP = "smartoptics/dcp-r-34d-cs"      # places common/lc-duplex-adapter@6
 FHD = "fs/fhd-1ufce"
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"     # twelve lc-duplex-v-adapter@5
-SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"     # six sc-duplex-adapter@4
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"     # twelve lc-duplex-v-adapter@6
+SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"     # six sc-duplex-adapter@5
 H_ADAPTER = "common/lc-duplex-adapter@6"
 
 
@@ -339,7 +339,7 @@ def lib(tmp_path):
                       {"id": "mtp2", "ref": "common/mpo-adapter@2", "at": [60.0, 12.0]}]
         for k in ("optical", "faces"):
             c.pop(k, None)
-    _copy(root, "fs/fhd-1mtp12-sc-os2-a", 2, "mpo-cassette", mpo_front)
+    _copy(root, "fs/fhd-1mtp12-sc-os2-a", 3, "mpo-cassette", mpo_front)
     return root
 
 
@@ -362,7 +362,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     on a bore's - because that is what makes a boot chained on a half land
     behind the fibre it belongs to, not 6.25 away from it."""
     # the Smartoptics adapter ships a cap in each bore, emptied first
-    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": ""})
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/1": "", "port-1510/2": ""})
     root, parents = face(build(dev, tmp_path / "o", LIB), "dcp-r-34d-cs", "default")
     occ = occupant(root, "port-1510", DUPLEX)
     adapter = by_path(root, "port-1510")
@@ -378,7 +378,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     plug, bore = contract(DUPLEX), contract("std/lc-bulkhead-bore@1")
     half = contract(LC)
     bores = {q["id"]: q for q in contract(H_ADAPTER)["parts"]}
-    pairs = [("a", "tx"), ("b", "rx")]
+    pairs = [("a", "1"), ("b", "2")]
     for half_id, bore_id in pairs:
         q = next(p for p in plug["parts"] if p["id"] == half_id)
         # the half's mate in the PLUG's frame, through its own placement
@@ -423,7 +423,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     # and each half on the bore it fills, through the turn the seat applied
     plug, bore, half = contract(DUPLEX), contract("std/lc-bulkhead-bore@1"), contract(LC)
     bores = {q["id"]: q for q in adapter["parts"]}
-    for half_id, bore_id in (("a", "tx"), ("b", "rx")):
+    for half_id, bore_id in (("a", "1"), ("b", "2")):
         q = next(p for p in plug["parts"] if p["id"] == half_id)
         hp = seat_point(q["at"], half["size"], q.get("rotate"),
                         half["connection-points"]["mate"]["at"])
@@ -445,7 +445,7 @@ def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):
     occupants keyed under the instance that holds them at any depth, so the
     key is the half's part id under the plug's own seat:
     `port-1510-occupant/a`. Both halves take one, independently."""
-    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": "",
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/1": "", "port-1510/2": "",
                          "port-1510-occupant/a": BOOT,
                          "port-1510-occupant/b": BOOT})
     root, parents = face(build(dev, tmp_path / "o", LIB), "dcp-r-34d-cs", "default")
@@ -547,12 +547,12 @@ def test_a_key_under_a_seated_occupant_that_reaches_nothing_is_still_an_error(tm
 
 
 def test_the_sc_plug_seats_in_an_fhd_sc_cassette_bore(tmp_path):
-    """`bay-1/sc1/tx` is the TX bore of the adapter `sc1` in the cassette -
+    """`bay-1/sc1/1` is bore 1 of the adapter `sc1` in the cassette -
     the seat common/sc-dust-cap@1 already takes, with the plug in its place."""
-    dev = fhd(tmp_path, SC_CASSETTE, {"bay-1/sc1/tx": SC})
+    dev = fhd(tmp_path, SC_CASSETTE, {"bay-1/sc1/1": SC})
     root, parents = face(build(dev, tmp_path / "o", LIB), "fhd-1ufce", "base")
-    occ = occupant(root, "bay-1/module/sc1/tx", SC)
-    host = by_path(root, "bay-1/module/sc1/tx")
+    occ = occupant(root, "bay-1/module/sc1/1", SC)
+    host = by_path(root, "bay-1/module/sc1/1")
     hx, hy = device_point(parents, host,
                           contract("std/sc-bore@1")["connection-points"]["mate"]["at"])
     ox, oy = device_point(parents, occ,

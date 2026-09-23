@@ -953,7 +953,7 @@ export function ejectTravel({body = null, bodyDepth = null, depth = null, occupi
 //                   cage (`port-4-occupant`);
 //   {fru, nested}   an OCCUPANT anywhere below the top - an optic seated on a
 //                   card (`front-6/module/xg0-occupant`, #484), a dust cap in
-//                   a bore of an adapter on the device (`xc01/tx-occupant`) or
+//                   a bore of an adapter on the device (`xc01/1-occupant`) or
 //                   on a cassette (`bay-1/module/lc1-occupant`): a FRU of its
 //                   own, keyed by its full path, whose group sits inside its
 //                   host's when the host is one (the card's, or the optic a
@@ -969,7 +969,7 @@ export function ejectTravel({body = null, bodyDepth = null, depth = null, occupi
 // Deeper than two segments used to mean {sub} for everything, and a generic
 // optic declares no boxes, so a card's optic had no body and no pull at all.
 // And TWO segments used to mean the first, whatever moved: a Smartoptics
-// adapter's two bore caps (`xc01/tx-occupant`, `xc01/rx-occupant`) came out
+// adapter's two bore caps (`xc01/1-occupant`, `xc01/2-occupant`) came out
 // as one FRU named for the adapter, taking the adapter's own art with them,
 // and a cassette back's cap as a FRU named for the back - the whole back
 // ejected as a "cap" (B3 Tasks 8 and 10c).

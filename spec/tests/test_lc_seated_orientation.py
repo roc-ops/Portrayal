@@ -78,10 +78,10 @@ TOL = 0.05
 # bay-1 and bay-4 are the enclosure's two ends. The OM4 cassette is the OS2
 # one's twin, so the same keys; the 36-fibre cassette has eighteen shuttered
 # adapters, lc01 top left to lc18 bottom right.
-LC_SIMPLEX_KEYS = {"fhd": ["bay-1/lc01/tx", "bay-1/lc01/rx", "bay-4/lc12/tx"],
-                   "fhd-om": ["bay-1/lc01/tx", "bay-1/lc01/rx", "bay-4/lc12/tx"],
-                   "fhd-36": ["bay-1/lc01/tx", "bay-1/lc01/rx", "bay-4/lc18/tx"],
-                   "dcp": ["port-1510/tx", "port-1510/rx", "xc18/rx"]}
+LC_SIMPLEX_KEYS = {"fhd": ["bay-1/lc01/1", "bay-1/lc01/2", "bay-4/lc12/1"],
+                   "fhd-om": ["bay-1/lc01/1", "bay-1/lc01/2", "bay-4/lc12/1"],
+                   "fhd-36": ["bay-1/lc01/1", "bay-1/lc01/2", "bay-4/lc18/1"],
+                   "dcp": ["port-1510/1", "port-1510/2", "xc18/2"]}
 LC_DUPLEX_KEYS = {"fhd": ["bay-1/lc02", "bay-4/lc07"],
                   "fhd-om": ["bay-1/lc02", "bay-4/lc07"],
                   "fhd-36": ["bay-1/lc02", "bay-4/lc13"],
@@ -144,7 +144,7 @@ def build_lc(tmp_path, which, simplex=LC, duplex=DUPLEX, root=LIB):
         empties.update({k.rsplit("/", 1)[0]: "" for k in LC_SIMPLEX_KEYS[which]})
     elif SHIPS_AT[which] == "bores":
         empties.update({f"{k}/{b}": "" for k in LC_DUPLEX_KEYS[which]
-                        for b in ("tx", "rx")})
+                        for b in ("1", "2")})
     occ = {**empties,
            **{k: simplex for k in LC_SIMPLEX_KEYS[which]},
            **{k: duplex for k in LC_DUPLEX_KEYS[which]}}
@@ -432,7 +432,7 @@ def test_the_smartoptics_adapters_keyway_fits_inside_its_outline():
     bulk = contract(BULKHEAD)
     (x0, y0, x1, y1), sw = _outline(H_ADAPTER)
     inner = (x0 + sw / 2, y0 + sw / 2, x1 - sw / 2, y1 - sw / 2)
-    bores = [q for q in c["parts"] if q["id"] in ("tx", "rx")]
+    bores = [q for q in c["parts"] if q["id"] in ("1", "2")]
     assert len(bores) == 2
     bw, bh = bulk["size"]["w"], bulk["size"]["h"]
     bmx, bmy = bulk["connection-points"]["mate"]["at"]
@@ -458,7 +458,7 @@ def test_the_smartoptics_adapters_keyway_fits_inside_its_outline():
 
 def test_the_sc_plugs_key_faces_its_bores_key_slot(tmp_path):
     made = fhd(tmp_path, SC_CASSETTE,
-               {"bay-1/sc1/tx": SC, "bay-1/sc1/rx": SC, "bay-4/sc6/tx": SC})
+               {"bay-1/sc1/1": SC, "bay-1/sc1/2": SC, "bay-4/sc6/1": SC})
     svg, parents = front(tmp_path, made)
     pairs = seated_pairs(svg, parents)
     assert len(pairs) == 3
@@ -490,7 +490,7 @@ def test_the_v_adapter_with_its_bores_reversed_is_caught(tmp_path):
 
     def reversed_order(c):
         c["parts"] = list(reversed(c["parts"]))
-    _copy(root, "common/lc-duplex-v-adapter", 5, "reversed-v-adapter", reversed_order)
+    _copy(root, "common/lc-duplex-v-adapter", 6, "reversed-v-adapter", reversed_order)
     got = l112(root, "test/reversed-v-adapter@1")
     assert len(got) == 1 and "latch" in got[0], got
 
@@ -501,8 +501,8 @@ def test_bores_at_two_different_turns_are_caught(tmp_path):
     root = tmp_path / "lib"
 
     def split_turn(c):
-        next(q for q in c["parts"] if q["id"] == "rx")["rotate"] = 270
-    _copy(root, "common/lc-duplex-v-adapter", 5, "split-v-adapter", split_turn)
+        next(q for q in c["parts"] if q["id"] == "2")["rotate"] = 270
+    _copy(root, "common/lc-duplex-v-adapter", 6, "split-v-adapter", split_turn)
     got = l112(root, "test/split-v-adapter@1")
     # turning one bore also swings its mate off the pitch, which the pitch arm
     # reports on its own; the latch arm's finding is the one asked for here
@@ -553,7 +553,7 @@ def _shutter_cover(svg, parents, root=LIB):
     """For every shutter drawn in a shuttered adapter: (its path, the plug
     body seated on its bore or None, whether that body's box contains the
     shutter's and paints after it). The shutter is found by the bore it
-    closes - `--shutter-tx` over `tx` - and the plug by the bore's mate."""
+    closes - `--shutter-1` over `1` - and the plug by the bore's mate."""
     order = {el: i for i, el in enumerate(svg.iter())}
     seated = {id(b[0]): p for p, b in seated_pairs(svg, parents, root)}
     out = []
@@ -589,7 +589,7 @@ def test_the_shuttered_adapter_is_a_duplex_slot_with_no_default():
     assert c["interface"] == "lc-duplex"
     assert "default" not in c
     bores = [q for q in c["parts"] if q["ref"] == BULKHEAD]
-    assert [q["id"] for q in bores] == ["tx", "rx"]
+    assert [q["id"] for q in bores] == ["1", "2"]
     assert all("default" not in q for q in bores), bores
     assert not (contract(BULKHEAD).get("default")), "the bore itself ships nothing"
 
@@ -603,7 +603,7 @@ def occupants_on(svg, adapter_prefixes=(S_ADAPTER,)):
     hosts = set()
     for a in _groups(svg, adapter_prefixes):
         path = a.get("data-path")
-        hosts |= {path, f"{path}/tx", f"{path}/rx"}
+        hosts |= {path, f"{path}/1", f"{path}/2"}
     assert hosts, "no shuttered adapter in the drawing - this measures nothing"
     return {el.get("data-path"): _ref(el) for el in svg.iter()
             if el.get("data-for") in hosts

@@ -197,7 +197,7 @@ def shipped_default(ref, slot_id):
     if level == "self":
         return cap
     level, cap = SHIPS.get(ref, (None, None))
-    return cap if level == "bores" and slot_id in ("tx", "rx") else None
+    return cap if level == "bores" and slot_id in ("1", "2") else None
 
 
 def test_a_card_cage_carries_exactly_the_r1_keys(index):
@@ -210,7 +210,7 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
             # the only defaults are the caps the adapters ship (B3 task 8)
             assert c["default"] == shipped_default(ref, c["id"]), (ref, c["id"])
             # and only a duplex adapter's own slot spans anything
-            assert c["bores"] == (["tx", "rx"] if c["interface"] == "lc-duplex"
+            assert c["bores"] == (["1", "2"] if c["interface"] == "lc-duplex"
                                   else []), (ref, c["id"])
             checked += 1
     assert checked > 0

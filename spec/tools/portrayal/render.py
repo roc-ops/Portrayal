@@ -941,7 +941,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
 
     Called for EVERY instance with a path (B3, deep addressing): a module in
     a bay, a part composed at any depth, a device placement. Its keys are the
-    ones whose prefix is slot_key_prefix(path) - `bay-1/lc01/tx` is seated by
+    ones whose prefix is slot_key_prefix(path) - `bay-1/lc01/1` is seated by
     the adapter drawn at `bay-1/module/lc01` - so an occupant is drawn inside
     the innermost group holding its slot. A key whose value is "" empties the
     slot (P4): it counts as used when its host exists and draws nothing.
@@ -1890,7 +1890,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # AND A PLACED SPANNING SLOT IS REFUSED WHILE ITS BORES HOLD SOMETHING (B3,
     # "The duplex host"), the same check `_seat_nested_occupants` makes for a
     # composed one. A device placement's bores are keyed under its own id
-    # (`port-1510/tx`) and seated by the instance drawn at that path, so this
+    # (`port-1510/1`) and seated by the instance drawn at that path, so this
     # loop never sees them; the configuration does, and so does the placed
     # contract's own `parts:`.
     _conn = _connector_registry()
@@ -2704,7 +2704,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved,
-                                     # A SLOT ON A PLACED PART (B3): `port-1510/tx`,
+                                     # A SLOT ON A PLACED PART (B3): `port-1510/1`,
                                      # an adapter placed directly - and, since
                                      # the duplex plug, A SLOT ON A SEATED PART
                                      # TOO: `port-1510-occupant/a` is half `a`
@@ -2877,7 +2877,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # down with the bay's module and are seated in its instance group; the
     # device-level expansion above never matches them (no placement id holds
     # a slash). So do slots at any depth (B3), and a slot on a placed part
-    # (`port-1510/tx`) goes down with that placement. `nested_used` collects
+    # (`port-1510/1`) goes down with that placement. `nested_used` collects
     # what seated, for the check after the bays are drawn.
     nested_occupants = {k: v for k, v in (config.get("occupants") or {}).items()
                         if "/" in k}
