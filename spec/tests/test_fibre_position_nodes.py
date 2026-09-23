@@ -57,9 +57,15 @@ def test_a_missing_position_fails():
     assert msgs and "[12]" in msgs[0]
 
 
+def test_an_element_of_the_wrong_class_does_not_count_as_a_position():
+    d = port(1, elements={"1": {"at": [0.0, 0.0], "size": [0.1, 0.1], "class": "label"}})
+    msgs = l110(d)
+    assert msgs and "[1]" in msgs[0]
+
+
 def test_a_position_beyond_n_fails():
     msgs = l110(port(1, elements={"1": el(0), "2": el(1)}))
-    assert msgs and "2" in msgs[0]
+    assert msgs and "[2]" in msgs[0] and "beyond" in msgs[0]
 
 
 def test_not_a_port_or_no_positions_is_not_judged():

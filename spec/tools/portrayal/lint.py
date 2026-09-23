@@ -96,7 +96,6 @@ import types
 import contextlib
 import json
 import math
-import pathlib
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -2515,9 +2514,8 @@ POSITION_EXEMPT = {
 
 
 def _component_key(path):
-    parts = pathlib.Path(path).parts
-    i = parts.index("components") if "components" in parts else -1
-    return "/".join(parts[i + 1:i + 3]) if i >= 0 else None
+    parts = Path(path).parts
+    return "/".join(parts[-4:-2])
 
 
 def lint_component_optical_position_nodes(path, data, lib_roots):
@@ -2547,7 +2545,8 @@ def lint_component_optical_position_nodes(path, data, lib_roots):
     n = (data.get("optical") or {}).get("positions")
     if not n or _component_key(path) in POSITION_EXEMPT:
         return
-    have = own | {str(k) for k in (data.get("elements") or {})}
+    have = own | {str(k) for k, v in (data.get("elements") or {}).items()
+                  if isinstance(v, dict) and v.get("class") == "fibre"}
     want = {str(i) for i in range(1, int(n) + 1)}
     missing = sorted((int(i) for i in want - have))
     if missing:
