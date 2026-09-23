@@ -59,3 +59,5 @@ def test_a_swapped_back_rows_as_the_built_one_does(out):
         "the swapped projection lost its root's class and media, which the tree rows it by"
     assert s["paths"] == ["cutout:back-1", "bay-1/module", "bay-1/module/mtp1", "bay-1/module/mtp2"]
     assert s["leftover"] == []
+    assert s["rearRef"] == "fs/cassette@1"
+    assert s["rearRefEmpty"] is None

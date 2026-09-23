@@ -46,6 +46,14 @@ const applied = await applyRearOverrides(swapped, {'bay-1': 'fs/cassette@1'},
   () => ({faces: {rear: 'fs/rear-2@1'}}));
 const wrap = [...swapped.descendants()].find(n => n.getAttribute('data-projection'));
 const swapEntries = faceEntries(swapped);
+const rearRef = swapped.children[0].getAttribute('data-rear-ref');
+// EMPTYING A BAY clears the occupant along with its projection: a swap to
+// null is what a pulled module looks like, and the cutout should stop
+// naming an occupant that is no longer there.
+await applyRearOverrides(swapped, {'bay-1': null},
+  async () => ({text: JSON.stringify(skin), comp: {name: 'rear-2'}}),
+  () => ({faces: {rear: 'fs/rear-2@1'}}));
+const rearRefEmpty = swapped.children[0].getAttribute('data-rear-ref');
 
 console.log(JSON.stringify({
   swap: {
@@ -54,6 +62,8 @@ console.log(JSON.stringify({
     paths: swapEntries.map(e => e.path),
     leftover: [...wrap.descendants()].flatMap(n => n.attributes.map(a => a.name))
       .filter(k => ['data-path', 'data-ref'].includes(k) || k.startsWith('data-z-')),
+    rearRef,
+    rearRefEmpty,
   },
   paths: entries.map(e => e.path),
   projected: entries.filter(e => e.projected).map(e => e.path),

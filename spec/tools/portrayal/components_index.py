@@ -23,6 +23,49 @@ from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule, component_cages,
                     _pluggable_families, _pluggable_candidates)
+from portrayal import libwalk  # noqa: E402
+from portrayal import optical, optical_ports  # noqa: E402
+
+
+def fibre_ends(data, load_ref):
+    """`{endpoint: {"to": far endpoint(s), "label": front number or None}}`.
+
+    A two-ended path names one far end each way, each side falling back to
+    the other's label when its own is None (a rear endpoint has none). A
+    SPLIT DOES NOT FALL BACK THE SAME WAY: `optical.endpoints` is the one
+    place this library reads a path's `to` as either a string or a ratio
+    list (smartoptics/ppm-ocu-50-50, ppm-ocu-97-3 - a coupler's one input
+    reaching two legs), and the source of a split keeps only its OWN label
+    or None; a common port never borrows a branch's number, but a branch
+    with no number of its own (there isn't one in this library, but nothing
+    stops one) borrows the common port's, because that is the one number the
+    explorer can show for it. Dropping this shape read as `optical.ends: {}`
+    on a real, DCIM-exported part - wrong, not merely incomplete.
+
+    A LIST `from` IS NOT A SHAPE THIS SCHEMA HAS: `optical.endpoints` reads
+    `path["from"]` as a single string unconditionally, and L79 (`lint.py`)
+    checks a path's source the same way - a fan-IN combiner has no syntax
+    here, so one is treated as an unresolved endpoint and skipped, the same
+    as any other value `split_endpoint` cannot parse.
+    """
+    ends = {}
+    for p in data["optical"]["paths"]:
+        if not isinstance(p.get("from"), str) or not p.get("to"):
+            continue
+        eps = [ep for ep, _ratio in optical.endpoints(p)]
+        if len(eps) < 2 or not all(isinstance(ep, str) for ep in eps):
+            continue
+        src, dests = eps[0], eps[1:]
+        label = {ep: optical_ports.front_label(data, ep, load_ref) for ep in eps}
+        if len(dests) == 1:
+            b = dests[0]
+            ends[src] = {"to": b, "label": label[src] if label[src] is not None else label[b]}
+            ends[b] = {"to": src, "label": label[b] if label[b] is not None else label[src]}
+        else:
+            ends[src] = {"to": dests, "label": label[src]}
+            for b in dests:
+                ends[b] = {"to": src, "label": label[b] if label[b] is not None else label[src]}
+    return ends
 
 
 def _confidence_counts(data):
@@ -53,6 +96,7 @@ def main():
     # indexer alongside the renderers, so nothing they write exists yet.
     families = _pluggable_families()
     candidates = _pluggable_candidates(args.library)
+    load_ref = lambda ref: libwalk.load_contract(ref, args.library)  # noqa: E731
     index = []
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
@@ -248,6 +292,13 @@ def main():
             # widened again by the first consumer that wanted the rest.
             if data.get("optical"):
                 entry["optical"] = data["optical"]
+                # THE FIBRE ENDS, NUMBERED ONCE. The explorer labels a fibre by
+                # its far end and its vendor front number; the number is
+                # optical_ports.front_label's rule and nobody else's, so it is
+                # written here beside the paths rather than re-derived in the
+                # kit.
+                if data["optical"].get("paths"):
+                    entry["optical"] = {**data["optical"], "ends": fibre_ends(data, load_ref)}
             index.append(entry)
     totals = {}
     for e in index:

@@ -56,6 +56,19 @@ the *published build*, not about the hardware.
   stays the canonical name and is never repeated there. The names are also in
   the `devices.json` search field, so a hardware compatibility list's AS9716-32D
   finds `dcs510` (roc-ops/Portrayal#514).
+- `components.json` carries each part's `optical.ends`: for every fibre
+  endpoint, `{to: string | string[], label: string | null}`, keyed `part.n` on
+  the front and `rear:part.n` on the rear; a fan-out endpoint (a splitter's
+  common port) has a list `to`, one entry per branch. A rear cutout a bay is
+  seen through now also carries `data-rear-ref` (the seated occupant),
+  `data-group` and `data-group-role` (the bay's own group), and `data-rel-pos`
+  (its position within it) - so `[data-group='slots']`, or any group
+  selector, now also matches these rear holes on a rear view, not only the
+  fronts they used to match alone; a consumer counting bays should key off
+  `[data-class=bay]` instead, and a document already selecting by group will
+  now also hit the rear cutouts. In the explorer, a fibre's row says where it
+  goes, selecting a fibre marks its far end on every loaded face, and a rear
+  row reads as the slot it is, not the panel hole (roc-ops/Portrayal#535).
 
 ### Changed
 - Every fibre a connector declares is now a node you can address: a bore or a

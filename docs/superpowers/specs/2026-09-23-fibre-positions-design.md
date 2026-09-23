@@ -157,6 +157,8 @@ tested the way `test_projected_rows_js.py` tests the tree rules.
   direction in their paths.
 - Applying swaps to faces that are not on screen. That is a separate change
   already in progress, and this work merges after it.
+- 3D far-end marking, and selecting a rear fibre in 3D without haloing the
+  whole cassette (roc-ops/Portrayal#534).
 
 ## Delivery
 
