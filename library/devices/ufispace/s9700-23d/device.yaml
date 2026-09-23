@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9700-23d
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-23D
@@ -201,7 +201,7 @@ provenance:
       ERROR THIS ENTRY USED TO RECORD IS FIXED: std/usb-a drew a blue tongue, the USB 3.0
       convention, where the datasheet calls this port 'USB 2.0 Type-A', whose tongue is white or
       black. The shared part was used unchanged rather than forked for a tongue colour; it now
-      carries a `usb2` skin instead, and the placement asks for it as well as saying speed: usb2.
+      carries a `usb2` skin instead, and the placement asks for it as well as saying usb: '2.0'.
   connector-orientation:
     note: >-
       photo/drawing, measured rather than assumed, and it comes out MIRRORED for the RJ45 pair. A
@@ -761,8 +761,8 @@ views:
         - {ref: std/sfp-ganged@1, id: sfp-1, at: [42.53, 33.45], rotate: 180, group: sfp-plus, rel-pos: 1}
         - {ref: std/rj45-ganged@2, id: console, at: [43.15, 51.66], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [29.15, 55.13], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
-        - {ref: common/rj45-ganged-eth@1, id: oob, at: [43.15, 64.26], group: mgmt, rel-pos: 3, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: HIG section 10, Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity). The vocabulary is this guide''s own; only the left window resolves in the figure, so see the mgmt-jack-led-semantics gap for the position; led-oob-right: HIG section 10, Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). Placed by symmetry with the left lamp; see the mgmt-jack-led-semantics gap'}
-        - {ref: std/usb-a@1, id: usb, at: [27.25, 66.45], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: storage, speed: usb2}}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [43.15, 64.26], group: mgmt, rel-pos: 3, attrs: {media: rj45, role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: HIG section 10, Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity). The vocabulary is this guide''s own; only the left window resolves in the figure, so see the mgmt-jack-led-semantics gap for the position; led-oob-right: HIG section 10, Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). Placed by symmetry with the left lamp; see the mgmt-jack-led-semantics gap'}
+        - {ref: std/usb-a@1, id: usb, at: [27.25, 66.45], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '2.0'}}
         - {ref: common/reset-button@1, id: reset, at: [26.60, 41.30], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: ufispace/seg7-status-2@1, id: beacon, at: [411.57, 7.42], for: chassis,
            description: 'HIG Figure 4 calls this the Beacon LED. Section 10 tables SYS, FAN, PS0 and PS1 and says nothing about a numeric readout, so what the two digits show is not claimed here; the artwork draws the all-segments lamp test',
