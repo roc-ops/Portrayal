@@ -38,7 +38,7 @@ LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@4
 SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
 
 LC_CAP = "common/lc-dust-cap@1"
-LC_DUPLEX_CAP = "common/lc-duplex-dust-cap@1"
+LC_DUPLEX_CAP = "common/lc-duplex-dust-cap@2"
 SC_CAP = "common/sc-dust-cap@1"
 MPO_CAP = "common/mpo-dust-cap@1"
 

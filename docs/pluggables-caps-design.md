@@ -135,6 +135,17 @@ slot is occupied, its bore slots are not offered and a configuration naming one 
 an error; when either bore slot is occupied, the adapter slot is not offered.
 The build enforces it and the kit follows it; the explorer shows the free level.
 
+A spanning slot also carries the AXIS its pair runs on, because a duplex connector
+is one moulding with two ferrules and cannot turn itself. The two LC adapters do
+not agree: one puts its bores side by side, the other stacks them - "the same
+duplex pair stood on end" - so a single part drawn on one axis would be right on
+one host and wrong on the other. The canonical drawing axis is ACROSS, the pair
+running in x from the part's own `mate`, and every spanning part is drawn on it;
+a slot publishes the turn that carries that axis onto its own bores, derived from
+the bores' composed mate points and added to the placement's own `rotate`, and the
+existing seat arithmetic applies it to the occupant. Lint holds both ends: a host's
+bores to the pitch, and a part mating a spanning interface to the canonical axis.
+
 The registry says which interface takes the place of which, rather than a rule
 naming `lc-duplex` in code: the entry carries `spans: {interface: lc, count: 2}`,
 and the pitch the spanned parts sit at is the interface's own `standard`. A

@@ -29,7 +29,7 @@ from portrayal.manifest import (view_parts, targets, split_target, component_ref
                       load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
-                      spanned_slots)
+                      spanned_slots, spanning_axis, summed_rotate)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -717,9 +717,10 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     The host's mate point - possibly FORWARDED from a composed aperture (see
     manifest.presented_interface) - is taken through the host's rotation
     (seat_point), and the occupant is solved to land its own `mate` there
-    while drawn at that same rotation (seat_at). `lift` is the host's
-    presented lift plus its `host-lift`, less the floor of a well it stands
-    `in:` (floor_of, device frame only)."""
+    while drawn at that rotation plus, for a host whose slot SPANS a pair,
+    the axis that pair runs on (manifest.spanning_axis; seat_at). `lift` is
+    the host's presented lift plus its `host-lift`, less the floor of a well
+    it stands `in:` (floor_of, device frame only)."""
     hc, _ = lib.resolve(host["ref"])
     oc, _ = lib.resolve(occ_ref)
 
@@ -747,16 +748,30 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     # and seat_at reduce exactly to the old formula, so no unrotated
     # seat moves.
     hrot = host.get("rotate")
+    # AND A SPANNING HOST TURNS IT FURTHER (B3, "The duplex host"). A duplex
+    # connector is one moulding with two ferrules on an axis; it cannot turn
+    # itself, and the library's two duplex adapters do not agree about which
+    # way round their pair runs. `manifest.spanning_axis` reads that off the
+    # host's own bores, and the occupant is drawn at the SUM - the placement's
+    # rotation and its pair's axis are rotations of the same plane.
+    #
+    # THE HOST'S OWN MATE POINT IS NOT TAKEN THROUGH IT. `seat_point` below
+    # maps a point of the host's contract into the host's frame, which is the
+    # host's own `rotate` and nothing else; the axis is a fact about the
+    # OCCUPANT's drawing, not about where the host's slot is. The published
+    # entry splits them the same way (`_slot_dict`: `mate` by the placement's
+    # rotate, `rotate` by the sum), so the kit seats what the build draws.
+    orot = summed_rotate(hrot, spanning_axis(hc, _res, _connector_registry()))
     if host.get("mirror"):
         raise ValueError(
             f"{who}: its host {host_name!r} is mirrored, and a "
             "mirrored host cannot seat an occupant - handedness of a "
             "seated part is not a question the seating rule answers")
     if occ_rotate is not None and \
-            float(occ_rotate) % 360 != float(hrot or 0) % 360:
+            float(occ_rotate) % 360 != float(orot or 0) % 360:
         raise ValueError(
             f"{who}: declares rotate {occ_rotate} but its host "
-            f"{host_name!r} is at {hrot or 0} - a seated part turns "
+            f"{host_name!r} seats at {orot or 0} - a seated part turns "
             "with its host; drop the rotate")
     # A SEATED PART ALREADY SINKS WITH A SUNK HOST - through host-lift,
     # below - so its own `in:` would sink it a second time: -3.46 where
@@ -770,7 +785,7 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
             f"with its host {host_name!r}, which is already sunk in a "
             "well - drop the in:")
     at = seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
-                 hrot, oc["size"], om["at"])
+                 orot, oc["size"], om["at"])
     # A CHAINED SEAT INHERITS THE WHOLE STACK, not just the last link.
     # `presented_interface` answers one question - how far the HOST's
     # aperture stands off the HOST's own face - and returns 0.0 whenever
@@ -792,7 +807,7 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     # per link. A projection is not sunk, so neither is what seats on one.
     if host.get("in") and not host.get("projection-of"):
         lift -= floor_of(host["in"])
-    return at, hrot, lift
+    return at, orot, lift
 
 
 def refuse_bay_module_default(lib, ref, where):
@@ -3323,7 +3338,8 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
         refs = sorted({ref for ref, _c in candidates.get(interface, [])})
         return _slot_dict(p, contract, interface, None, refs, occupant, mate_at,
                           lift, extra_lift, group, "connector",
-                          spanned_slots(contract, _resolve, connectors))
+                          spanned_slots(contract, _resolve, connectors),
+                          spanning_axis(contract, _resolve, connectors))
     _family_name, family = found
     # `media` is the port's declared media - the cage's ceiling on its
     # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
@@ -3362,17 +3378,28 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
     return _slot_dict(p, contract, interface, media,
                       _cage_accepts(candidates, families, accept_family, media),
                       occupant, mate_at, lift, extra_lift, group, "cage",
-                      spanned_slots(contract, _resolve, connectors))
+                      spanned_slots(contract, _resolve, connectors),
+                      spanning_axis(contract, _resolve, connectors))
 
 
 def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
-               extra_lift, group, kind, bores):
+               extra_lift, group, kind, bores, axis):
     """The published entry, one shape for a cage and a connector slot alike;
     only `kind`, `media` and how `accepts` was derived differ."""
     return {
         "id": p["id"], "at": p["at"], "interface": interface, "media": media,
         "group": p.get("group"), "rel-pos": p.get("rel-pos"),
-        "rotate": p.get("rotate"),
+        # HOW AN OCCUPANT IS TURNED, which for a SPANNING slot is not only the
+        # placement's own rotation (B3, "The duplex host"). A duplex connector
+        # is one moulding with two ferrules on an axis and cannot turn itself,
+        # and the two adapters in the library disagree about that axis - one
+        # puts its bores side by side, the other stacks them. So a spanning
+        # slot adds `manifest.spanning_axis`, the turn that carries the
+        # canonical drawing axis onto its own pair, and `solve_seat` seats its
+        # occupant at the same sum - through the same `summed_rotate`, so the
+        # published entry and the drawing cannot come apart. A slot that spans
+        # nothing publishes its placement's `rotate` unchanged, `None` included.
+        "rotate": summed_rotate(p.get("rotate"), axis),
         "accepts": accepts,
         "occupant": (occupant.get("ref") if isinstance(occupant, dict) else occupant)
                     if occupant else None,

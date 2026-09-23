@@ -25,12 +25,13 @@ import sys
 import pytest
 import yaml
 
-from test_nested_occupants import LIB, SPEC
+from test_nested_occupants import LIB, SPEC, by_path, device_point, is_inside
 from test_slot_defaults import (_copy, _lib, _part, build, face, fhd,
                                 occupants_drawn, run)
 
 from portrayal import lint
-from portrayal.manifest import presented_interface, seat_point, spanned_slots
+from portrayal.manifest import (CANONICAL_SPAN_AXIS, presented_interface,
+                                seat_point, spanned_slots, spanning_axis)
 from portrayal.render import (_connector_registry, _pluggable_candidates,
                               _pluggable_families, component_cages)
 
@@ -410,3 +411,265 @@ def test_l112_leaves_a_non_spanning_interface_alone(lib):
     interface spans nothing, and its bores are its own."""
     assert l112(LIB, "common/sfp-lc-duplex@1") == []
     assert l112(LIB, "std/lc-bore@3") == []
+
+
+# --- the axis the pair runs on ------------------------------------------------------
+#
+# A duplex connector is one moulding with two ferrules on an axis and cannot
+# turn itself: a seated part takes its host's rotation. The two adapters do not
+# agree about that axis - the Smartoptics one puts its bores side by side, the
+# FS one stacks them - so a spanning slot publishes the turn that carries the
+# canonical drawing axis onto its own pair, and the build seats its occupant at
+# that turn. Everything below is computed from the two contracts' own bore
+# placements; nothing here reads a name or a ref to decide which way round a
+# pair runs.
+
+CAP = "common/lc-duplex-dust-cap@2"         # drawn ACROSS, the canonical axis
+REAL_PLUG = "generic/lc-duplex-plug@1"      # likewise
+CARD = "smartoptics/dcp-f-a22@1"            # composes two side-by-side adapters
+
+
+def bore_axis(root, ref):
+    """Which way round this adapter's pair runs, read off the two composed
+    mate points here rather than taken from the code under test: the right
+    angle the first-to-last direction lies nearest."""
+    (a, b) = bore_mates(root, ref).values()
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    assert abs(dx) > 1e-9 or abs(dy) > 1e-9, (a, b)
+    if abs(dx) >= abs(dy):
+        return 0 if dx >= 0 else 180
+    return 90 if dy > 0 else 270
+
+
+# 270 FOR THE STACKED ADAPTER, NOT 90 - and 270 is the right answer. Since
+# common/lc-duplex-v-adapter@4 the LOWER bore is composed first (`tx`, the port
+# FS prints as odd), so the first-to-last direction runs UP the plate, and the
+# turn that carries the canonical across axis onto it is 270. That turn puts a
+# duplex part's half `a` in the lower bore (port 1) and swings its latch, drawn
+# up, to the LEFT - the side each bore's own latch tongue faces (std/lc-bore@3
+# draws it down; the adapter turns every bore 90). @3 composed the upper bore
+# first and derived 90, which drew the duplex plug turned the wrong way round.
+AXIS = {ADAPTER: 0, V_ADAPTER: 270}
+
+
+@pytest.mark.parametrize("name", [ADAPTER, V_ADAPTER])
+def test_the_two_adapters_pairs_run_different_ways(lib, name):
+    """THE PREMISE OF EVERY TEST BELOW, asserted rather than assumed, and it is
+    also what makes the axis worth publishing: one part cannot be drawn right
+    for both hosts."""
+    assert bore_axis(lib, f"{name}@{MAJOR[name]}") == AXIS[name]
+    assert len(set(AXIS.values())) == 2, AXIS
+
+
+@pytest.mark.parametrize("name", [ADAPTER, V_ADAPTER])
+def test_an_adapter_derives_its_axis_from_its_bores(lib, name):
+    """`manifest.spanning_axis` answers the turn that carries the canonical
+    axis onto the adapter's own, which for a canonical host is 0."""
+    c = contract(lib, f"{name}@{MAJOR[name]}")
+    got = spanning_axis(c, resolver(lib), _connector_registry())
+    assert got == (bore_axis(lib, f"{name}@{MAJOR[name]}") - CANONICAL_SPAN_AXIS) % 360
+    assert got == AXIS[name]
+
+
+def test_a_contract_that_hosts_no_spanning_slot_has_no_axis(lib):
+    """None, not 0: "drawn upright" and "not a question this contract answers"
+    have to be tellable apart, for the reason `bores: []` is always published."""
+    _res, reg = resolver(lib), _connector_registry()
+    for ref in ("std/lc-bore@3", "common/sfp-lc-duplex@1", "casa/csc-8x10g@1"):
+        assert spanning_axis(contract(lib, ref), _res, reg) is None, ref
+
+
+SPANNING = [(CASSETTE, "lc01", V_ADAPTER), (CARD, "edfa", ADAPTER)]
+
+
+@pytest.mark.parametrize("composer,slot,adapter", SPANNING)
+def test_a_spanning_slot_publishes_the_axis_its_bores_lie_on(lib, composer, slot,
+                                                             adapter):
+    """The published entry carries the turn, so a consumer seating a duplex
+    part turns it the way the build does.
+
+    NOTHING DECLARES IT: the placement carries no `rotate` of its own, which is
+    checked here, so a published one can only have come from the bores."""
+    placement = next(q for q in contract(lib, composer)["parts"]
+                     if q["id"] == slot)
+    assert placement.get("rotate") is None
+    assert placement["ref"] == f"{adapter}@{MAJOR[adapter]}"
+    entry = cages(lib, composer)[slot]
+    assert entry["bores"] == ["tx", "rx"]
+    assert entry["rotate"] == AXIS[adapter]
+
+
+def test_a_slot_that_spans_nothing_still_publishes_its_placements_rotate(lib):
+    """The axis is added to a SPANNING slot and to nothing else: a cage keeps
+    publishing exactly what its placement declares, `None` included."""
+    got = cages(lib, "casa/csc-8x10g@1")
+    assert got, "the fixture composes no slots any more"
+    for pid, e in got.items():
+        q = next(p for p in contract(lib, "casa/csc-8x10g@1")["parts"]
+                 if p["id"] == pid)
+        assert e["bores"] == [] and e["rotate"] == q.get("rotate"), pid
+
+
+# --- seated on a real build: the part covers both bores ------------------------------
+
+def dcp2(tmp_path, occupants):
+    """smartoptics/dcp-2 in its ILA-node configuration - a dcp-f-a22 in
+    `slot-1`, which composes two `common/lc-duplex-adapter@4` on a raised
+    block - with one configuration carrying `occupants`. `slot-1/edfa` is the
+    first adapter's own spanning slot, three levels down."""
+    dev = shutil.copytree(LIB / "devices/smartoptics/dcp-2",
+                          tmp_path / "dcp-2") / "device.yaml"
+    d = yaml.safe_load(dev.read_text())
+    cfg = d["configurations"]["ila-node"]
+    assert cfg["bays"]["slot-1"] == CARD, cfg["bays"]
+    cfg["occupants"] = occupants
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    return dev
+
+
+# (which builder, the device slug, the configuration, the occupant key, the
+#  path the build draws the host at, which adapter that host is). The two
+#  reach a spanning slot by different routes - a cassette in a bay, and a card
+#  in a bay whose adapters stand on a raised block at lift 44 - and between
+#  them they cover both axes.
+SEATS = [
+    ("fhd", "fhd-1ufce", "base", "bay-1/lc01", "bay-1/module/lc01", V_ADAPTER),
+    ("dcp2", "dcp-2", "ila-node", "slot-1/edfa", "slot-1/module/edfa", ADAPTER),
+]
+
+
+def seat_duplex(tmp_path, lib_root, where, name, config, key, ref):
+    if where == "fhd":
+        dev, _ = fhd(tmp_path, CASSETTE, {key: ref})
+    else:
+        dev = dcp2(tmp_path, {key: ref})
+    return face(build(dev, tmp_path / "o", lib_root), name, config)
+
+
+def outline(parents, el, size):
+    """An instance's own outline in the DEVICE frame, composed through every
+    ancestor: the four corners of its `size` box. Axis-aligned, because every
+    turn in this corpus is a right angle."""
+    pts = [device_point(parents, el, p)
+           for p in ([0, 0], [size["w"], 0], [size["w"], size["h"]],
+                     [0, size["h"]])]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def covers(box, pt):
+    x0, y0, x1, y1 = box
+    return x0 - 1e-6 <= pt[0] <= x1 + 1e-6 and y0 - 1e-6 <= pt[1] <= y1 + 1e-6
+
+
+def turn_about(pt, centre, deg):
+    """`pt` turned about `centre` by `deg`, in whatever frame both are in."""
+    dx, dy = pt[0] - centre[0], pt[1] - centre[1]
+    rad = math.radians(deg)
+    c, s = round(math.cos(rad), 12), round(math.sin(rad), 12)
+    return (centre[0] + dx * c - dy * s, centre[1] + dx * s + dy * c)
+
+
+def bore_points(root, parents, host_path, adapter_ref, lib_root):
+    """Each bore's own mate point in the DEVICE frame, through the adapter's
+    placement and every ancestor above it."""
+    host = by_path(root, host_path)
+    return {bid: device_point(parents, host, p)
+            for bid, p in bore_mates(lib_root, adapter_ref).items()}
+
+
+def seated_duplex(tmp_path, lib_root, seat, ref):
+    """Build one seating and return (the bores' device points, the occupant's
+    device-frame outline, the occupant's device-frame mate point)."""
+    where, name, config, key, path, adapter = seat
+    root, parents = seat_duplex(tmp_path, lib_root, where, name, config, key, ref)
+    occ = by_path(root, f"{path}-occupant")
+    assert occ.get("data-ref").rsplit(":", 1)[0] == ref
+    # THE OCCUPANT AND ITS HOST ARE IN THE SAME FRAME, which is what makes the
+    # two device-frame figures below comparable at all: an occupant is drawn
+    # as a SIBLING of its slot, inside whatever group holds them both.
+    assert is_inside(parents, occ, parents[by_path(root, path)])
+    part = contract(lib_root, ref)
+    bores = bore_points(root, parents, path, f"{adapter}@{MAJOR[adapter]}",
+                        lib_root)
+    assert len(bores) == 2, bores
+    return (bores, outline(parents, occ, part["size"]),
+            device_point(parents, occ,
+                         part["connection-points"]["mate"]["at"]))
+
+
+@pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
+@pytest.mark.parametrize("seat", SEATS, ids=[s[5].split("/")[1] for s in SEATS])
+def test_a_duplex_part_covers_both_bores_of_either_adapter(tmp_path, lib, ref, seat):
+    """THE ASSERTION THIS TASK EXISTS FOR, on a real build and composed through
+    every ancestor: the part seated on a spanning slot lies over BOTH of the
+    bores it fills, on the side-by-side adapter and on the stacked one alike.
+
+    Coverage rather than a mate-point equality, because that is the claim a
+    cap makes - it is one moulding over two ports and nothing inside it is
+    addressable - and it is the claim a reader of the drawing can check."""
+    bores, box, _ = seated_duplex(tmp_path, lib, seat, ref)
+    for bid, pt in bores.items():
+        assert covers(box, pt), (ref, seat[3], bid, pt, box)
+
+
+@pytest.mark.parametrize("deg", [90, 270])
+@pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
+@pytest.mark.parametrize("seat", SEATS, ids=[s[5].split("/")[1] for s in SEATS])
+def test_the_coverage_check_fails_on_a_mutated_published_rotate(tmp_path, lib,
+                                                                ref, seat, deg):
+    """NON-VACUITY, by mutating the one number this task publishes.
+
+    CHANGING A SPANNING SLOT'S `rotate` BY d MOVES ITS OCCUPANT IN EXACTLY ONE
+    WAY, and that is arithmetic rather than a guess: `render.seat_at` re-solves
+    the occupant's `at` so its own `mate` stays on the slot's point whatever
+    the turn is, so the whole outline turns about that point by d and nothing
+    else about the drawing changes. So the mutation is applied here to the
+    outline the build produced, about the occupant's own mate point, and no
+    second build is needed to know what a different published rotate would
+    have drawn.
+
+    A HALF TURN IS NOT TESTED, and the reason is a real limit of this check: a
+    duplex part is a pair on an axis, so turning it 180 maps the pair onto
+    itself and leaves both bores covered. What 180 changes is WHICH half lands
+    on which bore - tx against rx - and coverage cannot see that. The order is
+    held instead by `spanning_axis` reading the bores in declaration order and
+    by the plug's halves being checked against the bores by name in
+    spec/tests/test_fibre_plugs.py."""
+    bores, box, mate = seated_duplex(tmp_path, lib, seat, ref)
+    turned = [turn_about(c, mate, deg) for c in
+              ((box[0], box[1]), (box[2], box[1]), (box[2], box[3]),
+               (box[0], box[3]))]
+    xs, ys = [p[0] for p in turned], [p[1] for p in turned]
+    mutated = (min(xs), min(ys), max(xs), max(ys))
+    assert not all(covers(mutated, pt) for pt in bores.values()), \
+        (ref, seat[3], deg, mutated, bores)
+
+
+# --- L112: a spanning part is drawn on the canonical axis ----------------------------
+
+@pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
+def test_l112_is_clean_for_the_librarys_duplex_parts(lib, ref):
+    assert l112(LIB, ref) == []
+
+
+@pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
+def test_l112_reports_a_duplex_part_drawn_on_the_wrong_axis(lib, ref):
+    """The fault the arm exists for, and it is the state both parts were in
+    before this task from one side or the other: a part drawn STACKED. Its
+    outline is transposed here - width for height, and every element with it -
+    which is exactly the drawing turned onto the other axis."""
+    def stacked(c):
+        c["size"] = {"w": c["size"]["h"], "h": c["size"]["w"]}
+        m = c["connection-points"]["mate"]["at"]
+        c["connection-points"]["mate"]["at"] = [m[1], m[0]]
+    _copy(lib, ref.split("@")[0], int(ref.split("@")[1]), "tall-duplex", stacked)
+    got = l112(lib, "test/tall-duplex@1")
+    assert got and "lc-duplex" in got[0] and "across" in got[0].lower(), got
+
+
+def test_l112_leaves_a_simplex_part_alone(lib):
+    """A part mating an interface that spans nothing is not held to any axis:
+    it fills one bore and has no pair to line up."""
+    for ref in (PLUG, "common/lc-dust-cap@1", "common/lc-boot@1"):
+        assert l112(LIB, ref) == [], ref

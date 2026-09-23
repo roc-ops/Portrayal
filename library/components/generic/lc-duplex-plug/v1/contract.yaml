@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: lc-duplex
 optical: {positions: 2}
@@ -99,22 +99,24 @@ provenance:
     corresponding bore's, which spec/tests/test_fibre_plugs.py checks in the
     device frame to 1e-6 rather than trusting the arithmetic here.
   orientation: >-
-    DRAWN SIDE BY SIDE, AND THE LIBRARY HOLDS ONE ADAPTER THAT IS NOT.
-    common/lc-duplex-adapter@4 (Smartoptics) puts its two bores side by side
-    and this plug lands on them exactly. common/lc-duplex-v-adapter@4 (the FS
-    FHD cassettes) puts the same pair STACKED - its own provenance calls it
-    "the same duplex pair stood on end" - and an occupant cannot be turned
-    relative to its host: render.solve_seat takes the host's rotation and
-    refuses an occupant that declares a different one. So this plug seated on
-    an FHD adapter lands its `mate` on the adapter's `mate`, correctly, and
-    draws its pair across the adapter's stacked ports.
-    THAT IS A KNOWN GAP AND NOT A FIGURE IN THIS CONTRACT. It is the same gap
-    common/lc-duplex-dust-cap@1 already has from the other side - that cap is
-    5.85 x 12.25, read off FS's stacked adapter, and the `lc-duplex` accept
-    list offers it on the side-by-side Smartoptics adapter too. What would
-    close it is a way for a slot to say which way round its pair runs, or a
-    second part per orientation; neither is this task's, and drawing this one
-    at the standard's own arrangement is what keeps the pitch figure honest.
+    DRAWN SIDE BY SIDE, WHICH IS THE CANONICAL AXIS, AND THE HOST SUPPLIES THE
+    REST. common/lc-duplex-adapter@4 (Smartoptics) puts its two bores side by
+    side and this plug lands on them exactly. common/lc-duplex-v-adapter@4
+    (the FS FHD cassettes) puts the same pair STACKED - its own provenance
+    calls it "the same duplex pair stood on end" - and an occupant cannot be
+    turned relative to its host: render.solve_seat takes the host's rotation
+    and refuses an occupant that declares a different one.
+    SO THE ADAPTER SAYS WHICH WAY ROUND ITS PAIR RUNS. A spanning slot
+    publishes the turn that carries the canonical across axis onto its own
+    bores, derived from those bores (manifest.spanning_axis), and the seat
+    applies it: this plug is drawn across on the Smartoptics adapter and
+    turned onto the stacked pair on an FHD one, from one drawing, with half
+    `a` landing on the adapter's first bore either way. Lint L112 holds every
+    part mating a spanning interface to this axis, so the two sides of the
+    arrangement cannot drift apart. This WAS a stated gap, shared with
+    common/lc-duplex-dust-cap, whose @1 was drawn stacked and whose @2 is
+    drawn across for the same reason; drawing this one at the standard's own
+    arrangement is also what keeps the pitch figure honest.
   halves: >-
     TWO WHOLE PLUGS, NOT A REDRAWN PAIR, which is what
     docs/pluggables-caps-design.md asks for: "It composes two

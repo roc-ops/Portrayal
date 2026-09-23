@@ -255,7 +255,7 @@ RULES = {
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L110": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
     "L111": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
-    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint and its bores at the depth that point presents", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector"),
+    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint and its bores at the depth that point presents - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; draw a duplex connector itself with its pair ACROSS, because the host's own axis arrives with the seat"),
 }
 
 
@@ -5739,6 +5739,72 @@ def _composed_mates(contract, resolve):
 SPAN_TOLERANCE = 0.01
 
 
+def _spanning_part_drawn_across(path, data):
+    """L112's fifth arm: A PART THAT MATES A SPANNING INTERFACE IS DRAWN ON THE
+    CANONICAL AXIS - the pair it fills runs ACROSS, along +x from its own
+    `mate` point (manifest.CANONICAL_SPAN_AXIS).
+
+    THE HOST'S AXIS ARRIVES WITH THE SEAT, and that is why the part's own has
+    to be pinned. A duplex connector is one moulding with two ferrules and
+    cannot turn itself; the library holds two duplex adapters whose pairs run
+    at right angles to each other, and a spanning slot publishes the turn that
+    carries this canonical axis onto its own (manifest.spanning_axis). A part
+    drawn on some other axis is then wrong on EVERY host rather than right on
+    one of them, and no view of a single adapter shows it: the cap looks
+    perfectly seated on the adapter it was read off.
+
+    CHECKED AS COVERAGE, not as a shape. Where a duplex connector's own
+    ferrules sit is not in its contract - a dust cap is a blank moulding with
+    nothing inside it a key could name - so what is held is the property the
+    drawing has to have: seated on a CANONICAL host, this part lies over both
+    of the points that host's bores stand at. Those points are its own `mate`
+    displaced along x by the interface's own pitch, which is the one figure the
+    registry already carries, so the rule invents nothing.
+
+    It is a weaker rule than an equality and deliberately so: a part wide
+    enough to cover the pair on either axis passes, and it deserves to - it
+    does cover both bores. What it catches is the narrow one, which is every
+    duplex part in this library drawn the wrong way round.
+    """
+    iface = data.get("mates")
+    entry = (_connectors().get(iface) or {}) if iface else {}
+    spans = entry.get("spans")
+    if not spans:
+        return
+    own = (data.get("connection-points") or {}).get("mate")
+    size = data.get("size") or {}
+    if not own or not own.get("at") or not size.get("w") or not size.get("h"):
+        return                          # a part with no mate or no size is L11/L1's
+    # THE PITCH ARM'S OWN VACUITY GUARD, for the same reason: `STANDARDS` is
+    # empty until main() fills it, so an unloaded registry skips - but one that
+    # IS loaded and records no pitch leaves this rule nothing to measure and
+    # has to say so rather than go quiet.
+    key = entry.get("standard")
+    std = STANDARDS.get(key)
+    pitch = (std or {}).get("pitch")
+    if std is not None and not pitch:
+        err(path, "L112", f"mates {iface!r}, which spans "
+            f"{spans.get('interface')!r}, but its standard {key!r} records no "
+            "`pitch` - there is nothing to line the pair up on")
+    if not pitch:
+        return
+    n = int(spans.get("count") or 2)
+    mx, my = float(own["at"][0]), float(own["at"][1])
+    for i in range(n):
+        x = mx + (i - (n - 1) / 2) * float(pitch)
+        if -SPAN_TOLERANCE <= x <= size["w"] + SPAN_TOLERANCE and \
+                -SPAN_TOLERANCE <= my <= size["h"] + SPAN_TOLERANCE:
+            continue
+        err(path, "L112", f"mates {iface!r}, which spans {n} "
+            f"{spans.get('interface')!r} at the {pitch} pitch of {key!r}, but "
+            f"position {i + 1} of that pair falls at "
+            f"{[round(x, 4), round(my, 4)]}, outside its own "
+            f"{size['w']} x {size['h']} outline - a spanning connector is "
+            "drawn ACROSS, with the pair running in x from its own mate "
+            "point, and the host's own axis arrives with the seat")
+        return
+
+
 def lint_component_spanned_geometry(path, data, lib_roots):
     """L112: a component presenting a SPANNING connector interface really hosts
     what it spans.
@@ -5775,7 +5841,13 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     differ in axis, rotation and box; their mate points do not. L81 reads `at`
     and says so in its own comments - it has to tell a rotated column from a
     stacked pair - and this rule needs no such argument.
+
+    A FIFTH ARM ASKS THE MIRROR-IMAGE QUESTION of the connector rather than
+    the host - is a spanning part drawn on the canonical axis - and it is
+    called from here so one rule number covers one subject: whether a duplex
+    connector and the adapter it plugs can be put together at all.
     """
+    _spanning_part_drawn_across(path, data)
     iface = data.get("interface")
     if not iface:
         return

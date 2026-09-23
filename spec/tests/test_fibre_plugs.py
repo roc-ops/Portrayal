@@ -327,12 +327,14 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     in the cassette in `bay-1`, and the plug is drawn inside the innermost
     group that holds it.
 
-    IT LANDS ITS OWN MATE ON THE ADAPTER'S AND NOT ITS HALVES ON THE BORES,
-    and that is not an oversight: `common/lc-duplex-v-adapter@4` stacks its
-    pair where this plug's is side by side, and an occupant cannot be turned
-    relative to its host. `provenance.orientation` records the gap - it is the
-    one common/lc-duplex-dust-cap@1 already has in the other direction - so
-    what is checked here is the seat, which IS right."""
+    AND ITS HALVES LAND ON THE STACKED BORES, which they did not when this
+    plug was first drawn. `common/lc-duplex-v-adapter@4` stacks its pair where
+    this plug's is side by side, and an occupant cannot turn itself - so the
+    ADAPTER says which way round its pair runs: its spanning slot publishes
+    the turn that carries the canonical across axis onto its own bores, and
+    the seat draws the plug at it. Half `a` therefore lands on the adapter's
+    first bore here exactly as it does on the side-by-side Smartoptics adapter
+    above, from the same drawing."""
     dev = fhd(tmp_path, LC_CASSETTE, {"bay-1/lc01": DUPLEX})
     root, parents = face(build(dev, tmp_path / "o", LIB), "fhd-1ufce", "base")
     occ = occupant(root, "bay-1/module/lc01", DUPLEX)
@@ -347,6 +349,19 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     # seated ON the bezel the adapter presents, not at the plate behind it
     assert lift > 0
     assert float(occ.get("data-z-lift")) == pytest.approx(lift, abs=1e-6)
+    # and each half on the bore it fills, through the turn the seat applied
+    plug, bore, half = contract(DUPLEX), contract("std/lc-bore@3"), contract(LC)
+    bores = {q["id"]: q for q in adapter["parts"]}
+    for half_id, bore_id in (("a", "tx"), ("b", "rx")):
+        q = next(p for p in plug["parts"] if p["id"] == half_id)
+        hp = seat_point(q["at"], half["size"], q.get("rotate"),
+                        half["connection-points"]["mate"]["at"])
+        px, py = device_point(parents, occ, hp)
+        b = bores[bore_id]
+        bp = seat_point(b["at"], bore["size"], b.get("rotate"),
+                        bore["connection-points"]["mate"]["at"])
+        bx, by = device_point(parents, host, bp)
+        assert abs(px - bx) < 1e-6 and abs(py - by) < 1e-6, (half_id, bore_id)
 
 
 def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):

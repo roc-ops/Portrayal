@@ -283,6 +283,85 @@ def spanned_slots(contract, resolve, connectors):
     return out
 
 
+# THE CANONICAL AXIS A SPANNING CONNECTOR IS DRAWN ON: ACROSS, along +x, with
+# the first spanned part on the left. Every duplex part in the library is drawn
+# that way, and a host whose own pair runs some other way publishes the turn
+# that carries the one onto the other (B3, docs/pluggables-caps-design.md,
+# "The duplex host").
+CANONICAL_SPAN_AXIS = 0
+
+
+def spanning_axis(contract, resolve, connectors):
+    """THE TURN A SPANNING OCCUPANT IS DRAWN AT ON THIS HOST, in degrees, or
+    None where this contract hosts no spanning slot.
+
+    A duplex connector is ONE moulding with two ferrules on an axis, and it
+    cannot turn itself: a seated part takes its host's rotation
+    (`render.solve_seat`, D3). So the axis has to come from the host, and the
+    two adapters in the library disagree about it - `common/lc-duplex-adapter`
+    puts its bores SIDE BY SIDE and `common/lc-duplex-v-adapter` STACKS them,
+    which its own provenance calls "the same duplex pair stood on end". One
+    part drawn on one axis is right on one of them and wrong on the other
+    unless the host says which way round its pair runs.
+
+    DERIVED FROM THE BORES, never from a name or a ref: the direction from the
+    FIRST spanned part's composed mate point to the LAST, snapped to the right
+    angle it lies nearest, is the direction the canonical +x axis has to be
+    carried onto. Composed mate points and not `at`, for L112's reason - a
+    stacked pair and a side-by-side pair differ in box, axis and rotation, and
+    their mate points do not.
+
+    The ORDER is the `parts:` declaration order (`spanned_slots`), so the
+    answer distinguishes a pair running left-to-right from one running
+    right-to-left. That matters for a part whose two halves are not
+    interchangeable - a duplex plug's `a` half carries the fibre its host's
+    first bore does - and is invisible on a symmetric one like a dust cap.
+
+    This is the turn IN THE CONTRACT'S OWN FRAME. A placement of the contract
+    adds its own `rotate` on top, which is a sum because both are rotations of
+    the same plane.
+    """
+    ids = spanned_slots(contract, resolve, connectors)
+    if len(ids) < 2:
+        return None
+    places = {q.get("id"): q for q in (contract.get("parts") or [])}
+    pts = []
+    for bid in ids:
+        q = places.get(bid) or {}
+        core = resolve(q.get("ref")) or {}
+        cm = (core.get("connection-points") or {}).get("mate")
+        if not cm or not core.get("size"):
+            return None                 # a bore with no mate point is L58/L1's
+        pts.append(seat_point(q.get("at") or [0, 0], core["size"],
+                              q.get("rotate"), cm["at"]))
+    dx, dy = pts[-1][0] - pts[0][0], pts[-1][1] - pts[0][1]
+    if dx == 0 and dy == 0:
+        return None                     # two bores on one point is L112's
+    if abs(dx) >= abs(dy):
+        lies_at = 0 if dx >= 0 else 180
+    else:
+        lies_at = 90 if dy > 0 else 270
+    return (lies_at - CANONICAL_SPAN_AXIS) % 360
+
+
+def summed_rotate(rotate, axis):
+    """A placement's own `rotate` turned further by the axis its slot's pair
+    runs on - the ONE spelling of that sum, so the entry `render._slot_dict`
+    publishes and the turn `render.solve_seat` draws at cannot come apart.
+
+    `axis` None means the slot spans nothing and the placement's own answer
+    stands, `None` included: "drawn upright" and "not a question this slot
+    answers" have to stay tellable apart. A whole number comes back as an
+    `int`, because the sum is written straight into an SVG `rotate()` and
+    `rotate(90.0 ...)` is a different string from the one every unspanned
+    placement emits.
+    """
+    if axis is None:
+        return rotate
+    turn = (float(rotate or 0) + float(axis)) % 360
+    return int(turn) if turn == int(turn) else turn
+
+
 def resolve_views(device, cfg):
     """{face: (view-name, view)} for one configuration.
 
