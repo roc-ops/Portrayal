@@ -14,6 +14,9 @@
 //   emptied  - a build that seated a cassette, taken out by the reader
 //   again    - a face seated once, handed a later swap of the same bay
 //   none     - no swaps: nothing on either face is touched
+//   queue    - swap.js's `faceQueue`, the shell's bookkeeping for the held
+//              faces: a swap made while faces load, entries a face already
+//              holds, jobs asked for on faces no longer held, a failed job
 const m = await import('../../../kit/swap.js');
 const mode = process.argv[2];
 
@@ -104,5 +107,68 @@ if (mode === 'none') {
   const fr = await seat(f, 'front', map), rr = await seat(r, 'rear', map);
   Object.assign(out, {map, front: inFront(f), rear: inRear(r),
                       applied: fr.applied + rr.applied});
+}
+if (mode === 'queue') {
+  const tick = () => new Promise(r => setTimeout(r, 0));
+  // the shell's seat, counted: which face was handed which entries
+  const calls = [];
+  const skinAsks = [];
+  const counted = async ref => { skinAsks.push(ref); return loadSkin(ref); };
+  const q = m.faceQueue({loadSkin: counted, seat: async (face, view, map, skin) => {
+    calls.push([view, Object.keys(map).sort()]);
+    return m.seatFace(face, {bays: view === 'front' ? BAYS : [], cages: []}, map, skin, compByRef);
+  }});
+  const cfg = {name: 'base', bays: {}};
+  // the reader's state: one cassette in two bays, so a face needs its skin
+  // (and the rear its back) twice in one job
+  let cfgBays = {'bay-1': A, 'bay-3': A};
+  const held = {};
+  let gate;                                      // the front's text is slow to arrive
+  const slow = new Promise(r => { gate = r; });
+  const opts = live => ({
+    live, has: v => !!held[v], delta: () => delta(cfg, cfgBays),
+    fetch: async v => { if (v === 'front') await slow; return v === 'front' ? front() : rear(); },
+    store: (v, f) => !held[v] && !!(held[v] = f),
+  });
+  const heldFaces = live => ({live, held: () => Object.entries(held)});
+  const loading = q.load(['front', 'rear'], opts(() => true));
+  await tick();
+  // a swap made while the front is still loading: bay-2 filled
+  cfgBays = {...cfgBays, 'bay-2': B};
+  const during = q.swap({'bay-2': B}, heldFaces(() => true));
+  gate();
+  out.loaded = await loading;
+  out.during = await during;
+  out.afterLoad = {front: inFront(held.front), rear: inRear(held.rear)};
+  // the faces were seated with the delta once their text arrived, which
+  // already held bay-2, so the swap queued behind them seated nothing again
+  out.callsAfterLoad = calls.map(c => c.join(':'));
+  // each skin asked for once per job, however many faces need it
+  out.skinAsks = [...skinAsks].sort();
+  calls.length = 0;
+  out.same = await q.swap({'bay-1': A}, heldFaces(() => true));
+  out.sameCalls = calls.length;
+  out.changed = await q.swap({'bay-1': B}, heldFaces(() => true));
+  out.changedCalls = calls.map(c => c.join(':'));
+  out.afterChange = {front: inFront(held.front), rear: inRear(held.rear)};
+  // asked for on faces no longer held: nothing is seated or stored
+  calls.length = 0;
+  out.staleSwap = await q.swap({'bay-3': A}, heldFaces(() => false));
+  const other = {};
+  out.staleLoad = await q.load(['top'], {...opts(() => false), has: v => !!other[v],
+                                         store: (v, f) => !!(other[v] = f)});
+  out.staleCalls = calls.length;
+  out.staleStored = Object.keys(other);
+  // a job that fails does not stop the one behind it
+  const bad = m.faceQueue({loadSkin, seat: async () => { throw new Error('boom'); }});
+  const first = bad.swap({'bay-1': A}, heldFaces(() => true)).then(() => 'ok', e => e.message);
+  const second = bad.swap({}, heldFaces(() => true)).then(n => n, e => e.message);
+  out.failed = [await first, await second];
+  // a face the queue never seated takes every entry
+  const fresh = front();
+  held.front = fresh;
+  calls.length = 0;
+  await q.swap({'bay-1': B}, {live: () => true, held: () => [['front', fresh]]});
+  out.unrecorded = calls.map(c => c.join(':'));
 }
 console.log(JSON.stringify(out));

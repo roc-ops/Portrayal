@@ -867,6 +867,94 @@ export async function seatFace(rootEl, {bays = [], cages = []}, overrides, loadS
   return {...face, applied: face.applied + rear, rear};
 }
 
+// THE FACES HELD BUT NOT MOUNTED, KEPT SEATED - the shell's bookkeeping for
+// them, here so node can run it. `seat(face, view, map, loadSkin)` is the
+// per-face pass (the shell's is `seatFace`).
+//
+// ONE QUEUE, IN ORDER. `load` and `swap` are jobs on one chain, so a swap
+// made while faces are loading is seated into them once they are held, and
+// two swaps of one key reach every face in the order they were made. A job
+// that fails does not stop the ones behind it.
+//
+// EACH FACE REMEMBERS WHAT IT WAS SEATED WITH, and a later job skips an entry
+// the face already holds: faces loaded with the state's whole delta, then
+// handed the swap that was queued while they loaded, would take every module
+// out and seat it again - refetching its skin and dropping whatever the
+// reader had pulled inside it. A face the queue never seated (the one that
+// was mounted, now held) has no record and takes every entry.
+//
+// `live()` is the caller saying the faces it meant are still the held ones -
+// the same device and configuration as when the job was ASKED for, not when
+// it ran - and it is read again after every await. Both jobs resolve to what
+// they changed (faces stored, entries applied), so a caller can skip a
+// redraw that would show nothing new.
+//
+// A job's skins are loaded once: every face that holds a swapped module asks
+// for the same skin, and a module shown front and back asks twice per face.
+export function faceQueue({seat, loadSkin}) {
+  let work = Promise.resolve();
+  const run = job => {
+    const r = work.then(job);
+    work = r.catch(() => {});
+    return r;
+  };
+  const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  const holds = new WeakMap();
+  const note = (face, map) => {
+    const h = holds.get(face) || {};
+    for (const [k, v] of Object.entries(map)) h[k] = v ?? null;
+    holds.set(face, h);
+  };
+  const todo = (face, map) => {
+    const h = holds.get(face);
+    return Object.fromEntries(Object.entries(map)
+      .filter(([k, v]) => !(h && own(h, k) && h[k] === (v ?? null))));
+  };
+  const skins = () => {
+    const memo = new Map();
+    return ref => {
+      if (!memo.has(ref)) memo.set(ref, Promise.resolve(loadSkin(ref)));
+      return memo.get(ref);
+    };
+  };
+  return {
+    // fetch every view not yet held, in parallel, and seat each with the
+    // delta as it stands once its text has arrived
+    load(views, {has, fetch, delta, store, live}) {
+      return run(async () => {
+        const skin = skins();
+        const stored = await Promise.all(views.map(async view => {
+          if (!live() || has(view)) return 0;
+          const face = await fetch(view);
+          if (!face || !live()) return 0;
+          const map = delta();
+          await seat(face, view, map, skin);
+          if (!live() || !store(view, face)) return 0;
+          note(face, map);
+          return 1;
+        }));
+        return stored.reduce((a, b) => a + b, 0);
+      });
+    },
+    // one swap into every held face that does not already hold it
+    swap(map, {held, live}) {
+      return run(async () => {
+        const skin = skins();
+        let applied = 0;
+        for (const [view, face] of held()) {
+          if (!live()) break;
+          const entries = todo(face, map);
+          if (!Object.keys(entries).length) continue;
+          applied += (await seat(face, view, entries, skin))?.applied || 0;
+          if (!live()) break;
+          note(face, entries);
+        }
+        return applied;
+      });
+    },
+  };
+}
+
 // THE SWAP STATE AS A URL PARAMETER, so a swap survives a reload. A runtime
 // swap changes no file on disk - it lives in the explorer's memory - and a
 // page that forgets it on reload shows the reader the build again with nothing
