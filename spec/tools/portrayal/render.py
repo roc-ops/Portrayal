@@ -24,7 +24,7 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref
 from portrayal import libwalk
-from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slot, slot_in_slot_error,
+from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
                                 view_parts, targets, split_target, component_refs,
                       presented_interface, seat_point, _turn,
                       load_yaml, resolve_views, slot_key_prefix,
@@ -973,13 +973,12 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         return
     for host_id, (key, spec, _c) in pending.items():
         q = hosts.get(host_id)
-        # A SLOT INSIDE A SLOT IS REFUSED (B3, manifest.slot_in_slot): a key on
-        # a cage wrapper's own aperture names the opening the wrapper's key
-        # already names. Only a configured key - a default is the product's
-        # own - and only on a placed part: a module in a bay is no slot.
+        # A SLOT INSIDE A SLOT IS REFUSED (B3, manifest.slot_in_slot_at, the
+        # gate nested_key_host - and so L12 - applies too): a key on a cage
+        # wrapper's own aperture names the opening the wrapper's key already
+        # names. Only a configured key - a default is the product's own.
         if (key is not None and q is not None and prefix is not None
-                and not (path or "").endswith("/module")
-                and slot_in_slot(contract, host_id, _res)):
+                and slot_in_slot_at(path, contract, host_id, _res)):
             raise slot_in_slot_error(key, prefix, host_id)
         if spec is None or q is None or prefix is None:
             continue

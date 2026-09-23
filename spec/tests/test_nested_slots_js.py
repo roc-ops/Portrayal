@@ -609,10 +609,21 @@ def test_l12_reports_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, 
     assert not [e for e in got.errors if "[L12]" in e]
 
 
+# HOW MANY NESTED `occupants:` KEYS THE LIBRARY HAS TODAY: none. Two devices
+# carry `occupants:` at all and neither keys a path with a slash, so the census
+# below walks every configuration and checks NOTHING - it cannot fail today,
+# and bites only once a configuration keys a nested path (update this figure
+# then, and it checks each one). The real evidence that the library keys no
+# slot inside a slot is the build: the full build and lint are unchanged by
+# the refusal (task-10a-report.md, fix round).
+LIBRARY_NESTED_OCCUPANT_KEYS = 0
+
+
 def test_no_library_configuration_keys_a_slot_inside_a_slot():
     """The census: every configuration in the library, every nested
     `occupants:` key walked by the build's resolver, none refused as a slot
-    inside a slot."""
+    inside a slot. See LIBRARY_NESTED_OCCUPANT_KEYS: today there are none to
+    walk, and the count is pinned so that stops being silent."""
     from portrayal.manifest import nested_key_host
     res = _resolve()
     configs = keys = 0
@@ -632,4 +643,40 @@ def test_no_library_configuration_keys_a_slot_inside_a_slot():
                     if "is the aperture the slot" in str(e):
                         bad.append((str(dev.parent.relative_to(LIB)), name, key))
     assert configs > 100, configs
+    assert keys == LIBRARY_NESTED_OCCUPANT_KEYS, (
+        f"{keys} nested occupants: keys now (pinned {LIBRARY_NESTED_OCCUPANT_KEYS}) - "
+        "the census checks them; update the figure")
     assert not bad, bad
+
+
+# THE ONE GATE, INSIDE AN OCCUPANT TOO. generic/sfp-lc-simplex@2 is an optic
+# that forwards its one LC bore, so seated in a cage it is a slot at its own
+# key - `front-2/xg0-occupant` - and its `bore` is not a second one. The build
+# refused `front-2/xg0-occupant/bore` while nested_key_host (and so L12)
+# skipped any carrier reached through a chained occupant and passed it; both
+# now ask manifest.slot_in_slot_at.
+INSIDE_OCCUPANT = [
+    ({"front-2/xg0": "generic/sfp-lc-simplex@2",
+      "front-2/xg0-occupant/bore": "generic/lc-plug@2"}, False),
+    ({"front-2/xg0": "generic/sfp-lc-simplex@2",
+      "front-2/xg0-occupant": "generic/lc-plug@2"}, True),
+]
+
+
+@pytest.mark.parametrize("occ,ok", INSIDE_OCCUPANT, ids=["the bore", "the occupant's own key"])
+def test_the_build_and_l12_answer_a_key_inside_an_occupant_alike(tmp_path, occ, ok):
+    from portrayal import lint
+    dev = shutil.copytree(LIB / "devices/casa/c40g", tmp_path / "c40g") / "device.yaml"
+    d = yaml.safe_load(dev.read_text())
+    d["configurations"]["bdm-3plus1"]["occupants"] = occ
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+                        "--out", str(tmp_path / "out")], capture_output=True, text=True)
+    with lint.collecting() as got:
+        lint.lint_device_occupants(dev, yaml.safe_load(dev.read_text()), [str(LIB)])
+    l12 = [e for e in got.errors if "[L12]" in e]
+    assert (r.returncode == 0) is ok, r.stderr[-600:]
+    assert (not l12) is ok, l12
+    if not ok:
+        want = "key 'front-2/xg0-occupant' instead"
+        assert want in r.stderr and all(want in e for e in l12), (r.stderr[-400:], l12)

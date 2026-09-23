@@ -316,9 +316,10 @@ def slot_in_slot(carrier, host_id, resolve):
     (spanned_slots): the duplex adapter's `tx` and `rx`, the other level of
     the same opening, which L111 keeps exclusive of it.
 
-    `carrier` is the contract of a PLACED part - a device placement or a part
-    a component composes. A module seated in a bay is never one: a bay is not
-    a slot, so the card that is one cage keeps its cage."""
+    `carrier` is the contract of the instance holding `host_id` - a device
+    placement, a part a component composes, or a seated occupant. A module
+    seated in a bay is never asked (slot_in_slot_at): a bay is not a slot, so
+    the card that is one cage keeps its cage."""
     if not carrier:
         return False
     registered, conns = slot_interfaces()
@@ -329,6 +330,20 @@ def slot_in_slot(carrier, host_id, resolve):
     if not core or presented_interface(core, resolve)[0] not in registered:
         return False
     return host_id not in spanned_slots(carrier, resolve, conns)
+
+
+def slot_in_slot_at(path, carrier, host_id, resolve):
+    """slot_in_slot for the instance drawn at `path` - THE GATE both the build
+    (render._seat_nested_occupants) and the resolver L12 calls
+    (nested_key_host) apply, so the two cannot come to disagree about which
+    keys it refuses. A module in a bay (`.../module`) is never a placed slot;
+    every other instance is asked - a device placement, a composed part, and
+    an OCCUPANT too: an optic that forwards one bore (generic/sfp-lc-simplex@2)
+    is a slot at its own key, `front-2/xg0-occupant`, and its bore is not a
+    second one."""
+    if not path or path.endswith("/module"):
+        return False
+    return slot_in_slot(carrier, host_id, resolve)
 
 
 def slot_in_slot_error(key, carrier_key, host_id):
@@ -724,16 +739,12 @@ def nested_key_host(key, device, cfg, resolve):
                              "this configuration draws, no placement either, and "
                              "no occupant of this configuration seats it")
         where, path, in_bays = segs[0], segs[0], False
-    # whether the instance reached so far is an OCCUPANT (a chained segment),
-    # which is no placed slot: slot_in_slot below asks only of placed parts
-    via_occupant = not (segs[0] in bays or segs[0] in placements)
     for seg in segs[1:-1]:
         c = resolve(ref) if ref else None
         nb = ((c or {}).get("bays") or {}).get(seg) if in_bays else None
         if isinstance(nb, dict):
             where, path = f"{where}/{seg}", f"{path}/{seg}/module"
             ref = seated_ref(cfg_bays, where, nb)
-            via_occupant = False
             continue
         q = next((q for q in (c or {}).get("parts") or [] if q.get("id") == seg), None)
         if q is None or not q.get("ref"):
@@ -764,10 +775,9 @@ def nested_key_host(key, device, cfg, resolve):
                                  f"holds {ref or 'nothing'}, which has no bay "
                                  f"or part {seg!r}, and no occupant seated "
                                  "there produces it")
-            where, path, in_bays, via_occupant = f"{where}/{seg}", f"{path}/{seg}", False, True
+            where, path, in_bays = f"{where}/{seg}", f"{path}/{seg}", False
             continue
-        where, path, ref, in_bays, via_occupant = (f"{where}/{seg}", f"{path}/{seg}", q["ref"],
-                                                   False, False)
+        where, path, ref, in_bays = f"{where}/{seg}", f"{path}/{seg}", q["ref"], False
     if not ref:
         raise ValueError(f"occupants/{key}: names no cage - bay {where!r} is "
                          "empty in this configuration")
@@ -777,8 +787,7 @@ def nested_key_host(key, device, cfg, resolve):
                          "does not resolve")
     parts = {q.get("id"): q for q in module.get("parts") or []}
     if host_id in parts:
-        if (not path.endswith("/module") and not via_occupant
-                and slot_in_slot(module, host_id, resolve)):
+        if slot_in_slot_at(path, module, host_id, resolve):
             raise slot_in_slot_error(key, where, host_id)
         return parts[host_id]["ref"], ref, path
     # A SLOT ON THE MODULE'S BACK (back_parts), or an occupant chained on

@@ -130,6 +130,24 @@ def lib(tmp_path):
             p.update(extra)
     _copy(root, CASSETTE, 3, "composer-cassette", composer)
 
+    # an adapter that is NOT itself a slot - no interface of its own, so its
+    # two `lc` bores (each test/defaulted-bore@1, which ships PLUG at its own
+    # top level) are slots in their own right, not slots inside a slot - and
+    # a cassette composing it: the grandchild a configuration may key
+    def plain_adapter(c):
+        for k in ("interface", "interface-at", "spans"):
+            c.pop(k, None)
+        tx, rx = _part(c, "tx"), _part(c, "rx")
+        tx["ref"] = rx["ref"] = "test/defaulted-bore@1"
+    _copy(root, V_ADAPTER, 5, "plain-adapter", _unshipped(plain_adapter))
+
+    def plain_cassette(c):
+        for pid in ("lc01", "lc02", "lc03"):
+            p = _part(c, pid)
+            p["ref"] = "test/plain-adapter@1"
+            p.pop("default", None)
+    _copy(root, CASSETTE, 3, "plain-cassette", plain_cassette)
+
     # the same adapter shape at device level, for dcp-r-34d-cs's port-1510
     def h_adapter(c):
         c["interface"] = "lc"
@@ -302,16 +320,35 @@ def test_a_composer_overrides_the_top_level_default_only(tmp_path, lib):
     assert_seated(root, parents, "bay-1/module/lc02", "rx", "test/defaulted-bore@1", lib)
 
 
-def test_a_configuration_reaches_a_grandchild_default(tmp_path, lib):
-    """A configuration empties a default two levels down - a bore of an
-    adapter of the cassette in bay-1 - on REAL parts: the SC cassette's
-    sc-duplex-adapter@4 ships a cap in each bore, and presents no slot of its
-    own, so `bay-1/sc1/tx` is a slot and not a slot inside one. The other bore
-    keeps its cap.
+def test_a_configuration_overrides_a_composers_empty_default(tmp_path, lib):
+    """The composer's `""` empties lc03 (P5); a configuration key on lc03 -
+    a slot on the MODULE, so no slot inside a slot - seats there anyway, and
+    nothing else moves: the whole occupant map is compared exactly."""
+    dev, _ = fhd(tmp_path, "test/composer-cassette@1", {"bay-1/lc03": OTHER})
+    root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
+    want = dict(EXPECTED_COMPOSED)
+    want["bay-1/module/lc03-occupant"] = OTHER
+    assert occupants_drawn(root) == want
 
-    It was written on test/self-adapter@1, whose bores are slots inside a
-    slot that spans neither (it presents `lc` itself); a key on one of those is
-    refused now (manifest.slot_in_slot - the next test)."""
+
+def test_a_configuration_reaches_a_grandchild_default(tmp_path, lib):
+    """A configuration empties a default two levels down - the bore's OWN
+    top-level default (test/defaulted-bore@1 ships PLUG), on an adapter in the
+    cassette in bay-1 - and nothing else moves. The adapter,
+    test/plain-adapter@1, presents no slot of its own, so `bay-1/lc01/rx` is a
+    slot and not a slot inside one (a key on test/self-adapter@1's bores is
+    refused - the next test)."""
+    dev, _ = fhd(tmp_path, "test/plain-cassette@1", {"bay-1/lc01/rx": ""})
+    root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
+    want = {f"bay-1/module/lc0{n}/{b}-occupant": PLUG for n in (1, 2, 3) for b in ("tx", "rx")}
+    del want["bay-1/module/lc01/rx-occupant"]
+    assert occupants_drawn(root) == want
+
+
+def test_the_same_grandchild_on_real_parts(tmp_path, lib):
+    """And on the library's own: the SC cassette's sc-duplex-adapter@4 ships
+    a cap in each bore and presents no slot of its own. `bay-1/sc1/tx: ""`
+    empties that bore; the other 23 keep their caps."""
     dev, _ = fhd(tmp_path, "fs/fhd-1mtp12-sc-os2-a@2", {"bay-1/sc1/tx": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     held = {n.get("data-for"): n.get("data-ref").rsplit(":", 1)[0] for n in root.iter()
