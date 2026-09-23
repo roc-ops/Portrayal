@@ -22,6 +22,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath } from './swap.js';
 import { jdist } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
+import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -70,6 +71,8 @@ export const SHELL_CSS = `
           font-size:0.76rem; cursor:pointer; border-radius:4px; white-space:nowrap; }
   .node:hover { background:var(--control); }
   .node.sel { background:var(--hl); color:var(--sel-ink); }
+  .node.linked { outline:1px dashed var(--hl); outline-offset:-1px; }
+  [data-portrayal-linked] { outline:1.2px dashed var(--hl); }
   .node.grp { color:var(--dim); text-transform:uppercase; font-size:0.68rem;
               letter-spacing:0.05em; margin-top:0.25rem; }
   .node.grp .cls { text-transform:none; letter-spacing:0; }
@@ -432,12 +435,31 @@ export function createShell(opts = {}) {
       const m = occ && modelOf(occ);
       return m ? `${own} — ${m}` : own;
     }
+    // A REAR HOLE A SLOT IS SEEN THROUGH IS THAT SLOT (render.py stamps it)
+    if (e.dataset.rearOf) {
+      const c = e.dataset.rearRef && compByRef(e.dataset.rearRef.split(':')[0]);
+      const m = c?.attrs?.model || c?.name;
+      return `${e.dataset.rearOf} — ${m || 'open'} (rear)`;
+    }
+    // A FIBRE ROW SAYS WHERE IT GOES; A REAR CONNECTOR, WHICH FRONT PORTS IT CARRIES
+    const mod = moduleOf(n.path);
+    if (mod) {
+      const entry = moduleEntry(mod);
+      const f = entry && fibreOf(n.path, entry, compByRef);
+      if (f) return fibreLabel(entry, f.endpoint) || own;
+      const rel = n.path.slice(mod.length + 1);
+      if (entry && !rel.includes('/') && n.projected) {
+        const carries = connectorLabel(entry, rel, 'rear');
+        if (carries) return `${own} — ${carries}`;
+      }
+    }
     const port = portLabel(e);
     if (port) return `${own} — ${port}`;
     const model = modelOf(e);
     if (model && model !== own) return `${own} — ${model}`;
-    const title = e.querySelector(':scope > title');
-    return (title && title.textContent.trim()) || own;
+    // an internal id (`cutout--3`) is not a name; the row's own id reads better
+    const title = e.querySelector(':scope > title')?.textContent.trim();
+    return title && !title.includes('--') ? title : own;
   }
 
   // Ordering rules. Tier comes from the component's class, never from the author,
@@ -745,6 +767,18 @@ export function createShell(opts = {}) {
     for (const d of faceDocs()) { const e = d.querySelector(q); if (e) return e; }
     return null;
   }
+  // THE MODULE A PATH IS IN, as components.json knows it. The front draws it
+  // with its ref; the rear draws only a projection, whose ref sits on the
+  // cutout it is seen through (render.py `data-rear-ref`, kept by swaps).
+  function moduleEntry(module) {
+    if (!module) return null;
+    const drawn = elOf(module)?.dataset.ref;
+    const bay = module.slice(0, module.lastIndexOf('/module'));
+    const seen = drawn ? null : faceDocs().map(d => d.querySelector(
+      `[data-rear-of="${CSS.escape(bay)}"][data-rear-ref]`)).find(Boolean);
+    const ref = (drawn || seen?.dataset.rearRef || '').split(':')[0];
+    return ref ? compByRef(ref) : null;
+  }
   function pulledEls() { return faceDocs().flatMap(d => [...d.querySelectorAll('[data-portrayal-pulled]')]); }
   function pulledPaths() { return pulledEls().map(e => e.dataset.path).filter(Boolean); }
   function isPulled(path) { return !!elOf(path)?.hasAttribute('data-portrayal-pulled'); }
@@ -850,6 +884,19 @@ export function createShell(opts = {}) {
       for (const e of d.querySelectorAll('[data-portrayal-selected]')) e.removeAttribute('data-portrayal-selected');
       if (path != null) for (const e of d.querySelectorAll(qo)) e.setAttribute('data-portrayal-selected', '');
     }
+    // THE OTHER END OF A FIBRE is marked on every face, and its row lit. A
+    // splitter's common end has several (optical.js farPath returns an array
+    // for it), so `far` is always a list - empty when the path is no fibre.
+    const entry = path && moduleEntry(moduleOf(path));
+    const fib = entry && fibreOf(path, entry, compByRef);
+    const far = fib ? [].concat(farPath(fib.module, entry, fib.endpoint) || []).filter(Boolean) : [];
+    const qf = far.map(p => `[data-path="${CSS.escape(p)}"],[data-of="${CSS.escape(p)}"]`).join(',');
+    for (const d of faceDocs()) {
+      for (const e of d.querySelectorAll('[data-portrayal-linked]')) e.removeAttribute('data-portrayal-linked');
+      if (qf) for (const e of d.querySelectorAll(qf)) e.setAttribute('data-portrayal-linked', '');
+    }
+    for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('linked', far.includes(r.dataset.path));
+    state.far = far;
     if (halo) { halo.remove(); halo = null; }
     // getScreenCTM is null while the SVG is hidden, which is exactly what a page
     // showing a 3D stage instead has done to it. Selection still stands; only
@@ -905,6 +952,8 @@ export function createShell(opts = {}) {
     const bay = bayFor(path);
 
     let html = `<h2>${cls || 'node'}</h2><div class="row"><span>path</span><code>${path}</code></div>`;
+    for (const to of state.far || [])
+      html += `<div class="row"><span>fibre to</span><a href="#" data-go="${esc(to)}"><code>${esc(to)}</code></a></div>`;
     if (ref) html += `<div class="row"><span>component</span><code>${ref.split(':')[0]}</code></div>`;
 
     // Why nothing lit up. A region is allowed to name a part of the device that
@@ -980,6 +1029,25 @@ export function createShell(opts = {}) {
     if (optic) optic.onchange = () => swapCage(optic.dataset.cage, optic.value);
     const open = box.querySelector('#open');
     if (open) open.onclick = () => openModule(ref.split(':')[0]);
+    for (const a of box.querySelectorAll('[data-go]'))
+      a.addEventListener('click', ev => { ev.preventDefault(); goTo(ev.currentTarget.dataset.go); });
+  }
+
+  // FOLLOW A FIBRE to its far end: select it, switching view when that end is
+  // drawn only on another face and the tree is not merged (a merged tree
+  // already lists every face). The faces not on screen are fetched first if
+  // they are not held yet, or a rear end would never be found from the front.
+  async function goTo(to) {
+    const q = `[data-path="${CSS.escape(to)}"],[data-of="${CSS.escape(to)}"]`;
+    const find = () => state.svg?.querySelector(q) ? state.view
+      : Object.entries(state.faces || {}).find(([, d]) => d.querySelector(q))?.[0];
+    let onView = find();
+    if (!onView && !state.module) { await loadFaces().catch(() => {}); onView = find(); }
+    if (onView && onView !== state.view && !state.merge) {
+      state.view = onView; el.view.value = onView;
+      await loadStage();
+    }
+    select(to);
   }
 
   // Swapping is done in the DOM, not by rebuilding: fetch the component's compiled
@@ -1345,7 +1413,10 @@ export function createShell(opts = {}) {
       if (tw?.textContent) tw.textContent = shut.get(k) ? '▸' : '▾';
     }
     if (state.sel != null)
-      for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('sel', r.dataset.path === state.sel);
+      for (const r of el.tree.querySelectorAll('.node')) {
+        r.classList.toggle('sel', r.dataset.path === state.sel);
+        r.classList.toggle('linked', !!state.far?.includes(r.dataset.path));
+      }
     el.tree.scrollTop = top;
   }
   function refreshTree() {
