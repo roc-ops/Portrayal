@@ -6,6 +6,16 @@
 format: 1
 interfaces:
   lc: {standard: lc-duplex-receptacle, note: one LC bore}
-  lc-duplex: {standard: lc-duplex-receptacle, note: 'two LC bores at the 6.25 duplex pitch, presented by the adapter itself'}
+  # SPANS: one lc-duplex connector fills TWO `lc` bores, so a duplex adapter
+  # holds two levels of slot for one piece of hardware - its own, and the two
+  # bores it composes - and the two are mutually exclusive (B3,
+  # docs/pluggables-caps-design.md, "The duplex host"). `interface` names what
+  # the spanned parts present and `count` how many of them there must be; the
+  # pitch they sit at is this interface's own `standard` in standards.yaml, so
+  # no figure is written twice.
+  lc-duplex:
+    standard: lc-duplex-receptacle
+    note: two LC bores at the 6.25 duplex pitch, presented by the adapter itself
+    spans: {interface: lc, count: 2}
   sc: {standard: sc-simplex-receptacle}
   mpo: {standard: mpo-adapter, note: 'MPO-8/12/24 share the opening; MPO-16 is keyed differently and is not this interface'}

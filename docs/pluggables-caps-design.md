@@ -135,6 +135,14 @@ slot is occupied, its bore slots are not offered and a configuration naming one 
 an error; when either bore slot is occupied, the adapter slot is not offered.
 The build enforces it and the kit follows it; the explorer shows the free level.
 
+The registry says which interface takes the place of which, rather than a rule
+naming `lc-duplex` in code: the entry carries `spans: {interface: lc, count: 2}`,
+and the pitch the spanned parts sit at is the interface's own `standard`. A
+published slot entry names the parts it spans, so a reader offers one level or
+the other; `[]` where a slot spans nothing. "Occupied" is read after defaults
+and the configuration resolve, which is why the table below says a Smartoptics
+port's two bores must be emptied before a duplex connector seats in it.
+
 So the two LC adapters come out differently, as the products do:
 
 | adapter | ships with | the swap menu offers |

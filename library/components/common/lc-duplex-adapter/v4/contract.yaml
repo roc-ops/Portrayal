@@ -1,8 +1,13 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 4.0.0
+version: 4.1.0
 class: port
+# THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
+# duplex host"): a duplex connector - a duplex dust cap, a duplex plug -
+# mates the pair of bores as one part, at their midpoint. That slot and the
+# two bore slots below are mutually exclusive; the build and lint hold it.
+interface: lc-duplex
 profile: networking
 description: >-
   Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side,
@@ -92,6 +97,14 @@ parts:
   - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180}
   - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180}
 connection-points:
+  # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
+  # points, which the pair's placements put at (3.475, 5.5) and (9.725, 5.5) -
+  # the same point `optical` already names, and for the same reason. The
+  # quoted `'on'` is the depth - YAML 1.1 reads a bare `on` as true - and it
+  # says the bores recess from the raised face, each lifted onto it by the
+  # 3.175 of `relief`, so a part seated across both stands on that face too
+  # and not at the panel behind it.
+  mate: {at: [6.6, 5.5], direction: front, 'on': bezel}
   # the midpoint of the two ferrule centres (3.475 and 9.725) - which is,
   # correctly, the 13.2-wide body's own centre (6.6). It was 6.6 originally
   # (from the uncorrected 6.6 stencil pitch, itself centred), moved to 6.3 when

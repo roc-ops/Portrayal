@@ -322,8 +322,10 @@ def test_components_json_publishes_the_resolved_default(lib):
     comp = _cages(lib, "test/composer-cassette@1")
     got = {k: comp[k]["default"] for k in ("lc01", "lc02", "lc03")}
     assert got == {"lc01": OTHER, "lc02": PLUG, "lc03": None}
-    # every other adapter on it is the stock one, which is no slot of its own
-    assert set(comp) == {"lc01", "lc02", "lc03"}
+    # every other adapter on it is the stock one, which is a slot of its own
+    # since B3 task 4 and ships nothing
+    assert set(comp) == {f"lc{n:02d}" for n in range(1, 13)}
+    assert all(comp[k]["default"] is None for k in comp if k not in got)
 
 
 def test_configs_json_publishes_the_resolved_default(tmp_path, lib):
@@ -372,14 +374,20 @@ def test_lint_a_top_level_default_the_slot_does_not_accept(lib):
 
 def test_lint_a_default_on_a_part_that_is_no_slot(lib):
     def bad(c):
-        _part(c, "lc01")["default"] = PLUG      # the stock adapter presents nothing
+        # a splice tray presents no interface, so nothing can seat on it - the
+        # stock adapter is a slot of its own since B3 task 4 and no longer
+        # answers this question
+        p = _part(c, "lc01")
+        p["ref"], p["default"] = "common/fibre-splice@1", PLUG
     _copy(lib, CASSETTE, 3, "bad-cassette", bad)
     got = l110(lib, "test/bad-cassette@1")
     assert got and "lc01" in got[0] and "no slot" in got[0], got
 
 
 def test_lint_a_top_level_default_on_a_component_that_is_no_slot(lib):
-    _copy(lib, V_ADAPTER, 4, "bad-self", _set(default=PLUG))
+    # the CASSETTE, which presents no interface of its own and composes twelve
+    # apertures rather than one, so it forwards nothing either
+    _copy(lib, CASSETTE, 3, "bad-self", _set(default=PLUG))
     got = l110(lib, "test/bad-self@1")
     assert got and "no slot" in got[0], got
 

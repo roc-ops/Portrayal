@@ -247,6 +247,42 @@ def presented_interface(contract, resolve):
     return contract.get("interface"), (list(mate["at"]) if mate else None), 0.0
 
 
+def spanned_slots(contract, resolve, connectors):
+    """The ids of the `parts:` entries this contract's OWN slot takes the place
+    of - what the caps work calls its BORES (B3, docs/pluggables-caps-design.md,
+    "The duplex host"). [] for everything else.
+
+    An interface in spec/schemas/connectors.yaml may declare that it SPANS
+    another: `lc-duplex` spans two `lc` bores, because one duplex connector
+    fills both of them. A contract presenting a spanning interface and
+    composing the parts it spans therefore holds TWO LEVELS OF SLOT FOR ONE
+    PIECE OF HARDWARE - its own, and the bores - and the two are mutually
+    exclusive: filling either level means the other is not offered, and filling
+    both is an error the build and lint each refuse.
+
+    The ids are LOCAL to this contract, because that is how a configuration
+    addresses them: the bore beside a slot keyed `bay-1/lc01` is `bay-1/lc01/tx`.
+
+    ONLY A CONTRACT PRESENTING THE SPANNING INTERFACE AS ITS OWN names bores. A
+    wrapper that FORWARDS a spanned slot (P2, `render._forwarded_part`) is not
+    the host of these parts - they sit one level further down than any id a key
+    at the wrapper's level could name - and it publishes no second slot for them.
+    """
+    iface = (contract or {}).get("interface")
+    spans = ((connectors or {}).get(iface) or {}).get("spans") if iface else None
+    if not spans:
+        return []
+    want = spans.get("interface")
+    out = []
+    for part in contract.get("parts") or []:
+        if not part.get("id") or not part.get("ref"):
+            continue
+        core = resolve(part["ref"])
+        if core and core.get("interface") == want:
+            out.append(part["id"])
+    return out
+
+
 def resolve_views(device, cfg):
     """{face: (view-name, view)} for one configuration.
 

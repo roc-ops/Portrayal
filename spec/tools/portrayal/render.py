@@ -6,6 +6,7 @@ One SVG per view. Deterministic output: no timestamps; tool version stamped in
 """
 import argparse
 import copy
+import functools
 import json
 import math
 import re
@@ -27,7 +28,8 @@ from portrayal.manifest import (view_parts, targets, split_target, component_ref
                       presented_interface, seat_point, _turn,
                       load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
-                      occupant_spec, nested_key_host, slot_default, drawn_refs)
+                      occupant_spec, nested_key_host, slot_default, drawn_refs,
+                      spanned_slots)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -823,6 +825,61 @@ def refuse_bay_module_default(lib, ref, where):
             "default")
 
 
+def filled_spanned_slots(contract, resolve, connectors, slot_key, occupants):
+    """Which of `contract`'s spanned bores hold something once this
+    configuration and the contracts' own defaults resolve (B3, "The duplex
+    host") - the ids, in declaration order.
+
+    `slot_key` is the key the SPANNING slot is addressed by (`bay-1/lc01`,
+    `port-1510`), so a bore's own key is `<slot_key>/<id>`. A configuration
+    that keys a bore answers for it outright, `""` included - that is P5, and
+    an emptied bore is not filled. A bore no key names holds what it ships
+    (`slot_default`), because a default is the product's state and seats in
+    every configuration that does not override it.
+    """
+    parts = {q.get("id"): q for q in (contract.get("parts") or [])}
+    out = []
+    for bid in spanned_slots(contract, resolve, connectors):
+        key = f"{slot_key}/{bid}" if slot_key else None
+        if key is not None and key in (occupants or {}):
+            try:
+                if occupant_spec(key, occupants[key]) is not None:
+                    out.append(bid)
+            except ValueError:
+                pass                    # a malformed value is reported when it seats
+            continue
+        q = parts.get(bid) or {}
+        try:
+            if slot_default(q, resolve(q.get("ref")) or {}):
+                out.append(bid)
+        except (FileNotFoundError, ValueError, KeyError):
+            continue                    # a bad ref is draw_placement's to report
+    return out
+
+
+def refuse_spanned_overlap(slot_key, ref, contract, resolve, connectors, occupants):
+    """A SPANNING SLOT AND ITS BORES ARE MUTUALLY EXCLUSIVE (B3, docs/
+    pluggables-caps-design.md, "The duplex host"), and this is where the build
+    says so - called wherever a fill lands on the spanning slot itself.
+
+    One duplex connector occupies both LC bores of a duplex adapter. So when
+    the adapter's own slot is filled its bores are not offered, and when either
+    bore is filled the adapter's slot is not offered. Both filled is not a
+    precedence question with a quiet answer - there is one piece of hardware
+    and two claims on it - so it is an error naming the key to edit. Emptying
+    the level you do not want (`""`) is how a configuration chooses: the
+    Smartoptics adapter ships capped bores, so a duplex plug there needs both
+    bores emptied first, and the FS adapter ships a duplex cap, so a simplex
+    plug in one bore needs the adapter's own slot emptied first.
+    """
+    for bid in filled_spanned_slots(contract, resolve, connectors, slot_key,
+                                    occupants):
+        raise ValueError(
+            f"occupants/{slot_key}: {ref} and its bore {bid} cannot both be "
+            "filled - one duplex connector fills both bores. Empty the bores "
+            f"({slot_key}/{bid}: \"\"), or empty this slot")
+
+
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
                            skin_overrides, attr_overrides, resolved):
@@ -871,6 +928,26 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                        "mirror": bool(mirror or q.get("mirror")),
                        "host-lift": float(q.get("lift") or 0.0)}
              for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
+    # A FILL ON A SPANNING SLOT IS REFUSED WHILE ITS BORES HOLD SOMETHING (B3,
+    # "The duplex host"). Checked from the HOST side, here, because this is the
+    # one place that knows both halves: the fill on the part's own slot - a key
+    # of this instance, or what the part ships - is in `pending`, and its bores'
+    # keys and defaults belong to the part's own contract, one level down.
+    _conn = _connector_registry()
+
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except (FileNotFoundError, ValueError, KeyError):
+            return None
+    for host_id, (_k, spec, _c) in pending.items():
+        q = hosts.get(host_id)
+        if spec is None or q is None or prefix is None:
+            continue
+        held = _res(q["ref"])
+        if held is not None:
+            refuse_spanned_overlap(f"{prefix}/{host_id}", q["ref"], held, _res,
+                                   _conn, occupants)
 
     def _label(host_id, key):
         return f"occupants/{key}" if key else f"{path}/{host_id}: default"
@@ -1686,6 +1763,31 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if ships:
             remaining[q["id"]] = ships
             shipped[q["id"]] = ()
+    # AND A PLACED SPANNING SLOT IS REFUSED WHILE ITS BORES HOLD SOMETHING (B3,
+    # "The duplex host"), the same check `_seat_nested_occupants` makes for a
+    # composed one. A device placement's bores are keyed under its own id
+    # (`port-1510/tx`) and seated by the instance drawn at that path, so this
+    # loop never sees them; the configuration does, and so does the placed
+    # contract's own `parts:`.
+    _conn = _connector_registry()
+
+    def _res_ref(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except (FileNotFoundError, ValueError, KeyError):
+            return None
+    for q in parts["placements"]:
+        if not q.get("id") or q.get("mate-to") or q["id"] not in remaining:
+            continue
+        try:
+            if occupant_spec(q["id"], remaining[q["id"]]) is None:
+                continue
+        except ValueError:
+            continue                    # reported when it seats, below
+        held = _res_ref(q.get("ref"))
+        if held is not None:
+            refuse_spanned_overlap(q["id"], q["ref"], held, _res_ref, _conn,
+                                   config.get("occupants"))
     while remaining:
         seated_now = []
         chained, chains = {}, {}
@@ -2975,9 +3077,13 @@ def _pluggable_families():
     return doc.get("families") or {}
 
 
+@functools.lru_cache(maxsize=1)
 def _connector_registry():
-    """interface -> {standard, note}, from spec/schemas/connectors.yaml, or {}
-    if the checkout is broken.
+    """interface -> {standard, note, spans}, from spec/schemas/connectors.yaml,
+    or {} if the checkout is broken.
+
+    Cached because the seating path asks for it once per drawn instance now
+    (`_seat_nested_occupants`), and the file is a fact of the checkout.
 
     The second registry `slot_entry` answers from (B3,
     docs/pluggables-caps-design.md). A part presenting a pluggables FAMILY is a
@@ -3177,7 +3283,8 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
             return None
         refs = sorted({ref for ref, _c in candidates.get(interface, [])})
         return _slot_dict(p, contract, interface, None, refs, occupant, mate_at,
-                          lift, extra_lift, group, "connector")
+                          lift, extra_lift, group, "connector",
+                          spanned_slots(contract, _resolve, connectors))
     _family_name, family = found
     # `media` is the port's declared media - the cage's ceiling on its
     # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
@@ -3215,11 +3322,12 @@ def slot_entry(p, lib, families, connectors, candidates, group=None,
             accept_family = media_found[1]
     return _slot_dict(p, contract, interface, media,
                       _cage_accepts(candidates, families, accept_family, media),
-                      occupant, mate_at, lift, extra_lift, group, "cage")
+                      occupant, mate_at, lift, extra_lift, group, "cage",
+                      spanned_slots(contract, _resolve, connectors))
 
 
 def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
-               extra_lift, group, kind):
+               extra_lift, group, kind, bores):
     """The published entry, one shape for a cage and a connector slot alike;
     only `kind`, `media` and how `accepts` was derived differ."""
     return {
@@ -3256,6 +3364,15 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
         # or None. The build seats it in every configuration that does not key
         # this slot; `occupant` stays the configured answer alone.
         "default": slot_default(p, contract),
+        # THE SLOTS THIS ONE TAKES THE PLACE OF (B3, "The duplex host"):
+        # `manifest.spanned_slots` - the ids, under this entry's own key, of the
+        # bores a connector seated HERE would fill. Filling this slot and one of
+        # them is an error (`refuse_spanned_overlap`), so a reader offering a
+        # swap offers one level or the other. Always present, empty where the
+        # slot spans nothing, for the reason `accepts: []` is always present:
+        # "this slot stands alone" and "not a question this entry answers" have
+        # to be tellable apart.
+        "bores": bores,
     }
 
 

@@ -63,12 +63,19 @@ def test_the_forwarded_point_is_where_the_author_already_put_it():
     assert disagree <= 1, f"{disagree} wrappers disagree; investigate before relaxing"
 
 
-def test_a_multi_bore_adapter_declines_rather_than_guessing():
-    """`lc-duplex-adapter` composes TWO LC bores and its own point is their
-    midpoint. A fibre landing on a ferrule is not a module entering a cage, and
-    picking one of the two bores would be inventing which."""
-    iface, at, _ = presented_interface(contract("common/lc-duplex-adapter/v4"), resolve)
-    assert iface is None and at is None
+def test_a_multi_bore_adapter_presents_its_own_interface_not_a_bore():
+    """`lc-duplex-adapter` composes TWO LC bores, and FORWARDING still declines
+    to pick one of them - picking either would be inventing which. What it
+    presents is its OWN interface: `lc-duplex`, the pair taken together, at the
+    midpoint the contract declares (B3, "The duplex host"). The forwarding path
+    is untouched; this contract no longer reaches it, because a contract that
+    declares its own interface and point forwards nothing."""
+    d = contract("common/lc-duplex-adapter/v4")
+    iface, at, _ = presented_interface(d, resolve)
+    assert iface == "lc-duplex" != resolve(d["parts"][0]["ref"])["interface"]
+    assert at == list(d["connection-points"]["mate"]["at"])
+    assert at not in [resolve(q["ref"])["connection-points"]["mate"]["at"]
+                      for q in d["parts"]]
 
 
 def test_the_optical_form_factors_can_all_host():

@@ -1,8 +1,14 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 4.1.0
+version: 4.2.0
 class: port
+# THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
+# duplex host"): FS ships ONE white cap over both stacked ports, and a
+# duplex connector mates the pair as one part, at their midpoint. That slot
+# and the two bore slots below are mutually exclusive; the build and lint
+# hold it.
+interface: lc-duplex
 profile: networking
 description: >-
   LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS
@@ -57,6 +63,14 @@ parts:
   - {id: tx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
   - {id: rx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
 connection-points:
+  # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
+  # points, which the stacked placements put at (5.85, 3.75) and (5.85, 10.0) -
+  # the ferrule line `provenance.parts` reads off FS's own render, so the x is
+  # 5.85 and not the 4.64 body centre `optical` uses. The quoted `'on'` is the
+  # depth - YAML 1.1 reads a bare `on` as true - and each bore is lifted onto
+  # the raised face by the 1.2 of `relief`, so a cap spanning both stands on
+  # that face and not on the plate behind it.
+  mate: {at: [5.85, 6.875], direction: front, 'on': bezel}
   optical:
     at: [4.64, 6.875]
     direction: front
