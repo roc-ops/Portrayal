@@ -30,7 +30,7 @@ DIST = ROOT / "library" / "dist" / "components"
 
 # component drawing, instance id, and the bays whose openings declare a lift
 LIFTED_BAYS = {
-    "smartoptics--dcp-f-a22--v1--default.svg": ("dcp-f-a22", ["ppm-1", "ppm-2"]),
+    "smartoptics--dcp-f-a22--v2--default.svg": ("dcp-f-a22", ["ppm-1", "ppm-2"]),
 }
 
 
@@ -122,7 +122,7 @@ def test_the_a22s_two_blocks_carry_different_relief():
     over ppm-1 - which opens at y 2.5, inside the ramp - and the bay is cut
     through by a slope no module can seat against.
     """
-    f = DIST / "smartoptics--dcp-f-a22--v1--default.svg"
+    f = DIST / "smartoptics--dcp-f-a22--v2--default.svg"
     if not f.exists():
         pytest.skip("dcp-f-a22 not built")
     by_id = {el.get("id"): el for el in ET.parse(f).getroot().iter() if el.get("id")}
