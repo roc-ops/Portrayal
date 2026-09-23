@@ -99,7 +99,7 @@ def test_the_a22s_adapters_stand_the_same_height_as_they_do_alone():
     bezel is the same kind of raised feature on the same composed part.)
     """
     a22 = DIST / "components" / "smartoptics--dcp-f-a22--v1--default.svg"
-    lone = DIST / "components" / "common--lc-duplex-adapter--v4--default.svg"
+    lone = DIST / "components" / "common--lc-duplex-adapter--v5--default.svg"
     if not (a22.exists() and lone.exists()):
         pytest.skip("components not built")
 
