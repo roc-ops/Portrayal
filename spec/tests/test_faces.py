@@ -201,9 +201,9 @@ def test_the_index_carries_a_parts_other_faces():
         assert name in by_name, f"common/{name} missing from the built index"
         assert by_name[name].get("faces", {}).get("plan") == want, \
             f"common/{name}'s built entry does not carry faces.plan == {want!r}"
-    # 18, not 17: fs/fhd-1mtp24-lc-os2-a@2 is the fifth contract to declare
-    # `faces.rear` - after fs/fhd-1mtp6lcd-os2-a@2, fs/fhd-splice-12-lc@2,
-    # fs/fhd-2mtp12-lc-os2-a@2 and fs/fhd-1mtp12-sc-os2-a@1, the first
+    # 18, not 17: fs/fhd-1mtp24-lc-os2-a@3 is the fifth contract to declare
+    # `faces.rear` - after fs/fhd-1mtp6lcd-os2-a@3, fs/fhd-splice-12-lc@2,
+    # fs/fhd-2mtp12-lc-os2-a@3 and fs/fhd-1mtp12-sc-os2-a@2, the first
     # cassette plan's whole reason for widening this file past `plan` -
     # joining the 13 that carry the `plan:`/`faces.plan` sugar instead. A
     # future rear or plan face bumps this again.

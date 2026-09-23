@@ -122,13 +122,13 @@ def test_the_fs_cassette_pitch_is_in_the_registry_as_measured():
         "the registry entry must name the render the pitch came from"
 
 
-CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v2"
-CENTRES = [20.45, 33.34, 46.23, 59.30, 72.19, 85.08]
+CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v3"
+CENTRES = [21.91, 34.86, 47.81, 60.94, 73.89, 86.84]
 
 
 def test_the_cassette_is_an_fhd_module():
     c = contract(CASSETTE)
-    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@2 not built"
+    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@3 not built"
     assert c["size"]["w"] == 108.97 and c["size"]["h"] == 35.05
 
 
@@ -141,7 +141,7 @@ def test_the_cassette_carries_six_stacked_lc_adapters():
 def test_the_adapters_sit_on_their_measured_centres():
     """Not a pitch multiplied out - the six centres as measured, each to 0.01.
 
-    lc4 sits 13.07 from lc3 where every other gap is 12.89. That asymmetry is in
+    lc4 sits 13.13 from lc3 where every other gap is 12.95. That asymmetry is in
     the render, and rounding it away to a tidy 12.92 everywhere would turn a
     measurement into a model of one.
     """
