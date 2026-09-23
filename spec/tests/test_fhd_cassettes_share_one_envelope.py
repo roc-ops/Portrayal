@@ -43,13 +43,17 @@ def test_every_fhd_cassette_declares_the_same_envelope():
     envelopes = {}
     for ref, doc in cassettes:
         size = doc.get("size") or {}
-        box = (size.get("w"), size.get("h"), size.get("d"))
-        envelopes.setdefault(box, []).append(ref)
+        # TO A TENTH OF A MILLIMETRE: 4.64in is 117.856, and a contract that
+        # writes it that way is the same box as one that writes 117.86. The
+        # misreading this exists for was 7.62 mm; precision is not the question.
+        box = tuple(None if size.get(k) is None else round(size[k], 1) for k in "whd")
+        envelopes.setdefault(box, []).append((ref, size))
 
     assert len(envelopes) == 1, (
         "FHD cassettes disagree about the box they all are:\n  " + "\n  ".join(
-            f"w {w} x h {h} x d {d}: {', '.join(refs)}"
-            for (w, h, d), refs in sorted(envelopes.items(), key=lambda kv: -len(kv[1]))))
+            f"w {members[0][1].get('w')} x h {members[0][1].get('h')} x d "
+            f"{members[0][1].get('d')}: {', '.join(ref for ref, _ in members)}"
+            for members in sorted(envelopes.values(), key=len, reverse=True)))
 
 
 def test_every_fhd_cassette_body_is_as_deep_as_its_size_says():

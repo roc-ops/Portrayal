@@ -479,7 +479,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-1mtp24-lc-os2-af@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP12LCDOS2AF - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2, Type AF polarity |
 | `fs/fhd-1mtp24-lc-rear@3` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-1X24MTPLCOS2A (SKU 57023): the cassette body seen from behind, carrying its single MTP-24 … |
 | `fs/fhd-1mtp6lcd-af-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6LCDOS2AF (SKU 57037): the AF cassette's body seen from behind, with its polarity labe… |
-| `fs/fhd-1mtp6lcd-os2-a@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 2 | FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A polarity |
+| `fs/fhd-1mtp6lcd-os2-a@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 7 | FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp6lcd-os2-af@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-1MTP6LCDOS2AF - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type AF polarity: the Type A cassette'… |
 | `fs/fhd-1mtp6lcd-os2-u@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-1MTP6LCDOS2U - MTP-12 (male) to six LC duplex, 12 fibres, OS2, universal polarity: one cassette used a… |
 | `fs/fhd-1mtp6lcd-rear@3` | component | cassette | 99 × 31 |  | 0 | 7 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
