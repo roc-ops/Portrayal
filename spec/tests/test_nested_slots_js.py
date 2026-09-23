@@ -37,6 +37,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+from portrayal import libwalk
 from test_lifted_seat_js import (LIB, RENDER, SPEC, build_components, chain_matrix,
                                  descendants, is_occupant, mismatches, skin_file, spec_of)
 
@@ -136,8 +137,9 @@ def world(tmp_path_factory):
         "bays": {n: [b for v in m["bays"].values() for b in v] for n, m in meta.items()},
         "configs": {n: m["configs"] for n, m in meta.items()},
     }
-    return {"faces": faces, "comps": comps, "meta": meta, "stdin": json.dumps(payload),
-            "out": node(json.dumps(payload))}
+    devices = {n: tmp / n / "src" / "device.yaml" for n in meta}
+    return {"faces": faces, "comps": comps, "meta": meta, "devices": devices,
+            "stdin": json.dumps(payload), "out": node(json.dumps(payload))}
 
 
 def node(stdin, swap=None):
@@ -453,35 +455,181 @@ def test_a_cage_wrappers_own_aperture_is_not_a_second_slot(world):
 
 
 # THE FIXES, MUTATED. Each edit is applied to a copy of kit/swap.js and must
-# turn the scenario it names back to the defect.
+# turn the property back to the defect - with every scenario it reads still
+# RUNNING: a mutant that makes a scenario throw has shown nothing about the
+# property, so it does not count as caught.
 MUTATIONS = [
     ("a plug is no occupant", "return !!ref && (slot.accepts || []).includes(ref);", "return false;",
-     lambda o: o["fhdPlug"]["afterCap"] == [o["fhdPlug"]["afterCap"][0]] and len(o["fhdPlug"]["afterCap"]) == 1),
+     ["fhdPlug"], lambda o: len(o["fhdPlug"]["afterCap"]) == 1),
     ("rename leaves data-for", "if (to !== df) el.setAttribute('data-for', to);", "",
-     lambda o: o["rekey"]["lc01Paths"] == o["rekey"]["lc01"]),
+     ["rekey"], lambda o: o["rekey"]["lc01Paths"] == o["rekey"]["lc01"]),
     ("no exclusion", "if (filled(e)) for (const b of bores) hide.add(b.id);", "",
-     lambda o: len(o["census"]["offered"]) == 24),
+     ["census"], lambda o: len(o["census"]["offered"]) == 24),
     ("a slot ships nothing", "const shipped = id => R.entryAt(id)?.default ?? null;",
-     "const shipped = id => null;", lambda o: o["delta"]["emptied"] == {"bay-1/module/lc1": None}),
+     "const shipped = id => null;", ["delta"], lambda o: o["delta"]["emptied"] == {"bay-1/module/lc1": None}),
     ("slots inside an occupant", "if (!modulePath || insideOccupant(mod)) continue;",
-     "if (!modulePath) continue;", lambda o: o["fhdPlug"]["insidePlug"] == []),
+     "if (!modulePath) continue;", ["fhdPlug"], lambda o: o["fhdPlug"]["insidePlug"] == []),
     ("a slot on a slot is kept", "return !host || (host.bores || []).includes(e.cage);", "return true;",
-     lambda o: o["wrappers"]["s9510-30xc:ac"]["slots"] == []),
+     ["wrappers"], lambda o: o["wrappers"]["s9510-30xc:ac"]["slots"] == []),
+    ("seatFace seats the offered level only", "const all = faceCages(rootEl, cages, compByRef);",
+     "const all = faceCages(rootEl, cages, compByRef, {offered: true});", ["seatFace"],
+     lambda o: o["seatFace"]["fhd"]["tx"]["count"] == 1 and o["seatFace"]["duplex"]["seated"]["count"] == 1),
 ]
 
 
 @needs_node
-@pytest.mark.parametrize("label,old,new,holds", MUTATIONS, ids=[m[0] for m in MUTATIONS])
-def test_a_mutated_fix_fails(world, tmp_path, label, old, new, holds):
+@pytest.mark.parametrize("label,old,new,scen,holds", MUTATIONS, ids=[m[0] for m in MUTATIONS])
+def test_a_mutated_fix_fails(world, tmp_path, label, old, new, scen, holds):
     src = (SPEC.parent / "kit/swap.js").read_text()
     assert src.count(old) == 1, f"{label}: the anchor {old!r} is not in swap.js exactly once"
     assert holds(world["out"]), f"{label}: the property does not hold on the real kit"
     mutant = tmp_path / "swap.js"
     mutant.write_text(src.replace(old, new))
     got = node(world["stdin"], swap=mutant)
-    broken = False
-    try:
-        broken = not holds(got)
-    except (KeyError, TypeError, IndexError):
-        broken = True
-    assert broken, f"{label}: the mutated kit still passes"
+    crashed = {n: got[n]["error"][:200] for n in scen if isinstance(got[n], dict) and "error" in got[n]}
+    assert not crashed, f"{label}: the mutant crashed a scenario rather than flipping it: {crashed}"
+    assert not holds(got), f"{label}: the mutated kit still passes"
+
+
+# ------------------------------------ seatFace: detached faces and 3D
+
+@needs_node
+def test_seat_face_seats_slot_keys_as_the_build_does(world):
+    """The pass the merged tree's faces not on screen and the 3D scene run
+    (seatFace -> applyFaceOverrides), given a mixed map: a cassette and a
+    plug on it, one adapter level emptied and the other filled."""
+    f = scenario(world, "seatFace")
+    fhd = f["fhd"]
+    assert fhd["res"]["refused"] == [] and fhd["res"]["failed"] == [] and fhd["res"]["dropped"] == []
+    bad, _ = parity(world, "fhd:swapplug", "bay-2/module/lc01", fhd["lc01"])
+    assert not bad, "\n".join(bad[:8])
+    bad, _ = parity(world, "fhd:simplex", "bay-1/module/lc1/tx", fhd["tx"])
+    assert not bad, "\n".join(bad[:8])
+    assert fhd["lc01Paths"] == 1, "the cassette's shipped cap stayed under the plug"
+    assert fhd["lc1"] == 0 and fhd["lc1Paths"] == 0, "the emptied cap is still there"
+    assert fhd["stale"] == 0, "an occupant still names the cassette's own namespace"
+    tx = f["tx"]
+    assert tx["res"] == {"applied": 1, "refused": [], "failed": []}
+    bad, _ = parity(world, "dcp:tx", "xc01/tx", tx["seated"])
+    assert not bad, "\n".join(bad[:8])
+    assert tx["paths"] == 1
+    dx = f["duplex"]
+    assert dx["res"]["refused"] == [] and dx["res"]["failed"] == []
+    bad, _ = parity(world, "dcp:duplex", "xc01", dx["seated"])
+    assert not bad, "\n".join(bad[:8])
+    assert dx["bores"] == 0
+
+
+# ------------------------- a slot inside a slot: the build and the kit agree
+
+def _resolve():
+    from portrayal.render import Library
+    lib = Library([str(LIB)])
+
+    def res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+    return res
+
+
+@needs_node
+def test_the_build_and_the_kit_answer_every_candidate_slot_alike(world):
+    """ONE RULE, THREE READERS. For every slot a component publishes on a
+    group these real faces draw - c40g's cards and their cage wrappers, the
+    s9510's device-level wrappers, the DCP-R's adapters and bores, the FHD's
+    cassettes - the kit's drawing reading (nestedSlots), its drawing-less one
+    (slotResolver) and the build's (manifest.nested_key_host, which the build's
+    dangling check and L12 call) accept and refuse the same keys."""
+    from portrayal.manifest import nested_key_host
+    res = _resolve()
+    cand = scenario(world, "agree")
+    cfgs = {"c40g:bdm-3plus1": ("c40g", "bdm-3plus1"), "s9510-30xc:ac": ("s9510-30xc", "ac"),
+            "dcp:default": ("dcp-r-34d-cs", "default"), "fhd:populated": ("fhd-1ufce", "populated")}
+    accepted, refused, differ = set(), set(), []
+    for name, rows in cand.items():
+        dev, cfg_name = cfgs[name]
+        data = yaml.safe_load(world["devices"][dev].read_text())
+        cfg = (data.get("configurations") or {"default": {}})[cfg_name] or {}
+        for r in rows:
+            try:
+                nested_key_host(r["key"], data, cfg, res)
+                build = True
+            except ValueError:
+                build = False
+            if not (r["kit"] == r["resolver"] == build):
+                differ.append((name, r["id"], r["kit"], r["resolver"], build))
+            (accepted if build else refused).add(f"{name} {r['key']}")
+    assert not differ, differ[:10]
+    assert len(accepted) > 100 and len(refused) > 10, (len(accepted), len(refused))
+    assert "s9510-30xc:ac port-0/aperture" in refused
+    assert "c40g:bdm-3plus1 front-2/xg0/cage" in refused
+    assert "c40g:bdm-3plus1 front-2/xg0" in accepted
+    assert "dcp:default xc01/tx" in accepted and "fhd:populated bay-1/lc1/tx" in accepted
+
+
+WRAPPED = [("ufispace/s9510-30xc", "ac", "port-0/aperture", "generic/qsfp-lc@1", "port-0"),
+           ("casa/c40g", "bdm-3plus1", "front-2/xg0/cage", "generic/sfp-lc@1", "front-2/xg0")]
+
+
+def _keyed(tmp_path, src, cfg, key, ref):
+    dev = shutil.copytree(LIB / "devices" / src, tmp_path / src.split("/")[-1]) / "device.yaml"
+    d = yaml.safe_load(dev.read_text())
+    d["configurations"][cfg]["occupants"] = {key: ref}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    return dev
+
+
+@pytest.mark.parametrize("src,cfg,key,ref,instead", WRAPPED, ids=[w[0] for w in WRAPPED])
+def test_the_build_refuses_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, instead):
+    dev = _keyed(tmp_path, src, cfg, key, ref)
+    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+                        "--out", str(tmp_path / "out")], capture_output=True, text=True)
+    assert r.returncode != 0, "the build seated an occupant in a wrapper's own aperture"
+    assert f"occupants/{key}" in r.stderr and f"key {instead!r} instead" in r.stderr, r.stderr[-600:]
+    # and the slot the message names is one the build does seat
+    ok = _keyed(tmp_path / "ok", src, cfg, instead, ref)
+    r = subprocess.run([sys.executable, str(RENDER), str(ok), "--library", str(LIB),
+                        "--out", str(tmp_path / "ok-out")], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-600:]
+
+
+@pytest.mark.parametrize("src,cfg,key,ref,instead", WRAPPED, ids=[w[0] for w in WRAPPED])
+def test_l12_reports_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, instead):
+    from portrayal import lint
+    dev = _keyed(tmp_path, src, cfg, key, ref)
+    with lint.collecting() as got:
+        lint.lint_device_occupants(dev, yaml.safe_load(dev.read_text()), [str(LIB)])
+    l12 = [e for e in got.errors if "[L12]" in e]
+    assert l12 and all(f"key {instead!r} instead" in e for e in l12), l12
+    ok = _keyed(tmp_path / "ok", src, cfg, instead, ref)
+    with lint.collecting() as got:
+        lint.lint_device_occupants(ok, yaml.safe_load(ok.read_text()), [str(LIB)])
+    assert not [e for e in got.errors if "[L12]" in e]
+
+
+def test_no_library_configuration_keys_a_slot_inside_a_slot():
+    """The census: every configuration in the library, every nested
+    `occupants:` key walked by the build's resolver, none refused as a slot
+    inside a slot."""
+    from portrayal.manifest import nested_key_host
+    res = _resolve()
+    configs = keys = 0
+    bad = []
+    for dev in libwalk.iter_devices([str(LIB)]):
+        dev = Path(dev)
+        data = yaml.safe_load(dev.read_text())
+        for name, cfg in (data.get("configurations") or {}).items():
+            configs += 1
+            for key in ((cfg or {}).get("occupants") or {}):
+                if "/" not in key:
+                    continue
+                keys += 1
+                try:
+                    nested_key_host(key, data, cfg or {}, res)
+                except ValueError as e:
+                    if "is the aperture the slot" in str(e):
+                        bad.append((str(dev.parent.relative_to(LIB)), name, key))
+    assert configs > 100, configs
+    assert not bad, bad

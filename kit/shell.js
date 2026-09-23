@@ -241,7 +241,9 @@ export function createShell(opts = {}) {
   function placementRef(path) {
     if (state.facesFor !== `${state.device}.${state.cfg}`) return null;
     for (const f of Object.values(state.faces || {})) {
-      const r = f?.querySelector?.(`[data-path="${CSS.escape(path)}"]`)?.getAttribute('data-ref');
+      // with a ref: a group without one (a label, a cutout) at the same path
+      // must not shadow the placement
+      const r = f?.querySelector?.(`[data-path="${CSS.escape(path)}"][data-ref]`)?.getAttribute('data-ref');
       if (r) return r.split(':')[0];
     }
     return null;

@@ -383,6 +383,18 @@ back that composes one bulkhead publishes that bulkhead as its own slot, not as 
 forwarded one (P2): nothing places a face, so a forwarded slot would be published
 nowhere.
 
+**A slot inside a slot (2026-09-23).** A cage wrapper presents the aperture it
+composes as its own interface, so the frame that places the wrapper already
+publishes that aperture as a slot, at the wrapper's key (`port-0`,
+`front-2/xg0`). The wrapper's component still lists the aperture among its own
+cages, which would make `port-0/aperture` a second key for one opening. It is
+not one: a slot whose carrier is itself a placed slot is a slot only when the
+carrier's `bores` name it - a duplex adapter's `tx` and `rx`, the other level
+of the same opening. The build refuses an `occupants:` key on any other slot
+inside a slot, naming the carrier's key to use instead; L12 reports it as an
+error; the explorer never offers it. A module seated in a bay is not a placed
+slot, so a card that is one cage keeps its cage.
+
 One resolver maps a key to its slot, and the build, L12 and the kit all call it: it
 generalises `manifest.nested_key_host`, which today stops at one level, and
 `chained_occupant_ref` stays the rule for a key that names an occupant rather than

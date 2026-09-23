@@ -234,9 +234,9 @@ def test_a_seated_mpo_plug_lies_inside_its_opening_and_the_opening_inside_its_ad
     adapter's through every transform above them, and check they nest. This is
     what a seated plug looks like to anyone reading the drawing, and a mate
     point that landed off-centre would fail it even with the sizes right."""
-    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": ref})
+    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1": ref})
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    occ = occupant(root, "bay-1/module/mtp1/bore", ref)
+    occ = occupant(root, "bay-1/module/mtp1", ref)
     bore = by_path(root, "bay-1/module/mtp1/bore")
     adapter = by_path(root, "bay-1/module/mtp1")
     size = lambda r: (contract(r)["size"]["w"], contract(r)["size"]["h"])
@@ -575,9 +575,9 @@ def test_the_mpo_plug_seats_at_the_panel_because_its_aperture_presents_no_lift(
     """std/mpo@2 puts its `mate` on nothing, so it presents 0.0 and an
     occupant is seated at the panel plane - the same reason
     common/mpo-dust-cap@2's figures are absolute from the panel."""
-    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": MPO12})
+    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1": MPO12})
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    occ = occupant(root, "bay-1/module/mtp1/bore", MPO12)
+    occ = occupant(root, "bay-1/module/mtp1", MPO12)
     _, _, presented = presented_interface(contract("std/mpo@2"), contract)
     assert presented == 0.0
     assert float(occ.get("data-z-lift") or 0.0) == pytest.approx(0.0, abs=1e-6)

@@ -405,6 +405,84 @@ await scenario('builtKeys', async () => {
   };
 });
 
+// ------------- the faces not on screen, and 3D: seatFace with slot keys
+// The per-face pass (seatFace -> applyFaceOverrides) that the merged tree's
+// detached faces and the 3D scene run, handed a MIXED map in one go: a
+// cassette swap and a slot on the cassette it seats, and one level of an
+// adapter emptied while the other is filled.
+await scenario('seatFace', async () => {
+  const fhdRoot = face('fhd:populated');
+  const fhdBays = input.bays['fhd-1ufce'];
+  const map = {'bay-2': CASS12, 'bay-2/module/lc01': PLUG,
+               'bay-1/module/lc1': '', 'bay-1/module/lc1/tx': SIMPLEX};
+  const fr = await m.seatFace(fhdRoot, {bays: fhdBays, cages: fhdCages}, map, loadSkin, compByRef);
+  const byPathCount = (root, p) => root.querySelectorAll(`[data-path="${p}"]`).length;
+  const stale = r => r.querySelectorAll('[data-for]')
+    .filter(n => /^fhd-/.test(n.getAttribute('data-for') || '')).length;
+  const tx = await (async () => {
+    const root = face('dcp:default');
+    const res = await m.seatFace(root, {bays: [], cages: dcpCages}, {'xc01/tx': SIMPLEX}, loadSkin, compByRef);
+    return {res: {applied: res.applied, refused: res.refused, failed: res.failed},
+            seated: seated(root, 'xc01/tx'), paths: byPathCount(root, 'xc01/tx-occupant')};
+  })();
+  const duplex = await (async () => {
+    const root = face('dcp:default');
+    const res = await m.seatFace(root, {bays: [], cages: dcpCages},
+                                 {'xc01/tx': '', 'xc01/rx': '', 'xc01': PLUG}, loadSkin, compByRef);
+    return {res: {applied: res.applied, refused: res.refused, failed: res.failed},
+            seated: seated(root, 'xc01'), bores: byPathCount(root, 'xc01/tx-occupant')
+              + byPathCount(root, 'xc01/rx-occupant')};
+  })();
+  return {
+    fhd: {res: {applied: fr.applied, refused: fr.refused, failed: fr.failed, dropped: fr.dropped},
+          lc01: seated(fhdRoot, 'bay-2/module/lc01'),
+          lc01Paths: byPathCount(fhdRoot, 'bay-2/module/lc01-occupant'),
+          lc1: occupantsAt(fhdRoot, 'bay-1/module/lc1').length,
+          lc1Paths: byPathCount(fhdRoot, 'bay-1/module/lc1-occupant'),
+          tx: seated(fhdRoot, 'bay-1/module/lc1/tx'),
+          stale: stale(fhdRoot)},
+    tx, duplex,
+  };
+});
+
+// ------------------- what the kit says of every candidate slot, for the
+// build to answer the same question about (manifest.nested_key_host)
+await scenario('agree', async () => {
+  const res = {};
+  const faces = [['c40g:bdm-3plus1', 'c40g', 'bdm-3plus1'], ['s9510-30xc:ac', 's9510-30xc', 'ac'],
+                 ['dcp:default', 'dcp-r-34d-cs', 'default'], ['fhd:populated', 'fhd-1ufce', 'populated']];
+  for (const [name, dev, cfgName] of faces) {
+    if (!input.faces[name]) continue;
+    const root = face(name);
+    const cages = input.cages[dev] || [];
+    const cfg = input.configs[dev].find(c => c.name === cfgName);
+    const cb = m.builtBays(cfg);
+    const R = m.slotResolver({bays: input.bays[dev], cages, compByRef,
+      bayRef: (p, bay) => Object.prototype.hasOwnProperty.call(cb, p) ? cb[p] : bay.default ?? null,
+      placementRef: p => (root.querySelector(`[data-path="${p}"][data-ref]`)?.getAttribute('data-ref') || '')
+        .split(':')[0] || null});
+    const kit = new Set(m.nestedSlots(root, compByRef, {deviceCages: cages, all: true}).map(e => e.id));
+    // every slot a component publishes on a group the face draws, outside any
+    // occupant - the question, before either side's rule answers it
+    const cand = [];
+    for (const mod of root.querySelectorAll('[data-ref]')) {
+      const at = mod.getAttribute('data-path');
+      if (!at) continue;
+      let inside = false;
+      for (let n = mod; n && typeof n.getAttribute === 'function'; n = n.parentNode)
+        if (n.getAttribute('data-for') != null
+            && !['mounts', 'fills'].includes(n.getAttribute('data-behaviour'))) inside = true;
+      if (inside) continue;
+      for (const c of compByRef((mod.getAttribute('data-ref') || '').split(':')[0])?.cages || []) {
+        const id = `${at}/${c.id}`;
+        if (byPath(root, id)) cand.push({id, key: m.slotKey(id), kit: kit.has(id), resolver: !!R.entryAt(id)});
+      }
+    }
+    res[name] = cand;
+  }
+  return res;
+});
+
 // ------------------- a cage wrapper's own aperture is not a second slot
 await scenario('wrappers', async () => {
   const res = {};

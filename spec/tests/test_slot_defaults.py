@@ -303,13 +303,35 @@ def test_a_composer_overrides_the_top_level_default_only(tmp_path, lib):
 
 
 def test_a_configuration_reaches_a_grandchild_default(tmp_path, lib):
-    dev, _ = fhd(tmp_path, "test/composer-cassette@1",
-                 {"bay-1/lc01/rx": "", "bay-1/lc03": OTHER})
+    """A configuration empties a default two levels down - a bore of an
+    adapter of the cassette in bay-1 - on REAL parts: the SC cassette's
+    sc-duplex-adapter@4 ships a cap in each bore, and presents no slot of its
+    own, so `bay-1/sc1/tx` is a slot and not a slot inside one. The other bore
+    keeps its cap.
+
+    It was written on test/self-adapter@1, whose bores are slots inside a
+    slot that spans neither (it presents `lc` itself); a key on one of those is
+    refused now (manifest.slot_in_slot - the next test)."""
+    dev, _ = fhd(tmp_path, "fs/fhd-1mtp12-sc-os2-a@2", {"bay-1/sc1/tx": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    want = dict(EXPECTED_COMPOSED)
-    del want["bay-1/module/lc01/rx-occupant"]
-    want["bay-1/module/lc03-occupant"] = OTHER
-    assert occupants_drawn(root) == want
+    held = {n.get("data-for"): n.get("data-ref").rsplit(":", 1)[0] for n in root.iter()
+            if (n.get("data-path") or "").startswith("bay-1/module/sc")
+            and (n.get("data-path") or "").endswith("-occupant")}
+    assert "bay-1/module/sc1/tx" not in held
+    assert held["bay-1/module/sc1/rx"] == "common/sc-dust-cap@1"
+    assert sum(ref == "common/sc-dust-cap@1" for ref in held.values()) == len(held) > 10
+
+
+def test_a_key_on_a_bore_the_slot_does_not_span_is_refused(tmp_path, lib):
+    """test/self-adapter@1 IS a slot (it presents `lc`) and composes two `lc`
+    bores it does not span. Its bores' defaults still seat - they are the
+    part's own - but a configuration may not key one: that names a slot
+    inside a slot, which the build refuses, naming the slot to key instead."""
+    dev, _ = fhd(tmp_path, "test/composer-cassette@1", {"bay-1/lc01/rx": ""})
+    r = run(dev, tmp_path / "o", lib)
+    assert r.returncode != 0
+    assert "occupants/bay-1/lc01/rx" in r.stderr and "key 'bay-1/lc01' instead" in r.stderr, \
+        r.stderr[-600:]
 
 
 # --- device level -------------------------------------------------------------------

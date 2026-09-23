@@ -254,9 +254,9 @@ def test_a_seated_mpo_caps_plate_stands_on_its_saddle(tmp_path, lib):
     saddle's front, and the saddle's back is the cap's face. Lifts are summed
     down the tree and `out` is absolute, so a plate nested wrongly would build
     inside out or float, and 2D would not show it."""
-    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": MPO_CAP})
+    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1": MPO_CAP})
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    occ = occupant(root, parents, "bay-1/module/mtp1/bore", MPO_CAP)
+    occ = occupant(root, parents, "bay-1/module/mtp1", MPO_CAP)
     body, saddle, grip = (inside(occ, n) for n in ("body", "saddle", "grip"))
     stack = [(float(n.get("data-z-out")), effective_lift(parents, n))
              for n in (body, saddle, grip)]
@@ -404,9 +404,9 @@ def test_the_mpo_cap_seats_at_the_panel_because_its_aperture_presents_no_lift(tm
     occupant is seated at the panel plane - which is why this cap's figures are
     absolute from the panel and have to clear common/mpo-adapter@2's own bezel
     by hand."""
-    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": MPO_CAP})
+    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1": MPO_CAP})
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
-    occ = occupant(root, parents, "bay-1/module/mtp1/bore", MPO_CAP)
+    occ = occupant(root, parents, "bay-1/module/mtp1", MPO_CAP)
     out, lift = front_of(parents, occ, inside(occ, "body"))
     _, _, presented = presented_interface(contract("std/mpo@2"), contract)
     assert presented == 0.0
@@ -424,7 +424,7 @@ SEATINGS = [
     (LC_CAP, DCP, "dcp-r-34d-cs", "default", "port-1510/tx", "port-1510/tx"),
     (LC_DUPLEX_CAP, FHD, "fhd-1ufce", "base", "bay-1/lc01", "bay-1/module/lc01"),
     (SC_CAP, FHD, "fhd-1ufce", "base", "bay-1/sc1/tx", "bay-1/module/sc1/tx"),
-    (MPO_CAP, FHD, "fhd-1ufce", "base", "bay-1/mtp1/bore", "bay-1/module/mtp1/bore"),
+    (MPO_CAP, FHD, "fhd-1ufce", "base", "bay-1/mtp1", "bay-1/module/mtp1"),
 ]
 CASSETTE_FOR = {LC_DUPLEX_CAP: LC_CASSETTE, SC_CAP: SC_CASSETTE,
                 MPO_CAP: "test/mpo-cassette@1"}

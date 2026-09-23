@@ -5,6 +5,7 @@ nested to say so. Readers do not want to know that; they want the lists. This
 is the only place that knows the nesting, so when the shape changes it changes
 here and nowhere else.
 """
+import functools
 import math
 
 import yaml
@@ -283,6 +284,59 @@ def spanned_slots(contract, resolve, connectors):
         if core and core.get("interface") == want:
             out.append(part["id"])
     return out
+
+
+@functools.lru_cache(maxsize=1)
+def slot_interfaces():
+    """(every interface a part can present AS A SLOT, the connector registry):
+    the pluggables families' interfaces (a cage) and spec/schemas/
+    connectors.yaml's (a connector slot) - the two registries render.slot_entry
+    answers from. Empty on a broken checkout."""
+    schemas = Path(__file__).resolve().parents[2] / "schemas"
+    try:
+        fams = (yaml.safe_load((schemas / "pluggables.yaml").read_text()) or {}).get("families") or {}
+        conns = (yaml.safe_load((schemas / "connectors.yaml").read_text()) or {}).get("interfaces") or {}
+    except (OSError, yaml.YAMLError):
+        return frozenset(), {}
+    return frozenset({f.get("interface") for f in fams.values() if f.get("interface")} | set(conns)), conns
+
+
+def slot_in_slot(carrier, host_id, resolve):
+    """True when the part `host_id` of `carrier` is a slot that is NOT one of
+    `carrier`'s own when `carrier`, placed, is itself a slot - a cage
+    wrapper's composed aperture (B3, docs/pluggables-caps-design.md, "A slot
+    inside a slot").
+
+    A wrapper presents the aperture it composes as its own interface
+    (presented_interface looks through it), so the frame that places the
+    wrapper already publishes that aperture as a slot, at the wrapper's key.
+    Keying the aperture again one level down names the same opening twice;
+    the build refuses it, L12 reports it, and the kit never offers it. The one
+    slot that may sit inside a slot is a BORE a spanning slot names
+    (spanned_slots): the duplex adapter's `tx` and `rx`, the other level of
+    the same opening, which L111 keeps exclusive of it.
+
+    `carrier` is the contract of a PLACED part - a device placement or a part
+    a component composes. A module seated in a bay is never one: a bay is not
+    a slot, so the card that is one cage keeps its cage."""
+    if not carrier:
+        return False
+    registered, conns = slot_interfaces()
+    if presented_interface(carrier, resolve)[0] not in registered:
+        return False
+    part = next((q for q in carrier.get("parts") or [] if q.get("id") == host_id), None)
+    core = resolve(part["ref"]) if part and part.get("ref") else None
+    if not core or presented_interface(core, resolve)[0] not in registered:
+        return False
+    return host_id not in spanned_slots(carrier, resolve, conns)
+
+
+def slot_in_slot_error(key, carrier_key, host_id):
+    """The refusal for slot_in_slot, one wording for the build and L12."""
+    return ValueError(
+        f"occupants/{key}: {host_id!r} is the aperture the slot {carrier_key!r} "
+        f"composes, not a slot of its own - key {carrier_key!r} instead (a slot "
+        "inside a slot is only one of the bores a spanning slot names)")
 
 
 # THE CANONICAL AXIS A SPANNING CONNECTOR IS DRAWN ON: ACROSS, along +x, with
@@ -670,12 +724,16 @@ def nested_key_host(key, device, cfg, resolve):
                              "this configuration draws, no placement either, and "
                              "no occupant of this configuration seats it")
         where, path, in_bays = segs[0], segs[0], False
+    # whether the instance reached so far is an OCCUPANT (a chained segment),
+    # which is no placed slot: slot_in_slot below asks only of placed parts
+    via_occupant = not (segs[0] in bays or segs[0] in placements)
     for seg in segs[1:-1]:
         c = resolve(ref) if ref else None
         nb = ((c or {}).get("bays") or {}).get(seg) if in_bays else None
         if isinstance(nb, dict):
             where, path = f"{where}/{seg}", f"{path}/{seg}/module"
             ref = seated_ref(cfg_bays, where, nb)
+            via_occupant = False
             continue
         q = next((q for q in (c or {}).get("parts") or [] if q.get("id") == seg), None)
         if q is None or not q.get("ref"):
@@ -706,9 +764,10 @@ def nested_key_host(key, device, cfg, resolve):
                                  f"holds {ref or 'nothing'}, which has no bay "
                                  f"or part {seg!r}, and no occupant seated "
                                  "there produces it")
-            where, path, in_bays = f"{where}/{seg}", f"{path}/{seg}", False
+            where, path, in_bays, via_occupant = f"{where}/{seg}", f"{path}/{seg}", False, True
             continue
-        where, path, ref, in_bays = f"{where}/{seg}", f"{path}/{seg}", q["ref"], False
+        where, path, ref, in_bays, via_occupant = (f"{where}/{seg}", f"{path}/{seg}", q["ref"],
+                                                   False, False)
     if not ref:
         raise ValueError(f"occupants/{key}: names no cage - bay {where!r} is "
                          "empty in this configuration")
@@ -718,6 +777,9 @@ def nested_key_host(key, device, cfg, resolve):
                          "does not resolve")
     parts = {q.get("id"): q for q in module.get("parts") or []}
     if host_id in parts:
+        if (not path.endswith("/module") and not via_occupant
+                and slot_in_slot(module, host_id, resolve)):
+            raise slot_in_slot_error(key, where, host_id)
         return parts[host_id]["ref"], ref, path
     # A SLOT ON THE MODULE'S BACK (back_parts), or an occupant chained on
     # one: only a module seated straight into a device bay has a back the
