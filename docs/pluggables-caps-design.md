@@ -474,7 +474,19 @@ Two lessons from building the caps as the adapter's relief carry over:
   DCP-R. On a module's back, no occupant is a part of its own. The back is drawn
   inside the module's own part, in the back component's namespace, so its caps
   ride out with the module. The kit had pulled a whole cassette back as a "cap".
-  A plug carries no behaviour and is still not pulled, as its ruling says.
+  A PLUG IN A FRONT SLOT IS PULLED THE SAME WAY (ruled 2026-09-23). A plug
+  declares no behaviour, by its own ruling, so the kit knows it as it knows
+  any occupant: `data-for` its slot, at the `<slot>-occupant` name the build
+  gives it. A simplex plug in a bore is pulled as `xc01/tx-occupant`, a
+  duplex plug in an FHD slot as `bay-1/module/lc1-occupant`. No library part
+  changed for this.
+- **How far a cap or a plug is pulled (2026-09-23).** A part that declares a
+  depth (a `body`, a body depth, an optic's own depth) is pulled as before and
+  leaves a dark bay box that deep behind it. A cap or a plug declares none.
+  It used to take the 60 mm fallback, sliding 115 mm and leaving a 60 mm box
+  in its port. Now it is pulled by its own relief: its furthest `out` off its
+  seat, plus 10 mm. It leaves no box, so the port shows as the build draws it,
+  with bore, sleeve and ferrule.
 - **A choice on a back reaches the back 3D builds (2026-09-23).** 3D builds a
   cassette's back from the module's own back drawing (`body.sides.rear`), never
   from the flat projection on the rear face. Every key the explorer holds under
@@ -495,6 +507,12 @@ Two lessons from building the caps as the adapter's relief carry over:
   Its floor then drew 0.1 mm in front of its own mouth. The shuttered adapter
   alone showed open bores over its shutters, while every device holding it
   showed the doors. Relief on such a part is no longer limited by the plate.
+  A KNOWN, TRUTHFUL SIDE EFFECT: a module that declares no depth and draws
+  deep cage recesses now shows those recesses alone as tubes running behind
+  its 2 mm plate. That is how deep its cages are. In the library at this date
+  this is 149 parts: 113 juniper (the MPC4E, MPC, MIC, DPC and JNP10K cards
+  and modules among them), 22 cisco and 14 ufispace. A device holding them is
+  unchanged, since there the device's depth bounds the relief.
 
 ## Lint
 

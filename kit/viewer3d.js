@@ -492,10 +492,12 @@ export function createViewer(container, opts = {}) {
     const doc = text ? new DOMParser().parseFromString(text, 'image/svg+xml') : null;
     if (!doc || doc.querySelector('parsererror')) return url;
     const res = await seatBack(doc.documentElement, {bay, moduleRef}, OVERRIDES, loadSkin, byRef);
-    if (res.refused.length || res.failed.length)
+    const missed = [...res.refused, ...res.failed, ...res.dropped];
+    if (missed.length)
       console.warn(`[portrayal] ${DEV}: the back of ${bay} did not take `
-                   + `${res.refused.length + res.failed.length} key(s) - a plug whose `
-                   + `skin did not load keeps what the back shipped`, [...res.refused, ...res.failed]);
+                   + `${missed.length} key(s) - a plug whose skin did not load keeps `
+                   + `what the back shipped, and a key naming no slot of this back `
+                   + `(or one a front part shadows) seats nothing`, missed);
     if (!res.applied) return url;
     const own = `${url}#${bay}`;
     setSvgOverride(own, new XMLSerializer().serializeToString(doc), SCOPE);

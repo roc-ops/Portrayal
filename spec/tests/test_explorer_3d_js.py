@@ -51,6 +51,7 @@ SCRIPT = SPEC / "tests/js/explorer-3d.mjs"
 SWAP = SPEC.parent / "kit/swap.js"
 RELIEF = SPEC.parent / "kit/relief.js"
 PLUG, SIMPLEX = "generic/lc-duplex-plug@2", "generic/lc-plug@2"
+SFP = "generic/sfp-lc@1"
 DCAP, CAP = "common/lc-duplex-dust-cap@2", "common/lc-dust-cap@1"
 MCAP, MPO12, MPO24 = "common/mpo-dust-cap@2", "generic/mpo12-plug@1", "generic/mpo24-plug@1"
 CASS6, CASS12, SHUT = "fs/fhd-1mtp6lcd-os2-a@3", "fs/fhd-2mtp12-lc-os2-a@3", "fs/fhd-3mtp18-lc-os2-a@1"
@@ -107,6 +108,24 @@ def render(tmp, device, extra):
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     return out, name
+
+
+def render_merged(tmp, device, cfg, occupants):
+    """A tmp copy of `device` with `occupants` merged into its configuration
+    `cfg`, rendered; the front face of that configuration."""
+    vendor, name = device.split("/")
+    dev = tmp / f"{name}-merged" / "src" / "device.yaml"
+    shutil.copytree(LIB / "devices" / device, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    c = d["configurations"][cfg]
+    c["occupants"] = {**(c.get("occupants") or {}), **occupants}
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    out = dev.parent.parent / "out"
+    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+                        "--out", str(out)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    meta = json.loads((out / f"{name}.configs.json").read_text())
+    return ET.parse(out / f"{name}.{cfg}.front.svg").getroot(), meta
 
 
 def node(mode, payload, swap=None, relief=None):
@@ -169,8 +188,13 @@ def world(tmp_path_factory):
             faces[f"fhd:{cfg}:{view}"] = ET.parse(fhd_out / f"{fhd}.{cfg}.{view}.svg").getroot()
     for cfg in ["default", *DCP]:
         faces[f"dcp:{cfg}:front"] = ET.parse(dcp_out / f"{dcp}.{cfg}.front.svg").getroot()
+    # an optic that declares its depth, seated on a card: the eject pin's
+    # reference for "a part with a depth travels as it always did"
+    faces["dcp2:sfp:front"], dcp2_meta = render_merged(tmp, "smartoptics/dcp-2", "ila-node",
+                                                       {"slot-1/sfp-1": SFP})
     meta = {n: json.loads((o / f"{n}.configs.json").read_text())
             for o, n in ((fhd_out, fhd), (dcp_out, dcp))}
+    meta["dcp-2"] = dcp2_meta
     idx = json.loads((dist / "components.json").read_text())["components"]
     backs = {r: comps[r]["faces"]["rear"] for r in (CASS6, CASS12, SHUT)}
     skins = {r: ET.parse(skin_file(dist, comps[r])).getroot() for r in SKINS + list(backs.values())}
@@ -256,10 +280,11 @@ def count(el, pred):
 
 # ------------------------------------------------------- the FRU ruling
 
-def removable(root):
-    """What extractRelief collects: every instance (`data-ref`) that fills or
-    occupies, or carries a legacy body class with no behaviour - outside a
-    projection, which is flat."""
+def instances(root):
+    """Every instance (`data-ref`) of a drawing outside a projection, which is
+    flat, with the marks extractRelief reads - relief.js bodyBehaviour decides
+    which come out (what `fills` or `occupies`, a legacy body class, and an
+    occupant that declares no behaviour: a plug)."""
     parents = {c: p for p in root.iter() for c in p}
 
     def projected(e):
@@ -269,21 +294,24 @@ def removable(root):
                 return True
             n = parents.get(n)
         return False
-    return [{"path": e.get("data-path") or "", "behaviour": e.get("data-behaviour")}
-            for e in root.iter()
-            if e.get("data-ref") and not projected(e)
-            and (e.get("data-behaviour") in ("fills", "occupies")
-                 or (e.get("data-behaviour") is None and e.get("data-class") in BODY_CLASSES))]
+    return [{"ref": e.get("data-ref"), "path": e.get("data-path") or "",
+             "behaviour": e.get("data-behaviour"), "for": e.get("data-for"),
+             "cls": e.get("data-class")}
+            for e in root.iter() if e.get("data-ref") and not projected(e)]
 
 
 @pytest.fixture(scope="module")
 def roles(world):
-    sets = {"dcp": {"back": False, "nodes": removable(world["faces"]["dcp:default:front"])},
-            "fhd": {"back": False, "nodes": removable(world["faces"]["fhd:populated:front"])},
-            "cassette": {"back": False, "nodes": removable(world["skins"][CASS12])}}
+    sets = {"dcp": {"back": False, "nodes": instances(world["faces"]["dcp:default:front"])},
+            "fhd": {"back": False, "nodes": instances(world["faces"]["fhd:populated:front"])},
+            "cassette": {"back": False, "nodes": instances(world["skins"][CASS12])},
+            # a PLUG in a front slot: on a bore of an adapter on the device,
+            # and in a cassette's duplex slot
+            "dcp:tx": {"back": False, "nodes": instances(world["faces"]["dcp:tx:front"])},
+            "fhd:plug": {"back": False, "nodes": instances(world["faces"]["fhd:plug:front"])}}
     for r, back in world["backs"].items():
         for as_back in (True, False):
-            sets[f"{back}|{as_back}"] = {"back": as_back, "nodes": removable(world["skins"][back])}
+            sets[f"{back}|{as_back}"] = {"back": as_back, "nodes": instances(world["skins"][back])}
     return sets, node("roles", {"sets": sets})
 
 
@@ -309,12 +337,30 @@ def test_every_fru_on_a_real_face_is_a_removable_part(roles):
     """Every FRU key names a part that comes out: an occupant's own path, or
     the bay a fills module sits in (`bay-1/module` pulls as `bay-1`)."""
     sets, out = roles
-    for name in ("dcp", "fhd", "cassette"):
+    for name in ("dcp", "fhd", "cassette", "dcp:tx", "fhd:plug"):
         g = got(out, name)
         own = {r["path"] for r in g["roles"] if r["behaviour"] == "occupies"}
         bays = {r["path"].split("/")[0] for r in g["roles"] if r["behaviour"] != "occupies"}
         assert g["frus"] and set(g["frus"]) <= own | bays, (name, sorted(set(g["frus"]) - own - bays))
         assert own <= set(g["frus"]), (name, sorted(own - set(g["frus"])))
+
+
+@needs_node
+def test_a_plug_in_a_front_slot_is_its_own_part(roles):
+    """A plug declares no behaviour (class `port`, by its own ruling), and was
+    never collected: the cap it replaced came out, the plug did not. It is an
+    occupant - `data-for` its slot, at `<slot>-occupant` - and is pulled by
+    its own path like the cap (the controller's ruling, B3 Task 10c)."""
+    _, out = roles
+    for name, path, ref in (("dcp:tx", "xc01/tx-occupant", SIMPLEX),
+                            ("fhd:plug", "bay-1/module/lc1-occupant", PLUG)):
+        g = got(out, name)
+        [r] = [r for r in g["roles"] if r["path"] == path]
+        assert r["raw"] is None and r["behaviour"] == "occupies", r
+        assert r["role"] == {"fru": path, "nested": True}, r
+        assert path in g["frus"], (name, g["frus"])
+    # the cap beside it on the same adapter is still its own part
+    assert "xc01/rx-occupant" in got(out, "dcp:tx")["frus"]
 
 
 @needs_node
@@ -446,6 +492,9 @@ def back_cases(world):
         ("nothing keyed under bay-1", CASS12, "bay-1", rk, {}),
         ("a front key is no back key", CASS12, "bay-2", {"bay-2/module/lc01": PLUG}, {}),
         ("an unloadable plug", CASS6, "bay-4", {"bay-4/module/mtp": "generic/no-such-plug@1"}, {}),
+        ("a key naming nothing on the back", CASS12, "bay-1",
+         {"bay-1/module/mtp9": MPO12, "bay-1/module/mtp1": MPO12}, {"mtp1": MPO12}),
+        ("a back with no root", CASS12, "bay-1", {"bay-1/module/mtp1": MPO12}, None),
     ]
 
 
@@ -453,10 +502,20 @@ def back_cases(world):
 def seated_backs(world):
     cases = back_cases(world)
     payload = {"components": world["idx"], "skins": world["skin_text"],
-               "cases": [{"name": n, "back": spec_of(world["skins"][world["backs"][mod]]),
+               "cases": [{"name": n, "back": (spec_of(world["skins"][world["backs"][mod]])
+                                              if occ is not None else rootless(world["skins"][world["backs"][mod]])),
                           "bay": bay, "moduleRef": mod, "map": mp}
-                         for n, mod, bay, mp, _ in cases]}
+                         for n, mod, bay, mp, occ in cases]}
     return cases, payload, node("backs", payload)
+
+
+def rootless(skin):
+    """The back skin with its instance's `data-ref` taken off: a drawing the
+    kit cannot read a back's slots from."""
+    spec = spec_of(skin)
+    for k in spec["c"]:
+        k["a"].pop("data-ref", None)
+    return spec
 
 
 def test_the_build_draws_the_compiled_back(world):
@@ -478,6 +537,8 @@ def test_a_back_the_kit_seats_is_the_back_the_build_draws(world, seated_backs):
     the back's namespace, the shipped cap gone where it was replaced."""
     cases, _, out = seated_backs
     for name, mod, bay, mp, occ in cases:
+        if occ is None:
+            continue
         back = world["backs"][mod]
         bname = back.split("/")[-1].split("@")[0]
         g = got(out, name)
@@ -498,42 +559,57 @@ def test_a_back_the_kit_seats_is_the_back_the_build_draws(world, seated_backs):
 @needs_node
 def test_a_back_key_that_does_not_seat_says_so(world, seated_backs):
     cases, _, out = seated_backs
-    assert got(out, "nothing keyed under bay-1")["res"] == {"applied": 0, "refused": [], "failed": []}
-    assert got(out, "a front key is no back key")["res"] == {"applied": 0, "refused": [], "failed": []}
+    none = {"applied": 0, "refused": [], "failed": [], "dropped": []}
+    assert got(out, "nothing keyed under bay-1")["res"] == none
+    # a key on the module's FRONT is the face pass's, and not reported here
+    assert got(out, "a front key is no back key")["res"] == none
     # a skin that does not load leaves the shipped cap and is reported by the
     # device key, as the front pass reports it
-    assert got(out, "an unloadable plug")["res"] == {"applied": 0, "refused": [],
-                                                     "failed": ["bay-4/module/mtp"]}
+    assert got(out, "an unloadable plug")["res"] == {**none, "failed": ["bay-4/module/mtp"]}
+    # a key naming no slot of the back is said, and the one beside it seats
+    assert got(out, "a key naming nothing on the back")["res"] == {
+        **none, "applied": 1, "dropped": ["bay-1/module/mtp9"]}
+    # a drawing the back's slots cannot be read from seats nothing and says so
+    assert got(out, "a back with no root")["res"] == {**none, "dropped": ["bay-1/module/mtp1"]}
 
 
 # THE BACK SEAT, MUTATED: each edit to a copy of kit/swap.js must make the
 # back parity fail (a mutant that crashes a case does not count as caught).
+SEATED = {"rearplug bay-1", "rearplug bay-3", "rearkey bay-4", "mixed bay-2", "mixed bay-4",
+          "a key naming nothing on the back"}
 BACK_MUTATIONS = [
-    ("no lift on the back", "liftOccupant(wrap, +cage.lift || 0);", "liftOccupant(wrap, 0);"),
-    ("keys under another bay", "const head = `${bay}/module/`;", "const head = `bay-1/module/`;"),
+    # every case that seats a plug: the plug stands at the face, not at 3.5
+    ("no lift on the back", "liftOccupant(wrap, +cage.lift || 0);", "liftOccupant(wrap, 0);", SEATED),
+    # the cases whose keys sit under another bay: nothing is seated on them
+    ("keys under another bay", "const head = `${bay}/module/`;", "const head = `bay-1/module/`;",
+     {"rearplug bay-2", "rearplug bay-3", "rearkey bay-4", "mixed bay-2", "mixed bay-4"}),
+    # every case that seats or empties anything
     ("the back's own name is not the namespace",
-     "const local = `${name}/${k.slice(head.length)}`;", "const local = `${k}`;"),
+     "const local = `${name}/${k.slice(head.length)}`;", "const local = `${k}`;",
+     SEATED | {"rearplug bay-2"}),
 ]
 
 
 @needs_node
-@pytest.mark.parametrize("label,old,new", BACK_MUTATIONS, ids=[m[0] for m in BACK_MUTATIONS])
-def test_a_mutated_back_seat_fails_the_parity(world, seated_backs, tmp_path, label, old, new):
+@pytest.mark.parametrize("label,old,new,expect", BACK_MUTATIONS, ids=[m[0] for m in BACK_MUTATIONS])
+def test_a_mutated_back_seat_fails_the_parity(world, seated_backs, tmp_path, label, old, new, expect):
     cases, payload, _ = seated_backs
     src = SWAP.read_text()
     assert src.count(old) == 1, f"{label}: the anchor is not in swap.js exactly once"
     mutant = tmp_path / "swap.js"
     mutant.write_text(src.replace(old, new))
     out = node("backs", payload, swap=mutant)
-    caught = 0
+    caught = set()
     for name, mod, bay, mp, occ in cases:
         g = out[name]
         assert "error" not in g, f"{label}: {name} crashed - not a catch: {g['error'][:300]}"
+        if occ is None:
+            continue
         back = world["backs"][mod]
-        bname = back.split("/")[-1].split("@")[0]
         want = built_back(back, bay, {f"{bay}/{k}": v for k, v in occ.items()})
-        caught += bool(tree_diff(root_group(g["back"]), want))
-    assert caught > 0, label
+        if tree_diff(root_group(g["back"]), want):
+            caught.add(name)
+    assert caught == expect, (label, sorted(caught))
 
 
 # THE FACES AND THE ROLES, MUTATED: each edit to a copy of the kit must fail
@@ -575,25 +651,30 @@ def test_a_mutated_face_pass_fails_the_parity(world, seated_faces, tmp_path, lab
     assert failing == set(cases), (label, sorted(failing))
 
 
+BACKS = ("fs/fhd-1mtp6lcd-rear@3", "fs/fhd-2mtp12-lc-rear@2", "fs/fhd-3mtp18-lc-rear@1")
 ROLE_MUTATIONS = [
     ("two segments are keyed by the first again",
      "if (behaviour === 'occupies' && segs.length > 1) return {fru: segs.join('/'), nested: true};",
      "if (behaviour === 'occupies' && segs.length > 2) return {fru: segs.join('/'), nested: true};",
-     {"dcp"} | {f"{b}|{t}" for b in ("fs/fhd-1mtp6lcd-rear@3", "fs/fhd-2mtp12-lc-rear@2",
-                                      "fs/fhd-3mtp18-lc-rear@1") for t in (False,)} | {"cassette"}),
+     {"dcp", "dcp:tx", "cassette"} | {f"{b}|False" for b in BACKS}),
     ("a back's occupant is a FRU", "if (behaviour === 'occupies' && back) return null;", "",
-     {f"{b}|True" for b in ("fs/fhd-1mtp6lcd-rear@3", "fs/fhd-2mtp12-lc-rear@2",
-                            "fs/fhd-3mtp18-lc-rear@1")}),
+     {f"{b}|True" for b in BACKS}),
+    ("a plug is not collected",
+     "if (host && /-occupant$/.test(String(path || ''))) return 'occupies';", "",
+     {"dcp:tx", "fhd:plug"}),
 ]
 
 
 def _role_ok(name, g, backs):
-    """The ruling, per set: every occupant keyed by its own path (nested), and
-    on a back none at all."""
-    caps = [r for r in g["roles"] if r["behaviour"] == "occupies"]
+    """The ruling, per set: every occupant - `data-for` a slot at
+    `<slot>-occupant`, a plug included - is collected as occupying and keyed
+    by its own path (nested); on a back none is a FRU."""
+    occ = [r for r in g["roles"] if r["for"] and r["path"].endswith("-occupant")]
+    assert occ, name
     if name.endswith("|True"):
-        return g["frus"] == [] and all(c["role"] is None for c in caps)
-    return all(c["role"] == {"fru": c["path"], "nested": True} for c in caps if "/" in c["path"])
+        return g["frus"] == [] and all(r["role"] is None for r in occ)
+    return all(r["behaviour"] == "occupies" and r["role"] == {"fru": r["path"], "nested": True}
+               and r["path"] in g["frus"] for r in occ if "/" in r["path"])
 
 
 @needs_node
@@ -613,3 +694,112 @@ def test_a_mutated_body_role_breaks_the_ruling(world, roles, tmp_path, label, ol
         if not _role_ok(n, out[n], world["backs"]):
             broken.add(n)
     assert broken == set(sets), (label, sorted(broken))
+
+
+# ------------------------------------------------------- how far a part is pulled
+
+def eject_cases(world):
+    """Every removable instance of four real fronts, as extractRelief measures
+    it: its body (components.json), `data-body-depth`, an optic's `data-depth`,
+    whether it occupies (bodyBehaviour's reading, a plug included), and its
+    own features with their summed lifts. `into` is the device's depth."""
+    faces = {"dcp:default": ("dcp-r-34d-cs", "dcp:default:front"),
+             "dcp:tx": ("dcp-r-34d-cs", "dcp:tx:front"),
+             "fhd:plug": ("fhd-1ufce", "fhd:plug:front"),
+             "dcp2:sfp": ("dcp-2", "dcp2:sfp:front")}
+    comps = world["comps"]
+    cases = []
+    for key, (dev, face) in faces.items():
+        root = world["faces"][face]
+        parents = {c: p for p in root.iter() for c in p}
+
+        def lift(e):
+            t, n = 0.0, e
+            while n is not None:
+                t += float(n.get("data-z-lift") or 0)
+                n = parents.get(n)
+            return t
+
+        def projected(e):
+            n = e
+            while n is not None:
+                if n.get("data-projection"):
+                    return True
+                n = parents.get(n)
+            return False
+        into = world["meta"][dev]["chassis"]["d"]
+        for e in root.iter():
+            ref = (e.get("data-ref") or "").split(":")[0]
+            if not ref or projected(e):
+                continue
+            beh = e.get("data-behaviour")
+            occ = beh == "occupies" or (bool(e.get("data-for"))
+                                        and (e.get("data-path") or "").endswith("-occupant"))
+            if not (occ or beh == "fills" or (beh is None and e.get("data-class") in BODY_CLASSES)):
+                continue
+            feats = [{"out": n.get("data-z-out"), "cyl": n.get("data-z-cyl"), "bar": n.get("data-z-bar"),
+                      "uhandle": n.get("data-z-uhandle"), "lift": lift(n)} for n in e.iter()
+                     if any(n.get(f"data-z-{k}") is not None for k in ("out", "cyl", "bar", "uhandle"))]
+            cases.append({"name": f"{key} {e.get('data-path')}", "ref": ref,
+                          "body": (comps.get(ref) or {}).get("body"),
+                          "bodyDepth": float(e.get("data-body-depth")) if e.get("data-body-depth") else None,
+                          "depth": float(e.get("data-depth")) if beh == "occupies" and e.get("data-depth") else None,
+                          "occupies": occ, "feats": feats, "base": lift(e), "into": into})
+    return cases
+
+
+@pytest.fixture(scope="module")
+def ejected(world):
+    cases = eject_cases(world)
+    return cases, node("eject", {"cases": cases})
+
+
+def _old_travel(c):
+    """The rule every part with a depth kept, restated from the 10b kit:
+    `min(travel or depth * 1.5 + 25, into - 10)`, depth = body.depth, else
+    data-body-depth, else 60, and a bay box that deep left behind."""
+    d = c["body"]["depth"] if c["body"] else (c["bodyDepth"] or 60)
+    captive = c["body"] and c["body"].get("travel")
+    return {"pull": min(captive or d * 1.5 + 25, c["into"] - 10), "leavesBay": True, "bayDepth": d}
+
+
+@needs_node
+def test_a_part_that_declares_a_depth_is_pulled_as_before(ejected):
+    """Optics, cards, modules and supplies that declare a body or a depth keep
+    today's travel and today's bay box EXACTLY."""
+    cases, out = ejected
+    kept = [c for c in cases if c["body"] or c["bodyDepth"] or c["depth"] or not c["occupies"]]
+    kinds = {c["ref"] for c in kept}
+    # the cassettes (a body), the SFP (an optic's own depth), the DCP-R's supplies
+    assert SFP in kinds and CASS6 in kinds and len(kept) >= 8, sorted(kinds)
+    for c in kept:
+        assert got(out, c["name"])["travel"] == _old_travel(c), c["name"]
+
+
+@needs_node
+def test_a_cap_or_a_plug_is_pulled_by_its_own_relief_and_leaves_its_port(ejected, world):
+    """An occupant that declares no depth - every dust cap and plug - travels
+    its own relief extent (its furthest `out` off its seat) plus the margin,
+    and leaves no box in the port it came out of."""
+    cases, out = ejected
+    free = [c for c in cases if c["occupies"] and not (c["body"] or c["bodyDepth"] or c["depth"])]
+    refs = {c["ref"] for c in free}
+    assert {CAP, DCAP, SIMPLEX, PLUG} <= refs, sorted(refs)
+    for c in free:
+        g = got(out, c["name"])
+        top = 0.0
+        for f in c["feats"]:
+            if f["out"] is not None:
+                top = max(top, float(f["out"]) - c["base"])
+            for k in ("cyl", "bar", "uhandle"):
+                if f[k] is not None:
+                    top = max(top, f["lift"] - c["base"] + float(f[k]))
+        assert top > 0 and abs(g["extent"] - top) < 1e-9, (c["name"], g["extent"], top)
+        assert g["travel"] == {"pull": top + 10, "leavesBay": False, "bayDepth": 0}, c["name"]
+    # the extent is the part's own published figure: a simplex cap stands its
+    # contract's `out` off its seat, whatever lift the seat is at
+    for ref, want in ((CAP, 6.35), (DCAP, None)):
+        ext = {round(got(out, c["name"])["extent"], 6) for c in free if c["ref"] == ref}
+        assert len(ext) == 1, (ref, ext)
+        if want is not None:
+            assert ext == {want}, (ref, ext)

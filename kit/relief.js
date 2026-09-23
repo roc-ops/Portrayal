@@ -885,6 +885,67 @@ export function crop(cv, r, pxmm = PXMM) {
   return c;
 }
 
+// WHICH INSTANCES COME OUT, and as what: the behaviour extractRelief builds a
+// removable part's body by, from the instance's own marks - `fills` and
+// `occupies` as the part says, a legacy body class (psu, fan, tab, power,
+// cooling) with no behaviour at all as `class`, and null for anything that
+// does not come out (a label, a screw, a part without `data-ref`).
+//
+// AN OCCUPANT OCCUPIES, WHATEVER IT DECLARES (B3 Task 10c). A plug is
+// `class: port` with no behaviour, deliberately (test_behaviour.py holds a
+// port to none, and each plug's provenance records why), so it was never
+// collected and never pulled, while the cap it replaces was. The kit already
+// knows an occupant by its seat: `data-for` its slot, at the build's
+// `<slot>-occupant` name (swap.js isOccupantOf, projectedOccupant). That is
+// the reading here, so a plug is pulled by its own path exactly as a cap is.
+// A projection is flat and is never read (extractRelief's `q`).
+export const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
+export function bodyBehaviour({ref, behaviour, for: host, path, cls} = {}) {
+  if (!ref) return null;
+  if (behaviour === 'fills' || behaviour === 'occupies') return behaviour;
+  if (host && /-occupant$/.test(String(path || ''))) return 'occupies';
+  if (!behaviour && BODY_CLASSES.includes(cls)) return 'class';
+  return null;
+}
+
+// HOW FAR A PART STANDS OFF ITS OWN SEAT, from its relief: the furthest a
+// feature of it reaches, less the lift it is seated at. `out` is absolute
+// from the panel and every other length runs from its node's own summed lift,
+// so each is measured from `base`, the part group's summed lift.
+//   feats [{out, cyl, bar, uhandle, lift}] -> mm (0 for a flat part)
+export function reliefExtent(feats = [], base = 0) {
+  const num = v => (v === undefined || v === null || v === '' || !Number.isFinite(+v)) ? null : +v;
+  let top = 0;
+  for (const f of feats) {
+    if (num(f.out) !== null) top = Math.max(top, num(f.out) - base);
+    for (const k of ['cyl', 'bar', 'uhandle'])
+      if (num(f[k]) !== null) top = Math.max(top, (num(f.lift) || 0) - base + num(f[k]));
+  }
+  return top;
+}
+
+// HOW FAR A PULLED PART TRAVELS, AND WHETHER IT LEAVES A HOLE.
+// A part that says how deep it is - a `body:` block, a `data-body-depth`, or
+// an optic's own `data-depth` - travels as it always did: a captive part its
+// declared travel, anything else 1.5 x its depth + 25 (60 when a drawing
+// predates depths entirely), never further than the face looks less 10, and
+// it leaves a dark bay box that deep behind it.
+// An OCCUPANT THAT DECLARES NO DEPTH - a dust cap, a plug - has no body
+// behind the face to clear: it is the relief it draws. It travels its own
+// extent (reliefExtent) plus EJECT_MARGIN and leaves no box, so the port it
+// came out of shows as the build draws it - bore, sleeve and ferrule. With
+// the depth fallback every cap slid 115 mm and left a 60 mm box in its port
+// (B3 Task 10c).
+export const EJECT_MARGIN = 10;
+export function ejectTravel({body = null, bodyDepth = null, depth = null, occupies = false,
+                             extent = 0, into = Infinity} = {}) {
+  if (occupies && !body && !bodyDepth && !depth)
+    return {pull: Math.min((+extent || 0) + EJECT_MARGIN, into - 10), leavesBay: false, bayDepth: 0};
+  const d = body ? body.depth : (bodyDepth || 60);
+  const captive = body && body.travel;
+  return {pull: Math.min(captive || d * 1.5 + 25, into - 10), leavesBay: true, bayDepth: d};
+}
+
 // WHAT A REMOVABLE PART'S BODY IS BUILT AS, from its path and behaviour - the
 // decision extractRelief makes for every `fills` / `occupies` instance:
 //   {fru}           its own ejectable group, keyed `fru`: a module in a chassis
@@ -957,7 +1018,7 @@ export function opticBody({behaviour, body, depth, w, h} = {}) {
 // standalone with the scope its rules were written in - and having two
 // copies is how the second one drifts. `svg` must be attached to a document
 // (getScreenCTM and getBBox read nothing from a detached tree).
-export function nodeTools(svg) {
+export function nodeTools(svg, {back = false} = {}) {
   const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
@@ -1006,10 +1067,19 @@ export function nodeTools(svg) {
   // cover be hidden without being ejected.
   // An optic on a card (bodyRole `nested`) is a FRU of its own, so what it
   // draws is owned by it and not by the card's bay.
+  // An occupant is known as bodyBehaviour knows it - a plug as well as a
+  // cap - and on a module's BACK it owns nothing of its own: it is its
+  // module's art, as bodyRole's `back` makes it no FRU (B3 Task 10c).
+  const occupantAbove = el => {
+    for (let n = el; n && n !== svg && n.dataset; n = n.parentElement)
+      if (bodyBehaviour({ref: n.dataset.ref, behaviour: n.dataset.behaviour, for: n.dataset.for,
+                         path: n.dataset.path, cls: n.dataset.class}) === 'occupies') return n;
+    return null;
+  };
   const ownerOf = el => {
     const a = el.closest('[data-path]');
     if (!a) return null;
-    const o = el.closest('[data-behaviour="occupies"][data-ref]');
+    const o = back ? null : occupantAbove(el);
     const own = o && bodyRole(o.dataset.path, 'occupies');
     if (own && own.nested) return own.fru;
     return a.dataset.path.split('/')[0] || null;
@@ -1110,7 +1180,7 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   // no geometry behind, not a flat one.
   applyPulled(svg, scope);
   for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
-  const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg);
+  const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg, {back});
   // THE OUTLINE OF A NODE, in face millimetres, as closed rings.
   //
   // SAMPLED RATHER THAN PARSED. getPointAtLength walks a path at constant arc
@@ -1307,9 +1377,8 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   //
   // The old list stays for drawings compiled before behaviours existed. It costs
   // one selector and means a stale dist/ does not silently lose every FRU.
-  const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
-  const BODY_SELECTOR = ['[data-behaviour="fills"]', '[data-behaviour="occupies"]']
-    .concat(BODY_CLASSES.map(c => `[data-class="${c}"]:not([data-behaviour])`)).join(',');
+  // The rule itself is bodyBehaviour (above), which also admits an occupant
+  // that declares no behaviour - a plug.
   // A MODULE INSIDE A MODULE HAS A BODY OF ITS OWN. A card in a riser slot is
   // not a FRU here - it comes out with its riser - but its PCB is real, and
   // it hides on its own path. Collected beside the FRUs and built into the
@@ -1317,7 +1386,7 @@ export async function extractRelief(url, scope, {back = false} = {}) {
   const subBodies = [];
   // A CARD'S OPTICS ARE NOT THE CARD'S ART: each is a FRU of its own
   // (bodyRole), so the card's plane is cut without them.
-  const OWN_FRU = '[data-behaviour="occupies"][data-ref]';
+  const OWN_FRU = '[data-behaviour="occupies"][data-ref],[data-ref][data-for][data-path$="-occupant"]';
   // THE BODY NODE'S SIDE COLOUR FIRST: on the SFP skins it stands 10 mm out
   // of the cage as a relief feature whose sides are its `data-z-color`
   // (#6e747c, the `outs` colour above), and the box behind the face is the
@@ -1330,10 +1399,13 @@ export async function extractRelief(url, scope, {back = false} = {}) {
     const f = getComputedStyle(n).fill;
     return f && f !== 'none' && !f.startsWith('url(') ? f : null;
   };
-  for (const el of q(BODY_SELECTOR)) {
-    if (!el.dataset.ref) continue;
+  const FEATURE_SEL = '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]';
+  for (const el of q('[data-ref]')) {
+    const beh = bodyBehaviour({ref: el.dataset.ref, behaviour: el.dataset.behaviour,
+                               for: el.dataset.for, path: el.dataset.path, cls: el.dataset.class});
+    if (!beh) continue;
     const full = el.dataset.path || '';
-    const role = bodyRole(full, el.dataset.behaviour, {back});
+    const role = bodyRole(full, beh, {back});
     if (!role) continue;
     const path = role.fru || role.sub;
     // a module in a chassis bay is `bay/module`; one in a module's bay is
@@ -1372,6 +1444,14 @@ export async function extractRelief(url, scope, {back = false} = {}) {
                // an optic's own depth, for opticBody (on anything else
                // `data-depth` is a cavity's and is not read here)
                behaviour: el.dataset.behaviour || null,
+               // what it is pulled as (a plug occupies though it declares
+               // nothing), and how far its relief stands off its seat -
+               // the travel of an occupant that declares no depth (ejectTravel)
+               occupies: beh === 'occupies',
+               extent: beh === 'occupies' ? reliefExtent(
+                 [el, ...el.querySelectorAll(FEATURE_SEL)].map(n => ({
+                   out: n.dataset.zOut, cyl: n.dataset.zCyl, bar: n.dataset.zBar,
+                   uhandle: n.dataset.zUhandle, lift: liftOf(n)})), liftOf(el)) : 0,
                depth: el.dataset.behaviour === 'occupies' ? +el.dataset.depth || null : null,
                // and its colour: its skin's own `<name>--body` node's side
                // colour, else its fill (bodyFill)
@@ -1552,13 +1632,15 @@ export async function buildFaceRelief(F, ctx) {
       FRU_GROUPS[f.path] = fg;
       const bd = BODY_META[f.ref];
       // a `body:` block is the best answer, the part's own size.d the next, and
-      // 60 only when a drawing predates `data-body-depth` entirely
-      const depth = bd ? bd.depth : (f.bodyDepth || 60);
-      // captive modules declare how far they pull out; removable FRUs clear the chassis
-      const captive = bd && bd.travel;
-      FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!captive,
-                          bodyDepth: f.bodyDepth,
-                          pull: Math.min(captive || depth * 1.5 + 25, INTO - 10)};
+      // 60 only when a drawing predates `data-body-depth` entirely; captive
+      // modules declare how far they pull out, removable FRUs clear the
+      // chassis, and an occupant that declares no depth clears its own relief
+      // (ejectTravel)
+      const travel = ejectTravel({body: bd, bodyDepth: f.bodyDepth, depth: f.depth,
+                                  occupies: f.occupies, extent: f.extent, into: INTO});
+      FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!(bd && bd.travel),
+                          bodyDepth: f.bodyDepth, pull: travel.pull,
+                          leavesBay: travel.leavesBay, bayDepth: travel.bayDepth};
     }
     let curOwner = null;
     // Tagged on the way in, so `setPulled` can hide a part's relief without the
@@ -2218,7 +2300,10 @@ export async function buildFaceRelief(F, ctx) {
       // empty bay: interior surfaces only, so it never occludes the module's
       // own cavities (the C14 inlet pins live inside this volume)
       // the bay is as deep as the thing that goes in it, not 60 mm
-      const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
+      const bd = meta.bayDepth;
+      // an occupant with no depth of its own leaves its port as the build
+      // draws it, with no box (ejectTravel)
+      if (!meta.leavesBay) continue;
       if (f.shelf) continue;   // a shelf, not a hole: nothing is left behind
       if (f.openBack) continue;   // a passage: the rear hole's walls are its sides
       // a body in pieces is a riser, and behind an unseated riser is the

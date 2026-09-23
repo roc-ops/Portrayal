@@ -330,31 +330,40 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
 // key_on_back). The seat is applyOccupantOverrides', unchanged.
 //
 // `rootEl` is the back's parsed drawing and is changed in place. Resolves
-// to `{applied, refused, failed}`, refused and failed named by the DEVICE's
-// key, as the face pass names them.
+// to `{applied, refused, failed, dropped}`, each named by the DEVICE's key,
+// as the face pass names them.
 export async function seatBack(rootEl, {bay, moduleRef}, overrides, loadSkin, compByRef) {
-  const none = {applied: 0, refused: [], failed: []};
-  const top = rootEl?.querySelector('[data-ref][data-path]');
-  const name = top?.getAttribute('data-path');
-  if (!name || name.includes('/')) return none;
   const head = `${bay}/module/`;
+  const keys = Object.keys(overrides || {}).filter(k => k.startsWith(head));
   const look = r => { try { return r ? compByRef(r) || null : null; } catch (e) { return null; } };
   const module = look(String(moduleRef || '').split(':')[0]);
   const front = new Set((module?.parts || []).map(q => q.id).concat(Object.keys(module?.bays || {})));
-  const map = {}, device = {};
-  for (const [k, v] of Object.entries(overrides || {})) {
-    if (!k.startsWith(head)) continue;
-    const local = `${name}/${k.slice(head.length)}`;
-    map[local] = v;
-    device[local] = k;
+  const top = rootEl?.querySelector('[data-ref][data-path]');
+  const name = top?.getAttribute('data-path');
+  const slots = name && !name.includes('/')
+    ? nestedSlots(rootEl, compByRef, {all: true}).filter(e => e.modulePath === name) : [];
+  const back = new Set(slots.map(e => e.cage));
+  // WHAT IS NOT SEATED IS SAID (`dropped`), so backSource can warn: a key
+  // naming no slot of this back (or any key, when the drawing has no root),
+  // and a back slot a front part of the module shadows - the front wins, as
+  // in the build (key_on_back). A key on the module's FRONT - a part or bay
+  // of it, or an occupant chained on one - is the face pass's, and is not
+  // this function's to report.
+  const map = {}, device = {}, dropped = [];
+  for (const k of keys) {
+    const rest = k.slice(head.length);
+    const first = rest.split('/')[0].replace(/-occupant$/, '');
+    if (back.has(rest) && !front.has(rest)) {
+      const local = `${name}/${k.slice(head.length)}`;
+      map[local] = overrides[k];
+      device[local] = k;
+    } else if (back.has(rest) || !front.has(first)) dropped.push(k);
   }
-  if (!Object.keys(map).length) return none;
-  const slots = nestedSlots(rootEl, compByRef, {all: true})
-    .filter(e => e.modulePath === name && Object.prototype.hasOwnProperty.call(map, e.id)
-                 && !front.has(e.cage));
-  const res = await applyOccupantOverrides(rootEl, slots, map, loadSkin);
+  if (!Object.keys(map).length) return {applied: 0, refused: [], failed: [], dropped};
+  const res = await applyOccupantOverrides(rootEl, slots.filter(e => Object.prototype.hasOwnProperty.call(map, e.id)),
+                                           map, loadSkin);
   return {applied: res.applied, refused: res.refused.map(id => device[id]),
-          failed: res.failed.map(id => device[id])};
+          failed: res.failed.map(id => device[id]), dropped};
 }
 
 // SEATING AN OPTIC IN A CAGE is the other half of this module, and it is NOT
