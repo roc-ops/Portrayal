@@ -377,6 +377,11 @@ def buckets(doc, versions=None):
             # the devices that declare none are not rehashed for the key.
             **({"stack-exceptions": doc.get("stack-exceptions")}
                if doc.get("stack-exceptions") else {}),
+            # AN ALIAS IS A LOOKUP CLAIM - it says an HCL row reading this name
+            # means this drawing - so rewording or dropping one changes what a
+            # search resolves to. Surface, not `names`: nothing addresses a slot
+            # by it. Conditional, so a device naming no alias is not rehashed.
+            **({"aliases": doc.get("aliases")} if doc.get("aliases") else {}),
             "attrs": doc.get("attrs"),
             "provenance": doc.get("provenance"),
             "groups": doc.get("groups"),

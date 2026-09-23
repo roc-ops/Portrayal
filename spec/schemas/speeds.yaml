@@ -1,0 +1,33 @@
+# The closed set a port's `speed` attr is spelled from.
+#
+# ONE VOCABULARY, SO ONE SELECTOR FINDS EVERY PORT AT A RATE. `speed` flattens to
+# data-speed on every port the renderer draws, and a filter for "every 1G port"
+# is `[data-speed='1g']`. Before this file 1G copper was written four ways -
+# `100m-1g`, `1000base-t`, `100/1000base-t` and `10/100/1000` - so that selector
+# found about half of them, and USB generations and a PON flavour rode in the
+# same attr. Lint reads this file (L110), so the set and the rule that enforces
+# it cannot drift apart.
+#
+# WHAT A SPEED IS. The highest native rate the device runs that port at - not the
+# ceiling of the cage family it is built in. A QSFP-DD cage wired for 100G is
+# `100g`; a 10/100/1000 copper jack is `1g`. Everything else about the port has a
+# home of its own:
+#   - copper or fibre, and the cage family, are `media`
+#   - a USB port's generation is `usb` ('2.0', '3.0'), not a speed
+#   - a PON port's flavour is `pon` (xgs-pon), beside its line rate in `speed`
+#   - a caveat ("reserved for future use") is the placement's `description`
+#
+# NOT HERE, ON PURPOSE: every rate a multi-rate cage also runs at, and breakout.
+# Both are real and both are deferred - breakout is a logical interface a NOS
+# makes of a port, which spec/DESIGN.md (Architecture, layer 2) gives to the NOS
+# overlay, not to the hardware.
+#
+# SCOPE. Port speed only: a device group's attrs, a placement's attrs, a
+# component's own attrs and its parts' attrs. A component that declares `speed`
+# as one of its `fields` is printing a value on itself (a DIMM's MT/s), not
+# naming a port rate, and is not checked.
+#
+# ORDER is ascending, so a consumer can compare two speeds by their index here
+# rather than by the string, which does not order.
+format: 1
+speeds: [10m, 100m, 1g, 2.5g, 5g, 10g, 20g, 25g, 40g, 50g, 100g, 200g, 400g, 800g, 1.6t]

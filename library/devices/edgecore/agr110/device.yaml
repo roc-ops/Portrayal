@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: agr110
-version: 8.2.5
+version: 8.2.7
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
+aliases:
+- {name: AGR110, kind: marketing}
 portfolio: {line: Service Provider, family: Aggregation Router, series: AGR110}
 description: >-
   48x 10G SFP+ plus 6x 100G QSFP28 1RU aggregation router, sold as the AGR110, Broadcom BCM88370 Qumran-MX
@@ -481,7 +483,6 @@ attrs:
     bmc: yes, 1 x BMC
     software: ONIE installer pre-loaded; Open Network Linux (ONL) compatible
   features:
-    marketing-name: AGR110
     timing: IEEE 1588v2 and SyncE in hardware
     optics-sfp-plus: 10GBASE-SR/LR, 10G DAC/AOC, 1000BASE-T/SX/LX
     optics-qsfp28: >-
@@ -1913,7 +1914,7 @@ views:
         group: mgmt
         rel-pos: 1
         rotate: 180
-        attrs: {media: rj45, role: mgmt, speed: 100/1000base-t}
+        attrs: {media: rj45, role: mgmt, speed: 1g}
       - ref: std/rj45-ganged@2
         id: console
         at: [409.14, 15.7]

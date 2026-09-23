@@ -375,6 +375,8 @@ Now populate. Reuse before building.
    a fan bay and a line-card bay are all the same hole with a module in it, so
    nothing reading the compiled SVG can tell which is why the box exists and
    which two keep it alive. `traffic` is the work the box is bought to do;
+   `fabric` is the cell or chassis interconnect of a distributed chassis (the
+   ports only; a fabric card is still `service`);
    `management` is how you reach and discipline it (OOB, console, craft,
    timing); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor
@@ -384,7 +386,10 @@ Now populate. Reuse before building.
    family, named for the family: `sfp28`, `qsfp28`, `qsfpdd-400g`, with the
    speed appended where the media token alone does not fix it. The block then
    declares `attrs: {media, speed}` once (L22 checks that promise against the
-   members). Not `sfp-ports`, which names only the cage; not `row-top`, which
+   members). A speed is the highest native rate the port runs at, spelled from
+   the closed set in `spec/schemas/speeds.yaml` (L110): a 10/100/1000 jack is
+   `1g`, not `1000base-t`. A USB port's generation is `usb: '3.0'`, not a speed.
+   Not `sfp-ports`, which names only the cage; not `row-top`, which
    names only where it sits. If a block spans media because the vendor treats
    it as one thing, a management cluster, a timing block, say so in `mixed:`
    and name the job they do together (L23).

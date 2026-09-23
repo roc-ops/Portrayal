@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s7801-54xs
-version: 5.0.0
+version: 5.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S7801-54XS
@@ -431,7 +431,7 @@ views:
     components:
       placements:
         - {ref: common/rj45-eth@1, id: mgmt-oob, at: [6.8, 4.33], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 1g},
            states: {led-a: ['off', {name: link-100m, color: '#f59e0b'},
                             {name: activity-100m, color: '#f59e0b', behavior: blinking}],
                     led-b: ['off', {name: link-1g, color: '#22c55e'},
@@ -445,7 +445,7 @@ views:
              green corner lamps) the component-local left window (led-a) renders on
              screen-right, so led-a carries the physical-right/amber pair and led-b
              the physical-left/green pair, keeping the same physical lamp assignment'}
-        - {ref: common/usb-a-bezel@1, id: usb, at: [6.2, 18.25], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
+        - {ref: common/usb-a-bezel@1, id: usb, at: [6.2, 18.25], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '3.0'}}
         - {ref: std/rj45@2, id: console, at: [6.8, 28.28], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/reset-button@1, id: reset, at: [46.6, 2.6], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-sys, at: [52.4, 4.0], for: chassis, group: status-leds, rel-pos: 1,
