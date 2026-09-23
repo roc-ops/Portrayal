@@ -49,7 +49,7 @@ import yaml
 
 from portrayal.artifacts import Dist
 
-from portrayal.manifest import view_parts
+from portrayal.manifest import view_parts, config_airflow
 from portrayal import optical_ports
 from portrayal.faces import face_ref
 
@@ -918,13 +918,14 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         out["weight_unit"] = "kg"
 
     # THE CHASSIS IS WHERE AIRFLOW LIVES UNLESS A CONFIGURATION DIFFERS, which is
-    # the fallback render.py:1087 has always used and this did not. Eighteen
+    # the fallback the drawing's `data-airflow` has always used
+    # (manifest.config_airflow) and this did not. Eighteen
     # configurations across ten devices stated airflow only on the chassis - the
     # ASR 9000s, the fanless FS enclosure, the S9502 - and exported none at all:
     # `cfg.get` returned nothing and the key was quietly dropped. Seven of those
     # are `front-to-back` and land now; the rest are `side` and `passive`, which
     # the chassis enum allows and this map has no entry for (roc-ops/Portrayal#171).
-    air = AIRFLOW.get(cfg.get("airflow") or (dev.get("chassis") or {}).get("airflow"))
+    air = AIRFLOW.get(config_airflow(dev, cfg))
     if air:
         out["airflow"] = air
 
