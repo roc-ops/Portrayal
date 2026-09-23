@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: fhd-3mtp18-lc-rear
+version: 1.0.0
+class: cassette
+description: >-
+  The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the
+  36-fibre cassette's body seen from behind, carrying three MTP-12 trunk
+  bulkheads - 25-36, 13-24 and 1-12, left to right - with each range printed
+  BELOW its bulkhead, and a Type A polarity label at the upper left.
+size: {w: 99.0, h: 31.0}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  THE BODY IS fs/fhd-1mtp6lcd-rear@3's, borrowed whole: every FHD cassette is
+  the same box (spec/tests/test_fhd_cassettes_share_one_envelope.py) and FS's
+  rear renders of 105333 and 105335 show the same body. NO DEPTH IS DECLARED:
+  this is a FACE, and the depth of the body it closes is the cassette's
+  `body.depth`.
+attrs: {media: fiber}
+parts:
+  - {id: mtp1, ref: common/mpo-flange-adapter@1, at: [3.3, 15.0]}
+  - {id: mtp2, ref: common/mpo-flange-adapter@1, at: [34.3, 15.0]}
+  - {id: mtp3, ref: common/mpo-flange-adapter@1, at: [65.3, 15.0]}
+provenance:
+  size: >-
+    borrowed - see size-notes.
+  parts: >-
+    PHOTO-MEASURED ACROSS, ESTIMATED UP - the same standing as
+    fs/fhd-2mtp12-lc-rear@2's. FS's rear render of 105333 (105333.D.jpg, and
+    105335.E.jpg, the same view of the OM4 twin) is shot from above, so widths
+    are readings and heights are not. Scaled on the 108.97 faceplate flange
+    behind the body at 5.80 px/mm, the body reads 96.4 wide against its 99 - it
+    sits further from the camera than the flange - so readings are stretched by
+    99/96.4 onto the body: the three flanges centre at 18.3, 49.3 and 80.3, a
+    31.0 pitch with the middle one on the body's centre line. The first centre
+    is the same 18.3 fs/fhd-2mtp12-lc-rear@2 reads for its left bulkhead.
+    `at.y` 15.0 puts the 11.0-tall flanges below the label and above the
+    printed ranges, which is the order the render shows; the figure itself is
+    estimated.
+  legends: >-
+    `25-36`, `13-24` and `1-12`, left to right, each centred BELOW its bulkhead
+    - not above it as on the 12- and 24-fibre backs. Which bulkhead is which is
+    what the render prints; the fibre paths the cassettes declare follow it.
+    Heights estimated as the bulkheads are.
+  polarity-label: >-
+    a bordered box reading `Type A` at the upper left, across 7.1-29.6 of the
+    body on 105333.D.jpg, above the left bulkhead. The round warranty seal
+    beside it is a sticker over the lid edge and is not drawn, as on every FHD
+    back.
+skins: [default]

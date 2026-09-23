@@ -196,14 +196,15 @@ def test_the_sweep_finds_fibre_modules_at_all():
 def test_the_populations_split_as_the_controller_ruling_expects():
     """Pin the ruling with a number, not merely an assertion that passes.
 
-    Twenty-six modules carry `optical.paths` today: twenty FS cassettes with
+    Twenty-eight modules carry `optical.paths` today: twenty-two FS cassettes with
     a declared rear face - the five OS2 Type A ones (fhd-1mtp6lcd-os2-a,
     fhd-splice-12-lc, fhd-2mtp12-lc-os2-a, fhd-1mtp12-sc-os2-a and
     fhd-1mtp24-lc-os2-a), their five polarity twins (fhd-1mtp6lcd-os2-af
     and -os2-u, fhd-2mtp12-lc-os2-af and -os2-u, fhd-1mtp24-lc-os2-af) and
     ten media twins in OM4, OM5 and OM3 (fhd-1mtp6lcd-om4-a, -om4-u, -om5-a;
     fhd-2mtp12-lc-om4-a, -om4-u, -om5-a, -om3-a; fhd-1mtp24-lc-om4-a,
-    -om5-a, -om3-a) - and six Smartoptics PPMs with none. A future cassette that joins the library
+    -om5-a, -om3-a), the 36-fibre pair (fhd-3mtp18-lc-os2-a, -om4-a) - and six
+    Smartoptics PPMs with none. A future cassette that joins the library
     moves one of these two counts, and this is what a reviewer notices
     moving.
     """
@@ -211,8 +212,8 @@ def test_the_populations_split_as_the_controller_ruling_expects():
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 26, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 20, [e["name"] for e in projecting]
+    assert len(all_fibre) == 28, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 22, [e["name"] for e in projecting]
     assert sorted(excluded) == sorted([
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",
