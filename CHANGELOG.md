@@ -25,6 +25,15 @@ the *published build*, not about the hardware.
   digest of the `attrs` each placed port states for itself (`speed`, `media`,
   `usb`). Retyping one now asks for a patch bump, where before it asked for
   nothing (found on roc-ops/Portrayal#519).
+- Every device in `library/dist/devices.lock.json` carries `placement-geometry`,
+  `placement-addressing` and `placement-surface`, fingerprinting the placement
+  and bay keys that were hashed nowhere: `inset`, `lift`, `in`, `under`,
+  `only-in`, `optional` and `interfaces` (a major); `for` and `rel-pos` (a
+  major when changed or removed, a minor for a `for` stated where there was
+  none, nothing for a new `rel-pos` - recorded as a map, not a digest, so the
+  cases can be told apart); `states`, `description`, `provenance`,
+  `physical-context` and `frames` (a patch). Editing any of them used to ask for
+  no bump at all.
 - `devices.json` carries `contract: 1` — the first version a consumer can check
   (roc-ops/Portrayal#185).
 - `library/dist/devices.lock.json`: every device's fingerprint in one file,
