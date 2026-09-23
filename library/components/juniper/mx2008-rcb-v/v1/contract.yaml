@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2008-rcb-v
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -14,6 +14,11 @@ attrs:
   model: MX2008 RCB
   power-draw-max-w: 120
 provenance:
+  speed: 'guide - MX2008 hardware guide, RJ-45 pinout section: the port labeled MGMT is an autosensing
+    10/100/1000-Mbps Ethernet RJ-45 receptacle. Carried as 1g for both management jacks'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
   size: 'photo - the MX2008 studio front photograph at ~1.39 px/mm; positions approximate to ~3 mm, and no vendor module dimension is in the extraction'
   power: >-
     guide FRU power table, MX2008 hardware guide, Routing Control Board block: '| RCB ... |
@@ -34,13 +39,26 @@ states:
 - ok
 - fail
 - absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the BITS external clock jack
 parts:
-- {ref: common/rj45-eth@1, id: mgmt0, at: [8.1, 40.4], rotate: 90, attrs: {function: management 0}}
-- {ref: common/rj45-eth@1, id: mgmt1, at: [28.1, 40.4], rotate: 90, attrs: {function: management 1}}
-- {ref: std/rj45@2, id: console, at: [8.1, 62.4], rotate: 90, attrs: {function: serial console}}
-- {ref: std/rj45@2, id: aux, at: [28.1, 62.4], rotate: 90, attrs: {function: auxiliary console}}
-- {ref: std/rj45@2, id: bits, at: [8.1, 100.4], rotate: 90, attrs: {function: BITS timing}}
-- {ref: std/usb-a@1, id: usb, at: [30.25, 102.75], attrs: {function: USB service port}}
+- {ref: common/rj45-eth@1, id: mgmt0, group: mgmt, at: [8.1, 40.4], rotate: 90, attrs: {speed: 1g, media: rj45, function: management 0}}
+- {ref: common/rj45-eth@1, id: mgmt1, group: mgmt, at: [28.1, 40.4], rotate: 90, attrs: {speed: 1g, media: rj45, function: management 1}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [8.1, 62.4], rotate: 90, attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [28.1, 62.4], rotate: 90, attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: std/rj45@2, id: bits, group: timing, at: [8.1, 100.4], rotate: 90, attrs: {media: rj48, function: BITS timing}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [30.25, 102.75], attrs: {function: USB service port}}
 size:
   w: 57.0
   h: 170.0

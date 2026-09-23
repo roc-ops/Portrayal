@@ -160,6 +160,13 @@ The rest earns its place:
   `common/led` says so instead of redrawing them. Lint (L10) checks the
   composition resolves and does not cycle; L46 checks composed parts do not
   overlap.
+- `groups` for the ports a module carries, in the same shape as a device's
+  `groups:`, with `group:` on each port part. A card's console, management
+  jack and timing jacks say `role: management`; a sled's client ports say
+  `role: traffic`, with `attrs: {media, speed}` stated once. Names are local
+  to the component. When the card is drawn in a device, every grouped part
+  carries `data-group`, `data-group-role` and the group's attrs, as a device
+  placement does. Lint L17, L22, L23 and L37 check them, as warnings.
 - `fields` for what varies without the shape changing: a supply's wattage, a
   drive's capacity. Do not make a new skin per wattage.
 - `states` for lamps, named as tokens (`link`, `activity`, `fault`), with the
