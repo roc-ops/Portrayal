@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr200
-version: 1.0.3
+version: 1.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-18X
@@ -242,7 +242,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45, speed: 100/1000base-t}
+    attrs: {media: rj45, speed: 1g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
   timing:
     term: Port
@@ -479,7 +479,7 @@ views:
       - {ref: std/rj45-ganged@2, id: console, at: [370.70, 5.20], rotate: 180, group: mgmt, rel-pos: 2,
          attrs: {media: rj45-serial, role: console}}
       - {ref: std/rj45-ganged@2, id: mgmt-eth, at: [370.70, 19.90], group: mgmt, rel-pos: 1,
-         attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+         attrs: {media: rj45, role: mgmt, speed: 1g}}
       - {ref: common/reset-button@1, id: reset, at: [334.20, 33.80], group: mgmt, rel-pos: 4, for: chassis}
       - {ref: common/led-rect@1, id: led-loc, at: [191.59, 33.06], group: leds, rel-pos: 1, for: chassis, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-rect@1, id: led-diag, at: [198.60, 33.06], group: leds, rel-pos: 2, for: chassis, states: ['off', {name: 'on', color: '#22c55e'}]}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 6.0.1
+version: 6.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
@@ -787,9 +787,9 @@ views:
         - {ref: std/smb@1, id: mhz, at: [36.92, 5.16], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
         - {ref: std/smb@1, id: pps, at: [54.40, 5.16], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [23.25, 49.2], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g}}
+           attrs: {role: mgmt, speed: 1g}}
         - {ref: std/usb-a@1, id: usb, at: [23.60, 62.31], group: mgmt, rel-pos: 3,
-           attrs: {role: storage, speed: usb3}}
+           attrs: {role: storage, usb: '3.0'}}
         - {ref: std/rj45-ganged@2, id: console, at: [23.25, 69], group: mgmt, rel-pos: 2,
            attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [9.25, 80.43], group: mgmt, rel-pos: 4,

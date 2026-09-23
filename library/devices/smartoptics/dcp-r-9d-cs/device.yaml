@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
@@ -472,7 +472,7 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
-        - {ref: common/rj45-eth@1, id: eth0, at: [10.8, 9.85], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: eth0, at: [10.8, 9.85], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 1}
         - {ref: std/rj45@2, id: rs232, at: [10.8, 24.35], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
         - {ref: std/sfp@1, id: port-osc, at: [31, 26.7], attrs: {media: sfp, role: osc}, group: line, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.4], for: port-osc, attrs: {function: osc-tx}, group: port-leds, rel-pos: 1}
@@ -558,13 +558,13 @@ views:
         - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 6}
         - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}, group: psus, rel-pos: 1}
         - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}, group: psus, rel-pos: 2}
-        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [276.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 3}
-        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [291.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 4}
-        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [276.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 5}
-        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [291.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 6}
+        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [276.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 3}
+        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [291.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 4}
+        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [276.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 5}
+        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [291.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}, group: port-leds, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}, group: port-leds, rel-pos: 4}
-        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}, rel-pos: 7}
+        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 1g}, rel-pos: 7}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis, rel-pos: 8}
   left:
     size:

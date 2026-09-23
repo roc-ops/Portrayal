@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr180
-version: 1.0.4
+version: 1.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-16X
@@ -207,7 +207,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45, speed: 100/1000base-t}
+    attrs: {media: rj45, speed: 1g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
   timing:
     term: Port
@@ -855,7 +855,7 @@ views:
         at: [372.0, 19.9]
         group: mgmt
         rel-pos: 1
-        attrs: {media: rj45, role: mgmt, speed: 1000base-t}
+        attrs: {media: rj45, role: mgmt, speed: 1g}
       - {ref: common/reset-button@1, id: reset, at: [335.1, 32.7], group: mgmt, rel-pos: 4, for: chassis}
       - ref: common/led-rect@1
         id: led-loc

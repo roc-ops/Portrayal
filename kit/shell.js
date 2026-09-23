@@ -397,14 +397,18 @@ export function createShell(opts = {}) {
     'usb-a': 'USB-A', 'usb-c': 'USB-C', 'sc-apc': 'SC/APC', 'fiber': 'fibre',
     'coax': 'coax', 'ac': 'AC',
   };
-  const SPEED = {'1000base-t': '1000BASE-T', '10g-pon': '10G-PON', 'usb3': 'USB 3'};
+  // A speed is one of spec/schemas/speeds.yaml's closed set (lint L110), and
+  // every one of those reads right upper-cased - 1G, 2.5G, 1.6T - so there is
+  // no per-value table to keep in step. USB generation and PON flavour are
+  // their own attrs (data-usb, data-pon), so they are read on their own:
+  // "USB-A 3.0", "SC/APC 10G XGS-PON".
   const mediaLabel = m => MEDIA[m] || m.toUpperCase();
-  const speedLabel = s => SPEED[s] || s.toUpperCase();
   function portLabel(e) {
     const m = e.dataset.media;
     if (!m) return null;
-    return e.dataset.speed ? `${mediaLabel(m)} ${speedLabel(e.dataset.speed)}`
-                           : mediaLabel(m);
+    const d = e.dataset;
+    return [mediaLabel(m), d.usb, d.speed && d.speed.toUpperCase(),
+            d.pon && d.pon.toUpperCase()].filter(Boolean).join(' ');
   }
 
   // The targets of this node that live in another view, spelled as the manifest

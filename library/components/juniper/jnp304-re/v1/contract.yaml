@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp304-re
-version: 1.2.0
+version: 1.2.1
 class: supervisor
 behaviour: fills
 profile: networking
@@ -64,7 +64,7 @@ states:
 - absent
 parts:
 - {ref: std/rj45@2, id: console, at: [82.9, 17.7], attrs: {function: serial console}}
-- {ref: common/rj45-eth@1, id: mgmt, at: [118.4, 17.7], attrs: {function: out-of-band management, speed: 10/100/1000},
+- {ref: common/rj45-eth@1, id: mgmt, at: [118.4, 17.7], attrs: {function: out-of-band management, speed: 1g},
    states: {led-a: ['off', {name: activity, color: '#22c55e', behavior: blinking}],
             led-b: ['off', {name: 10-100, color: '#eab308'}, {name: '1000', color: '#22c55e'}]}}
 - {ref: std/usb-a@1, id: usb, at: [137.4, 21.75], rotate: 90, attrs: {function: USB 3.0 service port}}

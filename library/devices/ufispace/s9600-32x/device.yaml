@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -618,7 +618,7 @@ views:
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [8.34, 20.86], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
         - {ref: std/rj45@2, id: tod, at: [22.2, 27.6], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
         - {ref: common/rj45-eth@1, id: mgmt, at: [49.43, 59.6], group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 1g},
            description: 'the datasheet''s 1 x 100/1000M RJ45 management port. Its two
              lamps are drawn because Figure 8 draws them green in the jack''s lower
              corners; HIG section 10 tables the six front-panel lamps and the two FRU
@@ -629,7 +629,7 @@ views:
              default already, matching the photo directly, so no rotate is added'}
         - {ref: std/rj45@2, id: console, at: [29.14, 59.09], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [18.35, 70.40], group: mgmt, rel-pos: 3, attrs: {role: console, media: micro-usb}}
-        - {ref: std/usb-a@1, id: usb, at: [39.90, 32.25], rotate: 270, group: mgmt, rel-pos: 4, attrs: {role: storage, speed: usb3}}
+        - {ref: std/usb-a@1, id: usb, at: [39.90, 32.25], rotate: 270, group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '3.0'}}
         - {ref: common/reset-button@1, id: reset, at: [28.44, 44.62], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, at: [11.52, 57.13], for: chassis,
            states: ['off', {name: synced, color: '#22c55e'}, {name: synce, color: '#22c55e', behavior: blinking}, {name: free-run, color: '#f59e0b'}],
