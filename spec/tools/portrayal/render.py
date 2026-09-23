@@ -3132,7 +3132,8 @@ def _inputs(device, device_yaml, lib):
         if skins is not None:
             files.add(Path(skins).parent / "contract.yaml")
             files.update(Path(skins).glob("*.svg"))
-        # a part's ref and every default it ships holding (drawn_refs)
+        # a part's ref, every default it ships holding and every face it
+        # names (drawn_refs) - a redrawn rear must rebuild its device
         queue.extend(drawn_refs(contract))
     return {f for f in files if f.exists()}
 

@@ -130,8 +130,13 @@ Three layers:
    the check can say which bump a change requires rather than only that one
    happened: `shape` (chassis dimensions, view sizes, and the position, size and
    wiring of everything placed), `names` (ids, groups, configurations), `surface`
-   (silkscreen, decor, description, attrs, provenance) and `gaps`. Surface alone
-   is a patch; ids added with nothing moved or removed is a minor; anything else
+   (silkscreen, decor, description, attrs, provenance) and `gaps`, plus
+   `composed`: every component the device draws without containing it, with
+   its version and a digest of its contract and skins, walked transitively
+   through each part, each shipped default and each face (`faces.rear`,
+   `faces.plan` or the legacy `plan:`) - a cassette's back is drawn under the
+   device that seats the cassette, so redrawing it is redrawing that device.
+   Surface or composed alone is a patch; ids added with nothing moved or removed is a minor; anything else
    about shape or names is a major, because a moved slot invalidates a cached
    coordinate exactly as a renamed id invalidates a held reference.
 

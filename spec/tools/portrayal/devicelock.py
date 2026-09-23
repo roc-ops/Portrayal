@@ -244,7 +244,8 @@ def component_versions(library: pathlib.Path):
         ver = str(doc.get("version") or "")
         out[f"{vendor}/{name}@{major[1:]}"] = (
             ver + "+" + _component_digest(ct.parent, doc))
-        # what this major draws: its parts and the defaults they ship holding
+        # what this major draws: its parts, the defaults they ship holding,
+        # and its faces (manifest.drawn_refs)
         out.setdefault(f"{vendor}/{name}", {})[major] = manifest.drawn_refs(doc)
     return out
 
@@ -261,6 +262,12 @@ def _composed(doc, versions):
     device changing because something it composes did.
     Resolved TRANSITIVELY - a card composes a jack which composes a cage - so a
     change three levels down still reaches the device that shows it.
+
+    A FACE IS FOLLOWED LIKE A PART. A cassette's back is its `faces.rear`, not
+    one of its `parts:`, and the walk used to stop at `parts:` - so the FS FHD
+    rears' MPO openings were redrawn under fs/fhd-1ufce and its lock reported
+    nothing. The face list comes from `manifest.drawn_refs`, which reads both
+    spellings of `plan` and every direction in `faces.DIRECTIONS`.
     """
     seen, todo = {}, []
     for view in (doc.get("views") or {}).values():

@@ -10,6 +10,8 @@ import math
 import yaml
 from pathlib import Path
 
+from portrayal.faces import DIRECTIONS, face_ref
+
 
 # ONE READING OF A FILE, TOO, AND THE FAST ONE.
 #
@@ -438,9 +440,21 @@ def slot_default(part, contract):
 
 def drawn_refs(contract):
     """Every ref a contract draws without a configuration asking: each part's
-    `ref`, each part's `default:`, and its own top-level `default:` (which its
-    composer draws unless it overrides it). Over-inclusive for a dependency
-    walk on purpose - a default is drawn like a composed part."""
+    `ref`, each part's `default:`, its own top-level `default:` (which its
+    composer draws unless it overrides it), and each of its `faces:`.
+    Over-inclusive for a dependency walk on purpose - a default is drawn like
+    a composed part.
+
+    A FACE IS DRAWN TOO, and the three walks that read this list - the device
+    lock's `composed` bucket, the build's up-to-date check and lint's
+    `--device` filter - all missed it while it was left out. A cassette's
+    `faces.rear` is drawn as the back of the seated module and a riser's
+    `faces.plan` (or legacy `plan:`) lands in the device's top view, so a
+    rear redrawn under a device went unseen: the FS FHD rears' MPO openings
+    moved from 13.1 x 7.0 to 12.9 x 8.0 and fs/fhd-1ufce's lock reported
+    nothing (roc-ops/Portrayal#405 is that silent redraw). Read through
+    `face_ref`, so both spellings of `plan` count and a new direction in
+    `faces.DIRECTIONS` is followed without a change here."""
     out = []
     for part in (contract or {}).get("parts") or []:
         for r in (part.get("ref"), part.get("default")):
@@ -448,6 +462,10 @@ def drawn_refs(contract):
                 out.append(str(r).split(":")[0])
     if (contract or {}).get("default"):
         out.append(str(contract["default"]).split(":")[0])
+    for direction in DIRECTIONS:
+        ref = face_ref(contract or {}, direction)
+        if ref:
+            out.append(str(ref).split(":")[0])
     return out
 
 

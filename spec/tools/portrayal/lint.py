@@ -1018,7 +1018,8 @@ def device_dependencies(dev_path, lib_roots):
             sp = cp.parent / "skins" / f"{sk}.svg"
             if sp.exists():
                 files.add(sp)
-        # a part's ref and every default it ships holding (drawn_refs)
+        # a part's ref, every default it ships holding and every face it
+        # names (drawn_refs)
         queue.extend(drawn_refs(spec))
     return files
 
