@@ -56,6 +56,24 @@ the *published build*, not about the hardware.
   finds `dcs510` (roc-ops/Portrayal#514).
 
 ### Changed
+- Every fibre a connector declares is now a node you can address: a bore or a
+  `class: fibre` element numbered `1` through `optical.positions`, `X/n` on a
+  port that carries more than one. Lint L112 holds it - a connector composes a
+  bore for each position or draws its own fibre element, and a cassette's rear
+  face reuses none of the front's ids. The three duplex adapters
+  (`common/lc-duplex-adapter`, `common/lc-duplex-v-adapter`,
+  `common/sc-duplex-adapter`) move to v5 for it: their two bores are `1` and
+  `2`, not `tx` and `rx`, so a consumer addressing `.../tx` or `.../rx` on one
+  of these adapters finds nothing where it used to find a bore (a
+  transceiver's own tx/rx faces are unchanged). 29 parts that compose one of
+  these adapters took a major bump, and the five devices that seat them
+  followed: `fs/fhd-1ufce` 4.0.0, `smartoptics/dcp-2` 2.0.0,
+  `smartoptics/dcp-m32-cso-zr` 3.0.0, `smartoptics/dcp-r-34d-cs` 4.0.0 and
+  `smartoptics/dcp-r-9d-cs` 4.0.0. The MPO/MTP flange adapters
+  (`common/mpo-flange-adapter`, `common/mpo24-flange-adapter`) carry a new
+  `opening` element for the keyed bulkhead itself and fibre elements `1..12`
+  (the 24-fibre part `1..24`), numbered as the plug numbers them rather than
+  as a viewer sees them.
 - Ten routing-engine, control-board and sled modules now group their ports:
   `juniper/jnp10k-re1@2`, `re-s-1300@1`, `re-s-1300-v@1`,
   `mx2000-cb-re-v@1`, `mx2008-rcb-v@1`, `jnp10003-rcb@1`, `jnp304-re@1`,
@@ -130,6 +148,11 @@ the *published build*, not about the hardware.
   type (roc-ops/Portrayal#426).
 
 ### Fixed
+- A component whose own class is `port` and which draws a second `class: port`
+  element inside itself - an MPO/MTP flange adapter's keyed opening, a bare
+  plug's body - now marks that inner element `data-inner="1"` too, on the same
+  rule a composed cage's std core is marked by. It was carrying no mark, so an
+  audit walking `[data-class=port]` counted it as a second connector.
 - `devices_index` fails when two devices share a name. Dist filenames carry no
   vendor, so they would otherwise render over each other in silence (roc-ops/Portrayal#185).
 
