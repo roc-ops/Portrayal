@@ -59,14 +59,20 @@ A node is either:
 
 ## MPO fibre numbering
 
-The expected convention is TIA-604-5 (FOCIS 5): with the key up, fibre 1 is at
-the left of the row, and on a 24-fibre ferrule the second row carries 13-24.
-The skins already draw the fibres left to right at the ferrule's 0.25 pitch
-with the key slot on the top edge, so fibre `n` would be the n-th circle.
-**This is to be confirmed against the standard, or a vendor drawing that cites
-it, before any fibre element is placed.** It also has to be settled which way
-the adapter is being looked at, since the rear face shows the side the trunk
-plugs into. Each part's provenance records the source.
+Numbering belongs to the plug, not the viewer. On a plug end face seen key
+up, position 1 is at the left and 1-12 run left to right; on 24 fibres the row
+on the key side carries 1-12 and the other 13-24, also left to right
+(ANSI/TIA-568.3-D, as reproduced in the SENKO application note *Fiber Optic
+Polarity Guide for VSFF Connectivity*, Rev. 01, October 2023, p. 8, Figure 5,
+and in a 2018 Sylex note on 24-fibre connectivity, Figure 3). The rear face
+looks through the trunk-side opening, keyway on top, at the end face of the
+male plug inside the cassette. FS fits Type A (key-up to key-down) adapters to
+its A, AF and universal FHD cassettes (*FHD MTP-12/24 Cassettes Datasheet*,
+December 2023, pp. 4-7; opposed keyway per IEC 61754-7-1:2014, clause 2), so
+that plug is seen key-down, turned 180 degrees. Fibre 1 is the rightmost
+circle, cx 16.375, and fibre `n` runs leftward to 12 at cx 13.625. On the
+24-fibre skin, 1-12 are the lower row (cy 5.75) and 13-24 the upper (cy 5.25),
+each from cx 16.375 leftward. Provenance records this per part.
 
 ## Library changes
 
