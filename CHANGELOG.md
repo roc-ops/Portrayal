@@ -21,6 +21,10 @@ the *published build*, not about the hardware.
   configuration's value, else the chassis's). The `chassis` block carries the
   chassis's own `airflow`. A page filtering builds by airflow no longer parses
   it out of a configuration's name or description (roc-ops/Portrayal#513).
+- Every device in `library/dist/devices.lock.json` carries `placement-attrs`: a
+  digest of the `attrs` each placed port states for itself (`speed`, `media`,
+  `usb`). Retyping one now asks for a patch bump, where before it asked for
+  nothing (found on roc-ops/Portrayal#519).
 - `devices.json` carries `contract: 1` — the first version a consumer can check
   (roc-ops/Portrayal#185).
 - `library/dist/devices.lock.json`: every device's fingerprint in one file,
