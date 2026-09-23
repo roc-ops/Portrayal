@@ -253,9 +253,10 @@ def same_attrs(kit, build):
 # on purpose. A plug's connection-point marker names the relief node it sits
 # on, `data-cp-on="<instance>--a--body"` (render.py instance_group); the kit's
 # `rename` rewrites ids, data-path and url(#...) but not this reference, so a
-# kit-seated plug keeps `lc-duplex-plug--a--body`. Seating a plug is Task 10's
-# swap (the plug also carries no data-behaviour="occupies", which is what the
-# kit's own swap finds occupants by); the lift arithmetic on the plug is
+# kit-seated plug keeps `lc-duplex-plug--a--body`. Closing it is B3 Task 10c
+# (3D cable anchors). The plug carries no data-behaviour="occupies"; the kit
+# now finds it by `data-for` and its slot's accepts (swap.js isOccupantOf,
+# Task 10a, test_nested_slots_js.py). The lift arithmetic on the plug is
 # checked here like every other case.
 CP_ON_GAP = "data-cp-on"
 
@@ -346,11 +347,11 @@ def test_every_case_is_a_lifted_slot_the_kit_used_to_refuse(parity):
 
 
 @needs_node
-def test_the_slot_entry_helper_is_nestedCages_on_every_card(parity):
-    """lifted-seat.mjs builds the entry for a slot on a non-card carrier (an
-    adapter's bore) itself, because nothing in the kit finds those yet (Task
-    10). On every card carrier it is checked against nestedCages, field for
-    field, so the only thing it adds is the carrier."""
+def test_nestedSlots_is_the_slot_entry_on_every_carrier(parity):
+    """The parity seats through the kit's own nestedSlots (B3 Task 10a) - on
+    a card, on an adapter placed on the device, on one composed on a card.
+    Task 9's `slotEntries` helper, which stood in for it, is kept as the
+    reference: on every carrier the kit's entry equals it, field for field."""
     _, _, got = parity
     checked = [h for g in got for h in g["helperVsKit"]]
     assert checked and all(h["n"] > 0 for h in checked), checked

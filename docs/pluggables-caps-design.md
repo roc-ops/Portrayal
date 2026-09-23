@@ -411,6 +411,18 @@ transform above it and nothing is solved twice.
 - **Exclusion and pruning.** The kit offers only the free level of a duplex adapter
   (above). Replacing or emptying a carrier drops every occupant keyed under it, in
   2D state, `swap=` and the 3D map - a cap cannot outlive its cassette.
+- **How the kit knows an occupant (2026-09-23).** A plug is `class: port` and
+  carries no `behaviour`, by the ruling each plug's provenance records, so the
+  kit does not find occupants by `occupies` alone: an occupant is the element
+  `data-for` a slot that either `occupies` or is a part the slot accepts. A
+  module the explorer swaps in has its compiled skin's `data-for` re-keyed into
+  the bay's namespace, as its `data-path` always was, so its shipped caps name
+  the device's slots.
+- **Which slots a drawing has (2026-09-23).** Every instance whose component
+  publishes slots, outside any occupant (P3). A slot whose carrier is itself a
+  slot is kept only as one of that slot's `bores`: a cage wrapper publishes the
+  aperture it composes as its own cage, and its host already publishes that
+  aperture at the wrapper's path.
 - One home: all of it lives in `kit/swap.js`.
 
 ## 3D

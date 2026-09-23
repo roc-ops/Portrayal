@@ -11,13 +11,13 @@
 // and the compiled skins; what the kit seats back is compared with what
 // render.py wrote.
 //
-// WHERE THE SLOT ENTRY COMES FROM. A slot on a seated card (`<bay>/module`) is
-// nestedCages' - the kit's own reading. A slot on anything else (a bore of an
-// adapter placed on the device, `xc01/tx`, or composed on a card,
-// `slot-1/module/edfa/tx`) is found by nothing in the kit yet: that is Task
-// 10's nestedSlots. Until then `slotEntries` below builds the entry in
-// nestedCages' exact shape, and the parity mode proves it equal to nestedCages
-// on every card carrier it also sees, so the only thing it adds is the carrier.
+// WHERE THE SLOT ENTRY COMES FROM: the kit's own nestedSlots (B3 Task 10a),
+// which reads a slot off ANY carrier - a card (`<bay>/module`), an adapter
+// placed on the device (`xc01/tx`), one composed on a card
+// (`slot-1/module/edfa/tx`). Task 9 built those entries here, in
+// `slotEntries` below, because nothing in the kit found them yet; the helper
+// is kept as the reference the kit's entry is checked against, field for
+// field, on every carrier the parity seats into.
 //
 // Cases, chosen by argv[2]:
 //   parity - stdin JSON {cases: [{name, face, comps, skins, keys: [{key, ref,
@@ -39,8 +39,9 @@ const byPath = (root, p) => root.querySelector(`[data-path="${p}"]`);
 const occupantsOf = (root, key) => root.querySelectorAll(`[data-for="${key}"]`)
   .filter(n => (n.getAttribute('data-path') || '').endsWith('-occupant'));
 
-// nestedCages' entry, for a carrier group at any path. The sum is nestedCages'
-// seatDepth: every `data-z-lift` from the carrier's group up.
+// The entry Task 9 wrote, for a carrier group at any path - now only the
+// reference nestedSlots is held to. The sum is seatDepth's: every
+// `data-z-lift` from the carrier's group up.
 function slotEntries(root, carrier, compByRef) {
   const mod = byPath(root, carrier);
   const ref = (mod?.getAttribute('data-ref') || '').split(':')[0];
@@ -67,16 +68,14 @@ if (mode === 'parity') {
   for (const {name, face, comps, skins, keys} of cases) {
     const root = build(face);
     const compByRef = ref => comps[ref] || null;
-    const nested = m.nestedCages(root, compByRef);
+    const nested = m.nestedSlots(root, compByRef);
     const entries = [], helperVsKit = [];
     for (const carrier of [...new Set(keys.map(k => k.carrier))]) {
       const mine = slotEntries(root, carrier, compByRef);
-      if (carrier.endsWith('/module')) {
-        const kit = nested.filter(c => c.modulePath === carrier);
-        helperVsKit.push({carrier, same: JSON.stringify(mine.map(plain)) === JSON.stringify(kit.map(plain)),
-                          n: kit.length});
-        entries.push(...kit);
-      } else entries.push(...mine);
+      const kit = nested.filter(c => c.modulePath === carrier);
+      helperVsKit.push({carrier, same: JSON.stringify(mine.map(plain)) === JSON.stringify(kit.map(plain)),
+                        n: kit.length});
+      entries.push(...kit);
     }
     const before = Object.fromEntries(keys.map(({key}) => [key, occupantsOf(root, key).length]));
     const loadSkin = async ref => comps[ref] && skins[ref] ? {comp: comps[ref], text: skins[ref]} : null;
