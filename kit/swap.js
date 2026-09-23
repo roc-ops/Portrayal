@@ -851,6 +851,22 @@ export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overri
           cages: all};
 }
 
+// A FACE THAT IS NOT ON SCREEN, GIVEN THE SWAPS. The explorer's merged tree
+// (3D) lists every face, and all but the mounted one are parsed straight from
+// the build, which knows only the configuration. The mounted face is seated
+// by the shell's `reseat()`; these were not, so the tree listed a bay the
+// reader had filled as "open" on every face but the one the 2D view last
+// showed. This is the whole pass one detached face needs, applied as the 3D
+// scene applies it: `applyFaceOverrides` for its bays and cages, then
+// `applyRearOverrides` for the rear holes that show a swapped front bay's
+// back - a face may hold those and no bay at all. Resolves to the face pass's
+// result with `rear`, the holes re-seated, and `applied` counting both.
+export async function seatFace(rootEl, {bays = [], cages = []}, overrides, loadSkin, compByRef) {
+  const face = await applyFaceOverrides(rootEl, {bays, cages}, overrides, loadSkin, compByRef);
+  const rear = await applyRearOverrides(rootEl, overrides, loadSkin, compByRef);
+  return {...face, applied: face.applied + rear, rear};
+}
+
 // THE SWAP STATE AS A URL PARAMETER, so a swap survives a reload. A runtime
 // swap changes no file on disk - it lives in the explorer's memory - and a
 // page that forgets it on reload shows the reader the build again with nothing

@@ -19,7 +19,7 @@ import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
-         freshBaysUnder } from './swap.js';
+         freshBaysUnder, seatFace, swapOverrides } from './swap.js';
 import { jdist } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 
@@ -1112,6 +1112,7 @@ export function createShell(opts = {}) {
 
   async function swapBay(bayId, ref) {
     if (!(await seat(bayId, ref))) return;
+    seatDetached({[bayId]: state.cfgBays[bayId]}).then(refreshMerged, warnFaces);
     refreshTree();
     select(bayId, true);
     emit('change');
@@ -1122,6 +1123,7 @@ export function createShell(opts = {}) {
   async function swapCage(cageId, ref) {
     if (!cagesOnFace().some(c => c.id === cageId)) return;
     if (!(await seat(cageId, ref))) return;
+    seatDetached({[cageId]: state.cfgOccupants[cageId]}).then(refreshMerged, warnFaces);
     refreshTree();
     select(cageId, true);
     emit('change');
@@ -1209,6 +1211,13 @@ export function createShell(opts = {}) {
       state.touched.add(key);
     }
     await reseat();
+    // the faces held but not mounted take the same entries - as the state
+    // now answers them, so a cage seat() refused is empty there too
+    const seated = {};
+    for (const key of Object.keys(accepted))
+      if (own(state.cfgOccupants, key)) seated[key] = state.cfgOccupants[key];
+      else if (own(state.cfgBays, key)) seated[key] = state.cfgBays[key];
+    seatDetached(seated).then(refreshMerged, warnFaces);
     refreshTree();
     emit('change');
     return {ignored};
@@ -1224,23 +1233,75 @@ export function createShell(opts = {}) {
   // up through that or a 12-drive front reads the 24-drive bay list. `views`
   // at the top level is faces only, which is what loadFaces walks - a variant
   // has no file of its own to fetch.
-  function bayView() {
+  function bayView(view = state.view) {
     const c = (state.meta?.configs || []).find(c => c.name === state.cfg);
-    return c?.views?.[state.view] || state.view;
+    return c?.views?.[view] || view;
   }
 
-  async function loadFaces() {
-    if (state.module) return;
-    const key = `${state.device}.${state.cfg}`;
-    if (state.facesFor !== key) { state.faces = {}; state.facesFor = key; }
-    for (const view of state.meta?.views || []) {
-      if (state.faces[view]) continue;
-      const file = `${DIST}/${state.device}.${state.cfg}.${view}.svg`;
-      const r = await fetch(file);
-      if (!r.ok) continue;
-      const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
-      state.faces[view] = document.importNode(doc.documentElement, true);
-    }
+  // THE FACES HELD BUT NOT MOUNTED ARE SEATED TOO. loadFaces parses them from
+  // the build, which knows only the configuration, and `reseat()` seats only
+  // the face on screen - so the merged tree listed a cassette the reader had
+  // swapped in on the rear (mounted) and its bay as "open" on the front. Each
+  // detached face goes through swap.js's `seatFace`, the pass the 3D scene
+  // makes on its own copy of the text: when it is loaded, with the state's
+  // whole delta against the build (the map index.html hands 3D), and on every
+  // later swap, with that one entry.
+  //
+  // IN PLACE, NOT RE-FETCHED: a held face also carries what the reader did to
+  // it - parts pulled, fields painted - and a fresh parse would drop it.
+  //
+  // ONE QUEUE, IN ORDER. A face still loading when a swap lands is seated
+  // with the delta as it stood when its pass began; the swap's own pass is
+  // queued behind it and reaches the face once it is held. Two swaps of one
+  // bay reach every face in the order they were made. A pass that finds the
+  // device or configuration moved on stops: those faces are no longer held.
+  const faceParts = view => ({bays: state.meta?.bays?.[bayView(view)] || [],
+                              cages: state.meta?.cages?.[bayView(view)] || []});
+  const swapDelta = () => swapOverrides({
+    cfg: (state.meta?.configs || []).find(c => c.name === state.cfg),
+    bays: Object.values(state.meta?.bays || {}).flat(),
+    cages: Object.values(state.meta?.cages || {}).flat(),
+    cfgBays: state.cfgBays, cfgOccupants: state.cfgOccupants, compByRef,
+  });
+  let faceWork = Promise.resolve();
+  function onFaces(job) {
+    const run = faceWork.then(job);
+    faceWork = run.catch(() => {});
+    return run;
+  }
+  const warnFaces = err => console.warn('[portrayal] seating the faces not on screen', err);
+  const refreshMerged = () => { if (state.merge && !state.module) refreshTree(); };
+
+  function seatDetached(map) {
+    return onFaces(async () => {
+      if (!Object.keys(map).length) return;
+      const key = state.facesFor;
+      for (const [view, face] of Object.entries(state.faces || {})) {
+        if (face === state.svg) continue;          // reseat()/seat() own that one
+        await seatFace(face, faceParts(view), map, loadSkin, compByRef);
+        if (state.facesFor !== key) return;
+      }
+    });
+  }
+
+  function loadFaces() {
+    return onFaces(async () => {
+      if (state.module) return;
+      const key = `${state.device}.${state.cfg}`;
+      if (state.facesFor !== key) { state.faces = {}; state.facesFor = key; }
+      for (const view of state.meta?.views || []) {
+        if (state.faces[view]) continue;
+        const file = `${DIST}/${state.device}.${state.cfg}.${view}.svg`;
+        const r = await fetch(file);
+        if (!r.ok) continue;
+        const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
+        const face = document.importNode(doc.documentElement, true);
+        if (state.facesFor !== key) return;
+        await seatFace(face, faceParts(view), swapDelta(), loadSkin, compByRef);
+        if (state.facesFor !== key) return;
+        state.faces[view] ||= face;
+      }
+    });
   }
   function refreshTree() {
     // `merge` is the host saying "every face is visible": one section per
