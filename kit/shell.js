@@ -72,7 +72,6 @@ export const SHELL_CSS = `
   .node:hover { background:var(--control); }
   .node.sel { background:var(--hl); color:var(--sel-ink); }
   .node.linked { outline:1px dashed var(--hl); outline-offset:-1px; }
-  [data-portrayal-linked] { outline:1.2px dashed var(--hl); }
   .node.grp { color:var(--dim); text-transform:uppercase; font-size:0.68rem;
               letter-spacing:0.05em; margin-top:0.25rem; }
   .node.grp .cls { text-transform:none; letter-spacing:0; }
@@ -129,6 +128,13 @@ export const SHELL_CSS = `
   .halo { fill:none; stroke:var(--hl); stroke-width:1.4; vector-effect:non-scaling-stroke;
           pointer-events:none; }
   .halo.pulse { animation: p 1.1s ease-out 2; }
+  /* THE FAR END OF A FIBRE is a dashed ring, not an outline on the part: an
+     outline is drawn in the drawing's units (mm), and on a 0.075 mm fibre dot
+     it was a solid block over half the ferrule that said nothing about which
+     fibre. Its stroke, dashes and padding are set per zoom in screen px by
+     sizeFarRing: non-scaling-stroke does not see the stage's CSS zoom, so at
+     20x a 1.4 "px" stroke was 28 px and filled the ring solid. */
+  .halo.linked { vector-effect:none; }
   @keyframes p { 0%,100%{ stroke-opacity:1 } 50%{ stroke-opacity:0.25 } }
 `;
 
@@ -230,11 +236,15 @@ export function createShell(opts = {}) {
   // ---------------------------------------------------------------- stage
 
   let zoom = 1, panX = 0, panY = 0;
+  // one dashed ring per far end of a selected fibre (select); here because
+  // applyTransform re-pads them on every zoom
+  let farHalos = [];
   // set while the pointer is panning, so the click that ends a drag does not
   // also change the selection
   let dragged = false;
   function applyTransform() {
     if (state.svg) state.svg.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
+    padFarRings();
   }
   function fit() {
     const svg = state.svg; if (!svg) return;
@@ -863,6 +873,77 @@ export function createShell(opts = {}) {
     if (off.length) setPulled(off, true);
   }
 
+  // A BOX AROUND A PART, in the mounted drawing's root coordinates. getBBox is
+  // in the element's OWN coordinate system and the ring is appended to the
+  // root, so the box has to be carried through every transform between them
+  // or it lands wherever that offset happens to point - which for a
+  // bay-mounted port is several slots away. `pad` is in root units.
+  function ringAround(target, cls, pad) {
+    const b = target.getBBox();
+    const m = state.svg.getScreenCTM().inverse().multiply(target.getScreenCTM());
+    const pt = (x, y) => ({x: m.a*x + m.c*y + m.e, y: m.b*x + m.d*y + m.f});
+    const cs = [pt(b.x, b.y), pt(b.x + b.width, b.y),
+                pt(b.x, b.y + b.height), pt(b.x + b.width, b.y + b.height)];
+    const xs = cs.map(c => c.x), ys = cs.map(c => c.y);
+    const r = document.createElementNS(NS, 'rect');
+    r.setAttribute('class', cls);
+    r._box = [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)];
+    padRing(r, pad);
+    state.svg.appendChild(r);
+    return r;
+  }
+  function padRing(r, pad) {
+    const [x0, y0, x1, y1] = r._box;
+    r.setAttribute('x', x0 - pad); r.setAttribute('y', y0 - pad);
+    r.setAttribute('width', x1 - x0 + 2 * pad);
+    r.setAttribute('height', y1 - y0 + 2 * pad);
+  }
+  // A FAR RING KEEPS ITS SCREEN SIZE AT ANY ZOOM: 4 px clear of the part, a
+  // 1.4 px stroke, 3/2 px dashes. Set once in drawing units, the ring grew
+  // with every wheel step until it boxed half the ferrule. `s` is screen px
+  // per drawing unit, the stage's CSS zoom included (getScreenCTM has it).
+  function screenScale() {
+    const ctm = state.svg?.getScreenCTM();
+    return ctm ? (Math.hypot(ctm.a, ctm.b) || 1) : null;
+  }
+  function sizeFarRing(r, s) {
+    padRing(r, 4 / s);
+    r.style.strokeWidth = String(1.4 / s);
+    r.style.strokeDasharray = `${3 / s} ${2 / s}`;
+  }
+  function padFarRings() {
+    if (!farHalos.length) return;
+    const s = screenScale();
+    if (s) for (const r of farHalos) sizeFarRing(r, s);
+  }
+  function clearHalos() {
+    if (halo) { halo.remove(); halo = null; }
+    for (const r of farHalos) r.remove();
+    farHalos = [];
+  }
+  // open every fold a row sits in, so the row can be seen
+  function openRow(row) {
+    for (let p = row.parentElement; p && p !== el.tree; p = p.parentElement)
+      if (p.classList?.contains('kids') && p.classList.contains('hid')) {
+        p.classList.remove('hid');
+        const tw = p.previousElementSibling?.querySelector('.tw');
+        if (tw?.textContent) tw.textContent = '▾';
+      }
+  }
+  // THE SELECTED ROW AND ITS FIBRE'S FAR ROWS, marked on whatever tree is
+  // drawn now. Every rebuild draws fresh rows that know nothing of either,
+  // which is how a 2D to 3D switch used to lose both highlights.
+  function markRows({open = false} = {}) {
+    const far = state.far || [];
+    for (const r of el.tree.querySelectorAll('.node')) {
+      const sel = state.sel != null && r.dataset.path === state.sel;
+      const lit = far.includes(r.dataset.path);
+      r.classList.toggle('sel', sel);
+      r.classList.toggle('linked', lit);
+      if (open && (sel || lit)) openRow(r);
+    }
+  }
+
   function select(path, fromTree) {
     state.sel = path;
     reveal(path);
@@ -895,9 +976,11 @@ export function createShell(opts = {}) {
       for (const e of d.querySelectorAll('[data-portrayal-linked]')) e.removeAttribute('data-portrayal-linked');
       if (qf) for (const e of d.querySelectorAll(qf)) e.setAttribute('data-portrayal-linked', '');
     }
-    for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('linked', far.includes(r.dataset.path));
     state.far = far;
-    if (halo) { halo.remove(); halo = null; }
+    // lit and unfolded, but not scrolled to: the selected row keeps the scroll
+    for (const r of el.tree.querySelectorAll('.node'))
+      if (r.classList.toggle('linked', far.includes(r.dataset.path))) openRow(r);
+    clearHalos();
     // getScreenCTM is null while the SVG is hidden, which is exactly what a page
     // showing a 3D stage instead has done to it. Selection still stands; only
     // the halo waits until the drawing is on screen again.
@@ -908,30 +991,24 @@ export function createShell(opts = {}) {
     // there is nothing to point at.
     const noExtent = target?.dataset.extent === 'none';
     // the halo is drawn in the mounted SVG, so only for a target that is in it
-    if (target && !noExtent && state.svg.contains(target) && state.svg.getScreenCTM()) {
-      // getBBox is in the element's OWN coordinate system. The halo is appended to
-      // the root, so the box has to be carried through every transform between them
-      // or it lands wherever that offset happens to point - which for a bay-mounted
-      // port is several slots away.
-      const b = target.getBBox();
-      const m = state.svg.getScreenCTM().inverse().multiply(target.getScreenCTM());
-      const pt = (x, y) => ({x: m.a*x + m.c*y + m.e, y: m.b*x + m.d*y + m.f});
-      const cs = [pt(b.x, b.y), pt(b.x + b.width, b.y),
-                  pt(b.x, b.y + b.height), pt(b.x + b.width, b.y + b.height)];
-      const xs = cs.map(c => c.x), ys = cs.map(c => c.y);
-      const x0 = Math.min(...xs), y0 = Math.min(...ys);
-      halo = document.createElementNS(NS, 'rect');
-      halo.setAttribute('class', 'halo pulse');
-      halo.setAttribute('x', x0 - 0.6); halo.setAttribute('y', y0 - 0.6);
-      halo.setAttribute('width', Math.max(...xs) - x0 + 1.2);
-      halo.setAttribute('height', Math.max(...ys) - y0 + 1.2);
-      state.svg.appendChild(halo);
+    const ctm = state.svg?.getScreenCTM();
+    if (target && !noExtent && state.svg.contains(target) && ctm)
+      halo = ringAround(target, 'halo pulse', 0.6);
+    // THE FAR END, where the mounted drawing has it: the part itself, else a
+    // projection of it. Padded by 4 screen px (sizeFarRing), so a fibre dot a
+    // fraction of a millimetre across still gets a ring the eye can find.
+    if (ctm) {
+      for (const p of far) {
+        const t = state.svg.querySelector(`[data-path="${CSS.escape(p)}"]`)
+               || state.svg.querySelector(`[data-of="${CSS.escape(p)}"]`);
+        if (t && t.dataset.extent !== 'none') farHalos.push(ringAround(t, 'halo linked', 0));
+      }
+      padFarRings();
     }
     if (!fromTree) {
       const row = [...el.tree.querySelectorAll('.node')].find(r => r.dataset.path === path);
       if (row) {
-        for (let p = row.parentElement; p; p = p.parentElement)
-          if (p.classList?.contains('kids')) p.classList.remove('hid');
+        openRow(row);
         row.scrollIntoView({block: 'center'});
       }
     }
@@ -1412,11 +1489,7 @@ export function createShell(opts = {}) {
       const tw = r.querySelector('.tw');
       if (tw?.textContent) tw.textContent = shut.get(k) ? '▸' : '▾';
     }
-    if (state.sel != null)
-      for (const r of el.tree.querySelectorAll('.node')) {
-        r.classList.toggle('sel', r.dataset.path === state.sel);
-        r.classList.toggle('linked', !!state.far?.includes(r.dataset.path));
-      }
+    markRows();
     el.tree.scrollTop = top;
   }
   function refreshTree() {
@@ -1433,6 +1506,9 @@ export function createShell(opts = {}) {
     } else {
       renderTree(buildTree(state.svg));
     }
+    // a fresh tree (a 2D/3D switch) opens onto the selection and its far
+    // rows; redrawTree then puts the reader's own folds back over this
+    markRows({open: true});
     refreshPulled();
   }
 
@@ -1452,6 +1528,8 @@ export function createShell(opts = {}) {
     el.svgHost.appendChild(svg);
     state.svg = svg;
     state.sel = null;
+    state.far = [];
+    farHalos = [];        // they were drawn in the drawing just replaced
     // THE OTHER FACES ARE STILL THE SAME DEVICE. In 2D one view is on screen
     // and the tree lists it; in 3D every face is on screen at once, so a
     // tree pinned to `state.view` lists a sixth of what the reader is looking
