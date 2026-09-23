@@ -23,13 +23,13 @@ a test fails when this page and the linter disagree. A finding prints as
 | L14 | device | a silkscreen `for:` target exists and is nearby | name the placement or bay the mark annotates, and anchor the mark at it |
 | L15 | device | a device at `modelled` or above has a provenance block good enough for the level | add provenance for every figure, or lower `maturity` |
 | L16 | device | keys inside a view read in manufacturing order | reorder: empty, size, panel, silkscreen, components, regions |
-| L17 | device | a placement's group is declared under `groups:` | declare the group with term, role and index-origin |
+| L17 | component, device | a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one | declare the group with term, role and index-origin; join the loose port to a group |
 | L18 | device | a port inherits media from its group rather than restating it | drop the per-port media, or fix the group's `attrs.media` |
 | L19 | device | an indicator declares `for:` the thing it indicates | add `for:` to the lamp placement |
 | L20 | component, device | state names are tokens and each `behavior` is well-formed, on a contract's states, an element's, or a placement's | a state name is a token like `link`; prose goes in `description`; `behavior` is solid, blinking, alternating or sequence, with `behavior.color` for the second colour |
 | L21 | device | chassis silkscreen does not sit under a bay where the module covers it | move the mark, or put it in the module's own skin if the module carries it |
-| L22 | device | a group's declared media/speed matches the ports it holds | fix the group's `attrs`, or move the odd port to its own group |
-| L23 | device | a port group is one family, or says in `mixed:` why it is not | split the group by family, or add `mixed:` naming the job they share |
+| L22 | component, device | a group's declared media/speed matches the ports it holds | fix the group's `attrs`, or move the odd port to its own group |
+| L23 | component, device | a port group is one family, or says in `mixed:` why it is not | split the group by family, or add `mixed:` naming the job they share |
 | L24 | device | `attrs.other` is counted so the long tail cannot go quiet | file each key under its section where one fits; otherwise leave it and accept the count |
 | L25 | device | one attr key is claimed by one section | rename one of the two; keys flatten to data-<key> |
 | L26 | component | every `class: cutout` element is backed by a conforming contract or a part that resolves to one | add `conforms`, or compose the std/ part that owns the aperture |
@@ -43,7 +43,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L34 | device | front and rear occupants of one slot fit around the midplane | check the two depths against chassis depth; one of them is wrong |
 | L35 | component | a relief magnitude says where it came from | add `confidence` and `source` to each `relief.features` entry |
 | L36 | component | a `borrowed` relief magnitude names an origin that actually measured it | name a part whose own figure is `measured` or `photo-measured`, or use `estimated` |
-| L37 | device | a group says what it is for and has members | add `role`; delete a group nothing joins |
+| L37 | component, device | a group says what it is for and has members | add `role`; delete a group nothing joins |
 | L38 | component | printed text in a skin sits in `<g id="silkscreen">` unless the part is applied over the panel | wrap the text nodes in the silkscreen group |
 | L39 | device | the panel's holes agree with what goes in them: no overlap, standard sizes, no legend on a hole, every port has one where cutouts are declared | fix the cutout size/position, or the placement; one wrong `ref` shows as many overlaps |
 | L40 | device | a pluggable cage says which optics run in it, and optics prose names a group that exists | add the group's optics attrs, or fix the group name in the prose |

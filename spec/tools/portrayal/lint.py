@@ -15,8 +15,10 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       change the interface of the receptacle it composes
   L12 device: mate-to resolves, host is a receptacle, and the interfaces match
   L20 states: a state name is a token - prose belongs in `description`
-  L22 device: a group's declared media/speed matches the ports it holds
-  L23 device: a port group is one family, or says in `mixed:` why it is not
+  L22 device, component: a group's declared media/speed matches the ports it
+      holds (a component's groups warn, #511)
+  L23 device, component: a port group is one family, or says in `mixed:` why
+      it is not
   L24 device: `attrs.other` is counted, so the long tail cannot go quiet
   L25 device: one attr key is claimed by one section - it flattens to data-<key>
   L26 component: every `class: cutout` element is backed - the contract conforms,
@@ -38,7 +40,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
   L35 component: a relief magnitude says where it came from, or is counted as
       unstated - an estimate and a measurement are indistinguishable otherwise
   L36 component: a `borrowed` magnitude names an origin that actually measured it
-  L37 device: a group says what it is FOR, and a declared group has members
+  L37 device, component: a group says what it is FOR, and a declared group has
+      members
   L38 component: printed text in a skin sits in a silkscreen group, unless the
       part is applied over the panel rather than printed into it
   L40 device: a pluggable cage says which optics run in it, and optics prose
@@ -158,13 +161,13 @@ RULES = {
     "L14": ("device",     "a silkscreen `for:` target exists and is nearby", "name the placement or bay the mark annotates, and anchor the mark at it"),
     "L15": ("device",     "a device at `modelled` or above has a provenance block good enough for the level", "add provenance for every figure, or lower `maturity`"),
     "L16": ("device",     "keys inside a view read in manufacturing order", "reorder: empty, size, panel, silkscreen, components, regions"),
-    "L17": ("device",     "a placement's group is declared under `groups:`", "declare the group with term, role and index-origin"),
+    "L17": ("component, device", "a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one", "declare the group with term, role and index-origin; join the loose port to a group"),
     "L18": ("device",     "a port inherits media from its group rather than restating it", "drop the per-port media, or fix the group's `attrs.media`"),
     "L19": ("device",     "an indicator declares `for:` the thing it indicates", "add `for:` to the lamp placement"),
     "L20": ("component, device", "state names are tokens and each `behavior` is well-formed, on a contract's states, an element's, or a placement's", "a state name is a token like `link`; prose goes in `description`; `behavior` is solid, blinking, alternating or sequence, with `behavior.color` for the second colour"),
     "L21": ("device",     "chassis silkscreen does not sit under a bay where the module covers it", "move the mark, or put it in the module's own skin if the module carries it"),
-    "L22": ("device",     "a group's declared media/speed matches the ports it holds", "fix the group's `attrs`, or move the odd port to its own group"),
-    "L23": ("device",     "a port group is one family, or says in `mixed:` why it is not", "split the group by family, or add `mixed:` naming the job they share"),
+    "L22": ("component, device", "a group's declared media/speed matches the ports it holds", "fix the group's `attrs`, or move the odd port to its own group"),
+    "L23": ("component, device", "a port group is one family, or says in `mixed:` why it is not", "split the group by family, or add `mixed:` naming the job they share"),
     "L24": ("device",     "`attrs.other` is counted so the long tail cannot go quiet", "file each key under its section where one fits; otherwise leave it and accept the count"),
     "L25": ("device",     "one attr key is claimed by one section", "rename one of the two; keys flatten to data-<key>"),
     "L26": ("component",  "every `class: cutout` element is backed by a conforming contract or a part that resolves to one", "add `conforms`, or compose the std/ part that owns the aperture"),
@@ -178,7 +181,7 @@ RULES = {
     "L34": ("device",     "front and rear occupants of one slot fit around the midplane", "check the two depths against chassis depth; one of them is wrong"),
     "L35": ("component",  "a relief magnitude says where it came from", "add `confidence` and `source` to each `relief.features` entry"),
     "L36": ("component",  "a `borrowed` relief magnitude names an origin that actually measured it", "name a part whose own figure is `measured` or `photo-measured`, or use `estimated`"),
-    "L37": ("device",     "a group says what it is for and has members", "add `role`; delete a group nothing joins"),
+    "L37": ("component, device", "a group says what it is for and has members", "add `role`; delete a group nothing joins"),
     "L38": ("component",  "printed text in a skin sits in `<g id=\"silkscreen\">` unless the part is applied over the panel", "wrap the text nodes in the silkscreen group"),
     "L39": ("device",     "the panel's holes agree with what goes in them: no overlap, standard sizes, no legend on a hole, every port has one where cutouts are declared", "fix the cutout size/position, or the placement; one wrong `ref` shows as many overlaps"),
     "L40": ("device",     "a pluggable cage says which optics run in it, and optics prose names a group that exists", "add the group's optics attrs, or fix the group name in the prose"),
@@ -5778,14 +5781,24 @@ def lint_device_groups(path, data, lib_roots):
                 continue
             if contract_class(p["ref"], lib_roots) != "port":
                 continue
-            own = (p.get("attrs") or {}).get("media")
-            members.setdefault(g, []).append({
-                "where": f"{vname}/{p['id']}",
-                "declared-media": own,
-                "media": own or (contract_attrs(p["ref"], lib_roots) or {}).get("media"),
-                "declared-speed": (p.get("attrs") or {}).get("speed"),
-            })
+            members.setdefault(g, []).append(
+                _group_member(f"{vname}/{p['id']}", p, lib_roots))
+    _judge_group_members(path, groups, members, err, warn)
 
+
+def _group_member(where, p, lib_roots):
+    """One port member of a group, as _judge_group_members reads it."""
+    own = (p.get("attrs") or {}).get("media")
+    return {"where": where, "declared-media": own,
+            "media": own or (contract_attrs(p["ref"], lib_roots) or {}).get("media"),
+            "declared-speed": (p.get("attrs") or {}).get("speed")}
+
+
+def _judge_group_members(path, groups, members, e, w):
+    """L22 and L23 over one manifest's groups and the port members gathered
+    for them - a device's placements, or a component's parts (#511). `e` and
+    `w` are the severities: a device reports L22 as an error, a component
+    reports both as warnings while the library's cards are migrated."""
     for gname, gdef in groups.items():
         mem = members.get(gname) or []
         if not mem:
@@ -5795,18 +5808,18 @@ def lint_device_groups(path, data, lib_roots):
         # L22 - the promise against the members.
         for m in mem:
             if gm and m["media"] and media_family(m["media"]) != media_family(gm):
-                err(path, "L22", f"{m['where']}: group {gname!r} declares media {gm!r}, "
-                                 f"but this port is {m['media']!r}. A group's attrs are "
-                                 f"merged into every member, so the drawing would call it "
-                                 f"{gm!r}")
+                e(path, "L22", f"{m['where']}: group {gname!r} declares media {gm!r}, "
+                               f"but this port is {m['media']!r}. A group's attrs are "
+                               f"merged into every member, so the drawing would call it "
+                               f"{gm!r}")
             elif gm and m["declared-media"] and m["declared-media"] != gm \
                     and m["declared-media"] not in AMBIGUOUS_MEDIA:
-                err(path, "L22", f"{m['where']}: group {gname!r} declares media {gm!r}, "
-                                 f"but this port declares {m['declared-media']!r}. Same "
-                                 f"cage, different media - one of the two is wrong")
+                e(path, "L22", f"{m['where']}: group {gname!r} declares media {gm!r}, "
+                               f"but this port declares {m['declared-media']!r}. Same "
+                               f"cage, different media - one of the two is wrong")
             if gs and m["declared-speed"] and m["declared-speed"] != gs:
-                err(path, "L22", f"{m['where']}: group {gname!r} declares speed {gs!r}, "
-                                 f"but this port declares {m['declared-speed']!r}")
+                e(path, "L22", f"{m['where']}: group {gname!r} declares speed {gs!r}, "
+                               f"but this port declares {m['declared-speed']!r}")
         # L23 - the composition against the declaration. Effective values, because
         # a member that says nothing is answered by its group.
         medias = {m["declared-media"] or gm or m["media"] for m in mem} - {None}
@@ -5817,14 +5830,65 @@ def lint_device_groups(path, data, lib_roots):
             found = ", ".join(sorted(medias)) or "one media"
             if len(speeds) > 1:
                 found += " at " + ", ".join(sorted(speeds))
-            warn(path, "L23", f"groups/{gname}: {len(mem)} ports spanning more than one "
-                              f"family ({found}), so the block can declare nothing in "
-                              f"attrs and every port must repeat itself. Split it by "
-                              f"family, or say in `mixed:` what job they do together")
+            w(path, "L23", f"groups/{gname}: {len(mem)} ports spanning more than one "
+                           f"family ({found}), so the block can declare nothing in "
+                           f"attrs and every port must repeat itself. Split it by "
+                           f"family, or say in `mixed:` what job they do together")
         elif reason and not spans:
-            warn(path, "L23", f"groups/{gname}: declares mixed {reason!r}, but all "
-                              f"{len(mem)} ports are {', '.join(sorted(medias)) or 'one family'}. "
-                              f"`mixed:` states a fact about the hardware - drop it")
+            w(path, "L23", f"groups/{gname}: declares mixed {reason!r}, but all "
+                           f"{len(mem)} ports are {', '.join(sorted(medias)) or 'one family'}. "
+                           f"`mixed:` states a fact about the hardware - drop it")
+
+
+def lint_component_groups(path, data, lib_roots):
+    """L17, L22, L23 and L37 on a COMPONENT's own `groups:` (#511).
+
+    A card's ports join groups the card declares, and the renderer writes them
+    exactly as it writes a device group onto a device placement - so the same
+    four promises hold, read the same way:
+
+      L17  a part's `group:` names a group this component declares; and, once a
+           component declares any group, every PORT part joins one - a card
+           half migrated would draw some of its ports with a role and the rest
+           without, which reads as two kinds of port where there is one;
+      L22  a group's declared media/speed agrees with the port parts it holds;
+      L23  a port group is one family, or says in `mixed:` why it is not;
+      L37  a group says what it is FOR, and a declared group has members.
+
+    ALL WARNINGS, where L17 and L22 are errors on a device: 215 components
+    carry port parts and almost none declare groups yet, so this is the debt
+    stated and counted while they are migrated, not a gate. A component that
+    declares no groups is silent - it has not been migrated, and that is
+    not news.
+    """
+    groups = data.get("groups") or {}
+    members, joined = {}, set()
+    for part in data.get("parts") or []:
+        if not isinstance(part, dict) or not part.get("ref"):
+            continue
+        g = part.get("group")
+        is_port = contract_class(part["ref"], lib_roots) == "port"
+        where = f"parts/{part.get('id')}"
+        if g:
+            joined.add(g)
+            if g not in groups:
+                warn(path, "L17", f"{where}: group {g!r} is not declared under the "
+                                  "component's own groups:")
+                continue
+            if is_port:
+                members.setdefault(g, []).append(_group_member(where, part, lib_roots))
+        elif groups and is_port:
+            warn(path, "L17", f"{where}: a port part in no group, on a component that "
+                              f"declares groups ({', '.join(sorted(groups))}). Join it "
+                              "to one, so every port on the card says what it is for")
+    _judge_group_members(path, groups, members, warn, warn)
+    for gid, gdef in groups.items():
+        if not (gdef or {}).get("role"):
+            warn(path, "L37", f"group {gid} does not say what it is for. Add "
+                              "role: traffic|management|service|indicator|furniture")
+        if gid not in joined:
+            warn(path, "L37", f"group {gid} is declared and no part joins it. "
+                              "Either place a part in it or drop it")
 
 
 def lint_device_attrs(path, data):
@@ -8237,6 +8301,7 @@ def main():
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
                 lint_component_rj45_lamps(f, d, args.library)
+                lint_component_groups(f, d, args.library)
                 lint_quoted_prose(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):
