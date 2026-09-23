@@ -14,7 +14,7 @@ import re
 
 import pytest
 
-from portrayal import lint
+from portrayal import libwalk, lint
 from portrayal.manifest import load_yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -112,12 +112,12 @@ def test_the_library_is_at_zero_and_the_sweep_measured_something(errors):
     """Every device and component, through the rule itself. The count is the
     guard against a walk that finds nothing and passes."""
     seen = 0
-    for f in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for f in libwalk.iter_devices([LIB]):
         d = load_yaml(f) or {}
         seen += sum(1 for g in (d.get("groups") or {}).values()
                     if ((g or {}).get("attrs") or {}).get("speed"))
         lint.lint_device_speed_vocabulary(f, d)
-    for f in sorted(LIB.glob("components/**/contract.yaml")):
+    for f in libwalk.iter_components([LIB]):
         d = load_yaml(f) or {}
         seen += sum(1 for p in (d.get("parts") or []) if (p.get("attrs") or {}).get("speed"))
         lint.lint_component_speed_vocabulary(f, d)

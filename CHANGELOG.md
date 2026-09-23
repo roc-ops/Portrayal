@@ -28,6 +28,24 @@ the *published build*, not about the hardware.
   (roc-ops/Portrayal#286, roc-ops/Portrayal#285).
 
 ### Changed
+- `data-speed` is spelled from one closed set - `10m 100m 1g 2.5g 5g 10g 20g
+  25g 40g 50g 100g 200g 400g 800g 1.6t`, in `spec/schemas/speeds.yaml` - and
+  means the highest native rate the port runs at. **Values a consumer may filter
+  on changed:** `100m-1g`, `1000base-t`, `100/1000base-t` and `10/100/1000` are
+  all `1g`; `400g-capable` is `400g`; the MX304's GM/PTP port is `10g`, with its
+  reserved-for-future-use caveat moved to the placement's description. USB
+  generation left `speed` for its own `data-usb` (`2.0`, `3.0`; was `usb2`,
+  `usb-2.0`, `usb3`, `usb-3.0`), and the HLX-TGV's PON port is `speed: 10g` with
+  `data-pon="xgs-pon"` (was `10g-pon`). The MX304 LMIC16's twelve 100G-only
+  ports now state `100g`. Lint L110 holds the set. 63 devices took a patch bump,
+  and `juniper/mx304-lmic16`, `juniper/jnp304-re` and `smartoptics/dcp-f-a22` a
+  patch each (roc-ops/Portrayal#512).
+- Device types export the CSR180's and CSR200's four RJ45 traffic ports each as
+  `1000base-t`; their `100/1000base-t` spelling had no interface-type row, so
+  all eight exported nothing. For the same reason the management SFP on the
+  DCP-2, DCP-R-34D-CS and DCP-R-9D-CS (`100m-1g`) now exports as a
+  management-only `1000base-x-sfp`, and the MX304's GM/PTP SFP as a
+  management-only `10gbase-x-sfpp` (roc-ops/Portrayal#512).
 - A pluggable cage's `rotate`, and so `cages[].rotate`, has one meaning: 0 is a
   module seated upright, bail at the top and belly at the bottom. Every
   belly-to-belly SFP/QSFP/QSFP-DD stack is drawn upper 0 over lower 180, or left
