@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo12-plug
-version: 1.0.3
+version: 1.1.0
 class: port
 mates: mpo
 interface: mpo-plug
@@ -147,8 +147,32 @@ provenance:
     and where the sleeve sits is not dimensioned. So the mid-plane is about
     where two ferrules meet and not about the adapter body, and the figure is
     an estimate and no more.
+  fibre-positions: >-
+    ELEMENTS `1` TO `12` ARE ADDRESSES, NOT A PICTURE (the fibres stay undrawn,
+    see the skin): L112 asks every connector to draw a node for each of its
+    optical.positions, so fibre n of a seated plug is at `<part>/n`. They sit on
+    one row through the drawn ferrule window's centre (6.25, 3.8), at the 0.25
+    MT pitch the flanged bulkhead adapters draw their fibres on - a placement,
+    not a measurement of this plug. NUMBERED AS THE PLUG NUMBERS THEM, its end
+    face seen key up: fibre 1 at the LEFT, x 4.875, running right to 12 at
+    7.625 (ANSI/TIA-568.3-D, as reproduced in SENKO, Fiber Optic Polarity Guide
+    for VSFF Connectivity, Rev. 01, October 2023, p. 8, Figure 5 - the source
+    common/mpo-flange-adapter@2's `fibre-numbering` cites). This front view is
+    that end face, key rib on top.
 elements:
   body: {at: [0.0, 0.0], size: [12.5, 7.6], class: port}
+  '1': {at: [4.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '2': {at: [5.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '3': {at: [5.3, 3.725], size: [0.15, 0.15], class: fibre}
+  '4': {at: [5.55, 3.725], size: [0.15, 0.15], class: fibre}
+  '5': {at: [5.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '6': {at: [6.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '7': {at: [6.3, 3.725], size: [0.15, 0.15], class: fibre}
+  '8': {at: [6.55, 3.725], size: [0.15, 0.15], class: fibre}
+  '9': {at: [6.8, 3.725], size: [0.15, 0.15], class: fibre}
+  '10': {at: [7.05, 3.725], size: [0.15, 0.15], class: fibre}
+  '11': {at: [7.3, 3.725], size: [0.15, 0.15], class: fibre}
+  '12': {at: [7.55, 3.725], size: [0.15, 0.15], class: fibre}
 connection-points:
   mate: {at: [6.25, 3.8], direction: front}
   boot: {at: [6.25, 3.8], direction: rear, 'on': body}

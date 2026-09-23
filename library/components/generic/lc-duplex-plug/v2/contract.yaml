@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-plug
-version: 2.0.0
+version: 2.1.0
 class: port
 mates: lc-duplex
 optical: {positions: 2}
@@ -75,6 +75,15 @@ provenance:
   optical: >-
     `positions: 2` - one fibre per half, the count
     spec/tests/test_connector_sweep.py requires of every fibre connector.
+  fibre-positions: >-
+    ELEMENTS `1` AND `2` ARE THE TWO FIBRE POSITIONS, as L112 asks, so fibre n
+    of a seated duplex plug is at `<part>/n` whatever its halves are called:
+    `1` is half `a`, composed first, and `2` half `b`, the order positions
+    follow on every duplex part. Each is the box of that half's own ferrule
+    ring - generic/lc-plug@2's element `1`, r 1.6 - turned with the half: the
+    axis at 2.825 of an 8.535 half stands at 5.71 once turned 180, so the rings
+    centre on (2.79, 5.71) and (9.04, 5.71), either side of the `mate` at
+    their midpoint. Drawn with zero ink; the halves draw the ferrules.
 parts:
   # SIDE BY SIDE AT THE 6.25 DUPLEX PITCH, each half TURNED 180 so its latch -
   # drawn down on generic/lc-plug@2 - stands UP, the canonical spanning axis
@@ -83,6 +92,8 @@ parts:
   - {id: b, ref: generic/lc-plug@2, at: [6.25, 0.0], rotate: 180}
 elements:
   clip: {at: [5.58, 2.885], size: [0.67, 5.65], class: latch}
+  '1': {at: [1.19, 4.11], size: [3.2, 3.2], class: fibre}
+  '2': {at: [7.44, 4.11], size: [3.2, 3.2], class: fibre}
 connection-points:
   mate: {at: [5.915, 5.71], direction: front}
 relief:

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sc-plug
-version: 1.0.1
+version: 1.1.0
 class: port
 mates: sc
 interface: sc-plug
@@ -139,9 +139,15 @@ provenance:
     envelope, which is what `conforms: sc-plug` is checked against; the latch
     window in the housing's side wall is on a different axis than this view and
     is not drawn.
+  fibre-position: >-
+    element `1` is the one fibre position, the group wrapping the drawn
+    ferrule end (`ferrule` and `ferrule-bore`, both kept by id), so fibre 1 of
+    the plug is drawn at `<part>/1` - generic/lc-plug@2's arrangement. Its box
+    is the ferrule, r 1.25 on the axis at 4.6, 4.5, inside the collar.
 elements:
   key: {at: [0.0, 3.6], size: [0.9, 1.8], class: latch}
   body: {at: [0.9, 0.0], size: [7.4, 9.0], class: port}
+  '1': {at: [3.35, 3.25], size: [2.5, 2.5], class: fibre}
 connection-points:
   mate: {at: [4.6, 4.5], direction: front}
   boot: {at: [4.6, 4.5], direction: rear, 'on': body}
