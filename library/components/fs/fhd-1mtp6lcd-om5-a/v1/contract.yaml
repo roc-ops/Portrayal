@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: fhd-1mtp6lcd-om5-a
+version: 1.0.0
+class: cassette
+behaviour: fills
+description: >-
+  FS FHD-1MTP6LCDOM5A - MTP-12 (male) to six LC duplex, 12 fibres, OM5, Type A.
+  FS SKU 174246. The same cassette as fs/fhd-1mtp6lcd-os2-a@2 (SKU 57016) in
+  OM5 fibre, with OM5-coloured adapters.
+size: {w: 108.97, h: 35.05, d: 117.86}
+size-confidence: {w: photo-measured, h: photo-measured, d: datasheet}
+size-notes: >-
+  THE FACEPLATE IS 57016's, the OS2 twin this is built on, and so are its
+  parts. FS's face-on render of 174246 (174246.g1.jpg) was put through
+  `spec/tools/intake/panel_measure.py` - scaled on the 108.97 mm module width
+  and validated against the 35.05 mm height - and its adapter centres read
+  within 0.2 mm of the same measurement taken on the twin's own render: the
+  same one row of six, on the same centres. See the twin's size-notes for how
+  the plate was measured. The 117.86 depth is FS's own product page for 174246,
+  which states 35 x 109 x 118 mm (1.38 x 4.29 x 4.64 in).
+attrs: {media: fiber, model: FHD-1MTP6LCDOM5A, vendor-sku: '174246'}
+body:
+  depth: 117.86
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
+  # overhangs the cassette on every side (FS's rear renders show its edge
+  # standing out round the body), and the back of the body is the rear face,
+  # 99 x 31, centred behind the 108.97 x 35.05 plate. Estimated with that face
+  # - see its own size-notes. It is what a pulled cassette's box is drawn as,
+  # and what its rear face is painted on.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+parts:
+  - {id: lc1, ref: common/lc-duplex-v-adapter@4, at: [15.81, 10.66],
+     attrs: {housing-finish: '#a1af65'}}
+  - {id: lc2, ref: common/lc-duplex-v-adapter@4, at: [28.70, 10.66],
+     attrs: {housing-finish: '#a1af65'}}
+  - {id: lc3, ref: common/lc-duplex-v-adapter@4, at: [41.59, 10.66],
+     attrs: {housing-finish: '#a1af65'}}
+  - {id: lc4, ref: common/lc-duplex-v-adapter@4, at: [54.66, 10.66],
+     attrs: {housing-finish: '#a1af65'}}
+  - {id: lc5, ref: common/lc-duplex-v-adapter@4, at: [67.55, 10.66],
+     attrs: {housing-finish: '#a1af65'}}
+  - {id: lc6, ref: common/lc-duplex-v-adapter@4, at: [80.44, 10.66],
+     attrs: {housing-finish: '#a1af65'}}
+faces:
+  rear: {ref: fs/fhd-1mtp6lcd-rear@3}
+optical:
+  media: om5
+  polarity: a
+  polish: upc
+  paths:
+    - {from: lc1.1, to: 'rear:mtp.1'}
+    - {from: lc1.2, to: 'rear:mtp.2'}
+    - {from: lc2.1, to: 'rear:mtp.3'}
+    - {from: lc2.2, to: 'rear:mtp.4'}
+    - {from: lc3.1, to: 'rear:mtp.5'}
+    - {from: lc3.2, to: 'rear:mtp.6'}
+    - {from: lc4.1, to: 'rear:mtp.7'}
+    - {from: lc4.2, to: 'rear:mtp.8'}
+    - {from: lc5.1, to: 'rear:mtp.9'}
+    - {from: lc5.2, to: 'rear:mtp.10'}
+    - {from: lc6.1, to: 'rear:mtp.11'}
+    - {from: lc6.2, to: 'rear:mtp.12'}
+provenance:
+  face-legends: >-
+    THE PORT NUMBERS ARE fs/fhd-1mtp6lcd-os2-a@2's, AND 174246.g1.jpg SHOWS
+    THEM: the same end-of-row numbers in the same places, and nothing between
+    them. They are drawn at the twin's coordinates - see its face-legends for
+    how they were measured.
+  size: >-
+    see size-notes - the plate and the parts are 57016's, re-read on 174246's
+    own render; the depth is this SKU's product page.
+  parts: >-
+    the twin's positions, unchanged, and corroborated rather than assumed:
+    `panel_measure.openings` on 174246.g1.jpg puts every adapter within 0.2 mm
+    of where the same call puts it on the twin's render. What differs is the
+    housing colour, passed to each adapter as `housing-finish`.
+  colour: >-
+    COUNTED, NOT TAKEN FROM THE OM5 CONVENTION. #a1af65 is the median of the
+    adapter-body pixels on 174246.g1.jpg, selected by the one rule
+    common/lc-duplex-v-adapter@4's provenance.colour records - tuned until it
+    reproduces that part's measured OS2 blue off 57016.main.jpg, then applied
+    unchanged here. That entry lists every medium's count side by side.
+  optical: >-
+    the twin's paths, unchanged: fibre type and adapter colour do not change
+    which LC port a fibre reaches. `media: om5` is FS's own naming of 174246
+    (FHD-1MTP6LCDOM5A) on its product page. See the twin's provenance.optical
+    for how the paths were derived.
+  twin: >-
+    built from fs/fhd-1mtp6lcd-os2-a@2 (SKU 57016) - the same cassette FS
+    builds in OM5. Everything but the model, SKU, fibre, adapter colour and
+    depth source is the twin's.
+
+skins: [default]
