@@ -14,7 +14,7 @@ LIB = ROOT / "library" / "components"
 
 FIBRE_CONNECTORS = [
     "common/lc-duplex-adapter/v4", "common/lc-duplex-v-adapter/v5",
-    "common/lc-duplex-shuttered-adapter/v1",
+    "common/lc-duplex-shuttered-adapter/v2",
     "common/mpo-adapter/v2", "common/mpo-flange-adapter/v1",
     "common/mpo24-flange-adapter/v1",
     "common/sc-duplex-adapter/v4",

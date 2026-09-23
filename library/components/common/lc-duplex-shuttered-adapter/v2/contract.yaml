@@ -1,0 +1,162 @@
+format: 1
+kind: component
+name: lc-duplex-shuttered-adapter
+version: 2.0.0
+class: port
+# THE ADAPTER IS ITSELF A SLOT, AND IT SHIPS EMPTY (B3,
+# docs/pluggables-caps-design.md, "The shuttered adapter"). A duplex connector
+# mates the pair of bores as one part, at their midpoint, and a simplex one
+# mates a bore; the two levels are mutually exclusive, as on every duplex
+# adapter. NOTHING HERE DECLARES A `default:` - not the adapter, not its bores -
+# because what FS ships in these ports is nothing: the spring shutter in each
+# bore is the dust protection, and it is part of this adapter's art, not an
+# occupant.
+interface: lc-duplex
+profile: networking
+description: >-
+  LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter
+  closing each bore - the adapter FS fits to its 36-fibre FHD cassettes, three
+  rows of six. The shutters are part of the adapter, which is why those plates
+  ship with no dust caps: each bore and the pair are slots that ship EMPTY, and
+  a plug seated in one is drawn over its closed shutter. The same body as
+  common/lc-duplex-adapter@4 in outline, latch keyways up; what differs is the
+  shutter in each bore.
+size: {w: 13.1, h: 11.6}
+size-confidence: {w: photo-measured, h: estimated}
+size-notes: >-
+  WIDTH IS MEASURED, on FS's render of SKU 105333 (105333.main.jpg), in
+  panel_measure's frame as #503 and #506 corrected it: the adapters abut in
+  pairs, three pairs to a row, and the pairs measure 26.42, 26.09 and 26.26 - a
+  mean of 26.26, so 13.1 an adapter (13.13). The row is centred on the plate to
+  0.01 mm, the check that does not come from the tool. 105335.main.jpg reads
+  within 0.25 and is not used. HEIGHT IS ESTIMATED, and it is not
+  common/lc-duplex-adapter@4's 11.0. The rows abut and repeat every 11.31 in
+  the width-scaled frame, but the render looks down on the cassette - the lid
+  shows, putting the camera about 12-13 degrees up - which foreshortens heights
+  by 2-3%. Corrected, the pitch is 11.6, and three rows fill 34.8 of the
+  plate's 35.05, which is what the render shows, the blue running from the
+  plate's top edge to its bottom. The plate's own height cannot settle it on
+  this render: #506's tool reads it 4.01% tall and refuses it, the older tool
+  read it 2.76% short. Until review this part said 11.0, reached by applying a
+  frame correction the wrong way round and then taking the agreement with the
+  other adapter as a check.
+attrs: {media: fiber, connector: lc-duplex}
+fields:
+  housing-finish:
+    label: Housing colour
+    type: text
+    default: '#368ad4'
+optical:
+  # TWO BORES, SO TWO FIBRE POSITIONS, in the order they are composed: 1 is
+  # `tx`, the LEFT bore, which is the odd port FS numbers first along a row.
+  positions: 2
+relief:
+  features:
+    - node: bezel
+      out: 3.175
+      confidence: borrowed
+      source: >-
+        common/lc-duplex-adapter@4's photo-measured stand-off, an eighth of an
+        inch. The same body; FS's 36-fibre renders are too oblique across the
+        adapters' faces to read their own.
+    # THE SHUTTERS ARE SOLID, so that in 3D they stand IN FRONT of the ferrule
+    # each composed bore draws - see provenance.shutter for the depth.
+    - node: shutter-tx
+      out: 2.725
+      confidence: estimated
+      source: >-
+        a modelling choice, not a reading - see provenance.shutter: halfway
+        between the raised face (3.175) and the front of the ferrule the
+        composed std/lc-bulkhead-bore@1 stands 0.9 behind that face (2.275),
+        so the door hides the ferrule and still reads as recessed.
+    - node: shutter-rx
+      out: 2.725
+      confidence: estimated
+      source: >-
+        as shutter-tx - one door per bore, the same depth.
+parts:
+  # THE BULKHEAD APERTURE, TURNED 180 so the latch tongue points UP, as FS
+  # fits it (the latch windows show at the top edge of every adapter on
+  # 105333.main.jpg) and as common/lc-duplex-adapter@4 turns its bores. `at` is
+  # the unrotated box's corner and the turn is about its centre, so each mate
+  # lands at (3.425, 5.8) and (9.675, 5.8): the 6.25 pitch, centred on the
+  # body. Lifted onto the raised bezel, so each bore recesses from the proud
+  # face. BEHIND the skin, so the shutter drawn over each bore paints in front
+  # of it - a composed part otherwise paints after its host's art. NO
+  # `default:` on either: see the header.
+  - {id: tx, ref: std/lc-bulkhead-bore@1, at: [1.075, 0.09], lift: 3.175, rotate: 180, behind: true}
+  - {id: rx, ref: std/lc-bulkhead-bore@1, at: [7.325, 0.09], lift: 3.175, rotate: 180, behind: true}
+connection-points:
+  # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
+  # points, (3.425, 5.8) and (9.675, 5.8) - the body's centre, and the same
+  # point `optical` names. The quoted `'on'` is the depth - YAML 1.1 reads a
+  # bare `on` as true - and each bore is lifted onto the raised face by the
+  # 3.175 of `relief`, so a part seated across both stands on that face too.
+  mate: {at: [6.55, 5.8], direction: front, 'on': bezel}
+  optical: {at: [6.55, 5.8], direction: front}
+provenance:
+  size: >-
+    see size-notes.
+  bores: >-
+    TWO std/lc-bulkhead-bore@1, COMPOSED SINCE THIS MAJOR. @1 composed none and
+    cut std/lc-bore@3's outline into its bezel instead, because a closed
+    shutter hides the bore and, as first drawn, each bore's own ferrule - a
+    raised white cylinder - stood out through every closed door in 3D. The
+    bores are back because a port a plug can be seated in is a slot, and a
+    slot is a composed part with a mate; the shutter is now a solid door in
+    front of the ferrule (see `shutter`), which answers the same 3D problem
+    the other way round.
+    THE BULKHEAD APERTURE, not the transceiver receptacle: this is a panel
+    adapter, and std/lc-bulkhead-bore@1 carries the keyway measured off
+    SENKO's bulkhead adapter (DS-LC-000010), ending 5.71 from the ferrule axis.
+    IT FITS, BY 0.09. The axis is 5.8 into the 11.6 height - centred, where @1
+    placed the bore square - so the keyway ends at y 0.09, inside the body's
+    top edge, and 0.015 clear of the outline's 0.15 stroke. FS's render does
+    not locate the axis more closely than that: at 6.1 px/mm the margin is half
+    a pixel, and under the raised camera the lit inside walls of each bore run
+    into the doors, so a luminance profile down a port gives no square edge to
+    centre on. What the render does show is the latch window opening at the
+    top edge of each adapter's front face, which is where a 0.09 margin puts
+    it. The tongue (2.64 wide, centred on each ferrule) is clear of the
+    neighbouring bore and of the body's sides. The keyway is not shortened and
+    the bores are not moved: nothing read off the render puts the axis
+    anywhere but where @1 had it.
+    THE BEZEL OUTLINE IS NOW THE BODY'S BOX, 13.1 x 11.6, where @1 drew it
+    inset 0.1 all round. The inset was a drawn seam between abutting adapters,
+    not a reading, and at 0.1 the keyway would have cut through it. Two
+    abutting outlines now share one stroke, which still draws the seam.
+    THE KEYED OPENINGS in the bezel are the bulkhead outline turned 180 - the
+    tongue from y 0.09, the shoulder from 1.51, the neck from 2.70 and the
+    4.7 square from 3.45 to 8.15 - at x 1.075 and 7.325, the bores' own `at`.
+    The square is where @1 cut it; the keyway above it is 1.76 longer.
+  shipped-empty: >-
+    NO `default:`, ON THE ADAPTER OR ON EITHER BORE. A default is what a slot
+    ships holding, and FS ships these ports holding nothing: the spring
+    shutters are what keeps dust out, which is why the 36-fibre plates come
+    without the caps every other FHD plate carries. So an unconfigured build
+    draws each port empty - shutter closed - and a configuration or the
+    explorer can seat a plug, simplex in a bore or duplex across the pair,
+    exactly as on a capped adapter with its cap taken out.
+  shutter: >-
+    ONE SHUTTER PER BORE, CLOSED. Each bore on FS's renders is filled by a pair
+    of angled doors in the housing's own plastic, meeting down the bore's
+    middle - what keeps dust out of an unused port, and why these plates ship
+    without caps. Drawn as the two doors over the bore square, in the housing
+    colour at 78% over a black underlay - FS draws them only a shade darker
+    than the housing - so they follow `housing-finish`, with the seam between
+    them. THE SHUTTER IS THE ADAPTER'S ART, NEVER AN OCCUPANT: it is what an
+    EMPTY port looks like. A plug seated in the bore is drawn after its host,
+    so it covers the door, as the door is pushed aside by the plug on the real
+    part. THE DEPTH IS A MODELLING CHOICE: the doors' angle and how far they sit
+    behind the face are not readable at 6.1 px/mm. @1 drew them flat at the
+    plate plane, which would now put them behind the ferrule the composed bore
+    draws 0.9 behind the face; they stand at 2.725, halfway between that
+    ferrule (2.275) and the face (3.175), which is the one constraint the
+    model has - in front of the ferrule and behind the face.
+  colour: >-
+    the `housing-finish` default is FS's single-mode UPC blue as it renders on
+    this adapter: #368ad4, the median of the housing pixels on 105333.main.jpg
+    by the rule common/lc-duplex-v-adapter@5's provenance.colour records. That
+    is a little darker than the vertical adapter's #2d91d8 on 57016 - a
+    different render, and each part carries its own reading.
+skins: [default]

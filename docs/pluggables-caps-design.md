@@ -232,6 +232,35 @@ Precedence, lowest first: the adapter's `default:`; a composer's `parts:` entry
 (`none` empties it); the explorer's swap. Lint rejects a `default:` that the slot's
 accept list does not contain.
 
+### The shuttered adapter
+
+Added 2026-09-23, when the FS 36-fibre cassettes arrived with
+`common/lc-duplex-shuttered-adapter@1`.
+
+**A shuttered adapter is a slot whose shipped state is empty.** Its spring
+shutters are the dust protection, and FS ships those plates with no caps, so
+nothing on it declares a `default:` - not the adapter's own duplex slot, not
+either bore. It is still a slot at both levels: `@2` composes two
+`std/lc-bulkhead-bore@1` (turned 180, keyways up, as the Smartoptics adapter
+turns its bores) and presents `lc-duplex` with a `mate` at their midpoint, so a
+plug can be swapped in, simplex in a bore or duplex across the pair, and the
+exclusion and the spanning-geometry lint apply to it as to any duplex host.
+`@1` had no bores and no interface, so there was nothing to seat.
+
+**The shutter stays the adapter's art (decision 10).** It is what an empty port
+looks like. The bores are composed `behind: true`, so the shutter drawn over each
+bore paints in front of it; a plug seated in a bore is an occupant, drawn after
+its host, so it covers the shutter as the real plug pushes the doors aside. In 3D
+the shutter is a solid door standing in front of the bore's ferrule and behind
+the raised face - how far behind is a modelling choice, since FS's renders do not
+show it. Nothing switches the shutter on occupancy; an open-when-occupied state
+remains the later option decision 10 leaves.
+
+**The bulkhead keyway fits, by 0.09.** The ferrule axis sits 5.8 into the 11.6
+body, where `@1` placed the bore square, and the keyway reaches 5.71 from it. The
+bezel outline moved out to the body's box to make room: `@1` drew it inset 0.1 as
+a seam, and the keyway would have cut through that.
+
 ## Deep addressing
 
 A cassette's bore is three levels down: device bay, cassette, adapter, bore. #484

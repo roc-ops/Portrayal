@@ -1,6 +1,6 @@
 """A cassette's LC adapters wear one colour, and it is the colour of its fibre.
 
-`common/lc-duplex-v-adapter@4` and `common/lc-duplex-shuttered-adapter@1` draw
+`common/lc-duplex-v-adapter@5` and `common/lc-duplex-shuttered-adapter@2` draw
 their housing from a `housing-finish` field (OS2 blue by default), and each cassette in another fibre sets it on every
 adapter it composes - six or twelve `attrs:` lines stating one fact, beside the
 `optical.media` that states it again in words. Nothing else ties them together,

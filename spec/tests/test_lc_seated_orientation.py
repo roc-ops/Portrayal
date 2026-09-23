@@ -11,7 +11,8 @@ receptacle's 1.60 keyway, which is shorter than their own hardware's.
 
 WHAT IS CHECKED, AND WHERE. Everything below is measured on REAL BUILDS of
 copies in `tmp_path` - the FS FHD enclosure with an LC cassette in bay-1 and
-bay-4, and the Smartoptics DCP-R-34D-CS - through every ancestor's transform,
+bay-4 (the OS2 12-fibre, its OM4 twin, and the 36-fibre shuttered one), and the
+Smartoptics DCP-R-34D-CS - through every ancestor's transform,
 so a turn applied anywhere in the chain (device placement, cassette, adapter,
 bore, spanning axis, duplex half) is in the answer:
 
@@ -23,7 +24,10 @@ bore, spanning axis, duplex half) is in the answer:
   (c) the same latch-side check for the SC plug in its bore - a guard, since
       both are drawn key-left and already agree;
   (d) L112's latch-side arm: the axis a duplex host derives puts a duplex
-      part's latches (drawn up) on its bores' keyway side (drawn down).
+      part's latches (drawn up) on its bores' keyway side (drawn down);
+  (e) the shuttered adapter is a slot that ships EMPTY - no default on it or
+      its bores, nothing seated in an unconfigured build - and a plug seated
+      in one of its bores is drawn over that bore's shutter.
 
 EACH IS PROVED NON-VACUOUS HERE, not only in a report: the same measurement is
 run against the shapes that were wrong - a plug drawn latch UP (the retired
@@ -53,8 +57,13 @@ BULKHEAD = "std/lc-bulkhead-bore@1"
 RECEPTACLE = "std/lc-bore@3"
 H_ADAPTER = "common/lc-duplex-adapter@4"        # Smartoptics, side by side
 V_ADAPTER = "common/lc-duplex-v-adapter@5"      # FS FHD cassettes, stacked
+S_ADAPTER = "common/lc-duplex-shuttered-adapter@2"  # FS 36-fibre, side by side
 LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"
+OM_CASSETTE = "fs/fhd-2mtp12-lc-om4-a@1"        # #504's OM4 twin, the same V_ADAPTER
+SHUTTERED_CASSETTE = "fs/fhd-3mtp18-lc-os2-a@1"  # eighteen S_ADAPTER, three rows
 SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"
+# which FHD cassette each FHD build seats in bay-1 and bay-4
+FHD_CASSETTES = {"fhd": LC_CASSETTE, "fhd-om": OM_CASSETTE, "fhd-36": SHUTTERED_CASSETTE}
 
 # what a seated plug can land in, and what is a plug
 BORES = ("std/lc-bore@", "std/lc-bulkhead-bore@", "std/sc-bore@")
@@ -64,10 +73,17 @@ TOL = 0.05
 
 # (keys on the FHD, keys on the DCP). The DCP's xc18/xc19 are on the row it
 # places at rotate 180; port-1510 and xc01 are on the unturned row. The FHD's
-# bay-1 and bay-4 are the enclosure's two ends.
+# bay-1 and bay-4 are the enclosure's two ends. The OM4 cassette is the OS2
+# one's twin, so the same keys; the 36-fibre cassette has eighteen shuttered
+# adapters, lc01 top left to lc18 bottom right.
 LC_SIMPLEX_KEYS = {"fhd": ["bay-1/lc01/tx", "bay-1/lc01/rx", "bay-4/lc12/tx"],
+                   "fhd-om": ["bay-1/lc01/tx", "bay-1/lc01/rx", "bay-4/lc12/tx"],
+                   "fhd-36": ["bay-1/lc01/tx", "bay-1/lc01/rx", "bay-4/lc18/tx"],
                    "dcp": ["port-1510/tx", "port-1510/rx", "xc18/rx"]}
-LC_DUPLEX_KEYS = {"fhd": ["bay-1/lc02", "bay-4/lc07"], "dcp": ["xc01", "xc19"]}
+LC_DUPLEX_KEYS = {"fhd": ["bay-1/lc02", "bay-4/lc07"],
+                  "fhd-om": ["bay-1/lc02", "bay-4/lc07"],
+                  "fhd-36": ["bay-1/lc02", "bay-4/lc13"],
+                  "dcp": ["xc01", "xc19"]}
 # every simplex plug, and BOTH halves of every duplex plug
 EXPECTED = {k: len(LC_SIMPLEX_KEYS[k]) + 2 * len(LC_DUPLEX_KEYS[k])
             for k in LC_SIMPLEX_KEYS}
@@ -116,7 +132,8 @@ def front(tmp_path, made, root=LIB):
 def build_lc(tmp_path, which, simplex=LC, duplex=DUPLEX, root=LIB):
     occ = {**{k: simplex for k in LC_SIMPLEX_KEYS[which]},
            **{k: duplex for k in LC_DUPLEX_KEYS[which]}}
-    made = fhd(tmp_path, LC_CASSETTE, occ) if which == "fhd" else dcp(tmp_path, occ)
+    made = (fhd(tmp_path, FHD_CASSETTES[which], occ) if which in FHD_CASSETTES
+            else dcp(tmp_path, occ))
     return front(tmp_path, made, root)
 
 
@@ -236,7 +253,7 @@ def overrun(pairs, bore_prefix):
 
 # --- (a) the latch faces the keyway ------------------------------------------------
 
-@pytest.mark.parametrize("which", ["fhd", "dcp"])
+@pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_every_seated_lc_plug_faces_its_bores_keyway(tmp_path, which):
     svg, parents = build_lc(tmp_path, which)
     pairs = seated_pairs(svg, parents)
@@ -288,7 +305,7 @@ def _free_latch(root):
     return _plug_copy(root, "free-plug", skin, free)
 
 
-@pytest.mark.parametrize("which", ["fhd", "dcp"])
+@pytest.mark.parametrize("which", ["fhd", "fhd-36", "dcp"])
 def test_a_latch_up_plug_is_caught_facing_away(tmp_path, which):
     """THE FAULT THIS TASK FIXES, found by the same code: a plug drawn latch
     UP - the retired @1's orientation - seats with its latch opposite the
@@ -326,13 +343,14 @@ def test_a_duplex_plug_with_unturned_halves_is_caught(tmp_path):
 
 # --- (b) the seated latch stays inside the bulkhead keyway -------------------------
 
-def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path):
-    """On the FS cassettes, whose adapter composes the bulkhead aperture: the
+@pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36"])
+def test_a_seated_plug_stays_inside_the_bulkhead_bores_outline(tmp_path, which):
+    """On the FS cassettes, whose adapters compose the bulkhead aperture: the
     compressed latch runs no further along the latch axis than the keyway
     does. Measured on the plug's whole drawn silhouette, not only its tip."""
-    svg, parents = build_lc(tmp_path, "fhd")
+    svg, parents = build_lc(tmp_path, which)
     got = overrun(seated_pairs(svg, parents), "std/lc-bulkhead-bore@")
-    assert len(got) == EXPECTED["fhd"] > 0, got
+    assert len(got) == EXPECTED[which] > 0, got
     assert all(v <= TOL for v in got.values()), got
 
 
@@ -394,8 +412,8 @@ def l112(root, ref):
     return [e for e in got.errors if "[L112]" in e]
 
 
-@pytest.mark.parametrize("ref", [H_ADAPTER, V_ADAPTER])
-def test_both_duplex_adapters_put_the_latch_on_the_keyway_side(ref):
+@pytest.mark.parametrize("ref", [H_ADAPTER, V_ADAPTER, S_ADAPTER])
+def test_every_duplex_adapter_puts_the_latch_on_the_keyway_side(ref):
     assert l112(LIB, ref) == []
 
 
@@ -431,13 +449,16 @@ def test_the_arm_measures_a_side_on_both_library_adapters():
     direction for both hosts rather than skipping them, and the two hosts'
     answers differ - so it is not a constant."""
     got = {}
-    for ref in (H_ADAPTER, V_ADAPTER):
+    for ref in (H_ADAPTER, V_ADAPTER, S_ADAPTER):
         sides = lint._spanning_latch_sides(contract(ref), _resolve)
         assert sides is not None, ref
         latch, keyway = sides
         assert latch == keyway, (ref, latch, keyway)
         got[ref] = latch
     assert got[H_ADAPTER] != got[V_ADAPTER], got
+    # the shuttered adapter is side by side with its keyways up, as the
+    # Smartoptics one is - the same answer, for the same geometry
+    assert got[S_ADAPTER] == got[H_ADAPTER], got
 
 
 def test_both_lc_bores_are_drawn_tongue_down():
@@ -447,3 +468,109 @@ def test_both_lc_bores_are_drawn_tongue_down():
         c = contract(ref)
         my = c["connection-points"]["mate"]["at"][1]
         assert c["size"]["h"] - my > my + 1.0, ref
+
+
+# --- (e) the shuttered adapter: a slot that ships empty (B3, "The shuttered adapter")
+
+def _adapter_of(parents, el, prefix):
+    node = parents.get(el)
+    while node is not None and not _ref(node).startswith(prefix):
+        node = parents.get(node)
+    return node
+
+
+def _box(points):
+    return (min(p[0] for p in points), min(p[1] for p in points),
+            max(p[0] for p in points), max(p[1] for p in points))
+
+
+def _shutter_cover(svg, parents, root=LIB):
+    """For every shutter drawn in a shuttered adapter: (its path, the plug
+    body seated on its bore or None, whether that body's box contains the
+    shutter's and paints after it). The shutter is found by the bore it
+    closes - `--shutter-tx` over `tx` - and the plug by the bore's mate."""
+    order = {el: i for i, el in enumerate(svg.iter())}
+    seated = {id(b[0]): p for p, b in seated_pairs(svg, parents, root)}
+    out = []
+    for bore in _groups(svg, (BULKHEAD,)):
+        adapter = _adapter_of(parents, bore, S_ADAPTER)
+        if adapter is None:
+            continue
+        bore_id = bore.get("data-path").rsplit("/", 1)[-1]
+        shutter = [el for el in adapter.iter()
+                   if (el.get("id") or "").endswith(f"--shutter-{bore_id}")]
+        assert len(shutter) == 1, (bore.get("data-path"), len(shutter))
+        rects = [r for r in shutter[0] if r.tag.split("}")[-1] == "rect"]
+        sbox = _box([p for r in rects for p in _rect_corners(parents, r)])
+        plug = seated.get(id(bore))
+        if plug is None:
+            out.append((bore.get("data-path"), None, False))
+            continue
+        body = [r for r in plug[0] if (r.get("id") or "").endswith("--body")]
+        assert len(body) == 1, plug[0].get("data-path")
+        pbox = _box(_rect_corners(parents, body[0]))
+        inside = (pbox[0] <= sbox[0] and pbox[1] <= sbox[1]
+                  and sbox[2] <= pbox[2] and sbox[3] <= pbox[3])
+        out.append((bore.get("data-path"), plug[0].get("data-path"),
+                    inside and order[body[0]] > order[shutter[0]]))
+    return out
+
+
+def test_the_shuttered_adapter_is_a_duplex_slot_with_no_default():
+    """It presents lc-duplex at its two bores' midpoint, so a duplex plug has
+    a host, and nothing on it - adapter or bore - declares what it ships: FS
+    ships these ports holding nothing."""
+    c = contract(S_ADAPTER)
+    assert c["interface"] == "lc-duplex"
+    assert "default" not in c
+    bores = [q for q in c["parts"] if q["ref"] == BULKHEAD]
+    assert [q["id"] for q in bores] == ["tx", "rx"]
+    assert all("default" not in q for q in bores), bores
+    assert not (contract(BULKHEAD).get("default")), "the bore itself ships nothing"
+
+
+def test_the_shuttered_cassette_ships_every_port_empty(tmp_path):
+    """The unconfigured build: every bore of every shuttered adapter is drawn,
+    and NOTHING is seated on the adapters or their bores."""
+    svg, parents = front(tmp_path, fhd(tmp_path, SHUTTERED_CASSETTE, {}))
+    adapters = _groups(svg, (S_ADAPTER,))
+    assert len(adapters) == 36, len(adapters)             # eighteen, in two bays
+    bores_seen = [b for b in _groups(svg, (BULKHEAD,))
+                  if _adapter_of(parents, b, S_ADAPTER) is not None]
+    assert len(bores_seen) == 72, len(bores_seen)
+    occupants = [el.get("data-path") for a in adapters for el in a.iter()
+                 if "-occupant" in (el.get("data-path") or "")]
+    assert occupants == [], occupants[:5]
+    # and so every shutter is left showing
+    cover = _shutter_cover(svg, parents)
+    assert len(cover) == 72 and all(plug is None for _b, plug, _ok in cover)
+
+
+def test_a_seated_plug_covers_the_shutter_it_pushes_aside(tmp_path):
+    """The shutter is the empty port's art; a plug seated in the bore is drawn
+    over it. Each seated body - three simplex plugs and both halves of two
+    duplex plugs - contains its bore's shutter and paints after it, and the
+    shutters of the ports left empty are covered by nothing."""
+    svg, parents = build_lc(tmp_path, "fhd-36")
+    cover = _shutter_cover(svg, parents)
+    plugged = [c for c in cover if c[1] is not None]
+    assert len(plugged) == EXPECTED["fhd-36"] > 0, plugged
+    assert all(ok for _b, _p, ok in plugged), [c for c in plugged if not c[2]]
+    assert len(cover) - len(plugged) == 72 - EXPECTED["fhd-36"] > 0
+
+
+def test_a_plug_too_small_to_cover_the_shutter_is_caught(tmp_path):
+    """Non-vacuity for the cover check: a copy of generic/lc-plug@2 whose body
+    is cut to 3.0 square about the same mate seats in the same bores, and each
+    simplex one is found leaving its shutter showing round it."""
+    root = tmp_path / "lib"
+
+    def skin(text):
+        return re.sub(r'(<rect id="body" )x="[\d.]+" y="[\d.]+" width="[\d.]+" height="[\d.]+"',
+                      r'\g<1>x="1.29" y="1.325" width="3.0" height="3.0"', text)
+    ref = _plug_copy(root, "small-plug", skin, lambda c: None)
+    svg, parents = build_lc(tmp_path, "fhd-36", simplex=ref, root=root)
+    cover = [c for c in _shutter_cover(svg, parents, root) if c[1] is not None]
+    bad = [p for _b, p, ok in cover if not ok]
+    assert len(bad) == len(LC_SIMPLEX_KEYS["fhd-36"]) > 0, cover
+    assert all(p.endswith("-occupant") for p in bad), bad
