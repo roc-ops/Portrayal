@@ -142,7 +142,7 @@ Three layers:
    version plus a digest of its contract and skins. A component redrawn in place
    therefore moves every device that shows it, and that alone is a patch.
 
-   Every other key a placement can state, and those a bay shares with it, is
+   Every other key a placement can state, and every key a bay states, is
    fingerprinted the same way,
    under three keys of its own that each read only when the old lock has them:
    `placement-geometry` (`inset`, `lift`, `in`, `under`, `only-in`, `optional`,

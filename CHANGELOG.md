@@ -58,7 +58,7 @@ the *published build*, not about the hardware.
   minor when stated where there was none). The eight devices whose bays state
   one - six Cisco ASR 9000s, the R740xd and the FHD 1U enclosure - were
   re-locked, and only their `placement-geometry` moved. No device version
-  changed.
+  changed (roc-ops/Portrayal#537).
 - `devices.json` carries `contract: 1` — the first version a consumer can check
   (roc-ops/Portrayal#185).
 - `library/dist/devices.lock.json`: every device's fingerprint in one file,
