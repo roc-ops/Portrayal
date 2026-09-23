@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-681 component majors in 13 namespaces.
+685 component majors in 13 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -30,7 +30,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
 | `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 3 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
-| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 12 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
+| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 13 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 5 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
 | `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 0 | Micro-USB Type-B receptacle, as used for a console port |
 | `std/mpo@1` | component | port | 7.8 × 5.6 × 9 | mpo-adapter | 0 | 4 | One MPO/MTP adapter opening in a panel - the aperture, not the adapter |
@@ -54,7 +54,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (80)
+## common/ (81)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -82,8 +82,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/keystone-clip@1` | component | mechanical | 14.8 × 19.3 | keystone-opening | 0 | 0 | A generic snap-in keystone clip opening, as fitted to an FS FHD keystone panel |
 | `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 4 | 3 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 3 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
-| `common/lc-duplex-adapter@4` | component | port | 13.2 × 11 |  | 3 | 13 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
-| `common/lc-duplex-v-adapter@4` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 20 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-adapter@4` | component | port | 13.2 × 11 |  | 3 | 14 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
+| `common/lc-duplex-shuttered-adapter@1` | component | port | 13.1 × 11.6 |  | 0 | 2 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
+| `common/lc-duplex-v-adapter@4` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 22 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
 | `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 153 | Tiny round port LED (2mm) |
@@ -93,7 +94,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 5 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
-| `common/mpo-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 7 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
+| `common/mpo-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 8 | Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/mpo24-flange-adapter@1` | component | port | 30 × 11 |  | 0 | 3 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 0 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
 | `common/pcie-card-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 9 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
@@ -468,7 +469,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 
-## fs/ (30)
+## fs/ (33)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -488,7 +489,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-1mtp6lcd-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 10 | FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp6lcd-os2-af@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-1MTP6LCDOS2AF - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type AF polarity: the Type A cassette'… |
 | `fs/fhd-1mtp6lcd-os2-u@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 2 | FS FHD-1MTP6LCDOS2U - MTP-12 (male) to six LC duplex, 12 fibres, OS2, universal polarity: one cassette used a… |
-| `fs/fhd-1mtp6lcd-rear@3` | component | cassette | 99 × 31 |  | 0 | 9 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
+| `fs/fhd-1mtp6lcd-rear@3` | component | cassette | 99 × 31 |  | 0 | 10 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-1mtp6lcd-u-rear@2` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-1MTP6LCDOS2U (SKU 182641): the universal-polarity cassette's body seen from behind - the M… |
 | `fs/fhd-2mtp12-lc-af-rear@1` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-2MTP12LCDOS2AF (SKU 68540): two MTP-12 trunk bulkheads - 13-24 on the left, 1-12 on the ri… |
 | `fs/fhd-2mtp12-lc-om3-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP1212LCDXOM3A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OM3, Type A |
@@ -498,8 +499,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-2mtp12-lc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 6 | FS FHD-2MTP12LCDOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
 | `fs/fhd-2mtp12-lc-os2-af@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP12LCDOS2AF - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, Type AF polarity |
 | `fs/fhd-2mtp12-lc-os2-u@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-2MTP12LCDOS2U - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, universal polarity |
-| `fs/fhd-2mtp12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 4 | The back of FS FHD-2MTP12LCDOS2A (SKU 57341): the cassette body seen from behind, carrying its two MTP-12 tru… |
+| `fs/fhd-2mtp12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 5 | The back of FS FHD-2MTP12LCDOS2A (SKU 57341): the cassette body seen from behind, carrying its two MTP-12 tru… |
 | `fs/fhd-2mtp12-lc-u-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-2MTP12LCDOS2U (SKU 182643): two MTP-12 trunk bulkheads - 13-24 on the left, 1-12 on the ri… |
+| `fs/fhd-3mtp18-lc-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-3MTP18LCDOM4A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OM4, Type A polarity |
+| `fs/fhd-3mtp18-lc-os2-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-3MTP18LCDOS2A - three MTP-12 (male) to eighteen shuttered LC duplex, 36 fibres, OS2, Type A polarity |
+| `fs/fhd-3mtp18-lc-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the 36-fibre cassette's body seen from… |
 | `fs/fhd-splice-12-lc@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers |
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 

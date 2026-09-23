@@ -15,6 +15,7 @@ from portrayal import optical
 FAMILY = {
     "common/lc-duplex-adapter": "lc",
     "common/lc-duplex-v-adapter": "lc",
+    "common/lc-duplex-shuttered-adapter": "lc",
     "common/sc-duplex-adapter": "sc",
     "common/mpo-adapter": "mpo",
     "common/mpo-flange-adapter": "mpo",

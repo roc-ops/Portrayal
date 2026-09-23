@@ -1,0 +1,85 @@
+format: 1
+kind: component
+name: lc-duplex-shuttered-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter
+  closing each bore - the adapter FS fits to its 36-fibre FHD cassettes, three
+  rows of six. The shutters are part of the adapter, which is why those plates
+  ship with no dust caps. The same body as common/lc-duplex-adapter@4 in
+  outline, latch keyways up; what differs is the shutter in each bore.
+size: {w: 13.1, h: 11.6}
+size-confidence: {w: photo-measured, h: estimated}
+size-notes: >-
+  WIDTH IS MEASURED, on FS's render of SKU 105333 (105333.main.jpg), in
+  panel_measure's frame as #503 and #506 corrected it: the adapters abut in
+  pairs, three pairs to a row, and the pairs measure 26.42, 26.09 and 26.26 - a
+  mean of 26.26, so 13.1 an adapter (13.13). The row is centred on the plate to
+  0.01 mm, the check that does not come from the tool. 105335.main.jpg reads
+  within 0.25 and is not used. HEIGHT IS ESTIMATED, and it is not
+  common/lc-duplex-adapter@4's 11.0. The rows abut and repeat every 11.31 in
+  the width-scaled frame, but the render looks down on the cassette - the lid
+  shows, putting the camera about 12-13 degrees up - which foreshortens heights
+  by 2-3%. Corrected, the pitch is 11.6, and three rows fill 34.8 of the
+  plate's 35.05, which is what the render shows, the blue running from the
+  plate's top edge to its bottom. The plate's own height cannot settle it on
+  this render: #506's tool reads it 4.01% tall and refuses it, the older tool
+  read it 2.76% short. Until review this part said 11.0, reached by applying a
+  frame correction the wrong way round and then taking the agreement with the
+  other adapter as a check.
+attrs: {media: fiber, connector: lc-duplex}
+fields:
+  housing-finish:
+    label: Housing colour
+    type: text
+    default: '#368ad4'
+optical:
+  # TWO BORES, SO TWO FIBRE POSITIONS, in the order they are composed: 1 is
+  # `tx`, the LEFT bore, which is the odd port FS numbers first along a row.
+  positions: 2
+relief:
+  features:
+    - node: bezel
+      out: 3.175
+      confidence: borrowed
+      source: >-
+        common/lc-duplex-adapter@4's photo-measured stand-off, an eighth of an
+        inch. The same body; FS's 36-fibre renders are too oblique across the
+        adapters' faces to read their own.
+connection-points:
+  optical: {at: [6.55, 5.8], direction: front}
+provenance:
+  size: >-
+    see size-notes.
+  bores: >-
+    NO BORES ARE COMPOSED, BECAUSE A CLOSED SHUTTER HIDES THEM. The keyed
+    opening is std/lc-bore@3's outline, cut as two evenodd holes in the raised
+    bezel - tongue up, the verified 6.25 pitch, centred on this 13.1 x 11.6
+    body - and what shows through each hole is the shutter, 3.175 back at the
+    plate plane. The first version composed the bores as
+    common/lc-duplex-adapter@4 does, behind the skin; in 2D the shutters
+    covered them, but in 3D each bore's own ferrule, a raised white cylinder,
+    stood out through every closed door - a port that looks open on a part
+    whose whole point is that it is shut. The two fibre positions are this
+    part's own `optical.positions`, not the bores', so nothing a cassette or an
+    export reads changed. The keyways are up on FS's renders too: the latch
+    windows show at the top edge of each adapter on 105333.main.jpg.
+  shutter: >-
+    ONE SHUTTER PER BORE, CLOSED. Each bore on FS's renders is filled by a pair
+    of angled doors in the housing's own plastic, meeting down the bore's
+    middle - what keeps dust out of an unused port, and why these plates ship
+    without caps. Drawn as the two doors over the bore square, in the housing
+    colour at 78% over a black underlay - FS draws them only a shade darker
+    than the housing - so they follow `housing-finish`, with the seam between
+    them. Their angle and how far they sit behind the face are not readable at
+    6.1 px/mm and are not modelled: the doors are flat art at the plate plane,
+    behind the raised bezel.
+  colour: >-
+    the `housing-finish` default is FS's single-mode UPC blue as it renders on
+    this adapter: #368ad4, the median of the housing pixels on 105333.main.jpg
+    by the rule common/lc-duplex-v-adapter@4's provenance.colour records. That
+    is a little darker than the vertical adapter's #2d91d8 on 57016 - a
+    different render, and each part carries its own reading.
+skins: [default]

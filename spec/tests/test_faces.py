@@ -214,9 +214,11 @@ def test_the_index_carries_a_parts_other_faces():
     # fhd-2mtp12-lc-om4-a, -om4-u, fhd-1mtp24-lc-om4-a; OM5 fhd-1mtp6lcd-om5-a,
     # fhd-2mtp12-lc-om5-a, fhd-1mtp24-lc-om5-a; OM3 fhd-2mtp12-lc-om3-a,
     # fhd-1mtp24-lc-om3-a - each declare their OS2 twin's `faces.rear`.
+    # 35, not 33: the 36-fibre pair, fhd-3mtp18-lc-os2-a and -om4-a, declare
+    # fs/fhd-3mtp18-lc-rear@1.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 33, \
-        f"expected exactly 33 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 35, \
+        f"expected exactly 35 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

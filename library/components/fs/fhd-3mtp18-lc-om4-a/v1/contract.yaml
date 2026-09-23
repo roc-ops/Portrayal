@@ -1,0 +1,175 @@
+format: 1
+kind: module
+name: fhd-3mtp18-lc-om4-a
+version: 1.0.0
+class: cassette
+behaviour: fills
+description: >-
+  FS FHD-3MTP18LCDOM4A - three MTP-12 (male) to eighteen shuttered LC duplex,
+  36 fibres, OM4, Type A polarity. FS SKU 105335.
+size: {w: 108.97, h: 35.05, d: 117.86}
+size-confidence: {w: photo-measured, h: photo-measured, d: borrowed}
+size-notes: >-
+  The faceplate is the FHD module face, 108.97 x 35.05. 105335.main.jpg's
+  height is refused by spec/tools/intake/panel_measure.py (+3.72%, as #506 left
+  the tool - a raised camera, like 105333's), so it is not used for any
+  absolute figure: the plate and every position are fs/fhd-3mtp18-lc-os2-a@1's,
+  and this render was read only for colour and to confirm the layout, which it
+  does to 0.2 mm across. The 117.86 depth is BORROWED from
+  fs/fhd-3mtp18-lc-os2-a@1, whose own source is FS's dimension line on
+  105333.B.jpg; no dimensioned view of 105335 is staged, and every FHD cassette
+  is the same box.
+attrs: {media: fiber, model: FHD-3MTP18LCDOM4A, vendor-sku: '105335'}
+body:
+  depth: 117.86
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S - the same 99 x 31
+  # every FHD cassette's is, centred behind the plate.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+parts:
+  - {id: lc01, ref: common/lc-duplex-shuttered-adapter@1, at: [13.29, 23.325],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc02, ref: common/lc-duplex-shuttered-adapter@1, at: [26.42, 23.325],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc03, ref: common/lc-duplex-shuttered-adapter@1, at: [41.52, 23.325],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc04, ref: common/lc-duplex-shuttered-adapter@1, at: [54.65, 23.325],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc05, ref: common/lc-duplex-shuttered-adapter@1, at: [69.42, 23.325],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc06, ref: common/lc-duplex-shuttered-adapter@1, at: [82.55, 23.325],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc07, ref: common/lc-duplex-shuttered-adapter@1, at: [13.29, 11.725],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc08, ref: common/lc-duplex-shuttered-adapter@1, at: [26.42, 11.725],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc09, ref: common/lc-duplex-shuttered-adapter@1, at: [41.52, 11.725],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc10, ref: common/lc-duplex-shuttered-adapter@1, at: [54.65, 11.725],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc11, ref: common/lc-duplex-shuttered-adapter@1, at: [69.42, 11.725],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc12, ref: common/lc-duplex-shuttered-adapter@1, at: [82.55, 11.725],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc13, ref: common/lc-duplex-shuttered-adapter@1, at: [13.29, 0.125],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc14, ref: common/lc-duplex-shuttered-adapter@1, at: [26.42, 0.125],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc15, ref: common/lc-duplex-shuttered-adapter@1, at: [41.52, 0.125],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc16, ref: common/lc-duplex-shuttered-adapter@1, at: [54.65, 0.125],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc17, ref: common/lc-duplex-shuttered-adapter@1, at: [69.42, 0.125],
+     attrs: {housing-finish: '#38bbcd'}}
+  - {id: lc18, ref: common/lc-duplex-shuttered-adapter@1, at: [82.55, 0.125],
+     attrs: {housing-finish: '#38bbcd'}}
+faces:
+  rear: {ref: fs/fhd-3mtp18-lc-rear@1}
+optical:
+  media: om4
+  polarity: a
+  polish: upc
+  front-order:
+    [lc01, lc02, lc03, lc04, lc05, lc06, lc07, lc08, lc09, lc10, lc11, lc12,
+    lc13, lc14, lc15, lc16, lc17, lc18]
+  paths:
+    - {from: lc01.1, to: 'rear:mtp3.1'}
+    - {from: lc01.2, to: 'rear:mtp3.2'}
+    - {from: lc02.1, to: 'rear:mtp3.3'}
+    - {from: lc02.2, to: 'rear:mtp3.4'}
+    - {from: lc03.1, to: 'rear:mtp3.5'}
+    - {from: lc03.2, to: 'rear:mtp3.6'}
+    - {from: lc04.1, to: 'rear:mtp3.7'}
+    - {from: lc04.2, to: 'rear:mtp3.8'}
+    - {from: lc05.1, to: 'rear:mtp3.9'}
+    - {from: lc05.2, to: 'rear:mtp3.10'}
+    - {from: lc06.1, to: 'rear:mtp3.11'}
+    - {from: lc06.2, to: 'rear:mtp3.12'}
+    - {from: lc07.1, to: 'rear:mtp2.1'}
+    - {from: lc07.2, to: 'rear:mtp2.2'}
+    - {from: lc08.1, to: 'rear:mtp2.3'}
+    - {from: lc08.2, to: 'rear:mtp2.4'}
+    - {from: lc09.1, to: 'rear:mtp2.5'}
+    - {from: lc09.2, to: 'rear:mtp2.6'}
+    - {from: lc10.1, to: 'rear:mtp2.7'}
+    - {from: lc10.2, to: 'rear:mtp2.8'}
+    - {from: lc11.1, to: 'rear:mtp2.9'}
+    - {from: lc11.2, to: 'rear:mtp2.10'}
+    - {from: lc12.1, to: 'rear:mtp2.11'}
+    - {from: lc12.2, to: 'rear:mtp2.12'}
+    - {from: lc13.1, to: 'rear:mtp1.1'}
+    - {from: lc13.2, to: 'rear:mtp1.2'}
+    - {from: lc14.1, to: 'rear:mtp1.3'}
+    - {from: lc14.2, to: 'rear:mtp1.4'}
+    - {from: lc15.1, to: 'rear:mtp1.5'}
+    - {from: lc15.2, to: 'rear:mtp1.6'}
+    - {from: lc16.1, to: 'rear:mtp1.7'}
+    - {from: lc16.2, to: 'rear:mtp1.8'}
+    - {from: lc17.1, to: 'rear:mtp1.9'}
+    - {from: lc17.2, to: 'rear:mtp1.10'}
+    - {from: lc18.1, to: 'rear:mtp1.11'}
+    - {from: lc18.2, to: 'rear:mtp1.12'}
+provenance:
+  size: >-
+    see size-notes - fs/fhd-3mtp18-lc-os2-a@1's plate and depth, borrowed;
+    105335.main.jpg has its height refused by panel_measure and is read only
+    for colour and layout.
+  face-legends: >-
+    SIX NUMBERS, THE ENDS OF THE THREE ROWS: `25`, `13` and `1` down the left
+    and `36`, `24` and `12` down the right, top to bottom - so the BOTTOM row
+    is 1-12, the middle 13-24 and the top 25-36, as on the 12- and 24-fibre
+    plates. One number per row end, not a pair: these adapters are side by
+    side, so a row end is one port. Measured ACROSS on 105333.main.jpg in the
+    corrected frame - its height is refused, which does not touch an across
+    reading - and 105335.main.jpg agrees to 0.2 mm and is not used. Across, in
+    the plate frame: each side's digits centre on one column, x 11.32 and 97.89
+    in the corrected frame (#503/#506). Up, from the row seams, in units of the
+    row pitch, so the frame's vertical shortfall cancels: the `25`/`36`
+    baselines sit 0.333 pitch above the first seam, `13`/`24` 0.623 below it
+    and `1`/`12` 1.666 below it - 7.86, 18.96 and 31.05 on the 11.6 pitch. The
+    middle pair sits half a millimetre higher in its row than the other two,
+    and is drawn so; both renders show it. Cap height 2.35 (2.29 in the short
+    frame), so 3.15 type at the family's 2.61/3.5 ratio; regular weight, as FS
+    prints them.
+  parts: >-
+    EIGHTEEN common/lc-duplex-shuttered-adapter@1, three rows of three abutting
+    PAIRS. ACROSS, MEASURED on 105333.main.jpg in panel_measure's frame as #503
+    and #506 corrected it (median left and right edges, median width): the
+    pairs span 13.29-39.71, 41.52-67.61 and 69.42-95.68, with 1.8 mm of plate
+    between them, and each pair's second adapter starts one width (13.13) on,
+    at 26.42, 54.65 and 82.55. THE ROW IS CENTRED - 13.29 from each edge -
+    which is the check that does not come from the tool: FS centres every FHD
+    row it draws. 105335.main.jpg reads 13.17 / 13.17, pairs within 0.25, and
+    is not used. #506's tool refuses both renders' height (+4.01%, +3.72% - a
+    raised camera shows the body's top), which says nothing about the across
+    frame; plate() is called for the frame and validate() is not asked. Until
+    #503/#506 these positions were read about 0.35-0.45 mm low, from the
+    rounded corner the old tool took for the plate's edge. UP, ESTIMATED: the
+    rows abut on the adapter's 11.6 pitch (see its size-notes), and the three
+    fill the plate's height, 34.8 of 35.05, as the render shows, so they are
+    centred: tops 0.125, 11.725 and 23.325.
+  knobs: >-
+    the FHD family's measured pair, cx 5.1 and 103.87 at r 4.1 - the figure the
+    thumb-knob correction on the 12- and 24-fibre plates reads off FS's face-on
+    renders, and which test_every_fhd_cassette_draws_the_same_thumb_knobs holds
+    every FHD skin to. On 105333.main.jpg the knobs sit at the plate ends the
+    same way, clear of the row-end digits.
+  colour: >-
+    COUNTED, NOT TAKEN FROM THE OM4 CONVENTION: #38bbcd is the median of the
+    housing pixels on 105335.main.jpg, by the rule
+    common/lc-duplex-v-adapter@4's provenance.colour records, and it is passed
+    to each adapter as `housing-finish`.
+  optical: >-
+    TYPE A, STRAIGHT THROUGH, ROW BY ROW. The rear render prints `1-12`,
+    `13-24` and `25-36` under the right, middle and left bulkheads, and the
+    front numbers the bottom row 1-12, the middle 13-24 and the top 25-36 - so
+    the bottom row runs to the right bulkhead (mtp3), the middle to the middle
+    (mtp2), the top to the left (mtp1), each left to right, fibre k of the row
+    to MTP position k. The LEFT bore of each adapter is the odd port. Type A is
+    FS's own naming of 105335 and its rear label; `front-order` states FS's
+    printed numbering, which position cannot (L88).
+  twin: >-
+    built on fs/fhd-3mtp18-lc-os2-a@1 (SKU 105333) - the same cassette FS
+    builds in OM4. Its plate, adapter positions and digits were re-read on
+    105335.main.jpg and agree with 105333's to 0.2 mm; what differs is the
+    fibre, the adapter colour, the model and the SKU.
+skins: [default]

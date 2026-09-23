@@ -1,7 +1,7 @@
 """A cassette's LC adapters wear one colour, and it is the colour of its fibre.
 
-`common/lc-duplex-v-adapter@4` draws its housing from the `housing-finish` field
-(OS2 blue by default), and each cassette in another fibre sets it on every
+`common/lc-duplex-v-adapter@4` and `common/lc-duplex-shuttered-adapter@1` draw
+their housing from a `housing-finish` field (OS2 blue by default), and each cassette in another fibre sets it on every
 adapter it composes - six or twelve `attrs:` lines stating one fact, beside the
 `optical.media` that states it again in words. Nothing else ties them together,
 so an edit that re-measures the colour and misses one line ships a mottled
@@ -18,13 +18,13 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 FS = ROOT / "library" / "components" / "fs"
-ADAPTER = "common/lc-duplex-v-adapter@"
+ADAPTERS = ("common/lc-duplex-v-adapter@", "common/lc-duplex-shuttered-adapter@")
 
 
 def _cassettes():
     for contract in sorted(FS.glob("fhd-*/v*/contract.yaml")):
         doc = yaml.safe_load(contract.read_text())
-        parts = [p for p in doc.get("parts") or [] if str(p.get("ref", "")).startswith(ADAPTER)]
+        parts = [p for p in doc.get("parts") or [] if str(p.get("ref", "")).startswith(ADAPTERS)]
         if doc.get("class") == "cassette" and parts:
             yield f"fs/{doc['name']}@{contract.parent.name[1:]}", doc, parts
 
