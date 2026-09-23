@@ -68,7 +68,7 @@ the *published build*, not about the hardware.
   `[data-class=bay]` instead, and a document already selecting by group will
   now also hit the rear cutouts. In the explorer, a fibre's row says where it
   goes, selecting a fibre marks its far end on every loaded face, and a rear
-  row reads as the slot it is, not the panel hole (roc-ops/Portrayal#PR).
+  row reads as the slot it is, not the panel hole (roc-ops/Portrayal#535).
 
 ### Changed
 - Every fibre a connector declares is now a node you can address: a bore or a
