@@ -1,11 +1,11 @@
 format: 1
 kind: module
 name: fhd-1mtp24-lc-os2-a
-version: 1.5.2
+version: 2.0.0
 class: cassette
 behaviour: fills
 description: >-
-  FS FHD-1X24MTPLCOS2A - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2,
+  FS FHD-1MTP12LCDOS2A - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2,
   Type A polarity. FS SKU 57023. THE FIRST CASSETTE IN THIS LIBRARY WITH A
   SINGLE REAR CONNECTOR WIDER THAN TWELVE - common/mpo-adapter@1 is fixed at
   12 positions, so this rear needs common/mpo24-flange-adapter@1 instead, a sibling
@@ -16,14 +16,14 @@ size-notes: >-
   The faceplate is MEASURED off FS's own face-on render 57023.B.jpg, scaled
   on the 108.97 mm FHD module width and validated against the 35.05 mm
   height to 2.87% (`panel_measure.validate`, limit 3.0%) - the same
-  tolerance fhd-2mtp12-lc-os2-a@1's own 57341.B.jpg reproduces to the tenth
+  tolerance fhd-2mtp12-lc-os2-a@2's own 57341.B.jpg reproduces to the tenth
   of a percent, which is expected: both SKUs share one FHD panel mould at
   twelve front adapters, twenty-four fibres, differing only in what the rear
   carries. The 117.86 depth is FS's own dimension line on 57023.C.jpg, which
   reads 4.29in x 1.38in x 4.64in - 108.97 x 35.05 x 117.86, identical to
   57341's own drawing - corroborating the width and height a second,
   independent way and supplying the one figure the face-on render cannot.
-attrs: {media: fiber, model: FHD-1X24MTPLCOS2A, vendor-sku: '57023'}
+attrs: {media: fiber, model: FHD-1MTP12LCDOS2A, vendor-sku: '57023'}
 body:
   depth: 117.86
   # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
@@ -34,18 +34,18 @@ body:
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@4, at: [17.22, 18.66]}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@4, at: [30.07, 18.66]}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@4, at: [43.09, 18.66]}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@4, at: [56.10, 18.66]}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@4, at: [69.04, 18.66]}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@4, at: [82.14, 18.66]}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@4, at: [17.22, 3.89]}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@4, at: [30.07, 3.89]}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@4, at: [43.09, 3.89]}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@4, at: [56.10, 3.89]}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@4, at: [69.04, 3.89]}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@4, at: [82.14, 3.89]}
+  - {id: lc01, ref: common/lc-duplex-v-adapter@4, at: [15.85, 18.66]}
+  - {id: lc02, ref: common/lc-duplex-v-adapter@4, at: [28.70, 18.66]}
+  - {id: lc03, ref: common/lc-duplex-v-adapter@4, at: [41.72, 18.66]}
+  - {id: lc04, ref: common/lc-duplex-v-adapter@4, at: [54.74, 18.66]}
+  - {id: lc05, ref: common/lc-duplex-v-adapter@4, at: [67.75, 18.66]}
+  - {id: lc06, ref: common/lc-duplex-v-adapter@4, at: [80.60, 18.66]}
+  - {id: lc07, ref: common/lc-duplex-v-adapter@4, at: [15.85, 3.89]}
+  - {id: lc08, ref: common/lc-duplex-v-adapter@4, at: [28.70, 3.89]}
+  - {id: lc09, ref: common/lc-duplex-v-adapter@4, at: [41.72, 3.89]}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@4, at: [54.74, 3.89]}
+  - {id: lc11, ref: common/lc-duplex-v-adapter@4, at: [67.75, 3.89]}
+  - {id: lc12, ref: common/lc-duplex-v-adapter@4, at: [80.60, 3.89]}
 faces:
   rear: {ref: fs/fhd-1mtp24-lc-rear@3}
 optical:
@@ -95,6 +95,16 @@ provenance:
     both two-row plates rather than two independent ones. The odd number
     is the LOWER bore of its adapter, the same reading common/lc-duplex-v-
     adapter@4 composes its two bores in.
+
+    THE DIGITS MOVED WITH THE ADAPTERS IN 2.0.0. They were placed 1.49 left
+    of the first adapter and 1.50 right of the last, and until 2.0.0 the
+    adapters sat about 1.4 mm too far right (see provenance.parts), so the
+    digits did too: 15.73 and 92.92. Kept at those same offsets from the
+    corrected adapters they are 14.36 and 91.38. Checked a second way: the
+    digits' own ink on 57023.B.jpg (the same file as 57341.B.jpg) ends at 14.02 on the left and starts at
+    91.61 on the right, and the same ink measurement on 57016.main.jpg sits
+    0.34 inside fs/fhd-1mtp6lcd-os2-a@2's left anchor and 0.18 outside its
+    right one - applied here, 14.36 and 91.43.
   size: >-
     Faceplate measured off FS's own face-on render 57023.B.jpg, scaled on
     the 108.97 mm FHD module width and validated against the 35.05 mm height
@@ -102,9 +112,11 @@ provenance:
     supplies the depth.
   parts: >-
     THE SIX COLUMN CENTRES AND TWO ROW CENTRES ARE THE MEASUREMENT, not a
-    pitch multiplied out - MEASURED INDEPENDENTLY ON 57023.B.jpg, not copied
-    from fhd-2mtp12-lc-os2-a@1, though the two agree to the third decimal
-    because both renders share one FHD panel mould (see size-notes).
+    pitch multiplied out - measured on 57023.B.jpg. NOT AN INDEPENDENT
+    READING of fhd-2mtp12-lc-os2-a@2's figures, as this note claimed until
+    2.0.0: 57023.B.jpg and 57341.B.jpg are byte-for-byte the same file - FS
+    renders the two SKUs' fronts once - so the two agreeing "to the third
+    decimal" was one image measured twice.
 
     `panel_measure.openings()` on 57023.B.jpg's plate finds six column
     centres per row, identical between the two rows to 0.00 spread: x =
@@ -112,8 +124,25 @@ provenance:
     edge). Five gaps of 12.849, 13.017, 13.016, 12.933, 13.099 - mean 12.983,
     spread 0.25, kept rather than averaged away, the same treatment every
     other FHD cassette in this library gives its own uneven gaps.
-    `at.x` for each column is centre - 9.28/2 (common/lc-duplex-v-adapter@4's
-    own measured width): 17.22, 30.07, 43.09, 56.10, 69.04, 82.14.
+    These are the centres of the pale DUST CAPS, not of the adapters - see
+    below.
+
+    `at.x` WAS THE OPENING'S CENTRE LESS HALF THE ADAPTER UNTIL 2.0.0, AND
+    THAT PUT EVERY ADAPTER 1.2 TO 1.4 mm TOO FAR RIGHT. What `openings()`
+    finds is the pale DUST CAP, and the cap is not centred on the housing:
+    common/lc-duplex-v-adapter@4 records it spanning 2.92-8.77 of the
+    9.28 mm body, so its centre is 1.205 right of the body's. Measured
+    directly instead - the left edge of each coloured housing, the same
+    `openings()` call with a saturation test in place of the pale one - the
+    housings start at x = 15.85, 28.70, 41.72, 54.74, 67.75, 80.60 on
+    57023.B.jpg, and that is `at.x` now. The method is proven on the
+    12-fibre twin first: on 57016.main.jpg it returns 15.81, 28.70, 41.59,
+    54.66, 67.55, 80.44 - fs/fhd-1mtp6lcd-os2-a@2's own `at.x`, to the
+    hundredth. Corroborated on two renders FS drew separately, of other SKUs
+    with this plate: 174248.g1.jpg (OM5) within 0.3 mm and 182644.g1.jpg
+    (OM4 universal) within 0.15. Cap centre less 5.845 gives 16.02-80.93,
+    the same answer to within a pixel. The pitch figures above are the caps'
+    and stand as caps' pitch.
 
     A vertical scan of each column (the pale opening band against the black
     plate) gives two row centres, independently of the horizontal scan and
@@ -122,12 +151,12 @@ provenance:
     nearer the bottom spans y = 19.358 to 31.706, centre 25.532. `at.y` for
     each row is centre - 13.75/2 (the adapter's own measured height): 3.89
     for the row nearer the top, 18.66 for the row nearer the bottom -
-    matching fhd-2mtp12-lc-os2-a@1's own two row centres exactly, which is
+    matching fhd-2mtp12-lc-os2-a@2's own two row centres exactly, which is
     the expected result of two SKUs sharing one front-panel mould rather
     than a coincidence or a copy.
 
     THE TWO ROWS ARE COLUMN-ALIGNED, sharing one set of six x centres -
-    confirmed the same way fhd-2mtp12-lc-os2-a@1's own provenance confirms
+    confirmed the same way fhd-2mtp12-lc-os2-a@2's own provenance confirms
     it, and why `ids` are zero-padded (`lc01`..`lc12`) so string sort never
     disagrees with numeric order.
   optical: >-
@@ -150,23 +179,23 @@ provenance:
     single MTP-24 opening (see below). `optical.front-order` above -
     `[lc01..lc06, lc07..lc12]` - reads bottom row first (1-12), top row
     second (13-24), each left to right: the SAME order and the SAME id
-    convention fhd-2mtp12-lc-os2-a@1 already uses for the same physical
+    convention fhd-2mtp12-lc-os2-a@2 already uses for the same physical
     layout, adopted here because it is what the silkscreen prints, not
     because the two contracts should match. Confidence: SOURCED, read off
     57023.B.jpg and 57023.F.jpg directly, not derived from placement - the
-    same standing fhd-2mtp12-lc-os2-a@1's own `front-order` provenance
+    same standing fhd-2mtp12-lc-os2-a@2's own `front-order` provenance
     documents, including that contract's own two retracted derivations of
     why geometry alone cannot be trusted for this.
 
     THE REAR IS A SINGLE MTP-24, NOT TWO MTP-12s - the one respect in which
-    this SKU differs from fhd-2mtp12-lc-os2-a@1 despite the identical front.
+    this SKU differs from fhd-2mtp12-lc-os2-a@2 despite the identical front.
     57023.E.jpg is FS's own rear render: one MPO/MTP opening, captioned
     `1-24` to its left and `Type A` to its right, with a `MALE` warranty
     seal above it - a single port carrying every position, confirmed
     against the catalogue row itself ("FHD® MTP-24 (Male) to LC Cassette,
     OS2, 24 Fibers, Type A") and against 57023.D.jpg's three-quarter side
     view, which shows one MTP plug (with its pull tab) where
-    fhd-2mtp12-lc-os2-a@1's own equivalent view shows two.
+    fhd-2mtp12-lc-os2-a@2's own equivalent view shows two.
 
     THE MTP-TO-FIBRE PINOUT IS THE SAME ASSUMPTION EVERY OTHER FHD CASSETTE
     IN THIS LIBRARY MAKES, and for the same reason: no per-fibre diagram
@@ -176,7 +205,7 @@ provenance:
     the STANDARD TYPE A STRAIGHT-THROUGH arrangement: MTP position n to
     fibre n in order, rear:mtp.1 to lc01.1 through rear:mtp.24 to lc12.2,
     walking front-order exactly as fhd-1mtp6lcd-os2-a@2 and
-    fhd-2mtp12-lc-os2-a@1 both do for their own twelve and twenty-four.
+    fhd-2mtp12-lc-os2-a@2 both do for their own twelve and twenty-four.
     Confidence: ESTIMATED - the same word carries this contract's pinout
     that it carries theirs.
 
@@ -187,7 +216,7 @@ provenance:
     57341's own rows leave, and does NOT name the polish. `polish: upc` is
     therefore the convention for an OS2 cassette with no APC stated, not a
     fact read off FS's own description of this part - the same wording
-    fhd-1mtp6lcd-os2-a@2 and fhd-2mtp12-lc-os2-a@1 both use for their own
+    fhd-1mtp6lcd-os2-a@2 and fhd-2mtp12-lc-os2-a@2 both use for their own
     identical gap, deliberately not copied verbatim: this note cites SKU
     57023's own catalogue row, not theirs. A catalogue row naming "LC UPC"
     or "LC APC" outright, a datasheet, or a green ferrule in a face-on

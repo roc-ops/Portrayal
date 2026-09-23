@@ -363,7 +363,7 @@ def test_the_two_row_cassette_follows_its_front_order():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    e = idx["fs/fhd-2mtp12-lc-os2-a@2"]
     view = D.contract_view(e)
     want = [str(n) for n in range(1, 25)]
     got = []

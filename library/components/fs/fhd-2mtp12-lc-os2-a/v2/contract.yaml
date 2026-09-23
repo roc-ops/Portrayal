@@ -1,11 +1,11 @@
 format: 1
 kind: module
 name: fhd-2mtp12-lc-os2-a
-version: 1.5.2
+version: 2.0.0
 class: cassette
 behaviour: fills
 description: >-
-  FS FHD-2X12MTPLCOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres,
+  FS FHD-2MTP12LCDOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres,
   OS2, Type A polarity. FS SKU 57341.
 size: {w: 108.97, h: 35.05, d: 117.86}
 size-confidence: {w: photo-measured, h: photo-measured, d: drawing}
@@ -19,7 +19,7 @@ size-notes: >-
   x 1.38in x 4.64in - 108.97 x 35.05 x 117.86 - corroborating the width and
   height a second, independent way and supplying the one figure the face-on
   render cannot.
-attrs: {media: fiber, model: FHD-2X12MTPLCOS2A, vendor-sku: '57341'}
+attrs: {media: fiber, model: FHD-2MTP12LCDOS2A, vendor-sku: '57341'}
 body:
   depth: 117.86
   # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
@@ -30,18 +30,18 @@ body:
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@4, at: [17.22, 18.66]}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@4, at: [30.07, 18.66]}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@4, at: [43.09, 18.66]}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@4, at: [56.10, 18.66]}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@4, at: [69.04, 18.66]}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@4, at: [82.14, 18.66]}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@4, at: [17.22, 3.89]}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@4, at: [30.07, 3.89]}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@4, at: [43.09, 3.89]}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@4, at: [56.10, 3.89]}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@4, at: [69.04, 3.89]}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@4, at: [82.14, 3.89]}
+  - {id: lc01, ref: common/lc-duplex-v-adapter@4, at: [15.85, 18.66]}
+  - {id: lc02, ref: common/lc-duplex-v-adapter@4, at: [28.70, 18.66]}
+  - {id: lc03, ref: common/lc-duplex-v-adapter@4, at: [41.72, 18.66]}
+  - {id: lc04, ref: common/lc-duplex-v-adapter@4, at: [54.74, 18.66]}
+  - {id: lc05, ref: common/lc-duplex-v-adapter@4, at: [67.75, 18.66]}
+  - {id: lc06, ref: common/lc-duplex-v-adapter@4, at: [80.60, 18.66]}
+  - {id: lc07, ref: common/lc-duplex-v-adapter@4, at: [15.85, 3.89]}
+  - {id: lc08, ref: common/lc-duplex-v-adapter@4, at: [28.70, 3.89]}
+  - {id: lc09, ref: common/lc-duplex-v-adapter@4, at: [41.72, 3.89]}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@4, at: [54.74, 3.89]}
+  - {id: lc11, ref: common/lc-duplex-v-adapter@4, at: [67.75, 3.89]}
+  - {id: lc12, ref: common/lc-duplex-v-adapter@4, at: [80.60, 3.89]}
 faces:
   rear: {ref: fs/fhd-2mtp12-lc-rear@2}
 optical:
@@ -89,6 +89,16 @@ provenance:
     right of its last, cap height 2.61. The odd number is the LOWER bore
     of its adapter, the same reading common/lc-duplex-v-adapter@4 composes
     its two bores in.
+
+    THE DIGITS MOVED WITH THE ADAPTERS IN 2.0.0. They were placed 1.49 left
+    of the first adapter and 1.50 right of the last, and until 2.0.0 the
+    adapters sat about 1.4 mm too far right (see provenance.parts), so the
+    digits did too: 15.73 and 92.92. Kept at those same offsets from the
+    corrected adapters they are 14.36 and 91.38. Checked a second way: the
+    digits' own ink on 57341.B.jpg ends at 14.02 on the left and starts at
+    91.61 on the right, and the same ink measurement on 57016.main.jpg sits
+    0.34 inside fs/fhd-1mtp6lcd-os2-a@2's left anchor and 0.18 outside its
+    right one - applied here, 14.36 and 91.43.
   size: >-
     Faceplate measured off FS's own face-on render 57341.B.jpg, scaled on
     the 108.97 mm FHD module width and validated against the 35.05 mm height
@@ -103,9 +113,25 @@ provenance:
     column-aligned with 0.00 spread. Five gaps of 12.8494, 13.0163, 13.0163,
     12.9329, 13.0998 - mean 12.9829, spread 0.2504, kept rather than
     averaged away, the same treatment fhd-1mtp6lcd-os2-a@2 gives its own
-    uneven gap. `at.x` for each column is centre - 9.28/2 (the adapter's own
-    measured width from common/lc-duplex-v-adapter@4): 17.22, 30.07, 43.09,
-    56.10, 69.04, 82.14.
+    uneven gap. These are the centres of the pale DUST CAPS, not of the
+    adapters - see below.
+
+    `at.x` WAS THE OPENING'S CENTRE LESS HALF THE ADAPTER UNTIL 2.0.0, AND
+    THAT PUT EVERY ADAPTER 1.2 TO 1.4 mm TOO FAR RIGHT. What `openings()`
+    finds is the pale DUST CAP, and the cap is not centred on the housing:
+    common/lc-duplex-v-adapter@4 records it spanning 2.92-8.77 of the
+    9.28 mm body, so its centre is 1.205 right of the body's. Measured
+    directly instead - the left edge of each coloured housing, the same
+    `openings()` call with a saturation test in place of the pale one - the
+    housings start at x = 15.85, 28.70, 41.72, 54.74, 67.75, 80.60 on
+    57341.B.jpg, and that is `at.x` now. The method is proven on the
+    12-fibre twin first: on 57016.main.jpg it returns 15.81, 28.70, 41.59,
+    54.66, 67.55, 80.44 - fs/fhd-1mtp6lcd-os2-a@2's own `at.x`, to the
+    hundredth. Corroborated on two renders FS drew separately, of other SKUs
+    with this plate: 174248.g1.jpg (OM5) within 0.3 mm and 182644.g1.jpg
+    (OM4 universal) within 0.15. Cap centre less 5.845 gives 16.02-80.93,
+    the same answer to within a pixel. The pitch figures above are the caps'
+    and stand as caps' pitch.
 
     THE TWO ROW CENTRES ARE ALSO MEASURED, independently for each row and
     likewise with 0.00 spread across all six columns: the row nearer the top

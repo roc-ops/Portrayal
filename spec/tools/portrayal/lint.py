@@ -2308,7 +2308,7 @@ def lint_component_optical_front_order(path, data):
     and which row comes first, is a fact about the SILKSCREEN, and `at.x`/
     `at.y` cannot answer it - the geometry-only derivation would quietly
     guess one, which is exactly what shipped wrong before this rule existed
-    (fs/fhd-2mtp12-lc-os2-a@1's own provenance.parts records both retracted
+    (fs/fhd-2mtp12-lc-os2-a@2's own provenance.parts records both retracted
     guesses). So a module whose fibre-bearing parts sit at more than one
     distinct `at.y` states `optical.front-order` explicitly instead of
     leaving it to be derived.
