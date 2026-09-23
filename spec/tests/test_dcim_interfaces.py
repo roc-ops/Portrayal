@@ -56,6 +56,7 @@ def test_lamps_are_not_interfaces():
     100G interface. The role is what keeps a lamp out, not the typing.
     """
     assert "indicator" in dx.NON_PORT_ROLES
+    assert "fabric" in dx.PORT_ROLES            # cabled like any port (#510)
     assert "furniture" in dx.NON_PORT_ROLES
 
 

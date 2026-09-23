@@ -667,7 +667,14 @@ def breakout_note(breakout, n):
 # THE TWO SETS ARE EXHAUSTIVE OVER THE SCHEMA'S ENUM, and a test holds that. A
 # sixth role must be classified by whoever adds it rather than falling silently
 # to one side - which is the whole defect this replaced, one level up.
-PORT_ROLES = {"traffic", "management", "service"}
+#
+# `fabric` IS A PORT ROLE (#510). The interconnect ports on a distributed
+# chassis - a DDC line-card box's uplinks to its fabric boxes, and every port on
+# the fabric box - are cabled like any other port, so a DCIM that tracks cables
+# needs them as interfaces. They export exactly as they did when they sat in
+# `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
+# fabric is the data path, not the way you reach the box.
+PORT_ROLES = {"traffic", "fabric", "management", "service"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 
