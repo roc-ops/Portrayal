@@ -393,10 +393,17 @@ transform above it and nothing is solved twice.
 ## The kit
 
 - **Lifted seating (decision 8).** `seatOccupant` stops refusing a non-zero lift.
-  It applies the build's rule: the occupant's own `data-z-lift` is the host's
-  presented lift plus the composed lifts above it, and every `data-z-out` inside
-  the occupant is left as the build writes it (`out` is absolute, `lift` is
-  summed). The 7 DCP card cages refused at lift 44 are seated by the same change.
+  It applies the build's rule (settled 2026-09-23). The occupant group's own
+  `data-z-lift` is the slot's lift, which is the host's presented lift plus the
+  host part's own `lift`. That is the figure `components.json` publishes, and
+  `solve_seat` returns it. Every feature inside the occupant then goes through a
+  port of `_inset_feature(feat, back=-L, group_lift=L)`, where L is the
+  EFFECTIVE lift: the slot's lift plus every `data-z-lift` above its carrier.
+  `out` is absolute, so it moves by L. `lift`, `cyl`, `bar` and `uhandle` come
+  out unchanged. An element with `data-ref`, meaning a part or occupant composed
+  inside, keeps the lift its composition wrote. The 7 DCP card cages refused at
+  lift 44 are seated by the same change, and so is every shipped cap: the bores
+  stand 3.175 proud and the FS duplex slot 1.2.
 - **Slots in the inspector.** `nestedCages` becomes `nestedSlots`, reading each
   seated component's slots from `components.json` at any depth. Clicking a slot
   offers its accept list plus `empty`, the default marked. The choice is kept in

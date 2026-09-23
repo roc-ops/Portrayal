@@ -454,7 +454,7 @@ export function createViewer(container, opts = {}) {
       // A REFUSED CAGE OVERRIDE is the cage counterpart of a dropped bay one -
       // `applyOccupantOverrides` will not half-seat an optic into a cage the
       // build does something to that the kit does not (see swap.js
-      // `refusalReason`: lifted, mirrored, or in a group carrying states), so
+      // `refusalReason`: mirrored, or in a group carrying states), so
       // it leaves the cage empty rather than guess with no real build to check
       // against. The cage shows nothing seated in 2D and 3D alike; only the
       // CHOSEN swap silently failed, and that is worth saying. A FAILED one is
@@ -462,7 +462,7 @@ export function createViewer(container, opts = {}) {
       if (refused.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${refused.length} cage `
                      + `override(s) refused - the kit does not seat an optic into `
-                     + `a lifted or mirrored cage, or one whose group carries `
+                     + `a mirrored cage, or one whose group carries `
                      + `states, so the cage is left empty`,
                      refused.map(id => `${id} (${refusalReason(faceCages.find(c => c.id === id))})`));
       if (failed.length)

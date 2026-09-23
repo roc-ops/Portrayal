@@ -947,12 +947,6 @@ export function createShell(opts = {}) {
       // leaves it holding what it held, which the select above now shows.
       const no = state.refused?.[cage.id];
       const why = {
-        // A cage in a well publishes a NEGATIVE lift (its sink), so the
-        // sign says which of the two the refusal is about.
-        'lift': (Number(cage.lift) < 0
-                  ? 'this cage sits in a well below the face'
-                  : 'this cage stands off the face')
-              + ', and the kit does not seat an optic into a cage off the face yet',
         'mirror': 'this cage is mirrored, and the build refuses to seat an '
                 + 'optic into a mirrored cage',
         'group-states': "this cage's group carries lamp states, which the build "

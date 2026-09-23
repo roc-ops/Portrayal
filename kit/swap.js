@@ -262,20 +262,19 @@ export function occupantTransform(cage, comp) {
        + (cage.rotate ? ` rotate(${cage.rotate} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
 }
 
-// A LIFTED CAGE IS REFUSED, NOT HALF-SEATED. For a cage whose aperture stands
-// off the face by L, the build does two things to the optic it seats: it writes
-// `data-z-lift=L` on the occupant group, AND it rewrites every child's
-// `data-z-out` to `out + L` (render.py's `_inset_feature`, called with
-// z_inset=-L) - because `out` is absolute and `lift` is summed. Copying the
-// first without the second puts every `out` face of the optic L mm short in 3D.
-// No DEVICE cage in the library is lifted today (every one publishes
-// lift 0), so a shift formula here would be arithmetic copied from the build
-// with no real build to hold it to. Until one exists, the kit does not seat an
-// optic into a lifted cage at all, and says so.
+// A LIFTED SLOT IS SEATED, AS THE BUILD SEATS IT (B3 Task 9). For a slot whose
+// aperture stands off the face by L, the build does two things to what it
+// seats: `data-z-lift` on the occupant group, AND every descendant's
+// `data-z-out` moved by render.py's `_inset_feature(feat, back=-L,
+// group_lift=L)` - because `out` is absolute and `lift` is summed. The kit
+// refused every such slot until it did both; seatOccupant now does
+// (liftOccupant, insetFeature below), held to real builds by
+// spec/tests/test_lifted_seat_js.py. The library's shipped dust caps made the
+// refusal untenable: every one sits in a bore 3.175 or 1.2 proud.
 //
-// TWO MORE CAGES ARE REFUSED ON THE SAME PRECEDENT, and for the same reason:
-// the build does something to the optic the kit does not, and no cage in the
-// library exists to hold an implementation to.
+// TWO CAGES ARE STILL REFUSED, because the build does something to the optic
+// the kit does not, and no cage in the library exists to hold an
+// implementation to.
 //   mirror        render.py RAISES for an occupant in a mirrored host (the
 //                 optic's handedness would be wrong), so the kit must not
 //                 quietly seat an un-mirrored one there;
@@ -284,17 +283,99 @@ export function occupantTransform(cage, comp) {
 //                 not, so a kit-seated optic would carry none of them.
 // Both are published on the cage entry (render.py `cage_entries`), 0 of each
 // today. A refusal names its reason so the caller can say why.
-//
-// ON A CARD, depth is a second term (nestedCages' `seat-depth`: the card's own
-// sunk or raised seat), refused on its own and not only through the sum -
-// a cage raised 3 mm on a card sunk 3 mm sums to 0, but the build writes
-// data-z-lift 3 on that optic and the kit would write none.
 export function refusalReason(cage) {
   if (!cage) return null;
-  if (+cage.lift || +cage['seat-depth']) return 'lift';
   if (cage.mirror) return 'mirror';
   if (cage['group-states']) return 'group-states';
   return null;
+}
+
+// render.py's `_inset_feature`, PORTED, not re-derived: a relief feature on an
+// instance mounted `back` mm behind the face, of which `groupLift` is already
+// carried by a group's `data-z-lift`. `out` is absolute and moves by `back`;
+// `lift` moves by `back + groupLift`; `cyl`/`bar`/`uhandle` are lengths whose
+// base is `lift`, so their top moves and they are re-measured from the new
+// base. A feature left wholly behind the face is dropped (null). Numbers in,
+// numbers out; rounded to 4 places as the build rounds (occupantAt's r4).
+export function insetFeature(feat, back, groupLift = 0) {
+  if (!back && !groupLift) return feat;
+  const r4 = v => Math.round(v * 1e4) / 1e4;
+  const f = {...feat};
+  const lb = back + groupLift;
+  let top = null;
+  for (const k of ['cyl', 'bar', 'uhandle'])
+    if (f[k] != null) top = (f.lift || 0) + f[k];
+  if (f.out != null) {
+    f.out = r4(f.out - back);
+    if (f.out <= 0) return null;
+  }
+  if (f.lift != null) {
+    f.lift = r4(Math.max(0, f.lift - lb));
+    if (!f.lift) delete f.lift;
+  }
+  if (top != null) {
+    top -= lb;
+    if (top <= 0) return null;
+    for (const k of ['cyl', 'bar', 'uhandle'])
+      if (f[k] != null) f[k] = r4(top - (f.lift || 0));
+  }
+  return f;
+}
+
+// HOW THE BUILD SPELLS A NUMBER, two ways. A figure `_inset_feature` rewrote
+// is written `str(float)`: shortest round-trip, and `44.0`, never `44`. The
+// occupant group's own `data-z-lift` is written `f"{lift:g}"`: six
+// significant figures, no trailing zeros.
+const pyFloat = v => (Number.isInteger(v) ? v.toFixed(1) : String(v));
+export function pyG(v) {
+  const n = Number(Number(v).toPrecision(6));
+  if (!n) return '0';
+  const e = Math.floor(Math.log10(Math.abs(n)));
+  if (e >= -4 && e < 6) return String(n);
+  const [mant, exp] = n.toExponential().split('e');
+  return `${mant}e${exp[0] === '-' ? '-' : '+'}${exp.replace(/^[+-]/, '').padStart(2, '0')}`;
+}
+
+// The `_inset_feature` keys a relief feature carries, and every attribute the
+// build writes from a feature - all absent when the feature is dropped.
+const INSET_KEYS = ['out', 'lift', 'cyl', 'bar', 'uhandle'];
+const FEATURE_ATTRS = ['top', 'sink', 'out', 'dome', 'vent', 'cyl', 'lift', 'bar', 'uhandle',
+                       'dia', 'profile', 'profile-y', 'color', 'hole-color', 'shape', 'knurl',
+                       'thread'].map(k => `data-z-${k}`).concat(['data-depth', 'data-wall']);
+
+// EVERY FEATURE BELOW A SEATED OCCUPANT, MOVED AS THE BUILD MOVES IT. The skin
+// the kit copies is the component's STANDALONE drawing, built at back 0; the
+// build draws the same component seated with back -L and group lift L
+// (`_seat_nested_occupants`: z_inset - lift, z_group_lift + lift; a device
+// seat: -seat_lift, seat_lift), so every feature of it goes through
+// `_inset_feature(feat, -L, L)`. `L` is the EFFECTIVE lift - the slot's own
+// plus every ancestor's (`seat-depth`) - because `out` is measured from the
+// panel, not from the card.
+//
+// AN INSTANCE GROUP IS NOT A FEATURE. An element with `data-ref` - a part the
+// occupant composes, or an occupant seated inside it (a plug's boot) - carries
+// the `data-z-lift` its composition wrote, which the build never passes
+// through `_inset_feature`; its features, below it, are moved like any other.
+function liftOccupant(wrap, L) {
+  if (!L) return;
+  for (const el of wrap.querySelectorAll('*')) {
+    if (el.getAttribute('data-ref') != null) continue;
+    const feat = {};
+    for (const k of INSET_KEYS) {
+      const v = el.getAttribute(`data-z-${k}`);
+      if (v != null) feat[k] = +v;
+    }
+    if (!Object.keys(feat).length) continue;
+    const moved = insetFeature(feat, -L, L);
+    if (!moved) {
+      for (const a of FEATURE_ATTRS) el.removeAttribute(a);
+      continue;
+    }
+    for (const k of INSET_KEYS) {
+      if (moved[k] == null) el.removeAttribute(`data-z-${k}`);
+      else el.setAttribute(`data-z-${k}`, pyFloat(moved[k]));
+    }
+  }
 }
 
 // EVERY ATTRIBUTE THE OCCUPANT <g> CARRIES except its transform, as a plain
@@ -305,9 +386,15 @@ export function refusalReason(cage) {
 //   cage['occupant-attrs']        - render.py's `group_side_attrs` for the host,
 //                                   published per cage: a `media: qsfp-dd` group
 //                                   over the contract's `media: fiber`;
-//   identity                      - id, data-path, data-ref, data-for.
-// No data-z-lift: a lifted cage never gets this far (see refusalReason).
-// Nothing else. If the build ever writes an attribute none of these can supply,
+//   identity                      - id, data-path, data-ref, data-for;
+//   the slot's lift               - `data-z-lift`, omitted at 0.
+// Nothing else.
+//
+// THE GROUP CARRIES ITS OWN LIFT, NOT THE EFFECTIVE ONE. relief.js sums
+// `data-z-lift` up the ancestors, so a slot on a card in a raised bay writes
+// only what the slot adds - `cage.lift` less nestedCages' `seat-depth`, the
+// component's published figure - exactly as render.py writes `f"{lift:g}"`
+// from solve_seat. The ancestors' part goes into the shift (liftOccupant). If the build ever writes an attribute none of these can supply,
 // the parity test fails rather than this growing a special case.
 //
 // AN ID AND A PATH ARE TWO ARGUMENTS, as they are for rename: a device-level
@@ -325,13 +412,16 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occup
   out['data-path'] = occPath;
   out['data-ref'] = `${ref}:${comp.version}`;
   out['data-for'] = cage.id;
+  const own = (+cage.lift || 0) - (+cage['seat-depth'] || 0);
+  if (Math.abs(own) > 1e-9) out['data-z-lift'] = pyG(own);
   return out;
 }
 
 // The <g> that represents `ref` seated in `cage`, built from the component's
-// compiled standalone skin - the occupant's counterpart of seatModule.
+// compiled standalone skin - the occupant's counterpart of seatModule - with
+// every feature moved by the slot's effective lift (liftOccupant).
 // Returns null for a refused cage rather than a half-seated optic
-// (refusalReason: lifted, mirrored, or in a group that carries states).
+// (refusalReason: mirrored, or in a group that carries states).
 // `occId` / `occPath` default to occupantNames(cage): the bare
 // `<cage>-occupant` for a device cage, the module-qualified pair for a cage
 // on a seated card (nestedCages).
@@ -350,6 +440,7 @@ export function seatOccupant(ownerDoc, cage, ref, comp, skinText,
   for (const n of [...doc.documentElement.childNodes])
     (n === root ? [...n.childNodes] : [n]).forEach(k => wrap.appendChild(ownerDoc.importNode(k, true)));
   rename(wrap, comp.name, occId, occPath, '');
+  liftOccupant(wrap, +cage.lift || 0);
   return wrap;
 }
 
@@ -522,19 +613,21 @@ export function nestedBays(rootEl, compByRef) {
 // on the SMM-8x10G the cage node is `front-2/module/xg0/cage`, and the
 // placement `front-2/module/xg0` is what the build names in `data-for`.
 //
-// REFUSED ON THE EFFECTIVE FACTS (R4), which are the card's as well as the
-// cage's, because the kit copies the optic's skin verbatim:
+// SEATED ON THE EFFECTIVE FACTS (R4), which are the card's as well as the
+// cage's, because the kit copies the optic's standalone skin:
 //   lift    the cage's own (a composed cage's lift is in it already), PLUS
 //           every `data-z-lift` from the card's group up. A card in a sunk or
 //           raised bay has every child's absolute `out` shifted by that depth
 //           in the build (draw_bay's pass, a nested bay's z_inset), and an
-//           optic seated there by the build is shifted with them;
+//           optic seated there by the build is shifted with them - so the
+//           shift is this sum, and the optic's own `data-z-lift` is the sum
+//           less `seat-depth` (occupantAttrs);
 //   mirror  the cage's own, or the card drawn mirrored (its own transform):
 //           the build refuses both, as it refuses a mirrored device cage.
 // `group-states` is the cage's own - a component declares no groups.
 //
 // Each entry adds, to the component's cage: `seat-depth` (that ancestor sum;
-// `lift` becomes the effective figure), `id` (the drawing path), `cage`
+// `lift` becomes the effective figure, and the difference is the cage's own), `id` (the drawing path), `cage`
 // (the component-local id), `module` (the card's group element), `modulePath`,
 // `moduleId` (its element id, which names the optic) and `carrier` (the ref
 // without its version, which applyOccupantOverrides re-checks).

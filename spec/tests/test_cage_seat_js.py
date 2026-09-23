@@ -5,9 +5,10 @@ cage in 2D and 3D alike. It repeats ONE formula from render.py - `seat_at`, as
 `occupantAt` - and assembles the occupant's attributes from three published
 sources: the skin root's `data-*`, the cage's `occupant-attrs` (render.py's
 `group_side_attrs`), and identity (`data-ref`, `data-for`, `id`/`data-path`).
-A LIFTED cage is refused rather than half-seated - the build also shifts every
-child's absolute `out`, and no lifted cage exists to hold that to. A formula checked against itself
-proves nothing, so both halves are held to a REAL build: a fitted copy is
+A LIFTED cage is seated as the build seats it - the lift on the group and every
+child's absolute `out` moved by it (B3 Task 9; test_lifted_seat_js.py holds that
+to real builds). A mirrored or group-states cage is refused. A formula checked
+against itself proves nothing, so both halves are held to a REAL build: a fitted copy is
 rendered, and what render.py wrote on every occupant is the expected answer.
 
 THE LIBRARY SHIPS NO FITTED DEVICE (docs/pluggables-design.md decision 2), so
@@ -235,14 +236,20 @@ def test_an_occupant_override_replaces_empties_and_leaves_alone():
     assert out["applied"] == 5, (
         "port-7 is not in the map and must not be touched; port-6's skin never "
         "loaded, so nothing about it changed")
-    assert out["refused"] == ["port-8", "port-9", "port-10"], (
-        "a lifted, a mirrored and a group-states cage are each refused, and the "
-        "refusal is reported to the caller")
-    for port in ("port-8", "port-9", "port-10"):
+    # THE RULE CHANGED (B3 Task 9): a lifted cage is no longer refused - the
+    # kit now does both halves of what the build does to it
+    assert out["refused"] == ["port-9", "port-10"], (
+        "a mirrored and a group-states cage are each refused, and the refusal is "
+        "reported to the caller")
+    for port in ("port-9", "port-10"):
         assert out["after"][port] == [], (
             f"{port}: a refused cage is left empty - never a half-seated optic")
-    assert out["seatRefused"] == [None, None, None]
-    assert out["reasons"] == [None, None, None, None, "lift", "mirror", "group-states"]
+    assert out["seatRefused"] == [None, None]
+    assert out["reasons"] == [None, None, None, None, None, "mirror", "group-states"]
+    assert [o["ref"] for o in out["after"]["port-8"]] == ["generic/sfp-lc@1:1.0.0"], (
+        "a lifted cage is seated")
+    assert out["port8Lift"] == ["3"] and out["liftedLift"] == "3", (
+        "with its lift on the occupant group, as render.py writes it")
     assert out["emptyRefused"] == {"applied": 1, "refused": [], "failed": []}, (
         "emptying a refused cage is not a refusal")
     assert out["second"] == {"applied": 1, "refused": [], "failed": []}
