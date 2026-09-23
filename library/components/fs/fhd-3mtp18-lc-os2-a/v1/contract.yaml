@@ -21,24 +21,24 @@ body:
   # every FHD cassette's is, centred behind the plate.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
-  - {id: lc01, ref: common/lc-duplex-shuttered-adapter@1, at: [12.88, 22.3]}
-  - {id: lc02, ref: common/lc-duplex-shuttered-adapter@1, at: [25.99, 22.3]}
-  - {id: lc03, ref: common/lc-duplex-shuttered-adapter@1, at: [41.08, 22.3]}
-  - {id: lc04, ref: common/lc-duplex-shuttered-adapter@1, at: [54.19, 22.3]}
-  - {id: lc05, ref: common/lc-duplex-shuttered-adapter@1, at: [68.88, 22.3]}
-  - {id: lc06, ref: common/lc-duplex-shuttered-adapter@1, at: [81.99, 22.3]}
-  - {id: lc07, ref: common/lc-duplex-shuttered-adapter@1, at: [12.88, 11.3]}
-  - {id: lc08, ref: common/lc-duplex-shuttered-adapter@1, at: [25.99, 11.3]}
-  - {id: lc09, ref: common/lc-duplex-shuttered-adapter@1, at: [41.08, 11.3]}
-  - {id: lc10, ref: common/lc-duplex-shuttered-adapter@1, at: [54.19, 11.3]}
-  - {id: lc11, ref: common/lc-duplex-shuttered-adapter@1, at: [68.88, 11.3]}
-  - {id: lc12, ref: common/lc-duplex-shuttered-adapter@1, at: [81.99, 11.3]}
-  - {id: lc13, ref: common/lc-duplex-shuttered-adapter@1, at: [12.88, 0.3]}
-  - {id: lc14, ref: common/lc-duplex-shuttered-adapter@1, at: [25.99, 0.3]}
-  - {id: lc15, ref: common/lc-duplex-shuttered-adapter@1, at: [41.08, 0.3]}
-  - {id: lc16, ref: common/lc-duplex-shuttered-adapter@1, at: [54.19, 0.3]}
-  - {id: lc17, ref: common/lc-duplex-shuttered-adapter@1, at: [68.88, 0.3]}
-  - {id: lc18, ref: common/lc-duplex-shuttered-adapter@1, at: [81.99, 0.3]}
+  - {id: lc01, ref: common/lc-duplex-shuttered-adapter@1, at: [12.95, 23.325]}
+  - {id: lc02, ref: common/lc-duplex-shuttered-adapter@1, at: [26.06, 23.325]}
+  - {id: lc03, ref: common/lc-duplex-shuttered-adapter@1, at: [41.13, 23.325]}
+  - {id: lc04, ref: common/lc-duplex-shuttered-adapter@1, at: [54.24, 23.325]}
+  - {id: lc05, ref: common/lc-duplex-shuttered-adapter@1, at: [68.99, 23.325]}
+  - {id: lc06, ref: common/lc-duplex-shuttered-adapter@1, at: [82.10, 23.325]}
+  - {id: lc07, ref: common/lc-duplex-shuttered-adapter@1, at: [12.95, 11.725]}
+  - {id: lc08, ref: common/lc-duplex-shuttered-adapter@1, at: [26.06, 11.725]}
+  - {id: lc09, ref: common/lc-duplex-shuttered-adapter@1, at: [41.13, 11.725]}
+  - {id: lc10, ref: common/lc-duplex-shuttered-adapter@1, at: [54.24, 11.725]}
+  - {id: lc11, ref: common/lc-duplex-shuttered-adapter@1, at: [68.99, 11.725]}
+  - {id: lc12, ref: common/lc-duplex-shuttered-adapter@1, at: [82.10, 11.725]}
+  - {id: lc13, ref: common/lc-duplex-shuttered-adapter@1, at: [12.95, 0.125]}
+  - {id: lc14, ref: common/lc-duplex-shuttered-adapter@1, at: [26.06, 0.125]}
+  - {id: lc15, ref: common/lc-duplex-shuttered-adapter@1, at: [41.13, 0.125]}
+  - {id: lc16, ref: common/lc-duplex-shuttered-adapter@1, at: [54.24, 0.125]}
+  - {id: lc17, ref: common/lc-duplex-shuttered-adapter@1, at: [68.99, 0.125]}
+  - {id: lc18, ref: common/lc-duplex-shuttered-adapter@1, at: [82.10, 0.125]}
 faces:
   rear: {ref: fs/fhd-3mtp18-lc-rear@1}
 optical:
@@ -94,25 +94,28 @@ provenance:
     and `36`, `24` and `12` down the right, top to bottom - so the BOTTOM row
     is 1-12, the middle 13-24 and the top 25-36, as on the 12- and 24-fibre
     plates. One number per row end, not a pair: these adapters are side by
-    side, so a row end is one port. Measured on 105333.main.jpg and its twin
-    render, which agree to 0.2 mm: each side's digits are centred on one
-    column, x 10.97 and 97.43; cap height 2.23 (2.29 in a plate frame 2.76%
-    tall), so 3.0 type at the family's 2.61/3.5 ratio; regular weight, as FS
-    prints them; each baseline 7.34 below its row's top, measured from the row
-    seams rather than the plate frame.
+    side, so a row end is one port. Measured on 105333.main.jpg, the render
+    that passes panel_measure's check (105335.main.jpg agrees to 0.2 mm and is
+    not used). Across, in the plate frame: each side's digits centre on one
+    column, x 10.98 and 97.44. Up, from the row seams, in units of the row
+    pitch, so the frame's vertical shortfall cancels: the `25`/`36` baselines
+    sit 0.333 pitch above the first seam, `13`/`24` 0.623 below it and `1`/`12`
+    1.666 below it - 7.86, 18.96 and 31.05 on the 11.6 pitch. The middle pair
+    sits half a millimetre higher in its row than the other two, and is drawn
+    so; both renders show it. Cap height 2.35 (2.29 in the short frame), so
+    3.15 type at the family's 2.61/3.5 ratio; regular weight, as FS prints
+    them.
   parts: >-
     EIGHTEEN common/lc-duplex-shuttered-adapter@1, three rows of three abutting
-    PAIRS. ACROSS, measured: on 105333.main.jpg and 105335.main.jpg the pairs
-    span 12.95-39.33, 41.13-67.18, 68.99-95.21 and 12.80-39.39, 41.03-66.96,
-    68.76-95.18; the housings' left edges are the two renders' means, 12.88,
-    41.08, 68.88, each pair's second adapter one width (13.11) on, and 1.8 mm
-    of plate between pairs. The in-pair seams read 26.05 and 82.1 on 105333,
-    where that predicts 25.99 and 81.99. UP, ESTIMATED: the rows abut on an
-    11.0 pitch, and the block starts at the plate's top edge on the render -
-    rows at 0.3, 11.3 and 22.3, leaving 1.75 below. The render is not square-on
-    enough to measure that absolutely (the lid shows above the plate and the
-    proud adapters project downward), so the three tops are estimated; their
-    pitch is not.
+    PAIRS. ACROSS, MEASURED on 105333.main.jpg: the pairs span 12.95-39.33,
+    41.13-67.18 and 68.99-95.21, with 1.8 mm of plate between them; each pair's
+    second adapter starts one width (13.11) on, at 26.06, 54.24 and 82.10, and
+    the in-pair seams read 26.05 and 82.1 where that predicts them.
+    105335.main.jpg agrees within 0.25 and is not used. UP, ESTIMATED: the rows
+    abut on the adapter's 11.6 pitch (see its size-notes for why 11.6), and the
+    three of them fill the plate's height - 34.8 of 35.05 - as the render
+    shows, so they are centred: tops 0.125, 11.725 and 23.325. That centring is
+    the estimate; the pitch rests on the foreshortening correction.
   knobs: >-
     read by eye, like every FHD plate's: one knurled knob at each end near the
     edge, about 4.9 in from it on 105333.main.jpg and roughly 7.8 across, so r

@@ -10,18 +10,24 @@ description: >-
   rows of six. The shutters are part of the adapter, which is why those plates
   ship with no dust caps. The same body as common/lc-duplex-adapter@4 in
   outline, latch keyways up; what differs is the shutter in each bore.
-size: {w: 13.1, h: 11.0}
-size-confidence: {w: photo-measured, h: photo-measured}
+size: {w: 13.1, h: 11.6}
+size-confidence: {w: photo-measured, h: estimated}
 size-notes: >-
-  MEASURED ON FS's face-on renders of SKUs 105333 and 105335 (105333.main.jpg,
-  105335.main.jpg), through spec/tools/intake/panel_measure.py. WIDTH: the
-  adapters abut in pairs, three pairs to a row, and the three pairs measure
-  26.38, 26.05 and 26.22 wide on 105333 and 26.59, 25.93 and 26.42 on 105335 -
-  a mean of 26.26, so 13.1 an adapter. HEIGHT: the three rows abut too, and
-  repeat every 11.31 in the plate frame - a frame whose own height misses 35.05
-  by 2.76% on this render, which puts the true pitch at 11.0. That is also
-  common/lc-duplex-adapter@4's height, measured independently off another
-  vendor's panel, and the two agreeing is the check.
+  WIDTH IS MEASURED, on FS's render of SKU 105333 (105333.main.jpg), which
+  passes spec/tools/intake/panel_measure.py's check: the adapters abut in
+  pairs, three pairs to a row, and the pairs measure 26.38, 26.05 and 26.22 - a
+  mean of 26.22, so 13.1 an adapter. 105335.main.jpg, which misses the check at
+  3.08%, reads within 0.25 of each and is not used. HEIGHT IS ESTIMATED, and it
+  is not common/lc-duplex-adapter@4's 11.0. The three rows abut and repeat
+  every 11.31 in the width-scaled frame, but the render looks down on the
+  cassette (the lid shows), so vertical distances come out short: the detected
+  plate is 34.08 tall against a true 35.05, 2.76% short, and the lid's apparent
+  depth puts the camera about 12-13 degrees up, which foreshortens by the same
+  amount. Corrected, the pitch is 11.6, and three rows fill 34.8 of the plate's
+  35.05 - which is what the render shows, the blue running from the plate's top
+  edge to its bottom. Until review this part said 11.0, reached by applying
+  that correction the wrong way round and then taking the agreement with the
+  other adapter as a check.
 attrs: {media: fiber, connector: lc-duplex}
 fields:
   housing-finish:
@@ -41,24 +47,24 @@ relief:
         common/lc-duplex-adapter@4's photo-measured stand-off, an eighth of an
         inch. The same body; FS's 36-fibre renders are too oblique across the
         adapters' faces to read their own.
-parts:
-  # BEHIND THE SKIN, so the shutters the skin draws paint OVER the bores rather
-  # than under their dark openings (common/lc-duplex-v-adapter@4's caps were
-  # buried the same way until #497). Tongue up, as common/lc-duplex-adapter@4
-  # composes them, centred 6.25 apart on the 13.1 body.
-  - {ref: std/lc-bore@3, id: tx, at: [1.075, 1.55], lift: 3.175, rotate: 180, behind: true}
-  - {ref: std/lc-bore@3, id: rx, at: [7.325, 1.55], lift: 3.175, rotate: 180, behind: true}
 connection-points:
-  optical: {at: [6.55, 5.5], direction: front}
+  optical: {at: [6.55, 5.8], direction: front}
 provenance:
   size: >-
     see size-notes.
   bores: >-
-    std/lc-bore@3, composed exactly as common/lc-duplex-adapter@4 composes them
-    - rotate 180, tongue up, the verified 6.25 pitch - and centred on this
-    body's 13.1 rather than that one's 13.2, so both sit 0.05 left of where
-    that part puts them. The keyways are up on FS's renders too: the two small
-    latch windows show at the top edge of each adapter on 105333.main.jpg.
+    NO BORES ARE COMPOSED, BECAUSE A CLOSED SHUTTER HIDES THEM. The keyed
+    opening is std/lc-bore@3's outline, cut as two evenodd holes in the raised
+    bezel - tongue up, the verified 6.25 pitch, centred on this 13.1 x 11.6
+    body - and what shows through each hole is the shutter, 3.175 back at the
+    plate plane. The first version composed the bores as
+    common/lc-duplex-adapter@4 does, behind the skin; in 2D the shutters
+    covered them, but in 3D each bore's own ferrule, a raised white cylinder,
+    stood out through every closed door - a port that looks open on a part
+    whose whole point is that it is shut. The two fibre positions are this
+    part's own `optical.positions`, not the bores', so nothing a cassette or an
+    export reads changed. The keyways are up on FS's renders too: the latch
+    windows show at the top edge of each adapter on 105333.main.jpg.
   shutter: >-
     ONE SHUTTER PER BORE, CLOSED. Each bore on FS's renders is filled by a pair
     of angled doors in the housing's own plastic, meeting down the bore's

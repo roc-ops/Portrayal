@@ -117,3 +117,27 @@ def test_both_plugs_say_the_coincidence_is_load_bearing():
         note = prov["boot-coincides-with-mate"]
         assert "test_a_boot_point_is_the_mate_point" in note, (
             f"{rel}: the note must name the test that enforces it")
+
+
+def test_every_panel_adapter_has_a_port_family():
+    """A panel adapter the exporter cannot name exports no ports at all.
+
+    `optical_ports.FAMILY` maps a connector's ref to the family its DCIM port
+    type is spelled from (`lc` + polish -> `lc-upc`), and a ref it does not
+    list gets type None - so every front and rear port of a cassette composing
+    it silently drops out of the export. common/lc-duplex-shuttered-adapter@1
+    did exactly that: both 36-fibre cassettes exported nothing until the table
+    learned its name. Asked here, at the moment a connector joins the list
+    above, rather than when a cassette happens to compose it.
+
+    Scoped to the `common/...-adapter` panel parts. The splice and the cable-end
+    plug are fibre connectors of other kinds, and are exported another way.
+    """
+    from portrayal.optical_ports import FAMILY
+    adapters = [rel for rel in FIBRE_CONNECTORS
+                if rel.startswith("common/") and rel.split("/")[1].endswith("-adapter")]
+    assert len(adapters) >= 10, f"only {len(adapters)} panel adapters found - has the list moved?"
+    unnamed = [rel for rel in adapters if rel.rsplit("/", 1)[0] not in FAMILY]
+    assert not unnamed, (
+        "these panel adapters have no port family in optical_ports.FAMILY, so a "
+        f"cassette composing one exports no ports: {unnamed}")
