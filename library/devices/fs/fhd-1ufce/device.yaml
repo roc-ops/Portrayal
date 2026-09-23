@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 1.9.1
+version: 2.0.0
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -54,7 +54,7 @@ provenance:
       an empty bay opening. Each bay is sized at 108.97 x 35.05 - the FHD module envelope, a
       FAMILY CONSTANT common to every cassette this format admits, not a figure this device
       measures itself or that belongs to any one cassette. It was first measured off FS's own
-      render for fs/fhd-1mtp6lcd-os2-a@1 (SKU 57016), and `panel_measure` refuses to scale ANY FHD
+      render for fs/fhd-1mtp6lcd-os2-a@2 (SKU 57016), and `panel_measure` refuses to scale ANY FHD
       face-on render at all unless that scale reproduces the same 35.05mm height - which is what
       makes this a constant worth carrying rather than a per-cassette reading. THE RULE, NOT A
       COUNT: every FHD cassette this library models seats in every bay's `accepts`, because the
@@ -91,7 +91,7 @@ provenance:
       right because the back is seen from behind; their real outline, and whether it is one
       hole or four, is still open (the `envelope-face-detail` gap). Each runs 431.8 in - the
       432.8 drawer less a 1.0 front plate, which is ESTIMATED - so the slot is a passage the
-      cassette's own 110.24 or 117.86 mm body stands in, open front to back when it is out.
+      cassette's own 117.86 mm body stands in, open front to back when it is out.
 
 chassis:
   width: 448.0
@@ -152,7 +152,9 @@ gaps:
       RE-READ A THIRD TIME when fs/fhd-1mtp12-sc-os2-a@1 joined every bay's
       `accepts`: its single MTP trunk leaves through the same undimensioned
       rear opening its LC and splice siblings use - a deeper cassette body
-      (117.86 mm against 110.24), not a different rear opening - so the gap
+      (117.86 mm against 110.24, as was then believed; every FHD cassette here
+      is 117.86, the 110.24 having been a misreading corrected in
+      fs/fhd-1mtp6lcd-os2-a@2), not a different rear opening - so the gap
       stands unchanged a third time.
       RE-READ A FOURTH TIME when fs/fhd-1mtp24-lc-os2-a@1 joined every bay's
       `accepts`: its single MTP-24 trunk leaves through the same
@@ -198,8 +200,8 @@ views:
           at: [6.06, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@1
-            - fs/fhd-splice-12-lc@1
+            - fs/fhd-1mtp6lcd-os2-a@2
+            - fs/fhd-splice-12-lc@2
             - fs/fhd-2mtp12-lc-os2-a@1
             - fs/fhd-1mtp12-sc-os2-a@1
             - fs/fhd-1mtp24-lc-os2-a@1
@@ -215,8 +217,8 @@ views:
           at: [115.03, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@1
-            - fs/fhd-splice-12-lc@1
+            - fs/fhd-1mtp6lcd-os2-a@2
+            - fs/fhd-splice-12-lc@2
             - fs/fhd-2mtp12-lc-os2-a@1
             - fs/fhd-1mtp12-sc-os2-a@1
             - fs/fhd-1mtp24-lc-os2-a@1
@@ -232,8 +234,8 @@ views:
           at: [224.00, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@1
-            - fs/fhd-splice-12-lc@1
+            - fs/fhd-1mtp6lcd-os2-a@2
+            - fs/fhd-splice-12-lc@2
             - fs/fhd-2mtp12-lc-os2-a@1
             - fs/fhd-1mtp12-sc-os2-a@1
             - fs/fhd-1mtp24-lc-os2-a@1
@@ -249,8 +251,8 @@ views:
           at: [332.97, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@1
-            - fs/fhd-splice-12-lc@1
+            - fs/fhd-1mtp6lcd-os2-a@2
+            - fs/fhd-splice-12-lc@2
             - fs/fhd-2mtp12-lc-os2-a@1
             - fs/fhd-1mtp12-sc-os2-a@1
             - fs/fhd-1mtp24-lc-os2-a@1
@@ -329,17 +331,17 @@ configurations:
   populated:
     kind: example
     description: >-
-      All four bays carrying fs/fhd-1mtp6lcd-os2-a@1, chosen as one
+      All four bays carrying fs/fhd-1mtp6lcd-os2-a@2, chosen as one
       representative cassette from the FHD catalogue this same bay format
       accepts - see `provenance.bays` for the rest. Illustrative, like every
       `example` in this library: the cassettes are ordered separately from
       the enclosure, and later tasks in this plan add the rest of the
       catalogue this same bay format accepts.
     bays:
-      bay-1: fs/fhd-1mtp6lcd-os2-a@1
-      bay-2: fs/fhd-1mtp6lcd-os2-a@1
-      bay-3: fs/fhd-1mtp6lcd-os2-a@1
-      bay-4: fs/fhd-1mtp6lcd-os2-a@1
+      bay-1: fs/fhd-1mtp6lcd-os2-a@2
+      bay-2: fs/fhd-1mtp6lcd-os2-a@2
+      bay-3: fs/fhd-1mtp6lcd-os2-a@2
+      bay-4: fs/fhd-1mtp6lcd-os2-a@2
 datasheet:
   title: 'FS FHD 1U Rack Mount Fiber Enclosure datasheet'
   sha256: 6459020299a17a9326a3d867ef1ec082b10b874d46cf02ee19dc0acaa29a94b2

@@ -74,7 +74,7 @@ def test_the_enclosure_accepts_every_fs_cassette_in_the_library():
     assert not missing, f"cassettes the enclosure does not accept: {missing}"
 
 
-SPLICE = "fs/fhd-splice-12-lc/v1"
+SPLICE = "fs/fhd-splice-12-lc/v2"
 
 
 def test_the_splice_cassette_states_that_nothing_measured_it():
@@ -85,7 +85,7 @@ def test_the_splice_cassette_states_that_nothing_measured_it():
     the prose needs rewriting too.
     """
     c = contract(SPLICE)
-    assert c is not None, "fs/fhd-splice-12-lc@1 not built"
+    assert c is not None, "fs/fhd-splice-12-lc@2 not built"
     conf = set(c["size-confidence"].values())
     assert conf <= {"estimated", "borrowed"}, \
         f"claims a measurement the corpus cannot support: {c['size-confidence']}"
