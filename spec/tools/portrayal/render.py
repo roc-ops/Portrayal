@@ -27,7 +27,7 @@ from portrayal.manifest import (view_parts, targets, split_target, component_ref
                       presented_interface, seat_point, _turn,
                       load_yaml, resolve_views, module_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
-                      occupant_spec)
+                      occupant_spec, alias_names, config_airflow)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -1473,7 +1473,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # index and the exporters so they cannot disagree about what the bag holds.
     for ak, av in attrs_mod.flatten(device.get("attrs")).items():
         svg.set(f"data-{ak}", str(av))
-    airflow = config.get("airflow") or (device.get("chassis") or {}).get("airflow")
+    airflow = config_airflow(device, config)
     if airflow:
         svg.set("data-airflow", airflow)
     skin_overrides = config.get("skins") or {}
@@ -3168,6 +3168,11 @@ def main():
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
+                 # THE OTHER NAMES THIS BOX IS SOLD OR LISTED UNDER - an HCL's
+                 # AS number, a marketing name, an OEM's name (#514). Names
+                 # only; kind and note stay in the manifest. `model` remains
+                 # the canonical one and is never repeated here.
+                 "aliases": alias_names(device),
                  "capability": cap["capability"], "gaps": cap["gaps"],
                  # FACES ONLY. A view carrying `face:` is a VARIANT - the
                  # 12 x 3.5in front is drawn when a configuration redirects the
@@ -3181,8 +3186,13 @@ def main():
                  # to know what that view holds.
                  "views": [v for v, w in device["views"].items()
                            if not (w or {}).get("face")],
+                 # `airflow` is the chassis's own statement - the value every
+                 # configuration that states none inherits - or null where the
+                 # device says nothing. Each configuration's RESOLVED answer is
+                 # `configs[].airflow` below; read that, not this, to learn how
+                 # a particular build breathes.
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
-                             "ru": ch.get("ru")},
+                             "ru": ch.get("ru"), "airflow": ch.get("airflow")},
                  # facts about the device that belong to no view. They reach the
                  # drawing as data-* on the SVG root, which meant a viewer had to
                  # load and scrape a picture to answer "how much memory" - and
@@ -3207,6 +3217,16 @@ def main():
                               # this renderer makes up when a device declares no
                               # configurations - nothing is invented for it.
                               "kind": c.get("kind"),
+                              # WHICH WAY THIS BUILD BREATHES - front-to-back,
+                              # back-to-front, side or passive, the library's
+                              # own words - resolved exactly as the drawing's
+                              # `data-airflow` is (config_airflow: the
+                              # configuration's value, else the chassis's), so
+                              # a page filtering builds by airflow reads it here
+                              # instead of parsing `ac-b2f` out of a name or
+                              # "exhaust airflow" out of a description (#513).
+                              # `null` where the device states no airflow.
+                              "airflow": config_airflow(device, c),
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
                               # WHAT THIS CONFIGURATION SEATS IN ITS CAGES,

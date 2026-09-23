@@ -15,6 +15,12 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- Every `configs[]` entry in `<device>.configs.json` carries `airflow` —
+  `front-to-back`, `back-to-front`, `side` or `passive`, or `null` where the
+  device states none — resolved the way each drawing's `data-airflow` is (the
+  configuration's value, else the chassis's). The `chassis` block carries the
+  chassis's own `airflow`. A page filtering builds by airflow no longer parses
+  it out of a configuration's name or description (roc-ops/Portrayal#513).
 - `devices.json` carries `contract: 1` — the first version a consumer can check
   (roc-ops/Portrayal#185).
 - `library/dist/devices.lock.json`: every device's fingerprint in one file,
@@ -26,8 +32,48 @@ the *published build*, not about the hardware.
 - Device types carry `power-ports` where the chassis holds the inlet, and RF and
   timing jacks as `other` interfaces with their connector or function as a label
   (roc-ops/Portrayal#286, roc-ops/Portrayal#285).
+- `<device>.configs.json` and every `devices.json` entry carry `aliases`: the
+  other names the box is sold or listed under - an AS number, a marketing name,
+  a DriveNets name - as a list of strings, `[]` when there are none. `model`
+  stays the canonical name and is never repeated there. The names are also in
+  the `devices.json` search field, so a hardware compatibility list's AS9716-32D
+  finds `dcs510` (roc-ops/Portrayal#514).
 
 ### Changed
+- `data-speed` is spelled from one closed set - `10m 100m 1g 2.5g 5g 10g 20g
+  25g 40g 50g 100g 200g 400g 800g 1.6t`, in `spec/schemas/speeds.yaml` - and
+  means the highest native rate the port runs at. **Values a consumer may filter
+  on changed:** `100m-1g`, `1000base-t`, `100/1000base-t` and `10/100/1000` are
+  all `1g`; `400g-capable` is `400g`; the MX304's GM/PTP port is `10g`, with its
+  reserved-for-future-use caveat moved to the placement's description. USB
+  generation left `speed` for its own `data-usb` (`2.0`, `3.0`; was `usb2`,
+  `usb-2.0`, `usb3`, `usb-3.0`), and the HLX-TGV's PON port is `speed: 10g` with
+  `data-pon="xgs-pon"` (was `10g-pon`). The MX304 LMIC16's twelve 100G-only
+  ports now state `100g` (its module type still exports all sixteen by the
+  cage, as `400gbase-x-qsfpdd`, as before). Lint L110 holds the set. 63 devices took a patch bump,
+  and `juniper/mx304-lmic16`, `juniper/jnp304-re` and `smartoptics/dcp-f-a22` a
+  patch each (roc-ops/Portrayal#512).
+- Device types export the CSR180's and CSR200's four RJ45 traffic ports each as
+  `1000base-t`; their `100/1000base-t` spelling had no interface-type row, so
+  all eight exported nothing. For the same reason the management SFP on the
+  DCP-2, DCP-R-34D-CS and DCP-R-9D-CS (`100m-1g`) now exports as a
+  management-only `1000base-x-sfp`, and the MX304's GM/PTP SFP as a
+  management-only `10gbase-x-sfpp` (roc-ops/Portrayal#512).
+- `attrs.features.vendor-alias`, `attrs.features.marketing-name` and
+  `attrs.platform.oem-alias` are gone from `configs.json` `attrs`, and from the
+  facts list in the DCIM exports' comments. Their values moved to the
+  top-level `aliases` above, with any caveat kept as the alias's note in the
+  manifest; the exports' comments name the aliases on an "Also sold or listed
+  as" line instead (roc-ops/Portrayal#514).
+- `group-role` takes a sixth value, `fabric`: the cell or chassis interconnect
+  ports of a distributed chassis. The 241 fabric ports on nine DDC boxes carry
+  `data-group-role="fabric"` where they carried `traffic` (the S9700-53DX,
+  S9701-82DC, S9705-48D, S9710-76D, S9720-56ED, S9725-64E, COR550 and COR580)
+  or `service` (the S9700-23D), so a filter on `traffic` now sees fewer ports
+  and `[data-class="port"][data-group-role="fabric"]` selects exactly the
+  fabric. Group names and port ids are unchanged, and the NetBox and Nautobot
+  exports list these ports as interfaces exactly as before. Fabric CARD slots
+  stay `service` (roc-ops/Portrayal#510).
 - A pluggable cage's `rotate`, and so `cages[].rotate`, has one meaning: 0 is a
   module seated upright, bail at the top and belly at the bottom. Every
   belly-to-belly SFP/QSFP/QSFP-DD stack is drawn upper 0 over lower 180, or left

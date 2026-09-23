@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 3.0.9
+version: 3.0.10
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -368,8 +368,10 @@ views:
         - {id: tod, ref: std/rj45@2, at: [93.4, 48.8], group: timing, rel-pos: 5,
            attrs: {function: Time of day}}
         - {id: gm-ptp, ref: std/sfp@1, at: [92.85, 69.9], rotate: 90, group: timing, rel-pos: 6,
-           attrs: {media: sfp, function: PTP grandmaster clock port, speed: 1g/10g
-             (reserved for future use per the guide)}}
+           attrs: {media: sfp, function: PTP grandmaster clock port, speed: 10g},
+           description: 'takes 1-GbE and 10-GbE optics per the guide, so its speed is the
+             higher of the two; the same guide says this port is reserved for future use and
+             currently unsupported'}
         - {id: led-gm-ptp, ref: common/led-dot@1, at: [92.6, 71.8], for: gm-ptp,
            group: gm-ptp-leds, rel-pos: 0}
         - {id: led-fan-0, ref: common/led-dot@1, at: [201.6, 77.6], for: fan-0, group: fan-leds, rel-pos: 0}
