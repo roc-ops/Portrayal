@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo
-version: 2.0.0
+version: 2.0.1
 interface: mpo
 class: port
 profile: networking
@@ -41,15 +41,26 @@ provenance:
     tier (std/lc-bulkhead-bore@1's `keyway`). 0.40 is taken on both axes:
     12.5 + 0.40 = 12.9 and 7.6 + 0.40 = 8.0. The lower end would give
     12.66 x 7.76.
-    WHY THE UPPER END. Every undimensioned reading of an MPO mouth held here
-    sits at or above it: FS's face-on render of SKU 35510 shows a capped port's
-    visible content at 12.82 x 8.09 (common/mpo-dust-cap@2's `size-notes`);
-    SENKO DS-MPO-000004's top view draws its seated dust cap with a collar
-    12.87 across; and the drawn outermost outlines inside the adapter body read
-    8.21 short on C10783 and 8.22 on DS-MPO-000004's front view, each on the
-    sheet's own two printed rulers. Those readings chose the END of a measured
-    range. None of them is a measurement of the opening, and none is adopted
-    as one.
+    THE UNDIMENSIONED READINGS, AXIS BY AXIS, AND THEY DO NOT SIT ON ONE SIDE
+    OF THE FIGURE. None of them is a measurement of the opening and none is
+    adopted as one, but they say which way each axis may be wrong.
+    LONG AXIS - BOTH READINGS ARE BELOW 12.9: FS's face-on render of SKU 35510
+    shows a capped port's visible content 12.82 long
+    (common/mpo-dust-cap@2's `size-notes`), and SENKO DS-MPO-000004's top view
+    draws its seated dust cap with a collar 12.87 across. Over the printed
+    12.5 those are clearances of 0.32 and 0.37 - inside the LC range, not at
+    its upper end. So the long axis is probably a little too WIDE, by 0.03 to
+    0.08.
+    SHORT AXIS - EVERY READING IS ABOVE 8.0: the same FS content reads 8.09,
+    and the drawn outermost outlines inside the adapter body read 8.21 on
+    C10783 and 8.22 on DS-MPO-000004's front view, each on the sheet's own two
+    printed rulers. Over the printed 7.6 those are 0.49 to 0.62 - beyond the
+    LC range altogether. SO THE SHORT AXIS MAY BE TOO SMALL, by 0.09 to 0.22,
+    and the true mouth is probably a little narrower and taller than drawn.
+    The upper end of the LC range was taken on both axes because one
+    clearance applied to both is what the fallback states; the readings above
+    are why it was the upper end and not the lower, and they are not fitted to
+    axis by axis.
     CHECKED AGAINST A STANDARD BOUND ON THE PLUG. IEC 61754-7-1:2014 Tables 1
     and 4 (the female and male MPO plug, both in the publisher's preview) put
     the plug's long-axis envelope H at 12.19 to 12.59 and its short axis R at
