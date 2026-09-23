@@ -240,21 +240,32 @@ runs on the body's own box, as the shuttered adapter's does. `@4` drew it inset
 the stroke. Moving the outline is a drawing change, and so is the extra 0.03; the
 part says both.
 
-**The fibres did not move; the bodies moved around them.** The first cut of
-this change kept every placement and let the fibres move 0.32 inside the body.
-That was reversed the same day. The fibre positions on these faces are what the
-devices resolved from a source: the stencil ShapeSheet connection points on the
-DCP-R units. The 5.82 reading re-derives the body around a fibre, not the fibre.
-So every placement of the adapter moved 0.32 toward its own latch side. That is
-up on an unturned row and down on a row at `rotate: 180`, and each device's panel
-cutout moved with its adapter. The three Smartoptics devices place the adapter
-directly (117 placements) and nine modules compose it (16). Every optical point,
-bore mate, duplex seat and seated cap or plug is exactly where `@4` had it, and a
-test holds all of them to those figures on real builds. What moved is the body,
-its outline and its keyways. On the DCP-R units that brings each body within the
-line of its Tx/Rx caption frame, which the model draws closer to the ferrule than
-the stencil does. A source that fixes the axis would move the bodies again; the
-two stencil readings lie 0.54 apart.
+**Keep what the source measured, and move what it did not.** Moving the axis
+inside the part moves one of two things on a face: the fibre or the body. Which
+one moves depends on what each composer's source measured. The first cut kept
+every placement and moved every fibre. The second moved every body. Both were
+reversed the same day in favour of this rule.
+
+- Where the source is the fibre, the fibre stays and the body moves. On the
+  DCP-R units that source is the stencil ShapeSheet connection points; on the
+  DCP-M32 it is the photograph's channel positions. The A22 carrier is treated
+  the same way. Each of those placements moved 0.32 toward its own latch side:
+  up on an unturned row, down on a row at `rotate: 180`. Each device's panel
+  cutout moved with its adapter. That is 119 placements, and every optical point
+  and mate on them is where `@4` had it. A test holds them to those figures on
+  real builds.
+- Where the source is the body, the body stays and the fibre moves. The eight
+  PPM modules measured the adapter block on five renders, so their 14 placements
+  keep `@4`'s position and their ferrules sit 0.32 further from the latch inside
+  it. A test holds those placements to `@4`'s.
+- The Tx/Rx caption frames on the DCP-R units obey the same rule. They were
+  generated from each adapter's placement, not measured, and they stood about 2
+  closer to the ferrule than the stencil draws them. Once the bodies moved, they
+  met. So the frames, their dividers, their Tx/Rx text and the port names above
+  them moved onto the stencil's own positions.
+
+A source that fixes the axis would move the bodies again; the two stencil
+readings lie 0.54 apart.
 
 ### The shipped default
 
