@@ -129,6 +129,24 @@ def test_changing_or_removing_an_address_is_a_major(before, after):
     assert bump(before, after) == "major"
 
 
+@pytest.mark.parametrize("before, after", [
+    ({"for": "led-1"}, {"for": ["led-1"]}),
+    ({"for": ["a", "b"]}, {"for": ["b", "a"]}),
+    ({"under": "lid"}, {"under": ["lid"]}),
+    ({"only-in": ["ac", "dc"]}, {"only-in": ["dc", "ac"]}),
+    ({"frames": "led-1"}, {"frames": ["led-1"]}),
+])
+def test_respelling_a_set_is_not_a_change(before, after):
+    """One id or a list of one, in any order, names the same set - and a
+    change of spelling is not a change."""
+    assert bump(before, after) is None
+
+
+def test_interfaces_keep_their_order():
+    """The DCIM export emits interfaces in the order written."""
+    assert bump({"interfaces": ["a", "b"]}, {"interfaces": ["b", "a"]}) == "major"
+
+
 def test_a_removed_placement_is_judged_by_ids_not_twice():
     """A placement that is gone takes its `rel-pos` with it; `ids` already
     says major, and the addressing check must not read the absence as its own

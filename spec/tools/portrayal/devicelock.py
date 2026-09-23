@@ -222,6 +222,21 @@ PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
                      "frames"}
 
 
+# KEYS THAT NAME A SET, which the schema lets an author spell as one id or a
+# list of them, in any order. `for: port-1` and `for: [port-1]` bind the same
+# lamp, and `only-in: [ac, dc]` is `[dc, ac]` - so they are hashed as a sorted
+# list, or re-spelling one would read as a rebind and ask for a major. This
+# module's first rule is that a change of spelling is not a change.
+# `interfaces` is NOT here: the DCIM export emits them in the order written.
+_SET_VALUED = {"for", "under", "frames", "only-in"}
+
+
+def _spelled_once(key, value):
+    if key not in _SET_VALUED:
+        return value
+    return sorted(value if isinstance(value, list) else [value], key=str)
+
+
 def _placement_keys(doc, keys):
     """The keys of `keys` each placed thing states, keyed as `_placements` is.
 
@@ -233,7 +248,7 @@ def _placement_keys(doc, keys):
         view = view or {}
         for kind in ("bays", "placements"):
             for item in ((view.get("components") or {}).get(kind) or []):
-                said = {k: item[k] for k in sorted(keys)
+                said = {k: _spelled_once(k, item[k]) for k in sorted(keys)
                         if item.get(k) is not None}
                 if said:
                     out[f"{vname}/{kind}/{item.get('id')}"] = said
