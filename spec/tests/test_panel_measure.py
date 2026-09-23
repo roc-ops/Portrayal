@@ -210,8 +210,15 @@ def test_a_rounded_plate_reports_its_true_left_edge(pm):
     """
     Image = pytest.importorskip("PIL.Image")
     im = _rounded_plate(Image)
-    x0, y0, x1, _y1, _mm = pm.plate(im)
-    first = next(x for x in range(im.size[0]) if pm._dark(im.getpixel((x, y0))))
+    x0, _y0, x1, _y1, _mm = pm.plate(im)
+    # The band's first row, found as `plate()` finds it. Not y0: that is the
+    # plate's solid top edge now, and on a rounded plate it is always inset.
+    spans = []
+    for y in range(im.size[1]):
+        xs = [x for x in range(im.size[0]) if pm._dark(im.getpixel((x, y)))]
+        spans.append((xs[0], xs[-1] - xs[0] + 1) if xs else (0, 0))
+    widest = max(w for _x, w in spans)
+    first = next(x for x, w in spans if w > widest * 0.97)
     assert first > 30, (
         "the band opens on a full-width row, so a first-row x0 would pass too - "
         "this plate no longer tests the corner; see _rounded_plate")
@@ -243,3 +250,66 @@ def test_the_cassette_renders_frame_on_the_plate_edge(pm):
     yc = (y0 + y1) // 2
     edge = next(x for x in range(im.size[0]) if pm._dark(im.getpixel((x, yc))))
     assert abs(x0 - edge) <= 1, (x0, edge)
+
+
+# --- the scale is the plate's width, and its height ends where the plate does -----
+
+def _shadowed_plate(Image):
+    """The rounded plate, with the two shadows FS renders under one.
+
+    A HALO: a pale grey band (sum 675, inside `_dark`) 3 px outside BOTH edges
+    over the plate's lower quarter, the way FS's drop shadow widens the rows
+    near the lip. It makes those rows the widest in the image.
+
+    A SHADOW BELOW: rows fading from grey to white under the plate, as wide as
+    its rounded corners, so the first of them are wide enough to join the band.
+    """
+    im = _rounded_plate(Image)
+    for y in range(25 + 75, 25 + 100):
+        for x in list(range(27, 30)) + list(range(341, 344)):
+            im.putpixel((x, y), (225, 225, 225))
+    for k in range(12):
+        g = 150 + 7 * k                   # sums 450..681: dark, never solid
+        for x in range(30 + k, 341 - k):
+            im.putpixel((x, 125 + k), (g, g, g))
+    return im
+
+
+def test_the_scale_is_the_plate_not_its_widest_shadowed_row(pm):
+    """x1 IS THE PLATE'S RIGHT EDGE, AND THE SCALE IS ITS WIDTH.
+
+    The widest row in an FS render is its drop shadow, not its plate: 1.4% wider
+    on 35510.G and 0.16-0.48% on the FHD cassette renders. Scaling on that row
+    put every measured position short in proportion to its distance from x0.
+    """
+    Image = pytest.importorskip("PIL.Image")
+    x0, _y0, x1, _y1, mm = pm.plate(_shadowed_plate(Image))
+    assert (x0, x1) == (30, 30 + 311 - 1), (x0, x1)
+    assert abs(mm - 108.97 / 311) < 1e-9, (mm, 108.97 / 311)
+
+
+def test_the_plate_ends_where_it_is_solid_not_where_its_shadow_does(pm):
+    """y0 AND y1 ARE THE PLATE'S TOP AND BOTTOM EDGES.
+
+    The band is cut on width, so it dropped a rounded corner's rows at the top and
+    kept the shadow's first rows below the plate - on 35510.G one row lost at
+    the top and four gained below, which with the scale corrected would have
+    read 3.1% on the height check. The shadow is dark, but it is not solid.
+    """
+    Image = pytest.importorskip("PIL.Image")
+    _x0, y0, _x1, y1, _mm = pm.plate(_shadowed_plate(Image))
+    assert (y0, y1) == (25, 25 + 100 - 1), (y0, y1)
+
+
+def test_the_mtp_panel_scales_on_its_centre_row(pm):
+    """On FS's own render the scale is the plate's width at its centre row.
+
+    35510.G.jpg's widest dark row is its lower halo, 645 px against the plate's
+    636, and that is the 1.4% every figure measured on it was short by.
+    """
+    im = _im(pm, "35510.G.jpg")
+    x0, y0, x1, y1, mm = pm.plate(im)
+    yc = (y0 + y1) // 2
+    xs = [x for x in range(im.size[0]) if pm._dark(im.getpixel((x, yc)))]
+    assert abs(x0 - xs[0]) <= 1 and abs(x1 - xs[-1]) <= 1, (x0, x1, xs[0], xs[-1])
+    assert abs((x1 - x0 + 1) * mm - 108.97) < 0.01

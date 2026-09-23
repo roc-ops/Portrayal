@@ -16,9 +16,11 @@ MaiaEdge chassis against an FHD cassette's height - so they travel as one
 mismatched at all.
 
 The faceplate is the widest full-width dark band in the image - the module body
-behind it is narrower and sits above it in these renders. Its left edge is the
-median over that band, because a rounded corner starts the band's first rows
-inboard of the real edge (see `plate()`).
+behind it is narrower and sits above it in these renders. Its left and right
+edges are the medians over that band, because a rounded corner starts the band's
+first rows inboard of the real edge and a drop shadow widens its last rows past
+it. Its top and bottom are where it is solid black, because that shadow is dark
+enough to pass for plate everywhere else (see `plate()`).
 
 `plate()` locates that band HEURISTICALLY, and the heuristic is correct only
 for renders that put a dark chassis on a light ground - on a render shot against
@@ -48,6 +50,13 @@ def _dark(p):
     return sum(p) < 690
 
 
+# HALF-MAX: halfway from a black plate to a white ground. `_dark` is loose
+# enough to count a drop shadow, which is right for finding the band and wrong
+# for saying where the plate ends - see the y extent in `plate()`.
+def _solid(p):
+    return sum(p) < 383
+
+
 def plate(im, face=FHD_MODULE):
     """(x0, y0, x1, y1, mm_per_px) for the faceplate in a face-on render.
 
@@ -56,13 +65,18 @@ def plate(im, face=FHD_MODULE):
 
     Raises ValueError if no contiguous band of qualifying rows reaches 20 px
     tall - see the comment on `runs(mask, gap=0)` below for why contiguity is
-    required rather than just spanning the first and last matching row.
+    required rather than just spanning the first and last matching row. Raises
+    it too if the middle of that band is not solid black across the plate,
+    because the y extent is then undefined.
     """
     px, py = im.size
-    rows = []
+    rows, solid = [], []
     for y in range(py):
-        xs = [x for x in range(px) if _dark(im.getpixel((x, y)))]
+        line = [im.getpixel((x, y)) for x in range(px)]
+        xs = [x for x, p in enumerate(line) if _dark(p)]
         rows.append((y, (xs[-1] - xs[0] + 1) if xs else 0, xs[0] if xs else 0))
+        xs = [x for x, p in enumerate(line) if _solid(p)]
+        solid.append((xs[-1] - xs[0] + 1) if xs else 0)
     wmax = max(w for _y, w, _x in rows)
     mask = [w > wmax * 0.97 for _y, w, _x in rows]
     # gap=0: text, a shadow or a reflection elsewhere in the frame can put a
@@ -86,9 +100,35 @@ def plate(im, face=FHD_MODULE):
     # and `openings()` counts from x0, so every adapter measured with it came out
     # that much too far left. The corner rows at the top and bottom of the band
     # are a minority of it, so they cannot move the median.
-    y0, y1 = start, end
     x0 = sorted(x for _y, _w, x in rows[start:end + 1])[(end - start) // 2]
-    return x0, y0, x0 + wmax - 1, y1, face.w_mm / wmax
+    # x1 AND THE SCALE ARE THE MEDIAN RIGHT EDGE, NOT THE WIDEST ROW. The widest
+    # row is a drop shadow: on 35510.G a pale halo (sums 660-690, inside `_dark`)
+    # stands 5 px outside BOTH edges over the plate's lower 26 rows, while the
+    # plate's own edges there sit where they do everywhere else. Scaling on it
+    # read 0.16-0.48% short on the FHD cassette renders and 1.4% on 35510.G.
+    x1 = sorted(x + w - 1 for _y, w, x in rows[start:end + 1])[(end - start) // 2]
+    wmed = x1 - x0 + 1
+    # THE Y EXTENT IS WHERE THE PLATE IS SOLID, NOT WHERE THE BAND IS. The band
+    # is cut at 97% of a width, so it drops the rounded corners' rows at the top
+    # and keeps the shadow's rows below the plate, which are as wide as a corner
+    # and pass `_dark`. Width cannot tell the two apart; darkness can. A row
+    # belongs to the plate while its half-max span is 90% of the plate's width,
+    # counted outward from the band's middle so that a narrower dark body above
+    # the plate (the cassette behind it, in FS's renders) is not reached. On the
+    # FHD cassette renders that face the camera this moved the height check
+    # from a spread of +1.0 to -2.9% to a cluster of -0.5 to -1.4%.
+    mid = (start + end) // 2
+    if solid[mid] < wmed * 0.9:
+        raise ValueError(
+            "the band's middle row is not solid across the plate - no dark "
+            "faceplate on a light ground here")
+    y0 = mid
+    while y0 > 0 and solid[y0 - 1] >= wmed * 0.9:
+        y0 -= 1
+    y1 = mid
+    while y1 < py - 1 and solid[y1 + 1] >= wmed * 0.9:
+        y1 += 1
+    return x0, y0, x1, y1, face.w_mm / wmed
 
 
 def validate(mm, y0, y1, *, face=FHD_MODULE, limit=3.0):
