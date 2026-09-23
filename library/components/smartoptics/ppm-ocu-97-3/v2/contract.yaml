@@ -1,0 +1,149 @@
+format: 1
+kind: module
+name: ppm-ocu-97-3
+version: 2.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: Smartoptics PPM-OCU-97-3 - a passive plug-in module holding a C-band
+  optical coupler that taps 3% of the signal off the main path, leaving 97% to carry
+  on. Two LC duplex adapters carrying three bidirectional ports on a half-height plate
+  that seats in a DCP-F carrier's PPM bay.
+size: {w: 55.4, h: 19.5}
+attrs:
+  model: PPM-OCU-97-3
+  media: fiber
+  role: optical-coupler
+  coupling-ratio: '97/3'
+provenance:
+  major: >-
+    Composes the duplex adapter at v5, whose bores are numbered 1 and 2
+    instead of tx and rx, so every path under this part changes
+    (`common/tx` -> `common/1`); nothing drawn moved.
+  size: >-
+    borrowed - smartoptics/ppm-ad1-1510@2, whose 55.4 x 19.5 is itself ESTIMATED from
+    four agreeing inferences rather than measured. NO DOCUMENT IN THE CORPUS DIMENSIONS
+    ANY PPM: ds-ppm-r4.0 gives all eight parts a spec table and none of them a
+    mechanical section. What makes borrowing right rather than lazy is that these
+    plates fill the SAME bay in the same carrier, and the library must not hold two
+    answers for one aperture. Read that part's `size` key for how weak the figure is.
+  what-it-is: >-
+    datasheet - ds-ppm-r4.0 section "OCU MODULES": "The OCU modules are C-band optical
+    couplers where the signal is split or combined with the ratio 50% - 50% and 97% -
+    3%, respectively." This one is the 97/3 member: passband 1526-1570nm,
+    insertion loss 100 to 97 at most 0.3dB and 100 to 3 at most 16.6dB.
+    ds-ppm-r4.0 again: the 97/3 coupler is meant for tapping a small share of the
+    optical signal off to something like an Optical Channel Monitoring (OCM) function.
+    The two legs are NOT interchangeable - one is the through path and one is the tap -
+    which is why the datasheet numbers them 97 and 3 rather than A and B.
+  class-choice: >-
+    `coupler` RATHER THAN `filter`, which is what smartoptics/ppm-ad1-1510@2 and the
+    DCMs carry. A coupler splits power and passes every wavelength in the band; a
+    filter selects one. Calling a broadband tap a filter would lose exactly the
+    distinction the two module types exist to draw, and the datasheet names it
+    "Optical Coupler Unit" outright. It is a new class value, used by these two parts
+    and nothing else so far; roc-ops/Portrayal#173 is where the class vocabulary gets
+    settled, and this is one more entry for it to settle.
+  ports: >-
+    datasheet render and stencil master, which agree on the arrangement - FOUR BORES
+    IN TWO ABUTTING DUPLEX ADAPTERS, and only THREE of them are ports. Reading left to
+    right the labels above are 100, nothing, 97 and 3, and the white caption
+    boxes below read Tx/Rx | NA and Tx/Rx | Tx/Rx.
+    THE SECOND BORE IS DEAD. It is captioned NA and terminates nothing. The plate takes
+    duplex adapters and a three-port coupler leaves one of the four positions with
+    nothing behind it - the position exists because of the connector, not because of
+    the optics. It is drawn, because it is there.
+    EVERY PORT IS BIDIRECTIONAL, which is why the captions read Tx/Rx rather than Tx
+    and Rx: a coupler splits or combines depending on which way the light is going,
+    and the same fibre does both.
+    THE STENCIL LABELS THE LEGS DIFFERENTLY on the 50/50: it draws 50-A and 50-B where
+    ds-ppm-r4.0 draws 50 and 50. The datasheet is the product document and is
+    followed here; the stencil's suffixes are a diagramming convenience.
+  port-positions: >-
+    MEASURED TWICE, ON TWO DOCUMENTS. Duplex-pair centres read off ds-ppm-r4.0's own
+    render and off the DCP-F stencil master, both scaled on the 55.4 width, and both
+    put the two-adapter block in the right-hand half with the left half bare.
+    THE ADAPTER IS THE LIBRARY'S, NOT THE ARTWORK'S. Both drawings space a pair's
+    bores about 7.25 apart where common/lc-duplex-adapter@5 spaces them 6.25 - the
+    IEC 61754-20 / TIA-604-10 FOCIS 10 pitch verified in standards.yaml, not the 6.6
+    this same Smartoptics DCP-R stencil reads for it. The connector is the part the
+    library already owns, so only the POSITIONS are taken from these renders.
+    The two adapters abut, so they are placed at the adapter's own 13.2 pitch anchored
+    on the MIDPOINT of the drawn group: the artwork's over-wide connectors then cost
+    half the error at each end instead of all of it at one. That gives 22.50 and 35.70
+    - the same two numbers smartoptics/ppm-ad1-1510@2 already carries for its own
+    right-hand pair, from readings taken independently of it, which is the strongest
+    thing said about this face.
+  face-layout: >-
+    the adapter block runs y 3.86-4.02 to 14.99-15.10 across five renders in two
+    documents, and the white caption box 16.15-16.37 to 18.22-18.32. Taken as 4.0 and
+    16.2 x 2.05, the same figures as the rest of the family.
+  connector: >-
+    datasheet - ds-ppm-r4.0's spec table for this exact part: "Connector type LC/UPC".
+    Worth stating because THE ARTWORK DISAGREES: the stencil master's adapters read as
+    SC at a glance, on this part as on every other PPM.
+    This is also the source for `optical.polish: upc` - a vendor-stated fact, not
+    the FHD cassette's convention default.
+  marking: >-
+    datasheet render and stencil master - the part number is silkscreened VERTICALLY UP
+    THE RIGHT-HAND EDGE, as on the rest of the family.
+  legend-conflict: >-
+    THE SOURCES DISAGREE ABOUT THE EMPTY HALF, and the datasheet wins. The DCP-F
+    stencil master draws a large "OCU 97:3" legend across the left of the
+    plate; ds-ppm-r4.0's render of the same part leaves it bare. ds-ppm-r4.0 is the
+    product document for the whole family and is what fixes every part number here, so
+    it is taken as the metal; the stencil is artwork for network diagrams, where a
+    legend legible at diagram scale is worth adding and a bare plate is not.
+  depth: >-
+    borrowed - smartoptics/ppm-ad1-1510@2's ESTIMATED 60, on the reasoning that a
+    passive module of the same family in the same bay is the same object behind the
+    face. No document gives a depth for any PPM. A fused coupler is smaller than a
+    filter stack, so 60 is if anything generous; treat it as a placeholder with a
+    ceiling - the carrier is 270 deep - and replace it the moment anything states one.
+  face-detail-gap: >-
+    no orthographic photograph of a PPM exists; both readings above are of DRAWINGS.
+    Lamp inventory and any marking other than the part number are unknown, and the
+    module may well carry none - a passive coupler has nothing to report.
+elements:
+  caption-common: {at: [22.50, 16.2], size: [13.2, 2.05], class: marking}
+  caption-split: {at: [35.70, 16.2], size: [13.2, 2.05], class: marking}
+parts:
+  # the left adapter carries the common port and one dead position; the right one
+  # carries both legs. That is the datasheet's arrangement, not a convenience.
+  - {ref: common/lc-duplex-adapter@5, id: common, at: [22.50, 4.0], attrs: {role: common}}
+  - {ref: common/lc-duplex-adapter@5, id: split, at: [35.70, 4.0], attrs: {role: split}}
+optical:
+  # THE PART'S FUNCTION, WHICH USED TO BE A STRING. `coupling-ratio: '97/3'` is
+  # still in attrs for a reader; this is the same fact in a form lint can check
+  # against the bores it actually has.
+  media: os2
+  polish: upc
+  paths:
+    - from: common.1
+      to:
+        - {at: split.1, ratio: 97}
+        - {at: split.2, ratio: 3}
+  unused:
+    common.2: >-
+      a three-port coupler in a four-bore faceplate - the plate takes duplex
+      adapters and the optics need one common port and two legs, so this bore
+      exists because of the connector and terminates nothing. ds-ppm-r4.0
+      captions it NA.
+relief:
+  wall: '#22262a'
+  features:
+    # NOT `out` ON THE BODY. A plate that stands proud of its own panel buries
+    # everything drawn on it - see smartoptics/ppm-ad1-1510@2, which carries the
+    # same note and the same reason. The plate IS the panel; the adapters recess.
+    - node: caption-common
+      out: 0.15
+      confidence: estimated
+      source: a printed caption panel, drawn barely proud so it reads as label rather than hole
+    - node: caption-split
+      out: 0.15
+      confidence: estimated
+      source: as caption-common
+body:
+  depth: 60.0        # estimated - see provenance/depth
+  color: '#33383d'
+skins: [default]

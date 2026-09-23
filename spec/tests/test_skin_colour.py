@@ -172,8 +172,10 @@ def test_the_maiaedge_pbc_asks_for_the_usb2_skin():
 # written it down as a known error that was "not this device's to fix" - which was
 # true right up until the part grew a second skin.
 
-USB_2 = {"usb2", "usb-2.0"}
-USB_3 = {"usb3", "usb-3.0"}
+# A USB port's generation is its own attr, `usb`, not a `speed`: speed is the
+# closed Ethernet vocabulary lint L110 holds (#512), and there is one spelling each.
+USB_2 = {"2.0"}
+USB_3 = {"3.0"}
 
 
 def _usb_placements():
@@ -186,16 +188,16 @@ def _usb_placements():
 
 
 def test_a_port_the_device_calls_usb_2_is_not_drawn_as_usb_3():
-    """THE SWEEP, and it is structural: the placement's own declared speed
-    against the skin it asks for. Reading the provenance prose instead would
+    """THE SWEEP, and it is structural: the placement's own declared USB
+    generation against the skin it asks for. Reading the provenance prose instead would
     match sentences about accessory cables and gap discussions - one device's
     only mention of '2.0' is inside a note about a cable, and another's is inside
     the note recording this very defect."""
     bad = []
     for dev, view, pl in _usb_placements():
-        speed = (pl.get("attrs") or {}).get("speed")
-        if speed in USB_2 and pl.get("skin") != "usb2":
-            bad.append(f"{dev} {view}/{pl['id']}: attrs say {speed!r} but it draws "
+        usb = str((pl.get("attrs") or {}).get("usb"))
+        if usb in USB_2 and pl.get("skin") != "usb2":
+            bad.append(f"{dev} {view}/{pl['id']}: attrs say usb {usb!r} but it draws "
                        f"skin {pl.get('skin')!r} - the default tongue is USB-3 blue")
     assert not bad, "\n".join(bad)
 
@@ -207,8 +209,15 @@ def test_a_port_the_device_calls_usb_3_keeps_the_blue():
     part."""
     bad = [f"{dev} {view}/{pl['id']}"
            for dev, view, pl in _usb_placements()
-           if (pl.get("attrs") or {}).get("speed") in USB_3 and pl.get("skin") == "usb2"]
+           if str((pl.get("attrs") or {}).get("usb")) in USB_3 and pl.get("skin") == "usb2"]
     assert not bad, bad
+
+
+def test_the_usb_sweeps_measure_something():
+    """Both sweeps above read `attrs.usb`, so a rename of the attr would leave
+    them passing over nothing. They have to see both generations."""
+    seen = {str((pl.get("attrs") or {}).get("usb")) for _d, _v, pl in _usb_placements()}
+    assert USB_2 <= seen and USB_3 <= seen, seen
 
 
 def test_the_r740xd_draws_its_two_usb_generations_apart():

@@ -1,10 +1,16 @@
 format: 1
 kind: device
 name: dcs500
-version: 2.0.0
+version: 2.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: DCS500
+aliases:
+- name: AS7816-64X
+  kind: vendor
+  note: >-
+    Drawn as the OZ series, whose ports, fans and supplies number from zero; the O series
+    numbers from one.
 portfolio: {line: Data Center, family: Data Center Switch, series: DCS500}
 description: >-
   64 x 100G QSFP28 2RU top-of-rack or spine switch (vendor alias AS7816-64X, OZ series),
@@ -183,8 +189,6 @@ attrs:
     storage: 32 GB M.2 MLC SSD (reserve mSATA connector)
     software: ONIE installer pre-loaded; open-source and commercial NOS options
   features:
-    marketing-name: DCS500
-    vendor-alias: AS7816-64X (OZ series - numbering from zero)
     optics-qsfp28: 100GBASE-CR4/AOC/SR4/LR4/CWDM4/PSM4, 40GBASE-CR4/SR4/LR4, 100G DAC, 40G DAC/AOC
   management:
     mgmt-ports: 1x RJ-45 serial console, 1x RJ-45 1000BASE-T management, 1x USB Type-A storage
@@ -441,7 +445,7 @@ views:
         - {ref: common/led-dot@1, id: led-fan, at: [22.10, 56.60], group: leds, rel-pos: 3, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3]}
         - {ref: common/led-dot@1, id: led-psu0, at: [22.10, 59.80], group: leds, rel-pos: 4, for: rear/psu-0}
         - {ref: common/led-dot@1, id: led-psu1, at: [22.10, 62.90], group: leds, rel-pos: 5, for: rear/psu-1}
-        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [392.32, 15.57], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [392.32, 15.57], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1g}}
         - {ref: std/rj45@2, id: console, at: [392.32, 28.97], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: std/usb-a@1, id: usb, at: [411.47, 32.53], rotate: 90, group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: storage}}
         - {ref: common/pull-tab@1, id: info-tab, at: [390.50, 83.20], group: furniture, rel-pos: 3}

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo-adapter
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: networking
 description: >-
@@ -27,6 +27,19 @@ optical:
   # ferrule - so a module using another count overrides this on its placement
   # rather than composing a different part.
   positions: 12
+elements:
+  '1': {at: [8.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '2': {at: [7.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '3': {at: [7.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '4': {at: [7.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '5': {at: [7.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '6': {at: [6.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '7': {at: [6.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '8': {at: [6.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '9': {at: [6.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '10': {at: [5.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '11': {at: [5.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '12': {at: [5.45, 4.625], size: [0.15, 0.15], class: fibre}
 provenance:
   size: >-
     MEASURED for the width, ESTIMATED for the height, and the width is a
@@ -56,7 +69,7 @@ provenance:
     reading used to sit in standards.yaml's `mpo-adapter` entry, under the
     same key a `conforms:` on this contract would check `size` against. This
     contract declares no `conforms:`, though - it composes std/mpo@1 for the
-    aperture and draws its own bezel around it, as common/lc-duplex-adapter@4
+    aperture and draws its own bezel around it, as common/lc-duplex-adapter@5
     does for std/lc-bore@3. That entry now holds the FS panel's APERTURE and
     PITCH instead (see its notes for the full history), so the vendor
     body/depth figures are recorded here rather than lost: they describe a
@@ -86,6 +99,18 @@ provenance:
     photo-measured and h estimated; a centre depending on both axes is only
     as good as the weaker one, so this point is ESTIMATED, not photo-measured,
     even though half of what it is built from is not.
+  fibre-markers: >-
+    the markers carry no ink: the fibres are behind the dust sleeve; these
+    give each position an address and a place, not a picture. Elements `1`
+    to `12` sit on the ferrule row at the 0.25 MT pitch, the pitch the
+    flanged MPO bulkhead adapter draws its fibres on, centred on the
+    composed std/mpo@1 opening, whose centre is (3.0 + 7.8/2, 1.9 + 5.6/2) =
+    (6.9, 4.7). NUMBERED AS SEEN FROM THIS SIDE WITH A KEY-UP PLUG MATED
+    FROM THE VIEWER: its end face faces away, so the fibre 1 a key-up end
+    face shows at its left is on the RIGHT here, cx 8.275, running leftward
+    to 12 at cx 5.525. A key slot drawn at the bottom of the opening would
+    mirror this; std/mpo@1 draws no key at all (see face-detail-gap), so the
+    key-up reading stands until one is drawn.
 parts:
   - {ref: std/mpo@1, id: bore, at: [3.0, 1.9]}
 connection-points:

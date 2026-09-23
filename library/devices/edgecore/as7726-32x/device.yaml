@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 2.0.0
+version: 2.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7726-32X
+aliases:
+- {name: DCS204, kind: marketing}
 portfolio:
   line: Data Center
   family: Ethernet Switch
@@ -310,7 +312,7 @@ views:
         - {ref: common/led-indicator@1, id: led-psu2, at: [33, 23], group: leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/led-indicator@1, id: led-fan, at: [40, 23], group: leds, rel-pos: 3, for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4, rear/fan-5, rear/fan-6]}
         - {ref: common/reset-button@1, id: reset, at: [36.5, 32], for: chassis, group: mgmt, rel-pos: 6}
-        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [362.6, 9.95], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [362.6, 9.95], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1g}}
         - {ref: std/rj45@2, id: console, at: [362.6, 26.05], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/sfp-led-pair@1, id: sfp-leds, at: [383, 9], group: leds, rel-pos: 6, for: [mgmt-sfp-1, mgmt-sfp-2]}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [381, 14.5], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}

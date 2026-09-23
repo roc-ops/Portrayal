@@ -130,10 +130,12 @@ Three layers:
    the check can say which bump a change requires rather than only that one
    happened: `shape` (chassis dimensions, view sizes, and the position, size and
    wiring of everything placed), `names` (ids, groups, configurations), `surface`
-   (silkscreen, decor, description, attrs, provenance) and `gaps`. Surface alone
-   is a patch; ids added with nothing moved or removed is a minor; anything else
+   (silkscreen, decor, description, attrs, provenance), `placement-attrs` (the
+   `attrs` each placed port states for itself - `speed`, `media`, `usb` - hashed
+   beside `surface` rather than inside it so that learning the field rehashed no
+   device) and `gaps`. Surface alone, placement attrs included, is a patch; ids added with nothing moved or removed is a minor; anything else
    about shape or names is a major, because a moved slot invalidates a cached
-   coordinate exactly as a renamed id invalidates a held reference. A fifth,
+   coordinate exactly as a renamed id invalidates a held reference. A sixth,
    `composed`, covers what the device draws and does not contain: every
    component it seats, followed through their `parts:` and through the
    `default` and `accepts` of their own bays at any depth, each recorded as its

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64eo
-version: 1.0.11
+version: 1.0.12
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64EO
@@ -654,7 +654,7 @@ views:
              Blinking Blue (beacon feature enabled)',
            group: status-leds, rel-pos: 6}
         - {ref: common/usb-a@2, id: usb, at: [7.90, 65.80], rotate: 90, group: mgmt, rel-pos: 3,
-           attrs: {role: maintenance, speed: usb3},
+           attrs: {role: maintenance, usb: '3.0'},
            description: 'HIG Connecting the USB Extender Cable - a maintenance port; the guide
              gives usbreset and i2cset lines to run after inserting a device'}
         - {ref: std/rj45-ganged@2, id: console, at: [24.1, 52], rotate: 180, group: mgmt, rel-pos: 1,
@@ -663,7 +663,7 @@ views:
              control. Drawn rotate 180 because this jack shows its latch keyway up and its contacts
              down, the mirror of the OOB jack below it'}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [24.1, 64.1], group: mgmt, rel-pos: 4,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 1g},
            states: {led-a: ['off', {name: link-1g, color: '#22c55e'},
                             {name: activity-1g, color: '#22c55e', behavior: blinking}],
                     led-b: ['off', {name: link-10-100m, color: '#f59e0b'},

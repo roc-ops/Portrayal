@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-rp-f
-version: 2.0.1
+version: 2.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -24,6 +24,15 @@ attrs:
   power-draw-max-w: 102
   eol: 'none-announced'
 provenance:
+  speed: 'guide - Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide, Ethernet
+    Ports and Status LEDs: the RP has two RJ-45 Management LAN ports (MGT LAN 0 and MGT LAN
+    1) for 10, 100 and 1000 Mbps Ethernet, speed set by autonegotiation. Carried as 1g, the
+    top of that range'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks. The two SYNC
+    jacks are BITS or DTI inputs/outputs per the same guide, typed rj48 for BITS, their datasheet
+    name'
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 9 panel lamps at dome 0.3 (one number, carried by
@@ -337,15 +346,28 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the route processor management cluster - the two management Ethernet ports, the
+      console and auxiliary serial ports and the USB port. One job, several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the GPS and BITS timing block - two SYNC (BITS) jacks and the ToD jack on RJ-45
+      beside the 10 MHz and 1 PPS SMB inputs. One job (clock), several media
 parts:
-  - {ref: std/rj45-ganged@2, id: sync-0, at: [55.93, 6.45]}
-  - {ref: std/rj45-ganged@2, id: sync-1, at: [75.83, 6.45]}
-  - {ref: std/rj45-ganged@2, id: tod, at: [96.35, 6.45]}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [123.07, 6.85]}
-  - {ref: std/rj45-ganged@2, id: aux, at: [144.48, 6.85]}
-  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [123.07, 22.3]}
-  - {ref: std/rj45-ganged@2, id: console, at: [144.48, 22.3]}
-  - {ref: std/smb@1, id: gps-10mhz, at: [43.3, 5.17]}
-  - {ref: std/smb@1, id: gps-1pps, at: [43.3, 14.1]}
-  - {ref: std/usb-a@1, id: usb, at: [163.69, 11.7], rotate: 90}
+  - {ref: std/rj45-ganged@2, id: sync-0, group: timing, at: [55.93, 6.45], attrs: {media: rj48}}
+  - {ref: std/rj45-ganged@2, id: sync-1, group: timing, at: [75.83, 6.45], attrs: {media: rj48}}
+  - {ref: std/rj45-ganged@2, id: tod, group: timing, at: [96.35, 6.45], attrs: {media: rj45-tod}}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, group: mgmt, at: [123.07, 6.85], attrs: {speed: 1g, media: rj45}}
+  - {ref: std/rj45-ganged@2, id: aux, group: mgmt, at: [144.48, 6.85], attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, group: mgmt, at: [123.07, 22.3], attrs: {speed: 1g, media: rj45}}
+  - {ref: std/rj45-ganged@2, id: console, group: mgmt, at: [144.48, 22.3], attrs: {media: rj45-serial}}
+  - {ref: std/smb@1, id: gps-10mhz, group: timing, at: [43.3, 5.17]}
+  - {ref: std/smb@1, id: gps-1pps, group: timing, at: [43.3, 14.1]}
+  - {ref: std/usb-a@1, id: usb, group: mgmt, at: [163.69, 11.7], rotate: 90}
 skins: [default]

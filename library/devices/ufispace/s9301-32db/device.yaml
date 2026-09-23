@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32db
-version: 2.0.11
+version: 2.0.12
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32DB
@@ -574,9 +574,9 @@ views:
              115200 8N1, no flow control. Drawn rotate 180 because this jack shows its latch
              keyway up and its contacts down, the mirror of the OOB jack below it'}
         - {ref: common/usb-a@2, id: usb, at: [14.45, 18.95], group: mgmt, rel-pos: 2,
-           attrs: {role: storage, speed: usb3}}
+           attrs: {role: storage, usb: '3.0'}}
         - {ref: common/rj45-ganged-eth@1, id: oob, at: [16.6, 26.9], group: mgmt, rel-pos: 3,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 1g},
            states: {led-a: ['off', {name: link-1g, color: '#22c55e'},
                             {name: activity-1g, color: '#22c55e', behavior: blinking}],
                     led-b: ['off', {name: link-10-100m, color: '#f59e0b'},
