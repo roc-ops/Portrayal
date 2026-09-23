@@ -1931,9 +1931,17 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if not pref:
                 continue
             if direction == "rear":
+                # WHOSE BACK THIS IS, said on the drawing (B3, Task 10b). The
+                # projection strips `data-ref`, so the back alone cannot name
+                # the module seated in the bay - and the explorer finds the
+                # slots on a back (its MTP bulkheads) through that module's
+                # `faces.rear`, off this face, as it finds every other slot.
+                # `data-of-ref` is the seated module's ref, written as
+                # `data-ref` is; nothing builds relief from it.
                 parts["placements"].append({
                     "ref": pref, "id": f"{b['id']}-rear", "at": list(pl["at"]),
                     "projection-of": f"{b['id']}/module",
+                    "projection-ref": f"{occ}:{(oc or {}).get('version')}",
                     "cutout": pl["cutout"]})
                 continue
             pc, _ = lib.resolve(pref)
@@ -2645,6 +2653,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # and ejects nothing from it - the body already stands where this is.
         if p.get("projection-of"):
             g.set("data-projection", "1")
+            if rear_face and p.get("projection-ref"):
+                g.set("data-of-ref", p["projection-ref"])
             for node in g.iter():
                 dp = node.get("data-path")
                 if dp is not None:

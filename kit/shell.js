@@ -17,6 +17,7 @@
 
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
+         occupantsOf,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath,
@@ -1152,8 +1153,14 @@ export function createShell(opts = {}) {
       // records what the drawing still holds, not what was asked for, and the
       // inspector says the chosen one did not load.
       else if (failed.includes(key)) {
+        const was = Object.prototype.hasOwnProperty.call(state.cfgOccupants, key)
+          ? state.cfgOccupants[key] : cage.default ?? null;
         state.failed[key] = ref;
-        ref = occupantRef(svg, cage);
+        // what the drawing still holds; on a back the projection keeps no
+        // ref to read it by (swap.js isOccupantOf), and it is what the state
+        // said the slot held before this swap
+        ref = occupantRef(svg, cage)
+          ?? (cage.projection && occupantsOf(svg, cage).length ? was : null);
         console.warn(`[portrayal] ${key}: ${state.failed[key]} did not load; `
                      + `the cage keeps ${ref || 'nothing'}`);
       }
@@ -1214,21 +1221,26 @@ export function createShell(opts = {}) {
     // and stop - the remaining keys are for whatever reseat the new
     // config's own loadStage already ran.
     const svg = state.svg, gen = state.cfgGen;
+    // A SWAPPED BAY SEEN FROM BEHIND. This face may have no bays and still
+    // show one: a rear hole names the front bay whose module's back it holds
+    // (render.py's `rear:`). `seat` looks for the bay on this face and so never
+    // reaches it; the swapped bays are re-seated through the hole instead.
+    // FIRST, before the keys (B3 Task 10b): a back's own slots - its MTP
+    // bulkheads, `bay-1/module/mtp1` - are keys like any other, and they
+    // must be seated into the back the state holds, not into the build's
+    // back that this replaces.
+    if (svg?.querySelector('[data-rear-of]')) {
+      const rear = {};
+      for (const key of state.touched)
+        if (Object.prototype.hasOwnProperty.call(state.cfgBays, key)) rear[key] = state.cfgBays[key];
+      if (Object.keys(rear).length) await applyRearOverrides(svg, rear, loadSkin, compByRef);
+    }
     for (const key of byDepth(state.touched)) {
       if (svg !== state.svg || gen !== state.cfgGen) return;
       // a key a card swap pruned while this loop ran is no longer the state's
       if (!state.touched.has(key)) continue;
       await seat(key, stateRef(key));
     }
-    // A SWAPPED BAY SEEN FROM BEHIND. This face may have no bays and still
-    // show one: a rear hole names the front bay whose module's back it holds
-    // (render.py's `rear:`). `seat` looks for the bay on this face and so never
-    // reaches it; the swapped bays are re-seated through the hole instead.
-    if (svg !== state.svg || gen !== state.cfgGen || !svg?.querySelector('[data-rear-of]')) return;
-    const rear = {};
-    for (const key of state.touched)
-      if (Object.prototype.hasOwnProperty.call(state.cfgBays, key)) rear[key] = state.cfgBays[key];
-    if (Object.keys(rear).length) await applyRearOverrides(svg, rear, loadSkin, compByRef);
   }
 
   // THE SWAPS A RELOAD CARRIES (the explorer's `swap=`), taken into the state

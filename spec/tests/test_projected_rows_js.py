@@ -55,7 +55,10 @@ def test_a_swapped_back_rows_as_the_built_one_does(out):
     assert s["applied"] == 1
     assert s["wrap"] == {"id": "bay-1-rear", "transform": "translate(337.955,6.5)",
                          "data-class": "cassette", "data-media": "fiber",
-                         "data-projection": "1", "data-of": "bay-1/module"}, \
+                         "data-projection": "1", "data-of": "bay-1/module",
+                         # whose back it is (B3 Task 10b): render.py writes it on
+                         # a `rear:` projection, and the kit finds a back's slots by it
+                         "data-of-ref": "fs/cassette@1"}, \
         "the swapped projection lost its root's class and media, which the tree rows it by"
     assert s["paths"] == ["cutout:back-1", "bay-1/module", "bay-1/module/mtp1", "bay-1/module/mtp2"]
     assert s["leftover"] == []

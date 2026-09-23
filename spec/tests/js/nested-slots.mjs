@@ -13,7 +13,7 @@
 //               so each Python test fails for its own reason.
 // SWAP_MODULE names the swap.js to load; by default the kit's own.
 import {pathToFileURL} from 'node:url';
-import {build, install} from './fake-dom.mjs';
+import {build, install, toSpec} from './fake-dom.mjs';
 
 const m = await import(process.env.SWAP_MODULE
   ? pathToFileURL(process.env.SWAP_MODULE).href : '../../../kit/swap.js');
@@ -262,7 +262,8 @@ await scenario('options', async () => {
 await scenario('resolver', async () => {
   const faces = [['fhd:populated', fhdCages, 'fhd-1ufce', 'populated'],
                  ['fhd:shut', fhdCages, 'fhd-1ufce', 'shut'],
-                 ['dcp:default', dcpCages, 'dcp-r-34d-cs', 'default']];
+                 ['dcp:default', dcpCages, 'dcp-r-34d-cs', 'default'],
+                 ['fhd-rear:rear', [], 'fhd-1ufce', 'rear']];
   const res = {};
   for (const [name, cages, dev, cfgName] of faces) {
     const root = face(name);
@@ -480,6 +481,33 @@ await scenario('agree', async () => {
     }
     res[name] = cand;
   }
+  // THE BACKS (Task 10b). The question is asked without the kit's own
+  // reading of a back: the configuration says what each bay holds, its
+  // `faces.rear` says which slots its back has, and those drawn on the rear
+  // (`data-of`) are the candidates - with the near misses around them (a
+  // bulkhead another back has, a part of the adapter) that all three refuse.
+  for (const [name, cfgName] of [['fhd-rear:populated', 'populated'], ['fhd-rear:rear', 'rear']]) {
+    if (!input.faces[name]) continue;
+    const root = face(name);
+    const dev = 'fhd-1ufce';
+    const cfg = input.configs[dev].find(c => c.name === cfgName);
+    const cb = m.builtBays(cfg);
+    const bayRef = (p, bay) => Object.prototype.hasOwnProperty.call(cb, p) ? cb[p] : bay?.default ?? null;
+    const R = m.slotResolver({bays: input.bays[dev], cages: [], compByRef, bayRef});
+    const kit = new Set(m.nestedSlots(root, compByRef, {all: true}).map(e => e.id));
+    const cand = [];
+    for (const hole of root.querySelectorAll('[data-rear-of]')) {
+      const bay = hole.getAttribute('data-rear-of');
+      const ref = bayRef(bay, input.bays[dev].find(b => b.id === bay));
+      const back = compByRef(compByRef(ref)?.faces?.rear);
+      const ids = new Set();
+      for (const c of back?.cages || [])
+        if (hole.querySelector(`[data-of="${bay}/module/${c.id}"]`)) ids.add(`${bay}/module/${c.id}`);
+      for (const near of ['mtp', 'mtp1', 'mtp2', 'mtp3', 'mtp1/screw-left']) ids.add(`${bay}/module/${near}`);
+      for (const id of ids) cand.push({id, key: m.slotKey(id), kit: kit.has(id), resolver: !!R.entryAt(id)});
+    }
+    res[name] = cand;
+  }
   return res;
 });
 
@@ -499,6 +527,163 @@ await scenario('wrappers', async () => {
     };
   }
   return res;
+});
+
+
+
+// =========================================== THE BACKS (B3 Task 10b)
+// A cassette's back on the rear face is a PROJECTION: `data-of`, no
+// `data-ref`. What the build seated in it is `data-for` the slot at
+// `<slot>-occupant` - the test's own reading, as occupantsAt is for a front.
+const MCAP = 'common/mpo-dust-cap@2', MPO12 = 'generic/mpo12-plug@1', MPO24 = 'generic/mpo24-plug@1';
+const SHUT = 'fs/fhd-3mtp18-lc-os2-a@1';
+const heldAt = (root, key) => root.querySelectorAll(`[data-for="${key}"]`)
+  .filter(n => n.getAttribute('data-of') === `${key}-occupant`);
+const backSpec = (root, bay) => {
+  const g = root.querySelector(`[id="${bay}-rear"]`);
+  return g ? toSpec(g) : null;
+};
+const backs = (root, bays) => Object.fromEntries(bays.map(b => [b, backSpec(root, b)]));
+const rearSlots = root => m.nestedSlots(root, compByRef, {all: true}).filter(e => e.projection);
+async function rearSwapOne(root, key, ref) {
+  const entry = m.nestedSlots(root, compByRef, {all: true}).find(e => e.id === key);
+  if (!entry) return {error: `no slot ${key}`};
+  return m.applyOccupantOverrides(root, [entry], {[key]: ref}, loadSkin);
+}
+
+await scenario('rearCensus', async () => {
+  const root = face('fhd-rear:rear');
+  const all = m.nestedSlots(root, compByRef, {all: true});
+  const e = all.find(s => s.id === 'bay-1/module/mtp1');
+  return {
+    ids: all.map(s => s.id),
+    offered: m.faceCages(root, [], compByRef, {offered: true}).map(s => s.id),
+    mtp1: e && {...plain(e), moduleRef: e.moduleRef, projection: e.projection},
+    held: all.map(s => m.occupantsOf(root, s).length),
+    populated: m.nestedSlots(face('fhd-rear:populated'), compByRef, {all: true}).map(s => s.id),
+    front: m.nestedSlots(face('fhd:populated'), compByRef, {deviceCages: fhdCages, all: true})
+      .filter(s => s.projection).map(s => s.id),
+  };
+});
+
+await scenario('rearSwap', async () => {
+  const root = face('fhd-rear:rear');
+  const res = [await rearSwapOne(root, 'bay-1/module/mtp1', MPO12),
+               await rearSwapOne(root, 'bay-2/module/mtp2', ''),
+               await rearSwapOne(root, 'bay-3/module/mtp2', MPO24)];
+  const out_ = {res, backs: backs(root, ['bay-1', 'bay-2', 'bay-3'])};
+  // cap -> plug -> cap -> plug on one slot of a fresh face: one each time
+  const r2 = face('fhd-rear:rear');
+  const key = 'bay-4/module/mtp';
+  const cycle = [];
+  for (const ref of [MPO12, MCAP, MPO24, MPO24]) {
+    await rearSwapOne(r2, key, ref);
+    cycle.push(heldAt(r2, key).length);
+  }
+  out_.cycle = cycle;
+  out_.occRef = m.occupantRef(r2, rearSlots(r2).find(s => s.id === key));
+  await rearSwapOne(r2, key, null);
+  out_.emptied = heldAt(r2, key).length;
+  return out_;
+});
+
+await scenario('rearClick', async () => {
+  const root = face('fhd-rear:rear');
+  const at = p => m.cageAt(root, p, [], compByRef)?.id ?? null;
+  const slot = rearSlots(root).find(s => s.id === 'bay-3/module/mtp2');
+  return {cap: at('bay-3/module/mtp2-occupant/body'), screw: at('bay-3/module/mtp2/screw-left'),
+          bezel: at('bay-3/module'), options: slot ? m.slotOptions(slot, MCAP) : null};
+});
+
+await scenario('rearModule', async () => {
+  const root = face('fhd-rear:populated');
+  const applied = await m.applyRearOverrides(root, {'bay-1': CASS12, 'bay-2': CASS12, 'bay-3': SHUT},
+                                             loadSkin, compByRef);
+  const mine = rearSlots(root).filter(s => /^bay-[123]\//.test(s.id));
+  return {applied, backs: backs(root, ['bay-1', 'bay-2', 'bay-3']),
+          held: mine.map(s => m.occupantsOf(root, s).length)};
+});
+
+await scenario('rearSeatFace', async () => {
+  // a key BEFORE the cassette it sits on, as a map may hold them
+  const map = {'bay-1/module/mtp1': MPO12, 'bay-3/module/mtp2': MPO24, 'bay-2/module/mtp2': '',
+               'bay-1': CASS12, 'bay-2': CASS12, 'bay-3': SHUT};
+  const root = face('fhd-rear:populated');
+  const res = await m.seatFace(root, {bays: [], cages: []}, map, loadSkin, compByRef);
+  // the queue the shell's faces not on screen go through, one swap at a
+  // time: a plug on the built back first, which the cassette swap retires
+  const held = face('fhd-rear:populated');
+  const q = m.faceQueue({loadSkin, seat: (f, view, mp, skin) =>
+    m.seatFace(f, {bays: [], cages: []}, mp, skin, compByRef)});
+  const opts = {held: () => [['rear', held]], live: () => true};
+  for (const one of [{'bay-1/module/mtp': MPO12}, {'bay-1': CASS12}, {'bay-2': CASS12}, {'bay-3': SHUT},
+                     {'bay-1/module/mtp1': MPO12}, {'bay-2/module/mtp2': ''}, {'bay-3/module/mtp2': MPO24}])
+    await q.swap(one, opts);
+  const bays = ['bay-1', 'bay-2', 'bay-3', 'bay-4'];
+  return {res: {refused: res.refused, failed: res.failed}, seatFace: backs(root, bays),
+          queue: backs(held, bays)};
+});
+
+await scenario('rearDelta', async () => {
+  const cfgOf = n => input.configs['fhd-1ufce'].find(c => c.name === n);
+  const bays = input.bays['fhd-1ufce'];
+  const rear = cfgOf('rear');
+  const d = occ => m.swapOverrides({cfg: rear, bays, cages: [], compByRef, cfgBays: m.builtBays(rear),
+                                    cfgOccupants: occ});
+  const plugged = d({'bay-1/module/mtp1': MPO12});
+  const emptied = d({'bay-2/module/mtp2': null});
+  const swap = m.encodeSwaps({...plugged, ...emptied});
+  const plug = cfgOf('rearplug');
+  const built = m.builtOccupants(plug, [], {bays, compByRef});
+  const pop = cfgOf('populated');
+  const cb = m.builtBays(pop);
+  const accept = m.acceptSwaps({
+    'bay-1': CASS12,
+    'bay-1/module/mtp2': MPO24,              // on the NEW cassette's back
+    'bay-1/module/mtp': MPO12,               // the OLD back's only bulkhead
+    'bay-1/module/mtp3': MPO12,              // a 2 x MTP-12 back has no third
+    'bay-1/module/mtp1/screw-left': MCAP,    // a part of the adapter, no slot
+    'bay-2/module/mtp1': MPO12,              // a single-MTP back's is `mtp`
+    'bay-4/module/mtp': '',                  // the shipped cap, emptied
+  }, {bays, cages: [], compByRef,
+      built: p => Object.prototype.hasOwnProperty.call(cb, p) ? cb[p] || null : undefined});
+  return {
+    untouched: d({}), capBack: d({'bay-1/module/mtp1': MCAP}), plugged, emptied, swap,
+    back: m.decodeSwaps(swap), built,
+    builtDelta: m.swapOverrides({cfg: plug, bays, cages: [], compByRef, cfgBays: m.builtBays(plug),
+                                 cfgOccupants: built}),
+    accept,
+  };
+});
+
+await scenario('rearPrune', async () => {
+  const cfgOf = n => input.configs['fhd-1ufce'].find(c => c.name === n);
+  const bays = input.bays['fhd-1ufce'];
+  const slice = {cfgBays: {'bay-1': CASS12, 'bay-2': CASS6},
+                 cfgOccupants: {'bay-1/module/mtp1': MPO12, 'bay-1/module/mtp2': null,
+                                'bay-2/module/mtp': null},
+                 touched: new Set(['bay-1', 'bay-1/module/mtp1', 'bay-1/module/mtp2', 'bay-2/module/mtp']),
+                 refused: {}, failed: {}};
+  const p = m.pruneCarrier(slice, 'bay-1');
+  const rear = cfgOf('rear');
+  const delta = m.swapOverrides({cfg: rear, bays, cages: [], compByRef,
+                                 cfgBays: {...p.cfgBays, 'bay-1': CASS6}, cfgOccupants: p.cfgOccupants});
+  const e = m.pruneCarrier(slice, 'bay-1');
+  // the BUILD's own cassette back in a configuration that keyed its back
+  const plug = cfgOf('rearplug');
+  const built = m.builtOccupants(plug, [], {bays, compByRef});
+  const R = m.slotResolver({bays, cages: [], compByRef, bayRef: p_ => p_ === 'bay-1' ? CASS12 : null});
+  const back = m.pruneCarrier({cfgBays: {}, cfgOccupants: {}, touched: new Set(), refused: {}, failed: {}},
+                              'bay-1', built, {}, k => R.entryAt(k)?.default ?? null);
+  const calls = [];
+  const q = m.faceQueue({loadSkin: async () => null,
+                         seat: async (f, view, map) => { calls.push(Object.keys(map)); return {applied: 1}; }});
+  const opts = {held: () => [['rear', {}]], live: () => true};
+  await q.swap({'bay-1/module/mtp1': MPO12}, opts);
+  await q.swap({'bay-1': CASS6}, opts);
+  await q.swap({'bay-1/module/mtp1': MPO12}, opts);
+  return {swapped: p.cfgOccupants, swap: m.encodeSwaps(delta), emptied: e.cfgOccupants,
+          back: back.cfgOccupants, queue: calls};
 });
 
 console.log(JSON.stringify(out));

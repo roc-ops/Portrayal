@@ -435,6 +435,20 @@ transform above it and nothing is solved twice.
   slot is kept only as one of that slot's `bores`: a cage wrapper publishes the
   aperture it composes as its own cage, and its host already publishes that
   aperture at the wrapper's path.
+- **Slots on a back (2026-09-23).** A module's back on the rear face is a
+  projection, which carries no `data-ref`, so the drawing could not say whose back
+  it was. The build now writes the seated module's ref on a `rear:` projection as
+  `data-of-ref`, beside `data-of`; the kit writes the same on a back it rebuilds.
+  The slots on a back are that module's `faces.rear` component's, read off the
+  drawing at the module's path (`bay-1/module/mtp1`, key `bay-1/mtp1`), and the
+  drawing-less resolver reads them the same way, one step under a device bay's
+  module. What the kit seats there is the same seat as on a card, made a
+  projection as the build makes one: `data-of` in place of `data-path`, and no
+  relief, ref, behaviour or connection point. An occupant on a back is therefore
+  known by its name, `<slot>-occupant`, since both marks the kit reads elsewhere
+  are stripped. A back rebuilt for a swapped module holds the caps its drawing
+  ships, with their `data-for` re-keyed by the rule a module's skin uses, and the
+  swap map's keys on that back are seated into it.
 - One home: all of it lives in `kit/swap.js`.
 
 ## 3D

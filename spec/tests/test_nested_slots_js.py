@@ -39,13 +39,19 @@ import yaml
 
 from portrayal import libwalk
 from test_lifted_seat_js import (LIB, RENDER, SPEC, build_components, chain_matrix,
-                                 descendants, is_occupant, mismatches, skin_file, spec_of)
+                                 descendants, is_occupant, mismatches, numbers, skin_file,
+                                 spec_of)
 
 SCRIPT = SPEC / "tests/js/nested-slots.mjs"
 PLUG, SIMPLEX = "generic/lc-duplex-plug@2", "generic/lc-plug@2"
 DCAP, CAP = "common/lc-duplex-dust-cap@2", "common/lc-dust-cap@1"
 CASS6, CASS12, SHUT = "fs/fhd-1mtp6lcd-os2-a@3", "fs/fhd-2mtp12-lc-os2-a@3", "fs/fhd-3mtp18-lc-os2-a@1"
 POP = {"bay-1": CASS6, "bay-2": CASS6, "bay-3": CASS6, "bay-4": CASS6}
+# THE BACKS (B3 Task 10b): two 2 x MTP-12 LC cassettes and the 36-fibre
+# cassette, whose back carries three MTP bulkheads, beside one single-MTP back
+MCAP, MPO12, MPO24 = "common/mpo-dust-cap@2", "generic/mpo12-plug@1", "generic/mpo24-plug@1"
+MIX = {"bay-1": CASS12, "bay-2": CASS12, "bay-3": SHUT, "bay-4": CASS6}
+REAR_KEYS = {"bay-1/mtp1": MPO12, "bay-2/mtp2": "", "bay-3/mtp2": MPO24}
 
 # configuration name -> (bays, occupants) added to a tmp copy of the device
 FHD_CONFIGS = {
@@ -55,12 +61,14 @@ FHD_CONFIGS = {
     "swapplug": ({**POP, "bay-2": CASS12}, {"bay-2/lc01": PLUG}),
     "shut": ({**POP, "bay-3": SHUT}, {}),
     "shutplug": ({**POP, "bay-3": SHUT}, {"bay-3/lc01/tx": SIMPLEX}),
+    "rear": (MIX, {}),
+    "rearplug": (MIX, REAR_KEYS),
 }
 DCP_CONFIGS = {
     "tx": (None, {"xc01/tx": SIMPLEX}),
     "duplex": (None, {"xc01/tx": "", "xc01/rx": "", "xc01": PLUG}),
 }
-SKINS = [PLUG, SIMPLEX, DCAP, CAP, CASS6, CASS12, SHUT]
+SKINS = [PLUG, SIMPLEX, DCAP, CAP, CASS6, CASS12, SHUT, MCAP, MPO12, MPO24]
 
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 
@@ -125,14 +133,21 @@ def world(tmp_path_factory):
     faces.update({f"dcp:{c}": face(dcp_out, dcp, c) for c in ["default", *DCP_CONFIGS]})
     faces["c40g:bdm-3plus1"] = face(wrap["c40g"], "c40g", "bdm-3plus1")
     faces["s9510-30xc:ac"] = face(wrap["s9510-30xc"], "s9510-30xc", "ac")
+    # the rear face: every cassette's back, drawn as a projection in its hole
+    for c in ("populated", "rear", "rearplug"):
+        faces[f"fhd-rear:{c}"] = ET.parse(fhd_out / f"{fhd}.{c}.rear.svg").getroot()
     meta = {n: json.loads((o / f"{n}.configs.json").read_text())
             for o, n in ((fhd_out, fhd), (dcp_out, dcp), *((o, n) for n, o in wrap.items()))}
     idx = json.loads((dist / "components.json").read_text())["components"]
+    # a back's own drawing is what applyRearOverrides imports for a module
+    backs = sorted({comps[r]["faces"]["rear"] for r in (CASS6, CASS12, SHUT)})
     payload = {
         "components": idx,
         "faces": {k: spec_of(faces[k]) for k in ("fhd:populated", "fhd:shut", "dcp:default",
-                                                   "c40g:bdm-3plus1", "s9510-30xc:ac")},
-        "skins": {r: json.dumps(spec_of(ET.parse(skin_file(dist, comps[r])).getroot())) for r in SKINS},
+                                                   "c40g:bdm-3plus1", "s9510-30xc:ac",
+                                                   "fhd-rear:populated", "fhd-rear:rear")},
+        "skins": {r: json.dumps(spec_of(ET.parse(skin_file(dist, comps[r])).getroot()))
+                  for r in SKINS + backs},
         "cages": {n: m["cages"]["front"] for n, m in meta.items()},
         "bays": {n: [b for v in m["bays"].values() for b in v] for n, m in meta.items()},
         "configs": {n: m["configs"] for n, m in meta.items()},
@@ -352,6 +367,7 @@ def test_the_resolver_reads_every_slot_the_drawing_shows(world):
     screen - reads components.json `parts`. They must name the same slots."""
     r = scenario(world, "resolver")
     assert r["fhd:populated"]["n"] == 72 and r["fhd:shut"]["n"] > 72 and r["dcp:default"]["n"] >= 72
+    assert r["fhd-rear:rear"]["n"] == 8, "the rear face's backs are read too (Task 10b)"
     assert all(not v["diff"] for v in r.values()), {k: v["diff"][:4] for k, v in r.items()}
 
 
@@ -474,7 +490,32 @@ MUTATIONS = [
     ("seatFace seats the offered level only", "const all = faceCages(rootEl, cages, compByRef);",
      "const all = faceCages(rootEl, cages, compByRef, {offered: true});", ["seatFace"],
      lambda o: o["seatFace"]["fhd"]["tx"]["count"] == 1 and o["seatFace"]["duplex"]["seated"]["count"] == 1),
+    # the backs (Task 10b)
+    ("a back has no slots", "raw.push(...backSlotsOf(back, compByRef));", ";",
+     ["rearCensus"], lambda o: len(o["rearCensus"]["ids"]) == 8),
+    ("an occupant on a back is unknown", "if (!ref) return isProjectedOccupant(el, slot);",
+     "if (!ref) return false;", ["rearSwap"], lambda o: o["rearSwap"]["cycle"] == [1, 1, 1, 1]),
+    ("a rebuilt back keeps its own data-for", "rekeyFor(el, name, `${bayId}/module`);", "",
+     ["rearModule"], lambda o: o["rearModule"]["held"] == [1] * 7),
+    ("a rebuilt back names no module",
+     "wrap.setAttribute(OF_REF, comp.version ? `${ref}:${comp.version}` : ref);", "",
+     ["rearModule"], lambda o: o["rearModule"]["held"] == [1] * 7),
+    ("a rebuilt back drops the map's keys",
+     "applied += (await applyOccupantOverrides(rootEl, slots, overrides, loadSkin)).applied;", "",
+     ["rearSeatFace"], lambda o: _occ_class(o["rearSeatFace"]["seatFace"]["bay-1"], "bay-1/module/mtp1") == "port"),
+    ("a seat on a back is no projection", "if (cage.projection) asProjection(occ);", "",
+     ["rearSwap"], lambda o: _occ_class(o["rearSwap"]["backs"]["bay-1"], "bay-1/module/mtp1") == "port"),
+    ("the resolver has no backs", "if (!slot) return backEntry(path, parent, name, c);",
+     "if (!slot) return null;", ["rearDelta"], lambda o: o["rearDelta"]["capBack"] == {}),
 ]
+
+
+def _occ_class(spec, slot):
+    """The data-class of what the back `spec` holds in `slot`, as the build
+    projects it (`data-of` `<slot>-occupant`, no data-path), else None."""
+    if spec["a"].get("data-of") == f"{slot}-occupant" and "data-path" not in spec["a"]:
+        return spec["a"].get("data-class")
+    return next((c for c in (_occ_class(k, slot) for k in spec["c"]) if c), None)
 
 
 @needs_node
@@ -546,7 +587,8 @@ def test_the_build_and_the_kit_answer_every_candidate_slot_alike(world):
     res = _resolve()
     cand = scenario(world, "agree")
     cfgs = {"c40g:bdm-3plus1": ("c40g", "bdm-3plus1"), "s9510-30xc:ac": ("s9510-30xc", "ac"),
-            "dcp:default": ("dcp-r-34d-cs", "default"), "fhd:populated": ("fhd-1ufce", "populated")}
+            "dcp:default": ("dcp-r-34d-cs", "default"), "fhd:populated": ("fhd-1ufce", "populated"),
+            "fhd-rear:populated": ("fhd-1ufce", "populated"), "fhd-rear:rear": ("fhd-1ufce", "rear")}
     accepted, refused, differ = set(), set(), []
     for name, rows in cand.items():
         dev, cfg_name = cfgs[name]
@@ -567,6 +609,16 @@ def test_the_build_and_the_kit_answer_every_candidate_slot_alike(world):
     assert "c40g:bdm-3plus1 front-2/xg0/cage" in refused
     assert "c40g:bdm-3plus1 front-2/xg0" in accepted
     assert "dcp:default xc01/tx" in accepted and "fhd:populated bay-1/lc1/tx" in accepted
+    # THE BACKS (Task 10b): every MTP bulkhead the rear draws, on two 2 x
+    # MTP-12 backs, the 36-fibre cassette's three and a single-MTP back - and
+    # the near misses around them, which all three refuse
+    rear = {k.split(" ", 1)[1] for k in accepted if k.startswith("fhd-rear:rear ")}
+    assert rear == {"bay-1/mtp1", "bay-1/mtp2", "bay-2/mtp1", "bay-2/mtp2",
+                    "bay-3/mtp1", "bay-3/mtp2", "bay-3/mtp3", "bay-4/mtp"}, rear
+    assert {k.split(" ", 1)[1] for k in accepted if k.startswith("fhd-rear:populated ")} == \
+        {"bay-1/mtp", "bay-2/mtp", "bay-3/mtp", "bay-4/mtp"}
+    near = {k.split(" ", 1)[1] for k in refused if k.startswith("fhd-rear:rear ")}
+    assert {"bay-1/mtp3", "bay-4/mtp1", "bay-1/mtp1/screw-left", "bay-3/mtp"} <= near, near
 
 
 WRAPPED = [("ufispace/s9510-30xc", "ac", "port-0/aperture", "generic/qsfp-lc@1", "port-0"),
@@ -680,3 +732,243 @@ def test_the_build_and_l12_answer_a_key_inside_an_occupant_alike(tmp_path, occ, 
     if not ok:
         want = "key 'front-2/xg0-occupant' instead"
         assert want in r.stderr and all(want in e for e in l12), (r.stderr[-400:], l12)
+
+
+# =================================================== THE BACKS (Task 10b)
+#
+# A seated cassette's back is drawn on the rear face as a PROJECTION of the
+# module (render.py `rear:`): `data-of` in place of `data-path`, and no
+# `data-ref`, `data-z-*` or `data-cp*`. Its MTP bulkheads are slots all the
+# same - `bay-1/module/mtp1`, keyed `bay-1/mtp1` - and the build seats their
+# shipped caps and any configured plug inside the projection group, keyed as
+# every other slot is. The kit reads those slots off the drawing, seats into
+# them, rebuilds a swapped module's back with its caps, and is held here to
+# the real rear face of the same request.
+
+def back_of(root, bay):
+    """The projection group the build drew for `bay`'s back."""
+    found = [e for e in root.iter() if e.get("id") == f"{bay}-rear"]
+    assert len(found) == 1, (bay, len(found))
+    return found[0]
+
+
+def _tree(spec):
+    """A spec with its `<style>` elements left out: the kit brings a skin's own
+    stylesheet along with what it imports, where the build states the rules
+    once for the drawing - the allowance `descendants` makes for a front seat.
+    Nothing a style holds is read by any rule here (fake-dom keeps no text)."""
+    return {"t": spec["t"], "a": spec["a"],
+            "c": [_tree(k) for k in spec["c"] if k["t"] != "style"]}
+
+
+def back_diff(kit, build):
+    """Every difference between a back the kit holds (fake-dom spec) and the
+    build's (ElementTree), as readable strings. EQUAL, attribute for
+    attribute and element for element, with one allowance each way: a
+    `transform` is compared as numbers (the kit writes `16`, the build
+    `16.0`), and the projection's own children are matched by id rather than
+    by position - the kit appends a new occupant after the parts, as it does
+    on a card, where the build draws them in slot order."""
+    want, kit = _tree(spec_of(build)), _tree(kit)
+    out = []
+
+    def attrs(where, ka, ba):
+        for k in sorted(set(ka) | set(ba)):
+            a, b = ka.get(k), ba.get(k)
+            if a == b:
+                continue
+            if k == "transform" and a and b and len(numbers(a)) == len(numbers(b)) \
+                    and all(abs(x - y) < 1e-6 for x, y in zip(numbers(a), numbers(b))) \
+                    and re.sub(r"[-\d.e]+", "#", a) == re.sub(r"[-\d.e]+", "#", b):
+                continue
+            out.append(f"{where} [{k}]: kit {a!r} build {b!r}")
+
+    def same(where, k, b):
+        if k["t"] != b["t"]:
+            out.append(f"{where}: <{k['t']}> vs <{b['t']}>")
+            return
+        attrs(where, k["a"], b["a"])
+        if len(k["c"]) != len(b["c"]):
+            out.append(f"{where}: {len(k['c'])} children vs {len(b['c'])}")
+            return
+        for i, (x, y) in enumerate(zip(k["c"], b["c"])):
+            same(f"{where}/{y['a'].get('id') or y['t'] + str(i)}", x, y)
+
+    def keyed(kids):
+        seen, out_ = {}, {}
+        for c in kids:
+            k = c["a"].get("id") or f"<{c['t']}>"
+            seen[k] = seen.get(k, 0) + 1
+            out_[f"{k}#{seen[k]}"] = c
+        return out_
+
+    where = want["a"].get("id")
+    attrs(where, kit["a"], want["a"])
+    kk, bk = keyed(kit["c"]), keyed(want["c"])
+    for k in sorted(set(kk) ^ set(bk)):
+        out.append(f"{where}: child {k} only in the {'kit' if k in kk else 'build'}")
+    for k in sorted(set(kk) & set(bk)):
+        same(f"{where}/{k}", kk[k], bk[k])
+    return out
+
+
+def backs_match(world, face, got, bays):
+    bad = []
+    for bay in bays:
+        bad += back_diff(got[bay], back_of(world["faces"][face], bay))
+    return bad
+
+
+@needs_node
+def test_the_build_names_the_module_a_back_is_of(world):
+    """A PROJECTION STRIPS `data-ref`, so a back alone cannot say whose it is.
+    The build writes `data-of-ref` beside `data-of` on a `rear:` projection:
+    the ref of the module seated in the bay, which is what the kit looks up
+    `faces.rear` on. A `plan:` projection is not a back and does not carry it."""
+    root = world["faces"]["fhd-rear:rear"]
+    got = {b: back_of(root, b).get("data-of-ref") for b in MIX}
+    assert got == {b: ver(world, r) for b, r in MIX.items()}, got
+    assert all(back_of(root, b).get("data-ref") is None for b in MIX)
+    assert [e for e in root.iter() if e.get("data-of-ref") and not e.get("data-projection")] == []
+
+
+def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():
+    """THE KIT'S DRAWING-LESS READER ASSUMES IT. configs.json publishes no
+    bay's `rear:`, so slotResolver accepts a slot on a module's back under any
+    device bay; the build refuses one under a bay that shows no back
+    (manifest.nested_key_host). They agree while every bay that accepts a
+    module with `faces.rear` also declares `rear:` - which this pins."""
+    from portrayal.manifest import view_parts
+    res = _resolve()
+    bays = missing = 0
+    for dev in libwalk.iter_devices([str(LIB)]):
+        data = yaml.safe_load(Path(dev).read_text())
+        for view in (data.get("views") or {}).values():
+            for b in view_parts(view)["bays"]:
+                backed = [r for r in b.get("accepts") or []
+                          if ((res(r) or {}).get("faces") or {}).get("rear")]
+                if not backed:
+                    continue
+                bays += 1
+                if not b.get("rear"):
+                    missing += 1
+    assert bays > 0, "no bay in the library takes a module with a back"
+    assert missing == 0, missing
+
+
+@needs_node
+def test_nested_slots_reads_every_mtp_on_the_rear_face(world):
+    c = scenario(world, "rearCensus")
+    assert c["ids"] == ["bay-1/module/mtp1", "bay-1/module/mtp2", "bay-2/module/mtp1",
+                        "bay-2/module/mtp2", "bay-3/module/mtp1", "bay-3/module/mtp2",
+                        "bay-3/module/mtp3", "bay-4/module/mtp"], c["ids"]
+    assert c["offered"] == c["ids"], "a back's slot is not offered"
+    back12 = world["comps"][CASS12]["faces"]["rear"]
+    assert c["mtp1"] == {**c["mtp1"], "id": "bay-1/module/mtp1", "key": "bay-1/mtp1",
+                         "kind": "connector", "default": MCAP, "accepts": [MCAP, MPO12, MPO24],
+                         "modulePath": "bay-1/module", "moduleId": "bay-1-rear",
+                         "carrier": back12, "moduleRef": CASS12, "projection": True}
+    # the build's shipped cap is known as what each slot holds
+    assert c["held"] == [1] * 8, c["held"]
+    assert c["populated"] == ["bay-1/module/mtp", "bay-2/module/mtp", "bay-3/module/mtp",
+                              "bay-4/module/mtp"]
+    assert c["front"] == [], "the front face grew rear slots"
+
+
+@needs_node
+def test_a_plug_on_a_built_back_is_the_builds(world):
+    """cap -> plug, and emptying one: the three backs the kit swapped on the
+    `rear` build are the `rearplug` build's, element for element."""
+    s = scenario(world, "rearSwap")
+    assert s["res"] == [{"applied": 1, "refused": [], "failed": []}] * 3
+    bad = backs_match(world, "fhd-rear:rearplug", s["backs"], ["bay-1", "bay-2", "bay-3"])
+    assert not bad, "\n".join(bad[:12])
+
+
+@needs_node
+def test_a_second_swap_on_a_back_takes_the_first_out(world):
+    """A projected occupant has no `data-ref` and no `data-behaviour` - the
+    build strips both - so the kit knows it by its name, `<slot>-occupant`."""
+    s = scenario(world, "rearSwap")
+    assert s["cycle"] == [1, 1, 1, 1], s["cycle"]
+    assert s["emptied"] == 0
+    assert s["occRef"] is None, "a projected occupant names no ref"
+
+
+@needs_node
+def test_a_click_on_a_back_names_its_slot(world):
+    c = scenario(world, "rearClick")
+    assert c["cap"] == "bay-3/module/mtp2"
+    assert c["screw"] == "bay-3/module/mtp2"
+    assert c["bezel"] is None
+    assert c["options"] == [
+        {"value": "", "label": "— empty —", "selected": False},
+        {"value": MCAP, "label": f"{MCAP} (ships with)", "selected": True},
+        {"value": MPO12, "label": MPO12, "selected": False},
+        {"value": MPO24, "label": MPO24, "selected": False}]
+
+
+@needs_node
+def test_a_module_swapped_in_draws_the_builds_back_caps_and_all(world):
+    """THE DEFAULTS ON A SWAPPED BACK. applyRearOverrides imports the back's
+    own drawing, whose flange adapters ship their caps; those caps named the
+    back's own namespace (`fhd-2mtp12-lc-rear/mtp1`), so no slot of the
+    device held them and the next swap stacked. Swapped from the populated
+    build to the `rear` population, the three backs are the build's."""
+    s = scenario(world, "rearModule")
+    assert s["applied"] == 3
+    caps = [f for b in s["backs"].values() for f in _fors(b)]
+    assert len(caps) == 7, caps
+    bad = backs_match(world, "fhd-rear:rear", s["backs"], ["bay-1", "bay-2", "bay-3"])
+    assert not bad, "\n".join(bad[:12])
+    assert s["held"] == [1] * 7, s["held"]
+
+
+def _fors(spec):
+    own = [spec["a"]["data-for"]] if "data-for" in spec["a"] else []
+    return own + [f for k in spec["c"] for f in _fors(k)]
+
+
+@needs_node
+def test_a_swapped_back_seats_its_keys_as_the_build_does(world):
+    """The whole pass a face not on screen takes (seatFace, and the faceQueue
+    that calls it), handed the cassettes AND the keys on their backs - in an
+    order that puts a key before its cassette - ends as the `rearplug` build."""
+    s = scenario(world, "rearSeatFace")
+    for name in ("seatFace", "queue"):
+        bad = backs_match(world, "fhd-rear:rearplug", s[name], ["bay-1", "bay-2", "bay-3", "bay-4"])
+        assert not bad, f"{name}:\n" + "\n".join(bad[:12])
+    assert s["res"]["refused"] == [] and s["res"]["failed"] == []
+
+
+@needs_node
+def test_rear_keys_in_the_delta_the_codec_and_the_reload(world):
+    d = scenario(world, "rearDelta")
+    assert d["untouched"] == {}
+    assert d["capBack"] == {}, "the shipped cap put back is no swap"
+    assert d["plugged"] == {"bay-1/module/mtp1": MPO12}
+    assert d["emptied"] == {"bay-2/module/mtp2": None}
+    assert d["swap"] == "bay-1%2Fmodule%2Fmtp1~generic%2Fmpo12-plug%401,bay-2%2Fmodule%2Fmtp2~"
+    assert d["back"] == {"bay-1/module/mtp1": MPO12, "bay-2/module/mtp2": None}
+    # a configuration's rear keys meet the drawing's paths, and the state
+    # that holds them is no swap
+    assert d["built"] == {"bay-1/module/mtp1": MPO12, "bay-2/module/mtp2": None,
+                          "bay-3/module/mtp2": MPO24}
+    assert d["builtDelta"] == {}
+    a = d["accept"]
+    assert a["accepted"] == {"bay-1": CASS12, "bay-1/module/mtp2": MPO24,
+                             "bay-4/module/mtp": None}, a
+    assert sorted(a["ignored"]) == ["bay-1/module/mtp", "bay-1/module/mtp1/screw-left",
+                                    "bay-1/module/mtp3", "bay-2/module/mtp1"], a
+    assert sorted(a["cages"]) == ["bay-1/module/mtp2", "bay-4/module/mtp"]
+
+
+@needs_node
+def test_swapping_or_emptying_a_cassette_drops_its_rear_keys(world):
+    p = scenario(world, "rearPrune")
+    assert p["swapped"] == {"bay-2/module/mtp": None}, p["swapped"]
+    assert "bay-1%2Fmodule%2Fmtp" not in p["swap"] and p["swap"].startswith("bay-1~")
+    assert p["emptied"] == {"bay-2/module/mtp": None}
+    # the build's own cassette put back holds what it ships, on its back too
+    assert p["back"] == {"bay-1/module/mtp1": MCAP}, p["back"]
+    assert p["queue"] == [["bay-1/module/mtp1"], ["bay-1"], ["bay-1/module/mtp1"]]

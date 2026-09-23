@@ -102,12 +102,7 @@ export function rename(wrap, name, idBase, pathBase = idBase, segment = 'module'
     // plug on top of the cap (B3 Task 10a). Each token is re-keyed as a
     // data-path is; a cross-view token (`/rear/psu-0`) and one naming
     // something outside this component are left as they are.
-    const df = el.getAttribute('data-for');
-    if (df) {
-      const to = df.split(/\s+/).map(t => t === name ? pathHead
-        : t.startsWith(name + '/') ? `${pathHead}/${t.slice(name.length + 1)}` : t).join(' ');
-      if (to !== df) el.setAttribute('data-for', to);
-    }
+    rekeyFor(el, name, pathHead);
   }
   // RENAMING A DEFINITION IS HALF THE JOB. A skin that clips, masks or fills by
   // reference carries `clip-path="url(#drive-carrier-25--w0)"` beside the
@@ -128,6 +123,19 @@ export function rename(wrap, name, idBase, pathBase = idBase, segment = 'module'
         /url\(#([^)]*)\)/g, (m, id) => `url(#${renamed.get(id) || id})`));
     }
   }
+}
+
+// A `data-for` IS A PATH, re-keyed as a data-path is: each token that is
+// `name` or under it moves under `pathHead`; a cross-view token and one
+// naming something outside the component stay. ONE RULE for the two places a
+// compiled skin is re-addressed into a device - a module seated in a bay
+// (rename) and a module's back drawn in a rear hole (applyRearOverrides).
+function rekeyFor(el, name, pathHead) {
+  const df = el.getAttribute('data-for');
+  if (!df) return;
+  const to = df.split(/\s+/).map(t => t === name ? pathHead
+    : t.startsWith(name + '/') ? `${pathHead}/${t.slice(name.length + 1)}` : t).join(' ');
+  if (to !== df) el.setAttribute('data-for', to);
 }
 
 // The <g> that represents `ref` seated in `bay`, built from the component's
@@ -171,6 +179,34 @@ const projectionDrops = n => n.startsWith('data-z-') || n.startsWith('data-cp')
   || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
       'data-vent', 'data-groove'].includes(n);
 
+// A GROUP MADE A PROJECTION, as render.py makes one: `data-path` becomes
+// `data-of` (the path is already the part's own), and everything
+// projectionDrops names goes, on the group and on every descendant. What the
+// kit seats on a back (B3 Task 10b) is built exactly as a seat on a card is
+// (seatOccupant: the same transform, ids, paths and lift) and then made this.
+function asProjection(wrap) {
+  for (const el of [wrap, ...wrap.querySelectorAll('*')]) {
+    const dp = el.getAttribute('data-path');
+    if (dp != null) {
+      el.removeAttribute('data-path');
+      el.setAttribute('data-of', dp);
+    }
+    for (const a of [...el.attributes])
+      if (projectionDrops(a.name)) el.removeAttribute(a.name);
+  }
+  return wrap;
+}
+
+// WHOSE BACK A REAR PROJECTION IS. The projection strips `data-ref`, so
+// render.py writes the seated module's ref beside `data-of` as `data-of-ref`
+// (`fs/fhd-2mtp12-lc-os2-a@3:3.1.0`), and applyRearOverrides writes it on a
+// back it rebuilds. The slots on a back are its `faces.rear` component's.
+const OF_REF = 'data-of-ref';
+const faceRef = f => (typeof f === 'string' ? f : f?.ref) || null;
+function backProjection(rootEl, modulePath) {
+  return rootEl.querySelector(`[data-projection][data-of="${CSS.escape(modulePath)}"][${OF_REF}]`);
+}
+
 // A BAY SEEN FROM BEHIND. render.py draws a seated module's back (`faces.rear`)
 // inside the rear-panel hole its bay names, as a projection, and deepens the
 // hole to the back of that module. A swap changes the front bay only - there is
@@ -211,6 +247,7 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
         wrap.setAttribute(a.name, a.value);
     wrap.setAttribute('data-projection', '1');
     wrap.setAttribute('data-of', `${bayId}/module`);
+    wrap.setAttribute(OF_REF, comp.version ? `${ref}:${comp.version}` : ref);
     for (const n of [...doc.documentElement.childNodes])
       (n === root ? [...n.childNodes] : [n])
         .forEach(k => wrap.appendChild(rootEl.ownerDocument.importNode(k, true)));
@@ -222,10 +259,24 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
         el.setAttribute('data-of', `${bayId}/module` + (dp.startsWith(name + '/') ? dp.slice(name.length) : ''));
         el.removeAttribute('data-path');
       }
+      // WHAT A SHIPPED CAP IS FOR, in the device's namespace: the back's
+      // drawing seats its flange adapters' default caps `data-for` its own
+      // paths (`fhd-2mtp12-lc-rear/mtp1`), and the build, drawing the same
+      // back in the bay, writes `bay-1/module/mtp1` - rename's rule
+      rekeyFor(el, name, `${bayId}/module`);
       for (const a of [...el.attributes])
         if (projectionDrops(a.name)) el.removeAttribute(a.name);
     }
     hole.appendChild(wrap);
+    // AND WHAT THE MAP SEATS ON THIS BACK (B3 Task 10b). A fresh back holds
+    // what it ships - the caps came with the drawing - and the keys the map
+    // names under this bay (`bay-1/module/mtp1`) are seated into it now,
+    // since the back they were seated on before is the one just replaced.
+    const under = Object.keys(overrides).filter(k => underCarrier(k, bayId));
+    if (under.length) {
+      const slots = backSlotsOf(wrap, compByRef).filter(e => under.includes(e.id));
+      applied += (await applyOccupantOverrides(rootEl, slots, overrides, loadSkin)).applied;
+    }
   }
   return applied;
 }
@@ -538,7 +589,7 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
   const refused = [], failed = [];
   for (const cage of cages) {
     if (!Object.prototype.hasOwnProperty.call(overrides, cage.id)) continue;
-    const host = bayGroup(rootEl, cage.id);
+    const host = slotElement(rootEl, cage);
     if (!host) continue;
     // A CAGE ON A CARD SEATS INSIDE THE CARD. Its module group is re-found
     // by path HERE, not taken from the entry, and must still hold the card
@@ -556,6 +607,10 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     if (refuse) { refused.push(cage.id); continue; }
     if (!ref) continue;                       // deliberately empty
     const occ = seatOccupant(rootEl.ownerDocument, cage, ref, loaded.comp, loaded.text);
+    // ON A BACK (B3 Task 10b) the seat is the same one, made a projection as
+    // render.py makes what it seats there: `data-of` for `data-path`, and no
+    // relief, ref, behaviour or connection point
+    if (cage.projection) asProjection(occ);
     // a device cage's optic is its host's next sibling; a card cage's is the
     // LAST CHILD of the card's group, where render.py appends it (after the
     // card's own parts), so it takes the card's translate and turn
@@ -591,7 +646,20 @@ export function isOccupantOf(el, slot) {
   if (el.getAttribute('data-for') !== slot.id) return false;
   if (el.getAttribute('data-behaviour') === 'occupies') return true;
   const ref = (el.getAttribute('data-ref') || '').split(':')[0];
+  if (!ref) return isProjectedOccupant(el, slot);
   return !!ref && (slot.accepts || []).includes(ref);
+}
+
+// AN OCCUPANT ON A BACK (B3 Task 10b) carries neither of those: a projection
+// strips `data-ref` and `data-behaviour` (projectionDrops), from the build's
+// seat and the kit's alike. What is left is its name - render.py seats an
+// occupant at `<slot>-occupant`, the path a projection keeps as `data-of` -
+// and that is what an LED or a label `data-for` the same slot never has.
+// (A configuration may name an occupant `{ref, id}` instead; no library
+// configuration keys a back that way, and one that did would not be found.)
+function isProjectedOccupant(el, slot) {
+  return el.getAttribute('data-path') == null
+    && el.getAttribute('data-of') === `${slot.id}-occupant`;
 }
 export function occupantsOf(rootEl, slot) {
   if (!rootEl || !slot) return [];
@@ -655,7 +723,9 @@ export function nestedBays(rootEl, compByRef) {
 //   a card in a bay           `front-6/module` -> `front-6/module/xg0`;
 //   a cassette in a bay       `bay-1/module`   -> `bay-1/module/lc1`;
 //   an adapter composed in it `bay-1/module/lc1` -> `bay-1/module/lc1/tx`;
-//   an adapter on the device  `xc01`           -> `xc01/tx`.
+//   an adapter on the device  `xc01`           -> `xc01/tx`;
+//   a module's back           `bay-1/module`   -> `bay-1/module/mtp1`, drawn as
+//                             a projection on the rear face (backSlotsOf).
 //
 // NOTHING INSIDE AN OCCUPANT (P3). An element that names its host with
 // `data-for`, or is inside one that does, is skipped (insideOccupant): a
@@ -725,6 +795,8 @@ export function nestedSlots(rootEl, compByRef, {deviceCages = [], all = false} =
                 module: mod, modulePath, moduleId: mod.getAttribute('id') || '', carrier});
     }
   }
+  for (const back of rootEl.querySelectorAll(`[data-projection][${OF_REF}]`))
+    raw.push(...backSlotsOf(back, compByRef));
   const hosts = new Map([...(deviceCages || []), ...raw].map(e => [e.id, e]));
   const out = raw.filter(e => {
     const host = hosts.get(e.modulePath);
@@ -733,6 +805,44 @@ export function nestedSlots(rootEl, compByRef, {deviceCages = [], all = false} =
   if (all) return out;
   const hidden = freeLevel(rootEl, [...(deviceCages || []), ...out]);
   return out.filter(e => !hidden.has(e.id));
+}
+
+// THE SLOTS ON A MODULE'S BACK (B3 Task 10b), read off the rear projection
+// render.py draws in the hole its bay names. A projection strips `data-ref`,
+// so the group is known by `data-of-ref` - the seated module - and its slots
+// are that module's `faces.rear` component's `cages`, each at the module's
+// own path (`bay-1/module/mtp1`, keyed `bay-1/mtp1`) as the build publishes
+// them. Only the back's own slots: the build accepts a key on a back only one
+// step under a device bay's module (manifest.nested_key_host), and a part of
+// a flange adapter is no slot. A front part or bay of the same id wins, as it
+// does in the build (key_on_back); spec/tests/test_rear_slots.py holds every
+// module to having none.
+//
+// The entry is a card's, with `projection` set: `module` is the projection
+// group the occupant is seated in, `moduleId` its id (`bay-1-rear`, which
+// names the occupant `bay-1-rear--mtp1-occupant` as the build does),
+// `carrier` the back's component and `moduleRef` the module it is the back
+// of, which applyOccupantOverrides re-checks.
+function backSlotsOf(back, compByRef) {
+  const modulePath = back.getAttribute('data-of');
+  const moduleRef = (back.getAttribute(OF_REF) || '').split(':')[0];
+  const look = r => { try { return r ? compByRef(r) || null : null; } catch (e) { return null; } };
+  const module = look(moduleRef);
+  const carrier = faceRef(module?.faces?.rear);
+  const cages = look(carrier)?.cages;
+  if (!modulePath || !Array.isArray(cages)) return [];
+  const drawn = new Set([...back.querySelectorAll('[data-of]')].map(e => e.getAttribute('data-of')));
+  const front = new Set((module.parts || []).map(q => q.id).concat(Object.keys(module.bays || {})));
+  const depth = seatDepth(back);
+  const out = [];
+  for (const c of cages) {
+    const id = `${modulePath}/${c.id}`;
+    if (!drawn.has(id) || front.has(c.id)) continue;
+    out.push({...c, id, key: slotKey(id), cage: c.id, lift: (+c.lift || 0) + depth,
+              'seat-depth': depth, mirror: !!c.mirror, module: back, modulePath,
+              moduleId: back.getAttribute('id') || '', carrier, moduleRef, projection: true});
+  }
+  return out;
 }
 
 // Kept for the callers #484 wrote; every slot is found now, not only a card's.
@@ -813,9 +923,12 @@ export function cageAt(rootEl, path, deviceCages = [], compByRef) {
   const byId = id => cages.find(c => c.id === id) || null;
   const own = byId(path);
   if (own) return own;
-  for (let n = bayGroup(rootEl, path); n && n !== rootEl && typeof n.getAttribute === 'function';
+  // a part of a back is drawn `data-of` its path (B3 Task 10b): on the face
+  // that shows the back, a projection is the only place that path is drawn
+  const start = bayGroup(rootEl, path) || rootEl.querySelector(`[data-of="${CSS.escape(path)}"]`);
+  for (let n = start; n && n !== rootEl && typeof n.getAttribute === 'function';
        n = n.parentNode) {
-    const hit = byId(n.getAttribute('data-path'));
+    const hit = byId(n.getAttribute('data-path') ?? n.getAttribute('data-of'));
     if (hit) return hit;
     const host = byId(n.getAttribute('data-for'));
     if (host && isOccupantOf(n, host)) return host;
@@ -855,9 +968,22 @@ function seatDepth(el) {
   return total;
 }
 
+// The element a slot is drawn as: its `data-path`, or on a back, the part
+// of the projection that is `data-of` it.
+function slotElement(rootEl, cage) {
+  if (!cage.projection) return bayGroup(rootEl, cage.id);
+  const back = backProjection(rootEl, cage.modulePath);
+  return back?.querySelector(`[data-of="${CSS.escape(cage.id)}"]`) || null;
+}
+
 // The card's group a nested cage sits in, if it is still the card the cage was
-// read from; null otherwise.
+// read from; null otherwise. On a back, the projection, if it is still the
+// back of the module the slot was read from.
 function cardOf(rootEl, cage) {
+  if (cage.projection) {
+    const back = backProjection(rootEl, cage.modulePath);
+    return back && (back.getAttribute(OF_REF) || '').split(':')[0] === cage.moduleRef ? back : null;
+  }
   const mod = bayGroup(rootEl, cage.modulePath);
   const ref = (mod?.getAttribute('data-ref') || '').split(':')[0];
   return mod && ref === cage.carrier ? mod : null;
@@ -1429,10 +1555,22 @@ export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.defaul
     const b = parent.endsWith('/module') ? c.bays?.[name] : null;
     if (b) return {...b, id: path};
     const slot = (Array.isArray(c.cages) ? c.cages : []).find(g => g.id === name);
-    if (!slot) return null;
+    if (!slot) return backEntry(path, parent, name, c);
     const host = parent.endsWith('/module') ? null : entryAt(parent);
     if (host?.isCage && !(host.bores || []).includes(name)) return null;
     return {...slot, id: path, key: slotKey(path), isCage: true};
+  }
+  // A SLOT ON A MODULE'S BACK (B3 Task 10b): one step under the module in a
+  // DEVICE bay, a slot of the module's `faces.rear` component that no front
+  // part or bay of the module shares an id with - manifest.nested_key_host's
+  // reading. The build also asks that the bay shows its back somewhere
+  // (`rear:`), which configs.json does not publish; every bay in the library
+  // that takes a module with a back does (test_nested_slots_js.py pins it).
+  function backEntry(path, parent, name, c) {
+    if (!parent.endsWith('/module') || !bays.some(b => `${b.id}/module` === parent)) return null;
+    if ((c.parts || []).some(q => q.id === name) || c.bays?.[name]) return null;
+    const slot = (comp(faceRef(c.faces?.rear))?.cages || []).find(g => g.id === name);
+    return slot ? {...slot, id: path, key: slotKey(path), isCage: true, back: true} : null;
   }
   return {entryAt, refAt};
 }
