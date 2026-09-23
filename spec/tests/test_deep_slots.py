@@ -26,7 +26,7 @@ from portrayal import lint
 from portrayal import manifest
 from portrayal.manifest import occupant_spec, presented_interface
 
-CASSETTE = "fs/fhd-1mtp24-lc-os2-a@3"
+CASSETTE = "fs/fhd-1mtp24-lc-os2-a@4"
 PLUG = "generic/lc-plug@2"
 
 
@@ -126,7 +126,7 @@ def test_a_plug_seats_on_a_bore_in_a_cassette_in_a_bay(tmp_path):
 def test_the_same_at_depth_four_on_a_raised_carrier(tmp_path):
     """dcp-f-a22's adapters are composed at lift 44 on the raised block, in a
     card seated in the DCP-2's slot: bay, card, adapter, bore."""
-    edfa = part("smartoptics/dcp-f-a22@1", "edfa")
+    edfa = part("smartoptics/dcp-f-a22@2", "edfa")
     assert edfa["lift"] == 44.0
     root, parents = render(a22(tmp_path, {"slot-1/edfa/tx": PLUG}), tmp_path / "o",
                            "dcp-2", "ila-node")
@@ -140,7 +140,7 @@ def test_a_plug_seats_on_a_directly_placed_adapter(tmp_path):
     `<placement>/tx` is a live key: seated inside that placement's group."""
     root, parents = render(direct(tmp_path, {"port-1510/tx": PLUG}), tmp_path / "o",
                            "dcp-r-34d-cs", "default")
-    assert_seated_on_bore(root, parents, "port-1510", "tx", "common/lc-duplex-adapter@5",
+    assert_seated_on_bore(root, parents, "port-1510", "tx", "common/lc-duplex-adapter@6",
                           "port-1510/tx")
     assert occupant_paths(root) == ["port-1510/tx-occupant"]
 

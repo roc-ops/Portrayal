@@ -40,8 +40,8 @@ from portrayal.render import (Library, _connector_registry, _pluggable_candidate
 PLUG = "generic/lc-plug@2"
 OTHER = "test/other-plug@1"
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a"
-V_ADAPTER = "common/lc-duplex-v-adapter"     # what the cassette composes (@5)
-H_ADAPTER = "common/lc-duplex-adapter"       # what dcp-r-34d-cs places (@5)
+V_ADAPTER = "common/lc-duplex-v-adapter"     # what the cassette composes (@6)
+H_ADAPTER = "common/lc-duplex-adapter"       # what dcp-r-34d-cs places (@6)
 
 
 # --- the throwaway library ---------------------------------------------------------
@@ -63,8 +63,8 @@ def _copy(lib, src, major, name, edit):
 
 def _unshipped(edit):
     """`edit`, applied to a copy of a REAL adapter with the caps it ships
-    removed first. Those defaults are the product's (common/lc-duplex-v-adapter@5
-    ships a duplex cap on its own slot, common/lc-duplex-adapter@5 a cap in each
+    removed first. Those defaults are the product's (common/lc-duplex-v-adapter@6
+    ships a duplex cap on its own slot, common/lc-duplex-adapter@6 a cap in each
     bore - test_shipped_caps.py), and every throwaway here is built to exercise
     ONE default at a time, which a second, shipped one would collide with
     (L115) or mask."""
@@ -349,7 +349,7 @@ def test_the_same_grandchild_on_real_parts(tmp_path, lib):
     """And on the library's own: the SC cassette's sc-duplex-adapter@4 ships
     a cap in each bore and presents no slot of its own. `bay-1/sc1/tx: ""`
     empties that bore; the other 23 keep their caps."""
-    dev, _ = fhd(tmp_path, "fs/fhd-1mtp12-sc-os2-a@2", {"bay-1/sc1/tx": ""})
+    dev, _ = fhd(tmp_path, "fs/fhd-1mtp12-sc-os2-a@3", {"bay-1/sc1/tx": ""})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     held = {n.get("data-for"): n.get("data-ref").rsplit(":", 1)[0] for n in root.iter()
             if (n.get("data-path") or "").startswith("bay-1/module/sc")

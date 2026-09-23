@@ -57,13 +57,13 @@ DUPLEX = "generic/lc-duplex-plug@2"
 SC = "generic/sc-plug@1"
 BULKHEAD = "std/lc-bulkhead-bore@1"
 RECEPTACLE = "std/lc-bore@3"
-H_ADAPTER = "common/lc-duplex-adapter@5"        # Smartoptics, side by side
-V_ADAPTER = "common/lc-duplex-v-adapter@5"      # FS FHD cassettes, stacked
+H_ADAPTER = "common/lc-duplex-adapter@6"        # Smartoptics, side by side
+V_ADAPTER = "common/lc-duplex-v-adapter@6"      # FS FHD cassettes, stacked
 S_ADAPTER = "common/lc-duplex-shuttered-adapter@2"  # FS 36-fibre, side by side
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"
-OM_CASSETTE = "fs/fhd-2mtp12-lc-om4-a@1"        # #504's OM4 twin, the same V_ADAPTER
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"
+OM_CASSETTE = "fs/fhd-2mtp12-lc-om4-a@2"        # #504's OM4 twin, the same V_ADAPTER
 SHUTTERED_CASSETTE = "fs/fhd-3mtp18-lc-os2-a@1"  # eighteen S_ADAPTER, three rows
-SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"
+SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"
 # which FHD cassette each FHD build seats in bay-1 and bay-4
 FHD_CASSETTES = {"fhd": LC_CASSETTE, "fhd-om": OM_CASSETTE, "fhd-36": SHUTTERED_CASSETTE}
 

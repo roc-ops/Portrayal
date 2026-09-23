@@ -62,11 +62,11 @@ POSITIONS = {DUPLEX: 2, SC: 1, MPO12: 12, MPO24: 24}
 # describes its outline - which is a claim the contract has to defend in prose
 CONFORMS = {DUPLEX: None, SC: "sc-plug", MPO12: "mpo-plug", MPO24: "mpo-plug"}
 
-DCP = "smartoptics/dcp-r-34d-cs"      # places common/lc-duplex-adapter@5
+DCP = "smartoptics/dcp-r-34d-cs"      # places common/lc-duplex-adapter@6
 FHD = "fs/fhd-1ufce"
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@5
-SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
-H_ADAPTER = "common/lc-duplex-adapter@5"
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"     # twelve lc-duplex-v-adapter@5
+SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"     # six sc-duplex-adapter@4
+H_ADAPTER = "common/lc-duplex-adapter@6"
 
 
 def contract(ref):
@@ -354,7 +354,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     """THE ASSERTION THE COMPOSITION EXISTS FOR, and it is made in the DEVICE
     frame rather than on the contract's own arithmetic.
 
-    `common/lc-duplex-adapter@5` composes two std/lc-bulkhead-bore@1 at `rotate: 180`,
+    `common/lc-duplex-adapter@6` composes two std/lc-bulkhead-bore@1 at `rotate: 180`,
     6.25 apart. The plug composes two generic/lc-plug@2 6.25 apart, each turned
     180 so its latch stands up (the canonical axis).
     Neither contract knows about the other; what has to be true is that once
@@ -399,7 +399,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     group that holds it.
 
     AND ITS HALVES LAND ON THE STACKED BORES, which they did not when this
-    plug was first drawn. `common/lc-duplex-v-adapter@5` stacks its pair where
+    plug was first drawn. `common/lc-duplex-v-adapter@6` stacks its pair where
     this plug's is side by side, and an occupant cannot turn itself - so the
     ADAPTER says which way round its pair runs: its spanning slot publishes
     the turn that carries the canonical across axis onto its own bores, and
@@ -411,7 +411,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     occ = occupant(root, "bay-1/module/lc01", DUPLEX)
     host = by_path(root, "bay-1/module/lc01")
     assert is_inside(parents, occ, parents[host])
-    adapter = contract("common/lc-duplex-v-adapter@5")
+    adapter = contract("common/lc-duplex-v-adapter@6")
     _, at, lift = presented_interface(adapter, contract)
     hx, hy = device_point(parents, host, at)
     ox, oy = device_point(parents, occ,

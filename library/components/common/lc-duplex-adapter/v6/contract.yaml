@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 5.1.0
+version: 6.0.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): a duplex connector - a duplex dust cap, a duplex plug -
@@ -50,7 +50,7 @@ provenance:
   bores: >-
     std/lc-bulkhead-bore@1 SINCE THIS MAJOR - the BULKHEAD aperture, whose keyway ends
     5.71 from the ferrule axis (measured off SENKO's LC Premium Adapter,
-    DS-LC-000010; that part's `keyway` note). @4 composed std/lc-bore@3, the
+    DS-LC-000010; that part's `keyway` note). @4 and @5 composed std/lc-bore@3, the
     TRANSCEIVER receptacle, whose 1.60 keyway is cut short to fit a module face, so
     a seated plug's compressed latch ran 1.76 past the keyway this part drew and
     0.21 past its outline. Before that the bore was @1 (4.6 x 4.4, proportional,
@@ -90,7 +90,7 @@ provenance:
     constraint, not a measurement, and a source that fixes the axis replaces
     both figures.
     THE OUTLINE WAS MOVED FIRST, and that too is a DRAWING change, not a
-    reading: @4 drew the bezel outline inset 0.1 all round, a seam between
+    reading: @4 and @5 drew the bezel outline inset 0.1 all round, a seam between
     abutting adapters with no source, whose stroke reached y 0.2 - and at the
     reading's 5.79 the keyway would have cut it by 0.12. The outline is now the
     13.2 x 11.0 box itself, as common/lc-duplex-shuttered-adapter@2 draws its
@@ -105,7 +105,7 @@ provenance:
     the placement's `rotate`: up on an unturned row, down on a row at rotate 180),
     with the panel cutout of the same id where there is one, and every optical
     point, bore mate, duplex seat and seated cap or plug stands exactly where @4
-    put it.
+    and @5 put it.
     WHERE THE SOURCE IS THE BODY - the eight PPM modules, whose position is the
     adapter block measured on five renders - the placements stay, and the
     ferrules move 0.32 inside the body, away from the latch, as the part does on
@@ -130,12 +130,19 @@ provenance:
     moulding across both, and the caps pulled from the ports in use lie on
     the lids one at a time. So the adapter's own duplex slot ships empty and
     the bores ship capped: the reverse of FS's stacked adapter, which ships
-    one cap across the pair (common/lc-duplex-v-adapter@5).
+    one cap across the pair (common/lc-duplex-v-adapter@6).
   bore-ids: >-
     THE BORES ARE NUMBERED, NOT TX AND RX. A panel adapter has no direction
     until something is plugged into it; its bores are fibre positions 1 and 2,
     and a cassette path endpoint `lc01.1` is drawn at `lc01/1` (L112). Until
     v5 they were `tx` and `rx`, which read as a direction the part does not have.
+  major: >-
+    @6 IS @5 WITH THE BULKHEAD APERTURE. @5 renamed the bores `1` and `2` and
+    changed nothing drawn; @6 keeps those ids and composes std/lc-bulkhead-bore@1
+    on the 5.82 axis (`bores`, `axis`), ships a cap in each bore
+    (`shipped-caps`) and presents the pair as its own `lc-duplex` slot. A major
+    because the composed bore ref is addressing: what fills `xc01/1` is now a
+    different part.
 relief:
   features:
     - node: bezel

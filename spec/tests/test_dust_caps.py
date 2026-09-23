@@ -4,7 +4,7 @@
 A dust cap is a connector: it mates the interface a plug mates, seats at the
 plug's mate point, and occupies the plug's slot. Three of the four carry
 figures that used to be drawn INTO an adapter - `common/lc-duplex-adapter@4`,
-`common/lc-duplex-v-adapter@5` and `common/sc-duplex-adapter@4` each keep the
+`common/lc-duplex-v-adapter@6` and `common/sc-duplex-adapter@5` each keep the
 full reading under `provenance.dust-caps` - and the fourth, the MPO cap, is
 read off FS's own renders and says so.
 
@@ -34,8 +34,8 @@ from portrayal.manifest import load_yaml, presented_interface
 
 DCP = "smartoptics/dcp-r-34d-cs"
 FHD = "fs/fhd-1ufce"
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@5
-SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@4"     # twelve lc-duplex-v-adapter@5
+SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@3"     # six sc-duplex-adapter@4
 
 LC_CAP = "common/lc-dust-cap@1"
 LC_DUPLEX_CAP = "common/lc-duplex-dust-cap@2"
@@ -288,7 +288,7 @@ def test_a_feature_inside_a_cap_is_lifted_onto_the_caps_own_front(ref, node, inn
 # --- the devices the caps are seated on ------------------------------------------------
 
 def dcp(tmp_path, occupants):
-    """smartoptics/dcp-r-34d-cs, which PLACES common/lc-duplex-adapter@5 as
+    """smartoptics/dcp-r-34d-cs, which PLACES common/lc-duplex-adapter@6 as
     port-1510, with a configuration seating caps in its bores."""
     dev = shutil.copytree(LIB / "devices" / DCP, tmp_path / "dcp") / "device.yaml"
     d = yaml.safe_load(dev.read_text())

@@ -220,7 +220,7 @@ fit an 8.5 module face. `std/lc-bulkhead-bore@1` has the same square, widths and
 mate, with the 3.36 keyway measured off the vector line art of SENKO's LC Premium
 Adapter (DS-LC-000010). A panel adapter composes the bulkhead aperture unless its
 own outline cannot hold it. The FS FHD adapter (`lc-duplex-v-adapter@5`) does, and
-so does the Smartoptics one since its `@5` moved its ferrule axis (see "The
+so does the Smartoptics one since its `@6` moved its ferrule axis (see "The
 Smartoptics axis" below). A seated plug in a transceiver receptacle runs past the
 drawn keyway, which is that receptacle's understatement showing.
 
@@ -236,9 +236,9 @@ Added 2026-09-23, when the review page showed a seated plug running past the
 Smartoptics adapter's outline.
 
 **The Smartoptics adapter composes the bulkhead aperture, and its ferrules moved
-to hold it.** `common/lc-duplex-adapter@4` drew its axis at y 5.5, the middle of
-its 11.0 outline, on the transceiver receptacle; the bulkhead keyway reaches 5.71
-from the axis and would have run 0.21 past the edge. `@5` composes
+to hold it.** `common/lc-duplex-adapter@4` and `@5` drew their axis at y 5.5, the
+middle of the 11.0 outline, on the transceiver receptacle; the bulkhead keyway reaches 5.71
+from the axis and would have run 0.21 past the edge. `@6` composes
 `std/lc-bulkhead-bore@1` with the axis at 5.82 from the latch-side edge.
 
 **The axis figure is the stencil's direct ferrule reading, and it is an
@@ -290,7 +290,7 @@ A slot's default is declared on the part that presents it, in the component that
 composes it:
 
 ```yaml
-# library/components/common/lc-duplex-adapter/v5/contract.yaml
+# library/components/common/lc-duplex-adapter/v6/contract.yaml
 parts:
   - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180,
      default: common/lc-dust-cap@1}
@@ -309,9 +309,9 @@ cites the source that shows the product shipping capped:
 
 | adapter | ships | on | source |
 |---|---|---|---|
-| `common/lc-duplex-adapter@5` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `tx` and `rx` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore |
-| `common/lc-duplex-v-adapter@5` (FS FHD, stacked) | `common/lc-duplex-dust-cap@2` | the adapter's own slot | FS's face-on render of SKU 57016: one white moulding across both stacked ports of every adapter |
-| `common/sc-duplex-adapter@4` (FS FHD SC) | `common/sc-dust-cap@1` | each opening | FS's face-on render of SKU 57058: a black cap in each of the twelve openings |
+| `common/lc-duplex-adapter@6` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `tx` and `rx` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore |
+| `common/lc-duplex-v-adapter@6` (FS FHD, stacked) | `common/lc-duplex-dust-cap@2` | the adapter's own slot | FS's face-on render of SKU 57016: one white moulding across both stacked ports of every adapter |
+| `common/sc-duplex-adapter@5` (FS FHD SC) | `common/sc-dust-cap@1` | each opening | FS's face-on render of SKU 57058: a black cap in each of the twelve openings |
 | `common/mpo-adapter@2` (FS MTP panel tile) | `common/mpo-dust-cap@2` | the slot it forwards from `std/mpo@2` | FS's face-on renders of SKU 35510: all twelve ports capped. Nothing places the tile yet, so the default seats nowhere until a panel composes it |
 | `common/mpo-flange-adapter@2`, `common/mpo24-flange-adapter@2` (FHD cassette backs) | `common/mpo-dust-cap@2` | the bulkhead's own slot | FS's side renders of SKU 57016 (view C) and SKU 57023 (view D) show the cap seated in the rear bulkhead; the rear renders of SKU 57016 (view D) and SKU 57341 (view E) show it supplied, one per bulkhead; the 36-fibre SKU 105333 shows both (views C, D) |
 | `common/lc-duplex-shuttered-adapter@2` | nothing | - | its shutters are the dust protection (see "The shuttered adapter") |

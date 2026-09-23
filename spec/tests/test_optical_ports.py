@@ -24,7 +24,7 @@ def run86(doc, path="t/contract.yaml"):
 
 def test_a_polished_family_needs_a_polish():
     """An LC adapter is sold UPC and APC and the enum has no bare `lc`."""
-    doc = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}],
+    doc = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@6"}],
            "optical": {"paths": [{"from": "lc1.1", "to": "lc1.2"}]}}
     got = run86(doc)
     assert len(got) == 1, got
@@ -32,7 +32,7 @@ def test_a_polished_family_needs_a_polish():
 
 
 def test_stating_the_polish_is_quiet():
-    doc = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}],
+    doc = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@6"}],
            "optical": {"polish": "upc",
                        "paths": [{"from": "lc1.1", "to": "lc1.2"}]}}
     assert run86(doc) == []
@@ -47,7 +47,7 @@ def test_an_unpolished_family_needs_nothing():
 
 
 def test_a_module_with_no_paths_is_not_this_rules_business():
-    assert run86({"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}]}) == []
+    assert run86({"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@6"}]}) == []
 
 
 def test_the_real_cassette_states_its_polish():
@@ -140,8 +140,8 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
     contract = {
         "name": "t-coupler",
         "parts": [
-            {"id": "common", "ref": "common/lc-duplex-adapter@5"},
-            {"id": "split", "ref": "common/lc-duplex-adapter@5"},
+            {"id": "common", "ref": "common/lc-duplex-adapter@6"},
+            {"id": "split", "ref": "common/lc-duplex-adapter@6"},
         ],
         "optical": {
             "polish": "upc",
@@ -150,7 +150,7 @@ def test_a_single_faced_module_with_paths_exports_no_ports():
                               {"at": "split.2", "ratio": 50}]}],
         },
     }
-    known = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}}}
+    known = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}}}
     doc = D.build_module(contract, "Vendor", known.get)
     assert "front-ports" not in doc
     assert "rear-ports" not in doc
@@ -190,14 +190,14 @@ def test_a_split_carries_its_ratio():
     splits yet - the taps arrive in plan 6, and a rule with no test until then
     is a rule nobody has run.
     """
-    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5",
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@6",
                         "at": [0, 0]}],
              "faces": {"rear": {"ref": "t/rear@1"}},
              "optical": {"media": "os2", "polish": "upc",
                          "paths": [{"from": "rear:mtp.1",
                                     "to": [{"at": "lc1.1", "ratio": 50},
                                            {"at": "lc1.2", "ratio": 50}]}]}}
-    known = {"common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
+    known = {"common/lc-duplex-v-adapter@6": {"optical": {"positions": 2}},
              "common/mpo-adapter@2": {"optical": {"positions": 12}},
              "t/rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@2"}]}}
     m = P.fibre_map(entry, known.get, "TAP")
@@ -209,13 +209,13 @@ def test_a_split_carries_its_ratio():
 def test_a_splice_rear_exports_as_one_splice_port():
     """C2, and upstream's own convention: the devicetype-library ships ADC's
     PPP-SC-SM with `rear-ports: [{name, type: splice, positions: 1}]`."""
-    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@5",
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@6",
                         "at": [0, 0]}],
              "faces": {"rear": {"ref": "t/splice-rear@1"}},
              "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
                          "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
                                    {"from": "lc1.2", "to": "rear:splice.2"}]}}
-    known = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}},
+    known = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}},
              "common/fibre-splice@1": {"optical": {"positions": 2}},
              "t/splice-rear@1": {"parts": [{"id": "splice",
                                             "ref": "common/fibre-splice@1"}]}}
@@ -230,13 +230,13 @@ def test_a_declared_rear_kind_does_not_override_a_known_family():
     rear face would export both as `type: splice`. The connector family wins
     when it is known; `rear-kind` is only the fallback for a part - like a
     splice tray - that composes nothing `FAMILY` recognises."""
-    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@5",
+    entry = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-adapter@6",
                         "at": [0, 0]}],
              "faces": {"rear": {"ref": "t/mixed-rear@1"}},
              "optical": {"media": "os2", "polish": "upc", "rear-kind": "splice",
                          "paths": [{"from": "lc1.1", "to": "rear:splice.1"},
                                    {"from": "lc1.2", "to": "rear:mtp.1"}]}}
-    known = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}},
+    known = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}},
              "common/fibre-splice@1": {"optical": {"positions": 2}},
              "common/mpo-adapter@2": {"optical": {"positions": 12}},
              "t/mixed-rear@1": {"parts": [
@@ -291,7 +291,7 @@ def test_front_numbering_follows_at_x_not_id_order(tmp_path):
     leave `_front_parts` alone.
 
     This runs the REAL `components_index.py` CLI against a throwaway
-    component (composing the real common/lc-duplex-v-adapter@5, resolved from
+    component (composing the real common/lc-duplex-v-adapter@6, resolved from
     this library) rather than constructing an index entry by hand, because a
     hand-built entry that already carries `at` cannot tell a working
     `_front_parts` apart from a `components_index.py` that silently drops it
@@ -315,8 +315,8 @@ description: throwaway component proving components_index publishes `at` on part
 size: {w: 100.0, h: 20.0}
 attrs: {media: fiber}
 parts:
-  - {id: lc10, ref: common/lc-duplex-v-adapter@5, at: [90.0, 3.0]}
-  - {id: lc9, ref: common/lc-duplex-v-adapter@5, at: [10.0, 3.0]}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [90.0, 3.0]}
+  - {id: lc9, ref: common/lc-duplex-v-adapter@6, at: [10.0, 3.0]}
 optical:
   polish: upc
   paths:
@@ -381,8 +381,8 @@ def run88(doc, path="t/contract.yaml"):
 
 
 TWO_ROW_PARTS = [
-    {"id": "a", "ref": "common/lc-duplex-v-adapter@5", "at": [5.0, 3.0]},
-    {"id": "b", "ref": "common/lc-duplex-v-adapter@5", "at": [20.0, 15.0]},
+    {"id": "a", "ref": "common/lc-duplex-v-adapter@6", "at": [5.0, 3.0]},
+    {"id": "b", "ref": "common/lc-duplex-v-adapter@6", "at": [20.0, 15.0]},
 ]
 TWO_ROW_PATHS = [{"from": "a.1", "to": "a.2"}, {"from": "b.1", "to": "b.2"}]
 
@@ -400,8 +400,8 @@ def test_a_two_row_fibre_face_without_front_order_is_l88():
 def test_a_single_row_fibre_face_needs_nothing():
     """One `at.y` among the fibre parts - `at.x` alone is a safe reading, the
     same case every cassette built before this rule already models."""
-    one_row = [{"id": "a", "ref": "common/lc-duplex-v-adapter@5", "at": [5.0, 3.0]},
-               {"id": "b", "ref": "common/lc-duplex-v-adapter@5", "at": [20.0, 3.0]}]
+    one_row = [{"id": "a", "ref": "common/lc-duplex-v-adapter@6", "at": [5.0, 3.0]},
+               {"id": "b", "ref": "common/lc-duplex-v-adapter@6", "at": [20.0, 3.0]}]
     assert run88({"parts": one_row, "optical": {"paths": TWO_ROW_PATHS}}) == []
 
 

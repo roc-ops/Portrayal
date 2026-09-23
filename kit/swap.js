@@ -171,7 +171,7 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
   wrap.setAttribute('id', `${idBase}--module`);
   wrap.setAttribute('data-path', `${bayId}/module`);
   // WITH ITS VERSION, as render.py writes every instance's ref
-  // (`fs/fhd-2mtp12-lc-os2-a@3:3.1.0`) and occupantAttrs writes an occupant's.
+  // (`fs/fhd-2mtp12-lc-os2-a@4:3.1.0`) and occupantAttrs writes an occupant's.
   // Every reader here splits it off; the 3D pass is held to the build's face
   // attribute for attribute (test_explorer_3d_js.py), and this was the one
   // attribute of a swapped module that differed.
@@ -219,7 +219,7 @@ function asProjection(wrap) {
 
 // WHOSE BACK A REAR PROJECTION IS. The projection strips `data-ref`, so
 // render.py writes the seated module's ref beside `data-of` as `data-of-ref`
-// (`fs/fhd-2mtp12-lc-os2-a@3:3.1.0`), and applyRearOverrides writes it on a
+// (`fs/fhd-2mtp12-lc-os2-a@4:3.1.0`), and applyRearOverrides writes it on a
 // back it rebuilds. The slots on a back are its `faces.rear` component's.
 const OF_REF = 'data-of-ref';
 const faceRef = f => (typeof f === 'string' ? f : f?.ref) || null;

@@ -41,7 +41,7 @@ from portrayal.render import (_connector_registry, _pluggable_candidates,
 ADAPTER = "common/lc-duplex-adapter"        # side by side; dcp-r-34d-cs places it
 V_ADAPTER = "common/lc-duplex-v-adapter"    # stacked; the FHD cassette composes it
 MAJOR = {ADAPTER: 5, V_ADAPTER: 5}
-CASSETTE = "fs/fhd-1mtp24-lc-os2-a@3"
+CASSETTE = "fs/fhd-1mtp24-lc-os2-a@4"
 PLUG = "generic/lc-plug@2"                  # mates lc - one bore
 DUPLEX = "test/duplex-plug@1"               # mates lc-duplex - the pair
 
@@ -188,7 +188,7 @@ def test_a_cage_entry_carries_an_empty_bores_list(lib):
 def test_every_adapter_a_module_composes_names_its_bores(lib):
     """A module holding both kinds: its duplex adapters name their bores and
     its SFP cages name none, in one published list."""
-    got = cages(lib, "smartoptics/dcp-f-a22@1")
+    got = cages(lib, "smartoptics/dcp-f-a22@2")
     spanning = {i: e["bores"] for i, e in got.items()
                 if e["interface"] == "lc-duplex"}
     assert spanning and all(b == ["tx", "rx"] for b in spanning.values()), got
@@ -431,7 +431,7 @@ def test_l112_leaves_a_non_spanning_interface_alone(lib):
 
 CAP = "common/lc-duplex-dust-cap@2"         # drawn ACROSS, the canonical axis
 REAL_PLUG = "generic/lc-duplex-plug@2"      # likewise
-CARD = "smartoptics/dcp-f-a22@1"            # composes two side-by-side adapters
+CARD = "smartoptics/dcp-f-a22@2"            # composes two side-by-side adapters
 
 
 def bore_axis(root, ref):
@@ -447,7 +447,7 @@ def bore_axis(root, ref):
 
 
 # 270 FOR THE STACKED ADAPTER, NOT 90 - and 270 is the right answer. Since
-# common/lc-duplex-v-adapter@5 the LOWER bore is composed first (`tx`, the port
+# common/lc-duplex-v-adapter@6 the LOWER bore is composed first (`tx`, the port
 # FS prints as odd), so the first-to-last direction runs UP the plate, and the
 # turn that carries the canonical across axis onto it is 270. That turn puts a
 # duplex part's half `a` in the lower bore (port 1) and swings its latch, drawn
@@ -519,7 +519,7 @@ def test_a_slot_that_spans_nothing_still_publishes_its_placements_rotate(lib):
 
 def dcp2(tmp_path, occupants):
     """smartoptics/dcp-2 in its ILA-node configuration - a dcp-f-a22 in
-    `slot-1`, which composes two `common/lc-duplex-adapter@5` on a raised
+    `slot-1`, which composes two `common/lc-duplex-adapter@6` on a raised
     block - with one configuration carrying `occupants`. `slot-1/edfa` is the
     first adapter's own spanning slot, three levels down."""
     dev = shutil.copytree(LIB / "devices/smartoptics/dcp-2",

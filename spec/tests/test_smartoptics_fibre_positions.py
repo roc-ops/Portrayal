@@ -1,7 +1,7 @@
 """On the Smartoptics chain, what the source measured stays put (B3, "The
 Smartoptics axis").
 
-`common/lc-duplex-adapter@5` moved its ferrule axis from 5.5 to 5.82 inside
+`common/lc-duplex-adapter@6` moved its ferrule axis from 5.5 to 5.82 inside
 its body so the bulkhead keyway fits. On a face that moves either the fibre or
 the body, and each composer keeps the one its own source measured:
 

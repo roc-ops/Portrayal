@@ -4,10 +4,10 @@ default", "Which adapter ships which cap").
 A dust cap is the shipped state of an idle fibre port, declared as a `default:`
 on the part that presents the port. Which LEVEL ships it follows the product:
 
-  - common/lc-duplex-adapter@5 (Smartoptics): a simplex cap in EACH bore;
-  - common/lc-duplex-v-adapter@5 (FS FHD, stacked): ONE duplex cap across both
+  - common/lc-duplex-adapter@6 (Smartoptics): a simplex cap in EACH bore;
+  - common/lc-duplex-v-adapter@6 (FS FHD, stacked): ONE duplex cap across both
     ports, on the adapter's own slot;
-  - common/sc-duplex-adapter@4 (FS FHD SC): a cap in each opening;
+  - common/sc-duplex-adapter@5 (FS FHD SC): a cap in each opening;
   - common/mpo-adapter@2 (FS's MTP panel tile, unplaced) and the FHD cassette
     rears' flanged bulkheads common/mpo-flange-adapter@2 and
     common/mpo24-flange-adapter@2: the MPO cap in the opening;
@@ -64,9 +64,9 @@ MPO12 = "generic/mpo12-plug@1"
 # adapter -> (the level that ships the cap, the cap). "self" is the adapter's
 # own slot; "bores" is each of its two composed bores, `tx` and `rx`.
 SHIPS = {
-    "common/lc-duplex-adapter@5": ("bores", LC_CAP),
-    "common/lc-duplex-v-adapter@5": ("self", DUPLEX_CAP),
-    "common/sc-duplex-adapter@4": ("bores", SC_CAP),
+    "common/lc-duplex-adapter@6": ("bores", LC_CAP),
+    "common/lc-duplex-v-adapter@6": ("self", DUPLEX_CAP),
+    "common/sc-duplex-adapter@5": ("bores", SC_CAP),
     "common/mpo-adapter@2": ("self", MPO_CAP),
     "common/mpo-flange-adapter@2": ("self", MPO_CAP),
     "common/mpo24-flange-adapter@2": ("self", MPO_CAP),
@@ -278,8 +278,8 @@ def test_every_compiled_component_face_ships_its_ports_capped():
         bad_caps += no_drawn_cap_outside_an_occupant(g, ref)
     assert not bad_caps, bad_caps[:10]
     # every family is exercised, and the shuttered ports are counted empty
-    for ref in ("common/lc-duplex-adapter@5", "common/lc-duplex-v-adapter@5",
-                "common/sc-duplex-adapter@4", "common/mpo-flange-adapter@2",
+    for ref in ("common/lc-duplex-adapter@6", "common/lc-duplex-v-adapter@6",
+                "common/sc-duplex-adapter@5", "common/mpo-flange-adapter@2",
                 "common/mpo24-flange-adapter@2", SHUTTERED):
         assert total[ref] > 0, (ref, dict(total))
     # AS MANY AS THE CONTRACTS COMPOSE: the drawing checked every slot the
@@ -325,7 +325,7 @@ def test_the_census_fails_on_an_adapter_that_ships_nothing(tmp_path):
 
     def repoint(c):
         for q in c["parts"]:
-            if q["ref"] == "common/lc-duplex-v-adapter@5":
+            if q["ref"] == "common/lc-duplex-v-adapter@6":
                 q["ref"] = "test/bare-v@1"
     _copy(root, "fs/fhd-2mtp12-lc-os2-a", 3, "bare-cassette", repoint)
     g = compiled_face("test/bare-cassette@1", root)
@@ -349,7 +349,7 @@ def test_the_census_fails_on_a_cap_at_the_wrong_level(tmp_path):
 
     def repoint(c):
         for q in c["parts"]:
-            if q["ref"] == "common/lc-duplex-v-adapter@5":
+            if q["ref"] == "common/lc-duplex-v-adapter@6":
                 q["ref"] = "test/bored-v@1"
     _copy(root, "fs/fhd-2mtp12-lc-os2-a", 3, "bored-cassette", repoint)
     g = compiled_face("test/bored-cassette@1", root)
@@ -377,7 +377,7 @@ def test_the_drawn_cap_check_finds_a_cap_the_adapter_draws(tmp_path):
     found = no_drawn_cap_outside_an_occupant(g, refs=("test/drawn-cap@1",))
     assert len(found) == 1, found
     # and the real adapter, whose caps are all occupants, is clean
-    assert no_drawn_cap_outside_an_occupant(compiled_face("smartoptics/ppm-dcm-40@1")) == []
+    assert no_drawn_cap_outside_an_occupant(compiled_face("smartoptics/ppm-dcm-40@2")) == []
 
 
 # --- (a) the census: real device builds ----------------------------------------------
@@ -425,8 +425,8 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
 # FS: the populated configuration's four fhd-1mtp6lcd-os2-a@3, six stacked
 # adapters each, on the front; one MTP bulkhead each on the rear. The base
 # configuration ships every bay empty, so it adds nothing.
-EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@5": 478,
-                         "common/lc-duplex-v-adapter@5": 24}
+EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
+                         "common/lc-duplex-v-adapter@6": 24}
 EXPECTED_DEVICE_REAR_SLOTS = 4
 
 
@@ -486,7 +486,7 @@ def test_every_fhd_cassette_is_covered():
 
 
 def _a22_modules():
-    c = load_yaml(_contract_path("smartoptics/dcp-f-a22@1"))
+    c = load_yaml(_contract_path("smartoptics/dcp-f-a22@2"))
     return sorted({r for b in c["bays"].values() for r in b.get("accepts") or []})
 
 
@@ -494,7 +494,7 @@ def _dcp2(tmp_path, bays, occupants=None):
     dev = shutil.copytree(LIB / "devices/smartoptics/dcp-2", tmp_path / "dcp-2") / "device.yaml"
     d = yaml.safe_load(dev.read_text())
     cfg = d["configurations"]["ila-node"]
-    cfg["bays"] = {"slot-1": "smartoptics/dcp-f-a22@1", **bays,
+    cfg["bays"] = {"slot-1": "smartoptics/dcp-f-a22@2", **bays,
                    "slot-2": "smartoptics/dcp-2-blank@1"}
     if occupants is not None:
         cfg["occupants"] = occupants
@@ -511,14 +511,14 @@ def test_every_ppm_module_ships_capped_in_the_a22(tmp_path, pair):
     out = build(_dcp2(tmp_path, bays), tmp_path / "o", LIB)
     root = ET.parse(out / "dcp-2.ila-node.front.svg").getroot()
     got = census(root, where=str(pair))
-    assert got["common/lc-duplex-adapter@5"] > 0
+    assert got["common/lc-duplex-adapter@6"] > 0
     assert not no_drawn_cap_outside_an_occupant(root)
 
 
 # --- (d) the PPM-DCM modules ---------------------------------------------------------
 
-DCMS = ["smartoptics/ppm-dcm-10@1", "smartoptics/ppm-dcm-20@1",
-        "smartoptics/ppm-dcm-40@1", "smartoptics/ppm-dcm-80@1"]
+DCMS = ["smartoptics/ppm-dcm-10@2", "smartoptics/ppm-dcm-20@2",
+        "smartoptics/ppm-dcm-40@2", "smartoptics/ppm-dcm-80@2"]
 
 
 def test_a_seated_dcm_shows_its_forwarded_adapters_two_bore_caps(tmp_path):
@@ -563,7 +563,7 @@ def test_a_dcms_own_top_level_default_is_still_refused(tmp_path):
     d = yaml.safe_load(dev.read_text())
     for v in d["views"].values():
         for b in ((v or {}).get("bays") or {}).values():
-            if "smartoptics/dcp-f-a22@1" in (b.get("accepts") or []):
+            if "smartoptics/dcp-f-a22@2" in (b.get("accepts") or []):
                 b["accepts"].append("test/a22-dcm@1")
     d["configurations"]["ila-node"]["bays"] = {
         "slot-1": "test/a22-dcm@1", "slot-1/ppm-1": "test/capped-dcm@1",
@@ -585,7 +585,7 @@ def test_an_fs_port_is_emptied_and_replaced_front_and_rear(tmp_path):
            "bay-1/mtp1": MPO12, "bay-1/mtp2": ""}
     dev = shutil.copytree(LIB / "devices/fs/fhd-1ufce", tmp_path / "fhd-1ufce") / "device.yaml"
     d = yaml.safe_load(dev.read_text())
-    d["configurations"]["base"]["bays"] = {"bay-1": "fs/fhd-2mtp12-lc-os2-a@3"}
+    d["configurations"]["base"]["bays"] = {"bay-1": "fs/fhd-2mtp12-lc-os2-a@4"}
     d["configurations"]["base"]["occupants"] = occ
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = build(dev, tmp_path / "o", LIB)
@@ -621,7 +621,7 @@ def test_a_smartoptics_port_is_emptied_and_replaced(tmp_path):
     assert held.get("xc01/tx", []) == [] and held.get("xc01/rx") == [LC]
     assert held.get("port-1510/tx", []) == [] and held.get("port-1510/rx", []) == []
     assert held.get("port-1510") == [DUPLEX]
-    adapters = adapters_in(root, ("common/lc-duplex-adapter@5",))
+    adapters = adapters_in(root, ("common/lc-duplex-adapter@6",))
     capped = [h for h, v in held.items() if v == [LC_CAP]]
     assert len(capped) == 2 * len(adapters) - 4 > 0
 
@@ -680,7 +680,7 @@ def test_lint_every_new_default_is_in_its_slots_accepts(ref):
 
 @pytest.mark.parametrize("ref,wrong", [
     ("common/mpo-adapter@2", LC_CAP), ("common/mpo-flange-adapter@2", SC_CAP),
-    ("common/lc-duplex-v-adapter@5", LC_CAP)])
+    ("common/lc-duplex-v-adapter@6", LC_CAP)])
 def test_lint_finds_a_top_level_default_the_slot_does_not_take(tmp_path, ref, wrong):
     """Non-vacuity: L114 sees each adapter as a slot (the MPO tile through the
     aperture it forwards), so a cap of the wrong interface is found."""
@@ -693,7 +693,7 @@ def test_lint_finds_a_top_level_default_the_slot_does_not_take(tmp_path, ref, wr
     assert got and wrong in got[0], got
 
 
-@pytest.mark.parametrize("ref", ["common/lc-duplex-adapter@5", "common/sc-duplex-adapter@4"])
+@pytest.mark.parametrize("ref", ["common/lc-duplex-adapter@6", "common/sc-duplex-adapter@5"])
 def test_lint_finds_a_bore_default_the_slot_does_not_take(tmp_path, ref):
     root = tmp_path / "lib"
     ns, rest = ref.split("/", 1)

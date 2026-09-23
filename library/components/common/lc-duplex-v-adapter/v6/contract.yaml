@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 5.1.0
+version: 6.0.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): FS ships ONE white cap over both stacked ports, and a
@@ -19,7 +19,7 @@ description: >-
   fits to FHD cassettes and adapter panels. A blue body standing proud of the
   plate, each port turned with its latch slot to the LEFT. The white duplex
   dust cap FS ships over both ports is an occupant, not part of this adapter:
-  common/lc-duplex-dust-cap@2, its `default:` (provenance.shipped-cap). Not the same part as common/lc-duplex-adapter@5,
+  common/lc-duplex-dust-cap@2, its `default:` (provenance.shipped-cap). Not the same part as common/lc-duplex-adapter@6,
   which is wider and puts its bores side by side.
 size: {w: 9.28, h: 13.75}
 conforms: fhd-lc-cassette
@@ -64,9 +64,9 @@ parts:
   # tongue DOWN, and rotate 90 swings it to the LEFT, which is where FS's own
   # render puts every port's stepped latch slot (57016.main.jpg, beside the
   # cap). `at` is the UNROTATED box's corner and the turn is about its centre,
-  # so the ferrules stay exactly where @4 put them - (5.85, 10.0) and (5.85,
+  # so the ferrules stay exactly where @4 and @5 put them - (5.85, 10.0) and (5.85,
   # 3.75) - and only the keyway grows, leftward. Lifted onto the raised bezel so
-  # each bore recesses from the proud face, as common/lc-duplex-adapter@5 does.
+  # each bore recesses from the proud face, as common/lc-duplex-adapter@6 does.
   - {id: '1', ref: std/lc-bulkhead-bore@1, at: [1.82, 5.97], rotate: 90, lift: 1.2}
   - {id: '2', ref: std/lc-bulkhead-bore@1, at: [1.82, -0.28], rotate: 90, lift: 1.2}
 connection-points:
@@ -108,12 +108,13 @@ provenance:
     render puts at 2.92-8.77 of the 9.28 body. v1 placed the bores tongue-down
     at 6.75 apart, which was the defect v2 fixed.
   bores: >-
-    std/lc-bulkhead-bore@1 SINCE THIS MAJOR, and std/lc-bore@3 before it. @3 is
+    std/lc-bulkhead-bore@1 SINCE THIS MAJOR, and std/lc-bore@3 before it (@5, which
+    renamed the bores `1` and `2` and drew nothing new, still composed it). @3 is
     the TRANSCEIVER receptacle, whose 1.60 keyway is cut short to fit a module
     face (its own `short-keyway` named this adapter's composer as drawing less
     keyway than its hardware has); the bulkhead aperture carries the 3.36 stack
     measured off SENKO DS-LC-000010, its keyway ending 5.71 from the ferrule
-    axis. THE FERRULES DID NOT MOVE: both mate points are where @4 put them, so
+    axis. THE FERRULES DID NOT MOVE: both mate points are where @4 and @5 put them, so
     the spanning slot's midpoint, its derived axis (270) and every composer's
     fibre positions are unchanged. What moved is the keyway, which now runs out
     to x 0.14 rather than 1.90.
@@ -125,7 +126,7 @@ provenance:
     px/mm it cannot say whether that wall is 0.14 or half a millimetre, so this
     fit is SENKO's keyway on FS's measured outline and ferrule line, not an FS
     reading. A MAJOR because the composed bore ref is addressing: what fills
-    `lc01/tx` is now a different part.
+    `lc01/1` is now a different part.
   dust-caps: >-
     NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; common/lc-duplex-dust-cap@2 is that part, and this adapter's top-level `default:` seats it (see `shipped-cap`). The reading is kept here for that part: photo-measured on 57016.main.jpg at the same 5.78 px/mm the
     plate gives (86-716 px across 108.97 mm): ONE white duplex cap, not two,
@@ -141,7 +142,7 @@ provenance:
     the six adapters holding a single white moulding over its two stacked
     ports, with an inset in front of each - the reading `dust-caps` records.
     So the bores ship empty, and the adapter's slot ships capped:
-    the reverse of the Smartoptics adapter, common/lc-duplex-adapter@5.
+    the reverse of the Smartoptics adapter, common/lc-duplex-adapter@6.
   colour: >-
     sampled off 57016.main.jpg: the adapter body's median blue is
     rgb(45,145,216), #2d91d8, and the cap rgb(231,231,233). The blue is FS's

@@ -45,7 +45,7 @@ from test_lifted_seat_js import (LIB, RENDER, SPEC, build_components, chain_matr
 SCRIPT = SPEC / "tests/js/nested-slots.mjs"
 PLUG, SIMPLEX = "generic/lc-duplex-plug@2", "generic/lc-plug@2"
 DCAP, CAP = "common/lc-duplex-dust-cap@2", "common/lc-dust-cap@1"
-CASS6, CASS12, SHUT = "fs/fhd-1mtp6lcd-os2-a@3", "fs/fhd-2mtp12-lc-os2-a@3", "fs/fhd-3mtp18-lc-os2-a@1"
+CASS6, CASS12, SHUT = "fs/fhd-1mtp6lcd-os2-a@4", "fs/fhd-2mtp12-lc-os2-a@4", "fs/fhd-3mtp18-lc-os2-a@1"
 POP = {"bay-1": CASS6, "bay-2": CASS6, "bay-3": CASS6, "bay-4": CASS6}
 # THE BACKS (B3 Task 10b): two 2 x MTP-12 LC cassettes and the 36-fibre
 # cassette, whose back carries three MTP bulkheads, beside one single-MTP back
@@ -198,7 +198,7 @@ def test_nested_slots_reads_every_slot_off_a_real_fhd_face(world):
     assert c["lc1"] == {**c["lc1"], "id": "bay-1/module/lc1", "key": "bay-1/lc1", "kind": "connector",
                         "default": DCAP, "bores": ["tx", "rx"], "accepts": [DCAP, PLUG],
                         "modulePath": "bay-1/module", "moduleId": "bay-1--module", "carrier": CASS6}
-    assert c["tx"]["key"] == "bay-1/lc1/tx" and c["tx"]["carrier"] == "common/lc-duplex-v-adapter@5"
+    assert c["tx"]["key"] == "bay-1/lc1/tx" and c["tx"]["carrier"] == "common/lc-duplex-v-adapter@6"
     assert c["tx"]["modulePath"] == "bay-1/module/lc1"
     assert c["helperSame"], "nestedSlots differs from the entry Task 9's parity was built on"
     assert c["alias"], "nestedCages is no longer an alias of nestedSlots"

@@ -103,7 +103,7 @@ async function swap(root, deviceCages, key, ref) {
 
 const PLUG = 'generic/lc-duplex-plug@2', SIMPLEX = 'generic/lc-plug@2';
 const DCAP = 'common/lc-duplex-dust-cap@2', CAP = 'common/lc-dust-cap@1';
-const CASS12 = 'fs/fhd-2mtp12-lc-os2-a@3', CASS6 = 'fs/fhd-1mtp6lcd-os2-a@3';
+const CASS12 = 'fs/fhd-2mtp12-lc-os2-a@4', CASS6 = 'fs/fhd-1mtp6lcd-os2-a@4';
 const out = {};
 async function scenario(name, fn) {
   try { out[name] = await fn(); } catch (e) { out[name] = {error: String(e && e.stack || e)}; }
