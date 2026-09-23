@@ -145,6 +145,125 @@ def _placement_skins(doc):
     return out
 
 
+def _placement_attrs(doc):
+    """The facts each placed thing states about itself, keyed the same way.
+
+    THESE WERE NOT FINGERPRINTED AT ALL. A group's `attrs` sit in `surface`, but
+    the same facts stated one port at a time - `speed`, `media`, `usb` - could
+    be rewritten and the lock said nothing: `speed: 100m-1g` retyped as `1g` on
+    a placement made `required_bump` return None. #519 found it by retyping the
+    speed vocabulary across the library, where some sixty devices had to be
+    patch-bumped by hand so that one version number never covered two contents.
+
+    `surface`, and so a patch, for the reason a group's `attrs` are: a fact a
+    reader and an export see, not a coordinate or an id anything addresses by.
+
+    HASHED AS ITS OWN KEY AND NOT FOLDED INTO `surface`, because 98 of the 124
+    devices carry placement attrs today and folding them in rehashes every one
+    of those surfaces - a patch demanded of each for a field the lock learned,
+    not a change the device made. `required_bump` reads the key only when the
+    old lock has it, the way it reads `composed`.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        view = view or {}
+        for kind in ("bays", "placements"):
+            for item in ((view.get("components") or {}).get(kind) or []):
+                if item.get("attrs") is not None:
+                    out[f"{vname}/{kind}/{item.get('id')}"] = item["attrs"]
+    return out
+
+
+# THE PLACEMENT KEYS NOTHING FINGERPRINTED, AND WHICH BUMP EACH ONE IS.
+#
+# `_placements` hashes where a part is and what it is, `_placement_groups`,
+# `_placement_skins` and `_placement_attrs` three more of its keys - and that
+# left thirteen keys of a placement, and the ones a bay shares with it, that
+# could be rewritten with `required_bump` returning None. `rel-pos` alone is
+# stated 11,522 times. Each is sorted by what `render.py`, `expand.py`,
+# `dcim_export.py` and `lint.py` do with it, not by how its name reads.
+#
+# GEOMETRY - where the part is in depth, or whether it is drawn at all. Major,
+# for the reason `shape` is: a consumer that cached what it saw is now wrong.
+#   `inset`, `lift`   z-offset of every protrusion (`instance_group(z_inset=)`)
+#   `in`              sinks the part by its well's depth (`sink(g, floor_of())`)
+#   `under`           paint order, and published as `data-under` for a viewer
+#                     that lifts the lid off to show what is below
+#   `only-in`         which configurations the part exists in at all - the
+#                     schema calls it "a statement about GEOMETRY"
+#   `optional`        drawn only under `--with <tag>`: flipping it adds or takes
+#                     away a part in the default build
+#   `interfaces`      the DCIM export emits one interface per id INSTEAD OF the
+#                     placement's own, so even adding it retires a name a
+#                     consumer holds (#443). Addressing, but never additive.
+# ADDRESSING - `for` and `rel-pos`. What a part is bound to (`data-for`, which
+# the explorer tree nests on) and its ENTITY-MIB position under its parent.
+# Rebinding or renumbering is major like a group moving; STATING a `for` where
+# there was none is additive, the case `_placement_groups` draws, because
+# nothing could have been held by a value that was not there - and stating a
+# `rel-pos` asks for nothing at all (see `_addressing_bump`).
+# SURFACE - what a reader sees and nothing computes a coordinate or an address
+# from. Patch.
+#   `states`, `description`  what a lamp's colours mean, and the vendor's words
+#   `provenance`             where the fact came from
+#   `physical-context`       the Redfish class, a label
+#   `frames`                 a lint declaration (L13); draws nothing
+#
+# TOGETHER WITH THE KEYS ALREADY HASHED THESE ARE EXHAUSTIVE OVER THE SCHEMA'S
+# placement properties, and test_lock_sees_placement_keys.py holds that - the
+# same guard CHASSIS_SHAPE/CHASSIS_SURFACE have, so a new placement key has to
+# be sorted by whoever adds it rather than default into "hashed nowhere".
+PLACEMENT_HASHED = {"ref", "id", "at", "rotate", "mirror", "mate-to", "skin",
+                    "group", "attrs"}
+PLACEMENT_GEOMETRY = {"inset", "lift", "in", "under", "only-in", "optional",
+                      "interfaces"}
+PLACEMENT_ADDRESSING = {"for", "rel-pos"}
+PLACEMENT_SURFACE = {"states", "description", "provenance", "physical-context",
+                     "frames"}
+
+
+# KEYS THAT NAME A SET, which the schema lets an author spell as one id or a
+# list of them, in any order. `for: port-1` and `for: [port-1]` bind the same
+# lamp, and `only-in: [ac, dc]` is `[dc, ac]` - so they are hashed as a sorted
+# list, or re-spelling one would read as a rebind and ask for a major. This
+# module's first rule is that a change of spelling is not a change.
+# `interfaces` is NOT here: the DCIM export emits them in the order written.
+_SET_VALUED = {"for", "under", "frames", "only-in"}
+
+
+def _spelled_once(key, value):
+    if key not in _SET_VALUED:
+        return value
+    return sorted(value if isinstance(value, list) else [value], key=str)
+
+
+def _placement_keys(doc, keys):
+    """The keys of `keys` each placed thing states, keyed as `_placements` is.
+
+    Only the keys a placement actually states, and only placements that state
+    one, so a device is never billed for a key it does not use.
+    """
+    out = {}
+    for vname, view in (doc.get("views") or {}).items():
+        view = view or {}
+        for kind in ("bays", "placements"):
+            for item in ((view.get("components") or {}).get(kind) or []):
+                said = {k: _spelled_once(k, item[k]) for k in sorted(keys)
+                        if item.get(k) is not None}
+                if said:
+                    out[f"{vname}/{kind}/{item.get('id')}"] = said
+    return out
+
+
+def _by_field(per_placement):
+    """`{placement: {field: v}}` turned inside out, to `{field: {placement: v}}`."""
+    out = {}
+    for key, said in per_placement.items():
+        for field, value in said.items():
+            out.setdefault(field, {})[key] = value
+    return out
+
+
 def _placement_groups(doc):
     """Which group each placed thing belongs to, keyed the same way.
 
@@ -244,8 +363,27 @@ def component_versions(library: pathlib.Path):
         ver = str(doc.get("version") or "")
         out[f"{vendor}/{name}@{major[1:]}"] = (
             ver + "+" + _component_digest(ct.parent, doc))
-        out.setdefault(f"{vendor}/{name}", {})[major] = doc.get("parts") or []
+        out.setdefault(f"{vendor}/{name}", {})[major] = _children(doc)
     return out
+
+
+def _children(contract):
+    """The refs a component draws that it does not itself contain: its `parts`,
+    and every ref its own bays seat or take.
+
+    NESTED BAYS WERE NOT FOLLOWED. A component can host bays - an SCB carries a
+    routing engine, a SIP carries SPAs - and only `parts:` was walked, so
+    `juniper/re-s-1300@1` could be rewritten inside the SCB bays of mx240, mx480
+    and mx960 with devicelock asking for nothing; #521 bumped all three by hand.
+    A nested bay is read exactly as `_composed` reads a device bay, `default`
+    and every ref it `accepts`, because an occupant the bay only accepts is
+    still one a configuration can draw there.
+    """
+    refs = [p.get("ref") for p in (contract.get("parts") or [])]
+    for bay in (contract.get("bays") or {}).values():
+        bay = bay or {}
+        refs += [bay.get("default")] + list(bay.get("accepts") or [])
+    return [r for r in refs if r]
 
 
 def _composed(doc, versions):
@@ -258,8 +396,9 @@ def _composed(doc, versions):
     devices draw their management ports, and devicelock re-locked none of them.
     The guard against a device changing without saying so did not extend to a
     device changing because something it composes did.
-    Resolved TRANSITIVELY - a card composes a jack which composes a cage - so a
-    change three levels down still reaches the device that shows it.
+    Resolved TRANSITIVELY - a card composes a jack which composes a cage, an SCB
+    seats a routing engine in a bay of its own - so a change three levels down
+    still reaches the device that shows it. See `_children`.
     """
     seen, todo = {}, []
     for view in (doc.get("views") or {}).values():
@@ -275,9 +414,7 @@ def _composed(doc, versions):
             continue
         seen[ref] = versions.get(ref, "?")
         base, _, major = ref.partition("@")
-        for part in (versions.get(base) or {}).get(f"v{major}", []):
-            if part.get("ref"):
-                todo.append(part["ref"])
+        todo.extend((versions.get(base) or {}).get(f"v{major}", []))
     return dict(sorted(seen.items()))
 
 
@@ -318,7 +455,9 @@ def buckets(doc, versions=None):
 
     `surface` is everything a reader sees and no consumer computes with -
     silkscreen text, decor, description, provenance, maturity, attrs, portfolio.
-    Patch.
+    Patch. A placement's own `attrs` are the same kind of fact and take the same
+    bump, but are hashed under `placement-attrs` beside it - see
+    `_placement_attrs` for the migration that costs.
 
     `gaps` is hashed on its own because it is the one part of a device that
     makes a CLAIM ABOUT THE WORLD rather than about the drawing, so it needs to
@@ -406,6 +545,14 @@ def buckets(doc, versions=None):
             # actually states, so the 24 with no colour are not billed for one.
             **chassis_surface,
         }),
+        # SURFACE IN MEANING, A KEY OF ITS OWN IN THE LOCK - see
+        # `_placement_attrs` for why it is not inside the digest above.
+        "placement-attrs": _digest(_placement_attrs(doc)),
+        # THREE MORE KEYS OF THE SAME KIND, for the same migration - see
+        # PLACEMENT_GEOMETRY. Beside `shape` and `surface` rather than inside
+        # them, so learning thirteen keys rehashed no device's old buckets.
+        "placement-geometry": _digest(_placement_keys(doc, PLACEMENT_GEOMETRY)),
+        "placement-surface": _digest(_placement_keys(doc, PLACEMENT_SURFACE)),
         "gaps": _digest(doc.get("gaps") or []),
         # WHAT THIS DEVICE DRAWS THAT LIVES SOMEWHERE ELSE. Hashed apart from
         # `surface` because it is not this file's content at all - nothing in
@@ -426,6 +573,13 @@ def entry(doc, versions=None):
          "configs": sorted((doc.get("configurations") or {}).keys()),
          "placement-groups": _placement_groups(doc),
          "bay-accepts": _bay_accepts(doc),
+         # RECORDED AND NOT ONLY HASHED for the reason `placement-groups` is:
+         # stating a `for` where there was none is additive and rebinding one
+         # is not, and a digest cannot tell the two apart.
+         # FIELD FIRST - `{"for": {placement: target}, "rel-pos": {...}}` - so
+         # each stated value is one line of the committed lock, not four.
+         "placement-addressing": _by_field(
+             _placement_keys(doc, PLACEMENT_ADDRESSING)),
          # RECORDED AND NOT ONLY HASHED, so a finding can name the part that
          # moved. A digest can say something changed; it cannot say what.
          "composed-refs": _composed(doc, versions or {})}
@@ -433,8 +587,62 @@ def entry(doc, versions=None):
     return e
 
 
+def _addressing_bump(old, new):
+    """What `for` and `rel-pos` demand: major when a value a placement stated
+    changes or goes, minor when `for` is stated where there was none.
+
+    STATING A `rel-pos` WHERE THERE WAS NONE ASKS FOR NOTHING, which is the
+    ruling test_device_versioning.py already holds: six of the eight chassis
+    made addressable in one backfill needed only `rel-pos`, and nothing should
+    have asked them for a version. Only renumbering or dropping one is breaking.
+    """
+    if "placement-addressing" not in old:
+        return None
+    was_all = old["placement-addressing"] or {}
+    now_all = new["placement-addressing"] or {}
+    still_here = set(new.get("ids") or [])
+    for field, was in was_all.items():
+        now = now_all.get(field) or {}
+        # A PLACEMENT THAT IS GONE is the `ids` check's to judge - it already
+        # says major - so only a placement still here is read.
+        if any(now.get(key) != value for key, value in was.items()
+               if key in still_here):
+            return "major"              # rebound, renumbered or unstated
+    if set(now_all.get("for") or {}) - set(was_all.get("for") or {}):
+        return "minor"                  # bound where it was not
+    return None
+
+
+def _placement_keys_bump(old, new):
+    """What the placement keys PLACEMENT_GEOMETRY sorts demand on their own.
+
+    EACH KEY IS READ ONLY WHEN THE OLD LOCK HAS IT, the guard `composed` and
+    `placement-attrs` use: a lock written before these were fingerprinted has
+    nothing to compare, and reading its absence as a change would bill every
+    device in the library for the lock learning thirteen keys.
+    """
+    if "placement-geometry" in old and \
+            old["placement-geometry"] != new["placement-geometry"]:
+        return "major"
+    need = _addressing_bump(old, new)
+    if need is None and "placement-surface" in old and \
+            old["placement-surface"] != new["placement-surface"]:
+        need = "patch"
+    return need
+
+
 def required_bump(old, new):
-    """The smallest bump this change is allowed to take.
+    """The smallest bump this change is allowed to take - the larger of what
+    the buckets demand and what the placement keys demand."""
+    if old is None:
+        return None
+    need = [b for b in (_bucket_bump(old, new), _placement_keys_bump(old, new))
+            if b]
+    return max(need, key=RANK.get) if need else None
+
+
+def _bucket_bump(old, new):
+    """The smallest bump the buckets allow.
 
     Additive is minor and anything else about shape or names is major, which is
     the distinction DESIGN.md draws and the one that matters to a consumer: a
@@ -451,8 +659,14 @@ def required_bump(old, new):
         # field existed must not report every device in the library at once.
         composed_moved = ("composed" in old
                           and old["composed"] != new["composed"])
+        # SAME GUARD, SAME REASON: a lock written before placement attrs were
+        # fingerprinted has no key to compare, and reading its absence as a
+        # change would bill 98 devices for the lock learning a field.
+        attrs_moved = ("placement-attrs" in old
+                       and old["placement-attrs"] != new["placement-attrs"])
         return "patch" if old.get("surface") != new["surface"] or \
                           old.get("gaps") != new["gaps"] or composed_moved \
+                          or attrs_moved \
             else None
     # ANYTHING REMOVED IS BREAKING, whichever set it left: an id, a group or a
     # configuration name can each be held by something outside this repository.
@@ -670,6 +884,19 @@ def check(library: pathlib.Path):
             if was.get("surface") != now["surface"]:
                 what.append("surface (silkscreen, decor, provenance, attrs, "
                             "portfolio, skins)")
+            if "placement-attrs" in was and \
+                    was["placement-attrs"] != now["placement-attrs"]:
+                what.append("placement attrs")
+            if "placement-geometry" in was and \
+                    was["placement-geometry"] != now["placement-geometry"]:
+                what.append("placement geometry (inset, lift, in, under, "
+                            "only-in, optional, interfaces)")
+            if _addressing_bump(was, now) is not None:
+                what.append("placement addressing (for, rel-pos)")
+            if "placement-surface" in was and \
+                    was["placement-surface"] != now["placement-surface"]:
+                what.append("placement surface (states, description, "
+                            "provenance, physical-context, frames)")
             if was.get("gaps") != now["gaps"]:
                 what.append("gaps")
             # NAME THE COMPOSED CHANGE. The one bucket whose cause is not in
@@ -705,7 +932,11 @@ def check(library: pathlib.Path):
         # left one pointing at a slot that no longer exists, and only a person
         # who knows the sources can say which. Firing when the surface alone
         # changed would make it noise.
-        moved = was.get("shape") != now["shape"] or was.get("names") != now["names"]
+        moved = was.get("shape") != now["shape"] or \
+            was.get("names") != now["names"] or \
+            ("placement-geometry" in was and
+             was["placement-geometry"] != now["placement-geometry"]) or \
+            _addressing_bump(was, now) is not None
         if moved and was.get("gaps") == now["gaps"] and (doc.get("gaps") or []):
             findings.append((name, "gaps-unreviewed",
                              f"{name} changed shape or addressing and its {len(doc['gaps'])} declared "

@@ -6,7 +6,7 @@ relief.js reads `data-z-out` as an ABSOLUTE distance from the panel and SUMS
 the features inside it - which are absolute - and must NOT fold it into their
 `lift` values, which the ancestor already supplies.
 
-It folded it into both. Composing common/lc-duplex-adapter@4 onto
+It folded it into both. Composing common/lc-duplex-adapter@5 onto
 smartoptics/dcp-f-a22's plate at `lift: 44` put 44 on the adapter's group AND
 rewrote each dust cap's own 3.175 lift to 47.175, so relief.js summed 91.175
 against an `out` of 50.35 and built each cap as a box whose front face was 40mm
@@ -15,7 +15,7 @@ BEHIND its back. They rendered as white spikes standing off the faceplate.
 It has a second shape, found in review on the fix's own PR and confirmed by
 seating the other occupant the A22 accepts: a module in a bay that carries a lift
 got the lift on its group and its own relief left panel-relative, so every
-feature on smartoptics/ppm-ad1-1510@1 went 40mm negative in the A22's raised
+feature on smartoptics/ppm-ad1-1510@2 went 40mm negative in the A22's raised
 block. That went unseen because the bay's DEFAULT is ppm-dummy, which declares no
 relief at all - so `dcp-2`'s `ila-node` configuration exists partly to give this
 a live subject. The invariant is general, so this is:
@@ -98,8 +98,8 @@ def test_the_a22s_adapters_stand_the_same_height_as_they_do_alone():
     caps until they left the adapter to become occupants of the bores; the
     bezel is the same kind of raised feature on the same composed part.)
     """
-    a22 = DIST / "components" / "smartoptics--dcp-f-a22--v1--default.svg"
-    lone = DIST / "components" / "common--lc-duplex-adapter--v4--default.svg"
+    a22 = DIST / "components" / "smartoptics--dcp-f-a22--v2--default.svg"
+    lone = DIST / "components" / "common--lc-duplex-adapter--v5--default.svg"
     if not (a22.exists() and lone.exists()):
         pytest.skip("components not built")
 

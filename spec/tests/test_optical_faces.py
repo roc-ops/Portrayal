@@ -45,11 +45,11 @@ def test_what_is_not_an_endpoint(bad):
 
 def test_capacities_reaches_a_part_on_another_face():
     """The whole point: a cassette's rear MTP must be findable from the front."""
-    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@4"}],
+    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}],
              "faces": {"rear": {"ref": "fs/x-rear@1"}}}
     rear = {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]}
     known = {
-        "common/lc-duplex-v-adapter@4": {"optical": {"positions": 2}},
+        "common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
         "common/mpo-adapter@1": {"optical": {"positions": 12}},
         "fs/x-rear@1": rear,
     }
@@ -109,7 +109,7 @@ def test_a_split_reports_every_bad_leg():
 def test_the_real_cassette_passes_this_rule():
     """The one contract in the library that uses a qualified endpoint."""
     c = yaml.safe_load(
-        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v3/contract.yaml"
+        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v4/contract.yaml"
          ).read_text())
     assert run84(c) == []
 
@@ -131,10 +131,10 @@ def test_a_legacy_plan_spelling_still_counts_as_a_declared_face():
 
 def test_a_rear_face_contributes_its_own_positions():
     """The live case: the cassette's MTP is drawn on the back and nowhere else."""
-    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@4"}],
+    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}],
              "faces": {"rear": {"ref": "fs/x-rear@1"}}}
     known = {
-        "common/lc-duplex-v-adapter@4": {"optical": {"positions": 2}},
+        "common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
         "common/mpo-adapter@1": {"optical": {"positions": 12}},
         "fs/x-rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]},
     }
@@ -149,11 +149,11 @@ def test_a_plan_face_does_not_contribute_positions_again():
     already routed - the author's only escapes being a duplicate path or an
     `unused` entry, both untrue about the hardware.
     """
-    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@4"}],
+    front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}],
              "faces": {"plan": {"ref": "t/top@1"}}}
     known = {
-        "common/lc-duplex-v-adapter@4": {"optical": {"positions": 2}},
-        "t/top@1": {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@4"}]},
+        "common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
+        "t/top@1": {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}]},
     }
     assert O.capacities(front, known.get) == {"lc1": 2}
 
@@ -162,8 +162,8 @@ def test_the_legacy_plan_spelling_does_not_contribute_either():
     """Whichever way a plan is spelled, it is the same drawing."""
     front = {"parts": [], "plan": {"ref": "t/top@1"}}
     known = {
-        "common/lc-duplex-v-adapter@4": {"optical": {"positions": 2}},
-        "t/top@1": {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@4"}]},
+        "common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
+        "t/top@1": {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}]},
     }
     assert O.capacities(front, known.get) == {}
 

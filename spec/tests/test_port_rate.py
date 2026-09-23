@@ -50,9 +50,9 @@ def _device(port=None, group=None, ref="common/rj45-eth@1", maturity="modelled",
 
 # --- the catalogue -----------------------------------------------------------
 
-def test_l113_is_a_device_rule_and_l112_is_held_for_another_branch():
+def test_l113_is_a_device_rule_after_l112():
     assert lint.RULES["L113"][0] == "device"
-    assert "L112" in lint.RESERVED
+    assert "L112" in lint.RULES and "L112" not in lint.RESERVED
 
 
 # --- which media are asked ---------------------------------------------------
