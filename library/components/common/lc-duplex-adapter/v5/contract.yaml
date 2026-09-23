@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 4.0.0
+version: 5.0.0
 class: port
 profile: networking
 description: >-
@@ -68,6 +68,11 @@ provenance:
     `out: 9.525` on the bezel's 3.175 (3.175 + the photographed quarter inch),
     and a 2.7 x 2.7 inset 0.9 deep (estimated). The spigot that seats it into
     the bore is not modelled - it sits inside the recess and is never visible
+  bore-ids: >-
+    THE BORES ARE NUMBERED, NOT TX AND RX. A panel adapter has no direction
+    until something is plugged into it; its bores are fibre positions 1 and 2,
+    and a cassette path endpoint `lc01.1` is drawn at `lc01/1` (L110). Until
+    v5 they were `tx` and `rx`, which read as a direction the part does not have.
 relief:
   features:
     - node: bezel
@@ -81,16 +86,16 @@ relief:
         rather than estimated.
 optical:
   # TWO BORES, SO TWO FIBRE POSITIONS, and position order is the order the bores
-  # are composed below: 1 is `tx`, 2 is `rx`. Stated here so no module composing
-  # this adapter has to restate it - on the FS FHD line that would be 77 chances
-  # to mistype a number the adapter already knows.
+  # are composed below: bore `1` first, bore `2` second. Stated here so no module
+  # composing this adapter has to restate it - on the FS FHD line that would be
+  # 77 chances to mistype a number the adapter already knows.
   positions: 2
 parts:
   # lifted onto the raised bezel, so each bore recesses from the proud face.
   # rotate 180 puts the latch tongue UP, which is how a panel-mount adapter is
   # fitted and how the issue's own photograph shows it; @3 draws it down.
-  - {ref: std/lc-bore@3, id: tx, at: [1.125, 1.55], lift: 3.175, rotate: 180}
-  - {ref: std/lc-bore@3, id: rx, at: [7.375, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: '1', at: [1.125, 1.55], lift: 3.175, rotate: 180}
+  - {ref: std/lc-bore@3, id: '2', at: [7.375, 1.55], lift: 3.175, rotate: 180}
 connection-points:
   # the midpoint of the two ferrule centres (3.475 and 9.725) - which is,
   # correctly, the 13.2-wide body's own centre (6.6). It was 6.6 originally

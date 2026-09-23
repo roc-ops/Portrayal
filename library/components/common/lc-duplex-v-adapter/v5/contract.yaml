@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 4.1.0
+version: 5.0.0
 class: port
 profile: networking
 description: >-
@@ -54,8 +54,8 @@ parts:
   # it to the LEFT, which is where FS's own render puts every port's stepped
   # latch slot (57016.main.jpg, beside the cap). Lifted onto the raised bezel so
   # each bore recesses from the proud face, as common/lc-duplex-adapter@4 does.
-  - {id: tx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
-  - {id: rx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
+  - {id: '1', ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
+  - {id: '2', ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
 connection-points:
   optical:
     at: [4.64, 6.875]
@@ -66,7 +66,7 @@ provenance:
     stacked adapter as the ODD port (1 below 2 at the left end of the panel,
     11 below 12 at the right) and a fibre position's number is the port
     number every consumer of the optical model shows. Positions follow the
-    order the bores are composed, so `tx` - composed first - sits below. Until
+    order the bores are composed, so bore `1` - composed first - sits below. Until
     this major the upper bore was composed first: every Type A path was
     "straight through" by number while fibre 1 surfaced at the port FS prints
     as 2, a Type AF wiring on the hardware under a Type A label.
@@ -120,4 +120,9 @@ provenance:
     No dimensioned drawing of this adapter has been obtained. The 9.28 x 13.75
     outline is measured, the cap is photo-measured, the stand-off heights come
     from an oblique photograph and are estimates.
+  bore-ids: >-
+    THE BORES ARE NUMBERED, NOT TX AND RX. A panel adapter has no direction
+    until something is plugged into it; its bores are fibre positions 1 and 2,
+    and a cassette path endpoint `lc01.1` is drawn at `lc01/1` (L110). Until
+    v5 they were `tx` and `rx`, which read as a direction the part does not have.
 skins: [default]
