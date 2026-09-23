@@ -125,7 +125,7 @@ def test_every_invented_relief_magnitude_says_it_is_invented():
 def test_the_three_faces_compose_the_bore_tongue_up():
     # Every receptacle in the corpus is drawn latch-up; the part draws it down,
     # so each placement turns it. A placement that forgets is upside down.
-    for ref, ids in (("common/lc-duplex-adapter@4", ("tx", "rx")),
+    for ref, ids in (("common/lc-duplex-adapter@5", ("tx", "rx")),
                      ("common/sfp-lc-duplex@1", ("lc-a", "lc-b")),
                      ("common/qsfp-transceiver@1", ("tx", "rx"))):
         parts = {p["id"]: p for p in contract(ref)["parts"] if p["ref"].startswith("std/lc-bore@")}
@@ -145,7 +145,7 @@ def test_the_adapter_bore_centres_sit_on_the_verified_pitch():
     # instead of 3.475) that left the pair 0.300 off the body's own centre;
     # review caught it. The dust caps moved with them, so they still plug the
     # bore SQUARE, which still starts at y 3.15.
-    c = contract("common/lc-duplex-adapter@4")
+    c = contract("common/lc-duplex-adapter@5")
     parts = {p["id"]: p for p in c["parts"]}
     for pid, x in (("tx", 1.125), ("rx", 7.375)):
         assert parts[pid]["at"] == [x, 1.55]
@@ -164,7 +164,7 @@ def test_the_adapter_bore_pair_is_centred_in_the_body():
     # relationship, not the literal coordinates, so this survives the next
     # legitimate move of either the pitch or the body width: the pair's
     # midpoint must equal the body's own centre.
-    c = contract("common/lc-duplex-adapter@4")
+    c = contract("common/lc-duplex-adapter@5")
     bore_w = contract("std/lc-bore@3")["size"]["w"]
     xs = sorted(p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bore@3")
     centres = [x + bore_w / 2 for x in xs]
@@ -230,7 +230,7 @@ def test_the_declared_optical_point_is_where_the_ferrules_actually_are():
     even when prose cannot, so check them: whatever the placements resolve to
     is what `optical` has to say, on all three faces.
     """
-    for ref, keys in (("common/lc-duplex-adapter@4", ["optical"]),
+    for ref, keys in (("common/lc-duplex-adapter@5", ["optical"]),
                       ("common/sfp-lc-duplex@1", ["optical"]),
                       ("common/qsfp-transceiver@1", ["optical-tx", "optical-rx"])):
         centres = ferrule_centres(ref)

@@ -67,7 +67,7 @@ def test_a_multi_bore_adapter_declines_rather_than_guessing():
     """`lc-duplex-adapter` composes TWO LC bores and its own point is their
     midpoint. A fibre landing on a ferrule is not a module entering a cage, and
     picking one of the two bores would be inventing which."""
-    iface, at, _ = presented_interface(contract("common/lc-duplex-adapter/v4"), resolve)
+    iface, at, _ = presented_interface(contract("common/lc-duplex-adapter/v5"), resolve)
     assert iface is None and at is None
 
 

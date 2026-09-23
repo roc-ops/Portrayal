@@ -22,9 +22,9 @@
 const m = await import('../../../kit/swap.js');
 const mode = process.argv[2];
 
-const A22 = 'smartoptics/dcp-f-a22@1';
+const A22 = 'smartoptics/dcp-f-a22@2';
 const X404 = 'smartoptics/dcp-404@1';
-const PPM = 'smartoptics/ppm-ad1-1510@1';
+const PPM = 'smartoptics/ppm-ad1-1510@2';
 const DUMMY = 'smartoptics/ppm-dummy@1';
 const ppmBay = y => ({at: [147.3, y], size: {w: 55.4, h: 19.5},
                       accepts: [PPM, DUMMY], default: DUMMY});

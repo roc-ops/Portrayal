@@ -217,7 +217,7 @@ def test_a_wired_standards_floor_is_actually_enforced():
     Three SC adapters at 12.0 sit inside `sc-duplex-adapter`'s measured 13.0
     floor. Before the adapter named the standard this composed silently.
     """
-    doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@4",
+    doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@5",
                       "at": [x, 0.0]}
                      for i, x in enumerate((0.0, 12.0, 24.0))]}
     got = run(doc)
@@ -227,7 +227,7 @@ def test_a_wired_standards_floor_is_actually_enforced():
 
 def test_a_wired_standards_floor_allows_a_wider_layout():
     """It is a FLOOR - a panel may space its adapters further apart."""
-    doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@4",
+    doc = {"parts": [{"id": f"p{i}", "ref": "common/sc-duplex-adapter@5",
                       "at": [x, 0.0]}
                      for i, x in enumerate((0.0, 13.5, 27.0))]}
     assert run(doc) == []

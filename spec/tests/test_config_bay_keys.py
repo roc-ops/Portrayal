@@ -76,4 +76,4 @@ def test_the_ila_node_is_the_case_that_found_it():
     where a dropped key and an honoured one draw the same module."""
     d = yaml.safe_load((LIB / "devices/smartoptics/dcp-2/device.yaml").read_text())
     bays = d["configurations"]["ila-node"]["bays"]
-    assert bays.get("slot-1/ppm-1") == "smartoptics/ppm-ad1-1510@1", bays
+    assert bays.get("slot-1/ppm-1") == "smartoptics/ppm-ad1-1510@2", bays

@@ -114,7 +114,7 @@ provenance:
       AMBIENT TEMPERATURE is quoted against any DCP power figure, so none is asserted.
   slot-occupants:
     note: >-
-      the traffic slots accept smartoptics/dcp-f-a22@1 as well as the DCP-404. Both are 205 x 44 x
+      the traffic slots accept smartoptics/dcp-f-a22@2 as well as the DCP-404. Both are 205 x 44 x
       270 - the DCP traffic-unit envelope is one shared footprint, stated independently by each
       part's own datasheet - so a slot that fits one fits the other. The A22 is what makes an ILA
       node out of this chassis.
@@ -262,7 +262,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
-            - smartoptics/dcp-f-a22@1
+            - smartoptics/dcp-f-a22@2
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
           group: slots
@@ -272,7 +272,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
-            - smartoptics/dcp-f-a22@1
+            - smartoptics/dcp-f-a22@2
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
           group: slots
@@ -435,8 +435,8 @@ configurations:
       their defaults nothing exercises the depth arithmetic that puts an occupant on the
       A22's raised block.
     bays:
-      slot-1: smartoptics/dcp-f-a22@1
-      slot-1/ppm-1: smartoptics/ppm-ad1-1510@1
+      slot-1: smartoptics/dcp-f-a22@2
+      slot-1/ppm-1: smartoptics/ppm-ad1-1510@2
       slot-1/ppm-2: smartoptics/ppm-dummy@1
       slot-2: smartoptics/dcp-2-blank@1
   dcp-404-x1:
