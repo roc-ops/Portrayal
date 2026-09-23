@@ -375,6 +375,8 @@ Now populate. Reuse before building.
    a fan bay and a line-card bay are all the same hole with a module in it, so
    nothing reading the compiled SVG can tell which is why the box exists and
    which two keep it alive. `traffic` is the work the box is bought to do;
+   `fabric` is the cell or chassis interconnect of a distributed chassis (the
+   ports only; a fabric card is still `service`);
    `management` is how you reach and discipline it (OOB, console, craft,
    timing); `service` is what keeps it running (PSUs, fans, filters);
    `indicator` is what you read; `furniture` is what you neither connect to nor

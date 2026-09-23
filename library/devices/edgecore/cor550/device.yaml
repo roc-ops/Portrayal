@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: cor550
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
+aliases:
+- {name: AS7926-40XKFB, kind: vendor}
 portfolio: {line: Service Provider, family: Core Router, series: COR550}
 description: >-
   40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (vendor alias AS7926-40XKFB), Broadcom
@@ -267,8 +269,6 @@ attrs:
     bmc: ASPEED AST2600
     software: ONIE installer pre-loaded; open-source and commercial NOS options
   features:
-    marketing-name: COR550
-    vendor-alias: AS7926-40XKFB
     port-summary: 40 x 100G QSFP28, 13 x 400G QSFP-DD fabric
     timing: Synchronous Ethernet, IEEE 1588v2 PTP, timing synchronization stack interfaces
   management:
@@ -364,7 +364,7 @@ groups:
     attrs: {media: qsfp28, speed: 100g}
   qsfpdd-fabric:
     term: Port
-    role: traffic
+    role: fabric
     index-origin: 0
     attrs: {media: qsfp-dd, speed: 400g}
   port-lamps: {term: LED, role: indicator, index-origin: 0}

@@ -252,7 +252,15 @@ RULES = {
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
+    "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
 }
+
+# A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
+# once cannot both take the next number, so one takes the one after and the
+# gap is named here rather than read as a deleted rule. The catalogue test
+# counts these as present, and fails once a reserved code is also in RULES -
+# whichever branch lands second deletes its line.
+RESERVED = {}
 
 
 def rules_text(markdown=False):
@@ -4649,6 +4657,69 @@ def lint_library_comparable_facts(roots, docs):
              f"that recur into comparable.py, leave the genuine one-offs alone")
 
 
+def lint_library_aliases(docs):
+    """L111: an alias resolves to one drawing, or says it knowingly does not.
+
+    `aliases:` exists so an HCL row reading AS7535-28XB or NCP-40C lands on one
+    Portrayal id (#514). A name two devices both claim sends that row to
+    whichever the consumer happened to read first, and an alias equal to some
+    device's `model` makes the canonical name ambiguous with a nickname. Both
+    are library-wide facts no single manifest can see, so this reads them all.
+
+    `shared: true` is the one way out and it has to be unanimous: an OEM that
+    sells either of a pair under one name is a real fact (DriveNets NCP-96X6C-S
+    on the S9600-102XC and the S9601-102XC), but one device saying so while the
+    other stays silent is a collision nobody decided. A `shared` flag nothing
+    else claims is stale, and is an error for the same reason.
+    """
+    models, claims = {}, {}
+    for path, doc in docs:
+        if not isinstance(doc, dict) or doc.get("kind") != "device":
+            continue
+        m = str(doc.get("model") or "").strip().casefold()
+        if m:
+            models.setdefault(m, []).append(path)
+    for path, doc in docs:
+        if not isinstance(doc, dict) or doc.get("kind") != "device":
+            continue
+        own = str(doc.get("model") or "").strip().casefold()
+        seen = set()
+        for a in doc.get("aliases") or []:
+            if not isinstance(a, dict) or not a.get("name"):
+                continue
+            name = str(a["name"])
+            key = name.strip().casefold()
+            if key in seen:
+                err(path, "L111", f"alias {name!r} is listed twice (names compare "
+                    f"case-insensitively). List it once")
+                continue
+            seen.add(key)
+            if key == own:
+                err(path, "L111", f"alias {name!r} repeats this device's own `model`. "
+                    f"`model` is already the canonical name; drop the alias")
+            for other in models.get(key, []):
+                if other != path:
+                    err(path, "L111", f"alias {name!r} is the `model` of {other}. An "
+                        f"alias may not shadow another device's canonical name")
+            claims.setdefault(key, []).append((path, name, a.get("shared") is True))
+    for key, who in sorted(claims.items()):
+        if len(who) == 1:
+            path, name, shared = who[0]
+            if shared:
+                err(path, "L111", f"alias {name!r} says `shared: true` but no other "
+                    f"device claims it. Drop the flag, or add the alias to the device "
+                    f"it is shared with")
+            continue
+        if all(s for _, _, s in who):
+            continue
+        for path, name, shared in who:
+            if not shared:
+                others = ", ".join(str(p) for p, _, _ in who if p != path)
+                err(path, "L111", f"alias {name!r} is also claimed by {others}, so a "
+                    f"lookup by it cannot pick one drawing. Drop it from all but one, "
+                    f"or mark it `shared: true` in every claimant and say why in `note`")
+
+
 def lint_device_fan_redundancy(path, data):
     """L69: a cooling group with more than one bay says how many fans it can lose.
 
@@ -5241,7 +5312,7 @@ def lint_unplaced_majors(root):
 # sweep that introduced it moved 25 files instead of 88.
 TOP_LEVEL_ORDER = (
     "format", "kind", "name", "version", "maturity",
-    "manufacturer", "model", "portfolio", "description", "profile",
+    "manufacturer", "model", "aliases", "portfolio", "description", "profile",
     # `lint:` sits with `provenance:` rather than at the end, because it is the
     # same kind of statement: this is what we know and how we know it, and this
     # is the rule we have argued with and why.
@@ -7619,7 +7690,7 @@ def lint_device(path, validator, lib_roots):
             if not gdef.get("role"):
                 (err if maturity == "verified" else warn)(
                     path, "L37", f"group {gid} does not say what it is for. Add "
-                    "role: traffic|management|service|indicator|furniture - a PSU "
+                    "role: traffic|fabric|management|service|indicator|furniture - a PSU "
                     "bay and a line-card bay are the same class, so this is the "
                     "only thing that can rank them")
             # A GROUP NOTHING JOINS IS A CATEGORY THE DRAWING PROMISES AND DOES
@@ -8361,6 +8432,7 @@ def main():
     # partial check would report the unexamined ones as unchanged.
     if not args.device:
         lint_library_comparable_facts([Path(r) for r in args.library], matrix)
+        lint_library_aliases(matrix)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             lint_unplaced_majors(root)

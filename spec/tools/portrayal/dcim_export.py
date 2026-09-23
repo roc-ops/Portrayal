@@ -49,7 +49,7 @@ import yaml
 
 from portrayal.artifacts import Dist
 
-from portrayal.manifest import view_parts
+from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import optical_ports
 from portrayal.faces import face_ref
 
@@ -675,7 +675,14 @@ def breakout_note(breakout, n):
 # THE TWO SETS ARE EXHAUSTIVE OVER THE SCHEMA'S ENUM, and a test holds that. A
 # sixth role must be classified by whoever adds it rather than falling silently
 # to one side - which is the whole defect this replaced, one level up.
-PORT_ROLES = {"traffic", "management", "service"}
+#
+# `fabric` IS A PORT ROLE (#510). The interconnect ports on a distributed
+# chassis - a DDC line-card box's uplinks to its fabric boxes, and every port on
+# the fabric box - are cabled like any other port, so a DCIM that tracks cables
+# needs them as interfaces. They export exactly as they did when they sat in
+# `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
+# fabric is the data path, not the way you reach the box.
+PORT_ROLES = {"traffic", "fabric", "management", "service"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 
@@ -760,6 +767,11 @@ def comments_for(dev, cfg_name, cfg):
         lines += [dev["description"].strip(), ""]
     if cfg and cfg.get("description"):
         lines += [f"Configuration `{cfg_name}`: {cfg['description'].strip()}", ""]
+    # THE OTHER NAMES A DCIM USER MIGHT SEARCH FOR - the AS number, the
+    # marketing name, the OEM's name (#514). NetBox and Nautobot device types
+    # have one `model`, so the rest go where a reader of the record sees them.
+    if alias_names(dev):
+        lines += ["Also sold or listed as: " + ", ".join(alias_names(dev)), ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -926,13 +938,14 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         out["weight_unit"] = "kg"
 
     # THE CHASSIS IS WHERE AIRFLOW LIVES UNLESS A CONFIGURATION DIFFERS, which is
-    # the fallback render.py:1087 has always used and this did not. Eighteen
+    # the fallback the drawing's `data-airflow` has always used
+    # (manifest.config_airflow) and this did not. Eighteen
     # configurations across ten devices stated airflow only on the chassis - the
     # ASR 9000s, the fanless FS enclosure, the S9502 - and exported none at all:
     # `cfg.get` returned nothing and the key was quietly dropped. Seven of those
     # are `front-to-back` and land now; the rest are `side` and `passive`, which
     # the chassis enum allows and this map has no entry for (roc-ops/Portrayal#171).
-    air = AIRFLOW.get(cfg.get("airflow") or (dev.get("chassis") or {}).get("airflow"))
+    air = AIRFLOW.get(config_airflow(dev, cfg))
     if air:
         out["airflow"] = air
 
