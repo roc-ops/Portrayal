@@ -102,6 +102,12 @@ IFACE_TYPE = {
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "2.5g"): "2.5gbase-t",
     ("rj45", "1g"): "1000base-t",           # a 10/100/1000 port is `1g`, so 1000base-t
+    # A 10/100 JACK IS FAST ETHERNET, and upstream names it. The ASR 9001's and
+    # 9901's IEEE 1588 service LAN ports are 10/100 Mb/s by the install guide's
+    # own port table (#511); before they stated a speed the default above typed
+    # them 1000base-t, and without this row stating the true one would have
+    # dropped them from the export instead.
+    ("rj45", "100m"): "100base-tx",
 }
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 

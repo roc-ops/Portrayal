@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-34d-cs
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-R-34D-CS
@@ -10,6 +10,13 @@ description: 34-channel colourless/directionless cross-connect ROADM line unit, 
   RS232 management.
 profile: optical
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the OSC cage is `1g`: the DCP-R user manual (14.0), Supported OSC transceivers, certifies
+      SFPs from 155 Mb/s STM-1/Fast Ethernet parts up to 1GE ones, and its OTDR section offers the
+      combined OSC/OTDR SFP at 155 Mb/s or 1 Gb/s. The highest native rate the cage runs at is
+      therefore 1G.
   chassis:
     note: >-
       manual DIMENSIONS (DCP-R) - 440mm (W) x 45mm (H) x 505mm (D), 1 RU. The manual also states
@@ -417,7 +424,7 @@ views:
         - {ref: common/led-dot@1, id: led-status, at: [59.81, 35], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
         - {ref: common/lc-duplex-adapter@5, id: port-1510, at: [52.7, 9.6], attrs: {role: osc-filter, media: fiber}, group: line, rel-pos: 1}
         - {ref: common/lc-duplex-adapter@5, id: port-line, at: [104.71, 11.1], attrs: {role: line, media: fiber}, group: line, rel-pos: 2}
-        - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, role: osc}, group: line, rel-pos: 3}
+        - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, speed: 1g, role: osc}, group: line, rel-pos: 3}
         - {ref: common/lc-duplex-adapter@5, id: xc01, at: [134.79, 11.1], group: xc, attrs: {channel: '1'}, rel-pos: 1}
         - {ref: common/lc-duplex-adapter@5, id: xc02, at: [152.81, 11.1], group: xc, attrs: {channel: '2'}, rel-pos: 2}
         - {ref: common/lc-duplex-adapter@5, id: xc03, at: [166.12, 11.1], group: xc, attrs: {channel: '3'}, rel-pos: 3}

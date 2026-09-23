@@ -257,6 +257,7 @@ RULES = {
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
     "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
+    "L113": ("device",     "a device port whose effective media carries a network interface (a pluggable cage, or `rj45`) has a `speed` and a group with a `role` - warning at `modelled`, error at `verified`", "add the rate the source states, on the port or its group; a console, timing or alarm jack takes the media that says so (`rj45-serial`, `rj45-tod`, `rj48`) instead of a speed; where no document states a rate, leave it and record the search in `gaps:`"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -6085,6 +6086,73 @@ def lint_device_speed_vocabulary(path, data):
                            attrs_mod.flatten(p.get("attrs")).get("speed"))
 
 
+# L113's question: which media put a NETWORK INTERFACE behind the connector.
+#
+# NOT A NEW LIST. It is the two the tree already keeps: every pluggable cage
+# L40 and L102 ask about (PLUGGABLE_CAGES, which test_pluggable_ladder.py holds
+# to spec/schemas/pluggables.yaml), and every media the DCIM exporter's
+# PART_MEDIA table types as an interface rather than `other` - which is how
+# plain `rj45` gets in and `rj45-telemetry` stays out. A medium on neither list
+# is not asked: `rj45-serial`, `rj45-tod`, `rj48`, `usb-a`, `coax-smb`, a bonded
+# `fiber` adapter. So the fix for a timing or console jack that trips this rule
+# is to name what it carries in `media`, not to give it a speed it does not have.
+INTERFACE_MEDIA = frozenset(
+    PLUGGABLE_CAGES
+    | {m for (m, _s), t in dcim_export.PART_MEDIA.items() if t != "other"})
+
+
+def lint_device_port_rate(path, data, lib_roots):
+    """L113: a device's network port says what rate it runs at and what its
+    group is for (#511).
+
+    A port's effective media - its own attrs over its group's, then the part's
+    own - decides whether it is asked. If that media carries an interface
+    (INTERFACE_MEDIA), the port must end up with a `speed` (its own or its
+    group's) and a group with a `role`. `speed` is what `[data-speed]`
+    selects on and what the exporter types an interface from; a port without
+    one is invisible to the first and GUESSED by the second - `iface_type`
+    falls back to 25G for any SFP, which exported the ASR 9001's two 10G
+    cluster ports and three Smartoptics OSC cages as SFP28.
+
+    DEVICE LEVEL ONLY. It reads a view's placements - the ports the device
+    places itself. The inner parts of a composed port (`--jack`, `--cage`) are
+    a component's `parts:` and never appear here, and the ports on a module
+    seated in a bay belong to the module's contract, whose groups are #511's
+    component half.
+
+    WARNING AT `modelled`, ERROR AT `verified` - L37's gate, and for L37's
+    reason. The library cannot be driven to zero honestly: a vendor that
+    publishes no rate for a management jack or a probe port has given nothing
+    to write, and inventing one is the defect this rule exists to prevent. A
+    device claiming `verified` has to have found the rate or stopped claiming.
+    """
+    groups = data.get("groups") or {}
+    loud = err if data.get("maturity") == "verified" else warn
+    for vname, view in sorted((data.get("views") or {}).items()):
+        for p in view_parts(view or {})["placements"]:
+            ref = p.get("ref")
+            if not ref or contract_class(ref, lib_roots) != "port":
+                continue
+            gdef = groups.get(p.get("group")) or {}
+            a = {**attrs_mod.flatten(gdef.get("attrs")), **attrs_mod.flatten(p.get("attrs"))}
+            media = a.get("media") or attrs_mod.flatten(contract_attrs(ref, lib_roots)).get("media")
+            if media not in INTERFACE_MEDIA:
+                continue
+            lacks = []
+            if not a.get("speed"):
+                lacks.append("no `speed`")
+            if not gdef.get("role"):
+                lacks.append("no group" if not p.get("group") else
+                             f"group {p.get('group')!r} has no `role`")
+            if lacks:
+                loud(path, "L113", f"{vname}/{p.get('id')}: a {media} port with "
+                     f"{' and '.join(lacks)}. Give it the rate the source states "
+                     "(or its group's), or - if it is a console, timing or alarm "
+                     "jack - the media that says so (`rj45-serial`, `rj45-tod`, "
+                     "`rj48`); where no document states a rate, leave it and "
+                     "record the search in `gaps:`")
+
+
 def lint_component_speed_vocabulary(path, data):
     """L110 for a component: its own `attrs.speed`, each of its own groups'
     (#511 - the renderer merges a component group's attrs into every part in
@@ -7426,6 +7494,7 @@ def lint_device(path, validator, lib_roots):
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
     lint_device_speed_vocabulary(path, data)
+    lint_device_port_rate(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
     lint_device_pluggable_media(path, data)
     lint_device_cage_media_disagreement(path, data, lib_roots)

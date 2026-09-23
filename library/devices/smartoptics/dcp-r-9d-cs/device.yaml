@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
@@ -10,6 +10,13 @@ description: 40-channel colourless/directionless ROADM line unit, 1RU. Two rows 
   RS232 management.
 profile: optical
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the OSC cage is `1g`: the DCP-R user manual (14.0), Supported OSC transceivers, certifies
+      SFPs from 155 Mb/s STM-1/Fast Ethernet parts up to 1GE ones, and its OTDR section offers the
+      combined OSC/OTDR SFP at 155 Mb/s or 1 Gb/s. The highest native rate the cage runs at is
+      therefore 1G.
   chassis:
     note: >-
       manual DIMENSIONS (DCP-R) - 440mm (W) x 45mm (H) x 505mm (D), 1 RU
@@ -474,7 +481,7 @@ views:
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
         - {ref: common/rj45-eth@1, id: eth0, at: [10.8, 9.85], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 1}
         - {ref: std/rj45@2, id: rs232, at: [10.8, 24.35], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
-        - {ref: std/sfp@1, id: port-osc, at: [31, 26.7], attrs: {media: sfp, role: osc}, group: line, rel-pos: 1}
+        - {ref: std/sfp@1, id: port-osc, at: [31, 26.7], attrs: {media: sfp, speed: 1g, role: osc}, group: line, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.4], for: port-osc, attrs: {function: osc-tx}, group: port-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.4], for: port-osc, attrs: {function: osc-rx}, group: port-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-power, at: [53.79, 34.5], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9511-20ct
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9511-20CT
@@ -527,7 +527,7 @@ views:
            group: status-leds, rel-pos: 5}
         - {ref: common/reset-button@1, id: reset, at: [130.50, 36.00], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: std/rj45-ganged@2, id: bits, at: [146.48, 10.8], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-in}}
-        - {ref: std/rj45-ganged@2, id: tod, at: [146.48, 22.8], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [146.48, 22.8], group: timing, rel-pos: 5, attrs: {media: rj45-tod, role: tod-io}}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [167.51, 9.3], rotate: 180, group: mgmt, rel-pos: 1, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-left: HIG section 8 Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-right: HIG section 8 Management port LED table, Right LED - Off (no link), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
         - {ref: std/usb-a@1, id: usb, at: [167.86, 20.80], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '3.0'}}
         - {ref: std/rj45-ganged@2, id: console, at: [167.51, 25.6], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9901
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9901
@@ -20,6 +20,15 @@ description: >-
   seats on the front face at all.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the fixed-port install guide, Table 4 (front panel ports, the 9901 and the 9001 together):
+      the IEEE 1588 service LAN port is 10/100 Mb/s Ethernet for a grandmaster connection, so
+      `100m`; MGT LAN 0 and 1 are tri-speed 10/100/1000, so `1g`. The same table types the timing
+      and serial jacks by what they carry: TOD is time of day with 1PPS over RS-422 (`rj45-tod`),
+      SYNC 0/1 are BITS or DTI (`rj48`), CONSOLE and AUX are RS-232 (`rj45-serial`). The CMP port
+      has no rate anywhere - see gaps.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -321,6 +330,16 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 gaps:
+- what: cmp-port-speed
+  scope: [cmp]
+  reason: vendor-silent
+  note: >-
+    The fixed-port install guide names the Connectivity Management Processor port only in the
+    front-panel callouts, and Table 4 has no row for it; the series overview guide describes CMP
+    as a secondary processor with its own front-panel management Ethernet port, with no rate.
+    The 9901 data sheet lists it without one.
+  wanted: >-
+    the CMP jack rate, so the port can state a `speed`.
 - what: chassis-height-sources-disagree
   reason: sources-disagree
   note: >-
@@ -711,14 +730,14 @@ views:
         - {id: port-39, ref: std/sfp-ganged@1, at: [381.04, 27.77], rotate: 180, group: sfp, rel-pos: 39}
         - {id: port-40, ref: std/sfp-ganged@1, at: [395.29, 12.73], group: sfp, rel-pos: 40}
         - {id: port-41, ref: std/sfp-ganged@1, at: [395.29, 27.77], rotate: 180, group: sfp, rel-pos: 41}
-        - {id: sync-1, ref: std/rj45-ganged@2, at: [87.95, 51.67], group: timing, rel-pos: 0}
-        - {id: sync-0, ref: std/rj45-ganged@2, at: [87.95, 66.7], group: timing, rel-pos: 1}
-        - {id: ieee1588-link, ref: common/rj45-ganged-eth@1, at: [125.93, 51.67], group: timing, rel-pos: 2}
-        - {id: tod, ref: std/rj45-ganged@2, at: [125.93, 66.7], group: timing, rel-pos: 3}
-        - {id: console, ref: std/rj45-ganged@2, at: [153.42, 53.49], group: mgmt, rel-pos: 4}
-        - {id: aux, ref: std/rj45-ganged@2, at: [153.42, 67.38], group: mgmt, rel-pos: 5}
-        - {id: mgt-lan-1, ref: common/rj45-ganged-eth@1, at: [235.71, 53.09], group: mgmt, rel-pos: 6}
-        - {id: mgt-lan-0, ref: common/rj45-ganged-eth@1, at: [235.71, 67.38], group: mgmt, rel-pos: 7}
+        - {id: sync-1, ref: std/rj45-ganged@2, at: [87.95, 51.67], group: timing, rel-pos: 0, attrs: {media: rj48}}
+        - {id: sync-0, ref: std/rj45-ganged@2, at: [87.95, 66.7], group: timing, rel-pos: 1, attrs: {media: rj48}}
+        - {id: ieee1588-link, ref: common/rj45-ganged-eth@1, at: [125.93, 51.67], group: timing, rel-pos: 2, attrs: {speed: 100m}}
+        - {id: tod, ref: std/rj45-ganged@2, at: [125.93, 66.7], group: timing, rel-pos: 3, attrs: {media: rj45-tod}}
+        - {id: console, ref: std/rj45-ganged@2, at: [153.42, 53.49], group: mgmt, rel-pos: 4, attrs: {media: rj45-serial, role: console}}
+        - {id: aux, ref: std/rj45-ganged@2, at: [153.42, 67.38], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: aux}}
+        - {id: mgt-lan-1, ref: common/rj45-ganged-eth@1, at: [235.71, 53.09], group: mgmt, rel-pos: 6, attrs: {speed: 1g}}
+        - {id: mgt-lan-0, ref: common/rj45-ganged-eth@1, at: [235.71, 67.38], group: mgmt, rel-pos: 7, attrs: {speed: 1g}}
         - {id: cmp, ref: common/rj45-ganged-eth@1, at: [262.61, 67.38], group: mgmt, rel-pos: 8}
         - {id: usb, ref: std/usb-a@1, at: [302.9, 69.19], group: mgmt, rel-pos: 9}
         - {id: gps-1pps, ref: std/smb@1, at: [318.4, 72.46], group: timing, rel-pos: 4}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -648,7 +648,7 @@ views:
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [167.6, 14], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: oob, speed: 1g}, states: {led-a: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: activity-100m}], led-b: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}]}, description: 'led-mgmt-l: HIG Management port LED table, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-mgmt-r: HIG Management port LED table, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, which is why each is declared on its own'}
         - {ref: std/usb-a@1, id: usb, at: [167.6, 28.3], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: maintenance, usb: '2.0'}}
-        - {ref: std/rj45-ganged@2, id: tod, at: [188.2, 10], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [188.2, 10], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj45-tod, role: tod-io}}
         - {ref: std/rj45-ganged@2, id: console, at: [188.2, 24.3], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/rj45-ganged-eth@1, id: port-0, at: [209.6, 10], rotate: 180, group: rj45-1g, rel-pos: 0}
         - {ref: common/rj45-ganged-eth@1, id: port-1, at: [209.6, 23.9], group: rj45-1g, rel-pos: 1}
