@@ -45,6 +45,9 @@ export class Node {
     for (const c of this.children) { yield c; yield* c.descendants(); }
   }
   querySelectorAll(sel) {
+    // `:scope > X` is X among the children only - applyRearOverrides' form
+    const kid = sel.match(/^:scope > (.*)$/);
+    if (kid) { const t = parseSel(kid[1]); return this.children.filter(t); }
     const alts = sel.split(',').map(s => s.trim()).map(parseSel);
     return [...this.descendants()].filter(n => alts.some(a => a(n)));
   }

@@ -161,6 +161,10 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
 // module's rear face comes from its components.json entry. Built the way
 // render.py builds a projection: `data-of` in place of `data-path`, and nothing
 // the kit would extract as relief. In 3D the back is the module body's own.
+// what a projection does not carry: relief, refs, behaviour, connection points
+const projectionDrops = n => n.startsWith('data-z-') || n.startsWith('data-cp')
+  || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
+      'data-vent', 'data-groove'].includes(n);
 export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef) {
   let applied = 0;
   const NSX = 'http://www.w3.org/2000/svg';
@@ -179,10 +183,17 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
     const wrap = rootEl.ownerDocument.createElementNS(NSX, 'g');
     wrap.setAttribute('id', `${bayId}-rear`);
     wrap.setAttribute('transform', `translate(${x},${y})`);
-    wrap.setAttribute('data-projection', '1');
-    wrap.setAttribute('data-of', `${bayId}/module`);
     const name = loaded.comp.name;
     const root = doc.getElementById(name);
+    // THE ROOT'S OWN ATTRIBUTES COME ALONG, as render.py's projection keeps
+    // instance_group's: `data-class` and `data-media` are what the tree rows
+    // a part by, and without them a swapped cassette's back read as its skin's
+    // <title> while the built one beside it read "module - fibre".
+    for (const a of (root ? [...root.attributes] : []))
+      if (!['id', 'transform', 'data-path'].includes(a.name) && !projectionDrops(a.name))
+        wrap.setAttribute(a.name, a.value);
+    wrap.setAttribute('data-projection', '1');
+    wrap.setAttribute('data-of', `${bayId}/module`);
     for (const n of [...doc.documentElement.childNodes])
       (n === root ? [...n.childNodes] : [n])
         .forEach(k => wrap.appendChild(rootEl.ownerDocument.importNode(k, true)));
@@ -195,10 +206,7 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
         el.removeAttribute('data-path');
       }
       for (const a of [...el.attributes])
-        if (a.name.startsWith('data-z-') || a.name.startsWith('data-cp')
-            || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
-                'data-vent', 'data-groove'].includes(a.name))
-          el.removeAttribute(a.name);
+        if (projectionDrops(a.name)) el.removeAttribute(a.name);
     }
     hole.appendChild(wrap);
   }
@@ -1214,4 +1222,34 @@ export function liesOver(el, path) {
   const cp = el.getAttribute('data-path');
   return !!cp && cp !== path
     && (el.getAttribute('data-for') || '').split(/\s+/).includes(path);
+}
+
+// WHAT A FACE LISTS, AND WHAT A CLICK ON IT NAMES. The tree is built from the
+// drawing: every `data-path` is a row. A projection (render.py's `plan:` and
+// `rear:`, applyRearOverrides above) carries `data-of` in its place, naming
+// the seated part's path, so a part seen from two faces is still one part.
+// That is right for the part itself, which the face holding it lists. It is
+// wrong for what only the projection draws: a cassette's back is its MTP
+// bulkheads, `bay-1/module/mtp1`, and no face draws those with a data-path -
+// so they were on no row anywhere, and a click on one selected the rear cutout
+// it is seen through. So a face lists every projected path it does not also
+// draw as a part, and a click names the nearest part OR projected part.
+export function faceEntries(root) {
+  const drawn = new Set([...root.querySelectorAll('[data-path]')]
+    .map(e => e.getAttribute('data-path')));
+  const out = [];
+  for (const e of root.querySelectorAll('[data-path],[data-of]')) {
+    const dp = e.getAttribute('data-path');
+    if (dp != null) out.push({path: dp, el: e});
+    else if (!drawn.has(e.getAttribute('data-of')))
+      out.push({path: e.getAttribute('data-of'), el: e, projected: true});
+  }
+  return out;
+}
+export function ownerPath(el) {
+  for (let n = el; n && typeof n.getAttribute === 'function'; n = n.parentNode) {
+    const p = n.getAttribute('data-path') ?? n.getAttribute('data-of');
+    if (p != null) return p;
+  }
+  return null;
 }

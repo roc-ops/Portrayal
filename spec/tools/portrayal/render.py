@@ -1609,10 +1609,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # what draws it from above (`plan.ref`). Each becomes a placement in this
     # view - so `in:`, `under:` and the paint order all apply - marked as a
     # PROJECTION of the seated part: draw_placement swaps its data-path for
-    # `data-of`, so the tree lists the part once and the kit builds nothing
-    # from it. The occupants of the occupant's own bays come along at the
-    # offsets those bays declare, lowest slot first so the top card paints
-    # last. A mirrored plan mirrors the offsets about the plan's own width.
+    # `data-of`, so it stays one part (this face's tree lists it only where
+    # this face draws no part at that path - swap.js faceEntries) and the kit
+    # builds nothing from it. The occupants of the occupant's own bays come
+    # along at the offsets those bays declare, lowest slot first so the top
+    # card paints last. A mirrored plan mirrors the offsets about the plan's own width.
     #
     # `rear:` IS THE SAME PROJECTION FROM THE OTHER END. A drawer whose back is
     # open shows the backs of the cassettes it holds; the occupant's contract
