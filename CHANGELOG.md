@@ -37,7 +37,8 @@ the *published build*, not about the hardware.
   generation left `speed` for its own `data-usb` (`2.0`, `3.0`; was `usb2`,
   `usb-2.0`, `usb3`, `usb-3.0`), and the HLX-TGV's PON port is `speed: 10g` with
   `data-pon="xgs-pon"` (was `10g-pon`). The MX304 LMIC16's twelve 100G-only
-  ports now state `100g`. Lint L110 holds the set. 63 devices took a patch bump,
+  ports now state `100g` (its module type still exports all sixteen by the
+  cage, as `400gbase-x-qsfpdd`, as before). Lint L110 holds the set. 63 devices took a patch bump,
   and `juniper/mx304-lmic16`, `juniper/jnp304-re` and `smartoptics/dcp-f-a22` a
   patch each (roc-ops/Portrayal#512).
 - Device types export the CSR180's and CSR200's four RJ45 traffic ports each as

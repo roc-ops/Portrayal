@@ -216,7 +216,7 @@ def test_every_plain_speed_the_library_uses_has_a_row():
     an Ethernet cage family.
     """
     import re
-    plain = re.compile(r"^\d+(\.\d+)?[gm]$")
+    plain = re.compile(r"^\d+(\.\d+)?[gmt]$")
     bad = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
         dev = load_yaml(p) or {}
