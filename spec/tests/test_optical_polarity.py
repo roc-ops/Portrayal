@@ -1,9 +1,11 @@
 """L109: a declared `optical.polarity` is what the paths actually wire.
 
 The patterns are read off FS's own cassette diagrams (the FHD universal-polarity
-blog): Type A straight through, AF each duplex pair swapped, universal fibre j
-paired with fibre n+1-j. The rule must FAIL a wrong claim, not merely stay quiet
-on right ones - so each pattern is also checked under every other name.
+blog, and the FHD MTP-12/24 Cassettes Datasheet): Type A straight through, AF
+each duplex pair swapped - and at 24 fibres the two rows exchanged as well -
+universal fibre j paired with fibre n+1-j. The rule must FAIL a wrong claim, not
+merely stay quiet on right ones - so each pattern is also checked under every
+other name.
 """
 import pathlib
 
@@ -54,6 +56,40 @@ def test_the_patterns_are_fs_s_diagrams():
     assert lint.POLARITY_PATTERNS["a"](12)[:4] == [1, 2, 3, 4]
     assert lint.POLARITY_PATTERNS["af"](12)[:4] == [2, 1, 4, 3]
     assert lint.POLARITY_PATTERNS["universal"](12)[:4] == [1, 12, 2, 11]
+
+
+def test_a_24_fibre_af_exchanges_the_rows_as_well_as_the_pairs():
+    # The datasheet, p. 6 (MTP-24 Type AF), Inner Sequence beneath Port Labeling:
+    # ports 1, 2, 11, 12 take 14, 13, 24, 23; ports 13, 14, 23, 24 take 2, 1, 12, 11.
+    af = lint.POLARITY_PATTERNS["af"](24)
+    assert [af[p - 1] for p in (1, 2, 11, 12)] == [14, 13, 24, 23]
+    assert [af[p - 1] for p in (13, 14, 23, 24)] == [2, 1, 12, 11]
+    assert sorted(af) == list(range(1, 25))
+
+
+AF24 = ROOT / "library/components/fs/fhd-1mtp24-lc-os2-af/v3/contract.yaml"
+
+
+def rewired(contract, fibres):
+    """The contract with port p (lcNN.1 odd, lcNN.2 even) wired to fibres[p-1]."""
+    d = yaml.safe_load(contract.read_text())
+    order = d["optical"]["front-order"]
+    d["optical"]["paths"] = [
+        {"from": f"{order[(p - 1) // 2]}.{2 - p % 2}", "to": f"rear:mtp.{fibres[p - 1]}"}
+        for p in range(1, 25)]
+    return d
+
+
+def test_the_pair_swap_alone_fails_a_24_fibre_af():
+    # What the part wired until 3.0.1: right for an MTP-12, wrong for this one.
+    pair_swap = [p + 1 if p % 2 else p - 1 for p in range(1, 25)]
+    msgs = l109(rewired(AF24, pair_swap))
+    assert msgs and "port 1 takes mtp fibre 2 where 'af' puts fibre 14" in msgs[0], msgs
+
+
+@pytest.mark.parametrize("wired", ["a", "universal"])
+def test_other_wirings_fail_a_24_fibre_af(wired):
+    assert l109(rewired(AF24, lint.POLARITY_PATTERNS[wired](24)))
 
 
 def test_every_fs_cassette_wires_its_declared_polarity():

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-1mtp24-lc-os2-af
-version: 3.0.0
+version: 3.0.1
 class: cassette
 behaviour: fills
 description: >-
@@ -48,30 +48,30 @@ optical:
   front-order:
     [lc01, lc02, lc03, lc04, lc05, lc06, lc07, lc08, lc09, lc10, lc11, lc12]
   paths:
-    - {from: lc01.1, to: 'rear:mtp.2'}
-    - {from: lc01.2, to: 'rear:mtp.1'}
-    - {from: lc02.1, to: 'rear:mtp.4'}
-    - {from: lc02.2, to: 'rear:mtp.3'}
-    - {from: lc03.1, to: 'rear:mtp.6'}
-    - {from: lc03.2, to: 'rear:mtp.5'}
-    - {from: lc04.1, to: 'rear:mtp.8'}
-    - {from: lc04.2, to: 'rear:mtp.7'}
-    - {from: lc05.1, to: 'rear:mtp.10'}
-    - {from: lc05.2, to: 'rear:mtp.9'}
-    - {from: lc06.1, to: 'rear:mtp.12'}
-    - {from: lc06.2, to: 'rear:mtp.11'}
-    - {from: lc07.1, to: 'rear:mtp.14'}
-    - {from: lc07.2, to: 'rear:mtp.13'}
-    - {from: lc08.1, to: 'rear:mtp.16'}
-    - {from: lc08.2, to: 'rear:mtp.15'}
-    - {from: lc09.1, to: 'rear:mtp.18'}
-    - {from: lc09.2, to: 'rear:mtp.17'}
-    - {from: lc10.1, to: 'rear:mtp.20'}
-    - {from: lc10.2, to: 'rear:mtp.19'}
-    - {from: lc11.1, to: 'rear:mtp.22'}
-    - {from: lc11.2, to: 'rear:mtp.21'}
-    - {from: lc12.1, to: 'rear:mtp.24'}
-    - {from: lc12.2, to: 'rear:mtp.23'}
+    - {from: lc01.1, to: 'rear:mtp.14'}
+    - {from: lc01.2, to: 'rear:mtp.13'}
+    - {from: lc02.1, to: 'rear:mtp.16'}
+    - {from: lc02.2, to: 'rear:mtp.15'}
+    - {from: lc03.1, to: 'rear:mtp.18'}
+    - {from: lc03.2, to: 'rear:mtp.17'}
+    - {from: lc04.1, to: 'rear:mtp.20'}
+    - {from: lc04.2, to: 'rear:mtp.19'}
+    - {from: lc05.1, to: 'rear:mtp.22'}
+    - {from: lc05.2, to: 'rear:mtp.21'}
+    - {from: lc06.1, to: 'rear:mtp.24'}
+    - {from: lc06.2, to: 'rear:mtp.23'}
+    - {from: lc07.1, to: 'rear:mtp.2'}
+    - {from: lc07.2, to: 'rear:mtp.1'}
+    - {from: lc08.1, to: 'rear:mtp.4'}
+    - {from: lc08.2, to: 'rear:mtp.3'}
+    - {from: lc09.1, to: 'rear:mtp.6'}
+    - {from: lc09.2, to: 'rear:mtp.5'}
+    - {from: lc10.1, to: 'rear:mtp.8'}
+    - {from: lc10.2, to: 'rear:mtp.7'}
+    - {from: lc11.1, to: 'rear:mtp.10'}
+    - {from: lc11.2, to: 'rear:mtp.9'}
+    - {from: lc12.1, to: 'rear:mtp.12'}
+    - {from: lc12.2, to: 'rear:mtp.11'}
 provenance:
   face-legends: >-
     THE PORT NUMBERS ARE fs/fhd-1mtp24-lc-os2-a@3's, BORROWED WHOLE. FS
@@ -92,14 +92,20 @@ provenance:
     numbering. See the twin's provenance for how each was read.
   optical: >-
     FS names this part Type AF on its product page for 68549 and in the FHD
-    Fiber Cabling System Guide's cassette tables. THE PATHS ARE FS's OWN
-    DIAGRAM, NOT A CONVENTION: the FHD universal-polarity blog draws each
-    cassette with its fibres numbered at the LC ports -
-    a Type AF cassette swaps each duplex pair: port 1 takes MTP fibre 2 and port 2 takes fibre 1, port 3 takes 4 and port 4 takes 3, and so on. The blog's own TEXT says AF reverses fibre 1 to 12; its diagram labels every fibre and shows the pair swap, and the diagram is the more specific of the two, so the diagram is what is modelled.
-    Ports are FS's printed numbers, the lower bore of each adapter the odd one.
-    Where a cassette has two MTPs, each carries its own twelve ports exactly as
-    the twin's do (1-12 on one, 13-24 on the other). L109 checks these paths
-    against `polarity`.
+    Fiber Cabling System Guide's cassette tables. THE PATHS ARE THE FHD
+    MTP-12/24 CASSETTES DATASHEET, p. 6, section VIII (MTP-24 Cassette, Type
+    AF): its Inner Sequence table and its wiring diagram agree fibre for
+    fibre, and the fibre colours in the diagram agree with both. A 24-fibre
+    AF cassette swaps each duplex pair AND exchanges the two twelve-fibre
+    rows of the MTP: port 1 takes fibre 14 and port 2 takes 13, port 11
+    takes 24 and port 12 takes 23; port 13 takes fibre 2 and port 14 takes
+    1, port 23 takes 12 and port 24 takes 11. The same datasheet (p. 4,
+    section II) draws the MTP-12 AF as the pair swap alone, so the row
+    exchange belongs to the 24-fibre part only.
+    UNTIL 3.0.1 THESE PATHS WERE THE PAIR SWAP ALONE, read off the FHD
+    universal-polarity blog, which draws the twelve-fibre cassette and not
+    this one. Ports are the printed numbers, the lower bore of each adapter
+    the odd one. L109 checks these paths against `polarity`.
   twin: >-
     built from fs/fhd-1mtp24-lc-os2-a@3 (57023, Type A) - the same cassette FS builds in
     Type AF polarity. Everything but the model, SKU, depth, rear face,
