@@ -30,7 +30,9 @@ the *published build*, not about the hardware.
   `common/rj45-eth@1`, `common/qsfp28-cage@3`, `common/sfp-plus-cage@2` and
   `common/rj45-ganged-eth@1` draw as a nested `data-class="port"` element.
   The core keeps its class. An audit that counts ports should skip it with
-  `[data-class=port]:not([data-inner])` (roc-ops/Portrayal#511).
+  `[data-class=port]:not([data-inner])` (roc-ops/Portrayal#511). The same mark
+  covers a port component that draws a second `class: port` element inside
+  its own skin, not only one composed as a separate part.
 - Every `configs[]` entry in `<device>.configs.json` carries `airflow` —
   `front-to-back`, `back-to-front`, `side` or `passive`, or `null` where the
   device states none — resolved the way each drawing's `data-airflow` is (the
@@ -71,9 +73,12 @@ the *published build*, not about the hardware.
   `smartoptics/dcp-m32-cso-zr` 3.0.0, `smartoptics/dcp-r-34d-cs` 4.0.0 and
   `smartoptics/dcp-r-9d-cs` 4.0.0. The MPO/MTP flange adapters
   (`common/mpo-flange-adapter`, `common/mpo24-flange-adapter`) carry a new
-  `opening` element for the keyed bulkhead itself and fibre elements `1..12`
-  (the 24-fibre part `1..24`), numbered as the plug numbers them rather than
-  as a viewer sees them.
+  `opening` element for the keyed bulkhead itself, `class: port` and marked
+  `data-inner="1"` so `[data-class=port]:not([data-inner])` still counts one
+  connector per adapter, and fibre elements `1..12` (the 24-fibre part
+  `1..24`), numbered as the plug numbers them rather than as a viewer sees
+  them. Both adapters took a minor bump, 1.1.1 to 1.2.0
+  (roc-ops/Portrayal#533).
 - Ten routing-engine, control-board and sled modules now group their ports:
   `juniper/jnp10k-re1@2`, `re-s-1300@1`, `re-s-1300-v@1`,
   `mx2000-cb-re-v@1`, `mx2008-rcb-v@1`, `jnp10003-rcb@1`, `jnp304-re@1`,
@@ -148,11 +153,6 @@ the *published build*, not about the hardware.
   type (roc-ops/Portrayal#426).
 
 ### Fixed
-- A component whose own class is `port` and which draws a second `class: port`
-  element inside itself - an MPO/MTP flange adapter's keyed opening, a bare
-  plug's body - now marks that inner element `data-inner="1"` too, on the same
-  rule a composed cage's std core is marked by. It was carrying no mark, so an
-  audit walking `[data-class=port]` counted it as a second connector.
 - `devices_index` fails when two devices share a name. Dist filenames carry no
   vendor, so they would otherwise render over each other in silence (roc-ops/Portrayal#185).
 

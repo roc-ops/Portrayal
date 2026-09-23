@@ -415,9 +415,8 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None, in_port=False):
     # marks its std core - an audit walking `[data-class=port]` should not
     # count the opening or the body as a second connector. This wrapping `g`
     # (below, via the caller) is what carries `contract`'s own class, so an
-    # inner element is nested under a port ancestor exactly when THIS
-    # contract is itself a port, or when the caller says an ancestor above it
-    # already is.
+    # inner element is nested under a port ancestor when THIS contract is
+    # itself a port, or when the caller says an ancestor above it already is.
     self_in_port = in_port or contract.get("class") == "port"
     renamed = {}
     for node in el.iter():
