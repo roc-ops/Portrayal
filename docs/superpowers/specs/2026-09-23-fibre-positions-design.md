@@ -96,8 +96,9 @@ this per part.
 | common/mpo-flange-adapter, mpo24-flange-adapter | screws only | `opening` + fibre elements | minor |
 | common/mpo-adapter | composes `bore` (std/mpo) | fibre elements `1`-`12` | minor |
 | common/st-, fc-, lsh-simplex-adapter | nothing | element `1` | minor |
-| common/mdc-adapter | nothing | elements `1`-`4` | minor |
-| common/fibre-splice | nothing | elements `1`-`12` | minor |
+| common/mdc-adapter | nothing | exempt (L110 table) | minor |
+| common/fibre-splice | nothing | exempt (L110 table) | minor |
+| generic/lc-plug | nothing | element `1` on the ferrule | minor |
 
 **Two parts are exempt, by name and with a reason, in L110's table:**
 `common/mdc-adapter` (which bore of which duplex port is position 1-4 is
@@ -111,10 +112,10 @@ composed id changes the paths every consumer draws, so each consumer takes a
 major, and each device that accepts one is re-pinned and re-locked. The
 bumps are done by script and checked by the existing version and lock gates.
 
-**A new lint rule** (next free L-number): a `class: port` part with
+**L110**, a new lint rule: a `class: port` part with
 `optical.positions: N` must expose addressable nodes `1`-`N`, no more and
-none missing. A census test lists every part it covers, so a new adapter
-joins by design.
+none missing. A census test covers every class:port part with
+optical.positions, so a new adapter joins by design.
 
 **Front and rear ids must not collide** on one cassette. `rear:mtp1` and a
 front `mtp1` would draw the same path on two faces as two different
@@ -152,7 +153,8 @@ tested the way `test_projected_rows_js.py` tests the tree rules.
 
 - DCIM export content. It already numbers fibres from `optical.positions` and
   is unaffected by the rename.
-- Directional parts: transceivers and Smartoptics PPM modules keep `tx`/`rx`.
+- Directional parts: transceivers keep `tx`/`rx`; PPM modules carry their
+  direction in their paths.
 - Applying swaps to faces that are not on screen. That is a separate change
   already in progress, and this work merges after it.
 
