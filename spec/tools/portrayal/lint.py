@@ -96,6 +96,7 @@ import types
 import contextlib
 import json
 import math
+import pathlib
 import re
 import sys
 import xml.etree.ElementTree as ET
@@ -250,6 +251,7 @@ RULES = {
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
+    "L110": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
 }
 
@@ -2497,6 +2499,64 @@ def lint_component_optical_polarity(path, data, lib_roots):
                               f"{rpart} fibre {got[first]} where {pol!r} puts fibre "
                               f"{want[first]} (ports {base + 1}-{base + n} wire "
                               f"{got}); the paths are the evidence - fix them or the claim")
+
+
+# L110 EXEMPTIONS, BY NAME AND WITH A REASON. A part leaves this table when the
+# source that places its fibres arrives; the census test fails if one is added
+# silently or names a part that no longer exists.
+POSITION_EXEMPT = {
+    "common/mdc-adapter": (
+        "which bore of which duplex port is position 1-4 is not sourced, and a "
+        "guessed order is a wrong address that looks like a right one"),
+    "common/fibre-splice": (
+        "a placeholder that draws no fibres; markers on it would be addresses "
+        "without a place"),
+}
+
+
+def _component_key(path):
+    parts = pathlib.Path(path).parts
+    i = parts.index("components") if "components" in parts else -1
+    return "/".join(parts[i + 1:i + 3]) if i >= 0 else None
+
+
+def lint_component_optical_position_nodes(path, data, lib_roots):
+    """L110: every fibre position a connector declares is a node you can point at.
+
+    A fibre endpoint `X.n` in `optical.paths` is drawn at path `X/n`, so the
+    explorer and every consumer can turn one into the other without a table.
+    That holds only if a connector with `optical.positions: N` draws nodes
+    `1`..`N`: a composed bore, or a contracted element of class `fibre`.
+
+    It also refuses a cassette whose rear face composes an id its front also
+    uses. Both would be drawn at the same path on two faces as two different
+    connectors, which is the one thing a path must never be.
+    """
+    own = {str(p.get("id")) for p in data.get("parts") or [] if p.get("id") is not None}
+    rear = (data.get("faces") or {}).get("rear")
+    rear_ref = rear.get("ref") if isinstance(rear, dict) else rear
+    if rear_ref:
+        f = resolve_component(rear_ref, lib_roots)
+        rd = load_yaml(f) if f else None
+        clash = sorted(own & {str(p.get("id")) for p in (rd or {}).get("parts") or []})
+        if clash:
+            err(path, "L110", f"rear face {rear_ref} composes {clash}, which the front also "
+                              "composes; one path would name two connectors - rename one side")
+    if data.get("class") != "port":
+        return
+    n = (data.get("optical") or {}).get("positions")
+    if not n or _component_key(path) in POSITION_EXEMPT:
+        return
+    have = own | {str(k) for k in (data.get("elements") or {})}
+    want = {str(i) for i in range(1, int(n) + 1)}
+    missing = sorted((int(i) for i in want - have))
+    if missing:
+        err(path, "L110", f"declares optical.positions {n} but draws no node for position(s) "
+                          f"{missing}; compose a bore with that id or declare an element of "
+                          "class fibre, so fibre X.n has a path X/n")
+    extra = sorted(int(i) for i in have if i.isdigit() and int(i) > int(n))
+    if extra:
+        err(path, "L110", f"draws position node(s) {extra} beyond optical.positions {n}")
 
 
 def lint_component_optical_coverage(path, data, lib_roots):
