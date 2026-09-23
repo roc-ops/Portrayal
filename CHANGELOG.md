@@ -40,6 +40,22 @@ the *published build*, not about the hardware.
   finds `dcs510` (roc-ops/Portrayal#514).
 
 ### Changed
+- Timing and console jacks say what they carry in `data-media` instead of
+  `rj45`: ToD and PPS/ToD jacks are `rj45-tod`, BITS and external-clock jacks
+  `rj48`, stacking-sync jacks `rj45-sync`, the CSR440's alarm jack `rj45-alarm`,
+  and consoles and AUX ports `rj45-serial` (roles `console` / `aux`). A selector
+  for `[data-media='rj45']` now finds Ethernet only. 33 more device-level
+  ports gained a `data-speed` their sources state - the MX150's ten copper
+  access ports, management jacks across Cisco, Juniper, Edgecore, UfiSpace,
+  Celestica and MaiaEdge, the ASR 9001's cluster ports (`10g`, media now
+  `sfp-plus`), its and the ASR 9901's IEEE 1588 service LAN ports (`100m`),
+  and three Smartoptics OSC cages (`1g`). Device types follow: those OSC cages
+  and the ES1010 management SFP export as `1000base-x-sfp` (were
+  `25gbase-x-sfp28`, a default), the ASR 9001 cluster ports as
+  `10gbase-x-sfpp` (were `25gbase-x-sfp28`), the service LAN ports as
+  `100base-tx` (were `1000base-t`), and 24 device types gain the
+  `Console` console port they had been missing. Lint L113 holds it; 58 devices
+  took a patch bump (roc-ops/Portrayal#511).
 - `data-speed` is spelled from one closed set - `10m 100m 1g 2.5g 5g 10g 20g
   25g 40g 50g 100g 200g 400g 800g 1.6t`, in `spec/schemas/speeds.yaml` - and
   means the highest native rate the port runs at. **Values a consumer may filter

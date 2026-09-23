@@ -12,9 +12,12 @@ description: Cisco ASR 9000 Series ASR 9901 Router - a 2 RU fixed-port provider-
   route processor and 456 Gbps of fabric
 front_image: true
 rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
 interfaces:
   - name: ieee1588-link
-    type: 1000base-t
+    type: 100base-tx
     mgmt_only: true
   - name: mgt-lan-0
     type: 1000base-t
@@ -227,7 +230,7 @@ comments: 'Cisco ASR 9000 Series ASR 9901 Router - a 2 RU fixed-port provider-ed
   - thermal.airflow: front to back
 
 
-  Drawing version 1.0.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 1.0.1. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'
