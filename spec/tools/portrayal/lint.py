@@ -250,6 +250,7 @@ RULES = {
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
+    "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
 }
 
@@ -1291,6 +1292,22 @@ def _load_pluggable_families(schemas):
 
 PLUGGABLE_FAMILIES = _load_pluggable_families(
     Path(__file__).resolve().parents[2] / "schemas")
+
+
+def _load_port_speeds(schemas):
+    """The closed speed vocabulary, in ascending order, or () if the checkout is
+    broken. Loaded at import for the reason the registries above are: L110 asks
+    its question of the tree, so an empty set makes it report every speed it
+    sees rather than pass them all in silence."""
+    path = Path(schemas) / "speeds.yaml"
+    try:
+        doc = yaml.safe_load(path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return ()
+    return tuple(str(s) for s in (doc.get("speeds") or ()))
+
+
+PORT_SPEEDS = _load_port_speeds(Path(__file__).resolve().parents[2] / "schemas")
 
 
 def _pluggable_rates():
@@ -5827,6 +5844,56 @@ def lint_device_groups(path, data, lib_roots):
                               f"`mixed:` states a fact about the hardware - drop it")
 
 
+def _speed_finding(path, where, speed):
+    """L110 for one declared speed. Nothing declared is not a finding - a port
+    that says nothing about its rate is answered by its group or its cage."""
+    if speed is None:
+        return
+    if str(speed) in PORT_SPEEDS:
+        return
+    err(path, "L110", f"{where}: speed {speed!r} is not in the closed set "
+                      f"({' '.join(PORT_SPEEDS) or 'spec/schemas/speeds.yaml loaded nothing'}). "
+                      "A speed is the highest native rate the port runs at; copper or "
+                      "fibre is `media`, a USB generation is `usb`, a PON flavour is "
+                      "`pon`, and a caveat belongs in the placement's `description`")
+
+
+def lint_device_speed_vocabulary(path, data):
+    """L110: every port speed a device declares is spelled from one closed set.
+
+    `speed` flattens to data-speed on every port the renderer draws, so it is
+    the attribute a filter selects on - "every 1G port" is one selector only if
+    1G is spelled one way. It was spelled four ways (`100m-1g`, `1000base-t`,
+    `100/1000base-t`, `10/100/1000`), and the DCIM exporter's table knew only
+    two of them, so eight 1G copper ports on the CSR180 and CSR200 exported
+    nothing at all (#512). Read on both of the places a device states it: a
+    group's attrs, which the renderer merges into every member, and a
+    placement's own.
+    """
+    for gname, gdef in (data.get("groups") or {}).items():
+        _speed_finding(path, f"groups/{gname}",
+                       attrs_mod.flatten((gdef or {}).get("attrs")).get("speed"))
+    for vname, view in (data.get("views") or {}).items():
+        for p in view_parts(view or {})["placements"]:
+            _speed_finding(path, f"{vname}/{p.get('id')}",
+                           attrs_mod.flatten(p.get("attrs")).get("speed"))
+
+
+def lint_component_speed_vocabulary(path, data):
+    """L110 for a component: its own `attrs.speed` and each composed part's.
+
+    A contract that declares `speed` among its `fields` is exempt at the top
+    level, because there the value is something printed on the part - the DIMM
+    sticker's MT/s - and not a port rate. Its parts are still read.
+    """
+    if "speed" not in (data.get("fields") or {}):
+        _speed_finding(path, "attrs", attrs_mod.flatten(data.get("attrs")).get("speed"))
+    for part in data.get("parts") or []:
+        if isinstance(part, dict):
+            _speed_finding(path, f"parts/{part.get('id')}",
+                           attrs_mod.flatten(part.get("attrs")).get("speed"))
+
+
 def lint_device_attrs(path, data):
     """L24 and L25 - what the sections of `attrs` promise.
 
@@ -7147,6 +7214,7 @@ def lint_device(path, validator, lib_roots):
         check_states(path, f"groups/{gname}", (gdef or {}).get("states"),
                      (gdef or {}).get("attrs"))
     lint_device_groups(path, data, lib_roots)
+    lint_device_speed_vocabulary(path, data)
     lint_device_port_optics(path, data, lib_roots)
     lint_device_pluggable_media(path, data)
     lint_device_cage_media_disagreement(path, data, lib_roots)
@@ -8156,6 +8224,11 @@ def main():
     if (schemas / "power-roles.yaml").exists():
         global DRAW_CLASSES, SUPPLY_CLASSES, PASSIVE_CLASSES
         DRAW_CLASSES, SUPPLY_CLASSES, PASSIVE_CLASSES = _load_power_roles(schemas)
+    # THE SPEED SET FOLLOWS --schemas TOO, like the power roles: an alternate
+    # tree is linted against its own vocabulary, not this checkout's.
+    if (schemas / "speeds.yaml").exists():
+        global PORT_SPEEDS
+        PORT_SPEEDS = _load_port_speeds(schemas)
     # the schemas are YAML too where they are YAML, and a duplicate in the
     # registry would be as silent there as anywhere else
     for f in sorted(schemas.glob("*.yaml")):
@@ -8200,6 +8273,7 @@ def main():
                 lint_component_dc_capacity(f, d)
                 lint_component_inlet(f, d, args.library)
                 lint_component_cage_rate(f, d)
+                lint_component_speed_vocabulary(f, d)
                 lint_component_size_confidence(f, d)
                 lint_component_display(f, d)
                 lint_component_generic(f, d)
