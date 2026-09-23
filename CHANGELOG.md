@@ -15,6 +15,12 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- Every `configs[]` entry in `<device>.configs.json` carries `airflow` —
+  `front-to-back`, `back-to-front`, `side` or `passive`, or `null` where the
+  device states none — resolved the way each drawing's `data-airflow` is (the
+  configuration's value, else the chassis's). The `chassis` block carries the
+  chassis's own `airflow`. A page filtering builds by airflow no longer parses
+  it out of a configuration's name or description (roc-ops/Portrayal#513).
 - `devices.json` carries `contract: 1` — the first version a consumer can check
   (roc-ops/Portrayal#185).
 - `library/dist/devices.lock.json`: every device's fingerprint in one file,
