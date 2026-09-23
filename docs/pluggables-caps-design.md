@@ -228,7 +228,7 @@ parts:
 
 and a duplex adapter's own slot by a top-level `default:` beside its `interface:`.
 Precedence, lowest first: the adapter's `default:`; a composer's `parts:` entry
-(`default: none` for, say, a shuttered variant); a configuration's `occupants:`
+(`default: none` for, say, a plate that ships one port open); a configuration's `occupants:`
 (`none` empties it); the explorer's swap. Lint rejects a `default:` that the slot's
 accept list does not contain.
 
@@ -240,7 +240,7 @@ Added 2026-09-23, when the FS 36-fibre cassettes arrived with
 **A shuttered adapter is a slot whose shipped state is empty.** Its spring
 shutters are the dust protection, and FS ships those plates with no caps, so
 nothing on it declares a `default:` - not the adapter's own duplex slot, not
-either bore. It is still a slot at both levels: `@2` composes two
+either bore - and no composer needs `default: none` to empty it. It is still a slot at both levels: `@2` composes two
 `std/lc-bulkhead-bore@1` (turned 180, keyways up, as the Smartoptics adapter
 turns its bores) and presents `lc-duplex` with a `mate` at their midpoint, so a
 plug can be swapped in, simplex in a bore or duplex across the pair, and the

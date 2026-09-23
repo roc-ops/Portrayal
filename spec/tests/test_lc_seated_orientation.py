@@ -529,21 +529,84 @@ def test_the_shuttered_adapter_is_a_duplex_slot_with_no_default():
     assert not (contract(BULKHEAD).get("default")), "the bore itself ships nothing"
 
 
+def occupants_on(svg, adapter_prefixes=(S_ADAPTER,)):
+    """{occupant path: its ref} for everything seated on a shuttered adapter's
+    own slot or on one of its bores, searched over the WHOLE drawing. A duplex
+    occupant is appended to the group that composes the adapter - the cassette -
+    not to the adapter's own, so a scan of each adapter's subtree cannot see
+    it. Every seat names its host in `data-for`, and that is what is matched."""
+    hosts = set()
+    for a in _groups(svg, adapter_prefixes):
+        path = a.get("data-path")
+        hosts |= {path, f"{path}/tx", f"{path}/rx"}
+    assert hosts, "no shuttered adapter in the drawing - this measures nothing"
+    return {el.get("data-path"): _ref(el) for el in svg.iter()
+            if el.get("data-for") in hosts
+            or any((el.get("data-path") or "") == f"{h}-occupant" for h in hosts)}
+
+
 def test_the_shuttered_cassette_ships_every_port_empty(tmp_path):
     """The unconfigured build: every bore of every shuttered adapter is drawn,
-    and NOTHING is seated on the adapters or their bores."""
+    and NOTHING is seated on the adapters or their bores, anywhere in the
+    drawing."""
     svg, parents = front(tmp_path, fhd(tmp_path, SHUTTERED_CASSETTE, {}))
     adapters = _groups(svg, (S_ADAPTER,))
     assert len(adapters) == 36, len(adapters)             # eighteen, in two bays
     bores_seen = [b for b in _groups(svg, (BULKHEAD,))
                   if _adapter_of(parents, b, S_ADAPTER) is not None]
     assert len(bores_seen) == 72, len(bores_seen)
-    occupants = [el.get("data-path") for a in adapters for el in a.iter()
-                 if "-occupant" in (el.get("data-path") or "")]
-    assert occupants == [], occupants[:5]
+    assert occupants_on(svg) == {}
     # and so every shutter is left showing
     cover = _shutter_cover(svg, parents)
     assert len(cover) == 72 and all(plug is None for _b, plug, _ok in cover)
+
+
+def test_the_occupant_search_sees_a_seat_on_the_duplex_slot(tmp_path):
+    """The search is not vacuous: on the plugged build it finds the simplex
+    plugs on the bores AND the duplex plugs, which sit in the cassette's group
+    rather than the adapter's."""
+    svg, _ = build_lc(tmp_path, "fhd-36")
+    got = occupants_on(svg)
+    want = {f"bay-1/module/{k.split('/', 1)[1]}-occupant" if k.startswith("bay-1")
+            else f"bay-4/module/{k.split('/', 1)[1]}-occupant"
+            for k in LC_SIMPLEX_KEYS["fhd-36"] + LC_DUPLEX_KEYS["fhd-36"]}
+    assert set(got) == want, got
+    assert sum(r == DUPLEX for r in got.values()) == len(LC_DUPLEX_KEYS["fhd-36"]) > 0
+
+
+CAP = "common/lc-duplex-dust-cap@2"
+
+
+def test_a_cap_default_on_the_adapter_is_found(tmp_path):
+    """Mutation (1): a copy of the shuttered adapter declaring a top-level
+    duplex-cap default, in a copy of the 36-fibre cassette. The unconfigured
+    build ships a cap on every adapter, and the search finds each one."""
+    root = tmp_path / "lib"
+    _copy(root, "common/lc-duplex-shuttered-adapter", 2, "capped-shuttered",
+          lambda c: c.__setitem__("default", CAP))
+
+    def repoint(c):
+        for q in c["parts"]:
+            q["ref"] = "test/capped-shuttered@1"
+    _copy(root, "fs/fhd-3mtp18-lc-os2-a", 1, "capped-36", repoint)
+    svg, _ = front(tmp_path, fhd(tmp_path, "test/capped-36@1", {}), root)
+    got = occupants_on(svg, ("test/capped-shuttered@",))
+    assert len(got) == 36 and set(got.values()) == {CAP}, got
+
+
+def test_a_cap_default_on_the_cassettes_parts_entry_is_found(tmp_path):
+    """Mutation (2): the real adapter, but a copy of the 36-fibre cassette
+    whose `parts:` entry for lc01 ships a duplex cap - the composer override
+    the precedence allows. The search finds it on both bays' lc01."""
+    root = tmp_path / "lib"
+
+    def cap_lc01(c):
+        next(q for q in c["parts"] if q["id"] == "lc01")["default"] = CAP
+    _copy(root, "fs/fhd-3mtp18-lc-os2-a", 1, "lc01-capped-36", cap_lc01)
+    svg, _ = front(tmp_path, fhd(tmp_path, "test/lc01-capped-36@1", {}), root)
+    got = occupants_on(svg)
+    assert got == {"bay-1/module/lc01-occupant": CAP,
+                   "bay-4/module/lc01-occupant": CAP}, got
 
 
 def test_a_seated_plug_covers_the_shutter_it_pushes_aside(tmp_path):

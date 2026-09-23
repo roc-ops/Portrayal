@@ -64,7 +64,7 @@ CONFORMS = {DUPLEX: None, SC: "sc-plug", MPO12: "mpo-plug", MPO24: "mpo-plug"}
 
 DCP = "smartoptics/dcp-r-34d-cs"      # places common/lc-duplex-adapter@4
 FHD = "fs/fhd-1ufce"
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@4
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@5
 SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
 H_ADAPTER = "common/lc-duplex-adapter@4"
 

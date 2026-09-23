@@ -34,7 +34,7 @@ from portrayal.manifest import load_yaml, presented_interface
 
 DCP = "smartoptics/dcp-r-34d-cs"
 FHD = "fs/fhd-1ufce"
-LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@4
+LC_CASSETTE = "fs/fhd-2mtp12-lc-os2-a@3"     # twelve lc-duplex-v-adapter@5
 SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
 
 LC_CAP = "common/lc-dust-cap@1"
