@@ -1,0 +1,11 @@
+# spec/schemas/connectors.yaml
+# Connector interfaces a port can present. A part presenting one is a SLOT
+# (B3, docs/pluggables-caps-design.md): it accepts every part whose `mates:`
+# names the interface - dust caps and plugs alike. No ladder: a connector
+# either intermates or it does not.
+format: 1
+interfaces:
+  lc: {standard: lc-duplex-receptacle, note: one LC bore}
+  lc-duplex: {standard: lc-duplex-receptacle, note: 'two LC bores at the 6.25 duplex pitch, presented by the adapter itself'}
+  sc: {standard: sc-simplex-receptacle}
+  mpo: {standard: mpo-adapter, note: 'MPO-8/12/24 share the opening; MPO-16 is keyed differently and is not this interface'}

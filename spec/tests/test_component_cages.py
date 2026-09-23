@@ -75,8 +75,9 @@ def _contract(ref):
 
 
 def _presents(lib, families, part):
-    """(interface, mate_at, lift) when `part` is a cage, else None - the
-    census's own reading, independent of the index."""
+    """(interface, mate_at, lift) when `part` is a cage or a connector slot
+    (B3: spec/schemas/connectors.yaml), else None - the census's own reading,
+    independent of the index."""
     def _res(ref):
         try:
             return lib.resolve(ref)[0]
@@ -86,9 +87,33 @@ def _presents(lib, families, part):
     if not c:
         return None
     iface, mate_at, lift = presented_interface(c, _res)
-    if not iface or render_mod._family_by_interface(families, iface) is None:
+    if not iface:
+        return None
+    if (render_mod._family_by_interface(families, iface) is None
+            and iface not in render_mod._connector_registry()):
         return None
     return iface, mate_at, lift
+
+
+def _forwarded_connector(lib, contract):
+    """The part id a contract presents as its OWN connector slot by
+    forwarding (B3, P2) - published where the contract is placed, never on
+    the contract itself - or None. Read off `presented_interface` here, not
+    off render's helper: a contract without its own interface that presents
+    a connector interface anyway got it from its one composed aperture."""
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+    own = contract.get("interface") and (contract.get("connection-points") or {}).get(
+        contract.get("interface-at") or "mate")
+    iface, _at, _lift = presented_interface(contract, _res)
+    if own or iface not in render_mod._connector_registry():
+        return None
+    [pid] = [p["id"] for p in contract.get("parts") or []
+             if (_res(p.get("ref")) or {}).get("interface") == iface]
+    return pid
 
 
 @pytest.mark.parametrize("ref", NAMED)
@@ -141,7 +166,7 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
 
 
 CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
-             "accepts", "occupant-attrs", "mirror", "group-states"}
+             "accepts", "occupant-attrs", "mirror", "group-states", "kind"}
 
 
 def test_a_card_cage_carries_exactly_the_r1_keys(index):
@@ -192,9 +217,12 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     cage-presenting parts, counted independently of the indexer. 166
     components / 2171 cages when this was written; the live count is what is
     asserted, and that it is not zero."""
-    want_components, want_cages = 0, 0
+    want_components, want_cages, forwarded = 0, 0, 0
     for ref, entry in index.items():
-        n = sum(1 for p in _contract(ref).get("parts") or [] if _presents(lib, families, p))
+        skip = _forwarded_connector(lib, _contract(ref))
+        forwarded += skip is not None
+        n = sum(1 for p in _contract(ref).get("parts") or []
+                if p["id"] != skip and _presents(lib, families, p))
         assert len(entry.get("cages") or []) == n, ref
         if n:
             want_components += 1
@@ -202,6 +230,8 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     got_components = sum(1 for e in index.values() if e.get("cages"))
     got_cages = sum(len(e.get("cages") or []) for e in index.values())
     assert want_components > 0 and want_cages > 0
+    # P2 is exercised, not assumed: common/mpo-adapter@1 forwards its bore
+    assert forwarded > 0
     assert (got_components, got_cages) == (want_components, want_cages)
 
 

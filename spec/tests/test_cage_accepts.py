@@ -119,7 +119,9 @@ def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     cage = _cage(idx, "front", "m1-0")
     assert set(cage) == {"id", "at", "interface", "media", "group", "rel-pos",
                           "rotate", "accepts", "occupant",
-                          "mate", "lift", "occupant-attrs", "mirror", "group-states"}
+                          "mate", "lift", "occupant-attrs", "mirror", "group-states",
+                          "kind"}
+    assert cage["kind"] == "cage"
     assert cage["rel-pos"] == 0
     assert cage["rotate"] is None
     # AFTER SPEC A NO SHIPPED DEVICE SEATS ONE - this is the honest value for

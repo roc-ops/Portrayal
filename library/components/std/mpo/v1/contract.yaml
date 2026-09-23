@@ -1,7 +1,8 @@
 format: 1
 kind: component
 name: mpo
-version: 1.1.0
+version: 1.2.0
+interface: mpo
 class: port
 profile: networking
 conforms: mpo-adapter
@@ -36,6 +37,12 @@ provenance:
     own recess (4.5, against its 6.3 height) is not either. This is meant only
     to look recessed at the panel face, and 19.8 would carve a hole far deeper
     than any other aperture in the library.
+  mate: >-
+    the centre of the 7.8 x 5.6 opening, (7.8/2, 5.6/2) = (3.9, 2.8) - the
+    aperture centre of an ESTIMATED aperture (see `size`), so the point is no
+    better than the opening it is the centre of. Added with `interface: mpo`
+    (1.2.0) so the opening is a connector slot a cap or a plug can seat in
+    (docs/pluggables-caps-design.md).
 elements:
   opening: {at: [0, 0], size: [7.8, 5.6], class: cutout}
 relief:
@@ -49,4 +56,6 @@ relief:
   # precedent: `cavity: bore`, depth from `size.d`, pockets only on other nodes.
   wall: '#2a2f35'
   cavity: opening
+connection-points:
+  mate: {at: [3.9, 2.8], direction: front}
 skins: [default]

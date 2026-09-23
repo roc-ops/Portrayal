@@ -2801,6 +2801,22 @@ def _pluggable_families():
     return doc.get("families") or {}
 
 
+def _connector_registry():
+    """interface -> {standard, note}, from spec/schemas/connectors.yaml, or {}
+    if the checkout is broken.
+
+    The second registry `slot_entry` answers from (B3,
+    docs/pluggables-caps-design.md). A part presenting a pluggables FAMILY is a
+    cage; a part presenting one of THESE interfaces is a connector slot. Read
+    the same way `_pluggable_families` reads its file, for the same reason.
+    """
+    try:
+        doc = yaml.safe_load((SCHEMAS / "connectors.yaml").read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    return doc.get("interfaces") or {}
+
+
 def _family_by_interface(families, interface):
     """The (name, family) whose `interface` equals `interface`, or None.
 
@@ -2828,8 +2844,8 @@ def _family_by_rate(families, media):
 
 
 def _pluggable_candidates(lib_roots):
-    """Every library component that could seat in SOME pluggable cage,
-    indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
+    """Every library component that could seat in SOME pluggable cage or
+    connector slot, indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
 
     BUILT ONCE PER PROCESS. `libwalk.iter_components` is a GENERATOR - the
     same shape as `iter_devices`, which spent this very branch's last three
@@ -2847,12 +2863,17 @@ def _pluggable_candidates(lib_roots):
     yet while this process is running - depending on it here would be a race.
     `libwalk` reads contracts off disk directly, which is what every renderer
     already does for every placement it draws.
+
+    `mates:` IS THE GATE, NOT `behaviour`. The two plugs, generic/lc-plug@1 and
+    generic/rj45-plug@1, are `class: port` and so carry no `behaviour` (their
+    own provenance says why: test_behaviour.py holds every port to none), yet
+    each is exactly what a connector slot must offer (B3). Every other part
+    that declares `mates:` is `behaviour: occupies`, and neither plug mates a
+    pluggables family's interface, so no cage's accept list changes by this.
     """
     out = {}
     for cf in libwalk.iter_components(lib_roots):
         c = load_yaml(cf) or {}
-        if c.get("behaviour") != "occupies":
-            continue
         if c.get("superseded-by"):
             continue
         mates = c.get("mates")
@@ -2919,8 +2940,16 @@ def _cage_accepts(candidates, families, family, media):
 
 def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
                occupant=None):
-    """ONE cage entry for ONE placement, or None when it is not a cage - the
-    core that a device view's `cages[]` (cage_entries) and a component's own
+    """`slot_entry` with the connector registry read here - the name every
+    caller before B3 used, kept so none of them has to change."""
+    return slot_entry(p, lib, families, _connector_registry(), candidates,
+                      group=group, extra_lift=extra_lift, occupant=occupant)
+
+
+def slot_entry(p, lib, families, connectors, candidates, group=None,
+               extra_lift=0.0, occupant=None):
+    """ONE cage or connector-slot entry for ONE placement, or None when it is
+    neither - the core that a device view's `cages[]` (cage_entries) and a component's own
     `cages` (component_cages, which components_index.py publishes) both call,
     so a cage on a card and a cage on a switch face are the same answer to
     the same question.
@@ -2939,6 +2968,16 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
                   component_cages);
       occupant    the configured occupant, if any.
     `mate` and `at` are in the frame `p["at"]` is written in.
+
+    TWO REGISTRIES, ONE CORE (B3, docs/pluggables-caps-design.md). The
+    presented interface is looked up in `families` (spec/schemas/
+    pluggables.yaml) first and, failing that, in `connectors` (spec/schemas/
+    connectors.yaml). Every entry says which it is by `kind`: `cage` or
+    `connector`. A connector slot has no ladder and so no ceiling: its
+    `accepts` is every candidate whose `mates:` is the interface - dust caps
+    and plugs alike, never a boot, which mates a plug - and its `media` is
+    None. Everything else - `mate`, `lift`, `rotate`, `mirror`,
+    `group-states`, `occupant-attrs` - is the same answer to the same question.
     """
     contract, _skins = lib.resolve(p["ref"])
 
@@ -2951,7 +2990,11 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
     interface, mate_at, lift = presented_interface(contract, _resolve)
     found = _family_by_interface(families, interface) if interface else None
     if found is None:
-        return None
+        if not interface or interface not in (connectors or {}):
+            return None
+        refs = sorted({ref for ref, _c in candidates.get(interface, [])})
+        return _slot_dict(p, contract, interface, None, refs, occupant, mate_at,
+                          lift, extra_lift, group, "connector")
     _family_name, family = found
     # `media` is the port's declared media - the cage's ceiling on its
     # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
@@ -2987,11 +3030,20 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
         media_found = _family_by_rate(families, media)
         if media_found and media_found[0] != _family_name:
             accept_family = media_found[1]
+    return _slot_dict(p, contract, interface, media,
+                      _cage_accepts(candidates, families, accept_family, media),
+                      occupant, mate_at, lift, extra_lift, group, "cage")
+
+
+def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
+               extra_lift, group, kind):
+    """The published entry, one shape for a cage and a connector slot alike;
+    only `kind`, `media` and how `accepts` was derived differ."""
     return {
         "id": p["id"], "at": p["at"], "interface": interface, "media": media,
         "group": p.get("group"), "rel-pos": p.get("rel-pos"),
         "rotate": p.get("rotate"),
-        "accepts": _cage_accepts(candidates, families, accept_family, media),
+        "accepts": accepts,
         "occupant": (occupant.get("ref") if isinstance(occupant, dict) else occupant)
                     if occupant else None,
         # WHERE AN OCCUPANT MATES, in the frame the placement is written in
@@ -3015,10 +3067,12 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
         #                 does not carry.
         "mirror": bool(p.get("mirror")),
         "group-states": bool((group or {}).get("states")),
+        "kind": kind,
     }
 
 
-def cage_entries(device, view_name, lib, families, candidates, default_occupants):
+def cage_entries(device, view_name, lib, families, candidates, default_occupants,
+                 connectors=None):
     """`cages[]` for one view: one entry per placement that presents a
     pluggable interface (`manifest.presented_interface`, looked through a
     wrapper's own `parts:` the same way a `mate-to` occupant already is), with
@@ -3036,7 +3090,13 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     spec/schemas/pluggables.yaml - a placement that presents nothing (an LED,
     a jack, a fixed connector) or an interface this registry does not cover is
     silently not a cage, the same way it is silently not a bay.
+
+    A placement presenting a connector interface in spec/schemas/
+    connectors.yaml is emitted too, as `kind: connector` (B3; see slot_entry).
+    `connectors` is that registry, read here when the caller has not.
     """
+    if connectors is None:
+        connectors = _connector_registry()
     view = device["views"][view_name] or {}
     groups = device.get("groups") or {}
     out = []
@@ -3051,7 +3111,7 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         extra = 0.0
         if p.get("in") and not p.get("projection-of"):
             extra = -well_floor(placements, lib, p["in"])
-        entry = cage_entry(p, lib, families, candidates,
+        entry = slot_entry(p, lib, families, connectors, candidates,
                            group=groups.get(p.get("group")), extra_lift=extra,
                            occupant=default_occupants.get(p["id"]))
         if entry is not None:
@@ -3065,7 +3125,32 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
 COMPONENT_CAGE_DROPS = ("occupant", "group", "rel-pos")
 
 
-def component_cages(contract, lib, families, candidates):
+def _forwarded_part(contract, lib):
+    """(part, interface) for the `parts:` entry whose aperture `contract`
+    presents AS ITS OWN, or None when it presents its own interface or
+    forwards nothing.
+
+    The same reading `manifest.presented_interface` makes: a contract with its
+    own `interface` and point forwards nothing; otherwise, exactly one composed
+    part whose contract has an `interface` and a `mate` is the one forwarded.
+    """
+    cps = contract.get("connection-points") or {}
+    if contract.get("interface") and cps.get(contract.get("interface-at") or "mate"):
+        return None
+    cores = []
+    for part in contract.get("parts") or []:
+        if not part.get("ref"):
+            continue
+        try:
+            core = lib.resolve(part["ref"])[0]
+        except Exception:
+            continue
+        if core.get("interface") and (core.get("connection-points") or {}).get("mate"):
+            cores.append((part, core["interface"]))
+    return cores[0] if len(cores) == 1 else None
+
+
+def component_cages(contract, lib, families, candidates, connectors=None):
     """A component's OWN cages, in its own frame: one entry per `parts:` entry
     that presents a pluggable interface, by the same core as a device view's
     `cages[]` (cage_entry). components_index.py publishes it on the
@@ -3095,10 +3180,31 @@ def component_cages(contract, lib, families, candidates):
     carries it - and a consumer that refuses a lifted cage then refuses it
     for the right reason rather than seating the optic 44 mm under a shelf
     card's raised cage.
+
+    A WRAPPER THAT FORWARDS ITS ONE APERTURE IS THE SLOT (B3, P2). When this
+    contract presents a composed part's interface as its own
+    (`_forwarded_part`), that part is where the WRAPPER's placement seats an
+    occupant, published once in whatever frame places the wrapper - not a
+    second slot here. A contract that declares its OWN interface forwards
+    nothing, and every composed part of it is still offered.
+
+    CONNECTOR SLOTS ONLY. A pluggables cage forwarded the same way is still
+    published on its wrapper, as it was before B3: a card that IS one cage
+    (cisco/a9k-mpa-1x40ge@1, a CFP MIC) is seated in a bay, not a cage, so no
+    frame above it lists that cage and dropping it here would lose it
+    entirely (#484). Whether a cage wrapper should follow P2 is a question for
+    the cage side; this does not change it.
     """
+    if connectors is None:
+        connectors = _connector_registry()
+    fwd = _forwarded_part(contract, lib)
+    forwarded = (fwd[0] if fwd and fwd[1] in (connectors or {})
+                 and _family_by_interface(families, fwd[1]) is None else None)
     out = []
     for p in contract.get("parts") or []:
-        entry = cage_entry(p, lib, families, candidates,
+        if p is forwarded:
+            continue
+        entry = slot_entry(p, lib, families, connectors, candidates,
                            extra_lift=float(p.get("lift") or 0.0))
         if entry is not None:
             for k in COMPONENT_CAGE_DROPS:
@@ -3165,6 +3271,7 @@ def main():
     # `libwalk.iter_components` in full rather than re-walking the library for
     # every placement in every view.
     _families = _pluggable_families()
+    _connectors = _connector_registry()
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
@@ -3284,7 +3391,8 @@ def main():
                  # seated optic). A consumer that cannot do what the build
                  # does for either declines to seat there.
                  "cages": {v: cage_entries(device, v, lib, _families, _candidates,
-                                            _default_occupants)
+                                            _default_occupants,
+                                            connectors=_connectors)
                            for v in device["views"]}}
     (outdir / f"{device['name']}.configs.json").write_text(json.dumps(cfg_index, indent=1, sort_keys=True))
     print(f"wrote {device['name']}.configs.json")
