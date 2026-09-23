@@ -49,7 +49,7 @@ import yaml
 
 from portrayal.artifacts import Dist
 
-from portrayal.manifest import view_parts, config_airflow
+from portrayal.manifest import view_parts, alias_names, config_airflow
 from portrayal import optical_ports
 from portrayal.faces import face_ref
 
@@ -759,6 +759,11 @@ def comments_for(dev, cfg_name, cfg):
         lines += [dev["description"].strip(), ""]
     if cfg and cfg.get("description"):
         lines += [f"Configuration `{cfg_name}`: {cfg['description'].strip()}", ""]
+    # THE OTHER NAMES A DCIM USER MIGHT SEARCH FOR - the AS number, the
+    # marketing name, the OEM's name (#514). NetBox and Nautobot device types
+    # have one `model`, so the rest go where a reader of the record sees them.
+    if alias_names(dev):
+        lines += ["Also sold or listed as: " + ", ".join(alias_names(dev)), ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
