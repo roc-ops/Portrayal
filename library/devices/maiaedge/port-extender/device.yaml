@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: port-extender
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
@@ -133,6 +133,17 @@ attrs:
   lifecycle: {eol: none-announced}
 chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#a9adb1'}
 gaps:
+- what: mgmt-port-speed
+  scope:
+  - mgmt
+  reason: vendor-silent
+  note: >-
+    The datasheet (v1) Management Interfaces row lists one rear CPU/BMC shared Ethernet RJ45 beside the
+    serial console and the USB port, and gives it no rate; no other staged document describes the rear
+    panel.
+  wanted: >-
+    the rate of the rear CPU/BMC shared Ethernet jack (10/100/1000 or otherwise), so the port can state
+    a `speed`.
 - what: psu-identity
   scope:
   - rear
@@ -1149,7 +1160,7 @@ views:
         at: [203.0, 17.2]
         group: mgmt
         rel-pos: 2
-        attrs: {role: console}
+        attrs: {media: rj45-serial, role: console}
       - {ref: std/usb-a@1, id: usb, at: [218.65, 7.85], rotate: 90, group: mgmt, rel-pos: 3}
   top:
     size: {w: 438.0, h: 520.0}

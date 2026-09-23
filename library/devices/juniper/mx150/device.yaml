@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx150
-version: 1.0.10
+version: 1.0.11
 maturity: modelled
 manufacturer: Juniper
 model: MX150
@@ -16,6 +16,14 @@ description: >-
   matrix at the right. Built-in AC supply and two fixed fans on the rear.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      every copper jack is `1g`. The hardware guide, Front Panel, lists eight 1-Gigabit Ethernet
+      network ports, two 1-Gigabit Ethernet RJ-45 access or uplink ports and a 1-Gigabit
+      management port, and its network port pinout section has the RJ-45 ports autosensing
+      10/100/1000BASE-T. Ports 0-9 state it themselves because their group also holds the two SFP
+      ports.
   sources:
     note: >-
       MX150 Hardware Guide, the MX-family datasheet (no standalone MX150 datasheet exists -
@@ -224,16 +232,16 @@ views:
       - {at: [436.5, 18.6], text: EN, font-size: 1.5, anchor: end, for: led-en}
     components:
       placements:
-        - {id: port-0, ref: common/rj45-ganged-eth@1, at: [161.35, 9], rotate: 180, group: ge, rel-pos: 0}
-        - {id: port-2, ref: common/rj45-ganged-eth@1, at: [177.05, 9], rotate: 180, group: ge, rel-pos: 2}
-        - {id: port-4, ref: common/rj45-ganged-eth@1, at: [192.75, 9], rotate: 180, group: ge, rel-pos: 4}
-        - {id: port-6, ref: common/rj45-ganged-eth@1, at: [208.45, 9], rotate: 180, group: ge, rel-pos: 6}
-        - {id: port-1, ref: common/rj45-ganged-eth@1, at: [161.35, 22.5], group: ge, rel-pos: 1}
-        - {id: port-3, ref: common/rj45-ganged-eth@1, at: [177.05, 22.5], group: ge, rel-pos: 3}
-        - {id: port-5, ref: common/rj45-ganged-eth@1, at: [192.75, 22.5], group: ge, rel-pos: 5}
-        - {id: port-7, ref: common/rj45-ganged-eth@1, at: [208.45, 22.5], group: ge, rel-pos: 7}
-        - {id: port-8, ref: common/rj45-eth@1, at: [224.7, 21.9], group: ge, rel-pos: 8}
-        - {id: port-9, ref: common/rj45-eth@1, at: [242.4, 21.9], group: ge, rel-pos: 9}
+        - {id: port-0, ref: common/rj45-ganged-eth@1, at: [161.35, 9], rotate: 180, group: ge, rel-pos: 0, attrs: {media: rj45, speed: 1g}}
+        - {id: port-2, ref: common/rj45-ganged-eth@1, at: [177.05, 9], rotate: 180, group: ge, rel-pos: 2, attrs: {media: rj45, speed: 1g}}
+        - {id: port-4, ref: common/rj45-ganged-eth@1, at: [192.75, 9], rotate: 180, group: ge, rel-pos: 4, attrs: {media: rj45, speed: 1g}}
+        - {id: port-6, ref: common/rj45-ganged-eth@1, at: [208.45, 9], rotate: 180, group: ge, rel-pos: 6, attrs: {media: rj45, speed: 1g}}
+        - {id: port-1, ref: common/rj45-ganged-eth@1, at: [161.35, 22.5], group: ge, rel-pos: 1, attrs: {media: rj45, speed: 1g}}
+        - {id: port-3, ref: common/rj45-ganged-eth@1, at: [177.05, 22.5], group: ge, rel-pos: 3, attrs: {media: rj45, speed: 1g}}
+        - {id: port-5, ref: common/rj45-ganged-eth@1, at: [192.75, 22.5], group: ge, rel-pos: 5, attrs: {media: rj45, speed: 1g}}
+        - {id: port-7, ref: common/rj45-ganged-eth@1, at: [208.45, 22.5], group: ge, rel-pos: 7, attrs: {media: rj45, speed: 1g}}
+        - {id: port-8, ref: common/rj45-eth@1, at: [224.7, 21.9], group: ge, rel-pos: 8, attrs: {media: rj45, speed: 1g}}
+        - {id: port-9, ref: common/rj45-eth@1, at: [242.4, 21.9], group: ge, rel-pos: 9, attrs: {media: rj45, speed: 1g}}
         - {id: port-10, ref: std/sfp-ganged@1, at: [273.05, 23.3], group: ge, rel-pos: 10,
            attrs: {media: sfp, speed: 1g}}
         - {id: port-11, ref: std/sfp-ganged@1, at: [287.3, 23.3], group: ge, rel-pos: 11,
@@ -245,7 +253,7 @@ views:
         - {id: usb, ref: std/usb-a@1, at: [359.0, 25.25], rotate: 90, group: mgmt, rel-pos: 1,
            attrs: {function: USB service port}}
         - {id: mgmt, ref: common/rj45-eth@1, at: [373.5, 21.9], group: mgmt, rel-pos: 2,
-           attrs: {function: out-of-band management}}
+           attrs: {speed: 1g, function: out-of-band management}}
         - {id: led-link-10, ref: common/led-dot@1, at: [277.3, 17.6], for: port-10, group: port-leds, rel-pos: 4}
         - {id: led-st-10, ref: common/led-dot@1, at: [281.9, 17.6], for: port-10, group: port-leds, rel-pos: 5}
         - {id: led-link-11, ref: common/led-dot@1, at: [291.6, 17.6], for: port-11, group: port-leds, rel-pos: 6}
