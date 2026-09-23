@@ -48,9 +48,9 @@ MPO_CAP = "common/mpo-dust-cap@2"
 # each one against the sentence it was taken from, so this table cannot drift
 # away from its source in silence.
 ABSOLUTE_OUT = {LC_CAP: 9.525, LC_DUPLEX_CAP: 5.5, SC_CAP: 3.3}
-ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 5),
-              LC_DUPLEX_CAP: ("common/lc-duplex-v-adapter", 5),
-              SC_CAP: ("common/sc-duplex-adapter", 4)}
+ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 6),
+              LC_DUPLEX_CAP: ("common/lc-duplex-v-adapter", 6),
+              SC_CAP: ("common/sc-duplex-adapter", 5)}
 MATES = {LC_CAP: "lc", LC_DUPLEX_CAP: "lc-duplex", SC_CAP: "sc", MPO_CAP: "mpo"}
 # WHICH PART EACH CAP SEATS ON inside its adapter: a bore id, or None where the
 # cap spans the adapter's own slot.
@@ -498,8 +498,8 @@ def l112(ref, root=None):
     return [e for e in got.errors if "[L116]" in e]
 
 
-@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 5),
-                                        ("common/lc-duplex-v-adapter", 5)])
+@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 6),
+                                        ("common/lc-duplex-v-adapter", 6)])
 def test_both_library_adapters_lift_their_bores_to_the_depth_they_present(name, major):
     """What a test used to say about these two by name, now asked by the rule -
     and still asserted here, because the rule is only as good as the corpus it
@@ -510,8 +510,8 @@ def test_both_library_adapters_lift_their_bores_to_the_depth_they_present(name, 
     assert l112(f"{name}@{major}") == []
 
 
-@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 5),
-                                        ("common/lc-duplex-v-adapter", 5)])
+@pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 6),
+                                        ("common/lc-duplex-v-adapter", 6)])
 def test_lint_refuses_a_bore_at_a_different_depth_from_the_slot(tmp_path, name, major):
     """The fault the rule exists for: the bores drop to the panel while the
     adapter still presents its slot on the raised bezel, so a duplex cap would

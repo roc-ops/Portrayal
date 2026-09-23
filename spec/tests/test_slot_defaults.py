@@ -452,7 +452,7 @@ def test_lint_a_default_the_slot_does_not_accept(lib):
         _part(c, "1")["default"] = "common/lc-boot@1"      # mates lc-plug
     _copy(lib, V_ADAPTER, 6, "bad-adapter", _unshipped(bad))
     got = l110(lib, "test/bad-adapter@1")
-    assert got and "1" in got[0] and "common/lc-boot@1" in got[0], got
+    assert got and "parts/1:" in got[0] and "common/lc-boot@1" in got[0], got
 
 
 def test_lint_a_top_level_default_the_slot_does_not_accept(lib):

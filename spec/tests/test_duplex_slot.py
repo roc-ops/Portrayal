@@ -348,7 +348,7 @@ def test_l111_reports_a_contract_shipping_both_levels(lib):
         _part(c, "1")["default"] = PLUG
     _copy(lib, V_ADAPTER, MAJOR[V_ADAPTER], "greedy-adapter", both)
     got = l111_component(lib, "test/greedy-adapter@1")
-    assert got and "1" in got[0], got
+    assert got and "the bore '1'" in got[0], got
 
 
 def test_l111_reports_a_composer_shipping_over_shipped_bores(lib):

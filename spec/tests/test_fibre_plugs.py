@@ -182,9 +182,17 @@ def test_the_two_mpo_plugs_are_one_housing_with_two_ferrule_counts():
     held here dimensions a two-row ferrule rather than drawing an invented
     one."""
     a, b = contract(MPO12), contract(MPO24)
-    for key in ("size", "elements", "connection-points", "conforms",
+    for key in ("size", "connection-points", "conforms",
                 "size-confidence", "mates", "attrs"):
         assert a[key] == b[key], key
+    # THE ELEMENTS AGREE BUT FOR THE FIBRE POSITIONS, which ARE the count: one
+    # node per position (L112), 12 on one and 24 on the other
+    def outline(c):
+        return {k: v for k, v in c["elements"].items() if v.get("class") != "fibre"}
+    assert outline(a) == outline(b)
+    for c in (a, b):
+        fibres = [k for k, v in c["elements"].items() if v.get("class") == "fibre"]
+        assert sorted(fibres, key=int) == [str(i) for i in range(1, c["optical"]["positions"] + 1)]
     # relief compared on the GEOMETRY, not the prose: each feature's `source`
     # names its own part, which is right and is not a figure
     def shape(c):
