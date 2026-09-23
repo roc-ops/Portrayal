@@ -115,7 +115,7 @@ def test_an_empty_string_empties():
 def test_a_plug_seats_on_a_bore_in_a_cassette_in_a_bay(tmp_path):
     adapter = part(CASSETTE, "lc01")
     assert adapter["at"] == [17.24, 18.66]
-    # the adapter ships a duplex cap on its own slot, emptied first (L111)
+    # the adapter ships a duplex cap on its own slot, emptied first (L115)
     root, parents = render(fhd(tmp_path, {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG}),
                            tmp_path / "o", "fhd-1ufce", "base")
     assert_seated_on_bore(root, parents, "bay-1/module/lc01", "tx", adapter["ref"],

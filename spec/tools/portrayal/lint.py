@@ -261,9 +261,9 @@ RULES = {
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
     "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L113": ("device",     "a device port whose effective media carries a network interface (a pluggable cage, or `rj45`) has a `speed` and a group with a `role` - warning at `modelled`, error at `verified`", "add the rate the source states, on the port or its group; a console, timing or alarm jack takes the media that says so (`rj45-serial`, `rj45-tod`, `rj48`) instead of a speed; where no document states a rate, leave it and record the search in `gaps:`"),
-    "L110": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
-    "L111": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
-    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat"),
+    "L114": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
+    "L115": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
+    "L116": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1072,7 +1072,7 @@ def lint_component_mating(path, data, lib_roots):
     # `lc` bores, so a duplex adapter presenting `lc-duplex` over two
     # `std/lc-bore@3` is stating that registered relationship rather than
     # changing the interface under a plug's feet (B3, "The duplex host"). What
-    # keeps it honest is L112: the bores must be at the interface pitch, and
+    # keeps it honest is L116: the bores must be at the interface pitch, and
     # the adapter's own mate on their midpoint, or it presents nothing.
     spans = ((_connectors().get(data.get("interface")) or {}).get("spans")
              if data.get("interface") else None)
@@ -5807,7 +5807,7 @@ def _slot_core(lib_roots):
     """(render module, Library, families, connectors, candidates) for
     `lib_roots`, built once per process and only when a `default:` exists.
 
-    L110 ASKS THE BUILD'S OWN QUESTION: what does this slot accept? The answer
+    L114 ASKS THE BUILD'S OWN QUESTION: what does this slot accept? The answer
     is render.slot_entry's - the one core behind components.json `cages` and a
     device's `cages[]` - so a default lint passes is one the published accept
     list offers. Imported here, not at module scope: render.py has never
@@ -5822,7 +5822,7 @@ def _slot_core(lib_roots):
 
 
 def lint_component_slot_defaults(path, data, lib_roots):
-    """L110: a `default:` sits on a slot and names what that slot accepts.
+    """L114: a `default:` sits on a slot and names what that slot accepts.
 
     A default is the shipped state of the product (B3, docs/pluggables-caps-
     design.md, "The shipped default") and the build seats it in every
@@ -5855,12 +5855,12 @@ def lint_component_slot_defaults(path, data, lib_roots):
         except (FileNotFoundError, ValueError, KeyError):
             return                      # a bad ref is L5's to report
         if entry is None:
-            err(path, "L110", f"{where}: default {want!r} - {placement['ref']} "
+            err(path, "L114", f"{where}: default {want!r} - {placement['ref']} "
                 "presents no slot (no pluggables family and no registered "
                 "connector interface), so there is nowhere to seat it")
             return
         if want and want.split(":")[0] not in entry["accepts"]:
-            err(path, "L110", f"{where}: default {want!r} is not in this "
+            err(path, "L114", f"{where}: default {want!r} is not in this "
                 f"{entry['kind']} slot's accepts ({entry['interface']}: "
                 f"{', '.join(entry['accepts']) or 'nothing'})")
 
@@ -5878,7 +5878,7 @@ def lint_component_slot_defaults(path, data, lib_roots):
 
 def _connectors():
     """spec/schemas/connectors.yaml's `interfaces`, from the renderer that
-    already reads it (cached there). Lazily imported for L110's reason: lint
+    already reads it (cached there). Lazily imported for L114's reason: lint
     is not a consumer of render except where it must ask the build's own
     question, and a spanning interface is the build's own question."""
     from portrayal import render as _render
@@ -5905,7 +5905,7 @@ SPAN_TOLERANCE = 0.01
 
 
 def _spanning_part_drawn_across(path, data):
-    """L112's fifth arm: A PART THAT MATES A SPANNING INTERFACE IS DRAWN ON THE
+    """L116's fifth arm: A PART THAT MATES A SPANNING INTERFACE IS DRAWN ON THE
     CANONICAL AXIS - the pair it fills runs ACROSS, along +x from its own
     `mate` point (manifest.CANONICAL_SPAN_AXIS).
 
@@ -5948,7 +5948,7 @@ def _spanning_part_drawn_across(path, data):
     std = STANDARDS.get(key)
     pitch = (std or {}).get("pitch")
     if std is not None and not pitch:
-        err(path, "L112", f"mates {iface!r}, which spans "
+        err(path, "L116", f"mates {iface!r}, which spans "
             f"{spans.get('interface')!r}, but its standard {key!r} records no "
             "`pitch` - there is nothing to line the pair up on")
     if not pitch:
@@ -5960,7 +5960,7 @@ def _spanning_part_drawn_across(path, data):
         if -SPAN_TOLERANCE <= x <= size["w"] + SPAN_TOLERANCE and \
                 -SPAN_TOLERANCE <= my <= size["h"] + SPAN_TOLERANCE:
             continue
-        err(path, "L112", f"mates {iface!r}, which spans {n} "
+        err(path, "L116", f"mates {iface!r}, which spans {n} "
             f"{spans.get('interface')!r} at the {pitch} pitch of {key!r}, but "
             f"position {i + 1} of that pair falls at "
             f"{[round(x, 4), round(my, 4)]}, outside its own "
@@ -6012,7 +6012,7 @@ def _spanning_latch_sides(contract, resolve):
 
 
 def _spanning_latch_on_keyway(path, data, resolve):
-    """L112's latch-side arm: THE AXIS A DUPLEX HOST DERIVES PUTS A DUPLEX
+    """L116's latch-side arm: THE AXIS A DUPLEX HOST DERIVES PUTS A DUPLEX
     CONNECTOR'S LATCHES ON ITS BORES' KEYWAY SIDE.
 
     The axis is derived from the ORDER of the spanned bores (manifest.
@@ -6029,13 +6029,13 @@ def _spanning_latch_on_keyway(path, data, resolve):
     latch, keyway = got
     iface = data.get("interface")
     if keyway is None:
-        err(path, "L112", f"presents {iface!r}, but the bores it spans are not "
+        err(path, "L116", f"presents {iface!r}, but the bores it spans are not "
             "all at one `rotate`, so their keyways face different ways and no "
             "duplex connector - one moulding - can latch into both")
         return
     if latch != keyway:
         names = {(0, -1): "up", (0, 1): "down", (-1, 0): "left", (1, 0): "right"}
-        err(path, "L112", f"presents {iface!r} with a derived axis that turns a "
+        err(path, "L116", f"presents {iface!r} with a derived axis that turns a "
             f"duplex connector's latch {names.get(latch, latch)}, but its bores' "
             f"keyways face {names.get(keyway, keyway)} - the order the bores are "
             "composed in runs the pair the wrong way round for the way they are "
@@ -6043,7 +6043,7 @@ def _spanning_latch_on_keyway(path, data, resolve):
 
 
 def lint_component_spanned_geometry(path, data, lib_roots):
-    """L112: a component presenting a SPANNING connector interface really hosts
+    """L116: a component presenting a SPANNING connector interface really hosts
     what it spans.
 
     `lc-duplex` spans two `lc` bores (spec/schemas/connectors.yaml), and the
@@ -6104,7 +6104,7 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     ids = spanned_slots(data, _res, _connectors())
     want_n = spans.get("count")
     if want_n is not None and len(ids) != want_n:
-        err(path, "L112", f"presents {iface!r}, which spans {want_n} "
+        err(path, "L116", f"presents {iface!r}, which spans {want_n} "
             f"{spans.get('interface')!r} slot(s), but composes {len(ids)}"
             + (f" ({', '.join(ids)})" if ids else ""))
         return
@@ -6120,14 +6120,14 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     std = STANDARDS.get(key)
     want = (std or {}).get("pitch")
     if std is not None and not want:
-        err(path, "L112", f"presents {iface!r}, which spans "
+        err(path, "L116", f"presents {iface!r}, which spans "
             f"{spans.get('interface')!r}, but its standard {key!r} records no "
             "`pitch` - there is nothing to hold the bores to")
     if want:
         for a, b in zip(ids, ids[1:]):
             got = math.dist(mates[a], mates[b])
             if abs(got - float(want)) > SPAN_TOLERANCE:
-                err(path, "L112", f"bores {a!r} and {b!r} mate "
+                err(path, "L116", f"bores {a!r} and {b!r} mate "
                     f"{round(got, 4)} apart, but {iface!r} is the "
                     f"{want} pitch of {(_connectors().get(iface) or {}).get('standard')} "
                     "- an adapter off the interface pitch accepts no duplex "
@@ -6135,13 +6135,13 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     own = (data.get("connection-points") or {}).get(
         data.get("interface-at") or "mate")
     if not own or not own.get("at"):
-        err(path, "L112", f"presents {iface!r} but declares no "
+        err(path, "L116", f"presents {iface!r} but declares no "
             f"{data.get('interface-at') or 'mate'} connection point, so "
             "nothing says where a connector seats")
         return
     mid = [sum(c) / len(pts) for c in zip(*pts)]
     if any(abs(a - b) > SPAN_TOLERANCE for a, b in zip(own["at"], mid)):
-        err(path, "L112", f"presents {iface!r} at {list(own['at'])}, but the "
+        err(path, "L116", f"presents {iface!r} at {list(own['at'])}, but the "
             f"midpoint of {', '.join(ids)} is {[round(c, 4) for c in mid]} - a "
             "duplex connector seats on the midpoint of the pair it fills")
     # AND AT THE SAME DEPTH. What this slot presents is the `out` of the
@@ -6153,7 +6153,7 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     for bid in ids:
         got = float((places.get(bid) or {}).get("lift") or 0.0)
         if abs(got - presented) > SPAN_TOLERANCE:
-            err(path, "L112", f"presents {iface!r} at a lift of {presented:g}, "
+            err(path, "L116", f"presents {iface!r} at a lift of {presented:g}, "
                 f"but its bore {bid!r} is placed at lift {got:g} - a connector "
                 "spanning the pair rests on the same face the pair is let "
                 "into, so a simplex part in the bore and a duplex part over "
@@ -6164,7 +6164,7 @@ def lint_component_spanned_geometry(path, data, lib_roots):
 
 
 def _spanned_default_overlap(path, where, placement, contract, resolve):
-    """L111's component arm for one placing entry: the slot it places ships a
+    """L115's component arm for one placing entry: the slot it places ships a
     default AND so does one of the bores that slot spans."""
     ids = spanned_slots(contract, resolve, _connectors())
     if not ids:
@@ -6175,14 +6175,14 @@ def _spanned_default_overlap(path, where, placement, contract, resolve):
     for bid in ids:
         q = parts.get(bid) or {}
         if slot_default(q, resolve(q.get("ref")) or {}):
-            err(path, "L111", f"{where}: {placement['ref']} ships a default on "
+            err(path, "L115", f"{where}: {placement['ref']} ships a default on "
                 f"its own slot AND on the bore {bid!r} it spans. One duplex "
                 "connector fills both bores, so a product ships one level or "
                 "the other")
 
 
 def lint_component_spanned_exclusion(path, data, lib_roots):
-    """L111, component side: nothing SHIPS both levels of a spanning slot.
+    """L115, component side: nothing SHIPS both levels of a spanning slot.
 
     The device side below catches a configuration that fills both. This
     catches the same contradiction written into the contracts, where no
@@ -6214,7 +6214,7 @@ def lint_component_spanned_exclusion(path, data, lib_roots):
 
 
 def lint_device_spanned_exclusion(path, data, lib_roots):
-    """L111, device side: a configuration does not fill a spanning slot AND a
+    """L115, device side: a configuration does not fill a spanning slot AND a
     slot it spans (B3, docs/pluggables-caps-design.md, "The duplex host").
 
     A duplex adapter holds two levels of slot for one piece of hardware: its
@@ -6277,7 +6277,7 @@ def lint_device_spanned_exclusion(path, data, lib_roots):
                 continue
             for bid in _render.filled_spanned_slots(contract, _res, _connectors(),
                                                     key, occupants):
-                err(path, "L111", f"configurations/{cname}/occupants: {key!r} "
+                err(path, "L115", f"configurations/{cname}/occupants: {key!r} "
                     f"holds {q['ref']} filled, and so does its bore "
                     f"{key}/{bid} - one duplex connector fills both bores, so "
                     f"empty one level ({key}/{bid}: \"\", or {key}: \"\")")

@@ -824,7 +824,7 @@ export function nestedBays(rootEl, compByRef) {
 // publishes that same aperture looked through the wrapper, at the wrapper's
 // path. So a slot whose carrier is itself a slot (`deviceCages`, or another
 // entry here) is kept only when the carrier names it in its `bores` - the
-// duplex adapter's two, which L111 makes the other level of one opening.
+// duplex adapter's two, which L115 makes the other level of one opening.
 // Across the built library (2026-09-23) that rule drops the 112 wrapper
 // apertures (`port-1/aperture`, `front-6/module/xg0/cage`) and keeps every
 // card cage nestedCages ever found; without `deviceCages` a device-level
@@ -856,7 +856,7 @@ export function nestedBays(rootEl, compByRef) {
 // re-checks).
 //
 // THE FREE LEVEL ONLY, unless `all`. A duplex adapter's slot and its two
-// bores are one opening at two levels (L111): while the adapter's slot holds
+// bores are one opening at two levels (L115): while the adapter's slot holds
 // something its bores are not offered, and while a bore holds something the
 // adapter's slot is not (freeLevel). What the explorer OFFERS is that;
 // what a swap SEATS through is `all`, because an override map that empties
@@ -957,7 +957,7 @@ function insideOccupant(el) {
 // slot with `bores` (published: the ids, under its own key, a connector here
 // would fill): while it holds an occupant its bores are hidden; while any
 // bore does, it is. Both filled cannot come of anything the explorer offers
-// and the build refuses it (L111); the adapter level is shown then, so the
+// and the build refuses it (L115); the adapter level is shown then, so the
 // drawing's contradiction is still reachable to be undone.
 export function freeLevel(rootEl, slots) {
   const byId = new Map((slots || []).map(e => [e.id, e]));
@@ -1594,7 +1594,7 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null,
     accepted[key] = ref;
     if (target.isCage) isCage.add(key);
   }
-  // THE EXCLUSION (L111), on the state this map leaves: a fill on one level
+  // THE EXCLUSION (L115), on the state this map leaves: a fill on one level
   // of a duplex adapter is not taken while the other level holds something -
   // this map's answer, else the configuration's (`builtOcc`), else what the
   // slot ships (`default`), or a fresh seat's when this map re-seated the

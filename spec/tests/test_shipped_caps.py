@@ -29,11 +29,11 @@ WHAT IS CHECKED, ON REAL BUILDS:
       except inside an occupant.
   (c) A CONFIGURATION STILL WINS (P4/P5): `""` empties a shipped cap and a plug
       replaces it, on an FS port (front and rear) and a Smartoptics port; and
-      the exclusion (L111) still refuses a duplex plug over capped bores.
+      the exclusion (L115) still refuses a duplex plug over capped bores.
   (d) THE SMARTOPTICS PPM-DCM MODULES, seated in the A22's bays, show their
       forwarded adapter's two bore caps; a bay module's OWN top-level default
       is still refused (Task 3's ruling).
-  (e) L110 is clean on every new default, and finds a wrong one.
+  (e) L114 is clean on every new default, and finds a wrong one.
 
 Each census is proved non-vacuous by a tmp copy of the adapter with its default
 removed, which the same census has to fail.
@@ -336,7 +336,7 @@ def test_the_census_fails_on_an_adapter_that_ships_nothing(tmp_path):
 
 def test_the_census_fails_on_a_cap_at_the_wrong_level(tmp_path):
     """Non-vacuity for the OTHER level: the FS adapter's bores capped as well
-    as its own slot is refused by the build (L111), so the census is fed a
+    as its own slot is refused by the build (L115), so the census is fed a
     copy capping the bores INSTEAD - and must call every one of them wrong."""
     root = tmp_path / "lib"
 
@@ -627,7 +627,7 @@ def test_a_smartoptics_port_is_emptied_and_replaced(tmp_path):
 
 
 def test_a_duplex_plug_over_capped_bores_is_still_refused(tmp_path):
-    """The exclusion (L111) now bites on the shipped state: a duplex plug on a
+    """The exclusion (L115) now bites on the shipped state: a duplex plug on a
     Smartoptics adapter whose bores still hold their caps fails the build,
     naming the bore to empty."""
     dev = shutil.copytree(LIB / "devices/smartoptics/dcp-r-34d-cs",
@@ -664,13 +664,13 @@ def test_the_unplaced_mpo_tile_ships_its_cap_where_a_panel_composes_it(tmp_path)
     assert held.get(paths["lc02"], []) == []
 
 
-# --- (e) L110 ------------------------------------------------------------------------
+# --- (e) L114 ------------------------------------------------------------------------
 
 def _l110(f, roots):
     data = yaml.safe_load(f.read_text())
     with lint.collecting() as got:
         lint.lint_component_slot_defaults(f, data, roots)
-    return [e for e in got.errors if "[L110]" in e]
+    return [e for e in got.errors if "[L114]" in e]
 
 
 @pytest.mark.parametrize("ref", sorted(SHIPS))
@@ -682,7 +682,7 @@ def test_lint_every_new_default_is_in_its_slots_accepts(ref):
     ("common/mpo-adapter@2", LC_CAP), ("common/mpo-flange-adapter@2", SC_CAP),
     ("common/lc-duplex-v-adapter@5", LC_CAP)])
 def test_lint_finds_a_top_level_default_the_slot_does_not_take(tmp_path, ref, wrong):
-    """Non-vacuity: L110 sees each adapter as a slot (the MPO tile through the
+    """Non-vacuity: L114 sees each adapter as a slot (the MPO tile through the
     aperture it forwards), so a cap of the wrong interface is found."""
     root = tmp_path / "lib"
     ns, rest = ref.split("/", 1)

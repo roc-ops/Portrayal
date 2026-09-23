@@ -323,7 +323,7 @@ def slot_in_slot(carrier, host_id, resolve):
     the build refuses it, L12 reports it, and the kit never offers it. The one
     slot that may sit inside a slot is a BORE a spanning slot names
     (spanned_slots): the duplex adapter's `tx` and `rx`, the other level of
-    the same opening, which L111 keeps exclusive of it.
+    the same opening, which L115 keeps exclusive of it.
 
     `carrier` is the contract of the instance holding `host_id` - a device
     placement, a part a component composes, or a seated occupant. A module
@@ -387,7 +387,7 @@ def spanning_axis(contract, resolve, connectors):
     DERIVED FROM THE BORES, never from a name or a ref: the direction from the
     FIRST spanned part's composed mate point to the LAST, snapped to the right
     angle it lies nearest, is the direction the canonical +x axis has to be
-    carried onto. Composed mate points and not `at`, for L112's reason - a
+    carried onto. Composed mate points and not `at`, for L116's reason - a
     stacked pair and a side-by-side pair differ in box, axis and rotation, and
     their mate points do not.
 
@@ -416,7 +416,7 @@ def spanning_axis(contract, resolve, connectors):
                               q.get("rotate"), cm["at"]))
     dx, dy = pts[-1][0] - pts[0][0], pts[-1][1] - pts[0][1]
     if dx == 0 and dy == 0:
-        return None                     # two bores on one point is L112's
+        return None                     # two bores on one point is L116's
     if abs(dx) >= abs(dy):
         lies_at = 0 if dx >= 0 else 180
     else:

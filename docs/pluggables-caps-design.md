@@ -320,7 +320,7 @@ The two LC adapters ship at opposite levels because the products do: Smartoptics
 fits two simplex caps, FS one duplex moulding. So on a Smartoptics port a duplex
 plug needs both bores emptied first (`<port>/tx: ""`, `<port>/rx: ""`), and on an
 FS port a simplex plug needs the adapter's own slot emptied (`bay-1/lc01: ""`);
-L111 refuses the build otherwise, naming the key.
+L115 refuses the build otherwise, naming the key.
 
 A default seats however its part got there, so the four Smartoptics `ppm-dcm-*`
 modules, which forward `lc-duplex` from their one composed adapter and publish no

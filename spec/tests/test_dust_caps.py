@@ -115,7 +115,7 @@ def seat_lift(ref):
     0.0 - std/lc-bore@3 and std/sc-bore@1 both put `mate` on nothing - and
     stands at whatever `lift` its adapter's `parts:` entry gives it. A duplex
     cap seats on the ADAPTER, whose own `mate` sits `on:` its bezel and so
-    presents that bezel's `out`. L112's depth arm is what keeps the two
+    presents that bezel's `out`. L116's depth arm is what keeps the two
     answers one number for a duplex adapter."""
     name, major = ADAPTER_OF[ref]
     adapter = contract(f"{name}@{major}")
@@ -477,10 +477,10 @@ def test_a_pocket_inside_a_cap_never_stands_in_front_of_the_cap_face(tmp_path, l
     assert pockets or raised, "this cap compiled no inner feature at all"
 
 
-# --- L112's fourth arm ------------------------------------------------------------------
+# --- L116's fourth arm ------------------------------------------------------------------
 
 def l112(ref, root=None):
-    """L112 over one contract, found in `root` if given and in the real library
+    """L116 over one contract, found in `root` if given and in the real library
     otherwise. STANDARDS is filled the way main() fills it - lint.py loads it
     inside main, so a rule called directly finds an empty registry and the
     pitch arm passes VACUOUSLY."""
@@ -495,7 +495,7 @@ def l112(ref, root=None):
     roots = [str(root), str(LIB)] if root is not None else [str(LIB)]
     with lint.collecting() as got:
         lint.lint_component_spanned_geometry(f, data, roots)
-    return [e for e in got.errors if "[L112]" in e]
+    return [e for e in got.errors if "[L116]" in e]
 
 
 @pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 5),

@@ -67,7 +67,7 @@ def _unshipped(edit):
     ships a duplex cap on its own slot, common/lc-duplex-adapter@5 a cap in each
     bore - test_shipped_caps.py), and every throwaway here is built to exercise
     ONE default at a time, which a second, shipped one would collide with
-    (L111) or mask."""
+    (L115) or mask."""
     def wrapped(c):
         c.pop("default", None)
         for q in c.get("parts") or []:
@@ -428,7 +428,7 @@ def test_configs_json_publishes_the_resolved_default(tmp_path, lib):
     assert sum(1 for e in entries if e["default"] is None) > 0
 
 
-# --- L110 ----------------------------------------------------------------------------
+# --- L114 ----------------------------------------------------------------------------
 
 def l110(root, ref):
     ns, rest = ref.split("/", 1)
@@ -437,7 +437,7 @@ def l110(root, ref):
     data = yaml.safe_load(f.read_text())
     with lint.collecting() as got:
         lint.lint_component_slot_defaults(f, data, [str(root), str(LIB)])
-    return [e for e in got.errors if "[L110]" in e]
+    return [e for e in got.errors if "[L114]" in e]
 
 
 @pytest.mark.parametrize("ref", ["test/capped-adapter@1", "test/defaulted-bore@1",

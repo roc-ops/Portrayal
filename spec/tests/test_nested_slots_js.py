@@ -6,7 +6,7 @@ card in a bay, a cassette, an adapter composed in either, an adapter placed on
 the device - that is not inside a `data-for` group (P3). Each entry carries the
 drawing path as `id` and the configuration's module-less key as `key` (P1:
 `bay-1/module/lc1/tx` is `bay-1/lc1/tx`). The explorer offers only the free
-level of a duplex adapter (L111's exclusion), marks the shipped default, and
+level of a duplex adapter (L115's exclusion), marks the shipped default, and
 takes a swap through the one seating path the build is held to.
 
 HELD TO REAL BUILDS. Tmp copies of fs/fhd-1ufce and smartoptics/dcp-r-34d-cs

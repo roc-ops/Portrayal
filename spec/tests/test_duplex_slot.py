@@ -87,7 +87,7 @@ def bore_mates(root, ref):
 
 
 # STANDARDS IS EMPTY ON A PLAIN IMPORT: lint.py fills it inside main(), so a
-# rule called directly finds no entry and L112's pitch arm would pass
+# rule called directly finds no entry and L116's pitch arm would pass
 # VACUOUSLY - the shape of failure this suite has been bitten by before. Load
 # it once, the way main does.
 lint.STANDARDS.update(
@@ -99,7 +99,7 @@ def standards():
 
 
 def test_the_pitch_registry_is_loaded():
-    """The guard on every L112 pitch assertion below: an empty registry makes
+    """The guard on every L116 pitch assertion below: an empty registry makes
     the rule skip in silence and every "clean" answer meaningless."""
     assert standards().get("lc-duplex-receptacle", {}).get("pitch")
 
@@ -285,13 +285,13 @@ def test_emptying_the_adapter_slot_is_not_filling_it(tmp_path, lib):
     assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG}
 
 
-# --- L111 ---------------------------------------------------------------------------
+# --- L115 ---------------------------------------------------------------------------
 
 def l111_device(dev, root):
     data = yaml.safe_load(dev.read_text())
     with lint.collecting() as got:
         lint.lint_device_spanned_exclusion(dev, data, [str(root), str(LIB)])
-    return [e for e in got.errors if "[L111]" in e]
+    return [e for e in got.errors if "[L115]" in e]
 
 
 def l111_component(root, ref):
@@ -301,7 +301,7 @@ def l111_component(root, ref):
     with lint.collecting() as got:
         lint.lint_component_spanned_exclusion(f, yaml.safe_load(f.read_text()),
                                               [str(root), str(LIB)])
-    return [e for e in got.errors if "[L111]" in e]
+    return [e for e in got.errors if "[L115]" in e]
 
 
 def test_l111_reports_a_configuration_filling_both_levels(tmp_path, lib):
@@ -367,7 +367,7 @@ def test_l111_is_clean_for_the_library_adapters(lib):
         assert l111_component(LIB, f"{name}@{MAJOR[name]}") == []
 
 
-# --- L112 ---------------------------------------------------------------------------
+# --- L116 ---------------------------------------------------------------------------
 
 def l112(root, ref):
     ns, rest = ref.split("/", 1)
@@ -376,7 +376,7 @@ def l112(root, ref):
     with lint.collecting() as got:
         lint.lint_component_spanned_geometry(f, yaml.safe_load(f.read_text()),
                                              [str(root), str(LIB)])
-    return [e for e in got.errors if "[L112]" in e]
+    return [e for e in got.errors if "[L116]" in e]
 
 
 @pytest.mark.parametrize("name", [ADAPTER, V_ADAPTER])
@@ -652,7 +652,7 @@ def test_the_coverage_check_fails_on_a_mutated_published_rotate(tmp_path, lib,
         (ref, seat[3], deg, mutated, bores)
 
 
-# --- L112: a spanning part is drawn on the canonical axis ----------------------------
+# --- L116: a spanning part is drawn on the canonical axis ----------------------------
 
 @pytest.mark.parametrize("ref", [CAP, REAL_PLUG])
 def test_l112_is_clean_for_the_librarys_duplex_parts(lib, ref):

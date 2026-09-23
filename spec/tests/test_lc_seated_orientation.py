@@ -25,7 +25,7 @@ bore, spanning axis, duplex half) is in the answer:
       bulkhead aperture;
   (c) the same latch-side check for the SC plug in its bore - a guard, since
       both are drawn key-left and already agree;
-  (d) L112's latch-side arm: the axis a duplex host derives puts a duplex
+  (d) L116's latch-side arm: the axis a duplex host derives puts a duplex
       part's latches (drawn up) on its bores' keyway side (drawn down);
   (e) the shuttered adapter is a slot that ships EMPTY - no default on it or
       its bores, nothing seated in an unconfigured build - and a plug seated
@@ -132,7 +132,7 @@ def front(tmp_path, made, root=LIB):
 
 
 # THE LEVEL EACH BUILD'S ADAPTERS SHIP CAPPED (B3 task 8, test_shipped_caps.py),
-# which a plug on the OTHER level has to empty first (L111): the FS stacked
+# which a plug on the OTHER level has to empty first (L115): the FS stacked
 # adapter ships a duplex cap on its own slot, the Smartoptics one a cap in each
 # bore, and the shuttered one ships nothing.
 SHIPS_AT = {"fhd": "self", "fhd-om": "self", "fhd-36": None, "dcp": "bores"}
@@ -465,7 +465,7 @@ def test_the_sc_plugs_key_faces_its_bores_key_slot(tmp_path):
     assert wrong_side(pairs) == []
 
 
-# --- (d) L112's latch-side arm -----------------------------------------------------
+# --- (d) L116's latch-side arm -----------------------------------------------------
 
 def l112(root, ref):
     ns, rest = ref.split("/", 1)
@@ -474,7 +474,7 @@ def l112(root, ref):
     with lint.collecting() as got:
         lint.lint_component_spanned_geometry(f, yaml.safe_load(f.read_text()),
                                              [str(root), str(LIB)])
-    return [e for e in got.errors if "[L112]" in e]
+    return [e for e in got.errors if "[L116]" in e]
 
 
 @pytest.mark.parametrize("ref", [H_ADAPTER, V_ADAPTER, S_ADAPTER])
