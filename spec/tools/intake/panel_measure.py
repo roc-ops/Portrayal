@@ -16,7 +16,9 @@ MaiaEdge chassis against an FHD cassette's height - so they travel as one
 mismatched at all.
 
 The faceplate is the widest full-width dark band in the image - the module body
-behind it is narrower and sits above it in these renders.
+behind it is narrower and sits above it in these renders. Its left edge is the
+median over that band, because a rounded corner starts the band's first rows
+inboard of the real edge (see `plate()`).
 
 `plate()` locates that band HEURISTICALLY, and the heuristic is correct only
 for renders that put a dark chassis on a light ground - on a render shot against
@@ -77,7 +79,15 @@ def plate(im, face=FHD_MODULE):
             f"widest contiguous full-width dark band is only "
             f"{max(end - start + 1, 0)} rows tall - no faceplate found "
             "(a dark backdrop or a three-quarter render fails this way)")
-    y0, y1, x0 = start, end, rows[start][2]
+    # x0 IS THE MEDIAN LEFT EDGE OVER THE BAND, NOT THE FIRST ROW'S. A plate
+    # with rounded corners starts its first rows inboard of its true edge, and
+    # they are still wide enough to be in the band. Taking x0 from the first
+    # row put it 1.25-1.53 mm right of the edge on every FS FHD cassette render,
+    # and `openings()` counts from x0, so every adapter measured with it came out
+    # that much too far left. The corner rows at the top and bottom of the band
+    # are a minority of it, so they cannot move the median.
+    y0, y1 = start, end
+    x0 = sorted(x for _y, _w, x in rows[start:end + 1])[(end - start) // 2]
     return x0, y0, x0 + wmax - 1, y1, face.w_mm / wmax
 
 
