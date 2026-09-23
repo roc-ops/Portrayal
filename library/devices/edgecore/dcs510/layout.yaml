@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: dcs510
-version: 2.0.0
+version: 2.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: DCS510
+aliases:
+- {name: AS9716-32D, kind: vendor}
 portfolio: {line: Data Center, family: Ethernet Switch, series: DCS510}
 description: >-
   32x 400G QSFP-DD 1RU data-centre spine switch (vendor alias AS9716-32D), Broadcom Tomahawk 3 BCM56980,
@@ -275,7 +277,6 @@ attrs:
       (2x 8 GB SO-DIMM), boot-flash: 2x 16 MB SPI, storage: 50 GB M.2 SSD (MLC), software: 'ONIE installer,
       open-source and commercial NOS options'}
   features:
-    vendor-alias: AS9716-32D
     optics-qsfp-dd: >-
       400GBASE-SR8/DR4/FR4, 400G-DAC/AOC, 100GBASE-SR4/CWDM4/LR4, 100G-DAC/AOC, 40GBASE-SR4/LR4, 40G-DAC
   management:
@@ -486,7 +487,7 @@ views:
         - {ref: common/led-dot@1, id: led-ps2, at: [32.6, 19.63], group: leds, rel-pos: 5, for: rear/psu-2}
         - {ref: common/reset-button@1, id: reset, at: [31.6, 21.86], group: mgmt, rel-pos: 6, for: chassis}
         - {block: qsfpdd-400g}
-        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [391.4, 2.55], group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [391.4, 2.55], group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, speed: 1g}}
         - {ref: std/usb-a@1, id: usb, at: [393.3, 15.95], group: mgmt, rel-pos: 5, attrs: {media: usb-a, role: storage}}
         - {ref: std/rj45@2, id: console, at: [389.5, 26.95], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}, rotate: 180}
         - {ref: common/sfp-plus-cage@2, id: mgmt-sfp-1, at: [409.3, 11.9], group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: mgmt-uplink}}

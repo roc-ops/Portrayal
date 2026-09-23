@@ -135,7 +135,12 @@ Three layers:
    beside `surface` rather than inside it so that learning the field rehashed no
    device) and `gaps`. Surface alone, placement attrs included, is a patch; ids added with nothing moved or removed is a minor; anything else
    about shape or names is a major, because a moved slot invalidates a cached
-   coordinate exactly as a renamed id invalidates a held reference.
+   coordinate exactly as a renamed id invalidates a held reference. A sixth,
+   `composed`, covers what the device draws and does not contain: every
+   component it seats, followed through their `parts:` and through the
+   `default` and `accepts` of their own bays at any depth, each recorded as its
+   version plus a digest of its contract and skins. A component redrawn in place
+   therefore moves every device that shows it, and that alone is a patch.
 
    Every other key a placement can state, and those a bay shares with it, is
    fingerprinted the same way,

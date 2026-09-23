@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32d
-version: 1.0.11
+version: 1.0.12
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32D
@@ -562,8 +562,8 @@ views:
              feature is enabled on the switch)',
            group: status-leds, rel-pos: 5}
         - {ref: std/rj45-ganged@2, id: console, at: [16.45, 6.9], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [16.8, 20.2], group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-ganged-eth@1, id: oob, at: [16.45, 27.1], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: HIG section 10 Management Port LED table, Left LED - Off (no power), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-right: HIG section 10 Management Port LED table, Right LED - Off (no power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
+        - {ref: std/usb-a@1, id: usb, at: [16.8, 20.2], group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [16.45, 27.1], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: HIG section 10 Management Port LED table, Left LED - Off (no power), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-right: HIG section 10 Management Port LED table, Right LED - Off (no power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity). The two lamps do not share a vocabulary, so they are declared separately'}
         - {ref: std/sfp-ganged@1, id: oob-sfp-0, at: [36.20, 10.35], group: sfp-plus-oob, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: oob-sfp-1, at: [36.20, 24.85], rotate: 180, group: sfp-plus-oob, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: port-sfp-0, at: [50.45, 10.35], group: sfp-plus-mgmt, rel-pos: 0}

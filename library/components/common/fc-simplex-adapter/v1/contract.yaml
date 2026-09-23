@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fc-simplex-adapter
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: >-
@@ -21,7 +21,14 @@ attrs: {media: fiber, connector: fc}
 optical:
   # ONE FIBRE. FC is simplex on FS's panels, the same as ST.
   positions: 1
+elements:
+  '1': {at: [2.4, 2.4], size: [5.2, 5.2], class: fibre}
 provenance:
+  fibre-position: >-
+    element `1` is the one fibre position: the dark threaded opening, a
+    circle r 2.6 at 5.0, 5.0, the skin node that used to be `port`. Its
+    bounding box is the element, so fibre 1 of this part is drawn at
+    `<part>/1`.
   size: >-
     ESTIMATED - NOT A MEASUREMENT. No face-on render of an FS FC panel exists
     in this corpus, only a THREE-QUARTER product shot of SKU 382881, and a

@@ -1,10 +1,17 @@
 format: 1
 kind: device
 name: csr440
-version: 1.0.3
+version: 1.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AS7535-28XB
+aliases:
+- {name: CSR440, kind: marketing}
+- name: AS7535-28XBE
+  kind: variant
+  note: >-
+    A sibling model the two-model quick start also covers. Neither staged document says how it differs
+    from the AS7535-28XB, so it is listed to find the closest drawing, not as the same box.
 portfolio: {line: Service Provider, family: Cell Site Router, series: CSR440}
 description: >-
   24x 25G SFP28, 2x 100G QSFP28 and 2x 400G QSFP-DD cell site router, sold as the CSR440, Broadcom BCM88843
@@ -147,8 +154,6 @@ attrs:
     storage: 128 GB mSATA SSD
     software: ONIE installer pre-loaded; Open Network Linux (ONL) compatible
   features:
-    marketing-name: CSR440
-    vendor-alias: AS7535-28XB (the quick start also covers the AS7535-28XBE)
     standards: O-RAN fronthaul; IEEE 802.1CM TSN in hardware
     timing: IEEE1588v2 and SyncE in hardware; integrated GNSS
     timing-ports: BITS (RJ-45), ToD (RJ-45), 1PPS I/O (SMB), 10MHz I/O (SMB), GNSS antenna (SMA)
@@ -912,7 +917,7 @@ views:
         rotate: 180
         group: mgmt
         rel-pos: 1
-        attrs: {media: rj45, role: mgmt, speed: 1000base-t}
+        attrs: {media: rj45, role: mgmt, speed: 1g}
       - ref: std/rj45-ganged@2
         id: console-rj
         at: [364.2, 22.4]

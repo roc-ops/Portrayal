@@ -1,0 +1,178 @@
+format: 1
+kind: module
+name: fhd-2mtp12-lc-om3-a
+version: 2.0.0
+class: cassette
+behaviour: fills
+description: >-
+  FS FHD-2MTP1212LCDXOM3A - two MTP-12 (male) to twelve LC duplex, 24 fibres,
+  OM3, Type A. FS SKU 382889. The same cassette as fs/fhd-2mtp12-lc-os2-a@4
+  (SKU 57341) in OM3 fibre, with OM3-coloured adapters.
+size: {w: 108.97, h: 35.05, d: 117.86}
+size-confidence: {w: photo-measured, h: photo-measured, d: datasheet}
+size-notes: >-
+  THE FACEPLATE IS 57341's IN LAYOUT, PRINTED DIFFERENTLY - three marks of its
+  own and smaller, lighter port digits (see provenance.face-marks) - the OS2
+  twin this is built on, and so are its parts. FS's face-on render of 382889
+  (382889.g1.jpg) was put through `spec/tools/intake/panel_measure.py` - scaled
+  on the 108.97 mm module width and validated against the 35.05 mm height - and
+  its adapter centres read within 0.2 mm of the same measurement taken on the
+  twin's own render: the same two rows of six, on the same centres. See the
+  twin's size-notes for how the plate was measured. The 117.86 depth is FS's
+  own product page for 382889, which states 35 x 109 x 118 mm (1.38 x 4.29 x
+  4.64 in).
+attrs: {media: fiber, model: FHD-2MTP1212LCDXOM3A, vendor-sku: '382889'}
+body:
+  depth: 117.86
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
+  # overhangs the cassette on every side (FS's rear renders show its edge
+  # standing out round the body), and the back of the body is the rear face,
+  # 99 x 31, centred behind the 108.97 x 35.05 plate. Estimated with that face
+  # - see its own size-notes. It is what a pulled cassette's box is drawn as,
+  # and what its rear face is painted on.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+parts:
+  - {id: lc01, ref: common/lc-duplex-v-adapter@5, at: [17.24, 18.66],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc02, ref: common/lc-duplex-v-adapter@5, at: [30.13, 18.66],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc03, ref: common/lc-duplex-v-adapter@5, at: [43.19, 18.66],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc04, ref: common/lc-duplex-v-adapter@5, at: [56.25, 18.66],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc05, ref: common/lc-duplex-v-adapter@5, at: [69.30, 18.66],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc06, ref: common/lc-duplex-v-adapter@5, at: [82.19, 18.66],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc07, ref: common/lc-duplex-v-adapter@5, at: [17.24, 3.89],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc08, ref: common/lc-duplex-v-adapter@5, at: [30.13, 3.89],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc09, ref: common/lc-duplex-v-adapter@5, at: [43.19, 3.89],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@5, at: [56.25, 3.89],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc11, ref: common/lc-duplex-v-adapter@5, at: [69.30, 3.89],
+     attrs: {housing-finish: '#4dcfe3'}}
+  - {id: lc12, ref: common/lc-duplex-v-adapter@5, at: [82.19, 3.89],
+     attrs: {housing-finish: '#4dcfe3'}}
+faces:
+  rear: {ref: fs/fhd-2mtp12-lc-rear@2}
+optical:
+  media: om3
+  polarity: a
+  polish: upc
+  front-order:
+    [lc01, lc02, lc03, lc04, lc05, lc06, lc07, lc08, lc09, lc10, lc11, lc12]
+  paths:
+    - {from: lc01.1, to: 'rear:mtp2.1'}
+    - {from: lc01.2, to: 'rear:mtp2.2'}
+    - {from: lc02.1, to: 'rear:mtp2.3'}
+    - {from: lc02.2, to: 'rear:mtp2.4'}
+    - {from: lc03.1, to: 'rear:mtp2.5'}
+    - {from: lc03.2, to: 'rear:mtp2.6'}
+    - {from: lc04.1, to: 'rear:mtp2.7'}
+    - {from: lc04.2, to: 'rear:mtp2.8'}
+    - {from: lc05.1, to: 'rear:mtp2.9'}
+    - {from: lc05.2, to: 'rear:mtp2.10'}
+    - {from: lc06.1, to: 'rear:mtp2.11'}
+    - {from: lc06.2, to: 'rear:mtp2.12'}
+    - {from: lc07.1, to: 'rear:mtp1.1'}
+    - {from: lc07.2, to: 'rear:mtp1.2'}
+    - {from: lc08.1, to: 'rear:mtp1.3'}
+    - {from: lc08.2, to: 'rear:mtp1.4'}
+    - {from: lc09.1, to: 'rear:mtp1.5'}
+    - {from: lc09.2, to: 'rear:mtp1.6'}
+    - {from: lc10.1, to: 'rear:mtp1.7'}
+    - {from: lc10.2, to: 'rear:mtp1.8'}
+    - {from: lc11.1, to: 'rear:mtp1.9'}
+    - {from: lc11.2, to: 'rear:mtp1.10'}
+    - {from: lc12.1, to: 'rear:mtp1.11'}
+    - {from: lc12.2, to: 'rear:mtp1.12'}
+provenance:
+  major: >-
+    Composes the duplex adapter at v5, whose bores are numbered 1 and 2
+    instead of tx and rx, so every path under this part changes
+    (`lc01/tx` -> `lc01/1`); nothing drawn moved.
+  face-legends: >-
+    THE PORT NUMBERS ARE THE TWIN'S NUMBERS AND BASELINES, NOT ITS TYPE.
+    382889.g1.jpg shows the same end-of-row numbers (fs/fhd-2mtp12-lc-os2-a@4
+    lists them) in the same rows, and nothing between them - but printed
+    smaller and lighter than the twin's: cap height 1.92 against 2.50, regular
+    against bold. They are drawn so, at 2.57 regular with anchors 15.73 and
+    92.89, on the twin's baselines - see provenance.face-marks for the
+    measurement.
+  size: >-
+    see size-notes - the plate and the parts are 57341's, re-read on 382889's
+    own render; the depth is this SKU's product page.
+  parts: >-
+    the twin's positions, unchanged, and corroborated rather than assumed:
+    `panel_measure.openings` on 382889.g1.jpg puts every adapter within 0.2 mm
+    of where the same call puts it on the twin's render. What differs is the
+    housing colour, passed to each adapter as `housing-finish`.
+  colour: >-
+    COUNTED, NOT TAKEN FROM THE OM3 CONVENTION. #4dcfe3 is the median of the
+    adapter-body pixels on 382889.g1.jpg, selected by the one rule
+    common/lc-duplex-v-adapter@5's provenance.colour records - tuned until it
+    reproduces that part's measured OS2 blue off 57016.main.jpg, then applied
+    unchanged here. That entry lists every medium's count side by side.
+  optical: >-
+    the twin's paths, unchanged: fibre type and adapter colour do not change
+    which LC port a fibre reaches. `media: om3` is FS's own naming of 382889
+    (FHD-2MTP1212LCDXOM3A) on its product page. See the twin's
+    provenance.optical for how the paths were derived.
+  twin: >-
+    built from fs/fhd-2mtp12-lc-os2-a@4 (SKU 57341) - the same cassette FS
+    builds in OM3. Everything but the model, SKU, fibre, adapter colour, depth
+    source and three printed marks (see face-marks) is the twin's.
+
+  face-marks: >-
+    THIS PLATE PRINTS THREE MARKS ITS OS2 TWIN DOES NOT, and they are drawn:
+    `FHD` at the lower left, a yellow `MTP` tag at the upper right and a pale
+    blue `DL2A3P` tag at the lower right, level with port 11. the 2026 FS
+    renders of the two OM3 cassettes (382889.g1.jpg, 382897.g1.jpg) are the
+    only ones in the corpus that show them; no other FHD render carries them,
+    so they are this plate's and not the family's. Measured on both renders,
+    agreeing to 0.05 mm. ACROSS, in panel_measure's plate frame as #503 and
+    #506 corrected it (median edges, median width) - the frame in which these
+    plates' housings start at 17.20 and 17.16, where the twin's corrected row
+    does. Until those corrections this entry read every x about 1.5 mm low, as
+    every FHD figure measured with the tool did; the marks moved with them.
+    DOWN, FROM THE NEAREST DIGIT THIS SKIN ALREADY DRAWS, not from the plate
+    frame: the plate frame's height is the part of it the tool has had to
+    correct most - 2.5-2.7% off 35.05 on these renders before #506, -1.1 to
+    -1.4% after - and a mark 27 mm down carries that error whole, where a mark
+    measured from the digit beside it carries almost none (under 0.1 mm). The
+    first placement, off the frame, put the code tag visibly off its port
+    number. The MTP tag spans 5.00 to 2.07 above the `24` baseline (7.55), so y
+    2.55-5.48, its ink baseline 2.58 above; the code tag spans 2.66 above to
+    0.17 below the `11` baseline (30.51), so y 27.85-30.68, its ink baseline
+    0.25 above; the `FHD` baseline sits 0.25 below the `1` baseline, 30.77.
+    Across: MTP tag 100.91-107.44, fill #fbda1f, ink 5.55 wide and 1.9 tall;
+    code tag 96.67-107.44, fill #b8d9ec, ink 9.83 wide and 2.0 tall - the right
+    edges of the two tags align at 107.44; `FHD` ink 3.01-8.28, white - an
+    earlier reading of 1.82-6.78 was a mask clipped at x 1.8, not the ink. Type
+    sizes are the cap heights over the 2.61/3.5 ratio the digits of the twin
+    are set at, and each word is fitted to its measured width. The two SKUs
+    print different codes - DL2A3P on the 2x MTP-12, DL1A3P on the MTP-24 -
+    transcribed as printed; what the code means is not stated anywhere held.
+    THE PORT DIGITS ARE SMALLER AND LIGHTER ON THIS PLATE, and drawn so. Their
+    cap height is 1.92 mm on both OM3 renders against 2.50 on the OS2 and OM5
+    prints (57341.B.jpg, 174248.g1.jpg) - the same size as the other marks on
+    this plate, so a different print rather than a different measurement - and
+    they are regular weight where the twin sets bold. Set at 2.57 (1.92 over
+    the 2.61/3.5 ratio), regular. Their ink ends at 15.48 on the left and
+    starts at 93.02 on the right, as the twin's nearly do; with the side
+    bearing of the smaller type the anchors are 15.73 (end) and 92.89 (start).
+    Baselines are the twin's, unchanged - they are what the tags above are
+    measured from. At the twin's bold 3.5 the `11` ran into the code tag.
+  logo-zone: >-
+    photo-measured - a round logo mark sits at the upper left, 3.0-9.1 across
+    on both OM3 renders, in the corrected frame; down, its foot sits 0.86-0.92
+    below the `14` baseline beside it, so the zone runs 2.5-8.45 - measured
+    from the digit, like every other mark here, not from the plate frame's
+    height. IT IS NOT DRAWN: vendor logos are not reproduced
+    (library/components/README.md); the zone is reserved and left as plate.
+elements:
+  logo-zone: {at: [3.0, 2.5], size: [6.1, 5.95], class: label}
+skins: [default]

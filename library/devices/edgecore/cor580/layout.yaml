@@ -1,10 +1,17 @@
 format: 1
 kind: device
 name: cor580
-version: 2.0.1
+version: 2.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
+aliases:
+- {name: AS9926-24D, kind: vendor}
+- name: AS9926-24DB
+  kind: variant
+  note: >-
+    The AS9926-24D with an ASPEED AST2600 BMC fitted. The COR580 datasheet and quick start cover
+    both, and its orderable rows are configurations here; the BMC is the stated difference.
 portfolio: {line: Service Provider, family: Core Router, series: COR580}
 description: >-
   24x 400G QSFP-DD 1RU cell-based fabric switch for carrier core routers (vendor alias AS9926-24D, and
@@ -377,7 +384,7 @@ attrs:
       GHz', memory: 32 GB DDR4 (2x 16 GB SO-DIMM), boot-flash: '2x 16 MB SPI, redundant', storage: 128
       GB M.2 SSD, bmc: ASPEED AST2600 (AS9926-24DB only), software: 'ONIE installer, open-source and commercial
       NOS options'}
-  features: {vendor-alias: AS9926-24D (AS9926-24DB adds the BMC), optics-qsfp-dd: '400G QSFP-DD, breakout
+  features: {optics-qsfp-dd: '400G QSFP-DD, breakout
       to 2x 200G / 4x 100G / 100G'}
   management:
     mgmt-ports: >-
@@ -610,7 +617,7 @@ views:
         - {ref: common/sfp-plus-cage@2, id: oob-1, at: [369.0, 27.5], rotate: 180, group: mgmt, rel-pos: 3, attrs: {media: sfp-plus, speed: 10g, role: out-of-band}}
         - {ref: common/led-dot@1, id: led-oob-0, at: [372.72, 8.5], group: leds, rel-pos: 6, for: oob-0}
         - {ref: common/led-dot@1, id: led-oob-1, at: [379.28, 8.5], group: leds, rel-pos: 7, for: oob-1}
-        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [388.44, 9.1], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 1000base-t}, rotate: 180}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [388.44, 9.1], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 1g}, rotate: 180}
         - {ref: std/rj45@2, id: console-1, at: [388.44, 27.1], group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}, rotate: 180}
         - {ref: std/usb-a@1, id: usb, at: [404.2, 13.1], rotate: 90, group: mgmt, rel-pos: 7, attrs: {media: usb-a, role: storage}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [407.00, 22.2], group: furniture, rel-pos: 3, for: usb}

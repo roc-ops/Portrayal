@@ -28,7 +28,7 @@ DIST = ROOT / "library" / "dist" / "components"
 # id suffix of the first drawable element in each skin, i.e. its base plate
 BASE_PLATE = {
     "smartoptics--dcp-404--v1--default.svg": "body",
-    "common--lc-duplex-adapter--v4--default.svg": "bezel",
+    "common--lc-duplex-adapter--v5--default.svg": "bezel",
 }
 
 NONDRAWING = ("title", "defs", "style", "desc", "metadata")
