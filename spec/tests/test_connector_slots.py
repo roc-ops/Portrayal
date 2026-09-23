@@ -62,7 +62,7 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
 
 def test_an_lc_slot_accepts_the_plug_and_no_boot(comps):
     lc = next(c for c in _entries(comps) if c.get("interface") == "lc")
-    assert "generic/lc-plug@1" in lc["accepts"]
+    assert "generic/lc-plug@2" in lc["accepts"]
     assert not any("boot" in r for r in lc["accepts"])
 
 

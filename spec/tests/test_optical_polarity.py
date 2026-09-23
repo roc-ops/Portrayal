@@ -18,7 +18,7 @@ LIB = [str(ROOT / "library")]
 
 def cassette(pol, fibres):
     """A six-adapter FHD LC cassette whose port p takes MTP fibre fibres[p-1]."""
-    parts = [{"id": f"lc{i}", "ref": "common/lc-duplex-v-adapter@4", "at": [15.81 + 12.9 * (i - 1), 10.66]}
+    parts = [{"id": f"lc{i}", "ref": "common/lc-duplex-v-adapter@5", "at": [15.81 + 12.9 * (i - 1), 10.66]}
              for i in range(1, 7)]
     paths = [{"from": f"lc{(p - 1) // 2 + 1}.{2 - p % 2}", "to": f"rear:mtp.{fibres[p - 1]}"}
              for p in range(1, 13)]

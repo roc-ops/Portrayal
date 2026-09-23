@@ -22,25 +22,25 @@ def contract(rel):
 
 
 def test_the_stacked_lc_adapter_presents_two_fibres():
-    c = contract("common/lc-duplex-v-adapter/v4")
-    assert c is not None, "common/lc-duplex-v-adapter@4 not built"
+    c = contract("common/lc-duplex-v-adapter/v5")
+    assert c is not None, "common/lc-duplex-v-adapter@5 not built"
     assert (c.get("optical") or {}).get("positions") == 2
 
 
 def test_the_stacked_lc_adapter_is_the_measured_width():
     """9.28 across all six adapters on 57016, spread 0.00."""
-    c = contract("common/lc-duplex-v-adapter/v4")
+    c = contract("common/lc-duplex-v-adapter/v5")
     assert c["size"]["w"] == 9.28
 
 
 def test_the_stacked_adapter_is_the_measured_height():
     """13.75 across all six, spread 0.00 - top edge 10.66, bottom 24.41."""
-    c = contract("common/lc-duplex-v-adapter/v4")
+    c = contract("common/lc-duplex-v-adapter/v5")
     assert c["size"]["h"] == 13.75
 
 
 def test_the_stacked_adapter_says_which_of_its_dimensions_were_measured():
-    c = contract("common/lc-duplex-v-adapter/v4")
+    c = contract("common/lc-duplex-v-adapter/v5")
     sc = c.get("size-confidence") or {}
     assert sc.get("w") == "photo-measured", \
         "the width IS measured - six bodies, spread 0.00 - and must say so"
@@ -51,10 +51,18 @@ def test_the_stacked_adapter_says_which_of_its_dimensions_were_measured():
         "sibling adapter carries one to borrow, so stating it would invent it"
 
 
-def _drawn_box(p, w=4.7, h=6.3):
-    """A std/lc-bore@3 placement's box as drawn: `at` is the UNROTATED
-    top-left and a quarter turn spins the part about its own centre, so a
-    rotate 90 bore is 6.3 wide and 4.7 tall around the same centre."""
+# the two LC bore parts: the transceiver receptacle and, since
+# common/lc-duplex-v-adapter@5, the bulkhead aperture this adapter composes
+LC_BORES = ("std/lc-bore@", "std/lc-bulkhead-bore@")
+
+
+def _drawn_box(p):
+    """An LC bore placement's box as drawn: `at` is the UNROTATED top-left and
+    a quarter turn spins the part about its own centre, so a rotate 90 bore is
+    as wide as it is tall unturned (8.06 for the bulkhead aperture) and 4.7
+    tall, around the same centre. The size is the bore's own contract's."""
+    size = contract(p["ref"].replace("@", "/v"))["size"]
+    w, h = size["w"], size["h"]
     x, y = float(p["at"][0]), float(p["at"][1])
     cx, cy = x + w / 2, y + h / 2
     if p.get("rotate") in (90, 270, -90):
@@ -68,11 +76,12 @@ def test_two_stacked_bores_actually_fit_in_the_body():
     An earlier draft of this plan sized the body at 12.0, borrowed from the SC
     shell - which would have put 12.6 mm of upright bore into 12.0 mm of
     adapter and drawn two apertures overlapping. Measuring the height instead
-    of borrowing it is what caught that. @2 turns each bore latch-left, so each
-    is 4.7 tall and 6.3 wide; the box is computed as drawn, not assumed upright.
+    of borrowing it is what caught that. @2 turned each bore latch-left, so each
+    is 4.7 tall and (since @5's bulkhead aperture) 8.06 wide; the box is
+    computed as drawn, not assumed upright.
     """
-    c = contract("common/lc-duplex-v-adapter/v4")
-    bores = [p for p in (c.get("parts") or []) if "lc-bore" in str(p.get("ref"))]
+    c = contract("common/lc-duplex-v-adapter/v5")
+    bores = [p for p in (c.get("parts") or []) if str(p.get("ref")).startswith(LC_BORES)]
     boxes = sorted((_drawn_box(p) for p in bores), key=lambda b: b[1])
     assert len(boxes) == 2, boxes
     upper, lower = boxes
@@ -85,12 +94,12 @@ def test_two_stacked_bores_actually_fit_in_the_body():
 def test_the_ports_are_turned_latch_left_on_the_duplex_pitch():
     """FS's render puts every port's stepped latch slot LEFT of the cap.
 
-    std/lc-bore@3 draws its tongue down; rotate 90 swings it left. And the two
+    The bore draws its tongue down; rotate 90 swings it left. And the two
     ferrules sit 6.25 apart - the duplex pitch stood on end, which v1's 6.75
     was not.
     """
-    c = contract("common/lc-duplex-v-adapter/v4")
-    bores = [p for p in (c.get("parts") or []) if "lc-bore" in str(p.get("ref"))]
+    c = contract("common/lc-duplex-v-adapter/v5")
+    bores = [p for p in (c.get("parts") or []) if str(p.get("ref")).startswith(LC_BORES)]
     assert {p.get("rotate") for p in bores} == {90}, bores
     ys = sorted(float(p["at"][1]) for p in bores)
     assert round(ys[1] - ys[0], 3) == 6.25, ys
@@ -104,8 +113,8 @@ def test_its_two_ports_are_stacked_not_side_by_side():
     the faceplate numbers agree - evens along the top, odds along the bottom.
     If a later edit lays these out abreast, this is what says so.
     """
-    c = contract("common/lc-duplex-v-adapter/v4")
-    bores = [p for p in (c.get("parts") or []) if "lc-bore" in str(p.get("ref"))]
+    c = contract("common/lc-duplex-v-adapter/v5")
+    bores = [p for p in (c.get("parts") or []) if str(p.get("ref")).startswith(LC_BORES)]
     assert len(bores) == 2, [p.get("ref") for p in c.get("parts") or []]
     xs = {round(float(p["at"][0]), 3) for p in bores}
     ys = {round(float(p["at"][1]), 3) for p in bores}
@@ -134,7 +143,7 @@ def test_the_cassette_is_an_fhd_module():
 
 def test_the_cassette_carries_six_stacked_lc_adapters():
     c = contract(CASSETTE)
-    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@4"]
+    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@5"]
     assert len(lcs) == 6, [p["ref"] for p in c["parts"]]
 
 
@@ -146,7 +155,7 @@ def test_the_adapters_sit_on_their_measured_centres():
     measurement into a model of one.
     """
     c = contract(CASSETTE)
-    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@4"]
+    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@5"]
     got = sorted(round(float(p["at"][0]) + 4.64, 2) for p in lcs)
     assert got == CENTRES
 
@@ -159,7 +168,7 @@ def test_the_adapter_row_is_measured_as_centred_not_drawn_as_centred():
     arithmetic tidier, it has replaced a measurement with a model of one.
     """
     c = contract(CASSETTE)
-    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@4"]
+    lcs = [p for p in c["parts"] if p["ref"] == "common/lc-duplex-v-adapter@5"]
     assert {round(float(p["at"][1]), 2) for p in lcs} == {10.66}
 
 
@@ -225,7 +234,7 @@ def test_the_cassette_pitch_standard_is_actually_conformed_to():
     part - so until the adapter names it, the entry is inert and the rule that
     exists to compare the two never runs.
     """
-    c = contract("common/lc-duplex-v-adapter/v4")
+    c = contract("common/lc-duplex-v-adapter/v5")
     assert c.get("conforms") == "fhd-lc-cassette", \
         "the adapter must name the standard whose pitch describes how it is spaced"
 
@@ -282,7 +291,7 @@ def test_the_registry_centres_are_the_contracts_centres():
     text = std["standards"]["fhd-lc-cassette"]["registry"]
     centres = [float(v) for v in
                re.search(r"centres ([\d.\s]+?), pitches", text).group(1).split()]
-    w = contract("common/lc-duplex-v-adapter/v4")["size"]["w"]
+    w = contract("common/lc-duplex-v-adapter/v5")["size"]["w"]
     placed = [round(float(p["at"][0]) + w / 2, 2) for p in c["parts"]]
     assert centres == placed, \
         f"registry centres {centres} are not where the contract places them: {placed}"
@@ -305,7 +314,7 @@ def test_the_rear_mtp_is_where_its_provenance_says_it_is():
     assert "18 mm from the body's left" in " ".join(rear["provenance"]["parts"].split())
 
 
-@pytest.mark.parametrize("rel,bore", [("common/lc-duplex-v-adapter/v4", "lc-bore"),
+@pytest.mark.parametrize("rel,bore", [("common/lc-duplex-v-adapter/v5", "lc-bulkhead-bore"),
                                       ("common/sc-duplex-adapter/v4", "sc-bore")])
 def test_position_one_is_the_lower_bore(rel, bore):
     """FS prints the lower bore of a stacked adapter as the ODD port.

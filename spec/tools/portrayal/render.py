@@ -2577,8 +2577,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      # because until now every occupant that
                                      # could host presented ONE interface, so
                                      # the bare chained key said everything
-                                     # there was to say. generic/lc-duplex-plug@1
-                                     # composes TWO generic/lc-plug@1, each with
+                                     # there was to say. generic/lc-duplex-plug@2
+                                     # composes TWO generic/lc-plug@2, each with
                                      # its own rear point, and the bare key
                                      # cannot name which: the plug as a whole
                                      # presents nothing (presented_interface
@@ -3198,7 +3198,7 @@ def _pluggable_candidates(lib_roots):
     `libwalk` reads contracts off disk directly, which is what every renderer
     already does for every placement it draws.
 
-    `mates:` IS THE GATE, NOT `behaviour`. The two plugs, generic/lc-plug@1 and
+    `mates:` IS THE GATE, NOT `behaviour`. The two plugs, generic/lc-plug@2 and
     generic/rj45-plug@1, are `class: port` and so carry no `behaviour` (their
     own provenance says why: test_behaviour.py holds every port to none), yet
     each is exactly what a connector slot must offer (B3). Every other part

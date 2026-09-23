@@ -14,7 +14,7 @@ unless that configuration's `occupants:` overrides it.
 
 Nothing in the library declares a default yet, so every test writes throwaway
 contracts into a tmp_path library searched BEFORE the real one, and seats on
-a copy of a real device. `generic/lc-plug@1` stands in for a dust cap until
+a copy of a real device. `generic/lc-plug@2` stands in for a dust cap until
 the caps land (Task 5); `test/other-plug@1` is a second `mates: lc` part.
 """
 import json
@@ -34,10 +34,10 @@ from portrayal.manifest import presented_interface
 from portrayal.render import (Library, _connector_registry, _pluggable_candidates,
                               _pluggable_families, component_cages)
 
-PLUG = "generic/lc-plug@1"
+PLUG = "generic/lc-plug@2"
 OTHER = "test/other-plug@1"
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a"
-V_ADAPTER = "common/lc-duplex-v-adapter"     # what the cassette composes (@4)
+V_ADAPTER = "common/lc-duplex-v-adapter"     # what the cassette composes (@5)
 H_ADAPTER = "common/lc-duplex-adapter"       # what dcp-r-34d-cs places (@4)
 
 
@@ -75,7 +75,7 @@ def lib(tmp_path):
     # a bore default on a composed part: tx ships plugged, rx does not
     def capped(c):
         _part(c, "tx")["default"] = PLUG
-    _copy(root, V_ADAPTER, 4, "capped-adapter", capped)
+    _copy(root, V_ADAPTER, 5, "capped-adapter", capped)
 
     def cassette_with(ref):
         def edit(c):
@@ -83,7 +83,7 @@ def lib(tmp_path):
         return edit
     _copy(root, CASSETTE, 3, "capped-cassette", cassette_with("test/capped-adapter@1"))
 
-    _copy(root, "generic/lc-plug", 1, "other-plug", lambda c: None)
+    _copy(root, "generic/lc-plug", 2, "other-plug", lambda c: None)
 
     # a component's own presented slot, defaulted at the top level
     _copy(root, "std/lc-bore", 3, "defaulted-bore", _set(default=PLUG))
@@ -99,7 +99,7 @@ def lib(tmp_path):
         tx, rx = _part(c, "tx"), _part(c, "rx")
         tx["ref"] = rx["ref"] = "test/defaulted-bore@1"
         tx["default"] = OTHER
-    _copy(root, V_ADAPTER, 4, "self-adapter", self_adapter)
+    _copy(root, V_ADAPTER, 5, "self-adapter", self_adapter)
 
     # the composer: lc01 overrides the adapter's own default, lc02 leaves it,
     # lc03 empties it
@@ -361,7 +361,7 @@ def test_lint_the_throwaway_defaults_are_clean(lib, ref):
 def test_lint_a_default_the_slot_does_not_accept(lib):
     def bad(c):
         _part(c, "tx")["default"] = "common/lc-boot@1"      # mates lc-plug
-    _copy(lib, V_ADAPTER, 4, "bad-adapter", bad)
+    _copy(lib, V_ADAPTER, 5, "bad-adapter", bad)
     got = l110(lib, "test/bad-adapter@1")
     assert got and "tx" in got[0] and "common/lc-boot@1" in got[0], got
 
@@ -401,11 +401,11 @@ BOOT = "common/lc-boot@1"
 def booted(lib):
     """A plug whose contract ships a boot on its own rear slot, and an adapter
     whose bore ships that plug."""
-    _copy(lib, "generic/lc-plug", 1, "booted-plug", _set(default=BOOT))
+    _copy(lib, "generic/lc-plug", 2, "booted-plug", _set(default=BOOT))
 
     def capped(c):
         _part(c, "tx")["default"] = "test/booted-plug@1"
-    _copy(lib, V_ADAPTER, 4, "booted-adapter", capped)
+    _copy(lib, V_ADAPTER, 5, "booted-adapter", capped)
     _copy(lib, CASSETTE, 3, "booted-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/booted-adapter@1"}))
     return lib
@@ -489,7 +489,7 @@ def test_a_bay_module_shipping_a_default_is_an_error(tmp_path, lib):
     dev, _ = fhd(tmp_path, "test/self-adapter@1")
     r = run(dev, tmp_path / "o", lib)
     assert r.returncode != 0
-    assert "test/self-adapter@1 ships holding generic/lc-plug@1" in r.stderr, r.stderr[-800:]
+    assert "test/self-adapter@1 ships holding generic/lc-plug@2" in r.stderr, r.stderr[-800:]
     assert "bay-1" in r.stderr and "no slot key" in r.stderr
 
 
@@ -504,7 +504,7 @@ def test_a_module_in_a_nested_bay_is_refused_the_same_way(tmp_path, lib):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     r = run(dev, tmp_path / "o", lib)
     assert r.returncode != 0
-    assert "test/self-adapter@1 ships holding generic/lc-plug@1" in r.stderr, r.stderr[-800:]
+    assert "test/self-adapter@1 ships holding generic/lc-plug@2" in r.stderr, r.stderr[-800:]
     assert "slot-0/module/bay-0" in r.stderr
 
 
@@ -526,7 +526,7 @@ def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, b
     def both(c):
         for pid in ("tx", "rx"):
             _part(c, pid)["default"] = "test/booted-plug@1"
-    _copy(booted, V_ADAPTER, 4, "twice-booted-adapter", both)
+    _copy(booted, V_ADAPTER, 5, "twice-booted-adapter", both)
     _copy(booted, CASSETTE, 3, "twice-booted-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/twice-booted-adapter@1"}))
     dev, _ = fhd(tmp_path, "test/twice-booted-cassette@1")
@@ -567,8 +567,8 @@ def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_pa
 @pytest.fixture
 def looping(lib):
     """A plug whose own default is itself - a cycle of one link."""
-    _copy(lib, "generic/lc-plug", 1, "loop-plug", _set(default="test/loop-plug@1"))
-    _copy(lib, V_ADAPTER, 4, "looping-adapter",
+    _copy(lib, "generic/lc-plug", 2, "loop-plug", _set(default="test/loop-plug@1"))
+    _copy(lib, V_ADAPTER, 5, "looping-adapter",
           lambda c: _part(c, "tx").update({"default": "test/loop-plug@1"}))
     _copy(lib, CASSETTE, 3, "looping-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/looping-adapter@1"}))

@@ -13,7 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library" / "components"
 
 FIBRE_CONNECTORS = [
-    "common/lc-duplex-adapter/v4", "common/lc-duplex-v-adapter/v4",
+    "common/lc-duplex-adapter/v4", "common/lc-duplex-v-adapter/v5",
     "common/lc-duplex-shuttered-adapter/v1",
     "common/mpo-adapter/v1", "common/mpo-flange-adapter/v1",
     "common/mpo24-flange-adapter/v1",
@@ -21,9 +21,9 @@ FIBRE_CONNECTORS = [
     "common/st-simplex-adapter/v1", "common/fc-simplex-adapter/v1",
     "common/lsh-simplex-adapter/v1", "common/mdc-adapter/v1",
     "common/fibre-splice/v1",
-    # generic/lc-plug@1 (pluggables B2, Task 4): the cable-end LC plug, not a
+    # generic/lc-plug (pluggables B2, Task 4; @2, drawn seated, since B3): the cable-end LC plug, not a
     # panel adapter - simplex, `optical.positions: 1`.
-    "generic/lc-plug/v1",
+    "generic/lc-plug/v2",
     # THE FOUR CABLE-END PLUGS OF B3 (docs/pluggables-caps-design.md, "Parts"),
     # which arrive with the dust caps they swap for. Each is a connector by
     # this sweep's own test - `class: port`, `attrs.media: fiber`, no
@@ -36,7 +36,7 @@ FIBRE_CONNECTORS = [
     # The two MPO plugs are two parts for one outline BECAUSE the count lives
     # here: `optical.positions` is the only field that tells them apart, so a
     # missing one would silently merge them in every coverage check.
-    "generic/lc-duplex-plug/v1",
+    "generic/lc-duplex-plug/v2",
     "generic/sc-plug/v1",
     "generic/mpo12-plug/v1",
     "generic/mpo24-plug/v1",
@@ -127,7 +127,7 @@ def test_a_boot_point_is_the_mate_point():
 
 def test_both_plugs_say_the_coincidence_is_load_bearing():
     """The prose half of the decision above, where a contract reader will see it."""
-    for rel in ("generic/lc-plug/v1", "generic/rj45-plug/v1"):
+    for rel in ("generic/lc-plug/v2", "generic/rj45-plug/v1"):
         prov = (load(rel) or {}).get("provenance") or {}
         assert "boot-coincides-with-mate" in prov, rel
         note = prov["boot-coincides-with-mate"]

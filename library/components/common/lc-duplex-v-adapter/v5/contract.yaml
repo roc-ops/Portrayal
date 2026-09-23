@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 4.2.0
+version: 5.0.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): FS ships ONE white cap over both stacked ports, and a
@@ -56,12 +56,15 @@ relief:
         is under one pixel (0.19 mm here), inside what a 7 px reading can
         resolve, so the estimate is left at 1.2 rather than redrawn.
 parts:
-  # TURNED 90: std/lc-bore@3 draws its latch tongue DOWN, and rotate 90 swings
-  # it to the LEFT, which is where FS's own render puts every port's stepped
-  # latch slot (57016.main.jpg, beside the cap). Lifted onto the raised bezel so
+  # THE BULKHEAD APERTURE, TURNED 90: std/lc-bulkhead-bore@1 draws its latch
+  # tongue DOWN, and rotate 90 swings it to the LEFT, which is where FS's own
+  # render puts every port's stepped latch slot (57016.main.jpg, beside the
+  # cap). `at` is the UNROTATED box's corner and the turn is about its centre,
+  # so the ferrules stay exactly where @4 put them - (5.85, 10.0) and (5.85,
+  # 3.75) - and only the keyway grows, leftward. Lifted onto the raised bezel so
   # each bore recesses from the proud face, as common/lc-duplex-adapter@4 does.
-  - {id: tx, ref: std/lc-bore@3, at: [2.70, 6.85], rotate: 90, lift: 1.2}
-  - {id: rx, ref: std/lc-bore@3, at: [2.70, 0.60], rotate: 90, lift: 1.2}
+  - {id: tx, ref: std/lc-bulkhead-bore@1, at: [1.82, 5.97], rotate: 90, lift: 1.2}
+  - {id: rx, ref: std/lc-bulkhead-bore@1, at: [1.82, -0.28], rotate: 90, lift: 1.2}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
   # points, which the stacked placements put at (5.85, 3.75) and (5.85, 10.0) -
@@ -92,15 +95,33 @@ provenance:
     Stacked: a 6x crop of 57016.main.jpg shows one white dust cap over two
     ports one above the other, and the faceplate numbering agrees - 2 above 1
     at the left end, 12 above 11 at the right. Turned: the same crop shows each
-    port's stepped latch slot to the LEFT of the cap, so std/lc-bore@3 (tongue
-    down unrotated) is placed at rotate 90, which makes each bore 6.3 wide and
-    4.7 tall. Pitch: the two ferrules sit 6.25 apart, the duplex pitch
+    port's stepped latch slot to the LEFT of the cap, so the bore (tongue down
+    unrotated) is placed at rotate 90, which makes each one 8.06 wide and 4.7
+    tall - see `bores` for which bore. Pitch: the two ferrules sit 6.25 apart, the duplex pitch
     `lc-duplex-receptacle` records from IEC 61754-20 - a stacked duplex adapter
     is the same duplex pair stood on end - centred on the body at y 3.75 and
     10.0. Across: the ferrule is at x 5.85, the centre of the cap, which the
-    render puts at 2.92-8.77 of the 9.28 body; that leaves the latch slot
-    running out to x 1.90. v1 placed the bores tongue-down at 6.75 apart, which
-    was the defect this major fixes.
+    render puts at 2.92-8.77 of the 9.28 body. v1 placed the bores tongue-down
+    at 6.75 apart, which was the defect v2 fixed.
+  bores: >-
+    std/lc-bulkhead-bore@1 SINCE THIS MAJOR, and std/lc-bore@3 before it. @3 is
+    the TRANSCEIVER receptacle, whose 1.60 keyway is cut short to fit a module
+    face (its own `short-keyway` named this adapter's composer as drawing less
+    keyway than its hardware has); the bulkhead aperture carries the 3.36 stack
+    measured off SENKO DS-LC-000010, its keyway ending 5.71 from the ferrule
+    axis. THE FERRULES DID NOT MOVE: both mate points are where @4 put them, so
+    the spanning slot's midpoint, its derived axis (270) and every composer's
+    fibre positions are unchanged. What moved is the keyway, which now runs out
+    to x 0.14 rather than 1.90.
+    IT FITS, AND BY LITTLE. At the ferrule line x 5.85 the 5.71 reach ends 0.14
+    inside the 9.28 body's left edge, inside the bezel's 0.15 stroke by 0.065,
+    and the tongue (2.64 wide, centred on each ferrule) is clear of the body's
+    0.4 corner radii. FS's face-on render agrees in kind - the stepped slot runs
+    to within a wall's thickness of the blue body's left edge - but at its 5.78
+    px/mm it cannot say whether that wall is 0.14 or half a millimetre, so this
+    fit is SENKO's keyway on FS's measured outline and ferrule line, not an FS
+    reading. A MAJOR because the composed bore ref is addressing: what fills
+    `lc01/tx` is now a different part.
   dust-caps: >-
     NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; the pluggables connectors work seats it (a `common/` cap part, and a default occupant per port). The reading is kept here for that part: photo-measured on 57016.main.jpg at the same 5.78 px/mm the
     plate gives (86-716 px across 108.97 mm): ONE white duplex cap, not two,

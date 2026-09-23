@@ -4,7 +4,8 @@ A plug is the other occupant of a connector slot: it mates the interface a
 dust cap mates, seats at the same point, and swaps for the cap without either
 adapter being touched. Four arrive together - `generic/lc-duplex-plug@1`,
 `generic/sc-plug@1`, `generic/mpo12-plug@1`, `generic/mpo24-plug@1` - beside
-`generic/lc-plug@1`, which B2 already built.
+`generic/lc-plug@1`, which B2 already built. (Both are @2 since B3's Task 7c,
+drawn seated and latch-first into the bore - spec/tests/test_lc_seated_orientation.py.)
 
 WHAT THIS FILE IS ABOUT, BEYOND "IT RENDERS". Three things that could each go
 wrong silently:
@@ -15,7 +16,7 @@ wrong silently:
     the registry and the contract hold ONE copy of each figure between them
     (L9 does the comparing) and that the keys which say "this is an estimate"
     are still there to be read.
-  - THE HALVES ARE REACHABLE. `generic/lc-duplex-plug@1` composes two whole
+  - THE HALVES ARE REACHABLE. `generic/lc-duplex-plug` composes two whole
     plugs rather than redrawing a pair, and the point of that is a boot on one
     half. So the two halves' mate points are checked against the adapter's two
     bores IN THE DEVICE FRAME, and a boot is actually seated on one.
@@ -44,11 +45,11 @@ from portrayal.manifest import (load_yaml, nested_key_host,
 
 SPEC = LIB.parent / "spec"
 
-DUPLEX = "generic/lc-duplex-plug@1"
+DUPLEX = "generic/lc-duplex-plug@2"
 SC = "generic/sc-plug@1"
 MPO12 = "generic/mpo12-plug@1"
 MPO24 = "generic/mpo24-plug@1"
-LC = "generic/lc-plug@1"
+LC = "generic/lc-plug@2"
 BOOT = "common/lc-boot@1"
 
 # the four this task builds, and what each one mates
@@ -83,7 +84,7 @@ def test_a_plug_is_an_unmoving_port_that_mates_one_interface(ref):
     assert c["class"] == "port"
     # NO `behaviour`, and it is not an oversight: test_behaviour.py asserts
     # `behaviour is None` for every `class: port` contract, and
-    # generic/lc-plug@1's own provenance records the same decision.
+    # generic/lc-plug@2's own provenance records the same decision.
     assert "behaviour" not in c
     assert c["mates"] == MATES[ref]
     assert c["connection-points"]["mate"]["direction"] == "front"
@@ -106,10 +107,14 @@ def test_a_plugs_envelope_is_held_to_a_registry_entry_or_says_why_not(ref):
     else:
         note = c["provenance"]["standard"]
         assert "NO `conforms:`" in note
-        # the claim it makes instead: both halves are a conforming part
+        # the claim it makes instead: both halves are the simplex plug, whose
+        # width is the registry's `lc-plug` width. Since @2 the halves are
+        # drawn SEATED and carry no `conforms` of their own - the registry
+        # entry is the free silhouette - so the width is what is held here.
         halves = {q["ref"] for q in c["parts"]}
         assert halves == {LC}
-        assert contract(LC)["conforms"] == "lc-plug"
+        assert contract(LC)["size"]["w"] == standards()["lc-plug"]["w"]
+        assert "NO `conforms:`" in contract(LC)["provenance"]["standard"]
 
 
 def test_the_librarys_fibre_plugs_are_these_five_and_there_are_five():
@@ -317,7 +322,8 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     frame rather than on the contract's own arithmetic.
 
     `common/lc-duplex-adapter@4` composes two std/lc-bore@3 at `rotate: 180`,
-    6.25 apart. The plug composes two generic/lc-plug@1 6.25 apart, unrotated.
+    6.25 apart. The plug composes two generic/lc-plug@2 6.25 apart, each turned
+    180 so its latch stands up (the canonical axis).
     Neither contract knows about the other; what has to be true is that once
     the plug's own `mate` is seated on the adapter's, each half's `mate` lands
     on a bore's - because that is what makes a boot chained on a half land
@@ -359,7 +365,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     group that holds it.
 
     AND ITS HALVES LAND ON THE STACKED BORES, which they did not when this
-    plug was first drawn. `common/lc-duplex-v-adapter@4` stacks its pair where
+    plug was first drawn. `common/lc-duplex-v-adapter@5` stacks its pair where
     this plug's is side by side, and an occupant cannot turn itself - so the
     ADAPTER says which way round its pair runs: its spanning slot publishes
     the turn that carries the canonical across axis onto its own bores, and
@@ -371,7 +377,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     occ = occupant(root, "bay-1/module/lc01", DUPLEX)
     host = by_path(root, "bay-1/module/lc01")
     assert is_inside(parents, occ, parents[host])
-    adapter = contract("common/lc-duplex-v-adapter@4")
+    adapter = contract("common/lc-duplex-v-adapter@5")
     _, at, lift = presented_interface(adapter, contract)
     hx, hy = device_point(parents, host, at)
     ox, oy = device_point(parents, occ,
@@ -381,7 +387,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     assert lift > 0
     assert float(occ.get("data-z-lift")) == pytest.approx(lift, abs=1e-6)
     # and each half on the bore it fills, through the turn the seat applied
-    plug, bore, half = contract(DUPLEX), contract("std/lc-bore@3"), contract(LC)
+    plug, bore, half = contract(DUPLEX), contract("std/lc-bulkhead-bore@1"), contract(LC)
     bores = {q["id"]: q for q in adapter["parts"]}
     for half_id, bore_id in (("a", "tx"), ("b", "rx")):
         q = next(p for p in plug["parts"] if p["id"] == half_id)

@@ -222,7 +222,7 @@ def test_a_chained_seat_on_a_nested_optic(tmp_path):
     as at device level, keyed by the card-local occupant id."""
     dev = fitted_copy(tmp_path, "c100g", "base", {"front-6": "casa/smm-300gm@1"},
                       {"front-6/xg0": "generic/sfp-lc-simplex@2",
-                       "front-6/xg0-occupant": "generic/lc-plug@1",
+                       "front-6/xg0-occupant": "generic/lc-plug@2",
                        "front-6/xg0-occupant-occupant": "common/lc-boot@1"})
     root, parents = render(dev, tmp_path / "o", "c100g", "base")
     card = by_path(root, "front-6/module")
@@ -242,7 +242,7 @@ def test_a_chained_seat_on_a_nested_optic(tmp_path):
     # being 0 == 0.
     lift = lambda p: float(by_path(root, p).get("data-z-lift") or 0)
     presents = lambda r: float(presented_interface(_contract(r), _contract)[2] or 0)
-    optic, body = presents("generic/sfp-lc-simplex@2"), presents("generic/lc-plug@1")
+    optic, body = presents("generic/sfp-lc-simplex@2"), presents("generic/lc-plug@2")
     assert optic and body
     assert lift("front-6/module/xg0-occupant") == 0
     assert lift("front-6/module/xg0-occupant-occupant") == pytest.approx(optic)
@@ -327,7 +327,7 @@ def l12(dev):
 def test_lint_a_valid_nested_key_and_its_chain_lint_clean(tmp_path):
     dev = fitted_copy(tmp_path, "c100g", "base", {"front-6": "casa/smm-300gm@1"},
                       {"front-6/xg0": "generic/sfp-lc-simplex@2",
-                       "front-6/xg0-occupant": "generic/lc-plug@1",
+                       "front-6/xg0-occupant": "generic/lc-plug@2",
                        "front-6/xg0-occupant-occupant": "common/lc-boot@1",
                        "front-6/cg0": "generic/qsfp-lc@1"})
     assert l12(dev) == []
@@ -339,7 +339,7 @@ def test_lint_a_valid_nested_key_and_its_chain_lint_clean(tmp_path):
     ({"front-7/xg0": "generic/sfp-lc@1"}, "names no cage"),         # blank plate
     ({"front-99/xg0": "generic/sfp-lc@1"}, "no bay in any view"),  # no such bay
     ({"front-6/xg0": "generic/sfp-lc@1",
-      "front-6/xg0-occupant": "generic/lc-plug@1"},                 # the chain reaches the optic,
+      "front-6/xg0-occupant": "generic/lc-plug@2"},                 # the chain reaches the optic,
      "host generic/sfp-lc@1 presents no 'interface'"),              # which presents nothing
 ])
 def test_lint_a_bad_nested_key_is_an_l12_error(tmp_path, occ, why):

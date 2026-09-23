@@ -116,6 +116,7 @@ from portrayal.manifest import (view_parts, targets, split_target, presented_int
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml, nested_key_host, chained_occupant_ref,
                       drawn_refs, seat_point, slot_default, spanned_slots,
+                      spanning_axis, _turn,
                       occupant_spec,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
 from jsonschema import Draft202012Validator
@@ -255,7 +256,7 @@ RULES = {
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L110": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
     "L111": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
-    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint and its bores at the depth that point presents - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; draw a duplex connector itself with its pair ACROSS, because the host's own axis arrives with the seat"),
+    "L112": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat"),
 }
 
 
@@ -5805,6 +5806,78 @@ def _spanning_part_drawn_across(path, data):
         return
 
 
+# WHICH WAY A SPANNED BORE'S KEYWAY FACES WHEN THE BORE IS DRAWN UNROTATED, by
+# the interface the bore presents, and which way a spanning connector's latches
+# face on the canonical axis. `lc`: std/lc-bore@3 and std/lc-bulkhead-bore@1
+# both draw their tongue DOWN (spec/tests/test_lc_seated_orientation.py holds
+# each part's outline to it), and every duplex part is drawn with its latches
+# UP (generic/lc-duplex-plug@2 turns its halves to get there). An interface
+# not named here has no keyway this rule knows, and the arm has nothing to say.
+SPANNED_KEYWAY_SIDE = {"lc": (0, 1)}
+CANONICAL_LATCH_SIDE = (0, -1)
+
+
+def _spanning_latch_sides(contract, resolve):
+    """(latch side, keyway side) for a spanning host, as unit vectors in the
+    contract's own frame, or None where the arm has nothing to measure.
+
+    THE LATCH SIDE is the canonical one turned by the axis the host derives -
+    the turn the seat will actually draw a duplex connector at. THE KEYWAY SIDE
+    is the spanned bores' own convention turned by their shared `rotate`. The
+    keyway side is None when the bores do not share one rotate, which is an
+    error of its own: a duplex connector is one moulding and cannot put its two
+    latches into keyways facing different ways."""
+    connectors = _connectors()
+    iface = (contract or {}).get("interface")
+    spans = ((connectors.get(iface) or {}).get("spans") or {}) if iface else {}
+    side = SPANNED_KEYWAY_SIDE.get(spans.get("interface"))
+    if side is None:
+        return None
+    axis = spanning_axis(contract, resolve, connectors)
+    if axis is None:
+        return None
+    places = {q.get("id"): q for q in contract.get("parts") or []}
+    rots = {float((places.get(i) or {}).get("rotate") or 0) % 360
+            for i in spanned_slots(contract, resolve, connectors)}
+
+    def snap(v):
+        return tuple(int(round(c)) for c in v)
+    latch = snap(_turn(CANONICAL_LATCH_SIDE, axis))
+    keyway = snap(_turn(side, rots.pop())) if len(rots) == 1 else None
+    return latch, keyway
+
+
+def _spanning_latch_on_keyway(path, data, resolve):
+    """L112's latch-side arm: THE AXIS A DUPLEX HOST DERIVES PUTS A DUPLEX
+    CONNECTOR'S LATCHES ON ITS BORES' KEYWAY SIDE.
+
+    The axis is derived from the ORDER of the spanned bores (manifest.
+    spanning_axis) and the keyway from their ROTATE, and nothing tied the two
+    together: compose the pair in the other order and the pitch, the midpoint
+    and the depth all still hold while every duplex plug seats with its latches
+    on the side opposite the keyway. That is exactly main's pre-#496 FS
+    adapter, whose upper bore was composed first - a polarity bug found by
+    reading FS's port numbers, which the geometry could have caught on its own.
+    """
+    got = _spanning_latch_sides(data, resolve)
+    if got is None:
+        return
+    latch, keyway = got
+    iface = data.get("interface")
+    if keyway is None:
+        err(path, "L112", f"presents {iface!r}, but the bores it spans are not "
+            "all at one `rotate`, so their keyways face different ways and no "
+            "duplex connector - one moulding - can latch into both")
+        return
+    if latch != keyway:
+        names = {(0, -1): "up", (0, 1): "down", (-1, 0): "left", (1, 0): "right"}
+        err(path, "L112", f"presents {iface!r} with a derived axis that turns a "
+            f"duplex connector's latch {names.get(latch, latch)}, but its bores' "
+            f"keyways face {names.get(keyway, keyway)} - the order the bores are "
+            "composed in runs the pair the wrong way round for the way they are "
+            "turned")
+
+
 def lint_component_spanned_geometry(path, data, lib_roots):
     """L112: a component presenting a SPANNING connector interface really hosts
     what it spans.
@@ -5846,6 +5919,11 @@ def lint_component_spanned_geometry(path, data, lib_roots):
     the host - is a spanning part drawn on the canonical axis - and it is
     called from here so one rule number covers one subject: whether a duplex
     connector and the adapter it plugs can be put together at all.
+
+    A SIXTH, THE LATCH SIDE, joins the two: the axis the host derives from its
+    bores' order must carry the connector's latches (drawn up) onto the side
+    its bores' keyways face (drawn down, turned by their shared rotate) -
+    `_spanning_latch_on_keyway`.
     """
     _spanning_part_drawn_across(path, data)
     iface = data.get("interface")
@@ -5916,6 +5994,9 @@ def lint_component_spanned_geometry(path, data, lib_roots):
                 "spanning the pair rests on the same face the pair is let "
                 "into, so a simplex part in the bore and a duplex part over "
                 "both would stand at different depths")
+    # AND THE RIGHT WAY ROUND: the axis the order of the bores derives carries
+    # a duplex connector's latches onto the side their keyways face.
+    _spanning_latch_on_keyway(path, data, _res)
 
 
 def _spanned_default_overlap(path, where, placement, contract, resolve):

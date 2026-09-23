@@ -93,7 +93,7 @@ def test_the_boot_goes_round_the_outside_of_the_plug():
     """
     d = contract()
     plug = yaml.safe_load(
-        (LIB / "components/generic/lc-plug/v1/contract.yaml").read_text())
+        (LIB / "components/generic/lc-plug/v2/contract.yaml").read_text())
     body_w = plug["size"]["w"]
     body_h = plug["elements"]["body"]["size"][1]
     assert d["size"]["w"] > body_w, (

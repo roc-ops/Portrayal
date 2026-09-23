@@ -14,8 +14,8 @@ points through `manifest.seat_point`, the pitch from spec/schemas/standards.yaml
 via the registry - so a test cannot agree with a stale copy of a number.
 
 Nothing in the library ships a duplex occupant yet (Task 5 lands the caps), so
-`test/duplex-plug@1` - a `mates: lc-duplex` copy of `generic/lc-plug@1` - stands
-in for one, and `generic/lc-plug@1` is the simplex part in a bore.
+`test/duplex-plug@1` - a `mates: lc-duplex` copy of `generic/lc-plug@2` - stands
+in for one, and `generic/lc-plug@2` is the simplex part in a bore.
 """
 import math
 import shutil
@@ -37,9 +37,9 @@ from portrayal.render import (_connector_registry, _pluggable_candidates,
 
 ADAPTER = "common/lc-duplex-adapter"        # side by side; dcp-r-34d-cs places it
 V_ADAPTER = "common/lc-duplex-v-adapter"    # stacked; the FHD cassette composes it
-MAJOR = {ADAPTER: 4, V_ADAPTER: 4}
+MAJOR = {ADAPTER: 4, V_ADAPTER: 5}
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a@3"
-PLUG = "generic/lc-plug@1"                  # mates lc - one bore
+PLUG = "generic/lc-plug@2"                  # mates lc - one bore
 DUPLEX = "test/duplex-plug@1"               # mates lc-duplex - the pair
 
 
@@ -51,7 +51,7 @@ def lib(tmp_path):
 
     def duplex(c):
         c["mates"] = "lc-duplex"
-    _copy(root, "generic/lc-plug", 1, "duplex-plug", duplex)
+    _copy(root, "generic/lc-plug", 2, "duplex-plug", duplex)
     return root
 
 
@@ -425,7 +425,7 @@ def test_l112_leaves_a_non_spanning_interface_alone(lib):
 # pair runs.
 
 CAP = "common/lc-duplex-dust-cap@2"         # drawn ACROSS, the canonical axis
-REAL_PLUG = "generic/lc-duplex-plug@1"      # likewise
+REAL_PLUG = "generic/lc-duplex-plug@2"      # likewise
 CARD = "smartoptics/dcp-f-a22@1"            # composes two side-by-side adapters
 
 
@@ -442,7 +442,7 @@ def bore_axis(root, ref):
 
 
 # 270 FOR THE STACKED ADAPTER, NOT 90 - and 270 is the right answer. Since
-# common/lc-duplex-v-adapter@4 the LOWER bore is composed first (`tx`, the port
+# common/lc-duplex-v-adapter@5 the LOWER bore is composed first (`tx`, the port
 # FS prints as odd), so the first-to-last direction runs UP the plate, and the
 # turn that carries the canonical across axis onto it is 270. That turn puts a
 # duplex part's half `a` in the lower bore (port 1) and swings its latch, drawn

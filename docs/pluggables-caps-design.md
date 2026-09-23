@@ -57,7 +57,7 @@ Taken 2026-09-22.
 | `common/lc-duplex-dust-cap` | `lc-duplex` | a duplex LC adapter | the FS FHD cap figures, moved from `lc-duplex-v-adapter@2` |
 | `common/sc-dust-cap` | `sc` | `std/sc-bore@1` | the FS FHD SC cap and grip, moved from `sc-duplex-adapter@2` |
 | `common/mpo-dust-cap` | `mpo` | `std/mpo@1` | new: FS's MTP cassette photographs |
-| `generic/lc-duplex-plug` | `lc-duplex` | a duplex LC adapter | two `generic/lc-plug@1` bodies at the `lc-duplex-receptacle` pitch, on a clip |
+| `generic/lc-duplex-plug` | `lc-duplex` | a duplex LC adapter | two `generic/lc-plug` bodies at the `lc-duplex-receptacle` pitch, on a clip, each turned latch-up (see "Seated plugs") |
 | `generic/sc-plug` | `sc` | `std/sc-bore@1` | new intake (below) |
 | `generic/mpo12-plug` | `mpo` | `std/mpo@1` | new intake (below) |
 | `generic/mpo24-plug` | `mpo` | `std/mpo@1` | as mpo12; its own part for the two-row ferrule (umbrella decision 10) |
@@ -71,7 +71,7 @@ not as the adapter's.
 6.25 pitch its clip holds is `lc-duplex-receptacle`'s, set by IEC 61754-20 / TIA-604-10
 FOCIS 10 (`pitch-confidence: verified`). The clip's own outline is not, and the part
 says which of its figures are the standard's and which a vendor's.
-It composes two `generic/lc-plug@1` rather than redrawing one, so each half keeps
+It composes two `generic/lc-plug` rather than redrawing one, so each half keeps
 the plug's own rear point and a boot can seat behind either.
 
 An MPO-16 plug is not in this work. It has a different key and so a different
@@ -81,7 +81,7 @@ with nowhere to seat is a part nothing checks.
 ### Intake the parts need
 
 Nothing is estimated into a measurement. Each part states which of its figures are
-drawn, measured or estimated, the way `generic/lc-plug@1` carries no `d` because
+drawn, measured or estimated, the way `generic/lc-plug` carries no `d` because
 the class fixes none.
 
 - **`generic/sc-plug`.** The opening it enters is drawn: `sc-simplex-receptacle`,
@@ -161,6 +161,45 @@ So the two LC adapters come out differently, as the products do:
 | `lc-duplex-v-adapter` (FS FHD) | the adapter slot filled by `common/lc-duplex-dust-cap` | on the adapter: duplex cap, `generic/lc-duplex-plug`, empty; empty opens the two bores to simplex parts |
 | `lc-duplex-adapter` (Smartoptics) | each bore filled by `common/lc-dust-cap` | on each bore: cap, `generic/lc-plug`, empty; both bores empty opens the adapter slot to a duplex connector |
 
+### Seated plugs
+
+Added 2026-09-23, after the review page showed the plug and its bore disagreeing.
+
+**A keyed occupant is drawn in its host bore's unrotated convention.** A seat
+turns an occupant by exactly its host's turn (`render.solve_seat`), so the two
+parts only agree on every host if they agree unturned. `std/lc-bore@3` is drawn
+tongue down and `generic/lc-plug@1` was drawn latch up, so every simplex LC plug
+seated with its latch on the side opposite the keyway. `generic/lc-plug@2` is
+drawn latch down. The SC pair already agreed (both key-left), and a test holds
+them to it.
+
+**The library draws a plug seated, so its latch is compressed.** An LC latch is a
+spring the adapter presses down on insertion. SENKO DS-LC-000004's 10.43 front
+silhouette is the plug in the hand; seated, the latch lies within the keyway. The
+plug is drawn with its tab at the bulkhead keyway's end, 5.71 from the ferrule
+axis. The tier widths stay SENKO's dimensioned ones. The tier heights are the
+free ones scaled in proportion, which is a modelling choice and the contract says
+so. The seated state is the plug's only drawing, not a state its host switches
+on. A loose plug in a catalogue therefore also shows the latch compressed; a
+free-state variant would be additive.
+
+**Two LC bores: the transceiver receptacle and the bulkhead aperture.**
+`std/lc-bore@3` is the transceiver receptacle, and its 1.60 keyway is cut short to
+fit an 8.5 module face. `std/lc-bulkhead-bore@1` has the same square, widths and
+mate, with the 3.36 keyway measured off the vector line art of SENKO's LC Premium
+Adapter (DS-LC-000010). A panel adapter composes the bulkhead aperture unless its
+own outline cannot hold it. The FS FHD adapter (`lc-duplex-v-adapter@5`) does.
+The Smartoptics adapter stays on the receptacle for now: at its drawn axis the
+longer keyway would run 0.21 past its outline, and its stencil does not settle
+where its ferrules really sit. A seated plug in a transceiver receptacle runs past
+the drawn keyway, which is that receptacle's understatement showing.
+
+**Duplex parts stay on the canonical axis, latches up.** `generic/lc-duplex-plug@2`
+composes its two halves at `rotate: 180`, so the pair runs across with both latches
+up. Each host's derived axis then carries the latches onto its bores' keyway
+side: 0 on the Smartoptics adapter (bores turned tongue-up), 270 on the FS one
+(bores turned tongue-left).
+
 ### The shipped default
 
 A slot's default is declared on the part that presents it, in the component that
@@ -233,6 +272,12 @@ Two lessons from building the caps as the adapter's relief carry over:
   not fill an adapter slot and one of its bore slots at once.
 - A new rule: an adapter presenting `lc-duplex` has its two bores on the
   `lc-duplex-receptacle` pitch.
+- The same rule's latch-side arm: the axis a duplex host derives from the ORDER of
+  its bores must turn a duplex connector's latches (drawn up) onto the side the
+  bores' keyways face (drawn down, turned by the bores' shared `rotate`), and the
+  bores must share one `rotate`. It catches, from the geometry, a pair composed in
+  the wrong order. The FS adapter's upper-bore-first order before #496 was that
+  mistake, and at the time it was found by reading FS's port numbers.
 - A census: every part presenting a connector interface is a slot, and the census
   asserts the count it measured is greater than zero.
 

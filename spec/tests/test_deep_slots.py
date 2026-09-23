@@ -26,7 +26,7 @@ from portrayal import manifest
 from portrayal.manifest import occupant_spec, presented_interface
 
 CASSETTE = "fs/fhd-1mtp24-lc-os2-a@3"
-PLUG = "generic/lc-plug@1"
+PLUG = "generic/lc-plug@2"
 
 
 def copy_with(tmp_path, src, config, occupants, bays=None, make_config=False):
@@ -180,7 +180,7 @@ def test_lint_the_same_keys_lint_clean(tmp_path, make, occ):
 
 
 @pytest.mark.parametrize("make, occ, why", [
-    (fhd, {"bay-1/lc01/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bore@3 presents 'lc'"),
+    (fhd, {"bay-1/lc01/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bulkhead-bore@1 presents 'lc'"),
     (direct, {"port-1510/tx": "common/lc-boot@1"}, "mates 'lc-plug' but std/lc-bore@3 presents 'lc'"),
     (fhd, {"bay-1/lc01/tx/nope": PLUG}, "occupants/bay-1/lc01/tx/nope"),
     (fhd, {"bay-1/lc99/tx": PLUG}, "'lc99'"),

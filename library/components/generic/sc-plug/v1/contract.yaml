@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sc-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: sc
 interface: sc-plug
@@ -16,7 +16,7 @@ description: >-
   enters std/sc-bore@1, whose keyway is on the left unrotated too. Occupies an
   `sc` receptacle (std/sc-bore@1 and anything composing it) at its own `mate`
   point, and in turn presents `sc-plug` so a boot (or a bare cable) can seat on
-  its rear - the shape generic/lc-plug@1 already has, with no `common/sc-boot`
+  its rear - the shape generic/lc-plug@2 already has, with no `common/sc-boot`
   built yet to take it up. Drawn with NO depth - see `provenance.size` - but
   standing out of its opening in 3D by an estimated standoff,
   `provenance.standoff`.
@@ -26,12 +26,12 @@ attrs: {media: fiber, connector: sc}
 unplaced: >-
   seated by a device that places it in an `sc`-presenting receptacle - none
   does yet. A configured occupant on an FHD SC cassette exercises it in
-  spec/tests/test_fibre_plugs.py, the way generic/lc-plug@1's own `unplaced`
+  spec/tests/test_fibre_plugs.py, the way generic/lc-plug@2's own `unplaced`
   describes; a device manifest showing a patched SC port is downstream of this
   library.
 provenance:
   behaviour: >-
-    DELIBERATELY OMITTED, for the reason generic/lc-plug@1 states at length in
+    DELIBERATELY OMITTED, for the reason generic/lc-plug@2 states at length in
     its own `provenance.behaviour`: spec/tests/test_behaviour.py::
     test_a_receptacle_does_not_move asserts `behaviour is None` for every
     `class: port` contract, and the mate-to resolution in render.py reads
@@ -64,7 +64,7 @@ provenance:
     housing reads 7.399 wide, the key 0.902 by 1.803. Three printed figures
     read back to 0.01 mm from a scale fixed by the fourth, so the ruler is not
     fitted to the art box.
-    DELIBERATELY NO DEPTH, the reading generic/lc-plug@1 and
+    DELIBERATELY NO DEPTH, the reading generic/lc-plug@2 and
     standards.yaml's `lc-plug` already take for the same reason. The same
     catalogue page draws four SC plug variants and prints 25 / 33, 25 / 36.5
     and 25 / 55 for them: the 25 (front face to where the boot begins) repeats,
@@ -102,7 +102,7 @@ provenance:
     narrower than the hole, and it is the MATE POINTS that bring them
     together, not the outlines.
     The `mate`, `boot` and `cable` points share this one (x, y) for the reason
-    generic/lc-plug@1's own `axis` note gives: the fibre runs straight through
+    generic/lc-plug@2's own `axis` note gives: the fibre runs straight through
     the connector, so a front point and a rear point are one axis seen from two
     directions.
   standoff: >-
@@ -125,11 +125,11 @@ provenance:
     it. So the part standing outside is between 25.0 - 14.0 = 11.0 and
     25.0 - 10.0 = 15.0, and 13.0 is the middle of that bracket, an estimate and
     no more - the same arithmetic, on the same kind of evidence, that
-    generic/lc-plug@1's own standoff records.
+    generic/lc-plug@2's own standoff records.
     WHAT IS NOT DRAWN, AND WHY THE NUMBER IS NOT LARGER. This face is the
     7.4 x 9.0 housing that goes INTO the opening. The push-pull grip and the
     boot behind it are a further 11.5 of connector on the same side view and
-    are not this part's silhouette, the same omission generic/lc-plug@1 makes.
+    are not this part's silhouette, the same omission generic/lc-plug@2 makes.
   face-detail-gap: >-
     the housing's corners are CHAMFERED on the drawn front view - about 0.5 on
     each of the four, measured, and no callout dimensions them - and the

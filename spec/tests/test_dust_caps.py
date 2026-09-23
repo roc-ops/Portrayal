@@ -4,7 +4,7 @@
 A dust cap is a connector: it mates the interface a plug mates, seats at the
 plug's mate point, and occupies the plug's slot. Three of the four carry
 figures that used to be drawn INTO an adapter - `common/lc-duplex-adapter@4`,
-`common/lc-duplex-v-adapter@4` and `common/sc-duplex-adapter@4` each keep the
+`common/lc-duplex-v-adapter@5` and `common/sc-duplex-adapter@4` each keep the
 full reading under `provenance.dust-caps` - and the fourth, the MPO cap, is
 read off FS's own renders and says so.
 
@@ -49,7 +49,7 @@ MPO_CAP = "common/mpo-dust-cap@1"
 # away from its source in silence.
 ABSOLUTE_OUT = {LC_CAP: 9.525, LC_DUPLEX_CAP: 5.5, SC_CAP: 3.3}
 ADAPTER_OF = {LC_CAP: ("common/lc-duplex-adapter", 4),
-              LC_DUPLEX_CAP: ("common/lc-duplex-v-adapter", 4),
+              LC_DUPLEX_CAP: ("common/lc-duplex-v-adapter", 5),
               SC_CAP: ("common/sc-duplex-adapter", 4)}
 MATES = {LC_CAP: "lc", LC_DUPLEX_CAP: "lc-duplex", SC_CAP: "sc", MPO_CAP: "mpo"}
 # WHICH PART EACH CAP SEATS ON inside its adapter: a bore id, or None where the
@@ -428,7 +428,7 @@ def l112(ref, root=None):
 
 
 @pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 4),
-                                        ("common/lc-duplex-v-adapter", 4)])
+                                        ("common/lc-duplex-v-adapter", 5)])
 def test_both_library_adapters_lift_their_bores_to_the_depth_they_present(name, major):
     """What a test used to say about these two by name, now asked by the rule -
     and still asserted here, because the rule is only as good as the corpus it
@@ -440,7 +440,7 @@ def test_both_library_adapters_lift_their_bores_to_the_depth_they_present(name, 
 
 
 @pytest.mark.parametrize("name,major", [("common/lc-duplex-adapter", 4),
-                                        ("common/lc-duplex-v-adapter", 4)])
+                                        ("common/lc-duplex-v-adapter", 5)])
 def test_lint_refuses_a_bore_at_a_different_depth_from_the_slot(tmp_path, name, major):
     """The fault the rule exists for: the bores drop to the panel while the
     adapter still presents its slot on the raised bezel, so a duplex cap would

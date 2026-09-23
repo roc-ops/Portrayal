@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: rj45-plug
-version: 1.1.0
+version: 1.1.1
 class: port
 mates: rj45
 interface: rj45-plug
@@ -13,7 +13,7 @@ description: >-
   a spring latch on its underside that engages a jack's latch slot. Occupies a
   `rj45` receptacle (std/rj45@2 and anything that composes it) at its own
   `mate` point, and in turn presents `rj45-plug` so a boot (or a bare cable,
-  when there is no boot) can seat on its rear. UNLIKE generic/lc-plug@1, this
+  when there is no boot) can seat on its rear. UNLIKE generic/lc-plug@2, this
   plug HAS a class-wide depth - see `provenance.size`.
 size: {w: 11.68, h: 7.93, d: 22.48}
 size-confidence: {w: drawing, h: drawing, d: drawing}
@@ -22,10 +22,10 @@ unplaced: >-
   seated by a device that places it in an `rj45`-presenting receptacle - none
   does yet. common/rj45-boot@1 (Task 7) mates to it via `mate-to`, following
   the LC pair's own shape; a device manifest exercising the two-part fit is
-  downstream of this library, same as generic/lc-plug@1's own `unplaced`.
+  downstream of this library, same as generic/lc-plug@2's own `unplaced`.
 provenance:
   behaviour: >-
-    DELIBERATELY OMITTED, the same ruling carried from generic/lc-plug@1
+    DELIBERATELY OMITTED, the same ruling carried from generic/lc-plug@2
     (Task 4). spec/tests/test_behaviour.py::test_a_receptacle_does_not_move
     asserts `d.get("behaviour") is None` for every `class: port` contract, a
     class this plug shares with std/rj45@2, the housing it enters. Seating does
@@ -39,14 +39,15 @@ provenance:
     PLUG 8 POSITION. .460 [11.68] is the front view width; .312 [7.93] is the
     side view BODY height (the latch is not part of this box - see `latch`
     below); .885 [22.48] is the side view overall length, a PLAIN dimension
-    (not parenthesised), so unlike generic/lc-plug@1's reference-only overall
+    (not parenthesised), so unlike generic/lc-plug@2's reference-only overall
     length, this one is real and belongs in `size.d`. Registered at the same
     figures in spec/schemas/standards.yaml's `rj45-plug` entry
     (spec/tests/test_plug_envelopes.py pins it).
   size-vs-lc-plug: >-
     `h` HERE (7.93) IS THE BODY EXCLUDING THE LATCH - not a silhouette height.
-    generic/lc-plug@1's `h` (10.43) is the OPPOSITE: SENKO's front view gives
-    it as the overall silhouette INCLUDING the latch tip, because that drawing
+    SENKO's LC plug silhouette (10.43 free, recorded in generic/lc-plug@2's
+    `free-state`) is the OPPOSITE: SENKO's front view gives it as the overall
+    silhouette INCLUDING the latch tip, because that drawing
     dimensions the whole outline as one figure and never breaks out a
     latch-free body height. The two numbers are not comparable as drawn: a
     reader diffing 7.93 against 10.43 would be comparing "body only" against
@@ -115,7 +116,7 @@ provenance:
     geometry no held drawing sources. So the 17.17 and 7.67 stay here, as
     measured and estimated facts about the part, and drive no render.
   axis: >-
-    derived, following the connection-point convention generic/lc-plug@1 and
+    derived, following the connection-point convention generic/lc-plug@2 and
     common/lc-boot@1 introduced (Task 4/5): the `mate`, `boot` and `cable`
     points all share one (x, y), the centre of the 11.68 x 7.93 body
     (5.84, 3.965) - a part with no depth axis (the LC pair) has one axis seen

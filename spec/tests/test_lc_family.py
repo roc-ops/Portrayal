@@ -91,7 +91,7 @@ def test_the_bore_is_one_keyed_part_at_one_version():
     # #126's first half: two majors drawing the same square. There is one.
     assert versions == ["v3"]
     c = contract("std/lc-bore@3")
-    assert c["version"] == "3.0.0"
+    assert c["version"].startswith("3.")
     assert (c["size"]["w"], c["size"]["h"]) == APERTURE
     assert c["conforms"] == "lc-duplex-receptacle"
     assert c["elements"]["bore"]["size"] == list(APERTURE)

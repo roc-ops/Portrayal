@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 4.1.0
+version: 4.1.1
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): a duplex connector - a duplex dust cap, a duplex plug -
@@ -60,9 +60,28 @@ provenance:
     0.300; see `bore-spacing` above for both moves. Each placement carries rotate: 180
     so the latch tongue points up, as a panel-mount adapter is fitted. THE KEYWAY
     THIS DRAWS IS SHORTER THAN THIS PART'S OWN HARDWARE: @3 is sized for a
-    transceiver face and SENKO's bulkhead adapter DS-LC-000010 carries a 3.51 stack
-    rather than 1.60. That is recorded on @3 under `short-keyway` and is the price
-    of one shared bore part
+    transceiver face and SENKO's bulkhead adapter DS-LC-000010 carries a 3.36 stack
+    rather than 1.60. That is recorded on @3 under `short-keyway`.
+    WHY THIS ADAPTER DOES NOT COMPOSE std/lc-bulkhead-bore@1, which is the bulkhead
+    aperture and what common/lc-duplex-v-adapter@5 composes. Its keyway ends 5.71
+    from the ferrule axis, and this part's axis is at y 5.5 of an 11.0 outline with
+    the tongue toward y 0: the keyway would run 0.21 past the edge. Moving the
+    bores away from the latch side would fix that, and the stencil this part is
+    measured off does not settle by how much. Its art (DCP-R master R-34D-CS, about
+    8.86 px/mm on the 11.5 row pitch) draws each adapter about 10.0 tall - not this
+    part's 11.0, which is the row pitch less a gap - with the ferrule 5.79 from the
+    latch-side edge and 4.26 from the other; read that way the axis clears the
+    keyway by 0.08, less than one pixel of the art (0.11). Read instead off the
+    art's own keyway, which ends 0.62 inside its housing, the axis would sit 6.33
+    from the edge. The art's bore is the drafter's (its keyway reaches 5.11 from
+    its ferrule, not SENKO's 5.71), so the two readings disagree by 0.6 and
+    neither is a measurement of where this adapter's ferrule sits. And moving the
+    ferrules inside this part moves the fibre position of every one of its
+    composers - three devices and nine modules - each placed off its own
+    source, unless every placement moves with them. Left on @3
+    until a source fixes the axis; a seated generic/lc-plug@2's compressed latch
+    reaches 0.21 past this outline in the meantime, which is the same gap seen
+    from the plug
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
   dust-caps: >-

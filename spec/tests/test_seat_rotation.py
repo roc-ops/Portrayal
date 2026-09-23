@@ -215,7 +215,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     for cfg in d["configurations"].values():
         cfg["occupants"] = {"m1-1": "generic/sfp-lc-simplex@2"}
     _front_placements(d).extend([
-        {"ref": "generic/lc-plug@1", "id": "plug1", "mate-to": "m1-1-occupant"},
+        {"ref": "generic/lc-plug@2", "id": "plug1", "mate-to": "m1-1-occupant"},
         {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}])
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     r = run_render(dev, tmp_path / "o")
@@ -223,7 +223,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     svg = next((tmp_path / "o").glob("csr310.*.front.svg")).read_text()
 
     chain = [("m1-1", cage["ref"]), ("m1-1-occupant", "generic/sfp-lc-simplex@2"),
-             ("plug1", "generic/lc-plug@1"), ("boot1", "common/lc-boot@1")]
+             ("plug1", "generic/lc-plug@2"), ("boot1", "common/lc-boot@1")]
     for (host, host_ref), (occ, occ_ref) in zip(chain, chain[1:]):
         assert parse_transform(transform_of(svg, occ))[2][0] == 180, occ
         _, hm, _ = presented_interface(contract(host_ref), lambda r: contract(r))
@@ -239,7 +239,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     # went through the composed bore's rotate: 180, it sat 1.6 mm off it.
     optical = contract("generic/sfp-lc-simplex@2")["connection-points"]["optical"]["at"]
     want = apply(transform_of(svg, "m1-1-occupant"), optical)
-    got = apply(transform_of(svg, "plug1"), contract("generic/lc-plug@1")["connection-points"]["mate"]["at"])
+    got = apply(transform_of(svg, "plug1"), contract("generic/lc-plug@2")["connection-points"]["mate"]["at"])
     assert abs(want[0] - got[0]) < 1e-6 and abs(want[1] - got[1]) < 1e-6, (want, got)
 
 
