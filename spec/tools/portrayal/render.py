@@ -405,9 +405,19 @@ def apply_states(g, states, palette):
             node.set("data-states", g.get("data-states"))
 
 
-def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
+def rewrite_ids(el, prefix, contract, path_prefix, skip=None, in_port=False):
     """Prefix all ids (and url(#...) references to them); attach data-* to contracted elements."""
     elements = contract.get("elements", {}) or {}
+    # A CONTRACT CAN NEST A PORT IN ITSELF, not just in a composed `parts:`
+    # entry: an MPO/MTP flange adapter's own class is `port` and its keyed
+    # `opening` is drawn as a second `class: port` element inside it, and a
+    # bare plug's `body` does the same, for the same reason a composed cage
+    # marks its std core - an audit walking `[data-class=port]` should not
+    # count the opening or the body as a second connector. This wrapping `g`
+    # (below, via the caller) is what carries `contract`'s own class, so an
+    # inner element is nested under a port ancestor when THIS contract is
+    # itself a port, or when the caller says an ancestor above it already is.
+    self_in_port = in_port or contract.get("class") == "port"
     renamed = {}
     for node in el.iter():
         if node is skip:
@@ -422,6 +432,8 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
             node.set("data-path", f"{path_prefix}/{nid}")
             if spec.get("class"):
                 node.set("data-class", spec["class"])
+                if self_in_port and spec["class"] == "port":
+                    node.set("data-inner", "1")
             if spec.get("states"):
                 node.set("data-states", " ".join(state_names(spec["states"])))
             # A DISPLAY IS NOT A LAMP AND ITS VOCABULARY IS NOT COLOURS. `states`
@@ -698,6 +710,29 @@ def group_side_attrs(group_name, grp):
     return out
 
 
+def write_group_side(g, group_name, grp, own_attrs):
+    """Write group_side_attrs onto a drawn member `g`, except where the member's
+    OWN attrs already name the key - a placement's attrs win over its group's.
+
+    THE ONE WRITER, for the three places a member is drawn: a device placement
+    (draw_placement), a component part in a component group (instance_group's
+    `parts:` loop, at any nesting depth), and an optic seated in a card's cage
+    (_seat_nested_occupants). The map is group_side_attrs and nothing else, so
+    a cage's published `occupant-attrs` and what the build writes cannot drift
+    apart on a card any more than on a device."""
+    own = data_attrs(own_attrs)
+    for name, value in group_side_attrs(group_name, grp).items():
+        if name not in own:
+            g.set(name, value)
+
+
+def group_merged_attrs(grp, own_attrs):
+    """The attrs bag a grouped member is DRAWN with: its group's attrs under its
+    own. instance_group reads this for text filled from attrs and for the
+    contract-attr precedence; write_group_side is what the group writes."""
+    return {**((grp or {}).get("attrs") or {}), **(own_attrs or {})} or None
+
+
 def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
                floor_of=None):
     """WHERE ONE OCCUPANT SEATS ON ONE HOST: (at, rotate, lift), in the frame
@@ -806,9 +841,11 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     own `lift` is its `host-lift`, because the occupant sits BESIDE the
     cage's group and not in it - the figure component_cages publishes as the
     cage's `lift`. A mirrored card mirrors every cage on it, so it refuses as
-    a mirrored cage does. Nothing here takes a port group: a contract
-    declares none (R3). Keys used are added to `occ_used`, which render_view
-    reads to report a key nothing seated."""
+    a mirrored cage does. An occupant takes its host part's COMPONENT group
+    (#511) exactly as a device occupant takes its host placement's - the map
+    component_cages publishes as `occupant-attrs`; a card that declares no
+    groups contributes nothing. Keys used are added to `occ_used`, which
+    render_view reads to report a key nothing seated."""
     prefix = module_key_prefix(path)
     if not occupants or prefix is None:
         return
@@ -817,8 +854,10 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         return
     hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
                        "mirror": bool(mirror or q.get("mirror")),
-                       "host-lift": float(q.get("lift") or 0.0)}
+                       "host-lift": float(q.get("lift") or 0.0),
+                       "group": q.get("group")}
              for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
+    comp_groups = contract.get("groups") or {}
     while pending:
         seated_now = []
         for host_id, (key, spec) in pending.items():
@@ -828,19 +867,31 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             at, hrot, lift = solve_seat(lib, f"occupants/{key}", spec["ref"],
                                         f"{path}/{host_id}", host)
             local = occupant_local_id(host_id, spec)
+            # THE HOST'S GROUP, AS A DEVICE OCCUPANT TAKES ITS HOST'S: the card
+            # group's attrs under the occupant's own, its side written by
+            # write_group_side, its states if it has them - the same map
+            # component_cages publishes as this cage's `occupant-attrs`. An
+            # occupant seated on an occupant inherits the chain's group.
+            gname = host.get("group")
+            grp = comp_groups.get(gname) or {}
             og, _ = instance_group(
-                lib, spec["ref"], f"{inst_id}--{local}", at, None, spec.get("attrs"),
+                lib, spec["ref"], f"{inst_id}--{local}", at, None,
+                group_merged_attrs(grp, spec.get("attrs")),
                 None, None, skin_name=spec.get("skin", "default"),
                 rotate=hrot or None, palette=palette, inst_palette=inst_palette,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                 path=f"{path}/{local}", resolved=resolved)
+            if gname:
+                write_group_side(og, gname, grp, spec.get("attrs"))
+                if grp.get("states"):
+                    apply_states(og, grp["states"], inst_palette)
             if lift:
                 og.set("data-z-lift", f"{lift:g}")
             og.set("data-for", f"{path}/{host_id}")
             g.append(og)
             hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
-                            "host-lift": lift}
+                            "host-lift": lift, "group": gname}
             if occ_used is not None:
                 occ_used.add(key)
             seated_now.append(host_id)
@@ -852,7 +903,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             del pending[host_id]
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -926,6 +977,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     g.set("id", inst_id)
     g.set("data-path", path)
     g.set("data-class", contract.get("class", "component"))
+    # A PORT INSIDE A PORT - the std core of a composed port - is the inner
+    # part of one connector, not a second one (see the `parts:` loop below).
+    if in_port and contract.get("class") == "port":
+        g.set("data-inner", "1")
     # HOW IT MOVES, beside WHAT IT IS. The 3D viewer decided what could be
     # ejected from a hardcoded class list, so every new removable type meant
     # editing that list - and a transceiver, which is removable, was not on it.
@@ -1022,7 +1077,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     holder = ET.Element(f"{{{SVG_NS}}}g")
     for child in list(skin):
         holder.append(copy.deepcopy(child))
-    rewrite_ids(holder, inst_id, contract, path, skip=holder)
+    rewrite_ids(holder, inst_id, contract, path, skip=holder, in_port=in_port)
     # TEXT FROM ATTRS, so one carrier covers a catalogue instead of a file per
     # row. `merged` is the contract's attrs under the placement's, which is
     # already the precedence every other attr consumer uses.
@@ -1077,9 +1132,27 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # default order the bracket's own dark opening lands back over the vents and
     # the plate renders as an empty slot. `behind: true` says which.
     behind_at = 1                       # after the <title>, before the skin
+    # A CARD'S PORTS CARRY THE CARD'S GROUPS (#511). A part joins a group the
+    # component itself declares, and is drawn exactly as a device placement in
+    # a device group is: the group's attrs under its own, then the group's side
+    # written by write_group_side. This runs wherever the component is drawn -
+    # a device placement, a device bay's module, a module in a nested bay - so
+    # the depth a card is seated at changes nothing about what its ports say.
+    # A device never overrides a card's groups: the bay's own group stays on
+    # the bay element (render_view), and names are local to the component.
+    comp_groups = contract.get("groups") or {}
+    # AN INNER PORT IS MARKED. A composed port - common/rj45-eth around a
+    # std/rj45, common/qsfp28-cage around a std/qsfp-ganged - draws its core as a
+    # data-class `port` of its own, nested inside the outer one. The outer port
+    # is the one that carries the facts (media, speed, group); the core keeps
+    # its class, so no selector breaks, and says `data-inner="1"` so an audit
+    # can skip it. Handed down the whole composition, not just one level.
+    parts_in_port = in_port or contract.get("class") == "port"
     for part in contract.get("parts") or []:
+        pgrp = comp_groups.get(part.get("group")) or {}
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
-                               part["at"], None, part.get("attrs"), None, None,
+                               part["at"], None,
+                               group_merged_attrs(pgrp, part.get("attrs")), None, None,
                                skin_name=part.get("skin", "default"),
                                rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
                                # A LIFTED PART'S FEATURES ARE STILL MEASURED
@@ -1098,7 +1171,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                               path=f"{path}/{part['id']}", resolved=resolved)
+                               path=f"{path}/{part['id']}", resolved=resolved,
+                               in_port=parts_in_port)
+        if part.get("group"):
+            write_group_side(pg, part["group"], pgrp, part.get("attrs"))
         # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
         # declares what a lamp IS and can only guess what it MEANS - the same
         # reasoning apply_states already carries for device placements, and the
@@ -1106,8 +1182,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # indicator table for it and had no way to attach one. Without this the
         # only route was a wrapper that redraws the lamps over the ones it
         # composes, which is two nodes for one indicator.
-        if part.get("states"):
-            apply_states(pg, part["states"], inst_palette)
+        # A part's own table wins over its group's, as on a device placement.
+        part_states = part.get("states") or pgrp.get("states")
+        if part_states:
+            apply_states(pg, part_states, inst_palette)
         # a part on a protruding parent recesses from THAT surface, not the panel
         if part.get("lift"):
             pg.set("data-z-lift", str(part["lift"]))
@@ -2284,7 +2362,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # placement's own: text filled from attrs and the contract-attr
         # precedence both read that merged bag. What the GROUP WRITES on this
         # placement is group_side_attrs, below, and only that.
-        merged_attrs = {**(grp.get("attrs") or {}), **(p.get("attrs") or {})} or None
+        merged_attrs = group_merged_attrs(grp, p.get("attrs"))
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
                                      None, merged_attrs,
                                      None, p.get("rel-pos"),
@@ -2335,10 +2413,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # so the kit seats an optic with what the build writes here. A
         # placement's own attrs and description win over its group's: the
         # attrs were merged that way above, and the description is set below.
-        own = data_attrs(p.get("attrs"))
-        for name, value in group_side_attrs(p.get("group"), grp).items():
-            if name not in own:
-                g.set(name, value)
+        write_group_side(g, p.get("group"), grp, p.get("attrs"))
         if p.get("in"):
             # a projection is flat: nothing is built from it, so it carries no
             # lift - but it keeps data-in, which the pull machinery reads
@@ -2930,10 +3005,10 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
     `at`, `rotate`, `attrs`, `mirror`). Everything that is a FACT OF THE
     FRAME the placement sits in is handed in rather than looked up, because
     the two frames answer it differently:
-      group       the placement's port group ({} or None where it has none -
-                  a component carries no `groups:`, so a card cage's media is
-                  its part's own `attrs.media` and its occupant-attrs are
-                  empty);
+      group       the placement's port group ({} or None where it has none) -
+                  a device group for a device cage, the card's own COMPONENT
+                  group for a card cage (#511); a card part in no group has
+                  only its own `attrs.media` and empty occupant-attrs;
       extra_lift  added to the presented lift - a device cage's well sink
                   (negative), a composed part's own `lift` (see
                   component_cages);
@@ -3059,9 +3134,10 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     return out
 
 
-# What a device cage carries and a component's own cage does not: each is a
-# fact of a device frame (a configured occupant, a port group, a group
-# position) that a contract never states.
+# What a device cage carries and a component's own cage does not: a configured
+# occupant, the device's port group and a group position. A card's own group
+# (#511) reaches its cages through `occupant-attrs` (`data-group`), not as a
+# `group` key that a consumer would read as a device group.
 COMPONENT_CAGE_DROPS = ("occupant", "group", "rel-pos")
 
 
@@ -3078,13 +3154,18 @@ def component_cages(contract, lib, families, candidates):
     interface, its one composed aperture. Nothing deeper is walked, on either
     side.
 
-    NO GROUP, NO OCCUPANT. A contract declares no `groups:`, so `media` is the
-    part's own `attrs.media` (a part that declares none has no ceiling) and
-    `occupant-attrs` is what group_side_attrs yields for no group - empty. A
-    contract seats no occupant: which optic a card's cage holds is a
-    configuration's answer, not the card's. So the three keys only a device
-    frame can fill - `occupant`, `group`, `rel-pos` - are DROPPED here rather
-    than published as nulls that look like answers (COMPONENT_CAGE_DROPS).
+    THE CARD'S OWN GROUP, NO OCCUPANT. A part in one of the component's own
+    `groups:` (#511) is read exactly as a device placement in a device group:
+    `media` from the part and then the group, `occupant-attrs` the group's
+    side (group_side_attrs) - which is what _seat_nested_occupants writes on
+    an optic the build seats here, so the kit seats the same thing. A part in
+    no group has its own `attrs.media` only (none: no ceiling) and empty
+    `occupant-attrs`. A contract seats no occupant: which optic a card's cage
+    holds is a configuration's answer, not the card's. So `occupant`, and the
+    device-frame `group` and `rel-pos` keys, are DROPPED here rather than
+    published as nulls that look like answers (COMPONENT_CAGE_DROPS); the
+    group's name still reaches a consumer, as `data-group` in
+    `occupant-attrs`.
 
     THE PART'S OWN `lift` IS ADDED, where a device placement's is not. The two
     words mean different things: a device placement's `lift:` is carried by
@@ -3097,8 +3178,10 @@ def component_cages(contract, lib, families, candidates):
     card's raised cage.
     """
     out = []
+    groups = contract.get("groups") or {}
     for p in contract.get("parts") or []:
         entry = cage_entry(p, lib, families, candidates,
+                           group=groups.get(p.get("group")),
                            extra_lift=float(p.get("lift") or 0.0))
         if entry is not None:
             for k in COMPONENT_CAGE_DROPS:

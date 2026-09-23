@@ -744,6 +744,26 @@ def iface_type(p, attrs, group_role=None):
     return IFACE_TYPE.get((fam, speed)) if speed else None
 
 
+def mgmt_only(attrs, group_role):
+    """Is this port management-only? EITHER WAY OF SAYING IT COUNTS: the
+    per-port `attrs.role: mgmt`, or a group whose `role` is `management`. One
+    rule for a device port (`build`) and a card's port (`build_module`)."""
+    return attrs.get("role") == "mgmt" or group_role == "management"
+
+
+def effective_part(part, groups):
+    """A card's `parts:` entry as the exporter reads it, and its group's role:
+    (the part with its group's attrs merged under its own, role or None).
+    The same precedence `build`'s attrs_of gives a device placement - and
+    render.py's group_merged_attrs gives the drawing - so the export types a
+    port from what the drawing says it is."""
+    grp = (groups or {}).get(part.get("group")) or {}
+    if not grp:
+        return part, None
+    return ({**part, "attrs": {**(grp.get("attrs") or {}), **(part.get("attrs") or {})}},
+            grp.get("role"))
+
+
 def flatten(section, prefix=""):
     """attrs are nested a section deep and sometimes deeper. Read them flat."""
     out = {}
@@ -1104,7 +1124,7 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
                 # spelling; a group whose own role is `management` says the same
                 # thing about every port in it, and six devices only say it that way.
-                if a.get("role") == "mgmt" or group_role(p) == "management":
+                if mgmt_only(a, group_role(p)):
                     iface["mgmt_only"] = True
                 if breakout:
                     iface["description"] = breakout_note(breakout, _num(iid.rsplit("-", 1)[-1]))
@@ -1194,9 +1214,21 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
     # Which interface type this card's cages actually run at. The cage ref gives
     # the floor; an attr naming a faster media raises it.
     ifaces, consoles, powers = [], [], []
+    # A CARD'S PORTS ARE READ THROUGH THE CARD'S OWN GROUPS (#511), the way a
+    # device's placements are read through the device's: every table below
+    # sees the part's EFFECTIVE attrs - its group's attrs under its own
+    # (effective_part) - and a port in a `management` group is mgmt_only, the
+    # same rule `build` applies to a device port.
+    comp_groups = contract.get("groups") or {}
     for part in contract.get("parts") or []:
         if not isinstance(part, dict):
             continue
+        part, part_role = effective_part(part, comp_groups)
+        # The one interface this part exports as a NETWORK port, if any - the
+        # only kind mgmt_only is set on. A timing or RF jack exports as `other`
+        # with its function as a label and stays out of it, as it does on a
+        # device, where `build` lists those jacks apart from the ports.
+        network = None
         full_ref = part["ref"]
         ref = full_ref.split("@")[0]
         pid = str(part.get("id") or "")
@@ -1211,6 +1243,7 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             if placed == "other":
                 iface["label"] = "RJ45"
             ifaces.append(iface)
+            network = iface
         elif full_ref in FAMILY_PART:
             # Checked on the un-stripped ref, before PART_CONSOLE/PART_IFACE
             # below drop the @major and would otherwise catch every version of
@@ -1226,7 +1259,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
                 if kind == "console":
                     consoles.append({"name": pid or "Console", "type": t})
                 else:
-                    ifaces.append({"name": pid, "type": t})
+                    network = {"name": pid, "type": t}
+                    ifaces.append(network)
         elif ref in PART_POWER:
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:
@@ -1239,7 +1273,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         elif ref in PART_IFACE:
             if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
                 defaulted[ref] = defaulted.get(ref, 0) + 1
-            ifaces.append({"name": pid, "type": cage_type(ref, attrs)})
+            network = {"name": pid, "type": cage_type(ref, attrs)}
+            ifaces.append(network)
         elif dropped is not None:
             # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
             # out here with nothing written down, and an empty interface list is
@@ -1249,6 +1284,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             # decides what to do with the names; `None` opts out, for readers
             # that only want the document.
             dropped[ref] = dropped.get(ref, 0) + 1
+        if network is not None and mgmt_only(part.get("attrs") or {}, part_role):
+            network["mgmt_only"] = True
 
     # THE DECLARED INLET, when no part draws one. Second, not first: a composed
     # part knows its own id and there may be several, so it wins wherever it

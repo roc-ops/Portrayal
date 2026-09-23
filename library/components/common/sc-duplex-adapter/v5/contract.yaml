@@ -1,0 +1,100 @@
+format: 1
+kind: component
+name: sc-duplex-adapter
+version: 5.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body
+  carrying two SC ports STACKED vertically, not side by side, on the 12.7 SC
+  duplex pitch. A blue frame standing proud of the plate, each port a real SC
+  opening (std/sc-bore@1). The black dust caps FS ships are occupants of the
+  openings, not part of this adapter - see provenance.dust-caps. Distinct from
+  common/lc-duplex-adapter, whose pair sits abreast, and from common/sc-apc,
+  which is a device-specific moulded PON bay rather than a panel adapter.
+size: {w: 9.4, h: 25.4}
+conforms: sc-duplex-adapter
+size-confidence: {w: photo-measured, h: photo-measured}
+size-notes: >-
+  9.4 is the width v1 measured: six bodies 9.32 to 9.49 on FS's face-on render
+  of SKU 57058. 25.4 is the height, and v1's 12.0 was the defect this major
+  exists for - two 9.0 SC openings cannot stack in 12.0. On 57058.main.jpg,
+  scaled on the 108.97 mm plate (80-719 px, 5.86 px/mm), every adapter's blue
+  frame runs from y 370 to 518, 149 px, 25.4 mm. It is corroborated twice:
+  25.4 is exactly two cells on the 12.7 SC duplex pitch, and Molex's SC duplex
+  adapter (106167) is drawn 9.4 wide and 25.9 overall. No depth in `size`: how
+  far the frame stands out of the plate is `relief`, not an aperture.
+attrs: {media: fiber, connector: sc}
+optical:
+  # TWO PORTS, STACKED. FS's own panel numbering reads 2/4/6/8/10/12 across
+  # the top of each block and 1/3/5/7/9/11 across the bottom - the same six
+  # bodies, each carrying an upper and a lower port - which is the opposite
+  # arrangement from common/lc-duplex-adapter's side-by-side pair.
+  positions: 2
+relief:
+  features:
+    - node: bezel
+      out: 1.0
+      confidence: estimated
+      source: >-
+        FS's side photograph of SKU 57058 (57058.C.jpg): the blue frames stand
+        just proud of the faceplate. Oblique, not orthographic, so it is
+        scaled on the cassette's body depth along the same axis and is an
+        estimate - about 5 px. That scale was first taken on a 110.24 mm
+        body, a misreading of FS's 4.64in dimension line (see
+        fs/fhd-1mtp6lcd-os2-a@4); on the true 117.86 mm the same 5 px is
+        1.07 mm against the 1.0 recorded - under one pixel, inside what a
+        5 px reading can resolve, so the estimate is left at 1.0.
+parts:
+  # Each opening centred across the 9.4 frame (7.5 opening at x 0.95-8.45, its
+  # key slot cut out through the left wall) and centred in its 12.7 cell.
+  # Lifted onto the raised frame so each recesses from the proud face.
+  - {id: '1', ref: std/sc-bore@1, at: [0.06, 14.55], lift: 1.0}
+  - {id: '2', ref: std/sc-bore@1, at: [0.06, 1.85], lift: 1.0}
+connection-points:
+  optical: {at: [4.7, 12.7], direction: front}
+provenance:
+  position-order: >-
+    POSITION 1 IS THE LOWER BORE, because FS prints the lower bore of each
+    stacked adapter as the ODD port (1 below 2 at the left end of the panel,
+    11 below 12 at the right) and a fibre position's number is the port
+    number every consumer of the optical model shows. Positions follow the
+    order the bores are composed, so bore `1` - composed first - sits below. Until
+    v4 the upper bore was composed first: every Type A path was
+    "straight through" by number while fibre 1 surfaced at the port FS prints
+    as 2, a Type AF wiring on the hardware under a Type A label.
+  size: >-
+    photo-measured, both axes - see size-notes. v1's height was 12.0, read off
+    the render's proportions rather than any pixel span, and it was wrong by
+    more than half.
+  stacking: >-
+    photo-read off 57058.main.jpg - each adapter is one blue frame around two
+    black-capped ports, one over the other, and the panel prints '2' above and
+    '1' below the leftmost block (then 4/3, 6/5, 8/7, 10/9, 12/11 across the
+    row). `optical.positions: 2` and the vertical arrangement follow this.
+  parts: >-
+    THE OPENINGS ARE REAL AND THEIR KEY SIDE IS ASSUMED. The two std/sc-bore@1
+    are SENKO's printed 7.5 x 9.0 opening; their centres are 12.7 apart, the SC
+    duplex pitch, which is what the 25.4 frame is two of. The key slot is put
+    on the LEFT because the caps FS ships these with hide it on every image
+    held; an uncapped FHD SC panel photographed face-on settles which side.
+  dust-caps: >-
+    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; the pluggables connectors work seats it (a `common/` cap part, and a default occupant per port). The reading is kept here for that part: photo-measured on 57058.main.jpg - one black cap fills each
+    cell inside the blue frame, 8.8 x 11.45 (at 0.3, 0.9 and 0.3, 13.6), with a
+    lighter raised grip 3.9 x 7.0 on its centre; caps rgb(40,41,42), #2b2c2e,
+    grips #46484b. Their fronts stood at `out: 3.3` on the frame's 1.0 and the
+    grips at 3.8, estimated off FS's oblique side photo 57058.C.
+  colour: >-
+    sampled off 57058.main.jpg - frame rgb(48,120,192), #3078c0.
+  fibre-count: >-
+    catalogue - the FS FHD catalogue lists 57058 as a 12-fibre part (MTP-12 to
+    SC, OS2) built from six of these SC duplex adapters, 2 fibres each.
+  connection-point: >-
+    the centre of the 9.4 x 25.4 face, (4.7, 12.7) - midway between the two
+    ports' own mates at y 6.35 and 19.05.
+  bore-ids: >-
+    THE BORES ARE NUMBERED, NOT TX AND RX. A panel adapter has no direction
+    until something is plugged into it; its bores are fibre positions 1 and 2,
+    and a cassette path endpoint `lc01.1` is drawn at `lc01/1` (L112). Until
+    v5 they were `tx` and `rx`, which read as a direction the part does not have.
+skins: [default]

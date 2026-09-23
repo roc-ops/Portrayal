@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx104-re
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -14,6 +14,12 @@ attrs:
   model: RE-MX-104
   power-absent: not-published
 provenance:
+  speed: 'guide - MX104 hardware guide, RJ-45 pinout section: the ETHERNET port is an autosensing
+    10/100/1000-Mbps Ethernet RJ-45 receptacle. Carried as 1g, the top of the autosensing range,
+    which is how the library states a tri-speed jack'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
   size: 'photo - ~145 x 22.5 mm read off the reference photograph; the RJ45
     fit is what bounds the height (a first reading gave 13.9 mm rows, which
     cannot hold a 14 mm jack - the plausibility check moved the band
@@ -32,12 +38,20 @@ states:
 - ok
 - fail
 - absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
 parts:
-- {ref: std/usb-a@1, id: usb0, at: [39.0, 9.75], rotate: 90, attrs: {function: USB 0}}
-- {ref: std/usb-a@1, id: usb1, at: [47.0, 9.75], rotate: 90, attrs: {function: USB 1}}
-- {ref: std/rj45@2, id: aux, at: [62.1, 6.15], attrs: {function: auxiliary console}}
-- {ref: std/rj45@2, id: console, at: [80.1, 6.15], attrs: {function: serial console}}
-- {ref: common/rj45-eth@1, id: ethernet, at: [108.1, 6.15], attrs: {function: out-of-band management}}
+- {ref: std/usb-a@1, id: usb0, group: mgmt, at: [39.0, 9.75], rotate: 90, attrs: {function: USB 0}}
+- {ref: std/usb-a@1, id: usb1, group: mgmt, at: [47.0, 9.75], rotate: 90, attrs: {function: USB 1}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [62.1, 6.15], attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [80.1, 6.15], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: ethernet, group: mgmt, at: [108.1, 6.15], attrs: {speed: 1g, media: rj45, function: out-of-band management}}
 size:
   w: 145.0
   h: 22.5
