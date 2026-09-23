@@ -100,12 +100,13 @@ provenance:
     band - 0.475% short. Both come off this one render, so the fix is
     arithmetic on the old figures: new = (old + 1.375) x 634/631. The row sat
     15.81 mm from the left edge and 19.25 from the right, a 3.4 mm asymmetry FS
-    does not draw; it is now 17.27 and 17.49. Three renders FS drew separately,
-    each framed on its own plate's median edges, put every housing's left
-    edge on these: 57016.main within 0.17 (one pixel), 57017.B within 0.09,
-    182642.g1 (OM4 universal, at 12 px/mm) within 0.06 - and their own rows
-    are symmetric - 17.33/17.33 on 57017.B, 17.21/17.38 on 182642.g1. The earlier proof of the
-    method, that it returned this contract's own `at.x` to the hundredth,
+    does not draw; it is now 17.27 and 17.49. Re-measured directly in the
+    corrected frame, 57016.main itself puts every housing's left edge within
+    0.17 (one pixel) of these. Two renders FS drew separately, of other SKUs
+    on this plate, each framed on its own plate's median edges, agree too:
+    57017.B (OM4 Type A) within 0.09 and 182642.g1 (OM4 universal, at 12
+    px/mm) within 0.06 - and their own rows are symmetric, 17.33/17.33 and
+    17.21/17.38. The earlier proof of the method, that it returned this contract's own `at.x` to the hundredth,
     compared the tool with its own earlier output and could not have caught
     this. spec/tests/test_fhd_adapter_rows_are_centred.py now asks every FHD
     cassette to centre its row.

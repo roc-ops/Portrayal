@@ -23,6 +23,7 @@ Read from the contracts themselves, not the build, so it cannot skip.
 import pathlib
 
 import yaml
+from portrayal import optical_ports
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library" / "components"
@@ -40,16 +41,20 @@ def _rows():
         doc = yaml.safe_load(path.read_text())
         if doc.get("kind") != "module" or doc.get("class") != "cassette":
             continue
+        # THE ROW IS THE FIBRE PARTS, picked the way the optical projection and
+        # L88 pick them (`optical_ports.family_of`), not by a substring of the
+        # ref. A cassette with none is a failure below, never a quiet skip.
         spans = []
         for part in doc.get("parts") or []:
-            if "adapter" not in part["ref"]:
+            if optical_ports.family_of(part["ref"]) is None:
                 continue
-            w = ((_contract(part["ref"]) or {}).get("size") or {}).get("w")
+            sub = _contract(part["ref"])
+            assert sub is not None, f"{part['ref']} does not resolve to a contract"
+            w = (sub.get("size") or {}).get("w")
             assert w, f"{part['ref']} has no size.w to measure a margin with"
             spans.append((float(part["at"][0]), float(part["at"][0]) + float(w)))
-        if spans:
-            ref = f"fs/{doc['name']}@{path.parent.name[1:]}"
-            out.append((ref, doc["size"]["w"], spans))
+        ref = f"fs/{doc['name']}@{path.parent.name[1:]}"
+        out.append((ref, doc["size"]["w"], spans))
     return out
 
 
@@ -60,6 +65,10 @@ def test_every_fhd_cassette_centres_its_adapter_row():
         "measuring the family it was written for - have they moved or been renamed?")
     bad = []
     for ref, w, spans in rows:
+        if not spans:
+            bad.append(f"{ref}: composes no fibre part this test knows, so it "
+                       "measured nothing - teach optical_ports.FAMILY the part")
+            continue
         left = min(a for a, _b in spans)
         right = w - max(b for _a, b in spans)
         if abs(left - right) > 0.5:

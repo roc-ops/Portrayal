@@ -180,9 +180,13 @@ def test_the_maiaedge_face_carries_the_datasheet_figures(pm):
 def _rounded_plate(Image, *, left=30, top=25, w=311, h=100, r=12):
     """A dark plate with rounded corners on a light ground, as FS draws one.
 
-    Rows inside a corner's radius start inboard of the true edge, by up to
-    `r` px on the very first row. Those rows are still more than 97% of the
-    widest row, so they are inside the band `plate()` finds.
+    Rows inside a corner's radius start inboard of the true edge, by `r` px on
+    the very first row. The outermost of them fall under 97% of the widest row
+    and stay out of the band `plate()` finds, but the next ones in do not: with
+    these defaults the band's first row starts 4 px inboard, which is the error
+    the first-row x0 made. Change `r`, `w` or the 97% threshold and re-check
+    that the band still opens on an inset row, or the tests below stop
+    measuring anything.
     """
     im = Image.new("RGB", (left + w + 40, top + h + 40), (255, 255, 255))
     for y in range(h):
@@ -206,7 +210,11 @@ def test_a_rounded_plate_reports_its_true_left_edge(pm):
     """
     Image = pytest.importorskip("PIL.Image")
     im = _rounded_plate(Image)
-    x0, _y0, x1, _y1, _mm = pm.plate(im)
+    x0, y0, x1, _y1, _mm = pm.plate(im)
+    first = next(x for x in range(im.size[0]) if pm._dark(im.getpixel((x, y0))))
+    assert first > 30, (
+        "the band opens on a full-width row, so a first-row x0 would pass too - "
+        "this plate no longer tests the corner; see _rounded_plate")
     assert x0 == 30, f"x0 {x0} is {x0 - 30} px inboard of the drawn edge at 30"
     assert x1 == 30 + 311 - 1
 
