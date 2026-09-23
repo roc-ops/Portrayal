@@ -85,3 +85,25 @@ def test_every_exemption_names_a_part_that_exists_and_says_why():
         ns, name = key.split("/")
         assert list((ROOT / "library/components" / ns / name).glob("v*/contract.yaml")), key
         assert len(why.split()) >= 8, f"{key}: an exemption needs a reason, not a word"
+
+
+def _position_ports():
+    for f in sorted((ROOT / "library/components").glob("*/*/v*/contract.yaml")):
+        d = yaml.safe_load(f.read_text())
+        if d.get("class") == "port" and (d.get("optical") or {}).get("positions"):
+            yield f, d
+
+
+def test_every_position_bearing_port_is_covered():
+    seen, failing = 0, {}
+    for f, d in _position_ports():
+        seen += 1
+        msgs = l110(d, path=str(f.relative_to(ROOT)))
+        if msgs:
+            failing[str(f.relative_to(ROOT / "library/components"))] = msgs[0]
+    assert seen >= 12, f"only {seen} position-bearing ports found - has the library moved?"
+    assert not failing, failing
+
+
+def test_the_exemptions_are_exactly_these():
+    assert set(lint.POSITION_EXEMPT) == {"common/mdc-adapter", "common/fibre-splice"}

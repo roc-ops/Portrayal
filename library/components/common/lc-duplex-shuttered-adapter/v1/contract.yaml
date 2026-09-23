@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-shuttered-adapter
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: >-
@@ -36,9 +36,13 @@ fields:
     type: text
     default: '#368ad4'
 optical:
-  # TWO BORES, SO TWO FIBRE POSITIONS, in the order they are composed: 1 is
-  # `tx`, the LEFT bore, which is the odd port FS numbers first along a row.
+  # TWO BORES, SO TWO FIBRE POSITIONS: 1 is the LEFT bore, which is the odd
+  # port FS numbers first along a row, and 2 the right. Each is the shutter
+  # group drawn over its bore, element `1` and element `2` below.
   positions: 2
+elements:
+  '1': {at: [1.275, 3.65], size: [4.3, 4.3], class: fibre}
+  '2': {at: [7.525, 3.65], size: [4.3, 4.3], class: fibre}
 relief:
   features:
     - node: bezel
@@ -75,7 +79,9 @@ provenance:
     than the housing - so they follow `housing-finish`, with the seam between
     them. Their angle and how far they sit behind the face are not readable at
     6.1 px/mm and are not modelled: the doors are flat art at the plate plane,
-    behind the raised bezel.
+    behind the raised bezel. The two shutter groups are the skin nodes `1`
+    and `2`, one per fibre position, so fibre 1 is drawn at `<part>/1`.
+    Position 1 is the LEFT bore, as `optical:` states.
   colour: >-
     the `housing-finish` default is FS's single-mode UPC blue as it renders on
     this adapter: #368ad4, the median of the housing pixels on 105333.main.jpg

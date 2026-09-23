@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lsh-simplex-adapter
-version: 1.0.3
+version: 1.1.0
 class: port
 profile: networking
 description: >-
@@ -23,7 +23,14 @@ attrs: {media: fiber, connector: lsh}
 optical:
   # ONE FIBRE. LSH/E2000 ships simplex on FS's panels.
   positions: 1
+elements:
+  '1': {at: [1.5, 2.5], size: [4.0, 3.0], class: fibre}
 provenance:
+  fibre-position: >-
+    element `1` is the one fibre position: the dark shuttered opening, the
+    4.0 x 3.0 rect at 1.5, 2.5, the skin node that used to be `port`. Its
+    bounding box is the element, so fibre 1 of this part is drawn at
+    `<part>/1`.
   size: >-
     ESTIMATED - NOT A MEASUREMENT, AND THE WEAKEST APERTURE OF THE FIVE. No
     face-on render of an FS LSH panel exists in this corpus, only a
