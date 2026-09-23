@@ -249,7 +249,7 @@ RULES = {
     "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
-    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
+    "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
@@ -2453,13 +2453,25 @@ def lint_component_optical_conflicts(path, data, _lib_roots=None):
 # THE THREE POLARITIES FS BUILDS, as the fibre each front port takes, port by
 # port, within one rear connector of n positions. Port p is the vendor's printed
 # number (odd = the lower bore of a stacked duplex). Read off FS's own cassette
-# diagrams (the FHD universal-polarity blog's Method A and Method B figures):
-# Type A is straight through; AF swaps each duplex pair - port 1 takes fibre 2
-# and port 2 takes fibre 1; universal pairs fibre j with fibre n+1-j, so port 1
-# takes fibre 1 and port 2 fibre 12.
+# diagrams (the FHD universal-polarity blog's Method A and Method B figures, and
+# the FHD MTP-12/24 Cassettes Datasheet's Inner Sequence tables): Type A is
+# straight through; AF swaps each duplex pair - port 1 takes fibre 2 and port 2
+# takes fibre 1; universal pairs fibre j with fibre n+1-j, so port 1 takes fibre
+# 1 and port 2 fibre 12.
+#
+# A 24-FIBRE AF IS NOT THE PAIR SWAP ALONE. The datasheet (p. 6, MTP-24 Type AF)
+# also exchanges the two twelve-fibre rows: port 1 takes fibre 14, port 13
+# takes fibre 2. Its MTP-12 AF (p. 4) is the pair swap alone.
+def _af_pattern(n):
+    swapped = [p + 1 if p % 2 else p - 1 for p in range(1, n + 1)]
+    if n == 24:
+        return [f + 12 if f <= 12 else f - 12 for f in swapped]
+    return swapped
+
+
 POLARITY_PATTERNS = {
     "a": lambda n: list(range(1, n + 1)),
-    "af": lambda n: [p + 1 if p % 2 else p - 1 for p in range(1, n + 1)],
+    "af": _af_pattern,
     "universal": lambda n: [(p + 1) // 2 if p % 2 else n + 1 - p // 2
                             for p in range(1, n + 1)],
 }
