@@ -122,13 +122,13 @@ def test_the_fs_cassette_pitch_is_in_the_registry_as_measured():
         "the registry entry must name the render the pitch came from"
 
 
-CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v1"
+CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v2"
 CENTRES = [20.45, 33.34, 46.23, 59.30, 72.19, 85.08]
 
 
 def test_the_cassette_is_an_fhd_module():
     c = contract(CASSETTE)
-    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@1 not built"
+    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@2 not built"
     assert c["size"]["w"] == 108.97 and c["size"]["h"] == 35.05
 
 

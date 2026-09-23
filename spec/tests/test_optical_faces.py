@@ -109,7 +109,7 @@ def test_a_split_reports_every_bad_leg():
 def test_the_real_cassette_passes_this_rule():
     """The one contract in the library that uses a qualified endpoint."""
     c = yaml.safe_load(
-        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v1/contract.yaml"
+        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v2/contract.yaml"
          ).read_text())
     assert run84(c) == []
 

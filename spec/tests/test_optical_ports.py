@@ -52,7 +52,7 @@ def test_a_module_with_no_paths_is_not_this_rules_business():
 
 def test_the_real_cassette_states_its_polish():
     c = yaml.safe_load(
-        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v1/contract.yaml").read_text())
+        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v2/contract.yaml").read_text())
     assert (c["optical"]).get("polish") == "upc"
     assert run86(c) == []
 
@@ -63,7 +63,7 @@ def test_the_cassettes_polish_is_marked_as_the_assumption_it_is():
     and the contract has to say which - the same distinction plan 4 drew for the
     polarity map."""
     c = yaml.safe_load(
-        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v1/contract.yaml").read_text())
+        (ROOT / "library/components/fs/fhd-1mtp6lcd-os2-a/v2/contract.yaml").read_text())
     note = (c.get("provenance") or {}).get("optical") or ""
     assert "polish" in note.lower(), "provenance says nothing about the polish"
     assert "ASSUM" in note.upper() or "not name" in note.lower(), \
@@ -78,7 +78,7 @@ def cassette_entry():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    return idx["fs/fhd-1mtp6lcd-os2-a@1"], idx
+    return idx["fs/fhd-1mtp6lcd-os2-a@2"], idx
 
 
 def test_the_rear_mtp_is_one_port_with_twelve_positions():
@@ -363,7 +363,7 @@ def test_the_two_row_cassette_follows_its_front_order():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    e = idx["fs/fhd-2mtp12-lc-os2-a@2"]
     view = D.contract_view(e)
     want = [str(n) for n in range(1, 25)]
     got = []

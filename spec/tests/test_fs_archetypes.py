@@ -74,7 +74,7 @@ def test_the_enclosure_accepts_every_fs_cassette_in_the_library():
     assert not missing, f"cassettes the enclosure does not accept: {missing}"
 
 
-SPLICE = "fs/fhd-splice-12-lc/v1"
+SPLICE = "fs/fhd-splice-12-lc/v2"
 
 
 def test_the_splice_cassette_states_that_nothing_measured_it():
@@ -85,7 +85,7 @@ def test_the_splice_cassette_states_that_nothing_measured_it():
     the prose needs rewriting too.
     """
     c = contract(SPLICE)
-    assert c is not None, "fs/fhd-splice-12-lc@1 not built"
+    assert c is not None, "fs/fhd-splice-12-lc@2 not built"
     conf = set(c["size-confidence"].values())
     assert conf <= {"estimated", "borrowed"}, \
         f"claims a measurement the corpus cannot support: {c['size-confidence']}"
@@ -109,7 +109,7 @@ def test_the_splice_cassette_has_a_splice_rear():
     assert len(c["optical"]["paths"]) == 12
 
 
-TWO_MTP = "fs/fhd-2mtp12-lc-os2-a/v1"
+TWO_MTP = "fs/fhd-2mtp12-lc-os2-a/v2"
 
 
 def test_two_rear_connectors_export_as_two_distinct_ports():
@@ -127,7 +127,7 @@ def test_two_rear_connectors_export_as_two_distinct_ports():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
+    e = idx["fs/fhd-2mtp12-lc-os2-a@2"]
     got = P.ports(D.contract_view(e), idx.get)
     names = [p["name"] for p in got["rear"]]
     assert len(names) == 2, got["rear"]
@@ -145,8 +145,8 @@ def test_every_one_of_the_24_fibres_is_bound():
         pytest.skip("library/dist not built")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-2mtp12-lc-os2-a@1"]
-    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-2X12MTPLCOS2A")
+    e = idx["fs/fhd-2mtp12-lc-os2-a@2"]
+    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-2MTP12LCDOS2A")
     assert len(m["rows"]) == 24
     assert len({(r["rear"], r["rear_position"]) for r in m["rows"]}) == 24, \
         "two fibres land on one rear position"
@@ -208,7 +208,7 @@ def test_the_sc_front_ports_type_as_sc():
     assert c["optical"]["polish"] in ("upc", "apc")
 
 
-MTP24 = "fs/fhd-1mtp24-lc-os2-a/v1"
+MTP24 = "fs/fhd-1mtp24-lc-os2-a/v2"
 
 
 def test_the_library_has_an_mpo_wider_than_twelve():
@@ -232,7 +232,7 @@ def test_the_mtp24_cassette_carries_24_fibres_on_one_rear_port():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-1mtp24-lc-os2-a@1"]
+    e = idx["fs/fhd-1mtp24-lc-os2-a@2"]
     got = P.ports(D.contract_view(e), idx.get)
     assert len(got["rear"]) == 1, got["rear"]
     assert got["rear"][0]["positions"] == 24
@@ -253,6 +253,6 @@ def test_the_front_numbering_covers_all_24_without_a_gap():
         pytest.skip("library/dist not built")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-1mtp24-lc-os2-a@1"]
-    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-1X24MTPLCOS2A")
+    e = idx["fs/fhd-1mtp24-lc-os2-a@2"]
+    m = P.fibre_map(D.contract_view(e), idx.get, "FHD-1MTP12LCDOS2A")
     assert sorted(int(r["front"]) for r in m["rows"]) == list(range(1, 25))
