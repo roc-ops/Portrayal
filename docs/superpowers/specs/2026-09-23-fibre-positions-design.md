@@ -104,8 +104,10 @@ connectors. The lint rule refuses it; no part in the library does it today
   `components.json`, looked up through the module's ref (the front's
   `data-ref`, or `data-rear-ref` on the rear; see below).
 - **MTP rows** read `mtp2 — front 1-12`: the front fibres wired to that
-  connector, numbered as the vendor prints them (`optical_ports.front_label`'s
-  rule, repeated in the kit and held to it by a parity test).
+  connector, numbered as the vendor prints them. The build writes each fibre
+  end's far end and front number into `components.json` (`optical.ends`, from
+  `optical_ports.front_label`), so the kit reads the numbering and never
+  re-derives it.
 - **Selecting a fibre marks its other end** on every loaded face
   (`data-portrayal-linked`), highlights that row, and the inspector gives the
   far end as a link. In 3D both faces are on screen at once; in 2D the link
