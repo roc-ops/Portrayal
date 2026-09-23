@@ -25,6 +25,28 @@ const splitter = {
   }},
 };
 
+// K5: a splitter's common port with no front label of its own - fibreLabel
+// must spell the endpoint, never invent a number (never `0`, never the `n`
+// pulled from the endpoint's own suffix).
+const splitterNoLabel = {
+  parts: [{id: 'common'}, {id: 'split'}],
+  optical: {ends: {
+    'common.1': {to: ['split.1', 'split.2'], label: null},
+    'split.1': {to: 'common.1', label: '1'},
+    'split.2': {to: 'common.1', label: '2'},
+  }},
+};
+
+// Fix round 1, bug 1: a rear connector with one port's label null must not
+// let `Number(null) === 0` slip a phantom "0" into the run.
+const gapRear = {
+  optical: {ends: {
+    'rear:mtp2.1': {to: 'x.1', label: '1'},
+    'rear:mtp2.2': {to: 'x.2', label: null},
+    'rear:mtp2.3': {to: 'x.3', label: '3'},
+  }},
+};
+
 console.log(JSON.stringify({
   module: moduleOf('bay-1/module/lc01/1'),
   moduleNested: moduleOf('front-6/module/slot-2/module/lc01/1'),
@@ -43,4 +65,6 @@ console.log(JSON.stringify({
   connNone: connectorLabel(af, 'mtp1', 'rear'),
   farSplit: farPath('bay-1/module', splitter, 'common.1'),
   labelSplit: fibreLabel(splitter, 'common.1'),
+  labelSplitNoLabel: fibreLabel(splitterNoLabel, 'common.1'),
+  connGap: connectorLabel(gapRear, 'mtp2', 'rear'),
 }));

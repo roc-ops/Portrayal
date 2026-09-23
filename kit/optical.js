@@ -48,17 +48,23 @@ const spell = ep => ep.replace(/^rear:/, 'rear ').replace(/\.(\d+)$/, ' · $1');
 export function fibreLabel(entry, endpoint) {
   const end = entry?.optical?.ends?.[endpoint];
   if (!end) return null;
-  const n = endpoint.match(/\.(\d+)$/)[1];
-  if (endpoint.startsWith('rear:')) return end.label ? `${n} → front ${end.label}` : null;
+  if (endpoint.startsWith('rear:')) {
+    const n = endpoint.match(/\.(\d+)$/)[1];
+    return end.label ? `${n} → front ${end.label}` : null;
+  }
   const to = Array.isArray(end.to) ? end.to.map(spell).join(', ') : spell(end.to);
-  return `${end.label ?? n} → ${to}`;
+  // K5: a front end with no label (a splitter's common port can legitimately
+  // have none) never invents a number - it spells the endpoint itself.
+  return `${end.label ?? spell(endpoint)} → ${to}`;
 }
 
 export function connectorLabel(entry, part, face) {
   if (face !== 'rear') return null;
   const nums = Object.entries(entry?.optical?.ends || {})
     .filter(([ep]) => ep.startsWith(`rear:${part}.`))
-    .map(([, e]) => Number(e.label)).filter(Number.isFinite).sort((a, b) => a - b);
+    .map(([, e]) => e.label)
+    .filter(label => label != null)
+    .map(Number).filter(Number.isFinite).sort((a, b) => a - b);
   if (!nums.length) return null;
   const run = nums.every((v, i) => v === nums[0] + i);
   return run ? `front ${nums[0]}-${nums[nums.length - 1]}` : `front ${nums.join(', ')}`;
