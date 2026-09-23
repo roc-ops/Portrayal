@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-sc-28p
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-SC-28P
@@ -95,6 +95,17 @@ chassis:
   depth: 505
   ru: 1
   color: '#1b1e21'
+gaps:
+- what: probe-port-speed
+  scope: [probe]
+  reason: vendor-silent
+  note: >-
+    The DCP-SC-28P user manual (14.0), Physical Description, lists one QSFP-DD probe port and
+    says nothing else about it - no rate, no protocol, no supported optic; its power table only
+    quotes figures with no QSFP-DD fitted.
+  wanted: >-
+    what the probe port carries and at what rate, so the port can state a `speed` - or a media
+    that says it is not an Ethernet interface.
 groups:
   furniture:
     term: Item

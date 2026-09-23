@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx304
-version: 3.0.11
+version: 3.0.12
 maturity: modelled
 manufacturer: Juniper
 model: MX304
@@ -364,9 +364,9 @@ views:
         - {id: clk-1pps-in, ref: std/smb@1, at: [104.69, 19.79], group: timing, rel-pos: 3,
            attrs: {function: 1PPS input}}
         - {id: bits, ref: std/rj45@2, at: [94, 29], group: timing, rel-pos: 4,
-           attrs: {function: BITS (reserved for future use per the guide)}}
+           attrs: {media: rj48, function: BITS (reserved for future use per the guide)}}
         - {id: tod, ref: std/rj45@2, at: [93.4, 48.8], group: timing, rel-pos: 5,
-           attrs: {function: Time of day}}
+           attrs: {media: rj45-tod, function: Time of day}}
         - {id: gm-ptp, ref: std/sfp@1, at: [92.85, 69.9], rotate: 90, group: timing, rel-pos: 6,
            attrs: {media: sfp, function: PTP grandmaster clock port, speed: 10g},
            description: 'takes 1-GbE and 10-GbE optics per the guide, so its speed is the

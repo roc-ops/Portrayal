@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-102xc
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-102XC
@@ -826,7 +826,7 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [17.18, 2.69], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [35.93, 3.77], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [53.38, 3.77], group: timing, rel-pos: 3, attrs: {role: 1pps-io}}
-        - {ref: std/rj45@2, id: tod, at: [6.4, 27], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45@2, id: tod, at: [6.4, 27], group: timing, rel-pos: 4, attrs: {media: rj45-tod, role: tod-io}}
         - {ref: common/reset-button@1, id: reset, at: [11.9, 43.9], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [23.2, 49.4], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: oob, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}], led-b: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-mgmt-l: the management jack''s left corner lamp, drawn lit green in HIG Figure 8. THE HIG TABLES NO MANAGEMENT-PORT LED for this platform - the S9510-28DC and M3000-14XC guides do and this one does not - so the states here are the component default and not a transcription; led-mgmt-r: the management jack''s right corner lamp; same absence of a vendor table as its left-hand twin, and the same component default'}

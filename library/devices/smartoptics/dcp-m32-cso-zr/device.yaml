@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-m32-cso-zr
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-M32-CSO-ZR+
@@ -10,6 +10,14 @@ description: 32-channel 150 GHz coherent open line system, 1RU. Mux/demux with E
   1510nm OSC filter port and a 1625nm OTDR port.
 profile: optical
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the OSC cage is `1g`: the DCP-M user manual (14.0), Supported OSC transceivers, certifies
+      SFPs from 155 Mb/s STM-1/Fast Ethernet parts up to 1GE ones, so the highest native rate the
+      cage runs at is 1G. The same manual gives the OSC a bandwidth of 100 Mb/s in its
+      remote-management section - read here as the channel the nodes budget for their own traffic,
+      not the rate the SFP links at.
   method:
     note: >-
       FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-m32-cso-zr.md. The
@@ -300,7 +308,7 @@ views:
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
         - {ref: common/rj45-ganged-eth@1, id: eth0, at: [8.65, 12.30], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 1}
         - {ref: std/rj45-ganged@2, id: rs232, at: [8.65, 25.50], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
-        - {ref: std/sfp@1, id: osc-sfp, at: [28.05, 28.30], group: line, attrs: {role: osc, media: sfp}, rel-pos: 1}
+        - {ref: std/sfp@1, id: osc-sfp, at: [28.05, 28.30], group: line, attrs: {role: osc, media: sfp, speed: 1g}, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [31.40, 22.60], for: osc-sfp, attrs: {function: tx}, group: line-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-rx, at: [37.10, 22.60], for: osc-sfp, attrs: {function: rx}, group: line-leds, rel-pos: 2}
         - {ref: common/led-rect@1, id: led-power, at: [49.60, 36.00], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}

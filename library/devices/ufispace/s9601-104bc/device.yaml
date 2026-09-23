@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-104bc
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-104BC
@@ -831,7 +831,7 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [19.51, 2.96], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [38.31, 4.21], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [55.68, 4.27], group: timing, rel-pos: 3, attrs: {role: 1pps-io}}
-        - {ref: std/rj45@2, id: tod, at: [8.93, 28.4], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45@2, id: tod, at: [8.93, 28.4], group: timing, rel-pos: 4, attrs: {media: rj45-tod, role: tod-io}}
         - {ref: common/reset-button@1, id: reset, at: [14.76, 44.74], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [25.84, 49.77], rotate: 180, group: mgmt, rel-pos: 1,
            attrs: {role: oob, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link}], led-b: ['off', {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-mgmt-l: the management jack''s left corner lamp, drawn lit green in HIG Figure 8 - which is also how the jack is known to be keyway-up, since a ganged RJ45 puts its lamps on the latch side. THE HIG TABLES NO MANAGEMENT-PORT LED for this platform, so the states here are the component default (led-a link, led-b activity, the green of Figure 8) and not a transcription; led-mgmt-r: the management jack''s right corner lamp; same absence of a vendor table as its left-hand twin, and the same component default'}

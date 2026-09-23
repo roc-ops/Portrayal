@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pbc-2000
-version: 8.0.0
+version: 8.0.1
 maturity: modelled
 manufacturer: MaiaEdge
 model: PBC-2000
@@ -14,6 +14,12 @@ description: >-
   front-to-back.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      MGMT and CTRL are `1g`: the datasheet counts two 1GB RJ45 management ports and the setup
+      guide rates both jacks 10/100/1000 (see face-check). CON is the RS-232 serial console the
+      same sources name, so it is `rj45-serial` and states no speed.
   model-number:
     confidence: datasheet
     note: >-
@@ -348,13 +354,13 @@ views:
       - {ref: common/led-dot@1, id: status-2, at: [34.95, 21.1], for: chassis, group: furniture, rel-pos: 5}
       - {ref: common/led-dot@1, id: status-3, at: [34.95, 23.35], for: chassis, group: furniture, rel-pos: 6}
       - {ref: common/led-dot@1, id: status-4, at: [34.95, 25.6], for: chassis, group: furniture, rel-pos: 7}
-      - {ref: std/rj45@2, id: con, at: [281.55, 21.8], group: mgmt, rel-pos: 2}
+      - {ref: std/rj45@2, id: con, at: [281.55, 21.8], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
       # THE TWO ETHERNET JACKS ARE FITTED TAB UP - the latch slot is at the top
       # of the opening and the contacts along the bottom in the face-on
       # photograph, the console jack the other way about. A jack fitted the other
       # way up is the same jack turned through 180 degrees, not a reflection.
-      - {ref: common/rj45-eth@1, id: mgmt, at: [308.25, 21.8], rotate: 180, group: mgmt, rel-pos: 3}
-      - {ref: common/rj45-eth@1, id: ctrl, at: [334.45, 21.8], rotate: 180, group: mgmt, rel-pos: 4}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [308.25, 21.8], rotate: 180, group: mgmt, rel-pos: 3, attrs: {speed: 1g}}
+      - {ref: common/rj45-eth@1, id: ctrl, at: [334.45, 21.8], rotate: 180, group: mgmt, rel-pos: 4, attrs: {speed: 1g}}
       # THE TOUCH SCREEN, as a part rather than paint - see gaps `front-indicator-meanings`
       - {ref: maiaedge/pbc-2000-lcd@2, id: display, at: [372.6, 2.8], for: chassis, group: displays, rel-pos: 1}
   rear:

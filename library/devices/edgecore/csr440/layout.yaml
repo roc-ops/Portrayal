@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr440
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS7535-28XB
@@ -36,8 +36,8 @@ lint:
       so drawing it as its own cutout claims a second hole in metal that has one. The reason
       the family integrates these lamps is the reason I cannot place them.
       So the choice is a wrong port type or a wrong panel, and I take the wrong port type
-      because it is DECLARED rather than drawn: the group says `role: timing` and
-      `media: rj45-bits`, dcim_export reads the group and not the part, and this waiver names
+      because it is DECLARED rather than drawn: the placement says `role: timing` and
+      `media: rj48`, dcim_export reads the placement and not the part, and this waiver names
       the misfit out loud. A misdrawn panel would have been silently wrong.
       THE REAL FIX IS A PART, NOT A WAIVER - a lamped ganged cell that does not assert
       Ethernet, which the five ways in docs/rj45-family-design.md do not yet include. That is
@@ -486,11 +486,11 @@ views:
       - {ref: std/rj45-ganged@2, id: console-rj, at: [364.20, 22.40], group: mgmt, rel-pos: 2,
          attrs: {media: rj45-serial, role: console}}
       - {ref: common/rj45-ganged-eth@1, id: bits, at: [386.95, 8.70], rotate: 180, group: timing, rel-pos: 1,
-         attrs: {media: rj45, role: timing, timing: BITS}}
+         attrs: {media: rj48, role: timing, timing: BITS}}
       - {ref: std/rj45-ganged@2, id: tod, at: [386.95, 22.40], group: timing, rel-pos: 2,
-         attrs: {media: rj45, role: timing, timing: ToD}}
+         attrs: {media: rj45-tod, role: timing, timing: ToD}}
       - {ref: std/rj45-ganged@2, id: alarm, at: [407.35, 21.50], group: mgmt, rel-pos: 5,
-         attrs: {media: rj45, role: alarm}}
+         attrs: {media: rj45-alarm, role: alarm}}
       - {ref: common/smb-jack@1, id: clk-10m, at: [405.70, 4.90], group: timing, rel-pos: 4,
          attrs: {media: coax-smb, role: timing, timing: 10MHz I/O}}
       - {ref: common/smb-jack@1, id: pps-io, at: [416.20, 4.90], group: timing, rel-pos: 3,
