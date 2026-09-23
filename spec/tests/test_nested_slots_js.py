@@ -172,15 +172,12 @@ def scenario(world, name):
 
 
 def parity(world, face, key, have):
-    """Every difference between the kit's occupant and the build's, except the
-    plug's `data-cp-on` markers - the rename gap Task 9 pinned, which is 10c's
-    (3D cable anchors) and is held to exactly that attribute here."""
+    """Every difference between the kit's occupant and the build's - a plug's
+    `data-cp-on` markers included, since B3 Task 10c closed the rename gap
+    Task 9 pinned."""
     want = built_occupant(world["faces"][face], key)
-    gaps = []
     bad = mismatches([{"name": face, "built": {key: want}}],
-                     [{"name": face, "seated": {key: have}}], gaps)
-    # `mismatches` files a difference under `gaps` only for data-cp-on on a plug
-    assert all(k == key for k, _, _ in gaps), gaps
+                     [{"name": face, "seated": {key: have}}])
     return bad, want
 
 
@@ -501,7 +498,8 @@ MUTATIONS = [
      "wrap.setAttribute(OF_REF, comp.version ? `${ref}:${comp.version}` : ref);", "",
      ["rearModule"], lambda o: o["rearModule"]["held"] == [1] * 7),
     ("a rebuilt back drops the map's keys",
-     "applied += (await applyOccupantOverrides(rootEl, slots, overrides, loadSkin)).applied;", "",
+     "const occ = await applyOccupantOverrides(rootEl, slots, overrides, loadSkin);",
+     "const occ = {applied: 0, refused: [], failed: []};",
      ["rearSeatFace"], lambda o: _occ_class(o["rearSeatFace"]["seatFace"]["bay-1"], "bay-1/module/mtp1") == "port"),
     ("a seat on a back is no projection", "if (cage.projection) asProjection(occ);", "",
      ["rearSwap"], lambda o: _occ_class(o["rearSwap"]["backs"]["bay-1"], "bay-1/module/mtp1") == "port"),

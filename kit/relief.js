@@ -889,21 +889,35 @@ export function crop(cv, r, pxmm = PXMM) {
 // decision extractRelief makes for every `fills` / `occupies` instance:
 //   {fru}           its own ejectable group, keyed `fru`: a module in a chassis
 //                   bay (`front-6/module` -> `front-6`), an optic on a device
-//                   cage (`port-4-occupant`) - one or two segments, as ever;
-//   {fru, nested}   an optic seated on a CARD (`front-6/module/xg0-occupant`,
-//                   #484): a FRU of its own, keyed by its full path, whose group
-//                   sits inside the card's (or, for a tier chained on another
-//                   optic, inside that optic's) - so it is pulled on its own and
-//                   still leaves with the card;
+//                   cage (`port-4-occupant`);
+//   {fru, nested}   an OCCUPANT anywhere below the top - an optic seated on a
+//                   card (`front-6/module/xg0-occupant`, #484), a dust cap in
+//                   a bore of an adapter on the device (`xc01/tx-occupant`) or
+//                   on a cassette (`bay-1/module/lc1-occupant`): a FRU of its
+//                   own, keyed by its full path, whose group sits inside its
+//                   host's when the host is one (the card's, or the optic a
+//                   tier is chained on) - pulled on its own, and still gone
+//                   with its carrier;
 //   {sub}           a module in a module's bay: not a FRU, it comes out with
-//                   its carrier `sub`, and is built only from `body.boxes`.
+//                   its carrier `sub`, and is built only from `body.boxes`;
+//   null            nothing to build - no path, or, on a module's BACK
+//                   (`back`), an occupant: the back is drawn inside its
+//                   module's FRU, in the back component's own namespace
+//                   (`fhd-2mtp12-lc-rear/mtp1-occupant`), so what it holds is
+//                   its art and rides out with the module.
 // Deeper than two segments used to mean {sub} for everything, and a generic
 // optic declares no boxes, so a card's optic had no body and no pull at all.
-export function bodyRole(path, behaviour) {
+// And TWO segments used to mean the first, whatever moved: a Smartoptics
+// adapter's two bore caps (`xc01/tx-occupant`, `xc01/rx-occupant`) came out
+// as one FRU named for the adapter, taking the adapter's own art with them,
+// and a cassette back's cap as a FRU named for the back - the whole back
+// ejected as a "cap" (B3 Tasks 8 and 10c).
+export function bodyRole(path, behaviour, {back = false} = {}) {
   const segs = String(path || '').split('/');
   if (!segs[0]) return null;
+  if (behaviour === 'occupies' && back) return null;
+  if (behaviour === 'occupies' && segs.length > 1) return {fru: segs.join('/'), nested: true};
   if (segs.length <= 2) return {fru: segs[0]};
-  if (behaviour === 'occupies') return {fru: segs.join('/'), nested: true};
   return {sub: segs[0]};
 }
 
@@ -1067,7 +1081,9 @@ export function nodeTools(svg) {
 // standards-relief extraction: cavities (with interior features) + outward protrusions.
 // Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
 // can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
-export async function extractRelief(url, scope) {
+// `back` says the drawing is a module's back, built inside the module's FRU
+// (buildFaceRelief's back pass): nothing on it is a FRU of its own (bodyRole).
+export async function extractRelief(url, scope, {back = false} = {}) {
   const div = document.createElement('div');
   div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
   div.innerHTML = await svgSource(url, scope);
@@ -1317,7 +1333,7 @@ export async function extractRelief(url, scope) {
   for (const el of q(BODY_SELECTOR)) {
     if (!el.dataset.ref) continue;
     const full = el.dataset.path || '';
-    const role = bodyRole(full, el.dataset.behaviour);
+    const role = bodyRole(full, el.dataset.behaviour, {back});
     if (!role) continue;
     const path = role.fru || role.sub;
     // a module in a chassis bay is `bay/module`; one in a module's bay is
@@ -1486,7 +1502,7 @@ export async function buildFaceRelief(F, ctx) {
       return;
     }
     const {cavities, outs, domes, vents, frus, subBodies = [], flatLifted = [],
-           cleanText} = await extractRelief(src, ctx.scope);
+           cleanText} = await extractRelief(src, ctx.scope, {back: !!ctx.back});
     const faceText = squareFaceplate(cleanText);
     // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
     // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
@@ -2168,14 +2184,22 @@ export async function buildFaceRelief(F, ctx) {
         // box is placed off it, and NOT FOR A BACK'S OWN BACK: `ctx.back` stops
         // the recursion at one level, so a rear drawing that itself seats a
         // module cannot walk backwards for ever.
+        //
+        // THE BACK THIS MODULE HOLDS NOW, not the one it ships with: a plug
+        // put on a cassette's back in the explorer, or a cap taken off it, is
+        // in a drawing of its own - `ctx.backSource(bay, ref, url)` is the
+        // host's answer (viewer3d seats the map's keys under the bay into the
+        // shipped drawing with swap.js's seatBack and hands back the URL of
+        // that copy), and with no host answer the shipped drawing is built.
         const backSrc = meta.body.sides && meta.body.sides.rear;
         if (backSrc && ctx.dist && !f.lift && !ctx.back) {
           const key = `back:${f.path}`;
+          const shipped = ctx.dist + backSrc;
+          const src = ctx.backSource ? await ctx.backSource(f.path, f.ref, shipped) : shipped;
           const back = {view: key, fw: () => fp.size[0], fh: () => fp.size[1],
                         deep: () => d, pos: () => [0, 0, 0], rot: [0, Math.PI, 0]};
           const before = meshes.length;
-          await buildFaceRelief(back, {...ctx, src: ctx.dist + backSrc, deep: d,
-                                       back: true});
+          await buildFaceRelief(back, {...ctx, src, deep: d, back: true});
           if (meshes.length > before) {
             const bg = meshes.pop();
             bg.position.set(LX(f.x + fp.at[0], fp.size[0]),

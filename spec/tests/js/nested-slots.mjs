@@ -597,8 +597,8 @@ await scenario('rearClick', async () => {
 
 await scenario('rearModule', async () => {
   const root = face('fhd-rear:populated');
-  const applied = await m.applyRearOverrides(root, {'bay-1': CASS12, 'bay-2': CASS12, 'bay-3': SHUT},
-                                             loadSkin, compByRef);
+  const {applied} = await m.applyRearOverrides(root, {'bay-1': CASS12, 'bay-2': CASS12, 'bay-3': SHUT},
+                                               loadSkin, compByRef);
   const mine = rearSlots(root).filter(s => /^bay-[123]\//.test(s.id));
   return {applied, backs: backs(root, ['bay-1', 'bay-2', 'bay-3']),
           held: mine.map(s => m.occupantsOf(root, s).length)};

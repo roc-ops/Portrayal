@@ -249,21 +249,18 @@ def same_attrs(kit, build):
     return bad
 
 
-# A KNOWN GAP, NOT A LIFT ONE, pinned so it cannot widen and must be closed
-# on purpose. A plug's connection-point marker names the relief node it sits
-# on, `data-cp-on="<instance>--a--body"` (render.py instance_group); the kit's
-# `rename` rewrites ids, data-path and url(#...) but not this reference, so a
-# kit-seated plug keeps `lc-duplex-plug--a--body`. Closing it is B3 Task 10c
-# (3D cable anchors). The plug carries no data-behaviour="occupies"; the kit
-# now finds it by `data-for` and its slot's accepts (swap.js isOccupantOf,
-# Task 10a, test_nested_slots_js.py). The lift arithmetic on the plug is
-# checked here like every other case.
-CP_ON_GAP = "data-cp-on"
+# NO GAP. A plug's connection-point marker names the relief node it sits on,
+# `data-cp-on="<instance>--a--body"` (render.py instance_group), and until B3
+# Task 10c the kit's `rename` left it naming the plug's own skin
+# (`lc-duplex-plug--a--body`) - exactly 4 attributes on the duplex plug, which
+# this file pinned as a known gap. `rename` now re-keys it as it re-keys the
+# id it names, so it is compared like every other attribute. The plug carries
+# no data-behaviour="occupies"; the kit finds it by `data-for` and its slot's
+# accepts (swap.js isOccupantOf, Task 10a, test_nested_slots_js.py).
 
 
-def mismatches(cases, got, gaps=None):
-    """Every way a kit seat differs from the build's, as readable strings.
-    A `data-cp-on` difference on a PLUG goes to `gaps` instead (CP_ON_GAP)."""
+def mismatches(cases, got):
+    """Every way a kit seat differs from the build's, as readable strings."""
     out = []
     for case, g in zip(cases, got):
         assert g["name"] == case["name"]
@@ -294,9 +291,6 @@ def mismatches(cases, got, gaps=None):
                 continue
             for i, (k, b) in enumerate(zip(kc, bc)):
                 bad = same_attrs(k["a"], b["a"]) if k["t"] == b["t"] else ["<tag>"]
-                if gaps is not None and "plug" in want["ref"] and CP_ON_GAP in bad:
-                    bad.remove(CP_ON_GAP)
-                    gaps.append((key, k["a"].get(CP_ON_GAP), b["a"].get(CP_ON_GAP)))
                 if bad:
                     out.append(f"{where}: descendant {i} ({b['a'].get('id')}) {bad}: kit "
                                f"{ {x: k['a'].get(x) for x in bad} } build "
@@ -364,16 +358,13 @@ def test_the_kit_seats_a_lifted_slot_exactly_as_the_build(parity):
     for case, g in zip(cases, got):
         assert g["result"] == {"applied": len(case["built"]), "refused": [], "failed": []}, (
             case["name"], g["result"])
-    gaps = []
-    bad = mismatches(cases, got, gaps)
+    bad = mismatches(cases, got)
     assert not bad, f"{len(bad)} differences, first: " + "\n".join(bad[:8])
-    # the plug's four markers, and nothing else, differ by the rename gap
-    assert gaps and all(k == "slot-1/module/edfa" for k, _, _ in gaps), gaps
-    assert all(kit.startswith("lc-duplex-plug--")
-               and build.startswith("slot-1--module--edfa-occupant--")
-               and kit[len("lc-duplex-plug--"):] == build[len("slot-1--module--edfa-occupant--"):]
-               for _, kit, build in gaps), gaps
-    assert len(gaps) == 4, gaps
+    # the plug's four cable-anchor markers are in what was compared - the
+    # attributes Task 9 pinned as the rename gap, now equal to the build's
+    edfa = {c["name"]: c for c in cases}["dcp-2 ila-node"]["built"]["slot-1/module/edfa"]
+    ons = [d["a"]["data-cp-on"] for d in edfa["children"] if "data-cp-on" in d["a"]]
+    assert len(ons) == 4 and all(o.startswith("slot-1--module--edfa-occupant--") for o in ons), ons
     # and the shift is really in what was compared: an `out` moved, and a lift
     # written on the group, in every case
     for case in cases:
@@ -433,7 +424,7 @@ def test_a_mutated_shift_fails_the_parity(parity, tmp_path, label, old, new, whe
     assert src.count(old) == 1, f"{label}: the anchor {old!r} is not in swap.js exactly once"
     mutant = tmp_path / "swap.js"
     mutant.write_text(src.replace(old, new))
-    bad = mismatches(cases, node("parity", stdin, swap=mutant), [])
+    bad = mismatches(cases, node("parity", stdin, swap=mutant))
     total = sum(len(c["built"]) for c in cases)
     hit = {b.split(":")[0] for b in bad}
     deep = {f"{c['name']} {k} ({w['ref']})" for c in cases for k, w in c["built"].items()

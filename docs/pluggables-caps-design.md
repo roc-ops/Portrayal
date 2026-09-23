@@ -464,6 +464,37 @@ Two lessons from building the caps as the adapter's relief carry over:
   relative to the cap, not summed a second time. Nothing in the suite holds a
   composed child's lift to that today, for a solid or for a pocket; this work adds
   the test for both, and for a pocket inside a cap standing behind the cap's face.
+- **Which occupant is pulled on its own (2026-09-23).** Pluggables D makes an
+  optic seated on a card a part of its own: it is ejected by its own path and
+  leaves with the card. A dust cap is seated the same way (`occupies`), so it
+  follows the same rule at every depth. A cap in a bore of an adapter placed on
+  the device is pulled as `xc01/tx-occupant`. The kit used to key any
+  two-segment path by its first segment. So both caps of a Smartoptics adapter,
+  and the adapter's own art, came out as one part called `xc01`, 36 times on a
+  DCP-R. On a module's back, no occupant is a part of its own. The back is drawn
+  inside the module's own part, in the back component's namespace, so its caps
+  ride out with the module. The kit had pulled a whole cassette back as a "cap".
+  A plug carries no behaviour and is still not pulled, as its ruling says.
+- **A choice on a back reaches the back 3D builds (2026-09-23).** 3D builds a
+  cassette's back from the module's own back drawing (`body.sides.rear`), never
+  from the flat projection on the rear face. Every key the explorer holds under
+  a bay (`bay-1/module/mtp1`) is seated into a copy of that drawing for that bay
+  before relief is cut. The seat is the one used everywhere else: the slot's
+  lift (3.5 on the flange adapters) and `out`s as published. It applies whether
+  or not the bay itself was swapped. The rear face 3D is cut from takes the same
+  keys through the one face pass. A key that cannot be seated on a back is
+  reported, as a key on a front is.
+- **Cable anchors follow the seat (2026-09-23).** A connection point `on:` a
+  relief feature names the feature's compiled id (`data-cp-on`). The kit
+  re-keys it as it re-keys that id, for a seated occupant and for a module
+  swapped into a bay. A seated plug's cable now leaves from its own boot.
+- **A part alone keeps its cavities (2026-09-23).** Some parts declare no depth,
+  as a face part must not. Alone, such a part is drawn on a 2 mm plate. That
+  placeholder was also used as the depth the part's relief may reach, and the
+  kit keeps every cavity 2 mm short of that depth, so each bore came out 0 deep.
+  Its floor then drew 0.1 mm in front of its own mouth. The shuttered adapter
+  alone showed open bores over its shutters, while every device holding it
+  showed the doors. Relief on such a part is no longer limited by the plate.
 
 ## Lint
 

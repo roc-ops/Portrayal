@@ -191,8 +191,10 @@ if (mode === 'race') {
   ]);
   const optics = root => root.querySelectorAll('[data-for="port-4"][data-behaviour="occupies"]')
     .map(n => n.getAttribute('data-ref'));
+  // the ref less its version: a seated module's `data-ref` carries it, as
+  // render.py writes it (B3 Task 10c), and every kit reader splits it off
   const modules = root => root.querySelectorAll('[id="slot-0--module"]')
-    .map(n => n.getAttribute('data-ref'));
+    .map(n => (n.getAttribute('data-ref') || '').split(':')[0]);
   const claims = m.seatClaims ? m.seatClaims() : () => () => true;
   const out = {};
 

@@ -104,6 +104,21 @@ export function rename(wrap, name, idBase, pathBase = idBase, segment = 'module'
     // something outside this component are left as they are.
     rekeyFor(el, name, pathHead);
   }
+  // A CONNECTION POINT NAMES THE NODE IT SITS ON BY ID, and an id is what
+  // this renames. render.py writes `data-cp-on="<instance id>--<on>"` on a
+  // point declared `on:` a relief feature (instance_group), and relief.js's
+  // cablePoints looks that id up inside the marker's own group to read the
+  // feature's `data-z-out` - where a cable leaves a boot. The marker is a
+  // bare `<g data-cp>`, no id and no path, so the walk above never saw it:
+  // a kit-seated duplex plug kept `lc-duplex-plug--a--body`, which names
+  // nothing in the drawing, and its cable anchors fell back to the plug's
+  // face in 3D (B3 Tasks 9 and 10c). A module swapped into a bay had the
+  // same gap on its adapters' `mate` points. The token is re-keyed by the
+  // rule its target's id was.
+  for (const el of wrap.querySelectorAll('[data-cp-on]')) {
+    const on = el.getAttribute('data-cp-on');
+    if (on && on.startsWith(name + '--')) el.setAttribute('data-cp-on', `${idHead}--${on.slice(name.length + 2)}`);
+  }
   // RENAMING A DEFINITION IS HALF THE JOB. A skin that clips, masks or fills by
   // reference carries `clip-path="url(#drive-carrier-25--w0)"` beside the
   // `<clipPath id="drive-carrier-25--w0">` it names. Moving the definition into
@@ -155,7 +170,12 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
   const wrap = ownerDoc.createElementNS(NS, 'g');
   wrap.setAttribute('id', `${idBase}--module`);
   wrap.setAttribute('data-path', `${bayId}/module`);
-  wrap.setAttribute('data-ref', ref);
+  // WITH ITS VERSION, as render.py writes every instance's ref
+  // (`fs/fhd-2mtp12-lc-os2-a@3:3.1.0`) and occupantAttrs writes an occupant's.
+  // Every reader here splits it off; the 3D pass is held to the build's face
+  // attribute for attribute (test_explorer_3d_js.py), and this was the one
+  // attribute of a swapped module that differed.
+  wrap.setAttribute('data-ref', comp?.version && !String(ref).includes(':') ? `${ref}:${comp.version}` : ref);
   wrap.setAttribute('transform', bayTransform(bay, comp));
 
   // A standalone component skin is addressed in its OWN namespace: the file
@@ -218,8 +238,15 @@ function backProjection(rootEl, modulePath) {
 // module's rear face comes from its components.json entry. Built the way
 // render.py builds a projection: `data-of` in place of `data-path`, and nothing
 // the kit would extract as relief. In 3D the back is the module body's own.
+//
+// RESOLVES TO `{applied, refused, failed}`, the shape applyOccupantOverrides
+// reports: `applied` counts the holes re-seated and the keys seated into the
+// backs they now show; `refused` and `failed` are the keys on those backs the
+// kit would not, or could not, seat - silent until B3 Task 10c, so a back key
+// whose plug did not load looked seated in 3D and was not.
 export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef) {
   let applied = 0;
+  const refused = [], failed = [];
   const NSX = 'http://www.w3.org/2000/svg';
   for (const hole of rootEl.querySelectorAll('[data-rear-of]')) {
     const bayId = hole.getAttribute('data-rear-of');
@@ -275,10 +302,59 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
     const under = Object.keys(overrides).filter(k => underCarrier(k, bayId));
     if (under.length) {
       const slots = backSlotsOf(wrap, compByRef).filter(e => under.includes(e.id));
-      applied += (await applyOccupantOverrides(rootEl, slots, overrides, loadSkin)).applied;
+      const occ = await applyOccupantOverrides(rootEl, slots, overrides, loadSkin);
+      applied += occ.applied;
+      refused.push(...occ.refused);
+      failed.push(...occ.failed);
     }
   }
-  return applied;
+  return {applied, refused, failed};
+}
+
+// THE BACK A MODULE CARRIES INTO 3D (B3 Task 10c). viewer3d builds a
+// cassette's back from the module's OWN back drawing - `body.sides.rear`,
+// the compiled skin of its `faces.rear` component (relief.js's back pass) -
+// and never from the rear face's projection, which is flat. So a key on a
+// back (`bay-1/module/mtp1`) has to be seated into THAT drawing before any
+// relief is cut from it, exactly as render.py would draw the back given the
+// occupant: at the slot's lift (the flange adapter's 3.5), every `out`
+// absolute as published, ids and paths in the back's own namespace
+// (`fhd-2mtp12-lc-rear--mtp1-occupant`), the shipped cap it replaces gone.
+//
+// EVERY KEY UNDER THE BAY, whether or not the bay was swapped: the back is
+// the module's, and the module in the bay is `moduleRef` (whatever the face
+// now holds there). The slots are the drawing's own (nestedSlots on the back
+// drawing, the rule every other slot is read by), each key translated from
+// the device's namespace to the back's; a front part or bay of the module
+// with the same id is not a back slot (backSlotsOf's rule, the build's
+// key_on_back). The seat is applyOccupantOverrides', unchanged.
+//
+// `rootEl` is the back's parsed drawing and is changed in place. Resolves
+// to `{applied, refused, failed}`, refused and failed named by the DEVICE's
+// key, as the face pass names them.
+export async function seatBack(rootEl, {bay, moduleRef}, overrides, loadSkin, compByRef) {
+  const none = {applied: 0, refused: [], failed: []};
+  const top = rootEl?.querySelector('[data-ref][data-path]');
+  const name = top?.getAttribute('data-path');
+  if (!name || name.includes('/')) return none;
+  const head = `${bay}/module/`;
+  const look = r => { try { return r ? compByRef(r) || null : null; } catch (e) { return null; } };
+  const module = look(String(moduleRef || '').split(':')[0]);
+  const front = new Set((module?.parts || []).map(q => q.id).concat(Object.keys(module?.bays || {})));
+  const map = {}, device = {};
+  for (const [k, v] of Object.entries(overrides || {})) {
+    if (!k.startsWith(head)) continue;
+    const local = `${name}/${k.slice(head.length)}`;
+    map[local] = v;
+    device[local] = k;
+  }
+  if (!Object.keys(map).length) return none;
+  const slots = nestedSlots(rootEl, compByRef, {all: true})
+    .filter(e => e.modulePath === name && Object.prototype.hasOwnProperty.call(map, e.id)
+                 && !front.has(e.cage));
+  const res = await applyOccupantOverrides(rootEl, slots, map, loadSkin);
+  return {applied: res.applied, refused: res.refused.map(id => device[id]),
+          failed: res.failed.map(id => device[id])};
 }
 
 // SEATING AN OPTIC IN A CAGE is the other half of this module, and it is NOT
@@ -1237,10 +1313,43 @@ export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overri
 // `applyRearOverrides` for the rear holes that show a swapped front bay's
 // back - a face may hold those and no bay at all. Resolves to the face pass's
 // result with `rear`, the holes re-seated, and `applied` counting both.
+//
+// The rear pass's refused and failed keys join the face pass's (B3 Task
+// 10c), once each: a key on a back the face pass read off the build's back
+// and the rear pass re-seated on the swapped one is one key.
 export async function seatFace(rootEl, {bays = [], cages = []}, overrides, loadSkin, compByRef) {
   const face = await applyFaceOverrides(rootEl, {bays, cages}, overrides, loadSkin, compByRef);
   const rear = await applyRearOverrides(rootEl, overrides, loadSkin, compByRef);
-  return {...face, applied: face.applied + rear, rear};
+  const once = (a, b) => [...new Set([...a, ...b])];
+  return {...face, applied: face.applied + rear.applied, rear,
+          refused: once(face.refused, rear.refused), failed: once(face.failed, rear.failed)};
+}
+
+// EVERY FACE THE 3D SCENE IS CUT FROM, GIVEN THE SWAPS (B3 Task 10c) - the
+// pass viewer3d.js runs over the device's fetched faces before relief reads
+// any of them, here so node can run it (viewer3d imports `three`). Each face
+// that viewsToRewrite names, and every face that holds a rear hole, goes
+// through seatFace - the pass the merged tree's faces not on screen already
+// take. The rear holes used to be walked by applyRearOverrides alone, which
+// re-seats only the bays the map swaps, so a plug put on the back of a
+// cassette nobody swapped (`bay-4/module/mtp`) never reached the rear face 3D
+// was cut from.
+//
+// `faces` is {view: parsed root}, changed in place; `devIndex` the device's
+// `{bays, cages}` by view (configs.json). Resolves to {view: seatFace's
+// result} for the faces it seated.
+export async function seatViews(faces, devIndex, overrides, loadSkin, compByRef) {
+  const named = new Set(viewsToRewrite(devIndex, overrides));
+  const out = {};
+  if (!Object.keys(overrides || {}).length) return out;
+  for (const [view, root] of Object.entries(faces || {})) {
+    if (!root) continue;
+    if (!named.has(view) && !root.querySelector('[data-rear-of]')) continue;
+    out[view] = await seatFace(root, {bays: devIndex?.bays?.[view] || [],
+                                      cages: devIndex?.cages?.[view] || []},
+                               overrides, loadSkin, compByRef);
+  }
+  return out;
 }
 
 // THE FACES HELD BUT NOT MOUNTED, KEPT SEATED - the shell's bookkeeping for
