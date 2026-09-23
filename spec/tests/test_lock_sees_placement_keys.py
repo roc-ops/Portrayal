@@ -11,6 +11,11 @@ They are fingerprinted under three keys of their own - `placement-geometry`
 `for` where there was none is a minor and a `rel-pos` nothing) and
 `placement-surface` (patch) - each read only when the old lock has it, the
 migration #522 used for `placement-attrs`.
+
+The five keys only a bay states - `opening`, `floor`, `plan`, `rear` and
+`interface` - were then still hashed nowhere. The first four are geometry and
+`interface` is addressing (major when changed or dropped, minor when stated
+where there was none), under the same three keys.
 """
 import copy
 import json
@@ -49,22 +54,41 @@ def old_lock(doc):
     return {k: v for k, v in dl.entry(doc).items() if k not in NEW}
 
 
-def _placement_properties():
+def _properties(kind):
     schema = json.loads(SCHEMA.read_text())
     comps = schema["properties"]["views"]["additionalProperties"][
         "properties"]["components"]["properties"]
-    return set(comps["placements"]["items"]["properties"])
+    return set(comps[kind]["items"]["properties"])
+
+
+SORTED = (dl.PLACEMENT_GEOMETRY, dl.PLACEMENT_ADDRESSING, dl.PLACEMENT_SURFACE)
 
 
 def test_the_sets_are_exhaustive_over_the_schema():
     """THE GUARD. A placement key the schema gains has to be sorted into one of
     these by whoever adds it, rather than land hashed nowhere - which is how
     thirteen of them did."""
-    sets = (dl.PLACEMENT_HASHED, dl.PLACEMENT_GEOMETRY,
-            dl.PLACEMENT_ADDRESSING, dl.PLACEMENT_SURFACE)
-    assert set().union(*sets) == _placement_properties()
+    sets = (dl.PLACEMENT_HASHED,) + SORTED
+    assert _properties("placements") <= set().union(*sets)
     # ...and no key is in two, so no key has two bumps.
     assert sum(len(s) for s in sets) == len(set().union(*sets))
+
+
+def test_the_sets_are_exhaustive_over_the_bay_schema():
+    """THE SAME GUARD FOR A BAY, which is how the five keys only a bay states
+    were found hashed nowhere after the placement keys were sorted."""
+    sets = (dl.BAY_HASHED,) + SORTED
+    assert _properties("bays") <= set().union(*sets)
+    assert sum(len(s) for s in sets) == len(set().union(*sets))
+
+
+def test_every_sorted_key_is_one_the_schema_has():
+    """The other half of exhaustive: a key dropped from the schema must leave
+    the sets too, or the guard above passes over a name nothing states."""
+    assert set().union(*SORTED) <= \
+        _properties("placements") | _properties("bays")
+    assert dl.PLACEMENT_HASHED <= _properties("placements")
+    assert dl.BAY_HASHED <= _properties("bays")
 
 
 GEOMETRY = [
@@ -168,16 +192,66 @@ def test_the_largest_demand_wins():
 def test_a_bay_states_them_too():
     """The walk covers bays, which share `for`, `rel-pos`, `in`, `under`,
     `only-in` and `physical-context` with a placement."""
-    def with_bay(**keys):
-        doc = dev()
-        doc["views"]["front"]["components"]["bays"] = [
-            {"id": "slot-1", "at": [50, 1], "size": {"w": 10, "h": 10}, **keys}]
-        return dl.entry(doc)
     assert dl.required_bump(with_bay(), with_bay(**{"only-in": ["ac"]})) == "major"
     assert dl.required_bump(with_bay(**{"rel-pos": 1}),
                             with_bay(**{"rel-pos": 2})) == "major"
     assert dl.required_bump(with_bay(), with_bay(
         **{"physical-context": "PowerSupply"})) == "patch"
+
+
+def with_bay(**keys):
+    doc = dev()
+    doc["views"]["front"]["components"]["bays"] = [
+        {"id": "slot-1", "at": [50, 1], "size": {"w": 10, "h": 10}, **keys}]
+    return dl.entry(doc)
+
+
+PLAN = {"view": "top", "at": [10, 20]}
+REAR = {"view": "rear", "at": [5, 5], "cutout": "window-1"}
+BAY_GEOMETRY = [
+    ({}, {"opening": {"w": 8, "h": 8}}),
+    ({"opening": {"w": 8, "h": 8}}, {"opening": {"w": 8, "h": 7}}),
+    ({"in": "well"}, {"in": "well", "floor": 26.6}),
+    ({"in": "well", "floor": 26.6}, {"in": "well", "floor": 44.8}),
+    ({}, {"plan": PLAN}),
+    ({"plan": PLAN}, {"plan": {**PLAN, "at": [11, 20]}}),
+    ({"plan": PLAN}, {"plan": {**PLAN, "mirror": True}}),
+    ({}, {"rear": REAR}),
+    ({"rear": REAR}, {"rear": {**REAR, "cutout": "window-2"}}),
+    ({"rear": REAR}, {}),
+]
+
+
+@pytest.mark.parametrize("before, after", BAY_GEOMETRY)
+def test_bay_geometry_is_a_major(before, after):
+    """The hole that is punched, the shelf the occupant stands on, and where
+    it is projected on another face: each is a coordinate a consumer holds."""
+    assert dl.required_bump(with_bay(**before), with_bay(**after)) == "major"
+
+
+def test_a_plans_under_is_a_set_too():
+    before = {"plan": {**PLAN, "under": ["lid", "shroud"]}}
+    after = {"plan": {**PLAN, "under": ["shroud", "lid"]}}
+    assert dl.required_bump(with_bay(**before), with_bay(**after)) is None
+
+
+def test_a_bay_interface_is_addressing():
+    """Opening a slot to an interface admits occupants, as `accepts` growing
+    does; changing or dropping it withdraws the ones it admitted."""
+    assert dl.required_bump(with_bay(), with_bay(interface="pcie")) == "minor"
+    assert dl.required_bump(with_bay(interface="pcie"),
+                            with_bay(interface="ocp3")) == "major"
+    assert dl.required_bump(with_bay(interface="pcie"), with_bay()) == "major"
+
+
+def test_a_bay_key_moves_only_its_own_lock_key():
+    """`opening` moves `placement-geometry` and nothing else; `interface`
+    moves `placement-addressing` and nothing else."""
+    a = with_bay()
+    for keys, moved in (({"opening": {"w": 8, "h": 8}}, "placement-geometry"),
+                        ({"interface": "pcie"}, "placement-addressing")):
+        b = with_bay(**keys)
+        assert [k for k in a if a[k] != b[k]] == [moved]
 
 
 def test_the_old_buckets_do_not_move():
