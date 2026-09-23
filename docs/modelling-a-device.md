@@ -393,6 +393,21 @@ Now populate. Reuse before building.
    names only where it sits. If a block spans media because the vendor treats
    it as one thing, a management cluster, a timing block, say so in `mixed:`
    and name the job they do together (L23).
+
+   **A card's ports take the card's groups.** A port on a module seated in a
+   bay (a routing engine's console, a line card's QSFP28) is not a device
+   placement, so the device's `groups:` cannot reach it. The component
+   declares its own `groups:` in the same shape (term, role, index-origin,
+   mixed, attrs, description) and each port part joins one with `group:`.
+   Group names are local to the component, and a device never overrides a
+   card's groups: the device bay keeps its own group (`re-slots`, role
+   `service`) and the card's ports keep theirs (`mgmt`, role `management`).
+   Wherever the card is drawn, at any depth, each grouped part carries what a
+   device placement in that group carries (`data-group`, `data-group-role`,
+   the group's attrs and description), with the part's own attrs winning, and
+   a cage in the group offers its seated optic the same attrs. L17, L22, L23
+   and L37 read component groups too, as warnings for now; once a component
+   declares any group, every port part on it should join one.
 6. **`rotate:` pivots a placement on its own pre-rotation centre**, so after
    turning a part recompute `at`; the landed box is not where the unrotated one
    sat. Look at the render. L39 compares the landed box with the hole.

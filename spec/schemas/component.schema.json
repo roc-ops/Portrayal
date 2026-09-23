@@ -621,6 +621,16 @@
     }
    }
   },
+  "groups": {
+   "type": "object",
+   "description": "THE PORT GROUPS OF THIS COMPONENT, declared once, in the same shape as a device's `groups:` (term, role, index-origin, mixed, attrs, states, description; `$defs/group` is kept identical to device.schema.json's group item and a test holds the two equal). A part joins one with `group:`. Names are LOCAL to the component: `mgmt` on a routing engine and `mgmt` on the chassis it seats in are different groups, and a device never overrides a card's. When the card is drawn inside a device - at any depth, a device bay's module or a module in a nested bay - every grouped part carries exactly what a device placement in that group carries (`data-group`, `data-group-role`, the group's attrs and description; the part's own attrs win), and a cage in the group publishes the same map as its `occupant-attrs`. Lint L17, L22, L23 and L37 read these as they read a device's, as warnings",
+   "propertyNames": {
+    "$ref": "#/$defs/segment"
+   },
+   "additionalProperties": {
+    "$ref": "#/$defs/group"
+   }
+  },
   "parts": {
    "type": "array",
    "description": "sub-components composed into this component (compile-time flattened); e.g. a std/ cutout core inside a bezel",
@@ -651,6 +661,10 @@
      },
      "attrs": {
       "type": "object"
+     },
+     "group": {
+      "$ref": "#/$defs/segment",
+      "description": "the component group (top-level `groups:`) this part belongs to. Declared there with its role and shared attrs, exactly as a device placement joins a device group; lint L17 flags a name the component does not declare"
      },
      "lift": {
       "type": "number",
@@ -863,6 +877,75 @@
   }
  },
  "$defs": {
+  "group": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "index-origin": {
+     "enum": [
+      0,
+      1
+     ]
+    },
+    "term": {
+     "type": "string",
+     "description": "vendor display word, e.g. 'Port', 'Slot', 'Bay'"
+    },
+    "role": {
+     "enum": [
+      "traffic",
+      "fabric",
+      "management",
+      "service",
+      "indicator",
+      "furniture"
+     ],
+     "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a separate bucket rather than part of traffic because on five devices the management block is written FIRST in the manifest, so leaving it in with the traffic ports still opened the tree with a console socket. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. They are named here because leaving them unnamed let the convention drift both ways - nine devices had routing engines in `service` and two in `management`, and the ASR 9912 and 9922 had their ROUTE PROCESSORS in `traffic`, which made the first base configuration built for a 9922 empty both of them. An RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37"
+    },
+    "physical-context": {
+     "type": "string",
+     "description": "Redfish PhysicalContext value shared by everything in this block, e.g. 'PowerSupply' for the PSU bays. A whole group is the natural place to say it once"
+    },
+    "mixed": {
+     "type": "string",
+     "description": "the job these ports do together, when they do NOT share a media or a speed and that is deliberate: a management cluster of SFP+, USB and RJ45, a timing block of RJ45 and coax. The default shape of a port group is one family - one media, one speed - because that is what lets the block declare its facts once in `attrs`; a group spanning families is normally a bucket nobody has sorted yet, and lint L23 says so. This field is the author's answer: the vendor's faceplate calls these one thing, and splitting them by media would be a worse drawing. State the function, e.g. 'management cluster' or 'timing inputs and outputs' - it is a reason, not a switch, and L23 also objects if it is set on a group that is in fact one family"
+    },
+    "attrs": {
+     "type": "object"
+    },
+    "states": {
+     "description": "what this indicator's states MEAN on this device. Overrides the component's own vocabulary, which can only be generic - the same led-dot is a speed lamp on one port and a link lamp on the next. A block of eighteen speed lamps shares one vocabulary and says it once; a placement inside it may still override",
+     "oneOf": [
+      {
+       "type": "array",
+       "minItems": 1,
+       "items": {
+        "$ref": "#/$defs/state"
+       }
+      },
+      {
+       "type": "object",
+       "minProperties": 1,
+       "description": "per contracted element, when one component carries two lamps that do NOT share a vocabulary - a management jack whose left lamp is green for 1G and whose right is amber for 10M/100M. Keys are element ids of the referenced component; lint L20 rejects one that names no element",
+       "propertyNames": {
+        "$ref": "#/$defs/segment"
+       },
+       "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+         "$ref": "#/$defs/state"
+        }
+       }
+      }
+     ]
+    },
+    "description": {
+     "type": "string",
+     "description": "the vendor's own sentence about this block of indicators, kept beside the tokens"
+    }
+   }
+  },
   "face": {
    "type": "object",
    "additionalProperties": false,
