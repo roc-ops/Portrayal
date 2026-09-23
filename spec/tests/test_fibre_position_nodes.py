@@ -1,4 +1,4 @@
-"""L110: every fibre position a connector declares is a node you can point at.
+"""L112: every fibre position a connector declares is a node you can point at.
 
 A fibre endpoint `X.n` in `optical.paths` is drawn at path `X/n`. The explorer
 and every consumer turn one into the other without a table, which only holds
@@ -17,7 +17,7 @@ LIB = [str(ROOT / "library")]
 P = "library/components/common/x-adapter/v1/contract.yaml"
 
 
-def l110(data, path=P):
+def l112(data, path=P):
     got = []
     real = lint.err
     lint.err = lambda p, rule, msg: got.append((rule, msg))
@@ -25,7 +25,7 @@ def l110(data, path=P):
         lint.lint_component_optical_position_nodes(path, data, LIB)
     finally:
         lint.err = real
-    return [m for r, m in got if r == "L110"]
+    return [m for r, m in got if r == "L112"]
 
 
 def port(n, parts=(), elements=None):
@@ -40,49 +40,49 @@ def el(x):
 
 
 def test_composed_bores_numbered_pass():
-    assert l110(port(2, [{"id": "1", "ref": "std/lc-bore@3"}, {"id": "2", "ref": "std/lc-bore@3"}])) == []
+    assert l112(port(2, [{"id": "1", "ref": "std/lc-bore@3"}, {"id": "2", "ref": "std/lc-bore@3"}])) == []
 
 
 def test_elements_numbered_pass():
-    assert l110(port(3, elements={"1": el(0), "2": el(1), "3": el(2), "opening": el(5)})) == []
+    assert l112(port(3, elements={"1": el(0), "2": el(1), "3": el(2), "opening": el(5)})) == []
 
 
 def test_tx_rx_bores_fail_naming_both_positions():
-    msgs = l110(port(2, [{"id": "tx", "ref": "std/lc-bore@3"}, {"id": "rx", "ref": "std/lc-bore@3"}]))
+    msgs = l112(port(2, [{"id": "tx", "ref": "std/lc-bore@3"}, {"id": "rx", "ref": "std/lc-bore@3"}]))
     assert msgs and "[1, 2]" in msgs[0]
 
 
 def test_a_missing_position_fails():
-    msgs = l110(port(12, elements={str(i): el(i) for i in range(1, 12)}))
+    msgs = l112(port(12, elements={str(i): el(i) for i in range(1, 12)}))
     assert msgs and "[12]" in msgs[0]
 
 
 def test_an_element_of_the_wrong_class_does_not_count_as_a_position():
     d = port(1, elements={"1": {"at": [0.0, 0.0], "size": [0.1, 0.1], "class": "label"}})
-    msgs = l110(d)
+    msgs = l112(d)
     assert msgs and "[1]" in msgs[0]
 
 
 def test_a_position_beyond_n_fails():
-    msgs = l110(port(1, elements={"1": el(0), "2": el(1)}))
+    msgs = l112(port(1, elements={"1": el(0), "2": el(1)}))
     assert msgs and "[2]" in msgs[0] and "beyond" in msgs[0]
 
 
 def test_not_a_port_or_no_positions_is_not_judged():
-    assert l110({"class": "filter", "optical": {"positions": 2}}) == []
-    assert l110({"class": "port"}) == []
+    assert l112({"class": "filter", "optical": {"positions": 2}}) == []
+    assert l112({"class": "port"}) == []
 
 
 def test_an_exempt_part_is_not_judged():
     p = "library/components/common/mdc-adapter/v1/contract.yaml"
     assert "common/mdc-adapter" in lint.POSITION_EXEMPT
-    assert l110(port(4), path=p) == []
+    assert l112(port(4), path=p) == []
 
 
 def test_a_rear_id_that_is_also_a_front_id_fails():
     d = {"class": "cassette", "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@1"}],
          "faces": {"rear": {"ref": "fs/fhd-2mtp12-lc-rear@2"}}}
-    msgs = l110(d)
+    msgs = l112(d)
     assert msgs and "mtp1" in msgs[0]
 
 
@@ -104,7 +104,7 @@ def test_every_position_bearing_port_is_covered():
     seen, failing = 0, {}
     for f, d in _position_ports():
         seen += 1
-        msgs = l110(d, path=str(f.relative_to(ROOT)))
+        msgs = l112(d, path=str(f.relative_to(ROOT)))
         if msgs:
             failing[str(f.relative_to(ROOT / "library/components"))] = msgs[0]
     assert seen >= 12, f"only {seen} position-bearing ports found - has the library moved?"

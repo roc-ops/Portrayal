@@ -96,11 +96,11 @@ this per part.
 | common/mpo-flange-adapter, mpo24-flange-adapter | screws only | `opening` + fibre elements | minor |
 | common/mpo-adapter | composes `bore` (std/mpo) | fibre elements `1`-`12` | minor |
 | common/st-, fc-, lsh-simplex-adapter | nothing | element `1` | minor |
-| common/mdc-adapter | nothing | exempt (L110 table) | minor |
-| common/fibre-splice | nothing | exempt (L110 table) | minor |
+| common/mdc-adapter | nothing | exempt (L112 table) | minor |
+| common/fibre-splice | nothing | exempt (L112 table) | minor |
 | generic/lc-plug | nothing | element `1` on the ferrule | minor |
 
-**Two parts are exempt, by name and with a reason, in L110's table:**
+**Two parts are exempt, by name and with a reason, in L112's table:**
 `common/mdc-adapter` (which bore of which duplex port is position 1-4 is
 not sourced) and `common/fibre-splice` (a placeholder that draws no fibres;
 markers on it would be addresses without a place). Each leaves the table when
@@ -112,7 +112,7 @@ composed id changes the paths every consumer draws, so each consumer takes a
 major, and each device that accepts one is re-pinned and re-locked. The
 bumps are done by script and checked by the existing version and lock gates.
 
-**L110**, a new lint rule: a `class: port` part with
+**L112**, a new lint rule: a `class: port` part with
 `optical.positions: N` must expose addressable nodes `1`-`N`, no more and
 none missing. A census test covers every class:port part with
 optical.positions, so a new adapter joins by design.

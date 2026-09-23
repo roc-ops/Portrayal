@@ -250,7 +250,7 @@ RULES = {
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped, universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
-    "L110": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
+    "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
 }
 
@@ -2500,7 +2500,7 @@ def lint_component_optical_polarity(path, data, lib_roots):
                               f"{got}); the paths are the evidence - fix them or the claim")
 
 
-# L110 EXEMPTIONS, BY NAME AND WITH A REASON. A part leaves this table when the
+# L112 EXEMPTIONS, BY NAME AND WITH A REASON. A part leaves this table when the
 # source that places its fibres arrives; the census test fails if one is added
 # silently or names a part that no longer exists.
 POSITION_EXEMPT = {
@@ -2519,7 +2519,7 @@ def _component_key(path):
 
 
 def lint_component_optical_position_nodes(path, data, lib_roots):
-    """L110: every fibre position a connector declares is a node you can point at.
+    """L112: every fibre position a connector declares is a node you can point at.
 
     A fibre endpoint `X.n` in `optical.paths` is drawn at path `X/n`, so the
     explorer and every consumer can turn one into the other without a table.
@@ -2538,7 +2538,7 @@ def lint_component_optical_position_nodes(path, data, lib_roots):
         rd = load_yaml(f) if f else None
         clash = sorted(own & {str(p.get("id")) for p in (rd or {}).get("parts") or []})
         if clash:
-            err(path, "L110", f"rear face {rear_ref} composes {clash}, which the front also "
+            err(path, "L112", f"rear face {rear_ref} composes {clash}, which the front also "
                               "composes; one path would name two connectors - rename one side")
     if data.get("class") != "port":
         return
@@ -2550,12 +2550,12 @@ def lint_component_optical_position_nodes(path, data, lib_roots):
     want = {str(i) for i in range(1, int(n) + 1)}
     missing = sorted((int(i) for i in want - have))
     if missing:
-        err(path, "L110", f"declares optical.positions {n} but draws no node for position(s) "
+        err(path, "L112", f"declares optical.positions {n} but draws no node for position(s) "
                           f"{missing}; compose a bore with that id or declare an element of "
                           "class fibre, so fibre X.n has a path X/n")
     extra = sorted(int(i) for i in have if i.isdigit() and int(i) > int(n))
     if extra:
-        err(path, "L110", f"draws position node(s) {extra} beyond optical.positions {n}")
+        err(path, "L112", f"draws position node(s) {extra} beyond optical.positions {n}")
 
 
 def lint_component_optical_coverage(path, data, lib_roots):
