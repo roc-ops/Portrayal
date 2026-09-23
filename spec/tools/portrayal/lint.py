@@ -256,6 +256,7 @@ RULES = {
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
     "L108": ("component, device", "a belly-to-belly SFP/QSFP/QSFP-DD cage pair faces the library's way - upper 0 over lower 180, or left 270 beside right 90 on a card drawn on its side - so both bails face outward (OSFP stacks are not checked)", "turn the pair; where a recorded reading says the stack is built otherwise, name the pair in `stack-exceptions:` with that reading as its `reason`"),
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
+    "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -2336,7 +2337,7 @@ def lint_component_optical_front_order(path, data):
     and which row comes first, is a fact about the SILKSCREEN, and `at.x`/
     `at.y` cannot answer it - the geometry-only derivation would quietly
     guess one, which is exactly what shipped wrong before this rule existed
-    (fs/fhd-2mtp12-lc-os2-a@3's own provenance.parts records both retracted
+    (fs/fhd-2mtp12-lc-os2-a@4's own provenance.parts records both retracted
     guesses). So a module whose fibre-bearing parts sit at more than one
     distinct `at.y` states `optical.front-order` explicitly instead of
     leaving it to be derived.
@@ -2539,10 +2540,68 @@ def lint_component_optical_polarity(path, data, lib_roots):
                               f"{got}); the paths are the evidence - fix them or the claim")
 
 
+# L112 EXEMPTIONS, BY NAME AND WITH A REASON. A part leaves this table when the
+# source that places its fibres arrives; the census test fails if one is added
+# silently or names a part that no longer exists.
+POSITION_EXEMPT = {
+    "common/mdc-adapter": (
+        "which bore of which duplex port is position 1-4 is not sourced, and a "
+        "guessed order is a wrong address that looks like a right one"),
+    "common/fibre-splice": (
+        "a placeholder that draws no fibres; markers on it would be addresses "
+        "without a place"),
+}
+
+
+def _component_key(path):
+    parts = Path(path).parts
+    return "/".join(parts[-4:-2])
+
+
+def lint_component_optical_position_nodes(path, data, lib_roots):
+    """L112: every fibre position a connector declares is a node you can point at.
+
+    A fibre endpoint `X.n` in `optical.paths` is drawn at path `X/n`, so the
+    explorer and every consumer can turn one into the other without a table.
+    That holds only if a connector with `optical.positions: N` draws nodes
+    `1`..`N`: a composed bore, or a contracted element of class `fibre`.
+
+    It also refuses a cassette whose rear face composes an id its front also
+    uses. Both would be drawn at the same path on two faces as two different
+    connectors, which is the one thing a path must never be.
+    """
+    own = {str(p.get("id")) for p in data.get("parts") or [] if p.get("id") is not None}
+    rear = (data.get("faces") or {}).get("rear")
+    rear_ref = rear.get("ref") if isinstance(rear, dict) else rear
+    if rear_ref:
+        f = resolve_component(rear_ref, lib_roots)
+        rd = load_yaml(f) if f else None
+        clash = sorted(own & {str(p.get("id")) for p in (rd or {}).get("parts") or []})
+        if clash:
+            err(path, "L112", f"rear face {rear_ref} composes {clash}, which the front also "
+                              "composes; one path would name two connectors - rename one side")
+    if data.get("class") != "port":
+        return
+    n = (data.get("optical") or {}).get("positions")
+    if not n or _component_key(path) in POSITION_EXEMPT:
+        return
+    have = own | {str(k) for k, v in (data.get("elements") or {}).items()
+                  if isinstance(v, dict) and v.get("class") == "fibre"}
+    want = {str(i) for i in range(1, int(n) + 1)}
+    missing = sorted((int(i) for i in want - have))
+    if missing:
+        err(path, "L112", f"declares optical.positions {n} but draws no node for position(s) "
+                          f"{missing}; compose a bore with that id or declare an element of "
+                          "class fibre, so fibre X.n has a path X/n")
+    extra = sorted(int(i) for i in have if i.isdigit() and int(i) > int(n))
+    if extra:
+        err(path, "L112", f"draws position node(s) {extra} beyond optical.positions {n}")
+
+
 def lint_component_optical_coverage(path, data, lib_roots):
     """L80: every position is reached by a path or declared unused, with a reason.
 
-    smartoptics/ppm-ocu-97-3@1 carries this in provenance today:
+    smartoptics/ppm-ocu-97-3@2 carries this in provenance today:
 
         THE SECOND BORE IS DEAD. It is captioned NA and terminates nothing.
 
@@ -8457,6 +8516,7 @@ def main():
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_optical_polarity(f, d, args.library)
+                lint_component_optical_position_nodes(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)

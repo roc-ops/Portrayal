@@ -83,5 +83,5 @@ def test_components_json_publishes_what_a_nested_bay_accepts():
     ppm = a22["bays"]["ppm-1"]
     assert ppm["size"] == {"w": 55.4, "h": 19.5}, (
         f"published unnormalised: {ppm['size']}")
-    assert "smartoptics/ppm-ad1-1510@1" in ppm["accepts"]
+    assert "smartoptics/ppm-ad1-1510@2" in ppm["accepts"]
     assert ppm["default"] == "smartoptics/ppm-dummy@1"

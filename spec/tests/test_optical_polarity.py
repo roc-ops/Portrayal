@@ -16,7 +16,7 @@ from portrayal import lint
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = [str(ROOT / "library")]
-AF24 = ROOT / "library/components/fs/fhd-1mtp24-lc-os2-af/v3/contract.yaml"
+AF24 = ROOT / "library/components/fs/fhd-1mtp24-lc-os2-af/v4/contract.yaml"
 
 
 def paths_for(order, fibres):
@@ -28,7 +28,7 @@ def paths_for(order, fibres):
 
 def cassette(pol, fibres):
     """A six-adapter FHD LC cassette whose port p takes MTP fibre fibres[p-1]."""
-    parts = [{"id": f"lc{i}", "ref": "common/lc-duplex-v-adapter@4", "at": [15.81 + 12.9 * (i - 1), 10.66]}
+    parts = [{"id": f"lc{i}", "ref": "common/lc-duplex-v-adapter@5", "at": [15.81 + 12.9 * (i - 1), 10.66]}
              for i in range(1, 7)]
     return {"parts": parts, "faces": {"rear": {"ref": "fs/fhd-1mtp6lcd-rear@3"}},
             "optical": {"polarity": pol, "paths": paths_for([p["id"] for p in parts], fibres)}}

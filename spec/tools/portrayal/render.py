@@ -405,9 +405,19 @@ def apply_states(g, states, palette):
             node.set("data-states", g.get("data-states"))
 
 
-def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
+def rewrite_ids(el, prefix, contract, path_prefix, skip=None, in_port=False):
     """Prefix all ids (and url(#...) references to them); attach data-* to contracted elements."""
     elements = contract.get("elements", {}) or {}
+    # A CONTRACT CAN NEST A PORT IN ITSELF, not just in a composed `parts:`
+    # entry: an MPO/MTP flange adapter's own class is `port` and its keyed
+    # `opening` is drawn as a second `class: port` element inside it, and a
+    # bare plug's `body` does the same, for the same reason a composed cage
+    # marks its std core - an audit walking `[data-class=port]` should not
+    # count the opening or the body as a second connector. This wrapping `g`
+    # (below, via the caller) is what carries `contract`'s own class, so an
+    # inner element is nested under a port ancestor when THIS contract is
+    # itself a port, or when the caller says an ancestor above it already is.
+    self_in_port = in_port or contract.get("class") == "port"
     renamed = {}
     for node in el.iter():
         if node is skip:
@@ -422,6 +432,8 @@ def rewrite_ids(el, prefix, contract, path_prefix, skip=None):
             node.set("data-path", f"{path_prefix}/{nid}")
             if spec.get("class"):
                 node.set("data-class", spec["class"])
+                if self_in_port and spec["class"] == "port":
+                    node.set("data-inner", "1")
             if spec.get("states"):
                 node.set("data-states", " ".join(state_names(spec["states"])))
             # A DISPLAY IS NOT A LAMP AND ITS VOCABULARY IS NOT COLOURS. `states`
@@ -1065,7 +1077,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     holder = ET.Element(f"{{{SVG_NS}}}g")
     for child in list(skin):
         holder.append(copy.deepcopy(child))
-    rewrite_ids(holder, inst_id, contract, path, skip=holder)
+    rewrite_ids(holder, inst_id, contract, path, skip=holder, in_port=in_port)
     # TEXT FROM ATTRS, so one carrier covers a catalogue instead of a file per
     # row. `merged` is the contract's attrs under the placement's, which is
     # already the precedence every other attr consumer uses.

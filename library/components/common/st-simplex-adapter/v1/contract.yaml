@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: st-simplex-adapter
-version: 1.0.0
+version: 1.1.0
 class: port
 profile: networking
 description: >-
@@ -21,7 +21,14 @@ optical:
   # ship duplex adapters as the panel norm, FS's ST panels are one opening per
   # fibre.
   positions: 1
+elements:
+  '1': {at: [2.2, 2.2], size: [5.6, 5.6], class: fibre}
 provenance:
+  fibre-position: >-
+    element `1` is the one fibre position: the dark bayonet opening, a
+    circle r 2.8 at 5.0, 5.0, the skin node that used to be `port`. Its
+    bounding box is the element, so fibre 1 of this part is drawn at
+    `<part>/1`.
   size: >-
     ESTIMATED - NOT A MEASUREMENT. No face-on render of an FS ST panel exists
     in this corpus, only a THREE-QUARTER product shot of SKU 183380, and a

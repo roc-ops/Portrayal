@@ -30,7 +30,9 @@ the *published build*, not about the hardware.
   `common/rj45-eth@1`, `common/qsfp28-cage@3`, `common/sfp-plus-cage@2` and
   `common/rj45-ganged-eth@1` draw as a nested `data-class="port"` element.
   The core keeps its class. An audit that counts ports should skip it with
-  `[data-class=port]:not([data-inner])` (roc-ops/Portrayal#511).
+  `[data-class=port]:not([data-inner])` (roc-ops/Portrayal#511). The same mark
+  covers a port component that draws a second `class: port` element inside
+  its own skin, not only one composed as a separate part.
 - Every `configs[]` entry in `<device>.configs.json` carries `airflow` —
   `front-to-back`, `back-to-front`, `side` or `passive`, or `null` where the
   device states none — resolved the way each drawing's `data-airflow` is (the
@@ -56,6 +58,27 @@ the *published build*, not about the hardware.
   finds `dcs510` (roc-ops/Portrayal#514).
 
 ### Changed
+- Every fibre a connector declares is now a node you can address: a bore or a
+  `class: fibre` element numbered `1` through `optical.positions`, `X/n` on a
+  port that carries more than one. Lint L112 holds it - a connector composes a
+  bore for each position or draws its own fibre element, and a cassette's rear
+  face reuses none of the front's ids. The three duplex adapters
+  (`common/lc-duplex-adapter`, `common/lc-duplex-v-adapter`,
+  `common/sc-duplex-adapter`) move to v5 for it: their two bores are `1` and
+  `2`, not `tx` and `rx`, so a consumer addressing `.../tx` or `.../rx` on one
+  of these adapters finds nothing where it used to find a bore (a
+  transceiver's own tx/rx faces are unchanged). 29 parts that compose one of
+  these adapters took a major bump, and the five devices that seat them
+  followed: `fs/fhd-1ufce` 4.0.0, `smartoptics/dcp-2` 2.0.0,
+  `smartoptics/dcp-m32-cso-zr` 3.0.0, `smartoptics/dcp-r-34d-cs` 4.0.0 and
+  `smartoptics/dcp-r-9d-cs` 4.0.0. The MPO/MTP flange adapters
+  (`common/mpo-flange-adapter`, `common/mpo24-flange-adapter`) carry a new
+  `opening` element for the keyed bulkhead itself, `class: port` and marked
+  `data-inner="1"` so `[data-class=port]:not([data-inner])` still counts one
+  connector per adapter, and fibre elements `1..12` (the 24-fibre part
+  `1..24`), numbered as the plug numbers them rather than as a viewer sees
+  them. Both adapters took a minor bump, 1.1.1 to 1.2.0
+  (roc-ops/Portrayal#533).
 - Ten routing-engine, control-board and sled modules now group their ports:
   `juniper/jnp10k-re1@2`, `re-s-1300@1`, `re-s-1300-v@1`,
   `mx2000-cb-re-v@1`, `mx2008-rcb-v@1`, `jnp10003-rcb@1`, `jnp304-re@1`,

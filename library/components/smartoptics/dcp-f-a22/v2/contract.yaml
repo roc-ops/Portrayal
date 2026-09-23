@@ -1,0 +1,281 @@
+format: 1
+kind: module
+name: dcp-f-a22
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: Smartoptics DCP-F-A22 - a 22 dB gain EDFA amplifier that takes one slot
+  in a DCP-2 chassis and carries two bays for passive plug-in modules. Half-width
+  1RU, the same 205 x 44 footprint as the DCP-404.
+size: {w: 205.0, h: 44.0}
+attrs:
+  model: DCP-F-A22
+  role: amplifier
+  gain-db: '22'
+  power-draw-typical-w: 30
+  power-draw-max-w: 35
+  laser-class: '1'
+provenance:
+  major: >-
+    Composes the duplex adapter at v5, whose bores are numbered 1 and 2
+    instead of tx and rx, so every path under this part changes
+    (`edfa/tx` -> `edfa/1`); nothing drawn moved.
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
+    the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
+    the band between the two cages and both bails face outward. Decided by the rule, not
+    an observation, so a photograph of the stack overturns it: the 1 SFP pair
+    (sfp-1/sfp-2). Turning a composed cage in place changes no box, id or anything a
+    device places, so it is a minor bump (S6).
+  method: >-
+    FACT SHEET FIRST, THEN THE ARTWORK - working/intake/factsheets/dcp-f-a22.md. The
+    sheet was written from the manuals alone and concluded that no document in the
+    corpus dimensions any DCP-F plug-in unit. That was true of the corpus and false of
+    the world: the part's own datasheet was then found by probing the URL pattern the
+    R22 product page uses, and it dimensions it outright. The sheet records the
+    overturning rather than being quietly rewritten.
+  size: >-
+    datasheet - so-ds-dcp-f-a22-r1.3, "Size (WxDxH) 44 x 205 x 270mm", 1.8 kg.
+    THE AXIS LABELS ARE TRANSPOSED, exactly as on the DCP-404's datasheet, and they
+    resolve the same way: 44 cannot be the width of a half-width 1RU unit. That lands
+    the A22 on PRECISELY the DCP-404's footprint - 205 x 44 x 270, identical in all
+    three axes - which says the DCP traffic-unit form factor is one shared envelope.
+    Two parts agreeing is a stronger check than either alone.
+  power: >-
+    datasheet - "Typical consumption at 220VAC: Normal operation: 30W, Max during power
+    up: 35W". The ambient is not stated with either figure; 220VAC is the input, not a
+    temperature.
+  ports: >-
+    datasheet, FRONT SIDE CONNECTIONS - 1 x EDFA input/output port, 1 x Monitor output
+    port, 2 x RJ45 management 10/100/1000 Base-T, 2 x SFP management 1000 Base-X, and
+    "All optical ports are of LC connector type". The datasheet ALSO lists REAR SIDE
+    CONNECTIONS and says outright they are "located on the DCP-2 chassis" - those are
+    the chassis management block, already on smartoptics/dcp-2, and they are
+    deliberately not drawn here.
+  ppm-bay-height: >-
+    from smartoptics/ppm-ad1-1510@2's 19.5, NOT from this master. The A22 master draws
+    its two stacked openings 28mm tall in total, i.e. 14 each, which disagrees with the
+    PPM master's 19.46 by a third. The PPM master is isotropic - 10.81 px/mm on both
+    axes - and this one is not, so the PPM master wins. Two 19.5 bays then fill 39 of
+    the 44 face, which fixes the bay positions at 2.5 and 22.0 with 2.5 of margin top
+    and bottom and nothing between them.
+  ppm-accepts: >-
+    datasheet - ds-ppm-r4.0's ordering table is the whole PPM catalogue, nine parts,
+    and its overview says the DCP-F modules "have two internal expansion slots for
+    optional Passive Plug-in Modules (PPM)" without qualifying which. So every PPM is
+    accepted by both bays, and nothing in the corpus says otherwise: no document pairs
+    a particular PPM with a particular slot, and none restricts one to a carrier. The
+    list was the two parts that happened to exist, which read as a restriction the
+    vendor never stated.
+  ppm-bays: >-
+    count and numbering from prose, arrangement from artwork, and the two are kept
+    apart. DCP-F UM s4.7 "DCP-F has two internal expansion slots"; s1.1 "support for
+    2 x Passive Plugin Modules"; s3.5 "should be placed in PPM position 1". The CLI
+    manual corroborates independently with real interface names - ppm-1/1/2/osc-tx,
+    i.e. ppm-<chassis>/<slot>/<position>/<port>. That the bays are STACKED, bay 1
+    upper, at the right-hand end is not in any prose; it comes from the stencil's
+    connection points sharing an x and differing only in y, and from the PPM 1 / 2
+    bracket in the manual figures.
+  layout: >-
+    ORDERING FROM THE PHOTOGRAPH, FINE POSITIONS FROM THE STENCIL, and the photograph
+    had to come first because the stencil is self-contradictory here. a22.gif draws ONE
+    stacked pair of openings and brackets it twice - SFP 1/2 on the left and PPM 1/2
+    on the right - and nothing in the drawing says which it is. The vendor photograph
+    dcp-f-a22.jpg shows they are two separate feature groups: the SFP cages sit
+    between the OCM and the PPM field, and the PPM bays are at the right-hand end.
+    That also reconciles arithmetically - the OCM ends at 129.5 and the PPM field
+    starts at 147.3, leaving an 18mm gap that two stacked SFP cages fit and nothing
+    else explains.
+    x positions are read off the master and scaled on the datasheet's 205; y on the 44.
+    THE MASTER IS ANISOTROPIC - its faceplate box has an aspect of 3.52 against the
+    real 4.659 - so the axes are scaled separately and nothing is taken from a single
+    factor.
+  connector-sizes: >-
+    from the library's real parts, NOT from the master. The master draws its optical
+    adapters at ~10mm pitch and 7.4mm wide, which is SC-like and contradicts the
+    datasheet's LC. Positions come from the drawing; sizes come from
+    common/lc-duplex-adapter@5, itself measured off the Smartoptics DCP-R stencil.
+  markings: >-
+    stencil master - smartoptics wordmark and DCP-F-A22 top left, a laser hazard
+    triangle over a general warning triangle beneath them, and Power / Status captions
+    under their lamps. The same pair of triangles the DCP-404 carries, which is what
+    common/warning-triangle@1 was added for.
+  vents: >-
+    stencil master - two offset rows of hexagonal cells on the sloped band, the only
+    ventilation the master shows on this face.
+    THE CELLS ARE REGULAR HEXAGONS SEEN FORESHORTENED, not the elongated slots the
+    master draws, and this is the same correction smartoptics/dcp-404@1 needed. They sit
+    on a band tilted back to the chassis, so a front elevation sees them squashed by the
+    ratio of the band's PROJECTION to its true length: 8.9 / hypot(8.9, 44) = 0.19825,
+    against the DCP-404's 10.4 / 45.21 = 0.23003. A cell 5.2 wide is 4.503 tall as a
+    regular hexagon and is therefore drawn 0.893 tall. It was drawn 2.7 - squashed to
+    0.60 where it should be 0.198, so three times too tall - which reads as an elongated
+    slot in 2D and, once the band actually slopes, as a stretched cell in 3D.
+    ONE RATIO FIXES BOTH VIEWS, which is what says it is the right ratio rather than a
+    tuned one. Block bounds, row positions and pitches are the master's and are kept;
+    only the cell outlines are regularised.
+    IT IS DRAWN ONLY AS FAR AS THE PPM FIELD, and the master draws it further. Two
+    19.5 bays stacked take 39 of the 44 height, which leaves 5 for margins and none
+    for a vent band above them - so a row running the full width, as the master shows
+    it, cannot be what the metal does. The master's y is not trustworthy here anyway:
+    its faceplate box has an aspect of 3.52 against the real 4.659.
+  ocm-aperture-gap: >-
+    THE OCM IS DRAWN AS TWO APERTURES UNDER ONE CAPTION. a22.gif shows two adapter
+    openings with a single white Tx box beneath them, while the datasheet says
+    "1 x Monitor output port". It is modelled as one duplex adapter with one captioned
+    bore, on the reading that the second position is present in the shell and unused -
+    but that is a reading, not a source. The M32 master has the same shape at its OTDR
+    position, which suggests a vendor drawing convention rather than two independent
+    oddities. A square-on bench photograph settles it.
+  sfp-positions-gap: >-
+    the two SFP cages are placed in the 18mm the arithmetic leaves between the OCM and
+    the PPM field, stacked, because that is the only place they fit. Their exact x, the
+    gap between them and which is SFP 1 are ESTIMATED. The photograph is 1.1 px/mm
+    across the chassis and cannot separate them.
+    THE CAPTION MOVED OFF THE RAMP. It sat at baseline 8.2, which was inside the top band
+    before that band sloped and on the bevel afterwards - in 3D it lay facing the ceiling.
+    A caption cannot sit on a slope, and there is no room between the ramp's foot at 8.9
+    and SFP 1's top at 10.0, so it moves to baseline 23.0, in the 4mm the two cages leave
+    between them. That is off the ramp and keeps this face's habit of captioning a port
+    from just above it, as ETH1, ETH2, EDFA and OCM all do. Its position is as estimated
+    as the cages it labels.
+  no-orthographic-elevation-gap: >-
+    none exists. The only elevation of this unit is the stencil master, which is
+    anisotropic and self-contradictory at the right-hand end; the only photograph is a
+    1.1 px/mm vendor render of an installed chassis. Everything here is `drawing` or
+    `estimated` confidence and none of it is measured.
+  depth: >-
+    datasheet - so-ds-dcp-f-a22-r1.3, 270 deep. Only the front face is modelled; no
+    figure in the corpus shows a side, top or bottom of this unit.
+  body-relief: >-
+    THIS KEY USED TO SAY THE BODY DECLARES NO `out`, DELIBERATELY, and the reason it
+    gave has since been fixed. It said a proud faceplate buries everything drawn on it,
+    because the kit extruded the plate as a slab while every port, lamp and marking sat
+    at the panel plane inside it. That was true, it is what left smartoptics/dcp-404@1
+    blank in 3D, and it is now three separate fixes: the node has to be a GROUP wrapping
+    what rides on it rather than a bare plate rect, composed parts carry `lift`, and
+    relief.js punches a lifted cavity through the raised surface it seats on.
+    The key's OTHER argument still stands and is not what this models: how far a plug-in
+    unit stands out of the CHASSIS is the bay's business, wanting `insert` or `travel` on
+    the chassis side. What is modelled here is the 44 as the observed protrusion the
+    DCP-404 records, because the ramp cannot be drawn without it - `profile-y` runs 0 to
+    44 and the bevel IS the top of the protruding block. See that part's `relief` for
+    where 44 comes from and how weakly it is held.
+  two-boxes: >-
+    THE FACE IS TWO BOXES WELDED AT 147.3, not one plate carrying a profile, and this is
+    a shape the vocabulary cannot say any other way. `profile-y` reads down the height
+    and knows nothing about x, so one node cannot slope at one end and stand square at
+    the other. `body-ramp` covers 0 to 147.3 and slopes back over its top 8.9;
+    `body-square` covers 147.3 to 205 and is square to its top edge. Their plates abut on
+    cut edges with only the outer corners carrying the shell's radius, so there is no
+    seam and neither rounds into the other.
+    SQUARE ON THE RIGHT IS FORCED, NOT PREFERRED: ppm-1 opens at y 2.5 and the ramp runs
+    to 8.9, so a ramp over that end would cut through the top 6.4 of bay 1. The metal has
+    to stand full height for a module to slide into it, which is presumably why the unit
+    is built this way rather than bevelled across.
+  ramp-angle: >-
+    8.9 IS THIS PART'S OWN FIGURE AND IS KEPT, against a first instinct to import the
+    DCP-404's 10.4. The two parts share one 205 x 44 x 270 envelope, so the bevel is
+    plausibly one feature and one number - but 8.9 over a 44 setback is 11.4 degrees off
+    the lid, and the DCP-404's own `relief` records its angle as EYED off a perspective
+    render at 10 to 15 degrees with 13.3 the value that fits. 11.4 sits inside that band.
+    So the two agree to within what either can support, and taking 10.4 would have traded
+    this part's own artwork for a number measured off a different part's render, moved
+    every vent hexagon, and pushed the ramp's foot 0.4 past the top of the SFP 1 cage at
+    y 10.0 - a cage cannot sit on a slope.
+  bay-lift: >-
+    BOTH PPM OPENINGS CARRY `lift: 44`, and so, by way of render.py, does whatever is
+    seated in them. relief.js's liftOf sums data-z-lift up the ANCESTOR chain, and a bay's
+    occupant is appended to the instance group rather than beside its opening - the flat
+    coordinate space is deliberate there - so it inherits nothing from the group the
+    opening sits in. Without the propagation both bays and their modules sat at the panel
+    plane behind unbroken metal: the dcp-404's blank-face failure again, in the one place
+    restructuring the skin cannot reach. A component bay declares no lift of its own and
+    does not need one; it takes it from a relief feature naming the opening.
+elements:
+  vent-top: {at: [14.0, 3.6], size: [128.0, 4.4], class: vent}
+  caption-power: {at: [4.6, 38.4], size: [8.2, 2.6], class: marking}
+  caption-status: {at: [13.7, 38.4], size: [8.2, 2.6], class: marking}
+bays:
+  ppm-1:
+    at: [147.3, 2.5]
+    size: [55.4, 19.5]
+    accepts:
+      - smartoptics/ppm-ad1-1510@2
+      - smartoptics/ppm-ad1-1625@2
+      - smartoptics/ppm-dcm-10@2
+      - smartoptics/ppm-dcm-20@2
+      - smartoptics/ppm-dcm-40@2
+      - smartoptics/ppm-dcm-80@2
+      - smartoptics/ppm-ocu-50-50@2
+      - smartoptics/ppm-ocu-97-3@2
+      - smartoptics/ppm-dummy@1
+    default: smartoptics/ppm-dummy@1
+  ppm-2:
+    at: [147.3, 22.0]
+    size: [55.4, 19.5]
+    accepts:
+      - smartoptics/ppm-ad1-1510@2
+      - smartoptics/ppm-ad1-1625@2
+      - smartoptics/ppm-dcm-10@2
+      - smartoptics/ppm-dcm-20@2
+      - smartoptics/ppm-dcm-40@2
+      - smartoptics/ppm-dcm-80@2
+      - smartoptics/ppm-ocu-50-50@2
+      - smartoptics/ppm-ocu-97-3@2
+      - smartoptics/ppm-dummy@1
+    default: smartoptics/ppm-dummy@1
+parts:
+  # `lift: 44.0` on every one of them: the plate stands 44 off the chassis and these
+  # are ON it, not behind it. A composed part is appended to the instance group, not
+  # into `body-ramp`, so it inherits nothing and each has to say so itself. The kit
+  # builds a lifted part's box as out - lift, so its own relief still measures from
+  # the panel. All ten sit below the ramp's foot at 8.9 - the highest is sfp-1 at
+  # 10.0 - so every one of them is on the flat, and none is asked to sit on a slope.
+  - {ref: common/laser-warning@1, id: warn-laser, at: [10.7, 21.4], lift: 44.0}
+  - {ref: common/warning-triangle@1, id: warn-general, at: [10.7, 27.7], lift: 44.0}
+  - {ref: common/led-rect@1, id: led-power, at: [6.38, 35.1], lift: 44.0, attrs: {function: power}}
+  - {ref: common/led-rect@1, id: led-status, at: [15.49, 35.1], lift: 44.0, attrs: {function: status}}
+  - {ref: common/rj45-eth@1, id: eth1, at: [29.9, 23.8], lift: 44.0, attrs: {role: mgmt, speed: 1g}}
+  - {ref: common/rj45-eth@1, id: eth2, at: [52.3, 23.8], lift: 44.0, attrs: {role: mgmt, speed: 1g}}
+  - {ref: common/lc-duplex-adapter@5, id: edfa, at: [88.08, 23.8], lift: 44.0, attrs: {role: edfa}}
+  - {ref: common/lc-duplex-adapter@5, id: ocm, at: [113.98, 23.8], lift: 44.0, attrs: {role: monitor}}
+  - {ref: std/sfp@1, id: sfp-1, at: [130.75, 10.0], lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: sfp-2, at: [130.75, 24.0], rotate: 180, lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 1g}}
+relief:
+  features:
+    # THE LEFT BLOCK, WHOSE TOP SLOPES BACK TO THE CHASSIS. `profile-y` reads down
+    # the height: 0 at the top edge, the full 44 by 8.9, flat from there. The node is
+    # a GROUP wrapping its plate and everything printed on it, because `out` extrudes
+    # the node's own art as a height field and on a bare rect that is a blank slab.
+    - node: body-ramp
+      out: 44.0
+      profile-y: [[0, 0.0], [8.9, 44.0], [44, 44.0]]
+      confidence: estimated
+      source: >-
+        THE 44 IS THE DCP-404's, and it is the same fact about the same shell: how far a
+        traffic unit stands out of a DCP-2, read off an unboxing video and two stills as
+        "an inch and a half to two inches" and consistent with a 270-deep module in a
+        500-deep chassis. See smartoptics/dcp-404@1's `relief` for the full derivation
+        and for how weakly it is held.
+        THE 8.9 IS THIS PART'S OWN, from its master's top band, and it is NOT the
+        DCP-404's 10.4 - see `ramp-angle` for why the two disagree by less than either
+        can resolve.
+        NO `color` is set, so the sides sample the node's own art.
+    # THE RIGHT BLOCK, SQUARE TO ITS TOP EDGE. No profile: ppm-1 opens at y 2.5 and a
+    # ramp running to 8.9 would cut through the top 6.4 of it.
+    - node: body-square
+      out: 44.0
+      confidence: estimated
+      source: the same 44 as body-ramp; the two blocks are one plate and part the same way
+    # the perforation is holes through the sloped band, not printing on it
+    - {node: vent-top, vent: 44.0, confidence: estimated, source: holes through the sloped band}
+    # the openings are 44 off the chassis, and render.py carries that onto whatever is
+    # seated in them - see `bay-lift`
+    - {node: ppm-1, lift: 44.0, confidence: estimated, source: the opening is in the raised plate}
+    - {node: ppm-2, lift: 44.0, confidence: estimated, source: the opening is in the raised plate}
+body:
+  depth: 270.0
+  color: '#33383d'
+skins: [default]

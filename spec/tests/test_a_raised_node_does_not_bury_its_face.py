@@ -19,7 +19,7 @@ fibres and two guide pins - is drawn inside it. The adapter composes two screws,
 so the housing was raised, and every MTP port on every FHD cassette back became a
 blank slab. In 3D too: a cavity's floor is cut from its own group RENDERED
 STANDALONE, so the same order buried the same art there. The fix is the pattern
-common/lc-duplex-v-adapter@4 already uses for its bores - the opening is an
+common/lc-duplex-v-adapter@5 already uses for its bores - the opening is an
 `evenodd` HOLE in the raised shape, so what is behind shows through however late
 it paints.
 

@@ -16,7 +16,7 @@ const nodes = [
   // a bay on the device itself: no `/module/` in its path
   el({id: 'slot-1', 'data-path': 'slot-1', 'data-class': 'bay'}),
   el({id: 'slot-1--module', 'data-path': 'slot-1/module',
-      'data-ref': 'smartoptics/dcp-f-a22@1:1.2.0'}),
+      'data-ref': 'smartoptics/dcp-f-a22@2:2.0.0'}),
   // two bays inside what is seated in it
   el({id: 'slot-1--module--ppm-1', 'data-path': 'slot-1/module/ppm-1',
       'data-class': 'bay'}),
@@ -42,13 +42,13 @@ const root = {
 globalThis.CSS = {escape: s => s};
 
 const INDEX = {
-  'smartoptics/dcp-f-a22@1': {
+  'smartoptics/dcp-f-a22@2': {
     bays: {
       'ppm-1': {at: [147.3, 2.5], size: {w: 55.4, h: 19.5},
-                accepts: ['smartoptics/ppm-ad1-1510@1', 'smartoptics/ppm-dummy@1'],
+                accepts: ['smartoptics/ppm-ad1-1510@2', 'smartoptics/ppm-dummy@1'],
                 default: 'smartoptics/ppm-dummy@1'},
       'ppm-2': {at: [147.3, 22.0], size: {w: 55.4, h: 19.5},
-                accepts: ['smartoptics/ppm-ad1-1510@1', 'smartoptics/ppm-dummy@1'],
+                accepts: ['smartoptics/ppm-ad1-1510@2', 'smartoptics/ppm-dummy@1'],
                 default: 'smartoptics/ppm-dummy@1'},
     },
   },
