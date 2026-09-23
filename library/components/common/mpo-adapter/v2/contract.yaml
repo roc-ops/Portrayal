@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo-adapter
-version: 2.0.0
+version: 2.1.0
 class: port
 profile: networking
 description: >-
@@ -12,6 +12,10 @@ description: >-
 size: {w: 13.8, h: 9.4}
 size-confidence: {w: photo-measured, h: estimated}
 attrs: {media: fiber, connector: mpo}
+# WHAT THE PORT SHIPS HOLDING, on the slot this tile forwards from its
+# composed std/mpo@2 (P2) - seated wherever a panel composes it, and
+# overridden there or by a configuration (provenance.shipped-cap).
+default: common/mpo-dust-cap@2
 unplaced: >-
   NOTHING SEATS THIS UNTIL AN FHD ADAPTER PANEL IS MODELLED. It is one opening
   tile in FS's continuous MTP adapter panel (the 12x MTP panel, SKU 35510, its
@@ -83,6 +87,13 @@ provenance:
     taking any of the three ferrules. 12 is the default because it is the count
     the FHD cassettes' rear connectors use; see the FS catalogue at
     working/intake/fs/fhd/CATALOGUE.tsv.
+  shipped-cap: >-
+    THE PORT SHIPS CAPPED, declared as this tile's top-level `default:` (B3,
+    docs/pluggables-caps-design.md, "The shipped default"): FS's face-on
+    renders of SKU 35510, the 12x MTP adapter panel this tile is read off,
+    show all twelve ports holding the grey cap common/mpo-dust-cap@2 is
+    drawn from (that part's `size-notes`). Nothing places this tile yet
+    (`unplaced`), so the default seats nowhere until a panel composes it.
   face-detail-gap: >-
     no orthographic photograph of an MPO adapter exists here; the reading is off
     a product RENDER. The latch, the key orientation and any keying mark are not

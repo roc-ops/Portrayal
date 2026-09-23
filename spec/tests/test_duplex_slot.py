@@ -13,9 +13,12 @@ The figures here are all COMPUTED FROM THE CONTRACTS - the bores' composed mate
 points through `manifest.seat_point`, the pitch from spec/schemas/standards.yaml
 via the registry - so a test cannot agree with a stale copy of a number.
 
-Nothing in the library ships a duplex occupant yet (Task 5 lands the caps), so
-`test/duplex-plug@1` - a `mates: lc-duplex` copy of `generic/lc-plug@2` - stands
-in for one, and `generic/lc-plug@2` is the simplex part in a bore.
+`test/duplex-plug@1` - a `mates: lc-duplex` copy of `generic/lc-plug@2` - is
+the duplex part, and `generic/lc-plug@2` is the simplex part in a bore. The
+library's adapters SHIP a level filled (B3 task 8, test_shipped_caps.py): the
+FS stacked adapter a duplex cap on its own slot, the Smartoptics adapter a cap
+in each bore. So a configuration here that fills the OTHER level empties the
+shipped one first, as a real one has to.
 """
 import math
 import shutil
@@ -26,7 +29,7 @@ import pytest
 import yaml
 
 from test_nested_occupants import LIB, SPEC, by_path, device_point, is_inside
-from test_slot_defaults import (_copy, _lib, _part, build, face, fhd,
+from test_slot_defaults import (_copy, _lib, _part, _unshipped, build, face, fhd,
                                 occupants_drawn, run)
 
 from portrayal import lint
@@ -200,7 +203,7 @@ def capped_cassette(root):
     so that bore is filled with no configuration saying so."""
     def capped(c):
         _part(c, "tx")["default"] = PLUG
-    _copy(root, V_ADAPTER, MAJOR[V_ADAPTER], "capped-adapter", capped)
+    _copy(root, V_ADAPTER, MAJOR[V_ADAPTER], "capped-adapter", _unshipped(capped))
 
     def swap(c):
         _part(c, "lc01")["ref"] = "test/capped-adapter@1"
@@ -240,7 +243,8 @@ def test_a_composed_adapter_refuses_its_slot_and_a_bore(tmp_path, lib):
 
 
 def test_a_placed_adapter_refuses_its_slot_and_a_bore(tmp_path, lib):
-    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/rx": PLUG})
+    # tx's shipped cap emptied, so the one conflict is the configured rx
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": PLUG})
     refuses(dev, tmp_path, lib, "port-1510", "rx")
 
 
@@ -267,8 +271,9 @@ def test_filling_only_the_adapter_slot_builds(tmp_path, lib):
 
 
 def test_filling_only_the_bores_builds(tmp_path, lib):
+    # the adapter ships a duplex cap on its own slot, emptied first
     dev, _ = fhd(tmp_path, CASSETTE,
-                 {"bay-1/lc01/tx": PLUG, "bay-1/lc01/rx": PLUG})
+                 {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG, "bay-1/lc01/rx": PLUG})
     root, _ = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     assert occupants_drawn(root) == {"bay-1/module/lc01/tx-occupant": PLUG,
                                      "bay-1/module/lc01/rx-occupant": PLUG}
@@ -307,7 +312,7 @@ def test_l111_reports_a_configuration_filling_both_levels(tmp_path, lib):
 
 
 def test_l111_reports_a_placed_adapter_too(tmp_path, lib):
-    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/rx": PLUG})
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": PLUG})
     got = l111_device(dev, lib)
     assert got and "port-1510/rx" in got[0], got
 
@@ -331,7 +336,7 @@ def test_l111_reports_a_configured_bore_over_a_shipped_adapter_slot(tmp_path, li
 
 def test_l111_is_clean_for_one_level_at_a_time(tmp_path, lib):
     for occ in ({"bay-1/lc01": DUPLEX},
-                {"bay-1/lc01/tx": PLUG, "bay-1/lc01/rx": PLUG},
+                {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG, "bay-1/lc01/rx": PLUG},
                 {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG}):
         dev, _ = fhd(tmp_path / str(abs(hash(str(occ)))), CASSETTE, occ)
         assert l111_device(dev, lib) == [], occ
@@ -542,7 +547,8 @@ def seat_duplex(tmp_path, lib_root, where, name, config, key, ref):
     if where == "fhd":
         dev, _ = fhd(tmp_path, CASSETTE, {key: ref})
     else:
-        dev = dcp2(tmp_path, {key: ref})
+        # the Smartoptics adapter ships a cap in each bore, emptied first
+        dev = dcp2(tmp_path, {key: ref, f"{key}/tx": "", f"{key}/rx": ""})
     return face(build(dev, tmp_path / "o", lib_root), name, config)
 
 

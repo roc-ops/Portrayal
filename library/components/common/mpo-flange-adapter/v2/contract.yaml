@@ -1,15 +1,17 @@
 format: 1
 kind: component
 name: mpo-flange-adapter
-version: 2.0.0
+version: 2.1.0
 class: port
 # THE ADAPTER IS ITSELF AN `mpo` SLOT (B3, docs/pluggables-caps-design.md, "The
 # MPO opening"). It declares the interface and its own `mate` rather than
 # composing std/mpo@2, because what shows through the opening is the internal
 # MTP's dark end face, not std/mpo's pale sleeve - so the end face stays the
-# floor of an empty port, and a cap or plug seated here is drawn over it. No
-# `default:` yet: what FS ships in this port is declared separately.
+# floor of an empty port, and a cap or plug seated here is drawn over it.
 interface: mpo
+# WHAT FS SHIPS IN THIS PORT (provenance.shipped-cap). A configuration keys
+# the bulkhead on the module's back (`bay-1/mtp1`) to replace or empty it.
+default: common/mpo-dust-cap@2
 profile: networking
 description: >-
   Flanged MPO/MTP bulkhead adapter carrying 12 fibres - a black flange held by
@@ -82,6 +84,17 @@ provenance:
     photo-read, with the spacing corroborated. The screws are 25.0 apart, centred
     on the part (centres 2.5 and 27.5), which is US Conec C9857's flange pattern
     and within a millimetre of the 24 read off the render.
+  shipped-cap: >-
+    THE PORT SHIPS CAPPED, declared as this bulkhead's top-level `default:`
+    (B3, docs/pluggables-caps-design.md, "The shipped default"). FS's side
+    renders of the MTP cassettes show the grey saddle cap common/mpo-dust-cap@2
+    draws SEATED in the rear bulkhead - SKU 57016 (its view C) and SKU 57023
+    (its view D) - and the rear renders of SKU 57016 (view D) and SKU 57341
+    (view E) show the same cap supplied with the cassette, one per bulkhead,
+    lying beside the port it was pulled from. The 36-fibre cassette, SKU
+    105333, shows both: seated in its three rear bulkheads (view C), and three
+    caps supplied (view D) - its FRONT ports, behind shutters, ship bare. So
+    the port is capped as shipped, and the cap is an occupant a plug replaces.
   opening: >-
     std/mpo@2's 12.9 x 8.0, ESTIMATED ON BOTH AXES AND DERIVED, NOT READ - and
     cited from that part rather than measured here. No drawing held dimensions

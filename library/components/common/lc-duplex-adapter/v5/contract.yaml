@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 5.0.0
+version: 5.1.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): a duplex connector - a duplex dust cap, a duplex plug -
@@ -14,7 +14,8 @@ description: >-
   as used for Tx/Rx pairs on optical line cards. The body stands proud of the
   faceplate; the bores recess from that raised face, not from the panel. The
   dust caps an unused port ships with are occupants of the bores, not part of
-  this adapter - see provenance.dust-caps. Distinct from sfp-lc-duplex, which is a pluggable transceiver.
+  this adapter: each bore ships holding common/lc-dust-cap@1, its `default:`
+  (provenance.shipped-caps). Distinct from sfp-lc-duplex, which is a pluggable transceiver.
 size: {w: 13.2, h: 11.0}
 size-confidence: {w: measured, h: measured}
 attrs: {media: fiber, connector: lc-duplex}
@@ -112,13 +113,25 @@ provenance:
   stand-off: photo - the adapter body sits about an eighth of an inch proud of
     the faceplate, not the quarter inch first modelled
   dust-caps: >-
-    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; the pluggables connectors work seats it (a `common/` cap part, and a default occupant per port). The reading is kept here for that part: photo - unused ports carry a white cap standing about a
+    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; common/lc-dust-cap@1 is that part, and each bore's `default:` seats it (see `shipped-caps`). The reading is kept here for that part: photo - unused ports carry a white cap standing about a
     quarter inch proud of the jack face, with a rounded-square inset moulded
     into its front. As @3 drew them: one simplex cap per bore, 4.7 x 4.7 over
     each bore square (x 1.125 and 7.375, y 3.15), white #e9ecef, front at
     `out: 9.525` on the bezel's 3.175 (3.175 + the photographed quarter inch),
     and a 2.7 x 2.7 inset 0.9 deep (estimated). The spigot that seats it into
     the bore is not modelled - it sits inside the recess and is never visible
+  shipped-caps: >-
+    ONE SIMPLEX CAP IN EACH BORE, declared as each bore's `default:` (B3,
+    docs/pluggables-caps-design.md, "The shipped default"). Read off photo
+    IMG_2188 of racked DCP-R units - the rack photograph the DCP-R devices'
+    own provenance already cites for their lids and silkscreen. Every idle
+    cross-connect adapter on both faceplates carries a white cap in EACH of
+    its two bores, the pair separate with a gap between them rather than one
+    moulding across both, and the caps pulled from the ports in use lie on
+    the lids one at a time. So the adapter's own duplex slot ships empty and
+    the bores ship capped: the reverse of FS's stacked adapter, which ships
+    one cap across the pair (common/lc-duplex-v-adapter@5).
+
 relief:
   features:
     - node: bezel
@@ -143,8 +156,14 @@ parts:
   # the bore is drawn tongue down. `at` is the unrotated box's corner and the
   # turn is about its centre: each mate lands at y 0.11 + 5.71 = 5.82 (see
   # provenance.axis), each keyway ends at y 0.11.
-  - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180}
-  - {ref: std/lc-bulkhead-bore@1, id: rx, at: [7.375, 0.11], lift: 3.175, rotate: 180}
+  #
+  # EACH BORE SHIPS CAPPED, one simplex cap per bore (provenance.shipped-caps):
+  # a configuration keys `<placement>/tx` or `/rx` to replace or empty one,
+  # and empties both before a duplex connector takes the adapter's own slot.
+  - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180,
+     default: common/lc-dust-cap@1}
+  - {ref: std/lc-bulkhead-bore@1, id: rx, at: [7.375, 0.11], lift: 3.175, rotate: 180,
+     default: common/lc-dust-cap@1}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
   # points, which the pair's placements put at (3.475, 5.82) and (9.725, 5.82) -

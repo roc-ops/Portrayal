@@ -77,6 +77,12 @@ def chain_points(svg_path, ppm=False):
         owner, adapter, in_ppm = _chain(parents, el)
         if adapter is None or in_ppm != ppm:
             continue
+        # NOT A POINT OF THE ADAPTER'S: a cap seated in a bore (B3 task 8, the
+        # adapter ships one per bore) is drawn inside the adapter's group and
+        # carries its own `mate`, which lands on the bore's by construction
+        # (test_shipped_caps.py) - it is the occupant's, not a fibre position
+        if "-occupant" in owner:
+            continue
         at = [float(v) for v in el.get("data-cp-at").split()]
         base = f"{cp} {owner}"
         n = seen[base] = seen.get(base, -1) + 1

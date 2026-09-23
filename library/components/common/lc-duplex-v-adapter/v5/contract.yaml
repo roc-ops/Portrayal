@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 5.0.0
+version: 5.1.0
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): FS ships ONE white cap over both stacked ports, and a
@@ -9,13 +9,17 @@ class: port
 # and the two bore slots below are mutually exclusive; the build and lint
 # hold it.
 interface: lc-duplex
+# WHAT THAT SLOT SHIPS HOLDING (provenance.shipped-cap). A configuration keys
+# the adapter (`bay-1/lc01`) to replace or empty it, and empties it before a
+# simplex part takes one of the bores.
+default: common/lc-duplex-dust-cap@2
 profile: networking
 description: >-
   LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS
   fits to FHD cassettes and adapter panels. A blue body standing proud of the
   plate, each port turned with its latch slot to the LEFT. The white duplex
-  dust cap FS ships over both ports is an occupant, not part of this adapter -
-  see provenance.dust-caps. Not the same part as common/lc-duplex-adapter@4,
+  dust cap FS ships over both ports is an occupant, not part of this adapter:
+  common/lc-duplex-dust-cap@2, its `default:` (provenance.shipped-cap). Not the same part as common/lc-duplex-adapter@4,
   which is wider and puts its bores side by side.
 size: {w: 9.28, h: 13.75}
 conforms: fhd-lc-cassette
@@ -123,13 +127,21 @@ provenance:
     reading. A MAJOR because the composed bore ref is addressing: what fills
     `lc01/tx` is now a different part.
   dust-caps: >-
-    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; the pluggables connectors work seats it (a `common/` cap part, and a default occupant per port). The reading is kept here for that part: photo-measured on 57016.main.jpg at the same 5.78 px/mm the
+    NOT DRAWN SINCE THIS MAJOR. A dust cap is an occupant of the bore it plugs - taken out, swapped for a plug, or left empty - not part of the adapter, so it is no longer in this contract's art or relief; common/lc-duplex-dust-cap@2 is that part, and this adapter's top-level `default:` seats it (see `shipped-cap`). The reading is kept here for that part: photo-measured on 57016.main.jpg at the same 5.78 px/mm the
     plate gives (86-716 px across 108.97 mm): ONE white duplex cap, not two,
     spanning 2.92-8.77 across the body and 0.75-13.0 of its 13.75 - over both
     stacked ports - white #e7e9ec, with a rounded-square inset 3.6 x 4.4 in
     front of each port. Its front stood at `out: 5.5` on the bezel's 1.2,
     estimated off FS's oblique side photo 57016.C (about 30 px past the plate
     at 5.5 px/mm); the insets 0.6 deep, estimated.
+  shipped-cap: >-
+    ONE DUPLEX CAP ACROSS BOTH PORTS, declared as this adapter's own top-level
+    `default:` (B3, docs/pluggables-caps-design.md, "The shipped default"), not
+    a simplex cap per bore. FS's face-on render of SKU 57016 shows every one of
+    the six adapters holding a single white moulding over its two stacked
+    ports, with an inset in front of each - the reading `dust-caps` records.
+    So the bores ship empty, and the adapter's slot ships capped:
+    the reverse of the Smartoptics adapter, common/lc-duplex-adapter@5.
   colour: >-
     sampled off 57016.main.jpg: the adapter body's median blue is
     rgb(45,145,216), #2d91d8, and the cap rgb(231,231,233). The blue is FS's

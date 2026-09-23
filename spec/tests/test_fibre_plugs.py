@@ -361,7 +361,8 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     the plug's own `mate` is seated on the adapter's, each half's `mate` lands
     on a bore's - because that is what makes a boot chained on a half land
     behind the fibre it belongs to, not 6.25 away from it."""
-    dev = dcp(tmp_path, {"port-1510": DUPLEX})
+    # the Smartoptics adapter ships a cap in each bore, emptied first
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": ""})
     root, parents = face(build(dev, tmp_path / "o", LIB), "dcp-r-34d-cs", "default")
     occ = occupant(root, "port-1510", DUPLEX)
     adapter = by_path(root, "port-1510")
@@ -444,7 +445,7 @@ def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):
     occupants keyed under the instance that holds them at any depth, so the
     key is the half's part id under the plug's own seat:
     `port-1510-occupant/a`. Both halves take one, independently."""
-    dev = dcp(tmp_path, {"port-1510": DUPLEX,
+    dev = dcp(tmp_path, {"port-1510": DUPLEX, "port-1510/tx": "", "port-1510/rx": "",
                          "port-1510-occupant/a": BOOT,
                          "port-1510-occupant/b": BOOT})
     root, parents = face(build(dev, tmp_path / "o", LIB), "dcp-r-34d-cs", "default")

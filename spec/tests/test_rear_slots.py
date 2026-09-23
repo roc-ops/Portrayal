@@ -21,8 +21,9 @@ without a sound:
     rear drawing, lands on the bulkhead's mate, and is not drawn on the front,
     where the same bay's `bay-1/lc01` is.
 
-Every seating is a configured occupant on a tmp_path copy of the real device:
-no default is declared yet (a later step does).
+Every seating is a configured occupant on a tmp_path copy of the real device.
+Each bulkhead SHIPS its cap (B3 task 8, test_shipped_caps.py), so an unkeyed
+bulkhead holds the cap and a configured one holds what it names.
 """
 import re
 import shutil
@@ -134,8 +135,8 @@ def test_the_flange_adapter_presents_mpo_at_its_opening_on_the_housing(ref):
     assert housing["out"] == HOUSING
     assert c["connection-points"]["optical"]["at"] == MATE
     assert c["optical"]["positions"] == FLANGES[ref]
-    # NO DEFAULT YET - a later step declares the shipped cap
-    assert "default" not in c
+    # FS SHIPS THE PORT CAPPED (B3 task 8, test_shipped_caps.py)
+    assert c["default"] == CAP
     # the internal end face stays the floor of the empty port, and the part
     # still composes no std/mpo: it presents the slot itself
     art = skin(ref)
@@ -300,9 +301,11 @@ def test_the_cap_and_both_plugs_seat_on_a_real_cassette_back(tmp_path):
         assert abs(px - hx) < 1e-6 and abs(py - hy) < 1e-6, (key, (px, py))
         seated += 1
     assert seated == len(SEATS) > 0
-    # the slot nobody keyed stays empty: no default is declared yet
-    assert not [n for n in rear.iter()
-                if n.get("data-of") == "bay-2/module/mtp2-occupant"]
+    # the slot nobody keyed holds what it ships: the cap, seated on its host
+    shipped = [n for n in rear.iter()
+               if n.get("data-of") == "bay-2/module/mtp2-occupant"]
+    assert len(shipped) == 1 and shipped[0].get("data-class") == "cap"
+    assert shipped[0].get("data-for") == "bay-2/module/mtp2"
     assert l12(dev) == []
 
 

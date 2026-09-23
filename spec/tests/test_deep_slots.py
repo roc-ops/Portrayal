@@ -20,6 +20,7 @@ import yaml
 
 from test_nested_occupants import (LIB, _contract, assert_same_turn, by_path,
                                    device_point, is_inside, own_mate, render, run)
+from test_slot_defaults import SHIPPED_CAPS
 
 from portrayal import lint
 from portrayal import manifest
@@ -82,8 +83,11 @@ def assert_seated_on_bore(root, parents, holder_path, bore_id, adapter_ref, key)
 
 
 def occupant_paths(root):
+    """Every occupant a configuration seated - bar the caps the real adapters
+    ship (B3 task 8, test_shipped_caps.py), which every unkeyed port draws."""
     return sorted(n.get("data-path") for n in root.iter()
-                  if (n.get("data-path") or "").endswith("-occupant"))
+                  if (n.get("data-path") or "").endswith("-occupant")
+                  and (n.get("data-ref") or "").rsplit(":", 1)[0] not in SHIPPED_CAPS)
 
 
 # --- the key ------------------------------------------------------------------
@@ -111,8 +115,9 @@ def test_an_empty_string_empties():
 def test_a_plug_seats_on_a_bore_in_a_cassette_in_a_bay(tmp_path):
     adapter = part(CASSETTE, "lc01")
     assert adapter["at"] == [17.24, 18.66]
-    root, parents = render(fhd(tmp_path, {"bay-1/lc01/tx": PLUG}), tmp_path / "o",
-                           "fhd-1ufce", "base")
+    # the adapter ships a duplex cap on its own slot, emptied first (L111)
+    root, parents = render(fhd(tmp_path, {"bay-1/lc01": "", "bay-1/lc01/tx": PLUG}),
+                           tmp_path / "o", "fhd-1ufce", "base")
     assert_seated_on_bore(root, parents, "bay-1/module/lc01", "tx", adapter["ref"],
                           "bay-1/lc01/tx")
     assert occupant_paths(root) == ["bay-1/module/lc01/tx-occupant"]

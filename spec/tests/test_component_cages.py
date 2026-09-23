@@ -186,6 +186,20 @@ CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
              "bores"}
 
 
+def shipped_default(ref, slot_id):
+    """What test_shipped_caps.SHIPS says the slot `slot_id` of component `ref`
+    ships: a composed adapter's own slot when that adapter ships at "self", an
+    adapter's bore when it ships at "bores" - otherwise nothing."""
+    from test_shipped_caps import SHIPS
+    part = next((q for q in _contract(ref).get("parts") or []
+                 if q.get("id") == slot_id), {})
+    level, cap = SHIPS.get(part.get("ref", "").split(":")[0], (None, None))
+    if level == "self":
+        return cap
+    level, cap = SHIPS.get(ref, (None, None))
+    return cap if level == "bores" and slot_id in ("tx", "rx") else None
+
+
 def test_a_card_cage_carries_exactly_the_r1_keys(index):
     """R1's list and nothing else: `occupant`, `group` and `rel-pos` are facts
     of a device frame, and a null there would read as an answer."""
@@ -193,8 +207,8 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
     for ref, entry in index.items():
         for c in entry.get("cages") or []:
             assert set(c) == CAGE_KEYS, (ref, c["id"], sorted(set(c) ^ CAGE_KEYS))
-            # nothing in the library declares a default yet (B3 task 3)
-            assert c["default"] is None, (ref, c["id"])
+            # the only defaults are the caps the adapters ship (B3 task 8)
+            assert c["default"] == shipped_default(ref, c["id"]), (ref, c["id"])
             # and only a duplex adapter's own slot spans anything
             assert c["bores"] == (["tx", "rx"] if c["interface"] == "lc-duplex"
                                   else []), (ref, c["id"])

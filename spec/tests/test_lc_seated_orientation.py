@@ -131,8 +131,22 @@ def front(tmp_path, made, root=LIB):
     return svg, {c: p for p in svg.iter() for c in p}
 
 
+# THE LEVEL EACH BUILD'S ADAPTERS SHIP CAPPED (B3 task 8, test_shipped_caps.py),
+# which a plug on the OTHER level has to empty first (L111): the FS stacked
+# adapter ships a duplex cap on its own slot, the Smartoptics one a cap in each
+# bore, and the shuttered one ships nothing.
+SHIPS_AT = {"fhd": "self", "fhd-om": "self", "fhd-36": None, "dcp": "bores"}
+
+
 def build_lc(tmp_path, which, simplex=LC, duplex=DUPLEX, root=LIB):
-    occ = {**{k: simplex for k in LC_SIMPLEX_KEYS[which]},
+    empties = {}
+    if SHIPS_AT[which] == "self":
+        empties.update({k.rsplit("/", 1)[0]: "" for k in LC_SIMPLEX_KEYS[which]})
+    elif SHIPS_AT[which] == "bores":
+        empties.update({f"{k}/{b}": "" for k in LC_DUPLEX_KEYS[which]
+                        for b in ("tx", "rx")})
+    occ = {**empties,
+           **{k: simplex for k in LC_SIMPLEX_KEYS[which]},
            **{k: duplex for k in LC_DUPLEX_KEYS[which]}}
     made = (fhd(tmp_path, FHD_CASSETTES[which], occ) if which in FHD_CASSETTES
             else dcp(tmp_path, occ))

@@ -12,10 +12,13 @@ for its own presented slot. Precedence, lowest first (P5):
 A default is the product's shipped state, so it seats in EVERY configuration
 unless that configuration's `occupants:` overrides it.
 
-Nothing in the library declares a default yet, so every test writes throwaway
-contracts into a tmp_path library searched BEFORE the real one, and seats on
-a copy of a real device. `generic/lc-plug@2` stands in for a dust cap until
-the caps land (Task 5); `test/other-plug@1` is a second `mates: lc` part.
+Every test writes throwaway contracts into a tmp_path library searched BEFORE
+the real one, and seats on a copy of a real device. The real adapters ship
+caps since B3 task 8 (test_shipped_caps.py); a throwaway copied from one has
+them removed first (`_unshipped`), and the caps the rest of a copied device
+ships are left out of what is compared (`SHIPPED_CAPS`). `generic/lc-plug@2`
+stands in for a dust cap, as it did before the caps landed (Task 5);
+`test/other-plug@1` is a second `mates: lc` part.
 """
 import json
 import shutil
@@ -58,6 +61,21 @@ def _copy(lib, src, major, name, edit):
     return f
 
 
+def _unshipped(edit):
+    """`edit`, applied to a copy of a REAL adapter with the caps it ships
+    removed first. Those defaults are the product's (common/lc-duplex-v-adapter@5
+    ships a duplex cap on its own slot, common/lc-duplex-adapter@5 a cap in each
+    bore - test_shipped_caps.py), and every throwaway here is built to exercise
+    ONE default at a time, which a second, shipped one would collide with
+    (L111) or mask."""
+    def wrapped(c):
+        c.pop("default", None)
+        for q in c.get("parts") or []:
+            q.pop("default", None)
+        edit(c)
+    return wrapped
+
+
 def _part(c, pid):
     return next(q for q in c["parts"] if q["id"] == pid)
 
@@ -75,7 +93,7 @@ def lib(tmp_path):
     # a bore default on a composed part: tx ships plugged, rx does not
     def capped(c):
         _part(c, "tx")["default"] = PLUG
-    _copy(root, V_ADAPTER, 5, "capped-adapter", capped)
+    _copy(root, V_ADAPTER, 5, "capped-adapter", _unshipped(capped))
 
     def cassette_with(ref):
         def edit(c):
@@ -99,7 +117,7 @@ def lib(tmp_path):
         tx, rx = _part(c, "tx"), _part(c, "rx")
         tx["ref"] = rx["ref"] = "test/defaulted-bore@1"
         tx["default"] = OTHER
-    _copy(root, V_ADAPTER, 5, "self-adapter", self_adapter)
+    _copy(root, V_ADAPTER, 5, "self-adapter", _unshipped(self_adapter))
 
     # the composer: lc01 overrides the adapter's own default, lc02 leaves it,
     # lc03 empties it
@@ -118,7 +136,7 @@ def lib(tmp_path):
         c["default"] = PLUG
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(root, H_ADAPTER, 5, "self-hadapter", h_adapter)
+    _copy(root, H_ADAPTER, 5, "self-hadapter", _unshipped(h_adapter))
     return root
 
 
@@ -184,11 +202,22 @@ def face(out, name, config, view="front"):
     return root, {c: p for p in root.iter() for c in p}
 
 
+# THE CAPS THE REAL ADAPTERS SHIP (test_shipped_caps.py). Every device these
+# tests copy also places real adapters the throwaways do not replace - the
+# other cassettes of a configuration, the DCP's other ports - and those draw
+# their shipped caps. They are the product's, not the mechanism under test,
+# so they are left out of what these tests compare; no throwaway here ships one.
+SHIPPED_CAPS = {"common/lc-dust-cap@1", "common/lc-duplex-dust-cap@2",
+                "common/sc-dust-cap@1", "common/mpo-dust-cap@2"}
+
+
 def occupants_drawn(root):
-    """{data-path: occupant ref} for every seated occupant in a drawing."""
+    """{data-path: occupant ref} for every seated occupant in a drawing, bar
+    the real adapters' shipped caps (SHIPPED_CAPS)."""
     return {n.get("data-path"): n.get("data-ref").rsplit(":", 1)[0]
             for n in root.iter()
-            if (n.get("data-path") or "").endswith("-occupant")}
+            if (n.get("data-path") or "").endswith("-occupant")
+            and n.get("data-ref").rsplit(":", 1)[0] not in SHIPPED_CAPS}
 
 
 def assert_seated(root, parents, holder_path, host_id, host_ref, root_lib):
@@ -323,9 +352,10 @@ def test_components_json_publishes_the_resolved_default(lib):
     got = {k: comp[k]["default"] for k in ("lc01", "lc02", "lc03")}
     assert got == {"lc01": OTHER, "lc02": PLUG, "lc03": None}
     # every other adapter on it is the stock one, which is a slot of its own
-    # since B3 task 4 and ships nothing
+    # since B3 task 4 and ships FS's duplex cap since B3 task 8
     assert set(comp) == {f"lc{n:02d}" for n in range(1, 13)}
-    assert all(comp[k]["default"] is None for k in comp if k not in got)
+    assert all(comp[k]["default"] == "common/lc-duplex-dust-cap@2"
+               for k in comp if k not in got)
 
 
 def test_configs_json_publishes_the_resolved_default(tmp_path, lib):
@@ -361,7 +391,7 @@ def test_lint_the_throwaway_defaults_are_clean(lib, ref):
 def test_lint_a_default_the_slot_does_not_accept(lib):
     def bad(c):
         _part(c, "tx")["default"] = "common/lc-boot@1"      # mates lc-plug
-    _copy(lib, V_ADAPTER, 5, "bad-adapter", bad)
+    _copy(lib, V_ADAPTER, 5, "bad-adapter", _unshipped(bad))
     got = l110(lib, "test/bad-adapter@1")
     assert got and "tx" in got[0] and "common/lc-boot@1" in got[0], got
 
@@ -405,7 +435,7 @@ def booted(lib):
 
     def capped(c):
         _part(c, "tx")["default"] = "test/booted-plug@1"
-    _copy(lib, V_ADAPTER, 5, "booted-adapter", capped)
+    _copy(lib, V_ADAPTER, 5, "booted-adapter", _unshipped(capped))
     _copy(lib, CASSETTE, 3, "booted-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/booted-adapter@1"}))
     return lib
@@ -467,7 +497,7 @@ def test_a_device_level_default_brings_its_own_default(tmp_path, booted):
         c["default"] = "test/booted-plug@1"
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(booted, H_ADAPTER, 5, "booted-hadapter", h_adapter)
+    _copy(booted, H_ADAPTER, 5, "booted-hadapter", _unshipped(h_adapter))
     dev = dcp(tmp_path)
     d = yaml.safe_load(dev.read_text())
     for view in d["views"].values():
@@ -526,7 +556,7 @@ def test_sibling_slots_shipping_the_same_default_each_ship_its_chain(tmp_path, b
     def both(c):
         for pid in ("tx", "rx"):
             _part(c, pid)["default"] = "test/booted-plug@1"
-    _copy(booted, V_ADAPTER, 5, "twice-booted-adapter", both)
+    _copy(booted, V_ADAPTER, 5, "twice-booted-adapter", _unshipped(both))
     _copy(booted, CASSETTE, 3, "twice-booted-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/twice-booted-adapter@1"}))
     dev, _ = fhd(tmp_path, "test/twice-booted-cassette@1")
@@ -545,7 +575,7 @@ def test_sibling_placements_shipping_the_same_default_each_ship_its_chain(tmp_pa
         c["default"] = "test/booted-plug@1"
         c.setdefault("connection-points", {})["mate"] = {"at": [6.6, 5.5],
                                                          "direction": "front"}
-    _copy(booted, H_ADAPTER, 5, "booted-hadapter", h_adapter)
+    _copy(booted, H_ADAPTER, 5, "booted-hadapter", _unshipped(h_adapter))
     dev = dcp(tmp_path)
     d = yaml.safe_load(dev.read_text())
     n = 0
@@ -569,7 +599,7 @@ def looping(lib):
     """A plug whose own default is itself - a cycle of one link."""
     _copy(lib, "generic/lc-plug", 2, "loop-plug", _set(default="test/loop-plug@1"))
     _copy(lib, V_ADAPTER, 5, "looping-adapter",
-          lambda c: _part(c, "tx").update({"default": "test/loop-plug@1"}))
+          _unshipped(lambda c: _part(c, "tx").update({"default": "test/loop-plug@1"})))
     _copy(lib, CASSETTE, 3, "looping-cassette",
           lambda c: _part(c, "lc01").update({"ref": "test/looping-adapter@1"}))
     return lib

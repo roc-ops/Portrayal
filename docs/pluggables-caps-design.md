@@ -126,7 +126,8 @@ not re-read, and its per-axis note applies. The key slot `@1` drew is kept. It i
 the same long face as the plugs' key, so the polarity agrees, but it is narrower
 (3.0 against the plug key's 4.39). The plug key lies inside the plug's own envelope,
 so it never reaches the slot. Ten cassette backs compose the bulkheads, and each
-publishes one slot per bulkhead. The default cap is declared in a later step.
+publishes one slot per bulkhead, and each bulkhead ships the MPO cap (see "Which
+adapter ships which cap").
 
 ## The connector slot
 
@@ -297,9 +298,40 @@ parts:
 
 and a duplex adapter's own slot by a top-level `default:` beside its `interface:`.
 Precedence, lowest first: the adapter's `default:`; a composer's `parts:` entry
-(`default: none` for, say, a plate that ships one port open); a configuration's `occupants:`
-(`none` empties it); the explorer's swap. Lint rejects a `default:` that the slot's
+(`default: ""` for, say, a plate that ships one port open); a configuration's `occupants:`
+(`""` empties it); the explorer's swap. Lint rejects a `default:` that the slot's
 accept list does not contain.
+
+### Which adapter ships which cap
+
+Declared 2026-09-23. Each default sits at the level the product ships it on, and
+cites the source that shows the product shipping capped:
+
+| adapter | ships | on | source |
+|---|---|---|---|
+| `common/lc-duplex-adapter@5` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `tx` and `rx` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore |
+| `common/lc-duplex-v-adapter@5` (FS FHD, stacked) | `common/lc-duplex-dust-cap@2` | the adapter's own slot | FS's face-on render of SKU 57016: one white moulding across both stacked ports of every adapter |
+| `common/sc-duplex-adapter@4` (FS FHD SC) | `common/sc-dust-cap@1` | each opening | FS's face-on render of SKU 57058: a black cap in each of the twelve openings |
+| `common/mpo-adapter@2` (FS MTP panel tile) | `common/mpo-dust-cap@2` | the slot it forwards from `std/mpo@2` | FS's face-on renders of SKU 35510: all twelve ports capped. Nothing places the tile yet, so the default seats nowhere until a panel composes it |
+| `common/mpo-flange-adapter@2`, `common/mpo24-flange-adapter@2` (FHD cassette backs) | `common/mpo-dust-cap@2` | the bulkhead's own slot | FS's side renders of SKU 57016 (view C) and SKU 57023 (view D) show the cap seated in the rear bulkhead; the rear renders of SKU 57016 (view D) and SKU 57341 (view E) show it supplied, one per bulkhead; the 36-fibre SKU 105333 shows both (views C, D) |
+| `common/lc-duplex-shuttered-adapter@2` | nothing | - | its shutters are the dust protection (see "The shuttered adapter") |
+
+The two LC adapters ship at opposite levels because the products do: Smartoptics
+fits two simplex caps, FS one duplex moulding. So on a Smartoptics port a duplex
+plug needs both bores emptied first (`<port>/tx: ""`, `<port>/rx: ""`), and on an
+FS port a simplex plug needs the adapter's own slot emptied (`bay-1/lc01: ""`);
+L111 refuses the build otherwise, naming the key.
+
+A default seats however its part got there, so the four Smartoptics `ppm-dcm-*`
+modules, which forward `lc-duplex` from their one composed adapter and publish no
+slot of their own, still show two bore caps when seated in the DCP-F-A22's bays.
+The build reaches those bores by their deep key (`slot-1/ppm-1/dcm/tx`); the
+explorer cannot offer them, because the module publishes no slot. A bay module's
+OWN top-level default is still refused.
+
+No other library part presenting `lc`, `lc-duplex`, `sc` or `mpo` is capped. The
+transceivers that compose `std/lc-bore@3` (the SFP and QSFP LC optics) are optics
+in a cage, and decision 7 leaves a cage's dust plug undefaulted.
 
 ### The shuttered adapter
 
@@ -309,7 +341,7 @@ Added 2026-09-23, when the FS 36-fibre cassettes arrived with
 **A shuttered adapter is a slot whose shipped state is empty.** Its spring
 shutters are the dust protection, and FS ships those plates with no caps, so
 nothing on it declares a `default:` - not the adapter's own duplex slot, not
-either bore - and no composer needs `default: none` to empty it. It is still a slot at both levels: `@2` composes two
+either bore - and no composer needs `default: ""` to empty it. It is still a slot at both levels: `@2` composes two
 `std/lc-bulkhead-bore@1` (turned 180, keyways up, as the Smartoptics adapter
 turns its bores) and presents `lc-duplex` with a `mate` at their midpoint, so a
 plug can be swapped in, simplex in a bore or duplex across the pair, and the
@@ -435,7 +467,10 @@ Two lessons from building the caps as the adapter's relief carry over:
 - The slot census, and byte-identical `cages[]` against the tree before step 1.
 - The resolver at depth three and four, a dangling key and a cycle, each shown
   failing first.
-- Default precedence: adapter, composer override, `none`, configuration.
+- Default precedence: adapter, composer override, `""`, configuration.
+- The shipped caps: every slot a capped adapter presents, on every compiled face
+  and every device build, front and rear, holds its declared cap and nothing
+  else; a shuttered port holds nothing.
 - Mutual exclusion both ways, in the build and in lint.
 - Kit against build: a cap and a plug seated by the kit on a lifted Smartoptics
   bore and on an FHD adapter in a cassette in a bay match the build's transform,
