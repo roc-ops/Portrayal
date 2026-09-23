@@ -173,3 +173,73 @@ def test_the_maiaedge_face_carries_the_datasheet_figures(pm):
     """
     assert round(pm.MAIAEDGE_PBC.w_mm, 2) == 437.90
     assert round(pm.MAIAEDGE_PBC.h_mm, 2) == 41.27
+
+
+# --- the plate's left edge is its edge, not its corner -------------------------
+
+def _rounded_plate(Image, *, left=30, top=25, w=311, h=100, r=12):
+    """A dark plate with rounded corners on a light ground, as FS draws one.
+
+    Rows inside a corner's radius start inboard of the true edge, by `r` px on
+    the very first row. The outermost of them fall under 97% of the widest row
+    and stay out of the band `plate()` finds, but the next ones in do not: with
+    these defaults the band's first row starts 4 px inboard, which is the error
+    the first-row x0 made. Change `r`, `w` or the 97% threshold and re-check
+    that the band still opens on an inset row, or the tests below stop
+    measuring anything.
+    """
+    im = Image.new("RGB", (left + w + 40, top + h + 40), (255, 255, 255))
+    for y in range(h):
+        # how far a quarter-circle of radius r pulls this row in
+        dy = max(r - y, y - (h - 1 - r), 0)
+        inset = r - int(round((r * r - dy * dy) ** 0.5)) if dy else 0
+        for x in range(inset, w - inset):
+            im.putpixel((left + x, top + y), (10, 10, 10))
+    return im
+
+
+def test_a_rounded_plate_reports_its_true_left_edge(pm):
+    """x0 IS THE PLATE'S EDGE, NOT ITS CORNER.
+
+    `plate()` took x0 from the FIRST row of the band, and on every FS FHD render
+    that row lies on the plate's rounded top corner: 1.25-1.53 mm right of the
+    true edge on the seven cassette renders measured in 2026-09. `openings()`
+    counts from x0, so every adapter measured with it came out ~1.45 mm too far
+    left and nothing noticed, because the check that "proved" the method compared
+    it with a skin the same tool had produced. A drawn plate knows its edge.
+    """
+    Image = pytest.importorskip("PIL.Image")
+    im = _rounded_plate(Image)
+    x0, y0, x1, _y1, _mm = pm.plate(im)
+    first = next(x for x in range(im.size[0]) if pm._dark(im.getpixel((x, y0))))
+    assert first > 30, (
+        "the band opens on a full-width row, so a first-row x0 would pass too - "
+        "this plate no longer tests the corner; see _rounded_plate")
+    assert x0 == 30, f"x0 {x0} is {x0 - 30} px inboard of the drawn edge at 30"
+    assert x1 == 30 + 311 - 1
+
+
+def test_openings_count_from_the_true_edge(pm):
+    """A feature a known distance in from the edge reads that distance."""
+    Image = pytest.importorskip("PIL.Image")
+    im = _rounded_plate(Image)
+    for y in range(25 + 30, 25 + 70):          # a pale opening at x 80..119
+        for x in range(30 + 80, 30 + 120):
+            im.putpixel((x, y), (200, 205, 210))
+    box = pm.plate(im)
+    (a, b, _c), = pm.openings(im, box)
+    px = 311 / 108.97
+    assert abs(a * px - 80) < 0.5 and abs(b * px - 120) < 0.5, (a * px, b * px)
+
+
+def test_the_cassette_renders_frame_on_the_plate_edge(pm):
+    """On FS's own render the frame is the edge at the plate's centre row.
+
+    57016.main.jpg's centre row starts at x 86; the band's first row, on the
+    corner, starts at 94 - the 1.38 mm every 12-fibre adapter was placed short by.
+    """
+    im = _im(pm, "57016.main.jpg")
+    x0, y0, _x1, y1, _mm = pm.plate(im)
+    yc = (y0 + y1) // 2
+    edge = next(x for x in range(im.size[0]) if pm._dark(im.getpixel((x, yc))))
+    assert abs(x0 - edge) <= 1, (x0, edge)

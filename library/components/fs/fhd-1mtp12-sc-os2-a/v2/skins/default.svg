@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108.97mm" height="35.05mm" viewBox="0 0 108.97 35.05">
+  <!-- FHD-1MTP6SCDOS2A faceplate, 108.97 x 35.05, FS SKU 57058 - measured off
+       FS's own face-on render, see the contract's size-notes.
+
+       THE SIX SC CUTOUTS ARE NOT DRAWN HERE. Each of the six
+       common/sc-duplex-adapter@4 parts the contract composes draws its own
+       bezel, blue flange and pair of stacked port openings at its `at`
+       position - the same reason common/lc-duplex-v-adapter@4's plate and
+       common/mpo-adapter@1's plate leave their own apertures undrawn (see
+       those skins' headers). Drawing a second rect under each composed
+       adapter would be a duplicate of geometry the composed part already
+       owns, and the two copies would drift the day one of them is edited
+       and the other is not.
+
+       THE TWO THUMB-KNOBS ARE MEASURED, on six face-on renders FS drew
+       separately - three 12-fibre (57016.main, 174246.g1, 182642.g1) and three
+       24-fibre (57341.B, 174248.g1, 182644.g1). Each is framed on the plate's
+       own left and right edges at its centre row and scaled on that width,
+       108.97 mm; panel_measure.measure() supplied only the height check,
+       because its x0 was then taken on the plate's rounded corner (fixed
+       since, in this major). A circle fitted to the
+       lower arc of each knob's front face gives r 4.04-4.13 across all twelve
+       knobs. That face stands proud and the camera sits above the plate, so
+       the renders draw it displaced outward and down; the knob's AXIS is read
+       from its base instead - the lit barrel's inboard side and its top, one
+       radius in - at 4.99-5.29 mm from the plate edge, the same at both ends
+       and on both cassette widths, and 17.53-17.75 mm down, on the plate's
+       centre line. Drawn at 5.10 from each edge, r 4.10, centred vertically.
+       57058.main.jpg is an older render of the same knob with a domed face the
+       fit cannot follow; read at zoom it agrees - face about 8.2 across, base
+       about 5.0 from the edge. The circles this replaces (cx 7.9 / 101.07, r
+       3.1) were placed by eye and sat 2.8 mm inboard. -->
+  <defs>
+    <linearGradient id="bez" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c4248"/>
+      <stop offset="1" stop-color="#23272c"/>
+    </linearGradient>
+    <radialGradient id="knob" cx="0.35" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#4a5056"/>
+      <stop offset="1" stop-color="#1c1f22"/>
+    </radialGradient>
+  </defs>
+  <rect id="bezel" x="0" y="0" width="108.97" height="35.05" rx="1.5"
+        fill="url(#bez)" stroke="#15181a" stroke-width="0.3"/>
+  <circle id="thumb-knob-left" cx="5.1" cy="17.525" r="4.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <circle id="thumb-knob-right" cx="103.87" cy="17.525" r="4.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <!-- THE PORT NUMBERS, AND ONLY FOUR OF THEM, and they sit OUTBOARD of the
+       bores rather than level with them: on a 25.4 tall SC adapter FS prints
+       `2` near its top and `1` near its bottom (57058.main.jpg), where the LC
+       plates put theirs beside each bore. Measured on that render calibrated on
+       the adapters: right-aligned 1.86 left of the first, left-aligned 0.87
+       right of the last, cap height 2.42, a 3.4 font-size. -->
+  <g id="silkscreen">
+    <text id="port-2" x="15.50" y="8.05" font-size="3.4" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">2</text>
+    <text id="port-1" x="15.50" y="28.45" font-size="3.4" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">1</text>
+    <text id="port-12" x="92.72" y="8.05" font-size="3.4" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">12</text>
+    <text id="port-11" x="92.72" y="28.45" font-size="3.4" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">11</text>
+  </g>
+</svg>

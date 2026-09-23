@@ -109,7 +109,7 @@ def test_the_splice_cassette_has_a_splice_rear():
     assert len(c["optical"]["paths"]) == 12
 
 
-TWO_MTP = "fs/fhd-2mtp12-lc-os2-a/v2"
+TWO_MTP = "fs/fhd-2mtp12-lc-os2-a/v3"
 
 
 def test_two_rear_connectors_export_as_two_distinct_ports():
@@ -127,7 +127,7 @@ def test_two_rear_connectors_export_as_two_distinct_ports():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-2mtp12-lc-os2-a@2"]
+    e = idx["fs/fhd-2mtp12-lc-os2-a@3"]
     got = P.ports(D.contract_view(e), idx.get)
     names = [p["name"] for p in got["rear"]]
     assert len(names) == 2, got["rear"]
@@ -145,14 +145,14 @@ def test_every_one_of_the_24_fibres_is_bound():
         pytest.skip("library/dist not built")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-2mtp12-lc-os2-a@2"]
+    e = idx["fs/fhd-2mtp12-lc-os2-a@3"]
     m = P.fibre_map(D.contract_view(e), idx.get, "FHD-2MTP12LCDOS2A")
     assert len(m["rows"]) == 24
     assert len({(r["rear"], r["rear_position"]) for r in m["rows"]}) == 24, \
         "two fibres land on one rear position"
 
 
-SC = "fs/fhd-1mtp12-sc-os2-a/v1"
+SC = "fs/fhd-1mtp12-sc-os2-a/v2"
 
 
 def test_the_sc_cassette_is_the_first_user_of_the_sc_adapter():
@@ -162,7 +162,7 @@ def test_the_sc_cassette_is_the_first_user_of_the_sc_adapter():
     L81 reads `conforms` off a composed part and nothing composed it.
     """
     c = contract(SC)
-    assert c is not None, "fs/fhd-1mtp12-sc-os2-a@1 not built"
+    assert c is not None, "fs/fhd-1mtp12-sc-os2-a@2 not built"
     refs = [p["ref"] for p in c["parts"]]
     assert refs.count("common/sc-duplex-adapter@4") == 6, refs
 
@@ -174,8 +174,9 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
     The six centres are 57058.main.jpg's own render, the same image
     common/sc-duplex-adapter@4's pitch floor (13.0, `pitch-kind: floor`) was
     set from. Reproducing them here for the first real cassette shows the
-    floor is the MEAN of five noisy gaps (12.71-13.22), not their minimum:
-    the narrowest gap sits 0.29 under it. Lint stays clean not because the
+    floor is the MEAN of five noisy gaps (12.73-13.24 on the plate's true
+    edge, 12.71-13.22 as first measured off its rounded corner), not their
+    minimum: the narrowest gap sits 0.27 under it. Lint stays clean not because the
     gaps are irregular but because the contract carries a
     `provenance.pitch-note`: L81 returns before it ever looks at a gap once
     that key is present at all - the documented escape hatch for a part that
@@ -196,7 +197,7 @@ def test_the_sc_adapters_are_the_first_real_check_of_the_registry_floor():
     gaps = [round(xs[i] - xs[i - 1], 2) for i in range(1, len(xs))]
     assert len(set(gaps)) > 1, \
         f"expected the render's own measurement noise, got a uniform {gaps}"
-    assert min(gaps) == 12.71, gaps
+    assert min(gaps) == 12.73, gaps
     assert min(gaps) < 13.0, (
         "the registry floor is a rounded MEAN of these same five gaps, not "
         f"their minimum - {min(gaps)} is honestly narrower than it, and "
@@ -208,7 +209,7 @@ def test_the_sc_front_ports_type_as_sc():
     assert c["optical"]["polish"] in ("upc", "apc")
 
 
-MTP24 = "fs/fhd-1mtp24-lc-os2-a/v2"
+MTP24 = "fs/fhd-1mtp24-lc-os2-a/v3"
 
 
 def test_the_library_has_an_mpo_wider_than_twelve():
@@ -232,7 +233,7 @@ def test_the_mtp24_cassette_carries_24_fibres_on_one_rear_port():
         pytest.skip("library/dist not built - run ./publish.sh --no-images")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-1mtp24-lc-os2-a@2"]
+    e = idx["fs/fhd-1mtp24-lc-os2-a@3"]
     got = P.ports(D.contract_view(e), idx.get)
     assert len(got["rear"]) == 1, got["rear"]
     assert got["rear"][0]["positions"] == 24
@@ -253,6 +254,6 @@ def test_the_front_numbering_covers_all_24_without_a_gap():
         pytest.skip("library/dist not built")
     idx = {f"{e['ns']}/{e['name']}@{e['major'][1:]}": e
            for e in json.loads(f.read_text())["components"]}
-    e = idx["fs/fhd-1mtp24-lc-os2-a@2"]
+    e = idx["fs/fhd-1mtp24-lc-os2-a@3"]
     m = P.fibre_map(D.contract_view(e), idx.get, "FHD-1MTP12LCDOS2A")
     assert sorted(int(r["front"]) for r in m["rows"]) == list(range(1, 25))
