@@ -1,10 +1,17 @@
 format: 1
 kind: device
 name: cor580
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
+aliases:
+- {name: AS9926-24D, kind: vendor}
+- name: AS9926-24DB
+  kind: variant
+  note: >-
+    The AS9926-24D with an ASPEED AST2600 BMC fitted. The COR580 datasheet and quick start cover both,
+    and its orderable rows are configurations here; the BMC is the stated difference.
 portfolio: {line: Service Provider, family: Core Router, series: COR580}
 description: >-
   24x 400G QSFP-DD 1RU cell-based fabric switch for carrier core routers (vendor alias AS9926-24D, and
@@ -347,8 +354,7 @@ attrs:
       GHz', memory: 32 GB DDR4 (2x 16 GB SO-DIMM), boot-flash: '2x 16 MB SPI, redundant', storage: 128
       GB M.2 SSD, bmc: ASPEED AST2600 (AS9926-24DB only), software: 'ONIE installer, open-source and commercial
       NOS options'}
-  features: {vendor-alias: AS9926-24D (AS9926-24DB adds the BMC), optics-qsfp-dd: '400G QSFP-DD, breakout
-      to 2x 200G / 4x 100G / 100G'}
+  features: {optics-qsfp-dd: '400G QSFP-DD, breakout to 2x 200G / 4x 100G / 100G'}
   management:
     mgmt-ports: >-
       1x RJ-45 console, 1x micro-USB console, 1x RJ-45 10/100/1000BASE-T management, 2x SFP+ 10G out-of-band,

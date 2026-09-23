@@ -1,10 +1,16 @@
 format: 1
 kind: device
 name: s9725-64e
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9725-64E
+aliases:
+- name: NCF-64E
+  kind: oem
+  note: >-
+    The DriveNets name for this chassis (Network Cloud Fabric, 64x800G). Not a UfiSpace claim -
+    the provenance entry `drivenets-alias` says where the mapping comes from.
 portfolio:
   line: Telecoms
   family: Disaggregated Fabric Router
@@ -357,7 +363,7 @@ provenance:
   drivenets-alias:
     note: >-
       An internal analysis note identifies this chassis as the hardware behind DriveNets' NCF-64E
-      fabric element. The alias is carried in attrs.platform.oem-alias and in the description so a
+      fabric element. The alias is carried in the top-level `aliases` and in the description so a
       search for either name finds this box; it is a second party's naming of the same hardware,
       not a UfiSpace statement, and no DriveNets figure is transcribed anywhere in this file.
   lifecycle:
@@ -392,7 +398,6 @@ attrs:
     memory: 32 GB DDR4 (2x 16 GB DDR4 R-DIMM with ECC)
     storage: 2x 256 GB M.2 SSD
     bmc: ASPEED AST2620
-    oem-alias: DriveNets NCF-64E (Network Cloud Fabric, 64x800G)
   features:
     optics-qsfp-dd: 800GE QSFP-DD SR8/LR8/DR4/FR4 and 400GE QSFP-DD SR8; 800GE and 400GE
       QSFP-DD DAC, AEC and AOC cable assemblies (datasheet Compatible Fabric Transceiver

@@ -1,10 +1,16 @@
 format: 1
 kind: device
 name: s9700-23d
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9700-23D
+aliases:
+- name: NCP-10CD
+  kind: oem
+  note: >-
+    The DriveNets name for this chassis (Network Cloud Packet forwarder, 10x400 NIF + 13x400
+    FIF). Not a UfiSpace claim - the provenance entry `aliases` says where the mapping comes from.
 portfolio:
   line: Telecoms
   family: Disaggregated Core and Edge Router
@@ -315,14 +321,14 @@ provenance:
       datasheet - Specifications, Environmental, Performance, Regulatory Compliance and
       Accessories sections, transcribed into sections. Compliance strings kept verbatim,
       semicolon-separated, untidied. The DriveNets name is not a UfiSpace claim and is sourced
-      separately - see oem-alias.
-  oem-alias:
+      separately - see the provenance entry `aliases`.
+  aliases:
     confidence: registry
     note: >-
       registry - internal analysis maps NCP-10CD to the UfiSpace S9700-23D on its published
       configuration: 'J2; 10x400 service + 13x400G fabric = 23'. That is internal analysis
       matching DriveNets' published configuration against vendor datasheets, not a statement by
-      either vendor, and it is recorded as an alias in attrs.platform.oem-alias so a search for
+      either vendor, and it is recorded as an alias in the top-level `aliases` so a search for
       either name finds this box. The same analysis warns that Edgecore's COR580 (AS9926-24D,
       24x400) is a NEAR-TWIN of the NCP-10CD rather than the same box, so the alias is not
       transitive.
@@ -386,7 +392,6 @@ attrs:
     memory: 64 GB DDR4
     storage: 128 GB SSD
     bmc: Aspeed AST2400
-    oem-alias: DriveNets NCP-10CD (Network Cloud Packet forwarder, 10x400 NIF + 13x400 FIF)
   features:
     deployment: >-
       standalone core or edge router, or a packet-forwarding building block of a
