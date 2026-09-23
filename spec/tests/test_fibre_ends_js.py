@@ -27,6 +27,9 @@ def test_module_of_a_path(out):
     assert out["module"] == "bay-1/module"
     assert out["moduleNested"] == "front-6/module/slot-2/module"
     assert out["moduleNone"] is None
+    # a part id that itself starts with "module" (e.g. `modulex`) must not
+    # make a textual search for "/module" match partway into it.
+    assert out["moduleIdStartsWithModule"] == "bay-1/module"
 
 
 def test_a_path_names_its_fibre_front_or_rear(out):
@@ -49,17 +52,17 @@ def test_rows_say_where_a_fibre_goes(out):
 
 
 def test_a_splitters_common_end_fans_out(out):
-    # K4: a fan-out `to` (a list) gives an array of far paths, one per branch.
+    # a fan-out `to` (a list) gives an array of far paths, one per branch.
     assert out["farSplit"] == ["bay-1/module/split/1", "bay-1/module/split/2"]
     assert out["labelSplit"] == "1 → split · 1, split · 2"
 
 
 def test_a_null_label_is_not_a_phantom_port_zero(out):
-    # Fix round 1, bug 1: Number(null) === 0 must not slip a "0" into the run.
+    # Number(null) === 0 must not slip a "0" into the run.
     assert out["connGap"] == "front 1, 3"
 
 
 def test_a_label_less_common_port_spells_itself_not_a_number(out):
-    # K5: a front end with no label of its own (a splitter's common port can
+    # a front end with no label of its own (a splitter's common port can
     # legitimately have none) never invents a number - it spells the endpoint.
     assert out["labelSplitNoLabel"] == "common · 1 → split · 1, split · 2"

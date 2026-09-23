@@ -14,7 +14,7 @@ const af = {
 };
 const compByRef = r => (r === 'fs/rear@1' ? rearComp : null);
 
-// A splitter (K4): a fan-out `to` (smartoptics/ppm-ocu-50-50's common.1 -> the
+// A splitter: a fan-out `to` (smartoptics/ppm-ocu-50-50's common.1 -> the
 // two split legs), not a point-to-point path.
 const splitter = {
   parts: [{id: 'common'}, {id: 'split'}],
@@ -25,7 +25,7 @@ const splitter = {
   }},
 };
 
-// K5: a splitter's common port with no front label of its own - fibreLabel
+// A splitter's common port with no front label of its own - fibreLabel
 // must spell the endpoint, never invent a number (never `0`, never the `n`
 // pulled from the endpoint's own suffix).
 const splitterNoLabel = {
@@ -37,8 +37,8 @@ const splitterNoLabel = {
   }},
 };
 
-// Fix round 1, bug 1: a rear connector with one port's label null must not
-// let `Number(null) === 0` slip a phantom "0" into the run.
+// A rear connector with one port's label null must not let `Number(null) ===
+// 0` slip a phantom "0" into the run.
 const gapRear = {
   optical: {ends: {
     'rear:mtp2.1': {to: 'x.1', label: '1'},
@@ -51,6 +51,11 @@ console.log(JSON.stringify({
   module: moduleOf('bay-1/module/lc01/1'),
   moduleNested: moduleOf('front-6/module/slot-2/module/lc01/1'),
   moduleNone: moduleOf('chassis'),
+  // A part id that itself starts with "module" (e.g. a component literally
+  // named `modulex`) must not fool a textual search for the last "/module"
+  // into matching partway into it - the module boundary is the segment
+  // "module" on its own, not any id that happens to start with those letters.
+  moduleIdStartsWithModule: moduleOf('bay-1/module/modulex/1'),
   front: fibreOf('bay-1/module/lc01/1', af, compByRef),
   rear: fibreOf('bay-1/module/mtp2/2', af, compByRef),
   notFibre: fibreOf('bay-1/module/lc01', af, compByRef),

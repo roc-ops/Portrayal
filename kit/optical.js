@@ -1,5 +1,5 @@
 // WHERE A FIBRE GOES, for the explorer. A fibre endpoint `X.n` is drawn at
-// path `X/n` (L110), a rear endpoint `rear:X.n` at `X/n` on the rear face.
+// path `X/n` (L112), a rear endpoint `rear:X.n` at `X/n` on the rear face.
 // The graph and the vendor's front numbers come from components.json
 // (`optical.ends`, written by components_index.py from optical_ports), so
 // nothing here numbers a fibre - it only reads.
@@ -12,10 +12,11 @@
 
 export function moduleOf(path) {
   if (!path) return null;
-  const i = path.lastIndexOf('/module');
-  if (i < 0) return null;
-  const end = i + '/module'.length;
-  return end === path.length || path[end] === '/' ? path.slice(0, end) : null;
+  // Greedy and segment-anchored: backtracks from the end of the string to
+  // the LAST "/module" that is a whole path segment (followed by "/" or the
+  // end), so a part id that itself starts with "module" (`modulex`) cannot
+  // be mistaken for the segment "module" partway through a lastIndexOf scan.
+  return path.match(/^(.*\/module)(?=\/|$)/)?.[1] ?? null;
 }
 
 const ids = c => new Set((c?.parts || []).map(p => String(p.id)));
@@ -27,6 +28,8 @@ export function fibreOf(path, entry, compByRef) {
   if (rest.length !== 2 || !/^\d+$/.test(rest[1])) return null;
   const [part, n] = rest;
   const rear = entry.faces?.rear ? compByRef(entry.faces.rear) : null;
+  // Front and rear ids never collide (L112), so a part missing from the
+  // front but present on the rear is unambiguously a rear endpoint.
   const face = !ids(entry).has(part) && ids(rear).has(part) ? 'rear:' : '';
   const endpoint = `${face}${part}.${n}`;
   return entry.optical?.ends?.[endpoint] ? {module, endpoint} : null;
@@ -53,7 +56,7 @@ export function fibreLabel(entry, endpoint) {
     return end.label ? `${n} → front ${end.label}` : null;
   }
   const to = Array.isArray(end.to) ? end.to.map(spell).join(', ') : spell(end.to);
-  // K5: a front end with no label (a splitter's common port can legitimately
+  // A front end with no label (a splitter's common port can legitimately
   // have none) never invents a number - it spells the endpoint itself.
   return `${end.label ?? spell(endpoint)} → ${to}`;
 }

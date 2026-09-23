@@ -449,11 +449,15 @@ export function createShell(opts = {}) {
       const m = occ && modelOf(occ);
       return m ? `${own} — ${m}` : own;
     }
-    // A REAR HOLE A SLOT IS SEEN THROUGH IS THAT SLOT (render.py stamps it)
+    // A REAR HOLE A SLOT IS SEEN THROUGH IS THAT SLOT (render.py stamps it).
+    // "open" means no occupant (no data-rear-ref); a ref that compByRef
+    // cannot resolve is not open - it is unresolved, so it labels with the
+    // ref itself rather than claiming the slot is empty.
     if (e.dataset.rearOf) {
-      const c = e.dataset.rearRef && compByRef(e.dataset.rearRef.split(':')[0]);
+      const ref = e.dataset.rearRef;
+      const c = ref && compByRef(ref.split(':')[0]);
       const m = c?.attrs?.model || c?.name;
-      return `${e.dataset.rearOf} — ${m || 'open'} (rear)`;
+      return `${e.dataset.rearOf} — ${ref ? (m || ref) : 'open'} (rear)`;
     }
     // A FIBRE ROW SAYS WHERE IT GOES; A REAR CONNECTOR, WHICH FRONT PORTS IT CARRIES
     const mod = moduleOf(n.path);
@@ -886,8 +890,13 @@ export function createShell(opts = {}) {
   // or it lands wherever that offset happens to point - which for a
   // bay-mounted port is several slots away. `pad` is in root units.
   function ringAround(target, cls, pad) {
+    // getScreenCTM is null for a target that is not actually rendered (e.g.
+    // display:none), which a pulled-away part can be even while its element
+    // is still in the DOM - draw no ring rather than crash on a null CTM.
+    const tm = target.getScreenCTM();
+    if (!tm) return null;
     const b = target.getBBox();
-    const m = state.svg.getScreenCTM().inverse().multiply(target.getScreenCTM());
+    const m = state.svg.getScreenCTM().inverse().multiply(tm);
     const pt = (x, y) => ({x: m.a*x + m.c*y + m.e, y: m.b*x + m.d*y + m.f});
     const cs = [pt(b.x, b.y), pt(b.x + b.width, b.y),
                 pt(b.x, b.y + b.height), pt(b.x + b.width, b.y + b.height)];
@@ -1008,7 +1017,13 @@ export function createShell(opts = {}) {
       for (const p of far) {
         const t = state.svg.querySelector(`[data-path="${CSS.escape(p)}"]`)
                || state.svg.querySelector(`[data-of="${CSS.escape(p)}"]`);
-        if (t && t.dataset.extent !== 'none') farHalos.push(ringAround(t, 'halo linked', 0));
+        // A far end hidden inside a pulled-out part (display:none, see the
+        // CSS rule) has no screen box to ring - skip it rather than let
+        // ringAround hand back nothing to push.
+        if (t && t.dataset.extent !== 'none' && !t.closest('[data-portrayal-pulled]')) {
+          const ring = ringAround(t, 'halo linked', 0);
+          if (ring) farHalos.push(ring);
+        }
       }
       padFarRings();
     }

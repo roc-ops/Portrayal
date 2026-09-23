@@ -64,3 +64,9 @@ def test_a_rear_cutout_carries_its_slot_and_occupant():
     cut = next(e for e in root.iter() if e.get("data-rear-of") == "bay-1")
     assert cut.get("data-group") == "slots" and cut.get("data-rel-pos") == "1"
     assert cut.get("data-rear-ref") == occ
+    # The cutout carries the bay's group and role (fs/fhd-1ufce's `slots`
+    # group reads role: service in device.yaml), but never `data-media` - a
+    # hole is not itself a port, and a `data-media` here would make the
+    # explorer misread the cutout as one.
+    assert cut.get("data-media") is None
+    assert cut.get("data-group-role") == "service"
