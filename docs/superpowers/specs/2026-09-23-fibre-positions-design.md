@@ -47,8 +47,9 @@ A node is either:
 1. **Positions are numbered, not `tx`/`rx`, on passive adapters.** A cassette
    port has no direction until something is plugged into it. `tx`/`rx` stays
    where the direction is real: transceivers (`generic/sfp-lc`, `qsfp-lc`,
-   `qsfp-dd-lc`, `common/qsfp-transceiver`), and Smartoptics PPM modules, which
-   are `class: filter` and out of this rule's scope anyway.
+   `qsfp-dd-lc`, `common/qsfp-transceiver`). Smartoptics PPM modules compose
+   the shared LC adapter, so their bores are numbered too; their direction is
+   in their paths (`from: dcm.2, to: dcm.1`), which is where it belongs.
 2. **The MPO opening is its own node,** `opening` (class `port`), separate from
    the flange and screws. The fibres are siblings of it: `mtp1 › opening,
    1…12, screw-left, screw-right`. Keeping them flat under the adapter, rather
@@ -64,15 +65,25 @@ up, position 1 is at the left and 1-12 run left to right; on 24 fibres the row
 on the key side carries 1-12 and the other 13-24, also left to right
 (ANSI/TIA-568.3-D, as reproduced in the SENKO application note *Fiber Optic
 Polarity Guide for VSFF Connectivity*, Rev. 01, October 2023, p. 8, Figure 5,
-and in a 2018 Sylex note on 24-fibre connectivity, Figure 3). The rear face
-looks through the trunk-side opening, keyway on top, at the end face of the
-male plug inside the cassette. FS fits Type A (key-up to key-down) adapters to
+and in the Sylex note "Is the 24 fibre connectivity method really clear?",
+2018, Figure 3). The rear face looks through the trunk-side opening, keyway
+on top, at the end face of the male plug inside the cassette, and the ids are
+that plug's own numbering - FS's "Inner Sequence" - not the trunk's: on
+24-fibre parts a trunk's fibres 1-12 land on ids 13-24.
+
+This mapping holds because FS fits Type A (key-up to key-down) adapters to
 its A, AF and universal FHD cassettes (*FHD MTP-12/24 Cassettes Datasheet*,
 December 2023, pp. 4-7; opposed keyway per IEC 61754-7-1:2014, clause 2), so
-that plug is seen key-down, turned 180 degrees. Fibre 1 is the rightmost
-circle, cx 16.375, and fibre `n` runs leftward to 12 at cx 13.625. On the
-24-fibre skin, 1-12 are the lower row (cy 5.75) and 13-24 the upper (cy 5.25),
-each from cx 16.375 leftward. Provenance records this per part.
+that plug is seen key-down, turned 180 degrees. An aligned-key (Type B)
+adapter would show the plug key-up instead, putting fibre 1 on the left and
+1-12 on the upper row, so a Type B rear must not reuse these skins'
+numbering unchanged. The 36-fibre and 12-fibre SC rears are Type A by the
+datasheet's ordering-list label only, with no polarity diagram of their own.
+
+Fibre 1 is the rightmost circle, cx 16.375, and fibre `n` runs leftward to 12
+at cx 13.625. On the 24-fibre skin, 1-12 are the lower row (cy 5.75) and
+13-24 the upper (cy 5.25), each from cx 16.375 leftward. Provenance records
+this per part.
 
 ## Library changes
 
@@ -88,11 +99,17 @@ each from cx 16.375 leftward. Provenance records this per part.
 | common/mdc-adapter | nothing | elements `1`-`4` | minor |
 | common/fibre-splice | nothing | elements `1`-`12` | minor |
 
-**The rename is the cost.** 42 contracts and devices use the three renamed
-adapters. Changing a composed id changes the paths every consumer draws, so
-each consumer takes a major, and each device that accepts one is re-pinned
-and re-locked. The bumps are done by script and checked by the existing
-version and lock gates.
+**Two parts are exempt, by name and with a reason, in L110's table:**
+`common/mdc-adapter` (which bore of which duplex port is position 1-4 is
+not sourced) and `common/fibre-splice` (a placeholder that draws no fibres;
+markers on it would be addresses without a place). Each leaves the table when
+its source arrives.
+
+**The rename is the cost.** 29 components and 5 devices compose or seat the
+three renamed adapters (walked structurally, not by text search). Changing a
+composed id changes the paths every consumer draws, so each consumer takes a
+major, and each device that accepts one is re-pinned and re-locked. The
+bumps are done by script and checked by the existing version and lock gates.
 
 **A new lint rule** (next free L-number): a `class: port` part with
 `optical.positions: N` must expose addressable nodes `1`-`N`, no more and
