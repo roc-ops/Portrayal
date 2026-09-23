@@ -8291,6 +8291,7 @@ def main():
                 lint_component_optical_conflicts(f, d)
                 lint_component_optical_coverage(f, d, args.library)
                 lint_component_optical_polarity(f, d, args.library)
+                lint_component_optical_position_nodes(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_fields(f, d)

@@ -107,3 +107,26 @@ def test_every_position_bearing_port_is_covered():
 
 def test_the_exemptions_are_exactly_these():
     assert set(lint.POSITION_EXEMPT) == {"common/mdc-adapter", "common/fibre-splice"}
+
+
+def test_fhd_1ufce_draws_each_fibre_at_its_endpoint_path():
+    """lc01.1 is drawn at .../lc01/1 on the front; rear:mtp2.2 at .../mtp2/2 on the rear."""
+    from portrayal import render
+    lib = render.Library(LIB)
+    dev = yaml.safe_load((ROOT / "library/devices/fs/fhd-1ufce/device.yaml").read_text())
+    af = next(r for r in dev["views"]["front"]["components"]["bays"][0]["accepts"]
+              if r.startswith("fs/fhd-2mtp12-lc-os2-af@"))
+    cfg = {"bays": {"bay-1": af}}
+
+    def paths(view):
+        out = render.render_view(dev, view, dev["views"][view], lib, config_name="t", config=cfg)
+        root = render.ET.fromstring(out) if isinstance(out, str) else out
+        return ({e.get("data-path") for e in root.iter() if e.get("data-path")},
+                {e.get("data-of") for e in root.iter() if e.get("data-of")})
+
+    front, _ = paths("front")
+    _, rear_of = paths("rear")
+    assert {"bay-1/module/lc01/1", "bay-1/module/lc01/2"} <= front
+    assert not any(p.endswith(("/tx", "/rx")) for p in front if p.startswith("bay-1/"))
+    assert {f"bay-1/module/mtp2/{i}" for i in range(1, 13)} <= rear_of
+    assert "bay-1/module/mtp2/opening" in rear_of
