@@ -52,6 +52,13 @@ def contract():
     return yaml.safe_load(P.read_text())
 
 
+def tiers(d=None):
+    """The silhouette's elements: everything but the fibre position `1`,
+    which sits inside the body tier and is an address, not a tier."""
+    return {k: v for k, v in (d or contract())["elements"].items()
+            if v.get("class") != "fibre"}
+
+
 def test_shape():
     d = contract()
     assert d["class"] == "port"
@@ -111,7 +118,7 @@ def test_size_says_h_includes_the_latch_unlike_rj45_plug():
 
 def test_the_four_tiers_are_the_part():
     d = contract()
-    elems = d["elements"]
+    elems = tiers(d)
     assert set(elems) == {"tip", "shoulder", "stem", "body"}
     widths = {k: v["size"][0] for k, v in elems.items()}
     assert widths == {"tip": 2.3, "shoulder": 4.3, "stem": 3.3, "body": 5.58}
@@ -129,7 +136,7 @@ def test_the_tiers_run_down_the_page_in_the_drawn_order():
     lines land on a different tier and the three figures are far enough apart
     that the assignment cannot be mistaken - see provenance.keyway.
     """
-    elems = contract()["elements"]
+    elems = tiers()
     order = sorted(elems, key=lambda k: elems[k]["at"][1])
     assert order == ["tip", "shoulder", "stem", "body"]
     # tiers stack with no gap and no overlap
@@ -161,7 +168,7 @@ def test_the_body_tier_is_the_dimensioned_5_65():
         "share of the overall silhouette")
     assert abs(body["at"][1] - (10.43 - 5.65)) < 1e-9
     # and the latch column is what is left of the dimensioned overall
-    latch = sum(v["size"][1] for k, v in d["elements"].items() if k != "body")
+    latch = sum(v["size"][1] for k, v in tiers(d).items() if k != "body")
     assert abs(latch - (10.43 - 5.65)) < 1e-9
 
     # THE AXIS IS THE BODY TIER'S CENTRE, and that is a DERIVED relation the
@@ -237,7 +244,7 @@ def test_the_skin_draws_the_tiers_where_the_contract_puts_them():
     """A skin that kept the old split would draw a plug the contract denies."""
     import re
     svg = (P.parent / "skins/default.svg").read_text()
-    for el, e in contract()["elements"].items():
+    for el, e in tiers().items():
         m = re.search(rf'<rect id="{el}"[^>]*>', svg)
         assert m, el
         got = {k: float(re.search(rf'\b{k}="([-\d.]+)"', m.group(0)).group(1))
@@ -252,3 +259,19 @@ def test_the_skin_draws_the_tiers_where_the_contract_puts_them():
         cx = float(re.search(r'cx="([-\d.]+)"', m.group(0)).group(1))
         cy = float(re.search(r'cy="([-\d.]+)"', m.group(0)).group(1))
         assert [cx, cy] == axis, (cid, cx, cy, axis)
+
+
+def test_the_fibre_position_is_the_ferrule_on_the_axis():
+    """L112: the plug's one fibre is node `1`, the group around the ferrule
+    end, and its element box is centred on the optical axis."""
+    import re
+    fibres = {k: v for k, v in contract()["elements"].items() if v.get("class") == "fibre"}
+    assert set(fibres) == {"1"}
+    e = fibres["1"]
+    axis = contract()["connection-points"]["mate"]["at"]
+    centre = [round(e["at"][i] + e["size"][i] / 2, 6) for i in (0, 1)]
+    assert centre == axis, (centre, axis)
+    svg = (P.parent / "skins/default.svg").read_text()
+    g = svg[svg.index('<g id="1">'):]
+    g = g[:g.index("</g>")]
+    assert 'id="ferrule"' in g and 'id="ferrule-bore"' in g

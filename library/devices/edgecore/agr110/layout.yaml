@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: agr110
-version: 8.2.5
+version: 8.2.7
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
+aliases:
+- {name: AGR110, kind: marketing}
 portfolio: {line: Service Provider, family: Aggregation Router, series: AGR110}
 description: >-
   48x 10G SFP+ plus 6x 100G QSFP28 1RU aggregation router, sold as the AGR110, Broadcom
@@ -539,7 +541,6 @@ attrs:
     memory: 'DDR4 SO-DIMM, 2 x 8 GB', storage: 128 GB MLC M.2 SSD, bmc: 'yes, 1 x BMC', software: 'ONIE
       installer pre-loaded; Open Network Linux (ONL) compatible'}
   features:
-    marketing-name: AGR110
     timing: IEEE 1588v2 and SyncE in hardware
     optics-sfp-plus: 10GBASE-SR/LR, 10G DAC/AOC, 1000BASE-T/SX/LX
     optics-qsfp28: 100GBASE-CR4/SR4/LR4/PSM4 and AOC, 40GBASE-CR4/SR4/LR4, 25GBASE-CR4 and AOC, 10GBASE-CR/SR/LR
@@ -879,7 +880,7 @@ views:
       - {ref: std/usb-a@1, id: usb, at: [319.40, 36.40], group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: storage}}
       - {ref: common/usb-symbol@1, id: usb-mark, at: [311.10, 31.20], rotate: 180, mirror: true, group: furniture, rel-pos: 3, for: usb}
       - {ref: std/rj45-ganged@2, id: mgmt-eth, at: [409.14, 3.60], group: mgmt, rel-pos: 1, rotate: 180,
-         attrs: {media: rj45, role: mgmt, speed: 100/1000base-t}}
+         attrs: {media: rj45, role: mgmt, speed: 1g}}
       - {ref: std/rj45-ganged@2, id: console, at: [409.14, 15.70], group: mgmt, rel-pos: 2,
          attrs: {media: rj45-serial, role: console}}
     regions:

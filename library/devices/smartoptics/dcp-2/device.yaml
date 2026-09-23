@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-2
-version: 1.9.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-2
@@ -114,7 +114,7 @@ provenance:
       AMBIENT TEMPERATURE is quoted against any DCP power figure, so none is asserted.
   slot-occupants:
     note: >-
-      the traffic slots accept smartoptics/dcp-f-a22@1 as well as the DCP-404. Both are 205 x 44 x
+      the traffic slots accept smartoptics/dcp-f-a22@2 as well as the DCP-404. Both are 205 x 44 x
       270 - the DCP traffic-unit envelope is one shared footprint, stated independently by each
       part's own datasheet - so a slot that fits one fits the other. The A22 is what makes an ILA
       node out of this chassis.
@@ -143,6 +143,10 @@ gaps:
     honeycomb mesh, but that mesh is on the TRAFFIC UNITS' faceplates, not the
     chassis. So the front view draws no vent of its own and whether the chassis
     carries any is unresolved.
+    RE-READ when the duplex adapters renamed their bores from tx and rx to fibre
+    positions 1 and 2 (the adapter at v5, and the A22 that composes it, in the traffic
+    slots at v2): the rename lives inside the slot occupants, not on the chassis front between
+    them, so it neither closes this gap nor opens one - the gap stands.
   wanted: >-
     a face-on photograph of a populated DCP-2, which would show the chassis front
     beside a unit faceplate and separate the two. Every front image in the corpus is
@@ -262,7 +266,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
-            - smartoptics/dcp-f-a22@1
+            - smartoptics/dcp-f-a22@2
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
           group: slots
@@ -272,7 +276,7 @@ views:
           size: {w: 205.0, h: 44.0}
           accepts:
             - smartoptics/dcp-404@1
-            - smartoptics/dcp-f-a22@1
+            - smartoptics/dcp-f-a22@2
             - smartoptics/dcp-2-blank@1
           default: smartoptics/dcp-2-blank@1
           group: slots
@@ -347,12 +351,12 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left-r, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 5}
-        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [281.91, 11.89], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 2}
-        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [295.88, 11.89], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 4}
-        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [281.91, 27.02], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
-        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [295.88, 27.02], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 3}
-        - {ref: std/sfp@1, id: eth4-sfp, at: [314.22, 27.52], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}, rel-pos: 5}
-        - {ref: common/rj45-ganged-eth@1, id: eth0, at: [333.95, 12.46], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 6}
+        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [281.91, 11.89], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 2}
+        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [295.88, 11.89], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 4}
+        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [281.91, 27.02], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 1}
+        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [295.88, 27.02], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 3}
+        - {ref: std/sfp@1, id: eth4-sfp, at: [314.22, 27.52], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 1g}, rel-pos: 5}
+        - {ref: common/rj45-ganged-eth@1, id: eth0, at: [333.95, 12.46], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 6}
         - {ref: std/rj45-ganged@2, id: console, at: [333.95, 26.83], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 7}
   left:
     size:
@@ -435,8 +439,8 @@ configurations:
       their defaults nothing exercises the depth arithmetic that puts an occupant on the
       A22's raised block.
     bays:
-      slot-1: smartoptics/dcp-f-a22@1
-      slot-1/ppm-1: smartoptics/ppm-ad1-1510@1
+      slot-1: smartoptics/dcp-f-a22@2
+      slot-1/ppm-1: smartoptics/ppm-ad1-1510@2
       slot-1/ppm-2: smartoptics/ppm-dummy@1
       slot-2: smartoptics/dcp-2-blank@1
   dcp-404-x1:

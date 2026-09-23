@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: amx-3200-sled400
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -25,6 +25,10 @@ attrs:
   port-modes-cfp2: 100G / 200G / 300G / 400G coherent over DP-16QAM, DP-8QAM, DP-QPSK
   power-absent: not-published
 provenance:
+  speed: 'datasheet - the sled is ordered as a 2 x 400G CFP + 8 x 100G sled (the ordering line
+    quoted under power), and the description here carries the same: 400G CFP2-DCO line ports,
+    100G QSFP28 client ports. Each is the port''s nominal rate; the CFP2 line also runs 100G
+    to 300G coherent modes and a QSFP28 40GbE, as port-modes-* record'
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
@@ -99,17 +103,35 @@ provenance:
     thumbscrew at its end. The part draws the guide's blue latch, because it is the one
     the vendor's own procedure describes in words, and keeps the colour a field.
 states: [absent]
+groups:
+  line:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs:
+      media: cfp2
+      speed: 400g
+    description: the two CFP2-DCO coherent line ports, CFP2-1 and CFP2-2 on the photographed
+      faceplate
+  client:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs:
+      media: qsfp28
+      speed: 100g
+    description: the eight QSFP28 client ports, 3 to 10 on the photographed faceplate
 parts:
-  - {id: port-1, ref: std/cfp2@1, at: [11.02, 16.85], attrs: {media: cfp2}}
-  - {id: port-2, ref: std/cfp2@1, at: [53.52, 16.85], attrs: {media: cfp2}}
-  - {id: port-3, ref: std/qsfp-ganged@1, at: [99.12, 5.00], attrs: {media: qsfp28}}
-  - {id: port-4, ref: std/qsfp-ganged@1, at: [99.12, 20.29], rotate: 180, attrs: {media: qsfp28}}
-  - {id: port-5, ref: std/qsfp-ganged@1, at: [118.12, 5.00], attrs: {media: qsfp28}}
-  - {id: port-6, ref: std/qsfp-ganged@1, at: [118.12, 20.29], rotate: 180, attrs: {media: qsfp28}}
-  - {id: port-7, ref: std/qsfp-ganged@1, at: [140.24, 5.00], attrs: {media: qsfp28}}
-  - {id: port-8, ref: std/qsfp-ganged@1, at: [140.24, 20.29], rotate: 180, attrs: {media: qsfp28}}
-  - {id: port-9, ref: std/qsfp-ganged@1, at: [159.24, 5.00], attrs: {media: qsfp28}}
-  - {id: port-10, ref: std/qsfp-ganged@1, at: [159.24, 20.29], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-1, group: line, ref: std/cfp2@1, at: [11.02, 16.85], attrs: {media: cfp2}}
+  - {id: port-2, group: line, ref: std/cfp2@1, at: [53.52, 16.85], attrs: {media: cfp2}}
+  - {id: port-3, group: client, ref: std/qsfp-ganged@1, at: [99.12, 5.00], attrs: {media: qsfp28}}
+  - {id: port-4, group: client, ref: std/qsfp-ganged@1, at: [99.12, 20.29], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-5, group: client, ref: std/qsfp-ganged@1, at: [118.12, 5.00], attrs: {media: qsfp28}}
+  - {id: port-6, group: client, ref: std/qsfp-ganged@1, at: [118.12, 20.29], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-7, group: client, ref: std/qsfp-ganged@1, at: [140.24, 5.00], attrs: {media: qsfp28}}
+  - {id: port-8, group: client, ref: std/qsfp-ganged@1, at: [140.24, 20.29], rotate: 180, attrs: {media: qsfp28}}
+  - {id: port-9, group: client, ref: std/qsfp-ganged@1, at: [159.24, 5.00], attrs: {media: qsfp28}}
+  - {id: port-10, group: client, ref: std/qsfp-ganged@1, at: [159.24, 20.29], rotate: 180, attrs: {media: qsfp28}}
 elements:
   vent: {at: [2.80, 3.10], size: [92.80, 10.30], class: vent}
   lever: {at: [0.80, 35.60], size: [78.70, 2.20], class: handle}

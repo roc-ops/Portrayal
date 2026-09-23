@@ -51,6 +51,43 @@
     "type": "string"
    }
   },
+  "aliases": {
+   "type": "array",
+   "minItems": 1,
+   "uniqueItems": true,
+   "description": "THE OTHER NAMES THIS BOX IS SOLD OR LISTED UNDER, so a hardware compatibility list that names it by an AS number, a marketing name or an OEM's name resolves to one drawing (#514). `model` stays the canonical name and is never repeated here. Orderable SKUs are not aliases - they live in `configurations.*.part-numbers`. Every entry has one shape, an object, so every consumer reads it one way and no alias is a bare string with its caveat lost. `kind` says what sort of name it is: `vendor` the manufacturer's own other number for the same box, `marketing` the manufacturer's catalogue name, `oem` a name another company sells it under, `superseded` a name the manufacturer used for it before, `variant` a NEAR-TWIN that differs in a stated way (the `note` says how), listed so a search finds the closest drawing without claiming it is the same box. L111 holds a name to one device unless every claimant marks it `shared`, and never lets it equal another device's `model`. configs.json and devices.json publish the names only.",
+   "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "name",
+     "kind"
+    ],
+    "properties": {
+     "name": {
+      "type": "string",
+      "pattern": "^\\S(.*\\S)?$"
+     },
+     "kind": {
+      "enum": [
+       "vendor",
+       "marketing",
+       "oem",
+       "superseded",
+       "variant"
+      ]
+     },
+     "note": {
+      "type": "string",
+      "description": "the caveat that keeps the alias honest - where the mapping comes from, or how a variant differs"
+     },
+     "shared": {
+      "const": true,
+      "description": "this name is knowingly claimed by more than one device - an OEM name mapped to either of a pair. L111 accepts a duplicate only when EVERY claimant says so"
+     }
+    }
+   }
+  },
   "description": {
    "type": "string"
   },

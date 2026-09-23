@@ -70,7 +70,7 @@ def test_every_fhd_cassette_body_is_as_deep_as_its_size_says():
 # face carries the same pair, so a new one without them is a skin copied from
 # the wrong place, not a different product.
 NO_KNOBS = {
-    "fs/fhd-splice-12-lc@2": "no render of this SKU exists to draw them from; "
+    "fs/fhd-splice-12-lc@3": "no render of this SKU exists to draw them from; "
                              "its contract records the gap",
 }
 

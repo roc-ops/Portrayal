@@ -1,10 +1,18 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 3.0.1
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
+aliases:
+- name: NCF-48CD
+  kind: oem
+  note: >-
+    The DriveNets name for this chassis (Network Cloud Fabric, 48x400GE FIF). NOT A UFISPACE
+    CLAIM - no UfiSpace document names DriveNets. The mapping is internal analysis matching
+    DriveNets' NCF-48CD (Ramon 19.2T, 48x400GE fabric) to this chassis on silicon and port
+    configuration. Recorded so a search for either name finds this box
 portfolio:
   line: Telecoms
   family: Disaggregated Fabric Switch
@@ -305,11 +313,6 @@ attrs:
     memory: 64 GB DDR4 R-DIMM with ECC
     storage: 128 GB SSD
     bmc: Aspeed AST2400
-    oem-alias: >-
-      DriveNets NCF-48CD (Network Cloud Fabric, 48x400GE FIF). NOT A UFISPACE
-      CLAIM - no UfiSpace document names DriveNets. The mapping is internal analysis matching DriveNets' NCF-48CD
-      (Ramon 19.2T, 48x400GE fabric) to this chassis on silicon and port
-      configuration. Recorded so a search for either name finds this box
   features:
     optics-qsfp-dd: >-
       400GE QSFP-DD SR8, LR8, DR4 and FR4; 400GE QSFP-DD DAC, AEC and AOC (datasheet
@@ -805,9 +808,9 @@ views:
         - {ref: common/led-dot@1, id: led-sfp-0, at: [29.90, 48.90], for: mgmt-sfp-0, group: port-leds, rel-pos: 49}
         - {ref: common/led-dot@1, id: led-sfp-1, at: [34.20, 48.90], for: mgmt-sfp-1, group: port-leds, rel-pos: 50}
         - {ref: std/micro-usb@1, id: usb-console, at: [45.50, 43.35], group: mgmt, rel-pos: 3, attrs: {role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [43.30, 54.55], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: maintenance, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [43.30, 54.55], rotate: 90, skin: usb2, group: mgmt, rel-pos: 4, attrs: {role: maintenance, usb: '2.0'}}
         - {ref: std/rj45-ganged@2, id: console, at: [58.4, 44.25], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
-        - {ref: common/rj45-ganged-eth@1, id: oob, at: [58.4, 56.15], group: mgmt, rel-pos: 2, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10m-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10m-100m}]}, description: 'led-oob-l: HIG section 10, Management port LED, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-r: HIG section 10, Management port LED, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
+        - {ref: common/rj45-ganged-eth@1, id: oob, at: [58.4, 56.15], group: mgmt, rel-pos: 2, attrs: {media: rj45, role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10m-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10m-100m}]}, description: 'led-oob-l: HIG section 10, Management port LED, Left LED - Off (1G no link), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-r: HIG section 10, Management port LED, Right LED - Off (no activity), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
         - {ref: common/reset-button@1, id: reset, at: [10.30, 61.05], for: chassis, group: furniture, rel-pos: 1}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [46.10, 64.90], for: usb, group: furniture, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-sys, at: [17.70, 52.29], for: chassis, group: status-leds, rel-pos: 1,

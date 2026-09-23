@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-56dx
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-56DX
@@ -612,8 +612,8 @@ views:
         - {ref: std/rj45@2, id: tod, at: [22.9, 26.97], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
         - {ref: std/rj45@2, id: console, at: [29.25, 59.28], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [18.64, 70.26], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [40.20, 30.35], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-eth@1, id: oob, at: [49.42, 58.29], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture, drawn green in HIG Figure 8''s lower corners. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, unlike the S9510-28DC and S9311-64D guides from which the wording is borrowed. See the mgmt-jack-led-semantics gap; led-oob-right: the right lamp in the out-of-band jack''s aperture. Same borrowed, unsourced vocabulary and the same gap as led-oob-left'}
+        - {ref: std/usb-a@1, id: usb, at: [40.20, 30.35], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/rj45-eth@1, id: oob, at: [49.42, 58.29], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: activity-1g}], led-b: ['off', {color: '#f59e0b', name: link-10-100m}, {behavior: blinking, color: '#f59e0b', name: activity-10-100m}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture, drawn green in HIG Figure 8''s lower corners. THIS VOCABULARY IS NOT SOURCED FOR THIS DEVICE: HIG section 10 tables the six front-panel lamps and the two FRU lamps and gives this jack no table at all, unlike the S9510-28DC and S9311-64D guides from which the wording is borrowed. See the mgmt-jack-led-semantics gap; led-oob-right: the right lamp in the out-of-band jack''s aperture. Same borrowed, unsourced vocabulary and the same gap as led-oob-left'}
         - {ref: common/reset-button@1, id: reset, at: [28.64, 43.94], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [11.70, 56.98],
            states: ['off',

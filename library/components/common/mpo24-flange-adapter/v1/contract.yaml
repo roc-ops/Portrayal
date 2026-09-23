@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo24-flange-adapter
-version: 1.1.1
+version: 1.2.0
 class: port
 profile: networking
 description: >-
@@ -27,6 +27,32 @@ size-notes: >-
 attrs: {media: fiber, connector: mpo}
 optical:
   positions: 24
+elements:
+  opening: {at: [8.45, 1.3], size: [13.1, 7.7], class: port}
+  '1': {at: [16.3, 5.675], size: [0.15, 0.15], class: fibre}
+  '2': {at: [16.05, 5.675], size: [0.15, 0.15], class: fibre}
+  '3': {at: [15.8, 5.675], size: [0.15, 0.15], class: fibre}
+  '4': {at: [15.55, 5.675], size: [0.15, 0.15], class: fibre}
+  '5': {at: [15.3, 5.675], size: [0.15, 0.15], class: fibre}
+  '6': {at: [15.05, 5.675], size: [0.15, 0.15], class: fibre}
+  '7': {at: [14.8, 5.675], size: [0.15, 0.15], class: fibre}
+  '8': {at: [14.55, 5.675], size: [0.15, 0.15], class: fibre}
+  '9': {at: [14.3, 5.675], size: [0.15, 0.15], class: fibre}
+  '10': {at: [14.05, 5.675], size: [0.15, 0.15], class: fibre}
+  '11': {at: [13.8, 5.675], size: [0.15, 0.15], class: fibre}
+  '12': {at: [13.55, 5.675], size: [0.15, 0.15], class: fibre}
+  '13': {at: [16.3, 5.175], size: [0.15, 0.15], class: fibre}
+  '14': {at: [16.05, 5.175], size: [0.15, 0.15], class: fibre}
+  '15': {at: [15.8, 5.175], size: [0.15, 0.15], class: fibre}
+  '16': {at: [15.55, 5.175], size: [0.15, 0.15], class: fibre}
+  '17': {at: [15.3, 5.175], size: [0.15, 0.15], class: fibre}
+  '18': {at: [15.05, 5.175], size: [0.15, 0.15], class: fibre}
+  '19': {at: [14.8, 5.175], size: [0.15, 0.15], class: fibre}
+  '20': {at: [14.55, 5.175], size: [0.15, 0.15], class: fibre}
+  '21': {at: [14.3, 5.175], size: [0.15, 0.15], class: fibre}
+  '22': {at: [14.05, 5.175], size: [0.15, 0.15], class: fibre}
+  '23': {at: [13.8, 5.175], size: [0.15, 0.15], class: fibre}
+  '24': {at: [13.55, 5.175], size: [0.15, 0.15], class: fibre}
 relief:
   features:
     # ESTIMATED, ALL THREE. FS's rear renders are shot from above the cassette,
@@ -84,4 +110,20 @@ provenance:
     pitch, guide pins 4.6 apart - the figures every MPO/MTP end-face drawing
     uses. Drawn MALE, because FS's cassettes are MTP (Male) and the trunk
     plugged into this adapter is the female half.
+  fibre-numbering: >-
+    ELEMENTS `1` TO `24` ARE THE FIBRE CIRCLES, numbered as the plug numbers
+    them, not as the viewer would. On a plug end face seen key up, fibre 1
+    is at the left and the row runs left to right, and on 24 fibres the row
+    on the key side carries 1-12 and the other 13-24, also left to right
+    (ANSI/TIA-568.3-D, as reproduced in SENKO, Fiber Optic Polarity Guide
+    for VSFF Connectivity, Rev. 01, October 2023, p. 8, Figure 5). FS fits
+    Type A, key-up to key-down, adapters to its FHD cassettes (FHD MTP-12/24
+    Cassettes Datasheet, December 2023, pp. 4-7), so the male plug inside
+    the cassette is seen key down, turned 180 degrees, through this key-up
+    opening. Fibres 1-12 are therefore the LOWER row, cy 5.75, and 13-24 the
+    UPPER row, cy 5.25, each starting at cx 16.375 and running leftward; a
+    trunk fibre 1-12 lands on ids 13-24, the Inner Sequence FS prints. This
+    is the fibre-positions design note, MPO fibre numbering; a Type B rear
+    must not reuse this numbering unchanged. The `opening` element is the
+    keyed opening, the bounding box of its own path.
 skins: [default]
