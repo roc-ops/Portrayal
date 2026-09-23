@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo24-plug
-version: 1.0.1
+version: 1.0.2
 class: port
 mates: mpo
 interface: mpo-plug
@@ -16,7 +16,7 @@ description: >-
   why this is its own part rather than an attr on that one
   (docs/pluggables-design.md, decision 10), and why the two contracts agree
   figure for figure: nothing outside the ferrule window changes with the row
-  count. UNPINNED, the same way. Occupies an `mpo` aperture (std/mpo@1 and
+  count. UNPINNED, the same way. Occupies an `mpo` aperture (std/mpo@2 and
   anything composing it) at its own `mate` point, and presents `mpo-plug` at
   its rear so a boot or a bare cable can seat there.
 size: {w: 12.5, h: 7.6}
@@ -24,11 +24,13 @@ size-confidence: {w: drawing, h: drawing}
 attrs: {media: fiber, connector: mpo}
 unplaced: >-
   seated by a device that places it in an `mpo`-presenting aperture - none
-  does yet. Every MPO aperture in the library today is on a cassette's REAR
-  face (common/mpo-adapter@1 on fs/fhd-2mtp12-lc-rear@1), so
+  does yet. No library part presents an `mpo` slot today: the FHD cassette
+  rears use common/mpo-flange-adapter@1 and common/mpo24-flange-adapter@1,
+  which draw the plug's end face and compose no std/mpo@2, and
+  common/mpo-adapter@2 waits for an adapter panel to be modelled. So
   spec/tests/test_fibre_plugs.py seats it as a configured occupant on a
-  throwaway cassette whose FRONT carries the same adapter, the fixture
-  spec/tests/test_dust_caps.py already uses for common/mpo-dust-cap@1.
+  throwaway cassette whose FRONT carries common/mpo-adapter@2, the fixture
+  spec/tests/test_dust_caps.py uses for common/mpo-dust-cap@2.
 provenance:
   behaviour: >-
     DELIBERATELY OMITTED, for the reason generic/lc-plug@2 states at length in
@@ -65,36 +67,18 @@ provenance:
     overall for the same connector on round cable, so what is behind the
     housing is the cable assembly's length and not the interface's. The 25.6
     is used once, in `provenance.standoff`.
-  aperture-contradiction: >-
-    THIS PLUG DOES NOT FIT THE APERTURE THE LIBRARY DRAWS, AND THE APERTURE IS
-    THE SIDE TO DOUBT. std/mpo@1 is 7.8 x 5.6 at `confidence: estimated`, and
-    spec/schemas/standards.yaml's `mpo-adapter` entry says of the same reading
-    that the detection 'catches a bevelled interior and reads 5.4 to 8.5 across
-    the rows'. A 12.5 x 7.6 connector cannot enter a 7.8 x 5.6 opening.
-    WHAT IS ON EACH SIDE. Here: two printed callouts on two customer drawings
-    from the manufacturer of the connector, cross-checked against the drawn
-    outline. There: one reading off a vendor's product render, at estimated
-    confidence, whose own note brackets the same axis between 5.4 and 8.5 -
-    a bracket 7.8 and 5.6 BOTH fall inside.
-    IT IS NOT A NEW SUSPICION. common/mpo-dust-cap@1's
-    `provenance.aperture-doubt` reached it from a different direction in the
-    task before this one - that a port's visible content on FS's render reads
-    12.8 by 8.1, 'an aspect a 7.8 x 5.6 opening does not have', and that the
-    two thresholds look like two readings of ONE axis. 12.5 x 7.6 printed here
-    is what that hypothesis predicted, to 0.3 and 0.5 of a figure that cap
-    itself calls an upper bound.
-    WHAT THIS PART DOES ABOUT IT: NOTHING, DELIBERATELY. It is drawn at the
-    size its own source prints and is NOT fitted to std/mpo@1. Re-deriving
-    that aperture is its own piece of work - it changes a published `conforms:`
-    and every adapter composing it - and it is reported rather than done here.
-    US Conec's own MTP adapter drawing C10783 rev B draws the opening a
-    connector enters and puts no callout on it, as every SC and LC adapter
-    drawing in this corpus does with its own; measured on the two rulers that
-    sheet prints (14.9 body width and 9.8 body height, which agree to 0.13%),
-    the content inside the adapter body reaches 13.8 by 8.2 - consistent with
-    a 12.5 x 7.6 connector entering it, and not with 7.8 x 5.6. That
-    measurement is recorded as corroboration and is not a derivation of the
-    aperture: the opening itself carries no dimension on that sheet either.
+  aperture: >-
+    THIS PLUG FITS THE OPENING IT SEATS IN, AND THAT WAS NOT ALWAYS TRUE. At
+    1.0.1 this key recorded a contradiction and left it standing: std/mpo@1
+    drew a 7.8 x 5.6 opening, estimated off an FS render, and a 12.5 x 7.6
+    connector cannot enter it. The plug was deliberately NOT fitted to that
+    aperture, because two printed callouts outrank one reading of a render.
+    std/mpo@2 corrected the aperture instead: 12.9 x 8.0, still estimated -
+    this part's own printed envelope plus a clearance measured on SENKO's LC
+    adapter/plug pair - which leaves 0.2 on every side of the housing and
+    admits the largest plug IEC 61754-7-1 Tables 1 and 4 allow (12.59 x 7.7).
+    Nothing in this part moved: its size, mate and relief are what they were,
+    and its mate still lands on the opening's centre.
   key: >-
     MEASURED, and WHICH FACE CARRIES IT IS A CONVENTION ARGUMENT AND NOT A
     READING - stated because the key is the whole of an MPO's polarity. On the
@@ -105,7 +89,7 @@ provenance:
     THE SAME SHEET DRAWS A DIFFERENT MOULDING ON THE OPPOSITE FACE, at the
     same distance from the outline and the same width, with its own bevels;
     no callout names either, and an MPO has ONE key. Only one is drawn here.
-    The top is chosen because US Conec's own MTP adapter drawing C10783 rev B
+    The top is chosen because US Conec's own MTP adapter drawing C10783 rev G
     draws its opening's key notch on one long wall only - measured, the top
     wall carries a step the bottom wall does not - and the two drawings are the
     same manufacturer's third-angle views of mating parts. That is a
@@ -136,7 +120,7 @@ provenance:
     the housing, the key and the same 6.10 x 2.50 ferrule window - and states
     the count in `optical.positions` alone.
     THAT IS THE RIGHT ANSWER AND NOT A GAP. US Conec's own drawing set puts
-    both counts in one housing (the adapter C10783 rev B says the opening is
+    both counts in one housing (the adapter C10783 rev G says the opening is
     shared), spec/schemas/standards.yaml's `mpo-adapter` records that MPO-8,
     -12, -16 and -24 share the opening because fibre count is a property of the
     ferrule, and at this scale two rows 0.25 apart are under a line weight. If
@@ -155,14 +139,14 @@ provenance:
     carry the key yet (`additionalProperties: false`), so the claim cannot be
     written as a field without a schema change this task does not make. Adding
     the key, and the L12 comparison with it, belongs with the first part that
-    declares the other side of the pair - std/mpo@1 declares no gender either,
+    declares the other side of the pair - std/mpo@2 declares no gender either,
     so there is nothing for it to disagree with today.
   standoff: >-
     ESTIMATED - how far this plug stands out of the aperture it enters, which
     is the body feature's `out`. No document held here dimensions it.
     WHAT IS PRINTED. C20044's SECTION A-A dimensions the connector body 25.6
     long, with the guide pins standing a further 1.9 off its front face and a
-    1.0 step. US Conec's MTP adapter C10783 rev B prints 20.7 for the adapter
+    1.0 step. US Conec's MTP adapter C10783 rev G prints 20.7 for the adapter
     overall.
     THE BRACKET. An adapter takes a connector from each face and the two
     ferrules butt at the split sleeve between them, so one connector enters
@@ -191,9 +175,9 @@ relief:
         generic/mpo24-plug@1's own `provenance.standoff` - the printed 25.6
         connector body less half the printed 20.7 adapter, on the stated
         assumption that two ferrules meet at the adapter's mid-plane. ABSOLUTE
-        from this part's own face: std/mpo@1 puts its `mate` on nothing and so
-        presents a lift of 0.0, which is why common/mpo-dust-cap@1's own
+        from this part's own face: std/mpo@2 puts its `mate` on nothing and so
+        presents a lift of 0.0, which is why common/mpo-dust-cap@2's own
         figures are absolute from the panel too, and why this one has to clear
-        common/mpo-adapter@1's bezel by being larger than it rather than by
+        common/mpo-adapter@2's bezel by being larger than it rather than by
         inheriting anything.
 skins: [default]

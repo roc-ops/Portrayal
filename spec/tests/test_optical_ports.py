@@ -41,7 +41,7 @@ def test_stating_the_polish_is_quiet():
 def test_an_unpolished_family_needs_nothing():
     """MPO, ST, MDC and splice have one form in the enum, so there is nothing
     for a contract to state and demanding it would be noise."""
-    doc = {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}],
+    doc = {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@2"}],
            "optical": {"paths": [{"from": "mtp.1", "to": "mtp.2"}]}}
     assert run86(doc) == []
 
@@ -198,8 +198,8 @@ def test_a_split_carries_its_ratio():
                                     "to": [{"at": "lc1.1", "ratio": 50},
                                            {"at": "lc1.2", "ratio": 50}]}]}}
     known = {"common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
-             "common/mpo-adapter@1": {"optical": {"positions": 12}},
-             "t/rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]}}
+             "common/mpo-adapter@2": {"optical": {"positions": 12}},
+             "t/rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@2"}]}}
     m = P.fibre_map(entry, known.get, "TAP")
     assert len(m["rows"]) == 2
     assert all(r["ratio"] == 50 for r in m["rows"])
@@ -238,10 +238,10 @@ def test_a_declared_rear_kind_does_not_override_a_known_family():
                                    {"from": "lc1.2", "to": "rear:mtp.1"}]}}
     known = {"common/lc-duplex-adapter@4": {"optical": {"positions": 2}},
              "common/fibre-splice@1": {"optical": {"positions": 2}},
-             "common/mpo-adapter@1": {"optical": {"positions": 12}},
+             "common/mpo-adapter@2": {"optical": {"positions": 12}},
              "t/mixed-rear@1": {"parts": [
                  {"id": "splice", "ref": "common/fibre-splice@1"},
-                 {"id": "mtp", "ref": "common/mpo-adapter@1"}]}}
+                 {"id": "mtp", "ref": "common/mpo-adapter@2"}]}}
     got = P.ports(entry, known.get)
     types = {r["name"]: r["type"] for r in got["rear"]}
     assert types == {"SPLICE-1": "splice", "MTP-1": "mpo"}, types

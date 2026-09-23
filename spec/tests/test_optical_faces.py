@@ -47,10 +47,10 @@ def test_capacities_reaches_a_part_on_another_face():
     """The whole point: a cassette's rear MTP must be findable from the front."""
     front = {"parts": [{"id": "lc1", "ref": "common/lc-duplex-v-adapter@5"}],
              "faces": {"rear": {"ref": "fs/x-rear@1"}}}
-    rear = {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]}
+    rear = {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@2"}]}
     known = {
         "common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
-        "common/mpo-adapter@1": {"optical": {"positions": 12}},
+        "common/mpo-adapter@2": {"optical": {"positions": 12}},
         "fs/x-rear@1": rear,
     }
     caps = O.capacities(front, known.get)
@@ -135,8 +135,8 @@ def test_a_rear_face_contributes_its_own_positions():
              "faces": {"rear": {"ref": "fs/x-rear@1"}}}
     known = {
         "common/lc-duplex-v-adapter@5": {"optical": {"positions": 2}},
-        "common/mpo-adapter@1": {"optical": {"positions": 12}},
-        "fs/x-rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@1"}]},
+        "common/mpo-adapter@2": {"optical": {"positions": 12}},
+        "fs/x-rear@1": {"parts": [{"id": "mtp", "ref": "common/mpo-adapter@2"}]},
     }
     assert O.capacities(front, known.get) == {"lc1": 2, "rear:mtp": 12}
 

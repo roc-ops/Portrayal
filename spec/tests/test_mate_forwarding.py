@@ -115,11 +115,11 @@ def test_the_two_modelled_optics_have_a_cage_that_will_take_them():
 # A PORT EXEMPT FROM THE DEPTH RULE, with the reason. Every entry must still be
 # a port that would otherwise fail, or the exemption is stale.
 SHALLOW_BY_DESIGN = {
-    # std/mpo@1 presents `mpo` since 1.1.0 (B3), so this adapter now forwards
+    # std/mpo presents `mpo` since 1.1.0 (B3), so this adapter now forwards
     # it. Its face is a raised flange (`bezel`, out 1.2) on a cassette, and a
     # `size.d` on a fixed part without behaviour carves a hole behind its whole
-    # 13.8 x 9.4 bbox; std/mpo@1's own cavity is the recess a plug seats in.
-    "common/mpo-adapter/v1/contract.yaml":
+    # 13.8 x 9.4 bbox; std/mpo@2's own cavity is the recess a plug seats in.
+    "common/mpo-adapter/v2/contract.yaml":
         "raised flange; the composed aperture's own cavity is the recess",
 }
 

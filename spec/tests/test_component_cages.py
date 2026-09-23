@@ -241,7 +241,7 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     got_components = sum(1 for e in index.values() if e.get("cages"))
     got_cages = sum(len(e.get("cages") or []) for e in index.values())
     assert want_components > 0 and want_cages > 0
-    # P2 is exercised, not assumed: common/mpo-adapter@1 forwards its bore
+    # P2 is exercised, not assumed: common/mpo-adapter@2 forwards its bore
     assert forwarded > 0
     assert (got_components, got_cages) == (want_components, want_cages)
 

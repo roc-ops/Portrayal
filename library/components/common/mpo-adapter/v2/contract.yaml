@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: mpo-adapter
-version: 1.1.0
+version: 2.0.0
 class: port
 profile: networking
 description: >-
@@ -55,7 +55,7 @@ provenance:
     with depth 19.8 or 20.6 and a 25.0 x 20.0 / 3.1 dia mounting flange. That
     reading used to sit in standards.yaml's `mpo-adapter` entry, under the
     same key a `conforms:` on this contract would check `size` against. This
-    contract declares no `conforms:`, though - it composes std/mpo@1 for the
+    contract declares no `conforms:`, though - it composes std/mpo@2 for the
     aperture and draws its own bezel around it, as common/lc-duplex-adapter@4
     does for std/lc-bore@3. That entry now holds the FS panel's APERTURE and
     PITCH instead (see its notes for the full history), so the vendor
@@ -64,8 +64,20 @@ provenance:
     panel, kept because it is the only adapter-body figure held anywhere in
     this corpus - not because it measures the same thing as 13.8 x 9.4, and
     not in tension with it. The 19.8/20.6 body depth is NOT used for anything
-    drawn here or on std/mpo@1 - see std/mpo@1's own `provenance.depth` for
+    drawn here or on std/mpo@2 - see std/mpo@2's own `provenance.depth` for
     why.
+  bore: >-
+    MAJOR 2.0.0: THE COMPOSED APERTURE CHANGED MAJOR, NOTHING ELSE DID. @1
+    composed std/mpo@1 (7.8 x 5.6 at [3.0, 1.9]); this composes std/mpo@2, the
+    12.9 x 8.0 opening an MPO plug can actually enter, placed at [0.45, 0.7] so
+    it stays centred on the unchanged (6.9, 4.7). The 13.8 x 9.4 outline still
+    contains it, with 0.45 of wall each side on the long axis and 0.7 on the
+    short. That wall is thin on the long axis for a reason worth stating: 13.8
+    is FS 35510's aperture PITCH adopted as a width (`size`), and 35510 mounts
+    its adapters PORTRAIT, so on the real panel 13.8 is the spacing along the
+    opening's SHORT axis and the long axis runs down the 15.97 row pitch. This
+    tile is drawn landscape; its outline is an estimate on both axes and is
+    not re-derived here.
   fibre-count: >-
     catalogue - FS's FHD panels are sold as `12 x MTP-8/12/24`, one opening
     taking any of the three ferrules. 12 is the default because it is the count
@@ -80,14 +92,14 @@ provenance:
   connection-point: >-
     `optical.at` is the plain centre of the 13.8 x 9.4 mating face - (13.8/2,
     9.4/2) = (6.9, 4.7). That figure is corroborated, not just asserted: the
-    composed std/mpo@1 bore sits at [3.0, 1.9] with its own size 7.8 x 5.6, so
-    its centre is (3.0 + 7.8/2, 1.9 + 5.6/2) = (6.9, 4.7) too - the same point
-    two different pieces of geometry land on. `size-confidence` marks w
+    composed std/mpo@2 bore sits at [0.45, 0.7] with its own size 12.9 x 8.0,
+    so its centre is (0.45 + 12.9/2, 0.7 + 8.0/2) = (6.9, 4.7) too - the same
+    point two different pieces of geometry land on. `size-confidence` marks w
     photo-measured and h estimated; a centre depending on both axes is only
     as good as the weaker one, so this point is ESTIMATED, not photo-measured,
     even though half of what it is built from is not.
 parts:
-  - {ref: std/mpo@1, id: bore, at: [3.0, 1.9]}
+  - {ref: std/mpo@2, id: bore, at: [0.45, 0.7]}
 connection-points:
   # centre of the 13.8 x 9.4 mating face - (6.9, 4.7) - so the next plan has
   # somewhere to hang a fibre path off this adapter without a version bump.

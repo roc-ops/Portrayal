@@ -56,11 +56,11 @@ Taken 2026-09-22.
 | `common/lc-dust-cap` | `lc` | `std/lc-bore@3` | the Smartoptics cap figures, moved from `lc-duplex-adapter@3` |
 | `common/lc-duplex-dust-cap` | `lc-duplex` | a duplex LC adapter | the FS FHD cap figures, moved from `lc-duplex-v-adapter@2` |
 | `common/sc-dust-cap` | `sc` | `std/sc-bore@1` | the FS FHD SC cap and grip, moved from `sc-duplex-adapter@2` |
-| `common/mpo-dust-cap` | `mpo` | `std/mpo@1` | new: FS's MTP cassette photographs |
+| `common/mpo-dust-cap` | `mpo` | `std/mpo@2` | new: FS's MTP cassette photographs |
 | `generic/lc-duplex-plug` | `lc-duplex` | a duplex LC adapter | two `generic/lc-plug` bodies at the `lc-duplex-receptacle` pitch, on a clip, each turned latch-up (see "Seated plugs") |
 | `generic/sc-plug` | `sc` | `std/sc-bore@1` | new intake (below) |
-| `generic/mpo12-plug` | `mpo` | `std/mpo@1` | new intake (below) |
-| `generic/mpo24-plug` | `mpo` | `std/mpo@1` | as mpo12; its own part for the two-row ferrule (umbrella decision 10) |
+| `generic/mpo12-plug` | `mpo` | `std/mpo@2` | new intake (below) |
+| `generic/mpo24-plug` | `mpo` | `std/mpo@2` | as mpo12; its own part for the two-row ferrule (umbrella decision 10) |
 
 Caps are `common/` by the rule B gives the boots: no standard governs a cap's
 shape, only the interface it plugs. Each is `behaviour: occupies`, `class: cap`,
@@ -99,6 +99,19 @@ the class fixes none.
 - **The caps.** The three existing caps move with their figures. The MPO cap is
   read off FS's cassette photographs, checked orthographic first.
 
+### The MPO opening
+
+The MPO plug intake found the connector printed at 12.5 x 7.6 (US Conec C20044
+rev B, C20851 rev D), and `std/mpo@1`'s opening - 7.8 x 5.6, estimated off an FS
+render - could not take it. The opening was the weaker reading, so it moved:
+`std/mpo@2` is 12.9 x 8.0, still `estimated`, because no adapter drawing held
+puts a callout on the mouth. It is the printed plug plus the clearance an LC
+adapter's opening runs over its plug (SENKO DS-LC-000010 against DS-LC-000004,
+0.16-0.40 per tier, the upper end taken), and it admits the largest plug IEC
+61754-7-1 allows (12.59 x 7.7). `common/mpo-adapter@2` composes it, centred where
+`@1`'s opening was. A test holds both plugs inside the opening on a build, in the
+device frame.
+
 ## The connector slot
 
 ### What is a slot
@@ -114,8 +127,9 @@ Its core is generalised to take a registry, and it is called with two:
 A slot's accept list is every part whose `mates:` is the slot's interface - caps
 and plugs alike. Boots never appear: they mate `lc-plug`/`rj45-plug`, which name no
 port. There is no ladder; a connector interface either intermates or it does not.
-`std/mpo@1` presents no interface and no `mate` point today; it gains both
-(`interface: mpo`, a `mate` at the aperture centre) as a minor.
+`std/mpo@1` presented no interface and no `mate` point; it gained both
+(`interface: mpo`, a `mate` at the aperture centre) as a minor. Its opening was
+then corrected as a major, `std/mpo@2` (see "The MPO opening" below).
 
 Slots are published where cages are: a device view's `cages[]` gains `kind: cage`
 or `kind: connector` on each entry, and `components.json` carries each component's
@@ -297,8 +311,10 @@ Two lessons from building the caps as the adapter's relief carry over:
    `generic/mpo12-plug`, `generic/mpo24-plug`.
 7. The adapters (decision 9): if they still draw caps, remove them as majors
    (`lc-duplex-adapter@4`, `lc-duplex-v-adapter@3`, `sc-duplex-adapter@3`),
-   declare the default caps, and repoint the 18 components that compose them. The
-   MPO adapters gain their default without a major. Until this step, a bore under a
+   declare the default caps, and repoint the 18 components that compose them. No
+   library part presents an `mpo` slot yet - the FHD cassette rears use flanged
+   adapters that draw the plug's end face and compose no `std/mpo` - so the MPO
+   default waits for a host. Until this step, a bore under a
    drawn cap declares no default, so no port is ever capped twice.
 8. The kit: lifted seating with its parity test, `nestedSlots`, the swap, exclusion
    and pruning.

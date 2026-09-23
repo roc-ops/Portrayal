@@ -40,7 +40,7 @@ SC_CASSETTE = "fs/fhd-1mtp12-sc-os2-a@2"     # six sc-duplex-adapter@4
 LC_CAP = "common/lc-dust-cap@1"
 LC_DUPLEX_CAP = "common/lc-duplex-dust-cap@2"
 SC_CAP = "common/sc-dust-cap@1"
-MPO_CAP = "common/mpo-dust-cap@1"
+MPO_CAP = "common/mpo-dust-cap@2"
 
 # WHAT THE ADAPTERS READ, as an ABSOLUTE distance from the panel. These are the
 # figures the three adapters' own `provenance.dust-caps` state, and
@@ -166,17 +166,18 @@ def test_the_mpo_cap_marks_every_figure_it_carries_estimated():
     depth = c["provenance"]["depth"]
     assert "ESTIMATED" in depth and "PERSPECTIVE" in depth
     assert "withdrawn" in depth, "the retracted derivation has to stay retracted"
-    # the doubt about std/mpo@1 is a hypothesis, and is filed as one
-    doubt = c["provenance"]["aperture-doubt"]
-    assert "HYPOTHESIS" in doubt and "NOT A FINDING" in doubt
+    # @1 filed its doubt about std/mpo@1 as a hypothesis; @2 records what became
+    # of it, and that the corrected figure did NOT come from this render
+    aperture = c["provenance"]["aperture"]
+    assert "hypothesis" in aperture and "did not come from here" in aperture
 
 
 def test_the_mpo_caps_depth_figures_are_declared_choices_that_stack_right():
     """IMPORTANT 1 of the task 5 review, and what a test can and cannot do here.
 
     THERE IS NOTHING TO CHECK THE GRIP'S `out` AGAINST. No document held here
-    dimensions an MTP cap and no render held here can be unfolded, so 8.0 is a
-    MODELLING CHOICE - and a test that compared it to another figure in the
+    dimensions an MTP cap and no render held here can be unfolded, so the height
+    is a MODELLING CHOICE - and a test that compared it to another figure in the
     same file would be checking the contract against itself and would keep
     passing however wrong the figure was. This does not do that. It holds the
     two things that stay true whatever the number is, and it holds the contract
@@ -186,15 +187,15 @@ def test_the_mpo_caps_depth_figures_are_declared_choices_that_stack_right():
         cap's face, and the cap's face in front of the adapter bezel it would
         otherwise be buried behind;
       - the arithmetic fault the first review caught - the seat is the panel
-        (std/mpo@1 presents no lift), so the bezel is never added on top of a
+        (std/mpo@2 presents no lift), so the bezel is never added on top of a
         figure already measured from the panel.
 
-    Whether 8.0 is the RIGHT height is open until something dimensions the
+    Whether the grip is the RIGHT height is open until something dimensions the
     part, and `provenance.depth` says so rather than this test pretending."""
     c = contract(MPO_CAP)
     grip = feature(MPO_CAP, "grip")
     body = feature(MPO_CAP, "body")
-    bezel = feature("common/mpo-adapter@1", "bezel")["out"]
+    bezel = feature("common/mpo-adapter@2", "bezel")["out"]
     assert body["out"] < grip["out"], "the saddle has to stand in front of the cap's face"
     assert body["out"] > bezel, "the cap's face would sit behind the adapter bezel"
     # the figure is declared a choice, in the key and on the feature itself
@@ -204,11 +205,73 @@ def test_the_mpo_caps_depth_figures_are_declared_choices_that_stack_right():
     assert f"{grip['out'] + bezel:g}" not in c["provenance"]["depth"]
 
 
+# THE FIGURE THE GRIP WAS BROUGHT DOWN FROM. Task 5 stood a 10.2 x 3.6 bar out to
+# 8.0 from the panel as one solid - a plank - against FS's photographs of a thin,
+# waisted saddle with a lip at its end.
+PLANK_OUT = 8.0
+
+
+def _skin_rect(ref, node_id):
+    """(w, h) of a skin rect by id - the drawn outline a relief feature extrudes."""
+    import xml.etree.ElementTree as ET
+    ns, rest = ref.split("/", 1)
+    name, major = rest.split("@")
+    skin = LIB / "components" / ns / name / f"v{major}" / "skins" / "default.svg"
+    hits = [e for e in ET.parse(skin).getroot().iter() if e.get("id") == node_id]
+    assert len(hits) == 1, (ref, node_id, len(hits))
+    return float(hits[0].get("width")), float(hits[0].get("height"))
+
+
+def test_the_mpo_caps_grip_is_a_thin_waisted_saddle_not_a_plank():
+    """The Task 7 review: the grip rendered as a plank. What FS draws is a web
+    rising off the cap's face and a thin plate across its end, the plate
+    overhanging the web's waist so a fingertip goes under it. So the grip is
+    two named features, stacked:
+
+      - `saddle`, the web, standing on the cap's face (its lift is the body's
+        `out`) and NARROWER along the long axis than the plate it carries;
+      - `grip`, the plate, standing on the saddle (its lift is the saddle's
+        `out`), THINNER than the saddle's rise;
+
+    and the plate's front is brought down from the plank's 8.0. The heights
+    stay declared modelling choices - this holds the shape they have to make,
+    not the numbers."""
+    body, saddle, grip = (feature(MPO_CAP, n) for n in ("body", "saddle", "grip"))
+    assert saddle["lift"] == pytest.approx(body["out"]), "the web stands on the cap's face"
+    assert grip["lift"] == pytest.approx(saddle["out"]), "the plate stands on the web"
+    rise, plate = saddle["out"] - saddle["lift"], grip["out"] - grip["lift"]
+    assert 0 < plate < rise, (plate, rise)
+    assert grip["out"] < PLANK_OUT, grip["out"]
+    (ww, wh), (pw, ph) = _skin_rect(MPO_CAP, "saddle"), _skin_rect(MPO_CAP, "grip")
+    assert ww < pw, "no waist: the plate would have nothing to get a fingertip under"
+    assert wh <= ph
+    for f in (saddle, grip):
+        assert f["confidence"] == "estimated" and "MODELLING CHOICE" in f["source"]
+
+
+def test_a_seated_mpo_caps_plate_stands_on_its_saddle(tmp_path, lib):
+    """The same stack ON A BUILD: the plate's back (its summed lift) is the
+    saddle's front, and the saddle's back is the cap's face. Lifts are summed
+    down the tree and `out` is absolute, so a plate nested wrongly would build
+    inside out or float, and 2D would not show it."""
+    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": MPO_CAP})
+    root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
+    occ = occupant(root, parents, "bay-1/module/mtp1/bore", MPO_CAP)
+    body, saddle, grip = (inside(occ, n) for n in ("body", "saddle", "grip"))
+    stack = [(float(n.get("data-z-out")), effective_lift(parents, n))
+             for n in (body, saddle, grip)]
+    assert len(stack) == 3
+    (b_out, _b), (s_out, s_back), (g_out, g_back) = stack
+    assert s_back == pytest.approx(b_out, abs=1e-6)
+    assert g_back == pytest.approx(s_out, abs=1e-6)
+    assert b_out < s_out < g_out < PLANK_OUT
+
+
 @pytest.mark.parametrize("ref,node,inner", [(LC_CAP, "inset", "pocket"),
                                             (LC_DUPLEX_CAP, "inset-tx", "pocket"),
                                             (LC_DUPLEX_CAP, "inset-rx", "pocket"),
                                             (SC_CAP, "grip", "out"),
-                                            (MPO_CAP, "grip", "out")])
+                                            (MPO_CAP, "saddle", "out")])
 def test_a_feature_inside_a_cap_is_lifted_onto_the_caps_own_front(ref, node, inner):
     """A child of the cap carries a lift RELATIVE to the cap, because lifts are
     summed down the tree. Each of these sits on the cap's face, so its lift is
@@ -256,8 +319,8 @@ def lib(tmp_path):
     root = tmp_path / "lib"
 
     def mpo_front(c):
-        c["parts"] = [{"id": "mtp1", "ref": "common/mpo-adapter@1", "at": [20.0, 12.0]},
-                      {"id": "mtp2", "ref": "common/mpo-adapter@1", "at": [60.0, 12.0]}]
+        c["parts"] = [{"id": "mtp1", "ref": "common/mpo-adapter@2", "at": [20.0, 12.0]},
+                      {"id": "mtp2", "ref": "common/mpo-adapter@2", "at": [60.0, 12.0]}]
         for k in ("optical", "faces"):
             c.pop(k, None)
     _copy(root, "fs/fhd-1mtp12-sc-os2-a", 2, "mpo-cassette", mpo_front)
@@ -337,19 +400,19 @@ def test_the_sc_cap_and_its_grip_stand_where_the_adapter_drew_them(tmp_path):
 
 
 def test_the_mpo_cap_seats_at_the_panel_because_its_aperture_presents_no_lift(tmp_path, lib):
-    """std/mpo@1's `mate` sits `on:` nothing, so it presents 0.0 and its
+    """std/mpo@2's `mate` sits `on:` nothing, so it presents 0.0 and its
     occupant is seated at the panel plane - which is why this cap's figures are
-    absolute from the panel and have to clear common/mpo-adapter@1's own bezel
+    absolute from the panel and have to clear common/mpo-adapter@2's own bezel
     by hand."""
     dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": MPO_CAP})
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     occ = occupant(root, parents, "bay-1/module/mtp1/bore", MPO_CAP)
     out, lift = front_of(parents, occ, inside(occ, "body"))
-    _, _, presented = presented_interface(contract("std/mpo@1"), contract)
+    _, _, presented = presented_interface(contract("std/mpo@2"), contract)
     assert presented == 0.0
     assert lift == pytest.approx(0.0, abs=1e-6)
     assert out == pytest.approx(feature(MPO_CAP, "body")["out"], abs=1e-6)
-    bezel = feature("common/mpo-adapter@1", "bezel")["out"]
+    bezel = feature("common/mpo-adapter@2", "bezel")["out"]
     assert out > bezel, "the cap would be buried in the adapter it plugs"
     assert float(inside(occ, "grip").get("data-z-out")) == pytest.approx(
         feature(MPO_CAP, "grip")["out"], abs=1e-6)
@@ -400,9 +463,17 @@ def test_a_pocket_inside_a_cap_never_stands_in_front_of_the_cap_face(tmp_path, l
         assert mouth <= front + 1e-6, (n.get("id"), mouth, front)
         assert mouth - float(n.get("data-depth")) >= base - 1e-6, \
             "the pocket cuts out through the back of the cap"
+    # A RAISED FEATURE STANDS ON SOMETHING: its back (the summed lift) is the
+    # cap's own front or the front of another raised feature of the same cap -
+    # the MPO cap's plate stands on its saddle, which stands on the face. A
+    # lift summed a second time lands on neither, which is the fault this holds.
+    surfaces = [front] + [float(n.get("data-z-out")) for n in raised]
     for n in raised:
         assert float(n.get("data-z-out")) > front, (n.get("id"), front)
-        assert effective_lift(parents, n) == pytest.approx(front, abs=1e-6)
+        back = effective_lift(parents, n)
+        assert back < float(n.get("data-z-out")), (n.get("id"), "built inside out")
+        assert any(back == pytest.approx(s, abs=1e-6) for s in surfaces), \
+            (n.get("id"), back, surfaces)
     assert pockets or raised, "this cap compiled no inner feature at all"
 
 

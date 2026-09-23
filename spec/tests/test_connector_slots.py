@@ -75,9 +75,9 @@ def test_every_cage_entry_says_its_kind(comps):
 
 def test_std_mpo_presents_mpo_at_its_centre():
     from portrayal.manifest import presented_interface
-    c = yaml.safe_load((LIB / "components/std/mpo/v1/contract.yaml").read_text())
+    c = yaml.safe_load((LIB / "components/std/mpo/v2/contract.yaml").read_text())
     iface, at, lift = presented_interface(c, lambda r: None)
-    assert (iface, at, lift) == ("mpo", [3.9, 2.8], 0.0)
+    assert (iface, at, lift) == ("mpo", [6.45, 4.0], 0.0)
 
 
 def test_a_wrappers_aperture_is_not_a_second_slot(comps):
@@ -93,13 +93,14 @@ def test_the_wrapper_is_the_slot_where_it_is_composed(comps):
     ON A COMPOSER BUILT HERE, because the library no longer has one: the FHD
     cassette rears that composed common/mpo-adapter@1 moved to
     common/mpo-flange-adapter@1 on main (#497, #499), which draws the plug's
-    end face and composes no std/mpo@1, and mpo-adapter@1 itself is now
+    end face and composes no std/mpo, and mpo-adapter (@2 since the aperture
+    was corrected) is now
     `unplaced`. So no library part publishes an mpo slot today; the forwarding
     is exercised on the real wrapper contract instead, and any library slot
     that does appear is held to the same shape."""
     lib = render_mod.Library([str(LIB)])
     composer = {"size": {"w": 80.0, "h": 30.0},
-                "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@1",
+                "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@2",
                            "at": [20.0, 12.0]}]}
     [slot] = render_mod.component_cages(composer, lib,
                                         render_mod._pluggable_families(),
@@ -121,7 +122,7 @@ def test_a_part_presenting_its_own_interface_keeps_its_composed_slots():
     families = render_mod._pluggable_families()
     connectors = render_mod._connector_registry()
     candidates = render_mod._pluggable_candidates([str(LIB)])
-    bore = {"ref": "std/mpo@1", "id": "bore", "at": [3.0, 1.9]}
+    bore = {"ref": "std/mpo@2", "id": "bore", "at": [0.45, 0.7]}
     forwarding = {"size": {"w": 13.8, "h": 9.4}, "parts": [bore]}
     own = {"size": {"w": 13.8, "h": 9.4}, "interface": "mpo",
            "connection-points": {"mate": {"at": [6.9, 4.7]}}, "parts": [bore]}

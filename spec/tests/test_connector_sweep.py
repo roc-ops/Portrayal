@@ -15,7 +15,7 @@ LIB = ROOT / "library" / "components"
 FIBRE_CONNECTORS = [
     "common/lc-duplex-adapter/v4", "common/lc-duplex-v-adapter/v5",
     "common/lc-duplex-shuttered-adapter/v1",
-    "common/mpo-adapter/v1", "common/mpo-flange-adapter/v1",
+    "common/mpo-adapter/v2", "common/mpo-flange-adapter/v1",
     "common/mpo24-flange-adapter/v1",
     "common/sc-duplex-adapter/v4",
     "common/st-simplex-adapter/v1", "common/fc-simplex-adapter/v1",
@@ -71,7 +71,7 @@ def test_the_sweep_covers_what_the_library_actually_has():
     omission and slip past silently, which is exactly the gap
     `test_every_fibre_connector_declares_its_capacity` cannot see either,
     since it only walks the hard-coded list above. `std/lc-bore/v3` and
-    `std/mpo/v1` are excluded because they set `relief.cavity`: that is what
+    `std/mpo/v2` are excluded because they set `relief.cavity`: that is what
     makes a component a hole cut in a face rather than a part that carries
     fibres, so they are apertures, not connectors, and the exclusion is keyed
     on that structural fact rather than an allowlist - a future `std/sc`

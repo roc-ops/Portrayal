@@ -20,11 +20,11 @@ wrong silently:
     plugs rather than redrawing a pair, and the point of that is a boot on one
     half. So the two halves' mate points are checked against the adapter's two
     bores IN THE DEVICE FRAME, and a boot is actually seated on one.
-  - THE MPO CONTRADICTION STAYS VISIBLE. The MPO plug is 12.5 x 7.6 printed
-    and std/mpo@1's aperture is 7.8 x 5.6 estimated; the plug does not fit the
-    hole. Nothing here fixes that - it is not this task's - but a test holds
-    the contradiction to being STATED on both sides, so it cannot go quiet the
-    next time somebody edits one of the three files.
+  - THE MPO PLUG FITS ITS HOLE. The MPO plug is 12.5 x 7.6 printed, and
+    std/mpo@1's 7.8 x 5.6 estimated opening could not take it; std/mpo@2
+    corrected the opening (12.9 x 8.0, still estimated). The plug is checked
+    inside the opening twice - on the contracts and on a build, in the device
+    frame - so a later edit to either side cannot reopen the gap in silence.
 
 Nothing in the library places any of these, so every seating is a configured
 occupant on a tmp_path copy of a real device, the idiom
@@ -49,6 +49,9 @@ DUPLEX = "generic/lc-duplex-plug@2"
 SC = "generic/sc-plug@1"
 MPO12 = "generic/mpo12-plug@1"
 MPO24 = "generic/mpo24-plug@1"
+# the opening both MPO plugs enter, and the panel adapter that composes it
+APERTURE = "std/mpo@2"
+ADAPTER = "common/mpo-adapter@2"
 LC = "generic/lc-plug@2"
 BOOT = "common/lc-boot@1"
 
@@ -192,25 +195,58 @@ def test_the_two_mpo_plugs_are_one_housing_with_two_ferrule_counts():
     assert "NO SOURCE HELD IN THIS CORPUS DIMENSIONS A TWO-ROW MT FERRULE" in note
 
 
-def test_the_mpo_contradiction_is_stated_on_both_sides():
-    """THE ONE FINDING OF THIS TASK'S INTAKE, and it is left standing rather
-    than patched: a 12.5 x 7.6 connector cannot enter std/mpo@1's 7.8 x 5.6.
+@pytest.mark.parametrize("ref", [MPO12, MPO24])
+def test_the_mpo_plug_envelope_fits_inside_the_opening(ref):
+    """REPLACES THE TASK 6 TEST THAT PINNED THE CONTRADICTION. A 12.5 x 7.6
+    connector (US Conec C20044 / C20851, printed) could not enter the 7.8 x 5.6
+    opening std/mpo@1 drew; std/mpo@2 corrects the opening, and what a test
+    can hold is the physical claim itself - on both axes the plug is smaller
+    than the hole it seats in, and the opening is the registry's figure, so L9
+    and this agree about which number is meant.
 
-    The plug is NOT fitted to the aperture - that is the thing a test has to
-    hold, because fitting it would make the library self-consistent and wrong.
-    So: the plug keeps its printed size, the aperture keeps its estimated one,
-    and all three files that know about the disagreement say so."""
-    plug, aperture = contract(MPO12), contract("std/mpo@1")
-    assert (aperture["size"]["w"], aperture["size"]["h"]) == (7.8, 5.6)
-    assert plug["size"]["w"] > aperture["size"]["w"]
-    assert plug["size"]["h"] > aperture["size"]["h"]
-    assert "ESTIMATED" in aperture["provenance"]["size"]
-    note = plug["provenance"]["aperture-contradiction"]
-    assert "NOTHING, DELIBERATELY" in note
-    # the cap that predicted it from the other direction still carries the
-    # hypothesis, so the two can be read together
-    assert "HYPOTHESIS" in contract("common/mpo-dust-cap@1")["provenance"]["aperture-doubt"]
-    assert "7.8 x 5.6" in standards()["mpo-plug"]["notes"]
+    The plug keeps its printed size: it is the aperture that moved, because it
+    was the weaker reading (an estimate off a render) against two callouts."""
+    plug, aperture = contract(ref), contract(APERTURE)
+    std = standards()[aperture["conforms"]]
+    assert (aperture["size"]["w"], aperture["size"]["h"]) == (std["w"], std["h"])
+    assert (plug["size"]["w"], plug["size"]["h"]) == (12.5, 7.6)
+    assert plug["size"]["w"] < aperture["size"]["w"], (plug["size"], aperture["size"])
+    assert plug["size"]["h"] < aperture["size"]["h"], (plug["size"], aperture["size"])
+    # the opening is still an ESTIMATE, and says so where L9 reads it
+    assert std["confidence"] == "estimated"
+
+
+def _corners(parents, el, w, h):
+    xs, ys = zip(*(device_point(parents, el, p) for p in ((0, 0), (w, 0), (0, h), (w, h))))
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _within(inner, outer, tol=1e-6):
+    return (inner[0] >= outer[0] - tol and inner[1] >= outer[1] - tol
+            and inner[2] <= outer[2] + tol and inner[3] <= outer[3] + tol)
+
+
+@pytest.mark.parametrize("ref", [MPO12, MPO24])
+def test_a_seated_mpo_plug_lies_inside_its_opening_and_the_opening_inside_its_adapter(
+        tmp_path, lib, ref):
+    """The same claim ON A BUILD, in the device frame: seat the plug on the
+    throwaway MTP cassette, map the plug's own outline, the aperture's and the
+    adapter's through every transform above them, and check they nest. This is
+    what a seated plug looks like to anyone reading the drawing, and a mate
+    point that landed off-centre would fail it even with the sizes right."""
+    dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": ref})
+    root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
+    occ = occupant(root, "bay-1/module/mtp1/bore", ref)
+    bore = by_path(root, "bay-1/module/mtp1/bore")
+    adapter = by_path(root, "bay-1/module/mtp1")
+    size = lambda r: (contract(r)["size"]["w"], contract(r)["size"]["h"])
+    plug_box = _corners(parents, occ, *size(ref))
+    hole_box = _corners(parents, bore, *size(APERTURE))
+    wrap_box = _corners(parents, adapter, *size(ADAPTER))
+    measured = [plug_box, hole_box, wrap_box]
+    assert all(b[2] - b[0] > 0 and b[3] - b[1] > 0 for b in measured), measured
+    assert _within(plug_box, hole_box), (plug_box, hole_box)
+    assert _within(hole_box, wrap_box), (hole_box, wrap_box)
 
 
 # --- the slots that offer them -----------------------------------------------------
@@ -226,7 +262,7 @@ def _accepts(comps, interface):
 
 # THE MPO PLUGS ARE CHECKED ON A COMPOSER BUILT HERE, not across the library:
 # since main moved the FHD cassette rears to common/mpo-flange-adapter@1 (#497,
-# #499), which composes no std/mpo@1, and marked common/mpo-adapter@1
+# #499), which composes no std/mpo, and marked common/mpo-adapter
 # `unplaced`, no library part publishes an mpo slot, and `_accepts` would find
 # nothing to ask.
 IN_LIBRARY = sorted(r for r in MATES if MATES[r] != "mpo")
@@ -239,14 +275,14 @@ def test_a_plug_is_offered_by_every_slot_of_its_interface(comps, ref):
 
 
 def test_an_mpo_slot_offers_both_mpo_plugs(comps):
-    """The real wrapper, common/mpo-adapter@1, composed into a throwaway
-    composer: its forwarded std/mpo@1 aperture is the slot, and the slot's
+    """The real wrapper, common/mpo-adapter@2, composed into a throwaway
+    composer: its forwarded std/mpo@2 aperture is the slot, and the slot's
     accept list - built from `mates`, as every connector slot's is - offers
     both plugs. Any mpo slot the library does publish is held to the same."""
     from portrayal import render as render_mod
     lib = render_mod.Library([str(LIB)])
     composer = {"size": {"w": 80.0, "h": 30.0},
-                "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@1",
+                "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@2",
                            "at": [20.0, 12.0]}]}
     [slot] = render_mod.component_cages(composer, lib,
                                         render_mod._pluggable_families(),
@@ -302,8 +338,8 @@ def lib(tmp_path):
     root = tmp_path / "lib"
 
     def mpo_front(c):
-        c["parts"] = [{"id": "mtp1", "ref": "common/mpo-adapter@1", "at": [20.0, 12.0]},
-                      {"id": "mtp2", "ref": "common/mpo-adapter@1", "at": [60.0, 12.0]}]
+        c["parts"] = [{"id": "mtp1", "ref": "common/mpo-adapter@2", "at": [20.0, 12.0]},
+                      {"id": "mtp2", "ref": "common/mpo-adapter@2", "at": [60.0, 12.0]}]
         for k in ("optical", "faces"):
             c.pop(k, None)
     _copy(root, "fs/fhd-1mtp12-sc-os2-a", 2, "mpo-cassette", mpo_front)
@@ -538,18 +574,18 @@ def test_the_sc_plug_seats_in_an_fhd_sc_cassette_bore(tmp_path):
 
 def test_the_mpo_plug_seats_at_the_panel_because_its_aperture_presents_no_lift(
         tmp_path, lib):
-    """std/mpo@1 puts its `mate` on nothing, so it presents 0.0 and an
+    """std/mpo@2 puts its `mate` on nothing, so it presents 0.0 and an
     occupant is seated at the panel plane - the same reason
-    common/mpo-dust-cap@1's figures are absolute from the panel."""
+    common/mpo-dust-cap@2's figures are absolute from the panel."""
     dev = fhd(tmp_path, "test/mpo-cassette@1", {"bay-1/mtp1/bore": MPO12})
     root, parents = face(build(dev, tmp_path / "o", lib), "fhd-1ufce", "base")
     occ = occupant(root, "bay-1/module/mtp1/bore", MPO12)
-    _, _, presented = presented_interface(contract("std/mpo@1"), contract)
+    _, _, presented = presented_interface(contract("std/mpo@2"), contract)
     assert presented == 0.0
     assert float(occ.get("data-z-lift") or 0.0) == pytest.approx(0.0, abs=1e-6)
     body = next(n for n in occ.iter() if (n.get("id") or "").endswith("--body"))
     assert float(body.get("data-z-out")) == pytest.approx(15.2, abs=1e-6)
     # and it stands in front of the adapter bezel rather than inside it
-    bezel = next(f for f in contract("common/mpo-adapter@1")["relief"]["features"]
+    bezel = next(f for f in contract("common/mpo-adapter@2")["relief"]["features"]
                  if f["node"] == "bezel")["out"]
     assert float(body.get("data-z-out")) > bezel
