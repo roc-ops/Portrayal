@@ -210,9 +210,13 @@ def test_the_index_carries_a_parts_other_faces():
     # 23, not 18: the FHD polarity twins - fhd-1mtp6lcd-os2-af, -os2-u,
     # fhd-2mtp12-lc-os2-af, -os2-u and fhd-1mtp24-lc-os2-af - each declare
     # `faces.rear`, their Type A twins' bodies in Type AF or universal wiring.
+    # 33, not 23: the ten FHD media twins - OM4 fhd-1mtp6lcd-om4-a, -om4-u,
+    # fhd-2mtp12-lc-om4-a, -om4-u, fhd-1mtp24-lc-om4-a; OM5 fhd-1mtp6lcd-om5-a,
+    # fhd-2mtp12-lc-om5-a, fhd-1mtp24-lc-om5-a; OM3 fhd-2mtp12-lc-om3-a,
+    # fhd-1mtp24-lc-om3-a - each declare their OS2 twin's `faces.rear`.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 23, \
-        f"expected exactly 23 of {len(entries)} entries to carry a faces " \
+    assert len(with_faces) == 33, \
+        f"expected exactly 33 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

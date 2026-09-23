@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-671 component majors in 13 namespaces.
+681 component majors in 13 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -83,7 +83,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 4 | 3 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 3 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
 | `common/lc-duplex-adapter@4` | component | port | 13.2 × 11 |  | 3 | 13 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
-| `common/lc-duplex-v-adapter@4` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 10 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-v-adapter@4` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 20 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
 | `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 153 | Tiny round port LED (2mm) |
@@ -468,28 +468,38 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 
-## fs/ (20)
+## fs/ (30)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `fs/fhd-1mtp12-sc-os2-a@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP6SCDOS2A - MTP-12 (male) to six SC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp12-sc-rear@3` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from behind, carrying its single MTP-12 t… |
 | `fs/fhd-1mtp24-lc-af-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP12LCDOS2AF (SKU 68549): the MTP-24 cassette's body seen from behind, with its polarity… |
-| `fs/fhd-1mtp24-lc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-1MTP12LCDOS2A - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
+| `fs/fhd-1mtp24-lc-om3-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-MTP2412LCDXOM3A - MTP-24 (male) to twelve LC duplex, 24 fibres, OM3, Type A |
+| `fs/fhd-1mtp24-lc-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP12LCDOM4A - MTP-24 (male) to twelve LC duplex, 24 fibres, OM4, Type A |
+| `fs/fhd-1mtp24-lc-om5-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP12LCDOM5A - MTP-24 (male) to twelve LC duplex, 24 fibres, OM5, Type A |
+| `fs/fhd-1mtp24-lc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 4 | FS FHD-1MTP12LCDOS2A - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp24-lc-os2-af@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP12LCDOS2AF - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2, Type AF polarity |
-| `fs/fhd-1mtp24-lc-rear@3` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-1MTP12LCDOS2A (SKU 57023): the cassette body seen from behind, carrying its single MTP-24 … |
+| `fs/fhd-1mtp24-lc-rear@3` | component | cassette | 99 × 31 |  | 0 | 5 | The back of FS FHD-1MTP12LCDOS2A (SKU 57023): the cassette body seen from behind, carrying its single MTP-24 … |
 | `fs/fhd-1mtp6lcd-af-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6LCDOS2AF (SKU 57037): the AF cassette's body seen from behind, with its polarity labe… |
-| `fs/fhd-1mtp6lcd-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 8 | FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A polarity |
+| `fs/fhd-1mtp6lcd-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP6LCDOM4A - MTP-12 (male) to six LC duplex, 12 fibres, OM4, Type A |
+| `fs/fhd-1mtp6lcd-om4-u@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP6LCDOM4U - MTP-12 (male) to six LC duplex, 12 fibres, OM4, universal polarity |
+| `fs/fhd-1mtp6lcd-om5-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-1MTP6LCDOM5A - MTP-12 (male) to six LC duplex, 12 fibres, OM5, Type A |
+| `fs/fhd-1mtp6lcd-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 10 | FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A polarity |
 | `fs/fhd-1mtp6lcd-os2-af@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-1MTP6LCDOS2AF - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type AF polarity: the Type A cassette'… |
-| `fs/fhd-1mtp6lcd-os2-u@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-1MTP6LCDOS2U - MTP-12 (male) to six LC duplex, 12 fibres, OS2, universal polarity: one cassette used a… |
-| `fs/fhd-1mtp6lcd-rear@3` | component | cassette | 99 × 31 |  | 0 | 7 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
-| `fs/fhd-1mtp6lcd-u-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-1MTP6LCDOS2U (SKU 182641): the universal-polarity cassette's body seen from behind - the M… |
+| `fs/fhd-1mtp6lcd-os2-u@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 2 | FS FHD-1MTP6LCDOS2U - MTP-12 (male) to six LC duplex, 12 fibres, OS2, universal polarity: one cassette used a… |
+| `fs/fhd-1mtp6lcd-rear@3` | component | cassette | 99 × 31 |  | 0 | 9 | The back of FS FHD-1MTP6LCDOS2A (SKU 57016): the cassette body seen from behind, carrying its single MTP-12 t… |
+| `fs/fhd-1mtp6lcd-u-rear@2` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-1MTP6LCDOS2U (SKU 182641): the universal-polarity cassette's body seen from behind - the M… |
 | `fs/fhd-2mtp12-lc-af-rear@1` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-2MTP12LCDOS2AF (SKU 68540): two MTP-12 trunk bulkheads - 13-24 on the left, 1-12 on the ri… |
-| `fs/fhd-2mtp12-lc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 3 | FS FHD-2MTP12LCDOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
+| `fs/fhd-2mtp12-lc-om3-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP1212LCDXOM3A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OM3, Type A |
+| `fs/fhd-2mtp12-lc-om4-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP12LCDOM4A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OM4, Type A |
+| `fs/fhd-2mtp12-lc-om4-u@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP12LCDOM4U - two MTP-12 (male) to twelve LC duplex, 24 fibres, OM4, universal polarity |
+| `fs/fhd-2mtp12-lc-om5-a@1` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP12LCDOM5A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OM5, Type A |
+| `fs/fhd-2mtp12-lc-os2-a@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 6 | FS FHD-2MTP12LCDOS2A - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, Type A polarity |
 | `fs/fhd-2mtp12-lc-os2-af@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP12LCDOS2AF - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, Type AF polarity |
-| `fs/fhd-2mtp12-lc-os2-u@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD-2MTP12LCDOS2U - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, universal polarity |
-| `fs/fhd-2mtp12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-2MTP12LCDOS2A (SKU 57341): the cassette body seen from behind, carrying its two MTP-12 tru… |
-| `fs/fhd-2mtp12-lc-u-rear@1` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD-2MTP12LCDOS2U (SKU 182643): two MTP-12 trunk bulkheads - 13-24 on the left, 1-12 on the ri… |
+| `fs/fhd-2mtp12-lc-os2-u@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 1 | FS FHD-2MTP12LCDOS2U - two MTP-12 (male) to twelve LC duplex, 24 fibres, OS2, universal polarity |
+| `fs/fhd-2mtp12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 4 | The back of FS FHD-2MTP12LCDOS2A (SKU 57341): the cassette body seen from behind, carrying its two MTP-12 tru… |
+| `fs/fhd-2mtp12-lc-u-rear@1` | component | cassette | 99 × 31 |  | 0 | 2 | The back of FS FHD-2MTP12LCDOS2U (SKU 182643): two MTP-12 trunk bulkheads - 13-24 on the left, 1-12 on the ri… |
 | `fs/fhd-splice-12-lc@2` | module | cassette | 108.97 × 35.05 × 117.86 |  | 1 | 0 | FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers |
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
 

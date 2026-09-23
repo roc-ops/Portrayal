@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-v-adapter
-version: 4.0.1
+version: 4.1.0
 class: port
 profile: networking
 description: >-
@@ -26,6 +26,11 @@ size-notes: >-
   compiled as an aperture, a pit behind its whole box; how far this body stands
   OUT of the plate is carried by `relief` instead, where it belongs.
 attrs: {media: fiber, connector: lc}
+fields:
+  housing-finish:
+    label: Housing colour
+    type: text
+    default: '#2d91d8'
 optical:
   positions: 2
 relief:
@@ -93,7 +98,24 @@ provenance:
   colour: >-
     sampled off 57016.main.jpg: the adapter body's median blue is
     rgb(45,145,216), #2d91d8, and the cap rgb(231,231,233). The blue is FS's
-    UPC colour; an APC adapter would be green.
+    single-mode UPC colour - an APC adapter would be green, whatever its fibre
+    - and the `housing-finish` default; a cassette of another fibre sets its
+    own through the field, as `attrs:` on each composed adapter. THE COLOUR
+    FOLLOWS THE MEDIUM, NOT A CONVENTION, AND EACH WAS COUNTED. One selection
+    rule - saturation (max - min) over 60, value over 150, hue within 30
+    degrees of the image's dominant one - is tuned until it reproduces this
+    recorded blue off 57016.main (it gives #2f90d4, 7 levels out) and then
+    applied unchanged to FS's face-on renders of every medium: OS2 #2f90d4
+    57016.main, #2f8fd4 57023.B - one blue across layouts; OM4 #1dcbd3 57017.B
+    and #18d1dc 182642.g1 (12-fibre plates) but #54ccde 57024.B and #53d0e5
+    182644.g1 (24-fibre plates) - two aquas, each pair agreeing across separate
+    uploads, so the split is in FS's renders, not in the sampling; OM3 #4dcfe3
+    382889.g1, #4ecee4 382897.g1 - the 24-fibre OM4 aqua again, not a colour of
+    its own; OM5 #a1af65 174246.g1, #a0ae61 174248.g1 - an olive lime, darker
+    than the conventional OM5 lime would have drawn it. Each cassette carries
+    the colour its OWN renders show. The outline follows the fill through
+    `data-stroke-derive` (each channel x 61/100), so the drawn default's stroke
+    is #1b5884, the shade of #2d91d8; until 4.1.0 it was a hand-picked #1d6aa6.
   face-detail-gap: >-
     No dimensioned drawing of this adapter has been obtained. The 9.28 x 13.75
     outline is measured, the cap is photo-measured, the stand-off heights come

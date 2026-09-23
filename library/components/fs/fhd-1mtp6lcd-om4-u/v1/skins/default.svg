@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108.97mm" height="35.05mm" viewBox="0 0 108.97 35.05">
+  <!-- FHD-1MTP6LCDOM4U (FS SKU 182642) wears fs/fhd-1mtp6lcd-os2-u@2's
+       faceplate unchanged; its OM4 adapter colour is set by the contract. What
+       follows is the twin's own header.
+
+      FHD-1MTP6LCDOS2A faceplate, 108.97 x 35.05, FS SKU 57016 - measured off
+       FS's own face-on render, see the contract's size-notes.
+
+       THE SIX LC CUTOUTS ARE NOT DRAWN HERE. Each of the six
+       common/lc-duplex-v-adapter@4 parts the contract composes draws its own
+       bezel and its own two port openings at its `at` position - the same
+       reason common/mpo-adapter@1's plate leaves its aperture undrawn (see
+       that skin's header). Drawing a second rect under each composed adapter
+       would be a duplicate of geometry the composed part already owns, and
+       the two copies would drift the day one of them is edited and the other
+       is not.
+
+       THE TWO THUMB-KNOBS ARE MEASURED, on six face-on renders FS drew
+       separately - three 12-fibre (57016.main, 174246.g1, 182642.g1) and three
+       24-fibre (57341.B, 174248.g1, 182644.g1). Each is framed on the plate's
+       own left and right edges at its centre row and scaled on that width,
+       108.97 mm; panel_measure.measure() supplied only the height check,
+       because its x0 was then taken on the plate's rounded corner (fixed
+       since, in this major). A circle fitted to the
+       lower arc of each knob's front face gives r 4.04-4.13 across all twelve
+       knobs. That face stands proud and the camera sits above the plate, so
+       the renders draw it displaced outward and down; the knob's AXIS is read
+       from its base instead - the lit barrel's inboard side and its top, one
+       radius in - at 4.99-5.29 mm from the plate edge, the same at both ends
+       and on both cassette widths, and 17.53-17.75 mm down, on the plate's
+       centre line. Drawn at 5.10 from each edge, r 4.10, centred vertically.
+       The circles this replaces (cx 7.9 / 101.07, r 3.1) were placed by eye
+       and sat 2.8 mm inboard. -->
+  <defs>
+    <linearGradient id="bez" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c4248"/>
+      <stop offset="1" stop-color="#23272c"/>
+    </linearGradient>
+    <radialGradient id="knob" cx="0.35" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#4a5056"/>
+      <stop offset="1" stop-color="#1c1f22"/>
+    </radialGradient>
+  </defs>
+  <rect id="bezel" x="0" y="0" width="108.97" height="35.05" rx="1.5"
+        fill="url(#bez)" stroke="#15181a" stroke-width="0.3"/>
+  <circle id="thumb-knob-left" cx="5.1" cy="17.525" r="4.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <circle id="thumb-knob-right" cx="103.87" cy="17.525" r="4.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <!-- THE PORT NUMBERS, AND ONLY FOUR OF THEM. FS prints the pair at each END
+       of the row and nothing in between: `2` over `1` left of the first
+       adapter, `12` over `11` right of the last (57016.main.jpg, and the photo
+       is what settles it - the odd number is the LOWER bore, which is the same
+       reading common/lc-duplex-v-adapter@4 composes its bores in). Measured on
+       that render calibrated on the ADAPTERS rather than on the plate edge (the
+       plate's rounded corner and its shadow put the box 2% out): the digits are
+       right-aligned 1.56 left of the first adapter and left-aligned 2.11 right
+       of the last, cap height 2.50, which is a 3.5 font-size. -->
+  <g id="silkscreen">
+    <text id="port-2" x="15.71" y="14.77" font-size="3.5" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">2</text>
+    <text id="port-1" x="15.71" y="22.09" font-size="3.5" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">1</text>
+    <text id="port-12" x="93.59" y="14.77" font-size="3.5" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">12</text>
+    <text id="port-11" x="93.59" y="22.09" font-size="3.5" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">11</text>
+  </g>
+</svg>
