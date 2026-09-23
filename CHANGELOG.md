@@ -15,6 +15,22 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- Component groups: a component declares `groups:` in the device shape and a
+  part joins one with `group:`. A port on a module seated in a bay, at any
+  depth, now carries `data-group`, `data-group-role` and its group's attrs
+  and description, with the part's own attrs winning. A cage on such a card
+  publishes the group's side as `occupant-attrs`, and the build writes the
+  same attrs on an optic seated there. `components.json` carries each part's
+  `group` and the component's `groups`, and module-type exports type a card
+  port from its group's attrs and mark a `management` group's ports
+  `mgmt_only`. A component group's role takes the device group's six values,
+  `fabric` included, and L110 reads a component group's `speed` as it reads a
+  device group's (roc-ops/Portrayal#511).
+- `data-inner="1"` on the inner part of a composed port, the `std/*` core that
+  `common/rj45-eth@1`, `common/qsfp28-cage@3`, `common/sfp-plus-cage@2` and
+  `common/rj45-ganged-eth@1` draw as a nested `data-class="port"` element.
+  The core keeps its class. An audit that counts ports should skip it with
+  `[data-class=port]:not([data-inner])` (roc-ops/Portrayal#511).
 - Every `configs[]` entry in `<device>.configs.json` carries `airflow` —
   `front-to-back`, `back-to-front`, `side` or `passive`, or `null` where the
   device states none — resolved the way each drawing's `data-airflow` is (the
@@ -40,6 +56,17 @@ the *published build*, not about the hardware.
   finds `dcs510` (roc-ops/Portrayal#514).
 
 ### Changed
+- Ten routing-engine, control-board and sled modules now group their ports:
+  `juniper/jnp10k-re1@2`, `re-s-1300@1`, `re-s-1300-v@1`,
+  `mx2000-cb-re-v@1`, `mx2008-rcb-v@1`, `jnp10003-rcb@1`, `jnp304-re@1`,
+  `mx104-re@1`, `cisco/a99-rp-f@1` and `edgecore/amx-3200-sled400@1`.
+  Management and timing jacks are role `management`, and the sled's CFP2 and
+  QSFP28 ports are role `traffic` at 400g and 100g. Management Ethernet
+  states 1g where a guide gives the rate; the RE-S-1300's sources disagree,
+  so it has none. The port media are corrected: console and auxiliary ports
+  `rj45-serial`, ToD `rj45-tod`, BITS `rj48` (all were `rj45`). Each module
+  took a minor bump, and the fifteen devices that seat them took a patch
+  bump. Part ids are unchanged (roc-ops/Portrayal#511).
 - `data-speed` is spelled from one closed set - `10m 100m 1g 2.5g 5g 10g 20g
   25g 40g 50g 100g 200g 400g 800g 1.6t`, in `spec/schemas/speeds.yaml` - and
   means the highest native rate the port runs at. **Values a consumer may filter

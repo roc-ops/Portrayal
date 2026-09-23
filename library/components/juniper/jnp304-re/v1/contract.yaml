@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp304-re
-version: 1.2.1
+version: 1.3.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -24,6 +24,13 @@ attrs:
   storage: 2x200-GB M.2 SATA SSD
   platform-security: TPM 2.0, secure boot
 provenance:
+  speed: 'guide - MX304 hardware guide: one 10/100/1000 BASE-T RJ45 management port, and the
+    pinout section calls the MGMT port an autosensing 10/100/1000-Mbps receptacle. Carried as
+    1g, the closed speed vocabulary''s spelling of that tri-speed jack; it was the prose 10/100/1000
+    on the part'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
   size: 'datasheet-table + photo - Table 22 states the Routing Engine envelope
     8.01 x 1.58 x 8.0 in (203.5 x 40.1 x 203.2 mm). The DRAWN face is the
     197.6 mm visible plate measured off the straight-on DAM front photograph
@@ -62,12 +69,20 @@ states:
 - ok
 - fail
 - absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
 parts:
-- {ref: std/rj45@2, id: console, at: [82.9, 17.7], attrs: {function: serial console}}
-- {ref: common/rj45-eth@1, id: mgmt, at: [118.4, 17.7], attrs: {function: out-of-band management, speed: 1g},
+- {ref: std/rj45@2, id: console, group: mgmt, at: [82.9, 17.7], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [118.4, 17.7], attrs: {media: rj45, function: out-of-band management, speed: 1g},
    states: {led-a: ['off', {name: activity, color: '#22c55e', behavior: blinking}],
             led-b: ['off', {name: 10-100, color: '#eab308'}, {name: '1000', color: '#22c55e'}]}}
-- {ref: std/usb-a@1, id: usb, at: [137.4, 21.75], rotate: 90, attrs: {function: USB 3.0 service port}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [137.4, 21.75], rotate: 90, attrs: {function: USB 3.0 service port}}
 elements:
   lever-left:
     at: [1.6, 3.3]
