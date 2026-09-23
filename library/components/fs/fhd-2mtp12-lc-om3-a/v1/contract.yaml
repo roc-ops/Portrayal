@@ -135,11 +135,12 @@ provenance:
     does. Until those corrections this entry read every x about 1.5 mm low, as
     every FHD figure measured with the tool did; the marks moved with them.
     DOWN, FROM THE NEAREST DIGIT THIS SKIN ALREADY DRAWS, not from the plate
-    frame: its y scale runs 2.5-2.7% off 35.05 on these renders, and a fit on
-    the four digit baselines disagrees with the x scale by 3.6%, so a mark 27
-    mm down would carry up to 0.7 mm of frame error - enough to move the code
-    tag visibly off its port number. Measured locally the error is under 0.1
-    mm. The MTP tag spans 5.00 to 2.07 above the `24` baseline (7.55), so y
+    frame: the plate frame's height is the part of it the tool has had to
+    correct most - 2.5-2.7% off 35.05 on these renders before #506, -1.1 to
+    -1.4% after - and a mark 27 mm down carries that error whole, where a mark
+    measured from the digit beside it carries almost none (under 0.1 mm). The
+    first placement, off the frame, put the code tag visibly off its port
+    number. The MTP tag spans 5.00 to 2.07 above the `24` baseline (7.55), so y
     2.55-5.48, its ink baseline 2.58 above; the code tag spans 2.66 above to
     0.17 below the `11` baseline (30.51), so y 27.85-30.68, its ink baseline
     0.25 above; the `FHD` baseline sits 0.25 below the `1` baseline, 30.77.
@@ -162,10 +163,12 @@ provenance:
     Baselines are the twin's, unchanged - they are what the tags above are
     measured from. At the twin's bold 3.5 the `11` ran into the code tag.
   logo-zone: >-
-    photo-measured - a round logo mark sits at the upper left, 3.0-9.1 x
-    2.25-8.25 on both OM3 renders. IT IS NOT DRAWN: vendor logos are not
-    reproduced (library/components/README.md); the zone is reserved and left as
-    plate.
+    photo-measured - a round logo mark sits at the upper left, 3.0-9.1 across
+    on both OM3 renders, in the corrected frame; down, its foot sits 0.86-0.92
+    below the `14` baseline beside it, so the zone runs 2.5-8.45 - measured
+    from the digit, like every other mark here, not from the plate frame's
+    height. IT IS NOT DRAWN: vendor logos are not reproduced
+    (library/components/README.md); the zone is reserved and left as plate.
 elements:
-  logo-zone: {at: [3.0, 2.25], size: [6.1, 6.0], class: label}
+  logo-zone: {at: [3.0, 2.5], size: [6.1, 5.95], class: label}
 skins: [default]
