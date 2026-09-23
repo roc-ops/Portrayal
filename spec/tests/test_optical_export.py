@@ -57,7 +57,7 @@ def test_the_index_carries_a_connectors_positions():
 
 def test_the_index_carries_a_modules_paths():
     idx = index()
-    c = idx["fs/fhd-1mtp6lcd-os2-a@3"]
+    c = idx["fs/fhd-1mtp6lcd-os2-a@4"]
     opt = c.get("optical") or {}
     assert opt.get("media") == "os2"
     assert len(opt.get("paths") or []) == 12
@@ -77,7 +77,7 @@ def test_capacities_answers_from_the_built_index():
     """
     from portrayal import dcim_export as D
     idx = index()
-    caps = O.capacities(D.contract_view(idx["fs/fhd-1mtp6lcd-os2-a@3"]),
+    caps = O.capacities(D.contract_view(idx["fs/fhd-1mtp6lcd-os2-a@4"]),
                         lambda ref: idx.get(ref))
     assert caps == {"lc1": 2, "lc2": 2, "lc3": 2, "lc4": 2, "lc5": 2, "lc6": 2,
                     "rear:mtp": 12}
@@ -92,7 +92,7 @@ def test_the_cassette_is_an_orderable_module():
     selects on `kind`, so the part simply never reached the exporter.
     """
     idx = index()
-    c = idx["fs/fhd-1mtp6lcd-os2-a@3"]
+    c = idx["fs/fhd-1mtp6lcd-os2-a@4"]
     assert c["kind"] == "module"
     assert c["class"] != "module", "`class: module` says nothing; name the thing"
 

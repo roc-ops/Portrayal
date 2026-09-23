@@ -1,0 +1,129 @@
+format: 1
+kind: module
+name: ppm-dcm-20
+version: 2.1.0
+class: filter
+behaviour: fills
+profile: optical
+description: Smartoptics PPM-DCM20-100GHz - a passive plug-in module holding a
+  channelised Fiber Bragg Grating that applies the opposite dispersion of 20km of
+  standard single-mode fibre. One LC duplex adapter, Rx in and Tx out, on a
+  half-height plate that seats in a DCP-F carrier's PPM bay.
+size: {w: 55.4, h: 19.5}
+attrs:
+  model: PPM-DCM20-100GHz
+  media: fiber
+  role: dispersion-compensation
+  compensating-length-km: '20'
+  channel-spacing-ghz: '100'
+provenance:
+  major: >-
+    Composes the duplex adapter at v5, whose bores are numbered 1 and 2
+    instead of tx and rx, so every path under this part changes
+    (`dcm/tx` -> `dcm/1`); nothing drawn moved.
+  size: >-
+    borrowed - smartoptics/ppm-ad1-1510@2, whose 55.4 x 19.5 is itself ESTIMATED from
+    four agreeing inferences rather than measured. NO DOCUMENT IN THE CORPUS DIMENSIONS
+    ANY PPM: ds-ppm-r4.0 gives all eight parts a spec table and none of them a
+    mechanical section. What makes borrowing right rather than lazy is that these
+    plates fill the SAME bay in the same carrier, and the library must not hold two
+    answers for one aperture. Read that part's `size` key for how weak the figure is.
+  what-it-is: >-
+    datasheet - ds-ppm-r4.0 section "DCM MODULES": each DCM module holds a channelized
+    Fiber Bragg Grating (FBG) dispersion compensator that cancels the dispersion of 10km,
+    20km, 40km or 80km of SM fiber, one length per member. This one is the 20km member:
+    compensating length 20km, channel spacing 100GHz, operation bandwidth 72GHz,
+    dispersion -310ps/nm at 196.3THz and -356ps/nm at 191.3THz, insertion loss Rx to Tx
+    at most 3dB.
+  ports: >-
+    datasheet render and stencil master ppm-dcm-20, which agree - ONE duplex pair,
+    captioned DCM above and Tx / Rx in a white box below. Two bores. The datasheet's
+    own signal-flow figure labels them Rx in and Tx out, which is why the caption
+    reads Tx on the left: "Signals entering the module are denoted Rx. Signals exiting
+    the module are denoted Tx."
+  port-positions: >-
+    MEASURED TWICE, ON TWO DOCUMENTS, AND ACROSS ALL FOUR MEMBERS. The duplex-pair
+    centre reads 10.83-10.87 on the four stencil masters and 11.22-11.47 on the four
+    datasheet renders, all scaled on the 55.4 width; the eight readings mean 11.09 and
+    the adapter is placed at 4.50 so its centre lands there.
+    THE ADAPTER IS THE LIBRARY'S, NOT THE ARTWORK'S. Both drawings space the pair's
+    bores about 7.2 apart where common/lc-duplex-adapter@5 spaces them 6.25 - the
+    IEC 61754-20 / TIA-604-10 FOCIS 10 pitch verified in standards.yaml, not the 6.6
+    this same Smartoptics DCP-R stencil reads for it. The connector is the part the
+    library already owns, so only the POSITION is taken from these renders.
+    ONE FIGURE FOR ALL FOUR, because the spread across the eight readings is 0.6 and
+    no part of it correlates with the compensating length. Four different numbers here
+    would be reporting render noise as mechanical difference.
+  face-layout: >-
+    the adapter block runs y 3.86-4.02 to 14.99-15.10 across five renders in two
+    documents, and the white caption box 16.15-16.37 to 18.22-18.32. Taken as 4.0 and
+    16.2 x 2.05, the same figures as the rest of the family.
+    THE BODY IS THE READING HERE, SO THE BODY STAYS (B3, 2026-09-23). What this
+    part's sources measured is the adapter BLOCK above, not a fibre, so the
+    placements keep y 4.0 and the ferrules move inside the body instead:
+    common/lc-duplex-adapter@5 puts its ferrule axis 5.82 from the latch-side
+    edge where @4 put it at 5.5, so the fibre axis here is y 9.82, 0.32 below
+    where 4.0 and @4 put it. The DCP-R and DCP-M32 faces do the opposite, because
+    their source is the fibre - the stencil's connection points - so there the
+    fibre stays and the body moves.
+  connector: >-
+    datasheet - ds-ppm-r4.0's "GENERIC FOR ALL PPM-DCMxx-100GHZ MODULES" table:
+    "Connector type LC/UPC". Worth stating because THE ARTWORK DISAGREES: the stencil
+    master's adapters read as SC at a glance, on this part as on every other PPM.
+    This is also the source for `optical.polish: upc` - a vendor-stated fact, not
+    the FHD cassette's convention default.
+  marking: >-
+    datasheet render and stencil master - the part number is silkscreened VERTICALLY UP
+    THE RIGHT-HAND EDGE, as on the rest of the family.
+  legend-conflict: >-
+    THE SOURCES DISAGREE ABOUT THE EMPTY HALF, and the datasheet wins. The DCP-F
+    stencil master draws a large "DCM 20km" legend across the right of the plate;
+    ds-ppm-r4.0's render of the same part leaves it blank, carrying only the small DCM
+    label above the adapter, the Tx/Rx box and the vertical part number. ds-ppm-r4.0 is
+    the product document for the whole family and is what fixes every part number here,
+    so it is taken as the metal; the stencil is artwork for network diagrams, where a
+    legend legible at diagram scale is worth adding and a bare plate is not.
+    WHAT THAT COSTS: nothing on the face distinguishes a 10km from an 80km except the
+    vertical part number, which is how the datasheet draws all four.
+  depth: >-
+    borrowed - smartoptics/ppm-ad1-1510@2's ESTIMATED 60, on the reasoning that a
+    passive module of the same family in the same bay is the same object behind the
+    face. No document gives a depth for any PPM. An FBG-based DCM is a fibre spool and
+    a grating, so 60 is if anything generous; treat it as a placeholder with a ceiling
+    - the carrier is 270 deep - and replace it the moment anything states one.
+  face-detail-gap: >-
+    no orthographic photograph of a PPM exists; both readings above are of DRAWINGS.
+    Lamp inventory and any marking other than the part number are unknown, and the
+    module may well carry none - a passive filter has nothing to report.
+elements:
+  caption-dcm: {at: [4.50, 16.2], size: [13.2, 2.05], class: marking}
+parts:
+  - {ref: common/lc-duplex-adapter@5, id: dcm, at: [4.50, 4.0], attrs: {role: dcm}}
+optical:
+  # RX IN, TX OUT, THROUGH THE GRATING. ds-ppm-r4.0's flow figure for these
+  # modules draws Rx entering and Tx leaving, and says so in prose: "Signals
+  # entering the module are denoted Rx. Signals exiting the module are denoted
+  # Tx." Bore 1 is Tx and bore 2 is Rx - the order the faceplate captions them
+  # and the order common/lc-duplex-adapter@5 composes its bores.
+  #
+  # ONE PATH, NOT TWO. A DCM is not a duplex pass-through; it is a single fibre
+  # path through a Bragg grating that applies 20km of opposite dispersion. Both
+  # bores are ends of that one path.
+  media: os2
+  polish: upc
+  paths:
+    - {from: dcm.2, to: dcm.1}
+relief:
+  wall: '#22262a'
+  features:
+    # NOT `out` ON THE BODY. A plate that stands proud of its own panel buries
+    # everything drawn on it - see smartoptics/ppm-ad1-1510@2, which carries the
+    # same note and the same reason. The plate IS the panel; the adapter recesses.
+    - node: caption-dcm
+      out: 0.15
+      confidence: estimated
+      source: a printed caption panel, drawn barely proud so it reads as label rather than hole
+body:
+  depth: 60.0        # estimated - see provenance/depth
+  color: '#33383d'
+skins: [default]

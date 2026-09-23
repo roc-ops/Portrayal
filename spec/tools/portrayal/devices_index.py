@@ -13,7 +13,7 @@ import yaml
 
 from portrayal import attrsections as attrs_mod
 from portrayal import capability
-from portrayal.manifest import view_parts, load_yaml
+from portrayal.manifest import view_parts, load_yaml, alias_names
 from portrayal import libwalk
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
@@ -68,6 +68,9 @@ def search_blob(d, ddir=None):
     # that matches everything is worse than one that matches nothing.
     take(attrs_mod.flatten(d.get("attrs")))
     take(d.get("part-numbers") or {})
+    # every other name the box is sold or listed under (#514), so an HCL's AS
+    # number or a DriveNets name typed into the filter finds the drawing
+    take(alias_names(d))
     for g, gdef in (d.get("groups") or {}).items():
         words.append(g)
         gdef = gdef or {}
@@ -173,6 +176,8 @@ def main():
                 "capability": cap["capability"],
                 "gaps": cap["gaps"],
                 "model": d.get("model", d["name"]),
+                # the box's other names, `model` excluded (#514)
+                "aliases": alias_names(d),
                 "manufacturer": d.get("manufacturer", ""),
                 # THE NAMESPACE, because a consumer cannot recover it. `name` is
                 # bare - `c100g`, not `casa/c100g` - and components.json keys its

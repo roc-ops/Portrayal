@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: eps112
-version: 1.0.2
+version: 1.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-30P
+aliases:
+- {name: EPS112, kind: marketing}
 portfolio: {line: Enterprise, family: Access Switch, series: EPS112}
 description: >-
   24 x 1G RJ-45 PoE plus 6 x 1G/10G SFP+ 1RU access switch, sold as the EPS112 and stamped
@@ -561,7 +563,7 @@ views:
       - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [406.88, 11.65], rotate: 180, group: mgmt, rel-pos: 1,
         attrs: {media: rj45, speed: 1g, role: out-of-band}}
       - {ref: std/rj45-ganged@2, id: console, at: [406.88, 25.41], group: mgmt, rel-pos: 2,
-        attrs: {media: rj45, role: console}}
+        attrs: {media: rj45-serial, role: console}}
       - {ref: std/usb-a@1, id: usb, at: [424.38, 27.69], rotate: 90, group: mgmt, rel-pos: 3,
         attrs: {media: usb-a, role: storage}}
       - {ref: common/reset-button@1, id: reset, at: [98.28, 3.49], group: mgmt, rel-pos: 4, for: chassis}

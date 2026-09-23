@@ -81,8 +81,11 @@ data. Three of this sweep's candidates did not survive it:
   Ethernet row. Dell's own master is named `2x10gb-bt-2x1gb`: two of the four are
   10GBASE-T and the model does not say which. The exporter is right to refuse it;
   the **model** is what is incomplete (#287).
-- **`common/sc-apc` at `10g-pon`.** Upstream separates `xg-pon` (10G/2.5G) from
-  `xgs-pon` (10G/10G) and the model does not say which. Typing it would pick one.
+- **`common/sc-apc` on a PON port.** Upstream separates `xg-pon` (10G/2.5G) from
+  `xgs-pon` (10G/10G), and the connector ref cannot say which: the same SC/APC
+  ferrule serves both. Typing the ref would pick one. (The one device that places
+  it now states `pon: xgs-pon` on the port, so a device-level row could; the
+  ref-keyed register cannot.)
 
 And it is not only candidates that fail step three. A *rule* can too, and the
 same check catches it. Three parts in a row turned out to be thin wrappers over a

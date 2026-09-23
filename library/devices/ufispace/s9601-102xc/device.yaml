@@ -1,10 +1,22 @@
 format: 1
 kind: device
 name: s9601-102xc
-version: 3.0.0
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-102XC
+aliases:
+- name: NCP-96X6C-S
+  kind: oem
+  shared: true
+  note: >-
+    The DriveNets name for this chassis (Network Cloud Packet forwarder, 96x1/10/25 + 6x100).
+    NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal
+    analysis matching DriveNets' NCP-96X6C-S (Q2C 2.4T) to this chassis on published silicon and
+    port configuration. The map names the S9600-102XC OR this Ice Lake refresh for the same
+    DriveNets name, so the alias is not unique to one of the pair. Recorded so a search for
+    either name finds this box; no DriveNets figure or artwork is transcribed anywhere in this
+    file.
 portfolio:
   line: Telecoms
   family: Open Aggregation Router
@@ -429,13 +441,6 @@ attrs:
     asic: Broadcom Qumran2c BCM88820
     lookup-engine: Broadcom OP2 BCM16K
     bmc: ASPEED AST2620
-    oem-alias: >-
-      DriveNets NCP-96X6C-S (Network Cloud Packet forwarder, 96x1/10/25 + 6x100). NOT A
-      UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal analysis matching DriveNets' NCP-96X6C-S (Q2C 2.4T) to this
-      chassis on published silicon and port configuration. The map names the S9600-102XC OR
-      this Ice Lake refresh for the same DriveNets name, so the alias is not unique to one of
-      the pair. Recorded so a search for either name finds this box; no DriveNets figure or
-      artwork is transcribed anywhere in this file.
   features:
     timing: Stratum 3E OCXO, ITU-T SyncE, IEEE 1588v2 (G.8265.1 default, G.8275.1,
       G.8275.2, SMPTE ST 2059-2 with additional licence; T-GM, T-BC/OC, T-TC), Time
@@ -821,11 +826,11 @@ views:
         - {ref: common/sma-jack@1, id: gnss-ant, at: [17.18, 2.69], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [35.93, 3.77], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [53.38, 3.77], group: timing, rel-pos: 3, attrs: {role: 1pps-io}}
-        - {ref: std/rj45@2, id: tod, at: [6.4, 27], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45@2, id: tod, at: [6.4, 27], group: timing, rel-pos: 4, attrs: {media: rj45-tod, role: tod-io}}
         - {ref: common/reset-button@1, id: reset, at: [11.9, 43.9], for: chassis, group: mgmt, rel-pos: 4}
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [23.2, 49.4], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: oob, speed: 100m-1g}, states: {led-a: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}], led-b: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-mgmt-l: the management jack''s left corner lamp, drawn lit green in HIG Figure 8. THE HIG TABLES NO MANAGEMENT-PORT LED for this platform - the S9510-28DC and M3000-14XC guides do and this one does not - so the states here are the component default and not a transcription; led-mgmt-r: the management jack''s right corner lamp; same absence of a vendor table as its left-hand twin, and the same component default'}
-        - {ref: std/usb-a@1, id: usb, at: [23.5, 62.5], group: mgmt, rel-pos: 2, attrs: {role: maintenance, speed: usb3}}
+           attrs: {role: oob, speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}], led-b: ['off', {color: '#22c55e', name: link}, {behavior: blinking, color: '#22c55e', name: activity}]}, description: 'led-mgmt-l: the management jack''s left corner lamp, drawn lit green in HIG Figure 8. THE HIG TABLES NO MANAGEMENT-PORT LED for this platform - the S9510-28DC and M3000-14XC guides do and this one does not - so the states here are the component default and not a transcription; led-mgmt-r: the management jack''s right corner lamp; same absence of a vendor table as its left-hand twin, and the same component default'}
+        - {ref: std/usb-a@1, id: usb, at: [23.5, 62.5], group: mgmt, rel-pos: 2, attrs: {role: maintenance, usb: '3.0'}}
         - {ref: std/rj45-ganged@2, id: console, at: [23.2, 69.5], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {ref: common/led-rect@1, id: led-sync, at: [12.1, 61.45], for: chassis,
            states: ['off',

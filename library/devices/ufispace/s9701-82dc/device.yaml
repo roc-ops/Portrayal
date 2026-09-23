@@ -1,10 +1,19 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 3.0.0
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
+aliases:
+- name: NCP-64X12C-S
+  kind: oem
+  note: >-
+    The DriveNets name for this chassis (Network Cloud Packet forwarder, 64x1/10GE + 12x100 +
+    6x400). NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is
+    internal analysis matching DriveNets' NCP-64X12C-S (J2C 2.4T) to this chassis on published
+    silicon and port configuration. Recorded so a search for either name finds this box; no
+    DriveNets figure or artwork is transcribed anywhere in this file.
 portfolio:
   line: Telecoms
   family: Open Core Router
@@ -25,6 +34,12 @@ description: >-
   front-to-back
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the out-of-band RJ45 is `1g`: the datasheet lists it as a 100/1000M out-of-band management
+      port (carried in `attrs.management.oob`), and the HIG Management port LED table agrees - a
+      green 1G lamp on the left, an amber 10M/100M one on the right.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -349,12 +364,6 @@ attrs:
     storage: 128 GB SSD
     bmc: Aspeed AST2400
     oscillator: Stratum 3E OCXO
-    oem-alias: >-
-      DriveNets NCP-64X12C-S (Network Cloud Packet forwarder, 64x1/10GE + 12x100 + 6x400).
-      NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal analysis matching DriveNets' NCP-64X12C-S (J2C 2.4T) to this
-      chassis on published silicon and port configuration. Recorded so a search for either
-      name finds this box; no DriveNets figure or artwork is transcribed anywhere in this
-      file.
   features:
     optics-sfp28: >-
       25GBASE SFP28 ZR/ER/LR/SR; 10GBASE SFP+ ER/LR/SR; 1GBASE SFP EX/LX/SX (datasheet
@@ -593,7 +602,7 @@ groups:
       the low end of its own space
   qsfpdd-fabric:
     term: Port
-    role: traffic
+    role: fabric
     index-origin: 0
     attrs: {media: qsfp-dd, speed: 400g}
     description: >-
@@ -1069,12 +1078,12 @@ views:
       - {ref: std/sma@1, id: gnss-ant, at: [18.81, 4.4], group: timing, rel-pos: 1}
       - {ref: std/smb@1, id: mhz-10, at: [37.13, 5.16], group: timing, rel-pos: 2}
       - {ref: std/smb@1, id: pps-1, at: [54.58, 4.99], group: timing, rel-pos: 3}
-      - {ref: std/rj45@2, id: tod, at: [6.98, 28.39], group: timing, rel-pos: 4}
+      - {ref: std/rj45@2, id: tod, at: [6.98, 28.39], group: timing, rel-pos: 4, attrs: {media: rj45-tod}}
       - {ref: std/sfp-ganged@1, id: mgmt-sfp-0, at: [27.11, 15.61], group: sfpp-mgmt, rel-pos: 1}
       - {ref: std/sfp-ganged@1, id: mgmt-sfp-1, at: [27.11, 31.25], rotate: 180, group: sfpp-mgmt, rel-pos: 2}
-      - {ref: common/rj45-eth@1, id: mgmt-oob, at: [22, 48.6], group: mgmt, rel-pos: 1, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: act-1g}], led-b: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: act-100m}]}, description: 'led-oob-left: HIG Management port LED, Left LED - Off (no power), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-right: HIG Management port LED, Right LED - Off (no power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
+      - {ref: common/rj45-eth@1, id: mgmt-oob, at: [22, 48.6], group: mgmt, rel-pos: 1, attrs: {speed: 1g}, states: {led-a: ['off', {color: '#22c55e', name: link-1g}, {behavior: blinking, color: '#22c55e', name: act-1g}], led-b: ['off', {color: '#f59e0b', name: link-100m}, {behavior: blinking, color: '#f59e0b', name: act-100m}]}, description: 'led-oob-left: HIG Management port LED, Left LED - Off (no power), Solid Green (1G link-up), Blinking Green (1G TX/RX activity); led-oob-right: HIG Management port LED, Right LED - Off (no power), Solid Amber (10M/100M link-up), Blinking Amber (10M/100M TX/RX activity)'}
       - {ref: std/usb-a@1, id: usb3, at: [23.8, 62.6], group: mgmt, rel-pos: 2}
-      - {ref: std/rj45@2, id: console-rj45, at: [22, 67.7], group: mgmt, rel-pos: 3}
+      - {ref: std/rj45@2, id: console-rj45, at: [22, 67.7], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
       - {ref: std/micro-usb@1, id: console-usb, at: [9.96, 79.77], group: mgmt, rel-pos: 4}
       - {ref: common/reset-button@1, id: reset, at: [12.88, 44.65], for: chassis, group: mgmt, rel-pos: 5}
       - {ref: std/sfp-ganged@1, id: port-0, at: [45.38, 15.37], group: sfp28, rel-pos: 1}

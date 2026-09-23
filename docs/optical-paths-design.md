@@ -7,7 +7,7 @@ Written 2026-09-12 against `main` at 82811725. Nothing here is built yet.
 
 The library can draw a passive optical module and cannot say what it does.
 
-`smartoptics/ppm-ocu-97-3@1` is a C-band tap. Its function - 97% of the light
+`smartoptics/ppm-ocu-97-3@2` is a C-band tap. Its function - 97% of the light
 carries on, 3% is bled to a monitor port - lives in an attr as the string
 `coupling-ratio: '97/3'`, and the fact that one of its four bores terminates
 nothing lives in a sentence:
@@ -72,7 +72,7 @@ Taken 2026-09-11/12, in this order:
 
 ## A. The optical model
 
-**Fibre capacity lives on the connector, stated once.** `common/lc-duplex-adapter@4`
+**Fibre capacity lives on the connector, stated once.** `common/lc-duplex-adapter@5`
 presents 2 fibre positions; an MPO-12 presents 12; an ST simplex presents 1. No
 module restates it, and every module inherits a correction.
 
@@ -261,7 +261,7 @@ ports; no exported front port is left without a rear port.
 
    | connector | modules | status |
    |---|---:|---|
-   | LC duplex | 42 | have `common/lc-duplex-adapter@4` |
+   | LC duplex | 42 | have `common/lc-duplex-adapter@5` |
    | MTP/MPO -8/-12/-16/-24 | 48 | **missing entirely** |
    | SC duplex | 5 | missing - `common/sc-apc` is a device-specific moulded bay off an HLX-TGV, not a panel-mount adapter |
    | MDC | 3 | missing |
@@ -301,7 +301,7 @@ Recorded rather than decided, because both need evidence we do not have:
 
 **The LC pitch** was settled in plan 4: `standards.yaml`'s `fhd-lc-cassette`
 entry records the measured 12.92 floor off FS SKU 57016, and
-`common/lc-duplex-v-adapter@4` is the 9.28-wide stacked adapter FS actually
+`common/lc-duplex-v-adapter@5` is the 9.28-wide stacked adapter FS actually
 ships, so the 13.2-wide shared adapter is no longer composed at a 12.90 pitch.
 
 **The FMT-N's 16.93".** The fixed enclosure's render carries a fourth dimension,

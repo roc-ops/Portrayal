@@ -10,6 +10,13 @@ description: 34-channel colourless/directionless cross-connect ROADM line unit, 
   RS232 management.
 profile: optical
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the OSC cage is `1g`: the DCP-R user manual (14.0), Supported OSC transceivers, certifies
+      SFPs from 155 Mb/s STM-1/Fast Ethernet parts up to 1GE ones, and its OTDR section offers the
+      combined OSC/OTDR SFP at 155 Mb/s or 1 Gb/s. The highest native rate the cage runs at is
+      therefore 1G.
   chassis:
     note: >-
       manual DIMENSIONS (DCP-R) - 440mm (W) x 45mm (H) x 505mm (D), 1 RU. The manual also states
@@ -429,7 +436,7 @@ views:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 2}
-        - {ref: common/rj45-eth@1, id: eth0, at: [9.8, 10.2], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: eth0, at: [9.8, 10.2], rotate: 180, group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 1}
         - {ref: std/rj45@2, id: rs232, at: [9.8, 24.5], group: mgmt, attrs: {role: console, media: rj45-serial}, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-osc-tx, at: [33.9, 21.8], for: port-osc, attrs: {function: osc-tx}, group: port-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], for: port-osc, attrs: {function: osc-rx}, group: port-leds, rel-pos: 2}
@@ -437,7 +444,7 @@ views:
         - {ref: common/led-dot@1, id: led-status, at: [59.81, 35], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
         - {ref: common/lc-duplex-adapter@5, id: port-1510, at: [52.7, 9.28], attrs: {role: osc-filter, media: fiber}, group: line, rel-pos: 1}
         - {ref: common/lc-duplex-adapter@5, id: port-line, at: [104.71, 10.78], attrs: {role: line, media: fiber}, group: line, rel-pos: 2}
-        - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, role: osc}, group: line, rel-pos: 3}
+        - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, speed: 1g, role: osc}, group: line, rel-pos: 3}
         - {ref: common/lc-duplex-adapter@5, id: xc01, at: [134.79, 10.78], group: xc, attrs: {channel: '1'}, rel-pos: 1}
         - {ref: common/lc-duplex-adapter@5, id: xc02, at: [152.81, 10.78], group: xc, attrs: {channel: '2'}, rel-pos: 2}
         - {ref: common/lc-duplex-adapter@5, id: xc03, at: [166.12, 10.78], group: xc, attrs: {channel: '3'}, rel-pos: 3}
@@ -505,13 +512,13 @@ views:
         - {ref: common/rack-ear@1, id: ear-right-r, at: [440, 0.75], skin: right, optional: ears, group: furniture, rel-pos: 6}
         - {ref: common/psu-550w@2, id: psu-1, at: [0, 2.5], attrs: {slot: '1'}, group: psus, rel-pos: 1}
         - {ref: common/psu-550w@2, id: psu-2, at: [366.5, 2.5], attrs: {slot: '2'}, group: psus, rel-pos: 2}
-        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [276.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 3}
-        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [291.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 4}
-        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [276.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 5}
-        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [291.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1000base-t}, rel-pos: 6}
+        - {ref: common/rj45-ganged-eth@1, id: eth2, at: [276.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 3}
+        - {ref: common/rj45-ganged-eth@1, id: eth4, at: [291.65, 9], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 4}
+        - {ref: common/rj45-ganged-eth@1, id: eth1, at: [276.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 5}
+        - {ref: common/rj45-ganged-eth@1, id: eth3, at: [291.65, 22.5], group: mgmt, attrs: {role: mgmt, speed: 1g}, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-eth5-tx, at: [320, 14], for: eth5, attrs: {function: tx}, group: port-leds, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-eth5-rx, at: [332, 14], for: eth5, attrs: {function: rx}, group: port-leds, rel-pos: 4}
-        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 100m-1g}, rel-pos: 7}
+        - {ref: std/sfp@1, id: eth5, at: [318.75, 22], group: mgmt, attrs: {role: mgmt, media: sfp, speed: 1g}, rel-pos: 7}
         - {ref: common/reset-button@1, id: reset, at: [345, 26], group: mgmt, for: chassis, rel-pos: 8}
   left:
     size:

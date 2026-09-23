@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="108.97mm" height="35.05mm" viewBox="0 0 108.97 35.05">
+  <!-- FHD-2MTP1212LCDXOM3A (FS SKU 382889) wears fs/fhd-2mtp12-lc-os2-a@4's
+       layout, printed differently: three marks of its own at the end of the
+       silkscreen group, and smaller, regular-weight port digits; its OM3
+       adapter colour is set by the contract. What follows is the twin's own
+       header.
+
+      FHD-2MTP12LCDOS2A faceplate, 108.97 x 35.05, FS SKU 57341 - measured off
+       FS's own face-on render 57341.B.jpg, see the contract's size-notes.
+
+       THE TWELVE LC CUTOUTS ARE NOT DRAWN HERE, for the same reason
+       fhd-1mtp6lcd-os2-a@3's six are not: each composed
+       common/lc-duplex-v-adapter@5 draws its own bezel and its own two port
+       openings at its `at` position, so a second rect here would duplicate
+       geometry the composed parts already own and the two copies would
+       drift the day one is edited and the other is not.
+
+       THE TWO THUMB-KNOBS ARE MEASURED, on six face-on renders FS drew
+       separately - three 12-fibre (57016.main, 174246.g1, 182642.g1) and three
+       24-fibre (57341.B, 174248.g1, 182644.g1). Each is framed on the plate's
+       own left and right edges at its centre row and scaled on that width,
+       108.97 mm; panel_measure.measure() supplied only the height check,
+       because its x0 was then taken on the plate's rounded corner (fixed
+       since, in this major). A circle fitted to the
+       lower arc of each knob's front face gives r 4.04-4.13 across all twelve
+       knobs. That face stands proud and the camera sits above the plate, so
+       the renders draw it displaced outward and down; the knob's AXIS is read
+       from its base instead - the lit barrel's inboard side and its top, one
+       radius in - at 4.99-5.29 mm from the plate edge, the same at both ends
+       and on both cassette widths, and 17.53-17.75 mm down, on the plate's
+       centre line. Drawn at 5.10 from each edge, r 4.10, centred vertically.
+       The circles this replaces (cx 7.9 / 101.07, r 3.1) were placed by eye
+       and sat 2.8 mm inboard. -->
+  <defs>
+    <linearGradient id="bez" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c4248"/>
+      <stop offset="1" stop-color="#23272c"/>
+    </linearGradient>
+    <radialGradient id="knob" cx="0.35" cy="0.35" r="0.75">
+      <stop offset="0" stop-color="#4a5056"/>
+      <stop offset="1" stop-color="#1c1f22"/>
+    </radialGradient>
+  </defs>
+  <rect id="bezel" x="0" y="0" width="108.97" height="35.05" rx="1.5"
+        fill="url(#bez)" stroke="#15181a" stroke-width="0.3"/>
+  <circle id="thumb-knob-left" cx="5.1" cy="17.525" r="4.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <circle id="thumb-knob-right" cx="103.87" cy="17.525" r="4.1"
+          fill="url(#knob)" stroke="#0e1012" stroke-width="0.25"/>
+  <!-- THE PORT NUMBERS, AND ONLY EIGHT OF THEM. FS prints a pair at each end of
+       each row: the lower row is 1-12 and the upper is 13-24, so `2`/`1` and
+       `12`/`11` below, `14`/`13` and `24`/`23` above (57341.B.jpg - which is
+       byte-for-byte the render FS also serves for SKU 57023, so this is ONE
+       reading covering both two-row cassettes, not two). Measured against the
+       adapters rather than the plate box: right-aligned 1.50 left of the first
+       adapter of a row, left-aligned 1.53 right of the last, cap height 2.61,
+       drawn at a 3.5 font-size with the single-row plates. -->
+    <!-- A LOGO MARK IS PRINTED HERE AND IS NOT REPRODUCED (vendor logos are
+       never drawn - library/components/README.md); the zone is reserved and
+       left as plate. -->
+  <rect id="logo-zone" x="3.0" y="2.5" width="6.1" height="5.95" fill="none"/>
+  <g id="silkscreen">
+    <text id="port-14" x="15.73" y="7.55" font-size="2.57" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">14</text>
+    <text id="port-13" x="15.73" y="14.95" font-size="2.57" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">13</text>
+    <text id="port-24" x="92.89" y="7.55" font-size="2.57" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">24</text>
+    <text id="port-23" x="92.89" y="14.95" font-size="2.57" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">23</text>
+    <text id="port-2" x="15.73" y="23.18" font-size="2.57" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">2</text>
+    <text id="port-1" x="15.73" y="30.51" font-size="2.57" text-anchor="end"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">1</text>
+    <text id="port-12" x="92.89" y="23.18" font-size="2.57" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">12</text>
+    <text id="port-11" x="92.89" y="30.51" font-size="2.57" text-anchor="start"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">11</text>
+      <!-- MARKS THIS PLATE CARRIES AND ITS OS2 TWIN DOES NOT, measured on
+         382889.g1.jpg and 382897.g1.jpg (both 1600 px, panel_measure-validated), which
+         agree to 0.05 mm. x is in panel_measure's plate frame as corrected in #503/#506; y is taken from the
+         nearest digit this skin already draws (see provenance.face-marks). Cap heights are set at the twin's own digits' ratio
+         (2.61 cap on 3.5 type) and each word is fitted to its measured ink
+         width. See the contract's provenance.face-marks. -->
+    <rect id="mtp-tag" x="100.91" y="2.55" width="6.53" height="2.92" rx="0.35"
+          fill="#fbda1f"/>
+    <text id="mtp-tag-text" x="104.20" y="4.97" font-size="2.56" text-anchor="middle"
+          textLength="5.55" lengthAdjust="spacingAndGlyphs"
+          font-family="Helvetica, Arial, sans-serif" fill="#161214">MTP</text>
+    <rect id="code-tag" x="96.67" y="27.85" width="10.76" height="2.84" rx="0.35"
+          fill="#b8d9ec"/>
+    <text id="code-tag-text" x="102.05" y="30.26" font-size="2.68" text-anchor="middle"
+          textLength="9.84" lengthAdjust="spacingAndGlyphs"
+          font-family="Helvetica, Arial, sans-serif" fill="#232323">DL2A3P</text>
+    <text id="fhd-mark" x="3.01" y="30.77" font-size="2.68" text-anchor="start"
+          textLength="5.27" lengthAdjust="spacingAndGlyphs"
+          font-family="Helvetica, Arial, sans-serif" fill="#e8ebee">FHD</text>
+  </g>
+</svg>

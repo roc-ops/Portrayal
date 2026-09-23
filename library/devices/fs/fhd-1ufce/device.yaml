@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 3.2.6
+version: 4.0.0
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -54,7 +54,7 @@ provenance:
       an empty bay opening. Each bay is sized at 108.97 x 35.05 - the FHD module envelope, a
       FAMILY CONSTANT common to every cassette this format admits, not a figure this device
       measures itself or that belongs to any one cassette. It was first measured off FS's own
-      render for fs/fhd-1mtp6lcd-os2-a@3 (SKU 57016), and `panel_measure` refuses to scale ANY FHD
+      render for fs/fhd-1mtp6lcd-os2-a@4 (SKU 57016), and `panel_measure` refuses to scale ANY FHD
       face-on render at all unless that scale reproduces the same 35.05mm height - which is what
       makes this a constant worth carrying rather than a per-cassette reading. THE RULE, NOT A
       COUNT: every FHD cassette this library models seats in every bay's `accepts`, because the
@@ -130,10 +130,15 @@ gaps:
       carries a wider MPO ferrule the front panel never sees - so the gap
       stands unchanged a fourth time.
       RE-READ when every FHD LC and SC cassette's adapter row moved 1.4-1.8
-      mm right (fs/fhd-1mtp6lcd-os2-a@3 and its siblings), once
+      mm right (fs/fhd-1mtp6lcd-os2-a@4 and its siblings), once
       `panel_measure` framed FS's renders on the plate's real edge rather than
       its rounded corner: the rows sit inside each cassette's own plate, not
       on the enclosure's front panel, so the gap stands unchanged.
+      RE-READ when the LC and SC duplex adapters on the cassettes renamed
+      their bores from tx and rx to fibre positions 1 and 2 and the cassettes
+      composing them took a major:
+      an addressing change inside the bay occupants, not on the front panel
+      around them, so the gap stands unchanged.
     wanted: >-
       a square-on, face-on photograph of the closed FHD-1UFCE front, the same
       kind of image that let the cassettes' own faceplates be measured.
@@ -193,6 +198,9 @@ gaps:
       RE-READ when every FHD LC and SC cassette's adapter row moved 1.4-1.8
       mm right on its faceplate: a front-plate change, which none of these
       five faces shows - the gap stands.
+      RE-READ when each rear MPO adapter gained its fibre elements, 1 to 12
+      or 1 to 24: they sit on the cassette rear, and the rear opening the
+      trunks leave through is as undimensioned as it was - the gap stands.
     wanted: >-
       a rear photograph (the cassettes seat from the front but the trunk
       cables leave from the back of the drawer) and a lid/side photograph,
@@ -221,26 +229,26 @@ views:
           at: [6.06, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@3
-            - fs/fhd-splice-12-lc@2
-            - fs/fhd-2mtp12-lc-os2-a@3
-            - fs/fhd-1mtp12-sc-os2-a@2
-            - fs/fhd-1mtp24-lc-os2-a@3
-            - fs/fhd-1mtp6lcd-os2-af@2
-            - fs/fhd-1mtp6lcd-os2-u@2
-            - fs/fhd-2mtp12-lc-os2-af@3
-            - fs/fhd-2mtp12-lc-os2-u@3
-            - fs/fhd-1mtp24-lc-os2-af@3
-            - fs/fhd-1mtp6lcd-om4-a@1
-            - fs/fhd-2mtp12-lc-om4-a@1
-            - fs/fhd-1mtp24-lc-om4-a@1
-            - fs/fhd-1mtp6lcd-om5-a@1
-            - fs/fhd-2mtp12-lc-om5-a@1
-            - fs/fhd-1mtp24-lc-om5-a@1
-            - fs/fhd-1mtp6lcd-om4-u@1
-            - fs/fhd-2mtp12-lc-om4-u@1
-            - fs/fhd-2mtp12-lc-om3-a@1
-            - fs/fhd-1mtp24-lc-om3-a@1
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
@@ -250,26 +258,26 @@ views:
           at: [115.03, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@3
-            - fs/fhd-splice-12-lc@2
-            - fs/fhd-2mtp12-lc-os2-a@3
-            - fs/fhd-1mtp12-sc-os2-a@2
-            - fs/fhd-1mtp24-lc-os2-a@3
-            - fs/fhd-1mtp6lcd-os2-af@2
-            - fs/fhd-1mtp6lcd-os2-u@2
-            - fs/fhd-2mtp12-lc-os2-af@3
-            - fs/fhd-2mtp12-lc-os2-u@3
-            - fs/fhd-1mtp24-lc-os2-af@3
-            - fs/fhd-1mtp6lcd-om4-a@1
-            - fs/fhd-2mtp12-lc-om4-a@1
-            - fs/fhd-1mtp24-lc-om4-a@1
-            - fs/fhd-1mtp6lcd-om5-a@1
-            - fs/fhd-2mtp12-lc-om5-a@1
-            - fs/fhd-1mtp24-lc-om5-a@1
-            - fs/fhd-1mtp6lcd-om4-u@1
-            - fs/fhd-2mtp12-lc-om4-u@1
-            - fs/fhd-2mtp12-lc-om3-a@1
-            - fs/fhd-1mtp24-lc-om3-a@1
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
@@ -279,26 +287,26 @@ views:
           at: [224.00, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@3
-            - fs/fhd-splice-12-lc@2
-            - fs/fhd-2mtp12-lc-os2-a@3
-            - fs/fhd-1mtp12-sc-os2-a@2
-            - fs/fhd-1mtp24-lc-os2-a@3
-            - fs/fhd-1mtp6lcd-os2-af@2
-            - fs/fhd-1mtp6lcd-os2-u@2
-            - fs/fhd-2mtp12-lc-os2-af@3
-            - fs/fhd-2mtp12-lc-os2-u@3
-            - fs/fhd-1mtp24-lc-os2-af@3
-            - fs/fhd-1mtp6lcd-om4-a@1
-            - fs/fhd-2mtp12-lc-om4-a@1
-            - fs/fhd-1mtp24-lc-om4-a@1
-            - fs/fhd-1mtp6lcd-om5-a@1
-            - fs/fhd-2mtp12-lc-om5-a@1
-            - fs/fhd-1mtp24-lc-om5-a@1
-            - fs/fhd-1mtp6lcd-om4-u@1
-            - fs/fhd-2mtp12-lc-om4-u@1
-            - fs/fhd-2mtp12-lc-om3-a@1
-            - fs/fhd-1mtp24-lc-om3-a@1
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
@@ -308,26 +316,26 @@ views:
           at: [332.97, 4.475]
           size: {w: 108.97, h: 35.05}
           accepts:
-            - fs/fhd-1mtp6lcd-os2-a@3
-            - fs/fhd-splice-12-lc@2
-            - fs/fhd-2mtp12-lc-os2-a@3
-            - fs/fhd-1mtp12-sc-os2-a@2
-            - fs/fhd-1mtp24-lc-os2-a@3
-            - fs/fhd-1mtp6lcd-os2-af@2
-            - fs/fhd-1mtp6lcd-os2-u@2
-            - fs/fhd-2mtp12-lc-os2-af@3
-            - fs/fhd-2mtp12-lc-os2-u@3
-            - fs/fhd-1mtp24-lc-os2-af@3
-            - fs/fhd-1mtp6lcd-om4-a@1
-            - fs/fhd-2mtp12-lc-om4-a@1
-            - fs/fhd-1mtp24-lc-om4-a@1
-            - fs/fhd-1mtp6lcd-om5-a@1
-            - fs/fhd-2mtp12-lc-om5-a@1
-            - fs/fhd-1mtp24-lc-om5-a@1
-            - fs/fhd-1mtp6lcd-om4-u@1
-            - fs/fhd-2mtp12-lc-om4-u@1
-            - fs/fhd-2mtp12-lc-om3-a@1
-            - fs/fhd-1mtp24-lc-om3-a@1
+            - fs/fhd-1mtp6lcd-os2-a@4
+            - fs/fhd-splice-12-lc@3
+            - fs/fhd-2mtp12-lc-os2-a@4
+            - fs/fhd-1mtp12-sc-os2-a@3
+            - fs/fhd-1mtp24-lc-os2-a@4
+            - fs/fhd-1mtp6lcd-os2-af@3
+            - fs/fhd-1mtp6lcd-os2-u@3
+            - fs/fhd-2mtp12-lc-os2-af@4
+            - fs/fhd-2mtp12-lc-os2-u@4
+            - fs/fhd-1mtp24-lc-os2-af@4
+            - fs/fhd-1mtp6lcd-om4-a@2
+            - fs/fhd-2mtp12-lc-om4-a@2
+            - fs/fhd-1mtp24-lc-om4-a@2
+            - fs/fhd-1mtp6lcd-om5-a@2
+            - fs/fhd-2mtp12-lc-om5-a@2
+            - fs/fhd-1mtp24-lc-om5-a@2
+            - fs/fhd-1mtp6lcd-om4-u@2
+            - fs/fhd-2mtp12-lc-om4-u@2
+            - fs/fhd-2mtp12-lc-om3-a@2
+            - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
@@ -400,17 +408,17 @@ configurations:
   populated:
     kind: example
     description: >-
-      All four bays carrying fs/fhd-1mtp6lcd-os2-a@3, chosen as one
+      All four bays carrying fs/fhd-1mtp6lcd-os2-a@4, chosen as one
       representative cassette from the FHD catalogue this same bay format
       accepts - see `provenance.bays` for the rest. Illustrative, like every
       `example` in this library: the cassettes are ordered separately from
       the enclosure, and later tasks in this plan add the rest of the
       catalogue this same bay format accepts.
     bays:
-      bay-1: fs/fhd-1mtp6lcd-os2-a@3
-      bay-2: fs/fhd-1mtp6lcd-os2-a@3
-      bay-3: fs/fhd-1mtp6lcd-os2-a@3
-      bay-4: fs/fhd-1mtp6lcd-os2-a@3
+      bay-1: fs/fhd-1mtp6lcd-os2-a@4
+      bay-2: fs/fhd-1mtp6lcd-os2-a@4
+      bay-3: fs/fhd-1mtp6lcd-os2-a@4
+      bay-4: fs/fhd-1mtp6lcd-os2-a@4
 datasheet:
   title: 'FS FHD 1U Rack Mount Fiber Enclosure datasheet'
   sha256: 6459020299a17a9326a3d867ef1ec082b10b874d46cf02ee19dc0acaa29a94b2

@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: csr310
-version: 1.0.2
+version: 1.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS7315-27X
+aliases:
+- {name: CSR310, kind: marketing}
 portfolio: {line: Service Provider, family: Cell Site Router, series: CSR310}
 description: >-
   20x 10G SFP+, 4x 25G SFP28 and 3x 100G QSFP28 cell site router, sold as the CSR310,
@@ -14,6 +16,14 @@ description: >-
   front, including both hot-swappable supplies and the fan tray; side-to-side airflow.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      both copper Ethernet jacks are `1g` from the datasheet: the management-port list gives a
+      1000BASE-T RJ-45 (carried in `attrs.management.mgmt-ports`), and the stacking row gives
+      STACK-CTRL as one 1 GbE link from the CPU carrying the control signal. STACK-SYNC, BITS and
+      PPS/ToD are not Ethernet and state no speed: their media say what they carry (`rj45-sync`,
+      `rj48`, `rj45-tod`).
   stack-orientation:
     confidence: estimated
     note: >-
@@ -131,7 +141,6 @@ attrs:
     storage: 32 GB M.2 SSD, oscillator: Stratum 3E compliant OCXO, software: 'ONIE installer pre-loaded;
       Open Network Linux (ONL) compatible'}
   features:
-    marketing-name: CSR310
     standards: OCP Accepted; TIP DCSG compliant
     timing: IEEE1588v2 and SyncE in hardware; PRTC ITU-T G.8272; integrated GNSS receiver
     timing-ports: BITS (RJ-45), PPS/ToD (RJ-45), GNSS antenna (SMA)
@@ -516,12 +525,12 @@ views:
       - {ref: common/led-arrow-sm@1, id: led-port-18-1, at: [311.25, 17.14], skin: up, group: port-leds, rel-pos: 181, for: port-18, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-arrow-sm@1, id: led-port-19-2, at: [314.99, 17.14], skin: down, group: port-leds, rel-pos: 192, for: port-19, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-arrow-sm@1, id: led-port-18-2, at: [317.79, 17.14], skin: up, group: port-leds, rel-pos: 182, for: port-18, states: ['off', {name: 'on', color: '#22c55e'}]}
-      - {ref: std/rj45-ganged@2, id: stack-sync, at: [347.00, 6.00], rotate: 180, group: timing, rel-pos: 3, attrs: {media: rj45, role: timing, function: stacking-sync}}
-      - {ref: std/rj45-ganged@2, id: bits, at: [360.97, 6.00], rotate: 180, group: timing, rel-pos: 1, attrs: {media: rj45, role: timing, function: BITS}}
+      - {ref: std/rj45-ganged@2, id: stack-sync, at: [347.00, 6.00], rotate: 180, group: timing, rel-pos: 3, attrs: {media: rj45-sync, role: timing, function: stacking-sync}}
+      - {ref: std/rj45-ganged@2, id: bits, at: [360.97, 6.00], rotate: 180, group: timing, rel-pos: 1, attrs: {media: rj48, role: timing, function: BITS}}
       - {ref: std/rj45-ganged@2, id: console, at: [374.94, 6.00], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console, function: console}}
-      - {ref: std/rj45-ganged@2, id: stack-ctrl, at: [347.00, 19.50], group: stacking, rel-pos: 2, attrs: {media: rj45, role: stacking, function: stacking-control}}
-      - {ref: std/rj45-ganged@2, id: pps-tod, at: [360.97, 19.50], group: timing, rel-pos: 2, attrs: {media: rj45, role: timing, function: PPS/ToD}}
-      - {ref: std/rj45-ganged@2, id: mgmt-eth, at: [374.94, 19.50], group: mgmt, rel-pos: 1, attrs: {media: rj45, role: mgmt, function: management}}
+      - {ref: std/rj45-ganged@2, id: stack-ctrl, at: [347.00, 19.50], group: stacking, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: stacking, function: stacking-control}}
+      - {ref: std/rj45-ganged@2, id: pps-tod, at: [360.97, 19.50], group: timing, rel-pos: 2, attrs: {media: rj45-tod, role: timing, function: PPS/ToD}}
+      - {ref: std/rj45-ganged@2, id: mgmt-eth, at: [374.94, 19.50], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt, function: management}}
       - {ref: std/qsfp-ganged@1, id: m0-0, at: [126.65, 21.01], group: qsfp28, rel-pos: 0,
          attrs: {media: qsfp28, speed: 100g}}
       - {ref: std/qsfp-ganged@1, id: stack-0, at: [323.25, 5.44], group: stacking, rel-pos: 0,

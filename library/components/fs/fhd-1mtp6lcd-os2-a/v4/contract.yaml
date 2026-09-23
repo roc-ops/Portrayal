@@ -1,0 +1,158 @@
+format: 1
+kind: module
+name: fhd-1mtp6lcd-os2-a
+version: 4.1.0
+class: cassette
+behaviour: fills
+description: >-
+  FS FHD-1MTP6LCDOS2A - MTP-12 (male) to six LC duplex, 12 fibres, OS2, Type A
+  polarity. FS SKU 57016.
+size: {w: 108.97, h: 35.05, d: 117.86}
+size-confidence: {w: photo-measured, h: photo-measured, d: drawing}
+size-notes: >-
+  The faceplate is MEASURED off FS's face-on render of SKU 57016, scaled on the
+  108.97 mm FHD module width and validated against the 35.05 mm height to 1.02%
+  - and corroborated independently by FS's own dimension line on 57016.B.jpg,
+  which reads 4.29in x 1.38in, exactly 108.97 x 35.05. The 117.86 depth is the
+  4.64in on that same dimension line.
+  THIS DEPTH WAS 110.24 UNTIL 2.0.0, A MISREADING OF THAT LINE AS 4.34in. Read
+  at five times, 57016.B.jpg's depth figure is 4.64in, and nothing in the image
+  supports a 3 in that place. The wrong figure made this cassette 7.62 mm
+  shallower than fs/fhd-1mtp6lcd-os2-af@3 and fs/fhd-1mtp6lcd-os2-u@3, which
+  are the same body with the fibres crossed differently behind it, and whose
+  117.86 comes from a different source: FS's product pages for 57037 and
+  182641, each stating 35 x 109 x 118 mm (1.38 x 4.29 x 4.64 in). Two readings
+  that never refer to each other now agree. The misreading also travelled: it
+  was borrowed whole by fs/fhd-splice-12-lc, and fs/fhd-1mtp12-sc-os2-a
+  explained its own correct 4.64in as an SC cassette being genuinely deeper.
+attrs: {media: fiber, model: FHD-1MTP6LCDOS2A, vendor-sku: '57016'}
+body:
+  depth: 117.86
+  # THE BODY IS THE REAR FACE'S SIZE, NOT THE FACEPLATE'S. The faceplate
+  # overhangs the cassette on every side (FS's rear renders show its edge
+  # standing out round the body), and the back of the body is the rear face,
+  # 99 x 31, centred behind the 108.97 x 35.05 plate. Estimated with that face
+  # - see its own size-notes. It is what a pulled cassette's box is drawn as,
+  # and what its rear face is painted on.
+  footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+parts:
+  - {id: lc1, ref: common/lc-duplex-v-adapter@5, at: [17.27, 10.66]}
+  - {id: lc2, ref: common/lc-duplex-v-adapter@5, at: [30.22, 10.66]}
+  - {id: lc3, ref: common/lc-duplex-v-adapter@5, at: [43.17, 10.66]}
+  - {id: lc4, ref: common/lc-duplex-v-adapter@5, at: [56.30, 10.66]}
+  - {id: lc5, ref: common/lc-duplex-v-adapter@5, at: [69.25, 10.66]}
+  - {id: lc6, ref: common/lc-duplex-v-adapter@5, at: [82.20, 10.66]}
+faces:
+  rear: {ref: fs/fhd-1mtp6lcd-rear@3}
+optical:
+  media: os2
+  polarity: a
+  polish: upc
+  paths:
+    - {from: lc1.1, to: 'rear:mtp.1'}
+    - {from: lc1.2, to: 'rear:mtp.2'}
+    - {from: lc2.1, to: 'rear:mtp.3'}
+    - {from: lc2.2, to: 'rear:mtp.4'}
+    - {from: lc3.1, to: 'rear:mtp.5'}
+    - {from: lc3.2, to: 'rear:mtp.6'}
+    - {from: lc4.1, to: 'rear:mtp.7'}
+    - {from: lc4.2, to: 'rear:mtp.8'}
+    - {from: lc5.1, to: 'rear:mtp.9'}
+    - {from: lc5.2, to: 'rear:mtp.10'}
+    - {from: lc6.1, to: 'rear:mtp.11'}
+    - {from: lc6.2, to: 'rear:mtp.12'}
+provenance:
+  major: >-
+    Composes the duplex adapter at v5, whose bores are numbered 1 and 2
+    instead of tx and rx, so every path under this part changes
+    (`lc1/tx` -> `lc1/1`); nothing drawn moved.
+  face-legends: >-
+    THE PORT NUMBERS ARE DRAWN NOW, AND ONLY THE END PAIRS ARE - which is
+    all FS prints. 57016.main.jpg shows `2` over `1` left of the first
+    adapter and `12` over `11` right of the last, and nothing between
+    them, so a plate numbering every port would be a legend this part does
+    not carry. Positions are measured on that render CALIBRATED ON THE
+    ADAPTERS, not on the plate box: the plate's rounded corner and its
+    shadow put a box scaled on the outline about 2% out, while the adapter
+    row is geometry this contract already states exactly. The digits are
+    1.56 left of the first adapter and 2.11 right of the last, cap height
+    2.50. The odd number is the LOWER bore of its adapter, the same
+    reading common/lc-duplex-v-adapter@5 composes its two bores in. They
+    moved with the adapters in 3.0.0, by the same correction (see
+    provenance.parts): 14.26 and 91.77 became 15.71 and 93.59.
+  size: >-
+    Faceplate measured off FS's face-on render of SKU 57016, scaled on the
+    108.97 mm FHD module width and validated against the 35.05 mm height to
+    1.02% - see size-notes for the corroborating dimension line.
+  parts: >-
+    THE SIX CENTRES ARE THE MEASUREMENT, not a pitch multiplied out. Measured on
+    57016.main.jpg at 21.91, 34.86, 47.81, 60.94, 73.89 and 86.84, with body
+    widths of 9.28 and a spread of 0.00 across the six. Five gaps of 12.95,
+    12.95, 13.13, 12.95, 12.95 - mean 12.985, spread 0.18. The one wide gap is in
+    the render and is kept rather than averaged away. `at.y` of 10.66 is MEASURED
+    too - the top edge of all six, spread 0.00 - and 10.66 + 13.75/2 = 17.53
+    against a face half-height of 17.525, so the row really is centred rather
+    than drawn to look centred.
+
+    `at.x` MOVED IN 3.0.0, BY 1.46 mm AT THE FIRST ADAPTER AND 1.76 AT THE
+    LAST. Until then every position here counted from `panel_measure.plate()`'s
+    x0, which the tool took from the FIRST row of the plate's dark band - on
+    this render a row on the plate's rounded top corner, x 94 where the plate's
+    edge is at x 86 on every row below it, 1.375 mm inboard. And they were
+    scaled on the band's single widest row, 634 px (row 540, near the plate's
+    lower edge), where the plate is 631 px across on the median row of the
+    band - 0.475% short. Both come off this one render, so the fix is
+    arithmetic on the old figures: new = (old + 1.375) x 634/631. The row sat
+    15.81 mm from the left edge and 19.25 from the right, a 3.4 mm asymmetry FS
+    does not draw; it is now 17.27 and 17.49. Re-measured directly in the
+    corrected frame, 57016.main itself puts every housing's left edge within
+    0.17 (one pixel) of these. Two renders FS drew separately, of other SKUs
+    on this plate, each framed on its own plate's median edges, agree too:
+    57017.B (OM4 Type A) within 0.09 and 182642.g1 (OM4 universal, at 12
+    px/mm) within 0.06 - and their own rows are symmetric, 17.33/17.33 and
+    17.21/17.38. The earlier proof of the method, that it returned this contract's own `at.x` to the hundredth,
+    compared the tool with its own earlier output and could not have caught
+    this. spec/tests/test_fhd_adapter_rows_are_centred.py now asks every FHD
+    cassette to centre its row.
+  face-detail-gap: >-
+    The FS logo on the lid is not drawn (see the library's no-logo rule); the
+    port numbers now ARE - see provenance.face-legends. What the render shows
+    and this face still omits is the `MALE` warranty seal, which is a sticker
+    over the lid join rather than printing on the plate.
+  optical: >-
+    THIS IS AN ASSUMPTION, NOT A SOURCED MAPPING. FS's fhd-fiber-cabling-system-
+    guide names the polarity TYPE - Table 3 (doc.md around line 195) lists
+    FHD-1MTP6LCDOS2A as Type A, and modular-cabling-system-portfolio's cassette
+    table (its doc.md around line 224) confirms SKU 57016 the same way - but
+    neither document holds a per-fibre diagram that says which MTP position
+    lands on which LC port. All 34 figures in the cabling guide were opened,
+    including fig-0023.png, the one immediately after Table 2 where docling
+    dropped a caption-less image (the brief's own lead on where one might be):
+    it is three product photos, none a fibre trace. The Method A/B link
+    diagrams later in the same document (fig-0026, fig-0028 through fig-0032)
+    show cassette-to-cassette wiring at the equipment level, not fibre-to-port.
+    modular-cabling-system-portfolio's own row-thumbnails for 57016 (fig-0044,
+    fig-0046) are the same kind of product photo. No per-fibre diagram exists in
+    either corpus.
+    So the twelve paths below are the STANDARD TYPE A STRAIGHT-THROUGH
+    arrangement instead: MTP position n to fibre n in order, rear:mtp.1 to
+    lc1.1, rear:mtp.2 to lc1.2, rear:mtp.3 to lc2.1, and so on - which is what
+    "Type A" conventionally means (TIA-598/568 straight pinout, no crossing), not
+    a fact read off a drawing of this specific cassette. A Type A cassette's own
+    datasheet with a per-fibre diagram, or a fibre trace on real hardware,
+    settles it; naming the polarity type in FS's tables is not the same as
+    sourcing this map, and this note exists so nobody mistakes one for the
+    other. Confidence: ESTIMATED - there is no schema key for it on `optical`,
+    so this sentence is where that word lives.
+
+    THE POLISH IS THE SAME KIND OF ASSUMPTION AND IS MARKED THE SAME WAY. FS's
+    catalogue names the polish where it applies - 19 of its 81 rows read "LC
+    UPC" or "LC APC", including four other FHD cassettes - and SKU 57016's row
+    does not: it reads "FHD MTP-12 (Male) to LC Cassette, OS2, 12 Fibers, Type
+    A" and stops. `polish: upc` is therefore the convention for an OS2 cassette
+    with no APC stated, not a fact read off FS's own description of this part.
+    An APC variant of the same cassette would be a different SKU and FS would
+    say so; that is the evidence for the default rather than a source for it.
+    A catalogue row, a datasheet, or a green ferrule in a face-on photograph
+    settles it.
+skins: [default]

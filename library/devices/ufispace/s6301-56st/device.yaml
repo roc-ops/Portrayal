@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -463,14 +463,14 @@ views:
     components:
       placements:
         - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [7.45, 7.65], rotate: 180, group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 1g},
            description: 'the OOB management jack, HIG Figure 5 callout
              ''Mgmt. Port'', reached by ''the RJ45 OOB port marked a symbol'';
              its two integrated lamps (HIG Management Port LED table - left
              green for 1G, right amber for 10M/100M) are drawn as led-a/led-b
              of this jack, at component default vocabulary (no colour override
              modelled, matching the ge group''s other 48 jacks)'}
-        - {ref: std/usb-a@1, id: usb, at: [7.8, 20.55], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, speed: usb2}}
+        - {ref: std/usb-a@1, id: usb, at: [7.8, 20.55], skin: usb2, group: mgmt, rel-pos: 2, attrs: {role: storage, usb: '2.0'}}
         - {ref: std/rj45-ganged@2, id: console, at: [7.45, 26.5], group: mgmt, rel-pos: 3,
            attrs: {media: rj45-serial, role: console}}
         - {ref: common/usb-symbol@1, id: usb-mark, at: [5.2, 39.4], for: usb, group: furniture, rel-pos: 1}

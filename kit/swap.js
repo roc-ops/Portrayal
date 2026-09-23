@@ -257,6 +257,7 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
     const loaded = rearRef ? await loadSkin(rearRef) : null;
     for (const old of hole.querySelectorAll(':scope > [data-projection]')) old.remove();
     applied++;
+    if (ref) hole.setAttribute('data-rear-ref', ref); else hole.removeAttribute('data-rear-ref');
     if (!loaded) continue;            // emptied, or a module with no back to show
     const doc = new DOMParser().parseFromString(loaded.text, 'image/svg+xml');
     const [x, y] = hole.getAttribute('data-rear-at').split(',').map(Number);

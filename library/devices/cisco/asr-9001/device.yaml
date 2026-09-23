@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -17,6 +17,17 @@ description: >-
   port. The rear is a plain louvred panel.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the fixed-port install guide, Table 4 (front panel ports, shared with the 9901): SVC LAN is
+      a 10/100 Mb/s Ethernet port for an IEEE 1588 grandmaster, so `100m`; MGT LAN 0 and 1 are
+      tri-speed 10/100/1000, so `1g`. The data sheet (c78-685687) gives the two CLUSTER ports as
+      10 G out-of-band Ethernet ports for nV clustering, so the group is `10g` and `sfp-plus` -
+      Table 4 calls the cage SFP and says it takes copper or optical modules, and a 10G module in
+      an SFP cage is SFP+. The same table types the rest by what they carry, not by a rate: TOD is
+      time of day with 1PPS over RS-422 (`rj45-tod`), SYNC 0/1 are BITS or DTI (`rj48`), CONSOLE
+      and AUX are RS-232 (`rj45-serial`).
   stack-orientation:
     confidence: estimated
     note: >-
@@ -358,8 +369,8 @@ groups:
       redundancy-note: '1+1 - two AC or two DC power modules for redundancy. The ASR 9001 FAQ states this directly; the 2+2 and 3+1 tables in the series install guide describe four-module chassis and do not apply to this two-bay one'
   cooling: {role: service, term: Fan Tray, index-origin: 0, physical-context: Fan}
   sfp-plus: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
-  cluster: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp}}
-  timing: {role: management, term: Port, index-origin: 0, attrs: {media: rj45}}
+  cluster: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
+  timing: {role: management, term: Port, index-origin: 0, mixed: 'the timing row - the ToD/1PPS jack and the two BITS/DTI SYNC jacks. One job (clock), two signal types on one 8P8C shell'}
   mgmt: {role: management, term: Port, index-origin: 0, mixed: 'local and remote management access - console, auxiliary, Ethernet and USB'}
   system-leds: {role: indicator, term: LED, index-origin: 1}
 views:
@@ -439,14 +450,14 @@ views:
         - {id: psu-1, at: [72.0, 45.0], size: {w: 56.8, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 1, default: cisco/a9k-750w-ac@1}
         - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
       placements:
-        - {ref: std/rj45-ganged@2, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0}
-        - {ref: common/rj45-ganged-eth@1, id: svc-lan, at: [159.75, 61.5], group: mgmt, rel-pos: 9, rotate: 180, provenance: {media: 'Ethernet, not timing: the legend reads SVC LAN and the install guide lists this as a service LAN port, not one of the tod/sync timing signals it shares the panel row with, so it is drawn lamped (common/rj45-ganged-eth@1) rather than the bare std/rj45-ganged@2 its physical row-mates use, and grouped with mgmt (console, auxiliary, Ethernet and USB management access) rather than timing.'}}
-        - {ref: std/rj45-ganged@2, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 1}
-        - {ref: std/rj45-ganged@2, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 2, rotate: 180}
-        - {ref: std/rj45-ganged@2, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4}
-        - {ref: std/rj45-ganged@2, id: aux, at: [228.5, 61.5], group: mgmt, rel-pos: 5, rotate: 180}
-        - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [250.85, 45.45], group: mgmt, rel-pos: 6}
-        - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [250.85, 61.5], group: mgmt, rel-pos: 7, rotate: 180}
+        - {ref: std/rj45-ganged@2, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0, attrs: {media: rj45-tod}}
+        - {ref: common/rj45-ganged-eth@1, id: svc-lan, at: [159.75, 61.5], group: mgmt, rel-pos: 9, rotate: 180, attrs: {speed: 100m}, provenance: {media: 'Ethernet, not timing: the legend reads SVC LAN and the install guide lists this as a service LAN port, not one of the tod/sync timing signals it shares the panel row with, so it is drawn lamped (common/rj45-ganged-eth@1) rather than the bare std/rj45-ganged@2 its physical row-mates use, and grouped with mgmt (console, auxiliary, Ethernet and USB management access) rather than timing.'}}
+        - {ref: std/rj45-ganged@2, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 1, attrs: {media: rj48}}
+        - {ref: std/rj45-ganged@2, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 2, rotate: 180, attrs: {media: rj48}}
+        - {ref: std/rj45-ganged@2, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4, attrs: {media: rj45-serial, role: console}}
+        - {ref: std/rj45-ganged@2, id: aux, at: [228.5, 61.5], group: mgmt, rel-pos: 5, rotate: 180, attrs: {media: rj45-serial, role: aux}}
+        - {ref: common/rj45-ganged-eth@1, id: mgt-lan-1, at: [250.85, 45.45], group: mgmt, rel-pos: 6, attrs: {speed: 1g}}
+        - {ref: common/rj45-ganged-eth@1, id: mgt-lan-0, at: [250.85, 61.5], group: mgmt, rel-pos: 7, rotate: 180, attrs: {speed: 1g}}
         - {ref: std/sfp-ganged@1, id: cluster-1, at: [318.675, 45.75], group: cluster, rel-pos: 1}
         - {ref: std/sfp-ganged@1, id: cluster-0, at: [318.675, 61.8], rotate: 180, group: cluster, rel-pos: 0}
         - {ref: std/sfp-ganged@1, id: sfp-plus-3, at: [341.675, 45.75], group: sfp-plus, rel-pos: 3}

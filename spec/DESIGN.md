@@ -130,15 +130,38 @@ Three layers:
    the check can say which bump a change requires rather than only that one
    happened: `shape` (chassis dimensions, view sizes, and the position, size and
    wiring of everything placed), `names` (ids, groups, configurations), `surface`
-   (silkscreen, decor, description, attrs, provenance) and `gaps`, plus
-   `composed`: every component the device draws without containing it, with
-   its version and a digest of its contract and skins, walked transitively
-   through each part, each shipped default and each face (`faces.rear`,
-   `faces.plan` or the legacy `plan:`) - a cassette's back is drawn under the
-   device that seats the cassette, so redrawing it is redrawing that device.
-   Surface or composed alone is a patch; ids added with nothing moved or removed is a minor; anything else
+   (silkscreen, decor, description, attrs, provenance), `placement-attrs` (the
+   `attrs` each placed port states for itself - `speed`, `media`, `usb` - hashed
+   beside `surface` rather than inside it so that learning the field rehashed no
+   device) and `gaps`. Surface alone, placement attrs included, is a patch; ids added with nothing moved or removed is a minor; anything else
    about shape or names is a major, because a moved slot invalidates a cached
-   coordinate exactly as a renamed id invalidates a held reference.
+   coordinate exactly as a renamed id invalidates a held reference. A sixth,
+   `composed`, covers what the device draws and does not contain: every
+   component it seats, followed through their `parts:`, the `default:` each
+   part ships holding, their faces (`faces.rear`, `faces.plan` or the legacy
+   `plan:` - a cassette's back is drawn under the device that seats the
+   cassette, so redrawing it is redrawing that device) and the `default` and
+   `accepts` of their own bays at any depth, each recorded as its version plus
+   a digest of its contract and skins. A component redrawn in place
+   therefore moves every device that shows it, and that alone is a patch.
+
+   Every other key a placement can state, and every key a bay states, is
+   fingerprinted the same way,
+   under three keys of its own that each read only when the old lock has them:
+   `placement-geometry` (`inset`, `lift`, `in`, `under`, `only-in`, `optional`,
+   `interfaces` - where the part sits in depth, whether it is drawn at all, and
+   which interfaces the export names in its place - and a bay's `opening`,
+   `floor`, `plan` and `rear`: the hole that is punched, the shelf its occupant
+   stands on, and where that occupant is projected on another face) is a major;
+   `placement-addressing` (`for`, `rel-pos`, and a bay's `interface`) is a major
+   when a value changes or goes, a minor when a `for` or an `interface` is
+   stated where there was none - a slot opened to an interface admits more, as
+   `accepts` growing does - and nothing when a `rel-pos` is; and
+   `placement-surface` (`states`, `description`, `provenance`,
+   `physical-context`, `frames`) is a patch. Together with the keys already
+   hashed these sets cover the schema's placement and bay properties exactly,
+   and a test holds that for each, so a new key on either has to be sorted when
+   it is added.
 
    The workflow is: edit, bump `version:`, then `devicelock.py --update`. Lint
    (L53) fails the loop until the bump covers the change, and re-locking is what

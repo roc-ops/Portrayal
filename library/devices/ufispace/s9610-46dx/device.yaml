@@ -1,10 +1,19 @@
 format: 1
 kind: device
 name: s9610-46dx
-version: 4.0.0
+version: 4.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-46DX
+aliases:
+- name: NCP-40C6CD-S
+  kind: oem
+  note: >-
+    The DriveNets name for this chassis (Network Cloud Packet forwarder, 4x10/25 + 40x100 +
+    6x400). NOT A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is
+    internal analysis matching DriveNets' NCP-40C6CD-S (Q2C+ 6.4T) to this chassis on published
+    silicon and port configuration. Recorded so a search for either name finds this box; no
+    DriveNets figure or artwork is transcribed anywhere in this file.
 portfolio:
   line: Telecoms
   family: Open Aggregation Router
@@ -366,12 +375,6 @@ attrs:
     memory: 64 GB DDR4 (up to 128 GB)
     storage: 128 GB SSD (up to 2x 256 GB)
     bmc: Aspeed AST2620
-    oem-alias: >-
-      DriveNets NCP-40C6CD-S (Network Cloud Packet forwarder, 4x10/25 + 40x100 + 6x400). NOT
-      A UFISPACE CLAIM - no UfiSpace document mentions DriveNets. The mapping is internal analysis matching DriveNets' NCP-40C6CD-S (Q2C+ 6.4T) to this
-      chassis on published silicon and port configuration. Recorded so a search for either
-      name finds this box; no DriveNets figure or artwork is transcribed anywhere in this
-      file.
     tcam: TCAM option available to meet diverse deployment requirements (datasheet)
   features:
     timing: >-
@@ -786,11 +789,11 @@ views:
         - {ref: std/smb@1, id: clk-10mhz, at: [10.69, 20.66], group: timing, rel-pos: 2, attrs: {media: coax-smb, role: 10mhz-io}}
         - {ref: std/smb@1, id: clk-1pps, at: [10.85, 6.43], group: timing, rel-pos: 3, attrs: {media: coax-smb, role: 1pps-io}}
         - {ref: std/rj45-ganged@2, id: bits, at: [24.99, 15.03], rotate: 180, group: timing, rel-pos: 4, attrs: {media: rj48, role: bits-io}}
-        - {ref: std/rj45-ganged@2, id: tod, at: [24.99, 27.95], group: timing, rel-pos: 5, attrs: {media: rj45, role: tod-io}}
+        - {ref: std/rj45-ganged@2, id: tod, at: [24.99, 27.95], group: timing, rel-pos: 5, attrs: {media: rj45-tod, role: tod-io}}
         - {ref: std/rj45@2, id: console, at: [27.91, 59.5], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
         - {ref: std/micro-usb@1, id: console-usb, at: [17.14, 69.64], group: mgmt, rel-pos: 2, attrs: {media: micro-usb-b, role: console}}
-        - {ref: std/usb-a@1, id: usb, at: [40.75, 30.80], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, speed: usb3}}
-        - {ref: common/rj45-eth@1, id: oob, at: [47.63, 59.5], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 100m-1g}, states: {led-a: ['off', {color: '#3b82f6', name: 'on'}], led-b: ['off', {color: '#3b82f6', name: 'on'}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture, drawn BLUE in HIG Figure 8. THIS GUIDE TABLES IT NOWHERE and the colour differs from the S9600-56DX''s green/amber pair, so no link/activity vocabulary is borrowed from that sibling - the lamp carries a plain on state in the colour the figure draws it. See the mgmt-jack-led-semantics gap; led-oob-right: the right lamp in the out-of-band jack''s aperture. Same unsourced state and the same gap as led-oob-left'}
+        - {ref: std/usb-a@1, id: usb, at: [40.75, 30.80], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: storage, usb: '3.0'}}
+        - {ref: common/rj45-eth@1, id: oob, at: [47.63, 59.5], group: mgmt, rel-pos: 4, attrs: {media: rj45, role: mgmt, speed: 1g}, states: {led-a: ['off', {color: '#3b82f6', name: 'on'}], led-b: ['off', {color: '#3b82f6', name: 'on'}]}, description: 'led-oob-left: the left lamp in the out-of-band jack''s aperture, drawn BLUE in HIG Figure 8. THIS GUIDE TABLES IT NOWHERE and the colour differs from the S9600-56DX''s green/amber pair, so no link/activity vocabulary is borrowed from that sibling - the lamp carries a plain on state in the colour the figure draws it. See the mgmt-jack-led-semantics gap; led-oob-right: the right lamp in the out-of-band jack''s aperture. Same unsourced state and the same gap as led-oob-left'}
         - {ref: common/reset-button@1, id: reset, at: [29.17, 44.63], for: chassis, group: mgmt, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-sync, for: chassis, at: [9.94, 57.21],
            states: ['off',

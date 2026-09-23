@@ -131,13 +131,13 @@ def test_the_fs_cassette_pitch_is_in_the_registry_as_measured():
         "the registry entry must name the render the pitch came from"
 
 
-CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v3"
+CASSETTE = "fs/fhd-1mtp6lcd-os2-a/v4"
 CENTRES = [21.91, 34.86, 47.81, 60.94, 73.89, 86.84]
 
 
 def test_the_cassette_is_an_fhd_module():
     c = contract(CASSETTE)
-    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@3 not built"
+    assert c is not None, "fs/fhd-1mtp6lcd-os2-a@4 not built"
     assert c["size"]["w"] == 108.97 and c["size"]["h"] == 35.05
 
 
@@ -315,7 +315,7 @@ def test_the_rear_mtp_is_where_its_provenance_says_it_is():
 
 
 @pytest.mark.parametrize("rel,bore", [("common/lc-duplex-v-adapter/v5", "lc-bulkhead-bore"),
-                                      ("common/sc-duplex-adapter/v4", "sc-bore")])
+                                      ("common/sc-duplex-adapter/v5", "sc-bore")])
 def test_position_one_is_the_lower_bore(rel, bore):
     """FS prints the lower bore of a stacked adapter as the ODD port.
 

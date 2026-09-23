@@ -17,8 +17,10 @@ interfaces:
     label: BITS
   - name: mgmt
     type: 1000base-t
+    mgmt_only: true
   - name: mgmt-sfp
     type: 1000base-x-sfp
+    mgmt_only: true
   - name: mhz-in
     type: other
     label: SMB
@@ -35,9 +37,11 @@ interfaces:
     type: other
     label: TOD
   - name: xge-0
-    type: 1000base-x-sfp
+    type: 10gbase-x-sfpp
+    mgmt_only: true
   - name: xge-1
-    type: 1000base-x-sfp
+    type: 10gbase-x-sfpp
+    mgmt_only: true
 comments: 'Juniper JNP10K-RE1 Routing and Control Board for the MX10004, MX10008 and MX10016 - a slim
   full-width FRU, two stacked in the top slots. PWR/STS/MASTER status lamps, CONSOLE, the MGMT pair (RJ-45
   and SFP) with its LINK lamp, USB, DISK1/DISK2 SSD lamps, Online/Offline and RESET buttons, BITS-0 and
@@ -51,4 +55,4 @@ comments: 'Juniper JNP10K-RE1 Routing and Control Board for the MX10004, MX10008
 
   - sfp: 3
 
-  Contract version 2.0.0 (juniper/jnp10k-re1).'
+  Contract version 2.1.0 (juniper/jnp10k-re1).'

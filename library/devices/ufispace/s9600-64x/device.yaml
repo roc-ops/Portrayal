@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 4.0.2
+version: 4.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -662,13 +662,13 @@ views:
         - {ref: common/smb-jack@1, id: clk-1pps, at: [9.00, 6.02], group: timing, rel-pos: 1, attrs: {role: 1pps-io}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [9.00, 20.63], group: timing, rel-pos: 2, attrs: {role: 10mhz-io}}
         - {ref: common/sma-jack@1, id: gnss-ant, at: [8.25, 34.00], group: timing, rel-pos: 3, attrs: {role: gnss-in}}
-        - {ref: std/rj45@2, id: tod, at: [22.93, 28.75], group: timing, rel-pos: 4, attrs: {media: rj45, role: tod-io}}
-        - {ref: common/usb-a-bezel@1, id: usb, at: [38.00, 29.85], rotate: 90, group: mgmt, rel-pos: 4, attrs: {role: maintenance, speed: usb3}}
+        - {ref: std/rj45@2, id: tod, at: [22.93, 28.75], group: timing, rel-pos: 4, attrs: {media: rj45-tod, role: tod-io}}
+        - {ref: common/usb-a-bezel@1, id: usb, at: [38.00, 29.85], rotate: 90, group: mgmt, rel-pos: 4, attrs: {role: maintenance, usb: '3.0'}}
         - {ref: common/reset-button@1, id: reset, at: [28.92, 45.11], for: chassis, group: furniture, rel-pos: 1}
         - {ref: std/micro-usb@1, id: usb-console, at: [19.67, 71.02], group: mgmt, rel-pos: 3, attrs: {role: console}}
         - {ref: std/rj45@2, id: console, at: [29.77, 60.36], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
         - {ref: common/rj45-eth@1, id: mgmt, at: [50.1, 60.19], group: mgmt, rel-pos: 1,
-           attrs: {role: mgmt, speed: 100m-1g},
+           attrs: {role: mgmt, speed: 1g},
            description: 'the drawn jack is keyway-DOWN with its two lamps at the BOTTOM
              corners; common/rj45-port@4 drew the opposite (keyway-up) by default, which
              is why the pre-sweep placement carried rotate: 180. Checked in a 7x crop of

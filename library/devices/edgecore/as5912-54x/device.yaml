@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 3.0.0
+version: 3.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS5912-54X
+aliases:
+- {name: AGR100, kind: marketing}
 portfolio:
   line: Service Provider
   family: Aggregation Router
@@ -12,6 +14,11 @@ portfolio:
 description: 48x SFP+ 10G + 6x QSFP28 100G 1U aggregation router, Broadcom Qumran-MX
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the management jack is `1g`: the datasheet lists one RJ-45 100/1000BASE-T management port
+      (carried in `attrs.management.mgmt-ports`).
   stack-orientation:
     confidence: drawing
     note: >-
@@ -465,7 +472,7 @@ views:
         - {ref: common/usb-symbol@1, id: usb-mark, at: [334.5, 35.75], group: furniture, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-mgmt-lnk, at: [420.5, 37.3], group: mgmt, for: mgmt-eth, attrs: {function: link}, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-mgmt-act, at: [427.5, 37.3], group: mgmt, for: mgmt-eth, attrs: {function: activity}, rel-pos: 3}
-        - {ref: std/rj45@2, id: mgmt-eth, at: [416.6, 3.35], rotate: 180, group: mgmt, attrs: {media: rj45, role: mgmt}, rel-pos: 4}
+        - {ref: std/rj45@2, id: mgmt-eth, at: [416.6, 3.35], rotate: 180, group: mgmt, attrs: {media: rj45, speed: 1g, role: mgmt}, rel-pos: 4}
         - {ref: std/rj45@2, id: console, at: [416.6, 19.85], group: mgmt, attrs: {media: rj45-serial, role: console}, rel-pos: 5}
     regions:
       - {id: sfp-block, at: [12, 0], size: {w: 352, h: 44}, label: 48x 10G SFP+}

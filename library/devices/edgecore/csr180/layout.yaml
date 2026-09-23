@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: csr180
-version: 1.0.3
+version: 1.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-16X
+aliases:
+- {name: CSR180, kind: marketing}
 portfolio: {line: Service Provider, family: Cell Site Router, series: CSR180}
 description: >-
   4x 10G SFP+, 8x 1G SFP and 4x 1G RJ-45 fanless cell site gateway, sold as the CSR180,
@@ -112,7 +114,6 @@ attrs:
     storage: 32 GB M.2 SSD, oscillator: Stratum 3E compliant OCXO, software: 'ONIE installer pre-loaded;
       Open Network Linux (ONL) compatible'}
   features:
-    marketing-name: CSR180
     timing: IEEE 1588v2 and SyncE in hardware
     timing-ports: ToD/1PPS (RJ-45), 1PPS I/O (SMB), 10MHz I/O (SMB)
     optics-sfp-plus: 10GBASE-SR/LR/ER/ZR, 10G DAC/AOC
@@ -213,7 +214,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45, speed: 100/1000base-t}
+    attrs: {media: rj45, speed: 1g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
   timing:
     term: Port
@@ -505,7 +506,7 @@ views:
       - {ref: std/rj45-ganged@2, id: stack-a-upper, at: [350.45, 5.20], rotate: 180, group: timing, rel-pos: 1,
          attrs: {media: rj45, role: timing, timing: unidentified}}
       - {ref: std/rj45-ganged@2, id: tod-pps, at: [350.45, 19.90], group: timing, rel-pos: 2,
-         attrs: {media: rj45, role: timing, timing: ToD/1PPS}}
+         attrs: {media: rj45-tod, role: timing, timing: ToD/1PPS}}
       - {ref: common/smb-jack@1, id: pps-in, at: [235.61, 34.50], group: timing, rel-pos: 3,
          attrs: {media: coax-smb, role: timing, timing: 1PPS in}}
       - {ref: common/smb-jack@1, id: pps-out, at: [250.46, 34.50], group: timing, rel-pos: 4,
@@ -517,7 +518,7 @@ views:
       - {ref: std/rj45-ganged@2, id: console, at: [372.00, 5.20], rotate: 180, group: mgmt, rel-pos: 2,
          attrs: {media: rj45-serial, role: console}}
       - {ref: std/rj45-ganged@2, id: mgmt-eth, at: [372.00, 19.90], group: mgmt, rel-pos: 1,
-         attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+         attrs: {media: rj45, role: mgmt, speed: 1g}}
       - {ref: common/reset-button@1, id: reset, at: [335.10, 32.70], group: mgmt, rel-pos: 4, for: chassis}
       - {ref: common/led-rect@1, id: led-loc, at: [189.00, 33.30], group: leds, rel-pos: 1, for: chassis, states: ['off', {name: 'on', color: '#22c55e'}]}
       - {ref: common/led-rect@1, id: led-diag, at: [196.20, 33.30], group: leds, rel-pos: 2, for: chassis, states: ['off', {name: 'on', color: '#22c55e'}]}

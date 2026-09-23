@@ -1,10 +1,23 @@
 format: 1
 kind: device
 name: ais800-64o
-version: 3.0.0
+version: 3.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-64O
+aliases:
+- name: AS9817-64O
+  kind: superseded
+  note: >-
+    The earlier Edgecore number for this chassis. The archived DCS560 datasheet (R01,
+    2023-09-27) matches this one on switch silicon, CPU, memory, ports, dimensions, weight and
+    supplies; its part numbers are FP6ZZ9664 where the AIS800 ones are FP6EC9664.
+- name: DCS560
+  kind: superseded
+  note: >-
+    The earlier Edgecore marketing name. That datasheet sold it as two boxes, the AS9817-64O
+    (OSFP800, this one) and the AS9817-64D (QSFP-DD800), so the name also covers the QSFP-DD800
+    twin; that mapping is not recorded yet.
 portfolio: {line: AI and Data Center, family: AI/ML Switch, series: AIS800}
 description: >-
   64 x 800G OSFP800 AI and data centre 2RU switch on a Broadcom Tomahawk 5 with an Intel
@@ -50,6 +63,18 @@ provenance:
       Over a 440 mm face that is 2.18 px/mm, too coarse to measure, but they confirm the
       block structure, the two lamps per column, the model name printed on the panel and
       the red PSU latches and tray bars of the front-to-back build.
+  aliases:
+    confidence: datasheet
+    note: >-
+      THE AS9817-64O AND THE DCS560 ARE THIS CHASSIS UNDER ITS EARLIER NAMES. An archived
+      Edgecore datasheet, "DCS560 Data Center Switch AS9817-64O/AS9817-64D" (R01, dated
+      2023-09-27), agrees with the AIS800 documents above on every figure the two share: a
+      Broadcom Tomahawk 5, an Intel Xeon D-1713NTE with 32 GB of DDR4, 64 x 800G OSFP800
+      ports, 44 x 64.92 x 8.7 cm, 21.5 kg with two supplies and four fans, and two 3000 W
+      supplies with 3+1 fans. Only the part-number roots differ - FP6ZZ9664 there, FP6EC9664
+      here. Distributor listings that still carry the AIS800-64O as the DCS560 agree. The same
+      datasheet sold the AS9817-64D QSFP-DD800 build under the DCS560 name, so that name also
+      covers the edgecore/ais800-64d twin; this device records only its own side of it.
   gate-1:
     confidence: measured
     note: >-
@@ -573,7 +598,7 @@ views:
       - {ref: std/sma@1, id: clk-10mhz, at: [406.87, 62.37], group: timing, rel-pos: 2,
          attrs: {media: coax-sma, role: timing, signal: '10 MHz'}}
       - {ref: std/rj45@2, id: tod, at: [416.40, 67.20], group: timing, rel-pos: 3,
-         attrs: {media: rj45, role: timing, signal: 'ToD'}}
+         attrs: {media: rj45-tod, role: timing, signal: 'ToD'}}
       - {ref: common/led-arrow-sm@1, id: led-sfp-1, at: [402.92, 27.68], skin: up, group: port-leds, rel-pos: 65, for: mgmt-inband-1,
          states: ['off', {name: link, color: '#22c55e'}, {name: activity, behavior: blinking, color: '#22c55e'}]}
       - {ref: common/led-arrow-sm@1, id: led-sfp-2, at: [406.58, 27.66], skin: down, group: port-leds, rel-pos: 66, for: mgmt-inband-2,
@@ -707,3 +732,4 @@ configurations:
 references:
 - {title: 'Edgecore AIS800-64O 800 Gigabit AI & Data Center Ethernet Switch Quick Start Guide'}
 - {title: 'Edgecore AIS800 Data Center Switch AIS800-64O/AIS800-64D Data Sheet'}
+- {title: 'Edgecore DCS560 Data Center Switch AS9817-64O/AS9817-64D Data Sheet, R01 2023-09-27'}

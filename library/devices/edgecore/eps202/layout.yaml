@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: eps202
-version: 1.0.2
+version: 1.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS4630-54PE
+aliases:
+- {name: EPS202, kind: marketing}
 portfolio: {line: Enterprise, family: Access Switch, series: EPS202}
 description: >-
   54-port Gigabit PoE access switch, 1RU, sold as the EPS202 and stamped AS4630-54PE.
@@ -468,7 +470,7 @@ views:
       - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [8.95, 11.80], rotate: 180, group: mgmt, rel-pos: 1,
         attrs: {media: rj45, speed: 1g, role: out-of-band}}
       - {ref: std/rj45-ganged@2, id: console, at: [8.95, 25.72], group: mgmt, rel-pos: 2,
-        attrs: {media: rj45, role: console}}
+        attrs: {media: rj45-serial, role: console}}
       - {ref: std/usb-a@1, id: usb, at: [9.50, 3.75], group: mgmt, rel-pos: 3,
         attrs: {media: usb-a, role: storage}}
       - {ref: common/reset-button@1, id: btn-stk, at: [134.61, 3.00], group: buttons, rel-pos: 1, for: chassis}

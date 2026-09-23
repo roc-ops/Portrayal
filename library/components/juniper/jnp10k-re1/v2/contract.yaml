@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10k-re1
-version: 2.0.0
+version: 2.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -17,6 +17,13 @@ attrs:
   model: JNP10K-RE1
   power-draw-max-w: 175
 provenance:
+  speed: 'guide - MX10004 hardware guide, Management Port LEDs: the left management port (RJ-45)
+    is for 10/100/1000 BASE-T connections and the right port (SFP) for 1000BASE-X; the management
+    section calls the SFP a 1-Gigabit Ethernet port. Both carried as 1g. XGE-0 and XGE-1 are
+    sfp-plus at 10g, the SFP+ rate of the cage family; Juniper marks them not used (reserved)'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
   size: 'bay - 389.0 x 38.1 mm, the RCB bay these chassis declare. Carried from
     v1 unchanged: the metal is the same slot in all three chassis and nothing in
     this rebuild questioned it'
@@ -157,22 +164,46 @@ elements:
     size: [2.6, 2.6]
     class: led
     states: ['off', {name: link, color: '#22c55e'}]
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the timing block - BITS and ToD on RJ-45 beside the 1PPS and 10 MHz SMB jacks.
+      One job (clock), several media
+  xge:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: XGE-0 and XGE-1, which Juniper marks not used (reserved ports). They sit
+      on the routing and control board and carry no user traffic, so they are filed with its
+      management ports rather than as traffic
 parts:
-- {ref: std/rj45@2, id: con, at: [37.8, 14.8], attrs: {function: serial console}}
-- {ref: common/rj45-eth@1, id: mgmt, at: [59.6, 14.8], attrs: {function: out-of-band management}}
-- {ref: std/sfp@1, id: mgmt-sfp, at: [78.85, 16.4], attrs: {function: management SFP}}
-- {ref: std/usb-a@1, id: usb, at: [100.4, 19.15], rotate: 90, attrs: {function: USB service port}}
+- {ref: std/rj45@2, id: con, group: mgmt, at: [37.8, 14.8], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [59.6, 14.8], attrs: {speed: 1g, media: rj45, function: out-of-band management}}
+- {ref: std/sfp@1, id: mgmt-sfp, group: mgmt, at: [78.85, 16.4], attrs: {speed: 1g, media: sfp, function: management SFP}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [100.4, 19.15], rotate: 90, attrs: {function: USB service port}}
 - {ref: common/reset-button@1, id: offline, at: [127.2, 32.0], attrs: {function: online/offline}}
 - {ref: common/reset-button@1, id: reset, at: [189.1, 32.0], attrs: {function: reset}}
-- {ref: std/rj45@2, id: bits-1, at: [204.8, 7.9], attrs: {function: BITS1 timing}}
-- {ref: std/rj45@2, id: bits-0, at: [204.8, 21.4], attrs: {function: BITS0 timing}}
-- {ref: std/rj45@2, id: tod, at: [231.7, 14.8], attrs: {function: time of day}}
-- {ref: std/smb@1, id: pps-in, at: [252.7, 15.2], attrs: {function: 1PPS in}}
-- {ref: std/smb@1, id: mhz-in, at: [262.8, 15.2], attrs: {function: 10MHz in}}
-- {ref: std/smb@1, id: pps-out, at: [252.7, 24.1], attrs: {function: 1PPS out}}
-- {ref: std/smb@1, id: mhz-out, at: [262.8, 24.1], attrs: {function: 10MHz out}}
-- {ref: std/sfp@1, id: xge-0, at: [283.35, 16.4], attrs: {media: sfp-plus, function: 'reserved - Juniper marks these not used'}}
-- {ref: std/sfp@1, id: xge-1, at: [302.85, 16.4], attrs: {media: sfp-plus, function: 'reserved - Juniper marks these not used'}}
+- {ref: std/rj45@2, id: bits-1, group: timing, at: [204.8, 7.9], attrs: {media: rj48, function: BITS1 timing}}
+- {ref: std/rj45@2, id: bits-0, group: timing, at: [204.8, 21.4], attrs: {media: rj48, function: BITS0 timing}}
+- {ref: std/rj45@2, id: tod, group: timing, at: [231.7, 14.8], attrs: {media: rj45-tod, function: time of day}}
+- {ref: std/smb@1, id: pps-in, group: timing, at: [252.7, 15.2], attrs: {function: 1PPS in}}
+- {ref: std/smb@1, id: mhz-in, group: timing, at: [262.8, 15.2], attrs: {function: 10MHz in}}
+- {ref: std/smb@1, id: pps-out, group: timing, at: [252.7, 24.1], attrs: {function: 1PPS out}}
+- {ref: std/smb@1, id: mhz-out, group: timing, at: [262.8, 24.1], attrs: {function: 10MHz out}}
+- {ref: std/sfp@1, id: xge-0, group: xge, at: [283.35, 16.4], attrs: {media: sfp-plus, function: 'reserved - Juniper marks these not used'}}
+- {ref: std/sfp@1, id: xge-1, group: xge, at: [302.85, 16.4], attrs: {media: sfp-plus, function: 'reserved - Juniper marks these not used'}}
 size:
   w: 389.0
   h: 38.1

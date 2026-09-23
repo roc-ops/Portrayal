@@ -19,7 +19,7 @@ description: >-
   fits to FHD cassettes and adapter panels. A blue body standing proud of the
   plate, each port turned with its latch slot to the LEFT. The white duplex
   dust cap FS ships over both ports is an occupant, not part of this adapter:
-  common/lc-duplex-dust-cap@2, its `default:` (provenance.shipped-cap). Not the same part as common/lc-duplex-adapter@4,
+  common/lc-duplex-dust-cap@2, its `default:` (provenance.shipped-cap). Not the same part as common/lc-duplex-adapter@5,
   which is wider and puts its bores side by side.
 size: {w: 9.28, h: 13.75}
 conforms: fhd-lc-cassette
@@ -55,7 +55,7 @@ relief:
         cassette's body depth along the same axis and is an estimate: about
         7 px. That scale was first taken on a 110.24 mm body (5.5 px/mm), a
         misreading of FS's 4.64in dimension line - see
-        fs/fhd-1mtp6lcd-os2-a@3. On the true 117.86 mm the same span is 5.14
+        fs/fhd-1mtp6lcd-os2-a@4. On the true 117.86 mm the same span is 5.14
         px/mm and 7 px is 1.36 mm, against the 1.2 recorded. The difference
         is under one pixel (0.19 mm here), inside what a 7 px reading can
         resolve, so the estimate is left at 1.2 rather than redrawn.
@@ -66,9 +66,9 @@ parts:
   # cap). `at` is the UNROTATED box's corner and the turn is about its centre,
   # so the ferrules stay exactly where @4 put them - (5.85, 10.0) and (5.85,
   # 3.75) - and only the keyway grows, leftward. Lifted onto the raised bezel so
-  # each bore recesses from the proud face, as common/lc-duplex-adapter@4 does.
-  - {id: tx, ref: std/lc-bulkhead-bore@1, at: [1.82, 5.97], rotate: 90, lift: 1.2}
-  - {id: rx, ref: std/lc-bulkhead-bore@1, at: [1.82, -0.28], rotate: 90, lift: 1.2}
+  # each bore recesses from the proud face, as common/lc-duplex-adapter@5 does.
+  - {id: '1', ref: std/lc-bulkhead-bore@1, at: [1.82, 5.97], rotate: 90, lift: 1.2}
+  - {id: '2', ref: std/lc-bulkhead-bore@1, at: [1.82, -0.28], rotate: 90, lift: 1.2}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
   # points, which the stacked placements put at (5.85, 3.75) and (5.85, 10.0) -
@@ -87,8 +87,8 @@ provenance:
     stacked adapter as the ODD port (1 below 2 at the left end of the panel,
     11 below 12 at the right) and a fibre position's number is the port
     number every consumer of the optical model shows. Positions follow the
-    order the bores are composed, so `tx` - composed first - sits below. Until
-    this major the upper bore was composed first: every Type A path was
+    order the bores are composed, so bore `1` - composed first - sits below. Until
+    v4 the upper bore was composed first: every Type A path was
     "straight through" by number while fibre 1 surfaced at the port FS prints
     as 2, a Type AF wiring on the hardware under a Type A label.
   size: >-
@@ -167,4 +167,9 @@ provenance:
     No dimensioned drawing of this adapter has been obtained. The 9.28 x 13.75
     outline is measured, the cap is photo-measured, the stand-off heights come
     from an oblique photograph and are estimates.
+  bore-ids: >-
+    THE BORES ARE NUMBERED, NOT TX AND RX. A panel adapter has no direction
+    until something is plugged into it; its bores are fibre positions 1 and 2,
+    and a cassette path endpoint `lc01.1` is drawn at `lc01/1` (L112). Until
+    v5 they were `tx` and `rx`, which read as a direction the part does not have.
 skins: [default]

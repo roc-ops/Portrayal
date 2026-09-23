@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: dcs520
-version: 1.0.4
+version: 1.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS9736-64D
+aliases:
+- {name: DCS520, kind: marketing}
 portfolio: {line: Cloud Data Center, family: Data Center Switch, series: DCS520}
 description: >-
   64 x 400G QSFP56-DD 2RU spine switch on a Broadcom Tomahawk 4 with an Intel Xeon D-1548,
@@ -448,7 +450,7 @@ views:
       - {ref: common/rj45-eth@1, id: mgmt, at: [410.60, 40.70], group: mgmt, rel-pos: 2,
         attrs: {media: rj45, speed: 1g, role: out-of-band}}
       - {ref: std/rj45@2, id: console, at: [410.60, 7.75], group: mgmt, rel-pos: 1,
-        attrs: {media: rj45, role: console}}
+        attrs: {media: rj45-serial, role: console}}
       - {ref: std/usb-a@1, id: usb, at: [413.50, 56.75], group: mgmt, rel-pos: 3,
         attrs: {media: usb-a, role: storage}}
       - {ref: common/led-rect-sm@1, id: led-loc, at: [19.10, 3.61], group: leds, rel-pos: 1,

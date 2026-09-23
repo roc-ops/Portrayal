@@ -55,6 +55,15 @@ def load_yaml(path):
     return hit
 
 
+def alias_names(device):
+    """The `name` of every entry in a device's `aliases:`, in declared order.
+
+    What configs.json and devices.json publish - the names an HCL or a search
+    box would type. `kind`, `note` and `shared` stay in the manifest.
+    """
+    return [a["name"] for a in (device.get("aliases") or [])
+            if isinstance(a, dict) and a.get("name")]
+
 
 def view_parts(view):
     """Flatten a canonical view into its lists. Missing sections are empty lists."""
@@ -452,6 +461,22 @@ def resolve_views(device, cfg):
             continue
         out.setdefault(vname, (vname, v or {}))
     return out
+
+
+def config_airflow(device, cfg):
+    """The airflow one configuration is built with, or None.
+
+    `configurations.<name>.airflow` is stated only where a build differs from
+    the chassis (L91), so the chassis value is the answer everywhere else. The
+    SVG root's `data-airflow`, the `configs[].airflow` in `<device>.configs.json`
+    and the DCIM export all read it here, so the drawing, the index and the
+    export cannot come to disagree about which way a build breathes. The value
+    is the library's own vocabulary - front-to-back, back-to-front, side,
+    passive - and None where the device states nothing.
+    """
+    return ((cfg or {}).get("airflow")
+            or ((device or {}).get("chassis") or {}).get("airflow")
+            or None)
 
 # --- occupants keyed inside a seated module (#484, R2) -----------------------
 #

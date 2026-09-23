@@ -217,12 +217,34 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
 
 
 def test_a_card_cage_has_no_group_side_attrs(index):
-    """R3: a contract declares no `groups:`, so the host side contributes
-    nothing to a seated optic."""
+    """R3, for a card that declares no `groups:` - the three named cards do
+    not - the host side contributes nothing to a seated optic. A card that
+    DOES declare groups (#511) is held to the other half below."""
     for ref in NAMED:
+        assert not _contract(ref).get("groups"), f"{ref} now declares groups - repick"
         for c in index[ref]["cages"]:
             assert c["occupant-attrs"] == {}
             assert c["group-states"] is False
+
+
+def test_a_grouped_card_cage_publishes_its_group_side(index):
+    """#511: a cage on a card whose part joins one of the card's own groups
+    publishes exactly group_side_attrs for that group as `occupant-attrs` -
+    the map the build writes on an optic seated there. edgecore's AMX sled
+    is the case: two CFP2 line ports and eight QSFP28 client ports, both
+    groups `traffic`."""
+    ref = "edgecore/amx-3200-sled400@1"
+    contract = _contract(ref)
+    groups = contract.get("groups") or {}
+    parts = {p["id"]: p for p in contract.get("parts") or []}
+    cages = index[ref]["cages"]
+    assert cages and groups, "the sled publishes no cage or declares no group - vacuous"
+    for c in cages:
+        g = parts[c["id"]].get("group")
+        assert g, (ref, c["id"])
+        assert c["occupant-attrs"] == render_mod.group_side_attrs(g, groups[g])
+        assert c["occupant-attrs"]["data-group-role"] == "traffic"
+        assert c["media"] == groups[g]["attrs"]["media"]
 
 
 def test_every_component_cage_is_the_device_answer_for_the_same_placement(
@@ -235,9 +257,14 @@ def test_every_component_cage_is_the_device_answer_for_the_same_placement(
     checked = 0
     for ref, entry in index.items():
         for cage in entry.get("cages") or []:
-            parts = {p["id"]: p for p in _contract(ref).get("parts") or []}
+            contract = _contract(ref)
+            parts = {p["id"]: p for p in contract.get("parts") or []}
             p = parts[cage["id"]]
-            device = {"views": {"front": {"components": {"placements": [p]}}}}
+            # THE CARD'S OWN GROUPS STAND IN FOR A DEVICE'S (#511): the same
+            # part, placed in a device that declares the card's groups, is
+            # the same answer.
+            device = {"groups": contract.get("groups") or {},
+                      "views": {"front": {"components": {"placements": [p]}}}}
             [dev] = render_mod.cage_entries(device, "front", lib, families,
                                             candidates, {})
             assert cage["lift"] == dev["lift"] + float(p.get("lift") or 0.0), (ref, p["id"])

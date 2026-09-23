@@ -131,7 +131,11 @@ provenance:
     the lids one at a time. So the adapter's own duplex slot ships empty and
     the bores ship capped: the reverse of FS's stacked adapter, which ships
     one cap across the pair (common/lc-duplex-v-adapter@5).
-
+  bore-ids: >-
+    THE BORES ARE NUMBERED, NOT TX AND RX. A panel adapter has no direction
+    until something is plugged into it; its bores are fibre positions 1 and 2,
+    and a cassette path endpoint `lc01.1` is drawn at `lc01/1` (L112). Until
+    v5 they were `tx` and `rx`, which read as a direction the part does not have.
 relief:
   features:
     - node: bezel
@@ -145,9 +149,9 @@ relief:
         rather than estimated.
 optical:
   # TWO BORES, SO TWO FIBRE POSITIONS, and position order is the order the bores
-  # are composed below: 1 is `tx`, 2 is `rx`. Stated here so no module composing
-  # this adapter has to restate it - on the FS FHD line that would be 77 chances
-  # to mistype a number the adapter already knows.
+  # are composed below: bore `1` first, bore `2` second. Stated here so no module
+  # composing this adapter has to restate it - on the FS FHD line that would be
+  # 77 chances to mistype a number the adapter already knows.
   positions: 2
 parts:
   # THE BULKHEAD APERTURE, lifted onto the raised bezel, so each bore recesses
@@ -158,11 +162,11 @@ parts:
   # provenance.axis), each keyway ends at y 0.11.
   #
   # EACH BORE SHIPS CAPPED, one simplex cap per bore (provenance.shipped-caps):
-  # a configuration keys `<placement>/tx` or `/rx` to replace or empty one,
+  # a configuration keys `<placement>/1` or `/2` to replace or empty one,
   # and empties both before a duplex connector takes the adapter's own slot.
-  - {ref: std/lc-bulkhead-bore@1, id: tx, at: [1.125, 0.11], lift: 3.175, rotate: 180,
+  - {ref: std/lc-bulkhead-bore@1, id: '1', at: [1.125, 0.11], lift: 3.175, rotate: 180,
      default: common/lc-dust-cap@1}
-  - {ref: std/lc-bulkhead-bore@1, id: rx, at: [7.375, 0.11], lift: 3.175, rotate: 180,
+  - {ref: std/lc-bulkhead-bore@1, id: '2', at: [7.375, 0.11], lift: 3.175, rotate: 180,
      default: common/lc-dust-cap@1}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate

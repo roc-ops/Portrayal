@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10003-rcb
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -15,6 +15,12 @@ attrs:
   model: JNP10003-RE
   power-draw-max-w: 58
 provenance:
+  speed: 'guide - MX10003 hardware guide, RJ-45 pinout section: the port labeled MGMT is an
+    autosensing 10/100/1000-Mbps Ethernet RJ-45 receptacle. Carried as 1g, the top of the autosensing
+    range'
+  media: 'the RJ-45 jacks are typed by what runs through them rather than by the housing: console
+    and auxiliary ports are rj45-serial (RS-232), a time-of-day port is rj45-tod and a BITS
+    port is rj48, the media the library devices already use for the same jacks'
   size: 'datasheet-table - the guide FRU table gives the RCB 7.98 x 22.12 x
     1.66 in; 202.7 mm is the face width and 42.1 mm the face height'
   power: 'datasheet-table - the guide power example attributes 116 W to two
@@ -24,16 +30,30 @@ states:
 - ok
 - fail
 - absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45
+      serial ports and the USB service port. One job (reaching and disciplining the box),
+      several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the timing block - BITS and ToD on RJ-45 beside the 1PPS and 10 MHz SMB jacks.
+      One job (clock), several media
 parts:
-- {ref: std/usb-a@1, id: usb, at: [6.0, 12.75], rotate: 90, attrs: {function: USB service port}}
-- {ref: common/rj45-eth@1, id: mgmt, at: [14.1, 5.4], attrs: {function: out-of-band management}}
-- {ref: std/rj45@2, id: con, at: [34.1, 5.4], attrs: {function: serial console}}
-- {ref: std/rj45@2, id: tod, at: [130.6, 5.4], attrs: {function: time of day}}
-- {ref: std/rj45@2, id: bits, at: [150.6, 5.4], attrs: {function: BITS timing}}
-- {ref: std/smb@1, id: pps-out, at: [174.1, 5.6], attrs: {function: PPS out}}
-- {ref: std/smb@1, id: pps-in, at: [174.1, 14.6], attrs: {function: PPS in}}
-- {ref: std/smb@1, id: mhz-out, at: [186.1, 5.6], attrs: {function: 10MHz out}}
-- {ref: std/smb@1, id: mhz-in, at: [186.1, 14.6], attrs: {function: 10MHz in}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [6.0, 12.75], rotate: 90, attrs: {function: USB service port}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [14.1, 5.4], attrs: {speed: 1g, media: rj45, function: out-of-band management}}
+- {ref: std/rj45@2, id: con, group: mgmt, at: [34.1, 5.4], attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/rj45@2, id: tod, group: timing, at: [130.6, 5.4], attrs: {media: rj45-tod, function: time of day}}
+- {ref: std/rj45@2, id: bits, group: timing, at: [150.6, 5.4], attrs: {media: rj48, function: BITS timing}}
+- {ref: std/smb@1, id: pps-out, group: timing, at: [174.1, 5.6], attrs: {function: PPS out}}
+- {ref: std/smb@1, id: pps-in, group: timing, at: [174.1, 14.6], attrs: {function: PPS in}}
+- {ref: std/smb@1, id: mhz-out, group: timing, at: [186.1, 5.6], attrs: {function: 10MHz out}}
+- {ref: std/smb@1, id: mhz-in, group: timing, at: [186.1, 14.6], attrs: {function: 10MHz in}}
 size:
   w: 202.7
   h: 42.1

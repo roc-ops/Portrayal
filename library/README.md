@@ -22,9 +22,9 @@ export it to a DCIM without a checkout of this repository.
 | file | what a consumer gets from it |
 |---|---|
 | `<device>.<config>.<view>.svg` | the drawing, with `--` DOM ids and `/` data-paths — and the whole source manifest embedded in `<metadata>`, every view of it |
-| `<device>.configs.json` | the device's configurations — each with its `kind` (base, orderable, example, model), part numbers, bays and view bindings |
-| `devices.json` | the portfolio index: identity, capability, gaps, search blob |
-| `components.json` | the lean component index — identity, size, skins, attrs, parts |
+| `<device>.configs.json` | the device's configurations — each with its `kind` (base, orderable, example, model), its `airflow` (front-to-back, back-to-front, side, passive, or `null` where unstated), part numbers, bays and view bindings |
+| `devices.json` | the portfolio index: identity (with `aliases`, the other names a box is sold or listed under), capability, gaps, search blob |
+| `components.json` | the lean component index — identity, size, skins, attrs, parts (with each part's `group`), the component's own `groups` and `cages` |
 | `components-detail.json` | the same refs with `provenance` and `relief`, split out because they were 88% of the bytes and no viewer reads them |
 | `labs.json` | rack layouts |
 | `gaps.json` | what this library admits it does not know |
@@ -35,6 +35,16 @@ The last two exist because the DCIM exporter used to read them off the source
 tree, which made "export a NetBox document" a task that needed the development
 environment rather than the artifacts. `spec/tests/test_artifact_sufficiency.py`
 is what keeps them published and whole.
+
+**Ports in the drawing.** Every port is a `<g data-class="port">`, and the
+facts about it (`data-media`, `data-speed`, `data-group`, `data-group-role`)
+sit on that element. A composed port, such as `common/rj45-eth@1` around a
+`std/rj45` or `common/qsfp28-cage@3` around a `std/qsfp-ganged`, draws its core as a
+second `data-class="port"` element nested inside the first. The core carries
+`data-inner="1"`, and only the generic housing's attrs. To count or audit
+ports, select `[data-class=port]:not([data-inner])`. A port on a module seated
+in a bay carries the module's own group and role, from the component's
+`groups:`.
 
 Rules of the road (see spec/DESIGN.md for the full set):
 - Real millimeters everywhere; origin top-left, y-down, per view.

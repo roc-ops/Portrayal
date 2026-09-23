@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: as7946-74xksb
-version: 4.0.0
+version: 4.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
+aliases:
+- {name: AGR420, kind: marketing}
 portfolio:
   line: Service Provider
   family: Aggregation Router
@@ -14,6 +16,12 @@ description: Edgecore AGR420 (AS7946-74XKSB) 25GbE aggregation router. 2RU, 74 f
   PSUs and 4+1 redundant fans.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the out-of-band jack is `1g`: the AGR420 datasheet (R03) and the QSG specifications both
+      give one RJ-45 10/100/1000BASE-T management port. The three BITS jacks are `rj48` and the
+      PPS/ToD jack `rj45-tod` - the QSG groups all four as timing ports.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -1127,16 +1135,16 @@ views:
         - {id: led-port-72-a, ref: common/led-arrow-sm@1, at: [334.74, 56.80], skin: up, group: sfp28-speed-leds, rel-pos: 63, for: port-72, attrs: {function: speed}}
         - {id: led-port-73-b, ref: common/led-arrow-sm@1, at: [338.74, 56.80], skin: down, group: sfp28-link-leds, rel-pos: 62, for: port-73, attrs: {function: link}}
         - {id: led-port-72-b, ref: common/led-arrow-sm@1, at: [341.63, 56.80], skin: up, group: sfp28-link-leds, rel-pos: 63, for: port-72, attrs: {function: link}}
-        - {id: bits-0, ref: std/rj45@2, at: [356.1, 14.8], rotate: 180, group: timing, rel-pos: 0}
-        - {id: bits-2, ref: std/rj45@2, at: [372.4, 14.8], rotate: 180, group: timing, rel-pos: 1}
-        - {id: bits-1, ref: std/rj45@2, at: [356.1, 28.9], group: timing, rel-pos: 2}
-        - {id: pps-tod, ref: std/rj45@2, at: [372.4, 28.9], group: timing, rel-pos: 3}
+        - {id: bits-0, ref: std/rj45@2, at: [356.1, 14.8], rotate: 180, group: timing, rel-pos: 0, attrs: {media: rj48}}
+        - {id: bits-2, ref: std/rj45@2, at: [372.4, 14.8], rotate: 180, group: timing, rel-pos: 1, attrs: {media: rj48}}
+        - {id: bits-1, ref: std/rj45@2, at: [356.1, 28.9], group: timing, rel-pos: 2, attrs: {media: rj48}}
+        - {id: pps-tod, ref: std/rj45@2, at: [372.4, 28.9], group: timing, rel-pos: 3, attrs: {media: rj45-tod}}
         - {id: mhz-10-in, ref: std/smb@1, at: [393.60, 17.80], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [394.10, 31.20], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [401.20, 31.35], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [413.6, 27.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {leds: 'Left = link, Right = activity'}, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]}}
+        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [413.6, 27.4], rotate: 180, group: mgmt, rel-pos: 1, attrs: {speed: 1g, leds: 'Left = link, Right = activity'}, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]}}
         - {id: console-0, ref: std/micro-usb@1, at: [402.90, 44.40], group: mgmt, rel-pos: 2}
-        - {id: console-1, ref: std/rj45@2, at: [413.6, 44.8], rotate: 180, group: mgmt, rel-pos: 3}
+        - {id: console-1, ref: std/rj45@2, at: [413.6, 44.8], rotate: 180, group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {id: reset, ref: common/reset-button@1, at: [394.80, 44.60], group: mgmt, rel-pos: 4, for: chassis}
         - {id: led-diag, ref: common/led-rect@1, at: [359.30, 45.00], group: status-leds, rel-pos: 0, for: chassis, attrs: {function: DIAG},
            description: 'DIAG - Green (OK), Amber (fault detected)'}

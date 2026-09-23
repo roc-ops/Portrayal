@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: es1010
-version: 3.0.0
+version: 3.0.2
 maturity: modelled
 manufacturer: Celestica
 model: ES1010
@@ -9,6 +9,12 @@ description: Celestica ES1010 - 1U 48-port 1GbE (PoE++) access switch with 4x 25
   Broadcom TD3.X2, fixed 2+1 fans, 1+1 hot-swap AC PSUs
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      both halves of the out-of-band combo pair are `1g`: the ES1010/ES1050/EG1050 hardware guide,
+      Features and Benefits, rates the SFP combo management port at 1GbE/100M and the Ethernet
+      management port at 1GbE/100M/10M.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -288,11 +294,11 @@ views:
         - {ref: std/sfp-ganged@1, id: port-50, at: [374.8, 19.0], rotate: 180, group: sfp28, rel-pos: 50}
         - {ref: std/sfp-ganged@1, id: port-51, at: [389.05, 3.0], group: sfp28, rel-pos: 51}
         - {ref: std/sfp-ganged@1, id: port-52, at: [389.05, 19.0], rotate: 180, group: sfp28, rel-pos: 52}
-        - {ref: std/usb-a@1, id: usb-1, at: [328.5, 6.0], group: mgmt, rel-pos: 1, attrs: {role: storage, speed: usb3}}
+        - {ref: std/usb-a@1, id: usb-1, at: [328.5, 6.0], group: mgmt, rel-pos: 1, attrs: {role: storage, usb: '3.0'}}
         - {ref: common/led-dot@1, id: led-sys, at: [349.8, 6.2], for: chassis, attrs: {role: system}, group: status-leds, rel-pos: 1}
-        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.5, 4.6], group: mgmt, rel-pos: 2, attrs: {media: sfp, role: mgmt-combo, combo-with: mgmt}}
-        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.25, 6.1], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 100m-1g, combo-with: mgmt-sfp}}
-        - {ref: std/usb-a@1, id: usb-2, at: [408.6, 18.8], group: mgmt, rel-pos: 4, attrs: {role: storage, speed: usb3}}
+        - {ref: std/sfp@1, id: mgmt-sfp, at: [355.5, 4.6], group: mgmt, rel-pos: 2, attrs: {media: sfp, speed: 1g, role: mgmt-combo, combo-with: mgmt}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [408.25, 6.1], group: mgmt, rel-pos: 3, attrs: {role: mgmt, speed: 1g, combo-with: mgmt-sfp}}
+        - {ref: std/usb-a@1, id: usb-2, at: [408.6, 18.8], group: mgmt, rel-pos: 4, attrs: {role: storage, usb: '3.0'}}
         - {ref: std/rj45-ganged@2, id: console, at: [408.25, 26.4], rotate: 180, group: mgmt, rel-pos: 5, attrs: {media: rj45-serial, role: console}}
         - {ref: common/led-dot@1, id: led-stat, at: [428.0, 4.0], for: chassis, group: status-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-fan, at: [428.0, 11.5], for: chassis, group: status-leds, rel-pos: 3}

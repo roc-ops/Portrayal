@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx80
-version: 1.0.15
+version: 1.0.16
 maturity: modelled
 manufacturer: Juniper
 model: MX80
@@ -80,6 +80,18 @@ chassis:
   ru: 2
   color: '#2b2f36'
 gaps:
+  - what: ethernet-port-speed
+    scope: [ethernet]
+    reason: sources-disagree
+    note: >-
+      The MX5/MX10/MX40/MX80 hardware guide says two things about the one management jack. Its
+      Routing Engine description gives one 1-Gbps Ethernet port for the management network; its
+      ETHERNET port pinout section calls the same jack an autosensing 10/100-Mbps RJ-45
+      receptacle. Neither is carried. The EXT CLK A and B jacks are the two BITS clock inputs the
+      same description lists, so they are `rj48`.
+    wanted: >-
+      a third source - a datasheet, or a photograph of the jack lamps with a legend - that settles
+      the ETHERNET port at 100M or 1G.
   - what: mx80-fixed-variant
     reason: needs-photo
     wanted: the fixed MX80 faceplate (Figure 8, built-in 48x1GbE) - a
@@ -235,17 +247,17 @@ views:
         - {id: led-link-2, ref: common/led-dot@1, at: [332.7, 66.0], for: xe-2, group: xe-leds, rel-pos: 2}
         - {id: led-link-3, ref: common/led-dot@1, at: [362.1, 66.0], for: xe-3, group: xe-leds, rel-pos: 3}
         - {id: console, ref: std/rj45@2, at: [182.1, 47.9], rotate: 180, group: mgmt, rel-pos: 0,
-           attrs: {function: serial console}}
+           attrs: {media: rj45-serial, role: console, function: serial console}}
         - {id: aux, ref: std/rj45@2, at: [182.1, 66.9], group: mgmt, rel-pos: 1,
-           attrs: {function: auxiliary console}}
+           attrs: {media: rj45-serial, role: aux, function: auxiliary console}}
         - {id: ethernet, ref: common/rj45-eth@1, at: [205.1, 47.9], rotate: 180, group: mgmt, rel-pos: 2,
            attrs: {function: out-of-band management}}
         - {id: usb, ref: std/usb-a@1, at: [207.0, 68.25], rotate: 90, group: mgmt, rel-pos: 3,
            attrs: {function: USB service port}}
         - {id: clk-a, ref: std/rj45@2, at: [224.1, 47.9], rotate: 180, group: mgmt, rel-pos: 4,
-           attrs: {function: external clock A}}
+           attrs: {media: rj48, function: external clock A}}
         - {id: clk-b, ref: std/rj45@2, at: [224.1, 66.9], group: mgmt, rel-pos: 5,
-           attrs: {function: external clock B}}
+           attrs: {media: rj48, function: external clock B}}
         - {id: led-sys-ok, ref: common/led-dot@1, at: [167.0, 63.0], for: chassis,
            group: status-leds, rel-pos: 0,
            states: ['off', {name: ok, color: '#22c55e'}],

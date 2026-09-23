@@ -19,7 +19,7 @@ description: >-
   rows of six. The shutters are part of the adapter, which is why those plates
   ship with no dust caps: each bore and the pair are slots that ship EMPTY, and
   a plug seated in one is drawn over its closed shutter. The same body as
-  common/lc-duplex-adapter@4 in outline, latch keyways up; what differs is the
+  common/lc-duplex-adapter@5 in outline, latch keyways up; what differs is the
   shutter in each bore.
 size: {w: 13.1, h: 11.6}
 size-confidence: {w: photo-measured, h: estimated}
@@ -30,7 +30,7 @@ size-notes: >-
   mean of 26.26, so 13.1 an adapter (13.13). The row is centred on the plate to
   0.01 mm, the check that does not come from the tool. 105335.main.jpg reads
   within 0.25 and is not used. HEIGHT IS ESTIMATED, and it is not
-  common/lc-duplex-adapter@4's 11.0. The rows abut and repeat every 11.31 in
+  common/lc-duplex-adapter@5's 11.0. The rows abut and repeat every 11.31 in
   the width-scaled frame, but the render looks down on the cassette - the lid
   shows, putting the camera about 12-13 degrees up - which foreshortens heights
   by 2-3%. Corrected, the pitch is 11.6, and three rows fill 34.8 of the
@@ -47,8 +47,9 @@ fields:
     type: text
     default: '#368ad4'
 optical:
-  # TWO BORES, SO TWO FIBRE POSITIONS, in the order they are composed: 1 is
-  # `tx`, the LEFT bore, which is the odd port FS numbers first along a row.
+  # TWO BORES, SO TWO FIBRE POSITIONS: 1 is the LEFT bore, which is the odd
+  # port FS numbers first along a row, and 2 the right. Each is the composed
+  # bore of that id below (provenance.bores), so fibre 1 is drawn at `<part>/1`.
   positions: 2
 relief:
   features:
@@ -61,7 +62,7 @@ relief:
         adapters' faces to read their own.
     # THE SHUTTERS ARE SOLID, so that in 3D they stand IN FRONT of the ferrule
     # each composed bore draws - see provenance.shutter for the depth.
-    - node: shutter-tx
+    - node: shutter-1
       out: 2.725
       confidence: estimated
       source: >-
@@ -69,23 +70,23 @@ relief:
         between the raised face (3.175) and the front of the ferrule the
         composed std/lc-bulkhead-bore@1 stands 0.9 behind that face (2.275),
         so the door hides the ferrule and still reads as recessed.
-    - node: shutter-rx
+    - node: shutter-2
       out: 2.725
       confidence: estimated
       source: >-
-        as shutter-tx - one door per bore, the same depth.
+        as shutter-1 - one door per bore, the same depth.
 parts:
   # THE BULKHEAD APERTURE, TURNED 180 so the latch tongue points UP, as FS
   # fits it (the latch windows show at the top edge of every adapter on
-  # 105333.main.jpg) and as common/lc-duplex-adapter@4 turns its bores. `at` is
+  # 105333.main.jpg) and as common/lc-duplex-adapter@5 turns its bores. `at` is
   # the unrotated box's corner and the turn is about its centre, so each mate
   # lands at (3.425, 5.8) and (9.675, 5.8): the 6.25 pitch, centred on the
   # body. Lifted onto the raised bezel, so each bore recesses from the proud
   # face. BEHIND the skin, so the shutter drawn over each bore paints in front
   # of it - a composed part otherwise paints after its host's art. NO
   # `default:` on either: see the header.
-  - {id: tx, ref: std/lc-bulkhead-bore@1, at: [1.075, 0.09], lift: 3.175, rotate: 180, behind: true}
-  - {id: rx, ref: std/lc-bulkhead-bore@1, at: [7.325, 0.09], lift: 3.175, rotate: 180, behind: true}
+  - {id: '1', ref: std/lc-bulkhead-bore@1, at: [1.075, 0.09], lift: 3.175, rotate: 180, behind: true}
+  - {id: '2', ref: std/lc-bulkhead-bore@1, at: [7.325, 0.09], lift: 3.175, rotate: 180, behind: true}
 connection-points:
   # WHERE A DUPLEX CONNECTOR SEATS: the midpoint of the two bores' own mate
   # points, (3.425, 5.8) and (9.675, 5.8) - the body's centre, and the same
@@ -106,6 +107,12 @@ provenance:
     slot is a composed part with a mate; the shutter is now a solid door in
     front of the ferrule (see `shutter`), which answers the same 3D problem
     the other way round.
+    THE BORES ARE THE FIBRE POSITIONS, `1` the LEFT and `2` the right, as
+    `optical:` states: a composed bore with the position's number as its id is
+    one of the two nodes L112 accepts, so fibre 1 is drawn at `<part>/1`, the
+    bore's own path. @1, which composed no bores, drew each position as an
+    element of class fibre, the shutter group over its bore; with the bores
+    back those ids are theirs, and the groups are `shutter-1` and `shutter-2`.
     THE BULKHEAD APERTURE, not the transceiver receptacle: this is a panel
     adapter, and std/lc-bulkhead-bore@1 carries the keyway measured off
     SENKO's bulkhead adapter (DS-LC-000010), ending 5.71 from the ferrule axis.
@@ -152,7 +159,8 @@ provenance:
     plate plane, which would now put them behind the ferrule the composed bore
     draws 0.9 behind the face; they stand at 2.725, halfway between that
     ferrule (2.275) and the face (3.175), which is the one constraint the
-    model has - in front of the ferrule and behind the face.
+    model has - in front of the ferrule and behind the face. Each door is the
+    skin group `shutter-<bore>`, `shutter-1` over bore `1`.
   colour: >-
     the `housing-finish` default is FS's single-mode UPC blue as it renders on
     this adapter: #368ad4, the median of the housing pixels on 105333.main.jpg

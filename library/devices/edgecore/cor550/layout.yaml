@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: cor550
-version: 2.0.0
+version: 2.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
+aliases:
+- {name: AS7926-40XKFB, kind: vendor}
 portfolio: {line: Service Provider, family: Core Router, series: COR550}
 description: >-
   40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (vendor alias
@@ -317,8 +319,6 @@ attrs:
     bmc: ASPEED AST2600
     software: ONIE installer pre-loaded; open-source and commercial NOS options
   features:
-    marketing-name: COR550
-    vendor-alias: AS7926-40XKFB
     port-summary: 40 x 100G QSFP28, 13 x 400G QSFP-DD fabric
     timing: Synchronous Ethernet, IEEE 1588v2 PTP, timing synchronization stack interfaces
   management:
@@ -418,7 +418,7 @@ groups:
     attrs: {media: qsfp28, speed: 100g}
   qsfpdd-fabric:
     term: Port
-    role: traffic
+    role: fabric
     index-origin: 0
     attrs: {media: qsfp-dd, speed: 400g}
   port-lamps: {term: LED, role: indicator, index-origin: 0}
@@ -738,12 +738,12 @@ views:
         - {ref: common/led-dot@1, id: led-pwr, at: [415.40, 50.20], group: leds, rel-pos: 3, for: [rear/psu-0, rear/psu-1]}
         - {ref: common/led-dot@1, id: led-fan, at: [420.20, 50.20], group: leds, rel-pos: 4, for: [rear/fan-0, rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4]}
         - {ref: std/micro-usb@1, id: console-usb, at: [425.70, 49.70], group: mgmt, rel-pos: 6, attrs: {media: micro-usb-b, role: console}}
-        - {ref: std/rj45@2, id: stack-sync-0, at: [377.35, 56.43], rotate: 180, group: mgmt, rel-pos: 7, attrs: {media: rj45, role: timing}}
-        - {ref: std/rj45@2, id: stack-sync-1, at: [377.35, 69.83], group: mgmt, rel-pos: 8, attrs: {media: rj45, role: timing}}
-        - {ref: std/rj45@2, id: pps-tod-0, at: [397.58, 56.43], rotate: 180, group: mgmt, rel-pos: 9, attrs: {media: rj45, role: timing}}
-        - {ref: std/rj45@2, id: pps-tod-1, at: [397.58, 69.83], group: mgmt, rel-pos: 10, attrs: {media: rj45, role: timing}}
+        - {ref: std/rj45@2, id: stack-sync-0, at: [377.35, 56.43], rotate: 180, group: mgmt, rel-pos: 7, attrs: {media: rj45-sync, role: timing}}
+        - {ref: std/rj45@2, id: stack-sync-1, at: [377.35, 69.83], group: mgmt, rel-pos: 8, attrs: {media: rj45-sync, role: timing}}
+        - {ref: std/rj45@2, id: pps-tod-0, at: [397.58, 56.43], rotate: 180, group: mgmt, rel-pos: 9, attrs: {media: rj45-tod, role: timing}}
+        - {ref: std/rj45@2, id: pps-tod-1, at: [397.58, 69.83], group: mgmt, rel-pos: 10, attrs: {media: rj45-tod, role: timing}}
         - {ref: std/rj45@2, id: console-rj45, at: [418.21, 56.43], rotate: 180, group: mgmt, rel-pos: 11, attrs: {media: rj45-serial, role: console}}
-        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [418.21, 69.83], group: mgmt, rel-pos: 12, attrs: {media: rj45, role: mgmt, speed: 1000base-t}}
+        - {ref: common/rj45-eth@1, id: mgmt-eth, at: [418.21, 69.83], group: mgmt, rel-pos: 12, attrs: {media: rj45, role: mgmt, speed: 1g}}
     regions:
       - {id: mgmt-cluster, at: [374.0, 2.0], size: {w: 64.0, h: 84.0}, label: Management,
          members: [oob-0, oob-1, timing-coax, status-display, usb, usb-mark, reset,

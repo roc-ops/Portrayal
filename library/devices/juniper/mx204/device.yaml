@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx204
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Juniper
 model: MX204
@@ -17,6 +17,13 @@ description: >-
   the rear.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      MGMT is `1g`: the hardware guide describes it as an autosensing RJ-45 supporting 10, 100 or
+      1000 Mb/s (also carried in `attrs.management.oob`). BITS, ToD and CON state no speed; their
+      media say what they carry (`rj48`, `rj45-tod`, `rj45-serial`). The GM/PTP SFP has no rate
+      anywhere - see gaps.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -253,6 +260,15 @@ chassis:
   ru: 1
   color: '#9a9ea3'
 gaps:
+  - what: gm-ptp-speed
+    scope: [gm-ptp]
+    reason: vendor-silent
+    note: >-
+      The hardware guide names the PTP grandmaster clock (GM/PTP) port in both front-panel callout
+      tables and gives no rate or supported optic for it; the MX204 datasheet does not mention the
+      port. The MX304 guide rates its own GM/PTP port, but that is a different chassis.
+    wanted: >-
+      the GM/PTP port rate, or its supported transceiver list, so the port can state a `speed`.
   - what: smb-column-legend
     scope: [timing]
     reason: sources-disagree
@@ -501,18 +517,18 @@ views:
         - {id: led-port-9, ref: common/led-dot@1, at: [164.75, 21.1], for: port-9, group: sfp-plus-leds, rel-pos: 9}
         - {id: led-port-10, ref: common/led-dot@1, at: [175.35, 21.1], for: port-10, group: sfp-plus-leds, rel-pos: 10}
         - {id: led-port-11, ref: common/led-dot@1, at: [178.95, 21.1], for: port-11, group: sfp-plus-leds, rel-pos: 11}
-        - {id: mgmt, ref: common/rj45-eth@1, at: [237.05, 20.65], rotate: 180, group: mgmt, rel-pos: 0,
+        - {id: mgmt, ref: common/rj45-eth@1, at: [237.05, 20.65], rotate: 180, group: mgmt, rel-pos: 0, attrs: {speed: 1g},
            states: {led-a: ['off', {name: 1000m, color: '#f59e0b'}, {name: 100m, color: '#22c55e'}],
                     led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]},
            description: 'Routing Engine interface text - link LED amber steady at 1000 Mbps, green
              steady at 100 Mbps, off at 10 Mbps; activity LED green, blinking with traffic'}
-        - {id: bits, ref: std/rj45@2, at: [259.15, 20.65], rotate: 180, group: timing, rel-pos: 0}
+        - {id: bits, ref: std/rj45@2, at: [259.15, 20.65], rotate: 180, group: timing, rel-pos: 0, attrs: {media: rj48}}
         - {id: led-bits-act, ref: common/led-dot@1, at: [261.95, 20.7], for: bits, group: bits-leds, rel-pos: 0,
            attrs: {function: activity}}
         - {id: led-bits-link, ref: common/led-dot@1, at: [270.15, 20.7], for: bits, group: bits-leds, rel-pos: 1,
            attrs: {function: link}}
-        - {id: con, ref: std/rj45@2, at: [282.25, 20.8], group: mgmt, rel-pos: 1}
-        - {id: tod, ref: std/rj45@2, at: [306.25, 20.8], group: timing, rel-pos: 1}
+        - {id: con, ref: std/rj45@2, at: [282.25, 20.8], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {id: tod, ref: std/rj45@2, at: [306.25, 20.8], group: timing, rel-pos: 1, attrs: {media: rj45-tod}}
         - {id: usb, ref: std/usb-a@1, at: [323.85, 25.55], rotate: 90, group: mgmt, rel-pos: 2}
         - {id: clk-10mhz-in, ref: std/smb@1, at: [341.64, 21.39], group: timing, rel-pos: 2,
            attrs: {function: 10 MHz clock input}}

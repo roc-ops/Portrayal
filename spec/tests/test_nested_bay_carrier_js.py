@@ -20,7 +20,7 @@ import pytest
 
 SCRIPT = Path(__file__).resolve().parents[1] / "tests/js/nested-bay-carrier.mjs"
 
-PPM = "smartoptics/ppm-ad1-1510@1"
+PPM = "smartoptics/ppm-ad1-1510@2"
 DUMMY = "smartoptics/ppm-dummy@1"
 X404 = "smartoptics/dcp-404@1"
 NESTED = "slot-1/module/ppm-1"

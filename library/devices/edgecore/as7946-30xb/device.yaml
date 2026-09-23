@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: as7946-30xb
-version: 4.0.0
+version: 4.0.2
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-30XB
+aliases:
+- {name: AGR400, kind: marketing}
 portfolio:
   line: Service Provider
   family: Aggregation Router
@@ -14,6 +16,12 @@ description: Edgecore AGR400 (AS7946-30XB) 100GbE aggregation router. 2RU, 30 fi
   1+1 redundant PSUs and 4+1 redundant fans.
 profile: networking
 provenance:
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      the out-of-band jack is `1g`: the AGR400 datasheet (R05) Management Ports list gives one
+      RJ-45 10/100/1000BASE-T management port. The three BITS jacks are `rj48` and the 1PPS/ToD
+      jack `rj45-tod` - the same list names them as timing ports, not Ethernet.
   stack-orientation:
     confidence: estimated
     note: >-
@@ -631,16 +639,16 @@ views:
         - {id: led-port-27, ref: common/led-dot@1, at: [322.93, 26.06], group: sfp28-port-leds, rel-pos: 1, for: port-27, attrs: {function: speed/link}}
         - {id: led-port-28, ref: common/led-dot@1, at: [331.36, 26.06], group: sfp28-port-leds, rel-pos: 2, for: port-28, attrs: {function: speed/link}}
         - {id: led-port-29, ref: common/led-dot@1, at: [337.23, 26.06], group: sfp28-port-leds, rel-pos: 3, for: port-29, attrs: {function: speed/link}}
-        - {id: bits-0, ref: std/rj45@2, at: [356.3, 14.8], rotate: 180, group: timing, rel-pos: 0}
-        - {id: bits-2, ref: std/rj45@2, at: [372.3, 14.8], rotate: 180, group: timing, rel-pos: 1}
-        - {id: bits-1, ref: std/rj45@2, at: [356.3, 28.8], group: timing, rel-pos: 2}
-        - {id: pps-tod, ref: std/rj45@2, at: [372.3, 28.8], group: timing, rel-pos: 3}
+        - {id: bits-0, ref: std/rj45@2, at: [356.3, 14.8], rotate: 180, group: timing, rel-pos: 0, attrs: {media: rj48}}
+        - {id: bits-2, ref: std/rj45@2, at: [372.3, 14.8], rotate: 180, group: timing, rel-pos: 1, attrs: {media: rj48}}
+        - {id: bits-1, ref: std/rj45@2, at: [356.3, 28.8], group: timing, rel-pos: 2, attrs: {media: rj48}}
+        - {id: pps-tod, ref: std/rj45@2, at: [372.3, 28.8], group: timing, rel-pos: 3, attrs: {media: rj45-tod}}
         - {id: mhz-10-in, ref: std/smb@1, at: [393.81, 18.01], group: timing, rel-pos: 4}
         - {id: pps-1-out, ref: std/smb@1, at: [393.81, 30.53], group: timing, rel-pos: 5}
         - {id: usb, ref: std/usb-a@1, at: [403.79, 28.77], rotate: 90, group: mgmt, rel-pos: 0}
-        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [415.8, 28.7], rotate: 180, group: mgmt, rel-pos: 1, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]},
+        - {id: mgmt-eth, ref: common/rj45-eth@1, at: [415.8, 28.7], rotate: 180, group: mgmt, rel-pos: 1, attrs: {speed: 1g}, states: {led-a: ['off', {behavior: blinking, name: activity}], led-b: ['off', {name: link}]},
            description: 'QSG Front LEDs callout 5 - the OOB jack carries link (left) and activity (right) lamps as led-b and led-a under rotate 180; the guide names no colours'}
-        - {id: console-1, ref: std/rj45@2, at: [415.8, 45.7], rotate: 180, group: mgmt, rel-pos: 3}
+        - {id: console-1, ref: std/rj45@2, at: [415.8, 45.7], rotate: 180, group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
         - {id: console-0, ref: std/micro-usb@1, at: [404.0, 46.4], group: mgmt, rel-pos: 2}
         - {id: reset, ref: common/reset-button@1, at: [394.5, 45.4], group: mgmt, rel-pos: 4, for: chassis}
         - {id: led-diag, ref: common/led-rect@1, at: [359.2, 48.6], group: status-leds, rel-pos: 0, for: chassis, attrs: {function: DIAG},

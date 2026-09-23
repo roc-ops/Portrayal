@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: csr200
-version: 1.0.2
+version: 1.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AS5915-18X
+aliases:
+- {name: CSR200, kind: marketing}
 portfolio: {line: Service Provider, family: Cell Site Router, series: CSR200}
 description: >-
   6x 10G SFP+, 8x 1G SFP and 4x 1G RJ-45 compact cell site gateway, sold as the CSR200, Broadcom BCM88272
@@ -142,7 +144,6 @@ attrs:
     oscillator: Stratum 3E compliant OCXO
     software: ONIE installer pre-loaded; Open Network Linux (ONL) compatible
   features:
-    marketing-name: CSR200
     timing: IEEE 1588v2 and SyncE in hardware
     timing-ports: BITS (RJ-45), ToD/1PPS (RJ-45), 1PPS I/O (SMB), 10MHz I/O (SMB)
     standards: TIP OOPT DCSG specification
@@ -241,7 +242,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45, speed: 100/1000base-t}
+    attrs: {media: rj45, speed: 1g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
   timing:
     term: Port
@@ -827,13 +828,13 @@ views:
         rotate: 180
         group: timing
         rel-pos: 1
-        attrs: {media: rj45, role: timing, timing: BITS}
+        attrs: {media: rj48, role: timing, timing: BITS}
       - ref: std/rj45-ganged@2
         id: tod-pps
         at: [349.15, 19.9]
         group: timing
         rel-pos: 2
-        attrs: {media: rj45, role: timing, timing: ToD/1PPS}
+        attrs: {media: rj45-tod, role: timing, timing: ToD/1PPS}
       - ref: common/smb-jack@1
         id: pps-in
         at: [236.52, 34.47]
@@ -870,7 +871,7 @@ views:
         at: [370.7, 19.9]
         group: mgmt
         rel-pos: 1
-        attrs: {media: rj45, role: mgmt, speed: 1000base-t}
+        attrs: {media: rj45, role: mgmt, speed: 1g}
       - {ref: common/reset-button@1, id: reset, at: [334.2, 33.8], group: mgmt, rel-pos: 4, for: chassis}
       - ref: common/led-rect@1
         id: led-loc

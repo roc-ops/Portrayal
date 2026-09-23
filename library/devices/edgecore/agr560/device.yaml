@@ -1,10 +1,12 @@
 format: 1
 kind: device
 name: agr560
-version: 2.0.4
+version: 2.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
+aliases:
+- {name: AGR560, kind: marketing}
 portfolio: {line: Service Provider, family: Aggregation Router, series: AGR560}
 description: >-
   12 x 400G QSFP-DD, 24 x 100G QSFP28 and 4 x 10G SFP+ 2RU aggregation router on a Broadcom Jericho2c+
@@ -1640,7 +1642,7 @@ views:
         at: [362.64, 32.67]
         group: mgmt
         rel-pos: 2
-        attrs: {media: rj45, role: console}
+        attrs: {media: rj45-serial, role: console}
       - ref: std/usb-a@1
         id: usb
         at: [421.2, 36.35]
@@ -1654,7 +1656,7 @@ views:
         at: [383.1, 32.67]
         group: timing
         rel-pos: 1
-        attrs: {media: rj45, role: timing, signal: tod}
+        attrs: {media: rj45-tod, role: timing, signal: tod}
       - ref: std/sma@1
         id: pps
         at: [406.11, 38.33]
