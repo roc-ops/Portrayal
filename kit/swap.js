@@ -150,6 +150,11 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
   return wrap;
 }
 
+// what a projection does not carry: relief, refs, behaviour, connection points
+const projectionDrops = n => n.startsWith('data-z-') || n.startsWith('data-cp')
+  || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
+      'data-vent', 'data-groove'].includes(n);
+
 // A BAY SEEN FROM BEHIND. render.py draws a seated module's back (`faces.rear`)
 // inside the rear-panel hole its bay names, as a projection, and deepens the
 // hole to the back of that module. A swap changes the front bay only - there is
@@ -161,10 +166,6 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
 // module's rear face comes from its components.json entry. Built the way
 // render.py builds a projection: `data-of` in place of `data-path`, and nothing
 // the kit would extract as relief. In 3D the back is the module body's own.
-// what a projection does not carry: relief, refs, behaviour, connection points
-const projectionDrops = n => n.startsWith('data-z-') || n.startsWith('data-cp')
-  || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
-      'data-vent', 'data-groove'].includes(n);
 export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef) {
   let applied = 0;
   const NSX = 'http://www.w3.org/2000/svg';
