@@ -26,8 +26,20 @@ the *published build*, not about the hardware.
 - Device types carry `power-ports` where the chassis holds the inlet, and RF and
   timing jacks as `other` interfaces with their connector or function as a label
   (roc-ops/Portrayal#286, roc-ops/Portrayal#285).
+- `<device>.configs.json` and every `devices.json` entry carry `aliases`: the
+  other names the box is sold or listed under - an AS number, a marketing name,
+  a DriveNets name - as a list of strings, `[]` when there are none. `model`
+  stays the canonical name and is never repeated there. The names are also in
+  the `devices.json` search field, so a hardware compatibility list's AS9716-32D
+  finds `dcs510` (roc-ops/Portrayal#514).
 
 ### Changed
+- `attrs.features.vendor-alias`, `attrs.features.marketing-name` and
+  `attrs.platform.oem-alias` are gone from `configs.json` `attrs`, and from the
+  facts list in the DCIM exports' comments. Their values moved to the
+  top-level `aliases` above, with any caveat kept as the alias's note in the
+  manifest; the exports' comments name the aliases on an "Also sold or listed
+  as" line instead (roc-ops/Portrayal#514).
 - A pluggable cage's `rotate`, and so `cages[].rotate`, has one meaning: 0 is a
   module seated upright, bail at the top and belly at the bottom. Every
   belly-to-belly SFP/QSFP/QSFP-DD stack is drawn upper 0 over lower 180, or left

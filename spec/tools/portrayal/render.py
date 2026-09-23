@@ -27,7 +27,7 @@ from portrayal.manifest import (view_parts, targets, split_target, component_ref
                       presented_interface, seat_point, _turn,
                       load_yaml, resolve_views, module_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
-                      occupant_spec)
+                      occupant_spec, alias_names)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -3168,6 +3168,11 @@ def main():
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
+                 # THE OTHER NAMES THIS BOX IS SOLD OR LISTED UNDER - an HCL's
+                 # AS number, a marketing name, an OEM's name (#514). Names
+                 # only; kind and note stay in the manifest. `model` remains
+                 # the canonical one and is never repeated here.
+                 "aliases": alias_names(device),
                  "capability": cap["capability"], "gaps": cap["gaps"],
                  # FACES ONLY. A view carrying `face:` is a VARIANT - the
                  # 12 x 3.5in front is drawn when a configuration redirects the

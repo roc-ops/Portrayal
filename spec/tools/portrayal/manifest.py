@@ -52,6 +52,15 @@ def load_yaml(path):
     return hit
 
 
+def alias_names(device):
+    """The `name` of every entry in a device's `aliases:`, in declared order.
+
+    What configs.json and devices.json publish - the names an HCL or a search
+    box would type. `kind`, `note` and `shared` stay in the manifest.
+    """
+    return [a["name"] for a in (device.get("aliases") or [])
+            if isinstance(a, dict) and a.get("name")]
+
 
 def view_parts(view):
     """Flatten a canonical view into its lists. Missing sections are empty lists."""
