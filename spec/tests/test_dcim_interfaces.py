@@ -205,11 +205,15 @@ def test_a_cage_with_no_settled_default_does_not_guess_its_speed():
 def test_every_plain_speed_the_library_uses_has_a_row():
     """THE SWEEP THAT WOULD HAVE CAUGHT ALL 773.
 
-    Only speeds written as a plain token are required to type. That is the line
-    between a missing row and a fact about the hardware: the MX304's GM/PTP port
-    says "1g/10g (reserved for future use per the guide)" because Juniper says it
-    is unsupported, and it is RIGHT that it does not export. A new device with
-    1.6T ports will fail this until somebody adds the row and picks the cage.
+    Every speed is a plain token now - lint L110 holds the library to the closed
+    set in spec/schemas/speeds.yaml - so this reads every speed on a port. A new
+    device with 1.6T ports will fail this until somebody adds the row and picks
+    the cage.
+
+    A port whose part NOT_A_DCIM_PORT registers is not a missing row: the register
+    already says why it does not type. The HLX-TGV's SC/APC PON port is the one
+    case - it states `speed: 10g` beside `pon: xgs-pon`, and the ferrule is not
+    an Ethernet cage family.
     """
     import re
     plain = re.compile(r"^\d+(\.\d+)?[gm]$")
@@ -228,6 +232,8 @@ def test_every_plain_speed_the_library_uses_has_a_row():
                         continue
                     speed = str(a.get("speed") or "")
                     if not plain.match(speed):
+                        continue
+                    if pl["ref"].split("@")[0] in dx.NOT_A_DCIM_PORT:
                         continue
                     if dx.iface_type(pl, a, g.get("role")) is None:
                         bad.add(f"{p.parent.parent.name}/{p.parent.name}: {pl['ref']} "
@@ -279,9 +285,44 @@ def test_a_bare_rj45_the_device_gives_a_speed_is_an_ethernet_port():
     jacks on the same part: a ToD or BITS input has no Ethernet speed to give,
     and not one of them states a speed.
     """
-    assert dx.iface_type(_pl("std/rj45-ganged@2"), {"speed": "100m-1g"},
+    assert dx.iface_type(_pl("std/rj45-ganged@2"), {"speed": "1g"},
                          "management") == "1000base-t"
     assert dx.iface_type(_pl("std/rj45@2"), {}, "management") is None
+
+
+# --- one spelling per rate (#512) --------------------------------------------
+
+def test_the_rj45_table_has_one_row_per_rate():
+    """1G copper was spelled four ways and IFACE_TYPE carried two of them, so a
+    port spelled either of the others typed as nothing. With one vocabulary the
+    table needs one row, and a second spelling coming back is a regression."""
+    rj45 = {s for (fam, s) in dx.IFACE_TYPE if fam == "rj45"}
+    assert "100m-1g" not in rj45 and "1g" in rj45, rj45
+
+
+def test_every_speed_the_export_tables_key_on_is_in_the_closed_set():
+    """The tables and the library speak one vocabulary. A row keyed on a
+    spelling lint L110 refuses is a row no port can ever reach."""
+    from portrayal import lint
+    keys = {s for (_f, s) in dx.IFACE_TYPE} | {s for (_m, s) in dx.PART_MEDIA if s}
+    assert set(lint.PORT_SPEEDS), "spec/schemas/speeds.yaml loaded nothing"
+    assert keys <= set(lint.PORT_SPEEDS), sorted(keys - set(lint.PORT_SPEEDS))
+
+
+@pytest.mark.parametrize("model,ports", [
+    ("AS5915-16X", ["port-13", "port-14", "port-15", "port-16"]),     # CSR180
+    ("AS5915-18X", ["port-15", "port-16", "port-17", "port-18"]),     # CSR200
+])
+def test_the_csr_copper_ports_export_as_1000base_t(model, ports):
+    """THE EIGHT PORTS THE SECOND SPELLING DROPPED. The CSR180's and CSR200's
+    RJ45 traffic group said `100/1000base-t`, which had no IFACE_TYPE row, so
+    their four copper ports each exported nothing, in every configuration."""
+    found = [d for m, d in _exports() if m.startswith(model)]
+    if not found:
+        pytest.skip(f"{model} is not in this library")
+    for d in found:
+        got = {i["name"]: i["type"] for i in (d.get("interfaces") or [])}
+        assert {p: got.get(p) for p in ports} == {p: "1000base-t" for p in ports}, d["model"]
 
 
 def test_the_s9110_exports_its_out_of_band_jack():
