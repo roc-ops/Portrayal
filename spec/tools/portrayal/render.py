@@ -891,7 +891,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             del pending[host_id]
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -965,6 +965,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     g.set("id", inst_id)
     g.set("data-path", path)
     g.set("data-class", contract.get("class", "component"))
+    # A PORT INSIDE A PORT - the std core of a composed port - is the inner
+    # part of one connector, not a second one (see the `parts:` loop below).
+    if in_port and contract.get("class") == "port":
+        g.set("data-inner", "1")
     # HOW IT MOVES, beside WHAT IT IS. The 3D viewer decided what could be
     # ejected from a hardcoded class list, so every new removable type meant
     # editing that list - and a transceiver, which is removable, was not on it.
@@ -1125,6 +1129,13 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # A device never overrides a card's groups: the bay's own group stays on
     # the bay element (render_view), and names are local to the component.
     comp_groups = contract.get("groups") or {}
+    # AN INNER PORT IS MARKED. A composed port - common/rj45-eth around a
+    # std/rj45, common/qsfp28-cage around a std/qsfp-ganged - draws its core as a
+    # data-class `port` of its own, nested inside the outer one. The outer port
+    # is the one that carries the facts (media, speed, group); the core keeps
+    # its class, so no selector breaks, and says `data-inner="1"` so an audit
+    # can skip it. Handed down the whole composition, not just one level.
+    parts_in_port = in_port or contract.get("class") == "port"
     for part in contract.get("parts") or []:
         pgrp = comp_groups.get(part.get("group")) or {}
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
@@ -1148,7 +1159,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                palette=palette,
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                               path=f"{path}/{part['id']}", resolved=resolved)
+                               path=f"{path}/{part['id']}", resolved=resolved,
+                               in_port=parts_in_port)
         if part.get("group"):
             write_group_side(pg, part["group"], pgrp, part.get("attrs"))
         # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
