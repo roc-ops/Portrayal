@@ -2310,7 +2310,7 @@ def lint_component_optical_front_order(path, data):
     and which row comes first, is a fact about the SILKSCREEN, and `at.x`/
     `at.y` cannot answer it - the geometry-only derivation would quietly
     guess one, which is exactly what shipped wrong before this rule existed
-    (fs/fhd-2mtp12-lc-os2-a@3's own provenance.parts records both retracted
+    (fs/fhd-2mtp12-lc-os2-a@4's own provenance.parts records both retracted
     guesses). So a module whose fibre-bearing parts sit at more than one
     distinct `at.y` states `optical.front-order` explicitly instead of
     leaving it to be derived.
@@ -2562,7 +2562,7 @@ def lint_component_optical_position_nodes(path, data, lib_roots):
 def lint_component_optical_coverage(path, data, lib_roots):
     """L80: every position is reached by a path or declared unused, with a reason.
 
-    smartoptics/ppm-ocu-97-3@1 carries this in provenance today:
+    smartoptics/ppm-ocu-97-3@2 carries this in provenance today:
 
         THE SECOND BORE IS DEAD. It is captioned NA and terminates nothing.
 
