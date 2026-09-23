@@ -83,7 +83,7 @@ groups:                         # what the parts are FOR; every placement and ba
     term: Port
     role: management
     index-origin: 1
-    description: out-of-band Ethernet and console   # both RJ45, so no `mixed:`; add it only when media differ
+    mixed: out-of-band Ethernet and the serial console   # one job, two media (rj45, rj45-serial), so it says why
   status:
     term: LED
     role: indicator
@@ -124,8 +124,10 @@ views:                          # all six; a face with nothing documented says s
         - {id: led-port-2, ref: common/led-dot@1, at: [42.75, 11.0], for: port-2, group: port-leds, rel-pos: 2}
         - {id: led-port-3, ref: common/led-dot@1, at: [59.25, 11.0], for: port-3, group: port-leds, rel-pos: 3}
         - {id: led-port-4, ref: common/led-dot@1, at: [75.75, 11.0], for: port-4, group: port-leds, rel-pos: 4}
-        - {id: mgmt, ref: common/rj45-eth@1, at: [380.0, 14.0], group: mgmt, rel-pos: 1}      # an Ethernet jack has lamps
-        - {id: console, ref: std/rj45@2, at: [400.0, 14.0], group: mgmt, rel-pos: 2}          # a console jack is the bare housing
+        - {id: mgmt, ref: common/rj45-eth@1, at: [380.0, 14.0], group: mgmt, rel-pos: 1,
+           attrs: {speed: 1g}}                 # an Ethernet jack has lamps, and a rate (L113)
+        - {id: console, ref: std/rj45@2, at: [400.0, 14.0], group: mgmt, rel-pos: 2,
+           attrs: {media: rj45-serial, role: console}}   # the bare housing; its media says it is not Ethernet
         - {id: sys, ref: common/led-dot@1, at: [424.0, 20.0], for: chassis, attrs: {role: system}, group: status, rel-pos: 1}   # a lamp says what it indicates
   rear:
     size: {w: 440.0, h: 43.6}
