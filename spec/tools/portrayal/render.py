@@ -1973,14 +1973,33 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 # front bay and nothing else, so a hole a bay is seen through
                 # says which bay and where its projection goes - what a swap
                 # needs to redraw the back it shows in 2D.
-                rear_of = next(((b["id"], b["rear"]["at"])
-                                for ov in (device.get("views") or {}).values()
-                                for b in view_parts(ov)["bays"]
-                                if (b.get("rear") or {}).get("view") == view_name
-                                and b["rear"].get("cutout") == c["id"]), None)
-                if rear_of:
-                    e.set("data-rear-of", rear_of[0])
-                    e.set("data-rear-at", f"{rear_of[1][0]:g},{rear_of[1][1]:g}")
+                rear_bay = next((b for ov in (device.get("views") or {}).values()
+                                 for b in view_parts(ov)["bays"]
+                                 if (b.get("rear") or {}).get("view") == view_name
+                                 and b["rear"].get("cutout") == c["id"]), None)
+                if rear_bay:
+                    e.set("data-rear-of", rear_bay["id"])
+                    e.set("data-rear-at", f"{rear_bay['rear']['at'][0]:g},{rear_bay['rear']['at'][1]:g}")
+                    # A HOLE A SLOT IS SEEN THROUGH IS THAT SLOT, FROM BEHIND.
+                    # The tree rows it as the bay, in the bay's group and order,
+                    # named for what sits in it; the path stays cutout:<id>.
+                    occ = (config.get("bays") or {}).get(rear_bay["id"], rear_bay.get("default"))
+                    if occ:
+                        e.set("data-rear-ref", occ)
+                    grp_name = rear_bay.get("group")
+                    if grp_name:
+                        # ONLY data-group AND data-group-role COME ACROSS. The
+                        # rest of group_side_attrs (a group's own attrs, its
+                        # description) belongs to the thing drawn IN the bay,
+                        # not the hole it is seen through - a `data-media`
+                        # here would make the explorer read the cutout itself
+                        # as a port.
+                        side = group_side_attrs(grp_name, dev_groups.get(grp_name))
+                        for k in ("data-group", "data-group-role"):
+                            if k in side:
+                                e.set(k, side[k])
+                    if rear_bay.get("rel-pos") is not None:
+                        e.set("data-rel-pos", f"{rear_bay['rel-pos']}")
                 e.set("data-wall", c.get("wall") or "#2a2d31")
                 hole.set("id", f"cutout--{c['id']}--hole")
                 e.append(hole)

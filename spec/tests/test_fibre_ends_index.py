@@ -48,3 +48,19 @@ def test_a_splitter_fans_out_instead_of_being_dropped(tmp_path):
     assert ends["split.1"]["to"] == "common.1"
     assert ends["split.2"]["to"] == "common.1"
     assert ends["split.1"]["label"] and ends["split.2"]["label"]
+
+
+def test_a_rear_cutout_carries_its_slot_and_occupant():
+    import yaml
+    from portrayal import render
+    lib = render.Library([str(ROOT / "library")])
+    dev = yaml.safe_load((ROOT / "library/devices/fs/fhd-1ufce/device.yaml").read_text())
+    # bay-1 declares no `default`, so an occupant is only on the cutout when
+    # the config seats one - a bay-less config gets no data-rear-ref at all.
+    occ = dev["views"]["front"]["components"]["bays"][0]["accepts"][0]
+    out = render.render_view(dev, "rear", dev["views"]["rear"], lib, config_name="t",
+                             config={"bays": {"bay-1": occ}})
+    root = render.ET.fromstring(out) if isinstance(out, str) else out
+    cut = next(e for e in root.iter() if e.get("data-rear-of") == "bay-1")
+    assert cut.get("data-group") == "slots" and cut.get("data-rel-pos") == "1"
+    assert cut.get("data-rear-ref") == occ
