@@ -244,8 +244,27 @@ def component_versions(library: pathlib.Path):
         ver = str(doc.get("version") or "")
         out[f"{vendor}/{name}@{major[1:]}"] = (
             ver + "+" + _component_digest(ct.parent, doc))
-        out.setdefault(f"{vendor}/{name}", {})[major] = doc.get("parts") or []
+        out.setdefault(f"{vendor}/{name}", {})[major] = _children(doc)
     return out
+
+
+def _children(contract):
+    """The refs a component draws that it does not itself contain: its `parts`,
+    and every ref its own bays seat or take.
+
+    NESTED BAYS WERE NOT FOLLOWED. A component can host bays - an SCB carries a
+    routing engine, a SIP carries SPAs - and only `parts:` was walked, so
+    `juniper/re-s-1300@1` could be rewritten inside the SCB bays of mx240, mx480
+    and mx960 with devicelock asking for nothing; #521 bumped all three by hand.
+    A nested bay is read exactly as `_composed` reads a device bay, `default`
+    and every ref it `accepts`, because an occupant the bay only accepts is
+    still one a configuration can draw there.
+    """
+    refs = [p.get("ref") for p in (contract.get("parts") or [])]
+    for bay in (contract.get("bays") or {}).values():
+        bay = bay or {}
+        refs += [bay.get("default")] + list(bay.get("accepts") or [])
+    return [r for r in refs if r]
 
 
 def _composed(doc, versions):
@@ -258,8 +277,9 @@ def _composed(doc, versions):
     devices draw their management ports, and devicelock re-locked none of them.
     The guard against a device changing without saying so did not extend to a
     device changing because something it composes did.
-    Resolved TRANSITIVELY - a card composes a jack which composes a cage - so a
-    change three levels down still reaches the device that shows it.
+    Resolved TRANSITIVELY - a card composes a jack which composes a cage, an SCB
+    seats a routing engine in a bay of its own - so a change three levels down
+    still reaches the device that shows it. See `_children`.
     """
     seen, todo = {}, []
     for view in (doc.get("views") or {}).values():
@@ -275,9 +295,7 @@ def _composed(doc, versions):
             continue
         seen[ref] = versions.get(ref, "?")
         base, _, major = ref.partition("@")
-        for part in (versions.get(base) or {}).get(f"v{major}", []):
-            if part.get("ref"):
-                todo.append(part["ref"])
+        todo.extend((versions.get(base) or {}).get(f"v{major}", []))
     return dict(sorted(seen.items()))
 
 
