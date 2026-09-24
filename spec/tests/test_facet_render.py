@@ -250,13 +250,14 @@ def test_a_card_rotated_90_still_seats_its_occupant_on_the_facet(tmp_path):
     assert math.isclose(oh, 18.35, abs_tol=0.01)
 
 
-def plant_two_facet_card(tmp, chained=False):
+def plant_two_facet_card(tmp, chained=False, p2_rotate=None):
     """A card with TWO facets, seated in a bay, with an optic seated via
     `occupants:` into the SECOND one - the ordinary path for a multi-cage
     card, and the one `_seat_nested_occupants` (not the device-level
     `mate-to` loop) resolves. `chained=True` seats a SECOND occupant, a cap,
     onto the optic itself - a boot on a plug, entirely within the nested
-    path."""
+    path. `p2_rotate` sets p2's OWN `rotate` (the cage's local rotate
+    inside the card, not an outer container's)."""
     lib = tmp / "lib"
     if chained:
         cd = lib / "components/acme/cap/v1"
@@ -284,7 +285,8 @@ def plant_two_facet_card(tmp, chained=False):
              "confidence": "drawing", "source": "fixture"}]},
         "parts": [
             {"ref": "std/qsfp28@1", "id": "p1", "at": [2.5, 15.0], "on": "housing-1"},
-            {"ref": "std/qsfp28@1", "id": "p2", "at": [2.5, 65.0], "on": "housing-2"}],
+            {"ref": "std/qsfp28@1", "id": "p2", "at": [2.5, 65.0], "on": "housing-2",
+             **({"rotate": p2_rotate} if p2_rotate else {})}],
         "skins": ["default"]}))
     (d / "skins/default.svg").write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" width="25mm" height="100mm" viewBox="0 0 25 100">'
@@ -350,6 +352,29 @@ def test_a_nested_chained_seat_inherits_the_tilt(tmp_path):
     cap_pt = device_point(root, cap, [2.5, 2.5])
     assert math.isclose(o_pt[0], cap_pt[0], abs_tol=0.01)
     assert math.isclose(o_pt[1], cap_pt[1], abs_tol=0.01)
+
+
+def test_a_nested_occupant_on_a_rotated_cage_is_not_axis_swapped(tmp_path):
+    """p2 itself at `rotate: 90` (its OWN local rotate inside the card, not
+    an outer container's), with an optic seated onto it via `occupants:`.
+
+    Unlike a TOP-LEVEL `mate-to` seat, a nested occupant is drawn INSIDE
+    its card's own group - the same "turned by a container, not by its own
+    baked-in `rotate`" situation a composed part is in - so it takes NO
+    axis swap, even though its own `rotate` is 90. Swapping here regressed
+    a previously-correct render (8.5 x 16.631) to a wrong one (7.704 x
+    18.35, the wrong dimension foreshortened)."""
+    root = plant_two_facet_card(tmp_path, p2_rotate=90)
+    p2 = by_id(root, "--p2")
+    o = by_id(root, "--p2-occupant")
+    assert o.get("data-tilt") == "25"
+    p2_pt = device_point(root, p2, QSFP28_MATE)
+    o_pt = device_point(root, o, QSFP_LC_MATE)
+    assert math.isclose(p2_pt[0], o_pt[0], abs_tol=0.01)
+    assert math.isclose(p2_pt[1], o_pt[1], abs_tol=0.01)
+    ow, oh = device_bbox(root, o, QSFP_LC["size"])
+    assert math.isclose(ow, 8.5, abs_tol=0.01)
+    assert math.isclose(oh, 16.63, abs_tol=0.01)
 
 
 def test_a_facet_feature_shifts_with_an_inset(tmp_path):

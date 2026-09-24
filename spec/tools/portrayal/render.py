@@ -909,14 +909,21 @@ def _drawn_facet(facet, rotate):
 
     A composed part `on` a facet with no rotate of its own is turned by its
     CONTAINER, from outside its own transform string - an ordinary Rotate
-    applied AFTER that part's own Scale. A seated occupant has no such
-    container: it inherits its host's rotation as ITS OWN `rotate`, baked
-    into the SAME string as the scale, where `rotate` (rightmost, so
-    applied first to a point) comes BEFORE the scale - Rotate-then-Scale,
-    the opposite order. At 0/180 the two orders agree; at 90/270 they do
-    not (Rot90.Sy = Sx.Rot90), so an occupant at 90/270 has to swap which
-    axis its OWN scale lands on to still foreshorten the same physical
-    dimension its host's own (unrotated, container-turned) parts do.
+    applied AFTER that part's own Scale. A TOP-LEVEL, `mate-to`-seated
+    occupant has no such container: it inherits its host's rotation as ITS
+    OWN `rotate`, baked into the SAME string as the scale, where `rotate`
+    (rightmost, so applied first to a point) comes BEFORE the scale -
+    Rotate-then-Scale, the opposite order. At 0/180 the two orders agree;
+    at 90/270 they do not (Rot90.Sy = Sx.Rot90), so a TOP-LEVEL occupant at
+    90/270 has to swap which axis its OWN scale lands on to still
+    foreshorten the same physical dimension its host's own (unrotated,
+    container-turned) parts do.
+
+    NOT for a NESTED `occupants:` seat (`_seat_nested_occupants`): that one
+    IS drawn inside its card's own group, exactly like a composed part, so
+    its `rotate` (the cage's own local rotate) is turned from outside by
+    that group and needs no swap - applying one there regressed a
+    previously-correct render.
     """
     if float(rotate or 0) % 360 not in (90, 270):
         return facet
@@ -1028,16 +1035,17 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                     target = (host["at"][0] + ox, host["at"][1] + oy)
                 else:
                     tilt_facet = None
-            # THE OCCUPANT'S OWN SHAPE SWAPS AXIS AT 90/270 (`_drawn_facet`)
-            # - it has no container to be turned BY, unlike the cage this
-            # loop is seating it on, so its own `rotate` and its own scale
-            # share one transform string, in the opposite order.
-            drawn_facet = _drawn_facet(tilt_facet, hrot) if tilt_facet else None
+            # NO AXIS SWAP HERE, unlike the mate-to path below: `og` is
+            # drawn INSIDE `g`, the card's own group, so its `rotate` (the
+            # CAGE's own local rotate) is turned by that group from
+            # OUTSIDE og's transform through ordinary SVG nesting - the
+            # same "composed part" situation `_drawn_facet`'s docstring
+            # describes, not the "no container" one it swaps for.
             if tilt_facet and target is not None:
                 occ_c = _res(spec["ref"])
                 om = (occ_c.get("connection-points") or {}).get("mate") if occ_c else None
                 if om:
-                    ox, oy = _tilt_offset(om["at"], occ_c["size"], hrot, drawn_facet)
+                    ox, oy = _tilt_offset(om["at"], occ_c["size"], hrot, tilt_facet)
                     at = [round(target[0] - ox, 4), round(target[1] - oy, 4)]
             local = occupant_local_id(host_id, spec)
             # THE HOST'S GROUP, AS A DEVICE OCCUPANT TAKES ITS HOST'S: the card
@@ -1054,13 +1062,13 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 rotate=hrot or None, palette=palette, inst_palette=inst_palette,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                path=f"{path}/{local}", resolved=resolved, tilt=drawn_facet)
+                path=f"{path}/{local}", resolved=resolved, tilt=tilt_facet)
             if tilt_facet:
                 og.set("data-tilt-on", tilt_node)
                 og.set("data-tilt", f"{tilt_facet['deg']:g}")
-                # THE FACET'S OWN FRAME, not the drawn one `tilt=drawn_facet`
-                # just used - relief.js reads this relative to the part's
-                # own (pre-rotate) orientation, same as `data-facet-facing`.
+                # `data-tilt-facing` is in the frame of the COMPONENT THAT
+                # DECLARES THE FACET (the card), same as `data-facet-facing`
+                # on the facet node itself - not `og`'s own frame.
                 og.set("data-tilt-facing", tilt_facet["facing"])
             if gname:
                 write_group_side(og, gname, grp, spec.get("attrs"))
@@ -2696,9 +2704,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         if p.get("tilt"):
             g.set("data-tilt-on", p["tilt-on"])
             g.set("data-tilt", f"{p['tilt']['deg']:g}")
-            # THE FACET'S OWN FRAME, not the (possibly swapped) drawn one -
-            # relief.js reads this relative to the part's own orientation,
-            # same as `data-facet-facing`.
+            # `data-tilt-facing` is in the frame of the COMPONENT THAT
+            # DECLARES THE FACET, not this occupant's own (possibly
+            # axis-swapped) drawn one - same as `data-facet-facing` on the
+            # facet node itself.
             g.set("data-tilt-facing", p["tilt"]["facing"])
         # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
         # data-path becomes data-of, naming the seated part on the face that
