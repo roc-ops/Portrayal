@@ -11,8 +11,8 @@ description: >-
   the NT I/O card lie HORIZONTALLY, stacked from the bottom: the general facilities card (NGFC-H), NT
   A, NTIO, NT B, then LT1 to LT8. The BFAN-E fan unit stands at the right-hand end behind a fan cover
   that carries the shelf's name and the slot legends. Cards are authored upright, as the Unit Data
-  Sheet guides draw them, and every card bay seats its card with `rotate: 90`, which turns the
-  card's top end to the right, as the shelf figure draws it. The LT slots take only the LT blank
+  Sheet guides draw them, and every card bay seats its card with `rotate: 270`, which turns the
+  card's top end to the LEFT, toward the power terminals, as an installed shelf shows. The LT slots take only the LT blank
   until the line cards are modelled (roc-ops/Portrayal#538).
 profile: networking
 provenance:
@@ -82,12 +82,18 @@ provenance:
       it at y 8.8 to 352.4 (343.6, the drawing's short scale again); nokia/bfan-e@1 is 345, centred
       there at 8.1 to 353.1.
   orientation:
-    confidence: drawing
+    confidence: photo-measured
     note: >-
-      Cards are modelled upright in their own contracts and turned here with `rotate: 90` (clockwise),
-      so the card's top end lies at the right. Figure 4 draws the ejectors and ports of every card at
-      the right-hand end of its row and the latch at the left, as on the FX-4, and the NGFC-H (which
-      only ever lies flat) is authored as it sits and is not rotated.
+      Cards are modelled upright in their own contracts and turned here with `rotate: 270`, so the
+      card's top end (ejector lever, lamps, the NT port housings) lies at the LEFT, toward the NGFC-H
+      power terminals, and its bottom end at the right beside the fan cover's slot legends. Settled by
+      the owner's lab photographs of an installed NFXS-E (2026-09-24): a FANT-H's lever and lamps sit
+      directly beside the black terminal cover, and the cards' bottom thumbscrews beside the NTA/NTB
+      legend strip; the same photographs put breaker B above breaker A and the terminal cover at the
+      left, as Figure 4 draws them, which fixes the frame. Figure 4 itself cannot say: it draws the NT
+      and LT rows as generic grey port grids with a latch at each end. An earlier revision read those
+      grids as ports at the right and seated the cards at `rotate: 90`, 180 degrees out. The NGFC-H
+      (which only ever lies flat) is authored as it sits and is not rotated.
   slot-legends:
     confidence: drawing
     note: >-
@@ -248,17 +254,17 @@ views:
         - {at: [4.7, 351.6], size: [405.0, 3.4], fill: '#b7bbc0'}
     components:
       bays:
-        - {id: lt-8, at: [4.7, 9.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 8}
-        - {id: lt-7, at: [4.7, 34.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 7}
-        - {id: lt-6, at: [4.7, 59.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 6}
-        - {id: lt-5, at: [4.7, 84.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 5}
-        - {id: lt-4, at: [4.7, 109.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 4}
-        - {id: lt-3, at: [4.7, 134.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 3}
-        - {id: lt-2, at: [4.7, 159.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 2}
-        - {id: lt-1, at: [4.7, 184.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 1}
-        - {id: nt-b, at: [4.7, 213.0], size: {w: 405.0, h: 30.0}, rotate: 90, accepts: [nokia/fant-h-bb@2, nokia/fant-h-bc@2, nokia/fant-m@1, nokia/dummy-nt@1], default: nokia/dummy-nt@1, group: nt-slots, rel-pos: 2}
-        - {id: ntio, at: [4.7, 243.0], size: {w: 405.0, h: 25.0}, rotate: 90, accepts: [nokia/fnio-a@1, nokia/fnio-d@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: ntio-slot, rel-pos: 1}
-        - {id: nt-a, at: [4.7, 268.0], size: {w: 405.0, h: 30.0}, rotate: 90, accepts: [nokia/fant-h-bb@2, nokia/fant-h-bc@2, nokia/fant-m@1, nokia/dummy-nt@1], default: nokia/fant-h-bb@2, group: nt-slots, rel-pos: 1}
+        - {id: lt-8, at: [4.7, 9.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 8}
+        - {id: lt-7, at: [4.7, 34.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 7}
+        - {id: lt-6, at: [4.7, 59.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 6}
+        - {id: lt-5, at: [4.7, 84.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 5}
+        - {id: lt-4, at: [4.7, 109.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 4}
+        - {id: lt-3, at: [4.7, 134.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 3}
+        - {id: lt-2, at: [4.7, 159.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 2}
+        - {id: lt-1, at: [4.7, 184.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 1}
+        - {id: nt-b, at: [4.7, 213.0], size: {w: 405.0, h: 30.0}, rotate: 270, accepts: [nokia/fant-h-bb@2, nokia/fant-h-bc@2, nokia/fant-m@1, nokia/dummy-nt@1], default: nokia/dummy-nt@1, group: nt-slots, rel-pos: 2}
+        - {id: ntio, at: [4.7, 243.0], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fnio-a@1, nokia/fnio-d@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: ntio-slot, rel-pos: 1}
+        - {id: nt-a, at: [4.7, 268.0], size: {w: 405.0, h: 30.0}, rotate: 270, accepts: [nokia/fant-h-bb@2, nokia/fant-h-bc@2, nokia/fant-m@1, nokia/dummy-nt@1], default: nokia/fant-h-bb@2, group: nt-slots, rel-pos: 1}
         - {id: gfc, at: [4.7, 298.0], size: {w: 405.0, h: 53.6}, accepts: [nokia/ngfc-h@1], default: nokia/ngfc-h@1, group: gfc-slot, rel-pos: 1}
         - {id: fan, at: [411.1, 8.1], size: {w: 32.9, h: 345.0}, accepts: [nokia/bfan-e@1], default: nokia/bfan-e@1, under: [fan-cover], group: fans, rel-pos: 1}
       placements:
