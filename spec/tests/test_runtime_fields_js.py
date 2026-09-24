@@ -108,7 +108,7 @@ def test_the_repaint_path_recolours_and_every_body_material_is_collected():
     no material is built from `o.color` except through bodyMat (or sideMats,
     which is collected) - a new branch that built its own would never repaint."""
     text = (ROOT / "kit/relief.js").read_text()
-    start = text.index("for (const o of outs) {")
+    start = text.index("for (const o of outs) {   // protrusions:")
     end = text.index("for (const f of frus) {", start)
     loop = text[start:end]
     reg = loop[loop.index("reg(o.svgText,"):]

@@ -93,6 +93,10 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       (census; see docs/rj45-family-design.md)
   L89 library: a component major no device reaches carries `unplaced:` saying
       what would seat it - and a part that IS reached does not still carry one
+  L117 component: a part `on` a facet names a relief feature that declares
+      `facet`, whose node is a declared element, and its projected box lies
+      within that element; a facet does not also declare `out`, `profile` or
+      `profile-y`
 """
 import argparse
 import types
@@ -111,6 +115,7 @@ from pathlib import Path
 import yaml
 
 from portrayal import attrsections as attrs_mod
+from portrayal import facets
 from portrayal import libwalk
 from portrayal import capability
 from portrayal import dcim_export
@@ -269,6 +274,7 @@ RULES = {
     "L114": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
     "L115": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
     "L116": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat"),
+    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3338,11 +3344,9 @@ def lint_component_collisions(path, data, lib_roots):
         if not size:
             continue
         w, h = size
-        x, y = q["at"]
-        if q.get("rotate") in (90, 270, -90):
-            cx, cy = x + w / 2, y + h / 2
-            x, y, w, h = cx - h / 2, cy - w / 2, h, w
-        boxes.append((q.get("id", "?"), x, y, x + w, y + h))
+        facet = facets.facet_of(data, q["on"]) if q.get("on") else None
+        x0, y0, x1, y1 = facets.projected_box(q["at"], w, h, q.get("rotate"), facet)
+        boxes.append((q.get("id", "?"), x0, y0, x1, y1))
 
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
@@ -3360,6 +3364,48 @@ def lint_component_collisions(path, data, lib_roots):
                      "one. Two parts drawn in one place is the commonest defect a "
                      "human finds and no rule saw; if the layering is deliberate, "
                      "say so in provenance")
+
+
+def lint_component_facets(path, data, lib_roots):
+    """L117: a tilted part stands on a facet that exists and holds it.
+
+    docs/superpowers/specs/2026-09-24-tilted-facets-design.md. The facet's rectangle is
+    its front-view footprint; a part on it is measured by its PROJECTED box (true size
+    foreshortened by cos(deg)), which is what occupies the face.
+    """
+    feats = {f.get("node"): f for f in (data.get("relief") or {}).get("features") or []}
+    elements = data.get("elements") or {}
+    for node, f in feats.items():
+        if f.get("facet"):
+            for k in ("out", "profile", "profile-y"):
+                if k in f:
+                    err(path, "L117", f"feature {node!r} declares a `facet` and also `{k}` - "
+                        "the renderer derives the slope from the facet, and two sources for "
+                        "one slope drift apart")
+            if node not in elements or not elements[node].get("size"):
+                err(path, "L117", f"facet node {node!r} is not a declared element with a "
+                    "size - the renderer needs its front-view rectangle to derive the wedge")
+    for q in data.get("parts") or []:
+        on = q.get("on")
+        if not on:
+            continue
+        facet = facets.facet_of(data, on)
+        if not facet:
+            err(path, "L117", f"part {q.get('id')!r} is `on: {on}`, which is not a relief "
+                "feature on this contract that declares a `facet`")
+            continue
+        el = elements.get(on) or {}
+        size = _instance_size(q.get("ref"), lib_roots)
+        if not el.get("size") or not size or not q.get("at"):
+            continue
+        x0, y0, x1, y1 = facets.projected_box(q["at"], size[0], size[1], q.get("rotate"), facet)
+        ex, ey = el["at"]
+        ew, eh = el["size"]
+        tol = 0.5
+        if x0 < ex - tol or y0 < ey - tol or x1 > ex + ew + tol or y1 > ey + eh + tol:
+            err(path, "L117", f"part {q.get('id')!r} on facet {on!r} projects to "
+                f"({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}), outside the facet's "
+                f"({ex},{ey})-({ex + ew},{ey + eh}) by more than {tol} mm")
 
 
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
@@ -9428,6 +9474,7 @@ def main():
                 lint_component_optical_position_nodes(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
+                lint_component_facets(f, d, args.library)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
