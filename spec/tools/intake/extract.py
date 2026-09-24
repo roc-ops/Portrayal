@@ -84,6 +84,21 @@ ICON_PX = 200
 BANNER_ASPECT = 2.5
 BANNER_HAMMING = 3
 BANNER_CLUSTER = 10
+# A height ceiling for the rule, OFF by default because no single number is
+# right across publishers. ARRIS/CommScope's CH3000 datasheets carry a header
+# logo strip (under 130px tall) AND draw their ordering-code charts and
+# connection diagrams at full page width in the same white and orange - so the
+# charts share the strip's ahash and the rule took 45 of them, among them the
+# BP-35M4-CFx back plate to transmitter compatibility chart. There, 200 is the
+# answer: every true banner is under it and every lost chart is over it.
+#
+# It cannot be the default. The Cisco cityscape the rule was built for is
+# 1302x370, and Juniper's "IN THIS SECTION" boxes are page-width furniture whose
+# height grows with their entry count, up to 640. Matching the pool on shape as
+# well as hash was tried and is no better: it keeps the cityscape but hands back
+# 81 of the Juniper boxes and still loses half the CommScope charts. So it is a
+# knob, like ICON_PX - `--banner-max-h`, re-sorted with `--reclassify`.
+BANNER_MAX_H = None
 
 
 def ahash(im):
@@ -102,7 +117,8 @@ def hamming(a, b):
     return bin(int(a, 16) ^ int(b, 16)).count("1")
 
 
-def classify(pics, banner_rule=True, pool=None, icon_px=ICON_PX):
+def classify(pics, banner_rule=True, pool=None, icon_px=ICON_PX,
+             banner_max_h=BANNER_MAX_H):
     """Split raw picture records into keepers and rejects.
 
     Takes and returns plain dicts, so it can be re-run over an existing
@@ -115,6 +131,11 @@ def classify(pics, banner_rule=True, pool=None, icon_px=ICON_PX):
     and its three status LEDs. Casa prints no repeated header image at all -
     the C40G guide, same rule, dropped zero - so for Casa the rule can only
     subtract. Pass --no-banner for a publisher whose figures are page-width.
+
+    banner_max_h spares a picture at least that tall from the banner rule while
+    leaving the rule on for the short strips - see BANNER_MAX_H. The pool is
+    built as before, so the knob changes which pictures can BE banners, not
+    what they are compared against.
     """
     def bannerish(p):
         return (not p["caption"] and p.get("ahash")
@@ -131,9 +152,10 @@ def classify(pics, banner_rule=True, pool=None, icon_px=ICON_PX):
         why = ""
         if w < icon_px and h < icon_px and not cap:
             why = "icon"
-        elif bannerish(p) and sum(
-                1 for q in pool if hamming(p["ahash"], q) <= BANNER_HAMMING
-                ) >= BANNER_CLUSTER:
+        elif (bannerish(p)
+              and (banner_max_h is None or h < banner_max_h)
+              and sum(1 for q in pool if hamming(p["ahash"], q) <= BANNER_HAMMING
+                      ) >= BANNER_CLUSTER):
             why = "banner"
         if why:
             rejected.append(dict(p, drop_reason=why))
@@ -194,8 +216,8 @@ def convert(pdf: Path, out: Path, scale: float):
 
 
 def write_index(pdf, out, pics, md, banner_rule=True, pool=None,
-                icon_px=ICON_PX):
-    kept, rejected = classify(pics, banner_rule, pool, icon_px)
+                icon_px=ICON_PX, banner_max_h=BANNER_MAX_H):
+    kept, rejected = classify(pics, banner_rule, pool, icon_px, banner_max_h)
     sections(md, kept)
     sections(md, rejected)
     (out / "index.json").write_text(json.dumps({
@@ -219,7 +241,8 @@ def hashes(out: Path):
 
 
 def run(pdf: Path, out_root: Path, scale: float, reclassify: bool,
-        banner_rule: bool = True, pool=None, icon_px=ICON_PX):
+        banner_rule: bool = True, pool=None, icon_px=ICON_PX,
+        banner_max_h=BANNER_MAX_H):
     out = out_root / pdf.stem
     raw = out / "raw.json"
     if raw.exists():
@@ -237,12 +260,13 @@ def run(pdf: Path, out_root: Path, scale: float, reclassify: bool,
             raw.write_text(json.dumps(d, indent=1))
         return "recls", write_index(pdf, out, pics,
                                     (out / "doc.md").read_text(), banner_rule,
-                                    pool, icon_px)
+                                    pool, icon_px, banner_max_h)
     pics, md = convert(pdf, out, scale)
-    return "ok", write_index(pdf, out, pics, md, banner_rule, pool, icon_px)
+    return "ok", write_index(pdf, out, pics, md, banner_rule, pool, icon_px,
+                             banner_max_h)
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("pdfs", nargs="+")
     ap.add_argument("--out", default="working/images")
@@ -257,25 +281,36 @@ def main():
     ap.add_argument("--no-banner", dest="banner", action="store_false",
                     help="disable the repeated-width banner rule; for a publisher "
                          "whose every figure is drawn at the page width")
-    a = ap.parse_args()
+    ap.add_argument("--banner-max-h", type=int, default=BANNER_MAX_H,
+                    help="a picture at least this tall is never a banner (default "
+                         "off). For a publisher whose page-width charts share the "
+                         "header strip's hash - CommScope CH3000 wants 200. Pair "
+                         "with --reclassify")
+    a = ap.parse_args(argv)
     root = Path(a.out)
     # One pool for the whole invocation - see BANNER_CLUSTER.
     pool = []
     if a.banner:
         for p in a.pdfs:
             pool += hashes(root / Path(p).stem)
+    # A failed file has to fail the run. The intake runbook reads one exit status
+    # per file, and a truncated PDF (pypdfium: 'Data format error') printed its
+    # FAIL line and then exited 0, indistinguishable from a conversion.
+    failed = 0
     for p in a.pdfs:
         p = Path(p)
         t0 = time.time()
         try:
             status, n = run(p, root, a.scale, a.reclassify, a.banner,
-                            pool or None, a.icon_px)
+                            pool or None, a.icon_px, a.banner_max_h)
         except Exception as e:
             print(f"FAIL {p.name}: {type(e).__name__}: {e}", flush=True)
+            failed += 1
             continue
         print(f"{status:5s} {p.name}: {n} figures in {time.time()-t0:.0f}s",
               flush=True)
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
