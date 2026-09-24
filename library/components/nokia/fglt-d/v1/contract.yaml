@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-d
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -104,20 +104,20 @@ provenance:
     estimated - ETSI UDS A18 p349 Figure 143, the two side elevations (3.14 px/mm,
     isotropic). Line fits on the tooth outline of the left elevation give the long edge
     that carries the cage at 29.5-29.7 degrees to the plate and the short edge at
-    59.8-60.0 degrees, on the 20.66 pitch (65 px). Modelled as sixteen teeth of 30
-    degrees (face-N, facing up, the cage on it) and 60 degrees (return-N, facing down,
-    below it): face 15.50 mm and return 5.17 mm of front view, meeting at 8.95 mm. Each
-    face is placed so its cage keeps the centre that the flat front of Figure 143 gives
-    (45.15 + 20.66 n) with its lower edge 0.5 mm above the apex, so the cage runs back
-    parallel to the return and stays inside the tooth. The last return runs to 367.0 and
-    so under the tips of the ESD and hot-surface triangles (from 365). Every Nokia
-    figure puts this sawtooth BEHIND a flat faceplate: the side elevations draw nothing
-    proud of the plate front, and the cage mouths look up and out through the plate. A
-    facet can only stand proud (its `lift` is above the plate), so the teeth are
-    modelled standing out of the plate with their roots on it. The angle, the
-    foreshortening and the direction each cage and its optic point come from the figure;
-    how far forward the teeth stand (8.95 mm at the apex) comes from the model, not from
-    Nokia (gap).
+    59.8-60.0 degrees, on the 20.66 pitch. DEPTH: the sawtooth stands BEHIND the plate:
+    the left elevation draws the plate 14.0 mm deep (front line 68-70 px, back line
+    111-113 px) and nothing proud of it, and the tooth tips touch the back. The opening
+    the cages look through is one pocket, `well`, 33.0 to 366.99 and 22.95 deep; every
+    facet has `lift` -22.95. The angles are unchanged by the depth. Section, plate front
+    at 0: tooth crest -14.0, tooth root and pocket floor -22.95. Modelled as sixteen
+    teeth of 30 degrees (face-N, facing up, the cage on it) and 60 degrees (return-N,
+    facing down, below it): face 15.50 and return 5.17 mm of front view. Each face keeps
+    the cage centre the flat front of Figure 143 gives (45.15 + 20.66 n), its lower edge
+    0.5 mm above the crest, so the cage runs back parallel to the return below it, 0.58
+    mm inside it, and passes below the pocket floor before any wall. The last return,
+    and so the pocket, runs to 366.99, over the tips of the ESD and hot-surface
+    triangles (from 365) (gap); ending the pocket sooner would put cage 16 through its
+    wall.
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -139,6 +139,7 @@ elements:
   logo-zone: {at: [7.5, 23.3], size: [15.5, 8.5], class: label}
   model-label: {at: [7.5, 11.0], size: [15.6, 11.1], class: label}
   blank-label: {at: [7.6, 383.1], size: [14.8, 11.0], class: label}
+  well: {at: [5, 33], size: [19, 333.994], class: mechanical}
   face-1: {at: [5, 36.434], size: [19, 15.495], class: mechanical}
   return-1: {at: [5, 51.929], size: [19, 5.165], class: mechanical}
   face-2: {at: [5, 57.094], size: [19, 15.495], class: mechanical}
@@ -186,132 +187,168 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 left elevation: plate front 68-70 px to plate back 111-113 px = 14.0 mm (3.143 px/mm), the tooth tips touching the back'
     - node: face-1
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-1
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-2
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-2
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-3
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-3
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-4
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-4
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-5
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-5
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-6
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-6
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-7
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-7
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-8
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-8
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-9
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-9
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-10
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-10
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-11
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-11
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-12
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-12
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-13
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-13
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-14
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-14
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-15
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-15
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-16
       facet: {deg: 30, facing: up}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: return-16
       facet: {deg: 60, facing: down}
+      lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
 groups:

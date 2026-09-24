@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fgut-a
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -106,20 +106,20 @@ provenance:
     that needs newer software; ETSI A18 chapter 39 lists 3FE 76986 CD. Figures 163 and 223
     (and 164 and 224) are the same art, so one faceplate; the part number is a field.
   angled-panel: >-
-    estimated - the geometry of nokia/fglt-d@1: ETSI UDS A18 p380 Figure 164 draws the
-    same sixteen-tooth sheet behind the plate, too busy with cage detail for a clean
-    line fit. Faces of 30 degrees (face-N, facing up, the cage on it) and returns of 60
-    degrees (return-N, facing down) on the 20.49 pitch: face 15.37 and return 5.12 mm of
-    front view, apex 8.87 mm; each face keeps the cage centre Figure 163 gives (45.4 +
-    20.49 n), its lower edge 0.5 mm above the apex. The PON lamps stay on the flat strip
-    left of the teeth (x 6.2 on). The last return runs to 364.7, under the tops of the
-    ESD and hot-surface triangles (from 361.8). Every Nokia figure puts this sawtooth
-    BEHIND a flat faceplate: the side elevations draw nothing proud of the plate front,
-    and the cage mouths look up and out through the plate. A facet can only stand proud
-    (its `lift` is above the plate), so the teeth are modelled standing out of the plate
-    with their roots on it. The angle, the foreshortening and the direction each cage
-    and its optic point come from the figure; how far forward the teeth stand (8.87 mm
-    at the apex) comes from the model, not from Nokia (gap).
+    estimated - the tooth of nokia/fglt-d@1: ETSI UDS A18 p380 Figure 164 draws the same
+    sixteen-tooth sheet, too busy with cage detail for a clean angle fit. DEPTH, read
+    off the left elevation of Figure 164 (3.304 px/mm): the plate is 13.9 mm deep (front
+    line 110 px, back line 156 px) with nothing proud of it, and the tooth tips touch
+    its back. The opening is one pocket, `well`, 36.4 to 364.65 and 22.77 deep; every
+    facet has `lift` -22.77. Section, plate front at 0: tooth crest -13.9, tooth root
+    and pocket floor -22.77. Faces of 30 degrees (face-N, facing up, the cage on it) and
+    returns of 60 degrees (return-N, facing down) on the 20.49 pitch: face 15.37 and
+    return 5.12 mm of front view. Each face keeps the cage centre Figure 163 gives (45.4
+    + 20.49 n), its lower edge 0.5 mm above the crest, so the cage runs back parallel to
+    the return below it and passes below the pocket floor before any wall (0.58 mm worst
+    clearance). The PON lamps stay on the flat strip left of the pocket (x 6.2 on). The
+    last return, and so the pocket, runs to 364.65, over the tops of the ESD and hot-
+    surface triangles (from 361.8) (gap).
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -141,16 +141,17 @@ elements:
   logo-zone: {at: [8.7, 26.6], size: [15.3, 3.8], class: label}
   label-unit: {at: [8.7, 14.4], size: [15.3, 11.5], class: label}
   label-serial: {at: [8.7, 383.2], size: [14.1, 10.9], class: label}
+  well: {at: [6.2, 36.4], size: [17.2, 328.252], class: mechanical}
   face-1: {at: [6.2, 36.811], size: [17.2, 15.367], class: mechanical}
-  return-1: {at: [6.2, 52.179], size: [17.2, 5.123], class: mechanical}
+  return-1: {at: [6.2, 52.178], size: [17.2, 5.124], class: mechanical}
   face-2: {at: [6.2, 57.301], size: [17.2, 15.367], class: mechanical}
-  return-2: {at: [6.2, 72.669], size: [17.2, 5.123], class: mechanical}
+  return-2: {at: [6.2, 72.668], size: [17.2, 5.124], class: mechanical}
   face-3: {at: [6.2, 77.791], size: [17.2, 15.367], class: mechanical}
-  return-3: {at: [6.2, 93.159], size: [17.2, 5.123], class: mechanical}
+  return-3: {at: [6.2, 93.158], size: [17.2, 5.124], class: mechanical}
   face-4: {at: [6.2, 98.281], size: [17.2, 15.367], class: mechanical}
-  return-4: {at: [6.2, 113.649], size: [17.2, 5.123], class: mechanical}
+  return-4: {at: [6.2, 113.648], size: [17.2, 5.124], class: mechanical}
   face-5: {at: [6.2, 118.771], size: [17.2, 15.367], class: mechanical}
-  return-5: {at: [6.2, 134.139], size: [17.2, 5.123], class: mechanical}
+  return-5: {at: [6.2, 134.138], size: [17.2, 5.124], class: mechanical}
   face-6: {at: [6.2, 139.261], size: [17.2, 15.368], class: mechanical}
   return-6: {at: [6.2, 154.629], size: [17.2, 5.123], class: mechanical}
   face-7: {at: [6.2, 159.751], size: [17.2, 15.368], class: mechanical}
@@ -195,132 +196,168 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.77
+      confidence: estimated
+      source: 'ETSI UDS A18 p380 Figure 164 left elevation: plate front 110 px to plate back 156 px = 13.9 mm (3.304 px/mm), the tooth tips touching the back'
     - node: face-1
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-1
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-2
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-2
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-3
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-3
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-4
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-4
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-5
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-5
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-6
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-6
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-7
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-7
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-8
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-8
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-9
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-9
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-10
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-10
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-11
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-11
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-12
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-12
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-13
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-13
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-14
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-14
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-15
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-15
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-16
       facet: {deg: 30, facing: up}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: return-16
       facet: {deg: 60, facing: down}
+      lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
 groups:
