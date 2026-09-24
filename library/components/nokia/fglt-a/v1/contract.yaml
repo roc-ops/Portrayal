@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-a
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -92,18 +92,28 @@ provenance:
     absent from the Lightspan UDS A23, which suggests it is no longer offered for new
     Lightspan builds; no end-of-life notice was searched for on the web.
   angled-panel: >-
-    estimated - as nokia/fglt-b@1 (the same face, Figure 129 draws the same eight
-    teeth): eight teeth of 31 degrees (face-N, facing up, two cages and their lamps on
-    it) and 56 degrees (return-N, facing down) on the 38.3 window pitch, face 27.25 and
-    return 11.05 mm of front view, apex 16.38 mm, each face ending at the bottom of its
-    window. The last return runs to 366.65, over the top 6.5 mm of the barcode label
-    (gap). Every Nokia figure puts this sawtooth BEHIND a flat faceplate: the side
-    elevations draw nothing proud of the plate front, and the cage mouths look up and
-    out through the plate. A facet can only stand proud (its `lift` is above the plate),
-    so the teeth are modelled standing out of the plate with their roots on it. The
-    angle, the foreshortening and the direction each cage and its optic point come from
-    the figure; how far forward the teeth stand (16.38 mm at the apex) comes from the
-    model, not from Nokia (gap).
+    estimated - as nokia/fglt-b@1: the same face, and Figure 129 draws the same eight
+    teeth behind the same plate. DEPTH: the sawtooth stands BEHIND the plate. Figure 137
+    (FGLT-B) draws the plate 12.0 mm deep (41.5 px, front line to back line) and nothing
+    proud of it; the tooth tips touch the back of the plate and the roots lie 16.4 mm
+    further in. So the eight windows are one pocket, `well`, 43.0 to 366.65 and 28.38
+    deep, and every facet has `lift` -28.38: roots on the pocket floor, proud edges 12.0
+    below the plate front, where the bars between the windows stand in front of them.
+    The angles are unchanged by the depth. Section, plate front at 0: bar front 0, tooth
+    crest -12.0, tooth root and pocket floor -28.38. Modelled as eight teeth of 31
+    degrees (face-N, facing up, two cages and their PON lamps on it, the lamp in the
+    side of the socket) and 56 degrees (return-N, facing down) on the 38.3 window pitch
+    of the photograph: face 27.25 and return 11.05 mm of front view. Each face ends at
+    the bottom of its window and its return rises behind the bar below it to the crest,
+    as Figure 137 draws; the bars are painted on the top 4 mm of each return. return-0
+    is the short edge Figure 137 draws at the top of the first window. A cage runs back
+    square to its face, down and in; because 31 + 56 is under 90 degrees it descends
+    faster than the return below it and passes below the pocket floor before it reaches
+    any wall (0.58 mm worst clearance), so none comes out through a wall or the back of
+    a tooth. That is also why the last face needs its return: the pocket runs to 366.65,
+    11 mm past the bottom of window 8 (355.6) and over the top 6.5 mm of the barcode
+    label (gap); ending it at the window would put the lower cage of face-8 through the
+    pocket wall.
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -125,22 +135,24 @@ elements:
   logo-zone: {at: [0.5, 383.4], size: [5.0, 4.4], class: label}
   model-label: {at: [0.4, 366.9], size: [5.4, 16.1], class: label}
   barcode-label: {at: [7.1, 360.2], size: [13.4, 27.0], class: label}
-  face-1: {at: [3, 60.246], size: [19.5, 27.254], class: mechanical}
-  return-1: {at: [3, 87.5], size: [19.5, 11.046], class: mechanical}
-  face-2: {at: [3, 98.546], size: [19.5, 27.254], class: mechanical}
-  return-2: {at: [3, 125.8], size: [19.5, 11.046], class: mechanical}
-  face-3: {at: [3, 136.846], size: [19.5, 27.254], class: mechanical}
-  return-3: {at: [3, 164.1], size: [19.5, 11.046], class: mechanical}
-  face-4: {at: [3, 175.146], size: [19.5, 27.254], class: mechanical}
-  return-4: {at: [3, 202.4], size: [19.5, 11.046], class: mechanical}
-  face-5: {at: [3, 213.446], size: [19.5, 27.254], class: mechanical}
-  return-5: {at: [3, 240.7], size: [19.5, 11.046], class: mechanical}
-  face-6: {at: [3, 251.746], size: [19.5, 27.254], class: mechanical}
-  return-6: {at: [3, 279], size: [19.5, 11.046], class: mechanical}
-  face-7: {at: [3, 290.046], size: [19.5, 27.254], class: mechanical}
-  return-7: {at: [3, 317.3], size: [19.5, 11.046], class: mechanical}
-  face-8: {at: [3, 328.346], size: [19.5, 27.254], class: mechanical}
-  return-8: {at: [3, 355.6], size: [19.5, 11.046], class: mechanical}
+  well: {at: [2.5, 43], size: [20.5, 323.646], class: mechanical}
+  return-0: {at: [2.5, 49.2], size: [20.5, 11.046], class: mechanical}
+  face-1: {at: [2.5, 60.246], size: [20.5, 27.254], class: mechanical}
+  return-1: {at: [2.5, 87.5], size: [20.5, 11.046], class: mechanical}
+  face-2: {at: [2.5, 98.546], size: [20.5, 27.254], class: mechanical}
+  return-2: {at: [2.5, 125.8], size: [20.5, 11.046], class: mechanical}
+  face-3: {at: [2.5, 136.846], size: [20.5, 27.254], class: mechanical}
+  return-3: {at: [2.5, 164.1], size: [20.5, 11.046], class: mechanical}
+  face-4: {at: [2.5, 175.146], size: [20.5, 27.254], class: mechanical}
+  return-4: {at: [2.5, 202.4], size: [20.5, 11.046], class: mechanical}
+  face-5: {at: [2.5, 213.446], size: [20.5, 27.254], class: mechanical}
+  return-5: {at: [2.5, 240.7], size: [20.5, 11.046], class: mechanical}
+  face-6: {at: [2.5, 251.746], size: [20.5, 27.254], class: mechanical}
+  return-6: {at: [2.5, 279], size: [20.5, 11.046], class: mechanical}
+  face-7: {at: [2.5, 290.046], size: [20.5, 27.254], class: mechanical}
+  return-7: {at: [2.5, 317.3], size: [20.5, 11.046], class: mechanical}
+  face-8: {at: [2.5, 328.346], size: [20.5, 27.254], class: mechanical}
+  return-8: {at: [2.5, 355.6], size: [20.5, 11.046], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -156,68 +168,93 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: well
+      pocket: 28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (Figure 137); Figure 129 draws the same plate and teeth'
+    - node: return-0
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-1
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-1
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-2
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-2
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-3
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-3
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-4
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-4
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-5
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-5
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-6
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-6
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-7
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-7
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: face-8
       facet: {deg: 31, facing: up}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
     - node: return-8
       facet: {deg: 56, facing: down}
+      lift: -28.38
       confidence: estimated
       source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
 groups:

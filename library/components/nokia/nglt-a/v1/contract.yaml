@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nglt-a
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -88,20 +88,24 @@ provenance:
     searched for on the web.
   angled-panel: >-
     estimated - NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7, the vector 3D view rendered
-    at 900 dpi. The sawtooth lies in a recess in the plate with its apexes toward the
-    viewer; the cage connectors are on the upper edge of each tooth, so the ports look
-    up. Tracing the tooth edge over eight teeth gives an image run of 154 px down to
-    each apex, 114.5 px back, and a 90 px depth; with the edge of the board as the depth
-    axis (6.2-6.6 px/mm across, 1.3 px/mm down) and 9.71 px/mm along the card, that is
-    13.9-14.0 mm and 13.6-13.8 mm of front view and 13.7-14.6 mm deep, 44-46 degrees
-    each way - the 45/45 of FNIO-A on a slightly shorter pitch. Modelled as eight teeth
-    of 45 degrees up (face-N, the cage on it) and 45 down (return-N), 13.79 mm each on
-    the 27.58 pitch, apexes at 137.2 + 27.58 n as measured, apex 13.79 mm. The recess in
-    Figure 7 ends at 335.3, 5 mm below the last apex, so return-8 is cut there and given
-    `lift` 8.75 to still meet the apex; the walls of cage 8 pass below the plate at
-    333.2, inside that end. The recess floor is modelled as the plate, so the teeth
-    stand 13.79 mm proud where the Nokia apexes sit about level with the plate front
-    (gap).
+    at 900 dpi. The sawtooth stands in a recess with its apexes toward the viewer; the
+    cage connectors are on the upper edge of each tooth, so the ports look up. Tracing
+    the tooth edge over eight teeth gives an image run of 154 px down to each apex,
+    114.5 px back, and a 90 px depth; with the edge of the board as the depth axis
+    (6.2-6.6 px/mm across, 1.3 px/mm down) and 9.71 px/mm along the card, that is
+    13.9-14.0 and 13.6-13.8 mm of front view and 13.7-14.6 mm deep, 44-46 degrees each
+    way. DEPTH, on the far wall of the recess: the apexes sit 12 px (about 2 mm) inside
+    its front edge and the roots about 17 mm. The recess is the pocket `well`, 106.9 to
+    335.3 as drawn, 15.79 deep, and every facet has `lift` -15.79: apexes 2.0 below the
+    plate, roots on the floor. The angles are unchanged by the depth. Section, plate
+    front at 0: apex -2.0, root and pocket floor -15.79. Modelled as eight teeth of 45
+    degrees up (face-N, the cage on it) and 45 down (return-N), 13.79 mm each on the
+    27.58 pitch, apexes at 137.2 + 27.58 n. return-0 is the leading edge Figure 7 draws
+    rising to the top of the recess. The recess ends 5 mm below the last apex, cutting
+    the last tooth, so return-8 closes it at 70 degrees in 5.02 mm, from the apex to the
+    floor at the recess end. A 45/45 cage runs back parallel to the return below it and
+    passes below the floor inside the recess; cage 8 reaches the floor just inside the
+    end wall, 0.18 mm under the closing return, so no cage comes out through a wall.
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -123,6 +127,8 @@ elements:
   logo-zone: {at: [4.0, 93.5], size: [17.0, 11.0], class: label}
   laser-label: {at: [1.0, 36.6], size: [20.8, 19.4], class: label}
   label-window: {at: [6.6, 337.6], size: [11.3, 24.8], class: label}
+  well: {at: [3.1, 106.9], size: [18.4, 228.4], class: mechanical}
+  return-0: {at: [3.1, 109.62], size: [18.4, 13.79], class: mechanical}
   face-1: {at: [3.1, 123.41], size: [18.4, 13.79], class: mechanical}
   return-1: {at: [3.1, 137.2], size: [18.4, 13.79], class: mechanical}
   face-2: {at: [3.1, 150.99], size: [18.4, 13.79], class: mechanical}
@@ -138,7 +144,7 @@ elements:
   face-7: {at: [3.1, 288.89], size: [18.4, 13.79], class: mechanical}
   return-7: {at: [3.1, 302.68], size: [18.4, 13.79], class: mechanical}
   face-8: {at: [3.1, 316.47], size: [18.4, 13.79], class: mechanical}
-  return-8: {at: [3.1, 330.26], size: [18.4, 5.04], class: mechanical}
+  return-8: {at: [3.1, 330.26], size: [18.4, 5.019], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -154,69 +160,93 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: well
+      pocket: 15.79
+      confidence: estimated
+      source: 'NGLT-A UDS A07 p9 Figure 7 at 900 dpi: on the far recess wall the apexes sit 12 px (about 2 mm) inside the front edge and the roots 106 px (about 17 mm); the floor is taken at the roots, 15.79'
+    - node: return-0
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-1
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-1
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-2
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-2
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-3
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-3
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-4
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-4
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-5
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-5
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-6
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-6
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-7
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-7
       facet: {deg: 45, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: face-8
       facet: {deg: 45, facing: up}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
     - node: return-8
-      facet: {deg: 45, facing: down}
-      lift: 8.75
+      facet: {deg: 70, facing: down}
+      lift: -15.79
       confidence: estimated
       source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
 groups:

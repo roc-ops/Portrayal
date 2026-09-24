@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nglt-c
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -94,20 +94,24 @@ provenance:
     searched for on the web.
   angled-panel: >-
     estimated - NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8, the vector 3D view rendered
-    at 900 dpi. The sawtooth lies in a recess with its apexes toward the viewer and two
-    cages on the upper, longer edge of each tooth, so the ports look up. One tooth
+    at 900 dpi. The sawtooth stands in a recess with its apexes toward the viewer and
+    two cages on the upper, longer edge of each tooth, so the ports look up. One tooth
     measures 321 px down to the apex, 64 px back and 93 px deep; with the edge of the
     board as the depth axis (4.5-4.7 px/mm across, 1.6-2.0 down) and 9.44 px/mm along
-    the card, that is about 30 and 10 mm of front view and 20 mm deep: 33-34 degrees and
-    61-64 degrees. Modelled as four teeth of 34 degrees up (face-N, two cages and their
+    the card, that is about 30 and 10 mm of front view and 20 mm deep: 33-34 and 61-64
+    degrees, good to a few degrees only. DEPTH: the apexes are taken 2.0 below the plate
+    front as on nokia/nglt-a@1 (the same generation of recess), because Figure 8 does
+    not separate the across and depth axes at the recess edge; the recess is the pocket
+    `well`, 39.4 to 214.7 and 22.38 deep, and every facet has `lift` -22.38. The angles
+    are unchanged by the depth. Section, plate front at 0: apex -2.0, root and pocket
+    floor -22.38. Modelled as four teeth of 34 degrees up (face-N, two cages and their
     PON lamps on it) and 63 down (return-N) on the 40.6 pitch, face 30.22 and return
-    10.38 mm of front view, apex 20.38 mm, roots at 52.3 + 40.6 n; the cages keep their
-    positions. The depth axis is read off a drawn edge, so the angles are good to a few
-    degrees only. The recess in Figure 8 ends at about 201, cutting the last face short
-    of its apex; the model runs face-4 to 204.3 and its return to 214.7 on the bare
-    plate so the last pair of cages stays inside a tooth. The recess floor is modelled
-    as the plate, so the teeth stand 20.4 mm proud where the Nokia apexes sit about
-    level with the plate front (gap).
+    10.38 mm of front view, roots at 52.3 + 40.6 n; return-0 is the leading edge Figure
+    8 draws rising to the top of the recess. The cages keep their positions and pass
+    below the pocket floor before any wall (0.60 mm worst clearance). Figure 8 ends the
+    recess at about 201, short of the last apex; the pocket runs on to 214.7 over the
+    bare plate so that face-4 keeps its return and its lower cage does not come out
+    through the end wall (gap).
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -131,6 +135,8 @@ elements:
   label-part: {at: [1.0, 361.1], size: [8.6, 4.9], class: label}
   label-model: {at: [3.8, 367.7], size: [3.9, 15.5], class: label}
   label-serial: {at: [12.5, 366.0], size: [11.5, 19.7], class: label}
+  well: {at: [2.5, 39.4], size: [20, 175.3], class: mechanical}
+  return-0: {at: [2.5, 41.916], size: [20, 10.384], class: mechanical}
   face-1: {at: [2.5, 52.3], size: [20, 30.216], class: mechanical}
   return-1: {at: [2.5, 82.516], size: [20, 10.384], class: mechanical}
   face-2: {at: [2.5, 92.9], size: [20, 30.216], class: mechanical}
@@ -154,36 +160,53 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.38
+      confidence: estimated
+      source: 'estimated by analogy with nokia/nglt-a@1 (apexes 2 mm below the front): Figure 8 does not separate the across and depth axes at the recess edge; roots 20.38 below the apexes'
+    - node: return-0
+      facet: {deg: 63, facing: down}
+      lift: -22.38
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: face-1
       facet: {deg: 34, facing: up}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: return-1
       facet: {deg: 63, facing: down}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: face-2
       facet: {deg: 34, facing: up}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: return-2
       facet: {deg: 63, facing: down}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: face-3
       facet: {deg: 34, facing: up}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: return-3
       facet: {deg: 63, facing: down}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: face-4
       facet: {deg: 34, facing: up}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
     - node: return-4
       facet: {deg: 63, facing: down}
+      lift: -22.38
       confidence: estimated
       source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
 groups:
