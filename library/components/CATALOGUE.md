@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-687 component majors in 14 namespaces.
+694 component majors in 14 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -32,20 +32,20 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 3 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 13 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 5 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
-| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 0 | Micro-USB Type-B receptacle, as used for a console port |
+| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 2 | Micro-USB Type-B receptacle, as used for a console port |
 | `std/mpo@1` | component | port | 7.8 × 5.6 × 9 | mpo-adapter | 0 | 4 | One MPO/MTP adapter opening in a panel - the aperture, not the adapter |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 0 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 30 | 15 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 45 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
-| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 26 | QSFP28 cage cutout (100G, 4 lanes) |
+| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 28 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 55 | 36 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 55 | 38 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 55 | 21 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 1 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 19 | 31 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 19 | 33 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 74 | 69 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 12 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
@@ -87,8 +87,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-v-adapter@5` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 22 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 155 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 5 | 1 | Single chassis status LED |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 157 | Tiny round port LED (2mm) |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 5 | 4 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
@@ -116,11 +116,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 1 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 2 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 33 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
-| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 82 | 1 | Recessed pinhole reset button |
+| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 82 | 2 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 46 | 17 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 46 | 19 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
 | `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 53 | 21 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 2 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
@@ -130,7 +130,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 1 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
 | `common/sfp-led-pair@1` | component | led | 12 × 4 |  | 4 | 0 | Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between |
 | `common/sfp-plus-cage@2` | component | port | 16 × 10 × 41 |  | 5 | 2 | SFP+ cage (v2 = composed - bezel wraps a std/sfp cutout core) |
-| `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 21 | 0 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
+| `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 21 | 2 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
 | `common/smb-jack@1` | component | port | 7 × 7 |  | 27 | 0 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
@@ -216,7 +216,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a99-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
 | `cisco/a99-rp-f@1` | module | supervisor | 221.84 × 39.52 |  | 3 | 0 | Cisco ASR 9900 Fixed Chassis Route Processor |
 | `cisco/a99-rp3-se@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Service Edge optimised, for the ASR 9912 and ASR 9922 |
-| `cisco/a99-rp3-tr@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
+| `cisco/a99-rp3-tr@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 2 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
 | `cisco/a99-rsp-se@1` | module | supervisor | 44.2 × 403.4 × 625.6 |  | 2 | 0 | Cisco ASR 9910 and ASR 9906 Route Switch Processor, Service Edge optimised - the card Cisco's guides call the… |
 | `cisco/a99-sfc-s@1` | module | fabric | 76.2 × 492.1 |  | 1 | 0 | Cisco ASR 9900 switch fabric card for the ASR 9910, the generation the A99-SFC3-S replaced |
 | `cisco/a99-sfc3@1` | module | fabric | 41.4 × 395.7 |  | 2 | 0 | Cisco ASR 9900 Series Third Generation Switch Fabric Card |
@@ -697,10 +697,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 | `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
 
-## nokia/ (2)
+## nokia/ (9)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `nokia/bfan-e@1` | module | fan | 32.9 × 345 × 216.7 |  | 0 | 0 | Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E), also sold as the Lights… |
+| `nokia/bfan-h@1` | module | fan | 493.4 × 59.25 × 274.85 |  | 0 | 0 | Nokia BFAN-H (3FE 66546 AA), the intelligent fan tray of the 7360 ISAM FX-16 (NFXS-D), also sold as the Light… |
+| `nokia/bfan-x@1` | module | fan | 33.1 × 213.5 × 225.36 |  | 0 | 0 | Nokia BFAN-X (3FE 66544 AA), the intelligent fan unit of the 7360 ISAM FX-4 (NFXS-F), also sold as the Lights… |
+| `nokia/dummy-lt@1` | module | blank | 25 × 405 |  | 0 | 0 | Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the 7360 ISAM FX (and of… |
+| `nokia/dummy-nt@1` | module | blank | 30 × 405 |  | 0 | 0 | Nokia 3FE 65651 AA, the dummy front panel for the second NT slot of the 7360 ISAM FX (FX-4, FX-8, FX-12 and F… |
+| `nokia/fant-m@1` | module | supervisor | 30 × 405 × 225 |  | 0 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ANSI build - part 3FE79270BA and its temperature-har… |
+| `nokia/fant-m-etsi@1` | module | supervisor | 30 × 405 × 225 |  | 0 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ETSI build - part 3FE79270AA and its temperature-har… |
 | `nokia/fnio-a@1` | module | line-card | 25 × 405 × 205 |  | 0 | 0 | Nokia FNIO-A (3FE 65586 BA), the 80G (8x10G) NT I/O applique of the 7360 ISAM FX (also Lightspan FX), with Sy… |
 | `nokia/fnio-d@1` | module | line-card | 25 × 405 × 205 |  | 0 | 0 | Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360 ISAM FX, with SyncE |
 

@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: dummy-nt
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 3FE 65651 AA, the dummy front panel for the second NT slot of the 7360 ISAM FX
+  (FX-4, FX-8, FX-12 and FX-16). A plain 30 mm-pitch plate held by a thumbscrew at each
+  end, with an ESD mark under the top screw and a part-number label near the foot.
+  Authored upright, as the Unit Data Sheet guides draw it; the FX-4 and FX-8 bays seat it
+  with `rotate: 90`.
+unplaced: >-
+  Seated by the second NT bay of the 7360 ISAM FX shelves (NFXS-D, NFXS-E, NFXS-F, NFXS-G),
+  which are being modelled in parallel under roc-ops/Portrayal#538 and are not in the
+  library yet. Remove this line when a shelf's NT bay lists the panel in `accepts`.
+size: {w: 30.0, h: 405.0}
+size-confidence: {w: datasheet, h: borrowed}
+size-notes: >-
+  w is the 30 mm NT slot pitch (UDS 12.3); h is the NT card height 405 borrowed from the
+  family convention, since the dummy chapter gives no dimensions
+attrs:
+  model: Dummy front panel for NT board
+  part-number: 3FE 65651 AA
+  role: slot-blank
+provenance:
+  size: >-
+    datasheet for the width, borrowed for the height. ETSI UDS 3FE77012AAAATQZZA18 section
+    12.3 (p135) and ANSI UDS 3FE77013AAAATQZZA16 section 12.3: "has a pitch of 30 mm". No
+    guide gives the panel a height, width or depth; the Product Information Guide
+    3HH11997AAAATCZZA42 p198 calls it only a "30mm blank". The 405 is the NT card height
+    (e.g. FANT-F, UDS dimensions "height 405 mm") on which the shared NT bay is built, and
+    the drawing agrees: Figure 38 measures 1400 px tall by 90 px across the plate, and the
+    plate carries no feature that would put its ends anywhere other than the card's.
+  size-width: >-
+    slot pitch, UDS section 12.3; faceplate edge-to-edge width not stated, taken as the pitch.
+  depth: >-
+    NOT STATED and not given: the chapter has no dimensions, and a plain blanking plate is
+    not a card, so the 205/225 of the NT boards is not borrowed.
+  layout: >-
+    drawing (fractions only) - Figure 38 of ETSI UDS 3FE77012AAAATQZZA18 (p137), embedded
+    1435 x 1506 at 300 ppi; the ANSI UDS 3FE77013AAAATQZZA16 Figure 46 (p139) is the same
+    image, pixel for pixel. The drawing is OBLIQUE (the left side flange shows), so it fails
+    Gate 1 across the plate: 90 px across against 1400 px down is 26.0 mm at the vertical
+    scale, 13% short of 30. Positions along the panel are therefore taken at 3.457 px/mm
+    from the top edge and positions across it as fractions of the plate's own 90 px, read
+    on the plate plane (the base of each screw, not its projecting head). Thumbscrews at
+    x 17.5, y about 4.5 and 397.5 (read 3.4 and 397.7; the top one rounded inward so the
+    head stays on the plate); ESD mark centre (15.3, 14.8); label 10.9-20.2 x 354.3-373.4.
+  fixing: >-
+    datasheet - UDS 12.3: "is secured to the subrack by thumbscrews"; Figure 38 draws a
+    knurled thumbscrew in a recessed seat at each end.
+  label: >-
+    Figure 38 draws a small label printed with placeholder X characters in two columns,
+    reading up the panel. Drawn as a blank label with two grey bars; no text is transcribed
+    because the figure prints none that is real.
+  purpose: >-
+    datasheet - UDS 12.3/12.4: ensures airflow, EMC and touch safety; "must be mounted in
+    the slot position of the second NT board" when that board is not fitted.
+  depth-gap: no document gives the panel's depth or weight.
+  logo-zone: 'reserved by the family convention; Figure 38 draws no mark on the plate'
+  lifecycle: >-
+    searched only the staged corpus - listed in the R7.0 ETSI and R6.9 ANSI guides; no
+    end-of-life notice was searched for on the web.
+elements:
+  screw-top: {at: [13.1, 0.1], size: [8.8, 8.8], class: fastener}
+  screw-bottom: {at: [13.1, 393.1], size: [8.8, 8.8], class: fastener}
+  esd-mark: {at: [12.9, 12.4], size: [4.8, 4.8], class: label}
+  part-label: {at: [10.9, 354.3], size: [9.3, 19.1], class: label}
+  logo-zone: {at: [5.0, 190.0], size: [20.0, 12.0], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: screw-top
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled thumbscrew head standing off the plate in Figure 38; nothing dimensions it
+    - node: screw-bottom
+      cyl: 6.0
+      confidence: estimated
+      source: as screw-top
+connection-points:
+  mate: {at: [15.0, 202.5], direction: rear}
+skins: [default]

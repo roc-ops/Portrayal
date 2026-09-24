@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: dummy-lt
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the
+  7360 ISAM FX (and of the 7302/7330/7356 FD shelves). A plain 25 mm-pitch plate held by a
+  thumbscrew at each end, with an ESD mark under the top screw and a part-number label near
+  the foot. Authored upright, as the Unit Data Sheet guides draw it; the FX-4 and FX-8 bays
+  seat it with `rotate: 90`.
+unplaced: >-
+  Seated by the LT and NTIO bays of the 7360 ISAM FX shelves (NFXS-D, NFXS-E, NFXS-F,
+  NFXS-G), which are being modelled in parallel under roc-ops/Portrayal#538 and are not in
+  the library yet. Remove this line when a shelf's LT or NTIO bay lists the panel in
+  `accepts`.
+size: {w: 25.0, h: 405.0}
+size-confidence: {w: datasheet, h: borrowed}
+size-notes: >-
+  w is the 25 mm LT/NTIO slot pitch (UDS 11.3); h is the LT card height 405 borrowed from the
+  family convention, since the dummy chapter gives no dimensions
+attrs:
+  model: Universal dummy front panel for FD/FX LT or NTIO board
+  part-number: 3FE 65651 BA
+  role: slot-blank
+provenance:
+  size: >-
+    datasheet for the width, borrowed for the height. ETSI UDS 3FE77012AAAATQZZA18 section
+    11.3 (p131) and ANSI UDS 3FE77013AAAATQZZA16 section 11.3: "has a pitch of 25 mm". No
+    guide gives the panel a height, width or depth. The 405 is the LT/NTIO card height (UDS
+    "height 405 mm", e.g. FNIO-A 40.5.1) on which the shared LT and NTIO bays are built.
+    Figure 37 measures 1402 px tall by 72 px across the plate.
+  size-width: >-
+    slot pitch, UDS section 11.3; faceplate edge-to-edge width not stated, taken as the pitch.
+  depth: >-
+    NOT STATED and not given: the chapter has no dimensions, and a plain blanking plate is
+    not a card, so the 205/225 of the LT boards is not borrowed.
+  layout: >-
+    drawing (fractions only) - Figure 37 of ETSI UDS 3FE77012AAAATQZZA18 (p133), embedded
+    1435 x 1518 at 300 ppi; the ANSI UDS 3FE77013AAAATQZZA16 Figure 45 (p135) is the same
+    image, pixel for pixel. The drawing is OBLIQUE (the left side flange shows): 72 px
+    across against 1402 px down is 20.7 mm at the vertical scale, 17% short of 25. Positions
+    along the panel are taken at 3.461 px/mm from the top edge, positions across it as
+    fractions of the plate's own 72 px, read on the plate plane (the base of each screw).
+    Thumbscrews at x 17.4, y about 4.5 and 397.5 (read 4.3 and 397.3); ESD mark centre
+    (12.8, 14.7); label 7.8-17.8 x 354.7-374.0. Both screws sit 17.4-17.5 from the left edge
+    on this panel and on the 30 mm NT dummy alike, read independently.
+  fixing: 'datasheet - UDS 11.3: "is secured to the subrack by screws"; Figure 37 draws knurled thumbscrews'
+  label: >-
+    Figure 37 draws a small label printed with placeholder X characters in two columns,
+    reading up the panel. Drawn as a blank label with two grey bars; no text is transcribed
+    because the figure prints none that is real.
+  purpose: >-
+    datasheet - UDS 11.4: must be mounted on any unused LT or NTIO slot, for airflow, EMC and
+    touch safety; Table 34: "A blank dummy front panel used when pre-cabling is not
+    required."
+  variants-gap: >-
+    Other LT-slot blanks have DIFFERENT faces and are not this part. 3FE 61074 BB (with EMC
+    gasket, A18 ch15 Figure 44 p151) and 3FE 61074 BA (without, A18 ch16 Figure 46 p155)
+    are universal MDF dummies with two large cut-outs, each carrying a cable-tie post, for
+    48/72-pair MDF connectors. 3FE 73243 AA (ANSI UDS A16 ch20 Figure 52 p153, EMC gasket,
+    standoffs) is a plain plate with four standoff posts for securing two MDF cables, drawn
+    only in steep perspective. None of the three is modelled; none has a stated dimension.
+    3FE 65651 AB ("25mm blank", PIG 3HH11997AAAATCZZA42 p198 Table 122) has no figure at all.
+  depth-gap: no document gives the panel's depth or weight.
+  logo-zone: 'reserved by the family convention; Figure 37 draws no mark on the plate'
+  lifecycle: >-
+    searched only the staged corpus - listed in the R7.0 ETSI and R6.9 ANSI guides; no
+    end-of-life notice was searched for on the web.
+elements:
+  screw-top: {at: [13.0, 0.1], size: [8.8, 8.8], class: fastener}
+  screw-bottom: {at: [13.0, 393.1], size: [8.8, 8.8], class: fastener}
+  esd-mark: {at: [10.4, 12.3], size: [4.8, 4.8], class: label}
+  part-label: {at: [7.8, 354.7], size: [10.0, 19.3], class: label}
+  logo-zone: {at: [4.0, 190.0], size: [17.0, 12.0], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: screw-top
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled thumbscrew head standing off the plate in Figure 37; nothing dimensions it
+    - node: screw-bottom
+      cyl: 6.0
+      confidence: estimated
+      source: as screw-top
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
