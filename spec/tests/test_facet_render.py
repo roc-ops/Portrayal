@@ -78,7 +78,7 @@ def device_bbox(root, el, size):
 
 
 def plant_card(tmp, rotate=None, occupant=False, card_rotate=None,
-               feat_lift=0.0, chained=False):
+               feat_lift=0.0, chained=False, pocket=None):
     lib = tmp / "lib"
     d = lib / "components/acme/tilt-card/v1"
     (d / "skins").mkdir(parents=True)
@@ -89,16 +89,26 @@ def plant_card(tmp, rotate=None, occupant=False, card_rotate=None,
                "confidence": "drawing", "source": "fixture"}
     if feat_lift:
         feature["lift"] = feat_lift
+    elements = {"face": {"at": [0, 0], "size": [25, 100], "class": "panel"},
+                "housing": {"at": [0.0, 40.0], "size": [25.0, 30.0], "class": "panel"}}
+    features = [feature]
+    skin = SKIN
+    if pocket:
+        # a recess around the facet, for a SUNK facet to stand in
+        elements["window"] = {"at": [0.0, 38.0], "size": [25.0, 34.0], "class": "panel"}
+        features.insert(0, {"node": "window", "pocket": pocket})
+        skin = SKIN.replace('<rect id="housing"',
+                            '<rect id="window" x="0" y="38" width="25" height="34" fill="#222"/>'
+                            '<rect id="housing"')
     (d / "contract.yaml").write_text(yaml.safe_dump({
         "format": 1, "kind": "module", "name": "tilt-card", "version": "1.0.0",
         "class": "line-card", "behaviour": "fills", "size": {"w": 25.0, "h": 100.0},
-        "elements": {"face": {"at": [0, 0], "size": [25, 100], "class": "panel"},
-                     "housing": {"at": [0.0, 40.0], "size": [25.0, 30.0], "class": "panel"}},
-        "relief": {"features": [feature]},
+        "elements": elements,
+        "relief": {"features": features},
         "parts": [part],
         "connection-points": {"mate": {"at": [12.5, 50.0], "direction": "rear"}},
         "skins": ["default"]}))
-    (d / "skins/default.svg").write_text(SKIN)
+    (d / "skins/default.svg").write_text(skin)
     if chained:
         # A THIRD, SYNTHETIC PART, mate-to'd to `optic` itself - the fixture
         # for a CHAINED seat (a cap on an optic that is itself seated on a
@@ -163,6 +173,32 @@ def test_a_facet_features_own_lift_offsets_the_whole_wedge(tmp_path):
     h = by_id(root, "--housing")
     assert h.get("data-z-out") == "22.3205"           # 5 + 30 x tan 30
     assert h.get("data-z-profile-y") == "0:5,30:22.3205"
+
+
+def test_a_sunk_facet_carries_negative_heights(tmp_path):
+    """Recessed facets: a facet at lift -12 in a 12 mm pocket roots 12 below
+    the plate, and its proud edge ends at -12 + 30 x tan 30 = 5.3205."""
+    root = plant_card(tmp_path, feat_lift=-12.0, pocket=12)
+    h = by_id(root, "--housing")
+    assert h.get("data-z-profile-y") == "0:-12,30:5.3205"
+    assert h.get("data-z-out") == "5.3205"
+    assert float(h.get("data-z-lift")) == -12.0
+    assert by_id(root, "--window").get("data-depth") == "12"
+
+
+def test_a_facet_sunk_wholly_below_the_plate_is_not_dropped(tmp_path):
+    """-20 + 17.3205: the proud edge is still 2.68 below the plate. Nothing
+    clamps it to 0 and nothing drops the feature for a negative `out`."""
+    h = by_id(plant_card(tmp_path, feat_lift=-20.0, pocket=20), "--housing")
+    assert h.get("data-z-profile-y") == "0:-20,30:-2.6795"
+    assert h.get("data-z-out") == "-2.6795"
+
+
+def test_a_part_on_a_sunk_facet_projects_as_on_a_proud_one(tmp_path):
+    proud = by_id(plant_card(tmp_path / "a"), "--p1")
+    sunk = by_id(plant_card(tmp_path / "b", feat_lift=-12.0, pocket=12), "--p1")
+    assert sunk.get("transform") == proud.get("transform")
+    assert sunk.get("data-tilt") == proud.get("data-tilt") == "30"
 
 
 def test_a_part_on_a_facet_is_scaled_and_marked(tmp_path):
@@ -425,3 +461,52 @@ def test_a_facet_feature_shifts_with_an_inset(tmp_path):
     plate = by_id(root, "--plate")
     assert plate.get("data-z-out") == "27.3205"        # 30 x tan 30 + the 10mm lift
     assert plate.get("data-z-profile-y") == "0:10,30:27.3205"
+
+
+def test_a_sunk_facet_shifts_with_an_inset_unclamped(tmp_path):
+    """A sunk facet on a part composed at lift 10: its own lift stays -12
+    (relief.js sums it onto the group's 10) and the absolute profile moves
+    by 10 without being clamped at 0."""
+    lib = tmp_path / "lib"
+    riser_dir = lib / "components/acme/riser/v1"
+    (riser_dir / "skins").mkdir(parents=True)
+    (riser_dir / "contract.yaml").write_text(yaml.safe_dump({
+        "format": 1, "kind": "component", "name": "riser", "version": "1.0.0",
+        "class": "bracket", "size": {"w": 25.0, "h": 34.0},
+        "elements": {"well": {"at": [0, 0], "size": [25, 34], "class": "panel"},
+                     "plate": {"at": [0, 2], "size": [25, 30], "class": "panel"}},
+        "relief": {"features": [{"node": "well", "pocket": 12},
+                                {"node": "plate", "facet": {"deg": 30, "facing": "up"},
+                                 "lift": -12, "confidence": "drawing", "source": "fixture"}]},
+        "skins": ["default"]}))
+    (riser_dir / "skins/default.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="25mm" height="34mm" viewBox="0 0 25 34">'
+        '<rect id="well" width="25" height="34" fill="#222"/>'
+        '<rect id="plate" y="2" width="25" height="30" fill="#999"/></svg>')
+    card_dir = lib / "components/acme/riser-card/v1"
+    (card_dir / "skins").mkdir(parents=True)
+    (card_dir / "contract.yaml").write_text(yaml.safe_dump({
+        "format": 1, "kind": "module", "name": "riser-card", "version": "1.0.0",
+        "class": "line-card", "behaviour": "fills", "size": {"w": 25.0, "h": 100.0},
+        "elements": {"face": {"at": [0, 0], "size": [25, 100], "class": "panel"}},
+        "parts": [{"ref": "acme/riser@1", "id": "riser", "at": [0.0, 40.0], "lift": 10.0}],
+        "skins": ["default"]}))
+    (card_dir / "skins/default.svg").write_text(SKIN)
+    dev = tmp_path / "device.yaml"
+    dev.write_text(yaml.safe_dump({
+        "format": 1, "kind": "device", "name": "inset-dev", "version": "0.1.0",
+        "maturity": "draft", "manufacturer": "Acme", "model": "T", "profile": "networking",
+        "chassis": {"width": 25, "height": 100, "depth": 200},
+        "views": {"front": {"size": {"w": 25, "h": 100}, "components": {
+            "placements": [{"ref": "acme/riser-card@1", "id": "card", "at": [0, 0]}]}}},
+    }, sort_keys=False))
+    out = tmp_path / "o"
+    out.mkdir()
+    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+                        "--library", str(lib), "--library", str(LIB), "--out", str(out)],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    plate = by_id(ET.parse(out / "inset-dev.front.svg").getroot(), "--plate")
+    assert float(plate.get("data-z-lift")) == -12.0
+    assert plate.get("data-z-out") == "15.3205"        # -12 + 17.3205 + 10
+    assert plate.get("data-z-profile-y") == "0:-2,30:15.3205"

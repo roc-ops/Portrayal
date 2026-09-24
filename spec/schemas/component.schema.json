@@ -289,6 +289,18 @@
       "required": [
        "node"
       ],
+      "if": {
+       "required": [
+        "facet"
+       ]
+      },
+      "else": {
+       "properties": {
+        "lift": {
+         "exclusiveMinimum": 0
+        }
+       }
+      },
       "properties": {
        "node": {
         "$ref": "#/$defs/segment",
@@ -343,8 +355,7 @@
        },
        "lift": {
         "type": "number",
-        "exclusiveMinimum": 0,
-        "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers)"
+        "description": "standoff: the feature starts this many mm off the face (floating handle bars, stacked washers). Greater than 0, except on a feature that declares `facet`, where a negative lift sinks the facet's root edge that far below the plate, into a `pocket` at least that deep (L117; docs/superpowers/specs/2026-09-24-tilted-facets-design.md, Recessed facets)."
        },
        "knurl": {
         "type": "boolean",
