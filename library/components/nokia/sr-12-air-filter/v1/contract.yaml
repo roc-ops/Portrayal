@@ -1,0 +1,69 @@
+format: 1
+kind: module
+name: sr-12-air-filter
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: networking
+description: >-
+  The air filter tray of the 7750 SR-12 and 7450 ESS-12, seen from the front: a
+  honeycomb-perforated vent faceplate across the foot of the chassis front, held by three
+  captive screws along its lower edge, with the filter tray behind it sliding in under the
+  card cage. It is the chassis's only air intake. Factory-installed and field-replaceable;
+  Nokia gives the tray no part number in the 22.7 guide.
+unplaced: "seated by the SR-12 front air-filter bay; the coordinator wires it"
+size: {w: 437.1, h: 56.7}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  measured on SR12 p47 Fig 6 at 600 dpi (6.487 px/mm), x 3.7-440.8 and y 565.6-622.3 of the
+  front face (the conventions' §3 figure); no document states it
+attrs:
+  model: 7750 SR-12 air filter tray
+  role: air-filter
+provenance:
+  sources: >-
+    datasheet - SR12 (3HE18644AAAATQZZA03): p81-82 section 3.5.3 with Fig 19 / Table 23
+    (isometric), p250 Fig 81 / Table 101 and p252 Fig 82 (removal and replacement), p47 Fig 6
+    (the chassis front, face-on, vector), p105 Table 44 (torque). No photograph of the foot
+    of the chassis is staged; the lab photographs stop above it.
+  size: 'drawing - SR12 p47 Fig 6, as size-notes; the plate spans between the chassis side rails'
+  depth: 'NOT STATED - Fig 19 draws a shallow tray under the card cage; no figure is given, so none is written'
+  layout: >-
+    drawing - p47 at 600 dpi, plate origin at px (210, 3736). Captive screws at x 43.2 /
+    218.7 / 394.5, y 48.7, 11.7 across the washer (Table 101 key 1 "Captive screws on filter
+    vent faceplate"; p82 Table 23 key 3). The perforation: Fig 6 draws the honeycomb only in
+    part, as a sketch, with flat-topped cells about 12.4 across the corners on a 10.95
+    column pitch and 12.3 down, odd columns half a row lower; Fig 19 draws the whole plate
+    perforated. It is tiled here over x 14-424 and y 0.8-45, clear of the screws, with that
+    cell size - the pattern is the figure's, the extent is inferred.
+  esd: >-
+    NOT DRAWN HERE. Fig 6 key 9 puts the ESD jack on a grey tag at about x 411.6-434.8, y
+    37.6-55.5 of this plate. The ESD placements belong to the chassis (agent A); the
+    perforation is kept clear of that tag so a placement there sits on plain metal.
+  filter: >-
+    datasheet - p81: "The air filter prevents large particles, debris, and dust from entering";
+    inspect monthly and replace when dust is present. The filter medium sits in the tray
+    behind the faceplate (Fig 19 key 2) and is not on the face.
+  airflow: 'datasheet - SR12 p77: the fans pull air through the system from front-filtered intake vents'
+  colour: 'estimated - drawn in the chassis charcoal; no photograph shows the vent plate. A gap'
+  logo-zone: 'reserved on the plain strip below the perforation; Fig 6 prints no mark there'
+  lifecycle: 'searched only the staged corpus; no separate part number is listed in 22.7'
+elements:
+  vent: {at: [14.0, 0.8], size: [410.0, 44.2], class: vent}
+  screw-1: {at: [37.35, 42.85], size: [11.7, 11.7], class: screw}
+  screw-2: {at: [212.85, 42.85], size: [11.7, 11.7], class: screw}
+  screw-3: {at: [388.65, 42.85], size: [11.7, 11.7], class: screw}
+  logo-zone: {at: [60.0, 46.0], size: [30.0, 8.0], class: label}
+relief:
+  wall: '#2b2f33'
+  features:
+    - node: vent-holes
+      vent: 12.0
+      confidence: estimated
+      source: the filter medium sits behind the faceplate (Fig 19); the gap is not dimensioned
+    - {node: screw-1, cyl: 3.0, confidence: estimated, source: 'a captive screw head (Fig 19 key 3 close-up); its height is not stated'}
+    - {node: screw-2, cyl: 3.0, confidence: estimated, source: as screw-1}
+    - {node: screw-3, cyl: 3.0, confidence: estimated, source: as screw-1}
+connection-points:
+  mate: {at: [218.55, 28.35], direction: rear}
+skins: [default]
