@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-34d-cs
-version: 4.0.1
+version: 5.0.1
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-R-34D-CS
@@ -26,7 +26,11 @@ provenance:
     note: >-
       stencil ShapeSheet connection points. Visio stores these as FRACTIONS of shape width/height,
       so they survive without knowing the drawing scale - resolved against the 19-inch rack width
-      the master is drawn at, then expressed from the body edge
+      the master is drawn at, then expressed from the body edge.
+      ADAPTER BODIES MOVED, FIBRES DID NOT (common/lc-duplex-adapter@6, B3): that adapter's
+      ferrule axis sits 5.82 from its latch-side edge where @4's sat at 5.5, so every placement
+      of it here moved 0.32 toward its own latch side - up on an unturned row, down on a row at
+      rotate 180, with the panel cutout of the same id - and each fibre stays on the position read above.
   port-pairing:
     note: >-
       each LC duplex adapter carries two connection points 6.6mm apart (the Tx and Rx fibers);
@@ -106,6 +110,31 @@ provenance:
       stencil master dcp-r-rear, which is orthographic - a 2x2 ganged RJ45 shell (ETH 2 / ETH 4
       over ETH 1 / ETH 3), ESD warning, Tx and Rx LEDs, an ETH 5 SFP cage and a recessed RESET
       button
+  tx-rx-positions:
+    confidence: measured
+    note: >-
+      THE CENTRES, MEASURED - and only the centres; the figures drawn around them are
+      `tx-rx-drawn`. Stencil master r-34d-cs, read at 8.86 px/mm (its two XC ferrule rows stand
+      102.0 px apart against the 11.5 row pitch), each figure measured outward from the art's own
+      ferrule line. The white Tx/Rx box runs 7.96 to 9.76 from the ferrule on the top XC row and
+      7.62 to 9.42 on the bottom row, 6.49 to 8.18 at 1510 and 7.72 to 9.53 at Line; the port
+      name's glyphs run 10.27 to 12.30 (top), 10.38 to 12.42 (bottom), 8.69 to 10.61 (1510) and
+      10.04 to 12.07 (Line). Each frame is centred on the box's centre, its divider and Tx/Rx
+      text move with it, and each name's glyph is centred on the stencil name's centre. Until B3
+      the frames were generated from each adapter's placement 5.85 from the ferrule, about 2
+      closer than the stencil draws them, and once the adapter bodies moved to keep the fibres
+      on the connection points (common/lc-duplex-adapter@6) the bodies met them. The boxed
+      style, the reversal on the bottom row and the text are the rack photograph's, as
+      `silkscreen` says; only the positions are the stencil's
+  tx-rx-drawn:
+    confidence: estimated
+    note: >-
+      THE TWO FIGURES THE MEASURED CENTRES ARE DRAWN WITH, neither read off a source. The FRAME
+      HEIGHT is 2.5, a drawn size where the stencil's box is 1.8: only its centre is the
+      stencil's (`tx-rx-positions`). The NAME BASELINES are placed from the measured glyph
+      centre by taking the cap height as 0.72 of the font size - an assumed ratio, not a
+      measured one - so a baseline is as good as that ratio, while the glyph centre it is
+      derived from is measured
 
 attrs:
   performance:
@@ -175,198 +204,198 @@ views:
       h: 45
     panel:
       decor:
-        - {at: [52.7, 6.75], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [59.23, 6.75], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [104.71, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [111.24, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [134.79, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [141.32, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [152.81, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [159.34, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [166.12, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [172.65, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [183.22, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [189.75, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [196.55, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [203.08, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [213.91, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [220.44, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [227.22, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [233.75, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [244.12, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [250.65, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [257.39, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [263.92, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [280, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [286.53, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [293.34, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [299.87, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [311.21, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [317.74, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [324.44, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [330.97, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [341.36, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [347.89, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [354.68, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [361.21, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [372.05, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [378.58, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [385.45, 8.25], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [391.98, 8.25], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [134.79, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [141.32, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [152.81, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [159.34, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [166.12, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [172.65, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [183.22, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [189.75, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [196.55, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [203.08, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [213.91, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [220.44, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [227.22, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [233.75, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [244.12, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [250.65, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [257.39, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [263.92, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [280, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [286.53, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [293.34, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [299.87, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [311.21, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [317.74, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [324.44, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [330.97, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [341.36, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [347.89, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [354.68, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [361.21, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [372.05, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [378.58, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
-        - {at: [385.45, 33.95], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
-        - {at: [391.98, 33.95], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [52.7, 6.52], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [59.23, 6.52], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [104.71, 6.73], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [111.24, 6.73], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [134.79, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [141.32, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [152.81, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [159.34, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [166.12, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [172.65, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [183.22, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [189.75, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [196.55, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [203.08, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [213.91, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [220.44, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [227.22, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [233.75, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [244.12, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [250.65, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [257.39, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [263.92, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [280, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [286.53, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [293.34, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [299.87, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [311.21, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [317.74, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [324.44, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [330.97, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [341.36, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [347.89, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [354.68, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [361.21, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [372.05, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [378.58, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [385.45, 6.49], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [391.98, 6.49], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [134.79, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [141.32, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [152.81, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [159.34, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [166.12, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [172.65, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [183.22, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [189.75, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [196.55, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [203.08, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [213.91, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [220.44, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [227.22, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [233.75, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [244.12, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [250.65, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [257.39, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [263.92, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [280, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [286.53, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [293.34, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [299.87, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [311.21, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [317.74, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [324.44, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [330.97, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [341.36, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [347.89, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [354.68, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [361.21, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [372.05, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [378.58, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
+        - {at: [385.45, 35.37], size: [13.2, 2.5], rx: 0.5, fill: none, stroke: '#8d939a', stroke-width: 0.14}
+        - {at: [391.98, 35.37], size: [0.14, 2.5], fill: '#8d939a'}
         - {at: [30, 9], size: [20, 10], pattern: vent, vent: 5}
         - {at: [271.6, 15.5], size: [5.4, 14], pattern: vent, vent: 3}
         - {at: [424, 13], size: [7, 19], pattern: vent, vent: 5}
       cutouts:
         - {id: eth0, at: [9.8, 10.2], size: [15.8, 13.2], shape: rect}
         - {id: rs232, at: [9.8, 24.5], size: [15.8, 13.2], shape: rect}
-        - {id: port-1510, at: [52.7, 9.6], size: [13.2, 11], shape: rect}
-        - {id: port-line, at: [104.71, 11.1], size: [13.2, 11], shape: rect}
+        - {id: port-1510, at: [52.7, 9.28], size: [13.2, 11], shape: rect}
+        - {id: port-line, at: [104.71, 10.78], size: [13.2, 11], shape: rect}
         - {id: port-osc, at: [30.7, 27.5], size: [14.5, 10], shape: rect}
-        - {id: xc01, at: [134.79, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc02, at: [152.81, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc03, at: [166.12, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc04, at: [183.22, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc05, at: [196.55, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc06, at: [213.91, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc07, at: [227.22, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc08, at: [244.12, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc09, at: [257.39, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc10, at: [280, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc11, at: [293.34, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc12, at: [311.21, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc13, at: [324.44, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc14, at: [341.36, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc15, at: [354.68, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc16, at: [372.05, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc17, at: [385.45, 11.1], size: [13.2, 11], shape: rect}
-        - {id: xc18, at: [134.79, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc19, at: [152.81, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc20, at: [166.12, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc21, at: [183.22, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc22, at: [196.55, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc23, at: [213.91, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc24, at: [227.22, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc25, at: [244.12, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc26, at: [257.39, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc27, at: [280, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc28, at: [293.34, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc29, at: [311.21, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc30, at: [324.44, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc31, at: [341.36, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc32, at: [354.68, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc33, at: [372.05, 22.6], size: [13.2, 11], shape: rect}
-        - {id: xc34, at: [385.45, 22.6], size: [13.2, 11], shape: rect}
+        - {id: xc01, at: [134.79, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc02, at: [152.81, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc03, at: [166.12, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc04, at: [183.22, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc05, at: [196.55, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc06, at: [213.91, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc07, at: [227.22, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc08, at: [244.12, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc09, at: [257.39, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc10, at: [280, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc11, at: [293.34, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc12, at: [311.21, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc13, at: [324.44, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc14, at: [341.36, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc15, at: [354.68, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc16, at: [372.05, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc17, at: [385.45, 10.78], size: [13.2, 11], shape: rect}
+        - {id: xc18, at: [134.79, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc19, at: [152.81, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc20, at: [166.12, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc21, at: [183.22, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc22, at: [196.55, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc23, at: [213.91, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc24, at: [227.22, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc25, at: [244.12, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc26, at: [257.39, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc27, at: [280, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc28, at: [293.34, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc29, at: [311.21, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc30, at: [324.44, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc31, at: [341.36, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc32, at: [354.68, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc33, at: [372.05, 22.92], size: [13.2, 11], shape: rect}
+        - {id: xc34, at: [385.45, 22.92], size: [13.2, 11], shape: rect}
         - {id: led-osc-tx, at: [33.9, 21.8], size: [2, 2], shape: rect}
         - {id: led-osc-rx, at: [39.7, 21.8], size: [2, 2], shape: rect}
         - {id: led-power, at: [53.7, 35], size: [2, 2], shape: rect}
         - {id: led-status, at: [59.81, 35], size: [2, 2], shape: rect}
     silkscreen:
-      - {text: Tx, at: [56, 8.53], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-1510}
-      - {text: Rx, at: [62.6, 8.53], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-1510}
-      - {text: Tx, at: [108.01, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-line}
-      - {text: Rx, at: [114.61, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-line}
-      - {text: Tx, at: [138.09, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc01}
-      - {text: Rx, at: [144.69, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc01}
-      - {text: Tx, at: [156.11, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc02}
-      - {text: Rx, at: [162.71, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc02}
-      - {text: Tx, at: [169.42, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc03}
-      - {text: Rx, at: [176.02, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc03}
-      - {text: Tx, at: [186.52, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc04}
-      - {text: Rx, at: [193.12, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc04}
-      - {text: Tx, at: [199.85, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc05}
-      - {text: Rx, at: [206.45, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc05}
-      - {text: Tx, at: [217.21, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc06}
-      - {text: Rx, at: [223.81, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc06}
-      - {text: Tx, at: [230.52, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc07}
-      - {text: Rx, at: [237.12, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc07}
-      - {text: Tx, at: [247.42, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc08}
-      - {text: Rx, at: [254.02, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc08}
-      - {text: Tx, at: [260.69, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc09}
-      - {text: Rx, at: [267.29, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc09}
-      - {text: Tx, at: [283.3, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc10}
-      - {text: Rx, at: [289.9, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc10}
-      - {text: Tx, at: [296.64, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc11}
-      - {text: Rx, at: [303.24, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc11}
-      - {text: Tx, at: [314.51, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc12}
-      - {text: Rx, at: [321.11, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc12}
-      - {text: Tx, at: [327.74, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc13}
-      - {text: Rx, at: [334.34, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc13}
-      - {text: Tx, at: [344.66, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc14}
-      - {text: Rx, at: [351.26, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc14}
-      - {text: Tx, at: [357.98, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc15}
-      - {text: Rx, at: [364.58, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc15}
-      - {text: Tx, at: [375.35, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc16}
-      - {text: Rx, at: [381.95, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc16}
-      - {text: Tx, at: [388.75, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc17}
-      - {text: Rx, at: [395.35, 10.03], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc17}
-      - {text: Rx, at: [138.09, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc18}
-      - {text: Tx, at: [144.69, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc18}
-      - {text: Rx, at: [156.11, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc19}
-      - {text: Tx, at: [162.71, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc19}
-      - {text: Rx, at: [169.42, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc20}
-      - {text: Tx, at: [176.02, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc20}
-      - {text: Rx, at: [186.52, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc21}
-      - {text: Tx, at: [193.12, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc21}
-      - {text: Rx, at: [199.85, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc22}
-      - {text: Tx, at: [206.45, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc22}
-      - {text: Rx, at: [217.21, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc23}
-      - {text: Tx, at: [223.81, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc23}
-      - {text: Rx, at: [230.52, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc24}
-      - {text: Tx, at: [237.12, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc24}
-      - {text: Rx, at: [247.42, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc25}
-      - {text: Tx, at: [254.02, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc25}
-      - {text: Rx, at: [260.69, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc26}
-      - {text: Tx, at: [267.29, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc26}
-      - {text: Rx, at: [283.3, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc27}
-      - {text: Tx, at: [289.9, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc27}
-      - {text: Rx, at: [296.64, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc28}
-      - {text: Tx, at: [303.24, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc28}
-      - {text: Rx, at: [314.51, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc29}
-      - {text: Tx, at: [321.11, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc29}
-      - {text: Rx, at: [327.74, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc30}
-      - {text: Tx, at: [334.34, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc30}
-      - {text: Rx, at: [344.66, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc31}
-      - {text: Tx, at: [351.26, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc31}
-      - {text: Rx, at: [357.98, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc32}
-      - {text: Tx, at: [364.58, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc32}
-      - {text: Rx, at: [375.35, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc33}
-      - {text: Tx, at: [381.95, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc33}
-      - {text: Rx, at: [388.75, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc34}
-      - {text: Tx, at: [395.35, 35.73], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc34}
+      - {text: Tx, at: [56, 8.29], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-1510}
+      - {text: Rx, at: [62.6, 8.29], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-1510}
+      - {text: Tx, at: [108.01, 8.51], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-line}
+      - {text: Rx, at: [114.61, 8.51], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: port-line}
+      - {text: Tx, at: [138.09, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc01}
+      - {text: Rx, at: [144.69, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc01}
+      - {text: Tx, at: [156.11, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc02}
+      - {text: Rx, at: [162.71, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc02}
+      - {text: Tx, at: [169.42, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc03}
+      - {text: Rx, at: [176.02, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc03}
+      - {text: Tx, at: [186.52, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc04}
+      - {text: Rx, at: [193.12, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc04}
+      - {text: Tx, at: [199.85, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc05}
+      - {text: Rx, at: [206.45, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc05}
+      - {text: Tx, at: [217.21, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc06}
+      - {text: Rx, at: [223.81, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc06}
+      - {text: Tx, at: [230.52, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc07}
+      - {text: Rx, at: [237.12, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc07}
+      - {text: Tx, at: [247.42, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc08}
+      - {text: Rx, at: [254.02, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc08}
+      - {text: Tx, at: [260.69, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc09}
+      - {text: Rx, at: [267.29, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc09}
+      - {text: Tx, at: [283.3, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc10}
+      - {text: Rx, at: [289.9, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc10}
+      - {text: Tx, at: [296.64, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc11}
+      - {text: Rx, at: [303.24, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc11}
+      - {text: Tx, at: [314.51, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc12}
+      - {text: Rx, at: [321.11, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc12}
+      - {text: Tx, at: [327.74, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc13}
+      - {text: Rx, at: [334.34, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc13}
+      - {text: Tx, at: [344.66, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc14}
+      - {text: Rx, at: [351.26, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc14}
+      - {text: Tx, at: [357.98, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc15}
+      - {text: Rx, at: [364.58, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc15}
+      - {text: Tx, at: [375.35, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc16}
+      - {text: Rx, at: [381.95, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc16}
+      - {text: Tx, at: [388.75, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc17}
+      - {text: Rx, at: [395.35, 8.27], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc17}
+      - {text: Rx, at: [138.09, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc18}
+      - {text: Tx, at: [144.69, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc18}
+      - {text: Rx, at: [156.11, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc19}
+      - {text: Tx, at: [162.71, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc19}
+      - {text: Rx, at: [169.42, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc20}
+      - {text: Tx, at: [176.02, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc20}
+      - {text: Rx, at: [186.52, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc21}
+      - {text: Tx, at: [193.12, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc21}
+      - {text: Rx, at: [199.85, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc22}
+      - {text: Tx, at: [206.45, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc22}
+      - {text: Rx, at: [217.21, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc23}
+      - {text: Tx, at: [223.81, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc23}
+      - {text: Rx, at: [230.52, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc24}
+      - {text: Tx, at: [237.12, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc24}
+      - {text: Rx, at: [247.42, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc25}
+      - {text: Tx, at: [254.02, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc25}
+      - {text: Rx, at: [260.69, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc26}
+      - {text: Tx, at: [267.29, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc26}
+      - {text: Rx, at: [283.3, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc27}
+      - {text: Tx, at: [289.9, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc27}
+      - {text: Rx, at: [296.64, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc28}
+      - {text: Tx, at: [303.24, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc28}
+      - {text: Rx, at: [314.51, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc29}
+      - {text: Tx, at: [321.11, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc29}
+      - {text: Rx, at: [327.74, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc30}
+      - {text: Tx, at: [334.34, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc30}
+      - {text: Rx, at: [344.66, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc31}
+      - {text: Tx, at: [351.26, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc31}
+      - {text: Rx, at: [357.98, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc32}
+      - {text: Tx, at: [364.58, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc32}
+      - {text: Rx, at: [375.35, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc33}
+      - {text: Tx, at: [381.95, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc33}
+      - {text: Rx, at: [388.75, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc34}
+      - {text: Tx, at: [395.35, 37.15], font-size: 1.5, fill: '#c9cdd1', anchor: middle, for: xc34}
       - {text: smartoptics, at: [16.7, 6.4], font-size: 3.4, fill: '#e8ecef', for: chassis}
       - {text: DCP-R-34D-CS, at: [39.8, 6.2], font-size: 3.0, fill: '#e8ecef', for: chassis}
       - {text: ETH0, at: [6.2, 16.8], font-size: 2.2, fill: '#c9cdd1', anchor: middle, rotate: -90, for: eth0}
@@ -375,43 +404,43 @@ views:
       - {text: Rx, at: [43.8, 23.6], font-size: 2.0, fill: '#c9cdd1', for: port-osc}
       - {text: Power, at: [54.7, 34.2], font-size: 2.0, fill: '#c9cdd1', anchor: middle, for: led-power}
       - {text: Status, at: [60.81, 34.2], font-size: 2.0, fill: '#c9cdd1', anchor: middle, for: led-status}
-      - {at: [59.3, 5.85], text: '1510', font-size: 1.5, for: port-1510}
-      - {at: [111.31, 7.35], text: Line, font-size: 1.5, for: port-line}
+      - {at: [59.3, 5.99], text: '1510', font-size: 1.5, for: port-1510}
+      - {at: [111.31, 6.09], text: Line, font-size: 1.5, for: port-line}
       - {at: [37.95, 40.4], text: OSC, font-size: 1.4, for: port-osc}
-      - {at: [141.39, 7.35], text: XC1, font-size: 1.5, for: xc01}
-      - {at: [159.41, 7.35], text: XC2, font-size: 1.5, for: xc02}
-      - {at: [172.72, 7.35], text: XC3, font-size: 1.5, for: xc03}
-      - {at: [189.82, 7.35], text: XC4, font-size: 1.5, for: xc04}
-      - {at: [203.15, 7.35], text: XC5, font-size: 1.5, for: xc05}
-      - {at: [220.51, 7.35], text: XC6, font-size: 1.5, for: xc06}
-      - {at: [233.82, 7.35], text: XC7, font-size: 1.5, for: xc07}
-      - {at: [250.72, 7.35], text: XC8, font-size: 1.5, for: xc08}
-      - {at: [263.99, 7.35], text: XC9, font-size: 1.5, for: xc09}
-      - {at: [286.6, 7.35], text: XC10, font-size: 1.5, for: xc10}
-      - {at: [299.94, 7.35], text: XC11, font-size: 1.5, for: xc11}
-      - {at: [317.81, 7.35], text: XC12, font-size: 1.5, for: xc12}
-      - {at: [331.04, 7.35], text: XC13, font-size: 1.5, for: xc13}
-      - {at: [347.96, 7.35], text: XC14, font-size: 1.5, for: xc14}
-      - {at: [361.28, 7.35], text: XC15, font-size: 1.5, for: xc15}
-      - {at: [378.65, 7.35], text: XC16, font-size: 1.5, for: xc16}
-      - {at: [392.05, 7.35], text: XC17, font-size: 1.5, for: xc17}
-      - {at: [141.39, 38.35], text: XC18, font-size: 1.5, for: xc18}
-      - {at: [159.41, 38.35], text: XC19, font-size: 1.5, for: xc19}
-      - {at: [172.72, 38.35], text: XC20, font-size: 1.5, for: xc20}
-      - {at: [189.82, 38.35], text: XC21, font-size: 1.5, for: xc21}
-      - {at: [203.15, 38.35], text: XC22, font-size: 1.5, for: xc22}
-      - {at: [220.51, 38.35], text: XC23, font-size: 1.5, for: xc23}
-      - {at: [233.82, 38.35], text: XC24, font-size: 1.5, for: xc24}
-      - {at: [250.72, 38.35], text: XC25, font-size: 1.5, for: xc25}
-      - {at: [263.99, 38.35], text: XC26, font-size: 1.5, for: xc26}
-      - {at: [286.6, 38.35], text: XC27, font-size: 1.5, for: xc27}
-      - {at: [299.94, 38.35], text: XC28, font-size: 1.5, for: xc28}
-      - {at: [317.81, 38.35], text: XC29, font-size: 1.5, for: xc29}
-      - {at: [331.04, 38.35], text: XC30, font-size: 1.5, for: xc30}
-      - {at: [347.96, 38.35], text: XC31, font-size: 1.5, for: xc31}
-      - {at: [361.28, 38.35], text: XC32, font-size: 1.5, for: xc32}
-      - {at: [378.65, 38.35], text: XC33, font-size: 1.5, for: xc33}
-      - {at: [392.05, 38.35], text: XC34, font-size: 1.5, for: xc34}
+      - {at: [141.39, 5.86], text: XC1, font-size: 1.5, for: xc01}
+      - {at: [159.41, 5.86], text: XC2, font-size: 1.5, for: xc02}
+      - {at: [172.72, 5.86], text: XC3, font-size: 1.5, for: xc03}
+      - {at: [189.82, 5.86], text: XC4, font-size: 1.5, for: xc04}
+      - {at: [203.15, 5.86], text: XC5, font-size: 1.5, for: xc05}
+      - {at: [220.51, 5.86], text: XC6, font-size: 1.5, for: xc06}
+      - {at: [233.82, 5.86], text: XC7, font-size: 1.5, for: xc07}
+      - {at: [250.72, 5.86], text: XC8, font-size: 1.5, for: xc08}
+      - {at: [263.99, 5.86], text: XC9, font-size: 1.5, for: xc09}
+      - {at: [286.6, 5.86], text: XC10, font-size: 1.5, for: xc10}
+      - {at: [299.94, 5.86], text: XC11, font-size: 1.5, for: xc11}
+      - {at: [317.81, 5.86], text: XC12, font-size: 1.5, for: xc12}
+      - {at: [331.04, 5.86], text: XC13, font-size: 1.5, for: xc13}
+      - {at: [347.96, 5.86], text: XC14, font-size: 1.5, for: xc14}
+      - {at: [361.28, 5.86], text: XC15, font-size: 1.5, for: xc15}
+      - {at: [378.65, 5.86], text: XC16, font-size: 1.5, for: xc16}
+      - {at: [392.05, 5.86], text: XC17, font-size: 1.5, for: xc17}
+      - {at: [141.39, 40.04], text: XC18, font-size: 1.5, for: xc18}
+      - {at: [159.41, 40.04], text: XC19, font-size: 1.5, for: xc19}
+      - {at: [172.72, 40.04], text: XC20, font-size: 1.5, for: xc20}
+      - {at: [189.82, 40.04], text: XC21, font-size: 1.5, for: xc21}
+      - {at: [203.15, 40.04], text: XC22, font-size: 1.5, for: xc22}
+      - {at: [220.51, 40.04], text: XC23, font-size: 1.5, for: xc23}
+      - {at: [233.82, 40.04], text: XC24, font-size: 1.5, for: xc24}
+      - {at: [250.72, 40.04], text: XC25, font-size: 1.5, for: xc25}
+      - {at: [263.99, 40.04], text: XC26, font-size: 1.5, for: xc26}
+      - {at: [286.6, 40.04], text: XC27, font-size: 1.5, for: xc27}
+      - {at: [299.94, 40.04], text: XC28, font-size: 1.5, for: xc28}
+      - {at: [317.81, 40.04], text: XC29, font-size: 1.5, for: xc29}
+      - {at: [331.04, 40.04], text: XC30, font-size: 1.5, for: xc30}
+      - {at: [347.96, 40.04], text: XC31, font-size: 1.5, for: xc31}
+      - {at: [361.28, 40.04], text: XC32, font-size: 1.5, for: xc32}
+      - {at: [378.65, 40.04], text: XC33, font-size: 1.5, for: xc33}
+      - {at: [392.05, 40.04], text: XC34, font-size: 1.5, for: xc34}
     components:
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.75], skin: left, optional: ears, group: furniture, rel-pos: 1}
@@ -422,43 +451,43 @@ views:
         - {ref: common/led-dot@1, id: led-osc-rx, at: [39.7, 21.8], for: port-osc, attrs: {function: osc-rx}, group: port-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-power, at: [53.7, 35], for: chassis, attrs: {function: power}, group: status-leds, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-status, at: [59.81, 35], for: chassis, attrs: {function: status}, group: status-leds, rel-pos: 2}
-        - {ref: common/lc-duplex-adapter@5, id: port-1510, at: [52.7, 9.6], attrs: {role: osc-filter, media: fiber}, group: line, rel-pos: 1}
-        - {ref: common/lc-duplex-adapter@5, id: port-line, at: [104.71, 11.1], attrs: {role: line, media: fiber}, group: line, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@6, id: port-1510, at: [52.7, 9.28], attrs: {role: osc-filter, media: fiber}, group: line, rel-pos: 1}
+        - {ref: common/lc-duplex-adapter@6, id: port-line, at: [104.71, 10.78], attrs: {role: line, media: fiber}, group: line, rel-pos: 2}
         - {ref: std/sfp@1, id: port-osc, at: [30.7, 27.5], attrs: {media: sfp, speed: 1g, role: osc}, group: line, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@5, id: xc01, at: [134.79, 11.1], group: xc, attrs: {channel: '1'}, rel-pos: 1}
-        - {ref: common/lc-duplex-adapter@5, id: xc02, at: [152.81, 11.1], group: xc, attrs: {channel: '2'}, rel-pos: 2}
-        - {ref: common/lc-duplex-adapter@5, id: xc03, at: [166.12, 11.1], group: xc, attrs: {channel: '3'}, rel-pos: 3}
-        - {ref: common/lc-duplex-adapter@5, id: xc04, at: [183.22, 11.1], group: xc, attrs: {channel: '4'}, rel-pos: 4}
-        - {ref: common/lc-duplex-adapter@5, id: xc05, at: [196.55, 11.1], group: xc, attrs: {channel: '5'}, rel-pos: 5}
-        - {ref: common/lc-duplex-adapter@5, id: xc06, at: [213.91, 11.1], group: xc, attrs: {channel: '6'}, rel-pos: 6}
-        - {ref: common/lc-duplex-adapter@5, id: xc07, at: [227.22, 11.1], group: xc, attrs: {channel: '7'}, rel-pos: 7}
-        - {ref: common/lc-duplex-adapter@5, id: xc08, at: [244.12, 11.1], group: xc, attrs: {channel: '8'}, rel-pos: 8}
-        - {ref: common/lc-duplex-adapter@5, id: xc09, at: [257.39, 11.1], group: xc, attrs: {channel: '9'}, rel-pos: 9}
-        - {ref: common/lc-duplex-adapter@5, id: xc10, at: [280, 11.1], group: xc, attrs: {channel: '10'}, rel-pos: 10}
-        - {ref: common/lc-duplex-adapter@5, id: xc11, at: [293.34, 11.1], group: xc, attrs: {channel: '11'}, rel-pos: 11}
-        - {ref: common/lc-duplex-adapter@5, id: xc12, at: [311.21, 11.1], group: xc, attrs: {channel: '12'}, rel-pos: 12}
-        - {ref: common/lc-duplex-adapter@5, id: xc13, at: [324.44, 11.1], group: xc, attrs: {channel: '13'}, rel-pos: 13}
-        - {ref: common/lc-duplex-adapter@5, id: xc14, at: [341.36, 11.1], group: xc, attrs: {channel: '14'}, rel-pos: 14}
-        - {ref: common/lc-duplex-adapter@5, id: xc15, at: [354.68, 11.1], group: xc, attrs: {channel: '15'}, rel-pos: 15}
-        - {ref: common/lc-duplex-adapter@5, id: xc16, at: [372.05, 11.1], group: xc, attrs: {channel: '16'}, rel-pos: 16}
-        - {ref: common/lc-duplex-adapter@5, id: xc17, at: [385.45, 11.1], group: xc, attrs: {channel: '17'}, rel-pos: 17}
-        - {ref: common/lc-duplex-adapter@5, id: xc18, at: [134.79, 22.6], rotate: 180, group: xc, attrs: {channel: '18'}, rel-pos: 18}
-        - {ref: common/lc-duplex-adapter@5, id: xc19, at: [152.81, 22.6], rotate: 180, group: xc, attrs: {channel: '19'}, rel-pos: 19}
-        - {ref: common/lc-duplex-adapter@5, id: xc20, at: [166.12, 22.6], rotate: 180, group: xc, attrs: {channel: '20'}, rel-pos: 20}
-        - {ref: common/lc-duplex-adapter@5, id: xc21, at: [183.22, 22.6], rotate: 180, group: xc, attrs: {channel: '21'}, rel-pos: 21}
-        - {ref: common/lc-duplex-adapter@5, id: xc22, at: [196.55, 22.6], rotate: 180, group: xc, attrs: {channel: '22'}, rel-pos: 22}
-        - {ref: common/lc-duplex-adapter@5, id: xc23, at: [213.91, 22.6], rotate: 180, group: xc, attrs: {channel: '23'}, rel-pos: 23}
-        - {ref: common/lc-duplex-adapter@5, id: xc24, at: [227.22, 22.6], rotate: 180, group: xc, attrs: {channel: '24'}, rel-pos: 24}
-        - {ref: common/lc-duplex-adapter@5, id: xc25, at: [244.12, 22.6], rotate: 180, group: xc, attrs: {channel: '25'}, rel-pos: 25}
-        - {ref: common/lc-duplex-adapter@5, id: xc26, at: [257.39, 22.6], rotate: 180, group: xc, attrs: {channel: '26'}, rel-pos: 26}
-        - {ref: common/lc-duplex-adapter@5, id: xc27, at: [280, 22.6], rotate: 180, group: xc, attrs: {channel: '27'}, rel-pos: 27}
-        - {ref: common/lc-duplex-adapter@5, id: xc28, at: [293.34, 22.6], rotate: 180, group: xc, attrs: {channel: '28'}, rel-pos: 28}
-        - {ref: common/lc-duplex-adapter@5, id: xc29, at: [311.21, 22.6], rotate: 180, group: xc, attrs: {channel: '29'}, rel-pos: 29}
-        - {ref: common/lc-duplex-adapter@5, id: xc30, at: [324.44, 22.6], rotate: 180, group: xc, attrs: {channel: '30'}, rel-pos: 30}
-        - {ref: common/lc-duplex-adapter@5, id: xc31, at: [341.36, 22.6], rotate: 180, group: xc, attrs: {channel: '31'}, rel-pos: 31}
-        - {ref: common/lc-duplex-adapter@5, id: xc32, at: [354.68, 22.6], rotate: 180, group: xc, attrs: {channel: '32'}, rel-pos: 32}
-        - {ref: common/lc-duplex-adapter@5, id: xc33, at: [372.05, 22.6], rotate: 180, group: xc, attrs: {channel: '33'}, rel-pos: 33}
-        - {ref: common/lc-duplex-adapter@5, id: xc34, at: [385.45, 22.6], rotate: 180, group: xc, attrs: {channel: '34'}, rel-pos: 34}
+        - {ref: common/lc-duplex-adapter@6, id: xc01, at: [134.79, 10.78], group: xc, attrs: {channel: '1'}, rel-pos: 1}
+        - {ref: common/lc-duplex-adapter@6, id: xc02, at: [152.81, 10.78], group: xc, attrs: {channel: '2'}, rel-pos: 2}
+        - {ref: common/lc-duplex-adapter@6, id: xc03, at: [166.12, 10.78], group: xc, attrs: {channel: '3'}, rel-pos: 3}
+        - {ref: common/lc-duplex-adapter@6, id: xc04, at: [183.22, 10.78], group: xc, attrs: {channel: '4'}, rel-pos: 4}
+        - {ref: common/lc-duplex-adapter@6, id: xc05, at: [196.55, 10.78], group: xc, attrs: {channel: '5'}, rel-pos: 5}
+        - {ref: common/lc-duplex-adapter@6, id: xc06, at: [213.91, 10.78], group: xc, attrs: {channel: '6'}, rel-pos: 6}
+        - {ref: common/lc-duplex-adapter@6, id: xc07, at: [227.22, 10.78], group: xc, attrs: {channel: '7'}, rel-pos: 7}
+        - {ref: common/lc-duplex-adapter@6, id: xc08, at: [244.12, 10.78], group: xc, attrs: {channel: '8'}, rel-pos: 8}
+        - {ref: common/lc-duplex-adapter@6, id: xc09, at: [257.39, 10.78], group: xc, attrs: {channel: '9'}, rel-pos: 9}
+        - {ref: common/lc-duplex-adapter@6, id: xc10, at: [280, 10.78], group: xc, attrs: {channel: '10'}, rel-pos: 10}
+        - {ref: common/lc-duplex-adapter@6, id: xc11, at: [293.34, 10.78], group: xc, attrs: {channel: '11'}, rel-pos: 11}
+        - {ref: common/lc-duplex-adapter@6, id: xc12, at: [311.21, 10.78], group: xc, attrs: {channel: '12'}, rel-pos: 12}
+        - {ref: common/lc-duplex-adapter@6, id: xc13, at: [324.44, 10.78], group: xc, attrs: {channel: '13'}, rel-pos: 13}
+        - {ref: common/lc-duplex-adapter@6, id: xc14, at: [341.36, 10.78], group: xc, attrs: {channel: '14'}, rel-pos: 14}
+        - {ref: common/lc-duplex-adapter@6, id: xc15, at: [354.68, 10.78], group: xc, attrs: {channel: '15'}, rel-pos: 15}
+        - {ref: common/lc-duplex-adapter@6, id: xc16, at: [372.05, 10.78], group: xc, attrs: {channel: '16'}, rel-pos: 16}
+        - {ref: common/lc-duplex-adapter@6, id: xc17, at: [385.45, 10.78], group: xc, attrs: {channel: '17'}, rel-pos: 17}
+        - {ref: common/lc-duplex-adapter@6, id: xc18, at: [134.79, 22.92], rotate: 180, group: xc, attrs: {channel: '18'}, rel-pos: 18}
+        - {ref: common/lc-duplex-adapter@6, id: xc19, at: [152.81, 22.92], rotate: 180, group: xc, attrs: {channel: '19'}, rel-pos: 19}
+        - {ref: common/lc-duplex-adapter@6, id: xc20, at: [166.12, 22.92], rotate: 180, group: xc, attrs: {channel: '20'}, rel-pos: 20}
+        - {ref: common/lc-duplex-adapter@6, id: xc21, at: [183.22, 22.92], rotate: 180, group: xc, attrs: {channel: '21'}, rel-pos: 21}
+        - {ref: common/lc-duplex-adapter@6, id: xc22, at: [196.55, 22.92], rotate: 180, group: xc, attrs: {channel: '22'}, rel-pos: 22}
+        - {ref: common/lc-duplex-adapter@6, id: xc23, at: [213.91, 22.92], rotate: 180, group: xc, attrs: {channel: '23'}, rel-pos: 23}
+        - {ref: common/lc-duplex-adapter@6, id: xc24, at: [227.22, 22.92], rotate: 180, group: xc, attrs: {channel: '24'}, rel-pos: 24}
+        - {ref: common/lc-duplex-adapter@6, id: xc25, at: [244.12, 22.92], rotate: 180, group: xc, attrs: {channel: '25'}, rel-pos: 25}
+        - {ref: common/lc-duplex-adapter@6, id: xc26, at: [257.39, 22.92], rotate: 180, group: xc, attrs: {channel: '26'}, rel-pos: 26}
+        - {ref: common/lc-duplex-adapter@6, id: xc27, at: [280, 22.92], rotate: 180, group: xc, attrs: {channel: '27'}, rel-pos: 27}
+        - {ref: common/lc-duplex-adapter@6, id: xc28, at: [293.34, 22.92], rotate: 180, group: xc, attrs: {channel: '28'}, rel-pos: 28}
+        - {ref: common/lc-duplex-adapter@6, id: xc29, at: [311.21, 22.92], rotate: 180, group: xc, attrs: {channel: '29'}, rel-pos: 29}
+        - {ref: common/lc-duplex-adapter@6, id: xc30, at: [324.44, 22.92], rotate: 180, group: xc, attrs: {channel: '30'}, rel-pos: 30}
+        - {ref: common/lc-duplex-adapter@6, id: xc31, at: [341.36, 22.92], rotate: 180, group: xc, attrs: {channel: '31'}, rel-pos: 31}
+        - {ref: common/lc-duplex-adapter@6, id: xc32, at: [354.68, 22.92], rotate: 180, group: xc, attrs: {channel: '32'}, rel-pos: 32}
+        - {ref: common/lc-duplex-adapter@6, id: xc33, at: [372.05, 22.92], rotate: 180, group: xc, attrs: {channel: '33'}, rel-pos: 33}
+        - {ref: common/lc-duplex-adapter@6, id: xc34, at: [385.45, 22.92], rotate: 180, group: xc, attrs: {channel: '34'}, rel-pos: 34}
         - {ref: common/laser-warning@1, id: laser-warn-top, at: [271.6, 5.4], group: furniture, rel-pos: 3}
         - {ref: common/laser-warning@1, id: laser-warn-bottom, at: [271.6, 34.6], group: furniture, rel-pos: 4}
   rear:

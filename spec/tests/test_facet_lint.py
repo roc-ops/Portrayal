@@ -1,4 +1,4 @@
-"""Facets in the schema and L114 (docs/superpowers/specs/2026-09-24-tilted-facets-design.md).
+"""Facets in the schema and L117 (docs/superpowers/specs/2026-09-24-tilted-facets-design.md).
 
 Fixtures are planted in a tmp library; no live part is borrowed."""
 import json
@@ -59,30 +59,30 @@ def run(tmp_path, data):
 
 def test_a_good_facet_is_clean(tmp_path):
     f = run(tmp_path, card())
-    assert not [e for e in f.errors if "[L114]" in e]
+    assert not [e for e in f.errors if "[L117]" in e]
 
 
 def test_on_must_name_a_facet(tmp_path):
     c = card()
     c["parts"][0]["on"] = "nowhere"
-    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+    assert any("[L117]" in e for e in run(tmp_path, c).errors)
 
 
 def test_the_projected_part_must_lie_within_its_facet(tmp_path):
     c = card()
     c["parts"][0]["at"] = [2.5, 65.0]        # 10.15 x cos30 = 8.79 tall, ends at 73.8 > 70.5
-    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+    assert any("[L117]" in e for e in run(tmp_path, c).errors)
 
 
 def test_a_facet_does_not_also_declare_its_slope(tmp_path):
     c = card()
     c["relief"]["features"][0]["profile-y"] = [[0, 0], [30, 5]]
-    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+    assert any("[L117]" in e for e in run(tmp_path, c).errors)
 
 
 def test_the_facet_node_must_be_an_element(tmp_path):
     c = card(elements={})
-    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+    assert any("[L117]" in e for e in run(tmp_path, c).errors)
 
 
 def test_l46_measures_the_projected_box(tmp_path):

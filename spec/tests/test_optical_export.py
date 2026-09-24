@@ -51,7 +51,7 @@ def dist():
 def test_the_index_carries_a_connectors_positions():
     """Without this the exporter cannot count a single fibre."""
     idx = index()
-    mpo = idx["common/mpo-adapter@1"]
+    mpo = idx["common/mpo-adapter@2"]
     assert (mpo.get("optical") or {}).get("positions") == 12
 
 

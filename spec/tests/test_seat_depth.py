@@ -30,13 +30,14 @@ import jsonschema
 import pytest
 import yaml
 
+import warmrender
 from portrayal import lint
 from portrayal.manifest import presented_interface
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
 SRC = LIB / "devices/ufispace/s9510-28dc"
-PLUG = LIB / "components/generic/lc-plug/v1/contract.yaml"
+PLUG = LIB / "components/generic/lc-plug/v2/contract.yaml"
 
 COMPONENT_SCHEMA = json.loads((SPEC / "schemas/component.schema.json").read_text())
 
@@ -210,7 +211,7 @@ def test_lint_prints_the_unquoted_on_error_end_to_end(tmp_path):
     lib = tmp_path / "library"
     shutil.copytree(LIB / "devices/juniper/mx10003", lib / "devices/juniper/mx10003")
     shutil.copytree(PLUG.parent.parent, lib / "components/generic/lc-plug")
-    c = lib / "components/generic/lc-plug/v1/contract.yaml"
+    c = lib / "components/generic/lc-plug/v2/contract.yaml"
     text = c.read_text()
     assert "'on': body" in text
     c.write_text(text.replace("'on': body", "on: body"))
@@ -262,7 +263,7 @@ def _effective_lift(root, target_id):
 
 
 def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
-    """Seat generic/sfp-lc-simplex@2 in an SFP cage, generic/lc-plug@1 in it and
+    """Seat generic/sfp-lc-simplex@2 in an SFP cage, generic/lc-plug@2 in it and
     common/lc-boot@1 on the plug, through the chained `occupants:` keys.
 
     The hand arithmetic: s9510-28dc's port-4 cage is flush (cage lift 0), and
@@ -283,14 +284,14 @@ def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
     for cfg in d["configurations"].values():
         cfg["occupants"] = {
             "port-4": "generic/sfp-lc-simplex@2",
-            "port-4-occupant": "generic/lc-plug@1",
+            "port-4-occupant": "generic/lc-plug@2",
             "port-4-occupant-occupant": "common/lc-boot@1",
         }
     dev = tmp_path / "device.yaml"
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run(
+    r = warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True)
@@ -335,7 +336,7 @@ def test_an_rj45_boot_stands_on_its_plug_body(tmp_path):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run(
+    r = warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True)

@@ -98,13 +98,13 @@ parts:
 
 ## Lint
 
-- **L114 (new).** On each part that is `on` a facet:
+- **L117 (new).** On each part that is `on` a facet:
   - `on` names a relief feature on the same contract that declares `facet`;
   - the part's projected box lies within the facet node's box, to within 0.5 mm.
 
   A feature declaring `facet` together with `out`, `profile` or `profile-y` is an error.
 - **Ranges:** `facet.deg` in 1..89 and `facet.facing` as one of the four values are enforced by the
-  schema, not by L114.
+  schema, not by L117.
 - **Projected boxes:** L46 (composed parts collide) measures a facet-mounted part by its projected
   box, because that is what occupies the face. The device-level L13 and L39 are unchanged in v1:
   they check device placements, and a part `on` a facet is a component's composed part.
@@ -141,7 +141,7 @@ parts:
   - the transform on a facet-mounted part, with and without its own `rotate`;
   - the derived wedge;
   - the emitted attributes, including on a seated occupant;
-  - each L114 failure;
+  - each L117 failure;
   - L9 still checking the true size.
 - **Node:** `tiltFrame`, `unproject` and facet hole placement.
 - **Fixtures** are built for the tests: a test card with a 30-degree housing and a 45-degree

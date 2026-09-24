@@ -33,6 +33,31 @@ if hasattr(yaml, "CSafeLoader"):
     yaml.safe_load = _safe_load_fast
 
 
+# THE SUITE NEVER READS OR WRITES THE USER'S CACHE. lint keeps L62's id
+# vocabulary on disk, keyed by the content of the library (#542), in
+# $PORTRAYAL_CACHE_DIR or ~/.cache/portrayal. A test run that fell through to
+# the home directory would read entries some other checkout wrote, and leave
+# its own behind - so the whole session, and every subprocess it spawns, is
+# pointed at pytest's tmp dir instead. Under xdist the workers share one
+# directory (the parent of their per-worker basetemps): entries are written
+# atomically and named by content, so sharing is safe and saves each worker
+# the first computation.
+@pytest.fixture(scope="session", autouse=True)
+def _portrayal_cache_dir(tmp_path_factory):
+    import os
+    base = tmp_path_factory.getbasetemp()
+    if os.environ.get("PYTEST_XDIST_WORKER"):
+        base = base.parent
+    d = base / "portrayal-cache"
+    old = os.environ.get("PORTRAYAL_CACHE_DIR")
+    os.environ["PORTRAYAL_CACHE_DIR"] = str(d)
+    yield d
+    if old is None:
+        os.environ.pop("PORTRAYAL_CACHE_DIR", None)
+    else:
+        os.environ["PORTRAYAL_CACHE_DIR"] = old
+
+
 @pytest.fixture(scope="session")
 def library():
     return libdata.library()

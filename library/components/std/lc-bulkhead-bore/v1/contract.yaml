@@ -1,0 +1,120 @@
+format: 1
+kind: component
+name: lc-bulkhead-bore
+version: 1.0.1
+class: port
+interface: lc
+profile: networking
+description: One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening
+  an LC plug enters, with the full-length keyway a panel adapter carries. The
+  same square, widths and mate as std/lc-bore@3, which is the TRANSCEIVER
+  receptacle and draws a keyway cut short to fit a module face; this part is the
+  bulkhead aperture, and its latch stack is the one measured off SENKO's LC
+  Premium Adapter. Tongue down when unrotated, the convention std/lc-bore@3
+  keeps; a placement turns it.
+size: {w: 4.7, h: 8.06, d: 4.5}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {media: fiber, connector: lc}
+provenance:
+  registry: >-
+    NO `conforms:`, DELIBERATELY. The `lc` interface's registry entry,
+    `lc-duplex-receptacle`, is 4.7 x 6.3 - the TRANSCEIVER receptacle
+    std/lc-bore@3 draws, whose 1.60 latch stack is fitted to an 8.5 module face
+    (its own `keyway` and `short-keyway`). This part shares that entry's width,
+    its 4.7 square and its three tier widths, and is taller because a panel
+    adapter's keyway is not cut short; declaring the entry would make L9 compare
+    8.06 against 6.3 and fail, and restating it as a second entry would hold one
+    measurement in two files. The shared figures are carried below from
+    std/lc-bore@3 with their sources, not re-derived.
+  size: >-
+    The WIDTH and the SQUARE are std/lc-bore@3's and carry its sources: 4.7
+    +/-0.05 is the bore square, dimensioned on two independent documents (section
+    A-A of the ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet, and the LINK-PP
+    LS-SM311G-10C product drawing, four callouts). The 8.06 HEIGHT is that
+    square's half (2.35, the mate to its edge) plus the measured 5.71 keyway
+    reach from the ferrule axis - see `keyway`; `drawing` because it is read
+    off SENKO's own drawing of this aperture, and a reading of line art rather
+    than a callout, which `keyway` says in full. Depth 4.5 is std/lc-bore@3's
+    estimate, unchanged.
+  keyway: >-
+    WIDTHS carried, HEIGHTS MEASURED OFF VECTOR LINE ART - NOT DIMENSIONED. No
+    callout on any document in hand gives a tier height, so these are readings of
+    a drawing at a stated scale and are labelled as such, one grade below a
+    callout.
+    THE WIDTHS are std/lc-bore@3's - neck 3.46, shoulder 4.70, tongue 2.64 - which
+    are the plug's dimensioned 3.3 / 4.3 / 2.3 (SENKO DS-LC-000004 Rev A) plus the
+    clearance traced off the adapter below. Re-read here they come back 3.46 /
+    4.69 / 2.65 on one bore and 3.44 / 4.71 / 2.66 on the other.
+    THE SOURCE is SENKO's LC Premium Adapter datasheet DS-LC-000010 Rev A, page 3,
+    "Adapter Duplex Drawing", Front View - Senior Side. The view is vector art, so
+    it was read as coordinates of the drawn strokes (their centrelines) in the
+    page itself rather than off a raster.
+    THE SCALE is the 6.25 bore pitch the same view dimensions (TYP): the two
+    ferrule centres, each a least-squares circle fit through four concentric
+    rings (residual under 0.03 pt), stand 15.598 pt apart, so 2.4957 pt/mm.
+    CHECKED TWO WAYS, against figures the scale was not fitted to: the 18.0
+    +/-0.2 mounting-hole centre span reads 18.01, and the 9.3 body height reads
+    9.40 (1.1% long). The bore square itself reads 4.69 wide and 4.71 tall
+    against its 4.7.
+    THE READINGS, from the ferrule axis out along the latch, identical to the
+    hundredth on both bores: the neck opens at 2.26 where the square's rounded
+    corners end (the square's own lower edge is drawn at 2.42); neck to shoulder
+    3.10; shoulder to tongue 4.29 (the outline's corner - a heavy line on the
+    shoulder floor begins at 4.20); keyway end 5.71.
+    WHAT THIS PART STATES. The square keeps std/lc-bore@3's 4.7 centred on the
+    mate, so the neck starts 2.35 from the axis (the drawing's square sits 0.06
+    off its ferrule, inside the reading's scatter), and the tier boundaries sit
+    at the MEASURED distances from the axis - 3.10, 4.29 and 5.71 - so that the
+    one figure a seated plug is drawn to, the keyway end from the ferrule, is
+    the reading itself and not a sum of rounded tiers. That makes the tiers 0.75
+    / 1.19 / 1.42, a 3.36 stack against the transceiver receptacle's 1.60.
+  receptacle-or-bulkhead: >-
+    THIS IS THE BULKHEAD APERTURE. std/lc-bore@3 is the TRANSCEIVER receptacle:
+    same square, same widths, same mate, a 1.60 keyway fitted to an 8.5 module
+    face. A panel adapter composes this part; a transceiver composes that one.
+    common/lc-duplex-v-adapter@6 (the FS FHD cassettes),
+    common/lc-duplex-shuttered-adapter@2 (FS's 36-fibre cassettes) and
+    common/lc-duplex-adapter@6 (Smartoptics) compose this. The Smartoptics
+    adapter's @4 did not: at its drawn axis the 5.71 reach ran 0.21 past its
+    11.0 outline, so @6 moved its ferrule axis 0.32 away from the latch side
+    (its provenance.axis says from what reading, and by how much is a drawing
+    constraint).
+  ferrule: standard (LC uses a 1.25mm ferrule; SC and FC use 2.5mm)
+  depth: estimated (std/lc-bore@3's figure - recess deep enough that the ferrule
+    face sits below the surrounding surface)
+elements:
+  bore: {at: [0.0, 0.0], size: [4.7, 8.06], class: cutout}
+relief:
+  wall: '#4a4f55'
+  cavity: bore
+  features:
+    - node: ferrule
+      top: 3.6
+      color: '#e8ecef'
+      confidence: estimated
+      source: >-
+        std/lc-bore@3's ferrule, unchanged - itself std/lc-bore@1's estimate,
+        carried through every major since. Only the aperture has gained a source.
+    # The latch slot scoops back as it runs away from the bore so a fingertip can
+    # reach the latch; three stepped floors approximate that curve, exactly as
+    # std/lc-bore@3 does (spec/DEPTH-AND-3D.md s7: no fillets).
+    - node: key-neck
+      top: 3.6
+      confidence: estimated
+      source: >-
+        std/lc-bore@3's key-neck, unchanged: NOT MEASURED. The scoop is reported
+        from handling the hardware and no source dimensions it; the three tops
+        step 3.6, 2.9, 2.2 and only their ORDER is claimed.
+    - node: key-shoulder
+      top: 2.9
+      confidence: estimated
+      source: std/lc-bore@3's key-shoulder, unchanged - one approximation in three
+        steps, not three readings.
+    - node: key-tongue
+      top: 2.2
+      confidence: estimated
+      source: std/lc-bore@3's key-tongue, unchanged - the outermost and so the
+        deepest step, the end a finger goes into.
+connection-points:
+  mate: {at: [2.35, 2.35], direction: front}
+skins: [default]

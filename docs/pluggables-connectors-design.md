@@ -34,6 +34,8 @@ one product, and makes no standards claim. Neither boot is a sourcing failure: b
 are fully dimensioned, `common/lc-boot` off SENKO DS-LC-000023 (15.1 +/-0.1) and
 `common/rj45-boot` off EASE J0072 rev A (26.4 +/-0.5).
 
+The SC plug and the MPO plugs have moved to B3,
+[pluggables-caps-design.md](pluggables-caps-design.md), with the dust caps they replace.
 Second batch, once the `cable` contract has been used by the cabling side: SC plug
 and boot (with `std/sc-bore` from A); the MPO plugs - `generic/mpo12-plug`,
 `generic/mpo24-plug` (same key as mpo12, own part for the two-row ferrule) and

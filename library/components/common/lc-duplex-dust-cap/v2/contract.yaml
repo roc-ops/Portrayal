@@ -1,0 +1,128 @@
+format: 1
+kind: component
+name: lc-duplex-dust-cap
+version: 2.0.1
+class: cap
+behaviour: occupies
+mates: lc-duplex
+profile: networking
+description: >-
+  The ONE white cap FS ships over both ports of an FHD LC duplex adapter -
+  5.85 x 12.25 as read off that adapter, drawn here 12.25 x 5.85 on the
+  canonical across axis, with a rounded-square inset moulded in front of each
+  port. A duplex connector, not two simplex ones: it mates `lc-duplex` and
+  seats on the adapter's own slot, at the midpoint of its two bores, so seating
+  it and seating a simplex cap in a bore are mutually exclusive (L115). It was
+  drawn as part of common/lc-duplex-v-adapter until @3 took it off; its figures
+  move here unchanged. `common/` for the reason common/lc-boot@1 gives: no
+  standard governs a cap's shape, only the interface it plugs.
+size: {w: 12.25, h: 5.85}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  axis: >-
+    DRAWN ACROSS, WHICH IS THE ONLY THING @2 CHANGES. The pair this cap covers
+    runs along x, tx left of rx, which is the canonical axis every spanning
+    connector in this library is drawn on and which lint L116 holds it to. @1
+    was drawn STACKED, because that is how the adapter it was read off - the
+    FS FHD `common/lc-duplex-v-adapter@4` - stands its own pair, and it was
+    therefore wrong on `common/lc-duplex-adapter@4`, which puts the same pair
+    side by side. An occupant cannot turn itself, so the adapter is what says
+    which way round its pair runs: a spanning slot publishes the turn that
+    carries this axis onto its own bores (manifest.spanning_axis) and the seat
+    applies it, which draws this cap stacked again on an FHD adapter and
+    across on a Smartoptics one, from one drawing.
+    NO FIGURE IS RE-DERIVED AND NONE CHANGES. Every reading below is the one
+    @1 carried, TRANSPOSED: a length that was a height is now a width, the two
+    coordinates of every point swap, and the source sentences are quoted
+    unaltered. 5.85 x 12.25 is still the reading; 12.25 x 5.85 is that reading
+    drawn on the other axis. Because the cap is symmetric about its own long
+    centreline - each inset is centred across the short axis - transposing it
+    and turning it are the same picture, so nothing had to be re-measured to
+    do it.
+  size: >-
+    MOVED, NOT RE-DERIVED, from common/lc-duplex-v-adapter@4's own
+    `provenance.dust-caps`, which photo-measured the cap on FS's face-on render
+    of SKU 57016 at the 5.78 px/mm the 108.97 mm plate gives across 86-716 px.
+    It reads ONE cap and not two, spanning 2.92 to 8.77 across the adapter's
+    9.28 body and 0.75 to 13.0 of its 13.75, over both stacked ports: 5.85 by
+    12.25, which is this size on the axis that adapter stands it on. Drawn on
+    the canonical across axis (`provenance.axis`) the same two lengths are
+    w 12.25 and h 5.85 - the ACROSS figure is the 12.25 that spans the pair,
+    and the 5.85 is the width of one port's moulding.
+  mate: >-
+    the centre of the cap, (6.125, 2.925) - (2.925, 6.125) as @1 drew it,
+    transposed - and the adapter's own reading says that IS the ferrule line:
+    lc-duplex-v-adapter@4's `provenance.parts` has 'the ferrule is at x 5.85,
+    the centre of the cap, which the render puts at 2.92-8.77 of the 9.28
+    body'. Seated on the adapter's `mate` at (5.85, 6.875), and turned onto
+    that adapter's stacked axis by the seat, this draws the cap at
+    (2.925, 0.75) - the 2.92 and 0.75 the adapter's own `elements` carried, to
+    the 0.005 the rounded pixel edges leave. The centre is adopted over the
+    rounded edge because the same reading calls 5.85 the cap's centre.
+    THE MATE IS THE CAP'S OWN CENTRE, which is why the transposition leaves
+    the seated drawing identical on the adapter it was read off.
+  thickness: >-
+    4.3, THE CAP'S OWN PROUDNESS, and it is a subtraction rather than a new
+    reading. common/lc-duplex-v-adapter@4 records the cap's front at `out: 5.5`
+    - an ABSOLUTE distance from the panel - standing on a bezel whose own `out`
+    is 1.2. As an occupant the cap is seated AT that bezel (the adapter's
+    presented lift is 1.2, which the build puts on the cap's group as
+    `data-z-lift`), so what belongs here is the difference: 5.5 - 1.2 = 4.3.
+    The adapter's own relief already carried 4.3 as the lift each inset needed
+    to reach the cap's front from the cap's back, which is the same quantity
+    seen from the other end. Depth is the one axis a turn does not touch, so
+    @2 leaves it alone.
+  insets: >-
+    3.6 x 4.4 in front of each port, 0.6 deep, from the same
+    `provenance.dust-caps` key - 'with a rounded-square inset 3.6 x 4.4 in
+    front of each port ... the insets 0.6 deep, estimated'. THE DEPTH IS THE
+    ONLY INVENTED FIGURE. Their positions follow the ports, not the cap: the
+    adapter stacks its two bores at y 3.75 and 10.0, which is 3.0 and 9.25 in
+    this cap's own frame, and each inset is centred on its port. On the
+    canonical across axis those are the same two figures along x, and each
+    inset is the same rectangle turned: 4.4 x 3.6.
+  colour: >-
+    #e7e9ec for the cap and #d5dade for the insets, carried across from
+    common/lc-duplex-v-adapter@2's skin, which sampled the cap off
+    57016.main.jpg at rgb(231,231,233).
+  depth-confidence: >-
+    ESTIMATED, and inherited as such. The 4.3 is a subtraction between two
+    figures the adapter marks `estimated` - both read off FS's OBLIQUE side
+    photograph of SKU 57016, not an orthographic one - so it is no better than
+    they are, whatever the arithmetic looks like.
+elements:
+  body: {at: [0.0, 0.0], size: [12.25, 5.85], class: cap}
+connection-points:
+  mate: {at: [6.125, 2.925], direction: front}
+relief:
+  features:
+    - node: body
+      out: 4.3
+      color: '#e7e9ec'
+      confidence: estimated
+      source: >-
+        common/lc-duplex-v-adapter@4's `provenance.dust-caps` - 'Its front
+        stood at `out: 5.5` on the bezel's 1.2, estimated off FS's oblique side
+        photo 57016.C (about 30 px past the plate at 5.5 px/mm)'. The adapter
+        carried the absolute 5.5 because the cap was part of the adapter; an
+        occupant's relief is measured from its own seat, and the seat carries
+        the bezel's 1.2, so the cap's own figure is 5.5 - 1.2 = 4.3. Estimated,
+        because the reading it is a difference of is.
+    - node: inset-tx
+      pocket: 0.6
+      lift: 4.3
+      confidence: estimated
+      source: >-
+        FS's face-on render 57016.main.jpg shows a rounded-square inset moulded
+        into the cap in front of each port; its depth is not shown anywhere and
+        0.6 is the adapter's own estimate, carried across. Lifted to 4.3 - the
+        cap's own front - because it is moulded INTO that front and lifts are
+        summed down the tree.
+    - node: inset-rx
+      pocket: 0.6
+      lift: 4.3
+      confidence: estimated
+      source: >-
+        common/lc-duplex-dust-cap@2's own inset-tx reading, the other port's
+        inset. ONE reading covering both, not two.
+skins: [default]

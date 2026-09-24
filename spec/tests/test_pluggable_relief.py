@@ -139,11 +139,11 @@ def test_latch_fill_follows_the_latch_color_field(ref, latch_node, body_out, mar
 # confidence, substrings its source sentence must carry). Read off the
 # standalone compile, the same call components_index.py makes.
 PLUGS_AND_BOOTS = [
-    ("generic/lc-plug@1", "body", 12.5, None, "estimated",
+    ("generic/lc-plug@2", "body", 12.5, None, "estimated",
      ["DS-LC-000004", "12.2 MIN", "(42)", "REFERENCE"]),
-    ("generic/lc-plug@1", "tip", 6.6, None, "estimated", ["8.6", "19.70"]),
-    ("generic/lc-plug@1", "shoulder", 6.6, None, "estimated", ["19.70"]),
-    ("generic/lc-plug@1", "stem", 6.6, None, "estimated", ["19.70"]),
+    ("generic/lc-plug@2", "tip", 6.6, None, "estimated", ["8.6", "19.70"]),
+    ("generic/lc-plug@2", "shoulder", 6.6, None, "estimated", ["19.70"]),
+    ("generic/lc-plug@2", "stem", 6.6, None, "estimated", ["19.70"]),
     ("generic/rj45-plug@1", "body", 13.0, None, "estimated",
      ["22.48 - 9.5", "TE 1734264", "std/rj45"]),
     ("common/lc-boot@1", "body", 15.1, None, "drawing", ["DS-LC-000023", "15.1"]),
@@ -163,7 +163,7 @@ def test_plugs_and_boots_stand_off(ref, node, out, lift, conf, markers):
         assert m in feat["source"], f"{ref} {node} source is missing {m!r}"
 
 
-@pytest.mark.parametrize("ref", ["generic/lc-plug@1", "generic/rj45-plug@1"])
+@pytest.mark.parametrize("ref", ["generic/lc-plug@2", "generic/rj45-plug@1"])
 def test_a_plug_presents_at_its_boot_on_its_body(ref):
     """`interface-at: boot`, `boot` and `cable` both `on: body` - and `mate`
     exactly as it was: the plug still seats INTO its receptacle by `mate`."""

@@ -418,7 +418,7 @@ Now populate. Reuse before building.
     each part on it `on: <node>`. Keep measuring `at` in front-view
     millimetres. The part keeps its registry size, and the renderer
     foreshortens it and builds it along the slope in 3D. Do not declare `out`
-    or a profile on the facet; it is derived (L114). An angle read off a 3D
+    or a profile on the facet; it is derived (L117). An angle read off a 3D
     figure is `estimated`. A sawtooth is two facets per tooth: the face the
     port sits on and the return that closes the tooth back to the panel,
     each its own node. A port's depth runs back along the slope, so without

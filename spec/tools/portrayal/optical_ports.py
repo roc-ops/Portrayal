@@ -37,7 +37,7 @@ FIXED_POLISH = {"fc": "apc", "lsh": "apc"}
 
 
 def family_of(ref):
-    """`common/mpo-adapter@1` -> `mpo`, or None for a part that is not fibre."""
+    """`common/mpo-adapter@2` -> `mpo`, or None for a part that is not fibre."""
     return FAMILY.get(str(ref).split("@")[0])
 
 
