@@ -226,20 +226,10 @@ def presented_interface(contract, resolve):
     point = cps.get(contract.get("interface-at") or "mate")
     if contract.get("interface") and point:
         return contract["interface"], list(point["at"]), _seat_out(contract, point)
-    # A wrapper may compose several parts - a duplex adapter holds two bores -
-    # and only one aperture can be the thing a module seats into. Take the first
-    # that presents an interface, in declaration order, and leave the multi-mate
-    # case alone: `lc-duplex-adapter` composes two LC bores and its own point is
-    # their midpoint, which is a fibre landing on a ferrule rather than a module
-    # entering a cage. Different question, not this one.
-    cores = []
-    for part in (contract.get("parts") or []):
-        core = resolve(part.get("ref")) if part.get("ref") else None
-        if not core or not core.get("interface"):
-            continue
+    part = forwarded_part(contract, resolve)
+    if part is not None:
+        core = resolve(part["ref"])
         cm = (core.get("connection-points") or {}).get("mate")
-        if not cm:
-            continue
         # THROUGH THE PART'S OWN PLACEMENT, rotation and all. `at + mate`
         # was right only for an unturned part: every generic transceiver
         # composes std/lc-bore@3 at `rotate: 180` (tongue up), and the plain
@@ -248,12 +238,39 @@ def presented_interface(contract, resolve):
         # is at (x, 5.70). The part is drawn translate(at) rotate(deg w/2
         # h/2) with its own contract's size, so its mate lands by seat_point.
         at = part.get("at") or [0, 0]
-        cores.append((core["interface"],
-                      seat_point(at, core["size"], part.get("rotate"), cm["at"]),
-                      float(part.get("lift") or 0)))
-    if len(cores) == 1:
-        return cores[0]
+        return (core["interface"],
+                seat_point(at, core["size"], part.get("rotate"), cm["at"]),
+                float(part.get("lift") or 0))
     return contract.get("interface"), (list(mate["at"]) if mate else None), 0.0
+
+
+def forwarded_part(contract, resolve):
+    """Which of `contract`'s `parts:` entries `presented_interface` forwards
+    its mate point from, or None.
+
+    The same selection `presented_interface` makes when it has no top-level
+    `interface` of its own: a wrapper may compose several parts - a duplex
+    adapter holds two bores - and only one aperture can be the thing a
+    module seats into, so this takes the interfaced part ONLY when it is
+    the single one found, in declaration order, and leaves the multi-mate
+    case alone (a duplex adapter's own point is its bores' midpoint, a
+    fibre landing rather than a module entering a cage - different
+    question). Exposed as its own function so a caller can ask a further
+    question of THAT SPECIFIC part - here, whether it sits `on` a facet -
+    without re-deriving which one presented_interface would pick.
+    """
+    if contract.get("interface") and (contract.get("connection-points") or {}).get(
+            contract.get("interface-at") or "mate"):
+        return None
+    hits = []
+    for part in (contract.get("parts") or []):
+        core = resolve(part.get("ref")) if part.get("ref") else None
+        if not core or not core.get("interface"):
+            continue
+        if not (core.get("connection-points") or {}).get("mate"):
+            continue
+        hits.append(part)
+    return hits[0] if len(hits) == 1 else None
 
 
 def resolve_views(device, cfg):

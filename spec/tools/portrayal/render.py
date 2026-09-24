@@ -24,7 +24,7 @@ from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref
 from portrayal import libwalk
 from portrayal.manifest import (view_parts, targets, split_target, component_refs,
-                      presented_interface, seat_point, _turn,
+                      presented_interface, forwarded_part, seat_point, _turn,
                       load_yaml, resolve_views, module_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
                       occupant_spec, alias_names, config_airflow)
@@ -636,16 +636,15 @@ def _inset_feature(feat, back, group_lift=0.0):
 
 
 def _facet_wedge(feat, contract):
-    """A `facet` feature's derived wedge, in the existing `out`/profile
-    vocabulary, computed BEFORE `_inset_feature` gets a look at it.
+    """A `facet` feature's derived `out`/profile, off the facet node's own
+    `elements[node].size`, computed BEFORE `_inset_feature` sees it
+    (docs/superpowers/specs/2026-09-24-tilted-facets-design.md; the schema
+    forbids a `facet` feature from also declaring them). A node missing
+    from `elements` derives nothing.
 
-    The schema (global constraints) forbids a `facet` feature from also
-    declaring `out`, `profile` or `profile-y`, so there is nothing to
-    collide with - this is simply where those numbers come from for a
-    feature that carries `facet` instead. The element's own `size` supplies
-    the plate dimensions facets.py needs; a facet feature whose node is not
-    also in `elements` derives nothing (schema requires it, so this is a
-    defensive no-op, not a silent guess).
+    `lift` offsets the WHOLE wedge, root edge included, not just `out`:
+    `derived_profile` starts every wedge at 0, so both its points are
+    shifted here by the same `lift` `out` already carries.
     """
     if not feat.get("facet"):
         return feat
@@ -653,9 +652,12 @@ def _facet_wedge(feat, contract):
     if not el.get("size"):
         return feat
     fw, fh = el["size"]
+    lift = feat.get("lift") or 0
     key, prof = _facets.derived_profile(feat["facet"], fw, fh)
+    if lift:
+        prof = [[p, round(o + lift, 4)] for p, o in prof]
     return {**feat, key: prof,
-            "out": round((feat.get("lift") or 0) + _facets.proud_extent(feat["facet"], fw, fh), 4)}
+            "out": round(lift + _facets.proud_extent(feat["facet"], fw, fh), 4)}
 
 
 def _inset_facet_profile(raw_feat, pre_out, feat):
@@ -879,38 +881,51 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     return at, hrot, lift
 
 
-def _host_tilt(lib, host_id, placements):
-    """The facet a `mate-to` host's forwarded aperture sits on, if any.
+def _facet_via_part(contract, part, node_prefix):
+    """(facet, part_at, node_id) for a `parts:` entry that sits `on` a
+    facet, or (None, None, None).
 
-    `presented_interface` finds a host's composed aperture BY ITS INTERFACE
-    (the one composed part with an `interface` + `mate`) so an occupant can
-    mate to a wrapper like `card` above without naming the part inside it.
-    This is the same search, one level narrower: which of that host's
-    `parts:` entries carries `on`, naming a relief feature that itself
-    carries `facet`. v1 allows at most one (no compound angles), so the
-    first hit wins.
-
-    Returns `(facet, part_at, node_id)` - `part_at` in the HOST's own frame
-    (the part's `at`, exactly as `presented_interface` reads it before any
-    seating happens) and `node_id` the facet node's rendered id, e.g.
-    `"card--housing"` - matching what the Step 4 part-transform code writes
-    for a part composed directly `on` that same node. `(None, None, None)`
-    when the host is not a placement in this view, does not resolve, or
-    draws nothing on a facet.
+    The tail shared by every place an occupant can inherit a facet straight
+    from a `parts:` entry: a wrapper's forwarded aperture (`forwarded_part`,
+    for a `mate-to` naming the wrapper, e.g. `card`) and a card's own cage
+    named directly by id (`_seat_nested_occupants`'s `occupants:`).
+    `node_id` is the facet node's rendered id, e.g. `"card--housing"` -
+    matching what the `parts:` loop above writes for a part composed
+    directly `on` that same node.
     """
-    q = next((p for p in placements if p.get("id") == host_id), None)
-    if q is None:
+    if not part or not part.get("on"):
         return None, None, None
-    try:
-        c, _ = lib.resolve(q["ref"])
-    except Exception:
+    facet = _facets.facet_of(contract, part["on"])
+    if not facet:
         return None, None, None
-    for part in (c or {}).get("parts") or []:
-        if part.get("on"):
-            facet = _facets.facet_of(c, part["on"])
-            if facet:
-                return facet, part["at"], f"{host_id}--{part['on']}"
-    return None, None, None
+    return facet, part["at"], f"{node_prefix}--{part['on']}"
+
+
+def _tilt_offset(local_q, size, rotate, facet):
+    """Where `local_q` (a point in a part's own untransformed frame) lands
+    relative to the part's own origin, when the part is drawn
+    `translate(origin) scale(1,cos) rotate(rotate, size/2)`
+    (`instance_group`'s `tilt` branch) - the EXACT composition, not an
+    approximation: rotate about the part's own centre first (`seat_point`'s
+    own `_turn`), then the facet's scale, which is about the part's own
+    coordinate origin (0, 0) - NOT about the centre `rotate` just turned
+    around. That second point is the one a per-axis "project `at`" shortcut
+    misses: even a `local_q` sitting exactly on the part's own centre picks
+    up a scale term from the centre's own (non-zero) offset from the
+    origin, whenever the part itself is drawn rotated 90/270. Add `origin`
+    to what this returns for the forward point; subtract it from a known
+    target to solve for the `origin` (`at`) a seat needs.
+    """
+    cx, cy = size["w"] / 2.0, size["h"] / 2.0
+    dx, dy = _turn((local_q[0] - cx, local_q[1] - cy), rotate)
+    x, y = cx + dx, cy + dy
+    if facet:
+        c = _facets.cos_of(facet)
+        if _facets.axis_of(facet) == "y":
+            y *= c
+        else:
+            x *= c
+    return x, y
 
 
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
@@ -942,7 +957,18 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                        "host-lift": float(q.get("lift") or 0.0),
                        "group": q.get("group")}
              for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
+    # `on` NAMED DIRECTLY, BY PART ID - unlike a device-level `mate-to`
+    # naming a wrapper, an `occupants:` key already names the exact cage
+    # (`_facet_via_part` below), so this needs no `forwarded_part` search.
+    parts_by_id = {q["id"]: q for q in contract.get("parts") or [] if q.get("id")}
     comp_groups = contract.get("groups") or {}
+
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+
     while pending:
         seated_now = []
         for host_id, (key, spec) in pending.items():
@@ -951,6 +977,40 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 continue
             at, hrot, lift = solve_seat(lib, f"occupants/{key}", spec["ref"],
                                         f"{path}/{host_id}", host)
+            # AN OCCUPANT INHERITS ITS HOST'S TILT (mirrors the device-level
+            # `mate-to` resolution in render_view, and the same
+            # `_tilt_offset`) - fresh from the cage itself when `host_id`
+            # names one of THIS card's own `parts:`, or carried forward
+            # when `host_id` names a previously-seated occupant that
+            # already carries one (a boot on a tilted optic). No OUTER
+            # transform to carry through either way: `og` nests INSIDE `g`,
+            # so this stays entirely in the card's own local frame.
+            tilt_facet = tilt_node = target = None
+            fpart = parts_by_id.get(host_id)
+            tilt_facet, part_at, tilt_node = _facet_via_part(contract, fpart, inst_id)
+            if tilt_facet:
+                core = _res(fpart["ref"])
+                hm = presented_interface(core, _res) if core else (None, None, None)
+                if hm[1] is not None:
+                    ox, oy = _tilt_offset(hm[1], core["size"], fpart.get("rotate"), tilt_facet)
+                    target = (part_at[0] + ox, part_at[1] + oy)
+                else:
+                    tilt_facet = None
+            if not tilt_facet and host.get("tilt"):
+                tilt_facet, tilt_node = host["tilt"], host.get("tilt-on")
+                host_c = _res(host["ref"])
+                hm = presented_interface(host_c, _res) if host_c else (None, None, None)
+                if hm[1] is not None:
+                    ox, oy = _tilt_offset(hm[1], host_c["size"], host.get("rotate"), tilt_facet)
+                    target = (host["at"][0] + ox, host["at"][1] + oy)
+                else:
+                    tilt_facet = None
+            if tilt_facet and target is not None:
+                occ_c = _res(spec["ref"])
+                om = (occ_c.get("connection-points") or {}).get("mate") if occ_c else None
+                if om:
+                    ox, oy = _tilt_offset(om["at"], occ_c["size"], hrot, tilt_facet)
+                    at = [round(target[0] - ox, 4), round(target[1] - oy, 4)]
             local = occupant_local_id(host_id, spec)
             # THE HOST'S GROUP, AS A DEVICE OCCUPANT TAKES ITS HOST'S: the card
             # group's attrs under the occupant's own, its side written by
@@ -966,7 +1026,11 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 rotate=hrot or None, palette=palette, inst_palette=inst_palette,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                path=f"{path}/{local}", resolved=resolved)
+                path=f"{path}/{local}", resolved=resolved, tilt=tilt_facet)
+            if tilt_facet:
+                og.set("data-tilt-on", tilt_node)
+                og.set("data-tilt", f"{tilt_facet['deg']:g}")
+                og.set("data-tilt-facing", tilt_facet["facing"])
             if gname:
                 write_group_side(og, gname, grp, spec.get("attrs"))
                 if grp.get("states"):
@@ -976,7 +1040,8 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             og.set("data-for", f"{path}/{host_id}")
             g.append(og)
             hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
-                            "host-lift": lift, "group": gname}
+                            "host-lift": lift, "group": gname,
+                            "tilt": tilt_facet, "tilt-on": tilt_node}
             if occ_used is not None:
                 occ_used.add(key)
             seated_now.append(host_id)
@@ -1143,7 +1208,7 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         tf = f"translate({at[0]},{at[1]})"
         # SCALED BEFORE IT TURNS. A part `on` a facet keeps its true size and
         # is only foreshortened by the facet's own cos, along the facet's
-        # axis - `rotate` still turns the true box (global constraints:
+        # axis - `rotate` still turns the true box (facets.projected_box:
         # "the rotated true box, scaled about the part origin"), so the scale
         # has to land between the translate and the rotate, not after it.
         if tilt:
@@ -1257,8 +1322,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for part in contract.get("parts") or []:
         pgrp = comp_groups.get(part.get("group")) or {}
         # `on` NAMES A FACET, NOT A GROUP. It points at a relief feature on
-        # THIS SAME CONTRACT that declares `facet` (global constraints), so
-        # the lookup is against `contract`, never the part's own component.
+        # THIS SAME CONTRACT that declares `facet` (design doc: "`on`: the
+        # `node` of a relief feature on the same contract"), so the lookup
+        # is against `contract`, never the part's own component.
         tilt = _facets.facet_of(contract, part["on"]) if part.get("on") else None
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None,
@@ -2327,6 +2393,13 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     hosts = {q["id"]: q for q in parts["placements"] if q.get("at")}
     pending = [q for q in parts["placements"] if q.get("mate-to") and not q.get("at")]
     mate_resolved = {}
+
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+
     while pending:
         progressed = []
         for p in pending:
@@ -2340,35 +2413,53 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             at, hrot, total_lift = solve_seat(
                 lib, p["id"], p["ref"], p["mate-to"], host,
                 occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of)
-            # AN OCCUPANT INHERITS ITS HOST'S TILT. `solve_seat` mates the
-            # occupant to `host`'s forwarded aperture point exactly as if it
-            # sat flat - `presented_interface` (which it calls) knows nothing
-            # about facets. When that aperture is itself `on` a facet
-            # (`_host_tilt`), the point drawn is not the one solve_seat used:
-            # the part draws translate(at) scale(1,cos) ..., so its aperture
-            # is foreshortened about the part's OWN origin, along the facet's
-            # axis, by the same cos. Re-project `at` by that same amount -
-            # linear in the forwarded point, so shifting the point shifts the
-            # solved `at` by exactly as much - and mark the occupant with the
-            # same three `data-tilt-*` facts the part itself carries.
-            tilt_facet, tilt_part_at, tilt_node = _host_tilt(
-                lib, p["mate-to"], parts["placements"])
-            if tilt_facet:
-                hc, _ = lib.resolve(host["ref"])
-
-                def _res(ref):
-                    try:
-                        return lib.resolve(ref)[0]
-                    except Exception:
-                        return None
-                _, hm_at, _ = presented_interface(hc, _res)
-                if hm_at is not None:
-                    c = _facets.cos_of(tilt_facet)
-                    axis_i = 1 if _facets.axis_of(tilt_facet) == "y" else 0
-                    local_delta = [0.0, 0.0]
-                    local_delta[axis_i] = (c - 1) * (hm_at[axis_i] - tilt_part_at[axis_i])
-                    ddx, ddy = _turn(local_delta, hrot)
-                    at = [round(at[0] + ddx, 4), round(at[1] + ddy, 4)]
+            # AN OCCUPANT INHERITS ITS HOST'S TILT. `solve_seat` (through
+            # `presented_interface`) knows nothing of facets, so `at` lands
+            # on the host's FLAT aperture point. Two sources for a tilt:
+            # the host's own contract forwards its mate point from a
+            # composed part that sits `on` a facet (`card` wrapping a
+            # tilted cage), or the host is ITSELF a seat that already
+            # carries one (a boot on a tilted optic). Either way, find the
+            # TARGET device point the aperture is actually drawn at
+            # (`_tilt_offset`), then solve the occupant's own `at` from it.
+            hc = _res(host["ref"])
+            tilt_facet = tilt_node = target = None
+            if hc:
+                fpart = forwarded_part(hc, _res)
+                tilt_facet, part_at, tilt_node = _facet_via_part(hc, fpart, p["mate-to"])
+                if tilt_facet:
+                    # THE APERTURE'S EXACT DRAWN POSITION - p1's own local
+                    # mate point, through p1's own `_tilt_offset` (rotate,
+                    # then the facet's scale), landed in card's frame, then
+                    # carried out by card's own (untilted) placement.
+                    core = _res(fpart["ref"])
+                    core_mate = (core.get("connection-points") or {}).get("mate")
+                    ox, oy = _tilt_offset(core_mate["at"], core["size"],
+                                          fpart.get("rotate"), tilt_facet)
+                    target = seat_point(host["at"], hc["size"], hrot,
+                                        (part_at[0] + ox, part_at[1] + oy))
+            if not tilt_facet and host.get("tilt") and hc:
+                # CHAINED: the host is itself a tilted seat. Its own mate
+                # point (`presented_interface`, in its own local frame) is
+                # drawn exactly as `part_at`+`_tilt_offset` above, except
+                # the host has no further OUTER placement to carry through -
+                # a seated occupant's group is a top-level sibling, so
+                # `host["at"]` is already device-frame.
+                tilt_facet, tilt_node = host["tilt"], host.get("tilt-on")
+                _, host_pt, _ = presented_interface(hc, _res)
+                if host_pt is not None:
+                    ox, oy = _tilt_offset(host_pt, hc["size"], hrot, tilt_facet)
+                    target = (host["at"][0] + ox, host["at"][1] + oy)
+            if tilt_facet and target is not None:
+                # SOLVE THE OCCUPANT'S OWN `at` from the target its `mate`
+                # must land on, inverting the SAME `_tilt_offset` the
+                # occupant is itself drawn with (it inherits `tilt`, so its
+                # own group carries the same scale).
+                oc = _res(p["ref"])
+                om = (oc.get("connection-points") or {}).get("mate") if oc else None
+                if om:
+                    ox, oy = _tilt_offset(om["at"], oc["size"], hrot, tilt_facet)
+                    at = [round(target[0] - ox, 4), round(target[1] - oy, 4)]
             seated = dict(p, at=at)
             if tilt_facet:
                 seated["tilt"] = tilt_facet
@@ -2550,11 +2641,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                      resolved=resolved, tilt=p.get("tilt"))
-        # A SEATED OCCUPANT INHERITS ITS HOST'S TILT (`_host_tilt`, above,
-        # sets `p["tilt"]`/`p["tilt-on"]` when the mate-to resolution finds
-        # one) - the same three facts and the same foreshortening a part
-        # composed directly `on` a facet carries, so a viewer cannot tell the
-        # two apart from these attributes alone.
+        # A SEATED OCCUPANT INHERITS ITS HOST'S TILT: the mate-to resolution
+        # above sets `p["tilt"]`/`p["tilt-on"]` when it finds one, and `tilt`
+        # was already passed into `instance_group` so this group is drawn
+        # foreshortened the same way a part composed directly `on` a facet
+        # is - a viewer cannot tell the two apart from these attributes alone.
         if p.get("tilt"):
             g.set("data-tilt-on", p["tilt-on"])
             g.set("data-tilt", f"{p['tilt']['deg']:g}")
