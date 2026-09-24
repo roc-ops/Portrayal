@@ -411,6 +411,19 @@ Now populate. Reuse before building.
 6. **`rotate:` pivots a placement on its own pre-rotation centre**, so after
    turning a part recompute `at`; the landed box is not where the unrotated one
    sat. Look at the render. L39 compares the landed box with the hole.
+7a. **Ports on an angled surface sit `on` a facet.** Some faceplates carry
+    their connectors on a housing or sawtooth angled off the panel. Declare
+    the surface once, as a relief feature with `facet: {deg, facing}`, and
+    declare its node in `elements` at its front-view footprint. Then give
+    each part on it `on: <node>`. Keep measuring `at` in front-view
+    millimetres. The part keeps its registry size, and the renderer
+    foreshortens it and builds it along the slope in 3D. Do not declare `out`
+    or a profile on the facet; it is derived (L114). An angle read off a 3D
+    figure is `estimated`. A sawtooth is two facets per tooth: the face the
+    port sits on and the return that closes the tooth back to the panel,
+    each its own node. A port's depth runs back along the slope, so without
+    the return, or at the wrong angle, the cage comes out of the tooth in
+    3D; that is a geometry error to fix, not something to hide.
 7. **Cable-management accessories are not drawn**: cord-retainer bails, tie
    anchors, straps. They are not panel facts. Note them in provenance instead.
 8. **A row of indicators and buttons sharing one baseline on the real device is
