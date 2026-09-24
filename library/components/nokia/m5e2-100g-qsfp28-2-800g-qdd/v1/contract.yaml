@@ -1,0 +1,189 @@
+format: 1
+kind: module
+name: m5e2-100g-qsfp28-2-800g-qdd
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR MDA2-e-XP, 2-port 100G QSFP28 + 2-port 800G QDD (3HE20976AA, CLI
+  m5e2-100g-qsfp28+2-800g-qdd), an FP4 media-dependent adapter with up to 800 Gb/s of
+  line rate. Authored horizontal, as the guide draws it: a handle at each top corner and
+  a captive screw on each lower end wing; Stat and Pwr at the left; two QSFP28 cages
+  (c1, c2) and two QSFP-DD800 cages (c3, c4) in one row, each with its Lnk/Act lamp
+  above it; the legends QSFP28 and QDD bracketed under the cages and the model label at
+  the lower right.
+size: {w: 193.0, h: 35.4, d: 193.0}
+size-confidence: {w: drawing, h: datasheet, d: datasheet}
+size-notes: >-
+  The shared wave-1 MDA envelope (MDA-e, MDA-e-XP, MDA2-e-XP): w 193.0 measured on the figures
+  (the datasheet's 7.6 in), h 35.4 the measured slot pitch (the datasheet's 1.4 in rounded),
+  d 193.0 (7.6 in). The lower corners are notched: only x 16.1-176.9 runs the full height.
+unplaced: "seated by the SR-1 MDA slots (1.5 Tb/s chassis revisions only) and, in a later wave, the IOM5-e 1.5T; the coordinator wires it"
+attrs:
+  model: M5E2-100G-QSFP28+2-800G-QDD
+  part-number: 3HE20976AA
+  cli-type: m5e2-100g-qsfp28+2-800g-qdd
+  qsfp28: 2
+  qsfp-dd: 2
+  weight-kg: 1.27
+  power-draw-max-w: 185
+  power-draw-typical-w: 160
+provenance:
+  size: >-
+    datasheet - XP (3HE20985AAABTQZZA01, MDA-e-XP and MDA2-e-XP Installation Guide
+    25.10) p51 Table 27: 1.4 x 7.6 x 7.6 in (3.6 x 19.3 x 19.3 cm) for every MDA2-e-XP.
+    The face is held at the shared wave-1 MDA envelope, 193.0 x 35.4: w 193.0 as the
+    figures measure it (the 7.6 in), h 35.4 the measured slot pitch (the 1.4 in rounded
+    to 0.1 in), so stacked slots tile.
+  size-figure-height: >-
+    drawing - CONFLICT, recorded not followed. Figs 51-54 (pp103-108), rendered at 1200
+    dpi (vector, no raster; `pdfimages -list` finds none on pp103-108), draw the plate
+    4912 px wide (193.0 mm, 25.45 px/mm) but only 851 px from the plate top line to the
+    bottom of the band: 33.4 mm, against 35.3 mm on the MDA-e-XP Fig 39 (p88, 4927 x 900
+    px). The end wings measure the same in both (27.0 mm), so only the central band is
+    drawn shorter. Table 27 gives the MDA2 the same 1.4 in as the MDA-e-XP, so the
+    shared 35.4 is kept and every feature is placed isotropically from the plate top at
+    25.45 px/mm; the bottom 2 mm of the band carries nothing. Whether the MDA2 plate
+    really is 2 mm shorter is open (gap) - a photograph settles it.
+  depth: >-
+    datasheet - XP p51 Table 27: 7.6 in (19.3 cm) deep.
+  weight: >-
+    datasheet - XP p51 Table 27: 1.27 kg.
+  power: >-
+    datasheet - XP p53 Table 30 (the SR-1 guide p93 Table 35 prints the same): Idle 0 /
+    25C 160 / 40C 175 / 55C 185 W. Carried as max = the 55C rung (100% line rate IMIX,
+    the NEBS short-term maximum) and typical = the 25C rung (50% line rate IMIX). XP
+    p52: these values do not include the power consumed by optical components.
+  model: >-
+    datasheet - XP Table 3 (p19): 3HE20976AA; the printed model label on Fig 51 (p103,
+    art hw4483) and the CLI provisioning string m5e2-100g-qsfp28+2-800g-qdd.
+  layout: >-
+    drawing - Fig 51 (p103) at 1200 dpi, 25.45 px/mm, origin at the plate's outer top-
+    left under the card-top strip. One row: cage outlines 20.86 x 11.32 (cage plus
+    bezel) centred at x 36.58, 76.56 (QSFP28) and 116.52, 156.48 (QDD), pitch 39.96, y
+    centre 15.25. Lnk/Act lamps 2.44 across, centred 1.0 left of each cage centre at y
+    6.76, their c1-c4 legends to the right. Stat (12.65, 7.27) above Pwr (12.65, 12.0),
+    legends to the right. The legends QSFP28 and QDD sit in brackets at y 23.2 spanning
+    each pair (26.1-86.9, 106.0-166.8). Model label right-aligned at x 174.3, baseline
+    31.3. About 0.2 mm error.
+  plate: >-
+    drawing - the plate outline is the same on all four figures: full band x 16.1-176.9
+    (measured 16.2-176.9), end wings 27.0 tall from the plate top with a rounded step
+    (about 2 mm radius) into the band, as the family plate shape in the wave-1
+    conventions gives it. The thin line at y 31.9 across the band is the lip the figures
+    draw.
+  ports: >-
+    datasheet - XP p103 section 5.8 and Table 44: two QSFP28 connectors (QSFP-LS, QSFP28
+    single lambda, QSFP+) and two QDD connectors (QSFP112-DD 8x100GE / 2x400GE,
+    QSFP56-DD, QSFP112, QSFP28, QSFP28-DD, QSFP+). Numbered c1-c4 left to right as Fig
+    51 prints them. Composed as std/qsfp28@1 and std/qsfp-dd@1 (the QSFP-DD800 is the
+    QSFP-DD cage; media qsfp-dd, speed 800g, with no `qsfp-dd800` media invented). Card
+    rate attrs qsfp28: 2 and qsfp-dd: 2. The exporter's qsfp-dd row types a QDD cage as
+    400GBASE; the 800G is on the port attrs only (coordinator).
+  lamps: >-
+    datasheet - XP p110 Table 49 (single-port MDA2-e-XP connectors) and pp110-111 Table
+    50 (multi-port). Pwr: blue solid = power on, unlit = no power. Stat: green solid =
+    up, green blinking = initialising, amber solid = operationally down / admin up,
+    unlit = admin down. One Lnk/Act lamp per connector, labelled c1..: green solid =
+    link, green blinking = active, amber slow blink = admin up with no optic, amber fast
+    blink = loopback, amber solid = optic but no link, amber one blink per errored
+    frame, unlit = disabled. The guide gives no blink rates, so the slow/fast pair is
+    carried as two named blinking states at the default rate (gap), and the Table 50
+    break-out blink sequence (2.75 s amber, then 0.75 s green/amber per sub-port) is not
+    modelled as a state.
+  handles: >-
+    drawing - Figs 51-54 keys 6/7 (Handles, 'used for insertion and extraction of the
+    MDA'): a tab at each top corner, measured 19.6-19.9 x 4.7-4.8 mm at x 1.0 and 172.4,
+    y 0.9. The conventions give 19.6 x 4.7 (XP p89 Table 38 key 7), used. Under each
+    handle the figure draws a U-shaped recess (x 1.2-9.6 / 183.4-191.8, y 5.6-15.6),
+    drawn as decor.
+  thumbscrews: >-
+    drawing - Figs 51-54 (captive screws): head 10.37 mm across, centres 8.33 mm from
+    the left end and 7.50 mm from the right (185.50), 20.97 mm below the plate top, the
+    same on all four figures. The family figure is about 7.8 / 20.8 / 10.3; the measured
+    values are used.
+  relief: >-
+    estimated - the two insertion/extraction handles stand proud at out 4.2 and the
+    captive screw heads at cyl 1.6. No document gives either; these are the library's
+    pooled release-hardware (edgecore/agr-psu-dc@1 latch) and captive-screw
+    (edgecore/agr-panel-screw@1) estimates.
+  colour: >-
+    estimated - no photograph is staged. Charcoal faceplate, light silkscreen, dark
+    handles, a yellow ESD mark at the top right (the family appearance recorded in the
+    wave-1 conventions from PUBLIC-SOURCES; DS 214928 is the MDA2-e-XP datasheet cut-out
+    to check against). The figure draws the ESD mark as a triangle at x 176.1-182.1, y
+    5.9-8.5. No vendor mark is drawn on any of the four figures, so no logo-zone is
+    reserved (gap: the datasheet photo may show one).
+  compatibility: >-
+    datasheet - XP p9, pp21-22, SR-1 guide p46: MDA2-e-XPs need an FP4 IOM5-e with the
+    1.5 Tb/s FD licence. They seat in the SR-1 (FP4) MDA slots only on the 1.5 Tb/s
+    chassis revisions (3HE12298xxRD and higher, 3HE12299xxRB and higher) and in an
+    IOM5-e 1.5T; XP p22 note: not supported in the SR-7 or SR-12.
+  lifecycle: >-
+    searched only the staged corpus - current in the 25.10 guide; no end-of-life notice
+    was searched for.
+relief:
+  wall: '#1f2125'
+  features:
+    - node: handle-left
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: handle-right
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: screw-left
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1 - the library's one captive-screw-head figure, whose own
+        provenance reads 'estimated - it stands proud but was not measured'
+    - node: screw-right
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1 - the library's one captive-screw-head figure, whose own
+        provenance reads 'estimated - it stands proud but was not measured'
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: connectors c1-c2, QSFP28 (QSFP28, QSFP28 single lambda, QSFP+ optics)
+  qdd:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 800g}
+    description: connectors c3-c4, QSFP-DD800 "QDD" cages (QSFP112-DD, QSFP56-DD, QSFP112, QSFP28, QSFP28-DD, QSFP+ optics)
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Lnk/Act lamp per connector, labelled with the connector's name
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the adapter lamps Stat and Pwr
+parts:
+  - {ref: std/qsfp28@1, id: c1, group: qsfp28, at: [26.58, 10.175], attrs: {media: qsfp28, speed: 100g}}
+  - {ref: std/qsfp28@1, id: c2, group: qsfp28, at: [66.56, 10.175], attrs: {media: qsfp28, speed: 100g}}
+  - {ref: std/qsfp-dd@1, id: c3, group: qdd, at: [107.02, 10.25], attrs: {media: qsfp-dd, speed: 800g}}
+  - {ref: std/qsfp-dd@1, id: c4, group: qdd, at: [146.98, 10.25], attrs: {media: qsfp-dd, speed: 800g}}
+  - {ref: common/led-dot@1, id: led-c1, group: port-leds, at: [34.56, 5.76], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c2, group: port-leds, at: [73.93, 5.76], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c3, group: port-leds, at: [113.91, 5.76], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c4, group: port-leds, at: [154.16, 5.76], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-stat, group: status-leds, at: [11.65, 6.27], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: amber, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [11.65, 11], states: {lamp: ['off', {name: blue, color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]
