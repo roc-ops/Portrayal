@@ -17,18 +17,18 @@ passed, and the component's own skin file was correct all along; only the
 compiled output was wrong, and only a person looking at the picture caught it.
 Hence this test, which looks at the compiled output.
 """
-import pathlib
 import re
 
 import pytest
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
-DIST = ROOT / "library" / "dist" / "components"
+from libdata import built_component
 
-# id suffix of the first drawable element in each skin, i.e. its base plate
+# id suffix of the first drawable element in each skin, i.e. its base plate.
+# Keyed by part, not by file: the build file is resolved at the part's CURRENT
+# major (libdata.built_component), so a major bump cannot turn this into a skip.
 BASE_PLATE = {
-    "smartoptics--dcp-404--v1--default.svg": "body",
-    "common--lc-duplex-adapter--v5--default.svg": "bezel",
+    "smartoptics/dcp-404": "body",
+    "common/lc-duplex-adapter": "bezel",
 }
 
 NONDRAWING = ("title", "defs", "style", "desc", "metadata")
@@ -47,11 +47,10 @@ def top_level(text):
     return out
 
 
-@pytest.mark.parametrize("fname,plate", sorted(BASE_PLATE.items()))
-def test_the_base_plate_is_drawn_first(fname, plate):
-    f = DIST / fname
-    if not f.exists():
-        pytest.skip(f"{fname} not built")
+@pytest.mark.parametrize("part,plate", sorted(BASE_PLATE.items()))
+def test_the_base_plate_is_drawn_first(part, plate):
+    f = built_component(part)
+    fname = f.name
     kids = top_level(f.read_text())
     ids = [i for i, _ in kids]
     assert ids, f"{fname}: no drawable children found"
@@ -98,9 +97,7 @@ def test_the_dcp_404_face_is_inside_the_node_that_carries_its_relief():
     INSIDE the node that carries the relief. A sibling renders in 2D and vanishes
     in 3D, which is the failure that is easy to ship and hard to see.
     """
-    f = DIST / "smartoptics--dcp-404--v1--default.svg"
-    if not f.exists():
-        pytest.skip("dcp-404 not built")
+    f = built_component("smartoptics/dcp-404")
     text = f.read_text()
 
     m = re.search(r'<g id="dcp-404--body"[^>]*>', text)
@@ -133,9 +130,7 @@ def test_the_dcp_404_face_is_inside_the_node_that_carries_its_relief():
 
 def test_the_relief_node_and_the_lifted_parts_agree():
     """A part lifted less than the plate it sits on is inside the plate."""
-    f = DIST / "smartoptics--dcp-404--v1--default.svg"
-    if not f.exists():
-        pytest.skip("dcp-404 not built")
+    f = built_component("smartoptics/dcp-404")
     text = f.read_text()
     out = re.search(r'<g id="dcp-404--body"[^>]*data-z-out="([\d.]+)"', text)
     if not out:

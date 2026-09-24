@@ -17,9 +17,11 @@
 
 import { createDevicePicker } from './devsel.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
+         occupantsOf,
          rawParam, liesOver, seatClaims, occupantRef, refusalReason,
          builtOccupants, builtBays, faceCages, cageAt, pruneCarrier,
-         freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath } from './swap.js';
+         freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, ownerPath,
+         slotOptions, slotResolver } from './swap.js';
 import { jdist } from './dist.js';
 import { paintFields, unpaintFields } from './fields.js';
 import { fibreOf, farPath, fibreLabel, connectorLabel, moduleOf } from './optical.js';
@@ -226,12 +228,41 @@ export function createShell(opts = {}) {
   // the same reason - which cages exist depends on what the bays hold. The
   // rule for both kinds, and for a click inside either optic, is swap.js's
   // `cageAt` over `faceCages`, the list the 3D pass seats through as well.
+  //
+  // A SLOT AT ANY DEPTH is one too (B3 Task 10a): a cassette's duplex
+  // adapter, its bores, an adapter placed on the device - swap.js's
+  // `nestedSlots`. `cageFor` offers only the FREE level of a duplex adapter
+  // (cageAt); `cagesOnFace` is every slot, because a swap seats through it
+  // and a reload re-seats an emptied level and the filled one in any order.
   const cagesHere = () => (state.module ? [] : state.meta?.cages?.[bayView()] || []);
   const cagesOnFace = () => (state.module ? [] : faceCages(state.svg, cagesHere(), compByRef));
   function cageFor(path) {
     if (path == null || state.module) return null;
     return cageAt(state.svg, path, cagesHere(), compByRef);
   }
+
+  // THE REF OF A DEVICE PLACEMENT, off whichever face draws it - the one fact
+  // about a slot on the device (`xc01/1`) that no index publishes
+  // (configs.json's cages carry no ref). What swap.js's slotResolver asks
+  // when there is no drawing to read the slot off.
+  // Only faces of the device and configuration on screen: `syncCfgBays` runs
+  // before the new device's first face is mounted, when what is held is the
+  // last device's. (The mounted face is always among `state.faces`.)
+  function placementRef(path) {
+    if (state.facesFor !== `${state.device}.${state.cfg}`) return null;
+    for (const f of Object.values(state.faces || {})) {
+      // with a ref: a group without one (a label, a cutout) at the same path
+      // must not shadow the placement
+      const r = f?.querySelector?.(`[data-path="${CSS.escape(path)}"][data-ref]`)?.getAttribute('data-ref');
+      if (r) return r.split(':')[0];
+    }
+    return null;
+  }
+  const allOf = o => Object.values(o || {}).flat();
+  // what the configuration on screen seats in each slot it keys, at the
+  // drawing's path (a deep key walked through its bays - builtOccupants)
+  const builtOccOf = cfg => builtOccupants(cfg, allOf(state.meta?.cages),
+                                           {bays: allOf(state.meta?.bays), compByRef, placementRef});
 
   // ---------------------------------------------------------------- stage
 
@@ -1090,12 +1121,21 @@ export function createShell(opts = {}) {
     // value is `cfgOccupants`, which is reset from THIS configuration's
     // `configs[].occupants` - never `cage.occupant`, which is only the DEFAULT
     // configuration's answer and would show another configuration's optic.
+    //
+    // A SLOT THAT SHIPS SOMETHING (B3) holds its `default` until the reader
+    // or the configuration says otherwise, so that is its current value when
+    // the state has no entry; the option it ships is marked "(ships with)"
+    // (swap.js `slotOptions`). A connector slot says so in its label.
     if (cage) {
-      const cur = state.cfgOccupants?.[cage.id] ?? '';
+      const cur = Object.prototype.hasOwnProperty.call(state.cfgOccupants || {}, cage.id)
+        ? state.cfgOccupants[cage.id] ?? '' : cage.default ?? '';
       const accepts = cage.accepts || [];
-      const opts = ['<option value="">— empty —</option>']
-        .concat(accepts.map(a => `<option value="${esc(a)}"${a === cur ? ' selected' : ''}>${esc(a)}</option>`));
-      html += `<div class="row"><span>optic</span><select id="optic" data-cage="${esc(cage.id)}">${opts.join('')}</select></div>`;
+      const opts = slotOptions(cage, cur).map(o =>
+        `<option value="${esc(o.value)}"${o.selected ? ' selected' : ''}>${esc(o.label)}</option>`);
+      const label = cage.kind === 'connector' ? 'connector' : 'optic';
+      html += `<div class="row"><span>${label}</span><select id="optic" data-cage="${esc(cage.id)}">${opts.join('')}</select></div>`;
+      if (cage.key && cage.key !== cage.id)
+        html += `<div class="row"><span>key</span><code>${esc(cage.key)}</code></div>`;
       if (!accepts.length)
         html += `<div class="row" style="color:var(--warn)">no generic modelled for this cage's family yet</div>`;
       // WHY A CHOSEN OPTIC IS NOT THERE, said where the choice was made. A
@@ -1103,12 +1143,6 @@ export function createShell(opts = {}) {
       // leaves it holding what it held, which the select above now shows.
       const no = state.refused?.[cage.id];
       const why = {
-        // A cage in a well publishes a NEGATIVE lift (its sink), so the
-        // sign says which of the two the refusal is about.
-        'lift': (Number(cage.lift) < 0
-                  ? 'this cage sits in a well below the face'
-                  : 'this cage stands off the face')
-              + ', and the kit does not seat an optic into a cage off the face yet',
         'mirror': 'this cage is mirrored, and the build refuses to seat an '
                 + 'optic into a mirrored cage',
         'group-states': "this cage's group carries lamp states, which the build "
@@ -1206,10 +1240,17 @@ export function createShell(opts = {}) {
     const builtRef = Object.prototype.hasOwnProperty.call(cb, key) ? cb[key] || null
       : bayFor(key)?.default ?? null;
     const again = ref && ref === builtRef;
-    const rebuilt = again
-      ? builtOccupants(cfg, Object.values(state.meta?.cages || {}).flat()) : {};
+    const rebuilt = again ? builtOccOf(cfg) : {};
     const fresh = again ? freshBaysUnder(cfg, key, ref, compByRef) : {};
-    Object.assign(state, pruneCarrier(state, key, rebuilt, fresh));
+    // what a fresh seat of `ref` ships in each slot under it (B3, P5): its
+    // default, read with `ref` in the bay and the state's answer elsewhere
+    const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+    const R = slotResolver({bays: allOf(state.meta?.bays), cages: allOf(state.meta?.cages),
+      compByRef, placementRef,
+      bayRef: (p, bay) => p === key ? ref : own(state.cfgBays, p) ? state.cfgBays[p]
+        : own(fresh, p) ? fresh[p] : bay.default ?? null});
+    const ships = k => R.entryAt(k)?.default ?? null;
+    Object.assign(state, pruneCarrier(state, key, rebuilt, fresh, ships));
     // and a swap still loading under it is no longer anyone's to make: its
     // claim retired, it neither touches the drawing nor writes the state
     claim.retireUnder(key);
@@ -1287,8 +1328,14 @@ export function createShell(opts = {}) {
       // records what the drawing still holds, not what was asked for, and the
       // inspector says the chosen one did not load.
       else if (failed.includes(key)) {
+        const was = Object.prototype.hasOwnProperty.call(state.cfgOccupants, key)
+          ? state.cfgOccupants[key] : cage.default ?? null;
         state.failed[key] = ref;
-        ref = occupantRef(svg, key);
+        // what the drawing still holds; on a back the projection keeps no
+        // ref to read it by (swap.js isOccupantOf), and it is what the state
+        // said the slot held before this swap
+        ref = occupantRef(svg, cage)
+          ?? (cage.projection && occupantsOf(svg, cage).length ? was : null);
         console.warn(`[portrayal] ${key}: ${state.failed[key]} did not load; `
                      + `the cage keeps ${ref || 'nothing'}`);
       }
@@ -1349,21 +1396,26 @@ export function createShell(opts = {}) {
     // and stop - the remaining keys are for whatever reseat the new
     // config's own loadStage already ran.
     const svg = state.svg, gen = state.cfgGen;
+    // A SWAPPED BAY SEEN FROM BEHIND. This face may have no bays and still
+    // show one: a rear hole names the front bay whose module's back it holds
+    // (render.py's `rear:`). `seat` looks for the bay on this face and so never
+    // reaches it; the swapped bays are re-seated through the hole instead.
+    // FIRST, before the keys (B3 Task 10b): a back's own slots - its MTP
+    // bulkheads, `bay-1/module/mtp1` - are keys like any other, and they
+    // must be seated into the back the state holds, not into the build's
+    // back that this replaces.
+    if (svg?.querySelector('[data-rear-of]')) {
+      const rear = {};
+      for (const key of state.touched)
+        if (Object.prototype.hasOwnProperty.call(state.cfgBays, key)) rear[key] = state.cfgBays[key];
+      if (Object.keys(rear).length) await applyRearOverrides(svg, rear, loadSkin, compByRef);
+    }
     for (const key of byDepth(state.touched)) {
       if (svg !== state.svg || gen !== state.cfgGen) return;
       // a key a card swap pruned while this loop ran is no longer the state's
       if (!state.touched.has(key)) continue;
       await seat(key, stateRef(key));
     }
-    // A SWAPPED BAY SEEN FROM BEHIND. This face may have no bays and still
-    // show one: a rear hole names the front bay whose module's back it holds
-    // (render.py's `rear:`). `seat` looks for the bay on this face and so never
-    // reaches it; the swapped bays are re-seated through the hole instead.
-    if (svg !== state.svg || gen !== state.cfgGen || !svg?.querySelector('[data-rear-of]')) return;
-    const rear = {};
-    for (const key of state.touched)
-      if (Object.prototype.hasOwnProperty.call(state.cfgBays, key)) rear[key] = state.cfgBays[key];
-    if (Object.keys(rear).length) await applyRearOverrides(svg, rear, loadSkin, compByRef);
   }
 
   // THE SWAPS A RELOAD CARRIES (the explorer's `swap=`), taken into the state
@@ -1377,16 +1429,33 @@ export function createShell(opts = {}) {
   // or cage accepts. A link written for another device, or edited by hand,
   // cannot seat anything the inspector could never have offered.
   async function applySwaps(map) {
-    const all = o => Object.values(o || {}).flat();
+    const all = allOf;
     const bays = all(state.meta?.bays);
     const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
     // what this configuration BUILT at a path - the configuration's own map,
     // through builtBays (a nested key is the manifest's, not the drawing's),
     // not the state, which a swap has already moved; undefined = no answer
-    const cb = builtBays((state.meta?.configs || []).find(c => c.name === state.cfg));
+    const cfg = (state.meta?.configs || []).find(c => c.name === state.cfg);
+    const cb = builtBays(cfg);
     const built = p => own(cb, p) ? cb[p] || null
       : bays.find(b => b.id === p)?.default ?? undefined;
-    const {accepted, ignored, cages} = acceptSwaps(map, {bays, cages: all(state.meta?.cages), built, compByRef});
+    // and in each slot it keys: undefined for a slot it leaves at its default
+    const bo = builtOccOf(cfg);
+    const builtOcc = p => own(bo, p) ? bo[p] : undefined;
+    const gate = () => acceptSwaps(map, {bays, cages: all(state.meta?.cages), built, builtOcc,
+                                         compByRef, placementRef});
+    let verdict = gate();
+    // A SLOT ON A DEVICE PLACEMENT is found through the placement's ref, which
+    // only a face that draws it can give (placementRef). The face on screen
+    // is the one the link names; a key on another face - a bore swapped on
+    // the front, the link written from the rear - is known once the other
+    // faces are held, so they are fetched and the gate asked again.
+    if (verdict.ignored.length && !state.module
+        && (state.meta?.views || []).some(v => !state.faces?.[v])) {
+      await loadFaces().catch(() => 0);
+      verdict = gate();
+    }
+    const {accepted, ignored, cages} = verdict;
     // `cages` says which accepted keys are cages - a card's among them, whose
     // key looks like a nested bay's. Shallowest first (acceptSwaps' order), so
     // a card the link swaps drops what the build had under it (dropUnder)
@@ -1448,7 +1517,7 @@ export function createShell(opts = {}) {
       cfg: (state.meta?.configs || []).find(c => c.name === state.cfg),
       bays: Object.values(state.meta?.bays || {}).flat(),
       cages: Object.values(state.meta?.cages || {}).flat(),
-      cfgBays: state.cfgBays, cfgOccupants: state.cfgOccupants, compByRef,
+      cfgBays: state.cfgBays, cfgOccupants: state.cfgOccupants, compByRef, placementRef,
     });
   }
   const faceWork = faceQueue({
@@ -1645,7 +1714,7 @@ export function createShell(opts = {}) {
     // cages' own `occupant`, which is the default configuration's answer -
     // read through swap.js's `builtOccupants`, which reduces a mapping value
     // to its ref and drops a chained key that names no cage
-    state.cfgOccupants = builtOccupants(c, Object.values(state.meta.cages || {}).flat());
+    state.cfgOccupants = builtOccOf(c);
     state.touched = new Set();
     state.refused = {};
     state.failed = {};

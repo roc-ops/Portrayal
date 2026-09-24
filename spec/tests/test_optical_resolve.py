@@ -15,14 +15,14 @@ LIB = ROOT / "library"
 
 
 def contract(ref):
-    """`common/lc-duplex-adapter@5` -> its parsed contract."""
+    """`common/lc-duplex-adapter@6` -> its parsed contract."""
     name, major = ref.split("@")
     return yaml.safe_load(
         (LIB / "components" / name / f"v{major}" / "contract.yaml").read_text())
 
 
 def test_the_lc_duplex_adapter_presents_two_fibre_positions():
-    c = contract("common/lc-duplex-adapter@5")
+    c = contract("common/lc-duplex-adapter@6")
     assert (c.get("optical") or {}).get("positions") == 2, (
         "an LC DUPLEX adapter is two bores. If this is absent, every module "
         "composing it has no capacity to check its paths against")
@@ -39,7 +39,7 @@ def test_an_endpoint_splits_into_a_part_id_and_a_position():
 def test_the_adapters_parts_are_positions_1_then_2_in_that_order():
     """The order is a comment today, and four DCM contracts depend on it.
 
-    `common/lc-duplex-adapter@5`'s own `optical` block says position order is
+    `common/lc-duplex-adapter@6`'s own `optical` block says position order is
     the order its bores are composed below - bore `1` first, bore `2` second -
     stated in a comment nothing enforces. Every ppm-dcm-* contract declares its
     pass-through as `dcm.2 -> dcm.1`, which is only Rx-into-Tx if bore `1` (the
@@ -49,7 +49,7 @@ def test_the_adapters_parts_are_positions_1_then_2_in_that_order():
     still pass, and the suite stays green while the signal direction on every
     DCM in the library is now backwards.
     """
-    c = contract("common/lc-duplex-adapter@5")
+    c = contract("common/lc-duplex-adapter@6")
     ids = [p["id"] for p in c["parts"]]
     assert ids == ["1", "2"], (
         "lc-duplex-adapter's parts order encodes position 1 = bore `1`, "
@@ -59,10 +59,10 @@ def test_the_adapters_parts_are_positions_1_then_2_in_that_order():
 
 def test_capacities_come_from_the_composed_parts_contracts():
     """The module names parts; the PARTS know how many fibres they hold."""
-    c = {"parts": [{"ref": "common/lc-duplex-adapter@5", "id": "common"},
-                   {"ref": "common/lc-duplex-adapter@5", "id": "split"},
+    c = {"parts": [{"ref": "common/lc-duplex-adapter@6", "id": "common"},
+                   {"ref": "common/lc-duplex-adapter@6", "id": "split"},
                    {"ref": "common/led-dot@1", "id": "lamp"}]}
-    loaded = {"common/lc-duplex-adapter@5": {"optical": {"positions": 2}},
+    loaded = {"common/lc-duplex-adapter@6": {"optical": {"positions": 2}},
               "common/led-dot@1": {}}
     assert optical.capacities(c, loaded.get) == {"common": 2, "split": 2}, (
         "a part with no optical block is not a connector and must not appear")
@@ -144,9 +144,9 @@ def test_the_adapters_bore_pitch_matches_the_verified_standard():
     std = _yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())
     want = std["standards"]["lc-duplex-receptacle"]["pitch"]
 
-    c = contract("common/lc-duplex-adapter@5")
-    bore_w = contract("std/lc-bore@3")["size"]["w"]
-    xs = [p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bore@3"]
+    c = contract("common/lc-duplex-adapter@6")
+    bore_w = contract("std/lc-bulkhead-bore@1")["size"]["w"]
+    xs = [p["at"][0] for p in c["parts"] if p["ref"] == "std/lc-bulkhead-bore@1"]
     assert len(xs) == 2, xs
     centres = sorted(x + bore_w / 2 for x in xs)
     assert round(centres[1] - centres[0], 4) == want, (

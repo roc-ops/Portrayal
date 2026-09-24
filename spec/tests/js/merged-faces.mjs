@@ -83,7 +83,7 @@ if (mode === 'swapped') {
   const f = front(), r = rear();
   const fr = await seat(f, 'front', map), rr = await seat(r, 'rear', map);
   Object.assign(out, {map, front: inFront(f), rear: inRear(r),
-                      frontApplied: fr.applied, rearApplied: rr.applied, rearHoles: rr.rear});
+                      frontApplied: fr.applied, rearApplied: rr.applied, rearHoles: rr.rear.applied});
 }
 if (mode === 'emptied') {
   const cfg = {name: 'populated', bays: {'bay-1': A, 'bay-3': B}};

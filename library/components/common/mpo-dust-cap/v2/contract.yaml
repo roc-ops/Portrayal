@@ -1,0 +1,205 @@
+format: 1
+kind: component
+name: mpo-dust-cap
+version: 2.0.4
+class: cap
+behaviour: occupies
+mates: mpo
+profile: networking
+description: >-
+  The grey dust cap FS ships in an MTP/MPO port - a 12.8 x 8.1 moulding that
+  fills the port's mouth, with a thin waisted saddle rising off it and a plate
+  across the saddle's end to pull it out by. An OCCUPANT of the aperture it
+  plugs (std/mpo@2 and anything composing it), so it comes out, swaps for a
+  plug, or leaves the port empty. THE ONLY ONE OF THE FOUR CAPS THAT IS NEW:
+  the MPO adapters never drew a cap, so this is read off FS's own product
+  renders rather than moved off an adapter, and every figure it carries is an
+  estimate or a declared modelling choice - see `size-notes` and
+  `provenance.depth`. `common/` for the reason common/lc-boot@1 gives: no
+  standard governs a cap's shape, only the interface it plugs.
+size: {w: 12.8, h: 8.1}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  THE PIXEL SPANS ARE MEASURED; WHAT THEY ARE A READING OF IS AN INTERPRETATION, NOT SETTLED,
+  which is why both axes say `estimated` and not `photo-measured`. FS's face-on
+  renders of SKU 35510 (the 12x MTP adapter panel) show all twelve ports
+  CAPPED, and nothing in them draws a line between the cap's own outline and
+  the mouth of the aperture it stands in. The panel mounts its adapters
+  PORTRAIT, so the render's vertical reading is this part's width and its
+  horizontal reading is its height.
+  ORTHOGRAPHIC FIRST, because a reading off a perspective render is worth
+  nothing whatever it is a reading of. The six ports of the lower row fit a
+  straight line at a pitch of 81.850 px with a largest residual of 0.68 px -
+  under 1% of the pitch - and a least-squares quadratic term of -0.036 px per
+  index squared, which over the whole row is under a pixel. Both rows read the
+  same size to the pixel (74-75 px by 46-47 px, twelve ports), which a
+  perspective view of a 35 mm-tall plate could not give. Nothing here is fitted
+  to a curve because there is no curve to fit.
+  THE SCALE IS THE RENDER'S OWN PRINTED DIMENSION: the plate spans 633 px
+  against its printed 4.29 in (108.97 mm), 5.809 px/mm, cross-checked on the
+  printed 1.38 in height (35.05 mm), which reads 205 px, 5.848 px/mm - the two
+  0.67% apart.
+  THE SPANS: each port's content measures 74.5 px on the long axis (74-75
+  across all twelve, both rows, on two renders of the same panel) and 47 px on
+  the short (46-47), which at 5.809 px/mm is 12.82 and 8.09. Inside that sits a
+  brighter block of 59 by 21 px, 10.16 by 3.62.
+  WHICH OF THE TWO THE CAP IS. That the bright block is the WHOLE cap, sitting
+  in a mouth the 12.82 x 8.09 content outlines, is EXCLUDED: a cap 3.62 on its
+  short axis cannot seal an opening std/mpo@2 gives as 8.0, and the oblique
+  renders show a saddle standing off every port, which is what a bright block
+  in the middle of a port looks like seen end-on. So the content is read as
+  the cap's face. IT IS CLOSE TO THE CORRECTED MOUTH, AND THAT AGREEMENT IS
+  PARTLY BY CONSTRUCTION, so it is not evidence for this reading: this same
+  12.82 x 8.09 is one of the readings that chose the upper end of the
+  clearance std/mpo@2 was derived with (the way standards.yaml's `mpo-plug`
+  note says its own agreement with `mpo-adapter` is by construction). Axis by
+  axis it does not even match: 0.08 inside std/mpo@2's 12.9 on the long axis
+  and 0.09 over its 8.0 on the short. WHAT IS NOT EXCLUDED is that some of the
+  12.82 x 8.09 is the mouth's own bevel rather than the cap; if a drawing ever
+  settles the cap, this part gets smaller and not larger.
+provenance:
+  size: >-
+    ESTIMATED, BOTH AXES - see size-notes for the render, the orthographic
+    check, the scale, and which reading the figures take.
+    AGAINST THE OPENING, AXIS BY AXIS. std/mpo@2 is 12.9 x 8.0; this face is
+    12.8 x 8.1 - 0.05 INSIDE the mouth on each side of the long axis and 0.05
+    OVER it on each side of the short. The two do not match per axis, and
+    they cannot confirm each other either: the reading this face comes from
+    helped choose std/mpo@2's clearance (size-notes). Both are estimates; the
+    drawing is a cap about the size of the mouth, which is the adopted reading
+    and not a finding.
+  aperture: >-
+    WHAT THIS PART SAID ABOUT THE OPENING, AND WHAT BECAME OF IT. @1 carried a
+    hypothesis, recorded as one: that std/mpo@1's 7.8 x 5.6 was two thresholds
+    on ONE axis, because the port's content on this same render reads 12.8 by
+    8.1, an aspect 7.8 x 5.6 does not have. US Conec's printed MPO connector
+    (C20044 rev B, C20851 rev D: 12.5 x 7.6) then showed the opening had to be
+    larger than the plug, and std/mpo@2 is now 12.9 x 8.0 - still an estimate,
+    derived from that connector and a measured clearance, not read off this
+    render. The hypothesis was borne out in direction; the figure that
+    replaced it did not come from here.
+  mate: >-
+    the centre of the 12.8 x 8.1 face, (6.4, 4.05) - the centre of the cap is
+    where its spigot is, and std/mpo@2's own `mate` is the centre of its
+    opening. Seated on common/mpo-adapter@2 (whose composed aperture puts that
+    point at (6.9, 4.7)) this draws the cap at (0.5, 0.65), centred on the
+    13.8 x 9.4 adapter, which is where the render shows it.
+  grip: >-
+    TWO FEATURES, A SADDLE AND A PLATE, where @1 had one plank. Face-on the
+    render shows only the plate: 10.2 x 3.6, CENTRED. The bar reads 59 px on
+    the port's long axis (58-60 across the eight ports whose bar separates
+    cleanly from the lit chamfer) and 21 px on the short (21-22), which at
+    5.809 px/mm is 10.16 and 3.62; its centre sits within 0.2 mm of the
+    port's in the short axis and within 0.8 in the long, and CENTRED IS A
+    CHOICE, adopted because the spread is lighting and not a shape.
+    THE SADDLE BEHIND IT IS READ FOR PROPORTION, NOT MEASURED. Two FS renders
+    show it side-on: 57341.E, two loose caps on a white ground, and
+    35510.main, the panel seen obliquely with every port capped. Both show a
+    web whose long-axis flanks are concave - wide where it leaves the cap,
+    narrowest just under the plate - and a plate that overhangs that waist so
+    a fingertip goes under it. Only RATIOS ALONG ONE AXIS are taken, because
+    along one axis the unknown view angle cancels: the waist is 0.78 to 0.82
+    of the plate's length on the two renders, so 8.0 against the plate's
+    10.2; and the plate's thickness is 0.10 to 0.14 of the web's rise, so 0.4
+    against a rise of 3.0. The web keeps the plate's 3.6 on the short axis,
+    which is what the face-on bar and the side views agree on.
+  depth: >-
+    ESTIMATED, EVERY FIGURE, AND NO SOURCE HELD HERE DIMENSIONS ANY OF THEM.
+    The only views that show the cap standing out of the panel - 35510.C, .D,
+    .E, .F and .main - are PERSPECTIVE, not oblique-but-parallel: on 35510.F
+    the plate's own width swells from 649 px at its top edge to 664 px at its
+    bottom, so nothing on them is measurable the way the face-on render is.
+    AND THAT VIEW CANNOT BE UNFOLDED EITHER, which is the part worth writing
+    down so nobody tries again. A saddle's silhouette on it mixes two things -
+    how far the cap stands off the plate, and how much of the cap's own
+    in-plane width is foreshortened into the same direction - and separating
+    them needs the view angle, which no feature on those renders pins. An
+    earlier pass here printed a derivation, got 10.3 to 11.0, and then added
+    common/mpo-adapter's 1.2 bezel to a figure already measured from the
+    plate; that derivation is withdrawn rather than patched, and so is the
+    later suggestion that the saddle rises by about the width of the port.
+    SO THE HEIGHTS ARE A MODELLING CHOICE, NOT A READING OF ANYTHING: the
+    cap's face at 2.5, the saddle's top at 5.5, the plate's front at 5.9.
+    What they are read against: the face must show in front of
+    common/mpo-adapter@2's estimated 1.2 bezel; the saddle and plate take the
+    one-axis ratios in `grip`; and the whole grip is brought down from @1's
+    8.0, a plank the full width of the plate standing 5.5 proud of the face,
+    which set beside FS's photographs read as a block where FS shows a thin
+    saddle. The rise of 3.0 is the choice; nothing here prefers it over its
+    neighbours except that a fingertip needs room under the plate.
+    ONE DRAWN FIGURE EXISTS, FOR A DIFFERENT CAP, AND IT POINTS THE OTHER WAY.
+    SENKO DS-MPO-000004 Rev A's top view draws that adapter with its own dust
+    cap seated, and on the sheet's printed 14.80 and 20.6 its end plate
+    stands 8.34 in front of the adapter body (collar 1.50, flare and stem
+    5.35, plate 1.49). SENKO's cap is not FS's - its plate is 6.0 long
+    against FS's 10.2 - so the figure is not adopted, but it says a real MPO
+    cap can stand further out than this one is drawn, and it is recorded so
+    that the choice above is not mistaken for a measurement.
+    NOTE THE SEAT IS THE PANEL. std/mpo@2's `mate` sits `on:` nothing, so it
+    presents a lift of 0.0 and an occupant is seated at the panel plane, not
+    on the adapter's bezel - which is why every figure here is absolute from
+    the panel and why clearing that bezel has to be done by hand.
+  colour: >-
+    #808692 for the cap and #b3b6bc for the grip, sampled off 57341.E.jpg -
+    FS's render of the FHD 2x MTP-12 cassette's back, which lays two of these
+    caps loose on a white ground. Over 12,281 cap pixels the median is
+    rgb(128,134,146) and the lit faces (the brightest 30%) median
+    rgb(179,182,188); the grip is the face that points at the viewer, so it
+    takes the lit figure. 35510's own renders read much bluer (#616f85 and
+    #acbcd9) under that shot's key light and are not used for colour.
+  pitch-gap: >-
+    NOT USED HERE, BUT MEASURED IN PASSING AND WORTH RECORDING. On the scale
+    above, 35510's column pitch reads 14.09 and its row pitch 16.16, where
+    common/mpo-adapter@2 carries 13.8 and 15.97 off the same render. The
+    difference is about 2% and is the scale, not the geometry: 13.8 implies
+    5.93 px/mm, which would make the plate 106.8 mm rather than its printed
+    108.97. Nothing on this cap depends on either figure.
+  face-detail-gap: >-
+    the moulded FS mark on the saddle's side (visible on 57341.E), the ribbed
+    spigot that enters the adapter, and the CURVE of the saddle's waist are
+    not drawn. Relief is extrusions, not fillets (spec/DEPTH-AND-3D.md s7), so
+    the concave flank is one box at the waist's width under a plate at the
+    bar's; the front view is the cap's outline and the plate, which is what a
+    front view shows. The spigot is inside the opening and never visible, the
+    same omission common/lc-dust-cap@1 records.
+elements:
+  body: {at: [0.0, 0.0], size: [12.8, 8.1], class: cap}
+connection-points:
+  mate: {at: [6.4, 4.05], direction: front}
+relief:
+  features:
+    - node: body
+      out: 2.5
+      color: '#808692'
+      confidence: estimated
+      source: >-
+        common/mpo-dust-cap@2's own `provenance.depth`. NOTHING DIMENSIONS IT.
+        2.5 is set so the cap's face shows at the adapter face rather than
+        behind common/mpo-adapter@2's own estimated 1.2 bezel, which is the
+        only constraint held. std/mpo@2 presents no lift, so this is absolute
+        from the panel.
+    - node: saddle
+      out: 5.5
+      lift: 2.5
+      color: '#808692'
+      confidence: estimated
+      source: >-
+        common/mpo-dust-cap@2's own `provenance.grip` and `provenance.depth`.
+        A MODELLING CHOICE AND NOT A READING: the web's width is a ratio read
+        along one axis of FS's side views, and its rise of 3.0 is chosen - no
+        view along the depth axis can be unfolded and nothing dimensions an
+        MTP cap. It stands on the cap's own front, hence `lift: 2.5`; lifts
+        are summed down the tree and `out` is absolute.
+    - node: grip
+      out: 5.9
+      lift: 5.5
+      color: '#b3b6bc'
+      confidence: estimated
+      source: >-
+        common/mpo-dust-cap@2's own `provenance.grip` and `provenance.depth`.
+        A MODELLING CHOICE AND NOT A READING: the plate's face is the 10.2 x
+        3.6 bar measured face-on, its 0.4 thickness a ratio of the saddle's
+        rise read along one axis of FS's side views. It stands on the saddle's
+        top, hence `lift: 5.5` - the saddle's `out` - and a sibling of the
+        saddle rather than its child, so nothing sums that lift twice.
+skins: [default]

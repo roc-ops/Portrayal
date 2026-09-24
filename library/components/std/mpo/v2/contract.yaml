@@ -1,0 +1,116 @@
+format: 1
+kind: component
+name: mpo
+version: 2.0.2
+interface: mpo
+class: port
+profile: networking
+conforms: mpo-adapter
+description: >-
+  One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter
+  around it. The panel-mount part that carries a bezel is common/mpo-adapter@2,
+  which composes this. Shared by MPO-8, -12 and -24 because fibre count is a
+  property of the ferrule rather than of the opening. 12.9 x 8.0, ESTIMATED:
+  the printed MPO connector envelope plus a clearance measured on another
+  connector family, because no document held here dimensions the opening
+  itself (provenance.size).
+size: {w: 12.9, h: 8.0, d: 9.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {media: fiber, connector: mpo}
+unplaced: >-
+  NOTHING SEATS THIS UNTIL AN FHD ADAPTER PANEL IS MODELLED. The only part
+  composing it is common/mpo-adapter@2, the panel tile, which is itself waiting
+  for one of FS's MTP adapter panels to be modelled - see its own `unplaced`.
+  The flanged bulkhead the cassette rears use draws the plug's end face rather
+  than this punched aperture, so it does not compose this part; it presents
+  `mpo` itself, with this part's 12.9 x 8.0 as its opening
+  (common/mpo-flange-adapter@2's `provenance.opening`).
+provenance:
+  size: >-
+    ESTIMATED, BOTH AXES, AND DERIVED RATHER THAN READ. No drawing held here
+    puts a callout on an MPO adapter's opening: seven adapter drawings were
+    checked (US Conec C10783 rev G, C10784, C12697 rev G, C9299 rev H, C16920
+    rev G; SENKO DS-MPO-000004 Rev A and DS-MPO-000005 Rev A) and every one
+    dimensions the body, the flange, the length and the panel cut-out the body
+    snaps into - never the mouth. IEC 61754-7-1 Table 5 (the adaptor
+    interface) would settle it and is not held; the publisher's free preview of
+    that standard stops at the plug tables.
+    THE DERIVATION. The connector's own envelope is printed: 12.5 x 7.6 on US
+    Conec C20044 rev B and C20851 rev D (standards.yaml `mpo-plug`). To it is
+    added the clearance measured on another family's adapter/plug pair - the
+    LC opening widths off SENKO DS-LC-000010 Rev A against the plug widths
+    printed on SENKO DS-LC-000004 Rev A, which run 0.16 to 0.40 larger per
+    tier (std/lc-bulkhead-bore@1's `keyway`). 0.40 is taken on both axes:
+    12.5 + 0.40 = 12.9 and 7.6 + 0.40 = 8.0. The lower end would give
+    12.66 x 7.76.
+    THE UNDIMENSIONED READINGS, AXIS BY AXIS, AND THEY DO NOT SIT ON ONE SIDE
+    OF THE FIGURE. None of them is a measurement of the opening and none is
+    adopted as one, but they say which way each axis may be wrong.
+    LONG AXIS - BOTH READINGS ARE BELOW 12.9: FS's face-on render of SKU 35510
+    shows a capped port's visible content 12.82 long
+    (common/mpo-dust-cap@2's `size-notes`), and SENKO DS-MPO-000004's top view
+    draws its seated dust cap with a collar 12.87 across. Over the printed
+    12.5 those are clearances of 0.32 and 0.37 - inside the LC range, not at
+    its upper end. So the long axis is probably a little too WIDE, by 0.03 to
+    0.08.
+    SHORT AXIS - EVERY READING IS ABOVE 8.0: the same FS content reads 8.09,
+    and the drawn outermost outlines inside the adapter body read 8.21 on
+    C10783 and 8.22 on DS-MPO-000004's front view, each on the sheet's own two
+    printed rulers. Over the printed 7.6 those are 0.49 to 0.62 - beyond the
+    LC range altogether. SO THE SHORT AXIS MAY BE TOO SMALL, by 0.09 to 0.22,
+    and the true mouth is probably a little narrower and taller than drawn.
+    The upper end of the LC range was taken on both axes because one
+    clearance applied to both is what the fallback states; the readings above
+    are why it was the upper end and not the lower, and they are not fitted to
+    axis by axis.
+    CHECKED AGAINST A STANDARD BOUND ON THE PLUG. IEC 61754-7-1:2014 Tables 1
+    and 4 (the female and male MPO plug, both in the publisher's preview) put
+    the plug's long-axis envelope H at 12.19 to 12.59 and its short axis R at
+    7.7 maximum. 12.9 x 8.0 admits the largest plug the standard allows with
+    0.31 and 0.30 to spare; the lower end of the clearance range would have
+    admitted it by 0.07 and 0.06.
+  history: >-
+    std/mpo@1 drew this opening at 7.8 x 5.6, measured off FS's face-on render
+    of SKU 35510 by detecting the pale interior, whose own note said the
+    detection 'reads 5.4 to 8.5 across the rows'. The printed MPO connector
+    (12.5 x 7.6) could not enter it, and a dust cap read off the same render
+    had already found an aspect 7.8 x 5.6 does not have. This major replaces
+    that reading rather than refining it: the pitch that render gave (13.8,
+    standards.yaml `mpo-adapter`) was the strong half and is kept; the aperture
+    was the weak half and is not.
+  key: >-
+    NOT DRAWN, AND THAT IS A GAP RATHER THAN A CLAIM. C10783 and DS-MPO-000004
+    both draw a key notch in the opening's long wall (the opposed-key SENKO
+    adapter shows one top and one bottom, a keyway from each face), and
+    neither dimensions it. The plug's own key moulding sits INSIDE its printed
+    7.6 envelope (generic/mpo12-plug@1's `provenance.key`), so the plug enters
+    this rectangle without one. A dimensioned keyway would be a further major.
+  depth: >-
+    ESTIMATED at 9.0, unchanged from @1. No document held here gives an MPO
+    adapter's recess depth. Stated so the part has a solid in 3D rather than
+    a plane; replace it the moment anything states one. This is deliberately
+    NOT the 19.8-20.7 vendor drawings give for a bulkhead adapter's overall
+    length - that is how far the whole part sticks out behind the panel, and
+    it would carve a hole far deeper than any other aperture in the library.
+  mate: >-
+    the centre of the 12.9 x 8.0 opening, (12.9/2, 8.0/2) = (6.45, 4.0) - the
+    centre of an ESTIMATED aperture, so the point is no better than the
+    opening it is the centre of. It is where an MPO plug's own mate (the
+    centre of its 12.5 x 7.6 housing) lands, which leaves 0.2 of clearance on
+    every side.
+elements:
+  opening: {at: [0, 0], size: [12.9, 8.0], class: cutout}
+relief:
+  # CAVITY ALONE, NO POCKET. `relief.cavity` names the skin node whose art is the
+  # recess, and render.py then puts `data-depth` on this component's own instance
+  # group using `size.d`. Adding a `pocket` on that SAME node would put a second
+  # `data-depth` inside the first, and relief.js builds only the innermost cavity
+  # of a nest - so the aperture would delete itself. Plan 1 landed
+  # `test_a_pocket_does_not_swallow_the_cavity_it_sits_in` for exactly that, and
+  # no component in the library sets both on one node. std/lc-bore@3 is the
+  # precedent: `cavity: bore`, depth from `size.d`, pockets only on other nodes.
+  wall: '#2a2f35'
+  cavity: opening
+connection-points:
+  mate: {at: [6.45, 4.0], direction: front}
+skins: [default]

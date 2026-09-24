@@ -15,7 +15,6 @@ declared).
 """
 import re
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -24,6 +23,7 @@ import yaml
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
+import warmrender
 from portrayal import lint
 from portrayal import libwalk
 
@@ -42,7 +42,7 @@ def fitted_copy(tmp_path, occupants):
 
 
 def render(dev, out):
-    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    r = warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                         "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-600:]
@@ -144,7 +144,7 @@ def test_an_occupant_must_plug_into_something(tmp_path):
 def test_a_device_level_chain_lints_clean(tmp_path):
     dev = fitted_copy(tmp_path, {
         "port-4": "generic/sfp-lc-simplex@2",
-        "port-4-occupant": "generic/lc-plug@1",
+        "port-4-occupant": "generic/lc-plug@2",
         "port-4-occupant-occupant": "common/lc-boot@1",
     })
     assert errors_for(dev, yaml.safe_load(dev.read_text())) == []
@@ -169,7 +169,7 @@ def test_a_chained_key_naming_an_occupant_no_key_seats_is_an_error(tmp_path):
     this asserts the clause only the new chain-lookup path prints - the one
     the old code never reasoned about at all, because it never went looking
     for a sibling occupant to begin with."""
-    dev = fitted_copy(tmp_path, {"port-4-occupant": "generic/lc-plug@1"})
+    dev = fitted_copy(tmp_path, {"port-4-occupant": "generic/lc-plug@2"})
     errs = errors_for(dev, yaml.safe_load(dev.read_text()))
     assert any("no occupant of this configuration seats it either" in e
                for e in errs), errs
@@ -180,7 +180,7 @@ def test_a_spec_with_id_renames_the_chain(tmp_path):
     override `occupant_local_id` honours for the nested (card) branch."""
     dev = fitted_copy(tmp_path, {
         "port-4": {"ref": "generic/sfp-lc-simplex@2", "id": "the-plug-spot"},
-        "the-plug-spot": "generic/lc-plug@1",
+        "the-plug-spot": "generic/lc-plug@2",
     })
     assert errors_for(dev, yaml.safe_load(dev.read_text())) == []
 
@@ -192,7 +192,7 @@ def test_a_chain_cycling_back_on_itself_is_an_error(tmp_path):
     host in another view are skipped, not an error); L12 is the check that
     catches what would otherwise silently vanish from the drawing."""
     dev = fitted_copy(tmp_path, {
-        "loop-a": {"ref": "generic/lc-plug@1", "id": "loop-b"},
+        "loop-a": {"ref": "generic/lc-plug@2", "id": "loop-b"},
         "loop-b": {"ref": "common/lc-boot@1", "id": "loop-a"},
     })
     errs = errors_for(dev, yaml.safe_load(dev.read_text()))

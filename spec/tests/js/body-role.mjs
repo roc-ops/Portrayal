@@ -17,6 +17,13 @@ const cases = {
   nul: [null, 'fills'],
 };
 const out = Object.fromEntries(Object.entries(cases).map(([k, [p, b]]) => [k, bodyRole(p, b)]));
+// B3 Task 10c: an occupant two segments down is its own part too - a cap in
+// a bore of an adapter placed on the device, or on a back's bulkhead read as
+// a lone drawing - and on a module's BACK no occupant is a FRU
+out.boreCap = bodyRole('xc01/1-occupant', 'occupies');
+out.loneBackCap = bodyRole('fhd-2mtp12-lc-rear/mtp1-occupant', 'occupies');
+out.backCap = bodyRole('fhd-2mtp12-lc-rear/mtp1-occupant', 'occupies', {back: true});
+out.backBayModule = bodyRole('front-6/module', 'fills', {back: true});
 // the body a seated optic with no `body:` block gets: its face outline, run
 // back to its own depth (the skin root's data-depth, the contract's size.d)
 out.body = {

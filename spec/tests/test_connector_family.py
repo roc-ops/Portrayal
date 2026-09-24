@@ -20,15 +20,15 @@ def contract(ref):
 
 
 def test_the_mpo_aperture_exists_and_conforms():
-    c = contract("std/mpo@1")
-    assert c is not None, "std/mpo@1 not built"
+    c = contract("std/mpo@2")
+    assert c is not None, "std/mpo@2 not built"
     assert c["conforms"] == "mpo-adapter"
     assert c["class"] == "port"
 
 
 def test_the_mpo_adapter_presents_twelve_fibres_by_default():
-    c = contract("common/mpo-adapter@1")
-    assert c is not None, "common/mpo-adapter@1 not built"
+    c = contract("common/mpo-adapter@2")
+    assert c is not None, "common/mpo-adapter@2 not built"
     assert (c.get("optical") or {}).get("positions") == 12, (
         "an MPO-12 is twelve fibres; every module composing it inherits this")
 

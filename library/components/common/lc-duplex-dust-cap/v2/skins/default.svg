@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12.25mm" height="5.85mm" viewBox="0 0 12.25 5.85">
+  <!-- FS's one-piece LC duplex dust cap, front view: one white moulding over
+       both ports, with a rounded-square inset in front of each.
+
+       DRAWN ON THE CANONICAL AXIS - the pair ACROSS, tx left of rx - which is
+       how every spanning connector in this library is drawn and which lint
+       L116 holds it to. The reading it comes from is FS's STACKED adapter, and
+       the figures are that reading transposed and nothing else: 5.85 x 12.25
+       becomes 12.25 x 5.85, each 3.6 x 4.4 inset becomes 4.4 x 3.6, and each
+       one's two coordinates swap. The host says which way round its own pair
+       runs and the seat turns the cap onto it (manifest.spanning_axis), so the
+       FHD adapter this was measured on still draws it stacked.
+
+       THE INSETS ARE INSIDE THE BODY GROUP. A node standing `out` is moved to
+       the end of the instance so it paints over what it sits on, and insets
+       drawn as its siblings were left behind it, under the cap, and never
+       showed in 2D.
+
+       THE INSETS FOLLOW THE PORTS, NOT THE CAP: the adapter sits its bores
+       6.25 apart, 3.0 and 9.25 along this cap's own long axis of 12.25 - so
+       the insets are NOT symmetric about this cap's own centre, and must not
+       be "tidied" to be. -->
+  <g id="body" class="cap">
+    <rect x="0.0" y="0.0" width="12.25" height="5.85" rx="0.6" fill="#e7e9ec"
+          stroke="#b6bcc2" stroke-width="0.12"/>
+    <rect id="inset-tx" x="0.80" y="1.125" width="4.4" height="3.6" rx="0.6" fill="#d5dade"/>
+    <rect id="inset-rx" x="7.05" y="1.125" width="4.4" height="3.6" rx="0.6" fill="#d5dade"/>
+  </g>
+</svg>

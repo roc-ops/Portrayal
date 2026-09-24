@@ -20,12 +20,12 @@ picked by reading their contracts:
   - juniper/mic3-3d-10xge-sfpp@1  a MIC, ten SFP+ cages at rotate 0 / 180.
 """
 import json
-import subprocess
 import sys
 from pathlib import Path
 
 import pytest
 
+import warmrender
 from portrayal import render as render_mod
 from portrayal.manifest import load_yaml, presented_interface, seat_point
 
@@ -44,7 +44,7 @@ def _ref(entry):
 @pytest.fixture(scope="module")
 def index(tmp_path_factory):
     out = tmp_path_factory.mktemp("components")
-    r = subprocess.run([sys.executable, str(INDEXER), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(INDEXER), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     doc = json.loads((out / "components.json").read_text())
@@ -75,8 +75,9 @@ def _contract(ref):
 
 
 def _presents(lib, families, part):
-    """(interface, mate_at, lift) when `part` is a cage, else None - the
-    census's own reading, independent of the index."""
+    """(interface, mate_at, lift) when `part` is a cage or a connector slot
+    (B3: spec/schemas/connectors.yaml), else None - the census's own reading,
+    independent of the index."""
     def _res(ref):
         try:
             return lib.resolve(ref)[0]
@@ -86,9 +87,44 @@ def _presents(lib, families, part):
     if not c:
         return None
     iface, mate_at, lift = presented_interface(c, _res)
-    if not iface or render_mod._family_by_interface(families, iface) is None:
+    if not iface:
+        return None
+    if (render_mod._family_by_interface(families, iface) is None
+            and iface not in render_mod._connector_registry()):
         return None
     return iface, mate_at, lift
+
+
+def _faces(index):
+    """Every ref some component names as one of its `faces:`, read off the
+    contracts, not off the indexer's own helper."""
+    return {((_contract(ref).get("faces") or {}).get(k) or {}).get("ref")
+            for ref in index for k in ("plan", "rear")} - {None}
+
+
+def _forwarded_connector(lib, contract, face=False):
+    """The part id a contract presents as its OWN connector slot by
+    forwarding (B3, P2) - published where the contract is placed, never on
+    the contract itself - or None. Read off `presented_interface` here, not
+    off render's helper: a contract without its own interface that presents
+    a connector interface anyway got it from its one composed aperture.
+    A FACE forwards nothing (B3, Task 7i): nothing places a cassette's back,
+    so its one bulkhead is published on the back itself."""
+    if face:
+        return None
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except Exception:
+            return None
+    own = contract.get("interface") and (contract.get("connection-points") or {}).get(
+        contract.get("interface-at") or "mate")
+    iface, _at, _lift = presented_interface(contract, _res)
+    if own or iface not in render_mod._connector_registry():
+        return None
+    [pid] = [p["id"] for p in contract.get("parts") or []
+             if (_res(p.get("ref")) or {}).get("interface") == iface]
+    return pid
 
 
 @pytest.mark.parametrize("ref", NAMED)
@@ -125,7 +161,7 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
     """sfp-plus on the SMM-300GM and on the MIC takes exactly what a REAL
     device's sfp-plus cage takes - agr110's `port-0`, from a real build."""
     agr = LIB / "devices/edgecore/agr110/device.yaml"
-    r = subprocess.run([sys.executable, str(RENDER), str(agr), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(agr), "--library", str(LIB),
                         "--out", str(tmp_path)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     dev = json.loads((tmp_path / "agr110.configs.json").read_text())
@@ -141,7 +177,27 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
 
 
 CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
-             "accepts", "occupant-attrs", "mirror", "group-states"}
+             "accepts", "occupant-attrs", "mirror", "group-states", "kind",
+             # what this slot ships holding (B3), null where it ships empty -
+             # a fact of the contract, so it is published here too
+             "default",
+             # the slots this one takes the place of (B3, "The duplex host"):
+             # an LC duplex adapter's two bores, [] for a cage
+             "bores"}
+
+
+def shipped_default(ref, slot_id):
+    """What test_shipped_caps.SHIPS says the slot `slot_id` of component `ref`
+    ships: a composed adapter's own slot when that adapter ships at "self", an
+    adapter's bore when it ships at "bores" - otherwise nothing."""
+    from test_shipped_caps import SHIPS
+    part = next((q for q in _contract(ref).get("parts") or []
+                 if q.get("id") == slot_id), {})
+    level, cap = SHIPS.get(part.get("ref", "").split(":")[0], (None, None))
+    if level == "self":
+        return cap
+    level, cap = SHIPS.get(ref, (None, None))
+    return cap if level == "bores" and slot_id in ("1", "2") else None
 
 
 def test_a_card_cage_carries_exactly_the_r1_keys(index):
@@ -151,6 +207,11 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
     for ref, entry in index.items():
         for c in entry.get("cages") or []:
             assert set(c) == CAGE_KEYS, (ref, c["id"], sorted(set(c) ^ CAGE_KEYS))
+            # the only defaults are the caps the adapters ship (B3 task 8)
+            assert c["default"] == shipped_default(ref, c["id"]), (ref, c["id"])
+            # and only a duplex adapter's own slot spans anything
+            assert c["bores"] == (["1", "2"] if c["interface"] == "lc-duplex"
+                                  else []), (ref, c["id"])
             checked += 1
     assert checked > 0
 
@@ -219,9 +280,15 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     cage-presenting parts, counted independently of the indexer. 166
     components / 2171 cages when this was written; the live count is what is
     asserted, and that it is not zero."""
-    want_components, want_cages = 0, 0
+    want_components, want_cages, forwarded = 0, 0, 0
+    faces = _faces(index)
+    # the six single-MTP FHD backs, each ONE bulkhead a wrapper would forward
+    assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 6
     for ref, entry in index.items():
-        n = sum(1 for p in _contract(ref).get("parts") or [] if _presents(lib, families, p))
+        skip = _forwarded_connector(lib, _contract(ref), face=ref in faces)
+        forwarded += skip is not None
+        n = sum(1 for p in _contract(ref).get("parts") or []
+                if p["id"] != skip and _presents(lib, families, p))
         assert len(entry.get("cages") or []) == n, ref
         if n:
             want_components += 1
@@ -229,6 +296,8 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     got_components = sum(1 for e in index.values() if e.get("cages"))
     got_cages = sum(len(e.get("cages") or []) for e in index.values())
     assert want_components > 0 and want_cages > 0
+    # P2 is exercised, not assumed: common/mpo-adapter@2 forwards its bore
+    assert forwarded > 0
     assert (got_components, got_cages) == (want_components, want_cages)
 
 

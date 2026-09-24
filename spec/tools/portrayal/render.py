@@ -6,6 +6,7 @@ One SVG per view. Deterministic output: no timestamps; tool version stamped in
 """
 import argparse
 import copy
+import functools
 import json
 import math
 import re
@@ -23,11 +24,14 @@ APPLIED_CLASSES = {"sticker", "label", "marking"}
 from portrayal import attrsections as attrs_mod
 from portrayal.faces import face_ref
 from portrayal import libwalk
-from portrayal.manifest import (view_parts, targets, split_target, component_refs,
+from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
+                                view_parts, targets, split_target, component_refs,
                       presented_interface, seat_point, _turn,
-                      load_yaml, resolve_views, module_key_prefix,
+                      load_yaml, resolve_views, slot_key_prefix,
                       seated_ref, occupants_under, occupant_local_id,
-                      occupant_spec, alias_names, config_airflow)
+                      occupant_spec, nested_key_host, slot_default, drawn_refs,
+                      spanned_slots, spanning_axis, summed_rotate,
+                      alias_names, config_airflow)
 from portrayal import capability
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
@@ -750,9 +754,10 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     The host's mate point - possibly FORWARDED from a composed aperture (see
     manifest.presented_interface) - is taken through the host's rotation
     (seat_point), and the occupant is solved to land its own `mate` there
-    while drawn at that same rotation (seat_at). `lift` is the host's
-    presented lift plus its `host-lift`, less the floor of a well it stands
-    `in:` (floor_of, device frame only)."""
+    while drawn at that rotation plus, for a host whose slot SPANS a pair,
+    the axis that pair runs on (manifest.spanning_axis; seat_at). `lift` is
+    the host's presented lift plus its `host-lift`, less the floor of a well
+    it stands `in:` (floor_of, device frame only)."""
     hc, _ = lib.resolve(host["ref"])
     oc, _ = lib.resolve(occ_ref)
 
@@ -780,16 +785,30 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     # and seat_at reduce exactly to the old formula, so no unrotated
     # seat moves.
     hrot = host.get("rotate")
+    # AND A SPANNING HOST TURNS IT FURTHER (B3, "The duplex host"). A duplex
+    # connector is one moulding with two ferrules on an axis; it cannot turn
+    # itself, and the library's two duplex adapters do not agree about which
+    # way round their pair runs. `manifest.spanning_axis` reads that off the
+    # host's own bores, and the occupant is drawn at the SUM - the placement's
+    # rotation and its pair's axis are rotations of the same plane.
+    #
+    # THE HOST'S OWN MATE POINT IS NOT TAKEN THROUGH IT. `seat_point` below
+    # maps a point of the host's contract into the host's frame, which is the
+    # host's own `rotate` and nothing else; the axis is a fact about the
+    # OCCUPANT's drawing, not about where the host's slot is. The published
+    # entry splits them the same way (`_slot_dict`: `mate` by the placement's
+    # rotate, `rotate` by the sum), so the kit seats what the build draws.
+    orot = summed_rotate(hrot, spanning_axis(hc, _res, _connector_registry()))
     if host.get("mirror"):
         raise ValueError(
             f"{who}: its host {host_name!r} is mirrored, and a "
             "mirrored host cannot seat an occupant - handedness of a "
             "seated part is not a question the seating rule answers")
     if occ_rotate is not None and \
-            float(occ_rotate) % 360 != float(hrot or 0) % 360:
+            float(occ_rotate) % 360 != float(orot or 0) % 360:
         raise ValueError(
             f"{who}: declares rotate {occ_rotate} but its host "
-            f"{host_name!r} is at {hrot or 0} - a seated part turns "
+            f"{host_name!r} seats at {orot or 0} - a seated part turns "
             "with its host; drop the rotate")
     # A SEATED PART ALREADY SINKS WITH A SUNK HOST - through host-lift,
     # below - so its own `in:` would sink it a second time: -3.46 where
@@ -803,7 +822,7 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
             f"with its host {host_name!r}, which is already sunk in a "
             "well - drop the in:")
     at = seat_at(seat_point(host["at"], hc["size"], hrot, hm_at),
-                 hrot, oc["size"], om["at"])
+                 orot, oc["size"], om["at"])
     # A CHAINED SEAT INHERITS THE WHOLE STACK, not just the last link.
     # `presented_interface` answers one question - how far the HOST's
     # aperture stands off the HOST's own face - and returns 0.0 whenever
@@ -825,15 +844,107 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     # per link. A projection is not sunk, so neither is what seats on one.
     if host.get("in") and not host.get("projection-of"):
         lift -= floor_of(host["in"])
-    return at, hrot, lift
+    return at, orot, lift
+
+
+def refuse_bay_module_default(lib, ref, where):
+    """A module seated in a BAY may not ship an occupant on its own slot.
+
+    A default is the product's shipped state and seats wherever the part is
+    placed or composed (B3, "The shipped default") - but the rule that makes
+    that safe is that a configuration can always override it, and a bay
+    module's OWN slot has no key today: `occupants:` keys a part id under a
+    bay (`bay-1/lc01`), never the seated module itself, so `bay-1` names no
+    slot and neither the build nor L12 can empty one. Seating it anyway would
+    put an occupant in every drawing that nothing could take out, and
+    dropping it silently is the fault this refusal exists to stop: the same
+    contract would ship its cap as a composed part and lose it in a bay.
+
+    So it is an ERROR that names the default, not a silent drop. Nothing in
+    the library declares one; whoever needs it gives a bay module's slot a
+    key first. The defaults declared INSIDE such a module - on its own
+    `parts:` - are unaffected and seat as they do anywhere else.
+    """
+    try:
+        shipped = (lib.resolve(ref)[0] or {}).get("default")
+    except (FileNotFoundError, ValueError, KeyError):
+        return                          # a bad ref is reported where it is drawn
+    if shipped:
+        raise ValueError(
+            f"{where}: {ref} ships holding {shipped} on its own slot, and a "
+            "module seated in a bay has no slot key a configuration could "
+            "override (B3) - compose it as a part, or place it, to seat that "
+            "default")
+
+
+def filled_spanned_slots(contract, resolve, connectors, slot_key, occupants):
+    """Which of `contract`'s spanned bores hold something once this
+    configuration and the contracts' own defaults resolve (B3, "The duplex
+    host") - the ids, in declaration order.
+
+    `slot_key` is the key the SPANNING slot is addressed by (`bay-1/lc01`,
+    `port-1510`), so a bore's own key is `<slot_key>/<id>`. A configuration
+    that keys a bore answers for it outright, `""` included - that is P5, and
+    an emptied bore is not filled. A bore no key names holds what it ships
+    (`slot_default`), because a default is the product's state and seats in
+    every configuration that does not override it.
+    """
+    parts = {q.get("id"): q for q in (contract.get("parts") or [])}
+    out = []
+    for bid in spanned_slots(contract, resolve, connectors):
+        key = f"{slot_key}/{bid}" if slot_key else None
+        if key is not None and key in (occupants or {}):
+            try:
+                if occupant_spec(key, occupants[key]) is not None:
+                    out.append(bid)
+            except ValueError:
+                pass                    # a malformed value is reported when it seats
+            continue
+        q = parts.get(bid) or {}
+        try:
+            if slot_default(q, resolve(q.get("ref")) or {}):
+                out.append(bid)
+        except (FileNotFoundError, ValueError, KeyError):
+            continue                    # a bad ref is draw_placement's to report
+    return out
+
+
+def refuse_spanned_overlap(slot_key, ref, contract, resolve, connectors, occupants):
+    """A SPANNING SLOT AND ITS BORES ARE MUTUALLY EXCLUSIVE (B3, docs/
+    pluggables-caps-design.md, "The duplex host"), and this is where the build
+    says so - called wherever a fill lands on the spanning slot itself.
+
+    One duplex connector occupies both LC bores of a duplex adapter. So when
+    the adapter's own slot is filled its bores are not offered, and when either
+    bore is filled the adapter's slot is not offered. Both filled is not a
+    precedence question with a quiet answer - there is one piece of hardware
+    and two claims on it - so it is an error naming the key to edit. Emptying
+    the level you do not want (`""`) is how a configuration chooses: the
+    Smartoptics adapter ships capped bores, so a duplex plug there needs both
+    bores emptied first, and the FS adapter ships a duplex cap, so a simplex
+    plug in one bore needs the adapter's own slot emptied first.
+    """
+    for bid in filled_spanned_slots(contract, resolve, connectors, slot_key,
+                                    occupants):
+        raise ValueError(
+            f"occupants/{slot_key}: {ref} and its bore {bid} cannot both be "
+            "filled - one duplex connector fills both bores. Empty the bores "
+            f"({slot_key}/{bid}: \"\"), or empty this slot")
 
 
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
                            skin_overrides, attr_overrides, resolved):
-    """Seat the configuration's occupants keyed to THIS module's cages - and,
+    """Seat the configuration's occupants keyed to THIS instance's slots - and,
     to a fixed point, to occupants already seated in them (a plug in the
-    optic, a boot on the plug) - inside the module's instance group `g`.
+    optic, a boot on the plug) - inside the instance group `g`.
+
+    Called for EVERY instance with a path (B3, deep addressing): a module in
+    a bay, a part composed at any depth, a device placement. Its keys are the
+    ones whose prefix is slot_key_prefix(path) - `bay-1/lc01/1` is seated by
+    the adapter drawn at `bay-1/module/lc01` - so an occupant is drawn inside
+    the innermost group holding its slot. A key whose value is "" empties the
+    slot (P4): it counts as used when its host exists and draws nothing.
 
     Each seat is solve_seat - the device-level rule, in the card's frame -
     carried by the same trio draw_placement applies (z_inset / z_group_lift /
@@ -846,10 +957,25 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
     component_cages publishes as `occupant-attrs`; a card that declares no
     groups contributes nothing. Keys used are added to `occ_used`, which
     render_view reads to report a key nothing seated."""
-    prefix = module_key_prefix(path)
-    if not occupants or prefix is None:
-        return
-    pending = occupants_under(prefix, occupants)
+    prefix = slot_key_prefix(path)
+    # {host id: (key, spec, chain)} - `chain` is the refs already seated ON
+    # THIS ONE SEAT, innermost last, which is what tells a default that loops
+    # back on itself from two sibling slots shipping the same part.
+    pending = {h: (key, spec, ())
+               for h, (key, spec) in (occupants_under(prefix, occupants).items()
+                                      if occupants and prefix is not None else ())}
+    # AND WHAT EACH SLOT SHIPS HOLDING (B3, "The shipped default"): a part's
+    # resolved default (manifest.slot_default) seats unless the configuration
+    # keys that part - a configured key, `""` included, wins. Keyed None: a
+    # default is no `occupants:` key, so nothing is added to `occ_used` for it.
+    # Seated whether or not any configuration reached this instance, because
+    # a default is the product's shipped state, like a composed part.
+    for q in contract.get("parts") or []:
+        if not q.get("id") or not q.get("at") or q["id"] in pending:
+            continue
+        shipped = slot_default(q, lib.resolve(q["ref"])[0])
+        if shipped:
+            pending[q["id"]] = (None, {"ref": shipped}, ())
     if not pending:
         return
     hosts = {q["id"]: {"ref": q["ref"], "at": q["at"], "rotate": q.get("rotate"),
@@ -857,14 +983,64 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                        "host-lift": float(q.get("lift") or 0.0),
                        "group": q.get("group")}
              for q in contract.get("parts") or [] if q.get("id") and q.get("at")}
+    # A FILL ON A SPANNING SLOT IS REFUSED WHILE ITS BORES HOLD SOMETHING (B3,
+    # "The duplex host"). Checked from the HOST side, here, because this is the
+    # one place that knows both halves: the fill on the part's own slot - a key
+    # of this instance, or what the part ships - is in `pending`, and its bores'
+    # keys and defaults belong to the part's own contract, one level down.
+    _conn = _connector_registry()
+
+    def _res(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except (FileNotFoundError, ValueError, KeyError):
+            return None
+    # A KEY ON THE MODULE'S BACK IS SEATED BY THE REAR DRAWING (B3, Task 7i).
+    # `bay-1/mtp1` names the MTP bulkhead on a cassette's back
+    # (manifest.back_parts), which this instance - the cassette seen from the
+    # front - does not draw. The rear view draws the back as a projection at
+    # the module's own path and seats the key there (draw_placement), so here
+    # it is handed on, the way render_view hands a key whose bay is on another
+    # face to that face - with every occupant chained on it
+    # (manifest.back_hosts). NOT counted as used here: render_view's check
+    # asks manifest.key_on_back, and refuses one whose bay shows no back.
+    back = back_parts(contract, _res) if (path or "").endswith("/module") else {}
+    if back and prefix is not None:
+        for host_id in (back_hosts(prefix, occupants, back) - set(hosts)) & set(pending):
+            pending.pop(host_id)
+    if not pending:
+        return
+    for host_id, (key, spec, _c) in pending.items():
+        q = hosts.get(host_id)
+        # A SLOT INSIDE A SLOT IS REFUSED (B3, manifest.slot_in_slot_at, the
+        # gate nested_key_host - and so L12 - applies too): a key on a cage
+        # wrapper's own aperture names the opening the wrapper's key already
+        # names. Only a configured key - a default is the product's own.
+        if (key is not None and q is not None and prefix is not None
+                and slot_in_slot_at(path, contract, host_id, _res)):
+            raise slot_in_slot_error(key, prefix, host_id)
+        if spec is None or q is None or prefix is None:
+            continue
+        held = _res(q["ref"])
+        if held is not None:
+            refuse_spanned_overlap(f"{prefix}/{host_id}", q["ref"], held, _res,
+                                   _conn, occupants)
+
+    def _label(host_id, key):
+        return f"occupants/{key}" if key else f"{path}/{host_id}: default"
     comp_groups = contract.get("groups") or {}
     while pending:
-        seated_now = []
-        for host_id, (key, spec) in pending.items():
+        seated_now, chained = [], {}
+        for host_id, (key, spec, chain) in pending.items():
             host = hosts.get(host_id)
             if host is None:
                 continue
-            at, hrot, lift = solve_seat(lib, f"occupants/{key}", spec["ref"],
+            if spec is None:
+                if occ_used is not None:
+                    occ_used.add(key)
+                seated_now.append(host_id)
+                continue
+            at, orot, lift = solve_seat(lib, _label(host_id, key), spec["ref"],
                                         f"{path}/{host_id}", host)
             local = occupant_local_id(host_id, spec)
             # THE HOST'S GROUP, AS A DEVICE OCCUPANT TAKES ITS HOST'S: the card
@@ -878,10 +1054,17 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 lib, spec["ref"], f"{inst_id}--{local}", at, None,
                 group_merged_attrs(grp, spec.get("attrs")),
                 None, None, skin_name=spec.get("skin", "default"),
-                rotate=hrot or None, palette=palette, inst_palette=inst_palette,
+                rotate=orot or None, palette=palette, inst_palette=inst_palette,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                path=f"{path}/{local}", resolved=resolved)
+                path=f"{path}/{local}", resolved=resolved,
+                # AND A SLOT INSIDE WHAT WAS JUST SEATED, keyed under the
+                # occupant's own path - `bay-1/lc01-occupant/a`, half `a` of a
+                # duplex plug seated on the adapter `lc01`. The same widening
+                # draw_placement makes for a device-level seat, made here so
+                # the two directions cannot disagree about whether a composed
+                # part of an occupant is reachable.
+                occupants=occupants, occ_used=occ_used)
             if gname:
                 write_group_side(og, gname, grp, spec.get("attrs"))
                 if grp.get("states"):
@@ -890,17 +1073,35 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 og.set("data-z-lift", f"{lift:g}")
             og.set("data-for", f"{path}/{host_id}")
             g.append(og)
-            hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
+            hosts[local] = {"ref": spec["ref"], "at": at, "rotate": orot,
                             "host-lift": lift, "group": gname}
-            if occ_used is not None:
+            # AND WHAT THE OCCUPANT ITSELF SHIPS HOLDING. A plug's contract may
+            # default a boot onto its own rear slot, and it ships that boot
+            # however it got here - composed, configured, or seated as another
+            # part's default. The configuration keys this one by the produced
+            # id (`tx-occupant`), so it stays overridable. The guard is the
+            # CHAIN, not a set of refs seen anywhere in this instance: two
+            # sibling bores shipping the same plug each ship its boot, and
+            # only a default that names a part already seated on THIS seat is
+            # a cycle.
+            ships = (lib.resolve(spec["ref"])[0] or {}).get("default")
+            here = chain + (spec["ref"],)
+            if ships and ships in here:
+                raise ValueError(
+                    f"{path}/{host_id}: default {ships} is a cycle - "
+                    + " ships ".join(here + (ships,)))
+            if ships and local not in pending:
+                chained[local] = (None, {"ref": ships}, here)
+            if occ_used is not None and key:
                 occ_used.add(key)
             seated_now.append(host_id)
         if not seated_now:
             raise ValueError(
-                "occupants/" + ", ".join(sorted(k for k, _ in pending.values()))
+                ", ".join(sorted(_label(h, k) for h, (k, _, _c) in pending.items()))
                 + f": names no cage on {path} (or no occupant seated before it)")
         for host_id in seated_now:
             del pending[host_id]
+        pending.update(chained)
 
 
 def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False):
@@ -1172,7 +1373,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved,
-                               in_port=parts_in_port)
+                               in_port=parts_in_port,
+                               # a slot on a composed part, at any depth (B3)
+                               occupants=occupants, occ_used=occ_used)
         if part.get("group"):
             write_group_side(pg, part["group"], pgrp, part.get("attrs"))
         # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
@@ -1387,6 +1590,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         occupant = seated_ref(seated, bay_path, bay)
         if not occupant or depth >= MAX_BAY_DEPTH:
             continue
+        # a module's OWN default has no key inside a bay (B3)
+        refuse_bay_module_default(lib, occupant, f"{path}/{bay_id}")
         bw, bh = bay_size(bay)
         b_at = bay["at"]
         if bay.get("rotate") in (90, 270):
@@ -1443,6 +1648,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # `occupants:` keys such a cage by the MODULE-LESS path - `front-6/xg0` -
     # the convention its nested `bays:` keys already use (bay_path above), and
     # this is the module those keys address when `path` is `<bay>/module`.
+    # AND A SLOT AT ANY DEPTH (B3): every instance with a path seats the keys
+    # whose prefix is its own slot key, a composed adapter's bores included.
     # Seated INSIDE g, which carries this instance's translate/rotate, so the
     # occupant inherits the bay transform exactly as the card's own parts do
     # and nothing here composes it by hand; the mate points are the card-frame
@@ -1657,16 +1864,86 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # an error: the two cases are told apart by whether progress is possible,
     # not by when the set was sampled.
     remaining = dict(config.get("occupants") or {})
+    # {id: chain} for the ids in `remaining` that are a default rather than a
+    # configuration's key - `chain` being the refs already seated on that one
+    # seat, which is what tells a loop from two slots shipping the same part
+    shipped = {}
+    # A PLACED SLOT SHIPS HOLDING ITS DEFAULT (B3, "The shipped default"): the
+    # placed component's top-level `default:` (manifest.slot_default - a
+    # device placement declares none of its own) seats unless this
+    # configuration keys the placement, `""` included. Only a slot with its
+    # own `at` in this drawing: not an occupant (P3), not a projection (a part
+    # seen from another face), not an optional part this build leaves out. A
+    # ref that does not resolve is left for draw_placement to report.
+    for q in parts["placements"]:
+        if (not q.get("id") or not q.get("at") or q.get("mate-to")
+                or q.get("projection-of") or q["id"] in remaining
+                or (q.get("optional") and q["optional"] not in include)):
+            continue
+        try:
+            ships = slot_default(q, lib.resolve(q["ref"])[0])
+        except (FileNotFoundError, ValueError, KeyError):
+            continue
+        if ships:
+            remaining[q["id"]] = ships
+            shipped[q["id"]] = ()
+    # AND A PLACED SPANNING SLOT IS REFUSED WHILE ITS BORES HOLD SOMETHING (B3,
+    # "The duplex host"), the same check `_seat_nested_occupants` makes for a
+    # composed one. A device placement's bores are keyed under its own id
+    # (`port-1510/1`) and seated by the instance drawn at that path, so this
+    # loop never sees them; the configuration does, and so does the placed
+    # contract's own `parts:`.
+    _conn = _connector_registry()
+
+    def _res_ref(ref):
+        try:
+            return lib.resolve(ref)[0]
+        except (FileNotFoundError, ValueError, KeyError):
+            return None
+    for q in parts["placements"]:
+        if not q.get("id") or q.get("mate-to") or q["id"] not in remaining:
+            continue
+        try:
+            if occupant_spec(q["id"], remaining[q["id"]]) is None:
+                continue
+        except ValueError:
+            continue                    # reported when it seats, below
+        held = _res_ref(q.get("ref"))
+        if held is not None:
+            refuse_spanned_overlap(q["id"], q["ref"], held, _res_ref, _conn,
+                                   config.get("occupants"))
     while remaining:
         seated_now = []
+        chained, chains = {}, {}
         here = {q.get("id") for q in parts["placements"]}
         for host, spec in remaining.items():
             if host not in here:
                 continue
-            spec = occupant_spec(host, spec)
+            # A DEFAULT IS NO CONFIGURATION KEY, so it is not reported as one:
+            # `occupants/<id>: names no component` would name a key nobody
+            # wrote. The same `_label` reading the nested path uses.
+            spec = occupant_spec(host, spec,
+                                 label=f"{host}: default" if host in shipped else None)
+            if spec is None:            # "" empties the slot (P4)
+                seated_now.append(host)
+                continue
+            oid = occupant_local_id(host, spec)
+            # AND WHAT THE OCCUPANT ITSELF SHIPS HOLDING (B3): a plug whose
+            # contract defaults a boot onto its own rear slot brings the boot
+            # with it here too, keyed by the produced id so a configuration
+            # can still empty it. The guard is this seat's own CHAIN, so two
+            # ports shipping the same plug each ship its boot.
+            ships = (lib.resolve(spec["ref"])[0] or {}).get("default")
+            chain = shipped.get(host, ()) + (spec["ref"],)
+            if ships and ships in chain:
+                raise ValueError(f"{host}: default {ships} is a cycle - "
+                                 + " ships ".join(chain + (ships,)))
+            if ships and oid not in remaining and oid not in here:
+                chained[oid] = ships
+                chains[oid] = chain
             parts["placements"].append({
                 "ref": spec["ref"],
-                "id": occupant_local_id(host, spec),
+                "id": oid,
                 "mate-to": host,
                 # nests under the receptacle in the tree, the way an indicator nests
                 # under what it indicates - an optic belongs to its port
@@ -1678,9 +1955,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             })
             seated_now.append(host)
         if not seated_now:
+            # A CONFIGURED KEY WHOSE HOST IS IN ANOTHER VIEW IS SKIPPED (see
+            # above) - a front-panel optic has no business in the rear drawing,
+            # and L12 catches the typo. A DEFAULT IS NOT THAT CASE: its host is
+            # a placement in THIS view by construction, so one left unseated is
+            # a fault in this loop and must not vanish without a word.
+            left = sorted(h for h in remaining if h in shipped)
+            if left:
+                raise ValueError(
+                    ", ".join(f"{h}: default {remaining[h]!r}" for h in left)
+                    + ": nothing seated it - its slot is in this drawing")
             break
         for host in seated_now:
             del remaining[host]
+        remaining.update(chained)
+        shipped.update(chains)
 
     # A SEATED PART SEEN FROM THIS FACE TOO. A bay on another view may say its
     # occupant's plan lands here (`plan:`), and the occupant's contract names
@@ -1721,6 +2010,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if not pref:
                 continue
             if direction == "rear":
+                # WHOSE BACK THIS IS is said by the hole it is drawn in: the
+                # cutout carries the seated module as `data-rear-ref` (below,
+                # where the panel is drawn), and the projection is that hole's
+                # direct child. The explorer finds the slots on a back (its MTP
+                # bulkheads) through that module's `faces.rear` (B3, Task 10b).
                 parts["placements"].append({
                     "ref": pref, "id": f"{b['id']}-rear", "at": list(pl["at"]),
                     "projection-of": f"{b['id']}/module",
@@ -2213,15 +2507,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # THE ONE SEATING RULE (solve_seat): the mate points, the turn,
             # the mirror / rotate / in: refusals and the lift, shared with a
             # seat on a card (_seat_nested_occupants).
-            at, hrot, total_lift = solve_seat(
+            at, orot, total_lift = solve_seat(
                 lib, p["id"], p["ref"], p["mate-to"], host,
                 occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of)
             seated = dict(p, at=at)
-            # Omitted when the host has none, so an unrotated seat's output
-            # does not change. A chained seat (a boot on a plug in a rotated
+            # `orot` is the occupant's turn - the host's own plus a spanning
+            # host's axis (solve_seat) - omitted when that is none, so an
+            # unrotated seat's output does not change. A chained seat (a boot on a plug in a rotated
             # cage) inherits it: `hosts` holds this dict.
-            if hrot:
-                seated["rotate"] = hrot
+            if orot:
+                seated["rotate"] = orot
             # WHAT SEATS RECORDS ITS HOST, HOWEVER IT WAS AUTHORED. `occupants:`
             # writes `for: host` when it expands (see above); a HAND-WRITTEN
             # `mate-to` - which the spec offers in the same breath as
@@ -2332,6 +2627,18 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if node.get("data-z-out") is not None:
                 node.set("data-z-out", f"{float(node.get('data-z-out')) - floor:g}")
 
+    def back_occupants(p):
+        """The keys a module's back seats (B3, Task 7i): those whose host is
+        on the back (manifest.back_hosts), at any depth. The module's front
+        keys are left to the front drawing, where they are checked."""
+        prefix = slot_key_prefix(p["projection-of"])
+        back = {q["id"] for q in lib.resolve(p["ref"])[0].get("parts") or []
+                if q.get("id")}
+        on_back = back_hosts(prefix, nested_occupants, back)
+        return {k: v for k, v in nested_occupants.items()
+                if not k.startswith(prefix + "/")
+                or k[len(prefix) + 1:].split("/")[0] in on_back}
+
     def draw_placement(p):
         # How far off the face the SEAT is - the aperture's own protrusion,
         # nothing the author wrote. Kept separate from `p["lift"]` on purpose;
@@ -2382,6 +2689,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         # precedence both read that merged bag. What the GROUP WRITES on this
         # placement is group_side_attrs, below, and only that.
         merged_attrs = group_merged_attrs(grp, p.get("attrs"))
+        rear_face = bool(p.get("projection-of") and p.get("cutout"))
         g, contract = instance_group(lib, p["ref"], p["id"], p["at"],
                                      None, merged_attrs,
                                      None, p.get("rel-pos"),
@@ -2393,7 +2701,48 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                                     resolved=resolved)
+                                     resolved=resolved,
+                                     # A SLOT ON A PLACED PART (B3): `port-1510/1`,
+                                     # an adapter placed directly - and, since
+                                     # the duplex plug, A SLOT ON A SEATED PART
+                                     # TOO: `port-1510-occupant/a` is half `a`
+                                     # of the plug seated at `port-1510`, where
+                                     # a boot lands.
+                                     #
+                                     # P3 SAID "slots inside a seated part stay
+                                     # chained keys" and that is still true -
+                                     # `port-1510-occupant` IS the chained key,
+                                     # and this only lets it carry a part id
+                                     # after it. It was a blanket `None` here
+                                     # because until now every occupant that
+                                     # could host presented ONE interface, so
+                                     # the bare chained key said everything
+                                     # there was to say. generic/lc-duplex-plug@2
+                                     # composes TWO generic/lc-plug@2, each with
+                                     # its own rear point, and the bare key
+                                     # cannot name which: the plug as a whole
+                                     # presents nothing (presented_interface
+                                     # declines to pick between two composed
+                                     # parts), so a boot keyed there has no
+                                     # point to mate to at all.
+                                     #
+                                     # A `plan` projection is still excluded: it
+                                     # is a part seen from another face, and the
+                                     # thing seated on it belongs to that face.
+                                     #
+                                     # A MODULE'S BACK IS NOT (B3, Task 7i). What
+                                     # is seated in a cassette's rear MTP is seen
+                                     # from behind and from nowhere else, so the
+                                     # `rear:` projection seats it: drawn at the
+                                     # module's own path (`bay-1/module`), its
+                                     # slots take the module-less keys
+                                     # (`bay-1/mtp1`) the front drawing hands on
+                                     # (_seat_nested_occupants).
+                                     path=p["projection-of"] if rear_face else None,
+                                     occupants=(back_occupants(p) if rear_face
+                                                else None if p.get("projection-of")
+                                                else nested_occupants),
+                                     occ_used=nested_used)
         # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
         # data-path becomes data-of, naming the seated part on the face that
         # holds it; no relief, no ref, no behaviour, so the kit builds nothing
@@ -2403,8 +2752,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             for node in g.iter():
                 dp = node.get("data-path")
                 if dp is not None:
-                    node.set("data-of", p["projection-of"] + dp[len(p["id"]):]
-                             if dp.startswith(p["id"]) else p["projection-of"])
+                    # a back is drawn AT the seated part's path already (see
+                    # `rear_face` above), so its paths are kept as they are
+                    own = p["projection-of"]
+                    node.set("data-of", dp if dp == own or dp.startswith(own + "/")
+                             else own + dp[len(p["id"]):] if dp.startswith(p["id"])
+                             else own)
                     del node.attrib["data-path"]
                 # `data-cp*` GOES WITH THE REST. A projection is the part seen
                 # from another face; the connection point it carries is the
@@ -2519,12 +2872,27 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     # OCCUPANTS KEYED INSIDE A SEATED MODULE (#484, R2) - `front-6/xg0` - go
     # down with the bay's module and are seated in its instance group; the
     # device-level expansion above never matches them (no placement id holds
-    # a slash). `nested_used` collects what seated, for the check after the
-    # bays are drawn.
+    # a slash). So do slots at any depth (B3), and a slot on a placed part
+    # (`port-1510/1`) goes down with that placement. `nested_used` collects
+    # what seated, for the check after the bays are drawn.
     nested_occupants = {k: v for k, v in (config.get("occupants") or {}).items()
                         if "/" in k}
     nested_used = set()
     this_view_bays = {b["id"] for b in parts["bays"]}
+    this_view_placements = {q["id"] for q in parts["placements"]
+                            if not q.get("mate-to") and not q.get("projection-of")}
+    drawn_placements = {q.get("id") for _face, (_n, v) in resolve_views(device, config).items()
+                        for q in view_parts(v)["placements"] if q.get("at")}
+    # AND THE OCCUPANTS THOSE PLACEMENTS SEAT. A device-level occupant is a
+    # placement the build SYNTHESISES, so no view lists it - but it is a real
+    # drawing path in whichever view holds its host, and since the duplex plug
+    # it can carry keys of its own (`port-1510-occupant/a`, one half of a
+    # seated plug). Without this the view that does NOT hold the host reports
+    # such a key as naming nothing, which is the same false alarm the loop
+    # above already avoids for the host's own key.
+    drawn_placements |= {occupant_local_id(k, v if isinstance(v, dict) else {})
+                         for k, v in (config.get("occupants") or {}).items()
+                         if "/" not in k and v != ""}
     # the views THIS configuration draws: a bay only on an unbound variant
     # face is not drawn anywhere, so a key naming it is reported, not skipped
     drawn_bays = {b["id"] for _face, (_n, v) in resolve_views(device, config).items()
@@ -2654,6 +3022,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # THE OCCUPANT'S OWN VALUES: a configuration's `bay-attrs` reach the
             # part seated in THIS bay, the way a placement's `attrs` reach a
             # placed part - a supply's wattage, a drive's capacity
+            # a module's OWN default has no key inside a bay (B3)
+            refuse_bay_module_default(lib, default, f"bays/{b['id']}")
             g, contract = instance_group(lib, default, f"{b['id']}--module", b["at"],
                                          None, (config.get("bay-attrs") or {}).get(b["id"]), None, None,
                                          rotate=b.get("rotate"), palette=palette,
@@ -2698,27 +3068,57 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         else:
             draw_bay(item)
 
-    # A NESTED KEY THAT SEATED NOTHING IS AN ERROR, not a skip. A key whose bay
-    # is on another face belongs to that face's drawing, as a device-level
-    # occupant does; one whose bay is on THIS face and seated nothing names a
-    # bay that is empty or holds a module without that cage, and a key whose
-    # bay is on no face at all is a typo. Keys on a seated module that name no
-    # cage are raised where the module is drawn (_seat_nested_occupants).
-    for key in sorted(set(nested_occupants) - nested_used):
-        top = key.split("/", 1)[0]
-        if top in this_view_bays:
-            raise ValueError(
-                f"occupants/{key}: names no cage - bay {top!r} seats no module "
-                "carrying it in this configuration")
-        if top not in drawn_bays:
-            raise ValueError(
-                f"occupants/{key}: {top!r} is no bay in any view this "
-                "configuration draws")
-
     # second pass: the surface-mounted parts, now safely in front of the openings
     for p in ordered:
         if p["id"] in deferred_ids:
             draw_placement(p)
+
+    # A NESTED KEY THAT SEATED NOTHING IS AN ERROR, not a skip - checked once
+    # both passes have drawn, since a keyed placement may be a deferred one.
+    # A key whose bay or placement is on another face belongs to that face's
+    # drawing, as a device-level occupant does; one whose bay or placement is
+    # on THIS face and seated nothing names a bay that is empty or a part
+    # without that slot, and a key whose head is on no face at all is a typo. Keys on a seated module that name no
+    # cage are raised where the module is drawn (_seat_nested_occupants).
+    # The resolver lint uses (manifest.nested_key_host) says what a dangling
+    # key failed to reach - `'lc99'` - where it can; the generic message is
+    # the fallback for a key it resolves that still seated nothing here.
+    def _dangling(key, fallback):
+        def _res(r):
+            try:
+                return lib.resolve(r)[0]
+            except Exception:
+                return None
+        try:
+            nested_key_host(key, device, config, _res)
+        except ValueError as e:
+            return ValueError(str(e))
+        return ValueError(fallback)
+    def _res_key(r):
+        try:
+            return lib.resolve(r)[0]
+        except Exception:
+            return None
+    for key in sorted(set(nested_occupants) - nested_used):
+        top = key.split("/", 1)[0]
+        if top in this_view_bays and key_on_back(key, device, config, _res_key):
+            # ON THE MODULE'S BACK, so the rear drawing seats it (B3, Task
+            # 7i) - provided the bay shows its back somewhere; the resolver
+            # raises when it does not, rather than the key vanishing
+            nested_key_host(key, device, config, _res_key)
+            continue
+        if top in this_view_bays:
+            raise _dangling(
+                key, f"occupants/{key}: names no cage - bay {top!r} seats no module "
+                "carrying it in this configuration")
+        if top in this_view_placements:
+            raise _dangling(
+                key, f"occupants/{key}: names no slot on placement {top!r} in "
+                "this configuration")
+        if top not in drawn_bays and top not in drawn_placements:
+            raise ValueError(
+                f"occupants/{key}: {top!r} is no bay in any view this "
+                "configuration draws, and no placement either")
 
     # A REAR PROJECTION GOES INTO THE HOLE IT IS SEEN THROUGH (see `rear:`).
     for p in parts["placements"]:
@@ -2841,9 +3241,9 @@ def _inputs(device, device_yaml, lib):
         if skins is not None:
             files.add(Path(skins).parent / "contract.yaml")
             files.update(Path(skins).glob("*.svg"))
-        for part in ((contract or {}).get("parts") or []):
-            if part.get("ref"):
-                queue.append(part["ref"].split(":")[0])
+        # a part's ref, every default it ships holding and every face it
+        # names (drawn_refs) - a redrawn rear must rebuild its device
+        queue.extend(drawn_refs(contract))
     return {f for f in files if f.exists()}
 
 
@@ -2895,6 +3295,26 @@ def _pluggable_families():
     return doc.get("families") or {}
 
 
+@functools.lru_cache(maxsize=1)
+def _connector_registry():
+    """interface -> {standard, note, spans}, from spec/schemas/connectors.yaml,
+    or {} if the checkout is broken.
+
+    Cached because the seating path asks for it once per drawn instance now
+    (`_seat_nested_occupants`), and the file is a fact of the checkout.
+
+    The second registry `slot_entry` answers from (B3,
+    docs/pluggables-caps-design.md). A part presenting a pluggables FAMILY is a
+    cage; a part presenting one of THESE interfaces is a connector slot. Read
+    the same way `_pluggable_families` reads its file, for the same reason.
+    """
+    try:
+        doc = yaml.safe_load((SCHEMAS / "connectors.yaml").read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    return doc.get("interfaces") or {}
+
+
 def _family_by_interface(families, interface):
     """The (name, family) whose `interface` equals `interface`, or None.
 
@@ -2922,8 +3342,8 @@ def _family_by_rate(families, media):
 
 
 def _pluggable_candidates(lib_roots):
-    """Every library component that could seat in SOME pluggable cage,
-    indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
+    """Every library component that could seat in SOME pluggable cage or
+    connector slot, indexed by the interface it `mates`: `{interface: [(ref, contract), ...]}`.
 
     BUILT ONCE PER PROCESS. `libwalk.iter_components` is a GENERATOR - the
     same shape as `iter_devices`, which spent this very branch's last three
@@ -2941,12 +3361,18 @@ def _pluggable_candidates(lib_roots):
     yet while this process is running - depending on it here would be a race.
     `libwalk` reads contracts off disk directly, which is what every renderer
     already does for every placement it draws.
+
+    `mates:` IS THE GATE, NOT `behaviour`. The six plugs - generic/lc-plug@2,
+    lc-duplex-plug@2, sc-plug@1, mpo12-plug@1, mpo24-plug@1 and rj45-plug@1 -
+    are `class: port` and so carry no `behaviour` (their own provenance says
+    why: test_behaviour.py holds every port to none), yet each is exactly what
+    a connector slot must offer (B3). Every other part that declares `mates:`
+    is `behaviour: occupies`, and no plug mates a pluggables family's
+    interface, so no cage's accept list changes by this.
     """
     out = {}
     for cf in libwalk.iter_components(lib_roots):
         c = load_yaml(cf) or {}
-        if c.get("behaviour") != "occupies":
-            continue
         if c.get("superseded-by"):
             continue
         mates = c.get("mates")
@@ -3013,8 +3439,16 @@ def _cage_accepts(candidates, families, family, media):
 
 def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
                occupant=None):
-    """ONE cage entry for ONE placement, or None when it is not a cage - the
-    core that a device view's `cages[]` (cage_entries) and a component's own
+    """`slot_entry` with the connector registry read here - the name every
+    caller before B3 used, kept so none of them has to change."""
+    return slot_entry(p, lib, families, _connector_registry(), candidates,
+                      group=group, extra_lift=extra_lift, occupant=occupant)
+
+
+def slot_entry(p, lib, families, connectors, candidates, group=None,
+               extra_lift=0.0, occupant=None):
+    """ONE cage or connector-slot entry for ONE placement, or None when it is
+    neither - the core that a device view's `cages[]` (cage_entries) and a component's own
     `cages` (component_cages, which components_index.py publishes) both call,
     so a cage on a card and a cage on a switch face are the same answer to
     the same question.
@@ -3033,7 +3467,26 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
                   component_cages);
       occupant    the configured occupant, if any.
     `mate` and `at` are in the frame `p["at"]` is written in.
+
+    TWO REGISTRIES, ONE CORE (B3, docs/pluggables-caps-design.md). The
+    presented interface is looked up in `families` (spec/schemas/
+    pluggables.yaml) first and, failing that, in `connectors` (spec/schemas/
+    connectors.yaml). Every entry says which it is by `kind`: `cage` or
+    `connector`. A connector slot has no ladder and so no ceiling: its
+    `accepts` is every candidate whose `mates:` is the interface - dust caps
+    and plugs alike, never a boot, which mates a plug - and its `media` is
+    None. Everything else - `mate`, `lift`, `rotate`, `mirror`,
+    `group-states`, `occupant-attrs` - is the same answer to the same question.
+
+    A PLACEMENT SEATED BY `mate-to` HAS NO `at` in this frame - the build
+    solves its position from its host's mate point - so it is not published
+    here. Its own slots ride on it in components.json (component_cages), the
+    way a seated transceiver's two `lc` bores do. Before B3 no seated
+    placement presented a registered interface, so this never arose; a
+    std/lc-bore@3 seated by `mate-to` (test_chained_seats.py) is the first.
     """
+    if "at" not in p:
+        return None
     contract, _skins = lib.resolve(p["ref"])
 
     def _resolve(ref):
@@ -3045,7 +3498,13 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
     interface, mate_at, lift = presented_interface(contract, _resolve)
     found = _family_by_interface(families, interface) if interface else None
     if found is None:
-        return None
+        if not interface or interface not in (connectors or {}):
+            return None
+        refs = sorted({ref for ref, _c in candidates.get(interface, [])})
+        return _slot_dict(p, contract, interface, None, refs, occupant, mate_at,
+                          lift, extra_lift, group, "connector",
+                          spanned_slots(contract, _resolve, connectors),
+                          spanning_axis(contract, _resolve, connectors))
     _family_name, family = found
     # `media` is the port's declared media - the cage's ceiling on its
     # family's ladder. THE PLACEMENT'S OWN `attrs.media` IS READ FIRST,
@@ -3081,11 +3540,32 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
         media_found = _family_by_rate(families, media)
         if media_found and media_found[0] != _family_name:
             accept_family = media_found[1]
+    return _slot_dict(p, contract, interface, media,
+                      _cage_accepts(candidates, families, accept_family, media),
+                      occupant, mate_at, lift, extra_lift, group, "cage",
+                      spanned_slots(contract, _resolve, connectors),
+                      spanning_axis(contract, _resolve, connectors))
+
+
+def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
+               extra_lift, group, kind, bores, axis):
+    """The published entry, one shape for a cage and a connector slot alike;
+    only `kind`, `media` and how `accepts` was derived differ."""
     return {
         "id": p["id"], "at": p["at"], "interface": interface, "media": media,
         "group": p.get("group"), "rel-pos": p.get("rel-pos"),
-        "rotate": p.get("rotate"),
-        "accepts": _cage_accepts(candidates, families, accept_family, media),
+        # HOW AN OCCUPANT IS TURNED, which for a SPANNING slot is not only the
+        # placement's own rotation (B3, "The duplex host"). A duplex connector
+        # is one moulding with two ferrules on an axis and cannot turn itself,
+        # and the two adapters in the library disagree about that axis - one
+        # puts its bores side by side, the other stacks them. So a spanning
+        # slot adds `manifest.spanning_axis`, the turn that carries the
+        # canonical drawing axis onto its own pair, and `solve_seat` seats its
+        # occupant at the same sum - through the same `summed_rotate`, so the
+        # published entry and the drawing cannot come apart. A slot that spans
+        # nothing publishes its placement's `rotate` unchanged, `None` included.
+        "rotate": summed_rotate(p.get("rotate"), axis),
+        "accepts": accepts,
         "occupant": (occupant.get("ref") if isinstance(occupant, dict) else occupant)
                     if occupant else None,
         # WHERE AN OCCUPANT MATES, in the frame the placement is written in
@@ -3100,7 +3580,8 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
         "occupant-attrs": group_side_attrs(p.get("group"), group),
         # TWO THINGS THE BUILD DOES TO A SEATED OPTIC THAT A CONSUMER MAY
         # NOT, published so it can decline rather than seat it wrong (the
-        # kit refuses both, as it refuses a lift):
+        # kit refuses both; a lift it seats, since B3 Task 9, through
+        # `lift` above):
         #   mirror        this build RAISES for an occupant in a mirrored
         #                 host (the D3 refusal in the mate-to resolution);
         #   group-states  the host's group carries `states`, which
@@ -3109,10 +3590,26 @@ def cage_entry(p, lib, families, candidates, group=None, extra_lift=0.0,
         #                 does not carry.
         "mirror": bool(p.get("mirror")),
         "group-states": bool((group or {}).get("states")),
+        "kind": kind,
+        # WHAT THE SLOT SHIPS HOLDING (B3, P5): the placement's own `default:`
+        # over the placed component's top-level one (manifest.slot_default),
+        # or None. The build seats it in every configuration that does not key
+        # this slot; `occupant` stays the configured answer alone.
+        "default": slot_default(p, contract),
+        # THE SLOTS THIS ONE TAKES THE PLACE OF (B3, "The duplex host"):
+        # `manifest.spanned_slots` - the ids, under this entry's own key, of the
+        # bores a connector seated HERE would fill. Filling this slot and one of
+        # them is an error (`refuse_spanned_overlap`), so a reader offering a
+        # swap offers one level or the other. Always present, empty where the
+        # slot spans nothing, for the reason `accepts: []` is always present:
+        # "this slot stands alone" and "not a question this entry answers" have
+        # to be tellable apart.
+        "bores": bores,
     }
 
 
-def cage_entries(device, view_name, lib, families, candidates, default_occupants):
+def cage_entries(device, view_name, lib, families, candidates, default_occupants,
+                 connectors=None):
     """`cages[]` for one view: one entry per placement that presents a
     pluggable interface (`manifest.presented_interface`, looked through a
     wrapper's own `parts:` the same way a `mate-to` occupant already is), with
@@ -3130,7 +3627,13 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
     spec/schemas/pluggables.yaml - a placement that presents nothing (an LED,
     a jack, a fixed connector) or an interface this registry does not cover is
     silently not a cage, the same way it is silently not a bay.
+
+    A placement presenting a connector interface in spec/schemas/
+    connectors.yaml is emitted too, as `kind: connector` (B3; see slot_entry).
+    `connectors` is that registry, read here when the caller has not.
     """
+    if connectors is None:
+        connectors = _connector_registry()
     view = device["views"][view_name] or {}
     groups = device.get("groups") or {}
     out = []
@@ -3139,13 +3642,14 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         # A CAGE IN A WELL IS SUNK BY ITS FLOOR, and the mate-to resolution
         # carries that sink into its occupant's `host-lift` (render_view). The
         # published `lift` is documented as that same figure, so it takes the
-        # same term - and a consumer that does not seat into a lifted cage (the
-        # kit refuses any non-zero lift) declines this one rather than seating
-        # the optic at the panel above a floor it cannot see.
+        # same term - so a consumer seating into a lifted cage (the kit does,
+        # since B3 Task 9) puts the optic on the floor, and one that does not
+        # declines this one rather than seating the optic at the panel above
+        # a floor it cannot see.
         extra = 0.0
         if p.get("in") and not p.get("projection-of"):
             extra = -well_floor(placements, lib, p["in"])
-        entry = cage_entry(p, lib, families, candidates,
+        entry = slot_entry(p, lib, families, connectors, candidates,
                            group=groups.get(p.get("group")), extra_lift=extra,
                            occupant=default_occupants.get(p["id"]))
         if entry is not None:
@@ -3160,7 +3664,32 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
 COMPONENT_CAGE_DROPS = ("occupant", "group", "rel-pos")
 
 
-def component_cages(contract, lib, families, candidates):
+def _forwarded_part(contract, lib):
+    """(part, interface) for the `parts:` entry whose aperture `contract`
+    presents AS ITS OWN, or None when it presents its own interface or
+    forwards nothing.
+
+    The same reading `manifest.presented_interface` makes: a contract with its
+    own `interface` and point forwards nothing; otherwise, exactly one composed
+    part whose contract has an `interface` and a `mate` is the one forwarded.
+    """
+    cps = contract.get("connection-points") or {}
+    if contract.get("interface") and cps.get(contract.get("interface-at") or "mate"):
+        return None
+    cores = []
+    for part in contract.get("parts") or []:
+        if not part.get("ref"):
+            continue
+        try:
+            core = lib.resolve(part["ref"])[0]
+        except Exception:
+            continue
+        if core.get("interface") and (core.get("connection-points") or {}).get("mate"):
+            cores.append((part, core["interface"]))
+    return cores[0] if len(cores) == 1 else None
+
+
+def component_cages(contract, lib, families, candidates, connectors=None, face=False):
     """A component's OWN cages, in its own frame: one entry per `parts:` entry
     that presents a pluggable interface, by the same core as a device view's
     `cages[]` (cage_entry). components_index.py publishes it on the
@@ -3192,14 +3721,46 @@ def component_cages(contract, lib, families, candidates):
     is written as `data-z-lift` on its group (instance_group), which raises
     everything in it. An occupant seated inside the card sits BESIDE the cage
     group, not in it, so it takes that raise only if the published figure
-    carries it - and a consumer that refuses a lifted cage then refuses it
-    for the right reason rather than seating the optic 44 mm under a shelf
-    card's raised cage.
+    carries it - so the kit, which seats at a lift (B3 Task 9), raises the
+    optic with the cage, and a consumer that refuses a lifted cage refuses
+    it for the right reason rather than seating the optic 44 mm under a
+    shelf card's raised cage.
+
+    A WRAPPER THAT FORWARDS ITS ONE APERTURE IS THE SLOT (B3, P2). When this
+    contract presents a composed part's interface as its own
+    (`_forwarded_part`), that part is where the WRAPPER's placement seats an
+    occupant, published once in whatever frame places the wrapper - not a
+    second slot here. A contract that declares its OWN interface forwards
+    nothing, and every composed part of it is still offered.
+
+    CONNECTOR SLOTS ONLY. A pluggables cage forwarded the same way is still
+    published on its wrapper, as it was before B3: a card that IS one cage
+    (cisco/a9k-mpa-1x40ge@1, a CFP MIC) is seated in a bay, not a cage, so no
+    frame above it lists that cage and dropping it here would lose it
+    entirely (#484). Whether a cage wrapper should follow P2 is a question for
+    the cage side; this does not change it.
+
+    A FACE DRAWING FORWARDS NOTHING (B3, Task 7i). `face` is True for a
+    component some module names as one of its `faces:` - a cassette's back.
+    P2 publishes a forwarded slot in the frame that PLACES the wrapper, and
+    nothing places a face: the module's back is drawn at the module's own
+    path, never as a `parts:` entry. So a back composing ONE bulkhead - six
+    FHD single-MTP backs compose `common/mpo-flange-adapter@2` and nothing
+    else - would publish its only slot nowhere, while the two- and three-MTP
+    backs published theirs. On a face the bulkhead is published as its own
+    slot, under the id the build keys it by (`bay-1/mtp`).
     """
+    if connectors is None:
+        connectors = _connector_registry()
+    fwd = _forwarded_part(contract, lib)
+    forwarded = (fwd[0] if not face and fwd and fwd[1] in (connectors or {})
+                 and _family_by_interface(families, fwd[1]) is None else None)
     out = []
     groups = contract.get("groups") or {}
     for p in contract.get("parts") or []:
-        entry = cage_entry(p, lib, families, candidates,
+        if p is forwarded:
+            continue
+        entry = slot_entry(p, lib, families, connectors, candidates,
                            group=groups.get(p.get("group")),
                            extra_lift=float(p.get("lift") or 0.0))
         if entry is not None:
@@ -3267,6 +3828,7 @@ def main():
     # `libwalk.iter_components` in full rather than re-walking the library for
     # every placement in every view.
     _families = _pluggable_families()
+    _connectors = _connector_registry()
     _candidates = _pluggable_candidates(args.library)
     _default_occupants = (configs.get(default_cfg) or {}).get("occupants") or {}
     cfg_index = {"device": device["name"], "model": device.get("model", ""),
@@ -3406,7 +3968,8 @@ def main():
                  # seated optic). A consumer that cannot do what the build
                  # does for either declines to seat there.
                  "cages": {v: cage_entries(device, v, lib, _families, _candidates,
-                                            _default_occupants)
+                                            _default_occupants,
+                                            connectors=_connectors)
                            for v in device["views"]}}
     (outdir / f"{device['name']}.configs.json").write_text(json.dumps(cfg_index, indent=1, sort_keys=True))
     print(f"wrote {device['name']}.configs.json")

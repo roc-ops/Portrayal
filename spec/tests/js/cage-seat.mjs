@@ -79,8 +79,9 @@ if (mode === 'overrides') {
                        'occupant-attrs': {'data-group': 'sfp28', 'data-media': 'sfp28'}});
   const cages = ['port-4', 'port-5', 'port-6', 'port-7', 'port-8', 'port-9', 'port-10']
     .map(cage);
-  // a cage whose aperture stands off the face: the kit cannot seat into it
-  // without also shifting every child's absolute out, so it refuses
+  // a cage whose aperture stands off the face: SEATED since B3 Task 9, with
+  // the lift on the group and every child's absolute out moved by it (the
+  // arithmetic is held to real builds by test_lifted_seat_js.py)
   cages[4].lift = 3;
   // a mirrored cage, which the build refuses to seat at all
   cages[5].mirror = true;
@@ -109,7 +110,7 @@ if (mode === 'overrides') {
     'port-5': null,                           // emptied
     'port-6': 'nobody/nothing@9',             // unknown: failed, keeps its optic
     // port-7 absent: untouched
-    'port-8': 'generic/sfp-lc@1',             // lifted: refused, left empty
+    'port-8': 'generic/sfp-lc@1',             // lifted: seated, lift and all
     'port-9': 'generic/sfp-lc@1',             // mirrored: refused, left empty
     'port-10': 'generic/sfp-lc@1',            // group states: refused, left empty
   }, loadSkin);
@@ -127,8 +128,12 @@ if (mode === 'overrides') {
   console.log(JSON.stringify({
     applied, refused, failed, before, after, again, second,
     // seatOccupant itself will not produce a half-seated optic
-    seatRefused: [4, 5, 6].map(i => m.seatOccupant(DOC, cages[i], 'generic/sfp-lc@1',
-                                                   COMP['generic/sfp-lc@1'], skin('sfp-lc'))),
+    seatRefused: [5, 6].map(i => m.seatOccupant(DOC, cages[i], 'generic/sfp-lc@1',
+                                                COMP['generic/sfp-lc@1'], skin('sfp-lc'))),
+    // and a lifted cage is seated with its lift written on the group
+    liftedLift: m.seatOccupant(DOC, cages[4], 'generic/sfp-lc@1', COMP['generic/sfp-lc@1'],
+                               skin('sfp-lc'))?.getAttribute('data-z-lift') ?? null,
+    port8Lift: occ(root, 'port-8').map(n => n.getAttribute('data-z-lift')),
     reasons: cages.map(m.refusalReason),
     // what the failed cage still holds, as a caller records it
     heldAfterFailure: m.occupantRef(root, 'port-6'),
@@ -186,8 +191,10 @@ if (mode === 'race') {
   ]);
   const optics = root => root.querySelectorAll('[data-for="port-4"][data-behaviour="occupies"]')
     .map(n => n.getAttribute('data-ref'));
+  // the ref less its version: a seated module's `data-ref` carries it, as
+  // render.py writes it (B3 Task 10c), and every kit reader splits it off
   const modules = root => root.querySelectorAll('[id="slot-0--module"]')
-    .map(n => n.getAttribute('data-ref'));
+    .map(n => (n.getAttribute('data-ref') || '').split(':')[0]);
   const claims = m.seatClaims ? m.seatClaims() : () => () => true;
   const out = {};
 

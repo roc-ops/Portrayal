@@ -389,12 +389,15 @@ def component_versions(library: pathlib.Path):
         ver = str(doc.get("version") or "")
         out[f"{vendor}/{name}@{major[1:]}"] = (
             ver + "+" + _component_digest(ct.parent, doc))
+        # what this major draws: its parts, the defaults they ship holding,
+        # its faces (manifest.drawn_refs), and what its own bays seat or take
         out.setdefault(f"{vendor}/{name}", {})[major] = _children(doc)
     return out
 
 
 def _children(contract):
-    """The refs a component draws that it does not itself contain: its `parts`,
+    """The refs a component draws that it does not itself contain: its `parts`
+    with the defaults they ship holding and its faces (`manifest.drawn_refs`),
     and every ref its own bays seat or take.
 
     NESTED BAYS WERE NOT FOLLOWED. A component can host bays - an SCB carries a
@@ -405,7 +408,7 @@ def _children(contract):
     and every ref it `accepts`, because an occupant the bay only accepts is
     still one a configuration can draw there.
     """
-    refs = [p.get("ref") for p in (contract.get("parts") or [])]
+    refs = list(manifest.drawn_refs(contract))
     for bay in (contract.get("bays") or {}).values():
         bay = bay or {}
         refs += [bay.get("default")] + list(bay.get("accepts") or [])
@@ -425,6 +428,12 @@ def _composed(doc, versions):
     Resolved TRANSITIVELY - a card composes a jack which composes a cage, an SCB
     seats a routing engine in a bay of its own - so a change three levels down
     still reaches the device that shows it. See `_children`.
+
+    A FACE IS FOLLOWED LIKE A PART. A cassette's back is its `faces.rear`, not
+    one of its `parts:`, and the walk used to stop at `parts:` - so the FS FHD
+    rears' MPO openings were redrawn under fs/fhd-1ufce and its lock reported
+    nothing. The face list comes from `manifest.drawn_refs`, which reads both
+    spellings of `plan` and every direction in `faces.DIRECTIONS`.
     """
     seen, todo = {}, []
     for view in (doc.get("views") or {}).values():

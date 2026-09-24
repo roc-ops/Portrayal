@@ -1,0 +1,294 @@
+format: 1
+kind: component
+name: lc-plug
+version: 2.0.1
+class: port
+mates: lc
+interface: lc-plug
+interface-at: boot
+optical: {positions: 1}
+profile: networking
+description: >-
+  An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette
+  of the free plug (provenance.free-state) with its latch compressed into the
+  adapter's keyway, and
+  drawn in the bore's own convention: latch DOWN unrotated, as std/lc-bore@3 and
+  std/lc-bulkhead-bore@1 draw their tongue, so the turn a seat applies carries
+  the latch into the keyway on every host. A body holding the ferrule, and
+  below it the latch column - a 3.3 stem off the body, a 4.3 shoulder standing
+  proud of it, then the 2.3 tab. Occupies an `lc` bore at its `mate` and
+  presents `lc-plug` at its rear for a boot. No depth (provenance.size).
+size: {w: 5.58, h: 8.535}
+size-confidence: {w: drawing, h: borrowed}
+attrs: {media: fiber, connector: lc}
+unplaced: >-
+  seated by a device that places it in an `lc`-presenting bore - none does
+  yet; configurations downstream of this library seat it, and
+  spec/tests/test_lc_seated_orientation.py seats it on copies of two real
+  devices. common/lc-boot@1 mates to it the way it mated to @1.
+provenance:
+  seated: >-
+    THE LIBRARY DRAWS A PLUG SEATED, SO THE LATCH IS COMPRESSED. An LC latch is
+    a cantilever spring: the adapter presses it down on insertion, which is what
+    holds the plug, and pressing it further releases it. SENKO DS-LC-000004 Rev
+    A's 10.43 front silhouette - the figure @1 was drawn to - is
+    the FREE state, the plug in the hand. Seated, the latch lies within the
+    adapter's keyway, and a plug is only ever drawn here in a bore. So the
+    latch is drawn compressed until its tip reaches the bulkhead keyway's end:
+    5.71 from the ferrule axis, std/lc-bulkhead-bore@1's own reading of SENKO's
+    LC Premium Adapter DS-LC-000010 Rev A - one figure, held in that part and
+    borrowed here, which is what `h: borrowed` says. The free plug reaches
+    7.605 from its axis; the seated one 5.71.
+  orientation: >-
+    DRAWN IN THE BORE'S UNROTATED CONVENTION, and that is the whole fix.
+    std/lc-bore@3 is drawn tongue DOWN and generic/lc-plug@1 latch UP, and
+    render.solve_seat turns an occupant by exactly its host's turn - so every
+    simplex @1 plug seated 180 degrees out, its latch off the side opposite
+    the keyway. A keyed occupant is drawn the way its host bore is drawn
+    unrotated, and then the seat's turn is right by construction on every host:
+    the FS cassettes' latch-left bores and the Smartoptics adapters'
+    latch-up ones alike. spec/tests/test_lc_seated_orientation.py checks it on
+    real builds, through every ancestor, and shows a latch-up plug - @1's
+    orientation - failing the same check.
+  keyway: >-
+    THE WIDTHS ARE SENKO'S, THE HEIGHTS ARE A MODELLING CHOICE, and the two
+    must not be read as one kind of number.
+    WIDTHS - drawing, unchanged from generic/lc-plug@1: the front view of SENKO
+    DS-LC-000004 Rev A p.3 dimensions 2.3 +/-0.1 (tab), 4.3 +/-0.1 (shoulder)
+    and 3.3 +0.05/-0.10 (stem), and the body 5.58; `free-state` records the
+    600 dpi re-measurement that fixed which width is which tier.
+    The body tier keeps @1's 5.58 x 5.65, the 5.65 dimensioned on the side view.
+    HEIGHTS - a proportional compression, NOT A READING. How a compressed
+    latch's three tiers foreshorten is not drawn anywhere; what is known is the
+    total, 5.71 - 2.825 = 2.885 from the body's edge to the keyway's end,
+    against the free 4.78. Each free tier height (@1's 2.66 tab, 0.79 shoulder,
+    1.33 stem) is scaled by that same 2.885 / 4.78, giving 1.605 / 0.477 /
+    0.803. That keeps the order and the shoulder standing proud of both its
+    neighbours, and seated in std/lc-bulkhead-bore@1 each tier falls inside
+    the keyway tier of at least its own width - the 4.3 shoulder entirely
+    within the bore's 4.70 shoulder. A different split would be as defensible;
+    this one invents no second figure.
+  receptacle: >-
+    IN THE TRANSCEIVER RECEPTACLE THE LATCH OVERRUNS THE DRAWN KEYWAY, and that
+    is the receptacle's understatement showing, not a fault here.
+    std/lc-bore@3's 1.60 keyway is cut short to fit a module face (its own
+    `short-keyway`) and ends 3.95 from the ferrule, so this plug seated in it
+    runs 1.76 past the drawn keyway. common/lc-duplex-adapter@4 composed that
+    receptacle too, and there this latch also reached 0.21 past the adapter's
+    outline; @6 composes the bulkhead aperture, with its ferrule axis moved to
+    hold the keyway, so seated there the latch ends at the keyway's end like
+    every other panel adapter's.
+  size: >-
+    w: drawing - SENKO DS-LC-000004 Rev A's 5.58 body width. h: 5.65 (the
+    dimensioned body) + 2.885 (the compressed latch, see `seated`), so
+    `borrowed` for the one figure that decides it. DELIBERATELY NO DEPTH, for
+    @1's reason: the only overall length any SENKO drawing gives is a
+    parenthesised REFERENCE that differs on every product - (42), (38.6), (43)
+    - because it spans plug, boot and cable.
+  standard: >-
+    NO `conforms:`, AND THIS IS WHERE THIS MAJOR PARTS FROM @1. `lc-plug` in
+    spec/schemas/standards.yaml is SENKO's 5.58 x 10.43 FREE silhouette, and L9
+    would compare 8.535 against it and fail - rightly, since this is not that
+    outline. The width it records is this part's width; the height is the
+    seated state, which no registry entry describes. The free silhouette the
+    entry does describe is recorded under `free-state`; @1, retired with this
+    major, conformed to it.
+  axis: >-
+    DERIVED: the centre of the body tier, 5.65 / 2 = 2.825 from the top, and
+    5.58 / 2 = 2.79 across. @1 stated the same relation (its 7.61 was the body
+    tier's centre, 4.78 + 5.65 / 2) and corroborated it against the drawn
+    centreline on SENKO's front view to 0.012, a pixel; drawing the latch below
+    the body moves the tier, not the relation. `mate`, `boot` and `cable` share
+    this one point, for @1's reason: the fibre runs straight through the plug,
+    so a front point and a rear point on one connector are one axis seen from
+    two directions.
+  free-state: >-
+    THE FREE SILHOUETTE, RECORDED HERE BECAUSE IT IS WHERE THE TIER WIDTHS AND
+    THE FREE TIER HEIGHTS COME FROM - @1 was drawn to it, and this major is
+    drawn seated (`seated`). The figures below are @1's reading of SENKO
+    DS-LC-000004 Rev A p.3, unchanged; in @1's elements the tiers ran tab 2.66,
+    shoulder 0.79, stem 1.33, body 5.65 down from the tab, summing to the
+    dimensioned 10.43.
+    drawing throughout, RE-MEASURED at 600 dpi after the first cut of @1's
+    contract got both the ORDER and the heights of the tiers wrong. Front view,
+    SENKO DS-LC-000004 Rev A p.3.
+    THE ORDER. The drawing dimensions three widths - 4.3 +/-0.1, 3.3 +0.05/-0.10
+    and 2.3 +/-0.1 - and each one's extension lines land on a different tier.
+    Measured, those three pairs sit at 197, 152 and 106 px, which at this
+    sheet's scale is 4.31, 3.31 and 2.31 mm: the assignment is unambiguous
+    because the three figures are far apart. Reading DOWN from the tab: 2.3,
+    then 4.3, then 3.3, then the body. The first cut had the 3.3 and the 4.3 the
+    other way round and so described a monotonic taper the drawing does not show
+    - the 4.3 shoulder stands proud of BOTH its neighbours.
+    THE SCALE, and what fixes it. The 10.43 overall silhouette spans 476.5 px
+    between its two extension lines (y 583.0 and y 1059.5), so 45.686 px/mm.
+    That is one dimensioned figure used as a ruler; the three widths above are a
+    SECOND, independent quantity measured with it, and they come back within
+    0.01 of their callouts. The ruler is therefore not fitted to the art box.
+    THE TIER HEIGHTS, measured with that ruler: tab (2.3 wide) y 583.0 to 704.7
+    = 2.664; shoulder (4.3 wide) 704.7 to 740.7 = 0.788; stem (3.3 wide) 740.7
+    to 801.8 = 1.338; body (5.58 wide) 801.8 to 1059.5 = 5.640. The body's top
+    edge is hidden behind the stem, so 801.8 is not read off a pixel: a
+    least-squares circle through 29 points of the body's top-left corner arc
+    gives centre (229.36, 851.23) and R 49.39 px, which predicts the body's left
+    extreme at x 179.97 against an observed 180.25 - 0.28 px - and puts its top
+    edge at y 801.84.
+    WHAT THE CONTRACT STATES, and why it is not just the measurement. The body
+    is the one tier the drawing DIMENSIONS - 5.65 on the side view, the figure
+    common/lc-boot@1 already cites - and the measurement above lands on it to
+    0.01 mm. So the body is stated at the DIMENSIONED 5.65, not at the measured
+    5.640, and the three latch tiers take the remaining 4.78, apportioned in the
+    measured proportions 2.664 : 0.788 : 1.338 (whose own sum, 4.790, agrees
+    with that remainder to 0.01). Hence 2.66 / 0.79 / 1.33 / 5.65, summing to
+    the dimensioned 10.43.
+    WHAT IS NOT MODELLED. Nothing: the stem between the shoulder and the body is
+    the tier @1's first cut omitted entirely, and it is in the elements here
+    too. The internal line 0.6 mm below the tab's top edge is a face edge on the
+    latch, not a tier boundary, and is left to the skin.
+  size-vs-rj45-plug: >-
+    `h` HERE (8.535, and SENKO's free 10.43 behind it) IS A SILHOUETTE INCLUDING
+    THE LATCH - SENKO's front view dimensions the whole outline as one figure
+    and never breaks out a latch-free body height, and this part's seated height
+    is that body plus the compressed latch. generic/rj45-plug@1's `h` (7.93) is
+    the OPPOSITE: CommScope's side view dimensions the body only, and the RJ45
+    plug's latch (2.77 below the body datum) is a separate, additional figure
+    with no combined silhouette dimension on that drawing. The two `h` values
+    are not comparable number-for-number - a reader diffing either against 7.93
+    would be comparing "body plus latch" against "body only" without being told
+    so. Not reconciled by arithmetic (10.43 - 8.6 latch length is not this
+    plug's body height either, since the latch runs along a different axis than
+    it stands proud on); see spec/schemas/standards.yaml's `lc-plug` and
+    `rj45-plug` notes for the same statement made where the registry compares
+    the two.
+  ferrule: >-
+    estimated - the concentric ferrule/spring rings in the front view scale to
+    roughly 60% of the 5.58 body width; no drawing dimensions the ferrule
+    diameter on this sheet (it is a standard 1.25mm LC ferrule, per
+    std/lc-bore@3's own `ferrule` note, which is smaller than what is drawn here
+    - the front view draws the SPRING HOUSING around the ferrule, not the bare
+    ferrule).
+  fibre-position: >-
+    element `1` is the one fibre position, the group wrapping the drawn
+    ferrule end (`ferrule` and `ferrule-bore`, both kept by id), so fibre 1 of
+    the plug is drawn at `<part>/1`. Its box is the outer ring, r 1.6 on the
+    axis at 2.79, 2.825 (`axis`; @1 had the same ring at 2.79, 7.61). It is not
+    one of the four tiers: it sits inside the body tier and adds no height to
+    the silhouette.
+  boot-coincides-with-mate: >-
+    A LOAD-BEARING COINCIDENCE, AND THE `boot` POINT IS NOW READ. Until
+    pluggables D this contract published a `boot` point nothing read: seating
+    positioned a boot by the host's `mate` point, which put it on the plug's
+    FRONT face and was correct in 2D only because the two share one (x, y)
+    (provenance.axis). `interface-at: boot` now says the `lc-plug` interface is
+    presented at `boot`, so manifest.presented_interface returns THAT point, and
+    `boot.on: body` says the point sits on the body relief feature, so a boot
+    seated here stands off by the body's `out` (12.5, estimated - see
+    provenance.standoff). The front/rear distinction the old note said the
+    seating could not make is made along Z, by the relief, and not by a
+    `size.d`, which this part still does not state (provenance.size).
+    `mate` IS UNCHANGED: the plug itself still seats INTO its bore by `mate`, at
+    the host's presented lift. And the (x, y) coincidence still carries weight
+    in 2D, where a seated boot is drawn over the plug at that point, so
+    spec/tests/test_connector_sweep.py::test_a_boot_point_is_the_mate_point
+    still holds every contract that publishes both points to one (x, y).
+  behaviour: >-
+    DELIBERATELY OMITTED, against the implementation plan's own field table
+    (Task 4 lists `behaviour: occupies`). spec/tests/test_behaviour.py::
+    test_a_receptacle_does_not_move asserts `d.get("behaviour") is None` for
+    every `class: port` contract - "A `port` that gains a behaviour would be
+    given a 3D body and an eject control it has no business having" - and this
+    is a class this plug shares with std/lc-bore@3 and std/lc-bulkhead-bore@1,
+    the apertures it enters. Setting `occupies` here breaks that invariant;
+    std/lc-bore@3 itself carries no `behaviour` and still seats a `mate-to`
+    occupant correctly (spec/tests/test_chained_seats.py proves it), because the
+    mate-to resolution in render.py reads `mates`/`interface` and the `mate`
+    connection-point, never `behaviour` - the field is read only by the 3D
+    viewer's eject affordance (render.py's own comment: "HOW IT MOVES, beside
+    WHAT IT IS"). Omitting it costs that one 3D affordance and nothing the
+    render pipeline needs; keeping `occupies` would have broken an existing,
+    deliberate test to gain it. Reported rather than silently patched around -
+    `class: port` doubling as both "fixed aperture" (std/lc-bore) and "removable
+    plug" (this part) is a real tension the plan did not anticipate, and the
+    durable fix is a class of its own for a plug body, which is out of this
+    task's scope.
+  optical: >-
+    positions: 1 - a simplex plug carries one fibre, as @1 stated, and
+    spec/tests/test_connector_sweep.py requires the count of every fibre
+    connector.
+  standoff: >-
+    estimated - how far this plug stands out of the bore it enters, which is the
+    body feature's `out` and so the lift a boot seated on it gets. No LC
+    document held dimensions it: the standoff is the plug's length behind its
+    housing front less its insertion depth, and neither is a toleranced figure
+    on any SENKO drawing, nor does std/lc-bore@3, std/lc-bulkhead-bore@1 or the
+    SENKO LC Premium Adapter DS-LC-000010 give a depth the plug enters to. What
+    the side view of DS-LC-000004 does give is a ruler (the 8.6 +/-0.1 latch,
+    checked by the 12.2 MIN) and two features that bracket the insertion - the
+    12.2 MIN front housing, which must go in, and the taller rear housing at
+    13.97 (a ruler reading, not a callout), which cannot - and the relief states
+    the middle of the bracket that leaves. The arithmetic is in the body
+    feature's own source sentence.
+elements:
+  body: {at: [0.0, 0.0], size: [5.58, 5.65], class: port}
+  stem: {at: [1.14, 5.65], size: [3.3, 0.803], class: latch}
+  shoulder: {at: [0.64, 6.453], size: [4.3, 0.477], class: latch}
+  tip: {at: [1.64, 6.93], size: [2.3, 1.605], class: latch}
+  '1': {at: [1.19, 1.225], size: [3.2, 3.2], class: fibre}
+connection-points:
+  mate: {at: [2.79, 2.825], direction: front}
+  boot: {at: [2.79, 2.825], direction: rear, 'on': body}
+  cable: {at: [2.79, 2.825], direction: rear, 'on': body}
+relief:
+  features:
+    - node: body
+      out: 12.5
+      confidence: estimated
+      source: >-
+        SENKO DS-LC-000004 Rev A p.3 side view, measured at 600 dpi on a ruler
+        fixed by the toleranced 8.6 +/-0.1 latch (330 px, 38.37 px/mm) and
+        checked against a second callout, the 2X 12.2 MIN front-housing length,
+        which reads back 12.20. On that ruler the plug's rear - the joint where
+        the boot begins - is 25.6 behind the housing's front face. How far the
+        plug ENTERS its bore is not dimensioned anywhere: it is at least the
+        12.2 MIN front housing, and at most 13.97, where the taller rear
+        housing steps out and cannot follow it in - a ruler reading off the
+        same side view, on the same ruler, and not a callout: the drawing
+        dimensions no such step. So the part standing
+        outside the bore is between 25.6 - 13.97 = 11.6 and 25.6 - 12.2 =
+        13.4, and 12.5 is the middle of that bracket, an estimate and no
+        more. The overall (42), (38.6) and (43) are REFERENCE figures spanning
+        plug, boot and cable on three different SENKO products and are not
+        used; the (42) reads back 41.6 on this ruler, a check on the scan and
+        not a source. The ferrule end this face is drawn with is the plug's
+        FRONT and sits in the bore; the body standing over it is the plug seen
+        from the viewer's side, which is its rear. See provenance.standoff.
+    - node: tip
+      out: 6.6
+      confidence: estimated
+      source: >-
+        The latch, seen end-on as three tiers (tip, shoulder, stem - see
+        provenance.keyway); one Z extent for all three, because the side view
+        draws them as one moulding. SENKO DS-LC-000004 Rev A p.3 side view on
+        the ruler the body feature states: the latch trigger's rearmost edge
+        is 19.70 behind the housing front. The toleranced 8.6 +/-0.1 is the
+        latch arm from the housing front to its catch, which is INSIDE the
+        bore (8.6 is less than the 12.2 MIN that enters), so it fixes the
+        ruler and not this reach. 19.70 less the same estimated 13.1 of
+        insertion the body's 12.5 implies (25.6 - 12.5) is 6.6; the bracket
+        is 5.7 to 7.5. Estimated for the same reason the body is.
+    - node: shoulder
+      out: 6.6
+      confidence: estimated
+      source: >-
+        The latch's middle tier; same Z extent and same reasoning as `tip`
+        (SENKO DS-LC-000004 Rev A p.3 side view, trigger rear 19.70 behind the
+        housing front less an estimated 13.1 of insertion).
+    - node: stem
+      out: 6.6
+      confidence: estimated
+      source: >-
+        The latch's lowest tier, where it joins the body; same Z extent and
+        same reasoning as `tip` (SENKO DS-LC-000004 Rev A p.3 side view,
+        trigger rear 19.70 behind the housing front less an estimated 13.1 of
+        insertion).
+skins: [default]
