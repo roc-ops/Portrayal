@@ -57,6 +57,50 @@ const cageRefs = optic
   .map(n => n.getAttribute('clip-path') || n.getAttribute('fill'))
   .filter(Boolean);
 
+// A TILT-CARRYING MODULE, swapped into a bay. render.py writes
+// `data-tilt-on="<facet's own id>"` on a part that stands `on` a tilted
+// facet, and on an occupant seated in such a part - it's an id reference,
+// same shape as `data-cp-on`, and has to follow the facet's id into the
+// bay's namespace or relief.js's `tiltOf` finds nothing at the old name.
+const tiltNodes = [
+  el({id: 'fwlt-b', 'data-path': 'fwlt-b'}),
+  el({id: 'fwlt-b--facet-0'}),                                  // the facet itself
+  el({id: 'fwlt-b--port-1', 'data-tilt-on': 'fwlt-b--facet-0'}), // a part standing on it
+  // an occupant seated in that part inherits the tilt reference too
+  el({id: 'fwlt-b--port-1-occupant', 'data-tilt-on': 'fwlt-b--facet-0'}),
+  // a token naming something outside this component is left alone
+  el({'data-tilt-on': 'other-component--facet-0'}),
+];
+m.rename({querySelectorAll: () => tiltNodes}, 'fwlt-b', 'bay-3', 'bay-3', 'module');
+const tiltIds = tiltNodes.map(n => n.getAttribute('id')).filter(Boolean);
+const tiltOns = tiltNodes.map(n => n.getAttribute('data-tilt-on')).filter(Boolean);
+
+// AN OCCUPANT HAS NO `module` SEGMENT (`segment = ''`), same case
+// `data-cp-on` already covers above - a tilted optic seated straight into a
+// slot, not composed inside a swapped-in module.
+const tiltOccupant = [
+  el({id: 'sfp-tilt', 'data-path': 'sfp-tilt'}),
+  el({id: 'sfp-tilt--facet-0'}),
+  el({id: 'sfp-tilt--tab', 'data-tilt-on': 'sfp-tilt--facet-0'}),
+];
+m.rename({querySelectorAll: () => tiltOccupant}, 'sfp-tilt', 'port-9-occupant',
+         'port-9-occupant', '');
+const tiltOccupantIds = tiltOccupant.map(n => n.getAttribute('id')).filter(Boolean);
+const tiltOccupantOns = tiltOccupant.map(n => n.getAttribute('data-tilt-on')).filter(Boolean);
+
+// A NESTED BAY: idBase and pathBase diverge (slot-1's own bay nested inside a
+// swapped module). `data-tilt-on` is renamed by the ID rule (idBase), never
+// the path rule, exactly as `data-cp-on` is.
+const tiltNested = [
+  el({id: 'fwlt-b', 'data-path': 'fwlt-b'}),
+  el({id: 'fwlt-b--facet-0'}),
+  el({id: 'fwlt-b--port-1', 'data-tilt-on': 'fwlt-b--facet-0'}),
+];
+m.rename({querySelectorAll: () => tiltNested}, 'fwlt-b',
+         'bay-3--module--slot-1', 'bay-3/module/slot-1', 'module');
+const tiltNestedIds = tiltNested.map(n => n.getAttribute('id')).filter(Boolean);
+const tiltNestedOns = tiltNested.map(n => n.getAttribute('data-tilt-on')).filter(Boolean);
+
 console.log(JSON.stringify({
   ids,
   refs,
@@ -69,4 +113,10 @@ console.log(JSON.stringify({
   cageDangling: cageRefs
     .map(r => (r.match(/url\(#([^)]*)\)/) || [])[1])
     .filter(id => id && id !== 'portrayal-vent' && !cageIds.includes(id)),
+  tiltIds,
+  tiltOns,
+  tiltOccupantIds,
+  tiltOccupantOns,
+  tiltNestedIds,
+  tiltNestedOns,
 }));

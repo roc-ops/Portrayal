@@ -53,3 +53,64 @@ def test_an_optic_seated_in_a_cage_keeps_its_references_too():
     assert out["cageIds"] == ["port-4-occupant--w0"], out["cageIds"]
     assert out["cageRefs"] == ["url(#port-4-occupant--w0)", "url(#portrayal-vent)"], out["cageRefs"]
     assert not out["cageDangling"], out["cageDangling"]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_a_swapped_modules_tilt_reference_follows_its_facets_id():
+    """`data-tilt-on` names the facet a part stands on, by id - same shape as
+    `data-cp-on`, and the same bug: `rename()` moved the facet's own id into
+    the bay's namespace and left `data-tilt-on` naming the old one. relief.js's
+    `tiltOf` looks that id up to find the facet, so a swapped-in module with a
+    tilted facet (a Nokia FWLT-B seated in an FX-4 LT bay) got no tilt on its
+    parts, no punch through the facet surface, and drew its sloped teeth solid
+    with no port openings."""
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True,
+                       cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    out = json.loads(p.stdout.strip().splitlines()[-1])
+
+    assert out["tiltIds"] == [
+        "bay-3--module--facet-0",
+        "bay-3--module--port-1",
+        "bay-3--module--port-1-occupant",
+    ], out["tiltIds"]
+    assert out["tiltOns"] == [
+        "bay-3--module--facet-0",
+        "bay-3--module--facet-0",
+        # a token naming something outside this component is left alone
+        "other-component--facet-0",
+    ], out["tiltOns"]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_a_tilted_occupant_seated_straight_into_a_slot_keeps_its_reference():
+    """The `segment=''` occupant path - a tilted optic seated directly, not
+    composed inside a swapped-in module."""
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True,
+                       cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    out = json.loads(p.stdout.strip().splitlines()[-1])
+
+    assert out["tiltOccupantIds"] == [
+        "port-9-occupant--facet-0", "port-9-occupant--tab",
+    ], out["tiltOccupantIds"]
+    assert out["tiltOccupantOns"] == ["port-9-occupant--facet-0"], out["tiltOccupantOns"]
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_a_nested_bays_tilt_reference_follows_the_id_rule_not_the_path_rule():
+    """A bay nested inside a swapped module has an idBase and pathBase that
+    diverge (`slot-1--module` vs `slot-1/module`); `data-tilt-on` is renamed
+    by the id rule, exactly as `data-cp-on` is."""
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True,
+                       cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    out = json.loads(p.stdout.strip().splitlines()[-1])
+
+    assert out["tiltNestedIds"] == [
+        "bay-3--module--slot-1--module--facet-0",
+        "bay-3--module--slot-1--module--port-1",
+    ], out["tiltNestedIds"]
+    assert out["tiltNestedOns"] == [
+        "bay-3--module--slot-1--module--facet-0",
+    ], out["tiltNestedOns"]
