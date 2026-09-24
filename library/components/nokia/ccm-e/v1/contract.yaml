@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ccm-e
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -94,14 +94,10 @@ provenance:
     are separate dots on the ganged cell's window centres across (2.2 and 10.5 in from the
     cell's left), Lnk left and Flt right, as Table 68 places them.
   alarms-connector: >-
-    GAP - drawn as art, not composed. SRE p57 Table 10 key 11 calls it "a D-type 15-pin
-    connector" (and "DB-15" in the same row); Fig 13 draws two rows of 8 and 7 pins in a
-    shell 28.0 x 10.8 on 33.5 standoff centres, which is the A shell (DA-15), not the E shell
-    of std/db9@1 or std/hd15. std/da15 is being added by the wave-1 prerequisite (P2, from TE
-    114-40010 Rev G Fig 3); until it merges the connector is the `alarms` element with the
-    shell, insert and pins in the skin. When it lands, replace the element with
-    `{ref: std/da15@1, id: alarms, group: mgmt}` centred on (93.05, 20.6) and keep the
-    standoffs as decor.
+    datasheet + registry - SRE p57 Table 10 key 11 calls it "a D-type 15-pin connector" (and
+    "DB-15" in the same row); Fig 13 draws two rows of 8 and 7 in a shell 28.0 x 10.8 on 33.5
+    standoff centres, the A shell. Composed as std/da15@1 (female, TE 114-40010 Rev G) centred
+    where Fig 13 draws it, (93.05, 20.6).
   controls: >-
     datasheet - SRE p57-58 Table 10: the DTE/DCE slide switch (key 4) sets the console's
     sense; ACO/LT (key 12) cuts off the alarm relays and lamp-tests on a long press; the CF
@@ -126,7 +122,6 @@ elements:
   screw-left: {at: [3.0, 1.9], size: [11.0, 11.0], class: screw}
   screw-right: {at: [179.0, 1.9], size: [11.0, 11.0], class: screw}
   dte-dce: {at: [21.9, 4.4], size: [7.7, 5.2], class: control}
-  alarms: {at: [79.8, 15.2], size: [28.0, 10.8], class: connector}
   aco-lt: {at: [117.7, 18.9], size: [6.2, 6.2], class: control}
   cf-slot: {at: [129.8, 18.2], size: [46.1, 7.5], class: slot}
   cf-eject: {at: [176.4, 18.0], size: [5.7, 4.7], class: control}
@@ -169,6 +164,7 @@ groups:
     index-origin: 1
     description: the office alarm lamps Critical, Major and Minor
 parts:
+  - {ref: std/da15@1, id: alarms, group: mgmt, at: [78.65, 14.9]}
   - {ref: common/led-dot@1, id: led-stat, group: status-leds, at: [10.8, 18.7], states: {lamp: ['off', {name: loading, color: '#39b54a', behavior: blinking}, {name: primary, color: '#39b54a'}, {name: secondary, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [10.8, 23.7], states: {lamp: ['off', {name: 'on', color: '#1e73d8'}]}}
   - {ref: std/rj45@2, id: console, group: mgmt, at: [18.0, 17.9], attrs: {media: rj45-serial}}

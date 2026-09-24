@@ -562,6 +562,8 @@ NOT_A_DCIM_PORT = {
     # --- connectors upstream has no type for ---------------------------------
     "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
                              "Neither library has an alarm port, and `de-9` would read as a console",
+    "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
+                "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/vga": "VGA; neither library has a video port type",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
@@ -574,6 +576,10 @@ NOT_A_DCIM_PORT = {
     # --- power entry on a chassis ---------------------------------------------
     # `common/dc-barrel` was here until #286 gave `build` a power path; it now
     # exports, and the register's stale-entry test is what says so.
+    "nokia/sr-1-dc-terminal-block": "the 7750 SR-1 DC chassis's fixed -48 V terminal block - a "
+                                    "barrier strip with its switch and cover, bolted to the rear. "
+                                    "Its feeds are the chassis power inputs, stated in the "
+                                    "device's power attrs; no connector here has a DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
 

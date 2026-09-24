@@ -267,6 +267,7 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "fiber",        # bare glass in an adapter, not a cage
         "coax-smb",     # a timing connector
         "usb-c",        # power in, on the GL-8xEP
+        "db9",          # a D-sub alarm or serial connector (the 7750 SR-1 alarm port) takes no module
     }
     used = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
