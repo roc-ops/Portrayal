@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bfan-x
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: networking
@@ -54,14 +54,18 @@ provenance:
     of the render. Front plate 0-23.8 with the fan plate's folded flange 23.8-33.1 beside
     it; two long windows 3.8-12.7 and 13.6-22.5 x 13.1-73.1; fan clips 83.5-108; caution
     label 3.8-22.5 x 113.7-155.4; ESD mark centre (12.7, 163.5); label window 3.8-13.4 x
-    170.6-198.3; lamp centre (16.0, 175.8), 3.4 across; cover-screw boss centre
-    (16.3, 194.5). Stated to 0.1 mm because that is what the arithmetic gives; the drawing
+    170.6-198.3; status lamp centre (16.3, 194.5); cover-screw boss centre (16.0, 175.8),
+    3.4 across (the two identities corrected on review - see status-led). Stated to 0.1 mm because that is what the arithmetic gives; the drawing
     resolves about 0.2 mm.
   status-led: >-
     datasheet - Table 145 (p385): green blinking 50/50 at power-up and start-up, green steady
     at the inlet-temperature settle point, green blinking 90/10 in closed-loop control, red
-    steady on fan failure. Figure 174 (p383, 3D) points "Status LED" at the small round beside
-    the lower label window, which is the round at 175.8 in the front view. The HW
+    steady on fan failure. WHICH ROUND IS THE LAMP was first read from Figure 174 (p383, 3D) as
+    the upper of the two, at 175.8, and corrected on review: the FX-4 fan cover
+    (nokia/fan-cover-fx4@1) carries its captive screw over 175.8 - HIM 3HH91853AAAARJZZA08 Figure
+    260 labels that screw "Captive screw fan unit and fan cover", so it threads into this unit
+    there - and prints a fan symbol beside a small window over 194.5. A lamp cannot sit behind
+    a screw, so the lamp is the round at 194.5 and the screw boss is the one at 175.8. The HW
     Installation Manual 3HH91853AAAARJZZA08 section 21.6 (p390) calls it "a single red alarm
     LED"; the UDS table is the fuller statement and is what the states follow.
   fan-cover: >-
@@ -102,7 +106,7 @@ elements:
   caution-label: {at: [3.8, 113.7], size: [18.7, 41.7], class: label}
   esd-mark: {at: [9.5, 160.3], size: [6.4, 6.4], class: label}
   label-window: {at: [3.8, 170.6], size: [9.6, 27.7], class: label}
-  cover-screw: {at: [14.4, 192.6], size: [3.8, 3.8], class: fastener}
+  cover-screw: {at: [14.1, 173.9], size: [3.8, 3.8], class: fastener}
   logo-zone: {at: [4.0, 200.0], size: [16.0, 8.0], class: label}
 groups:
   status-leds:
@@ -111,7 +115,7 @@ groups:
     index-origin: 1
     description: the fan unit's single status lamp
 parts:
-  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [14.0, 173.8],
+  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [14.3, 192.5],
      states: {lamp: ['off', {name: starting, color: '#39b54a', behavior: blinking},
                      {name: 'on', color: '#39b54a'},
                      {name: closed-loop, color: '#39b54a', behavior: blinking},

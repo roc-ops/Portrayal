@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bfan-e
-version: 1.0.0
+version: 1.0.1
 class: fan
 behaviour: fills
 profile: networking
@@ -11,7 +11,7 @@ description: >-
   fans in a 2 x 3 block, which slides in at the shelf's right-hand end. Drawn is its narrow
   front edge, 32.9 x 345, as the Unit Data Sheet's middle view draws it: a top block, two
   long recessed windows, a CAUTION ROTATING FAN BLADES label, an ESD mark, a grip, a label
-  window, then low down the status lamp, a locating pin and the captive screw. In a working
+  window, then low down the boss for the fan cover's captive screw, the status lamp (a short light pipe) and the unit's own captive screw. In a working
   shelf this edge sits BEHIND the shelf's fan cover (the strip printed "7360 ISAM FX-8"),
   which is a separate part; see fan-cover-gap.
 size: {w: 32.9, h: 345.0, d: 216.7}
@@ -49,15 +49,20 @@ provenance:
     and column edge scans of the render: front plate 0-24.2 with the folded flange
     24.2-32.9; top block 0-20.1; windows 4.3-12.8 and 13.6-22.0 x 25.1-69.0; caution label
     4.3-23.2 x 71.9-113.8; ESD mark centre (14.25, 119.8); grip 11.1-24.9 x 129.8-164.6;
-    label window 4.3-13.8 x 179.7-207.6; lamp centre (15.4, 298.0), 3.2 across; pin
-    (7.65, 319.45); captive screw about (15.5, 340). Stated to 0.1 mm because that is what the
+    label window 4.3-13.8 x 179.7-207.6; cover-screw boss centre (15.4, 298.0), 3.2 across; status lamp (light
+    pipe) (7.65, 319.45); captive screw about (15.5, 340). Stated to 0.1 mm because that is what the
     arithmetic gives; the drawing resolves about 0.2 mm.
   status-led: >-
     datasheet - Table 140 (p377): green blinking 50/50 at power-up and start-up, green steady
     at the inlet-temperature settle point, green blinking 90/10 in closed-loop control, red
     steady on fan failure. Figure 1 of 3FE66545AAAATQZZA03 (p5, 3D, vector) points "Status
     LED" at the upper of the two small rounds near the foot of the edge, which is the one at
-    298.0; the lower (319.45) is drawn there as a short cylindrical pin.
+    298.0; the lower (319.45) is drawn there as a short cylinder. CORRECTED ON REVIEW: the FX-8 fan
+    cover (nokia/fan-cover-fx8@1) carries its captive screw ("Captive screw fan cover", HIM
+    3HH91853AAAARJZZA08 Figure 158) directly over 298.0, and a small window printed "FAN" directly
+    over 319.45. A lamp cannot sit behind a screw, so the round at 298.0 is the boss that screw
+    threads into, and the short cylinder at 319.45 is the lamp - a light pipe standing proud to
+    reach the cover's window. Figure 1's arrow is drawn to the edge between the two.
   captive-screw: >-
     HIM 3HH91853AAAARJZZA08 Figure 157 (p253) "Captive screw on the fan unit" names the
     knurled screw at the foot of the edge; the fan cover has a captive screw of its own
@@ -97,7 +102,7 @@ elements:
   esd-mark: {at: [11.05, 116.6], size: [6.4, 6.4], class: label}
   grip: {at: [11.1, 129.8], size: [13.8, 34.8], class: handle}
   label-window: {at: [4.3, 179.7], size: [9.5, 27.9], class: label}
-  pin: {at: [6.25, 318.05], size: [2.8, 2.8], class: fastener}
+  cover-boss: {at: [14.0, 296.6], size: [2.8, 2.8], class: fastener}
   captive-screw: {at: [11.0, 335.5], size: [9.0, 9.0], class: fastener}
   logo-zone: {at: [4.3, 220.0], size: [16.0, 10.0], class: label}
 groups:
@@ -107,7 +112,7 @@ groups:
     index-origin: 1
     description: the fan unit's single status lamp
 parts:
-  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [13.4, 296.0],
+  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [5.65, 317.45],
      states: {lamp: ['off', {name: starting, color: '#39b54a', behavior: blinking},
                      {name: 'on', color: '#39b54a'},
                      {name: closed-loop, color: '#39b54a', behavior: blinking},
@@ -125,10 +130,6 @@ relief:
       source: >-
         a knurled captive screw head, Figure 1 (3D) and HIM Figure 157; the library carries no
         measured figure for one and nothing dimensions it
-    - node: pin
-      cyl: 2.0
-      confidence: estimated
-      source: the short pin drawn below the lamp in Figure 1 (3D); undimensioned
 connection-points:
   mate: {at: [16.45, 172.5], direction: rear}
 skins: [default]
