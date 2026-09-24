@@ -29,6 +29,7 @@ from portrayal.manifest import (view_parts, targets, split_target, component_ref
                       seated_ref, occupants_under, occupant_local_id,
                       occupant_spec, alias_names, config_airflow)
 from portrayal import capability
+from portrayal import facets as _facets
 TOOL_VERSION = "0.1.0"
 # profiles.yaml lives with the schemas, and every tool that needs it can find it
 # from here rather than each growing a flag that is always given the same value.
@@ -634,6 +635,56 @@ def _inset_feature(feat, back, group_lift=0.0):
     return f
 
 
+def _facet_wedge(feat, contract):
+    """A `facet` feature's derived wedge, in the existing `out`/profile
+    vocabulary, computed BEFORE `_inset_feature` gets a look at it.
+
+    The schema (global constraints) forbids a `facet` feature from also
+    declaring `out`, `profile` or `profile-y`, so there is nothing to
+    collide with - this is simply where those numbers come from for a
+    feature that carries `facet` instead. The element's own `size` supplies
+    the plate dimensions facets.py needs; a facet feature whose node is not
+    also in `elements` derives nothing (schema requires it, so this is a
+    defensive no-op, not a silent guess).
+    """
+    if not feat.get("facet"):
+        return feat
+    el = (contract.get("elements") or {}).get(feat["node"]) or {}
+    if not el.get("size"):
+        return feat
+    fw, fh = el["size"]
+    key, prof = _facets.derived_profile(feat["facet"], fw, fh)
+    return {**feat, key: prof,
+            "out": round((feat.get("lift") or 0) + _facets.proud_extent(feat["facet"], fw, fh), 4)}
+
+
+def _inset_facet_profile(raw_feat, pre_out, feat):
+    """Shift a facet-DERIVED profile by whatever `_inset_feature` just moved
+    `out` by.
+
+    `_inset_feature` moves `out` and `lift`; it knows nothing about
+    `profile`/`profile-y`, because a hand-written feature's profile is
+    written against the part's own face and never needed to move with an
+    inset before now. A facet's derived profile is exactly as "declared" as
+    its derived `out` and has to move by the same amount `out` just did, or
+    the wedge and the plate it sits on disagree about where the panel is.
+    Hand-written profiles are untouched - only a feature THIS BUILD expanded
+    from a `facet` is shifted here, guarded by `raw_feat.get("facet")`.
+    Clamped at 0: an inset larger than the wedge's own proud extent must not
+    read as a negative depth.
+    """
+    if not raw_feat.get("facet") or pre_out is None or feat is None or feat.get("out") is None:
+        return feat
+    shift = feat["out"] - pre_out
+    if not shift:
+        return feat
+    pkey = "profile-y" if raw_feat["facet"]["facing"] in ("up", "down") else "profile"
+    if feat.get(pkey):
+        feat = dict(feat)
+        feat[pkey] = [[x, max(0.0, round(o + shift, 4))] for x, o in feat[pkey]]
+    return feat
+
+
 def well_floor(placements, lib, wid):
     """How deep the floor of well `wid` is, for whatever says it is `in:` one.
 
@@ -828,6 +879,40 @@ def solve_seat(lib, who, occ_ref, host_name, host, occ_rotate=None, occ_in=None,
     return at, hrot, lift
 
 
+def _host_tilt(lib, host_id, placements):
+    """The facet a `mate-to` host's forwarded aperture sits on, if any.
+
+    `presented_interface` finds a host's composed aperture BY ITS INTERFACE
+    (the one composed part with an `interface` + `mate`) so an occupant can
+    mate to a wrapper like `card` above without naming the part inside it.
+    This is the same search, one level narrower: which of that host's
+    `parts:` entries carries `on`, naming a relief feature that itself
+    carries `facet`. v1 allows at most one (no compound angles), so the
+    first hit wins.
+
+    Returns `(facet, part_at, node_id)` - `part_at` in the HOST's own frame
+    (the part's `at`, exactly as `presented_interface` reads it before any
+    seating happens) and `node_id` the facet node's rendered id, e.g.
+    `"card--housing"` - matching what the Step 4 part-transform code writes
+    for a part composed directly `on` that same node. `(None, None, None)`
+    when the host is not a placement in this view, does not resolve, or
+    draws nothing on a facet.
+    """
+    q = next((p for p in placements if p.get("id") == host_id), None)
+    if q is None:
+        return None, None, None
+    try:
+        c, _ = lib.resolve(q["ref"])
+    except Exception:
+        return None, None, None
+    for part in (c or {}).get("parts") or []:
+        if part.get("on"):
+            facet = _facets.facet_of(c, part["on"])
+            if facet:
+                return facet, part["at"], f"{host_id}--{part['on']}"
+    return None, None, None
+
+
 def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                            occ_used, z_inset, z_group_lift, palette, inst_palette,
                            skin_overrides, attr_overrides, resolved):
@@ -903,7 +988,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
             del pending[host_id]
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -1056,6 +1141,13 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         tf += f" translate({-cw / 2:g},{-chh / 2:g})"
     else:
         tf = f"translate({at[0]},{at[1]})"
+        # SCALED BEFORE IT TURNS. A part `on` a facet keeps its true size and
+        # is only foreshortened by the facet's own cos, along the facet's
+        # axis - `rotate` still turns the true box (global constraints:
+        # "the rotated true box, scaled about the part origin"), so the scale
+        # has to land between the translate and the rotate, not after it.
+        if tilt:
+            tf += " " + _facets.scale_transform(tilt)
         if rotate:
             tf += f" rotate({rotate} {cw / 2} {chh / 2})"
     # MIRRORED LAST, so it flips the component about its OWN vertical centre
@@ -1085,9 +1177,17 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     for child in list(holder):
         g.append(child)
     for feat in (contract.get("relief") or {}).get("features") or []:
+        raw_feat = feat
+        # A FACET COMPILES TO A WEDGE FIRST - before `_inset_feature` gets a
+        # look at it, so an inset moves the derived numbers exactly as it
+        # would a hand-written `out`/profile (see `_facet_wedge`,
+        # `_inset_facet_profile`).
+        feat = _facet_wedge(feat, contract)
+        pre_out = feat.get("out") if raw_feat.get("facet") else None
         feat = _inset_feature(feat, z_inset, z_group_lift)
         if feat is None:
             continue
+        feat = _inset_facet_profile(raw_feat, pre_out, feat)
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
@@ -1122,6 +1222,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-knurl", "1")
                 if feat.get("thread"):
                     node.set("data-z-thread", str(feat["thread"]))
+                if feat.get("facet"):
+                    # THE FACET ITSELF, for relief.js to build a tilted plane
+                    # from rather than a stepped profile - the profile above is
+                    # what a viewer with no 3D kit still gets.
+                    node.set("data-facet-deg", f"{feat['facet']['deg']:g}")
+                    node.set("data-facet-facing", feat["facet"]["facing"])
                 break
     part_groups = []
     # WHERE A COMPOSED PART SITS IN THE STACK IS A PROPERTY OF WHAT IT IS.
@@ -1150,6 +1256,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     parts_in_port = in_port or contract.get("class") == "port"
     for part in contract.get("parts") or []:
         pgrp = comp_groups.get(part.get("group")) or {}
+        # `on` NAMES A FACET, NOT A GROUP. It points at a relief feature on
+        # THIS SAME CONTRACT that declares `facet` (global constraints), so
+        # the lookup is against `contract`, never the part's own component.
+        tilt = _facets.facet_of(contract, part["on"]) if part.get("on") else None
         pg, _ = instance_group(lib, part["ref"], f"{inst_id}--{part['id']}",
                                part["at"], None,
                                group_merged_attrs(pgrp, part.get("attrs")), None, None,
@@ -1172,7 +1282,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                inst_palette=inst_palette,
                                skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                                path=f"{path}/{part['id']}", resolved=resolved,
-                               in_port=parts_in_port)
+                               in_port=parts_in_port, tilt=tilt)
+        if tilt:
+            # THE FACET NODE'S FULL ID, so a consumer can walk straight from
+            # the tilted part to the wedge it stands on without knowing this
+            # component's own id scheme.
+            pg.set("data-tilt-on", f"{inst_id}--{part['on']}")
+            pg.set("data-tilt", f"{tilt['deg']:g}")
+            pg.set("data-tilt-facing", tilt["facing"])
         if part.get("group"):
             write_group_side(pg, part["group"], pgrp, part.get("attrs"))
         # WHAT A COMPOSED LAMP MEANS IS THE COMPOSER'S TO SAY. A component
@@ -1203,9 +1320,13 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         if not part.get("behind"):
             part_groups.append(pg)
     for feat in (contract.get("relief") or {}).get("features") or []:
+        raw_feat = feat
+        feat = _facet_wedge(feat, contract)
+        pre_out = feat.get("out") if raw_feat.get("facet") else None
         feat = _inset_feature(feat, z_inset, z_group_lift)
         if feat is None:
             continue
+        feat = _inset_facet_profile(raw_feat, pre_out, feat)
         want = f"{inst_id}--{feat['node']}"
         for node in g.iter():
             if node.get("id") == want:
@@ -1240,6 +1361,9 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     node.set("data-z-knurl", "1")
                 if feat.get("thread"):
                     node.set("data-z-thread", str(feat["thread"]))
+                if feat.get("facet"):
+                    node.set("data-facet-deg", f"{feat['facet']['deg']:g}")
+                    node.set("data-facet-facing", feat["facet"]["facing"])
                 # bezel plates ('out') paint over composed parts: raise direct
                 # children to the end of the instance group. Only when there ARE
                 # composed parts - otherwise this reorders the skin's own draw
@@ -2216,7 +2340,39 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             at, hrot, total_lift = solve_seat(
                 lib, p["id"], p["ref"], p["mate-to"], host,
                 occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of)
+            # AN OCCUPANT INHERITS ITS HOST'S TILT. `solve_seat` mates the
+            # occupant to `host`'s forwarded aperture point exactly as if it
+            # sat flat - `presented_interface` (which it calls) knows nothing
+            # about facets. When that aperture is itself `on` a facet
+            # (`_host_tilt`), the point drawn is not the one solve_seat used:
+            # the part draws translate(at) scale(1,cos) ..., so its aperture
+            # is foreshortened about the part's OWN origin, along the facet's
+            # axis, by the same cos. Re-project `at` by that same amount -
+            # linear in the forwarded point, so shifting the point shifts the
+            # solved `at` by exactly as much - and mark the occupant with the
+            # same three `data-tilt-*` facts the part itself carries.
+            tilt_facet, tilt_part_at, tilt_node = _host_tilt(
+                lib, p["mate-to"], parts["placements"])
+            if tilt_facet:
+                hc, _ = lib.resolve(host["ref"])
+
+                def _res(ref):
+                    try:
+                        return lib.resolve(ref)[0]
+                    except Exception:
+                        return None
+                _, hm_at, _ = presented_interface(hc, _res)
+                if hm_at is not None:
+                    c = _facets.cos_of(tilt_facet)
+                    axis_i = 1 if _facets.axis_of(tilt_facet) == "y" else 0
+                    local_delta = [0.0, 0.0]
+                    local_delta[axis_i] = (c - 1) * (hm_at[axis_i] - tilt_part_at[axis_i])
+                    ddx, ddy = _turn(local_delta, hrot)
+                    at = [round(at[0] + ddx, 4), round(at[1] + ddy, 4)]
             seated = dict(p, at=at)
+            if tilt_facet:
+                seated["tilt"] = tilt_facet
+                seated["tilt-on"] = tilt_node
             # Omitted when the host has none, so an unrotated seat's output
             # does not change. A chained seat (a boot on a plug in a rotated
             # cage) inherits it: `hosts` holds this dict.
@@ -2393,7 +2549,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                      z_group_lift=seat_lift,
                                      inst_palette=inst_palette,
                                      skin_overrides=skin_overrides, attr_overrides=attr_overrides,
-                                     resolved=resolved)
+                                     resolved=resolved, tilt=p.get("tilt"))
+        # A SEATED OCCUPANT INHERITS ITS HOST'S TILT (`_host_tilt`, above,
+        # sets `p["tilt"]`/`p["tilt-on"]` when the mate-to resolution finds
+        # one) - the same three facts and the same foreshortening a part
+        # composed directly `on` a facet carries, so a viewer cannot tell the
+        # two apart from these attributes alone.
+        if p.get("tilt"):
+            g.set("data-tilt-on", p["tilt-on"])
+            g.set("data-tilt", f"{p['tilt']['deg']:g}")
+            g.set("data-tilt-facing", p["tilt"]["facing"])
         # A PROJECTION IS THE PART SEEN FROM HERE, NOT A SECOND PART. Its
         # data-path becomes data-of, naming the seated part on the face that
         # holds it; no relief, no ref, no behaviour, so the kit builds nothing
