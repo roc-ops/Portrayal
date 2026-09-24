@@ -164,3 +164,77 @@ parts:
   - a line in `library/components/README.md`;
   - a `docs/modelling-pitfalls.md` entry on reading an angle off a 3D figure. An angle read by eye
     is `estimated`, and what you measure is a projected footprint.
+
+## Recessed facets (addendum)
+
+Status: approved design. It extends the tilted-facet format above.
+
+### Why
+
+Many faceplates set their angled surfaces into the plate rather than onto it:
+- a sawtooth behind a flat faceplate, seen through windows;
+- teeth standing in a recess;
+- a housing whose faces start in a pocket below the plate.
+
+A facet in v1 roots at `lift >= 0`, so it can only stand proud of the plate. Modelled that way, those teeth stand 6-20 mm too far out. Their angles and port directions are right; their depth is not.
+
+### Format
+
+A facet's `lift` may be **negative**: its root edge then sits that far below the plate. Everything else about the facet is unchanged:
+- the wedge is derived;
+- the proud edge is at `lift + extent * tan(deg)`, opposite `facing`;
+- parts sit `on` it.
+
+The proud edge may end below the plate, flush with it, or above it (a tooth rooted in a pocket that stands out past the plate).
+
+A facet below the plate stands in a **pocket**. `pocket: <depth>` is the existing relief key for a recess in a solid face (render.py compiles it to `data-depth`, and the kit builds walls plus a floor carrying the node's art). The facet's footprint must lie inside a pocket node's footprint, and that pocket must be at least `-lift` deep.
+
+```yaml
+elements:
+  window-1: {at: [0, 60], size: [25, 120]}
+  face-1:   {at: [0, 62], size: [25, 14]}
+  return-1: {at: [0, 76], size: [25, 8]}
+relief:
+  features:
+    - {node: window-1, pocket: 12}
+    - {node: face-1,   facet: {deg: 30, facing: up},   lift: -12}
+    - {node: return-1, facet: {deg: 45, facing: down}, lift: -12}
+```
+
+The schema keeps `lift > 0` for every other feature. Only a feature that declares `facet` may carry `lift <= 0`.
+
+### Rendering (render.py)
+
+Nothing new in 2D:
+- A part on a sunk facet is foreshortened exactly as on a proud one.
+- The derived profile carries negative heights, and `data-z-*` attributes accept them.
+- The pocket draws as it does today.
+
+### Lint (L117, extended)
+
+A facet with `lift < 0` must have its element's box inside the box of an element that is a relief feature with `pocket`, and `pocket >= -lift`. Two error cases:
+- a facet outside any pocket;
+- a pocket shallower than the facet is sunk.
+
+The v1 checks are unchanged:
+- no `out`/`profile`/`profile-y` on a facet;
+- parts `on` it lie within its footprint.
+
+### 3D (kit/relief.js)
+
+- The pocket builds its walls and floor as today. The facet's wedge stands on the pocket floor, and the wedge's surface heights are the derived profile, now allowed below 0.
+- **The pocket floor is cleared under each facet's footprint**, as v1 clears the flat face and card planes under a facet. Otherwise the floor plane cuts across the cage wells of the parts on the facet.
+- Skirts drop from the surface to the facet's own base (`lift`), not to the plate. The v1 apex rule (no skirt where a same-owner facet neighbour is as tall) still holds between the teeth.
+- **Parts on a sunk facet** stand on its surface through the same tilt frame; `facetZ` already adds `lift`. Their cavities run back along the facet normal.
+- **Nothing is clipped.** A cage coming out through the pocket floor, a pocket wall, or the back of a tooth is a geometry error in the model, and stays visible so it gets fixed.
+- A drawing with no negative facet lift builds exactly as before.
+
+### Testing
+
+- **Schema:** a facet with a negative lift validates; a non-facet feature with a negative lift does not.
+- **Lint:** a sunk facet inside a deep-enough pocket is clean; outside any pocket is an error; in a pocket too shallow is an error.
+- **Render:** a component with a pocket and a sunk facet emits negative profile heights, and its part's projected box is unchanged from the proud case.
+- **Kit, under node:**
+  - the pocket floor raster is cleared at the facet footprint;
+  - `facetZ` with a negative lift gives the sunk surface height;
+  - the skirt of a sunk facet ends at its base, not at 0.
