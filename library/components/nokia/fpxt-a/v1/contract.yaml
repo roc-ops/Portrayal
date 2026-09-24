@@ -1,0 +1,147 @@
+format: 1
+kind: module
+name: fpxt-a
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (NFXS-D FX-16, NFXS-E FX-8, NFXS-F FX-4,
+  and the FX-12 where modelled); the coordinator wires it into their LT `accepts` under
+  roc-ops/Portrayal#538. Delete this key when the first LT bay names nokia/fpxt-a@1.
+description: >-
+  Nokia FPXT-A (3FE 66876 AA), the 4-port 10G EPON line termination board, version A, of the
+  7360 ISAM FX (Alcatel-Lucent R5.2). Four IEEE 802.3av 10G EPON XFP cages down the front
+  cover, under a 2 x 5 block of bicolour lamps: PWR and ALM, then a PON status lamp and an
+  SPD (XFP type) lamp for each port. Authored upright, as the data sheet's 3D view stands it;
+  the orthographic front-cover figure draws it turned 90 degrees. A thumbscrew on a narrowed
+  tab at each end.
+size: {w: 25.0, h: 405.0, d: 227.99}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the 25 mm board-to-board pitch the LT bays are built to. The FPXT family is the one FX
+  card family whose front-cover width Nokia states: "width top 26.08 mm, width bottom 24.5 mm"
+  (UDS section 8). Recorded, not drawn: 26.08 exceeds the pitch and Figure 8 draws no taper
+  along the 405 mm (both long edges straight end to end), only narrowed end tabs. d is the
+  larger board depth stated (225 top / 227.99 bottom).
+attrs:
+  model: FPXT-A
+  part-number: 3FE 66876 AA
+  mnemonic: FPXT-A
+  pon: 10g-epon
+  xfp: 4
+  weight-kg: 1.2
+  front-cover-width-top-mm: 26.08
+  front-cover-width-bottom-mm: 24.5
+provenance:
+  size: >-
+    datasheet - UDS 3FE66876AAAATQZZA03 (Edition 03, March 2015, R5.2) section 7 "Dimensions":
+    height 405 mm, width top 225 mm, width bottom 227.99 mm, board-to-board pitch 25 mm; section
+    8, the front cover: height 405 mm, width top 26.08 mm, width bottom 24.5 mm, pitch 25 mm;
+    weight 1.2 kg.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 8. The front-cover width IS stated, tapered 26.08
+    top / 24.5 bottom; held at the 25 mm pitch by the shared FX convention so the LT bay seats
+    it. The taper does not show in Figure 8, so it is not drawn.
+  depth: >-
+    datasheet - the "width top 225 / width bottom 227.99 mm" of section 7 are the board's depth
+    at its two ends; the larger is carried.
+  weight: 'datasheet - 1.2 kg, UDS section 8'
+  power: >-
+    NOT FOUND - searched the ANSI Safety Manual 3HH12894AAAATCZZA27 and A23 Table 2, the ETSI
+    Safety Manuals 3HH11998AAAATCZZA29 and A25, the Lightspan Safety Manual 3HH91852AAAATCZZA07,
+    and every FPXT-A UDS edition held (A03, the only one) for the card name and for any wattage or "power
+    consumption" figure; none carries one (the UDS says only "provides low power
+    consumption"). The coverage grid's "stated in UDS" does not hold. L27 stands as the record.
+  layout: >-
+    drawing (fractions only) - UDS 3FE66876AAAATQZZA03 p12 Figure 8 "Front cover of FPXT-A",
+    vector art rendered at 600 dpi, an orthographic front view turned 90 degrees
+    counter-clockwise (the lamp end, which the 3D Figure 6 puts at the top, is at the left).
+    Gate 1 FAILS by about 5%: the cover measures 3380 x 228 px, aspect 14.8, against 15.5 for
+    405 x 26.08 and 16.2 for 405 x 25, so no absolute scale is taken. Positions along the card
+    are fractions of the 3380 px length (8.346 px/mm on 405), positions across it fractions of
+    the 228 px plate on 25 mm. Read: thumbscrews at (11.8, 4.8) and (11.8, 398.8), the centre of each drawn
+    knob, which the figure draws partly in perspective (so x is good to about 2 mm), on end tabs
+    narrowed to x 4.8-23.0 for the outer 9.6 mm; lamp columns at y 38.0 + 5.05 n (all five
+    within 0.1 mm of that pitch), rows at x 11.8 and 7.7; four cage bezels x 1.9-16.6, the first
+    y 70.8-108.3, on a 79.7 mm pitch (665 px, identical for all four); the inserted module
+    centred (10.7, 93.0) in the first. Two lines run the full length at x 19.2 and 21.1, drawn.
+  ports: >-
+    datasheet - UDS section 2: "4 compliant IEEE802.3av EPON XFP ports". Composed as std/xfp@1
+    at its registry aperture, turned 90 degrees so the XFP width runs along the card: the drawn
+    bezel is 14.7 mm across, narrower than the 19.5 mm opening, and the 3D Figure 6 draws the
+    cages on angled faces, as the FPXT-B's orthographic panel shows more clearly. Numbering 1-4
+    from the lamp end is ASSUMED from the lamp legend order; no numeral is drawn at a cage. L96
+    is left standing: the export's only declarable XFP rate is oc192, which would be wrong here,
+    and it has no EPON interface type, so the 10gbase-x-xfp default is the nearest it can say.
+  lamps: >-
+    datasheet - Figure 7 (p11) and Table 2. Figure 7 is the lamp block turned the same way as
+    Figure 8: PWR over ALM, then PON 1-4 over SPD 1-4, legend "Green / Red" and every port lamp
+    drawn half and half, i.e. bicolour. Upright, PWR and the PON lamps are the right-hand column
+    and ALM and SPD the left. Table 2: PWR off / blinking green initialization / green on; ALM
+    red alarm / off; SPD off = no PON XFP, green = type 3 XFP (10G/1G), yellow = type 4 XFP
+    (10G/10G), red = type or configuration mismatch; PON off = not active (safe to remove),
+    green = provisioned and active, yellow (both red and green on) = provisioned and active
+    (the table repeats the green row's wording for it; the state is kept and the ambiguity is
+    a gap), red = transmitter failed or XFP unreachable. Yellow drawn #f2b705.
+  lamp-size: >-
+    drawing - the lamps are drawn about 4 mm across on a 5.05 mm pitch (Figure 8, and Figure 7's
+    lamp to pitch ratio 0.76 gives 3.9), carried as common/led-indicator@1 (4 mm bezel).
+  legends: >-
+    Figure 7 prints PWR, ALM, PON with a bracket over 1 2 3 4, and SPD with a bracket; they are
+    printed here in the upright arrangement. Figure 8, the front cover itself, draws the lamps
+    but NO legend, no wordmark and no numerals, although at 8.3 px/mm a 1.5 mm legend would be
+    12 px and resolvable (the lamps in the same image resolve). Whether the plate carries the
+    Figure 7 legends is therefore unresolved (gap); they are printed on the reading that
+    Figure 7's caption is "LEDs on the front panel".
+  levers: >-
+    Figure 6 (3D) draws a small lever beside each screw; Figure 8 does not show them, so they
+    are not drawn.
+  colour: 'estimated - light silver-grey plate, the family finish of the shared FX conventions; no FPXT-A photograph was staged'
+  logo-zone: 'reserved by the family convention on the empty plate between the last cage and the bottom screw; Figure 8 draws no mark'
+  lifecycle: >-
+    searched only the staged corpus - the one data sheet is R5.2 and the card is absent from
+    the later FX guides, which suggests it was superseded by the FPXT-B; no end-of-life notice
+    was searched for on the web.
+elements:
+  logo-zone: {at: [5.0, 355.0], size: [15.0, 12.0], class: label}
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g, pon: 10g-epon}
+    description: the four 10G EPON XFP ports (IEEE 802.3av; 10/10, 10/1 and 1/1 coexistence)
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one bicolour PON status lamp per port, legends 1-4 bracketed PON
+  spd-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one bicolour XFP type (speed) lamp per port, bracketed SPD
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR and ALM
+parts:
+  - {ref: std/xfp@1, id: pon-1, group: pon, at: [0.95, 88.15], rotate: 90}
+  - {ref: std/xfp@1, id: pon-2, group: pon, at: [0.95, 167.85], rotate: 90}
+  - {ref: std/xfp@1, id: pon-3, group: pon, at: [0.95, 247.55], rotate: 90}
+  - {ref: std/xfp@1, id: pon-4, group: pon, at: [0.95, 327.25], rotate: 90}
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [9.8, 36], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [5.7, 36], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pon-1, group: pon-leds, at: [9.8, 41.05], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: yellow, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-spd-1, group: spd-leds, at: [5.7, 41.05], states: {lamp: ['off', {name: type-3-xfp, color: '#39b54a'}, {name: type-4-xfp, color: '#f2b705'}, {name: mismatch, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pon-2, group: pon-leds, at: [9.8, 46.1], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: yellow, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-spd-2, group: spd-leds, at: [5.7, 46.1], states: {lamp: ['off', {name: type-3-xfp, color: '#39b54a'}, {name: type-4-xfp, color: '#f2b705'}, {name: mismatch, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pon-3, group: pon-leds, at: [9.8, 51.15], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: yellow, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-spd-3, group: spd-leds, at: [5.7, 51.15], states: {lamp: ['off', {name: type-3-xfp, color: '#39b54a'}, {name: type-4-xfp, color: '#f2b705'}, {name: mismatch, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pon-4, group: pon-leds, at: [9.8, 56.2], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: yellow, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-spd-4, group: spd-leds, at: [5.7, 56.2], states: {lamp: ['off', {name: type-3-xfp, color: '#39b54a'}, {name: type-4-xfp, color: '#f2b705'}, {name: mismatch, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
