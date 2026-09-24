@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fant-m
-version: 1.1.0
+version: 1.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -107,24 +107,51 @@ provenance:
     faces, so that is a convention (library vertical cards take R90), not a reading.
     The micro-USB's trapezoid is not resolved either; rotate 90 by the same convention.
   housing: >-
-    drawing - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 draws the SMA, QSFP28 and SFP+ block as a housing standing proud of
-    the plate, one box per connector, from 66.0 to 240.6, cell edges at 83.5, 108.9,
-    145.75, 179.1 and 205.25. It is not raised in relief: the projection gives no depth
-    for it, and a raised node is lifted OVER the composed parts, which would bury the six
-    connectors it frames. GAP: how far the housing stands proud is unmeasured; no Nokia
-    document dimensions it.
+    drawing - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 draws the SMA, QSFP28 and SFP+ block as a housing from 66.0 to
+    240.6 mm and, at 3x, all but edge to edge of the plate (x about 1.2-28.8; the connector
+    legends are printed on the tooth faces at the right, so they are drawn on the facets).
+    It is six sawtooth teeth, not a raised box: between teeth the left-hand chevron edge
+    returns to the plate line, so the bands 87.9-90.5, 111.5-118.5, 148.2-153.9 and
+    236.3-240.6 are drawn flush. PORT2, PORT3 and PORT4 adjoin: the figure draws 1-2 mm of
+    plate between them, but the owner's lab photo of an installed FANT-M (FX-8),
+    2026-09-24, shows the PORT3 and PORT4 boxes following each other with no flat plate
+    between, so those two bands are taken as drafting. Each tooth is its own pair of
+    facets - see provenance.angled-panel and relief.
   angled-panel: >-
-    estimated from the drawing - in 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 each connector box's face is turned upward,
-    about 30 degrees by eye (the figure is a three-quarter view and no document states
-    the angle). The skin paints it: the housing band is darker than the plate, bevelled
-    down both sides, with a lit top edge and a 2.5 mm shaded underside to every box (the
-    shaded strips clear every composed part). The SMA jacks and the QSFP28/SFP+ cages
-    are the library parts at registry size, face-on, with no foreshortening faked:
-    angled-panel: 30 degrees; not representable until the format carries a tilt.
+    estimated from the drawing - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72. Each connector sits on the UPPER band of its
+    tooth, a face turned upward (root at its upper edge, lower edge proud), and a return
+    below it turns back down to the plate; the two meet at a ridge the figure draws as a
+    lit line. Which band carries the port is read from the SMA barrels, which point up
+    and out of the upper band. HOW THE NUMBERS WERE TAKEN: the y-extents on the face frame
+    (2.664 px/mm) - root line, ridge line, and the row where the left chevron edge is back
+    on the plate line. The figure is a three-quarter view turned about 22 degrees (the
+    30 mm face draws 74 px against 80: cos 0.925), which draws depth at about 1.0 px/mm
+    (the side panel, 205 mm deep, spans about 201 px). Every ridge displaces the chevron
+    7 to 9 px off the plate line, so all six teeth stand about the same 8.5 mm proud, and
+    each angle follows from that common apex over the band's height: the SMA faces 39
+    degrees over 10.5 mm, the QSFP28 faces 24 and 23 over 18.9 and 19.9, the SFP+ faces
+    27 and 27 over 16.6 and 16.5, the returns 38 to 41 over 9.6 to 10.8 mm, each return
+    fitted so its tooth's apex heights agree within 0.1 mm. The reading of 'about 30
+    degrees with a return of equal height' holds for the SMA teeth only; the cage teeth
+    have longer, shallower faces. The PORT1 and PORT2 faces start 0.9 and 1.5 mm above the
+    drawn root line (118.5 and 153.9 against 119.4 and 155.4): the registry cage,
+    foreshortened by its face's angle, is taller than the opening the figure draws, and a
+    facet is sized to hold its whole cage. The PORT3 and PORT4 faces run up to the return
+    above them (see provenance.housing). SECOND SOURCE: the owner's lab photo of an
+    installed FANT-M (FX-8), 2026-09-24, shows PORT3 and PORT4 each in its own protruding
+    box, the cage opening on the box's upper part facing up and out, a band below it
+    running back to the plate, and the boxes adjoining - the face-up-plus-return tooth
+    modelled here. It is a perspective phone photo, so only ratios are taken from it: down
+    the PORT4 box's mid-column the lit cage face is about 105 px and the shadowed band
+    below it about 45 px, a face longer than its return as modelled (16.5 : 9.6), though
+    the camera foreshortens the two surfaces unequally and neither ratio is a measurement.
+    Every face plus its return is under 90 degrees (80 at most), so a cage's well,
+    running back along its face's normal, stays under the return and the plate below it.
   gaps: >-
-    angled-panel: 30 degrees; not representable until the format carries a tilt. The
-    angle itself is an estimate by eye. How far the housing stands proud. Cage latch
-    direction (rotate 90 is convention).
+    The angles are estimates: a 1 px error in the chevron reading moves the apex about
+    1 mm, about 3 to 5 degrees, and the depth scale rests on the 22 degree turn read off
+    the face width. The flat bands between teeth are taken as flush. Cage latch direction
+    (rotate 90 is convention).
   lamps: >-
     drawing - Figure 73 'FANT-M system status LEDs' (p211, object 6001): two columns
     of round lamps, ALM / PWR, (blank) / A/S, then PORT1 lanes 2-1 and 4-3 in a
@@ -183,6 +210,66 @@ elements:
     size: [8.0, 8.0]
     class: screw
     description: captive fixing screw
+  pps-face:
+    at: [1.2, 67.6]
+    size: [27.6, 10.5]
+    class: mechanical
+    description: the face of the 1PPS tooth, turned 39 degrees upward - its connector sits on it
+  pps-return:
+    at: [1.2, 78.1]
+    size: [27.6, 9.78]
+    class: mechanical
+    description: the return closing the 1PPS tooth back to the plate, 41 degrees downward
+  ten-mhz-face:
+    at: [1.2, 90.5]
+    size: [27.6, 10.5]
+    class: mechanical
+    description: the face of the 10MHz tooth, turned 39 degrees upward - its connector sits on it
+  ten-mhz-return:
+    at: [1.2, 101.0]
+    size: [27.6, 10.5]
+    class: mechanical
+    description: the return closing the 10MHz tooth back to the plate, 39 degrees downward
+  port1-face:
+    at: [1.2, 118.5]
+    size: [27.6, 18.9]
+    class: mechanical
+    description: the face of the PORT1 tooth, turned 24 degrees upward - its connector sits on it
+  port1-return:
+    at: [1.2, 137.4]
+    size: [27.6, 10.77]
+    class: mechanical
+    description: the return closing the PORT1 tooth back to the plate, 38 degrees downward
+  port2-face:
+    at: [1.2, 153.9]
+    size: [27.6, 19.9]
+    class: mechanical
+    description: the face of the PORT2 tooth, turned 23 degrees upward - its connector sits on it
+  port2-return:
+    at: [1.2, 173.8]
+    size: [27.6, 10.07]
+    class: mechanical
+    description: the return closing the PORT2 tooth back to the plate, 40 degrees downward
+  port3-face:
+    at: [1.2, 183.87]
+    size: [27.6, 16.63]
+    class: mechanical
+    description: the face of the PORT3 tooth, turned 27 degrees upward - its connector sits on it
+  port3-return:
+    at: [1.2, 200.5]
+    size: [27.6, 9.75]
+    class: mechanical
+    description: the return closing the PORT3 tooth back to the plate, 41 degrees downward
+  port4-face:
+    at: [1.2, 210.25]
+    size: [27.6, 16.45]
+    class: mechanical
+    description: the face of the PORT4 tooth, turned 27 degrees upward - its connector sits on it
+  port4-return:
+    at: [1.2, 226.7]
+    size: [27.6, 9.64]
+    class: mechanical
+    description: the return closing the PORT4 tooth back to the plate, 41 degrees downward
 groups:
   qsfp28:
     term: Port
@@ -223,12 +310,12 @@ groups:
     index-origin: 1
     description: the system status lamps of Figure 73 and Table 68
 parts:
-  - {ref: common/sma-jack@1, id: pps, group: timing, at: [7.75, 67.25], attrs: {function: 1 PPS input, legend: 1PPS}}
-  - {ref: common/sma-jack@1, id: ten-mhz, group: timing, at: [7.75, 90.25], attrs: {function: 10 MHz GPS input, legend: 10MHz}}
-  - {ref: std/qsfp28@1, id: port1, group: qsfp28, at: [2.5, 122.925], rotate: 90, attrs: {legend: PORT1}}
-  - {ref: std/qsfp28@1, id: port2, group: qsfp28, at: [2.5, 158.425], rotate: 90, attrs: {legend: PORT2}}
-  - {ref: std/sfp@1, id: port3, group: sfp-plus, at: [5.25, 187.0], rotate: 90, attrs: {legend: PORT3}}
-  - {ref: std/sfp@1, id: port4, group: timing, at: [5.25, 213.5], rotate: 90, attrs: {media: sfp-plus, speed: 10g, legend: PORT4, function: 'SyncE/PTP timing only - no traffic'}}
+  - {ref: common/sma-jack@1, id: pps, group: timing, at: [7.75, 68.309], 'on': pps-face, attrs: {function: 1 PPS input, legend: 1PPS}}
+  - {ref: common/sma-jack@1, id: ten-mhz, group: timing, at: [7.75, 91.309], 'on': ten-mhz-face, attrs: {function: 10 MHz GPS input, legend: 10MHz}}
+  - {ref: std/qsfp28@1, id: port1, group: qsfp28, at: [2.5, 123.364], 'on': port1-face, rotate: 90, attrs: {legend: PORT1}}
+  - {ref: std/qsfp28@1, id: port2, group: qsfp28, at: [2.5, 158.828], 'on': port2-face, rotate: 90, attrs: {legend: PORT2}}
+  - {ref: std/sfp@1, id: port3, group: sfp-plus, at: [5.25, 187.545], 'on': port3-face, rotate: 90, attrs: {legend: PORT3}}
+  - {ref: std/sfp@1, id: port4, group: timing, at: [5.25, 214.045], 'on': port4-face, rotate: 90, attrs: {media: sfp-plus, speed: 10g, legend: PORT4, function: 'SyncE/PTP timing only - no traffic'}}
   - {ref: std/micro-usb@1, id: usb, group: craft, at: [4.25, 254.625], rotate: 90, attrs: {function: debug, legend: USB}}
   - {ref: common/rj45-eth@1, id: eth, group: base-t, at: [5.6, 300.2], rotate: 270, attrs: {legend: ETH}}
   - {ref: std/rj45@2, id: lcrt, group: craft, at: [5.6, 319.4], rotate: 270, attrs: {media: rj45-serial, function: local craft management interface (LCMI), legend: LCRT}}
@@ -287,6 +374,66 @@ relief:
       source: >-
         cisco/a99-rp3-tr@1 captive screw heads - the library's shared screw-head
         figure, itself estimated
+    - node: pps-face
+      facet: {deg: 39, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: pps-return
+      facet: {deg: 41, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: ten-mhz-face
+      facet: {deg: 39, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: ten-mhz-return
+      facet: {deg: 39, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port1-face
+      facet: {deg: 24, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port1-return
+      facet: {deg: 38, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port2-face
+      facet: {deg: 23, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port2-return
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port3-face
+      facet: {deg: 27, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port3-return
+      facet: {deg: 41, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port4-face
+      facet: {deg: 27, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port4-return
+      facet: {deg: 41, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
 connection-points:
   mate: {at: [15.0, 202.5], direction: rear}
 skins: [default]
