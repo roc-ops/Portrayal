@@ -1,6 +1,7 @@
 # Pluggables B3: dust caps and the connector slot
 
-Status: design agreed 2026-09-22. Extends
+Status: design agreed 2026-09-22, built 2026-09-22 to 2026-09-23. The rulings
+taken while planning and building are recorded under "Decisions". Extends
 [pluggables-connectors-design.md](pluggables-connectors-design.md) (B), and uses
 the slotting of [pluggables-slotting-design.md](pluggables-slotting-design.md) (C)
 and the 3D rules of [pluggables-3d-design.md](pluggables-3d-design.md) (D). Part of
@@ -49,14 +50,71 @@ Taken 2026-09-22.
 | 9 | Removing the drawn caps from the three adapters is being done separately. This work checks before its adapter step; if the caps are still drawn then, it removes them itself |
 | 10 | A shutter is not a cap. A spring door inside a shuttered adapter stays in the adapter's art; it may later be a state (open when occupied), never an occupant |
 
+Decision 9 was met upstream before this work reached its adapter step: #495
+stripped the drawn caps and kept each cap's reading in the adapter's
+`provenance.dust-caps`, and the cap parts were figured from there.
+
+### Taken while planning
+
+Taken 2026-09-22, before the first step.
+
+| # | ruling |
+|---|---|
+| P1 | THE SLOT KEY is the path of part ids from the device placement (or bay) to the slot part, with every `module` segment dropped: `bay-1/lc01/1`. A drawing path restores them: `bay-1/module/lc01/1`. One helper, `manifest.slot_key_prefix`, strips every `/module` segment from any instance path, and a device placement's path is its own key |
+| P2 | A WRAPPER'S APERTURE IS THE WRAPPER'S SLOT. A component that presents an interface by looking through to its one composed aperture is itself the slot, and the aperture is not published as a second one. So a cassette's placement of `mpo-adapter` is a slot, and the tile's own `bore` is not. This holds for connector slots only. Applied to cages it would have dropped the only published cage of 19 components, so cages publish as they did (ruled 2026-09-22, in the first step) |
+| P3 | OCCUPANTS OF OCCUPANTS STAY CHAINED KEYS. No slot is walked inside a seated occupant, a group carrying `data-for`, so a plug in a seated optic's bore keeps B's chained key (`port-4-occupant`). Narrowed 2026-09-22 so that a boot can address one half of a duplex plug (`port-1510-occupant/a`) |
+| P4 | EMPTY IS THE EMPTY STRING, as it is for bays: `occupants: {bay-1/lc01/1: ""}` empties a slot and overrides its default |
+| P5 | DEFAULT PRECEDENCE, lowest first: the slot part's own declaration; a composer's `parts:` entry, which overrides only the placed component's top-level default; a configuration's `occupants:`; the explorer. A composer cannot reach a grandchild's default, and a configuration can (see "The shipped default") |
+| P6 | `kind`. Every entry in a view's `cages[]` and in a component's `cages` carries `kind: cage` or `kind: connector`. Every cage entry was byte-identical before and after, once `kind` is removed |
+| P7 | THE REGISTRY FILE is `spec/schemas/connectors.yaml`, not a block in `pluggables.yaml`. A connector interface has no ladder and no rate, so the two do not share a shape |
+| P8 | `std/mpo@1` GAINED `interface: mpo` and a `mate` at its aperture centre, as a minor. Its opening was later corrected as a major (see "The MPO opening"). `common/fibre-splice@1`, the other part named as composing it, composes no parts and so is no slot |
+| P9 | RULE NUMBERS are the next free ones when a rule lands. Main took L109 to L113 while this work ran, so its three rules are L114 (a default is in its slot's accept list), L115 (a spanning slot and the slots it spans are never both filled) and L116 (spanning geometry) |
+
+### Taken while building
+
+Taken 2026-09-22 to 2026-09-23, each where the work met the question. Most are
+written up in full where they apply, and this list points there.
+
+- **A keyed occupant is drawn in its host bore's unrotated convention**, and a
+  seated LC plug's latch is drawn compressed ("Seated plugs").
+- **Two LC bores**: the transceiver receptacle and the bulkhead aperture, a new
+  part rather than a deeper receptacle ("Seated plugs").
+- **A duplex connector is drawn on one canonical axis**, and its host publishes
+  the turn onto its own bores ("The duplex host").
+- **Keep what the source measured, and move what it did not** ("The Smartoptics
+  axis").
+- **MPO: fix the aperture first**, before any MPO part ships as a default ("The
+  MPO opening").
+- **A plug and its adapter agree on fibre numbers** once seated ("Fibre numbers on
+  a seated plug").
+- **A shuttered adapter is a slot with no default** ("The shuttered adapter").
+- **A slot inside a slot** is refused by the build, by lint and by the kit alike,
+  unless it is one of a duplex adapter's bores ("Deep addressing").
+- **A front occupant is its own FRU; a back's occupants ride with the module**,
+  and an occupant is pulled by its own relief extent ("3D").
+- **A device lock follows faces and defaults** ("Device locks").
+- **A default seats however its part got there**: on a module seated in a bay and
+  on an occupant as well as on a placed part. A bay module's OWN top-level
+  default is refused, and says so.
+- **Slot keys follow the bores' own ids.** Main renamed the LC duplex bores from
+  `tx`/`rx` to `1`/`2` (#533) while this work ran. The duplex adapters took their
+  `@6` on main's `@5`, and every key follows (`bay-1/lc01/1`).
+- **Namespaces of the new plugs.** `generic/lc-duplex-plug` carries no `conforms:`,
+  because its clip's outline is no one's standard and only its pitch is.
+  `generic/sc-plug` conforms to a new `sc-plug` standards entry, not to
+  `sc-simplex-receptacle`: a plug is not the opening it enters.
+- **A plug's new major replaces the old one.** `generic/lc-plug@1` was deleted
+  when `@2` redrew it, not kept as superseded. A generic part keeps one major,
+  and nothing referenced `@1`.
+
 ## Parts
 
 | part | mates | seats in | source |
 |---|---|---|---|
-| `common/lc-dust-cap` | `lc` | `std/lc-bore@3` | the Smartoptics cap figures, moved from `lc-duplex-adapter@3` |
+| `common/lc-dust-cap` | `lc` | an LC bore, `std/lc-bulkhead-bore@1` or `std/lc-bore@3` | the Smartoptics cap figures, moved from `lc-duplex-adapter@3` |
 | `common/lc-duplex-dust-cap` | `lc-duplex` | a duplex LC adapter | the FS FHD cap figures, moved from `lc-duplex-v-adapter@2` |
 | `common/sc-dust-cap` | `sc` | `std/sc-bore@1` | the FS FHD SC cap and grip, moved from `sc-duplex-adapter@2` |
-| `common/mpo-dust-cap` | `mpo` | `std/mpo@2` | new: FS's MTP cassette photographs |
+| `common/mpo-dust-cap` | `mpo` | `std/mpo@2`, and the flanged bulkheads of the cassette backs | new: FS's MTP cassette photographs |
 | `generic/lc-duplex-plug` | `lc-duplex` | a duplex LC adapter | two `generic/lc-plug` bodies at the `lc-duplex-receptacle` pitch, on a clip, each turned latch-up (see "Seated plugs") |
 | `generic/sc-plug` | `sc` | `std/sc-bore@1` | new intake (below) |
 | `generic/mpo12-plug` | `mpo` | `std/mpo@2` | new intake (below) |
@@ -101,6 +159,10 @@ the class fixes none.
 
 ### The MPO opening
 
+Ruled 2026-09-22: the aperture is fixed FIRST, before any MPO part ships as a
+default, because a cap or plug that seats in an opening it could not enter
+would put the contradiction on every MPO port.
+
 The MPO plug intake found the connector printed at 12.5 x 7.6 (US Conec C20044
 rev B, C20851 rev D), and `std/mpo@1`'s opening - 7.8 x 5.6, estimated off an FS
 render - could not take it. The opening was the weaker reading, so it moved:
@@ -111,6 +173,14 @@ adapter's opening runs over its plug (SENKO DS-LC-000010 against DS-LC-000004,
 61754-7-1 allows (12.59 x 7.7). `common/mpo-adapter@2` composes it, centred where
 `@1`'s opening was. A test holds both plugs inside the opening on a build, in the
 device frame.
+
+**The cap's grip came down (2026-09-23).** The first MPO cap stood its grip 8.0
+proud, a plank the full width of the plate, which beside FS's photographs read as
+a block where FS shows a thin saddle. `common/mpo-dust-cap@2` stands the plate's
+front at 5.9. That figure is a modelling choice, not a reading, and the part says
+so. The one drawn figure held, SENKO DS-MPO-000004's own cap standing 8.34 in
+front of its adapter, points the other way. It is a different cap and is recorded,
+not adopted.
 
 **The cassette rears are MPO slots (2026-09-23).** The FHD MTP cassettes carry
 their trunk connectors on their backs, in the flanged bulkheads
@@ -128,6 +198,26 @@ the same long face as the plugs' key, so the polarity agrees, but it is narrower
 so it never reaches the slot. Ten cassette backs compose the bulkheads, and each
 publishes one slot per bulkhead, and each bulkhead ships the MPO cap (see "Which
 adapter ships which cap").
+
+### Fibre numbers on a seated plug
+
+Added 2026-09-23. A plug and the adapter it seats in each number their own
+fibres (L112), and seated, the two sets must land on each other the way the
+fibres do; otherwise the explorer rings the wrong fibre. A seated plug is seen
+from its boot end, so its end face appears mirrored: key up, an MPO plug's fibre
+1 is at the right, as both MPO adapters number theirs.
+
+- MPO-12: plug fibre n lies on adapter fibre n, on the flange bulkhead and on the
+  panel tile.
+- MPO-24: plug fibre n lies on adapter fibre n + 12, counted round 24. That is the
+  inner sequence the 24-fibre bulkhead's own numbering records (a trunk fibre
+  1-12 lands on ids 13-24). The adapter owns that mapping, so the plug follows it
+  rather than swapping its own rows.
+- LC duplex: half `a`, fibre 1, lies on bore `1`, on both duplex adapters.
+
+The plugs' fibre markers are placements, not readings, and the MPO-24's row
+spacing is the flange bulkhead's. A test holds all three on real builds, in the
+device frame.
 
 ## The connector slot
 
@@ -329,6 +419,13 @@ The build reaches those bores by their deep key (`slot-1/ppm-1/dcm/1`); the
 explorer cannot offer them, because the module publishes no slot. A bay module's
 OWN top-level default is still refused.
 
+The same forwarding leaves a second gap, recorded rather than closed. A forwarded
+duplex slot publishes no bores (`bores: []`), and so derives no turn, and a duplex
+connector would seat on it unturned. No drawing is wrong today, because the four
+modules forward the side-by-side adapter, placed unturned, whose derived turn is
+0. A module that forwarded the stacked adapter would seat its duplex connector
+across the wrong axis, and nothing would say so.
+
 No other library part presenting `lc`, `lc-duplex`, `sc` or `mpo` is capped. The
 transceivers that compose `std/lc-bore@3` (the SFP and QSFP LC optics) are optics
 in a cage, and decision 7 leaves a cage's dust plug undefaulted.
@@ -356,6 +453,11 @@ the shutter is a solid door standing in front of the bore's ferrule and behind
 the raised face - how far behind is a modelling choice, since FS's renders do not
 show it. Nothing switches the shutter on occupancy; an open-when-occupied state
 remains the later option decision 10 leaves.
+
+**A shuttered slot still offers dust caps (2026-09-23).** What a slot accepts is
+read from its interface, because a connector intermates or it does not. The
+ruling that a shuttered adapter ships empty is about the shipped state, not about
+what may be seated, so the explorer offers the caps there as it does anywhere.
 
 **The bulkhead keyway fits, by 0.09.** The ferrule axis sits 5.8 into the 11.6
 body, where `@1` placed the bore square, and the keyway reaches 5.71 from it. The
@@ -489,7 +591,9 @@ Two lessons from building the caps as the adapter's relief carry over:
   It used to take the 60 mm fallback, sliding 115 mm and leaving a 60 mm box
   in its port. Now it is pulled by its own relief: its furthest `out` off its
   seat, plus 10 mm. It leaves no box, so the port shows as the build draws it,
-  with bore, sleeve and ferrule.
+  with bore, sleeve and ferrule. The rule is for occupants (caps and plugs)
+  only. A module or card that declares no depth still takes the 60 mm fallback
+  and leaves its box.
 - **A choice on a back reaches the back 3D builds (2026-09-23).** 3D builds a
   cassette's back from the module's own back drawing (`body.sides.rear`), never
   from the flat projection on the rear face. Every key the explorer holds under
@@ -517,13 +621,24 @@ Two lessons from building the caps as the adapter's relief carry over:
   and modules among them), 22 cisco and 14 ufispace. A device holding them is
   unchanged, since there the device's depth bounds the relief.
 
+## Device locks
+
+Added 2026-09-23. A shipped cap changes what a device draws without any device
+file changing, and so does a cassette back redrawn through its module's
+`faces:`. A device's lock therefore walks everything its drawing reaches:
+`manifest.drawn_refs` follows a component's `parts:`, its defaults and its
+`faces:` (the legacy `plan:` too). Before this, a module's back could be redrawn
+without the device noticing, and the FHD chassis's populated rear was. The same
+walk decides whether a built drawing is stale, and which components
+`lint --device` reaches.
+
 ## Lint
 
 - L12 accepts slot keys at any depth through the one resolver, and checks a cap or
   plug's `mates:` against the slot's interface, as it checks an optic in a cage.
-- A new rule: a `default:` must be in the slot's accept list, and an occupant may
+- L114: a `default:` must be in the slot's accept list. L115: an occupant may
   not fill an adapter slot and one of its bore slots at once.
-- A new rule: an adapter presenting `lc-duplex` has its two bores on the
+- L116: an adapter presenting `lc-duplex` has its two bores on the
   `lc-duplex-receptacle` pitch.
 - The same rule's latch-side arm: the axis a duplex host derives from the ORDER of
   its bores must turn a duplex connector's latches (drawn up) onto the side the
