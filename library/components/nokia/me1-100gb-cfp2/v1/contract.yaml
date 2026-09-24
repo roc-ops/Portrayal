@@ -1,0 +1,119 @@
+format: 1
+kind: module
+name: me1-100gb-cfp2
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 1-port 100GE CFP2 MDA-e (3HE09881AA), CLI type me1-100gb-cfp2, for the 7750 SR-e front
+  MDA slots and the IOM4-e. Authored horizontal, as MDA-e guide 20.2 p53 Figure 12 draws it:
+  Stat and Pwr at the left end, the Lnk, Act and Laser Disabled lamps left of one CFP2 cage
+  set in a raised bezel, the ESD mark at the top right, the model label ME1-100GB-CFP2 at the
+  lower right and a captive screw on each lower wing. Stat: blinking green initialising, green
+  up, amber operationally down, unlit admin down. Pwr: blue on, unlit no power. Lnk: green
+  link at 100G; amber slow blink no optic; amber fast blink loopback; amber optics but no
+  link; unlit disabled. Act: green active; amber error; unlit no activity. Laser Disabled:
+  amber laser off, unlit laser on.
+unplaced: >-
+  seated by the 7750 SR-1e, SR-2e and SR-3e MDA slots (mda-n-m) and, in later waves, the
+  IOM4-e of the SR-7, SR-12 and SR-12e; the coordinator wires it.
+size: {w: 193.0, h: 35.4, d: 195.6}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  w and h are the shared 7750 MDA envelope (193.0 x 35.4) the SR-e slots are built to;
+  the guide states 1.4 x 7.6 in, rounded to 0.1 in. d is the stated 7.7 in.
+attrs:
+  model: ME1-100GB-CFP2
+  part-number: 3HE09881AA
+  cli-type: me1-100gb-cfp2
+  cfp2: 1
+  weight-kg: 0.91
+  power-draw-max-w: 60
+  power-draw-typical-w: 50
+provenance:
+  size: >-
+    datasheet - MDA-e Installation Guide 3HE16330AAAATQZZA02 (20.2) p17 Table 4: H x W x D 1.4
+    x 7.6 x 7.7 in (3.6 x 19.3 x 19.6 cm). The face is held at 193.0 x 35.4, the shared 7750
+    wave-1 MDA envelope: 1.4 in (35.56) is rounded to 0.1 in, and the SR-3e slot pitch
+    measures 35.43 (SRE 3HE17927AAAATQZZA03 p50 Fig 10), so stacked slots tile at 35.4. The
+    figure agrees: the plate is 4016 x 732 px at 1200 dpi, aspect 5.49 = 193.0 / 35.2
+  depth: >-
+    datasheet - 7.7 in (19.6 cm), MDA-e guide p17 Table 4; carried as 195.6
+  shape: >-
+    drawing - the plate is notched at both lower corners, as every MDA-e faceplate figure
+    draws it: the full 35.4 band runs x 16.2 to 176.8 and the two end wings stop 27.3 below
+    the plate top, with a 2.4 fillet where wing meets band (1200 dpi render, 20.81 px/mm
+    across and 20.68 px/mm down). The notches are transparent in the skin. The thin strip the
+    figure draws above the plate is the card's top edge in slight perspective and is not face
+  thumbscrews: >-
+    drawing - two captive screws (Table key 'Captive screws'), one on each lower wing. The
+    figure measures centre 7.8-8.0 in from each end and 21.0 below the plate top, head 10.6
+    across; the wave-1 family figure (7.8 / 20.8 / 10.3) is used, which this figure agrees
+    with to 0.3 mm. MDA-e has no insertion handles (MDA-e-XP has)
+  esd-mark: >-
+    drawing - the ESD warning triangle at the top right, 183.5-189.7 x 3.0-8.6; yellow is the
+    family colour the 7750 conventions record, not read from this figure (gap)
+  colour: >-
+    estimated - no photograph of this card is staged. Charcoal plate, light legends, silver
+    screws and a yellow ESD mark are the 7750 wave-1 family estimate (dark MDA faceplates with
+    a yellow ESD mark at the top right). Gap until a datasheet cut-out or photo is staged
+  lifecycle: >-
+    searched only the staged corpus - listed in the MDA-e guides from 13.0 to 20.2
+    (3HE16330AAAATQZZA02); no end-of-sale notice was searched for
+  lamps: >-
+    datasheet - LED colours and states from the card's Features and LEDs table (quoted per
+    lamp in the part's description). The guide gives 'slow' and 'fast' amber blinking for Lnk
+    without rates: slow is carried as plain blinking and fast as 4 Hz, an ESTIMATE (gap).
+    Positions measured on the figure: Stat and Pwr at (11.6, 7.6) and (11.6, 11.7), drawn 2.35
+    across
+  logo: >-
+    drawing - the figure draws no vendor mark on the plate, so no logo-zone is reserved; the
+    only printed text besides the legends is the model label at the lower right
+  weight: >-
+    datasheet - 2.01 lb (0.91 kg), MDA-e guide p17 Table 4
+  power: >-
+    datasheet - MDA-e guide p16 Table 3: idle 0, zero rate 45, typical 50, worst case 60 W.
+    Max is the worst case (55C, 100%), typical the typical figure. The table notes that optics
+    are NOT included
+  layout: >-
+    drawing - MDA-e guide 3HE16330AAAATQZZA02 p53 Figure 12 (art 25210), vector, rendered at
+    1200 dpi (pdfimages finds no raster). Lamps: Lnk (113.1, 13.8), Act (113.1, 18.9), Laser
+    Disabled (118.2, 18.9), legends Lnk above, Act and Laser/Disabled below. The cage is drawn
+    as a raised bezel 126.1-171.1 x 10.4-26.2 round an inner panel 127.9-169.3 x 11.0-25.5
+    (41.3 x 14.6); std/cfp2 (41.5 x 12.4) is centred in the inner panel. The figure also draws
+    an oblong slot on the inner panel, which the std cage hides (gap: what it is, a door or a
+    dust plug, is not stated). Port number '1' printed above the cage at x 147.9
+  ports: >-
+    datasheet - Table 2: one physical 100GE port for a CFP2 (OTU4, G.709 FEC,
+    100GBase-SR10/LR4/ER4); Table 15 key 5 'One 100-GB CFP2 slot'
+elements:
+  model-label: {at: [149.7, 29.3], size: [25.5, 3.1], class: label}
+  bezel-1: {at: [126.06, 10.4], size: [45.08, 15.76], class: mechanical}
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: cfp2, speed: 100g}
+    description: the one 100GE CFP2 port, printed 1
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: Lnk, Act and Laser Disabled for the port, left of the cage
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the left end
+parts:
+  - {ref: std/cfp2@1, id: port-1, group: ports, at: [127.85, 12.05], attrs: {media: cfp2, speed: 100g}}
+  - {ref: common/led-dot@1, id: stat, group: status-leds, at: [10.61, 6.62], states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: pwr, group: status-leds, at: [10.61, 10.73], states: {lamp: ['off', {name: 'on', color: '#2f6fdb'}]}}
+  - {ref: common/led-dot@1, id: lnk-1, group: port-leds, at: [112.1, 12.81], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1, group: port-leds, at: [112.1, 17.88], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: laser-1, group: port-leds, at: [117.2, 17.88], states: {lamp: ['off', {name: laser-disabled, color: '#f5a623'}]}}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]
