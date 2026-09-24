@@ -13,7 +13,7 @@ size: {w: 30.0, h: 405.0, d: 225.0}
 size-confidence: {w: datasheet, h: datasheet, d: datasheet}
 size-notes: 'w is the NT slot pitch (30 mm), taken as the faceplate width; d is the larger of the two depths the UDS gives (205/225)'
 attrs:
-  model: FANT-H
+  model: FANT-H AA
   part-number: 3FE74828AA
   variant: AA
   standard: ETSI
@@ -24,6 +24,11 @@ attrs:
   power-draw-typical-w: 140
   power-scope: 'excludes the NTIO card and pluggable (SFP/QSFP) power, per the ETSI Safety Manual note (1)'
 provenance:
+  lamp-colour: >-
+    estimated - The UDS LED tables name the port lamps' conditions (link, activity) but not their colour, so
+    the `link-activity` state is drawn in the family green #39b54a that nokia/fnio-a@1 uses for the
+    same unstated case; the A/S lamp's `standby` is that lamp OFF (the table: 'off = stand-by'), so it
+    is drawn unlit (#3a3f44) rather than given a colour the hardware does not show.
   size: 'datasheet - 3HH90279AAAATQZZA23 (Lightspan FX UDS 25.12) section "Dimensions" of the AA chapter: height 405 mm, width 30 mm, depth 205/225 mm, weight approximately 1.5 kg. The same four figures appear in every FANT-H chapter of the ANSI R6.9 and ETSI R7.0 UDS guides. The 30 mm is the NT card pitch; the UDS states no separate faceplate edge-to-edge width, so the face is drawn at the pitch, which is what the FX shelf bays are built to'
   size-width: 'datasheet - slot pitch, "width: 30 mm" in the UDS dimensions list; faceplate width not stated, taken as the pitch'
   depth: 'datasheet - the UDS gives "205/225 mm" without saying what each measures; 225 is carried as the card depth. Which figure is PCB and which is overall (faceplate and ejectors included) is not stated'
@@ -75,15 +80,15 @@ parts:
 - {ref: common/led-dot@1, id: led-alm, group: leds, at: [10.5, 37.5], attrs: {description: 'ALM - red: alarm condition exists; off: no alarm condition'}, states: {lamp: ['off', {name: alarm, color: '#ef4444'}]}}
 - {ref: common/led-dot@1, id: led-pwr, group: leds, at: [15.55, 37.5], attrs: {description: 'PWR - green flashing 0.5 s on / 0.5 s off: software initializing; green blinking 3.5 s on / 0.5 s off: initialization completed, NT operational; off: no power'}, states: {lamp: ['off', {name: initializing, color: '#22c55e', behavior: {mode: blinking, rate: 1}}, {name: operational, color: '#22c55e', behavior: {mode: sequence, phases: [{color: '#22c55e', seconds: 3.5}, {seconds: 0.5}]}}]}}
 - {ref: common/led-dot@1, id: led-aco, group: leds, at: [10.5, 42.5], attrs: {description: 'ACO - green: alarm has been cut off; off: no alarm cut off'}, states: {lamp: ['off', {name: alarm-cut-off, color: '#22c55e'}]}}
-- {ref: common/led-dot@1, id: led-a-s, group: leds, at: [15.55, 42.5], attrs: {description: 'A/S - green: active; off: stand-by'}, states: {lamp: [standby, {name: active, color: '#22c55e'}]}}
-- {ref: common/led-dot@1, id: led-p1-2, group: leds, at: [10.5, 47.5], attrs: {description: 'PORT1 lamp 2 - link/activity status, QSFP28 interface 1 channel 2'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p1-1, group: leds, at: [15.55, 47.5], attrs: {description: 'PORT1 lamp 1 - link/activity status, QSFP28 interface 1 channel 1'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p1-4, group: leds, at: [10.5, 52.5], attrs: {description: 'PORT1 lamp 4 - link/activity status, QSFP28 interface 1 channel 4'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p1-3, group: leds, at: [15.55, 52.5], attrs: {description: 'PORT1 lamp 3 - link/activity status, QSFP28 interface 1 channel 3'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p2-6, group: leds, at: [10.5, 57.5], attrs: {description: 'PORT2 lamp 6 - link/activity status, QSFP28 interface 2 channel 2 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p2-5, group: leds, at: [15.55, 57.5], attrs: {description: 'PORT2 lamp 5 - link/activity status, QSFP28 interface 2 channel 1 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p2-8, group: leds, at: [10.5, 62.5], attrs: {description: 'PORT2 lamp 8 - link/activity status, QSFP28 interface 2 channel 4 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', link-activity]}}
-- {ref: common/led-dot@1, id: led-p2-7, group: leds, at: [15.55, 62.5], attrs: {description: 'PORT2 lamp 7 - link/activity status, QSFP28 interface 2 channel 3 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', link-activity]}}
+- {ref: common/led-dot@1, id: led-a-s, group: leds, at: [15.55, 42.5], attrs: {description: 'A/S - green: active; off: stand-by'}, states: {lamp: [{name: standby, color: '#3a3f44'}, {name: active, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-p1-2, group: leds, at: [10.5, 47.5], attrs: {description: 'PORT1 lamp 2 - link/activity status, QSFP28 interface 1 channel 2'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p1-1, group: leds, at: [15.55, 47.5], attrs: {description: 'PORT1 lamp 1 - link/activity status, QSFP28 interface 1 channel 1'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p1-4, group: leds, at: [10.5, 52.5], attrs: {description: 'PORT1 lamp 4 - link/activity status, QSFP28 interface 1 channel 4'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p1-3, group: leds, at: [15.55, 52.5], attrs: {description: 'PORT1 lamp 3 - link/activity status, QSFP28 interface 1 channel 3'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p2-6, group: leds, at: [10.5, 57.5], attrs: {description: 'PORT2 lamp 6 - link/activity status, QSFP28 interface 2 channel 2 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p2-5, group: leds, at: [15.55, 57.5], attrs: {description: 'PORT2 lamp 5 - link/activity status, QSFP28 interface 2 channel 1 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p2-8, group: leds, at: [10.5, 62.5], attrs: {description: 'PORT2 lamp 8 - link/activity status, QSFP28 interface 2 channel 4 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-p2-7, group: leds, at: [15.55, 62.5], attrs: {description: 'PORT2 lamp 7 - link/activity status, QSFP28 interface 2 channel 3 (the AA close-up numbers the second port 5-8)'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
 connection-points:
   mate: {at: [15.0, 202.5], direction: front}
 skins: [default]

@@ -16,17 +16,13 @@ description: >-
   Base-T jack, the LCRT craft jack and the ToD/PPS jack. The ETSI build (AA/AB)
   is a different face with BITS jacks and an ACO switch, and is
   nokia/fant-m-etsi@1.
-unplaced: >-
-  The 7360 ISAM FX-16, FX-12, FX-8 and FX-4 shelves (roc-ops/Portrayal#538) seat it at
-  NT-A and NT-B; none of those shelves is in the library yet. Delete this key when the
-  first shelf's NT bay names nokia/fant-m@1 in `accepts` or `default`.
 size: {w: 30.0, h: 405.0, d: 225.0}
 size-confidence: {w: datasheet, h: datasheet, d: datasheet}
 size-notes: >-
   w is the NT slot pitch, not a measured faceplate width - see provenance.size-width.
   d is the larger of the two depths the UDS gives (205/225 mm) - see provenance.depth.
 attrs:
-  model: FANT-M
+  model: FANT-M (ANSI BA/BB)
   part-number: 3FE79270BA
   variants: >-
     BA 3FE79270BA - central office, -5 to +50 C. BB 3FE79270BB - temperature
@@ -43,6 +39,11 @@ attrs:
   power-draw-scope: module
   input-voltage: -48 V DC and -60 V DC nominal
 provenance:
+  lamp-colour: >-
+    estimated - The UDS LED tables name the port lamps' conditions (link, activity) but not their colour, so
+    the `link-activity` state is drawn in the family green #39b54a that nokia/fnio-a@1 uses for the
+    same unstated case; the A/S lamp's `standby` is that lamp OFF (the table: 'off = stand-by'), so it
+    is drawn unlit (#3a3f44) rather than given a colour the hardware does not show.
   size: >-
     datasheet - 7360 ISAM FX ANSI Unit Data Sheet guide R6.9 (3FE77013AAAATQZZA16)
     s26.5.1 and s27.5.1, identical for BA and BB: 'Height: 405 mm (15.94 in.)',
@@ -242,16 +243,16 @@ parts:
     at: [13.0, 37.5]
     states:
       lamp: [{name: active, color: '#39b54a'}, 'off']
-  - {ref: common/led-dot@1, id: port1-l2, group: leds, at: [8.0, 42.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port1-l1, group: leds, at: [13.0, 42.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port1-l4, group: leds, at: [8.0, 47.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port1-l3, group: leds, at: [13.0, 47.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port2-l2, group: leds, at: [8.0, 52.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port2-l1, group: leds, at: [13.0, 52.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port2-l4, group: leds, at: [8.0, 57.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port2-l3, group: leds, at: [13.0, 57.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port4-led, group: leds, at: [8.0, 62.5], states: {lamp: [link-activity, 'off']}}
-  - {ref: common/led-dot@1, id: port3-led, group: leds, at: [13.0, 62.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l2, group: leds, at: [8.0, 42.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l1, group: leds, at: [13.0, 42.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l4, group: leds, at: [8.0, 47.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l3, group: leds, at: [13.0, 47.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l2, group: leds, at: [8.0, 52.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l1, group: leds, at: [13.0, 52.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l4, group: leds, at: [8.0, 57.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l3, group: leds, at: [13.0, 57.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port4-led, group: leds, at: [8.0, 62.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port3-led, group: leds, at: [13.0, 62.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
 relief:
   wall: '#9ea3a9'
   features:
