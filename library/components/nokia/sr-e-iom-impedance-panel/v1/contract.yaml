@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: sr-e-iom-impedance-panel
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia ACC - 7750 SR-e IOM Impedance Panel (3HE10297AA), the blank for an unused IOM slot
+  at the rear of the SR-1e, SR-2e and SR-3e: a plain plate with a captive screw on a raised
+  tab at each top corner, as the iom-e carries, and ends shorter than its middle where the
+  card's ejector levers would sit. Authored horizontal.
+unplaced: >-
+  seated by the SR-e IOM slots (iom-1 to iom-3 of nokia/7750-sr-1e, -2e and -3e); the
+  coordinator wires it
+size: {w: 259.1, h: 70.8}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  nokia/iom-e@1's face (259.1 x 70.8), borrowed: the panel fills the same slot and no guide
+  dimensions it.
+attrs:
+  model: ACC - 7750 SR-e IOM Impedance Panel
+  part-number: 3HE10297AA
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - nokia/iom-e@1's face, 259.1 x 70.8 (SRE p86 Table 28 width; the slot pitch).
+    The only drawing of this panel is the isometric SRE p73 Fig 24.
+  purpose: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p72 section 3.3.3: impedance panels are required
+    on all empty slots "to prevent excess dust accumulation, to help control airflow and
+    electromagnetic interference, and for safety reasons", and "do not have board components
+    or connector pins"; Table 20 lists the five part numbers.
+  layout: >-
+    drawing (shape, in proportion) and borrowed (heights, screws) - SRE p73 Fig 24
+    (isometric) draws a plain plate with small raised tabs at the top corners (the steps
+    about 14 in from each end, the card's tabs being 13.5) and a bottom edge that steps down
+    about 32 in from each end (read as fractions along the plate: 145/1185 and 150/1185 of
+    its length), so the middle 32.0-227.1 reaches 70.8 and the ends stop at 65.9, the card's
+    own heights. Screws at the card's centres (5.6, 7.9) and (251.3, 7.9), heads 11.0.
+  colour: >-
+    estimated - no photograph is staged; charcoal as the cards. A gap.
+  logo-zone: >-
+    reserved on the plain plate; Fig 24 draws no mark
+  depth: >-
+    NOT STATED - a blanking plate; no guide gives a depth or weight.
+elements:
+  screw-left: {at: [0.1, 2.4], size: [11.0, 11.0], class: screw}
+  screw-right: {at: [245.8, 2.4], size: [11.0, 11.0], class: screw}
+  logo-zone: {at: [100.0, 9.6], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+connection-points:
+  mate: {at: [129.55, 35.4], direction: rear}
+skins: [default]

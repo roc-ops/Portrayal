@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: sr-e-psu-impedance-panel
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia ACC - 7750 SR-e PSU Impedance Panel (3HE09419AA), the blank for an unused PSU slot
+  of the SR-1e, SR-2e and SR-3e rear shelf: a plain plate the size of a PSU face with a
+  diagonal pull handle and a ribbed latch tab at the lower right. Authored horizontal like
+  the supplies; the SR-2e and SR-3e seat it upright in PSU 1-6 with `rotate: 90`.
+unplaced: >-
+  seated by the SR-e PSU slots (psu-1 to psu-4 of nokia/7750-sr-1e, psu-1 to psu-8 of -2e
+  and -3e); the coordinator wires it
+size: {w: 86.4, h: 40.4}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the SR-e PSU face (86.4 x 40.4), borrowed: the panel fills a PSU slot and no guide
+  dimensions it.
+attrs:
+  model: ACC - 7750 SR-e PSU Impedance Panel
+  part-number: 3HE09419AA
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - nokia/sr-e-psu-ac@1's face, 86.4 x 40.4 (SRE p85 Table 28, transposed); the
+    SR-1e rear view (SRE p45) draws the panel in PSU 3 and 4 at the same 744 px width as the
+    supplies beside it (86.4 at 8.61 px/mm).
+  purpose: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p72 section 3.3.3: impedance panels are required
+    on all empty slots "to prevent excess dust accumulation, to help control airflow and
+    electromagnetic interference, and for safety reasons", and "do not have board components
+    or connector pins"; Table 20 lists the five part numbers.
+  layout: >-
+    drawing - SRE p45 Fig 7, PSU 3, at 1200 dpi, 8.61 px/mm across and 8.94 down (the bay's
+    361 px height fitted to 40.4): the handle a slot-shaped pull about 5.2 wide from (7.1,
+    35.6) to (39.4, 3.7); the ribbed latch tab 80.6-86.4 x 24.0-37.8. SRE p73 Fig 24 shows
+    the handle standing proud of the plate as a bent pull.
+  shared-part-number: >-
+    datasheet - the SR-a guide (3HE17928AAAATQZZA04 p66, coverage grid) lists 3HE09419AA as
+    the SR-a PSU impedance panel too; the SR-a is not modelled.
+  colour: >-
+    estimated - no photograph is staged; charcoal plate, grey pull. A gap.
+  logo-zone: >-
+    reserved on the plain plate right of the handle; no figure draws a mark
+  relief: >-
+    estimated - the pull is NOT raised, because relief raises a node's bounding box and the
+    diagonal pull's box is most of the plate. The latch tab stands 2.0 proud, not
+    dimensioned.
+  depth: >-
+    NOT STATED - a blanking plate; no guide gives a depth or weight.
+elements:
+  handle: {at: [4.5, 1.1], size: [37.5, 37.1], class: handle}
+  latch: {at: [80.6, 24.0], size: [5.8, 13.8], class: latch}
+  logo-zone: {at: [50.0, 4.0], size: [26.0, 8.0], class: label}
+relief:
+  features:
+  - {node: latch, out: 2.0, color: '#b8bcc1', confidence: estimated, source: 'a ribbed latch tab; not dimensioned'}
+connection-points:
+  mate: {at: [43.2, 20.2], direction: rear}
+skins: [default]
