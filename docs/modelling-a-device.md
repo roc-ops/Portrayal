@@ -423,7 +423,10 @@ Now populate. Reuse before building.
     port sits on and the return that closes the tooth back to the panel,
     each its own node. A port's depth runs back along the slope, so without
     the return, or at the wrong angle, the cage comes out of the tooth in
-    3D; that is a geometry error to fix, not something to hide.
+    3D; that is a geometry error to fix, not something to hide. A surface set
+    into the plate, such as teeth behind a window or in a recess, is a sunk
+    facet: give it a negative `lift` (its root that far below the plate) and
+    declare the recess around it as a `pocket` at least that deep (L117).
 7. **Cable-management accessories are not drawn**: cord-retainer bails, tie
    anchors, straps. They are not panel facts. Note them in provenance instead.
 8. **A row of indicators and buttons sharing one baseline on the real device is
