@@ -133,6 +133,7 @@ PART_IFACE = {
     # slugs are in netbox-community/netbox and nautobot/nautobot alike.
     "std/cfp": "100gbase-x-cfp",
     "std/cfp2": "100gbase-x-cfp2",
+    "std/cfp4": "100gbase-x-cfp4",
     "std/cxp": "100gbase-x-cxp",
 }
 # What a cage RUNS AT is a property of the card, not of the cage. So the cage ref

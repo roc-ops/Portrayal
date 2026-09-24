@@ -230,6 +230,7 @@ def test_the_census_is_not_vacuous():
 @pytest.mark.parametrize("ref,expected", [
     ("std/cfp", "100gbase-x-cfp"),
     ("std/cfp2", "100gbase-x-cfp2"),
+    ("std/cfp4", "100gbase-x-cfp4"),
     ("std/cxp", "100gbase-x-cxp"),
 ])
 def test_the_100g_form_factors_that_are_nobodys_substring(ref, expected):
