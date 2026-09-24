@@ -217,14 +217,18 @@ function asProjection(wrap) {
   return wrap;
 }
 
-// WHOSE BACK A REAR PROJECTION IS. The projection strips `data-ref`, so
-// render.py writes the seated module's ref beside `data-of` as `data-of-ref`
-// (`fs/fhd-2mtp12-lc-os2-a@4:3.1.0`), and applyRearOverrides writes it on a
-// back it rebuilds. The slots on a back are its `faces.rear` component's.
-const OF_REF = 'data-of-ref';
+// WHOSE BACK A REAR PROJECTION IS. The projection strips `data-ref`; the
+// rear-panel hole it is drawn in says which module sits in the bay, as
+// `data-rear-ref` (render.py writes it, applyRearOverrides keeps it), and the
+// projection is always that hole's direct child. The slots on a back are its
+// `faces.rear` component's. (Filtered by parent rather than written as a `>`
+// selector, which the node tests' DOM does not parse.)
 const faceRef = f => (typeof f === 'string' ? f : f?.ref) || null;
+const backRef = back => (back?.parentNode?.getAttribute?.('data-rear-ref') || '').split(':')[0];
+const backsIn = (rootEl, sel = '[data-projection]') =>
+  [...rootEl.querySelectorAll(sel)].filter(b => b.parentNode?.hasAttribute?.('data-rear-ref'));
 function backProjection(rootEl, modulePath) {
-  return rootEl.querySelector(`[data-projection][data-of="${CSS.escape(modulePath)}"][${OF_REF}]`);
+  return backsIn(rootEl, `[data-projection][data-of="${CSS.escape(modulePath)}"]`)[0] || null;
 }
 
 // A BAY SEEN FROM BEHIND. render.py draws a seated module's back (`faces.rear`)
@@ -275,7 +279,6 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
         wrap.setAttribute(a.name, a.value);
     wrap.setAttribute('data-projection', '1');
     wrap.setAttribute('data-of', `${bayId}/module`);
-    wrap.setAttribute(OF_REF, comp.version ? `${ref}:${comp.version}` : ref);
     for (const n of [...doc.documentElement.childNodes])
       (n === root ? [...n.childNodes] : [n])
         .forEach(k => wrap.appendChild(rootEl.ownerDocument.importNode(k, true)));
@@ -881,7 +884,7 @@ export function nestedSlots(rootEl, compByRef, {deviceCages = [], all = false} =
                 module: mod, modulePath, moduleId: mod.getAttribute('id') || '', carrier});
     }
   }
-  for (const back of rootEl.querySelectorAll(`[data-projection][${OF_REF}]`))
+  for (const back of backsIn(rootEl))
     raw.push(...backSlotsOf(back, compByRef));
   const hosts = new Map([...(deviceCages || []), ...raw].map(e => [e.id, e]));
   const out = raw.filter(e => {
@@ -895,7 +898,7 @@ export function nestedSlots(rootEl, compByRef, {deviceCages = [], all = false} =
 
 // THE SLOTS ON A MODULE'S BACK (B3 Task 10b), read off the rear projection
 // render.py draws in the hole its bay names. A projection strips `data-ref`,
-// so the group is known by `data-of-ref` - the seated module - and its slots
+// so the group is known by its hole's `data-rear-ref` - the seated module - and its slots
 // are that module's `faces.rear` component's `cages`, each at the module's
 // own path (`bay-1/module/mtp1`, keyed `bay-1/mtp1`) as the build publishes
 // them. Only the back's own slots: the build accepts a key on a back only one
@@ -911,7 +914,7 @@ export function nestedSlots(rootEl, compByRef, {deviceCages = [], all = false} =
 // of, which applyOccupantOverrides re-checks.
 function backSlotsOf(back, compByRef) {
   const modulePath = back.getAttribute('data-of');
-  const moduleRef = (back.getAttribute(OF_REF) || '').split(':')[0];
+  const moduleRef = backRef(back);
   const look = r => { try { return r ? compByRef(r) || null : null; } catch (e) { return null; } };
   const module = look(moduleRef);
   const carrier = faceRef(module?.faces?.rear);
@@ -1068,7 +1071,7 @@ function slotElement(rootEl, cage) {
 function cardOf(rootEl, cage) {
   if (cage.projection) {
     const back = backProjection(rootEl, cage.modulePath);
-    return back && (back.getAttribute(OF_REF) || '').split(':')[0] === cage.moduleRef ? back : null;
+    return back && backRef(back) === cage.moduleRef ? back : null;
   }
   const mod = bayGroup(rootEl, cage.modulePath);
   const ref = (mod?.getAttribute('data-ref') || '').split(':')[0];

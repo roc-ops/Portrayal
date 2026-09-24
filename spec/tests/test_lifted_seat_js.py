@@ -23,7 +23,7 @@ the face and pass on it. Three faces:
   dcp-2 dcp-404-x1, configured: a QSFP in each of the DCP-404's five cages on
       its 44 mm faceplate - with the A22's two, the 7 card cages the old rule
       refused (docs/pluggables-caps-design.md, decision 8);
-  dcp-r-34d-cs as it ships: 72 default dust caps in lc-duplex-adapter@5 bores
+  dcp-r-34d-cs as it ships: 72 default dust caps in lc-duplex-adapter@6 bores
       placed on the device, lift 3.175, turned 180;
   fhd-1ufce populated: 24 default duplex caps on the cassettes' v-adapter
       slots, lift 1.2, turned 270.

@@ -219,7 +219,7 @@ free-state variant would be additive.
 fit an 8.5 module face. `std/lc-bulkhead-bore@1` has the same square, widths and
 mate, with the 3.36 keyway measured off the vector line art of SENKO's LC Premium
 Adapter (DS-LC-000010). A panel adapter composes the bulkhead aperture unless its
-own outline cannot hold it. The FS FHD adapter (`lc-duplex-v-adapter@5`) does, and
+own outline cannot hold it. The FS FHD adapter (`lc-duplex-v-adapter@6`) does, and
 so does the Smartoptics one since its `@6` moved its ferrule axis (see "The
 Smartoptics axis" below). A seated plug in a transceiver receptacle runs past the
 drawn keyway, which is that receptacle's understatement showing.
@@ -437,8 +437,11 @@ transform above it and nothing is solved twice.
   aperture at the wrapper's path.
 - **Slots on a back (2026-09-23).** A module's back on the rear face is a
   projection, which carries no `data-ref`, so the drawing could not say whose back
-  it was. The build now writes the seated module's ref on a `rear:` projection as
-  `data-of-ref`, beside `data-of`; the kit writes the same on a back it rebuilds.
+  it was. The rear-panel hole says it: the build writes the seated module's ref on
+  the cutout as `data-rear-ref`, the projection is that hole's direct child, and
+  the kit keeps the attribute on a back it rebuilds. (A first cut wrote a second
+  attribute, `data-of-ref`, on the projection itself; it was dropped for the
+  hole's, which the explorer's tree already reads.)
   The slots on a back are that module's `faces.rear` component's, read off the
   drawing at the module's path (`bay-1/module/mtp1`, key `bay-1/mtp1`), and the
   drawing-less resolver reads them the same way, one step under a device bay's

@@ -166,38 +166,44 @@ provenance:
     two rows 0.5 apart about the drawn ferrule window's centre (6.25, 3.8), at
     the 0.25 MT pitch - the layout common/mpo24-flange-adapter@2 draws its end
     face with, borrowed, because no source held here dimensions a two-row MT
-    ferrule (`row-count`). NUMBERED AS THE PLUG NUMBERS THEM, its end face seen
-    key up: the row on the key side (the upper, y 3.55) carries 1-12 and the
-    other (y 4.05) 13-24, each from the LEFT (x 4.875) running right
-    (ANSI/TIA-568.3-D, as reproduced in SENKO, Fiber Optic Polarity Guide for
-    VSFF Connectivity, Rev. 01, October 2023, p. 8, Figure 5). This front view
-    is that end face, key rib on top.
+    ferrule (`row-count`). NUMBERED AS A SEATED PLUG SHOWS THEM: the row on the
+    key side (the upper, y 3.55) carries 1-12 and the other (y 4.05) 13-24,
+    each from the RIGHT (x 7.625) running left. On its own end face seen key
+    up the plug numbers each row from the left (ANSI/TIA-568.3-D, as reproduced
+    in SENKO, Fiber Optic Polarity Guide for VSFF Connectivity, Rev. 01,
+    October 2023, p. 8, Figure 5), but this view is the plug seen from its
+    BOOT end, key rib on top, so each row appears mirrored; the rows do not
+    swap, because the mirror is left to right. Seated unturned on
+    common/mpo24-flange-adapter@2, fibre n lands on that adapter's fibre
+    n + 12, counted round 24 - the Inner Sequence its `fibre-numbering`
+    records, a trunk fibre 1-12 on ids 13-24
+    (spec/tests/test_fibre_positions_meet.py).
 elements:
   body: {at: [0.0, 0.0], size: [12.5, 7.6], class: port}
-  '1': {at: [4.8, 3.475], size: [0.15, 0.15], class: fibre}
-  '2': {at: [5.05, 3.475], size: [0.15, 0.15], class: fibre}
-  '3': {at: [5.3, 3.475], size: [0.15, 0.15], class: fibre}
-  '4': {at: [5.55, 3.475], size: [0.15, 0.15], class: fibre}
-  '5': {at: [5.8, 3.475], size: [0.15, 0.15], class: fibre}
-  '6': {at: [6.05, 3.475], size: [0.15, 0.15], class: fibre}
-  '7': {at: [6.3, 3.475], size: [0.15, 0.15], class: fibre}
-  '8': {at: [6.55, 3.475], size: [0.15, 0.15], class: fibre}
-  '9': {at: [6.8, 3.475], size: [0.15, 0.15], class: fibre}
-  '10': {at: [7.05, 3.475], size: [0.15, 0.15], class: fibre}
-  '11': {at: [7.3, 3.475], size: [0.15, 0.15], class: fibre}
-  '12': {at: [7.55, 3.475], size: [0.15, 0.15], class: fibre}
-  '13': {at: [4.8, 3.975], size: [0.15, 0.15], class: fibre}
-  '14': {at: [5.05, 3.975], size: [0.15, 0.15], class: fibre}
-  '15': {at: [5.3, 3.975], size: [0.15, 0.15], class: fibre}
-  '16': {at: [5.55, 3.975], size: [0.15, 0.15], class: fibre}
-  '17': {at: [5.8, 3.975], size: [0.15, 0.15], class: fibre}
-  '18': {at: [6.05, 3.975], size: [0.15, 0.15], class: fibre}
-  '19': {at: [6.3, 3.975], size: [0.15, 0.15], class: fibre}
-  '20': {at: [6.55, 3.975], size: [0.15, 0.15], class: fibre}
-  '21': {at: [6.8, 3.975], size: [0.15, 0.15], class: fibre}
-  '22': {at: [7.05, 3.975], size: [0.15, 0.15], class: fibre}
-  '23': {at: [7.3, 3.975], size: [0.15, 0.15], class: fibre}
-  '24': {at: [7.55, 3.975], size: [0.15, 0.15], class: fibre}
+  '1': {at: [7.55, 3.475], size: [0.15, 0.15], class: fibre}
+  '2': {at: [7.3, 3.475], size: [0.15, 0.15], class: fibre}
+  '3': {at: [7.05, 3.475], size: [0.15, 0.15], class: fibre}
+  '4': {at: [6.8, 3.475], size: [0.15, 0.15], class: fibre}
+  '5': {at: [6.55, 3.475], size: [0.15, 0.15], class: fibre}
+  '6': {at: [6.3, 3.475], size: [0.15, 0.15], class: fibre}
+  '7': {at: [6.05, 3.475], size: [0.15, 0.15], class: fibre}
+  '8': {at: [5.8, 3.475], size: [0.15, 0.15], class: fibre}
+  '9': {at: [5.55, 3.475], size: [0.15, 0.15], class: fibre}
+  '10': {at: [5.3, 3.475], size: [0.15, 0.15], class: fibre}
+  '11': {at: [5.05, 3.475], size: [0.15, 0.15], class: fibre}
+  '12': {at: [4.8, 3.475], size: [0.15, 0.15], class: fibre}
+  '13': {at: [7.55, 3.975], size: [0.15, 0.15], class: fibre}
+  '14': {at: [7.3, 3.975], size: [0.15, 0.15], class: fibre}
+  '15': {at: [7.05, 3.975], size: [0.15, 0.15], class: fibre}
+  '16': {at: [6.8, 3.975], size: [0.15, 0.15], class: fibre}
+  '17': {at: [6.55, 3.975], size: [0.15, 0.15], class: fibre}
+  '18': {at: [6.3, 3.975], size: [0.15, 0.15], class: fibre}
+  '19': {at: [6.05, 3.975], size: [0.15, 0.15], class: fibre}
+  '20': {at: [5.8, 3.975], size: [0.15, 0.15], class: fibre}
+  '21': {at: [5.55, 3.975], size: [0.15, 0.15], class: fibre}
+  '22': {at: [5.3, 3.975], size: [0.15, 0.15], class: fibre}
+  '23': {at: [5.05, 3.975], size: [0.15, 0.15], class: fibre}
+  '24': {at: [4.8, 3.975], size: [0.15, 0.15], class: fibre}
 connection-points:
   mate: {at: [6.25, 3.8], direction: front}
   boot: {at: [6.25, 3.8], direction: rear, 'on': body}

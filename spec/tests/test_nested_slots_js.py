@@ -495,7 +495,8 @@ MUTATIONS = [
     ("a rebuilt back keeps its own data-for", "rekeyFor(el, name, `${bayId}/module`);", "",
      ["rearModule"], lambda o: o["rearModule"]["held"] == [1] * 7),
     ("a rebuilt back names no module",
-     "wrap.setAttribute(OF_REF, comp.version ? `${ref}:${comp.version}` : ref);", "",
+     "if (ref) hole.setAttribute('data-rear-ref', ref); else hole.removeAttribute('data-rear-ref');",
+     "hole.removeAttribute('data-rear-ref');",
      ["rearModule"], lambda o: o["rearModule"]["held"] == [1] * 7),
     ("a rebuilt back drops the map's keys",
      "const occ = await applyOccupantOverrides(rootEl, slots, overrides, loadSkin);",
@@ -820,14 +821,18 @@ def backs_match(world, face, got, bays):
 @needs_node
 def test_the_build_names_the_module_a_back_is_of(world):
     """A PROJECTION STRIPS `data-ref`, so a back alone cannot say whose it is.
-    The build writes `data-of-ref` beside `data-of` on a `rear:` projection:
-    the ref of the module seated in the bay, which is what the kit looks up
-    `faces.rear` on. A `plan:` projection is not a back and does not carry it."""
+    The hole it is drawn in does: the build writes the module seated in the
+    bay on the rear cutout as `data-rear-ref`, and each back is that hole's
+    DIRECT child - which is what the kit reads (`[data-rear-ref] >
+    [data-projection]`) to look up `faces.rear`. No second attribute on the
+    projection says it again."""
     root = world["faces"]["fhd-rear:rear"]
-    got = {b: back_of(root, b).get("data-of-ref") for b in MIX}
-    assert got == {b: ver(world, r) for b, r in MIX.items()}, got
+    parents = {c: p for p in root.iter() for c in p}
+    got = {b: parents[back_of(root, b)].get("data-rear-ref") for b in MIX}
+    assert got == MIX, got
+    assert all(parents[back_of(root, b)].get("data-rear-of") == b for b in MIX)
     assert all(back_of(root, b).get("data-ref") is None for b in MIX)
-    assert [e for e in root.iter() if e.get("data-of-ref") and not e.get("data-projection")] == []
+    assert [e for e in root.iter() if e.get("data-of-ref")] == []
 
 
 def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():

@@ -318,7 +318,7 @@ def slots_by_contract(comps):
 
 def test_the_census_fails_on_an_adapter_that_ships_nothing(tmp_path):
     """Non-vacuity: a copy of the FS LC cassette whose adapters are a copy of
-    lc-duplex-v-adapter@5 WITHOUT its default. Told that copy ships the duplex
+    lc-duplex-v-adapter@6 WITHOUT its default. Told that copy ships the duplex
     cap, the census finds every port bare."""
     root = tmp_path / "lib"
     _copy(root, "common/lc-duplex-v-adapter", 6, "bare-v", lambda c: c.pop("default"))
