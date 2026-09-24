@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fnio-d
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -67,9 +67,12 @@ provenance:
     opening's long side runs down its facet, ALONG the card, so the 20 mm side of the
     aperture lies along the 405 mm and the 10.15 mm side across it (the cages open up
     and down the card, not left and right). Each cage sits `on` its tooth's face facet,
-    so the drawing foreshortens it to 20 x cos 45 = 14.14 mm along the card; the centres
-    stay at 189.1, 225.2, 261.1 and 297.2, and `at` is each centre less 10.15/2 x cos 45,
-    the projected half of the unrotated height, at the true size 20 x 10.15 (L9). Latch
+    so the drawing foreshortens it to 20 x cos 45 = 14.14 mm along the card. The centres
+    are 185.04, 221.04, 257.04 and 293.04, 7.2 mm of face below each cage and 3.6 above:
+    about 4 mm up the face from the 189.1, 225.2, 261.1, 297.2 read off Figure 183, which
+    is what keeps each cage inside its tooth (provenance.angled-panel). `at` is each centre
+    less 10.15/2 x cos 45, the projected half of the unrotated height, at the true size 20
+    x 10.15 (L9). Latch
     direction is not resolved; rotate 90 is the library's
     vertical-card convention, not a reading. Numbered 1-4 top to bottom, which is ASSUMED
     from the lamp block's PORT1-PORT4 brackets reading top to bottom; each cage has a
@@ -104,17 +107,34 @@ provenance:
     36.7 px to the next valley, 10.6 mm, about 43 degrees. So the face is at 45 degrees,
     but its upper part is SUNK: the plate has an opening from the top of each long face
     (174.1) down to where the face plane crosses the plate (about 189.6), and the face's
-    root sits about 15 mm behind the plate. A facet's `lift` cannot be negative, so the
-    facets here keep the 45 degree face and put its root on the plate: face and return
-    are both 45 degrees and 18.0 mm front-view on a 36.0 pitch (179.7 to 323.7, the last
-    return landing on the bottom ejector's hook), so the apex stands 18.0 mm out where
-    the drawing's stands about 10, and the returns are 18.0 mm where it draws about 10.6.
-    18.0 is what the cage needs: the projected cage is 14.14 mm, leaving 1.4 to 2.4 mm
-    of face either side (2.0 mm along the slope below it). A 45/45 tooth is square, so a
-    cage's depth runs parallel to the return and stays inside it however deep it goes.
+    root sits behind the plate by the face's front-view extent less the apex height,
+    24.9 - 9.8 = about 15 mm. Modelled as recessed facets in one pocket,
+    `sawtooth-window`, 174.4 to 318.4 and 15.0 deep, the four teeth on a 36.0 pitch. The
+    section, from the plate at 0 (out of the panel positive): pocket floor -15.0; each
+    face roots at lift -15.0 at the top of its window (174.4, 210.4, 246.4, 282.4) and
+    rises at 45 degrees over 24.91 mm front-view to an apex +9.91 at 199.31, 235.31,
+    271.31, 307.31 (the figure's 199.0, 235.4, 271.8, 307.3); each return shares the
+    lift and falls from the apex back to -15.0 at the next face's root over 11.09 mm
+    front-view, so it is 66 degrees. The face keeps the 45 degrees measured; the return
+    does not keep its 43: in the figure it falls at about 43 degrees to the plate and a
+    vertical wall at the top of the next window drops the rest of the 15 mm, and one
+    facet per slope cannot carry that knee, so the return is the straight line from the
+    apex to the next root, 11.09 front-view where the drawing's return reaches the plate
+    in 10.6. The window's top edge is the figure's vertical wall at 174.4. The pocket
+    floor is never seen: the facets cover the window from end to end. WHY NO CAGE LEAVES
+    ITS TOOTH: a cage's depth runs back along the face normal, 45 degrees down the card,
+    and the 66 degree return falls faster than that, so the cage's lower wall must reach
+    the pocket floor (where the kit lets it run on into the card) before it meets the
+    return; that needs at least (24.91 - 11.09)/2 = 6.91 mm of face below the cage,
+    front-view. 7.2 is used, so the lower wall reaches -15.0 at 1.3 mm under the return
+    (tooth 4: at y 317.83, where the return is at -13.72), and the upper wall is under
+    the floor within 3.6 mm of the root. The cages therefore sit about 4 mm further up
+    their faces than the figure draws them; with them where drawn, the lower wall would
+    leave the back of the return about 1 mm below the plate, into the open valley.
   gaps: >-
-    Each face's root is sunk about 15 mm into the plate in Figure 183; modelled on the
-    plate, so the teeth stand about 8 mm prouder than drawn and the returns are longer.
+    The knee in each return (about 43 degrees to the plate, then a vertical wall to the
+    window floor) is one straight 66 degree facet. The cages sit about 4 mm up their faces
+    from where Figure 183 draws them, so that each stays inside its tooth.
     Faceplate edge-to-edge width (26 mm stated overall, held at the 25 mm pitch).
     Whether the QSFP modules are inside the 104 W figure. The printed strip beside each
     cage and the two marks and hazard icons (unresolved at 300 ppi). Cage latch
@@ -146,14 +166,15 @@ elements:
   logo-zone: {at: [4.0, 86.0], size: [17.0, 20.0], class: label}
   mark-upper: {at: [9.25, 112.6], size: [4.5, 5.0], class: label}
   mark-lower: {at: [9.25, 161.8], size: [4.5, 5.0], class: label}
-  tooth-1-face: {at: [0.6, 179.7], size: [23.8, 18], class: mechanical}
-  tooth-1-return: {at: [0.6, 197.7], size: [23.8, 18], class: mechanical}
-  tooth-2-face: {at: [0.6, 215.7], size: [23.8, 18], class: mechanical}
-  tooth-2-return: {at: [0.6, 233.7], size: [23.8, 18], class: mechanical}
-  tooth-3-face: {at: [0.6, 251.7], size: [23.8, 18], class: mechanical}
-  tooth-3-return: {at: [0.6, 269.7], size: [23.8, 18], class: mechanical}
-  tooth-4-face: {at: [0.6, 287.7], size: [23.8, 18], class: mechanical}
-  tooth-4-return: {at: [0.6, 305.7], size: [23.8, 18], class: mechanical}
+  sawtooth-window: {at: [0.6, 174.4], size: [23.8, 144], class: cutout}
+  tooth-1-face: {at: [0.6, 174.4], size: [23.8, 24.91], class: mechanical}
+  tooth-1-return: {at: [0.6, 199.31], size: [23.8, 11.09], class: mechanical}
+  tooth-2-face: {at: [0.6, 210.4], size: [23.8, 24.91], class: mechanical}
+  tooth-2-return: {at: [0.6, 235.31], size: [23.8, 11.09], class: mechanical}
+  tooth-3-face: {at: [0.6, 246.4], size: [23.8, 24.91], class: mechanical}
+  tooth-3-return: {at: [0.6, 271.31], size: [23.8, 11.09], class: mechanical}
+  tooth-4-face: {at: [0.6, 282.4], size: [23.8, 24.91], class: mechanical}
+  tooth-4-return: {at: [0.6, 307.31], size: [23.8, 11.09], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -169,43 +190,56 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: sawtooth-window
+      pocket: 15.0
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, the sunk face root (provenance.angled-panel)
     - node: tooth-1-face
       facet: {deg: 45, facing: up}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-1-return
-      facet: {deg: 45, facing: down}
+      facet: {deg: 66, facing: down}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-2-face
       facet: {deg: 45, facing: up}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-2-return
-      facet: {deg: 45, facing: down}
+      facet: {deg: 66, facing: down}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-3-face
       facet: {deg: 45, facing: up}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-3-return
-      facet: {deg: 45, facing: down}
+      facet: {deg: 66, facing: down}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-4-face
       facet: {deg: 45, facing: up}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
     - node: tooth-4-return
-      facet: {deg: 45, facing: down}
+      facet: {deg: 66, facing: down}
+      lift: -15
       confidence: estimated
       source: >-
         ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
@@ -229,10 +263,10 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 185.511], rotate: 90, 'on': tooth-1-face}
-  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 221.611], rotate: 90, 'on': tooth-2-face}
-  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 257.511], rotate: 90, 'on': tooth-3-face}
-  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 293.611], rotate: 90, 'on': tooth-4-face}
+  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 181.45], rotate: 90, 'on': tooth-1-face}
+  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 217.45], rotate: 90, 'on': tooth-2-face}
+  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 253.45], rotate: 90, 'on': tooth-3-face}
+  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 289.45], rotate: 90, 'on': tooth-4-face}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 36.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 36.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-1, group: lane-leds, at: [14.8, 41.39], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
