@@ -1,0 +1,182 @@
+format: 1
+kind: module
+name: fpxt-b
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (NFXS-D FX-16, NFXS-E FX-8, NFXS-F FX-4,
+  and the FX-12 where modelled); the coordinator wires it into their LT `accepts` under
+  roc-ops/Portrayal#538. Delete this key when the first LT bay names nokia/fpxt-b@1.
+description: >-
+  Nokia FPXT-B (3FE 68788 AA, C-temp, and 3FE 68788 AB, I-temp), the 8-port 10G EPON line
+  termination board of the 7360 ISAM FX. Eight IEEE 802.3av 10G EPON XFP cages down the
+  front panel, each with a dual-colour LNK and SPD lamp pair beside it, and the board lamps
+  ALM and PWR under the FPXT-B wordmark. Authored upright, as the Unit Data Sheet draws it
+  (turned 90 degrees): thumbscrew and ejector lever at each end, ESD mark at the foot. AA
+  and AB share one front panel (the AB data sheet reprints the AA figure, art number 24200),
+  so they are one component; the part numbers are recorded in attrs.
+size: {w: 25.0, h: 405.0, d: 227.99}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the 25 mm board-to-board pitch the LT bays are built to. The FPXT-B is the one FX card
+  family whose front-cover WIDTH Nokia states: "width top 26.08 mm, width bottom 24.5 mm"
+  (UDS 1.8.1). Both are recorded in provenance and neither is drawn: 26.08 exceeds the pitch,
+  and the orthographic Figure 9 shows NO taper along the 405 mm (both long edges are straight
+  to the pixel from end to end), so what "top" and "bottom" measure is not resolvable from the
+  figure. d is the larger board depth the UDS states (225 top / 227.99 bottom).
+attrs:
+  model: FPXT-B
+  part-number: 3FE 68788 AA
+  part-number-i-temp: 3FE 68788 AB
+  mnemonic: FPXT-B
+  pon: 10g-epon
+  xfp: 8
+  weight-kg: 1.2
+  front-cover-width-top-mm: 26.08
+  front-cover-width-bottom-mm: 24.5
+provenance:
+  size: >-
+    datasheet - UDS 3FE68788AAAATQZZA06 (R5.4.01, FPXT-B AA) section 1.7.2: height 405 mm,
+    width top 225 mm, width bottom 227.99 mm, board-to-board pitch 25 mm; section 1.8.1, the
+    front cover: height 405 mm, width top 26.08 mm, width bottom 24.5 mm, pitch 25 mm; weight
+    1.2 kg. The AB sheet 3FE68788ABAATQZZA02 sections 1.8.1 and 1.9.1 print the same figures.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS 1.8.1. The faceplate width IS stated for this family,
+    tapered 26.08 top / 24.5 bottom; held at the 25 mm pitch by the shared FX convention so the
+    LT bay seats it. Figure 9 draws the plate 316 px across against 5033 px along (1200 dpi
+    render, vector art), which is 25.4 mm at the along-scale: between the two stated widths and
+    1.6% over the pitch. No taper shows along the length; the only width change drawn is at the
+    two end tabs, where the lever-side edge steps in about 2.2 mm (drawn).
+  depth: >-
+    datasheet - "width top 225 mm, width bottom 227.99 mm" in UDS 1.7.2 are the board's depth
+    front to back at its two ends; the larger is carried.
+  weight: 'datasheet - 1.2 kg, UDS 1.8.1 (AA) and 1.9.1 (AB)'
+  power: >-
+    NOT FOUND - searched the ANSI Safety Manual 3HH12894AAAATCZZA27 and A23 Table 2, the ETSI
+    Safety Manual 3HH11998AAAATCZZA29 and A25, the Lightspan Safety Manual 3HH91852AAAATCZZA07,
+    and every FPXT-B UDS edition held (A01-A06, AB A01-A02) for FPXT and for a wattage; none
+    carries a row or figure for the FPXT-B. The coverage grid's "stated in UDS" is wrong. L27
+    stands as the record.
+  layout: >-
+    drawing - UDS 3FE68788AAAATQZZA06 p12 Figure 9 "Front panel of FPXT-B", vector art rendered
+    at 1200 dpi. It is an ORTHOGRAPHIC front view of the card turned 90 degrees
+    counter-clockwise (the wordmark and PWR/AIM read bottom to top), so its left end is the
+    card's top and its top edge the card's right side. Gate 1: 5033 px along for 405 mm is
+    12.427 px/mm; 316 px across is 25.4 mm, within 2.6% of 26.08 and 1.6% of 25, so positions
+    along the card are taken at 12.427 px/mm and across it as fractions of the 316 px plate
+    mapped onto 25 mm. Read: screws (17.6, 6.5) and (17.5, 398.6); top lever x 1.3-6.4, y
+    11.0-43.5, bottom lever y 361.4-394.0; FPXT-B wordmark centred y 37.0, x 8.5-20.6; ALM and
+    PWR lamps at y 45.7, x 9.5 and 14.2; XFP cage bezels x 4.0-20.8, the first y 51.3-84.9, on
+    a 37.42 mm pitch (465 px, identical for all eight to the pixel); the inserted module's face
+    centred x 12.3, 21.6 mm into each bezel; LNK and SPD lamps at x 5.3, 7.3 and 21.6 mm into
+    each bezel; ESD mark centre (14.5, 387.0).
+  ports: >-
+    datasheet - UDS 1.3: "8 compliant IEEE802.3av EPON XFP ports". Composed as std/xfp@1 at its
+    registry aperture, turned 90 degrees: the drawn bezel is 16.8 mm across, narrower than the
+    19.5 mm XFP opening, and the inserted module's face measures 13.0 mm along the card, which
+    is the 18.35 mm XFP width foreshortened by a 45 degree tilt (18.35 x 0.707 = 12.97), so
+    the module's width runs ALONG the card on a slanted face, as the 3D Figure 7 draws the
+    sawtooth. The aperture is drawn at its true 19.5 mm, not at its 13.8 mm projection.
+    Numbering 1-8 from the top is ASSUMED from Figure 8, whose XFP legends run left to right
+    from the ALM/PWR end; the panel prints no number beside any cage.
+    L96 is left standing: the export's only declarable XFP rate is oc192, which would be
+    wrong here, and it has no EPON interface type, so the 10gbase-x-xfp default is the nearest
+    it can say.
+  lamps: >-
+    datasheet - Figure 8 (p11) and Table 2. ALM and PWR round lamps under the wordmark; one
+    dual-colour (red/green) LNK lamp and one SPD lamp under each XFP. Table 2: PWR off / blinking
+    green initialization / green on; ALM off / red alarm; LNK off = PON not active (safe to
+    remove), green = provisioned and active, red+green (drawn yellow) = provisioned but no ONU
+    ranged, red = transmitter failed or XFP unreachable; SPD off = 10G/1G, green = dual-speed,
+    red+green = 10G/10G, red = speed read error. The "both red and green on" state is drawn
+    yellow (#f2b705) because that is what a lit red/green bicolour shows; Nokia names it only as
+    both elements on. SPD off is a meaningful state (10G/1G) and is drawn unlit.
+  lamp-size: >-
+    drawing - round lamps drawn 3.4 mm across, carried as common/led-indicator@1 (4 mm bezel);
+    the LNK/SPD lamps are drawn 3.6 x 1.0 mm as two halves, carried as common/led-rect-sm@1
+    turned 90 degrees (1.6 x 2.8), the nearest library bar lamp. Shape is a compromise.
+  legends: >-
+    drawing - Figure 9 prints FPXT-B, PWR, "AIM" and LNK / SPD under every cage. "AIM" is read as
+    printed in the figure art and in its text layer, and in the FPLT-A art; every LED table
+    names the lamp ALM, so ALM is printed here and the art's spelling is taken as a drafting
+    slip (gap). No cage numbers are printed on the panel and none are drawn.
+  levers: >-
+    drawing - Figure 9 draws a lever lying along the card's left edge at each end, with a pivot
+    tab beyond it; positions as read in layout.
+  colour: 'estimated - light silver-grey plate, dark levers, the family finish of the shared FX conventions; no FPXT-B photograph was staged'
+  relief: >-
+    estimated - the levers stand proud; no document gives a figure, so the library's pooled
+    release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is used.
+  logo-zone: 'reserved by the family convention on the empty plate between the last cage and the bottom lever; Figure 9 draws no mark there'
+  lifecycle: 'searched only the staged corpus - no end-of-life notice was searched for on the web'
+elements:
+  logo-zone: {at: [8.0, 350.0], size: [13.0, 9.0], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: lever-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: lever-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g, pon: 10g-epon}
+    description: the eight 10G EPON XFP ports (IEEE 802.3av; 10/10, 10/1 and 1/1 coexistence)
+  lnk-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one dual-colour PON link lamp per XFP, legend LNK
+  spd-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one dual-colour PON speed lamp per XFP, legend SPD
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/xfp@1, id: pon-1, group: pon, at: [2.65, 68.05], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-1, group: lnk-leds, at: [3.9, 57.8], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-1, group: spd-leds, at: [3.9, 72.1], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-2, group: pon, at: [2.65, 105.47], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-2, group: lnk-leds, at: [3.9, 95.22], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-2, group: spd-leds, at: [3.9, 109.52], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-3, group: pon, at: [2.65, 142.89], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-3, group: lnk-leds, at: [3.9, 132.64], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-3, group: spd-leds, at: [3.9, 146.94], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-4, group: pon, at: [2.65, 180.31], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-4, group: lnk-leds, at: [3.9, 170.06], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-4, group: spd-leds, at: [3.9, 184.36], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-5, group: pon, at: [2.65, 217.73], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-5, group: lnk-leds, at: [3.9, 207.48], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-5, group: spd-leds, at: [3.9, 221.78], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-6, group: pon, at: [2.65, 255.15], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-6, group: lnk-leds, at: [3.9, 244.9], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-6, group: spd-leds, at: [3.9, 259.2], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-7, group: pon, at: [2.65, 292.57], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-7, group: lnk-leds, at: [3.9, 282.32], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-7, group: spd-leds, at: [3.9, 296.62], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: std/xfp@1, id: pon-8, group: pon, at: [2.65, 329.99], rotate: 90}
+  - {ref: common/led-rect-sm@1, id: led-lnk-8, group: lnk-leds, at: [3.9, 319.74], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-rect-sm@1, id: led-spd-8, group: spd-leds, at: [3.9, 334.04], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [7.5, 43.7], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [12.2, 43.7], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

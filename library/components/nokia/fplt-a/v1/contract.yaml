@@ -1,0 +1,136 @@
+format: 1
+kind: module
+name: fplt-a
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (NFXS-D FX-16, NFXS-E FX-8, NFXS-F FX-4,
+  and the FX-12 where modelled); the coordinator wires it into their LT `accepts` under
+  roc-ops/Portrayal#538. Delete this key when the first LT bay names nokia/fplt-a@1.
+description: >-
+  Nokia FPLT-A (3FE 53711 AA), the 8-port EPON line termination board, version A, of the 7360
+  ISAM FX: eight 1G EPON SFP cages on a sawtooth faceplate that angles each cage for fibre
+  bend radius, under the FPLT-A wordmark and a 2 x 5 lamp block (ALM, PWR, PON 1-8). OTDR-capable
+  EPON SFPs are supported. Authored upright, as the Unit Data Sheet draws it: a thumbscrew at
+  each end, a laser mark under the last cage and an ESD mark at the foot.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the 25 mm board-to-board pitch; the faceplate width is not stated and is taken as the
+  pitch. d is the larger of the two board depths the UDS states (225 top / 205 bottom).
+attrs:
+  model: FPLT-A
+  part-number: 3FE 53711 AA
+  mnemonic: FPLT-A
+  pon: epon
+  sfp: 8
+  weight-kg: 0.94
+provenance:
+  size: >-
+    datasheet - UDS 3FE53711AAAATQZZA06 section 1.7.2 (p12): height 405 mm, width top 225 mm,
+    width bottom 205 mm, board-to-board pitch 25 mm, weight 0.94 kg. The R4.4.03a edition
+    3FE53711AAAATCZZA03 prints the same.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS 1.7.2; faceplate width not stated, taken as the pitch.
+  depth: >-
+    datasheet - "width top 225 mm, width bottom 205 mm" are the board's depth at its two ends;
+    the larger is carried.
+  weight: 'datasheet - 0.94 kg, UDS 1.7.2'
+  power: >-
+    NOT FOUND - searched the ANSI Safety Manual 3HH12894AAAATCZZA27 and A23 Table 2, the ETSI
+    Safety Manuals 3HH11998AAAATCZZA29 and A25, the Lightspan Safety Manual 3HH91852AAAATCZZA07,
+    and every FPLT-A UDS edition held (A03, A04, A05, A06) for the card name and for any wattage or "power
+    consumption" figure; none carries one (the UDS says only "provides low power
+    consumption"). The coverage grid's "stated in UDS" does not hold. L27 stands as the record.
+  layout: >-
+    drawing (fractions only) - UDS 3FE53711AAAATQZZA06 p11 Figure 7 "Front view of the FPLT-A"
+    (art 21710, the same art in the A03 edition), a 3D side-and-front view in vector art,
+    rendered at 1200 dpi. There is no orthographic front. The face runs 4832 px along its
+    left front corner (rows 146 to 4978), 11.93 px/mm on 405; its top and bottom edges slope
+    0.24 px per px across, so each row is taken against the top edge at its own column. Read:
+    wordmark y 25.5; lamp rows 37.9 to 58.2 on a 5.07 pitch (both columns agree to 0.1 mm);
+    the sawtooth's nine tooth lines at the plate's right edge from 71.0 to 292.7 on a 27.72
+    pitch (332 +/- 1 px, eight teeth); each cage opening centred about 16.5 mm into its tooth,
+    read 17.5 and taken 1 mm up for the depth axis of the oblique view, which draws anything
+    proud of the plate shifted down; laser mark y 300.5; ESD mark y 388.6. Across the face
+    the view is foreshortened (215 px for 25 mm), so x is fractions of that: lamp columns 8.1
+    and 13.4, cage openings 2.0-16.5. The thumbscrews are drawn proud and shifted by the
+    projection, so their base is not readable; they are placed at x 17.4, y 5.0 / 400.0, the
+    across figure borrowed from nokia/dummy-lt@1, which measured it on an FX 25 mm plate.
+    Estimated error about 1 mm along the card.
+  ports: >-
+    datasheet - UDS 1.3 / 1.6: eight EPON ports (1.25 Gbps downstream and upstream) in SFP
+    cages; the modem module "consists of eight EPON modules". Composed as std/sfp@1 at its
+    registry aperture, unrotated (the drawn opening is 13.4 mm across, the SFP width). Each
+    tooth's side wall carries a "PON n" legend beside its cage, printed here at the plate's left
+    edge; numbering is top to bottom.
+  lamps: >-
+    datasheet - Table 2 of UDS 1.7.3: PWR off / blinking green "initialization, power on state"
+    (the table gives no steady-green row; drawn 'init' blinking and 'on' green, the family
+    reading); ALM red alarm / off; PON 1-8 off = provisioned but ONUs not provisioned or ranging,
+    green = provisioned and active without errors. Arrangement from Figure 7: two columns,
+    ALM | PWR, then 1 | 2, 3 | 4, 5 | 6, 7 | 8, legends outboard, a bracket labelled PON on the
+    right. Figure 8, the flat LED legend, lists PWR before ALM (PWR left); the face drawing
+    prints ALM left, and the face is followed (gap).
+  lamp-size: >-
+    drawing - drawn 3.1 mm along on a 5.07 mm pitch; carried as common/led-dot@1 (2 mm), the
+    part nokia/fnio-a@1 uses for the same family lamp block.
+  legends: >-
+    drawing - Figure 7 prints FPLT-A, "AIM", PWR, 1-8, PON and a PON n legend per cage, read at
+    1200 dpi. "AIM" is printed in the art and its text layer but every LED table names the lamp
+    ALM, so ALM is printed. The cage legends print PON 1-5 then PON 7, 8, 9: the art skips 6 and
+    runs to 9, on a board the same document says has eight ports and whose lamps are numbered
+    1-8, so they are printed PON 1-8 and the slip is a gap.
+  levers: >-
+    Figure 7 draws no ejector lever, only a thumbscrew on a stepped tab at each end, so none is
+    drawn.
+  marks: >-
+    drawing - a laser warning triangle below the last cage (drawn pointing right, composed as
+    common/laser-warning@1 turned 90) and an ESD triangle above the bottom screw.
+  colour: 'estimated - light silver-grey plate, the family finish of the shared FX conventions; no FPLT-A photograph was staged'
+  logo-zone: 'reserved by the family convention on the empty plate between the laser mark and the ESD mark; Figure 7 draws no mark there'
+  lifecycle: 'searched only the staged corpus - no end-of-life notice was searched for on the web'
+elements:
+  logo-zone: {at: [5.0, 312.0], size: [15.0, 12.0], class: label}
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g, pon: epon}
+    description: the eight 1G EPON SFP ports (1.25 Gbps symmetric), legends PON 1-8
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON state lamp per port, legends 1-8 bracketed PON
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: pon-1, group: pon, at: [2.0, 82.5]}
+  - {ref: std/sfp@1, id: pon-2, group: pon, at: [2.0, 110.22]}
+  - {ref: std/sfp@1, id: pon-3, group: pon, at: [2.0, 137.94]}
+  - {ref: std/sfp@1, id: pon-4, group: pon, at: [2.0, 165.66]}
+  - {ref: std/sfp@1, id: pon-5, group: pon, at: [2.0, 193.38]}
+  - {ref: std/sfp@1, id: pon-6, group: pon, at: [2.0, 221.1]}
+  - {ref: std/sfp@1, id: pon-7, group: pon, at: [2.0, 248.82]}
+  - {ref: std/sfp@1, id: pon-8, group: pon, at: [2.0, 276.54]}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [7.1, 36.9], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [12.4, 36.9], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [7.1, 41.97], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-2, group: pon-leds, at: [12.4, 41.97], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-3, group: pon-leds, at: [7.1, 47.04], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-4, group: pon-leds, at: [12.4, 47.04], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-5, group: pon-leds, at: [7.1, 52.11], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-6, group: pon-leds, at: [12.4, 52.11], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-7, group: pon-leds, at: [7.1, 57.18], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-8, group: pon-leds, at: [12.4, 57.18], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
+  - {ref: common/laser-warning@1, id: laser-mark, at: [9.3, 298.1], rotate: 90}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
