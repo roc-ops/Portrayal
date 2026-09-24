@@ -1,0 +1,174 @@
+format: 1
+kind: module
+name: me3-200gb-cfp2-dco
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 3-port CFP2-DCO MDA-e-XP (3HE13955AA), CLI type me3-200gb-cfp2-dco, for the 7750 SR-1
+  (FP4) and the IOM5-e. Three CFP2 cages in bezels, c1 to c3 left to right, each taking a CFP2
+  or a CFP2-DCO coherent optic (200GE; XP p92). A Lnk-over-Act lamp pair sits to the right of
+  every cage and its cN legend below it; Stat and Pwr are at the left end, the model label at
+  the lower right, an insertion handle at each top corner and a captive screw on each lower
+  wing. On the SR-7 and SR-12 only the middle port takes a DCO and the system is held to 40C.
+unplaced: >-
+  seated by the 7750 SR-1 MDA slots (mda-1, mda-2) and, in later waves, the IOM5-e of the SR-7,
+  SR-12 and SR-12e; the coordinator wires it.
+size: {w: 193, h: 35.4, d: 193}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  w and h are the shared 7750 MDA envelope (193.0 x 35.4) the slots are built to; the guide
+  states 1.4 x 7.6 in, rounded to 0.1 in. d is the stated 7.6 in.
+attrs:
+  model: ME3-200GB-CFP2-DCO
+  part-number: 3HE13955AA
+  cfp2: 3
+  weight-kg: 1.13
+  power-draw-max-w: 66
+  power-draw-typical-w: 59
+provenance:
+  size: >-
+    datasheet - MDA-e-XP and MDA2-e-XP Installation Guide 3HE20985AAABTQZZA01 (25.10) p50 Table
+    26: H x W x D 1.4 x 7.6 x 7.6 in (3.6 x 19.3 x 19.3 cm) for every MDA-e-XP. The face is held
+    at 193.0 x 35.4, the shared 7750 wave-1 MDA envelope the SR-1 and SR-e slots are built to:
+    1.4 in (35.56) is rounded to 0.1 in and the SR-3e slot pitch measures 35.43 (SRE
+    3HE17927AAAATQZZA03 p50 Fig 10). The 7.6 in width is 193.0
+  depth: >-
+    datasheet - 7.6 in (19.3 cm), MDA-e-XP and MDA2-e-XP Installation Guide 3HE20985AAABTQZZA01
+    (25.10) p50 Table 26; carried as 193.0
+  shape: >-
+    drawing - the plate is notched at both lower corners, as every MDA-e-XP faceplate figure
+    draws it. Measured on the vector paths of Fig 39 (p88), whose plate is 295.66 x 54.23 pt,
+    1.5319 pt/mm on BOTH axes (aspect 5.452 = 193.0 / 35.4 exactly): the full-height band runs x
+    16.2 to 176.8 (outer edge of the 1.5 pt stroke), the end wings stop 27.4 below the plate
+    top, and a 2.4 fillet joins wing and band. Fig 40 draws the identical outline. The notches
+    are transparent in the skin. The thin strip the figures draw above the plate is the card's
+    top edge in slight perspective and is not face; the fine line 1.9 below the plate top is the
+    fold of the plate's top flange and is drawn
+  thumbscrews: >-
+    drawing - two captive screws, one on each lower wing (the figure's 'Captive screws' key):
+    head 10.1 across, centres (8.1, 21.0) and (184.9, 21.0), from Fig 39 and Fig 40 (the two
+    figures drawn at an exact 193 x 35.4 aspect). The other four figures read 7.6-8.4 in,
+    21.0-22.2 down and 10.1-10.35 across once fitted per axis; their spread is the drawings' own
+    aspect error (Figs 41 and 43 are drawn 1.8% and 5.6% squat), so one screw geometry serves
+    the family. The wave-1 family figure is 7.8 / 20.8 / 10.3
+  handles: >-
+    drawing - insertion/extraction handles at both top corners (the figure's 'Handles' key;
+    MDA-e has none, this is the one visible difference between the two plates): a tab 19.6 x 5.1
+    across each top corner (x 1.1-20.7 and 172.3-191.9, y 0.8-5.9) with a D-shaped pull loop
+    hanging below it at the outer edge (x 1.0-9.1 and 183.9-192.0, down to y 15.4), from Fig 39.
+    Figs 41-44 draw the same tab 19.6-20.3 wide; Fig 40 draws it 17.7
+  colour: >-
+    estimated - no photograph of an MDA-e-XP is staged. Charcoal plate, light legends, grey
+    handles, silver screws and a yellow ESD mark are the 7750 wave-1 family estimate (dark MDA
+    faceplates, a yellow ESD mark at the top right) from the datasheet cut-out DS 194147 listed
+    in PUBLIC-SOURCES, which is not staged (gap)
+  lamps: >-
+    datasheet - MDA-e-XP and MDA2-e-XP Installation Guide 3HE20985AAABTQZZA01 (25.10) p109 Table
+    48 (single-port connectors). Pwr: blue solid = power on, unlit = no power. Stat: green solid
+    = up, green blinking = initialising, amber solid = operationally down, unlit = admin down.
+    Lnk: green = link, amber slow blink = no optic, amber fast blink = loopback, amber solid =
+    optic but no link, unlit = disabled. Act: green = active, amber = error, unlit = no
+    activity. The guide gives no blink rates: slow is carried as plain blinking and fast as 4
+    Hz, an ESTIMATE shared with the MDA-e cards (gap). With a break-out optic the Lnk lamp runs
+    the blink sequence of Table 50 (p110-111: 2.75 s amber, then one 0.75 s green or amber blink
+    per port) and Act stays off; that sequence is not carried as a state (gap)
+  relief: >-
+    estimated - the two handles stand proud; no document gives a figure, so the library's pooled
+    release-hardware estimate (4.2, as nokia/fglt-b@1 carries from edgecore/agr-psu-dc@1) is
+    used. Cages and lamps take their own std/ and common/ relief
+  esd-mark: >-
+    drawing - the ESD warning symbol at the top right, under the right handle's tab. Each
+    figure's symbol box is recorded in `layout`; the part of it the tab hides is not drawn, so
+    the mark is drawn from the tab's lower edge (y 5.95) down. Yellow is the family estimate,
+    not read from any figure (gap)
+  logo: >-
+    drawing - none of the six figures draws a vendor mark on the plate, so no logo-zone is
+    reserved; the only printed text besides the legends is the model label
+  lifecycle: >-
+    searched only the staged corpus - current in the 25.10 guide; no end-of-sale notice was
+    searched for
+  figure-scale: >-
+    drawing - every figure is vector (pdfimages -list finds no raster on pp88-102), so the paths
+    were read directly rather than a render measured
+  weight: >-
+    datasheet - 2.5 lb (1.13 kg), MDA-e-XP and MDA2-e-XP Installation Guide 3HE20985AAABTQZZA01
+    (25.10) p50 Table 26
+  power: >-
+    datasheet - MDA-e-XP and MDA2-e-XP Installation Guide 3HE20985AAABTQZZA01 (25.10) p52 Table
+    29: idle 0, 25C 59, 40C 63, 55C 66 W; max is the 55C rung, typical the 25C one; optics
+    EXCLUDED, which matters most here - a CFP2-DCO is a coherent module drawing its own tens of
+    watts. Note 2: on the SR-7 and SR-12 the system is held to 40C with this card fitted
+  ports: >-
+    datasheet - 'three CFP2 interface ports that support both CFP2 and CFP2-DCO transceivers',
+    'numbered c1 to c3, from left to right' (XP p92-93, Table 40). Composed as std/cfp2@1 (a
+    CFP2-DCO is a CFP2 module): Fig 41 draws each bezel 44.65 x 15.60 with a 42.59 x 13.56
+    opening, and the 41.5 x 12.4 MSA aperture is centred in it. Speed 200g is the card's rating
+    (me3-200gb, 'physical 200 Gigabit Ethernet'); a plain CFP2 in the same port runs 100G. The
+    connector and guide detail drawn inside each opening is the empty cage's interior and is
+    left to the aperture's own art
+  layout: >-
+    drawing - Fig 41 p92 vector paths; this figure is drawn 1.8% squat (295.5 x 52.0 pt against
+    193 x 35.4), so it is fitted per axis, 1.4949 pt/mm across and 1.4690 down. Bezels at x
+    24.03 + 50.9 n, y 6.86-22.47. Lamps 2.19 across at x 71.87, 122.60, 173.38: Lnk y 7.87 with
+    its legend above (ink 3.67-5.84), Act y 12.25 with its legend below (13.87-16.07). cN
+    centred under each bezel (ink 23.8-25.8). Stat (12.38, 7.83), Pwr (12.38, 12.25). Model
+    label ink x 138.4-171.1, y 30.0-32.8. ESD mark x 175.3-182.6, y 5.6-8.9. The figure's text
+    is outlined, so each legend is sized from its ink box (Arial Bold). The small tabs the
+    figure draws outside the plate's left and right edges and under each screw are left out:
+    they lie outside the 193 x 35.4 envelope or in the notch (gap)
+elements:
+  handle-left: {at: [1.0, 0.8], size: [19.69, 14.55], class: handle}
+  handle-right: {at: [172.31, 0.8], size: [19.69, 14.55], class: handle}
+  screw-left: {at: [3.03, 15.95], size: [10.1, 10.1], class: fastener}
+  screw-right: {at: [179.87, 15.95], size: [10.1, 10.1], class: fastener}
+  esd-mark: {at: [175.32, 5.95], size: [7.31, 2.92], class: label}
+  model-label: {at: [138.41, 30.0], size: [32.65, 2.76], class: label}
+relief:
+  wall: '#2b2e32'
+  features:
+    - node: handle-left
+      out: 4.2
+      confidence: estimated
+      source: >-
+        nokia/fglt-b@1 ejector - the library's pooled release-hardware figure (edgecore/
+        agr-psu-dc@1 latch), sourced for arrangement and not proudness
+    - node: handle-right
+      out: 4.2
+      confidence: estimated
+      source: >-
+        nokia/fglt-b@1 ejector - the library's pooled release-hardware figure (edgecore/
+        agr-psu-dc@1 latch), sourced for arrangement and not proudness
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: cfp2, speed: 200g}
+    description: the three CFP2 connectors c1-c3 (CFP2 at 100G or CFP2-DCO at 200G)
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the 6 port lamps, a Lnk and an Act lamp per connector
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the left end
+parts:
+  - {ref: std/cfp2@1, id: c1, group: ports, at: [25.61, 8.46]}
+  - {ref: std/cfp2@1, id: c2, group: ports, at: [76.45, 8.46]}
+  - {ref: std/cfp2@1, id: c3, group: ports, at: [127.39, 8.46]}
+  - {ref: common/led-dot@1, id: lnk-c1, group: port-leds, at: [70.87, 6.87], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-c1, group: port-leds, at: [70.87, 11.25], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-c2, group: port-leds, at: [121.6, 6.87], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-c2, group: port-leds, at: [121.6, 11.25], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-c3, group: port-leds, at: [172.38, 6.87], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-c3, group: port-leds, at: [172.38, 11.25], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: stat, group: status-leds, at: [11.38, 6.83], states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: pwr, group: status-leds, at: [11.38, 11.25], states: {lamp: ['off', {name: 'on', color: '#2f6fdb'}]}}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]
