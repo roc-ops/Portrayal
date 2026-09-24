@@ -502,14 +502,6 @@ def slot_key_prefix(path):
     return "/".join(s for s in path.split("/") if s != "module")
 
 
-def module_key_prefix(path):
-    """slot_key_prefix, but only for a module seated in a bay (`front-6/module`,
-    `riser-1/module/slot-1/module`); None for any other path."""
-    if not path or not path.endswith("/module"):
-        return None
-    return slot_key_prefix(path)
-
-
 def seated_ref(cfg_bays, bay_path, bay):
     """What a configuration seats in the bay at module-less `bay_path`: its own
     `bays:` entry, else the bay's `default`; empty means empty."""

@@ -1040,7 +1040,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                     occ_used.add(key)
                 seated_now.append(host_id)
                 continue
-            at, hrot, lift = solve_seat(lib, _label(host_id, key), spec["ref"],
+            at, orot, lift = solve_seat(lib, _label(host_id, key), spec["ref"],
                                         f"{path}/{host_id}", host)
             local = occupant_local_id(host_id, spec)
             # THE HOST'S GROUP, AS A DEVICE OCCUPANT TAKES ITS HOST'S: the card
@@ -1054,7 +1054,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 lib, spec["ref"], f"{inst_id}--{local}", at, None,
                 group_merged_attrs(grp, spec.get("attrs")),
                 None, None, skin_name=spec.get("skin", "default"),
-                rotate=hrot or None, palette=palette, inst_palette=inst_palette,
+                rotate=orot or None, palette=palette, inst_palette=inst_palette,
                 z_inset=z_inset - lift, z_group_lift=z_group_lift + lift,
                 skin_overrides=skin_overrides, attr_overrides=attr_overrides,
                 path=f"{path}/{local}", resolved=resolved,
@@ -1073,7 +1073,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
                 og.set("data-z-lift", f"{lift:g}")
             og.set("data-for", f"{path}/{host_id}")
             g.append(og)
-            hosts[local] = {"ref": spec["ref"], "at": at, "rotate": hrot,
+            hosts[local] = {"ref": spec["ref"], "at": at, "rotate": orot,
                             "host-lift": lift, "group": gname}
             # AND WHAT THE OCCUPANT ITSELF SHIPS HOLDING. A plug's contract may
             # default a boot onto its own rear slot, and it ships that boot
@@ -2507,15 +2507,16 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             # THE ONE SEATING RULE (solve_seat): the mate points, the turn,
             # the mirror / rotate / in: refusals and the lift, shared with a
             # seat on a card (_seat_nested_occupants).
-            at, hrot, total_lift = solve_seat(
+            at, orot, total_lift = solve_seat(
                 lib, p["id"], p["ref"], p["mate-to"], host,
                 occ_rotate=p.get("rotate"), occ_in=p.get("in"), floor_of=floor_of)
             seated = dict(p, at=at)
-            # Omitted when the host has none, so an unrotated seat's output
-            # does not change. A chained seat (a boot on a plug in a rotated
+            # `orot` is the occupant's turn - the host's own plus a spanning
+            # host's axis (solve_seat) - omitted when that is none, so an
+            # unrotated seat's output does not change. A chained seat (a boot on a plug in a rotated
             # cage) inherits it: `hosts` holds this dict.
-            if hrot:
-                seated["rotate"] = hrot
+            if orot:
+                seated["rotate"] = orot
             # WHAT SEATS RECORDS ITS HOST, HOWEVER IT WAS AUTHORED. `occupants:`
             # writes `for: host` when it expands (see above); a HAND-WRITTEN
             # `mate-to` - which the spec offers in the same breath as
@@ -3361,12 +3362,13 @@ def _pluggable_candidates(lib_roots):
     `libwalk` reads contracts off disk directly, which is what every renderer
     already does for every placement it draws.
 
-    `mates:` IS THE GATE, NOT `behaviour`. The two plugs, generic/lc-plug@2 and
-    generic/rj45-plug@1, are `class: port` and so carry no `behaviour` (their
-    own provenance says why: test_behaviour.py holds every port to none), yet
-    each is exactly what a connector slot must offer (B3). Every other part
-    that declares `mates:` is `behaviour: occupies`, and neither plug mates a
-    pluggables family's interface, so no cage's accept list changes by this.
+    `mates:` IS THE GATE, NOT `behaviour`. The six plugs - generic/lc-plug@2,
+    lc-duplex-plug@2, sc-plug@1, mpo12-plug@1, mpo24-plug@1 and rj45-plug@1 -
+    are `class: port` and so carry no `behaviour` (their own provenance says
+    why: test_behaviour.py holds every port to none), yet each is exactly what
+    a connector slot must offer (B3). Every other part that declares `mates:`
+    is `behaviour: occupies`, and no plug mates a pluggables family's
+    interface, so no cage's accept list changes by this.
     """
     out = {}
     for cf in libwalk.iter_components(lib_roots):
@@ -3578,7 +3580,8 @@ def _slot_dict(p, contract, interface, media, accepts, occupant, mate_at, lift,
         "occupant-attrs": group_side_attrs(p.get("group"), group),
         # TWO THINGS THE BUILD DOES TO A SEATED OPTIC THAT A CONSUMER MAY
         # NOT, published so it can decline rather than seat it wrong (the
-        # kit refuses both, as it refuses a lift):
+        # kit refuses both; a lift it seats, since B3 Task 9, through
+        # `lift` above):
         #   mirror        this build RAISES for an occupant in a mirrored
         #                 host (the D3 refusal in the mate-to resolution);
         #   group-states  the host's group carries `states`, which
@@ -3639,9 +3642,10 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
         # A CAGE IN A WELL IS SUNK BY ITS FLOOR, and the mate-to resolution
         # carries that sink into its occupant's `host-lift` (render_view). The
         # published `lift` is documented as that same figure, so it takes the
-        # same term - and a consumer that does not seat into a lifted cage (the
-        # kit refuses any non-zero lift) declines this one rather than seating
-        # the optic at the panel above a floor it cannot see.
+        # same term - so a consumer seating into a lifted cage (the kit does,
+        # since B3 Task 9) puts the optic on the floor, and one that does not
+        # declines this one rather than seating the optic at the panel above
+        # a floor it cannot see.
         extra = 0.0
         if p.get("in") and not p.get("projection-of"):
             extra = -well_floor(placements, lib, p["in"])
@@ -3717,9 +3721,10 @@ def component_cages(contract, lib, families, candidates, connectors=None, face=F
     is written as `data-z-lift` on its group (instance_group), which raises
     everything in it. An occupant seated inside the card sits BESIDE the cage
     group, not in it, so it takes that raise only if the published figure
-    carries it - and a consumer that refuses a lifted cage then refuses it
-    for the right reason rather than seating the optic 44 mm under a shelf
-    card's raised cage.
+    carries it - so the kit, which seats at a lift (B3 Task 9), raises the
+    optic with the cage, and a consumer that refuses a lifted cage refuses
+    it for the right reason rather than seating the optic 44 mm under a
+    shelf card's raised cage.
 
     A WRAPPER THAT FORWARDS ITS ONE APERTURE IS THE SLOT (B3, P2). When this
     contract presents a composed part's interface as its own
