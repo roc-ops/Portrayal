@@ -122,3 +122,14 @@ def test_tilt_frame():
     assert g["memo"] and g["sameKeyInside"] and g["autoOff"]
     assert g["userData"]["anchor"] == [20, 30] and g["userData"]["on"] == "card--housing"
     assert g["nestedB"] == pytest.approx(g["aloneB"], abs=1e-3)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_out_height_at_reads_the_neighbouring_solid():
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True, cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    o = json.loads(p.stdout.strip().splitlines()[-1])["outHeight"]
+    assert o["pastApex"] == pytest.approx(14.25, abs=1e-3)   # the return is as tall as the apex
+    assert o["midReturn"] == pytest.approx(7.125, abs=1e-3)
+    assert o["flat"] == 3
+    assert o["outside"] == 0

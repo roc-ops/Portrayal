@@ -89,6 +89,31 @@ export function facetZ(r, {deg, facing}, lift, [px, py]) {
           : facing === 'left' ? px - r.x : r.x + r.w - px;
   return (lift || 0) + Math.max(0, d) * t;
 }
+// THE HEIGHT OF THE RAISED SOLID at a face point: the tallest `out` whose box
+// holds it, a profiled one read off its piecewise-linear profiles (offsets
+// from the box's own edges; the lesser of the two, as the builder draws it).
+// Outs are absolute, so this is a height off the face.
+export function outHeightAt(outs, x, y, eps = 0.01) {
+  const lerp = (pts, t) => {
+    if (t <= pts[0][0]) return pts[0][1];
+    for (let i = 1; i < pts.length; i++)
+      if (t <= pts[i][0]) {
+        const [a0, z0] = pts[i - 1], [a1, z1] = pts[i];
+        return a1 === a0 ? z1 : z0 + (z1 - z0) * (t - a0) / (a1 - a0);
+      }
+    return pts[pts.length - 1][1];
+  };
+  let h = 0;
+  for (const o of outs) {
+    if (x < o.x - eps || x > o.x + o.w + eps || y < o.y - eps || y > o.y + o.h + eps) continue;
+    const zx = o.profile && o.profile.length >= 2 ? lerp(o.profile, x - o.x) : Infinity;
+    const zy = o.profileY && o.profileY.length >= 2 ? lerp(o.profileY, y - o.y) : Infinity;
+    const z = Math.min(zx, zy);
+    const v = Number.isFinite(z) ? z : typeof o.out === 'number' ? o.out : 0;
+    if (v > h) h = v;
+  }
+  return h;
+}
 // WHICH FACET A NODE STANDS ON: the nearest `[data-tilt-on]` group at or above
 // it (render.py writes it on a part `on` a facet and on every occupant seated in
 // one). `host` is that group; its projected box supplies the tilt's anchor.
@@ -2302,7 +2327,23 @@ export async function buildFaceRelief(F, ctx) {
             sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
                     LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
           }
+          // A SKIRT AGAINST A NEIGHBOUR AS TALL IS INSIDE THE SOLID. A sawtooth
+          // is a face and its return, two nodes meeting at the tooth's apex;
+          // each dropped a full-height skirt there, back to back in one plane,
+          // and a cage well running down the slope crossed them and showed
+          // them z-fighting inside the cage. One tooth has no wall there.
+          const others = o.tilt ? [] : outs.filter(e => e !== o && !e.tilt);
+          const inner = (p, q) => {
+            if (!others.length) return false;
+            const eps = 1e-4, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+            const dx = p[0] === q[0] ? (p[0] <= 0 ? -eps : p[0] >= o.w ? eps : 0) : 0;
+            const dy = p[1] === q[1] ? (p[1] <= 0 ? -eps : p[1] >= o.h ? eps : 0) : 0;
+            if (!dx && !dy) return false;
+            const top = Math.max(depthAt(...p), depthAt(...q));
+            return outHeightAt(others, o.x + mx + dx, o.y + my + dy, 0) >= top - 0.01;
+          };
           for (let k = 0; k < ring.length; k++) {
+            if (inner(ring[k], ring[(k + 1) % ring.length])) continue;
             const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
             si.push(a, b, c, b, d, c);
           }

@@ -157,4 +157,15 @@ out.group = {
   nestedB: rr(through([gB, gA], L([25, 35]))),
   aloneB: rr(through([gBalone], L([25, 35]))),
 };
+// A sawtooth tooth: an up face and its down return meeting at the apex. The
+// height just past the face's apex edge is the return's, so the face's skirt
+// there is inside the tooth.
+const fc = {x: 0, y: 0, w: 25, h: 14.25, profileY: [[0, 0], [14.25, 14.25]], out: 14.25};
+const rt = {x: 0, y: 14.25, w: 25, h: 14.25, profileY: [[0, 14.25], [14.25, 0]], out: 14.25};
+out.outHeight = {
+  pastApex: rr([m.outHeightAt([rt], 12.5, 14.25 + 1e-4, 0)])[0],
+  midReturn: rr([m.outHeightAt([fc, rt], 12.5, 21.375)])[0],
+  flat: m.outHeightAt([{x: 0, y: 0, w: 10, h: 10, out: 3}], 5, 5),
+  outside: m.outHeightAt([fc, rt], 12.5, 40),
+};
 console.log(JSON.stringify(out));
