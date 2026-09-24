@@ -97,10 +97,14 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
 import argparse
 import types
 import contextlib
+import hashlib
 import json
 import math
+import os
 import re
 import sys
+import tempfile
+import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -111,6 +115,7 @@ from portrayal import libwalk
 from portrayal import capability
 from portrayal import dcim_export
 from portrayal import devicelock
+from portrayal import manifest as _manifest
 from portrayal import optical
 from portrayal import optical_ports
 from portrayal import stacks
@@ -6940,6 +6945,316 @@ def _mark_centre(mark):
 
 _ID_VOCAB_CACHE = {}
 
+# L62'S VOCABULARY, KEPT ON DISK BETWEEN PROCESSES (#542).
+#
+# `_id_corpus` reads every contract and every device manifest in the library,
+# and build.sh renders each device in its own process - so that read was paid
+# once per device, and it was ~95% of a render (5.9 s of a 6.5 s `render.py`;
+# the drawing is 0.1 s). The answer is now written to a file named for a digest
+# of the bytes it was computed from, and the next process reads that instead.
+#
+# KEYED ON CONTENT, NEVER ON MTIMES. A stale vocabulary does not fail loudly:
+# it silently hides a real L62 finding (or invents one), and nothing downstream
+# can tell. An mtime key can go stale - a checkout that restores an old
+# timestamp, a coarse-grained filesystem, two edits inside one tick, a copy
+# that preserves times - and every one of those would serve the old answer. A
+# digest of every byte `_id_corpus` reads cannot: if any input differs, the
+# name differs and the entry is simply never found. The compute reads the SAME
+# bytes that were hashed (not a second read through load_yaml's (path, mtime)
+# cache), so what is stored under a digest is exactly what those bytes say.
+#
+# THE CODE IS AN INPUT TOO, SO THE BYTES OF THIS FILE ARE IN THE DIGEST. An
+# entry computed by older logic must never answer for newer logic, and a
+# hand-bumped version constant is exactly the guard that gets forgotten. The
+# WHOLE of lint.py is hashed rather than `_id_corpus_compute`'s source, because
+# the answer also depends on helpers and constants elsewhere in the module and a
+# whole-file hash cannot miss one. The price is one recompute per lint.py edit.
+# The bytes are read ONCE, when this module is imported, so the digest names
+# the code this process actually loaded: a long-lived process - the tests'
+# warm render server, say - whose lint.py is edited on disk behind it keeps
+# computing with the OLD code, and must keep keying its entries as the old
+# code too.
+#
+# _ID_CORPUS_CACHE_FORMAT is for the SERIALISED SHAPE only: bump it when what
+# `_id_corpus_cache_store` writes, or what `_id_corpus_cache_load` accepts,
+# changes. It is in the digest as well, so a bump turns every old entry into a
+# miss.
+#
+# ANY FAILURE ON THE CACHE PATH FALLS BACK TO COMPUTING: an unwritable or
+# missing directory, a corrupt or truncated file, a JSON error, a race. The
+# cache is an optimisation and is never allowed to be a reason to fail.
+_ID_CORPUS_CACHE_FORMAT = 1
+_ID_CORPUS_CACHE_KEEP = 50          # entries kept; the oldest by mtime go first
+
+
+def _source_sha(path):
+    """sha256 of a source file's bytes, or None if it cannot be read - in which
+    case the digest raises and the cache is simply not used."""
+    try:
+        return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    except OSError:
+        return None
+
+
+_ID_CORPUS_CODE = _source_sha(__file__)   # this module as loaded; see above
+_ID_CORPUS_TMP_MAX_AGE = 3600       # seconds before a stray temp file is an orphan
+
+
+def _id_corpus_cache_dir():
+    """$PORTRAYAL_CACHE_DIR, else $XDG_CACHE_HOME/portrayal, else
+    ~/.cache/portrayal. Never inside the checkout or dist/.
+
+    A RELATIVE value is ignored and the next option is used - the XDG spec says
+    so for XDG_CACHE_HOME, and PORTRAYAL_CACHE_DIR gets the same treatment,
+    because a relative path resolves against the cwd, which for build.sh and
+    the tests is the checkout itself."""
+    env = os.environ.get("PORTRAYAL_CACHE_DIR")
+    if env and Path(env).is_absolute():
+        return Path(env)
+    xdg = os.environ.get("XDG_CACHE_HOME")
+    if xdg and Path(xdg).is_absolute():
+        return Path(xdg) / "portrayal"
+    return Path.home() / ".cache" / "portrayal"
+
+
+def _id_corpus_roots_cacheable(lib_roots):
+    """Whether the digest determines the answer for these roots. It does only
+    when no two roots overlap. The veto in `_id_corpus_compute` counts DISTINCT
+    file paths, and the digest keys on root position and relative path, not on
+    absolute paths - so [A, A] and [A, B], with B a byte-identical copy of A,
+    hash the same and answer differently (the same two files twice, against
+    four). A repeated root, or one inside another, is computed and not cached."""
+    try:
+        rs = [Path(r).resolve() for r in lib_roots]
+    except Exception:
+        return False
+    for i, a in enumerate(rs):
+        for j, b in enumerate(rs):
+            if i != j and (a == b or a in b.parents):
+                return False
+    return True
+
+
+def _id_corpus_files(lib_roots):
+    """Every file `_id_corpus` reads, with its bytes, in the order it reads
+    them: (section, root index, path relative to root/section, path, bytes,
+    sha256 of the bytes). Bytes and hash are None for a file that vanished
+    between the walk and the read - load_yaml answered None for that too, and
+    the computation treats it as the empty document it always did."""
+    files = []
+    for section, pattern in (("components", "contract.yaml"), ("devices", "*.yaml")):
+        for n, root in enumerate(lib_roots):
+            base = Path(root) / section
+            for f in base.rglob(pattern):
+                try:
+                    data = f.read_bytes()
+                except FileNotFoundError:
+                    data = None
+                sha = hashlib.sha256(data).hexdigest() if data is not None else None
+                files.append((section, n, f.relative_to(base).as_posix(), f, data, sha))
+    return files
+
+
+def _id_corpus_section(files, section):
+    """(path, bytes, hash) for one section, roots in order - the order the two
+    loops in `_id_corpus_compute` always walked them in."""
+    return [(f, data, sha) for s, _n, _rel, f, data, sha in files if s == section]
+
+
+_ID_CORPUS_PARSES = 0              # files parsed by this process, for the trace
+
+
+def _id_corpus_parse(data):
+    """One file's document: the parser load_yaml uses, on the hashed bytes."""
+    global _ID_CORPUS_PARSES
+    _ID_CORPUS_PARSES += 1
+    return yaml.load(data, Loader=_manifest._Loader)
+
+
+def _id_corpus_trace(outcome, lib_roots, files, parsed0, t0):
+    """One JSON line per computation to $PORTRAYAL_ID_CORPUS_TRACE, if set:
+    whether the disk cache hit, how many files there were and how many had to
+    be parsed. How a slow build or suite shows which processes paid for the
+    vocabulary; never a reason to fail."""
+    path = os.environ.get("PORTRAYAL_ID_CORPUS_TRACE")
+    if not path:
+        return
+    with contextlib.suppress(Exception):
+        line = json.dumps({
+            "pid": os.getpid(), "argv0": Path(sys.argv[0]).name if sys.argv else "",
+            "roots": [str(r) for r in lib_roots], "outcome": outcome,
+            "files": len(files), "parsed": _ID_CORPUS_PARSES - parsed0,
+            "secs": round(time.monotonic() - t0, 3)}) + "\n"
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+        try:
+            os.write(fd, line.encode())
+        finally:
+            os.close(fd)
+
+
+def _id_corpus_doc(data):
+    return (_id_corpus_parse(data) if data is not None else None) or {}
+
+
+# WHAT EACH FILE CONTRIBUTES, MEMOISED BY THE HASH OF ITS BYTES. A cache miss
+# used to parse every file from bytes, including the ~860 of the real library
+# that nearly every test render shares with a tmp root beside it - where
+# before this cache existed, those came free from load_yaml's per-process
+# parse. This memo gives that back without giving up the purity the disk
+# cache rests on: its key is the content hash the digest already computes, so
+# it cannot go stale (a changed file IS a different key), and what it holds is
+# exactly what `_id_corpus_compute` reads off a document - nothing about any
+# device or rule outcome. `_id_corpus_prime` fills it, which is what the
+# tests' warm render server does once so that its forked children parse only
+# the files a test wrote.
+_ID_CORPUS_FACTS = {}
+
+
+def _id_corpus_facts(section, data, sha):
+    """What one file contributes to the vocabulary, from its bytes:
+
+      components - the values offered as connector words, in order: its
+                   `conforms`, then `attrs.media` when its class is `port`;
+      devices    - every string placement id, in order, or nothing for a
+                   document that is not a device.
+
+    Memoised in _ID_CORPUS_FACTS by (section, sha256 of the bytes)."""
+    if data is None:
+        return ()
+    key = (section, sha)
+    hit = _ID_CORPUS_FACTS.get(key)
+    if hit is not None:
+        return hit
+    doc = _id_corpus_doc(data)
+    out = []
+    if section == "components":
+        if doc.get("conforms"):
+            out.append(str(doc["conforms"]))
+        if doc.get("class") == "port":
+            media = (doc.get("attrs") or {}).get("media")
+            if media:
+                out.append(str(media))
+    elif doc.get("kind") in (None, "device"):
+        for view in (doc.get("views") or {}).values():
+            for q in (((view or {}).get("components") or {}).get("placements") or []):
+                i = q.get("id")
+                if isinstance(i, str):
+                    out.append(i)
+    facts = _ID_CORPUS_FACTS[key] = tuple(out)
+    return facts
+
+
+def _id_corpus_prime(lib_roots):
+    """Fill the per-file memo for `lib_roots` and nothing else: no answer is
+    computed, no in-process or disk entry is written."""
+    for section, _n, _rel, _f, data, sha in _id_corpus_files(lib_roots):
+        _id_corpus_facts(section, data, sha)
+
+
+def _id_corpus_digest(files):
+    """sha256 over the cache format, the bytes of the source that computes the
+    answer (_ID_CORPUS_CODE: lint.py, as imported), and for every library file its root's
+    position, its path relative to that root's section and a hash of its bytes
+    - sorted, so the directory walk's order does not matter, and without the
+    roots' absolute paths, so every checkout of the same commit shares one
+    entry. An unreadable source raises, and the caller then computes without
+    the cache."""
+    code = _ID_CORPUS_CODE
+    if code is None:
+        raise OSError("lint.py's source could not be read at import")
+    rows = []
+    for section, n, rel, _f, _data, sha in files:
+        rows.append(f"{n}\0{section}\0{rel}\0{sha or 'missing'}\n")
+    rows.sort()
+    # the parser is part of the computation too: a different PyYAML, or the
+    # pure-Python loader where libyaml is missing, could read a document
+    # differently, so neither may reuse the other's entries
+    parser = f"{yaml.__version__}\0{_manifest._Loader.__name__}"
+    top = hashlib.sha256(
+        f"portrayal-id-corpus\0{_ID_CORPUS_CACHE_FORMAT}\0code\0{code}\0"
+        f"parser\0{parser}\n".encode())
+    for r in rows:
+        top.update(r.encode("utf-8", "surrogateescape"))
+    return top.hexdigest()
+
+
+def _id_corpus_cache_load(path, digest):
+    """The cached (words, preferred, whole), rebuilt as exactly the types
+    `_id_corpus_compute` returns - or None if the entry is missing, unreadable,
+    or anything other than what `_id_corpus_cache_store` writes for `digest`."""
+    try:
+        with open(path, "rb") as fh:
+            doc = json.loads(fh.read().decode("utf-8"))
+        if (not isinstance(doc, dict) or doc.get("format") != _ID_CORPUS_CACHE_FORMAT
+                or doc.get("digest") != digest):
+            return None
+        raw_words, raw_pref, raw_whole = doc["words"], doc["preferred"], doc["whole"]
+        if not (isinstance(raw_words, list) and isinstance(raw_whole, list)
+                and isinstance(raw_pref, list)):
+            return None
+        if not all(type(w) is str for w in raw_words + raw_whole):
+            return None
+        preferred = {}
+        for row in raw_pref:
+            if not (isinstance(row, list) and len(row) == 3 and type(row[0]) is str
+                    and type(row[1]) is int and type(row[2]) is str):
+                return None
+            preferred[row[0]] = (row[1], row[2])
+        if len(preferred) != len(raw_pref):
+            return None
+        return set(raw_words), preferred, set(raw_whole)
+    except Exception:
+        return None
+
+
+def _id_corpus_cache_store(cache_dir, digest, result):
+    """Write the entry atomically - a temp file in the same directory, then
+    os.replace - so a reader sees the whole file or none. Two processes racing
+    write the same bytes under the same name, and the second replace is
+    harmless. Then prune to the newest _ID_CORPUS_CACHE_KEEP entries. Every
+    failure is swallowed: not caching is always a correct outcome."""
+    words, preferred, whole = result
+    payload = json.dumps({
+        "format": _ID_CORPUS_CACHE_FORMAT,
+        "digest": digest,
+        "words": sorted(words),
+        # a list of rows rather than an object, so the dict's key order - which
+        # is what a fresh computation would have produced - survives the trip
+        "preferred": [[k, n, lead] for k, (n, lead) in preferred.items()],
+        "whole": sorted(whole),
+    }, separators=(",", ":"))
+    tmp = None
+    try:
+        cache_dir = Path(cache_dir)
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=cache_dir, prefix=".id-corpus-", suffix=".tmp")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(payload)
+        os.replace(tmp, cache_dir / f"id-corpus-{digest}.json")
+        tmp = None
+    except Exception:
+        return
+    finally:
+        if tmp is not None:
+            with contextlib.suppress(OSError):
+                os.unlink(tmp)
+    with contextlib.suppress(Exception):
+        aged = []
+        for e in cache_dir.glob("id-corpus-*.json"):
+            with contextlib.suppress(OSError):
+                aged.append((e.stat().st_mtime, e.name, e))
+        aged.sort(reverse=True)
+        for _m, _n, e in aged[_ID_CORPUS_CACHE_KEEP:]:
+            with contextlib.suppress(OSError):
+                e.unlink()
+        # a writer killed between mkstemp and os.replace leaves its temp file;
+        # one old enough that no live writer can still own it is an orphan
+        cutoff = time.time() - _ID_CORPUS_TMP_MAX_AGE
+        for t in cache_dir.glob(".id-corpus-*.tmp"):
+            with contextlib.suppress(OSError):
+                if t.stat().st_mtime < cutoff:
+                    t.unlink()
+
 
 def _id_corpus(lib_roots):
     """What this library calls things - the two facts L62 needs, read off the
@@ -6972,6 +7287,38 @@ def _id_corpus(lib_roots):
     key = tuple(str(r) for r in lib_roots)
     if key in _ID_VOCAB_CACHE:
         return _ID_VOCAB_CACHE[key]
+    t0, parsed0 = time.monotonic(), _ID_CORPUS_PARSES
+    files = _id_corpus_files(lib_roots)
+    try:
+        if not _id_corpus_roots_cacheable(lib_roots):
+            raise ValueError("overlapping roots: the digest does not determine the answer")
+        digest = _id_corpus_digest(files)
+        cache_dir = _id_corpus_cache_dir()
+        hit = _id_corpus_cache_load(cache_dir / f"id-corpus-{digest}.json", digest)
+    except Exception:          # the cache is an optimisation, never a reason to fail
+        digest, hit = None, None
+    if hit is not None:
+        # touched, so pruning drops the least recently USED entries
+        with contextlib.suppress(OSError):
+            os.utime(cache_dir / f"id-corpus-{digest}.json")
+        _ID_VOCAB_CACHE[key] = hit
+        _id_corpus_trace("hit", lib_roots, files, parsed0, t0)
+        return hit
+    result = _id_corpus_compute(files)
+    # a file that vanished mid-walk is a tree being changed under us: answer
+    # from what was read, as before, but do not record it for anyone else
+    if digest is not None and all(data is not None for *_, data, _sha in files):
+        _id_corpus_cache_store(cache_dir, digest, result)
+    _ID_VOCAB_CACHE[key] = result
+    _id_corpus_trace("miss" if digest is not None else "uncached", lib_roots, files,
+                     parsed0, t0)
+    return result
+
+
+def _id_corpus_compute(files):
+    """L62's vocabulary from the files `_id_corpus_files` read - the logic
+    `_id_corpus` describes. A pure function of those bytes, which is what lets
+    the answer be cached under a digest of them."""
     slug = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
     words = set()
 
@@ -6983,15 +7330,9 @@ def _id_corpus(lib_roots):
             if head != v:
                 words.add(head)
 
-    for root in lib_roots:
-        for f in (Path(root) / "components").rglob("contract.yaml"):
-            c = load_yaml(f) or {}
-            if c.get("conforms"):
-                offer(c["conforms"])
-            if c.get("class") == "port":
-                media = (c.get("attrs") or {}).get("media")
-                if media:
-                    offer(media)
+    for _f, data, sha in _id_corpus_section(files, "components"):
+        for value in _id_corpus_facts("components", data, sha):
+            offer(value)
 
     # AND THEN THE CORPUS GETS A VETO. A word that devices already use as a
     # COMPLETE id is a function name in this library whatever else it is: `usb`
@@ -7000,26 +7341,18 @@ def _id_corpus(lib_roots):
     # arguing with the convention it was written to state. Three devices, so
     # that one sloppy file cannot silence a word everywhere.
     bare, tails, whole_ids = {}, {}, {}
-    for root in lib_roots:
-        for f in (Path(root) / "devices").rglob("*.yaml"):
-            d = load_yaml(f) or {}
-            if d.get("kind") not in (None, "device"):
-                continue
-            for view in (d.get("views") or {}).values():
-                for q in (((view or {}).get("components") or {}).get("placements") or []):
-                    i = q.get("id")
-                    if not isinstance(i, str):
-                        continue
-                    if i in words:
-                        bare.setdefault(i, set()).add(str(f))
-                    whole_ids[i] = whole_ids.get(i, 0) + 1
-                    # every way this id divides into <lead>-<tail>, which is how
-                    # the preferred name below is looked up
-                    t = i.split("-")
-                    for k in range(1, len(t)):
-                        c = tails.setdefault("-".join(t[k:]), {})
-                        c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
-    words -= {w for w, files in bare.items() if len(files) >= 3}
+    for f, data, sha in _id_corpus_section(files, "devices"):
+        for i in _id_corpus_facts("devices", data, sha):
+            if i in words:
+                bare.setdefault(i, set()).add(str(f))
+            whole_ids[i] = whole_ids.get(i, 0) + 1
+            # every way this id divides into <lead>-<tail>, which is how
+            # the preferred name below is looked up
+            t = i.split("-")
+            for k in range(1, len(t)):
+                c = tails.setdefault("-".join(t[k:]), {})
+                c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
+    words -= {w for w, where in bare.items() if len(where) >= 3}
 
     # THE PREFERRED NAME. What does the library already call the thing on the
     # other end of `smb-10mhz-out`? It calls it `clk-10mhz-out`, on three
@@ -7063,7 +7396,6 @@ def _id_corpus(lib_roots):
     # library uses it as a whole id somewhere, which is what makes it a name
     # rather than a leftover.
     whole = {i for i, n in whole_ids.items() if n >= 2}
-    _ID_VOCAB_CACHE[key] = (words, preferred, whole)
     return words, preferred, whole
 
 

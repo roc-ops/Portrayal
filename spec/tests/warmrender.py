@@ -30,7 +30,10 @@ WHY IT IS STILL A REAL BUILD, AND NOT AN IN-PROCESS SHORTCUT:
   - THE ONLY THING A CHILD INHERITS BEYOND A FRESH INTERPRETER is the parse of
     each unchanged library file, keyed by its mtime: exactly the document a
     cold `load_yaml` would have returned. A tmp copy a test writes is a
-    different path, so it is parsed fresh in the child.
+    different path, so it is parsed fresh in the child. And lint's memo of
+    what each library file contributes to L62's vocabulary, keyed by the
+    sha256 of the file's bytes (#542) - content-keyed, so it cannot go stale,
+    and per file, so it holds no rule outcome. See `_warm`.
   - THE SAME CODE RUNS. The script is executed from its file, as `__main__`,
     so `_cli()` and its error handling are what a test sees, and a tool test
     that asserts on stderr or a non-zero status still asserts on the real ones.
@@ -182,7 +185,9 @@ def _server():
 
 def _warm():
     """Import the tools and parse every library and schema YAML once, through
-    the build's own cache. Nothing else: no rule runs, no global is filled."""
+    the build's own cache, and prime lint's content-keyed per-file memo for
+    L62. Nothing else: no rule runs, and no global holding a rule's answer is
+    filled."""
     import portrayal.capability  # noqa: F401
     import portrayal.lint  # noqa: F401
     import portrayal.render  # noqa: F401
@@ -192,6 +197,16 @@ def _warm():
             load_yaml(f)
     for f in sorted(SCHEMAS.glob("*.yaml")):
         load_yaml(f)
+    # AND L62'S PER-FILE FACTS FOR THE SAME LIBRARY (#542). L62's vocabulary is
+    # cached on disk by content, so a render whose roots include a tmp library
+    # beside the real one misses that cache, and would otherwise parse all
+    # ~860 real files again from their bytes. This fills lint's memo of what
+    # each FILE contributes, keyed by the sha256 of its bytes, so a child
+    # parses only the files a test wrote. It is not rule state: no vocabulary
+    # is computed, nothing goes into `_ID_VOCAB_CACHE` or onto disk, and a
+    # content-keyed entry cannot go stale - a file that changes is a new key.
+    import portrayal.lint as lint
+    lint._id_corpus_prime([LIB])
 
 
 def _child(req):
