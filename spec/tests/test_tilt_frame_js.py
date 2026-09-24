@@ -84,3 +84,15 @@ def test_tilt_frame():
 
     # right: root at x=25, proud edge at x=0; at px=0, d = r.x + r.w - px = 25+0-0 = 25
     assert o["facetZRight"] == pytest.approx(25 * math.tan(math.radians(45)), abs=1e-3)
+
+    # tiltOf: the nearest tilted group wins over an outer one; the group itself
+    # answers for itself; a node on no facet answers null
+    assert o["tiltOf"] == {"deg": 30, "facing": "up", "on": "card--housing", "hostIsOptic": True}
+    assert o["tiltOfSelf"] == "card--housing"
+    assert o["tiltOfNone"] is None
+
+    # faceFacing: rotate(90) turns the component clockwise on the face, so its
+    # `up` looks right; a mirror in x swaps left and right only
+    assert o["faceFacing"]["r90"] == ["right", "left", "up", "down"]
+    assert o["faceFacing"]["mirror"] == ["up", "down", "right", "left"]
+    assert o["faceFacing"]["identity"] == ["up", "down", "left", "right"]

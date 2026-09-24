@@ -1,6 +1,7 @@
 globalThis.location = { search: '' };
 globalThis.fetch = async () => ({ ok: true, text: async () => '<svg/>' });
 const m = await import('../../../kit/relief.js');
+const {Node} = await import('./fake-dom.mjs');
 const apply = (e, [x, y, z]) => [e[0]*x + e[4]*y + e[8]*z + e[12],
                                  e[1]*x + e[5]*y + e[9]*z + e[13],
                                  e[2]*x + e[6]*y + e[10]*z + e[14]];
@@ -56,5 +57,24 @@ const out = {
   },
   facetZLeft: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 45, facing: 'left'}, 0, [25, 50]) * 1000) / 1000,
   facetZRight: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 45, facing: 'right'}, 0, [0, 50]) * 1000) / 1000,
+};
+// tiltOf: the nearest [data-tilt-on] at or above a node; null off a facet
+const lamp = new Node({id: 'lamp'});
+const optic = new Node({'data-tilt-on': 'card--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'},
+                       [new Node({}, [lamp])]);
+new Node({id: 'card'}, [new Node({'data-tilt-on': 'card--other', 'data-tilt': '45',
+                                  'data-tilt-facing': 'left'}, [optic])]);
+const loose = new Node({id: 'loose'});
+new Node({id: 'plate'}, [loose]);
+const t = m.tiltOf(lamp);
+out.tiltOf = {deg: t.deg, facing: t.facing, on: t.on, hostIsOptic: t.host === optic};
+out.tiltOfSelf = m.tiltOf(optic).on;
+out.tiltOfNone = m.tiltOf(loose);
+// faceFacing: a component turned rotate(90) (a=0 b=1 c=-1 d=0), and mirrored in x
+const r90 = {a: 0, b: 1, c: -1, d: 0}, mx = {a: -1, b: 0, c: 0, d: 1};
+out.faceFacing = {
+  r90: ['up', 'down', 'left', 'right'].map(f => m.faceFacing(r90, f)),
+  mirror: ['up', 'down', 'left', 'right'].map(f => m.faceFacing(mx, f)),
+  identity: ['up', 'down', 'left', 'right'].map(f => m.faceFacing({a: 1, b: 0, c: 0, d: 1}, f)),
 };
 console.log(JSON.stringify(out));
