@@ -1,0 +1,311 @@
+format: 1
+kind: device
+name: ch3000
+version: 0.1.0
+maturity: modelled
+manufacturer: CommScope
+model: CH3000
+description: >-
+  The CH3000 headend optics platform - a 3RU, 19-inch mid-plane chassis for cable
+  headend and hub optics, designed by Aurora Networks (2004), sold under the ARRIS
+  name and now by CommScope / Vistance. Sixteen identical full-depth slots take
+  transmitters, receivers, amplifiers and a power supply from the front; the rear
+  of each slot takes the module's dynamic back plate, which carries its optical and
+  RF connections, or a half-depth passive. A mid-plane between the two carries the
+  12 VDC bus and the RS-485 management bus.
+profile: optical
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      datasheets and photographs only - the CH3000 Chassis datasheet (2022) and its Aurora
+      2004 predecessor, the Chassis Accessories datasheet, the PS3006 and AR3002E
+      datasheets, and the HT3580H datasheet whose p1 photograph is the face-on chassis
+      front every front measurement is taken from (all in `references`). NO INSTALLATION
+      MANUAL OR HARDWARE GUIDE IS PUBLIC: the vendor's sit behind an entitled support
+      portal, so nothing here comes from one, and slot placement rests on photographs.
+  width:
+    confidence: photo-measured
+    note: >-
+      433 mm between the side walls, from two photographs that agree. The HT3580H sheet's
+      p1 chassis front, stitched from seven 1344 x 73 tiles, spans 1316 px between the rack
+      ears' outer edges - the data sheet's 19.0 in (482.6 mm), which INCLUDES the ears -
+      giving 2.727 px/mm, and the face's 360 px height against the data sheet's 5.22 in
+      agrees to 0.4%, so the face is near-orthographic. Its sixteen slots span 428.2 mm. The
+      Aurora 2004 sheet's empty CH3000N front puts the slot pitch at 6.178% of the outer
+      frame; 26.76 / 0.06178 = 433.1. The ears are not drawn.
+  height: {confidence: datasheet, note: 'CH3000 Chassis data sheet, Dimensions: 5.22 in H (13.5 cm), 3RU'}
+  depth: {confidence: datasheet, note: 'CH3000 Chassis data sheet, Dimensions: 13.3 in D (34 cm)'}
+  slot-pitch:
+    confidence: photo-measured
+    note: >-
+      26.76 mm. Each slot carries one captive thumbscrew on its centre line at the top of
+      the module face; on the HT3580H chassis photograph the sixteen screws fit a straight
+      line of 72.97 px pitch with a largest residual of 1.65 px (0.6 mm). The Aurora empty
+      chassis gives 26.75 from its rail holes against the 433 body. A faceplate is one pitch
+      less a 1.0 mm gap (25.76; a two-slot module 52.52), the gap read between the PS3006D
+      and the first CA3008 on the same photograph.
+  slot-height:
+    confidence: photo-measured
+    note: >-
+      module faceplates run y 142-497 of the 1344 px chassis photograph, 355 px = 130.2 mm
+      of the 132.6 mm face, leaving the frame rail visible above; drawn centred at y 1.2.
+  slot-numbering:
+    confidence: photo-measured
+    note: >-
+      FRONT 1-16 LEFT TO RIGHT; REAR 16-1 LEFT TO RIGHT as seen from behind, so front N and
+      rear N are one mid-plane column. The chassis data sheet says only "All slots are
+      identical (no specific slot allocation)", but the controller's display numbers them:
+      on the HT3580H photograph the PS3006D in the two left-hand slots reads "Slot 2", and
+      on the Aurora 2004 sheet's front photograph a PS3001D counted into slots 10-11 reads
+      "Slot 11". So the vendor counts from the left, and A TWO-SLOT MODULE IS ADDRESSED BY
+      ITS RIGHT-HAND SLOT - a two-slot bay is named for both slots (slot-1-2) and takes the
+      higher number as its rel-pos.
+  back-plates:
+    confidence: datasheet
+    note: >-
+      every active module mates a dynamic back plate seated in the rear of its slot(s); the
+      chassis data sheet says the dynamic back plates let a module be replaced from the front
+      without touching the cabling at the back. So the rear view's bays hold back plates, one per
+      module, spanning the same columns.
+  chassis-variants:
+    confidence: datasheet
+    note: >-
+      sold as CH3000C (top and bottom covers, 7 kg) and CH3000N (no covers, 4.5 kg). The
+      views model the CH3000C's covered box, which is what the HT3580H photograph shows; the
+      N's open frame, photographed on the Aurora 2004 sheet, is not drawn yet.
+attrs:
+  physical:
+    rack-face-width-mm: '482.6'
+    weight-kg: '7.0'
+    weight-note: 'CH3000C, with top and bottom covers; the CH3000N without covers is 4.5 kg'
+    slots-full-depth: '16'
+    slots-half-depth: '32 (16 front, 16 rear)'
+  power:
+    power-bus: 12 VDC mid-plane bus, fed by the PS3006 / PS3248 controller-supply
+  environmental:
+    operating-temperature: -20 to +65 C
+    storage-temperature: -40 to +85 C
+    humidity: 5% to 95% non-condensing
+  management:
+    mid-plane-bus: RS-485, polled by the power-supply controller; SNMP through a CX3002 / CX3003C / CX3033N
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 433.0
+  height: 132.6
+  depth: 337.8
+  ru: 3
+  color: '#1c1d1f'
+gaps:
+  - what: slot-blanks
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no front blanking panel for an empty CH3000 slot is named in any of the 164 data
+      sheets held. A rear plate legended BP3001 appears beside a BP-P2 in the CX3003C sheet's
+      photograph and is probably the rear blank, but no document names or describes it.
+    wanted: the part numbers of the front and rear slot blanks, if they exist
+  - what: older-psu-face
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      the PS3006D and PS3006N on the HT3580H chassis photograph carry an older face - a 3.5
+      mm jack legended Serial in place of the micro-USB, and vertical vent slots on the
+      PS3006N - than the PS3006 data sheet's own photographs. The current face is modelled.
+    wanted: the revision history of the PS3006 faceplate
+groups:
+  psus:
+    term: Slot
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        PS3006 data sheet, Features - "Supports redundant power supplies", and the PS3006N's
+        B/U PS lamp is "Lit if second power supply is present within chassis". The sheet
+        names redundancy as the only reason for a second supply and never a combined
+        rating, so two are read as the same capacity twice; the form is not stated.
+    description: >-
+      the power supply and chassis controller, two full-depth slots wide. PS3006 data sheet:
+      "Supports redundant power supplies" and "Occupies two full-depth slots"; any two
+      adjacent slots may take one, and these bays sit where the photographed chassis has them.
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the full-depth module slots, identical and taking any active module from the front
+  psu-back-plates:
+    term: Slot
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        PS3006 data sheet, Features - "Supports redundant power supplies", and the PS3006N's
+        B/U PS lamp is "Lit if second power supply is present within chassis". The sheet
+        names redundancy as the only reason for a second supply and never a combined
+        rating, so two are read as the same capacity twice; the form is not stated.
+    description: the BP-P1 back plate behind each power supply, carrying its AC inlet
+  back-plates:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the rear of each slot, where a module's dynamic back plate or a half-depth passive seats
+views:
+  front:
+    size: {w: 433.0, h: 132.6}
+    panel:
+      decor:
+        - {at: [0, 0], size: [433.0, 1.2], fill: '#111213'}
+        - {at: [0, 131.4], size: [433.0, 1.2], fill: '#111213'}
+    components:
+      bays:
+        - {id: slot-1-2, at: [2.92, 1.2], size: {w: 52.52, h: 130.2}, accepts: [commscope/ps3006d@1, commscope/ps3006n@1], default: commscope/ps3006d@1, group: psus, rel-pos: 2}
+        - {id: slot-3, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 3}
+        - {id: slot-4, at: [83.2, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 4}
+        - {id: slot-5, at: [109.96, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 5}
+        - {id: slot-6, at: [136.72, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 6}
+        - {id: slot-7, at: [163.48, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 7}
+        - {id: slot-8, at: [190.24, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 8}
+        - {id: slot-9, at: [217.0, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 9}
+        - {id: slot-10, at: [243.76, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 10}
+        - {id: slot-11, at: [270.52, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 11}
+        - {id: slot-12, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 12}
+        - {id: slot-13, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 13}
+        - {id: slot-14, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 14}
+        - {id: slot-15, at: [377.56, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 15, only-in: [base, ar3002e-x14]}
+        - {id: slot-16, at: [404.32, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 16, only-in: [base, ar3002e-x14]}
+        - {id: slot-15-16, at: [377.56, 1.2], size: {w: 52.52, h: 130.2}, accepts: [commscope/ps3006d@1, commscope/ps3006n@1], default: commscope/ps3006n@1, group: psus, rel-pos: 16, only-in: [redundant-power]}
+  rear:
+    size: {w: 433.0, h: 132.6}
+    panel:
+      decor:
+        - {at: [0, 0], size: [433.0, 1.2], fill: '#111213'}
+        - {at: [0, 131.4], size: [433.0, 1.2], fill: '#111213'}
+    components:
+      bays:
+        - {id: rear-1-2, at: [377.56, 1.2], size: {w: 52.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: psu-back-plates, rel-pos: 2}
+        - {id: rear-3, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 3}
+        - {id: rear-4, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 4}
+        - {id: rear-5, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 5}
+        - {id: rear-6, at: [270.52, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 6}
+        - {id: rear-7, at: [243.76, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 7}
+        - {id: rear-8, at: [217.0, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 8}
+        - {id: rear-9, at: [190.24, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 9}
+        - {id: rear-10, at: [163.48, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 10}
+        - {id: rear-11, at: [136.72, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 11}
+        - {id: rear-12, at: [109.96, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 12}
+        - {id: rear-13, at: [83.2, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 13}
+        - {id: rear-14, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 14}
+        - {id: rear-15, at: [29.68, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 15, only-in: [base, ar3002e-x14]}
+        - {id: rear-16, at: [2.92, 1.2], size: {w: 25.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 16, only-in: [base, ar3002e-x14]}
+        - {id: rear-15-16, at: [2.92, 1.2], size: {w: 52.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: psu-back-plates, rel-pos: 16, only-in: [redundant-power]}
+  left:
+    size: {w: 337.8, h: 132.6}
+    panel:
+      decor:
+        - {at: [0, 0], size: [337.8, 132.6], fill: '#1c1d1f'}
+  right:
+    size: {w: 337.8, h: 132.6}
+    panel:
+      decor:
+        - {at: [0, 0], size: [337.8, 132.6], fill: '#1c1d1f'}
+  top:
+    size: {w: 433.0, h: 337.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [433.0, 337.8], fill: '#232427'}
+  bottom:
+    size: {w: 433.0, h: 337.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [433.0, 337.8], fill: '#232427'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      One PS3006D power supply and controller in slots 1-2 with its BP-P1 back plate, and
+      every other slot empty - the chassis powered and manageable before any optics are
+      chosen. Empty slots are drawn open: no front blanking panel for a CH3000 slot is
+      named in any document held (see gaps).
+    bays:
+      slot-3: ''
+      slot-4: ''
+      slot-5: ''
+      slot-6: ''
+      slot-7: ''
+      slot-8: ''
+      slot-9: ''
+      slot-10: ''
+      slot-11: ''
+      slot-12: ''
+      slot-13: ''
+      slot-14: ''
+      slot-15: ''
+      slot-16: ''
+      rear-3: ''
+      rear-4: ''
+      rear-5: ''
+      rear-6: ''
+      rear-7: ''
+      rear-8: ''
+      rear-9: ''
+      rear-10: ''
+      rear-11: ''
+      rear-12: ''
+      rear-13: ''
+      rear-14: ''
+      rear-15: ''
+      rear-16: ''
+  redundant-power:
+    kind: example
+    description: >-
+      A second supply for redundancy - the PS3006 data sheet "Supports redundant power
+      supplies" - placed as the HT3580H sheet's chassis photograph places it: a PS3006N in
+      slots 15-16, with a BP-P1 behind it. The PS3006N's B/U PS lamp is what reports it.
+  ar3002e-x14:
+    kind: example
+    description: >-
+      Fourteen AR3002E forward receivers in slots 3-16, each on its own BP-A5 back plate,
+      beside the one PS3006D - the "up to 14 receivers in one 3RU chassis" of the AR3002E
+      data sheet. Illustrative: modules and back plates are ordered separately.
+    bays:
+      slot-3: commscope/ar3002e@1
+      slot-4: commscope/ar3002e@1
+      slot-5: commscope/ar3002e@1
+      slot-6: commscope/ar3002e@1
+      slot-7: commscope/ar3002e@1
+      slot-8: commscope/ar3002e@1
+      slot-9: commscope/ar3002e@1
+      slot-10: commscope/ar3002e@1
+      slot-11: commscope/ar3002e@1
+      slot-12: commscope/ar3002e@1
+      slot-13: commscope/ar3002e@1
+      slot-14: commscope/ar3002e@1
+      slot-15: commscope/ar3002e@1
+      slot-16: commscope/ar3002e@1
+      rear-3: commscope/bp-a5@1
+      rear-4: commscope/bp-a5@1
+      rear-5: commscope/bp-a5@1
+      rear-6: commscope/bp-a5@1
+      rear-7: commscope/bp-a5@1
+      rear-8: commscope/bp-a5@1
+      rear-9: commscope/bp-a5@1
+      rear-10: commscope/bp-a5@1
+      rear-11: commscope/bp-a5@1
+      rear-12: commscope/bp-a5@1
+      rear-13: commscope/bp-a5@1
+      rear-14: commscope/bp-a5@1
+      rear-15: commscope/bp-a5@1
+      rear-16: commscope/bp-a5@1
+datasheet:
+  title: 'CommScope CH3000 Chassis data sheet (2022, 87-10004 RevH)'
+  sha256: c7bbe5d22144b3e8001803c3bc73cf77a52572700dda8b8c5a9b82bfa5a2e562
+references:
+  - {title: 'Aurora Networks CH3000 Chassis data sheet (2004, 87-10004 RevD)', sha256: 07d8ce3975f2589eaeaef0d7a91ca3c37a09403a50330fe7eff2ddee0dbe82e8}
+  - {title: 'CommScope CH3000 Chassis Accessories data sheet (2022)', sha256: 5b4085dda2edc4cfe54686394fcc2334b20034cdbafe00caaa2941294546dcce}
+  - {title: 'CommScope CH3000 PS3006 Power Supply 300 Watt AC data sheet (2022)', sha256: 18122b8dbbb8c86636176dd2ebede0fcf502afd245a37f605fda6bcd44ec6edf}
+  - {title: 'CommScope CH3000 HT3580H data sheet (2024) - p1 chassis front photograph', sha256: d027950292d360426e9baed1239a2acb99d634d2e9276147dcb154a60088ad85}
+  - {title: 'CommScope CH3000 AR3002E Analog Forward Receiver data sheet (2022)', sha256: 64d843cd4e6d34e50b81d79cd0494b562e379b31d7081c73a6eda5977bec5456}
+  - {title: 'CommScope CH3000 CX3003C Enhanced Communications Module data sheet', sha256: 6c4d66460073ff10a4ac2df50588cf957cf08fba20e89f64777403c7160dc94f}
