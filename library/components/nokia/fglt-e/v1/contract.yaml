@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-e
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -110,18 +110,29 @@ provenance:
     searched only the staged corpus - current in the Lightspan UDS A23 and ETSI UDS A18;
     no end-of-life notice was searched for on the web.
   angled-panel: >-
-    estimated - the geometry of nokia/fglt-d@1, the same sixteen-cage sawtooth on a
-    20.59 pitch: faces of 30 degrees (face-N, facing up, the cage on it) and returns of
-    60 degrees (return-N, facing down), face 15.44 and return 5.15 mm of front view,
-    apex 8.92 mm; each face keeps the cage centre Figure 149 gives (45.55 + 20.59 n),
-    its lower edge 0.5 mm above the apex. ETSI UDS A18 p360 Figure 150 (side elevation,
-    3.46 px/mm) draws, unlike the FGLT-D, a small sawtooth proud of the plate front as
-    well as the one behind it: line fits give that proud hood 30.4-31.2 degrees on its
-    long edge and 55.4-56.2 on its short one, 11.4 and 4.6 mm with a 4.3 mm flat between
-    hoods, 6.8 mm proud. That hood face is shorter than the projected 12.6 mm of the
-    cage, so the cage mouth is not on it; the teeth are therefore the full no-flat tooth
-    of the sister card, and the proud height comes from the model (gap). The last return
-    runs to 366.3, under the tips of the hazard triangles (from 365).
+    estimated - ETSI UDS A18 p360 Figure 150, the side elevation (3.457 px/mm,
+    isotropic). It draws two sawtooths: the one the cages sit on, BEHIND the plate, and
+    a small hood per cage proud of the plate front. The rear teeth fit at 30.4-30.9
+    degrees on the long edge that carries the cage and 54.4-56.4 on the short edge, 7.6
+    mm deep, their tips touching the back of a plate 13.3 mm deep (front line 348 px,
+    back line 394 px) - the 31/56 of nokia/fglt-b@1, so the tooth changes from the 30/60
+    borrowed from nokia/fglt-d@1 before. The opening is one pocket, `well`, 33.5 to
+    367.05 and 22.1 deep, and every facet has `lift` -22.1. Section, plate front at 0:
+    tooth crest -13.3, tooth root and pocket floor -22.1. Modelled as sixteen teeth of
+    31 degrees (face-N, facing up, the cage on it) and 56 degrees (return-N, facing
+    down, below it) on the 20.59 pitch of Figure 149, face 14.65 and return 5.94 mm of
+    front view, 8.80 mm from root to crest (the figure draws 7.6 with a 2 mm flat root;
+    the flat is left out so that the cage, 12.43 mm projected, fits its face with
+    margin). Each face keeps the cage centre Figure 149 gives (45.55 + 20.59 n), its
+    lower edge 0.5 mm above the crest; since 31 + 56 is under 90 degrees each cage runs
+    back under the return below it and passes below the pocket floor before any wall
+    (0.58 mm worst clearance), so none comes out through a wall. The last return, and so
+    the pocket, runs to 367.05, over the tips of the ESD and hot-surface triangles (from
+    365) (gap). THE HOOD IS NOT MODELLED (gap): Figure 150 draws it 6.8 mm proud of the
+    plate front, 31/56 with a 4.3 mm flat between hoods, over the same stretch of card
+    as the cage face behind it. A facet footprint is either sunk in a pocket or standing
+    on the plate, so a proud hood and the sunk tooth behind it cannot share one
+    footprint, and a hood drawn over the opening would hide the cage it surrounds.
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -143,38 +154,39 @@ elements:
   logo-zone: {at: [7.5, 23.6], size: [15.5, 8.7], class: label}
   model-label: {at: [6.7, 11.5], size: [15.1, 10.9], class: label}
   blank-label: {at: [7.3, 382.6], size: [14.5, 10.6], class: label}
-  face-1: {at: [5.2, 36.886], size: [18.8, 15.443], class: mechanical}
-  return-1: {at: [5.2, 52.329], size: [18.8, 5.148], class: mechanical}
-  face-2: {at: [5.2, 57.476], size: [18.8, 15.442], class: mechanical}
-  return-2: {at: [5.2, 72.919], size: [18.8, 5.147], class: mechanical}
-  face-3: {at: [5.2, 78.066], size: [18.8, 15.442], class: mechanical}
-  return-3: {at: [5.2, 93.509], size: [18.8, 5.147], class: mechanical}
-  face-4: {at: [5.2, 98.656], size: [18.8, 15.442], class: mechanical}
-  return-4: {at: [5.2, 114.099], size: [18.8, 5.148], class: mechanical}
-  face-5: {at: [5.2, 119.246], size: [18.8, 15.442], class: mechanical}
-  return-5: {at: [5.2, 134.689], size: [18.8, 5.148], class: mechanical}
-  face-6: {at: [5.2, 139.836], size: [18.8, 15.442], class: mechanical}
-  return-6: {at: [5.2, 155.279], size: [18.8, 5.148], class: mechanical}
-  face-7: {at: [5.2, 160.426], size: [18.8, 15.442], class: mechanical}
-  return-7: {at: [5.2, 175.869], size: [18.8, 5.148], class: mechanical}
-  face-8: {at: [5.2, 181.016], size: [18.8, 15.442], class: mechanical}
-  return-8: {at: [5.2, 196.459], size: [18.8, 5.148], class: mechanical}
-  face-9: {at: [5.2, 201.606], size: [18.8, 15.442], class: mechanical}
-  return-9: {at: [5.2, 217.049], size: [18.8, 5.148], class: mechanical}
-  face-10: {at: [5.2, 222.196], size: [18.8, 15.442], class: mechanical}
-  return-10: {at: [5.2, 237.639], size: [18.8, 5.148], class: mechanical}
-  face-11: {at: [5.2, 242.786], size: [18.8, 15.442], class: mechanical}
-  return-11: {at: [5.2, 258.229], size: [18.8, 5.147], class: mechanical}
-  face-12: {at: [5.2, 263.376], size: [18.8, 15.442], class: mechanical}
-  return-12: {at: [5.2, 278.819], size: [18.8, 5.147], class: mechanical}
-  face-13: {at: [5.2, 283.966], size: [18.8, 15.442], class: mechanical}
-  return-13: {at: [5.2, 299.409], size: [18.8, 5.147], class: mechanical}
-  face-14: {at: [5.2, 304.556], size: [18.8, 15.442], class: mechanical}
-  return-14: {at: [5.2, 319.999], size: [18.8, 5.147], class: mechanical}
-  face-15: {at: [5.2, 325.146], size: [18.8, 15.442], class: mechanical}
-  return-15: {at: [5.2, 340.589], size: [18.8, 5.147], class: mechanical}
-  face-16: {at: [5.2, 345.736], size: [18.8, 15.442], class: mechanical}
-  return-16: {at: [5.2, 361.179], size: [18.8, 5.147], class: mechanical}
+  well: {at: [5.2, 33.5], size: [18.8, 333.553], class: mechanical}
+  face-1: {at: [5.2, 37.613], size: [18.8, 14.652], class: mechanical}
+  return-1: {at: [5.2, 52.264], size: [18.8, 5.938], class: mechanical}
+  face-2: {at: [5.2, 58.203], size: [18.8, 14.652], class: mechanical}
+  return-2: {at: [5.2, 72.854], size: [18.8, 5.938], class: mechanical}
+  face-3: {at: [5.2, 78.793], size: [18.8, 14.652], class: mechanical}
+  return-3: {at: [5.2, 93.444], size: [18.8, 5.938], class: mechanical}
+  face-4: {at: [5.2, 99.383], size: [18.8, 14.652], class: mechanical}
+  return-4: {at: [5.2, 114.034], size: [18.8, 5.938], class: mechanical}
+  face-5: {at: [5.2, 119.973], size: [18.8, 14.652], class: mechanical}
+  return-5: {at: [5.2, 134.624], size: [18.8, 5.938], class: mechanical}
+  face-6: {at: [5.2, 140.563], size: [18.8, 14.652], class: mechanical}
+  return-6: {at: [5.2, 155.214], size: [18.8, 5.938], class: mechanical}
+  face-7: {at: [5.2, 161.153], size: [18.8, 14.652], class: mechanical}
+  return-7: {at: [5.2, 175.804], size: [18.8, 5.938], class: mechanical}
+  face-8: {at: [5.2, 181.743], size: [18.8, 14.652], class: mechanical}
+  return-8: {at: [5.2, 196.394], size: [18.8, 5.938], class: mechanical}
+  face-9: {at: [5.2, 202.333], size: [18.8, 14.652], class: mechanical}
+  return-9: {at: [5.2, 216.984], size: [18.8, 5.938], class: mechanical}
+  face-10: {at: [5.2, 222.923], size: [18.8, 14.652], class: mechanical}
+  return-10: {at: [5.2, 237.574], size: [18.8, 5.938], class: mechanical}
+  face-11: {at: [5.2, 243.513], size: [18.8, 14.652], class: mechanical}
+  return-11: {at: [5.2, 258.164], size: [18.8, 5.938], class: mechanical}
+  face-12: {at: [5.2, 264.103], size: [18.8, 14.652], class: mechanical}
+  return-12: {at: [5.2, 278.754], size: [18.8, 5.938], class: mechanical}
+  face-13: {at: [5.2, 284.693], size: [18.8, 14.652], class: mechanical}
+  return-13: {at: [5.2, 299.344], size: [18.8, 5.938], class: mechanical}
+  face-14: {at: [5.2, 305.283], size: [18.8, 14.652], class: mechanical}
+  return-14: {at: [5.2, 319.934], size: [18.8, 5.938], class: mechanical}
+  face-15: {at: [5.2, 325.873], size: [18.8, 14.652], class: mechanical}
+  return-15: {at: [5.2, 340.524], size: [18.8, 5.938], class: mechanical}
+  face-16: {at: [5.2, 346.463], size: [18.8, 14.652], class: mechanical}
+  return-16: {at: [5.2, 361.114], size: [18.8, 5.938], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -190,134 +202,170 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150: plate front 348 px to plate back 394 px = 13.3 mm (3.457 px/mm), the rear tooth tips touching the back; roots 8.80 further in'
     - node: face-1
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-1
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-2
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-2
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-3
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-3
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-4
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-4
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-5
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-5
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-6
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-6
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-7
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-7
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-8
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-8
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-9
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-9
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-10
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-10
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-11
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-11
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-12
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-12
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-13
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-13
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-14
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-14
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-15
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-15
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: face-16
-      facet: {deg: 30, facing: up}
+      facet: {deg: 31, facing: up}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
     - node: return-16
-      facet: {deg: 60, facing: down}
+      facet: {deg: 56, facing: down}
+      lift: -22.1
       confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
 groups:
   pon-cages:
     term: Cage
@@ -338,22 +386,22 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/sfp@1, id: cage-1, group: pon-cages, at: [4.35, 41.22], rotate: 90, 'on': face-1}
-  - {ref: std/sfp@1, id: cage-2, group: pon-cages, at: [4.35, 61.81], rotate: 90, 'on': face-2}
-  - {ref: std/sfp@1, id: cage-3, group: pon-cages, at: [4.35, 82.4], rotate: 90, 'on': face-3}
-  - {ref: std/sfp@1, id: cage-4, group: pon-cages, at: [4.35, 102.99], rotate: 90, 'on': face-4}
-  - {ref: std/sfp@1, id: cage-5, group: pon-cages, at: [4.35, 123.58], rotate: 90, 'on': face-5}
-  - {ref: std/sfp@1, id: cage-6, group: pon-cages, at: [4.35, 144.17], rotate: 90, 'on': face-6}
-  - {ref: std/sfp@1, id: cage-7, group: pon-cages, at: [4.35, 164.76], rotate: 90, 'on': face-7}
-  - {ref: std/sfp@1, id: cage-8, group: pon-cages, at: [4.35, 185.35], rotate: 90, 'on': face-8}
-  - {ref: std/sfp@1, id: cage-9, group: pon-cages, at: [4.35, 205.94], rotate: 90, 'on': face-9}
-  - {ref: std/sfp@1, id: cage-10, group: pon-cages, at: [4.35, 226.53], rotate: 90, 'on': face-10}
-  - {ref: std/sfp@1, id: cage-11, group: pon-cages, at: [4.35, 247.12], rotate: 90, 'on': face-11}
-  - {ref: std/sfp@1, id: cage-12, group: pon-cages, at: [4.35, 267.71], rotate: 90, 'on': face-12}
-  - {ref: std/sfp@1, id: cage-13, group: pon-cages, at: [4.35, 288.3], rotate: 90, 'on': face-13}
-  - {ref: std/sfp@1, id: cage-14, group: pon-cages, at: [4.35, 308.89], rotate: 90, 'on': face-14}
-  - {ref: std/sfp@1, id: cage-15, group: pon-cages, at: [4.35, 329.48], rotate: 90, 'on': face-15}
-  - {ref: std/sfp@1, id: cage-16, group: pon-cages, at: [4.35, 350.07], rotate: 90, 'on': face-16}
+  - {ref: std/sfp@1, id: cage-1, group: pon-cages, at: [4.35, 41.264], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: cage-2, group: pon-cages, at: [4.35, 61.854], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: cage-3, group: pon-cages, at: [4.35, 82.444], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: cage-4, group: pon-cages, at: [4.35, 103.034], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: cage-5, group: pon-cages, at: [4.35, 123.624], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: cage-6, group: pon-cages, at: [4.35, 144.214], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: cage-7, group: pon-cages, at: [4.35, 164.804], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: cage-8, group: pon-cages, at: [4.35, 185.394], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: cage-9, group: pon-cages, at: [4.35, 205.984], rotate: 90, 'on': face-9}
+  - {ref: std/sfp@1, id: cage-10, group: pon-cages, at: [4.35, 226.574], rotate: 90, 'on': face-10}
+  - {ref: std/sfp@1, id: cage-11, group: pon-cages, at: [4.35, 247.164], rotate: 90, 'on': face-11}
+  - {ref: std/sfp@1, id: cage-12, group: pon-cages, at: [4.35, 267.754], rotate: 90, 'on': face-12}
+  - {ref: std/sfp@1, id: cage-13, group: pon-cages, at: [4.35, 288.344], rotate: 90, 'on': face-13}
+  - {ref: std/sfp@1, id: cage-14, group: pon-cages, at: [4.35, 308.934], rotate: 90, 'on': face-14}
+  - {ref: std/sfp@1, id: cage-15, group: pon-cages, at: [4.35, 329.524], rotate: 90, 'on': face-15}
+  - {ref: std/sfp@1, id: cage-16, group: pon-cages, at: [4.35, 350.114], rotate: 90, 'on': face-16}
   - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2, 33], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [2, 41.6], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [2, 53.59], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
