@@ -617,16 +617,21 @@ def _inset_feature(feat, back, group_lift=0.0):
     f = dict(feat)
     # what a `lift`, and anything measured from one, has to move by
     lb = back + group_lift
+    # A SUNK FACET IS BELOW THE PLATE ON PURPOSE (recessed facets, in
+    # docs/superpowers/specs/2026-09-24-tilted-facets-design.md): it stands in
+    # a pocket, so a negative `out` or `lift` is its geometry, not a feature
+    # left behind the panel. Nothing here clamps or drops one.
+    sunk = bool(f.get("facet")) and (f.get("lift") or 0) < 0
     top = None
     for k in ("cyl", "bar", "uhandle"):
         if f.get(k) is not None:
             top = (f.get("lift") or 0.0) + f[k]
     if f.get("out") is not None:
         f["out"] = round(f["out"] - back, 4)
-        if f["out"] <= 0:
+        if f["out"] <= 0 and not sunk:
             return None
     if f.get("lift") is not None:
-        f["lift"] = round(max(0.0, f["lift"] - lb), 4)
+        f["lift"] = round(f["lift"] - lb if sunk else max(0.0, f["lift"] - lb), 4)
         if not f["lift"]:
             f.pop("lift")
     if top is not None:
@@ -677,7 +682,8 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     Hand-written profiles are untouched - only a feature THIS BUILD expanded
     from a `facet` is shifted here, guarded by `raw_feat.get("facet")`.
     Clamped at 0: an inset larger than the wedge's own proud extent must not
-    read as a negative depth.
+    read as a negative depth - EXCEPT on a sunk facet (`lift < 0`), whose
+    heights are below the plate on purpose and pass through unclamped.
     """
     if not raw_feat.get("facet") or pre_out is None or feat is None or feat.get("out") is None:
         return feat
@@ -687,7 +693,9 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     pkey = "profile-y" if raw_feat["facet"]["facing"] in ("up", "down") else "profile"
     if feat.get(pkey):
         feat = dict(feat)
-        feat[pkey] = [[x, max(0.0, round(o + shift, 4))] for x, o in feat[pkey]]
+        floor = None if (raw_feat.get("lift") or 0) < 0 else 0.0
+        feat[pkey] = [[x, round(o + shift, 4) if floor is None else max(floor, round(o + shift, 4))]
+                      for x, o in feat[pkey]]
     return feat
 
 
