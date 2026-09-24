@@ -58,17 +58,62 @@ def test_facet_info_reads_a_root_below_the_plate(o):
     assert fi["base"] == 0
 
 
-def test_a_sunk_tooths_skirt_ends_at_its_base(o):
-    s = o["skirt"]
-    assert s["allAtBase"] is True
-    assert s["minTop"] == -12 and s["maxTop"] == pytest.approx(2.25, abs=1e-3)
-    # sides border open pocket and are built in full; the root edge is zero
-    # height and the apex is inside the tooth (its return is as tall)
+def test_a_sunk_tooth_narrower_than_its_pocket_skirts_to_its_base(o):
+    s = o["skirtNarrow"]
+    # both sides border open pocket and are built in full; the root edge is
+    # zero height and the apex is inside the tooth (its return is as tall)
     assert s["edges"] == {"top": 0, "right": 3, "bottom": 0, "left": 3}
+    assert s["basesAtLift"] is True
+    assert s["zmin"] == -12 and s["zmax"] == pytest.approx(2.25, abs=1e-3)
+
+
+def test_a_sunk_tooth_as_wide_as_its_pocket_builds_no_skirt_in_the_pocket_walls(o):
+    s = o["skirtSpan"]
+    # beside each side is the plate: segments whose top is below the mouth
+    # are inside the solid, and the one that rises above it skirts only
+    # down to the mouth - never in the pocket wall's plane below it
+    assert s["edges"] == {"top": 0, "right": 1, "bottom": 0, "left": 1}
+    assert s["sideBases"] == [0, 0]
+    assert s["sideVertsAboveMouth"] is True
+
+
+def test_a_sunk_tooth_with_no_pocket_reads_the_plate_beside_it(o):
+    assert o["skirtNoPocket"] == {"top": 0, "right": 1, "bottom": 0, "left": 1}
 
 
 def test_a_proud_tooth_builds_the_skirt_it_did_before(o):
     assert o["skirtProud"] == {"edges": {"top": 0, "right": 3, "bottom": 0, "left": 3},
-                               "allAtBase": True}
+                               "paired": True, "idxAsBefore": True, "allAtBase": True}
     assert o["outHeightDefault"] == 0
     assert o["outHeightNone"] == -12
+
+
+@pytest.mark.parametrize("case", ["wellDeep", "wellLone", "wellNarrow"])
+def test_the_floor_is_cleared_where_each_well_crosses_it(o, case):
+    """I1: a well runs back along the facet normal and meets the floor (and the
+    back 0.25 behind it) down-slope of its facet, past the facet's footprint.
+    Every crossing lies inside a clear, which footprints alone do not give."""
+    w = o[case]
+    assert w["n"] >= 4
+    assert w["covered"] is True
+    assert w["byFootprintsAlone"] is False
+    assert w["inPocket"] is True
+    assert w["wellClears"] >= 1
+
+
+def test_a_well_clears_only_the_pocket_its_facet_stands_in(o):
+    assert o["wellElsewhere"] == 0
+    assert o["wellProud"] == 0
+
+
+def test_floor_clears_are_scoped_by_owner(o):
+    assert o["owner"] == {"deviceWell": 0, "ownPocket": 1, "nested": 1, "otherCard": 0}
+
+
+def test_clears_are_mirrored_on_a_flipped_face(o):
+    m = o["mirror"]
+    base = {"kind": "rect", "w": 10, "h": 14, "facet": "a"}
+    assert m["none"] == [{**base, "x": 15, "y": 62}]
+    assert m["x"] == [{**base, "x": 35, "y": 62}]          # 10 + 50 - 25
+    assert m["y"] == [{**base, "x": 15, "y": 124}]         # 60 + 140 - 76
+    assert m["both"] == [{**base, "x": 35, "y": 124}]
