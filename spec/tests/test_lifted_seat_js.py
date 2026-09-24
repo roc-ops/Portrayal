@@ -384,7 +384,12 @@ def test_insetFeature_is_render_py_inset_feature():
     feature left wholly behind the face - through both and compares."""
     feats = [{"out": 6.35}, {"out": 12.5, "lift": 6.6}, {"lift": 10.0, "bar": 1.05},
              {"lift": 3, "cyl": 5}, {"uhandle": 24, "lift": 2.5, "out": 3.0},
-             {"out": 0.15}, {"lift": 0.5}, {"cyl": 1.2}, {"top": 2.2, "color": "#fff"}]
+             {"out": 0.15}, {"lift": 0.5}, {"cyl": 1.2}, {"top": 2.2, "color": "#fff"},
+             # facets: proud (clamped and dropped as before), and SUNK (recessed
+             # facets: a negative lift and out pass through unclamped, undropped)
+             {"facet": {"deg": 30, "facing": "up"}, "out": 17.3205},
+             {"facet": {"deg": 30, "facing": "up"}, "out": 5.3205, "lift": -12.0},
+             {"facet": {"deg": 45, "facing": "down"}, "out": -2.6795, "lift": -20.0}]
     moves = [(0.0, 0.0), (-3.175, 3.175), (-47.175, 47.175), (3.0, -3.0), (-44.0, 0.0),
              (2.0, 0.0), (0.4, 0.2), (-1.2, 1.2), (5.0, 1.0), (-0.3, 0.0)]
     grid = [[f, b, g] for f in feats for b, g in moves]

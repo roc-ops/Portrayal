@@ -458,15 +458,18 @@ export function insetFeature(feat, back, groupLift = 0) {
   const r4 = v => Math.round(v * 1e4) / 1e4;
   const f = {...feat};
   const lb = back + groupLift;
+  // a SUNK facet (recessed facets) is below the plate on purpose: its negative
+  // lift and out are neither clamped nor dropped (render.py's `sunk`)
+  const sunk = !!f.facet && (f.lift || 0) < 0;
   let top = null;
   for (const k of ['cyl', 'bar', 'uhandle'])
     if (f[k] != null) top = (f.lift || 0) + f[k];
   if (f.out != null) {
     f.out = r4(f.out - back);
-    if (f.out <= 0) return null;
+    if (f.out <= 0 && !sunk) return null;
   }
   if (f.lift != null) {
-    f.lift = r4(Math.max(0, f.lift - lb));
+    f.lift = r4(sunk ? f.lift - lb : Math.max(0, f.lift - lb));
     if (!f.lift) delete f.lift;
   }
   if (top != null) {
@@ -522,6 +525,9 @@ function liftOccupant(wrap, L) {
       if (v != null) feat[k] = +v;
     }
     if (!Object.keys(feat).length) continue;
+    // the facet flag is what exempts a sunk facet from the clamp
+    const deg = el.getAttribute('data-facet-deg');
+    if (deg != null) feat.facet = {deg: +deg, facing: el.getAttribute('data-facet-facing')};
     const moved = insetFeature(feat, -L, L);
     if (!moved) {
       for (const a of FEATURE_ATTRS) el.removeAttribute(a);
