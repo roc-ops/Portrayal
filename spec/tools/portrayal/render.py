@@ -1355,6 +1355,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             # component's own id scheme.
             pg.set("data-tilt-on", f"{inst_id}--{part['on']}")
             pg.set("data-tilt", f"{tilt['deg']:g}")
+            # THE FACET'S OWN FRAME, not the device's - unlike the position
+            # math above, this is never rotated to device-frame: relief.js
+            # reads it relative to the part's own (pre-rotate) orientation,
+            # same as `data-facet-facing` on the facet node itself.
             pg.set("data-tilt-facing", tilt["facing"])
         if part.get("group"):
             write_group_side(pg, part["group"], pgrp, part.get("attrs"))
