@@ -236,7 +236,7 @@ and plugs alike. Boots never appear: they mate `lc-plug`/`rj45-plug`, which name
 port. There is no ladder; a connector interface either intermates or it does not.
 `std/mpo@1` presented no interface and no `mate` point; it gained both
 (`interface: mpo`, a `mate` at the aperture centre) as a minor. Its opening was
-then corrected as a major, `std/mpo@2` (see "The MPO opening" below).
+then corrected as a major, `std/mpo@2` (see "The MPO opening" above).
 
 Slots are published where cages are: a device view's `cages[]` gains `kind: cage`
 or `kind: connector` on each entry, and `components.json` carries each component's
@@ -399,7 +399,7 @@ cites the source that shows the product shipping capped:
 
 | adapter | ships | on | source |
 |---|---|---|---|
-| `common/lc-duplex-adapter@6` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `1` and `2` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore |
+| `common/lc-duplex-adapter@6` (Smartoptics) | `common/lc-dust-cap@1` | each bore, `1` and `2` | rack photograph IMG_2188 of racked DCP-R units: every idle cross-connect adapter has a separate white cap in each bore. An operator's photograph of racked demo units, not a vendor document; the installed state is taken as the shipped one |
 | `common/lc-duplex-v-adapter@6` (FS FHD, stacked) | `common/lc-duplex-dust-cap@2` | the adapter's own slot | FS's face-on render of SKU 57016: one white moulding across both stacked ports of every adapter |
 | `common/sc-duplex-adapter@5` (FS FHD SC) | `common/sc-dust-cap@1` | each opening | FS's face-on render of SKU 57058: a black cap in each of the twelve openings |
 | `common/mpo-adapter@2` (FS MTP panel tile) | `common/mpo-dust-cap@2` | the slot it forwards from `std/mpo@2` | FS's face-on renders of SKU 35510: all twelve ports capped. Nothing places the tile yet, so the default seats nowhere until a panel composes it |
@@ -663,12 +663,17 @@ walk decides whether a built drawing is stale, and which components
    `common/sc-dust-cap`, `common/mpo-dust-cap`.
 6. Intake, then the connectors: `generic/lc-duplex-plug`, `generic/sc-plug`,
    `generic/mpo12-plug`, `generic/mpo24-plug`.
-7. The adapters (decision 9): if they still draw caps, remove them as majors
-   (`lc-duplex-adapter@4`, `lc-duplex-v-adapter@3`, `sc-duplex-adapter@3`),
-   declare the default caps, and repoint the 18 components that compose them. The
-   MPO default goes on the flanged bulkheads of the FHD cassette rears, which
-   present `mpo` at `@2` (see "The MPO opening"). Until this step, a bore under a
-   drawn cap declares no default, so no port is ever capped twice.
+7. The adapters (decision 9): declare the default caps. The caps had already
+   left the adapters' art, as majors, before this step ran, and main had since
+   renumbered the duplex adapters' bores at `@5`. The majors that shipped are
+   `lc-duplex-adapter@6` and `lc-duplex-v-adapter@6` (main's `@5`, composing
+   `std/lc-bulkhead-bore@1`) and `lc-duplex-shuttered-adapter@2`, and the 28
+   components that compose either of the first two were repointed;
+   `sc-duplex-adapter@5` took its defaults as a minor. The MPO default goes on
+   the flanged bulkheads of the FHD cassette rears, `mpo-flange-adapter@2` and
+   `mpo24-flange-adapter@2`, which present `mpo` at `std/mpo@2` (see "The MPO
+   opening"). Until this step, a bore under a drawn cap declares no default, so
+   no port is ever capped twice.
 8. The kit: lifted seating with its parity test, `nestedSlots`, the swap, exclusion
    and pruning.
 9. A review page - the product photographs beside the rendered caps and plugs, 2D

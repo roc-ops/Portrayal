@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcp-r-9d-cs
-version: 5.0.0
+version: 5.0.1
 maturity: modelled
 manufacturer: Smartoptics
 model: DCP-R-9D-CS
@@ -107,19 +107,28 @@ provenance:
   tx-rx-positions:
     confidence: measured
     note: >-
-      stencil master r-9d-csx, read at 8.33 px/mm vertically - its two ferrule rows stand 92 px
-      apart against this model's 11.05 row pitch, the same fit the 34D's 8.86 comes from, and
-      within 1.7% of the 45/46.0 y-scale above - each figure measured outward from the art's own
-      ferrule line and taken as the row's median, since this master is a JPEG and single pairs
-      scatter by about 0.2. The white Tx/Rx box runs 7.68 to 9.38 from the ferrule on the top row
-      and 7.65 to 9.45 on the bottom row; the port name's glyphs run 10.02 to 12.00 and 10.26 to
-      12.18. Each frame - drawn 2.5 tall, where the stencil's box is 1.7-1.8 - is centred on the
-      box's centre, its divider and Tx/Rx text move with it, and each name's glyph is centred on
-      the stencil name's centre, taking its cap height as 0.72 of the font size. Until B3 the
-      frames were generated from each adapter's placement 5.85 from the ferrule, about 1.8
-      closer than the stencil draws them, and once the adapter bodies moved to keep the fibres on
-      the connection points (common/lc-duplex-adapter@6) the bodies met them. The boxed style is
-      the photograph's (`tx-rx-boxes`); only the positions are the stencil's
+      THE CENTRES, MEASURED - and only the centres; the figures drawn around them are
+      `tx-rx-drawn`. Stencil master r-9d-csx, read at 8.33 px/mm vertically - its two ferrule
+      rows stand 92 px apart against this model's 11.05 row pitch, the same fit the 34D's 8.86
+      comes from, and within 1.7% of the 45/46.0 y-scale above - each figure measured outward
+      from the art's own ferrule line and taken as the row's median, since this master is a JPEG
+      and single pairs scatter by about 0.2. The white Tx/Rx box runs 7.68 to 9.38 from the
+      ferrule on the top row and 7.65 to 9.45 on the bottom row; the port name's glyphs run 10.02
+      to 12.00 and 10.26 to 12.18. Each frame is centred on the box's centre, its divider and
+      Tx/Rx text move with it, and each name's glyph is centred on the stencil name's centre.
+      Until B3 the frames were generated from each adapter's placement 5.85 from the ferrule,
+      about 1.8 closer than the stencil draws them, and once the adapter bodies moved to keep the
+      fibres on the connection points (common/lc-duplex-adapter@6) the bodies met them. The boxed
+      style is the photograph's (`tx-rx-boxes`); only the positions are the stencil's
+  tx-rx-drawn:
+    confidence: estimated
+    note: >-
+      THE TWO FIGURES THE MEASURED CENTRES ARE DRAWN WITH, neither read off a source. The FRAME
+      HEIGHT is 2.5, a drawn size where the stencil's box is 1.7-1.8: only its centre is the
+      stencil's (`tx-rx-positions`). The NAME BASELINES are placed from the measured glyph
+      centre by taking the cap height as 0.72 of the font size - an assumed ratio, not a
+      measured one - so a baseline is as good as that ratio, while the glyph centre it is
+      derived from is measured
 
 attrs:
   performance:

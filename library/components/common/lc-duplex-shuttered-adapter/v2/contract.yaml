@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-shuttered-adapter
-version: 2.0.1
+version: 2.0.2
 class: port
 # THE ADAPTER IS ITSELF A SLOT, AND IT SHIPS EMPTY (B3,
 # docs/pluggables-caps-design.md, "The shuttered adapter"). A duplex connector
@@ -132,6 +132,12 @@ provenance:
     inset 0.1 all round. The inset was a drawn seam between abutting adapters,
     not a reading, and at 0.1 the keyway would have cut through it. Two
     abutting outlines now share one stroke, which still draws the seam.
+    ONLY THAT OUTLINE IS STROKED, since 2.0.2. The openings were subpaths of
+    one stroked path, so a line ran round each keyway too, and its top edge
+    met the outline's stroke 0.015 away: the two merged and the keyway read
+    as opening through the body's edge. The skin's `#bezel` is now a group of
+    the evenodd fill, unstroked, and the outline alone; the relief still names
+    `bezel`.
     THE KEYED OPENINGS in the bezel are the bulkhead outline turned 180 - the
     tongue from y 0.09, the shoulder from 1.51, the neck from 2.70 and the
     4.7 square from 3.45 to 8.15 - at x 1.075 and 7.325, the bores' own `at`.

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-f-a22
-version: 2.1.0
+version: 2.1.1
 class: line-card
 behaviour: fills
 profile: optical
@@ -96,6 +96,12 @@ provenance:
     adapters at ~10mm pitch and 7.4mm wide, which is SC-like and contradicts the
     datasheet's LC. Positions come from the drawing; sizes come from
     common/lc-duplex-adapter@6, itself measured off the Smartoptics DCP-R stencil.
+    ADAPTER BODIES MOVED, FIBRES DID NOT (common/lc-duplex-adapter@6, B3): that
+    adapter's ferrule axis sits 5.82 from its latch-side edge where @5's sat at 5.5,
+    so the `edfa` and `ocm` placements moved 0.32 toward their own latch side, y 23.8
+    to 23.48, and each fibre stays where the drawing put it. Those two `at`s are
+    therefore 0.32 off the drawing's adapter positions: what is the drawing's is the
+    fibre, not the body.
   markings: >-
     stencil master - smartoptics wordmark and DCP-F-A22 top left, a laser hazard
     triangle over a general warning triangle beneath them, and Power / Status captions

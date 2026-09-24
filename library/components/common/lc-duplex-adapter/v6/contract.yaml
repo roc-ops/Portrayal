@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-duplex-adapter
-version: 6.0.0
+version: 6.0.1
 class: port
 # THE ADAPTER IS ITSELF A SLOT (B3, docs/pluggables-caps-design.md, "The
 # duplex host"): a duplex connector - a duplex dust cap, a duplex plug -
@@ -95,7 +95,11 @@ provenance:
     reading's 5.79 the keyway would have cut it by 0.12. The outline is now the
     13.2 x 11.0 box itself, as common/lc-duplex-shuttered-adapter@2 draws its
     own for the same reason; two abutting outlines share one stroke as the
-    seam.
+    seam. ONLY THAT OUTLINE IS STROKED, since 6.0.1: the openings were
+    subpaths of one stroked path, so a line ran round each keyway too, met
+    the outline's stroke 0.01 away, and the keyway read as opening through
+    the edge. The skin's `#bezel` is now a group of the evenodd fill,
+    unstroked, and the outline alone; the relief still names `bezel`.
     WHAT MOVED: WHATEVER THE COMPOSER'S SOURCE DID NOT MEASURE. Each composer keeps
     the figure its own source gave and lets the other move.
     WHERE THE SOURCE IS THE FIBRE - dcp-r-34d-cs, dcp-r-9d-cs and dcp-m32-cso-zr,
@@ -124,7 +128,11 @@ provenance:
     ONE SIMPLEX CAP IN EACH BORE, declared as each bore's `default:` (B3,
     docs/pluggables-caps-design.md, "The shipped default"). Read off photo
     IMG_2188 of racked DCP-R units - the rack photograph the DCP-R devices'
-    own provenance already cites for their lids and silkscreen. Every idle
+    own provenance already cites for their lids and silkscreen. IT IS AN
+    OPERATOR'S PHOTOGRAPH OF RACKED DEMO UNITS, NOT A VENDOR DOCUMENT: it shows
+    how these units stand installed, and the INSTALLED STATE IS TAKEN AS THE
+    SHIPPED ONE - no Smartoptics document says what a new unit ships with, so
+    a source that does replaces this reading. Every idle
     cross-connect adapter on both faceplates carries a white cap in EACH of
     its two bores, the pair separate with a gap between them rather than one
     moulding across both, and the caps pulled from the ports in use lie on

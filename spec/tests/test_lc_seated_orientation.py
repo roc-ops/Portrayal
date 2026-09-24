@@ -270,12 +270,50 @@ def overrun(pairs, bore_prefix):
 
 # --- (a) the latch faces the keyway ------------------------------------------------
 
+def _in_frame(parents, el, v):
+    """A device-frame direction `v`, in `el`'s own frame: the inverse of the
+    linear part of every transform from `el` up to the root."""
+    m = device_matrix(parents, el)
+    a, b, c, d = m[0][0], m[0][1], m[1][0], m[1][1]
+    det = a * d - b * c
+    assert abs(det) > 1e-9, el.get("data-path")
+    return ((d * v[0] - b * v[1]) / det, (-c * v[0] + a * v[1]) / det)
+
+
+def duplex_latch_sides(pairs, parents):
+    """[(half's path, its latch direction measured in its HOST ADAPTER's own
+    frame, the latch side lint._spanning_latch_sides predicts for that
+    adapter)] for each half of every seated duplex plug. The adapter is the
+    bore's own ancestor, so the half is judged against the host it landed in."""
+    out = []
+    for (pel, _mate, latch, _corners), (bel, *_rest) in pairs:
+        if _adapter_of(parents, pel, DUPLEX) is None:
+            continue                    # a simplex plug, not a duplex half
+        adapter = _adapter_of(parents, bel, (H_ADAPTER, V_ADAPTER, S_ADAPTER))
+        assert adapter is not None, pel.get("data-path")
+        local = _in_frame(parents, adapter, latch)
+        assert min(abs(local[0]), abs(local[1])) < 1e-6, (pel.get("data-path"), local)
+        measured = tuple(int(round(c)) for c in _unit(local))
+        predicted = lint._spanning_latch_sides(contract(_ref(adapter)), _resolve)[0]
+        out.append((pel.get("data-path"), measured, predicted))
+    return out
+
+
 @pytest.mark.parametrize("which", ["fhd", "fhd-om", "fhd-36", "dcp"])
 def test_every_seated_lc_plug_faces_its_bores_keyway(tmp_path, which):
     svg, parents = build_lc(tmp_path, which)
     pairs = seated_pairs(svg, parents)
     assert len(pairs) == EXPECTED[which] > 0, len(pairs)
     assert wrong_side(pairs) == []
+    # AND L116 PREDICTED THE SIDE THE BUILD DREW. The latch side is solved
+    # twice: lint (`_spanning_latch_sides`, the canonical side turned by the
+    # derived axis) says where a duplex connector's latches WILL face, and the
+    # build draws them through `solve_seat`. Only the drawn side was measured
+    # here, so the two could drift apart with every test green; each half's
+    # measured latch, in its host adapter's own frame, must be the prediction.
+    sides = duplex_latch_sides(pairs, parents)
+    assert len(sides) == 2 * len(LC_DUPLEX_KEYS[which]) > 0, sides
+    assert [s for s in sides if s[1] != s[2]] == [], sides
 
 
 def _plug_copy(root, name, skin_edit, contract_edit):
@@ -406,18 +444,51 @@ def test_the_seated_latch_reaches_exactly_the_bulkhead_keyway_end():
     assert plug["size"]["h"] - pm[1] > pm[1], "the plug is not drawn latch down"
 
 
-def _outline(ref):
-    """The adapter skin's bezel OUTLINE - the first subpath of `#bezel`, a
-    rectangle - as (x0, y0, x1, y1), and that path's stroke width."""
+def _bezel(ref):
+    """The adapter skin's `#bezel` node."""
     ns, rest = ref.split("/", 1)
     name, major = rest.split("@")
     skin = ET.parse(LIB / "components" / ns / name / f"v{major}" / "skins" / "default.svg")
-    bezel = next(e for e in skin.iter() if e.get("id") == "bezel")
-    head = re.match(r"\s*M\s*([\d.]+)\s+([\d.]+)\s*h\s*([\d.]+)\s*v\s*([\d.]+)\s*h\s*-",
-                    bezel.get("d"))
-    assert head, bezel.get("d")[:60]
-    x, y, w, h = (float(g) for g in head.groups())
-    return (x, y, x + w, y + h), float(bezel.get("stroke-width"))
+    return next(e for e in skin.iter() if e.get("id") == "bezel")
+
+
+def _stroked(el):
+    """Every element at or under `el` that draws a stroke."""
+    return [e for e in el.iter()
+            if e.get("stroke") not in (None, "none") and float(e.get("stroke-width") or 1) > 0]
+
+
+def _outline(ref):
+    """The adapter skin's bezel OUTLINE - the one stroked element under
+    `#bezel`, a rect on the body's box - as (x0, y0, x1, y1), and its stroke
+    width."""
+    lines = _stroked(_bezel(ref))
+    assert len(lines) == 1, [e.tag for e in lines]
+    r = lines[0]
+    assert r.tag.split("}")[-1] == "rect", r.tag
+    x, y, w, h = (float(r.get(k)) for k in ("x", "y", "width", "height"))
+    return (x, y, x + w, y + h), float(r.get("stroke-width"))
+
+
+@pytest.mark.parametrize("ref", [H_ADAPTER, S_ADAPTER])
+def test_only_the_bezel_outline_is_stroked_not_its_keyed_holes(ref):
+    """THE HOLES ARE FILL ONLY. The keyed openings are evenodd subpaths of the
+    bezel's fill; stroked with it, a line ran round each keyway and met the
+    outline's stroke 0.01 (Smartoptics) or 0.015 (shuttered) away, so the two
+    merged and the keyway read as opening through the body's edge. What is
+    stroked is the outline alone, on the body's own box; the fill carrying the
+    holes draws no line at all."""
+    bezel = _bezel(ref)
+    holes = [e for e in bezel.iter() if len(re.findall(r"[Mm]", e.get("d") or "")) > 1]
+    assert holes, f"{ref}: no evenodd hole subpaths under #bezel; this checks nothing"
+    for e in holes:
+        assert e.get("stroke") in (None, "none"), (ref, e.get("stroke"))
+        assert (e.get("fill-rule") or bezel.get("fill-rule")) == "evenodd", ref
+    (x0, y0, x1, y1), sw = _outline(ref)
+    c = contract(ref)
+    assert (x0, y0, x1 - x0, y1 - y0) == pytest.approx(
+        (0, 0, c["size"]["w"], c["size"]["h"]), abs=1e-9), ref
+    assert sw > 0, ref
 
 
 def test_the_smartoptics_adapters_keyway_fits_inside_its_outline():
