@@ -1,0 +1,126 @@
+format: 1
+kind: module
+name: fant-g-aa
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+unplaced: "seated by the NT bays of the 7360 ISAM FX shelves; the coordinator wires it"
+description: >-
+  Nokia FANT-G AA (3FE71256AA) and FANT-G AB (3FE71256AB), the ETSI builds of the 7360 ISAM FX / Lightspan FX network termination card with the 1.2 Tbps switch; the two variants share one face. Four SFP+ cages and one 100GE CFP4 cage, 1PPS and 10 MHz SMA timing inputs, the cages and SMAs set on a sawtooth housing whose 45 degree teeth tip the ports up, a micro-USB debug port, BITS IN and BITS OUT, a 10/100/1000BASE-T port, the craft port and the ToD/1PPS port, all RJ45, the ACO switch, and the ALM/PWR/ACO/A/S and FSM1-FSM5 lamps. The CFP4 cage is drawn, not composed: the library has no CFP4 cage yet (see gaps).
+size: {w: 30.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: 'w is the NT slot pitch (30 mm), taken as the faceplate width; d is the larger of the two depths the UDS gives (205/225)'
+attrs:
+  model: FANT-G AA
+  part-number: 3FE71256AA
+  variant: AA
+  also-covers: 'FANT-G AB (3FE71256AB) - the same face'
+  standard: ETSI
+  switch-capacity: '1.2 Tbps'
+  weight-kg: 1.5
+  sfp-plus: 4
+  power-draw-max-w: 150
+  power-draw-typical-w: 120
+  power-scope: 'excludes the NTIO card and pluggable (SFP/CFP4) power, per the ETSI Safety Manual note (1)'
+provenance:
+  variants: 'drawing - ONE FACE FOR AA AND AB. The ETSI UDS 3FE77012AAAATQZZA18 draws the AA (p222 Figure 75) and the AB (p232 Figure 79) with the SAME embedded image (PDF object 7267, 1435 x 1720, both pages), and the Lightspan UDS 3HH90279AAAATQZZA23 does the same (p186 Figure 75 and p196 Figure 79, object 2170); the LED close-ups are shared too (objects 7270 / 2171). The AA and AB chapters list the same interfaces, lamps and ACO; the texts differ only in the safety standard named (IEC/EN 60950-1 for AA, 62368-1 for AB). So AB is recorded here, not a second component. The BA (ANSI) face differs - no ACO switch or lamp, no BITS pair, X1-X5 lamp legends - and is nokia/fant-g-ba'
+  size: 'datasheet - ETSI UDS 3FE77012AAAATQZZA18 p222 section 22.5.1 (and p232 for the AB): height 405 mm, width 30 mm, depth 205/225 mm, weight approximately 1.5 kg'
+  size-width: 'datasheet - slot pitch, "width: 30 mm" in the UDS dimensions list; faceplate width not stated, taken as the pitch'
+  depth: 'datasheet - the UDS gives "205/225 mm" without saying what each measures; 225 is carried as the card depth'
+  power: 'datasheet - ETSI Safety Manual 3HH11998AAAATCZZA29 p25 Table 2, "FANT-G (1)" 120 W typical / 150 W maximum. Note (1): the power consumption for all NT cards does not include the NTIO card or SFP power consumption. One row for FANT-G, no variant split, so it covers AA and AB'
+  gate-1: 'drawing - the only drawings of the face are 3D side-and-front views. The best is the vector Figure 3 of the standalone FANT-G UDS 3FE71256AAAATQZZA01 p11 (pdfimages lists no raster there), rendered at 1200 dpi: the plate runs rows 310-5076 (11.767 px/mm along the card) and is about 324 px across (10.8 px/mm, the face turned about 24 degrees). The same drawing is the 300 ppi raster in the ETSI UDS p222, and the BA vector drawing (3FE71256BAAATQZZA03 p9) puts every shared feature within 0.7 mm of it. Along the card, y = (row - 310) / 11.767, with proud features corrected for the depth axis (read off the card top edge: 3.69 px right and 1.09 px down per mm toward the viewer for the 225 mm depth)'
+  layout: 'drawing - along (mm): top lever 1.0-33.0, FANT-G legend baseline 26.3, ACO legend 30.8, lamp rows 37.5 / 42.53 / 47.56 / 52.59 / 57.62 (pitch 5.03), label 61.2-66.3, laser mark 62.2-68.2, housing (see angled-panel) 74.1-271.9, micro-USB centre 281.3, BITS IN / OUT centres 298.1 / 313.9 in one frame 289.45-322.6, FUI4 frame 325.06-342.14, LCRT 344.18-361.3, ToD/1PPS 363.4-380.1, ESD mark 384.1-391.8, lower lever 325.5-403.5. Across: housing x 1.8-25.3 and every cage, SMA and jack centred on x 13.55 (the cage and SMA centres read 13.5-13.8 after the depth correction), lamp columns centred 9.0 / 14.2 (read 9.3-9.6 / 14.5-14.8 depending on which of the doubled plate-edge lines is the face edge; the FANT-H family 8.94 / 14.14 pitch agrees), micro-USB x 7.85, jack frames x 6.2-21.0, jack legends x 25.2'
+  angled-panel: 'drawing - SAWTOOTH, one tooth per port group, each tooth a face tipped up (carrying the port) and a return closing it back to the plate. Read off the housing near-side outline in the 1200 dpi render: roots (outline at the plate, col ~200) and ridges (col ~258 for the SFP+ teeth, 261 for the CFP4, 271 for the SMA block). SFP+ teeth: ridges at rows 1360 / 1705 / 2040 / 2373 and roots 1522 / 1862 / 2194; the ridge stands 55-58 px right of the root = 14.3-15.7 mm proud (the 205 or 225 mm depth), and after the 17 px depth correction the face and the return are each 14.2 mm front-view, so 45/45 (atan 14.3/14.2) - the tooth FNIO-A (nokia/fnio-a@1) carries, with the same 28.5 pitch (read 28.3-28.7 here and 28.45 on the BA drawing). Modelled at a fitted pitch of 28.5 with face = return = 14.25: faces 74.1 / 102.6 / 131.1 / 159.6, returns ending 188.1; residuals against the read ridges 0.6 mm or less. CFP4 tooth: root 190.8, ridge 208.9 (depth-corrected), foot 228.6, apex 16.8-18.4 mm proud - modelled 45/45, face 190.8-209.7 and return 209.7-228.6. SMA tooth, both jacks on one face: root 228.6, ridge 250.4, foot 271.9, apex 19.8-21.7 proud - modelled 45/45, face 228.6-250.25 and return 250.25-271.9. Every tooth is square (45/45), so a cage run back along its face normal runs parallel to the return and stays inside the tooth however deep it goes. What the facets cannot say: Nokia draws the valleys between SFP+ teeth about 3 mm proud of the plate (the root outline sits about 10 px right of the housing top), and the first face longer (the housing top at 71.0); every valley is modelled on the plate, so the housing starts at 74.1 and the 2.7 mm between the last SFP+ foot and the CFP4 root is flat. The housing stands proud of the plate in the figure (not set into it)'
+  ports: 'datasheet - ETSI UDS p219-220 section 22.4.8 "External interfaces", transcribed: communication, 1 x 10/100/1000Base-T, 4 x 10GE SFP+ (1GE with SFP optics), 1 x 100GE CFP4; management, micro-USB (debug), the Alarm Cut-Off switch (ACOS) and LED, the local craft management interface (LCMI, RJ45); clock, BITS input and BITS output (RJ45), ToD/1PPS (RJ45), 10 MHz GPS (SMA), 1 PPS (SMA), and a daisy-chain NTR clock output (RJ45) - which has no jack of its own in the figure, so it is taken to share the BITS OUT jack as nokia/fant-h-aa@2 reads it. Composed from std/sfp@1, common/sma-jack@1, std/micro-usb@1, std/rj45@2 and common/rj45-eth@1 at registry size; the SFP+ cages and SMA jacks sit on their tooth faces and are foreshortened by cos 45 along the card. SFP+ cages turn 90 (long side along the card, as the BA drawing draws the openings taller than wide and FNIO-A reads its own). Cage numbering 1-4 top to bottom is ASSUMED (no numeral legible beside a cage); the CFP4 is module 5 by the lamp table'
+  cfp4: 'drawing - the CFP4 cage is drawn in the skin (cfp4-aperture, the CFP4 MSA module envelope 21.5 x 9.5 mm, long side along the card, foreshortened by cos 45 on its tooth face), NOT composed as a port: the library has no std/cfp4 and cfp4 is not in the pluggables registry, the standards table, the exporter type map or lint PLUGGABLE_CAGES. Adding that family touches shared schema, lint and test files, which is outside a card change. Until it lands, this card exports four SFP+ ports and no CFP4 port'
+  rotation: 'estimated - the face is 30 mm wide, so every cage and jack lies on its side. The RJ45s turn 270 as on the FANT-H; the micro-USB turns 90. Which way a cage latch faces is not resolvable'
+  media: 'the RJ45 jacks are typed by what runs through them: Base-T rj45, craft rj45-serial, ToD/1PPS rj45-tod, BITS rj48'
+  leds: 'datasheet - ETSI UDS p223 Table 78 (Lightspan Table 68 p187 identical), transcribed as states: PWR green power present / off; A/S green active / off stand-by (drawn unlit); ALM red / off; ACO green alarm cut off / off; FSM1-FSM5 link/activity status of modules 1-5. The close-up (p223 Figure 76) gives the arrangement: ALM | PWR, ACO | A/S, FSM2 | FSM1, FSM4 | FSM3, then FSM5 alone on the right'
+  lamp-colour: 'estimated - the table gives FSM1-FSM5 no colour, so link-activity is drawn in the family green #39b54a that nokia/fnio-a@1 uses for the same unstated case'
+  lamp-size: 'estimated - common/led-dot@1 (2 mm); the figure draws the bezel rings about 5.5 mm across'
+  legends: 'drawing - read at 4800 dpi off the vector figure: FANT-G and ACO under the logo, the lamp legends, USB, BITS.IN, BITS.OUT, FUI4 (beside the Base-T jack), LCRT (beside the craft jack) and ToD/1PPS, set as printed; the jack legends read DOWN the card, glyph tops toward the right edge, so rotate(90). FUI4 and LCRT are transcribed exactly as drawn although the text calls the ports 10/100/1000Base-T and craft. The legends beside the teeth are hidden behind the teeth in every figure (only a "PO" fragment shows), so none is drawn'
+  aco: 'estimated - the figure names the ACO switch (a callout to the ACO legend under FANT-G) but draws no hole; it is carried as common/reset-button@1, a recessed pinhole, right of the ACO legend at x 23, y 29.8'
+  levers: 'drawing - dark ejector levers at the left edge. The top one is a broad curved handle, 0.4-10.0 across and 1.0-33.0 along (after the depth correction). The bottom one runs from 325.5 to 403.5 beside the Base-T, craft and ToD jacks; in the figure its handle end stands out from the plate and is drawn across the left of those jacks, but at the plate it hugs the left edge, so it is held to x 0.4-5.6, clear of the jacks'
+  screws: 'drawing - knurled captive screw at each end, right of the lever, drawn to the family figure (see thumbscrews); the figure draws both'
+  marks: 'drawing - skin art only: the product label under the lamps (61.2-66.3), the small label right of the micro-USB, the label and the ESD mark at the bottom. The laser warning is common/laser-warning@1 (the library triangle points up; Nokia prints it pointing right)'
+  logo: 'drawing - the figure prints the Alcatel-Lucent mark and wordmark above FANT-G; per the library rule no logo is drawn, and a logo-zone covers both'
+  colour: 'estimated - light silver-grey plate with dark ejectors, the family finish; the housing darker grey, each port face light and each return darker, so the teeth read face-on'
+  relief: 'estimated - lever projection and screw heads carry the library card-family figures, not measurements. The port housing is facets, each face and each return its own relief feature (see angled-panel)'
+  thumbscrews: 'photo - owner lab photos of an installed FX-8, 2026-09-24: one family figure for every NT card, head 10.5 mm across centred 19.4 mm from the left edge on a 30 mm plate, top head at y 0 and bottom head at y 394.5, flush with the ends'
+  gaps: >-
+    CFP4 cage drawn, not composed (no std/cfp4 in the library; the card exports no CFP4 port).
+    SFP+ cage numbering assumed top to bottom. Teeth legends hidden in every figure. ACO switch
+    position estimated (not drawn). Valleys between teeth drawn about 3 mm proud, modelled on the
+    plate. Faceplate edge-to-edge width not stated (taken as the 30 mm pitch). Which of 205/225 mm
+    is the card depth is not stated.
+groups:
+  sfp-plus: {term: Port, role: traffic, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}, description: 'SFP+ ports - 10GE and 1GE; lamps FSM1-FSM4'}
+  base-t: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the fixed 10/100/1000Base-T communication port (legend FUI4)'}
+  timing: {term: Port, role: management, index-origin: 1, mixed: 'network timing - the 1 PPS and 10 MHz GPS SMA inputs, the ToD/1PPS RJ45, and BITS in and BITS out / daisy-chain NTR output'}
+  craft: {term: Port, role: management, index-origin: 1, mixed: 'reaching the card locally - the craft RJ45 (LCMI, legend LCRT) and the micro-USB debug port'}
+  leds: {term: LED, role: indicator, index-origin: 1}
+elements:
+  logo-zone: {at: [11.0, 14.5], size: [12.0, 5.5], class: logo-zone}
+  lever-top: {at: [0.4, 1.0], size: [9.6, 32.0], class: latch}
+  lever-bottom: {at: [0.4, 325.5], size: [5.2, 78.0], class: latch}
+  screw-top: {at: [14.15, 0], size: [10.5, 10.5], class: screw}
+  screw-bottom: {at: [14.15, 394.5], size: [10.5, 10.5], class: screw}
+  sfp1-face: {at: [1.8, 74.1], size: [23.5, 14.25], class: mechanical}
+  sfp1-return: {at: [1.8, 88.35], size: [23.5, 14.25], class: mechanical}
+  sfp2-face: {at: [1.8, 102.6], size: [23.5, 14.25], class: mechanical}
+  sfp2-return: {at: [1.8, 116.85], size: [23.5, 14.25], class: mechanical}
+  sfp3-face: {at: [1.8, 131.1], size: [23.5, 14.25], class: mechanical}
+  sfp3-return: {at: [1.8, 145.35], size: [23.5, 14.25], class: mechanical}
+  sfp4-face: {at: [1.8, 159.6], size: [23.5, 14.25], class: mechanical}
+  sfp4-return: {at: [1.8, 173.85], size: [23.5, 14.25], class: mechanical}
+  cfp4-face: {at: [1.8, 190.8], size: [23.5, 18.9], class: mechanical}
+  cfp4-return: {at: [1.8, 209.7], size: [23.5, 18.9], class: mechanical}
+  sma-face: {at: [1.8, 228.6], size: [23.5, 21.65], class: mechanical}
+  sma-return: {at: [1.8, 250.25], size: [23.5, 21.65], class: mechanical}
+relief:
+  wall: '#3a3d42'
+  features:
+  - {node: lever-top, out: 4.2, color: '#2b2e33', confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch via the casa card family - the library one figure for an ejector lever. NOT MEASURED; no Nokia document states it'}
+  - {node: lever-bottom, out: 4.2, color: '#2b2e33', confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch via the casa card family - the library one figure for an ejector lever. NOT MEASURED; no Nokia document states it'}
+  - {node: screw-top, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED'}
+  - {node: screw-bottom, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED'}
+  - {node: sfp1-face, facet: {deg: 45, facing: up}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 1 face, 45 deg up, front view 74.1-88.35; see provenance angled-panel'}
+  - {node: sfp1-return, facet: {deg: 45, facing: down}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 1 return, ridge 88.35 to foot 102.6, meets the face apex at 14.25 mm; see provenance angled-panel'}
+  - {node: sfp2-face, facet: {deg: 45, facing: up}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 2 face, 45 deg up, front view 102.6-116.85; see provenance angled-panel'}
+  - {node: sfp2-return, facet: {deg: 45, facing: down}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 2 return, ridge 116.85 to foot 131.1, meets the face apex at 14.25 mm; see provenance angled-panel'}
+  - {node: sfp3-face, facet: {deg: 45, facing: up}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 3 face, 45 deg up, front view 131.1-145.35; see provenance angled-panel'}
+  - {node: sfp3-return, facet: {deg: 45, facing: down}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 3 return, ridge 145.35 to foot 159.6, meets the face apex at 14.25 mm; see provenance angled-panel'}
+  - {node: sfp4-face, facet: {deg: 45, facing: up}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 4 face, 45 deg up, front view 159.6-173.85; see provenance angled-panel'}
+  - {node: sfp4-return, facet: {deg: 45, facing: down}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - SFP+ cage 4 return, ridge 173.85 to foot 188.1, meets the face apex at 14.25 mm; see provenance angled-panel'}
+  - {node: cfp4-face, facet: {deg: 45, facing: up}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - CFP4 cage face, 45 deg up, front view 190.8-209.7; see provenance angled-panel'}
+  - {node: cfp4-return, facet: {deg: 45, facing: down}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - CFP4 cage return, ridge 209.7 to foot 228.6, meets the face apex at 18.90 mm; see provenance angled-panel'}
+  - {node: sma-face, facet: {deg: 45, facing: up}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - 1PPS and 10MHz SMA jacks face, 45 deg up, front view 228.6-250.25; see provenance angled-panel'}
+  - {node: sma-return, facet: {deg: 45, facing: down}, confidence: estimated, source: 'FANT-G standalone UDS 3FE71256AAAATQZZA01 p11 Figure 3 (vector, rendered 1200 dpi; the same drawing as ETSI UDS 3FE77012AAAATQZZA18 p222 Figure 75 and Lightspan UDS 3HH90279AAAATQZZA23 p186/p196) - 1PPS and 10MHz SMA jacks return, ridge 250.25 to foot 271.9, meets the face apex at 21.65 mm; see provenance angled-panel'}
+parts:
+- {ref: std/sfp@1, id: sfp-1, group: sfp-plus, at: [6.3, 77.689], rotate: 90, 'on': sfp1-face, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp@1, id: sfp-2, group: sfp-plus, at: [6.3, 106.189], rotate: 90, 'on': sfp2-face, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp@1, id: sfp-3, group: sfp-plus, at: [6.3, 134.689], rotate: 90, 'on': sfp3-face, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp@1, id: sfp-4, group: sfp-plus, at: [6.3, 163.189], rotate: 90, 'on': sfp4-face, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: common/sma-jack@1, id: pps-1, group: timing, at: [8.8, 230.041], 'on': sma-face, attrs: {function: 1 PPS input}}
+- {ref: common/sma-jack@1, id: gps-10mhz, group: timing, at: [8.8, 240.041], 'on': sma-face, attrs: {function: 10 MHz GPS input}}
+- {ref: common/laser-warning@1, id: laser-mark, at: [20.5, 62.8]}
+- {ref: std/micro-usb@1, id: usb, group: craft, at: [4.1, 279.925], rotate: 90, attrs: {function: debug}}
+- {ref: std/rj45@2, id: bits-in, group: timing, at: [5.65, 291.5], rotate: 270, attrs: {media: rj48, function: BITS input}}
+- {ref: std/rj45@2, id: bits-out, group: timing, at: [5.65, 307.3], rotate: 270, attrs: {media: rj48, function: BITS output / daisy-chain NTR clock output}}
+- {ref: common/rj45-eth@1, id: eth, group: base-t, at: [5.65, 327], rotate: 270}
+- {ref: std/rj45@2, id: lcrt, group: craft, at: [5.65, 346.14], rotate: 270, attrs: {media: rj45-serial, function: local craft management interface}}
+- {ref: std/rj45@2, id: tod, group: timing, at: [5.65, 365.15], rotate: 270, attrs: {media: rj45-tod, function: ToD / 1PPS}}
+- {ref: common/reset-button@1, id: aco-switch, at: [21.0, 27.8], attrs: {function: alarm cut-off switch}}
+- {ref: common/led-dot@1, id: led-alm, group: leds, at: [8, 36.5], attrs: {description: 'ALM - red: alarm condition exists; off: no alarm condition exists'}, states: {lamp: ['off', {name: alarm, color: '#ef4444'}]}}
+- {ref: common/led-dot@1, id: led-pwr, group: leds, at: [13.2, 36.5], attrs: {description: 'PWR - green: power present; off: no power'}, states: {lamp: ['off', {name: power, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-aco, group: leds, at: [8, 41.53], attrs: {description: 'ACO - green: alarm has been cut off; off: no alarm cut off'}, states: {lamp: ['off', {name: alarm-cut-off, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-a-s, group: leds, at: [13.2, 41.53], attrs: {description: 'A/S - green: active; off: stand-by'}, states: {lamp: [{name: standby, color: '#3a3f44'}, {name: active, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-fsm2, group: leds, at: [8, 46.56], attrs: {description: 'FSM2 - link/activity status (module 2), SFP+ cage 2'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-fsm1, group: leds, at: [13.2, 46.56], attrs: {description: 'FSM1 - link/activity status (module 1), SFP+ cage 1'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-fsm4, group: leds, at: [8, 51.59], attrs: {description: 'FSM4 - link/activity status (module 4), SFP+ cage 4'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-fsm3, group: leds, at: [13.2, 51.59], attrs: {description: 'FSM3 - link/activity status (module 3), SFP+ cage 3'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-fsm5, group: leds, at: [13.2, 56.62], attrs: {description: 'FSM5 - link/activity status (module 5), the CFP4 cage'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [15.0, 202.5], direction: front}
+skins: [default]
