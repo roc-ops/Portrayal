@@ -381,8 +381,12 @@ AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
 # four-lane QSFP, one generation past qsfp56, and the cage is mechanically the
 # same - std/qsfp-ganged@1 seats it unchanged. Left out, L22 accused every one of
 # the EXP400-32X's thirty-two ports of contradicting its own group.
+# sfp112 IS IN THE SFP FAMILY ON THE SAME ARGUMENT: the 100G single-lane SFP, one
+# generation past sfp56, in the SFP envelope - an SFP112 cage takes SFP56 and
+# SFP28 modules, so std/sfp and std/sfp-ganged serve it unchanged. The Nokia
+# MDA2-e-XP SFP112 cards (m5e8, m5e16) are the first to need it.
 MEDIA_FAMILY = {
-    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp",
+    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp", "sfp112": "sfp",
     "qsfp": "qsfp", "qsfp-plus": "qsfp", "qsfp28": "qsfp", "qsfp56": "qsfp",
     "qsfp112": "qsfp", "qsfp-dd": "qsfp",
 }
@@ -1653,7 +1657,7 @@ def lint_component_display(path, data, _lib_roots=None):
 GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
                            "power-draw-max-w", "power-draw-typical-w")
 GENERIC_RATE_TOKENS = re.compile(
-    r"(^|-)(sfp28|sfp56|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
+    r"(^|-)(sfp28|sfp56|sfp112|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
     r"1000base[a-z0-9-]*|"
     r"\d+g|\d+gbase[a-z0-9-]*|\d+km|\d+m)(-|$)")
 
@@ -4225,9 +4229,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
 # generation past qsfp56 on the same cage - and adding the device without adding
 # the media would have made its port group the third to escape L40 in silence.
 # The test failed first and this line is its answer, not the other way round.
-PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp-dd", "qsfp", "qsfp28",
-                   "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2",
-                   "cfp4", "cxp"}
+# sfp112 JOINED BEFORE ITS DEVICE, the other way round from qsfp112: the Nokia
+# MDA2-e-XP SFP112 cards are known to be coming, and a cage already in the
+# vocabulary the day its first card lands is what keeps that card's groups from
+# escaping L40.
+PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp112", "sfp-dd", "qsfp",
+                   "qsfp28", "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp",
+                   "cfp2", "cfp4", "cxp"}
 
 
 def _bay_pitch_is_uneven(gaps):

@@ -160,14 +160,16 @@ SONET = {"oc3": "sonet-oc3", "oc12": "sonet-oc12", "oc48": "sonet-oc48"}
 def test_the_sonet_rates_are_types_both_targets_have():
     """One document is written to both trees, so a type either library refuses
     would be rejected on import rather than by any gate here."""
-    assert dict(dx.FAMILY_ATTRS["sfp"][2:5]) == \
+    assert dict(dx.FAMILY_ATTRS["sfp"][3:6]) == \
         {"oc48": "sonet-oc48", "oc12": "sonet-oc12", "oc3": "sonet-oc3"}
 
 
 def test_an_ethernet_card_is_unaffected_by_the_sonet_rates():
-    """The Ethernet pair stays FIRST in the tuple, so nothing about a card that
-    declares `sfp` or `sfp-plus` changes."""
-    assert dx.FAMILY_ATTRS["sfp"][:2] == (("sfp-plus", "10gbase-x-sfpp"),
+    """The Ethernet pair stays FIRST in the tuple after `sfp112` - which no card
+    stated before it joined - so nothing about a card that declares `sfp` or
+    `sfp-plus` changes."""
+    assert dx.FAMILY_ATTRS["sfp"][0] == dx.SFP112_ATTR
+    assert dx.FAMILY_ATTRS["sfp"][1:3] == (("sfp-plus", "10gbase-x-sfpp"),
                                           ("sfp", "1000base-x-sfp"))
     assert dx.cage_type("std/sfp-ganged", {"sfp": 20}) == "1000base-x-sfp"
     assert dx.cage_type("std/sfp-ganged", {"sfp-plus": 16}) == "10gbase-x-sfpp"
@@ -250,7 +252,7 @@ def test_the_pon_rates_follow_ethernet_and_sonet():
     """AFTER everything a card could already declare, so no existing card's
     export changes - the SFP family ends in them and the XFP family's OC-192
     stays first."""
-    assert dx.FAMILY_ATTRS["sfp"][5:] == dx.PON_ATTRS
+    assert dx.FAMILY_ATTRS["sfp"][6:] == dx.PON_ATTRS
     assert dx.FAMILY_ATTRS["xfp"] == (("oc192", "sonet-oc192"),) + dx.PON_ATTRS
     assert dx.cage_type("std/sfp", {"sfp": 8, "gpon": 8}) == "1000base-x-sfp"
     assert dx.cage_type("std/xfp", {"oc192": 1, "10g-epon": 1}) == "sonet-oc192"
@@ -292,6 +294,54 @@ def test_a_pon_card_states_its_rate(ref, attr, count):
     cages = {p["ref"].split("@")[0] for p in d["parts"]
              if isinstance(p, dict) and p["ref"].split("@")[0] in dx.CAGE_FAMILY}
     assert cages and {dx.cage_type(c, attrs) for c in cages} == {PON[attr]}
+
+
+# --- SFP112 and QSFP-DD800: two rates the Nokia MDA2-e-XP brought ------------
+
+def test_sfp112_exports_as_other_because_nautobot_has_no_type_for_it():
+    """NetBox has `100gbase-x-sfp112`; Nautobot does not (nautobot/dcim/
+    choices.py at 38953ac3). One document is written to both trees, so the slug
+    would fail a Nautobot import - the reason `25gs-pon` has no row. But a card
+    stating `sfp112` HAS stated its rate, and without a row it fell to the cage
+    default (10GBASE-X SFP+) with L96 accusing it. `other` is in both."""
+    assert dx.SFP112_ATTR == ("sfp112", "other")
+    written = ({t for fam in dx.FAMILY_ATTRS.values() for _a, t in fam}
+               | set(dx.IFACE_TYPE.values()) | set(dx.PART_IFACE.values())
+               | set(dx.PART_MEDIA.values()))
+    assert "100gbase-x-sfp112" not in written
+    assert not dx.cage_family_needs_a_rate("std/sfp-ganged", {"sfp112": 16})
+    assert dx.cage_type("std/sfp-ganged", {"sfp112": 16}) == "other"
+    assert dx.cage_type("std/sfp", {"sfp112": 8, "sfp28": 8}) == "other"
+    part = {"ref": "std/sfp@1", "attrs": {"media": "sfp112", "speed": "100g"}}
+    assert dx.placed_type(part) == "other"
+
+
+def test_an_800g_qsfp_dd_card_is_not_typed_400g():
+    """`800gbase-x-qsfpdd` is in both targets (NetBox and Nautobot
+    TYPE_800GE_QSFP_DD). The card attr is `qsfp-dd-800g` - a rate statement, not
+    a media value: the port's media stays `qsfp-dd` and `qsfp-dd800` stays out
+    of the vocabulary, as spec/schemas/pluggables.yaml rules."""
+    assert dx.FAMILY_ATTRS["qsfp-dd"] == (
+        ("qsfp-dd-800g", "800gbase-x-qsfpdd"), ("qsfp-dd", "400gbase-x-qsfpdd"))
+    assert "qsfp-dd-800g" not in lint.PLUGGABLE_CAGES
+    assert dx.cage_type("std/qsfp-dd", {"qsfp-dd-800g": 2}) == "800gbase-x-qsfpdd"
+    assert dx.cage_type("std/qsfp-dd", {"qsfp-dd-800g": 2, "qsfp-dd": 2}) == \
+        "800gbase-x-qsfpdd"
+    assert not dx.cage_family_needs_a_rate("std/qsfp-dd", {"qsfp-dd-800g": 2})
+    # Every 400G card states only `qsfp-dd`, and is unchanged.
+    assert dx.cage_type("std/qsfp-dd", {"qsfp-dd": 6}) == "400gbase-x-qsfpdd"
+    part = {"ref": "std/qsfp-dd@1", "attrs": {"media": "qsfp-dd", "speed": "800g"}}
+    assert dx.placed_type(part) == "800gbase-x-qsfpdd"
+
+
+def test_no_existing_card_states_the_new_rates_before_its_card_lands():
+    """Both rows sit FIRST in their families, which is only free if no card
+    already states them - else that card's export changed under this commit."""
+    stating = sorted(ref for ref, d in _modules().items()
+                     if {"sfp112", "qsfp-dd-800g"} & set(d.get("attrs") or {}))
+    nokia_mda2 = {"nokia/m5e2-100g-qsfp28-2-800g-qdd", "nokia/m5e8-100g-sfp112-2-800g-qdd",
+                  "nokia/m5e16-100g-sfp112"}
+    assert set(stating) <= nokia_mda2, stating
 
 
 def test_a_placement_that_names_its_pon_flavour_takes_it():
