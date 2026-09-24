@@ -22,13 +22,13 @@ stands in for a dust cap, as it did before the caps landed (Task 5);
 """
 import json
 import shutil
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 import pytest
 import yaml
 
+import warmrender
 from test_nested_occupants import (LIB, SPEC, assert_same_turn, by_path,
                                    device_point, is_inside)
 
@@ -203,7 +203,7 @@ def dcp(tmp_path, occupants=None):
 
 
 def run(dev, out, root):
-    return subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    return warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                            "--library", str(root), "--library", str(LIB),
                            "--out", str(out)],
                           capture_output=True, text=True)

@@ -44,6 +44,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import warmrender
 from portrayal import render as R
 from test_lifted_seat_js import LIB, RENDER, SPEC, build_components, numbers, skin_file, spec_of
 
@@ -104,7 +105,7 @@ def render(tmp, device, extra):
                                     "occupants": dict(occ)}
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp / name / "out"
-    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     return out, name
@@ -121,7 +122,7 @@ def render_merged(tmp, device, cfg, occupants):
     c["occupants"] = {**(c.get("occupants") or {}), **occupants}
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = dev.parent.parent / "out"
-    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     meta = json.loads((out / f"{name}.configs.json").read_text())

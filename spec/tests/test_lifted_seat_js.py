@@ -44,6 +44,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import warmrender
 from portrayal.render import _inset_feature
 
 SPEC = Path(__file__).resolve().parents[1]
@@ -107,7 +108,7 @@ def descendants(el):
 
 
 def build_components(out):
-    r = subprocess.run([sys.executable, "-m", "portrayal.components_index",
+    r = warmrender.run([sys.executable, "-m", "portrayal.components_index",
                         "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True,
                        env={**os.environ, "PYTHONPATH": str(SPEC / "tools")})
@@ -171,7 +172,7 @@ def face_case(tmp, comps, dist, name, device, config, occupants):
         cfg["occupants"] = {**(cfg.get("occupants") or {}), **occupants}
         dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = work / "out"
-    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / f"{dev_name}.{config}.front.svg").getroot()

@@ -20,12 +20,12 @@ picked by reading their contracts:
   - juniper/mic3-3d-10xge-sfpp@1  a MIC, ten SFP+ cages at rotate 0 / 180.
 """
 import json
-import subprocess
 import sys
 from pathlib import Path
 
 import pytest
 
+import warmrender
 from portrayal import render as render_mod
 from portrayal.manifest import load_yaml, presented_interface, seat_point
 
@@ -44,7 +44,7 @@ def _ref(entry):
 @pytest.fixture(scope="module")
 def index(tmp_path_factory):
     out = tmp_path_factory.mktemp("components")
-    r = subprocess.run([sys.executable, str(INDEXER), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(INDEXER), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     doc = json.loads((out / "components.json").read_text())
@@ -161,7 +161,7 @@ def test_a_card_cage_accepts_what_a_device_cage_of_its_media_accepts(index, tmp_
     """sfp-plus on the SMM-300GM and on the MIC takes exactly what a REAL
     device's sfp-plus cage takes - agr110's `port-0`, from a real build."""
     agr = LIB / "devices/edgecore/agr110/device.yaml"
-    r = subprocess.run([sys.executable, str(RENDER), str(agr), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(agr), "--library", str(LIB),
                         "--out", str(tmp_path)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     dev = json.loads((tmp_path / "agr110.configs.json").read_text())

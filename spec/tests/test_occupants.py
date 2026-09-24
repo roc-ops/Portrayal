@@ -15,7 +15,6 @@ declared).
 """
 import re
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -24,6 +23,7 @@ import yaml
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
+import warmrender
 from portrayal import lint
 from portrayal import libwalk
 
@@ -42,7 +42,7 @@ def fitted_copy(tmp_path, occupants):
 
 
 def render(dev, out):
-    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    r = warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                         "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-600:]

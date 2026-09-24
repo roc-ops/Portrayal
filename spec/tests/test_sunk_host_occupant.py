@@ -24,12 +24,13 @@ the aperture rule (not a module, no `behaviour`). The number is chosen for being
 unlike any seat lift in the chain, so a term counted twice or dropped shows.
 """
 import pathlib
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 import pytest
 import yaml
+
+import warmrender
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
@@ -70,7 +71,7 @@ def _render(tmp_path, occupants, *, port_in=True, extra=()):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run(
+    r = warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True)
@@ -216,7 +217,7 @@ def test_an_occupant_that_stands_in_its_sunk_hosts_well_is_refused(tmp_path):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run(
+    r = warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True)

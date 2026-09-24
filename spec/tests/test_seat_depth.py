@@ -30,6 +30,7 @@ import jsonschema
 import pytest
 import yaml
 
+import warmrender
 from portrayal import lint
 from portrayal.manifest import presented_interface
 
@@ -290,7 +291,7 @@ def test_a_boot_on_a_seated_plug_stands_on_the_plug_body(tmp_path):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run(
+    r = warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True)
@@ -335,7 +336,7 @@ def test_an_rj45_boot_stands_on_its_plug_body(tmp_path):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run(
+    r = warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True)

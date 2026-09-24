@@ -37,6 +37,7 @@ from pathlib import Path
 import pytest
 import yaml
 
+import warmrender
 from portrayal import libwalk
 from test_lifted_seat_js import (LIB, RENDER, SPEC, build_components, chain_matrix,
                                  descendants, is_occupant, mismatches, numbers, skin_file,
@@ -86,7 +87,7 @@ def render(tmp, device, extra):
                                     "occupants": dict(occ)}
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = work / "out"
-    r = subprocess.run([sys.executable, str(RENDER), str(dev),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev),
                         "--library", str(LIB), "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
     return out, name
@@ -635,13 +636,13 @@ def _keyed(tmp_path, src, cfg, key, ref):
 @pytest.mark.parametrize("src,cfg,key,ref,instead", WRAPPED, ids=[w[0] for w in WRAPPED])
 def test_the_build_refuses_a_key_on_a_wrappers_aperture(tmp_path, src, cfg, key, ref, instead):
     dev = _keyed(tmp_path, src, cfg, key, ref)
-    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(tmp_path / "out")], capture_output=True, text=True)
     assert r.returncode != 0, "the build seated an occupant in a wrapper's own aperture"
     assert f"occupants/{key}" in r.stderr and f"key {instead!r} instead" in r.stderr, r.stderr[-600:]
     # and the slot the message names is one the build does seat
     ok = _keyed(tmp_path / "ok", src, cfg, instead, ref)
-    r = subprocess.run([sys.executable, str(RENDER), str(ok), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(ok), "--library", str(LIB),
                         "--out", str(tmp_path / "ok-out")], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-600:]
 
@@ -775,7 +776,7 @@ def test_the_build_and_l12_answer_a_key_inside_an_occupant_alike(tmp_path, occ, 
     d = yaml.safe_load(dev.read_text())
     d["configurations"]["bdm-3plus1"]["occupants"] = occ
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
-    r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(tmp_path / "out")], capture_output=True, text=True)
     with lint.collecting() as got:
         lint.lint_device_occupants(dev, yaml.safe_load(dev.read_text()), [str(LIB)])

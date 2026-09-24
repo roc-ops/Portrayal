@@ -19,7 +19,6 @@ ancestors, so the build and what the kit will read cannot drift apart.
 import math
 import re
 import shutil
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -30,6 +29,7 @@ import yaml
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
+import warmrender
 from portrayal.manifest import presented_interface
 from portrayal.render import (Library, component_cages, _pluggable_families,
                               _pluggable_candidates)
@@ -54,7 +54,7 @@ def fitted_copy(tmp_path, name, config, bays, occupants):
 
 
 def run(dev, out):
-    return subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    return warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                            "--library", str(LIB), "--out", str(out)],
                           capture_output=True, text=True)
 

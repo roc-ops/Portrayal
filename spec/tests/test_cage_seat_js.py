@@ -30,6 +30,8 @@ from pathlib import Path
 import pytest
 import yaml
 
+import warmrender
+
 SPEC = Path(__file__).resolve().parents[1]
 ROOT = SPEC.parent
 LIB = ROOT / "library"
@@ -43,7 +45,7 @@ needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not i
 
 
 def run_render(dev, out):
-    r = subprocess.run([sys.executable, str(RENDER), str(dev),
+    r = warmrender.run([sys.executable, str(RENDER), str(dev),
                         "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-600:]
@@ -61,7 +63,7 @@ def build_components(out):
     """components.json and the compiled skins, BUILT HERE rather than read
     from library/dist - a stale dist is a stale answer, and nothing about this
     test would say so (the "gates measure the installed tree" hazard)."""
-    r = subprocess.run([sys.executable, "-m", "portrayal.components_index",
+    r = warmrender.run([sys.executable, "-m", "portrayal.components_index",
                         "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True,
                        env={**os.environ, "PYTHONPATH": str(SPEC / "tools")})

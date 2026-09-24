@@ -27,13 +27,13 @@ bulkhead holds the cap and a configured one holds what it names.
 """
 import re
 import shutil
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 import pytest
 import yaml
 
+import warmrender
 from test_nested_occupants import LIB, SPEC, device_point, effective_lift, is_inside
 
 from portrayal import lint
@@ -245,7 +245,7 @@ def fhd_with(tmp_path, bays, occupants, without_rear=()):
 
 
 def run(dev, out):
-    return subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"),
+    return warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"),
                            str(dev), "--library", str(LIB), "--out", str(out)],
                           capture_output=True, text=True)
 

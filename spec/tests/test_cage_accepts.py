@@ -39,7 +39,6 @@ above.
 """
 import json
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -50,6 +49,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 RENDER = SPEC / "tools/portrayal/render.py"
 
+import warmrender
 from portrayal import libwalk
 from portrayal import render as render_mod
 
@@ -59,7 +59,7 @@ AIS800_32O = LIB / "devices/edgecore/ais800-32o/device.yaml"
 
 
 def _build(device_yaml, tmp_path):
-    r = subprocess.run([sys.executable, str(RENDER), str(device_yaml),
+    r = warmrender.run([sys.executable, str(RENDER), str(device_yaml),
                         "--library", str(LIB), "--out", str(tmp_path)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr

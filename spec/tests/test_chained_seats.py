@@ -15,11 +15,12 @@ while placements remain unresolved is either a dangling `mate-to` (already an er
 or a cycle (a new one).
 """
 import pathlib
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 import yaml
+
+import warmrender
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
@@ -43,7 +44,7 @@ def _render(tmp_path, extra_placements, occupants):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    return subprocess.run(
+    return warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True), out

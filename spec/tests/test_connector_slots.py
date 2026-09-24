@@ -8,13 +8,13 @@ These run against the real library and a components.json built here by the
 indexer the build runs, never a fixture and never a possibly stale dist.
 """
 import json
-import subprocess
 import sys
 from pathlib import Path
 
 import pytest
 import yaml
 
+import warmrender
 from portrayal import render as render_mod
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,7 +30,7 @@ def _ref(entry):
 def comps(tmp_path_factory):
     """components.json keyed by ref - the file itself is `{components: [...]}`."""
     out = tmp_path_factory.mktemp("components")
-    r = subprocess.run([sys.executable, str(INDEXER), "--library", str(LIB),
+    r = warmrender.run([sys.executable, str(INDEXER), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
     doc = json.loads((out / "components.json").read_text())

@@ -21,7 +21,6 @@ parsed as numbers (Python writes `9.0` where JS writes `9`).
 import math
 import re
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -33,6 +32,7 @@ LIB = SPEC.parent / "library"
 RENDER = SPEC / "tools/portrayal/render.py"
 SRC = LIB / "devices/ufispace/s9510-28dc"
 
+import warmrender
 from portrayal import render as render_mod
 from portrayal.manifest import presented_interface
 from portrayal.render import seat_at, seat_point
@@ -98,7 +98,7 @@ def fitted_copy(tmp_path, occupants, edit=None):
 
 
 def run_render(dev, out):
-    return subprocess.run([sys.executable, str(RENDER), str(dev),
+    return warmrender.run([sys.executable, str(RENDER), str(dev),
                            "--library", str(LIB), "--out", str(out)],
                           capture_output=True, text=True)
 

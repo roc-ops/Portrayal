@@ -14,6 +14,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
+import warmrender
 from portrayal.manifest import presented_interface  # noqa: E402
 
 
@@ -162,7 +163,7 @@ def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
     window showed up as an intermittent failure in a test that never touches
     this file. A corpus other tests read is not a scratch pad.
     """
-    import subprocess, shutil, re as _re
+    import shutil, re as _re
     src = ROOT / "library/devices/edgecore/as7726-32x"
     dev = tmp_path / "as7726-32x" / "device.yaml"
     shutil.copytree(src, dev.parent)
@@ -172,7 +173,7 @@ def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
                    + "    occupants: {port-1: generic/qsfp-lc@1}\n"
                    + original[m.end():])
     out = tmp_path / "out"
-    r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
+    r = warmrender.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
                         str(dev), "--library", str(ROOT / "library"), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-400:]
