@@ -102,7 +102,7 @@ def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(t
 
 
 def test_an_osfp_cage_accepts_nothing_but_says_so_explicitly(tmp_path):
-    """Four families - osfp, xfp, cfp, cfp2 - have a cage in the library and
+    """Five families - osfp, xfp, cfp, cfp2, cfp4 - have a cage in the library and
     no component that mates one. `[]`, EMPTY, NOT ABSENT: a consumer has to
     be able to tell "the library offers nothing here" from "this placement
     is not a cage at all", and those are different facts only if the key is
