@@ -7021,10 +7021,10 @@ def _id_corpus_roots_cacheable(lib_roots):
 
 def _id_corpus_files(lib_roots):
     """Every file `_id_corpus` reads, with its bytes, in the order it reads
-    them: (section, root index, path relative to root/section, path, bytes).
-    Bytes is None for a file that vanished between the walk and the read -
-    load_yaml answered None for that too, and the computation treats it as the
-    empty document it always did."""
+    them: (section, root index, path relative to root/section, path, bytes,
+    sha256 of the bytes). Bytes and hash are None for a file that vanished
+    between the walk and the read - load_yaml answered None for that too, and
+    the computation treats it as the empty document it always did."""
     files = []
     for section, pattern in (("components", "contract.yaml"), ("devices", "*.yaml")):
         for n, root in enumerate(lib_roots):
@@ -7034,23 +7034,105 @@ def _id_corpus_files(lib_roots):
                     data = f.read_bytes()
                 except FileNotFoundError:
                     data = None
-                files.append((section, n, f.relative_to(base).as_posix(), f, data))
+                sha = hashlib.sha256(data).hexdigest() if data is not None else None
+                files.append((section, n, f.relative_to(base).as_posix(), f, data, sha))
     return files
 
 
 def _id_corpus_section(files, section):
-    """(path, bytes) for one section, roots in order - the order the two loops
-    in `_id_corpus_compute` always walked them in."""
-    return [(f, data) for s, _n, _rel, f, data in files if s == section]
+    """(path, bytes, hash) for one section, roots in order - the order the two
+    loops in `_id_corpus_compute` always walked them in."""
+    return [(f, data, sha) for s, _n, _rel, f, data, sha in files if s == section]
+
+
+_ID_CORPUS_PARSES = 0              # files parsed by this process, for the trace
 
 
 def _id_corpus_parse(data):
     """One file's document: the parser load_yaml uses, on the hashed bytes."""
+    global _ID_CORPUS_PARSES
+    _ID_CORPUS_PARSES += 1
     return yaml.load(data, Loader=_manifest._Loader)
+
+
+def _id_corpus_trace(outcome, lib_roots, files, parsed0, t0):
+    """One JSON line per computation to $PORTRAYAL_ID_CORPUS_TRACE, if set:
+    whether the disk cache hit, how many files there were and how many had to
+    be parsed. How a slow build or suite shows which processes paid for the
+    vocabulary; never a reason to fail."""
+    path = os.environ.get("PORTRAYAL_ID_CORPUS_TRACE")
+    if not path:
+        return
+    with contextlib.suppress(Exception):
+        line = json.dumps({
+            "pid": os.getpid(), "argv0": Path(sys.argv[0]).name if sys.argv else "",
+            "roots": [str(r) for r in lib_roots], "outcome": outcome,
+            "files": len(files), "parsed": _ID_CORPUS_PARSES - parsed0,
+            "secs": round(time.monotonic() - t0, 3)}) + "\n"
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+        try:
+            os.write(fd, line.encode())
+        finally:
+            os.close(fd)
 
 
 def _id_corpus_doc(data):
     return (_id_corpus_parse(data) if data is not None else None) or {}
+
+
+# WHAT EACH FILE CONTRIBUTES, MEMOISED BY THE HASH OF ITS BYTES. A cache miss
+# used to parse every file from bytes, including the ~860 of the real library
+# that nearly every test render shares with a tmp root beside it - where
+# before this cache existed, those came free from load_yaml's per-process
+# parse. This memo gives that back without giving up the purity the disk
+# cache rests on: its key is the content hash the digest already computes, so
+# it cannot go stale (a changed file IS a different key), and what it holds is
+# exactly what `_id_corpus_compute` reads off a document - nothing about any
+# device or rule outcome. `_id_corpus_prime` fills it, which is what the
+# tests' warm render server does once so that its forked children parse only
+# the files a test wrote.
+_ID_CORPUS_FACTS = {}
+
+
+def _id_corpus_facts(section, data, sha):
+    """What one file contributes to the vocabulary, from its bytes:
+
+      components - the values offered as connector words, in order: its
+                   `conforms`, then `attrs.media` when its class is `port`;
+      devices    - every string placement id, in order, or nothing for a
+                   document that is not a device.
+
+    Memoised in _ID_CORPUS_FACTS by (section, sha256 of the bytes)."""
+    if data is None:
+        return ()
+    key = (section, sha)
+    hit = _ID_CORPUS_FACTS.get(key)
+    if hit is not None:
+        return hit
+    doc = _id_corpus_doc(data)
+    out = []
+    if section == "components":
+        if doc.get("conforms"):
+            out.append(str(doc["conforms"]))
+        if doc.get("class") == "port":
+            media = (doc.get("attrs") or {}).get("media")
+            if media:
+                out.append(str(media))
+    elif doc.get("kind") in (None, "device"):
+        for view in (doc.get("views") or {}).values():
+            for q in (((view or {}).get("components") or {}).get("placements") or []):
+                i = q.get("id")
+                if isinstance(i, str):
+                    out.append(i)
+    facts = _ID_CORPUS_FACTS[key] = tuple(out)
+    return facts
+
+
+def _id_corpus_prime(lib_roots):
+    """Fill the per-file memo for `lib_roots` and nothing else: no answer is
+    computed, no in-process or disk entry is written."""
+    for section, _n, _rel, _f, data, sha in _id_corpus_files(lib_roots):
+        _id_corpus_facts(section, data, sha)
 
 
 def _id_corpus_digest(files):
@@ -7063,9 +7145,8 @@ def _id_corpus_digest(files):
     the cache."""
     code = hashlib.sha256(Path(_ID_CORPUS_SOURCE).read_bytes()).hexdigest()
     rows = []
-    for section, n, rel, _f, data in files:
-        h = hashlib.sha256(data).hexdigest() if data is not None else "missing"
-        rows.append(f"{n}\0{section}\0{rel}\0{h}\n")
+    for section, n, rel, _f, _data, sha in files:
+        rows.append(f"{n}\0{section}\0{rel}\0{sha or 'missing'}\n")
     rows.sort()
     # the parser is part of the computation too: a different PyYAML, or the
     # pure-Python loader where libyaml is missing, could read a document
@@ -7188,6 +7269,7 @@ def _id_corpus(lib_roots):
     key = tuple(str(r) for r in lib_roots)
     if key in _ID_VOCAB_CACHE:
         return _ID_VOCAB_CACHE[key]
+    t0, parsed0 = time.monotonic(), _ID_CORPUS_PARSES
     files = _id_corpus_files(lib_roots)
     try:
         if not _id_corpus_roots_cacheable(lib_roots):
@@ -7202,13 +7284,16 @@ def _id_corpus(lib_roots):
         with contextlib.suppress(OSError):
             os.utime(cache_dir / f"id-corpus-{digest}.json")
         _ID_VOCAB_CACHE[key] = hit
+        _id_corpus_trace("hit", lib_roots, files, parsed0, t0)
         return hit
     result = _id_corpus_compute(files)
     # a file that vanished mid-walk is a tree being changed under us: answer
     # from what was read, as before, but do not record it for anyone else
-    if digest is not None and all(data is not None for *_, data in files):
+    if digest is not None and all(data is not None for *_, data, _sha in files):
         _id_corpus_cache_store(cache_dir, digest, result)
     _ID_VOCAB_CACHE[key] = result
+    _id_corpus_trace("miss" if digest is not None else "uncached", lib_roots, files,
+                     parsed0, t0)
     return result
 
 
@@ -7227,14 +7312,9 @@ def _id_corpus_compute(files):
             if head != v:
                 words.add(head)
 
-    for f, data in _id_corpus_section(files, "components"):
-        c = _id_corpus_doc(data)
-        if c.get("conforms"):
-            offer(c["conforms"])
-        if c.get("class") == "port":
-            media = (c.get("attrs") or {}).get("media")
-            if media:
-                offer(media)
+    for _f, data, sha in _id_corpus_section(files, "components"):
+        for value in _id_corpus_facts("components", data, sha):
+            offer(value)
 
     # AND THEN THE CORPUS GETS A VETO. A word that devices already use as a
     # COMPLETE id is a function name in this library whatever else it is: `usb`
@@ -7243,24 +7323,17 @@ def _id_corpus_compute(files):
     # arguing with the convention it was written to state. Three devices, so
     # that one sloppy file cannot silence a word everywhere.
     bare, tails, whole_ids = {}, {}, {}
-    for f, data in _id_corpus_section(files, "devices"):
-        d = _id_corpus_doc(data)
-        if d.get("kind") not in (None, "device"):
-            continue
-        for view in (d.get("views") or {}).values():
-            for q in (((view or {}).get("components") or {}).get("placements") or []):
-                i = q.get("id")
-                if not isinstance(i, str):
-                    continue
-                if i in words:
-                    bare.setdefault(i, set()).add(str(f))
-                whole_ids[i] = whole_ids.get(i, 0) + 1
-                # every way this id divides into <lead>-<tail>, which is how
-                # the preferred name below is looked up
-                t = i.split("-")
-                for k in range(1, len(t)):
-                    c = tails.setdefault("-".join(t[k:]), {})
-                    c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
+    for f, data, sha in _id_corpus_section(files, "devices"):
+        for i in _id_corpus_facts("devices", data, sha):
+            if i in words:
+                bare.setdefault(i, set()).add(str(f))
+            whole_ids[i] = whole_ids.get(i, 0) + 1
+            # every way this id divides into <lead>-<tail>, which is how
+            # the preferred name below is looked up
+            t = i.split("-")
+            for k in range(1, len(t)):
+                c = tails.setdefault("-".join(t[k:]), {})
+                c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
     words -= {w for w, where in bare.items() if len(where) >= 3}
 
     # THE PREFERRED NAME. What does the library already call the thing on the

@@ -37,13 +37,20 @@ LIB = ROOT / "library"
 
 @pytest.fixture(autouse=True)
 def _cache_dir(tmp_path, monkeypatch):
-    """A cache directory of this test's own, and an empty in-process cache
+    """A cache directory of this test's own, and empty in-process caches
     before and after, so every call below really goes to disk."""
     d = tmp_path / "cache"
     monkeypatch.setenv("PORTRAYAL_CACHE_DIR", str(d))
-    L._ID_VOCAB_CACHE.clear()
+    _forget()
     yield d
+    _forget()
+
+
+def _forget():
+    """What a new process starts with: neither the answer nor the per-file
+    facts in memory."""
     L._ID_VOCAB_CACHE.clear()
+    L._ID_CORPUS_FACTS.clear()
 
 
 def entries(d):
@@ -52,13 +59,17 @@ def entries(d):
 
 def corpus(roots):
     """One call as a new process would make it: nothing in memory."""
-    L._ID_VOCAB_CACHE.clear()
+    _forget()
     return L._id_corpus([str(r) for r in roots])
 
 
 def uncached(roots):
-    """The computation with no cache anywhere near it."""
-    return L._id_corpus_compute(L._id_corpus_files([str(r) for r in roots]))
+    """The computation with no cache anywhere near it, memo included."""
+    _forget()
+    try:
+        return L._id_corpus_compute(L._id_corpus_files([str(r) for r in roots]))
+    finally:
+        _forget()
 
 
 def assert_same(a, b):
@@ -128,6 +139,9 @@ MINI_CONTRACTS = {
     "std/rj45": "class: port\nattrs:\n  media: rj45\n",
     "common/esd-jack": "class: ground\nattrs:\n  media: esd\n",
 }
+# the three devices are byte-identical, and the per-file memo is keyed by
+# content, so a computation parses each distinct file once: 3 + 1
+MINI_DISTINCT = 4
 MINI_IDS = ["clk-10mhz", "clk-10mhz", "clk-1pps", "sma-10mhz-out", "port-1",
             "port-2", "usb", "reset", "reset"]
 
@@ -297,6 +311,87 @@ def test_a_new_file_misses(lib, _cache_dir, monkeypatch):
     assert "zzq-new-file" in after[0]
 
 
+def test_a_miss_in_a_process_that_has_seen_the_files_parses_only_the_new_ones(
+        lib, _cache_dir, monkeypatch):
+    """The per-file memo is keyed by each file's content hash, so after one
+    computation a miss parses only what it has not seen - here, the one edited
+    contract - and still answers exactly as a fresh process would."""
+    corpus([lib])
+    target = next(f for f in sorted((lib / "components").rglob("contract.yaml"))
+                  if (yaml.safe_load(f.read_text()) or {}).get("conforms"))
+    _rewrite(target, lambda d: d.__setitem__("conforms", "zzq-memo-probe"))
+    L._ID_VOCAB_CACHE.clear()                    # the answer goes; the facts stay
+    assert L._ID_CORPUS_FACTS, "the first computation memoised nothing"
+    p = Parses(monkeypatch)
+    after = L._id_corpus([str(lib)])
+    assert p.n == 1, f"parsed {p.n} files; only the edited one is new"
+    assert len(entries(_cache_dir)) == 2, "the edit did not miss the disk cache"
+    assert "zzq-memo-probe" in after[0]
+    monkeypatch.undo()
+    assert_same(after, uncached([lib]))
+
+
+def test_the_memo_is_keyed_by_content_not_path(lib, pristine, _cache_dir, monkeypatch):
+    """A byte-identical file at another path is the same key: a tmp copy of the
+    real library costs no parse at all once the real one has been read."""
+    L._id_corpus_prime([str(pristine)])
+    p = Parses(monkeypatch)
+    got = L._id_corpus([str(lib)])
+    assert p.n == 0, f"parsed {p.n} files that were byte-identical to primed ones"
+    monkeypatch.undo()
+    assert_same(got, uncached([lib]))
+
+
+def test_priming_computes_no_answer(mini, _cache_dir):
+    L._id_corpus_prime([str(mini)])
+    assert L._ID_CORPUS_FACTS
+    assert not L._ID_VOCAB_CACHE, "priming filled the in-process answer"
+    assert entries(_cache_dir) == [], "priming wrote a disk entry"
+
+
+def test_a_warm_render_with_a_tmp_root_parses_only_the_tmp_files(tmp_path, _cache_dir):
+    """The regression #545's CI showed: a render with roots [real library, tmp]
+    misses the disk cache (the tmp content is new), and parsed all ~860 real
+    files from bytes in every such child. The warm server primes the per-file
+    memo, so a forked child parses only what the test wrote.
+
+    Counted through the trace lint writes for each computation, and checked
+    against a cold subprocess of the same command, which must parse everything
+    - so a count of 1 cannot be a trace that simply counts nothing."""
+    import warmrender
+    src = LIB / "devices" / "fs" / "fhd-1ufce" / "device.yaml"
+    extra = tmp_path / "extra"
+    dev = extra / "devices" / "zzq" / "probe" / "device.yaml"
+    dev.parent.mkdir(parents=True)
+    dev.write_bytes(src.read_bytes() + b"\n# a byte the real library does not have\n")
+
+    def render(runner, tag):
+        trace = tmp_path / f"trace-{tag}.jsonl"
+        out = tmp_path / f"out-{tag}"
+        out.mkdir()
+        env = {**os.environ, "PORTRAYAL_ID_CORPUS_TRACE": str(trace),
+               "PORTRAYAL_CACHE_DIR": str(tmp_path / f"cache-{tag}")}
+        r = runner([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"), str(dev),
+                    "--library", str(LIB), "--library", str(extra), "--out", str(out)],
+                   capture_output=True, text=True, env=env)
+        assert r.returncode == 0, r.stderr[-800:]
+        rows = [json.loads(line) for line in trace.read_text().splitlines()]
+        (row,) = [x for x in rows if x["roots"] == [str(LIB), str(extra)]]
+        return row
+
+    served = warmrender._server().served
+    warm = render(warmrender.run, "warm")
+    assert warmrender._server().served == served + 1, "the render was not served warm"
+    cold = render(subprocess.run, "cold")
+
+    n_lib = len(L._id_corpus_files([str(LIB)]))
+    assert n_lib > 800
+    assert warm["outcome"] == cold["outcome"] == "miss"
+    assert warm["files"] == cold["files"] == n_lib + 1
+    assert cold["parsed"] == n_lib + 1, cold
+    assert warm["parsed"] == 1, f"a warm child parsed {warm['parsed']} files, not just the tmp one"
+
+
 def test_an_mtime_only_change_hits(lib, _cache_dir, monkeypatch):
     """Same bytes, same answer: a checkout or a `touch` must not cost a miss."""
     before = corpus([lib])
@@ -358,7 +453,7 @@ def test_an_edited_lint_py_misses(mini, _cache_dir, tmp_path, monkeypatch):
 
     p = Parses(monkeypatch)
     after = corpus([mini])
-    assert p.n == len(MINI_CONTRACTS) + 3, "an edited lint.py was answered from the cache"
+    assert p.n == MINI_DISTINCT, "an edited lint.py was answered from the cache"
     assert len(entries(_cache_dir)) == 2
     assert_same(after, before)
 
@@ -440,7 +535,7 @@ def test_a_damaged_entry_is_ignored_and_recomputed(damage, mini, _cache_dir, mon
 
     p = Parses(monkeypatch)
     again = corpus([lib])
-    assert p.n == len(MINI_CONTRACTS) + 3, "a damaged entry was believed"
+    assert p.n == MINI_DISTINCT, "a damaged entry was believed"
     assert_same(again, good)
     # and the recomputation repaired the entry
     _again(monkeypatch, _cache_dir, forbid=True)
