@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-701 component majors in 14 namespaces.
+702 component majors in 14 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -76,7 +76,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/fan-module-46@1` | module | fan | 46.6 × 40 |  | 4 | 1 | Hot-swappable 1U fan module, 46.6mm pitch - 44.6mm square unioned with a 2mm left mounting tab (captive screw… |
 | `common/fc-simplex-adapter@1` | component | port | 10 × 10 | fc-adapter | 0 | 0 | Panel-mount FC simplex adapter, one threaded bayonet-coupled opening, as fitted to an FS FHD FC panel |
 | `common/fibre-splice@1` | component | port | 60 × 20 |  | 0 | 1 | A fusion-splice tray holder, as fitted behind a splice cassette's rear panel - twelve trunk pigtails fusion-s… |
-| `common/ground-lug@1` | component | ground | 7 × 14 |  | 37 | 1 | Chassis grounding point with earth symbol above the stud |
+| `common/ground-lug@1` | component | ground | 7 × 14 |  | 38 | 1 | Chassis grounding point with earth symbol above the stud |
 | `common/ground-symbol@1` | component | ground | 6 × 6 |  | 42 | 0 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 1 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@1` | component | mechanical | 14.8 × 19.3 | keystone-opening | 0 | 0 | A generic snap-in keystone clip opening, as fitted to an FS FHD keystone panel |
@@ -697,26 +697,27 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 | `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
 
-## nokia/ (16)
+## nokia/ (17)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `nokia/bfan-e@1` | module | fan | 32.9 × 345 × 216.7 |  | 0 | 0 | Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E), also sold as the Lights… |
+| `nokia/bfan-e@1` | module | fan | 32.9 × 345 × 216.7 |  | 1 | 1 | Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E), also sold as the Lights… |
 | `nokia/bfan-h@1` | module | fan | 493.4 × 59.25 × 274.85 |  | 0 | 0 | Nokia BFAN-H (3FE 66546 AA), the intelligent fan tray of the 7360 ISAM FX-16 (NFXS-D), also sold as the Light… |
 | `nokia/bfan-x@1` | module | fan | 33.1 × 213.5 × 225.36 |  | 1 | 1 | Nokia BFAN-X (3FE 66544 AA), the intelligent fan unit of the 7360 ISAM FX-4 (NFXS-F), also sold as the Lights… |
-| `nokia/dummy-lt@1` | module | blank | 25 × 405 |  | 1 | 0 | Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the 7360 ISAM FX (and of… |
-| `nokia/dummy-nt@1` | module | blank | 30 × 405 |  | 1 | 0 | Nokia 3FE 65651 AA, the dummy front panel for the second NT slot of the 7360 ISAM FX (FX-4, FX-8, FX-12 and F… |
+| `nokia/dummy-lt@1` | module | blank | 25 × 405 |  | 2 | 0 | Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the 7360 ISAM FX (and of… |
+| `nokia/dummy-nt@1` | module | blank | 30 × 405 |  | 2 | 0 | Nokia 3FE 65651 AA, the dummy front panel for the second NT slot of the 7360 ISAM FX (FX-4, FX-8, FX-12 and F… |
 | `nokia/fan-cover-fx4@1` | module | blank | 33.1 × 213.5 |  | 1 | 0 | The fan cover of the Nokia 7360 ISAM FX-4 shelf (NFXS-F): a strip closing the fan area at the shelf's right-h… |
+| `nokia/fan-cover-fx8@1` | module | blank | 32.9 × 345 |  | 1 | 1 | The fan cover of the Nokia 7360 ISAM FX-8 shelf (NFXS-E): a strip closing the fan area at the shelf's right-h… |
 | `nokia/fant-h-aa@1` | module | supervisor | 30 × 405 × 225 |  | 0 | 0 | Nokia FANT-H AA (3FE74828AA), the ETSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
 | `nokia/fant-h-ac@1` | module | supervisor | 30 × 405 × 225 |  | 0 | 0 | Nokia FANT-H AC (3FE74828AC), the ETSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
-| `nokia/fant-h-bb@1` | module | supervisor | 30 × 405 × 225 |  | 1 | 0 | Nokia FANT-H BB (3FE74828BB), the ANSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
-| `nokia/fant-h-bc@1` | module | supervisor | 30 × 405 × 225 |  | 1 | 0 | Nokia FANT-H BC (3FE74828BC), the ANSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
-| `nokia/fant-m@1` | module | supervisor | 30 × 405 × 225 |  | 1 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ANSI build - part 3FE79270BA and its temperature-har… |
-| `nokia/fant-m-etsi@1` | module | supervisor | 30 × 405 × 225 |  | 1 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ETSI build - part 3FE79270AA and its temperature-har… |
-| `nokia/fnio-a@1` | module | line-card | 25 × 405 × 205 |  | 1 | 6 | Nokia FNIO-A (3FE 65586 BA), the 80G (8x10G) NT I/O applique of the 7360 ISAM FX (also Lightspan FX), with Sy… |
-| `nokia/fnio-d@1` | module | line-card | 25 × 405 × 205 |  | 1 | 0 | Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360 ISAM FX, with SyncE |
+| `nokia/fant-h-bb@1` | module | supervisor | 30 × 405 × 225 |  | 2 | 0 | Nokia FANT-H BB (3FE74828BB), the ANSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
+| `nokia/fant-h-bc@1` | module | supervisor | 30 × 405 × 225 |  | 2 | 0 | Nokia FANT-H BC (3FE74828BC), the ANSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
+| `nokia/fant-m@1` | module | supervisor | 30 × 405 × 225 |  | 2 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ANSI build - part 3FE79270BA and its temperature-har… |
+| `nokia/fant-m-etsi@1` | module | supervisor | 30 × 405 × 225 |  | 2 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ETSI build - part 3FE79270AA and its temperature-har… |
+| `nokia/fnio-a@1` | module | line-card | 25 × 405 × 205 |  | 2 | 6 | Nokia FNIO-A (3FE 65586 BA), the 80G (8x10G) NT I/O applique of the 7360 ISAM FX (also Lightspan FX), with Sy… |
+| `nokia/fnio-d@1` | module | line-card | 25 × 405 × 205 |  | 2 | 0 | Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360 ISAM FX, with SyncE |
 | `nokia/ngfc-g@1` | module | power | 405 × 28.8 × 203 |  | 1 | 0 | Nokia NGFC-G (3FE 65676 AA), the general facilities card of the ANSI 7360 ISAM FX-4 shelf (NFXS-F BB) |
-| `nokia/ngfc-h@1` | module | power | 405 × 53.6 × 201.4 |  | 0 | 0 | Nokia NGFC-H (3FE 65675 AA), the general facilities card of the ANSI 7360 ISAM FX-8 shelf (NFXS-E BB) |
+| `nokia/ngfc-h@1` | module | power | 405 × 53.6 × 201.4 |  | 1 | 0 | Nokia NGFC-H (3FE 65675 AA), the general facilities card of the ANSI 7360 ISAM FX-8 shelf (NFXS-E BB) |
 
 ## smartoptics/ (16)
 

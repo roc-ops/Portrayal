@@ -14,10 +14,6 @@ description: >-
   window, then low down the status lamp, a locating pin and the captive screw. In a working
   shelf this edge sits BEHIND the shelf's fan cover (the strip printed "7360 ISAM FX-8"),
   which is a separate part; see fan-cover-gap.
-unplaced: >-
-  Seated by the fan bay at the right-hand end of the 7360 ISAM FX-8 shelf (NFXS-E), which
-  is being modelled in parallel under roc-ops/Portrayal#538 and is not in the library yet.
-  Remove this line when that shelf's fan bay lists the unit in `accepts`.
 size: {w: 32.9, h: 345.0, d: 216.7}
 size-confidence: {w: datasheet, h: datasheet, d: datasheet}
 attrs:
@@ -70,10 +66,11 @@ provenance:
     drawing - the rectangle at 130-165 stands proud of the plate in Figure 1 (3D) and is
     split by the fan-plate line; read as the pull grip. The HIM does not name it.
   fan-cover-gap: >-
-    NOT MODELLED. HIM 3HH91853AAAARJZZA08 Figure 158 (p255): the FX-8 fan area is closed by a
-    FAN COVER printed "7360 ISAM FX-8" with slot legends and its own captive screw. No
-    staged document gives it a part number; it is a shelf part and the shelf should draw it
-    over the fan bay. The "7360 ISAM FX-8" printing is not on this unit.
+    HIM 3HH91853AAAARJZZA08 Figure 158 (p255): the FX-8 fan area is closed by a FAN COVER
+    printed "7360 ISAM FX-8" with slot legends and its own captive screw. It is modelled as
+    nokia/fan-cover-fx8@1, which the NFXS-E BB shelf places over this unit's bay; a notch in
+    its foot leaves this unit's captive screw exposed. The "7360 ISAM FX-8" printing is not
+    on this unit.
   power-ambient-gap: >-
     classic-mode draw above +25 C is not published in the UDS guides or either Safety
     Manual; only the full-speed 95 W bounds it.
