@@ -1,0 +1,127 @@
+format: 1
+kind: module
+name: sr-1-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 3HE12300AA, the fan tray of the 7750 SR-1 (FP4). Four identical trays slide into the
+  rear of the chassis side by side, FAN 1 to FAN 4 from left to right as seen from behind.
+  The square face carries a single variable-speed fan behind a honeycomb-perforated exhaust
+  guard (a circle clipped to a square), a label tab at the top left printed "7750 SR-1 Fan
+  Tray" with the Status lamp, knurled captive thumbscrews at the top right and bottom left,
+  and a hex fastener at the bottom right. Authored as it sits, square, as SR1 Figure 5 draws
+  it seen from behind.
+size: {w: 82.8, h: 83.1, d: 175.3}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 7750 SR-1 Fan Tray
+  part-number: 3HE12300AA
+  weight-kg: 0.82
+provenance:
+  sources: >-
+    datasheet - 7750 SR-1 Chassis Installation Guide 25.10, 3HE22130AAAATQZZA01 (SR1): Figure 5
+    p48 (rear view, VECTOR - pdfimages finds no raster on the page), Figure 25 p75 and
+    Figure 72 p211 (isometric, for what the face carries), Figure 51 p161 (the tray from
+    behind), Figure 52 p162 and Figures 53/80 (isometric, which show the guard as honeycomb
+    perforation), Table 26 p76 (part number), Table 36 p95 (dimensions and weight), Table 75
+    p211 (Status LED). No photograph of the tray is staged.
+  size: >-
+    datasheet - SR1 Table 36 p95: 3.27 in H x 3.26 in W x 6.90 in D (8.30 x 8.28 x 17.53 cm),
+    so w 82.8 and h 83.1. Figure 5 draws the tray 84.2 x 85.7 over its outline strokes at
+    the chassis scale (13.04 px/mm across, 12.88 down, at 1200 dpi); the stated size is used
+    and the difference is the 0.7 mm outline stroke either side.
+  depth: 'datasheet - 6.90 in (175.3 mm), SR1 Table 36 p95'
+  weight: 'datasheet - 1.8 lb (0.82 kg), SR1 Table 36 p95'
+  layout: >-
+    drawing - SR1 Figure 5 p48, AC rear view, fan 1 rendered at 1200 dpi and measured on a
+    1 mm grid, then scaled from the drawn outline (84.2 x 85.7) onto the stated face
+    (x 0.983, y 0.970). Label tab 2.2-27.3 x 2.0-27.1 (the guard cuts its lower right
+    corner); Status lamp centre (5.1, 13.6); guard a circle of radius 39.3 about (41.5,
+    41.5) clipped to the square 4.9-78.1 both ways, which leaves the four flats 27.2-55.8
+    that the figure draws; knurled thumbscrews about (76.4, 6.5) and (6.5, 76.7), 10.9
+    across; hex fastener about (76.5, 76.5), 6.7 across flats. The drawing resolves about
+    0.1 mm; the positions are good to about 0.5 mm after the outline scaling.
+  guard: >-
+    drawing - Figure 5 fills the guard with a flat tint; the isometric Figures 53 and 80
+    (pp163, 226) and Figure 52 draw it as fine hexagonal perforation, which is what is
+    drawn. The hole pitch is not documented; the library's honeycomb tile is used.
+  fixing: >-
+    datasheet - SR1 p162 (Figure 52 steps): "Grip the fan tray by the top and bottom captive
+    thumb screws"; Figure 25 labels both "Captive Screw". Figure 51 key 1 "Captive thumb
+    screws on the front of the fan tray". The hex at the bottom right is drawn in Figures 5
+    and 52 and is not named in any table; it is drawn as a plain fastener.
+  status-led: >-
+    datasheet - SR1 section 3.4.2.1 p75: "an LED located at the top-left corner on the front
+    panel that indicates the power status"; Table 75 p211: blue solid during initial power
+    up; unlit, no power or faulty power; green solid, operational and communicating with the
+    CCM; amber fast blinking, fault (an alarm is generated).
+  label: >-
+    drawing - the tab prints "7750 SR-1" over "Fan Tray" and "Status" beside the lamp
+    (Figures 5, 25, 72), transcribed as printed.
+  power: >-
+    NOT STATED per tray. SR1 Table 34 p92 gives only the four fan trays and the PSUs
+    combined (34 / 410 / 575 / 830 W idle / 25C / 40C / 55C); no staged document splits it.
+    The 830 W sits on the chassis devices as the vendor's system figure, with that scope;
+    this tray carries no figure and L27 stands as the record.
+  colour: >-
+    estimated - no photograph of the SR-1 rear is staged (PUBLIC-SOURCES lists the front
+    only). Charcoal with a mid-grey guard is a guess from the family's dark faceplates, not
+    an observation.
+  airflow: >-
+    datasheet - SR1 p75: front intake, "exits through the fan tray in the rear of the
+    chassis"; the guard is an exhaust. The four trays are redundant and must all be fitted
+    while powered.
+  lifecycle: >-
+    searched only the staged corpus - the 25.10 guide lists 3HE12300AA as current; no
+    end-of-life notice was searched for on the web.
+elements:
+  label-tab: {at: [2.2, 2.0], size: [25.1, 25.1], class: label}
+  guard: {at: [4.9, 4.9], size: [73.2, 73.2], class: vent}
+  screw-top: {at: [70.95, 1.05], size: [10.9, 10.9], class: fastener}
+  screw-bottom: {at: [1.05, 71.25], size: [10.9, 10.9], class: fastener}
+  hex-fastener: {at: [72.6, 72.6], size: [7.8, 7.8], class: fastener}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the tray's single Status lamp, top left of the face
+parts:
+  - {ref: common/led-dot@1, id: led-status, group: status-leds, at: [4.1, 12.6],
+     states: {lamp: ['off', {name: powering-up, color: '#2f6fd6'},
+                     {name: 'on', color: '#39b54a'},
+                     {name: fault, color: '#f5a623', behavior: blinking}]}}
+relief:
+  wall: '#26292d'
+  features:
+    - node: guard
+      vent: 6.0
+      confidence: estimated
+      source: >-
+        the guard is perforated sheet over the fan (Figures 52, 53, 80, isometric); the
+        cavity depth behind it is not documented
+    - node: screw-top
+      cyl: 5.0
+      knurl: true
+      confidence: estimated
+      source: >-
+        knurled captive thumbscrew, drawn standing proud in Figures 25 and 52 (isometric);
+        no document gives its height
+    - node: screw-bottom
+      cyl: 5.0
+      knurl: true
+      confidence: estimated
+      source: the same thumbscrew as screw-top, one estimate written for both
+    - node: hex-fastener
+      cyl: 1.5
+      confidence: estimated
+      source: >-
+        a hex head drawn in Figures 5 and 52; no document names or dimensions it
+connection-points:
+  mate: {at: [41.4, 41.55], direction: rear}
+body:
+  depth: 175.3
+  color: '#2e3135'
+skins: [default]
