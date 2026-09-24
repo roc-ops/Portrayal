@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fant-h-ac
-version: 2.1.0
+version: 2.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -44,11 +44,30 @@ provenance:
   lamp-size: 'estimated - common/led-dot@1 (2 mm); the flat BA view draws the lamp rings 6 px (3.5 mm) across, which is the bezel ring, not the lens'
   legends: 'drawing - printed legends read at 14x off the flat BA view (3FE74828BAAATQZZA01 p8), where they read DOWN the card, glyph tops toward the right edge (the H of ETH is the lowest glyph, the T of TOD-PPS the highest), so they are set rotate(90), not rotate(-90): 1PPS, 10MHz, PORT1, PORT2 beside the housing at x 27.4; USB beside the micro-USB; ETH, LMT, TOD-PPS beside the jacks; FANT-H at the top; the lamp legends ALM, PWR, A/S, the lane digits and the PORT1 / PORT2 brackets as the LED close-up (p8 Figure 2) draws them. Sizes: port legends 2.4 (the flat view sets TOD-PPS over 13 mm), lamp legends 1.7. AC own: ACO, PORT4 | PORT3 (the AC close-up, p222), BITS IN / BITS OUT, and PORT3 / PORT4 beside the SFP+ cages - estimated, following the lamp naming and the FANT-M plate. Positions along are the AC 3D view port centres'
   levers: 'drawing - dark ejector levers at both ends, inside the 405 mm, at x 0.4-6.0 (the flat BA view draws the handle cols 200-210). Along off the AC 3D view: upper 1.0-30.0, lower 318.0-388.0. The figure draws the closed lower lever lying ACROSS the left half of the LMT and ToD jacks; a face drawing cannot show both, so the lever is kept to the strip at the left edge beside them'
-  screws: 'drawing - knurled captive screws at the lower end only (the AC figure draws no upper screw), drawn 10 mm across: the flat BA view draws the heads 17-20 px (10-11.5 mm) across, centred col 232, and overhanging the plate ends by a pixel; they are kept inside the 405 mm'
+  screws: 'drawing - knurled captive screws at the lower end only (the AC figure draws no upper screw), now drawn to the family figure in thumbscrews; as read, the flat BA view draws the heads 17-20 px (10-11.5 mm) across, centred col 232, and overhanging the plate ends by a pixel; they are kept inside the 405 mm'
   colour: 'estimated - light silver-grey plate with dark ejectors, the family finish from the shared FX conventions; the port housing is a darker grey, each port face a light flat grey and each return a darker one, so the teeth read in a face-on drawing without painted shading - the slope itself is the facets (see angled-panel)'
   relief: 'estimated - lever projection and screw heads carry the library card-family figures, not measurements; no Nokia document states them. The port housing is carried as facets, each port face and each return its own relief feature; see angled-panel for how they were read.'
   aco: 'estimated - the ACO switch is drawn as common/reset-button@1, a recessed push button; the BA build has none, so its place comes from the AC 3D figure'
   variants: 'drawing - FOUR FACES, SO FOUR COMPONENTS (nokia/fant-h-aa, -ac, -bb, -bc). AA has no SFP cages but has the ACO switch and BITS IN/OUT; BB has two SFP cages, no ACO and no BITS; AC has SFP+, ACO and BITS; BC has SFP+ and neither. BA (3FE74828BA, the R6.x ANSI build) is NOT modelled; its flat view is the AA arrangement with blank plate where the BITS pair is and no ACO, and it is the source every @2 across-the-face position comes from'
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 19.4 mm from the left edge on
+    this 30 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+    Only the bottom screw is drawn, as the figure draws only that one; the photographed
+    FANT-H (3FE74828BB) has one at each end.
 groups:
   qsfp28: {term: Port, role: traffic, index-origin: 1, attrs: {media: qsfp28, speed: 100g}, description: 'QSFP28 uplinks - 100GE, 40GE, 4x25GE and 4x10GE'}
   sfp-plus: {term: Port, role: traffic, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}, description: 'SFP+ ports - 10GE and 1GE; their lamps are PORT3 and PORT4'}
@@ -60,7 +79,7 @@ elements:
   logo-zone: {at: [9.5, 15.0], size: [12.0, 4.0], class: logo-zone}
   lever-top: {at: [0.4, 1.0], size: [5.6, 29.0], class: latch}
   lever-bottom: {at: [0.4, 318.0], size: [5.6, 70.0], class: latch}
-  screw-bottom: {at: [13.8, 394.0], size: [10.0, 10.0], class: screw}
+  screw-bottom: {at: [14.15, 394.5], size: [10.5, 10.5], class: screw}
   pps-face: {at: [1.15, 66.4], size: [24.25, 11.1], class: mechanical}
   pps-return: {at: [1.15, 77.5], size: [24.25, 12.42], class: mechanical}
   gps-face: {at: [1.15, 89.92], size: [24.25, 10.63], class: mechanical}
