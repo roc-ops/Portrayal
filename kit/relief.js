@@ -93,7 +93,9 @@ export function facetZ(r, {deg, facing}, lift, [px, py]) {
 // holds it, a profiled one read off its piecewise-linear profiles (offsets
 // from the box's own edges; the lesser of the two, as the builder draws it).
 // Outs are absolute, so this is a height off the face.
-export function outHeightAt(outs, x, y, eps = 0.01) {
+// `none` is the height where nothing stands: 0, the plate, unless the caller
+// is asking about a solid below it (a sunk facet's skirt; skirtIsInterior).
+export function outHeightAt(outs, x, y, eps = 0.01, none = 0) {
   const lerp = (pts, t) => {
     if (t <= pts[0][0]) return pts[0][1];
     for (let i = 1; i < pts.length; i++)
@@ -103,7 +105,7 @@ export function outHeightAt(outs, x, y, eps = 0.01) {
       }
     return pts[pts.length - 1][1];
   };
-  let h = 0;
+  let h = none;
   for (const o of outs) {
     if (x < o.x - eps || x > o.x + o.w + eps || y < o.y - eps || y > o.y + o.h + eps) continue;
     const zx = o.profile && o.profile.length >= 2 ? lerp(o.profile, x - o.x) : Infinity;
@@ -131,6 +133,10 @@ export function skirtNeighbours(o, outs) {
 // box edge can be; the probe steps just past that edge and reads the tallest
 // neighbour there (outHeightAt). `p`/`q` and `depthAt` are in the out's local
 // mm; `others` is skirtNeighbours(o, outs).
+// WHERE NO NEIGHBOUR STANDS the probe reads the plate, 0 - or, for a SUNK
+// facet (recessed facets: lift < 0), its own base, since open pocket is
+// not solid at the plate. Read as 0 there, every side wall of a tooth below
+// the plate counted as inside the solid and was left out.
 export function skirtIsInterior(o, others, p, q, depthAt) {
   if (!others.length) return false;
   const eps = 1e-4, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
@@ -138,7 +144,29 @@ export function skirtIsInterior(o, others, p, q, depthAt) {
   const dy = p[1] === q[1] ? (p[1] <= 0 ? -eps : p[1] >= o.h ? eps : 0) : 0;
   if (!dx && !dy) return false;
   const top = Math.max(depthAt(...p), depthAt(...q));
-  return outHeightAt(others, o.x + mx + dx, o.y + my + dy, 0) >= top - 0.01;
+  return outHeightAt(others, o.x + mx + dx, o.y + my + dy, 0, Math.min(0, o.lift || 0)) >= top - 0.01;
+}
+// THE SKIRT OF A PROFILED OUT: the grid's perimeter, each point dropped from
+// the surface (`depthAt`) to the out's own base, `o.lift` - for a sunk facet
+// that is below the plate, and the skirt ends there, not at 0. `ring` is the
+// perimeter in local mm; `pts` pairs [x, y, top], [x, y, base] per ring
+// point; `idx` indexes `pts`, two triangles per built segment, a segment
+// inside the solid (skirtIsInterior against `others`) left out.
+export function profileSkirt(o, xs, ys, depthAt, others = []) {
+  const nx = xs.length, ny = ys.length;
+  const ring = [];
+  for (let i = 0; i < nx; i++) ring.push([xs[i], ys[0]]);
+  for (let j = 1; j < ny; j++) ring.push([xs[nx - 1], ys[j]]);
+  for (let i = nx - 2; i >= 0; i--) ring.push([xs[i], ys[ny - 1]]);
+  for (let j = ny - 2; j > 0; j--) ring.push([xs[0], ys[j]]);
+  const pts = [], idx = [];
+  for (const [x, y] of ring) pts.push([x, y, depthAt(x, y)], [x, y, o.lift]);
+  for (let k = 0; k < ring.length; k++) {
+    if (skirtIsInterior(o, others, ring[k], ring[(k + 1) % ring.length], depthAt)) continue;
+    const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
+    idx.push(a, b, c, b, d, c);
+  }
+  return {ring, pts, idx};
 }
 // WHICH FACET A NODE STANDS ON: the nearest `[data-tilt-on]` group at or above
 // it (render.py writes it on a part `on` a facet and on every occupant seated in
@@ -236,6 +264,34 @@ export function facetPunch(o) {
 export function punchRectPx(p, ox, oy, pxmm) {
   return [Math.round((p.x - ox) * pxmm), Math.round((p.y - oy) * pxmm),
           Math.round(p.w * pxmm), Math.round(p.h * pxmm)];
+}
+// A SUNK FACET STANDS ON THE FLOOR OF ITS POCKET (recessed facets, the
+// addendum to the tilted-facets spec), and that floor is a textured plane
+// across the whole recess: left in, it cut across the cage wells of every
+// part on the facet, as the card plane did in v1 (facetPunch). So the floor
+// is cleared under each facet in the cavity `c` whose root is below the
+// cavity's own mouth (its lift under c's) and whose front-view footprint the
+// cavity holds, to L117's 0.5 mm. A facet rooted at or above the mouth -
+// every facet before recessed facets - clears nothing, so those build as
+// before. Returns `rect` punches in face mm, clipped to the cavity.
+export function facetFloorClears(c, outs, tol = 0.5) {
+  const pc = c.proj || c, mouth = c.lift || 0, res = [];
+  for (const o of outs) {
+    if (!o.facet || o.tilt || !((o.lift || 0) < mouth - 0.01)) continue;
+    if (o.x < pc.x - tol || o.y < pc.y - tol || o.x + o.w > pc.x + pc.w + tol
+        || o.y + o.h > pc.y + pc.h + tol) continue;
+    const x0 = Math.max(o.x, pc.x), y0 = Math.max(o.y, pc.y);
+    const x1 = Math.min(o.x + o.w, pc.x + pc.w), y1 = Math.min(o.y + o.h, pc.y + pc.h);
+    res.push({kind: 'rect', x: x0, y: y0, w: x1 - x0, h: y1 - y0, facet: o.facet.id});
+  }
+  return res;
+}
+// clear `rect` punches from a canvas whose origin is (ox, oy) face mm
+export function clearFloor(cvs, clears, ox, oy, pxmm) {
+  if (!clears || !clears.length) return cvs;
+  const ctx = cvs.getContext('2d');
+  for (const p of clears) ctx.clearRect(...punchRectPx(p, ox, oy, pxmm));
+  return cvs;
 }
 // THE GROUP THAT CARRIES A TILT (see buildFaceRelief). Its matrix is
 // M_face * tiltFrame(t) * M_face^-1, M_face being the LX/LY map of a face `fw`
@@ -1989,6 +2045,10 @@ export async function buildFaceRelief(F, ctx) {
         if (ft.kind === 'sink') fctx.clearRect(...px);
         else { fctx.fillStyle = '#0d0f11'; fctx.fillRect(...px); }
       }
+      // a sunk facet stands on this floor: clear it under the facet
+      // (facetFloorClears; none without a negative facet lift)
+      const floorClears = facetFloorClears(c, outs);
+      clearFloor(floorCv, floorClears, pc.x, pc.y, PX);
       // shape-accurate punch: the cavity node's own art defines the hole
       if (!c.lift && !c.tilt) {   // a lifted cavity recesses from a raised part, so the
         // chassis face beneath it is already covered - punching it would leave
@@ -2047,7 +2107,10 @@ export async function buildFaceRelief(F, ctx) {
       const floorMat = floor.material;
       reg(c.grpSvg, async text => {
         const g2 = await rasterize(text, c.grpRect.w, c.grpRect.h, PX);
-        remap(floorMat, crop(g2, {x: pc.x - c.grpRect.x, y: pc.y - c.grpRect.y, w: pc.w, h: pc.h}, PX));
+        // the facet clear is REAPPLIED: a restyle re-cuts the floor from the art
+        remap(floorMat, clearFloor(
+          crop(g2, {x: pc.x - c.grpRect.x, y: pc.y - c.grpRect.y, w: pc.w, h: pc.h}, PX),
+          floorClears, pc.x, pc.y, PX));
         for (const ft of cavCrops) {
           const pf = projOf(ft);
           if (ft.mat) remap(ft.mat,
@@ -2056,6 +2119,17 @@ export async function buildFaceRelief(F, ctx) {
       });
       // closed exterior back, deep enough to clear any sink pockets
       const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
+      // ...and the closed back, 0.25 behind the floor, is cleared under a sunk
+      // facet the same way, or it is the plane that crosses the cage wells
+      if (floorClears.length) {
+        const acv = document.createElement('canvas');
+        acv.width = floorCv.width; acv.height = floorCv.height;
+        const actx = acv.getContext('2d');
+        actx.fillStyle = '#fff';
+        actx.fillRect(0, 0, acv.width, acv.height);
+        backMat.alphaMap = canvasTex(clearFloor(acv, floorClears, pc.x, pc.y, PX));
+        backMat.alphaTest = 0.5;
+      }
       const back = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h), backMat);
       back.position.set(LX(c.x, c.w), LY(c.y, c.h), c.lift - (d + maxSink + 0.15));
       addTo(back);
@@ -2445,31 +2519,18 @@ export async function buildFaceRelief(F, ctx) {
           front.computeVertexNormals();
           faceTex.side = THREE.DoubleSide;   // a mirrored face reverses the winding
           addTo(new THREE.Mesh(front, faceTex));
-          // skirts: the perimeter dropped to the face, so the ends and the rails
-          // are the slopes the profiles give them and not open edges
-          const sp = [], si = [];
-          const ring = [];
-          for (let i = 0; i < nx; i++) ring.push([xs[i], ys[0]]);
-          for (let j = 1; j < ny; j++) ring.push([xs[nx - 1], ys[j]]);
-          for (let i = nx - 2; i >= 0; i--) ring.push([xs[i], ys[ny - 1]]);
-          for (let j = ny - 2; j > 0; j--) ring.push([xs[0], ys[j]]);
-          for (let k = 0; k < ring.length; k++) {
-            const [x, y] = ring[k];
-            sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
-                    LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
-          }
+          // skirts: the perimeter dropped to the out's base (`o.lift`; below
+          // the plate for a sunk facet), so the ends and the rails are the
+          // slopes the profiles give them and not open edges (profileSkirt)
           // A SKIRT AGAINST A NEIGHBOUR AS TALL IS INSIDE THE SOLID. A sawtooth
           // is a face and its return, two nodes meeting at the tooth's apex;
           // each dropped a full-height skirt there, back to back in one plane,
           // and a cage well running down the slope crossed them and showed
           // them z-fighting inside the cage. One tooth has no wall there.
           // Facet to facet only (skirtNeighbours): without facets this is a no-op.
-          const others = skirtNeighbours(o, outs);
-          for (let k = 0; k < ring.length; k++) {
-            if (skirtIsInterior(o, others, ring[k], ring[(k + 1) % ring.length], depthAt)) continue;
-            const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
-            si.push(a, b, c, b, d, c);
-          }
+          const {pts, idx: si} = profileSkirt(o, xs, ys, depthAt, skirtNeighbours(o, outs));
+          const sp = [];
+          for (const [x, y, z] of pts) sp.push(LX(o.x + x, 0), LY(o.y + y, 0), z);
           const skirt = new THREE.BufferGeometry();
           skirt.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
           skirt.setIndex(si);
