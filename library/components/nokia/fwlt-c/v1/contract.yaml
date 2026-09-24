@@ -1,0 +1,216 @@
+format: 1
+kind: module
+name: fwlt-c
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX / Lightspan FX shelves (NFXS-F FX-4, NFXS-E
+  FX-8, NFXS-D FX-16); the coordinator wires it into their LT accepts lists under #538
+description: >-
+  Nokia FWLT-C (3FE 74981 AA, AD, BD and CD), the 16-port Multi-PON line termination card
+  of the 7360 ISAM FX and Lightspan FX: GPON, XGS-PON or Multi-PON (MPM, GPON + XGS-PON)
+  on every port and 25GS-PON on the even ports, in sixteen SFP-DD cages numbered 1 to 16.
+  Authored upright, as the guides draw it: thumbscrew and ejector at each end, a product
+  label under the top screw, one long block of sixteen cages on a 20.6 mm pitch, each with
+  two PON lamps on its left, then the ESD and hot-surface marks, the ALM / PWR lamps and a
+  label at the bottom. The four part numbers share one face (AD and CD are software-linked
+  component variants, BD the US-made BEAD build), so they are one component.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), held so the shared FX LT bay seats the card. In
+  Figure 218 the plate measures about 24.5 mm and the side rail takes the overall to
+  25.9 mm. d is the larger of the two board widths the UDS gives (225 mm top / 205 mm
+  bottom: the board is tapered).
+attrs:
+  model: FWLT-C
+  part-number: 3FE 74981 AA / AD / BD / CD
+  sfp-plus: 16
+  weight-kg: 2.76
+  power-draw-max-w: 98
+  power-draw-typical-w: 92
+  power-scope: >-
+    the highest mode the Safety Manual lists, 8 x 25GS-PON; GPON mode is 71 W max (66 typ),
+    XGS-PON 89 (84), MPM XGS/GPON 95 (90). Includes the optics, per the note that PON
+    line-card figures include their optics
+provenance:
+  size: >-
+    datasheet - Lightspan FX UDS 25.12 3HH90279AAAATQZZA23 section 42.5.1 (p437-438) and
+    ETSI UDS R7.0 3FE77012AAAATQZZA18 section 47.5.1 (p459): height 405 mm, width 225 mm
+    (top) / 205 mm (bottom), board-to-board pitch 25 mm, weight 2.76 kg (some builds carry
+    an aluminium heat sink 400 g lighter; no functional change).
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 42.5.1; faceplate width not stated, taken as
+    the pitch.
+  depth: >-
+    datasheet - the 225 / 205 mm board widths; 225 carried as the envelope.
+  power: >-
+    datasheet - ETSI Safety Manual 3HH11998AAAATCZZA29 p26 Table 2: "FWLT-C (8x 25GSPON)"
+    92 W typical / 98 W maximum; "FWLT-C/FGUT-A" GPON mode 66 / 71, XGS-PON mode 84 / 89,
+    MPM XGS/GPON mode 90 / 95. The ANSI (3HH12894AAAATCZZA27 p26) and Lightspan
+    (3HH91852AAAATCZZA07 p37) tables give the same three FWLT-C/FGUT-A rows and no 25GS-PON
+    row. The highest, 98 W, is carried as the maximum; no table splits the figure by part
+    number.
+  faces: >-
+    drawing - the Lightspan UDS draws the AA/AD (p436 Figure 209) and the BD (p448 Figure
+    216) with the SAME embedded image (one PDF object, 713 x 758 at 150 ppi), and the ETSI
+    UDS draws the CD (p457 Figure 218) as a 933 x 1719 JPEG at 300 ppi. Put side by side
+    at 4 px/mm the two drawings match feature for feature: label, sixteen cages, two lamps
+    and a numeral per cage, ESD and hot-surface marks, ALM / PWR, bottom label. One face,
+    so one component, and the part number is an attr.
+  layout: >-
+    drawing - ETSI UDS p457 Figure 218, ORTHOGRAPHIC. Gate 1: the card runs from row 10 to
+    1713.5, 1703.5 px for 405 mm = 4.206 px/mm; the width with the side rail, 109 px, gives
+    15.63 against 405/26 = 15.58 (0.3 %), so the figure is measured. x from the plate
+    centre (px 453 = 12.5 mm). Module top edges at rows 171.5 / 258.5 / ... / 1472.5, a
+    regular 86.73 px = 20.62 mm pitch; the first module face 8.6 x 12.8 mm centred at
+    (11.35, 44.82). Cage block 27.9 to 357.8 mm, x 5.25 to 22.5. Lamps x 2.73, at 11.0 and
+    2.85 mm above each module centre, the port numeral between them. Top label 6.9 to 21.9
+    x 11.0 to 21.9; ESD mark x 1.8 to 10.0 and hot-surface mark 13.0 to 22.8 at 359.9 to
+    368.4; ALM and PWR legends over lamps at x 8.67 and 13.8, y 379.5 (3.7 mm circles);
+    bottom label 6.9 to 21.9 x 383.0 to 394.1; screws at (18.0, 4.75) and (18.0, 399.7);
+    ejector blocks 13.7 to 31.5 and 373.3 to 391.3. The 150 ppi Lightspan figure agrees
+    to within its pixel.
+  ports: >-
+    datasheet - UDS section 42.4.2 (16 cages "labeled PORT1 until PORT16"; the ETSI CD
+    section 47.4.2 says "1 until 16", which is what the drawings print) and section 47.4:
+    GPON, XGS-PON and Multi-PON on any port, 25GS-PON on the even ports. The Lightspan PIM
+    3HH91679AAAATCZZA17 Table 61 lists GPON SFP, XGS SFP+, MPM SFP-DD and 25GS-PON SFP28
+    OLT modules for the FWLT-C, so the cage is an SFP-DD, which takes a single-row SFP too
+    (spec/schemas/pluggables.yaml). The library has no std/ SFP-DD cage, so each port
+    composes std/sfp@1, the SFP opening an SFP-DD cage presents, turned 90 degrees at the
+    module centre; each port says media sfp-dd. Speed is 25g on the even ports and 10g on
+    the odd (the fastest optic each takes: XGS-PON or the XGS half of an MPM). `sfp-plus:
+    16` tells the DCIM export the cages run SFP+ XGS optics; it has no SFP-DD or 25GS-PON
+    type (gap).
+  lamps: >-
+    datasheet - ETSI UDS Figures 220-221 and Tables 137-138 (p459-460): two PON lamps per
+    port "worked in into the side of the optical socket"; with a single-channel optic the
+    top lamp is in use (GPON, XGS-PON or 25GS-PON status) and the bottom one is not; with
+    an MPM the top lamp shows the GPON channel and the bottom one the XGS-PON channel.
+    Each: off / yellow (provisioned, no ONU ranged) / green (active) / red (transmitter
+    failed or no communication with the module). PWR off / blinking green / on green; ALM
+    red = alarm. The Lightspan text for the AA says one PON lamp per port, but its figure
+    draws two, as the CD does. The yellow is drawn #f2c200; Nokia gives no shade.
+  logo-zone: >-
+    reserved on the strip of empty plate between the top label and the cage block; Figure
+    218 draws no mark.
+  lifecycle: >-
+    searched only the staged corpus - listed as current in the Lightspan PIM and the ETSI
+    PIG; no end-of-life notice was searched for on the web.
+  gaps: >-
+    (1) no std/sfp-dd cage exists, so the opening is the SFP one and the export types the
+    ports sfp-plus; (2) both labels are drawn as placeholders; (3) the cages' angle, if
+    any, is not resolvable in a front view; (4) on the regular 20.62 mm pitch the sixteenth
+    opening (14.5 mm, the SFP bezel, taller than the 12.8 mm module face the figure draws)
+    runs 3.5 mm past the block's drawn lower edge at 357.8 mm, where Figure 218 shows the
+    last module face cut short by that edge; the pitch was kept and the conflict left
+    visible rather than reconciled.
+elements:
+  logo-zone: {at: [8, 22.3], size: [13, 4.8], class: label}
+  top-label: {at: [6.9, 11], size: [15, 10.9], class: label}
+  part-label: {at: [6.9, 383], size: [15, 11.1], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: screw-top
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled thumbscrew head standing off the plate; nothing dimensions it. The same
+        6.0 as nokia/dummy-lt@1, which is the same estimate, not a second reading
+    - node: screw-bottom
+      cyl: 6.0
+      confidence: estimated
+      source: as screw-top
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, as
+        nokia/fnio-d@1 uses; itself sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: as ejector-top
+groups:
+  sfp-dd:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      one row of identical SFP-DD cages that differ only in the fastest PON they run -
+      25GS-PON on the even ports, XGS-PON (or an MPM's XGS channel) on the odd - so each
+      port states its own media and speed
+    description: >-
+      the sixteen Multi-PON ports, SFP-DD cages numbered 1 to 16 top to bottom; GPON,
+      XGS-PON or MPM on every port, 25GS-PON on the even ports only (the odd ports carry
+      speed 10g)
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      two PON lamps per port on the left of its cage, led-N-top and led-N-bottom; top = the
+      optic's channel (the GPON channel of an MPM), bottom = the XGS-PON channel of an MPM
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR, at the bottom of the card
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp-dd, at: [4.1, 39.82], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-2, group: sfp-dd, at: [4.1, 60.44], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-3, group: sfp-dd, at: [4.1, 81.06], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-4, group: sfp-dd, at: [4.1, 101.68], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-5, group: sfp-dd, at: [4.1, 122.3], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-6, group: sfp-dd, at: [4.1, 142.92], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-7, group: sfp-dd, at: [4.1, 163.54], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-8, group: sfp-dd, at: [4.1, 184.16], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-9, group: sfp-dd, at: [4.1, 204.78], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-10, group: sfp-dd, at: [4.1, 225.4], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-11, group: sfp-dd, at: [4.1, 246.02], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-12, group: sfp-dd, at: [4.1, 266.64], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-13, group: sfp-dd, at: [4.1, 287.26], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-14, group: sfp-dd, at: [4.1, 307.88], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-15, group: sfp-dd, at: [4.1, 328.5], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
+  - {ref: std/sfp@1, id: port-16, group: sfp-dd, at: [4.1, 349.12], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [6.67, 377.5], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [11.8, 377.5], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-1-top, group: pon-leds, at: [1.73, 32.82], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-1-bottom, group: pon-leds, at: [1.73, 40.97], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2-top, group: pon-leds, at: [1.73, 53.44], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2-bottom, group: pon-leds, at: [1.73, 61.59], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3-top, group: pon-leds, at: [1.73, 74.06], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3-bottom, group: pon-leds, at: [1.73, 82.21], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4-top, group: pon-leds, at: [1.73, 94.68], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4-bottom, group: pon-leds, at: [1.73, 102.83], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5-top, group: pon-leds, at: [1.73, 115.3], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5-bottom, group: pon-leds, at: [1.73, 123.45], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6-top, group: pon-leds, at: [1.73, 135.92], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6-bottom, group: pon-leds, at: [1.73, 144.07], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7-top, group: pon-leds, at: [1.73, 156.54], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7-bottom, group: pon-leds, at: [1.73, 164.69], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8-top, group: pon-leds, at: [1.73, 177.16], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8-bottom, group: pon-leds, at: [1.73, 185.31], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9-top, group: pon-leds, at: [1.73, 197.78], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9-bottom, group: pon-leds, at: [1.73, 205.93], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10-top, group: pon-leds, at: [1.73, 218.4], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10-bottom, group: pon-leds, at: [1.73, 226.55], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11-top, group: pon-leds, at: [1.73, 239.02], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11-bottom, group: pon-leds, at: [1.73, 247.17], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12-top, group: pon-leds, at: [1.73, 259.64], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12-bottom, group: pon-leds, at: [1.73, 267.79], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13-top, group: pon-leds, at: [1.73, 280.26], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13-bottom, group: pon-leds, at: [1.73, 288.41], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14-top, group: pon-leds, at: [1.73, 300.88], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14-bottom, group: pon-leds, at: [1.73, 309.03], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15-top, group: pon-leds, at: [1.73, 321.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15-bottom, group: pon-leds, at: [1.73, 329.65], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16-top, group: pon-leds, at: [1.73, 342.12], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16-bottom, group: pon-leds, at: [1.73, 350.27], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

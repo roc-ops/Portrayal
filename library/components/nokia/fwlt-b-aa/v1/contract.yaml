@@ -1,0 +1,154 @@
+format: 1
+kind: module
+name: fwlt-b-aa
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX / Lightspan FX shelves (NFXS-F FX-4, NFXS-E
+  FX-8, NFXS-D FX-16); the coordinator wires it into their LT accepts lists under #538
+description: >-
+  Nokia FWLT-B AA (3FE 72955 AA), the 8-port XGS-PON line termination card of the 7360
+  ISAM FX and Lightspan FX: eight SFP+ cages labelled PORT1 to PORT8. Authored upright, as
+  the Lightspan Unit Data Sheet guide draws it: thumbscrew and ejector at each end, the
+  model name and the ALM / PWR lamps under the top screw, then eight cages in raised
+  housings on a 40 mm pitch running most of the card's length, each with its PON lamp on
+  the left, and the laser and ESD marks above the bottom ejector. The AB build
+  (nokia/fwlt-b-ab@1) has a different face.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), held so the shared FX LT bay seats the card. In
+  Figure 202 the plate measures 24.7 mm and the side rail takes the overall to 26.7 mm (a
+  150 ppi image; about 1 mm either way). d is the larger of the two board widths the UDS
+  gives (225 mm top / 205 mm bottom: the board is tapered).
+attrs:
+  model: FWLT-B AA
+  part-number: 3FE 72955 AA
+  sfp-plus: 8
+  weight-kg: 2.0
+  power-draw-max-w: 148
+  power-draw-typical-w: 126
+  power-scope: includes the SFP+ optics, per the Safety Manual note that PON line-card figures include their optics
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 25.12 3HH90279AAAATQZZA23 section 41.5.1
+    (p426): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm, weight 2.0 kg.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 41.5.1; faceplate width not stated, taken as
+    the pitch.
+  depth: >-
+    datasheet - the 225 / 205 mm board widths of section 41.5.1; 225 carried as the
+    envelope.
+  power: >-
+    datasheet - Lightspan Safety Manual 3HH91852AAAATCZZA07 p37, ANSI 3HH12894AAAATCZZA27
+    p26 and ETSI 3HH11998AAAATCZZA29 p26, all "FWLT-B" 126 W typical, 148 W maximum. None of
+    the three tables names a variant, so the figure is the AA's by default (the AA is the
+    build the Lightspan manual covers). The ETSI table's note: PON line-card figures
+    include the optics.
+  layout: >-
+    drawing - Lightspan UDS p425 Figure 202 "FWLT-B front view", an ORTHOGRAPHIC front
+    embedded as a 713 x 758 JPEG at 150 ppi (pdfimages -list). Gate 1: the card runs from
+    row 20 to 733.5, 713.5 px for 405 mm = 1.762 px/mm; plate 43.5 px = 24.7 mm, 16.4
+    against 405/25 = 16.2 (1.2 %), so it is measured at that scale, to about 0.6 mm (one
+    pixel). Housing frames at rows 83 / 153.5 / 223.5 / 294.5 / 364.5 / 435 / 505.5 /
+    575.5, a 70.36 px = 39.94 mm pitch, each 65.5 px = 37.2 mm tall, x 3.8 to 20.5, with
+    the cage flange inside at +1.4 to +27.0 mm - the same housing, to the pixel, that
+    Figure 134 draws on the FWLT-A at 300 ppi, whose finer numbers the skin uses. Status
+    lamps at x 8.6 and 13.8, y 31.9; laser mark 379.2 to 384.3 and ESD mark 385.4 to 391.6;
+    screws at (19.0, 3.8) and (19.0, 400.1); ejector blocks at 13.2 to 31.2 and 373.4 to
+    392.2. No label area is drawn.
+  ports: >-
+    datasheet - UDS section 41.4.2: "eight physical optical module ports for the eight
+    XGS-PON links, labeled PORT1 until PORT8"; the ETSI PIG 3HH11997AAAATCZZA42 Table 126
+    lists XGS dual-rate SFP+ OLT modules (3FE 47548 AA / BA) for the FWLT-B AA and no XFP,
+    SFP-DD or SFP28. Composed as std/sfp@1 turned 90 degrees, the drawn opening being
+    9.9 mm across (the SFP's 10, not its 14.5). Centred at x 11.0 and on the drawn plug,
+    21.9 mm below each housing top; the cage is drawn angled toward the fibre, so the
+    position along the card is estimated to about 3 mm.
+  lamps: >-
+    datasheet - Figure 204 and Table 156 (p427). ALM (left; hidden behind the top ejector
+    in Figure 202, which prints only PWR) and PWR: PWR off / blinking green / on green; ALM
+    red = alarm. PON lamp, one per port "on the left of the corresponding PON interface":
+    off / yellow (provisioned, no ONT) / green (active) / red (PON loss or transmitter
+    failure). Placed at x 3.2 and 22.4 mm below each housing top, where the figure's "PON
+    LEDs" arrows land (the drawn square is at x 4.0; moved 0.8 mm left so the lamp clears
+    the cage's footprint). The housing draws a second square higher up, taken to be the
+    cage latch (gap). The yellow is drawn #f2c200; Nokia gives no shade.
+  logo-zone: >-
+    reserved on the empty plate above the model name; Figure 202 draws no mark there.
+  lifecycle: >-
+    searched only the staged corpus - listed as current in the Lightspan PIM
+    3HH91679AAAATCZZA17 and the ETSI PIG; no end-of-life notice was searched for on the
+    web.
+  gaps: >-
+    (1) the figure is 150 ppi, so every position is good to about 0.6 mm and the cage angle
+    is not resolvable; (2) whether the upper square beside each housing is a lamp or the
+    cage latch; (3) the PON lamp's colours carry no shade; (4) the ALM legend is hidden in
+    the figure and is drawn where the FWLT-A prints it.
+elements:
+  logo-zone: {at: [6, 11], size: [12, 10], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: screw-top
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled thumbscrew head standing off the plate; nothing dimensions it. The same
+        6.0 as nokia/dummy-lt@1, which is the same estimate, not a second reading
+    - node: screw-bottom
+      cyl: 6.0
+      confidence: estimated
+      source: as screw-top
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, as
+        nokia/fnio-d@1 uses; itself sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: as ejector-top
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the eight XGS-PON ports, SFP+ cages for XGS dual-rate OLT optics, PORT1 to PORT8 top to bottom
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON lamp per port, on the left of its cage (led-port-N serves port-N)
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [3.75, 52.65], rotate: 90}
+  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [3.75, 92.59], rotate: 90}
+  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [3.75, 132.53], rotate: 90}
+  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [3.75, 172.47], rotate: 90}
+  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [3.75, 212.41], rotate: 90}
+  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [3.75, 252.35], rotate: 90}
+  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [3.75, 292.29], rotate: 90}
+  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [3.75, 332.23], rotate: 90}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [6.6, 29.9], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [11.8, 29.9], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-port-1, group: pon-leds, at: [2.2, 57.15], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-2, group: pon-leds, at: [2.2, 97.09], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-3, group: pon-leds, at: [2.2, 137.03], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-4, group: pon-leds, at: [2.2, 176.97], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-5, group: pon-leds, at: [2.2, 216.91], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-6, group: pon-leds, at: [2.2, 256.85], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-7, group: pon-leds, at: [2.2, 296.79], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-8, group: pon-leds, at: [2.2, 336.73], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
