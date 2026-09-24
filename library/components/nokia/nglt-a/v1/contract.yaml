@@ -1,0 +1,151 @@
+format: 1
+kind: module
+name: nglt-a
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia NGLT-A (3FE 64279 AA), the 8-port GPON line termination board with traffic
+  manager (version A) that the 7302 ISAM, 7330 ISAM FTTN and 7360 ISAM FX shelves take.
+  Authored upright, as the Unit Data Sheet guides draw it: ejector and thumbscrew at each
+  end, a yellow laser warning label under the top lever, a lamp column PWR, A/S, ALM and
+  a 2 x 4 block of PON lamps 1-8, then eight SFP cages on a sawtooth faceplate that
+  angles each cage for fibre bend radius, a label window, and the bottom lever.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm); no faceplate width is stated, so the face is
+  held at the pitch by the shared 7360 FX convention. d is the larger of the two board
+  depths the UDS gives (225 mm top / 205 mm bottom), taken as the envelope.
+attrs:
+  model: NGLT-A
+  part-number: 3FE 64279 AA
+  weight-kg: 0.9
+  power-draw-max-w: 76.2
+  power-draw-typical-w: 64.2
+provenance:
+  size: >-
+    datasheet - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 section 51.5.2 (p497) and the
+    NGLT-A Unit Data Sheet 3FE64279AAAATQZZA07 section 1.7.2 (p9): height 405 mm, width
+    225 mm (top) / 205 mm (bottom), board-to-board pitch 25 mm.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 51.5.2; the faceplate edge-to-edge width
+    is not stated in either UDS and is taken as the pitch.
+  depth: >-
+    datasheet - "width 225 mm (top) / 205 mm (bottom)", the board's depth behind the
+    faceplate at its two ends; 225 carried as the envelope.
+  weight: 'datasheet - 0.9 kg (2 lb), ANSI UDS R6.9 section 51.5.2'
+  power: >-
+    datasheet - 7360 ISAM FX ANSI Safety Manual 3HH12894AAAATCZZA27 p26 Table 2 and ETSI
+    Safety Manual 3HH11998AAAATCZZA29 p26 Table 2: NGLT-A 64.2 W typical, 76.2 W maximum.
+    The ETSI table note says PON line-card figures include the optics.
+  layout: >-
+    drawing (fractions only) - NGLT-A Unit Data Sheet 3FE64279AAAATQZZA07 p9 Figure 7,
+    the 3D side-and-front view (the same art as ANSI UDS R6.9 p497 Figure 265). The
+    standalone UDS draws it as vectors, so it was rendered at 600 dpi rather than taken
+    from the 150 ppi raster in the guide. No orthographic front exists. Positions along
+    the card are fractions of 405 mm between the top of the top ejector and the bottom
+    of the bottom ejector (render y 1255 to 3876, 0.1545 mm/px): top lever tip 34.5;
+    laser label 36.6-56.0 (its top, an oval DANGER header behind the lever tip, is not
+    drawn); lamp rows 60.1 to 89.8 on a 4.95 pitch; sawtooth recess 106.9-335.3 with
+    tooth apexes 137.2 to 329.7 on a 27.58 pitch and each cage on the sloped face
+    15.9 mm above its apex; label window 337.6-362.4; bottom lever from 377. Across the
+    card the face is foreshortened (106 px for 25 mm), so x is taken as fractions of the
+    drawn face: lamp columns at 9.0 and 14.9, cages centred. About 1 mm error along the
+    card, more across it.
+  ports: >-
+    datasheet - UDS section 51.4: eight GPON ports (2.488 Gbps down, 1.244 Gbps up) for
+    SFP GPON modules. Composed as std/sfp@1 at its registry aperture, unrotated.
+    Numbering 1-8 top to bottom is ASSUMED from the lamp block's 1-8; the figure prints
+    no numeral beside any cage and no document maps cage to number (gap). No `sfp` count is stated for the export
+    (L96 stands): its cage table has no GPON interface type, and `sfp` would type these
+    ports as 1000BASE-X.
+  lamps: >-
+    datasheet - NGLT-A UDS A07 Figure 8 (p10) and Table 2; ANSI R6.9 Table 148. Column
+    PWR, A/S, ALM, legends to the right; then 1 | 2, 3 | 4, 5 | 6, 7 | 8, odd legends
+    left, even right. PWR off = power off, blinking green = initialisation; the table's
+    same row reads "Initialization / Power on state" and has no steady row, so a steady
+    green 'on' is added by analogy with the FGUT-A table (inferred, gap). A/S on =
+    active, off = standby, colour not stated, drawn with the family green. ALM red =
+    alarm. PON lamp off = not active, yellow = provisioned and ranging, green = active,
+    blinking green = provisioned and active, red = transmitter failed or no SFP
+    communication.
+  marks: >-
+    drawing - the laser label is drawn with the wording Figure 7 prints on it (invisible
+    laser radiation when disconnected, avoid direct exposure to beam) and its starburst;
+    the rectangle with corner brackets below the cages is not named in any table and is
+    drawn as an empty window.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so
+    the library's pooled release-hardware estimate (4.2) is used, as on the FNIO cards.
+    The sawtooth is NOT raised: an `out` on it would come to the front and bury the
+    composed cages.
+  logo-zone: >-
+    reserved by the family convention; Figure 7 draws no mark, so the zone is the empty
+    metal between the lamp block and the sawtooth.
+  lifecycle: >-
+    searched only the staged corpus - listed in ANSI UDS R6.9; no end-of-life notice was
+    searched for on the web.
+unplaced: >-
+  Seated by the LT bays of the 7360 ISAM FX shelves (FX-4, FX-8, FX-16); the coordinator
+  of #538 adds it to their LT accepts lists.
+elements:
+  logo-zone: {at: [4.0, 93.5], size: [17.0, 11.0], class: label}
+  laser-label: {at: [1.0, 36.6], size: [20.8, 19.4], class: label}
+  label-window: {at: [6.6, 337.6], size: [11.3, 24.8], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+groups:
+  gpon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: the eight GPON SFP cages
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON state lamp per port, legends 1-8 in the lamp block
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR, A/S (LT redundancy active/standby) and ALM
+parts:
+  - {ref: std/sfp@1, id: port-1, group: gpon, at: [5.25, 124.25]}
+  - {ref: std/sfp@1, id: port-2, group: gpon, at: [5.25, 151.83]}
+  - {ref: std/sfp@1, id: port-3, group: gpon, at: [5.25, 179.41]}
+  - {ref: std/sfp@1, id: port-4, group: gpon, at: [5.25, 206.99]}
+  - {ref: std/sfp@1, id: port-5, group: gpon, at: [5.25, 234.57]}
+  - {ref: std/sfp@1, id: port-6, group: gpon, at: [5.25, 262.15]}
+  - {ref: std/sfp@1, id: port-7, group: gpon, at: [5.25, 289.73]}
+  - {ref: std/sfp@1, id: port-8, group: gpon, at: [5.25, 317.31]}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [8, 59.1], states: {lamp: ['off', {name: 'init', color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-as, group: status-leds, at: [8, 64.05], states: {lamp: ['off', {name: 'active', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8, 69], states: {lamp: ['off', {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [8, 73.95], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-2, group: pon-leds, at: [13.9, 73.95], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-3, group: pon-leds, at: [8, 78.9], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-4, group: pon-leds, at: [13.9, 78.9], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-5, group: pon-leds, at: [8, 83.85], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-6, group: pon-leds, at: [13.9, 83.85], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-7, group: pon-leds, at: [8, 88.8], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-8, group: pon-leds, at: [13.9, 88.8], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
