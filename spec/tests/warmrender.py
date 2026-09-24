@@ -35,10 +35,27 @@ WHY IT IS STILL A REAL BUILD, AND NOT AN IN-PROCESS SHORTCUT:
     so `_cli()` and its error handling are what a test sees, and a tool test
     that asserts on stderr or a non-zero status still asserts on the real ones.
 
+A TRACEBACK IS TRIMMED TO WHAT THE INTERPRETER PRINTS, and that is a choice
+made per entry point, not a general guarantee. For a script path the child's
+frames above the tool's own (this module, runpy) are cut, and what is left is
+what `python tool.py` prints. For `-m` the child calls runpy's
+`_run_module_as_main` - the function `python -m` itself calls - and cuts to
+that frame, so the `<frozen runpy>` lines a real `-m` traceback carries are
+kept. test_warmrender.py compares both, byte for byte, against a real
+subprocess; a Python whose runpy changes shape would fail there first.
+
+THE HASH SEED IS THE SERVER'S. Every child is forked from one process, so they
+share its string-hash seed where cold interpreters would each draw their own.
+Nothing the build writes depends on set order (all 124 devices build
+byte-identically either way), but a caller that passes PYTHONHASHSEED is asking
+for a particular seed, and a fork cannot give it one - so that call goes to a
+real subprocess.
+
 Anything this cannot serve faithfully falls back to a real `subprocess.run`: a
 platform without `fork`, a command that is not `python <portrayal tool>` or
-`python -m portrayal.<tool>`, a keyword this does not model, or an environment
-whose PYTHONPATH would import a different `portrayal` than the server did.
+`python -m portrayal.<tool>`, a keyword this does not model, an environment
+whose PYTHONPATH would import a different `portrayal` than the server did, or
+one that sets PYTHONHASHSEED.
 
 PORTRAYAL_TESTS_COLD_RENDER=1 sends every call to `subprocess.run` instead, so
 a suspicion that the server changed an answer is one run away from settled.
@@ -100,6 +117,7 @@ def run(cmd, *, capture_output=False, text=False, env=None, cwd=None, **kw):
     target = _target(cmd)
     if (kw or not (capture_output and text) or target is None
             or os.environ.get("PORTRAYAL_TESTS_COLD_RENDER")
+            or "PYTHONHASHSEED" in (env if env is not None else os.environ)
             or not hasattr(os, "fork") or not _same_portrayal(env)):
         return subprocess.run(cmd, capture_output=capture_output, text=text,
                               env=env, cwd=cwd, **kw)
@@ -119,6 +137,9 @@ def run(cmd, *, capture_output=False, text=False, env=None, cwd=None, **kw):
 
 class _Server:
     def __init__(self):
+        # how many calls this server has answered: test_warmrender.py reads
+        # it to prove a comparison's warm half really was warm
+        self.served = 0
         self.p = subprocess.Popen([sys.executable, __file__, "--serve"],
                                   stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                   text=True, cwd=str(ROOT))
@@ -133,6 +154,7 @@ class _Server:
             raise RuntimeError(f"warmrender server imported {served}, not {_package_dir()}")
 
     def call(self, req):
+        self.served += 1
         self.p.stdin.write(json.dumps(req) + "\n")
         self.p.stdin.flush()
         line = self.p.stdout.readline()
@@ -183,6 +205,7 @@ def _child(req):
         os.environ.update(req["env"])
         null = os.open(os.devnull, os.O_RDONLY)
         os.dup2(null, 0)
+        os.close(null)
         for fd, path in ((1, req["stdout"]), (2, req["stderr"])):
             f = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
             os.dup2(f, fd)
@@ -200,16 +223,16 @@ def _child(req):
             main = os.path.abspath(req["what"])
             sys.path[0] = os.path.dirname(main)
         else:
-            # `-m` finds the module first, and it is not imported until it runs
-            import importlib.util
+            # `-m` is runpy._run_module_as_main, which finds the module and
+            # runs it as __main__ before it is ever imported under its name
             sys.path[0] = os.getcwd()
             sys.modules.pop(req["what"], None)
-            main = importlib.util.find_spec(req["what"]).origin
+            main = None
         try:
             if req["kind"] == "path":
                 runpy.run_path(main, run_name="__main__")
             else:
-                runpy.run_module(req["what"], run_name="__main__", alter_sys=True)
+                runpy._run_module_as_main(req["what"], alter_argv=True)
         except SystemExit as e:
             # what the interpreter does with an uncaught SystemExit
             if e.code is None:
@@ -220,10 +243,15 @@ def _child(req):
                 print(e.code, file=sys.stderr)
                 code = 1
         except BaseException as e:
-            # the traceback the interpreter prints: from the tool's own frame,
-            # not from this function's call into runpy
+            # the traceback the interpreter prints: from the script's own frame,
+            # or for `-m` from runpy's _run_module_as_main - never from this
+            # function (see "A TRACEBACK IS TRIMMED" above)
+            def first(f):
+                c = f.f_code
+                return (c.co_filename == main if main is not None
+                        else c is runpy._run_module_as_main.__code__)
             tb = e.__traceback__
-            while tb is not None and tb.tb_frame.f_code.co_filename != main:
+            while tb is not None and not first(tb.tb_frame):
                 tb = tb.tb_next
             traceback.print_exception(type(e), e, tb or e.__traceback__)
             code = 1
