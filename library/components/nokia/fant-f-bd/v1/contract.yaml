@@ -1,0 +1,143 @@
+format: 1
+kind: module
+name: fant-f-bd
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FANT-F BC / BD / BF (3FE53701BC, BD, BF), the ANSI network termination card version F of the 7360 ISAM FX and Lightspan FX, with a 480 Gbps switch. Four SFP+ ports X1-X4 in a sawtooth housing just under the lamps, whose facets tip the cages up, then the 1PPS and 10 MHz SMA timing jacks flat on the plate and the front uplink 10/100/1000Base-T, CRAFT and ToD/1PPS ports (RJ45), and the ALM/PWR/A/S lamps plus one lamp per SFP+. No ACO switch and no BITS jacks. Stands vertically in the FX-16 and FX-12 and is turned in the FX-8 and FX-4.
+unplaced: >-
+  Seated by the NT bays of the 7360 ISAM FX shelves; the coordinator wires it.
+size: {w: 30.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: 'w is the NT slot pitch (30 mm), taken as the faceplate width; d is the larger of the two depths the UDS gives (205/225)'
+attrs:
+  model: FANT-F BC/BD/BF
+  part-number: 3FE53701BD
+  variants: 'BC 3FE53701BC (R4.3.01 only, superseded by BD), BD 3FE53701BD, BF 3FE53701BF - one face. All three are drawn by the same Nokia drawing 22447 (3FE53701BCAATQZZA01 p8 Figure 3, 3FE53701BDAATQZZA06 p11 Figure 3, Lightspan UDS 3HH90279AAAATQZZA23 p163 Figure 67 and p175 Figure 71, the last two one embedded image object). The BD and BF list the same interfaces; the BF differs in its compliance statements'
+  standard: ANSI
+  switch-capacity: 480 Gbps
+  weight-kg: 2.0
+  sfp-plus: 4
+  power-draw-max-w: 97
+  power-draw-typical-w: 82
+  power-draw-scope: module
+  input-voltage: -48 V DC and -60 V DC nominal
+provenance:
+  size: 'datasheet - every FANT-F chapter lists the same dimensions: ETSI UDS A18 3FE77012AAAATQZZA18 17.5.1 / 18.6.1 / 19.6.1 / 20.6.1 / 21.6.1 and Lightspan UDS 3HH90279AAAATQZZA23 13.6.1 / 14.6.1: height 405 mm, width 30 mm, depth 205/225 mm, weight 2 kg'
+  size-width: 'datasheet - slot pitch, "width: 30 mm" in the UDS dimensions list, which is the NT card pitch the FX shelf bays are built to; faceplate width not stated, taken as the pitch'
+  depth: 'datasheet - the UDS gives "205/225 mm" without saying what each measures; 225 is carried as the card depth. Which figure is PCB and which is overall (faceplate and ejectors included) is not stated'
+  power: 'datasheet - 97 W maximum, 82 W typical, in every Safety Manual that lists the card: ETSI 3HH11998AAAATCZZA29 p25 Table 2 row "FANT-F (1)", note (1) "The power consumption for all NT cards does not include the NTIO card or SFP power consumption"; ANSI 3HH12894AAAATCZZA27 p25 Table 2 row "FANT-F (1)", note (1) "FANT-F power consumption does not include the NTIO card or SFP power consumption"; Lightspan 3HH91852AAAATCZZA07 p37 row "FANT-F (1)", the same exclusion. No variant is split out, so the one figure is carried for every variant. No ambient is stated'
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 19.4 mm from the left edge on
+    this 30 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). The installed card in those photos IS a FANT-F BD (3FE53701BD, label AB 03):
+    its screws read 0.64-0.67 of the plate width at the top and about 0.64 at the bottom, so
+    this card is one of the cards the family figure was measured on. The Nokia 3D views draw
+    a screw at both ends, as here.
+  levers: 'drawing and photo - grey ejector levers at both ends, inside the 405 mm, at x 0.4-6.0 (the left edge, away from the screw). Upper 1.0-35.0: the lab photo (images 11) shows the grey handle hanging from the top end to just above the ALM lamp. Lower 322.0-392.0: every FANT-F 3D view draws the lower lever from the level of the lowest jack block down to the bottom end, and the lab photo of the bottom end (image 10) shows its grey handle beside the lowest RJ45. The lever is drawn closed along the left edge; the 3D views draw its arm across the jacks, which is the perspective of an arm standing proud of the plate'
+  lamp-colour: >-
+    datasheet and estimated - PWR, A/S, ALM and ACO colours are the UDS tables' own (green, green,
+    red, green). The SFP+ lamps are "link/activity status" with no colour, so the `link-activity`
+    state is drawn in the family green #39b54a that nokia/fnio-a@1 uses for the same unstated case.
+    The A/S lamp's `standby` is that lamp OFF (the table: "Off - Stand-by"), so it is drawn unlit
+    (#3a3f44). The FANT-F PWR lamp has a single on state (green, power present), unlike the FANT-H.
+  lamp-size: 'estimated - common/led-dot@1 (2 mm); the lab photo draws the lamp windows about 0.13 of the plate width (3.9 mm) across, which is the bezel, not the lens'
+  lamp-positions: 'photo and drawing - two columns at x 9.3 and 14.4 (lab photo image 11, plate cols 650-950 = 30 mm, lamp centres cols 742 / 795), rows 36.8 + n x 5.08 (the ETSI 3D view, rows 330-395 on the mapping in layout; the photo agrees on the 5.08 pitch, 51 px per row at 10 px/mm)'
+  legends: 'drawing and photo - printed legends read at 3-4x off the ETSI 300 ppi views and the BD vector view; the port legends read DOWN the card (glyph tops toward the right edge), as on the FANT-H, so they are set rotate(90). The front uplink RJ45 legend reads "FUI" plus one glyph the drawings do not resolve (it reads as 4 or M); "FUI" is set and the fourth glyph is a gap. The "Alcatel·Lucent" name is the printed text wordmark (text only; the round mark above it is NOT drawn - it is inside logo-zone). Sizes from the lab photo, where the lamp legends are bold and about 2.3 mm tall: lamp legends 2.3 bold on the BD, 1.9 bold on the ETSI builds (FSM4 has to fit left of its lamp), port legends 2.2 to 2.4, card name 2.8'
+  rotation: 'estimated - the face is 30 mm wide, so every cage and jack lies on its side. The RJ45s turn 270, as on the FANT-H; the cages turn 270 with the long axis along the card (the lab photo shows the empty X2 cage taller than wide, about 11.5 x 14.5 mm, and the fitted X1 module with its two LC bores one above the other). Which way a cage latch faces is not resolvable'
+  angled-panel: >-
+    estimated - REAL FACETS: four SFP+ teeth, each a face tipped 41 degrees up (toward the card
+    top) carrying its cage, and a return closing the tooth back to the plate, facing down. Every
+    FANT-F figure draws the housing as a SAWTOOTH standing PROUD of a flat plate, one tooth per
+    cage, the teeth touching (no flat between them); the lab photo of the BD shows the same boxes,
+    light grey faces with the cage and a darker underside. Measured on the 300 ppi ETSI views: the
+    along-card scale is 4.0 px/mm (plate 405 mm over rows 170-1777 at the right edge, cross-checked
+    against the lab photo, see layout); a millimetre proud draws 2.89 px right and 0.51 px down
+    (the card top edge, 650 px across and 115 px up for the 225 mm depth). The right-hand outline
+    of the housing gives the apexes (rows 507, 622, 738, 853 on the AC view, 988, 1103.5, 1219,
+    1334 on the AA view: the same 115.3 px, 28.8 mm, pitch on both), and the tooth side edges give
+    the rise: a face edge runs 37 px right over 66 rows and a return edge 37 px back over 49 rows
+    (tooth 1: 46 px over 81 rows). So each apex stands 37 / 2.89 = 12.8 mm proud (tooth 1, the
+    larger one under the lamps, 15.9) over a face 14.9 mm long in front view (tooth 1, 18.5),
+    40.7 degrees for every tooth, taken as 41. On the 205 mm depth the same edges give 38-39
+    degrees; the range is the angle's uncertainty. Returns: 14.5 mm (tooth 1) and 13.9 mm (teeth
+    2-3) against measured 14.7 and 14.0, and tooth 4's longer return (17.2) runs to the housing
+    foot, as drawn. Each return angle is solved so the two facets of a tooth meet at one apex, then
+    rounded, and its length re-solved; each next face roots where the return ends (the chained
+    roots sit within 0.5 mm of the measured ones). Across, the housing runs x 1.0-23.6 (lab photo:
+    cols 660-886 at the face root; the proud apex draws wider, being nearer the camera), the cages centred at x 13.2 (photo: the empty X2 cage centred
+    at 13.7; the housing centre is 12.9). Each cage sits on its face with its lower edge 1.0 mm
+    above the apex, where Nokia draws a lip across the face. A cage's lower wall, run back 41 mm
+    along the face normal, reaches the plate before the return does in every tooth (tooth 1: at
+    30.7 mm of 33.0; teeth 2-3: 24.4 of 28.8), so no cage shows through the back of its tooth
+  colour: 'photo - light silver-grey plate; the SFP+ tooth faces lighter than the plate and their returns darker (the lab photo); grey plastic ejector handles; white product label at the bottom end (image 10)'
+  relief: 'estimated - lever projection and screw heads carry the library card-family figures, not measurements; no Nokia document states them. The SFP+ housing is carried as facets, each face and each return its own relief feature; see angled-panel for how they were read'
+  media: 'the RJ45 jacks are typed by what runs through them, as the library devices already do: the front uplink 10/100/1000Base-T rj45 (common/rj45-eth@1), LCRT/CRAFT craft rj45-serial, ToD/1PPS rj45-tod, BITS rj48, and the AA daisy-chain NTR clock jacks rj45-sync (8 kHz / 19.44 MHz clock pairs on pins 5-8, not BITS: ETSI UDS A18 Tables 42 and 43)'
+  label: 'photo - the white product label (FANT-F / 3FE53701 / BD AB 03 on the photographed card) is drawn blank at x 9.5-19.0, y 378.0-393.0: the lab photo of the bottom end puts it between the lowest jack and the bottom screw, and every Nokia 3D view draws a rectangle there. Its text is per unit and is not printed in the skin'
+  layout: 'photo and drawing - the owner''s lab photos of an installed FANT-F BD (label 3FE53701 BD AB 03, images 10 and 11, 2026-09-24) for what they show: the lamp block and its legends, the X1 and X2 boxes, the grey levers, the lowest RJ45, the label and the bottom screw. Nokia''s own BD drawing (22447, rendered from the vector at 600 dpi) is coarser and in a steeper projection; read as fractions of the plate it places the SFP housing, SMAs, jacks and label within 4 mm of the ETSI AC view, which draws the same layout down to the ToD jack at 300 ppi, so the AC measurements are carried: the ETSI 3D side-and-front views are 300 ppi; along the card y = (row - 175 - 0.18 x (xr - col)) / 4.0 on the AC view (xr, the plate right edge, runs col 892 to 880 down the card; 0.18 is the slope of a line across the face), which puts the plate ends at -1.2 and 400.5 and was chosen over the bare plate-end fit (row0 170, 3.968 px/mm) because it lands the bottom of the layout where the lab photo of the BD bottom end puts it (lowest jack frame 338, label 378-394, against 339.2 and 377.9-393.9 here) and the lamps where the top-end photo puts them relative to the name. Across, x = 14.4 + (col - 846) / 3.35 anchored on the lamp columns of the lab photo. Along: name 25.3, lamp rows 36.8 on a 5.08 pitch, the SFP+ housing 61.7-184.35 (see angled-panel), laser triangle 193.9, ESD triangle 201.7, a blank rounded plate 209.3-238.9, SMA centres 249.0 / 266.5, RJ45 centres FUI 287.05, CRAFT 308.6, ToD/1PPS 329.85, then plain plate where the ETSI builds carry BITS, label 378-393 (photo: 378-394). Photo checks: the lamp rows (51 px per 5.08 mm), the name 12.7 mm and the round mark 22.2 mm above the PWR row, the X1 face root 24.3 mm below the PWR row (61.1 here from 36.8, against 61.7), the lowest jack frame 11 mm above the label'
+  ports: 'datasheet - Lightspan UDS 3HH90279AAAATQZZA23 13.4.8-13.4.11 (BD; the BF chapter lists the same, the BC data sheet 3FE53701BCAATQZZA01 the same), transcribed: communication, 4 x 10GE SFP+ (1GE with standard SFP) and 1 x 10/100/1000Base-T (the front uplink); management, the local craft management interface (LCMI, RJ45); clock, ToD/1PPS (RJ45), 10 MHz GPS (SMA) and 1 PPS (SMA). No ACO switch, no BITS on the face (the BD takes BITS at the General Facilities Card). Composed from std/sfp@1, common/sma-jack@1, common/rj45-eth@1, std/rj45@2, common/laser-warning@1 and common/led-dot@1 at registry size; the cages sit on their tooth faces, so they keep that size and the renderer foreshortens them by cos 41 along the card. The SMA jacks sit FLAT on the plate'
+  leds: 'datasheet and photo - Lightspan UDS Table 60 p164-165, transcribed onto each lamp as `states`. The arrangement is the lab photo: two columns, ALM | PWR, a lone A/S on the right, X2 | X1, X4 | X3. The UDS close-up (Figure 68) instead labels the SFP lamps PORT1 | PORT2, PORT3 | PORT4 (PORT1 on the left) and its table calls them PORT1-PORT4 ''module 1-4''; the photographed card is followed, so X1 (module 1) is the right-hand lamp of the third row'
+  aco: 'none - the BD has no ACO switch or ACO lamp (UDS 13.4.10, the lab photo)'
+  sfp-legends: 'X1-X4 beside the housing at x 25.4, reading down the card - the lab photo shows X1 and X2 printed on the plate right of their boxes, level with each cage; X3 and X4 are below the photo and are taken to continue the pattern'
+  variants: 'drawing - THREE FACES, SO THREE COMPONENTS (nokia/fant-f-aa, -ac, -bd). AA (drawing 33707): DC IN/OUT near the top, the SFP+ housing low, FUI and LCRT only, ACO. AC/AD/AE/AF (33712 for the AC; the AD, AE and AF chapters share one embedded image, 33717, identical in layout): SFP+ housing under the lamps, 1PPS/10MHz SMAs, FUI, LCRT, ToD/1PPS, BITS IN/OUT, ACO. BC/BD/BF (22447 for all three): the AC layout without the ACO switch, ACO lamp and BITS pair. A skin cannot add or remove ports, so the three port sets are three components; part numbers that share a face are one component. This component: BC 3FE53701BC (R4.3.01 only, superseded by BD), BD 3FE53701BD, BF 3FE53701BF - one face. All three are drawn by the same Nokia drawing 22447 (3FE53701BCAATQZZA01 p8 Figure 3, 3FE53701BDAATQZZA06 p11 Figure 3, Lightspan UDS 3HH90279AAAATQZZA23 p163 Figure 67 and p175 Figure 71, the last two one embedded image object). The BD and BF list the same interfaces; the BF differs in its compliance statements'
+  gaps: 'The tooth angle rests on the card-depth projection (225 mm read off the card top edge; 205 gives 38-39 degrees). The lab photos show only the X1 and X2 teeth; X3 and X4 follow the drawing. The blank rounded plate 209-239 is drawn as art; its function is not stated. The fourth glyph of the front uplink legend is unread. SFP lamp naming: photo (X1-X4) over drawing (PORT1-PORT4). Cage latch direction (rotate 270 is convention).'
+groups:
+  sfp-plus: {term: Port, role: traffic, index-origin: 1, attrs: {media: sfp-plus, speed: 10g}, description: 'the four SFP+ ports - 10GE with SFP+ optics, 1GE with SFP; SyncE clock extraction'}
+  base-t: {term: Port, role: traffic, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the front uplink interface (FUI), the fixed 10/100/1000Base-T port Nokia counts among the five communication interfaces'}
+  timing: {term: Port, role: management, index-origin: 1, mixed: 'network timing - the 1 PPS and 10 MHz GPS SMA jacks and the ToD/1PPS RJ45'}
+  craft: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial}, description: 'reaching the card locally - the CRAFT RJ45 (LCMI)'}
+  leds: {term: LED, role: indicator, index-origin: 1}
+elements:
+  logo-zone: {at: [11.5, 11.5], size: [7.0, 6.0], class: logo-zone}
+  lever-top: {at: [0.4, 1.0], size: [5.6, 34.0], class: latch}
+  lever-bottom: {at: [0.4, 322.0], size: [5.6, 70.0], class: latch}
+  screw-top: {at: [14.15, 0], size: [10.5, 10.5], class: screw}
+  screw-bottom: {at: [14.15, 394.5], size: [10.5, 10.5], class: screw}
+  sfp1-face: {at: [1, 61.7], size: [22.6, 18.5], class: mechanical, description: 'face of SFP+ tooth 1, tipped 41 degrees up - the cage sits on it'}
+  sfp1-return: {at: [1, 80.2], size: [22.6, 14.48], class: mechanical, description: 'return closing SFP+ tooth 1 back to the plate, 48 degrees down'}
+  sfp2-face: {at: [1, 94.68], size: [22.6, 14.9], class: mechanical, description: 'face of SFP+ tooth 2, tipped 41 degrees up - the cage sits on it'}
+  sfp2-return: {at: [1, 109.58], size: [22.6, 13.89], class: mechanical, description: 'return closing SFP+ tooth 2 back to the plate, 43 degrees down'}
+  sfp3-face: {at: [1, 123.47], size: [22.6, 14.9], class: mechanical, description: 'face of SFP+ tooth 3, tipped 41 degrees up - the cage sits on it'}
+  sfp3-return: {at: [1, 138.37], size: [22.6, 13.89], class: mechanical, description: 'return closing SFP+ tooth 3 back to the plate, 43 degrees down'}
+  sfp4-face: {at: [1, 152.26], size: [22.6, 14.9], class: mechanical, description: 'face of SFP+ tooth 4, tipped 41 degrees up - the cage sits on it'}
+  sfp4-return: {at: [1, 167.16], size: [22.6, 17.19], class: mechanical, description: 'return closing SFP+ tooth 4 back to the plate, 37 degrees down'}
+relief:
+  wall: '#3a3d42'
+  features:
+  - {node: lever-top, out: 4.2, color: '#5b6066', confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch via the casa card family - the library one figure for an ejector lever. NOT MEASURED; no Nokia document states it'}
+  - {node: lever-bottom, out: 4.2, color: '#5b6066', confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch via the casa card family - the library one figure for an ejector lever. NOT MEASURED; no Nokia document states it'}
+  - {node: screw-top, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED'}
+  - {node: screw-bottom, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED'}
+  - {node: sfp1-face, facet: {deg: 41, facing: up}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 1 face, front view 61.7-80.2, 41 deg read off the tooth side edges (see provenance angled-panel); apex 16.08 mm proud'}
+  - {node: sfp1-return, facet: {deg: 48, facing: down}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 1 return, front view 80.2-94.68, angle solved to meet the face apex at 16.08 mm'}
+  - {node: sfp2-face, facet: {deg: 41, facing: up}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 2 face, front view 94.68-109.58, 41 deg read off the tooth side edges (see provenance angled-panel); apex 12.95 mm proud'}
+  - {node: sfp2-return, facet: {deg: 43, facing: down}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 2 return, front view 109.58-123.47, angle solved to meet the face apex at 12.95 mm'}
+  - {node: sfp3-face, facet: {deg: 41, facing: up}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 3 face, front view 123.47-138.37, 41 deg read off the tooth side edges (see provenance angled-panel); apex 12.95 mm proud'}
+  - {node: sfp3-return, facet: {deg: 43, facing: down}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 3 return, front view 138.37-152.26, angle solved to meet the face apex at 12.95 mm'}
+  - {node: sfp4-face, facet: {deg: 41, facing: up}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 4 face, front view 152.26-167.16, 41 deg read off the tooth side edges (see provenance angled-panel); apex 12.95 mm proud'}
+  - {node: sfp4-return, facet: {deg: 37, facing: down}, confidence: estimated, source: 'ETSI UDS A18 3FE77012AAAATQZZA18 p176 Figure 56 (the AC, the sharpest drawing of this layout) checked against 3FE53701BDAATQZZA06 p11 Figure 3 (drawing 22447, vector) - SFP+ tooth 4 return, front view 167.16-184.35, angle solved to meet the face apex at 12.95 mm'}
+parts:
+- {ref: std/sfp@1, id: sfp-1, group: sfp-plus, at: [5.95, 69.955], 'on': sfp1-face, rotate: 270, attrs: {media: sfp-plus, speed: 10g, legend: X1}}
+- {ref: std/sfp@1, id: sfp-2, group: sfp-plus, at: [5.95, 99.335], 'on': sfp2-face, rotate: 270, attrs: {media: sfp-plus, speed: 10g, legend: X2}}
+- {ref: std/sfp@1, id: sfp-3, group: sfp-plus, at: [5.95, 128.125], 'on': sfp3-face, rotate: 270, attrs: {media: sfp-plus, speed: 10g, legend: X3}}
+- {ref: std/sfp@1, id: sfp-4, group: sfp-plus, at: [5.95, 156.915], 'on': sfp4-face, rotate: 270, attrs: {media: sfp-plus, speed: 10g, legend: X4}}
+- {ref: common/laser-warning@1, id: laser-mark, at: [9.2, 191.5]}
+- {ref: common/sma-jack@1, id: pps-1, group: timing, at: [8.45, 244.25], attrs: {function: 1 PPS input / output, legend: 1PPS}}
+- {ref: common/sma-jack@1, id: gps-10mhz, group: timing, at: [8.45, 261.75], attrs: {function: 10 MHz GPS input, legend: 10MHz}}
+- {ref: common/rj45-eth@1, id: fui, group: base-t, at: [5.3, 280.45], rotate: 270, attrs: {legend: FUI, function: front uplink interface}}
+- {ref: std/rj45@2, id: lcrt, group: craft, at: [5.3, 302], rotate: 270, attrs: {media: rj45-serial, function: local craft management interface (LCMI), legend: CRAFT}}
+- {ref: std/rj45@2, id: tod, group: timing, at: [5.3, 323.25], rotate: 270, attrs: {media: rj45-tod, function: ToD / 1PPS, legend: ToD/1PPS}}
+- {ref: common/led-dot@1, id: led-alm, group: leds, at: [8.3, 35.8], attrs: {description: 'ALM - red: alarm condition exists; off: no alarm condition exists'}, states: {lamp: ['off', {name: alarm, color: '#ef4444'}]}}
+- {ref: common/led-dot@1, id: led-pwr, group: leds, at: [13.4, 35.8], attrs: {description: 'PWR - green: power present; off: no power'}, states: {lamp: ['off', {name: power-present, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-a-s, group: leds, at: [13.4, 40.88], attrs: {description: 'A/S - green: active; off: stand-by'}, states: {lamp: [{name: standby, color: '#3a3f44'}, {name: active, color: '#22c55e'}]}}
+- {ref: common/led-dot@1, id: led-x2, group: leds, at: [8.3, 45.96], attrs: {description: 'X2 (PORT2 in the UDS table) - link/activity status of SFP+ module 2'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-x1, group: leds, at: [13.4, 45.96], attrs: {description: 'X1 (PORT1 in the UDS table) - link/activity status of SFP+ module 1'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-x4, group: leds, at: [8.3, 51.04], attrs: {description: 'X4 (PORT4 in the UDS table) - link/activity status of SFP+ module 4'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+- {ref: common/led-dot@1, id: led-x3, group: leds, at: [13.4, 51.04], attrs: {description: 'X3 (PORT3 in the UDS table) - link/activity status of SFP+ module 3'}, states: {lamp: ['off', {name: link-activity, color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [15.0, 202.5], direction: rear}
+skins: [default]
