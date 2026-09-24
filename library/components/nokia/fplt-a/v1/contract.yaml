@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fplt-a
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -61,7 +61,21 @@ provenance:
     cages; the modem module "consists of eight EPON modules". Composed as std/sfp@1 at its
     registry aperture, unrotated (the drawn opening is 13.4 mm across, the SFP width). Each
     tooth's side wall carries a "PON n" legend beside its cage, printed here at the plate's left
-    edge; numbering is top to bottom.
+    edge; numbering is top to bottom. Each cage is `on` its tooth's face and drawn
+    foreshortened (7.66 mm along the card) about the centre the figure gives it, 16.5 mm
+    into its tooth.
+  relief: >-
+    drawing (fractions only) - the sawtooth of Figure 7, eight teeth between the nine tooth
+    lines at 71.0 + 27.72 n. The cages in Figure 7 point out and DOWN (the SFP's long axis
+    draws at (0.49, 0.87) in the oblique view, which is an axis 40 to 45 degrees below the
+    plate normal), so the port face looks down: flush at its lower edge, proud at its upper,
+    with a return above it that looks up. Face 40 degrees, 15.79 mm (82.93 + 27.72 n to the
+    next tooth line); return 48 degrees, 11.93 mm; apex 13.25 mm proud. The split is set by
+    the cage, not measured: the face must reach above the cage's foreshortened top and the
+    return must be shallow enough that the cage, whose depth runs back along the face's
+    normal, stays inside the tooth. The oblique view draws its across and out-of-plate axes
+    almost parallel, so the tooth's own profile cannot be read from it. The facets run x 1.4
+    to 24.4, clear of the PON n legends at the plate's left edge.
   lamps: >-
     datasheet - Table 2 of UDS 1.7.3: PWR off / blinking green "initialization, power on state"
     (the table gives no steady-green row; drawn 'init' blinking and 'on' green, the family
@@ -90,6 +104,107 @@ provenance:
   lifecycle: 'searched only the staged corpus - no end-of-life notice was searched for on the web'
 elements:
   logo-zone: {at: [5.0, 312.0], size: [15.0, 12.0], class: label}
+  tooth-1-face: {at: [1.4, 82.93], size: [23.0, 15.79], class: mechanical}
+  tooth-1-return: {at: [1.4, 71.0], size: [23.0, 11.93], class: mechanical}
+  tooth-2-face: {at: [1.4, 110.65], size: [23.0, 15.79], class: mechanical}
+  tooth-2-return: {at: [1.4, 98.72], size: [23.0, 11.93], class: mechanical}
+  tooth-3-face: {at: [1.4, 138.37], size: [23.0, 15.79], class: mechanical}
+  tooth-3-return: {at: [1.4, 126.44], size: [23.0, 11.93], class: mechanical}
+  tooth-4-face: {at: [1.4, 166.09], size: [23.0, 15.79], class: mechanical}
+  tooth-4-return: {at: [1.4, 154.16], size: [23.0, 11.93], class: mechanical}
+  tooth-5-face: {at: [1.4, 193.81], size: [23.0, 15.79], class: mechanical}
+  tooth-5-return: {at: [1.4, 181.88], size: [23.0, 11.93], class: mechanical}
+  tooth-6-face: {at: [1.4, 221.53], size: [23.0, 15.79], class: mechanical}
+  tooth-6-return: {at: [1.4, 209.6], size: [23.0, 11.93], class: mechanical}
+  tooth-7-face: {at: [1.4, 249.25], size: [23.0, 15.79], class: mechanical}
+  tooth-7-return: {at: [1.4, 237.32], size: [23.0, 11.93], class: mechanical}
+  tooth-8-face: {at: [1.4, 276.97], size: [23.0, 15.79], class: mechanical}
+  tooth-8-return: {at: [1.4, 265.04], size: [23.0, 11.93], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: tooth-1-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: >-
+        drawing (fractions only) - Figure 7 as tooth-1-face. The nine tooth lines (71.0 +
+        27.72 n) are taken as the roots; the return closes the tooth above its face, and the
+        split between them is set by the cage the figure centres 16.5 mm into each tooth:
+        the face must start above the cage's foreshortened top (12.67 mm into the tooth) and
+        the return must stay shallow enough that the cage, whose depth runs back along the
+        face's normal, does not leave through it (return_h >= face_h x tan^2 40 = 11.12). A
+        11.93 mm return at 48 degrees against a 15.79 mm face at 40 meets at a 13.25 mm apex
+    - node: tooth-1-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: >-
+        drawing (fractions only) - UDS 3FE53711AAAATQZZA06 p11 Figure 7, the oblique 3D view
+        rendered at 1200 dpi. Each cage's SFP is drawn with its long axis running (0.49,
+        0.87) across and down the image; the view's out-of-plate axis is (0.956, 0.294) at
+        7.98 px/mm (from the board's top edge, 225 mm) and its along-card axis is vertical
+        at 11.93 px/mm, so an axis tipped DOWN from the plate normal by t draws at (0.956 x
+        7.98 cos t, 0.294 x 7.98 cos t + 11.93 sin t): 40 degrees gives (0.52, 0.85) and 45
+        gives (0.47, 0.88), so the cages point out and down at about 40 to 45 degrees and
+        the port face looks down. 40 is taken, the most the tooth can hold with the cage
+        left where the figure draws it (see tooth-1-return). The view's across and out axes
+        draw almost parallel, so the tooth's own outline cannot be measured and this is the
+        only reading
+    - node: tooth-2-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-2-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-3-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-3-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-4-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-4-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-5-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-5-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-6-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-6-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-7-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-7-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-8-return
+      facet: {deg: 48, facing: up}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-8-face
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: as tooth-1-face
 groups:
   pon:
     term: Port
@@ -108,14 +223,14 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/sfp@1, id: pon-1, group: pon, at: [2.0, 82.5]}
-  - {ref: std/sfp@1, id: pon-2, group: pon, at: [2.0, 110.22]}
-  - {ref: std/sfp@1, id: pon-3, group: pon, at: [2.0, 137.94]}
-  - {ref: std/sfp@1, id: pon-4, group: pon, at: [2.0, 165.66]}
-  - {ref: std/sfp@1, id: pon-5, group: pon, at: [2.0, 193.38]}
-  - {ref: std/sfp@1, id: pon-6, group: pon, at: [2.0, 221.1]}
-  - {ref: std/sfp@1, id: pon-7, group: pon, at: [2.0, 248.82]}
-  - {ref: std/sfp@1, id: pon-8, group: pon, at: [2.0, 276.54]}
+  - {ref: std/sfp@1, id: pon-1, group: pon, at: [2.0, 83.67], 'on': tooth-1-face}
+  - {ref: std/sfp@1, id: pon-2, group: pon, at: [2.0, 111.39], 'on': tooth-2-face}
+  - {ref: std/sfp@1, id: pon-3, group: pon, at: [2.0, 139.11], 'on': tooth-3-face}
+  - {ref: std/sfp@1, id: pon-4, group: pon, at: [2.0, 166.83], 'on': tooth-4-face}
+  - {ref: std/sfp@1, id: pon-5, group: pon, at: [2.0, 194.55], 'on': tooth-5-face}
+  - {ref: std/sfp@1, id: pon-6, group: pon, at: [2.0, 222.27], 'on': tooth-6-face}
+  - {ref: std/sfp@1, id: pon-7, group: pon, at: [2.0, 249.99], 'on': tooth-7-face}
+  - {ref: std/sfp@1, id: pon-8, group: pon, at: [2.0, 277.71], 'on': tooth-8-face}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [7.1, 36.9], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [12.4, 36.9], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [7.1, 41.97], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}

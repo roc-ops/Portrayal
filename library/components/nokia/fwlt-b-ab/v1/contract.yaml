@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fwlt-b-ab
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -65,7 +65,20 @@ provenance:
     PORT8"; section 37.4 says optical modules plug in and refers to the PIG, whose ETSI
     edition 3HH11997AAAATCZZA42 Table 126 carries an FWLT-B AB column listing XGS dual-rate
     SFP+ OLT modules. Composed as std/sfp@1 turned 90 degrees at each module outline's
-    centre (x 11.5, 142.5 + 24.0 (n-1) mm).
+    centre (x 11.5, 142.5 + 24.0 (n-1) mm), each `on` its tooth's face, so it is drawn
+    foreshortened to 12.56 mm along the card about that centre.
+  relief: >-
+    drawing - the cage block is a sawtooth, eight teeth on the 24.0 mm step pitch, read off
+    the orthographic side profile of Figure 149 (p324). Each tooth is a port face at 30
+    degrees looking up (flush at its top edge, 7.51 mm proud at its lower edge) and a
+    54-degree return closing it to the plate: face 136.0 + 24 n to 149.0 + 24 n, return to
+    154.45 + 24 n, where Figure 148 draws the step line; the plate between teeth is flat.
+    The profile's face is 9.8 mm long before the tooth turns back through a small lip; that
+    is shorter than the SFP aperture foreshortened on it (12.56), so the face is lengthened
+    to 13.0 mm to hold the cage and the lip is not modelled. The SFP cages behind the plate
+    are drawn about 26 degrees off the board normal, which agrees with the face. The
+    facets run x 4.4 to 20.8, clear of the lamp column on the left and the PORT legends on
+    the right, which stay on the flat plate.
   lamps: >-
     datasheet - Figure 150 and Table 97 (p325): ALM and PWR as on the FWLT-B AA (PWR off /
     blinking green / on green; ALM red = alarm); the PON lamp off / yellow / green / red.
@@ -88,11 +101,29 @@ provenance:
     (1) one PON lamp per port in the text against two per cage in the figure; (2) the two
     arrow marks under the block are unnamed; (3) the power figure is the unqualified FWLT-B
     row; (4) the ALM legend is hidden behind the top ejector in the figure and is drawn
-    where the FWLT-A prints it.
+    where the FWLT-A prints it; (5) the tooth angle is read by eye from one side profile,
+    and Figure 148 draws the module outline 14.8 mm along the card, unforeshortened, where
+    a 30-degree face would show 12.6; the lip below each face is not modelled.
 elements:
   logo-zone: {at: [6.5, 11], size: [12, 9.5], class: label}
   mark-1: {at: [5.2, 359.6], size: [5.3, 7.9], class: label}
   mark-2: {at: [13.3, 359.6], size: [5.4, 7.9], class: label}
+  tooth-1-face: {at: [4.4, 136.0], size: [16.4, 13.0], class: mechanical}
+  tooth-1-return: {at: [4.4, 149.0], size: [16.4, 5.453], class: mechanical}
+  tooth-2-face: {at: [4.4, 160.0], size: [16.4, 13.0], class: mechanical}
+  tooth-2-return: {at: [4.4, 173.0], size: [16.4, 5.453], class: mechanical}
+  tooth-3-face: {at: [4.4, 184.0], size: [16.4, 13.0], class: mechanical}
+  tooth-3-return: {at: [4.4, 197.0], size: [16.4, 5.453], class: mechanical}
+  tooth-4-face: {at: [4.4, 208.0], size: [16.4, 13.0], class: mechanical}
+  tooth-4-return: {at: [4.4, 221.0], size: [16.4, 5.453], class: mechanical}
+  tooth-5-face: {at: [4.4, 232.0], size: [16.4, 13.0], class: mechanical}
+  tooth-5-return: {at: [4.4, 245.0], size: [16.4, 5.453], class: mechanical}
+  tooth-6-face: {at: [4.4, 256.0], size: [16.4, 13.0], class: mechanical}
+  tooth-6-return: {at: [4.4, 269.0], size: [16.4, 5.453], class: mechanical}
+  tooth-7-face: {at: [4.4, 280.0], size: [16.4, 13.0], class: mechanical}
+  tooth-7-return: {at: [4.4, 293.0], size: [16.4, 5.453], class: mechanical}
+  tooth-8-face: {at: [4.4, 304.0], size: [16.4, 13.0], class: mechanical}
+  tooth-8-return: {at: [4.4, 317.0], size: [16.4, 5.453], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -116,6 +147,80 @@ relief:
       out: 4.2
       confidence: estimated
       source: as ejector-top
+    - node: tooth-1-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: >-
+        drawing - ANSI UDS R6.9 p324 Figure 149, the left-hand view, an orthographic side
+        profile (card 37..1401 px = 3.368 px/mm; board depth 3.40 px/mm). Each tooth's port
+        face runs from the plate at row 502 out to 19 px (5.6 mm) proud at row 535, 33 px
+        (9.8 mm) down the card, so atan(5.6 / 9.8) = 30 degrees; the SFP cages behind the
+        plate run 26 degrees below the board normal going inward, which agrees. The face is
+        lengthened to 13.0 mm so that it holds the SFP's 14.5 mm aperture foreshortened to
+        12.56
+    - node: tooth-1-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: >-
+        drawing - Figure 149 as tooth-1-face: the tooth closes to the plate at row 564, the
+        step lines Figure 148 draws at 154.5 + 24 n, with a small lip on the way; against
+        the face's 7.51 mm apex the 5.45 mm return is 54 degrees
+    - node: tooth-2-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-2-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-3-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-3-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-4-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-4-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-5-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-5-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-6-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-6-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-7-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-7-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
+    - node: tooth-8-face
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: as tooth-1-face
+    - node: tooth-8-return
+      facet: {deg: 54, facing: down}
+      confidence: estimated
+      source: as tooth-1-return
 groups:
   sfp-plus:
     term: Port
@@ -134,14 +239,14 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [4.25, 137.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [4.25, 161.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [4.25, 185.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [4.25, 209.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [4.25, 233.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [4.25, 257.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [4.25, 281.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [4.25, 305.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [4.25, 138.17], 'on': tooth-1-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [4.25, 162.17], 'on': tooth-2-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [4.25, 186.17], 'on': tooth-3-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [4.25, 210.17], 'on': tooth-4-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [4.25, 234.17], 'on': tooth-5-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [4.25, 258.17], 'on': tooth-6-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [4.25, 282.17], 'on': tooth-7-face, rotate: 90}
+  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [4.25, 306.17], 'on': tooth-8-face, rotate: 90}
   - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [7, 29.3], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
   - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [12.1, 29.3], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2.2, 137.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
