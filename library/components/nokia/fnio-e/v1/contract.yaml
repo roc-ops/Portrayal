@@ -1,0 +1,281 @@
+format: 1
+kind: module
+name: fnio-e
+version: 1.0.0
+unplaced: >-
+  seated by the NTIO bays of the 7360 ISAM FX shelves; the coordinator wires it
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FNIO-E (3FE 79365 AA), the 100G (8 x 100G) NT I/O applique of the Lightspan FX.
+  Seats in the NTIO slot between the two NT boards and gives the shelf eight QSFP28 ports,
+  each 10G, 25G, 40G or 100G. Authored upright, as the Unit Data Sheet guide draws it:
+  ejector and thumbscrew at each end, eight QSFP28 cages on a sawtooth angled 45 degrees
+  for fibre bend radius, a lamp per port, two marks, and the PWR and ALM lamps stacked
+  near the bottom lever. Nokia sets the sawtooth into the plate; it is modelled proud
+  until the format carries recessed facets.
+size: {w: 25.0, h: 405.0, d: 205.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), not the faceplate: the same UDS section states
+  the width as 26 mm, which is wider than the pitch and so is taken to be the widest
+  point (the ejector), not the plate between neighbours. Held at 25.0 so the NTIO bay
+  built from the shared family convention seats it. d is the first of the two depths the
+  UDS gives (205 / 225 mm); which one applies to which shelf is not stated.
+attrs:
+  model: FNIO-E
+  qsfp28: 8
+  part-number: 3FE 79365 AA
+  weight-kg: 1.5
+  power-draw-max-w: 82
+  power-draw-typical-w: 53
+provenance:
+  size: >-
+    datasheet - Lightspan UDS 3HH90279AAAATQZZA23 section 28.5.1 (p303): height 405 mm,
+    width 26 mm, depth 205 mm / 225 mm, board-to-board pitch 25 mm. Face held at the 25 mm
+    pitch by the shared 7360 FX convention; the 26 mm width is recorded in size-notes and
+    gaps. The FNIO-E is in no 7360 ISAM (ANSI or ETSI) guide.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 28.5.1; the faceplate edge-to-edge width is
+    stated only as 26 mm overall, which exceeds the pitch, so the plate width itself is not
+    stated and is taken as the pitch.
+  depth: >-
+    datasheet - 205 mm / 225 mm, section 28.5.1; 205 carried. Neither figure is tied to a
+    shelf in the text.
+  weight: 'datasheet - 1.50 kg, Lightspan UDS section 28.5.2 (p303)'
+  power: >-
+    datasheet - Lightspan Safety Manual 3HH91852AAAATCZZA07 p37, Table 2 "Power consumption
+    per component for Lightspan FX": FNIO-E 53 W typical, note (7) "typical use case
+    defined as 4x 100G QSFP", and 82 W maximum, note (8) "use case defined as 8x 100G
+    QSFP". Whether the QSFP modules themselves are inside those figures is not said (gap).
+  layout: >-
+    drawing (fractions only) - Lightspan UDS A23 p303 Figure 131 (drawing 39549), two 3D
+    views of the board, from the embedded 713 x 671 JPEG at only 150 ppi (pdfimages); no
+    higher-resolution copy and no photograph is staged. The left view shows the plate
+    nearly edge-on from the component side. Scale: the two thumbscrew knurls (image y 89.1
+    and 630.6 in the left view; 55.9 and 596.5 in the right view, agreeing) fix 394.5 mm =
+    541.5 px, 0.729 mm/px. Top lever tip 35.0; the sawtooth's nine tooth boundaries at
+    image y 153 + 45.14 k (a 32.9 mm pitch), 51.9 to 315.1; a dark mark on the plate's
+    edge at the middle of each tooth (provenance.lamps); a right-pointing mark at 328.2 and
+    a warning triangle at 341.3; two lamps at 377.0 and 382.1, beside the pivot of the
+    bottom lever, which is drawn OPEN and modelled closed with its tip at about 329 (its
+    open run solved as on the FNIO-B, a lever of about 59 mm). Across the card nothing can
+    be read at this resolution: the cages are centred, the PWR/ALM lamps at the left with
+    their legends to the right, the lower lever at the right edge. Error about 1.5 mm along
+    the card.
+  ports: >-
+    datasheet - UDS section 28.4.2.1: eight uplink ports on the front plate, each for a
+    10G, 25G, 40G or 100G QSFP module, placed under a 45 degree angle for fibre bend
+    radius; numbered 1-8 top to bottom by Nokia's own callout in Figure 131. Composed as
+    std/qsfp28@1 at its registry aperture, rotate 90, `on` its tooth's face facet, as
+    nokia/fnio-d@1: the 20 mm side along the card, foreshortened to 14.14; `at` is the
+    face centre less 10.15/2 x cos 45. Latch direction is not resolved at 150 ppi; rotate
+    90 is the library's vertical-card convention, not a reading.
+  lamps: >-
+    datasheet and drawing - Figure 132 (p304) draws only PWR above ALM, one column, legends
+    to the right; Table 99: PWR on = power on, ALM red = alarm, and a QSFP LED 1-8 per port,
+    off = no link, green = link up, blinking green = traffic. Figure 132 does not show the
+    QSFP lamps; the eight dark marks Figure 131 draws on the plate's right edge, one at the
+    middle of each tooth, are read as those lamps, so each is drawn on its tooth's face at
+    the right edge beside the cage. That position is an ESTIMATE (gap). PWR colour not
+    stated; drawn with the family green. The PWR/ALM pair is placed where the two dark
+    dots sit in Figure 131 near the bottom lever pivot, PWR above ALM as Figure 132 orders
+    them.
+  marks: >-
+    drawing - below the last tooth Figure 131 draws a right-pointing triangle and a warning
+    triangle (the laser mark, as on the FNIO-B and FNIO-D); drawn as outlines, neither is
+    legible at 150 ppi.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2) is used. The sawtooth is sixteen
+    facets (provenance.angled-panel), not an `out`.
+  angled-panel: >-
+    set into the plate in the figure; awaiting recessed facets (negative lift in a pocket).
+    The UDS places each QSFP 'under a 45 degree angle', and Figure 131 draws the eight
+    cages on a sawtooth whose teeth lie BEHIND a flat front plate: the left view shows the
+    plate's front edge as one straight line past every port with the cages behind it, and
+    the right view shows the teeth as triangles pointing back into the board from the rear
+    of the plate. A facet's lift cannot yet be negative, so the teeth are modelled proud of
+    the plate, each a face that looks up and carries the cage and a return that looks down,
+    45/45, 16.45 mm front-view each on the measured 32.9 mm pitch, meeting at a 16.45 mm
+    apex that Nokia puts roughly behind the plate. Which slope of each V carries the cage
+    is not resolved at 150 ppi; face-up is the FNIO-A/FNIO-D convention, not a reading. The
+    projected cage (14.14 mm) leaves 1.15 mm of face above and below it; a 45/45 tooth is
+    square, so each cage's depth runs parallel to its return and stays 1.6 mm inside it.
+    The angle itself is not measured in the figure (too coarse); 45 is the text's.
+  gaps: >-
+    The sawtooth is set into the plate in Figure 131 and modelled proud (awaiting recessed
+    facets). Which slope of each tooth carries the cage (face-up assumed). The QSFP lamp
+    positions (the eight marks read as lamps). Faceplate edge-to-edge width (26 mm stated
+    overall, held at the 25 mm pitch). Whether the QSFP modules are inside the 53 / 82 W
+    figures. Cage latch direction. All along-card positions come from a 150 ppi figure.
+  logo-zone: >-
+    reserved by the family convention; Figure 131's face shows no mark there, so the zone
+    sits on the empty metal between the warning triangle and the PWR lamp.
+  lifecycle: >-
+    searched only the staged corpus - listed in the Lightspan UDS A23; no end-of-life notice
+    was searched for on the web.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Drawn and relieved as nokia/fant-h-bb@2 draws its screws (knurled head,
+    cyl 1.6). Figure 131 draws a knurled screw at each end, as the family figure has.
+elements:
+  logo-zone: {at: [2.0, 348.0], size: [14.0, 24.0], class: label}
+  screw-top: {at: [13.45, 0], size: [10.5, 10.5], class: screw}
+  screw-bottom: {at: [13.45, 394.5], size: [10.5, 10.5], class: screw}
+  tooth-1-face: {at: [0.6, 51.9], size: [23.8, 16.45], class: mechanical}
+  tooth-1-return: {at: [0.6, 68.35], size: [23.8, 16.45], class: mechanical}
+  tooth-2-face: {at: [0.6, 84.8], size: [23.8, 16.45], class: mechanical}
+  tooth-2-return: {at: [0.6, 101.25], size: [23.8, 16.45], class: mechanical}
+  tooth-3-face: {at: [0.6, 117.7], size: [23.8, 16.45], class: mechanical}
+  tooth-3-return: {at: [0.6, 134.15], size: [23.8, 16.45], class: mechanical}
+  tooth-4-face: {at: [0.6, 150.6], size: [23.8, 16.45], class: mechanical}
+  tooth-4-return: {at: [0.6, 167.05], size: [23.8, 16.45], class: mechanical}
+  tooth-5-face: {at: [0.6, 183.5], size: [23.8, 16.45], class: mechanical}
+  tooth-5-return: {at: [0.6, 199.95], size: [23.8, 16.45], class: mechanical}
+  tooth-6-face: {at: [0.6, 216.4], size: [23.8, 16.45], class: mechanical}
+  tooth-6-return: {at: [0.6, 232.85], size: [23.8, 16.45], class: mechanical}
+  tooth-7-face: {at: [0.6, 249.3], size: [23.8, 16.45], class: mechanical}
+  tooth-7-return: {at: [0.6, 265.75], size: [23.8, 16.45], class: mechanical}
+  tooth-8-face: {at: [0.6, 282.2], size: [23.8, 16.45], class: mechanical}
+  tooth-8-return: {at: [0.6, 298.65], size: [23.8, 16.45], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - {node: screw-top, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 via nokia/fant-h-bb@2 - the library one figure for a captive screw head. NOT MEASURED'}
+    - {node: screw-bottom, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 via nokia/fant-h-bb@2 - the library one figure for a captive screw head. NOT MEASURED'}
+    - node: tooth-1-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-1-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-2-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-2-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-3-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-3-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-4-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-4-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-5-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-5-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-6-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-6-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-7-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-7-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-8-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+    - node: tooth-8-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        Lightspan UDS A23 p303 Figure 131, the tooth pitch and the 45 degrees of the text (provenance.angled-panel)
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: the eight uplink QSFP28 cages (10G, 25G, 40G or 100G)
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one lamp per QSFP port, QSFP LED 1-8 of Table 99
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR and ALM
+parts:
+  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 56.536], rotate: 90, 'on': tooth-1-face}
+  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 89.436], rotate: 90, 'on': tooth-2-face}
+  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 122.336], rotate: 90, 'on': tooth-3-face}
+  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 155.236], rotate: 90, 'on': tooth-4-face}
+  - {ref: std/qsfp28@1, id: port-5, group: qsfp28, at: [2.5, 188.136], rotate: 90, 'on': tooth-5-face}
+  - {ref: std/qsfp28@1, id: port-6, group: qsfp28, at: [2.5, 221.036], rotate: 90, 'on': tooth-6-face}
+  - {ref: std/qsfp28@1, id: port-7, group: qsfp28, at: [2.5, 253.936], rotate: 90, 'on': tooth-7-face}
+  - {ref: std/qsfp28@1, id: port-8, group: qsfp28, at: [2.5, 286.836], rotate: 90, 'on': tooth-8-face}
+  - {ref: common/led-dot@1, id: led-port-1, group: port-leds, at: [19.3, 59.418], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-1-face}
+  - {ref: common/led-dot@1, id: led-port-2, group: port-leds, at: [19.3, 92.318], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-2-face}
+  - {ref: common/led-dot@1, id: led-port-3, group: port-leds, at: [19.3, 125.218], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-3-face}
+  - {ref: common/led-dot@1, id: led-port-4, group: port-leds, at: [19.3, 158.118], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-4-face}
+  - {ref: common/led-dot@1, id: led-port-5, group: port-leds, at: [19.3, 191.018], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-5-face}
+  - {ref: common/led-dot@1, id: led-port-6, group: port-leds, at: [19.3, 223.918], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-6-face}
+  - {ref: common/led-dot@1, id: led-port-7, group: port-leds, at: [19.3, 256.818], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-7-face}
+  - {ref: common/led-dot@1, id: led-port-8, group: port-leds, at: [19.3, 289.718], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}, 'on': tooth-8-face}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [6, 376], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [6, 381.1], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
