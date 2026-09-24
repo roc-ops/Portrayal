@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9321-64e
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9321-64E
@@ -266,7 +266,8 @@ attrs:
     power-max-w: '2589'
     power-max-dc-w: '2496'
     power-envelope: fully-configured
-    input: AC 200 to 240V, 16A max x2; DC -40 to -72V, 80A max x2
+    input-ac: '200 to 240V, 16A max x2'
+    input-dc: '-40 to -72V, 80A max x2'
   environmental:
     operating-temp: 0 to 40 C
     operating-humidity: 5% to 95% RH non-condensing
@@ -928,12 +929,14 @@ views:
 configurations:
   ac:
     kind: base
+    power: ac
     description: Dual 3000W AC PSUs (PSU-302-AESR) 1+1, four FAN-808012-HCE fan modules
       3+1, front-to-back airflow - the build both vendor rear renders and HIG Figure 4
       show
     default: true
   dc:
     kind: orderable
+    power: dc
     description: Dual 3000W DC PSUs (PSU-302-DESR) 1+1, four FAN-808012-HCE fan modules
       3+1, front-to-back airflow
     bays:

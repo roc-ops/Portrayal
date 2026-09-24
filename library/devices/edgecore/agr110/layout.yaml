@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr110
-version: 8.2.7
+version: 8.2.8
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XL
@@ -532,8 +532,8 @@ attrs:
   performance:
     switching-capacity: 800 Gbps
     processing-rate: 700 Mpps
-  power: {power-max-w: 450, power-envelope: unstated, power-input-ac: '100-240 VAC, 50-60 Hz, 6 A maximum',
-    power-input-dc: '-36 to -72 VDC, 28-14 A'}
+  power: {power-max-w: 450, power-envelope: unstated, input-ac: '100-240 VAC, 50-60 Hz, 6 A maximum',
+    input-dc: '-36 to -72 VDC, 28-14 A'}
   thermal: {airflow: front-to-back (every published ordering code), cooling: 5+1 redundant hot-swappable fan modules}
   environmental: {temperature-operating: 0 C to 40 C (32 F to 104 F), temperature-storage: -40 C to 70
       C (-40 F to 158 F), humidity-operating: 5% to 95% non-condensing}
@@ -951,6 +951,7 @@ configurations:
   ac:
     kind: base
     default: true
+    power: ac
     description: >-
       Two 650 W AC supplies and six fan trays, front-to-back. This is a fixed 1RU router, so the
       base configuration is the box as it is bought - supplies and fans populated, cages empty.
@@ -969,6 +970,7 @@ configurations:
     bays: {psu-0: common/psu-ac-650@3, psu-1: common/psu-ac-650@3}
   dc:
     kind: orderable
+    power: dc
     description: >-
       Two -48 VDC supplies, otherwise the base box. The quick-start's DC procedure calls for #10 AWG
       wire and the grounding kit's ring lugs, and the datasheet's input range is -36 to -72 VDC.

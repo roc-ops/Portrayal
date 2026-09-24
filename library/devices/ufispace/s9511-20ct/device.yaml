@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9511-20ct
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9511-20CT
@@ -164,6 +164,12 @@ provenance:
       FAN0-FAN3 legends with arrows and the fourth sits by itself at the right-hand end, which is
       what a 3+1 layout looks like when the spare is not in line. Five screws along the lower edge
       on a roughly 100 mm pitch.
+  airflow:
+    confidence: datasheet
+    note: >-
+      HIG Site Preparation, Cooling: the airflow direction is front-to-back, stated twice (the
+      cooling paragraph and the thermal-requirement row). The fixed fans exhaust through the four
+      rear grilles; no reverse-airflow build is named in either held document.
   views:
     note: >-
       Six views. TOP and BOTTOM carry only size and a compliance sticker: no held figure draws
@@ -254,6 +260,8 @@ chassis:
   depth: 250
   ru: 1
   weight-kg: 4.2
+  airflow: front-to-back
+  power: dc
 gaps:
 - what: port-led-semantics
   scope: [combo-1g-rj45, combo-1g-sfp, sfp-plus, sfp28, port-leds]

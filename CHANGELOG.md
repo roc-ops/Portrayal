@@ -39,6 +39,27 @@ the *published build*, not about the hardware.
   configuration's value, else the chassis's). The `chassis` block carries the
   chassis's own `airflow`. A page filtering builds by airflow no longer parses
   it out of a configuration's name or description (roc-ops/Portrayal#513).
+- A device states its supply feed as `power` - `ac`, `dc` or `hvdc` - on the
+  chassis where the box has one feed, and on a configuration where its build
+  differs, the way `airflow` is stated (lint L117). Every `configs[]` entry in
+  `<device>.configs.json` carries the resolved answer as `power`, always a list
+  (`["ac"]`; `["ac", "dc"]` for a build fed both ways; `[]` where nothing is
+  stated), and each drawing's SVG root carries it as `data-power`,
+  space-separated. The `chassis` block carries the chassis's own `power`.
+- `options` in `<device>.configs.json` and on every entry of `devices.json`:
+  `{"power": [...], "airflow": [...]}`, the union over a device's orderable
+  and base builds. "Does this come in DC?" and "is there a back-to-front
+  build?" are one lookup; an `example` or `model` build does not widen it, and
+  a build the vendor sells that nobody has modelled is not in it.
+- `comparable-facts.json` reads `airflow` from `chassis.airflow` and the
+  configurations before any attrs prose (it read only attrs, so a device
+  stating airflow properly compared as silent), and gains `power-feed`.
+- All 84 Edgecore, UfiSpace and Celestica devices state `power` on every
+  build (the N3100-4C PCIe card, fed by its host slot, is the one without), and four more state `airflow` (AS7946-30XB and
+  AS7946-74XKSB front-to-back, S9511-20CT front-to-back, S9502-12SM passive).
+  Lint L118 asks any other device with supplies for a feed, as a warning
+  baselined for the 24 that do not say yet; L119 reports a build whose `power`
+  contradicts the supply it seats (roc-ops/Portrayal#513).
 - Every device in `library/dist/devices.lock.json` carries `placement-attrs`: a
   digest of the `attrs` each placed port states for itself (`speed`, `media`,
   `usb`). Retyping one now asks for a patch bump, where before it asked for
@@ -91,6 +112,14 @@ the *published build*, not about the hardware.
   row reads as the slot it is, not the panel hole (roc-ops/Portrayal#535).
 
 ### Changed
+- The Edgecore, UfiSpace and Celestica devices spell their input ratings one
+  way, `input-ac` and `input-dc` under `attrs.power`, so the SVG root's
+  `data-power-input-ac`, `data-psu-ac-input`, `data-psu-input-ac`,
+  `data-ac-input` and `data-system-input-rating-per-psu` (and their DC twins)
+  are now `data-input-ac` / `data-input-dc`. A bare `input` that held both
+  ("AC 100 to 240V...; DC -36 to -72V...") is split into the two keys, and
+  the DCS510's `power-input-ac-current` is `input-ac-current`. Values are
+  unchanged; each device took a patch bump (roc-ops/Portrayal#513).
 - Every fibre a connector declares is now a node you can address: a bore or a
   `class: fibre` element numbered `1` through `optical.positions`, `X/n` on a
   port that carries more than one. Lint L112 holds it - a connector composes a

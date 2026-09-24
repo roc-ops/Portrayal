@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -736,6 +736,7 @@ views:
 configurations:
   base:
     kind: base
+    power: dc
     description: >-
       The router as every figure draws it - two PSU-401-DISB 400W DC supplies in the
       front bays, five FAN-402825-HD exhaust fans at the rear, and the thirty traffic
@@ -744,6 +745,7 @@ configurations:
     default: true
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 400W DC supplies (PSU-401-DISB, screw-terminal input, intake airflow) with
       five FAN-402825-HD exhaust fans. The datasheet's DC input rating is -36 to -75 V
@@ -755,6 +757,7 @@ configurations:
         model: FAN-402825-HD
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 400W AC supplies (PSU-401-AISB, C14 inlet, intake airflow) with five
       FAN-402825-HD exhaust fans. The datasheet's AC input rating is 100 to 240 V at 6 A.

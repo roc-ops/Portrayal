@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-54dc
-version: 4.0.1
+version: 4.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-54DC
@@ -1001,6 +1001,7 @@ views:
 configurations:
   base:
     kind: base
+    power: dc
     description: >-
       Five FAN-405636-HD exhaust fans and two PSU-751-DESR-1C 750 W DC supplies,
       front-to-back, with all fifty-four ports empty. WHICH SUPPLY SHIPS AS THE BASE IS
@@ -1016,6 +1017,7 @@ configurations:
         model: PSU-751-DESR-1C
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 750 W DC supplies, PSU-751-DESR-1C, exhaust air flow (datasheet Available to
       Order). Input -40 to -75 V at 28 A per feed.
@@ -1029,6 +1031,7 @@ configurations:
         model: FAN-405636-HD
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 750 W AC supplies, PSU-751-AESR-1C, exhaust air flow (datasheet Available to
       Order). Input 100 to 240 V at 10 A per feed. No held image shows this build; the

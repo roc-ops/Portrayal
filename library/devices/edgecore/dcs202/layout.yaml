@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs202
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS5835-54T
@@ -518,10 +518,12 @@ views:
 configurations:
   ac-f2b:
     kind: orderable
+    power: ac
     description: 'Dual 400 W AC PSUs, front-to-back airflow - red handles and red release latches'
     default: true
   ac-b2f:
     kind: orderable
+    power: ac
     description: >-
       Dual 400 W AC PSUs, back-to-front airflow. This guide states the rule in its own Caution:
       "All installed modules must have a matching airflow direction", and the family convention
@@ -533,10 +535,12 @@ configurations:
       dcs201-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
   dc-f2b:
     kind: orderable
+    power: dc
     description: 'Dual 400 W -48 VDC PSUs, front-to-back airflow - red handles and red release latches'
     bays: {psu-1: 'edgecore/dcs201-psu-dc@1', psu-2: 'edgecore/dcs201-psu-dc@1'}
   dc-b2f:
     kind: orderable
+    power: dc
     description: 'Dual 400 W -48 VDC PSUs, back-to-front airflow - blue handles and blue release latches'
     airflow: back-to-front
     region-context: {exhaust: Intake}

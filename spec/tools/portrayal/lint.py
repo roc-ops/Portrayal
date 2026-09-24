@@ -118,7 +118,7 @@ from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml, nested_key_host, chained_occupant_ref,
-                      PANEL_KEY_ORDER, COMPONENT_KEY_ORDER)
+                      PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS)
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -258,6 +258,9 @@ RULES = {
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
     "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L113": ("device",     "a device port whose effective media carries a network interface (a pluggable cage, or `rj45`) has a `speed` and a group with a `role` - warning at `modelled`, error at `verified`", "add the rate the source states, on the port or its group; a console, timing or alarm jack takes the media that says so (`rj45-serial`, `rj45-tod`, `rj48`) instead of a speed; where no document states a rate, leave it and record the search in `gaps:`"),
+    "L117": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy"),
+    "L118": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
+    "L119": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -265,7 +268,11 @@ RULES = {
 # gap is named here rather than read as a deleted rule. The catalogue test
 # counts these as present, and fails once a reserved code is also in RULES -
 # whichever branch lands second deletes its line.
-RESERVED = {}
+RESERVED = {
+    "L114": "#541 (dust caps as connectors)",
+    "L115": "#541 (dust caps as connectors)",
+    "L116": "#541 (dust caps as connectors)",
+}
 
 
 def rules_text(markdown=False):
@@ -5462,6 +5469,117 @@ def lint_device_airflow_home(path, data):
                          "let a configuration override it only where it differs")
 
 
+def lint_device_power_home(path, data):
+    """L117: power is stated once, the way L91 holds airflow.
+
+    One resolution rule for both (`manifest.config_power`, beside
+    `config_airflow`): the configuration's value, else the chassis's. The
+    difference is which case is common. Most whitebox switches are sold as an AC
+    and a DC build of one chassis, so `power` usually lives on each
+    configuration - but a fixed -48 V router has one feed, and saying `dc` on
+    each of its configurations is the repetition #171 took out of airflow.
+    """
+    chassis = (data.get("chassis") or {}).get("power")
+    cfgs = data.get("configurations") or {}
+    norm = lambda v: tuple(sorted({v} if isinstance(v, str) else set(v))) if v else None
+    stated = {n: norm((c or {}).get("power")) for n, c in cfgs.items()}
+    stated = {n: v for n, v in stated.items() if v}
+    if chassis:
+        same = sorted(n for n, v in stated.items() if v == norm(chassis))
+        if same:
+            err(path, "L117", f"configuration(s) {', '.join(same)} restate the chassis "
+                              f"power {chassis!r}. A configuration states power only "
+                              "when its build differs from the chassis")
+        return
+    if stated and len(stated) == len(cfgs) and len(set(stated.values())) == 1:
+        v = next(iter(stated.values()))
+        err(path, "L117", f"every configuration states power {list(v)!r} and the chassis "
+                          "states none. One feed is a fact about the box: put it on "
+                          "the chassis and let a configuration override it where it differs")
+
+
+# A SUPPLY'S FEED, READ OFF ITS COMPONENT NAME. The library names supplies
+# `psu-ac-650`, `psu-132-dc`, `agr560-psu-ac`, `amx-3200-48v-psu` - the feed is a
+# token of the name wherever the part is feed-specific, and a part whose name
+# carries no feed (`eps201-psu-150w`) is simply not checked. That is weaker than
+# a `feed:` on each supply contract would be, and it needs no component edit.
+_FEED_TOKEN = re.compile(r"(?:^|[-_/])(ac|dc|hvdc|48v)(?=$|[-_@])")
+
+
+def _supply_feed(ref):
+    m = _FEED_TOKEN.search(str(ref or "").split("@")[0].rsplit("/", 1)[-1])
+    if not m:
+        return None
+    return "dc" if m.group(1) == "48v" else m.group(1)
+
+
+def _seated_supplies(data, cfg):
+    """{bay id: component ref} for every supply-looking bay this build seats."""
+    out = {}
+
+    def walk(items):
+        for b in items or []:
+            if not isinstance(b, dict):
+                continue
+            bid = b.get("id")
+            if isinstance(bid, str):
+                ref = ((cfg or {}).get("bays") or {}).get(bid, b.get("default"))
+                if ref and re.search(r"psu|pem|power|supply", str(ref), re.I):
+                    out[bid] = ref
+            walk(b.get("bays"))
+    for view in (data.get("views") or {}).values():
+        walk(view_parts(view)["bays"])
+    return out
+
+
+def lint_device_power_stated(path, data):
+    """L118 and L119: each build says what feeds it, and the supplies agree.
+
+    L118 is the finding #513 was opened for: a device the HCL filters by feed
+    whose builds can only be told apart by name. It asks only of devices that
+    HAVE supplies - a `PSU` group, or a supply seated in a bay - because a
+    PCIe card or a passive enclosure has no feed to state. A warning: the
+    library holds devices from before the field, and the baseline records them.
+
+    L119 is a contradiction the drawing already shows: a configuration saying
+    `dc` whose bays seat `psu-ac-650` draws an IEC inlet under a label that says
+    -48 V. A warning at `modelled` and an error at `verified`, as L113 is,
+    because the honest case exists - a DC build drawn with the AC part's face
+    while the DC module is a registered gap (COR580) - and only a warning can
+    carry the waiver that says so.
+    """
+    loud = err if data.get("maturity") == "verified" else warn
+    cfgs = data.get("configurations") or {}
+    groups = data.get("groups") or {}
+    has_psu_group = any(str((g or {}).get("term", "")).upper() in ("PSU", "PEM")
+                        for g in groups.values())
+    seated = {n: _seated_supplies(data, c) for n, c in cfgs.items()}
+    if not (has_psu_group or any(seated.values())):
+        return
+    offered = [n for n, c in cfgs.items() if (c or {}).get("kind") in OFFERED_KINDS] \
+        or list(cfgs)
+    if not cfgs:
+        if not config_power(data, {}):
+            warn(path, "L118", "the device has supplies and states no `chassis.power`. "
+                 "A tool filtering by feed cannot tell what this box takes")
+        return
+    silent = sorted(n for n in offered if not config_power(data, cfgs[n]))
+    if silent:
+        warn(path, "L118", f"configuration(s) {', '.join(silent)} resolve no power feed. "
+             "State `chassis.power` where the box has one feed, or `power` on each "
+             "build - a tool filtering by feed otherwise parses the name (#513)")
+    for n, c in cfgs.items():
+        power = set(config_power(data, c))
+        if not power:
+            continue
+        wrong = sorted(f"{b} ({ref})" for b, ref in seated[n].items()
+                       if _supply_feed(ref) and _supply_feed(ref) not in power)
+        if wrong:
+            loud(path, "L119", f"configuration {n!r} says power {sorted(power)} and "
+                 f"seats {', '.join(wrong)}. Correct `power`, or seat the supply "
+                 "this build ships with")
+
+
 def lint_device_provenance_confidence(path, data):
     """L93: a device's provenance entry says how the figure is known.
 
@@ -8615,6 +8733,8 @@ def main():
                     WAIVED[str(Path(f).resolve())] = dict(waive)
                 lint_device_key_order(f, d)
                 lint_device_airflow_home(f, d)
+                lint_device_power_home(f, d)
+                lint_device_power_stated(f, d)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)

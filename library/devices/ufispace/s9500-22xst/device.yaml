@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-22xst
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-22XST
@@ -697,6 +697,7 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     description: >-
       Dual 200W DC PSUs (PSU-201-DISB, screw-terminal input marked RTN / -36~-75V, the
       build both vendor renders show) with three FAN-402825-HD exhaust fans. No
@@ -705,6 +706,7 @@ configurations:
     default: true
   ac:
     kind: orderable
+    power: ac
     description: Dual 200W AC PSUs (PSU-201-AISB, 100-240 V) with three FAN-402825-HD exhaust fans
     bays:
       psu-0: ufispace/psu-201-ac@1

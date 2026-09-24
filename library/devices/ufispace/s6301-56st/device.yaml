@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 3.0.1
+version: 3.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -233,7 +233,8 @@ attrs:
     power-max-w: '111.5'
     power-max-dc-w: '111'
     power-envelope: fully-configured
-    input: AC 100 to 240V, 3A max x2; DC -36 to -72V, 6A max x2
+    input-ac: '100 to 240V, 3A max x2'
+    input-dc: '-36 to -72V, 6A max x2'
   environmental:
     operating-temp: 0 to 45 C
     operating-humidity: 5% to 95% RH non-condensing
@@ -676,6 +677,7 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     description: Dual 150W DC PSUs (PSU-151-DESR) 1+1, dual FAN-402825-HDN fan
       modules 1+1, front-to-back airflow - the build the vendor's rear render shows
     default: true
@@ -684,6 +686,7 @@ configurations:
         model: FAN-402825-HDN
   ac:
     kind: orderable
+    power: ac
     description: Dual 150W AC PSUs (PSU-151-AESR) 1+1, dual FAN-402825-HDN fan
       modules 1+1, front-to-back airflow
     bays:

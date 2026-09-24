@@ -464,7 +464,7 @@ def _composed(doc, versions):
 # `shape` and quietly demand a major from every device that adopts it. Same
 # guard, and the same reason, as PORT_ROLES/NON_PORT_ROLES in dcim_export.
 CHASSIS_SHAPE = {"width", "height", "depth", "ru"}
-CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow"}
+CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power"}
 
 
 def buckets(doc, versions=None):

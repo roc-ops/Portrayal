@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32db
-version: 2.0.12
+version: 2.0.13
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32DB
@@ -761,6 +761,7 @@ views:
 configurations:
   base:
     kind: base
+    power: ac
     source: >-
       derived - built from the group roles rather than from a vendor bundle: the service
       bays (six fans, two PSUs) keep their seats and every traffic cage is empty, which is
@@ -771,6 +772,7 @@ configurations:
     default: true
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 1300W AC PSUs (PSU-132-AISB) with front-to-back airflow fans (FAN-405637-HD, red
       handles) - the build the vendor's -4-view render shows. The back-to-front build
@@ -784,6 +786,7 @@ configurations:
         model: FAN-405637-HD
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 1300W DC PSUs (PSU-132-DISB, screw-terminal input, 60A fast-acting internal
       fuse per the HIG DC procedure) with front-to-back airflow fans (FAN-405637-HD)
