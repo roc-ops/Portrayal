@@ -230,9 +230,19 @@ SFP112_ATTR = ("sfp112", "other")
 # FIRST, so a card stating it wins; every 400G card states only `qsfp-dd` and
 # is unchanged.
 QDD800_ATTR = ("qsfp-dd-800g", "800gbase-x-qsfpdd")
+# AN SFP28 CARD WAS EXPORTING AS SFP+, because the family knew no 25G rate: a
+# card stating only `sfp28` fell to the cage default. `25gbase-x-sfp28` is in
+# both targets (NetBox TYPE_25GE_SFP28 at 6a009845, Nautobot at 38953ac3) and
+# IFACE_TYPE already writes it for a device's 25G SFP groups.
+# AFTER `sfp-plus`, NOT BEFORE IT, and that is deliberate. Five Cisco cards -
+# the four A9K/A99-4HG-FLEX and the A9903-8HG-PEC - state `sfp-plus` AND
+# `sfp28` on one strip of std/sfp-ganged cages, and one card-level attr cannot
+# say which cage is which; placed first, this row would retype all of their
+# SFP+ ports as SFP28. Placed here they keep exporting exactly what they did.
+SFP28_ATTR = ("sfp28", "25gbase-x-sfp28")
 FAMILY_ATTRS = {
     "sfp": (SFP112_ATTR,
-            ("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp"),
+            ("sfp-plus", "10gbase-x-sfpp"), SFP28_ATTR, ("sfp", "1000base-x-sfp"),
             ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3"))
            + PON_ATTRS,
     "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),

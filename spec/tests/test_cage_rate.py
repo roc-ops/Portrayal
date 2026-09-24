@@ -160,7 +160,7 @@ SONET = {"oc3": "sonet-oc3", "oc12": "sonet-oc12", "oc48": "sonet-oc48"}
 def test_the_sonet_rates_are_types_both_targets_have():
     """One document is written to both trees, so a type either library refuses
     would be rejected on import rather than by any gate here."""
-    assert dict(dx.FAMILY_ATTRS["sfp"][3:6]) == \
+    assert dict(dx.FAMILY_ATTRS["sfp"][4:7]) == \
         {"oc48": "sonet-oc48", "oc12": "sonet-oc12", "oc3": "sonet-oc3"}
 
 
@@ -169,7 +169,8 @@ def test_an_ethernet_card_is_unaffected_by_the_sonet_rates():
     stated before it joined - so nothing about a card that declares `sfp` or
     `sfp-plus` changes."""
     assert dx.FAMILY_ATTRS["sfp"][0] == dx.SFP112_ATTR
-    assert dx.FAMILY_ATTRS["sfp"][1:3] == (("sfp-plus", "10gbase-x-sfpp"),
+    assert dx.FAMILY_ATTRS["sfp"][1:4] == (("sfp-plus", "10gbase-x-sfpp"),
+                                          dx.SFP28_ATTR,
                                           ("sfp", "1000base-x-sfp"))
     assert dx.cage_type("std/sfp-ganged", {"sfp": 20}) == "1000base-x-sfp"
     assert dx.cage_type("std/sfp-ganged", {"sfp-plus": 16}) == "10gbase-x-sfpp"
@@ -252,7 +253,7 @@ def test_the_pon_rates_follow_ethernet_and_sonet():
     """AFTER everything a card could already declare, so no existing card's
     export changes - the SFP family ends in them and the XFP family's OC-192
     stays first."""
-    assert dx.FAMILY_ATTRS["sfp"][6:] == dx.PON_ATTRS
+    assert dx.FAMILY_ATTRS["sfp"][7:] == dx.PON_ATTRS
     assert dx.FAMILY_ATTRS["xfp"] == (("oc192", "sonet-oc192"),) + dx.PON_ATTRS
     assert dx.cage_type("std/sfp", {"sfp": 8, "gpon": 8}) == "1000base-x-sfp"
     assert dx.cage_type("std/xfp", {"oc192": 1, "10g-epon": 1}) == "sonet-oc192"
@@ -332,6 +333,31 @@ def test_an_800g_qsfp_dd_card_is_not_typed_400g():
     assert dx.cage_type("std/qsfp-dd", {"qsfp-dd": 6}) == "400gbase-x-qsfpdd"
     part = {"ref": "std/qsfp-dd@1", "attrs": {"media": "qsfp-dd", "speed": "800g"}}
     assert dx.placed_type(part) == "800gbase-x-qsfpdd"
+
+
+def test_an_sfp28_card_exports_as_sfp28():
+    """`25gbase-x-sfp28` is in both targets (NetBox and Nautobot
+    TYPE_25GE_SFP28). A card stating only `sfp28` used to fall to the cage
+    default and export as 10GBASE-X SFP+."""
+    assert dx.SFP28_ATTR == ("sfp28", "25gbase-x-sfp28")
+    assert dx.cage_type("std/sfp-ganged", {"sfp28": 16}) == "25gbase-x-sfp28"
+    assert dx.cage_type("std/sfp", {"sfp28": 4, "sfp": 4}) == "25gbase-x-sfp28"
+    assert not dx.cage_family_needs_a_rate("std/sfp-ganged", {"sfp28": 16})
+
+
+@pytest.mark.parametrize("ref", ["cisco/a99-4hg-flex-se", "cisco/a99-4hg-flex-tr",
+                                 "cisco/a9k-4hg-flex-se", "cisco/a9k-4hg-flex-tr",
+                                 "cisco/a9903-8hg-pec"])
+def test_a_mixed_sfp_plus_and_sfp28_card_is_unchanged(ref):
+    """These state `sfp-plus` AND `sfp28` over one strip of std/sfp-ganged, and
+    exported SFP+ before `sfp28` had a row. The row sits AFTER `sfp-plus` so
+    they still do - one card-level attr cannot say which cage is which."""
+    d = _modules().get(ref)
+    if d is None:
+        pytest.skip(f"{ref} is not in this library")
+    attrs = d.get("attrs") or {}
+    assert attrs.get("sfp-plus") and attrs.get("sfp28")
+    assert dx.cage_type("std/sfp-ganged", attrs) == "10gbase-x-sfpp"
 
 
 def test_no_existing_card_states_the_new_rates_before_its_card_lands():
