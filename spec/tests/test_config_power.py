@@ -247,3 +247,52 @@ def test_devices_json_publishes_the_options():
     assert by["as7326-56x"]["options"]["power"] == ["ac", "dc"]
     stated = sum(1 for e in entries if e["options"]["power"])
     assert stated > 80, f"only {stated} devices publish a feed"
+
+
+# ---- what the prose offers, the builds offer (#513 part 2) ------------------
+
+OFFERS_B2F = re.compile(r"back-to-front", re.I)
+OFFERS_BOTH_FEEDS = re.compile(r"\bAC (?:or|and) (?:-48 ?V?DC|DC)\b|\bAC/DC\b", re.I)
+
+
+def test_a_description_offering_back_to_front_has_the_build():
+    """Nine devices say in their description that they ship back-to-front. Before
+    #513 part 2, five of them - the S9300-32D, S9301-32D, S9301-32DB, S9311-64D
+    and S6301-56ST - modelled only the front-to-back build, so `options.airflow`
+    told a filter they could not be bought the other way round. The prose was
+    right and the fields were not; this keeps the fields caught up with it."""
+    checked, missing = 0, []
+    for slug, f in whitebox():
+        d = load(f)
+        if not OFFERS_B2F.search(d.get("description") or ""):
+            continue
+        checked += 1
+        if "back-to-front" not in device_options(d)["airflow"]:
+            missing.append(slug)
+    assert not missing, missing
+    assert checked >= 9, f"only {checked} descriptions offer back-to-front"
+
+
+def test_a_description_offering_ac_or_dc_has_both_builds():
+    checked, missing = 0, []
+    for slug, f in whitebox():
+        d = load(f)
+        if not OFFERS_BOTH_FEEDS.search(d.get("description") or ""):
+            continue
+        checked += 1
+        if not {"ac", "dc"} <= set(device_options(d)["power"]):
+            missing.append(slug)
+    assert not missing, missing
+    assert checked >= 5, f"only {checked} descriptions offer AC or DC"
+
+
+def test_an_ac_supply_rated_for_hvdc_says_so():
+    """The 1300 W AC supply the COR580 and DCS510 seat is also rated 190-310 VDC
+    (quick start input tables), so their AC builds take high-voltage DC. The
+    DCS510 held that figure under `input-dc`, which read as a -48 V build it
+    does not sell."""
+    for p, cfg in ((LIB / "devices/edgecore/cor580/device.yaml", "ac-f2b"),
+                   (LIB / "devices/edgecore/dcs510/device.yaml", "ac-f2b")):
+        d = load(p)
+        assert config_power(d, d["configurations"][cfg]) == ["ac", "hvdc"], p
+    assert "dc" not in device_options(load(LIB / "devices/edgecore/dcs510/device.yaml"))["power"]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-32e
-version: 1.1.10
+version: 1.2.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-32E
@@ -368,7 +368,6 @@ chassis:
   color: '#252525'
   weight-kg: 19.65
   airflow: front-to-back
-  power: ac
 
 gaps:
 - what: no-hardware-installation-guide
@@ -433,8 +432,9 @@ gaps:
     both embedded renders show the AC build with C20 inlets. Nothing held shows the DC
     face. ufispace/psu-322-ac is measured; no psu-322-dc component is built, because
     every number on it would have been guessed from the AC sibling's outline. The bays
-    accept and default to the AC unit only, and there is no dc configuration - an
-    orderable variant the drawing cannot show is better absent than invented.
+    accept and default to the AC unit only, so the dc configuration seats it under the DC
+    model name - wrong at the inlet, which this gap and lint L119 keep in view. The build
+    is declared anyway because its feed is a field tools filter on.
   wanted: a photograph or drawing of the PSU-322-DEJR-NN face.
 - what: fan-sku-suffix
   scope: [fans]
@@ -998,11 +998,23 @@ views:
 configurations:
   ac:
     kind: base
+    power: ac
     description: Dual 3200W AC PSUs (PSU-322-AECR-NN) 1+1, four FAN-805616-HCD fan
       modules 3+1, front-to-back airflow - the build both embedded datasheet renders
-      show. The DC supply PSU-322-DEJR-NN is orderable and is NOT modelled, because no
-      held image shows its face; see the dc-psu-not-modelled gap
+      show. The DC build is dc
     default: true
+  dc:
+    kind: orderable
+    power: dc
+    description: >-
+      Dual 3200W DC PSUs (PSU-322-DEJR-NN, exhaust) 1+1 with the same four fans, front-to-back
+      - the datasheet's DC supply. DRAWN WITH THE AC SUPPLY'S FACE, C20 inlet and all,
+      because no held image shows the DC unit; the build is declared so a tool filtering by
+      feed finds it, and the wrong face is the dc-psu-not-modelled gap
+    component-attrs:
+      psu-322-ac:
+        model: PSU-322-DEJR-NN
+        input: dc
 datasheet:
   title: UfiSpace S9620-32E 800G Open Aggregation Router Datasheet (2025-06-30)
   url: https://www.ufispace.com/files/5E/S9620-32E%20Aggregation%20Router%20Datasheet_2025_0630.pdf

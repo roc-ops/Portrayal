@@ -1,15 +1,16 @@
 format: 1
 kind: module
 name: psu-132-ac
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
-description: UfiSpace PSU-132-AISB1 1300W AC PSU (S9300-32D family) - silver face,
+description: UfiSpace PSU-132-AESR 1300W AC PSU (S9300-32D family) - silver face,
   red release latch, C15-cord inlet in a slotted recess with a wire bail handle,
-  square-hole vent grid, status LED; front-to-back (intake) airflow
+  square-hole vent grid, status LED; front-to-back (exhaust) airflow; the intake PSU-132-AISB is the
+  back-to-front unit and wears a blue latch (`latch-finish`)
 size: {w: 50.5, h: 40.0}
-attrs: {power-output-w: 1300, input: ac, model: PSU-132-AISB1}
+attrs: {power-output-w: 1300, input: ac, model: PSU-132-AESR}
 provenance:
   power: >-
     datasheet - the ordering line states the rating in the part number's own row: 'Power
@@ -31,10 +32,17 @@ provenance:
     faceplate scale except for the notch. Recorded on the device as a gap.
   led-states: HIG section 10, PSU FRU LED table (page 25), transcribed in full
   airflow: >-
-    datasheet ordering line ('intake air flow') plus HIG Fig 8: PSUs for front-to-back
-    airflow are identified with a red latch, back-to-front with blue. The AESR-3N sibling
-    (exhaust / back-to-front, blue latch) is not modelled; this skin draws the red-latched
-    AISB1.
+    inferred - the datasheet names two units by airflow word ('PSU-132-AESR... exhaust air flow',
+    'PSU-132-AISB... intake air flow') and HIG Fig 8 names two by latch colour (red for
+    front-to-back systems, blue for back-to-front); no S9300/S9301 document joins the two
+    lists. For a supply at the REAR, exhaust is front-to-back, and three independent
+    readings agree: the FAN-405637-HD fan is 'exhaust air flow' and is the red, front-to-back
+    unit by the same HIG's colour rule; the S9600-72XC is sold front-to-back only and its
+    datasheet lists only this family's exhaust units; and the S9311-64D datasheet prints
+    'exhaust air, ... red colored latch' against 'intake air, ... blue latch' for its own
+    CRPS supplies. This contract used to say the opposite ('PSU-132-AISB1 ... front-to-back
+    (intake)') and was corrected on that evidence. The default skin draws the red-latched
+    exhaust unit; `latch-finish` / `latch-edge` draw the blue-latched PSU-132-AISB.
 elements:
   status-led:
     at: [8.7, 4.3]
@@ -95,4 +103,13 @@ relief:
         the vent depth is not in it.
 connection-points:
   power: {at: [34.5, 20.0], direction: front}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#c22f2f'
+  latch-edge:
+    label: Latch edge
+    type: text
+    default: '#8c2323'
 skins: [default]

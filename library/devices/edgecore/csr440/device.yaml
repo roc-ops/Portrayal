@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr440
-version: 1.0.7
+version: 1.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS7535-28XB
@@ -136,15 +136,17 @@ provenance:
   airflow:
     confidence: datasheet
     note: >-
-      Each fan module prints a small arrow beside its bay number, and the chassis is side-to-side like
-      the rest of this family. The quick start's fan procedure does not repeat the CSR430's "matching
-      airflow direction" caution, and no airflow-direction SKU is published in either document, so `side`
-      is taken from the family and the arrows rather than from an ordering code.
+      datasheet - every row of the Ordering Information table reads 'Front-to-Back Airflow', and the SKUs
+      end -F where the CSR310's and CSR200's end -S against 'Side-to-Side Airflow'. So the CSR440 is NOT
+      side-to-side like the rest of this family, which fits the split its description records: ports and
+      supplies on the front, all six fans on the rear. This used to read `side`, taken from the family
+      and the fan arrows on the belief that no airflow-direction SKU was published; the ordering table
+      was missed.
 attrs:
   performance: {switching-capacity: 800 Gbps, processing-rate: 600 Mpps}
-  power: {power-max-w: 383.6, power-envelope: as-tested, input-ac: '100V-240V, 6.0-2.4 A per PS',
-    input-dc: '-44 to -60 V, 15.5-9.6 A per PS'}
-  thermal: {airflow: side-to-side, cooling: 'six hot-swappable rear fan modules, 5+1 redundant'}
+  power: {power-max-w: 383.6, power-envelope: as-tested, input-ac: '100V-240V, 6.0-2.4 A per PS', input-dc: '-44
+      to -60 V, 15.5-9.6 A per PS'}
+  thermal: {airflow: front-to-back, cooling: 'six hot-swappable rear fan modules, 5+1 redundant'}
   environmental: {temperature-operating: -40 C to 65 C (-40 F to 149 F), temperature-storage: -40 C to
       70 C (-40 F to 158 F), humidity-operating: 5% to 95% non-condensing}
   platform:
@@ -177,7 +179,7 @@ attrs:
       UL (CAN/CSA 22.2 No 62368-1 & UL62368-1), CB (IEC/EN60950-1 & IEC/EN62368-1), BSMI CNS15598-1
     rohs: RoHS 2.0
   lifecycle: {eol: none-announced}
-chassis: {width: 438.4, height: 43.3, depth: 300.0, ru: 1, weight-kg: 7.5, color: '#2b2f33', airflow: side, power: ac}
+chassis: {width: 438.4, height: 43.3, depth: 300.0, ru: 1, weight-kg: 7.5, color: '#2b2f33', airflow: front-to-back}
 gaps:
 - what: dc-power-supply
   scope:
@@ -187,9 +189,10 @@ gaps:
     A picture of the DC supply's face. Both documents say the device takes "2 x DC or AC PSUs" and the
     datasheet publishes a DC input range of -44 to -60 V at 15.5-9.6 A per supply, so the variant certainly
     exists - but the only elevation draws AC modules, and the quick start's DC section pictures wiring
-    and ring lugs rather than a module face. The bay therefore accepts edgecore/csr440-psu-ac@1 alone
-    and there is no `dc` configuration. Inventing one from the CSR310's terminal-block module would be
-    wrong twice over: that is a different kind of supply, and this chassis is a different chassis.
+    and ring lugs rather than a module face. The bay therefore accepts edgecore/csr440-psu-ac@1 alone,
+    and the `dc` configuration seats it - wrong at the connector, which this gap and lint L119 keep in
+    view. Borrowing the CSR310's terminal-block module would be wrong twice over: that is a different
+    kind of supply, and this chassis is a different chassis.
 - what: fan-bay-numerals
   scope:
   - rear
@@ -1222,22 +1225,43 @@ views:
   left:
     size: {w: 300.0, h: 43.3}
     empty: >-
-      Not drawn by any staged source, and this is an airflow face - the fans are at the rear and the chassis
-      is side-to-side, so what crosses this panel is half the cooling story.
+      Not drawn by any staged source. A side panel of a front-to-back chassis (the datasheet's ordering
+      table) with nothing a figure would need to show.
   right:
     size: {w: 300.0, h: 43.3}
-    empty: Not drawn by any staged source. The other airflow face.
+    empty: Not drawn by any staged source. The other side panel.
 configurations:
   ac:
     kind: base
     default: true
+    power: ac
     description: >-
       Two hot-swappable AC supplies and six rear fan modules. This is the variant both elevations draw.
-      Neither staged document publishes an ordering matrix for this model, so the configuration carries
-      no part numbers, and the DC variant is a gap rather than a second configuration.
+      The datasheet's ordering table lists seven AC rows by power-cord region, carried below; the DC build
+      is dc.
+    part-numbers:
+      AS7535-28XB-O-AC-F V2: {part: F0PEC7332007A, power-cord: none}
+      AS7535-28XB-O-AC-F-US V2: {part: F0PEC7332403A, power-cord: N. America}
+      AS7535-28XB-O-AC-F-EU V2: {part: F0PEC7332203A, power-cord: EU}
+      AS7535-28XB-O-AC-F-JP V2: {part: F0PEC7332503A, power-cord: JP}
+      AS7535-28XB-O-AC-F-TW V2: {part: F0PEC7332T03A, power-cord: TW}
+      AS7535-28XB-O-AC-F-CN V2: {part: F0PEC7332703A, power-cord: CN}
+      AS7535-28XB-O-AC-F-UK V2: {part: F0PEC7332303A, power-cord: UK}
     bays: {psu-1: edgecore/csr440-psu-ac@1, psu-2: edgecore/csr440-psu-ac@1, fan-1: edgecore/csr440-fan@1,
       fan-2: edgecore/csr440-fan@1, fan-3: edgecore/csr440-fan@1, fan-4: edgecore/csr440-fan@1, fan-5: edgecore/csr440-fan@1,
       fan-6: edgecore/csr440-fan@1}
+  dc:
+    kind: orderable
+    power: dc
+    description: >-
+      Two hot-swappable DC supplies (-44 to -60 V, 15.5-9.6 A each) and the same six rear fan modules
+      - the datasheet's one DC ordering row. DRAWN WITH THE AC SUPPLY'S FACE, because neither document
+      pictures the DC module; the build is declared so a tool filtering by feed finds it, and the wrong
+      face is the dc-power-supply gap.
+    component-attrs:
+      csr440-psu-ac: {model: AS7535-28XB DC PSU, input: '-44 to -60 V, 15.5-9.6 A per PS', inlet: dc-terminal}
+    part-numbers:
+      AS7535-28XB-O-48V-F V2: {part: F0PEC7332006A, power-cord: none}
 references:
 - title: Edgecore CSR440 / AS7535-28XB Cell Site Router Data Sheet
   sha256: 10e43dd38a65b18edd67c448d49b853628af720262f64f5ddc161d27faf7a4c0
