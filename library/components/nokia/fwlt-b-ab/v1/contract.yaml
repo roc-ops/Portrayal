@@ -1,0 +1,168 @@
+format: 1
+kind: module
+name: fwlt-b-ab
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (NFXS-F FX-4, NFXS-E FX-8, NFXS-D
+  FX-16); the coordinator wires it into their LT accepts lists under #538
+description: >-
+  Nokia FWLT-B AB (3FE 72955 AB), the 8-port U-NGPON line termination card of the 7360
+  ISAM FX (NG-PON2 TWDM or XGS-PON), with 10/25 Gb/s backplane links. A different face from
+  the FWLT-B AA: the eight cages sit together in one stepped block in the middle third of
+  the card on a 24 mm pitch, each with two numbered lamps on its left and PORTn printed on
+  its right. Authored upright, as the ANSI Unit Data Sheet guide draws it: thumbscrew and
+  ejector at each end, the model name and ALM / PWR lamps under the top screw, two small
+  arrow marks under the block, and the laser and ESD marks above the bottom ejector.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), held so the shared FX LT bay seats the card. In
+  Figure 148 the plate measures 24.0 mm and the side rail takes the overall to 26.0 mm. d is
+  the larger of the two board widths the UDS gives (225 mm top / 205 mm bottom: the board is
+  tapered).
+attrs:
+  model: FWLT-B AB
+  part-number: 3FE 72955 AB
+  sfp-plus: 8
+  weight-kg: 1.67
+  power-draw-max-w: 148
+  power-draw-typical-w: 126
+  power-scope: >-
+    the Safety Manuals' unqualified FWLT-B row, which names no variant; includes the optics,
+    per the note that PON line-card figures include their optics
+provenance:
+  size: >-
+    datasheet - 7360 ISAM FX ANSI Unit Data Sheet guide R6.9 3FE77013AAAATQZZA16 section
+    37.5.1 (p324): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm, weight 1.67 kg.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 37.5.1; faceplate width not stated, taken as
+    the pitch. Figure 148 measures 85 px (24.0 mm) of plate and 92 px (26.0 mm) with the
+    side rail.
+  depth: >-
+    datasheet - the 225 / 205 mm board widths of section 37.5.1; 225 carried as the
+    envelope.
+  power: >-
+    datasheet - ANSI Safety Manual 3HH12894AAAATCZZA27 p26 and ETSI 3HH11998AAAATCZZA29 p26
+    Table 2, "FWLT-B" 126 W typical, 148 W maximum. Neither table has an AB row or says
+    which FWLT-B build the figure was taken on; carried here because the row is unqualified,
+    and flagged in gaps. The AB's heavier backplane (10/25 Gb/s links) and lighter weight
+    (1.67 against 2.0 kg) say it is a different board, so the figure may not be its own.
+  layout: >-
+    drawing - ANSI UDS R6.9 p323 Figure 148 "FWLT-B AB front view", an ORTHOGRAPHIC front
+    embedded as a 1435 x 1526 image at 300 ppi (pdfimages -list). Gate 1: the card runs from
+    row 46 to 1481, 1435 px for 405 mm = 3.543 px/mm; its width with the side rail, 92 px,
+    gives 15.60 against 405/26 = 15.58 (0.1 %), so the figure is measured. x from the plate
+    centre (px 716.5 = 12.5 mm). The cage block's frame runs 130.4 to 325.4 mm, x 2.3 to
+    21.3; the steps between cages are at rows 590 / 675 / ... / 1185, a regular 85 px =
+    24.0 mm pitch, and the first module outline is centred at row 551 (142.5 mm), x 11.5,
+    10.9 x 14.8 mm - an SFP on its side. Status lamps (3.3 mm circles) at x 9.0 and 14.1,
+    y 31.3; model name at y 24.8; arrow marks 5.2 to 10.5 and 13.3 to 18.7 at 359.6 to
+    367.5; laser mark 378.6 to 384.5, ESD 384.8 to 391.6; screws at (18.4, 4.7) and
+    (18.7, 400.5); ejector blocks 12.7 to 31.0 and 374.2 to 392.3.
+  ports: >-
+    datasheet - UDS section 37.4.2: eight optical module ports "labeled PORT1 until
+    PORT8"; section 37.4 says optical modules plug in and refers to the PIG, whose ETSI
+    edition 3HH11997AAAATCZZA42 Table 126 carries an FWLT-B AB column listing XGS dual-rate
+    SFP+ OLT modules. Composed as std/sfp@1 turned 90 degrees at each module outline's
+    centre (x 11.5, 142.5 + 24.0 (n-1) mm).
+  lamps: >-
+    datasheet - Figure 150 and Table 97 (p325): ALM and PWR as on the FWLT-B AA (PWR off /
+    blinking green / on green; ALM red = alarm); the PON lamp off / yellow / green / red.
+    THE FIGURE AND THE TEXT DISAGREE ON THE COUNT: section 37.5.2 says "one PON LED per
+    port", but Figure 148 draws TWO lamp blocks beside every cage (at -3.6 and +7.0 mm from
+    its centre, x 3.7) and numbers them 1 to 16 down the card. Modelled as drawn, sixteen
+    lamps led-1 to led-16, 2n-1 and 2n beside port n, each carrying Table 97's states;
+    which of each pair is the one the table describes is not stated (gap). The lamp column
+    is drawn at x 3.2, 0.5 mm left of the figure, so it clears the cage's footprint. The
+    yellow is drawn #f2c200; Nokia gives no shade.
+  marks: >-
+    drawing - two rounded boxes each holding a right-pointing triangle, below the cage
+    block. Nothing in the UDS names them; drawn as printed and left unnamed (gap).
+  logo-zone: >-
+    reserved on the empty plate above the model name; Figure 148 draws no mark there.
+  lifecycle: >-
+    searched only the staged corpus - listed in ANSI UDS R6.9 and the ETSI PIG; no
+    end-of-life notice was searched for on the web.
+  gaps: >-
+    (1) one PON lamp per port in the text against two per cage in the figure; (2) the two
+    arrow marks under the block are unnamed; (3) the power figure is the unqualified FWLT-B
+    row; (4) the ALM legend is hidden behind the top ejector in the figure and is drawn
+    where the FWLT-A prints it.
+elements:
+  logo-zone: {at: [6.5, 11], size: [12, 9.5], class: label}
+  mark-1: {at: [5.2, 359.6], size: [5.3, 7.9], class: label}
+  mark-2: {at: [13.3, 359.6], size: [5.4, 7.9], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: screw-top
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled thumbscrew head standing off the plate; nothing dimensions it. The same
+        6.0 as nokia/dummy-lt@1, which is the same estimate, not a second reading
+    - node: screw-bottom
+      cyl: 6.0
+      confidence: estimated
+      source: as screw-top
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, as
+        nokia/fnio-d@1 uses; itself sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: as ejector-top
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the eight U-NGPON ports, SFP+ cages in one stepped block, PORT1 to PORT8 top to bottom
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: sixteen numbered PON lamps, two beside each cage on its left (led-2n-1 and led-2n serve port-n)
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [4.25, 137.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [4.25, 161.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [4.25, 185.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [4.25, 209.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [4.25, 233.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [4.25, 257.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [4.25, 281.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [4.25, 305.5], rotate: 90}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [7, 29.3], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [12.1, 29.3], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2.2, 137.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [2.2, 148.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [2.2, 161.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [2.2, 172.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [2.2, 185.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [2.2, 196.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [2.2, 209.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [2.2, 220.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [2.2, 233.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [2.2, 244.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [2.2, 257.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [2.2, 268.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [2.2, 281.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [2.2, 292.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [2.2, 305.9], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [2.2, 316.5], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
