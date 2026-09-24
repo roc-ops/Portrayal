@@ -324,6 +324,32 @@ def test_the_digest_covers_root_order_and_the_format(mini, tmp_path, monkeypatch
     assert L._id_corpus_digest(L._id_corpus_files([str(lib), str(other)])) != ab
 
 
+def test_an_edited_lint_py_misses(mini, _cache_dir, tmp_path, monkeypatch):
+    """The code is an input: an entry computed by older logic must never answer
+    for newer logic. The key reads the whole of lint.py, so a copy that differs
+    by one comment line is a different key - and a recompute - with the library
+    untouched."""
+    before = corpus([mini])
+    assert len(entries(_cache_dir)) == 1
+    edited = tmp_path / "lint.py"
+    edited.write_bytes(Path(L.__file__).read_bytes() + b"\n# one extra comment line\n")
+    old_digest = L._id_corpus_digest(L._id_corpus_files([str(mini)]))
+    monkeypatch.setattr(L, "_ID_CORPUS_SOURCE", edited)
+    assert L._id_corpus_digest(L._id_corpus_files([str(mini)])) != old_digest
+
+    p = Parses(monkeypatch)
+    after = corpus([mini])
+    assert p.n == len(MINI_CONTRACTS) + 3, "an edited lint.py was answered from the cache"
+    assert len(entries(_cache_dir)) == 2
+    assert_same(after, before)
+
+
+def test_an_unreadable_source_computes_without_the_cache(mini, _cache_dir, tmp_path, monkeypatch):
+    monkeypatch.setattr(L, "_ID_CORPUS_SOURCE", tmp_path / "no-such-lint.py")
+    assert_same(corpus([mini]), uncached([mini]))
+    assert entries(_cache_dir) == []
+
+
 # --- when the cache cannot be trusted, it steps aside --------------------------
 
 @pytest.mark.parametrize("damage", ["garbage", "truncated", "empty", "wrong-shape",

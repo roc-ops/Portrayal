@@ -6962,16 +6962,24 @@ _ID_VOCAB_CACHE = {}
 # bytes that were hashed (not a second read through load_yaml's (path, mtime)
 # cache), so what is stored under a digest is exactly what those bytes say.
 #
-# BUMP _ID_CORPUS_CACHE_FORMAT WHENEVER `_id_corpus_compute`'S LOGIC, ITS
-# INPUTS OR THE STORED SHAPE CHANGE. It is part of the digest, so a bump turns
-# every old entry into a miss. Forgetting to bump it after changing the rule's
-# logic is the one way this cache CAN serve a wrong answer.
+# THE CODE IS AN INPUT TOO, SO THE BYTES OF THIS FILE ARE IN THE DIGEST. An
+# entry computed by older logic must never answer for newer logic, and a
+# hand-bumped version constant is exactly the guard that gets forgotten. The
+# WHOLE of lint.py is hashed rather than `_id_corpus_compute`'s source, because
+# the answer also depends on helpers and constants elsewhere in the module and a
+# whole-file hash cannot miss one. The price is one recompute per lint.py edit.
+#
+# _ID_CORPUS_CACHE_FORMAT is for the SERIALISED SHAPE only: bump it when what
+# `_id_corpus_cache_store` writes, or what `_id_corpus_cache_load` accepts,
+# changes. It is in the digest as well, so a bump turns every old entry into a
+# miss.
 #
 # ANY FAILURE ON THE CACHE PATH FALLS BACK TO COMPUTING: an unwritable or
 # missing directory, a corrupt or truncated file, a JSON error, a race. The
 # cache is an optimisation and is never allowed to be a reason to fail.
 _ID_CORPUS_CACHE_FORMAT = 1
 _ID_CORPUS_CACHE_KEEP = 50          # entries kept; the oldest by mtime go first
+_ID_CORPUS_SOURCE = Path(__file__)  # the code that computes the answer, hashed
 
 
 def _id_corpus_cache_dir():
@@ -7021,16 +7029,21 @@ def _id_corpus_doc(data):
 
 
 def _id_corpus_digest(files):
-    """sha256 over the cache format, and for every file its root's position,
-    its path relative to that root's section and a hash of its bytes - sorted,
-    so the directory walk's order does not matter, and without the roots'
-    absolute paths, so every checkout of the same commit shares one entry."""
+    """sha256 over the cache format, the bytes of the source that computes the
+    answer (_ID_CORPUS_SOURCE, lint.py), and for every library file its root's
+    position, its path relative to that root's section and a hash of its bytes
+    - sorted, so the directory walk's order does not matter, and without the
+    roots' absolute paths, so every checkout of the same commit shares one
+    entry. An unreadable source raises, and the caller then computes without
+    the cache."""
+    code = hashlib.sha256(Path(_ID_CORPUS_SOURCE).read_bytes()).hexdigest()
     rows = []
     for section, n, rel, _f, data in files:
         h = hashlib.sha256(data).hexdigest() if data is not None else "missing"
         rows.append(f"{n}\0{section}\0{rel}\0{h}\n")
     rows.sort()
-    top = hashlib.sha256(f"portrayal-id-corpus\0{_ID_CORPUS_CACHE_FORMAT}\n".encode())
+    top = hashlib.sha256(
+        f"portrayal-id-corpus\0{_ID_CORPUS_CACHE_FORMAT}\0code\0{code}\n".encode())
     for r in rows:
         top.update(r.encode("utf-8", "surrogateescape"))
     return top.hexdigest()
