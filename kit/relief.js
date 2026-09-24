@@ -53,6 +53,42 @@ export function cavitySeatsOn(c, o, eps = 0.01) {
     && c.x + c.w <= o.x + o.w + eps && c.y + c.h <= o.y + o.h + eps;
 }
 
+// TILTED FACETS (docs/superpowers/specs/2026-09-24-tilted-facets-design.md). A part
+// `on` a facet is drawn foreshortened in the face art; here it is built at its TRUE
+// size, flat, and then carried onto the facet plane by one matrix. Face mm, y down,
+// z out. Pure, so it is checked under node.
+function _tiltBasis(deg, facing) {
+  const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+  // u: where a step along the tilted axis goes; n: the part's outward normal
+  if (facing === 'up')    return {axis: 'y', u: [0,  c,  s], n: [0, -s, c]};
+  if (facing === 'down')  return {axis: 'y', u: [0,  c, -s], n: [0,  s, c]};
+  if (facing === 'left')  return {axis: 'x', u: [ c, 0, -s], n: [-s, 0, c]};
+  return                         {axis: 'x', u: [ c, 0,  s], n: [ s, 0, c]};   // right
+}
+export function tiltFrame({deg, facing, anchor: [ax, ay], z0 = 0}) {
+  const {axis, u, n} = _tiltBasis(deg, facing);
+  // the untilted axis is unchanged
+  const ex = axis === 'y' ? [1, 0, 0] : u;
+  const ey = axis === 'y' ? u : [0, 1, 0];
+  // p' = A + ex*(x-ax) + ey*(y-ay) + n*z   ->   column-major 4x4
+  const tx = ax - ex[0] * ax - ey[0] * ay;
+  const ty = ay - ex[1] * ax - ey[1] * ay;
+  const tz = z0 - ex[2] * ax - ey[2] * ay;
+  return [ex[0], ex[1], ex[2], 0,  ey[0], ey[1], ey[2], 0,  n[0], n[1], n[2], 0,  tx, ty, tz, 1];
+}
+export function unproject(rect, {deg, facing, anchor: [ax, ay]}) {
+  const c = Math.cos(deg * Math.PI / 180);
+  if (facing === 'up' || facing === 'down')
+    return {...rect, y: ay + (rect.y - ay) / c, h: rect.h / c};
+  return {...rect, x: ax + (rect.x - ax) / c, w: rect.w / c};
+}
+export function facetZ(r, {deg, facing}, lift, [px, py]) {
+  const t = Math.tan(deg * Math.PI / 180);
+  const d = facing === 'up' ? py - r.y : facing === 'down' ? r.y + r.h - py
+          : facing === 'left' ? r.x + r.w - px : px - r.x;
+  return (lift || 0) + Math.max(0, d) * t;
+}
+
 // A DEPTH THAT VARIES ACROSS A NODE, INSIDE THE NODE'S OWN OUTLINE. `profile`
 // and `profile-y` built their height field over the bounding box, so a sloped
 // moulding could only be a rectangle; the MaiaEdge PBC-2000's centre pane has
