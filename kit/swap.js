@@ -119,6 +119,20 @@ export function rename(wrap, name, idBase, pathBase = idBase, segment = 'module'
     const on = el.getAttribute('data-cp-on');
     if (on && on.startsWith(name + '--')) el.setAttribute('data-cp-on', `${idHead}--${on.slice(name.length + 2)}`);
   }
+  // A TILTED PART NAMES ITS FACET BY ID, and an id is what this renames.
+  // render.py writes `data-tilt-on="<inst_id>--<facet node>"` on every part
+  // that stands `on` a tilted facet, and on every occupant seated in such a
+  // part (the tilt is inherited, but the id it names is not re-derived).
+  // kit/relief.js's `tiltOf`/`tiltTools` look that id up to find the facet.
+  // Left alone, a swapped-in module's `data-tilt-on` still named the facet
+  // under its OLD id, so the facet lookup found nothing: no tilt for the
+  // module's parts, no punch through the facet surface, and its sloped teeth
+  // drew solid with no port openings. The token is re-keyed by the rule its
+  // target's id was - exactly the `data-cp-on` treatment.
+  for (const el of wrap.querySelectorAll('[data-tilt-on]')) {
+    const on = el.getAttribute('data-tilt-on');
+    if (on && on.startsWith(name + '--')) el.setAttribute('data-tilt-on', `${idHead}--${on.slice(name.length + 2)}`);
+  }
   // RENAMING A DEFINITION IS HALF THE JOB. A skin that clips, masks or fills by
   // reference carries `clip-path="url(#drive-carrier-25--w0)"` beside the
   // `<clipPath id="drive-carrier-25--w0">` it names. Moving the definition into
