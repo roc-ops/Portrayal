@@ -700,6 +700,60 @@ def test_no_library_configuration_keys_a_slot_inside_a_slot():
     assert not bad, bad
 
 
+# HOW MANY OCCUPANTS IN THE LIBRARY ARE NAMED WITH AN `id:`: none. It matters
+# because the build draws an occupant under its own `id:` when it has one
+# (manifest.occupant_local_id) and under `<slot>-occupant` otherwise, while the
+# kit finds a seated occupant - front and back, to swap it, pull it in 3D or
+# carry it out with its module - by the `<slot>-occupant` NAME alone (swap.js
+# occupantNames, the rear resolver, relief's OWN_FRU). An occupant with an
+# `id:` would draw correctly and be invisible to all of that, with nothing
+# failing. So the count is pinned: the day one appears, this fails and the kit
+# has to learn to read it first.
+LIBRARY_ID_OCCUPANTS = 0
+
+
+def _occupant_values():
+    """(where, value) for every occupant the library names: each
+    configuration's `occupants:` values, and each slot's shipped `default:` -
+    a component's top-level one, its `parts:` entries', and a device
+    placement's. Returns (configurations walked, [(where, value)])."""
+    configs, out = 0, []
+    for dev in libwalk.iter_devices([str(LIB)]):
+        dev = Path(dev)
+        rel = str(dev.parent.relative_to(LIB))
+        data = yaml.safe_load(dev.read_text()) or {}
+        for name, cfg in (data.get("configurations") or {}).items():
+            configs += 1
+            for key, v in ((cfg or {}).get("occupants") or {}).items():
+                out.append((f"{rel} {name} occupants/{key}", v))
+        for vname, view in (data.get("views") or {}).items():
+            for p in (((view or {}).get("components") or {}).get("placements") or []):
+                if "default" in p:
+                    out.append((f"{rel} {vname}/{p.get('id')} default", p["default"]))
+    for f in sorted(LIB.glob("components/*/*/v*/contract.yaml")):
+        c = yaml.safe_load(f.read_text()) or {}
+        rel = str(f.parent.relative_to(LIB / "components"))
+        if "default" in c:
+            out.append((f"{rel} default", c["default"]))
+        for q in c.get("parts") or []:
+            if "default" in q:
+                out.append((f"{rel} parts/{q.get('id')} default", q["default"]))
+    return configs, out
+
+
+def test_no_library_occupant_is_named_with_an_id():
+    """The census the kit's name-based lookup rests on: see LIBRARY_ID_OCCUPANTS."""
+    configs, values = _occupant_values()
+    assert configs > 100, configs
+    # the shipped defaults are what the walk actually meets today - the
+    # configurations key no `occupants:` at all - so it must meet some
+    assert len(values) > 0, "no occupant named anywhere; this census measures nothing"
+    named = [(w, v) for w, v in values if isinstance(v, dict) and "id" in v]
+    assert len(named) == LIBRARY_ID_OCCUPANTS, (
+        f"{len(named)} occupants named with an `id:` (pinned {LIBRARY_ID_OCCUPANTS}), "
+        f"which the kit cannot find by their `<slot>-occupant` name: {named}")
+
+
 # THE ONE GATE, INSIDE AN OCCUPANT TOO. generic/sfp-lc-simplex@2 is an optic
 # that forwards its one LC bore, so seated in a cage it is a slot at its own
 # key - `front-2/xg0-occupant` - and its `bore` is not a second one. The build
