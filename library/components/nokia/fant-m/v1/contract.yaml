@@ -1,0 +1,458 @@
+format: 1
+kind: module
+name: fant-m
+version: 1.3.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7360 ISAM FX FANT-M network termination (NT) card, ANSI build - part
+  3FE79270BA and its temperature-hardened twin 3FE79270BB, which share this face.
+  A 2.0 Tbps switch and the shelf's management, alarm and timing controller,
+  seated at NT-A and/or NT-B of an FX-16, FX-8 or FX-4 shelf. Authored upright,
+  as the Unit Data Sheet draws it; the FX-4 and FX-8 bays turn it with rotate 90.
+  Down the face - thirteen status lamps, 1 PPS and 10 MHz SMA jacks, two QSFP28
+  and two SFP+ cages in a raised housing, a micro-USB debug port, a 10/100/1000
+  Base-T jack, the LCRT craft jack and the ToD/PPS jack. The ETSI build (AA/AB)
+  is a different face with BITS jacks and an ACO switch, and is
+  nokia/fant-m-etsi@1.
+size: {w: 30.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the NT slot pitch, not a measured faceplate width - see provenance.size-width.
+  d is the larger of the two depths the UDS gives (205/225 mm) - see provenance.depth.
+attrs:
+  model: FANT-M (ANSI BA/BB)
+  part-number: 3FE79270BA
+  variants: >-
+    BA 3FE79270BA - central office, -5 to +50 C. BB 3FE79270BB - temperature
+    hardened, -40 to +65 C in a single subrack (65 C only with the dust filter
+    removed), -5 to +45 C with multiple subracks. One face, one drawing; a bay
+    seating the BB says so with attrs {part-number: 3FE79270BB, temperature-range: hardened}.
+  temperature-range: central-office
+  switch-capacity: 2.0 Tbps
+  qsfp28: 2
+  sfp-plus: 2
+  weight-kg: 1.7
+  power-draw-max-w: 127
+  power-draw-typical-w: 120
+  power-draw-scope: module
+  input-voltage: -48 V DC and -60 V DC nominal
+provenance:
+  lamp-colour: >-
+    estimated - The UDS LED tables name the port lamps' conditions (link, activity) but not their colour, so
+    the `link-activity` state is drawn in the family green #39b54a that nokia/fnio-a@1 uses for the
+    same unstated case; the A/S lamp's `standby` is that lamp OFF (the table: 'off = stand-by'), so it
+    is drawn unlit (#3a3f44) rather than given a colour the hardware does not show.
+  size: >-
+    datasheet - 7360 ISAM FX ANSI Unit Data Sheet guide R6.9 (3FE77013AAAATQZZA16)
+    s26.5.1 and s27.5.1, identical for BA and BB: 'Height: 405 mm (15.94 in.)',
+    'Width: 30 mm (1.18 in.)', weight approximately 1.7 kg. The same three figures are
+    in the ETSI UDS R7.0 (3FE77012...A18) s26.5.1 for the AA and the Lightspan UDS
+    25.12 (3HH90279...A23) p267 for the BA.
+  size-width: >-
+    datasheet - the 30 mm is the NT slot pitch ('card pitch NT 30 mm') and is also the
+    UDS 'Width'. The faceplate's own edge-to-edge width is not stated anywhere searched
+    (the three UDS guides and the ANSI HIM); it is taken as the pitch so the part
+    seats the shelf's NT bay exactly. Figure 72 draws the face at 74 px against 1079
+    px for the 405 mm height, i.e. 27.8 mm at the height's scale - seven percent
+    narrow, which is the three-quarter projection foreshortening the face, not a
+    measurement of it.
+  depth: >-
+    datasheet - UDS 'Depth: 205/225 mm (8.07/8.86 in.)'. The guide does not say what
+    the two figures measure; 225 is carried as the envelope (the larger), and the 205
+    is recorded here rather than guessed at (board only, or to the backplane connector,
+    are both plausible readings; the guide says neither).
+  variants: >-
+    datasheet and drawing - BA and BB SHARE ONE FACE, verified structurally rather than
+    by eye: in the ANSI UDS R6.9 Figure 72 (FANT-M, p210) and Figure 77 (FANT-M BB,
+    p218) are the SAME embedded image object (pdfimages object 5998, 1435 x 1236 at 300
+    ppi), and the LED figures 73 and 78 are likewise one object (6001). The Lightspan
+    UDS repeats the pattern (BA fig 108 and BB fig 113 are object 2178). The text
+    differs only in the operating-temperature bullets, so the temperature build is the
+    `variants` / `temperature-range` attrs, not a second drawing. The ETSI AA/AB
+    figure (ETSI UDS R7.0 Figure 90, object 7289) is a DIFFERENT drawing (ACO switch
+    and lamp, BITS_IN and BITS_OUT jacks) and is modelled as nokia/fant-m-etsi@1,
+    because a skin cannot change what a component composes.
+  face: >-
+    drawing - ANSI UDS R6.9 Figure 72 'View of the FANT-M (ANSI)', p210, the embedded
+    image extracted at its native 300 ppi (1435 x 1236; a page render would only
+    upsample it). It is a three-quarter side-and-front view, not an elevation. The
+    face runs y 116-1195 px, 1079 px for 405 mm = 2.664 px/mm, and every y below is
+    (px - 116) / 2.664. Only the y axis is taken as a measurement; x is foreshortened
+    (see size-width) and protruding parts are displaced right by the projection, so
+    every x is a placement judgement recorded per feature. ORDER, COUNT AND LEGENDS
+    come from the figure and the Figure 73 LED close-up; the port list from s26.4.1.
+  positions: >-
+    drawing (y) and estimated (x) - feature centres read off Figure 72, in mm from the
+    top: ejector lever 0.3-31.0; 'FANT-M' 25.0; lamp rows 33.4, 38.4, 43.8, 48.7,
+    54.1, 59.0, 63.7 (fitted as 33.5 + 5.0 n; Figure 73 draws the column spacing equal
+    to the row spacing, so the columns are 5.0 apart too); cage housing 66.0-240.6;
+    1 PPS nut 66.4-76.6 and 10 MHz nut 90.5-99.8 (centres 72.0 and 95.0); PORT1 and
+    PORT2 drawn openings 119.4-135.5 and 155.4-171.5 (centres 128.0, 163.5); PORT3 and
+    PORT4 186.2-197.8 and 212.5-224.5 (centres 192.0, 218.5); laser label 244.8; USB
+    256.0; ETH box 298.6-314.9; LCRT/ToD box 317.4-351.2, halved for the two jacks;
+    ESD triangle 387.5; captive screw 399.4. The drawn cage openings are 16 and 12 mm
+    tall against a rotated QSFP28's 20 and SFP's 14.5 - the figure draws the module
+    face inside the cage, not the cage - so only their CENTRES are used and the
+    openings are the std/ parts' own. x: the cage column is centred at 12.5 (the SMA
+    nuts read 14.6 and the QSFP openings 12.2, the nuts displaced by their
+    protrusion); the lower jacks at 13.5 so they clear the closed bottom lever at
+    0.8-6.0 (the figure draws the jack box 5.7-20.1 at its foreshortened scale).
+  orientation: >-
+    drawing - the RJ45s are rotate 270, keyway to the RIGHT: Figure 72 at 3x shows
+    the ETH jack's latch slot and its two lamp windows on the legend side, and the
+    LCRT and ToD/PPS openings step the same way. The cages are rotate 90 (long axis
+    down the card); the figure does not resolve which way a QSFP28 or SFP+ latch
+    faces, so that is a convention (library vertical cards take R90), not a reading.
+    The micro-USB's trapezoid is not resolved either; rotate 90 by the same convention.
+  housing: >-
+    drawing - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 draws the SMA, QSFP28 and SFP+ block as a housing from 66.0 to
+    240.6 mm and, at 3x, all but edge to edge of the plate (x about 1.2-28.8; the connector
+    legends are printed on the tooth faces at the right, so they are drawn on the facets).
+    It is six sawtooth teeth, not a raised box: between teeth the left-hand chevron edge
+    returns to the plate line, so the bands 87.9-90.5, 111.5-118.5, 148.2-153.9 and
+    236.3-240.6 are drawn flush. PORT2, PORT3 and PORT4 adjoin: the figure draws 1-2 mm of
+    plate between them, but the owner's lab photo of an installed FANT-M (FX-8),
+    2026-09-24, shows the PORT3 and PORT4 boxes following each other with no flat plate
+    between, so those two bands are taken as drafting. Each tooth is its own pair of
+    facets - see provenance.angled-panel and relief.
+  angled-panel: >-
+    estimated from the drawing - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72. Each connector sits on the UPPER band of its
+    tooth, a face turned upward (root at its upper edge, lower edge proud), and a return
+    below it turns back down to the plate; the two meet at a ridge the figure draws as a
+    lit line. Which band carries the port is read from the SMA barrels, which point up
+    and out of the upper band. HOW THE NUMBERS WERE TAKEN: the y-extents on the face frame
+    (2.664 px/mm) - root line, ridge line, and the row where the left chevron edge is back
+    on the plate line. The figure is a three-quarter view turned about 22 degrees (the
+    30 mm face draws 74 px against 80: cos 0.925), which draws depth at about 1.0 px/mm
+    (the side panel, 205 mm deep, spans about 201 px). Every ridge displaces the chevron
+    7 to 9 px off the plate line, so all six teeth stand about the same 8.5 mm proud, and
+    each angle follows from that common apex over the band's height: the SMA faces 39
+    degrees over 10.5 mm, the QSFP28 faces 24 and 23 over 18.9 and 19.9, the SFP+ faces
+    27 and 27 over 16.6 and 16.5, the returns 38 to 41 over 9.6 to 10.8 mm, each return
+    fitted so its tooth's apex heights agree within 0.1 mm. The reading of 'about 30
+    degrees with a return of equal height' holds for the SMA teeth only; the cage teeth
+    have longer, shallower faces. The PORT1 and PORT2 faces start 0.9 and 1.5 mm above the
+    drawn root line (118.5 and 153.9 against 119.4 and 155.4): the registry cage,
+    foreshortened by its face's angle, is taller than the opening the figure draws, and a
+    facet is sized to hold its whole cage. The PORT3 and PORT4 faces run up to the return
+    above them (see provenance.housing). SECOND SOURCE: the owner's lab photo of an
+    installed FANT-M (FX-8), 2026-09-24, shows PORT3 and PORT4 each in its own protruding
+    box, the cage opening on the box's upper part facing up and out, a band below it
+    running back to the plate, and the boxes adjoining - the face-up-plus-return tooth
+    modelled here. It is a perspective phone photo, so only ratios are taken from it: down
+    the PORT4 box's mid-column the lit cage face is about 105 px and the shadowed band
+    below it about 45 px, a face longer than its return as modelled (16.5 : 9.6), though
+    the camera foreshortens the two surfaces unequally and neither ratio is a measurement.
+    Every face plus its return is under 90 degrees (80 at most), so a cage's well,
+    running back along its face's normal, stays under the return and the plate below it.
+  gaps: >-
+    The angles are estimates: a 1 px error in the chevron reading moves the apex about
+    1 mm, about 3 to 5 degrees, and the depth scale rests on the 22 degree turn read off
+    the face width. The flat bands between teeth are taken as flush. Cage latch direction
+    (rotate 90 is convention).
+  lamps: >-
+    drawing - Figure 73 'FANT-M system status LEDs' (p211, object 6001): two columns
+    of round lamps, ALM / PWR, (blank) / A/S, then PORT1 lanes 2-1 and 4-3 in a
+    bracket, PORT2 lanes 2-1 and 4-3 in a bracket, PORT4 / PORT3. Thirteen lamps. The
+    lamps are common/led-dot@1 (2 mm); Figure 73 draws them about 2.7 mm across at
+    the 5 mm pitch, so the dot is a size compromise at the right pitch.
+  states: >-
+    datasheet - Table 68 'System status LED definition' (s26.5.2; Table 71 for the BB
+    is identical). PWR green flashing 0.5 s on / 0.5 s off = SW initializing; green
+    blinking 3.5 s on / 0.5 s off = SW initialization completed, NT operational; off
+    = no power. A/S green = active, off = stand-by. ALM red = alarm condition, off = no
+    alarm. PORT1 and PORT2 = 'Link/activity status (channel 1 to 4)', PORT3 and PORT4
+    = 'Link/activity status'. Nokia gives no colour and no split between link and
+    activity for the port lamps, so each carries one `link-activity` state and `off`.
+  ports: >-
+    datasheet - s26.4.1 and Table 67. Communication: 1 x 10/100/1000Base-T, 2 x QSFP28
+    (100GE, 40GE, 4x25GE, 4x10GE; 10GE by QSA adapter), PORT3 SFP+ 10GE. Management:
+    micro-USB (debug), LCMI craft (RJ-45). Clock: ToD/1 PPS (RJ-45), 10 MHz GPS (SMA),
+    1 PPS (SMA), SyncE/PTP on PORT1-3 and on PORT4. Table 67 gives PORT4 traffic 'Not
+    supported' and clock '10GE, 1GE' - it is a timing-only port, so it is in the
+    `timing` group, not `sfp-plus`. The Base-T is listed by Nokia as a COMMUNICATION
+    interface, so it is `traffic` in its own group rather than filed under management
+    on a guess about how operators use it.
+  power: >-
+    datasheet - maximum 127 W, typical 120 W. Lightspan FX Safety Manual
+    3HH91852AAAATCZZA07 p37, power consumption table, row 'FANT-M (1)': 120 W typical,
+    127 W maximum; note (1): 'The power consumption does not include the NTIO card or
+    SFP power consumption'. The row is not split by variant, so it is carried for BA
+    and BB alike. Corroborated by ETSI Safety Manual 3HH11998AAAATCZZA29 p25 Table 2,
+    'FANT-M - AA variant (1)' and 'AB variant (1)', both 120 / 127 W, with the same
+    exclusion ('does not include the NTIO card or SFP power consumption'). NOT in the
+    ANSI Safety Manual 3HH12894AAAATCZZA27: its table lists FANT-F, FANT-G and FANT-H
+    (BA/BB, BC) and has no FANT-M row. No ambient is stated for either figure.
+  relief: >-
+    estimated - the lever proudness (out 4.2) and captive-screw head (cyl 1.6) are the
+    library's shared release-hardware and screw figures (cisco/a99-rp3-tr@1 records
+    their origin); nothing in the Nokia corpus dimensions a projection.
+  logo-zone: >-
+    estimated - no logo is visible on Figure 72's face; the zone is reserved in the
+    blank top-right corner beside the lever, per the family convention, and draws
+    nothing.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 19.4 mm from the left edge on
+    this 30 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+    Only the bottom screw is drawn, as the figure draws only that one (the top end carries
+    the ejector lever and the logo zone); no FANT-M is in the photos.
+elements:
+  logo-zone: {at: [11.0, 3.0], size: [16.0, 18.0], class: label}
+  ejector-top:
+    at: [0.8, 0.5]
+    size: [7.4, 30.5]
+    class: handle
+    description: the upper ejector lever, closed along the face
+  ejector-bottom:
+    at: [0.8, 318.0]
+    size: [5.6, 86.0]
+    class: handle
+    description: the lower ejector lever, closed along the face, pivot at the bottom-left corner
+  screw:
+    at: [14.15, 394.5]
+    size: [10.5, 10.5]
+    class: screw
+    description: captive fixing screw
+  pps-face:
+    at: [1.2, 67.6]
+    size: [27.6, 10.5]
+    class: mechanical
+    description: the face of the 1PPS tooth, turned 39 degrees upward - its connector sits on it
+  pps-return:
+    at: [1.2, 78.1]
+    size: [27.6, 9.78]
+    class: mechanical
+    description: the return closing the 1PPS tooth back to the plate, 41 degrees downward
+  ten-mhz-face:
+    at: [1.2, 90.5]
+    size: [27.6, 10.5]
+    class: mechanical
+    description: the face of the 10MHz tooth, turned 39 degrees upward - its connector sits on it
+  ten-mhz-return:
+    at: [1.2, 101.0]
+    size: [27.6, 10.5]
+    class: mechanical
+    description: the return closing the 10MHz tooth back to the plate, 39 degrees downward
+  port1-face:
+    at: [1.2, 118.5]
+    size: [27.6, 18.9]
+    class: mechanical
+    description: the face of the PORT1 tooth, turned 24 degrees upward - its connector sits on it
+  port1-return:
+    at: [1.2, 137.4]
+    size: [27.6, 10.77]
+    class: mechanical
+    description: the return closing the PORT1 tooth back to the plate, 38 degrees downward
+  port2-face:
+    at: [1.2, 153.9]
+    size: [27.6, 19.9]
+    class: mechanical
+    description: the face of the PORT2 tooth, turned 23 degrees upward - its connector sits on it
+  port2-return:
+    at: [1.2, 173.8]
+    size: [27.6, 10.07]
+    class: mechanical
+    description: the return closing the PORT2 tooth back to the plate, 40 degrees downward
+  port3-face:
+    at: [1.2, 183.87]
+    size: [27.6, 16.63]
+    class: mechanical
+    description: the face of the PORT3 tooth, turned 27 degrees upward - its connector sits on it
+  port3-return:
+    at: [1.2, 200.5]
+    size: [27.6, 9.75]
+    class: mechanical
+    description: the return closing the PORT3 tooth back to the plate, 41 degrees downward
+  port4-face:
+    at: [1.2, 210.25]
+    size: [27.6, 16.45]
+    class: mechanical
+    description: the face of the PORT4 tooth, turned 27 degrees upward - its connector sits on it
+  port4-return:
+    at: [1.2, 226.7]
+    size: [27.6, 9.64]
+    class: mechanical
+    description: the return closing the PORT4 tooth back to the plate, 41 degrees downward
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      PORT1 and PORT2, QSFP28/QSFP+ uplinks - 100GE, 40GE, 4x25GE, 4x10GE, 10GE by
+      adapter; SyncE/PTP on all of them (Table 67)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: PORT3, SFP+ 10GE data and SyncE/PTP (Table 67)
+  base-t:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the ETH 10/100/1000Base-T port, which Nokia lists as a communication interface
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the clock block - 1 PPS and 10 MHz GPS SMA inputs, the ToD/1 PPS RJ-45 and
+      PORT4, an SFP+ Nokia gives no traffic support and SyncE/PTP at 10GE and 1GE
+  craft:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      local access to the card - the LCRT craft (LCMI) RJ-45 and the micro-USB debug port
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the system status lamps of Figure 73 and Table 68
+parts:
+  - {ref: common/sma-jack@1, id: pps, group: timing, at: [7.75, 68.309], 'on': pps-face, attrs: {function: 1 PPS input, legend: 1PPS}}
+  - {ref: common/sma-jack@1, id: ten-mhz, group: timing, at: [7.75, 91.309], 'on': ten-mhz-face, attrs: {function: 10 MHz GPS input, legend: 10MHz}}
+  - {ref: std/qsfp28@1, id: port1, group: qsfp28, at: [2.5, 123.364], 'on': port1-face, rotate: 90, attrs: {legend: PORT1}}
+  - {ref: std/qsfp28@1, id: port2, group: qsfp28, at: [2.5, 158.828], 'on': port2-face, rotate: 90, attrs: {legend: PORT2}}
+  - {ref: std/sfp@1, id: port3, group: sfp-plus, at: [5.25, 187.545], 'on': port3-face, rotate: 90, attrs: {legend: PORT3}}
+  - {ref: std/sfp@1, id: port4, group: timing, at: [5.25, 214.045], 'on': port4-face, rotate: 90, attrs: {media: sfp-plus, speed: 10g, legend: PORT4, function: 'SyncE/PTP timing only - no traffic'}}
+  - {ref: std/micro-usb@1, id: usb, group: craft, at: [4.25, 254.625], rotate: 90, attrs: {function: debug, legend: USB}}
+  - {ref: common/rj45-eth@1, id: eth, group: base-t, at: [5.6, 300.2], rotate: 270, attrs: {legend: ETH}}
+  - {ref: std/rj45@2, id: lcrt, group: craft, at: [5.6, 319.4], rotate: 270, attrs: {media: rj45-serial, function: local craft management interface (LCMI), legend: LCRT}}
+  - {ref: std/rj45@2, id: tod, group: timing, at: [5.6, 336.2], rotate: 270, attrs: {media: rj45-tod, function: ToD / 1 PPS, legend: ToD/PPS}}
+  - ref: common/led-dot@1
+    id: alm
+    group: leds
+    at: [8.0, 32.5]
+    states:
+      lamp: [{name: alarm, color: '#d0021b'}, 'off']
+  - ref: common/led-dot@1
+    id: pwr
+    group: leds
+    at: [13.0, 32.5]
+    states:
+      lamp:
+        - {name: initializing, color: '#39b54a', behavior: {mode: blinking, rate: 1}}
+        - name: operational
+          color: '#39b54a'
+          behavior: {mode: sequence, phases: [{color: '#39b54a', seconds: 3.5}, {seconds: 0.5}]}
+        - 'off'
+  - ref: common/led-dot@1
+    id: as
+    group: leds
+    at: [13.0, 37.5]
+    states:
+      lamp: [{name: active, color: '#39b54a'}, 'off']
+  - {ref: common/led-dot@1, id: port1-l2, group: leds, at: [8.0, 42.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l1, group: leds, at: [13.0, 42.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l4, group: leds, at: [8.0, 47.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l3, group: leds, at: [13.0, 47.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l2, group: leds, at: [8.0, 52.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l1, group: leds, at: [13.0, 52.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l4, group: leds, at: [8.0, 57.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l3, group: leds, at: [13.0, 57.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port4-led, group: leds, at: [8.0, 62.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: port3-led, group: leds, at: [13.0, 62.5], states: {lamp: [{name: link-activity, color: '#39b54a'}, 'off']}}
+relief:
+  wall: '#9ea3a9'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        cisco/a99-rp3-tr@1 ejector levers - the library's shared release-hardware
+        figure, itself estimated; nothing in the Nokia corpus gives a proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        cisco/a99-rp3-tr@1 ejector levers - the library's shared release-hardware
+        figure, itself estimated; nothing in the Nokia corpus gives a proudness
+    - node: screw
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        cisco/a99-rp3-tr@1 captive screw heads - the library's shared screw-head
+        figure, itself estimated
+    - node: pps-face
+      facet: {deg: 39, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: pps-return
+      facet: {deg: 41, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: ten-mhz-face
+      facet: {deg: 39, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: ten-mhz-return
+      facet: {deg: 39, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port1-face
+      facet: {deg: 24, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port1-return
+      facet: {deg: 38, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port2-face
+      facet: {deg: 23, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port2-return
+      facet: {deg: 40, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port3-face
+      facet: {deg: 27, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port3-return
+      facet: {deg: 41, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port4-face
+      facet: {deg: 27, facing: up}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+    - node: port4-return
+      facet: {deg: 41, facing: down}
+      confidence: estimated
+      source: >-
+        7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 p210 Figure 72 (object 5998, native 300 ppi): tooth y-extents measured on the face frame (2.664 px/mm); angle from a common apex height of about 8.5 mm read off the chevron displacement at about 1.0 px per mm of depth
+connection-points:
+  mate: {at: [15.0, 202.5], direction: rear}
+skins: [default]

@@ -1,0 +1,119 @@
+format: 1
+kind: module
+name: bfan-h
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia BFAN-H (3FE 66546 AA), the intelligent fan tray of the 7360 ISAM FX-16 (NFXS-D),
+  also sold as the Lightspan FX-16 fan unit. A horizontal tray under the card cage carrying
+  eight variable-speed fans (four columns of two). Its front is a 493.4 x 59.25 strip: a
+  plate with a pull handle at each end, a captive screw below each handle, the ALM lamp in
+  a round bezel at mid-width, three label windows, an Energy Hazard label and an ESD mark,
+  with the tray's lower lip showing beneath the plate.
+size: {w: 493.4, h: 59.25, d: 274.85}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: BFAN-H
+  part-number: 3FE 66546 AA
+  weight-kg: 3.4
+  fans: '8'
+  power-draw-max-w: 315
+  power-draw-typical-w: 80
+  airflow-m3h: 8 x 409
+  dust-filter: 3FE 67952 AA
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 35.5.1 (p368):
+    height 59.25 mm, width 493.4 mm, depth 274.85 mm; the stand-alone data sheet
+    3FE66546AAAATQZZA03 prints the same. The face is width x height.
+  depth: 'datasheet - 274.85 mm, 3HH90279AAAATQZZA23 section 35.5.1 (p368)'
+  weight: 'datasheet - 3.4 kg, 3HH90279AAAATQZZA23 section 35.5.2 (p368)'
+  power: >-
+    datasheet - 3HH90279AAAATQZZA23 Table 138 (p370): 80 W +/- 5% in "classic mode" at
+    -48 Vdc, 315 W +/- 5% at full speed at -48 Vdc. The ETSI Safety Manual
+    3HH11998AAAATCZZA29 Table 2 (p26) repeats both: note 6, classic mode "with +25 C ambient
+    value"; note 7, full speed, no ambient. The 315 W maximum is the fans at full speed, the
+    ceiling whatever the ambient; the 80 W typical is the +25 C classic-mode figure.
+  layout: >-
+    drawing - the front view (top of Figure 2 "BFAN-H Views") in the stand-alone data sheet
+    3FE66546AAAATQZZA03 p7, VECTOR art rendered at 600 dpi (the same art is Figure 170,
+    3HH90279AAAATQZZA23 p367, as a 150 ppi JPEG). Gate 1: the front view spans 2154 x 261 px
+    against 493.4 x 59.25, 4.366 and 4.405 px/mm (0.9% apart), and the plan view below it
+    2154 x 1212 against 493.4 x 274.85 (4.410 down), so the views are orthographic.
+    Positions by edge scans at 4.366 px/mm from the left and top: plate 0-49.2 with the
+    lower lip to 59.25; handles 0-14.2 and 479.2-493.4 (a bracket 6.4-32.1 high with the
+    grip standing out of it at the outer end, 9.0-28.6) and a pivot boss at 16.3 / 477.1;
+    captive screws at (5.0, 44.2) and (488.4, 44.2); ALM bezel centre (246.4, 20.2), 12.6
+    across, legend above at 12.0; label windows 303.0-330.5 x
+    17.9-27.5, 332.6-392.2 x 17.9-27.2 and 28.9-37.8; Energy Hazard label 393.0-443.0 x
+    14.9-39.9; ESD mark centre (453.0, 19.9). Stated to 0.1 mm because that is what the
+    arithmetic gives; the drawing resolves about 0.25 mm.
+  status-led: >-
+    datasheet - Table 134 (p367): green blinking 50/50 at power-up and start-up, green steady
+    at the inlet-temperature settle point, green blinking 90/10 in closed-loop control, red
+    steady on fan failure. The front view prints ALM over the lamp. The HIM
+    3HH91853AAAARJZZA08 (p141) calls it "a single red alarm LED"; the UDS table is the
+    fuller statement and is what the states follow.
+  fan-cover: >-
+    HIM 3HH91853AAAARJZZA08 section 10.5 (p141-143): "Loosen the captive screws of the fan
+    cover and remove the cover" (Figure 69), then pull the unit out "by the handles"
+    (Figure 70). Figure 69 draws the same strip as the UDS front view - ALM lamp, Energy
+    Hazard label, a captive screw at each lower corner, handle ends showing at both sides -
+    so the UDS draws the tray WITH its cover on, and that is the face modelled. Whether the
+    cover ships as part of 3FE 66546 AA or with the shelf is not stated (gap).
+  label: >-
+    drawing - "ALM" above the lamp and "Energy Hazard" beside a warning triangle,
+    transcribed as printed. The three plain windows carry nothing in the drawing.
+  cover-ownership-gap: >-
+    whether the front cover drawn here belongs to the BFAN-H or to the NFXS-D shelf is not
+    stated in the UDS, the HIM or the Product Information Guide.
+  power-ambient-gap: >-
+    classic-mode draw above +25 C is not published in the UDS guides or either Safety
+    Manual; only the full-speed 315 W bounds it.
+  photo-gap: >-
+    no photograph of the tray is staged; the FX-16 has only a 502 px front photograph
+    (PUBLIC-SOURCES.md 2c), not fetched. Colour is the family's silver-grey by convention.
+  logo-zone: 'reserved by the family convention on empty plate; no mark is drawn in any figure'
+  lifecycle: >-
+    searched only the staged corpus - the 2026 Lightspan UDS guide still lists the unit as
+    current; no end-of-life notice was searched for on the web.
+elements:
+  handle-left: {at: [0.0, 6.4], size: [18.5, 27.1], class: handle}
+  handle-right: {at: [474.9, 6.4], size: [18.5, 27.1], class: handle}
+  screw-left: {at: [1.6, 40.8], size: [6.8, 6.8], class: fastener}
+  screw-right: {at: [485.0, 40.8], size: [6.8, 6.8], class: fastener}
+  label-1: {at: [303.0, 17.9], size: [27.5, 9.6], class: label}
+  label-2: {at: [332.6, 17.9], size: [59.6, 9.3], class: label}
+  label-3: {at: [332.6, 28.9], size: [59.6, 8.9], class: label}
+  hazard-label: {at: [393.0, 14.9], size: [50.0, 25.0], class: label}
+  esd-mark: {at: [450.0, 16.9], size: [6.0, 6.0], class: label}
+  logo-zone: {at: [60.0, 14.0], size: [30.0, 12.0], class: label}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the fan tray's single status lamp, legend ALM
+parts:
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [244.4, 18.2],
+     states: {lamp: ['off', {name: starting, color: '#39b54a', behavior: blinking},
+                     {name: 'on', color: '#39b54a'},
+                     {name: closed-loop, color: '#39b54a', behavior: blinking},
+                     {name: fail, color: '#d0021b'}]}}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: handle-left
+      out: 4.0
+      confidence: estimated
+      source: >-
+        the handle grip stands off the plate in HIM Figure 70 (3D); nothing dimensions it
+    - node: handle-right
+      out: 4.0
+      confidence: estimated
+      source: as handle-left
+connection-points:
+  mate: {at: [246.7, 29.625], direction: rear}
+skins: [default]

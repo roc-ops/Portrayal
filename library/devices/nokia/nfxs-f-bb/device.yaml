@@ -1,0 +1,300 @@
+format: 1
+kind: device
+name: nfxs-f-bb
+version: 0.1.0
+maturity: modelled
+manufacturer: Nokia
+model: 7360 ISAM FX-4 (NFXS-F BB)
+description: >-
+  The 5RU ANSI shelf of the Nokia 7360 ISAM FX (Lightspan Access Node FX) GPON/NGPON access node,
+  part 3FE64991BB. The four line-termination (LT) cards, the two network-termination (NT) cards and
+  the NT I/O card lie HORIZONTALLY, stacked from the bottom: the general facilities card (NGFC-G), NT
+  A, NTIO, NT B, then LT1 to LT4. The BFAN-X fan unit stands at the right-hand end behind a fan cover
+  that carries the shelf's name and the slot legends. Cards are authored upright, as the Unit Data
+  Sheet guides draw them, and every card bay seats its card with `rotate: 270`, which turns the
+  card's top end to the LEFT, toward the power terminals, as an installed FX-8 shows. The LT slots take only the LT blank
+  until the line cards are modelled (roc-ops/Portrayal#538).
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Written first, before any number. (1) NFXS-F BA unit data sheet 3FE64991BAAATQZZA02 (Edition 02,
+      R5.3) p7 Figure 4 "Top and front view of NFXS-F" - a VECTOR elevation, the geometry source.
+      (2) Lightspan Access Node FX Unit Data Sheet Guide 3HH90279AAAATQZZA23 (25.12) chapter 8.4-8.5:
+      NFXS-F BB card positions (Figure 42), card pitches, dimensions and weight, and Figure 44, the
+      same elevation art for BB as a 150 ppi JPEG. (3) 7360 ISAM FX ANSI Hardware Installation Manual
+      3HH12893AAAATCZZA29 (R6.9): Figure 173, the grounding connection. (4) the part contracts of every
+      seated card, each with its own provenance. No photograph of this shelf is staged.
+  model:
+    confidence: datasheet
+    note: >-
+      3HH90279AAAATQZZA23 s8.5 heads the chapter "NFXS-F BB - FX-4 shelf" (ANSI); the BA build is the
+      R4.x-R5.x edition and its data sheet draws the same elevation, line for line, which is why its
+      vector copy can stand in for the BB's raster one. That BA and BB share a front is read off the
+      two figures, not stated.
+  chassis:
+    confidence: datasheet
+    note: >-
+      3HH90279AAAATQZZA23 s8.5.2: width 447 mm, overall over flanges 481 mm, mounting centre distance
+      465 mm, depth 278.3 mm, height 221.9 mm; s8.5.3 weight 8.6 kg including the fan. The BA data
+      sheet prints 447 / 480.5 / 465 / 278.6 / 221.9, and its own drawing labels the body 445.5. The
+      body modelled is the 447 between the flange folds; the flanges (ears) are not drawn, per the
+      method, and their extent is (481 - 447) / 2 = 17 mm a side.
+  panel-scale:
+    confidence: drawing
+    note: >-
+      Gate 1. The BA Figure 4 front view rendered at 1200 dpi: the body is 3120 px between its fold
+      lines and 1559 px from top edge to bottom edge. 3120 / 447 = 6.98 px/mm across and 1559 / 221.9
+      = 7.03 down, 0.7 percent apart - and 0.3 percent apart against the drawing's own labelled 445.5,
+      so the figure is orthographic and every position below is a measurement at about 0.15 mm/px,
+      limited in practice by the drawing's 1 mm double edge strokes. The BB raster Figure 44 (150 ppi,
+      0.867 px/mm) was measured first and agrees to a pixel, which is 1.2 mm, and no better.
+  rows:
+    confidence: drawing
+    note: >-
+      Card rows read off Figure 4 along the right-hand ejector column and the left latch column,
+      then set to the vendor's stated pitches (UDS s8.4.1 "NT cards: 30 mm, NTIO card: 25 mm, LT cards:
+      25 mm"). Measured LT row edges 6.45 / 31.4 / 56.4 / 81.2 / 106.0 (pitch 24.9), so LT4 starts at
+      6.4 and LT1 ends at 106.4. A rail runs across the shelf between LT1 and NT B. The GFC takes the
+      bottom 28.8 mm (the face nokia/ngfc-g@1 measured on this same figure, top line to the shelf's
+      bottom edge), so it starts at 193.1, and the NT rows are stacked up from it at their pitches: NT A
+      163.1, NTIO 138.1, NT B 108.1, leaving the rail 106.4 to 108.1. The drawing puts the NT row edges
+      at 110.2 / 139.7 / 164.8 / 194.5 - within 1.5 mm, the NT A bottom edge being where the figure and
+      the GFC's own measured height disagree by 1.4 mm. The GFC's measured face was held and the
+      difference taken up in the rail, because the GFC height is corroborated by a second drawing (its
+      own front panel) and the rail is not.
+  columns:
+    confidence: drawing
+    note: >-
+      Across: the GFC's face runs 7.6 to 414.4 on the drawing (outer strokes, 406.8 = 405 to the
+      stroke), centre 211.0, so every 405 mm card starts at x 8.5 and ends at 413.5. The 8.5 mm strip at
+      the left carries the card guides and latches. The fan column runs from 413.6 to the body edge;
+      BFAN-X is 33.1 wide (UDS p386), which closes it at 446.7, and its top at y 4.2 is where the fan
+      column's top line sits on the drawing (3.2 to 4.7).
+  orientation:
+    confidence: estimated
+    note: >-
+      Cards are modelled upright in their own contracts and turned here with `rotate: 270`, so the
+      card's top end (ejector lever, lamps, the NT port housings) lies at the LEFT, toward the NGFC-G
+      power terminals. Taken from the FX-8, which shares this layout (GFC along the bottom with its
+      terminal block at the left, fan column at the right): the owner's lab photographs of an
+      installed NFXS-E (2026-09-24) show a FANT-H's lever and lamps directly beside the terminal cover.
+      No photograph of an FX-4 is staged, and Figure 4 cannot say - it draws the card rows as generic
+      grids with a latch at each end. An earlier revision seated the cards at `rotate: 90`, 180
+      degrees out. The NGFC-G (which only ever lies flat) is authored as it sits and is not rotated.
+  slot-legends:
+    confidence: drawing
+    note: >-
+      The slot legends (NTA, NTIO, NTB, 01 to 04) and the shelf name are printed on the fan cover, not
+      on the frame - see nokia/fan-cover-fx4@1 - so the frame itself carries no silkscreen in this
+      model. Figure 4 draws no printing anywhere else on the front frame.
+  nt-occupants:
+    confidence: datasheet
+    note: >-
+      3HH90279AAAATQZZA23 and the ANSI UDS R6.9 list FANT-F, FANT-G, FANT-H (BB and the 125 W BC) and
+      FANT-M (BA/BB) as NT boards for the ANSI FX-4. The ANSI FANT-F (BC/BD/BF, nokia/fant-f-bd@1) and
+      FANT-G BA (nokia/fant-g-ba@1) are accepted. The ETSI builds (FANT-H AA/AC, nokia/fant-m-etsi@1) belong to the ETSI
+      shelves and are not accepted here. The second NT slot takes the NT dummy 3FE65651AA when a single
+      NT is fitted (UDS s12.3/12.4 - it "must be mounted in the slot position of the second NT board").
+  ntio-occupants:
+    confidence: datasheet
+    note: >-
+      FNIO-A, FNIO-B, FNIO-D and FNIO-E seat in the NTIO slot; the LT/NTIO dummy 3FE65651BA closes it when no NT I/O
+      card is fitted.
+  defaults:
+    confidence: datasheet
+    note: >-
+      The default build is one FANT-H BB in NT A, the NT dummy in NT B, the dummy in NTIO and in all four
+      LT slots, the NGFC-G and the BFAN-X. A shelf is never shipped with open slots - the dummies exist
+      for airflow and EMC - and FANT-H BB is the current ANSI NT. The configurations below carry the
+      other NT arrangements.
+  ground:
+    confidence: estimated
+    note: >-
+      HIM R6.9 Figure 173 "Grounding cable connection on 7360 ISAM FX-4" (p297) points to the ground
+      cable connector on the RIGHT side of the shelf, about mid-height and a little behind the front,
+      and Procedure 59 routes the cable "to the right side of the shelf and up to the middle". The
+      figure is a perspective view, so the position (x 22, centred at y 111) is estimated from it and
+      the lug is drawn with common/ground-lug@1; the connector itself is a dual-hole lug seat for a
+      4 AWG lug with 1/4 in holes at 3/4 in spacing (HIM text before Figure 173).
+  right-vents:
+    confidence: estimated
+    note: >-
+      Figure 173 draws the right side perforated over roughly its rear half, full height inside a
+      margin; the field is placed at x 128 to 270 and y 12 to 210 by eye from that perspective view.
+      Hole size and pitch are not documented.
+  power:
+    confidence: datasheet
+    note: >-
+      The shelf itself draws nothing: every consumer is a card with its own `power-draw-max-w` (from
+      the Safety Manuals) and the fan unit's. The shelf is powered through the NGFC-G's -48 V DC
+      terminals. No shelf-level power envelope is stated in any staged document; searched the UDS
+      chapter 8, HIM R6.9 chapter 14.5 "Power cabling" and the Safety Manual 3HH12894 tables.
+  airflow:
+    confidence: datasheet
+    note: >-
+      HIM R6.9: a vertically mounted FX-4 needs its mount kit's baffles "to meet NEBS preferred
+      airflow specifications (air flows in the front, and out the rear of the shelf)". For the
+      horizontal installation drawn here the fan unit sits at the right-hand end and the air crosses
+      the cards; the direction is not stated in any staged document, so no airflow is declared.
+attrs:
+  physical:
+    part-number: 3FE64991BB
+    ru: 5
+    weight-kg: 8.6
+    width-over-flanges-mm: 481
+    mounting-centre-mm: 465
+    depth-from-front-flanges-mm: 239.8
+    depth-from-mid-flanges-mm: 177.7
+  platform:
+    family: 7360 ISAM FX / Lightspan Access Node FX
+    standard: ANSI
+    lt-slots: 4
+    nt-slots: 2
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 447.0
+  height: 221.9
+  depth: 278.3
+  ru: 5
+  color: '#c9ccd0'
+gaps:
+- what: line-cards
+  scope: [lt-1, lt-2, lt-3, lt-4]
+  reason: needs-drawing
+  note: >-
+    Every ANSI-valid LT card the coverage grid lists is modelled and accepted in these slots, except
+    FELT-B AC (3FE69486AC), for which no data sheet exists in any staged document. FELT-C is an
+    ETSI/MII card and is not accepted by this ANSI shelf. The copper DSL/POTS cards (NDLS, NPOT,
+    NIAT, NDPS, NVPS) are out of scope by decision (roc-ops/Portrayal#538).
+  wanted: a FELT-B AC unit data sheet
+- what: side-top-bottom
+  scope: [left, top, bottom, rear]
+  reason: needs-drawing
+  note: >-
+    The top view in 3FE64991BAAATQZZA02 Figure 4 draws a column of openings along the left edge and
+    fittings along the right; they are not transcribed yet. No staged document draws the left side, the
+    bottom or the rear face.
+  wanted: the top view transcribed; a photograph of the rear and left side
+- what: horizontal-airflow
+  scope: [fans]
+  reason: vendor-silent
+  note: >-
+    The direction of the air across a horizontally mounted FX-4 is not stated; only the vertical
+    mounting's front-to-rear flow is.
+  wanted: a sentence or airflow figure for the horizontal installation
+groups:
+  lt-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the four LT (line termination) slots, LT1 at the bottom of the LT block to LT4 at the top (UDS Figure 42)
+  nt-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: NT A (rel-pos 1) and NT B (rel-pos 2), the two network-termination slots, 30 mm pitch
+  ntio-slot:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the NT I/O slot between the two NTs, 25 mm pitch
+  gfc-slot:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the general facilities card slot at the bottom of the shelf - power, alarms and timing
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: the BFAN-X fan unit at the right-hand end
+  covers:
+    term: Cover
+    role: furniture
+    index-origin: 1
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 447.0, h: 221.9}
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [8.5, 221.9], fill: '#b7bbc0'}
+        - {at: [8.5, 106.4], size: [405.0, 1.7], fill: '#8d9298'}
+    components:
+      bays:
+        - {id: lt-4, at: [8.5, 6.4], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 4}
+        - {id: lt-3, at: [8.5, 31.4], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 3}
+        - {id: lt-2, at: [8.5, 56.4], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 2}
+        - {id: lt-1, at: [8.5, 81.4], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 1}
+        - {id: nt-b, at: [8.5, 108.1], size: {w: 405.0, h: 30.0}, rotate: 270, accepts: [nokia/fant-h-bb@2, nokia/fant-h-bc@2, nokia/fant-m@1, nokia/fant-f-bd@1, nokia/fant-g-ba@1, nokia/dummy-nt@1], default: nokia/dummy-nt@1, group: nt-slots, rel-pos: 2}
+        - {id: ntio, at: [8.5, 138.1], size: {w: 405.0, h: 25.0}, rotate: 270, accepts: [nokia/fnio-a@1, nokia/fnio-d@1, nokia/fnio-b@1, nokia/fnio-e@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: ntio-slot, rel-pos: 1}
+        - {id: nt-a, at: [8.5, 163.1], size: {w: 405.0, h: 30.0}, rotate: 270, accepts: [nokia/fant-h-bb@2, nokia/fant-h-bc@2, nokia/fant-m@1, nokia/fant-f-bd@1, nokia/fant-g-ba@1, nokia/dummy-nt@1], default: nokia/fant-h-bb@2, group: nt-slots, rel-pos: 1}
+        - {id: gfc, at: [8.5, 193.1], size: {w: 405.0, h: 28.8}, accepts: [nokia/ngfc-g@1], default: nokia/ngfc-g@1, group: gfc-slot, rel-pos: 1}
+        - {id: fan, at: [413.6, 4.2], size: {w: 33.1, h: 213.5}, accepts: [nokia/bfan-x@1], default: nokia/bfan-x@1, under: [fan-cover], group: fans, rel-pos: 1}
+      placements:
+        - {ref: nokia/fan-cover-fx4@1, id: fan-cover, at: [413.6, 4.2], group: covers, rel-pos: 1}
+  rear:
+    size: {w: 447.0, h: 221.9}
+    empty: >-
+      No staged document draws the rear of the FX-4: searched the NFXS-F BA and BB data sheets, the
+      Lightspan UDS chapter 8 and every FX-4 figure caption in HIM R6.9 (chapters 13-14) for rear,
+      back and backplane views; the shelf is cabled from the front.
+  left:
+    size: {w: 278.3, h: 221.9}
+    empty: >-
+      No staged document draws the left side of the FX-4; the HIM's only side figure (Figure 173)
+      shows the right side, and the data sheets draw front and top only.
+  right:
+    size: {w: 278.3, h: 221.9}
+    panel:
+      decor:
+        - {at: [128.0, 12.0], size: [142.0, 198.0], fill: '#b7bbc0'}
+        - {at: [128.0, 12.0], size: [142.0, 198.0], pattern: vent, vent: 40, confidence: estimated, source: 'HIM R6.9 Figure 173 (perspective) draws the right side perforated over its rear half; extent by eye, hole size and pitch not documented'}
+    components:
+      placements:
+        - {ref: common/ground-lug@1, id: ground, at: [18.5, 104.0], group: grounding, rel-pos: 1}
+  top:
+    size: {w: 447.0, h: 278.3}
+    empty: >-
+      Drawn in plan in 3FE64991BAAATQZZA02 Figure 4 but not transcribed yet - see the side-top-bottom
+      gap; left bare rather than drawn from a reading nobody has checked.
+  bottom:
+    size: {w: 447.0, h: 278.3}
+    empty: >-
+      No staged document draws the underside of the FX-4; the mount-kit figures in HIM R6.9 show
+      brackets and drip trays fitted beneath it, not the shelf's own bottom face.
+configurations:
+  fant-h-simplex:
+    kind: base
+    default: true
+    description: >-
+      One FANT-H BB in NT A, the NT dummy in NT B and dummies in NTIO and every LT slot - the shelf as it
+      is ordered before line cards are chosen.
+  fant-h-duplex:
+    kind: orderable
+    description: Two FANT-H BB NT boards, redundant.
+    bays:
+      nt-b: nokia/fant-h-bb@2
+  fant-m-duplex:
+    kind: orderable
+    description: Two FANT-M (ANSI BA/BB) NT boards, redundant - the migration target.
+    bays:
+      nt-a: nokia/fant-m@1
+      nt-b: nokia/fant-m@1
+  fant-h-bc-simplex:
+    kind: orderable
+    description: One FANT-H BC, the 125 W ANSI build, in NT A.
+    bays:
+      nt-a: nokia/fant-h-bc@2
+datasheet:
+  title: 'Nokia NFXS-F BA (7360 ISAM FX-4 ANSI) Unit Data Sheet, 3FE 64991 BAAA TQZZA Edition 02'
+  sha256: 1a6b4edb84b46bc7742a0908b4472efcbf310e8aa30ed4dfc0a4e5b2a7e7705e
+references:
+  - {title: 'Nokia Lightspan Access Node FX Unit Data Sheet Guide 25.12, 3HH-90279-AAAA-TQZZA Issue 23', sha256: b06403047dff8db3becf71a183ce91a1f927fe3b99da8ec2ab546b9d1af97fb1}
+  - {title: 'Nokia 7360 ISAM FX ANSI Hardware Installation Manual R6.9, 3HH-12893-AAAA-TCZZA Issue 29', sha256: 2282eb2e3f7fee385e71df928f5d6dd4e76d6235bdc2684d7a2c4b4d8d2c20b6}

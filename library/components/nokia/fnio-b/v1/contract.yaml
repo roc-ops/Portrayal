@@ -1,0 +1,310 @@
+format: 1
+kind: module
+name: fnio-b
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FNIO-B (3FE 54057 AA), the FE/GE NT I/O applique of the 7360 ISAM FX and
+  Lightspan FX, used with the FANT-F NT board. Seats in the NTIO slot between the two NT
+  boards and gives the shelf up to eight GE uplinks: four SFP ports (1-4) and four combo
+  ports (5-8), each either an SFP or an RJ45 10/100/1000BASE-T. Authored upright, as the
+  Unit Data Sheet guides draw it: ejector and thumbscrew at each end, a 2 x 5 lamp block
+  (ALM, PWR, ports 1-8) under the top ejector, eight SFP cages on a sawtooth faceplate that
+  angles each cage 45 degrees for fibre bend radius, two marks, then the four combo RJ45s
+  stacked in one framed opening beside the bottom lever.
+size: {w: 25.0, h: 405.0, d: 205.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm); neither guide states a faceplate width for the
+  FNIO-B (the FNIO-A and FNIO-D say 26 mm overall), so the plate is taken as the pitch so
+  the NTIO bay built from the shared family convention seats it. d is the one depth the
+  FNIO-B section gives (205 mm).
+attrs:
+  model: FNIO-B
+  sfp: 8
+  rj45: 4
+  part-number: 3FE 54057 AA
+  weight-kg: 0.75
+  power-draw-max-w: 25
+  power-draw-typical-w: 20
+provenance:
+  size: >-
+    datasheet - Lightspan UDS 3HH90279AAAATQZZA23 section 27.5.1 (p294) and ETSI UDS
+    3FE77012AAAATQZZA18 section 41.5.1 (p396): height 405 mm, depth 205 mm, board-to-board
+    pitch 25 mm. No width is printed. Face held at the 25 mm pitch by the shared 7360 FX
+    convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 27.5.1 / 41.5.1; the faceplate edge-to-edge
+    width is not stated, so it is taken as the pitch.
+  depth: 'datasheet - 205 mm, Lightspan UDS section 27.5.1 (p294); the only depth given'
+  weight: 'datasheet - 0.75 kg, Lightspan UDS section 27.5.2 (p294); ETSI UDS A18 section 41.5.2 agrees'
+  power: >-
+    datasheet - Lightspan Safety Manual 3HH91852AAAATCZZA07 p37, Table 2 "Power consumption
+    per component for Lightspan FX": FNIO-B 20 W typical, 25 W maximum. It is not in the ETSI
+    Safety Manual 3HH11998AAAATCZZA29 table. The notes say NT figures exclude the NTIO and
+    SFPs; for the NTIO row itself the manual does not say whether the SFP modules are inside
+    the figure, so that scope is open (gap).
+  layout: >-
+    drawing (fractions only) - ETSI UDS A18 p396 Figure 176, the 3D side-and-front board
+    view, from the embedded 1435 x 1351 image at 300 ppi (pdfimages); the Lightspan p294
+    Figure 125 is the same art (drawing number 33775) as a 150 ppi JPEG. No orthographic
+    front exists in any guide. Scale: the two thumbscrew knurls are both at the front and at
+    the same depth, so their centres (image y 125.2 and 1272.7) fix 394.5 mm = 1147.5 px,
+    0.3438 mm/px. Plate features are read on the card's near edge, which sits about 5.6 px
+    below the screws in the oblique (the across axis rises 12 px over the 25 mm and a
+    feature proud of the plate drops 0.34 px/mm). Top lever tip 34.0 (the lever is drawn
+    half open; held clear of the lamp block, as the FNIO-A); lamp rows 37.9 to 58.1 on a
+    5.05 pitch; the sawtooth 65.1 to 294.5 with its seven inner valleys at 95.5 ... 264.8
+    (82.0 px, a 28.2 mm pitch); a right-pointing mark 296.9-303.4 and a warning triangle
+    304.1-310.3; the RJ45 frame from 314.3; jack pattern repeating every 45.5 px; the
+    bottom lever is drawn OPEN and is modelled closed (provenance.ejectors). Across the
+    card nothing can be taken from a 3D view: the cages are centred, the lamp columns spaced
+    6.6 mm as the FNIO-A (Figure 177 is the FNIO-A lamp block, legend for legend), the
+    jacks at the left and the lower lever at the right, as Figure 176 draws them side by
+    side. Estimated error about 1 mm along the card.
+  ports: >-
+    datasheet - UDS section 27.4.1.1 / 41.4.1.1 and Table 96 / 123: SFP ports 1-4
+    (1000BASE-X), SFP ports 5-8 (100BASE-FX, 1000BASE-X) and RJ45 ports 5-8
+    (10/100/1000BASE-T). Ports 5-8 are COMBO ports: the same port number is either the
+    SFP or the RJ45, so both are drawn (they are both on the plate) and each RJ45 carries
+    `combo-with` naming its SFP. SFPs 'placed under a 45 degree angle' for fibre bend
+    radius. Composed as std/sfp@1 at its registry aperture, rotate 90, `on` its tooth's
+    face facet, as nokia/fnio-a@1: the 14.5 mm side along the card, foreshortened to
+    10.25; `at` is the face centre less 5 x cos 45. Numbering 1-8 top to bottom is Nokia's
+    own callout in Figure 176. The RJ45s are common/rj45-eth@1 (the link and activity
+    lamps of Figure 178) at rotate 90, on a 15.9 pitch: the figure repeats every 45.5 px,
+    15.6 mm, which is less than the 15.8 mm housing, so the pitch is opened to 15.9 (1.9
+    percent, inside the scale error) rather than let housings overlap. Latch side (rotate
+    90, keyway toward the left edge) is a low-confidence reading of the oblique view.
+  lamps: >-
+    datasheet - Figure 177 (ETSI p397, embedded 1435 x 409 at 300 ppi; Lightspan Figure
+    126) and Table 97 / 124. Two columns: ALM | PWR, then 1 | 2, 3 | 4, 5 | 6, 7 | 8,
+    legends outboard, a bracket labelled PORT on the right beside rows 1-8. PWR on = power
+    on; ALM red = alarm; SFP lamp off = no link, green = link up, blinking green = traffic.
+    The PWR colour is not stated (on/off only); drawn with the family green. RJ45 lamps,
+    Figure 178: Link on the left window, Activity on the right, which is common/rj45-eth
+    led-a / led-b; Table 97 gives link ON and activity ON or flashing with no colour, so
+    both are drawn with the family green.
+  marks: >-
+    drawing - below the last tooth Figure 176 draws a right-pointing triangle and a warning
+    triangle (the laser mark, as on the FNIO-D); drawn as outlines, neither is legible at
+    300 ppi.
+  ejectors: >-
+    drawing - the upper lever is drawn swung out of the plate, and the lower lever OPEN;
+    both are modelled closed. The lower lever's closed length is solved from the open one
+    (image run 30 px out over 207 px down the card, a 70.8 mm lever) and its pivot at
+    about 395 mm, so its tip lies at about 324.7, alongside the RJ45 frame on the right
+    edge, where Figure 176 draws it beside the jacks.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2) is used. The sawtooth is sixteen
+    facets (provenance.angled-panel), not an `out`.
+  angled-panel: >-
+    datasheet and drawing - the UDS places each SFP 'under a 45 degree angle', and Figure
+    176 draws the eight cages on a continuous sawtooth, each tooth a FACE carrying the cage
+    that looks up (root at its upper edge on the plate, lower edge proud) and a RETURN below
+    it that looks down. The teeth stand PROUD of the plate (the sawtooth breaks the plate's
+    outline in the side view), so ordinary facets fit. Measured on the near-side edge of
+    tooth 2 (image px): a run of 33.5 out of the plate, which at the oblique's depth axis
+    (the board's top edge: 525 px across and 70 px down for its 205 mm, 2.56 and 0.34 px/mm)
+    is an apex 13.1 mm proud; the face falls 42.0 px (12.2 mm) and the return 40.0 px
+    (11.6 mm) front-view once the apex's 4.5 px depth drop is taken out, so 47 and 48
+    degrees against the 45 of the text. Modelled 45/45: face and return each 14.1 mm on
+    the measured 28.2 mm pitch, meeting at a 14.1 mm apex. The projected cage (10.25 mm)
+    leaves 1.9 mm of face above and below it; a 45/45 tooth is square, so each cage's
+    depth runs parallel to its return and stays 2.7 mm inside it however deep it goes.
+    What the facets do not say: as on the FNIO-A, the inner valleys are drawn about 2 mm
+    proud of the plate (x 822 against the plate's 817), so the end teeth run a little
+    longer (65.1 to 95.5 and 264.8 to 294.5); every valley is modelled on the plate and
+    the teeth span 67.3-292.9, the difference flat plate at each end.
+  gaps: >-
+    Inner valleys drawn about 2 mm proud of the plate (modelled on it). Faceplate
+    edge-to-edge width (not stated; held at the 25 mm pitch). Whether the SFP modules are
+    inside the 25 W figure. RJ45 pitch opened 15.6 -> 15.9 and latch side read at low
+    confidence. The two marks below the teeth (unresolved at 300 ppi). The lever tips'
+    closed positions are solved, not seen.
+  logo-zone: >-
+    reserved by the family convention; Figure 176 draws no mark on the plate, so the zone
+    sits on the empty metal below the RJ45 frame, left of the lower lever.
+  lifecycle: >-
+    searched only the staged corpus - listed in the Lightspan UDS A23 and ETSI UDS A18;
+    no end-of-life notice was searched for on the web.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Drawn and relieved as nokia/fant-h-bb@2 draws its screws (knurled head,
+    cyl 1.6). Figure 176 draws a knurled screw at each end, as the family figure has.
+elements:
+  logo-zone: {at: [2.0, 380.0], size: [14.5, 12.0], class: label}
+  screw-top: {at: [13.45, 0], size: [10.5, 10.5], class: screw}
+  screw-bottom: {at: [13.45, 394.5], size: [10.5, 10.5], class: screw}
+  tooth-1-face: {at: [0.6, 67.3], size: [23.8, 14.1], class: mechanical}
+  tooth-1-return: {at: [0.6, 81.4], size: [23.8, 14.1], class: mechanical}
+  tooth-2-face: {at: [0.6, 95.5], size: [23.8, 14.1], class: mechanical}
+  tooth-2-return: {at: [0.6, 109.6], size: [23.8, 14.1], class: mechanical}
+  tooth-3-face: {at: [0.6, 123.7], size: [23.8, 14.1], class: mechanical}
+  tooth-3-return: {at: [0.6, 137.8], size: [23.8, 14.1], class: mechanical}
+  tooth-4-face: {at: [0.6, 151.9], size: [23.8, 14.1], class: mechanical}
+  tooth-4-return: {at: [0.6, 166], size: [23.8, 14.1], class: mechanical}
+  tooth-5-face: {at: [0.6, 180.1], size: [23.8, 14.1], class: mechanical}
+  tooth-5-return: {at: [0.6, 194.2], size: [23.8, 14.1], class: mechanical}
+  tooth-6-face: {at: [0.6, 208.3], size: [23.8, 14.1], class: mechanical}
+  tooth-6-return: {at: [0.6, 222.4], size: [23.8, 14.1], class: mechanical}
+  tooth-7-face: {at: [0.6, 236.5], size: [23.8, 14.1], class: mechanical}
+  tooth-7-return: {at: [0.6, 250.6], size: [23.8, 14.1], class: mechanical}
+  tooth-8-face: {at: [0.6, 264.7], size: [23.8, 14.1], class: mechanical}
+  tooth-8-return: {at: [0.6, 278.8], size: [23.8, 14.1], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - {node: screw-top, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 via nokia/fant-h-bb@2 - the library one figure for a captive screw head. NOT MEASURED'}
+    - {node: screw-bottom, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 via nokia/fant-h-bb@2 - the library one figure for a captive screw head. NOT MEASURED'}
+    - node: tooth-1-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-1-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-2-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-2-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-3-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-3-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-4-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-4-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-5-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-5-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-6-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-6-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-7-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-7-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-8-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-8-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p396 Figure 176, a tooth run and rise (provenance.angled-panel)
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      the eight uplink SFP cages, 1-4 1000BASE-X and 5-8 100BASE-FX / 1000BASE-X (5-8 are
+      the optical side of the combo ports)
+  base-t:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the four combo RJ45s, 10/100/1000BASE-T, labelled 5-8 by Nokia (the electrical side
+      of the combo ports; the group counts them 1-4, the label attr carries Nokia's number)
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one lamp per SFP port, legends 1-8 bracketed PORT
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp, at: [5.25, 70.814], rotate: 90, 'on': tooth-1-face}
+  - {ref: std/sfp@1, id: port-2, group: sfp, at: [5.25, 99.014], rotate: 90, 'on': tooth-2-face}
+  - {ref: std/sfp@1, id: port-3, group: sfp, at: [5.25, 127.214], rotate: 90, 'on': tooth-3-face}
+  - {ref: std/sfp@1, id: port-4, group: sfp, at: [5.25, 155.414], rotate: 90, 'on': tooth-4-face}
+  - {ref: std/sfp@1, id: port-5, group: sfp, at: [5.25, 183.614], rotate: 90, 'on': tooth-5-face}
+  - {ref: std/sfp@1, id: port-6, group: sfp, at: [5.25, 211.814], rotate: 90, 'on': tooth-6-face}
+  - {ref: std/sfp@1, id: port-7, group: sfp, at: [5.25, 240.014], rotate: 90, 'on': tooth-7-face}
+  - {ref: std/sfp@1, id: port-8, group: sfp, at: [5.25, 268.214], rotate: 90, 'on': tooth-8-face}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 36.9], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 36.9], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-port-1, group: port-leds, at: [8.2, 41.95], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-2, group: port-leds, at: [14.8, 41.95], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-3, group: port-leds, at: [8.2, 47], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-4, group: port-leds, at: [14.8, 47], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-5, group: port-leds, at: [8.2, 52.05], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-6, group: port-leds, at: [14.8, 52.05], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-7, group: port-leds, at: [8.2, 57.1], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-8, group: port-leds, at: [14.8, 57.1], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/rj45-eth@1, id: rj45-5, group: base-t, at: [2.1, 315.7], rotate: 90, attrs: {label: '5', combo-with: port-5}, states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/rj45-eth@1, id: rj45-6, group: base-t, at: [2.1, 331.6], rotate: 90, attrs: {label: '6', combo-with: port-6}, states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/rj45-eth@1, id: rj45-7, group: base-t, at: [2.1, 347.5], rotate: 90, attrs: {label: '7', combo-with: port-7}, states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/rj45-eth@1, id: rj45-8, group: base-t, at: [2.1, 363.4], rotate: 90, attrs: {label: '8', combo-with: port-8}, states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

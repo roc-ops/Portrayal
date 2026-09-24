@@ -1,0 +1,314 @@
+format: 1
+kind: module
+name: fglt-a
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FGLT-A (3FE 66721 AB), the 16-port GPON line termination board with traffic
+  manager (version A) of the 7360 ISAM FX; dropped from the Lightspan FX guides. Seats in any LT slot of the
+  FX-4, FX-8 and FX-16. Authored upright, as the Unit Data Sheet guides draw it: a
+  thumbscrew and a grey ejector lever in a cap at each end, the PWR and ALM lamps and a
+  hot-surface mark under the top cap, then eight windows in a flat faceplate, each
+  showing two SFP cages angled on a sawtooth behind the plate (16 GPON ports), and the
+  barcode and model labels above the bottom cap. One PON lamp per port sits in the side
+  of its socket, on the port's left. The face is the FGLT-B's; only the model label
+  differs.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), the width the shared 7360 FX LT bay is built to;
+  the faceplate's own edge-to-edge width is not stated. d is the board's depth at its
+  top, 225 mm; the UDS gives 205 mm at the bottom (the board is stepped, and Figure 101
+  draws the step).
+attrs:
+  model: FGLT-A AB
+  part-number: 3FE 66721 AB
+  gpon: 16
+  weight-kg: 1.4
+  power-draw-max-w: 110
+  power-draw-typical-w: 103
+provenance:
+  size: >-
+    datasheet - 7360 ISAM FX ANSI Unit Data Sheet guide 3FE77013AAAATQZZA16 (R6.9) section
+    30.5.2 (p258): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board
+    pitch 25 mm; ETSI UDS 3FE77012AAAATQZZA18 section 34.5.2 prints the same. The UDS
+    "width" is the board's depth into the shelf. Face held at the 25 mm pitch by the
+    shared 7360 FX convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 30.5.2; faceplate width not stated, taken
+    as the pitch.
+  depth: 'datasheet - 225 mm at the top, 205 mm at the bottom, section 30.5.2; 225 carried as the envelope'
+  weight: 'datasheet - 1.4 kg, ANSI UDS R6.9 section 30.5.2 (p258)'
+  power: >-
+    datasheet - ANSI Safety Manual 3HH12894AAAATCZZA27 p25 Table 2 "Power consumption per
+    component for 7360 ISAM FX": FGLT-A 103 W typical, 110 W maximum. The Lightspan
+    Safety Manual A07 no longer lists it. The table's notes do not say whether the SFP
+    optics are inside the figure, so that scope is open (gap).
+  layout: >-
+    borrowed - nokia/fglt-b@1, whose layout is photo-measured and drawing-checked. The
+    guides draw the FGLT-A only as a 3D view (ANSI Figure 101 p258 / ETSI Figure 129 p330,
+    1435 x 1862 at 300 ppi) in which the faceplate is seen almost edge-on: it shows the
+    same eight sawtooth teeth behind a flat plate, the lamps under the top thumbscrew, and
+    nothing that can be measured across. The thunder-link 5650fglt-a-2.jpg photograph
+    (1200 x 1200, card horizontal) shows the same face as the FGLT-B photographs, window
+    for window: eight windows of two cages, the lamps, the hot-surface mark, the barcode
+    label and a model label reading FGLT-A in the same places. Compared like for like
+    with thunder-link's own FGLT-B photograph (5061fglt-b-2.jpg, same studio, same
+    thresholding), the window pitch is 10.0% of the plate against 10.2%, the same within
+    the 1200 px image's resolution. Thunder-link's plate ends fade into the white ground,
+    so both its images read the plate about 3% short; the absolute fractions therefore
+    come from the FGLT-B's 2000 px drinia photograph and are used here unchanged.
+  layout-rotation: >-
+    as nokia/fglt-b@1 - the PWR and ALM legends read upright with the lamp end at the top;
+    the ETSI LED close-up Figure 130 (p331) draws lamp left, legend right, PWR above ALM,
+    PWR green and ALM red.
+  ports: >-
+    datasheet for the count - UDS section 30.4: 16 GPON ports for SFP GPON optical
+    modules. Composed as std/sfp@1 turned 90, two per window, as nokia/fglt-b@1.
+    Numbered 1-16 from the top: ASSUMED, no image resolves a numeral (gap).
+  lamps: >-
+    datasheet - Figure 102 / ETSI Figure 130 and Table 83. PWR: off = power off, blinking
+    green = initialisation; no steady state is listed and none is drawn. ALM: red =
+    alarm. PON lamp (one per port, "worked into the side of the SFP socket", on the left
+    of its port): off, yellow = provisioned and an ONU ranges, green = active without
+    errors, blinking green = provisioned and active, red = transmitter failed or no
+    communication to the SFP. Placed at x 5.0 level with each cage; no image resolves the
+    light pipe itself (gap).
+  labels: >-
+    photo - a white barcode label and a model label reading FGLT-A above the bottom cap,
+    drawn as placeholder blocks; the vendor mark beside it is the logo-zone.
+  relief: >-
+    estimated - the two grey ejector levers stand proud; no document gives a figure, so
+    the library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is
+    used. The caps and windows are not raised; the sawtooth is carried as facets (angled-panel).
+  colour: >-
+    photo - light silver-grey plate, slightly darker end caps, grey plastic levers,
+    knurled silver thumbscrews, a yellow hot-surface label, white labels; the thunder-link
+    unit carries blue-bail SFPs, which are optics and not drawn.
+  lifecycle: >-
+    searched only the staged corpus - present in the ANSI UDS R6.9 and ETSI UDS A18,
+    absent from the Lightspan UDS A23, which suggests it is no longer offered for new
+    Lightspan builds; no end-of-life notice was searched for on the web.
+  angled-panel: >-
+    estimated - as nokia/fglt-b@1: the same face, and Figure 129 draws the same eight
+    teeth behind the same plate. DEPTH: the sawtooth stands BEHIND the plate. Figure 137
+    (FGLT-B) draws the plate 12.0 mm deep (41.5 px, front line to back line) and nothing
+    proud of it; the tooth tips touch the back of the plate and the roots lie 16.4 mm
+    further in. So the eight windows are one pocket, `well`, 43.0 to 366.65 and 28.38
+    deep, and every facet has `lift` -28.38: roots on the pocket floor, proud edges 12.0
+    below the plate front, where the bars between the windows stand in front of them.
+    The angles are unchanged by the depth. Section, plate front at 0: bar front 0, tooth
+    crest -12.0, tooth root and pocket floor -28.38. Modelled as eight teeth of 31
+    degrees (face-N, facing up, two cages and their PON lamps on it, the lamp in the
+    side of the socket) and 56 degrees (return-N, facing down) on the 38.3 window pitch
+    of the photograph: face 27.25 and return 11.05 mm of front view. Each face ends at
+    the bottom of its window and its return rises behind the bar below it to the crest,
+    as Figure 137 draws; the bars are painted on the top 4 mm of each return. return-0
+    is the short edge Figure 137 draws at the top of the first window. A cage runs back
+    square to its face, down and in; because 31 + 56 is under 90 degrees it descends
+    faster than the return below it and passes below the pocket floor before it reaches
+    any wall (0.58 mm worst clearance), so none comes out through a wall or the back of
+    a tooth. That is also why the last face needs its return: the pocket runs to 366.65,
+    11 mm past the bottom of window 8 (355.6) and over the top 6.5 mm of the barcode
+    label (gap); ending it at the window would put the lower cage of face-8 through the
+    pocket wall.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [0.5, 383.4], size: [5.0, 4.4], class: label}
+  model-label: {at: [0.4, 366.9], size: [5.4, 16.1], class: label}
+  barcode-label: {at: [7.1, 360.2], size: [13.4, 27.0], class: label}
+  well: {at: [2.5, 43], size: [20.5, 323.646], class: mechanical}
+  return-0: {at: [2.5, 49.2], size: [20.5, 11.046], class: mechanical}
+  face-1: {at: [2.5, 60.246], size: [20.5, 27.254], class: mechanical}
+  return-1: {at: [2.5, 87.5], size: [20.5, 11.046], class: mechanical}
+  face-2: {at: [2.5, 98.546], size: [20.5, 27.254], class: mechanical}
+  return-2: {at: [2.5, 125.8], size: [20.5, 11.046], class: mechanical}
+  face-3: {at: [2.5, 136.846], size: [20.5, 27.254], class: mechanical}
+  return-3: {at: [2.5, 164.1], size: [20.5, 11.046], class: mechanical}
+  face-4: {at: [2.5, 175.146], size: [20.5, 27.254], class: mechanical}
+  return-4: {at: [2.5, 202.4], size: [20.5, 11.046], class: mechanical}
+  face-5: {at: [2.5, 213.446], size: [20.5, 27.254], class: mechanical}
+  return-5: {at: [2.5, 240.7], size: [20.5, 11.046], class: mechanical}
+  face-6: {at: [2.5, 251.746], size: [20.5, 27.254], class: mechanical}
+  return-6: {at: [2.5, 279], size: [20.5, 11.046], class: mechanical}
+  face-7: {at: [2.5, 290.046], size: [20.5, 27.254], class: mechanical}
+  return-7: {at: [2.5, 317.3], size: [20.5, 11.046], class: mechanical}
+  face-8: {at: [2.5, 328.346], size: [20.5, 27.254], class: mechanical}
+  return-8: {at: [2.5, 355.6], size: [20.5, 11.046], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: well
+      pocket: 28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (Figure 137); Figure 129 draws the same plate and teeth'
+    - node: return-0
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-1
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-1
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-2
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-2
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-3
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-3
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-4
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-4
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-5
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-5
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-6
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-6
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-7
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-7
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-8
+      facet: {deg: 31, facing: up}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-8
+      facet: {deg: 56, facing: down}
+      lift: -28.38
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: the sixteen GPON ports (2.488 Gbps down, 1.244 Gbps up), SFP GPON optics
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON lamp per port, in the side of its socket on the port's left
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR and ALM
+parts:
+  - {ref: std/sfp@1, id: port-1, group: pon, at: [6.25, 63.174], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: pon, at: [6.25, 75.903], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: port-3, group: pon, at: [6.25, 101.474], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: port-4, group: pon, at: [6.25, 114.203], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: port-5, group: pon, at: [6.25, 139.774], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: port-6, group: pon, at: [6.25, 152.503], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: port-7, group: pon, at: [6.25, 178.074], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: port-8, group: pon, at: [6.25, 190.803], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: port-9, group: pon, at: [6.25, 216.374], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: port-10, group: pon, at: [6.25, 229.103], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: port-11, group: pon, at: [6.25, 254.674], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: port-12, group: pon, at: [6.25, 267.403], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: port-13, group: pon, at: [6.25, 292.974], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: port-14, group: pon, at: [6.25, 305.703], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: port-15, group: pon, at: [6.25, 331.274], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: port-16, group: pon, at: [6.25, 344.003], rotate: 90, 'on': face-8}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [4, 66.603], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-1}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [4, 79.332], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-1}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [4, 104.903], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-2}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [4, 117.632], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-2}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [4, 143.203], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-3}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [4, 155.932], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-3}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [4, 181.503], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-4}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [4, 194.232], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-4}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [4, 219.803], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-5}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [4, 232.532], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-5}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [4, 258.103], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-6}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [4, 270.832], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-6}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [4, 296.403], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-7}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [4, 309.132], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-7}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [4, 334.703], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-8}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [4, 347.432], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-8}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.6, 30.5], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [13.6, 35.5], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
