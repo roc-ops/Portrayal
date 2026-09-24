@@ -1356,7 +1356,7 @@ PORT_SPEEDS = _load_port_speeds(Path(__file__).resolve().parents[2] / "schemas")
 def _pluggable_rates():
     """Every rate any family on the ladder claims, flattened once per call.
 
-    Cheap - nine families, at most a handful of rates each - so this is not
+    Cheap - ten families, at most a handful of rates each - so this is not
     cached the way the per-component lookups above are; caching a set this
     small would only add a place for a test's monkeypatched registry to be
     read stale from.
@@ -4227,7 +4227,7 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
 # The test failed first and this line is its answer, not the other way round.
 PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp-dd", "qsfp", "qsfp28",
                    "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2",
-                   "cxp"}
+                   "cfp4", "cxp"}
 
 
 def _bay_pitch_is_uneven(gaps):
@@ -5268,7 +5268,7 @@ def lint_pluggable_family_interfaces(root):
     whether the registry resolves against the tree. A family whose cage no
     component declares is a family the vocabulary needs without the metal to
     back it, which is exactly `sfp-dd`'s situation today - the SFP-DD MSA
-    defines a real cage, `sfp-dd` is one of the fifteen values `media`
+    defines a real cage, `sfp-dd` is one of the sixteen values `media`
     carries, and no `std/` part for it has been modelled yet.
 
     A REGISTRY THAT LOADED NO FAMILIES IS ITSELF A FINDING HERE, reported

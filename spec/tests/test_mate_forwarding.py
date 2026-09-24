@@ -82,7 +82,7 @@ def test_a_multi_bore_adapter_presents_its_own_interface_not_a_bore():
 def test_the_optical_form_factors_can_all_host():
     """Every optical aperture in the library presents an interface, so nothing
     blocks an optic being seated once the optic itself is modelled."""
-    want = {"sfp", "qsfp", "qsfp-dd", "xfp", "cfp", "cfp2", "cxp"}
+    want = {"sfp", "qsfp", "qsfp-dd", "xfp", "cfp", "cfp2", "cfp4", "cxp"}
     presented = set()
     for p in glob.glob(str(ROOT / "library/components/*/*/v*/contract.yaml")):
         d = yaml.safe_load(open(p)) or {}
