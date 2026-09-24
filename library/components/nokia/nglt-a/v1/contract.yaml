@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nglt-a
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -79,18 +79,49 @@ provenance:
   relief: >-
     estimated - the ejectors stand proud of the plate; no document gives a figure, so
     the library's pooled release-hardware estimate (4.2) is used, as on the FNIO cards.
-    The sawtooth is NOT raised: an `out` on it would come to the front and bury the
-    composed cages.
+    The sawtooth is carried as facets (angled-panel), not as an `out`.
   logo-zone: >-
     reserved by the family convention; Figure 7 draws no mark, so the zone is the empty
     metal between the lamp block and the sawtooth.
   lifecycle: >-
     searched only the staged corpus - listed in ANSI UDS R6.9; no end-of-life notice was
     searched for on the web.
+  angled-panel: >-
+    estimated - NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7, the vector 3D view rendered
+    at 900 dpi. The sawtooth lies in a recess in the plate with its apexes toward the
+    viewer; the cage connectors are on the upper edge of each tooth, so the ports look
+    up. Tracing the tooth edge over eight teeth gives an image run of 154 px down to
+    each apex, 114.5 px back, and a 90 px depth; with the edge of the board as the depth
+    axis (6.2-6.6 px/mm across, 1.3 px/mm down) and 9.71 px/mm along the card, that is
+    13.9-14.0 mm and 13.6-13.8 mm of front view and 13.7-14.6 mm deep, 44-46 degrees
+    each way - the 45/45 of FNIO-A on a slightly shorter pitch. Modelled as eight teeth
+    of 45 degrees up (face-N, the cage on it) and 45 down (return-N), 13.79 mm each on
+    the 27.58 pitch, apexes at 137.2 + 27.58 n as measured, apex 13.79 mm. The recess in
+    Figure 7 ends at 335.3, 5 mm below the last apex, so return-8 is cut there and given
+    `lift` 8.75 to still meet the apex; the walls of cage 8 pass below the plate at
+    333.2, inside that end. The recess floor is modelled as the plate, so the teeth
+    stand 13.79 mm proud where the Nokia apexes sit about level with the plate front
+    (gap).
 elements:
   logo-zone: {at: [4.0, 93.5], size: [17.0, 11.0], class: label}
   laser-label: {at: [1.0, 36.6], size: [20.8, 19.4], class: label}
   label-window: {at: [6.6, 337.6], size: [11.3, 24.8], class: label}
+  face-1: {at: [3.1, 123.41], size: [18.4, 13.79], class: mechanical}
+  return-1: {at: [3.1, 137.2], size: [18.4, 13.79], class: mechanical}
+  face-2: {at: [3.1, 150.99], size: [18.4, 13.79], class: mechanical}
+  return-2: {at: [3.1, 164.78], size: [18.4, 13.79], class: mechanical}
+  face-3: {at: [3.1, 178.57], size: [18.4, 13.79], class: mechanical}
+  return-3: {at: [3.1, 192.36], size: [18.4, 13.79], class: mechanical}
+  face-4: {at: [3.1, 206.15], size: [18.4, 13.79], class: mechanical}
+  return-4: {at: [3.1, 219.94], size: [18.4, 13.79], class: mechanical}
+  face-5: {at: [3.1, 233.73], size: [18.4, 13.79], class: mechanical}
+  return-5: {at: [3.1, 247.52], size: [18.4, 13.79], class: mechanical}
+  face-6: {at: [3.1, 261.31], size: [18.4, 13.79], class: mechanical}
+  return-6: {at: [3.1, 275.1], size: [18.4, 13.79], class: mechanical}
+  face-7: {at: [3.1, 288.89], size: [18.4, 13.79], class: mechanical}
+  return-7: {at: [3.1, 302.68], size: [18.4, 13.79], class: mechanical}
+  face-8: {at: [3.1, 316.47], size: [18.4, 13.79], class: mechanical}
+  return-8: {at: [3.1, 330.26], size: [18.4, 5.04], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -106,6 +137,71 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: face-1
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-1
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-2
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-2
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-3
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-3
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-4
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-4
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-5
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-5
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-6
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-6
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-7
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-7
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-8
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-8
+      facet: {deg: 45, facing: down}
+      lift: 8.75
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
 groups:
   gpon:
     term: Port
@@ -124,14 +220,14 @@ groups:
     index-origin: 1
     description: the board lamps PWR, A/S (LT redundancy active/standby) and ALM
 parts:
-  - {ref: std/sfp@1, id: port-1, group: gpon, at: [5.25, 124.25]}
-  - {ref: std/sfp@1, id: port-2, group: gpon, at: [5.25, 151.83]}
-  - {ref: std/sfp@1, id: port-3, group: gpon, at: [5.25, 179.41]}
-  - {ref: std/sfp@1, id: port-4, group: gpon, at: [5.25, 206.99]}
-  - {ref: std/sfp@1, id: port-5, group: gpon, at: [5.25, 234.57]}
-  - {ref: std/sfp@1, id: port-6, group: gpon, at: [5.25, 262.15]}
-  - {ref: std/sfp@1, id: port-7, group: gpon, at: [5.25, 289.73]}
-  - {ref: std/sfp@1, id: port-8, group: gpon, at: [5.25, 317.31]}
+  - {ref: std/sfp@1, id: port-1, group: gpon, at: [5.25, 125.714], 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: gpon, at: [5.25, 153.294], 'on': face-2}
+  - {ref: std/sfp@1, id: port-3, group: gpon, at: [5.25, 180.874], 'on': face-3}
+  - {ref: std/sfp@1, id: port-4, group: gpon, at: [5.25, 208.454], 'on': face-4}
+  - {ref: std/sfp@1, id: port-5, group: gpon, at: [5.25, 236.034], 'on': face-5}
+  - {ref: std/sfp@1, id: port-6, group: gpon, at: [5.25, 263.614], 'on': face-6}
+  - {ref: std/sfp@1, id: port-7, group: gpon, at: [5.25, 291.194], 'on': face-7}
+  - {ref: std/sfp@1, id: port-8, group: gpon, at: [5.25, 318.774], 'on': face-8}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [8, 59.1], states: {lamp: ['off', {name: 'init', color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-as, group: status-leds, at: [8, 64.05], states: {lamp: ['off', {name: 'active', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8, 69], states: {lamp: ['off', {name: 'red', color: '#d0021b'}]}}
