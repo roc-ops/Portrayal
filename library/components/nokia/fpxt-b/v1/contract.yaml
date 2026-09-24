@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fpxt-b
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -74,12 +74,31 @@ provenance:
     19.5 mm XFP opening, and the inserted module's face measures 13.0 mm along the card, which
     is the 18.35 mm XFP width foreshortened by a 45 degree tilt (18.35 x 0.707 = 12.97), so
     the module's width runs ALONG the card on a slanted face, as the 3D Figure 7 draws the
-    sawtooth. The aperture is drawn at its true 19.5 mm, not at its 13.8 mm projection.
-    Numbering 1-8 from the top is ASSUMED from Figure 8, whose XFP legends run left to right
+    sawtooth. Each cage now sits `on` the 45 degree face of its tooth, so the aperture draws at
+    its 13.8 mm projection (see provenance.angled-panel). Numbering 1-8 from the top is ASSUMED from Figure 8, whose XFP legends run left to right
     from the ALM/PWR end; the panel prints no number beside any cage.
     L96 is left standing: the export's only declarable XFP rate is oc192, which would be
     wrong here, and it has no EPON interface type, so the 10gbase-x-xfp default is the nearest
     it can say.
+  angled-panel: >-
+    drawing and estimated - every XFP sits on its own tooth, two facets inside its drawn cage
+    bezel: a RETURN turned 47 degrees up from the plate at the bezel top, then the cage FACE
+    turned 45 degrees DOWN back to the plate, the two meeting at an apex about 15.0 mm proud.
+    Read from three figures that agree: the orthographic Figure 9 (p12) draws each bezel as a
+    blank band on the card-top side (the return, y 52-65 in the first bezel), then the inserted
+    module face (66-80), foreshortened to 13.0 mm for its 18.35 mm width (cos 45 degrees), then
+    a narrow strip; the 3D Figure 7 (p10) draws each module body standing out of the panel
+    pointing down and out, which is a cage mouth facing down; and the FPXT-A front-cover figure
+    draws the same ramp-then-mouth tooth. The face angle is that measured 45 degrees; the
+    face is sized around the cage projection with 0.7 mm above and 0.5 mm below it (65.31-80.29
+    in the first bezel), and the return fitted to meet its apex from the bezel top (51.34), so it
+    comes out 47 degrees; the two agree within 0.1 mm. Across the card the tooth spans x 6.4-18.4,
+    the band Figure 9 draws between the lamp strip and the long edge strip, so the LNK/SPD lamps
+    stay on the flat bezel floor. A cage well runs back along its face normal, up and in, and
+    stays under the return: the face and return total 92 degrees, but the port top sits 0.7 mm
+    below the apex, which leaves the well clear of the return by at least 0.2 mm over its 61.7 mm
+    depth. The apex height is derived from the angle and the bezel, not measured: no document
+    dimensions it.
   lamps: >-
     datasheet - Figure 8 (p11) and Table 2. ALM and PWR round lamps under the wordmark; one
     dual-colour (red/green) LNK lamp and one SPD lamp under each XFP. Table 2: PWR off / blinking
@@ -109,6 +128,86 @@ provenance:
   lifecycle: 'searched only the staged corpus - no end-of-life notice was searched for on the web'
 elements:
   logo-zone: {at: [8.0, 350.0], size: [13.0, 9.0], class: label}
+  pon-1-face:
+    at: [6.4, 65.31]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 1, turned 45 degrees downward - the cage sits on it
+  pon-1-return:
+    at: [6.4, 51.34]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 1, turned 47 degrees upward from the plate to the apex
+  pon-2-face:
+    at: [6.4, 102.73]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 2, turned 45 degrees downward - the cage sits on it
+  pon-2-return:
+    at: [6.4, 88.76]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 2, turned 47 degrees upward from the plate to the apex
+  pon-3-face:
+    at: [6.4, 140.15]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 3, turned 45 degrees downward - the cage sits on it
+  pon-3-return:
+    at: [6.4, 126.18]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 3, turned 47 degrees upward from the plate to the apex
+  pon-4-face:
+    at: [6.4, 177.57]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 4, turned 45 degrees downward - the cage sits on it
+  pon-4-return:
+    at: [6.4, 163.6]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 4, turned 47 degrees upward from the plate to the apex
+  pon-5-face:
+    at: [6.4, 214.99]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 5, turned 45 degrees downward - the cage sits on it
+  pon-5-return:
+    at: [6.4, 201.02]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 5, turned 47 degrees upward from the plate to the apex
+  pon-6-face:
+    at: [6.4, 252.41]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 6, turned 45 degrees downward - the cage sits on it
+  pon-6-return:
+    at: [6.4, 238.44]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 6, turned 47 degrees upward from the plate to the apex
+  pon-7-face:
+    at: [6.4, 289.83]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 7, turned 45 degrees downward - the cage sits on it
+  pon-7-return:
+    at: [6.4, 275.86]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 7, turned 47 degrees upward from the plate to the apex
+  pon-8-face:
+    at: [6.4, 327.25]
+    size: [12.0, 14.98]
+    class: mechanical
+    description: the face of the tooth for XFP 8, turned 45 degrees downward - the cage sits on it
+  pon-8-return:
+    at: [6.4, 313.28]
+    size: [12.0, 13.97]
+    class: mechanical
+    description: the return above XFP 8, turned 47 degrees upward from the plate to the apex
 relief:
   wall: '#8d9298'
   features:
@@ -124,6 +223,86 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: pon-1-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-1-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-2-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-2-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-3-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-3-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-4-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-4-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-5-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-5-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-6-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-6-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-7-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-7-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-8-return
+      facet: {deg: 47, facing: up}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
+    - node: pon-8-face
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        UDS 3FE68788AAAATQZZA06 p12 Figure 9 (orthographic, 1200 dpi) with the 3D Figure 7 (p10): the cage face angle from the module face foreshortened 13.0 mm for its 18.35 mm width (cos 45); the return fitted to meet it at one apex inside the drawn cage bezel
 groups:
   pon:
     term: Port
@@ -147,28 +326,28 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/xfp@1, id: pon-1, group: pon, at: [2.65, 68.05], rotate: 90}
+  - {ref: std/xfp@1, id: pon-1, group: pon, at: [2.65, 69.471], 'on': pon-1-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-1, group: lnk-leds, at: [3.9, 57.8], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-1, group: spd-leds, at: [3.9, 72.1], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-2, group: pon, at: [2.65, 105.47], rotate: 90}
+  - {ref: std/xfp@1, id: pon-2, group: pon, at: [2.65, 106.891], 'on': pon-2-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-2, group: lnk-leds, at: [3.9, 95.22], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-2, group: spd-leds, at: [3.9, 109.52], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-3, group: pon, at: [2.65, 142.89], rotate: 90}
+  - {ref: std/xfp@1, id: pon-3, group: pon, at: [2.65, 144.311], 'on': pon-3-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-3, group: lnk-leds, at: [3.9, 132.64], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-3, group: spd-leds, at: [3.9, 146.94], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-4, group: pon, at: [2.65, 180.31], rotate: 90}
+  - {ref: std/xfp@1, id: pon-4, group: pon, at: [2.65, 181.731], 'on': pon-4-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-4, group: lnk-leds, at: [3.9, 170.06], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-4, group: spd-leds, at: [3.9, 184.36], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-5, group: pon, at: [2.65, 217.73], rotate: 90}
+  - {ref: std/xfp@1, id: pon-5, group: pon, at: [2.65, 219.151], 'on': pon-5-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-5, group: lnk-leds, at: [3.9, 207.48], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-5, group: spd-leds, at: [3.9, 221.78], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-6, group: pon, at: [2.65, 255.15], rotate: 90}
+  - {ref: std/xfp@1, id: pon-6, group: pon, at: [2.65, 256.571], 'on': pon-6-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-6, group: lnk-leds, at: [3.9, 244.9], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-6, group: spd-leds, at: [3.9, 259.2], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-7, group: pon, at: [2.65, 292.57], rotate: 90}
+  - {ref: std/xfp@1, id: pon-7, group: pon, at: [2.65, 293.991], 'on': pon-7-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-7, group: lnk-leds, at: [3.9, 282.32], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-7, group: spd-leds, at: [3.9, 296.62], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
-  - {ref: std/xfp@1, id: pon-8, group: pon, at: [2.65, 329.99], rotate: 90}
+  - {ref: std/xfp@1, id: pon-8, group: pon, at: [2.65, 331.411], 'on': pon-8-face, rotate: 90}
   - {ref: common/led-rect-sm@1, id: led-lnk-8, group: lnk-leds, at: [3.9, 319.74], rotate: 90, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: unranged, color: '#f2b705'}, {name: fault, color: '#d0021b'}]}}
   - {ref: common/led-rect-sm@1, id: led-spd-8, group: spd-leds, at: [3.9, 334.04], rotate: 90, states: {lamp: ['off', {name: dual-speed, color: '#39b54a'}, {name: speed-10g-10g, color: '#f2b705'}, {name: error, color: '#d0021b'}]}}
   - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [7.5, 43.7], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
