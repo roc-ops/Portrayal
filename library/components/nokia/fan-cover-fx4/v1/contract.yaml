@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: fan-cover-fx4
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The fan cover of the Nokia 7360 ISAM FX-4 shelf (NFXS-F): a strip closing the fan area at
+  the shelf's right-hand end, in front of the BFAN-X fan unit, held by one captive screw.
+  THIS IS THE PART THAT CARRIES THE SHELF'S NAME: "7360 ISAM FX-4" is printed on the cover,
+  not on the fan unit or the shelf frame, together with the slot legend for each card row
+  (NTA, NTIO, NTB, 01 to 04). A window near the foot shows the fan unit's lamp. No part
+  number for the cover appears in any staged document.
+size: {w: 33.1, h: 213.5}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the cover closes exactly the fan area, so it takes the BFAN-X face it covers; its own
+  outline is not dimensioned
+attrs:
+  model: FX-4 fan cover
+  role: access-cover
+provenance:
+  size: >-
+    borrowed - nokia/bfan-x@1, the fan unit this closes (33.1 x 213.5, Lightspan UDS
+    3HH90279AAAATQZZA23 p386). In the NFXS-F BA shelf elevation (3FE64991BAAATQZZA02 p7
+    fig4, vector, rendered at 1200 dpi, 6.98 px/mm across from the 447 mm body and 7.02 down
+    from the 222 mm height) the cover's outline runs from x 413 to the body edge and from y
+    about 4 to 218, which is the fan's footprint to the resolution of its double edge strokes
+    (about 1 mm); nothing in that figure distinguishes the two outlines.
+  layout: >-
+    drawing - read off the same elevation at 1200 dpi, in shelf millimetres then shifted by
+    the cover's origin (413.6, 4.2). Row legends at shelf y NTA 178.0, NTIO 151.6, NTB 123.9,
+    01 93.9, 02 69.0, 03 44.1, 04 19.9 - each within 1 mm of the centre of the card row it
+    names, which is the check that the reading is right - all at shelf x 423.3. The name
+    "7360 ISAM FX-4" runs up the cover, set bold, from shelf y 163.8 to 112.5 at x 432.7.
+    Captive screw centre y 182.3, about 13 mm across; lamp window y 200.8 with a small fan
+    symbol above it at 195.8.
+  identity: >-
+    drawing - Lightspan HW Installation Manual 3HH91853AAAARJZZA08 figs 259-260 show the
+    FX-4 fan cover removed from in front of the fan unit, and fig 158 the FX-8's printed "7360
+    ISAM FX-8"; found by the agent who modelled nokia/bfan-x@1. No part number is given in the
+    installation manual, the Unit Data Sheet guides or the Product Information Guides.
+  text-weight: >-
+    drawing - the elevation sets every legend on the cover in a heavy face; drawn bold. The
+    legend height (about 3 mm, name about 5 mm) is read from the same figure and good to
+    half a millimetre.
+elements:
+  face: {at: [0.0, 0.0], size: [33.1, 213.5], class: panel}
+  screw: {at: [11.3, 171.4], size: [13.4, 13.4], class: fastener}
+  lamp-window: {at: [16.6, 195.0], size: [3.2, 3.2], class: window}
+  logo-zone: {at: [4.0, 2.0], size: [25.0, 8.0], class: logo-zone}
+connection-points:
+  mate: {at: [16.55, 106.75], direction: rear}
+skins: [default]
