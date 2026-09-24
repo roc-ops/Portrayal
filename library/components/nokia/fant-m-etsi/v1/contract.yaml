@@ -1,0 +1,277 @@
+format: 1
+kind: module
+name: fant-m-etsi
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7360 ISAM FX FANT-M network termination (NT) card, ETSI build - part
+  3FE79270AA and its temperature-hardened twin 3FE79270AB, which share this face.
+  A 2.0 Tbps switch and the subrack's management, alarm and timing controller,
+  seated at NT-A and/or NT-B of an FX-16, FX-8 or FX-4 subrack. Authored upright;
+  the FX-4 and FX-8 bays turn it with rotate 90. The ANSI face (nokia/fant-m@1)
+  plus what the ETSI build adds - an alarm cut-off (ACO) switch and ACO lamp, and
+  BITS_IN and BITS_OUT RJ-45s between the micro-USB and the ETH jack - fourteen
+  lamps in all.
+unplaced: >-
+  The 7360 ISAM FX-16, FX-12, FX-8 and FX-4 ETSI subracks (roc-ops/Portrayal#538) seat
+  it at NT-A and NT-B; none of those subracks is in the library yet. Delete this key when
+  the first NT bay names nokia/fant-m-etsi@1 in `accepts` or `default`.
+size: {w: 30.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the NT slot pitch, not a measured faceplate width - see provenance.size-width.
+  d is the larger of the two depths the UDS gives (205/225 mm) - see provenance.depth.
+attrs:
+  model: FANT-M
+  part-number: 3FE79270AA
+  variants: >-
+    AA 3FE79270AA - central office, -5 to +45 C with multiple subracks. AB 3FE79270AB -
+    temperature hardened, -40 to +65 C in a central office or outdoor cabinet with
+    multiple subracks. One face, one drawing; a bay seating the AB says so with attrs
+    {part-number: 3FE79270AB, temperature-range: hardened}.
+  temperature-range: central-office
+  switch-capacity: 2.0 Tbps
+  qsfp28: 2
+  sfp-plus: 2
+  weight-kg: 1.7
+  power-draw-max-w: 127
+  power-draw-typical-w: 120
+  power-draw-scope: module
+  input-voltage: -48 V DC and -60 V DC nominal
+provenance:
+  size: >-
+    datasheet - 7360 ISAM FX ETSI MII Unit Data Sheets R7.0 (3FE77012AAAATQZZA18)
+    s26.5.1 (AA) and the AB section, identical: 'Height: 405 mm (15.94 in.)', 'Width:
+    30 mm (1.18 in.)', weight approximately 1.7 kg. Lightspan UDS 25.12
+    (3HH90279...A23) p247 and p257 give the same for the AA and AB.
+  size-width: >-
+    datasheet - the 30 mm is the NT slot pitch ('card pitch NT 30 mm') and is also the
+    UDS 'Width'. The faceplate's own edge-to-edge width is not stated anywhere searched
+    (the three UDS guides and the ANSI HIM); it is taken as the pitch so the part
+    seats the shelf's NT bay exactly. Figure 90, like the ANSI Figure 72, draws the face at 74 px against 1079
+    px for the 405 mm height, i.e. 27.8 mm at the height's scale - seven percent
+    narrow, which is the three-quarter projection foreshortening the face, not a
+    measurement of it.
+  depth: >-
+    datasheet - UDS 'Depth: 205/225 mm (8.07/8.86 in.)'. The guide does not say what
+    the two figures measure; 225 is carried as the envelope (the larger), and the 205
+    is recorded here rather than guessed at (board only, or to the backplane connector,
+    are both plausible readings; the guide says neither).
+  variants: >-
+    datasheet and drawing - AA and AB SHARE ONE FACE, verified structurally: in the ETSI
+    UDS R7.0 Figure 90 (FANT-M AA, p256) and Figure 95 (FANT-M AB, p266) are the SAME
+    embedded image object (pdfimages object 7289, 1435 x 1236 at 300 ppi), and the LED
+    figures 91 and 96 are one object (7292). The Lightspan UDS repeats it (AA fig 98 and
+    AB fig 103 are object 2176). The text differs in the operating-temperature bullet,
+    so the temperature build is the `variants` / `temperature-range` attrs. The ANSI
+    BA/BB figure is a different drawing - it lacks the ACO switch and lamp and the two
+    BITS jacks, the ANSI build carrying BITS on the GFC plate instead - so it is the
+    separate nokia/fant-m@1.
+  face: >-
+    drawing - ETSI UDS R7.0 Figure 90 'View of the FANT-M AA (ETSI)', p256, the embedded
+    image at its native 300 ppi. It is the ANSI Figure 72 with the ETSI features added:
+    the face sits in the same frame (y 116-1195 px, 2.664 px/mm), and differencing the
+    two images pixel by pixel changes only three bands - 24.0-31.2 mm (the ACO switch
+    at the lever tip), 36.8-40.2 mm (the ACO lamp and its legend) and 262.8-296.5 mm
+    (the BITS_IN / BITS_OUT pair). Everything else is placed exactly as on
+    nokia/fant-m@1, whose provenance.positions this contract shares. Only y is a
+    measurement; x is foreshortened by the three-quarter view.
+  positions: >-
+    drawing (y) and estimated (x) - as nokia/fant-m@1 (the same figure frame, see
+    provenance.face), plus: ACO switch a small round button at the lower-right tip of
+    the upper lever, about 28.3-30.0 mm down, drawn about 1.5 mm across; placed as
+    common/reset-button@1 at 8.5-12.5 x 27.0-31.0, a size compromise (the library has
+    no smaller panel button). ACO lamp at row 2, left column, 38.5 mm - the slot the
+    ANSI face leaves blank. BITS_IN / BITS_OUT frame 262.8-296.5 mm, halved for the two
+    jacks (centres 271.3 and 288.0); the ETH and LCRT/ToD blocks are unmoved (the
+    differencing shows no change below 296.5 bar the legend antialiasing).
+  orientation: >-
+    drawing - the RJ45s are rotate 270, keyway to the RIGHT: Figures 72 and 90 at 3x show
+    the ETH jack's latch slot and its two lamp windows on the legend side, and the
+    LCRT, ToD/PPS and (Figure 90) BITS_IN and BITS_OUT openings step the same way. The cages are rotate 90 (long axis
+    down the card); the figure does not resolve which way a QSFP28 or SFP+ latch
+    faces, so that is a convention (library vertical cards take R90), not a reading.
+    The micro-USB's trapezoid is not resolved either; rotate 90 by the same convention.
+  housing: >-
+    drawing - Figure 72 draws the SMA, QSFP28 and SFP+ block as a housing standing
+    proud of the plate, one box per connector, from 66.0 to 240.6. It is painted flat
+    here: the projection gives no depth for it, and a raised node is lifted OVER the
+    composed parts, which would bury the six connectors it frames. GAP: how far the
+    housing stands proud is unmeasured; no Nokia document dimensions it.
+  lamps: >-
+    drawing - Figure 91 'FANT-M AA system status LEDs' (p258, object 7292): two
+    columns of round lamps, ALM / PWR, ACO / A/S, then PORT1 lanes 2-1 and 4-3 in a
+    bracket, PORT2 lanes 2-1 and 4-3 in a bracket, PORT4 / PORT3. Fourteen lamps. The
+    lamps are common/led-dot@1 (2 mm); the figure draws them about 2.7 mm across at the
+    5 mm pitch, so the dot is a size compromise at the right pitch.
+  states: >-
+    datasheet - Table 87 'System status LED definition' (ETSI UDS R7.0 s26.5.2; Table 90
+    for the AB). PWR green flashing 0.5 s on / 0.5 s off = SW initializing; green
+    blinking 3.5 s on / 0.5 s off = SW initialization completed, NT operational; off =
+    no power. A/S green = active, off = stand-by. ALM red = alarm condition, off = no
+    alarm. ACO green = 'Alarm has been cut off', off = no alarm cut off. The port lamps,
+    on the table's second page, are link/activity with no colour given, as in the ANSI
+    Table 68, so each carries one `link-activity` state and `off`.
+  ports: >-
+    datasheet - ETSI UDS R7.0 s26.4.1 and Table 86. Communication: 1 x 10/100/1000Base-T,
+    2 x QSFP28 (100GE, 40GE, 4x25GE, 4x10GE; 10GE by adapter), PORT3 SFP+ 10GE.
+    Management: micro-USB (debug), Alarm Cut-Off Switch (ACOS) and LED (ACOLED), LCMI
+    craft (RJ-45). Clock: BITS input (RJ-45), BITS output / daisy-chain NTR clock output
+    (RJ-45; 8 kHz and 19.44 MHz per the features list), ToD/1 PPS (RJ-45), 10 MHz GPS
+    (SMA), 1 PPS (SMA), SyncE/PTP on PORT1-4. Table 86 gives PORT4 traffic 'Not
+    supported' and clock '10GE, 1GE', so PORT4 is in `timing`, not `sfp-plus`. The
+    BITS jacks are media rj48, the token the library's other BITS jacks carry. The
+    Base-T is a COMMUNICATION interface in Nokia's list, so it is `traffic`.
+  power: >-
+    datasheet - maximum 127 W, typical 120 W. ETSI Safety Manual 3HH11998AAAATCZZA29
+    p25, Table 2 'Power consumption per component for 7360 ISAM FX', rows 'FANT-M - AA
+    variant (1)' and 'FANT-M - AB variant (1)', both 120 W typical and 127 W maximum;
+    note (1): 'The power consumption for all NT cards does not include the NTIO card or
+    SFP power consumption'. Corroborated by the Lightspan Safety Manual
+    3HH91852AAAATCZZA07 p37, row 'FANT-M (1)', 120 / 127 W, same exclusion. No ambient
+    is stated.
+  relief: >-
+    estimated - the lever proudness (out 4.2) and captive-screw head (cyl 1.6) are the
+    library's shared release-hardware and screw figures (cisco/a99-rp3-tr@1 records
+    their origin); nothing in the Nokia corpus dimensions a projection.
+  logo-zone: >-
+    estimated - no logo is visible on Figure 90's face; the zone is reserved in the
+    blank top-right corner beside the lever, per the family convention, and draws
+    nothing. It stops above the FANT-M legend and the ACO switch.
+elements:
+  logo-zone: {at: [11.0, 3.0], size: [16.0, 18.0], class: label}
+  ejector-top:
+    at: [0.8, 0.5]
+    size: [7.4, 30.5]
+    class: handle
+    description: the upper ejector lever, closed along the face
+  ejector-bottom:
+    at: [0.8, 318.0]
+    size: [5.6, 86.0]
+    class: handle
+    description: the lower ejector lever, closed along the face, pivot at the bottom-left corner
+  screw:
+    at: [17.0, 394.5]
+    size: [8.0, 8.0]
+    class: screw
+    description: captive fixing screw
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      PORT1 and PORT2, QSFP28/QSFP+ uplinks - 100GE, 40GE, 4x25GE, 4x10GE, 10GE by
+      adapter; SyncE/PTP on all of them (Table 67)
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: PORT3, SFP+ 10GE data and SyncE/PTP (Table 67)
+  base-t:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the ETH 10/100/1000Base-T port, which Nokia lists as a communication interface
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the clock block - 1 PPS and 10 MHz GPS SMA inputs, the BITS input and output
+      RJ-45s, the ToD/1 PPS RJ-45 and PORT4, an SFP+ Nokia gives no traffic support and
+      SyncE/PTP at 10GE and 1GE
+  craft:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      local access to the card - the LCRT craft (LCMI) RJ-45, the micro-USB debug port
+      and the alarm cut-off switch
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the system status lamps of Figure 91 and Table 87
+parts:
+  - {ref: common/sma-jack@1, id: pps, group: timing, at: [7.75, 67.25], attrs: {function: 1 PPS input, legend: 1PPS}}
+  - {ref: common/sma-jack@1, id: ten-mhz, group: timing, at: [7.75, 90.25], attrs: {function: 10 MHz GPS input, legend: 10MHz}}
+  - {ref: std/qsfp28@1, id: port1, group: qsfp28, at: [2.5, 122.925], rotate: 90, attrs: {legend: PORT1}}
+  - {ref: std/qsfp28@1, id: port2, group: qsfp28, at: [2.5, 158.425], rotate: 90, attrs: {legend: PORT2}}
+  - {ref: std/sfp@1, id: port3, group: sfp-plus, at: [5.25, 187.0], rotate: 90, attrs: {legend: PORT3}}
+  - {ref: std/sfp@1, id: port4, group: timing, at: [5.25, 213.5], rotate: 90, attrs: {media: sfp-plus, speed: 10g, legend: PORT4, function: 'SyncE/PTP timing only - no traffic'}}
+  - {ref: std/micro-usb@1, id: usb, group: craft, at: [4.25, 254.625], rotate: 90, attrs: {function: debug, legend: USB}}
+  - {ref: std/rj45@2, id: bits-in, group: timing, at: [5.6, 264.7], rotate: 270, attrs: {media: rj48, function: BITS input, legend: BITS_IN}}
+  - {ref: std/rj45@2, id: bits-out, group: timing, at: [5.6, 281.4], rotate: 270, attrs: {media: rj48, function: BITS output / daisy-chain NTR clock output, legend: BITS_OUT}}
+  - {ref: common/rj45-eth@1, id: eth, group: base-t, at: [5.6, 300.2], rotate: 270, attrs: {legend: ETH}}
+  - {ref: std/rj45@2, id: lcrt, group: craft, at: [5.6, 319.4], rotate: 270, attrs: {media: rj45-serial, function: local craft management interface (LCMI), legend: LCRT}}
+  - {ref: std/rj45@2, id: tod, group: timing, at: [5.6, 336.2], rotate: 270, attrs: {media: rj45-tod, function: ToD / 1 PPS, legend: ToD/PPS}}
+  - {ref: common/reset-button@1, id: aco-switch, group: craft, at: [8.5, 27.0], attrs: {function: alarm cut-off (ACO) switch}}
+  - ref: common/led-dot@1
+    id: alm
+    group: leds
+    at: [8.0, 32.5]
+    states:
+      lamp: [{name: alarm, color: '#d0021b'}, 'off']
+  - ref: common/led-dot@1
+    id: pwr
+    group: leds
+    at: [13.0, 32.5]
+    states:
+      lamp:
+        - {name: initializing, color: '#39b54a', behavior: {mode: blinking, rate: 1}}
+        - name: operational
+          color: '#39b54a'
+          behavior: {mode: sequence, phases: [{color: '#39b54a', seconds: 3.5}, {seconds: 0.5}]}
+        - 'off'
+  - ref: common/led-dot@1
+    id: aco
+    group: leds
+    at: [8.0, 37.5]
+    states:
+      lamp: [{name: alarm-cut-off, color: '#39b54a'}, 'off']
+  - ref: common/led-dot@1
+    id: as
+    group: leds
+    at: [13.0, 37.5]
+    states:
+      lamp: [{name: active, color: '#39b54a'}, 'off']
+  - {ref: common/led-dot@1, id: port1-l2, group: leds, at: [8.0, 42.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l1, group: leds, at: [13.0, 42.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l4, group: leds, at: [8.0, 47.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port1-l3, group: leds, at: [13.0, 47.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l2, group: leds, at: [8.0, 52.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l1, group: leds, at: [13.0, 52.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l4, group: leds, at: [8.0, 57.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port2-l3, group: leds, at: [13.0, 57.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port4-led, group: leds, at: [8.0, 62.5], states: {lamp: [link-activity, 'off']}}
+  - {ref: common/led-dot@1, id: port3-led, group: leds, at: [13.0, 62.5], states: {lamp: [link-activity, 'off']}}
+relief:
+  wall: '#9ea3a9'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        cisco/a99-rp3-tr@1 ejector levers - the library's shared release-hardware
+        figure, itself estimated; nothing in the Nokia corpus gives a proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        cisco/a99-rp3-tr@1 ejector levers - the library's shared release-hardware
+        figure, itself estimated; nothing in the Nokia corpus gives a proudness
+    - node: screw
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        cisco/a99-rp3-tr@1 captive screw heads - the library's shared screw-head
+        figure, itself estimated
+connection-points:
+  mate: {at: [15.0, 202.5], direction: rear}
+skins: [default]
