@@ -76,7 +76,9 @@ to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
   as `estimated` unless a document states it.
 - **If a cage shows through the back of a tooth in the 3D view, the facet
   angle, the facet's height or its return is wrong.** The viewer does not
-  clip it, on purpose.
+  clip it, on purpose. The same holds for a sunk facet whose cage comes out
+  through the floor of its pocket: check the facet's lift and angle, and the
+  pocket's depth, against the drawing.
 
 ## Axes and views
 
