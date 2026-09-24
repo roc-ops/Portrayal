@@ -1,0 +1,202 @@
+format: 1
+kind: module
+name: ngfc-h
+version: 1.0.0
+class: power
+behaviour: fills
+profile: networking
+description: >-
+  Nokia NGFC-H (3FE 65675 AA), the general facilities card of the ANSI 7360 ISAM FX-8
+  shelf (NFXS-E BB). It lies horizontally as the bottom row of the shelf, and it is the
+  shelf's -48 V DC power interface: at the left end a terminal block under a hinged
+  'Energy Hazard' cover carrying two EBATRET, EBAT-A and EBAT-B terminals for double-hole
+  lugs on M5 studs; then two 40 A circuit breakers, B above A; a pull handle; the 50-pin
+  micro D-sub for CO alarm I/O, the six-pin recessed BITS wire-wrap header and the DB-9
+  remote craft port; and the lamp field - BAT A and BAT B presence, critical, major and
+  minor alarm lamps, the ACO lamp and the ACO push button.
+unplaced: >-
+  the FX-8 shelf (nokia NFXS-E BB) is being modelled in parallel under roc-ops/Portrayal#538
+  and does not exist in this library yet. Its GFC bay, 405.0 x 53.6 at the bottom of the
+  shelf, seats this card; delete this sentence in the commit that adds that bay.
+size: {w: 405.0, h: 53.6, d: 201.4}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+attrs:
+  model: NGFC-H
+  part-number: 3FE 65675 AA
+  role: general-facilities-card
+  shelf: NFXS-E BB (7360 ISAM FX-8, ANSI)
+  input-voltage: '-48 V DC nominal (-40.5 to -60 V DC at the shelf connection point)'
+  branches: '2 (A and B), each split into two feeds, 2 x 40 A circuit breakers (redundant)'
+  hot-insertable: 'no'
+provenance:
+  size: >-
+    drawing - 405.0 x 53.6. THE WIDTH IS THE VENDOR'S: 'width: 405 mm (15.94 in.), depth:
+    201.40 mm' in Lightspan UDS 3HH90279AAAATQZZA23 p337 s31.5.2 and in 3FE65675AAAATQZZA02
+    p11 and 3FE65601ABAATQZZA01 p9. NO HEIGHT IS STATED ANYWHERE, so the face height is
+    measured from two vector drawings: (a) the NFXS-E BA shelf elevation,
+    3FE64936BAAATQZZA02 p7 fig4, rendered at 1200 dpi, whose own 355 mm height and 463 mm
+    dimension give 9.282 and 9.231 px/mm (0.5 percent apart, so orthographic); the GFC row
+    from the outer edge of its top line to the outer edge of its bottom line is 502 px =
+    54.3 mm, and its width from the terminal cover's left edge to the plate's right edge is
+    3811 px = 412 mm, the 405 to within the strokes; (b) the card's own front panel,
+    3FE65601ABAATQZZA01 p4 fig2 (art 21963), rendered at 600 dpi: 2802 x 366 px outer, which
+    at 405 wide is 52.9 tall. 53.6 is the mean of the two; stroke centres give 52.0 in the
+    shelf, so the figure is good to about a millimetre. The width 405 spans BOTH the
+    terminal section and the plate: the shelf elevation puts the cover's left edge and the
+    plate's right edge 412 mm apart, which the plate alone (312 mm) cannot account for.
+  depth: >-
+    datasheet - 'depth: 201.40 mm (7.93 in.)' in every NGFC-H data sheet (UDS
+    3HH90279AAAATQZZA23 p337; 3FE65675AAAATQZZA02 p11; 3FE65601ABAATQZZA01 p9) - the
+    dimension into the shelf.
+  layout: >-
+    drawing - Every x and y is read off 3FE65601ABAATQZZA01 p4 fig2 (art 21963, the same art
+    as UDS p331 fig151) rendered at 600 dpi, 6.919 px/mm across from the 405 mm width and
+    6.828 down from the chosen 53.6, by connected-component extraction of each feature's
+    bounding box. Breaker bodies 115.2 to 152.0, actuators centred at x 133.55; handle slot
+    193.1 to 247.6; alarm D-sub frame 180.5 to 228.2; BITS 236.7 to 267.7; DB-9 shell centre
+    309.85, 35.0; model name 270.7 to 326.6 with a 6.2 mm cap height. The terminal cover is
+    drawn in the figure as a tilted shield (the 3D view, UDS p337 fig157, shows it angled
+    out from the face) and is drawn here as the trapezoid the front view presents.
+  callouts: >-
+    datasheet - UDS p331 s31.4.1 items 1-13, the audit: 1 two EBATRET double-hole lug
+    connectors -> ebatret-1, ebatret-2 (both callouts 1 point at the LEFT stud column, top
+    and bottom); 2 EBAT-B -> ebat-b (bottom right); 3 EBAT-A -> ebat-a (top right) - the
+    R4.3 sheet's order, which the UDS list reverses in its text but not in its figure; 4
+    circuit breaker 40 A EBAT-B -> breaker-b (top); 5 circuit breaker 40 A EBAT-A ->
+    breaker-a (bottom); 6 50-pin micro D-sub for alarms -> alarm-io; 7 six-pin recessed BITS
+    wire-wrap header -> bits; 8 DB-9 remote craft port -> craft; 9 BAT-A presence LED ->
+    bat-a; 10 BAT-B presence LED -> bat-b; 11 critical, major and minor alarm LEDs ->
+    critical, major, minor; 12 ACO LED -> aco; 13 ACO switch -> aco-switch.
+  breakers: >-
+    datasheet - UDS s31.4.2.6: 'equipped with two 40 A circuit breakers ... located on the
+    front panel', 'protected to prevent accidental tripping'; the panel legends B-40A
+    (upper) and A-40A (lower) name them. No library part is a circuit breaker, so they are
+    elements.
+  terminals: >-
+    datasheet - UDS s31.4.2.5: single-hole lugs up to 25 mm2 or dual-hole lugs up to 8 AWG,
+    'the power terminals of the NGFC-H have two M5 type studs'. Each terminal is drawn with
+    its two studs; the stud spacing is the drawing's, not a stated pitch.
+  electrical: >-
+    datasheet - UDS s31.4.2 and s31.3: -48 V DC nominal, -60 V maximum and -40.5 V minimum
+    at the shelf connection point; 2 x 40 A redundant circuit breakers; each branch split
+    into two feeds toward the backplane (s31.4.2.1).
+  power: >-
+    NOT STATED. Searched: the ANSI Safety Manual 3HH12894AAAATCZZA27 Table 2 (pp25-26, power
+    consumption per component for 7360 ISAM FX) has no GFC row, nor has the A23 edition; the
+    Lightspan Safety Manual 3HH91852AAAATCZZA07 names NGFC-H only in its fuse table (Table
+    11); the unit data sheets (UDS 3HH90279AAAATQZZA23 ch31, 3FE65675AA A01/A02, 3FE65601AB
+    A01) give no figure for the card; the coverage grid's power column reads 'not stated'.
+    The card is a conduit, so the volts and amps are in attrs and L27 stands as the record.
+  lamps: >-
+    borrowed - common/led-dot@1 at 2.0 across, where fig2 draws these lamps 2.8 to 2.9
+    across. The 2.0 is a compromise kept so both GFCs use one lamp part; the centres are the
+    drawing's. Colours and meanings from UDS Table 114: BAT A and BAT B green, critical and
+    major red, minor yellow, ACO green.
+  screws: >-
+    the panel screws are the drawing's, positions only: two beside the breaker legends, two
+    flanking the handle, three at the right end (the middle one a larger captive screw),
+    three on the terminal section. Diameters are rounded and not measured to a standard.
+  orientation: >-
+    Authored horizontally, as the card sits in the FX-8 (the shared conventions for #538).
+    The terminal section is the LEFT end, as in both figures and the shelf elevations.
+  lifecycle: >-
+    searched the staged Nokia corpus for an end-of-sale or end-of-life notice for 3FE 65675
+    AA or NGFC-H and found none; the part is still in the Lightspan FX 25.12 UDS and the
+    ANSI Product Information Manual A25 orderable GFC table (Table 99). Not searched on the
+    web.
+groups:
+  craft:
+    term: Port
+    role: management
+    index-origin: 1
+    description: >-
+      the DB-9 remote craft port (RS-232, UDS Table 117). The alarm I/O D-sub and the BITS
+      header are management too, but no library part exists for either, so they are
+      elements of this card and cannot join a group.
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: power presence, office alarm and ACO lamps (UDS Table 114)
+elements:
+  ebatret-1:
+    at: [24.1, 8.9]
+    size: [13.0, 12.0]
+    class: inlet
+    description: EBATRET connector, double-hole lug on two M5 studs (callout 1, upper)
+  ebatret-2:
+    at: [24.1, 24.3]
+    size: [13.0, 12.0]
+    class: inlet
+    description: EBATRET connector, double-hole lug on two M5 studs (callout 1, lower)
+  ebat-a:
+    at: [67.5, 8.9]
+    size: [13.0, 12.0]
+    class: inlet
+    description: EBAT-A branch connector, double-hole lug on two M5 studs (callout 3)
+  ebat-b:
+    at: [67.5, 24.3]
+    size: [13.0, 12.0]
+    class: inlet
+    description: EBAT-B branch connector, double-hole lug on two M5 studs (callout 2)
+  terminal-cover:
+    at: [13.3, 3.2]
+    size: [73.7, 42.5]
+    class: cover
+    description: the hinged 'Energy Hazard' shield over the terminal block
+  breaker-b:
+    at: [115.2, 1.0]
+    size: [36.8, 21.0]
+    class: breaker
+    description: circuit breaker switch (40 A) EBAT-B, legend B-40A (callout 4)
+  breaker-a:
+    at: [115.2, 22.5]
+    size: [36.8, 21.0]
+    class: breaker
+    description: circuit breaker switch (40 A) EBAT-A, legend A-40A (callout 5)
+  handle:
+    at: [193.1, 3.8]
+    size: [54.5, 7.3]
+    class: handle
+  alarm-io:
+    at: [180.5, 34.0]
+    size: [47.7, 9.1]
+    class: port
+    description: >-
+      female 50-pin micro D-sub, 'External Alarms' - seventeen external alarm inputs and
+      outputs, external ACO, and visual and audible critical, major and minor relay
+      contacts (UDS Table 115)
+  bits:
+    at: [236.7, 29.3]
+    size: [31.0, 9.7]
+    class: port
+    description: >-
+      six-pin right-angle wire-wrap header, recessed behind the panel, for the BITS inputs
+      to NT-A and NT-B with frame ground between (UDS Table 116)
+  aco-switch:
+    at: [370.3, 36.5]
+    size: [6.2, 6.2]
+    class: button
+    description: alarm cut-off push button (callout 13)
+  esd-mark:
+    at: [395.3, 45.1]
+    size: [3.0, 2.65]
+    class: marking
+parts:
+  - {ref: common/db9-receptacle@1, id: craft, group: craft, at: [294.45, 28.75],
+     attrs: {media: db9, function: remote craft port}}
+  - {ref: common/led-dot@1, id: bat-a, group: leds, at: [334.9, 36.4],
+     states: {lamp: [{name: green, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: bat-b, group: leds, at: [341.4, 36.4],
+     states: {lamp: [{name: green, color: '#39b54a'}, 'off']}}
+  - {ref: common/led-dot@1, id: critical, group: leds, at: [351.3, 28.1],
+     states: {lamp: [{name: red, color: '#d0021b'}, 'off']}}
+  - {ref: common/led-dot@1, id: major, group: leds, at: [351.3, 33.6],
+     states: {lamp: [{name: red, color: '#d0021b'}, 'off']}}
+  - {ref: common/led-dot@1, id: minor, group: leds, at: [351.3, 39.3],
+     states: {lamp: [{name: yellow, color: '#f5d000'}, 'off']}}
+  - {ref: common/led-dot@1, id: aco, group: leds, at: [363.8, 36.6],
+     states: {lamp: [{name: green, color: '#39b54a'}, 'off']}}
+connection-points:
+  mate: {at: [202.5, 26.8], direction: rear}
+skins: [default]
