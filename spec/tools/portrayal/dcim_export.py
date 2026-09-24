@@ -176,9 +176,33 @@ CAGE_FAMILY = {
 # reach for - and there should not be. `type` names the PHYSICAL interface; ATM
 # is the framing that runs over it, the way POS and channelized DS0 are. An
 # OC-3 ATM port is an OC-3 port.
+#
+# NOR IS AN SFP OR XFP CAGE ONLY ETHERNET OR SONET: A PON OLT PORT IS NEITHER.
+# The Nokia 7360 ISAM FX line cards put GPON, XGS-PON, NG-PON2 and 10G-EPON OLT
+# optics in SFP and XFP cages - 112 cages on ten cards - and with only Ethernet
+# and SONET rates here every one fell to the cage default: a GPON OLT port
+# exported as 1000BASE-X, a 10G-EPON one as 10GBASE-X. The attr is named for the
+# PON flavour and carries the port count, as `sfp: 40` does.
+#
+# ONLY THE FLAVOURS BOTH TARGETS DEFINE. One document is written to both trees,
+# so a type either library refuses fails on import. InterfaceTypeChoices has all
+# six below in netbox-community/netbox (netbox/dcim/choices.py, TYPE_EPON ..
+# TYPE_NG_PON2, at 64ce9e2d) and in nautobot/nautobot (nautobot/dcim/choices.py,
+# the "PON" group, at 3edb1fca). NetBox also has `bpon`, `25g-pon` and `50g-pon`;
+# Nautobot has none of the three, so they are NOT here - an FGUT-A's even ports
+# run 25GS-PON as well, and export as the XGS-PON every one of its ports runs.
+#
+# AFTER THE ETHERNET PAIR AND THE SONET RATES, so no card that already declares
+# a rate changes. Among themselves, most capable first: a Multi-PON card that
+# states both `xgs-pon` and `gpon` is an XGS-PON port that also runs GPON, and a
+# U-NGPON card that states `ng-pon2` runs XGS-PON too.
+PON_ATTRS = (("ng-pon2", "ng-pon2"), ("xgs-pon", "xgs-pon"), ("xg-pon", "xg-pon"),
+             ("10g-epon", "10g-epon"), ("gpon", "gpon"), ("epon", "epon"))
+PON_TYPES = frozenset(t for _a, t in PON_ATTRS)
 FAMILY_ATTRS = {
     "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp"),
-            ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3")),
+            ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3"))
+           + PON_ATTRS,
     "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),
     "qsfp-dd": (("qsfp-dd", "400gbase-x-qsfpdd"),),
     # AN XFP CAGE IS NOT ONE RATE EITHER, and this entry said it was - the empty
@@ -187,7 +211,12 @@ FAMILY_ATTRS = {
     # them: SPA-OC192POS-XFP and MIC-3D-1OC192-XFP put an OC-192 port behind an
     # XFP, exporting as 10GbE. Both are ~10 Gb/s and the framing is what differs,
     # which is exactly why the cage cannot say.
-    "xfp": (("oc192", "sonet-oc192"),),
+    #
+    # Still no Ethernet row: an XFP card that states nothing takes the 10GbE
+    # default as before, and an `xfp` row placed first would read a PON card's
+    # `xfp: 4` as 10GbE - the FWLT-A (NG-PON2) and FPXT-A/B (10G-EPON) state
+    # their flavour instead.
+    "xfp": (("oc192", "sonet-oc192"),) + PON_ATTRS,
 }
 
 
@@ -398,6 +427,13 @@ def placed_type(part):
     media = a.get("media")
     if not media:
         return None
+    # A PON PORT'S FLAVOUR IS `pon`, BESIDE ITS MEDIA AND LINE RATE (the rule
+    # spec/schemas/speeds.yaml states), and it outranks them: the FGUT-A's odd
+    # ports are `media: sfp-plus, speed: 10g, pon: xgs-pon`, and reading only
+    # the first two exported eight XGS-PON OLT ports as 10GBASE-X SFP+. A flavour
+    # neither target defines (`25gs-pon`) falls through to the media as before.
+    if a.get("pon") in PON_TYPES:
+        return a["pon"]
     speed = a.get("speed")
     return PART_MEDIA.get((media, speed)) or PART_MEDIA.get((media, None))
 

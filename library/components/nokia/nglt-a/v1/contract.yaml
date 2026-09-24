@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nglt-a
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -21,6 +21,7 @@ size-notes: >-
 attrs:
   model: NGLT-A
   part-number: 3FE 64279 AA
+  gpon: 8
   weight-kg: 0.9
   power-draw-max-w: 76.2
   power-draw-typical-w: 64.2
@@ -58,9 +59,9 @@ provenance:
     datasheet - UDS section 51.4: eight GPON ports (2.488 Gbps down, 1.244 Gbps up) for
     SFP GPON modules. Composed as std/sfp@1 at its registry aperture, unrotated.
     Numbering 1-8 top to bottom is ASSUMED from the lamp block's 1-8; the figure prints
-    no numeral beside any cage and no document maps cage to number (gap). No `sfp` count is stated for the export
-    (L96 stands): its cage table has no GPON interface type, and `sfp` would type these
-    ports as 1000BASE-X.
+    no numeral beside any cage and no document maps cage to number (gap). The export rate is `gpon: 8`, from the
+    same section's "eight GPON ports per board" (ANSI R6.9 section 51.3), so the cages
+    export as `gpon` rather than the SFP cage default, 1000BASE-X.
   lamps: >-
     datasheet - NGLT-A UDS A07 Figure 8 (p10) and Table 2; ANSI R6.9 Table 148. Column
     PWR, A/S, ALM, legends to the right; then 1 | 2, 3 | 4, 5 | 6, 7 | 8, odd legends

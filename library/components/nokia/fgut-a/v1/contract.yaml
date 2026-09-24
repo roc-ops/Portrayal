@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fgut-a
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -26,6 +26,7 @@ size-notes: >-
 attrs:
   model: FGUT-A
   part-number: 3FE 76986 AA
+  xgs-pon: 16
   weight-kg: 2.76
   power-draw-max-w: 150
   power-draw-typical-w: 100
@@ -73,9 +74,12 @@ provenance:
     to bottom (at 8x the two-digit 13 and 16 put the 1 above the second digit). GPON, XGS-PON and MPM
     on any port; 25GS-PON on the even ports (section 44.4), so the even ports are
     grouped apart with the 25G rate. The cage is composed as std/sfp@1; the form factor
-    of the MPM (Multi-PON module) is not stated in the UDS. No `sfp-plus`/`sfp` count is
-    stated for the export (L96 stands): its cage table has no PON interface type, and
-    either count would type these ports as Ethernet.
+    of the MPM (Multi-PON module) is not stated in the UDS. The export rate is
+    `xgs-pon: 16`: XGS-PON is the most capable flavour every port runs ("GPON (ITU-T
+    G.984), XGS-PON (ITU-T G.9807.1) and Multi-PON ... on any of the 16 ports", section
+    44.4). The board ships licensed for GPON only, which is software, not the port.
+    25GS-PON on the even ports has no type in both DCIM targets (NetBox has `25g-pon`,
+    Nautobot does not), so those export as XGS-PON too.
   lamps: >-
     datasheet - Table 162 (Lightspan A23 p461) / Table 119 (ETSI A18 p381). PWR off =
     power off, blinking green = initialisation, green = power present; ALM red = alarm;
