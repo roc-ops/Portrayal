@@ -28,6 +28,7 @@ import pytest
 import yaml
 
 from portrayal import lint as L
+from test_warmrender import needs_fork, warm as warm_run
 
 ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -349,7 +350,8 @@ def test_priming_computes_no_answer(mini, _cache_dir):
     assert entries(_cache_dir) == [], "priming wrote a disk entry"
 
 
-def test_a_warm_render_with_a_tmp_root_parses_only_the_tmp_files(tmp_path, _cache_dir):
+@needs_fork
+def test_a_warm_render_with_a_tmp_root_parses_only_the_tmp_files(tmp_path, _cache_dir, monkeypatch):
     """The regression #545's CI showed: a render with roots [real library, tmp]
     misses the disk cache (the tmp content is new), and parsed all ~860 real
     files from bytes in every such child. The warm server primes the per-file
@@ -357,32 +359,34 @@ def test_a_warm_render_with_a_tmp_root_parses_only_the_tmp_files(tmp_path, _cach
 
     Counted through the trace lint writes for each computation, and checked
     against a cold subprocess of the same command, which must parse everything
-    - so a count of 1 cannot be a trace that simply counts nothing."""
-    import warmrender
+    - so a count of 1 cannot be a trace that simply counts nothing.
+
+    The warm half goes through test_warmrender's `warm()`, which lifts
+    PORTRAYAL_TESTS_COLD_RENDER and makes a fallback to subprocess.run fail,
+    so under the suite's cold mode this still measures a forked child."""
     src = LIB / "devices" / "fs" / "fhd-1ufce" / "device.yaml"
     extra = tmp_path / "extra"
     dev = extra / "devices" / "zzq" / "probe" / "device.yaml"
     dev.parent.mkdir(parents=True)
     dev.write_bytes(src.read_bytes() + b"\n# a byte the real library does not have\n")
 
-    def render(runner, tag):
+    def render(tag):
         trace = tmp_path / f"trace-{tag}.jsonl"
         out = tmp_path / f"out-{tag}"
         out.mkdir()
-        env = {**os.environ, "PORTRAYAL_ID_CORPUS_TRACE": str(trace),
-               "PORTRAYAL_CACHE_DIR": str(tmp_path / f"cache-{tag}")}
-        r = runner([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"), str(dev),
-                    "--library", str(LIB), "--library", str(extra), "--out", str(out)],
-                   capture_output=True, text=True, env=env)
+        monkeypatch.setenv("PORTRAYAL_ID_CORPUS_TRACE", str(trace))
+        monkeypatch.setenv("PORTRAYAL_CACHE_DIR", str(tmp_path / f"cache-{tag}"))
+        cmd = [sys.executable, str(ROOT / "spec/tools/portrayal/render.py"), str(dev),
+               "--library", str(LIB), "--library", str(extra), "--out", str(out)]
+        r = (warm_run(monkeypatch, cmd) if tag == "warm"
+             else subprocess.run(cmd, capture_output=True, text=True))
         assert r.returncode == 0, r.stderr[-800:]
         rows = [json.loads(line) for line in trace.read_text().splitlines()]
         (row,) = [x for x in rows if x["roots"] == [str(LIB), str(extra)]]
         return row
 
-    served = warmrender._server().served
-    warm = render(warmrender.run, "warm")
-    assert warmrender._server().served == served + 1, "the render was not served warm"
-    cold = render(subprocess.run, "cold")
+    warm = render("warm")
+    cold = render("cold")
 
     n_lib = len(L._id_corpus_files([str(LIB)]))
     assert n_lib > 800
@@ -440,15 +444,16 @@ def test_the_digest_covers_the_parser(mini, monkeypatch):
 
 def test_an_edited_lint_py_misses(mini, _cache_dir, tmp_path, monkeypatch):
     """The code is an input: an entry computed by older logic must never answer
-    for newer logic. The key reads the whole of lint.py, so a copy that differs
-    by one comment line is a different key - and a recompute - with the library
-    untouched."""
+    for newer logic. The key holds the hash of the whole of lint.py, so a
+    lint.py that differs by one comment line is a different key - and a
+    recompute - with the library untouched. (Stood in for by the hash a
+    process importing that edited file would hold.)"""
     before = corpus([mini])
     assert len(entries(_cache_dir)) == 1
     edited = tmp_path / "lint.py"
     edited.write_bytes(Path(L.__file__).read_bytes() + b"\n# one extra comment line\n")
     old_digest = L._id_corpus_digest(L._id_corpus_files([str(mini)]))
-    monkeypatch.setattr(L, "_ID_CORPUS_SOURCE", edited)
+    monkeypatch.setattr(L, "_ID_CORPUS_CODE", L._source_sha(edited))
     assert L._id_corpus_digest(L._id_corpus_files([str(mini)])) != old_digest
 
     p = Parses(monkeypatch)
@@ -459,9 +464,31 @@ def test_an_edited_lint_py_misses(mini, _cache_dir, tmp_path, monkeypatch):
 
 
 def test_an_unreadable_source_computes_without_the_cache(mini, _cache_dir, tmp_path, monkeypatch):
-    monkeypatch.setattr(L, "_ID_CORPUS_SOURCE", tmp_path / "no-such-lint.py")
+    assert L._source_sha(tmp_path / "no-such-lint.py") is None
+    monkeypatch.setattr(L, "_ID_CORPUS_CODE", None)
     assert_same(corpus([mini]), uncached([mini]))
     assert entries(_cache_dir) == []
+
+
+def test_the_digest_names_the_code_as_imported_not_as_on_disk(mini, tmp_path, monkeypatch):
+    """The source is hashed once, at import. A process whose lint.py is edited
+    on disk behind it still runs the old code, so its key must not move; and
+    what it holds is the hash of the file it was imported from."""
+    assert L._ID_CORPUS_CODE == L._source_sha(L.__file__)
+    files = L._id_corpus_files([str(mini)])
+    before = L._id_corpus_digest(files)
+    # the module's file, as the digest could find it, now says something else
+    edited = tmp_path / "lint.py"
+    edited.write_bytes(Path(L.__file__).read_bytes() + b"\n# edited after import\n")
+    monkeypatch.setattr(L, "__file__", str(edited))
+    real_read = Path.read_bytes
+
+    def no_source_reads(self):
+        assert self.name != "lint.py", "the digest re-read lint.py at call time"
+        return real_read(self)
+
+    monkeypatch.setattr(Path, "read_bytes", no_source_reads)
+    assert L._id_corpus_digest(files) == before
 
 
 def _usb_library(root, devices=2):

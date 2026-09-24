@@ -6969,6 +6969,11 @@ _ID_VOCAB_CACHE = {}
 # WHOLE of lint.py is hashed rather than `_id_corpus_compute`'s source, because
 # the answer also depends on helpers and constants elsewhere in the module and a
 # whole-file hash cannot miss one. The price is one recompute per lint.py edit.
+# The bytes are read ONCE, when this module is imported, so the digest names
+# the code this process actually loaded: a long-lived process - the tests'
+# warm render server, say - whose lint.py is edited on disk behind it keeps
+# computing with the OLD code, and must keep keying its entries as the old
+# code too.
 #
 # _ID_CORPUS_CACHE_FORMAT is for the SERIALISED SHAPE only: bump it when what
 # `_id_corpus_cache_store` writes, or what `_id_corpus_cache_load` accepts,
@@ -6980,7 +6985,18 @@ _ID_VOCAB_CACHE = {}
 # cache is an optimisation and is never allowed to be a reason to fail.
 _ID_CORPUS_CACHE_FORMAT = 1
 _ID_CORPUS_CACHE_KEEP = 50          # entries kept; the oldest by mtime go first
-_ID_CORPUS_SOURCE = Path(__file__)  # the code that computes the answer, hashed
+
+
+def _source_sha(path):
+    """sha256 of a source file's bytes, or None if it cannot be read - in which
+    case the digest raises and the cache is simply not used."""
+    try:
+        return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    except OSError:
+        return None
+
+
+_ID_CORPUS_CODE = _source_sha(__file__)   # this module as loaded; see above
 _ID_CORPUS_TMP_MAX_AGE = 3600       # seconds before a stray temp file is an orphan
 
 
@@ -7137,13 +7153,15 @@ def _id_corpus_prime(lib_roots):
 
 def _id_corpus_digest(files):
     """sha256 over the cache format, the bytes of the source that computes the
-    answer (_ID_CORPUS_SOURCE, lint.py), and for every library file its root's
+    answer (_ID_CORPUS_CODE: lint.py, as imported), and for every library file its root's
     position, its path relative to that root's section and a hash of its bytes
     - sorted, so the directory walk's order does not matter, and without the
     roots' absolute paths, so every checkout of the same commit shares one
     entry. An unreadable source raises, and the caller then computes without
     the cache."""
-    code = hashlib.sha256(Path(_ID_CORPUS_SOURCE).read_bytes()).hexdigest()
+    code = _ID_CORPUS_CODE
+    if code is None:
+        raise OSError("lint.py's source could not be read at import")
     rows = []
     for section, n, rel, _f, _data, sha in files:
         rows.append(f"{n}\0{section}\0{rel}\0{sha or 'missing'}\n")
