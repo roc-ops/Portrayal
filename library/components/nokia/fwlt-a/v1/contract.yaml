@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fwlt-a
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -64,10 +64,21 @@ provenance:
     in". Composed as std/xfp@1 turned 90 degrees (the card stands upright, so the cage lies
     on its side, as on every vertical card in the library): the drawn opening is 9.5 mm
     across, which is the XFP's 9.7 and not its 19.5. Centred at x 11.0 (the flange centre
-    11.1, the drawn plug 10.5) and 20.0 mm below each housing top. The housing draws the
-    cage angled down toward the fibre (the plain upper part of the flange is the cage's top
-    face seen in projection), so the opening's position along the card is estimated to
-    about 3 mm; the angle is not stated (gap).
+    11.1, the drawn plug 10.5) and, along the card, on the opening Figure 134 draws: the
+    flange, +1.4 to +27.0 mm below each housing top, centre +14.2 (49.70 / 129.76 / 209.72 /
+    289.68). Version 1.0.0 centred them 20.0 mm below the housing top (at.y 50.65 / 130.71
+    / 210.67 / 290.63, now 44.85 / 124.91 / 204.87 / 284.83), reading the plain upper part
+    of the flange as the cage's top face seen past an angled opening. The side profile of
+    the same housing (ANSI Figure 142, p314) shows the opening flush in the plate: the cage
+    is tilted about 40 degrees BEHIND the plate (19.5 / cos 40 = 25.5, the flange's 25.6),
+    so the whole flange is the opening, and the old position ran the cage 2.75 mm into the
+    lip below it. The cage's tilt behind the plate is not representable (gap).
+  relief: >-
+    drawing - the wedge lip under each opening (Figure 142's profile: 4.9 mm proud, over
+    the housing below the flange) is one part-less facet per housing, lip-1 to lip-4, 26
+    degrees looking down: its proud edge at the opening's lower edge (+27.0), its root on
+    the plate at the housing's foot (+37.1). Figure 134's line across the lip at +32.9 is
+    not modelled as a ridge.
   lamps: >-
     datasheet - Figure 136 and Table 93 (p305-306). ALM (left, the label partly hidden
     behind the top ejector in the figure) and PWR: PWR off / blinking green (initialisation)
@@ -85,7 +96,9 @@ provenance:
     searched only the staged corpus - listed as current in ANSI UDS R6.9 and the ETSI PIG
     3HH11997AAAATCZZA42; no end-of-life notice was searched for on the web.
   gaps: >-
-    (1) the cage angle and so the exact opening position along the card; (2) whether the
+    (1) the cage's tilt behind the plate (about 40 degrees, read off the FWLT-B AA profile
+    of the same housing), which the format cannot draw behind a flush opening; (2) whether
+    the
     lower square beside each housing is a second lamp or the cage latch; (3) the PON lamp's
     and the laser mark's colours are not stated; (4) the part-label content is a
     placeholder; (5) lint L96 asks an XFP card to state `oc192`, the only rate the DCIM
@@ -94,6 +107,10 @@ provenance:
 elements:
   logo-zone: {at: [4, 11.5], size: [17, 10], class: label}
   part-label: {at: [5, 338.4], size: [14.2, 18.1], class: label}
+  lip-1: {at: [2.6, 62.5], size: [17.9, 10.1], class: mechanical}
+  lip-2: {at: [2.6, 142.56], size: [17.9, 10.1], class: mechanical}
+  lip-3: {at: [2.6, 222.52], size: [17.9, 10.1], class: mechanical}
+  lip-4: {at: [2.6, 302.48], size: [17.9, 10.1], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -117,6 +134,28 @@ relief:
       out: 4.2
       confidence: estimated
       source: as ejector-top
+    - node: lip-1
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: >-
+        drawing - the wedge lip under each cage opening, ANSI UDS R6.9 p314 Figure 142's
+        right-hand orthographic profile: about 17 px (4.9 mm) proud at 3.444 px/mm, spanning
+        the housing below the flange (+27.0 to +37.1 mm below the housing top). One
+        part-less facet looking down, its proud edge at the opening's lower edge and its
+        root on the plate at the housing's foot: atan(4.9 / 10.1) = 26 degrees, 4.93 mm
+        proud
+    - node: lip-2
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: as lip-1
+    - node: lip-3
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: as lip-1
+    - node: lip-4
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: as lip-1
 groups:
   xfp:
     term: Port
@@ -135,10 +174,10 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/xfp@1, id: port-1, group: xfp, at: [1.25, 50.65], rotate: 90}
-  - {ref: std/xfp@1, id: port-2, group: xfp, at: [1.25, 130.71], rotate: 90}
-  - {ref: std/xfp@1, id: port-3, group: xfp, at: [1.25, 210.67], rotate: 90}
-  - {ref: std/xfp@1, id: port-4, group: xfp, at: [1.25, 290.63], rotate: 90}
+  - {ref: std/xfp@1, id: port-1, group: xfp, at: [1.25, 44.85], rotate: 90}
+  - {ref: std/xfp@1, id: port-2, group: xfp, at: [1.25, 124.91], rotate: 90}
+  - {ref: std/xfp@1, id: port-3, group: xfp, at: [1.25, 204.87], rotate: 90}
+  - {ref: std/xfp@1, id: port-4, group: xfp, at: [1.25, 284.83], rotate: 90}
   - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [6.1, 29.1], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
   - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [11.4, 29.1], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-port-1, group: pon-leds, at: [2.44, 43.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: active-ranging, color: '#39b54a', behavior: blinking}, {name: fault, color: '#d0021b'}]}}
