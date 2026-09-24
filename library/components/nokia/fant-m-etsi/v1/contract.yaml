@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fant-m-etsi
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -100,11 +100,24 @@ provenance:
     faces, so that is a convention (library vertical cards take R90), not a reading.
     The micro-USB's trapezoid is not resolved either; rotate 90 by the same convention.
   housing: >-
-    drawing - Figure 72 draws the SMA, QSFP28 and SFP+ block as a housing standing
-    proud of the plate, one box per connector, from 66.0 to 240.6. It is painted flat
-    here: the projection gives no depth for it, and a raised node is lifted OVER the
-    composed parts, which would bury the six connectors it frames. GAP: how far the
-    housing stands proud is unmeasured; no Nokia document dimensions it.
+    drawing - ETSI UDS R7.0 3FE77012AAAATQZZA18 p256 Figure 90 (the ANSI Figure 72 draws the same housing) draws the SMA, QSFP28 and SFP+ block as a housing standing proud of
+    the plate, one box per connector, from 66.0 to 240.6, cell edges at 83.5, 108.9,
+    145.75, 179.1 and 205.25. It is not raised in relief: the projection gives no depth
+    for it, and a raised node is lifted OVER the composed parts, which would bury the six
+    connectors it frames. GAP: how far the housing stands proud is unmeasured; no Nokia
+    document dimensions it.
+  angled-panel: >-
+    estimated from the drawing - in ETSI UDS R7.0 3FE77012AAAATQZZA18 p256 Figure 90 (the ANSI Figure 72 draws the same housing) each connector box's face is turned upward,
+    about 30 degrees by eye (the figure is a three-quarter view and no document states
+    the angle). The skin paints it: the housing band is darker than the plate, bevelled
+    down both sides, with a lit top edge and a 2.5 mm shaded underside to every box (the
+    shaded strips clear every composed part). The SMA jacks and the QSFP28/SFP+ cages
+    are the library parts at registry size, face-on, with no foreshortening faked:
+    angled-panel: 30 degrees; not representable until the format carries a tilt.
+  gaps: >-
+    angled-panel: 30 degrees; not representable until the format carries a tilt. The
+    angle itself is an estimate by eye. How far the housing stands proud. Cage latch
+    direction (rotate 90 is convention).
   lamps: >-
     drawing - Figure 91 'FANT-M AA system status LEDs' (p258, object 7292): two
     columns of round lamps, ALM / PWR, ACO / A/S, then PORT1 lanes 2-1 and 4-3 in a

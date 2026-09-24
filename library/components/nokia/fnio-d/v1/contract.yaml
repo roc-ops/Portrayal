@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fnio-d
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -63,7 +63,13 @@ provenance:
   ports: >-
     datasheet - UDS section 42.4.2.1: four uplink ports, each for a 100G, 40G or 4x10G
     QSFP28/QSFP+ module, placed under a 45 degree angle for fibre bend radius. Composed as
-    std/qsfp28@1 at its registry aperture. Numbered 1-4 top to bottom, which is ASSUMED
+    std/qsfp28@1 at its registry aperture, rotate 90: in Figure 183 at 4x each cage
+    opening's long side runs down its facet, ALONG the card, so the 20 mm side of the
+    aperture lies along the 405 mm and the 10.15 mm side across it (the cages open up
+    and down the card, not left and right). The rotate pivots on the part's
+    pre-rotation centre, so each `at` is unchanged and the centres stay at 189.1, 225.2,
+    261.1 and 297.2. Latch direction is not resolved; rotate 90 is the library's
+    vertical-card convention, not a reading. Numbered 1-4 top to bottom, which is ASSUMED
     from the lamp block's PORT1-PORT4 brackets reading top to bottom; each cage has a
     small printed strip beside it in Figure 183 that the 300 ppi image cannot resolve
     (gap).
@@ -84,6 +90,21 @@ provenance:
     estimated - the ejectors stand proud of the plate; no document gives a figure, so the
     library's pooled release-hardware estimate (4.2) is used. The sawtooth is NOT raised:
     an `out` on it would come to the front and bury the composed cages.
+  angled-panel: >-
+    datasheet and drawing - UDS section 42.4.2.1 places each uplink 'under a 45 degree
+    angle', and Figure 183 draws each cage standing on the long lit face of a tooth
+    (174.1-199.0, 209.1-235.4, 245.3-271.8, 281.4-307.3) with a short return face
+    below it. The skin paints each lit face as a light band with a dark valley line and
+    a bright apex line, and each return face as a shaded band. The cages are the std/
+    aperture at registry size, face-on: angled-panel 45 degrees; not representable
+    until the format carries a tilt. The 20 mm aperture is not foreshortened to the
+    about 14 mm a 45 degree face would project to.
+  gaps: >-
+    angled-panel: 45 degrees; not representable until the format carries a tilt.
+    Faceplate edge-to-edge width (26 mm stated overall, held at the 25 mm pitch).
+    Whether the QSFP modules are inside the 104 W figure. The printed strip beside each
+    cage and the two marks and hazard icons (unresolved at 300 ppi). Cage latch
+    direction.
   logo-zone: >-
     reserved by the family convention; Figure 183 draws no mark there, so the zone sits
     on the empty metal between the lamp block and the first mark.
@@ -129,10 +150,10 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 184.03]}
-  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 220.12]}
-  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 256.03]}
-  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 292.12]}
+  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 184.03], rotate: 90}
+  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 220.12], rotate: 90}
+  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 256.03], rotate: 90}
+  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 292.12], rotate: 90}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 36.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 36.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-1, group: lane-leds, at: [14.8, 41.39], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}

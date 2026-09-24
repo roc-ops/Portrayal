@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fnio-a
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -62,7 +62,13 @@ provenance:
   ports: >-
     datasheet - UDS section 40.4.2.1: eight uplink ports on the front plate, each for a
     1G, 2.5G or 10G SFP/SFP+ module, placed under a 45 degree angle for fibre bend radius.
-    Composed as std/sfp@1 at its registry aperture. Numbering 1-8 top to bottom is
+    Composed as std/sfp@1 at its registry aperture, rotate 90: in Figure 170 at 4x
+    each cage opening's long side runs down its facet, ALONG the card, so the 14.5 mm
+    side of the aperture lies along the 405 mm and the 10 mm side across it. The rotate
+    pivots on the part's pre-rotation centre, so each `at` is unchanged and the cage
+    centres stay on the 28.5 mm tooth pitch (67.3 ... 277.4). Which way each latch faces
+    is not resolved at 300 ppi; rotate 90 rather than 270 is the library's vertical-card
+    convention, not a reading. Numbering 1-8 top to bottom is
     ASSUMED: the lamp legend numbers 1-8, the board carries no numeral beside any cage in
     Figure 170, and no document maps cage to number (gap).
   lamps: >-
@@ -76,6 +82,21 @@ provenance:
     library's pooled release-hardware estimate (4.2, as cisco/ and edgecore/ parts carry)
     is used. The sawtooth itself is NOT raised: an `out` on it would come to the front and
     bury the composed cages, which already emit their own depth.
+  angled-panel: >-
+    datasheet and drawing - UDS section 40.4.2.1 places each uplink 'under a 45 degree
+    angle', and Figure 170 draws the eight cages on a sawtooth, each on the lit facet
+    that descends from a valley at the plate to an apex at the front. The skin paints each
+    tooth as a lit facet band (the cage face, valley line dark, apex line bright) and a
+    shaded return band, at the band edges read off Figure 170. The cages themselves are
+    the std/ aperture at registry size, face-on: angled-panel 45 degrees; not
+    representable until the format carries a tilt. A true 45 degree facet would project
+    the 14.5 mm aperture to about 10.3 mm along the card; that foreshortening is NOT
+    faked, so the drawn cages overrun their facet bands by up to 1 mm at ports 7 and 8.
+  gaps: >-
+    angled-panel: 45 degrees; not representable until the format carries a tilt.
+    Faceplate edge-to-edge width (26 mm stated overall, held at the 25 mm pitch).
+    Whether the SFP+ modules are inside the 26.4 W figure. Cage-to-number mapping
+    (assumed 1-8 top to bottom). Cage latch direction (not resolved in Figure 170).
   logo-zone: >-
     reserved by the family convention; Figure 170 draws no mark on the plate, so the zone
     sits on the empty metal between the last cage and the bottom lever.
@@ -117,14 +138,14 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [5.25, 62.3]}
-  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [5.25, 90.8]}
-  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [5.25, 119.3]}
-  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [5.25, 147.8]}
-  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [5.25, 186.9]}
-  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [5.25, 215.4]}
-  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [5.25, 243.9]}
-  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [5.25, 272.4]}
+  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [5.25, 62.3], rotate: 90}
+  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [5.25, 90.8], rotate: 90}
+  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [5.25, 119.3], rotate: 90}
+  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [5.25, 147.8], rotate: 90}
+  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [5.25, 186.9], rotate: 90}
+  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [5.25, 215.4], rotate: 90}
+  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [5.25, 243.9], rotate: 90}
+  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [5.25, 272.4], rotate: 90}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 33.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 33.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-port-1, group: port-leds, at: [8.2, 38.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
