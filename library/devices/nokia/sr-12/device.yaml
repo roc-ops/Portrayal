@@ -138,10 +138,11 @@ provenance:
     confidence: drawing
     note: >-
       The front ESD plug (p47 key 9) sits in a grey box at x 413.3-438.7, y 603.0-621.5, jack
-      centre (420.2, 609.5). That is INSIDE the air-filter vent faceplate (x 3.6-440.6, y
-      565.6-622.6 as drawn; p81 Figure 19 key 3 puts the captive screws on that faceplate), so
-      the jack belongs to the nokia/sr-12-air-filter part and is not drawn by the chassis.
-      Figure 7 draws no rear ESD jack.
+      centre (420.2, 609.5), which lies on the air-filter vent faceplate (x 3.6-440.6, y
+      565.6-622.6 as drawn). The nokia/sr-12-air-filter part draws the plate and leaves its
+      honeycomb clear there (x 411.6-434.8, y 37.6-55.5 in the plate's own frame, 415.3-438.5
+      and 603.2-621.1 here); the chassis places common/esd-jack@1 on it, centred on the drawn
+      jack. Figure 7 draws no rear ESD jack.
   fans:
     confidence: drawing
     note: >-
@@ -306,7 +307,16 @@ groups:
       takes two -48 V feeds; the pair load-share and either carries the chassis (1+1, p77).
     attrs:
       redundancy: '1+1'
-      redundancy-note: 'SR-12 guide p69: hot-swappable, load-sharing PEM-3s; p77: one PEM-3 can support the full system current requirements without power redundancy, and for redundancy two PEM-3s must be installed and powered on at all times'
+      redundancy-note: >-
+        SR-12 guide p77: "One PEM -3 can support the full system's electrical current requirements
+        if you are operating the chassis without power redundancy", at least one must be fitted,
+        and "For redundancy, you must install two PEM-3s." p69 calls them hot-swappable,
+        load-sharing PEM-3s.
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: the front ESD plug receptacle at the bottom right, on the air-filter vent faceplate (p47 key 9)
   air-filters:
     term: Filter
     role: service
@@ -407,6 +417,8 @@ views:
         - {id: slot-9, at: [363.9, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 9}
         - {id: slot-10, at: [399.3, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 10}
         - {id: air-filter, at: [3.7, 565.6], size: {w: 437.1, h: 56.7}, accepts: [nokia/sr-12-air-filter@1], default: nokia/sr-12-air-filter@1, group: air-filters, rel-pos: 1}
+      placements:
+        - {id: esd, ref: common/esd-jack@1, at: [417.2, 606.5], group: grounding, rel-pos: 1}
     regions:
       - {id: logo-zone, at: [250.0, 22.5], size: {w: 175.0, h: 17.0}, label: 'Vendor wordmark (Alcatel-Lucent on the photographed chassis, NOKIA on the -B); not drawn'}
   rear:
