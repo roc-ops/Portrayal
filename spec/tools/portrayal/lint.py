@@ -8967,7 +8967,9 @@ def lint_device_configuration_bays(path, data, lib_roots):
         return accepts
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
-            only = scoped_out(bid, cname)
+            # an empty string seats nothing, so scoping the bay out of the
+            # configuration draws exactly what the key says: no occupant
+            only = scoped_out(bid, cname) if ref != "" else None
             if only:
                 err(path, "L8", f"config {cname}: bay {bid} is `only-in: {only}`, so it "
                                 "does not exist in this configuration - the configuration "

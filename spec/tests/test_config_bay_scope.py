@@ -59,6 +59,12 @@ def test_an_unscoped_bay_is_fine():
     assert run(device({"slot-15": CARD}, only_in=None)) == []
 
 
+def test_emptying_a_scoped_out_bay_is_fine():
+    """`""` seats nothing, and a bay that is not there is empty too - the key
+    is redundant, but the drawing shows exactly what it says."""
+    assert run(device({"slot-15": ""})) == []
+
+
 def test_the_same_id_unscoped_in_another_view_is_enough():
     """The rule is that the key reaches a bay in SOME view that exists in the
     configuration: a rear bay of the same id with no scope still draws it."""
