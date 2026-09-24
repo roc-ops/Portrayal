@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ngfc-h
-version: 1.0.0
+version: 1.1.0
 class: power
 behaviour: fills
 profile: networking
@@ -51,8 +51,8 @@ provenance:
     bounding box. Breaker bodies 115.2 to 152.0, actuators centred at x 133.55; handle slot
     193.1 to 247.6; alarm D-sub frame 180.5 to 228.2; BITS 236.7 to 267.7; DB-9 shell centre
     309.85, 35.0; model name 270.7 to 326.6 with a 6.2 mm cap height. The terminal cover is
-    drawn in the figure as a tilted shield (the 3D view, UDS p337 fig157, shows it angled
-    out from the face) and is drawn here as the trapezoid the front view presents.
+    drawn as the trapezoid the front view presents, and its tilt is a relief facet
+    (provenance.relief).
   callouts: >-
     datasheet - UDS p331 s31.4.1 items 1-13, the audit: 1 two EBATRET double-hole lug
     connectors -> ebatret-1, ebatret-2 (both callouts 1 point at the LEFT stud column, top
@@ -95,6 +95,21 @@ provenance:
   orientation: >-
     Authored horizontally, as the card sits in the FX-8 (the shared conventions for #538).
     The terminal section is the LEFT end, as in both figures and the shelf elevations.
+  relief: >-
+    drawing (estimated angle) - the 'Energy Hazard' terminal cover is a hood whose front
+    turns about a vertical axis: in the 3D view, UDS p337 fig157 (embedded 921 x 430), its
+    left end stands well out from the plate and its right end meets the plate side of the
+    terminal section. Measured there by splitting the cover's lower front edge into the
+    card-width axis and the out-of-panel axis, each scaled off the card itself (405 mm wide,
+    201.4 mm deep): about 95 mm along the card for about 51 mm out, so about 28 degrees
+    from face-on, facing right (the left edge proud). The view is oblique and the axis
+    scales are read to perhaps 10 percent, so the angle is good to about +/-10 degrees. The
+    facet's root is the cover's right edge at the plate. Fig157 draws a short end wall
+    there (about 16 mm) that a facet cannot carry - a `lift` would float the hood off the
+    plate - so the modelled hood meets the plate at its right edge and stands 39 mm out at
+    its left edge where fig157 suggests more. The four terminals and the Energy Hazard
+    label are drawn inside the cover's node so the sloped surface carries them in 3D; the
+    real hood hides the terminals, which the 2D shows through it.
   lifecycle: >-
     searched the staged Nokia corpus for an end-of-sale or end-of-life notice for 3FE 65675
     AA or NGFC-H and found none; the part is still in the Lightspan FX 25.12 UDS and the
@@ -178,6 +193,14 @@ elements:
     at: [395.3, 45.1]
     size: [3.0, 2.65]
     class: marking
+relief:
+  features:
+    - node: terminal-cover
+      facet: {deg: 28, facing: right}
+      confidence: estimated
+      source: >-
+        UDS 3HH90279AAAATQZZA23 p337 fig157, the cover's front edge resolved into the card's
+        width and depth axes (provenance.relief)
 parts:
   - {ref: common/db9-receptacle@1, id: craft, group: craft, at: [294.45, 28.75],
      attrs: {media: db9, function: remote craft port}}
