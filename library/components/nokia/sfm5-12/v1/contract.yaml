@@ -1,0 +1,97 @@
+format: 1
+kind: module
+name: sfm5-12
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR SFM5-12 switch fabric module, the carrier half of the SFM5-12 + CPM5 combination
+  for the SR-12 / 7450 ESS-12. Its face is two end pieces - each with a black captive screw, the
+  black perforated ejector lever along the bottom edge, and on the left one the label plate -
+  with a window between them that the pluggable CPM5 fills (the `cpm` bay, nokia/cpm5@1, held by
+  its own captive screws). Authored horizontal like every SR-7/SR-12 slot card; the SR-12 turns
+  it upright with the left end at the top. SFM5-7, SFM5-12 and SFM6-7/12 share this form factor
+  (SR12 p60) and are separate components only because each chassis accepts its own.
+size: {w: 425.4, h: 35.4, d: 457.2}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  The wave-2 slot-card envelope: 425.4 x 35.4 so the twelve SR-12 slots tile; the guides state
+  1.35 in (34.3) for SF/CPMs. d is the 18 in of the SFM + CPM5 combination.
+attrs:
+  model: 7750 SR SFM5-12
+  part-number: 3HE08428AA
+  part-number-variants: 3HE08428AA, 3HE08430AA
+  power-draw-max-w: 260
+  power-draw-typical-w: 240
+provenance:
+  size: >-
+    datasheet + convention - 16.75 in wide (42.55 cm) and 1.35 in thick (3.43 cm) for the SFM
+    + CPM5 combination (SR12L p101 and SR7L Table 37, both 1.35 x 16.75 x 18 in); drawn 425.4
+    x 35.4, the wave-2 slot-card envelope, so the SR-12's twelve slots tile at the 35.4 pitch.
+    The 1.35 in thickness is recorded, not drawn.
+  depth: >-
+    datasheet - 18 in (45.72 cm), SR12L p101 / SR7L Table 37 (SFM + CPM5). SR7 p106 gives the
+    SFM6 17 in and SR12 p103 18 in; 18 is carried.
+  power: >-
+    datasheet - SR12 (3HE18644AAAATQZZA03) p96 Table 35: SFM5-12 idle 105, zero rate 230,
+    typical 240, worst case 260 W (SR12L p91 Table 24 the same). max = worst case, typical =
+    typical. The bundle 3HE09260AA (SFM5-12 + CPM5) is 280 / 405 / 420 / 485 W, which is this
+    row plus nokia/cpm5@1's; it is not carried here.
+  part-number: >-
+    datasheet - 3HE08428AA, 7450 ESS 3HE08430AA; bundled with a CPM5 as 3HE09260AA (ESS
+    3HE09262AA) (SR12 p96 Table 35; SR12L p91 Table 24).
+  window: >-
+    measured - the `cpm` window is 392.0 x 31.8 at [16.7, 0], centred along the card and flush
+    with its top edge: the CPM5's own face, decided for Q2 and recorded in nokia/cpm5@1
+    provenance.size (the empty SFM5-12e front view, SR-12e 3HE18645AAAATQZZA02 p56 Fig 9, the
+    SR-12e chassis front p50 Fig 6, and the owner's photo of a CPM5 beside an SF/CPM4-12).
+    SR12 p216 Fig 68 shows the same split: end pieces with the levers (keys 3/6), the CPM5
+    (key 1) sliding in between.
+  layout: >-
+    drawing + photo - the carrier's captive screw at (6.6, 21.6), about 8 across (SR-12e p50
+    Fig 6 reads (6.6, 21.1); the owner's photo reads about (6.3, 23.4)); the ejector lever
+    along the bottom edge from x 0.8 to 39.9, y 26.5-31.8, running over the CPM5's lower
+    corner as the SR-12e chassis figure draws it (331 px of its 3530 px card, from each end);
+    the right end mirrors the screw and lever. The label plate on the left end piece is read
+    off the photo (about 0.8-9.6 x 5.4-16.8).
+  label: >-
+    photo - the owner's lab photo sfm4-12-cpm5-lamps (2026-09-24) shows the top end piece of
+    the slot-B carrier: a recessed label plate whose visible line reads "-12", starting at the
+    plate's edge with nothing before it on that line, beside a black captive screw. The line
+    above it is out of frame. "SFM5" over "-12" is therefore a reading of one line and a guess
+    at the other; the right-hand end piece is not photographed and is drawn with its screw and
+    lever only. Gap.
+  colour: >-
+    photo - the owner's lab photos (2026-09-24): near-black end pieces with a recessed label
+    plate and white print, black plastic screw knobs with a cross slot, black perforated
+    ejector levers.
+  relief: >-
+    estimated - the screw knobs stand proud (cyl 1.6, as nokia/ccm-e@1) and the levers out 4.2
+    (the nokia/cpm-e@1 figure, itself borrowed from nokia/nelt-b@1). NOT MEASURED.
+  lifecycle: 'searched only the staged corpus - listed in the SR-7/SR-12 22.7 guides; no end-of-life notice searched'
+unplaced: >-
+  seated by the SR-12 SF/CPM slots A and B (sfm-a, sfm-b); the coordinator wires it
+elements:
+  screw-left: {at: [2.6, 17.6], size: [8.0, 8.0], class: screw}
+  screw-right: {at: [414.8, 17.6], size: [8.0, 8.0], class: screw}
+  lever-left: {at: [0.8, 26.5], size: [39.1, 5.3], class: latch}
+  lever-right: {at: [385.5, 26.5], size: [39.1, 5.3], class: latch}
+  model-label: {at: [0.8, 5.4], size: [8.8, 11.4], class: label}
+  logo-zone: {at: [411.9, 1.5], size: [11.0, 13.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: false, confidence: estimated, source: 'nokia/ccm-e@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: false, confidence: estimated, source: 'nokia/ccm-e@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/cpm-e@1 ejector lever, the library one figure for a lever (from nokia/nelt-b@1). NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/cpm-e@1 ejector lever, the library one figure for a lever (from nokia/nelt-b@1). NOT MEASURED'}
+bays:
+  cpm:
+    at: [16.7, 0]
+    size: [392, 31.8]
+    accepts:
+    - nokia/cpm5@1
+    default: nokia/cpm5@1
+connection-points:
+  mate: {at: [212.7, 17.7], direction: rear}
+skins: [default]

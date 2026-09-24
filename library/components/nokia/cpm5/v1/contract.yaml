@@ -1,0 +1,238 @@
+format: 1
+kind: module
+name: cpm5
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR / 7450 ESS CPM5, the pluggable control processor that slides into the window of
+  an SFM5-7, SFM5-12 or SFM6-7/12 carrier (and, in wave 3, the SFM5-12e and SFM6-12e). Left to
+  right: a black captive screw, the 7750 SR CPM5 legend and the recessed Reset, the lamp block
+  (CPM and SFM Pwr/Stat, M/S Ctl and Ref, Timing, Ref 1-3, Pwr 1-8, Fan 1-3, CF 1-3, the
+  OT/Crit/Maj/Min alarms), the lamped Mgmt RJ-45, the 2x2 block of OES 2 and BITS over OES 1 and
+  SyncE, the handle, Compact Flash #2 over #1, Compact Flash #3 behind its door, the AUX DB-9
+  (reserved), the DTE/DCE switch, the Console RJ-45, the Alarm DB-9, ACO/LT, the 1PPS SMB and
+  the second captive screw. Authored horizontal as SR12 p53 Fig 9 draws it; lamp legends print
+  vertical so that they read across when the SR-12 turns the carrier upright.
+size: {w: 392, h: 31.8}
+size-confidence: {w: photo-measured, h: drawing}
+size-notes: >-
+  The window length L = 392.0 is agent C's decision on Q2 of the wave-2 conventions; h = L /
+  12.33, the aspect of the SR12 p53 Fig 9 plate (5956 x 483 px at 1200 dpi). See provenance.size
+  for the three measurements and why no depth is stated.
+attrs:
+  model: 7750 SR CPM5
+  part-number: 3HE08423AA
+  part-number-variants: 3HE08423AA, 3HE08432AA
+  power-draw-max-w: 255
+  power-draw-typical-w: 180
+provenance:
+  size: >-
+    measured - Q2 of the wave-2 conventions, decided here. No document states the CPM5 face
+    and the upgrade guide 3HE11037AAABTQZZA01 (OCR'd) has no faceplate figure at all, only CLI
+    output. Three independent readings of the plate length against the 425.4 card length: (1)
+    SR-12e guide 3HE18645AAAATQZZA02 p56 Fig 9, the EMPTY SFM5-12e front view, vector: the
+    window between the inner edges of the two screw flanges is 6438 of the 7042.5 px card,
+    0.9142, i.e. 388.9 mm; (2) the same guide's chassis front p50 Fig 6, vector, which draws
+    CPM5s seated in SFM carriers: plate 3276.5 px of the 3530 px card, 0.9282, i.e. 394.9 mm
+    (the end-piece offsets 14.9 and 15.7 mm, so the window is centred); (3) the owner's lab
+    photo sfm4-12-cpm5-lamps (2026-09-24), the CPM5 beside an SF/CPM4-12 in the next slot: the
+    CPM5 screw and Reset land 22.6 and 42.1 mm from the card end on the SF/CPM4-12's own
+    measured features, which puts the plate 16.4 mm in, i.e. 392.6 mm. Taken as 392.0 (the
+    mean of the three, 392.1), about +-3. The window is centred, leaving 16.7 mm end pieces. h
+    = 392.0 / 12.33 = 31.8, the SR12 p53 Fig 9 aspect; the plate is flush with the carrier's
+    top edge (SR-12e p50 draws it so) and the carrier's ejector lever runs over the band below
+    it. Wave 3's SFM5-12e and SFM6-12e reuse this part and must cut the same 392.0 x 31.8
+    window at [16.7, 0].
+  depth: >-
+    NOT STATED - the guides give only the SFM + CPM5 combination, 1.35 x 16.75 x 18 in (3.43 x
+    42.55 x 45.72 cm, SR12L p101 Table 33); the CPM5 is shorter than its carrier and no figure
+    gives its depth. size.d is left off rather than guessed. Gap.
+  power: >-
+    datasheet - SR12 (3HE18644AAAATQZZA03) p93 Table 31, the FP4 table: CPM5 idle 175, 25C
+    180, 55C 255 W; SR7 p97 Table 35 the same. max 255 (55C), typical 180 (25C). CONFLICT: the
+    FP3 tables (SR12 p96 Table 35, SR7 p99, SR12L p91 Table 24) give 175 / 175 / 180 / 225 W
+    worst case. The larger figure is carried. The bundle rows (SFM5-12 + CPM5 485 W, SFM5-7 +
+    CPM5 360 W, SFM6-7/12 + CPM5 525 W) are the carrier's figure plus this one and are not
+    carried on either part.
+  part-number: >-
+    datasheet - 3HE08423AA, 7450 ESS 3HE08432AA (SR12 p93 Table 31, SR7 p97/p99). CONFLICT:
+    SR12 p96 Table 35 and SR12L p91 Table 24 print the CPM5 as 3HE08429AA, which SR7 p99 gives
+    to the SFM5-7; taken as a misprint.
+  layout: >-
+    drawing - SR12 p53 Fig 9 (art 27016), vector, read from its paths with PyMuPDF and mapped
+    so the plate's outer box is 392.0 x 31.8 (0.911 pt/mm both ways). Captive screws (6.78,
+    21.88) and (385.11, 21.88), heads 7.5 across in a 9.2 washer; the lower-corner lips 13.7 x
+    4.3 under each; Reset (24.93, 20.51); the lamp box 26.64-32.46 x 3.13-30.18 split at y
+    16.68; lamps 2.57 across on columns x 30.88 / 36.05 / 41.22 / 46.39 / 51.56 / 56.73 /
+    61.88 / 67.08 and rows y 22.55 / 18.68 / 14.80 / 10.93; Mgmt housing 71.40-87.84 x
+    10.20-25.09; the 2x2 shells 90.35-106.88 and 109.55-126.07 x 5.75-29.79, openings on rows
+    6.51-16.77 and 18.77-29.03; handle 132.94-137.33 x 3.27-28.30; CF eject buttons
+    138.93-145.67, slots 146.20-191.73 on rows 6.77 and 18.66; CF #3 eject 195.29-202.03, door
+    202.42-270.29 x 12.39-25.31 with its screw at (265.88, 20.65); AUX shell centred (224.40,
+    7.25); DTE/DCE 275.18-279.94 x 16.65-24.10; Console housing 282.32-300.60 x 11.40-26.66;
+    Alarm centred (317.99, 20.19); ACO/LT (339.81, 20.66) 7.6 across; 1PPS (362.40, 20.99);
+    ESD mark 382.83-390.09 x 1.74-8.03. SR7 p54 Fig 10 is the same art.
+  ports: >-
+    datasheet - SR12 p54-55 Table 6: Mgmt, 10/100 Ethernet RJ-45; OES 1, the optical extension
+    shelf port; OES 2, reserved; BITS, RJ-45 (RJ-48C, p256 Table 105); SyncE/1588v2, 10/100
+    Ethernet RJ-45; AUX, reserved, a DB-9; Console, an RJ-45 UART (the SF/CPM4's console was a
+    DB-9); Alarm, DB-9 female (p258 Table 108); 1PPS, SMB 50 ohm. CONFLICT: SR12 p51 Table 5
+    calls the 1PPS output 1.0/2.3 BNC, but the faceplate key 15 says SMB and Fig 9 draws a
+    hex-nut SMB; SMB is used.
+  jacks: >-
+    drawing + convention - Mgmt is the lamped common/rj45-eth@1 unrotated, its windows at the
+    bottom as Fig 9 draws them. The 2x2 block uses common/rj45-ganged-eth@1 cells for OES 1
+    and OES 2 (Ethernet) and bare std/rj45-ganged@2 cells for BITS and SyncE (timing jacks,
+    L76 and the nokia/ccm-e@1 pattern), centred on the drawn openings; the upper row is lamps-
+    up (rotate 180) and the lower row lamps-down, as drawn. The BITS and SyncE lamps are
+    separate common/led-dot@1 parts moved out past the housing's latch edge (above BITS, below
+    SyncE) at the drawn windows' x, so L46 does not read them as collisions. Console is a bare
+    std/rj45@2 turned 180, latch up as drawn; it has no lamps (SR12 p204 Table 81 key 6)
+    although Fig 9 draws two windows. AUX and Alarm are common/db9-receptacle@1 centred on the
+    drawn shells; Fig 9 draws the standoffs 21.0 apart against the D-sub's 24.99, so the
+    registry part is used, not the art. 1PPS is common/smb-jack@1.
+  lamps: >-
+    datasheet - SR12 pp200-202 Table 80: SFM Stat green up / green blinking booting; SFM Pwr
+    and CPM Pwr blue; CPM Stat green up / green blinking loading / green fast blinking
+    synchronizing (rate 4 estimated, as wave 1 did); M/S Ctl and Ref green primary / green
+    blinking secondary / amber fault; Timing green locked / green blinking holdover / amber
+    blinking free-running; Ref 1-3 green selected / green blinking standby / amber not
+    qualified; Pwr 1-8 green up / amber no power / amber blinking fault (footnote 19: the
+    chassis has only two power entry modules, so only Pwr 1 and 2 ever light, on the active
+    CPM5); Fan 1-3 green / amber blinking; CF 1-3 green / amber blinking / amber; OT, Crit,
+    Maj red, Min amber. Table 81 (pp203-204): Mgmt, OES 1 and SyncE Link (left) green 100 FD /
+    green blinking 100 HD / amber 10 FD / amber blinking 10 HD, Data (right) green blinking
+    activity / amber blinking error; BITS one link lamp, amber no clock / green clock; OES 2
+    is reserved and is given OES 1's meanings. The guide gives no RGB values; the library's
+    lamp colours are used. SR7 pp193-196 Tables 78/79 are the same.
+  lamp-mapping: >-
+    convention - rj45-eth and rj45-ganged-eth put led-a at the left window and led-b at the
+    right when unrotated; rotate 180 swaps them. So Link is led-a on Mgmt and OES 1 and led-b
+    on the turned OES 2. Which BITS window carries its one lamp is not stated; the left one is
+    used. The printed numerals inside the Ref / Pwr / Fan / CF lamps (Fig 9 and the photo) are
+    not drawn: the lamp part covers them.
+  legends: >-
+    drawing + photo - positions and orientation from Fig 9's text layer: lamp and module
+    legends run vertical (bottom to top), port legends horizontal, exactly as the owner's
+    photo of the installed CPM5 reads when the SR-12 turns them. Fig 9 prints "Timming"; the
+    photo reads "Timing", which is what is drawn. Fig 9 sets them in Times; the photo shows a
+    sans face, which is used.
+  colour: >-
+    photo - the owner's lab photos (2026-09-24): charcoal-to-black plate, white legends, black
+    plastic captive-screw knobs with a cross slot, a black handle, bright-shield RJ-45s. Warm
+    light, so the plate is the wave-2 family value #2e3034 rather than a sampled one.
+  relief: >-
+    estimated - the captive screw knobs stand proud (cyl 1.6, as nokia/ccm-e@1); the handle
+    stands out 12 (a loop the photo shows well clear of the plate; not dimensioned); the CF
+    mouths are pocketed 3 (nokia/ccm-e@1). Nothing else is raised in the figure.
+  marks: >-
+    drawing - the ESD triangle at the top right (Fig 9), drawn yellow with a black glyph as
+    the photos show it on the MDA-e plates beside it; no vendor logo on the plate, and a logo-
+    zone is reserved on the plain metal above ACO/LT.
+  lifecycle: 'searched only the staged corpus - listed in the SR-7/SR-12 22.7 guides; no end-of-life notice searched'
+unplaced: >-
+  seated by the `cpm` bay of the SFM5-7, SFM5-12 and SFM6-7/12 carriers, which the SR-7 and
+  SR-12 SF/CPM slots seat; the coordinator wires the carriers into the chassis
+elements:
+  screw-left: {at: [2.88, 17.98], size: [7.8, 7.8], class: screw}
+  screw-right: {at: [381.21, 17.98], size: [7.8, 7.8], class: screw}
+  reset: {at: [23.93, 19.51], size: [2.0, 2.0], class: control}
+  handle: {at: [132.94, 3.27], size: [4.39, 25.03], class: handle}
+  cf2-eject: {at: [138.93, 5.12], size: [6.74, 5.7], class: control}
+  cf2-slot: {at: [146.2, 6.77], size: [45.53, 5.62], class: slot}
+  cf1-eject: {at: [138.93, 17.02], size: [6.74, 5.69], class: control}
+  cf1-slot: {at: [146.2, 18.66], size: [45.53, 5.62], class: slot}
+  cf3-eject: {at: [195.29, 16.92], size: [6.74, 5.69], class: control}
+  cf3-door: {at: [202.42, 12.39], size: [67.87, 12.92], class: slot}
+  dte-dce: {at: [275.18, 16.65], size: [4.76, 7.45], class: control}
+  aco-lt: {at: [336.02, 16.86], size: [7.59, 7.59], class: control}
+  logo-zone: {at: [335.0, 2.0], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: false, confidence: estimated, source: 'nokia/ccm-e@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: false, confidence: estimated, source: 'nokia/ccm-e@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: handle, out: 12.0, color: '#1c1c1c', confidence: estimated, source: 'the CPM5 handle loop (SR12 p53 key 7); the photo shows it well proud of the plate. NOT MEASURED'}
+  - {node: cf1-slot, pocket: 3.0, confidence: estimated, source: 'the CF card mouth, as nokia/ccm-e@1. Not dimensioned'}
+  - {node: cf2-slot, pocket: 3.0, confidence: estimated, source: 'the CF card mouth, as nokia/ccm-e@1. Not dimensioned'}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      reaching the router - the RJ-45 console (serial, with the DTE/DCE switch), the 10/100 Mgmt
+      Ethernet port, OES 1 and OES 2 (10/100 Ethernet, the optical extension shelf; OES 2 reserved),
+      the AUX DB-9 (reserved) and the Alarm DB-9 contact output
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the timing ports - BITS (RJ-48C), SyncE/1588v2 (10/100 Ethernet on RJ-45) and the 1PPS output
+      on SMB
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the CPM and SFM Pwr and Stat lamps, M/S Ctl and Ref, and Timing
+  system-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: Ref 1-3, Pwr 1-8 (only 1 and 2 are ever lit in the SR-7 and SR-12), Fan 1-3 and CF 1-3
+  alarm-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the office alarm lamps OT, Crit, Maj and Min
+  timing-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the BITS link lamp and the SyncE Link and Data lamps, drawn as dots at the jacks' latch edges
+parts:
+  - {ref: common/led-dot@1, id: led-sfm-stat, group: status-leds, at: [29.88, 9.93], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: booting, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-sfm-pwr, group: status-leds, at: [29.88, 13.8], states: {lamp: ['off', {name: 'on', color: '#1e73d8'}]}}
+  - {ref: common/led-dot@1, id: led-cpm-stat, group: status-leds, at: [29.88, 17.68], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: loading, color: '#39b54a', behavior: blinking}, {name: synchronizing, color: '#39b54a', behavior: blinking, rate: 4}]}}
+  - {ref: common/led-dot@1, id: led-cpm-pwr, group: status-leds, at: [29.88, 21.55], states: {lamp: ['off', {name: 'on', color: '#1e73d8'}]}}
+  - {ref: common/led-dot@1, id: led-ms-ctl, group: status-leds, at: [35.05, 21.52], states: {lamp: ['off', {name: primary, color: '#39b54a'}, {name: secondary, color: '#39b54a', behavior: blinking}, {name: fault, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-ms-ref, group: status-leds, at: [35.05, 17.68], states: {lamp: ['off', {name: primary, color: '#39b54a'}, {name: secondary, color: '#39b54a', behavior: blinking}, {name: fault, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-timing, group: status-leds, at: [35.05, 9.93], states: {lamp: ['off', {name: locked, color: '#39b54a'}, {name: holdover, color: '#39b54a', behavior: blinking}, {name: free-running, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-ref-1, group: system-leds, at: [40.22, 21.55], states: {lamp: ['off', {name: selected, color: '#39b54a'}, {name: standby, color: '#39b54a', behavior: blinking}, {name: not-qualified, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-ref-2, group: system-leds, at: [40.22, 17.68], states: {lamp: ['off', {name: selected, color: '#39b54a'}, {name: standby, color: '#39b54a', behavior: blinking}, {name: not-qualified, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-ref-3, group: system-leds, at: [40.22, 13.8], states: {lamp: ['off', {name: selected, color: '#39b54a'}, {name: standby, color: '#39b54a', behavior: blinking}, {name: not-qualified, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-pwr-1, group: system-leds, at: [45.39, 21.55], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-2, group: system-leds, at: [45.39, 17.68], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-3, group: system-leds, at: [45.39, 13.8], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-4, group: system-leds, at: [45.39, 9.91], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-5, group: system-leds, at: [50.56, 21.55], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-6, group: system-leds, at: [50.56, 17.68], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-7, group: system-leds, at: [50.56, 13.8], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr-8, group: system-leds, at: [50.56, 9.91], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-power, color: '#f5a623'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-fan-1, group: system-leds, at: [55.73, 21.55], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-fan-2, group: system-leds, at: [55.73, 17.68], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-fan-3, group: system-leds, at: [55.73, 13.8], states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-cf-1, group: system-leds, at: [60.88, 21.55], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-cf-2, group: system-leds, at: [60.88, 17.68], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-cf-3, group: system-leds, at: [60.88, 13.8], states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-ot, group: alarm-leds, at: [66.08, 21.55], states: {lamp: ['off', {name: over-temperature, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-crit, group: alarm-leds, at: [66.08, 17.68], states: {lamp: ['off', {name: crit, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-maj, group: alarm-leds, at: [66.08, 13.77], states: {lamp: ['off', {name: maj, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-min, group: alarm-leds, at: [66.08, 9.93], states: {lamp: ['off', {name: min, color: '#f5a623'}]}}
+  - {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [71.72, 11.04], attrs: {media: rj45, speed: 100m}, states: {led-a: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/rj45-ganged-eth@1, id: oes-2, group: mgmt, at: [92.21, 5.74], rotate: 180, attrs: {media: rj45, speed: 100m}, states: {led-b: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}], led-a: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/rj45-ganged-eth@1, id: oes-1, group: mgmt, at: [92.21, 18.8], attrs: {media: rj45, speed: 100m}, states: {led-a: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]}}
+  - {ref: std/rj45-ganged@2, id: bits, group: timing, at: [111.41, 5.74], rotate: 180, attrs: {media: rj48}}
+  - {ref: common/led-dot@1, id: led-bits-lnk, group: timing-leds, at: [111.23, 3.9], states: {lamp: ['off', {name: no-signal, color: '#f5a623'}, {name: signal, color: '#39b54a'}]}}
+  - {ref: std/rj45-ganged@2, id: synce, group: timing, at: [111.41, 18.8], attrs: {media: rj45-sync}}
+  - {ref: common/led-dot@1, id: led-synce-lnk, group: timing-leds, at: [111.23, 29.4], states: {lamp: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-synce-data, group: timing-leds, at: [122.37, 29.4], states: {lamp: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/db9-receptacle@1, id: aux, group: mgmt, at: [209.0, 1.0]}
+  - {ref: std/rj45@2, id: console, group: mgmt, at: [283.56, 12.43], rotate: 180, attrs: {media: rj45-serial}}
+  - {ref: common/db9-receptacle@1, id: alarm, group: mgmt, at: [302.59, 13.94]}
+  - {ref: common/smb-jack@1, id: pps-1, group: timing, at: [358.9, 17.49]}
+connection-points:
+  mate: {at: [196, 15.9], direction: rear}
+skins: [default]
