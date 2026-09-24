@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fpxt-b
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -29,6 +29,7 @@ attrs:
   mnemonic: FPXT-B
   pon: 10g-epon
   xfp: 8
+  10g-epon: 8
   weight-kg: 1.2
   front-cover-width-top-mm: 26.08
   front-cover-width-bottom-mm: 24.5
@@ -77,9 +78,9 @@ provenance:
     sawtooth. Each cage now sits `on` the 45 degree face of its tooth, so the aperture draws at
     its 13.8 mm projection (see provenance.angled-panel). Numbering 1-8 from the top is ASSUMED from Figure 8, whose XFP legends run left to right
     from the ALM/PWR end; the panel prints no number beside any cage.
-    L96 is left standing: the export's only declarable XFP rate is oc192, which would be
-    wrong here, and it has no EPON interface type, so the 10gbase-x-xfp default is the nearest
-    it can say.
+    The export rate is `10g-epon: 8` from the same line and the unit name, "8p 10G EPON
+    Line Termination unit" (section 1.1), so the cages export as `10g-epon` rather than the
+    XFP cage default, 10GBASE-X.
   angled-panel: >-
     drawing and estimated - every XFP sits on its own tooth, two facets inside its drawn cage
     bezel: a RETURN turned 47 degrees up from the plate at the bezel top, then the cage FACE

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fwlt-a
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,6 +24,7 @@ attrs:
   model: FWLT-A
   part-number: 3FE 56399 AB
   xfp: 4
+  ng-pon2: 4
   weight-kg: 1.4
   power-draw-max-w: 123
   power-draw-typical-w: 108
@@ -101,9 +102,9 @@ provenance:
     the
     lower square beside each housing is a second lamp or the cage latch; (3) the PON lamp's
     and the laser mark's colours are not stated; (4) the part-label content is a
-    placeholder; (5) lint L96 asks an XFP card to state `oc192`, the only rate the DCIM
-    export knows for the family - these are PON ports, not SONET, so it is left unstated
-    and the warning stands.
+    placeholder; (5) the export rate is `ng-pon2: 4`, from section 35.3: "supports G.989
+    NG-PON2 TWDM, respectively G.9807 XGS-PON on any of the four ports" - NG-PON2 is the
+    card's U-NGPON mode, and XGS-PON the one it also runs.
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
