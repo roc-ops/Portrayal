@@ -36,6 +36,24 @@ def test_schema_refuses_bad_facets(bad):
         jsonschema.Draft202012Validator(SCHEMA).validate(c)
 
 
+# Recessed facets (the addendum): only a facet may carry lift <= 0.
+def test_schema_accepts_a_sunk_facet():
+    c = card()
+    c["relief"]["features"][0]["lift"] = -12
+    jsonschema.Draft202012Validator(SCHEMA).validate(c)
+
+
+@pytest.mark.parametrize("lift", [-12, 0])
+def test_schema_refuses_a_non_facet_lift_at_or_below_zero(lift):
+    c = card()
+    c["relief"]["features"].append({"node": "housing", "out": 2, "lift": lift})
+    errs = list(jsonschema.Draft202012Validator(SCHEMA).iter_errors(c))
+    assert errs
+    # the error names the lift and its bound, not a failed if/then
+    assert any(list(e.path)[-1:] == ["lift"] and "minimum" in e.message for e in errs), \
+        [e.message for e in errs]
+
+
 from portrayal import lint
 
 
