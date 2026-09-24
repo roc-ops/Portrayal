@@ -1,0 +1,64 @@
+format: 1
+kind: component
+name: sr-7-psf-safety-panel
+version: 1.0.0
+class: bezel
+behaviour: mounts
+profile: networking
+description: >-
+  The Power Supply Filter bay safety panel of the 7450 ESS-7 / 7750 SR-7: one honeycomb-vented
+  cover that screws over the lower front of the chassis and closes both DC power supply filter
+  bays at once, as the ESS-7 front view draws it. It spans the full chassis width, from the
+  bottom of SF/CPM slot B to the foot of the face, and is held by two slotted screws at its
+  upper corners. It is removed to reach the filters. No part number is given.
+unplaced: >-
+  placed on the SR-7 front over both filter bays, as the optional `safety-cover`
+  configuration; the coordinator wires it
+size: {w: 444.5, h: 84.0}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  measured on SR7 Fig 7 p50; no document states it. It is LARGER than the two filter bays
+  (437.4 x 64.5 in the wave-2 conventions): see provenance.size
+attrs:
+  model: SR-7 Power Supply Filter bay safety panel
+  role: safety-cover
+provenance:
+  sources: >-
+    SR7 = 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03: Fig 7
+    p50 and Table 3 key 4 ("DC power filter bays covered by the safety panel"); Table 48 p108
+    (screw torque, "Power Supply Filter bay safety panel", 8 to 10 lbf-in); p147 Table 66 procedure
+    step 1, which removes the safety panel to reach the filters' DE-9 ports. Coverage grid L298.
+    Vector art; no photograph.
+  size: >-
+    drawing - SR7 Fig 7 p50 at 1200 dpi (12.196 px/mm), read in the same frame as Fig 6 p49:
+    the panel's outer edge coincides with the chassis side line at the left and right (the
+    drawn width runs -4.4 to 439.9 in the left filter's frame, i.e. the full 444.5 face), its
+    top edge meets the bottom of SF/CPM slot B 11.9 above the filter plates, and it runs to
+    the chassis foot 7.6 below them. In the chassis frame that is x 0-444.5, y about
+    271.6-355.6: 444.5 x 84.0. CONFLICT with the wave-2 conventions' 437.4 x 64.5, which took
+    the size from the bays and asked for it to be measured; the measured cover is the larger,
+    and it is a placement (behaviour mounts), not a bay occupant, so nothing has to fit it.
+  layout: >-
+    drawing - same render, mm from the panel's top-left: slotted screws centred (13.8, 6.5)
+    and (430.7, 6.5), head 10.7; two honeycomb fields 17.9-205.0 and 235.9-423.0 across,
+    13.5-70.6 down, each 28 columns of flat-topped cells 7.5 across (column pitch 6.65, row
+    pitch 7.79, alternate columns dropped half a row), seven cells to a column. The two fields
+    are NOT the same phase: the left field's first column is the dropped one, the right
+    field's the raised one. Overlaid on the figure, every cell coincides. A return lip 1.5 in
+    from the sides and foot.
+  ess-only: >-
+    drawing - only the ESS-7 view (Fig 7) draws the panel; the SR-7 view (Fig 6) shows the bare
+    filters. Table 3 key 4 describes both, so it is optional on either chassis.
+  colour: 'estimated - line art only and no photograph; drawn in the front charcoal. A gap'
+  relief: 'estimated - the vent depth is not dimensioned'
+  lifecycle: 'searched only the staged corpus; not listed as a separately orderable item'
+elements:
+  vent-left: {at: [17.9, 13.5], size: [187.1, 57.1], class: vent}
+  vent-right: {at: [235.9, 13.5], size: [187.1, 57.1], class: vent}
+  screw-left: {at: [8.45, 1.15], size: [10.7, 10.7], class: screw}
+  screw-right: {at: [425.35, 1.15], size: [10.7, 10.7], class: screw}
+relief:
+  features:
+    - {node: vent-left-holes, vent: 15.0, confidence: estimated, source: 'the filters stand behind the cover (SR7 Fig 6 vs Fig 7); the gap is not dimensioned'}
+    - {node: vent-right-holes, vent: 15.0, confidence: estimated, source: as vent-left-holes}
+skins: [default]

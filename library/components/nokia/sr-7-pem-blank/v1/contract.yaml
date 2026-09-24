@@ -1,0 +1,48 @@
+format: 1
+kind: module
+name: sr-7-pem-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The filler panel that closes an empty rear power bay of the 7750 SR-7 / 7450 ESS-7 when a
+  DC PEM-3 is removed and not replaced at once. Nokia names it only in the removal procedure
+  and gives it no figure and no part number, so it is drawn as a plain plate the size of the
+  PEM-3 face, held by two captive screws where the PEM-3's are.
+unplaced: >-
+  seated by the SR-7 rear power bays (pem-1, pem-2); the coordinator wires it
+size: {w: 219.5, h: 42.7}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  borrowed from nokia/sr-7-pem-3@1, the module whose bay the blank closes; no document
+  dimensions the blank
+attrs:
+  model: 7750 SR-7 PEM slot filler panel
+  role: slot-blank
+provenance:
+  sources: >-
+    datasheet - SR7 = 3HE18643AAAATQZZA03 (22.7) p229 step 8: if the DC PEM-3 is not replaced
+    immediately, "install a filler panel" against dust, airflow and EMI. That sentence is the
+    whole of the source (coverage grid L305: no figure, no part number, in either the 22.7
+    guide or the legacy 3HE09917 guide). No photograph is staged.
+  size: >-
+    borrowed - nokia/sr-7-pem-3@1 (SR7 Table 47 p107, 219.5 x 42.7), the face of the bay the
+    blank closes.
+  depth: 'NOT STATED - no document gives the filler a depth, so none is written'
+  layout: >-
+    estimated - two captive screws at the PEM-3's own positions (8.1, 20.8) and (212.0, 21.3),
+    on the assumption that the filler fastens to the same threaded holes. Nothing else is
+    drawn, because nothing is known. A gap.
+  colour: 'estimated - drawn in the PEM-3 zinc grey; no photograph'
+  lifecycle: 'searched only the staged corpus; not listed as a separately orderable item'
+elements:
+  captive-screw-left: {at: [3.12, 15.82], size: [9.9, 9.9], class: screw}
+  captive-screw-right: {at: [207.08, 16.3], size: [9.9, 9.9], class: screw}
+relief:
+  features:
+    - {node: captive-screw-left, cyl: 4.0, confidence: estimated, source: 'borrowed - nokia/sr-7-pem-3@1 captive screw, itself not dimensioned'}
+    - {node: captive-screw-right, cyl: 4.0, confidence: estimated, source: as captive-screw-left}
+connection-points:
+  mate: {at: [109.75, 21.35], direction: rear}
+skins: [default]
