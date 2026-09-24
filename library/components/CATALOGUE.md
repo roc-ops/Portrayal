@@ -23,7 +23,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 2 | 10 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 7 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
-| `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 0 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
+| `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 2 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
 | `std/cxp@1` | component | port | 27 × 10 × 92 | cxp | 0 | 3 | CXP cage cutout - the module envelope of the CXP MSA, the aperture the module seats through |
 | `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 16 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
 | `std/drive-25@1` | component | drive | 15 × 69.85 × 100.45 | drive-25 | 1 | 2 | 2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier: 69.85 wide by 15.00 thick, drawn s… |
@@ -733,7 +733,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/felt-c@1` | module | line-card | 25 × 405 × 205 |  | 0 | 0 | Nokia FELT-C (3FE 75669 AA), the ETSI/MII high-speed point-to-point Ethernet LT of the 7360 ISAM FX, supporte… |
 | `nokia/felt-d@1` | module | line-card | 25 × 405 × 205 |  | 3 | 0 | Nokia FELT-D (3FE 78462 AA), the 1G/10G/25G/100G point-to-point Ethernet LT of the Lightspan FX (FX-4, FX-8, … |
 | `nokia/fglt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGLT-A (3FE 66721 AB), the 16-port GPON line termination board with traffic manager (version A) of the … |
-| `nokia/fglt-b@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FGLT-B (3FE 68954 AB), the 16-port GPON line termination board with traffic manager (version B) of the … |
+| `nokia/fglt-b@1` | module | line-card | 25 × 405 × 225 |  | 3 | 2 | Nokia FGLT-B (3FE 68954 AB), the 16-port GPON line termination board with traffic manager (version B) of the … |
 | `nokia/fglt-d@1` | module | line-card | 25 × 405 × 225 |  | 3 | 2 | Nokia FGLT-D (3FE 75833 AA), the 16-port GPON line termination board with traffic manager (version D) of the … |
 | `nokia/fglt-e@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGLT-E (3FE 76835 AA, and the AE functional variant), the 32-port GPON line termination board with traf… |
 | `nokia/fgut-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGUT-A (3FE 76986 AA, AD and CD), the 16-port Multi-PON line termination board of the 7360 ISAM FX and … |
@@ -751,7 +751,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/nelt-b@1` | module | line-card | 25 × 405 × 205 |  | 3 | 0 | Nokia NELT-B (3FE 62543 AA and AB), the FE/GE Ethernet LT of the 7360 ISAM FX (and 7302, 7330 FTTN and 7356 F… |
 | `nokia/ngfc-g@1` | module | power | 405 × 28.8 × 203 |  | 1 | 0 | Nokia NGFC-G (3FE 65676 AA), the general facilities card of the ANSI 7360 ISAM FX-4 shelf (NFXS-F BB) |
 | `nokia/ngfc-h@1` | module | power | 405 × 53.6 × 201.4 |  | 1 | 0 | Nokia NGFC-H (3FE 65675 AA), the general facilities card of the ANSI 7360 ISAM FX-8 shelf (NFXS-E BB) |
-| `nokia/nglt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia NGLT-A (3FE 64279 AA), the 8-port GPON line termination board with traffic manager (version A) that the… |
+| `nokia/nglt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia NGLT-A (3FE 64279 AA), the 8-port GPON line termination board with traffic manager (version A) that the… |
 | `nokia/nglt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia NGLT-C (3FE 67301 AA), the 8-port GPON line termination board with traffic manager (version C) that the… |
 
 ## smartoptics/ (16)
