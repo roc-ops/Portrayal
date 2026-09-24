@@ -91,10 +91,12 @@ const cage = R(new Node({'data-path': 'card/cage', 'data-tilt-on': 'card--housin
 const nested = R(new Node({'data-path': 'card/cage/optic', 'data-for': 'card/cage', 'data-z-lift': '1',
                            'data-tilt-on': 'card--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'}),
                  {x: 21, y: 31, w: 18, h: 6.93});
-const seat = R(new Node({'data-path': 'optic1', 'data-for': 'card/cage', 'data-z-lift': '6',
+// `data-for` names the untilted wrapper card, as render.py writes it for a
+// device-level `mate-to` (seated["for"] = p["mate-to"])
+const seat = R(new Node({'data-path': 'optic1', 'data-for': 'card', 'data-z-lift': '6',
                          'data-tilt-on': 'card--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'}),
                {x: 21, y: 31, w: 18, h: 6.93});
-const cardG = new Node({id: 'card', 'data-z-lift': '5'}, [facetNode, cage, nested]);
+const cardG = new Node({id: 'card', 'data-path': 'card', 'data-z-lift': '5'}, [facetNode, cage, nested]);
 const svgRoot = new Node({}, [cardG, seat], 'svg');
 const liftOf = el => { let z = 0; for (let n = el; n && n !== svgRoot; n = n.parentNode) z += +(n.getAttribute('data-z-lift') || 0); return z; };
 const tools = ctm => m.tiltTools(svgRoot, {mmRect: n => rects.get(n), liftOf, ctmOf: () => ctm});
@@ -107,11 +109,39 @@ out.tools = {
   seat: rr(TT.tiltRec(m.tiltOf(seat))),
   seatLiftFromFacet: liftOf(seat) - TT.tiltRec(m.tiltOf(seat)).base,
   nestedLiftFromFacet: liftOf(nested) - TT.tiltRec(m.tiltOf(nested)).base,
+  // a chained seat whose `data-for` IS a host tilted on the same facet
+  chained: (() => { const cap = R(new Node({'data-path': 'cap1', 'data-for': 'optic1', 'data-z-lift': '7',
+                         'data-tilt-on': 'card--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'}),
+                         {x: 22, y: 32, w: 4, h: 3});
+                    svgRoot.appendChild(cap);
+                    const r = liftOf(cap) - TT.tiltRec(m.tiltOf(cap)).base; cap.remove(); return r; })(),
   r90Facing: tools({a: 0, b: 1, c: -1, d: 0}).tiltRec(m.tiltOf(cage)).tilt.facing,
   noFacet: (() => { const w = console.warn; console.warn = () => {};
                     const r = TT.tiltRec({deg: 30, facing: 'up', on: 'nope', host: cage});
                     console.warn = w; return r; })(),
 };
+
+// THE SHAPE render.py WRITES FOR A CARD SUNK IN A WELL (rendered from the
+// test_facet_render fixture with the card `in:` std/db9@1, floor 6.73, and the
+// cage at `lift: 3`): card data-z-lift -6.73, cage 3 inside it, and the
+// mate-to optic a top-level sibling at host-lift 3 - 6.73 = -3.73 naming
+// `data-for="card"`. The optic stands on the facet exactly as the cage does.
+{
+  const fn = R(new Node({id: 'w--housing', 'data-facet-deg': '30', 'data-facet-facing': 'up',
+                         'data-z-profile-y': '0:0,30:17.3205'}), {x: 0, y: 40, w: 25, h: 30});
+  const cg = R(new Node({'data-path': 'w/p1', 'data-z-lift': '3', 'data-tilt-on': 'w--housing',
+                         'data-tilt': '30', 'data-tilt-facing': 'up'}), {x: 2.5, y: 45, w: 20, h: 8});
+  const card = new Node({id: 'w', 'data-path': 'w', 'data-z-lift': '-6.73', 'data-in': 'well'}, [fn, cg]);
+  const op = R(new Node({'data-path': 'optic', 'data-for': 'w', 'data-z-lift': '-3.73',
+                         'data-tilt-on': 'w--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'}),
+               {x: 3, y: 46, w: 18, h: 7});
+  const sv = new Node({}, [card, op], 'svg');
+  const lf = el => { let z = 0; for (let n = el; n && n !== sv; n = n.parentNode) z += +(n.getAttribute('data-z-lift') || 0); return z; };
+  const W = m.tiltTools(sv, {mmRect: n => rects.get(n), liftOf: lf, ctmOf: () => ({a: 1, b: 0, c: 0, d: 1})});
+  const rec = el => W.tiltRec(m.tiltOf(el));
+  out.sunk = {cageFromFacet: rr([lf(cg) - rec(cg).base])[0], opticFromFacet: rr([lf(op) - rec(op).base])[0],
+              opticBase: rr([rec(op).base])[0]};
+}
 
 // the facet footprint punch, and a rect punch in a module plane's pixels
 out.facetPunch = m.facetPunch({x: 10, y: 20, w: 60, h: 40, facet: {id: 'card--housing'}});
@@ -168,4 +198,24 @@ out.outHeight = {
   flat: m.outHeightAt([{x: 0, y: 0, w: 10, h: 10, out: 3}], 5, 5),
   outside: m.outHeightAt([fc, rt], 12.5, 40),
 };
+// SKIRT SUPPRESSION IS FACET TO FACET. The same tooth as facets suppresses
+// the apex wall; as plain profiled outs (a dcp ramp beside its body) it does
+// not, nor across owners, nor against a shaped or a lifted neighbour.
+{
+  const F = (e, extra = {}) => ({...e, owner: 'dev', lift: 0, facet: {deg: 45, id: 'x'}, ...extra});
+  const face = F(fc), ret = F(rt);
+  const depth = o => (x, y) => m.outHeightAt([o], o.x + x, o.y + y);
+  const apex = o => [[0, o.h], [o.w, o.h]];     // the face's bottom edge, at the apex
+  const ask = (o, outs) => m.skirtIsInterior(o, m.skirtNeighbours(o, outs), ...apex(o), depth(o));
+  const plain = {...fc, owner: 'dev', lift: 0}, plainRet = {...rt, owner: 'dev', lift: 0};
+  out.skirt = {
+    facets: ask(face, [face, ret]),
+    plain: ask(plain, [plain, plainRet]),
+    plainNeighbours: m.skirtNeighbours(plain, [plain, plainRet]).length,
+    facetBesidePlain: ask(face, [face, plainRet]),
+    otherOwner: ask(face, [face, F(rt, {owner: 'fru'})]),
+    shaped: ask(face, [face, F(rt, {rings: [{shell: [], holes: []}]})]),
+    lifted: ask(face, [face, F(rt, {lift: 2})]),
+  };
+}
 console.log(JSON.stringify(out));

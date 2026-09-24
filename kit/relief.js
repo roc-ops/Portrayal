@@ -114,6 +114,32 @@ export function outHeightAt(outs, x, y, eps = 0.01) {
   }
   return h;
 }
+// THE NEIGHBOURS A PROFILED OUT'S SKIRT MAY BE INSIDE OF. Facet to facet
+// only - a sawtooth's face and its return - and only a neighbour that is
+// certainly solid down to this out's base: the same owner (a FRU pulled or a
+// cover hidden takes its solid with it), no outline (its box is not its
+// shape), and a base no higher than this one's (a lifted neighbour leaves the
+// band beneath it open). A face with no facets gets none, so every skirt is
+// built exactly as before.
+export function skirtNeighbours(o, outs) {
+  if (!o.facet || o.tilt) return [];
+  const base = o.lift || 0;
+  return outs.filter(e => e !== o && e.facet && !e.tilt && e.owner === o.owner && !e.rings
+                          && (e.lift || 0) <= base + 0.01);
+}
+// IS THE SKIRT SEGMENT p-q INSIDE THE SOLID? Only a segment on the out's own
+// box edge can be; the probe steps just past that edge and reads the tallest
+// neighbour there (outHeightAt). `p`/`q` and `depthAt` are in the out's local
+// mm; `others` is skirtNeighbours(o, outs).
+export function skirtIsInterior(o, others, p, q, depthAt) {
+  if (!others.length) return false;
+  const eps = 1e-4, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+  const dx = p[0] === q[0] ? (p[0] <= 0 ? -eps : p[0] >= o.w ? eps : 0) : 0;
+  const dy = p[1] === q[1] ? (p[1] <= 0 ? -eps : p[1] >= o.h ? eps : 0) : 0;
+  if (!dx && !dy) return false;
+  const top = Math.max(depthAt(...p), depthAt(...q));
+  return outHeightAt(others, o.x + mx + dx, o.y + my + dy, 0) >= top - 0.01;
+}
 // WHICH FACET A NODE STANDS ON: the nearest `[data-tilt-on]` group at or above
 // it (render.py writes it on a part `on` a facet and on every occupant seated in
 // one). `host` is that group; its projected box supplies the tilt's anchor.
@@ -169,14 +195,21 @@ export function tiltTools(svg, {mmRect, liftOf, ctmOf}) {
     let n = t.host;
     while (attr(n.parentNode, 'data-tilt-on') === t.on) n = n.parentNode;
     // A MATE-TO SEAT IS DRAWN OUTSIDE ITS HOST'S CARD, and its own lift is the
-    // host's whole chain (render.py's `host-lift`). Measured from its own
-    // parent it stood the card's lift off the facet - or, in a well, sank into
-    // it. So a seat whose `data-for` host is on the same facet takes the
-    // host's base; a nested seat's host shares its parent, so nothing changes.
+    // host's whole chain (render.py's `host-lift`, which folds in a sunk
+    // card's -floor). Measured from its own parent it stood the card's lift
+    // off the facet - or, in a well, sank into it. Two shapes of `data-for`:
+    //  - a host tilted on the same facet (a boot on a tilted optic): take
+    //    that host's base;
+    //  - the untilted wrapper card render.py names for a device-level
+    //    `mate-to` (`data-for="card"`), which carries the forwarded cage on
+    //    this facet: the cage's base is the card's own lift, so take that.
+    // A nested seat's host shares its parent, so nothing changes for it.
     const fr = (attr(n, 'data-for') || '').split(/\s+/)[0];
     const h = fr && hops < 8 && svg.querySelector(`[data-path="${CSS.escape(fr)}"]`);
     const ht = h && tiltOf(h);
     if (ht && ht.on === t.on && ht.host !== n) return tiltBase(ht, hops + 1);
+    if (h && !(ht && ht.on === t.on) && h.querySelector(`[data-tilt-on="${CSS.escape(t.on)}"]`))
+      return liftOf(h);
     const p = n.parentNode;
     return p && p !== svg && p.getAttribute ? liftOf(p) : 0;
   };
@@ -2332,18 +2365,10 @@ export async function buildFaceRelief(F, ctx) {
           // each dropped a full-height skirt there, back to back in one plane,
           // and a cage well running down the slope crossed them and showed
           // them z-fighting inside the cage. One tooth has no wall there.
-          const others = o.tilt ? [] : outs.filter(e => e !== o && !e.tilt);
-          const inner = (p, q) => {
-            if (!others.length) return false;
-            const eps = 1e-4, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
-            const dx = p[0] === q[0] ? (p[0] <= 0 ? -eps : p[0] >= o.w ? eps : 0) : 0;
-            const dy = p[1] === q[1] ? (p[1] <= 0 ? -eps : p[1] >= o.h ? eps : 0) : 0;
-            if (!dx && !dy) return false;
-            const top = Math.max(depthAt(...p), depthAt(...q));
-            return outHeightAt(others, o.x + mx + dx, o.y + my + dy, 0) >= top - 0.01;
-          };
+          // Facet to facet only (skirtNeighbours): without facets this is a no-op.
+          const others = skirtNeighbours(o, outs);
           for (let k = 0; k < ring.length; k++) {
-            if (inner(ring[k], ring[(k + 1) % ring.length])) continue;
+            if (skirtIsInterior(o, others, ring[k], ring[(k + 1) % ring.length], depthAt)) continue;
             const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
             si.push(a, b, c, b, d, c);
           }

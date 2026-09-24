@@ -1,6 +1,6 @@
 # Tilted faces: facets, and the parts that sit on them
 
-Status: design agreed 2026-09-24. Implementation is on `claude/tilted-facets`.
+Status: design agreed 2026-09-24; implemented.
 
 ## Why
 
@@ -100,12 +100,14 @@ parts:
 
 - **L114 (new).** On each part that is `on` a facet:
   - `on` names a relief feature on the same contract that declares `facet`;
-  - `facet.deg` is in 1..89 and `facet.facing` is one of the four values;
   - the part's projected box lies within the facet node's box, to within 0.5 mm.
 
   A feature declaring `facet` together with `out`, `profile` or `profile-y` is an error.
-- **Projected boxes:** L46 (composed parts collide), L48, and the device-level L13 and L39 measure a
-  facet-mounted part by its projected box, because that is what occupies the face.
+- **Ranges:** `facet.deg` in 1..89 and `facet.facing` as one of the four values are enforced by the
+  schema, not by L114.
+- **Projected boxes:** L46 (composed parts collide) measures a facet-mounted part by its projected
+  box, because that is what occupies the face. The device-level L13 and L39 are unchanged in v1:
+  they check device placements, and a part `on` a facet is a component's composed part.
 - **True size:** L9 keeps checking the part's true size against the registry.
 - **Confidence:** a `facet` is a relief figure. L35 and L36 require its `confidence` and `source`
   like any other; an angle read by eye says `estimated`.

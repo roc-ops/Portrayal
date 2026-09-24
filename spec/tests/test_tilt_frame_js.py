@@ -105,9 +105,18 @@ def test_tilt_frame():
     assert t["cage"]["tilt"]["z0"] == pytest.approx(2 + 10 * math.tan(math.radians(30)), abs=1e-3)
     assert t["cage"]["base"] == 5
     # a mate-to seat drawn outside the card, whose own lift is the host's whole
-    # chain, stands on the facet exactly as a nested seat does - not 6 off it
+    # chain, stands on the facet exactly as a nested seat does - not 6 off it.
+    # Its `data-for` names the untilted card, as render.py writes it.
     assert t["seat"]["base"] == 5 and t["seatLiftFromFacet"] == 1
     assert t["nestedLiftFromFacet"] == 1
+    # a seat on that seat (data-for names a host tilted on the same facet)
+    assert t["chained"] == 2
+    # render.py's shape for a card sunk in a well: the optic's host-lift folds
+    # in the card's -6.73, so it takes the card's lift as base and stands 3 off
+    # the facet like its cage, not 3.73 into it
+    s = o["sunk"]
+    assert s["opticBase"] == pytest.approx(-6.73, abs=1e-3)
+    assert s["opticFromFacet"] == pytest.approx(s["cageFromFacet"], abs=1e-3) == 3
     assert t["r90Facing"] == "right"
     assert t["noFacet"] is None
 
@@ -133,3 +142,20 @@ def test_out_height_at_reads_the_neighbouring_solid():
     assert o["midReturn"] == pytest.approx(7.125, abs=1e-3)
     assert o["flat"] == 3
     assert o["outside"] == 0
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+def test_skirt_suppression_is_facet_to_facet():
+    """A skirt wall is dropped only between two facets of one owner, against a
+    neighbour with no outline standing from no higher a base. A plain profiled
+    neighbour (smartoptics dcp's ramp beside its body) suppresses nothing, so a
+    face without facets builds every skirt it did before."""
+    p = subprocess.run(["node", str(SCRIPT)], capture_output=True, text=True, cwd=str(SCRIPT.parent))
+    assert p.returncode == 0, p.stderr
+    o = json.loads(p.stdout.strip().splitlines()[-1])["skirt"]
+    assert o["facets"] is True
+    assert o["plain"] is False and o["plainNeighbours"] == 0
+    assert o["facetBesidePlain"] is False
+    assert o["otherOwner"] is False
+    assert o["shaped"] is False
+    assert o["lifted"] is False
