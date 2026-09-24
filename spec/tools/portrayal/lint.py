@@ -104,6 +104,7 @@ import os
 import re
 import sys
 import tempfile
+import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -6980,18 +6981,42 @@ _ID_VOCAB_CACHE = {}
 _ID_CORPUS_CACHE_FORMAT = 1
 _ID_CORPUS_CACHE_KEEP = 50          # entries kept; the oldest by mtime go first
 _ID_CORPUS_SOURCE = Path(__file__)  # the code that computes the answer, hashed
+_ID_CORPUS_TMP_MAX_AGE = 3600       # seconds before a stray temp file is an orphan
 
 
 def _id_corpus_cache_dir():
     """$PORTRAYAL_CACHE_DIR, else $XDG_CACHE_HOME/portrayal, else
-    ~/.cache/portrayal. Never inside the checkout or dist/."""
+    ~/.cache/portrayal. Never inside the checkout or dist/.
+
+    A RELATIVE value is ignored and the next option is used - the XDG spec says
+    so for XDG_CACHE_HOME, and PORTRAYAL_CACHE_DIR gets the same treatment,
+    because a relative path resolves against the cwd, which for build.sh and
+    the tests is the checkout itself."""
     env = os.environ.get("PORTRAYAL_CACHE_DIR")
-    if env:
+    if env and Path(env).is_absolute():
         return Path(env)
     xdg = os.environ.get("XDG_CACHE_HOME")
-    if xdg:
+    if xdg and Path(xdg).is_absolute():
         return Path(xdg) / "portrayal"
     return Path.home() / ".cache" / "portrayal"
+
+
+def _id_corpus_roots_cacheable(lib_roots):
+    """Whether the digest determines the answer for these roots. It does only
+    when no two roots overlap. The veto in `_id_corpus_compute` counts DISTINCT
+    file paths, and the digest keys on root position and relative path, not on
+    absolute paths - so [A, A] and [A, B], with B a byte-identical copy of A,
+    hash the same and answer differently (the same two files twice, against
+    four). A repeated root, or one inside another, is computed and not cached."""
+    try:
+        rs = [Path(r).resolve() for r in lib_roots]
+    except Exception:
+        return False
+    for i, a in enumerate(rs):
+        for j, b in enumerate(rs):
+            if i != j and (a == b or a in b.parents):
+                return False
+    return True
 
 
 def _id_corpus_files(lib_roots):
@@ -7042,8 +7067,13 @@ def _id_corpus_digest(files):
         h = hashlib.sha256(data).hexdigest() if data is not None else "missing"
         rows.append(f"{n}\0{section}\0{rel}\0{h}\n")
     rows.sort()
+    # the parser is part of the computation too: a different PyYAML, or the
+    # pure-Python loader where libyaml is missing, could read a document
+    # differently, so neither may reuse the other's entries
+    parser = f"{yaml.__version__}\0{_manifest._Loader.__name__}"
     top = hashlib.sha256(
-        f"portrayal-id-corpus\0{_ID_CORPUS_CACHE_FORMAT}\0code\0{code}\n".encode())
+        f"portrayal-id-corpus\0{_ID_CORPUS_CACHE_FORMAT}\0code\0{code}\0"
+        f"parser\0{parser}\n".encode())
     for r in rows:
         top.update(r.encode("utf-8", "surrogateescape"))
     return top.hexdigest()
@@ -7118,6 +7148,13 @@ def _id_corpus_cache_store(cache_dir, digest, result):
         for _m, _n, e in aged[_ID_CORPUS_CACHE_KEEP:]:
             with contextlib.suppress(OSError):
                 e.unlink()
+        # a writer killed between mkstemp and os.replace leaves its temp file;
+        # one old enough that no live writer can still own it is an orphan
+        cutoff = time.time() - _ID_CORPUS_TMP_MAX_AGE
+        for t in cache_dir.glob(".id-corpus-*.tmp"):
+            with contextlib.suppress(OSError):
+                if t.stat().st_mtime < cutoff:
+                    t.unlink()
 
 
 def _id_corpus(lib_roots):
@@ -7153,6 +7190,8 @@ def _id_corpus(lib_roots):
         return _ID_VOCAB_CACHE[key]
     files = _id_corpus_files(lib_roots)
     try:
+        if not _id_corpus_roots_cacheable(lib_roots):
+            raise ValueError("overlapping roots: the digest does not determine the answer")
         digest = _id_corpus_digest(files)
         cache_dir = _id_corpus_cache_dir()
         hit = _id_corpus_cache_load(cache_dir / f"id-corpus-{digest}.json", digest)
@@ -7222,7 +7261,7 @@ def _id_corpus_compute(files):
                 for k in range(1, len(t)):
                     c = tails.setdefault("-".join(t[k:]), {})
                     c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
-    words -= {w for w, files in bare.items() if len(files) >= 3}
+    words -= {w for w, where in bare.items() if len(where) >= 3}
 
     # THE PREFERRED NAME. What does the library already call the thing on the
     # other end of `smb-10mhz-out`? It calls it `clk-10mhz-out`, on three

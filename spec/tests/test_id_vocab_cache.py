@@ -217,8 +217,8 @@ def test_the_real_library_and_its_copy_share_one_entry(lib, _cache_dir, monkeypa
 
 
 def test_a_repeat_call_in_one_process_reads_nothing(mini, monkeypatch):
-    lib = mini
     """The in-process cache is still in front of the disk one."""
+    lib = mini
     first = corpus([lib])
 
     def boom(*a, **k):
@@ -320,8 +320,27 @@ def test_the_digest_covers_root_order_and_the_format(mini, tmp_path, monkeypatch
     ab = L._id_corpus_digest(L._id_corpus_files([str(lib), str(other)]))
     ba = L._id_corpus_digest(L._id_corpus_files([str(other), str(lib)]))
     assert ab != ba
+    files = L._id_corpus_files([str(lib), str(other)])
     monkeypatch.setattr(L, "_ID_CORPUS_CACHE_FORMAT", L._ID_CORPUS_CACHE_FORMAT + 1)
-    assert L._id_corpus_digest(L._id_corpus_files([str(lib), str(other)])) != ab
+    assert L._id_corpus_digest(files) != ab
+    monkeypatch.undo()
+    assert L._id_corpus_digest(files) == ab
+
+
+def test_the_digest_covers_the_parser(mini, monkeypatch):
+    """A different PyYAML, or the pure-Python loader where libyaml is missing,
+    must not reuse another parser's entries."""
+    files = L._id_corpus_files([str(mini)])
+    base = L._id_corpus_digest(files)
+    monkeypatch.setattr(L.yaml, "__version__", L.yaml.__version__ + ".zzq")
+    assert L._id_corpus_digest(files) != base
+    monkeypatch.undo()
+
+    class OtherLoader(L._manifest._Loader):
+        pass
+
+    monkeypatch.setattr(L._manifest, "_Loader", OtherLoader)
+    assert L._id_corpus_digest(files) != base
 
 
 def test_an_edited_lint_py_misses(mini, _cache_dir, tmp_path, monkeypatch):
@@ -348,6 +367,49 @@ def test_an_unreadable_source_computes_without_the_cache(mini, _cache_dir, tmp_p
     monkeypatch.setattr(L, "_ID_CORPUS_SOURCE", tmp_path / "no-such-lint.py")
     assert_same(corpus([mini]), uncached([mini]))
     assert entries(_cache_dir) == []
+
+
+def _usb_library(root, devices=2):
+    """`usb` is a connector word (a port's media), used as a whole id on
+    `devices` files. The veto drops it at three DISTINCT files - so the answer
+    depends on how many distinct paths the roots reach, which the digest (by
+    relative path, without absolute roots) cannot see."""
+    c = root / "components" / "std" / "usb-a" / "v1" / "contract.yaml"
+    c.parent.mkdir(parents=True)
+    c.write_text("class: port\nattrs:\n  media: usb\n")
+    for n in range(devices):
+        f = root / "devices" / "v" / f"d{n}" / "device.yaml"
+        f.parent.mkdir(parents=True)
+        f.write_text(yaml.safe_dump({"views": {"front": {"components": {"placements": [
+            {"id": "usb", "ref": "std/usb-a@1"}]}}}}))
+    return root
+
+
+@pytest.mark.parametrize("first", ["same-twice", "identical-copy"])
+def test_overlapping_roots_never_share_an_entry(first, tmp_path, _cache_dir):
+    """[A, A] and [A, B], with B a byte-identical copy of A, hash the same -
+    same root positions, relative paths and bytes - but differ in answer: A
+    twice is two distinct device files and keeps `usb`, A and B are four and
+    veto it. Whichever runs first must not answer for the other."""
+    a = _usb_library(tmp_path / "a")
+    b = tmp_path / "b"
+    shutil.copytree(a, b)
+    twice, pair = [a, a], [a, b]
+    assert "usb" in uncached(twice)[0] and "usb" not in uncached(pair)[0]
+    order = [twice, pair] if first == "same-twice" else [pair, twice]
+    for roots in order:
+        assert_same(corpus(roots), uncached(roots))
+
+
+def test_nested_or_repeated_roots_skip_the_disk_cache(tmp_path, _cache_dir):
+    a = _usb_library(tmp_path / "a")
+    inner = _usb_library(a / "devices" / "inner")
+    b = _usb_library(tmp_path / "b")
+    assert L._id_corpus_roots_cacheable([str(a), str(b)])
+    for roots in ([a, a], [a, inner], [inner, a], [a, tmp_path / "a" / "." ]):
+        assert not L._id_corpus_roots_cacheable([str(r) for r in roots]), roots
+        assert_same(corpus(roots), uncached(roots))
+    assert entries(_cache_dir) == [], "an overlapping root set was cached"
 
 
 # --- when the cache cannot be trusted, it steps aside --------------------------
@@ -416,6 +478,19 @@ def test_the_default_location_is_outside_the_repo(tmp_path, monkeypatch):
     assert L._id_corpus_cache_dir() == tmp_path / "home" / ".cache" / "portrayal"
 
 
+def test_a_relative_cache_setting_is_ignored(tmp_path, monkeypatch):
+    """A relative path resolves against the cwd, which for build.sh and the
+    tests is the checkout - so it is skipped for the next option, as the XDG
+    spec says of XDG_CACHE_HOME."""
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "xdg"))
+    monkeypatch.setenv("PORTRAYAL_CACHE_DIR", "library/dist/cache")
+    assert L._id_corpus_cache_dir() == tmp_path / "xdg" / "portrayal"
+    monkeypatch.setenv("XDG_CACHE_HOME", ".cache")
+    assert L._id_corpus_cache_dir() == tmp_path / "home" / ".cache" / "portrayal"
+    assert L._id_corpus_cache_dir().is_absolute()
+
+
 # --- pruning -------------------------------------------------------------------
 
 def test_pruning_keeps_the_newest_n(mini, _cache_dir, monkeypatch):
@@ -440,6 +515,22 @@ def test_pruning_keeps_the_newest_n(mini, _cache_dir, monkeypatch):
     assert set(left) == {old[4], old[5]} | new, "pruning did not take the oldest first"
     assert bystander.exists(), "pruning removed a file it did not write"
     assert not list(_cache_dir.glob("*.tmp")), "a temp file was left behind"
+
+
+def test_pruning_sweeps_orphaned_temp_files(mini, _cache_dir):
+    """A writer killed between mkstemp and os.replace leaves a temp file. One
+    older than an hour is swept; a fresh one may belong to a live writer."""
+    _cache_dir.mkdir()
+    orphan = _cache_dir / ".id-corpus-orphan.tmp"
+    live = _cache_dir / ".id-corpus-live.tmp"
+    for f in (orphan, live):
+        f.write_text("partial")
+    old = L.time.time() - L._ID_CORPUS_TMP_MAX_AGE - 60
+    os.utime(orphan, (old, old))
+    corpus([mini])
+    assert len(entries(_cache_dir)) == 1, "nothing was written, so nothing was pruned"
+    assert not orphan.exists(), "an orphaned temp file survived pruning"
+    assert live.exists(), "a temp file a live writer may own was removed"
 
 
 # --- two processes at once -----------------------------------------------------
