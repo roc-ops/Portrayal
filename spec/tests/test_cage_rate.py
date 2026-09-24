@@ -276,7 +276,7 @@ def test_a_pon_attr_answers_the_census():
     ("nokia/fgut-a", "xgs-pon", 16),  # "XGS-PON ... on any of the ports"
     ("nokia/nglt-a", "gpon", 8),      # "eight GPON ports per board"
     ("nokia/nglt-c", "gpon", 8),      # "eight GPON ports per board"
-    ("nokia/fwlt-a", "ng-pon2", 4),   # "G.989 NG-PON2 TWDM ... four ports"
+    ("nokia/fwlt-a", "xgs-pon", 4),   # NG-PON2 named, but only XGS optics listed
     ("nokia/fpxt-a", "10g-epon", 4),  # "4 compliant IEEE802.3av EPON XFP ports"
     ("nokia/fpxt-b", "10g-epon", 8),  # "8p 10G EPON Line Termination unit"
     ("nokia/fwlt-b-aa", "xgs-pon", 8),  # "G.9807 XGS-PON on any of the eight ports"

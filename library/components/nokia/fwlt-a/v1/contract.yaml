@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fwlt-a
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,7 +24,7 @@ attrs:
   model: FWLT-A
   part-number: 3FE 56399 AB
   xfp: 4
-  ng-pon2: 4
+  xgs-pon: 4
   weight-kg: 1.4
   power-draw-max-w: 123
   power-draw-typical-w: 108
@@ -102,9 +102,10 @@ provenance:
     the
     lower square beside each housing is a second lamp or the cage latch; (3) the PON lamp's
     and the laser mark's colours are not stated; (4) the part-label content is a
-    placeholder; (5) the export rate is `ng-pon2: 4`, from section 35.3: "supports G.989
-    NG-PON2 TWDM, respectively G.9807 XGS-PON on any of the four ports" - NG-PON2 is the
-    card's U-NGPON mode, and XGS-PON the one it also runs.
+    placeholder; (5) the export rate is `xgs-pon: 4`. Section 35.3 names both G.989 NG-PON2 TWDM and
+    G.9807 XGS-PON on any of the four ports, but the ETSI PIG optics table (Table 126) lists
+    only XGS dual-rate XFP optics for this card, so XGS-PON is the flavour every port runs
+    in hardware - the rule FWLT-B AB and FGUT-A follow.
   thumbscrews: >-
     photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
