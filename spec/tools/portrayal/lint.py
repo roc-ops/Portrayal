@@ -3366,12 +3366,45 @@ def lint_component_collisions(path, data, lib_roots):
                      "say so in provenance")
 
 
+def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
+    """L117, recessed facets: a facet with `lift < 0` roots below the plate, so it
+    has to stand in a hole - an element that is a `pocket` feature, whose box
+    holds the facet's box (to within `tol`, as L117 measures parts) and which is
+    at least `-lift` deep. Without one, the facet's wedge is buried in a solid
+    face; in a shallow one, its root is below the pocket's floor."""
+    sunk = -float(f["lift"])
+    fx, fy = elements[node]["at"]
+    fw, fh = elements[node]["size"]
+    holding = []
+    for p in (data.get("relief") or {}).get("features") or []:
+        pel = elements.get(p.get("node")) or {}
+        if not p.get("pocket") or not pel.get("size") or not pel.get("at"):
+            continue
+        px, py = pel["at"]
+        pw, ph = pel["size"]
+        if fx >= px - tol and fy >= py - tol and fx + fw <= px + pw + tol \
+                and fy + fh <= py + ph + tol:
+            holding.append((float(p["pocket"]), p["node"]))
+    if not holding:
+        err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) but is "
+            "not inside any `pocket` element's box - a facet below the plate has to stand "
+            "in a recess, or its wedge is buried in a solid face")
+        return
+    depth, pnode = max(holding)
+    if depth < sunk:
+        err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) in pocket "
+            f"{pnode!r}, which is only {depth:g} mm deep - a pocket shallower than the facet "
+            "is sunk puts the facet's root below the pocket floor")
+
+
 def lint_component_facets(path, data, lib_roots):
     """L117: a tilted part stands on a facet that exists and holds it.
 
     docs/superpowers/specs/2026-09-24-tilted-facets-design.md. The facet's rectangle is
     its front-view footprint; a part on it is measured by its PROJECTED box (true size
-    foreshortened by cos(deg)), which is what occupies the face.
+    foreshortened by cos(deg)), which is what occupies the face. A facet with a
+    negative `lift` (recessed facets, the addendum to the same spec) must stand in
+    a pocket deep enough to hold it - see `_lint_sunk_facet`.
     """
     feats = {f.get("node"): f for f in (data.get("relief") or {}).get("features") or []}
     elements = data.get("elements") or {}
@@ -3385,6 +3418,8 @@ def lint_component_facets(path, data, lib_roots):
             if node not in elements or not elements[node].get("size"):
                 err(path, "L117", f"facet node {node!r} is not a declared element with a "
                     "size - the renderer needs its front-view rectangle to derive the wedge")
+            elif (f.get("lift") or 0) < 0:
+                _lint_sunk_facet(path, node, f, data, elements)
     for q in data.get("parts") or []:
         on = q.get("on")
         if not on:

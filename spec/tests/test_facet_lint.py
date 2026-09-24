@@ -110,3 +110,49 @@ def test_l46_measures_the_projected_box(tmp_path):
     c = card()
     c["parts"].append({"ref": "std/qsfp28@1", "id": "p2", "at": [2.5, 52.0], "on": "housing"})
     assert not [w for w in run(tmp_path, c).warnings if "[L46]" in w]
+
+
+# Recessed facets (the addendum): a sunk facet stands in a pocket deep enough.
+def sunk(lift=-12.0, pocket=12, window=(0.0, 38.0, 25.0, 34.0)):
+    c = card()
+    c["elements"]["window"] = {"at": [window[0], window[1]], "size": [window[2], window[3]],
+                               "class": "display"}
+    c["relief"]["features"][0]["lift"] = lift
+    c["relief"]["features"].insert(0, {"node": "window", "pocket": pocket})
+    return c
+
+
+def l117(tmp_path, data):
+    return [e for e in run(tmp_path, data).errors if "[L117]" in e]
+
+
+def test_a_sunk_facet_in_a_deep_enough_pocket_is_clean(tmp_path):
+    assert not l117(tmp_path, sunk())
+
+
+def test_a_sunk_facet_in_a_deeper_pocket_is_clean(tmp_path):
+    assert not l117(tmp_path, sunk(lift=-6.0, pocket=12))
+
+
+def test_a_sunk_facet_outside_any_pocket_is_an_error(tmp_path):
+    c = card()
+    c["relief"]["features"][0]["lift"] = -12.0
+    errs = l117(tmp_path, c)
+    assert errs and any("pocket" in e for e in errs)
+
+
+def test_a_sunk_facet_only_partly_in_its_pocket_is_an_error(tmp_path):
+    # the window stops at y=60; the facet runs 40..70
+    errs = l117(tmp_path, sunk(window=(0.0, 38.0, 25.0, 22.0)))
+    assert errs and any("not inside" in e for e in errs)
+
+
+def test_a_sunk_facet_in_a_shallow_pocket_is_an_error(tmp_path):
+    errs = l117(tmp_path, sunk(lift=-12.0, pocket=8))
+    assert errs and any("shallower" in e for e in errs)
+
+
+def test_a_proud_facet_needs_no_pocket(tmp_path):
+    c = card()
+    c["relief"]["features"][0]["lift"] = 3.0
+    assert not l117(tmp_path, c)
