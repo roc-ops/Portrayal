@@ -1,0 +1,144 @@
+format: 1
+kind: module
+name: fnio-a
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FNIO-A (3FE 65586 BA), the 80G (8x10G) NT I/O applique of the 7360 ISAM FX
+  (also Lightspan FX), with SyncE. Seats in the NTIO slot between the two NT boards and
+  gives the shelf eight extra SFP/SFP+ uplinks (1G, 2.5G or 10G). Authored upright, as
+  the Unit Data Sheet guides draw it: ejector and thumbscrew at each end, a 2 x 5 lamp
+  block (ALM, PWR, ports 1-8) under the top ejector, then eight SFP cages in two groups
+  of four on a sawtooth faceplate that angles each cage 45 degrees for fibre bend radius.
+unplaced: >-
+  Seated by the NTIO bay of the 7360 ISAM FX shelves (NFXS-D FX-16,
+  NFXS-E FX-8 and NFXS-F FX-4, the fit the Unit Data Sheets give), which are being modelled in parallel under #538 and are not
+  in the library yet. Remove this line when a shelf's NTIO bay lists the card in `accepts`.
+size: {w: 25.0, h: 405.0, d: 205.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), not the faceplate: the same UDS section states
+  the width as 26 mm, which is wider than the pitch and so is taken to be the widest
+  point (the ejector or the sawtooth), not the plate between neighbours. Held at 25.0 so
+  the NTIO bay built from the shared family convention seats it. d is the first of the
+  two depths the UDS gives (205 / 225 mm); which one applies to which shelf is not stated.
+attrs:
+  model: FNIO-A
+  sfp-plus: 8
+  part-number: 3FE 65586 BA
+  weight-kg: 0.81
+  power-draw-max-w: 26.4
+  power-draw-typical-w: 24
+provenance:
+  size: >-
+    datasheet - ETSI Unit Data Sheet guide 3FE77012AAAATQZZA18 section 40.5.1 (p388):
+    height 405 mm, width 26 mm, depth 205 mm / 225 mm, board-to-board pitch 25 mm. The
+    Lightspan UDS 3HH90279AAAATQZZA23 p286 prints the same. Face held at the 25 mm pitch
+    by the shared 7360 FX convention; the 26 mm width is recorded in size-notes and gaps.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 40.5.1; the faceplate edge-to-edge width
+    is stated only as 26 mm overall, which exceeds the pitch, so the plate width itself is
+    not stated and is taken as the pitch.
+  depth: >-
+    datasheet - 205 mm / 225 mm, section 40.5.1; 205 carried. Neither figure is tied to a
+    shelf in the text.
+  weight: 'datasheet - 0.81 kg, ETSI UDS A18 section 40.5.2 (p389)'
+  power: >-
+    datasheet - ETSI Safety Manual 3HH11998AAAATCZZA29 p26, Table 2 "Power consumption
+    per component for 7360 ISAM FX": FNIO-A 24 W typical, 26.4 W maximum, 0-1 per shelf.
+    The table footnotes say PON line-card figures include their optics and that NT
+    figures exclude the NTIO and SFPs; for the NTIO row itself the manual says nothing
+    about whether the SFP+ modules are inside the figure, so that scope is open (gap).
+  layout: >-
+    drawing (fractions only) - ETSI UDS A18 p388 Figure 170, the 3D side-and-front board
+    view, taken from the embedded 1435 x 1586 image at 300 ppi (pdfimages; the Lightspan
+    p286 copy is a 150 ppi JPEG of the same art). There is no orthographic front in any
+    guide. Positions along the card are fractions of the 405 mm face measured between the
+    front corners of the two ejectors (image y 137 to 1538, 0.289 mm/px), corrected by
+    about 5 px on the tooth apexes for the depth axis of the oblique projection. Top
+    ejector lever tip 31.8; lamp rows 34.3 to 54.3 on a 5.0 pitch; sawtooth 57.5 to 175.5
+    (four teeth), a 6 mm flat, 181.5 to 300.3 (four teeth); bottom lever from 318.9. Tooth
+    pitch 28.5 +/- 0.4. Across the card nothing can be taken from a 3D view, so the cages
+    are centred and the lamp columns spaced 6.6 mm by the ratio column/row pitch = 1.33 read
+    off the flat LED close-up (Figure 171). Estimated error about 1 mm along the card.
+  ports: >-
+    datasheet - UDS section 40.4.2.1: eight uplink ports on the front plate, each for a
+    1G, 2.5G or 10G SFP/SFP+ module, placed under a 45 degree angle for fibre bend radius.
+    Composed as std/sfp@1 at its registry aperture. Numbering 1-8 top to bottom is
+    ASSUMED: the lamp legend numbers 1-8, the board carries no numeral beside any cage in
+    Figure 170, and no document maps cage to number (gap).
+  lamps: >-
+    datasheet - Figure 171 (p389, embedded 1435 x 409 at 300 ppi) and Table 121. Two
+    columns: ALM | PWR, then 1 | 2, 3 | 4, 5 | 6, 7 | 8, legends outboard, a bracket
+    labelled PORT on the right beside rows 1-8. Table 121: PWR on = power on; ALM red =
+    alarm present; port lamp off = no link, green = link up, blinking green = traffic.
+    The PWR colour is not stated (on/off only); drawn and named 'on' with the family green.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2, as cisco/ and edgecore/ parts carry)
+    is used. The sawtooth itself is NOT raised: an `out` on it would come to the front and
+    bury the composed cages, which already emit their own depth.
+  logo-zone: >-
+    reserved by the family convention; Figure 170 draws no mark on the plate, so the zone
+    sits on the empty metal between the last cage and the bottom lever.
+  lifecycle: >-
+    searched only the staged corpus - the UDS guides list it as current; no end-of-life
+    notice was searched for on the web.
+elements:
+  logo-zone: {at: [4.0, 303.0], size: [17.0, 12.0], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the eight uplink SFP/SFP+ cages (1G, 2.5G or 10G), SyncE capable
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one link/activity lamp per SFP port, legends 1-8 bracketed PORT
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [5.25, 62.3]}
+  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [5.25, 90.8]}
+  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [5.25, 119.3]}
+  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [5.25, 147.8]}
+  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [5.25, 186.9]}
+  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [5.25, 215.4]}
+  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [5.25, 243.9]}
+  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [5.25, 272.4]}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 33.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 33.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-port-1, group: port-leds, at: [8.2, 38.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-2, group: port-leds, at: [14.8, 38.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-3, group: port-leds, at: [8.2, 43.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-4, group: port-leds, at: [14.8, 43.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-5, group: port-leds, at: [8.2, 48.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-6, group: port-leds, at: [14.8, 48.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-7, group: port-leds, at: [8.2, 53.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-port-8, group: port-leds, at: [14.8, 53.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

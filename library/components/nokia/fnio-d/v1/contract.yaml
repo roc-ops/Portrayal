@@ -1,0 +1,160 @@
+format: 1
+kind: module
+name: fnio-d
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360
+  ISAM FX, with SyncE. Seats in the NTIO slot between the two NT boards and gives the
+  shelf four QSFP28/QSFP+ uplinks. Authored upright, as the Unit Data Sheet guides draw
+  it: ejector and thumbscrew at each end, a 2 x 9 lamp block (ALM, PWR and sixteen lane
+  lamps, four per port) under the top ejector, two small marks, then four QSFP cages on a
+  sawtooth faceplate that angles each cage 45 degrees for fibre bend radius, and two
+  hazard marks beside the bottom lever. Not in any Lightspan FX guide.
+unplaced: >-
+  Seated by the NTIO bay of the 7360 ISAM FX shelves (NFXS-D FX-16,
+  NFXS-E FX-8 and NFXS-F FX-4, the fit the Unit Data Sheets give), which are being modelled in parallel under #538 and are not
+  in the library yet. Remove this line when a shelf's NTIO bay lists the card in `accepts`.
+size: {w: 25.0, h: 405.0, d: 205.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), not the faceplate: the same UDS section states
+  the width as 26 mm, which is wider than the pitch and so is taken to be the widest
+  point (the ejector or the sawtooth), not the plate between neighbours. Held at 25.0 so
+  the NTIO bay built from the shared family convention seats it. d is the first of the
+  two depths the UDS gives (205 / 225 mm); which one applies to which shelf is not stated.
+attrs:
+  model: FNIO-D
+  qsfp28: 4
+  part-number: 3FE 74928 AA
+  weight-kg: 1.2
+  power-draw-max-w: 104
+  power-draw-typical-w: 83.5
+provenance:
+  size: >-
+    datasheet - 7360 ANSI Unit Data Sheet guide R6.9 3FE77013AAAATQZZA16 p294 and ETSI UDS
+    3FE77012AAAATQZZA18 section 42.5.1 (p406): height 405 mm, width 26 mm, depth 205 mm /
+    225 mm, board-to-board pitch 25 mm. Face held at the 25 mm pitch by the shared 7360 FX
+    convention; the 26 mm width is recorded in size-notes and gaps.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 42.5.1; the faceplate edge-to-edge width
+    is stated only as 26 mm overall, which exceeds the pitch, so the plate width itself is
+    not stated and is taken as the pitch.
+  depth: >-
+    datasheet - 205 mm / 225 mm, section 42.5.1; 205 carried. Neither figure is tied to a
+    shelf in the text.
+  weight: 'datasheet - 1.2 kg, ETSI UDS A18 section 42.5.2 (p407); ANSI R6.9 p295 agrees'
+  power: >-
+    datasheet - ETSI Safety Manual 3HH11998AAAATCZZA29 p26, Table 2 "Power consumption
+    per component for 7360 ISAM FX": FNIO-D 83.5 W typical, 104 W maximum. The manual does
+    not say whether the QSFP modules are inside the NTIO figure (it says so only for PON
+    line cards, which include their optics, and NT cards, which exclude NTIO and SFPs), so
+    that scope is open (gap).
+  layout: >-
+    drawing (fractions only) - ETSI UDS A18 p406 Figure 183 / ANSI R6.9 p294 Figure 128,
+    the same 3D side-and-front board view, taken from the embedded 1425 x 1576 image at
+    300 ppi. No orthographic front exists in any guide. This view is close to frontal.
+    Positions along the card are fractions of 405 mm between the top of the top ejector
+    and the bottom of the bottom ejector (image y 63 to 1498, 0.282 mm/px). Top lever tip
+    31.6; lamp rows 37.3 to 78.0 on a 5.09 pitch; two small dark marks at 115 and 164;
+    four teeth 174.1 to 317.8, cage openings (the drawn connector on each upper face)
+    centred at 189.1, 225.2, 261.1, 297.2 - a 36.0 pitch; hazard marks at 326.5 and 340.6;
+    the bottom lever is drawn OPEN in the figure and is modelled closed, its hook at 323.7.
+    Across the card the cages are centred and the lamp columns spaced 6.6 mm from the
+    column/row pitch ratio 1.31 of the flat LED close-up (Figure 184). About 1 mm error.
+  ports: >-
+    datasheet - UDS section 42.4.2.1: four uplink ports, each for a 100G, 40G or 4x10G
+    QSFP28/QSFP+ module, placed under a 45 degree angle for fibre bend radius. Composed as
+    std/qsfp28@1 at its registry aperture. Numbered 1-4 top to bottom, which is ASSUMED
+    from the lamp block's PORT1-PORT4 brackets reading top to bottom; each cage has a
+    small printed strip beside it in Figure 183 that the 300 ppi image cannot resolve
+    (gap).
+  lamps: >-
+    datasheet - Figure 184 (ETSI p407, embedded 1425 x 657 at 300 ppi; identical as ANSI
+    Figure 129 p295) and Table 126. Rows: ALM | PWR, then 2 | 1, 4 | 3 ... 16 | 15 - EVEN
+    on the LEFT, ODD on the RIGHT, the reverse of the FNIO-A, transcribed as printed.
+    Brackets PORT1 (lamps 1-4), PORT2 (5-8), PORT3 (9-12), PORT4 (13-16) on the right:
+    four lane lamps per QSFP, for 4x10G breakout. Table 126: PWR on = power on; ALM red =
+    alarm; QSFP lamp off = no link, green = link up, blinking = traffic. PWR colour and the
+    blinking colour are not stated; drawn with the family green.
+  marks: >-
+    drawing - two small dark rectangles on the plate between the lamps and the cages, at
+    115 and 164 mm, about 4.5 x 5 mm; at 300 ppi they hold unreadable glyphs. Drawn as
+    dark blocks and not named as anything (gap). The two hazard triangles near the bottom
+    are likewise drawn as outlines; one appears to be a laser warning, neither is resolved.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2) is used. The sawtooth is NOT raised:
+    an `out` on it would come to the front and bury the composed cages.
+  logo-zone: >-
+    reserved by the family convention; Figure 183 draws no mark there, so the zone sits
+    on the empty metal between the lamp block and the first mark.
+  lifecycle: >-
+    searched only the staged corpus - listed as current in ANSI R6.9 and ETSI A18; no
+    end-of-life notice was searched for on the web.
+elements:
+  logo-zone: {at: [4.0, 86.0], size: [17.0, 20.0], class: label}
+  mark-upper: {at: [9.25, 112.6], size: [4.5, 5.0], class: label}
+  mark-lower: {at: [9.25, 161.8], size: [4.5, 5.0], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: the four uplink QSFP28/QSFP+ cages (100G, 40G or 4x10G breakout), SyncE capable
+  lane-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      sixteen QSFP lamps, four per port (PORT1 = 1-4 ... PORT4 = 13-16), printed even on
+      the left and odd on the right
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 184.03]}
+  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 220.12]}
+  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 256.03]}
+  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 292.12]}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 36.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 36.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-1, group: lane-leds, at: [14.8, 41.39], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-2, group: lane-leds, at: [8.2, 41.39], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-3, group: lane-leds, at: [14.8, 46.48], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-4, group: lane-leds, at: [8.2, 46.48], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-5, group: lane-leds, at: [14.8, 51.57], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-6, group: lane-leds, at: [8.2, 51.57], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-7, group: lane-leds, at: [14.8, 56.66], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-8, group: lane-leds, at: [8.2, 56.66], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-9, group: lane-leds, at: [14.8, 61.75], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-10, group: lane-leds, at: [8.2, 61.75], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-11, group: lane-leds, at: [14.8, 66.84], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-12, group: lane-leds, at: [8.2, 66.84], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-13, group: lane-leds, at: [14.8, 71.93], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-14, group: lane-leds, at: [8.2, 71.93], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-15, group: lane-leds, at: [14.8, 77.02], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-16, group: lane-leds, at: [8.2, 77.02], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
