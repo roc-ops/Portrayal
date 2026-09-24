@@ -1,0 +1,638 @@
+format: 1
+kind: device
+name: osa-5420-quartz
+version: 0.1.0
+maturity: modelled
+manufacturer: Oscilloquartz
+model: OSA 5420 Quartz
+portfolio:
+  family: PTP grandmaster
+  series: OSA 5420 Series (edgeSync+)
+description: >-
+  Compact 1RU PTP grandmaster, boundary clock, NTP server and GNSS receiver with a
+  high-quality OCXO (Stratum 3 / G.812 Type III). Fanless. Everything is on the front:
+  two hot-swappable AC or DC supplies, two expansion slots for timing fan-out cards,
+  four 1G Ethernet ports (two of them combo RJ-45/SFP), BITS, ToD, clock and PPS I/O,
+  and the GNSS antenna input.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      data sheet - 2023 OSA 5420 Series, Product variants: "OSA 5420 quartz", OCXO, 2
+      expansion line cards, hot-swappable redundant PSU. The chassis label strip prints
+      "OSA 5420" over "QUARTZ". The 2016 data sheet calls the same variant "OSA 5420 Quartz
+      HQ"; the 2023 sheet and the manual's Figure 3 caption call it "OSA 5420 Quartz".
+  sources:
+    confidence: datasheet
+    note: >-
+      FOUR DOCUMENTS, EACH FOR ITS OWN QUESTION. The 2023 OSA 5420 Series data sheet (8 pp,
+      Adtran) for dimensions, weight, power per variant and the interface inventory, and
+      its p1 front render (1462 x 226 px) for the front face. The OSA 5420/5421
+      Installation and Commissioning Manual R9.5.1 Issue A, doc 80000045125 (2017, 98 pp)
+      for the chassis text, the front connector table, the LED tables, the variant fronts
+      (Figures 3-6), the expansion cards and the rear (p42 Figure 8). The 2015 and 2016
+      data sheets and the manufacturer's product-page renders for corroboration only.
+  chassis:
+    confidence: datasheet
+    note: >-
+      THE FRONT IS 443 WIDE, AND THE MANUAL SAYS 436. The data sheet (2023): "443mm x
+      44mm x 219mm / 17.44 x 1.73 x 8.62 in (W x H x D), ETSI-compliant", weight 3.2 kg.
+      The manual (p11): width "without mounting brackets" 436, height 44, depth "without
+      IEC and optical connectors" 212, weight "approximately 3 kg". Two independent
+      measurements settle the face: the data sheet's front render is 1440.5 x 142.5 px
+      between its edge lines, aspect 10.11 against 10.07 for 443 x 44 (0.4%) and 9.91
+      for 436 x 44 (2.0%); and the manual's own rear drawing (p42 Figure 8), a line
+      drawing from a different source, is 1043 x 102.5 px, 10.18 (1.1% and 2.7%). The
+      product-page three-quarter render shows the front plate standing a little proud of
+      the side walls, which is where a 436 body and a 443 front can both be true. So the
+      faces are 443 x 44 and the body depth is the manual's 212: the data sheet's 219 is
+      the same box with its connectors, by the manual's own scoping. The disagreement is
+      also filed under `gaps:`.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      photo-measured - 2023 data sheet p1 render at 3.252 px/mm across (1440.5 px for
+      443) and 3.239 down (142.5 px for 44), which agree to 0.4%. Every position on the
+      front is off that render. Two checks against things of known size: the IRIG-B
+      card's D-sub shell reads 16.2 against the 16.30 of TE C-747905, and the four SFP
+      cages repeat on a 17.9 pitch. The manual's Figures 3-6 are schematic (their pixel
+      aspect is about 16% taller than the face's) and were used for arrangement only - which card
+      sits in which slot, what the 5421 has where the 5420's second slot is.
+  psu-bays:
+    confidence: photo-measured
+    note: >-
+      photo-measured, same render. The two supply plates start at x 7.9 and 93.2 (pitch
+      85.3), each 71.8 x 35.0 from y 6.55, with the thumbscrew tab running on to 81.0
+      and 1.0 below. The bays take the whole 81 x 36 envelope because a bay is a
+      rectangle; see oscilloquartz/osa542x-psu-ac-40w@1 for the notch. Manual p43: the
+      two left-most rectangular slots, stencilled PSU1 and PSU2. PSU1 in the data sheet
+      render is the DC module and PSU2 the AC; in the manual's Figures 3-6 likewise.
+  psu-rating:
+    confidence: datasheet
+    note: >-
+      manual p43 - "The OSA 5420 uses 40 Watt AC/DC PSUs, and the OSA 5421 requires 90 Watt
+      AC/DC PSUs", and both supplies in one chassis must match. So this chassis accepts
+      only the 40 W modules.
+  lc-bays:
+    confidence: photo-measured
+    note: >-
+      photo-measured, same render - LC1 at 194.9-308.4, LC2 at 310.5-424.0, both 2.8-23.4,
+      on a 115.6 pitch; the vertical "L C 1" and "L C 2" legends stand in the gaps to the
+      left of each. Manual p11: "two expansion slots" on the OSA 5420. The data sheet
+      render carries an IRIG-B in LC1 and a BTOH-16 in LC2; the manual's Figure 3 carries
+      two BITS-OUT HD (BTOH-16) cards. Both are `example` configurations below.
+  front-ports:
+    confidence: photo-measured
+    note: >-
+      manual Table 1, "OSA 542x Front Panel Connectors (Left to Right)", for what each
+      opening is; the render for where. Left to right after the supplies: MGMT LAN over
+      RS-232 (RJ-45, stacked), the STA lamp and the USB port (3G modem), NET-1 and
+      ACCESS-1 copper RJ-45 in one shell, four SFP cages NET-1, ACCESS-1, NET-2,
+      ACCESS-2 each with a lamp above, BITS IN, BITS OUT and ToD (RJ-45) in one shell,
+      then five SMA jacks CLK IN, PPS IN, CLK, PPS, GNSS. Jack centres: 182.05 for the
+      stacked pair (rows 19.9 and 33.25), 226.1 and 242.9 for the copper pair, 261.6,
+      279.5, 297.4 and 315.1 for the cages, 336.8, 353.6 and 370.4 for the timing
+      jacks, and 384.8 to 432.7 on a 12.0 pitch for the SMAs.
+  combo-ports:
+    confidence: datasheet
+    note: >-
+      manual p13 - NET-1/NET-2 "operate in optical mode (1000BaseX) via SFP or electrical
+      mode (100/1000BaseT) via RJ45", and ACCESS-1/ACCESS-2 the same, with one electrical
+      jack each for NET and ACCESS; the data sheet says "Two combo 100/1000BaseT or
+      100/1000BaseX (SFP) ports. Two additional 100/1000BaseX (SFP) ports". So NET-1 and
+      ACCESS-1 each appear TWICE on the face, as a copper jack and as a cage, and only one
+      of each pair is used at a time. They are drawn as the two receptacles they are, and
+      the groups say which pairs are one interface.
+  jack-orientation:
+    confidence: photo-measured
+    note: >-
+      photo-measured and manual. The render shows the lamp windows of MGMT LAN at the TOP
+      of the jack and those of every other RJ-45 at the bottom; the manual's Table 3 draws
+      the management port's two lamps at the top and Table 5 the access/network jacks'
+      at the bottom. common/rj45-eth@1 carries its lamps at the bottom unrotated, so MGMT
+      LAN is rotated 180 and the rest are not. RS-232, BITS and ToD are bare jacks (no link
+      lamps; L76 and the RJ45 family design), and the render's lighter corners on them are
+      the shield, not lamps.
+  lamps:
+    confidence: datasheet
+    note: >-
+      manual - Table 2 (STA and the PSU and expansion card lamps), Table 3 (the management
+      LAN jack), Table 4 (the optical access port facility lamp), Tables 5 and 6 (the
+      access and network copper jacks). The optical NETWORK ports are described in prose
+      as having "two LEDs (Link and Rate)", but the render and every figure show ONE lamp
+      per cage, as for the access ports; that lamp is drawn and its states are left
+      generic, because the manual tables no single optical network lamp.
+  shells:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the copper jacks sit in bright rectangular shells, one per group
+      (the stacked management pair, the NET/ACCESS pair, the three timing jacks), and the
+      USB in its own. Drawn as `port-shell` decor behind the jacks, per the pitfall that a
+      dark jack on a bright face otherwise reads as floating.
+  label-strip:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the blue strip at the top right reads "OSA 5420" over "QUARTZ" in
+      white, with a blue rule running down the right edge of the face to y 41.7. Drawn as
+      decor and silkscreen; the variant name is the chassis', not a module's.
+  logos:
+    confidence: photo-measured
+    note: >-
+      TWO MARKS ARE RESERVED, NOT DRAWN. The OSCILLOQUARTZ wordmark with its waveform above
+      MGMT LAN (165.5-193.6 x 1.9-7.0) and the Syncjack badge under the label strip
+      (426.9-436.2 x 12.8-23.8) are both trademarks set as artwork; each is a `regions`
+      logo zone, per the library's rule that vendor logos are not reproduced.
+  esd-sticker:
+    confidence: photo-measured
+    note: >-
+      photo-measured - read at 10x, a black triangle with a yellow border carrying the
+      IEC 61340-5-1 hand, "ESD" beneath it, at 165.4-173.1 x 15.1-23.6. It sits in PSU2's
+      notch, the chassis metal above that supply's thumbscrew tab, which is inside the
+      bay's rectangle; so it is a placement `for: psu-2` and paints over the supply.
+  caution-mark:
+    confidence: photo-measured
+    note: >-
+      photo-measured - a yellow general-warning triangle at 323.6-327.1 x 40.5-43.3 beside
+      the ACCESS-2 legend, read at 10x as an exclamation mark, not a laser burst. Drawn
+      with common/warning-triangle@1, which is 5.4 x 4.8 against the 3.5 x 2.8 printed:
+      the library part is 60% larger than the mark and the placement centres it on the
+      mark's centre x and sits it on the face's bottom edge.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - manual p42 Figure 8, "OSA 5420 / OSA 5421 Rear Panel Frame Ground Point",
+      a line drawing at 2.354 px/mm across and 2.33 down (1043 x 102.5 px for 443 x 44).
+      Drawn as the figure presents it, looking at the rear. From its left: a plain margin
+      with one screw at x 6.2; a finned heatsink from x 9.1 to 213.9 on a 5.6 fin pitch,
+      carrying six screws at x 44.4, 111.5 and 178.6 top and bottom; the earth terminal
+      at (206.9, 7.7) with the earth symbol at 217.1 and a screw below it; a field of
+      hexagonal perforations at 226.6-430.5 x 6.0-26.4; and a strip along the bottom
+      right from y 31.5 carrying three screws at x 260.6, 341.3 and 422.5.
+  earth:
+    confidence: datasheet
+    note: >-
+      manual p41 - "An optional Earth (Frame Ground) connection may be attached to the Earth
+      terminal point, located at the rear of the unit", with an M4x6 screw and a lock
+      washer from the Earth Terminal Kit.
+  cooling:
+    confidence: datasheet
+    note: >-
+      manual p11 and p36 - "convection cooled (no fans or filters)", "designed for passive
+      (fanless) air cooling". Units stack four high in a commercial-temperature
+      environment and one high, with a rack unit free above and below, in an industrial one.
+  ears:
+    confidence: datasheet
+    note: >-
+      manual p38-40 - the rack brackets are a separate kit, part number 1013902002, screwed
+      to the chassis sides with two countersunk M4 each: 19-inch standard, 19-inch
+      extension (recessed), 23-inch standard, ETSI standard, ETSI extension and a wall
+      bracket, each fitted flush or recessed. None is dimensioned in the manual, so no ear
+      is drawn; the body stands alone, as it does on a desk.
+  power:
+    confidence: datasheet
+    note: >-
+      data sheet (2023) - "Power consumption (without LC or SFP; Vin=48V): OSA 5420 Quartz:
+      20W (typical), 22W (max.)". Recorded as the vendor's figure for the bare chassis; the
+      expansion cards publish no figure anywhere in the corpus (L27 on each card is that
+      record).
+  environmental:
+    confidence: datasheet
+    note: >-
+      data sheet (2023) - operating ambient for Quartz, HQ+ and HQ++: AC -40 to +50 C, DC
+      -40 to +65 C (hardened environment); storage -40 to +70 C (GR-63-CORE); humidity 5 to
+      100% with condensation.
+attrs:
+  physical:
+    weight-kg: 3.2
+    weight-note: data sheet 3.2 kg; the manual says approximately 3 kg
+    overall-mm: 443 x 44 x 219 (data sheet, W x H x D, with connectors)
+    body-mm: 436 x 44 x 212 (manual, without brackets and without connectors)
+  performance:
+    ptp-clients: up to 1024 unicast at 128 pps
+    ntp-transactions: up to 8000 per second (NTP server without PTP/Syncjack)
+    holdover-16ppb: 1 month (typical)
+  power:
+    power-typical-w: 20
+    power-max-w: 22
+    power-envelope: bare
+    power-envelope-note: without line cards or SFPs, Vin 48 V (data sheet)
+    psu-rating: 40 W AC or DC per module, two hot-swappable
+    input-voltage: 100-240 VAC 47-63 Hz, or -48 to -60 VDC (tolerates -36 to -72)
+  thermal:
+    cooling: passive convection, no fans or filters
+  environmental:
+    operating-temp: AC -40 to +50 C, DC -40 to +65 C
+    storage-temp: -40 to +70 C
+    humidity: 5 to 100 percent, with condensation
+  platform:
+    oscillator: high-quality OCXO, Stratum 3 / G.812 Type III
+    oscillator-aging: +/-5e-10 per day after 30 days
+    expansion-slots: 2
+  features:
+    gnss: GPS, GLONASS, BeiDou, Galileo; L1, 32 channels
+    optics-sfp: 100/1000BaseX; SM/MM coloured or non-coloured SFP and copper SFP on every cage (data sheet); 1000BASE-SX/LX/ZX named for the network ports and 1000BASE-LX10/LH and BX10 for the access ports (manual p13)
+    operation-modes: PTP grandmaster, boundary clock, slave, probe; NTP server; SSU; GNSS fan-out
+    ptp-profiles: G.8265.1, G.8275.1, G.8275.2, enterprise, IEEE 1588 default, IEC/IEEE 61850-9-3, C37.238, SMPTE ST2059-2, AES67
+    syncjack: clock and PTP probes, TE/TIE/MTIE monitoring
+  management:
+    local: RS-232 console on RJ-45, 10/100 management LAN on RJ-45
+    protocols: CLI, SNMP v1/v2c/v3, Web GUI, Telnet, SSH, HTTP/HTTPS, RADIUS, TACACS+
+  compliance:
+    nebs: NEBS level 3 compliance
+    safety: EN 60950-1, 21CFR1040.10, EN 60825
+    emi: EN 55022 2010 Class A, EN 61000-3-2, EN 61000-3-3, EN 300 386, FCC Part 15 Class A, ICES-002 Class A
+    regulatory: CE, RoHS
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 443
+  height: 44
+  depth: 212
+  ru: 1
+  color: '#d2d4d7'
+  airflow: passive
+  silk: '#2f3a66'
+gaps:
+- what: width-sources-disagree
+  scope: [front, rear, top, bottom]
+  reason: sources-disagree
+  note: >-
+    The data sheet gives 443 wide and the manual 436 "without mounting brackets". Both
+    of the face's own images measure 443 x 44 to about 1% and 436 x 44 to 2-3%, so the
+    faces are drawn 443. The reconciliation - a front plate a little wider than the body
+    - is read from one three-quarter render, not measured.
+  wanted: >-
+    a mechanical drawing of the chassis, or a ruler across a real unit's front and
+    across its sides.
+- what: side-detail
+  scope: [left, right, top, bottom]
+  reason: needs-photo
+  note: >-
+    The product-page three-quarter render shows each flank with two fields of round vent
+    holes and three pairs of screws, two of them the bracket positions the manual
+    describes; it is at an angle that measures none of it. The top and bottom are shown
+    by nothing. These four views carry the envelope only.
+  wanted: a square-on photograph of one flank and of the lid.
+- what: blank-plates
+  scope: [lc-1, lc-2, psu-1, psu-2]
+  reason: needs-photo
+  note: >-
+    Manual p46 - blank plates "must be installed in unused PSU or expansion slots",
+    each with a captive thumbscrew on the right. No image of either blank is held. The
+    expansion-slot blank is modelled from that text alone (oscilloquartz/osa542x-lc-blank@1,
+    art estimated); the PSU blank is not modelled, so a pulled supply draws as its opening.
+  wanted: a photograph or drawing of the expansion-slot and PSU blank plates.
+- what: optical-irig-connector
+  scope: [lc-1, lc-2]
+  reason: vendor-silent
+  note: >-
+    The IRIG-B card's optical output is a round barrel 7.4 across in a 375 px render;
+    no document names the connector type.
+  wanted: the IRIG-B card's own data sheet or a newer install manual.
+- what: card-and-psu-part-numbers
+  scope: [psu-1, psu-2, lc-1, lc-2]
+  reason: vendor-silent
+  note: >-
+    The manual gives part numbers for the BTOH-16, CPOH-16 and PTOH-16 and defers the
+    PSUs, the GE-4S and everything else to the OSA 5420/5421 System Description, which
+    is not held. The IRIG-B card postdates the manual.
+  wanted: the OSA 5420/5421 System Description.
+groups:
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        data sheet - "Hot-swappable redundant PSU"; manual p43 - both supplies in one
+        chassis must be of the same capacity.
+    description: two hot-swappable supplies, AC or DC, 40 W each on the OSA 5420.
+  lc-slots:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the two expansion slots, LC1 and LC2 as the face prints them. Each takes one
+      timing fan-out card - 16x BITS, 16x CLK/PPS, 16x PPS+ToD, 4x 1G or IRIG - and is
+      hot-insertable (data sheet).
+  eth-copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the electrical halves of the two combo ports, NET-1 and ACCESS-1, 100/1000BaseT.
+      Each is one interface with the cage of the same name in `sfp`; only one of the
+      pair is used at a time (manual p13).
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      four 100/1000BaseX cages, NET-1, ACCESS-1, NET-2 and ACCESS-2, hardware
+      timestamping for PTP and NTP and Sync-E on each. NET-1 and ACCESS-1 are the
+      optical halves of the combo ports whose copper halves are in `eth-copper`.
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  timing:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      the onboard synchronisation interfaces, which are the work a grandmaster is bought
+      to do: BITS IN and BITS OUT (E1, T1 or 2.048 MHz, RJ-48c), ToD+PPS (RS-422 on
+      RJ-45), CLK IN and CLK (10 MHz, SMA), PPS IN and PPS (SMA), and the GNSS antenna
+      input (SMA, +5 VDC to the antenna). Three connector families in one block because
+      the manual's Table 1 lists them as one Synchronization section.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the local management interfaces: MGMT LAN (10/100BaseT), the RS-232 console on
+      RJ-45, and the USB port the manual reserves for a 3G modem.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 443, h: 44}
+    panel:
+      decor:
+        - {id: shell-mgmt, kind: port-shell, at: [173.8, 13.2], size: [16.6, 26.7], rx: 0.3, fill: '#e1e3e5', stroke: '#9a9fa5', stroke-width: 0.25}
+        - {id: shell-usb, kind: port-shell, at: [200.8, 32.2], size: [13.4, 6.2], rx: 0.4, fill: '#c3c7cb', stroke: '#8a8f95', stroke-width: 0.2}
+        - {id: shell-copper, kind: port-shell, at: [217.5, 26.2], size: [33.6, 13.4], rx: 0.3, fill: '#e1e3e5', stroke: '#9a9fa5', stroke-width: 0.25}
+        - {id: shell-timing, kind: port-shell, at: [328.2, 26.1], size: [50.9, 13.5], rx: 0.3, fill: '#e1e3e5', stroke: '#9a9fa5', stroke-width: 0.25}
+        - {id: label-strip-model, kind: label-plate, at: [424.2, 1.9], size: [18.1, 4.1], fill: '#1f3a9a'}
+        - {id: label-strip-variant, kind: label-plate, at: [424.6, 6.3], size: [17.0, 3.8], fill: '#1f3a9a'}
+        - {id: label-strip-variant-rule, at: [424.9, 6.55], size: [16.4, 3.3], stroke: '#e8ebf5', stroke-width: 0.2}
+        - {id: edge-rule, kind: label-plate, at: [440.6, 1.9], size: [1.0, 39.8], fill: '#1f3a9a'}
+      cutouts:
+        - {id: mgmt-lan, at: [174.15, 13.3], size: [15.8, 13.2], shape: rect}
+        - {id: rs-232, at: [174.15, 26.65], size: [15.8, 13.2], shape: rect}
+        - {id: usb, at: [201.5, 33.05], size: [12.0, 4.5], shape: rect}
+        - {id: net-1-copper, at: [218.2, 26.35], size: [15.8, 13.2], shape: rect}
+        - {id: access-1-copper, at: [235.0, 26.35], size: [15.8, 13.2], shape: rect}
+        - {id: net-1, at: [254.35, 30.0], size: [14.5, 10.0], shape: rect}
+        - {id: access-1, at: [272.25, 30.0], size: [14.5, 10.0], shape: rect}
+        - {id: net-2, at: [290.15, 30.0], size: [14.5, 10.0], shape: rect}
+        - {id: access-2, at: [307.85, 30.0], size: [14.5, 10.0], shape: rect}
+        - {id: bits-in, at: [328.9, 26.25], size: [15.8, 13.2], shape: rect}
+        - {id: bits-out, at: [345.7, 26.25], size: [15.8, 13.2], shape: rect}
+        - {id: tod, at: [362.5, 26.25], size: [15.8, 13.2], shape: rect}
+        - {id: clk-in, at: [381.625, 30.025], size: [6.35, 6.35], shape: circle}
+        - {id: pps-in, at: [393.625, 30.025], size: [6.35, 6.35], shape: circle}
+        - {id: clk, at: [405.625, 30.025], size: [6.35, 6.35], shape: circle}
+        - {id: pps, at: [417.625, 30.025], size: [6.35, 6.35], shape: circle}
+        - {id: gnss, at: [429.525, 30.025], size: [6.35, 6.35], shape: circle}
+        - {id: led-sta, at: [193.4, 36.1], size: [4.0, 4.0], shape: circle}
+        - {id: led-net-1, at: [264.7, 25.5], size: [4.0, 4.0], shape: circle}
+        - {id: led-access-1, at: [270.5, 25.5], size: [4.0, 4.0], shape: circle}
+        - {id: led-net-2, at: [300.9, 25.5], size: [4.0, 4.0], shape: circle}
+        - {id: led-access-2, at: [306.6, 25.5], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [41.3, 4.6], text: PSU1, font-size: 2.8, anchor: middle, fill: '#2f3a66', for: psu-1}
+      - {at: [128.5, 4.6], text: PSU2, font-size: 2.8, anchor: middle, fill: '#2f3a66', for: psu-2}
+      - {at: [182.05, 12.7], text: MGMT LAN, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: mgmt-lan}
+      - {at: [182.05, 42.5], text: RS-232, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: rs-232}
+      - {at: [193.1, 11.0], text: L, font-size: 2.0, anchor: middle, fill: '#2f3a66', for: lc-1}
+      - {at: [193.1, 13.8], text: C, font-size: 2.0, anchor: middle, fill: '#2f3a66', for: lc-1}
+      - {at: [193.1, 16.6], text: '1', font-size: 2.0, anchor: middle, fill: '#2f3a66', for: lc-1}
+      - {at: [309.45, 11.0], text: L, font-size: 2.0, anchor: middle, fill: '#2f3a66', for: lc-2}
+      - {at: [309.45, 13.8], text: C, font-size: 2.0, anchor: middle, fill: '#2f3a66', for: lc-2}
+      - {at: [309.45, 16.6], text: '2', font-size: 2.0, anchor: middle, fill: '#2f3a66', for: lc-2}
+      - {at: [195.4, 42.7], text: STA, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: led-sta}
+      - {at: [226.1, 42.9], text: NET-1, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: net-1-copper}
+      - {at: [242.9, 42.9], text: ACCESS-1, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: access-1-copper}
+      - {at: [261.6, 42.9], text: NET-1, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: net-1}
+      - {at: [279.5, 42.9], text: ACCESS-1, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: access-1}
+      - {at: [297.4, 42.9], text: NET-2, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: net-2}
+      - {at: [315.1, 42.9], text: ACCESS-2, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: access-2}
+      - {id: bracket-net-1, at: [262.2, 28.8], path: 'M 0 0 L 0 -2.5 L 2.7 -2.5', fill: '#2f3a9a', stroke-width: 0.25, for: [led-net-1, net-1]}
+      - {id: bracket-access-1, at: [277.6, 28.8], path: 'M 0 0 L 0 -2.5 L -2.7 -2.5', fill: '#2f3a9a', stroke-width: 0.25, for: [led-access-1, access-1]}
+      - {id: bracket-net-2, at: [297.9, 28.8], path: 'M 0 0 L 0 -2.5 L 2.8 -2.5', fill: '#2f3a9a', stroke-width: 0.25, for: [led-net-2, net-2]}
+      - {id: bracket-access-2, at: [313.5, 28.8], path: 'M 0 0 L 0 -2.5 L -2.7 -2.5', fill: '#2f3a9a', stroke-width: 0.25, for: [led-access-2, access-2]}
+      - {at: [336.8, 42.9], text: BITS IN, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: bits-in}
+      - {at: [353.6, 42.9], text: BITS OUT, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: bits-out}
+      - {at: [370.4, 42.9], text: ToD, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: tod}
+      - {at: [384.8, 42.9], text: CLK IN, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: clk-in}
+      - {at: [396.8, 42.9], text: PPS IN, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: pps-in}
+      - {at: [408.8, 42.9], text: CLK, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: clk}
+      - {at: [420.8, 42.9], text: PPS, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: pps}
+      - {at: [432.7, 42.9], text: GNSS, font-size: 1.7, anchor: middle, fill: '#2f3a66', for: gnss}
+      - {at: [433.25, 5.35], text: OSA 5420, font-size: 3.4, anchor: middle, fill: '#ffffff', for: chassis}
+      - {at: [433.1, 9.45], text: QUARTZ, font-size: 2.9, anchor: middle, fill: '#ffffff', for: chassis}
+    components:
+      bays:
+        - id: psu-1
+          at: [7.9, 6.55]
+          size: {w: 81.0, h: 36.0}
+          accepts: [oscilloquartz/osa542x-psu-ac-40w@1, oscilloquartz/osa542x-psu-dc-40w@1]
+          default: oscilloquartz/osa542x-psu-ac-40w@1
+          group: psus
+          rel-pos: 1
+        - id: psu-2
+          at: [93.2, 6.55]
+          size: {w: 81.0, h: 36.0}
+          accepts: [oscilloquartz/osa542x-psu-ac-40w@1, oscilloquartz/osa542x-psu-dc-40w@1]
+          default: oscilloquartz/osa542x-psu-ac-40w@1
+          group: psus
+          rel-pos: 2
+        - id: lc-1
+          at: [194.9, 2.8]
+          size: {w: 113.5, h: 20.6}
+          accepts: [oscilloquartz/btoh-16@1, oscilloquartz/cpoh-16@1, oscilloquartz/ptoh-16@1, oscilloquartz/ge-4s@1, oscilloquartz/irig-b@1, oscilloquartz/osa542x-lc-blank@1]
+          default: oscilloquartz/btoh-16@1
+          group: lc-slots
+          rel-pos: 1
+        - id: lc-2
+          at: [310.5, 2.8]
+          size: {w: 113.5, h: 20.6}
+          accepts: [oscilloquartz/btoh-16@1, oscilloquartz/cpoh-16@1, oscilloquartz/ptoh-16@1, oscilloquartz/ge-4s@1, oscilloquartz/irig-b@1, oscilloquartz/osa542x-lc-blank@1]
+          default: oscilloquartz/btoh-16@1
+          group: lc-slots
+          rel-pos: 2
+      placements:
+        - {ref: common/esd-warning@1, id: esd-sticker, at: [165.4, 15.1], for: psu-2, group: furniture, rel-pos: 1}
+        - ref: common/rj45-eth@1
+          id: mgmt-lan
+          at: [174.15, 13.3]
+          rotate: 180
+          group: mgmt
+          rel-pos: 1
+          attrs: {media: rj45, speed: 100m}
+          states:
+            led-b: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]
+            led-a: ['off', {name: rate-10m, color: '#e0b21b'}, {name: rate-100m, color: '#39b54a'}]
+        - {ref: std/rj45@2, id: rs-232, at: [174.15, 26.65], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial}}
+        - ref: common/led-indicator@1
+          id: led-sta
+          at: [193.4, 36.1]
+          for: chassis
+          group: status-leds
+          rel-pos: 1
+          states: {lamp: ['off', {name: normal, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: power-up, color: '#e0b21b'}, {name: loading, color: '#e0b21b', behavior: blinking}, {name: fail, color: '#d0342c'}]}
+        - {ref: std/usb-a@1, id: usb, at: [201.5, 33.05], group: mgmt, rel-pos: 3, description: 'the 3G modem input (manual Table 1)'}
+        - {ref: common/usb-symbol@1, id: usb-legend, at: [204.3, 39.5], for: usb, group: furniture, rel-pos: 2}
+        - ref: common/rj45-eth@1
+          id: net-1-copper
+          at: [218.2, 26.35]
+          group: eth-copper
+          rel-pos: 1
+          states:
+            led-a: ['off', {name: activity, color: '#39b54a', behavior: blinking}]
+            led-b: ['off', {name: link, color: '#39b54a'}]
+        - ref: common/rj45-eth@1
+          id: access-1-copper
+          at: [235.0, 26.35]
+          group: eth-copper
+          rel-pos: 2
+          states:
+            led-a: ['off', {name: activity, color: '#e0b21b', behavior: blinking}]
+            led-b: ['off', {name: link, color: '#e0b21b'}]
+        - {ref: std/sfp@1, id: net-1, at: [254.35, 30.0], group: sfp, rel-pos: 1}
+        - {ref: std/sfp@1, id: access-1, at: [272.25, 30.0], group: sfp, rel-pos: 2}
+        - {ref: std/sfp@1, id: net-2, at: [290.15, 30.0], group: sfp, rel-pos: 3}
+        - {ref: std/sfp@1, id: access-2, at: [307.85, 30.0], group: sfp, rel-pos: 4}
+        - {ref: common/led-indicator@1, id: led-net-1, at: [264.7, 25.5], for: net-1, group: sfp-leds, rel-pos: 1}
+        - ref: common/led-indicator@1
+          id: led-access-1
+          at: [270.5, 25.5]
+          for: access-1
+          group: sfp-leds
+          rel-pos: 2
+          states: {lamp: ['off', {name: assigned, color: '#39b54a'}, {name: remote-fault, color: '#e0b21b'}, {name: loopback, color: '#e0b21b', behavior: blinking}, {name: fault, color: '#d0342c'}]}
+        - {ref: common/led-indicator@1, id: led-net-2, at: [300.9, 25.5], for: net-2, group: sfp-leds, rel-pos: 3}
+        - ref: common/led-indicator@1
+          id: led-access-2
+          at: [306.6, 25.5]
+          for: access-2
+          group: sfp-leds
+          rel-pos: 4
+          states: {lamp: ['off', {name: assigned, color: '#39b54a'}, {name: remote-fault, color: '#e0b21b'}, {name: loopback, color: '#e0b21b', behavior: blinking}, {name: fault, color: '#d0342c'}]}
+        - {ref: common/screw-head@1, id: screw-front, at: [323.9, 25.7], group: furniture, rel-pos: 3}
+        - {ref: common/warning-triangle@1, id: caution, at: [322.7, 39.2], group: furniture, rel-pos: 4}
+        - {ref: std/rj45@2, id: bits-in, at: [328.9, 26.25], group: timing, rel-pos: 1, attrs: {media: rj48}}
+        - {ref: std/rj45@2, id: bits-out, at: [345.7, 26.25], group: timing, rel-pos: 2, attrs: {media: rj48}}
+        - {ref: std/rj45@2, id: tod, at: [362.5, 26.25], group: timing, rel-pos: 3, attrs: {media: rj45-tod}}
+        - {ref: std/sma@1, id: clk-in, at: [381.625, 30.025], group: timing, rel-pos: 4, description: '10 MHz or 2.048 MHz clock input'}
+        - {ref: std/sma@1, id: pps-in, at: [393.625, 30.025], group: timing, rel-pos: 5, description: '1PPS input'}
+        - {ref: std/sma@1, id: clk, at: [405.625, 30.025], group: timing, rel-pos: 6, description: '10 MHz clock, input or output as provisioned'}
+        - {ref: std/sma@1, id: pps, at: [417.625, 30.025], group: timing, rel-pos: 7, description: '1PPS, input or output as provisioned'}
+        - {ref: std/sma@1, id: gnss, at: [429.525, 30.025], group: timing, rel-pos: 8, description: 'GNSS antenna input, +5 VDC to the antenna'}
+    regions:
+      - {id: logo-zone, at: [165.5, 1.9], size: {w: 28.1, h: 5.1}, label: Oscilloquartz wordmark (reserved)}
+      - {id: syncjack-badge, at: [426.9, 12.8], size: {w: 9.3, h: 11.0}, label: Syncjack badge (reserved)}
+  rear:
+    size: {w: 443, h: 44}
+    panel:
+      decor:
+        - {id: heatsink-base, kind: heatsink, at: [9.1, 2.8], size: [204.8, 39.7], fill: '#b8bcc1'}
+        - {id: heatsink-fins, at: [9.1, 2.8], size: [204.8, 39.7], pattern: ribs, pattern-pitch: [5.6, 6.0], confidence: drawing, source: 'manual p42 Figure 8, fins on a 5.6 pitch from x 9.1 to 213.9'}
+        - {id: vent-field, at: [226.6, 6.0], size: [203.9, 20.4], pattern: vent, vent: 5, confidence: estimated, source: 'field from manual p42 Figure 8; the 5 mm cavity depth is not stated anywhere and only makes the holes read as holes in 3D'}
+        - {id: bottom-strip, kind: seam, at: [220.3, 31.5], size: [222.7, 1.8], fill: '#b0b4b9'}
+    silkscreen:
+      - {id: earth-stem, at: [217.1, 5.9], path: 'M 0 0 L 0 1.5', fill: '#2f3a66', stroke-width: 0.3, for: earth-terminal}
+      - {id: earth-bar-1, at: [215.8, 7.4], path: 'M 0 0 L 2.6 0', fill: '#2f3a66', stroke-width: 0.3, for: earth-terminal}
+      - {id: earth-bar-2, at: [216.3, 8.2], path: 'M 0 0 L 1.6 0', fill: '#2f3a66', stroke-width: 0.3, for: earth-terminal}
+      - {id: earth-bar-3, at: [216.75, 9.0], path: 'M 0 0 L 0.7 0', fill: '#2f3a66', stroke-width: 0.3, for: earth-terminal}
+    components:
+      placements:
+        - {ref: common/screw-head@1, id: screw-rear-l, at: [4.4, 21.6], group: furniture, rel-pos: 5}
+        - {ref: common/screw-head@1, id: screw-hs-1, at: [42.6, 2.1], group: furniture, rel-pos: 6}
+        - {ref: common/screw-head@1, id: screw-hs-2, at: [109.7, 2.1], group: furniture, rel-pos: 7}
+        - {ref: common/screw-head@1, id: screw-hs-3, at: [176.8, 2.1], group: furniture, rel-pos: 8}
+        - {ref: common/screw-head@1, id: screw-hs-4, at: [42.6, 36.4], group: furniture, rel-pos: 9}
+        - {ref: common/screw-head@1, id: screw-hs-5, at: [109.7, 36.4], group: furniture, rel-pos: 10}
+        - {ref: common/screw-head@1, id: screw-hs-6, at: [176.8, 36.4], group: furniture, rel-pos: 11}
+        - {ref: common/screw-head@1, id: earth-terminal, at: [205.1, 5.9], group: grounding, rel-pos: 1, description: 'Earth terminal point, M4x6 screw and lock washer from the Earth Terminal Kit (manual p41)'}
+        - {ref: common/screw-head@1, id: screw-rear-m, at: [215.3, 21.6], group: furniture, rel-pos: 12}
+        - {ref: common/screw-head@1, id: screw-strip-1, at: [258.8, 36.4], group: furniture, rel-pos: 13}
+        - {ref: common/screw-head@1, id: screw-strip-2, at: [339.5, 36.4], group: furniture, rel-pos: 14}
+        - {ref: common/screw-head@1, id: screw-strip-3, at: [420.7, 36.4], group: furniture, rel-pos: 15}
+  left:
+    size: {w: 212, h: 44}
+    empty: >-
+      Envelope only. The product-page three-quarter render shows two fields of round vent
+      holes and three pairs of screws on each flank at an angle that measures none of them;
+      no document draws the side square-on (see the side-detail gap).
+  right:
+    size: {w: 212, h: 44}
+    empty: >-
+      Envelope only, for the same reason as the left: the flank is seen only obliquely in
+      one marketing render.
+  top:
+    size: {w: 443, h: 212}
+    empty: >-
+      Envelope only. The data sheet and manual renders show the lid obliquely, plain but
+      for two screws at its rear edge; no plan view of it exists in the corpus.
+  bottom:
+    size: {w: 443, h: 212}
+    empty: >-
+      Envelope only. Nothing draws the underside; the manual (p41) says four white rubber
+      feet ship in the accessory kit for desktop use and are applied by the installer.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      derived - both supplies populated (AC) and both expansion slots blanked, since the
+      cards are ordered separately and the manual requires a blank in an unused slot.
+    description: >-
+      The OSA 5420 Quartz with two 40 W AC supplies and a blank plate in LC1 and LC2,
+      which is how the manual (p46) says an unused slot must be left. The blank's art is
+      estimated (see the blank-plates gap).
+    bays:
+      lc-1: oscilloquartz/osa542x-lc-blank@1
+      lc-2: oscilloquartz/osa542x-lc-blank@1
+  dc-power:
+    kind: orderable
+    description: >-
+      Both supplies DC (-48 to -60 VDC). The two supply slots take either type, and the
+      manual asks only that both be of the same capacity.
+    bays:
+      psu-1: oscilloquartz/osa542x-psu-dc-40w@1
+      psu-2: oscilloquartz/osa542x-psu-dc-40w@1
+      lc-1: oscilloquartz/osa542x-lc-blank@1
+      lc-2: oscilloquartz/osa542x-lc-blank@1
+  manual-figure-3:
+    kind: example
+    description: >-
+      As the manual's Figure 3 draws the OSA 5420 Quartz - a DC supply in PSU1, an AC
+      supply in PSU2, and two BITS-OUT HD (BTOH-16) cards. Illustrative.
+    bays:
+      psu-1: oscilloquartz/osa542x-psu-dc-40w@1
+      psu-2: oscilloquartz/osa542x-psu-ac-40w@1
+      lc-1: oscilloquartz/btoh-16@1
+      lc-2: oscilloquartz/btoh-16@1
+  data-sheet-render:
+    kind: example
+    description: >-
+      As the 2023 data sheet's front render draws it - a DC supply in PSU1, an AC supply
+      in PSU2, the IRIG-B time-code card in LC1 and a BTOH-16 in LC2. Illustrative, and
+      the configuration the front was measured against.
+    bays:
+      psu-1: oscilloquartz/osa542x-psu-dc-40w@1
+      psu-2: oscilloquartz/osa542x-psu-ac-40w@1
+      lc-1: oscilloquartz/irig-b@1
+      lc-2: oscilloquartz/btoh-16@1
+datasheet:
+  title: 'Oscilloquartz edgeSync+ OSA 5420 Series data sheet (Adtran, 2023)'
+  sha256: c2665e482e4a066bfa56e87405a36377a5467eba60fe962ebdb1d079a1431f75
+references:
+  - {title: 'OSA 5420/5421 Installation and Commissioning Manual, Product Release 9.5.1, Issue A, doc 80000045125 (Oscilloquartz/ADVA, 2017)', sha256: 952666947d12ddcf56d8bf9fcd38c9cd658a463208bbebbd2d7f87d7ada579f2}
+  - {title: 'OSA 5420 Series data sheet (ADVA, 2016-10-26)', sha256: ff1159daeedf3b70d771da3051fa889f60a371bf9c4a721489e07a59586b2d84}

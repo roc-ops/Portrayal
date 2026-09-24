@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: irig-b
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Oscilloquartz IRIG-B - the OSA 542x time-code expansion card: an isolated IRIG input
+  on BNC, an IRIG optical output, ten IRIG outputs on a high-density D-sub, an
+  alarm/pulse relay on a pluggable terminal block and an RS-422 output on RJ-45.
+size: {w: 113.5, h: 20.6}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: IRIG-B
+groups:
+  timing:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+    description: >-
+      the card's time-code interfaces. Only the RS-422 output composes a library part;
+      the isolated IRIG input (BNC), the IRIG optical output, the ten IRIG outputs (a
+      high-density D-sub) and the alarm/pulse relay (a terminal block) are drawn in the
+      card's own art as addressable elements, because no library part draws them as
+      they look (2023 data sheet, IRIG line card).
+provenance:
+  identity: >-
+    data sheet - 2023 OSA 5420 Series, Line cards table, IRIG: "1x IRIG isolated input,
+    1x IRIG optical output, Alarm/pulse relay, RS422 output, 10x IRIG outputs", and the
+    Expansion cards list, "Time code IRIG I/O". THE CARD IS NEWER THAN THE MANUAL HELD:
+    R9.5.1 (2017) names only the GE-4S and the three HD cards, and the 2016 data sheet
+    has no IRIG card either. No part number is held.
+  size: >-
+    borrowed - oscilloquartz/btoh-16@1, the same expansion bay. In the 2023 data sheet
+    p1 render this card sits in LC1 at 113.5 x 20.6, the width and height the BTOH-16
+    beside it measures.
+  elements: >-
+    photo-measured at 3.25 px/mm off the 2023 data sheet p1 front render, LC1, and
+    checked against the p6 card image at a similar scale: name and PWR/STA lamps at the
+    left; BNC centred at (22.9, 9.2), 7.9 across; the optical output at (37.7, 9.2), 7.4
+    across; a D-sub shell 16.2 x 8.3 centred at (61.8, 8.75) between two hex posts at
+    x 48.6 and 74.5; a green three-pole terminal block at 79.7-89.8 x 6.9-13.4; an RJ-45
+    shell 12.7 x 8.3 at 91.5-104.2; legends beneath each. THE CARD IS DRAWN ONLY AS WELL
+    AS A 375 px IMAGE ALLOWS, which the intake recorded and the maintainer accepted.
+  d-sub: >-
+    FIFTEEN CONTACTS IN THREE ROWS OF FIVE, counted at 10x on the p1 render - a
+    high-density DE-15 in the E shell, not a DE-9. The shell reads 16.2 wide against
+    the 16.30 of TE C-747905, which is an independent check of the render's scale.
+    DRAWN HERE RATHER THAN COMPOSED: std/vga@1 carries the hd15 cutout but paints it
+    VGA blue with no field to change it, and this shell is black in every image of the
+    card. Ten IRIG outputs on fifteen contacts leaves grounds; the pin-out is not held.
+  optical-output: >-
+    NOT IDENTIFIED. A round metal barrel with a central bore, 7.4 across; no document
+    names the connector. Drawn as what it looks like and recorded as a gap on the device
+    rather than composed as an ST or any other adapter.
+  terminal-block: >-
+    photo-measured - green, three positions at about 3.4 pitch, the pluggable kind with
+    its screws on top. The relay's pin-out is not held.
+  lamp-states: >-
+    manual - Table 2, expansion card PWR and STA (the manual predates this card; the
+    lamps are the same pair in the same place as on the HD cards).
+  power: >-
+    NOT STATED anywhere in the corpus.
+states: [absent]
+elements:
+  thumbscrew: {at: [0.1, 9.15], size: [6.4, 6.4], class: fastener}
+  irig-in: {at: [18.95, 5.25], size: [7.9, 7.9], class: port}
+  optical-out: {at: [34.0, 5.5], size: [7.4, 7.4], class: port}
+  post-l: {at: [46.6, 6.6], size: [4.0, 4.0], class: fastener}
+  post-r: {at: [72.5, 6.6], size: [4.0, 4.0], class: fastener}
+  irig-out: {at: [53.7, 4.6], size: [16.2, 8.3], class: port}
+  alarm-pulse: {at: [79.7, 6.9], size: [10.1, 6.5], class: port}
+  handle: {at: [105.3, 0.55], size: [7.0, 19.25], class: handle}
+parts:
+  - ref: common/led-indicator@1
+    id: led-pwr
+    at: [11.6, 5.7]
+    states: {lamp: ['off', {name: power-ok, color: '#39b54a'}]}
+  - ref: common/led-indicator@1
+    id: led-sta
+    at: [11.6, 10.8]
+    states: {lamp: ['off', {name: normal, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: power-up, color: '#e0b21b'}, {name: loading, color: '#e0b21b', behavior: blinking}, {name: fail, color: '#d0342c'}]}
+  - {ref: std/rj45-ganged@2, id: rs-422-out, at: [91.5, 4.65], group: timing, attrs: {media: rj45-serial}}
+connection-points:
+  mate: {at: [56.75, 10.3], direction: rear}
+skins: [default]

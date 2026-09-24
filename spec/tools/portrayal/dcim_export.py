@@ -517,6 +517,9 @@ NOT_A_DCIM_PORT = {
     "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
                              "Neither library has an alarm port, and `de-9` would read as a console",
     "std/vga": "VGA; neither library has a video port type",
+    "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
+                               "over one cable; neither library has a type for it, and one row "
+                               "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
