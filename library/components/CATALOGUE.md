@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-702 component majors in 14 namespaces.
+720 component majors in 14 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -39,20 +39,20 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 30 | 15 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 45 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
-| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 32 | QSFP28 cage cutout (100G, 4 lanes) |
+| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 34 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 56 | 42 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 56 | 43 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 55 | 21 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 1 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 19 | 36 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 74 | 69 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 19 | 48 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 74 | 72 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 12 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 75 | 27 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 5 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 3 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
-| `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 29 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
+| `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 32 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
 ## common/ (81)
 
@@ -80,17 +80,17 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/ground-symbol@1` | component | ground | 6 × 6 |  | 42 | 0 | Grounding silkscreen symbol (earth in a circle), no hardware |
 | `common/keyhole-mount@1` | component | mount | 8 × 12 |  | 1 | 0 | Wall-mount keyhole slot |
 | `common/keystone-clip@1` | component | mechanical | 14.8 × 19.3 | keystone-opening | 0 | 0 | A generic snap-in keystone clip opening, as fitted to an FS FHD keystone panel |
-| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 4 | 7 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
+| `common/laser-warning@1` | component | marking | 5.4 × 4.8 |  | 4 | 8 | IEC 60825 laser hazard triangle - yellow field, black border and burst symbol |
 | `common/lc-boot@1` | component | boot | 6.2 × 6.2 | lc-plug | 0 | 3 | A strain-relief boot for an LC plug: a 6.2 square cross-section that goes AROUND the 5.58 x 5.65 plug body, w… |
 | `common/lc-duplex-adapter@5` | component | port | 13.2 × 11 |  | 3 | 14 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-shuttered-adapter@1` | component | port | 13.1 × 11.6 |  | 0 | 2 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
 | `common/lc-duplex-v-adapter@5` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 22 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 163 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 6 | 4 | Single chassis status LED |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 179 | Tiny round port LED (2mm) |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 6 | 10 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 2 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@1` | component | port | 13.8 × 9.4 |  | 0 | 5 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
@@ -418,9 +418,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/agr-label-caution@1` | component | sticker | 26 × 62 |  | 2 | 1 | Caution label near the rear left of the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-serial@1` | component | sticker | 74 × 100 |  | 2 | 0 | Serial number, SKU and MAC label on the top cover on the Edgecore AGR400 / AGR420 |
 | `edgecore/agr-label-spec@1` | component | sticker | 74 × 88 |  | 2 | 24 | Regulatory and specification label on the top cover on the Edgecore AGR400 / AGR420 |
-| `edgecore/agr-panel-screw@1` | component | screw | 8.4 × 8.4 × 3 |  | 1 | 97 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
+| `edgecore/agr-panel-screw@1` | component | screw | 8.4 × 8.4 × 3 |  | 1 | 101 | Captive slotted thumb screw at each corner of the Edgecore AGR400 / AGR420 front panel, holding the rack flan… |
 | `edgecore/agr-psu-ac@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 1 | AC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
-| `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 98 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
+| `edgecore/agr-psu-dc@1` | module | psu | 60.1 × 37.6 × 360.7 |  | 2 | 114 | DC-DC hot-swappable PSU for the Edgecore AGR400 (AS7946-30XB) and AGR420 (AS7946-74XKSB) |
 | `edgecore/agr420-filter-bottom@1` | module | filter | 399.5 × 9 × 12 |  | 1 | 0 | Removable BOTTOM air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
 | `edgecore/agr420-filter-step@1` | module | filter | 25.5 × 16.5 × 12 |  | 1 | 0 | The deep section of an Edgecore AGR420 air filter, beside the QSFP-DD column at the left of the front panel, … |
 | `edgecore/agr420-filter-top@1` | module | filter | 417 × 8.6 × 12 |  | 1 | 1 | Removable TOP air filter for the Edgecore AGR420 (AS7946-74XKSB) - the full-width band of it |
@@ -697,27 +697,45 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 | `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
 
-## nokia/ (17)
+## nokia/ (35)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `nokia/bfan-e@1` | module | fan | 32.9 × 345 × 216.7 |  | 1 | 1 | Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E), also sold as the Lights… |
 | `nokia/bfan-h@1` | module | fan | 493.4 × 59.25 × 274.85 |  | 1 | 0 | Nokia BFAN-H (3FE 66546 AA), the intelligent fan tray of the 7360 ISAM FX-16 (NFXS-D), also sold as the Light… |
 | `nokia/bfan-x@1` | module | fan | 33.1 × 213.5 × 225.36 |  | 1 | 1 | Nokia BFAN-X (3FE 66544 AA), the intelligent fan unit of the 7360 ISAM FX-4 (NFXS-F), also sold as the Lights… |
-| `nokia/dummy-lt@1` | module | blank | 25 × 405 |  | 3 | 0 | Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the 7360 ISAM FX (and of… |
+| `nokia/dummy-lt@1` | module | blank | 25 × 405 |  | 3 | 5 | Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the 7360 ISAM FX (and of… |
 | `nokia/dummy-nt@1` | module | blank | 30 × 405 |  | 3 | 0 | Nokia 3FE 65651 AA, the dummy front panel for the second NT slot of the 7360 ISAM FX (FX-4, FX-8, FX-12 and F… |
-| `nokia/fan-cover-fx4@1` | module | blank | 33.1 × 213.5 |  | 1 | 0 | The fan cover of the Nokia 7360 ISAM FX-4 shelf (NFXS-F): a strip closing the fan area at the shelf's right-h… |
+| `nokia/fan-cover-fx4@1` | module | blank | 33.1 × 213.5 |  | 1 | 1 | The fan cover of the Nokia 7360 ISAM FX-4 shelf (NFXS-F): a strip closing the fan area at the shelf's right-h… |
 | `nokia/fan-cover-fx8@1` | module | blank | 32.9 × 345 |  | 1 | 1 | The fan cover of the Nokia 7360 ISAM FX-8 shelf (NFXS-E): a strip closing the fan area at the shelf's right-h… |
-| `nokia/fant-h-aa@1` | module | supervisor | 30 × 405 × 225 |  | 0 | 0 | Nokia FANT-H AA (3FE74828AA), the ETSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
-| `nokia/fant-h-ac@1` | module | supervisor | 30 × 405 × 225 |  | 0 | 0 | Nokia FANT-H AC (3FE74828AC), the ETSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
-| `nokia/fant-h-bb@1` | module | supervisor | 30 × 405 × 225 |  | 3 | 0 | Nokia FANT-H BB (3FE74828BB), the ANSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
-| `nokia/fant-h-bc@1` | module | supervisor | 30 × 405 × 225 |  | 2 | 0 | Nokia FANT-H BC (3FE74828BC), the ANSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
+| `nokia/fant-h-aa@2` | module | supervisor | 30 × 405 × 225 |  | 0 | 0 | Nokia FANT-H AA (3FE74828AA), the ETSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
+| `nokia/fant-h-ac@2` | module | supervisor | 30 × 405 × 225 |  | 0 | 0 | Nokia FANT-H AC (3FE74828AC), the ETSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
+| `nokia/fant-h-bb@2` | module | supervisor | 30 × 405 × 225 |  | 3 | 0 | Nokia FANT-H BB (3FE74828BB), the ANSI build of the 7360 ISAM FX / Lightspan FX network termination card with… |
+| `nokia/fant-h-bc@2` | module | supervisor | 30 × 405 × 225 |  | 2 | 0 | Nokia FANT-H BC (3FE74828BC), the ANSI build of the FANT-H with the 2.0 Tbps switch, for the FX-8 and FX-4 on… |
 | `nokia/fant-m@1` | module | supervisor | 30 × 405 × 225 |  | 3 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ANSI build - part 3FE79270BA and its temperature-har… |
 | `nokia/fant-m-etsi@1` | module | supervisor | 30 × 405 × 225 |  | 3 | 1 | Nokia 7360 ISAM FX FANT-M network termination (NT) card, ETSI build - part 3FE79270AA and its temperature-har… |
-| `nokia/fnio-a@1` | module | line-card | 25 × 405 × 205 |  | 3 | 6 | Nokia FNIO-A (3FE 65586 BA), the 80G (8x10G) NT I/O applique of the 7360 ISAM FX (also Lightspan FX), with Sy… |
-| `nokia/fnio-d@1` | module | line-card | 25 × 405 × 205 |  | 3 | 0 | Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360 ISAM FX, with SyncE |
+| `nokia/felt-b@1` | module | line-card | 25 × 405 × 205 |  | 3 | 0 | Nokia FELT-B (3FE 69486 AA and 3FE 69486 AB), the high-speed point-to-point Ethernet LT of the 7360 ISAM FX /… |
+| `nokia/felt-c@1` | module | line-card | 25 × 405 × 205 |  | 0 | 0 | Nokia FELT-C (3FE 75669 AA), the ETSI/MII high-speed point-to-point Ethernet LT of the 7360 ISAM FX, supporte… |
+| `nokia/felt-d@1` | module | line-card | 25 × 405 × 205 |  | 3 | 0 | Nokia FELT-D (3FE 78462 AA), the 1G/10G/25G/100G point-to-point Ethernet LT of the Lightspan FX (FX-4, FX-8, … |
+| `nokia/fglt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGLT-A (3FE 66721 AB), the 16-port GPON line termination board with traffic manager (version A) of the … |
+| `nokia/fglt-b@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FGLT-B (3FE 68954 AB), the 16-port GPON line termination board with traffic manager (version B) of the … |
+| `nokia/fglt-d@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGLT-D (3FE 75833 AA), the 16-port GPON line termination board with traffic manager (version D) of the … |
+| `nokia/fglt-e@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGLT-E (3FE 76835 AA, and the AE functional variant), the 32-port GPON line termination board with traf… |
+| `nokia/fgut-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FGUT-A (3FE 76986 AA, AD and CD), the 16-port Multi-PON line termination board of the 7360 ISAM FX and … |
+| `nokia/fnio-a@1` | module | line-card | 25 × 405 × 205 |  | 3 | 12 | Nokia FNIO-A (3FE 65586 BA), the 80G (8x10G) NT I/O applique of the 7360 ISAM FX (also Lightspan FX), with Sy… |
+| `nokia/fnio-d@1` | module | line-card | 25 × 405 × 205 |  | 3 | 8 | Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360 ISAM FX, with SyncE |
+| `nokia/fplt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FPLT-A (3FE 53711 AA), the 8-port EPON line termination board, version A, of the 7360 ISAM FX: eight 1G… |
+| `nokia/fpxt-a@1` | module | line-card | 25 × 405 × 227.99 |  | 3 | 0 | Nokia FPXT-A (3FE 66876 AA), the 4-port 10G EPON line termination board, version A, of the 7360 ISAM FX (Alca… |
+| `nokia/fpxt-b@1` | module | line-card | 25 × 405 × 227.99 |  | 3 | 0 | Nokia FPXT-B (3FE 68788 AA, C-temp, and 3FE 68788 AB, I-temp), the 8-port 10G EPON line termination board of … |
+| `nokia/fwlt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-A (3FE 56399 AB), the 4-port U-NGPON line termination card of the 7360 ISAM FX: NG-PON2 TWDM or XG… |
+| `nokia/fwlt-b-aa@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-B AA (3FE 72955 AA), the 8-port XGS-PON line termination card of the 7360 ISAM FX and Lightspan FX… |
+| `nokia/fwlt-b-ab@1` | module | line-card | 25 × 405 × 225 |  | 3 | 1 | Nokia FWLT-B AB (3FE 72955 AB), the 8-port U-NGPON line termination card of the 7360 ISAM FX (NG-PON2 TWDM or… |
+| `nokia/fwlt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia FWLT-C (3FE 74981 AA, AD, BD and CD), the 16-port Multi-PON line termination card of the 7360 ISAM FX a… |
+| `nokia/nelt-b@1` | module | line-card | 25 × 405 × 205 |  | 3 | 0 | Nokia NELT-B (3FE 62543 AA and AB), the FE/GE Ethernet LT of the 7360 ISAM FX (and 7302, 7330 FTTN and 7356 F… |
 | `nokia/ngfc-g@1` | module | power | 405 × 28.8 × 203 |  | 1 | 0 | Nokia NGFC-G (3FE 65676 AA), the general facilities card of the ANSI 7360 ISAM FX-4 shelf (NFXS-F BB) |
 | `nokia/ngfc-h@1` | module | power | 405 × 53.6 × 201.4 |  | 1 | 0 | Nokia NGFC-H (3FE 65675 AA), the general facilities card of the ANSI 7360 ISAM FX-8 shelf (NFXS-E BB) |
+| `nokia/nglt-a@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia NGLT-A (3FE 64279 AA), the 8-port GPON line termination board with traffic manager (version A) that the… |
+| `nokia/nglt-c@1` | module | line-card | 25 × 405 × 225 |  | 3 | 0 | Nokia NGLT-C (3FE 67301 AA), the 8-port GPON line termination board with traffic manager (version C) that the… |
 
 ## smartoptics/ (16)
 

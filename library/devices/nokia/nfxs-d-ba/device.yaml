@@ -244,10 +244,11 @@ gaps:
   scope: [lt-1, lt-2, lt-3, lt-4, lt-5, lt-6, lt-7, lt-8, lt-9, lt-10, lt-11, lt-12, lt-13, lt-14, lt-15, lt-16]
   reason: needs-drawing
   note: >-
-    The LT slots accept only the LT dummy. The LT cards the slotmap lists for the FX-16 (FGLT-A/B/D/E,
-    FWLT-A/B/C, FGUT-A, FELT-B/C/D, NELT-B, NGLT-A/C, NDLS-E/F, NPOT-B/C, NIAT-A, NDPS-B, NVPS-C, FPLT-A,
-    FPXT-B) are priority 4 of roc-ops/Portrayal#538.
-  wanted: component contracts for the LT cards, authored upright at 25 x 405
+    Every ANSI-valid LT card the coverage grid lists is modelled and accepted in these slots, except
+    FELT-B AC (3FE69486AC), for which no data sheet exists in any staged document. FELT-C is an
+    ETSI/MII card and is not accepted by this ANSI shelf. The copper DSL/POTS cards (NDLS, NPOT,
+    NIAT, NDPS, NVPS) are out of scope by decision (roc-ops/Portrayal#538).
+  wanted: a FELT-B AC unit data sheet
 - what: nt-f-g
   scope: [nt-a, nt-b]
   reason: needs-drawing
@@ -521,25 +522,25 @@ views:
     - {at: [296.4, 605.4], text: 'TB1-4 -48V BAT B', font-size: 3.4, rotate: -30.2, for: chassis}
     components:
       bays:
-        - {id: lt-1, at: [4.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 1}
-        - {id: lt-2, at: [29.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 2}
-        - {id: lt-3, at: [54.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 3}
-        - {id: lt-4, at: [79.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 4}
-        - {id: lt-5, at: [104.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 5}
-        - {id: lt-6, at: [129.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 6}
-        - {id: lt-7, at: [154.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 7}
-        - {id: lt-8, at: [179.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 8}
+        - {id: lt-1, at: [4.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 1}
+        - {id: lt-2, at: [29.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 2}
+        - {id: lt-3, at: [54.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 3}
+        - {id: lt-4, at: [79.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 4}
+        - {id: lt-5, at: [104.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 5}
+        - {id: lt-6, at: [129.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 6}
+        - {id: lt-7, at: [154.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 7}
+        - {id: lt-8, at: [179.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 8}
         - {id: nt-a, at: [207.2, 18.0], size: {w: 30.0, h: 405.0}, accepts: [nokia/fant-h-bb@2, nokia/fant-m@1, nokia/dummy-nt@1], default: nokia/fant-h-bb@2, group: nt-slots, rel-pos: 1}
         - {id: ntio, at: [237.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fnio-a@1, nokia/fnio-d@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: ntio-slot, rel-pos: 1}
         - {id: nt-b, at: [262.2, 18.0], size: {w: 30.0, h: 405.0}, accepts: [nokia/fant-h-bb@2, nokia/fant-m@1, nokia/dummy-nt@1], default: nokia/dummy-nt@1, group: nt-slots, rel-pos: 2}
-        - {id: lt-9, at: [295.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 9}
-        - {id: lt-10, at: [320.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 10}
-        - {id: lt-11, at: [345.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 11}
-        - {id: lt-12, at: [370.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 12}
-        - {id: lt-13, at: [395.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 13}
-        - {id: lt-14, at: [420.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 14}
-        - {id: lt-15, at: [445.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 15}
-        - {id: lt-16, at: [470.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 16}
+        - {id: lt-9, at: [295.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 9}
+        - {id: lt-10, at: [320.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 10}
+        - {id: lt-11, at: [345.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 11}
+        - {id: lt-12, at: [370.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 12}
+        - {id: lt-13, at: [395.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 13}
+        - {id: lt-14, at: [420.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 14}
+        - {id: lt-15, at: [445.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 15}
+        - {id: lt-16, at: [470.2, 18.0], size: {w: 25.0, h: 405.0}, accepts: [nokia/fglt-a@1, nokia/fglt-b@1, nokia/fglt-d@1, nokia/fglt-e@1, nokia/fwlt-a@1, nokia/fwlt-b-aa@1, nokia/fwlt-b-ab@1, nokia/fwlt-c@1, nokia/fgut-a@1, nokia/nglt-a@1, nokia/nglt-c@1, nokia/felt-b@1, nokia/felt-d@1, nokia/nelt-b@1, nokia/fplt-a@1, nokia/fpxt-a@1, nokia/fpxt-b@1, nokia/dummy-lt@1], default: nokia/dummy-lt@1, group: lt-slots, rel-pos: 16}
         - {id: fan, at: [3.0, 510.5], size: {w: 493.4, h: 59.25}, accepts: [nokia/bfan-h@1], default: nokia/bfan-h@1, group: fans, rel-pos: 1}
       placements:
         - {ref: common/led-indicator@1, id: critical, at: [410.85, 471.05], group: leds, rel-pos: 1, for: chassis, states: {lamp: [{name: red, color: '#d0021b'}, 'off']}}
