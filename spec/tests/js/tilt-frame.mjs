@@ -50,6 +50,10 @@ const out = {
   unprojUp: m.unproject({x: 12, y: 50 + 8.660254, w: 5, h: 8.660254},
                         {deg: 30, facing: 'up', anchor}),
   facetZUp: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 30, facing: 'up'}, 0, [5, 70]) * 1000) / 1000,
+  facetZDown: {
+    atProudEdge: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 30, facing: 'down'}, 0, [5, 40]) * 1000) / 1000,
+    atRootEdge: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 30, facing: 'down'}, 0, [5, 70]) * 1000) / 1000,
+  },
   facetZLeft: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 45, facing: 'left'}, 0, [25, 50]) * 1000) / 1000,
   facetZRight: Math.round(m.facetZ({x: 0, y: 40, w: 25, h: 30}, {deg: 45, facing: 'right'}, 0, [0, 50]) * 1000) / 1000,
 };

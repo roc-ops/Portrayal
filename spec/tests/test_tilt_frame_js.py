@@ -73,6 +73,12 @@ def test_tilt_frame():
     # up: root at y=40, proud edge at y=70; at py=70, d = py - r.y = 70-40 = 30
     assert o["facetZUp"] == pytest.approx(30 * math.tan(math.radians(30)), abs=1e-3)
 
+    # down: root at y=70, proud edge at y=40; height h=30
+    # at py=40 (proud edge), d = r.y + r.h - py = 40 + 30 - 40 = 30
+    assert o["facetZDown"]["atProudEdge"] == pytest.approx(30 * math.tan(math.radians(30)), abs=1e-3)
+    # at py=70 (root edge), d = r.y + r.h - py = 40 + 30 - 70 = 0
+    assert o["facetZDown"]["atRootEdge"] == pytest.approx(0, abs=1e-3)
+
     # left: root at x=0, proud edge at x=25; at px=25, d = px - r.x = 25-0 = 25
     assert o["facetZLeft"] == pytest.approx(25 * math.tan(math.radians(45)), abs=1e-3)
 
