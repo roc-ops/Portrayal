@@ -65,6 +65,18 @@ def device_point(root, el, local_pt):
     return pt
 
 
+def device_bbox(root, el, size):
+    """The device-space (width, height) `el`'s own local box (0,0)-(w,h)
+    occupies, through its full transform chain - pins the FORESHORTENED
+    axis down, which two coincident mate points cannot: a scale on the
+    wrong axis still lands the single point it was solved for correctly,
+    and only shows up as the wrong dimension foreshortened."""
+    corners = [(0, 0), (size["w"], 0), (size["w"], size["h"]), (0, size["h"])]
+    pts = [device_point(root, el, c) for c in corners]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return max(xs) - min(xs), max(ys) - min(ys)
+
+
 def plant_card(tmp, rotate=None, occupant=False, card_rotate=None,
                feat_lift=0.0, chained=False):
     lib = tmp / "lib"
@@ -145,8 +157,8 @@ def test_the_facet_node_carries_its_derived_wedge(tmp_path):
 
 
 def test_a_facet_features_own_lift_offsets_the_whole_wedge(tmp_path):
-    """`lift` moves the root edge too, not just the proud one (controller
-    ruling): root at `lift`, proud edge at `lift + proud_extent`."""
+    """`lift` moves the root edge too, not just the proud one: root at
+    `lift`, proud edge at `lift + proud_extent`."""
     root = plant_card(tmp_path, feat_lift=5.0)
     h = by_id(root, "--housing")
     assert h.get("data-z-out") == "22.3205"           # 5 + 30 x tan 30
@@ -181,6 +193,13 @@ def test_an_occupant_inherits_the_tilt(tmp_path):
     o_pt = device_point(root, o, QSFP_LC_MATE)
     assert math.isclose(p1_pt[0], o_pt[0], abs_tol=0.01)
     assert math.isclose(p1_pt[1], o_pt[1], abs_tol=0.01)
+    # SHAPE, not just position: coincident mate points cannot tell a scale
+    # on the right axis from one on the wrong axis. Card unrotated, facing
+    # up (axis y): width stays true (18.35), height foreshortens by cos 30
+    # (8.5 x 0.866025 = 7.3612).
+    ow, oh = device_bbox(root, o, QSFP_LC["size"])
+    assert math.isclose(ow, 18.35, abs_tol=0.01)
+    assert math.isclose(oh, 7.3612, abs_tol=0.01)
 
 
 def test_a_chained_seat_inherits_the_tilt(tmp_path):
@@ -198,9 +217,16 @@ def test_a_chained_seat_inherits_the_tilt(tmp_path):
 
 
 def test_a_card_rotated_90_still_seats_its_occupant_on_the_facet(tmp_path):
-    """The host card itself at rotate: 90 - the foreshortening axis swaps
-    in device space (R90.Sy = Sx.R90), so this fails if render.py forgets
-    to swap it back when solving the occupant's `at`."""
+    """The host card itself at rotate: 90. p1 (nested inside the card's own
+    rotated group, no rotate of its own) is turned by the CARD from
+    outside its own transform, so its foreshortening lands on device-x
+    (R90.Sy = Sx.R90). The optic is a top-level seat: it inherits rotate:
+    90 as its OWN `rotate`, baked into the SAME transform string as its
+    scale, in the OPPOSITE order (rotate first, then scale) - so its scale
+    has to swap to the OTHER local axis to still foreshorten the same
+    PHYSICAL dimension p1 does. This fails if render.py forgets that swap,
+    even though the two mate points can still coincide with the scale on
+    the wrong axis - only the drawn shape gives it away."""
     root = plant_card(tmp_path, occupant=True, card_rotate=90)
     o = next(e for e in root.iter() if (e.get("data-path") or e.get("id") or "").endswith("optic"))
     assert o.get("data-tilt") == "30"
@@ -209,14 +235,40 @@ def test_a_card_rotated_90_still_seats_its_occupant_on_the_facet(tmp_path):
     o_pt = device_point(root, o, QSFP_LC_MATE)
     assert math.isclose(p1_pt[0], o_pt[0], abs_tol=0.01)
     assert math.isclose(p1_pt[1], o_pt[1], abs_tol=0.01)
+    # p1 itself: true width foreshortens to 8.79 (20 x cos 30), true height
+    # 10.15 stays - both swapped into device space by the card's own
+    # rotate: 8.79 wide, 20.0 tall.
+    pw, ph = device_bbox(root, p1, {"w": 20.0, "h": 10.15})
+    assert math.isclose(pw, 8.7913, abs_tol=0.01)
+    assert math.isclose(ph, 20.0, abs_tol=0.01)
+    # the optic: true width 18.35 stays, true height 8.5 foreshortens to
+    # 7.3612 - the SAME physical dimension p1's foreshortens, even though
+    # the optic's own local scale axis has to swap (facing "up" -> "left")
+    # to land there once ITS OWN rotate is baked into the same string.
+    ow, oh = device_bbox(root, o, QSFP_LC["size"])
+    assert math.isclose(ow, 7.3612, abs_tol=0.01)
+    assert math.isclose(oh, 18.35, abs_tol=0.01)
 
 
-def plant_two_facet_card(tmp):
+def plant_two_facet_card(tmp, chained=False):
     """A card with TWO facets, seated in a bay, with an optic seated via
     `occupants:` into the SECOND one - the ordinary path for a multi-cage
     card, and the one `_seat_nested_occupants` (not the device-level
-    `mate-to` loop) resolves."""
+    `mate-to` loop) resolves. `chained=True` seats a SECOND occupant, a cap,
+    onto the optic itself - a boot on a plug, entirely within the nested
+    path."""
     lib = tmp / "lib"
+    if chained:
+        cd = lib / "components/acme/cap/v1"
+        (cd / "skins").mkdir(parents=True)
+        (cd / "contract.yaml").write_text(yaml.safe_dump({
+            "format": 1, "kind": "component", "name": "cap", "version": "1.0.0",
+            "class": "accessory", "size": {"w": 5.0, "h": 5.0},
+            "connection-points": {"mate": {"at": [2.5, 2.5], "direction": "front"}},
+            "skins": ["default"]}))
+        (cd / "skins/default.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="5mm" height="5mm" '
+            'viewBox="0 0 5 5"><rect width="5" height="5" fill="#333"/></svg>')
     d = lib / "components/acme/dual-facet-card/v1"
     (d / "skins").mkdir(parents=True)
     (d / "contract.yaml").write_text(yaml.safe_dump({
@@ -240,6 +292,9 @@ def plant_two_facet_card(tmp):
         '<rect id="housing-1" x="0" y="10" width="25" height="30" fill="#999"/>'
         '<rect id="housing-2" x="0" y="60" width="25" height="30" fill="#999"/></svg>')
     dev = tmp / "device.yaml"
+    occupants = {"slot/p2": "generic/qsfp-lc@1"}
+    if chained:
+        occupants["slot/p2-occupant"] = "acme/cap@1"
     device = {
         "format": 1, "kind": "device", "name": "dual-dev", "version": "0.1.0",
         "maturity": "draft", "manufacturer": "Acme", "model": "T", "profile": "networking",
@@ -250,7 +305,7 @@ def plant_two_facet_card(tmp):
                                  "accepts": ["acme/dual-facet-card@1"],
                                  "default": "acme/dual-facet-card@1"}]}}},
         "configurations": {"default": {"kind": "base", "default": True,
-                                       "occupants": {"slot/p2": "generic/qsfp-lc@1"}}},
+                                       "occupants": occupants}},
     }
     dev.write_text(yaml.safe_dump(device, sort_keys=False))
     out = tmp / "o"
@@ -282,11 +337,26 @@ def test_an_occupant_seated_via_occupants_inherits_the_second_facet(tmp_path):
     assert not any(i.endswith("p1-occupant") for i in ids)
 
 
+def test_a_nested_chained_seat_inherits_the_tilt(tmp_path):
+    """A boot on an optic that is itself seated in a card's own tilted
+    cage - entirely within `_seat_nested_occupants`, no device-level
+    `mate-to` involved."""
+    root = plant_two_facet_card(tmp_path, chained=True)
+    o = by_id(root, "--p2-occupant")
+    cap = by_id(root, "--p2-occupant-occupant")
+    assert cap.get("data-tilt") == "25"
+    assert cap.get("data-tilt-on") == o.get("data-tilt-on")
+    o_pt = device_point(root, o, QSFP_LC_MATE)
+    cap_pt = device_point(root, cap, [2.5, 2.5])
+    assert math.isclose(o_pt[0], cap_pt[0], abs_tol=0.01)
+    assert math.isclose(o_pt[1], cap_pt[1], abs_tol=0.01)
+
+
 def test_a_facet_feature_shifts_with_an_inset(tmp_path):
     """A facet on a part composed WITH A LIFT - the derived `out` and
     profile must move by the same amount `_inset_feature` moves a
-    hand-written one by (ruling: derived numbers are exactly as "declared"
-    as a hand-written `out`)."""
+    hand-written one by: a derived number is exactly as "declared" as a
+    hand-written `out`."""
     lib = tmp_path / "lib"
     riser_dir = lib / "components/acme/riser/v1"
     (riser_dir / "skins").mkdir(parents=True)
