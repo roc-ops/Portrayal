@@ -167,6 +167,9 @@ The rest earns its place:
   to the component. When the card is drawn in a device, every grouped part
   carries `data-group`, `data-group-role` and the group's attrs, as a device
   placement does. Lint L17, L22, L23 and L37 check them, as warnings.
+- `facet` on a relief feature, and `on` on a part, for connectors on a
+  surface angled off the panel. See
+  `docs/superpowers/specs/2026-09-24-tilted-facets-design.md`.
 - `fields` for what varies without the shape changing: a supply's wattage, a
   drive's capacity. Do not make a new skin per wattage.
 - `states` for lamps, named as tokens (`link`, `activity`, `fault`), with the

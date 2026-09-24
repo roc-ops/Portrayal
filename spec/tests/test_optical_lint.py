@@ -34,8 +34,8 @@ def module(paths, parts=None, unused=None):
     """A module composing two LC duplex adapters, which hold 2 positions each."""
     doc = {"kind": "module", "size": {"w": 55.4, "h": 19.5},
            "parts": parts if parts is not None else [
-               {"ref": "common/lc-duplex-adapter@5", "id": "common"},
-               {"ref": "common/lc-duplex-adapter@5", "id": "split"}],
+               {"ref": "common/lc-duplex-adapter@6", "id": "common"},
+               {"ref": "common/lc-duplex-adapter@6", "id": "split"}],
            "optical": {"media": "os2", "paths": paths}}
     if unused:
         doc["optical"]["unused"] = unused

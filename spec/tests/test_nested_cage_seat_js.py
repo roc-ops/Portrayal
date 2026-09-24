@@ -288,9 +288,12 @@ def test_the_kit_seats_an_optic_on_a_card_where_the_build_does(parity):
 def test_a_nested_override_seats_replaces_empties_refuses_and_fails():
     out = node("overrides")
     assert out["before"]["front-6/module/xg1"] == 1 and out["before"]["front-6/module/xg0"] == 0
+    # THE RULE CHANGED (B3 Task 9): a lifted card cage and a card in a sunk bay
+    # are seated, not refused - the kit now moves the optic's `out` as the
+    # build does (test_lifted_seat_js.py holds it to real builds)
     assert out["result"] == {
         "applied": 6,
-        "refused": ["front-6/module/c1", "front-7/module/xg0"],
+        "refused": [],
         "failed": ["front-6/module/xg3"]}, out["result"]
     [x0] = out["after"]["front-6/module/xg0"]
     assert x0["id"] == "front-6--module--xg0-occupant"
@@ -308,14 +311,20 @@ def test_a_nested_override_seats_replaces_empties_refuses_and_fails():
     [x3] = out["after"]["front-6/module/xg3"]
     assert x3["ref"] == "generic/sfp-lc@1:1.0.0" and out["held"] == "generic/sfp-lc@1"
     assert out["after"]["front-6/module/xg4"] == [], "an absent key is untouched"
-    # REFUSED ON THE EFFECTIVE FACTS (R4): a lifted card cage, a card in a
-    # sunk bay, a lift and a depth that cancel, a mirrored card
-    assert out["after"]["front-6/module/c1"] == [] and out["after"]["front-7/module/xg0"] == []
+    # SEATED ON THE EFFECTIVE FACTS (R4): a lifted card cage and a card in a
+    # sunk bay each hold one optic, inside the card, and the group carries the
+    # cage's OWN lift - 44 on the shelf, none for a flat cage in a sunk bay,
+    # whose -3 is the bay group's and is summed by relief.js
+    for key in ("front-6/module/c1", "front-7/module/xg0"):
+        [o] = out["after"][key]
+        assert o["ref"] == "generic/sfp-lc@1:1.0.0" and o["parent"] == key.rsplit("/", 1)[0], o
+    assert out["zLift"] == {"front-6/module/c1": ["44"], "front-7/module/xg0": [None]}
     assert out["lifts"]["front-6/module/c1"] == 44 and out["lifts"]["front-7/module/xg0"] == -3
     assert out["lifts"]["front-7/module/c2"] == 0
-    assert out["reasons"]["front-7/module/c2"] == "lift", "a depth is refused even when it cancels"
+    assert out["reasons"]["front-7/module/c2"] is None, "a depth is no longer a refusal"
     assert all(out["reasons"][f"front-6/module/xg{i}"] is None for i in range(5))
-    assert out["mirrored"] == ["mirror"] * 5 + ["lift", "lift"]
+    # a mirrored card still mirrors every cage on it, lifted ones included
+    assert out["mirrored"] == ["mirror"] * 7
     # the device cage in the same call is untouched by the rule
     [p4] = out["deviceSeat"]
     assert p4["id"] == p4["path"] == "port-4-occupant"

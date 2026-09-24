@@ -127,7 +127,10 @@ const face = () => new Node({}, [
 const summary = (root, key) => occupantsOf(root, key).map(n => ({
   ref: n.getAttribute('data-ref'), id: n.getAttribute('id'), path: n.getAttribute('data-path'),
   parent: n.parentNode.getAttribute('data-path'),
-  last: n.parentNode.children.at(-1) === n,
+  // appended after the card's own parts: nothing but optics follows it (a
+  // later seat in the same call is appended after it in turn)
+  last: n.parentNode.children.slice(n.parentNode.children.indexOf(n) + 1)
+    .every(k => k.getAttribute('data-behaviour') === 'occupies'),
   transform: n.getAttribute('transform'),
   children: n.children.map(k => [k.getAttribute('id'), k.getAttribute('data-path')]),
 }));
@@ -151,10 +154,13 @@ if (mode === 'overrides') {
     'front-6/module/xg2': null,                       // emptied
     'front-6/module/xg3': 'nobody/nothing@9',         // unknown: failed, keeps its optic
     // xg4 absent: untouched
-    'front-6/module/c1': 'generic/sfp-lc@1',          // a lifted card cage: refused
-    'front-7/module/xg0': 'generic/sfp-lc@1',         // a card in a sunk bay: refused
+    'front-6/module/c1': 'generic/sfp-lc@1',          // a lifted card cage: seated
+    'front-7/module/xg0': 'generic/sfp-lc@1',         // a card in a sunk bay: seated
   }, loadSkin);
   const after = Object.fromEntries(keys.map(k => [k, summary(root, k)]));
+  // the lift each seated optic's group carries: the cage's OWN, not the sum
+  const zLift = Object.fromEntries(['front-6/module/c1', 'front-7/module/xg0']
+    .map(k => [k, occupantsOf(root, k).map(n => n.getAttribute('data-z-lift'))]));
   const deviceSeat = summary(root, 'port-4');
   // the same cage again: the kit's own optic is replaced, not stacked
   const second = await m.applyOccupantOverrides(root, cages,
@@ -168,7 +174,7 @@ if (mode === 'overrides') {
     {'front-6/module/xg1': 'generic/sfp-lc@1'}, loadSkin);
   const entry = cages.find(c => c.id === 'front-6/module/xg0');
   console.log(JSON.stringify({
-    before, result: res, after, deviceSeat, second,
+    before, result: res, after, deviceSeat, second, zLift,
     again: occupantsOf(root, 'front-6/module/xg1').map(n => n.getAttribute('data-ref')),
     led: root.querySelectorAll('[data-for="front-6/module/xg1"]')
       .filter(n => n.getAttribute('data-class') === 'led').length,

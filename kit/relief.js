@@ -53,6 +53,224 @@ export function cavitySeatsOn(c, o, eps = 0.01) {
     && c.x + c.w <= o.x + o.w + eps && c.y + c.h <= o.y + o.h + eps;
 }
 
+// TILTED FACETS (docs/superpowers/specs/2026-09-24-tilted-facets-design.md). A part
+// `on` a facet is drawn foreshortened in the face art; here it is built at its TRUE
+// size, flat, and then carried onto the facet plane by one matrix. Face mm, y down,
+// z out. Pure, so it is checked under node.
+function _tiltBasis(deg, facing) {
+  const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+  // u: where a step along the tilted axis goes; n: the part's outward normal.
+  // n must equal ex × ey, where ex and ey are the matrix's first two columns.
+  if (facing === 'up')    return {axis: 'y', u: [0,  c,  s], n: [0, -s, c]};
+  if (facing === 'down')  return {axis: 'y', u: [0,  c, -s], n: [0,  s, c]};
+  if (facing === 'left')  return {axis: 'x', u: [ c, 0,  s], n: [-s, 0, c]};
+  return                         {axis: 'x', u: [ c, 0, -s], n: [ s, 0, c]};   // right
+}
+export function tiltFrame({deg, facing, anchor: [ax, ay], z0 = 0}) {
+  const {axis, u, n} = _tiltBasis(deg, facing);
+  // the untilted axis is unchanged
+  const ex = axis === 'y' ? [1, 0, 0] : u;
+  const ey = axis === 'y' ? u : [0, 1, 0];
+  // p' = A + ex*(x-ax) + ey*(y-ay) + n*z   ->   column-major 4x4
+  const tx = ax - ex[0] * ax - ey[0] * ay;
+  const ty = ay - ex[1] * ax - ey[1] * ay;
+  const tz = z0 - ex[2] * ax - ey[2] * ay;
+  return [ex[0], ex[1], ex[2], 0,  ey[0], ey[1], ey[2], 0,  n[0], n[1], n[2], 0,  tx, ty, tz, 1];
+}
+export function unproject(rect, {deg, facing, anchor: [ax, ay]}) {
+  const c = Math.cos(deg * Math.PI / 180);
+  if (facing === 'up' || facing === 'down')
+    return {...rect, y: ay + (rect.y - ay) / c, h: rect.h / c};
+  return {...rect, x: ax + (rect.x - ax) / c, w: rect.w / c};
+}
+export function facetZ(r, {deg, facing}, lift, [px, py]) {
+  const t = Math.tan(deg * Math.PI / 180);
+  const d = facing === 'up' ? py - r.y : facing === 'down' ? r.y + r.h - py
+          : facing === 'left' ? px - r.x : r.x + r.w - px;
+  return (lift || 0) + Math.max(0, d) * t;
+}
+// THE HEIGHT OF THE RAISED SOLID at a face point: the tallest `out` whose box
+// holds it, a profiled one read off its piecewise-linear profiles (offsets
+// from the box's own edges; the lesser of the two, as the builder draws it).
+// Outs are absolute, so this is a height off the face.
+export function outHeightAt(outs, x, y, eps = 0.01) {
+  const lerp = (pts, t) => {
+    if (t <= pts[0][0]) return pts[0][1];
+    for (let i = 1; i < pts.length; i++)
+      if (t <= pts[i][0]) {
+        const [a0, z0] = pts[i - 1], [a1, z1] = pts[i];
+        return a1 === a0 ? z1 : z0 + (z1 - z0) * (t - a0) / (a1 - a0);
+      }
+    return pts[pts.length - 1][1];
+  };
+  let h = 0;
+  for (const o of outs) {
+    if (x < o.x - eps || x > o.x + o.w + eps || y < o.y - eps || y > o.y + o.h + eps) continue;
+    const zx = o.profile && o.profile.length >= 2 ? lerp(o.profile, x - o.x) : Infinity;
+    const zy = o.profileY && o.profileY.length >= 2 ? lerp(o.profileY, y - o.y) : Infinity;
+    const z = Math.min(zx, zy);
+    const v = Number.isFinite(z) ? z : typeof o.out === 'number' ? o.out : 0;
+    if (v > h) h = v;
+  }
+  return h;
+}
+// THE NEIGHBOURS A PROFILED OUT'S SKIRT MAY BE INSIDE OF. Facet to facet
+// only - a sawtooth's face and its return - and only a neighbour that is
+// certainly solid down to this out's base: the same owner (a FRU pulled or a
+// cover hidden takes its solid with it), no outline (its box is not its
+// shape), and a base no higher than this one's (a lifted neighbour leaves the
+// band beneath it open). A face with no facets gets none, so every skirt is
+// built exactly as before.
+export function skirtNeighbours(o, outs) {
+  if (!o.facet || o.tilt) return [];
+  const base = o.lift || 0;
+  return outs.filter(e => e !== o && e.facet && !e.tilt && e.owner === o.owner && !e.rings
+                          && (e.lift || 0) <= base + 0.01);
+}
+// IS THE SKIRT SEGMENT p-q INSIDE THE SOLID? Only a segment on the out's own
+// box edge can be; the probe steps just past that edge and reads the tallest
+// neighbour there (outHeightAt). `p`/`q` and `depthAt` are in the out's local
+// mm; `others` is skirtNeighbours(o, outs).
+export function skirtIsInterior(o, others, p, q, depthAt) {
+  if (!others.length) return false;
+  const eps = 1e-4, mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2;
+  const dx = p[0] === q[0] ? (p[0] <= 0 ? -eps : p[0] >= o.w ? eps : 0) : 0;
+  const dy = p[1] === q[1] ? (p[1] <= 0 ? -eps : p[1] >= o.h ? eps : 0) : 0;
+  if (!dx && !dy) return false;
+  const top = Math.max(depthAt(...p), depthAt(...q));
+  return outHeightAt(others, o.x + mx + dx, o.y + my + dy, 0) >= top - 0.01;
+}
+// WHICH FACET A NODE STANDS ON: the nearest `[data-tilt-on]` group at or above
+// it (render.py writes it on a part `on` a facet and on every occupant seated in
+// one). `host` is that group; its projected box supplies the tilt's anchor.
+// `facing` is as written - in the frame of the component declaring the facet.
+export function tiltOf(el) {
+  for (let n = el; n && n.getAttribute; n = n.parentNode) {
+    const on = n.getAttribute('data-tilt-on');
+    if (on) return {deg: +n.getAttribute('data-tilt'), facing: n.getAttribute('data-tilt-facing'),
+                    on, host: n};
+  }
+  return null;
+}
+// A FACING IN THE DECLARING COMPONENT'S FRAME, TURNED INTO THE FACE'S. A card
+// seated at rotate 90 has its `up` facet looking right on the face, and every
+// face-mm calculation here (unproject, tiltFrame, facetZ) reads the face's axes.
+// `m` is the component-to-face matrix {a, b, c, d}; a mirror swaps left/right.
+export function faceFacing(m, facing) {
+  const v = {up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0]}[facing];
+  if (!v || !m) return facing;
+  const x = m.a * v[0] + m.c * v[1], y = m.b * v[0] + m.d * v[1];
+  return Math.abs(x) > Math.abs(y) ? (x > 0 ? 'right' : 'left') : (y > 0 ? 'down' : 'up');
+}
+// THE TILT OF A NODE ON ONE PARSED FACE, shared by the build, the lamp animator
+// and the viewer's halo so that all three put a tilted thing in the same frame.
+// `mmRect`, `liftOf` and `ctmOf` (a node's component-to-face matrix) are the
+// caller's measuring tools; only getAttribute/parentNode/querySelector are read
+// here, so it runs on the node test DOM too.
+//   tiltRec(tiltOf(el)) -> {tilt: {deg, facing, on, anchor, z0}, base} | null
+// `facing` is in the face's frame. `base` is the lift the node's own lift is
+// measured from: everything above the outermost group on the facet, which is
+// already in the facet's height.
+export function tiltTools(svg, {mmRect, liftOf, ctmOf}) {
+  const facets = new Map(), hostRects = new Map();
+  const attr = (n, k) => (n && n.getAttribute ? n.getAttribute(k) : null);
+  // The root lift is read off the derived profile, because that is the surface
+  // the builder draws, and a part must stand on what is drawn.
+  const facetInfo = id => {
+    if (facets.has(id)) return facets.get(id);
+    const node = svg.querySelector(`[id="${CSS.escape(id)}"]`);
+    let info = null;
+    if (node && attr(node, 'data-facet-deg')) {
+      const m = ctmOf(node);
+      const prof = (attr(node, 'data-z-profile-y') || attr(node, 'data-z-profile') || '').split(',')
+        .map(p => +p.split(':')[1]).filter(Number.isFinite);
+      info = {node, m, rect: mmRect(node), deg: +attr(node, 'data-facet-deg'),
+              facing: faceFacing(m, attr(node, 'data-facet-facing')),
+              lift: prof.length ? Math.min(...prof) : 0};
+    }
+    facets.set(id, info);
+    return info;
+  };
+  const tiltBase = (t, hops = 0) => {
+    let n = t.host;
+    while (attr(n.parentNode, 'data-tilt-on') === t.on) n = n.parentNode;
+    // A MATE-TO SEAT IS DRAWN OUTSIDE ITS HOST'S CARD, and its own lift is the
+    // host's whole chain (render.py's `host-lift`, which folds in a sunk
+    // card's -floor). Measured from its own parent it stood the card's lift
+    // off the facet - or, in a well, sank into it. Two shapes of `data-for`:
+    //  - a host tilted on the same facet (a boot on a tilted optic): take
+    //    that host's base;
+    //  - the untilted wrapper card render.py names for a device-level
+    //    `mate-to` (`data-for="card"`), which carries the forwarded cage on
+    //    this facet: the cage's base is the card's own lift, so take that.
+    // A nested seat's host shares its parent, so nothing changes for it.
+    const fr = (attr(n, 'data-for') || '').split(/\s+/)[0];
+    const h = fr && hops < 8 && svg.querySelector(`[data-path="${CSS.escape(fr)}"]`);
+    const ht = h && tiltOf(h);
+    if (ht && ht.on === t.on && ht.host !== n) return tiltBase(ht, hops + 1);
+    if (h && !(ht && ht.on === t.on) && h.querySelector(`[data-tilt-on="${CSS.escape(t.on)}"]`))
+      return liftOf(h);
+    const p = n.parentNode;
+    return p && p !== svg && p.getAttribute ? liftOf(p) : 0;
+  };
+  const tiltRec = t => {
+    if (!t) return null;
+    const f = facetInfo(t.on);
+    if (!f) { console.warn('relief: tilted part names no facet node', t.on); return null; }
+    if (!hostRects.has(t.host)) hostRects.set(t.host, mmRect(t.host));
+    const hr = hostRects.get(t.host);
+    const facing = t.facing ? faceFacing(f.m, t.facing) : f.facing, anchor = [hr.x, hr.y];
+    const z0 = facetZ(f.rect, {deg: t.deg, facing}, f.lift, anchor);
+    return {tilt: {deg: t.deg, facing, on: t.on, anchor, z0}, base: tiltBase(t)};
+  };
+  return {facetInfo, tiltRec};
+}
+// A FACET HIDES THE FLAT FACE BEHIND IT, so its whole front-view footprint is
+// cleared from the face canvas and from every module plane that replays the
+// face's punches (a card's). Left in, the card plane cut across every tilted
+// cage well and showed as a strip along the facet's root edge.
+export function facetPunch(o) {
+  return {kind: 'rect', x: o.x, y: o.y, w: o.w, h: o.h, facet: o.facet.id};
+}
+// a `rect` punch in pixels of a canvas whose origin is (ox, oy) face mm
+export function punchRectPx(p, ox, oy, pxmm) {
+  return [Math.round((p.x - ox) * pxmm), Math.round((p.y - oy) * pxmm),
+          Math.round(p.w * pxmm), Math.round(p.h * pxmm)];
+}
+// THE GROUP THAT CARRIES A TILT (see buildFaceRelief). Its matrix is
+// M_face * tiltFrame(t) * M_face^-1, M_face being the LX/LY map of a face `fw`
+// x `fh` mm, mirror included. One per parent and facet anchor. Under a group
+// already tilted with the same key the parent itself is returned; under one
+// with a different key only the difference is applied, so a child still
+// rides with its host. `userData.tilt` names the tilt for anything placed
+// later (a halo, a lamp); the matrices live in a side table, not userData,
+// which the GLB export serialises.
+const TILT_META = new WeakMap(), TILT_KIDS = new WeakMap();
+export function tiltGroupIn(parent, t, {fw, fh, flipLX = false, flipLY = false}) {
+  const key = `${t.on}|${t.anchor.join(',')}`;
+  let anc = parent;
+  while (anc && !TILT_META.has(anc)) anc = anc.parent;
+  const up = anc && TILT_META.get(anc);
+  if (up && up.key === key) return parent;
+  if (!TILT_KIDS.has(parent)) TILT_KIDS.set(parent, new Map());
+  const kids = TILT_KIDS.get(parent);
+  if (kids.has(key)) return kids.get(key);
+  const sx = flipLX ? -1 : 1, sy = flipLY ? -1 : 1;
+  const toL = new THREE.Matrix4().set(sx, 0, 0, -sx * fw / 2,  0, -sy, 0, sy * fh / 2,
+                                      0, 0, 1, 0,  0, 0, 0, 1);
+  const fromL = new THREE.Matrix4().set(sx, 0, 0, fw / 2,  0, -sy, 0, fh / 2,
+                                        0, 0, 1, 0,  0, 0, 0, 1);
+  const G = toL.multiply(new THREE.Matrix4().fromArray(tiltFrame(t))).multiply(fromL);
+  const g = new THREE.Group();
+  g.matrix.copy(up ? up.G.clone().invert().multiply(G) : G);
+  g.matrixAutoUpdate = false;
+  g.userData.tilt = {...t, anchor: [...t.anchor]};
+  TILT_META.set(g, {key, G});
+  kids.set(key, g);
+  parent.add(g);
+  return g;
+}
+
 // A DEPTH THAT VARIES ACROSS A NODE, INSIDE THE NODE'S OWN OUTLINE. `profile`
 // and `profile-y` built their height field over the bounding box, so a sloped
 // moulding could only be a rectangle; the MaiaEdge PBC-2000's centre pane has
@@ -303,7 +521,7 @@ export function bodyBoxes(body, faceW, faceH) {
 // (pluggables D). Plugs and boots declare relief, and a boot is 15.1 or 26.4
 // long: the ancestor walk put a boot's cable at the boot's FRONT face, where
 // it meets the plug, when the cable leaves from its REAR. The seated chain
-// generic/sfp-lc-simplex@2 -> generic/lc-plug@1 -> common/lc-boot@1 makes the
+// generic/sfp-lc-simplex@2 -> generic/lc-plug@2 -> common/lc-boot@1 makes the
 // arithmetic concrete: the boot's group carries data-z-lift 22.5 (the optic's
 // 10.0 plus the plug body's 12.5), the lift walk gave z 22.5, and the boot's
 // body is built from 22.5 to its data-z-out of 37.6 - 15.1 short. So a point
@@ -885,25 +1103,100 @@ export function crop(cv, r, pxmm = PXMM) {
   return c;
 }
 
+// WHICH INSTANCES COME OUT, and as what: the behaviour extractRelief builds a
+// removable part's body by, from the instance's own marks - `fills` and
+// `occupies` as the part says, a legacy body class (psu, fan, tab, power,
+// cooling) with no behaviour at all as `class`, and null for anything that
+// does not come out (a label, a screw, a part without `data-ref`).
+//
+// AN OCCUPANT OCCUPIES, WHATEVER IT DECLARES (B3 Task 10c). A plug is
+// `class: port` with no behaviour, deliberately (test_behaviour.py holds a
+// port to none, and each plug's provenance records why), so it was never
+// collected and never pulled, while the cap it replaces was. The kit already
+// knows an occupant by its seat: `data-for` its slot, at the build's
+// `<slot>-occupant` name (swap.js isOccupantOf, projectedOccupant). That is
+// the reading here, so a plug is pulled by its own path exactly as a cap is.
+// A projection is flat and is never read (extractRelief's `q`).
+export const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
+export function bodyBehaviour({ref, behaviour, for: host, path, cls} = {}) {
+  if (!ref) return null;
+  if (behaviour === 'fills' || behaviour === 'occupies') return behaviour;
+  if (host && /-occupant$/.test(String(path || ''))) return 'occupies';
+  if (!behaviour && BODY_CLASSES.includes(cls)) return 'class';
+  return null;
+}
+
+// HOW FAR A PART STANDS OFF ITS OWN SEAT, from its relief: the furthest a
+// feature of it reaches, less the lift it is seated at. `out` is absolute
+// from the panel and every other length runs from its node's own summed lift,
+// so each is measured from `base`, the part group's summed lift.
+//   feats [{out, cyl, bar, uhandle, lift}] -> mm (0 for a flat part)
+export function reliefExtent(feats = [], base = 0) {
+  const num = v => (v === undefined || v === null || v === '' || !Number.isFinite(+v)) ? null : +v;
+  let top = 0;
+  for (const f of feats) {
+    if (num(f.out) !== null) top = Math.max(top, num(f.out) - base);
+    for (const k of ['cyl', 'bar', 'uhandle'])
+      if (num(f[k]) !== null) top = Math.max(top, (num(f.lift) || 0) - base + num(f[k]));
+  }
+  return top;
+}
+
+// HOW FAR A PULLED PART TRAVELS, AND WHETHER IT LEAVES A HOLE.
+// A part that says how deep it is - a `body:` block, a `data-body-depth`, or
+// an optic's own `data-depth` - travels as it always did: a captive part its
+// declared travel, anything else 1.5 x its depth + 25 (60 when a drawing
+// predates depths entirely), never further than the face looks less 10, and
+// it leaves a dark bay box that deep behind it.
+// An OCCUPANT THAT DECLARES NO DEPTH - a dust cap, a plug - has no body
+// behind the face to clear: it is the relief it draws. It travels its own
+// extent (reliefExtent) plus EJECT_MARGIN and leaves no box, so the port it
+// came out of shows as the build draws it - bore, sleeve and ferrule. With
+// the depth fallback every cap slid 115 mm and left a 60 mm box in its port
+// (B3 Task 10c).
+export const EJECT_MARGIN = 10;
+export function ejectTravel({body = null, bodyDepth = null, depth = null, occupies = false,
+                             extent = 0, into = Infinity} = {}) {
+  if (occupies && !body && !bodyDepth && !depth)
+    return {pull: Math.min((+extent || 0) + EJECT_MARGIN, into - 10), leavesBay: false, bayDepth: 0};
+  const d = body ? body.depth : (bodyDepth || 60);
+  const captive = body && body.travel;
+  return {pull: Math.min(captive || d * 1.5 + 25, into - 10), leavesBay: true, bayDepth: d};
+}
+
 // WHAT A REMOVABLE PART'S BODY IS BUILT AS, from its path and behaviour - the
 // decision extractRelief makes for every `fills` / `occupies` instance:
 //   {fru}           its own ejectable group, keyed `fru`: a module in a chassis
 //                   bay (`front-6/module` -> `front-6`), an optic on a device
-//                   cage (`port-4-occupant`) - one or two segments, as ever;
-//   {fru, nested}   an optic seated on a CARD (`front-6/module/xg0-occupant`,
-//                   #484): a FRU of its own, keyed by its full path, whose group
-//                   sits inside the card's (or, for a tier chained on another
-//                   optic, inside that optic's) - so it is pulled on its own and
-//                   still leaves with the card;
+//                   cage (`port-4-occupant`);
+//   {fru, nested}   an OCCUPANT anywhere below the top - an optic seated on a
+//                   card (`front-6/module/xg0-occupant`, #484), a dust cap in
+//                   a bore of an adapter on the device (`xc01/1-occupant`) or
+//                   on a cassette (`bay-1/module/lc1-occupant`): a FRU of its
+//                   own, keyed by its full path, whose group sits inside its
+//                   host's when the host is one (the card's, or the optic a
+//                   tier is chained on) - pulled on its own, and still gone
+//                   with its carrier;
 //   {sub}           a module in a module's bay: not a FRU, it comes out with
-//                   its carrier `sub`, and is built only from `body.boxes`.
+//                   its carrier `sub`, and is built only from `body.boxes`;
+//   null            nothing to build - no path, or, on a module's BACK
+//                   (`back`), an occupant: the back is drawn inside its
+//                   module's FRU, in the back component's own namespace
+//                   (`fhd-2mtp12-lc-rear/mtp1-occupant`), so what it holds is
+//                   its art and rides out with the module.
 // Deeper than two segments used to mean {sub} for everything, and a generic
 // optic declares no boxes, so a card's optic had no body and no pull at all.
-export function bodyRole(path, behaviour) {
+// And TWO segments used to mean the first, whatever moved: a Smartoptics
+// adapter's two bore caps (`xc01/1-occupant`, `xc01/2-occupant`) came out
+// as one FRU named for the adapter, taking the adapter's own art with them,
+// and a cassette back's cap as a FRU named for the back - the whole back
+// ejected as a "cap" (B3 Tasks 8 and 10c).
+export function bodyRole(path, behaviour, {back = false} = {}) {
   const segs = String(path || '').split('/');
   if (!segs[0]) return null;
+  if (behaviour === 'occupies' && back) return null;
+  if (behaviour === 'occupies' && segs.length > 1) return {fru: segs.join('/'), nested: true};
   if (segs.length <= 2) return {fru: segs[0]};
-  if (behaviour === 'occupies') return {fru: segs.join('/'), nested: true};
   return {sub: segs[0]};
 }
 
@@ -943,7 +1236,7 @@ export function opticBody({behaviour, body, depth, w, h} = {}) {
 // standalone with the scope its rules were written in - and having two
 // copies is how the second one drifts. `svg` must be attached to a document
 // (getScreenCTM and getBBox read nothing from a detached tree).
-export function nodeTools(svg) {
+export function nodeTools(svg, {back = false} = {}) {
   const q = sel => [...svg.querySelectorAll(sel)].filter(el => !el.closest('[data-projection]'));
   const inv = svg.getScreenCTM().inverse();
   const mmRect = el => {
@@ -992,10 +1285,19 @@ export function nodeTools(svg) {
   // cover be hidden without being ejected.
   // An optic on a card (bodyRole `nested`) is a FRU of its own, so what it
   // draws is owned by it and not by the card's bay.
+  // An occupant is known as bodyBehaviour knows it - a plug as well as a
+  // cap - and on a module's BACK it owns nothing of its own: it is its
+  // module's art, as bodyRole's `back` makes it no FRU (B3 Task 10c).
+  const occupantAbove = el => {
+    for (let n = el; n && n !== svg && n.dataset; n = n.parentElement)
+      if (bodyBehaviour({ref: n.dataset.ref, behaviour: n.dataset.behaviour, for: n.dataset.for,
+                         path: n.dataset.path, cls: n.dataset.class}) === 'occupies') return n;
+    return null;
+  };
   const ownerOf = el => {
     const a = el.closest('[data-path]');
     if (!a) return null;
-    const o = el.closest('[data-behaviour="occupies"][data-ref]');
+    const o = back ? null : occupantAbove(el);
     const own = o && bodyRole(o.dataset.path, 'occupies');
     if (own && own.nested) return own.fru;
     return a.dataset.path.split('/')[0] || null;
@@ -1067,7 +1369,9 @@ export function nodeTools(svg) {
 // standards-relief extraction: cavities (with interior features) + outward protrusions.
 // Interior/plate art is re-rendered STANDALONE from its own nodes so bezel plates
 // can carry arbitrary shapes (plug-outline apertures, LED holes) via alpha.
-export async function extractRelief(url, scope) {
+// `back` says the drawing is a module's back, built inside the module's FRU
+// (buildFaceRelief's back pass): nothing on it is a FRU of its own (bodyRole).
+export async function extractRelief(url, scope, {back = false} = {}) {
   const div = document.createElement('div');
   div.style.cssText = 'position:absolute;left:-10000px;top:0;width:1000px;visibility:hidden';
   div.innerHTML = await svgSource(url, scope);
@@ -1094,7 +1398,29 @@ export async function extractRelief(url, scope) {
   // no geometry behind, not a flat one.
   applyPulled(svg, scope);
   for (const el of [...q("[data-portrayal-pulled]")]) el.remove();
-  const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg);
+  const {inv, mmRect, shared, liftOf, ownerOf, nodeSvg} = nodeTools(svg, {back});
+  // TILTED FACETS (docs/superpowers/specs/2026-09-24-tilted-facets-design.md).
+  // A node under a `[data-tilt-on]` group is measured foreshortened; it is
+  // unprojected here to its true size about its part's anchor, and the builder
+  // carries it onto the facet plane with tiltFrame. Nothing below runs for a
+  // drawing with no facets.
+  // Lifts inside a tilted part are measured from the plane the part sits on,
+  // which is the facet (tiltTools' `base`).
+  const {facetInfo, tiltRec} = tiltTools(svg, {mmRect, liftOf,
+                                               ctmOf: n => inv.multiply(n.getScreenCTM())});
+  // `proj` keeps the front-view rect: rasters, crops and punches are cut from
+  // the face art at it, while geometry takes the true rect.
+  const tilted = (e, t) => {
+    const r = tiltRec(t);
+    if (!r) return e;
+    e.proj = {x: e.x, y: e.y, w: e.w, h: e.h};
+    Object.assign(e, unproject(e.proj, r.tilt));
+    e.tilt = r.tilt;
+    if (typeof e.lift === 'number') e.lift -= r.base;
+    // `out` is an absolute height; cyl, bar, dome and depth are lengths from `lift`
+    if (typeof e.out === 'number') e.out -= r.base;
+    return e;
+  };
   // THE OUTLINE OF A NODE, in face millimetres, as closed rings.
   //
   // SAMPLED RATHER THAN PARSED. getPointAtLength walks a path at constant arc
@@ -1176,7 +1502,9 @@ export async function extractRelief(url, scope) {
                   && !el.hasAttribute('data-states'))
     .map(el => {
       const rect = mmRect(el);
-      return {...rect, lift: liftOf(el), owner: ownerOf(el), svgText: nodeSvg(el, rect)};
+      const e = {...rect, lift: liftOf(el), owner: ownerOf(el), svgText: nodeSvg(el, rect)};
+      const t = tiltOf(el);
+      return t ? tilted(e, t) : e;
     });
 
   const cavities = [...q('[data-depth]')]
@@ -1200,7 +1528,7 @@ export async function extractRelief(url, scope) {
         // node whose art is round but whose tag is not.
         round: f.dataset.round === '1' || f.tagName === 'circle',
       }));
-      return {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
+      const e = {...rect, owner: ownerOf(el), d: +el.dataset.depth, wall: el.dataset.wall || '#a7adb4',
               wallsInside: el.dataset.walls === 'inside',
               // A HOLE A BAY IS SEEN THROUGH (render.py's `rear:`) is a passage
               // to the front of the chassis. Whatever the bay holds stands in it
@@ -1217,6 +1545,16 @@ export async function extractRelief(url, scope) {
               lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
+      const t = tiltOf(el);
+      if (!t) return e;
+      // its features are unprojected about the same anchor; grpRect stays
+      // projected, since it is only ever the raster they are cut from
+      tilted(e, t);
+      if (e.tilt) for (const ft of features) {
+        ft.proj = {x: ft.x, y: ft.y, w: ft.w, h: ft.h};
+        Object.assign(ft, unproject(ft.proj, e.tilt));
+      }
+      return e;
     });
   // pressed grooves: shallow standalone cavities whose own art is the floor.
   // `lift` is not optional here even though a groove is always pressed into the
@@ -1227,14 +1565,19 @@ export async function extractRelief(url, scope) {
   // full-length slits you could see the background through.
   for (const el of q('[data-groove]')) {
     const rect = mmRect(el);
-    cavities.push({...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
-                   lift: liftOf(el),
-                   cavSvg: nodeSvg(el, rect), grpRect: rect,
-                   grpSvg: nodeSvg(el, rect), features: []});
+    const e = {...rect, owner: ownerOf(el), d: +el.dataset.groove, wall: '#25282c', round: false,
+               lift: liftOf(el),
+               cavSvg: nodeSvg(el, rect), grpRect: rect,
+               grpSvg: nodeSvg(el, rect), features: []};
+    const t = tiltOf(el);
+    cavities.push(t ? tilted(e, t) : e);
   }
+  // A CARD'S OPTICS ARE NOT THE CARD'S ART: each is a FRU of its own
+  // (bodyRole), so the card's plane is cut without them.
+  const OWN_FRU = '[data-behaviour="occupies"][data-ref],[data-ref][data-for][data-path$="-occupant"]';
   const outs = [...q('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]')].map(el => {
     const rect = mmRect(el);
-    return {...rect, owner: ownerOf(el), out: el.dataset.zOut && +el.dataset.zOut,
+    const e = {...rect, owner: ownerOf(el), out: el.dataset.zOut && +el.dataset.zOut,
             cyl: el.dataset.zCyl && +el.dataset.zCyl,
             bar: el.dataset.zBar && +el.dataset.zBar,
             uhandle: el.dataset.zUhandle && +el.dataset.zUhandle,
@@ -1250,12 +1593,47 @@ export async function extractRelief(url, scope) {
             profileY: el.dataset.zProfileY
               ? el.dataset.zProfileY.split(',').map(p => p.split(':').map(Number)) : null,
             svgText: nodeSvg(el, rect)};
+    const t = tiltOf(el);
+    if (t) {
+      tilted(e, t);
+      // an outline is unprojected point by point, like its box
+      if (e.tilt && e.rings) {
+        const un = r => r.map(([x, y]) => { const u = unproject({x, y, w: 0, h: 0}, e.tilt); return [u.x, u.y]; });
+        e.rings = e.rings.map(g => ({shell: un(g.shell), holes: g.holes.map(un)}));
+      }
+    }
+    const f = el.dataset.facetDeg && facetInfo(el.id);
+    if (f) {
+      // THE WEDGE, REBUILT IN THE FACE'S FRAME. render.py's profile runs along
+      // the declaring component's axis, which is the face's only when the
+      // component is not turned. Root edge at the facet's lift, proud edge at
+      // lift + extent x tan, per `facing`.
+      const tn = Math.tan(f.deg * Math.PI / 180), lo = f.lift;
+      const alongY = f.facing === 'up' || f.facing === 'down', along = alongY ? e.h : e.w;
+      const hi = lo + along * tn;
+      const wedge = f.facing === 'up' || f.facing === 'left' ? [[0, lo], [along, hi]] : [[0, hi], [along, lo]];
+      if (alongY) { e.profileY = wedge; e.profile = null; }
+      else { e.profile = wedge; e.profileY = null; }
+      e.out = hi;
+      e.facet = {deg: f.deg, facing: f.facing, id: el.id};
+      // THE PARTS ON IT paint its surface: they are siblings of the facet node,
+      // so its own art does not hold them, and the face raster does not hold
+      // the facet (every raised node is hidden from it). Outermost groups only;
+      // optics are FRUs and bring their own plane.
+      e.parts = q(`[data-tilt-on="${CSS.escape(el.id)}"]`)
+        .filter(h => !h.parentElement.closest(`[data-tilt-on="${CSS.escape(el.id)}"]`)
+                     && !h.matches(OWN_FRU))
+        .map(h => { const r = mmRect(h); return {...r, svgText: nodeSvg(h, r, OWN_FRU)}; });
+    }
+    return e;
   });
   const domes = [...q('[data-z-dome]')].map(el => {
     const rect = mmRect(el);
     // a lamp on a raised indicator bezel domes from THAT surface, not the panel
-    return {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, lift: liftOf(el),
-            svgText: nodeSvg(el, rect)};
+    const e = {...rect, owner: ownerOf(el), dome: +el.dataset.zDome, lift: liftOf(el),
+               svgText: nodeSvg(el, rect)};
+    const t = tiltOf(el);
+    return t ? tilted(e, t) : e;
   });
   const vents = [...q('[data-vent],[data-z-vent]')].map(el => {
     const rect = mmRect(el);
@@ -1291,17 +1669,14 @@ export async function extractRelief(url, scope) {
   //
   // The old list stays for drawings compiled before behaviours existed. It costs
   // one selector and means a stale dist/ does not silently lose every FRU.
-  const BODY_CLASSES = ['psu', 'fan', 'tab', 'power', 'cooling'];
-  const BODY_SELECTOR = ['[data-behaviour="fills"]', '[data-behaviour="occupies"]']
-    .concat(BODY_CLASSES.map(c => `[data-class="${c}"]:not([data-behaviour])`)).join(',');
+  // The rule itself is bodyBehaviour (above), which also admits an occupant
+  // that declares no behaviour - a plug.
   // A MODULE INSIDE A MODULE HAS A BODY OF ITS OWN. A card in a riser slot is
   // not a FRU here - it comes out with its riser - but its PCB is real, and
   // it hides on its own path. Collected beside the FRUs and built into the
   // owner's ejection group.
   const subBodies = [];
-  // A CARD'S OPTICS ARE NOT THE CARD'S ART: each is a FRU of its own
-  // (bodyRole), so the card's plane is cut without them.
-  const OWN_FRU = '[data-behaviour="occupies"][data-ref]';
+  // (OWN_FRU, above: a card's optics are not the card's art)
   // THE BODY NODE'S SIDE COLOUR FIRST: on the SFP skins it stands 10 mm out
   // of the cage as a relief feature whose sides are its `data-z-color`
   // (#6e747c, the `outs` colour above), and the box behind the face is the
@@ -1314,10 +1689,13 @@ export async function extractRelief(url, scope) {
     const f = getComputedStyle(n).fill;
     return f && f !== 'none' && !f.startsWith('url(') ? f : null;
   };
-  for (const el of q(BODY_SELECTOR)) {
-    if (!el.dataset.ref) continue;
+  const FEATURE_SEL = '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]';
+  for (const el of q('[data-ref]')) {
+    const beh = bodyBehaviour({ref: el.dataset.ref, behaviour: el.dataset.behaviour,
+                               for: el.dataset.for, path: el.dataset.path, cls: el.dataset.class});
+    if (!beh) continue;
     const full = el.dataset.path || '';
-    const role = bodyRole(full, el.dataset.behaviour);
+    const role = bodyRole(full, beh, {back});
     if (!role) continue;
     const path = role.fru || role.sub;
     // a module in a chassis bay is `bay/module`; one in a module's bay is
@@ -1328,6 +1706,9 @@ export async function extractRelief(url, scope) {
       const m = inv.multiply(el.getScreenCTM());
       subBodies.push({path: full, owner: path, ref: el.dataset.ref.split(':')[0], lift: liftOf(el),
                       toFace: {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}});
+      // on a facet: its boxes are unprojected and built in the tilt frame
+      const st = tiltOf(el) && tiltRec(tiltOf(el));
+      if (st) { subBodies[subBodies.length - 1].tilt = st.tilt; subBodies[subBodies.length - 1].lift -= st.base; }
       continue;
     }
     if (frus.some(f => f.path === path)) continue;
@@ -1356,6 +1737,14 @@ export async function extractRelief(url, scope) {
                // an optic's own depth, for opticBody (on anything else
                // `data-depth` is a cavity's and is not read here)
                behaviour: el.dataset.behaviour || null,
+               // what it is pulled as (a plug occupies though it declares
+               // nothing), and how far its relief stands off its seat -
+               // the travel of an occupant that declares no depth (ejectTravel)
+               occupies: beh === 'occupies',
+               extent: beh === 'occupies' ? reliefExtent(
+                 [el, ...el.querySelectorAll(FEATURE_SEL)].map(n => ({
+                   out: n.dataset.zOut, cyl: n.dataset.zCyl, bar: n.dataset.zBar,
+                   uhandle: n.dataset.zUhandle, lift: liftOf(n)})), liftOf(el)) : 0,
                depth: el.dataset.behaviour === 'occupies' ? +el.dataset.depth || null : null,
                // and its colour: its skin's own `<name>--body` node's side
                // colour, else its fill (bodyFill)
@@ -1372,6 +1761,14 @@ export async function extractRelief(url, scope) {
                // in the contract's frame lands where the contract says.
                toFace: (() => { const m = inv.multiply(el.getScreenCTM());
                                 return {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}; })()});
+    // AN OPTIC IN A TILTED CAGE IS TILTED WITH IT. render.py copies the tilt
+    // onto the occupant; a seat without it takes its mate-to host's.
+    let t = tiltOf(el);
+    if (!t && el.dataset.for) {
+      const h = svg.querySelector(`[data-path="${CSS.escape(el.dataset.for.split(/\s+/)[0])}"]`);
+      t = h && tiltOf(h);
+    }
+    if (t) tilted(frus[frus.length - 1], t);
   }
   for (const el of q('[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle]'))
     el.style.display = 'none';
@@ -1486,7 +1883,7 @@ export async function buildFaceRelief(F, ctx) {
       return;
     }
     const {cavities, outs, domes, vents, frus, subBodies = [], flatLifted = [],
-           cleanText} = await extractRelief(src, ctx.scope);
+           cleanText} = await extractRelief(src, ctx.scope, {back: !!ctx.back});
     const faceText = squareFaceplate(cleanText);
     // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
     // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
@@ -1522,6 +1919,12 @@ export async function buildFaceRelief(F, ctx) {
     // it; `flipLX` is its partner, and the pair is what lets the bottom carry relief.
     const LX = (x, w) => (F.flipLX ? -1 : 1) * (x + w / 2 - fw / 2);
     const LY = (y, h) => (F.flipLY ? -1 : 1) * (fh / 2 - (y + h / 2));
+    // A PART ON A FACET IS BUILT FLAT, AT ITS TRUE SIZE, IN A GROUP WHOSE
+    // MATRIX IS ITS TILT FRAME (docs/superpowers/specs/2026-09-24-tilted-facets-design.md;
+    // tiltGroupIn). The matrix is fixed: a FRU's pull moves its own group along
+    // local z, which in here is the facet's normal.
+    const tiltGroupFor = (t, parent) =>
+      tiltGroupIn(parent, t, {fw, fh, flipLX: !!F.flipLX, flipLY: !!F.flipLY});
     const sideMats = c => Array.from({length: 6},
       () => new THREE.MeshLambertMaterial({color: c}));
     // each FRU gets a subgroup so its art and relief travel together when ejected
@@ -1531,54 +1934,66 @@ export async function buildFaceRelief(F, ctx) {
     const hostOf = f => (f.within || []).map(p => p && fruGroups[p]).find(Boolean) || grp;
     for (const f of frus) {
       const fg = new THREE.Group();
-      hostOf(f).add(fg);
+      (f.tilt ? tiltGroupFor(f.tilt, hostOf(f)) : hostOf(f)).add(fg);
       fruGroups[f.path] = fg;
       FRU_GROUPS[f.path] = fg;
       const bd = BODY_META[f.ref];
       // a `body:` block is the best answer, the part's own size.d the next, and
-      // 60 only when a drawing predates `data-body-depth` entirely
-      const depth = bd ? bd.depth : (f.bodyDepth || 60);
-      // captive modules declare how far they pull out; removable FRUs clear the chassis
-      const captive = bd && bd.travel;
-      FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!captive,
-                          bodyDepth: f.bodyDepth,
-                          pull: Math.min(captive || depth * 1.5 + 25, INTO - 10)};
+      // 60 only when a drawing predates `data-body-depth` entirely; captive
+      // modules declare how far they pull out, removable FRUs clear the
+      // chassis, and an occupant that declares no depth clears its own relief
+      // (ejectTravel)
+      const travel = ejectTravel({body: bd, bodyDepth: f.bodyDepth, depth: f.depth,
+                                  occupies: f.occupies, extent: f.extent, into: INTO});
+      FRU_META[f.path] = {cls: f.cls, view: F.view, body: bd, captive: !!(bd && bd.travel),
+                          bodyDepth: f.bodyDepth, pull: travel.pull,
+                          leavesBay: travel.leavesBay, bayDepth: travel.bayDepth};
     }
-    let curOwner = null;
+    let curOwner = null, curTilt = null;
     // Tagged on the way in, so `setPulled` can hide a part's relief without the
     // part having to be a FRU. A cover's meshes stay in the shared group - they
     // are not going anywhere - and simply stop being drawn.
+    // A tilted entry goes into its tilt group under the same parent.
     const addTo = obj => {
       if (curOwner) obj.userData.portrayalPath = curOwner;
-      return (curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp).add(obj);
+      const into = curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp;
+      return (curTilt ? tiltGroupFor(curTilt, into) : into).add(obj);
     };
+    // the front-view rect of an entry: where its art is cut from the face
+    const projOf = e => e.proj || e;
     for (const c of cavities) {
       // AN OPEN BAY'S MOUTH IS THE CHASSIS'S. It has no data-path of its own, so
       // ownerOf() answers with the bay's path, and a FRU group is keyed by that
       // same path - the collar went out with the cassette and a tree pull hid it.
       curOwner = c.hollow ? null : c.owner;
+      curTilt = c.tilt || null;
+      // a tilted cavity's art is cut at its front-view rect and stretched over
+      // its true size (for every other cavity pc is c)
+      const pc = projOf(c);
       // an open bay's mouth is a short collar, not a pocket: walls deep enough
       // to meet the rear passage, which stops INTO - 2 short of the face
       const d = c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
       // floor + feature art comes from the cavity group rendered standalone, so
       // raised bezel plates (drawn over the cavity on the face) never leak in
       const gcv = await rasterize(c.grpSvg, c.grpRect.w, c.grpRect.h, PX);
-      const floorCv = crop(gcv, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h}, PX);
+      const floorCv = crop(gcv, {x: pc.x - c.grpRect.x, y: pc.y - c.grpRect.y, w: pc.w, h: pc.h}, PX);
       const cavCrops = [];
       const fctx = floorCv.getContext('2d');
       for (const ft of c.features) {
-        ft.faceCv = crop(gcv, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h}, PX);
+        const pf = projOf(ft);
+        ft.faceCv = crop(gcv, {x: pf.x - c.grpRect.x, y: pf.y - c.grpRect.y, w: pf.w, h: pf.h}, PX);
         cavCrops.push(ft);
         // remove the feature art from the floor (it lives on its own box now)
-        const px = [Math.round((ft.x - c.x) * PX), Math.round((ft.y - c.y) * PX),
-                    Math.round(ft.w * PX), Math.round(ft.h * PX)];
+        const px = [Math.round((pf.x - pc.x) * PX), Math.round((pf.y - pc.y) * PX),
+                    Math.round(pf.w * PX), Math.round(pf.h * PX)];
         if (ft.kind === 'sink') fctx.clearRect(...px);
         else { fctx.fillStyle = '#0d0f11'; fctx.fillRect(...px); }
       }
       // shape-accurate punch: the cavity node's own art defines the hole
-      if (!c.lift) {   // a lifted cavity recesses from a raised part, so the
+      if (!c.lift && !c.tilt) {   // a lifted cavity recesses from a raised part, so the
         // chassis face beneath it is already covered - punching it would leave
-        // a hole straight through the faceplate
+        // a hole straight through the faceplate. A tilted one punches the
+        // facet it stands on instead (the outs loop).
         const pctx = cv.getContext('2d');
         pctx.globalCompositeOperation = 'destination-out';
         pctx.drawImage(await rasterize(c.cavSvg, c.w, c.h, PX),
@@ -1632,10 +2047,12 @@ export async function buildFaceRelief(F, ctx) {
       const floorMat = floor.material;
       reg(c.grpSvg, async text => {
         const g2 = await rasterize(text, c.grpRect.w, c.grpRect.h, PX);
-        remap(floorMat, crop(g2, {x: c.x - c.grpRect.x, y: c.y - c.grpRect.y, w: c.w, h: c.h}, PX));
-        for (const ft of cavCrops)
+        remap(floorMat, crop(g2, {x: pc.x - c.grpRect.x, y: pc.y - c.grpRect.y, w: pc.w, h: pc.h}, PX));
+        for (const ft of cavCrops) {
+          const pf = projOf(ft);
           if (ft.mat) remap(ft.mat,
-            crop(g2, {x: ft.x - c.grpRect.x, y: ft.y - c.grpRect.y, w: ft.w, h: ft.h}, PX));
+            crop(g2, {x: pf.x - c.grpRect.x, y: pf.y - c.grpRect.y, w: pf.w, h: pf.h}, PX));
+        }
       });
       // closed exterior back, deep enough to clear any sink pockets
       const maxSink = Math.max(0, ...c.features.filter(f => f.kind === 'sink').map(f => f.val));
@@ -1690,9 +2107,11 @@ export async function buildFaceRelief(F, ctx) {
       // 0.05mm back, far finer than the depth buffer resolves, which is what was
       // speckling along the side faces. Nothing to draw.
       curOwner = v.owner;
+      curTilt = null;
     }
     for (const dm of domes) { // gentle domes: node art draped on a paraboloid cap
       curOwner = dm.owner;
+      curTilt = dm.tilt || null;
       // (LED lamps, bulged fan guards); apex proud, rim sunk 0.15 into the face
       const dcv = await rasterize(dm.svgText, dm.w, dm.h, PX);
       const geo = new THREE.CircleGeometry(0.5, 48);
@@ -1712,6 +2131,28 @@ export async function buildFaceRelief(F, ctx) {
     }
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
+      curTilt = o.tilt || null;
+      if (o.facet) {
+        // the wedge covers its footprint: clear the flat face under it (facetPunch)
+        const fp = facetPunch(o);
+        cv.getContext('2d').clearRect(...punchRectPx(fp, 0, 0, PX));
+        facePunch[F.view].push(fp);
+      }
+      // A FACET'S SURFACE CARRIES THE PARTS ON IT. Its own art is the first
+      // layer and the parts' art goes over it at their front-view rects; each
+      // is a text a restyle can change, so each has a slot (see `reg` below).
+      const facetTexts = o.facet && o.parts && o.parts.length
+        ? [o.svgText, ...o.parts.map(p => p.svgText)] : null;
+      const facetArt = async cvs => {
+        if (!facetTexts) return cvs;
+        const fx = cvs.getContext('2d');
+        for (let i = 0; i < o.parts.length; i++) {
+          const p = o.parts[i];
+          fx.drawImage(await rasterize(facetTexts[i + 1], p.w, p.h, PX),
+                       Math.round((p.x - o.x) * PX), Math.round((p.y - o.y) * PX));
+        }
+        return cvs;
+      };
       const ocv = await rasterize(o.svgText, o.w, o.h, PX);
       // A LIFTED CAVITY PUNCHES THE SURFACE IT WAS LIFTED ONTO. The cavity loop
       // above skips the FACE punch for a lifted cavity, on the reasoning that it
@@ -1740,21 +2181,39 @@ export async function buildFaceRelief(F, ctx) {
       // rebuild dropped the punch and the marks and re-buried all four cages and
       // both hazard triangles - the very symptom this fixes, undone by the first
       // state change. Found in review rather than by any test.
-      const seated = cavities.filter(c => cavitySeatsOn(c, o));
-      const marks = flatLifted.filter(f => cavitySeatsOn(f, o));
+      //
+      // A TILTED CAVITY PUNCHES THE FACET IT STANDS ON, with its front-view
+      // footprint: that is where its mouth crosses the sloped surface. The lift
+      // rule only compares entries in one frame - a tilted entry's lift is
+      // measured from its facet, not from the face.
+      const sameFrame = (a, b) => !a.tilt === !b.tilt &&
+        (!a.tilt || (a.tilt.on === b.tilt.on && `${a.tilt.anchor}` === `${b.tilt.anchor}`));
+      const seated = cavities.filter(c => (sameFrame(c, o) && cavitySeatsOn(c, o))
+        || (o.facet && c.tilt && c.tilt.on === o.facet.id && !c.lift));
+      const marks = flatLifted.filter(f => sameFrame(f, o) && cavitySeatsOn(f, o));
+      // An untilted pair keeps the plain offset; anything tilted is placed by
+      // front-view rects scaled into the raster, which then holds either frame.
+      const put = async (octx, cvs, e, text) => {
+        if (!o.tilt && !e.tilt) {
+          octx.drawImage(await rasterize(text, e.w, e.h, PX),
+                         Math.round((e.x - o.x) * PX), Math.round((e.y - o.y) * PX));
+          return;
+        }
+        const po = projOf(o), pe = projOf(e);
+        const kx = cvs.width / po.w, ky = cvs.height / po.h;
+        octx.drawImage(await rasterize(text, pe.w, pe.h, PX),
+                       Math.round((pe.x - po.x) * kx), Math.round((pe.y - po.y) * ky),
+                       Math.round(pe.w * kx), Math.round(pe.h * ky));
+      };
       const compose = async cvs => {
         if (!seated.length && !marks.length) return cvs;
         const octx = cvs.getContext('2d');
         octx.globalCompositeOperation = 'destination-out';
-        for (const c of seated)
-          octx.drawImage(await rasterize(c.cavSvg, c.w, c.h, PX),
-                         Math.round((c.x - o.x) * PX), Math.round((c.y - o.y) * PX));
+        for (const c of seated) await put(octx, cvs, c, c.cavSvg);
         octx.globalCompositeOperation = 'source-over';
         // and the flat art goes ON, after the punch, so a marking beside a cage
         // is not erased by it
-        for (const f of marks)
-          octx.drawImage(await rasterize(f.svgText, f.w, f.h, PX),
-                         Math.round((f.x - o.x) * PX), Math.round((f.y - o.y) * PX));
+        for (const f of marks) await put(octx, cvs, f, f.svgText);
         return cvs;
       };
       // THE SIDE COLOUR IS THE ART'S DOMINANT COLOUR, NOT ITS CENTRE PIXEL.
@@ -1785,10 +2244,20 @@ export async function buildFaceRelief(F, ctx) {
         bodyMats.push(m);
         return m;
       };
-      await compose(ocv);
+      await compose(await facetArt(ocv));
       const faceTex = new THREE.MeshBasicMaterial(
         {map: canvasTex(ocv), transparent: true, alphaTest: 0.1, alphaToCoverage: true});
-      reg(o.svgText,
+      if (facetTexts) {
+        // every slot repaints the whole surface from the latest text of each;
+        // no lamp animation is handed this material, since a frame drawn from
+        // the facet's own text alone would drop the parts
+        const repaint = async () => {
+          const cvs = await rasterize(facetTexts[0], o.w, o.h, PX);
+          recolourBody(derived, bodyMats, cvs);
+          remap(faceTex, await compose(await facetArt(cvs)));
+        };
+        facetTexts.forEach((t, i) => reg(t, async text => { facetTexts[i] = text; await repaint(); }));
+      } else reg(o.svgText,
           async text => {
             const cvs = await rasterize(text, o.w, o.h, PX);
             // unpunched, as at build: `compose` below erases the seated cavities
@@ -1989,7 +2458,15 @@ export async function buildFaceRelief(F, ctx) {
             sp.push(LX(o.x + x, 0), LY(o.y + y, 0), depthAt(x, y),
                     LX(o.x + x, 0), LY(o.y + y, 0), o.lift);
           }
+          // A SKIRT AGAINST A NEIGHBOUR AS TALL IS INSIDE THE SOLID. A sawtooth
+          // is a face and its return, two nodes meeting at the tooth's apex;
+          // each dropped a full-height skirt there, back to back in one plane,
+          // and a cage well running down the slope crossed them and showed
+          // them z-fighting inside the cage. One tooth has no wall there.
+          // Facet to facet only (skirtNeighbours): without facets this is a no-op.
+          const others = skirtNeighbours(o, outs);
           for (let k = 0; k < ring.length; k++) {
+            if (skirtIsInterior(o, others, ring[k], ring[(k + 1) % ring.length], depthAt)) continue;
             const a = 2 * k, b = a + 1, c = 2 * ((k + 1) % ring.length), d = c + 1;
             si.push(a, b, c, b, d, c);
           }
@@ -2043,6 +2520,7 @@ export async function buildFaceRelief(F, ctx) {
       }
     }
     curOwner = null;
+    curTilt = null;
     // DEEPEST FIRST: a card's optic cuts its plane off the face before the
     // card punches its own shape out (the card's art leaves the optic out, but
     // its punch would still clear the optic's pixels). The sort is stable, so
@@ -2057,15 +2535,40 @@ export async function buildFaceRelief(F, ctx) {
       // empty plane: adapters floating in front of an open passage and no
       // faceplate. Cut from the pristine art instead, and re-open only the
       // module's own cavities (the mouth is the bay's hole, not the module's).
-      const faceCrop = crop(f.lift || f.openBack ? artCv : cv, f, PX);
+      // A TILTED MODULE (an optic in a cage on a facet) is cut from the face at
+      // its front-view rect `pf`, and its plane and body take its true size,
+      // inside its tilt group. For every other module pf is f.
+      const pf = projOf(f);
+      // A TILTED MODULE IS CUT FROM THE PRISTINE ART, like a lifted one: it
+      // stands on a facet, and the facet's footprint has been cleared from `cv`.
+      const faceCrop = crop(f.lift || f.openBack || f.tilt ? artCv : cv, pf, PX);
+      // replay one face punch on a canvas whose origin is pf (a facet's is a rect)
+      const unpunch = async (ctx2, p) => {
+        if (p.kind === 'rect') { ctx2.clearRect(...punchRectPx(p, pf.x, pf.y, PX)); return; }
+        ctx2.globalCompositeOperation = 'destination-out';
+        ctx2.drawImage(await rasterize(p.svg, p.w, p.h, PX),
+                       Math.round((p.x - pf.x) * PX), Math.round((p.y - pf.y) * PX));
+        ctx2.globalCompositeOperation = 'source-over';
+      };
+      // A TILTED MODULE'S OWN BORES ARE PUNCHED FROM ITS PLANE HERE, not through
+      // `cv`: a tilted cavity never punches the face (its facet is its surface),
+      // so no face punch exists to replay, and one recorded for the purpose
+      // would be replayed by every plane overlapping it, the card's included.
+      // Scoped to the owner, the hole reaches exactly the plane in front of it.
+      const bores = f.tilt ? cavities.filter(c => c.tilt && c.proj && c.owner === f.path) : [];
+      const unbore = async ctx2 => {
+        for (const c of bores) {
+          ctx2.globalCompositeOperation = 'destination-out';
+          ctx2.drawImage(await rasterize(c.cavSvg, c.proj.w, c.proj.h, PX),
+                         Math.round((c.proj.x - pf.x) * PX), Math.round((c.proj.y - pf.y) * PX));
+          ctx2.globalCompositeOperation = 'source-over';
+        }
+      };
       if (f.openBack && !f.lift) {
         const x0 = faceCrop.getContext('2d');
         for (const p of facePunch[F.view]) {
-          if (p.mouth || !(p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y)) continue;
-          x0.globalCompositeOperation = 'destination-out';
-          x0.drawImage(await rasterize(p.svg, p.w, p.h, PX),
-                       Math.round((p.x - f.x) * PX), Math.round((p.y - f.y) * PX));
-          x0.globalCompositeOperation = 'source-over';
+          if (p.mouth || !(p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y)) continue;
+          await unpunch(x0, p);
         }
       }
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
@@ -2076,7 +2579,7 @@ export async function buildFaceRelief(F, ctx) {
       // and left a hole in the panel where they had been. So the crop is
       // masked by the module's own art, exactly as a cavity's punch is: what
       // the module paints comes with it, and what it does not stays.
-      const mask = await rasterize(f.svgText, f.w, f.h, PX);
+      const mask = await rasterize(f.svgText, pf.w, pf.h, PX);
       // a seated optic with no `body:` gets one (opticBody, built below)
       const ob = opticBody({behaviour: f.behaviour, body: FRU_META[f.path].body,
                             depth: f.depth, w: f.w, h: f.h});
@@ -2086,6 +2589,7 @@ export async function buildFaceRelief(F, ctx) {
       mctx.globalCompositeOperation = 'destination-in';
       mctx.drawImage(mask, 0, 0, faceCrop.width, faceCrop.height);
       mctx.globalCompositeOperation = 'source-over';
+      if (bores.length) await unbore(mctx);
       const zf = f.lift || 0;
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
@@ -2106,17 +2610,14 @@ export async function buildFaceRelief(F, ctx) {
       // AN OPEN BAY'S MOUTH IS NOT THE MODULE'S. It is the bay's own hole, the
       // size of the whole slot, and replaying it here cut the entire faceplate
       // out of every module seated in an open-backed bay.
-      const punchesHere = f.lift ? [] : facePunch[F.view].filter(p => !p.mouth &&
-        p.x < f.x + f.w && p.x + p.w > f.x && p.y < f.y + f.h && p.y + p.h > f.y);
+      // (a tilted module, like a lifted one, replays none: its holes are `bores`)
+      const punchesHere = f.lift || f.tilt ? [] : facePunch[F.view].filter(p => !p.mouth &&
+        p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y);
       reg(f.svgText, async text => {
-        const c2 = await rasterize(text, f.w, f.h, PX);
+        const c2 = await rasterize(text, pf.w, pf.h, PX);
         const x2 = c2.getContext('2d');
-        for (const p of punchesHere) {
-          x2.globalCompositeOperation = 'destination-out';
-          x2.drawImage(await rasterize(p.svg, p.w, p.h, PX),
-                       Math.round((p.x - f.x) * PX), Math.round((p.y - f.y) * PX));
-          x2.globalCompositeOperation = 'source-over';
-        }
+        for (const p of punchesHere) await unpunch(x2, p);
+        if (bores.length) await unbore(x2);
         remap(plane.material, c2);
         if (opticMat && !f.bodyColor) recolourBody(true, [opticMat], c2);
       });
@@ -2125,9 +2626,9 @@ export async function buildFaceRelief(F, ctx) {
       // and the same shape comes out of the face, not the rectangle
       const pctx = cv.getContext('2d');
       pctx.globalCompositeOperation = 'destination-out';
-      pctx.drawImage(mask, Math.round(f.x * PX), Math.round(f.y * PX));
+      pctx.drawImage(mask, Math.round(pf.x * PX), Math.round(pf.y * PX));
       pctx.globalCompositeOperation = 'source-over';
-      facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: f.x, y: f.y, w: f.w, h: f.h});
+      facePunch[F.view].push({kind: 'shape', svg: f.svgText, x: pf.x, y: pf.y, w: pf.w, h: pf.h});
       const meta = FRU_META[f.path];
       // A SEATED OPTIC WITH NO `body:` (opticBody): one box behind its face, in
       // its body node's side colour (bodyFill); an optic whose skin names no body node is
@@ -2143,7 +2644,8 @@ export async function buildFaceRelief(F, ctx) {
         // riser's PCB and connectors come out with its plate. Side art is
         // for the one-box form; a PCB is a colour.
         for (const b of bodyBoxes(meta.body, f.w, f.h)) {
-          const r = localToFace(f.toFace, b);
+          // toFace is the drawn (foreshortened) frame; a tilted box is unprojected
+          const r = f.tilt ? unproject(localToFace(f.toFace, b), f.tilt) : localToFace(f.toFace, b);
           const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
             new THREE.MeshLambertMaterial({color: b.color}));
           m.position.set(LX(r.x, r.w), LY(r.y, r.h),
@@ -2168,14 +2670,22 @@ export async function buildFaceRelief(F, ctx) {
         // box is placed off it, and NOT FOR A BACK'S OWN BACK: `ctx.back` stops
         // the recursion at one level, so a rear drawing that itself seats a
         // module cannot walk backwards for ever.
+        //
+        // THE BACK THIS MODULE HOLDS NOW, not the one it ships with: a plug
+        // put on a cassette's back in the explorer, or a cap taken off it, is
+        // in a drawing of its own - `ctx.backSource(bay, ref, url)` is the
+        // host's answer (viewer3d seats the map's keys under the bay into the
+        // shipped drawing with swap.js's seatBack and hands back the URL of
+        // that copy), and with no host answer the shipped drawing is built.
         const backSrc = meta.body.sides && meta.body.sides.rear;
         if (backSrc && ctx.dist && !f.lift && !ctx.back) {
           const key = `back:${f.path}`;
+          const shipped = ctx.dist + backSrc;
+          const src = ctx.backSource ? await ctx.backSource(f.path, f.ref, shipped) : shipped;
           const back = {view: key, fw: () => fp.size[0], fh: () => fp.size[1],
                         deep: () => d, pos: () => [0, 0, 0], rot: [0, Math.PI, 0]};
           const before = meshes.length;
-          await buildFaceRelief(back, {...ctx, src: ctx.dist + backSrc, deep: d,
-                                       back: true});
+          await buildFaceRelief(back, {...ctx, src, deep: d, back: true});
           if (meshes.length > before) {
             const bg = meshes.pop();
             bg.position.set(LX(f.x + fp.at[0], fp.size[0]),
@@ -2194,7 +2704,10 @@ export async function buildFaceRelief(F, ctx) {
       // empty bay: interior surfaces only, so it never occludes the module's
       // own cavities (the C14 inlet pins live inside this volume)
       // the bay is as deep as the thing that goes in it, not 60 mm
-      const bd = meta.body ? meta.body.depth : (meta.bodyDepth || 60);
+      const bd = meta.bayDepth;
+      // an occupant with no depth of its own leaves its port as the build
+      // draws it, with no box (ejectTravel)
+      if (!meta.leavesBay) continue;
       if (f.shelf) continue;   // a shelf, not a hole: nothing is left behind
       if (f.openBack) continue;   // a passage: the rear hole's walls are its sides
       // a body in pieces is a riser, and behind an unseated riser is the
@@ -2209,15 +2722,16 @@ export async function buildFaceRelief(F, ctx) {
       // pulled with the tray, and four dark boxes were left hanging where it
       // had been, hiding the board.
       bay.userData.portrayalPath = f.path;
-      // an optic's cage is on its card, so the hole behind it leaves with the card
-      (f.within ? fruGroups[f.path].parent : grp).add(bay);
+      // an optic's cage is on its card, so the hole behind it leaves with the card;
+      // a tilted module's hole is in its tilt frame, which is its group's parent
+      (f.within || f.tilt ? fruGroups[f.path].parent : grp).add(bay);
     }
     for (const s of subBodies) {
       const body = BODY_META[s.ref];
       if (!body || !body.boxes) continue;
-      const into = fruGroups[s.owner] || grp;
+      const into = s.tilt ? tiltGroupFor(s.tilt, fruGroups[s.owner] || grp) : fruGroups[s.owner] || grp;
       for (const b of bodyBoxes(body, 0, 0)) {
-        const r = localToFace(s.toFace, b);
+        const r = s.tilt ? unproject(localToFace(s.toFace, b), s.tilt) : localToFace(s.toFace, b);
         const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
           new THREE.MeshLambertMaterial({color: b.color}));
         m.position.set(LX(r.x, r.w), LY(r.y, r.h),

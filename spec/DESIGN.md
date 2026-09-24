@@ -137,9 +137,12 @@ Three layers:
    about shape or names is a major, because a moved slot invalidates a cached
    coordinate exactly as a renamed id invalidates a held reference. A sixth,
    `composed`, covers what the device draws and does not contain: every
-   component it seats, followed through their `parts:` and through the
-   `default` and `accepts` of their own bays at any depth, each recorded as its
-   version plus a digest of its contract and skins. A component redrawn in place
+   component it seats, followed through their `parts:`, the `default:` each
+   part ships holding, their faces (`faces.rear`, `faces.plan` or the legacy
+   `plan:` - a cassette's back is drawn under the device that seats the
+   cassette, so redrawing it is redrawing that device) and the `default` and
+   `accepts` of their own bays at any depth, each recorded as its version plus
+   a digest of its contract and skins. A component redrawn in place
    therefore moves every device that shows it, and that alone is a patch.
 
    Every other key a placement can state, and every key a bay states, is

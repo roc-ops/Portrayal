@@ -79,3 +79,36 @@ def each_component():
     """The same for component contracts, keyed `ns/name`."""
     import pytest
     return [pytest.param(ref, path, doc, id=ref) for ref, path, doc in components()]
+
+
+def built_component(ns_name, skin="default"):
+    """The compiled drawing of `ns/name` at its CURRENT major, in
+    `library/dist/components/`.
+
+    THE MAJOR IS READ, NOT WRITTEN. A test that names
+    `common--lc-duplex-adapter--v6--default.svg` goes quiet the day the part
+    moves to v7: the file is gone, the test skips, and the check it made is
+    made nowhere. So the major is the library's highest `v<N>` directory for
+    the part, checked against that contract's own `version:`.
+
+    SKIP ONLY WHEN THERE IS NO BUILD. With no compiled component drawings at
+    all this skips, as every dist test does; with a build present and this one
+    file absent it FAILS - a built dist that lacks the part is a finding, not
+    an absence of evidence."""
+    import pytest
+    ns, name = ns_name.split("/")
+    contracts = sorted((LIB / "components" / ns / name).glob("v*/contract.yaml"),
+                       key=lambda p: int(p.parent.name[1:]))
+    assert contracts, f"{ns_name}: no contract in the library"
+    major = int(contracts[-1].parent.name[1:])
+    version = str((yaml.safe_load(contracts[-1].read_text()) or {}).get("version"))
+    assert version.split(".")[0] == str(major), (
+        f"{ns_name}: v{major}/contract.yaml says version {version}")
+    dist = LIB / "dist" / "components"
+    if not any(dist.glob("*.svg")):
+        pytest.skip("library/dist/components not built (./publish.sh --no-images)")
+    f = dist / f"{ns}--{name}--v{major}--{skin}.svg"
+    assert f.exists(), (
+        f"the dist is built but {f.name} is not in it: {ns_name}@{major} is the "
+        "part's current major, so the build should have drawn it")
+    return f

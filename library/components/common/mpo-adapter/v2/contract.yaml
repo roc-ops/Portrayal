@@ -1,0 +1,153 @@
+format: 1
+kind: component
+name: mpo-adapter
+version: 2.1.0
+class: port
+profile: networking
+description: >-
+  Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD
+  adapter panel. Twelve fibres by default; an MPO-8, -16 or -24 is the same
+  adapter with a different ferrule, and says so by overriding
+  `optical.positions` on its placement.
+size: {w: 13.8, h: 9.4}
+size-confidence: {w: photo-measured, h: estimated}
+attrs: {media: fiber, connector: mpo}
+# WHAT THE PORT SHIPS HOLDING, on the slot this tile forwards from its
+# composed std/mpo@2 (P2) - seated wherever a panel composes it, and
+# overridden there or by a configuration (provenance.shipped-cap).
+default: common/mpo-dust-cap@2
+unplaced: >-
+  NOTHING SEATS THIS UNTIL AN FHD ADAPTER PANEL IS MODELLED. It is one opening
+  tile in FS's continuous MTP adapter panel (the 12x MTP panel, SKU 35510, its
+  13.8 width being that panel's aperture pitch), and no panel in the FHD
+  catalogue is modelled yet - the cassettes are. The cassette rears carried it
+  until they moved to common/mpo-flange-adapter@1, the flanged bulkhead FS
+  actually fits to a cassette back; this tile is the panel's part, not the
+  cassette's, so it waits for the panel rather than following them.
+optical:
+  # TWELVE FIBRES IN ONE FERRULE, which is the whole point of the connector and
+  # the reason a cassette needs only one of these on its rear. MPO-8, -16 and
+  # -24 share this adapter and this opening - the count is a property of the
+  # ferrule - so a module using another count overrides this on its placement
+  # rather than composing a different part.
+  positions: 12
+elements:
+  '1': {at: [8.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '2': {at: [7.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '3': {at: [7.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '4': {at: [7.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '5': {at: [7.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '6': {at: [6.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '7': {at: [6.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '8': {at: [6.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '9': {at: [6.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '10': {at: [5.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '11': {at: [5.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '12': {at: [5.45, 4.625], size: [0.15, 0.15], class: fibre}
+provenance:
+  size: >-
+    MEASURED for the width, ESTIMATED for the height, and the width is a
+    PITCH, NOT A BODY DIMENSION. 13.8 is the aperture pitch on FS's face-on
+    render of SKU 35510 (two rows of six give 13.77 and 13.80, spreads 1.11
+    and 0.60), adopted here as the component's width so a row of these tiles
+    at the panel's real spacing. It is NOT a measured adapter body width: at
+    6x magnification the join between two adapters on 35510 shows one
+    continuous faceplate with bevelled apertures punched through it, no
+    discrete adapter blocks and no gap between them, because there is nothing
+    physical to have a gap between. A median-luminance profile across the top
+    row confirms this - bare plate at the margin reads 39, the moulded face
+    between two openings reads 60-75, and the five apparent "seams" (27.9,
+    41.6, 55.8, 69.4, 83.1 mm, spacing 13.7/14.2/13.6/13.7 - positions counted
+    from panel_measure's x0 as it stood then, which on this render sat 0.84 mm
+    inboard of the plate's edge; the spacing does not move) are each
+    aperture's bevel shadow, not a butt joint - so no adapter body is visible
+    here to measure at all.
+    The 9.4 height is a share of the panel's measured 15.97 mm row pitch, not
+    a body height either - the same continuous-plate reading applies
+    vertically, so there is no body edge in this render to place a height
+    against.
+    A SECOND, INDEPENDENT READING EXISTS FOR A DIFFERENT PART: two vendor
+    drawings for a generic MPO/MTP bulkhead adapter (US Conec C9857 rev AA and
+    Amphenol 955 series, 22 years apart) agree on a 14.9 (or 14.8) x 9.8 body
+    with depth 19.8 or 20.6 and a 25.0 x 20.0 / 3.1 dia mounting flange. That
+    reading used to sit in standards.yaml's `mpo-adapter` entry, under the
+    same key a `conforms:` on this contract would check `size` against. This
+    contract declares no `conforms:`, though - it composes std/mpo@2 for the
+    aperture and draws its own bezel around it, as common/lc-duplex-adapter@6
+    does for std/lc-bulkhead-bore@1. That entry now holds the FS panel's APERTURE and
+    PITCH instead (see its notes for the full history), so the vendor
+    body/depth figures are recorded here rather than lost: they describe a
+    flanged bulkhead adapter, a different physical part from FS's one-piece
+    panel, kept because it is the only adapter-body figure held anywhere in
+    this corpus - not because it measures the same thing as 13.8 x 9.4, and
+    not in tension with it. The 19.8/20.6 body depth is NOT used for anything
+    drawn here or on std/mpo@2 - see std/mpo@2's own `provenance.depth` for
+    why.
+  bore: >-
+    MAJOR 2.0.0: THE COMPOSED APERTURE CHANGED MAJOR, NOTHING ELSE DID. @1
+    composed std/mpo@1 (7.8 x 5.6 at [3.0, 1.9]); this composes std/mpo@2, the
+    12.9 x 8.0 opening an MPO plug can actually enter, placed at [0.45, 0.7] so
+    it stays centred on the unchanged (6.9, 4.7). The 13.8 x 9.4 outline still
+    contains it, with 0.45 of wall each side on the long axis and 0.7 on the
+    short. That wall is thin on the long axis for a reason worth stating: 13.8
+    is FS 35510's aperture PITCH adopted as a width (`size`), and 35510 mounts
+    its adapters PORTRAIT, so on the real panel 13.8 is the spacing along the
+    opening's SHORT axis and the long axis runs down the 15.97 row pitch. This
+    tile is drawn landscape; its outline is an estimate on both axes and is
+    not re-derived here.
+  fibre-count: >-
+    catalogue - FS's FHD panels are sold as `12 x MTP-8/12/24`, one opening
+    taking any of the three ferrules. 12 is the default because it is the count
+    the FHD cassettes' rear connectors use; see the FS catalogue at
+    working/intake/fs/fhd/CATALOGUE.tsv.
+  shipped-cap: >-
+    THE PORT SHIPS CAPPED, declared as this tile's top-level `default:` (B3,
+    docs/pluggables-caps-design.md, "The shipped default"): FS's face-on
+    renders of SKU 35510, the 12x MTP adapter panel this tile is read off,
+    show all twelve ports holding the grey cap common/mpo-dust-cap@2 is
+    drawn from (that part's `size-notes`). Nothing places this tile yet
+    (`unplaced`), so the default seats nowhere until a panel composes it.
+  face-detail-gap: >-
+    no orthographic photograph of an MPO adapter exists here; the reading is off
+    a product RENDER. The latch, the key orientation and any keying mark are not
+    modelled, and the key direction matters - FS sells `Up-Down Type A` and
+    `Up-Up Type B` panels as different SKUs, which this part does not yet
+    distinguish.
+  connection-point: >-
+    `optical.at` is the plain centre of the 13.8 x 9.4 mating face - (13.8/2,
+    9.4/2) = (6.9, 4.7). That figure is corroborated, not just asserted: the
+    composed std/mpo@2 bore sits at [0.45, 0.7] with its own size 12.9 x 8.0,
+    so its centre is (0.45 + 12.9/2, 0.7 + 8.0/2) = (6.9, 4.7) too - the same
+    point two different pieces of geometry land on. `size-confidence` marks w
+    photo-measured and h estimated; a centre depending on both axes is only
+    as good as the weaker one, so this point is ESTIMATED, not photo-measured,
+    even though half of what it is built from is not.
+  fibre-markers: >-
+    the markers carry no ink: the fibres are behind the dust sleeve; these
+    give each position an address and a place, not a picture. Elements `1`
+    to `12` sit on the ferrule row at the 0.25 MT pitch, the pitch the
+    flanged MPO bulkhead adapter draws its fibres on, centred on the
+    composed std/mpo@2 opening, whose centre is (0.45 + 12.9/2, 0.7 + 8.0/2) =
+    (6.9, 4.7) - the centre std/mpo@1's opening had, so the markers did not
+    move with the major. NUMBERED AS SEEN FROM THIS SIDE WITH A KEY-UP PLUG MATED
+    FROM THE VIEWER: its end face faces away, so the fibre 1 a key-up end
+    face shows at its left is on the RIGHT here, cx 8.275, running leftward
+    to 12 at cx 5.525. A key slot drawn at the bottom of the opening would
+    mirror this; std/mpo@2 draws no key at all (see face-detail-gap, and its
+    own provenance.key), so the key-up reading stands until one is drawn.
+parts:
+  - {ref: std/mpo@2, id: bore, at: [0.45, 0.7]}
+connection-points:
+  # centre of the 13.8 x 9.4 mating face - (6.9, 4.7) - so the next plan has
+  # somewhere to hang a fibre path off this adapter without a version bump.
+  optical: {at: [6.9, 4.7], direction: front}
+relief:
+  wall: '#22262a'
+  features:
+    - node: bezel
+      out: 1.2
+      confidence: estimated
+      source: >-
+        the adapter's flange stands slightly proud of the panel, as the renders
+        show. 1.2 is not measured; nothing in the corpus dimensions it.
+skins: [default]

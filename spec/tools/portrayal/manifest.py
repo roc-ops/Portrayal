@@ -5,10 +5,13 @@ nested to say so. Readers do not want to know that; they want the lists. This
 is the only place that knows the nesting, so when the shape changes it changes
 here and nowhere else.
 """
+import functools
 import math
 
 import yaml
 from pathlib import Path
+
+from portrayal.faces import DIRECTIONS, face_ref
 
 
 # ONE READING OF A FILE, TOO, AND THE FAST ONE.
@@ -226,20 +229,10 @@ def presented_interface(contract, resolve):
     point = cps.get(contract.get("interface-at") or "mate")
     if contract.get("interface") and point:
         return contract["interface"], list(point["at"]), _seat_out(contract, point)
-    # A wrapper may compose several parts - a duplex adapter holds two bores -
-    # and only one aperture can be the thing a module seats into. Take the first
-    # that presents an interface, in declaration order, and leave the multi-mate
-    # case alone: `lc-duplex-adapter` composes two LC bores and its own point is
-    # their midpoint, which is a fibre landing on a ferrule rather than a module
-    # entering a cage. Different question, not this one.
-    cores = []
-    for part in (contract.get("parts") or []):
-        core = resolve(part.get("ref")) if part.get("ref") else None
-        if not core or not core.get("interface"):
-            continue
+    part = forwarded_part(contract, resolve)
+    if part is not None:
+        core = resolve(part["ref"])
         cm = (core.get("connection-points") or {}).get("mate")
-        if not cm:
-            continue
         # THROUGH THE PART'S OWN PLACEMENT, rotation and all. `at + mate`
         # was right only for an unturned part: every generic transceiver
         # composes std/lc-bore@3 at `rotate: 180` (tongue up), and the plain
@@ -248,12 +241,222 @@ def presented_interface(contract, resolve):
         # is at (x, 5.70). The part is drawn translate(at) rotate(deg w/2
         # h/2) with its own contract's size, so its mate lands by seat_point.
         at = part.get("at") or [0, 0]
-        cores.append((core["interface"],
-                      seat_point(at, core["size"], part.get("rotate"), cm["at"]),
-                      float(part.get("lift") or 0)))
-    if len(cores) == 1:
-        return cores[0]
+        return (core["interface"],
+                seat_point(at, core["size"], part.get("rotate"), cm["at"]),
+                float(part.get("lift") or 0))
     return contract.get("interface"), (list(mate["at"]) if mate else None), 0.0
+
+
+def forwarded_part(contract, resolve):
+    """Which of `contract`'s `parts:` entries `presented_interface` forwards
+    its mate point from, or None.
+
+    The same selection `presented_interface` makes when it has no top-level
+    `interface` of its own: a wrapper may compose several parts - a duplex
+    adapter holds two bores - and only one aperture can be the thing a
+    module seats into, so this takes the interfaced part ONLY when it is
+    the single one found, in declaration order, and leaves the multi-mate
+    case alone (a duplex adapter's own point is its bores' midpoint, a
+    fibre landing rather than a module entering a cage - different
+    question). Exposed as its own function so a caller can ask a further
+    question of THAT SPECIFIC part - here, whether it sits `on` a facet -
+    without re-deriving which one presented_interface would pick.
+    """
+    if contract.get("interface") and (contract.get("connection-points") or {}).get(
+            contract.get("interface-at") or "mate"):
+        return None
+    hits = []
+    for part in (contract.get("parts") or []):
+        core = resolve(part.get("ref")) if part.get("ref") else None
+        if not core or not core.get("interface"):
+            continue
+        if not (core.get("connection-points") or {}).get("mate"):
+            continue
+        hits.append(part)
+    return hits[0] if len(hits) == 1 else None
+
+
+def spanned_slots(contract, resolve, connectors):
+    """The ids of the `parts:` entries this contract's OWN slot takes the place
+    of - what the caps work calls its BORES (B3, docs/pluggables-caps-design.md,
+    "The duplex host"). [] for everything else.
+
+    An interface in spec/schemas/connectors.yaml may declare that it SPANS
+    another: `lc-duplex` spans two `lc` bores, because one duplex connector
+    fills both of them. A contract presenting a spanning interface and
+    composing the parts it spans therefore holds TWO LEVELS OF SLOT FOR ONE
+    PIECE OF HARDWARE - its own, and the bores - and the two are mutually
+    exclusive: filling either level means the other is not offered, and filling
+    both is an error the build and lint each refuse.
+
+    The ids are LOCAL to this contract, because that is how a configuration
+    addresses them: the bore beside a slot keyed `bay-1/lc01` is `bay-1/lc01/1`.
+
+    ONLY A CONTRACT PRESENTING THE SPANNING INTERFACE AS ITS OWN names bores. A
+    wrapper that FORWARDS a spanned slot (P2, `render._forwarded_part`) is not
+    the host of these parts - they sit one level further down than any id a key
+    at the wrapper's level could name - and it publishes no second slot for them.
+    """
+    iface = (contract or {}).get("interface")
+    spans = ((connectors or {}).get(iface) or {}).get("spans") if iface else None
+    if not spans:
+        return []
+    want = spans.get("interface")
+    out = []
+    for part in contract.get("parts") or []:
+        if not part.get("id") or not part.get("ref"):
+            continue
+        core = resolve(part["ref"])
+        if core and core.get("interface") == want:
+            out.append(part["id"])
+    return out
+
+
+@functools.lru_cache(maxsize=1)
+def slot_interfaces():
+    """(every interface a part can present AS A SLOT, the connector registry):
+    the pluggables families' interfaces (a cage) and spec/schemas/
+    connectors.yaml's (a connector slot) - the two registries render.slot_entry
+    answers from. Empty on a broken checkout."""
+    schemas = Path(__file__).resolve().parents[2] / "schemas"
+    try:
+        fams = (yaml.safe_load((schemas / "pluggables.yaml").read_text()) or {}).get("families") or {}
+        conns = (yaml.safe_load((schemas / "connectors.yaml").read_text()) or {}).get("interfaces") or {}
+    except (OSError, yaml.YAMLError):
+        return frozenset(), {}
+    return frozenset({f.get("interface") for f in fams.values() if f.get("interface")} | set(conns)), conns
+
+
+def slot_in_slot(carrier, host_id, resolve):
+    """True when the part `host_id` of `carrier` is a slot that is NOT one of
+    `carrier`'s own when `carrier`, placed, is itself a slot - a cage
+    wrapper's composed aperture (B3, docs/pluggables-caps-design.md, "A slot
+    inside a slot").
+
+    A wrapper presents the aperture it composes as its own interface
+    (presented_interface looks through it), so the frame that places the
+    wrapper already publishes that aperture as a slot, at the wrapper's key.
+    Keying the aperture again one level down names the same opening twice;
+    the build refuses it, L12 reports it, and the kit never offers it. The one
+    slot that may sit inside a slot is a BORE a spanning slot names
+    (spanned_slots): the duplex adapter's `1` and `2`, the other level of
+    the same opening, which L115 keeps exclusive of it.
+
+    `carrier` is the contract of the instance holding `host_id` - a device
+    placement, a part a component composes, or a seated occupant. A module
+    seated in a bay is never asked (slot_in_slot_at): a bay is not a slot, so
+    the card that is one cage keeps its cage."""
+    if not carrier:
+        return False
+    registered, conns = slot_interfaces()
+    if presented_interface(carrier, resolve)[0] not in registered:
+        return False
+    part = next((q for q in carrier.get("parts") or [] if q.get("id") == host_id), None)
+    core = resolve(part["ref"]) if part and part.get("ref") else None
+    if not core or presented_interface(core, resolve)[0] not in registered:
+        return False
+    return host_id not in spanned_slots(carrier, resolve, conns)
+
+
+def slot_in_slot_at(path, carrier, host_id, resolve):
+    """slot_in_slot for the instance drawn at `path` - THE GATE both the build
+    (render._seat_nested_occupants) and the resolver L12 calls
+    (nested_key_host) apply, so the two cannot come to disagree about which
+    keys it refuses. A module in a bay (`.../module`) is never a placed slot;
+    every other instance is asked - a device placement, a composed part, and
+    an OCCUPANT too: an optic that forwards one bore (generic/sfp-lc-simplex@2)
+    is a slot at its own key, `front-2/xg0-occupant`, and its bore is not a
+    second one."""
+    if not path or path.endswith("/module"):
+        return False
+    return slot_in_slot(carrier, host_id, resolve)
+
+
+def slot_in_slot_error(key, carrier_key, host_id):
+    """The refusal for slot_in_slot, one wording for the build and L12."""
+    return ValueError(
+        f"occupants/{key}: {host_id!r} is the aperture the slot {carrier_key!r} "
+        f"composes, not a slot of its own - key {carrier_key!r} instead (a slot "
+        "inside a slot is only one of the bores a spanning slot names)")
+
+
+# THE CANONICAL AXIS A SPANNING CONNECTOR IS DRAWN ON: ACROSS, along +x, with
+# the first spanned part on the left. Every duplex part in the library is drawn
+# that way, and a host whose own pair runs some other way publishes the turn
+# that carries the one onto the other (B3, docs/pluggables-caps-design.md,
+# "The duplex host").
+CANONICAL_SPAN_AXIS = 0
+
+
+def spanning_axis(contract, resolve, connectors):
+    """THE TURN A SPANNING OCCUPANT IS DRAWN AT ON THIS HOST, in degrees, or
+    None where this contract hosts no spanning slot.
+
+    A duplex connector is ONE moulding with two ferrules on an axis, and it
+    cannot turn itself: a seated part takes its host's rotation
+    (`render.solve_seat`, D3). So the axis has to come from the host, and the
+    two adapters in the library disagree about it - `common/lc-duplex-adapter`
+    puts its bores SIDE BY SIDE and `common/lc-duplex-v-adapter` STACKS them,
+    which its own provenance calls "the same duplex pair stood on end". One
+    part drawn on one axis is right on one of them and wrong on the other
+    unless the host says which way round its pair runs.
+
+    DERIVED FROM THE BORES, never from a name or a ref: the direction from the
+    FIRST spanned part's composed mate point to the LAST, snapped to the right
+    angle it lies nearest, is the direction the canonical +x axis has to be
+    carried onto. Composed mate points and not `at`, for L116's reason - a
+    stacked pair and a side-by-side pair differ in box, axis and rotation, and
+    their mate points do not.
+
+    The ORDER is the `parts:` declaration order (`spanned_slots`), so the
+    answer distinguishes a pair running left-to-right from one running
+    right-to-left. That matters for a part whose two halves are not
+    interchangeable - a duplex plug's `a` half carries the fibre its host's
+    first bore does - and is invisible on a symmetric one like a dust cap.
+
+    This is the turn IN THE CONTRACT'S OWN FRAME. A placement of the contract
+    adds its own `rotate` on top, which is a sum because both are rotations of
+    the same plane.
+    """
+    ids = spanned_slots(contract, resolve, connectors)
+    if len(ids) < 2:
+        return None
+    places = {q.get("id"): q for q in (contract.get("parts") or [])}
+    pts = []
+    for bid in ids:
+        q = places.get(bid) or {}
+        core = resolve(q.get("ref")) or {}
+        cm = (core.get("connection-points") or {}).get("mate")
+        if not cm or not core.get("size"):
+            return None                 # a bore with no mate point is L58/L1's
+        pts.append(seat_point(q.get("at") or [0, 0], core["size"],
+                              q.get("rotate"), cm["at"]))
+    dx, dy = pts[-1][0] - pts[0][0], pts[-1][1] - pts[0][1]
+    if dx == 0 and dy == 0:
+        return None                     # two bores on one point is L116's
+    if abs(dx) >= abs(dy):
+        lies_at = 0 if dx >= 0 else 180
+    else:
+        lies_at = 90 if dy > 0 else 270
+    return (lies_at - CANONICAL_SPAN_AXIS) % 360
+
+
+def summed_rotate(rotate, axis):
+    """A placement's own `rotate` turned further by the axis its slot's pair
+    runs on - the ONE spelling of that sum, so the entry `render._slot_dict`
+    publishes and the turn `render.solve_seat` draws at cannot come apart.
+
+    `axis` None means the slot spans nothing and the placement's own answer
+    stands, `None` included: "drawn upright" and "not a question this slot
+    answers" have to stay tellable apart. A whole number comes back as an
+    `int`, because the sum is written straight into an SVG `rotate()` and
+    `rotate(90.0 ...)` is a different string from the one every unspanned
+    placement emits.
+    """
+    if axis is None:
+        return rotate
+    turn = (float(rotate or 0) + float(axis)) % 360
+    return int(turn) if turn == int(turn) else turn
 
 
 def resolve_views(device, cfg):
@@ -296,21 +499,24 @@ def config_airflow(device, cfg):
 #
 # A configuration's `occupants:` may key a cage on a card seated in a bay by the
 # card's MODULE-LESS path - `front-6/xg0` - the convention its nested `bays:`
-# keys already use. The build finds those keys from the module it is drawing
-# (module_key_prefix, occupants_under); lint finds the module from the key
-# (nested_key_host). Both read a bay's occupant with seated_ref and name a
+# keys already use - and, since B3, a slot at any depth, part ids after the
+# bays (`bay-1/lc01/1`). The build finds those keys from the instance it is
+# drawing (slot_key_prefix, occupants_under); lint finds the instance from
+# the key (nested_key_host). Both read a bay's occupant with seated_ref and name a
 # seated occupant with occupant_local_id, so the two directions cannot come to
 # disagree about which module a key reaches or which occupant a chained key
 # names.
 
-def module_key_prefix(path):
-    """The module-less key prefix a configuration uses for what is in the
-    module drawn at `path` - `front-6/module` -> `front-6`, `riser-1/module/
-    slot-1/module` -> `riser-1/slot-1` - or None when `path` is not a module
-    seated in a bay. The same stripping as a nested bay's `bay_path`."""
-    if not path or not path.endswith("/module"):
+def slot_key_prefix(path):
+    """The key prefix a configuration uses for what is on the instance drawn
+    at `path`: the path with every `module` step dropped (B3, P1) -
+    `bay-1/module/lc01` -> `bay-1/lc01`, `front-6/module` -> `front-6`, a
+    device placement's `port-3` -> `port-3` - or None when there is no path.
+    A slot at any depth is keyed this way: part ids from the device's
+    placement or bay down to the slot, a seated bay's `module` left out."""
+    if not path:
         return None
-    return (path[:-len("/module")] + "/").replace("/module/", "/")[:-1]
+    return "/".join(s for s in path.split("/") if s != "module")
 
 
 def seated_ref(cfg_bays, bay_path, bay):
@@ -319,12 +525,66 @@ def seated_ref(cfg_bays, bay_path, bay):
     return (cfg_bays or {}).get(bay_path, (bay or {}).get("default"))
 
 
-def occupant_spec(key, spec):
-    """An `occupants:` value as a dict with a `ref`, or ValueError naming the key."""
+def slot_default(part, contract):
+    """The ref a slot ships holding, or None - the shipped default (B3,
+    docs/pluggables-caps-design.md, "The shipped default").
+
+    `part` is the `parts:` entry (or device placement) that places the slot and
+    `contract` the placed component's. The entry's own `default:` wins - a
+    composer overriding the placed component's TOP-LEVEL default, `""` for
+    none - and otherwise the component's top-level `default:` stands. That is
+    the whole of what a composer can say (P5): the defaults declared INSIDE the
+    placed component, on its own `parts:`, are that component's, and only a
+    configuration's `occupants:` reaches past them."""
+    if "default" in (part or {}):
+        return part["default"] or None
+    return (contract or {}).get("default") or None
+
+
+def drawn_refs(contract):
+    """Every ref a contract draws without a configuration asking: each part's
+    `ref`, each part's `default:`, its own top-level `default:` (which its
+    composer draws unless it overrides it), and each of its `faces:`.
+    Over-inclusive for a dependency walk on purpose - a default is drawn like
+    a composed part.
+
+    A FACE IS DRAWN TOO, and the three walks that read this list - the device
+    lock's `composed` bucket, the build's up-to-date check and lint's
+    `--device` filter - all missed it while it was left out. A cassette's
+    `faces.rear` is drawn as the back of the seated module and a riser's
+    `faces.plan` (or legacy `plan:`) lands in the device's top view, so a
+    rear redrawn under a device went unseen: the FS FHD rears' MPO openings
+    moved from 13.1 x 7.0 to 12.9 x 8.0 and fs/fhd-1ufce's lock reported
+    nothing (roc-ops/Portrayal#405 is that silent redraw). Read through
+    `face_ref`, so both spellings of `plan` count and a new direction in
+    `faces.DIRECTIONS` is followed without a change here."""
+    out = []
+    for part in (contract or {}).get("parts") or []:
+        for r in (part.get("ref"), part.get("default")):
+            if r:
+                out.append(str(r).split(":")[0])
+    if (contract or {}).get("default"):
+        out.append(str(contract["default"]).split(":")[0])
+    for direction in DIRECTIONS:
+        ref = face_ref(contract or {}, direction)
+        if ref:
+            out.append(str(ref).split(":")[0])
+    return out
+
+
+def occupant_spec(key, spec, label=None):
+    """An `occupants:` value as a dict with a `ref`, or ValueError naming the key.
+    An empty string empties the slot (B3, P4): None, and nothing is seated.
+
+    `label` replaces `occupants/<key>` in that message, for a value that is not
+    a configuration's key at all - a slot's shipped `default:`, which no
+    `occupants:` entry named."""
+    if spec == "":
+        return None
     spec = {"ref": spec} if isinstance(spec, str) else spec
     if not isinstance(spec, dict) or not spec.get("ref"):
-        raise ValueError(f"occupants/{key}: names no component - give a ref, "
-                         "or {ref: ..., attrs: ...}")
+        raise ValueError(f"{label or f'occupants/{key}'}: names no component - "
+                         "give a ref, or {ref: ..., attrs: ...}")
     return spec
 
 
@@ -334,11 +594,74 @@ def occupant_local_id(host_id, spec):
     return spec.get("id") or f"{host_id}-occupant"
 
 
+def back_parts(contract, resolve):
+    """{part id: parts entry} of the drawing of `contract`'s BACK - the
+    component its `faces.rear` names - or {} when it has none.
+
+    A SLOT ON A MODULE'S BACK IS KEYED LIKE ONE ON ITS FRONT (B3, Task 7i).
+    The build draws a seated module's back as a projection of the module
+    (render.py `rear:`), so the back's parts are published under the module's
+    own path - `bay-1/module/mtp1`, a cassette's MTP bulkhead - and a slot on
+    one is keyed by the same module-less path, `bay-1/mtp1`. One namespace
+    for the two faces, which is the one the drawing already publishes. A key
+    is looked up on the front first, so a back part sharing a front part's id
+    could not be addressed; no module does that, and
+    spec/tests/test_rear_slots.py holds every module in the library to it."""
+    ref = (((contract or {}).get("faces") or {}).get("rear") or {}).get("ref")
+    back = resolve(ref) if ref else None
+    return {q["id"]: q for q in (back or {}).get("parts") or [] if q.get("id")}
+
+
+def back_hosts(prefix, occupants, back):
+    """The host ids under `prefix` that are on a module's BACK: the ids of
+    `back` (back_parts) and, to a fixed point, the produced id of every
+    occupant keyed on one of them - `mtp1-occupant`, a plug seated in the
+    bulkhead `mtp1`, which a boot can be keyed on in turn. The build splits a
+    module's keys between its two drawings by this set, so the front and the
+    back cannot both claim a key or both let one fall."""
+    on = set(back)
+    under = occupants_under(prefix, occupants) if prefix is not None else {}
+    grew = True
+    while grew:
+        grew = False
+        for host, (_key, spec) in under.items():
+            if host in on and spec is not None:
+                oid = occupant_local_id(host, spec)
+                if oid not in on:
+                    on.add(oid)
+                    grew = True
+    return on
+
+
+def key_on_back(key, device, cfg, resolve):
+    """Whether a module-less `occupants:` key names a slot on the BACK of the
+    module seated in its head bay - `bay-1/mtp1`, or anything keyed under an
+    occupant seated there (back_hosts). The front drawing hands such a key to
+    the rear one, and render_view asks this to know it was handed on rather
+    than dropped. A front part or nested bay of the same id wins, as it does
+    in nested_key_host."""
+    segs = key.split("/")
+    if len(segs) < 2:
+        return False
+    bays = {b["id"]: b for _face, (_n, v) in resolve_views(device, cfg).items()
+            for b in view_parts(v)["bays"]}
+    if segs[0] not in bays:
+        return False
+    ref = seated_ref((cfg or {}).get("bays"), segs[0], bays[segs[0]])
+    module = resolve(ref) if ref else None
+    back = back_parts(module, resolve)
+    front = {q.get("id") for q in (module or {}).get("parts") or []}
+    if not back or segs[1] in front or segs[1] in ((module or {}).get("bays") or {}):
+        return False
+    return segs[1] in back_hosts(segs[0], (cfg or {}).get("occupants"), back)
+
+
 def occupants_under(prefix, occupants):
     """{local host id: (key, spec)} for the `occupants:` keys that name a host
-    directly in the module whose key prefix is `prefix` - `front-6/xg0` under
+    directly on the instance whose key prefix is `prefix` - `front-6/xg0` under
     `front-6`, but not `front-6/slot-1/xg0`, which belongs to the module in
-    that nested bay."""
+    that nested bay, nor `bay-1/lc01/1`, which belongs to the adapter `lc01`.
+    A key that empties its slot (P4) comes back with spec None."""
     out = {}
     for key, spec in (occupants or {}).items():
         rest = key[len(prefix) + 1:] if key.startswith(prefix + "/") else None
@@ -389,47 +712,141 @@ def chained_occupant_ref(host_id, occupants, terminal):
 
 
 def nested_key_host(key, device, cfg, resolve):
-    """Walk a module-less `occupants:` key down the configuration's bays to its
-    host: (host_ref, module_ref, module_path). `resolve(ref)` returns a
-    contract or None. Raises ValueError saying what the key failed to reach.
+    """Walk a module-less `occupants:` key down to its host: (host_ref,
+    module_ref, module_path). `resolve(ref)` returns a contract or None.
+    Raises ValueError saying what the key failed to reach.
+
+    The key's head is a bay in a view this configuration draws, or a device
+    placement in one (an adapter placed directly, `port-1510/1`). After a
+    head bay, each segment is a nested bay of the module reached so far, and
+    once a segment is not, every segment is a PART id of the contract reached
+    so far (B3, deep addressing): `bay-1/lc01/1` is the part `1` of the part
+    `lc01` of whatever `bay-1` seats. `module_ref` and `module_path` are the
+    contract and the drawing path of the innermost instance holding the slot -
+    `bay-1/module/lc01` - which is where the build draws the occupant.
 
     A chained key (`front-6/xg0-occupant`) names the occupant seated on
-    another key of the same module, and resolves to that occupant's ref -
-    however many hops long, via `chained_occupant_ref`."""
+    another key of the same instance, and resolves to that occupant's ref -
+    however many hops long, via `chained_occupant_ref`. ANY SEGMENT may be a
+    chained occupant, not only the last: the head (`port-1510-occupant/a`, a
+    composed part of a plug seated on a device placement) is resolved against
+    this configuration's device-level occupants, and a segment mid-walk
+    (`bay-1/lc01-occupant/a`, the same plug seated on an adapter in a
+    cassette) against the keys of the instance reached so far. Resolving only
+    the head made this function refuse keys the build seats."""
     segs = key.split("/")
     host_id = segs[-1]
-    bays = {b["id"]: b for _face, (_n, v) in resolve_views(device, cfg).items()
+    views = resolve_views(device, cfg)
+    bays = {b["id"]: b for _face, (_n, v) in views.items()
             for b in view_parts(v)["bays"]}
-    if segs[0] not in bays:
-        raise ValueError(f"occupants/{key}: {segs[0]!r} is no bay in any view "
-                         "this configuration draws")
+    # A placement seated by mate-to has no `at`, so it is not a placement this
+    # map can offer: an occupant is named by the CHAINED key that produced it
+    # (P3), which is what the `else` branch below and the mid-walk branch in
+    # the loop resolve. Only a placement with its own `at` belongs here.
+    placements = {q.get("id"): q for _face, (_n, v) in views.items()
+                  for q in view_parts(v)["placements"] if q.get("at") and q.get("ref")}
     cfg_bays = (cfg or {}).get("bays") or {}
-    bay_path, path = segs[0], f"{segs[0]}/module"
-    ref = seated_ref(cfg_bays, bay_path, bays[segs[0]])
+    if segs[0] in bays:
+        where, path = segs[0], f"{segs[0]}/module"
+        ref, in_bays = seated_ref(cfg_bays, where, bays[segs[0]]), True
+    elif segs[0] in placements:
+        where, path = segs[0], segs[0]
+        ref, in_bays = placements[segs[0]]["ref"], False
+    else:
+        # A SEATED OCCUPANT CAN BE THE HEAD TOO: `port-1510-occupant/a` is half
+        # `a` of the duplex plug seated at `port-1510`. The head is resolved by
+        # the SAME chained walk a bare chained key takes (chained_occupant_ref
+        # over this configuration's device-level occupants), and `path` is the
+        # occupant's own drawing path, which is its placement id - instance_group
+        # falls back to `inst_id` when no path is passed, so the build names the
+        # instance exactly this. Reached only when the head is neither a bay nor
+        # a placement, so nothing that resolved before resolves differently.
+        try:
+            ref = chained_occupant_ref(
+                segs[0],
+                {k: (v if isinstance(v, dict) else {"ref": v})
+                 for k, v in ((cfg or {}).get("occupants") or {}).items()
+                 if "/" not in k and v != ""},
+                lambda h: placements[h]["ref"] if h in placements else None)
+        except (KeyError, ValueError):
+            raise ValueError(f"occupants/{key}: {segs[0]!r} is no bay in any view "
+                             "this configuration draws, no placement either, and "
+                             "no occupant of this configuration seats it")
+        where, path, in_bays = segs[0], segs[0], False
     for seg in segs[1:-1]:
         c = resolve(ref) if ref else None
-        nb = ((c or {}).get("bays") or {}).get(seg)
-        if not isinstance(nb, dict):
-            raise ValueError(f"occupants/{key}: names no cage - {bay_path!r} "
-                             f"seats {ref or 'nothing'}, which has no bay {seg!r}")
-        bay_path, path = f"{bay_path}/{seg}", f"{path}/{seg}/module"
-        ref = seated_ref(cfg_bays, bay_path, nb)
+        nb = ((c or {}).get("bays") or {}).get(seg) if in_bays else None
+        if isinstance(nb, dict):
+            where, path = f"{where}/{seg}", f"{path}/{seg}/module"
+            ref = seated_ref(cfg_bays, where, nb)
+            continue
+        q = next((q for q in (c or {}).get("parts") or [] if q.get("id") == seg), None)
+        if q is None or not q.get("ref"):
+            # A SEATED OCCUPANT MID-WALK, the same thing the head branch above
+            # and the terminal block below already resolve, and the reason this
+            # is here rather than only in those two: `bay-1/lc01-occupant/a` is
+            # half `a` of a duplex plug seated on the adapter `lc01` in the
+            # cassette in `bay-1`, and the build seats it - the plug's instance
+            # is drawn at `bay-1/module/lc01-occupant` and carries the keys
+            # whose prefix is its own. Resolving a chained occupant only at
+            # segs[0] made this function refuse a key the build accepted, so
+            # lint failed a seat that rendered.
+            #
+            # SCOPE IS THIS INSTANCE'S OWN KEYS, `occupants_under` the path
+            # reached so far - the same scope the terminal block uses - and the
+            # chain grounds on a part of the contract reached so far.
+            here = {p.get("id"): p for p in (c or {}).get("parts") or []}
+            mine = {h: s for h, (_k, s) in
+                    occupants_under(slot_key_prefix(path),
+                                    (cfg or {}).get("occupants")).items()
+                    if s is not None}
+            try:
+                ref = chained_occupant_ref(
+                    seg, mine,
+                    lambda h: here[h]["ref"] if h in here else None)
+            except (KeyError, ValueError):
+                raise ValueError(f"occupants/{key}: names no cage - {where!r} "
+                                 f"holds {ref or 'nothing'}, which has no bay "
+                                 f"or part {seg!r}, and no occupant seated "
+                                 "there produces it")
+            where, path, in_bays = f"{where}/{seg}", f"{path}/{seg}", False
+            continue
+        where, path, ref, in_bays = f"{where}/{seg}", f"{path}/{seg}", q["ref"], False
     if not ref:
-        raise ValueError(f"occupants/{key}: names no cage - bay {bay_path!r} is "
+        raise ValueError(f"occupants/{key}: names no cage - bay {where!r} is "
                          "empty in this configuration")
     module = resolve(ref)
     if module is None:
-        raise ValueError(f"occupants/{key}: {bay_path!r} seats {ref}, which "
+        raise ValueError(f"occupants/{key}: {where!r} holds {ref}, which "
                          "does not resolve")
     parts = {q.get("id"): q for q in module.get("parts") or []}
     if host_id in parts:
+        if slot_in_slot_at(path, module, host_id, resolve):
+            raise slot_in_slot_error(key, where, host_id)
         return parts[host_id]["ref"], ref, path
+    # A SLOT ON THE MODULE'S BACK (back_parts), or an occupant chained on
+    # one: only a module seated straight into a device bay has a back the
+    # build draws, and only where that bay says where its back is seen
+    # (`rear:`) - otherwise the key would seat nowhere, silently. A back part
+    # is held by the back's own component, drawn at the module's path.
+    back = back_parts(module, resolve) if len(segs) == 2 and in_bays else {}
     mine = {h: s for h, (_k, s) in
-            occupants_under(module_key_prefix(path), (cfg or {}).get("occupants")).items()}
+            occupants_under(slot_key_prefix(path), (cfg or {}).get("occupants")).items()
+            if s is not None}
+    if host_id in back_hosts(slot_key_prefix(path), (cfg or {}).get("occupants"), back):
+        drawn = {vname for _face, (vname, _v) in views.items()}
+        if (bays[segs[0]].get("rear") or {}).get("view") not in drawn:
+            raise ValueError(f"occupants/{key}: {host_id!r} is on the back of "
+                             f"{ref}, and bay {segs[0]!r} shows no back in any "
+                             "view this configuration draws (no `rear:`)")
+        if host_id in back:
+            return back[host_id]["ref"], module["faces"]["rear"]["ref"], path
     try:
         host_ref = chained_occupant_ref(
-            host_id, mine, lambda h: (parts[h]["ref"] if h in parts else None))
+            host_id, mine, lambda h: (parts[h]["ref"] if h in parts
+                                      else back[h]["ref"] if h in back else None))
     except (KeyError, ValueError):
-        raise ValueError(f"occupants/{key}: names no cage on {ref} seated at "
-                         f"{bay_path!r}")
+        raise ValueError(f"occupants/{key}: names no cage on {ref} at "
+                         f"{where!r} - no part {host_id!r}, and no occupant "
+                         "seated there produces it")
     return host_ref, ref, path

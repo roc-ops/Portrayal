@@ -14,6 +14,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
+import warmrender
 from portrayal.manifest import presented_interface  # noqa: E402
 
 
@@ -63,12 +64,19 @@ def test_the_forwarded_point_is_where_the_author_already_put_it():
     assert disagree <= 1, f"{disagree} wrappers disagree; investigate before relaxing"
 
 
-def test_a_multi_bore_adapter_declines_rather_than_guessing():
-    """`lc-duplex-adapter` composes TWO LC bores and its own point is their
-    midpoint. A fibre landing on a ferrule is not a module entering a cage, and
-    picking one of the two bores would be inventing which."""
-    iface, at, _ = presented_interface(contract("common/lc-duplex-adapter/v5"), resolve)
-    assert iface is None and at is None
+def test_a_multi_bore_adapter_presents_its_own_interface_not_a_bore():
+    """`lc-duplex-adapter` composes TWO LC bores, and FORWARDING still declines
+    to pick one of them - picking either would be inventing which. What it
+    presents is its OWN interface: `lc-duplex`, the pair taken together, at the
+    midpoint the contract declares (B3, "The duplex host"). The forwarding path
+    is untouched; this contract no longer reaches it, because a contract that
+    declares its own interface and point forwards nothing."""
+    d = contract("common/lc-duplex-adapter/v6")
+    iface, at, _ = presented_interface(d, resolve)
+    assert iface == "lc-duplex" != resolve(d["parts"][0]["ref"])["interface"]
+    assert at == list(d["connection-points"]["mate"]["at"])
+    assert at not in [resolve(q["ref"])["connection-points"]["mate"]["at"]
+                      for q in d["parts"]]
 
 
 def test_the_optical_form_factors_can_all_host():
@@ -105,6 +113,18 @@ def test_the_two_modelled_optics_have_a_cage_that_will_take_them():
             f"{d['name']} mates {d['mates']!r} and no port presents it"
 
 
+# A PORT EXEMPT FROM THE DEPTH RULE, with the reason. Every entry must still be
+# a port that would otherwise fail, or the exemption is stale.
+SHALLOW_BY_DESIGN = {
+    # std/mpo presents `mpo` since 1.1.0 (B3), so this adapter now forwards
+    # it. Its face is a raised flange (`bezel`, out 1.2) on a cassette, and a
+    # `size.d` on a fixed part without behaviour carves a hole behind its whole
+    # 13.8 x 9.4 bbox; std/mpo@2's own cavity is the recess a plug seats in.
+    "common/mpo-adapter/v2/contract.yaml":
+        "raised flange; the composed aperture's own cavity is the recess",
+}
+
+
 def test_a_composed_port_is_as_deep_as_its_aperture():
     """With mating working, a module actually seats - and a cage with no depth
     puts it in a flat patch painted on the panel rather than a recess."""
@@ -123,6 +143,9 @@ def test_a_composed_port_is_as_deep_as_its_aperture():
                 for part in (d.get("parts") or [])}
         if deep - {None}:
             shallow.append(p.split("components/")[1])
+    stale = sorted(set(SHALLOW_BY_DESIGN) - set(shallow))
+    assert not stale, f"exempt but no longer shallow - drop the exemption: {stale}"
+    shallow = [p for p in shallow if p not in SHALLOW_BY_DESIGN]
     assert not shallow, f"composed ports with an aperture depth but none of their own: {shallow}"
 
 
@@ -140,7 +163,7 @@ def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
     window showed up as an intermittent failure in a test that never touches
     this file. A corpus other tests read is not a scratch pad.
     """
-    import subprocess, shutil, re as _re
+    import shutil, re as _re
     src = ROOT / "library/devices/edgecore/as7726-32x"
     dev = tmp_path / "as7726-32x" / "device.yaml"
     shutil.copytree(src, dev.parent)
@@ -150,7 +173,7 @@ def test_a_component_with_one_skin_does_not_need_it_named(tmp_path):
                    + "    occupants: {port-1: generic/qsfp-lc@1}\n"
                    + original[m.end():])
     out = tmp_path / "out"
-    r = subprocess.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
+    r = warmrender.run([sys.executable, str(ROOT / "spec/tools/portrayal/render.py"),
                         str(dev), "--library", str(ROOT / "library"), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-400:]

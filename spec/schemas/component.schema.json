@@ -58,6 +58,10 @@
    "$ref": "#/$defs/segment",
    "description": "this component IS a receptacle presenting this mating interface, e.g. sfp, qsfp, rj45, iec-c14. Occupants declare the same key via `mates`. Deliberately not an enum - a new interface is a new key, not a schema change."
   },
+  "default": {
+   "type": "string",
+   "description": "what this component's OWN presented slot ships holding - a ref its accept list contains (L114). Requires the component to be a slot (an `interface` in spec/schemas/pluggables.yaml or connectors.yaml). A composer's `parts:` entry `default:` overrides it; a configuration's `occupants:` overrides both."
+  },
   "interface-at": {
    "$ref": "#/$defs/segment",
    "description": "WHICH connection point the `interface` is presented at; default `mate`. Allowed only beside `interface`. A plug mates INTO its receptacle at `mate` and presents its own interface to a boot at its REAR (`boot`), which is a different point: this names it. Paired with that point's `on:`, it is how a part seated on a plug lands on the plug's rear face rather than inside it."
@@ -398,6 +402,18 @@
         "type": "number",
         "exclusiveMinimum": 0,
         "description": "mm this node is sunk INTO an otherwise solid face - a window cut through a drive carrier, a button pressed into it. Distinct from `sink`, which measures from a cavity floor and so needs the part to be a hole already: a carrier is solid except where it is pocketed, and had no way to say so. The floor is the node's own art, so what is drawn behind a window is what shows down it."
+       },
+       "facet": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["deg", "facing"],
+        "properties": {
+         "deg": {"type": "number", "minimum": 1, "maximum": 89,
+                 "description": "the facet's angle away from face-on, in degrees"},
+         "facing": {"enum": ["up", "down", "left", "right"],
+                    "description": "which way the facet looks. `up`: the upper edge (the root) sits on the plate and the lower edge stands proud, so ports on it look upward; `down` the reverse; `left`: the left-hand edge is the root and the right-hand edge stands proud, so ports on it look left; `right` the reverse"}
+        },
+        "description": "THIS NODE IS A SURFACE ANGLED OFF THE PANEL, and composed parts may sit `on` it. The node's own art and its `elements` rectangle are its FOOTPRINT AS SEEN FROM THE FRONT - what you measure off a front figure. The proud edge stands off by projected extent x tan(deg); the renderer derives the wedge, so a feature with `facet` declares no `out`, `profile` or `profile-y` (L117). The Nokia 7360 ISAM FX NT cards carry their SMA jacks and QSFP28 cages in a housing angled about 30 degrees up, and the NT I/O cards put every cage on a 45 degree sawtooth - drawn face-on, both were wrong in 2D and in 3D. docs/superpowers/specs/2026-09-24-tilted-facets-design.md."
        }
       }
      }
@@ -679,6 +695,10 @@
       "type": "boolean",
       "description": "flip the occupant horizontally about its own centre line; handedness, not rotation - a riser whose cards face the other way"
      },
+     "default": {
+      "type": "string",
+      "description": "what this slot SHIPS HOLDING - a component ref its accept list contains (L114), or \"\" for nothing. The product's shipped state, like a bay's blank: drawn in every configuration unless that configuration's `occupants:` keys this slot. Overrides the placed component's own top-level `default:` and nothing inside it (docs/pluggables-caps-design.md, The shipped default)."
+     },
      "states": {
       "type": "object",
       "description": "what this part's lamps MEAN here, as {element-id: states}. A component declares what a lamp IS - a 2 mm round lamp, a jack with two indicators - and can only guess what it signifies; the thing composing it knows. The same override device placements already take, one level down, so a card can compose a generic jack and attach its own indicator table rather than redrawing the lamps over the ones it composed. Addresses one element at a time, because a jack's two lamps routinely do NOT share a vocabulary.",
@@ -686,6 +706,10 @@
        "type": "array",
        "minItems": 1
       }
+     },
+     "on": {
+      "$ref": "#/$defs/segment",
+      "description": "the relief feature (its `node`) on THIS contract that declares a `facet`, which this part sits on. `at` stays the part's front-view top-left and `size` its TRUE size; the renderer foreshortens it by cos(deg) along the facet's axis, and the 3D viewer builds its cavity along the slope. An occupant seated in it inherits the tilt. L117 checks the facet exists and the projected part lies within it."
      }
     }
    }

@@ -139,8 +139,8 @@ def test_a_plan_face_written_the_legacy_way_must_also_name_a_real_component():
 
 @pytest.mark.parametrize("direction", ["plan", "rear"])
 def test_a_part_may_not_be_its_own_face(direction):
-    got = run83({"faces": {direction: {"ref": "common/mpo-adapter@1"}}},
-                name="common/mpo-adapter@1")
+    got = run83({"faces": {direction: {"ref": "common/mpo-adapter@2"}}},
+                name="common/mpo-adapter@2")
     assert len(got) == 1, got
     assert f"its own {direction}" in got[0]
 
@@ -174,7 +174,7 @@ def test_a_face_may_not_itself_have_a_face_of_the_same_direction(direction, tmp_
 
 @pytest.mark.parametrize("direction", ["plan", "rear"])
 def test_a_real_face_reference_is_quiet(direction):
-    got = run83({"faces": {direction: {"ref": "common/mpo-adapter@1"}}})
+    got = run83({"faces": {direction: {"ref": "common/mpo-adapter@2"}}})
     assert got == [], got
 
 

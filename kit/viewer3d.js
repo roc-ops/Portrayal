@@ -27,8 +27,9 @@ import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief, bodyBoxes, fruFor } from './relief.js';
-import { applyFaceOverrides, applyRearOverrides, refusalReason, viewsToRewrite } from './swap.js';
+         buildFaceRelief, bodyBoxes, fruFor,
+         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject } from './relief.js';
+import { seatViews, seatBack, refusalReason } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
 
@@ -410,43 +411,41 @@ export function createViewer(container, opts = {}) {
   // module never called it, so a port's chosen occupant applied in 2D and
   // stayed whatever the configuration built in 3D - the same divergence a bay
   // swap had before `applyAllOverrides` existed, one seat lower.
+  const byRef = ref => (COMP_INDEX || []).find(
+    c => `${c.ns}/${c.name}@${c.major.slice(1)}` === String(ref).split(':')[0]);
+  const loadSkin = async ref => {
+    const c = byRef(ref);
+    if (!c) return null;
+    const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
+    const url = `${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
+    return {comp: c, text: await svgSource(url, SCOPE)};
+  };
   async function applyBayOverrides(cfg) {
     clearSvgOverrides(SCOPE);
     if (COMP || !Object.keys(OVERRIDES).length) return 0;
-    // WHICH VIEWS THIS MAP TOUCHES, bays and cages together - see
-    // `viewsToRewrite` in swap.js for why the decision lives there instead of
-    // here (it needs to be unit-testable under node, and this file imports
-    // `three`, which a plain node process cannot resolve).
-    const views = viewsToRewrite(devIndex, OVERRIDES);
-    if (!views.length) return 0;
-    const byRef = ref => (COMP_INDEX || []).find(
-      c => `${c.ns}/${c.name}@${c.major.slice(1)}` === ref.split(':')[0]);
-    const loadSkin = async ref => {
-      const c = byRef(ref);
-      if (!c) return null;
-      const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-      const url = `${DIST}components/${c.ns}--${c.name}--${c.major}--${skin}.svg`;
-      return {comp: c, text: await svgSource(url, SCOPE)};
-    };
-    let total = 0;
-    for (const view of views) {
-      const bays = devIndex.bays?.[view] || [];
-      const cages = devIndex.cages?.[view] || [];
+    // EVERY FACE AT ONCE, through the one pass node can run (swap.js
+    // `seatViews`): each face `viewsToRewrite` names, and every face with a
+    // rear hole, goes through `seatFace` - the device's bays at every level
+    // (applyAllOverrides), then every slot of the face as it now stands, the
+    // cards' and the backs' included (#484, B3 Task 10a/10b), then the rear
+    // holes of the bays the map swapped (applyRearOverrides). A key on the
+    // back of a cassette nobody swapped reaches the rear face too; the old
+    // rear pass here re-seated swapped bays only (B3 Task 10c).
+    const roots = {};
+    for (const view of ALL_VIEWS) {
       const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
       let text;
       try { text = await svgSource(url, SCOPE); } catch { continue; }
+      if (!text) continue;
       const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
       if (doc.querySelector('parsererror')) continue;
-      // EVERY LEVEL, not the two the library happens to have today - see
-      // `applyAllOverrides` for why a fixed number of passes is the wrong shape
-      // for this. shell.js never needed it: `bayFor` re-reads the live drawing
-      // on every lookup, so the gap here was always a 2D/3D divergence.
-      // THEN THE CAGES OF THE FACE AS IT NOW STANDS, a card's as well as the
-      // device's (#484): `applyFaceOverrides` in swap.js reads a seated card's
-      // cages off this document after its bays settle. Handed `cages[view]`
-      // alone, an optic chosen on a card was seated in 2D and never here.
-      const {applied: viewApplied, dropped, refused, failed, cages: faceCages} =
-        await applyFaceOverrides(doc.documentElement, {bays, cages}, OVERRIDES, loadSkin, byRef);
+      roots[view] = doc.documentElement;
+    }
+    const seated = await seatViews(roots, {bays: devIndex.bays || {}, cages: devIndex.cages || {}},
+                                   OVERRIDES, loadSkin, byRef);
+    let total = 0;
+    for (const [view, res] of Object.entries(seated)) {
+      const {applied: viewApplied, dropped = [], refused = [], failed = [], cages: faceCages = []} = res;
       if (dropped.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${dropped.length} nested `
                      + `bay override(s) never applied - the drawing nests deeper `
@@ -454,44 +453,56 @@ export function createViewer(container, opts = {}) {
       // A REFUSED CAGE OVERRIDE is the cage counterpart of a dropped bay one -
       // `applyOccupantOverrides` will not half-seat an optic into a cage the
       // build does something to that the kit does not (see swap.js
-      // `refusalReason`: lifted, mirrored, or in a group carrying states), so
+      // `refusalReason`: mirrored, or in a group carrying states), so
       // it leaves the cage empty rather than guess with no real build to check
       // against. The cage shows nothing seated in 2D and 3D alike; only the
       // CHOSEN swap silently failed, and that is worth saying. A FAILED one is
-      // a skin that did not load: the cage keeps what the build seated.
+      // a skin that did not load: the cage keeps what the build seated. A key
+      // on a back that was rebuilt is reported here too (seatFace merges the
+      // rear pass's).
       if (refused.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${refused.length} cage `
                      + `override(s) refused - the kit does not seat an optic into `
-                     + `a lifted or mirrored cage, or one whose group carries `
+                     + `a mirrored cage, or one whose group carries `
                      + `states, so the cage is left empty`,
-                     refused.map(id => `${id} (${refusalReason(faceCages.find(c => c.id === id))})`));
+                     refused.map(id => `${id} (${refusalReason(faceCages.find(c => c.id === id)) || 'rear'})`));
       if (failed.length)
         console.warn(`[portrayal] ${DEV}.${cfg}.${view}: ${failed.length} cage `
                      + `override(s) not applied - the optic's skin did not load, `
                      + `so the cage keeps what the build seated`, failed);
       if (!viewApplied) continue;
-      setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
+      setSvgOverride(`${DIST}${DEV}.${cfg}.${view}.svg`,
+                     new XMLSerializer().serializeToString(roots[view].ownerDocument), SCOPE);
       total += viewApplied;
     }
-    // A SWAPPED BAY SEEN FROM BEHIND. A rear hole names the front bay it shows
-    // (render.py's `rear:`), and a view with no bays of its own is not in
-    // `views` above - so without this pass the back of the drawer kept the
-    // module the build seated. Walked over every face, since the hole is on a
-    // face the swapped bay is not; a face already rewritten above is read back
-    // from its override, which svgSource returns first.
-    for (const view of ALL_VIEWS) {
-      const url = `${DIST}${DEV}.${cfg}.${view}.svg`;
-      let text;
-      try { text = await svgSource(url, SCOPE); } catch { continue; }
-      if (!text.includes('data-rear-of')) continue;
-      const doc = new DOMParser().parseFromString(text, 'image/svg+xml');
-      if (doc.querySelector('parsererror')) continue;
-      const n = await applyRearOverrides(doc.documentElement, OVERRIDES, loadSkin, byRef);
-      if (!n) continue;
-      setSvgOverride(url, new XMLSerializer().serializeToString(doc), SCOPE);
-      total += n;
-    }
     return total;
+  }
+
+  // THE BACK A MODULE HOLDS, for relief.js's back pass (B3 Task 10c). A
+  // cassette's back in 3D is built from the module's own back drawing
+  // (`body.sides.rear`), not from the rear face's flat projection, so a key
+  // on a back (`bay-1/module/mtp1`) is seated into a copy of that drawing
+  // (swap.js `seatBack`: at the slot's lift, its `out`s as published) and
+  // relief builds the copy, one per bay - two cassettes of one kind share a
+  // shipped drawing and not a choice. Every key under the bay counts,
+  // whether or not the bay itself was swapped. With no key, or nothing
+  // seated, the shipped drawing is built, as before.
+  async function backSource(bay, moduleRef, url) {
+    if (COMP || !Object.keys(OVERRIDES).some(k => k.startsWith(`${bay}/module/`))) return url;
+    const text = await svgSource(url, SCOPE);
+    const doc = text ? new DOMParser().parseFromString(text, 'image/svg+xml') : null;
+    if (!doc || doc.querySelector('parsererror')) return url;
+    const res = await seatBack(doc.documentElement, {bay, moduleRef}, OVERRIDES, loadSkin, byRef);
+    const missed = [...res.refused, ...res.failed, ...res.dropped];
+    if (missed.length)
+      console.warn(`[portrayal] ${DEV}: the back of ${bay} did not take `
+                   + `${missed.length} key(s) - a plug whose skin did not load keeps `
+                   + `what the back shipped, and a key naming no slot of this back `
+                   + `(or one a front part shadows) seats nothing`, missed);
+    if (!res.applied) return url;
+    const own = `${url}#${bay}`;
+    setSvgOverride(own, new XMLSerializer().serializeToString(doc), SCOPE);
+    return own;
   }
 
   async function build(cfg) {
@@ -542,9 +553,20 @@ export function createViewer(container, opts = {}) {
     // `deep` is how far INTO the box this face looks, and it is a different number
     // per face - the depth on front and rear, the width on the sides, the height on
     // the top and the bottom. It used to be the depth everywhere.
+    // A PART WITH NO DEPTH OF ITS OWN - no `body`, no `size.d`, as a face
+    // component must not have one (a `d` on a fixed part is a pit) - is drawn
+    // alone on a 2 mm plate (D above), and that plate is a placeholder, not a
+    // wall its relief runs into. Handed as the depth relief may reach, it made
+    // every cavity 0 deep (buildFaceRelief keeps a cavity `INTO - 2` short of
+    // the far side), which puts a bore's textured floor 0.1 mm IN FRONT of
+    // its own mouth: common/lc-duplex-shuttered-adapter@2 alone drew its open
+    // bores over its shutters (the floor at +3.275, the doors at +2.725),
+    // while every device holding it drew the doors (B3 Task 10c). Such a part
+    // is not clamped; a part that declares a depth is, as before.
+    const compDeep = () => (COMP_ENTRY.body || COMP_ENTRY.size?.d) ? D : Infinity;
     const FACES = COMP ? [
       {view: 'comp', url: DIST + COMP_ENTRY.files[cfg],
-       fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
+       fw: () => W, fh: () => H, deep: compDeep, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
     ] : [
       {view: 'front', fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, D / 2], rot: [0, 0, 0]},
       {view: 'rear',  fw: () => W, fh: () => H, deep: () => D, pos: () => [0, 0, -D / 2], rot: [0, Math.PI, 0]},
@@ -563,7 +585,7 @@ export function createViewer(container, opts = {}) {
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
                                 faceMM,
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
-                                bodyBoxMesh, dist: DIST,
+                                bodyBoxMesh, dist: DIST, backSource,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -757,14 +779,29 @@ export function createViewer(container, opts = {}) {
       const svg = div.querySelector('svg');
       if (!svg) { div.remove(); continue; }
       const inv = svg.getScreenCTM().inverse();
+      // A PART ON A FACET carries its tilt (relief.js tiltTools), so the halo
+      // can stand in the same frame its relief was built in
+      let TT = null;
+      const tiltAt = el => {
+        const t = tiltOf(el);
+        if (!t) return null;
+        if (!TT) { const T = nodeTools(svg);
+                   TT = tiltTools(svg, {mmRect: T.mmRect, liftOf: T.liftOf,
+                                        ctmOf: n => inv.multiply(n.getScreenCTM())}); }
+        const r = TT.tiltRec(t);
+        return r ? r.tilt : null;
+      };
       const rec = el => {
         const b = el.getBBox();
         const m = inv.multiply(el.getScreenCTM());
         const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height]]
           .map(([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f}));
-        return {path: el.dataset.path, cls: el.dataset.class || '',
+        const r = {path: el.dataset.path, cls: el.dataset.class || '',
                 model: el.dataset.model || '', x0: Math.min(pts[0].x, pts[1].x), y0: Math.min(pts[0].y, pts[1].y),
                 x1: Math.max(pts[0].x, pts[1].x), y1: Math.max(pts[0].y, pts[1].y)};
+        const tilt = tiltAt(el);
+        if (tilt) r.tilt = tilt;
+        return r;
       };
       hitIndex[view] = [...svg.children]
         .filter(el => el.dataset && el.dataset.path && el.dataset.class !== 'region')
@@ -885,8 +922,20 @@ export function createViewer(container, opts = {}) {
     // the same LX/LY relief.js places a part with, mirror and all
     const lx = (flipX ? -1 : 1) * (c.x0 + w / 2 - fw / 2);
     const ly = (flipY ? -1 : 1) * (fh / 2 - (c.y0 + h / 2));
+    // A PART ON A FACET: the halo takes the part's true box and stands in its
+    // tilt frame - inside the owning FRU's group when that is tilted already,
+    // so it rides the optic out. The frame below keeps the front-view centre.
+    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
+    let into = owner || grp, hw = w, hh = h, hx = lx, hy = ly;
+    if (c.tilt) {
+      const u = unproject({x: c.x0, y: c.y0, w, h}, c.tilt);
+      hw = u.w; hh = u.h;
+      hx = (flipX ? -1 : 1) * (u.x + u.w / 2 - fw / 2);
+      hy = (flipY ? -1 : 1) * (fh / 2 - (u.y + u.h / 2));
+      into = tiltGroupIn(into, c.tilt, {fw, fh, flipLX: flipX, flipLY: flipY});
+    }
     hl = new THREE.Group();
-    const geo = new THREE.PlaneGeometry(w, h);
+    const geo = new THREE.PlaneGeometry(hw, hh);
     // depthTest off, drawn last: the same argument hl.js makes in 2D - a halo that
     // neighbours can paint over is not a halo. Here the neighbour is a handle or a
     // cage standing proud of the face.
@@ -897,12 +946,11 @@ export function createViewer(container, opts = {}) {
     hl.add(new THREE.Mesh(geo, fillMat));
     hl.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
     hl.traverse(o2 => { o2.renderOrder = 999; });
-    hl.position.set(lx, ly, 0.8);
+    hl.position.set(hx, hy, 0.8);
     // ride with the module if it is a FRU, so ejecting it does not leave the
     // marker behind on the chassis
     // (the longest prefix that is one - a card's optic is a FRU inside its card)
-    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
-    (owner || grp).add(hl);
+    into.add(hl);
     if (o.frame !== false) frameOn(grp, lx, ly, w, h);
     return true;
   }
