@@ -1,0 +1,182 @@
+format: 1
+kind: module
+name: fglt-b
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FGLT-B (3FE 68954 AB), the 16-port GPON line termination board with traffic
+  manager (version B) of the 7360 ISAM FX and Lightspan FX. Seats in any LT slot of the
+  FX-4, FX-8 and FX-16. Authored upright, as the Unit Data Sheet guides draw it: a
+  thumbscrew and a grey ejector lever in a cap at each end, the PWR and ALM lamps and a
+  hot-surface mark under the top cap, then eight windows in a flat faceplate, each
+  showing two SFP cages angled on a sawtooth behind the plate (16 GPON ports), and the
+  barcode and model labels above the bottom cap. One PON lamp per port sits in the side
+  of its socket, on the port's left. The face is the FGLT-A's; only the model label
+  differs.
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (FX-4 NFXS-F, FX-8 NFXS-E, FX-16
+  NFXS-D); the coordinator adds it to those bays' accepts.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), the width the shared 7360 FX LT bay is built to;
+  the faceplate's own edge-to-edge width is not stated. d is the board's depth at its
+  top, 225 mm; the UDS gives 205 mm at the bottom (the board is stepped, and Figure 183
+  draws the step).
+attrs:
+  model: FGLT-B AB
+  part-number: 3FE 68954 AB
+  gpon-ports: 16
+  weight-kg: 1.1
+  power-draw-max-w: 100
+  power-draw-typical-w: 89
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 38.5.2
+    (p396): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm; ETSI UDS 3FE77012AAAATQZZA18 section 35.5.2 prints the same. The UDS "width" is
+    the board's depth into the shelf. Face held at the 25 mm pitch by the shared 7360 FX
+    convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 38.5.2; faceplate width not stated, taken
+    as the pitch. The photograph below measures the plate at 25.1 mm across at the scale
+    its own window pitch gives, which agrees to the pixel it resolves.
+  depth: >-
+    datasheet - 225 mm at the top, 205 mm at the bottom, section 38.5.2; 225 carried as
+    the envelope. ETSI Figure 137 (p340, 1848 x 1490 at 300 ppi) is an orthographic side
+    elevation that measures 227.5 and 207.6 mm at its own 3.459 px/mm, so the drawing is
+    to scale.
+  weight: 'datasheet - 1.1 kg, Lightspan UDS A23 section 38.5.2 (p396)'
+  power: >-
+    datasheet - Lightspan FX Safety Manual 3HH91852AAAATCZZA07 p37 Table 2 and ANSI Safety
+    Manual 3HH12894AAAATCZZA27 p25 Table 2: FGLT-B 89 W typical, 100 W maximum. Neither
+    table's notes say whether the SFP optics are inside the figure (the one note that
+    speaks to scope is FANT-F's, which excludes NTIO and SFPs), so that scope is open
+    (gap).
+  layout: >-
+    photo-measured along the card, drawing-checked. The guides draw this card only in
+    side elevation (ETSI Figure 137 p340, Lightspan Figure 183 p396, ANSI Figure 109): the
+    faceplate is seen edge-on, a flat plate with eight sawtooth teeth behind it on a 38.2
+    mm pitch (tooth apexes at 54.9 to 358.2 mm on the 405). The face comes from the
+    drinia.tech olt1.jpg photograph (2000 x 2000, card horizontal, top end at the left),
+    near orthographic: the plate reads 116 px across and the window pitch 177 px, which
+    is 25.1 mm and 38.3 mm at 4.63 px/mm, so both axes agree. The thunder-link
+    5061fglt-b-2.jpg photograph (1200 px) shows the same face and was used to confirm it.
+    Along the card the photo is anchored to the drawing at the end of window 8 (358 mm);
+    top cap to 16.8, PWR lamp 31.5, ALM 36.5, hot-surface mark 34.0-42.0, window 1 from
+    43.0, the bars between windows at 89.5 + 38.3 n (measured 89.5, 127.5, 165.3, 203.1,
+    241.8, 280.2, 319.3), window 8 to 355.6, barcode label 360.2-387.2, model label
+    366.9-383.0, bottom cap from 388.5. The metal itself starts about 6.5 mm down: above
+    that only the thumbscrew and lever reach, and they are drawn inside the 405 as the
+    family convention asks. Across: windows 2.5-23.0, lamps at 14.6 with
+    their legends to the right, the mark at 3.6-11.6. About 1.5 mm error along, 1 mm
+    across.
+  layout-rotation: >-
+    the photograph is of a horizontal card; the legends PWR and ALM read upright when the
+    card stands with the lamp end at the top, which is what fixes the mapping (photo top
+    edge = card right edge). The ETSI LED close-up Figure 138 (p341) draws the same:
+    lamp left, legend right, PWR above ALM. The hot-surface triangle then points to the
+    right on the upright card, as the photograph shows it upright on the horizontal one.
+  ports: >-
+    datasheet for the count - UDS section 38.4: 16 GPON ports for SFP GPON optical
+    modules. Composed as std/sfp@1 turned 90 (the SFP's 13.7 mm width along the card),
+    two per window; the cages are angled on the sawtooth, so the aperture drawn is their
+    projection and its position within each window is taken at the quarter points (about
+    2 mm). Numbered 1-16 from the top: ASSUMED, as no figure or photograph resolves a
+    numeral at any cage (gap). Which way the cage latch faces is not resolved either.
+  lamps: >-
+    datasheet - Figure 184 / ETSI Figure 138 and Table 150. PWR: off = power off,
+    blinking green = initialisation; no steady state is listed and none is drawn. ALM: red
+    = alarm. PON lamp (one per port, "worked into the side of the optical socket", "on the
+    left of the corresponding PON interface"): off, yellow, green, red. Placed at x 5.0
+    level with each cage; no image resolves the light pipe itself (gap).
+  labels: >-
+    photo-measured - a white barcode label and a small model label reading FGLT-B above
+    the bottom cap; drawn as placeholder blocks (no serial is transcribed). Beside the
+    model label the photo shows the vendor mark; that is the logo-zone.
+  relief: >-
+    estimated - the two grey ejector levers stand proud; no document gives a figure, so
+    the library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is
+    used. The caps, windows and sawtooth are not raised.
+  colour: >-
+    photo - light silver-grey plate, slightly darker end caps, grey plastic levers,
+    knurled silver thumbscrews, a yellow hot-surface label, white labels.
+  lifecycle: >-
+    searched only the staged corpus - current in the Lightspan UDS A23 and ETSI UDS A18;
+    no end-of-life notice was searched for on the web.
+elements:
+  logo-zone: {at: [0.5, 383.4], size: [5.0, 4.4], class: label}
+  model-label: {at: [0.4, 366.9], size: [5.4, 16.1], class: label}
+  barcode-label: {at: [7.1, 360.2], size: [13.4, 27.0], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: the sixteen GPON ports (2.488 Gbps down, 1.244 Gbps up), SFP GPON optics
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON lamp per port, in the side of its socket on the port's left
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR and ALM
+parts:
+  - {ref: std/sfp@1, id: port-1, group: pon, at: [6.25, 56.84], rotate: 90}
+  - {ref: std/sfp@1, id: port-2, group: pon, at: [6.25, 73.9], rotate: 90}
+  - {ref: std/sfp@1, id: port-3, group: pon, at: [6.25, 95.14], rotate: 90}
+  - {ref: std/sfp@1, id: port-4, group: pon, at: [6.25, 112.2], rotate: 90}
+  - {ref: std/sfp@1, id: port-5, group: pon, at: [6.25, 133.44], rotate: 90}
+  - {ref: std/sfp@1, id: port-6, group: pon, at: [6.25, 150.5], rotate: 90}
+  - {ref: std/sfp@1, id: port-7, group: pon, at: [6.25, 171.74], rotate: 90}
+  - {ref: std/sfp@1, id: port-8, group: pon, at: [6.25, 188.8], rotate: 90}
+  - {ref: std/sfp@1, id: port-9, group: pon, at: [6.25, 210.04], rotate: 90}
+  - {ref: std/sfp@1, id: port-10, group: pon, at: [6.25, 227.1], rotate: 90}
+  - {ref: std/sfp@1, id: port-11, group: pon, at: [6.25, 248.34], rotate: 90}
+  - {ref: std/sfp@1, id: port-12, group: pon, at: [6.25, 265.4], rotate: 90}
+  - {ref: std/sfp@1, id: port-13, group: pon, at: [6.25, 286.64], rotate: 90}
+  - {ref: std/sfp@1, id: port-14, group: pon, at: [6.25, 303.7], rotate: 90}
+  - {ref: std/sfp@1, id: port-15, group: pon, at: [6.25, 324.94], rotate: 90}
+  - {ref: std/sfp@1, id: port-16, group: pon, at: [6.25, 342], rotate: 90}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [4, 60.84], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [4, 77.9], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [4, 99.14], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [4, 116.2], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [4, 137.44], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [4, 154.5], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [4, 175.74], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [4, 192.8], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [4, 214.04], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [4, 231.1], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [4, 252.34], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [4, 269.4], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [4, 290.64], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [4, 307.7], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [4, 328.94], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [4, 346], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.6, 30.5], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [13.6, 35.5], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

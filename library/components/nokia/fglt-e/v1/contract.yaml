@@ -1,0 +1,206 @@
+format: 1
+kind: module
+name: fglt-e
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FGLT-E (3FE 76835 AA, and the AE functional variant), the 32-port GPON line
+  termination board with traffic manager of the 7360 ISAM FX and Lightspan FX: sixteen
+  cages, each taking a dual-GPON OLT pluggable, so two PON interfaces per cage. Seats in
+  any LT slot of the FX-4, FX-8 and FX-16. Authored upright, as the Unit Data Sheet
+  guides draw it: a thumbscrew and the model label at the top beside the ejector, the
+  sixteen cages one per tooth of a sawtooth, each numbered on the left strip between its
+  two PON lamps, then the ESD and hot-surface marks, the ALM and PWR lamps, a blank label
+  and the bottom thumbscrew.
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (FX-4 NFXS-F, FX-8 NFXS-E, FX-16
+  NFXS-D); the coordinator adds it to those bays' accepts.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), the width the shared 7360 FX LT bay is built to;
+  the faceplate's own edge-to-edge width is not stated. d is the board's depth at its
+  top, 225 mm; the UDS gives 205 mm at the bottom.
+attrs:
+  model: FGLT-E
+  part-number: 3FE 76835 AA / 3FE 76835 AE
+  gpon-ports: 32
+  weight-kg: 2.76
+  power-draw-max-w: 85
+  power-draw-typical-w: 80
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 40.5.1
+    (p416): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm; ETSI UDS 3FE77012AAAATQZZA18 section 37.5.1 prints the same. The UDS "width" is
+    the board's depth into the shelf. Face held at the 25 mm pitch by the shared 7360 FX
+    convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 40.5.1; faceplate width not stated, taken
+    as the pitch. Figure 149's plate is 86 px across at 3.44 px/mm = 25.0 mm, within 1% of
+    the scale along the card.
+  depth: 'datasheet - 225 mm at the top, 205 mm at the bottom, section 40.5.1; 225 carried as the envelope'
+  weight: >-
+    datasheet - 2.76 kg, Lightspan UDS A23 section 40.5.1 (p416), and the ETSI Product
+    Information Guide 3HH11997AAAATCZZA42 p153 Table 103 agrees; a 1.12 kg figure the
+    coverage grid records from an earlier Product Information Manual is the FGLT-D's
+    weight and reads as a copy error.
+  power: >-
+    datasheet - Lightspan FX Safety Manual 3HH91852AAAATCZZA07 p37 Table 2 and ANSI Safety
+    Manual 3HH12894AAAATCZZA27 p25 Table 2: FGLT-E 80 W typical, 85 W maximum. Neither
+    table's notes say whether the optics are inside the figure, so that scope is open
+    (gap).
+  layout: >-
+    drawing - ETSI UDS A18 Figure 149 (p359, embedded 1435 x 1510 at 300 ppi; Lightspan
+    Figure 195 p414 is a 150 ppi JPEG of the same art), a FLAT front view with callouts.
+    The plate spans image y 46 to 1457 (3.484 px/mm along the 405) and x 1037 to 1123
+    across (3.44 px/mm on 25): aspect within 1%, so positions are taken directly. Top
+    thumbscrew at 6.3, model label 11.5-22.4, ejector handle to 29.9; cage 1 top at 38.7,
+    sixteen cages 13.8 long on a 20.59 pitch (71.73 px, measured over fifteen repeats);
+    each cage's numeral on the left strip at its top edge, between two lamp pads at -4.5
+    and +4.1; ALM and PWR at 379.1; blank label 382.6-393.2; bottom thumbscrew at 400.4.
+    Across: cages 6.0-17.2 (centred 11.6), pads at 3.0, numerals at 2.4, lamps at 8.8
+    and 13.7. About 1 mm error.
+  layout-compression: >-
+    the ESD and hot-surface marks are drawn at 361.1-368.0, which would touch cage 16
+    (to 361.6 at the measured pitch); they are moved down to 365.0-372.0, clear of the
+    cage and of the lamp legends. The recess behind the cages ends at 364.0.
+  ports: >-
+    datasheet - UDS section 40.3/40.4.2: "16 physical PON cages, each supporting
+    dual-GPON OLT pluggable modules", up to 32 GPON interfaces. Composed as std/sfp@1
+    turned 90, the cage drawn 13.8 long and about 11 across (the SFP width along the
+    card), one per cage, id cage-N. Figure 149's callouts give cage N as "Port 2N-1, 2N"
+    (Port 1, 2 ... Port 31, 32), top to bottom. The printed numerals beside the cages read
+    1, 2, 3 ... 15, 16 in the figure (set a quarter turn, reading top to bottom), one per
+    cage, although the text says the cages are
+    "labeled 1 to 32"; the figure is transcribed (gap). A component part cannot carry
+    `interfaces:`, so the two PON interfaces per cage live in the group description and
+    the lamps, not as named interfaces (gap).
+  lamps: >-
+    datasheet - Figure 197 / ETSI Figure 151 and Table 154. PWR: off, blinking green =
+    initialisation, green = power present. ALM: red = alarm. PON lamps, "one PON LED per
+    port (two PON LEDs per cage) at the side of the optical cage": off, yellow, green, red.
+    Figure 149 draws the pair as the two small pads on the left strip beside each cage's
+    numeral; the upper is taken as the odd port and the lower as the even, which is
+    ASSUMED from the callout order (gap). ALM sits left of PWR, side by side under their
+    legends, in the flat front; the close-up stacks them and is generic art.
+  labels: >-
+    drawing - a label box at the top with the model placeholder "XXXX-X" and three lines
+    of placeholder text (drawn as the model name and grey bars; no serial is transcribed),
+    and an empty label frame above the bottom thumbscrew.
+  marks: >-
+    drawing - an ESD triangle (left) and a hot-surface triangle (right) above the lamps,
+    both upright in the flat front.
+  variants: >-
+    datasheet - Table 153: 3FE 76835 AA and AE share the mnemonic; AE is a functional
+    variant with alternative components that needs newer software. No document draws the
+    two apart, so they are one component with both part numbers.
+  logo-zone: >-
+    reserved by the family convention; the flat front draws no mark, so the zone sits on
+    the empty metal between the model label and the first lamp.
+  relief: >-
+    estimated - the two ejector handles stand proud; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is used.
+    The sawtooth is not raised: an `out` would come to the front and bury the cages.
+  colour: >-
+    borrowed - no photograph of an FGLT-E is known (working/intake/nokia/PUBLIC-SOURCES.md
+    section 3); the family's light silver-grey plate and dark ejectors are used, and the
+    hot-surface mark is filled yellow as the FGLT-B photographs show it (the figure is
+    black and white).
+  lifecycle: >-
+    searched only the staged corpus - current in the Lightspan UDS A23 and ETSI UDS A18;
+    no end-of-life notice was searched for on the web.
+elements:
+  logo-zone: {at: [7.5, 23.6], size: [15.5, 8.7], class: label}
+  model-label: {at: [6.7, 11.5], size: [15.1, 10.9], class: label}
+  blank-label: {at: [7.3, 382.6], size: [14.5, 10.6], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+groups:
+  pon-cages:
+    term: Cage
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: >-
+      the sixteen dual-GPON cages, two PON interfaces each - cage N carries ports 2N-1
+      and 2N (GPON, 2.488 Gbps down)
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: two PON lamps per cage, one per port, on the cage's left - lamp N is port N
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: cage-1, group: pon-cages, at: [4.35, 40.55], rotate: 90}
+  - {ref: std/sfp@1, id: cage-2, group: pon-cages, at: [4.35, 61.14], rotate: 90}
+  - {ref: std/sfp@1, id: cage-3, group: pon-cages, at: [4.35, 81.73], rotate: 90}
+  - {ref: std/sfp@1, id: cage-4, group: pon-cages, at: [4.35, 102.32], rotate: 90}
+  - {ref: std/sfp@1, id: cage-5, group: pon-cages, at: [4.35, 122.91], rotate: 90}
+  - {ref: std/sfp@1, id: cage-6, group: pon-cages, at: [4.35, 143.5], rotate: 90}
+  - {ref: std/sfp@1, id: cage-7, group: pon-cages, at: [4.35, 164.09], rotate: 90}
+  - {ref: std/sfp@1, id: cage-8, group: pon-cages, at: [4.35, 184.68], rotate: 90}
+  - {ref: std/sfp@1, id: cage-9, group: pon-cages, at: [4.35, 205.27], rotate: 90}
+  - {ref: std/sfp@1, id: cage-10, group: pon-cages, at: [4.35, 225.86], rotate: 90}
+  - {ref: std/sfp@1, id: cage-11, group: pon-cages, at: [4.35, 246.45], rotate: 90}
+  - {ref: std/sfp@1, id: cage-12, group: pon-cages, at: [4.35, 267.04], rotate: 90}
+  - {ref: std/sfp@1, id: cage-13, group: pon-cages, at: [4.35, 287.63], rotate: 90}
+  - {ref: std/sfp@1, id: cage-14, group: pon-cages, at: [4.35, 308.22], rotate: 90}
+  - {ref: std/sfp@1, id: cage-15, group: pon-cages, at: [4.35, 328.81], rotate: 90}
+  - {ref: std/sfp@1, id: cage-16, group: pon-cages, at: [4.35, 349.4], rotate: 90}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2, 33], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [2, 41.6], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [2, 53.59], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [2, 62.19], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [2, 74.18], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [2, 82.78], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [2, 94.77], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [2, 103.37], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [2, 115.36], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [2, 123.96], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [2, 135.95], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [2, 144.55], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [2, 156.54], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [2, 165.14], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [2, 177.13], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [2, 185.73], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-17, group: pon-leds, at: [2, 197.72], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-18, group: pon-leds, at: [2, 206.32], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-19, group: pon-leds, at: [2, 218.31], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-20, group: pon-leds, at: [2, 226.91], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-21, group: pon-leds, at: [2, 238.9], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-22, group: pon-leds, at: [2, 247.5], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-23, group: pon-leds, at: [2, 259.49], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-24, group: pon-leds, at: [2, 268.09], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-25, group: pon-leds, at: [2, 280.08], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-26, group: pon-leds, at: [2, 288.68], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-27, group: pon-leds, at: [2, 300.67], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-28, group: pon-leds, at: [2, 309.27], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-29, group: pon-leds, at: [2, 321.26], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-30, group: pon-leds, at: [2, 329.86], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-31, group: pon-leds, at: [2, 341.85], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-32, group: pon-leds, at: [2, 350.45], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [7.8, 378.1], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [12.7, 378.1], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
