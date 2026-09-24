@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nglt-c
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -83,7 +83,7 @@ provenance:
   relief: >-
     estimated - the ejector levers stand proud of the plate; no document gives a figure,
     so the library's pooled release-hardware estimate (4.2) is used, as on the FNIO
-    cards. The sawtooth is NOT raised.
+    cards. The sawtooth is carried as facets (angled-panel), not as an `out`.
   colour: >-
     photo - the plate is light silver-grey and the levers mid-grey plastic (about
     #6e7275) in the thunder-link photographs, not the dark ejectors of the FX NT cards.
@@ -92,12 +92,36 @@ provenance:
   lifecycle: >-
     searched only the staged corpus - listed in ANSI UDS R6.9; no end-of-life notice was
     searched for on the web.
+  angled-panel: >-
+    estimated - NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8, the vector 3D view rendered
+    at 900 dpi. The sawtooth lies in a recess with its apexes toward the viewer and two
+    cages on the upper, longer edge of each tooth, so the ports look up. One tooth
+    measures 321 px down to the apex, 64 px back and 93 px deep; with the edge of the
+    board as the depth axis (4.5-4.7 px/mm across, 1.6-2.0 down) and 9.44 px/mm along
+    the card, that is about 30 and 10 mm of front view and 20 mm deep: 33-34 degrees and
+    61-64 degrees. Modelled as four teeth of 34 degrees up (face-N, two cages and their
+    PON lamps on it) and 63 down (return-N) on the 40.6 pitch, face 30.22 and return
+    10.38 mm of front view, apex 20.38 mm, roots at 52.3 + 40.6 n; the cages keep their
+    positions. The depth axis is read off a drawn edge, so the angles are good to a few
+    degrees only. The recess in Figure 8 ends at about 201, cutting the last face short
+    of its apex; the model runs face-4 to 204.3 and its return to 214.7 on the bare
+    plate so the last pair of cages stays inside a tooth. The recess floor is modelled
+    as the plate, so the teeth stand 20.4 mm proud where the Nokia apexes sit about
+    level with the plate front (gap).
 elements:
   logo-zone: {at: [11.0, 15.0], size: [5.0, 5.0], class: label}
   laser-label: {at: [5.6, 30.8], size: [6.2, 5.4], class: label}
   label-part: {at: [1.0, 361.1], size: [8.6, 4.9], class: label}
   label-model: {at: [3.8, 367.7], size: [3.9, 15.5], class: label}
   label-serial: {at: [12.5, 366.0], size: [11.5, 19.7], class: label}
+  face-1: {at: [2.5, 52.3], size: [20, 30.216], class: mechanical}
+  return-1: {at: [2.5, 82.516], size: [20, 10.384], class: mechanical}
+  face-2: {at: [2.5, 92.9], size: [20, 30.216], class: mechanical}
+  return-2: {at: [2.5, 123.116], size: [20, 10.384], class: mechanical}
+  face-3: {at: [2.5, 133.5], size: [20, 30.216], class: mechanical}
+  return-3: {at: [2.5, 163.716], size: [20, 10.384], class: mechanical}
+  face-4: {at: [2.5, 174.1], size: [20, 30.216], class: mechanical}
+  return-4: {at: [2.5, 204.316], size: [20, 10.384], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -113,6 +137,38 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: face-1
+      facet: {deg: 34, facing: up}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: return-1
+      facet: {deg: 63, facing: down}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: face-2
+      facet: {deg: 34, facing: up}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: return-2
+      facet: {deg: 63, facing: down}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: face-3
+      facet: {deg: 34, facing: up}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: return-3
+      facet: {deg: 63, facing: down}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: face-4
+      facet: {deg: 34, facing: up}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
+    - node: return-4
+      facet: {deg: 63, facing: down}
+      confidence: estimated
+      source: 'NGLT-C UDS 3FE67301AAAATQZZA04 p10 Figure 8 at 900 dpi: run and rise of one tooth, depth corrected for the oblique view'
 groups:
   gpon:
     term: Port
@@ -139,24 +195,24 @@ stack-exceptions:
       and the thunder-link edge-on photograph (4573nglt-c-2.jpg) shows both cages of each
       pair with their latch tabs on the same edge.
 parts:
-  - {ref: std/sfp@1, id: port-1, group: gpon, at: [5.25, 51.9]}
-  - {ref: std/sfp@1, id: port-2, group: gpon, at: [5.25, 68.5]}
-  - {ref: std/sfp@1, id: port-3, group: gpon, at: [5.25, 92.5]}
-  - {ref: std/sfp@1, id: port-4, group: gpon, at: [5.25, 109.1]}
-  - {ref: std/sfp@1, id: port-5, group: gpon, at: [5.25, 133.1]}
-  - {ref: std/sfp@1, id: port-6, group: gpon, at: [5.25, 149.7]}
-  - {ref: std/sfp@1, id: port-7, group: gpon, at: [5.25, 173.7]}
-  - {ref: std/sfp@1, id: port-8, group: gpon, at: [5.25, 190.3]}
+  - {ref: std/sfp@1, id: port-1, group: gpon, at: [5.25, 52.755], 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: gpon, at: [5.25, 69.355], 'on': face-1}
+  - {ref: std/sfp@1, id: port-3, group: gpon, at: [5.25, 93.355], 'on': face-2}
+  - {ref: std/sfp@1, id: port-4, group: gpon, at: [5.25, 109.955], 'on': face-2}
+  - {ref: std/sfp@1, id: port-5, group: gpon, at: [5.25, 133.955], 'on': face-3}
+  - {ref: std/sfp@1, id: port-6, group: gpon, at: [5.25, 150.555], 'on': face-3}
+  - {ref: std/sfp@1, id: port-7, group: gpon, at: [5.25, 174.555], 'on': face-4}
+  - {ref: std/sfp@1, id: port-8, group: gpon, at: [5.25, 191.155], 'on': face-4}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.9, 26.5], states: {lamp: ['off', {name: 'init', color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [13.9, 31.2], states: {lamp: ['off', {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [2.6, 55.9], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-2, group: pon-leds, at: [2.6, 72.5], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-3, group: pon-leds, at: [2.6, 96.5], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-4, group: pon-leds, at: [2.6, 113.1], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-5, group: pon-leds, at: [2.6, 137.1], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-6, group: pon-leds, at: [2.6, 153.7], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-7, group: pon-leds, at: [2.6, 177.7], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-pon-8, group: pon-leds, at: [2.6, 194.3], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [2.6, 56.071], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-1}
+  - {ref: common/led-dot@1, id: led-pon-2, group: pon-leds, at: [2.6, 72.671], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-1}
+  - {ref: common/led-dot@1, id: led-pon-3, group: pon-leds, at: [2.6, 96.671], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-2}
+  - {ref: common/led-dot@1, id: led-pon-4, group: pon-leds, at: [2.6, 113.271], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-2}
+  - {ref: common/led-dot@1, id: led-pon-5, group: pon-leds, at: [2.6, 137.271], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-3}
+  - {ref: common/led-dot@1, id: led-pon-6, group: pon-leds, at: [2.6, 153.871], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-3}
+  - {ref: common/led-dot@1, id: led-pon-7, group: pon-leds, at: [2.6, 177.871], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-4}
+  - {ref: common/led-dot@1, id: led-pon-8, group: pon-leds, at: [2.6, 194.471], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}, 'on': face-4}
 connection-points:
   mate: {at: [12.5, 202.5], direction: rear}
 skins: [default]

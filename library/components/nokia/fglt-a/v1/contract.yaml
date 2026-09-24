@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-a
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -82,7 +82,7 @@ provenance:
   relief: >-
     estimated - the two grey ejector levers stand proud; no document gives a figure, so
     the library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is
-    used. The caps, windows and sawtooth are not raised.
+    used. The caps and windows are not raised; the sawtooth is carried as facets (angled-panel).
   colour: >-
     photo - light silver-grey plate, slightly darker end caps, grey plastic levers,
     knurled silver thumbscrews, a yellow hot-surface label, white labels; the thunder-link
@@ -91,10 +91,39 @@ provenance:
     searched only the staged corpus - present in the ANSI UDS R6.9 and ETSI UDS A18,
     absent from the Lightspan UDS A23, which suggests it is no longer offered for new
     Lightspan builds; no end-of-life notice was searched for on the web.
+  angled-panel: >-
+    estimated - as nokia/fglt-b@1 (the same face, Figure 129 draws the same eight
+    teeth): eight teeth of 31 degrees (face-N, facing up, two cages and their lamps on
+    it) and 56 degrees (return-N, facing down) on the 38.3 window pitch, face 27.25 and
+    return 11.05 mm of front view, apex 16.38 mm, each face ending at the bottom of its
+    window. The last return runs to 366.65, over the top 6.5 mm of the barcode label
+    (gap). Every Nokia figure puts this sawtooth BEHIND a flat faceplate: the side
+    elevations draw nothing proud of the plate front, and the cage mouths look up and
+    out through the plate. A facet can only stand proud (its `lift` is above the plate),
+    so the teeth are modelled standing out of the plate with their roots on it. The
+    angle, the foreshortening and the direction each cage and its optic point come from
+    the figure; how far forward the teeth stand (16.38 mm at the apex) comes from the
+    model, not from Nokia (gap).
 elements:
   logo-zone: {at: [0.5, 383.4], size: [5.0, 4.4], class: label}
   model-label: {at: [0.4, 366.9], size: [5.4, 16.1], class: label}
   barcode-label: {at: [7.1, 360.2], size: [13.4, 27.0], class: label}
+  face-1: {at: [3, 60.246], size: [19.5, 27.254], class: mechanical}
+  return-1: {at: [3, 87.5], size: [19.5, 11.046], class: mechanical}
+  face-2: {at: [3, 98.546], size: [19.5, 27.254], class: mechanical}
+  return-2: {at: [3, 125.8], size: [19.5, 11.046], class: mechanical}
+  face-3: {at: [3, 136.846], size: [19.5, 27.254], class: mechanical}
+  return-3: {at: [3, 164.1], size: [19.5, 11.046], class: mechanical}
+  face-4: {at: [3, 175.146], size: [19.5, 27.254], class: mechanical}
+  return-4: {at: [3, 202.4], size: [19.5, 11.046], class: mechanical}
+  face-5: {at: [3, 213.446], size: [19.5, 27.254], class: mechanical}
+  return-5: {at: [3, 240.7], size: [19.5, 11.046], class: mechanical}
+  face-6: {at: [3, 251.746], size: [19.5, 27.254], class: mechanical}
+  return-6: {at: [3, 279], size: [19.5, 11.046], class: mechanical}
+  face-7: {at: [3, 290.046], size: [19.5, 27.254], class: mechanical}
+  return-7: {at: [3, 317.3], size: [19.5, 11.046], class: mechanical}
+  face-8: {at: [3, 328.346], size: [19.5, 27.254], class: mechanical}
+  return-8: {at: [3, 355.6], size: [19.5, 11.046], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -110,6 +139,70 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: face-1
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-1
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-2
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-2
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-3
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-3
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-4
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-4
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-5
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-5
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-6
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-6
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-7
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-7
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: face-8
+      facet: {deg: 31, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
+    - node: return-8
+      facet: {deg: 56, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-b@1 (31/56); ETSI UDS A18 p330 Figure 129 draws the same eight teeth'
 groups:
   pon:
     term: Port
@@ -128,38 +221,38 @@ groups:
     index-origin: 1
     description: the board lamps PWR and ALM
 parts:
-  - {ref: std/sfp@1, id: port-1, group: pon, at: [6.25, 56.84], rotate: 90}
-  - {ref: std/sfp@1, id: port-2, group: pon, at: [6.25, 73.9], rotate: 90}
-  - {ref: std/sfp@1, id: port-3, group: pon, at: [6.25, 95.14], rotate: 90}
-  - {ref: std/sfp@1, id: port-4, group: pon, at: [6.25, 112.2], rotate: 90}
-  - {ref: std/sfp@1, id: port-5, group: pon, at: [6.25, 133.44], rotate: 90}
-  - {ref: std/sfp@1, id: port-6, group: pon, at: [6.25, 150.5], rotate: 90}
-  - {ref: std/sfp@1, id: port-7, group: pon, at: [6.25, 171.74], rotate: 90}
-  - {ref: std/sfp@1, id: port-8, group: pon, at: [6.25, 188.8], rotate: 90}
-  - {ref: std/sfp@1, id: port-9, group: pon, at: [6.25, 210.04], rotate: 90}
-  - {ref: std/sfp@1, id: port-10, group: pon, at: [6.25, 227.1], rotate: 90}
-  - {ref: std/sfp@1, id: port-11, group: pon, at: [6.25, 248.34], rotate: 90}
-  - {ref: std/sfp@1, id: port-12, group: pon, at: [6.25, 265.4], rotate: 90}
-  - {ref: std/sfp@1, id: port-13, group: pon, at: [6.25, 286.64], rotate: 90}
-  - {ref: std/sfp@1, id: port-14, group: pon, at: [6.25, 303.7], rotate: 90}
-  - {ref: std/sfp@1, id: port-15, group: pon, at: [6.25, 324.94], rotate: 90}
-  - {ref: std/sfp@1, id: port-16, group: pon, at: [6.25, 342], rotate: 90}
-  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [4, 60.84], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [4, 77.9], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [4, 99.14], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [4, 116.2], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [4, 137.44], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [4, 154.5], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [4, 175.74], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [4, 192.8], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [4, 214.04], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [4, 231.1], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [4, 252.34], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [4, 269.4], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [4, 290.64], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [4, 307.7], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [4, 328.94], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [4, 346], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
+  - {ref: std/sfp@1, id: port-1, group: pon, at: [6.25, 63.174], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: pon, at: [6.25, 75.903], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: port-3, group: pon, at: [6.25, 101.474], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: port-4, group: pon, at: [6.25, 114.203], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: port-5, group: pon, at: [6.25, 139.774], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: port-6, group: pon, at: [6.25, 152.503], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: port-7, group: pon, at: [6.25, 178.074], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: port-8, group: pon, at: [6.25, 190.803], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: port-9, group: pon, at: [6.25, 216.374], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: port-10, group: pon, at: [6.25, 229.103], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: port-11, group: pon, at: [6.25, 254.674], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: port-12, group: pon, at: [6.25, 267.403], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: port-13, group: pon, at: [6.25, 292.974], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: port-14, group: pon, at: [6.25, 305.703], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: port-15, group: pon, at: [6.25, 331.274], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: port-16, group: pon, at: [6.25, 344.003], rotate: 90, 'on': face-8}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [4, 66.603], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-1}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [4, 79.332], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-1}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [4, 104.903], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-2}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [4, 117.632], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-2}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [4, 143.203], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-3}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [4, 155.932], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-3}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [4, 181.503], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-4}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [4, 194.232], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-4}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [4, 219.803], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-5}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [4, 232.532], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-5}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [4, 258.103], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-6}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [4, 270.832], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-6}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [4, 296.403], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-7}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [4, 309.132], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-7}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [4, 334.703], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-8}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [4, 347.432], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}, 'on': face-8}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.6, 30.5], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [13.6, 35.5], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
 connection-points:

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-e
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -100,7 +100,7 @@ provenance:
   relief: >-
     estimated - the two ejector handles stand proud; no document gives a figure, so the
     library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is used.
-    The sawtooth is not raised: an `out` would come to the front and bury the cages.
+    The sawtooth is carried as facets (angled-panel), not as an `out`.
   colour: >-
     borrowed - no photograph of an FGLT-E is known (working/intake/nokia/PUBLIC-SOURCES.md
     section 3); the family's light silver-grey plate and dark ejectors are used, and the
@@ -109,10 +109,55 @@ provenance:
   lifecycle: >-
     searched only the staged corpus - current in the Lightspan UDS A23 and ETSI UDS A18;
     no end-of-life notice was searched for on the web.
+  angled-panel: >-
+    estimated - the geometry of nokia/fglt-d@1, the same sixteen-cage sawtooth on a
+    20.59 pitch: faces of 30 degrees (face-N, facing up, the cage on it) and returns of
+    60 degrees (return-N, facing down), face 15.44 and return 5.15 mm of front view,
+    apex 8.92 mm; each face keeps the cage centre Figure 149 gives (45.55 + 20.59 n),
+    its lower edge 0.5 mm above the apex. ETSI UDS A18 p360 Figure 150 (side elevation,
+    3.46 px/mm) draws, unlike the FGLT-D, a small sawtooth proud of the plate front as
+    well as the one behind it: line fits give that proud hood 30.4-31.2 degrees on its
+    long edge and 55.4-56.2 on its short one, 11.4 and 4.6 mm with a 4.3 mm flat between
+    hoods, 6.8 mm proud. That hood face is shorter than the projected 12.6 mm of the
+    cage, so the cage mouth is not on it; the teeth are therefore the full no-flat tooth
+    of the sister card, and the proud height comes from the model (gap). The last return
+    runs to 366.3, under the tips of the hazard triangles (from 365).
 elements:
   logo-zone: {at: [7.5, 23.6], size: [15.5, 8.7], class: label}
   model-label: {at: [6.7, 11.5], size: [15.1, 10.9], class: label}
   blank-label: {at: [7.3, 382.6], size: [14.5, 10.6], class: label}
+  face-1: {at: [5.2, 36.886], size: [18.8, 15.443], class: mechanical}
+  return-1: {at: [5.2, 52.329], size: [18.8, 5.148], class: mechanical}
+  face-2: {at: [5.2, 57.476], size: [18.8, 15.442], class: mechanical}
+  return-2: {at: [5.2, 72.919], size: [18.8, 5.147], class: mechanical}
+  face-3: {at: [5.2, 78.066], size: [18.8, 15.442], class: mechanical}
+  return-3: {at: [5.2, 93.509], size: [18.8, 5.147], class: mechanical}
+  face-4: {at: [5.2, 98.656], size: [18.8, 15.442], class: mechanical}
+  return-4: {at: [5.2, 114.099], size: [18.8, 5.148], class: mechanical}
+  face-5: {at: [5.2, 119.246], size: [18.8, 15.442], class: mechanical}
+  return-5: {at: [5.2, 134.689], size: [18.8, 5.148], class: mechanical}
+  face-6: {at: [5.2, 139.836], size: [18.8, 15.442], class: mechanical}
+  return-6: {at: [5.2, 155.279], size: [18.8, 5.148], class: mechanical}
+  face-7: {at: [5.2, 160.426], size: [18.8, 15.442], class: mechanical}
+  return-7: {at: [5.2, 175.869], size: [18.8, 5.148], class: mechanical}
+  face-8: {at: [5.2, 181.016], size: [18.8, 15.442], class: mechanical}
+  return-8: {at: [5.2, 196.459], size: [18.8, 5.148], class: mechanical}
+  face-9: {at: [5.2, 201.606], size: [18.8, 15.442], class: mechanical}
+  return-9: {at: [5.2, 217.049], size: [18.8, 5.148], class: mechanical}
+  face-10: {at: [5.2, 222.196], size: [18.8, 15.442], class: mechanical}
+  return-10: {at: [5.2, 237.639], size: [18.8, 5.148], class: mechanical}
+  face-11: {at: [5.2, 242.786], size: [18.8, 15.442], class: mechanical}
+  return-11: {at: [5.2, 258.229], size: [18.8, 5.147], class: mechanical}
+  face-12: {at: [5.2, 263.376], size: [18.8, 15.442], class: mechanical}
+  return-12: {at: [5.2, 278.819], size: [18.8, 5.147], class: mechanical}
+  face-13: {at: [5.2, 283.966], size: [18.8, 15.442], class: mechanical}
+  return-13: {at: [5.2, 299.409], size: [18.8, 5.147], class: mechanical}
+  face-14: {at: [5.2, 304.556], size: [18.8, 15.442], class: mechanical}
+  return-14: {at: [5.2, 319.999], size: [18.8, 5.147], class: mechanical}
+  face-15: {at: [5.2, 325.146], size: [18.8, 15.442], class: mechanical}
+  return-15: {at: [5.2, 340.589], size: [18.8, 5.147], class: mechanical}
+  face-16: {at: [5.2, 345.736], size: [18.8, 15.442], class: mechanical}
+  return-16: {at: [5.2, 361.179], size: [18.8, 5.147], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -128,6 +173,134 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: face-1
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-1
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-2
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-2
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-3
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-3
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-4
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-4
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-5
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-5
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-6
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-6
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-7
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-7
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-8
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-8
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-9
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-9
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-10
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-10
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-11
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-11
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-12
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-12
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-13
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-13
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-14
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-14
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-15
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-15
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: face-16
+      facet: {deg: 30, facing: up}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
+    - node: return-16
+      facet: {deg: 60, facing: down}
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60), the same 16-cage sawtooth; ETSI UDS A18 p360 Figure 150 reads the proud hoods at 31/56 (line fits)'
 groups:
   pon-cages:
     term: Cage
@@ -148,22 +321,22 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/sfp@1, id: cage-1, group: pon-cages, at: [4.35, 40.55], rotate: 90}
-  - {ref: std/sfp@1, id: cage-2, group: pon-cages, at: [4.35, 61.14], rotate: 90}
-  - {ref: std/sfp@1, id: cage-3, group: pon-cages, at: [4.35, 81.73], rotate: 90}
-  - {ref: std/sfp@1, id: cage-4, group: pon-cages, at: [4.35, 102.32], rotate: 90}
-  - {ref: std/sfp@1, id: cage-5, group: pon-cages, at: [4.35, 122.91], rotate: 90}
-  - {ref: std/sfp@1, id: cage-6, group: pon-cages, at: [4.35, 143.5], rotate: 90}
-  - {ref: std/sfp@1, id: cage-7, group: pon-cages, at: [4.35, 164.09], rotate: 90}
-  - {ref: std/sfp@1, id: cage-8, group: pon-cages, at: [4.35, 184.68], rotate: 90}
-  - {ref: std/sfp@1, id: cage-9, group: pon-cages, at: [4.35, 205.27], rotate: 90}
-  - {ref: std/sfp@1, id: cage-10, group: pon-cages, at: [4.35, 225.86], rotate: 90}
-  - {ref: std/sfp@1, id: cage-11, group: pon-cages, at: [4.35, 246.45], rotate: 90}
-  - {ref: std/sfp@1, id: cage-12, group: pon-cages, at: [4.35, 267.04], rotate: 90}
-  - {ref: std/sfp@1, id: cage-13, group: pon-cages, at: [4.35, 287.63], rotate: 90}
-  - {ref: std/sfp@1, id: cage-14, group: pon-cages, at: [4.35, 308.22], rotate: 90}
-  - {ref: std/sfp@1, id: cage-15, group: pon-cages, at: [4.35, 328.81], rotate: 90}
-  - {ref: std/sfp@1, id: cage-16, group: pon-cages, at: [4.35, 349.4], rotate: 90}
+  - {ref: std/sfp@1, id: cage-1, group: pon-cages, at: [4.35, 41.22], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: cage-2, group: pon-cages, at: [4.35, 61.81], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: cage-3, group: pon-cages, at: [4.35, 82.4], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: cage-4, group: pon-cages, at: [4.35, 102.99], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: cage-5, group: pon-cages, at: [4.35, 123.58], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: cage-6, group: pon-cages, at: [4.35, 144.17], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: cage-7, group: pon-cages, at: [4.35, 164.76], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: cage-8, group: pon-cages, at: [4.35, 185.35], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: cage-9, group: pon-cages, at: [4.35, 205.94], rotate: 90, 'on': face-9}
+  - {ref: std/sfp@1, id: cage-10, group: pon-cages, at: [4.35, 226.53], rotate: 90, 'on': face-10}
+  - {ref: std/sfp@1, id: cage-11, group: pon-cages, at: [4.35, 247.12], rotate: 90, 'on': face-11}
+  - {ref: std/sfp@1, id: cage-12, group: pon-cages, at: [4.35, 267.71], rotate: 90, 'on': face-12}
+  - {ref: std/sfp@1, id: cage-13, group: pon-cages, at: [4.35, 288.3], rotate: 90, 'on': face-13}
+  - {ref: std/sfp@1, id: cage-14, group: pon-cages, at: [4.35, 308.89], rotate: 90, 'on': face-14}
+  - {ref: std/sfp@1, id: cage-15, group: pon-cages, at: [4.35, 329.48], rotate: 90, 'on': face-15}
+  - {ref: std/sfp@1, id: cage-16, group: pon-cages, at: [4.35, 350.07], rotate: 90, 'on': face-16}
   - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2, 33], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [2, 41.6], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [2, 53.59], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
