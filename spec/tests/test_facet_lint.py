@@ -34,3 +34,61 @@ def test_schema_refuses_bad_facets(bad):
     c["relief"]["features"][0]["facet"] = bad
     with pytest.raises(jsonschema.ValidationError):
         jsonschema.Draft202012Validator(SCHEMA).validate(c)
+
+
+from portrayal import lint
+
+
+def plant(root, data):
+    p = root / "components/acme/card/v1/contract.yaml"
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(yaml.safe_dump(data))
+    return p
+
+
+LIB = SPEC.parent / "library"
+
+
+def run(tmp_path, data):
+    p = plant(tmp_path, data)
+    with lint.collecting() as found:
+        lint.lint_component_facets(p, data, [str(tmp_path), str(LIB)])
+        lint.lint_component_collisions(p, data, [str(tmp_path), str(LIB)])
+    return found
+
+
+def test_a_good_facet_is_clean(tmp_path):
+    f = run(tmp_path, card())
+    assert not [e for e in f.errors if "[L114]" in e]
+
+
+def test_on_must_name_a_facet(tmp_path):
+    c = card()
+    c["parts"][0]["on"] = "nowhere"
+    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+
+
+def test_the_projected_part_must_lie_within_its_facet(tmp_path):
+    c = card()
+    c["parts"][0]["at"] = [2.5, 65.0]        # 10.15 x cos30 = 8.79 tall, ends at 73.8 > 70.5
+    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+
+
+def test_a_facet_does_not_also_declare_its_slope(tmp_path):
+    c = card()
+    c["relief"]["features"][0]["profile-y"] = [[0, 0], [30, 5]]
+    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+
+
+def test_the_facet_node_must_be_an_element(tmp_path):
+    c = card(elements={})
+    assert any("[L114]" in e for e in run(tmp_path, c).errors)
+
+
+def test_l46_measures_the_projected_box(tmp_path):
+    # two QSFP28s 7 mm apart. At true height (10.15) they overlap 3.15 mm = 31% of the
+    # smaller, over L46's 25% threshold; on a 30-degree facet each is 8.79 tall and the
+    # overlap is 1.79 mm = 20%, under it. Unprojected boxes would warn; projected must not.
+    c = card()
+    c["parts"].append({"ref": "std/qsfp28@1", "id": "p2", "at": [2.5, 52.0], "on": "housing"})
+    assert not [w for w in run(tmp_path, c).warnings if "[L46]" in w]
