@@ -27,7 +27,8 @@ import { toGLB, toUSDZ } from './share.js';
 import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, svgSource, setSvgOverride, clearSvgOverrides,
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
-         buildFaceRelief, bodyBoxes, fruFor } from './relief.js';
+         buildFaceRelief, bodyBoxes, fruFor,
+         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject } from './relief.js';
 import { applyFaceOverrides, applyRearOverrides, refusalReason, viewsToRewrite } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
@@ -757,14 +758,29 @@ export function createViewer(container, opts = {}) {
       const svg = div.querySelector('svg');
       if (!svg) { div.remove(); continue; }
       const inv = svg.getScreenCTM().inverse();
+      // A PART ON A FACET carries its tilt (relief.js tiltTools), so the halo
+      // can stand in the same frame its relief was built in
+      let TT = null;
+      const tiltAt = el => {
+        const t = tiltOf(el);
+        if (!t) return null;
+        if (!TT) { const T = nodeTools(svg);
+                   TT = tiltTools(svg, {mmRect: T.mmRect, liftOf: T.liftOf,
+                                        ctmOf: n => inv.multiply(n.getScreenCTM())}); }
+        const r = TT.tiltRec(t);
+        return r ? r.tilt : null;
+      };
       const rec = el => {
         const b = el.getBBox();
         const m = inv.multiply(el.getScreenCTM());
         const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height]]
           .map(([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f}));
-        return {path: el.dataset.path, cls: el.dataset.class || '',
+        const r = {path: el.dataset.path, cls: el.dataset.class || '',
                 model: el.dataset.model || '', x0: Math.min(pts[0].x, pts[1].x), y0: Math.min(pts[0].y, pts[1].y),
                 x1: Math.max(pts[0].x, pts[1].x), y1: Math.max(pts[0].y, pts[1].y)};
+        const tilt = tiltAt(el);
+        if (tilt) r.tilt = tilt;
+        return r;
       };
       hitIndex[view] = [...svg.children]
         .filter(el => el.dataset && el.dataset.path && el.dataset.class !== 'region')
@@ -885,8 +901,20 @@ export function createViewer(container, opts = {}) {
     // the same LX/LY relief.js places a part with, mirror and all
     const lx = (flipX ? -1 : 1) * (c.x0 + w / 2 - fw / 2);
     const ly = (flipY ? -1 : 1) * (fh / 2 - (c.y0 + h / 2));
+    // A PART ON A FACET: the halo takes the part's true box and stands in its
+    // tilt frame - inside the owning FRU's group when that is tilted already,
+    // so it rides the optic out. The frame below keeps the front-view centre.
+    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
+    let into = owner || grp, hw = w, hh = h, hx = lx, hy = ly;
+    if (c.tilt) {
+      const u = unproject({x: c.x0, y: c.y0, w, h}, c.tilt);
+      hw = u.w; hh = u.h;
+      hx = (flipX ? -1 : 1) * (u.x + u.w / 2 - fw / 2);
+      hy = (flipY ? -1 : 1) * (fh / 2 - (u.y + u.h / 2));
+      into = tiltGroupIn(into, c.tilt, {fw, fh, flipLX: flipX, flipLY: flipY});
+    }
     hl = new THREE.Group();
-    const geo = new THREE.PlaneGeometry(w, h);
+    const geo = new THREE.PlaneGeometry(hw, hh);
     // depthTest off, drawn last: the same argument hl.js makes in 2D - a halo that
     // neighbours can paint over is not a halo. Here the neighbour is a handle or a
     // cage standing proud of the face.
@@ -897,12 +925,11 @@ export function createViewer(container, opts = {}) {
     hl.add(new THREE.Mesh(geo, fillMat));
     hl.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), lineMat));
     hl.traverse(o2 => { o2.renderOrder = 999; });
-    hl.position.set(lx, ly, 0.8);
+    hl.position.set(hx, hy, 0.8);
     // ride with the module if it is a FRU, so ejecting it does not leave the
     // marker behind on the chassis
     // (the longest prefix that is one - a card's optic is a FRU inside its card)
-    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
-    (owner || grp).add(hl);
+    into.add(hl);
     if (o.frame !== false) frameOn(grp, lx, ly, w, h);
     return true;
   }

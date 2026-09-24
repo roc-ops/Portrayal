@@ -111,6 +111,107 @@ export function faceFacing(m, facing) {
   const x = m.a * v[0] + m.c * v[1], y = m.b * v[0] + m.d * v[1];
   return Math.abs(x) > Math.abs(y) ? (x > 0 ? 'right' : 'left') : (y > 0 ? 'down' : 'up');
 }
+// THE TILT OF A NODE ON ONE PARSED FACE, shared by the build, the lamp animator
+// and the viewer's halo so that all three put a tilted thing in the same frame.
+// `mmRect`, `liftOf` and `ctmOf` (a node's component-to-face matrix) are the
+// caller's measuring tools; only getAttribute/parentNode/querySelector are read
+// here, so it runs on the node test DOM too.
+//   tiltRec(tiltOf(el)) -> {tilt: {deg, facing, on, anchor, z0}, base} | null
+// `facing` is in the face's frame. `base` is the lift the node's own lift is
+// measured from: everything above the outermost group on the facet, which is
+// already in the facet's height.
+export function tiltTools(svg, {mmRect, liftOf, ctmOf}) {
+  const facets = new Map(), hostRects = new Map();
+  const attr = (n, k) => (n && n.getAttribute ? n.getAttribute(k) : null);
+  // The root lift is read off the derived profile, because that is the surface
+  // the builder draws, and a part must stand on what is drawn.
+  const facetInfo = id => {
+    if (facets.has(id)) return facets.get(id);
+    const node = svg.querySelector(`[id="${CSS.escape(id)}"]`);
+    let info = null;
+    if (node && attr(node, 'data-facet-deg')) {
+      const m = ctmOf(node);
+      const prof = (attr(node, 'data-z-profile-y') || attr(node, 'data-z-profile') || '').split(',')
+        .map(p => +p.split(':')[1]).filter(Number.isFinite);
+      info = {node, m, rect: mmRect(node), deg: +attr(node, 'data-facet-deg'),
+              facing: faceFacing(m, attr(node, 'data-facet-facing')),
+              lift: prof.length ? Math.min(...prof) : 0};
+    }
+    facets.set(id, info);
+    return info;
+  };
+  const tiltBase = (t, hops = 0) => {
+    let n = t.host;
+    while (attr(n.parentNode, 'data-tilt-on') === t.on) n = n.parentNode;
+    // A MATE-TO SEAT IS DRAWN OUTSIDE ITS HOST'S CARD, and its own lift is the
+    // host's whole chain (render.py's `host-lift`). Measured from its own
+    // parent it stood the card's lift off the facet - or, in a well, sank into
+    // it. So a seat whose `data-for` host is on the same facet takes the
+    // host's base; a nested seat's host shares its parent, so nothing changes.
+    const fr = (attr(n, 'data-for') || '').split(/\s+/)[0];
+    const h = fr && hops < 8 && svg.querySelector(`[data-path="${CSS.escape(fr)}"]`);
+    const ht = h && tiltOf(h);
+    if (ht && ht.on === t.on && ht.host !== n) return tiltBase(ht, hops + 1);
+    const p = n.parentNode;
+    return p && p !== svg && p.getAttribute ? liftOf(p) : 0;
+  };
+  const tiltRec = t => {
+    if (!t) return null;
+    const f = facetInfo(t.on);
+    if (!f) { console.warn('relief: tilted part names no facet node', t.on); return null; }
+    if (!hostRects.has(t.host)) hostRects.set(t.host, mmRect(t.host));
+    const hr = hostRects.get(t.host);
+    const facing = t.facing ? faceFacing(f.m, t.facing) : f.facing, anchor = [hr.x, hr.y];
+    const z0 = facetZ(f.rect, {deg: t.deg, facing}, f.lift, anchor);
+    return {tilt: {deg: t.deg, facing, on: t.on, anchor, z0}, base: tiltBase(t)};
+  };
+  return {facetInfo, tiltRec};
+}
+// A FACET HIDES THE FLAT FACE BEHIND IT, so its whole front-view footprint is
+// cleared from the face canvas and from every module plane that replays the
+// face's punches (a card's). Left in, the card plane cut across every tilted
+// cage well and showed as a strip along the facet's root edge.
+export function facetPunch(o) {
+  return {kind: 'rect', x: o.x, y: o.y, w: o.w, h: o.h, facet: o.facet.id};
+}
+// a `rect` punch in pixels of a canvas whose origin is (ox, oy) face mm
+export function punchRectPx(p, ox, oy, pxmm) {
+  return [Math.round((p.x - ox) * pxmm), Math.round((p.y - oy) * pxmm),
+          Math.round(p.w * pxmm), Math.round(p.h * pxmm)];
+}
+// THE GROUP THAT CARRIES A TILT (see buildFaceRelief). Its matrix is
+// M_face * tiltFrame(t) * M_face^-1, M_face being the LX/LY map of a face `fw`
+// x `fh` mm, mirror included. One per parent and facet anchor. Under a group
+// already tilted with the same key the parent itself is returned; under one
+// with a different key only the difference is applied, so a child still
+// rides with its host. `userData.tilt` names the tilt for anything placed
+// later (a halo, a lamp); the matrices live in a side table, not userData,
+// which the GLB export serialises.
+const TILT_META = new WeakMap(), TILT_KIDS = new WeakMap();
+export function tiltGroupIn(parent, t, {fw, fh, flipLX = false, flipLY = false}) {
+  const key = `${t.on}|${t.anchor.join(',')}`;
+  let anc = parent;
+  while (anc && !TILT_META.has(anc)) anc = anc.parent;
+  const up = anc && TILT_META.get(anc);
+  if (up && up.key === key) return parent;
+  if (!TILT_KIDS.has(parent)) TILT_KIDS.set(parent, new Map());
+  const kids = TILT_KIDS.get(parent);
+  if (kids.has(key)) return kids.get(key);
+  const sx = flipLX ? -1 : 1, sy = flipLY ? -1 : 1;
+  const toL = new THREE.Matrix4().set(sx, 0, 0, -sx * fw / 2,  0, -sy, 0, sy * fh / 2,
+                                      0, 0, 1, 0,  0, 0, 0, 1);
+  const fromL = new THREE.Matrix4().set(sx, 0, 0, fw / 2,  0, -sy, 0, fh / 2,
+                                        0, 0, 1, 0,  0, 0, 0, 1);
+  const G = toL.multiply(new THREE.Matrix4().fromArray(tiltFrame(t))).multiply(fromL);
+  const g = new THREE.Group();
+  g.matrix.copy(up ? up.G.clone().invert().multiply(G) : G);
+  g.matrixAutoUpdate = false;
+  g.userData.tilt = {...t, anchor: [...t.anchor]};
+  TILT_META.set(g, {key, G});
+  kids.set(key, g);
+  parent.add(g);
+  return g;
+}
 
 // A DEPTH THAT VARIES ACROSS A NODE, INSIDE THE NODE'S OWN OUTLINE. `profile`
 // and `profile-y` built their height field over the bounding box, so a sloped
@@ -1159,44 +1260,10 @@ export async function extractRelief(url, scope) {
   // unprojected here to its true size about its part's anchor, and the builder
   // carries it onto the facet plane with tiltFrame. Nothing below runs for a
   // drawing with no facets.
-  const facets = new Map(), hostRects = new Map();
-  // One facet, in the FACE's frame: its rect, facing, angle and root height.
-  // The root height is read off the derived profile, because that is the
-  // surface the builder draws, and a part must stand on what is drawn.
-  const facetInfo = id => {
-    if (facets.has(id)) return facets.get(id);
-    const node = svg.querySelector(`[id="${CSS.escape(id)}"]`);
-    let info = null;
-    if (node && node.dataset.facetDeg) {
-      const m = inv.multiply(node.getScreenCTM());
-      const prof = (node.dataset.zProfileY || node.dataset.zProfile || '').split(',')
-        .map(p => +p.split(':')[1]).filter(Number.isFinite);
-      info = {node, m, rect: mmRect(node), deg: +node.dataset.facetDeg,
-              facing: faceFacing(m, node.dataset.facetFacing),
-              lift: prof.length ? Math.min(...prof) : 0};
-    }
-    facets.set(id, info);
-    return info;
-  };
   // Lifts inside a tilted part are measured from the plane the part sits on,
-  // which is the facet: the chain above the OUTERMOST group on this facet is
-  // already in the facet's own height.
-  const tiltBase = t => {
-    let n = t.host;
-    while (n.parentNode && n.parentNode.getAttribute &&
-           n.parentNode.getAttribute('data-tilt-on') === t.on) n = n.parentNode;
-    return n.parentNode && n.parentNode !== svg && n.parentNode.getAttribute ? liftOf(n.parentNode) : 0;
-  };
-  const tiltRec = t => {
-    const f = t && facetInfo(t.on);
-    if (!t) return null;
-    if (!f) { console.warn('relief: tilted part names no facet node', t.on); return null; }
-    if (!hostRects.has(t.host)) hostRects.set(t.host, mmRect(t.host));
-    const hr = hostRects.get(t.host);
-    const facing = faceFacing(f.m, t.facing || f.facing), anchor = [hr.x, hr.y];
-    const z0 = facetZ(f.rect, {deg: t.deg, facing}, f.lift, anchor);
-    return {tilt: {deg: t.deg, facing, on: t.on, anchor, z0}, base: tiltBase(t)};
-  };
+  // which is the facet (tiltTools' `base`).
+  const {facetInfo, tiltRec} = tiltTools(svg, {mmRect, liftOf,
+                                               ctmOf: n => inv.multiply(n.getScreenCTM())});
   // `proj` keeps the front-view rect: rasters, crops and punches are cut from
   // the face art at it, while geometry takes the true rect.
   const tilted = (e, t) => {
@@ -1493,6 +1560,9 @@ export async function extractRelief(url, scope) {
       const m = inv.multiply(el.getScreenCTM());
       subBodies.push({path: full, owner: path, ref: el.dataset.ref.split(':')[0], lift: liftOf(el),
                       toFace: {a: m.a, b: m.b, c: m.c, d: m.d, e: m.e, f: m.f}});
+      // on a facet: its boxes are unprojected and built in the tilt frame
+      const st = tiltOf(el) && tiltRec(tiltOf(el));
+      if (st) { subBodies[subBodies.length - 1].tilt = st.tilt; subBodies[subBodies.length - 1].lift -= st.base; }
       continue;
     }
     if (frus.some(f => f.path === path)) continue;
@@ -1696,36 +1766,11 @@ export async function buildFaceRelief(F, ctx) {
     const LX = (x, w) => (F.flipLX ? -1 : 1) * (x + w / 2 - fw / 2);
     const LY = (y, h) => (F.flipLY ? -1 : 1) * (fh / 2 - (y + h / 2));
     // A PART ON A FACET IS BUILT FLAT, AT ITS TRUE SIZE, IN A GROUP WHOSE
-    // MATRIX IS ITS TILT FRAME (docs/superpowers/specs/2026-09-24-tilted-facets-design.md).
-    // tiltFrame works in face mm, so it is conjugated into this group's frame by
-    // the same map LX/LY apply. One group per facet and anchor under each
-    // parent; under a group that is already tilted (an optic chained on a tilted
-    // optic) only the difference between the two frames is applied, so the
-    // child still ejects with its host. The matrix is fixed: a FRU's pull moves
-    // its own group along local z, which in here is the facet's normal.
-    const sxL = F.flipLX ? -1 : 1, syL = F.flipLY ? -1 : 1;
-    const tiltGroups = new Map(), tiltMats = new Map();
-    const tiltGroupFor = (t, parent) => {
-      const key = `${t.on}|${t.anchor.join(',')}`;
-      let anc = parent;
-      while (anc && !tiltMats.has(anc)) anc = anc.parent;
-      const up = anc && tiltMats.get(anc);
-      if (up && up.key === key) return parent;
-      const memo = `${parent.uuid}|${key}`;
-      if (tiltGroups.has(memo)) return tiltGroups.get(memo);
-      const toL = new THREE.Matrix4().set(sxL, 0, 0, -sxL * fw / 2,  0, -syL, 0, syL * fh / 2,
-                                          0, 0, 1, 0,  0, 0, 0, 1);
-      const fromL = new THREE.Matrix4().set(sxL, 0, 0, fw / 2,  0, -syL, 0, fh / 2,
-                                            0, 0, 1, 0,  0, 0, 0, 1);
-      const G = toL.multiply(new THREE.Matrix4().fromArray(tiltFrame(t))).multiply(fromL);
-      const g = new THREE.Group();
-      g.matrix.copy(up ? up.G.clone().invert().multiply(G) : G);
-      g.matrixAutoUpdate = false;
-      tiltMats.set(g, {key, G});
-      tiltGroups.set(memo, g);
-      parent.add(g);
-      return g;
-    };
+    // MATRIX IS ITS TILT FRAME (docs/superpowers/specs/2026-09-24-tilted-facets-design.md;
+    // tiltGroupIn). The matrix is fixed: a FRU's pull moves its own group along
+    // local z, which in here is the facet's normal.
+    const tiltGroupFor = (t, parent) =>
+      tiltGroupIn(parent, t, {fw, fh, flipLX: !!F.flipLX, flipLY: !!F.flipLY});
     const sideMats = c => Array.from({length: 6},
       () => new THREE.MeshLambertMaterial({color: c}));
     // each FRU gets a subgroup so its art and relief travel together when ejected
@@ -1931,6 +1976,12 @@ export async function buildFaceRelief(F, ctx) {
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
       curTilt = o.tilt || null;
+      if (o.facet) {
+        // the wedge covers its footprint: clear the flat face under it (facetPunch)
+        const fp = facetPunch(o);
+        cv.getContext('2d').clearRect(...punchRectPx(fp, 0, 0, PX));
+        facePunch[F.view].push(fp);
+      }
       // A FACET'S SURFACE CARRIES THE PARTS ON IT. Its own art is the first
       // layer and the parts' art goes over it at their front-view rects; each
       // is a text a restyle can change, so each has a slot (see `reg` below).
@@ -2324,15 +2375,36 @@ export async function buildFaceRelief(F, ctx) {
       // its front-view rect `pf`, and its plane and body take its true size,
       // inside its tilt group. For every other module pf is f.
       const pf = projOf(f);
-      const faceCrop = crop(f.lift || f.openBack ? artCv : cv, pf, PX);
+      // A TILTED MODULE IS CUT FROM THE PRISTINE ART, like a lifted one: it
+      // stands on a facet, and the facet's footprint has been cleared from `cv`.
+      const faceCrop = crop(f.lift || f.openBack || f.tilt ? artCv : cv, pf, PX);
+      // replay one face punch on a canvas whose origin is pf (a facet's is a rect)
+      const unpunch = async (ctx2, p) => {
+        if (p.kind === 'rect') { ctx2.clearRect(...punchRectPx(p, pf.x, pf.y, PX)); return; }
+        ctx2.globalCompositeOperation = 'destination-out';
+        ctx2.drawImage(await rasterize(p.svg, p.w, p.h, PX),
+                       Math.round((p.x - pf.x) * PX), Math.round((p.y - pf.y) * PX));
+        ctx2.globalCompositeOperation = 'source-over';
+      };
+      // A TILTED MODULE'S OWN BORES ARE PUNCHED FROM ITS PLANE HERE, not through
+      // `cv`: a tilted cavity never punches the face (its facet is its surface),
+      // so no face punch exists to replay, and one recorded for the purpose
+      // would be replayed by every plane overlapping it, the card's included.
+      // Scoped to the owner, the hole reaches exactly the plane in front of it.
+      const bores = f.tilt ? cavities.filter(c => c.tilt && c.proj && c.owner === f.path) : [];
+      const unbore = async ctx2 => {
+        for (const c of bores) {
+          ctx2.globalCompositeOperation = 'destination-out';
+          ctx2.drawImage(await rasterize(c.cavSvg, c.proj.w, c.proj.h, PX),
+                         Math.round((c.proj.x - pf.x) * PX), Math.round((c.proj.y - pf.y) * PX));
+          ctx2.globalCompositeOperation = 'source-over';
+        }
+      };
       if (f.openBack && !f.lift) {
         const x0 = faceCrop.getContext('2d');
         for (const p of facePunch[F.view]) {
           if (p.mouth || !(p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y)) continue;
-          x0.globalCompositeOperation = 'destination-out';
-          x0.drawImage(await rasterize(p.svg, p.w, p.h, PX),
-                       Math.round((p.x - pf.x) * PX), Math.round((p.y - pf.y) * PX));
-          x0.globalCompositeOperation = 'source-over';
+          await unpunch(x0, p);
         }
       }
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
@@ -2353,6 +2425,7 @@ export async function buildFaceRelief(F, ctx) {
       mctx.globalCompositeOperation = 'destination-in';
       mctx.drawImage(mask, 0, 0, faceCrop.width, faceCrop.height);
       mctx.globalCompositeOperation = 'source-over';
+      if (bores.length) await unbore(mctx);
       const zf = f.lift || 0;
       const plane = new THREE.Mesh(new THREE.PlaneGeometry(f.w, f.h),
         new THREE.MeshBasicMaterial({map: canvasTex(faceCrop), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));
@@ -2373,17 +2446,14 @@ export async function buildFaceRelief(F, ctx) {
       // AN OPEN BAY'S MOUTH IS NOT THE MODULE'S. It is the bay's own hole, the
       // size of the whole slot, and replaying it here cut the entire faceplate
       // out of every module seated in an open-backed bay.
-      const punchesHere = f.lift ? [] : facePunch[F.view].filter(p => !p.mouth &&
+      // (a tilted module, like a lifted one, replays none: its holes are `bores`)
+      const punchesHere = f.lift || f.tilt ? [] : facePunch[F.view].filter(p => !p.mouth &&
         p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y);
       reg(f.svgText, async text => {
         const c2 = await rasterize(text, pf.w, pf.h, PX);
         const x2 = c2.getContext('2d');
-        for (const p of punchesHere) {
-          x2.globalCompositeOperation = 'destination-out';
-          x2.drawImage(await rasterize(p.svg, p.w, p.h, PX),
-                       Math.round((p.x - pf.x) * PX), Math.round((p.y - pf.y) * PX));
-          x2.globalCompositeOperation = 'source-over';
-        }
+        for (const p of punchesHere) await unpunch(x2, p);
+        if (bores.length) await unbore(x2);
         remap(plane.material, c2);
         if (opticMat && !f.bodyColor) recolourBody(true, [opticMat], c2);
       });
@@ -2484,9 +2554,9 @@ export async function buildFaceRelief(F, ctx) {
     for (const s of subBodies) {
       const body = BODY_META[s.ref];
       if (!body || !body.boxes) continue;
-      const into = fruGroups[s.owner] || grp;
+      const into = s.tilt ? tiltGroupFor(s.tilt, fruGroups[s.owner] || grp) : fruGroups[s.owner] || grp;
       for (const b of bodyBoxes(body, 0, 0)) {
-        const r = localToFace(s.toFace, b);
+        const r = s.tilt ? unproject(localToFace(s.toFace, b), s.tilt) : localToFace(s.toFace, b);
         const m = new THREE.Mesh(new THREE.BoxGeometry(r.w, r.h, b.z1 - b.z0),
           new THREE.MeshLambertMaterial({color: b.color}));
         m.position.set(LX(r.x, r.w), LY(r.y, r.h),

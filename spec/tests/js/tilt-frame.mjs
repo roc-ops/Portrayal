@@ -77,4 +77,84 @@ out.faceFacing = {
   mirror: ['up', 'down', 'left', 'right'].map(f => m.faceFacing(mx, f)),
   identity: ['up', 'down', 'left', 'right'].map(f => m.faceFacing({a: 1, b: 0, c: 0, d: 1}, f)),
 };
+
+// tiltTools on the test DOM: a card (lift 5) with a facet (root lift 2), a cage
+// on it, an optic nested in the card, and a mate-to optic drawn outside the card
+// whose own lift is the host's whole chain (render.py `host-lift`)
+globalThis.CSS = {escape: s => s};
+const rects = new Map();
+const R = (n, r) => { rects.set(n, r); return n; };
+const facetNode = R(new Node({id: 'card--housing', 'data-facet-deg': '30', 'data-facet-facing': 'up',
+                              'data-z-profile-y': '0:2,40:25.094'}), {x: 10, y: 20, w: 60, h: 40});
+const cage = R(new Node({'data-path': 'card/cage', 'data-tilt-on': 'card--housing', 'data-tilt': '30',
+                         'data-tilt-facing': 'up'}), {x: 20, y: 30, w: 20, h: 8.66});
+const nested = R(new Node({'data-path': 'card/cage/optic', 'data-for': 'card/cage', 'data-z-lift': '1',
+                           'data-tilt-on': 'card--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'}),
+                 {x: 21, y: 31, w: 18, h: 6.93});
+const seat = R(new Node({'data-path': 'optic1', 'data-for': 'card/cage', 'data-z-lift': '6',
+                         'data-tilt-on': 'card--housing', 'data-tilt': '30', 'data-tilt-facing': 'up'}),
+               {x: 21, y: 31, w: 18, h: 6.93});
+const cardG = new Node({id: 'card', 'data-z-lift': '5'}, [facetNode, cage, nested]);
+const svgRoot = new Node({}, [cardG, seat], 'svg');
+const liftOf = el => { let z = 0; for (let n = el; n && n !== svgRoot; n = n.parentNode) z += +(n.getAttribute('data-z-lift') || 0); return z; };
+const tools = ctm => m.tiltTools(svgRoot, {mmRect: n => rects.get(n), liftOf, ctmOf: () => ctm});
+const TT = tools({a: 1, b: 0, c: 0, d: 1});
+const rr = r => r && JSON.parse(JSON.stringify(r, (k, v) => typeof v === 'number' ? Math.round(v * 1000) / 1000 : v));
+out.tools = {
+  facetLift: TT.facetInfo('card--housing').lift,
+  cage: rr(TT.tiltRec(m.tiltOf(cage))),
+  nested: rr(TT.tiltRec(m.tiltOf(nested))),
+  seat: rr(TT.tiltRec(m.tiltOf(seat))),
+  seatLiftFromFacet: liftOf(seat) - TT.tiltRec(m.tiltOf(seat)).base,
+  nestedLiftFromFacet: liftOf(nested) - TT.tiltRec(m.tiltOf(nested)).base,
+  r90Facing: tools({a: 0, b: 1, c: -1, d: 0}).tiltRec(m.tiltOf(cage)).tilt.facing,
+  noFacet: (() => { const w = console.warn; console.warn = () => {};
+                    const r = TT.tiltRec({deg: 30, facing: 'up', on: 'nope', host: cage});
+                    console.warn = w; return r; })(),
+};
+
+// the facet footprint punch, and a rect punch in a module plane's pixels
+out.facetPunch = m.facetPunch({x: 10, y: 20, w: 60, h: 40, facet: {id: 'card--housing'}});
+out.punchPx = m.punchRectPx({x: 10, y: 20, w: 60, h: 40}, 5, 15, 4);
+
+// tiltGroupIn, against a minimal THREE (column-major Matrix4, Group)
+class M4 {
+  constructor() { this.elements = [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]; }
+  set(...r) { const e = this.elements; for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) e[j * 4 + i] = r[i * 4 + j]; return this; }
+  fromArray(a) { this.elements = [...a]; return this; }
+  copy(o) { this.elements = [...o.elements]; return this; }
+  clone() { return new M4().copy(this); }
+  multiply(o) { const a = this.elements, b = o.elements, r = new Array(16).fill(0);
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) for (let k = 0; k < 4; k++) r[j * 4 + i] += a[k * 4 + i] * b[j * 4 + k];
+    this.elements = r; return this; }
+  invert() { const n = 4, A = []; for (let i = 0; i < n; i++) { A.push([]); for (let j = 0; j < n; j++) A[i].push(this.elements[j * 4 + i]); for (let j = 0; j < n; j++) A[i].push(i === j ? 1 : 0); }
+    for (let c = 0; c < n; c++) { let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      [A[c], A[p]] = [A[p], A[c]]; const d = A[c][c]; for (let j = 0; j < 2 * n; j++) A[c][j] /= d;
+      for (let r = 0; r < n; r++) if (r !== c) { const f = A[r][c]; for (let j = 0; j < 2 * n; j++) A[r][j] -= f * A[c][j]; } }
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) this.elements[j * 4 + i] = A[i][j + n]; return this; }
+}
+class G { constructor() { this.parent = null; this.children = []; this.userData = {}; this.matrix = new M4(); }
+          add(c) { c.parent = this; this.children.push(c); return this; } }
+m.configureRelief({THREE: {Matrix4: M4, Group: G}});
+const face = {fw: 200, fh: 100};
+const tA = {deg: 30, facing: 'up', on: 'card--housing', anchor: [20, 30], z0: 5.774};
+const tB = {...tA, anchor: [21, 31], z0: 6.351};
+const root = new G(), fruCard = new G(); root.add(fruCard);
+const gA = m.tiltGroupIn(fruCard, tA, face);
+const opticG = new G(); gA.add(opticG);
+const gB = m.tiltGroupIn(opticG, tB, face);
+// the face-group-local point a true-frame point lands at, through a group chain
+const through = (gs, p) => gs.reduce((v, g) => { const e = g.matrix.elements;
+  return [e[0]*v[0]+e[4]*v[1]+e[8]*v[2]+e[12], e[1]*v[0]+e[5]*v[1]+e[9]*v[2]+e[13], e[2]*v[0]+e[6]*v[1]+e[10]*v[2]+e[14]]; }, p);
+const L = ([x, y]) => [x - face.fw / 2, face.fh / 2 - y, 0];     // LX/LY of a face-mm point
+const alone = new G(); const gBalone = m.tiltGroupIn(alone, tB, face);
+out.group = {
+  memo: m.tiltGroupIn(fruCard, tA, face) === gA,
+  sameKeyInside: m.tiltGroupIn(opticG, tA, face) === opticG,
+  userData: gA.userData.tilt,
+  autoOff: gA.matrixAutoUpdate === false,
+  // B nested under A lands where B alone does (matrices apply innermost first)
+  nestedB: rr(through([gB, gA], L([25, 35]))),
+  aloneB: rr(through([gBalone], L([25, 35]))),
+};
 console.log(JSON.stringify(out));

@@ -96,3 +96,29 @@ def test_tilt_frame():
     assert o["faceFacing"]["r90"] == ["right", "left", "up", "down"]
     assert o["faceFacing"]["mirror"] == ["up", "down", "right", "left"]
     assert o["faceFacing"]["identity"] == ["up", "down", "left", "right"]
+
+    # tiltTools: the facet's root lift is its profile's; the anchor is the tilted
+    # group's projected corner and z0 the facet's height there
+    t = o["tools"]
+    assert t["facetLift"] == 2
+    assert t["cage"]["tilt"]["anchor"] == [20, 30] and t["cage"]["tilt"]["facing"] == "up"
+    assert t["cage"]["tilt"]["z0"] == pytest.approx(2 + 10 * math.tan(math.radians(30)), abs=1e-3)
+    assert t["cage"]["base"] == 5
+    # a mate-to seat drawn outside the card, whose own lift is the host's whole
+    # chain, stands on the facet exactly as a nested seat does - not 6 off it
+    assert t["seat"]["base"] == 5 and t["seatLiftFromFacet"] == 1
+    assert t["nestedLiftFromFacet"] == 1
+    assert t["r90Facing"] == "right"
+    assert t["noFacet"] is None
+
+    # the facet's footprint punch, and a rect punch in a plane's pixels
+    assert o["facetPunch"] == {"kind": "rect", "x": 10, "y": 20, "w": 60, "h": 40, "facet": "card--housing"}
+    assert o["punchPx"] == [20, 20, 240, 160]
+
+    # tiltGroupIn: memoised per parent and key; the same key inside an already
+    # tilted group adds nothing; a different key nested there lands where it
+    # would alone, so a chained optic is not tilted twice
+    g = o["group"]
+    assert g["memo"] and g["sameKeyInside"] and g["autoOff"]
+    assert g["userData"]["anchor"] == [20, 30] and g["userData"]["on"] == "card--housing"
+    assert g["nestedB"] == pytest.approx(g["aloneB"], abs=1e-3)
