@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fnio-a
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -64,9 +64,11 @@ provenance:
     1G, 2.5G or 10G SFP/SFP+ module, placed under a 45 degree angle for fibre bend radius.
     Composed as std/sfp@1 at its registry aperture, rotate 90: in Figure 170 at 4x
     each cage opening's long side runs down its facet, ALONG the card, so the 14.5 mm
-    side of the aperture lies along the 405 mm and the 10 mm side across it. The rotate
-    pivots on the part's pre-rotation centre, so each `at` is unchanged and the cage
-    centres stay on the 28.5 mm tooth pitch (67.3 ... 277.4). Which way each latch faces
+    side of the aperture lies along the 405 mm and the 10 mm side across it. Each cage
+    sits `on` its tooth's face facet, so the drawing foreshortens it to 14.5 x cos 45 =
+    10.25 mm along the card; its centre stays on the 28.5 mm tooth pitch (67.3 ... 277.4)
+    and `at` is that centre less 5 x cos 45, the projected half of the unrotated height,
+    at the true size 14.5 x 10 (L9). Which way each latch faces
     is not resolved at 300 ppi; rotate 90 rather than 270 is the library's vertical-card
     convention, not a reading. Numbering 1-8 top to bottom is
     ASSUMED: the lamp legend numbers 1-8, the board carries no numeral beside any cage in
@@ -80,20 +82,31 @@ provenance:
   relief: >-
     estimated - the ejectors stand proud of the plate; no document gives a figure, so the
     library's pooled release-hardware estimate (4.2, as cisco/ and edgecore/ parts carry)
-    is used. The sawtooth itself is NOT raised: an `out` on it would come to the front and
-    bury the composed cages, which already emit their own depth.
+    is used. The sawtooth is sixteen facets (provenance.angled-panel), not an `out`: a
+    facet is the sloped surface itself and the cages on it are cut into it.
   angled-panel: >-
     datasheet and drawing - UDS section 40.4.2.1 places each uplink 'under a 45 degree
-    angle', and Figure 170 draws the eight cages on a sawtooth, each on the lit facet
-    that descends from a valley at the plate to an apex at the front. The skin paints each
-    tooth as a lit facet band (the cage face, valley line dark, apex line bright) and a
-    shaded return band, at the band edges read off Figure 170. The cages themselves are
-    the std/ aperture at registry size, face-on: angled-panel 45 degrees; not
-    representable until the format carries a tilt. A true 45 degree facet would project
-    the 14.5 mm aperture to about 10.3 mm along the card; that foreshortening is NOT
-    faked, so the drawn cages overrun their facet bands by up to 1 mm at ports 7 and 8.
+    angle', and Figure 170 draws the eight cages on a sawtooth. Each tooth is two facets:
+    the FACE, which carries the cage and looks up (root at its upper edge on the plate,
+    lower edge proud), and the RETURN below it, which looks down and closes the tooth back
+    to the plate. Both are 45 degrees and 14.25 mm front-view, so they meet at a 14.25 mm
+    apex and a tooth is the 28.5 mm pitch. Measured in Figure 170 on the near-side edge
+    of one tooth (image px): a run of 40 out of the plate over a rise of 54.5 (face) and
+    41.75 (return) down the card. The oblique's depth axis, read off the board's top edge
+    (15 px down per 100 across, and about 3.1 px/mm over the 205 mm depth), turns that
+    into an apex 12.9 mm proud over 14.0 and 13.8 mm front-view: 43 degrees each (45 if
+    the depth is the 225 mm figure), so 45/45 as the text says. Each face is centred on
+    its cage, which keeps the cage centres where layout puts them; the projected cage
+    (10.25 mm) has 2.0 mm of face above and below it, 2.83 mm along the slope. A 45/45
+    tooth is square, so a cage's depth runs parallel to the return and stays 2.83 mm
+    inside it however deep it goes. What the facets cannot say: Figure 170 draws the six
+    valleys INSIDE each group about 2.7 mm proud of the plate (the first face and last
+    return of each group are that much longer), and a facet's `lift` would float it off
+    the plate, so every valley is modelled on the plate and each group's teeth span 114
+    mm (60.2-174.2, 184.8-298.8) against the 118 read off the figure (57.5-175.5,
+    181.5-300.3); the difference is flat plate at each end of a group.
   gaps: >-
-    angled-panel: 45 degrees; not representable until the format carries a tilt.
+    Valleys between teeth drawn about 2.7 mm proud of the plate (modelled on it).
     Faceplate edge-to-edge width (26 mm stated overall, held at the 25 mm pitch).
     Whether the SFP+ modules are inside the 26.4 W figure. Cage-to-number mapping
     (assumed 1-8 top to bottom). Cage latch direction (not resolved in Figure 170).
@@ -105,6 +118,22 @@ provenance:
     notice was searched for on the web.
 elements:
   logo-zone: {at: [4.0, 303.0], size: [17.0, 12.0], class: label}
+  tooth-1-face: {at: [0.6, 60.175], size: [23.8, 14.25], class: mechanical}
+  tooth-1-return: {at: [0.6, 74.425], size: [23.8, 14.25], class: mechanical}
+  tooth-2-face: {at: [0.6, 88.675], size: [23.8, 14.25], class: mechanical}
+  tooth-2-return: {at: [0.6, 102.925], size: [23.8, 14.25], class: mechanical}
+  tooth-3-face: {at: [0.6, 117.175], size: [23.8, 14.25], class: mechanical}
+  tooth-3-return: {at: [0.6, 131.425], size: [23.8, 14.25], class: mechanical}
+  tooth-4-face: {at: [0.6, 145.675], size: [23.8, 14.25], class: mechanical}
+  tooth-4-return: {at: [0.6, 159.925], size: [23.8, 14.25], class: mechanical}
+  tooth-5-face: {at: [0.6, 184.775], size: [23.8, 14.25], class: mechanical}
+  tooth-5-return: {at: [0.6, 199.025], size: [23.8, 14.25], class: mechanical}
+  tooth-6-face: {at: [0.6, 213.275], size: [23.8, 14.25], class: mechanical}
+  tooth-6-return: {at: [0.6, 227.525], size: [23.8, 14.25], class: mechanical}
+  tooth-7-face: {at: [0.6, 241.775], size: [23.8, 14.25], class: mechanical}
+  tooth-7-return: {at: [0.6, 256.025], size: [23.8, 14.25], class: mechanical}
+  tooth-8-face: {at: [0.6, 270.275], size: [23.8, 14.25], class: mechanical}
+  tooth-8-return: {at: [0.6, 284.525], size: [23.8, 14.25], class: mechanical}
 relief:
   wall: '#8d9298'
   features:
@@ -120,6 +149,86 @@ relief:
       source: >-
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
+    - node: tooth-1-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-1-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-2-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-2-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-3-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-3-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-4-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-4-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-5-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-5-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-6-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-6-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-7-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-7-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-8-face
+      facet: {deg: 45, facing: up}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
+    - node: tooth-8-return
+      facet: {deg: 45, facing: down}
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p388 Figure 170, a tooth run and rise (provenance.angled-panel)
 groups:
   sfp-plus:
     term: Port
@@ -138,14 +247,14 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR
 parts:
-  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [5.25, 62.3], rotate: 90}
-  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [5.25, 90.8], rotate: 90}
-  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [5.25, 119.3], rotate: 90}
-  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [5.25, 147.8], rotate: 90}
-  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [5.25, 186.9], rotate: 90}
-  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [5.25, 215.4], rotate: 90}
-  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [5.25, 243.9], rotate: 90}
-  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [5.25, 272.4], rotate: 90}
+  - {ref: std/sfp@1, id: port-1, group: sfp-plus, at: [5.25, 63.764], rotate: 90, 'on': tooth-1-face}
+  - {ref: std/sfp@1, id: port-2, group: sfp-plus, at: [5.25, 92.264], rotate: 90, 'on': tooth-2-face}
+  - {ref: std/sfp@1, id: port-3, group: sfp-plus, at: [5.25, 120.764], rotate: 90, 'on': tooth-3-face}
+  - {ref: std/sfp@1, id: port-4, group: sfp-plus, at: [5.25, 149.264], rotate: 90, 'on': tooth-4-face}
+  - {ref: std/sfp@1, id: port-5, group: sfp-plus, at: [5.25, 188.364], rotate: 90, 'on': tooth-5-face}
+  - {ref: std/sfp@1, id: port-6, group: sfp-plus, at: [5.25, 216.864], rotate: 90, 'on': tooth-6-face}
+  - {ref: std/sfp@1, id: port-7, group: sfp-plus, at: [5.25, 245.364], rotate: 90, 'on': tooth-7-face}
+  - {ref: std/sfp@1, id: port-8, group: sfp-plus, at: [5.25, 273.864], rotate: 90, 'on': tooth-8-face}
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 33.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 33.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-port-1, group: port-leds, at: [8.2, 38.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
