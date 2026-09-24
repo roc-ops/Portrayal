@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fwlt-c
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -24,7 +24,7 @@ size-notes: >-
 attrs:
   model: FWLT-C
   part-number: 3FE 74981 AA / AD / BD / CD
-  sfp-plus: 16
+  xgs-pon: 16
   weight-kg: 2.76
   power-draw-max-w: 98
   power-draw-typical-w: 92
@@ -33,6 +33,15 @@ attrs:
     XGS-PON 89 (84), MPM XGS/GPON 95 (90). Includes the optics, per the note that PON
     line-card figures include their optics
 provenance:
+  rate: >-
+    datasheet - `xgs-pon: 16`. Lightspan UDS section 42.4 gives GPON, XGS-PON and Multi-PON
+    (GPON + XGS-PON) "on any of the 16 ports", and 25GS-PON on the even ports (2, 4 ... 16)
+    only. The ETSI PIG 3HH11997AAAATCZZA42 Table 126 FWLT-C
+    column lists GPON SFP, XGS dual-rate SFP+, XGS/GPON SFP-DD MPM and 25GS-PON SFP28 OLT
+    modules. So each port states what its cage carries: the odd ports `pon: xgs-pon`
+    (XGS-PON, or the XGS channel of an MPM), the even ports `pon: 25gs-pon`. 25GS-PON has
+    no interface type in both DCIM targets (NetBox has `25g-pon`, Nautobot does not), so
+    the even ports export as the XGS-PON they also run, from the card's `xgs-pon: 16`.
   size: >-
     datasheet - Lightspan FX UDS 25.12 3HH90279AAAATQZZA23 section 42.5.1 (p437-438) and
     ETSI UDS R7.0 3FE77012AAAATQZZA18 section 47.5.1 (p459): height 405 mm, width 225 mm
@@ -79,9 +88,9 @@ provenance:
     (spec/schemas/pluggables.yaml). The library has no std/ SFP-DD cage, so each port
     composes std/sfp@1, the SFP opening an SFP-DD cage presents, turned 90 degrees at the
     module centre; each port says media sfp-dd. Speed is 25g on the even ports and 10g on
-    the odd (the fastest optic each takes: XGS-PON or the XGS half of an MPM). `sfp-plus:
-    16` tells the DCIM export the cages run SFP+ XGS optics; it has no SFP-DD or 25GS-PON
-    type (gap).
+    the odd (the fastest optic each takes: XGS-PON or the XGS half of an MPM). The DCIM
+    export has no SFP-DD or 25GS-PON type, so the ports export by their PON flavour (see
+    rate).
   lamps: >-
     datasheet - ETSI UDS Figures 220-221 and Tables 137-138 (p459-460): two PON lamps per
     port "worked in into the side of the optical socket"; with a single-channel optic the
@@ -98,8 +107,8 @@ provenance:
     searched only the staged corpus - listed as current in the Lightspan PIM and the ETSI
     PIG; no end-of-life notice was searched for on the web.
   gaps: >-
-    (1) no std/sfp-dd cage exists, so the opening is the SFP one and the export types the
-    ports sfp-plus; (2) both labels are drawn as placeholders; (3) the cages' angle, if
+    (1) no std/sfp-dd cage exists, so the opening is the SFP one, and the export has
+    no 25GS-PON type, so the even ports export as XGS-PON; (2) both labels are drawn as placeholders; (3) the cages' angle, if
     any, is not resolvable in a front view; (4) on the regular 20.62 mm pitch the sixteenth
     opening (14.5 mm, the SFP bezel, taller than the 12.8 mm module face the figure draws)
     runs 3.5 mm past the block's drawn lower edge at 357.8 mm, where Figure 218 shows the
@@ -175,22 +184,22 @@ groups:
     index-origin: 1
     description: the board lamps ALM and PWR, at the bottom of the card
 parts:
-  - {ref: std/sfp@1, id: port-1, group: sfp-dd, at: [4.1, 39.82], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-2, group: sfp-dd, at: [4.1, 60.44], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-3, group: sfp-dd, at: [4.1, 81.06], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-4, group: sfp-dd, at: [4.1, 101.68], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-5, group: sfp-dd, at: [4.1, 122.3], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-6, group: sfp-dd, at: [4.1, 142.92], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-7, group: sfp-dd, at: [4.1, 163.54], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-8, group: sfp-dd, at: [4.1, 184.16], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-9, group: sfp-dd, at: [4.1, 204.78], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-10, group: sfp-dd, at: [4.1, 225.4], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-11, group: sfp-dd, at: [4.1, 246.02], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-12, group: sfp-dd, at: [4.1, 266.64], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-13, group: sfp-dd, at: [4.1, 287.26], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-14, group: sfp-dd, at: [4.1, 307.88], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
-  - {ref: std/sfp@1, id: port-15, group: sfp-dd, at: [4.1, 328.5], rotate: 90, attrs: {media: sfp-dd, speed: 10g}}
-  - {ref: std/sfp@1, id: port-16, group: sfp-dd, at: [4.1, 349.12], rotate: 90, attrs: {media: sfp-dd, speed: 25g}}
+  - {ref: std/sfp@1, id: port-1, group: sfp-dd, at: [4.1, 39.82], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-2, group: sfp-dd, at: [4.1, 60.44], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-3, group: sfp-dd, at: [4.1, 81.06], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-4, group: sfp-dd, at: [4.1, 101.68], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-5, group: sfp-dd, at: [4.1, 122.3], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-6, group: sfp-dd, at: [4.1, 142.92], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-7, group: sfp-dd, at: [4.1, 163.54], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-8, group: sfp-dd, at: [4.1, 184.16], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-9, group: sfp-dd, at: [4.1, 204.78], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-10, group: sfp-dd, at: [4.1, 225.4], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-11, group: sfp-dd, at: [4.1, 246.02], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-12, group: sfp-dd, at: [4.1, 266.64], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-13, group: sfp-dd, at: [4.1, 287.26], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-14, group: sfp-dd, at: [4.1, 307.88], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
+  - {ref: std/sfp@1, id: port-15, group: sfp-dd, at: [4.1, 328.5], rotate: 90, attrs: {media: sfp-dd, speed: 10g, pon: xgs-pon}}
+  - {ref: std/sfp@1, id: port-16, group: sfp-dd, at: [4.1, 349.12], rotate: 90, attrs: {media: sfp-dd, speed: 25g, pon: 25gs-pon}}
   - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [6.67, 377.5], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
   - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [11.8, 377.5], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-1-top, group: pon-leds, at: [1.73, 32.82], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}

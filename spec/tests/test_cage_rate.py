@@ -279,6 +279,9 @@ def test_a_pon_attr_answers_the_census():
     ("nokia/fwlt-a", "ng-pon2", 4),   # "G.989 NG-PON2 TWDM ... four ports"
     ("nokia/fpxt-a", "10g-epon", 4),  # "4 compliant IEEE802.3av EPON XFP ports"
     ("nokia/fpxt-b", "10g-epon", 8),  # "8p 10G EPON Line Termination unit"
+    ("nokia/fwlt-b-aa", "xgs-pon", 8),  # "G.9807 XGS-PON on any of the eight ports"
+    ("nokia/fwlt-b-ab", "xgs-pon", 8),  # NG-PON2 named, but only XGS optics listed
+    ("nokia/fwlt-c", "xgs-pon", 16),    # "XGS-PON ... on any of the 16 ports"
 ])
 def test_a_pon_card_states_its_rate(ref, attr, count):
     d = _modules().get(ref)
@@ -314,16 +317,25 @@ def test_a_multi_pon_card_exports_every_port_as_pon():
     assert [i["type"] for i in d["interfaces"]] == ["xgs-pon"] * 16
 
 
+@pytest.mark.parametrize("model", ["FWLT-B AA", "FWLT-B AB", "FWLT-C"])
+def test_a_former_sfp_plus_pon_card_exports_as_pon(model):
+    """These three stated `sfp-plus` for want of a PON type, and exported every
+    OLT port as 10GBASE-X SFP+. The FWLT-C's odd ports state `pon: xgs-pon`
+    and its even ports `pon: 25gs-pon`, which neither falls to Ethernet nor
+    names a type Nautobot lacks: they export as the XGS-PON they also run."""
+    p = LIB / f"exports/netbox/module-types/Nokia/{model}.yaml"
+    if not p.exists():
+        pytest.skip(f"the {model} export is not in this library")
+    d = yaml.safe_load(p.read_text()) or {}
+    assert {i["type"] for i in d["interfaces"]} == {"xgs-pon"}
+
+
 # PON CARDS THAT STILL STATE AN ETHERNET RATE, named so the sweep below is not
-# silent about them. Each chose `sfp-plus` because the export had no PON type;
-# it has one now, and moving each to `xgs-pon` is a contract change of its own.
-# The sweep fails when one is fixed and not removed from here, as well as when
-# a new one appears.
-STILL_ETHERNET = {
-    "FWLT-B AA",   # "the 8-port XGS-PON line termination card", `sfp-plus: 8`
-    "FWLT-B AB",   # its AB build, `sfp-plus: 8`
-    "FWLT-C",      # "16-port Multi-PON", `sfp-plus: 16`
-}
+# silent about them. The register is meant to shrink: FWLT-B AA, FWLT-B AB and
+# FWLT-C were here until they stated `xgs-pon` in place of `sfp-plus`. The sweep
+# fails when one is fixed and not removed from here, as well as when a new one
+# appears.
+STILL_ETHERNET = set()
 
 
 def test_no_pon_card_still_exports_ethernet():
