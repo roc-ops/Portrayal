@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-685 component majors in 13 namespaces.
+690 component majors in 14 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -88,7 +88,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 20 | 0 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
 | `common/led-dot@1` | component | led | 2 × 2 |  | 83 | 153 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 5 | 1 | Single chassis status LED |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 5 | 4 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 0 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
@@ -696,6 +696,16 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/port-extender-fan@1` | module | fan | 58.8 × 40 |  | 1 | 0 | A rear fan module of the MaiaEdge Port Extender - a black 1RU module behind a honeycomb grille, with a blue p… |
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 | `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
+
+## nokia/ (5)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `nokia/bfan-e@1` | module | fan | 32.9 × 345 × 216.7 |  | 0 | 0 | Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E), also sold as the Lights… |
+| `nokia/bfan-h@1` | module | fan | 493.4 × 59.25 × 274.85 |  | 0 | 0 | Nokia BFAN-H (3FE 66546 AA), the intelligent fan tray of the 7360 ISAM FX-16 (NFXS-D), also sold as the Light… |
+| `nokia/bfan-x@1` | module | fan | 33.1 × 213.5 × 225.36 |  | 0 | 0 | Nokia BFAN-X (3FE 66544 AA), the intelligent fan unit of the 7360 ISAM FX-4 (NFXS-F), also sold as the Lights… |
+| `nokia/dummy-lt@1` | module | blank | 25 × 405 |  | 0 | 0 | Nokia 3FE 65651 BA, the universal dummy front panel for an unused LT or NTIO slot of the 7360 ISAM FX (and of… |
+| `nokia/dummy-nt@1` | module | blank | 30 × 405 |  | 0 | 0 | Nokia 3FE 65651 AA, the dummy front panel for the second NT slot of the 7360 ISAM FX (FX-4, FX-8, FX-12 and F… |
 
 ## smartoptics/ (16)
 

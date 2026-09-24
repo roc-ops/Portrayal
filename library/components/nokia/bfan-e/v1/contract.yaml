@@ -1,0 +1,137 @@
+format: 1
+kind: module
+name: bfan-e
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia BFAN-E (3FE 66545 AA), the intelligent fan unit of the 7360 ISAM FX-8 (NFXS-E),
+  also sold as the Lightspan FX-8 fan unit. A vertical plate carrying six variable-speed
+  fans in a 2 x 3 block, which slides in at the shelf's right-hand end. Drawn is its narrow
+  front edge, 32.9 x 345, as the Unit Data Sheet's middle view draws it: a top block, two
+  long recessed windows, a CAUTION ROTATING FAN BLADES label, an ESD mark, a grip, a label
+  window, then low down the status lamp, a locating pin and the captive screw. In a working
+  shelf this edge sits BEHIND the shelf's fan cover (the strip printed "7360 ISAM FX-8"),
+  which is a separate part; see fan-cover-gap.
+unplaced: >-
+  Seated by the fan bay at the right-hand end of the 7360 ISAM FX-8 shelf (NFXS-E), which
+  is being modelled in parallel under roc-ops/Portrayal#538 and is not in the library yet.
+  Remove this line when that shelf's fan bay lists the unit in `accepts`.
+size: {w: 32.9, h: 345.0, d: 216.7}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: BFAN-E
+  part-number: 3FE 66545 AA
+  weight-kg: 1.30
+  fans: '6'
+  power-draw-max-w: 95
+  power-draw-typical-w: 25
+  airflow-m3h: 6 x 192
+  dust-filter: 3FE 64928 DA
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 36.5.1 (p378):
+    height 345 mm, width 32.9 mm, depth 216.7 mm; the stand-alone data sheet
+    3FE66545AAAATQZZA03 section 1.5.1 prints the same. The face is width x height, because the
+    unit stands on edge at the shelf's right end and presents its narrow side.
+  depth: 'datasheet - 216.7 mm, 3HH90279AAAATQZZA23 section 36.5.1 (p378)'
+  weight: 'datasheet - 1.30 kg, 1.36 kg with filter, 3HH90279AAAATQZZA23 section 36.5.2 (p378)'
+  power: >-
+    datasheet - 3HH90279AAAATQZZA23 Table 143 (p380): 25 W +/- 5% in "classic mode" at
+    -48 Vdc, 95 W +/- 5% at full speed at -48 Vdc. The ETSI Safety Manual
+    3HH11998AAAATCZZA29 Table 2 (p26) repeats both: note 6, classic mode "with +25 C ambient
+    value"; note 7, full speed, no ambient. The 95 W maximum is the fans at full speed, the
+    ceiling whatever the ambient; the 25 W typical is the +25 C classic-mode figure.
+  layout: >-
+    drawing - the middle (front-edge) view of Figure 2 "BFAN-E Views" in the stand-alone data
+    sheet 3FE66545AAAATQZZA03 p8, VECTOR art rendered at 600 dpi (the same art is Figure 173,
+    3HH90279AAAATQZZA23 p378, as a 150 ppi JPEG). Gate 1: the fan-plate view measures
+    1250 x 1991 px against 216.7 x 345, 5.768 and 5.771 px/mm, so the views are
+    orthographic. The front edge spans 193 x 1991 px, 33.4 against 32.9 (1.5%, the flange
+    lip). Heights at 5.771 px/mm from the top edge and widths at 32.9/193 mm/px, both by row
+    and column edge scans of the render: front plate 0-24.2 with the folded flange
+    24.2-32.9; top block 0-20.1; windows 4.3-12.8 and 13.6-22.0 x 25.1-69.0; caution label
+    4.3-23.2 x 71.9-113.8; ESD mark centre (14.25, 119.8); grip 11.1-24.9 x 129.8-164.6;
+    label window 4.3-13.8 x 179.7-207.6; lamp centre (15.4, 298.0), 3.2 across; pin
+    (7.65, 319.45); captive screw about (15.5, 340). Stated to 0.1 mm because that is what the
+    arithmetic gives; the drawing resolves about 0.2 mm.
+  status-led: >-
+    datasheet - Table 140 (p377): green blinking 50/50 at power-up and start-up, green steady
+    at the inlet-temperature settle point, green blinking 90/10 in closed-loop control, red
+    steady on fan failure. Figure 1 of 3FE66545AAAATQZZA03 (p5, 3D, vector) points "Status
+    LED" at the upper of the two small rounds near the foot of the edge, which is the one at
+    298.0; the lower (319.45) is drawn there as a short cylindrical pin.
+  captive-screw: >-
+    HIM 3HH91853AAAARJZZA08 Figure 157 (p253) "Captive screw on the fan unit" names the
+    knurled screw at the foot of the edge; the fan cover has a captive screw of its own
+    (Figure 158).
+  grip: >-
+    drawing - the rectangle at 130-165 stands proud of the plate in Figure 1 (3D) and is
+    split by the fan-plate line; read as the pull grip. The HIM does not name it.
+  fan-cover-gap: >-
+    NOT MODELLED. HIM 3HH91853AAAARJZZA08 Figure 158 (p255): the FX-8 fan area is closed by a
+    FAN COVER printed "7360 ISAM FX-8" with slot legends and its own captive screw. No
+    staged document gives it a part number; it is a shelf part and the shelf should draw it
+    over the fan bay. The "7360 ISAM FX-8" printing is not on this unit.
+  power-ambient-gap: >-
+    classic-mode draw above +25 C is not published in the UDS guides or either Safety
+    Manual; only the full-speed 95 W bounds it.
+  window-gap: >-
+    Figure 1 (3D) draws an up-arrow in each of the two tall windows, and the orthographic
+    Figure 2 draws them empty. Which is the printed art is not settled, so neither arrow is
+    drawn.
+  photo-gap: >-
+    no photograph of the unit is staged. PUBLIC-SOURCES.md 2c lists thunder-link side shots of
+    the FX-8 fan side (TL 53727360-isam-fx-8-6 / 69467360-isam-fx-8-5) that were not fetched,
+    so colour is the family's silver-grey by convention, not by observation.
+  label: >-
+    drawing - the caution label carries a hazard triangle and CAUTION / ROTATING FAN BLADES,
+    set vertically reading bottom to top, transcribed as printed. The ESD mark is the circled
+    hand symbol.
+  logo-zone: 'reserved by the family convention; no mark is drawn on this edge in any figure'
+  lifecycle: >-
+    searched only the staged corpus - the 2026 Lightspan UDS guide still lists the unit as
+    current; no end-of-life notice was searched for on the web.
+elements:
+  window-left: {at: [4.3, 25.1], size: [8.5, 43.9], class: window}
+  window-right: {at: [13.6, 25.1], size: [8.4, 43.9], class: window}
+  caution-label: {at: [4.3, 71.9], size: [18.9, 41.9], class: label}
+  esd-mark: {at: [11.05, 116.6], size: [6.4, 6.4], class: label}
+  grip: {at: [11.1, 129.8], size: [13.8, 34.8], class: handle}
+  label-window: {at: [4.3, 179.7], size: [9.5, 27.9], class: label}
+  pin: {at: [6.25, 318.05], size: [2.8, 2.8], class: fastener}
+  captive-screw: {at: [11.0, 335.5], size: [9.0, 9.0], class: fastener}
+  logo-zone: {at: [4.3, 220.0], size: [16.0, 10.0], class: label}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the fan unit's single status lamp
+parts:
+  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [13.4, 296.0],
+     states: {lamp: ['off', {name: starting, color: '#39b54a', behavior: blinking},
+                     {name: 'on', color: '#39b54a'},
+                     {name: closed-loop, color: '#39b54a', behavior: blinking},
+                     {name: fail, color: '#d0021b'}]}}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: grip
+      out: 3.0
+      confidence: estimated
+      source: the grip stands off the plate in Figure 1 (3D); no document gives a figure
+    - node: captive-screw
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled captive screw head, Figure 1 (3D) and HIM Figure 157; the library carries no
+        measured figure for one and nothing dimensions it
+    - node: pin
+      cyl: 2.0
+      confidence: estimated
+      source: the short pin drawn below the lamp in Figure 1 (3D); undimensioned
+connection-points:
+  mate: {at: [16.45, 172.5], direction: rear}
+skins: [default]
