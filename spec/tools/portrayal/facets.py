@@ -26,7 +26,8 @@ def derived_profile(facet, w, h):
     """The wedge a facet compiles to, in the existing profile vocabulary.
 
     `up`: root (0 proud) at the upper edge, proud at the lower edge.
-    `down`: the reverse. `left`: proud at the left edge; `right`: proud at the right.
+    `down`: the reverse. `left`: root at the left edge, proud at the right.
+    `right`: root at the right edge, proud at the left.
     """
     t = proud_extent(facet, w, h)
     f = facet["facing"]
@@ -35,8 +36,8 @@ def derived_profile(facet, w, h):
     if f == "down":
         return "profile-y", [[0.0, t], [float(h), 0.0]]
     if f == "left":
-        return "profile", [[0.0, t], [float(w), 0.0]]
-    return "profile", [[0.0, 0.0], [float(w), t]]
+        return "profile", [[0.0, 0.0], [float(w), t]]
+    return "profile", [[0.0, t], [float(w), 0.0]]
 
 
 def scale_transform(facet):

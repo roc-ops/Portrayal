@@ -25,9 +25,9 @@ def test_derived_profile_down_and_left_right():
     assert facets.derived_profile({"deg": 45, "facing": "down"}, 20, 10) == \
         ("profile-y", [[0.0, pytest.approx(10.0)], [10.0, 0.0]])
     assert facets.derived_profile({"deg": 45, "facing": "left"}, 20, 10) == \
-        ("profile", [[0.0, pytest.approx(20.0)], [20.0, 0.0]])
-    assert facets.derived_profile({"deg": 45, "facing": "right"}, 20, 10) == \
         ("profile", [[0.0, 0.0], [20.0, pytest.approx(20.0)]])
+    assert facets.derived_profile({"deg": 45, "facing": "right"}, 20, 10) == \
+        ("profile", [[0.0, pytest.approx(20.0)], [20.0, 0.0]])
 
 
 def test_projected_box_unrotated_up():

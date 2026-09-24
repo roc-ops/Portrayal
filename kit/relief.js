@@ -59,11 +59,12 @@ export function cavitySeatsOn(c, o, eps = 0.01) {
 // z out. Pure, so it is checked under node.
 function _tiltBasis(deg, facing) {
   const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
-  // u: where a step along the tilted axis goes; n: the part's outward normal
+  // u: where a step along the tilted axis goes; n: the part's outward normal.
+  // n must equal ex × ey, where ex and ey are the matrix's first two columns.
   if (facing === 'up')    return {axis: 'y', u: [0,  c,  s], n: [0, -s, c]};
   if (facing === 'down')  return {axis: 'y', u: [0,  c, -s], n: [0,  s, c]};
-  if (facing === 'left')  return {axis: 'x', u: [ c, 0, -s], n: [-s, 0, c]};
-  return                         {axis: 'x', u: [ c, 0,  s], n: [ s, 0, c]};   // right
+  if (facing === 'left')  return {axis: 'x', u: [ c, 0,  s], n: [-s, 0, c]};
+  return                         {axis: 'x', u: [ c, 0, -s], n: [ s, 0, c]};   // right
 }
 export function tiltFrame({deg, facing, anchor: [ax, ay], z0 = 0}) {
   const {axis, u, n} = _tiltBasis(deg, facing);
@@ -85,7 +86,7 @@ export function unproject(rect, {deg, facing, anchor: [ax, ay]}) {
 export function facetZ(r, {deg, facing}, lift, [px, py]) {
   const t = Math.tan(deg * Math.PI / 180);
   const d = facing === 'up' ? py - r.y : facing === 'down' ? r.y + r.h - py
-          : facing === 'left' ? r.x + r.w - px : px - r.x;
+          : facing === 'left' ? px - r.x : r.x + r.w - px;
   return (lift || 0) + Math.max(0, d) * t;
 }
 

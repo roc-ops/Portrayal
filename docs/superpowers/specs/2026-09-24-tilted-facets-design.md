@@ -57,8 +57,8 @@ relief:
 - **`facing`:** `up | down | left | right`, which way the facet looks.
   - `up`: the upper edge (the *root*) sits on the plate and the lower edge stands proud.
   - `down`: the lower edge sits on the plate and the upper edge stands proud.
-  - `left` and `right`: the same across x. `left` means the right-hand edge is the root and the
-    left-hand edge stands proud.
+  - `left`: the left-hand edge is the root and the right-hand edge stands proud.
+  - `right`: the reverse of `left`.
 - **The node's rectangle** is the facet's footprint as seen from the front. The proud edge stands
   off by `projected extent x tan(deg)`.
 - **A feature with `facet` may not also declare `out`, `profile` or `profile-y`.** The renderer
