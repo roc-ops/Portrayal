@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: sr-12-pem-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The blank panel that closes an empty PEM slot on the rear of the 7750 SR-12 and 7450
+  ESS-12, fitted when a DC PEM-3 is removed and not replaced at once. Nokia names it only in
+  the PEM removal procedure and gives it no part number and no figure, so this face is the
+  slot's outline with the PEM-3's end flanges and captive screws, and nothing else.
+unplaced: "seated by the SR-12 rear PEM slots (pem-1, pem-2); the coordinator wires it"
+size: {w: 425.7, h: 51.6}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  borrowed from nokia/sr-12-pem-3@1, the module whose slot the blank closes; no document
+  dimensions the blank
+attrs:
+  model: 7750 SR-12 PEM slot blank panel
+  role: slot-blank
+provenance:
+  sources: >-
+    datasheet - SR12 (3HE18644AAAATQZZA03) p237, removing a 175A DC PEM-3, step 8: "If you do
+    not replace the PEM immediately, install a blank panel to prevent excess dust
+    accumulation and to help control airflow and electromagnetic interference." The 15.1
+    guide carries the same sentence. No figure, no part number, no photograph.
+  size: 'borrowed - nokia/sr-12-pem-3@1 (SR12 p104 Table 43), the slot it closes'
+  depth: 'NOT STATED - no figure or table gives it, so none is written'
+  layout: >-
+    estimated - the PEM-3's end flanges (x 0-16.2 and 409.4-425.7, y 2.4-46.6) and its two
+    flange captive screws at (8.5, 25.8) and (417.2, 25.8) are carried over, on the
+    assumption that a panel closing the same slot fastens the same way. Nothing else is
+    drawn because nothing else is known. A gap until a photograph or a figure is found.
+  colour: 'estimated - drawn in the PEM-3''s sheet-metal grey'
+  logo-zone: 'reserved at the centre of the plain plate; nothing is known to be printed on it'
+  lifecycle: 'searched only the staged corpus; not a separately listed orderable item'
+elements:
+  screw-left: {at: [4.05, 21.35], size: [8.9, 8.9], class: screw}
+  screw-right: {at: [412.75, 21.35], size: [8.9, 8.9], class: screw}
+  logo-zone: {at: [190.0, 20.0], size: [45.0, 11.6], class: label}
+relief:
+  features:
+    - node: screw-left
+      cyl: 3.0
+      confidence: estimated
+      source: borrowed from nokia/sr-12-pem-3@1's flange screw, itself unmeasured
+    - node: screw-right
+      cyl: 3.0
+      confidence: estimated
+      source: as screw-left
+connection-points:
+  mate: {at: [212.85, 25.8], direction: rear}
+skins: [default]
