@@ -1,0 +1,114 @@
+format: 1
+kind: module
+name: m2-10gb-xp-xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 2-port 10GBASE XFP MDA-XP, M2-10GB-XP-XFP
+  (3HE03685AA; ESS 3HE03687AA), a classic half-slot MDA for the IOM3-XP: two XFP cages, 1 at
+  the left and 2 near the middle, each with its Lnk, Act and Laser Disabled lamps beneath it,
+  the Stat and Pwr lamps at the far left, a WAN lamp at the upper right, the model legend at
+  the lower right and a cross-slotted captive screw on each lower end wing. Authored
+  horizontal; an SR-12 IOM3-XP seats it on end with the carrier.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 5
+  is fitted per axis to that face.
+attrs:
+  model: M2-10GB-XP-XFP
+  part-number: 3HE03685AA
+  part-number-variants: 3HE03685AA (7750 SR), 3HE03687AA (7450 ESS)
+  xfp: 2
+  power-draw-max-w: 50
+provenance:
+  sources: >-
+    datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p30 Figure 5 and p30-31 Table 5
+    (the face, its lamps and screws), p18 Table 2 (power), p16 (the model list). SR7 22.7
+    3HE18643AAAATQZZA03 p106 Table 47 (MDA size) and p105 Table 45 (power, 50 W); SR7 15.1
+    3HE14151AAAATQZZA02 p97 Table 32 (part numbers, "7750 SR 2-port 10GBASE - XFP MDA-XP"; p91
+    says the bracketed number is the 7450 ESS part).
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - MXP p30 Figure 5 (art MDA0063), vector (pdfimages finds no raster), rendered at
+    1200 dpi. Fitted per axis exactly as the M10-1GB-XP-SFP's Figure 9: 4618 px between the
+    plate's side lines to 190.5 (24.24 px/mm) and 847 px from the top line to the bottom of the
+    centre band to 35.4 (23.93 px/mm). The outline is the classic MDA's and measures the same:
+    end wings to y 28.27, notches to x 15.59 and 175.01, the band's inner line at y 33.46, the
+    top lip at y 1.65; the blocks outside each side line are the side guides, not face. Port 1
+    and its lamps are Figure 4's to the pixel. XFP boxes (key 3) drawn 20.0 x 10.32, x
+    30.38-50.43 and 104.39-124.39, y 3.70-14.02, centres (40.41, 8.86) and (114.39, 8.86), a
+    73.98 pitch. Lamps drawn 2.7 across: Stat (11.36, 6.37) and Pwr (11.36, 11.55), legends to
+    the left; Lnk, Act and Laser Disabled at y 18.20, x 32.01, 40.45, 48.86 under cage 1 and
+    106.02, 114.43, 122.85 under cage 2, legends below; WAN (179.96, 6.37). Port numbers 1 and 2
+    left of their cages at x 26.9 and 101.2. Captive screws (key 9) centred (7.6, 22.9) and
+    (183.0, 22.9), heads 8.2 in a 10.0 ring, cross-slotted; the tab under the left screw 1.55
+    deep, under the right 3.1. Model legend M2-10GB-XP-XFP (key 8), bold, ending at x 172.5,
+    baseline 32.2.
+  cages: >-
+    drawing + standard - each port is a std/xfp@1 (INF-8077i aperture 19.5 x 9.7) centred on its
+    drawn box, which is barely larger than the aperture and is drawn as the bezel. The 73.98
+    pitch is far above the MSA's 23.5 floor. ORIENTATION IS NOT READ: the figure draws empty
+    boxes with no latch or bail, and no photograph of this card is held, so both cages take
+    rotate 0.
+  lamps: >-
+    datasheet - MXP p30-31 Table 5: Status green blinking initializing, green up, amber
+    operationally down, unlit administratively down; Power blue on, off no power; Lnk green
+    link at 10000 Mbps, amber slow blinking no XFP installed, amber optics installed but no
+    link, unlit disabled; Act green active, amber error, unlit no activity; Laser Disabled amber
+    laser disabled, off laser on; WAN green both ports configured for 10GBASE WAN PHY framing,
+    unlit not.
+  power: 'datasheet - MXP p18 Table 2: M2-10GB-XP-XFP 50 W maximum; SR7 15.1 p97 and SR7 22.7 p105 Table 45 agree. XFP optics 4 W each (MXP Table 3), not included'
+  colour: >-
+    estimated - no photograph of a classic MDA is held (the public Ethernet MDA-XP datasheet
+    would settle it). Drawn in the charcoal of the SR-7/SR-12 card family. A gap.
+  logo-zone: 'reserved on the plain plate between cage 2 and the WAN lamp; Figure 5 draws no mark'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  lifecycle: 'searched only the staged corpus; the MDA-XP guide and the SR7 15.1 and 22.7 guides list it'
+  gaps: >-
+    Colour is estimated. The cage orientation is not read. The mda-type CLI string is not
+    printed for this card in anything held.
+elements:
+  screw-left: {at: [2.6, 17.9], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [178.0, 17.9], size: [10.0, 10.0], class: screw}
+  model-label: {at: [147.7, 30.0], size: [24.8, 2.8], class: label}
+  logo-zone: {at: [136.0, 4.0], size: [36.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g}
+    description: the two XFP cages, 10 Gigabit Ethernet, 1 and 2 left to right as Figure 5 prints them
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the port lamps Lnk, Act and Laser Disabled under each cage, port 1 then port 2
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the left and WAN at the upper right
+parts:
+  - {ref: std/xfp@1, id: port-1, group: xfp, at: [30.66, 4.01], attrs: {media: xfp, speed: 10g}}
+  - {ref: std/xfp@1, id: port-2, group: xfp, at: [104.64, 4.01], attrs: {media: xfp, speed: 10g}}
+  - {ref: common/led-indicator@1, id: lnk-1, group: port-leds, at: [30.01, 16.2], attrs: {description: 'Lnk, port 1 - green: link established, 10000 Mbps; amber slow blinking: no XFP installed; amber: optics installed, no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-xfp, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-1, group: port-leds, at: [38.45, 16.2], attrs: {description: 'Act, port 1 - green: active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: laser-1, group: port-leds, at: [46.86, 16.2], attrs: {description: 'Laser Disabled, port 1 - amber: laser disabled; off: laser on'}, states: {lamp: ['off', {name: disabled, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-2, group: port-leds, at: [104.02, 16.2], attrs: {description: 'Lnk, port 2 - green: link established, 10000 Mbps; amber slow blinking: no XFP installed; amber: optics installed, no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: up, color: '#39b54a'}, {name: no-xfp, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-2, group: port-leds, at: [112.43, 16.2], attrs: {description: 'Act, port 2 - green: active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: laser-2, group: port-leds, at: [120.85, 16.2], attrs: {description: 'Laser Disabled, port 2 - amber: laser disabled; off: laser on'}, states: {lamp: ['off', {name: disabled, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.36, 4.37], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.36, 9.55], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+  - {ref: common/led-indicator@1, id: wan, group: status-leds, at: [177.96, 4.37], attrs: {description: 'WAN - green: both ports configured for 10GBASE WAN PHY framing; unlit: not'}, states: {lamp: ['off', {name: wan-phy, color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]

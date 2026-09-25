@@ -1,0 +1,171 @@
+format: 1
+kind: module
+name: iom3-xp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS IOM3-XP, IOM3-XP-B and IOM3-XP-C (3HE03619AA,
+  3HE06318AA, 3HE08426AA - one face, three models), the FP2 50 Gb/s input/output module for the
+  SR-7 and SR-12 card slots. A full-length carrier holding two classic MDA / MDA-XP slots, slot
+  1 at the left: an end block with a Phillips captive screw at each end, an ejector lever along
+  the bottom at each end, and between the two MDA windows a narrow divider printed with the
+  model name, reading upward, whose T-shaped foot fills the MDAs' notched inner corners and
+  carries the Stat light pipe. Stat: purple (IOM3-XP) or teal (-B, -C) on but not yet through
+  diagnostics, green blinking booted but not provisioned, green booted, amber fault. Authored
+  horizontal, as the guide draws it; the SR-12's vertical slots seat it at rotate 90, which
+  puts MDA slot 1 at the top. Takes classic MDAs and MDA-XPs, not MDA-e (SR12 p67 Table 11),
+  and an FP2 card fails at fabric-speed-b and -c (SR12 p57, p63).
+size: {w: 425.4, h: 35.4, d: 431.8}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give every IOM 1.4 x 16.75 x 17 in (3.56 x 42.55 x 43.18 cm, SR7 p106
+  Table 47). The face is held at 425.4 x 35.4, the SR-7/SR-12 slot-card envelope, so the slots
+  tile on the 35.4 pitch; Figure 61 measures 425.5 wide and draws the plate 35.1 tall, and its
+  y figures are scaled by 35.4 / 35.1.
+attrs:
+  model: IOM3-XP
+  part-number: 3HE03619AA
+  part-number-variants: 3HE03619AA (ESS 3HE03620AA), 3HE06318AA IOM3-XP-B (ESS 3HE06324AA), 3HE08426AA IOM3-XP-C (ESS 3HE08427AA)
+  cli-type: iom3-xp
+  cli-type-variants: iom3-xp, iom3-xp-b, iom3-xp-c
+  chipset: FP2
+  mda-slots: 2
+  weight-kg: 5.26
+  power-draw-max-w: 275
+  power-draw-typical-w: 230
+fields:
+  model-label:
+    label: Model label
+    type: choice
+    options: [IOM3-XP, IOM3-XP-B, IOM3-XP-C]
+    default: IOM3-XP
+    description: the model printed up the divider - Figure 61 draws IOM3-XP for all three models; the -B and -C spellings are the models' names, not a reading of their divider
+provenance:
+  sources: >-
+    datasheet - 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03
+    (SR7): p198 Figure 61 / Table 80 (the face, "shown with no MDAs installed", and its one lamp),
+    p99 Table 40 (power), p106 Table 47 (size, weight), p69 Table 11 (the IOM comparison). The
+    15.1 edition 3HE14151AAAATQZZA02 (SR7L) carries the IOM3-XP-C, which 22.7 drops: p63 (part
+    number), p92 (power), p102 (weight). SR-12 guide 3HE18644AAAATQZZA03 p67 Table 11, p57 and p63.
+  size: >-
+    datasheet - SR7 p106 Table 47: IOMs 1.4 x 16.75 x 17 in (3.56 x 42.55 x 43.18 cm). Held at
+    425.4 x 35.4; Figure 61 at 1200 dpi is 6838 px across the plate, 16.07 px/mm, and 564 px
+    (35.1) from the plate's top line to its bottom edge. The thin strip the figure draws above
+    the plate is the card's top edge in perspective, not face.
+  layout: >-
+    drawing - SR7 p198 Figure 61 (art No3256), vector (pdfimages finds no raster), rendered at
+    1200 dpi, plate left at column 34 of the crop, plate top at row 116. End blocks x 0-15.9 and
+    409.3-425.4 with a double wall at 18.1-19.2 and 406.4-407.3; Phillips captive screws centred
+    (6.6, 22.8) and (418.5, 22.8), heads 7.8 across. MDA windows 20.4-207.9 and 217.6-405.1.
+    Divider walls 207.8 and 217.7; its stem 209.9-215.6 from y 1.0 carries the model name
+    reading upward, y 8.1-19.1, cap height 2.7; the T foot spans 193.7-231.8 from y 27.9 to
+    34.6. Ejector levers (the family's): bars x 2.1-67.4 and 358.0-423.3 at y 30.4-33.4, with
+    the lever arm under each end, x 0-31.8 and 393.6-425.4, y 33.8 to the bottom edge. The four
+    cross-slotted knobs Figure 61 draws inside the windows, 7.6 in from each window edge at y
+    22.6, are the captive screws of the blanks it shows in the MDA slots, at exactly the
+    position MDA-XP guide p38 Figure 9 key 5 puts an MDA's own; they belong to
+    nokia/mda-impedance-panel@1, not to the carrier.
+  bays: >-
+    drawing - the bays are the MDA-XP face (MDA-XP guide 9302180206 p38 Figure 9; SR7 p106: MDAs
+    1.4 x 7.5 x 7.0 in, so 190.5 wide) centred on the two windows: mda-1 18.9-209.4, mda-2
+    216.1-406.6. The skin draws them BEFORE the divider stem, the foot and the levers, because a
+    nested occupant is inserted at its opening's place in the draw order and the foot and levers
+    lie over the MDAs' notched lower corners (the notches are 15.5 wide, Figure 9; the foot
+    reaches 15.7 into each bay).
+  nested-default: >-
+    drawing - Figure 61 is "shown with no MDAs installed" and draws a plain blank with two
+    captive screws in each slot; nokia/mda-impedance-panel@1 is that blank.
+  accepts: >-
+    datasheet - SR7 p69 Table 11: the IOM3-XP-C takes "MDA, HS-MDA, ISA-MS @10G, MDA-XP @25G";
+    MDA-e cards do not seat (SR12 p67 Table 11). The list names the nine MDA-XPs the MDA-XP guide
+    9302180206 draws and the library models; the 48-port M48-1GB-XP-TX (its mini-RJ21 has no
+    library part yet), the HS-MDAs and the other classic MDAs join it as they are modelled.
+  variants: >-
+    datasheet - SR7 p198 draws one face for IOM3-XP, IOM3-XP-B and IOM3-XP-C, and Table 80
+    differs only in the lamp's first colour; one component with the label as a field. CLI
+    card-type iom3-xp (SR7 p172 example; -b and -c are the models' own).
+  power: >-
+    datasheet - SR7 p99 Table 40: IOM3-XP (3HE03619AA) and IOM3-XP-B (3HE06318AA) idle 170, zero
+    rate 200, typical 230, worst case 275 W; SR7L p92 gives the IOM3-XP-C (3HE08426AA) the same
+    four figures. MDAs not included.
+  weight: >-
+    datasheet - SR7 p106 Table 47: IOM3-XP 11.6 lb (5.26 kg), IOM3-XP-B 11.12 lb (5.04 kg); SR7L
+    p102 gives the IOM3-XP-C 11.12 lb (5.04 kg) too
+  lamps: >-
+    datasheet - SR7 p198 Table 80 key 1: purple (IOM3-XP) or teal (-B, -C) on, not yet through
+    diagnostics; green blinking booted, not provisioned; green booted; amber fault. Purple
+    #8e44ad and teal #1abc9c are the library's estimates of the hues. The lamp is placed on the
+    light pipe's bar, x 209.5-216.2, y 30.6-32.9; the pipe's stem runs up from it to y 26.2.
+  colour: >-
+    estimated - no photograph of an IOM3-XP is held (the public IOM3-XP and Ethernet MDA-XP
+    datasheets would settle it). Drawn in the charcoal of the SR-7/SR-12 card
+    family, silver Phillips screws as on the lab IMM and SF/CPM4-12, black ejector levers.
+  logo-zone: 'none reserved - Figure 61 prints nothing on the carrier but the divider label'
+  orientation: >-
+    datasheet - SR12 p46: "Module slots are vertically oriented ... MDA slot 1 (top slot)", so
+    the SR-12 seats this horizontal face at rotate 90; the divider label then reads across.
+  relief: >-
+    borrowed - screws and levers take the IOM4-e's figures (nokia/iom4-e@1: cyl 1.6; lever
+    out 4.2), themselves borrowed. NOT MEASURED. The foot carries no `out`: an `out` node is
+    moved to the end of its instance and would bury the Stat lamp.
+  lifecycle: 'searched only the staged corpus - still drawn in the 22.7 chassis guides; no end-of-sale notice searched'
+  gaps: >-
+    Colour is estimated. The -B and -C divider print is not drawn anywhere held. Screw and lever
+    relief are borrowed, not measured.
+elements:
+  screw-left: {at: [2.7, 18.9], size: [7.8, 7.8], class: screw}
+  screw-right: {at: [414.6, 18.9], size: [7.8, 7.8], class: screw}
+  lever-left: {at: [0.0, 30.4], size: [67.4, 5.0], class: latch}
+  lever-right: {at: [358.0, 30.4], size: [67.4, 5.0], class: latch}
+  foot: {at: [193.7, 27.9], size: [38.1, 6.7], class: mechanical}
+  model-label: {at: [211.4, 8.1], size: [2.8, 11.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/iom4-e@1 captive screw, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/iom4-e@1 captive screw, itself borrowed. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom4-e@1 ejector lever, itself borrowed. NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom4-e@1 ejector lever, itself borrowed. NOT MEASURED'}
+bays:
+  mda-1:
+    at: [18.9, 0]
+    size: [190.5, 35.4]
+    accepts:
+    - nokia/m1-10gb-xp-xfp@1
+    - nokia/m2-10gb-xp-xfp@1
+    - nokia/m2-oc192-xp-xfp@1
+    - nokia/m4-10gb-xp-xfp@1
+    - nokia/m10-1gb-xp-sfp@1
+    - nokia/m12-1gb-xp-sfp@1
+    - nokia/m12-1gb-2-10gb-xp@1
+    - nokia/m20-1gb-xp-sfp@1
+    - nokia/m20-1gb-xp-tx@1
+    - nokia/mda-impedance-panel@1
+    default: nokia/mda-impedance-panel@1
+  mda-2:
+    at: [216.1, 0]
+    size: [190.5, 35.4]
+    accepts:
+    - nokia/m1-10gb-xp-xfp@1
+    - nokia/m2-10gb-xp-xfp@1
+    - nokia/m2-oc192-xp-xfp@1
+    - nokia/m4-10gb-xp-xfp@1
+    - nokia/m10-1gb-xp-sfp@1
+    - nokia/m12-1gb-xp-sfp@1
+    - nokia/m12-1gb-2-10gb-xp@1
+    - nokia/m20-1gb-xp-sfp@1
+    - nokia/m20-1gb-xp-tx@1
+    - nokia/mda-impedance-panel@1
+    default: nokia/mda-impedance-panel@1
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one Stat lamp, the light pipe in the divider's foot
+parts:
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [210.85, 29.7], attrs: {description: 'Stat - purple (IOM3-XP) or teal (-B, -C): on, not yet through diagnostics; green blinking: booted, not provisioned; green: booted; amber: fault'}, states: {lamp: ['off', {name: diagnostics, color: '#8e44ad'}, {name: diagnostics-b-c, color: '#1abc9c'}, {name: not-provisioned, color: '#39b54a', behavior: blinking}, {name: booted, color: '#39b54a'}, {name: fault, color: '#f5a623'}]}}
+connection-points:
+  mate: {at: [212.7, 17.7], direction: rear}
+skins: [default]
