@@ -1,0 +1,74 @@
+format: 1
+kind: component
+name: qsfp-pull-tab
+version: 2.0.0
+class: latch
+profile: networking
+description: >-
+  QSFP / QSFP-DD pull tab, as the part is: a flat U-loop whose two thin arms run
+  forward along the module's side edges and join in a wider grip at the far end,
+  open in the middle so the fibre connector passes through. The grip rises above
+  the module top, inside the MSA's 3.4 MAX allowance above the module. Not
+  modelled: the strap's S-bend (it dips about 1.8 mid-span between the arm roots
+  and the grip) and the riser block at each arm root (about 7.5 long, flush with
+  the strap top). No speed lettering: the generic that composes it carries no
+  rate.
+size: {w: 19.0, h: 3.4}
+attrs: {role: pull-latch}
+fields:
+  latch-color: {label: Latch colour, type: text, default: '#6f6f6f'}
+provenance:
+  shape: >-
+    measured - the maintainer's photographs of a QSFP28-SR4 module (top, side
+    and end views). Top views (scale: module width 18.35, IMG 2191 passes the
+    orthography check at -1.0%) give ARM_W 1.95 +/-0.15 and GRIP_L 10.8 +/-0.5;
+    side views (scale: module height 8.5, IMG 2190 at +1.1%) give GRIP_T 2.9
+    +/-0.15, with the grip 0.5 above the strap root.
+  reach: >-
+    49.8 (QSFP-DD HW Rev 6.3 Appendix B, Type 1: 118 REF - 48.2 MIN - 20 nose;
+    drawing), measured from the nose front, because the photographs of the real
+    QSFP28-SR4 give 46.7-53.7 (mean 49.9) from the nose front, which agrees
+    within 8%, while the ProLabs 34.80 MAX disagrees by 30% or more in either
+    frame and is not this tab.
+  width: drawing - 19.00 MAX across (ProLabs PAN-QSFP28-100GBASE-CWDM4-C), also
+    SFF-8661 Figure 5-1's 19 MAX outside-the-cage width
+  height: >-
+    the grip sits above the module top by 1.07, measured, inside SFF-8661
+    Figure 5-1's 3.4 MAX above the module (Note 6, including bail travel). A
+    host composes this part at `at: [-0.325, -1.07]` with `lift: 20.0` so the
+    grip's top sits 1.07 above the host face's top edge, as measured, and the
+    strap top 0.57 above it - the grip straddles the body's top edge, as the
+    part does; it does not sit wholly above the face.
+  colour: >-
+    the neutral grey #6f6f6f, not a wavelength code (decision taken in #473); a
+    vendor wrapper or placement sets latch-color
+elements:
+  grip: {at: [0.0, 0.0], size: [19.0, 2.9], class: latch}
+  arm-l: {at: [0.0, 0.5], size: [1.95, 2.9], class: latch}
+  arm-r: {at: [17.05, 0.5], size: [1.95, 2.9], class: latch}
+relief:
+  features:
+    - node: arm-l
+      out: 39.0
+      confidence: measured
+      source: >-
+        REACH 49.8 (see provenance.reach) less GRIP_L 10.8, the grip pad length
+        measured on the module axis (2191 top view, 95.5 px / 8.50 px/mm = 11.2;
+        2193 top view, 92.5 px / 8.91 px/mm = 10.4; mean 10.8 +/-0.5) - the arm
+        reaches to where the grip pad begins, not to the tab's far end.
+    - node: arm-r
+      out: 39.0
+      confidence: measured
+      source: >-
+        REACH 49.8 (see provenance.reach) less GRIP_L 10.8, the same reading as
+        arm-l - one pair of measurements covering both arms of one tab.
+    - node: grip
+      out: 49.8
+      lift: 39.0
+      confidence: drawing
+      source: >-
+        provenance.reach's ruling (QSFP-DD HW Rev 6.3 Appendix B, Type 1,
+        corroborated by the photographs within 8%). The 39.0 lift is REACH
+        49.8 less the arm-l/arm-r out of 39.0, the subtraction that puts the
+        grip at the far end of the arms, not a separate reading.
+skins: [default]
