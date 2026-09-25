@@ -12,6 +12,17 @@ to a DCIM or a diagram tool.
 
 The core is domain-neutral. Networking is the first profile, not the only one.
 
+<p>
+  <a href="https://www.rocnetsupply.com/">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/sponsor/RocNet-Primary-Logo-white.svg">
+      <img src="docs/sponsor/RocNet-Primary-Logo.svg" alt="RocNet Supply" width="140">
+    </picture>
+  </a>
+  <br>
+  Portrayal is sponsored by <a href="https://www.rocnetsupply.com/">RocNet Supply</a>.
+</p>
+
 ```
 spec/          schemas, compiler, linter, tests
 library/       component contracts + skins, device manifests, NOS overlays
