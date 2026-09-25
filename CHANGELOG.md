@@ -74,7 +74,7 @@ the *published build*, not about the hardware.
   (`dc`, AS7535-28XB-O-48V-F V2) and the UfiSpace S9620-32E (`dc`,
   PSU-322-DEJR-NN), and an AC build on the S9502-12SM (`ac`). No held document
   shows those supply faces, so each is drawn with the other feed's part and
-  says so in its gap. Lint L119 is baselined for the three DC stand-ins, as
+  says so in its gap. Lint L120 is baselined for the three DC stand-ins, as
   for the COR580.
 - Every device in `library/dist/devices.lock.json` carries `placement-attrs`: a
   digest of the `attrs` each placed port states for itself (`speed`, `media`,
