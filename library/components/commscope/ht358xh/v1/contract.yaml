@@ -49,16 +49,16 @@ provenance:
     28.7 across inside the vent field; and the black latch from 36.3 to the right edge.
   test-point: >-
     datasheet - "RF Test Point: 75 ohm MCX female (located on front panel)", with an MCX
-    male to F female adapter shipped with each back plate. Composed as std/mcx@1.
+    male to F female adapter shipped with each back plate. DRAWN AS AN ELEMENT, NOT
+    COMPOSED AS std/mcx@1: a composed MCX exports as a DOCSIS interface, which would give
+    every chassis forty-eight "interfaces" for a -20 dB monitoring tap that carries no
+    service - the transmitter's RF input and optical output are on the back plate. The
+    AR3002E draws its test point the same way. Drawn nickel, as photographed.
   channel: >-
     the face prints the transmitter's own ITU channel (the photograph's carriers read
     Ch. 20 to Ch. 27, top to bottom), so it is the `channel` field, set per unit. The
     ordering code carries it: HT358*H-Q-***0-2-AS, where the channel is A (HT3584H) or E
     (HT3583H) followed by the ITU number, 20 to 62.
-  test-point-finish: >-
-    the photograph's test points are nickel-bright where std/mcx@1 draws a gold
-    barrel; that part carries no finish field, so the composed jack keeps its gold and
-    the difference is recorded here rather than redrawn.
   laser-control: >-
     the data sheet's feature list names a "Front panel laser On/Off interlock control", and
     no separate control is visible on any photograph of the face: the latch is the only
@@ -71,8 +71,8 @@ elements:
   label-box: {at: [1.5, 0.9], size: [5.9, 7.9], class: label}
   vent: {at: [15.1, 1.0], size: [20.9, 7.7], class: vent}
   latch: {at: [36.3, 0.8], size: [15.4, 8.1], class: latch}
+  test-point: {at: [8.7, 1.73], size: [6.2, 6.2], class: port}
 parts:
-  - {ref: std/mcx@1, id: test-point, at: [9.33, 2.58], attrs: {role: rf-test-point, level: -20 dB}}
   - {ref: common/led-dot@1, id: led-status, at: [27.7, 4.2], attrs: {function: status}}
 connection-points:
   mate: {at: [25.96, 4.83], direction: front}

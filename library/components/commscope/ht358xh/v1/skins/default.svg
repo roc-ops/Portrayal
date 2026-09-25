@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="51.92mm" height="9.66mm" viewBox="0 0 51.92 9.66">
   <!-- HT358xH face, 51.92 x 9.66, photo-measured on the HT3580H data sheet's p1 chassis
-       front (see contract). The MCX test point is std/mcx@1 and the lamp common/led-dot@1,
-       composed; the channel number is the `channel` field. -->
+       front (see contract). The lamp is common/led-dot@1, composed; the MCX test point is drawn
+       here (see the contract's test-point key); the channel number is the `channel` field. -->
   <defs>
     <radialGradient id="nut" cx="0.45" cy="0.4" r="0.7">
       <stop offset="0" stop-color="#e6e8ea"/>
@@ -10,7 +10,12 @@
   </defs>
   <rect id="body" x="0" y="0" width="51.92" height="9.66" rx="0.6" fill="#63676c" stroke="#2c2f32" stroke-width="0.2"/>
   <rect id="label-box" x="1.5" y="0.9" width="5.9" height="7.9" rx="0.5" fill="#7a7f84"/>
-  <circle cx="11.8" cy="4.83" r="3.1" fill="url(#nut)" stroke="#7d8287" stroke-width="0.2"/>
+  <g id="test-point">
+    <circle cx="11.8" cy="4.83" r="3.1" fill="url(#nut)" stroke="#7d8287" stroke-width="0.2"/>
+    <circle cx="11.8" cy="4.83" r="1.9" fill="none" stroke="#8e9398" stroke-width="0.35"/>
+    <circle cx="11.8" cy="4.83" r="0.9" fill="#2a2d31"/>
+    <circle cx="11.8" cy="4.83" r="0.3" fill="#c9ccd0"/>
+  </g>
   <g id="vent" fill="#101214">
     <circle cx="16.20" cy="2.35" r="0.95"/>
     <circle cx="18.60" cy="2.35" r="0.95"/>

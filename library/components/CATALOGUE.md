@@ -364,7 +364,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `commscope/ar3002e@1` | module | line-card | 25.76 × 130.2 × 330 |  | 1 | 1 | CommScope (ARRIS) AR3002E - analog forward-path optical receiver, 46 to 1218 MHz, for the CH3000 headend opti… |
-| `commscope/bd31a8-h10f@1` | module | coupler | 52.52 × 130.2 × 182.9 |  | 1 | 0 | CommScope (ARRIS) BD31A8-100-H10F-0-AL - the quad-density "zero-slot" back plate behind a CA3008 carrier of e… |
+| `commscope/bd31a8-h10f@1` | module | coupler | 52.52 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BD31A8-100-H10F-0-AL - the quad-density "zero-slot" back plate behind a CA3008 carrier of e… |
 | `commscope/bp-a5@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BP-A5 - the single-width dynamic back plate for one AR3002E or AR3002G forward receiver in … |
 | `commscope/bp-p1@1` | module | inlet | 52.52 × 130.2 |  | 1 | 2 | CommScope (ARRIS) BP-P1 - the dynamic back plate a PS3006 power supply mates in a CH3000 chassis, two slots w… |
 | `commscope/ca3008@1` | module | mechanical | 52.52 × 130.2 × 292.1 |  | 1 | 1 | CommScope (ARRIS) CA3008 - the module carrier that stacks eight HT358xH quad-density DWDM transmitters under … |
