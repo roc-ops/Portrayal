@@ -1,0 +1,45 @@
+format: 1
+kind: module
+name: fa3524s
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (Aurora / ARRIS) FA3524S-01 - FA3500-series 1550 nm EDFA, single amplifier with two outputs, 2 x 21 dBm
+  nominal output, one full-depth CH3000 slot. Its optical ports are on the back plate:
+  BP-F3 (SC/APC), double-wide.
+size: {w: 25.76, h: 130.2, d: 330.2}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: FA3524S-01
+  role: amplifier
+  amplifier: single amplifier with two outputs
+  output-power-nominal: 2 x 21 dBm
+  power-draw-max-w: 20
+  back-plate: BP-F3 (SC/APC), double-wide
+provenance:
+  size: >-
+    borrowed - commscope/fa3500-face@1, the face every FA3500 model shares, whose own
+    figures are photo-measured. The data sheet's "13.0 D x 5.25 H x 1.0 W" is the body
+    without connectors; its 13.0 in (330.2 mm) is taken as depth.
+  power: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Performance Parameters, "Power
+    Consumption, max (Watts)": 20 W. No ambient is given with it.
+  figures: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Performance Parameters, the FA3524S-01
+    row: model type single amplifier with two outputs, nominal output power 2 x 21 dBm, power consumption 20 W max.
+  face: >-
+    the model prints as "FA3524" on the shared face, as the photographed FA3524S prints
+    "FA3524"; see commscope/fa3500-face@1's model-print.
+  cooling: >-
+    datasheet - Note 2 of the ordering information: the FA3524S is a single-width module
+    that ships with the double-wide BP-F3 back plate, which forces the adjacent slot to
+    stay empty for cooling, and with a BP3000 blank face plate for the front of that slot.
+    Neither the BP-F3 nor the BP3000 is drawn or photographed in any document held, so
+    neither is modelled; see the CH3000's gaps.
+parts:
+  - {ref: commscope/fa3500-face@1, id: face, at: [0, 0], attrs: {model: FA3524}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
