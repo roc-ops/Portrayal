@@ -230,6 +230,17 @@ SFP112_ATTR = ("sfp112", "other")
 # and it was hardcoded "RJ45", written for the Casa rj45-telemetry port, until
 # the Nokia MDA2-e-XP exported 24 SFP112 cages as copper jacks (#558 review).
 OTHER_LABEL = {"rj45-telemetry": "RJ45", "sfp112": "SFP112"}
+# A T1/E1 JACK IS NOT ETHERNET, whichever RJ45 part draws it. The TM-3312's eight
+# CES ports are traffic ports (group role `traffic`) on the bare RJ45 part, so the
+# guard in iface_type let them through and the 1g default typed them 1000base-t.
+# `rj48` is the library's media name for an RJ-48C jack, and every placement that
+# states it carries DS1 or E1. Both targets have `t1` and `e1`, but a CES port
+# takes either line (the data sheet's "8xT1/E1 CES") and nothing fixes which, so it
+# is `other`, labelled with both - "a thing this schema has no name for" is less
+# true here than for SMB, but naming one of the two would be a guess. A jack whose
+# words name a timing function (juniper/mx204's BITS, also rj48) is caught by the
+# timing path before this is asked.
+TDM_LABEL = {"rj48": "T1/E1"}
 # AN SFP CAGE IS NOT ALWAYS A STANDARD PORT AT ALL. The CommScope BP3400C's eight
 # cages hold RR40x0 / RR36x0 digital-return receiver SFPs, the far end of a
 # proprietary link from a node's DT4250N / DT4600N transmitter - not Ethernet,
@@ -677,8 +688,8 @@ NOT_A_DCIM_PORT = {
                                 "device pass has no fibre path; optical-paths-design.md C3",
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
     "std/sc-bore": "the SC/APC optical ports of single-faced CH3000 back plates (commscope/bp-a5, "
-                   "bp-f2, bp-f4); no trunk to terminate on, the same case as "
-                   "common/lc-duplex-adapter",
+                   "bp-f2, bp-f4) and half-depth passives and switches (np35*, os32m2b); no "
+                   "trunk to terminate on, the same case as common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
                      "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
 
@@ -980,6 +991,11 @@ def iface_type(p, attrs, group_role=None):
     if (fam == "rj45" and "-eth" not in ref
             and group_role != "traffic" and not attrs.get("speed")):
         return None
+    # AFTER THE GUARD, NOT BEFORE IT: only a jack the guard already lets through is
+    # retyped. Ahead of it this reached juniper/mx104's ext-ref-clock, a bare rj48
+    # timing input in no traffic group that has never exported, and invented it.
+    if fam == "rj45" and attrs.get("media") in TDM_LABEL:
+        return "other"                         # T1/E1, see TDM_LABEL
     # A DEFAULT IS A GUESS, so only the families that have a settled one carry it.
     # An OSFP is 400G or 800G and nothing makes one likelier, so an OSFP that does
     # not say its speed does not type - which is this function's own rule.
@@ -1369,6 +1385,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 iface = {"name": name, "type": t}
                 if link:
                     iface["label"] = link
+                elif t == "other" and a.get("media") in TDM_LABEL:
+                    iface["label"] = TDM_LABEL[a["media"]]
                 # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
                 # spelling; a group whose own role is `management` says the same
                 # thing about every port in it, and six devices only say it that way.
