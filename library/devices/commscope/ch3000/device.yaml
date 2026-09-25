@@ -161,6 +161,17 @@ gaps:
       photographs do not resolve; the NP31F08S06 RFoG filter, which has no face image; and
       the 8x8 splitters (NP38S08, OP38S8S), which are two slots wide and only drawn.
     wanted: a photograph of a CH3000 with half-depth modules seated, front and rear
+  - what: half-depth-variants
+    scope: [front, rear]
+    reason: needs-photo
+    note: >-
+      several half-depth families are modelled as the one variant their data sheet
+      photographs, and the others would present a different port set: OP33F1x as the single
+      OP33F1S (the dual OP33F1D has six ports); NP35C0x as the NP35C01D03 red/blue split
+      (the family also takes CWDM/DWDM and DWDM-group splits, single or dual, with an
+      optional test port, each legended differently); and OP35F4S as the variant with a
+      -20 dB test port (the test port is optional). Each would need its own photograph.
+    wanted: face photographs of the OP33F1D, the other NP35C0x variants and an OP35F4S without a test port
 groups:
   psus:
     term: Slot
@@ -467,13 +478,15 @@ configurations:
   half-depth-mix:
     kind: example
     description: >-
-      Half-depth modules front and rear in the same slots - the chassis data sheet's "32
-      half-depth slots (16 front-loaded and 16 rear-loaded)": an NP35M08 DWDM mux in the
-      front of slot 3 with the matching NP35D08 demux behind it, an OS32M2B optical switch
-      and an AB32S1G RF A/B switch in slot 4, an NP35M04 / NP35D04 pair in slot 5, and an
-      NP35F01 single-channel filter with an NP35F04S group filter in slot 6, beside the one
-      PS3006D. Channel numbers are the photographs' (group K, channels 20-27; the NP35F01 on
-      channel 21, the NP35F04S group N). Illustrative.
+      Half-depth modules front and rear in every slot from 3 to 16 - the chassis data
+      sheet's "32 half-depth slots (16 front-loaded and 16 rear-loaded)" - beside the one
+      PS3006D. Slots 3-6: the switches and the NP35 DWDM family (NP35M08 over NP35D08,
+      OS32M2B with AB32S1G, NP35M04 over NP35D04, NP35F01 with NP35F04S). Slots 7-11: the
+      NP34/OP34 CWDM filters and multiplexers (NP34M08 with NP34B10S, OP34M8C over
+      OP34M10C, NP34M05 over OP34D5x, OP34M5x with NP34C01, NP34F01D with OP34F1D). Slots
+      12-16: NP33F01 with OP35D8-CF, the NP34S04 / OP34S4S splitters, NP35C0x with OP31M2D,
+      OP35F1 with OP35F1D, and OP35F4S with OP35D4x. Part and channel numbers are the
+      photographs'. Illustrative.
     bays:
       slot-3: commscope/np35m08@1
       rear-3: commscope/np35d08@1
@@ -518,7 +531,7 @@ configurations:
       slot-10: {model: OP34M5H, ch1: '1530', ch2: '1550', ch3: '1570', ch4: '1590', ch5: '1610'}
       slot-11: {model: NP34F01D51A0S, cha: '1610', chb: '1610'}
       rear-11: {model: OP34F1D-1610, cha: '1610', chb: '1610'}
-      slot-12: {model: NP33F01SNN}
+      slot-12: {model: NP33F01SNN, channel: NN}
       rear-12: {model: OP35D8-CF2, ch1: '20', ch2: '21', ch3: '24', ch4: '29', ch5: '35', ch6: '42', ch7: '52', ch8: '54'}
       slot-14: {model: NP35C01D03Z0}
       slot-15: {model: OP35F1-21, channel: '21'}
