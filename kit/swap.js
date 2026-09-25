@@ -416,19 +416,44 @@ function turn([x, y], rotate) {
   return [x * c - y * s, x * s + y * c];
 }
 
+// A CAGE ON A FACET FORESHORTENS WHAT IT HOLDS (P3 amended). A card's cage
+// `on` a tilted facet publishes that facet as `tilt` (render.py
+// `component_cage_tilt`), and the build draws the optic in it
+// `translate(at) scale(...) rotate(...)` - the facet's cos along its axis,
+// about the optic's own origin, applied after the turn. `[sx, sy]` is that
+// scale; [1, 1] for a cage on no facet.
+export function tiltScale(tilt) {
+  if (!tilt) return [1, 1];
+  const c = Math.cos(tilt.deg * Math.PI / 180);
+  return tilt.facing === 'up' || tilt.facing === 'down' ? [1, c] : [c, 1];
+}
+
 // render.py's `seat_at`, for a published cage and a components.json entry.
+// ON A FACET it is `_seat_nested_occupants`' solve instead: the cage's own
+// mate, foreshortened about the cage's origin (`_tilt_offset` on the cage -
+// the published `mate` is the flat seat_point, so `mate - at` is its turned
+// offset), less the optic's own mate, turned and foreshortened the same way.
+// With no tilt both scales are 1 and it is `seat_at` again.
 export function occupantAt(cage, comp) {
   const cx = comp.size.w / 2, cy = comp.size.h / 2;
   const [dx, dy] = turn([comp.mate[0] - cx, comp.mate[1] - cy], cage.rotate);
   const r4 = v => Math.round(v * 1e4) / 1e4;
-  return [r4(cage.mate[0] - cx - dx), r4(cage.mate[1] - cy - dy)];
+  if (!cage.tilt) return [r4(cage.mate[0] - cx - dx), r4(cage.mate[1] - cy - dy)];
+  const [sx, sy] = tiltScale(cage.tilt);
+  const tx = cage.at[0] + sx * (cage.mate[0] - cage.at[0]);
+  const ty = cage.at[1] + sy * (cage.mate[1] - cage.at[1]);
+  return [r4(tx - sx * (cx + dx)), r4(ty - sy * (cy + dy))];
 }
 
 // The same shape as render.py's placement transform: the occupant turns about
-// its OWN centre, with its host's rotate.
+// its OWN centre, with its host's rotate - and is SCALED BEFORE IT TURNS on a
+// facet (instance_group's `tilt`), the scale written as facets.scale_transform
+// writes it (`:.6g`, which pyG is).
 export function occupantTransform(cage, comp) {
   const [x, y] = occupantAt(cage, comp);
+  const [sx, sy] = tiltScale(cage.tilt);
   return `translate(${x},${y})`
+       + (cage.tilt ? ` scale(${pyG(sx)},${pyG(sy)})` : '')
        + (cage.rotate ? ` rotate(${cage.rotate} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
 }
 
@@ -590,6 +615,14 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occup
   out['data-for'] = cage.id;
   const own = (+cage.lift || 0) - (+cage['seat-depth'] || 0);
   if (Math.abs(own) > 1e-9) out['data-z-lift'] = pyG(own);
+  // THE FACET IT STANDS ON, as _seat_nested_occupants names it: the facet
+  // node of the CARD it is seated in (`<card id>--<on>`), and the facing in
+  // the card's frame - what relief.js tiltOf reads to build it tilted in 3D.
+  if (cage.tilt && cage.moduleId) {
+    out['data-tilt-on'] = `${cage.moduleId}--${cage.tilt.on}`;
+    out['data-tilt'] = pyG(cage.tilt.deg);
+    out['data-tilt-facing'] = cage.tilt.facing;
+  }
   return out;
 }
 
@@ -720,10 +753,13 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     // render.py makes what it seats there: `data-of` for `data-path`, and no
     // relief, ref, behaviour or connection point
     if (cage.projection) asProjection(occ);
-    // a device cage's optic is its host's next sibling; a card cage's is the
-    // LAST CHILD of the card's group, where render.py appends it (after the
-    // card's own parts), so it takes the card's translate and turn
-    if (card) card.appendChild(occ);
+    // a device cage's optic is its host's next sibling; a card cage's is a
+    // child of the card's group, where render.py appends it - after the
+    // card's own parts and BEFORE its connection-point markers, which
+    // instance_group emits last of all - so it takes the card's translate
+    // and turn. The markers draw nothing; the order is the build's so that a
+    // seated optic holding a plug (P3 amended) is the build's child for child.
+    if (card) card.insertBefore(occ, [...card.children].find(n => n.getAttribute('data-cp') != null) || null);
     else host.after(occ);
   }
   return {applied, refused, failed};
@@ -836,10 +872,10 @@ export function nestedBays(rootEl, compByRef) {
 //   a module's back           `bay-1/module`   -> `bay-1/module/mtp1`, drawn as
 //                             a projection on the rear face (backSlotsOf).
 //
-// NOTHING INSIDE AN OCCUPANT (P3). An element that names its host with
-// `data-for`, or is inside one that does, is skipped (insideOccupant): a
-// duplex plug composes two simplex plugs, each with a boot slot, and those
-// are the plug's business, not the face's.
+// AN OCCUPANT'S OWN SLOTS ARE SLOTS (P3, amended 2026-09-24): a seated
+// optic's `tx` and `rx` are `<slot>-occupant/tx`, keyed `nt-a/qsfp-2-occupant/tx`
+// as the build keys them. Anything else inside an element that names its
+// host with `data-for` is skipped (insideOccupant).
 //
 // A SLOT ON A SLOT IS ONE OF ITS BORES, OR IT IS NOT A SLOT. A cage wrapper
 // publishes the aperture it composes as its own cage (component_cages keeps
@@ -964,15 +1000,27 @@ export function slotKey(path) {
   return String(path).split('/').filter(s => s !== 'module').join('/');
 }
 
-// Inside, or itself, an OCCUPANT (P3): an element that names what it sits
-// in with `data-for`. Not a COVER, which names what it lies over the same
-// way and is `mounts` or `fills` (liesOver's reading): a card that says what
-// it fronts is still a carrier. An LED's `data-for` is caught too, and costs
-// nothing - an LED carries no slots.
+// Inside, or itself, something that names what it sits in with `data-for`
+// and is NOT A SEAT. Not a COVER either, which names what it lies over the
+// same way and is `mounts` or `fills` (liesOver's reading): a card that says
+// what it fronts is still a carrier. An LED's `data-for` is caught, and
+// costs nothing - an LED carries no slots.
+//
+// A SEAT IS WALKED (P3, amended 2026-09-24). An occupant the build or the
+// kit seated in a slot is drawn at `<slot>-occupant` (occupantNames), and
+// its own slots are keys the build seats: `nt-a/qsfp-2-occupant/tx` is the
+// optic's tx bore in the card cage `nt-a/qsfp-2`, and render.py draws a plug
+// there at `nt-a/module/qsfp-2-occupant/tx-occupant` (nested_key_host's
+// chained segment, _seat_nested_occupants on the optic's own group). Before
+// this the kit read no slot inside any occupant, so a cabled QSFP28 could be
+// built and never swapped. What stays skipped is what sits inside an element
+// that is `data-for` something without being its seat.
 function insideOccupant(el) {
-  for (let n = el; n && typeof n.getAttribute === 'function'; n = n.parentNode)
-    if (n.getAttribute('data-for') != null
-        && !['mounts', 'fills'].includes(n.getAttribute('data-behaviour'))) return true;
+  for (let n = el; n && typeof n.getAttribute === 'function'; n = n.parentNode) {
+    const f = n.getAttribute('data-for');
+    if (f == null || ['mounts', 'fills'].includes(n.getAttribute('data-behaviour'))) continue;
+    if (n.getAttribute('data-path') !== `${f}-occupant`) return true;
+  }
   return false;
 }
 
@@ -1285,7 +1333,8 @@ export async function applyAllOverrides(rootEl, deviceBays, overrides, loadSkin,
 //   - one of ITS CAGES is named in `overrides` - the case this function adds;
 //   - a key names a slot ON one of its cages - a bore of a duplex adapter
 //     placed on the device, `xc01/1` (B3): no `/module/` in it, and no cage
-//     of that id, so it named no view and 3D never saw the swap;
+//     of that id, so it named no view and 3D never saw the swap - or a slot
+//     on what one of its cages holds, `port-4-occupant/tx` (P3 amended);
 //   - `overrides` names a nested (`/module/`) path AND the view has bays at
 //     all. A nested path is never a device bay id (nestedBays only ever
 //     produces one by walking what a device bay's OWN drawing seated - see
@@ -1311,7 +1360,7 @@ export function viewsToRewrite(devIndex, overrides) {
     if (nestedOverride && bays.length) { out.push(view); continue; }
     if (bays.some(b => Object.prototype.hasOwnProperty.call(overrides, b.id))
         || cages.some(c => Object.prototype.hasOwnProperty.call(overrides, c.id)
-                           || keys.some(k => k.startsWith(c.id + '/'))))
+                           || keys.some(k => k.startsWith(c.id + '/') || underCarrier(k, c.id))))
       out.push(view);
   }
   return out;
@@ -1327,12 +1376,35 @@ export function viewsToRewrite(devIndex, overrides) {
 // Resolves to applyAllOverrides' `{applied, dropped}` plus
 // applyOccupantOverrides' `refused` / `failed` (applied summed), and the
 // `cages` it applied to, so a caller can say why one was refused.
+//
+// SLOTS ON AN OCCUPANT ARE SEATED BY THE FRONTIER TOO (P3 amended), for the
+// reason applyAllOverrides gives for bays: `nt-a/module/qsfp-2-occupant/tx`
+// exists only once the optic is seated, and a face the build populated
+// already shows the BUILD's optic's tx. Applied in one pass with its host,
+// the plug went into the optic about to be taken out. So a slot waits while
+// a slot it is on (`<slot>-occupant/...`) is still to be applied, and the
+// face is read again after each pass. `seen` ends the walk; `maxDepth` is
+// the belt, as it is there.
 export async function applyFaceOverrides(rootEl, {bays = [], cages = []}, overrides,
-                                         loadSkin, compByRef) {
+                                         loadSkin, compByRef, maxDepth = 4) {
   const {applied, dropped} = await applyAllOverrides(rootEl, bays, overrides, loadSkin, compByRef);
-  const all = faceCages(rootEl, cages, compByRef);
-  const occ = await applyOccupantOverrides(rootEl, all, overrides, loadSkin);
-  return {applied: applied + occ.applied, dropped, refused: occ.refused, failed: occ.failed,
+  const own = k => Object.prototype.hasOwnProperty.call(overrides || {}, k);
+  const seen = new Set();
+  const res = {applied: 0, refused: [], failed: []};
+  const slotsNow = () => faceCages(rootEl, cages, compByRef);
+  let all = slotsNow();
+  for (let depth = 0; depth < maxDepth; depth++) {
+    const todo = all.filter(c => !seen.has(c.id) && own(c.id));
+    const frontier = todo.filter(c => !todo.some(o => o !== c && underCarrier(c.id, o.id)));
+    if (!frontier.length) break;
+    for (const c of frontier) seen.add(c.id);
+    const r = await applyOccupantOverrides(rootEl, frontier, overrides, loadSkin);
+    res.applied += r.applied;
+    res.refused.push(...r.refused);
+    res.failed.push(...r.failed);
+    all = slotsNow();
+  }
+  return {applied: applied + res.applied, dropped, refused: res.refused, failed: res.failed,
           cages: all};
 }
 
@@ -1587,8 +1659,13 @@ export function searchWith(search, vals) {
 // exists for the same reason a nested bay does: `front-6/module/xg0` is a cage
 // only while what `front-6` holds - this map's decision, else the build's -
 // is a component whose own `cages` (components.json) name `xg0`. It is looked
-// for after the card's bays, and it is a leaf: nothing is nested under an
-// optic, so a key below a cage names nothing.
+// for after the card's bays.
+//
+// A SLOT ON AN OCCUPANT (P3 amended) is resolved through what its host slot
+// holds - this map's answer, else the build's, else what it ships (`holds`)
+// - so `nt-a/module/qsfp-2-occupant/tx` is a slot only while the optic in
+// `nt-a/module/qsfp-2` publishes `tx`. The host is decided first: the keys
+// are sorted by `/module/` depth, then by `-occupant/` depth.
 //
 // Returns `{accepted, ignored, cages}`: `cages` is the accepted keys that are
 // cages, device or card, so the caller files each where it belongs - a card
@@ -1605,10 +1682,14 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null,
       if (own(accepted, path)) return accepted[path];
       const was = built(path);
       return was !== undefined ? was : bay.default ?? null;
-    }});
+    },
+    // and what a slot holds, for a key on its occupant (P3 amended): the
+    // same answer the exclusion below reads
+    occRef: path => holds(path)});
   const depth = k => k.split('/module/').length;
+  const chain = k => k.split(`${OCC}/`).length;
   const keys = Object.keys(map && typeof map === 'object' ? map : {})
-    .sort((a, b) => depth(a) - depth(b) || (a < b ? -1 : 1));
+    .sort((a, b) => depth(a) - depth(b) || chain(a) - chain(b) || (a < b ? -1 : 1));
   const isCage = new Set();
   for (const key of keys) {
     const ref = map[key] || null;
@@ -1623,12 +1704,13 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null,
   // slot ships (`default`), or a fresh seat's when this map re-seated the
   // carrier. Judged against the map as accepted, before any is dropped, so
   // two fills that collide are both refused rather than the first winning.
-  const reseated = id => Object.keys(accepted).some(k => !isCage.has(k) && underCarrier(id, k));
-  const holds = id => {
+  // a bay or a slot this map re-seated holds a fresh seat below it
+  function reseated(id) { return Object.keys(accepted).some(k => underCarrier(id, k)); }
+  function holds(id) {
     if (own(accepted, id)) return accepted[id];
     const was = reseated(id) ? undefined : builtOcc(id);
     return was !== undefined ? was : R.entryAt(id)?.default ?? null;
-  };
+  }
   const clash = [];
   for (const key of Object.keys(accepted)) {
     if (!accepted[key] || !isCage.has(key)) continue;
@@ -1663,20 +1745,37 @@ export function acceptSwaps(map, {bays = [], cages = [], built = () => null,
 // component composes (components.json `parts`), a device placement. The
 // slot-on-a-slot rule is nestedSlots': only a bore of it. Slots come back
 // `isCage` with their `key`; bays as they are. `refAt(path)` is the
-// component drawn at a path: a bay's module, a part, a placement.
+// component drawn at a path: a bay's module, a part, a placement - or what a
+// slot holds, at `<slot>-occupant` (P3 amended): `occRef(p, slot)` is the
+// caller's answer for the slot at `p`, by default what it ships holding. So
+// `nt-a/module/qsfp-2-occupant/tx` is the tx bore of whatever optic the
+// caller says `nt-a/module/qsfp-2` holds.
 export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.default ?? null,
-                              compByRef, placementRef = () => null}) {
+                              compByRef, placementRef = () => null,
+                              occRef = (p, s) => s.default ?? null}) {
   const comp = ref => {
     if (!ref || !compByRef) return null;
     try { return compByRef(String(ref).split(':')[0]) || null; } catch (e) { return null; }
   };
   const place = p => { try { return placementRef ? placementRef(p) || null : null; } catch (e) { return null; } };
+  // what the slot a `<slot>-occupant` path names holds, or undefined when the
+  // path names no slot's occupant
+  const held = path => {
+    if (!path.endsWith(OCC)) return undefined;
+    const slotPath = path.slice(0, -OCC.length);
+    const slot = entryAt(slotPath);
+    return slot?.isCage ? occRef(slotPath, slot) || null : undefined;
+  };
   function refAt(path) {
     if (path.endsWith('/module')) {
       const bayPath = path.slice(0, -'/module'.length);
       const bay = entryAt(bayPath);
       return bay && !bay.isCage ? bayRef(bayPath, bay) || null : null;
     }
+    // the slot's answer first: placementRef reads the BUILT face, and at
+    // `port-4-occupant` that is the build's optic, not the one swapped in
+    const h = held(path);
+    if (h !== undefined) return h;
     const cut = path.lastIndexOf('/');
     if (cut < 0) return place(path);
     const name = path.slice(cut + 1);
@@ -1843,9 +1942,12 @@ export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccu
   const occ = builtOccupants(cfg, cages, compByRef ? {bays, compByRef, placementRef} : null);
   const cb = builtBays(cfg);
   const R = slotResolver({bays, cages, compByRef, placementRef,
-    bayRef: (p, bay) => own(cfgBays, p) ? cfgBays[p] : own(cb, p) ? cb[p] : bay.default ?? null});
+    bayRef: (p, bay) => own(cfgBays, p) ? cfgBays[p] : own(cb, p) ? cb[p] : bay.default ?? null,
+    occRef: p => own(cfgOccupants, p) ? cfgOccupants[p] : builtOcc(p)});
   const out = {};
-  const swappedAbove = id => Object.keys(out).some(k => id.startsWith(k + '/module/'));
+  // under a bay or a slot this delta already names (underCarrier): a fresh
+  // seat, which holds what it ships and nothing the configuration put there
+  const swappedAbove = id => Object.keys(out).some(k => underCarrier(id, k));
   const defaultIn = (carrierRef, id) => nestedDefault(compByRef, carrierRef, id);
   const shipped = id => R.entryAt(id)?.default ?? null;
   const builtOcc = id => (!swappedAbove(id) && own(occ, id)) ? occ[id] ?? null : shipped(id);
@@ -1863,8 +1965,12 @@ export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccu
   for (const [id, ref] of bayEntries)
     if ((ref || null) !== built(id)) out[id] = ref || null;
   // an occupant key is measured as a slot, whatever its path looks like - a
-  // card's cage and a nested bay share a shape, and the state knows which
-  for (const [id, ref] of Object.entries(cfgOccupants || {}))
+  // card's cage and a nested bay share a shape, and the state knows which.
+  // A slot before the slots on what it holds (`-occupant/` steps), so a plug
+  // in an optic the state swapped is measured against the fresh optic.
+  const chain = id => id.split(`${OCC}/`).length;
+  const occEntries = Object.entries(cfgOccupants || {}).sort(([a], [b]) => chain(a) - chain(b));
+  for (const [id, ref] of occEntries)
     if ((ref || null) !== builtOcc(id)) out[id] = ref || null;
   return out;
 }
@@ -1929,11 +2035,16 @@ export function freshBaysUnder(cfg, carrier, ref, compByRef) {
 // 2D shows the default.
 //
 // PURE: returns a new slice; the one it is handed is not changed.
-// Is `key` under the bay `carrier` - `front-6/module/...` - the one reading
-// pruneCarrier and seatClaims' retireUnder share.
+// Is `key` under the bay `carrier` - `front-6/module/...` - or under what
+// the slot `carrier` holds - `nt-a/module/qsfp-2-occupant/...` (P3 amended):
+// the one reading pruneCarrier, seatClaims' retireUnder and faceQueue share.
+// One rule serves both because neither suffix can follow the other kind: a
+// bay holds a `module`, and a slot holds an `-occupant`.
 export function underCarrier(key, carrier) {
-  return String(key).startsWith(`${carrier}/module/`);
+  const k = String(key);
+  return k.startsWith(`${carrier}/module/`) || k.startsWith(`${carrier}${OCC}/`);
 }
+const OCC = '-occupant';
 
 //
 // `fresh(k)` is what a fresh seat holds at the slot `k` - its shipped
