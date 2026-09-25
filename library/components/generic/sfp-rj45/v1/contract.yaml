@@ -1,0 +1,84 @@
+format: 1
+kind: component
+name: sfp-rj45
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+conforms: sfp-module
+profile: networking
+description: >-
+  A generic copper SFP - the shape every 1000BASE-T, 10GBASE-T and NBASE-T SFP
+  with an RJ45 jack has, standing for all of them. The body in the cage is the
+  SFP envelope; the head outside it is taller and longer, to hold the jack, which
+  is what every copper SFP drawing shows and what SFF-8432 leaves room for only
+  in length. Rate, reach and watts belong on the vendor wrapper.
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: registry, h: registry, d: registry}
+attrs: {power-absent: not-applicable, form-factor: sfp, face: rj45, media: copper}
+fields:
+  label: {label: Module label, type: text, default: ''}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+head:
+  at: [0.0, -2.50]
+  size: {w: 13.55, h: 13.20, d: 22.70}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: head
+  exceeds:
+    - dimension: above
+      source: Finisar FCLF852xP2BTL product specification Rev E Figure 2 (Y 2.50 +/-0.2 head top to body top, C 13.20 +/-0.2 head height against B 8.45 body); FS SFP-GE-T and Cambium SFP-10G-Copper both draw 2.70 above the body
+    - dimension: below
+      source: the same Finisar figure; FS SFP-GE-T about 2.70 below (14 - 8.60 - 2.70, untoleranced) and Cambium 2.60 below the body
+    - dimension: length
+      source: Finisar X 22.70 +/-0.3 outside the cage; Optcore SFPP-T-TCA5 20.4 (67.90 - 47.5); FS SFP-GE-T about 21 (68 MAX - 47). SFF-8432 A is a recommended 10.00 and calls other lengths application specific
+provenance:
+  size: registry - sfp-module, SFF-8432 Rev 5.2a Table 4-3 (E 13.55, S 8.55, T 47.50); Finisar's own A 13.55 +/-0.25 and S 47.50 +/-0.2 agree
+  head: >-
+    drawing - Finisar FCLF852xP2BTL Rev E Figure 2, the only copper SFP drawing
+    toleranced on every dimension: head C 13.20 x A 13.55, X 22.70 outside the cage,
+    K 70.20 REF overall. The head stands 2.50 above the body (Finisar Y 2.50 +/-0.2,
+    head top to body top) and 2.15 below it, which is 13.20 - 8.55 - 2.50: Finisar's
+    head placed on the 8.55 registry body. Finisar's own below is 2.25 against its
+    8.45 body B, and the 0.10 between them is inside every tolerance on the figure.
+    The older Finisar revision (FCLF-8521-3) gives C 13.40 with the same Y 2.50, so
+    Rev E took the 0.20 off the bottom only. Spread across four drawings: head
+    height 13.20 (Finisar) to 14 (FS), protrusion 20.4 (Optcore, 10GBASE-T) to 22.70
+    (Finisar, 1000BASE-T). One part stands for both; the spread is recorded, not split.
+  jack: >-
+    std/rj45-ganged@2 - its 12.7 x 11.0 cell and 11.91 opening fit inside the 13.55 x
+    13.20 head (the single std/rj45@2 is 15.8 wide and does not), and its 18.6 cavity
+    fits inside the 22.70 protrusion. The cell sits at [0.425, -1.40], 1.1 below the
+    head top, which centres the 11.0 cell in the 13.20 head. rotate 180: the Finisar
+    FCLF852xP2BTL Rev E Figure 2 front view and the FS SFP-GE-T front view both draw
+    the keyway up and the contacts down with the module label side up, and
+    std/rj45-ganged@2 at rotate 0 has its latch slot on the lower edge. A BARE jack,
+    though it is an Ethernet port: neither the Finisar nor the Cambium front view
+    draws an LED window in the head, so the lamped common/rj45-ganged-eth@1 would
+    invent two lamps. L76's census warns on this and has no exemption for a bare
+    Ethernet jack inside a component; the warning is left standing, not waived.
+  latch: >-
+    drawing - a bail is drawn on Finisar FCLF852xP2BTL Rev E Figure 2: a round wire
+    at the head's front top corner (W 0.65 REF proud of the top, L 1.45 REF ahead of
+    the face), arching over the jack in the closed position, with a delatch slider on
+    the underside. Cambium and Optcore draw the pivot at the front bottom instead,
+    with the handle at the top. The pivot varies by vendor, so the generic part draws
+    no bail, and the bail's reach past the head is outside head.size for the same
+    reason. With no bail there is nothing for a latch-color field to paint (L73), so
+    the part has none; a vendor wrapper that draws its own bail brings the field.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC: a 1000BASE-T is about 1 W and a
+    10GBASE-T up to about 3 W, and one drawing is both. The figure belongs on the
+    wrapper. L27 exempts by `power-absent` and this sentence is why.
+elements: {}
+parts:
+  - {ref: std/rj45-ganged@2, id: jack, at: [0.425, -1.40], rotate: 180, lift: 22.70}
+relief:
+  features:
+    - node: head
+      out: 22.70
+      color: '#9aa0a6'
+      confidence: drawing
+      source: Finisar FCLF852xP2BTL Rev E Figure 2, X 22.70 +/-0.3 - the head's length outside the cage
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+skins: [default]
