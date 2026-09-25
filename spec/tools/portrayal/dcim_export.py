@@ -469,6 +469,15 @@ PART_MEDIA = {
     # family fallback can tell them apart. #287.
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "1g"): "1000base-t",
+    # THE 10/100 ROW IFACE_TYPE ALREADY HAS, for a card. Without it a card's
+    # stated `speed: 100m` fell through to FAMILY_PART, whose answer for an
+    # Ethernet jack is 1000base-t - the Nokia CCM-e's mgmt and OES ports.
+    ("rj45", "100m"): "100base-tx",
+    # A CFP2 STATING 200G IS NOT THE CAGE'S 100G. With no row the Nokia
+    # ME3-200GB-CFP2-DCO's ports fell to PART_IFACE's std/cfp2 default and
+    # exported as 100gbase-x-cfp2. Unlike SFP112 the slug is in both targets:
+    # NetBox TYPE_200GE_CFP2 at 6a009845, Nautobot TYPE_200GE_CFP2 at 38953ac3.
+    ("cfp2", "200g"): "200gbase-x-cfp2",
 }
 
 
@@ -832,7 +841,13 @@ def iface_type(p, attrs, group_role=None):
     # is a stronger statement than a speed - it says what the jack is FOR - and the
     # AS5912-54X and CSR310 say it with no speed, so behind the guard they never
     # typed at all.
-    if fam == "rj45" and attrs.get("role") == "mgmt":
+    #
+    # BUT ONLY WHEN IT STATES NO SPEED. A stated speed is the device's own word
+    # on the rate, and returning 1G ahead of it typed the Nokia SR-1's 10/100
+    # `mgmt` jack 1000base-t while `oes-1` beside it, identical but for its
+    # role, gave 100base-tx. A mgmt jack that states one takes the path below,
+    # where the guard lets it through because it has a speed.
+    if fam == "rj45" and attrs.get("role") == "mgmt" and not attrs.get("speed"):
         return "1000base-t"                    # a copper management port is 1G
     if (fam == "rj45" and "-eth" not in ref
             and group_role != "traffic" and not attrs.get("speed")):
