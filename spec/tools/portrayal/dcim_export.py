@@ -332,6 +332,19 @@ RJ45_TIMING = re.compile(
     r"(^|[\s-])(gm-ptp|1588|bits|tod|pps|sync|ptp|ics|clk)([\s-]|$)", re.I)
 RJ45_CONSOLE = re.compile(r"console|aux|serial|(^|[\s-])con([\s-]|$)", re.I)
 
+# A D-SUB CONSOLE. common/db9-receptacle is mostly alarm-out and stays in
+# NOT_A_DCIM_PORT, but the 7750 SF/CPM4 cards seat one as the RS-232 Console
+# (SR12 Table 6), and dropping it left their reserved AUX jack as the only
+# console port. Narrower than RJ45_CONSOLE on purpose: `aux`, `craft` and
+# `serial` D-subs are not claimed here, only a placement that says `console`.
+DB9_CONSOLE_REF = "common/db9-receptacle"
+DB9_CONSOLE = re.compile(r"(^|[\s-])console([\s-]|$)", re.I)
+
+
+def db9_words(part):
+    a = part.get("attrs") or {}
+    return f"{part.get('id') or ''} {a.get('role') or ''} {a.get('function') or ''}"
+
 
 def rj45_words(part):
     a = part.get("attrs") or {}
@@ -469,6 +482,15 @@ PART_MEDIA = {
     # family fallback can tell them apart. #287.
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "1g"): "1000base-t",
+    # THE 10/100 ROW IFACE_TYPE ALREADY HAS, for a card. Without it a card's
+    # stated `speed: 100m` fell through to FAMILY_PART, whose answer for an
+    # Ethernet jack is 1000base-t - the Nokia CCM-e's mgmt and OES ports.
+    ("rj45", "100m"): "100base-tx",
+    # A CFP2 STATING 200G IS NOT THE CAGE'S 100G. With no row the Nokia
+    # ME3-200GB-CFP2-DCO's ports fell to PART_IFACE's std/cfp2 default and
+    # exported as 100gbase-x-cfp2. Unlike SFP112 the slug is in both targets:
+    # NetBox TYPE_200GE_CFP2 at 6a009845, Nautobot TYPE_200GE_CFP2 at 38953ac3.
+    ("cfp2", "200g"): "200gbase-x-cfp2",
 }
 
 
@@ -567,10 +589,16 @@ NOT_A_DCIM_PORT = {
     "std/usb-c": "USB-C power input on the GL-8xEP, group `usbc-power`; power in, not a port",
 
     # --- connectors upstream has no type for ---------------------------------
-    "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
-                             "Neither library has an alarm port, and `de-9` would read as a console",
+    "common/db9-receptacle": "the placements left here are alarm relays, status and craft ports - "
+                             "a dry-contact relay or a monitoring link, not an RS-232 console. Neither "
+                             "library has an alarm port, and `de-9` would read as a console. A placement "
+                             "that IS a console (id, role or function `console`) exports as `de-9` "
+                             "through DB9_CONSOLE",
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
+    "std/db25": "the 7750 SR-12 DC PEM-3 AC Supply Status port - an AC rectifier shelf's status "
+                "signalling on a female DB-25, not RS-232. `db-25` upstream is a CONSOLE type and "
+                "this is not a console; neither library has an alarm or status port",
     "std/vga": "VGA; neither library has a video port type",
     "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
                                "over one cable; neither library has a type for it, and one row "
@@ -837,7 +865,13 @@ def iface_type(p, attrs, group_role=None):
     # is a stronger statement than a speed - it says what the jack is FOR - and the
     # AS5912-54X and CSR310 say it with no speed, so behind the guard they never
     # typed at all.
-    if fam == "rj45" and attrs.get("role") == "mgmt":
+    #
+    # BUT ONLY WHEN IT STATES NO SPEED. A stated speed is the device's own word
+    # on the rate, and returning 1G ahead of it typed the Nokia SR-1's 10/100
+    # `mgmt` jack 1000base-t while `oes-1` beside it, identical but for its
+    # role, gave 100base-tx. A mgmt jack that states one takes the path below,
+    # where the guard lets it through because it has a speed.
+    if fam == "rj45" and attrs.get("role") == "mgmt" and not attrs.get("speed"):
         return "1000base-t"                    # a copper management port is 1G
     if (fam == "rj45" and "-eth" not in ref
             and group_role != "traffic" and not attrs.get("speed")):
@@ -1367,6 +1401,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
                 else:
                     network = {"name": pid, "type": t}
                     ifaces.append(network)
+        elif ref == DB9_CONSOLE_REF and DB9_CONSOLE.search(db9_words(part)):
+            consoles.append({"name": pid, "type": "de-9"})
         elif ref in PART_POWER:
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:

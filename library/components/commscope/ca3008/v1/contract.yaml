@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: ca3008
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) CA3008 - the module carrier that stacks eight HT358xH quad-density
+  DWDM transmitters under one CC3008 communications control module in two slots of a
+  CH3000 chassis: a top and a bottom band, each with two captive thumbscrews, and an open
+  cage between them. It mates a BD31A8 or BD35M8 "zero-slot" back plate at the rear.
+size: {w: 52.52, h: 130.2, d: 292.1}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+attrs:
+  model: CA3008
+  slots: 2
+  back-plate: BD31A8 or BD35M8
+provenance:
+  size: >-
+    borrowed - the width and height are commscope/ps3006d@1's two-slot faceplate, 52.52 x
+    130.2, and the photographs agree: on p1 of the HT3580H data sheet (2024) each carrier
+    spans the same two-slot width as the PS3006D beside it, and the data sheet's own
+    face-on photograph of an empty carrier (p5, 242 x 602 px) has the aspect of 52.52 x
+    130.6 to 0.3%. ESTIMATED DEPTH: no document dimensions the carrier, so it is given the
+    11.5 in (292.1 mm) of the transmitters it must contain.
+  identity: >-
+    datasheet - HT3580H data sheet, overview: up to eight HT3580H transmitters and a CC3008
+    stack vertically inside the CA3008, which takes "only two chassis slots"; System
+    Accessories ordering table: "Module Carrier, CA3008".
+  bands: >-
+    photo-measured on both photographs: the top band is 13.9 deep and the bottom band 13.9
+    deep (p5 empty carrier, 64 px at 4.608 px/mm each; p1 chassis, 13.9 and 14.1). The top
+    band carries the legend CA3008 between its two thumbscrews and the bottom band the
+    ARRIS wordmark between its two.
+  screws: >-
+    the thumbscrews sit on the two SLOT CENTRES, 12.88 and 39.64 across, as every
+    faceplate's in this chassis: on p5 the four heads centre at 13.2 / 39.9 (top) and 11.8
+    / 39.1 (bottom), shadows included, and on p1 at 13.2 and 39.6. Top heads centre 6.7
+    down. The bottom heads sit low in their band, centred about 126.5 on both photographs
+    with heads about 9 across, which would stand 0.4 past the plate; they are drawn at
+    125.9 and 8.6 across so they stay on it.
+  bays: >-
+    photo-measured on p1, the same in all six carriers: the CC3008 from 13.9 to 33.2, then
+    eight transmitter positions on a 10.36 pitch from 33.2 (see commscope/ht358xh@1), the
+    last ending 115.4, 0.7 above the bottom band. Positions are numbered 1 to 8 from the
+    top, the order in which the photograph's carriers print their channels (Ch. 20 to Ch.
+    27); no document numbers them.
+  fillers: >-
+    datasheet - the HT3FILH is sold as "Filler Module for Quad-Density Slots", so an
+    unused transmitter position takes one and that is the default; the CC3008 is part of
+    every loaded carrier in every photograph and is the default of its own position.
+  logo: >-
+    the bottom band prints the ARRIS wordmark as text with a swoosh mark above its right
+    end; the mark is not drawn, and logo-zone reserves where it is.
+elements:
+  screw-top-1: {at: [8.28, 2.1], size: [9.2, 9.2], class: fastener}
+  screw-top-2: {at: [35.04, 2.1], size: [9.2, 9.2], class: fastener}
+  logo-zone: {at: [30.4, 118.6], size: [6.0, 2.6], class: logo-zone}
+  screw-bottom-1: {at: [8.58, 121.6], size: [8.6, 8.6], class: fastener}
+  screw-bottom-2: {at: [35.34, 121.6], size: [8.6, 8.6], class: fastener}
+bays:
+  cc:
+    at: [0.3, 13.9]
+    size: [51.92, 19.3]
+    accepts: [commscope/cc3008@1]
+    default: commscope/cc3008@1
+  tx-1:
+    at: [0.3, 33.20]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-2:
+    at: [0.3, 43.56]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-3:
+    at: [0.3, 53.92]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-4:
+    at: [0.3, 64.28]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-5:
+    at: [0.3, 74.64]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-6:
+    at: [0.3, 85.00]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-7:
+    at: [0.3, 95.36]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+  tx-8:
+    at: [0.3, 105.72]
+    size: [51.92, 9.66]
+    accepts: [commscope/ht358xh@1, commscope/ht3filh@1]
+    default: commscope/ht3filh@1
+connection-points:
+  mate: {at: [26.26, 65.1], direction: front}
+skins: [default]

@@ -455,7 +455,14 @@ def test_the_comparison_layer_can_now_reach_them():
     remaining fans cooling adequately when a single fan fails. Four trays, one allowed
     to fail, is 3+1 over four bays, and the two devices state it twice because the AC
     and DC chassis are two part numbers with two rear faces, not one device configured.
+
+    SEVENTY-ONE IS THE NOKIA 7750 SR-12, the first entry with NOTHING SPARE: 3+0 over
+    three vertical trays. The guide says "Three fan trays are required for normal
+    operation" (SR12 p84), a single fan failure takes its whole tray out for replacement
+    (p80), and the chassis rides through a missing tray for only two minutes at 35 C. That
+    is a stated form with a zero in it, not an absence, so the census counts it. The SR-7
+    beside it has one tray and states no form, and is not counted.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 70, n
+    assert n == 71, n
