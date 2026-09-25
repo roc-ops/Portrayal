@@ -1,0 +1,140 @@
+format: 1
+kind: module
+name: m20-1gb-xp-tx
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 20-port 10/100/1000 copper MDA-XP, M20-1GB-XP-TX
+  (3HE03613AA; ESS 3HE03616AA), a classic half-slot MDA for the IOM3-XP: twenty RJ-45 jacks in
+  two stacked blocks, 1-8 at the left and 9-20 at the right, odd ports across the top and even
+  across the bottom, each jack with its Link and Activity lamps in the housing and an "L n A"
+  legend above or below it; the Stat and Pwr lamps at the left, the model legend at the upper
+  right and a cross-slotted captive screw on each lower end wing. Authored horizontal; an SR-12
+  IOM3-XP seats it on end with the carrier.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 12
+  is fitted per axis to that face.
+attrs:
+  model: M20-1GB-XP-TX
+  part-number: 3HE03613AA
+  part-number-variants: 3HE03613AA (7750 SR), 3HE03616AA (7450 ESS)
+  rj45: 20
+  power-draw-max-w: 45
+provenance:
+  sources: >-
+    datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p42 Figure 12 / Table 12 (the
+    face, its lamps, screws and port numbering), p18 Table 2 (power). SR7 22.7
+    3HE18643AAAATQZZA03 p106 Table 47 (MDA size) and p103 Table 43 (power); SR7 15.1
+    3HE14151AAAATQZZA02 p97 Table 32 (part numbers, "7750 SR 20-port GE - Copper/TX MDA-XP").
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - MXP p42 Figure 12 (art MDA0064), vector (pdfimages finds no raster), rendered at
+    1200 dpi. Fitted per axis exactly as nokia/m10-1gb-xp-sfp@1 fits Figure 9, and the art is
+    drawn at the same scale: 4615 px across the plate (stroke centre to stroke centre) to 190.5
+    (24.23 px/mm) and 847 px from the top line to the bottom of the centre band to 35.4 (23.93
+    px/mm). The outline is the M10's: end wings to y 28.2, notch edges at x 15.3 and 175.1, the
+    band to the bottom edge, a screw tab under each wing. Two port blocks, each outlined by a
+    thin frame from y 4.7 to 29.25: the left x 17.75-79.0 (ports 1-8), the right x 82.06-172.7
+    (ports 9-20). Jacks drawn 13.13 x 9.24 outside, 11.39 x 8.07 inside, centres x 26.52 +
+    14.553 n in the left block and 91.21 + 14.512 n in the right (the drawn centres sit within
+    0.1 of those lines), rows at y 10.59 and 23.03. Stat (11.17, 6.40) and Pwr (11.17, 11.58),
+    2.9 across, legends to their left ending at x 9.0. Captive screws (key 5) centred (7.57,
+    22.95) and (183.08, 22.95), heads 8.6 in a 10.2 ring, cross-slotted - the Figure 9 screw
+    art. Each jack carries an "L n A" legend, above the top row (baseline 4.25) and below the
+    bottom row (baseline 32.4): L at the jack centre -4.27, the port number on the centre, A at
+    +3.97. Model legend M20-1GB-XP-TX (key 4) in bold on two lines, "M20-1GB-" and "XP-TX",
+    centred at x 180.8, baselines 4.51 and 8.36.
+  jacks: >-
+    drawing - separate housings in two blocks (Figure 12 draws a gap between neighbours), 13.1
+    wide on a 14.5 pitch across and 12.44 down, so common/rj45-ganged-eth@1 cells (12.7 x 11.0)
+    are used, centred on the drawn jacks - the choice nokia/ccm-e@1 made for the same shape. The
+    ports are 10/100/1000 Ethernet (the card name, Table 12's L and A lamps), so the lamped part,
+    per docs/rj45-family-design.md. ORIENTATION IS READ: each drawn jack shows its latch slot
+    as a step in the inner outline with a lamp square in each corner beside it - on the top
+    edge in the top row and the bottom edge in the bottom row. The ganged part draws its latch
+    down, so the bottom row is at rotate 0 and the top row at rotate 180. The figure draws a
+    jack 9.24 tall where the cell is 11.0; the cells keep the standard's height, and a pair of
+    them 12.44 apart still clears (1.44). Jack finish is left at the part's default.
+  numbering: >-
+    datasheet - MXP p42 Table 12 key 3, "Ports are numbered 1 through 20"; Figure 12 prints the
+    odd numbers above the top row and the even below the bottom row, so ports run in columns,
+    1 over 2 at the left to 19 over 20 at the right.
+  lamps: >-
+    datasheet - MXP p42 Table 12: Status green blinking initializing, green operationally up,
+    amber operationally down, off administratively down; Power blue on, off no power. L (Link)
+    green 1000 Mb/s link, green fast blinking 100 Mb/s, green slow blinking 10 Mb/s, amber "Port
+    not shutdown", unlit disabled; A (Active) green active, amber an error condition (FCS,
+    collisions, bad CRC), unlit no activity. Fast and slow blink are both `blinking`, told apart
+    by name.
+  lamp-mapping: >-
+    convention - common/rj45-ganged-eth@1 puts led-a at the left window and led-b at the right
+    when unrotated; rotate 180 swaps them. Figure 12 prints L at the left and A at the right of
+    every jack in both rows, so on the bottom row the Link vocabulary is led-a and on the top
+    row (turned) it is led-b; the Activity vocabulary takes the other window.
+  power: 'datasheet - MXP p18 Table 2: M20-1GB-XP-TX 45 W maximum; SR7L p97 Table 32 and SR7 p103 Table 43 give the same 45 W as worst case'
+  cli-type: 'not carried - no mda-type string for this card is printed in anything held (the MXP example is m20-1gb-xp-sfp)'
+  colour: >-
+    estimated - no photograph of a classic MDA is held (the public Ethernet MDA-XP datasheet
+    would settle it). Drawn in the charcoal of the SR-7/SR-12 card family. A gap.
+  logo-zone: 'none reserved - Figure 12 draws no mark, and the plain plate right of the ports carries the model legend'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  relief: >-
+    borrowed - the screws take nokia/m10-1gb-xp-sfp@1's figure, itself borrowed; the port-block
+    frames are drawn as outlines on the face, not raised: Figure 12 draws a line, not a depth.
+  lifecycle: 'searched only the staged corpus; the MDA-XP guide and the 15.1 and 22.7 SR-7 guides list it. No end-of-sale notice searched'
+  gaps: >-
+    Colour and jack finish are estimated. The cli-type is not printed for this card.
+elements:
+  screw-left: {at: [2.57, 17.95], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [178.08, 17.95], size: [10.0, 10.0], class: screw}
+  model-label: {at: [174.3, 1.9], size: [13.0, 6.5], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the 20 RJ-45 jacks, 10/100/1000 Ethernet, in columns: odd across the top and even across
+      the bottom, 1-8 in the left block and 9-20 in the right, as Figure 12 prints them; each
+      jack's Link and Activity lamps are in its housing
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the left
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-1, group: rj45, at: [20.17, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, group: rj45, at: [20.17, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-3, group: rj45, at: [34.72, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-4, group: rj45, at: [34.72, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-5, group: rj45, at: [49.28, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-6, group: rj45, at: [49.28, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-7, group: rj45, at: [63.83, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-8, group: rj45, at: [63.83, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-9, group: rj45, at: [84.86, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-10, group: rj45, at: [84.86, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-11, group: rj45, at: [99.37, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-12, group: rj45, at: [99.37, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-13, group: rj45, at: [113.88, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-14, group: rj45, at: [113.88, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-15, group: rj45, at: [128.40, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-16, group: rj45, at: [128.40, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-17, group: rj45, at: [142.91, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-18, group: rj45, at: [142.91, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-19, group: rj45, at: [157.42, 5.09], rotate: 180, attrs: {media: rj45, speed: 1g}, states: {led-b: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-a: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/rj45-ganged-eth@1, id: port-20, group: rj45, at: [157.42, 17.53], attrs: {media: rj45, speed: 1g}, states: {led-a: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: not-shutdown, color: '#f5a623'}], led-b: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.17, 4.4], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; off: administratively down, shut down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.17, 9.58], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
