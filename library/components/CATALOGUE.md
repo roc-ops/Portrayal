@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-888 component majors in 17 namespaces.
+898 component majors in 17 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -46,12 +46,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 47 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 42 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 63 | 52 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
-| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 58 | 24 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 65 | 52 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 60 | 24 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
-| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 13 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 24 | 61 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 80 | 84 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 19 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 25 | 61 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 83 | 84 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 17 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 81 | 27 | USB Type-A receptacle opening - sharp corners |
@@ -65,7 +65,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 45 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 22 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
-| `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 1 | 0 | DC barrel power inlet |
+| `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 2 | 0 | DC barrel power inlet |
 | `common/dc-terminal-24@1` | component | inlet | 24.6 × 14.4 × 9.1 |  | 1 | 4 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-27@1` | component | inlet | 27.5 × 15.9 × 10.4 |  | 1 | 3 | Three-pole DC barrier terminal block with a hinged clear cover - the screw-down -48 V input fitted to 1RU acc… |
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
@@ -91,14 +91,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
 | `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 4 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
-| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 27 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 31 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 2 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 22 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
-| `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 26 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 89 | 239 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 14 | 46 | Single chassis status LED |
+| `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 27 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 90 | 239 | Tiny round port LED (2mm) |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 18 | 46 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 20 | 4 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 22 | 4 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@2` | component | port | 13.8 × 9.4 |  | 0 | 7 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
@@ -125,12 +125,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 1 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 2 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 33 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
-| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 88 | 7 | Recessed pinhole reset button |
+| `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 92 | 7 | Recessed pinhole reset button |
 | `common/rivet@1` | component | mechanical | 3 × 3 |  | 7 | 0 | Sheet-metal rivet head |
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
-| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 53 | 35 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
-| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 60 | 24 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
+| `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 54 | 35 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
+| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 64 | 24 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 3 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 1 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
@@ -360,7 +360,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/spa-8xoc3-pos@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 8-Port OC-3/STM-1 POS SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 | `cisco/spa-oc192pos-xfp@1` | module | line-card | 17.29 × 167.87 |  | 0 | 3 | Cisco 1-Port OC-192/STM-64 POS/RPR SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 
-## commscope/ (50)
+## commscope/ (60)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -403,12 +403,22 @@ aperture when it is a bare opening - never both at one position. The README's
 | `commscope/fa3524s@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3524S-01 - FA3500-series 1550 nm EDFA, single amplifier with two outputs, 2 x 21… |
 | `commscope/ht358xh@1` | module | line-card | 51.92 × 9.66 × 292.1 |  | 1 | 3 | CommScope (ARRIS) HT358xH - the quad-density 1.2 GHz full-spectrum DWDM forward transmitter of the CH3000 hea… |
 | `commscope/ht3filh@1` | module | blank | 51.92 × 9.66 |  | 0 | 1 | CommScope (ARRIS) HT3FILH - the filler module for an unused quad-density transmitter position in a CA3008 car… |
+| `commscope/np34b10s@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34B10S - single-fiber 10-channel CWDM filter for cellular backhaul on duplex LC/UPC: five… |
+| `commscope/np34c01@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34C01 - dual CWDM/1310 nm optical filter, two independent three-port filters that combine… |
+| `commscope/np34f01d@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34F01D - dual single-channel CWDM add/drop filter, two three-port filters: for each of A … |
+| `commscope/np34m05@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34M05 - 5-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -2… |
+| `commscope/np34m08@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34M08 - 8-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -2… |
 | `commscope/np35d04@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35D04 - 4-channel DWDM demultiplexer on the 100 GHz ITU grid with a -20 dB line monitorin… |
 | `commscope/np35d08@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35D08 - 8-channel DWDM demultiplexer on the 100 GHz ITU grid: the DWDM input from the net… |
 | `commscope/np35f01@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35F01 - single-channel DWDM add/drop filter on the 100 GHz ITU grid: the channel port, th… |
 | `commscope/np35f04s@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35F04S - 4-channel DWDM filter for one channel group on the 100 GHz ITU grid: the group p… |
 | `commscope/np35m04@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35M04 - 4-channel DWDM multiplexer on the 100 GHz ITU grid with a -20 dB line monitoring … |
 | `commscope/np35m08@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35M08 - 8-channel DWDM multiplexer on the 100 GHz ITU grid: eight channel inputs and the … |
+| `commscope/op34d5x@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) OP34D5X - 5-channel CWDM demultiplexer with cascade output, integrated 1310 nm splitter and… |
+| `commscope/op34f1d@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) OP34F1D - dual single-channel CWDM add/drop filter, two three-port filters: for each of A a… |
+| `commscope/op34m10c@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) OP34M10C - 10-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and … |
+| `commscope/op34m5x@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) OP34M5X - 5-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -2… |
+| `commscope/op34m8c@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) OP34M8C - 8-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -2… |
 | `commscope/os32m2b@1` | module | switch | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) OS32M2B - two independent 2x1 optical protection switches in one single-width, half-depth C… |
 | `commscope/ps3006d@1` | module | psu | 52.52 × 130.2 × 330 |  | 1 | 4 | CommScope (ARRIS) PS3006D - the 300 W AC power supply and chassis controller of the CH3000 headend optics pla… |
 | `commscope/ps3006n@1` | module | psu | 52.52 × 130.2 × 330 |  | 1 | 1 | CommScope (ARRIS) PS3006N - the 300 W AC power supply and chassis controller of the CH3000 headend optics pla… |

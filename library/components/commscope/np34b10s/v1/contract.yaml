@@ -1,0 +1,44 @@
+format: 1
+kind: module
+name: np34b10s
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) NP34B10S - single-fiber 10-channel CWDM filter for cellular backhaul on duplex LC/UPC: five CWDM wavelengths (1430-1510 nm) transmitted to the tower and five (1530-1610 nm) received, the common network port and a -20 dB test port. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: NP34B10S
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the NP34B10 CWDM cellular-backhaul filter data sheet (p1 photograph of an NP34B10S, 149 x 592)
+    agrees with it in aspect within a few percent, a check rather than a measurement. Depth
+    datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the LC/UPC adapters found by colour (their green or blue bodies and yellow laser
+    shutters), which gives each row's position to about half a millimetre; the legends are
+    read off the same photograph. The six duplex LC/UPC adapters are blue, the library adapter's own finish, and are keyed for Tx/Rx; each duplex is legended below its two ports. This is the single-fiber model NP34B10S00Z1S-0LA-UL; the dual-fiber NP34B10D is two slots wide and not photographed.
+  seating: >-
+    datasheet - the NP34B10S is described as a single-width, half-depth module (the NP34B10D is the dual-width one); accepted by a slot's front bay and its rear bay alike, per the chassis data
+    sheet's 16 front-loaded and 16 rear-loaded half-depth slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: common/lc-duplex-v-adapter@6, id: port-1, at: [7.36, 18.23], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-2, at: [7.36, 35.17], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-3, at: [7.36, 52.12], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-4, at: [7.36, 69.07], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-5, at: [7.36, 86.03], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: port-6, at: [7.36, 102.97], rotate: 90, attrs: {connector: LC/UPC, housing-finish: '#2d91d8'}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
