@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: bp-p2
+version: 1.0.0
+class: inlet
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) BP-P2 - the dynamic back plate a PS3248 -48 VDC power supply mates in
+  a CH3000 chassis, two slots wide at the rear: a pluggable six-position DC terminal block
+  for the -48 V feed and load sharing, a fan grille, and the position a CX3002, CX3003C or
+  CX3033N communications module mounts in at the top.
+size: {w: 52.52, h: 130.2}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: BP-P2
+  input-voltage: -36 to -60 VDC
+  slots: 2
+provenance:
+  size: >-
+    borrowed - commscope/ps3248d@1's two-slot plate, the footprint the back plate mates
+    from behind, as the BP-P1's is the PS3006's.
+  layout: >-
+    ESTIMATED - the only image of a BP-P2 is the PS3248 data sheet's p3 "Required Module BP-P2
+    Back Plate", a three-quarter render (237 x 528 px), not measurable. Read as fractions
+    of the plate: the top band is the BP-P1's (thumbscrews either side of the legend, which
+    reads BP-P2), then a grille of vertical slots, then a column of six legended screw
+    positions beside a green pluggable terminal block in the lower half, with the bottom
+    thumbscrews. Positions are placed on the BP-P1's measured frame and are good to a few
+    millimetres at best.
+  terminals: >-
+    the render prints the positions, top to bottom, GND, -48V, Share+, +48V and Share-;
+    the sixth legend is hidden behind a jumper loop drawn from it and is not read. The PS3248
+    data sheet says nothing more about the block. No library part is a six-position
+    pluggable terminal, so it is drawn as an element, and the plate exports no power port;
+    the BP-P1's C14 is std/c14-inlet@1 and does.
+  comms-position: >-
+    as on commscope/bp-p1@1: the CX data sheets install the module in the BP-P1 or BP-P2,
+    so the top 43.2 is the `comms` bay, defaulting to commscope/bp-p2-comms-cover@1, the
+    plate's own top band with its BP-P2 legend.
+elements:
+  screw-1: {at: [8.5, 1.3], size: [9.8, 9.8], class: fastener}
+  screw-2: {at: [34.7, 1.3], size: [9.8, 9.8], class: fastener}
+  fan-grille: {at: [7.3, 38.2], size: [37.9, 39.5], class: vent}
+  terminal-block: {at: [26.0, 83.0], size: [13.0, 32.5], class: terminal}
+  screw-3: {at: [8.5, 119.6], size: [9.8, 9.8], class: fastener}
+  screw-4: {at: [34.7, 119.6], size: [9.8, 9.8], class: fastener}
+bays:
+  comms:
+    at: [0, 0]
+    size: [52.52, 43.2]
+    accepts: [commscope/bp-p2-comms-cover@1, commscope/cx3002@1, commscope/cx3003c@1, commscope/cx3033n@1]
+    default: commscope/bp-p2-comms-cover@1
+connection-points:
+  mate: {at: [26.26, 65.1], direction: front}
+skins: [default]
