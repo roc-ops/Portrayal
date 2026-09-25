@@ -241,8 +241,26 @@ OTHER_LABEL = {"rj45-telemetry": "RJ45", "sfp112": "SFP112"}
 # THE VALUE IS THE LABEL, so it is a DCIM label: a non-empty string that fits
 # NetBox's and Nautobot's 64-character `label`. Anything else is not a
 # declaration, and the cage is treated as silent.
+#
+# ONLY A PLUGGABLE CAGE CARRIES ONE. A group is the natural way to declare it
+# once, and a receiver's group holds its F-type RF outputs beside its cage; read
+# on every member, the declaration retyped those jacks from `docsis` to the
+# digital-return link. `pluggable_cage` is the test, and L96 names a non-cage
+# part that carries the attr, since the export ignores it there.
+#
+# ON A DEVICE TOO. A device's own cage placement or group can say it, and
+# `build` types that port the same way `build_module` types a card's.
 PROPRIETARY_LINK = "proprietary-link"
 LABEL_MAX = 64
+
+
+def pluggable_cage(ref):
+    """Is this ref a pluggable cage - the only thing a proprietary link sits in?
+    PART_IFACE names the library's cages; the substrings are `iface_type`'s own
+    family test, which is how a device's vendor-wrapped cages are recognised
+    (OSFP and QSFP contain "sfp"; CFP and CXP are nobody's substring)."""
+    r = (ref or "").split("@")[0]
+    return r in PART_IFACE or any(f in r for f in ("sfp", "xfp", "cfp", "cxp"))
 
 
 def proprietary_link(part_attrs):
@@ -253,10 +271,11 @@ def proprietary_link(part_attrs):
     return None
 
 
-def other_label(part_attrs):
+def other_label(part):
     """What an `other` interface placed by `placed_type` is labelled with."""
+    part_attrs = part.get("attrs") or {}
     link = proprietary_link(part_attrs)
-    if link:
+    if link and pluggable_cage(part.get("ref")):
         return link
     media = part_attrs["media"]
     return OTHER_LABEL.get(media, media.upper())
@@ -541,8 +560,9 @@ def placed_type(part):
     """The interface type the placement itself declares, or None."""
     a = part.get("attrs") or {}
     # A PROPRIETARY LINK OUTRANKS EVERYTHING, media included: it says the cage
-    # carries no standard port, so no media or speed row can be true of it.
-    if proprietary_link(a):
+    # carries no standard port, so no media or speed row can be true of it. On a
+    # cage only - see PROPRIETARY_LINK.
+    if proprietary_link(a) and pluggable_cage(part.get("ref")):
         return "other"
     media = a.get("media")
     if not media:
@@ -1292,7 +1312,10 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 continue
             if names is None and a.get("role") == "mgmt" and pid.replace("port-", "") in listed_sfp:
                 continue
-            t = iface_type(p, a, group_role(p))
+            # A CAGE THAT CARRIES A PROPRIETARY LINK says what runs in it, as a
+            # card's does in `placed_type`, and no speed row can be true of it.
+            link = proprietary_link(a) if pluggable_cage(p["ref"]) else None
+            t = "other" if link else iface_type(p, a, group_role(p))
             if t is None:                      # unknown combination: skip, do not guess
                 continue
             # ONE CAGE, SEVERAL INTERFACES (#443). A CSFP cage presents two BiDi
@@ -1307,6 +1330,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 else:
                     name, breakout = iid, None
                 iface = {"name": name, "type": t}
+                if link:
+                    iface["label"] = link
                 # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
                 # spelling; a group whose own role is `management` says the same
                 # thing about every port in it, and six devices only say it that way.
@@ -1427,7 +1452,7 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         if placed:
             iface = {"name": pid, "type": placed}
             if placed == "other":
-                iface["label"] = other_label(part["attrs"])
+                iface["label"] = other_label(part)
             ifaces.append(iface)
             network = iface
         elif full_ref in FAMILY_PART:

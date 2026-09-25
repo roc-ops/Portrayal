@@ -558,7 +558,7 @@ def test_a_proprietary_link_exports_as_other_with_its_label():
     part["attrs"]["media"] = "sfp"
     part["attrs"]["speed"] = "1g"
     assert dx.placed_type(part) == "other"
-    assert dx.other_label(part["attrs"]) == DR
+    assert dx.other_label(part) == DR
 
 
 @pytest.mark.parametrize("bad", ["", "   ", 7, True, ["x"], {"a": 1}, "x" * 65])
@@ -610,3 +610,44 @@ def test_l96_names_a_declaration_that_is_not_a_label():
     got = _l96(doc)
     assert any("not a label" in w for w in got), got
     assert any("nothing says what rate" in w for w in got), got
+
+
+def test_only_a_pluggable_cage_carries_one():
+    """A GROUP HOLDS A RECEIVER'S RF JACKS BESIDE ITS CAGE, and read on every
+    member the declaration retyped an F-type output from `docsis` to the link."""
+    assert dx.pluggable_cage("std/sfp-ganged@1") and dx.pluggable_cage("std/cfp2@1")
+    assert dx.pluggable_cage("acme/osfp-cage@1")
+    assert not dx.pluggable_cage("std/f-type@1")
+    assert not dx.pluggable_cage("common/rj45-eth@1")
+    doc = _card(
+        [{"ref": "std/sfp-ganged@1", "id": "in-d", "group": "rx-d", "at": [0, 0]},
+         {"ref": "std/f-type@1", "id": "rf-d-1", "group": "rx-d", "at": [0, 40]}],
+        groups={"rx-d": {"term": "Port", "role": "data",
+                         "attrs": {"proprietary-link": DR}}})
+    out = {i["name"]: i for i in dx.build_module(doc, "T")["interfaces"]}
+    assert out["in-d"] == {"name": "in-d", "type": "other", "label": DR}
+    assert out["rf-d-1"] == {"name": "rf-d-1", "type": "docsis", "label": "F"}
+    got = _l96(doc)
+    assert len(got) == 1 and "rf-d-1" in got[0] and "not a pluggable cage" in got[0], got
+
+
+def _device(groups, placements):
+    return {"vendor": "acme", "manufacturer": "Acme", "name": "x", "model": "X1",
+            "chassis": {"u": 1}, "groups": groups,
+            "views": {"front": {"components": {"placements": placements}}}}
+
+
+def test_a_device_cage_that_declares_one_exports_as_other():
+    """NOT ONLY A CARD'S. L96's fix text says "on its placement", and a device
+    placement that said it was silently typed from media and speed instead."""
+    dev = _device(
+        {"dr": {"term": "Port", "role": "traffic", "attrs": {"proprietary-link": DR}},
+         "eth": {"term": "Port", "role": "traffic", "attrs": {"media": "sfp", "speed": "1g"}}},
+        [{"ref": "std/sfp@1", "id": "port-1", "at": [0, 0], "group": "dr"},
+         {"ref": "std/sfp@1", "id": "port-2", "at": [15, 0], "group": "eth",
+          "attrs": {"proprietary-link": DR * 7}},          # not a label: says nothing
+         {"ref": "std/f-type@1", "id": "rf-1", "at": [30, 0], "group": "dr"}])
+    got = {i["name"]: i for i in dx.build(dev, "base", {}, None)["interfaces"]}
+    assert got["port-1"] == {"name": "port-1", "type": "other", "label": DR}
+    assert got["port-2"] == {"name": "port-2", "type": "1000base-x-sfp"}
+    assert got["rf-1"] == {"name": "rf-1", "type": "docsis", "label": "F"}

@@ -1732,7 +1732,9 @@ def lint_component_cage_rate(path, data, _lib_roots=None):
     has no true rate to state, and says so with `proprietary-link: <label>` on
     its placement or its group. That is a declaration, as explicit as `sfp: 40`,
     and the export writes it as `other` with that label. The placement is read
-    through its group exactly as the exporter reads it.
+    through its group exactly as the exporter reads it - and a group can hold a
+    receiver's RF jacks beside its cage, so a non-cage part that ends up with
+    the attr is named too: the export ignores it there.
     """
     if data.get("kind") != "module":
         return
@@ -1746,6 +1748,12 @@ def lint_component_cage_rate(path, data, _lib_roots=None):
         placed, _role = dcim_export.effective_part(part, groups)
         pa = placed.get("attrs") or {}
         if (dcim_export.PROPRIETARY_LINK in pa
+                and not dcim_export.pluggable_cage(part["ref"])):
+            warn(path, "L96", f"{part.get('id')}: `{dcim_export.PROPRIETARY_LINK}` "
+                 f"is on {part['ref']}, which is not a pluggable cage - only a cage "
+                 "carries one, so the export ignores it here. Move it off the part, "
+                 "or out of the group this part shares with the cages")
+        elif (dcim_export.PROPRIETARY_LINK in pa
                 and not dcim_export.proprietary_link(pa)):
             warn(path, "L96", f"{part.get('id')}: `{dcim_export.PROPRIETARY_LINK}` "
                  f"is {pa[dcim_export.PROPRIETARY_LINK]!r}, which is not a label - it "
@@ -6870,7 +6878,12 @@ def lint_device_port_rate(path, data, lib_roots):
             if media not in INTERFACE_MEDIA:
                 continue
             lacks = []
-            if not a.get("speed"):
+            # A CAGE CARRYING A PROPRIETARY LINK HAS NO RATE TO GIVE, and says
+            # so; the exporter types it `other` from that (dcim_export
+            # PROPRIETARY_LINK). Its group still needs a role.
+            linked = (dcim_export.proprietary_link(a)
+                      and dcim_export.pluggable_cage(ref))
+            if not a.get("speed") and not linked:
                 lacks.append("no `speed`")
             if not gdef.get("role"):
                 lacks.append("no group" if not p.get("group") else
