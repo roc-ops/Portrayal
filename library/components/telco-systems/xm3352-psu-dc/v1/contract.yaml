@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: xm3352-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The swappable DC supply of the Telco Systems XM-3352: a captive thumbscrew at the left and a
+  green three-pole pluggable terminal, under a printed "-48V" and its pole marks.
+size: {w: 49.8, h: 21.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: XM-3352-DCPS
+  power-absent: not-published
+  input: dc
+  input-voltage: -48 VDC nominal (face "-48V"); 48-60 VDC (data sheet)
+provenance:
+  size: >-
+    photo-measured - the lower of the XM-3352's two identical supply bays (see
+    telco-systems/xm3352-psu-ac@1).
+  power: >-
+    NOT STATED. The data sheet gives "48-60V DC" and no supply rating; the module prints "-48V"
+    with a DC mark, and "-" and "+" over the plug's outer poles.
+  elements: >-
+    photo-measured on the same rectified render: thumbscrew centred at about (4.3, 34.5) on the
+    face; the green plug x 19.0-42.4, y 29.0-42.9 (telco-systems/xm3352-dc-plug@1).
+states: [absent]
+elements:
+  thumbscrew: {at: [1.1, 8.9], size: [6.4, 6.4], class: fastener}
+parts:
+  - {ref: telco-systems/xm3352-dc-plug@1, id: dc-in, at: [18.7, 6.6]}
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 4.1.0
+version: 5.1.0
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -64,7 +64,7 @@ provenance:
       shares this one envelope by definition of the format (the format's own name for it). The
       four bays sit contiguous across the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each
       side, centred top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 = 4.475mm.
-      THE ADAPTER PANELS JOINED IN 4.1.0: fifteen FHD panels (LC 24F in OS2 UPC and APC, OM4
+      THE ADAPTER PANELS JOINED IN 5.1.0: fifteen FHD panels (LC 24F in OS2 UPC and APC, OM4
       and OM5; LC 36F in OS2 and OM4; SC in OS2 UPC and APC and OM4; three MTP and one MTP-16;
       the multimedia modular panel and the blank) are in every bay's `accepts`.
       They are class adapter-panel, not cassette, so the cassette-envelope rule does not reach
@@ -98,7 +98,10 @@ provenance:
       right because the back is seen from behind; their real outline, and whether it is one
       hole or four, is still open (the `envelope-face-detail` gap). Each runs 431.8 in - the
       432.8 drawer less a 1.0 front plate, which is ESTIMATED - so the slot is a passage the
-      cassette's own 117.86 mm body stands in, open front to back when it is out.
+      cassette's own 117.86 mm body stands in, open front to back when it is out. WHERE IN
+      THE HOLE a back is drawn is the seated module's: its `body.footprint`, mirrored across
+      the bay - a cassette's 99 x 31 body and an adapter panel's 88 x 34.8 one both centre in
+      the hole, from two different offsets - so no bay states it.
 
 chassis:
   width: 448.0
@@ -212,6 +215,10 @@ gaps:
       RE-READ when each rear MPO adapter gained its fibre elements, 1 to 12
       or 1 to 24: they sit on the cassette rear, and the rear opening the
       trunks leave through is as undimensioned as it was - the gap stands.
+      RE-READ when the bays stopped saying where a back lands (`rear.at`)
+      and each back began landing where its own module's body stands,
+      mirrored in the hole: the holes and the opening are unchanged, and
+      nothing held shows them any better - the gap stands.
       RE-READ when the fifteen FHD adapter panels joined every bay's `accepts`:
       a panel's rear is its adapters' far ends, 16 to 32 deep instead of a
       117.86 cassette body, and the cords reach them through the same
@@ -283,7 +290,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 1
-          rear: {view: rear, at: [337.955, 6.5], cutout: back-1}
+          rear: {view: rear, cutout: back-1}
         - id: bay-2
           at: [115.03, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -327,7 +334,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 2
-          rear: {view: rear, at: [228.985, 6.5], cutout: back-2}
+          rear: {view: rear, cutout: back-2}
         - id: bay-3
           at: [224.00, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -371,7 +378,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 3
-          rear: {view: rear, at: [120.015, 6.5], cutout: back-3}
+          rear: {view: rear, cutout: back-3}
         - id: bay-4
           at: [332.97, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -415,7 +422,7 @@ views:
             - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 4
-          rear: {view: rear, at: [11.045, 6.5], cutout: back-4}
+          rear: {view: rear, cutout: back-4}
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [448.0, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}

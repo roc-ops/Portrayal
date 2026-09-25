@@ -68,6 +68,17 @@ def test_a_later_swap_replaces_what_the_face_was_seated_with():
     assert out["rear"]["bay-1"] == ["with-port"], "two backs, or the old one, in the hole"
 
 
+def test_a_swapped_back_lands_where_its_own_body_stands():
+    # bay-1 is seen through back-1 at x 332.97: a cassette's 99-wide body is
+    # centred in the 108.97 bay, an adapter panel's 88-wide one is too, and
+    # both are mirrored - so each back's centre is the hole's, 387.455
+    out = run("positions")["positions"]
+    assert out["a"] == {"transform": "translate(337.955,6.5)", "at": "337.955,6.5"}
+    assert out["b"] == {"transform": "translate(343.455,4.6)", "at": "343.455,4.6"}, \
+        "the panel's back was placed at the cassette's offset"
+    assert out["emptied"] is None, "an empty hole still says where a back is"
+
+
 def test_no_swaps_leave_the_build_untouched():
     out = run("none")
     assert out["map"] == {}
