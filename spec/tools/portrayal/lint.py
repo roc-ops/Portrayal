@@ -895,10 +895,17 @@ def _text_extent(m):
     anchor = m.get("anchor", "middle")
     lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
     rot = int(m.get("rotate", 0)) % 360
-    if rot == 90:            # runs downward, cap side to the LEFT of the baseline
-        return (x - up, y - lead, x + down, y - lead + w)
-    if rot == 270:           # runs upward, cap side to the right
-        return (x - down, y + lead - w, x + up, y + lead)
+    # WHICH SIDE THE CAPS FALL ON is the renderer's `rotate(deg x y)` applied to
+    # an upright mark, whose caps point up (-y). SVG turns clockwise on screen,
+    # so at 90 up becomes +x and the caps sit RIGHT of the baseline; at 270
+    # (-90, reading bottom to top) they sit LEFT. This had the two swapped, so
+    # an upright legend set against a part's left edge - XM-7380's CONSOLE, its
+    # glyphs painting 1.2mm clear of the USB port - was reported as buried in
+    # it, and a legend whose caps really did reach into a part went unreported.
+    if rot == 90:            # runs downward, cap side to the RIGHT of the baseline
+        return (x - down, y - lead, x + up, y - lead + w)
+    if rot == 270:           # runs upward, cap side to the LEFT
+        return (x - up, y + lead - w, x + down, y + lead)
     if rot == 180:           # runs leftward, cap side below
         return (x - w + lead, y - down, x + lead, y + up)
     return (x - lead, y - up, x - lead + w, y + down)
