@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: ht358xh
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) HT358xH - the quad-density 1.2 GHz full-spectrum DWDM forward
+  transmitter of the CH3000 headend optics platform, HT3583H (EEx wavelengths) or
+  HT3584H (ACx wavelengths). A thin horizontal slab: eight stack in a CA3008 carrier
+  with a CC3008 above them, two chassis slots for eight transmitters. The RF input and
+  the optical output are on the carrier's BD31A8 or BD35M8 back plate; the face carries
+  the channel label, the -20 dB MCX input test point, a status lamp and the latch.
+size: {w: 51.92, h: 9.66, d: 292.1}
+size-confidence: {w: photo-measured, h: photo-measured, d: datasheet}
+fields:
+  channel:
+    label: ITU channel printed on the face
+    type: text
+    default: ''
+attrs:
+  model: HT358xH-Q
+  role: transmitter
+  rf-passband: 45-1218 MHz
+  optical-output: 10 +/- 0.25 dBm
+  wavelengths: ITU channels 20-62, 100 GHz grid
+  power-draw-max-w: 6
+provenance:
+  size: >-
+    photo-measured on p1 of the HT3580H data sheet (2024), the face-on CH3000 front at
+    2.727 px/mm, where six CA3008 carriers each hold eight of these. The eight MCX test
+    points fit a straight line of 10.36 mm pitch in all four carriers checked (largest
+    residual 0.28 mm), and the dark gap between neighbouring faces is 0.7 mm, so a face is
+    9.66 tall on a 10.36 pitch. Width is the carrier's opening, 0.3 in from each carrier
+    side. The data sheet's "11.5 D x 0.4 H x 2.0 W" is the body: 0.4 in is 10.2 mm,
+    agreeing with the pitch, and 11.5 in (292.1 mm) is taken as the depth.
+  power: >-
+    datasheet - HT3580H data sheet (Rev G, 2024), Power Consumption "6 W (per
+    transmitter) including controller and back plate cooling fan". The vendor does not
+    say typical or maximum, so it is filed as the maximum. It INCLUDES each
+    transmitter's share of the CC3008 and of the back plate's fan and amplifier, which is
+    why neither of those carries a figure of its own.
+  face-features: >-
+    photo-measured on the same photograph, reading the same features on each of the
+    six carriers: a raised label box 1.5-7.4 across printed "Ch." over the ITU channel
+    number; the MCX test point centred 11.8 across and 4.8 down, inside a bright nut
+    about 6.2 across; a perforated vent field from 15.1 to 36.0; one lamp centred
+    28.7 across inside the vent field; and the black latch from 36.3 to the right edge.
+  test-point: >-
+    datasheet - "RF Test Point: 75 ohm MCX female (located on front panel)", with an MCX
+    male to F female adapter shipped with each back plate. Composed as std/mcx@1.
+  channel: >-
+    the face prints the transmitter's own ITU channel (the photograph's carriers read
+    Ch. 20 to Ch. 27, top to bottom), so it is the `channel` field, set per unit. The
+    ordering code carries it: HT358*H-Q-***0-2-AS, where the channel is A (HT3584H) or E
+    (HT3583H) followed by the ITU number, 20 to 62.
+  test-point-finish: >-
+    the photograph's test points are nickel-bright where std/mcx@1 draws a gold
+    barrel; that part carries no finish field, so the composed jack keeps its gold and
+    the difference is recorded here rather than redrawn.
+  laser-control: >-
+    the data sheet's feature list names a "Front panel laser On/Off interlock control", and
+    no separate control is visible on any photograph of the face: the latch is the only
+    moving part, and the likeliest reading is that releasing it is the interlock. No
+    document says so, so the latch is drawn as a latch and the control is not modelled.
+  lamp: >-
+    photo-measured, one lamp per transmitter. The data sheet says only "Local and remote
+    status monitoring" and gives no colour or meaning, so it carries neither.
+elements:
+  label-box: {at: [1.5, 0.9], size: [5.9, 7.9], class: label}
+  vent: {at: [15.1, 1.0], size: [20.9, 7.7], class: vent}
+  latch: {at: [36.3, 0.8], size: [15.4, 8.1], class: latch}
+parts:
+  - {ref: std/mcx@1, id: test-point, at: [9.33, 2.58], attrs: {role: rf-test-point, level: -20 dB}}
+  - {ref: common/led-dot@1, id: led-status, at: [27.7, 4.2], attrs: {function: status}}
+connection-points:
+  mate: {at: [25.96, 4.83], direction: front}
+skins: [default]
