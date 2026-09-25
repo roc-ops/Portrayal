@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: np35m04
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) NP35M04 - 4-channel DWDM multiplexer on the 100 GHz ITU grid with a -20 dB line monitoring tap and cascade ports: TP, INP (from the previous mux), OUT (to the network) and four channel inputs. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+fields:
+  model:
+    label: the part number printed under the title (the channel group is part of it)
+    type: text
+    default: ''
+  ch1:
+    label: ITU channel printed at channel port 1
+    type: text
+    default: ''
+  ch2:
+    label: ITU channel printed at channel port 2
+    type: text
+    default: ''
+  ch3:
+    label: ITU channel printed at channel port 3
+    type: text
+    default: ''
+  ch4:
+    label: ITU channel printed at channel port 4
+    type: text
+    default: ''
+attrs:
+  model: NP35M04
+  role: passive
+provenance:
+  size: >-
+    width borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), the width
+    every single-width face in this chassis has. Height borrowed - the chassis face's 130.2,
+    the slot height every full-height face takes; the NP35M04 / NP35D04 DWDM mux and demux data sheet (p1 photograph of an NP35M04S0K, 214 x 588)
+    agrees with it within 3% at the width's scale, which is a check on the borrowed figure,
+    not a measurement of it. Depth datasheet -
+    "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured on the same photograph, normalised to the 25.76 x 130.2 face: a thumbscrew
+    top and bottom on the centre line, the title DWDM MUX over the part number, and SC/APC
+    adapters mounted on their sides - green bodies 0.8-19.8 across with a yellow laser
+    shutter - on a 10.55 pitch, legended TP -20dB, INP, OUT, channel, channel, channel, channel at their right. The photograph is small
+    (4.5 to 8 px/mm), so positions are good to about half a millimetre.
+  printed-numbers: >-
+    the part number and the channel numbers are printed per unit (the ordering code carries
+    the channel group), so they are fields, set per module; left empty they print nothing.
+  seating: >-
+    datasheet - "Occupies one half-depth slot"; the chassis data sheet gives 32 half-depth
+    slots, 16 front-loaded and 16 rear-loaded, so the module is accepted by a slot's front
+    bay and its rear bay alike.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-tp: {at: [0.8, 18.65], size: [19.0, 10.3], class: port}
+  adapter-inp: {at: [0.8, 40.25], size: [19.0, 10.3], class: port}
+  adapter-out: {at: [0.8, 50.75], size: [19.0, 10.3], class: port}
+  adapter-ch-1: {at: [0.8, 71.65], size: [19.0, 10.3], class: port}
+  adapter-ch-2: {at: [0.8, 82.20], size: [19.0, 10.3], class: port}
+  adapter-ch-3: {at: [0.8, 92.75], size: [19.0, 10.3], class: port}
+  adapter-ch-4: {at: [0.8, 103.30], size: [19.0, 10.3], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: tp, at: [6.50, 19.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: inp, at: [6.50, 40.90], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: out, at: [6.50, 51.40], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-1, at: [6.50, 72.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-2, at: [6.50, 82.85], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-3, at: [6.50, 93.40], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-4, at: [6.50, 103.95], rotate: 90, attrs: {connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

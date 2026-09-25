@@ -88,6 +88,15 @@ def test_a_bare_rj45_the_device_calls_traffic_is_an_interface():
     assert dx.iface_type(_pl("std/rj45-ganged@2"), {"speed": "1g"}, "traffic") == "1000base-t"
 
 
+def test_a_t1_e1_traffic_jack_is_not_ethernet():
+    """The TM-3312's CES ports are traffic ports on the bare part, so the guard
+    lets them through - and the 1g default then typed eight T1/E1 lines as
+    gigabit Ethernet. The media says what they carry."""
+    assert dx.iface_type(_pl("std/rj45-ganged@2"), {"media": "rj48"}, "traffic") == "other"
+    # ...but a bare rj48 jack the guard keeps out stays out: mx104's ext-ref-clock
+    assert dx.iface_type(_pl("std/rj45@2"), {"media": "rj48"}, "management") is None
+
+
 # --- the corpus, which is the only thing that can prove the fix works --------
 
 @functools.lru_cache(maxsize=1)
@@ -332,6 +341,15 @@ def test_the_s9110_exports_its_out_of_band_jack():
         pytest.skip("S9110-32X is not in this library")
     oob = [i for i in (d.get("interfaces") or []) if i["name"] == "oob"]
     assert oob == [{"name": "oob", "type": "1000base-t", "mgmt_only": True}], oob
+
+
+def test_the_tm3312_ces_ports_export_as_t1_e1():
+    """Eight CES ports, 3/1-3/8, each `other` labelled T1/E1 - each jack takes
+    either line and nothing fixes which, so neither `t1` nor `e1` is true alone."""
+    d = _export("TM-3312")
+    assert d is not None, "TM-3312 is missing from the library exports"
+    ces = [i for i in (d.get("interfaces") or []) if i["name"].startswith("port-3-")]
+    assert ces == [{"name": f"port-3-{n}", "type": "other", "label": "T1/E1"} for n in range(1, 9)], ces
 
 
 # --- a management port exports however the device spells it -------------------

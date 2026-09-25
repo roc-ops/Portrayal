@@ -80,3 +80,25 @@ def test_the_cx3033n_sfp_exports_as_its_proprietary_network_port():
     by = {i["name"]: i for i in doc["interfaces"]}
     assert by["sfp"]["type"] == "other", by["sfp"]
     assert by["sfp"].get("label") == "2.125 Gb/s network port", by["sfp"]
+
+
+HALF_DEPTH_DROPS = {
+    # half-depth passives and the optical switch: single-faced SC/APC, all dropped
+    "np35f01": 3, "np35f04s": 4, "np35m04": 7, "np35d04": 7, "np35m08": 9, "np35d08": 9,
+    "os32m2b": 6,
+}
+
+
+@pytest.mark.parametrize("name", sorted(HALF_DEPTH_DROPS))
+def test_a_half_depth_optical_module_exports_nothing_and_drops_its_sc_ports(name):
+    doc, dropped = _export(name)
+    assert not doc.get("interfaces"), doc.get("interfaces")
+    assert dropped.get("std/sc-bore", 0) == HALF_DEPTH_DROPS[name], dict(dropped)
+    assert "std/sc-bore" in dcim_export.NOT_A_DCIM_PORT
+
+
+@pytest.mark.parametrize("name", ["ab32s1g", "ab32s1t"])
+def test_the_ab_switch_exports_its_three_rf_ports(name):
+    doc, _ = _export(name)
+    by = {i["name"]: i["type"] for i in doc["interfaces"]}
+    assert by == {"rf-in-a": "docsis", "rf-in-b": "docsis", "rf-out": "docsis"}
