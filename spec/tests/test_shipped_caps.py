@@ -430,9 +430,11 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
 # adapter as on the FHD cassettes. The plates are scoped to that configuration
 # only, so the undecorated face adds nothing. Its return-x14 rear adds fourteen
 # BP-A10 plates of two vertical LC/APC adapters - 14 x 2 = 28, so 76. The
-# BP-F2-AL is accepted but seated in no configuration, so it adds nothing.
+# BP-F2-AL is accepted but seated in no configuration, so it adds nothing. Its
+# half-depth-mix adds the CWDM half-depth modules' duplex rows - NP34M08 6,
+# OP34M8C 6, OP34M10C 7 and NP34B10S 6, 25 in all - for 101.
 EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
-                         "common/lc-duplex-v-adapter@6": 76}
+                         "common/lc-duplex-v-adapter@6": 101}
 EXPECTED_DEVICE_REAR_SLOTS = 4
 
 
