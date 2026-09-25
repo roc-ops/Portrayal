@@ -221,3 +221,81 @@ def test_a_csfp_card_exports_every_port_it_numbers(target, model, ports):
     assert {n for n in names if n.startswith("port-")} == {f"port-{n}" for n in range(1, ports + 1)}
     # the cages are where the ports live, not ports themselves
     assert not any(n.startswith(("sfp-", "csfp-")) for n in names), names
+
+
+# --- a declaration the export would drop -----------------------------------
+#
+# The split happens only where the export files a part as a switch port. A
+# port-class part it files as a timing input, a console, an RF connector or an
+# inlet - or a device placement it does not export as an interface at all -
+# used to keep its `interfaces:` and export none of them, and L105 said
+# nothing because the ref's class was `port`. The lint asks the exporter's own
+# routing (route_part, device_port_type), so the two cannot disagree.
+
+@pytest.mark.parametrize("part,kind", [
+    ({"ref": "std/rj45@2", "id": "bits-in", "attrs": {"function": "bits"}}, "timing"),
+    ({"ref": "std/smb@1", "id": "ref-in"}, "rf"),
+    ({"ref": "std/usb-a@1", "id": "con"}, "console"),
+])
+def test_a_part_the_export_files_as_something_else_may_not_present_interfaces(part, kind):
+    assert dx.route_part(part, {})[0] == kind
+    got = _lint_card(_card([{**part, "interfaces": ["port-1", "port-2"]}]))
+    assert any("[L105]" in e and "reaches the DCIM" in e for e in got.errors), got.errors
+
+
+def test_an_inlet_is_already_not_a_port():
+    """Every PART_POWER part is `class: inlet`, so the older half of the rule
+    has always caught it; the new half is for port-class parts."""
+    got = _lint_card(_card([{"ref": "std/c14-inlet@1", "id": "pwr", "interfaces": ["port-1", "port-2"]}]))
+    assert any("[L105]" in e and "is not a port" in e for e in got.errors), got.errors
+
+
+def test_build_module_drops_those_declarations_so_the_lint_must_catch_them():
+    card = {"name": "t", "attrs": {"model": "T"},
+            "parts": [{"ref": "std/rj45@2", "id": "bits-in", "attrs": {"function": "bits"},
+                       "interfaces": ["port-1", "port-2"]}]}
+    names = [i["name"] for i in dx.build_module(card, "X")["interfaces"]]
+    assert names == ["bits-in"]
+
+
+def test_a_network_part_is_still_clean():
+    got = _lint_card(_card([{"ref": "std/sfp-ganged@1", "id": "sfp-1", "group": "sfp",
+                             "interfaces": ["port-1", "port-2"]}]))
+    assert not got.errors
+
+
+@pytest.mark.parametrize("placement,why", [
+    ({"ref": "std/rj45@2", "id": "tod", "group": "csfp", "attrs": {"function": "tod"}}, "timing"),
+    ({"ref": "std/sfp-ganged@1", "id": "cage-9", "group": "leds"}, "port role"),
+    ({"ref": "std/sfp-ganged@1", "id": "cage-9", "group": "csfp", "attrs": {"role": "console"}}, "console"),
+    ({"ref": "std/rj45@2", "id": "jack", "group": "leds-free"}, "port role"),
+])
+def test_a_device_placement_the_export_turns_away_may_not_present_interfaces(placement, why):
+    got = _lint(_dev([{**placement, "interfaces": ["port-1", "port-2"]}]))
+    assert any("[L105]" in e and why in e for e in got.errors), got.errors
+
+
+def test_build_drops_a_device_declaration_the_lint_now_catches():
+    """The same gap on a chassis: a timing jack with `interfaces:` exported as
+    the one timing row and the two names went nowhere."""
+    dev = {"name": "t", "manufacturer": "X", "model": "T", "chassis": {"ru": 1},
+           **_dev([{"ref": "std/rj45@2", "id": "tod", "group": "csfp", "at": [0, 0],
+                    "attrs": {"function": "tod"}, "interfaces": ["port-1", "port-2"]}])}
+    names = [i["name"] for i in dx.build(dev, "default", {}, None).get("interfaces") or []]
+    assert "port-1" not in names and "tod" in names
+
+
+def test_split_rows_replace_only_their_own_cage():
+    """The split used to `ifaces.remove(network)`, which removes the first row
+    EQUAL to the cage's - and two unnamed cages of one type are equal. That
+    happened to come out right, because equal rows are interchangeable and
+    nothing touched the row afterwards; it was one later mutation away from
+    being wrong. The rows are built before anything is appended now, and this
+    pins the result either way: the twin stays, the declaring cage does not."""
+    card = {"name": "t", "attrs": {"model": "T"},
+            "groups": {"sfp": {"term": "Port", "role": "traffic", "attrs": {"media": "sfp", "speed": "1g"}}},
+            "parts": [{"ref": "std/sfp-ganged@1", "group": "sfp", "at": [0, 0]},
+                      {"ref": "std/sfp-ganged@1", "group": "sfp", "at": [0, 0],
+                       "interfaces": ["port-1", "port-2"]}]}
+    names = sorted(i["name"] for i in dx.build_module(card, "X")["interfaces"])
+    assert names == ["", "port-1", "port-2"]

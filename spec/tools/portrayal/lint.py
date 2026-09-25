@@ -264,7 +264,7 @@ RULES = {
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
-    "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
+    "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
@@ -6535,8 +6535,14 @@ def lint_device_placement_interfaces(path, data, lib_roots):
     ONE INTERFACE PRESENTED BY TWO PLACEMENTS - the same port counted twice.
 
     INTERFACES ON SOMETHING THAT IS NOT A PORT. A lamp or a bay filler does
-    not present a switch interface, whatever its id says.
+    not present a switch interface, whatever its id says. Nor does a port the
+    export files as something else - a timing input, a console, a jack in a
+    group with no port role: `build` splits only what it exports as a switch
+    port and dropped the rest's declaration without a word. Which is which is
+    dcim_export.device_port_type's answer, asked for the hardware's own
+    document (no overlay), not a second copy of its rules.
     """
+    dev_groups = data.get("groups") or {}
     for vname, view in (data.get("views") or {}).items():
         comps = (view or {}).get("components") or {}
         placements = comps.get("placements") or []
@@ -6551,6 +6557,13 @@ def lint_device_placement_interfaces(path, data, lib_roots):
             if _contract(ref, lib_roots).get("class") != "port":
                 err(path, "L105", f"{vname}: {p.get('id')} presents interfaces {', '.join(ifs)} "
                                   f"but {ref} is not a port")
+            else:
+                g = dev_groups.get(p.get("group")) or {}
+                a = {**(g.get("attrs") or {}), **(p.get("attrs") or {})}
+                _t, _l, why = dcim_export.device_port_type(p, a, g.get("role"))
+                if why:
+                    err(path, "L105", f"{vname}: {p.get('id')} presents interfaces {', '.join(ifs)} "
+                                      f"but exports as {why}, so none of them reaches the DCIM")
             for i in ifs:
                 if i in ids:
                     err(path, "L105", f"{vname}: {p.get('id')} presents interface {i!r}, which is "
@@ -6559,6 +6572,11 @@ def lint_device_placement_interfaces(path, data, lib_roots):
                     err(path, "L105", f"{vname}: interface {i!r} is presented by both "
                                       f"{owner[i]} and {p.get('id')}")
                 owner.setdefault(i, p.get("id"))
+
+PART_KIND_WORDS = {"timing": "a timing input", "rf": "an RF connector",
+                   "console": "a console port", "power": "a power inlet",
+                   "skip": "a part it skips"}
+
 
 def lint_component_part_interfaces(path, data, lib_roots):
     """L105 on a component: a part that presents several interfaces (#443).
@@ -6569,7 +6587,14 @@ def lint_component_part_interfaces(path, data, lib_roots):
     and cost the same thing: a DCIM module type listing a name twice, or a
     port that is not one. A part, element or bay id is the collision here,
     since those are the names a component offers.
+
+    A part whose ref is a port but which build_module files as a timing, RF,
+    console or power jack is the fourth: only a network row is split, so the
+    declaration was dropped without a word. dcim_export.route_part decides,
+    as it does for the export.
     """
+    groups = data.get("groups") or {}
+    attrs = data.get("attrs") or {}
     parts = [p for p in (data.get("parts") or []) if isinstance(p, dict)]
     ids = ({p.get("id") for p in parts if p.get("id")}
            | set((data.get("elements") or {}).keys())
@@ -6583,6 +6608,14 @@ def lint_component_part_interfaces(path, data, lib_roots):
         if _contract(ref, lib_roots).get("class") != "port":
             err(path, "L105", f"{p.get('id')} presents interfaces {', '.join(ifs)} "
                               f"but {ref} is not a port")
+        elif ref:
+            kind, _row = dcim_export.route_part(
+                dcim_export.effective_part(p, groups)[0], attrs)
+            if kind != "network":
+                err(path, "L105", f"{p.get('id')} presents interfaces {', '.join(ifs)} "
+                                  f"but the export files {ref} here as "
+                                  f"{PART_KIND_WORDS.get(kind, 'nothing')}, so none of "
+                                  f"them reaches the DCIM")
         for i in ifs:
             if i in ids:
                 err(path, "L105", f"{p.get('id')} presents interface {i!r}, which is "
