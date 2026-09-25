@@ -254,7 +254,7 @@ RULES = {
     "L93": ("device",     "a provenance entry says how the figure is known, not only where it was read", "add `confidence:` beside the note, from the eight words in the confidence enum"),
     "L94": ("device",     "a `component-attrs` key names a component the device seats, or a placement or bay it declares", "fix the key; one that matches neither sets nothing and is silently ignored"),
     "L95": ("component",  "a power supply says where power enters it", "compose an inlet part, or add `attrs.inlet` from the enum - `none` if the chassis carries it"),
-    "L96": ("component",  "a module composing a pluggable cage says what rate it runs at", "add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count"),
+    "L96": ("component",  "a module composing a pluggable cage says what rate it runs at", "add the media attr for that family - `sfp`, `sfp-plus`, `qsfp`, `qsfp28`, `qsfp-dd` - with the port count; a cage carrying a proprietary link no rate names takes `proprietary-link: <label>` on its placement instead"),
     "L97": ("component",  "a part that states a size says where each dimension came from", "add `size-confidence: {w: ..., h: ...}` from the confidence vocabulary, and `size-notes` where it needs a sentence"),
     "L98": ("component",  "a character display says how wide it is, and every reading fits", "add `characters:` to the `class: display` element, and keep each `messages[].text` inside it"),
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
@@ -1726,16 +1726,32 @@ def lint_component_cage_rate(path, data, _lib_roots=None):
     A FAMILY WITH NOTHING TO DECLARE IS NOT A GAP. XFP runs at one rate and
     `FAMILY_ATTRS` gives it no attrs, so an XFP cage answers for itself and is
     not counted here.
+
+    NOR IS A CAGE THAT SAYS IT CARRIES NO STANDARD PORT. A cage holding a
+    proprietary link - the CommScope BP3400C's digital-return receiver SFPs -
+    has no true rate to state, and says so with `proprietary-link: <label>` on
+    its placement or its group. That is a declaration, as explicit as `sfp: 40`,
+    and the export writes it as `other` with that label. The placement is read
+    through its group exactly as the exporter reads it.
     """
     if data.get("kind") != "module":
         return
     attrs = attrs_mod.flatten(data.get("attrs"))
+    groups = data.get("groups") or {}
     want = {}
     for part in (data.get("parts") or []):
         if not isinstance(part, dict) or "ref" not in part:
             continue
         ref = part["ref"].split("@")[0]
-        if dcim_export.cage_family_needs_a_rate(ref, attrs):
+        placed, _role = dcim_export.effective_part(part, groups)
+        pa = placed.get("attrs") or {}
+        if (dcim_export.PROPRIETARY_LINK in pa
+                and not dcim_export.proprietary_link(pa)):
+            warn(path, "L96", f"{part.get('id')}: `{dcim_export.PROPRIETARY_LINK}` "
+                 f"is {pa[dcim_export.PROPRIETARY_LINK]!r}, which is not a label - it "
+                 f"must be a non-empty string of at most {dcim_export.LABEL_MAX} "
+                 "characters, so the cage is read as saying nothing")
+        if dcim_export.cage_family_needs_a_rate(ref, attrs, pa):
             want[ref] = want.get(ref, 0) + 1
     if not want:
         return
@@ -1746,7 +1762,8 @@ def lint_component_cage_rate(path, data, _lib_roots=None):
              f"the export types them {dcim_export.PART_IFACE.get(ref)} from the table. "
              f"State {names} with the port count - the cage says what FITS and the "
              "card says what RUNS, and a default that is right is indistinguishable "
-             "from one that is not")
+             "from one that is not. A cage that carries a proprietary link no rate "
+             "names says so on its placement: `proprietary-link: <label>`")
 
 
 def lint_component_inlet(path, data, _lib_roots=None):
