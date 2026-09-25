@@ -703,8 +703,9 @@ NOT_A_DCIM_PORT = {
                                 "device pass has no fibre path; optical-paths-design.md C3",
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
     "std/sc-bore": "the SC/APC optical ports of single-faced CH3000 back plates (commscope/bp-a5, "
-                   "bp-f2, bp-f4) and half-depth passives and switches (np35*, os32m2b); no "
-                   "trunk to terminate on, the same case as common/lc-duplex-adapter",
+                   "bp-f2, bp-f4) and the half-depth passives and switch (np3*, op3*, "
+                   "os32m2b); no trunk to terminate on, the same case as "
+                   "common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
                      "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
 
