@@ -245,6 +245,19 @@ function backProjection(rootEl, modulePath) {
   return backsIn(rootEl, `[data-projection][data-of="${CSS.escape(modulePath)}"]`)[0] || null;
 }
 
+// WHERE A BACK LANDS IN ITS HOLE - render.py's faces.rear_at, for the module
+// the swap seated. A back is the back of the module's BODY, and the body stands
+// where its own `body.footprint` says, so a cassette and an adapter panel in
+// the same bay put their backs in different places. Seen from behind, left and
+// right swap: the footprint is mirrored across the bay (`data-rear-bay`, the
+// bay's own box as seen through the hole). No footprint: the body fills the face.
+export function rearAt(bayBox, comp) {
+  const [bx, by, bw] = String(bayBox).split(',').map(Number);
+  const fp = comp?.body?.footprint || {at: [0, 0], size: [comp?.size?.w || 0, comp?.size?.h || 0]};
+  const r = v => Math.round(v * 1e4) / 1e4;
+  return [r(bx + (bw - fp.at[0] - fp.size[0])), r(by + fp.at[1])];
+}
+
 // A BAY SEEN FROM BEHIND. render.py draws a seated module's back (`faces.rear`)
 // inside the rear-panel hole its bay names, as a projection, and deepens the
 // hole to the back of that module. A swap changes the front bay only - there is
@@ -252,7 +265,7 @@ function backProjection(rootEl, modulePath) {
 // kept showing the module the BUILD seated: a 24-fibre cassette swapped in still
 // showed a 1-12 MTP from behind.
 //
-// The hole carries what a swap needs (`data-rear-of`, `data-rear-at`); the new
+// The hole carries what a swap needs (`data-rear-of`, `data-rear-bay`); the new
 // module's rear face comes from its components.json entry. Built the way
 // render.py builds a projection: `data-of` in place of `data-path`, and nothing
 // the kit would extract as relief. In 3D the back is the module body's own.
@@ -276,9 +289,11 @@ export async function applyRearOverrides(rootEl, overrides, loadSkin, compByRef)
     for (const old of hole.querySelectorAll(':scope > [data-projection]')) old.remove();
     applied++;
     if (ref) hole.setAttribute('data-rear-ref', ref); else hole.removeAttribute('data-rear-ref');
+    hole.removeAttribute('data-rear-at');
     if (!loaded) continue;            // emptied, or a module with no back to show
     const doc = new DOMParser().parseFromString(loaded.text, 'image/svg+xml');
-    const [x, y] = hole.getAttribute('data-rear-at').split(',').map(Number);
+    const [x, y] = rearAt(hole.getAttribute('data-rear-bay'), comp);
+    hole.setAttribute('data-rear-at', `${x},${y}`);
     const wrap = rootEl.ownerDocument.createElementNS(NSX, 'g');
     wrap.setAttribute('id', `${bayId}-rear`);
     wrap.setAttribute('transform', `translate(${x},${y})`);
