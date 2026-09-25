@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nelt-b
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -61,9 +61,9 @@ provenance:
     with a CSFP; the legends 1-36 are printed two per cage (Figure 215, Figure 218). Composed as
     single std/sfp@1 cages (Figure 218 draws separate cages with metal between them) turned 90.
   interfaces: >-
-    the CSFP's two interfaces per cage cannot be declared here: `interfaces:` is a DEVICE
-    placement key (L105) and a component part admits no such key. Recorded in the group
-    description and as a gap.
+    datasheet - ANSI UDS R6.9 section 45.4.2.1, CSFP 2 channels per cage up to 36, and Figure 216: cage n declares `interfaces: [port-{2n-1}, port-{2n}]`, the two ports it numbers
+    whether a CSFP (both) or an SFP (the odd one alone) is seated, so the DCIM module type lists
+    all 36 ports, typed from the cage, and no cage row (roc-ops/Portrayal#443).
   rate: >-
     datasheet - section 45.4.2.1: `sfp: 18`, FE/GE SFPs; the 36-channel CSFP build is not
     expressed by the one per-card rate.
@@ -120,8 +120,7 @@ groups:
     attrs: {media: sfp, speed: 1g}
     description: >-
       the 18 single SFP cages (FE/GE SFP, or FE/GE CSFP with two channels). Cage n presents
-      ports 2n-1 and 2n with a CSFP; the two CSFP interfaces are not declared per cage because a
-      component part cannot carry `interfaces:`.
+      ports 2n-1 and 2n with a CSFP, and declares both as its `interfaces:`.
   link-leds:
     term: LED
     role: indicator
@@ -136,58 +135,58 @@ parts:
   - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [6.6, 23.8], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-as, group: status-leds, at: [10.4, 23.8], states: {lamp: ['off', {name: active, color: '#39b54a'}]}}
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.1, 23.8], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
-  - {ref: std/sfp@1, id: sfp-1, group: sfp, at: [3.82, 36.66], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-1, interfaces: [port-1, port-2], group: sfp, at: [3.82, 36.66], rotate: 90}
   - {ref: common/led-dot@1, id: led-1, group: link-leds, at: [2.1, 35.66], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-2, group: link-leds, at: [2.1, 45.66], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-2, group: sfp, at: [3.82, 54.32], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-2, interfaces: [port-3, port-4], group: sfp, at: [3.82, 54.32], rotate: 90}
   - {ref: common/led-dot@1, id: led-3, group: link-leds, at: [2.1, 53.32], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-4, group: link-leds, at: [2.1, 63.32], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-3, group: sfp, at: [3.82, 71.99], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-3, interfaces: [port-5, port-6], group: sfp, at: [3.82, 71.99], rotate: 90}
   - {ref: common/led-dot@1, id: led-5, group: link-leds, at: [2.1, 70.99], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-6, group: link-leds, at: [2.1, 80.99], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-4, group: sfp, at: [3.82, 89.66], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-4, interfaces: [port-7, port-8], group: sfp, at: [3.82, 89.66], rotate: 90}
   - {ref: common/led-dot@1, id: led-7, group: link-leds, at: [2.1, 88.66], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-8, group: link-leds, at: [2.1, 98.66], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-5, group: sfp, at: [3.82, 107.32], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-5, interfaces: [port-9, port-10], group: sfp, at: [3.82, 107.32], rotate: 90}
   - {ref: common/led-dot@1, id: led-9, group: link-leds, at: [2.1, 106.32], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-10, group: link-leds, at: [2.1, 116.32], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-6, group: sfp, at: [3.82, 124.98], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-6, interfaces: [port-11, port-12], group: sfp, at: [3.82, 124.98], rotate: 90}
   - {ref: common/led-dot@1, id: led-11, group: link-leds, at: [2.1, 123.98], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-12, group: link-leds, at: [2.1, 133.98], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-7, group: sfp, at: [3.82, 142.65], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-7, interfaces: [port-13, port-14], group: sfp, at: [3.82, 142.65], rotate: 90}
   - {ref: common/led-dot@1, id: led-13, group: link-leds, at: [2.1, 141.65], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-14, group: link-leds, at: [2.1, 151.65], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-8, group: sfp, at: [3.82, 160.31], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-8, interfaces: [port-15, port-16], group: sfp, at: [3.82, 160.31], rotate: 90}
   - {ref: common/led-dot@1, id: led-15, group: link-leds, at: [2.1, 159.31], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-16, group: link-leds, at: [2.1, 169.31], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-9, group: sfp, at: [3.82, 177.98], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-9, interfaces: [port-17, port-18], group: sfp, at: [3.82, 177.98], rotate: 90}
   - {ref: common/led-dot@1, id: led-17, group: link-leds, at: [2.1, 176.98], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-18, group: link-leds, at: [2.1, 186.98], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-10, group: sfp, at: [3.82, 210.3], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-10, interfaces: [port-19, port-20], group: sfp, at: [3.82, 210.3], rotate: 90}
   - {ref: common/led-dot@1, id: led-19, group: link-leds, at: [2.1, 209.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-20, group: link-leds, at: [2.1, 219.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-11, group: sfp, at: [3.82, 228.05], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-11, interfaces: [port-21, port-22], group: sfp, at: [3.82, 228.05], rotate: 90}
   - {ref: common/led-dot@1, id: led-21, group: link-leds, at: [2.1, 227.05], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-22, group: link-leds, at: [2.1, 237.05], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-12, group: sfp, at: [3.82, 245.8], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-12, interfaces: [port-23, port-24], group: sfp, at: [3.82, 245.8], rotate: 90}
   - {ref: common/led-dot@1, id: led-23, group: link-leds, at: [2.1, 244.8], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-24, group: link-leds, at: [2.1, 254.8], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-13, group: sfp, at: [3.82, 263.55], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-13, interfaces: [port-25, port-26], group: sfp, at: [3.82, 263.55], rotate: 90}
   - {ref: common/led-dot@1, id: led-25, group: link-leds, at: [2.1, 262.55], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-26, group: link-leds, at: [2.1, 272.55], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-14, group: sfp, at: [3.82, 281.3], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-14, interfaces: [port-27, port-28], group: sfp, at: [3.82, 281.3], rotate: 90}
   - {ref: common/led-dot@1, id: led-27, group: link-leds, at: [2.1, 280.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-28, group: link-leds, at: [2.1, 290.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-15, group: sfp, at: [3.82, 299.05], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-15, interfaces: [port-29, port-30], group: sfp, at: [3.82, 299.05], rotate: 90}
   - {ref: common/led-dot@1, id: led-29, group: link-leds, at: [2.1, 298.05], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-30, group: link-leds, at: [2.1, 308.05], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-16, group: sfp, at: [3.82, 316.8], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-16, interfaces: [port-31, port-32], group: sfp, at: [3.82, 316.8], rotate: 90}
   - {ref: common/led-dot@1, id: led-31, group: link-leds, at: [2.1, 315.8], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-32, group: link-leds, at: [2.1, 325.8], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-17, group: sfp, at: [3.82, 334.55], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-17, interfaces: [port-33, port-34], group: sfp, at: [3.82, 334.55], rotate: 90}
   - {ref: common/led-dot@1, id: led-33, group: link-leds, at: [2.1, 333.55], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-34, group: link-leds, at: [2.1, 343.55], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: std/sfp@1, id: sfp-18, group: sfp, at: [3.82, 352.3], rotate: 90}
+  - {ref: std/sfp@1, id: sfp-18, interfaces: [port-35, port-36], group: sfp, at: [3.82, 352.3], rotate: 90}
   - {ref: common/led-dot@1, id: led-35, group: link-leds, at: [2.1, 351.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-36, group: link-leds, at: [2.1, 361.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
 connection-points:

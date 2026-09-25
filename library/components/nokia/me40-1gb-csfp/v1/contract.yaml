@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: me40-1gb-csfp
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -120,8 +120,8 @@ provenance:
     number 3HE10642AA, one face); the printed label ME40-1GB-CSFP gives the component its name.
   gaps: >-
     No photograph is staged, so the colours are estimated and the stack orientation rests on the
-    figure alone. Blink rates are not stated. The CSFP second interface per cage is not declared
-    (component parts cannot carry `interfaces:`).
+    figure alone. Blink rates are not stated. Each cage declares the two ports it numbers as
+    its `interfaces:` (MDAE section 4.2.1: a CSFP takes both, an SFP the odd one), #443.
 stack-exceptions:
   - pairs: [[csfp-1-2, csfp-3-4], [csfp-5-6, csfp-7-8], [csfp-9-10, csfp-11-12], [csfp-13-14, csfp-15-16], [csfp-17-18, csfp-19-20], [csfp-21-22, csfp-23-24], [csfp-25-26, csfp-27-28], [csfp-29-30, csfp-31-32], [csfp-33-34, csfp-35-36], [csfp-37-38, csfp-39-40]]
     reason: >-
@@ -147,8 +147,8 @@ groups:
       the 20 CSFP/SFP cages in two ganged 2-row blocks (six columns, then four). Each cage takes a
       dual-port CSFP (two interfaces) or a single-port SFP (the odd interface only): column k has
       ports 4k-3 and 4k-2 in its top cage and 4k-1 and 4k in its bottom cage, 40 ports in all (MDAE
-      Table 10 keys 3-4, section 4.2.1). The two CSFP interfaces per cage are not declared: `interfaces:`
-      is a device placement key and a component part cannot carry it; the cage id names both.
+      Table 10 keys 3-4, section 4.2.1). Each cage declares its two ports as `interfaces:`, the
+      pair its id names.
   port-leds:
     term: LED
     role: indicator
@@ -162,26 +162,26 @@ groups:
     index-origin: 1
     description: the card lamps Stat and Pwr at the upper left
 parts:
-  - {ref: std/sfp-ganged@1, id: csfp-1-2, group: csfp, at: [25.175, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-5-6, group: csfp, at: [39.425, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-9-10, group: csfp, at: [53.675, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-13-14, group: csfp, at: [67.925, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-17-18, group: csfp, at: [82.175, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-21-22, group: csfp, at: [96.425, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-25-26, group: csfp, at: [113.11, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-29-30, group: csfp, at: [127.36, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-33-34, group: csfp, at: [141.61, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-37-38, group: csfp, at: [155.86, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-3-4, group: csfp, at: [25.175, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-7-8, group: csfp, at: [39.425, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-11-12, group: csfp, at: [53.675, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-15-16, group: csfp, at: [67.925, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-19-20, group: csfp, at: [82.175, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-23-24, group: csfp, at: [96.425, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-27-28, group: csfp, at: [113.11, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-31-32, group: csfp, at: [127.36, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-35-36, group: csfp, at: [141.61, 22.05], attrs: {media: sfp, speed: 1g}}
-  - {ref: std/sfp-ganged@1, id: csfp-39-40, group: csfp, at: [155.86, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-1-2, interfaces: [port-1, port-2], group: csfp, at: [25.175, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-5-6, interfaces: [port-5, port-6], group: csfp, at: [39.425, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-9-10, interfaces: [port-9, port-10], group: csfp, at: [53.675, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-13-14, interfaces: [port-13, port-14], group: csfp, at: [67.925, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-17-18, interfaces: [port-17, port-18], group: csfp, at: [82.175, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-21-22, interfaces: [port-21, port-22], group: csfp, at: [96.425, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-25-26, interfaces: [port-25, port-26], group: csfp, at: [113.11, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-29-30, interfaces: [port-29, port-30], group: csfp, at: [127.36, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-33-34, interfaces: [port-33, port-34], group: csfp, at: [141.61, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-37-38, interfaces: [port-37, port-38], group: csfp, at: [155.86, 8.01], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-3-4, interfaces: [port-3, port-4], group: csfp, at: [25.175, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-7-8, interfaces: [port-7, port-8], group: csfp, at: [39.425, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-11-12, interfaces: [port-11, port-12], group: csfp, at: [53.675, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-15-16, interfaces: [port-15, port-16], group: csfp, at: [67.925, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-19-20, interfaces: [port-19, port-20], group: csfp, at: [82.175, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-23-24, interfaces: [port-23, port-24], group: csfp, at: [96.425, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-27-28, interfaces: [port-27, port-28], group: csfp, at: [113.11, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-31-32, interfaces: [port-31, port-32], group: csfp, at: [127.36, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-35-36, interfaces: [port-35, port-36], group: csfp, at: [141.61, 22.05], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp-ganged@1, id: csfp-39-40, interfaces: [port-39, port-40], group: csfp, at: [155.86, 22.05], attrs: {media: sfp, speed: 1g}}
   - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.61, 5.62], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down, shut down'}, states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: amber, color: '#f5a623'}]}}
   - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.61, 9.7], attrs: {description: 'Pwr - blue: power is on; unlit: no power at the board'}, states: {lamp: ['off', {name: blue, color: '#2f7fe0'}]}}
   - {ref: common/led-dot@1, id: lnk-act-1, group: port-leds, at: [26.07, 4.88], attrs: {description: 'Lnk/Act - green: link; green blink: active; amber fast blink: loopback; amber slow blink: no optic; amber: optic installed, no link or LOS; unlit: laser disabled or shut down. No blink rates are given'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}

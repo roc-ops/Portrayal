@@ -48,8 +48,13 @@ provenance:
       millimetre) and every jack, cage, lamp, slot, vent and grille is placed where it lands.
       The NetZoom master TMC-3348S (CF) is retired for positions: its copper jacks sit on a
       16.7 pitch where this render measures 14.1, and its blocks are 0.5-4 mm from where the
-      render puts them; the TM-3312's render agrees with this one on the shared left half to
-      about 0.2 mm. The stencil keeps its legends and the cage and jack shapes.
+      render puts them. The stencil keeps its legends and the cage and jack shapes. THE
+      TM-3312's RENDER DOES NOT AGREE WITH THIS ONE CLOSELY on the shared left half, although
+      the two faces are presumably one part: relative positions differ by up to about 1.3 mm
+      in x (ETH to the first SFP column is 81.1 here and 82.35 on the TM-3312) and 0.5-1.1 mm
+      in y, and the pitches differ (copper 14.1 here against 14.25, SFP 14.45 against 14.3).
+      This render is 5.4 px/mm against the TM-3312's 2.3, so where they disagree this one is
+      the likelier to be right; nothing held settles it.
   ports:
     confidence: photo-measured
     note: >-
@@ -89,9 +94,11 @@ provenance:
   power:
     confidence: datasheet
     note: >-
-      Two internal supplies, AC (TMC-3348S-2AC-x) or wide-range DC (TMC-3348S-2DC); "Redundant
-      power supplies and wide-range DC input". No
-      consumption figure is published. The supplies are internal, so the front carries no
+      Two internal supplies, AC (TMC-3348S-2AC-x) or DC (TMC-3348S-2DC); "Redundant power
+      supplies and wide-range DC input". Input "100-240 VAC, 50/60 Hz -24/48VDC to-72VDC" (both
+      editions), and the ordering table rates the DC model "Dual feed -24/-48 VDC 3A power
+      supplies" - recorded as stated, in volts and amps, on the dc-power configuration. No
+      consumption figure in watts is published. The supplies are internal, so the front carries no
       bays; their inlets are presumably at the rear.
 attrs:
   physical:
@@ -99,7 +106,8 @@ attrs:
     overall-mm: 221 x 44 x 235 (data sheet)
     mounting: 19-inch rack (half width) or wall
   power:
-    input-voltage: AC, or wide-range DC
+    input-voltage: 100-240 VAC 50/60 Hz, or -24/-48 to -72 VDC
+    dc-input: dual feed, -24/-48 VDC, 3 A (TMC-3348S-2DC, ordering table)
     psu-redundancy: two internal supplies, AC or DC
   environmental:
     operating-temp: 0 to 50 C; -40 to 70 C for the TM-3348SH
@@ -257,7 +265,7 @@ views:
         - {id: slot-2, kind: vent, at: [26.2, 26.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
         - {id: slot-3, kind: vent, at: [41.8, 23.4], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
         - {id: slot-4, kind: vent, at: [41.9, 26.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
-        - {id: sd-slot, at: [26.5, 37.9], size: [26.0, 3.4], rx: 0.3, fill: '#2b2e32', confidence: estimated, source: 'the rectified render: a dark slot under the lamp row that the stencil does not draw; every data sheet lists an SD card under Management, so probably its slot (see the sd-slot gap); drawn as panel, not as a part'}
+        - {id: sd-slot, at: [26.5, 37.9], size: [26.0, 3.4], rx: 0.3, fill: '#2b2e32', confidence: estimated, source: 'the rectified render: a dark slot under the lamp row that the stencil does not draw; the same slot, in the same place, as on the TM-3312, whose data sheets list an SD card under Management; the TM-3348 sheets do not, so probably its slot (see the sd-slot gap); drawn as panel, not as a part'}
         - {id: shell-mgmt, kind: port-shell, at: [6.05, 9.1], size: [17.6, 27.85], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
         - {id: shell-copper, kind: port-shell, at: [54.95, 8.5], size: [30.9, 28.6], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
         - {id: sfp-block, kind: port-shell, at: [88.35, 8.95], size: [58.5, 27.4], rx: 0.3, fill: '#8f949a', stroke: '#5c6167', stroke-width: 0.35}
@@ -423,8 +431,8 @@ configurations:
     kind: orderable
     power: dc
     description: >-
-      TMC-3348S-2DC - two internal wide-range DC supplies. The face is the
-      same; the difference is at the rear.
+      TMC-3348S-2DC - "Dual feed -24/-48 VDC 3A power supplies" (ordering table), -24/-48 to
+      -72 VDC. The face is the same; the difference is at the rear.
 datasheet:
   title: 'Telco Systems TM-3348S/SH 10GE Ethernet/MPLS/IP Aggregation & Demarcation Device data sheet'
   url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-3348SH.pdf'
