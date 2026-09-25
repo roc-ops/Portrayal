@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: op31m2d
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) OP31M2D - dual 1310 nm / 1550 nm optical multiplexer: for each of A and B, the 1310 and 1550 inputs, the combined output and a -20 dB test port. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: OP31M2D
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the OP31M2D / OP31D2D 1310 nm / 1550 nm mux and demux data sheet's p1 photograph
+    of an OP31M2D (193 x 604 px) is a three-quarter view that
+    shows the module's side as well, so its pixel box does not give the face's aspect -
+    the photograph is normalised to these dimensions rather than checked against them. The data sheet's
+    4.3 in H is the module body without connectors, as the AR3002E's 4.3 in is; the face
+    is the chassis's 130.2. Depth datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the SC/APC adapters found by colour (their green bodies and yellow laser shutters),
+    which gives each row's position to about half a millimetre; the legends are read off
+    the same photograph. The OP31D2D demultiplexer shares the data sheet and is not photographed.
+  seating: >-
+    datasheet - a half-depth module; accepted by a slot's front bay and its rear bay alike,
+    per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-a-out: {at: [0.0, 20.30], size: [19.5, 10.4], class: port}
+  adapter-a-tp: {at: [0.0, 32.40], size: [19.5, 10.4], class: port}
+  adapter-a-inp-1310: {at: [0.0, 44.80], size: [19.5, 10.4], class: port}
+  adapter-a-inp-1550: {at: [0.0, 56.30], size: [19.5, 10.4], class: port}
+  adapter-b-out: {at: [0.0, 74.70], size: [19.5, 10.4], class: port}
+  adapter-b-tp: {at: [0.0, 85.30], size: [19.5, 10.4], class: port}
+  adapter-b-inp-1310: {at: [0.0, 95.90], size: [19.5, 10.4], class: port}
+  adapter-b-inp-1550: {at: [0.0, 106.50], size: [19.5, 10.4], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: a-out, at: [6.00, 21.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: a-tp, at: [6.00, 33.10], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: a-inp-1310, at: [6.00, 45.50], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: a-inp-1550, at: [6.00, 57.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-out, at: [6.00, 75.40], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-tp, at: [6.00, 86.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-inp-1310, at: [6.00, 96.60], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-inp-1550, at: [6.00, 107.20], rotate: 90, attrs: {connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

@@ -563,6 +563,77 @@ def composed_part_boxes(ref, lib_roots):
     return boxes
 
 
+
+def _turn_box(box, w, h, deg):
+    """A component-local box (x0, y0, x1, y1) after rotate(deg, w/2, h/2), the
+    turn render.py draws a placement with, or None for a turn that is not a
+    whole quarter - its image is not a box. Still in the placement's own frame,
+    so `at` is added after."""
+    turn = float(deg or 0) % 360
+    if turn % 90:
+        return None
+    cx, cy = w / 2.0, h / 2.0
+    th = math.radians(turn)
+    c, s = round(math.cos(th)), round(math.sin(th))
+    xs, ys = [], []
+    for x, y in ((box[0], box[1]), (box[2], box[3])):
+        xs.append(cx + c * (x - cx) - s * (y - cy))
+        ys.append(cy + s * (x - cx) + c * (y - cy))
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def placement_paint_boxes(p, lib_roots):
+    """What one placement paints over a legend, for L21: a list of
+    (x, y, w, h, id, holes) in view mm.
+
+    TURNED THE WAY IT IS DRAWN. render.py draws a placement translate(at)
+    rotate(deg w/2 h/2), so a quarter-turned part lands centred on the same
+    point with its width and height swapped. This first handled only 180, and
+    the XM-7380's console USB-A - 12 x 4.5, rotate 90 - was tested lying flat
+    where it stands upright, reporting the CONSOLE legend beside it as 4.50mm
+    inside it. Each painted box and the contracted box it is clamped to turn
+    together; the holes arrive already turned (placed_openings). A turn that is
+    not a quarter keeps the upright boxes, as it always did."""
+    if not p.get("at"):
+        return []                     # a mate-to occupant carries no position
+    sz = (contract_size(p["ref"], lib_roots) or {})
+    if not (sz.get("w") and sz.get("h")):
+        return []
+    px, py, pw, ph = p["at"][0], p["at"][1], sz["w"], sz["h"]
+    rot = p.get("rotate", 0)
+    turn = (lambda b: _turn_box(b, pw, ph, rot) or b)
+    lim = turn((0.0, 0.0, pw, ph))    # the contracted box, turned, is the limit
+    boxes = []
+    painted = paint_boxes(p["ref"], p.get("skin", "default"), lib_roots)
+    holes = placed_openings(p, lib_roots)
+    parts = composed_part_boxes(p["ref"], lib_roots) if holes else None
+    if painted is None:
+        if parts is None:
+            return [(px + lim[0], py + lim[1], lim[2] - lim[0], lim[3] - lim[1], p["id"], [])]
+        # the skin is unreadable but the holes are not: the whole box
+        # with its windows, and each composed part solid
+        boxes.append((px + lim[0], py + lim[1], lim[2] - lim[0], lim[3] - lim[1], p["id"], holes))
+        painted, skin_n = parts, 0
+    else:
+        # paint_boxes puts the composed parts last
+        skin_n = len(painted) - len(parts or [])
+    for i, b in enumerate(painted):
+        x0, y0, x1, y1 = turn(b)
+        x0, y0 = max(x0, lim[0]), max(y0, lim[1])
+        x1, y1 = min(x1, lim[2]), min(y1, lim[3])
+        if x1 > x0 and y1 > y0:
+            # only the node the windows are cut in carries them: its box
+            # contains a whole window, where anything drawn IN one is
+            # smaller than it and still covers what is behind it
+            bx0, by0, bx1, by1 = px + x0, py + y0, px + x1, py + y1
+            cut = i < skin_n and any(
+                min(q[0] for q in h) >= bx0 - 0.01 and max(q[0] for q in h) <= bx1 + 0.01
+                and min(q[1] for q in h) >= by0 - 0.01 and max(q[1] for q in h) <= by1 + 0.01
+                for h in holes)
+            boxes.append((bx0, by0, bx1 - bx0, by1 - by0, p["id"],
+                          holes if cut else []))
+    return boxes
+
 # --------------------------------------------------------------- openings ---
 #
 # A HOLE THROUGH A PART IS NOT PART OF IT, and every rule that measures a part
@@ -895,10 +966,17 @@ def _text_extent(m):
     anchor = m.get("anchor", "middle")
     lead = w if anchor == "end" else (w / 2 if anchor == "middle" else 0.0)
     rot = int(m.get("rotate", 0)) % 360
-    if rot == 90:            # runs downward, cap side to the LEFT of the baseline
-        return (x - up, y - lead, x + down, y - lead + w)
-    if rot == 270:           # runs upward, cap side to the right
-        return (x - down, y + lead - w, x + up, y + lead)
+    # WHICH SIDE THE CAPS FALL ON is the renderer's `rotate(deg x y)` applied to
+    # an upright mark, whose caps point up (-y). SVG turns clockwise on screen,
+    # so at 90 up becomes +x and the caps sit RIGHT of the baseline; at 270
+    # (-90, reading bottom to top) they sit LEFT. This had the two swapped, so
+    # an upright legend set against a part's left edge - XM-7380's CONSOLE, its
+    # glyphs painting 1.2mm clear of the USB port - was reported as buried in
+    # it, and a legend whose caps really did reach into a part went unreported.
+    if rot == 90:            # runs downward, cap side to the RIGHT of the baseline
+        return (x - down, y - lead, x + up, y - lead + w)
+    if rot == 270:           # runs upward, cap side to the LEFT
+        return (x - up, y + lead - w, x + down, y + lead)
     if rot == 180:           # runs leftward, cap side below
         return (x - w + lead, y - down, x + lead, y + up)
     return (x - lead, y - up, x - lead + w, y + down)
@@ -8922,44 +9000,7 @@ def lint_device(path, validator, lib_roots):
         # lamp drawn across a window still covers what is behind it.
         boxes = []
         for p in vp["placements"]:
-            if not p.get("at"):
-                continue                      # a mate-to occupant carries no position
-            sz = (contract_size(p["ref"], lib_roots) or {})
-            if not (sz.get("w") and sz.get("h")):
-                continue
-            px, py, pw, ph = p["at"][0], p["at"][1], sz["w"], sz["h"]
-            painted = paint_boxes(p["ref"], p.get("skin", "default"), lib_roots)
-            holes = placed_openings(p, lib_roots)
-            parts = composed_part_boxes(p["ref"], lib_roots) if holes else None
-            if painted is None:
-                if parts is None:
-                    boxes.append((px, py, pw, ph, p["id"], []))
-                    continue
-                # the skin is unreadable but the holes are not: the whole box
-                # with its windows, and each composed part solid
-                boxes.append((px, py, pw, ph, p["id"], holes))
-                painted, skin_n = parts, 0
-            else:
-                # paint_boxes puts the composed parts last
-                skin_n = len(painted) - len(parts or [])
-            flip = str(p.get("rotate", 0)) == "180"
-            for i, (x0, y0, x1, y1) in enumerate(painted):
-                if flip:                      # a half turn about the box centre
-                    x0, x1 = pw - x1, pw - x0
-                    y0, y1 = ph - y1, ph - y0
-                x0, y0 = max(x0, 0.0), max(y0, 0.0)   # the contracted box is the limit
-                x1, y1 = min(x1, pw), min(y1, ph)
-                if x1 > x0 and y1 > y0:
-                    # only the node the windows are cut in carries them: its box
-                    # contains a whole window, where anything drawn IN one is
-                    # smaller than it and still covers what is behind it
-                    bx0, by0, bx1, by1 = px + x0, py + y0, px + x1, py + y1
-                    cut = i < skin_n and any(
-                        min(q[0] for q in h) >= bx0 - 0.01 and max(q[0] for q in h) <= bx1 + 0.01
-                        and min(q[1] for q in h) >= by0 - 0.01 and max(q[1] for q in h) <= by1 + 0.01
-                        for h in holes)
-                    boxes.append((bx0, by0, bx1 - bx0, by1 - by0, p["id"],
-                                  holes if cut else []))
+            boxes.extend(placement_paint_boxes(p, lib_roots))
         # A BAY PAINTS OVER A LEGEND TOO, and L21 had never looked at one. It
         # gathered boxes from placements alone, so a mark printed where a card
         # goes was reported as fine - and the C40G's slot numbers, all six of
