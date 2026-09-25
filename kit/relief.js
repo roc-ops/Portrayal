@@ -47,6 +47,33 @@ export function localToFace(m, r) {
 // the selector for "this node carries relief of its own"
 export const RAISED = '[data-z-out],[data-z-cyl],[data-z-bar],[data-z-uhandle],[data-z-dome]';
 
+// WHAT A CAVITY BUILDS, from what render.py flagged on it. A pocket builds four
+// walls, a textured floor and a closed back, clamped INTO - 2 short of the far
+// face. A see-through passage (a rear hole, `seeThrough`) keeps its walls and
+// drops floor and back, so the far end is open. An open bay's mouth (`hollow`)
+// is a 6 mm collar meeting that passage. AN OPEN-FRAME MOUTH BUILDS NOTHING: its
+// slot shares one interior with every other slot on the face - guide rails and
+// a mid-plane, nothing between them - so a collar would stand a wall between
+// neighbours the hardware does not have. The face is still punched; that is
+// the hole, and the box's lining (openFrameFaces) is what is seen through it.
+export function cavityShell(c, INTO) {
+  if (c.openFrame) return {walls: false, floor: false, back: false, depth: 0};
+  const open = !!(c.seeThrough || c.hollow);
+  const depth = c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
+  return {walls: true, floor: !open, back: !open, depth};
+}
+
+// WHICH FACES DECLARED AN OPEN FRAME (render.py sets `data-open-frame` on the
+// root of a view whose `open-frame` is true). {face: svg text or null} in, the
+// face names out. viewer3d lines the inside of the box when any face is one, so
+// looking through an empty slot shows the chassis's interior and not nothing.
+export function openFrameFaces(texts) {
+  return Object.entries(texts || {})
+    .filter(([, t]) => typeof t === 'string'
+      && /^\s*<svg\b[^>]*\sdata-open-frame="1"/.test(t.replace(/<\?xml[^>]*>/, '')))
+    .map(([face]) => face);
+}
+
 export function cavitySeatsOn(c, o, eps = 0.01) {
   return !!c.lift && Math.abs(c.lift - o.out) < eps
     && c.x >= o.x - eps && c.y >= o.y - eps
@@ -1732,6 +1759,8 @@ export async function extractRelief(url, scope, {back = false} = {}) {
               // back - only a short collar of wall where the passage, which the
               // depth clamp stops just short of the face, would leave a gap.
               hollow: el.dataset.seeThrough === '1',
+              // an open-frame mouth (render.py `data-open-frame`): punched, nothing built
+              openFrame: el.dataset.openFrame === '1',
               lift: liftOf(el),
               round: !!el.dataset.round, cavSvg: nodeSvg(cavNode || el, rect),
               grpRect, grpSvg: nodeSvg(el, grpRect), features};
@@ -2153,7 +2182,7 @@ export async function buildFaceRelief(F, ctx) {
     const projOf = e => e.proj || e;
     // an open bay's mouth is a short collar, not a pocket: walls deep enough
     // to meet the rear passage, which stops INTO - 2 short of the face
-    const builtDepth = c => c.hollow ? Math.min(c.d, 6) : Math.min(c.d, INTO - 2);
+    const builtDepth = c => cavityShell(c, INTO).depth;
     for (const c of cavities) {
       // AN OPEN BAY'S MOUTH IS THE CHASSIS'S. It has no data-path of its own, so
       // ownerOf() answers with the bay's path, and a FRU group is keyed by that
@@ -2213,6 +2242,8 @@ export async function buildFaceRelief(F, ctx) {
       // drawn double-sided, its rear wall stood a hair behind the rear panel
       // and everything looking in from that face - the C14 inlet's pins, the
       // rear drive bays - ended at a flat plane.
+      const shell = cavityShell(c, INTO);
+      if (!shell.walls) continue;
       const wallMat = new THREE.MeshLambertMaterial({color: c.wall,
         side: c.wallsInside ? THREE.BackSide : THREE.DoubleSide});
       const backMat = new THREE.MeshLambertMaterial({color: 0x23262b, side: THREE.DoubleSide});
@@ -2236,7 +2267,7 @@ export async function buildFaceRelief(F, ctx) {
                       {owner: c.owner, x: c.x, y: c.y, d, lift: c.lift});
       walls.position.set(LX(c.x, c.w), LY(c.y, c.h), zc);
       addTo(walls);
-      if (c.seeThrough || c.hollow) continue;
+      if (!shell.floor) continue;
       // textured floor: the aperture art, pushed to the back of the recess
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(c.w, c.h),
         new THREE.MeshBasicMaterial({map: canvasTex(floorCv), transparent: true, alphaTest: 0.1, alphaToCoverage: true}));

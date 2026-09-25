@@ -560,6 +560,8 @@ NOT_A_DCIM_PORT = {
     "common/lc-duplex-adapter": "single-faced modules have no trunk to terminate on, and the "
                                 "device pass has no fibre path; optical-paths-design.md C3",
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
+    "std/sc-bore": "the SC/APC optical input of a single-faced CH3000 back plate (commscope/bp-a5); "
+                   "no trunk to terminate on, the same case as common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
                      "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
 
@@ -579,6 +581,9 @@ NOT_A_DCIM_PORT = {
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/vga": "VGA; neither library has a video port type",
+    "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
+                               "over one cable; neither library has a type for it, and one row "
+                               "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",

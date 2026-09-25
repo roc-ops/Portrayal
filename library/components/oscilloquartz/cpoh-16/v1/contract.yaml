@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: cpoh-16
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Oscilloquartz CPOH-16 - the OSA 542x CLK/PPS HD expansion card, sixteen unbalanced 50-ohm
+  outputs of either 10 MHz clock or 1PPS, brought out on one VHDCI high-density connector
+  and fanned out to BNC at a patch panel.
+size: {w: 113.5, h: 20.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: CPOH-16
+  part-number: 1047026086-01
+  outputs: 16
+  signal: 10 MHz clock (50 ohm) or 1PPS unbalanced (50 ohm)
+groups:
+  outputs:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: vhdci}
+    description: >-
+      ONE CONNECTOR, SIXTEEN OUTPUTS. The VHDCI carries all sixteen clock or 1PPS outputs to a
+      patch panel over one high-density cable (1036005401-01 or 1036005402-01), and
+      the outputs are numbered 1-16 on the panel's ports, not on this face. A timing
+      output is the work a grandmaster is bought to do, so the group is traffic.
+provenance:
+  identity: >-
+    manual - OSA 5420/5421 Installation and Commissioning Manual R9.5.1 p16, "CPOH-16 HD
+    Expansion Card", part number 1047026086-01: 16 x CLK (10 MHz, 50 ohm) or 16 x 1PPS
+    unbalanced (50 ohm) over the high-density connector. The same paragraph pairs it
+    with the 16x Clock and 16x 1PPS modular patch panel connectors (1047026089-01,
+    1047026084-01) and the high-density cables 1036005401-01 or 1036005402-01. The 2016
+    and 2023 data sheets list it as the "16x CLK / PPS" card: 16x 10 MHz or 5 MHz, or
+    16x PPS, over unbalanced 50 ohm.
+  size: >-
+    photo-measured - 2023 OSA 5420 Series data sheet p1 front render, both expansion
+    bays at 3.25 px/mm: 113.5 wide x 20.6 high on a 115.6 pitch. The manual's Figure 8
+    card image (p16, 1476 x 298 px; this card's own Figure 9 matches it outline for outline) gives a plate of 1457 x 262 px, aspect 5.56 against
+    5.51 from the render - a 1% agreement, which is what lets the higher-resolution
+    image supply the layout at 12.8 px/mm.
+  elements: >-
+    photo-measured off the manual's Figure 8 at 12.8 px/mm: captive thumbscrew centred
+    at (3.3, 12.35), about 7 across; PWR and STA lamps at x 19.1 on y 7.5 and 12.7 with
+    their names printed to the left; the VHDCI centred at (57.5, 11.8); "16 CLK/PPS-OUT"
+    beneath it; the pull tab 105.3-112.3 at the right end; and a small notch at x 7.2-8.7
+    in the top and bottom edges, which the data sheet render shows as two black squares
+    per card.
+  lamp-states: >-
+    manual - Table 2, System LEDs: PWR (Expansion Card) Off, power to LC is faulty;
+    Green, power to LC is OK. the manual gives the STA functions for the BITS OUT card's STA lamp, and this card carries the same pair in the same place: Off, Green, Flashing-Green, Yellow, Flashing Yellow, Red.
+  power: >-
+    NOT STATED. Searched the manual (every "W" and "Watt" is a PSU rating) and the 2015,
+    2016 and 2023 data sheets, whose power figures are for the chassis "without LC or
+    SFP". No figure for any expansion card exists in the corpus.
+states: [absent]
+elements:
+  thumbscrew: {at: [0.1, 9.15], size: [6.4, 6.4], class: fastener}
+  handle: {at: [105.3, 0.55], size: [7.0, 19.25], class: handle}
+parts:
+  - ref: common/led-indicator@1
+    id: led-pwr
+    at: [17.1, 5.5]
+    states: {lamp: ['off', {name: power-ok, color: '#39b54a'}]}
+  - ref: common/led-indicator@1
+    id: led-sta
+    at: [17.1, 10.7]
+    states: {lamp: ['off', {name: normal, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: power-up, color: '#e0b21b'}, {name: loading, color: '#e0b21b', behavior: blinking}, {name: fail, color: '#d0342c'}]}
+  - {ref: common/vhdci-receptacle@1, id: outputs, at: [37.3, 9.2], group: outputs}
+connection-points:
+  mate: {at: [56.75, 10.3], direction: rear}
+skins: [default]
