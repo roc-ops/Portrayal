@@ -132,7 +132,8 @@ from portrayal.manifest import (view_parts, targets, split_target, presented_int
                       drawn_refs, seat_point, slot_default, spanned_slots,
                       spanning_axis, _turn,
                       occupant_spec,
-                      PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS)
+                      PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS,
+                      resolve_views)
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -192,7 +193,7 @@ RULES = {
     "L31": ("device",     "a region's label matches the group or id it frames", "fix the label text or the region's members"),
     "L32": ("any yaml",   "no mapping declares the same key twice", "remove the duplicate; YAML keeps the last silently"),
     "L33": ("device",     "a bay reserves room for every module it accepts", "size the bay to the largest `insert`/`size` it accepts, or remove the module from `accepts`"),
-    "L34": ("device",     "front and rear occupants of one slot fit around the midplane", "check the two depths against chassis depth; one of them is wrong"),
+    "L34": ("device",     "front and rear occupants sharing a slot column, in every configuration, fit around the midplane", "check the two depths against chassis depth; one of them is wrong, or the two cannot be seated together"),
     "L35": ("component",  "a relief magnitude says where it came from", "add `confidence` and `source` to each `relief.features` entry"),
     "L36": ("component",  "a `borrowed` relief magnitude names an origin that actually measured it", "name a part whose own figure is `measured` or `photo-measured`, or use `estimated`"),
     "L37": ("component, device", "a group says what it is for and has members", "add `role`; delete a group nothing joins"),
@@ -9362,7 +9363,7 @@ MIDPLANE_SLACK = 1.25
 
 
 def lint_device_midplane_depth(path, data, lib_roots):
-    """L34 - front and rear occupants of one slot must fit around the midplane.
+    """L34 - front and rear occupants of one slot column must fit around the midplane.
 
     Found by a photograph, not by arithmetic. Every Casa card carried d 380.0 in
     a 386-388 mm chassis, on both faces, and nothing complained: each number was
@@ -9374,73 +9375,105 @@ def lint_device_midplane_depth(path, data, lib_roots):
     was in the RELATIONSHIP between two contracts that no rule compared, which is
     the same blind spot L33 exists for one axis over.
 
+    PAIRED BY THE COLUMN, NOT BY THE NAME. The first version paired a front and
+    a rear bay when both groups said `slot` and they shared a `rel-pos`, and the
+    CH3000 - front `slots`, rear `back-plates` - was never paired at all: a
+    full-depth AR3002E (d 330) in front of a half-depth NP35 (d 165.1), 495 mm in
+    a 337.8 mm chassis, passed. Two bays meet across the midplane when their
+    outlines share a column of the chassis, which the drawing already states: the
+    rear view is drawn as seen from behind, so a rear bay at x is at
+    `width - (x + w)` on the front's axis. They must share it on BOTH axes - a
+    front fan strip above a rear card is in neither's column - and by at least
+    half of the narrower bay, because outlines are drawn to faceplate precision
+    and a rear cage a few mm off the front one (Casa C40G's fan strip, 5.6 mm)
+    touches a column without being in it. A double or quad bay shares every
+    column it covers, which a rel-pos alone cannot say.
+
+    OCCUPANTS, NOT ACCEPTS. The rule used to compare the deepest part each bay
+    accepts. A chassis whose front takes full- or half-depth modules and whose
+    rear takes half-depth ones legitimately accepts a pair that cannot be seated
+    together - the operator seats one or the other - so the question is what each
+    build SEATS: every configuration, or the bay defaults when there are none,
+    with `only-in` honoured and the views each configuration binds.
+
     Reads `size-confidence` so a depth already marked `known-wrong` is reported as
     a KNOWN defect rather than a new one: the register and the rule should agree
     about what is already understood, or the rule just re-reports the backlog.
     """
     ch = data.get("chassis") or {}
     cd = ch.get("depth")
-    views = data.get("views") or {}
-    if not cd or "front" not in views or "rear" not in views:
+    if not cd:
         return
+    configs = data.get("configurations") or {"default": {"default": True}}
 
-    def by_pos(vname):
-        """Slot bays only, keyed by position.
+    depths = {}
 
-        ONLY SLOT GROUPS MATE ACROSS A MIDPLANE. A fan tray and a power module
-        also carry a rel-pos, and pairing a front fan with a rear line card by
-        position alone is how the first draft of this rule produced two
-        confident warnings about hardware that never meets. A group whose name
-        does not say `slot` is not in this relationship.
-        """
-        out = {}
-        for b in (((views.get(vname) or {}).get("components") or {}).get("bays") or []):
-            rp, g = b.get("rel-pos"), b.get("group")
-            if rp is not None and g and "slot" in g:
-                out.setdefault(rp, []).append(b)
+    def depth(ref):
+        """(depth, confidence) of one part, or (None, None)."""
+        if ref not in depths:
+            found = resolve_component(ref, lib_roots)
+            sub = (load_yaml(found) or {}) if found else {}
+            d = (sub.get("size") or {}).get("d")
+            depths[ref] = (d, (sub.get("size-confidence") or {}).get("d"))
+        return depths[ref]
+
+    def seated(view, cname, cfg, mirror_w=None):
+        """[(bay id, ref, x0, x1, y0, y1)] for what this build seats on a face."""
+        out = []
+        for b in view_parts(view)["bays"]:
+            if b.get("only-in") and cname not in b["only-in"]:
+                continue
+            ref = ((cfg or {}).get("bays") or {}).get(b.get("id"), b.get("default"))
+            at, size = b.get("at"), b.get("size") or {}
+            if not ref or not at or not size.get("w") or not size.get("h"):
+                continue
+            x0, y0 = float(at[0]), float(at[1])
+            x1, y1 = x0 + size["w"], y0 + size["h"]
+            if mirror_w is not None:
+                x0, x1 = mirror_w - x1, mirror_w - x0
+            out.append((b["id"], ref, x0, x1, y0, y1))
         return out
 
-    def deepest(bay):
-        """(depth, ref, confidence) of the deepest thing this bay accepts."""
-        best = (None, None, None)
-        for ref in (bay.get("accepts") or []):
-            found = resolve_component(ref, lib_roots)
-            if not found:
-                continue
-            sub = load_yaml(found) or {}
-            d = (sub.get("size") or {}).get("d")
-            if d and (best[0] is None or d > best[0]):
-                conf = (sub.get("size-confidence") or {}).get("d")
-                best = (d, ref, conf)
-        return best
+    def shared(a0, a1, b0, b1):
+        return min(a1, b1) - max(a0, b0) >= 0.5 * min(a1 - a0, b1 - b0)
 
-    front, rear = by_pos("front"), by_pos("rear")
-    seen = set()
-    for pos, fbays in sorted(front.items()):
-        rbays = rear.get(pos)
-        if not rbays:
+    found = {}                          # (front ref, rear ref) -> [(cfg, fbay, rbay)]
+    for cname, cfg in configs.items():
+        faces = resolve_views(data, cfg)
+        if "front" not in faces or "rear" not in faces:
             continue
-        fd, fref, fconf = deepest(fbays[0])
-        rd, rref, rconf = deepest(rbays[0])
-        if not fd or not rd:
+        rear_view = faces["rear"][1]
+        rw = (rear_view.get("size") or {}).get("w") or ch.get("width")
+        if not rw:
             continue
+        rear = seated(rear_view, cname, cfg, mirror_w=float(rw))
+        for fid, fref, fx0, fx1, fy0, fy1 in seated(faces["front"][1], cname, cfg):
+            fd = depth(fref)[0]
+            if not fd:
+                continue
+            for rid, rref, rx0, rx1, ry0, ry1 in rear:
+                rd = depth(rref)[0]
+                if not rd or fd + rd <= cd * MIDPLANE_SLACK:
+                    continue
+                if shared(fx0, fx1, rx0, rx1) and shared(fy0, fy1, ry0, ry1):
+                    found.setdefault((fref, rref), []).append((cname, fid, rid))
+
+    for (fref, rref), where in found.items():   # one warning per pair of parts
+        (fd, fconf), (rd, rconf) = depth(fref), depth(rref)
         total = fd + rd
-        if total <= cd * MIDPLANE_SLACK:
-            continue
-        pair = tuple(sorted((fref, rref)))
-        if pair in seen:
-            continue                      # one warning per pair of parts
-        seen.add(pair)
+        cname, fid, rid = where[0]
+        more = len({w[0] for w in where}) - 1
+        also = f" (and {more} other configuration{'s' if more > 1 else ''})" if more else ""
         known = [r for r, c in ((fref, fconf), (rref, rconf)) if c == "known-wrong"]
         tail = (f" ALREADY RECORDED as known-wrong on {', '.join(known)}."
                 if known else
                 " NEITHER depth is marked known-wrong, so this is a new defect.")
         warn(path, "L34",
-             f"slot {pos}: front accepts {fref} at d {fd:g} and rear accepts "
-             f"{rref} at d {rd:g}, together {total:g} mm in a {cd:g} mm chassis. "
-             f"A rear I/O card may legitimately OVERLAP the front one - its tongue "
-             f"passes through the midplane to mate with it - but by a tongue, not "
-             f"by {total - cd:.0f} mm.{tail}")
+             f"config {cname}{also}: front {fid} seats {fref} at d {fd:g} and rear "
+             f"{rid}, in the same column, seats {rref} at d {rd:g}, together "
+             f"{total:g} mm in a {cd:g} mm chassis. A rear I/O card may legitimately "
+             f"OVERLAP the front one - its tongue passes through the midplane to mate "
+             f"with it - but by a tongue, not by {total - cd:.0f} mm.{tail}")
 
 
 # ---------------------------------------------------------------- L32

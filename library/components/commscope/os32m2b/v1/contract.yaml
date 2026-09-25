@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: os32m2b
+version: 1.0.0
+class: switch
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) OS32M2B - two independent 2x1 optical protection switches in one
+  single-width, half-depth CH3000 module: each selects input A or B onto its output by
+  user-set power thresholds. Six SC/APC ports (A1, OUT 1, B1, A2, OUT 2, B2), a lamp per
+  input, and Alarm and Access lamps. Seats in the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: photo-measured, d: datasheet}
+attrs:
+  model: OS32M2B
+  role: optical-switch
+  switches: 2 x 2x1
+  switching-threshold: -22 to +22 dBm, 1 dB steps
+  power-draw-max-w: 1.6
+provenance:
+  size: >-
+    width borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0). Height
+    photo-measured: the OS32M2B data sheet's p1 photograph (340 x 1142) outlines the face at
+    221 x 1110 px, 8.58 px/mm across and 8.53 down. Depth datasheet - "6.5 D", 165.1 mm.
+  power: >-
+    datasheet - OS32M2B data sheet, "Power Consumption 1.6 W Max."
+  face-features: >-
+    photo-measured on the same photograph: the title "2X1 Optical Switch" over OS32M2B; for
+    each switch, two lamps legended A and B joined by a bracket to OUT, then three SC/APC
+    adapters on their sides (A, OUT, B) on an 11.0 pitch, legended at their right; then
+    Alarm and Access lamps, and the ARRIS wordmark over the bottom thumbscrew. A yellow
+    sticker on the left edge by the first switch is an applied label, not printing, and is
+    not drawn.
+  lamps: >-
+    datasheet - Module Status LEDs: red Alarm (both inputs below threshold), blue Access
+    (communication access); the per-input lamps are not described and carry no colour.
+  seating: >-
+    datasheet - "Occupies one half-depth slot"; accepted by a slot's front bay and its rear
+    bay alike, per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth
+    slots.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-in-a1: {at: [1.6, 26.95], size: [17.0, 10.3], class: port}
+  adapter-out-1: {at: [1.6, 38.05], size: [17.0, 10.3], class: port}
+  adapter-in-b1: {at: [1.6, 49.05], size: [17.0, 10.3], class: port}
+  adapter-in-a2: {at: [1.6, 70.65], size: [17.0, 10.3], class: port}
+  adapter-out-2: {at: [1.6, 81.65], size: [17.0, 10.3], class: port}
+  adapter-in-b2: {at: [1.6, 92.65], size: [17.0, 10.3], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: in-a1, at: [7.30, 27.60], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: out-1, at: [7.30, 38.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-b1, at: [7.30, 49.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-a2, at: [7.30, 71.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: out-2, at: [7.30, 82.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-b2, at: [7.30, 93.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: common/led-dot@1, id: led-a1, at: [11.3, 19.3], attrs: {function: input}}
+  - {ref: common/led-dot@1, id: led-b1, at: [11.3, 23.7], attrs: {function: input}}
+  - {ref: common/led-dot@1, id: led-a2, at: [11.3, 62.0], attrs: {function: input}}
+  - {ref: common/led-dot@1, id: led-b2, at: [11.3, 66.0], attrs: {function: input}}
+  - {ref: common/led-dot@1, id: led-alarm, at: [11.3, 104.8], attrs: {function: alarm}}
+  - {ref: common/led-dot@1, id: led-access, at: [11.3, 109.2], attrs: {function: activity}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
