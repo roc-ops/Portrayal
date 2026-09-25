@@ -1991,6 +1991,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     svg.set("data-device", device["name"])
     svg.set("data-view", view_name)
     svg.set("data-config", config_name)
+    # AN OPEN-FRAME FACE SAYS SO ON ITS ROOT, because what it changes is the
+    # chassis and not any one bay: the kit lines the inside of the box when a
+    # face declares it, so an empty slot looks into the chassis's interior
+    # rather than through a box that has no inside.
+    if view.get("open-frame"):
+        svg.set("data-open-frame", "1")
     # Sections are a classification, not a namespace: a drawing is opened
     # somewhere else, and `data-power-max-w` is readable there while
     # `data-power-max-w` under some section prefix would only be longer. So the
@@ -3308,6 +3314,22 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     depths.append(_d)
             if depths:
                 opening.set("data-depth", f"{max(depths):g}")
+                opening.set("data-wall", "#2a2e31")
+        # A BAY ON AN OPEN FRAME OPENS INTO THE CHASSIS. Its slot is two guide
+        # rails and a mid-plane, not a box, so the pocket above - walls, a floor
+        # and a back as deep as the deepest occupant - is exactly what the
+        # hardware does not have: sixteen of them made the CH3000 a row of closed
+        # tubes. It is a see-through mouth like an open-backed bay's, and
+        # `data-open-frame` asks the kit for no collar either. Occupied or not,
+        # as the open-backed bay's is: the kit draws a seated module over the
+        # mouth from unpunched art, and a pulled one leaves the open frame
+        # rather than a dark box.
+        if view.get("open-frame"):
+            bay_g.set("data-open-back", "1")
+            opening.set("data-see-through", "1")
+            opening.set("data-open-frame", "1")
+            if opening.get("data-depth") is None:
+                opening.set("data-depth", f"{ch['depth']:g}")
                 opening.set("data-wall", "#2a2e31")
         # A BAY WITH AN OPEN BACK IS A PASSAGE, NOT A POCKET. When the bay is
         # seen from behind (`rear:`), the rear-panel hole it names runs the

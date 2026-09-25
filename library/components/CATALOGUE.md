@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-786 component majors in 15 namespaces.
+787 component majors in 15 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -15,7 +15,7 @@ composes it. Place the wrapper when the panel carries that furniture and the
 aperture when it is a bare opening - never both at one position. The README's
 [Namespaces](README.md#namespaces) section has the pairs and the rule.
 
-## std/ (37)
+## std/ (38)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -25,8 +25,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/cfp2@1` | component | port | 41.5 × 12.4 × 107.5 | cfp2 | 0 | 9 | CFP2 cage cutout - the module envelope of the CFP2 MSA, the aperture the module seats through |
 | `std/cfp4@1` | component | port | 21.5 × 9.5 × 92 | cfp4 | 0 | 3 | CFP4 cage cutout - the module envelope of the CFP4 MSA, the aperture the module seats through |
 | `std/cxp@1` | component | port | 27 × 10 × 92 | cxp | 0 | 3 | CXP cage cutout - the module envelope of the CXP MSA, the aperture the module seats through |
-| `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 0 | 1 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
-| `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 17 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
+| `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 0 | 2 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
+| `std/db25@1` | component | port | 42.52 × 11.4 × 6.5 | db25 | 0 | 0 | D-subminiature DB-25 receptacle - twenty-five contacts in two rows, thirteen over twelve, in the size B shell… |
+| `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 18 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
 | `std/drive-25@1` | component | drive | 15 × 69.85 × 100.45 | drive-25 | 1 | 2 | 2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier: 69.85 wide by 15.00 thick, drawn s… |
 | `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 1 | 1 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
@@ -54,7 +55,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 79 | 27 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 5 | 0 | USB Type-C receptacle opening - fully rounded ends |
-| `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 5 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
+| `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 32 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
 ## common/ (87)

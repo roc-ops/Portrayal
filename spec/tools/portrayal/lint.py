@@ -174,7 +174,7 @@ RULES = {
     "L13": ("device",     "two placed components do not occupy the same faceplate area", "move one, or declare `for:`/`under:` when one deliberately sits on the other"),
     "L14": ("device",     "a silkscreen `for:` target exists and is nearby", "name the placement or bay the mark annotates, and anchor the mark at it"),
     "L15": ("device",     "a device at `modelled` or above has a provenance block good enough for the level", "add provenance for every figure, or lower `maturity`"),
-    "L16": ("device",     "keys inside a view read in manufacturing order", "reorder: empty, size, panel, silkscreen, components, regions"),
+    "L16": ("device",     "keys inside a view read in manufacturing order", "reorder: empty, size, open-frame, panel, silkscreen, components, regions"),
     "L17": ("component, device", "a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one", "declare the group with term, role and index-origin; join the loose port to a group"),
     "L18": ("device",     "a port inherits media from its group rather than restating it", "drop the per-port media, or fix the group's `attrs.media`"),
     "L19": ("device",     "an indicator declares `for:` the thing it indicates", "add `for:` to the lamp placement"),

@@ -39,13 +39,29 @@ concurrency:
   group: gates-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# WHERE THE JOBS RUN IS A REPOSITORY VARIABLE, NOT THIS FILE. While the
+# repository is private, `GATES_RUNNER` names the label of a self-hosted pool
+# (`portrayal-ci`) with six times the cores of a hosted runner; the suite is the
+# long pole of every run and it scales with them. Unset the variable and both
+# jobs are back on `ubuntu-latest` with no edit here - which is the step for
+# going public, and the fallback if the machine is down.
+#
+# A PULL REQUEST FROM A FORK NEVER GETS THE VARIABLE'S ANSWER. A self-hosted
+# runner executes whatever the pull request's tree says, on a machine that is
+# not thrown away afterwards; that is acceptable for branches in this repository
+# and never for a stranger's. The fork test comes first so that forgetting to
+# unset the variable when the repository opens is not the thing that exposes it.
+#
+# WHAT A HOSTED RUNNER GAVE FOR FREE, THIS FILE NOW ASKS FOR: the self-hosted
+# user has no sudo, so apt installs only what is missing; and several runners
+# share one /tmp, so the pytest log lives under the job's own RUNNER_TEMP.
 jobs:
   # LINT ON ITS OWN, AND FIRST. It is the fastest gate and the one whose failure
   # is most often the whole story, so it answers in well under a minute instead
   # of behind a render log; and because `build` waits on it, a broken manifest
   # costs one short job rather than twenty minutes of rendering and testing.
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
@@ -68,7 +84,7 @@ jobs:
 
   build:
     needs: lint
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
@@ -95,7 +111,9 @@ jobs:
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
       # thing this workflow exists to stop happening quietly.
       - name: poppler
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+        run: |
+          command -v pdftoppm \
+            || { sudo apt-get update && sudo apt-get install -y poppler-utils; }
 
       # BUILD BEFORE PYTEST, AND THIS ORDER IS THE POINT. Four test modules -
       # behaviour, config-scope, viewbox, state-css - skip themselves when
@@ -151,7 +169,7 @@ jobs:
           PORTRAYAL_LINT_ALREADY_RAN: '1'
         run: |
           set -o pipefail
-          python3 -m pytest spec/tests -q -rs -n auto | tee /tmp/pytest.txt
+          python3 -m pytest spec/tests -q -rs -n auto | tee "$RUNNER_TEMP/pytest.txt"
 
       # The guard for the failure above, and it checks WHICH test stopped running
       # rather than how many.
@@ -171,13 +189,13 @@ jobs:
       - name: no silent skipping
         if: always()
         run: |
-          if ! grep -qE '[0-9]+ (passed|failed|error)' /tmp/pytest.txt; then
+          if ! grep -qE '[0-9]+ (passed|failed|error)' "$RUNNER_TEMP/pytest.txt"; then
             echo "::error::pytest produced no summary line - the suite did not run."
             echo "::error::A missing interpreter or package looks like a clean result here."
-            tail -20 /tmp/pytest.txt || true
+            tail -20 "$RUNNER_TEMP/pytest.txt" || true
             exit 1
           fi
-          python3 spec/tools/portrayal/check_skips.py /tmp/pytest.txt spec/allowed-skips.txt
+          python3 spec/tools/portrayal/check_skips.py "$RUNNER_TEMP/pytest.txt" spec/allowed-skips.txt
 
       # The exports are committed and a DCIM reads them, so a stale one is a
       # real defect rather than untidiness. publish.sh above has already
