@@ -32,7 +32,9 @@ provenance:
     note: >-
       221 x 44 x 140.5 - the data sheet's "44 mm x 221 mm x 140.5 mm (1.73 in x 8.7 in x 5.51
       in)"; the stencil master's outline is 221.6 x 44.4. The face has rounded end-caps, which
-      the rectangular panel does not draw.
+      the rectangular panel does not draw. BOTH EDITIONS PRINT "0.6 kg (2.42 lbs)", which disagree
+      with themselves (2.42 lb is 1.10 kg, the TM-340's figure); 0.6 kg is carried as the metric
+      figure both print, and the conflict is recorded here.
   front-layout:
     confidence: estimated
     note: >-
@@ -45,7 +47,12 @@ provenance:
       is not used. POSITIONS IN THE PORT AREA (x 75-205) ARE THE RENDER'S: the Access pair is a
       ganged 2-jack block on a 14.05 pitch (the stencil draws two separate housings 16.5 apart),
       the RJ45s sit about 2 mm higher than the stencil has them, and the DC jack 1.7 mm left and
-      3 mm higher. THE LEFT GROUP - the wordmark plate, T-Marc 280, CON, STS, PWR, the pinhole
+      3 mm higher; the port numerals, the Network bracket's drops and its word sit where the
+      render prints them, measured by clustering the glyphs in the rectified image: 1/1 at 97.45,
+      2/1 at 122.3 and 2/2 at 137.1 are within half a millimetre of their jacks and are drawn
+      centred on them, and 3/1 at 166.95 is centred on its legend box rather than on its
+      cage-and-jack pair (168.57), so it is drawn where it is printed and L61 stays in the
+      baseline for it on purpose. The Network word is at 133.5. THE LEFT GROUP - the wordmark plate, T-Marc 280, CON, STS, PWR, the pinhole
       and the laser label - IS THE STENCIL'S, unchecked, and the renders show the same
       arrangement. See the left-group gap.
   ports:
@@ -57,6 +64,13 @@ provenance:
       (10/100/1000Base-T or 100Base-FX / 1000Base-X)" - an SFP cage (port-3-1) beside an RJ45
       (copper-3-1, common/rj45-eth@1), one or the other in use at a time. The legend boxes group
       1/1 and 3/1 as Network and 2/1-2/2 as Access.
+  far-right-slot:
+    confidence: estimated
+    note: >-
+      A white oval slot or lug near the right end-cap (the render has it at about 207.5-216 x
+      30-33.5, beyond the fitted span; the stencil draws a small rectangle at 207.2-213.8, 32.9-34.6)
+      is drawn as panel decor between the two. Nothing held says what it is - a light pipe or a
+      lock slot are both plausible.
   lamps:
     confidence: estimated
     note: >-
@@ -66,15 +80,16 @@ provenance:
     confidence: datasheet
     note: >-
       "5VDC @3A (max) with external power adaptor (AC to DC, DC to DC)", and the faceplate prints
-      5VDC 3A with a polarity symbol over the barrel inlet. Which way round the symbol reads is not
-      legible in the renders and the stencil draws it differently, so the conventional
-      centre-positive form is drawn and nothing is claimed for it. No watts are published
+      5VDC 3A with a polarity symbol over the barrel inlet: two circles joined through a dot with
+      an arc on its right, as the render shows it. The signs inside the circles are not legible in
+      any render and the stencil draws them differently, so POLARITY IS NOT MODELLED - the circles
+      are drawn plain. No watts are published
       (5 V at 3 A is 15 W at most).
 attrs:
   physical:
     weight-kg: 0.6
     overall-mm: 221 x 44 x 140.5 (data sheet)
-    mounting: desktop or wall
+    mounting: desktop, 19-inch rack or wall
   power:
     input-voltage: 5 VDC, 3 A max, from an external AC-DC or DC-DC adaptor
     psu-redundancy: none - one external adaptor
@@ -82,7 +97,11 @@ attrs:
     operating-temp: 0 to 40 C standard; -20 to 60 C extended
     storage-temp: -25 to 80 C
     humidity: 0 to 95 percent non-condensing
+  performance:
+    switching-capacity: 4 Gbps full duplex, non-blocking (2021 edition)
   features:
+    services: all MEF services, IEEE 802.1Q bridging, IEEE 802.1ad Q-in-Q (2021 edition)
+    timing: IEEE 1588v2 PTP (2021 edition)
     resiliency: G.8031, G.8032v2 R-APS, xSTP/MSTP, Fast Ring, Resilient Link, LAG (static / LACP)
     optics-sfp: '100BASE-FX, 1000BASE-X (data sheet, "1 x 100Base-FX / 1000Base-X uplink port")'
   management:
@@ -181,6 +200,7 @@ views:
         - {id: box-1-1, kind: outline, at: [78.2, 9.4], size: [30.8, 26.1], rx: 1.5, fill: none, stroke: '#3a3d41', stroke-width: 0.3}
         - {id: box-access, kind: outline, at: [111.5, 9.4], size: [35.9, 26.1], rx: 1.5, fill: none, stroke: '#3a3d41', stroke-width: 0.3}
         - {id: box-3-1, kind: outline, at: [149.9, 9.4], size: [36.0, 26.1], rx: 1.5, fill: none, stroke: '#3a3d41', stroke-width: 0.3}
+        - {id: far-right-slot, kind: label-plate, at: [207.5, 31.0], size: [7.5, 2.4], rx: 1.2, fill: '#f2f3f4', stroke: '#9aa0a6', stroke-width: 0.3, confidence: estimated, source: 'between the render (207.5-216 x 30-33.5, extrapolated) and the stencil (207.2-213.8 x 32.9-34.6); unidentified'}
       cutouts:
         - {id: con, at: [27.69, 18.16], size: [15.8, 13.2], shape: rect}
         - {id: led-sts, at: [50.37, 21.59], size: [4.0, 4.0], shape: circle}
@@ -194,8 +214,8 @@ views:
         - {id: copper-3-1, at: [168.7, 17.8], size: [15.8, 13.2], shape: rect}
         - {id: dc-in, at: [190.5, 19.4], size: [12.0, 13.0], shape: rect}
     silkscreen:
-      - {id: bracket-network-l, at: [93.6, 40.2], path: M 0 -3.4 L 0 0 L 30.8 0, for: [port-1-1, port-3-1, copper-3-1]}
-      - {id: bracket-network-r, at: [136.2, 40.2], path: M 0 0 L 32.8 0 L 32.8 -3.4, for: [port-1-1, port-3-1, copper-3-1]}
+      - {id: bracket-network-l, at: [97.5, 40.2], path: M 0 -3.4 L 0 0 L 30.8 0, for: [port-1-1, port-3-1, copper-3-1]}
+      - {id: bracket-network-r, at: [138.7, 40.2], path: M 0 0 L 28.4 0 L 28.4 -3.4, for: [port-1-1, port-3-1, copper-3-1]}
       - {at: [21.44, 9.4], text: TELCO SYSTEMS, font-size: 2.2, anchor: middle, for: chassis}
       - {at: [56.9, 10.6], text: T-Marc 280, font-size: 6.2, anchor: middle, fill: '#2f3337', for: chassis}
       - {at: [41.9, 39.5], text: CLASS 1 LASER PRODUCT, font-size: 2.2, anchor: middle, for: chassis}
@@ -207,13 +227,13 @@ views:
       - {at: [129.5, 15.1], text: 10/100/1000T, font-size: 1.9, anchor: middle, for: [port-2-1, port-2-2]}
       - {at: [159.9, 15.1], text: 100FX/1000X, font-size: 1.9, anchor: middle, for: port-3-1}
       - {at: [176.6, 15.1], text: 10/100/1000T, font-size: 1.9, anchor: middle, for: copper-3-1}
-      - {at: [94.4, 36.2], text: 1/1, font-size: 2.1, anchor: middle, for: port-1-1}
+      - {at: [97.2, 36.2], text: 1/1, font-size: 2.1, anchor: middle, for: port-1-1}
       - {at: [122.52, 36.2], text: 2/1, font-size: 2.1, anchor: middle, for: port-2-1}
       - {at: [136.49, 36.2], text: 2/2, font-size: 2.1, anchor: middle, for: port-2-2}
-      - {at: [168.57, 36.2], text: 3/1, font-size: 2.1, anchor: middle, for: [port-3-1, copper-3-1]}
-      - {at: [130.4, 41.0], text: Network, font-size: 2.1, anchor: middle, for: [port-1-1, port-3-1, copper-3-1]}
+      - {at: [166.95, 36.2], text: 3/1, font-size: 2.1, anchor: middle, for: [port-3-1, copper-3-1]}
+      - {at: [133.5, 41.0], text: Network, font-size: 2.1, anchor: middle, for: [port-1-1, port-3-1, copper-3-1]}
       - {at: [196.5, 14.6], text: 5VDC 3A, font-size: 2.1, anchor: middle, for: dc-in}
-      - {id: polarity, at: [190.55, 17.0], for: dc-in, path: M 3.2 0.0 L 2.986 0.8 L 2.4 1.386 L 1.6 1.6 L 0.8 1.386 L 0.214 0.8 L 0.0 0.0 L 0.214 -0.8 L 0.8 -1.386 L 1.6 -1.6 L 2.4 -1.386 L 2.986 -0.8 Z M 0.8 0 L 2.4 0 M 3.2 0 L 5.2 0 M 6.5 0.0 L 6.354 0.354 L 6.0 0.5 L 5.646 0.354 L 5.5 0.0 L 5.646 -0.354 L 6.0 -0.5 L 6.354 -0.354 Z M 6.8 0 L 8.7 0 M 11.9 0.0 L 11.686 0.8 L 11.1 1.386 L 10.3 1.6 L 9.5 1.386 L 8.914 0.8 L 8.7 0.0 L 8.914 -0.8 L 9.5 -1.386 L 10.3 -1.6 L 11.1 -1.386 L 11.686 -0.8 Z M 9.5 0 L 11.1 0 M 10.3 -0.8 L 10.3 0.8}
+      - {id: polarity, at: [190.55, 17.0], for: dc-in, path: M 3.2 0.0 L 2.986 0.8 L 2.4 1.386 L 1.6 1.6 L 0.8 1.386 L 0.214 0.8 L 0.0 0.0 L 0.214 -0.8 L 0.8 -1.386 L 1.6 -1.6 L 2.4 -1.386 L 2.986 -0.8 Z M 3.2 0 L 5.2 0 M 6.5 0.0 L 6.354 0.354 L 6.0 0.5 L 5.646 0.354 L 5.5 0.0 L 5.646 -0.354 L 6.0 -0.5 L 6.354 -0.354 Z M 6.9 -1.2 L 7.3 -0.6 L 7.4 0 L 7.3 0.6 L 6.9 1.2 M 7.4 0 L 8.7 0 M 11.9 0.0 L 11.686 0.8 L 11.1 1.386 L 10.3 1.6 L 9.5 1.386 L 8.914 0.8 L 8.7 0.0 L 8.914 -0.8 L 9.5 -1.386 L 10.3 -1.6 L 11.1 -1.386 L 11.686 -0.8 Z}
     components:
       placements:
         - {ref: 'std/rj45@2', id: con, at: [27.69, 18.16], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CON - the console}
@@ -252,7 +272,11 @@ configurations:
       sourced - TMC-280-z, "Managed Ethernet demarcation device with 2 x 10/100/1000Base-T ports,
       1 x combo copper/fiber port, 1 x SFP uplink, and external power supply" (data sheet
       ordering table).
-    description: The TM-280, fed from its external 5 VDC adaptor.
+    description: >-
+      The TM-280, fed from its external 5 VDC adaptor. The 2021 edition's footnote says "'z'
+      specifies power supply and cord types": NA, EUR and UK (an AC adaptor with that cord), DC (a
+      DC-DC adaptor) and AC (an adaptor with no cord). The adaptor is outside the box, so every z
+      build has this face; the base is drawn without asserting which adaptor feeds it.
 datasheet:
   title: 'BATM Networks TM-280 Carrier Ethernet NID data sheet'
   url: 'https://www.telco.com/wp-content/uploads/2025/12/BATM-Networks-TM-280-Datasheet.pdf'
