@@ -280,6 +280,7 @@ RULES = {
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy"),
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
+    "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own stands past the head, and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1778,6 +1779,88 @@ def lint_component_generic(path, data, _lib_roots=None):
     if GENERIC_RATE_TOKENS.search(name):
         err(path, "L99", f"{name} names a rate. A generic is named by form factor "
                          "and face - sfp-lc, qsfp-mpo12 - never by what runs in it")
+
+
+HEAD_TOL = 0.05
+# A skin insets its outline by half a stroke, so the node drawing a head is
+# compared more loosely than the head's own figures are.
+HEAD_NODE_TOL = 0.25
+
+
+def lint_component_head(path, data, _lib_roots=None):
+    """L121 - the head outside the cage.
+
+    Every MSA that defines a module envelope also defines a larger one for the
+    section OUTSIDE the cage (SFF-8432 Table 4-3 Note 4, SFF-8661 Figure 5-1
+    Note 1, QSFP-DD HW 6.3 Figure 52 Note 4). Without it the copper SFP was
+    refused for being taller than the in-cage body - the wrong box - and the
+    QSFP generics' pull tab could stand anywhere. The registry now carries the
+    outside envelope; this holds each part to it, and makes an overhang a
+    stated, sourced fact rather than a silent one.
+    docs/pluggables-heads-design.md section 4.3.
+    """
+    if not isinstance(data, dict) or data.get("behaviour") != "occupies":
+        return
+    if data.get("superseded-by"):
+        return
+    env = (STANDARDS.get(data.get("conforms") or "") or {}).get("head")
+    if not env:
+        return
+    name = data.get("name")
+    head = data.get("head")
+    if not head:
+        err(path, "L121", f"{name} conforms to {data['conforms']}, whose registry entry "
+                          "gives the envelope outside the cage, and declares no `head:`")
+        return
+    size, hs = data["size"], head["size"]
+    at = head.get("at") or [0.0, 0.0]
+    got = {"width": hs["w"],
+           "above": max(0.0, -at[1]),
+           "below": max(0.0, at[1] + hs["h"] - size["h"]),
+           "length": hs["d"]}
+    lmax = env["length-max"]
+    if isinstance(lmax, dict):
+        lmax = lmax.get(f"type-{head.get('type', 1)}")
+        if lmax is None:
+            err(path, "L121", f"{name}: head.type {head.get('type')} has no length in "
+                              f"{data['conforms']}'s envelope")
+            return
+    limit = {"width": env["w-max"], "above": env["above-max"],
+             "below": env["below-max"], "length": lmax}
+    waived = {e["dimension"]: e for e in head.get("exceeds") or []}
+    for dim, value in got.items():
+        over = value > limit[dim] + HEAD_TOL
+        if over and dim not in waived:
+            msg = (f"{name}: head {dim} {value:g} exceeds {data['conforms']}'s "
+                   f"{limit[dim]:g} outside the cage")
+            if dim == "length" and env.get("length-kind") == "recommended":
+                warn(path, "L121", msg + " (a recommended maximum; list it under "
+                                         "`head.exceeds` with its source)")
+            else:
+                err(path, "L121", msg + " - list it under `head.exceeds` with a source")
+        elif not over and dim in waived:
+            err(path, "L121", f"{name}: `head.exceeds` lists {dim}, but {value:g} is "
+                              f"within {limit[dim]:g} - a stale waiver")
+    for f in (data.get("relief") or {}).get("features") or []:
+        out = f.get("out")
+        if out is not None and out > hs["d"] + HEAD_TOL:
+            err(path, "L121", f"{name}: relief feature {f.get('node')!r} stands {out:g} "
+                              f"out, past the head's {hs['d']:g}")
+    node = head.get("node")
+    if node:
+        skins = data.get("skins") or ["default"]
+        svg = Path(path).parent / "skins" / f"{skins[0]}.svg"
+        el = None
+        if svg.exists():
+            import xml.etree.ElementTree as _ET
+            el = next((e for e in _ET.parse(svg).iter() if e.get("id") == node), None)
+        box = None
+        if el is not None and el.tag.rsplit("}", 1)[-1] == "rect":
+            box = [float(el.get(k) or 0) for k in ("x", "y", "width", "height")]
+        want = [at[0], at[1], hs["w"], hs["h"]]
+        if box is None or any(abs(a - b) > HEAD_NODE_TOL for a, b in zip(box, want)):
+            err(path, "L121", f"{name}: head.node {node!r} does not draw the head "
+                              f"{want} (found {box})")
 
 
 def lint_component_cage_rate(path, data, _lib_roots=None):
