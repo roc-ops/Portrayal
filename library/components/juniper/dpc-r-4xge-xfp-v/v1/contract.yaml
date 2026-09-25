@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpc-r-4xge-xfp-v
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,9 +10,16 @@ description: >-
   DPC the MX240/MX480 seat horizontally, authored vertically with the
   four cages spread down the faceplate, each with its LINK lamp.
 attrs:
+  xfp-10g: 4
   model: DPC-R-4XGE-XFP
   power-draw-max-w: 310
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the MX Series Interface Module Reference, which files
+    DPC-R-4XGE-XFP under 10-Gigabit Ethernet DPC with XFP. The XFP cage cannot say: it takes
+    a 10GbE optic and an OC-192 one, and the framing is what differs. The export already
+    typed it 10gbase-x-xfp by default; this makes that a statement. Nothing new was
+    measured.
   size: 'photo - the studio front photograph at ~2.07 px/mm: the card cage is ~405 mm tall and fourteen slots share the 441 mm width on a ~30.1 mm pitch; positions approximate to ~2 mm. No vendor card dimension in the extraction'
   power: >-
     guide FRU power table (Component | Model Number | Maximum Power Requirement), MX chassis

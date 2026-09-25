@@ -1,0 +1,558 @@
+format: 1
+kind: device
+name: tm-7124s
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: TM-7124S
+aliases:
+- {name: T-Metro 7124S, kind: superseded, note: 'the name on the metal and on the 2016-2025 data sheets; the 2025-12 data sheet and product page (slug tm-7124) call the same box TM-7124S / TM-7124'}
+- {name: TM-7124, kind: marketing, note: 'the product-page name and slug on telco.com (2025); the data sheet on that page is headed TM-7124S'}
+portfolio: {line: Carrier Ethernet, family: Demarcation and Pre-Aggregation, series: T-Series}
+description: >-
+  Telco Systems (BATM Networks) TM-7124S, formerly T-Metro 7124S - a 1.5RU carrier
+  Ethernet / MPLS demarcation and pre-aggregation platform: 24 SFP ports in three stacked
+  2 x 4 blocks with two arrow lamps per port, two hot-swappable supply bays (the base ships
+  one AC supply and a blank), a full-width expansion slot for the LC-7124-2XFP-B (2 x XFP
+  plus sync and phase clocks), a DA-15 alarm port, a four-pole DC feed connector, the CON /
+  ETH management stack and a front fan tray.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      TM-7124S data sheet (telco.com 2025/12, product page tm-7124); the 2016-08 and 2019-01
+      editions call it the T-Metro 7124S, which the face prints.
+  sources:
+    confidence: datasheet
+    note: >-
+      Three data-sheet editions (2016-08, 2019-01, 2025-12); three vendor renders, of which
+      telco.com 2025/09/t-metro-7124s.png (858 px) is the only near-square one; and the
+      legacy NetZoom stencil "Telco Systems" (2022), masters TM-7124S (F), (CF), (R),
+      TM-7124S-DC (CF) and LC-7124-2XFB-B (MFS). No installation guide is public.
+  chassis:
+    confidence: datasheet
+    note: >-
+      1.5RU, 440 x 66.3 x 253. Width and depth are the data sheets' ("440mm (19' racks) x
+      67mm (2.625') x 253mm (10')"); the height is not - see chassis-height.
+  chassis-height:
+    confidence: photo-measured
+    note: >-
+      66.3, NOT the data sheet's 67. The height is 440 divided by the rendered face's
+      MEASURED aspect, 6.64 - the render's four corners fix that ratio, and the stencil's
+      body (441.4 x 66.2) agrees with it - against the data sheet's 67; the 0.7 mm between
+      them is recorded rather than split.
+  front-layout:
+    confidence: estimated
+    note: >-
+      TWO SOURCES THAT DISAGREE, EACH USED FOR WHAT IT DOES WELL. Positions are read off the
+      2025 render rectified by a four-corner homography onto the face (corners TL 83.5,155
+      TR 784.5,154.5 BR 784.5,260.5 BL 84.5,260.5; about 1.6 px/mm, so good to about a
+      millimetre), then scaled 440/441.4 to the data sheet's body. Shapes, pitches and the
+      legends come from the 2022 stencil master, which is AN OLDER BUILD: its supply bays,
+      DA-15 and expansion-slot left edge agree with the render within 2.5 mm, but it draws
+      the SFP blocks 6.8 mm further right, the CON/ETH stack 4 mm right and a different
+      expansion card. Where they disagree on position the render - the current product - is
+      used (see the stencil-vs-render gap).
+  ports:
+    confidence: estimated
+    note: >-
+      24 std/sfp@1 in three 2 x 4 blocks. The blocks start where the render puts them (x
+      190.0, 251.8, 313.5 before scaling); inside a block the columns are on the stencil's
+      14.72 pitch - individual cages with a 0.8 mm web, not a ganged block - which the
+      render's block widths (57.6-58.9 for four columns) corroborate. Rows at y 10.85 and
+      26.35 (render centres); the lower row is turned 180. Numbered as printed, "△1 ▽2"
+      over each column: the odd port above, the even below; "1/" before each block.
+  lamps:
+    confidence: estimated
+    note: >-
+      TWO ARROW LAMPS PER PORT. Each column carries two ▲▼ pairs in the strip between the
+      rows - the stencil draws them at 1.55, 4.12, 7.88 and 10.46 mm from the column's left
+      edge, and the render shows the same doubled pattern - so each port has two lamps (-a
+      and -b), up-arrows for the upper port, down for the lower. What the two mean (likely
+      link and activity) is not documented. Sync and Fan are round lamps and Reset a pinhole
+      beside the DA-15; STS and EXT are small lamps over the CON/ETH stack.
+  alarm-port:
+    confidence: photo-measured
+    note: >-
+      "Alarm Input & Output" is a D-sub whose jackscrews stand 33.4 mm apart in the
+      rectified render - the registry's DA-15 (33.32), not the HD-15 (25.0) - so it is
+      std/da15@1. The stencil's shell is ambiguous between the two (24.1 wide, screws 28.4
+      apart).
+  controls:
+    confidence: estimated
+    note: >-
+      The Alarm Cut Off push button is drawn with common/reset-button@1, the nearest library
+      part; the real button is a small square cap about 5 x 7 mm (render and stencil). Reset
+      is a pinhole.
+  eth-speed:
+    confidence: borrowed
+    note: >-
+      BORROWED, NOT STATED. No edition gives the ETH management port's rate. 1g is taken
+      from the TM-8104's OOB port - same vendor, same OS family and the same console-plus-
+      Ethernet management stack - following the maintainer's ruling for unstated management
+      rates; NetBox's community entry types the 8104's port 1000base-t, itself unsourced.
+      The eth-speed gap stays open.
+  jack-orientation:
+    confidence: photo-measured
+    note: >-
+      The ETH jack's lamp labels (LNK/ACT, MNG) are printed under it and its lamp windows sit
+      on its lower corners in the render, so it is keyway-down (unrotated); CON above it is
+      turned 180, belly to belly. CON carries no lamps, so the unlamped std/rj45-ganged@2 is
+      used for it.
+  timing:
+    confidence: datasheet
+    note: >-
+      "SyncE, IEEE 1588v2* PTP, BITS and phase clock" (2019 edition). The chassis face has no
+      timing connector; the sync and phase clock jacks are on the LC-7124-2XFP-B card.
+  dc-feed:
+    confidence: photo-measured
+    note: >-
+      The four-pole green connector at the left end, legend -48VA RETA -48VB RETB, is on
+      the chassis in both the AC and DC stencil masters and in the render (an AC build), so
+      it is drawn on every configuration. The DC system is ordered "with DC feed connector".
+  fan-tray:
+    confidence: estimated
+    note: >-
+      The data sheets ship a fan tray with every base system. The stencil draws it as a
+      full-height module at the right end (40.85 x 64.66) with two corner thumbscrews and a
+      pull window; the render shows the same. Its bay uses the stencil's position.
+  power:
+    confidence: datasheet
+    note: >-
+      NOT STATED: no edition gives a consumption figure. Input: "100-240VAC, 50/60 Hz, -48VDC,
+      -60VDC and +24VDC nominal"; the AC supply's face prints "100-240V~50-60Hz 2A".
+attrs:
+  physical:
+    weight-kg: 5.2
+    overall-mm: 440 x 67 x 253 (data sheet)
+  performance:
+    switching-capacity: 44 Gbps full duplex, non-blocking
+  power:
+    input-voltage: 100-240 VAC 50/60 Hz, or -24 to -60 VDC wide range
+    psu-redundancy: two hot-swappable supply bays; the base ships one AC supply and a blank
+  environmental:
+    operating-temp: AC system -20 to 65 C; DC system -40 to 65 C
+    humidity: 5 to 95 percent, non-condensing
+  platform:
+    expansion-slots: 1
+  features:
+    services: MPLS L2/L3 VPN, VPWS, VPLS, H-VPLS, 802.1Q, 802.1ad
+    resiliency: G.8031, sub-50 ms G.8032v2 R-APS and MSTP fast ring, sub-50 ms RSVP-TE FRR, H-VPLS dual homing, LAG
+    timing: SyncE, IEEE 1588v2 PTP, BITS and phase clock
+    optics-sfp: '100BASE-FX, 1000BASE-X (data sheet, "24 x 100BaseFX/1000BaseX SFP ports")'
+    multicast: IGMP snooping v1/v2/v3, IGMP proxy, MVR
+  management:
+    local: CON serial console and ETH out-of-band Ethernet on RJ45; DA-15 alarm inputs and outputs
+    mgmt-protocols: Console, Telnet, SSHv2, RADIUS, TACACS+, SNMP v1/2/3, xFTP, NTP, DHCP, NAT, ZTP
+  compliance:
+    nebs: NEBS Level 1 certified
+    safety: C-UL 60950, CSA 22.2 No. 950, EN/IEC 60950, TUV/GS, CB, EN 60825-1/2 (2016 edition)
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 440.0
+  height: 66.3
+  depth: 253
+  ru: 1.5
+  weight-kg: 5.2
+  color: '#d6d8da'
+  silk: '#4d5156'
+  power: ac
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; hardware documentation is on a support portal
+    behind a login, whose contact is on telco.com/support. Searched: the telco.com media
+    library, every product and knowledge-centre page, and the Wayback index of telco.com PDFs.
+  wanted: the TM-7124S / T-Metro 7124S hardware installation guide, from the BATM support portal.
+- what: stencil-vs-render
+  scope: [sfp, mgmt, slot-2, fan-tray]
+  reason: sources-disagree
+  note: >-
+    The 2022 NetZoom master puts the SFP blocks 6.8 mm, the CON/ETH stack 4 mm and the fan
+    tray's left edge 2.8 mm to the right of where the 2025 render (rectified, about 1.6 px/mm)
+    puts them, and the render's expansion card is 166 wide where the stencil's is 171.5. The
+    supply bays, the DA-15 and the slot's left edge agree within 2.5 mm. The render is used
+    for positions and is itself only good to about a millimetre.
+  wanted: a square-on photograph of the front at 4 px/mm or better.
+- what: dc-supply
+  scope: [psu-1, psu-2]
+  reason: needs-photo
+  note: >-
+    The wide-range DC supply (TM-7124S-DCPS-W) is orderable but no image or stencil master
+    draws its face, so it is not modelled and there is no DC configuration.
+  wanted: a photograph of the DC supply's face.
+- what: rear
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The stencil master TM-7124S (R) draws the rear as a plain panel; no photograph confirms it.
+  wanted: a photograph of the rear.
+- what: eth-speed
+  scope: [eth]
+  reason: vendor-silent
+  note: >-
+    No edition states the ETH port's rate; 1g is carried as a BORROWED value from the
+    TM-8104 (see provenance.eth-speed), not as a finding.
+  wanted: the installation guide's interface table.
+- what: dc-feed-a-b
+  scope: [dc-feed]
+  reason: vendor-silent
+  note: >-
+    The DC feed connector carries two feeds, A and B, but is one part and so exports one
+    power port; a DCIM cannot cable the two feeds separately. Splitting it into two parts
+    would draw one physical header as two.
+  wanted: an exporter convention for a multi-feed connector (two power rows from one part).
+- what: lamp-meanings
+  scope: [sfp-leds, status-leds]
+  reason: vendor-silent
+  note: >-
+    Two lamps per SFP port, and Sync, Fan, STS and EXT, are drawn where they are; no
+    document says what any of their states mean.
+  wanted: the installation guide's LED table.
+groups:
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: data sheets - "Hot swappable, redundant AC/DC power supply"; the base ships one supply and a blank, the second is the redundant one.
+    description: two hot-swappable supply bays, stacked at the left; the base system fills one and blanks the other.
+  exp-slot:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the one expansion slot, printed as slot 2 (the card's ports are 2/1 and 2/2; the base
+      board's are 1/x), so the bay sits at rel-pos 2. Takes the LC-7124-2XFP-B.
+  fans:
+    term: Fan tray
+    role: service
+    index-origin: 1
+    description: the front-serviced fan tray at the right end.
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      24 x 100BaseFX/1000BaseX SFP (data sheet), 1/1 to 1/24, in three stacked 2 x 4 blocks
+      - odd ports above, even below.
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: two arrow lamps per port in the strip between the rows.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the local management connectors: the CON serial console and the ETH out-of-band port
+      on one RJ45 stack, and the Alarm Input & Output DA-15 - how the box is reached and how
+      its alarms leave it.
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: Alarm Cut Off and Reset.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: Sync and Fan beside the alarm port, STS and EXT over the management stack.
+  power-in:
+    term: Power input
+    role: service
+    index-origin: 1
+    description: the four-pole DC feed connector for two redundant -48 V feeds.
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 440.0, h: 66.3}
+    panel:
+      decor:
+        - {id: shell-mgmt, kind: port-shell, at: [373.11, 33.25], size: [18.8, 27.0], rx: 0.4, fill: '#eef0f1', stroke: '#8d9298', stroke-width: 0.3}
+        - {id: sfp-block-1, kind: port-shell, at: [188.6, 4.41], size: [59.58, 27.4], rx: 0.3, fill: '#50555b', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-strip-1, at: [189.0, 16.22], size: [58.78, 4.9], fill: '#d4d0c6'}
+        - {id: sfp-block-2, kind: port-shell, at: [250.2, 4.41], size: [59.58, 27.4], rx: 0.3, fill: '#50555b', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-strip-2, at: [250.6, 16.22], size: [58.78, 4.9], fill: '#d4d0c6'}
+        - {id: sfp-block-3, kind: port-shell, at: [311.71, 4.41], size: [59.58, 27.4], rx: 0.3, fill: '#50555b', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-strip-3, at: [312.11, 16.22], size: [58.78, 4.9], fill: '#d4d0c6'}
+      cutouts:
+        - {id: dc-feed, at: [1.5, 10.12], size: [18.3, 42.2], shape: rect}
+        - {id: alarm-io, at: [112.4, 19.64], size: [28.8, 11.4], shape: rect}
+        - {id: btn-aco, at: [150.81, 24.64], size: [4.0, 4.0], shape: circle}
+        - {id: btn-reset, at: [174.24, 26.34], size: [4.0, 4.0], shape: circle}
+        - {id: led-sync, at: [158.09, 26.24], size: [4.0, 4.0], shape: circle}
+        - {id: led-fan, at: [165.97, 26.34], size: [4.0, 4.0], shape: circle}
+        - {id: led-sts, at: [375.0, 29.85], size: [2.0, 2.0], shape: circle}
+        - {id: led-ext, at: [387.76, 29.95], size: [2.0, 2.0], shape: circle}
+        - {id: port-1, at: [189.07, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-2, at: [189.07, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-1-a, at: [190.94, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-a, at: [193.5, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-1-b, at: [197.25, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-b, at: [199.82, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-3, at: [203.74, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-4, at: [203.74, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-3-a, at: [205.62, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-4-a, at: [208.18, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-3-b, at: [211.93, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-4-b, at: [214.5, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-5, at: [218.41, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-6, at: [218.41, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-5-a, at: [220.29, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-6-a, at: [222.85, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-5-b, at: [226.6, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-6-b, at: [229.17, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-7, at: [233.09, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-8, at: [233.09, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-7-a, at: [234.96, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-8-a, at: [237.52, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-7-b, at: [241.27, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-8-b, at: [243.84, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-9, at: [250.67, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-10, at: [250.67, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-9-a, at: [252.55, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-10-a, at: [255.11, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-9-b, at: [258.86, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-10-b, at: [261.43, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-11, at: [265.34, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-12, at: [265.34, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-11-a, at: [267.22, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-12-a, at: [269.78, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-11-b, at: [273.53, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-12-b, at: [276.1, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-13, at: [280.02, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-14, at: [280.02, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-13-a, at: [281.89, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-14-a, at: [284.45, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-13-b, at: [288.2, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-14-b, at: [290.77, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-15, at: [294.69, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-16, at: [294.69, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-15-a, at: [296.57, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-16-a, at: [299.13, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-15-b, at: [302.88, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-16-b, at: [305.45, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-17, at: [312.17, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-18, at: [312.17, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-17-a, at: [314.05, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-18-a, at: [316.61, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-17-b, at: [320.36, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-18-b, at: [322.93, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-19, at: [326.85, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-20, at: [326.85, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-19-a, at: [328.72, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-20-a, at: [331.29, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-19-b, at: [335.03, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-20-b, at: [337.61, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-21, at: [341.52, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-22, at: [341.52, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-21-a, at: [343.4, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-22-a, at: [345.96, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-21-b, at: [349.71, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-22-b, at: [352.28, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: port-23, at: [356.19, 5.87], size: [14.5, 10.0], shape: rect}
+        - {id: port-24, at: [356.19, 21.39], size: [14.5, 10.0], shape: rect}
+        - {id: led-port-23-a, at: [358.07, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-24-a, at: [360.63, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-23-b, at: [364.38, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-24-b, at: [366.95, 17.63], size: [2.25, 2.0], shape: rect}
+        - {id: con, at: [376.8, 34.35], size: [12.7, 11.0], shape: rect}
+        - {id: eth, at: [376.6, 49.47], size: [12.7, 11.0], shape: rect}
+    silkscreen:
+      - {at: [10.57, 2.6], text: '-48VA', font-size: 1.0, anchor: middle, for: dc-feed}
+      - {at: [10.57, 4.35], text: RETA, font-size: 1.0, anchor: middle, for: dc-feed}
+      - {at: [10.57, 6.1], text: '-48VB', font-size: 1.0, anchor: middle, for: dc-feed}
+      - {at: [10.57, 7.85], text: RETB, font-size: 1.0, anchor: middle, for: dc-feed}
+      - {at: [196.32, 3.2], text: △1 ▽2, font-size: 1.6, anchor: middle, for: [port-1, port-2]}
+      - {at: [210.99, 3.2], text: △3 ▽4, font-size: 1.6, anchor: middle, for: [port-3, port-4]}
+      - {at: [225.66, 3.2], text: △5 ▽6, font-size: 1.6, anchor: middle, for: [port-5, port-6]}
+      - {at: [240.34, 3.2], text: △7 ▽8, font-size: 1.6, anchor: middle, for: [port-7, port-8]}
+      - {at: [188.2, 3.2], text: 1/, font-size: 1.6, anchor: end, for: port-1}
+      - {at: [257.92, 3.2], text: △9 ▽10, font-size: 1.6, anchor: middle, for: [port-9, port-10]}
+      - {at: [272.59, 3.2], text: △11 ▽12, font-size: 1.6, anchor: middle, for: [port-11, port-12]}
+      - {at: [287.27, 3.2], text: △13 ▽14, font-size: 1.6, anchor: middle, for: [port-13, port-14]}
+      - {at: [301.94, 3.2], text: △15 ▽16, font-size: 1.6, anchor: middle, for: [port-15, port-16]}
+      - {at: [249.81, 3.2], text: 1/, font-size: 1.6, anchor: end, for: port-9}
+      - {at: [319.42, 3.2], text: △17 ▽18, font-size: 1.6, anchor: middle, for: [port-17, port-18]}
+      - {at: [334.1, 3.2], text: △19 ▽20, font-size: 1.6, anchor: middle, for: [port-19, port-20]}
+      - {at: [348.77, 3.2], text: △21 ▽22, font-size: 1.6, anchor: middle, for: [port-21, port-22]}
+      - {at: [363.44, 3.2], text: △23 ▽24, font-size: 1.6, anchor: middle, for: [port-23, port-24]}
+      - {at: [311.31, 3.2], text: 1/, font-size: 1.6, anchor: end, for: port-17}
+      - {at: [157.4, 11.02], text: T-Metro 7124S, font-size: 4.2, anchor: middle, fill: '#2f3337', for: chassis}
+      - {at: [126.8, 18.23], text: 'Alarm Input & Output', font-size: 1.4, anchor: middle, for: alarm-io}
+      - {at: [152.81, 21.03], text: Alarm, font-size: 1.2, anchor: middle, for: btn-aco}
+      - {at: [152.81, 22.63], text: Cut Off, font-size: 1.2, anchor: middle, for: btn-aco}
+      - {at: [160.09, 25.34], text: Sync, font-size: 1.2, anchor: middle, for: led-sync}
+      - {at: [167.97, 25.34], text: Fan, font-size: 1.2, anchor: middle, for: led-fan}
+      - {at: [176.24, 25.34], text: Reset, font-size: 1.2, anchor: middle, for: btn-reset}
+      - {at: [376.0, 28.64], text: STS, font-size: 1.2, anchor: middle, for: led-sts}
+      - {at: [388.76, 28.64], text: EXT, font-size: 1.2, anchor: middle, for: led-ext}
+      - {at: [371.82, 40.36], text: CON, font-size: 1.4, anchor: end, for: con}
+      - {at: [371.82, 55.48], text: ETH, font-size: 1.4, anchor: end, for: eth}
+      - {at: [379.69, 63.0], text: LNK/ACT, font-size: 1.1, anchor: middle, for: eth}
+      - {at: [388.76, 63.0], text: MNG, font-size: 1.1, anchor: middle, for: eth}
+    components:
+      bays:
+        - {id: psu-1, at: [19.38, 1.78], size: {w: 81.7, h: 30.97}, accepts: ['telco-systems/tm-7124s-psu-ac@1', 'telco-systems/tm-7124s-psu-blank@1'], default: 'telco-systems/tm-7124s-psu-ac@1', group: psus, rel-pos: 1}
+        - {id: psu-2, at: [19.38, 33.64], size: {w: 81.7, h: 30.97}, accepts: ['telco-systems/tm-7124s-psu-ac@1', 'telco-systems/tm-7124s-psu-blank@1'], default: 'telco-systems/tm-7124s-psu-blank@1', group: psus, rel-pos: 2}
+        - {id: slot-2, at: [153.61, 33.69], size: {w: 166.0, h: 30.58}, accepts: ['telco-systems/lc-7124-2xfp-b@1', 'telco-systems/tm-7124s-slot-blank@1'], default: 'telco-systems/tm-7124s-slot-blank@1', group: exp-slot, rel-pos: 2}
+        - {id: fan-tray, at: [398.51, 0.89], size: {w: 40.85, h: 64.66}, accepts: ['telco-systems/tm-7124s-fan-tray@1'], default: 'telco-systems/tm-7124s-fan-tray@1', group: fans, rel-pos: 1}
+      placements:
+        - {ref: 'telco-systems/tm-7124s-dc-feed@1', id: dc-feed, at: [1.5, 10.12], group: power-in, rel-pos: 1}
+        - {ref: 'common/screw-head@1', id: ground-point, at: [10.06, 56.89], group: grounding, rel-pos: 1, description: the chassis grounding point under the DC feed (a dark screw hole in the 2025 render)}
+        - {ref: 'std/da15@1', id: alarm-io, at: [112.4, 19.64], group: mgmt, rel-pos: 3, attrs: {media: da15, role: alarm}, description: 'Alarm Input & Output - dry-contact alarms on a DA-15'}
+        - {ref: 'common/screw-head@1', id: alarm-jackscrew-1, at: [108.35, 23.54], group: furniture, rel-pos: 1}
+        - {ref: 'common/screw-head@1', id: alarm-jackscrew-2, at: [141.64, 23.54], group: furniture, rel-pos: 2}
+        - {ref: 'common/reset-button@1', id: btn-aco, at: [150.81, 24.64], for: alarm-io, group: controls, rel-pos: 1, description: Alarm Cut Off - silences the alarm relay outputs}
+        - {ref: 'common/reset-button@1', id: btn-reset, at: [174.24, 26.34], for: chassis, group: controls, rel-pos: 2}
+        - {ref: 'common/led-indicator@1', id: led-sync, at: [158.09, 26.24], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-fan, at: [165.97, 26.34], for: fan-tray, group: status-leds, rel-pos: 2}
+        - {ref: 'common/led-dot@1', id: led-sts, at: [375.0, 29.85], for: chassis, group: status-leds, rel-pos: 3}
+        - {ref: 'common/led-dot@1', id: led-ext, at: [387.76, 29.95], for: chassis, group: status-leds, rel-pos: 4}
+        - {ref: 'std/sfp@1', id: port-1, at: [189.07, 5.87], group: sfp, rel-pos: 1}
+        - {ref: 'std/sfp@1', id: port-2, at: [189.07, 21.39], rotate: 180, group: sfp, rel-pos: 2}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-1-a, at: [190.94, 17.63], skin: up, for: port-1, group: sfp-leds, rel-pos: 1}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-a, at: [193.5, 17.63], skin: down, for: port-2, group: sfp-leds, rel-pos: 3}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-1-b, at: [197.25, 17.63], skin: up, for: port-1, group: sfp-leds, rel-pos: 2}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-b, at: [199.82, 17.63], skin: down, for: port-2, group: sfp-leds, rel-pos: 4}
+        - {ref: 'std/sfp@1', id: port-3, at: [203.74, 5.87], group: sfp, rel-pos: 3}
+        - {ref: 'std/sfp@1', id: port-4, at: [203.74, 21.39], rotate: 180, group: sfp, rel-pos: 4}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-3-a, at: [205.62, 17.63], skin: up, for: port-3, group: sfp-leds, rel-pos: 5}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-4-a, at: [208.18, 17.63], skin: down, for: port-4, group: sfp-leds, rel-pos: 7}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-3-b, at: [211.93, 17.63], skin: up, for: port-3, group: sfp-leds, rel-pos: 6}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-4-b, at: [214.5, 17.63], skin: down, for: port-4, group: sfp-leds, rel-pos: 8}
+        - {ref: 'std/sfp@1', id: port-5, at: [218.41, 5.87], group: sfp, rel-pos: 5}
+        - {ref: 'std/sfp@1', id: port-6, at: [218.41, 21.39], rotate: 180, group: sfp, rel-pos: 6}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-5-a, at: [220.29, 17.63], skin: up, for: port-5, group: sfp-leds, rel-pos: 9}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-6-a, at: [222.85, 17.63], skin: down, for: port-6, group: sfp-leds, rel-pos: 11}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-5-b, at: [226.6, 17.63], skin: up, for: port-5, group: sfp-leds, rel-pos: 10}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-6-b, at: [229.17, 17.63], skin: down, for: port-6, group: sfp-leds, rel-pos: 12}
+        - {ref: 'std/sfp@1', id: port-7, at: [233.09, 5.87], group: sfp, rel-pos: 7}
+        - {ref: 'std/sfp@1', id: port-8, at: [233.09, 21.39], rotate: 180, group: sfp, rel-pos: 8}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-7-a, at: [234.96, 17.63], skin: up, for: port-7, group: sfp-leds, rel-pos: 13}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-8-a, at: [237.52, 17.63], skin: down, for: port-8, group: sfp-leds, rel-pos: 15}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-7-b, at: [241.27, 17.63], skin: up, for: port-7, group: sfp-leds, rel-pos: 14}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-8-b, at: [243.84, 17.63], skin: down, for: port-8, group: sfp-leds, rel-pos: 16}
+        - {ref: 'std/sfp@1', id: port-9, at: [250.67, 5.87], group: sfp, rel-pos: 9}
+        - {ref: 'std/sfp@1', id: port-10, at: [250.67, 21.39], rotate: 180, group: sfp, rel-pos: 10}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-9-a, at: [252.55, 17.63], skin: up, for: port-9, group: sfp-leds, rel-pos: 17}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-10-a, at: [255.11, 17.63], skin: down, for: port-10, group: sfp-leds, rel-pos: 19}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-9-b, at: [258.86, 17.63], skin: up, for: port-9, group: sfp-leds, rel-pos: 18}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-10-b, at: [261.43, 17.63], skin: down, for: port-10, group: sfp-leds, rel-pos: 20}
+        - {ref: 'std/sfp@1', id: port-11, at: [265.34, 5.87], group: sfp, rel-pos: 11}
+        - {ref: 'std/sfp@1', id: port-12, at: [265.34, 21.39], rotate: 180, group: sfp, rel-pos: 12}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-11-a, at: [267.22, 17.63], skin: up, for: port-11, group: sfp-leds, rel-pos: 21}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-12-a, at: [269.78, 17.63], skin: down, for: port-12, group: sfp-leds, rel-pos: 23}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-11-b, at: [273.53, 17.63], skin: up, for: port-11, group: sfp-leds, rel-pos: 22}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-12-b, at: [276.1, 17.63], skin: down, for: port-12, group: sfp-leds, rel-pos: 24}
+        - {ref: 'std/sfp@1', id: port-13, at: [280.02, 5.87], group: sfp, rel-pos: 13}
+        - {ref: 'std/sfp@1', id: port-14, at: [280.02, 21.39], rotate: 180, group: sfp, rel-pos: 14}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-13-a, at: [281.89, 17.63], skin: up, for: port-13, group: sfp-leds, rel-pos: 25}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-14-a, at: [284.45, 17.63], skin: down, for: port-14, group: sfp-leds, rel-pos: 27}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-13-b, at: [288.2, 17.63], skin: up, for: port-13, group: sfp-leds, rel-pos: 26}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-14-b, at: [290.77, 17.63], skin: down, for: port-14, group: sfp-leds, rel-pos: 28}
+        - {ref: 'std/sfp@1', id: port-15, at: [294.69, 5.87], group: sfp, rel-pos: 15}
+        - {ref: 'std/sfp@1', id: port-16, at: [294.69, 21.39], rotate: 180, group: sfp, rel-pos: 16}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-15-a, at: [296.57, 17.63], skin: up, for: port-15, group: sfp-leds, rel-pos: 29}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-16-a, at: [299.13, 17.63], skin: down, for: port-16, group: sfp-leds, rel-pos: 31}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-15-b, at: [302.88, 17.63], skin: up, for: port-15, group: sfp-leds, rel-pos: 30}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-16-b, at: [305.45, 17.63], skin: down, for: port-16, group: sfp-leds, rel-pos: 32}
+        - {ref: 'std/sfp@1', id: port-17, at: [312.17, 5.87], group: sfp, rel-pos: 17}
+        - {ref: 'std/sfp@1', id: port-18, at: [312.17, 21.39], rotate: 180, group: sfp, rel-pos: 18}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-17-a, at: [314.05, 17.63], skin: up, for: port-17, group: sfp-leds, rel-pos: 33}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-18-a, at: [316.61, 17.63], skin: down, for: port-18, group: sfp-leds, rel-pos: 35}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-17-b, at: [320.36, 17.63], skin: up, for: port-17, group: sfp-leds, rel-pos: 34}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-18-b, at: [322.93, 17.63], skin: down, for: port-18, group: sfp-leds, rel-pos: 36}
+        - {ref: 'std/sfp@1', id: port-19, at: [326.85, 5.87], group: sfp, rel-pos: 19}
+        - {ref: 'std/sfp@1', id: port-20, at: [326.85, 21.39], rotate: 180, group: sfp, rel-pos: 20}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-19-a, at: [328.72, 17.63], skin: up, for: port-19, group: sfp-leds, rel-pos: 37}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-20-a, at: [331.29, 17.63], skin: down, for: port-20, group: sfp-leds, rel-pos: 39}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-19-b, at: [335.03, 17.63], skin: up, for: port-19, group: sfp-leds, rel-pos: 38}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-20-b, at: [337.61, 17.63], skin: down, for: port-20, group: sfp-leds, rel-pos: 40}
+        - {ref: 'std/sfp@1', id: port-21, at: [341.52, 5.87], group: sfp, rel-pos: 21}
+        - {ref: 'std/sfp@1', id: port-22, at: [341.52, 21.39], rotate: 180, group: sfp, rel-pos: 22}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-21-a, at: [343.4, 17.63], skin: up, for: port-21, group: sfp-leds, rel-pos: 41}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-22-a, at: [345.96, 17.63], skin: down, for: port-22, group: sfp-leds, rel-pos: 43}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-21-b, at: [349.71, 17.63], skin: up, for: port-21, group: sfp-leds, rel-pos: 42}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-22-b, at: [352.28, 17.63], skin: down, for: port-22, group: sfp-leds, rel-pos: 44}
+        - {ref: 'std/sfp@1', id: port-23, at: [356.19, 5.87], group: sfp, rel-pos: 23}
+        - {ref: 'std/sfp@1', id: port-24, at: [356.19, 21.39], rotate: 180, group: sfp, rel-pos: 24}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-23-a, at: [358.07, 17.63], skin: up, for: port-23, group: sfp-leds, rel-pos: 45}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-24-a, at: [360.63, 17.63], skin: down, for: port-24, group: sfp-leds, rel-pos: 47}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-23-b, at: [364.38, 17.63], skin: up, for: port-23, group: sfp-leds, rel-pos: 46}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-24-b, at: [366.95, 17.63], skin: down, for: port-24, group: sfp-leds, rel-pos: 48}
+        - {ref: 'std/rj45-ganged@2', id: con, at: [376.8, 34.35], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CON - the serial console}
+        - {ref: 'common/rj45-ganged-eth@1', id: eth, at: [376.6, 49.47], group: mgmt, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: ETH - out-of-band Ethernet management; 1g is BORROWED from the TM-8104 OOB port (see provenance.eth-speed)}
+  rear:
+    size: {w: 440.0, h: 66.3}
+    empty: >-
+      Envelope only. The stencil master TM-7124S (R) draws the rear as a plain panel between
+      the ears; no photograph is held (see the rear gap).
+  left:
+    size: {w: 253, h: 66.3}
+    empty: >-
+      Envelope only. The renders show the flank at a grazing angle only.
+  right:
+    size: {w: 253, h: 66.3}
+    empty: >-
+      Envelope only, for the same reason as the left.
+  top:
+    size: {w: 440.0, h: 253}
+    empty: >-
+      Envelope only. The renders show a plain lid obliquely.
+  bottom:
+    size: {w: 440.0, h: 253}
+    empty: >-
+      Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - TM-7124S-AC-x, "Base system including fan tray, one (1) AC PSU, blank plates
+      (PSU & module slot), AC power cord" (data sheet ordering table).
+    description: >-
+      The TM-7124S as ordered: fan tray, one AC supply in PS1, a blank in PS2 and a blank in
+      the expansion slot.
+    bays:
+      psu-1: telco-systems/tm-7124s-psu-ac@1
+      psu-2: telco-systems/tm-7124s-psu-blank@1
+      slot-2: telco-systems/tm-7124s-slot-blank@1
+  dual-ac:
+    kind: orderable
+    description: >-
+      The base with a second AC supply (TM-7124S-ACPS) in PS2 for redundancy.
+    bays:
+      psu-1: telco-systems/tm-7124s-psu-ac@1
+      psu-2: telco-systems/tm-7124s-psu-ac@1
+      slot-2: telco-systems/tm-7124s-slot-blank@1
+  with-xfp-card:
+    kind: orderable
+    description: >-
+      Two AC supplies and the LC-7124-2XFP-B in the expansion slot - how the 2025 render
+      shows the TM-7124S.
+    bays:
+      psu-1: telco-systems/tm-7124s-psu-ac@1
+      psu-2: telco-systems/tm-7124s-psu-ac@1
+      slot-2: telco-systems/lc-7124-2xfp-b@1
+datasheet:
+  title: 'Telco Systems TM-7124S data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-7124.pdf'
+  sha256: b47060210e6bfbb10a59286320482cc900d1d1b648fc03c81931ea0b0a084cd0
+references:
+  - {title: 'T-Metro 7124S 10G Ethernet/MPLS/IP Demarcation and Pre-Aggregation Platform data sheet (2019-01-29)', url: 'https://www.telco.com/wp-content/uploads/2021/03/T-METRO7124S_29012019.pdf', sha256: 16f2318f5db3dd3c5f810655d06629390ad1844ce9de013b0699173ec593844c}

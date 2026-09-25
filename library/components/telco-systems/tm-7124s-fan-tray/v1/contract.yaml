@@ -1,0 +1,32 @@
+format: 1
+kind: module
+name: tm-7124s-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The TM-7124S fan tray - a full-height hot-swappable module at the right end of the
+  face, a pull window in a white surround and a captive thumbscrew at two opposite
+  corners.
+size: {w: 40.85, h: 64.66}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: TM-7124S fan tray
+  power-absent: not-published
+provenance:
+  size: >-
+    estimated - the stencil master's own vectors, 40.85 x 64.66 at chassis x 399.8 (the 2025
+    render puts its left edge nearer 397, low-contrast and read by eye).
+  elements: >-
+    drawing - the stencil: thumbscrews 6.53 across at the top-left and bottom-right corners,
+    a white surround 25.38 x 34.78 with a 19.43 x 28.65 pull window, and a label area below
+    it; the 2025 render shows the same.
+  power: >-
+    NOT STATED; the data sheets name the fan tray only as part of the base system.
+states: [absent]
+elements:
+  thumbscrew-top: {at: [0.87, 1.07], size: [6.53, 6.53], class: fastener}
+  thumbscrew-bottom: {at: [32.23, 56.34], size: [6.53, 6.53], class: fastener}
+  handle: {at: [10.7, 12.89], size: [19.43, 28.65], class: handle}
+skins: [default]

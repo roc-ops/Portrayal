@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-8t-e
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,6 +10,7 @@ description: >-
   rate, original generation. Eight XFP cages down the faceplate.
 size: {w: 43.7, h: 395.7, d: 520.7}
 attrs:
+  xfp-10g: 8
   model: 'A9K-8T-E'
   role: 'line-card'
   generation: '1st'
@@ -18,6 +19,12 @@ attrs:
   weight-kg: 8.391
   eol: 'none-announced'
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the Cisco ASR 9000 Series Ethernet Line Card Installation Guide
+    card table, which lists A9K-8T-E as a 8-Port 10GE Extended Line Rate Card with XFP, and
+    data sheet C78-501338, where it requires XFPs. The XFP cage cannot say: it takes a 10GbE
+    optic and an OC-192 one, and the framing is what differs. The export already typed it
+    10gbase-x-xfp by default; this makes that a statement. Nothing new was measured.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 4 ejector brackets, their levers and the grip

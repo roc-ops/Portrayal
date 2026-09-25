@@ -308,6 +308,29 @@ QDD800_ATTR = ("qsfp-dd-800g", "800gbase-x-qsfpdd")
 # say which cage is which; placed first, this row would retype all of their
 # SFP+ ports as SFP28. Placed here they keep exporting exactly what they did.
 SFP28_ATTR = ("sfp28", "25gbase-x-sfp28")
+# AN ETHERNET XFP CARD HAD NOTHING TO STATE. The family listed OC-192 and the PON
+# flavours, so L96 asked twenty-one 10GbE cards - the ASR 9000 A9K-4T/8T line
+# cards and 10GE MPAs, the Juniper DPC/DPCE and MIC-3D XFP cards - for a rate
+# none of them could give, and the only way to quiet it was a baseline entry
+# that read like an unanswered question.
+#
+# THE ATTR IS `xfp-10g`, spelled as `qsfp-dd-800g` is: the cage media, then the
+# rate from spec/schemas/speeds.yaml. NOT `xfp`, which every XFP card already
+# uses to COUNT its cages - the PON cards state `xfp: 4` beside their flavour,
+# and reading that as a rate would retype their OLT ports as 10GbE. A card attr
+# is a rate statement, as `oc192` and `xgs-pon` are, not a media value.
+#
+# NOR A PART_MEDIA ROW for ("xfp", "10g"). The FWLT-A places its cages as
+# `media: xfp, speed: 10g` with no `pon`, and a placement's own type outranks
+# the card's - so that row would type its XGS-PON ports as Ethernet.
+#
+# `10gbase-x-xfp` is in both targets (NetBox TYPE_10GE_XFP at 785d0b90,
+# Nautobot TYPE_10GE_XFP at 6e55bf7c), and it is the cage default already, so
+# stating it changes no export - it turns a default into a fact.
+#
+# LAST IN THE FAMILY, after OC-192 and the PON flavours, so no card that already
+# states a rate changes, as PON_ATTRS was placed after the Ethernet pair.
+XFP10G_ATTR = ("xfp-10g", "10gbase-x-xfp")
 FAMILY_ATTRS = {
     "sfp": (SFP112_ATTR,
             ("sfp-plus", "10gbase-x-sfpp"), SFP28_ATTR, ("sfp", "1000base-x-sfp"),
@@ -322,11 +345,11 @@ FAMILY_ATTRS = {
     # XFP, exporting as 10GbE. Both are ~10 Gb/s and the framing is what differs,
     # which is exactly why the cage cannot say.
     #
-    # Still no Ethernet row: an XFP card that states nothing takes the 10GbE
-    # default as before, and an `xfp` row placed first would read a PON card's
-    # `xfp: 4` as 10GbE - the FWLT-A (NG-PON2) and FPXT-A/B (10G-EPON) state
-    # their flavour instead.
-    "xfp": (("oc192", "sonet-oc192"),) + PON_ATTRS,
+    # An XFP card that states nothing takes the 10GbE default as before, and an
+    # `xfp` row would read a PON card's `xfp: 4` as 10GbE - the FWLT-A (NG-PON2)
+    # and FPXT-A/B (10G-EPON) state their flavour instead. An Ethernet card
+    # states `xfp-10g` (XFP10G_ATTR).
+    "xfp": (("oc192", "sonet-oc192"),) + PON_ATTRS + (XFP10G_ATTR,),
 }
 
 
@@ -342,7 +365,8 @@ def cage_family_needs_a_rate(ref, attrs, part_attrs=None):
     nothing counted how often the default was reached.
 
     L96 asks this question of every module; `export_modules` prints the count.
-    A family with no attrs to declare - XFP has one rate - is not a gap.
+    A family with no attrs to declare is not a gap. XFP used to be counted as
+    one, and is not: OC-192, PON and 10GbE all run in the same cage.
 
     `part_attrs` are the placement's effective attrs: a cage that declares
     `proprietary-link` has said what runs in it, and `placed_type` types it
@@ -472,6 +496,10 @@ PART_POWER = {
     # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
     # plug pulled out whole rather than lugs lifted off screws.
     "common/dc-terminal-plug-2": "dc-terminal",
+    # AND A FOUR-POLE ONE CARRYING TWO FEEDS: the TM-7124S lands -48 V A and B
+    # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
+    # face. It is still where a supply's wire is landed, so the same row.
+    "telco-systems/tm-7124s-dc-feed": "dc-terminal",
     # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
     # this takes `other` - the treatment PART_RF gives an SMB timing input, which
     # says "a thing this schema has no name for" instead of naming a neighbour.
