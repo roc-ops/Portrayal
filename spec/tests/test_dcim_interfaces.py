@@ -352,6 +352,15 @@ def test_the_tm3312_ces_ports_export_as_t1_e1():
     assert ces == [{"name": f"port-3-{n}", "type": "other", "label": "T1/E1"} for n in range(1, 9)], ces
 
 
+def test_the_xm8424h_exports_both_its_consoles():
+    """CONSOLE is printed over an RJ45 and over a USB-A jack, and the data sheet lists a
+    "USB console"; the device path knew only a USB-C console, so the USB-A one vanished."""
+    d = _export("XM-8424H")
+    assert d is not None, "XM-8424H is missing from the library exports"
+    assert sorted((c["name"], c["type"]) for c in d.get("console-ports") or []) == [
+        ("Console", "rj-45"), ("Console (USB-A)", "usb-a")]
+
+
 # --- a management port exports however the device spells it -------------------
 #
 # The collector says "EITHER WAY OF SAYING IT COUNTS" - `attrs.role: mgmt` on the

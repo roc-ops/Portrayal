@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: xm8424-dc-plug
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  The two-pole pluggable DC terminal on the Telco Systems XM-8424H's DC supply module - a green
+  screw-clamp plug seated in its header, a clamp screw at each end and two wire entries between
+  them, with a latch tab over the middle. Smaller than common/dc-terminal-plug-2@1 (the ECS4530
+  block, 32.1 x 17.6), so its own part. The poles and rating are printed on the module, so the
+  part carries none.
+size: {w: 20.1, h: 12.1, d: 15.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs: {media: dc-terminal}
+provenance:
+  size: >-
+    PHOTO-MEASURED on the XM-8424H render (telco.com 2024/10/XM-8424-new-1.png) rectified onto
+    the data sheet's 440 x 44 face at 10 px/mm: the green body runs x 69.4-89.5 and y 27.3-36.6
+    on that face (a colour-mask bounding box), and the dark latch tab stands above it to y 24.5,
+    so the part is 12.1 tall with the body in its lower 9.3. The render is about 2.6 px/mm, so good to about
+    half a millimetre. The depth is not visible and is estimated.
+  the-face: >-
+    PHOTO-MEASURED at the same scale: clamp screws at each end (centres about 2.2 and 18.0 mm
+    across, 5.1 down), two dark wire entries 3.5 x 5.5 between them, and a dark latch tab
+    rising above the middle of the body.
+elements:
+  body: {at: [0.0, 2.8], size: [20.1, 9.3], class: connector}
+  entry-1: {at: [6.1, 5.0], size: [3.5, 5.5], class: connector}
+  entry-2: {at: [11.1, 5.0], size: [3.5, 5.5], class: connector}
+skins: [default]
