@@ -82,19 +82,25 @@ def test_the_cx3033n_sfp_exports_as_its_proprietary_network_port():
     assert by["sfp"].get("label") == "2.125 Gb/s network port", by["sfp"]
 
 
+SC, LC = "std/sc-bore", "common/lc-duplex-v-adapter"
 HALF_DEPTH_DROPS = {
-    # half-depth passives and the optical switch: single-faced SC/APC, all dropped
-    "np35f01": 3, "np35f04s": 4, "np35m04": 7, "np35d04": 7, "np35m08": 9, "np35d08": 9,
-    "os32m2b": 6,
+    # half-depth passives and the optical switch: single-faced optics, all dropped -
+    # SC/APC bores, or duplex LC adapters (APC, and the NP34B10S's blue UPC)
+    "np35f01": (SC, 3), "np35f04s": (SC, 4), "np35m04": (SC, 7), "np35d04": (SC, 7),
+    "np35m08": (SC, 9), "np35d08": (SC, 9), "os32m2b": (SC, 6),
+    "np34c01": (SC, 8), "np34f01d": (SC, 6), "op34f1d": (SC, 6),
+    "np34m05": (SC, 9), "op34m5x": (SC, 9), "op34d5x": (SC, 9),
+    "np34m08": (LC, 6), "op34m8c": (LC, 6), "op34m10c": (LC, 7), "np34b10s": (LC, 6),
 }
 
 
 @pytest.mark.parametrize("name", sorted(HALF_DEPTH_DROPS))
-def test_a_half_depth_optical_module_exports_nothing_and_drops_its_sc_ports(name):
+def test_a_half_depth_optical_module_exports_nothing_and_drops_its_optics(name):
+    ref, n = HALF_DEPTH_DROPS[name]
     doc, dropped = _export(name)
     assert not doc.get("interfaces"), doc.get("interfaces")
-    assert dropped.get("std/sc-bore", 0) == HALF_DEPTH_DROPS[name], dict(dropped)
-    assert "std/sc-bore" in dcim_export.NOT_A_DCIM_PORT
+    assert dropped.get(ref, 0) == n, dict(dropped)
+    assert ref in dcim_export.NOT_A_DCIM_PORT or ref == LC
 
 
 @pytest.mark.parametrize("name", ["ab32s1g", "ab32s1t"])

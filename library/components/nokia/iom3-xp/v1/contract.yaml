@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: iom3-xp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -79,9 +79,10 @@ provenance:
     captive screws in each slot; nokia/mda-impedance-panel@1 is that blank.
   accepts: >-
     datasheet - SR7 p69 Table 11: the IOM3-XP-C takes "MDA, HS-MDA, ISA-MS @10G, MDA-XP @25G";
-    MDA-e cards do not seat (SR12 p67 Table 11). The list names the nine MDA-XPs the MDA-XP guide
-    9302180206 draws and the library models; the 48-port M48-1GB-XP-TX (its mini-RJ21 has no
-    library part yet), the HS-MDAs and the other classic MDAs join it as they are modelled.
+    MDA-e cards do not seat (SR12 p67 Table 11). The list names the ten MDA-XPs the MDA-XP guide
+    9302180206 draws and the library models, the 48-port M48-1GB-XP-TX among them (eight
+    std/mrj21@1 connectors); the other classic MDAs join it as they are modelled. It also names
+    the four HS MDA / HS-MDA2 cards (SR7 p69 Table 11: "HS-MDA").
   variants: >-
     datasheet - SR7 p198 draws one face for IOM3-XP, IOM3-XP-B and IOM3-XP-C, and Table 80
     differs only in the lamp's first colour; one component with the label as a field. CLI
@@ -141,6 +142,11 @@ bays:
     - nokia/m12-1gb-2-10gb-xp@1
     - nokia/m20-1gb-xp-sfp@1
     - nokia/m20-1gb-xp-tx@1
+    - nokia/m1-10gb-hs-xfp@1
+    - nokia/m1-10gb-hs-xfp-b@1
+    - nokia/m10-1gb-hs-sfp@1
+    - nokia/m10-1gb-hs-sfp-b@1
+    - nokia/m48-1gb-xp-tx@1
     - nokia/mda-impedance-panel@1
     default: nokia/mda-impedance-panel@1
   mda-2:
@@ -156,6 +162,11 @@ bays:
     - nokia/m12-1gb-2-10gb-xp@1
     - nokia/m20-1gb-xp-sfp@1
     - nokia/m20-1gb-xp-tx@1
+    - nokia/m1-10gb-hs-xfp@1
+    - nokia/m1-10gb-hs-xfp-b@1
+    - nokia/m10-1gb-hs-sfp@1
+    - nokia/m10-1gb-hs-sfp-b@1
+    - nokia/m48-1gb-xp-tx@1
     - nokia/mda-impedance-panel@1
     default: nokia/mda-impedance-panel@1
 groups:
