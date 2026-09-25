@@ -18,16 +18,18 @@ from portrayal import render
 
 SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
+# any library card will do; this one is 380 deep, which the pocket test reads back
+CARD = "casa/ds-8x8@1"
 
 
 def _device(open_frame, seated=None):
     front = {
-        "size": {"w": 100.0, "h": 50.0},
+        "size": {"w": 70.0, "h": 350.0},
         "components": {"bays": [
-            {"id": "slot-1", "at": [2.0, 1.0], "size": {"w": 25.76, "h": 48.0},
-             "accepts": ["commscope/ar3002e@1"], "group": "slots", "rel-pos": 1},
-            {"id": "slot-2", "at": [28.76, 1.0], "size": {"w": 25.76, "h": 48.0},
-             "accepts": ["commscope/ar3002e@1"], "group": "slots", "rel-pos": 2},
+            {"id": "slot-1", "at": [2.0, 2.0], "size": {"w": 30.47, "h": 345.5},
+             "accepts": [CARD], "group": "slots", "rel-pos": 1},
+            {"id": "slot-2", "at": [34.0, 2.0], "size": {"w": 30.47, "h": 345.5},
+             "accepts": [CARD], "group": "slots", "rel-pos": 2},
         ]},
     }
     if open_frame:
@@ -35,7 +37,7 @@ def _device(open_frame, seated=None):
     return {
         "format": 1, "kind": "device", "name": "t", "version": "0.1.0", "maturity": "draft",
         "manufacturer": "T", "model": "T",
-        "chassis": {"width": 100.0, "height": 50.0, "depth": 300.0},
+        "chassis": {"width": 70.0, "height": 350.0, "depth": 400.0},
         "groups": {"slots": {"term": "Slot", "role": "traffic", "index-origin": 1}},
         "views": {"front": front},
     }, {"bays": {"slot-1": seated}} if seated else {}
@@ -68,14 +70,14 @@ def test_a_seated_bay_on_an_open_frame_is_the_same_open_mouth():
     """Occupied or not, as an open-backed bay's is: a pulled module must leave the
     open frame an empty build shows, not a dark box. The seated module is drawn
     over the mouth from unpunched art (relief.js `openBack`), so it still shows."""
-    root, ops = _openings(_render(open_frame=True, seated="commscope/ar3002e@1"))
+    root, ops = _openings(_render(open_frame=True, seated=CARD))
     for bid in ("slot-1", "slot-2"):
         el = ops[f"{bid}--opening"]
         assert el.get("data-see-through") == "1", bid
         assert el.get("data-open-frame") == "1", bid
     bays = {el.get("id"): el for el in root.iter() if el.get("data-open-back") == "1"}
     assert {"slot-1", "slot-2"} <= set(bays)
-    seated = [el for el in root.iter() if (el.get("data-ref") or "").startswith("commscope/ar3002e@1")]
+    seated = [el for el in root.iter() if (el.get("data-ref") or "").startswith(CARD)]
     assert seated, "the seated module must still be drawn"
 
 
@@ -84,7 +86,7 @@ def test_without_open_frame_an_empty_bay_is_still_a_pocket():
     el = ops["slot-1--opening"]
     assert el.get("data-see-through") is None
     assert el.get("data-open-frame") is None
-    assert el.get("data-depth") == "330"
+    assert el.get("data-depth") == "380"
 
 
 def test_the_face_itself_says_it_is_an_open_frame():
