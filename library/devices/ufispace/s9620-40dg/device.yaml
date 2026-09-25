@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9620-40dg
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9620-40DG
@@ -346,7 +346,8 @@ attrs:
   power:
     power-typical-w: '268'
     power-envelope: bare
-    input: AC 100 to 240V, 12A; DC -40 to -72V, 30A
+    input-ac: '100 to 240V, 12A'
+    input-dc: '-40 to -72V, 30A'
   environmental:
     operating-temp: -40 to 70 C
     operating-humidity: 5% to 85% RH non-condensing
@@ -804,6 +805,7 @@ configurations:
   ac:
     kind: base
     default: true
+    power: ac
     description: Two 1000W AC supplies (PSU-102-AISB-1) and five FAN-40802825-HD fans,
       front-to-back airflow, no optics fitted - which is also the scope of the datasheet's
       268 W typical figure
@@ -814,6 +816,7 @@ configurations:
         model: FAN-40802825-HD
   dc:
     kind: orderable
+    power: dc
     description: Two 1000W DC supplies (PSU-102-DISB-1), -40 to -72V, front-to-back
       airflow. The supply's face is estimated rather than measured - see gaps
     bays:

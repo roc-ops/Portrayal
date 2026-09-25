@@ -53,6 +53,8 @@ picking one.
 """
 import re
 
+from portrayal.manifest import device_options
+
 # Every fact: the canonical name, its unit, and the ONLY places it may come
 # from. The source list is exhaustive by design - see rule 1 - so adding a
 # spelling here is a deliberate act and the lint rule below reports spellings
@@ -160,7 +162,17 @@ FACTS = [
     Fact("max-thermal-output", "thermal", None, TEXT, [
         A("max-thermal-output"),
     ]),
+    # THE STRUCTURED FIELD IS READ FIRST, in resolve(): `chassis.airflow` and
+    # each configuration's, one reading per direction a buyer can order. These
+    # attrs spellings are the prose some devices also carry ("front to back;
+    # both listed SKUs are F"), kept as readings behind it rather than dropped.
     Fact("airflow", "thermal", None, TEXT, [A("airflow"), A("cooling-path")]),
+    # WHAT THE BOX IS FED WITH - `ac`, `dc`, `hvdc` - one reading per feed its
+    # offered builds resolve to (`manifest.device_options`). No attrs source:
+    # `input-ac` says what an AC supply accepts, which is a different question
+    # from whether an AC build exists, and reading the one as the other is how
+    # a DC-only box with an AC figure in its datasheet footnote would list both.
+    Fact("power-feed", "power", None, TEXT, []),
 
     # ---- where it can live -------------------------------------------------
     Fact("operating-temperature", "environmental", None, TEXT, [
@@ -286,7 +298,7 @@ SUPERSEDED = {
 # Facts that resolve from somewhere other than attrs, so "no sources" is
 # correct rather than an omission.
 DERIVED = {"rack-units", "width-mm", "height-mm", "depth-mm",
-           "psu-redundancy", "fan-redundancy"}
+           "psu-redundancy", "fan-redundancy", "power-feed"}
 
 POWER_WORDS = ("psu", "power", "pem", "psm")
 FAN_WORDS = ("fan", "cooling")
@@ -437,10 +449,29 @@ def resolve(doc):
         weight.append(_reading(_number(chassis["weight-kg"]), chassis["weight-kg"],
                                "chassis.weight-kg"))
 
+    # AIRFLOW AND FEED HAVE A STRUCTURED HOME (#513), and it was never read
+    # here: the comparable `airflow` came only from attrs prose, so the 70-odd
+    # devices that state it properly - on the chassis or per configuration -
+    # compared as if they said nothing. One reading per option, each citing
+    # where it resolved from.
+    opts = device_options(doc)
+    structured = {"airflow": [], "power-feed": []}
+    for name, key in (("airflow", "airflow"), ("power-feed", "power")):
+        # a value the chassis states cites the chassis; one only a
+        # configuration's override reaches (a back-to-front build of a
+        # front-to-back chassis) cites the configurations
+        own = chassis.get(key) or []
+        own = {own} if isinstance(own, str) else set(own)
+        structured[name] = [_reading(v, v, f"chassis.{key}" if v in own
+                                     else f"configurations.*.{key}")
+                            for v in opts[key]]
+    put("power-feed", structured["power-feed"])
+
     for f in FACTS:
         if f.name in DERIVED:
             continue
-        readings = weight if f.name == "weight-kg" else []
+        readings = weight if f.name == "weight-kg" else \
+            structured.get(f.name) or []
         readings = list(readings)
         for key, basis, qualifier in f.sources:
             if key not in flat:

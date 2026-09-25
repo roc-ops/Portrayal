@@ -495,6 +495,56 @@ def config_airflow(device, cfg):
             or ((device or {}).get("chassis") or {}).get("airflow")
             or None)
 
+
+def config_power(device, cfg):
+    """The supply feeds one configuration is built with, as a sorted list.
+
+    Resolved exactly as `config_airflow` is - the configuration's `power`, else
+    the chassis's (L118) - so the drawing's `data-power`, `configs[].power` and
+    `options.power` cannot disagree. ALWAYS A LIST, where airflow is a string,
+    because a build can be fed two ways at once (a fixed box with an AC inlet and
+    a DC terminal both fitted); a consumer that wants one word reads `[0]` of a
+    one-item list rather than branching on a type. Empty where nothing is stated.
+    """
+    v = ((cfg or {}).get("power")
+         or ((device or {}).get("chassis") or {}).get("power"))
+    if not v:
+        return []
+    return sorted({v} if isinstance(v, str) else set(v))
+
+
+# THE CONFIGURATIONS A BUYER CAN ACTUALLY GET. An `example` is somebody's
+# illustration and a `model` a teaching build (#51), so neither may widen what
+# the device is said to be offered with. A device that declares no kinds at all
+# still has builds, so all of them count there rather than none.
+OFFERED_KINDS = {"orderable", "base"}
+
+
+def device_options(device):
+    """What a device can be bought with: `{"power": [...], "airflow": [...]}`.
+
+    The union over its offered configurations (OFFERED_KINDS) of each one's
+    resolved feed and airflow, sorted, so "does this switch come in DC?" and
+    "is there a back-to-front build?" are one lookup instead of a walk over the
+    configurations - which is what the tools filtering an HCL were doing, by
+    parsing names (#513). A device with no configurations answers from the
+    chassis alone. Only what is MODELLED is offered: a back-to-front SKU the
+    vendor sells and nobody has drawn is not in the list, and its absence is
+    what a gap records.
+    """
+    cfgs = (device or {}).get("configurations") or {}
+    offered = [c or {} for c in cfgs.values()
+               if (c or {}).get("kind") in OFFERED_KINDS]
+    if not offered:
+        offered = [c or {} for c in cfgs.values()] or [{}]
+    power, airflow = set(), set()
+    for c in offered:
+        power.update(config_power(device, c))
+        a = config_airflow(device, c)
+        if a:
+            airflow.add(a)
+    return {"power": sorted(power), "airflow": sorted(airflow)}
+
 # --- occupants keyed inside a seated module (#484, R2) -----------------------
 #
 # A configuration's `occupants:` may key a cage on a card seated in a bay by the

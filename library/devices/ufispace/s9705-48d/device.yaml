@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9705-48d
-version: 3.0.3
+version: 3.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9705-48D
@@ -923,6 +923,7 @@ views:
 configurations:
   base:
     kind: base
+    power: ac
     description: >-
       Four FAN-803816-HC exhaust fans in a 3+1 set and two PSU-202-AESR 2000 W AC
       supplies in a 1+1 active-active set, front-to-back, with all forty-eight fabric
@@ -934,6 +935,7 @@ configurations:
     default: true
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 2000 W AC supplies, PSU-202-AESR, exhaust air flow (datasheet Available to
       Order). Input 200 to 240 V at 12.5 A per feed; the HIG notes that on a 110 V feed
@@ -944,6 +946,7 @@ configurations:
       psu-1: ufispace/psu-202-ac@1
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 2000 W DC supplies, PSU-202-DESR, exhaust air flow (datasheet Available to
       Order). Input -40 to -72 V at 60 A per feed through a two-hole lug on a screw

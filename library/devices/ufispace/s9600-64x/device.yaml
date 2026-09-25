@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-64x
-version: 4.0.4
+version: 4.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-64X
@@ -935,6 +935,7 @@ views:
         - {ref: common/screw-head@1, id: rail-screw-r, at: [730.00, 42.05], group: furniture, rel-pos: 14}
 configurations:
   base:
+    power: ac
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2
@@ -943,6 +944,7 @@ configurations:
     default: true
   dc:
     kind: orderable
+    power: dc
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2
@@ -956,6 +958,7 @@ configurations:
       fan-803816-hi:
         model: FAN-803816-HI
   ac:
+    power: ac
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2

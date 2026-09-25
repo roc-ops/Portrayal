@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 4.0.1
+version: 4.0.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
@@ -785,6 +785,7 @@ views:
 configurations:
   base:
     kind: base
+    power: ac
     description: >-
       The chassis as it ships and as every rear figure draws it - four
       FAN-805616-HCE fans and two PSU-242-AECRN 2400W AC supplies, red handles and
@@ -794,6 +795,7 @@ configurations:
     default: true
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 2400W AC supplies (PSU-242-AECRN, C20 inlet, red latch) with
       front-to-back fans (FAN-805616-HCE). The back-to-front build swaps both for
@@ -807,6 +809,7 @@ configurations:
         model: FAN-805616-HCE
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 2400W -48V DC supplies (PSU-242-DEERN, two-row V+/V- input block, red
       latch) with front-to-back fans (FAN-805616-HCE). The HIG rates the DC feed at

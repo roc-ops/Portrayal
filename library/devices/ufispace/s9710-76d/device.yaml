@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9710-76d
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9710-76D
@@ -340,7 +340,8 @@ attrs:
     power-max-w: '2314'
     power-max-dc-w: '2351'
     power-envelope: fully-configured
-    input: AC 200 to 240V, 16A max x2; DC -40 to -72V, 80A max x2
+    input-ac: '200 to 240V, 16A max x2'
+    input-dc: '-40 to -72V, 80A max x2'
   thermal:
     airflow: front-to-back (exhaust FRUs only; the datasheet lists one fan and two PSUs,
       all 'exhaust air flow')
@@ -914,12 +915,14 @@ views:
 configurations:
   ac:
     kind: base
+    power: ac
     description: Dual 3000W AC PSUs (PSU-302-AESR) 1+1, four FAN-808012 fan modules 3+1,
       front-to-back airflow - the build HIG Figure 4's rear elevation and the vendor rear
       render both show
     default: true
   dc:
     kind: orderable
+    power: dc
     description: Dual 3000W DC PSUs (PSU-302-DESR) 1+1, four FAN-808012 fan modules 3+1,
       front-to-back airflow
     bays:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ais800-32d
-version: 1.0.4
+version: 1.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AIS800-32D
@@ -994,6 +994,7 @@ views:
 configurations:
   ac-f2b:
     kind: orderable
+    power: ac
     description: >-
       Dual 2400 W AC PSUs, front-to-back airflow - red bails on the supplies and the trays, which is the
       build the rear elevation and all five staged photographs show. Rated 0-40 C at 6000 ft.
@@ -1006,6 +1007,7 @@ configurations:
       AIS800-32D-AF-UN: {part: FP6EC9632011Z, power-cord: UN}
   ac-b2f:
     kind: orderable
+    power: ac
     description: >-
       Dual 2400 W AC PSUs, back-to-front airflow - blue bails. The guide never writes the colour rule
       in words; its Airflow Reversal figures draw it. Derated to 0-35 C, "subject to used optics".
@@ -1022,6 +1024,7 @@ configurations:
       AIS800-32D-AB-UN: {part: FP6EC9632012Z, power-cord: UN}
   dc-f2b:
     kind: orderable
+    power: dc
     description: >-
       Dual 2400 W DC PSUs, front-to-back airflow - red bails. The DC supply lands -40 to -72 VDC on a
       two-pole screw block with a separate ground stud; no power cord ships.
@@ -1030,6 +1033,7 @@ configurations:
       AIS800-32D-DF: {part: FP6EC9632008Z}
   dc-b2f:
     kind: orderable
+    power: dc
     description: Dual 2400 W DC PSUs, back-to-front airflow - blue bails
     airflow: back-to-front
     region-context: {exhaust: Intake}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9501-18smt
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9501-18SMT
@@ -310,8 +310,8 @@ attrs:
     power-max-w: 85
     power-envelope: unstated
     psus: 2x 200 W 1+1 redundant, hot-swappable (intake airflow)
-    psu-ac-input: 100-240 VAC, 3 A max
-    psu-dc-input: -36 to -75 VDC, 8 A max
+    input-ac: 100-240 VAC, 3 A max
+    input-dc: -36 to -75 VDC, 8 A max
   thermal:
     fans: 3x hot-swappable 2+1 redundant, exhaust airflow; system front-to-back
   environmental:
@@ -809,6 +809,7 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     description: Dual 200W DC PSUs (PSU-201-DISB, intake airflow) with three
       FAN-402818-HC exhaust fans - the DC build, which is also the bare working
       chassis, since the traffic cages ship empty
@@ -818,6 +819,7 @@ configurations:
         model: FAN-402818-HC
   ac:
     kind: orderable
+    power: ac
     description: Dual 200W AC PSUs (PSU-201-AISB, intake airflow) with three
       FAN-402818-HC exhaust fans
     bays:

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-72xc
-version: 6.0.3
+version: 6.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-72XC
@@ -1023,6 +1023,7 @@ views:
 configurations:
   base:
     kind: base
+    power: ac
     description: >-
       The router as HIG Figure 4 draws it - four FAN-803816-HI exhaust fans and two
       1300 W AC supplies at the rear, and the seventy-two traffic ports empty. No
@@ -1031,6 +1032,7 @@ configurations:
     default: true
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 1300 W AC supplies (PSU-132-AESR, exhaust airflow) with four FAN-803816-HI
       fans. The datasheet's AC input rating is 100 to 240 V at 12 A; the HIG's maximum
@@ -1043,6 +1045,7 @@ configurations:
         model: FAN-803816-HI
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 1300 W -48 V DC supplies (PSU-132-DESR, exhaust airflow) with four
       FAN-803816-HI fans. The datasheet's DC input rating is -40 to -75 V at 40 A and

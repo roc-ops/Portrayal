@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr430
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS7515-24X
@@ -119,8 +119,8 @@ attrs:
   performance:
     switching-capacity: 360 Gbps
     processing-rate: 300 Mpps
-  power: {power-max-w: 167, power-envelope: as-tested, power-input-ac: '100V-240V, 6.0-2.4 A per PS',
-    power-input-dc: '-44 to -60 V, 15.5-9.6 A per PS'}
+  power: {power-max-w: 167, power-envelope: as-tested, input-ac: '100V-240V, 6.0-2.4 A per PS',
+    input-dc: '-44 to -60 V, 15.5-9.6 A per PS'}
   thermal: {airflow: side-to-side, cooling: 4+1 redundant hot-swappable fan tray}
   environmental: {temperature-operating: -40 C to 65 C (-40 F to 149 F), temperature-storage: -40 C to 70 C (-40 F to 158 F),
     humidity-operating: 5% to 95% non-condensing}
@@ -486,6 +486,7 @@ configurations:
   ac:
     kind: base
     default: true
+    power: ac
     description: >-
       Two hot-swappable AC supplies and the fan tray. This is the variant the datasheet's
       upper front elevation draws. No ordering matrix is published for this model in either
@@ -493,6 +494,7 @@ configurations:
     bays: {psu-1: edgecore/csr310-psu-ac@1, psu-2: edgecore/csr310-psu-ac@1, fan-tray: edgecore/csr310-fan-tray@1}
   dc:
     kind: orderable
+    power: dc
     description: >-
       Two hot-swappable DC supplies, otherwise the base box. This is the variant the
       datasheet's lower front elevation draws - the figure every coordinate here is measured

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9510-30xc
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9510-30XC
@@ -273,7 +273,8 @@ attrs:
   power:
     power-typical-w: '126'
     power-envelope: unstated
-    input: AC 100 to 240V, 6A; DC -36 to -75V, 16A
+    input-ac: '100 to 240V, 6A'
+    input-dc: '-36 to -75V, 16A'
   environmental:
     operating-temp: -40 to 65 C (temperature hardened)
     operating-humidity: 5% to 85% RH non-condensing
@@ -745,6 +746,7 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     description: Dual 400W DC PSUs (PSU-401-DISB-1, intake airflow) 1+1, five
       FAN-402825-HD fan modules 4+1 - the build both vendor renders and HIG Figures 5,
       6 and 8 show
@@ -756,6 +758,7 @@ configurations:
         model: FAN-402825-HD
   ac:
     kind: orderable
+    power: ac
     description: Dual 400W AC PSUs (PSU-401-AISB, intake airflow) 1+1, five
       FAN-402825-HD fan modules 4+1, per HIG Figure 7
     bays:

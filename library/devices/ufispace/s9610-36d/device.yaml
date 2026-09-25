@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9610-36d
-version: 4.0.2
+version: 4.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9610-36D
@@ -919,6 +919,7 @@ views:
 configurations:
   base:
     kind: base
+    power: dc
     description: >-
       The chassis as both rear images draw it - four FAN-808012-HC fans and two
       PSU-302-DESR 3000 W DC supplies with their two-stud terminal blocks, red handles
@@ -931,6 +932,7 @@ configurations:
         model: FAN-808012-HC
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 3000 W -40 to -72 V DC supplies (PSU-302-DESR), which is the build every
       figure and render shows. The HIG rates the feed at 80 A maximum per circuit for
@@ -946,6 +948,7 @@ configurations:
         model: FAN-808012-HC
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 3000 W 200-240 V AC supplies (PSU-302-AESR, IEC 60320 C20 inlet, 16 A per
       circuit, 25 A internal fuse). The HIG describes this build in prose and shows it

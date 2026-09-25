@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: csr310
-version: 1.0.4
+version: 1.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AS7315-27X
@@ -119,7 +119,7 @@ provenance:
       is listed and none is assumed.
 attrs:
   performance: {switching-capacity: 300 Gbps, processing-rate: 300 Mpps}
-  power: {power-max-w: 193, power-envelope: as-tested, power-input-ac: '100V-240V, 5 A', power-input-dc: '36V-72V,
+  power: {power-max-w: 193, power-envelope: as-tested, input-ac: '100V-240V, 5 A', input-dc: '36V-72V,
       10 A'}
   thermal:
     airflow: side-to-side (every published ordering code)
@@ -1370,6 +1370,7 @@ configurations:
   ac:
     kind: base
     default: true
+    power: ac
     description: >-
       Two hot-swappable AC supplies and the fan tray, side-to-side. Four of the five published ordering
       codes are this configuration, differing only in the power cord.
@@ -1381,6 +1382,7 @@ configurations:
     bays: {psu-1: edgecore/csr310-psu-ac@1, psu-2: edgecore/csr310-psu-ac@1, fan-tray: edgecore/csr310-fan-tray@1}
   dc:
     kind: orderable
+    power: dc
     description: >-
       Two hot-swappable -48 VDC supplies, otherwise the base box. This is the variant the datasheet's
       front elevation draws, and the quick start ships four ring lugs with it.

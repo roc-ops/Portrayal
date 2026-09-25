@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 2.0.6
+version: 2.0.7
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -1826,6 +1826,7 @@ views:
 configurations:
   base:
     kind: base
+    power: ac
     description: >-
       The chassis as it ships and as most people want to see it first: two supplies and four fan trays
       in, every traffic cage empty. The AC supply is seated because four of the five ordering codes are
@@ -1833,6 +1834,7 @@ configurations:
     default: true
   ac-f2b:
     kind: orderable
+    power: ac
     description: >-
       Dual 2000 W AC PSUs, front-to-back airflow, and FOUR OF THE FIVE ORDERING CODES ARE THIS BUILD -
       the bare code and its EU, UK and US variants, which differ only in the power cord in the box and
@@ -1844,6 +1846,7 @@ configurations:
       AS9947-36XKB-O-AC-F-US: {part: FNPEC9636401Z, power-cord: NEMA 6-20P (UL)}
   dc-f2b:
     kind: orderable
+    power: dc
     description: >-
       Dual 2000 W -48 VDC PSUs, front-to-back airflow. This is the build the quick start guide's rear
       elevation draws, and the only one it draws. The included cable is the ordering table's "6AWG PSU
