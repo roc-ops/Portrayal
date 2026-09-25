@@ -41,10 +41,13 @@ provenance:
       scans of that 10 px/mm image. The stencil master is used for arrangement and legends only.
       THE UPRIGHT LEGENDS (X-METRO 7380, CONSOLE, SNMP, the laser label's text) are rotate -90,
       which the renderer draws reading upward with the caps to the LEFT of the baseline - checked
-      by rasterising: CONSOLE's glyphs land at x 372.1-373.3, clear of the USB jack at 375.5.
-      Lint's text-extent helper puts a 270-degree mark's caps to the right, so L21 reports
-      X-METRO 7380 and CONSOLE as painted over by the parts beside them; those two L21 lines are
-      in the baseline as false positives, pending a fix to that helper.
+      by rasterising: CONSOLE's glyphs land at x 372.1-373.3, clear of the USB jack at 375.5. L21
+      reports two of them as painted over, falsely and for two separate reasons in lint: its
+      text-extent helper has the two right-angle cases swapped (a 270-degree mark's caps put to the
+      right), which is the X-METRO 7380 line; and L21's placement boxes turn only a rotate-180
+      part, so the rotate-90 USB console is boxed as if lying flat (12 x 4.5 across x 371.8-383.8)
+      and swallows CONSOLE whichever side its caps are on. Both L21 lines are in the baseline as
+      false positives, pending a fix to lint.
   ports:
     confidence: photo-measured
     note: >-
@@ -63,10 +66,17 @@ provenance:
     confidence: estimated
     note: >-
       "20 x 10G/1G SFP+, 32 x 1G/100M SFP" - 52 ports, and the face has 48 in the blocks and four
-      at the right. The sibling XM-7280's data sheet calls its right-hand four "4x10G SFP NNI", so
-      those four are 10G here too, leaving 16 of the 48 as SFP+. WHICH 16 IS NOT DOCUMENTED; the
-      first block (1-16) is drawn as SFP+ at 10g and the other two as SFP at 1g, and the
-      uni-speeds gap stays open.
+      at the right. WHICH OF THE 48 ARE SFP+ IS NOT DOCUMENTED - there is no port table and the
+      three blocks are identical in the render - so all 48 are one group at 1g, the only rate
+      every UNI cage is documented to carry ("10G/1G" SFP+ and "1G/100M" SFP), and the split is
+      stated only in attrs.features.uni-mix. The count of SFP+ among them (16) itself rests on the
+      NNI four being 10G, which is borrowed (see nni-speed).
+  nni-speed:
+    confidence: borrowed
+    note: >-
+      BORROWED, NOT STATED. The XM-7380 data sheet does not say which of its ports the four at the
+      right are; 10g is taken from the sibling XM-7280's data sheet, which calls its right-hand four
+      "4x10G SFP NNI" on the same face layout; the nni-speed gap stays open.
   snmp-jack:
     confidence: photo-measured
     note: >-
@@ -103,7 +113,8 @@ attrs:
   performance:
     switching-capacity: 464 Gbps
   features:
-    services: E-LINE, E-LAN, E-TREE; MPLS, SR
+    services: E-LINE, E-LAN, E-TREE; MPLS L2VPN, L3VPN, H-VPLS; SR; IPv4/v6 routing
+    uni-mix: '48 UNI cages of which 16 are SFP+ (10G/1G) and 32 SFP (1G/100M) - which ones is undocumented'
     resiliency: 1+1 supplies, LAG, MC-LAG
     timing: SyncE (data sheet "Precision SyncE"; no 1588 stated)
     optics-sfp-plus: '10GBASE, 1000BASE (data sheet, "20 x 10G/1G SFP+")'
@@ -130,11 +141,19 @@ gaps:
     login, whose contact is on telco.com/support.
   wanted: the XM-7380 hardware installation guide, from the BATM support portal.
 - what: uni-speeds
-  scope: [front]
+  scope: [uni]
   reason: vendor-silent
   note: >-
-    Sixteen of the 48 UNI ports are SFP+ and 32 are SFP, and nothing held says which; the first
-    block is drawn as the SFP+ one (see provenance.port-speeds).
+    Sixteen of the 48 UNI ports are SFP+ and 32 are SFP (a count that rests on the borrowed NNI
+    speed), and nothing held says which; all 48 are exported at 1g, the rate every one carries
+    (see provenance.port-speeds).
+  wanted: the installation guide's port table.
+- what: nni-speed
+  scope: [nni]
+  reason: vendor-silent
+  note: >-
+    The data sheet does not say the four right-hand ports are the 10G ones; 10g is BORROWED from
+    the XM-7280 (see provenance.nni-speed).
   wanted: the installation guide's port table.
 - what: port-order
   scope: [front]
@@ -158,18 +177,14 @@ gaps:
     provenance.snmp-speed), not as a finding.
   wanted: the installation guide's interface table.
 groups:
-  uni-10g:
-    term: Port
-    role: traffic
-    index-origin: 1
-    attrs: {media: sfp-plus, speed: 10g}
-    description: UNI ports 1-16, the first stacked 2 x 8 block - drawn as the SFP+ block (see the uni-speeds gap).
-  uni-1g:
+  uni:
     term: Port
     role: traffic
     index-origin: 1
     attrs: {media: sfp, speed: 1g}
-    description: UNI ports 17-48, the second and third stacked 2 x 8 blocks.
+    description: >-
+      the 48 UNI ports in three stacked 2 x 8 blocks, all at 1g - 16 of them are SFP+, which ones
+      is undocumented (see the uni-speeds gap).
   uni-leds:
     term: LED
     role: indicator
@@ -546,153 +561,155 @@ views:
       - {at: [413.9, 7.55], text: PWR1, font-size: 1.5, anchor: end, for: led-pwr1}
       - {at: [413.3, 10.3], text: FAN1, font-size: 1.5, anchor: end, for: led-fan1}
       - {at: [413.3, 13.05], text: SNMP, font-size: 1.5, anchor: end, for: led-snmp-led}
+      - {id: leader-1, at: [413.37, 9.8], path: M 0 0 L 0 7.48 L 0.7 7.48 M 0 2.35 L 0.7 2.35, for: chassis}
       - {at: [424.5, 7.55], text: PWR2, font-size: 1.5, anchor: start, for: led-pwr2}
       - {at: [425.1, 10.3], text: FAN2, font-size: 1.5, anchor: start, for: led-fan2}
       - {at: [425.1, 13.05], text: SYS, font-size: 1.5, anchor: start, for: led-sys}
+      - {id: leader-2, at: [424.99, 9.8], path: M 0 0 L 0 7.48 L -0.7 7.48 M 0 2.35 L -0.7 2.35, for: chassis}
       - {at: [8.6, 23.15], text: X-METRO 7380, font-size: 3.9, anchor: middle, rotate: -90, for: chassis}
       - {at: [434.7, 22.75], text: Class 1 laser product, font-size: 2.3, anchor: middle, rotate: -90, for: chassis}
     components:
       placements:
-        - {ref: 'std/sfp-ganged@1', id: port-2, at: [10.38, 10.1], group: uni-10g, rel-pos: 2}
-        - {ref: 'std/sfp-ganged@1', id: port-1, at: [10.38, 26.2], rotate: 180, group: uni-10g, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-2, at: [10.38, 10.1], group: uni, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-1, at: [10.38, 26.2], rotate: 180, group: uni, rel-pos: 1}
         - {ref: 'common/led-arrow-sm@1', id: led-port-1-a, at: [11.62, 22.2], skin: down, for: port-1, group: uni-leds, rel-pos: 1}
         - {ref: 'common/led-arrow-sm@1', id: led-port-2-a, at: [14.47, 22.2], skin: up, for: port-2, group: uni-leds, rel-pos: 3}
         - {ref: 'common/led-arrow-sm@1', id: led-port-1-b, at: [18.18, 22.2], skin: down, for: port-1, group: uni-leds, rel-pos: 2}
         - {ref: 'common/led-arrow-sm@1', id: led-port-2-b, at: [21.02, 22.2], skin: up, for: port-2, group: uni-leds, rel-pos: 4}
-        - {ref: 'std/sfp-ganged@1', id: port-4, at: [24.75, 10.1], group: uni-10g, rel-pos: 4}
-        - {ref: 'std/sfp-ganged@1', id: port-3, at: [24.75, 26.2], rotate: 180, group: uni-10g, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-4, at: [24.75, 10.1], group: uni, rel-pos: 4}
+        - {ref: 'std/sfp-ganged@1', id: port-3, at: [24.75, 26.2], rotate: 180, group: uni, rel-pos: 3}
         - {ref: 'common/led-arrow-sm@1', id: led-port-3-a, at: [26.0, 22.2], skin: down, for: port-3, group: uni-leds, rel-pos: 5}
         - {ref: 'common/led-arrow-sm@1', id: led-port-4-a, at: [28.85, 22.2], skin: up, for: port-4, group: uni-leds, rel-pos: 7}
         - {ref: 'common/led-arrow-sm@1', id: led-port-3-b, at: [32.55, 22.2], skin: down, for: port-3, group: uni-leds, rel-pos: 6}
         - {ref: 'common/led-arrow-sm@1', id: led-port-4-b, at: [35.4, 22.2], skin: up, for: port-4, group: uni-leds, rel-pos: 8}
-        - {ref: 'std/sfp-ganged@1', id: port-6, at: [39.12, 10.1], group: uni-10g, rel-pos: 6}
-        - {ref: 'std/sfp-ganged@1', id: port-5, at: [39.12, 26.2], rotate: 180, group: uni-10g, rel-pos: 5}
+        - {ref: 'std/sfp-ganged@1', id: port-6, at: [39.12, 10.1], group: uni, rel-pos: 6}
+        - {ref: 'std/sfp-ganged@1', id: port-5, at: [39.12, 26.2], rotate: 180, group: uni, rel-pos: 5}
         - {ref: 'common/led-arrow-sm@1', id: led-port-5-a, at: [40.37, 22.2], skin: down, for: port-5, group: uni-leds, rel-pos: 9}
         - {ref: 'common/led-arrow-sm@1', id: led-port-6-a, at: [43.22, 22.2], skin: up, for: port-6, group: uni-leds, rel-pos: 11}
         - {ref: 'common/led-arrow-sm@1', id: led-port-5-b, at: [46.91, 22.2], skin: down, for: port-5, group: uni-leds, rel-pos: 10}
         - {ref: 'common/led-arrow-sm@1', id: led-port-6-b, at: [49.77, 22.2], skin: up, for: port-6, group: uni-leds, rel-pos: 12}
-        - {ref: 'std/sfp-ganged@1', id: port-8, at: [53.48, 10.1], group: uni-10g, rel-pos: 8}
-        - {ref: 'std/sfp-ganged@1', id: port-7, at: [53.48, 26.2], rotate: 180, group: uni-10g, rel-pos: 7}
+        - {ref: 'std/sfp-ganged@1', id: port-8, at: [53.48, 10.1], group: uni, rel-pos: 8}
+        - {ref: 'std/sfp-ganged@1', id: port-7, at: [53.48, 26.2], rotate: 180, group: uni, rel-pos: 7}
         - {ref: 'common/led-arrow-sm@1', id: led-port-7-a, at: [54.73, 22.2], skin: down, for: port-7, group: uni-leds, rel-pos: 13}
         - {ref: 'common/led-arrow-sm@1', id: led-port-8-a, at: [57.59, 22.2], skin: up, for: port-8, group: uni-leds, rel-pos: 15}
         - {ref: 'common/led-arrow-sm@1', id: led-port-7-b, at: [61.28, 22.2], skin: down, for: port-7, group: uni-leds, rel-pos: 14}
         - {ref: 'common/led-arrow-sm@1', id: led-port-8-b, at: [64.14, 22.2], skin: up, for: port-8, group: uni-leds, rel-pos: 16}
-        - {ref: 'std/sfp-ganged@1', id: port-10, at: [67.86, 10.1], group: uni-10g, rel-pos: 10}
-        - {ref: 'std/sfp-ganged@1', id: port-9, at: [67.86, 26.2], rotate: 180, group: uni-10g, rel-pos: 9}
+        - {ref: 'std/sfp-ganged@1', id: port-10, at: [67.86, 10.1], group: uni, rel-pos: 10}
+        - {ref: 'std/sfp-ganged@1', id: port-9, at: [67.86, 26.2], rotate: 180, group: uni, rel-pos: 9}
         - {ref: 'common/led-arrow-sm@1', id: led-port-9-a, at: [69.11, 22.2], skin: down, for: port-9, group: uni-leds, rel-pos: 17}
         - {ref: 'common/led-arrow-sm@1', id: led-port-10-a, at: [71.96, 22.2], skin: up, for: port-10, group: uni-leds, rel-pos: 19}
         - {ref: 'common/led-arrow-sm@1', id: led-port-9-b, at: [75.66, 22.2], skin: down, for: port-9, group: uni-leds, rel-pos: 18}
         - {ref: 'common/led-arrow-sm@1', id: led-port-10-b, at: [78.52, 22.2], skin: up, for: port-10, group: uni-leds, rel-pos: 20}
-        - {ref: 'std/sfp-ganged@1', id: port-12, at: [82.23, 10.1], group: uni-10g, rel-pos: 12}
-        - {ref: 'std/sfp-ganged@1', id: port-11, at: [82.23, 26.2], rotate: 180, group: uni-10g, rel-pos: 11}
+        - {ref: 'std/sfp-ganged@1', id: port-12, at: [82.23, 10.1], group: uni, rel-pos: 12}
+        - {ref: 'std/sfp-ganged@1', id: port-11, at: [82.23, 26.2], rotate: 180, group: uni, rel-pos: 11}
         - {ref: 'common/led-arrow-sm@1', id: led-port-11-a, at: [83.48, 22.2], skin: down, for: port-11, group: uni-leds, rel-pos: 21}
         - {ref: 'common/led-arrow-sm@1', id: led-port-12-a, at: [86.33, 22.2], skin: up, for: port-12, group: uni-leds, rel-pos: 23}
         - {ref: 'common/led-arrow-sm@1', id: led-port-11-b, at: [90.03, 22.2], skin: down, for: port-11, group: uni-leds, rel-pos: 22}
         - {ref: 'common/led-arrow-sm@1', id: led-port-12-b, at: [92.89, 22.2], skin: up, for: port-12, group: uni-leds, rel-pos: 24}
-        - {ref: 'std/sfp-ganged@1', id: port-14, at: [96.61, 10.1], group: uni-10g, rel-pos: 14}
-        - {ref: 'std/sfp-ganged@1', id: port-13, at: [96.61, 26.2], rotate: 180, group: uni-10g, rel-pos: 13}
+        - {ref: 'std/sfp-ganged@1', id: port-14, at: [96.61, 10.1], group: uni, rel-pos: 14}
+        - {ref: 'std/sfp-ganged@1', id: port-13, at: [96.61, 26.2], rotate: 180, group: uni, rel-pos: 13}
         - {ref: 'common/led-arrow-sm@1', id: led-port-13-a, at: [97.86, 22.2], skin: down, for: port-13, group: uni-leds, rel-pos: 25}
         - {ref: 'common/led-arrow-sm@1', id: led-port-14-a, at: [100.7, 22.2], skin: up, for: port-14, group: uni-leds, rel-pos: 27}
         - {ref: 'common/led-arrow-sm@1', id: led-port-13-b, at: [104.41, 22.2], skin: down, for: port-13, group: uni-leds, rel-pos: 26}
         - {ref: 'common/led-arrow-sm@1', id: led-port-14-b, at: [107.26, 22.2], skin: up, for: port-14, group: uni-leds, rel-pos: 28}
-        - {ref: 'std/sfp-ganged@1', id: port-16, at: [110.97, 10.1], group: uni-10g, rel-pos: 16}
-        - {ref: 'std/sfp-ganged@1', id: port-15, at: [110.97, 26.2], rotate: 180, group: uni-10g, rel-pos: 15}
+        - {ref: 'std/sfp-ganged@1', id: port-16, at: [110.97, 10.1], group: uni, rel-pos: 16}
+        - {ref: 'std/sfp-ganged@1', id: port-15, at: [110.97, 26.2], rotate: 180, group: uni, rel-pos: 15}
         - {ref: 'common/led-arrow-sm@1', id: led-port-15-a, at: [112.22, 22.2], skin: down, for: port-15, group: uni-leds, rel-pos: 29}
         - {ref: 'common/led-arrow-sm@1', id: led-port-16-a, at: [115.07, 22.2], skin: up, for: port-16, group: uni-leds, rel-pos: 31}
         - {ref: 'common/led-arrow-sm@1', id: led-port-15-b, at: [118.77, 22.2], skin: down, for: port-15, group: uni-leds, rel-pos: 30}
         - {ref: 'common/led-arrow-sm@1', id: led-port-16-b, at: [121.62, 22.2], skin: up, for: port-16, group: uni-leds, rel-pos: 32}
-        - {ref: 'std/sfp-ganged@1', id: port-18, at: [130.97, 10.1], group: uni-1g, rel-pos: 18}
-        - {ref: 'std/sfp-ganged@1', id: port-17, at: [130.97, 26.2], rotate: 180, group: uni-1g, rel-pos: 17}
+        - {ref: 'std/sfp-ganged@1', id: port-18, at: [130.97, 10.1], group: uni, rel-pos: 18}
+        - {ref: 'std/sfp-ganged@1', id: port-17, at: [130.97, 26.2], rotate: 180, group: uni, rel-pos: 17}
         - {ref: 'common/led-arrow-sm@1', id: led-port-17-a, at: [132.22, 22.2], skin: down, for: port-17, group: uni-leds, rel-pos: 33}
         - {ref: 'common/led-arrow-sm@1', id: led-port-18-a, at: [135.07, 22.2], skin: up, for: port-18, group: uni-leds, rel-pos: 35}
         - {ref: 'common/led-arrow-sm@1', id: led-port-17-b, at: [138.78, 22.2], skin: down, for: port-17, group: uni-leds, rel-pos: 34}
         - {ref: 'common/led-arrow-sm@1', id: led-port-18-b, at: [141.62, 22.2], skin: up, for: port-18, group: uni-leds, rel-pos: 36}
-        - {ref: 'std/sfp-ganged@1', id: port-20, at: [145.62, 10.1], group: uni-1g, rel-pos: 20}
-        - {ref: 'std/sfp-ganged@1', id: port-19, at: [145.62, 26.2], rotate: 180, group: uni-1g, rel-pos: 19}
+        - {ref: 'std/sfp-ganged@1', id: port-20, at: [145.62, 10.1], group: uni, rel-pos: 20}
+        - {ref: 'std/sfp-ganged@1', id: port-19, at: [145.62, 26.2], rotate: 180, group: uni, rel-pos: 19}
         - {ref: 'common/led-arrow-sm@1', id: led-port-19-a, at: [146.87, 22.2], skin: down, for: port-19, group: uni-leds, rel-pos: 37}
         - {ref: 'common/led-arrow-sm@1', id: led-port-20-a, at: [149.72, 22.2], skin: up, for: port-20, group: uni-leds, rel-pos: 39}
         - {ref: 'common/led-arrow-sm@1', id: led-port-19-b, at: [153.42, 22.2], skin: down, for: port-19, group: uni-leds, rel-pos: 38}
         - {ref: 'common/led-arrow-sm@1', id: led-port-20-b, at: [156.27, 22.2], skin: up, for: port-20, group: uni-leds, rel-pos: 40}
-        - {ref: 'std/sfp-ganged@1', id: port-22, at: [160.25, 10.1], group: uni-1g, rel-pos: 22}
-        - {ref: 'std/sfp-ganged@1', id: port-21, at: [160.25, 26.2], rotate: 180, group: uni-1g, rel-pos: 21}
+        - {ref: 'std/sfp-ganged@1', id: port-22, at: [160.25, 10.1], group: uni, rel-pos: 22}
+        - {ref: 'std/sfp-ganged@1', id: port-21, at: [160.25, 26.2], rotate: 180, group: uni, rel-pos: 21}
         - {ref: 'common/led-arrow-sm@1', id: led-port-21-a, at: [161.5, 22.2], skin: down, for: port-21, group: uni-leds, rel-pos: 41}
         - {ref: 'common/led-arrow-sm@1', id: led-port-22-a, at: [164.34, 22.2], skin: up, for: port-22, group: uni-leds, rel-pos: 43}
         - {ref: 'common/led-arrow-sm@1', id: led-port-21-b, at: [168.05, 22.2], skin: down, for: port-21, group: uni-leds, rel-pos: 42}
         - {ref: 'common/led-arrow-sm@1', id: led-port-22-b, at: [170.9, 22.2], skin: up, for: port-22, group: uni-leds, rel-pos: 44}
-        - {ref: 'std/sfp-ganged@1', id: port-24, at: [174.88, 10.1], group: uni-1g, rel-pos: 24}
-        - {ref: 'std/sfp-ganged@1', id: port-23, at: [174.88, 26.2], rotate: 180, group: uni-1g, rel-pos: 23}
+        - {ref: 'std/sfp-ganged@1', id: port-24, at: [174.88, 10.1], group: uni, rel-pos: 24}
+        - {ref: 'std/sfp-ganged@1', id: port-23, at: [174.88, 26.2], rotate: 180, group: uni, rel-pos: 23}
         - {ref: 'common/led-arrow-sm@1', id: led-port-23-a, at: [176.13, 22.2], skin: down, for: port-23, group: uni-leds, rel-pos: 45}
         - {ref: 'common/led-arrow-sm@1', id: led-port-24-a, at: [178.98, 22.2], skin: up, for: port-24, group: uni-leds, rel-pos: 47}
         - {ref: 'common/led-arrow-sm@1', id: led-port-23-b, at: [182.69, 22.2], skin: down, for: port-23, group: uni-leds, rel-pos: 46}
         - {ref: 'common/led-arrow-sm@1', id: led-port-24-b, at: [185.53, 22.2], skin: up, for: port-24, group: uni-leds, rel-pos: 48}
-        - {ref: 'std/sfp-ganged@1', id: port-26, at: [189.51, 10.1], group: uni-1g, rel-pos: 26}
-        - {ref: 'std/sfp-ganged@1', id: port-25, at: [189.51, 26.2], rotate: 180, group: uni-1g, rel-pos: 25}
+        - {ref: 'std/sfp-ganged@1', id: port-26, at: [189.51, 10.1], group: uni, rel-pos: 26}
+        - {ref: 'std/sfp-ganged@1', id: port-25, at: [189.51, 26.2], rotate: 180, group: uni, rel-pos: 25}
         - {ref: 'common/led-arrow-sm@1', id: led-port-25-a, at: [190.76, 22.2], skin: down, for: port-25, group: uni-leds, rel-pos: 49}
         - {ref: 'common/led-arrow-sm@1', id: led-port-26-a, at: [193.61, 22.2], skin: up, for: port-26, group: uni-leds, rel-pos: 51}
         - {ref: 'common/led-arrow-sm@1', id: led-port-25-b, at: [197.31, 22.2], skin: down, for: port-25, group: uni-leds, rel-pos: 50}
         - {ref: 'common/led-arrow-sm@1', id: led-port-26-b, at: [200.16, 22.2], skin: up, for: port-26, group: uni-leds, rel-pos: 52}
-        - {ref: 'std/sfp-ganged@1', id: port-28, at: [204.16, 10.1], group: uni-1g, rel-pos: 28}
-        - {ref: 'std/sfp-ganged@1', id: port-27, at: [204.16, 26.2], rotate: 180, group: uni-1g, rel-pos: 27}
+        - {ref: 'std/sfp-ganged@1', id: port-28, at: [204.16, 10.1], group: uni, rel-pos: 28}
+        - {ref: 'std/sfp-ganged@1', id: port-27, at: [204.16, 26.2], rotate: 180, group: uni, rel-pos: 27}
         - {ref: 'common/led-arrow-sm@1', id: led-port-27-a, at: [205.41, 22.2], skin: down, for: port-27, group: uni-leds, rel-pos: 53}
         - {ref: 'common/led-arrow-sm@1', id: led-port-28-a, at: [208.25, 22.2], skin: up, for: port-28, group: uni-leds, rel-pos: 55}
         - {ref: 'common/led-arrow-sm@1', id: led-port-27-b, at: [211.96, 22.2], skin: down, for: port-27, group: uni-leds, rel-pos: 54}
         - {ref: 'common/led-arrow-sm@1', id: led-port-28-b, at: [214.81, 22.2], skin: up, for: port-28, group: uni-leds, rel-pos: 56}
-        - {ref: 'std/sfp-ganged@1', id: port-30, at: [218.78, 10.1], group: uni-1g, rel-pos: 30}
-        - {ref: 'std/sfp-ganged@1', id: port-29, at: [218.78, 26.2], rotate: 180, group: uni-1g, rel-pos: 29}
+        - {ref: 'std/sfp-ganged@1', id: port-30, at: [218.78, 10.1], group: uni, rel-pos: 30}
+        - {ref: 'std/sfp-ganged@1', id: port-29, at: [218.78, 26.2], rotate: 180, group: uni, rel-pos: 29}
         - {ref: 'common/led-arrow-sm@1', id: led-port-29-a, at: [220.03, 22.2], skin: down, for: port-29, group: uni-leds, rel-pos: 57}
         - {ref: 'common/led-arrow-sm@1', id: led-port-30-a, at: [222.88, 22.2], skin: up, for: port-30, group: uni-leds, rel-pos: 59}
         - {ref: 'common/led-arrow-sm@1', id: led-port-29-b, at: [226.59, 22.2], skin: down, for: port-29, group: uni-leds, rel-pos: 58}
         - {ref: 'common/led-arrow-sm@1', id: led-port-30-b, at: [229.44, 22.2], skin: up, for: port-30, group: uni-leds, rel-pos: 60}
-        - {ref: 'std/sfp-ganged@1', id: port-32, at: [233.43, 10.1], group: uni-1g, rel-pos: 32}
-        - {ref: 'std/sfp-ganged@1', id: port-31, at: [233.43, 26.2], rotate: 180, group: uni-1g, rel-pos: 31}
+        - {ref: 'std/sfp-ganged@1', id: port-32, at: [233.43, 10.1], group: uni, rel-pos: 32}
+        - {ref: 'std/sfp-ganged@1', id: port-31, at: [233.43, 26.2], rotate: 180, group: uni, rel-pos: 31}
         - {ref: 'common/led-arrow-sm@1', id: led-port-31-a, at: [234.68, 22.2], skin: down, for: port-31, group: uni-leds, rel-pos: 61}
         - {ref: 'common/led-arrow-sm@1', id: led-port-32-a, at: [237.53, 22.2], skin: up, for: port-32, group: uni-leds, rel-pos: 63}
         - {ref: 'common/led-arrow-sm@1', id: led-port-31-b, at: [241.23, 22.2], skin: down, for: port-31, group: uni-leds, rel-pos: 62}
         - {ref: 'common/led-arrow-sm@1', id: led-port-32-b, at: [244.08, 22.2], skin: up, for: port-32, group: uni-leds, rel-pos: 64}
-        - {ref: 'std/sfp-ganged@1', id: port-34, at: [253.57, 10.1], group: uni-1g, rel-pos: 34}
-        - {ref: 'std/sfp-ganged@1', id: port-33, at: [253.57, 26.2], rotate: 180, group: uni-1g, rel-pos: 33}
+        - {ref: 'std/sfp-ganged@1', id: port-34, at: [253.57, 10.1], group: uni, rel-pos: 34}
+        - {ref: 'std/sfp-ganged@1', id: port-33, at: [253.57, 26.2], rotate: 180, group: uni, rel-pos: 33}
         - {ref: 'common/led-arrow-sm@1', id: led-port-33-a, at: [254.82, 22.2], skin: down, for: port-33, group: uni-leds, rel-pos: 65}
         - {ref: 'common/led-arrow-sm@1', id: led-port-34-a, at: [257.68, 22.2], skin: up, for: port-34, group: uni-leds, rel-pos: 67}
         - {ref: 'common/led-arrow-sm@1', id: led-port-33-b, at: [261.38, 22.2], skin: down, for: port-33, group: uni-leds, rel-pos: 66}
         - {ref: 'common/led-arrow-sm@1', id: led-port-34-b, at: [264.22, 22.2], skin: up, for: port-34, group: uni-leds, rel-pos: 68}
-        - {ref: 'std/sfp-ganged@1', id: port-36, at: [267.96, 10.1], group: uni-1g, rel-pos: 36}
-        - {ref: 'std/sfp-ganged@1', id: port-35, at: [267.96, 26.2], rotate: 180, group: uni-1g, rel-pos: 35}
+        - {ref: 'std/sfp-ganged@1', id: port-36, at: [267.96, 10.1], group: uni, rel-pos: 36}
+        - {ref: 'std/sfp-ganged@1', id: port-35, at: [267.96, 26.2], rotate: 180, group: uni, rel-pos: 35}
         - {ref: 'common/led-arrow-sm@1', id: led-port-35-a, at: [269.21, 22.2], skin: down, for: port-35, group: uni-leds, rel-pos: 69}
         - {ref: 'common/led-arrow-sm@1', id: led-port-36-a, at: [272.06, 22.2], skin: up, for: port-36, group: uni-leds, rel-pos: 71}
         - {ref: 'common/led-arrow-sm@1', id: led-port-35-b, at: [275.76, 22.2], skin: down, for: port-35, group: uni-leds, rel-pos: 70}
         - {ref: 'common/led-arrow-sm@1', id: led-port-36-b, at: [278.61, 22.2], skin: up, for: port-36, group: uni-leds, rel-pos: 72}
-        - {ref: 'std/sfp-ganged@1', id: port-38, at: [282.37, 10.1], group: uni-1g, rel-pos: 38}
-        - {ref: 'std/sfp-ganged@1', id: port-37, at: [282.37, 26.2], rotate: 180, group: uni-1g, rel-pos: 37}
+        - {ref: 'std/sfp-ganged@1', id: port-38, at: [282.37, 10.1], group: uni, rel-pos: 38}
+        - {ref: 'std/sfp-ganged@1', id: port-37, at: [282.37, 26.2], rotate: 180, group: uni, rel-pos: 37}
         - {ref: 'common/led-arrow-sm@1', id: led-port-37-a, at: [283.62, 22.2], skin: down, for: port-37, group: uni-leds, rel-pos: 73}
         - {ref: 'common/led-arrow-sm@1', id: led-port-38-a, at: [286.47, 22.2], skin: up, for: port-38, group: uni-leds, rel-pos: 75}
         - {ref: 'common/led-arrow-sm@1', id: led-port-37-b, at: [290.17, 22.2], skin: down, for: port-37, group: uni-leds, rel-pos: 74}
         - {ref: 'common/led-arrow-sm@1', id: led-port-38-b, at: [293.01, 22.2], skin: up, for: port-38, group: uni-leds, rel-pos: 76}
-        - {ref: 'std/sfp-ganged@1', id: port-40, at: [296.75, 10.1], group: uni-1g, rel-pos: 40}
-        - {ref: 'std/sfp-ganged@1', id: port-39, at: [296.75, 26.2], rotate: 180, group: uni-1g, rel-pos: 39}
+        - {ref: 'std/sfp-ganged@1', id: port-40, at: [296.75, 10.1], group: uni, rel-pos: 40}
+        - {ref: 'std/sfp-ganged@1', id: port-39, at: [296.75, 26.2], rotate: 180, group: uni, rel-pos: 39}
         - {ref: 'common/led-arrow-sm@1', id: led-port-39-a, at: [298.0, 22.2], skin: down, for: port-39, group: uni-leds, rel-pos: 77}
         - {ref: 'common/led-arrow-sm@1', id: led-port-40-a, at: [300.86, 22.2], skin: up, for: port-40, group: uni-leds, rel-pos: 79}
         - {ref: 'common/led-arrow-sm@1', id: led-port-39-b, at: [304.56, 22.2], skin: down, for: port-39, group: uni-leds, rel-pos: 78}
         - {ref: 'common/led-arrow-sm@1', id: led-port-40-b, at: [307.4, 22.2], skin: up, for: port-40, group: uni-leds, rel-pos: 80}
-        - {ref: 'std/sfp-ganged@1', id: port-42, at: [311.14, 10.1], group: uni-1g, rel-pos: 42}
-        - {ref: 'std/sfp-ganged@1', id: port-41, at: [311.14, 26.2], rotate: 180, group: uni-1g, rel-pos: 41}
+        - {ref: 'std/sfp-ganged@1', id: port-42, at: [311.14, 10.1], group: uni, rel-pos: 42}
+        - {ref: 'std/sfp-ganged@1', id: port-41, at: [311.14, 26.2], rotate: 180, group: uni, rel-pos: 41}
         - {ref: 'common/led-arrow-sm@1', id: led-port-41-a, at: [312.39, 22.2], skin: down, for: port-41, group: uni-leds, rel-pos: 81}
         - {ref: 'common/led-arrow-sm@1', id: led-port-42-a, at: [315.25, 22.2], skin: up, for: port-42, group: uni-leds, rel-pos: 83}
         - {ref: 'common/led-arrow-sm@1', id: led-port-41-b, at: [318.94, 22.2], skin: down, for: port-41, group: uni-leds, rel-pos: 82}
         - {ref: 'common/led-arrow-sm@1', id: led-port-42-b, at: [321.79, 22.2], skin: up, for: port-42, group: uni-leds, rel-pos: 84}
-        - {ref: 'std/sfp-ganged@1', id: port-44, at: [325.54, 10.1], group: uni-1g, rel-pos: 44}
-        - {ref: 'std/sfp-ganged@1', id: port-43, at: [325.54, 26.2], rotate: 180, group: uni-1g, rel-pos: 43}
+        - {ref: 'std/sfp-ganged@1', id: port-44, at: [325.54, 10.1], group: uni, rel-pos: 44}
+        - {ref: 'std/sfp-ganged@1', id: port-43, at: [325.54, 26.2], rotate: 180, group: uni, rel-pos: 43}
         - {ref: 'common/led-arrow-sm@1', id: led-port-43-a, at: [326.79, 22.2], skin: down, for: port-43, group: uni-leds, rel-pos: 85}
         - {ref: 'common/led-arrow-sm@1', id: led-port-44-a, at: [329.64, 22.2], skin: up, for: port-44, group: uni-leds, rel-pos: 87}
         - {ref: 'common/led-arrow-sm@1', id: led-port-43-b, at: [333.34, 22.2], skin: down, for: port-43, group: uni-leds, rel-pos: 86}
         - {ref: 'common/led-arrow-sm@1', id: led-port-44-b, at: [336.19, 22.2], skin: up, for: port-44, group: uni-leds, rel-pos: 88}
-        - {ref: 'std/sfp-ganged@1', id: port-46, at: [339.94, 10.1], group: uni-1g, rel-pos: 46}
-        - {ref: 'std/sfp-ganged@1', id: port-45, at: [339.94, 26.2], rotate: 180, group: uni-1g, rel-pos: 45}
+        - {ref: 'std/sfp-ganged@1', id: port-46, at: [339.94, 10.1], group: uni, rel-pos: 46}
+        - {ref: 'std/sfp-ganged@1', id: port-45, at: [339.94, 26.2], rotate: 180, group: uni, rel-pos: 45}
         - {ref: 'common/led-arrow-sm@1', id: led-port-45-a, at: [341.19, 22.2], skin: down, for: port-45, group: uni-leds, rel-pos: 89}
         - {ref: 'common/led-arrow-sm@1', id: led-port-46-a, at: [344.04, 22.2], skin: up, for: port-46, group: uni-leds, rel-pos: 91}
         - {ref: 'common/led-arrow-sm@1', id: led-port-45-b, at: [347.74, 22.2], skin: down, for: port-45, group: uni-leds, rel-pos: 90}
         - {ref: 'common/led-arrow-sm@1', id: led-port-46-b, at: [350.58, 22.2], skin: up, for: port-46, group: uni-leds, rel-pos: 92}
-        - {ref: 'std/sfp-ganged@1', id: port-48, at: [354.32, 10.1], group: uni-1g, rel-pos: 48}
-        - {ref: 'std/sfp-ganged@1', id: port-47, at: [354.32, 26.2], rotate: 180, group: uni-1g, rel-pos: 47}
+        - {ref: 'std/sfp-ganged@1', id: port-48, at: [354.32, 10.1], group: uni, rel-pos: 48}
+        - {ref: 'std/sfp-ganged@1', id: port-47, at: [354.32, 26.2], rotate: 180, group: uni, rel-pos: 47}
         - {ref: 'common/led-arrow-sm@1', id: led-port-47-a, at: [355.57, 22.2], skin: down, for: port-47, group: uni-leds, rel-pos: 93}
         - {ref: 'common/led-arrow-sm@1', id: led-port-48-a, at: [358.43, 22.2], skin: up, for: port-48, group: uni-leds, rel-pos: 95}
         - {ref: 'common/led-arrow-sm@1', id: led-port-47-b, at: [362.12, 22.2], skin: down, for: port-47, group: uni-leds, rel-pos: 94}
