@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: mrj21
+version: 1.0.0
+class: port
+profile: networking
+conforms: mrj21
+interface: mrj21
+description: >-
+  MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with
+  twelve contacts on each face, carrying six 10/100/1000 Ethernet ports, in a
+  metal shell with a guide hole at two diagonal corners; the connector of
+  high-density Gigabit line cards such as the Nokia 7750 M48-1GB-XP-TX MDA-XP,
+  broken out to RJ-45 by a cable. Authored as TE draws the mating face, the
+  upper blade offset right.
+size: {w: 28.92, h: 13.45}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The shell's mating face, off TE customer view model C-1761482-4 rev G (part
+  1761482-4), front view, which is drawn at 2:1. No panel cutout is dimensioned
+  in anything held, so the part is the shell face; no depth is stated.
+attrs: {media: mrj21}
+unplaced: >-
+  nothing seats this yet. It exists for the eight connectors of the Nokia 7750
+  M48-1GB-XP-TX MDA-XP (MDA-XP Installation Guide 9302180206 p43 Figure 13,
+  "eight mini RJ21 connectors", six ports each), which the next MDA-XP change
+  models and seats on end in an IOM3-XP bay.
+provenance:
+  source: >-
+    drawing - TE Connectivity customer view model drawing C-1761482-4 rev G,
+    30-Apr-19, the 2D DXF of part 1761482-4 "MRJ21 48POS RCPT ASSY PRESS FI"
+    (TE marks it obsolete, and marks the sheet a representation, not the
+    controlled customer drawing). The front view carries no dimensions.
+  scale: >-
+    drawing - two quantities fix the view at 2:1. The contact pairs repeat every
+    5.0 drawing units against TE's stated 2.5 mm centerline (product data for
+    1761482-1), and the face measures 26.90 units from its top edge to the
+    board line, 13.45 mm, against TE's stated connector height of 13.56 (the
+    0.11 is the board standoff). A third check: the Nokia MDA-XP guide p43
+    Figure 13 draws eight of them on end at 19.05 pitch, each 13.4 across.
+  size: 'drawing - shell outer edges 86.58 and 144.42, top 114.91, board line 88.01 in the view; halved: 28.92 x 13.45'
+  opening: >-
+    drawing - the keystone opening is four nested loops in the view (offsets
+    3.07, 2.1, 1.9, 1.6 about the corner centres), the outermost drawn as the
+    shroud and the innermost as the insert. Upper cavity top edge x 8.66-22.30
+    at y 1.63, lower cavity bottom edge x 6.15-19.88 at y 11.82 (mm from the
+    shell's top left); the concave S at the upper left about (1.50, 2.38).
+  contacts: >-
+    drawing - the upper and lower blades 15.40 x 2.86, offset 2.5 from each
+    other; twelve contacts on each face of each blade, pairs 1.0 apart on a
+    2.5 pitch, 48 in all. Contact width 0.25 as drawn; the exposed length is
+    estimated.
+  guide-holes: 'drawing - diameter 2.4 (inside a 2.8 boss) at (3.02, 3.12) and (25.90, 10.32)'
+  colour: 'estimated - a plated metal shell and a black insert, the usual finish; no photograph is held'
+elements:
+  opening: {at: [0.0, 0.0], size: [28.92, 13.45], class: cutout}
+connection-points:
+  mate: {at: [14.46, 6.725], direction: front}
+skins: [default]
