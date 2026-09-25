@@ -238,6 +238,23 @@ def test_comparable_reads_the_structured_fields():
     assert {r["value"] for r in facts["power-feed"]["readings"]} == {"ac", "dc"}
 
 
+def test_comparable_cites_the_override_where_only_a_build_states_it():
+    """A back-to-front build of a front-to-back chassis: the chassis does not
+    say back-to-front, so that reading must not cite it."""
+    doc = {"chassis": {"airflow": "front-to-back", "power": "ac"},
+           "configurations": {
+               "f2b": {"kind": "orderable"},
+               "b2f": {"kind": "orderable", "airflow": "back-to-front",
+                       "power": "dc"}}}
+    facts = comparable.resolve(doc)
+    cited = {f: {r["value"]: r["from"] for r in facts[f]["readings"]}
+             for f in ("airflow", "power-feed")}
+    assert cited["airflow"] == {"front-to-back": "chassis.airflow",
+                                "back-to-front": "configurations.*.airflow"}
+    assert cited["power-feed"] == {"ac": "chassis.power",
+                                   "dc": "configurations.*.power"}
+
+
 @pytest.mark.skipif(not (DIST / "devices.json").is_file(),
                     reason="dist/ not built; run ./publish.sh --no-images")
 def test_devices_json_publishes_the_options():

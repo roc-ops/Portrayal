@@ -447,8 +447,14 @@ def resolve(doc):
     opts = device_options(doc)
     structured = {"airflow": [], "power-feed": []}
     for name, key in (("airflow", "airflow"), ("power-feed", "power")):
-        home = f"chassis.{key}" if chassis.get(key) else f"configurations.*.{key}"
-        structured[name] = [_reading(v, v, home) for v in opts[key]]
+        # a value the chassis states cites the chassis; one only a
+        # configuration's override reaches (a back-to-front build of a
+        # front-to-back chassis) cites the configurations
+        own = chassis.get(key) or []
+        own = {own} if isinstance(own, str) else set(own)
+        structured[name] = [_reading(v, v, f"chassis.{key}" if v in own
+                                     else f"configurations.*.{key}")
+                            for v in opts[key]]
     put("power-feed", structured["power-feed"])
 
     for f in FACTS:
