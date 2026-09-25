@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: m4-10gb-xp-xfp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -23,8 +23,15 @@ attrs:
   part-number: 3HE03686AA
   part-number-variants: 3HE03686AA (7750 SR), 3HE03688AA (7450 ESS)
   xfp: 4
+  xfp-10g: 4
   power-draw-max-w: 60
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the SR-7 15.1 guide 3HE14151AAAATQZZA02 p97, which lists
+    3HE03686AA as "7750 SR 4-port 10GBASE - XFP MDA-XP", and the MDA-XP guide 9302180206 p45
+    "Each XFP-type MDA-XP accepts 10GE XFP optical modules" (the OC-192 card is a separate
+    model, nokia/m2-oc192-xp-xfp@1). The export already typed it 10gbase-x-xfp by default;
+    this makes that a statement. Nothing new was measured.
   sources: >-
     datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p36 Figure 8 and p36-37 Table 8
     (the face, its lamps and screws), p18 Table 2 (power), p16 (the model list). SR7 22.7
