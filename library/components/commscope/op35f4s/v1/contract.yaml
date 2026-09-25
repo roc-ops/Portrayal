@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: op35f4s
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) OP35F4S - 4-channel DWDM group filter on the 100 GHz ITU grid: the group port, the DWDM pass-through, a -20 dB test port and the common port. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+fields:
+  model:
+    label: the part number printed under the title
+    type: text
+    default: ''
+  group:
+    label: channel-group letter printed at the group port
+    type: text
+    default: ''
+attrs:
+  model: OP35F4S
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the OP35F4S 4-channel DWDM filter data sheet's p1 photograph
+    of an OP35F4S-N (204 x 599 px) agrees with it in aspect within a few percent, a check rather
+    than a measurement. Depth datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the SC/APC adapters found by colour (their green bodies and yellow laser shutters),
+    which gives each row's position to about half a millimetre; the legends are read off
+    the same photograph. The group letter and part number are fields.
+  seating: >-
+    datasheet - a half-depth module; accepted by a slot's front bay and its rear bay alike,
+    per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-grp: {at: [0.0, 18.10], size: [19.5, 10.4], class: port}
+  adapter-dwdm: {at: [0.0, 29.00], size: [19.5, 10.4], class: port}
+  adapter-tp: {at: [0.0, 39.80], size: [19.5, 10.4], class: port}
+  adapter-com: {at: [0.0, 50.70], size: [19.5, 10.4], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: grp, at: [6.00, 18.80], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: dwdm, at: [6.00, 29.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: tp, at: [6.00, 40.50], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: com, at: [6.00, 51.40], rotate: 90, attrs: {connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
