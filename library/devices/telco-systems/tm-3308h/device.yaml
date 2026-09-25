@@ -6,9 +6,9 @@ maturity: modelled
 manufacturer: Telco Systems
 model: TM-3308H
 aliases:
-- {name: T-Marc 3308, kind: superseded, note: 'the name on the 2019 data sheet (T-Marc 3308/H); the 2025-12 data sheet and product page call the same box TM-3308H'}
+- {name: T-Marc 3308, kind: superseded, note: 'the name on the 2019 and 2025-08 data sheets (T-Marc 3308/H, T-Marc 3308H); the 2025-12 data sheet and product page call the same box TM-3308H'}
 - {name: TMC-3308, kind: vendor, note: 'the model printed on the faceplate and the stem of every ordering code (TMC-3308-x, TMC-3308-2DC, TMC-3308H-2DC)'}
-- {name: TM-3308, kind: variant, note: 'the commercial-temperature (0 to 50 C) build; the H suffix is the hardened -40 to 70 C DC build, TMC-3308H-2DC, and the data sheets describe one face for both'}
+- {name: TM-3308, kind: variant, note: 'the commercial-temperature (0 to 50 C) build; the H suffix is the hardened -40 to 70 C DC build, TMC-3308H-2DC; the data sheets list identical ports for both and draw no face'}
 portfolio: {line: Carrier Ethernet, family: Network Interface Device, series: T-Series}
 description: >-
   Telco Systems (BATM Networks) TM-3308H, formerly T-Marc 3308/H - a half-width 1RU carrier
@@ -26,7 +26,7 @@ provenance:
   sources:
     confidence: datasheet
     note: >-
-      Two data-sheet editions (2019-01 and 2025-12), five vendor renders of which telco.com
+      Three data-sheet editions (2019-01, 2025-08 and 2025-12), five vendor renders of which telco.com
       2024/09/TMC3308.png (about 900 px across the face) is the best straight-ish view, and the
       legacy NetZoom stencil "Telco Systems" (2022), master T-Marc 3308 (F). No installation
       guide is public.
@@ -54,14 +54,17 @@ provenance:
       (latch up). SFP 2/1-2/4 are a 1 x 4 ganged cage on a 14.55 pitch, centres 153.2-196.85,
       from the bright cage walls in the rectified render (145.9, 160.5, 175.1, 189.6, 204.1).
       Each has one oblong lamp to the right of its printed number, 1.0-1.2 mm right of the
-      cage centre (lamps measured at 154.4, 168.85, 183.35, 197.85) - so L61 stays in the
+      cage centre (lamps measured, and placed, at 154.4, 168.85, 183.35, 197.85) - so L61 stays in the
       baseline for these four ON PURPOSE: the lamp sits beside its numeral, not centred on the
       cage, and centring it would draw a face the unit does not have. Numbering as printed.
   jack-lamps:
     confidence: photo-measured
     note: >-
       The render shows two lamp windows on the CON console, and STS and FLT printed under it
-      name them. CON is not Ethernet, so it is the bare std/rj45-ganged@2 with the two windows
+      name them. THE ETH AND CON LEGENDS ARE PLACED AS MEASURED, not centred: the render prints
+      ETH about 1.3 mm below its jack's centre and CON about 1.2 mm above its own, both toward
+      the gap between the two jacks, so L61 reports both and stays in the baseline for them on
+      purpose, as for the SFP lamps. CON is not Ethernet, so it is the bare std/rj45-ganged@2 with the two windows
       placed beside it as common/led-rect-sm@1, for: con, at the corners where
       common/rj45-ganged-eth@1 draws its own - the family's way of drawing a lamped
       non-Ethernet jack (juniper/mx204's BITS).
@@ -96,6 +99,7 @@ attrs:
   power:
     input-voltage: 100-240 VAC, or 24/48 VDC
     psu-redundancy: one internal supply; an optional external redundant AC supply (TMC-3X0-EXTPS-x)
+    dc-input: dual feed, 24/48 VDC (TMC-3308-2DC, TMC-3308H-2DC)
   environmental:
     operating-temp: 0 to 50 C; -40 to 70 C for the TMC-3308H
     humidity: 5 to 95 percent non-condensing
@@ -264,13 +268,13 @@ views:
         - {id: port-1-3, at: [113.55, 22.6], size: [12.7, 11.0], shape: rect}
         - {id: port-1-4, at: [127.65, 22.6], size: [12.7, 11.0], shape: rect}
         - {id: port-2-1, at: [146.07, 26.05], size: [14.25, 10.4], shape: rect}
-        - {id: led-port-2-1, at: [152.9, 37.9], size: [2.8, 1.6], shape: rect}
+        - {id: led-port-2-1, at: [153.0, 37.9], size: [2.8, 1.6], shape: rect}
         - {id: port-2-2, at: [160.62, 26.05], size: [14.25, 10.4], shape: rect}
         - {id: led-port-2-2, at: [167.45, 37.9], size: [2.8, 1.6], shape: rect}
         - {id: port-2-3, at: [175.18, 26.05], size: [14.25, 10.4], shape: rect}
-        - {id: led-port-2-3, at: [182.0, 37.9], size: [2.8, 1.6], shape: rect}
+        - {id: led-port-2-3, at: [181.95, 37.9], size: [2.8, 1.6], shape: rect}
         - {id: port-2-4, at: [189.72, 26.05], size: [14.25, 10.4], shape: rect}
-        - {id: led-port-2-4, at: [196.55, 37.9], size: [2.8, 1.6], shape: rect}
+        - {id: led-port-2-4, at: [196.45, 37.9], size: [2.8, 1.6], shape: rect}
         - {id: led-ps1, at: [56.3, 30.7], size: [4.0, 4.0], shape: circle}
         - {id: led-ps2, at: [65.4, 30.7], size: [4.0, 4.0], shape: circle}
         - {id: btn-reset, at: [46.3, 30.4], size: [4.0, 4.0], shape: circle}
@@ -288,8 +292,8 @@ views:
       - {at: [24.0, 4.2], text: CLASS 1 LASER PRODUCT, font-size: 1.3, anchor: middle, for: chassis}
       - {at: [47.0, 11.8], text: TELCO SYSTEMS, font-size: 2.9, anchor: middle, for: chassis}
       - {at: [48.3, 22.7], text: TMC-3308, font-size: 4.2, anchor: middle, fill: '#2f3337', for: chassis}
-      - {at: [14.3, 15.5], text: ETH, font-size: 1.4, anchor: end, for: eth}
-      - {at: [14.5, 30.3], text: CON, font-size: 1.4, anchor: end, for: con}
+      - {at: [14.3, 16.75], text: ETH, font-size: 1.4, anchor: end, for: eth}
+      - {at: [14.5, 29.1], text: CON, font-size: 1.4, anchor: end, for: con}
       - {at: [19.3, 7.4], text: LNK/ACT, font-size: 1.2, anchor: middle, for: eth}
       - {at: [30.3, 7.4], text: MNG, font-size: 1.2, anchor: middle, for: eth}
       - {at: [17.5, 38.6], text: STS, font-size: 1.2, anchor: middle, for: con}
@@ -305,13 +309,13 @@ views:
         - {ref: 'common/rj45-ganged-eth@1', id: port-1-3, at: [113.55, 22.6], rotate: 180, group: copper, rel-pos: 3}
         - {ref: 'common/rj45-ganged-eth@1', id: port-1-4, at: [127.65, 22.6], rotate: 180, group: copper, rel-pos: 4}
         - {ref: 'std/sfp-ganged@1', id: port-2-1, at: [146.07, 26.05], group: sfp, rel-pos: 1}
-        - {ref: 'common/led-rect-sm@1', id: led-port-2-1, at: [152.9, 37.9], for: port-2-1, group: sfp-leds, rel-pos: 1}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-1, at: [153.0, 37.9], for: port-2-1, group: sfp-leds, rel-pos: 1}
         - {ref: 'std/sfp-ganged@1', id: port-2-2, at: [160.62, 26.05], group: sfp, rel-pos: 2}
         - {ref: 'common/led-rect-sm@1', id: led-port-2-2, at: [167.45, 37.9], for: port-2-2, group: sfp-leds, rel-pos: 2}
         - {ref: 'std/sfp-ganged@1', id: port-2-3, at: [175.18, 26.05], group: sfp, rel-pos: 3}
-        - {ref: 'common/led-rect-sm@1', id: led-port-2-3, at: [182.0, 37.9], for: port-2-3, group: sfp-leds, rel-pos: 3}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-3, at: [181.95, 37.9], for: port-2-3, group: sfp-leds, rel-pos: 3}
         - {ref: 'std/sfp-ganged@1', id: port-2-4, at: [189.72, 26.05], group: sfp, rel-pos: 4}
-        - {ref: 'common/led-rect-sm@1', id: led-port-2-4, at: [196.55, 37.9], for: port-2-4, group: sfp-leds, rel-pos: 4}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-4, at: [196.45, 37.9], for: port-2-4, group: sfp-leds, rel-pos: 4}
         - {ref: 'common/led-indicator@1', id: led-ps1, at: [56.3, 30.7], for: chassis, group: status-leds, rel-pos: 1}
         - {ref: 'common/led-indicator@1', id: led-ps2, at: [65.4, 30.7], for: chassis, group: status-leds, rel-pos: 2}
         - {ref: 'common/reset-button@1', id: btn-reset, at: [46.3, 30.4], for: chassis, group: controls, rel-pos: 1}
@@ -358,3 +362,4 @@ datasheet:
   sha256: 8b28f33f6e61c96344ea8f7a8686c79b8039169e134b724738dae28fbf53ff76
 references:
   - {title: 'T-Marc 3308/H data sheet (2019-01-29)', url: 'https://www.telco.com/wp-content/uploads/2021/03/T-Marc_3308H_29012019.pdf', sha256: b30ed1cc8429f59aa8b32e48b5e3eb27e809f6e7906c36e7a4ea69ebc7fc08c7}
+  - {title: 'T-Marc 3308H data sheet (2025-08)', url: 'https://www.telco.com/wp-content/uploads/2025/09/Telco-Systems-T-Marc-3308H.pdf', sha256: c354a2cfb60d8b5d7e088f6eaa4d7e699af7b0d97bacf826ce34fa7c6beeaf6c}
