@@ -563,7 +563,7 @@ transform above it and nothing is solved twice.
   never plug it. Now a seat, the element drawn at `<slot>-occupant`, is a
   carrier like any other: its component's slots are read at
   `<slot>-occupant/<id>` and keyed with the `module` steps dropped, as P1 keys
-  every slot. Four rules follow from it:
+  every slot. Five rules follow from it:
   - The drawing-less resolver reads a `<slot>-occupant` step as what the caller
     says the slot holds: the map, else the build, else what the slot ships.
     So a reload's gate accepts a plug only while its optic publishes the bore.
@@ -576,9 +576,13 @@ transform above it and nothing is solved twice.
   - An occupant on a card goes in before the card's connection-point markers,
     where the build puts it, so a seated optic holding plugs matches the
     build's optic child for child.
-  Not covered here: an optic the kit seats in a cage on a tilted facet is drawn
-  untilted. `components.json` publishes no facet for a cage, and the kit has no
-  tilt seat. Plugs sit in the optic's own frame and are exact either way.
+  - A cage on a tilted facet tilts what it holds. A card's cage entry in
+    `components.json` publishes the facet it stands `on` as `tilt` (`deg`,
+    `facing`, `on`), or null. The kit then draws the optic the way the build
+    does: scaled by the facet's cos before it turns, with its `at` solved on
+    the foreshortened mates, and carrying `data-tilt-on`, `data-tilt` and
+    `data-tilt-facing`, which 3D reads to stand it on the facet. Plugs sit in
+    the optic's own frame and need nothing more.
 - One home: all of it lives in `kit/swap.js`.
 
 ## 3D

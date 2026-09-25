@@ -416,19 +416,44 @@ function turn([x, y], rotate) {
   return [x * c - y * s, x * s + y * c];
 }
 
+// A CAGE ON A FACET FORESHORTENS WHAT IT HOLDS (P3 amended). A card's cage
+// `on` a tilted facet publishes that facet as `tilt` (render.py
+// `component_cage_tilt`), and the build draws the optic in it
+// `translate(at) scale(...) rotate(...)` - the facet's cos along its axis,
+// about the optic's own origin, applied after the turn. `[sx, sy]` is that
+// scale; [1, 1] for a cage on no facet.
+export function tiltScale(tilt) {
+  if (!tilt) return [1, 1];
+  const c = Math.cos(tilt.deg * Math.PI / 180);
+  return tilt.facing === 'up' || tilt.facing === 'down' ? [1, c] : [c, 1];
+}
+
 // render.py's `seat_at`, for a published cage and a components.json entry.
+// ON A FACET it is `_seat_nested_occupants`' solve instead: the cage's own
+// mate, foreshortened about the cage's origin (`_tilt_offset` on the cage -
+// the published `mate` is the flat seat_point, so `mate - at` is its turned
+// offset), less the optic's own mate, turned and foreshortened the same way.
+// With no tilt both scales are 1 and it is `seat_at` again.
 export function occupantAt(cage, comp) {
   const cx = comp.size.w / 2, cy = comp.size.h / 2;
   const [dx, dy] = turn([comp.mate[0] - cx, comp.mate[1] - cy], cage.rotate);
   const r4 = v => Math.round(v * 1e4) / 1e4;
-  return [r4(cage.mate[0] - cx - dx), r4(cage.mate[1] - cy - dy)];
+  if (!cage.tilt) return [r4(cage.mate[0] - cx - dx), r4(cage.mate[1] - cy - dy)];
+  const [sx, sy] = tiltScale(cage.tilt);
+  const tx = cage.at[0] + sx * (cage.mate[0] - cage.at[0]);
+  const ty = cage.at[1] + sy * (cage.mate[1] - cage.at[1]);
+  return [r4(tx - sx * (cx + dx)), r4(ty - sy * (cy + dy))];
 }
 
 // The same shape as render.py's placement transform: the occupant turns about
-// its OWN centre, with its host's rotate.
+// its OWN centre, with its host's rotate - and is SCALED BEFORE IT TURNS on a
+// facet (instance_group's `tilt`), the scale written as facets.scale_transform
+// writes it (`:.6g`, which pyG is).
 export function occupantTransform(cage, comp) {
   const [x, y] = occupantAt(cage, comp);
+  const [sx, sy] = tiltScale(cage.tilt);
   return `translate(${x},${y})`
+       + (cage.tilt ? ` scale(${pyG(sx)},${pyG(sy)})` : '')
        + (cage.rotate ? ` rotate(${cage.rotate} ${comp.size.w / 2} ${comp.size.h / 2})` : '');
 }
 
@@ -590,6 +615,14 @@ export function occupantAttrs(cage, ref, comp, skinRootAttrs = {}, occId = occup
   out['data-for'] = cage.id;
   const own = (+cage.lift || 0) - (+cage['seat-depth'] || 0);
   if (Math.abs(own) > 1e-9) out['data-z-lift'] = pyG(own);
+  // THE FACET IT STANDS ON, as _seat_nested_occupants names it: the facet
+  // node of the CARD it is seated in (`<card id>--<on>`), and the facing in
+  // the card's frame - what relief.js tiltOf reads to build it tilted in 3D.
+  if (cage.tilt && cage.moduleId) {
+    out['data-tilt-on'] = `${cage.moduleId}--${cage.tilt.on}`;
+    out['data-tilt'] = pyG(cage.tilt.deg);
+    out['data-tilt-facing'] = cage.tilt.facing;
+  }
   return out;
 }
 

@@ -187,12 +187,12 @@ def test_seat_face_seats_the_optic_and_then_its_plugs(world):
 
 
 @needs_node
-@pytest.mark.xfail(strict=True, reason=(
-    "PRE-EXISTING, not P3's: the kit seats an optic in a cage on a tilted facet "
-    "untilted. components.json publishes no facet on a cage entry and swap.js "
-    "has no tilt seat, so the FANT-H's qsfp-2 optic lacks render.py's "
-    "scale(1,0.809017) and data-tilt*. The plugs are exact in either optic."))
 def test_an_optic_the_kit_seats_in_a_tilted_cage_is_the_builds(world):
+    """The FANT-H's qsfp-2 stands on a 36-degree facet. The card's cage
+    entry publishes it (`tilt`), and the kit draws the optic as
+    _seat_nested_occupants does: scale(1,cos) before the turn, its `at`
+    solved on the foreshortened mates, and data-tilt-on/-tilt/-facing -
+    child for child the build's, as its plugs already were."""
     s = scenario(world, "seatFace")
     for nt in NTS:
         bad = parity(world, "ring", CAGE[nt], s["seated"][CAGE[nt]])
