@@ -317,6 +317,23 @@ def test_sfp112_exports_as_other_because_nautobot_has_no_type_for_it():
     assert dx.placed_type(part) == "other"
 
 
+def test_an_other_port_is_labelled_with_its_own_media():
+    """`other` loses the connector, so the label carries it. It was hardcoded
+    "RJ45" (for the Casa rj45-telemetry port) and the Nokia MDA2-e-XP's SFP112
+    cages exported as copper jacks."""
+    assert dx.OTHER_LABEL["sfp112"] == "SFP112"
+    assert dx.OTHER_LABEL["rj45-telemetry"] == "RJ45"
+    assert [a for fam in dx.FAMILY_ATTRS.values() for a, t in fam
+            if t == "other"] == [dx.SFP112_ATTR[0]]
+    labelled = [media for (media, _s), t in dx.PART_MEDIA.items() if t == "other"]
+    assert labelled and all(m in dx.OTHER_LABEL for m in labelled)
+    exports = pathlib.Path(__file__).resolve().parents[2] / "library" / "exports"
+    sfp112 = list(exports.glob("*/module-types/Nokia/*SFP112*.yaml"))
+    assert sfp112, "no SFP112 card export to check"
+    for f in sfp112:
+        assert "label: RJ45" not in f.read_text(), f
+
+
 def test_an_800g_qsfp_dd_card_is_not_typed_400g():
     """`800gbase-x-qsfpdd` is in both targets (NetBox and Nautobot
     TYPE_800GE_QSFP_DD). The card attr is `qsfp-dd-800g` - a rate statement, not
@@ -437,3 +454,61 @@ def test_no_pon_card_still_exports_ethernet():
     assert not bad, "\n".join(bad)
     assert known == STILL_ETHERNET, f"now clean, drop from STILL_ETHERNET: {STILL_ETHERNET - known}"
     assert checked >= 10, f"only {checked} card(s) reached the sweep"
+
+
+# --- a stated rate wins: two gaps the Nokia 7750 SR-1 cards brought ----------
+
+def test_a_cfp2_stating_200g_is_not_the_cage_default():
+    """`200gbase-x-cfp2` is in both targets (NetBox and Nautobot TYPE_200GE_CFP2),
+    so unlike SFP112 it needs no `other`. Without the row a CFP2 port stating
+    200g fell to PART_IFACE's std/cfp2 default, 100gbase-x-cfp2."""
+    part = {"ref": "std/cfp2@1", "attrs": {"media": "cfp2", "speed": "200g"}}
+    assert dx.placed_type(part) == "200gbase-x-cfp2"
+    assert dx.PART_IFACE["std/cfp2"] == "100gbase-x-cfp2"   # the default is unchanged
+
+
+def test_a_card_rj45_stating_100m_is_fast_ethernet():
+    """A card's placement says 10/100; FAMILY_PART's Ethernet answer is 1000base-t
+    and must not be reached. PART_MEDIA and IFACE_TYPE agree on the slug."""
+    part = {"ref": "common/rj45-ganged-eth@1", "attrs": {"media": "rj45", "speed": "100m"}}
+    assert dx.placed_type(part) == "100base-tx"
+    assert dx.PART_MEDIA[("rj45", "100m")] == dx.IFACE_TYPE[("rj45", "100m")]
+
+
+def test_a_management_jack_that_states_its_speed_takes_it():
+    """`role: mgmt` answered 1000base-t before the speed was read, so the SR-1's
+    10/100 mgmt jack disagreed with `oes-1` beside it. Silent, it stays 1G."""
+    eth = {"ref": "common/rj45-ganged-eth@1", "id": "mgmt"}
+    bare = {"ref": "std/rj45@2", "id": "mgmt"}
+    for p in (eth, bare):
+        assert dx.iface_type(p, {"role": "mgmt", "speed": "100m"}, "management") == "100base-tx"
+        assert dx.iface_type(p, {"role": "mgmt", "speed": "1g"}, "management") == "1000base-t"
+        assert dx.iface_type(p, {"role": "mgmt"}, "management") == "1000base-t"
+    assert (dx.iface_type(eth, {"role": "mgmt", "speed": "100m"}, "management")
+            == dx.iface_type(eth, {"role": "oes-control", "speed": "100m"}, "management"))
+
+
+def _nokia_export(kind, model):
+    for p in sorted((LIB / f"exports/netbox/{kind}").glob("*/*.yaml")):
+        d = yaml.safe_load(p.read_text()) or {}
+        if d.get("model") == model:
+            return {i["name"]: i["type"] for i in d.get("interfaces") or []}
+    pytest.fail(f"no {kind} export with model {model!r}")
+
+
+def test_the_me3_cfp2_dco_card_exports_200g():
+    ifaces = _nokia_export("module-types", "ME3-200GB-CFP2-DCO")
+    assert ifaces == {"c1": "200gbase-x-cfp2", "c2": "200gbase-x-cfp2",
+                      "c3": "200gbase-x-cfp2"}
+
+
+def test_the_ccm_e_mgmt_and_oes_ports_are_100base_tx():
+    ifaces = _nokia_export("module-types", "7750 SR-e CCM-e")
+    assert ifaces["mgmt"] == ifaces["oes"] == "100base-tx"
+    assert not {n for n, t in ifaces.items() if t == "1000base-t"}
+
+
+@pytest.mark.parametrize("model", ["7750 SR-1 AC", "7750 SR-1 DC"])
+def test_the_sr1_mgmt_jack_agrees_with_its_siblings(model):
+    ifaces = _nokia_export("device-types", model)
+    assert ifaces["mgmt"] == ifaces["oes-1"] == "100base-tx"

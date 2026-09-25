@@ -288,7 +288,7 @@ SUPERSEDED = {
 DERIVED = {"rack-units", "width-mm", "height-mm", "depth-mm",
            "psu-redundancy", "fan-redundancy"}
 
-POWER_WORDS = ("psu", "power", "pem")
+POWER_WORDS = ("psu", "power", "pem", "psm")
 FAN_WORDS = ("fan", "cooling")
 
 _NUM = re.compile(r"-?\d+(?:\.\d+)?")
@@ -326,9 +326,20 @@ def _reading(value, raw, frm, basis=None, qualifier=None):
     return r
 
 
+def _names_a(name, term, words):
+    """Whether a group's name or term is one of `words`. Whole words only - `re`
+    is inside "furniture" and `fan` is inside "fanless" - but a group is named
+    for what it holds, and it holds more than one: `psus`, `pems`, `fans`. So a
+    token also counts with ONE trailing `s` taken off, which is as far as it
+    goes; "fanless" is still not a fan."""
+    for t in re.split(r"[^a-z0-9]+", f"{name} {term or ''}".lower()):
+        if t in words or (t.endswith("s") and t[:-1] in words):
+            return True
+    return False
+
+
 def _group_readings(doc, words):
-    """Redundancy off the group that holds the bays. Whole words only - `re` is
-    inside "furniture" and `fan` is inside "fanless"."""
+    """Redundancy off the group that holds the bays."""
     out = []
     for name, g in (doc.get("groups") or {}).items():
         g = g or {}
@@ -336,8 +347,7 @@ def _group_readings(doc, words):
         form = str(attrs.get("redundancy") or "").strip()
         if not form:
             continue
-        tokens = set(re.split(r"[^a-z0-9]+", f"{name} {g.get('term') or ''}".lower()))
-        if not tokens & set(words):
+        if not _names_a(name, g.get("term"), words):
             continue
         out.append(_reading(form, attrs.get("redundancy-note") or form,
                             f"groups.{name}.attrs.redundancy"))

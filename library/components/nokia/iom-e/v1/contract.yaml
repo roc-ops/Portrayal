@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: iom-e
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR-e IOM-e (3HE10311AA L3HQ, 3HE10311BA L2HQ, 3HE10311CA L3BQ - one face, three
+  licences), the two-slot-high rear input/output module of the SR-1e, SR-2e and SR-3e that
+  serves the four front MDA-e slots n/1 to n/4: a plain plate with a captive screw on a
+  raised tab at each top corner, one Pwr/Stat lamp, the printed module label and an ejector
+  lever at each end of the bottom edge. No ports of its own. Authored horizontal.
+size: {w: 259.1, h: 70.8, d: 292.1}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  w is SRE p86 Table 28's 10.2 in; h is two 35.4 slot pitches (the table gives 2.8 in,
+  71.1), so it tiles with the CPM-e above it.
+attrs:
+  model: 7750 SR-e IOM-e
+  part-number: 3HE10311AA
+  part-number-variants: 3HE10311AA, 3HE10311BA, 3HE10311CA
+  weight-kg: 4.0
+  power-draw-max-w: 560
+  power-draw-typical-w: 450
+provenance:
+  size: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p86 Table 28: 2.8 x 10.2 x 11.5 in (7.11 x 25.91 x
+    29.21 cm). h is held at 2 x 35.4 = 70.8 so the IOM bays tile on the rear cage's pitch.
+  depth: 'datasheet - 11.5 in (292.1 mm), SRE p86 Table 28'
+  weight: 'datasheet - 4.0 kg (8.82 lb), SRE p86 Table 28'
+  power: >-
+    datasheet - SRE p84 Table 27: IOM-e idle 400, zero traffic 400, typical 450, worst case
+    560 W; worst case at 55C (SRE p83). The MDA-e modules it serves are counted separately
+    in the same table.
+  variants: >-
+    datasheet - SRE p60 Table 12: 3HE10311BA (L2HQ), 3HE10311CA (L3BQ) and 3HE10311AA (L3HQ),
+    "7750 SR-e 200Gb/s Input/Output Module", differing only in the licensed feature set. One
+    face (Fig 15 is the only drawing), so one component with the part numbers as attrs.
+  bandwidth-conflict: >-
+    SRE p59 says each IOM-e "provides 400 Gb/s half-duplex connectivity to MDA-e modules";
+    Table 12 calls every variant a "200Gb/s Input/Output Module". Both are recorded; neither
+    is a face figure.
+  layout: >-
+    drawing - SRE p60 Fig 15 (art 25563) at 1200 dpi, 17.65 px/mm, read on a 1 mm grid. The
+    drawing spans 71.8 from the top of the screw tabs to the bottom of the plate's middle, so
+    heights are scaled by 70.8/71.8: tabs from y 0, plate top edge 1.6, the ends' bottom edge
+    65.9, the levers to 69.4, and the middle of the plate, 32.0-227.1 (steps read at 32 and 227
+    in from the drawing's lower line), down to 70.8; the levers lie over its ends. Raised tabs 0-13.5 and
+    245.6-259.1. Screw centres (5.6, 7.9) and (251.3, 7.9), heads 11.0 (the left read 4.8,
+    moved in to keep the head on the plate; right taken from the CPM-e, whose plate this one
+    shares). Pwr/Stat lamp centre (40.6, 62.3); the label "7750 SR-e IOM-e" centred at 214.3.
+    Levers 10.7-75.0 and 193.4-252.5 (Table 13 key 3). SRE p196 Fig 65 is the same art.
+  lamps: >-
+    datasheet - SRE p196 Table 70: one Pwr/Stat lamp - unlit no power, green slow blink
+    loading firmware, green solid operational. No blue state is listed for the IOM-e (the
+    CPM-e has one). Green #39b54a is the library's.
+  colour: 'estimated - no photograph is staged; charcoal as the MDA-e family, light print. A gap.'
+  serves: 'datasheet - SRE p59: IOM-e in slot n serves MDA-e slots n/1 to n/4'
+  logo-zone: 'reserved on the plain plate; Fig 15 draws no mark'
+  relief: >-
+    borrowed - screws and levers take nokia/nelt-b@1's figures (cyl 1.6 knurled; lever out
+    4.2), themselves borrowed library figures. NOT MEASURED.
+  lifecycle: 'searched only the staged corpus - listed in SRE 21.10; no end-of-life notice searched on the web'
+elements:
+  screw-left: {at: [0.1, 2.4], size: [11.0, 11.0], class: screw}
+  screw-right: {at: [245.8, 2.4], size: [11.0, 11.0], class: screw}
+  lever-left: {at: [10.7, 65.9], size: [64.3, 3.5], class: latch}
+  lever-right: {at: [193.4, 65.9], size: [59.1, 3.5], class: latch}
+  logo-zone: {at: [100.0, 9.6], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#5a6066', confidence: estimated, source: 'nokia/nelt-b@1 ejector lever, the library one figure for a lever. NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#5a6066', confidence: estimated, source: 'nokia/nelt-b@1 ejector lever, the library one figure for a lever. NOT MEASURED'}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one Pwr/Stat lamp
+parts:
+  - {ref: common/led-dot@1, id: led-pwr-stat, group: status-leds, at: [39.6, 61.3], states: {lamp: ['off', {name: loading, color: '#39b54a', behavior: blinking}, {name: operational, color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [129.55, 35.4], direction: rear}
+skins: [default]

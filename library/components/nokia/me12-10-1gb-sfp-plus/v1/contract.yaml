@@ -1,0 +1,196 @@
+format: 1
+kind: module
+name: me12-10-1gb-sfp-plus
+version: 1.1.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia ME12-10/1GB-SFP+ (3HE11903AA), the 12-port 10/1GE SFP+ MDA-e with MACsec, of the 7750 SR-e
+  and the IOM4-e family. Authored horizontal, as the guides draw it: a dark plate notched at both
+  lower corners, a captive screw on each end wing, Stat and Pwr at the upper left, a 2 x 6 stack
+  of SFP+ cages (1-6 top, 7-12 bottom), then a bank of 24 lamps (Lnk and Act for each port) with
+  its numerals, and the ESD mark and model label at the upper right.
+size: {w: 193.0, h: 35.4, d: 195.6}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  w 193.0 (7.6 in) and h 35.4 are the shared wave-1 MDA envelope the SR-e bays are built to; h is the
+  measured slot pitch, not the rounded 1.4 in (35.56) of Table 4. The lower corners are notched
+  (provenance plate-shape). d is 7.7 in, MDAE Table 4.
+attrs:
+  model: 'ME12-10/1GB-SFP+'
+  part-number: 3HE11903AA
+  cli-type: 'me12-10/1gb-sfp+'
+  sfp-plus: 12
+  weight-kg: 1.06
+  power-draw-max-w: 70
+  power-draw-typical-w: 62
+provenance:
+  screw-colour: "photo - the captive screw heads are BLACK, per the owner's lab photos of an installed IOM4-e with an ME1-100GB-CFP2 (2026-09-24); positions stay the drawing's"
+  size: >-
+    datasheet and drawing - the face is the shared wave-1 MDA envelope, 193.0 x 35.4 mm. MDA-e
+    Installation Guide 3HE16330AAAATQZZA02 (20.2) p17-18 Table 4 gives every MDA-e and the MS-ISA2
+    as 1.4 x 7.6 x 7.7 in (3.6 x 19.3 x 19.6 cm). 35.4 rather than 35.56 is the measured slot pitch
+    (SR-3e front, SR-e guide 3HE17927AAAATQZZA03 p50 Fig 10, 304 px at 8.58 px/mm), used so stacked
+    bays tile; the width 193.0 is 7.6 in and measured on SRE p44/p50. MDAE p51 Figure 11 agrees: the
+    plate measures 4918 x 895 px (193.0 wide at 25.48 px/mm; 35.1 tall at that scale, inside the
+    reading).
+  depth: >-
+    datasheet - 7.7 in (19.6 cm), MDAE p17-18 Table 4, the board's depth behind the plate.
+  plate-shape: >-
+    drawing - the plate is not a full rectangle. On MDAE p51 Figure 11 the full-height band runs
+    16.2 to 176.8 mm and the two end wings stop 27.3 mm below the plate top (the lower corners are
+    notched, with a small radius where the wing meets the band). The notches are left unpainted in
+    the skin; the part stays inside 193.0 x 35.4. The same outline, to within 0.1 mm, is drawn on
+    every MDA-e faceplate figure in the guide (Figs 7, 8, 10, 11, 16 measured). The thin strip the
+    figures draw above the plate is the card's top edge in slight perspective and is not part of the
+    face; the face is measured from the plate's top line under it, and the second line 1.6 mm below
+    that line is drawn as the plate's top fold.
+  screws: >-
+    drawing - two captive screws, one on each end wing, heads 10.2 mm across, centres 8.0 mm in from
+    each end and 21.05 mm below the plate top (MDAE p51 Figure 11; the wave-1 family figure is 7.8 /
+    20.8 / 10.3, and XP p88 Fig 39 reads 8.0 / 21.1 / 10.6). Drawn with the cross the figure draws
+    on the head. MDA-e plates have no insertion/extraction handle: the figure's table lists only
+    captive screws, unlike the MDA-e-XP.
+  weight: >-
+    datasheet - 2.33 lb (1.06 kg), MDAE p17-18 Table 4.
+  colour: >-
+    estimated - no photograph of this card is staged. A dark charcoal plate with light legends and a
+    yellow ESD mark at the top right is the wave-1 family reading (the public-source list for the
+    7750 names datasheet cut-outs that are not yet staged); the screw heads are drawn a mid metallic
+    grey. Gap.
+  relief: >-
+    estimated - the two captive screw heads stand proud (cyl 1.6, knurl false): the library's one
+    captive-screw figure, edgecore/agr-panel-screw@1, which is itself estimated and not measured.
+    The lamps carry their own dome from common/led-indicator@1 and common/led-dot@1. Nothing else on
+    the plate is raised in the figure.
+  esd-mark: >-
+    drawing - the ESD warning triangle at the top right (MDAE p51 Figure 11), about 184.0-189.8 x
+    3.0-7.9 mm. Its colour is the family reading (yellow), estimated.
+  logo-zone: >-
+    reserved by the library convention; the figure draws no vendor mark on this plate, so the zone
+    sits on bare metal clear of every drawn feature.
+  lamps-status: >-
+    datasheet - Stat and Pwr at the upper left, legends to their left (Stat above Pwr), centres
+    (11.61, 7.62) and (11.61, 11.7) mm, drawn 2.3 mm across (MDAE p51 Figure 11). Stat: green
+    blinking = initializing, green = operationally up and administratively up, amber = operationally
+    down and administratively up, unlit = administratively down. Pwr: blue = power on, unlit = no
+    power at the board. Composed as common/led-indicator@1 (lamp 2.0 mm).
+  lifecycle: >-
+    searched only the staged corpus - listed in the MDA-e Installation Guide 20.2
+    (3HE16330AAAATQZZA02); no end-of-life notice was searched for on the web.
+  power: >-
+    datasheet - MDAE p16 Table 3 (and SR-e guide p84 Table 27): ME12-10/1GB-SFP+ idle 0, zero rate
+    58, typical (50% line rate, 25C) 62, worst case (100% line rate, 55C) 70 W. max = worst case,
+    typical = typical. The table excludes the optics.
+  layout: >-
+    drawing - MDAE p51 Figure 11 (art 26466), the flat front view, vector, rendered at 1200 dpi.
+    Plate outline px x 3637-8555, top line y 5689, 25.48 px/mm across and 25.28 down (35.4 / 895
+    px). Cage stack: two ganged rows of six, the black openings centred at y 12.60 and 26.98 (row
+    pitch 14.38; the std part carries no row pitch and TE 2007562 measures 15.00, so the figure is
+    followed), columns centred 45.19 ... 102.12 on a 14.23 pitch (the first reads 30.79 through the
+    bezel line), placed at the registry 14.25 pitch about the measured centre 66.505. Lamp bank: six
+    columns at x 119.13, 126.10, 133.07, 140.05, 147.02, 153.98 and four rows at y 13.75 (Lnk 1-6),
+    18.89 (Act 1-6), 23.97 (Lnk 7-12), 29.11 (Act 7-12), drawn 1.6 mm across; numerals 1-6 above the
+    bank and 7-12 below it, Lnk/Act legends to the right of each row, a rule between the second and
+    third rows. Model label at the upper right under the ESD mark, x 167.7-190.3.
+  ports: >-
+    datasheet - MDAE p13 Table 2 and section 4.6: 12 physical ports that accept 1G SFP and 10G SFP+
+    (CLI me12-10/1gb-sfp+), oversubscribed 12-120 Gb/s. Composed as std/sfp-ganged@1. `sfp-plus: 12`
+    carries the 10G rate on the card; 1G SFP in the same cages is not expressed by the one per-card
+    rate (gap).
+  stack: >-
+    the library rule, not a reading - the rows are drawn upper rotate 0 over lower rotate 180
+    (belly-to-belly, L108). Figure 11 draws both rows with the same glyph (a black opening with the
+    grey connector at its bottom) and draws no cage latch tab at all, so it gives no tab reading to
+    overturn the rule; symmetric art is not a reading. Gap: a photograph of the stack would settle
+    it.
+  lamps: >-
+    datasheet - MDAE p52 Table 14 key 4: twelve Lnk and twelve Act lamps. Lnk: green = link, green
+    slow blink = port active, amber slow blink = no optic, amber fast blink = loopback, amber =
+    optic and no link or loss of signal, unlit = disabled. Act: green = active, amber = error, unlit
+    = none. No blink rates are given (gap). Composed as common/led-dot@1 (lamp 1.4 mm; the figure
+    draws 1.6).
+  labels: >-
+    drawing - model label "ME12-10/1GB-SFP+" at the upper right, centred about x 179, baseline 13.7
+    (Fig 11 key 5).
+  gaps: >-
+    No photograph is staged, so the colours are estimated and the stack orientation is the rule.
+    Blink rates are not stated. 1G SFP operation is not expressed by the card rate.
+elements:
+  model-label: {at: [167.7, 11.6], size: [22.6, 2.3], class: label}
+  esd-mark: {at: [184.0, 3.0], size: [5.8, 4.9], class: label}
+  logo-zone: {at: [162.5, 19.5], size: [13, 6], class: label}
+relief:
+  wall: '#23272a'
+  features:
+    - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head, itself estimated and not measured'}
+    - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head, itself estimated and not measured'}
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the 12 SFP+/SFP cages (10GE SFP+ or 1GE SFP, LAN/WAN, MACsec, Sync-E, SETS), one 2 x 6 ganged
+      stack: 1-6 on the top row and 7-12 on the bottom, left to right (MDAE Table 14 key 3)
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      one Lnk lamp per port in the lamp bank right of the cages, rows 1 and 3 (ports 1-6 and 7-12)
+  activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      one Act lamp per port in the lamp bank right of the cages, rows 2 and 4 (ports 1-6 and 7-12)
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the upper left
+parts:
+  - {ref: std/sfp-ganged@1, id: port-1, group: sfp-plus, at: [23.755, 7.4], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2, group: sfp-plus, at: [38.005, 7.4], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-3, group: sfp-plus, at: [52.255, 7.4], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-4, group: sfp-plus, at: [66.505, 7.4], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-5, group: sfp-plus, at: [80.755, 7.4], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-6, group: sfp-plus, at: [95.005, 7.4], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-7, group: sfp-plus, at: [23.755, 21.78], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-8, group: sfp-plus, at: [38.005, 21.78], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-9, group: sfp-plus, at: [52.255, 21.78], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-10, group: sfp-plus, at: [66.505, 21.78], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-11, group: sfp-plus, at: [80.755, 21.78], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-12, group: sfp-plus, at: [95.005, 21.78], rotate: 180, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.61, 5.62], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down, shut down'}, states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: amber, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.61, 9.7], attrs: {description: 'Pwr - blue: power is on; unlit: no power at the board'}, states: {lamp: ['off', {name: blue, color: '#2f7fe0'}]}}
+  - {ref: common/led-dot@1, id: lnk-1, group: link-leds, at: [118.13, 12.75], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2, group: link-leds, at: [125.1, 12.75], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-3, group: link-leds, at: [132.07, 12.75], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-4, group: link-leds, at: [139.05, 12.75], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-5, group: link-leds, at: [146.02, 12.75], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-6, group: link-leds, at: [152.98, 12.75], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1, group: activity-leds, at: [118.13, 17.89], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2, group: activity-leds, at: [125.1, 17.89], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-3, group: activity-leds, at: [132.07, 17.89], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-4, group: activity-leds, at: [139.05, 17.89], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-5, group: activity-leds, at: [146.02, 17.89], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-6, group: activity-leds, at: [152.98, 17.89], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-7, group: link-leds, at: [118.13, 22.97], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-8, group: link-leds, at: [125.1, 22.97], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-9, group: link-leds, at: [132.07, 22.97], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-10, group: link-leds, at: [139.05, 22.97], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-11, group: link-leds, at: [146.02, 22.97], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-12, group: link-leds, at: [152.98, 22.97], attrs: {description: 'Lnk - green: link established; green slow blink: port active; amber slow blink: no optic; amber fast blink: loopback; amber: optic installed and no link, or loss of signal; unlit: disabled. The guide gives no blink rates'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-7, group: activity-leds, at: [118.13, 28.11], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-8, group: activity-leds, at: [125.1, 28.11], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-9, group: activity-leds, at: [132.07, 28.11], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-10, group: activity-leds, at: [139.05, 28.11], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-11, group: activity-leds, at: [146.02, 28.11], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-12, group: activity-leds, at: [152.98, 28.11], attrs: {description: 'Act - green: port active, receiving or transmitting; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]

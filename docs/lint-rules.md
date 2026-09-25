@@ -14,7 +14,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L5 | device | placement refs resolve in the library, and instance ids are unique per view | fix the `ref` (namespace/name@major) or the duplicate id |
 | L6 | device | a bay's default appears in its accepts list | add the default to `accepts`, or change the default |
 | L7 | device | region members reference existing instance ids | name ids that exist in the same view |
-| L8 | device | a configuration seats only what its bays accept | add the occupant to the bay's `accepts`, or seat something the bay takes |
+| L8 | device | a configuration seats only what its bays accept, and only in bays that exist in it | add the occupant to the bay's `accepts`, or seat something the bay takes; for a bay `only-in` scopes out, add the configuration to it or drop the key |
 | L9 | component | a conforms-declared size matches spec/schemas/standards.yaml | take the size from the registry, or drop `conforms` if the part is not the standard aperture |
 | L10 | component | composed parts resolve, ids are unique, composition does not cycle (depth <= 4) | fix the `parts:` refs; a part must not compose itself |
 | L11 | component | interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes | add `connection-points.mate`; do not change the interface in a wrapper |
@@ -22,7 +22,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L13 | device | two placed components do not occupy the same faceplate area | move one, or declare `for:`/`under:` when one deliberately sits on the other |
 | L14 | device | a silkscreen `for:` target exists and is nearby | name the placement or bay the mark annotates, and anchor the mark at it |
 | L15 | device | a device at `modelled` or above has a provenance block good enough for the level | add provenance for every figure, or lower `maturity` |
-| L16 | device | keys inside a view read in manufacturing order | reorder: empty, size, panel, silkscreen, components, regions |
+| L16 | device | keys inside a view read in manufacturing order | reorder: empty, size, open-frame, panel, silkscreen, components, regions |
 | L17 | component, device | a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one | declare the group with term, role and index-origin; join the loose port to a group |
 | L18 | device | a port inherits media from its group rather than restating it | drop the per-port media, or fix the group's `attrs.media` |
 | L19 | device | an indicator declares `for:` the thing it indicates | add `for:` to the lamp placement |

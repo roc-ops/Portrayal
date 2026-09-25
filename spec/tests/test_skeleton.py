@@ -18,7 +18,7 @@ def run(*args):
 
 
 @pytest.mark.skipif(os.environ.get("PORTRAYAL_LINT_ALREADY_RAN") == "1",
-                    reason="lint ran as its own CI job before this suite started")
+                    reason="lint runs as its own CI job, and a merge needs it green")
 def test_lint_green():
     """THE THIRD LINT OF A CI RUN, and the only one that is not free.
 
@@ -26,8 +26,8 @@ def test_lint_green():
     it the critical path INSIDE the suite: it cannot be split across workers, so
     parallelism flattens after two of them. Locally it is worth every second -
     it is what stops a green test run over a library that does not lint. On CI
-    it is guaranteed redundant, because the `lint` job gates the job this runs
-    in and nothing can have reached here without it passing (#183).
+    it is redundant, because the `lint` job runs beside the job this runs in and
+    merge-if-green refuses a head unless every check passed (#183).
     """
     r = run(SPEC / "tools/portrayal/lint.py", "--schemas", SPEC / "schemas", "--library", LIB)
     assert r.returncode == 0, r.stdout + r.stderr

@@ -395,8 +395,8 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
     adapters, built for real, front and rear."""
     devs = devices_reaching_adapters()
     names = sorted(f.parent.name for f in devs)
-    assert names == ["dcp-2", "dcp-m32-cso-zr", "dcp-r-34d-cs", "dcp-r-9d-cs",
-                     "fhd-1ufce"], names
+    assert names == ["ch3000", "dcp-2", "dcp-m32-cso-zr", "dcp-r-34d-cs",
+                     "dcp-r-9d-cs", "fhd-1ufce"], names
     total, bad_caps, rear_total = defaultdict(int), [], 0
     for f in devs:
         out = tmp_path / f.parent.name
@@ -425,8 +425,12 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
 # FS: the populated configuration's four fhd-1mtp6lcd-os2-a@3, six stacked
 # adapters each, on the front; one MTP bulkhead each on the rear. The base
 # configuration ships every bay empty, so it adds nothing.
+# CommScope: the CH3000's ht3584h-x48 rear, six BD31A8-100-H10F plates of four
+# vertical LC/APC adapters - 6 x 4 = 24, one duplex cap seat per vertical
+# adapter as on the FHD cassettes. The plates are scoped to that configuration
+# only, so the undecorated face adds nothing.
 EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
-                         "common/lc-duplex-v-adapter@6": 24}
+                         "common/lc-duplex-v-adapter@6": 48}
 EXPECTED_DEVICE_REAR_SLOTS = 4
 
 

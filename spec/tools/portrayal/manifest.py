@@ -104,7 +104,7 @@ def split_target(t):
 
 
 # the order a view's keys must appear in - the order the part is made
-VIEW_KEY_ORDER = ("size", "panel", "silkscreen", "components", "regions")
+VIEW_KEY_ORDER = ("size", "open-frame", "panel", "silkscreen", "components", "regions")
 PANEL_KEY_ORDER = ("decor", "cutouts")
 COMPONENT_KEY_ORDER = ("bays", "placements")
 

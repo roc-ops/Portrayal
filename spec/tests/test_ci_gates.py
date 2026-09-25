@@ -37,10 +37,12 @@ def steps(job):
     return job.get("steps") or []
 
 
-def test_lint_is_its_own_job_and_the_build_waits_on_it(workflow):
+def test_lint_is_its_own_job_and_the_build_does_not_queue_behind_it(workflow):
+    """`needs: lint` made a run queue twice on a busy pool. The gate it gave is
+    kept by the merge: see test_the_merge_refuses_a_failed_lint."""
     jobs = workflow["jobs"]
     assert "lint" in jobs and "build" in jobs, list(jobs)
-    assert jobs["build"].get("needs") == "lint", jobs["build"].get("needs")
+    assert "needs" not in jobs["build"], jobs["build"].get("needs")
     names = [s.get("name") or s.get("uses", "") for s in steps(jobs["lint"])]
     assert any("lint" == n for n in names), names
     # and it is the FAST job: no build, no suite, no apt
@@ -51,9 +53,31 @@ def test_lint_is_its_own_job_and_the_build_waits_on_it(workflow):
 
 def test_the_build_job_does_not_lint_again(workflow):
     """The second of the three lints. `NO_LINT=1` is honoured by build.sh and is
-    safe here only because the `lint` job gates this one."""
+    safe here only because no head merges without the `lint` job passing."""
     build = yaml.safe_dump(workflow["jobs"]["build"])
     assert "NO_LINT=1 ./publish.sh" in build, build[:400]
+
+
+def test_the_merge_refuses_a_failed_lint():
+    """THE GATE `needs: lint` USED TO BE. With the jobs side by side, the only
+    thing standing between a manifest that does not lint and main is that
+    merge-if-green reads every check-run on the head and refuses on any that did
+    not succeed - and on any still running."""
+    t = (ROOT / ".github/merge-if-green.sh").read_text()
+    assert "check-runs" in t
+    assert '$3!="success"' in t, "a failed check must refuse the merge"
+    assert '$2!="completed"' in t, "a running check must refuse the merge"
+
+
+def test_a_push_to_main_lints_but_does_not_rebuild(workflow):
+    """merge-if-green merges only a green, up-to-date head, so main's tree after
+    the merge is the tree that was tested. The build on the push repeated it and
+    held a self-hosted runner through every merge burst. `workflow_dispatch`
+    keeps a full run on main one click away."""
+    on = workflow.get("on", workflow.get(True))
+    assert "workflow_dispatch" in on, on
+    assert workflow["jobs"]["build"].get("if") == "github.event_name != 'push'"
+    assert "if" not in workflow["jobs"]["lint"]
 
 
 def test_build_sh_still_lints_by_default():
@@ -79,6 +103,28 @@ def test_node_is_installed_rather_than_inherited(workflow):
     users = [p for p in (ROOT / "spec/tests").glob("test_*.py")
              if 'which("node")' in p.read_text()]
     assert len(users) >= 10, f"only {len(users)} modules shell out to node"
+
+
+def test_a_fork_never_reaches_the_self_hosted_pool(workflow):
+    """The runner is chosen by a repository variable so that going public is a
+    settings change - and a settings change is the kind that gets forgotten. A
+    self-hosted machine runs whatever a pull request's tree says and is not
+    thrown away afterwards, so the fork test has to come FIRST in every
+    `runs-on`, before the variable is consulted, and fall back to hosted."""
+    for name, job in workflow["jobs"].items():
+        runs_on = str(job.get("runs-on", ""))
+        assert runs_on.startswith(
+            "${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest')"
+        ), f"{name}: {runs_on}"
+        assert runs_on.rstrip(" }").endswith("'ubuntu-latest'"), f"{name}: {runs_on}"
+
+
+def test_the_suite_log_is_not_in_a_shared_tmp(workflow):
+    """Several runners on one machine share /tmp. A fixed /tmp path lets one
+    job's skip check read another job's log - green for the wrong tree."""
+    build = yaml.safe_dump(workflow["jobs"]["build"])
+    assert "/tmp/pytest.txt" not in build
+    assert "$RUNNER_TEMP/pytest.txt" in build
 
 
 def _pyproject():

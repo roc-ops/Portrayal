@@ -1,0 +1,390 @@
+format: 1
+kind: device
+name: sr-1-ac
+version: 0.1.1
+maturity: modelled
+manufacturer: Nokia
+model: 7750 SR-1 AC (FP4)
+description: >-
+  The 2RU, FP4-based Nokia 7750 SR-1 service router, AC chassis (3HE12299AA/BA/CA - the CR,
+  ER and HE licences of one chassis, 1.5 Tb/s from revision RB). The control and switching
+  (CCM, and the integrated CPM with an IOM5-e) are internal and fixed. The front carries the
+  control and management row, the L-shaped honeycomb air intake and, at the bottom, two
+  horizontal slots for MDA-e-XP or MDA2-e-XP cards. The rear carries two stacked slots for the
+  SR-1 AC PSU (PSU 1 above PSU 2) beside a two-stud safety ground, and four fan trays, FAN 1
+  to FAN 4 from left to right as seen from behind. The sibling nokia/sr-1-dc differs only
+  at the rear, where a fixed -48 VDC terminal block takes the PSU area.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Written first. (1) SR1 = 7750 SR-1 Chassis Installation Guide 25.10, 3HE22130AAAATQZZA01:
+      Figure 4 p47 (front), Figure 5 p48 (rear, AC and DC variants), Figure 6 pp50-52 and
+      Table 7 (front LEDs, ports and controls), Tables 4, 29-36 (variants, dimensions, power),
+      chapter 10 pp206-211 (LEDs), Figure 34 p106 (top view). Every figure used is VECTOR:
+      pdfimages -list finds no raster on pp47-48, 106, and so pdftocairo at 1200 dpi is exact.
+      (2) the part contracts of every seated module. No photograph of an SR-1 is staged;
+      PUBLIC-SOURCES lists NK/2018-11/7750_SR-1_f.jpg and DS 164728, neither fetched.
+  chassis:
+    confidence: datasheet
+    note: >-
+      SR1 Tables 29/30 p89: 3.5 x 19.0 x 24.6 in (8.9 x 48.3 x 62.5 cm), H x W x D, and note 2:
+      "Width includes the integrated flanges for rack mounting". The body between the fold lines
+      is 440.0 (SR1 Figure 4 at 1200 dpi: body 2222-7966 px, ears 1945-8646, 13.055 px/mm),
+      so the flanges are about 21 mm a side and are not drawn. Height 88.9 (2RU); depth 624.8
+      (24.6 in, excluding protrusions: note 3). Weight unpopulated: 31.7 lb (14.38 kg), Table 30.
+  panel-scale:
+    confidence: drawing
+    note: >-
+      Gate 1. SR1 Figure 4 (front) at 1200 dpi: the body measures 5744 x 1166 px over its
+      outer strokes, 13.055 px/mm across and 13.12 down, 0.5 percent apart, so the figure is
+      orthographic. Figure 5 (rear, both variants) measures 5739 x 1145 px: 13.04 across,
+      12.88 down, 1.2 percent apart; positions on the rear are taken at those per-axis scales.
+      Every position below was read on a 1 mm grid laid over those renders and is good to
+      about 0.3 mm.
+  front-layout:
+    confidence: drawing
+    note: >-
+      SR1 Figure 4 p47, positions in mm from the body top-left: chassis label (lens) 15.0-41.8 x
+      9.6-17.2 with "7750 SR-1" / "Service Router" under it; Stat/Pwr lamps (66.4, 8.0/15.1); CF
+      1-3 at x 71.9, y 8.0/11.6/15.1; OT and BT at x 77.1; Crit/Maj/Min at x 82.4 (lamps drawn
+      2.9 across); DTE/DCE slide switch 87.4-91.2 x 9.5-17.4; Console RJ45 centre (102.9, 11.3);
+      Bluetooth lens 114.8-133.5 x 7.2-18.5; a 1 x 4 RJ45 shell 136.0-195.4 x 3.8-18.3 holding
+      Mgmt, 1588/SyncE, OES1, OES2 on a 13.97 pitch (jack edges measured 138.5 / 152.3 / 166.3
+      / 180.2); ACO/LT button centre (200.2, 11.8); Alarm DB9 shell 209.6-230.4 with standoffs
+      at 207.5 / 232.6 (30.9 over both, common/db9-receptacle@1 is 30.8); BITS RJ45 centre
+      (246.5, 11.35); 1PPS SMB centre (260.5, 11.9); CF2 slot 267.2-319.7 x 8.7-19.0; the CF3
+      hinged cover 319.7-371.9 x 6.1-27.7 with its thumbscrew at (348.8, 21.8); ESD warning
+      triangle (376.8, 22.9); legends baseline about 21.0. Intake: a band 63.8-418.2 x
+      27.7-43.6, a block 381.4-432.5 x 6.1-43.6 and a strip 418.2-432.6 x 43.6-82.2. ESD jack
+      centre (13.5, 77.0). MDA slot 1 printed "1" at (33.2, 81.8), slot 2 "2" at (405.6, 81.5).
+  mda-slots:
+    confidence: drawing
+    note: >-
+      SR1 Figure 4 and p53 ("two slots... at the bottom"): both slots 193.0 x 35.4, the MDA
+      envelope of the wave-1 conventions, at x 26.8 and 220.3, y 48.4 (the drawn plate outlines
+      run 25.7-414.0 over their 1.5 mm strokes). Cards are HORIZONTAL and no bay rotates (SR1
+      Figure 55 p166; XP Figure 30). The MDA-e-XP family seats in any SR-1; the MDA2-e-XP family
+      only in the 1.5 Tb/s revisions (3HE12298xxRD and higher, 3HE12299xxRB and higher, SR1 p46),
+      which accepts cannot express. Figure 4 draws slot 1 with an ME6-100GB-QSFP28 and slot 2 with
+      the impedance panel 3HE10312AA, of which one ships with each chassis (SR1 p84). The
+      printed slot numbers "1" and "2" lie inside the bay boxes, in the notched lower corners
+      every MDA plate leaves open (wings 27 mm tall, conventions section 2), which is where
+      Figure 4 shows them readable with a card fitted; L21 reads the bay as a full rectangle.
+  front-controls:
+    confidence: datasheet
+    note: >-
+      SR1 Table 7 pp51-52: Console is an RJ45 UART port; Mgmt, 1588/SyncE and OES1 are
+      10/100 Mb/s Ethernet (OES1 is the GMPLS-UNI IP control channel, OES2 is reserved for
+      future use); ACO/LT is the alarm cut-off / lamp test and Bluetooth pairing button; Alarm
+      is a DB9; BITS is an RJ45 clock input; 1PPS is an SMB 50 ohm output; CF2 is a compact
+      flash drive and CF3 one behind a hinged cover; DTE/DCE is the console mode switch. The
+      Bluetooth lens (key 8) covers the internal transceiver.
+  front-leds:
+    confidence: datasheet
+    note: >-
+      SR1 Table 72 pp206-207 (Stat green / green slow blink / amber; Pwr blue; CF 1-3 green,
+      amber fast blink, amber; BT green blink / green / amber; OT, Crit, Maj red; Min amber) and
+      Table 73 pp208-209 (Mgmt, 1588/SyncE and OES1 link: green 100 Mb/s full-duplex, green
+      blinking half-duplex, amber 10 Mb/s, amber blinking; activity green blinking, amber
+      blinking on errors; OES2 for future use; BITS amber = configured and no clock, green =
+      clock). Which of a jack's two windows is link and which is activity is not stated; led-a
+      is taken as link. CF1 is the internal flash, "currently not used", but its lamp is fitted.
+      The figure numbers the CF lamps 1-3 INSIDE the lamp circles; those numerals sit under the
+      lamp parts and are not drawn. The lamps are drawn 2.9 mm across and are placed as
+      common/led-dot@1 (2 mm), the part that fits the 3.5 mm CF pitch. The 1588/SyncE and
+      BITS jacks are lamped parts although L76 files timing jacks as bare: Table 73 gives
+      both lamps (SyncE link and activity, BITS a clock LED) and Figures 4 and 6 draw two
+      windows on each, so the hardware wins over the rule's role heuristic.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      SR1 Figure 5 p48, AC rear, seen from behind. PSU slots: the drawn supplies span
+      12.8-88.0 x 0.0-42.6 and 43.4-85.2 over their strokes; the 73.7 x 40.6 bays are
+      centred on them at x 13.6, y 1.0 and 44.0. Printed "PSU 1" and "PSU 2" to their left at
+      y 9.1 and 77.9 (centres). Two-stud safety ground (hex nuts about 7.5 across) at (6.8,
+      28.9) and (6.8, 45.0) on a plate 3.0-12.5 x 20.8-60.1, earth symbol at (6.9, 55.5).
+  fan-bays:
+    confidence: drawing
+    note: >-
+      SR1 Figure 5 p48 (both variants alike): the four tray outlines run 93.9-178.1, 178.8-262.9,
+      263.5-347.6 and 348.2-432.7 across and 0.0-85.8 down, a pitch of 84.8; the stated
+      82.8 x 83.1 bays are centred on them at x 94.6 / 179.4 / 264.2 / 349.1, y 1.4. FAN 1-4
+      run left to right as seen from behind and are printed on the top of the chassis (Table 6
+      key 8; SR1 p161 "numbered 1 to 4 from left to right on the top of the chassis").
+  top:
+    confidence: drawing
+    note: >-
+      SR1 Figure 34 p106 (clearance, view from top) prints FAN 4, FAN 3, FAN 2, FAN 1 along
+      the rear edge, upside down as read from the front, FAN 1 at the right. The figure is a
+      schematic (its body aspect is 0.653 against 0.704), so the legends are placed over the
+      fan bays they name rather than where that drawing puts them; y = 0 is the REAR edge of
+      the top view (the viewer draws the front at the image bottom). Nothing else is drawn on
+      the top in any figure; the isometric Figures 36 and 38 show only screw heads along the
+      edges, which are not placed.
+  power:
+    confidence: datasheet
+    note: >-
+      SR1 Table 34 p92: the four fan trays and the PSUs combined draw 34 W idle, 410 W at 25C
+      (50% line rate), 575 W at 40C and 830 W at 55C (100% line rate), EXCLUDING the
+      MDA-e-XP / MDA2-e-XP cards and optics; PSUs run at 90% efficiency. The 830 W is carried as
+      the vendor's system figure with that scope; the cards carry their own figures (Table 35)
+      and optics are extra. The AC PSU is 1600 W high-line / 1000 W low-line (p73).
+  airflow:
+    confidence: datasheet
+    note: >-
+      SR1 p75-76: front intake through the honeycomb vent, rear exhaust through the four fan
+      trays; the PSU shelf has its own front-to-rear stream through each supply's fan.
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph is staged. A charcoal chassis with a light honeycomb intake is taken from
+      the family's dark faceplates and the vendor figures' tints, not observed.
+  ground:
+    confidence: drawing
+    note: >-
+      SR1 p72: a two-stud safety ground left of the PSU area / terminal block, for the
+      Panduit LCD6-10AH-L two-hole 45-degree lug in the accessory kit. It is drawn as two hex
+      nuts in panel decor on a plate, with common/ground-symbol@1 for the printed earth mark:
+      common/ carries no bare earthing stud and the studs in the library belong to other
+      makers, so no part is borrowed for it.
+  sides:
+    confidence: drawing
+    note: >-
+      SR1 Figures 36 and 38 (isometric) draw the right side plain apart from screw heads and
+      the optional rear rack bracket; Figure 34 shows no side features. No figure draws the
+      left side or the bottom square-on.
+attrs:
+  physical:
+    part-number: '3HE12299AA / 3HE12299BA / 3HE12299CA'
+    ru: 2
+    weight-kg: 14.38
+    width-over-flanges-mm: 482.6
+  power:
+    power-max-w: 830
+    power-typical-w: 410
+    power-max-scope: 'four fan trays and the PSUs combined at 55C, 100% line rate, excluding MDAs and optics (SR1 Table 34)'
+    power-envelope: bare
+    power-input-ac: '100-120/220-240 VAC, 50/60 Hz, 12/10 A per source'
+  environmental:
+    operating-temperature: '5 to 40 C normal; -5 to 55 C short-term (SR1 Table 31)'
+    acoustic-noise: '71.2 dBA declared sound power, normal operation'
+  performance:
+    capacity: '3.0 Tb/s half-duplex; 750 Gb/s full-duplex per MDA slot (1.5 Tb/s variants)'
+  features:
+    forwarding: FP4
+  platform:
+    family: 7750 SR
+    mda-slots: 2
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 440.0
+  height: 88.9
+  depth: 624.8
+  ru: 2
+  weight-kg: 14.38
+  airflow: front-to-back
+  color: '#2b2e32'
+  silk: '#e6e8ea'
+gaps:
+- what: photographs
+  scope: [front, rear]
+  reason: needs-photo
+  note: >-
+    No photograph of an SR-1 is staged, so every colour is estimated and the finish of the
+    intake, the label lens and the fan guards is unconfirmed.
+  wanted: NK/2018-11/7750_SR-1_f.jpg and a rear photograph
+groups:
+  mda-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      the two MDA slots at the bottom of the front, 1 at the left and 2 at the right,
+      for MDA-e-XP or MDA2-e-XP cards; MDA2-e-XP only in the 1.5 Tb/s chassis revisions
+      (3HE12298xxRD and higher, 3HE12299xxRB and higher, SR1 p46)
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: 'reaching the router - the RJ45 console, the 10/100 management Ethernet and the two OES control-channel Ethernet ports (OES2 reserved)'
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: 'the clock - the 1588/SyncE Ethernet port, the BITS input and the 1PPS SMB output'
+  alarm:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: db9}
+    description: the DB9 alarm port for external alarm devices
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+    description: ACO/LT - alarm cut-off, lamp test and Bluetooth pairing
+  system-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: Stat, Pwr, CF 1-3, OT, BT, Crit, Maj and Min (SR1 Table 72)
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: FAN 1 to FAN 4, left to right as seen from behind; all four must be fitted while powered
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: 'SR1 p75: four redundant variable-speed fan trays; if a single fan fails the remaining fans provide adequate cooling, and the failed tray must be replaced at once'
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    description: PSU 1 (upper) and PSU 2 (lower), SR-1 AC supplies load-sharing 1+1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'SR1 p73-74: one PSU is required for operation and two for redundancy; two PSUs load-share in a 1+1 configuration and either carries the full load'
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 440.0, h: 88.9}
+    panel:
+      decor:
+        - {id: intake-band, at: [63.8, 27.7], size: [317.6, 15.9], fill: '#b7bcc2'}
+        - {id: intake-block, at: [381.4, 6.1], size: [51.1, 37.5], fill: '#b7bcc2'}
+        - {id: intake-strip, at: [418.2, 43.6], size: [14.4, 38.6], fill: '#b7bcc2'}
+        - {id: intake-band-vent, at: [63.8, 27.7], size: [317.6, 15.9], pattern: vent, pattern-pitch: [3.0, 1.73], vent: 60, confidence: estimated, source: 'SR1 Figure 4 p47 draws the intake as honeycomb; p77 calls it the honeycomb intake vent. Cell size and open area are not documented'}
+        - {id: intake-block-vent, at: [381.4, 6.1], size: [51.1, 37.5], pattern: vent, pattern-pitch: [3.0, 1.73], vent: 60, confidence: estimated, source: 'SR1 Figure 4 p47 draws the intake as honeycomb; p77 calls it the honeycomb intake vent. Cell size and open area are not documented'}
+        - {id: intake-strip-vent, at: [418.2, 43.6], size: [14.4, 38.6], pattern: vent, pattern-pitch: [3.0, 1.73], vent: 60, confidence: estimated, source: 'SR1 Figure 4 p47 draws the intake as honeycomb; p77 calls it the honeycomb intake vent. Cell size and open area are not documented'}
+        - {id: chassis-label, at: [15.0, 9.6], size: [26.8, 7.6], fill: '#e4e7ea', rx: 0.8}
+        - {id: jack-shell, at: [136.0, 3.8], size: [59.4, 14.5], fill: '#b0b5bb', rx: 0.6}
+        - {id: bluetooth-lens, at: [114.8, 7.2], size: [18.7, 11.3], fill: '#1b1d20', rx: 3.0}
+        - {id: dte-dce-switch, at: [87.4, 9.5], size: [3.8, 7.9], fill: '#15171a', rx: 0.8}
+        - {id: dte-dce-slider, at: [87.9, 10.2], size: [2.8, 3.0], fill: '#c9cdd2', rx: 0.4}
+        - {id: cf2-slot, at: [267.2, 8.7], size: [52.8, 10.3], fill: '#15171a', rx: 1.2}
+        - {id: cf2-eject, at: [267.8, 9.4], size: [7.0, 6.4], fill: '#6f757c', rx: 0.8}
+        - {id: cf3-cover, at: [319.7, 6.1], size: [52.2, 21.6], fill: '#4a4f55', rx: 1.4}
+        - {id: cf3-thumbscrew, at: [345.3, 18.3], size: [7.0, 7.0], fill: '#8a9097', rx: 3.5}
+    silkscreen:
+      - {at: [15.0, 22.8], text: '7750 SR-1', font-size: 4.6, anchor: start, for: chassis}
+      - {at: [15.0, 27.1], text: 'Service Router', font-size: 3.3, anchor: start, for: chassis}
+      - {at: [64.6, 8.81], text: 'Stat', font-size: 2.6, anchor: end, for: led-stat}
+      - {at: [64.6, 15.91], text: 'Pwr', font-size: 2.6, anchor: end, for: led-pwr}
+      - {at: [71.9, 5.6], text: 'CF', font-size: 2.0, anchor: middle, for: [led-cf-1, led-cf-2, led-cf-3]}
+      - {at: [79.8, 5.6], text: 'Alarms', font-size: 2.0, anchor: middle, for: [led-ot, led-crit, led-maj, led-min]}
+      - {at: [78.4, 8.59], text: 'OT', font-size: 1.9, anchor: start, for: led-ot}
+      - {at: [77.1, 12.9], text: 'BT', font-size: 1.9, anchor: middle, for: led-bt}
+      - {at: [83.7, 8.59], text: 'Crit', font-size: 1.9, anchor: start, for: led-crit}
+      - {at: [83.7, 12.09], text: 'Maj', font-size: 1.9, anchor: start, for: led-maj}
+      - {at: [83.7, 15.69], text: 'Min', font-size: 1.9, anchor: start, for: led-min}
+      - {at: [89.3, 8.9], text: 'DTE', font-size: 1.9, anchor: middle, for: chassis}
+      - {at: [89.3, 20.2], text: 'DCE', font-size: 1.9, anchor: middle, for: chassis}
+      - {at: [102.9, 21.0], text: 'Console', font-size: 2.0, anchor: middle, for: console}
+      - {at: [144.75, 21.0], text: 'Mgmt', font-size: 2.0, anchor: middle, for: mgmt}
+      - {at: [158.72, 21.0], text: '1588/SyncE', font-size: 2.0, anchor: middle, for: sync-e}
+      - {at: [172.69, 21.0], text: 'OES1', font-size: 2.0, anchor: middle, for: oes-1}
+      - {at: [186.66, 21.0], text: 'OES2', font-size: 2.0, anchor: middle, for: oes-2}
+      - {at: [200.2, 21.0], text: 'ACO/LT', font-size: 2.0, anchor: middle, for: aco-lt}
+      - {at: [220.05, 21.0], text: 'Alarm', font-size: 2.0, anchor: middle, for: alarm}
+      - {at: [246.5, 21.0], text: 'BITS', font-size: 2.0, anchor: middle, for: bits}
+      - {at: [260.5, 21.0], text: '1PPS', font-size: 2.0, anchor: middle, for: pps}
+      - {at: [296.5, 5.4], text: 'CF2', font-size: 2.0, anchor: middle, for: chassis}
+      - {at: [349.0, 5.4], text: 'CF3', font-size: 2.0, anchor: middle, for: chassis}
+      - {at: [33.2, 83.2], text: '1', font-size: 3.4, anchor: middle, for: mda-1}
+      - {at: [405.6, 83.2], text: '2', font-size: 3.4, anchor: middle, for: mda-2}
+      - {id: bt-rune, at: [122.6, 11.35], path: 'M 0 0 L 3 3 L 1.5 4.5 L 1.5 -1.5 L 3 0 L 0 3', stroke-width: 0.4, for: chassis}
+      - {id: esd-warning, at: [376.8, 20.0], path: 'M 0 0 L 3 5.2 L -3 5.2 Z', filled: true, for: chassis}
+      - {id: esd-earth, at: [13.5, 80.9], path: 'M 0 0 L 0 1.6 M -1.9 1.6 L 1.9 1.6 M -1.2 2.6 L 1.2 2.6 M -0.5 3.6 L 0.5 3.6', stroke-width: 0.35, for: esd}
+    components:
+      bays:
+        - {id: mda-1, at: [26.8, 48.4], size: {w: 193.0, h: 35.4}, accepts: [nokia/me6-100gb-qsfp28@1, nokia/me12-100gb-qsfp28@1, nokia/me3-200gb-cfp2-dco@1, nokia/me3-400gb-qsfp-dd@1, nokia/me6-400gb-qsfp-dd@1, nokia/me16-25gb-sfp28-2-100gb@1, nokia/m5e2-100g-qsfp28-2-800g-qdd@1, nokia/m5e8-100g-sfp112-2-800g-qdd@1, nokia/m5e16-100g-sfp112@1, nokia/m5e10-100g-qsfp28@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/sr-e-mda-impedance-panel@1, group: mda-slots, rel-pos: 1}
+        - {id: mda-2, at: [220.3, 48.4], size: {w: 193.0, h: 35.4}, accepts: [nokia/me6-100gb-qsfp28@1, nokia/me12-100gb-qsfp28@1, nokia/me3-200gb-cfp2-dco@1, nokia/me3-400gb-qsfp-dd@1, nokia/me6-400gb-qsfp-dd@1, nokia/me16-25gb-sfp28-2-100gb@1, nokia/m5e2-100g-qsfp28-2-800g-qdd@1, nokia/m5e8-100g-sfp112-2-800g-qdd@1, nokia/m5e16-100g-sfp112@1, nokia/m5e10-100g-qsfp28@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/sr-e-mda-impedance-panel@1, group: mda-slots, rel-pos: 2}
+      placements:
+        - {ref: common/led-dot@1, id: led-stat, at: [65.4, 7.0], group: system-leds, rel-pos: 1, for: chassis, states: ['off', {name: booting, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}, {name: fail, color: '#f5a623'}]}
+        - {ref: common/led-dot@1, id: led-pwr, at: [65.4, 14.1], group: system-leds, rel-pos: 2, for: chassis, states: ['off', {name: 'on', color: '#2f6fd6'}]}
+        - {ref: common/led-dot@1, id: led-cf-1, at: [70.9, 7.0], group: system-leds, rel-pos: 3, for: chassis, states: ['off', {name: active, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}, {name: down, color: '#f5a623'}]}
+        - {ref: common/led-dot@1, id: led-cf-2, at: [70.9, 10.6], group: system-leds, rel-pos: 4, for: chassis, states: ['off', {name: active, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}, {name: down, color: '#f5a623'}]}
+        - {ref: common/led-dot@1, id: led-cf-3, at: [70.9, 14.1], group: system-leds, rel-pos: 5, for: chassis, states: ['off', {name: active, color: '#39b54a'}, {name: fault, color: '#f5a623', behavior: blinking}, {name: down, color: '#f5a623'}]}
+        - {ref: common/led-dot@1, id: led-ot, at: [76.1, 7.0], group: system-leds, rel-pos: 6, for: chassis, states: ['off', {name: over-temperature, color: '#e02020'}]}
+        - {ref: common/led-dot@1, id: led-bt, at: [76.1, 14.1], group: system-leds, rel-pos: 7, for: chassis, states: ['off', {name: pairing, color: '#39b54a', behavior: blinking}, {name: paired, color: '#39b54a'}, {name: pairing-failed, color: '#f5a623'}]}
+        - {ref: common/led-dot@1, id: led-crit, at: [81.4, 7.0], group: system-leds, rel-pos: 8, for: chassis, states: ['off', {name: critical, color: '#e02020'}]}
+        - {ref: common/led-dot@1, id: led-maj, at: [81.4, 10.5], group: system-leds, rel-pos: 9, for: chassis, states: ['off', {name: major, color: '#e02020'}]}
+        - {ref: common/led-dot@1, id: led-min, at: [81.4, 14.1], group: system-leds, rel-pos: 10, for: chassis, states: ['off', {name: minor, color: '#f5a623'}]}
+        - {ref: std/rj45@2, id: console, at: [95.0, 4.7], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/rj45-ganged-eth@1, id: mgmt, at: [138.4, 5.7], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: rj45, speed: 100m, role: mgmt}, states: {led-a: ['off', {name: link-100m, color: '#39b54a'}, {name: link-100m-half, color: '#39b54a', behavior: blinking}, {name: link-10m, color: '#f5a623'}, {name: link-10m-half, color: '#f5a623', behavior: blinking}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: errors, color: '#f5a623', behavior: blinking}]}}
+        - {ref: common/rj45-ganged-eth@1, id: sync-e, at: [152.37, 5.7], rotate: 180, group: timing, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: 1588-synce}, states: {led-a: ['off', {name: link-100m, color: '#39b54a'}, {name: link-100m-half, color: '#39b54a', behavior: blinking}, {name: link-10m, color: '#f5a623'}, {name: link-10m-half, color: '#f5a623', behavior: blinking}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: errors, color: '#f5a623', behavior: blinking}]}}
+        - {ref: common/rj45-ganged-eth@1, id: oes-1, at: [166.34, 5.7], rotate: 180, group: mgmt, rel-pos: 3, attrs: {media: rj45, speed: 100m, role: oes-control}, states: {led-a: ['off', {name: link-100m, color: '#39b54a'}, {name: link-100m-half, color: '#39b54a', behavior: blinking}, {name: link-10m, color: '#f5a623'}, {name: link-10m-half, color: '#f5a623', behavior: blinking}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: errors, color: '#f5a623', behavior: blinking}]}}
+        - {ref: common/rj45-ganged-eth@1, id: oes-2, at: [180.31, 5.7], rotate: 180, group: mgmt, rel-pos: 4, attrs: {media: rj45, speed: 100m, role: reserved}, states: {led-a: ['off'], led-b: ['off']}}
+        - {ref: common/reset-button@1, id: aco-lt, at: [198.2, 9.8], group: controls, rel-pos: 1, for: chassis}
+        - {ref: common/db9-receptacle@1, id: alarm, at: [204.65, 5.9], group: alarm, rel-pos: 1, attrs: {media: db9, role: alarm-io}}
+        - {ref: common/rj45-eth@1, id: bits, at: [238.6, 4.75], rotate: 180, group: timing, rel-pos: 2, attrs: {media: rj48, role: bits}, states: {led-a: ['off', {name: no-clock, color: '#f5a623'}, {name: clock, color: '#39b54a'}], led-b: ['off']}}
+        - {ref: common/smb-jack@1, id: pps, at: [257.0, 8.4], group: timing, rel-pos: 3, attrs: {role: 1pps-out}}
+        - {ref: common/esd-jack@1, id: esd, at: [10.5, 74.0], group: grounding, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [15.0, 9.6], size: {w: 26.8, h: 7.6}, label: Illuminated chassis label}
+  rear:
+    size: {w: 440.0, h: 88.9}
+    panel:
+      decor:
+        - {id: ground-plate, at: [3.0, 20.8], size: [9.5, 39.3], fill: '#9aa0a7', rx: 0.4}
+        - {id: ground-stud-1, at: [3.05, 25.15], size: [7.5, 7.5], shape: octagon, fill: '#c9cdd2'}
+        - {id: ground-stud-2, at: [3.05, 41.25], size: [7.5, 7.5], shape: octagon, fill: '#c9cdd2'}
+    silkscreen:
+      - {at: [7.4, 10.0], text: 'PSU 1', font-size: 2.4, anchor: middle, for: psu-1}
+      - {at: [7.4, 78.8], text: 'PSU 2', font-size: 2.4, anchor: middle, for: psu-2}
+    components:
+      bays:
+        - {id: psu-1, at: [13.6, 1.0], size: {w: 73.7, h: 40.6}, accepts: [nokia/sr-1-psu-ac@1, nokia/sr-1-psu-blank@1], default: nokia/sr-1-psu-ac@1, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [13.6, 44.0], size: {w: 73.7, h: 40.6}, accepts: [nokia/sr-1-psu-ac@1, nokia/sr-1-psu-blank@1], default: nokia/sr-1-psu-ac@1, group: psus, rel-pos: 2}
+        - {id: fan-1, at: [94.6, 1.4], size: {w: 82.8, h: 83.1}, accepts: [nokia/sr-1-fan-tray@1], default: nokia/sr-1-fan-tray@1, group: fans, rel-pos: 1}
+        - {id: fan-2, at: [179.4, 1.4], size: {w: 82.8, h: 83.1}, accepts: [nokia/sr-1-fan-tray@1], default: nokia/sr-1-fan-tray@1, group: fans, rel-pos: 2}
+        - {id: fan-3, at: [264.2, 1.4], size: {w: 82.8, h: 83.1}, accepts: [nokia/sr-1-fan-tray@1], default: nokia/sr-1-fan-tray@1, group: fans, rel-pos: 3}
+        - {id: fan-4, at: [349.1, 1.4], size: {w: 82.8, h: 83.1}, accepts: [nokia/sr-1-fan-tray@1], default: nokia/sr-1-fan-tray@1, group: fans, rel-pos: 4}
+      placements:
+        - {ref: common/ground-symbol@1, id: ground-mark, at: [3.9, 52.5], group: grounding, rel-pos: 1}
+  left:
+    size: {w: 624.8, h: 88.9}
+    empty: >-
+      No staged document draws the left side: SR1 Figures 36, 38, 39 and 40 (the rack and
+      ETSI installs) are isometric from the front right or the rear right, and Figure 34 is a
+      plan view. Nothing on it is documented.
+  right:
+    size: {w: 624.8, h: 88.9}
+    empty: >-
+      Seen only in perspective, in SR1 Figures 36 and 38, which draw a plain side with a few
+      screw heads and the optional rear rack bracket (an accessory, not the chassis); no
+      square-on figure or dimension places any of it, so nothing is drawn.
+  top:
+    size: {w: 440.0, h: 624.8}
+    silkscreen:
+      - {at: [304.0, 6.0], text: 'FAN 1', font-size: 3.0, anchor: middle, rotate: 180, for: chassis}
+      - {at: [219.2, 6.0], text: 'FAN 2', font-size: 3.0, anchor: middle, rotate: 180, for: chassis}
+      - {at: [134.4, 6.0], text: 'FAN 3', font-size: 3.0, anchor: middle, rotate: 180, for: chassis}
+      - {at: [49.5, 6.0], text: 'FAN 4', font-size: 3.0, anchor: middle, rotate: 180, for: chassis}
+  bottom:
+    size: {w: 440.0, h: 624.8}
+    empty: >-
+      No staged document draws the underside of the SR-1; searched the SR1 installation,
+      air-filter and rack-mount figures (chapters 3, 5 and 7), none of which shows it.
+configurations:
+  dual-psu:
+    kind: base
+    default: true
+    description: >-
+      Two AC PSUs and four fan trays, as SR1 Figure 5 draws the AC rear - 1+1 redundant.
+  shipped-bundle:
+    kind: orderable
+    description: >-
+      The AC chassis as it ships: one AC PSU in slot 1 and the blank plate in slot 2 (SR1
+      p47, p73), non-redundant until a second supply is fitted.
+    bays:
+      psu-2: nokia/sr-1-psu-blank@1
+datasheet:
+  title: 'Nokia 7750 SR-1 Chassis Installation Guide 25.10, 3HE 22130 AAAA TQZZA Edition 01'
+  sha256: f527001aa1f43d1c6cb82f21ad2f3ce3bb5fe736ecb0c54143ca625d9c460c7e

@@ -1,0 +1,112 @@
+format: 1
+kind: module
+name: sr-1-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 3HE12301AA, the AC power supply of the 7750 SR-1 (FP4) AC chassis: 1600 W on a
+  high-line feed, 1000 W on low-line. Two slide into the stacked PSU slots at the left of
+  the rear (PSU 1 above PSU 2), load-sharing 1+1. The face carries the supply's own fan
+  behind a four-screw guard with a U-shaped bail handle across it, an IEC C14 inlet turned
+  portrait, the latch lock beside it, the single status lamp at the lower right and a CLEI
+  label under the inlet. It is not interchangeable with any other 7750 supply.
+size: {w: 73.7, h: 40.6, d: 302.3}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 7750 SR-1 AC Power Supply
+  part-number: 3HE12301AA
+  power-output-w: 1600
+  input: ac
+  weight-kg: 1.18
+provenance:
+  sources: >-
+    datasheet - 7750 SR-1 Chassis Installation Guide 25.10, 3HE22130AAAATQZZA01 (SR1): Figure 5
+    p48 (rear view with two PSUs, VECTOR), Figure 24 p74 and Figure 71 p210 (the PSU, named
+    callouts: Handle, AC Receptacle, Latch Lock, LED), Figures 53 and 80 (isometric, which
+    print the CLEI LABEL), section 3.4.1.3 p73 (ratings), Table 25 p74, Table 36 p94, Table 74
+    p210. No photograph of the supply is staged.
+  size: >-
+    datasheet - SR1 Table 36 p94: 1.6 x 2.9 x 11.9 in (4.1 x 7.4 x 30.2 cm), H x W x D, so the
+    face is 73.7 wide and 40.6 tall, horizontal. Figure 5 draws it 75.2 x 42.6 over its
+    outline strokes at the chassis scale (13.04 px/mm across, 12.88 down, 1200 dpi); the
+    stated size is used.
+  depth: 'datasheet - 11.9 in (302.3 mm), SR1 Table 36 p94'
+  weight: 'datasheet - 2.6 lb (1.18 kg), SR1 Table 36 p94'
+  power: >-
+    datasheet - SR1 section 3.4.1.3 p73: each PSU is rated at 1600 W on a high-line AC feed
+    and at 1000 W on a low-line feed. power-output-w carries the high-line 1600; the low-line 1000 is here.
+    Environmental Table 31 p90: 100-120/220-240 VAC, 50/60 Hz, 12/10 A per source.
+  layout: >-
+    drawing - SR1 Figure 5 p48, PSU 1 rendered at 1200 dpi and read on a 1 mm grid, then
+    scaled from the drawn outline (75.2 x 42.6) onto the stated face (x 0.980, y 0.953).
+    Fan centre (21.7, 20.3), guard about 33 across; guard screws at x 6.2 / 38.0, y 5.5 /
+    35.9; handle bail x 2.6-41.2, y 12.0-27.6; C14 centre (53.5, 18.1), portrait, earth pin
+    to the right (the chamfered end), so std/c14-inlet@1 turned 90 clockwise; latch lock
+    x 65.2-69.0, y 14.2-28.6 with a small slot above it at x 68.1-69.6, y 5.9-12.5; LED
+    centre (67.6, 32.5); CLEI label x 43.3-62.1, y 33.4-39.0. Good to about 0.5 mm.
+  status-led: >-
+    datasheet - SR1 Table 74 p210: unlit, AC input below the minimum to turn on; green solid,
+    standby and main outputs normal and delivering power; amber solid, a fault detected.
+    Figure 24 and Figure 71 point "LED" at the round at the lower right.
+  handle: >-
+    drawing - Figure 24 labels "Handle" on the U-bail across the fan; the isometric Figures
+    53 and 80 draw it standing proud of the face. How far proud is not stated.
+  label: >-
+    drawing - Figures 53 and 80 print "CLEI LABEL" on the rectangle under the inlet; drawn as a
+    blank label (no real CLEI code is transcribed).
+  cooling: >-
+    datasheet - SR1 p76: each PSU has an integrated fan that exhausts through the grill on
+    its faceplate; its air enters at the chassis front intake.
+  colour: >-
+    estimated - no photograph is staged. A mid-grey metal face with a dark fan is the common
+    look of a supply of this kind, not an observation.
+  lifecycle: >-
+    searched only the staged corpus - listed in the 25.10 guide; no end-of-life notice was
+    searched for on the web.
+elements:
+  fan-guard: {at: [5.2, 3.8], size: [33.0, 33.0], class: vent}
+  handle: {at: [2.6, 12.0], size: [38.6, 15.6], class: handle}
+  latch: {at: [65.2, 14.2], size: [3.8, 14.4], class: latch}
+  clei-label: {at: [43.3, 33.4], size: [18.8, 5.6], class: label}
+groups:
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the supply's single IEC C14 AC inlet
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the supply's single status lamp, lower right of the face
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [39.5, 8.1], rotate: 90, group: inlets}
+  - {ref: common/led-dot@1, id: led-status, group: status-leds, at: [66.6, 31.5],
+     states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: fault, color: '#f5a623'}]}}
+relief:
+  features:
+    - node: handle
+      uhandle: 14.0
+      dia: 3.0
+      confidence: estimated
+      source: >-
+        the bail stands proud of the face in Figures 53 and 80 (isometric); neither its
+        reach nor its tube is dimensioned
+    - node: latch
+      out: 1.5
+      confidence: estimated
+      source: the latch lock is drawn raised in Figure 24; no document gives a figure
+    - node: fan-guard
+      vent: 8.0
+      confidence: estimated
+      source: >-
+        the fan sits behind an open guard (Figure 24); the depth to the blades is not
+        documented
+connection-points:
+  mate: {at: [36.85, 20.3], direction: rear}
+body:
+  depth: 302.3
+  color: '#a3a9b0'
+skins: [default]

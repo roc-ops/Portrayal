@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: sr-e-mda-impedance-panel
+version: 1.1.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia ACC - SR-e MDA Impedance Panel (3HE10312AA), the blank for an unused MDA slot: a
+  plain plate in the MDA envelope, full height between the two notched lower corners, with a
+  captive screw on each lower end wing. The same part number fills an empty MDA-e slot of
+  the SR-1e, SR-2e and SR-3e and an empty MDA-e-XP slot of the SR-1, which ships with one in
+  slot 2. Authored horizontal.
+size: {w: 193.0, h: 35.4}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the MDA envelope of the wave-1 convention (193.0 x 35.4), borrowed: no guide dimensions
+  the panel itself. The panel IS an MDA-slot occupant in both the SR-1 and the SR-e, which
+  is the proof that the two slot families are one size.
+attrs:
+  model: ACC - SR-e MDA Impedance Panel
+  part-number: 3HE10312AA
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - the MDA-e / MDA-e-XP face, 193.0 x 35.4 (XP p50-51 Tables 26/27, MDAE p17
+    Table 4, measured 193.0 on SRE p44/p50; h the 35.4 slot pitch, SRE p50). SAME part
+    number 3HE10312AA in SR1 (3HE22130AAAATQZZA01) p84 and SRE p72 Table 20.
+  purpose: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p72 section 3.3.3: impedance panels are required
+    on all empty slots "to prevent excess dust accumulation, to help control airflow and
+    electromagnetic interference, and for safety reasons", and "do not have board components
+    or connector pins"; Table 20 lists the five part numbers.
+  layout: >-
+    drawing - the flattest view is the SR-1 front, SR1 p47 Fig 4, slot 2, at 1200 dpi (13.06
+    px/mm): a plain plate with its lower corners notched (the end wings about 28 tall
+    against 27.0-27.4 on the MDA-e-XP and MDA-e figures; 27.2 is used, the family figure)
+    and a captive screw on each wing, centres read 7.7 in and 21.1 down. The family figures
+    of the wave-1 convention are used: full-height band 16.0-177.0, screw centres 7.8 in
+    from each end and 20.8 below the top, heads 10.3 across - the screws go into the same
+    chassis holes an MDA's do. SRE p73 Fig 24 (isometric) draws the same plate with the
+    screws low on the wings.
+  screw-colour: >-
+    photo, by family - the captive screw heads are BLACK. The owner's lab photos of an
+    installed IOM4-e (2026-09-24) show black heads on its MDA-e cards, which take the same
+    chassis holes as this panel; no photograph of the panel itself is staged, so the colour
+    follows the family.
+  colour: >-
+    estimated - Fig 4 is line art and no photograph is staged. Drawn in the charcoal of the
+    MDA family. A gap.
+  logo-zone: >-
+    reserved on the plain plate; no figure draws a mark on it
+  depth: >-
+    NOT STATED - a blanking plate; no guide gives a depth or weight, so none is carried.
+elements:
+  screw-left: {at: [2.65, 15.65], size: [10.3, 10.3], class: screw}
+  screw-right: {at: [180.05, 15.65], size: [10.3, 10.3], class: screw}
+  logo-zone: {at: [76.5, 10.0], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]

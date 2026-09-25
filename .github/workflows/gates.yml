@@ -13,6 +13,9 @@ on:
   pull_request:
   push:
     branches: [main]
+  # A FULL RUN ON MAIN, ON REQUEST. A push to main runs lint only (see `build`
+  # below); this is the button for the day somebody wants the whole thing.
+  workflow_dispatch:
 
 # NO `paths-ignore`, AND THAT IS A DECISION (#183). The obvious saving is to
 # skip the run on a docs-only diff, and this repository cannot: four files under
@@ -39,13 +42,37 @@ concurrency:
   group: gates-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# WHERE THE JOBS RUN IS A REPOSITORY VARIABLE, NOT THIS FILE. While the
+# repository is private, `GATES_RUNNER` names the label of a self-hosted pool
+# (`portrayal-ci`) with six times the cores of a hosted runner; the suite is the
+# long pole of every run and it scales with them. Unset the variable and both
+# jobs are back on `ubuntu-latest` with no edit here - which is the step for
+# going public, and the fallback if the machine is down.
+#
+# A PULL REQUEST FROM A FORK NEVER GETS THE VARIABLE'S ANSWER. A self-hosted
+# runner executes whatever the pull request's tree says, on a machine that is
+# not thrown away afterwards; that is acceptable for branches in this repository
+# and never for a stranger's. The fork test comes first so that forgetting to
+# unset the variable when the repository opens is not the thing that exposes it.
+#
+# WHAT A HOSTED RUNNER GAVE FOR FREE, THIS FILE NOW ASKS FOR: the self-hosted
+# user has no sudo, so apt installs only what is missing; and several runners
+# share one /tmp, so the pytest log lives under the job's own RUNNER_TEMP.
 jobs:
-  # LINT ON ITS OWN, AND FIRST. It is the fastest gate and the one whose failure
-  # is most often the whole story, so it answers in well under a minute instead
-  # of behind a render log; and because `build` waits on it, a broken manifest
-  # costs one short job rather than twenty minutes of rendering and testing.
+  # LINT ON ITS OWN. It is the fastest gate and the one whose failure is most
+  # often the whole story, so it answers in well under a minute instead of
+  # behind a render log.
+  #
+  # `build` NO LONGER WAITS ON IT, and that is a trade. With `needs: lint` a run
+  # joined the runner queue twice - once for lint, then again for build - and on
+  # a busy pool of three the second wait was up to fifteen minutes (#573, the
+  # night of 2026-09-24), longer than the build itself. Now both jobs queue at
+  # once. What a broken manifest costs is a build run that was going to fail
+  # anyway; what lint GATING buys is unchanged, because the gate is the merge:
+  # merge-if-green refuses a head with any check-run that did not succeed, and
+  # lint is one of them.
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
@@ -67,8 +94,14 @@ jobs:
         run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
 
   build:
-    needs: lint
-    runs-on: ubuntu-latest
+    # NOT ON A PUSH TO MAIN. merge-if-green merges only a head that is green AND
+    # up to date with main, and `--merge` of such a head gives main the very tree
+    # that was just built and tested - so the build on the push re-ran twenty
+    # minutes of work on a known answer, and on the self-hosted pool it held one
+    # of three runners through every burst of merges. Lint still runs on the push
+    # (a minute), and `workflow_dispatch` runs everything on request.
+    if: github.event_name != 'push'
+    runs-on: ${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest') || vars.GATES_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4.4.0
@@ -95,7 +128,9 @@ jobs:
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
       # thing this workflow exists to stop happening quietly.
       - name: poppler
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+        run: |
+          command -v pdftoppm \
+            || { sudo apt-get update && sudo apt-get install -y poppler-utils; }
 
       # BUILD BEFORE PYTEST, AND THIS ORDER IS THE POINT. Four test modules -
       # behaviour, config-scope, viewbox, state-css - skip themselves when
@@ -110,10 +145,10 @@ jobs:
       # CI was building 1104 pictures and throwing them away inside the step
       # that costs a quarter of the run.
       #
-      # NO_LINT=1 because the `lint` job above already ran it and this run
-      # cannot have started without it passing. That is the second of the three
-      # lints a run used to do; the third is inside the suite and is skipped for
-      # the same reason, below.
+      # NO_LINT=1 because the `lint` job runs it beside this one, and no head can
+      # merge unless that job passed. That is the second of the three lints a run
+      # used to do; the third is inside the suite and is skipped for the same
+      # reason, below.
       - name: build and publish
         run: NO_LINT=1 ./publish.sh --no-images
 
@@ -134,14 +169,17 @@ jobs:
       #
       # `auto` and not a number, because the runner decides. A GitHub-hosted
       # ubuntu-latest has two cores; a larger runner would use them without this
-      # line being touched.
+      # line being touched. THE SELF-HOSTED POOL CAPS IT IN THE RUNNER'S OWN .env
+      # (PYTEST_XDIST_AUTO_NUM_WORKERS=4, which xdist reads for `auto`): three
+      # runners share six cores, and three jobs at `auto` put 36 workers on
+      # them - tests went from about 6 minutes alone to 13 under load.
       #
       # PORTRAYAL_LINT_ALREADY_RAN retires the third lint of the run.
       # `test_lint_green` shells out and lints the whole library at 76s, which
       # made it the critical path INSIDE the suite - it cannot be split, which is
       # why parallelism flattened after two workers. It is worth its time
-      # locally and is guaranteed redundant here, because the `lint` job gates
-      # this one.
+      # locally and is redundant here, because the `lint` job runs beside this
+      # one and a merge needs both.
       #
       # NOTHING HERE SHARES MUTABLE STATE: the only test that writes outside a
       # tmp fixture makes its own tempfile.mkdtemp(), and the library the rest
@@ -151,7 +189,7 @@ jobs:
           PORTRAYAL_LINT_ALREADY_RAN: '1'
         run: |
           set -o pipefail
-          python3 -m pytest spec/tests -q -rs -n auto | tee /tmp/pytest.txt
+          python3 -m pytest spec/tests -q -rs -n auto | tee "$RUNNER_TEMP/pytest.txt"
 
       # The guard for the failure above, and it checks WHICH test stopped running
       # rather than how many.
@@ -171,13 +209,13 @@ jobs:
       - name: no silent skipping
         if: always()
         run: |
-          if ! grep -qE '[0-9]+ (passed|failed|error)' /tmp/pytest.txt; then
+          if ! grep -qE '[0-9]+ (passed|failed|error)' "$RUNNER_TEMP/pytest.txt"; then
             echo "::error::pytest produced no summary line - the suite did not run."
             echo "::error::A missing interpreter or package looks like a clean result here."
-            tail -20 /tmp/pytest.txt || true
+            tail -20 "$RUNNER_TEMP/pytest.txt" || true
             exit 1
           fi
-          python3 spec/tools/portrayal/check_skips.py /tmp/pytest.txt spec/allowed-skips.txt
+          python3 spec/tools/portrayal/check_skips.py "$RUNNER_TEMP/pytest.txt" spec/allowed-skips.txt
 
       # The exports are committed and a DCIM reads them, so a stale one is a
       # real defect rather than untidiness. publish.sh above has already

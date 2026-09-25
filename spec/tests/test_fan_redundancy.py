@@ -448,7 +448,21 @@ def test_the_comparison_layer_can_now_reach_them():
     modules are the datasheet's count placed symmetrically about the management panel.
     The figure is sourced and the geometry is not, and the census compares the figure -
     which is exactly why it can take a device whose rear is still an estimate.
+
+    SIXTY-NINE AND SEVENTY ARE THE NOKIA 7750 SR-1, AC AND DC: one chassis rear in two
+    builds, four fan trays across the top of it, and a guide sentence (SR1 p75) that
+    gives the form without a digit - "four redundant variable-speed fan trays", with the
+    remaining fans cooling adequately when a single fan fails. Four trays, one allowed
+    to fail, is 3+1 over four bays, and the two devices state it twice because the AC
+    and DC chassis are two part numbers with two rear faces, not one device configured.
+
+    SEVENTY-ONE IS THE NOKIA 7750 SR-12, the first entry with NOTHING SPARE: 3+0 over
+    three vertical trays. The guide says "Three fan trays are required for normal
+    operation" (SR12 p84), a single fan failure takes its whole tray out for replacement
+    (p80), and the chassis rides through a missing tray for only two minutes at 35 C. That
+    is a stated form with a zero in it, not an absence, so the census counts it. The SR-7
+    beside it has one tray and states no form, and is not counted.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 68, n
+    assert n == 71, n
