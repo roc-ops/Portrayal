@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan-805616
-version: 1.0.1
+version: 1.1.0
 class: fan
 behaviour: fills
 profile: networking
@@ -13,6 +13,14 @@ description: UfiSpace FAN-805616 hot-swap fan module (S9311-64D) - a hex rotor
 size: {w: 83.7, h: 80.0}
 attrs: {power-absent: not-published, model: FAN-805616-HCE, airflow: exhaust}
 provenance:
+  intake-skin: >-
+    estimated - the `intake` skin is the FAN-805616-CCD intake unit ('FAN-805616-CCD intake
+    air', S9311-64D datasheet), blue by the S9311-64D HIG's colour rule (red handle for
+    front-to-back, and a different outlook for back-to-front). No held image shows this unit,
+    so its blues are the ones measured on the same vendor's back-to-front render of the
+    S9301-32DB (handle #4666a2, tag #3f7acb, latch #3b6db9 for the release tab), and the
+    release tab is assumed to change colour with the handle as every other UfiSpace
+    touch-point in that render does.
   power: >-
     NOT PUBLISHED. The S9311-64D datasheet names FAN-805616-CCD and FAN-805616-HCE
     only as ordering lines ('FAN-805616-CCD intake air / FAN-805616-HCE exhaust
@@ -111,4 +119,4 @@ fields:
     label: Handle edge
     type: text
     default: '#8f0b21'
-skins: [default]
+skins: [default, intake]

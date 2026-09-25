@@ -884,10 +884,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `ufispace/psu-102-dc@1` | module | psu | 52.9 × 39.7 |  | 1 | 0 | UfiSpace PSU-102-DISB-1 1000W DC PSU - the AC unit's shell with a three-post terminal block where the C14 inl… |
 | `ufispace/psu-120-ac@1` | module | psu | 33.3 × 21 |  | 0 | 0 | UfiSpace 120W AC fixed dual-feed PSU input (S9502 family) - the front-panel window of a NON-REMOVABLE supply,… |
 | `ufispace/psu-120-dc@1` | module | psu | 33.3 × 15.9 |  | 1 | 0 | UfiSpace 120W DC fixed dual-feed PSU input (S9502 family) - the front-panel window of a NON-REMOVABLE supply,… |
-| `ufispace/psu-132-ac@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-AISB1 1300W AC PSU (S9300-32D family) - silver face, red release latch, C15-cord inlet in a … |
+| `ufispace/psu-132-ac@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-AESR 1300W AC PSU (S9300-32D family) - silver face, red release latch, C15-cord inlet in a s… |
 | `ufispace/psu-132-crps-ac@1` | module | psu | 73.5 × 40 |  | 1 | 1 | UfiSpace PSU-132-AEAR-NN 1300W AC PSU (S9601-104BC) - CRPS form factor, black face with a square intake-fan f… |
 | `ufispace/psu-132-crps-dc@1` | module | psu | 73.5 × 40 |  | 1 | 0 | UfiSpace PSU-132-DEGR-NN 1300W DC PSU (S9601-104BC) - CRPS form factor, black face with a square intake-fan f… |
-| `ufispace/psu-132-dc@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-DISB1 1300W DC PSU (S9300-32D family) - silver face, red release latch, two-pole screw-termi… |
+| `ufispace/psu-132-dc@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-DESR 1300W DC PSU (S9300-32D family) - silver face, red release latch, two-pole screw-termin… |
 | `ufispace/psu-151-ac@1` | module | psu | 50.5 × 40.2 |  | 1 | 0 | UfiSpace PSU-151-AESR 150W AC PSU (S6301-56ST family) - C14 inlet, red release latch (exhaust / front-to-back… |
 | `ufispace/psu-151-dc@1` | module | psu | 50.5 × 40.2 |  | 1 | 0 | UfiSpace PSU-151-DESR 150W DC PSU (S6301-56ST family) - screw-terminal block, red release latch (exhaust / fr… |
 | `ufispace/psu-162-ac@1` | module | psu | 50.5 × 40 |  | 3 | 0 | UfiSpace PSU-162-AESR 1600W AC PSU (S9600-30DX) - dark face with a silver mesh intake grille on the left unde… |

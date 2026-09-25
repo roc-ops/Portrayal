@@ -60,6 +60,22 @@ the *published build*, not about the hardware.
   Lint L119 asks any other device with supplies for a feed, as a warning
   baselined for the 32 that do not say yet; L120 reports a build whose `power`
   contradicts the supply it seats (roc-ops/Portrayal#513).
+- Back-to-front builds (`ac-b2f`, `dc-b2f`) on the UfiSpace S9300-32D, S9301-32D,
+  S9301-32DB, S9311-64D and S6301-56ST, which each sold both directions but modelled
+  only front-to-back. They seat the intake supplies and fans with blue latches,
+  handles and "I" airflow tags, coloured from the vendor's back-to-front renders.
+  The parts gained what that needs: `latch-finish` / `latch-edge` on
+  `ufispace/psu-132-ac`, `psu-132-dc`, `psu-151-ac`, `psu-151-dc`, `psu-242-ac` and
+  `psu-242-dc`; `handle-finish` on `ufispace/fan-402825`; and an `intake` skin on
+  `ufispace/fan-405637`, `fan-402825` and `fan-805616`. Each part took a minor
+  bump. The S9110-32X's existing back-to-front builds now use the `intake` skin
+  too; they wore the red "E" tag.
+- DC builds on the Edgecore COR550 (`dc-f2b`, 7926-40XKFB-O-48V-F) and CSR440
+  (`dc`, AS7535-28XB-O-48V-F V2) and the UfiSpace S9620-32E (`dc`,
+  PSU-322-DEJR-NN), and an AC build on the S9502-12SM (`ac`). No held document
+  shows those supply faces, so each is drawn with the other feed's part and
+  says so in its gap. Lint L120 is baselined for the three DC stand-ins, as
+  for the COR580.
 - Every device in `library/dist/devices.lock.json` carries `placement-attrs`: a
   digest of the `attrs` each placed port states for itself (`speed`, `media`,
   `usb`). Retyping one now asks for a patch bump, where before it asked for
@@ -152,6 +168,20 @@ the *published build*, not about the hardware.
   where it used to ask for nothing.
 
 ### Changed
+- `ufispace/psu-132-ac` and `psu-132-dc` (1.1.0) describe and default to the
+  EXHAUST units, PSU-132-AESR and PSU-132-DESR, which are front-to-back for a
+  rear-mounted supply. They claimed the intake AISB1/DISB1 were front-to-back.
+  The S9300-32D and S9301-32DB front-to-back builds named the intake parts and
+  now name the exhaust ones, and their back-to-front builds name the intake
+  ones. The reasoning is on the part's `airflow` provenance, and a
+  `psu-airflow-sku-mapping` gap records that no document for these chassis
+  states the pairing (roc-ops/Portrayal#513).
+- The Edgecore CSR440's airflow is `front-to-back`, not `side`: every row of its
+  datasheet ordering table says so, where the side-breathing CSR310 and CSR200
+  say "Side-to-Side".
+- The COR580 AC build and the DCS510 state `power: [ac, hvdc]`: their 1300 W AC
+  supply is also rated 190-310 VDC. The DCS510's `input-dc` attr, which held
+  that figure and read as a -48 V build it does not sell, is `input-hvdc`.
 - The Edgecore, UfiSpace and Celestica devices spell their input ratings one
   way, `input-ac` and `input-dc` under `attrs.power`, so the SVG root's
   `data-power-input-ac`, `data-psu-ac-input`, `data-psu-input-ac`,

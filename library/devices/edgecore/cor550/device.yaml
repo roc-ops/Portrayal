@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 2.0.5
+version: 2.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
@@ -254,8 +254,8 @@ attrs:
     throughput: 4.0 Tbps (non-blocking)
     port-modes-qsfp28: 40GE, 50GE and 100GE; DAC breakout to 2 x 50GE, 4 x 25GE or 4 x 10GE
     port-modes-qsfp-dd: 400GE fabric interconnect to a COR580 (Ramon) spine
-  power: {power-max-w: 1400, power-typical-w: 1100, power-envelope: unstated, input-ac: '90 to 264
-      VAC, 50-60 Hz', input-dc: 40 to 72 VDC, power-redundancy: '1+1 redundant, load-sharing, hot-swappable'}
+  power: {power-max-w: 1400, power-typical-w: 1100, power-envelope: unstated, input-ac: '90 to 264 VAC,
+      50-60 Hz', input-dc: 40 to 72 VDC, power-redundancy: '1+1 redundant, load-sharing, hot-swappable'}
   thermal:
     airflow: front-to-back
     cooling: 4+1 redundant hot-swappable fan modules, behind a carrier-grade air filter
@@ -285,7 +285,7 @@ attrs:
       GR-63-CORE, GR-1089-CORE (NEBS Level 3). The datasheet footnotes this line '* Pre-test. Certificate
       is by request with fees', so it is a pre-test claim and not a certification.
   lifecycle: {eol: none-announced}
-chassis: {width: 440.0, height: 87.0, depth: 635.0, ru: 2, weight-kg: 19.0, color: '#3c3c3f', airflow: front-to-back, power: ac}
+chassis: {width: 440.0, height: 87.0, depth: 635.0, ru: 2, weight-kg: 19.0, color: '#3c3c3f', airflow: front-to-back}
 gaps:
 - what: lane-lamp-legend
   scope:
@@ -332,15 +332,16 @@ gaps:
     THE FACEPLATE OF THE 48 VDC SUPPLY. The datasheet offers '48 VDC Power Supply: Input Voltage: 40 to
     72 VDC' beside the AC one, but both staged documents draw and photograph only the AC machine - the
     guide's Overview calls out '8. 2 x AC PSUs' and both rear elevations show C14 inlets. There is no
-    DC face to model, so no cor550-psu-dc part was written and no DC configuration is offered rather than
-    the AC part being seated under a DC name, which would be wrong at the connector.
+    DC face to model, so no cor550-psu-dc part was written, and the dc-f2b configuration seats the AC
+    part - wrong at the connector, which is what this gap and lint L120 keep in view until a DC face turns
+    up.
 - what: psu-and-fan-ordering-codes
   scope:
   - rear
   reason: vendor-silent
   wanted: >-
-    THE VENDOR ORDERING CODES FOR THE AC SUPPLY AND THE FAN TRAY. Neither staged document carries an ordering
-    table; the datasheet ends at Regulatory Compliance and the guide's replacement procedures name no
+    THE VENDOR ORDERING CODES FOR THE AC SUPPLY AND THE FAN TRAY. The datasheet's ordering table lists
+    chassis SKUs only (carried on the configurations), and the guide's replacement procedures name no
     part. Both FRUs are therefore named for the chassis, which library/components/README.md allows only
     because no model number exists to use instead. If a COR550 ordering table lands, both parts should
     be renamed to their FRUs and this device should take the major that costs - edgecore/fan-2u-1x1sn@1
@@ -1200,10 +1201,33 @@ configurations:
   ac-f2b:
     kind: base
     default: true
+    power: ac
     description: >-
       The only build either staged document draws: two AC supplies and five front-to-back fan trays. The
-      datasheet offers a 48 VDC supply beside the AC one and neither document pictures it, so no DC configuration
-      is offered - see the dc-supply-face gap.
+      datasheet's ordering table sells it with and without a regional cord (below) and a DC build, which
+      is dc-f2b. Its last row, 7926-40XKFB-O-AC-F Lite (FNPZZ7640001A), is not listed here: nothing held
+      says what 'Lite' leaves out.
+    part-numbers:
+      7926-40XKFB-O-AC-F: {part: FNPZZ7640009A, power-cord: none}
+      7926-40XKFB-O-AC-F-US: {part: FNPZZ7640401A, power-cord: N. America}
+      7926-40XKFB-O-AC-F-EU: {part: FNPZZ7640201A, power-cord: EU}
+      7926-40XKFB-O-AC-F-UK: {part: FNPZZ7640301A, power-cord: UK}
+      7926-40XKFB-O-AC-F-JP: {part: FNPZZ7640501A, power-cord: JP}
+      7926-40XKFB-O-AC-F-TW: {part: FNPZZ7640T01A, power-cord: TW}
+      7926-40XKFB-O-AC-F-CN: {part: FNPZZ7640701A, power-cord: CN}
+  dc-f2b:
+    kind: orderable
+    power: dc
+    description: >-
+      Dual 48 VDC supplies (datasheet: input 40 to 72 VDC; the quick start wires -48 to -60 VDC on #10
+      AWG) and the same five front-to-back fan trays - the datasheet's one DC ordering row. DRAWN WITH
+      THE AC SUPPLY'S FACE, C14 inlet and all, because neither document pictures the DC unit: the build
+      is real and orderable, and what it is fed with is a field a tool filters on, so it is declared rather
+      than left out, and the wrong connector is the dc-supply-face gap.
+    component-attrs:
+      cor550-psu-ac: {input: dc, inlet: dc-terminal}
+    part-numbers:
+      7926-40XKFB-O-48V-F: {part: FNPZZ7640003A, power-cord: none}
 datasheet:
   title: Edgecore COR550 (AS7926-40XKFB) Core Router data sheet
   sha256: e7a8daad0460fa5fc07d66a2d73f67861ace2fb1e82241bcf08683742d29410b

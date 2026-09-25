@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9301-32d
-version: 1.0.13
+version: 1.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9301-32D
@@ -346,17 +346,17 @@ gaps:
     about the hardware.
   wanted: a single-column ufispace/qsfpdd-led-strip-1x4 component
 - what: psu-airflow-sku-mapping
-  scope: [psus, ac, dc]
+  scope: [psus, ac, dc, ac-b2f, dc-b2f]
   reason: vendor-silent
   note: >-
     The datasheet lists four AC/DC PSU SKUs by airflow word (PSU-132-AESR 'exhaust air
     flow', -AISB 'intake air flow', and the DC pair the same way) and the HIG's Figures 6
     and 8 distinguish the two builds only by LATCH COLOUR ('blue latch' for back-to-front,
     'red latch' for front-to-back). No held document joins a part number to a colour or to
-    a system airflow direction, so the configurations here name the airflow and let the
-    PSU components keep their own model attrs rather than asserting a pairing. The fan
-    side IS documented by colour (HIG Fan Overview: blue handle back-to-front, red handle
-    front-to-back) and the red FAN-405637-HD is what the modelled build seats.
+    a system airflow direction. The fan side IS documented by colour (HIG Fan Overview:
+    blue handle back-to-front, red handle front-to-back), and the configurations pair the
+    supplies by inference: exhaust is front-to-back for these rear-mounted supplies, as the red FAN-405637-HD fan is 'exhaust air flow' and the S9600-72XC, sold front-to-back only, lists only exhaust units (the reasoning is on ufispace/psu-132-ac@1's airflow provenance). So ac and dc name PSU-132-AESR/DESR and the b2f
+    builds PSU-132-AISB/DISB. A UfiSpace document stating the pairing would close this.
   wanted: a UfiSpace ordering guide that prints the SKU beside the airflow direction
 - what: mgmt-port-numerals
   scope: [sfp-plus-mgmt]
@@ -710,11 +710,11 @@ configurations:
     kind: base
     power: ac
     description: >-
-      Dual 1300W AC PSUs with front-to-back airflow fans (FAN-405637-HD, red handles) -
-      the build both vendor rear renders show. The back-to-front build (blue handles and
-      latches, FAN-405637-CD) is orderable and is not modelled; no held document ties a
-      PSU part number to a latch colour (see the psu-airflow-sku-mapping gap) and none
-      prints a chassis SKU (see chassis-sku)
+      Dual 1300W AC PSUs (PSU-132-AESR, exhaust, red latch) with front-to-back airflow
+      fans (FAN-405637-HD, red handles) - the build both vendor rear renders show. The
+      back-to-front build is ac-b2f. The PSU part numbers are paired with airflow by
+      inference (see the psu-airflow-sku-mapping gap); no held document prints a chassis
+      SKU (see chassis-sku)
     default: true
   dc:
     kind: orderable
@@ -725,6 +725,53 @@ configurations:
     bays:
       psu-0: ufispace/psu-132-dc@1
       psu-1: ufispace/psu-132-dc@1
+    component-attrs:
+      psu-132-dc:
+        model: PSU-132-DESR
+  ac-b2f:
+    kind: orderable
+    power: ac
+    airflow: back-to-front
+    description: >-
+      Dual 1300W AC PSUs (PSU-132-AISB, intake) with back-to-front fans (FAN-405637-CD) -
+      the HIG's blue-latch, blue-handle build (Figures 6 and 8, Fan Overview). The PSU
+      part number is paired by inference; see the psu-airflow-sku-mapping gap
+    region-context:
+      exhaust: Intake
+    skins:
+      fan-405637: intake
+    component-attrs:
+      psu-132-ac:
+        model: PSU-132-AISB
+        latch-finish: '#3b6db9'
+        latch-edge: '#274a80'
+      fan-405637:
+        model: FAN-405637-CD
+        airflow: intake
+        handle-finish: '#4666a2'
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Dual 1300W DC PSUs (PSU-132-DISB, intake) with back-to-front fans (FAN-405637-CD),
+      blue latches and handles
+    bays:
+      psu-0: ufispace/psu-132-dc@1
+      psu-1: ufispace/psu-132-dc@1
+    region-context:
+      exhaust: Intake
+    skins:
+      fan-405637: intake
+    component-attrs:
+      psu-132-dc:
+        model: PSU-132-DISB
+        latch-finish: '#3b6db9'
+        latch-edge: '#274a80'
+      fan-405637:
+        model: FAN-405637-CD
+        airflow: intake
+        handle-finish: '#4666a2'
 datasheet:
   title: UfiSpace S9301-32D 400G Data Center Switch Datasheet
   url: https://www.ufispace.com/products/datacenter/400g/s9301-32d-400g-data-center-spine-switch

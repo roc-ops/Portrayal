@@ -1,17 +1,25 @@
 format: 1
 kind: module
 name: fan-402825
-version: 1.1.1
+version: 1.2.0
 class: fan
 behaviour: fills
 profile: networking
 description: UfiSpace FAN-402825-HD hot-swap fan module (S9510-28DC family) -
   red tube pull handle looped on the left, a hexagonal grille across the rest of
   the face, and a right-hand flange carrying a red 'E' exhaust tag, a knurled
-  captive thumbscrew and the status LED beneath it; exhaust airflow
+  captive thumbscrew and the status LED beneath it; exhaust airflow. The `intake`
+  skin is the blue-handled intake unit with an 'I' tag
 size: {w: 51.5, h: 42.2}
 attrs: {power-absent: not-published, model: FAN-402825-HD, airflow: exhaust}
 provenance:
+  intake-skin: >-
+    photo-measured - the `intake` skin is the FAN-402825 intake unit (FAN-402825-CDN on the
+    S6301-56ST), drawn from that device's vendor rear render of the blue build
+    (s6301-56st-3-rear): handle median #4867aa over 1299 pixels, airflow tag #496aad over 561,
+    printing 'I' where the exhaust unit prints 'E'. The S6301-56ST HIG states the rule - blue
+    handle for back-to-front, red for front-to-back. `handle-finish` colours the tube handle,
+    which this skin draws as a stroke.
   art: >-
     CORRECTED - THE OLD ART DID NOT MATCH THE FIGURE THIS FILE ALREADY CITED, and that is
     the part worth recording, because the citation was right and only the drawing was
@@ -110,4 +118,9 @@ relief:
         ufispace/fan-402825@1 - unsourced. The HIG's fan FRU LED table gives the lamp's
         STATES in full and nothing about its lens. 0.4 is the same dome on all three
         UfiSpace FRUs: one estimate written three times.
-skins: [default]
+fields:
+  handle-finish:
+    label: Handle colour
+    type: text
+    default: '#c22f2f'
+skins: [default, intake]

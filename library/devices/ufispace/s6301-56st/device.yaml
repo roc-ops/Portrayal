@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s6301-56st
-version: 3.0.2
+version: 3.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S6301-56ST
@@ -309,18 +309,6 @@ gaps:
     the fan FRU and tables its LED without a power figure. L29's standing
     warning is the live count of how much of the chassis total is a floor.
   wanted: a photograph of the fan module's label, or a UfiSpace FRU datasheet.
-- what: intake-airflow-skins-not-drawn
-  scope: [fans, psus]
-  reason: needs-drawing
-  note: >-
-    the datasheet orders both directions - FAN-402825-HDN / -CDN and
-    PSU-151-DESR / -DISB / -AESR / -AISB - and the HIG says the two are told
-    apart by handle colour, red for front-to-back and blue for back-to-front.
-    The rear render s6301-56st-3-rear.png shows the blue set. Every held
-    component draws only the red exhaust unit, so the back-to-front build can be
-    ordered but cannot be skinned, and no configuration is declared for it
-    rather than declare one that would render identically to the red.
-  wanted: blue-handle skins on ufispace/fan-402825, psu-151-dc and psu-151-ac.
 groups:
   ge:
     term: Port
@@ -695,6 +683,52 @@ configurations:
     component-attrs:
       fan-402825:
         model: FAN-402825-HDN
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Dual 150W DC PSUs (PSU-151-DISB, intake) 1+1, dual FAN-402825-CDN fan modules 1+1,
+      back-to-front airflow - blue handles, latches and tags, as the vendor's -3-rear render
+      shows and the HIG's colour rule states
+    region-context:
+      fan-exhaust: Intake
+      psu-bank: Intake
+    skins:
+      fan-402825: intake
+    component-attrs:
+      psu-151-dc:
+        model: PSU-151-DISB
+        latch-finish: '#4b6db1'
+        latch-edge: '#33497a'
+      fan-402825:
+        model: FAN-402825-CDN
+        airflow: intake
+        handle-finish: '#4867aa'
+  ac-b2f:
+    kind: orderable
+    power: ac
+    airflow: back-to-front
+    description: >-
+      Dual 150W AC PSUs (PSU-151-AISB, intake) 1+1, dual FAN-402825-CDN fan modules 1+1,
+      back-to-front airflow
+    bays:
+      psu-0: ufispace/psu-151-ac@1
+      psu-1: ufispace/psu-151-ac@1
+    region-context:
+      fan-exhaust: Intake
+      psu-bank: Intake
+    skins:
+      fan-402825: intake
+    component-attrs:
+      psu-151-ac:
+        model: PSU-151-AISB
+        latch-finish: '#4b6db1'
+        latch-edge: '#33497a'
+      fan-402825:
+        model: FAN-402825-CDN
+        airflow: intake
+        handle-finish: '#4867aa'
 datasheet:
   title: UfiSpace S6301-56ST Datasheet
   url: https://www.ufispace.com/products/datacenter/1g/s6301-56st-l2-l3-management-switch
