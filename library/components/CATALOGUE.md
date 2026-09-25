@@ -779,7 +779,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/m1-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GBASE XFP MDA-XP, M1-10GB-XP-XFP (3HE04274AA; ESS 3HE04273… |
 | `nokia/m10-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 6 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 10-port GE SFP MDA-XP, M10-1GB-XP-SFP (3HE03611AA; ESS 3HE03614AA),… |
 | `nokia/m12-1gb-2-10gb-xp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR 12-port GE SFP + 2-port 10GE XFP combo MDA-XP, printed M12-1GB+2-10GB-XP (3HE0… |
-| `nokia/m12-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 12-port GE SFP MDA-XP, M12-1GB-XP-SFP (3HE07285AA; 3HE07284AA), a c… |
+| `nokia/m12-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 12-port GE SFP MDA-XP, M12-1GB-XP-SFP (3HE07285AA; ESS 3HE07284AA),… |
 | `nokia/m2-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 2-port 10GBASE XFP MDA-XP, M2-10GB-XP-XFP (3HE03685AA; ESS 3HE03687… |
 | `nokia/m2-oc192-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR 2-port OC-192/STM-64 XFP MDA-XP, M2-OC192-XP-XFP (3HE05947AA), a classic half-… |
 | `nokia/m20-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 20-port GE SFP MDA-XP, M20-1GB-XP-SFP (3HE03612AA; ESS 3HE03615AA),… |
