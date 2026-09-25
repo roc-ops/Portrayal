@@ -1,0 +1,91 @@
+format: 1
+kind: module
+name: op34m10c
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) OP34M10C - 10-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -20 dB test port on LC/APC: INP, COM, TP and 1310, and ten channel inputs. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+fields:
+  model:
+    label: the part number printed under the title
+    type: text
+    default: ''
+  ch1:
+    label: wavelength printed at channel port 1
+    type: text
+    default: ''
+  ch2:
+    label: wavelength printed at channel port 2
+    type: text
+    default: ''
+  ch3:
+    label: wavelength printed at channel port 3
+    type: text
+    default: ''
+  ch4:
+    label: wavelength printed at channel port 4
+    type: text
+    default: ''
+  ch5:
+    label: wavelength printed at channel port 5
+    type: text
+    default: ''
+  ch6:
+    label: wavelength printed at channel port 6
+    type: text
+    default: ''
+  ch7:
+    label: wavelength printed at channel port 7
+    type: text
+    default: ''
+  ch8:
+    label: wavelength printed at channel port 8
+    type: text
+    default: ''
+  ch9:
+    label: wavelength printed at channel port 9
+    type: text
+    default: ''
+  ch10:
+    label: wavelength printed at channel port 10
+    type: text
+    default: ''
+attrs:
+  model: OP34M10C
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the OP34M8C / OP34M10C CWDM multiplexer data sheet (p1 photograph of an OP34M10C, 187 x 676)
+    agrees with it in aspect within a few percent, a check rather than a measurement. Depth
+    datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the LC/APC adapters found by colour (their green or blue bodies and yellow laser
+    shutters), which gives each row's position to about half a millimetre; the legends are
+    read off the same photograph. Each block is two horizontal duplex LC adapters stacked, composed as common/lc-duplex-v-adapter@6 turned 90 degrees (13.75 x 9.28 against the photographed rows); its four ports are legended above and below. Channel wavelengths are fields.
+  seating: >-
+    datasheet - "Occupies one half-depth slot"; accepted by a slot's front bay and its rear
+    bay alike, per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth
+    slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: common/lc-duplex-v-adapter@6, id: inp-com, at: [7.36, 16.93], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: tp-1310, at: [7.36, 26.92], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-1-2, at: [7.36, 45.52], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-3-4, at: [7.36, 64.62], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-5-6, at: [7.36, 74.42], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-7-8, at: [7.36, 92.83], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: ch-9-10, at: [7.36, 103.03], rotate: 90, attrs: {connector: LC/APC, housing-finish: '#2fa84f'}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: np34m05
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) NP34M05 - 5-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -20 dB test port: INP, COM, 1310, TP and five channel inputs. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+fields:
+  model:
+    label: the part number printed under the title
+    type: text
+    default: ''
+  ch1:
+    label: wavelength printed at channel port 1
+    type: text
+    default: ''
+  ch2:
+    label: wavelength printed at channel port 2
+    type: text
+    default: ''
+  ch3:
+    label: wavelength printed at channel port 3
+    type: text
+    default: ''
+  ch4:
+    label: wavelength printed at channel port 4
+    type: text
+    default: ''
+  ch5:
+    label: wavelength printed at channel port 5
+    type: text
+    default: ''
+attrs:
+  model: NP34M05
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the NP34M05 5-channel CWDM multiplexer data sheet (p1 photograph of an NP34M05H, 281 x 825)
+    agrees with it in aspect within a few percent, a check rather than a measurement. Depth
+    datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the SC/APC adapters found by colour (their green or blue bodies and yellow laser
+    shutters), which gives each row's position to about half a millimetre; the legends are
+    read off the same photograph. The five channel wavelengths are printed per model (the V, L and H groups - Very Low 1270-1350, Low 1430-1510 and High 1530-1610) and are fields.
+  seating: >-
+    datasheet - "Occupies one half-depth slot"; accepted by a slot's front bay and its rear
+    bay alike, per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth
+    slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-inp: {at: [0.0, 18.10], size: [19.5, 10.4], class: port}
+  adapter-com: {at: [0.0, 28.93], size: [19.5, 10.4], class: port}
+  adapter-in-1310: {at: [0.0, 39.76], size: [19.5, 10.4], class: port}
+  adapter-tp: {at: [0.0, 50.59], size: [19.5, 10.4], class: port}
+  adapter-ch-1: {at: [0.0, 61.42], size: [19.5, 10.4], class: port}
+  adapter-ch-2: {at: [0.0, 72.25], size: [19.5, 10.4], class: port}
+  adapter-ch-3: {at: [0.0, 83.08], size: [19.5, 10.4], class: port}
+  adapter-ch-4: {at: [0.0, 93.91], size: [19.5, 10.4], class: port}
+  adapter-ch-5: {at: [0.0, 104.74], size: [19.5, 10.4], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: inp, at: [6.00, 18.80], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: com, at: [6.00, 29.63], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-1310, at: [6.00, 40.46], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: tp, at: [6.00, 51.29], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-1, at: [6.00, 62.12], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-2, at: [6.00, 72.95], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-3, at: [6.00, 83.78], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-4, at: [6.00, 94.61], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-5, at: [6.00, 105.44], rotate: 90, attrs: {connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
