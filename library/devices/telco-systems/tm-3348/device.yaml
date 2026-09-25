@@ -1,0 +1,433 @@
+format: 1
+kind: device
+name: tm-3348
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: TM-3348
+aliases:
+- {name: T-Marc 3348S, kind: superseded, note: 'the name on the metal (TMC-3348 S) and on the 2021-2024 data sheets; the 2025 data sheet and product page call the same box TM-3348S/SH'}
+- {name: TMC-3348S, kind: vendor, note: 'the model printed on the faceplate and the stem of the ordering codes (TMC-3348S-2AC-x, TMC-3348S-2DC)'}
+- {name: T-Marc 3348SH, kind: variant, note: 'the hardened-temperature version (-40 to 70 C) with the BITS in/out interfaces; that its face matches the S drawn here is not confirmed - see the sh-variant gap'}
+portfolio: {line: Carrier Ethernet, family: Network Interface Device, series: T-Series}
+description: >-
+  Telco Systems (BATM Networks) TM-3348S, formerly T-Marc 3348S - a half-width 1RU carrier
+  Ethernet / MPLS / IP 10GE aggregation and demarcation device: four 10/100/1000 copper
+  ports, eight 100/1000 SFP ports and four 1/10GE SFP+ ports (3 and 4 licence-activated)
+  under four vent grilles, an ETH / CON management stack, SYNC / SD / PS1 / PS2 lamps, two
+  internal AC or DC supplies, for a 19-inch rack or a wall.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      TM-3348S/SH data sheet (telco.com 2025/12), "10GE Ethernet/MPLS/IP Aggregation &
+      Demarcation Device"; the 2024 edition calls it the T-Marc 3348S/SH, and the face prints
+      TMC-3348 S.
+  sources:
+    confidence: datasheet
+    note: >-
+      Two data-sheet editions (2024-05, 2025-12), twelve vendor images of which telco.com
+      2024/09/TMC3348S-E.png (1200 x 331, near square-on, about 5.4 px/mm) is the best of
+      any T-Series model, and the legacy NetZoom stencil "Telco Systems" (2022), master
+      TMC-3348S (CF). No installation guide is public.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Half-width 1RU, 221 x 44 x 235 - the data sheets' "1.75' (1RU) x 8.7' x 9.25' (44mm x
+      221mm x 235mm)". The stencil master's own outline, which has no ears (a half-width box),
+      is 221.25 x 43.79 and agrees to a quarter of a millimetre; the chassis carries the data
+      sheet's figures. "19' rack and wall-mounting
+      options" (2019 edition) - the brackets are not part of the face.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      POSITIONS ARE THE RENDER'S, SHAPES THE STENCIL'S. telco.com 2024/09/TMC3348S-E.png is
+      rectified by a four-corner homography onto the data sheet's 221 x 44 (corners TL 5,106.5
+      TR 1194,113.5 BR 1193,329 BL 5,328.5; about 5.4 px/mm, good to a few tenths of a
+      millimetre) and every jack, cage, lamp, slot, vent and grille is placed where it lands.
+      The NetZoom master TMC-3348S (CF) is retired for positions: its copper jacks sit on a
+      16.7 pitch where this render measures 14.1, and its blocks are 0.5-4 mm from where the
+      render puts them; the TM-3312's render agrees with this one on the shared left half to
+      about 0.2 mm. The stencil keeps its legends and the cage and jack shapes.
+  ports:
+    confidence: photo-measured
+    note: >-
+      Copper 1/1-1/4 (columns 63.35 and 77.45) are a 2 x 2 RJ45 block with lamp windows in
+      their outer corners, common/rj45-ganged-eth@1, upper row turned 180. SFP 2/1-2/8 are a 2
+      x 4 stacked block on a 14.4 pitch (columns 95.95-139.25) with TWO arrow lamps per port
+      in the strip between the rows, ▼▲▼▲ across each column at -4.75, -1.9, +1.8 and +4.65
+      mm from the column centre. SFP+ 3/1-3/4 are one row of four under four slotted vent
+      grilles, each with a lamp dot beside its legend; a LICENSE bracket spans 3/3 and 3/4,
+      which the ordering table says need "Activation license ... for ports 3 & 4". The ETH
+      legend's bracket runs under 1/1-2/8 and on under 3/1 and 3/2, with the word printed
+      off-centre at about 134 mm where the render has it; 3/3 and 3/4 each have a bracket of
+      their own under the LICENSE one - so the face groups 3/1-3/2 with the Ethernet ports and
+      sets the licensed pair apart.
+  jack-lamps:
+    confidence: photo-measured
+    note: >-
+      The render shows two lamp windows on the CON console, and the STS and FLT legends
+      printed under it name them. CON is not Ethernet, so it is the bare std/rj45-ganged@2
+      with the two windows placed beside it as common/led-rect-sm@1, for: con, at the corners
+      where common/rj45-ganged-eth@1 draws its own - the family's way of drawing a lamped
+      non-Ethernet jack (juniper/mx204's BITS).
+  lamps:
+    confidence: estimated
+    note: >-
+      SYNC, SD, PS1 and PS2 are about 4 mm lamps with a pinhole between SD and PS1, placed
+      where the rectified render has them, as are the wordmark plate, the four short slots
+      under the model name and the vent dashes along the top edge (none of which the
+      stencil draws); LNK/ACT and MNG are printed over the ETH jack and STS and FLT under the CON jack,
+      naming those jacks' own lamp windows. No document says what any state means.
+  eth-speed:
+    confidence: borrowed
+    note: >-
+      BORROWED, NOT STATED. The data sheets list "1 x Console RJ45 port" and are silent on the
+      ETH management port's rate. 1g is taken from the TM-8104's OOB port on the maintainer's
+      ruling for unstated management rates; the eth-speed gap stays open.
+  power:
+    confidence: datasheet
+    note: >-
+      Two internal supplies, AC (TMC-3348S-2AC-x) or wide-range DC (TMC-3348S-2DC); "Redundant
+      power supplies and wide-range DC input". No
+      consumption figure is published. The supplies are internal, so the front carries no
+      bays; their inlets are presumably at the rear.
+attrs:
+  physical:
+    weight-kg: 1.1
+    overall-mm: 221 x 44 x 235 (data sheet)
+    mounting: 19-inch rack (half width) or wall
+  power:
+    input-voltage: AC, or wide-range DC
+    psu-redundancy: two internal supplies, AC or DC
+  environmental:
+    operating-temp: 0 to 50 C; -40 to 70 C for the TM-3348SH
+  features:
+    services: MEF CE 2.0; 802.1Q, 802.1ad; MPLS VPWS, VPLS, H-VPLS; L3VPN with VRF
+    optics-sfp: '100BASE-FX, 1000BASE-X (data sheet, "8 x 100FX/1000BaseX SFP ports")'
+    optics-sfp-plus: '1000BASE-X, 10GBASE-X (data sheet, "4 x 1000FX/10000BaseX SFP+ ports")'
+    timing: IEEE 1588v2 PTP, SyncE; BITS in/out on the SH version
+    licensing: SFP+ ports 3 and 4 need an activation licence
+    resiliency: sub-50 ms G.8032 R-APS, STP/RSTP/MSTP, FRR, H-VPLS dual homing, LAG, BFD, redundant power
+  management:
+    local: CON RS-232 ASCII console and ETH out-of-band Ethernet on RJ45
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 221.0
+  height: 44.0
+  depth: 235
+  ru: 1
+  weight-kg: 1.1
+  power: ac
+  color: '#dddddd'
+  silk: '#3a3d41'
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; hardware documentation is on a support portal
+    behind a login, whose contact is on telco.com/support. Searched: the telco.com media
+    library, every product and knowledge-centre page, and the Wayback index of telco.com PDFs.
+  wanted: the TM-3348 / T-Marc 3348S hardware installation guide, from the BATM support portal.
+- what: rear
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The two internal supplies' inlets are not on the front, so they are presumably at the rear,
+    which nothing held shows (no stencil rear master for this model).
+  wanted: a photograph of the rear of an AC and of a DC unit.
+- what: sh-variant
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The hardened TM-3348SH adds "BITS in/out clock interfaces"; where they appear on the face
+    is not shown by anything held, so only the S face is drawn.
+  wanted: a photograph or render of the TM-3348SH front.
+- what: sd-slot
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    A dark 26 x 3.5 mm slot under the lamp row in the render, absent from the stencil - the
+    same slot, in the same place, as on the TM-3312, whose data sheets list an SD card under
+    Management; the TM-3348's editions do not mention one. Probably the SD card slot, drawn as
+    panel decor, not as a part.
+  wanted: a close photograph of the lamp area with and without a card.
+- what: eth-speed
+  scope: [eth]
+  reason: vendor-silent
+  note: >-
+    No edition states the ETH port's rate; 1g is carried as a BORROWED value (see
+    provenance.eth-speed), not as a finding.
+  wanted: the installation guide's interface table.
+groups:
+  copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: four 10/100/1000Base-T UNI/NNI ports, 1/1 to 1/4, a 2 x 2 block.
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: eight 100Base-FX/1000Base-X UNI/NNI ports, 2/1 to 2/8, a stacked 2 x 4 block.
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      four 1/10GE SFP+ UNI/NNI ports, 3/1 to 3/4, one row under the vent grilles; 3/3 and 3/4
+      need an activation licence.
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the ETH out-of-band Ethernet port over the CON RS-232 console, one RJ45 stack.
+  con-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: STS and FLT, the CON jack's two lamp windows.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: SYNC, SD, PS1 and PS2.
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+views:
+  front:
+    size: {w: 221.0, h: 44.0}
+    panel:
+      decor:
+        - {id: vent-1, kind: vent, at: [28.1, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-2, kind: vent, at: [43.9, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-3, kind: vent, at: [59.6, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-4, kind: vent, at: [75.4, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-5, kind: vent, at: [91.1, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-6, kind: vent, at: [106.9, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-7, kind: vent, at: [122.7, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-8, kind: vent, at: [138.5, 3.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-1, kind: vent, at: [154.3, 4.0], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-2, kind: vent, at: [154.3, 6.8], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-3, kind: vent, at: [154.3, 9.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-4, kind: vent, at: [154.3, 12.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-5, kind: vent, at: [154.3, 15.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-6, kind: vent, at: [154.3, 18.5], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-1-7, kind: vent, at: [154.3, 21.6], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-1, kind: vent, at: [170.1, 4.0], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-2, kind: vent, at: [170.1, 6.8], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-3, kind: vent, at: [170.1, 9.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-4, kind: vent, at: [170.1, 12.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-5, kind: vent, at: [170.1, 15.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-6, kind: vent, at: [170.1, 18.5], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-2-7, kind: vent, at: [170.1, 21.6], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-1, kind: vent, at: [186.0, 4.0], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-2, kind: vent, at: [186.0, 6.8], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-3, kind: vent, at: [186.0, 9.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-4, kind: vent, at: [186.0, 12.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-5, kind: vent, at: [186.0, 15.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-6, kind: vent, at: [186.0, 18.5], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-3-7, kind: vent, at: [186.0, 21.6], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-1, kind: vent, at: [201.8, 4.0], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-2, kind: vent, at: [201.8, 6.8], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-3, kind: vent, at: [201.8, 9.9], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-4, kind: vent, at: [201.8, 12.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-5, kind: vent, at: [201.8, 15.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-6, kind: vent, at: [201.8, 18.5], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: grille-4-7, kind: vent, at: [201.8, 21.6], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: laser-label, kind: label-plate, at: [1.2, 1.2], size: [25.9, 3.7], fill: '#d1d1d1', stroke: '#333333', stroke-width: 0.3}
+        - {id: wordmark-plate, kind: label-plate, at: [27.6, 7.0], size: [22.7, 8.5], rx: 2.5, fill: '#f3f4f5', stroke: '#8d9298', stroke-width: 0.35}
+        - {id: slot-1, kind: vent, at: [26.1, 23.5], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: slot-2, kind: vent, at: [26.2, 26.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: slot-3, kind: vent, at: [41.8, 23.4], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: slot-4, kind: vent, at: [41.9, 26.7], size: [10.0, 1.2], rx: 0.4, fill: '#3a3d41'}
+        - {id: sd-slot, at: [26.5, 37.9], size: [26.0, 3.4], rx: 0.3, fill: '#2b2e32', confidence: estimated, source: 'the rectified render: a dark slot under the lamp row that the stencil does not draw; every data sheet lists an SD card under Management, so probably its slot (see the sd-slot gap); drawn as panel, not as a part'}
+        - {id: shell-mgmt, kind: port-shell, at: [6.05, 9.1], size: [17.6, 27.85], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
+        - {id: shell-copper, kind: port-shell, at: [54.95, 8.5], size: [30.9, 28.6], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
+        - {id: sfp-block, kind: port-shell, at: [88.35, 8.95], size: [58.5, 27.4], rx: 0.3, fill: '#8f949a', stroke: '#5c6167', stroke-width: 0.35}
+        - {id: sfp-strip-1, at: [88.95, 20.15], size: [14.0, 5.0], fill: '#d1d1d1'}
+        - {id: sfp-strip-2, at: [103.4, 20.15], size: [14.0, 5.0], fill: '#d1d1d1'}
+        - {id: sfp-strip-3, at: [117.8, 20.15], size: [14.0, 5.0], fill: '#d1d1d1'}
+        - {id: sfp-strip-4, at: [132.25, 20.15], size: [14.0, 5.0], fill: '#d1d1d1'}
+        - {id: sfpp-block, kind: port-shell, at: [153.8, 25.7], size: [58.7, 11.8], rx: 0.3, fill: '#8f949a', stroke: '#5c6167', stroke-width: 0.35}
+      cutouts:
+        - {id: eth, at: [8.5, 10.0], size: [12.7, 11.0], shape: rect}
+        - {id: con, at: [8.75, 25.05], size: [12.7, 11.0], shape: rect}
+        - {id: port-1-1, at: [57.0, 9.4], size: [12.7, 11.0], shape: rect}
+        - {id: port-1-2, at: [57.0, 25.2], size: [12.7, 11.0], shape: rect}
+        - {id: port-1-3, at: [71.1, 9.4], size: [12.7, 11.0], shape: rect}
+        - {id: port-1-4, at: [71.1, 25.2], size: [12.7, 11.0], shape: rect}
+        - {id: port-2-1, at: [88.83, 9.65], size: [14.25, 10.4], shape: rect}
+        - {id: port-2-2, at: [88.83, 25.25], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-2-a, at: [90.08, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-1-a, at: [92.92, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-2-b, at: [96.62, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-1-b, at: [99.48, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: port-2-3, at: [103.28, 9.65], size: [14.25, 10.4], shape: rect}
+        - {id: port-2-4, at: [103.28, 25.25], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-4-a, at: [104.53, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-3-a, at: [107.38, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-4-b, at: [111.08, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-3-b, at: [113.93, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: port-2-5, at: [117.67, 9.65], size: [14.25, 10.4], shape: rect}
+        - {id: port-2-6, at: [117.67, 25.25], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-6-a, at: [118.92, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-5-a, at: [121.77, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-6-b, at: [125.47, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-5-b, at: [128.32, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: port-2-7, at: [132.12, 9.65], size: [14.25, 10.4], shape: rect}
+        - {id: port-2-8, at: [132.12, 25.25], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-8-a, at: [133.38, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-7-a, at: [136.22, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-8-b, at: [139.93, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: led-port-2-7-b, at: [142.78, 21.4], size: [2.25, 2.0], shape: rect}
+        - {id: port-3-1, at: [154.28, 26.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-3-1, at: [160.35, 37.1], size: [2.0, 2.0], shape: circle}
+        - {id: port-3-2, at: [168.68, 26.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-3-2, at: [174.75, 37.1], size: [2.0, 2.0], shape: circle}
+        - {id: port-3-3, at: [183.28, 26.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-3-3, at: [189.35, 37.1], size: [2.0, 2.0], shape: circle}
+        - {id: port-3-4, at: [197.78, 26.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-3-4, at: [203.85, 37.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-sync, at: [25.2, 30.65], size: [4.0, 4.0], shape: circle}
+        - {id: led-sd, at: [30.2, 30.65], size: [4.0, 4.0], shape: circle}
+        - {id: led-ps1, at: [44.45, 30.65], size: [4.0, 4.0], shape: circle}
+        - {id: led-ps2, at: [49.5, 30.65], size: [4.0, 4.0], shape: circle}
+        - {id: btn-reset, at: [37.25, 30.65], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [63.35, 7.59], text: 1/1, font-size: 1.6, anchor: middle, for: port-1-1}
+      - {at: [63.35, 39.3], text: 1/2, font-size: 1.6, anchor: middle, for: port-1-2}
+      - {at: [77.45, 7.59], text: 1/3, font-size: 1.6, anchor: middle, for: port-1-3}
+      - {at: [77.45, 39.3], text: 1/4, font-size: 1.6, anchor: middle, for: port-1-4}
+      - {at: [95.95, 7.59], text: 2/1, font-size: 1.6, anchor: middle, for: port-2-1}
+      - {at: [95.95, 39.3], text: 2/2, font-size: 1.6, anchor: middle, for: port-2-2}
+      - {at: [110.4, 7.59], text: 2/3, font-size: 1.6, anchor: middle, for: port-2-3}
+      - {at: [110.4, 39.3], text: 2/4, font-size: 1.6, anchor: middle, for: port-2-4}
+      - {at: [124.8, 7.59], text: 2/5, font-size: 1.6, anchor: middle, for: port-2-5}
+      - {at: [124.8, 39.3], text: 2/6, font-size: 1.6, anchor: middle, for: port-2-6}
+      - {at: [139.25, 7.59], text: 2/7, font-size: 1.6, anchor: middle, for: port-2-7}
+      - {at: [139.25, 39.3], text: 2/8, font-size: 1.6, anchor: middle, for: port-2-8}
+      - {at: [157.1, 39.8], text: 3/1, font-size: 1.6, anchor: middle, for: port-3-1}
+      - {at: [171.5, 39.8], text: 3/2, font-size: 1.6, anchor: middle, for: port-3-2}
+      - {at: [186.1, 39.8], text: 3/3, font-size: 1.6, anchor: middle, for: port-3-3}
+      - {at: [200.6, 39.8], text: 3/4, font-size: 1.6, anchor: middle, for: port-3-4}
+      - {at: [197.65, 24.3], text: LICENSE, font-size: 1.3, anchor: middle, for: [port-3-3, port-3-4]}
+      - {id: license-bar-l, at: [183.5, 23.4], path: M 0 1.0 L 0 0 L 10.35 0, for: [port-3-3, port-3-4]}
+      - {id: license-bar-r, at: [201.45, 23.4], path: M 0 0 L 7.05 0 L 7.05 1.0, for: [port-3-3, port-3-4]}
+      - {at: [133.7, 42.9], text: ETH, font-size: 1.5, anchor: middle, for: [port-1-1, port-1-2, port-1-3, port-1-4, port-2-1, port-2-2, port-2-3, port-2-4, port-2-5, port-2-6, port-2-7, port-2-8, port-3-1, port-3-2]}
+      - {id: legend-eth-l, at: [55.5, 42.35], path: M 0 -1.4 L 0 0 L 75.6 0, for: [port-1-1, port-1-2, port-1-3, port-1-4, port-2-1, port-2-2, port-2-3, port-2-4, port-2-5, port-2-6, port-2-7, port-2-8, port-3-1, port-3-2]}
+      - {id: legend-eth-r, at: [136.3, 42.35], path: M 0 0 L 42.0 0 L 42.0 -1.4, for: [port-1-1, port-1-2, port-1-3, port-1-4, port-2-1, port-2-2, port-2-3, port-2-4, port-2-5, port-2-6, port-2-7, port-2-8, port-3-1, port-3-2]}
+      - {id: legend-bracket-1, at: [183.3, 42.35], path: M 0 -1.4 L 0 0 L 9.7 0 L 9.7 -1.4, for: [port-3-3]}
+      - {id: legend-bracket-2, at: [197.7, 42.35], path: M 0 -1.4 L 0 0 L 9.8 0 L 9.8 -1.4, for: [port-3-4]}
+      - {at: [27.2, 36.949999999999996], text: SYNC, font-size: 1.0, anchor: middle, for: led-sync}
+      - {at: [32.2, 36.949999999999996], text: SD, font-size: 1.0, anchor: middle, for: led-sd}
+      - {at: [46.45, 36.949999999999996], text: PS1, font-size: 1.0, anchor: middle, for: led-ps1}
+      - {at: [51.5, 36.949999999999996], text: PS2, font-size: 1.0, anchor: middle, for: led-ps2}
+      - {at: [14.15, 4.1], text: CLASS 1 LASER PRODUCT, font-size: 1.2, anchor: middle, for: chassis}
+      - {at: [38.95, 12.4], text: TELCO SYSTEMS, font-size: 2.2, anchor: middle, for: chassis}
+      - {at: [38.9, 21.8], text: TMC-3348 S, font-size: 3.0, anchor: middle, fill: '#2f3337', for: chassis}
+      - {at: [5.25, 15.9], text: ETH, font-size: 1.3, anchor: end, for: eth}
+      - {at: [5.2, 30.95], text: CON, font-size: 1.3, anchor: end, for: con}
+      - {at: [11.55, 8.1], text: LNK/ACT, font-size: 1.1, anchor: middle, for: eth}
+      - {at: [19.75, 8.1], text: MNG, font-size: 1.1, anchor: middle, for: eth}
+      - {at: [11.8, 38.55], text: STS, font-size: 1.1, anchor: middle, for: con}
+      - {at: [20.0, 38.55], text: FLT, font-size: 1.1, anchor: middle, for: con}
+    components:
+      placements:
+        - {ref: 'common/rj45-ganged-eth@1', id: eth, at: [8.5, 10.0], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: ETH - out-of-band Ethernet management; 1g is BORROWED from the TM-8104 OOB port (see provenance.eth-speed)}
+        - {ref: 'std/rj45-ganged@2', id: con, at: [8.75, 25.05], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}, description: 'CON - the RS-232 ASCII console; its two lamp windows are the STS and FLT lamps, placed beside it'}
+        - {ref: 'common/led-rect-sm@1', id: led-con-a, at: [9.55, 34.43], for: con, group: con-leds, rel-pos: 1}
+        - {ref: 'common/led-rect-sm@1', id: led-con-b, at: [17.85, 34.43], for: con, group: con-leds, rel-pos: 2}
+        - {ref: 'common/rj45-ganged-eth@1', id: port-1-1, at: [57.0, 9.4], rotate: 180, group: copper, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: port-1-2, at: [57.0, 25.2], group: copper, rel-pos: 2}
+        - {ref: 'common/rj45-ganged-eth@1', id: port-1-3, at: [71.1, 9.4], rotate: 180, group: copper, rel-pos: 3}
+        - {ref: 'common/rj45-ganged-eth@1', id: port-1-4, at: [71.1, 25.2], group: copper, rel-pos: 4}
+        - {ref: 'std/sfp-ganged@1', id: port-2-1, at: [88.83, 9.65], group: sfp, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-2-2, at: [88.83, 25.25], rotate: 180, group: sfp, rel-pos: 2}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-2-a, at: [90.08, 21.4], skin: down, for: port-2-2, group: sfp-leds, rel-pos: 3}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-1-a, at: [92.92, 21.4], skin: up, for: port-2-1, group: sfp-leds, rel-pos: 1}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-2-b, at: [96.62, 21.4], skin: down, for: port-2-2, group: sfp-leds, rel-pos: 4}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-1-b, at: [99.48, 21.4], skin: up, for: port-2-1, group: sfp-leds, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-2-3, at: [103.28, 9.65], group: sfp, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-2-4, at: [103.28, 25.25], rotate: 180, group: sfp, rel-pos: 4}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-4-a, at: [104.53, 21.4], skin: down, for: port-2-4, group: sfp-leds, rel-pos: 7}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-3-a, at: [107.38, 21.4], skin: up, for: port-2-3, group: sfp-leds, rel-pos: 5}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-4-b, at: [111.08, 21.4], skin: down, for: port-2-4, group: sfp-leds, rel-pos: 8}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-3-b, at: [113.93, 21.4], skin: up, for: port-2-3, group: sfp-leds, rel-pos: 6}
+        - {ref: 'std/sfp-ganged@1', id: port-2-5, at: [117.67, 9.65], group: sfp, rel-pos: 5}
+        - {ref: 'std/sfp-ganged@1', id: port-2-6, at: [117.67, 25.25], rotate: 180, group: sfp, rel-pos: 6}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-6-a, at: [118.92, 21.4], skin: down, for: port-2-6, group: sfp-leds, rel-pos: 11}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-5-a, at: [121.77, 21.4], skin: up, for: port-2-5, group: sfp-leds, rel-pos: 9}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-6-b, at: [125.47, 21.4], skin: down, for: port-2-6, group: sfp-leds, rel-pos: 12}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-5-b, at: [128.32, 21.4], skin: up, for: port-2-5, group: sfp-leds, rel-pos: 10}
+        - {ref: 'std/sfp-ganged@1', id: port-2-7, at: [132.12, 9.65], group: sfp, rel-pos: 7}
+        - {ref: 'std/sfp-ganged@1', id: port-2-8, at: [132.12, 25.25], rotate: 180, group: sfp, rel-pos: 8}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-8-a, at: [133.38, 21.4], skin: down, for: port-2-8, group: sfp-leds, rel-pos: 15}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-7-a, at: [136.22, 21.4], skin: up, for: port-2-7, group: sfp-leds, rel-pos: 13}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-8-b, at: [139.93, 21.4], skin: down, for: port-2-8, group: sfp-leds, rel-pos: 16}
+        - {ref: 'common/led-arrow-sm@1', id: led-port-2-7-b, at: [142.78, 21.4], skin: up, for: port-2-7, group: sfp-leds, rel-pos: 14}
+        - {ref: 'std/sfp-ganged@1', id: port-3-1, at: [154.28, 26.4], group: sfp-plus, rel-pos: 1}
+        - {ref: 'common/led-dot@1', id: led-port-3-1, at: [160.35, 37.1], for: port-3-1, group: sfp-plus-leds, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-3-2, at: [168.68, 26.4], group: sfp-plus, rel-pos: 2}
+        - {ref: 'common/led-dot@1', id: led-port-3-2, at: [174.75, 37.1], for: port-3-2, group: sfp-plus-leds, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-3-3, at: [183.28, 26.4], group: sfp-plus, rel-pos: 3}
+        - {ref: 'common/led-dot@1', id: led-port-3-3, at: [189.35, 37.1], for: port-3-3, group: sfp-plus-leds, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-3-4, at: [197.78, 26.4], group: sfp-plus, rel-pos: 4}
+        - {ref: 'common/led-dot@1', id: led-port-3-4, at: [203.85, 37.1], for: port-3-4, group: sfp-plus-leds, rel-pos: 4}
+        - {ref: 'common/led-indicator@1', id: led-sync, at: [25.2, 30.65], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-sd, at: [30.2, 30.65], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: 'common/led-indicator@1', id: led-ps1, at: [44.45, 30.65], for: chassis, group: status-leds, rel-pos: 3}
+        - {ref: 'common/led-indicator@1', id: led-ps2, at: [49.5, 30.65], for: chassis, group: status-leds, rel-pos: 4}
+        - {ref: 'common/reset-button@1', id: btn-reset, at: [37.25, 30.65], for: chassis, group: controls, rel-pos: 1}
+  rear:
+    size: {w: 221.0, h: 44.0}
+    empty: >-
+      Envelope only. Nothing held shows the rear, where the two internal supplies' inlets
+      presumably are (see the rear gap).
+  left:
+    size: {w: 235, h: 44.0}
+    empty: Envelope only. The renders show the flank at a grazing angle only.
+  right:
+    size: {w: 235, h: 44.0}
+    empty: Envelope only, for the same reason as the left.
+  top:
+    size: {w: 221.0, h: 235}
+    empty: Envelope only. The renders show a plain lid obliquely.
+  bottom:
+    size: {w: 221.0, h: 235}
+    empty: Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - TMC-3348S-2AC-x, two internal AC supplies (2024 data sheet ordering table).
+    description: The TM-3348S with its two internal AC supplies.
+  dc-power:
+    kind: orderable
+    power: dc
+    description: >-
+      TMC-3348S-2DC - two internal wide-range DC supplies. The face is the
+      same; the difference is at the rear.
+datasheet:
+  title: 'Telco Systems TM-3348S/SH 10GE Ethernet/MPLS/IP Aggregation & Demarcation Device data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-3348SH.pdf'
+  sha256: 2644656fbedfe3ef7450924793b6eadcbc74896a6a61737337c1634e4ec6b7c1
+references:
+  - {title: 'T-Marc 3348S/SH data sheet (2024-05)', url: 'https://www.telco.com/wp-content/uploads/2024/05/T-Marc_3348SH.pdf', sha256: fc0d4e868e1cea68031d88eb02d316c44071ab13b16b28a95de1faa87f928e84}
