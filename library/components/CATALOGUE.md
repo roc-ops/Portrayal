@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-822 component majors in 17 namespaces.
+845 component majors in 17 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -32,11 +32,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 1 | 1 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
-| `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 5 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
+| `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 7 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 14 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 8 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 6 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
-| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 12 | Micro-USB Type-B receptacle, as used for a console port |
+| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 14 | Micro-USB Type-B receptacle, as used for a console port |
 | `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 6 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 0 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
@@ -48,9 +48,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 62 | 52 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 55 | 24 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
-| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 4 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 23 | 55 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 77 | 81 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 6 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 23 | 56 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 77 | 82 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 17 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 79 | 27 | USB Type-A receptacle opening - sharp corners |
@@ -90,11 +90,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
 | `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 4 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
-| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 25 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 27 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 2 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 22 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 88 | 221 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 88 | 227 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 11 | 31 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 2 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
@@ -359,16 +359,39 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/spa-8xoc3-pos@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 8-Port OC-3/STM-1 POS SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 | `cisco/spa-oc192pos-xfp@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 1-Port OC-192/STM-64 POS/RPR SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 
-## commscope/ (10)
+## commscope/ (33)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `commscope/ar3002e@1` | module | line-card | 25.76 × 130.2 × 330 |  | 1 | 1 | CommScope (ARRIS) AR3002E - analog forward-path optical receiver, 46 to 1218 MHz, for the CH3000 headend opti… |
+| `commscope/ar3044h@1` | module | line-card | 25.76 × 130.2 × 330 |  | 1 | 0 | CommScope (ARRIS) AR3044H - quad high gain analog return-path receiver, 5-204 MHz, for the CH3000 headend opt… |
+| `commscope/ar3044l@1` | module | line-card | 25.76 × 130.2 × 330 |  | 1 | 0 | CommScope (ARRIS) AR3044L - quad standard gain analog return-path receiver, 5-300 MHz, for the CH3000 headend… |
 | `commscope/bd31a8-h10f@1` | module | coupler | 52.52 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BD31A8-100-H10F-0-AL - the quad-density "zero-slot" back plate behind a CA3008 carrier of e… |
+| `commscope/bp-a10@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BP-A10 - the single-width dynamic back plate for one AR3044H or AR3044L quad return receive… |
 | `commscope/bp-a5@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BP-A5 - the single-width dynamic back plate for one AR3002E or AR3002G forward receiver in … |
+| `commscope/bp-f2@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) BP-F2 - the single-width back plate for a single-output FA3500 EDFA in a CH3000 ch… |
+| `commscope/bp-f2-al@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) BP-F2-AL - the single-width back plate for a single-output FA3500 EDFA ordered wit… |
+| `commscope/bp-f4@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) BP-F4 - the single-width back plate for a dual-amplifier FA3500 EDFA in a CH3000 c… |
 | `commscope/bp-p1@1` | module | inlet | 52.52 × 130.2 |  | 1 | 2 | CommScope (ARRIS) BP-P1 - the dynamic back plate a PS3006 power supply mates in a CH3000 chassis, two slots w… |
+| `commscope/bp3400c@1` | module | coupler | 106.04 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BP3400C-00 - the optical receiver back plate shared by four adjacent DR3450N or DR3600N qua… |
 | `commscope/ca3008@1` | module | mechanical | 52.52 × 130.2 × 292.1 |  | 1 | 1 | CommScope (ARRIS) CA3008 - the module carrier that stacks eight HT358xH quad-density DWDM transmitters under … |
 | `commscope/cc3008@1` | module | supervisor | 51.92 × 19.3 |  | 0 | 1 | CommScope (ARRIS) CC3008 - the communications control module of a CA3008 carrier, seated above its eight quad… |
+| `commscope/dr3450n@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (ARRIS) DR3450N - quad digital return receiver (5-42, 5-65, 5-85 and 5-100 MHz modes) for the CH300… |
+| `commscope/dr3600n@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (ARRIS) DR3600N - quad digital return receiver (modes up to 5-204 MHz) for the CH3000 headend optic… |
+| `commscope/fa3500-face@1` | component | bezel | 25.76 × 130.2 |  | 0 | 13 | The faceplate every CommScope (ARRIS / Aurora) FA3500-series EDFA shares, composed by each model's own module… |
+| `commscope/fa3514d@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3514D-00 - FA3500-series 1550 nm EDFA, dual amplifier, 2 x 14 dBm nominal output… |
+| `commscope/fa3514s@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3514S-00 - FA3500-series 1550 nm EDFA, single amplifier, 14 dBm nominal output, … |
+| `commscope/fa3517d@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3517D-00 - FA3500-series 1550 nm EDFA, dual amplifier, 2 x 17 dBm nominal output… |
+| `commscope/fa3517f@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3517F-00 - FA3500-series 1550 nm EDFA, gain-flattened single amplifier, 17 dBm n… |
+| `commscope/fa3517g@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3517G-00 - FA3500-series 1550 nm EDFA, gain-flattened dual amplifier, 2 x 17 dBm… |
+| `commscope/fa3517s@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3517S-00 - FA3500-series 1550 nm EDFA, single amplifier, 17 dBm nominal output, … |
+| `commscope/fa3519f@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3519F-00 - FA3500-series 1550 nm EDFA, gain-flattened single amplifier, 19 dBm n… |
+| `commscope/fa3520s@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3520S-00 - FA3500-series 1550 nm EDFA, single amplifier, 20 dBm nominal output, … |
+| `commscope/fa3521f@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3521F-00 - FA3500-series 1550 nm EDFA, gain-flattened single amplifier, 21 dBm n… |
+| `commscope/fa3521h@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3521H-00 - FA3500-series 1550 nm EDFA, gain-flattened single amplifier, 21 dBm n… |
+| `commscope/fa3521j@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3521J-00 - FA3500-series 1550 nm EDFA, gain-flattened single amplifier, 21 dBm n… |
+| `commscope/fa3521s@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3521S-01 - FA3500-series 1550 nm EDFA, single amplifier, 21 dBm nominal output, … |
+| `commscope/fa3524s@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (Aurora / ARRIS) FA3524S-01 - FA3500-series 1550 nm EDFA, single amplifier with two outputs, 2 x 21… |
 | `commscope/ht358xh@1` | module | line-card | 51.92 × 9.66 × 292.1 |  | 1 | 3 | CommScope (ARRIS) HT358xH - the quad-density 1.2 GHz full-spectrum DWDM forward transmitter of the CH3000 hea… |
 | `commscope/ht3filh@1` | module | blank | 51.92 × 9.66 |  | 0 | 1 | CommScope (ARRIS) HT3FILH - the filler module for an unused quad-density transmitter position in a CA3008 car… |
 | `commscope/ps3006d@1` | module | psu | 52.52 × 130.2 × 330 |  | 1 | 3 | CommScope (ARRIS) PS3006D - the 300 W AC power supply and chassis controller of the CH3000 headend optics pla… |

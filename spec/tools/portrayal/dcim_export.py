@@ -223,6 +223,62 @@ SFP112_ATTR = ("sfp112", "other")
 # and it was hardcoded "RJ45", written for the Casa rj45-telemetry port, until
 # the Nokia MDA2-e-XP exported 24 SFP112 cages as copper jacks (#558 review).
 OTHER_LABEL = {"rj45-telemetry": "RJ45", "sfp112": "SFP112"}
+# AN SFP CAGE IS NOT ALWAYS A STANDARD PORT AT ALL. The CommScope BP3400C's eight
+# cages hold RR40x0 / RR36x0 digital-return receiver SFPs, the far end of a
+# proprietary link from a node's DT4250N / DT4600N transmitter - not Ethernet,
+# SONET or PON, so no rate in FAMILY_ATTRS is true of them, and with none stated
+# they took the cage default and exported as 10GBASE-X SFP+.
+#
+# ON THE PLACEMENT, NOT THE CARD, and that is the point. A card-level attr covers
+# every cage of its family, which is the limit SFP28_ATTR's comment records; the
+# BP3400C's ninth SFP-family cage is a data port nobody documents, and a
+# card-level declaration would have typed it as the digital-return link too.
+# `proprietary-link: <label>` goes on each cage that carries one - or on a
+# component group those cages join, which `effective_part` merges in - and
+# exports as `other` labelled with its value. Like every rate statement it is
+# explicit: a cage that says nothing still takes the default, and L96 still asks.
+#
+# THE VALUE IS THE LABEL, so it is a DCIM label: a non-empty string that fits
+# NetBox's and Nautobot's 64-character `label`. Anything else is not a
+# declaration, and the cage is treated as silent.
+#
+# ONLY A PLUGGABLE CAGE CARRIES ONE. A group is the natural way to declare it
+# once, and a receiver's group holds its F-type RF outputs beside its cage; read
+# on every member, the declaration retyped those jacks from `docsis` to the
+# digital-return link. `pluggable_cage` is the test, and L96 names a non-cage
+# part that carries the attr, since the export ignores it there.
+#
+# ON A DEVICE TOO. A device's own cage placement or group can say it, and
+# `build` types that port the same way `build_module` types a card's.
+PROPRIETARY_LINK = "proprietary-link"
+LABEL_MAX = 64
+
+
+def pluggable_cage(ref):
+    """Is this ref a pluggable cage - the only thing a proprietary link sits in?
+    PART_IFACE names the library's cages; the substrings are `iface_type`'s own
+    family test, which is how a device's vendor-wrapped cages are recognised
+    (OSFP and QSFP contain "sfp"; CFP and CXP are nobody's substring)."""
+    r = (ref or "").split("@")[0]
+    return r in PART_IFACE or any(f in r for f in ("sfp", "xfp", "cfp", "cxp"))
+
+
+def proprietary_link(part_attrs):
+    """The label of the proprietary link a placement declares, or None."""
+    v = (part_attrs or {}).get(PROPRIETARY_LINK)
+    if isinstance(v, str) and v.strip() and len(v.strip()) <= LABEL_MAX:
+        return v.strip()
+    return None
+
+
+def other_label(part):
+    """What an `other` interface placed by `placed_type` is labelled with."""
+    part_attrs = part.get("attrs") or {}
+    link = proprietary_link(part_attrs)
+    if link and pluggable_cage(part.get("ref")):
+        return link
+    media = part_attrs["media"]
+    return OTHER_LABEL.get(media, media.upper())
 # AN 800G QSFP-DD PORT IS NOT A 400G ONE, and with only the `qsfp-dd` row the
 # Nokia MDA2-e-XP's QSFP-DD800 ports would have exported as 400GBASE-X.
 # `800gbase-x-qsfpdd` is in both targets (NetBox TYPE_800GE_QSFP_DD at 6a009845;
@@ -267,7 +323,7 @@ FAMILY_ATTRS = {
 }
 
 
-def cage_family_needs_a_rate(ref, attrs):
+def cage_family_needs_a_rate(ref, attrs, part_attrs=None):
     """Is this cage about to be typed by the TABLE rather than by the card?
 
     `cage_type` falls back to PART_IFACE when a card declares no media attr for
@@ -280,7 +336,13 @@ def cage_family_needs_a_rate(ref, attrs):
 
     L96 asks this question of every module; `export_modules` prints the count.
     A family with no attrs to declare - XFP has one rate - is not a gap.
+
+    `part_attrs` are the placement's effective attrs: a cage that declares
+    `proprietary-link` has said what runs in it, and `placed_type` types it
+    before the table is ever reached.
     """
+    if proprietary_link(part_attrs):
+        return False
     wants = FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ())
     return bool(wants) and not any(attrs.get(a) for a, _t in wants)
 
@@ -497,6 +559,11 @@ PART_MEDIA = {
 def placed_type(part):
     """The interface type the placement itself declares, or None."""
     a = part.get("attrs") or {}
+    # A PROPRIETARY LINK OUTRANKS EVERYTHING, media included: it says the cage
+    # carries no standard port, so no media or speed row can be true of it. On a
+    # cage only - see PROPRIETARY_LINK.
+    if proprietary_link(a) and pluggable_cage(part.get("ref")):
+        return "other"
     media = a.get("media")
     if not media:
         return None
@@ -573,8 +640,9 @@ NOT_A_DCIM_PORT = {
     "common/lc-duplex-adapter": "single-faced modules have no trunk to terminate on, and the "
                                 "device pass has no fibre path; optical-paths-design.md C3",
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
-    "std/sc-bore": "the SC/APC optical input of a single-faced CH3000 back plate (commscope/bp-a5); "
-                   "no trunk to terminate on, the same case as common/lc-duplex-adapter",
+    "std/sc-bore": "the SC/APC optical ports of single-faced CH3000 back plates (commscope/bp-a5, "
+                   "bp-f2, bp-f4); no trunk to terminate on, the same case as "
+                   "common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
                      "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
 
@@ -1245,7 +1313,10 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 continue
             if names is None and a.get("role") == "mgmt" and pid.replace("port-", "") in listed_sfp:
                 continue
-            t = iface_type(p, a, group_role(p))
+            # A CAGE THAT CARRIES A PROPRIETARY LINK says what runs in it, as a
+            # card's does in `placed_type`, and no speed row can be true of it.
+            link = proprietary_link(a) if pluggable_cage(p["ref"]) else None
+            t = "other" if link else iface_type(p, a, group_role(p))
             if t is None:                      # unknown combination: skip, do not guess
                 continue
             # ONE CAGE, SEVERAL INTERFACES (#443). A CSFP cage presents two BiDi
@@ -1260,6 +1331,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 else:
                     name, breakout = iid, None
                 iface = {"name": name, "type": t}
+                if link:
+                    iface["label"] = link
                 # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
                 # spelling; a group whose own role is `management` says the same
                 # thing about every port in it, and six devices only say it that way.
@@ -1380,8 +1453,7 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         if placed:
             iface = {"name": pid, "type": placed}
             if placed == "other":
-                media = part["attrs"]["media"]
-                iface["label"] = OTHER_LABEL.get(media, media.upper())
+                iface["label"] = other_label(part)
             ifaces.append(iface)
             network = iface
         elif full_ref in FAMILY_PART:
