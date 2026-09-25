@@ -1,0 +1,55 @@
+format: 1
+kind: module
+name: np34c01
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) NP34C01 - dual CWDM/1310 nm optical filter, two independent three-port filters that combine or separate 1310 nm and the CWDM band, each with a -20 dB test port: A and B groups of COM, 1310, CWDM and TP. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: NP34C01
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the NP34C01x CWDM/1310 optical filter data sheet (p1 photograph of an NP34C01, 283 x 825)
+    agrees with it in aspect within a few percent, a check rather than a measurement. Depth
+    datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the SC/APC adapters found by colour (their green or blue bodies and yellow laser
+    shutters), which gives each row's position to about half a millimetre; the legends are
+    read off the same photograph. The face prints NP34C01 without the ordering suffix, so it is printed as such.
+  seating: >-
+    datasheet - "Occupies one half-depth slot"; accepted by a slot's front bay and its rear
+    bay alike, per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth
+    slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-a-com: {at: [0.0, 18.40], size: [19.5, 10.4], class: port}
+  adapter-a-1310: {at: [0.0, 29.30], size: [19.5, 10.4], class: port}
+  adapter-a-cwdm: {at: [0.0, 40.30], size: [19.5, 10.4], class: port}
+  adapter-a-tp: {at: [0.0, 51.20], size: [19.5, 10.4], class: port}
+  adapter-b-com: {at: [0.0, 71.90], size: [19.5, 10.4], class: port}
+  adapter-b-1310: {at: [0.0, 83.10], size: [19.5, 10.4], class: port}
+  adapter-b-cwdm: {at: [0.0, 94.30], size: [19.5, 10.4], class: port}
+  adapter-b-tp: {at: [0.0, 105.40], size: [19.5, 10.4], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: a-com, at: [6.00, 19.10], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: a-1310, at: [6.00, 30.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: a-cwdm, at: [6.00, 41.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: a-tp, at: [6.00, 51.90], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-com, at: [6.00, 72.60], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-1310, at: [6.00, 83.80], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-cwdm, at: [6.00, 95.00], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: b-tp, at: [6.00, 106.10], rotate: 90, attrs: {connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
