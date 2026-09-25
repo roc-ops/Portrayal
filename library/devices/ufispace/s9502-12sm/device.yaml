@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9502-12sm
-version: 3.0.1
+version: 3.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9502-12SM
@@ -229,7 +229,8 @@ attrs:
     power-max-w: '47.2'
     power-max-dc-w: '45'
     power-envelope: unstated
-    input: AC 100 to 240V, 2A max x2; DC -36 to -75V, 4.5A max x2
+    input-ac: '100 to 240V, 2A max x2'
+    input-dc: '-36 to -75V, 4.5A max x2'
   thermal:
     cooling: fanless; the rack must supply at least 1 m/s of airflow in any direction
       without recirculation (HIG Cooling), and 43.5 mm of clear space is required above
@@ -269,6 +270,7 @@ chassis:
   depth: 250
   ru: 1
   weight-kg: 4.26
+  airflow: passive
 gaps:
 - what: ac-build-front-panel-not-drawn
   scope: [psus]
@@ -284,7 +286,11 @@ gaps:
     supply pulls out, and that the panel is otherwise the same). ufispace/psu-120-ac is
     built and sourced and sits in the library ready for whoever draws that panel; this
     device places ufispace/psu-120-dc directly, as the fixed connector it is.
-  wanted: the AC build modelled as its own front face, or a per-configuration override
+  wanted: the AC build modelled as its own front face, or a per-configuration override.
+    NOTE for whoever draws it - HIG Figure 5's AC strip (page 9 at 600 dpi) shows no
+    1PPS/10MHz SMB pair where the DC strip has two, so that figure may be the non-timing
+    build (non-timing-variant-not-modelled) rather than the AC one; settle which before
+    measuring it
     for `placements` plus a way to vary silkscreen with it.
 - what: sfp-port-led-semantics
   scope: [port-leds]
@@ -590,7 +596,17 @@ configurations:
     description: Fixed 1+1 120W DC supplies (-36 to -75V, screw-terminal dual feed) -
       the build the vendor front render and HIG Figures 5, 6 and 8 all show, and the
       only one this model draws; the AC build is a different front panel, see gaps
+    power: dc
     default: true
+  ac:
+    kind: orderable
+    power: ac
+    description: >-
+      Fixed 1+1 120W AC supplies, dual feed, 100 to 240V (datasheet 'Fixed Power Supply
+      Types: 120W AC PSU, fixed dual feed'). DRAWN WITH THE DC BUILD'S FRONT PANEL - the AC
+      panel moves the printing as well as the connector (ac-build-front-panel-not-drawn), so
+      this is the S9502-16SMT's arrangement: the build and its feed are declared, and the
+      face is not claimed
 datasheet:
   title: UfiSpace S9502-12SM Disaggregated Open Access Router Datasheet
   url: https://www.ufispace.com/products/telco/cell-site-gateway/s9502-12sm

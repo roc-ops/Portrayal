@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9601-102xc
-version: 3.0.3
+version: 3.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9601-102XC
@@ -424,8 +424,8 @@ attrs:
     power-typical-w: 399
     power-envelope: bare
     psus: 2x 1300 W 1+1 redundant, hot-swappable (exhaust airflow)
-    psu-ac-input: 100-240 VAC, 12 A max
-    psu-dc-input: -40 to -75 VDC, 40 A max
+    input-ac: 100-240 VAC, 12 A max
+    input-dc: -40 to -75 VDC, 40 A max
   thermal:
     fans: 4x hot-swappable 3+1 redundant, exhaust airflow; system front-to-back
   environmental:
@@ -1207,6 +1207,7 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     description: Dual 1300W DC PSUs (PSU-132-DESR, exhaust airflow) with four
       FAN-803816-HI exhaust fans - the DC build, which is also the bare working chassis,
       since the traffic cages ship empty
@@ -1216,6 +1217,7 @@ configurations:
         model: PSU-132-DESR
   ac:
     kind: orderable
+    power: ac
     description: Dual 1300W AC PSUs (PSU-132-AESR, exhaust airflow) with four
       FAN-803816-HI exhaust fans
     bays:

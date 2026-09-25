@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9720-56ed
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9720-56ED
@@ -371,8 +371,9 @@ attrs:
       the vendor's other three published maxima for the same chassis are DC 2088 W and
       AC 2035 W under MSA optics and AC 2280 W with Open ZR+. All four are measured at
       45 C ambient, fully populated optics and 100% traffic load
-    input: AC 200 to 240V, 16A; DC -40 to -72V, 80A. At 110V AC each supply delivers only
-      1500 W and hot-swap redundancy is lost, so 220V is required for 1+1 operation
+    input-ac: 200 to 240V, 16A. At 110V each supply delivers only 1500 W and hot-swap
+      redundancy is lost, so 220V is required for 1+1 operation
+    input-dc: -40 to -72V, 80A
   thermal:
     airflow: front-to-back; all FRUs are the exhaust build
   environmental:
@@ -1209,6 +1210,7 @@ views:
 configurations:
   ac:
     kind: base
+    power: ac
     description: Dual 3000W AC PSUs (PSU-302-AESR) 1+1 hot-swap with IEC 60320 C20
       inlets, four FAN-808012-HCE fan modules 3+1, front-to-back airflow - the build
       HIG Figure 7's rear elevation and the vendor rear render both show. Maximum
@@ -1216,6 +1218,7 @@ configurations:
     default: true
   dc:
     kind: orderable
+    power: dc
     description: Dual 3000W DC PSUs (PSU-302-DESR) 1+1 hot-swap with two-stud
       screw-terminal blocks under a plastic cover, four FAN-808012-HCE fan modules
       3+1, front-to-back airflow. Maximum system power 2088 W with MSA optics and

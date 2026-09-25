@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9701-82dc
-version: 3.0.3
+version: 3.0.5
 maturity: modelled
 manufacturer: UfiSpace
 model: S9701-82DC
@@ -1336,6 +1336,7 @@ views:
 configurations:
   base:
     kind: base
+    power: dc
     description: >-
       Four FAN-803816-HI exhaust fans and two PSU-132-DESR 1300 W DC supplies,
       front-to-back, with all eighty-two ports empty. The DC build is what the vendor's own
@@ -1349,6 +1350,7 @@ configurations:
         airflow: exhaust
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 1300 W DC supplies, PSU-132-DESR, exhaust air flow (datasheet Available to
       Order). Input -40 to -75 V at 40 A maximum per feed, with a 60 A fast-acting fuse in
@@ -1362,6 +1364,7 @@ configurations:
         airflow: exhaust
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 1300 W AC supplies, PSU-132-AESR, exhaust air flow (datasheet Available to
       Order). Input 100 to 240 V at 12 A maximum per feed, IEC60320 C15 cord, with a 16 A

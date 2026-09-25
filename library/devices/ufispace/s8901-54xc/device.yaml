@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s8901-54xc
-version: 4.0.1
+version: 4.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S8901-54XC
@@ -743,6 +743,7 @@ configurations:
   base:
     kind: base
     default: true
+    power: dc
     description: DC chassis as it powers on - five fans and both 400W DC PSUs
       seated, every cage empty; front-to-back airflow (red-latch FRUs)
     component-attrs:
@@ -752,6 +753,7 @@ configurations:
         model: FAN-402825-HD
   dc:
     kind: orderable
+    power: dc
     description: Dual 400W DC PSUs (PSU-401-DESR) and FAN-402825-HD fans,
       front-to-back airflow; no chassis SKU published (see gaps)
     component-attrs:
@@ -761,6 +763,7 @@ configurations:
         model: FAN-402825-HD
   ac:
     kind: orderable
+    power: ac
     description: Dual 400W AC PSUs (PSU-401-AESR) and FAN-402825-HD fans,
       front-to-back airflow; no chassis SKU published (see gaps)
     bays:

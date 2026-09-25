@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: m3000-14xc
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: M3000-14XC
@@ -245,8 +245,8 @@ attrs:
     power-max-w: 103.9
     power-envelope: unstated
     psus: 2x 200 W 1+1 active-active, hot-swappable (intake airflow)
-    psu-ac-input: 100-240 VAC, 3 A max
-    psu-dc-input: -36 to -75 VDC, 8 A max
+    input-ac: 100-240 VAC, 3 A max
+    input-dc: -36 to -75 VDC, 8 A max
   thermal:
     fans: 4 fixed fans, front-to-back airflow
   environmental:
@@ -656,12 +656,14 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     description: Dual 200W DC PSUs (PSU-201-DISB), front-to-back airflow - the DC
       orderable build, which is also the bare working chassis (the traffic cages
       ship empty and the fans are fixed)
     default: true
   ac:
     kind: orderable
+    power: ac
     description: Dual 200W AC PSUs (PSU-201-AISB), front-to-back airflow
     bays:
       psu-0: ufispace/psu-201-ac@1

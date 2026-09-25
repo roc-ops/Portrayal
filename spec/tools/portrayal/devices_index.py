@@ -13,7 +13,7 @@ import yaml
 
 from portrayal import attrsections as attrs_mod
 from portrayal import capability
-from portrayal.manifest import view_parts, load_yaml, alias_names
+from portrayal.manifest import view_parts, load_yaml, alias_names, device_options
 from portrayal import libwalk
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
@@ -198,6 +198,11 @@ def main():
                 # where it sits in the vendor's catalogue. The picker groups on
                 # this; absent is fine and sorts under the manufacturer alone.
                 "portfolio": d.get("portfolio") or {},
+                # WHAT IT CAN BE BOUGHT WITH, before anything is loaded: the
+                # feeds (`ac`, `dc`, `hvdc`) and airflows its orderable builds
+                # resolve to, so a picker can filter "DC, back-to-front" across
+                # the library without opening every configs.json (#513).
+                "options": device_options(d),
                 # what the type-ahead filter matches on beyond the fields above
                 "search": search_blob(d, man.parent),
                 # where this chassis's own 3D projections came from, counted

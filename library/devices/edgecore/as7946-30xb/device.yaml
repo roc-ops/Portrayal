@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-30xb
-version: 4.0.2
+version: 4.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-30XB
@@ -201,8 +201,8 @@ attrs:
   power:
     power-max-w: 527 W
     power-typical-w: 186 W
-    psu-dc-input: -40 to -75 VDC, 40 A max per PSU
-    psu-ac-input: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
+    input-dc: -40 to -75 VDC, 40 A max per PSU
+    input-ac: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
   environmental:
     operating-temp: 0 C to 45 C
     storage-temp: -40 C to 70 C
@@ -221,6 +221,7 @@ chassis:
   depth: 480.0
   ru: 2
   color: '#3f4449'
+  airflow: front-to-back
 # What no rule can find. Two Edgecore documents for this SKU state different
 # power consumption figures, and the manifest can only carry one of them.
 gaps:
@@ -806,6 +807,7 @@ views:
 configurations:
   dc-psu:
     kind: orderable
+    power: dc
     description: Modular dual DC PSUs, front-to-back airflow. This is the unit we photographed.
     default: true
     part-numbers:
@@ -813,6 +815,7 @@ configurations:
         part: FNPEC7946005Z
   ac-psu:
     kind: orderable
+    power: ac
     description: Modular dual AC PSUs, front-to-back airflow. Same shell, IEC inlet instead of the
       terminal block.
     bays:

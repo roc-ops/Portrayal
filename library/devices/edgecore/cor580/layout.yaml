@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor580
-version: 2.0.3
+version: 2.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: COR580
@@ -371,9 +371,9 @@ attrs:
   power:
     power-max-w: 800
     power-envelope: unstated
-    power-input-ac: 90-240 VAC, 50-60 Hz; 100-120 VAC 12 A max, 200-240 VAC 7.5 A max, 190-310 VDC 8-5
+    input-ac: 90-240 VAC, 50-60 Hz; 100-120 VAC 12 A max, 200-240 VAC 7.5 A max, 190-310 VDC 8-5
       A
-    power-input-dc: -36 to -72 VDC (PSU rated 48 VDC, 1300 W; -40 V to -75 V, 40 A max)
+    input-dc: -36 to -72 VDC (PSU rated 48 VDC, 1300 W; -40 V to -75 V, 40 A max)
   thermal:
     airflow: front-to-back (all SKUs; no back-to-front variant is offered)
   environmental:
@@ -694,9 +694,11 @@ configurations:
   ac-f2b:
     kind: base
     default: true
+    power: [ac, hvdc]
     description: >-
       Dual 1300 W AC PSUs (FRU FSH082-610G) and six fan trays (FRU AS9926-24D/24DB-FAN), front-to-back
-      airflow. This is a fixed 1RU switch, so the base configuration is the box as it is bought - supplies
+      airflow. The AC supply is also rated for 190-310 VDC (quick start input rating), so this build
+      takes high-voltage DC as well as AC. This is a fixed 1RU switch, so the base configuration is the box as it is bought - supplies
       and fans populated, cages empty. The AS9926-24DB rows are the same hardware with an ASPEED AST2600
       BMC on the CPU module, which changes nothing on either face.
     part-numbers:
@@ -716,11 +718,14 @@ configurations:
       AS9926-24DB-O-AC-F-JP: {part: FP5EC9524501Z, power-cord: JP}
   dc48-f2b:
     kind: orderable
+    power: dc
     description: >-
       Dual -48 VDC PSUs (FRU FSJ033-610G, rated 48 VDC 1300 W, input -40 V to -75 V at 40 A maximum) and
       the same six fan trays, front-to-back airflow. The DC SKUs ship four ring lugs that the AC SKUs
       do not (cor580-qsg package contents, item 4). The bay geometry is identical; the supply is drawn
       as the AC part because the library holds no 1300 W DC module yet, which is registered as a gap.
+    component-attrs:
+      psu-ac-1300: {input: dc}
     part-numbers:
       AS9926-24D-O-48V-F: {part: FP5EC9524001Z, power-cord: none}
       AS9926-24DB-O-48V-F: {part: FP5EC9524003Z, power-cord: none}

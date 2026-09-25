@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9311-64d
-version: 4.0.1
+version: 4.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9311-64D
@@ -402,6 +402,18 @@ gaps:
     and airflow builds almost certainly exist. The configurations therefore carry no
     part-numbers rather than invented ones.
   wanted: a UfiSpace ordering guide or a quote naming the chassis SKUs
+- what: intake-psu-face
+  scope: [ac-b2f, dc-b2f]
+  reason: needs-photo
+  note: >-
+    The back-to-front supplies are not the exhaust units in blue. The datasheet gives the
+    intake AC unit a different inlet ('PSU-242-AICB-NN ... CRPS-D-SUB/AC-inlet, blue latch')
+    and the intake DC unit a different connector ('PSU-242-DIEB-NN ... CRPS TE 2204535-3 ELON
+    Mini, blue latch'), and the HIG says only that their outlook differs. No held image shows
+    either face, so ac-b2f and dc-b2f seat the exhaust contracts with a blue latch: right in
+    colour, bay and airflow, wrong in inlet.
+  wanted: a rear photograph of a back-to-front S9311-64D, or face drawings of PSU-242-AICB-NN
+    and PSU-242-DIEB-NN
 groups:
   timing:
     term: Port
@@ -785,6 +797,7 @@ views:
 configurations:
   base:
     kind: base
+    power: ac
     description: >-
       The chassis as it ships and as every rear figure draws it - four
       FAN-805616-HCE fans and two PSU-242-AECRN 2400W AC supplies, red handles and
@@ -794,12 +807,10 @@ configurations:
     default: true
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 2400W AC supplies (PSU-242-AECRN, C20 inlet, red latch) with
-      front-to-back fans (FAN-805616-HCE). The back-to-front build swaps both for
-      their blue-latched intake counterparts - PSU-242-AICB-NN and FAN-805616-CCD -
-      which are orderable and are modelled only as the fan's blue skin, because no
-      held figure shows the intake PSU's face.
+      front-to-back fans (FAN-805616-HCE). The back-to-front build is ac-b2f.
     component-attrs:
       psu-242-ac:
         model: PSU-242-AECRN
@@ -807,6 +818,7 @@ configurations:
         model: FAN-805616-HCE
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 2400W -48V DC supplies (PSU-242-DEERN, two-row V+/V- input block, red
       latch) with front-to-back fans (FAN-805616-HCE). The HIG rates the DC feed at
@@ -820,6 +832,58 @@ configurations:
         model: PSU-242-DEERN
       fan-805616:
         model: FAN-805616-HCE
+  ac-b2f:
+    kind: orderable
+    power: ac
+    airflow: back-to-front
+    description: >-
+      Dual 2400W AC supplies (PSU-242-AICB-NN, 'intake air ... blue latch') with
+      back-to-front fans (FAN-805616-CCD, 'intake air') - the datasheet's own pairing. The
+      intake supply's inlet is a different connector ('CRPS-D-SUB/AC-inlet') and no held
+      figure shows it, so it is drawn with the exhaust unit's face in blue; see the
+      intake-psu-face gap
+    region-context:
+      fan-bank: Intake
+    skins:
+      fan-805616: intake
+    component-attrs:
+      psu-242-ac:
+        model: PSU-242-AICB-NN
+        airflow: intake
+        latch-finish: '#3b6db9'
+        latch-edge: '#274a80'
+      fan-805616:
+        model: FAN-805616-CCD
+        airflow: intake
+        handle-finish: '#4666a2'
+        handle-edge: '#2f4670'
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Dual 2400W DC supplies (PSU-242-DIEB-NN, 'intake air ... blue latch') with
+      back-to-front fans (FAN-805616-CCD). The intake supply's DC connector is a 'CRPS TE
+      2204535-3 ELON Mini', not the exhaust unit's two-row block, and no held figure shows
+      it; see the intake-psu-face gap
+    bays:
+      psu-0: ufispace/psu-242-dc@1
+      psu-1: ufispace/psu-242-dc@1
+    region-context:
+      fan-bank: Intake
+    skins:
+      fan-805616: intake
+    component-attrs:
+      psu-242-dc:
+        model: PSU-242-DIEB-NN
+        airflow: intake
+        latch-finish: '#3b6db9'
+        latch-edge: '#274a80'
+      fan-805616:
+        model: FAN-805616-CCD
+        airflow: intake
+        handle-finish: '#4666a2'
+        handle-edge: '#2f4670'
 datasheet:
   title: UfiSpace S9311-64D 400GE Data Center Switch Datasheet
   url: https://www.ufispace.com/products/datacenter/400g/s9311-64d

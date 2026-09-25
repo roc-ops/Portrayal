@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9300-32d
-version: 3.0.1
+version: 3.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9300-32D
@@ -143,9 +143,10 @@ provenance:
       ordering lines and live on the FRU contracts and configurations. NO ORDERABLE CHASSIS SKU
       appears in any held document - the datasheet and HIG name the product only as S9300-32D. The
       S9510-28DC lesson applies: such SKUs exist at the owner even when no held PDF prints one, so
-      this is recorded as a gap rather than as 'no SKU exists'. The back-to-front airflow variants
-      (blue handles/latches: FAN-405637-CD, PSU-132-AESR-3N/DESR-3N) are orderable and not
-      modelled as configurations - the PSU components carry only red-latch skins.
+      this is recorded as a gap rather than as 'no SKU exists'. The builds pair them by airflow:
+      front-to-back (ac, dc) seats PSU-132-AESR-3N/DESR-3N with FAN-405637-HD, back-to-front
+      (ac-b2f, dc-b2f) PSU-132-AISB1/DISB1 with FAN-405637-CD. This file used to pair them the
+      other way round; the datasheet names the units only as exhaust or intake, and exhaust is front-to-back for these rear-mounted supplies, as the red FAN-405637-HD fan is 'exhaust air flow' and the S9600-72XC, sold front-to-back only, lists only exhaust units (the reasoning is on ufispace/psu-132-ac@1's airflow provenance).
   lifecycle:
     note: >-
       searched 2026-08-28: 'UfiSpace S9300-32D end of life' - no announcement found; the product
@@ -251,6 +252,19 @@ gaps:
     any PDF), orderable SKUs for the AC/DC and airflow variants exist somewhere; the
     configurations therefore carry no part-numbers rather than invented ones.
   wanted: a UfiSpace ordering guide or a quote naming the chassis SKUs
+- what: psu-airflow-sku-mapping
+  scope: [psus, ac, dc, ac-b2f, dc-b2f]
+  reason: vendor-silent
+  note: >-
+    The datasheet names the supplies by airflow WORD (PSU-132-AESR-3N / DESR-3N 'exhaust air flow', PSU-132-AISB1 / DISB1
+    'intake air flow') and the HIG by latch COLOUR (red for front-to-back, blue for
+    back-to-front); no held document for this chassis joins the two. The four builds pair
+    them by inference - exhaust is front-to-back for a rear-mounted supply, as the red
+    FAN-405637-HD is 'exhaust air flow', the front-to-back-only S9600-72XC lists only
+    exhaust units, and the S9311-64D datasheet prints 'exhaust air ... red colored latch'
+    for its own supplies (reasoning on ufispace/psu-132-ac@1). The same gap is on the
+    S9301-32D.
+  wanted: a UfiSpace ordering guide that prints the SKU beside the airflow direction
 groups:
   mgmt:
     term: Port
@@ -563,31 +577,76 @@ views:
 configurations:
   ac:
     kind: orderable
+    power: ac
     description: >-
-      Dual 1300W AC PSUs (PSU-132-AISB1) with front-to-back airflow fans
-      (FAN-405637-HD, red handles) - the build the vendor renders show. The
-      back-to-front (blue, PSU-132-AESR-3N / FAN-405637-CD) variant is orderable and
-      not modelled; no chassis SKU appears in any held document (see the chassis-sku
-      gap)
+      Dual 1300W AC PSUs (PSU-132-AESR-3N, exhaust, red latch) with front-to-back
+      airflow fans (FAN-405637-HD, red handles) - the build the vendor renders show. The
+      back-to-front build is ac-b2f; no chassis SKU appears in any held document (see
+      the chassis-sku gap)
     default: true
     component-attrs:
       psu-132-ac:
-        model: PSU-132-AISB1
+        model: PSU-132-AESR-3N
       fan-405637:
         model: FAN-405637-HD
   dc:
     kind: orderable
+    power: dc
     description: >-
-      Dual 1300W DC PSUs (PSU-132-DISB1, screw-terminal input, 60A internal fuse)
+      Dual 1300W DC PSUs (PSU-132-DESR-3N, exhaust, screw-terminal input, 60A internal fuse)
       with front-to-back airflow fans (FAN-405637-HD)
     bays:
       psu-0: ufispace/psu-132-dc@1
       psu-1: ufispace/psu-132-dc@1
     component-attrs:
       psu-132-dc:
-        model: PSU-132-DISB1
+        model: PSU-132-DESR-3N
       fan-405637:
         model: FAN-405637-HD
+  ac-b2f:
+    kind: orderable
+    power: ac
+    airflow: back-to-front
+    description: >-
+      Dual 1300W AC PSUs (PSU-132-AISB1, intake, blue latch) with back-to-front fans
+      (FAN-405637-CD, blue handles) - the HIG's blue-latch, blue-handle build. The fan
+      bank breathes in at the rear, so the rear region reads Intake
+    region-context:
+      exhaust: Intake
+    skins:
+      fan-405637: intake
+    component-attrs:
+      psu-132-ac:
+        model: PSU-132-AISB1
+        latch-finish: '#3b6db9'
+        latch-edge: '#274a80'
+      fan-405637:
+        model: FAN-405637-CD
+        airflow: intake
+        handle-finish: '#4666a2'
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Dual 1300W DC PSUs (PSU-132-DISB1, intake, blue latch) with back-to-front fans
+      (FAN-405637-CD, blue handles)
+    bays:
+      psu-0: ufispace/psu-132-dc@1
+      psu-1: ufispace/psu-132-dc@1
+    region-context:
+      exhaust: Intake
+    skins:
+      fan-405637: intake
+    component-attrs:
+      psu-132-dc:
+        model: PSU-132-DISB1
+        latch-finish: '#3b6db9'
+        latch-edge: '#274a80'
+      fan-405637:
+        model: FAN-405637-CD
+        airflow: intake
+        handle-finish: '#4666a2'
 datasheet:
   title: UfiSpace S9300-32D 400GE Data Center Switch Datasheet
   url: https://www.ufispace.com/products/datacenter/400g/s9300-32d-400g-data-center-spine-switch

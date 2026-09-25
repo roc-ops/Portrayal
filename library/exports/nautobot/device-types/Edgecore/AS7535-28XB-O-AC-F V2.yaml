@@ -1,11 +1,13 @@
 ---
 manufacturer: Edgecore
-model: AS7535-28XB
-slug: edgecore-as7535-28xb
+model: AS7535-28XB-O-AC-F V2
+slug: edgecore-as7535-28xb-o-ac-f-v2
 u_height: 1.0
 is_full_depth: true
+part_number: F0PEC7332007A
 weight: 7.5
 weight_unit: kg
+airflow: front-to-rear
 description: 24x 25G SFP28, 2x 100G QSFP28 and 2x 400G QSFP-DD cell site router, sold as the CSR440, Broadcom
   BCM88843 Qumran-2A with an Intel Xeon D-1539
 front_image: true
@@ -121,8 +123,8 @@ comments: '24x 25G SFP28, 2x 100G QSFP28 and 2x 400G QSFP-DD cell site router, s
 
 
   Configuration `ac`: Two hot-swappable AC supplies and six rear fan modules. This is the variant both
-  elevations draw. Neither staged document publishes an ordering matrix for this model, so the configuration
-  carries no part numbers, and the DC variant is a gap rather than a second configuration.
+  elevations draw. The datasheet''s ordering table lists seven AC rows by power-cord region, carried below;
+  the DC build is dc.
 
 
   Also sold or listed as: CSR440, AS7535-28XBE
@@ -186,20 +188,20 @@ comments: '24x 25G SFP28, 2x 100G QSFP28 and 2x 400G QSFP-DD cell site router, s
 
   - platform.storage: 128 GB mSATA SSD
 
+  - power.input-ac: 100V-240V, 6.0-2.4 A per PS
+
+  - power.input-dc: -44 to -60 V, 15.5-9.6 A per PS
+
   - power.power-envelope: as-tested
-
-  - power.power-input-ac: 100V-240V, 6.0-2.4 A per PS
-
-  - power.power-input-dc: -44 to -60 V, 15.5-9.6 A per PS
 
   - power.power-max-w: 383.6
 
-  - thermal.airflow: side-to-side
+  - thermal.airflow: front-to-back
 
   - thermal.cooling: six hot-swappable rear fan modules, 5+1 redundant
 
 
-  Drawing version 1.0.6. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 1.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

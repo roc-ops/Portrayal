@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s7801-54xs
-version: 5.0.1
+version: 5.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S7801-54XS
@@ -217,8 +217,8 @@ attrs:
     power-typical-w: '111.3'
     power-max-w: '203.3'
     power-envelope: bare
-    ac-input: 100 to 240V, 6A
-    dc-input: -36 to -75V, 16A
+    input-ac: 100 to 240V, 6A
+    input-dc: -36 to -75V, 16A
     psu-redundancy: 1+1 active-active, hot-swappable
   thermal:
     fan-redundancy: 4+1, hot-swappable
@@ -710,6 +710,7 @@ configurations:
   base:
     kind: base
     default: true
+    power: dc
     description: chassis with dual 400 W DC PSUs and five fans seated, front-to-back
       airflow (exhaust FRUs, red latches); traffic cages empty
     airflow: front-to-back
@@ -720,6 +721,7 @@ configurations:
         model: FAN-402825-HD
   dc-front-to-back:
     kind: orderable
+    power: dc
     description: DC power (2x PSU-401-DESR, exhaust), front-to-back airflow, FAN-402825-HD fans
     airflow: front-to-back
     component-attrs:
@@ -729,6 +731,7 @@ configurations:
         model: FAN-402825-HD
   ac-front-to-back:
     kind: orderable
+    power: ac
     description: AC power (2x PSU-401-AESR, exhaust), front-to-back airflow, FAN-402825-HD fans
     airflow: front-to-back
     bays:
@@ -741,6 +744,7 @@ configurations:
         model: FAN-402825-HD
   dc-back-to-front:
     kind: orderable
+    power: dc
     description: DC power (2x PSU-401-DISB-1, intake), back-to-front airflow, FAN-402825-CD fans
     airflow: back-to-front
     component-attrs:
@@ -751,6 +755,7 @@ configurations:
         airflow: intake
   ac-back-to-front:
     kind: orderable
+    power: ac
     description: AC power (2x PSU-401-AISB, intake), back-to-front airflow, FAN-402825-CD fans
     airflow: back-to-front
     bays:

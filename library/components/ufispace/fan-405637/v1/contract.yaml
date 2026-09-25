@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fan-405637
-version: 1.0.0
+version: 1.1.0
 class: fan
 behaviour: fills
 profile: networking
@@ -13,6 +13,13 @@ description: UfiSpace FAN-405637 hot-swap fan module (S9110-32X) - tube handle
 size: {w: 50.7, h: 40.0}
 attrs: {power-absent: not-published, model: FAN-405637-HD, airflow: exhaust}
 provenance:
+  intake-skin: >-
+    photo-measured - the `intake` skin is the FAN-405637-CD back-to-front unit, drawn from the
+    S9301-32DB vendor rear render that shows the blue build (s9301-32db-3-view): the handle's
+    median blue #4666a2 over 1932 pixels and the airflow tag's #3f7acb over 473, the tag
+    printing 'I' where the exhaust unit prints 'E'. The HIG Fan Overview of the S9300-32D and
+    S9301-32D states the rule - blue handle for back-to-front, red for front-to-back. Geometry
+    is the default skin's; only colour and the tag letter change.
   power: >-
     NOT PUBLISHED. The S9110-32X datasheet names FAN-405637-HD and FAN-405637-CD only as
     ordering lines ('FAN-405637-HD, exhaust air flow'), and the S9110-32X hardware
@@ -102,4 +109,4 @@ fields:
     label: Handle colour
     type: text
     default: '#c22f2f'
-skins: [default]
+skins: [default, intake]

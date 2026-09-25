@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-28dx
-version: 4.0.2
+version: 4.0.4
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-28DX
@@ -270,8 +270,8 @@ attrs:
       894 W on the DC version and 890 W on the AC version
     power-typical-scope: no transceiver installed (datasheet's own qualifier)
     psus: 2x 1300 W 1+1 redundant, hot-swappable (exhaust airflow)
-    psu-ac-input: 100-240 VAC, 12 A max; 16 A fast-acting fuse in the PSU
-    psu-dc-input: -40 to -75 VDC, 40 A max; 60 A fast-acting fuse in the PSU
+    input-ac: 100-240 VAC, 12 A max; 16 A fast-acting fuse in the PSU
+    input-dc: -40 to -75 VDC, 40 A max; 60 A fast-acting fuse in the PSU
   thermal:
     fans: 4 hot-swappable modules, 3+1 redundant, exhaust; front-to-back airflow
   environmental:
@@ -736,6 +736,7 @@ views:
 configurations:
   dc:
     kind: base
+    power: dc
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2
@@ -750,6 +751,7 @@ configurations:
       fan-803816-hi:
         model: FAN-803816-HI
   ac:
+    power: ac
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2

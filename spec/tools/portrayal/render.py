@@ -31,7 +31,8 @@ from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slo
                       seated_ref, occupants_under, occupant_local_id,
                       occupant_spec, nested_key_host, slot_default, drawn_refs,
                       spanned_slots, spanning_axis, summed_rotate,
-                      alias_names, config_airflow)
+                      alias_names, config_airflow,
+                      config_power, device_options)
 from portrayal import capability
 from portrayal import facets as _facets
 TOOL_VERSION = "0.1.0"
@@ -2009,6 +2010,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     airflow = config_airflow(device, config)
     if airflow:
         svg.set("data-airflow", airflow)
+    # WHAT THIS BUILD IS FED WITH, resolved as airflow is (config_power) and
+    # space-separated where a build takes two feeds - `ac dc` - which is how an
+    # SVG attribute spells a list and what `~=` in a CSS selector matches.
+    power = config_power(device, config)
+    if power:
+        svg.set("data-power", " ".join(power))
     skin_overrides = config.get("skins") or {}
     attr_overrides = config.get("component-attrs") or {}
 
@@ -4112,8 +4119,33 @@ def component_cages(contract, lib, families, candidates, connectors=None, face=F
         if entry is not None:
             for k in COMPONENT_CAGE_DROPS:
                 entry.pop(k, None)
+            entry["tilt"] = component_cage_tilt(contract, p)
             out.append(entry)
     return out
+
+
+def component_cage_tilt(contract, part):
+    """The facet a card's cage stands `on`, as the cage entry publishes it:
+    `{"deg", "facing", "on"}`, or None for a cage on no facet.
+
+    WHAT _seat_nested_occupants DOES TO AN OPTIC IN A TILTED CAGE, published so
+    the kit can do the same (P3 amended). The build finds the facet from the
+    cage's own `parts:` entry (`_facet_via_part`), draws the optic
+    `translate(at) scale(...) rotate(...)` with the facet's cos along its axis,
+    solves `at` so the optic's foreshortened mate lands on the cage's
+    foreshortened one (`_tilt_offset`, both sides), and writes `data-tilt-on`
+    (`<card instance id>--<on>`), `data-tilt` and `data-tilt-facing`. The
+    entry's `mate` stays the flat seat_point: with the cage's `at` and this
+    facet a consumer has both ends of that solve. `facing` is in the card's
+    frame, as `data-tilt-facing` is.
+
+    A COMPONENT'S CAGES ONLY. A device placement stands on no facet; a part
+    that does is on a card, whose own group is where the optic is drawn.
+    """
+    facet, _at, _node = _facet_via_part(contract, part, "")
+    if not facet:
+        return None
+    return {"deg": facet["deg"], "facing": facet["facing"], "on": part["on"]}
 
 
 def main():
@@ -4202,7 +4234,16 @@ def main():
                  # `configs[].airflow` below; read that, not this, to learn how
                  # a particular build breathes.
                  "chassis": {"w": ch.get("width"), "h": ch.get("height"), "d": ch.get("depth"),
-                             "ru": ch.get("ru"), "airflow": ch.get("airflow")},
+                             "ru": ch.get("ru"), "airflow": ch.get("airflow"),
+                             # the chassis's own feed, where one feed is the
+                             # whole story; `configs[].power` is each build's
+                             # resolved answer, as for airflow
+                             "power": ch.get("power")},
+                 # WHAT THE DEVICE CAN BE BOUGHT WITH - the union over its
+                 # orderable and base builds of `configs[].power` and
+                 # `configs[].airflow`. The filter an HCL runs ("DC, back-to-
+                 # front") is one lookup here instead of a walk (#513).
+                 "options": device_options(device),
                  # facts about the device that belong to no view. They reach the
                  # drawing as data-* on the SVG root, which meant a viewer had to
                  # load and scrape a picture to answer "how much memory" - and
@@ -4237,6 +4278,11 @@ def main():
                               # "exhaust airflow" out of a description (#513).
                               # `null` where the device states no airflow.
                               "airflow": config_airflow(device, c),
+                              # WHAT THIS BUILD IS FED WITH - `ac`, `dc`,
+                              # `hvdc` - always a list, `[]` where the device
+                              # states nothing (config_power). Read this rather
+                              # than `ac`/`dc` out of the name.
+                              "power": config_power(device, c),
                               "part-numbers": c.get("part-numbers") or {},
                               "bays": c.get("bays") or {},
                               # WHAT THIS CONFIGURATION SEATS IN ITS CAGES,

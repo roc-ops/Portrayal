@@ -415,6 +415,10 @@
       "passive"
      ]
     },
+    "power": {
+     "description": "WHAT THE BOX IS FED WITH, stated the way `airflow` is: the chassis is the home, and a configuration states `power` only when its build DIFFERS - which, unlike airflow, is the usual case, because most switches are sold as an AC and a DC build of one chassis. So a box with one feed says it here once (`power: dc` on a fixed -48 V router), and a box with an AC and a DC build says it on each configuration and not here. `<device>.configs.json` publishes each build's resolved answer as `configs[].power`, and `options.power` there and in devices.json is the union across the builds a buyer can order - what a tool filtering by feed reads instead of parsing `ac`/`dc` out of a configuration name or `input-dc` out of attrs (#513). L118 checks the division; L119 asks for it where a device has supplies and says nothing.",
+     "$ref": "#/$defs/power-feed"
+    },
     "color": {
      "type": "string",
      "description": "housing color (faceplate fill); default dark"
@@ -452,6 +456,10 @@
        "front-to-back",
        "back-to-front"
       ]
+     },
+     "power": {
+      "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS - see `chassis.power`. An AC and a DC build of one switch are two configurations of one chassis, and each says which it is here; a box with one feed states it once on the chassis instead, and restating it here is what L118 reports. It must agree with the supplies the build seats: `dc` over a bay holding an `-ac` supply is L120.",
+      "$ref": "#/$defs/power-feed"
      },
      "occupants": {
       "type": "object",
@@ -1475,6 +1483,13 @@
   }
  },
  "$defs": {
+  "power-feed": {
+   "description": "a supply feed, in three words: `ac` is mains through an IEC or similar inlet; `dc` is telecom DC, -48 V nominal (-36 to -75 V across the whitebox datasheets); `hvdc` is 240/380 V DC. A build fed by two kinds at once - a fixed box with an AC inlet AND a DC terminal both fitted - lists both, and a list is never used for one.",
+   "oneOf": [
+    {"enum": ["ac", "dc", "hvdc"]},
+    {"type": "array", "items": {"enum": ["ac", "dc", "hvdc"]}, "minItems": 2, "uniqueItems": true}
+   ]
+  },
   "provenance": {
    "description": "field name -> where the figure came from. The same shape as component.schema.json's `$defs.provenance`, and deliberately so: a provenance note means one thing whether it is written on a device, a cutout or a placement.",
    "type": "object",

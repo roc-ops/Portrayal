@@ -1,0 +1,31 @@
+format: 1
+kind: module
+name: ht3filh
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) HT3FILH - the filler module for an unused quad-density transmitter
+  position in a CA3008 carrier: a plain slab face with the transmitter's latch.
+size: {w: 51.92, h: 9.66}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: HT3FILH
+provenance:
+  size: >-
+    borrowed - commscope/ht358xh@1's face; the filler takes a transmitter's position in
+    the carrier. The data sheet gives no dimensions for it, so no depth is stated.
+  identity: >-
+    datasheet - HT3580H data sheet (Rev G, 2024), System Accessories ordering table:
+    "Filler Module for Quad-Density Slots, HT3FILH".
+  face: >-
+    photograph - the same page's close-up shows a plain grey slab with only the black
+    latch at its right-hand end, the same latch as the transmitter's; nothing is printed
+    on it. The photograph is a three-quarter view, so the latch keeps the transmitter's
+    measured position rather than being re-measured.
+elements:
+  latch: {at: [36.3, 0.8], size: [15.4, 8.1], class: latch}
+connection-points:
+  mate: {at: [25.96, 4.83], direction: front}
+skins: [default]

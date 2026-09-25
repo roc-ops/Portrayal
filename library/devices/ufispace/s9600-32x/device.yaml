@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 3.0.2
+version: 3.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -797,6 +797,7 @@ views:
         - {ref: common/screw-head@1, id: pin-r5, at: [660.0, 42.0], group: furniture, rel-pos: 11}
 configurations:
   base:
+    power: ac
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2
@@ -808,6 +809,7 @@ configurations:
       chassis-sku gap.
     default: true
   ac:
+    power: ac
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2
@@ -822,6 +824,7 @@ configurations:
       psu-1: ufispace/psu-162-ac@1
   dc:
     kind: orderable
+    power: dc
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2
@@ -837,6 +840,7 @@ configurations:
       psu-0: ufispace/psu-162-dc@1
       psu-1: ufispace/psu-162-dc@1
   breakout:
+    power: ac
     source: >-
       bare by policy - what is plugged in is a downstream configuration,
       docs/pluggables-design.md decision 2

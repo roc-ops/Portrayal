@@ -183,7 +183,10 @@ CAGE_KEYS = {"id", "at", "mate", "lift", "rotate", "interface", "media",
              "default",
              # the slots this one takes the place of (B3, "The duplex host"):
              # an LC duplex adapter's two bores, [] for a cage
-             "bores"}
+             "bores",
+             # the facet the cage stands `on`, null where it stands on none
+             # (P3 amended): a fact of the card's frame, so a card's alone
+             "tilt"}
 
 
 def shipped_default(ref, slot_id):
@@ -214,6 +217,25 @@ def test_a_card_cage_carries_exactly_the_r1_keys(index):
                                   else []), (ref, c["id"])
             checked += 1
     assert checked > 0
+
+
+def test_a_card_cage_on_a_facet_publishes_the_facet(index):
+    """P3 amended: a cage whose part stands `on` a facet publishes that facet
+    as `tilt` - the one _seat_nested_occupants tilts an optic seated there by
+    - and every other cage publishes null. The FANT-H's two QSFP28 cages
+    stand on its 36-degree `up` facet; that is the case that must not be
+    vacuous."""
+    tilted = set()
+    for ref, entry in index.items():
+        parts = {p["id"]: p for p in _contract(ref).get("parts") or []}
+        for c in entry.get("cages") or []:
+            p = parts[c["id"]]
+            facet = render_mod._facets.facet_of(_contract(ref), p["on"]) if p.get("on") else None
+            want = {"deg": facet["deg"], "facing": facet["facing"], "on": p["on"]} if facet else None
+            assert c["tilt"] == want, (ref, c["id"])
+            if want:
+                tilted.add((ref, c["id"]))
+    assert {("nokia/fant-h-bb@2", "qsfp-1"), ("nokia/fant-h-bb@2", "qsfp-2")} <= tilted, tilted
 
 
 def test_a_card_cage_has_no_group_side_attrs(index):
@@ -268,7 +290,7 @@ def test_every_component_cage_is_the_device_answer_for_the_same_placement(
             [dev] = render_mod.cage_entries(device, "front", lib, families,
                                             candidates, {})
             assert cage["lift"] == dev["lift"] + float(p.get("lift") or 0.0), (ref, p["id"])
-            assert {k: v for k, v in cage.items() if k != "lift"} == \
+            assert {k: v for k, v in cage.items() if k not in ("lift", "tilt")} == \
                 {k: v for k, v in dev.items() if k != "lift"
                  and k not in render_mod.COMPONENT_CAGE_DROPS}, (ref, p["id"])
             checked += 1

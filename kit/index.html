@@ -313,11 +313,16 @@ function about(box) {
   const row = (k, v) => `<div class="row"><span>${esc(k)}</span><span class="v">${esc(v)}</span></div>`;
   // A fact and its citation belong together. Whatever provenance is left over is
   // about the modelling rather than about one fact, and goes at the bottom.
+  // A PROVENANCE ENTRY IS `{confidence, note}` since #167, not a string, and
+  // printing it raw showed "[object Object]" under every cited fact.
+  const said = t => typeof t === 'object'
+    ? [t.confidence && `[${t.confidence}]`, t.note].filter(Boolean).join(' ')
+    : t;
   const cite = (...keys) => keys.map(k => {
     const t = prov[k];
     if (!t) return '';
     delete prov[k];
-    return `<div class="prov">${esc(k)}: ${esc(t)}</div>`;
+    return `<div class="prov">${esc(k)}: ${esc(said(t))}</div>`;
   }).join('');
 
   let h = `<h2>About</h2>`;
@@ -336,6 +341,25 @@ function about(box) {
   h += row('rack units', ch.ru != null ? `${ch.ru} RU` : '—');
   h += row('W × H × D', `${dim(ch.w)} × ${dim(ch.h)} × ${dim(ch.d)}`);
   h += cite('chassis', 'dimensions', 'width', 'height', 'depth', 'ru');
+
+  // POWER AND AIRFLOW ARE FIELDS, NOT PROSE (#513). `options` is what the device
+  // can be bought with across its orderable builds; the configuration row is the
+  // build on screen. Neither lives in `attrs`, so without this section the only
+  // place either showed was the description.
+  const opts = meta.options || {};
+  const cur = (meta.configs || []).find(c => c.name === state.cfg) || {};
+  const feed = v => (v || []).map(x => x.toUpperCase()).join(' / ');
+  if ((opts.power || []).length || (opts.airflow || []).length || cur.airflow || (cur.power || []).length) {
+    h += `<h3>Power and airflow</h3>`;
+    h += row('power options', feed(opts.power) || '—');
+    h += row('airflow options', (opts.airflow || []).join(' / ') || '—');
+    if (cur.name)
+      h += row(`this build (${cur.name})`,
+               [feed(cur.power), cur.airflow].filter(Boolean).join(' · ') || '—');
+    // `provenance.power` is about the wattage figures, which print under
+    // Power below; only airflow has a provenance entry about this section
+    h += cite('airflow');
+  }
 
   // Attributes are SECTIONED, and this is where the sectioning pays: two dozen
   // rows in one column headed "Attributes" is a wall. Unknown sections are
@@ -373,7 +397,7 @@ function about(box) {
   const rest = Object.keys(prov);
   if (rest.length) {
     h += `<h3>Provenance</h3>`;
-    for (const k of rest) h += `<div class="prov" style="margin-left:0">${esc(k)}: ${esc(prov[k])}</div>`;
+    for (const k of rest) h += `<div class="prov" style="margin-left:0">${esc(k)}: ${esc(said(prov[k]))}</div>`;
   }
   if (!akeys.length && !rest.length)
     h += `<div class="hint" style="padding-left:0">This manifest carries no attrs or provenance.

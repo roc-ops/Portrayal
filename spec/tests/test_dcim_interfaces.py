@@ -355,7 +355,7 @@ def test_a_management_port_on_the_bare_jack_is_ethernet_when_the_device_says_so(
 
 
 @pytest.mark.parametrize("model,port", [
-    ("COR550", "mgmt-eth"),                 # role: mgmt on the port, lamped part
+    ("7926-40XKFB-O-AC-F", "mgmt-eth"),     # COR550: role: mgmt on the port, lamped part
     ("ECS4530-54CSFP", "mgmt-eth"),         # role: mgmt, bare part, speed 1g
     ("5912-54X-O-AC-F", "mgmt-eth"),         # AS5912-54X: role: mgmt, bare part, no speed
     ("AS4630-54TE-O-AC-F-EU", "mgmt"),      # role only on the group: always worked

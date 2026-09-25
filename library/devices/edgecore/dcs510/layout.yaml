@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs510
-version: 2.0.3
+version: 2.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: DCS510
@@ -267,8 +267,8 @@ attrs:
     vlan-ids: 4 K (NOS-dependent)
     l3-host-table: IPv4 UC 16 K / IPv4 MC 8 K / IPv6 UC 8 K / IPv6 MC 4 K (NOS-dependent)
     port-modes-qsfpdd: 1x 400G, 1x 100G, or breakout 4x 100G / 4x 25G
-  power: {power-max-w: 1300, power-envelope: unstated, power-input-ac: '100-240 VAC, 50-60 Hz', power-input-ac-current: 12
-      A max at 100-120 VAC; 7.5 A max at 200-240 VAC, power-input-dc: '190-310 VDC, 8-5 A'}
+  power: {power-max-w: 1300, power-envelope: unstated, input-ac: '100-240 VAC, 50-60 Hz', input-ac-current: 12
+      A max at 100-120 VAC; 7.5 A max at 200-240 VAC, input-hvdc: '190-310 VDC, 8-5 A'}
   thermal:
     airflow: front-to-back and back-to-front SKUs (matched PSU and fan modules)
   environmental: {temperature-operating: 0 C to 45 C (32 F to 113 F), temperature-storage: -40 C to 70
@@ -293,7 +293,7 @@ attrs:
     nebs: GR63-CORE (Pre-test)
     rohs: RoHS-2.0 compliant; WEEE Directive 2002/96/EC
   lifecycle: {eol: none-announced}
-chassis: {width: 438.4, height: 43.1, depth: 536.0, ru: 1, weight-kg: 11.06, color: '#2b2f33'}
+chassis: {width: 438.4, height: 43.1, depth: 536.0, ru: 1, weight-kg: 11.06, color: '#2b2f33', power: [ac, hvdc]}
 gaps:
 - what: reset-area-legend
   scope:

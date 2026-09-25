@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7726-32x
-version: 2.0.2
+version: 2.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: AS7726-32X
@@ -421,6 +421,7 @@ views:
 configurations:
   ac-f2b:
     kind: orderable
+    power: ac
     description: Dual AC PSUs, front-to-back airflow (7726-32X-O-AC-F)
     default: true
     airflow: front-to-back
@@ -456,6 +457,7 @@ configurations:
         part-number: F0TAO6632000A
   ac-b2f:
     kind: orderable
+    power: ac
     description: Dual AC PSUs, back-to-front airflow (7726-32X-O-AC-B)
     airflow: back-to-front
     region-context:
@@ -497,6 +499,7 @@ configurations:
         part-number: F0TZZ7632000A
   dc-f2b:
     kind: orderable
+    power: dc
     description: Dual -48V DC PSUs, front-to-back airflow (7726-32X-O-48V-F)
     airflow: front-to-back
     bays:
@@ -515,6 +518,7 @@ configurations:
         part-number: F0TAO6632000A
   dc-b2f:
     kind: orderable
+    power: dc
     description: Dual -48V DC PSUs, back-to-front airflow (7726-32X-O-48V-B)
     airflow: back-to-front
     bays:

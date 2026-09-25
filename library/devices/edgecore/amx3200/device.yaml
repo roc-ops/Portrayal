@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: amx3200
-version: 1.0.4
+version: 1.0.5
 maturity: modelled
 manufacturer: Edgecore
 model: AMX3200
@@ -88,8 +88,8 @@ attrs:
   power:
     power-max-w: 850
     power-envelope: unstated
-    power-input-ac: 100-240 VAC, 50-60 Hz (10.0 A max per PS at 100-127 V, 8.0 A at 200-240 V)
-    power-input-dc: -40 to -72 VDC, 40 A max per PS
+    input-ac: 100-240 VAC, 50-60 Hz (10.0 A max per PS at 100-127 V, 8.0 A at 200-240 V)
+    input-dc: -40 to -72 VDC, 40 A max per PS
     power-redundancy: 1+1 redundant, load-sharing, hot-swappable 1200 W supplies
   thermal: {airflow: front-to-back}
   environmental: {temperature-operating: 0 C to 45 C (32 F to 113 F), temperature-storage: -40 C to 70
@@ -426,11 +426,13 @@ configurations:
   base:
     kind: base
     default: true
+    power: ac
     description: >-
       Two AMX-3200-SLED400 sleds, two 1200 W AC supplies and five fan trays - the machine the guide's
       front and rear elevations draw.
   ac-f2b:
     kind: orderable
+    power: ac
     description: >-
       AMX3200-O-AC-F and its regional cord variants: dual 1200 W AC supplies, front-to-back, 'Sled configuration
       OTN Supported: 2 x 400G CFP + 8 x 100G QSFP28'.
@@ -444,6 +446,7 @@ configurations:
       AMX3200-O-AC-F-TW: {power-cord: TW}
   dc-f2b:
     kind: orderable
+    power: dc
     description: >-
       AMX3200-O-48V-F: dual 1200 W -48 VDC supplies with blue latches and terminal blocks, front-to-back
       - the build the DC rear photograph shows.

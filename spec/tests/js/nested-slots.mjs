@@ -61,7 +61,9 @@ function helperSlots(root, deviceCages = []) {
     let inside = false;
     for (let n = mod; n && typeof n.getAttribute === 'function'; n = n.parentNode)
       if (n.getAttribute('data-for') != null
-          && !['mounts', 'fills'].includes(n.getAttribute('data-behaviour'))) { inside = true; break; }
+          && !['mounts', 'fills'].includes(n.getAttribute('data-behaviour'))
+          // a seat is walked (P3 amended): only a non-seat's inside is skipped
+          && n.getAttribute('data-path') !== `${n.getAttribute('data-for')}-occupant`) { inside = true; break; }
     if (inside) continue;
     const ref = (mod.getAttribute('data-ref') || '').split(':')[0];
     let depth = 0;
@@ -139,15 +141,24 @@ await scenario('fhdPlug', async () => {
   const first = await swap(root, fhdCages, key, PLUG);
   const plug = seated(root, key);
   const offeredWithPlug = offered(root, fhdCages);
-  // P3, made to bite: an index in which the duplex plug publishes a boot
-  // slot on each half (the real one publishes none) - still no slot is read
-  // inside the seated plug
+  // P3 as amended (2026-09-24), made to bite: an index in which the duplex
+  // plug publishes a boot slot on each half (the real one publishes none).
+  // A SEAT's own slots are read, at its chained path; the same group made a
+  // non-seat (`data-for` the slot, but not at `<slot>-occupant`) is walked
+  // no more than an LED is
   const boots = {...compByRef(PLUG), cages: ['a', 'b'].map(id => ({
     id, kind: 'connector', accepts: ['common/lc-boot@1'], default: null, bores: [],
     mate: [0, 0], lift: 0, rotate: null, mirror: false, 'group-states': false}))};
   const withBoots = ref => String(ref).split(':')[0] === PLUG ? boots : compByRef(ref);
-  const insidePlug = m.nestedSlots(root, withBoots, {deviceCages: fhdCages, all: true})
-    .map(e => e.id).filter(id => id.includes('-occupant'));
+  const readInside = () => m.nestedSlots(root, withBoots, {deviceCages: fhdCages, all: true})
+    .filter(e => e.id.includes('-occupant'));
+  const inside = readInside();
+  const insidePlug = inside.map(e => e.id);
+  const insideKeys = inside.map(e => e.key);
+  const plugEl = byPath(root, `${key}-occupant`);
+  plugEl.setAttribute('data-for', `${key}-elsewhere`);
+  const insideNonSeat = readInside().map(e => e.id);
+  plugEl.setAttribute('data-for', key);
   const plugParts = root.querySelectorAll('[data-ref]')
     .filter(n => (n.getAttribute('data-path') || '').startsWith(`${key}-occupant/`)).length;
   const toCap = await swap(root, fhdCages, key, DCAP);
@@ -158,7 +169,7 @@ await scenario('fhdPlug', async () => {
   const occRef = m.occupantRef(root, allSlots(root, fhdCages).find(c => c.id === key));
   const emptied = await swap(root, fhdCages, key, null);
   return {first, plug, toCap, afterCap, afterTwoPlugs, emptied, left: occupantsAt(root, key).length,
-          offeredWithPlug, occRef, insidePlug, plugParts};
+          offeredWithPlug, occRef, insidePlug, insideKeys, insideNonSeat, plugParts};
 });
 
 // what a click on a seated plug names, and the select it offers

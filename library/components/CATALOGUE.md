@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-817 component majors in 17 namespaces.
+822 component majors in 17 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -32,11 +32,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 1 | 1 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
-| `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 4 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
+| `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 5 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 14 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 8 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
-| `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 5 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
-| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 11 | Micro-USB Type-B receptacle, as used for a console port |
+| `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 6 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
+| `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 12 | Micro-USB Type-B receptacle, as used for a console port |
 | `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 6 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 0 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
 | `std/pcie-bracket-fh@1` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 11 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
@@ -90,11 +90,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-duplex-adapter@6` | component | port | 13.2 × 11 | lc-duplex | 3 | 16 | Panel-mount LC duplex adapter - a bezel carrying two LC bores side by side, as used for Tx/Rx pairs on optica… |
 | `common/lc-duplex-dust-cap@2` | component | cap | 12.25 × 5.85 | lc-duplex | 0 | 1 | The ONE white cap FS ships over both ports of an FHD LC duplex adapter - 5.85 x 12.25 as read off that adapte… |
 | `common/lc-duplex-shuttered-adapter@2` | component | port | 13.1 × 11.6 | lc-duplex | 0 | 4 | LC duplex panel adapter with its two ports SIDE BY SIDE and a spring shutter closing each bore - the adapter … |
-| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 24 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
+| `common/lc-duplex-v-adapter@6` | component | port | 9.28 × 13.75 | fhd-lc-cassette | 0 | 25 | LC duplex panel adapter with its two ports STACKED VERTICALLY - the shell FS fits to FHD cassettes and adapte… |
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 2 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 22 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 87 | 219 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 87 | 221 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 10 | 31 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 2 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
@@ -359,14 +359,19 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/spa-8xoc3-pos@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 8-Port OC-3/STM-1 POS SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 | `cisco/spa-oc192pos-xfp@1` | module | line-card | 17.29 × 167.87 |  | 0 | 2 | Cisco 1-Port OC-192/STM-64 POS/RPR SPA, a single-height shared port adapter for the ASR 9000 SIP-700 |
 
-## commscope/ (5)
+## commscope/ (10)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
 | `commscope/ar3002e@1` | module | line-card | 25.76 × 130.2 × 330 |  | 1 | 1 | CommScope (ARRIS) AR3002E - analog forward-path optical receiver, 46 to 1218 MHz, for the CH3000 headend opti… |
+| `commscope/bd31a8-h10f@1` | module | coupler | 52.52 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BD31A8-100-H10F-0-AL - the quad-density "zero-slot" back plate behind a CA3008 carrier of e… |
 | `commscope/bp-a5@1` | module | coupler | 25.76 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BP-A5 - the single-width dynamic back plate for one AR3002E or AR3002G forward receiver in … |
 | `commscope/bp-p1@1` | module | inlet | 52.52 × 130.2 |  | 1 | 2 | CommScope (ARRIS) BP-P1 - the dynamic back plate a PS3006 power supply mates in a CH3000 chassis, two slots w… |
-| `commscope/ps3006d@1` | module | psu | 52.52 × 130.2 × 330 |  | 1 | 2 | CommScope (ARRIS) PS3006D - the 300 W AC power supply and chassis controller of the CH3000 headend optics pla… |
+| `commscope/ca3008@1` | module | mechanical | 52.52 × 130.2 × 292.1 |  | 1 | 1 | CommScope (ARRIS) CA3008 - the module carrier that stacks eight HT358xH quad-density DWDM transmitters under … |
+| `commscope/cc3008@1` | module | supervisor | 51.92 × 19.3 |  | 0 | 1 | CommScope (ARRIS) CC3008 - the communications control module of a CA3008 carrier, seated above its eight quad… |
+| `commscope/ht358xh@1` | module | line-card | 51.92 × 9.66 × 292.1 |  | 1 | 3 | CommScope (ARRIS) HT358xH - the quad-density 1.2 GHz full-spectrum DWDM forward transmitter of the CH3000 hea… |
+| `commscope/ht3filh@1` | module | blank | 51.92 × 9.66 |  | 0 | 1 | CommScope (ARRIS) HT3FILH - the filler module for an unused quad-density transmitter position in a CA3008 car… |
+| `commscope/ps3006d@1` | module | psu | 52.52 × 130.2 × 330 |  | 1 | 3 | CommScope (ARRIS) PS3006D - the 300 W AC power supply and chassis controller of the CH3000 headend optics pla… |
 | `commscope/ps3006n@1` | module | psu | 52.52 × 130.2 × 330 |  | 1 | 0 | CommScope (ARRIS) PS3006N - the 300 W AC power supply and chassis controller of the CH3000 headend optics pla… |
 
 ## dell/ (57)
@@ -888,10 +893,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `ufispace/psu-102-dc@1` | module | psu | 52.9 × 39.7 |  | 1 | 0 | UfiSpace PSU-102-DISB-1 1000W DC PSU - the AC unit's shell with a three-post terminal block where the C14 inl… |
 | `ufispace/psu-120-ac@1` | module | psu | 33.3 × 21 |  | 0 | 0 | UfiSpace 120W AC fixed dual-feed PSU input (S9502 family) - the front-panel window of a NON-REMOVABLE supply,… |
 | `ufispace/psu-120-dc@1` | module | psu | 33.3 × 15.9 |  | 1 | 0 | UfiSpace 120W DC fixed dual-feed PSU input (S9502 family) - the front-panel window of a NON-REMOVABLE supply,… |
-| `ufispace/psu-132-ac@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-AISB1 1300W AC PSU (S9300-32D family) - silver face, red release latch, C15-cord inlet in a … |
+| `ufispace/psu-132-ac@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-AESR 1300W AC PSU (S9300-32D family) - silver face, red release latch, C15-cord inlet in a s… |
 | `ufispace/psu-132-crps-ac@1` | module | psu | 73.5 × 40 |  | 1 | 1 | UfiSpace PSU-132-AEAR-NN 1300W AC PSU (S9601-104BC) - CRPS form factor, black face with a square intake-fan f… |
 | `ufispace/psu-132-crps-dc@1` | module | psu | 73.5 × 40 |  | 1 | 0 | UfiSpace PSU-132-DEGR-NN 1300W DC PSU (S9601-104BC) - CRPS form factor, black face with a square intake-fan f… |
-| `ufispace/psu-132-dc@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-DISB1 1300W DC PSU (S9300-32D family) - silver face, red release latch, two-pole screw-termi… |
+| `ufispace/psu-132-dc@1` | module | psu | 50.5 × 40 |  | 8 | 1 | UfiSpace PSU-132-DESR 1300W DC PSU (S9300-32D family) - silver face, red release latch, two-pole screw-termin… |
 | `ufispace/psu-151-ac@1` | module | psu | 50.5 × 40.2 |  | 1 | 0 | UfiSpace PSU-151-AESR 150W AC PSU (S6301-56ST family) - C14 inlet, red release latch (exhaust / front-to-back… |
 | `ufispace/psu-151-dc@1` | module | psu | 50.5 × 40.2 |  | 1 | 0 | UfiSpace PSU-151-DESR 150W DC PSU (S6301-56ST family) - screw-terminal block, red release latch (exhaust / fr… |
 | `ufispace/psu-162-ac@1` | module | psu | 50.5 × 40 |  | 3 | 0 | UfiSpace PSU-162-AESR 1600W AC PSU (S9600-30DX) - dark face with a silver mesh intake grille on the left unde… |

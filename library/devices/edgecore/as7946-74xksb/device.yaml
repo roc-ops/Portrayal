@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as7946-74xksb
-version: 4.0.2
+version: 4.0.3
 maturity: modelled
 manufacturer: Edgecore
 model: AS7946-74XKSB
@@ -295,8 +295,8 @@ attrs:
   power:
     power-max-w: 692 W
     power-typical-w: 201 W
-    psu-dc-input: -40 to -75 VDC, 40 A max per PSU
-    psu-ac-input: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
+    input-dc: -40 to -75 VDC, 40 A max per PSU
+    input-ac: 100-120 V 12 A or 200-240 V 7.5 A, 50-60 Hz per PSU
   thermal:
     airflow: front to back; both listed SKUs are F
   environmental:
@@ -324,6 +324,7 @@ chassis:
   depth: 480.0
   ru: 2
   color: '#3f4449'
+  airflow: front-to-back
 # What no rule can find, because the manifest looks complete. The management
 # jack's link lamp carries the component default of off/on, which is
 # indistinguishable from a lamp whose two states were read off a table - the
@@ -1310,6 +1311,7 @@ views:
 configurations:
   dc-psu:
     kind: orderable
+    power: dc
     description: Modular dual DC PSUs, front-to-back airflow. This is the unit we photographed.
     default: true
     part-numbers:
@@ -1317,6 +1319,7 @@ configurations:
         part: FNPEC7946007Z
   ac-psu:
     kind: orderable
+    power: ac
     description: Modular dual AC PSUs, front-to-back airflow. Same shell, IEC inlet instead of the
       terminal block.
     bays:

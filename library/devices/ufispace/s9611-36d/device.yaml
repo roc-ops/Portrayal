@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9611-36d
-version: 4.0.2
+version: 4.0.3
 maturity: modelled
 manufacturer: UfiSpace
 model: S9611-36D
@@ -1046,6 +1046,7 @@ views:
 configurations:
   base:
     kind: base
+    power: dc
     description: >-
       The chassis as every held rear figure draws it - four FAN-808012-HC fans and two
       PSU-302-DESR 3000 W DC supplies, red handles and latches throughout, exhaust
@@ -1055,6 +1056,7 @@ configurations:
     default: true
   dc:
     kind: orderable
+    power: dc
     description: >-
       Dual 3000 W -40 V to -72 V DC supplies (PSU-302-DESR, two-stud screw terminal block
       under a plastic cover) with FAN-808012-HC fans. This is the build both the HIG's
@@ -1068,6 +1070,7 @@ configurations:
         model: FAN-808012-HC
   ac:
     kind: orderable
+    power: ac
     description: >-
       Dual 3000 W 200-240 V AC supplies (PSU-302-AESR, IEC 60320 C20 inlet fed by a C19
       cable) with FAN-808012-HC fans; system maximum 1728 W on MSA optics and 2049 W with

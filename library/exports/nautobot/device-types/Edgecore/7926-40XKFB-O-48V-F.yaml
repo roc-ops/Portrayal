@@ -1,9 +1,10 @@
 ---
 manufacturer: Edgecore
-model: COR550
-slug: edgecore-cor550
+model: 7926-40XKFB-O-48V-F
+slug: edgecore-7926-40xkfb-o-48v-f
 u_height: 2.0
 is_full_depth: true
+part_number: FNPZZ7640003A
 weight: 19.0
 weight_unit: kg
 airflow: front-to-rear
@@ -174,9 +175,11 @@ comments: '40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (vend
   the rest of it, front-to-back only.
 
 
-  Configuration `ac-f2b`: The only build either staged document draws: two AC supplies and five front-to-back
-  fan trays. The datasheet offers a 48 VDC supply beside the AC one and neither document pictures it,
-  so no DC configuration is offered - see the dc-supply-face gap.
+  Configuration `dc-f2b`: Dual 48 VDC supplies (datasheet: input 40 to 72 VDC; the quick start wires -48
+  to -60 VDC on #10 AWG) and the same five front-to-back fan trays - the datasheet''s one DC ordering
+  row. DRAWN WITH THE AC SUPPLY''S FACE, C14 inlet and all, because neither document pictures the DC unit:
+  the build is real and orderable, and what it is fed with is a field a tool filters on, so it is declared
+  rather than left out, and the wrong connector is the dc-supply-face gap.
 
 
   Also sold or listed as: AS7926-40XKFB
@@ -230,11 +233,11 @@ comments: '40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (vend
 
   - platform.tcam: Broadcom BCM16K (OP2)
 
+  - power.input-ac: 90 to 264 VAC, 50-60 Hz
+
+  - power.input-dc: 40 to 72 VDC
+
   - power.power-envelope: unstated
-
-  - power.power-input-ac: 90 to 264 VAC, 50-60 Hz
-
-  - power.power-input-dc: 40 to 72 VDC
 
   - power.power-max-w: 1400
 
@@ -247,7 +250,7 @@ comments: '40x 100G QSFP28 and 13x 400G QSFP-DD 2RU cell-based core router (vend
   - thermal.cooling: 4+1 redundant hot-swappable fan modules, behind a carrier-grade air filter
 
 
-  Drawing version 2.0.4. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 2.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

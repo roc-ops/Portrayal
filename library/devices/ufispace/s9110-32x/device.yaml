@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9110-32x
-version: 2.0.10
+version: 2.0.12
 maturity: modelled
 manufacturer: UfiSpace
 model: S9110-32X
@@ -179,8 +179,8 @@ attrs:
     power-max-w: '530.7'
     power-envelope: bare
     psus: 2x 750 W 1+1 redundant, hot-swappable
-    psu-input-ac: 100-240 VAC, 10 A max per feed (HIG checklist adds 190-310 VDC, 5 A HVDC)
-    psu-input-dc: -36 to -75 VDC, 28 A max per feed
+    input-ac: 100-240 VAC, 10 A max per feed (HIG checklist adds 190-310 VDC, 5 A HVDC)
+    input-dc: -36 to -75 VDC, 28 A max per feed
   thermal:
     fans: 2+1 redundant, hot-swappable fan modules
     airflow: front-to-back or back-to-front, selected by FRU SKU (red handles = front-to-back, blue = back-to-front)
@@ -601,6 +601,7 @@ views:
 configurations:
   dc-f2b:
     kind: orderable
+    power: dc
     description: Dual 750 W DC PSUs (PSU-751-DESR) and FAN-405637-HD fans, front-to-back airflow, red handles
     default: true
     airflow: front-to-back
@@ -612,11 +613,14 @@ configurations:
         airflow: exhaust
   dc-b2f:
     kind: orderable
+    power: dc
     description: Dual 750 W DC PSUs (PSU-751-DISB) and FAN-405637-CD fans, back-to-front airflow, blue handles
     airflow: back-to-front
     region-context:
       intake: Exhaust
       exhaust: Intake
+    skins:
+      fan-405637: intake
     component-attrs:
       psu-751-dc:
         latch-finish: '#2f66b5'
@@ -628,6 +632,7 @@ configurations:
         airflow: intake
   ac-f2b:
     kind: orderable
+    power: ac
     description: Dual 750 W AC PSUs (PSU-751-AESR) and FAN-405637-HD fans, front-to-back airflow, red handles
     airflow: front-to-back
     bays:
@@ -641,6 +646,7 @@ configurations:
         airflow: exhaust
   ac-b2f:
     kind: orderable
+    power: ac
     description: Dual 750 W AC PSUs (PSU-751-AISB) and FAN-405637-CD fans, back-to-front airflow, blue handles
     airflow: back-to-front
     bays:
@@ -649,6 +655,8 @@ configurations:
     region-context:
       intake: Exhaust
       exhaust: Intake
+    skins:
+      fan-405637: intake
     component-attrs:
       psu-751-ac:
         latch-finish: '#2f66b5'
