@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-pull-tab
-version: 2.0.0
+version: 2.0.1
 class: latch
 profile: networking
 description: >-
@@ -14,10 +14,17 @@ description: >-
   the strap top). No speed lettering: the generic that composes it carries no
   rate.
 size: {w: 19.0, h: 3.4}
+size-confidence: {w: drawing, h: measured}
 attrs: {role: pull-latch}
 fields:
   latch-color: {label: Latch colour, type: text, default: '#6f6f6f'}
 provenance:
+  size: >-
+    w 19.0 is the 19.00 MAX across the tab (ProLabs PAN-QSFP28-100GBASE-CWDM4-C,
+    drawing), also SFF-8661 Figure 5-1's 19 MAX outside-the-cage width; h 3.4 is
+    the grip thickness 2.9 plus the grip's 0.5 rise above the arms, both measured
+    off the maintainer's photographs of a QSFP28-SR4 module (side view, scale
+    module height 8.5)
   shape: >-
     measured - the maintainer's photographs of a QSFP28-SR4 module (top, side
     and end views). Top views (scale: module width 18.35, IMG 2191 passes the
