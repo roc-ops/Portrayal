@@ -508,6 +508,7 @@ configurations:
   base:
     kind: base
     default: true
+    power: ac
     source: >-
       sourced - TM8106-2QS, the base SKU: the base board's 2 x QSFP28 + 16 x SFP+, fans and
       two supplies, the expansion slot empty (data sheet feature table, "2 x 40/100Ge + 16 x
@@ -519,6 +520,7 @@ configurations:
       slot-2: ''
   2qs-64:
     kind: orderable
+    power: ac
     description: >-
       TM8106-2QS-64 - 2 x 40/100GE + 64 x 1/10GE: the TM810x-48SFP+ module in slot 2, two AC
       supplies.
@@ -526,6 +528,7 @@ configurations:
       slot-2: telco-systems/tm810x-48sfp@1
   6qs:
     kind: orderable
+    power: ac
     description: >-
       TM8106-6QS - 6 x 40/100GE + 16 x 1/10GE: the TM810x-4QSFP28 module in slot 2, two AC
       supplies. How the vendor pictures the TM-8106 in most of its renders.
@@ -533,6 +536,7 @@ configurations:
       slot-2: telco-systems/tm810x-4qsfp28@1
   dc-power:
     kind: orderable
+    power: dc
     description: >-
       TM8106-6QS with two DC supplies (24 / -48 V), the XX = DC suffix - as the 2022 front
       (telco.com 2022/05/8106.jpg) shows it.
