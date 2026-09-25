@@ -1,0 +1,129 @@
+format: 1
+kind: module
+name: m1-10gb-hs-xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GB HS XFP MDA, M1-10GB-HS-XFP, the
+  first-generation High Scale MDA: a classic half-slot MDA with one XFP cage right of centre, the
+  Stat and Pwr lamps at the far left with the Laser Disabled, Lnk and Act lamps beside them, the
+  model legend at the lower right and a cross-slotted captive screw on each lower end wing.
+  Authored horizontal; an SR-12 IOM3-XP seats it on end with the carrier.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 4 is
+  fitted per axis to that face.
+attrs:
+  model: M1-10GB-HS-XFP
+  xfp: 1
+  xfp-10g: 1
+  power-draw-max-w: 60
+provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the HS MDA guide 9302350203 p17 Table 3, whose XFP row is "MDA
+    10 Gigabit Ethernet Optic Modules". The export already typed it 10gbase-x-xfp by
+    default; this makes that a statement.
+  sources: >-
+    datasheet - 7x50 High Scale (HS) MDA Installation Guide 93-0235-02-03 (HS): p26 Figure 4 and
+    p26-27 Table 6 (the face, its lamps, port and screws), p17 Table 3 (power) and Table 5 (optics
+    power), p9 (the carriers it was written for). SR7 22.7 3HE18643AAAATQZZA03 p106 Table 47 (MDA
+    size) and p69 Table 11 (IOM3-XP MDA support). SR-7 Chassis Installation Guide
+    3HE09917AAAATQZZA02 p50 Table 17 (power, a second reading).
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - HS p26 Figure 4 (art MDA0073), vector, rendered at 1200 dpi. Fitted per axis: 4615 px
+    between the plate's side lines to 190.5 (24.23 px/mm) and 847 px from the top line to the
+    bottom of the centre band to 35.4 (23.93 px/mm), 1.2 percent apart. The MDA00xx outline, as
+    nokia/m1-10gb-xp-xfp@1 measures it off MDA-XP guide Figure 4: end wings to y 28.1-28.3, notch
+    edges at x 15.5 and 175.0, the band to the bottom edge with its inner line at y 33.56, the top
+    lip at y 1.80; the three small blocks outside each side line are the side guides and are not
+    face. XFP box (key 6) drawn 19.99 x 10.32, x 120.18-140.17, y 3.99-14.31, centre (130.17,
+    9.15); port numeral 1 under it at x 129.7, baseline 19.4. Lamps drawn 2.8 across: Stat (11.27,
+    6.54) and Pwr (11.27, 11.70) with their legends to the left ending x 8.8; Laser Disabled
+    (16.38, 6.54) with a printed line from it down to its two-line legend, x 13.6 on baselines
+    15.3 and 18.2; Lnk (21.46, 6.54) and Act (21.46, 11.70), legends to the right from x 24.2.
+    Captive screws (key 8) centred (7.55, 22.9) and (183.03, 22.9), cross-slotted, over tabs x
+    5.14-10.03 (1.55 deep) and 180.56-185.45 (3.1 deep, the right tab's lower edge partly behind
+    the key 8 leader). Model legend (key 7) regular weight, x 150.10-172.55, baseline 32.4.
+  legend: 'drawing - read at 1200 dpi: the legend prints M1-10GB-HS-XFP, matching Table 6 key 7'
+  cages: >-
+    drawing + standard - one std/xfp@1 (INF-8077i aperture 19.5 x 9.7) centred on the drawn box,
+    which is barely larger than the aperture and is drawn as the bezel. ORIENTATION IS NOT READ:
+    the figure draws an empty box, and no photograph of this card is held, so the cage takes
+    rotate 0.
+  lamps: >-
+    datasheet - HS p26-27 Table 6: Power blue on, off no power; Status green blinking
+    initializing, green up, amber operationally down, off administratively down; Laser Disabled
+    amber laser disabled, off laser on; Link green link established, amber slow blinking no
+    optic installed, amber fast blinking loopback, amber optics installed and no link, unlit
+    disabled; Active green active, amber error, unlit no activity. The Link row says "1000 Mbps"
+    and "No SFP is installed" on this one-port 10G XFP card, the SFP card's wording carried over;
+    the states are kept, the rate is not repeated. No blink rates are given. Every lamp is
+    common/led-indicator@1 at its drawn centre.
+  power: >-
+    datasheet - HS p17 Table 3: M1-10GB-HS-XFP 60 W maximum; SR-7 guide 3HE09917AAAATQZZA02 p50
+    Table 17 gives the same 60. XFP optics 4 W each (HS p17 Table 5), not included.
+  part-number: >-
+    not held - searched every staged Nokia PDF for HS-SFP, HS-XFP, "HS MDA" and HS-MDA: the chassis
+    guides give this card a power row by model name only, and the only 3HE numbers printed beside
+    an HS card are the HS-MDA2's. Left out.
+  cli-type: >-
+    not held - the HS guide's provisioning example (p18-19) is written for m10-1gb-hs-sfp only and
+    no chassis guide held prints an mda-type for this card. Left out.
+  carrier: >-
+    datasheet - HS p9 says the HS MDA "is designed for use in" SR-7/SR-12 IOM-20Gs and IOM2s, while
+    the same guide's p19 example provisions an HS MDA in an iom3-xp card and SR7 22.7 p69 Table 11
+    lists HS-MDA among the IOM3-XP-C's MDAs. The library models only the IOM3-XP of those carriers.
+  colour: >-
+    estimated - no photograph of an HS MDA is held. Drawn in the charcoal of the SR-7/SR-12 card
+    family, printing in the family's white. A gap.
+  logo-zone: 'reserved on the plain plate between the lamps and the cage; Figure 4 draws no mark'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  lifecycle: >-
+    searched only the staged corpus; the HS MDA guide dates from 2009 and the 13.0 and older
+    chassis guides carry its power row; the 14.0 and later ones list only the HS-MDA2. No
+    end-of-sale notice searched.
+  gaps: >-
+    Colour is estimated. The cage orientation is not read. No part number or mda-type string is
+    held. The group's speed is the XFP's 10G; the guide calls the port 10GB and says nothing of
+    LAN or WAN PHY.
+elements:
+  screw-left: {at: [2.55, 17.9], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [178.03, 17.9], size: [10.0, 10.0], class: screw}
+  model-label: {at: [150.1, 29.9], size: [22.45, 2.5], class: label}
+  logo-zone: {at: [45.0, 6.0], size: [55.0, 10.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g}
+    description: the one XFP cage, 10 Gigabit Ethernet, port 1 as Figure 4 prints it
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the port lamps Laser Disabled, Lnk and Act beside the card lamps
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the far left
+parts:
+  - {ref: std/xfp@1, id: port-1, group: xfp, at: [120.42, 4.30], attrs: {media: xfp, speed: 10g}}
+  - {ref: common/led-indicator@1, id: laser-1, group: port-leds, at: [14.38, 4.54], attrs: {description: 'Laser Disabled, port 1 - amber: laser disabled; off: laser on'}, states: {lamp: ['off', {name: disabled, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-1, group: port-leds, at: [19.46, 4.54], attrs: {description: 'Lnk, port 1 - green: valid communications link established; amber slow blinking: no optic installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-1, group: port-leds, at: [19.46, 9.70], attrs: {description: 'Act, port 1 - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.27, 4.54], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; off: administratively down, shut down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.27, 9.70], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
