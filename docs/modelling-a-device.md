@@ -443,6 +443,17 @@ Now populate. Reuse before building.
    the vendor requires a filler and no component exists for it, that is a
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
+9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
+    mid-plane chassis whose slots are two guide rails and nothing between them -
+    the CommScope CH3000 - is seen straight through wherever a slot is empty.
+    Left to itself, every empty bay compiles to a pocket as deep as its deepest
+    occupant, walls, floor and back, and the chassis reads in 3D as a row of
+    closed tubes. Declare `open-frame` on each face whose slots open into the
+    interior (front and rear for a mid-plane box): every bay on it becomes a
+    see-through mouth with no walls, a seated module is drawn over it, a pulled
+    one leaves the frame open, and the kit lines the inside of the box. If the
+    faceplates stand a gap apart that is clearance and not metal, give each bay
+    an `opening` of the full pitch so an empty span reads as one hole.
 10. **A carrier is a module with bays of its own.** A modular line card holding
     adapters has those bays in its component contract, with `accepts` and a
     `default` exactly as a chassis bay does. Check an occupant is actually
