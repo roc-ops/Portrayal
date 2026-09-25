@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: cx3033n
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: optical
+description: >-
+  CommScope CX3033N - the enhanced network interface, management and communications module of a CH3000 chassis, fitted in the top of a power supply's BP-P1 or BP-P2 back plate with no slot of its own: an SFP optical port, two 10/100/1000 RJ-45 ports (IN and OUT), an RS-232 jack and a micro-USB (both factory use), Status and Access lamps and a reset.
+size: {w: 52.52, h: 43.2, d: 205.7}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: CX3033N
+  role: communications
+  power-draw-max-w: 5.5
+provenance:
+  size: >-
+    datasheet - CX3033N data sheet, "8.1 D x 1.7 H x 2.0 W (20.6 cm x 4.3 cm x 5 cm)",
+    installed in the rear of a power supply's back plate with no chassis slot of its own;
+    the width is taken as the plate's 52.52, the 2.0 in being the module's nominal width.
+  power: >-
+    datasheet - CX3033N data sheet, "Power Consumption 5.5 W with installed SFP TTD4580-21-PI". The vendor does not say typical or maximum, so it
+    is filed as the maximum.
+  mounting: >-
+    datasheet - the module "mounts on top of any power supply from rear of chassis" and is
+    installed in the BP-P1 or BP-P2 back plate; the CX3003C data sheet's p3 photograph shows
+    one seated at the top of a PSU back plate, above its fan grille. It is the `comms` bay
+    of commscope/bp-p1@1 and commscope/bp-p2@1.
+  face-features: >-
+    photo-measured on the CX3033N data sheet's three-quarter photograph (p1, 1200 x 806), whose face is
+    nearly square-on: 878 px across, 16.7 px/mm, and 37.7 mm tall at that scale, under a
+    heatsink band that makes up the rest of the 1.7 in and carries the module's two
+    thumbscrews (drawn at the back plate's screw centres, 13.4 and 39.6). On the face,
+    measured from its top edge: three Status lamps and an Access lamp at 6.1 across, 5.5 to
+    13.5 down; the RS-232 stereo jack centred 13.2, 11.6; the legend CX3033N and a horizontal
+    micro-USB at 44.3 across with RESET below it; and two RJ-45s centred 17.4 and 34.9
+    across at 28.6 down, legended OUT and IN, each with a 10/100M and a 1G lamp.
+  lamps: >-
+    datasheet - Status LEDs: green = OK, yellow = non-service-affecting alarm (or alarm
+    history present), red = service-affecting alarm; RJ-45 port LEDs: yellow = 10/100 Mbps
+    link and activity, green = 1000 Mbps link and activity. Those are the two lamps each
+    common/rj45-eth@1 draws in its own housing - split here by speed rather than the part's
+    link / activity convention - so they are not composed again.
+  sfp: >-
+    photo-measured - the SFP cage centred 25.1, 15.0 between the RS-232 jack and the
+    micro-USB, with LOS and BER lamps below it. The data sheet calls it "a full-duplex SFP
+    optical port" that "accepts a variety of SFP plug-in transceivers", quoting 5.5 W with a
+    TTD4580-21-PI fitted, and gives no rate for it, so none is declared and L96 stands.
+elements:
+  screw-1: {at: [10.5, 0.1], size: [5.8, 5.8], class: fastener}
+  screw-2: {at: [36.7, 0.1], size: [5.8, 5.8], class: fastener}
+  rs232: {at: [9.40, 12.80], size: [7.4, 7.4], class: port}
+  reset: {at: [43.6, 22.4], size: [1.4, 1.4], class: button}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the management link - the IN and OUT Ethernet ports that daisy-chain chassis, the SFP optical port, and the micro-USB (factory use). One job, several media
+parts:
+  - {ref: common/rj45-eth@1, id: eth-out, group: mgmt, at: [9.50, 27.50], attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-eth@1, id: eth-in, group: mgmt, at: [27.00, 27.50], attrs: {media: rj45, speed: 1g}}
+  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [40.55, 17.73], attrs: {role: console}}
+  - {ref: common/led-dot@1, id: led-status-1, at: [5.1, 10.0], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-2, at: [5.1, 12.4], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-3, at: [5.1, 15.5], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-access, at: [5.1, 18.0], attrs: {function: activity}}
+  - {ref: std/sfp@1, id: sfp, group: mgmt, at: [17.85, 10.00], attrs: {role: management}}
+  - {ref: common/led-dot@1, id: led-los, at: [16.8, 21.3], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-ber, at: [36.7, 21.3], attrs: {function: status}}
+connection-points:
+  mate: {at: [26.26, 21.6], direction: front}
+skins: [default]
