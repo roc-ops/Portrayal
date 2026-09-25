@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: ar3002e
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) AR3002E - analog forward-path optical receiver, 46 to 1218 MHz,
+  for the CH3000 headend optics platform. One full-depth slot. The optical input
+  (SC/APC) and RF output (F-type) are on its back plate, BP-A5 or a BP-35D4x demux
+  plate; the face carries status lamps, a micro-USB and a -20 dB RF test point.
+size: {w: 25.76, h: 130.2, d: 330.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: datasheet}
+attrs:
+  model: AR3002E-1-AS
+  role: receiver
+  rf-passband: 46-1218 MHz
+  optical-input-range: -6 to +3 dBm typical, 1270-1650 nm
+  output-level: 28 dBmV/ch at 0 dBm input, 4% OMI
+  power-draw-max-w: 11
+  slots: 1
+  back-plate: BP-A5 or BP-35D4x
+provenance:
+  size: >-
+    photo-measured. Width is one CH3000 slot pitch less the faceplate gap (26.76 - 1.0,
+    see the ch3000 device); height is the chassis's 130.2 faceplate. The AR3002E data
+    sheet's face-on photograph (p1, 453 x 1200) outlines the plate at 228 x 1150 px, an
+    aspect of 0.198 against 25.76 / 130.2 = 0.198. The data sheet's "13.0 D x 4.3 H x 1.0
+    W" is the body without connectors, as on the PS3006; its 13.0 in is taken as depth.
+  power: >-
+    datasheet - AR3002E data sheet (2022), "Current Consumption 11W". The vendor does not
+    say whether that is typical or maximum, so it is filed as the maximum; no ambient is
+    given. Input is 12 V DC from the chassis supply.
+  face-features: >-
+    photo-measured from the same photograph at 8.85 px/mm across and 8.83 down, dark
+    features segmented as boxes: a long vent slot on the left (x 2.6, y 24.9-78.6), a
+    slotted column on the right (x 20.3, y 24.5-56.5 and 63.5-85.4), a third slot at x 15.7,
+    a vertical micro-USB in a bezel centred 11.0, 74.9 with three small holes about it, and
+    the G-type test point's round knurled body centred 12.9, 105.2, about 15.8 across.
+  lamps: >-
+    photo-measured at 2x: three lamps in a box legended Status at y 30.8, 35.1 and 39.4 and
+    one in a box legended Access at 49.6, all at x 12.9. The data sheet says only "Local and
+    remote status monitor capability" and gives no colour or meaning for them, so they
+    carry none. The same legends on the PS3006N are defined in that data sheet; they are
+    not assumed to mean the same here.
+  screws: >-
+    one captive thumbscrew top and bottom on the slot centre line (12.88), the same line
+    the chassis photograph's sixteen screws define; this photograph reads both 0.8 left of
+    it, the plate-edge offset seen on the PS3006 photographs too.
+  test-point: >-
+    datasheet - "RF Output Test Points: G-type male connector (at front panel, -20 dB)",
+    legended Out TP on the face. No registry entry exists for a G-type connector, so it is
+    drawn as an element of this part rather than composed.
+elements:
+  screw-top: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
+  vent-left: {at: [2.6, 24.9], size: [2.6, 53.7], class: vent}
+  vent-mid: {at: [6.9, 57.0], size: [2.6, 9.1], class: vent}
+  vent-right: {at: [15.7, 24.5], size: [7.3, 60.9], class: vent}
+  test-point: {at: [5.0, 97.3], size: [15.8, 15.8], class: port}
+  screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
+parts:
+  - {ref: common/led-dot@1, id: led-status-1, at: [11.9, 29.8], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-2, at: [11.9, 34.1], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-3, at: [11.9, 38.4], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-access, at: [11.9, 48.6], attrs: {function: activity}}
+  - {ref: std/micro-usb@1, id: usb, at: [7.25, 73.5], rotate: 90, attrs: {role: console}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
