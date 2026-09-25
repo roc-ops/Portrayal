@@ -1,0 +1,59 @@
+format: 1
+kind: module
+name: ab32s1t
+version: 1.0.0
+class: switch
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS / Aurora) AB32S1T-0-00 - A/B alternate routing switch, the alternative
+  version: selects the RF signal on input A or B onto the RF output by user-set composite
+  level thresholds, 46-1002 MHz, in one single-width, half-depth CH3000 module. Three F-type
+  ports on the face (A, OUT, B), a lamp per input, and Alarm and Access lamps. Seats in the
+  front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: photo-measured, d: datasheet}
+attrs:
+  model: AB32S1T-0-00
+  role: rf-switch
+  rf-passband: 46-1002 MHz
+  switching-time: 10 ms typical
+  power-draw-max-w: 2.5
+provenance:
+  size: >-
+    width borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0). Height
+    photo-measured on the AB32S1G / AB32S1T data sheet's p1 photograph of an AB32S1G (577 x
+    1608), which shows the face and the module's side; the face's height, 1602 px, sets the
+    scale. Depth datasheet - "6.5 L", 165.1 mm.
+  power: >-
+    datasheet - "Current Consumption 2.5W". The vendor does not say typical or maximum, so
+    it is filed as the maximum.
+  variant: >-
+    datasheet - ordering information: AB32S1G-0-00 "original version", AB32S1T-0-00
+    "alternative version", with modified Alarm LED behaviour. This part is not photographed; the data sheet describes it as the same switch with modified Alarm LED behaviour, so it takes the AB32S1G's face with its own model legend.
+  face-features: >-
+    photo-measured on the same photograph: the title "A/B SWITCH" over the model, lamps
+    legended A and B joined by a bracket to OUT, three F-type jacks centred 8.0 across at
+    44.2, 65.0 and 86.7 down legended A, OUT and B at their right, then Alarm and Access
+    lamps and the "aurora NETWORKS" wordmark, printed as text, over the bottom thumbscrew.
+  lamps: >-
+    the data sheet's switch position tables drive the A, B and Alarm lamps (on, off,
+    blinking by mode); no colours are given in text. The photograph shows the Alarm lens red
+    and the Access lens blue; they carry their function and no colour.
+  seating: >-
+    datasheet - "Occupies one half-depth slot"; accepted by a slot's front bay and its rear
+    bay alike.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/f-type@1, id: rf-in-a, at: [3.15, 40.25], attrs: {role: rf-input}}
+  - {ref: std/f-type@1, id: rf-out, at: [3.15, 61.05], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-in-b, at: [3.15, 82.75], attrs: {role: rf-input}}
+  - {ref: common/led-dot@1, id: led-a, at: [11.7, 19.8], attrs: {function: input}}
+  - {ref: common/led-dot@1, id: led-b, at: [11.7, 23.7], attrs: {function: input}}
+  - {ref: common/led-dot@1, id: led-alarm, at: [11.7, 104.8], attrs: {function: alarm}}
+  - {ref: common/led-dot@1, id: led-access, at: [11.7, 109.2], attrs: {function: activity}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
