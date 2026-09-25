@@ -13,14 +13,15 @@ size-confidence: {w: photo-measured, h: photo-measured}
 attrs:
   power-absent: not-published
   input: dc
-  input-voltage: -36 to -72 VDC, 10 A (face "36-72V,10A")
+  input-voltage: -36 to -72 VDC, nominal -48, 10 A (stencil label text "36-72V,10A")
 provenance:
   size: >-
     photo-measured - the second of the XM-8424H's two identical supply bays, x 50.7-100.9 on the
     render rectified onto 440 x 44 (see telco-systems/xm8424-psu-ac@1).
   power: >-
-    NOT STATED. The data sheet gives "DC: -48V, -36~-72V" and no supply rating; the module prints
-    its input, "36-72V,10A".
+    NOT STATED. The data sheet gives "DC: -48V, -36~-72V" and no supply rating. The module's label
+    is illegible in the render; the stencil master's own text is "36-72V,10A" (no minus sign),
+    which the data sheet's range confirms apart from the sign.
   elements: >-
     photo-measured on the same rectified render: the green plug body x 69.4-89.5, y 27.3-36.6 on
     the face (telco-systems/xm8424-dc-plug@1); a dark captive thumbscrew that stands proud, so
@@ -30,6 +31,6 @@ states: [absent]
 elements:
   thumbscrew: {at: [40.9, 20.2], size: [6.4, 6.4], class: fastener}
 parts:
-  - {ref: telco-systems/xm8424-dc-plug@1, id: dc-in, at: [18.7, 26.5]}
+  - {ref: telco-systems/xm8424-dc-plug@1, id: dc-in, at: [18.7, 23.7]}
   - {ref: common/led-rect-sm@1, id: led-stat, at: [37.4, 36.7]}
 skins: [default]

@@ -937,7 +937,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `telco-systems/tm810x-4qsfp28@1` | module | line-card | 376.7 × 33.9 |  | 2 | 0 | Telco Systems TM810x-4QSFP28 - the 4 x 40/100GE QSFP28 expansion module of the TM-8104 and TM-8106, a full-wi… |
 | `telco-systems/tm810x-psu-ac@1` | module | psu | 50.91 × 39.43 |  | 2 | 0 | The hot-swappable AC power supply of the Telco Systems TM-8104 and TM-8106 - a dark module with a lattice fan… |
 | `telco-systems/tm810x-psu-dc@1` | module | psu | 50.91 × 39.43 |  | 2 | 0 | The hot-swappable DC power supply of the Telco Systems TM-8104 and TM-8106 - the AC supply's face with a thre… |
-| `telco-systems/xm8424-dc-plug@1` | component | inlet | 20.1 × 9.3 × 15 |  | 0 | 1 | The two-pole pluggable DC terminal on the Telco Systems XM-8424H's DC supply module - a green screw-clamp plu… |
+| `telco-systems/xm8424-dc-plug@1` | component | inlet | 20.1 × 12.1 × 15 |  | 0 | 1 | The two-pole pluggable DC terminal on the Telco Systems XM-8424H's DC supply module - a green screw-clamp plu… |
 | `telco-systems/xm8424-psu-ac@1` | module | psu | 50.2 × 42.6 |  | 1 | 1 | The hot-swappable AC supply of the Telco Systems XM-8424H: a pull handle down its left edge, an IEC C14 inlet… |
 | `telco-systems/xm8424-psu-dc@1` | module | psu | 50.2 × 42.6 |  | 1 | 0 | The hot-swappable DC supply of the Telco Systems XM-8424H: a pull handle down its left edge, a green two-pole… |
 
