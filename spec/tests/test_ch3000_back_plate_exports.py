@@ -57,3 +57,7 @@ def test_the_bp3400c_exports_every_receiver_input_cage():
     assert cages <= names, sorted(cages - names)
     assert {f"rf-{r}-{n}" for r in "abcd" for n in range(1, 5)} <= names
     assert "data-port" in names
+    by = {i["name"]: i for i in doc["interfaces"]}
+    for cage in cages:
+        assert by[cage]["type"] == "other", by[cage]
+        assert by[cage].get("label") == "Digital return", by[cage]
