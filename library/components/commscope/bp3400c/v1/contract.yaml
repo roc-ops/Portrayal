@@ -1,0 +1,116 @@
+format: 1
+kind: module
+name: bp3400c
+version: 1.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) BP3400C-00 - the optical receiver back plate shared by four adjacent
+  DR3450N or DR3600N quad digital return receivers in a CH3000 chassis, filling the rear of
+  their four slots: eight SFP cages for the RR40x0 / RR36x0 receiver SFPs (two per receiver,
+  lettered D to A), an SFP data port, sixteen F-type RF outputs (four per receiver), and
+  LOS, data-port and 2-fer lamps.
+size: {w: 106.04, h: 130.2}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: BP3400C-00
+  slots: 4
+provenance:
+  size: >-
+    drawing - four CH3000 slot pitches less the faceplate gap (4 x 26.76 - 1.0 = 106.04)
+    by the chassis face's 130.2; the DR3450N data sheet's drawing of the plate (p4, 792 x
+    931) outlines it at 740 x 914.5 px, 6.98 px/mm across and 7.02 down, within 0.6%, so the
+    drawing is taken as a measurement. No depth is stated.
+  identity: >-
+    datasheet - DR3450N and DR3600N data sheets, overview: each receiver interfaces with the
+    BP3400C Optical Receiver Back Plate, and one plate serves four receiver modules in four
+    adjacent slots, sixteen digital receivers in all;
+    the plate and its SFP receivers are ordered separately. Optical connectors are LC/UPC
+    on the SFPs, RF outputs F-type on the plate.
+  power: >-
+    datasheet - each receiver's figure "includes 1/4 of fully loaded BP3400C-00 with all
+    SFPs", so the plate carries none of its own and is filed as a passive coupler.
+  layout: >-
+    drawing, at 6.98 / 7.02 px/mm: the legend BP3400C and OPTICAL INPUTS at the top; two
+    rows of four ganged SFP cages 24.4-82.8 across, 21.0-31.0 and 34.1-44.1 down, lettered
+    D, C, B, A from the left and legended 2-x-1 above and 3-x-4 below, each cage with two
+    LOS lamps outside its row; an SFP DATA PORT 86.7-102.0 across in the upper row with TX
+    and RX lamps; four 2-fer lamps D to A at 37.4 down between vent slots on the left, and
+    vents on the right; sixteen F-type jacks in columns D, C, B, A at 15.5, 42.7, 69.6 and
+    96.7 across and rows 1 to 4 at 61.9, 78.0, 94.0 and 109.8; RF OUTPUTS at the bottom;
+    and four thumbscrews at 13.3 and 94.3 across, 5.3 and 124.3 down.
+  cage-pitch: >-
+    the drawing's four cages span 58.4 mm, 14.6 each, against SFF-8433's 14.25 for ganged
+    cages; std/sfp-ganged@1 keeps the standard pitch and is centred on the drawn span, so
+    each cage lands within 0.5 of its drawn place. The rows are 13.1 apart, not belly to
+    belly, and follow the library's stacking convention: upper row as drawn, lower row
+    turned 180.
+  cage-rate: >-
+    L96 STANDS ON PURPOSE. The eight cages hold RR40x0 / RR36x0 digital return SFP
+    receivers - a proprietary link from the node's DT4250N / DT4600N transceiver, not
+    Ethernet, SONET or PON - and the data port's SFP is not described in any document
+    held. None of the rates a module can declare for an SFP cage is true of them, so none
+    is declared, and the DCIM export's table default (10GBASE-X SFP+) is known to be wrong
+    for these cages until the exporter can type a proprietary optical port.
+  receiver-letters: >-
+    the drawing letters the four receivers D, C, B, A from the left as seen from behind,
+    which is front slots N to N+3 from the right - the rear view mirrors the front.
+elements:
+  screw-top-1: {at: [9.0, 1.0], size: [8.6, 8.6], class: fastener}
+  screw-top-2: {at: [90.0, 1.0], size: [8.6, 8.6], class: fastener}
+  vents-left: {at: [4.8, 17.5], size: [17.5, 31.3], class: vent}
+  vents-right: {at: [85.9, 35.3], size: [16.5, 13.5], class: vent}
+  screw-bottom-1: {at: [9.0, 120.0], size: [8.6, 8.6], class: fastener}
+  screw-bottom-2: {at: [90.0, 120.0], size: [8.6, 8.6], class: fastener}
+parts:
+  - {ref: std/sfp-ganged@1, id: in-d-1, at: [25.10, 20.8], attrs: {role: optical-input, receiver: D}}
+  - {ref: std/sfp-ganged@1, id: in-c-1, at: [39.35, 20.8], attrs: {role: optical-input, receiver: C}}
+  - {ref: std/sfp-ganged@1, id: in-b-1, at: [53.60, 20.8], attrs: {role: optical-input, receiver: B}}
+  - {ref: std/sfp-ganged@1, id: in-a-1, at: [67.85, 20.8], attrs: {role: optical-input, receiver: A}}
+  - {ref: std/sfp-ganged@1, id: in-d-4, at: [25.10, 33.9], rotate: 180, attrs: {role: optical-input, receiver: D}}
+  - {ref: std/sfp-ganged@1, id: in-c-4, at: [39.35, 33.9], rotate: 180, attrs: {role: optical-input, receiver: C}}
+  - {ref: std/sfp-ganged@1, id: in-b-4, at: [53.60, 33.9], rotate: 180, attrs: {role: optical-input, receiver: B}}
+  - {ref: std/sfp-ganged@1, id: in-a-4, at: [67.85, 33.9], rotate: 180, attrs: {role: optical-input, receiver: A}}
+  - {ref: std/sfp@1, id: data-port, at: [87.1, 21.0], attrs: {role: data-port}}
+  - {ref: common/led-dot@1, id: led-los-d-1, at: [28.10, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-d-2, at: [34.10, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-d-4, at: [28.10, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-d-3, at: [34.10, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-c-1, at: [42.40, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-c-2, at: [48.40, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-c-4, at: [42.40, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-c-3, at: [48.40, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-b-1, at: [57.50, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-b-2, at: [63.50, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-b-4, at: [57.50, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-b-3, at: [63.50, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-a-1, at: [71.80, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-a-2, at: [77.80, 16.9], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-a-4, at: [71.80, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-los-a-3, at: [77.80, 46.4], attrs: {function: los}}
+  - {ref: common/led-dot@1, id: led-data-tx, at: [90.0, 16.9], attrs: {function: activity}}
+  - {ref: common/led-dot@1, id: led-data-rx, at: [96.1, 16.9], attrs: {function: activity}}
+  - {ref: common/led-dot@1, id: led-2fer-d, at: [5.6, 36.4], attrs: {function: mode}}
+  - {ref: common/led-dot@1, id: led-2fer-c, at: [10.2, 36.4], attrs: {function: mode}}
+  - {ref: common/led-dot@1, id: led-2fer-b, at: [14.9, 36.4], attrs: {function: mode}}
+  - {ref: common/led-dot@1, id: led-2fer-a, at: [19.5, 36.4], attrs: {function: mode}}
+  - {ref: std/f-type@1, id: rf-d-1, at: [10.65, 57.95], attrs: {role: rf-output, receiver: D}}
+  - {ref: std/f-type@1, id: rf-d-2, at: [10.65, 74.05], attrs: {role: rf-output, receiver: D}}
+  - {ref: std/f-type@1, id: rf-d-3, at: [10.65, 90.05], attrs: {role: rf-output, receiver: D}}
+  - {ref: std/f-type@1, id: rf-d-4, at: [10.65, 105.85], attrs: {role: rf-output, receiver: D}}
+  - {ref: std/f-type@1, id: rf-c-1, at: [37.85, 57.95], attrs: {role: rf-output, receiver: C}}
+  - {ref: std/f-type@1, id: rf-c-2, at: [37.85, 74.05], attrs: {role: rf-output, receiver: C}}
+  - {ref: std/f-type@1, id: rf-c-3, at: [37.85, 90.05], attrs: {role: rf-output, receiver: C}}
+  - {ref: std/f-type@1, id: rf-c-4, at: [37.85, 105.85], attrs: {role: rf-output, receiver: C}}
+  - {ref: std/f-type@1, id: rf-b-1, at: [64.75, 57.95], attrs: {role: rf-output, receiver: B}}
+  - {ref: std/f-type@1, id: rf-b-2, at: [64.75, 74.05], attrs: {role: rf-output, receiver: B}}
+  - {ref: std/f-type@1, id: rf-b-3, at: [64.75, 90.05], attrs: {role: rf-output, receiver: B}}
+  - {ref: std/f-type@1, id: rf-b-4, at: [64.75, 105.85], attrs: {role: rf-output, receiver: B}}
+  - {ref: std/f-type@1, id: rf-a-1, at: [91.85, 57.95], attrs: {role: rf-output, receiver: A}}
+  - {ref: std/f-type@1, id: rf-a-2, at: [91.85, 74.05], attrs: {role: rf-output, receiver: A}}
+  - {ref: std/f-type@1, id: rf-a-3, at: [91.85, 90.05], attrs: {role: rf-output, receiver: A}}
+  - {ref: std/f-type@1, id: rf-a-4, at: [91.85, 105.85], attrs: {role: rf-output, receiver: A}}
+connection-points:
+  mate: {at: [53.02, 65.1], direction: front}
+skins: [default]
