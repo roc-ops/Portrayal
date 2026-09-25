@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: mda-impedance-panel
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS classic MDA slot impedance panel, the blank for an
+  unused MDA / MDA-XP slot of an IOM3-XP: a plain plate in the classic MDA outline, full height
+  between the two notched lower corners, with a cross-slotted captive screw on each lower end
+  wing. No part number is printed in any guide held. Authored horizontal. Not the SR-e / MDA-e
+  blank (nokia/sr-e-mda-impedance-panel@1, 193.0 wide, 3HE10312AA), which does not fit this
+  slot.
+size: {w: 190.5, h: 35.4}
+size-confidence: {w: datasheet, h: drawing}
+size-notes: >-
+  The classic MDA face: the chassis guides give MDAs 1.4 x 7.5 x 7.0 in (SR7 p106 Table 47), so
+  190.5 wide, held at the 35.4 slot pitch. No guide dimensions the blank itself; it fills the
+  same slot, so it takes the MDA's face.
+attrs:
+  model: 7750 SR classic MDA Impedance Panel
+  role: slot-blank
+provenance:
+  sources: >-
+    drawing - SR7 22.7 (3HE18643AAAATQZZA03) p198 Figure 61, the IOM3-XP "shown with no MDAs
+    installed", which draws this panel in both MDA slots; MDA-XP guide 9302180206 p38 Figure 9
+    for the classic MDA outline it shares. SR7 p49 Figure 6 / p50 Table key 7, "Impedance panel
+    installed over MDA slot", draws one seated beside an MDA in slot 4.
+  size: 'datasheet - SR7 p106 Table 47, MDAs 1.4 x 7.5 x 7.0 in; see size-notes'
+  purpose: >-
+    datasheet - MDA-XP guide p26 step 5: after removing an MDA-XP "You must either immediately
+    install another MDA into the slot or cover the MDA slot with an impedance panel."
+  layout: >-
+    drawing - the outline is the MDA-XP's (Figure 9, fitted per axis at 24.23 x 23.93 px/mm):
+    end wings to y 28.25, notches 15.5 wide, the full-height band 15.5-175.0. The captive screws
+    are where Figure 61 draws them on the blank, 7.6 in from each end, the position Figure 9
+    key 5 gives an MDA-XP's own; y 22.9 as the MDA-XP figures (4, 5, 8, 9, 11) all measure it
+    (Figure 61 reads 22.6 on the carrier's scale). Heads 8.2 inside a 10.0 ring, cross-slotted,
+    over tabs 1.55 deep on the left and 3.1 on the right.
+  colour: >-
+    estimated - no photograph of a classic MDA blank is held. Drawn in the charcoal of the
+    SR-7/SR-12 card family. A gap.
+  logo-zone: 'reserved on the plain plate; no figure draws a mark on it'
+  depth: 'NOT STATED - a blanking plate; no guide gives a depth or weight, so none is carried.'
+elements:
+  screw-left: {at: [2.6, 17.9], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [177.9, 17.9], size: [10.0, 10.0], class: screw}
+  logo-zone: {at: [75.25, 12.0], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
