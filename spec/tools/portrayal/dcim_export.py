@@ -218,6 +218,11 @@ PON_TYPES = frozenset(t for _a, t in PON_ATTRS)
 # and SFP28 too, so a card stating `sfp112` beside a lower rate is an SFP112
 # card. No card stated it before, so nothing that exported already changes.
 SFP112_ATTR = ("sfp112", "other")
+# WHAT AN `other` PORT IS LABELLED WITH, by media. `other` says the schema has no
+# name for the thing, so the label is the only place the connector survives -
+# and it was hardcoded "RJ45", written for the Casa rj45-telemetry port, until
+# the Nokia MDA2-e-XP exported 24 SFP112 cages as copper jacks (#558 review).
+OTHER_LABEL = {"rj45-telemetry": "RJ45", "sfp112": "SFP112"}
 # AN 800G QSFP-DD PORT IS NOT A 400G ONE, and with only the `qsfp-dd` row the
 # Nokia MDA2-e-XP's QSFP-DD800 ports would have exported as 400GBASE-X.
 # `800gbase-x-qsfpdd` is in both targets (NetBox TYPE_800GE_QSFP_DD at 6a009845;
@@ -1336,7 +1341,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         if placed:
             iface = {"name": pid, "type": placed}
             if placed == "other":
-                iface["label"] = "RJ45"
+                media = part["attrs"]["media"]
+                iface["label"] = OTHER_LABEL.get(media, media.upper())
             ifaces.append(iface)
             network = iface
         elif full_ref in FAMILY_PART:
@@ -1369,6 +1375,9 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
                 defaulted[ref] = defaulted.get(ref, 0) + 1
             network = {"name": pid, "type": cage_type(ref, attrs)}
+            # The one FAMILY_ATTRS row that writes `other` is SFP112_ATTR.
+            if network["type"] == "other":
+                network["label"] = OTHER_LABEL[SFP112_ATTR[0]]
             ifaces.append(network)
         elif dropped is not None:
             # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
