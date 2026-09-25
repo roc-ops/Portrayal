@@ -47,9 +47,13 @@ provenance:
     link / activity convention - so they are not composed again.
   sfp: >-
     photo-measured - the SFP cage centred 25.1, 15.0 between the RS-232 jack and the
-    micro-USB, with LOS and BER lamps below it. The data sheet calls it "a full-duplex SFP
-    optical port" that "accepts a variety of SFP plug-in transceivers", quoting 5.5 W with a
-    TTD4580-21-PI fitted, and gives no rate for it, so none is declared and L96 stands.
+    micro-USB, with LOS and BER lamps below it (both red, per the data sheet: loss of signal
+    and excess bit error rate). The data sheet gives the port as "Optical Transmission Bit
+    Rate 2.125 Gbps", fitted with CommScope's own network-port transceivers (TR40xx,
+    TR4540, TR4580 DWDM) - not 1000BASE-X, which signals at 1.25 Gb/s - so the cage
+    declares `proprietary-link: 2.125 Gb/s network port` and exports as `other` with that
+    label rather than as a 1 Gb/s SFP. The prose's "two RJ-45 10Base-T ports" contradicts
+    the specification table's 10/100/1000; the table is taken.
 elements:
   screw-1: {at: [10.5, 0.1], size: [5.8, 5.8], class: fastener}
   screw-2: {at: [36.7, 0.1], size: [5.8, 5.8], class: fastener}
@@ -69,7 +73,7 @@ parts:
   - {ref: common/led-dot@1, id: led-status-2, at: [5.1, 12.4], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-3, at: [5.1, 15.5], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-access, at: [5.1, 18.0], attrs: {function: activity}}
-  - {ref: std/sfp@1, id: sfp, group: mgmt, at: [17.85, 10.00], attrs: {role: management}}
+  - {ref: std/sfp@1, id: sfp, group: mgmt, at: [17.85, 10.00], attrs: {role: management, proprietary-link: 2.125 Gb/s network port}}
   - {ref: common/led-dot@1, id: led-los, at: [16.8, 21.3], attrs: {function: los}}
   - {ref: common/led-dot@1, id: led-ber, at: [36.7, 21.3], attrs: {function: status}}
 connection-points:

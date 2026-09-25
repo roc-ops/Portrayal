@@ -63,10 +63,20 @@ def test_the_bp3400c_exports_every_receiver_input_cage():
         assert by[cage].get("label") == "Digital return", by[cage]
 
 
-def test_the_cx3002_management_ports_export_as_10base_t():
+def test_the_cx3002_management_ports_export_as_10_100():
     """The CX3002's IN and OUT ports are 10BASE-T by its data sheet; with no `10m` row
-    they fell through to 1000base-t, as a 10/100 jack once did (#511)."""
+    they fell through to 1000base-t, as a 10/100 jack once did (#511). Neither NetBox nor
+    Nautobot defines 10base-t, so they take 100base-tx, labelled 10/100ME upstream."""
     doc, _ = _export("cx3002")
     by = {i["name"]: i for i in doc["interfaces"]}
-    assert {n: by[n]["type"] for n in ("eth-in", "eth-out")} == {"eth-in": "10base-t", "eth-out": "10base-t"}
+    assert {n: by[n]["type"] for n in ("eth-in", "eth-out")} == {"eth-in": "100base-tx", "eth-out": "100base-tx"}
     assert all(by[n]["mgmt_only"] for n in ("eth-in", "eth-out"))
+
+
+def test_the_cx3033n_sfp_exports_as_its_proprietary_network_port():
+    """2.125 Gb/s with CommScope's own network-port transceivers is not 1000BASE-X
+    (1.25 Gb/s), so the cage declares a proprietary link rather than a 1G rate."""
+    doc, _ = _export("cx3033n")
+    by = {i["name"]: i for i in doc["interfaces"]}
+    assert by["sfp"]["type"] == "other", by["sfp"]
+    assert by["sfp"].get("label") == "2.125 Gb/s network port", by["sfp"]

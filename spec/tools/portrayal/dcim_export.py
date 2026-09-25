@@ -108,10 +108,13 @@ IFACE_TYPE = {
     # them 1000base-t, and without this row stating the true one would have
     # dropped them from the export instead.
     ("rj45", "100m"): "100base-tx",
-    # A 10BASE-T JACK IS NEITHER. The CommScope CX3002's IN and OUT management ports
-    # are 10BASE-T by its data sheet and fell to 1000base-t the same way; both
-    # targets name the type (NetBox and Nautobot `10base-t`).
-    ("rj45", "10m"): "10base-t",
+    # A 10BASE-T JACK HAS NO TYPE OF ITS OWN UPSTREAM. The CommScope CX3002's IN and
+    # OUT management ports are 10BASE-T by its data sheet and fell to 1000base-t the
+    # same way. Neither target defines 10base-t: copper Ethernet starts at
+    # `100base-tx`, which both label "100BASE-TX (10/100ME)" (NetBox dcim/choices.py
+    # TYPE_100ME_FIXED at facc4235; Nautobot TYPE_100ME_FIXED at 6e55bf7c) - so a
+    # 10 Mb/s jack takes that, the type whose label covers it.
+    ("rj45", "10m"): "100base-tx",
 }
 AIRFLOW = {"front-to-back": "front-to-rear", "back-to-front": "rear-to-front"}
 
@@ -552,7 +555,7 @@ PART_MEDIA = {
     # stated `speed: 100m` fell through to FAMILY_PART, whose answer for an
     # Ethernet jack is 1000base-t - the Nokia CCM-e's mgmt and OES ports.
     ("rj45", "100m"): "100base-tx",
-    ("rj45", "10m"): "10base-t",            # the CX3002's 10BASE-T ports, as IFACE_TYPE
+    ("rj45", "10m"): "100base-tx",          # the CX3002's 10BASE-T ports; see IFACE_TYPE
     # A CFP2 STATING 200G IS NOT THE CAGE'S 100G. With no row the Nokia
     # ME3-200GB-CFP2-DCO's ports fell to PART_IFACE's std/cfp2 default and
     # exported as 100gbase-x-cfp2. Unlike SFP112 the slug is in both targets:
