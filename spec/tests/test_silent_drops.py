@@ -268,7 +268,6 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "coax-smb",     # a timing connector
         "usb-c",        # power in, on the GL-8xEP
         "db9",          # a D-sub alarm or serial connector (the 7750 SR-1 alarm port) takes no module
-        "rj48",         # a fixed T1/E1 jack (the TM-3312's CES ports), copper like rj45
     }
     used = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):
