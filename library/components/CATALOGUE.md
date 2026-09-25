@@ -379,9 +379,9 @@ aperture when it is a bare opening - never both at one position. The README's
 | `commscope/bp3400c@1` | module | coupler | 106.04 × 130.2 |  | 1 | 0 | CommScope (ARRIS) BP3400C-00 - the optical receiver back plate shared by four adjacent DR3450N or DR3600N qua… |
 | `commscope/ca3008@1` | module | mechanical | 52.52 × 130.2 × 292.1 |  | 1 | 1 | CommScope (ARRIS) CA3008 - the module carrier that stacks eight HT358xH quad-density DWDM transmitters under … |
 | `commscope/cc3008@1` | module | supervisor | 51.92 × 19.3 |  | 0 | 1 | CommScope (ARRIS) CC3008 - the communications control module of a CA3008 carrier, seated above its eight quad… |
-| `commscope/cx3002@1` | module | supervisor | 52.52 × 43.2 × 205.7 |  | 0 | 2 | CommScope (ARRIS) CX3002 - the communications module of a CH3000 chassis, fitted in the top of a power supply… |
-| `commscope/cx3003c@1` | module | supervisor | 52.52 × 43.2 × 205.7 |  | 1 | 2 | CommScope CX3003C - the enhanced communications module of a CH3000 chassis, fitted in the top of a power supp… |
-| `commscope/cx3033n@1` | module | supervisor | 52.52 × 43.2 × 205.7 |  | 0 | 2 | CommScope CX3033N - the enhanced network interface, management and communications module of a CH3000 chassis,… |
+| `commscope/cx3002@1` | module | supervisor | 52.52 × 43.2 |  | 0 | 2 | CommScope (ARRIS) CX3002 - the communications module of a CH3000 chassis, fitted in the top of a power supply… |
+| `commscope/cx3003c@1` | module | supervisor | 52.52 × 43.2 |  | 1 | 2 | CommScope CX3003C - the enhanced communications module of a CH3000 chassis, fitted in the top of a power supp… |
+| `commscope/cx3033n@1` | module | supervisor | 52.52 × 43.2 |  | 0 | 2 | CommScope CX3033N - the enhanced network interface, management and communications module of a CH3000 chassis,… |
 | `commscope/dr3450n@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (ARRIS) DR3450N - quad digital return receiver (5-42, 5-65, 5-85 and 5-100 MHz modes) for the CH300… |
 | `commscope/dr3600n@1` | module | line-card | 25.76 × 130.2 × 330.2 |  | 1 | 0 | CommScope (ARRIS) DR3600N - quad digital return receiver (modes up to 5-204 MHz) for the CH3000 headend optic… |
 | `commscope/fa3500-face@1` | component | bezel | 25.76 × 130.2 |  | 0 | 13 | The faceplate every CommScope (ARRIS / Aurora) FA3500-series EDFA shares, composed by each model's own module… |
