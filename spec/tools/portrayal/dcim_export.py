@@ -1023,6 +1023,118 @@ def effective_part(part, groups):
             grp.get("role"))
 
 
+def route_part(part, attrs, defaulted=None):
+    """Where `build_module` files one card part: (kind, row).
+
+    kind is `network`, `timing`, `rf`, `console`, `power`, `skip` (PART_SKIP)
+    or None (no branch matched - the caller's `dropped`). Only a `network` row
+    is a port a DCIM would cable as a switch interface, so only it can carry
+    mgmt_only or be split by `interfaces:` (#443) - and L105 asks this same
+    function, so a part that declares interfaces and routes anywhere else is a
+    lint error rather than a declaration the export drops without a word.
+
+    `part` is the EFFECTIVE part (effective_part); `attrs` is the contract's.
+    """
+    full_ref = part["ref"]
+    ref = full_ref.split("@")[0]
+    pid = str(part.get("id") or "")
+    if ref in PART_SKIP:
+        return "skip", None
+    # The placement is more specific than the ref, so it is checked first.
+    # Reaching PART_CONSOLE with an rj45-telemetry part would file a
+    # rectifier link as a console port, which is how #29 read before.
+    placed = placed_type(part)
+    if placed:
+        iface = {"name": pid, "type": placed}
+        if placed == "other":
+            iface["label"] = other_label(part)
+        return "network", iface
+    if full_ref in FAMILY_PART:
+        # Checked on the un-stripped ref, before PART_CONSOLE/PART_IFACE
+        # below drop the @major and would otherwise catch every version of
+        # std/rj45 alike - see FAMILY_PART's comment for why that is wrong.
+        # What the PLACEMENT says beats what the ref says, both ways round.
+        timing = rj45_timing_label(part)
+        if timing:
+            return "timing", {"name": pid, "type": "other", "label": timing}
+        if RJ45_CONSOLE.search(rj45_words(part)):
+            return "console", {"name": pid or "Console", "type": "rj-45"}
+        kind, t = FAMILY_PART[full_ref]
+        if kind == "console":
+            return "console", {"name": pid or "Console", "type": t}
+        return "network", {"name": pid, "type": t}
+    if ref == DB9_CONSOLE_REF and DB9_CONSOLE.search(db9_words(part)):
+        return "console", {"name": pid, "type": "de-9"}
+    if ref in PART_POWER:
+        return "power", {"name": pid or "Inlet", "type": PART_POWER[ref]}
+    if ref in PART_CONSOLE:
+        return "console", {"name": pid or "Console", "type": PART_CONSOLE[ref]}
+    if ref in PART_RF:
+        t, connector = PART_RF[ref]
+        # The type says what the signal is; the label keeps the connector,
+        # which is the part the type cannot express.
+        return "rf", {"name": pid or t, "type": t, "label": connector}
+    if ref in PART_IFACE:
+        if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
+            defaulted[ref] = defaulted.get(ref, 0) + 1
+        network = {"name": pid, "type": cage_type(ref, attrs)}
+        # The one FAMILY_ATTRS row that writes `other` is SFP112_ATTR.
+        if network["type"] == "other":
+            network["label"] = OTHER_LABEL[SFP112_ATTR[0]]
+        return "network", network
+    return None, None
+
+
+def device_timing_row(p, a):
+    """The row `build` lists a device placement under as a timing or RF input,
+    or None. `a` is the placement's attrs with its group's merged under them."""
+    rf_ref = p["ref"].split("@")[0]
+    if rf_ref in PART_RF:
+        t, connector = PART_RF[rf_ref]
+        return {"name": p.get("id") or t, "type": t, "label": connector}
+    if p["ref"] in FAMILY_PART:
+        # A BARE RJ45 THAT NAMES A TIMING FUNCTION, read from the
+        # placement's own words rather than from the ref - #125 gave
+        # std/rj45@2 seven jobs, so the ref cannot carry the answer and
+        # the device says which one this is. Console jacks are NOT taken
+        # here: `build` already has a console path with its own test,
+        # and widening this to RJ45_CONSOLE would be a different change.
+        label = rj45_timing_label({**p, "attrs": a})
+        if label:
+            return {"name": p.get("id"), "type": "other", "label": label}
+    return None
+
+
+def device_port_type(p, a, group_role, names=None):
+    """What `build` exports a device placement as when it is a switch port:
+    (type, label, None), or (None, None, why) when it is not one.
+
+    `names` is the overlay's (overlay_names) or None for the hardware's own
+    document. L105 asks this with None, so a placement that declares
+    `interfaces:` and would not export as a port is an error there instead of
+    a declaration `build` drops without a word.
+    """
+    if device_timing_row(p, a):
+        return None, None, "a timing or RF input"
+    if names is None and a.get("role") == "console":
+        return None, None, "a console port"
+    if names is None and group_role not in PORT_ROLES:
+        return None, None, f"in a group whose role is {group_role!r}, not a port role"
+    if names is None and a.get("role") == "mgmt" and a.get("speed") == "10g":
+        return None, None, "a 10G management SFP, listed apart from the interfaces"
+    # A CAGE THAT CARRIES A PROPRIETARY LINK says what runs in it, as a
+    # card's does in `placed_type`, and no speed row can be true of it.
+    link = proprietary_link(a) if pluggable_cage(p["ref"]) else None
+    t = "other" if link else iface_type(p, a, group_role)
+    if t is None:                      # unknown combination: skip, do not guess
+        return None, None, "a port the exporter cannot type"
+    if link:
+        return t, link, None
+    if t == "other" and a.get("media") in TDM_LABEL:
+        return t, TDM_LABEL[a["media"]], None
+    return t, None, None
+
+
 def flatten(section, prefix=""):
     """attrs are nested a section deep and sometimes deeper. Read them flat."""
     out = {}
@@ -1286,22 +1398,9 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
             #
             # The label is the whole point. `other` alone says a port exists and
             # nothing else; `other` + BITS says what to plug into it.
-            rf_ref = p["ref"].split("@")[0]
-            if rf_ref in PART_RF:
-                t, connector = PART_RF[rf_ref]
-                timing.setdefault(p["id"], {"name": p["id"] or t, "type": t,
-                                            "label": connector})
-            elif p["ref"] in FAMILY_PART:
-                # A BARE RJ45 THAT NAMES A TIMING FUNCTION, read from the
-                # placement's own words rather than from the ref - #125 gave
-                # std/rj45@2 seven jobs, so the ref cannot carry the answer and
-                # the device says which one this is. Console jacks are NOT taken
-                # here: `build` already has a console path with its own test,
-                # and widening this to RJ45_CONSOLE would be a different change.
-                label = rj45_timing_label({**p, "attrs": a})
-                if label:
-                    timing.setdefault(p["id"], {"name": p["id"], "type": "other",
-                                                "label": label})
+            row = device_timing_row(p, a)
+            if row:
+                timing.setdefault(p["id"], row)
             if p["ref"].split("@")[0] in PART_POWER:
                 powers.setdefault(p["id"], {
                     "name": p["id"] or "Inlet",
@@ -1360,16 +1459,13 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
             # timing jack was drawn with an Ethernet part.
             if pid in timing:
                 continue
-            if names is None and (group_role(p) not in PORT_ROLES
-                                  or a.get("role") == "console"):
-                continue
             if names is None and a.get("role") == "mgmt" and pid.replace("port-", "") in listed_sfp:
                 continue
-            # A CAGE THAT CARRIES A PROPRIETARY LINK says what runs in it, as a
-            # card's does in `placed_type`, and no speed row can be true of it.
-            link = proprietary_link(a) if pluggable_cage(p["ref"]) else None
-            t = "other" if link else iface_type(p, a, group_role(p))
-            if t is None:                      # unknown combination: skip, do not guess
+            # The rest of what makes a placement a switch port is one function,
+            # device_port_type, because L105 asks it too: a placement declaring
+            # `interfaces:` that it turns away is a lint error, not a silence.
+            t, iface_label, _why = device_port_type(p, a, group_role(p), names)
+            if t is None:
                 continue
             # ONE CAGE, SEVERAL INTERFACES (#443). A CSFP cage presents two BiDi
             # interfaces and says so with `interfaces:`; each is exported, typed
@@ -1383,10 +1479,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 else:
                     name, breakout = iid, None
                 iface = {"name": name, "type": t}
-                if link:
-                    iface["label"] = link
-                elif t == "other" and a.get("media") in TDM_LABEL:
-                    iface["label"] = TDM_LABEL[a["media"]]
+                if iface_label:
+                    iface["label"] = iface_label
                 # EITHER WAY OF SAYING IT COUNTS. `attrs.role: mgmt` is the per-port
                 # spelling; a group whose own role is `management` says the same
                 # thing about every port in it, and six devices only say it that way.
@@ -1490,81 +1584,42 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         if not isinstance(part, dict):
             continue
         part, part_role = effective_part(part, comp_groups)
-        # The one interface this part exports as a NETWORK port, if any - the
-        # only kind mgmt_only is set on. A timing or RF jack exports as `other`
-        # with its function as a label and stays out of it, as it does on a
-        # device, where `build` lists those jacks apart from the ports.
-        network = None
-        full_ref = part["ref"]
-        ref = full_ref.split("@")[0]
-        pid = str(part.get("id") or "")
-        if ref in PART_SKIP:
+        # Which list the part lands in is route_part's answer, and L105 asks
+        # it too. A `network` row is the only kind mgmt_only is set on: a
+        # timing or RF jack exports as `other` with its function as a label and
+        # stays out of it, as it does on a device, where `build` lists those
+        # jacks apart from the ports.
+        kind, row = route_part(part, attrs, defaulted)
+        if kind is None:
+            if dropped is not None:
+                # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
+                # out here with nothing written down, and an empty interface list is
+                # indistinguishable from a card with no ports - which is how 24
+                # 100GbE CFP, CFP2 and CXP ports sat missing across fourteen Juniper
+                # cards through every green run this repo has ever had. The caller
+                # decides what to do with the names; `None` opts out, for readers
+                # that only want the document.
+                ref = part["ref"].split("@")[0]
+                dropped[ref] = dropped.get(ref, 0) + 1
             continue
-        # The placement is more specific than the ref, so it is checked first.
-        # Reaching PART_CONSOLE with an rj45-telemetry part would file a
-        # rectifier link as a console port, which is how #29 read before.
-        placed = placed_type(part)
-        if placed:
-            iface = {"name": pid, "type": placed}
-            if placed == "other":
-                iface["label"] = other_label(part)
-            ifaces.append(iface)
-            network = iface
-        elif full_ref in FAMILY_PART:
-            # Checked on the un-stripped ref, before PART_CONSOLE/PART_IFACE
-            # below drop the @major and would otherwise catch every version of
-            # std/rj45 alike - see FAMILY_PART's comment for why that is wrong.
-            # What the PLACEMENT says beats what the ref says, both ways round.
-            timing = rj45_timing_label(part)
-            if timing:
-                ifaces.append({"name": pid, "type": "other", "label": timing})
-            elif RJ45_CONSOLE.search(rj45_words(part)):
-                consoles.append({"name": pid or "Console", "type": "rj-45"})
-            else:
-                kind, t = FAMILY_PART[full_ref]
-                if kind == "console":
-                    consoles.append({"name": pid or "Console", "type": t})
-                else:
-                    network = {"name": pid, "type": t}
-                    ifaces.append(network)
-        elif ref == DB9_CONSOLE_REF and DB9_CONSOLE.search(db9_words(part)):
-            consoles.append({"name": pid, "type": "de-9"})
-        elif ref in PART_POWER:
-            powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
-        elif ref in PART_CONSOLE:
-            consoles.append({"name": pid or "Console", "type": PART_CONSOLE[ref]})
-        elif ref in PART_RF:
-            t, connector = PART_RF[ref]
-            # The type says what the signal is; the label keeps the connector,
-            # which is the part the type cannot express.
-            ifaces.append({"name": pid or t, "type": t, "label": connector})
-        elif ref in PART_IFACE:
-            if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
-                defaulted[ref] = defaulted.get(ref, 0) + 1
-            network = {"name": pid, "type": cage_type(ref, attrs)}
-            # The one FAMILY_ATTRS row that writes `other` is SFP112_ATTR.
-            if network["type"] == "other":
-                network["label"] = OTHER_LABEL[SFP112_ATTR[0]]
-            ifaces.append(network)
-        elif dropped is not None:
-            # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
-            # out here with nothing written down, and an empty interface list is
-            # indistinguishable from a card with no ports - which is how 24
-            # 100GbE CFP, CFP2 and CXP ports sat missing across fourteen Juniper
-            # cards through every green run this repo has ever had. The caller
-            # decides what to do with the names; `None` opts out, for readers
-            # that only want the document.
-            dropped[ref] = dropped.get(ref, 0) + 1
-        if network is not None and mgmt_only(part.get("attrs") or {}, part_role):
-            network["mgmt_only"] = True
-        # ONE CAGE, SEVERAL INTERFACES - `build`'s #443 rule, on a card. A
-        # FELT-B cage numbers two ports whether a CSFP or an SFP is seated, and
-        # says so with `interfaces:`; each is exported, typed from the cage as
-        # the one row above was, and the cage itself is not. Only a network
-        # port presents interfaces (L105), so nothing else is split.
-        if network is not None and part.get("interfaces"):
-            ifaces.remove(network)
-            ifaces.extend({**network, "name": iid} for iid in part["interfaces"])
+        if kind == "console":
+            consoles.append(row)
+        elif kind == "power":
+            powers.append(row)
+        elif kind in ("timing", "rf"):
+            ifaces.append(row)
+        elif kind == "network":
+            if mgmt_only(part.get("attrs") or {}, part_role):
+                row["mgmt_only"] = True
+            # ONE CAGE, SEVERAL INTERFACES - `build`'s #443 rule, on a card. A
+            # FELT-B cage numbers two ports whether a CSFP or an SFP is seated, and
+            # says so with `interfaces:`; each is exported, typed from the cage as
+            # the one row would have been, and the cage itself is not. The rows
+            # are built before anything is appended, so no other row can be
+            # mistaken for this one. Only a network port presents interfaces, and
+            # L105 fails a part that declares them and routes anywhere else.
+            ifaces.extend([{**row, "name": iid} for iid in part["interfaces"]]
+                          if part.get("interfaces") else [row])
 
     # THE DECLARED INLET, when no part draws one. Second, not first: a composed
     # part knows its own id and there may be several, so it wins wherever it
