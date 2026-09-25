@@ -4112,8 +4112,33 @@ def component_cages(contract, lib, families, candidates, connectors=None, face=F
         if entry is not None:
             for k in COMPONENT_CAGE_DROPS:
                 entry.pop(k, None)
+            entry["tilt"] = component_cage_tilt(contract, p)
             out.append(entry)
     return out
+
+
+def component_cage_tilt(contract, part):
+    """The facet a card's cage stands `on`, as the cage entry publishes it:
+    `{"deg", "facing", "on"}`, or None for a cage on no facet.
+
+    WHAT _seat_nested_occupants DOES TO AN OPTIC IN A TILTED CAGE, published so
+    the kit can do the same (P3 amended). The build finds the facet from the
+    cage's own `parts:` entry (`_facet_via_part`), draws the optic
+    `translate(at) scale(...) rotate(...)` with the facet's cos along its axis,
+    solves `at` so the optic's foreshortened mate lands on the cage's
+    foreshortened one (`_tilt_offset`, both sides), and writes `data-tilt-on`
+    (`<card instance id>--<on>`), `data-tilt` and `data-tilt-facing`. The
+    entry's `mate` stays the flat seat_point: with the cage's `at` and this
+    facet a consumer has both ends of that solve. `facing` is in the card's
+    frame, as `data-tilt-facing` is.
+
+    A COMPONENT'S CAGES ONLY. A device placement stands on no facet; a part
+    that does is on a card, whose own group is where the optic is drawn.
+    """
+    facet, _at, _node = _facet_via_part(contract, part, "")
+    if not facet:
+        return None
+    return {"deg": facet["deg"], "facing": facet["facing"], "on": part["on"]}
 
 
 def main():
