@@ -233,7 +233,14 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     for c in LIB.glob("components/*/*/v*/contract.yaml"):
         majors[f"{c.parts[-4]}/{c.parts[-3]}"].append(int(c.parts[-2][1:]))
     multi = {n: sorted(v) for n, v in majors.items() if len(v) > 1}
-    assert multi == {}, multi
+    # KEPT ON PURPOSE, each while something still argues from it (the rule
+    # below, as written). The QSFP generics' @1 are the seating fixtures of the
+    # mechanism tests (a superseded part still resolves, so a fixture need not
+    # move with the accept lists); common/qsfp-pull-tab@1 is what the retired
+    # common/qsfp-transceiver@1 composes. Each @1 carries `superseded-by`.
+    kept = {"generic/qsfp-lc": [1, 2], "generic/qsfp-dd-lc": [1, 2],
+            "common/qsfp-pull-tab": [1, 2]}
+    assert multi == kept, multi
     # psu-550w USED TO BE HERE, the one retired major kept on purpose: the
     # PBC-2000's `psu-module-width` gap argued from @1's 84.0 mm against the
     # 73.5 of the @2 that device placed. A square-on photograph of the PBC-2000's

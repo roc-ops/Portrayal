@@ -3180,8 +3180,25 @@ def lint_component_fields(path, data, _lib_roots=None):
     would have produced blue handles wearing dark red edges. `data-stroke-derive`
     (#482), an outline drawn as a shade of a colour field, is read the same way:
     a skin deriving from a key no contract declares is deriving from nothing.
+
+    A COMPOSED PART THAT DECLARES THE SAME KEY KEEPS THE PROMISE TOO. The build
+    hands a host's field value to every composed part that declares that key
+    (pluggables-heads decision 4, render.instance_group's `inherited_fields`),
+    so generic/qsfp-lc@2's `latch-color` is painted by the composed pull tab and
+    by nothing in its own skin. Whether the part then paints it is the part's
+    own L73. The library root is the one `path` sits in unless `_lib_roots`
+    names others, so the CLI and the library-wide test agree.
     """
     fields = data.get("fields") or {}
+    path = Path(path)
+    roots = list(_lib_roots or [])
+    if not roots and len(path.parents) > 4 and path.parents[3].name == "components":
+        roots = [str(path.parents[4])]
+    composed = set()
+    for part in (data.get("parts") or []):
+        cp = libwalk.contract_path(part.get("ref") or "", roots) if roots else None
+        if cp:
+            composed |= set((load_yaml(cp) or {}).get("fields") or {})
     skins_dir = path.parent / "skins"
     seen = {}
     for skin in (data.get("skins") or ["default"]):
@@ -3192,7 +3209,7 @@ def lint_component_fields(path, data, _lib_roots=None):
         keys = set(re.findall(r'data-(?:(?:fill-|stroke-)?from|stroke-derive)="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
-            if k not in keys:
+            if k not in keys and k not in composed:
                 err(path, "L73", f"field {k} has no data-from, data-fill-from or "
                                  f"data-stroke-from node in skin {skin}")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
@@ -9914,7 +9931,7 @@ def main():
                 lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
                 lint_component_facets(f, d, args.library)
-                lint_component_fields(f, d)
+                lint_component_fields(f, d, args.library)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
                 lint_component_rj45_lamps(f, d, args.library)
