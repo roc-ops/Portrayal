@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-856 component majors in 17 namespaces.
+860 component majors in 17 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -49,14 +49,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 55 | 24 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 6 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 23 | 58 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 23 | 60 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 77 | 84 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 17 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 79 | 27 | USB Type-A receptacle opening - sharp corners |
 | `std/usb-c@1` | component | port | 8.34 × 2.56 × 6.5 | usb-c | 5 | 0 | USB Type-C receptacle opening - fully rounded ends |
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
-| `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 37 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
+| `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 39 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
 ## common/ (87)
 
@@ -95,7 +95,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 22 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 22 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
 | `common/led-dot@1` | component | led | 2 × 2 |  | 88 | 229 | Tiny round port LED (2mm) |
-| `common/led-indicator@1` | component | led | 4 × 4 |  | 11 | 41 | Single chassis status LED |
+| `common/led-indicator@1` | component | led | 4 × 4 |  | 11 | 45 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 18 | 2 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
@@ -749,7 +749,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 | `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
 
-## nokia/ (110)
+## nokia/ (114)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -799,10 +799,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/iom4-e@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 3 | Nokia 7750 SR / 7450 ESS IOM4-e and IOM4-e-B (3HE09648AA/BA/CA, 3HE10717AA/BA/CA - one face, two models, thre… |
 | `nokia/iom4-e-hs@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 0 | Nokia 7750 SR / 7450 ESS IOM4-e-HS (3HE11351AA L3HQ, 3HE11351CA L2HQ), the high-scale-QoS FP3 200 Gb/s input/… |
 | `nokia/iom5-e@1` | module | line-card | 425.4 × 35.4 × 431.8 |  | 2 | 0 | Nokia 7750 SR IOM5-e (3HE12332AA/BA/CA, 3HE13727AA/BA/CA 400G, 3HE15182AA/BA/CA 800G - nine licence and rate … |
-| `nokia/m1-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GBASE XFP MDA-XP, M1-10GB-XP-XFP (3HE04274AA; ESS 3HE04273… |
+| `nokia/m1-10gb-hs-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GB HS XFP MDA, M1-10GB-HS-XFP, the first-generation High S… |
+| `nokia/m1-10gb-hs-xfp-b@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GE XFP HS-MDA2, M1-10GB-HS-XFP-B (3HE06433AA), the second-… |
+| `nokia/m1-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 3 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 1-port 10GBASE XFP MDA-XP, M1-10GB-XP-XFP (3HE04274AA; ESS 3HE04273… |
+| `nokia/m10-1gb-hs-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 2 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 10-port 1000BASE HS SFP MDA, M10-1GB-HS-SFP, the first-generation H… |
+| `nokia/m10-1gb-hs-sfp-b@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 10-port GE SFP HS-MDA2, M10-1GB-HS-SFP-B (3HE06432AA), the second-g… |
 | `nokia/m10-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 6 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 10-port GE SFP MDA-XP, M10-1GB-XP-SFP (3HE03611AA; ESS 3HE03614AA),… |
 | `nokia/m12-1gb-2-10gb-xp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR 12-port GE SFP + 2-port 10GE XFP combo MDA-XP, printed M12-1GB+2-10GB-XP (3HE0… |
-| `nokia/m12-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 12-port GE SFP MDA-XP, M12-1GB-XP-SFP (3HE07285AA; ESS 3HE07284AA),… |
+| `nokia/m12-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 2 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 12-port GE SFP MDA-XP, M12-1GB-XP-SFP (3HE07285AA; ESS 3HE07284AA),… |
 | `nokia/m2-10gb-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 2-port 10GBASE XFP MDA-XP, M2-10GB-XP-XFP (3HE03685AA; ESS 3HE03687… |
 | `nokia/m2-oc192-xp-xfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR 2-port OC-192/STM-64 XFP MDA-XP, M2-OC192-XP-XFP (3HE05947AA), a classic half-… |
 | `nokia/m20-1gb-xp-sfp@1` | module | line-card | 190.5 × 35.4 × 177.8 |  | 0 | 1 | Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 20-port GE SFP MDA-XP, M20-1GB-XP-SFP (3HE03612AA; ESS 3HE03615AA),… |
@@ -859,7 +863,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/sr-e-ccm-impedance-panel@1` | module | blank | 193 × 35.4 |  | 3 | 0 | Nokia ACC - 7750 SR-e CCM Impedance Panel (3HE10295AA), the blank for an unused CCM slot (CCM A or CCM B) at … |
 | `nokia/sr-e-cpm-impedance-panel@1` | module | blank | 259.1 × 35.4 |  | 3 | 0 | Nokia ACC - 7750 SR-e CPM Impedance Panel (3HE10296AA), the blank for an unused CPM slot at the rear of the S… |
 | `nokia/sr-e-iom-impedance-panel@1` | module | blank | 259.1 × 70.8 |  | 3 | 0 | Nokia ACC - 7750 SR-e IOM Impedance Panel (3HE10297AA), the blank for an unused IOM slot at the rear of the S… |
-| `nokia/sr-e-mda-impedance-panel@1` | module | blank | 193 × 35.4 |  | 5 | 14 | Nokia ACC - SR-e MDA Impedance Panel (3HE10312AA), the blank for an unused MDA slot: a plain plate in the MDA… |
+| `nokia/sr-e-mda-impedance-panel@1` | module | blank | 193 × 35.4 |  | 5 | 18 | Nokia ACC - SR-e MDA Impedance Panel (3HE10312AA), the blank for an unused MDA slot: a plain plate in the MDA… |
 | `nokia/sr-e-psu-ac@1` | module | psu | 86.4 × 40.4 × 197.6 |  | 3 | 1 | Nokia PSU - 7750 SR-e AC (3HE09549AA), the hot-swap universal-AC supply of the SR-1e, SR-2e and SR-3e rear PS… |
 | `nokia/sr-e-psu-dc@1` | module | psu | 86.4 × 40.4 × 197.6 |  | 3 | 0 | Nokia PSU - 7750 SR-e DC -48V (3HE09548AA), the hot-swap -48/-60 VDC supply of the SR-1e, SR-2e and SR-3e rea… |
 | `nokia/sr-e-psu-impedance-panel@1` | module | blank | 86.4 × 40.4 |  | 3 | 0 | Nokia ACC - 7750 SR-e PSU Impedance Panel (3HE09419AA), the blank for an unused PSU slot of the SR-1e, SR-2e … |
