@@ -18,6 +18,7 @@ end-of-life question turns on: when it reaches zero, nothing in the library
 still needs `plan:` to mean `faces.plan`, and the fallback can go. Nothing else
 in the codebase tracks that number, so it has to be kept correct here by hand.
 """
+import math
 
 # THE LIST THE SCHEMA'S `faces.properties` DECLARES. A reader that spells the
 # directions out instead of iterating this tuple silently drops whichever one
@@ -89,3 +90,49 @@ def rear_at(bay, cutout, contract):
     cx, cy = cutout["at"]
     bw = float(bay["size"]["w"])
     return [round(cx + (bw - fp["at"][0] - fp["size"][0]), 4), round(cy + fp["at"][1], 4)]
+
+
+def rear_turn(bay):
+    """How far a back seen through `bay`'s rear cutout is turned in the rear
+    view, in degrees: the bay's own `rotate`, negated, in [0, 360).
+
+    A MODULE ON ITS SIDE SHOWS ITS BACK ON ITS SIDE, AND THE OTHER WAY ROUND.
+    A bay's `rotate` turns its occupant clockwise as seen from the front; seen
+    from behind, left and right swap and the same turn reads anticlockwise.
+    So there is no second number for a device to state and get wrong: the
+    back turns with the module, and the mirror decides which way.
+    """
+    return (-float(bay.get("rotate") or 0)) % 360
+
+
+def rear_place(bay, cutout, contract, back):
+    """Where `contract`'s back is drawn through `cutout`, seated in `bay`:
+    ``{"at": [x, y], "rotate": deg}`` for a placement of its `faces.rear`
+    drawing, whose size is `back` ({w, h}). `at` is that drawing's unturned
+    top-left and `rotate` turns it about its own centre, which is how a
+    placement is drawn.
+
+    UNTURNED, THIS IS `rear_at`. A turned bay's `size` is the module's box
+    after the turn - an FHD module on edge is a 35.05 x 108.97 bay holding a
+    108.97 x 35.05 plate - and a footprint is in the module's own frame, so
+    the footprint is found in the unturned bay (the bay's size with its axes
+    swapped back, centred on the same hole) and the back's centre is then
+    turned about the hole's centre by `rear_turn`, the whole module turning
+    about its own middle as instance_group turns it at the front.
+    """
+    turn = rear_turn(bay)
+    if not turn:
+        return {"at": rear_at(bay, cutout, contract), "rotate": 0}
+    bw, bh = float(bay["size"]["w"]), float(bay["size"]["h"])
+    cx, cy = cutout["at"][0] + bw / 2, cutout["at"][1] + bh / 2
+    uw, uh = (bh, bw) if turn in (90.0, 270.0) else (bw, bh)
+    tl = rear_at({"size": {"w": uw, "h": uh}}, {"at": [cx - uw / 2, cy - uh / 2]}, contract)
+    # no drawing to measure: the back is the body's, so it is the footprint's size
+    fp = (contract.get("body") or {}).get("footprint") or {"size": [uw, uh]}
+    dw = float((back or {}).get("w") or fp["size"][0])
+    dh = float((back or {}).get("h") or fp["size"][1])
+    vx, vy = tl[0] + dw / 2 - cx, tl[1] + dh / 2 - cy
+    c, s = {90.0: (0, 1), 180.0: (-1, 0), 270.0: (0, -1)}.get(
+        turn, (math.cos(math.radians(turn)), math.sin(math.radians(turn))))
+    px, py = cx + vx * c - vy * s, cy + vx * s + vy * c
+    return {"at": [round(px - dw / 2, 4), round(py - dh / 2, 4)], "rotate": turn}
