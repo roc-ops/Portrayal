@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: bp-a10
+version: 1.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) BP-A10 - the single-width dynamic back plate for one AR3044H or
+  AR3044L quad return receiver in a CH3000 chassis: four LC/APC optical inputs and four
+  F-type RF outputs, one of each per receiver, seated in the rear of the receiver's slot.
+size: {w: 25.76, h: 130.2}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: BP-A10
+  slots: 1
+provenance:
+  size: >-
+    borrowed - the single-width plate of the AR3044H and AR3044L, whose slot this fills
+    from the rear; the data sheet's own drawing agrees (below). No depth is stated.
+  connectors: >-
+    datasheet - AR3044H and AR3044L data sheets: "4 RF Outputs: F-type female (connectors
+    at Back Plate BP-A10)" and "Optical Connectors: LC/APC (at Back Plate BP-A10)"; the
+    plate ships with the receiver ("Requires BP-A10 Back Plate, which is included").
+  layout: >-
+    drawing - the data sheets' p3 drawing of the BP-A10 (100 x 435 px) outlines the plate at
+    85 x 421 px, an aspect within 2% of 25.76 x 130.2, so it is read at 3.30 px/mm across
+    and 3.23 down: a thumbscrew at the top on the slot centre line, the legend BP-A10, four
+    vent slots 15.6-28.8 down, four F-type jacks at 15.2 across on a 16.1 pitch from 40.0
+    numbered 1 to 4 at their left, a block of two vertical LC/APC duplex adapters (each 9.3
+    wide, the library adapter's 9.28) 98.4-113.1 down with bores numbered 1 and 2 in the
+    left adapter and 3 and 4 in the right, and a thumbscrew at the bottom. The drawing is
+    small, so positions are good to about half a millimetre.
+  pitch-note: >-
+    drawing - the two duplex adapters abut, housing to housing, as one quad LC block
+    9.3 + 9.3 wide with no web between them, which is how the data sheets draw it; so they
+    sit at their own width, 9.30, rather than at a cassette's adapter pitch.
+elements:
+  screw-top: {at: [8.68, 1.0], size: [8.4, 8.4], class: fastener}
+  vents: {at: [3.6, 15.6], size: [18.0, 13.2], class: vent}
+  screw-bottom: {at: [8.68, 119.8], size: [8.4, 8.4], class: fastener}
+parts:
+  - {ref: std/f-type@1, id: rf-out-1, at: [10.35, 36.05], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-out-2, at: [10.35, 52.25], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-out-3, at: [10.35, 68.15], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-out-4, at: [10.35, 84.25], attrs: {role: rf-output}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-1-2, at: [3.3, 98.83], attrs: {role: optical-input, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-3-4, at: [12.6, 98.83], attrs: {role: optical-input, connector: LC/APC, housing-finish: '#2fa84f'}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

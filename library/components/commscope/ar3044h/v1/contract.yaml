@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: ar3044h
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) AR3044H - quad high gain analog return-path receiver, 5-204 MHz, for
+  the CH3000 headend optics platform: four receivers in one full-depth slot. The four
+  LC/APC optical inputs and four F-type RF outputs are on its BP-A10 back plate; the face
+  carries the Status and Access lamps, a -20 dB G-type test point, and the button and
+  four lamps that pick which output the test point samples.
+size: {w: 25.76, h: 130.2, d: 330.0}
+size-confidence: {w: photo-measured, h: photo-measured, d: datasheet}
+attrs:
+  model: AR3044H-0-AL
+  role: receiver
+  rf-passband: 5-204 MHz
+  optical-input-range: -23 to -1 dBm
+  output-level: 54 dBmV with -23 dBm input, 30% OMI, MGC, 1 dB attenuation
+  receivers: 4
+  power-draw-max-w: 14.5
+  back-plate: BP-A10
+provenance:
+  size: >-
+    photo-measured. Width is one CH3000 slot pitch less the faceplate gap (26.76 - 1.0,
+    see the ch3000 device), as the AR3002E's. The AR3044H data sheet's face-on photograph
+    (p1, 260 x 854) outlines the plate at 165 x 828 px, 6.41 px/mm across and 6.36 down,
+    within 0.7% of 25.76 x 130.2, so it is measured directly. The data sheet's "13.0 D x
+    4.3 H x 1.0 W" is the body without connectors, as on the AR3002E; its 13.0 in is
+    taken as depth.
+  power: >-
+    datasheet - AR3044H data sheet, "Current Consumption 14.5W". The vendor does not say
+    typical or maximum, so it is filed as the maximum; no ambient is given.
+  face-features: >-
+    photo-measured on the same photograph: the Status box 7.1-18.7 across and 28.4-44.5
+    down with three lamps on the plate's centre line at 33.0, 37.2 and 41.4; the Access box
+    46.5-53.5 with one lamp at 50.8; four vent columns of oval holes on a 2.6 pitch (left
+    2.4-5.2 from 29.6 to 95.6, right 20.6-23.1 to 69.3, a short inner column 16.3-19.1 from
+    55.1, and two lower inner columns); the select button centred 12.96, 83.4; four lamps at
+    19.2 across on a 5.1 pitch from 76.5, numbered 1 to 4 and joined to the button by a
+    printed bracket; and the test point centred 10.4, 105.0, about 15 across.
+  test-point: >-
+    datasheet - "RF Output Test Point (Selectable for each Output Port): G-type male
+    (connector at front panel, -20 dB)". No registry entry exists for a G-type connector,
+    so it is drawn as an element, as on the AR3002E. The button steps the test point through
+    the four outputs and the numbered lamp shows which; that reading of the button is the
+    layout's, as the data sheet names only the selectable test point.
+  lamps: >-
+    photo-measured. The Status lenses are green, yellow and red top to bottom on the
+    photograph, but the data sheet gives no colour or meaning for any lamp, so, as on the
+    AR3002E, they carry their legend's function and no colour.
+  screws: >-
+    one captive thumbscrew top and bottom on the slot centre line (12.88), as every face in
+    this chassis; the photograph reads the top one 1.5 left of it, the plate-edge offset seen
+    on the AR3002E and PS3006 photographs.
+elements:
+  screw-top: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
+  vent-left: {at: [2.4, 29.6], size: [2.80, 66.00], class: vent}
+  vent-right: {at: [20.6, 29.6], size: [2.50, 39.70], class: vent}
+  vent-right-inner: {at: [16.3, 55.1], size: [2.80, 14.20], class: vent}
+  vent-lower-left: {at: [7.1, 70.8], size: [2.70, 24.80], class: vent}
+  vent-lower-mid-top: {at: [11.4, 70.8], size: [2.70, 6.70], class: vent}
+  vent-lower-mid-bottom: {at: [11.4, 87.4], size: [2.70, 8.20], class: vent}
+  select-button: {at: [11.46, 81.9], size: [3.0, 3.0], class: button}
+  test-point: {at: [3.0, 97.6], size: [14.8, 14.8], class: port}
+  screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
+parts:
+  - {ref: common/led-dot@1, id: led-status-1, at: [11.96, 32.00], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-2, at: [11.96, 36.20], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-3, at: [11.96, 40.40], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-access, at: [11.96, 49.8], attrs: {function: activity}}
+  - {ref: common/led-dot@1, id: led-tp-1, at: [18.2, 75.50], attrs: {function: test-point-select}}
+  - {ref: common/led-dot@1, id: led-tp-2, at: [18.2, 80.60], attrs: {function: test-point-select}}
+  - {ref: common/led-dot@1, id: led-tp-3, at: [18.2, 85.70], attrs: {function: test-point-select}}
+  - {ref: common/led-dot@1, id: led-tp-4, at: [18.2, 90.80], attrs: {function: test-point-select}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

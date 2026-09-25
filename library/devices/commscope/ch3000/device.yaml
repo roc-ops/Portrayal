@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ch3000
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: CommScope
 model: CH3000
@@ -130,6 +130,17 @@ gaps:
       and the BD35M8 mux plates (-ACx and -EEx with three SC/APC, -DCx with six LC/APC, each
       with nine F-type inputs) are described in text only, so their layouts are not drawn.
     wanted: a face-on photograph or drawing of a BD31A8-100-H18F and of a BD35M8
+  - what: half-depth-slots
+    scope: [front, rear]
+    reason: needs-drawing
+    note: >-
+      the chassis data sheet gives "16 full-depth / 32 half-depth slots", and about fifty
+      modules are half-depth - the DT3550N, the AB32S1x and OS32 switches, the OR3144H and
+      the NP and OP passives. No document held draws how a slot divides: where a front
+      half-depth module's face sits, and how a rear half-depth module shares the rear face
+      with the back plates that full-depth modules mate. The slots are modelled full-depth
+      only, and no half-depth module is seated.
+    wanted: a drawing or photograph of a CH3000 with half-depth modules in the front and the rear of one slot
 groups:
   psus:
     term: Slot
@@ -175,20 +186,20 @@ views:
     components:
       bays:
         - {id: slot-1-2, at: [2.92, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/ps3006d@1, commscope/ps3006n@1], default: commscope/ps3006d@1, group: psus, rel-pos: 2}
-        - {id: slot-3, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 3, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-4, at: [83.2, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 4, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-5, at: [109.96, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 5, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-6, at: [136.72, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 6, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-7, at: [163.48, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 7, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-8, at: [190.24, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 8, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-9, at: [217.0, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 9, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-10, at: [243.76, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 10, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-11, at: [270.52, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 11, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-12, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 12, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-13, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 13, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-14, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 14, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: slot-15, at: [377.56, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 15, only-in: [base, ar3002e-x14]}
-        - {id: slot-16, at: [404.32, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1], group: slots, rel-pos: 16, only-in: [base, ar3002e-x14]}
+        - {id: slot-3, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 3, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-4, at: [83.2, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 4, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-5, at: [109.96, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 5, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-6, at: [136.72, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 6, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-7, at: [163.48, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 7, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-8, at: [190.24, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 8, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-9, at: [217.0, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 9, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-10, at: [243.76, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 10, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-11, at: [270.52, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 11, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-12, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 12, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-13, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 13, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-14, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 14, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: slot-15, at: [377.56, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 15, only-in: [base, ar3002e-x14, return-x14]}
+        - {id: slot-16, at: [404.32, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/ar3002e@1, commscope/ar3044h@1, commscope/ar3044l@1], group: slots, rel-pos: 16, only-in: [base, ar3002e-x14, return-x14]}
         - {id: slot-15-16, at: [377.56, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/ps3006d@1, commscope/ps3006n@1], default: commscope/ps3006n@1, group: psus, rel-pos: 16, only-in: [redundant-power, ht3584h-x48]}
         - {id: slot-3-4, at: [56.44, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/ca3008@1], default: commscope/ca3008@1, group: slots, rel-pos: 4, only-in: [ht3584h-x48]}
         - {id: slot-5-6, at: [109.96, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/ca3008@1], default: commscope/ca3008@1, group: slots, rel-pos: 6, only-in: [ht3584h-x48]}
@@ -206,20 +217,20 @@ views:
     components:
       bays:
         - {id: rear-1-2, at: [377.56, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: inlet-plates, rel-pos: 2}
-        - {id: rear-3, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 3, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-4, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 4, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-5, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 5, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-6, at: [270.52, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 6, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-7, at: [243.76, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 7, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-8, at: [217.0, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 8, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-9, at: [190.24, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 9, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-10, at: [163.48, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 10, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-11, at: [136.72, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 11, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-12, at: [109.96, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 12, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-13, at: [83.2, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 13, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-14, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 14, only-in: [base, redundant-power, ar3002e-x14]}
-        - {id: rear-15, at: [29.68, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 15, only-in: [base, ar3002e-x14]}
-        - {id: rear-16, at: [2.92, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 16, only-in: [base, ar3002e-x14]}
+        - {id: rear-3, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 3, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-4, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 4, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-5, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 5, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-6, at: [270.52, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 6, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-7, at: [243.76, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 7, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-8, at: [217.0, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 8, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-9, at: [190.24, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 9, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-10, at: [163.48, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 10, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-11, at: [136.72, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 11, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-12, at: [109.96, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 12, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-13, at: [83.2, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 13, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-14, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 14, only-in: [base, redundant-power, ar3002e-x14, return-x14]}
+        - {id: rear-15, at: [29.68, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 15, only-in: [base, ar3002e-x14, return-x14]}
+        - {id: rear-16, at: [2.92, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1, commscope/bp-a10@1], group: back-plates, rel-pos: 16, only-in: [base, ar3002e-x14, return-x14]}
         - {id: rear-15-16, at: [2.92, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: inlet-plates, rel-pos: 16, only-in: [redundant-power, ht3584h-x48]}
         - {id: rear-3-4, at: [324.04, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bd31a8-h10f@1], default: commscope/bd31a8-h10f@1, group: back-plates, rel-pos: 4, only-in: [ht3584h-x48]}
         - {id: rear-5-6, at: [270.52, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bd31a8-h10f@1], default: commscope/bd31a8-h10f@1, group: back-plates, rel-pos: 6, only-in: [ht3584h-x48]}
@@ -338,6 +349,41 @@ configurations:
       rear-14: commscope/bp-a5@1
       rear-15: commscope/bp-a5@1
       rear-16: commscope/bp-a5@1
+  return-x14:
+    kind: example
+    description: >-
+      Fourteen AR3044H quad high-gain return receivers in slots 3-16, each on the BP-A10
+      back plate it ships with, beside the one PS3006D: fifty-six return-path receivers in
+      the chassis. Illustrative - the AR3044H data sheet states the module, not a build.
+    bays:
+      slot-3: commscope/ar3044h@1
+      slot-4: commscope/ar3044h@1
+      slot-5: commscope/ar3044h@1
+      slot-6: commscope/ar3044h@1
+      slot-7: commscope/ar3044h@1
+      slot-8: commscope/ar3044h@1
+      slot-9: commscope/ar3044h@1
+      slot-10: commscope/ar3044h@1
+      slot-11: commscope/ar3044h@1
+      slot-12: commscope/ar3044h@1
+      slot-13: commscope/ar3044h@1
+      slot-14: commscope/ar3044h@1
+      slot-15: commscope/ar3044h@1
+      slot-16: commscope/ar3044h@1
+      rear-3: commscope/bp-a10@1
+      rear-4: commscope/bp-a10@1
+      rear-5: commscope/bp-a10@1
+      rear-6: commscope/bp-a10@1
+      rear-7: commscope/bp-a10@1
+      rear-8: commscope/bp-a10@1
+      rear-9: commscope/bp-a10@1
+      rear-10: commscope/bp-a10@1
+      rear-11: commscope/bp-a10@1
+      rear-12: commscope/bp-a10@1
+      rear-13: commscope/bp-a10@1
+      rear-14: commscope/bp-a10@1
+      rear-15: commscope/bp-a10@1
+      rear-16: commscope/bp-a10@1
   ht3584h-x48:
     kind: example
     description: >-
