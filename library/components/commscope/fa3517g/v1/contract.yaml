@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: fa3517g
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (Aurora / ARRIS) FA3517G-00 - FA3500-series 1550 nm EDFA, gain-flattened dual amplifier, 2 x 17 dBm
+  nominal output, one full-depth CH3000 slot. Its optical ports are on the back plate:
+  BP-F4 (SC/APC).
+size: {w: 25.76, h: 130.2, d: 330.2}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: FA3517G-00
+  role: amplifier
+  amplifier: gain-flattened dual amplifier
+  output-power-nominal: 2 x 17 dBm
+  power-draw-max-w: 14
+  back-plate: BP-F4 (SC/APC)
+provenance:
+  size: >-
+    borrowed - commscope/fa3500-face@1, the face every FA3500 model shares, whose own
+    figures are photo-measured. The data sheet's "13.0 D x 5.25 H x 1.0 W" is the body
+    without connectors; its 13.0 in (330.2 mm) is taken as depth.
+  power: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Performance Parameters, "Power
+    Consumption, max (Watts)": 14 W. No ambient is given with it.
+  figures: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Performance Parameters, the FA3517G-00
+    row: model type gain-flattened dual amplifier, nominal output power 2 x 17 dBm, power consumption 14 W max.
+  face: >-
+    the model prints as "FA3517" on the shared face, as the photographed FA3524S prints
+    "FA3524"; see commscope/fa3500-face@1's model-print.
+parts:
+  - {ref: commscope/fa3500-face@1, id: face, at: [0, 0], attrs: {model: FA3517}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

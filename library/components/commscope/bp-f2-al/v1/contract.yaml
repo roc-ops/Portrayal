@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: bp-f2-al
+version: 1.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (Aurora / ARRIS) BP-F2-AL - the single-width back plate for a single-output FA3500 EDFA ordered with LC/APC connectors in a CH3000 chassis: one LC/APC duplex adapter carrying the optical input and output.
+size: {w: 25.76, h: 130.2}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: BP-F2-AL
+  slots: 1
+provenance:
+  size: >-
+    borrowed - the FA3500 face's single-width plate, whose slot this fills from the rear;
+    the data sheet's drawing agrees (below). No depth is stated.
+  connectors: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Optical Connector: "SC/APC (at Back
+    Plate BP-F2, BP-F3, or BP-F4)", and LC/APC at BP-F2-AL for five single-output models;
+    Required Module Back Plates: BP-F2 single output SC/APC, BP-F2-AL single output LC/APC,
+    BP-F4 dual SC/APC. The back plate ships with the module.
+  layout: >-
+    drawing - the data sheet's p3 drawing of the three plates (604 x 783 px) outlines each
+    at about 156 x 779 px, 6.06 px/mm across and 5.98 down, within 1.3% of 25.76 x 130.2.
+    It shows the legend BP-F2-AL and a key of two squares under a thumbscrew, four vent slots 32.3-61.5 down, a separate lower panel from 66.5 to 113.4, and on it one vertical LC/APC duplex adapter centred 19.0 across and 78.6 down.
+  port-order: >-
+    estimated - the drawing keys the ports with black squares in the order
+    OPTICAL INP, OPTICAL OUT, top to bottom, and does not mark which adapter is which; they are
+    assigned in that order from the top.
+elements:
+  screw-top: {at: [7.88, 0.5], size: [10.0, 10.0], class: fastener}
+  vents: {at: [4.3, 32.3], size: [17.2, 29.2], class: vent}
+  screw-bottom: {at: [7.88, 119.3], size: [10.0, 10.0], class: fastener}
+parts:
+  - {ref: common/lc-duplex-v-adapter@6, id: optical, at: [14.36, 71.72], attrs: {role: optical, connector: LC/APC, housing-finish: '#2fa84f'}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

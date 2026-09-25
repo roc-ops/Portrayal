@@ -428,9 +428,11 @@ def test_every_device_that_reaches_an_adapter_ships_its_ports_capped(tmp_path):
 # CommScope: the CH3000's ht3584h-x48 rear, six BD31A8-100-H10F plates of four
 # vertical LC/APC adapters - 6 x 4 = 24, one duplex cap seat per vertical
 # adapter as on the FHD cassettes. The plates are scoped to that configuration
-# only, so the undecorated face adds nothing.
+# only, so the undecorated face adds nothing. Its return-x14 rear adds fourteen
+# BP-A10 plates of two vertical LC/APC adapters - 14 x 2 = 28, so 76. The
+# BP-F2-AL is accepted but seated in no configuration, so it adds nothing.
 EXPECTED_DEVICE_SLOTS = {"common/lc-duplex-adapter@6": 478,
-                         "common/lc-duplex-v-adapter@6": 48}
+                         "common/lc-duplex-v-adapter@6": 76}
 EXPECTED_DEVICE_REAR_SLOTS = 4
 
 
