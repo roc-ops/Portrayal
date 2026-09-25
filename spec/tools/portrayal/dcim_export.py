@@ -199,12 +199,54 @@ CAGE_FAMILY = {
 PON_ATTRS = (("ng-pon2", "ng-pon2"), ("xgs-pon", "xgs-pon"), ("xg-pon", "xg-pon"),
              ("10g-epon", "10g-epon"), ("gpon", "gpon"), ("epon", "epon"))
 PON_TYPES = frozenset(t for _a, t in PON_ATTRS)
+# AN SFP112 PORT IS `other`, BECAUSE ONLY ONE TARGET NAMES IT. `sfp112` is a
+# rung of the SFP ladder (spec/schemas/pluggables.yaml), and NetBox has
+# TYPE_100GE_SFP112 = '100gbase-x-sfp112' (netbox-community/netbox
+# netbox/dcim/choices.py at 6a009845) - but Nautobot does not: nautobot/nautobot
+# nautobot/dcim/choices.py at 38953ac3 has 400gbase-x-qsfp112 and no SFP112.
+# One document is written to both trees, so that slug would fail every Nautobot
+# import of a card carrying it - the reason `25gs-pon` has no row either.
+#
+# BUT A CARD THAT STATES `sfp112` HAS STATED ITS RATE, and leaving the row out
+# sent it to the cage default: sixteen 100G ports exported as 10GBASE-X SFP+,
+# the #267 defect, with L96 accusing the card of a silence it did not keep.
+# `other` is valid in both and says "a thing this schema has no name for",
+# which for Nautobot is exactly true - the treatment PART_MEDIA already gives
+# rj45-telemetry. When Nautobot adds 100gbase-x-sfp112 this becomes that slug.
+#
+# FIRST IN THE SFP FAMILY, as the most capable rate: an SFP112 cage takes SFP56
+# and SFP28 too, so a card stating `sfp112` beside a lower rate is an SFP112
+# card. No card stated it before, so nothing that exported already changes.
+SFP112_ATTR = ("sfp112", "other")
+# AN 800G QSFP-DD PORT IS NOT A 400G ONE, and with only the `qsfp-dd` row the
+# Nokia MDA2-e-XP's QSFP-DD800 ports would have exported as 400GBASE-X.
+# `800gbase-x-qsfpdd` is in both targets (NetBox TYPE_800GE_QSFP_DD at 6a009845;
+# Nautobot TYPE_800GE_QSFP_DD at 38953ac3), and IFACE_TYPE already writes it for
+# a device's 800G QSFP-DD groups. The card attr is `qsfp-dd-800g`, NOT
+# `qsfp-dd800`: the port's media stays `qsfp-dd` with `speed: 800g` (QSFP-DD
+# HW 6.3 covers QSFP-DD800 in the same cage), and `qsfp-dd800` is kept out of
+# the media vocabulary on purpose - see spec/schemas/pluggables.yaml. A card
+# attr is a rate statement, as `oc48` and `xgs-pon` are, not a media value.
+# FIRST, so a card stating it wins; every 400G card states only `qsfp-dd` and
+# is unchanged.
+QDD800_ATTR = ("qsfp-dd-800g", "800gbase-x-qsfpdd")
+# AN SFP28 CARD WAS EXPORTING AS SFP+, because the family knew no 25G rate: a
+# card stating only `sfp28` fell to the cage default. `25gbase-x-sfp28` is in
+# both targets (NetBox TYPE_25GE_SFP28 at 6a009845, Nautobot at 38953ac3) and
+# IFACE_TYPE already writes it for a device's 25G SFP groups.
+# AFTER `sfp-plus`, NOT BEFORE IT, and that is deliberate. Five Cisco cards -
+# the four A9K/A99-4HG-FLEX and the A9903-8HG-PEC - state `sfp-plus` AND
+# `sfp28` on one strip of std/sfp-ganged cages, and one card-level attr cannot
+# say which cage is which; placed first, this row would retype all of their
+# SFP+ ports as SFP28. Placed here they keep exporting exactly what they did.
+SFP28_ATTR = ("sfp28", "25gbase-x-sfp28")
 FAMILY_ATTRS = {
-    "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp"),
+    "sfp": (SFP112_ATTR,
+            ("sfp-plus", "10gbase-x-sfpp"), SFP28_ATTR, ("sfp", "1000base-x-sfp"),
             ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3"))
            + PON_ATTRS,
     "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),
-    "qsfp-dd": (("qsfp-dd", "400gbase-x-qsfpdd"),),
+    "qsfp-dd": (QDD800_ATTR, ("qsfp-dd", "400gbase-x-qsfpdd")),
     # AN XFP CAGE IS NOT ONE RATE EITHER, and this entry said it was - the empty
     # tuple meant "nothing to declare", so L96 never asked and the cards below
     # were not even in #296's census. The sweep over the committed exports found
@@ -410,6 +452,10 @@ PART_MEDIA = {
     ("qsfp", "40g"): "40gbase-x-qsfpp",
     ("qsfp28", "100g"): "100gbase-x-qsfp28",
     ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    # A PLACEMENT'S OWN 800G, so a QSFP-DD800 port that says so types from
+    # itself; the card's `qsfp-dd-800g` gives the same answer (QDD800_ATTR).
+    ("qsfp-dd", "800g"): "800gbase-x-qsfpdd",
+    ("sfp112", "100g"): "other",
     ("rj45-telemetry", None): "other",
     # COPPER ETHERNET AT A STATED RATE. An 8P8C shell says nothing about speed,
     # so these only ever apply where the PLACEMENT declares one - which is the

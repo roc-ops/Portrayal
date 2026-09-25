@@ -166,7 +166,7 @@ RULES = {
     "L5":  ("device",     "placement refs resolve in the library, and instance ids are unique per view", "fix the `ref` (namespace/name@major) or the duplicate id"),
     "L6":  ("device",     "a bay's default appears in its accepts list", "add the default to `accepts`, or change the default"),
     "L7":  ("device",     "region members reference existing instance ids", "name ids that exist in the same view"),
-    "L8":  ("device",     "a configuration seats only what its bays accept", "add the occupant to the bay's `accepts`, or seat something the bay takes"),
+    "L8":  ("device",     "a configuration seats only what its bays accept, and only in bays that exist in it", "add the occupant to the bay's `accepts`, or seat something the bay takes; for a bay `only-in` scopes out, add the configuration to it or drop the key"),
     "L9":  ("component",  "a conforms-declared size matches spec/schemas/standards.yaml", "take the size from the registry, or drop `conforms` if the part is not the standard aperture"),
     "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4)", "fix the `parts:` refs; a part must not compose itself"),
     "L11": ("component",  "interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper"),
@@ -381,8 +381,12 @@ AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
 # four-lane QSFP, one generation past qsfp56, and the cage is mechanically the
 # same - std/qsfp-ganged@1 seats it unchanged. Left out, L22 accused every one of
 # the EXP400-32X's thirty-two ports of contradicting its own group.
+# sfp112 IS IN THE SFP FAMILY ON THE SAME ARGUMENT: the 100G single-lane SFP, one
+# generation past sfp56, in the SFP envelope - an SFP112 cage takes SFP56 and
+# SFP28 modules, so std/sfp and std/sfp-ganged serve it unchanged. The Nokia
+# MDA2-e-XP SFP112 cards (m5e8, m5e16) are the first to need it.
 MEDIA_FAMILY = {
-    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp",
+    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp", "sfp112": "sfp",
     "qsfp": "qsfp", "qsfp-plus": "qsfp", "qsfp28": "qsfp", "qsfp56": "qsfp",
     "qsfp112": "qsfp", "qsfp-dd": "qsfp",
 }
@@ -1653,7 +1657,7 @@ def lint_component_display(path, data, _lib_roots=None):
 GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
                            "power-draw-max-w", "power-draw-typical-w")
 GENERIC_RATE_TOKENS = re.compile(
-    r"(^|-)(sfp28|sfp56|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
+    r"(^|-)(sfp28|sfp56|sfp112|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
     r"1000base[a-z0-9-]*|"
     r"\d+g|\d+gbase[a-z0-9-]*|\d+km|\d+m)(-|$)")
 
@@ -4225,9 +4229,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
 # generation past qsfp56 on the same cage - and adding the device without adding
 # the media would have made its port group the third to escape L40 in silence.
 # The test failed first and this line is its answer, not the other way round.
-PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp-dd", "qsfp", "qsfp28",
-                   "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2",
-                   "cfp4", "cxp"}
+# sfp112 JOINED BEFORE ITS DEVICE, the other way round from qsfp112: the Nokia
+# MDA2-e-XP SFP112 cards are known to be coming, and a cage already in the
+# vocabulary the day its first card lands is what keeps that card's groups from
+# escaping L40.
+PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp112", "sfp-dd", "qsfp",
+                   "qsfp28", "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp",
+                   "cfp2", "cfp4", "cxp"}
 
 
 def _bay_pitch_is_uneven(gaps):
@@ -8915,11 +8923,30 @@ def lint_device_configuration_bays(path, data, lib_roots):
     a bay called slot-1 on one of the modules riser-1 accepts, and the ref must
     be in THAT bay's accepts. Which module is seated is not known here - the
     configuration may say - so any accepted module's slot counts.
+
+    A KEY MUST ALSO NAME A BAY THAT EXISTS IN ITS CONFIGURATION. `only-in`
+    removes a bay from the metal of every configuration it does not name, and
+    render.py skips the bay before it reads the configuration's `bays:`, so a
+    configuration that seats a module there asserts an occupant the drawing
+    cannot show - and the drawing drops it silently. The CH3000 declared
+    slot-15 and slot-16 `only-in: [base]`, seated a receiver in each from a
+    second configuration, and rendered 12 receivers where it meant 14. The same
+    id may be a bay on more than one view; one that exists in the configuration
+    is enough. A nested key is scoped by its head: a component's bays carry no
+    `only-in`, because a configuration varies a chassis and not a card.
     """
     bay_accepts = {}
+    bay_scopes = {}
     for view in (data.get("views") or {}).values():
         for b in view_parts(view)["bays"]:
             bay_accepts[b["id"]] = b.get("accepts") or []
+            bay_scopes.setdefault(b["id"], []).append(b.get("only-in"))
+
+    def scoped_out(bid, cname):
+        scopes = bay_scopes.get(bid.split("/")[0])
+        if not scopes or any(not s or cname in s for s in scopes):
+            return None
+        return sorted({c for s in scopes for c in s})
 
     def nested_accepts(key):
         head, *rest = key.split("/")
@@ -8940,6 +8967,15 @@ def lint_device_configuration_bays(path, data, lib_roots):
         return accepts
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
+            # an empty string seats nothing, so scoping the bay out of the
+            # configuration draws exactly what the key says: no occupant
+            only = scoped_out(bid, cname) if ref != "" else None
+            if only:
+                err(path, "L8", f"config {cname}: bay {bid} is `only-in: {only}`, so it "
+                                "does not exist in this configuration - the configuration "
+                                "seats an occupant the drawing cannot show, and the render "
+                                "drops it silently. Add the configuration to the bay's "
+                                "`only-in`, or drop the key")
             if "/" in bid:
                 acc = nested_accepts(bid)
                 if acc is None:
