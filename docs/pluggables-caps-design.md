@@ -62,7 +62,7 @@ Taken 2026-09-22, before the first step.
 |---|---|
 | P1 | THE SLOT KEY is the path of part ids from the device placement (or bay) to the slot part, with every `module` segment dropped: `bay-1/lc01/1`. A drawing path restores them: `bay-1/module/lc01/1`. One helper, `manifest.slot_key_prefix`, strips every `/module` segment from any instance path, and a device placement's path is its own key |
 | P2 | A WRAPPER'S APERTURE IS THE WRAPPER'S SLOT. A component that presents an interface by looking through to its one composed aperture is itself the slot, and the aperture is not published as a second one. So a cassette's placement of `mpo-adapter` is a slot, and the tile's own `bore` is not. This holds for connector slots only. Applied to cages it would have dropped the only published cage of 19 components, so cages publish as they did (ruled 2026-09-22, in the first step) |
-| P3 | OCCUPANTS OF OCCUPANTS STAY CHAINED KEYS. No slot is walked inside a seated occupant, a group carrying `data-for`, so a plug in a seated optic's bore keeps B's chained key (`port-4-occupant`). Narrowed 2026-09-22 so that a boot can address one half of a duplex plug (`port-1510-occupant/a`) |
+| P3 | OCCUPANTS OF OCCUPANTS STAY CHAINED KEYS. No slot is walked inside a seated occupant, a group carrying `data-for`, so a plug in a seated optic's bore keeps B's chained key (`port-4-occupant`). Narrowed 2026-09-22 so that a boot can address one half of a duplex plug (`port-1510-occupant/a`). Amended 2026-09-24 for the kit: a seated occupant's own slots are slots, at the chained path the build already seats (`nt-a/qsfp-2-occupant/tx`, a plug in the tx bore of the optic in a card's cage); see "Slots on an occupant" |
 | P4 | EMPTY IS THE EMPTY STRING, as it is for bays: `occupants: {bay-1/lc01/1: ""}` empties a slot and overrides its default |
 | P5 | DEFAULT PRECEDENCE, lowest first: the slot part's own declaration; a composer's `parts:` entry, which overrides only the placed component's top-level default; a configuration's `occupants:`; the explorer. A composer cannot reach a grandchild's default, and a configuration can (see "The shipped default") |
 | P6 | `kind`. Every entry in a view's `cages[]` and in a component's `cages` carries `kind: cage` or `kind: connector`. Every cage entry was byte-identical before and after, once `kind` is removed |
@@ -533,7 +533,8 @@ transform above it and nothing is solved twice.
   the bay's namespace, as its `data-path` always was, so its shipped caps name
   the device's slots.
 - **Which slots a drawing has (2026-09-23).** Every instance whose component
-  publishes slots, outside any occupant (P3). A slot whose carrier is itself a
+  publishes slots, outside any element that is `data-for` something without
+  being its seat (P3, and "Slots on an occupant" below). A slot whose carrier is itself a
   slot is kept only as one of that slot's `bores`: a cage wrapper publishes the
   aperture it composes as its own cage, and its host already publishes that
   aperture at the wrapper's path.
@@ -554,6 +555,30 @@ transform above it and nothing is solved twice.
   are stripped. A back rebuilt for a swapped module holds the caps its drawing
   ships, with their `data-for` re-keyed by the rule a module's skin uses, and the
   swap map's keys on that back are seated into it.
+- **Slots on an occupant (2026-09-24).** A cabled uplink is an optic in the
+  cage and a plug in each of its bores, and the build has always seated that
+  from the chained key `nt-a/qsfp-2-occupant/tx`, drawing the plug inside the
+  optic's own group at `nt-a/module/qsfp-2-occupant/tx-occupant`. The kit read
+  no slot inside any `data-for` group, so the explorer could show the optic and
+  never plug it. Now a seat, the element drawn at `<slot>-occupant`, is a
+  carrier like any other: its component's slots are read at
+  `<slot>-occupant/<id>` and keyed with the `module` steps dropped, as P1 keys
+  every slot. Four rules follow from it:
+  - The drawing-less resolver reads a `<slot>-occupant` step as what the caller
+    says the slot holds: the map, else the build, else what the slot ships.
+    So a reload's gate accepts a plug only while its optic publishes the bore.
+  - Replacing or emptying an optic drops its plugs, as replacing a card drops
+    its optics. `<slot>-occupant/` is "under" the slot, as `<bay>/module/` is
+    under the bay.
+  - A face is seated by a frontier of slots as well as of bays. A plug waits
+    until the optic it goes in is seated and the face has been read again;
+    otherwise it would land in the optic the same map was about to replace.
+  - An occupant on a card goes in before the card's connection-point markers,
+    where the build puts it, so a seated optic holding plugs matches the
+    build's optic child for child.
+  Not covered here: an optic the kit seats in a cage on a tilted facet is drawn
+  untilted. `components.json` publishes no facet for a cage, and the kit has no
+  tilt seat. Plugs sit in the optic's own frame and are exact either way.
 - One home: all of it lives in `kit/swap.js`.
 
 ## 3D

@@ -1256,6 +1256,31 @@ export function createShell(opts = {}) {
     claim.retireUnder(key);
   }
 
+  // AN OPTIC REPLACED OR EMPTIED TAKES ITS PLUGS WITH IT, as a card takes its
+  // optics (dropUnder): every key on what the slot held -
+  // `nt-a/module/qsfp-2-occupant/tx` - leaves the state (swap.js's
+  // underCarrier reads `<slot>-occupant/` as it reads `<bay>/module/`). The
+  // optic that goes in is a fresh seat of its skin, so when it is the
+  // BUILD's own optic, what the configuration plugged into it is recorded as
+  // what a fresh seat ships there - or 3D, handed nothing, would still show
+  // the build's plugs.
+  function dropOnSlot(key, ref, slot) {
+    const cfg = (state.meta?.configs || []).find(c => c.name === state.cfg);
+    const own = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+    const built = builtOccOf(cfg);
+    const R = slotResolver({bays: allOf(state.meta?.bays), cages: allOf(state.meta?.cages),
+      compByRef, placementRef,
+      bayRef: (p, bay) => own(state.cfgBays, p) ? state.cfgBays[p] : bay.default ?? null,
+      occRef: (p, s) => p === key ? ref : own(state.cfgOccupants, p) ? state.cfgOccupants[p]
+        : own(built, p) ? built[p] : s.default ?? null});
+    const builtRef = own(built, key) ? built[key] || null
+      : (slot || R.entryAt(key))?.default ?? null;
+    const rebuilt = ref && ref === builtRef ? built : {};
+    const ships = k => R.entryAt(k)?.default ?? null;
+    Object.assign(state, pruneCarrier(state, key, rebuilt, {}, ships));
+    claim.retireUnder(key);
+  }
+
   // ONE SWAP INTO THE FACE ON SCREEN, bay or cage - the single place both
   // swapBay/swapCage and a reload go through. Returns what it touched, or null
   // when `key` names nothing on this face (or `ref` is not something it
@@ -1317,6 +1342,8 @@ export function createShell(opts = {}) {
     } else {
       const {refused, failed} = await applyOccupantOverrides(svg, [cage], {[key]: ref}, loadSkin, onFace);
       if (!onFace()) return null;
+      const held = Object.prototype.hasOwnProperty.call(state.cfgOccupants, key)
+        ? state.cfgOccupants[key] : cage.default ?? null;
       delete state.refused[key];
       delete state.failed[key];
       // A REFUSED CAGE IS LEFT EMPTY (applyOccupantOverrides removed what was
@@ -1339,6 +1366,8 @@ export function createShell(opts = {}) {
         console.warn(`[portrayal] ${key}: ${state.failed[key]} did not load; `
                      + `the cage keeps ${ref || 'nothing'}`);
       }
+      // the occupant that left took whatever was plugged into it
+      if (!failed.includes(key) && (held || null) !== ref) dropOnSlot(key, ref, cage);
       state.cfgOccupants[key] = ref;
     }
     state.touched.add(key);
@@ -1460,10 +1489,14 @@ export function createShell(opts = {}) {
     // key looks like a nested bay's. Shallowest first (acceptSwaps' order), so
     // a card the link swaps drops what the build had under it (dropUnder)
     // BEFORE the link's own optic for that card is written.
+    // A slot the link fills drops what the build plugged into it, the same
+    // way (dropOnSlot) and for the same reason: reseat() seats a fresh optic.
     const cageKeys = new Set(cages);
     for (const [key, ref] of Object.entries(accepted)) {
-      if (cageKeys.has(key)) state.cfgOccupants[key] = ref;
-      else {
+      if (cageKeys.has(key)) {
+        dropOnSlot(key, ref);
+        state.cfgOccupants[key] = ref;
+      } else {
         dropUnder(key, ref);
         state.cfgBays[key] = ref;
       }

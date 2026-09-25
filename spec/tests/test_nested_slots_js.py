@@ -244,12 +244,18 @@ def test_a_second_swap_takes_the_plug_out(world):
 
 
 @needs_node
-def test_no_slot_is_read_inside_a_seated_plug(world):
-    """P3. The plug's halves are instances with a `data-ref`; given an index
-    in which they publish boot slots, nestedSlots still reads none of them."""
+def test_a_seated_plugs_own_slots_are_read_at_its_chained_path(world):
+    """P3, amended 2026-09-24. Given an index in which the duplex plug
+    publishes a boot slot on each half, nestedSlots reads them at the plug's
+    chained path and keys them as the build does (`bay-1/lc1-occupant/a`,
+    nested_key_host's chained segment). The same group made a non-seat -
+    `data-for` the slot but not drawn at `<slot>-occupant` - is walked no
+    more than an LED is."""
     s = scenario(world, "fhdPlug")
     assert s["plugParts"] >= 2
-    assert s["insidePlug"] == []
+    assert sorted(s["insidePlug"]) == ["bay-1/module/lc1-occupant/a", "bay-1/module/lc1-occupant/b"]
+    assert sorted(s["insideKeys"]) == ["bay-1/lc1-occupant/a", "bay-1/lc1-occupant/b"]
+    assert s["insideNonSeat"] == []
 
 
 @needs_node
@@ -481,13 +487,17 @@ MUTATIONS = [
      ["census"], lambda o: len(o["census"]["offered"]) == 24),
     ("a slot ships nothing", "const shipped = id => R.entryAt(id)?.default ?? null;",
      "const shipped = id => null;", ["delta"], lambda o: o["delta"]["emptied"] == {"bay-1/module/lc1": None}),
-    ("slots inside an occupant", "if (!modulePath || insideOccupant(mod)) continue;",
-     "if (!modulePath) continue;", ["fhdPlug"], lambda o: o["fhdPlug"]["insidePlug"] == []),
+    ("slots inside a non-seat", "if (!modulePath || insideOccupant(mod)) continue;",
+     "if (!modulePath) continue;", ["fhdPlug"], lambda o: o["fhdPlug"]["insideNonSeat"] == []),
+    ("no slot on a seat", "if (n.getAttribute('data-path') !== `${f}-occupant`) return true;",
+     "return true;", ["fhdPlug"], lambda o: len(o["fhdPlug"]["insidePlug"]) == 2),
     ("a slot on a slot is kept", "return !host || (host.bores || []).includes(e.cage);", "return true;",
      ["wrappers"], lambda o: o["wrappers"]["s9510-30xc:ac"]["slots"] == []),
-    ("seatFace seats the offered level only", "const all = faceCages(rootEl, cages, compByRef);",
-     "const all = faceCages(rootEl, cages, compByRef, {offered: true});", ["seatFace"],
-     lambda o: o["seatFace"]["fhd"]["tx"]["count"] == 1 and o["seatFace"]["duplex"]["seated"]["count"] == 1),
+    # ("seatFace seats the offered level only" retired 2026-09-24: seatFace
+    # now re-reads the face after each pass (applyFaceOverrides' frontier),
+    # so a level emptied in one pass is offered in the next and an
+    # offered-only read seats the same map. test_chained_slots_js.py mutates
+    # the frontier itself.)
     # the backs (Task 10b)
     ("a back has no slots", "raw.push(...backSlotsOf(back, compByRef));", ";",
      ["rearCensus"], lambda o: len(o["rearCensus"]["ids"]) == 8),

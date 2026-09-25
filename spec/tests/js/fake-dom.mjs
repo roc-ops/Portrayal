@@ -29,6 +29,13 @@ export class Node {
     this.children.push(c);
     return c;
   }
+  insertBefore(c, ref) {
+    if (!ref) return this.appendChild(c);
+    if (c.parentNode) c.remove();
+    this.children.splice(this.children.indexOf(ref), 0, c);
+    c.parentNode = this;
+    return c;
+  }
   remove() {
     const p = this.parentNode;
     if (!p) return;
