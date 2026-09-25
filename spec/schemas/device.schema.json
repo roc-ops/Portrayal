@@ -665,7 +665,7 @@
    "additionalProperties": {
     "type": "object",
     "additionalProperties": false,
-    "description": "one face of the device, written in the order the part is made: size the panel, punch it, print it, populate it. Key order is linted (L16).",
+    "description": "one face of the device, written in the order the part is made: size the panel, say whether it is an open frame, punch it, print it, populate it. Key order is linted (L16).",
     "properties": {
      "empty": {
       "type": "string",
@@ -688,6 +688,10 @@
         "type": "number"
        }
       }
+     },
+     "open-frame": {
+      "type": "boolean",
+      "description": "THIS FACE'S BAYS OPEN INTO ONE SHARED INTERIOR, not into a pocket each. An open-frame chassis - card-guide rails top and bottom, a mid-plane, and nothing between the slots, as on the CommScope CH3000 - is seen straight through wherever a slot is empty, front to rear. Without this every empty bay compiles to a pocket as deep as its deepest occupant, with four walls, a floor and a back, and the chassis reads in 3D as a row of closed tubes. With it an EMPTY bay compiles to a see-through mouth flagged `data-open-frame` - the kit punches it and builds no walls, floor or back round it - and the face's root carries `data-open-frame`, which tells the kit to line the inside of the box so the interior reads as the chassis's. A seated bay draws exactly as on any face. Declare it on every face whose slots open into the interior (a mid-plane chassis: front and rear)."
      },
      "panel": {
       "type": "object",

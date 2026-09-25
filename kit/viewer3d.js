@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, setNodeFields, restyleText,
          setPulled as setReliefPulled, pulledPaths,
          buildFaceRelief, bodyBoxes, fruFor,
-         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject } from './relief.js';
+         nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces } from './relief.js';
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { jdist } from './dist.js';
 import { createLamps } from './lamps.js';
@@ -724,6 +724,22 @@ export function createViewer(container, opts = {}) {
     } else {
       box = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), mats);
       scene.add(box);
+    }
+    // AN OPEN FRAME HAS AN INSIDE. Its empty slots are punched through front
+    // and rear and build no pockets (relief.js cavityShell), so through one you
+    // would look past the inside of a box whose faces are drawn only from
+    // outside - the lid and the flanks would vanish too. A lining of the four
+    // long faces, seen from inside only and open at both ends, is the chassis's
+    // interior; what a slot shows beyond it is whatever is behind the rear. A
+    // child of the box so it is disposed with it, and never a pick target.
+    if (!COMP && openFrameFaces(faceSvg).length) {
+      const lining = new THREE.MeshLambertMaterial({color: 0x1b1d20, side: THREE.BackSide});
+      const none = new THREE.MeshBasicMaterial({visible: false});
+      const liner = new THREE.Mesh(new THREE.BoxGeometry(W - 0.6, H - 0.6, D - 0.6),
+        [lining, lining, lining, lining, none, none]);
+      liner.position.copy(box.position).negate();
+      liner.raycast = () => {};
+      box.add(liner);
     }
     // register faces for adaptive refinement
     LOD.length = 0;
