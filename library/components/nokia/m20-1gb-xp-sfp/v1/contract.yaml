@@ -1,0 +1,130 @@
+format: 1
+kind: module
+name: m20-1gb-xp-sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 20-port GE SFP MDA-XP, M20-1GB-XP-SFP (3HE03612AA;
+  ESS 3HE03615AA), a classic half-slot MDA for the IOM3-XP: twenty SFP cages, eleven across the
+  top (1-11) running nearly edge to edge and nine across the bottom (12-20) between the Stat and
+  Pwr lamps at the left and the model legend at the lower right, and a cross-slotted captive
+  screw on each lower end wing. Takes any SFP; no per-port lamps are drawn or listed. Authored
+  horizontal; an SR-12 IOM3-XP seats it on end with the carrier.
+unplaced: >-
+  seated by the classic MDA bays (mda-1, mda-2) of nokia/iom3-xp@1, which is what would reach
+  it; it is wired by the IOM3-XP's accepts list, which is not edited in this change, so no
+  device reaches it yet.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 11
+  is fitted per axis to that face.
+attrs:
+  model: M20-1GB-XP-SFP
+  part-number: 3HE03612AA
+  part-number-variants: 3HE03612AA (7750 SR), 3HE03615AA (7450 ESS)
+  cli-type: m20-1gb-xp-sfp
+  sfp: 20
+  power-draw-max-w: 50
+provenance:
+  sources: >-
+    datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p41 Figure 11 / Table 11 (the
+    face, its lamps, screws and port numbering), p18 Table 2 (power), p20-21 (the mda-type CLI
+    example). SR7 22.7 3HE18643AAAATQZZA03 p106 Table 47 (MDA size); SR7 15.1
+    3HE14151AAAATQZZA02 p97 Table 32 (part numbers, "7750 SR 20-port GE - SFP MDA-XP").
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - MXP p41 Figure 11 (art MDA0065), vector (pdfimages finds no raster), rendered at
+    1200 dpi. Fitted per axis exactly as nokia/m10-1gb-xp-sfp@1 fits Figure 9, and the art is
+    drawn at the same scale: 4614.5 px across the plate (stroke centre to stroke centre) to
+    190.5 (24.22 px/mm) and 847 px from the top line to the bottom of the centre band to 35.4
+    (23.93 px/mm). The outline is the M10's: end wings to y 28.2, notch edges at x 15.5 and
+    175.1, the band to the bottom edge, a screw tab 5.0-10.2 and 180.4-185.6 under each wing.
+    Cages drawn 16.02 x 11.54 on a regular 16.543 pitch (eleven centres fit a line to 0.02),
+    top row centres x 12.68 to 178.11 at y 8.86, bottom row under top cages 2-10 (x 29.22 to
+    161.57) at y 22.86. Stat (17.40, 19.50) and Pwr (17.40, 24.68), 2.8 across, legend Stat
+    above and Pwr below. Captive screws (key 4) centred (7.55, 22.95) and (183.08, 22.95),
+    heads 8.6 in a 10.2 ring, cross-slotted - the same screw art as Figure 9, which reads at
+    the same centre there, so the M10's 22.6 is 0.35 high against this reading. Port numbers
+    1 left of cage 1 and 11 right of cage 11 (baseline 10.07), 12-19 under their cages
+    (baseline 32.2), 20 right of cage 20 (baseline 24.62); model legend M20-1GB-XP-SFP (key 5)
+    in bold, 151.7-174.2, baseline 32.93.
+  cages: >-
+    drawing + standard - separate cages at the drawn 16.543 pitch, wider than a ganged block's
+    14.25, so each port is std/sfp@1 (SFF-8432 aperture 14.5 x 10.0) centred on its drawn box;
+    the box's remaining margin is drawn as the bezel. The rows are 14.0 apart with a 2.46 gap.
+    ORIENTATION IS NOT READ: the figure draws empty boxes with no latch or tab, and no
+    photograph of this card is held, so the pair takes the library's belly-to-belly default,
+    upper 0 over lower 180 (L108).
+  numbering: >-
+    datasheet - MXP p41 Table 11 key 3, "Ports are numbered 1 through 20"; Figure 11 prints 1
+    and 11 at the ends of the top row and 12-20 along the bottom, so the top row is 1-11 and
+    the bottom 12-20, each left to right.
+  lamps: >-
+    datasheet - MXP p41 Table 11: Status green blinking initializing, green operationally up,
+    amber operationally down, off administratively down; Power blue on, off no power.
+  power: 'datasheet - MXP p18 Table 2: M20-1GB-XP-SFP 50 W maximum; SR7L p97 Table 32 gives the same 50 W as worst case; SFP optics not included'
+  cli-type: 'datasheet - MXP p20 (Step 3 and the example) and p21 (show mda output) print mda-type m20-1gb-xp-sfp'
+  colour: >-
+    estimated - no photograph of a classic MDA is held (the public Ethernet MDA-XP datasheet
+    would settle it). Drawn in the charcoal of the SR-7/SR-12 card family. A gap.
+  logo-zone: 'none reserved - Figure 11 draws no mark, and the cages leave no plain plate large enough for one'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  lifecycle: >-
+    searched only the staged corpus; the MDA-XP guide and the 15.1 chassis guide list it; the
+    22.7 SR-7 guide's MDA power table (p102-103 Table 43) no longer carries 3HE03612AA, but its
+    EPC/LTE component table (p104-105 Table 45) still gives M20-1GB-XP-SFP 50 W. No end-of-sale
+    notice searched.
+  gaps: >-
+    Colour is estimated. The cage orientation is the library default, not a reading.
+elements:
+  screw-left: {at: [2.55, 17.95], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [178.08, 17.95], size: [10.0, 10.0], class: screw}
+  model-label: {at: [151.7, 30.35], size: [22.5, 2.6], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      the 20 SFP cages, Gigabit Ethernet, 1-11 left to right across the top and 12-20 left to
+      right across the bottom, as Figure 11 prints them
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the left
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp, at: [5.43, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-2, group: sfp, at: [21.97, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-3, group: sfp, at: [38.52, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-4, group: sfp, at: [55.06, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-5, group: sfp, at: [71.60, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-6, group: sfp, at: [88.15, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-7, group: sfp, at: [104.69, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-8, group: sfp, at: [121.23, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-9, group: sfp, at: [137.77, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-10, group: sfp, at: [154.32, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-11, group: sfp, at: [170.86, 3.86], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-12, group: sfp, at: [21.97, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-13, group: sfp, at: [38.52, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-14, group: sfp, at: [55.06, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-15, group: sfp, at: [71.60, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-16, group: sfp, at: [88.15, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-17, group: sfp, at: [104.69, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-18, group: sfp, at: [121.23, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-19, group: sfp, at: [137.77, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-20, group: sfp, at: [154.32, 17.86], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [15.4, 17.5], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; off: administratively down, shut down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [15.4, 22.68], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
