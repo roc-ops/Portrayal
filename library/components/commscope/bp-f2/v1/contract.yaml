@@ -1,0 +1,43 @@
+format: 1
+kind: module
+name: bp-f2
+version: 1.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (Aurora / ARRIS) BP-F2 - the single-width back plate for a single-output FA3500 EDFA in a CH3000 chassis: an SC/APC optical input and an SC/APC optical output.
+size: {w: 25.76, h: 130.2}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: BP-F2
+  slots: 1
+provenance:
+  size: >-
+    borrowed - the FA3500 face's single-width plate, whose slot this fills from the rear;
+    the data sheet's drawing agrees (below). No depth is stated.
+  connectors: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Optical Connector: "SC/APC (at Back
+    Plate BP-F2, BP-F3, or BP-F4)", and LC/APC at BP-F2-AL for five single-output models;
+    Required Module Back Plates: BP-F2 single output SC/APC, BP-F2-AL single output LC/APC,
+    BP-F4 dual SC/APC. The back plate ships with the module.
+  layout: >-
+    drawing - the data sheet's p3 drawing of the three plates (604 x 783 px) outlines each
+    at about 156 x 779 px, 6.06 px/mm across and 5.98 down, within 1.3% of 25.76 x 130.2.
+    It shows the legend BP-F2 and a key of two squares under a thumbscrew, five vent slots 31.4-77.4 down, and two SC/APC adapters mounted on their sides, each with its yellow laser-warning shutter, centred 86.8 and 108.0 down.
+  port-order: >-
+    estimated - the drawing keys the ports with black squares in the order
+    OPTICAL INP, OPTICAL OUT, top to bottom, and does not mark which adapter is which; they are
+    assigned in that order from the top.
+elements:
+  screw-top: {at: [7.88, 0.5], size: [10.0, 10.0], class: fastener}
+  vents: {at: [3.3, 31.4], size: [18.8, 46.0], class: vent}
+  adapter-1: {at: [1.0, 81.65], size: [17.6, 10.3], class: port}
+  adapter-2: {at: [1.0, 102.85], size: [17.6, 10.3], class: port}
+  screw-bottom: {at: [7.88, 119.3], size: [10.0, 10.0], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: input, at: [8.21, 82.30], rotate: 90, attrs: {role: optical-input, connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: output, at: [8.21, 103.50], rotate: 90, attrs: {role: optical-output, connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

@@ -1,0 +1,423 @@
+format: 1
+kind: device
+name: tm-8001
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: TM-8001
+aliases:
+- {name: T-Metro 8001, kind: superseded, note: 'the name on the metal (T-METRO 8001) and on the 2019 and 2025-09 data sheets; the 2025-12 data sheet and product page call the same box TM-8001'}
+portfolio: {line: Carrier Ethernet, family: Service Aggregation Platform, series: T-Series}
+description: >-
+  Telco Systems (BATM Networks) TM-8001, formerly T-Metro 8001 - a 1RU carrier Ethernet /
+  MPLS aggregation and demarcation switch, 200 Gb switching: twenty 1/10GE SFP+ cages in one
+  row of five colour-coded blocks, their lamps gathered in a colour-matched strip beneath,
+  the CLI console and MNG management jacks and three status lamps at the left, and a
+  front-serviced fan tray behind a large thumbscrew at the right.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      TM-8001 data sheet (telco.com 2025/12), "TM-8001 Compact 10GE Service Demarcation
+      Device"; the 2019 and 2025-09 editions call it the T-Metro 8001, which the face prints.
+  sources:
+    confidence: datasheet
+    note: >-
+      Three data-sheet editions (2019-01, 2025-09, 2025-12), ten vendor renders from the
+      telco.com media library, and the legacy NetZoom stencil "Telco Systems" (2022), master
+      T-Metro 8001 (F). NO VENDOR IMAGE IS SQUARE-ON - every render is a three-quarter view -
+      and no installation guide is public. One file in the library, telco.com 2021/03/8001.png,
+      is not this product: it is a T-Metro 8104 render filed under the 8001's name.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      Every feature is read off the 2025 render (telco.com 2025/08/8001@2x.png, 1678 px)
+      after a four-corner homography of its front face onto a 440 x 44 rectangle at 10
+      px/mm - a planar face under perspective is exactly what a homography undoes, so this
+      is a measurement, not a reading of a slanted picture. Corners in the render: TL (90,
+      309), TR (1361, 376), BR (1366, 512), BL (91, 434), each good to a pixel, which is
+      about 0.35 mm across and 0.35 mm down. Features that stand proud of the face (the
+      fan-tray wheel, the screws) are displaced by their own height and are estimated.
+  chassis:
+    confidence: estimated
+    note: >-
+      1RU x 440 x 44 x 508 deep. Depth, weight and 1RU are the data sheets' ("1.75'H (1RU) x
+      19'W x 20'D (44.45 x 482.6 x 508 mm)"; 482.6 is the 19-inch face with ears). WIDTH AND
+      HEIGHT ARE BOTH ASSUMED, NOT MEASURED. A homography fixes the face's proportions only up
+      to the rectangle it is mapped onto, and the 440 x 44 target was chosen: at 440 the
+      in-block SFP+ pitch reads 14.24 +/- 0.22 mm, which agrees with the registry's ganged
+      14.25 - but that agreement is the ASSUMPTION restated, not a check. This vendor's own
+      pitch, read off the TM810x stencil on the TM-8104, is 14.355, which would put the body at
+      about 443.6. 44.0 is 1RU less the usual clearance. Every x on this face scales with
+      the width, so all of them share this uncertainty (about 0.8%).
+  stencil-is-another-build:
+    confidence: photo-measured
+    note: >-
+      The 2022 NetZoom master T-Metro 8001 (F) is NOT this face and is not used for
+      geometry: it puts the logo and lamps at the right, has no fan-tray wheel, and draws
+      the five port blocks 2 mm apart where the render has 5-6 mm. Its one agreement with
+      the render is the colour-coded lamp strip under the middle of the port row (stencil 5
+      x 26.06 mm, render 5 x 25.4-26.4), which is what confirms the strip is real rather than
+      a render artefact. It is most likely the 2019 build's face; the current one is drawn.
+  ports:
+    confidence: photo-measured
+    note: >-
+      Twenty cage openings segmented in the rectified render, mean 13.4 x 8.7 at y 23.35, in
+      blocks starting at x 71.6, 133.4, 193.8, 254.2 and 313.8. The raw centres scatter about
+      0.2 mm, which at a 14.24 mean pitch would overlap neighbouring cages, so each block is
+      drawn REGULAR - four std/sfp-ganged@1 at the registry's 14.25 pitch, centred on the
+      block's measured mean centre. BOTH JACKS ARE common/rj45-eth@1, turned 180: the render
+      shows lamp windows along the top edge of both openings, CLI's as well as MNG's, so the
+      lamped keyway side is up on each. That puts the CLI console on a lamped part, which L76
+      reports; it is left in the baseline, as on the TM-8104, whose console jack shows the
+      same windows. Numbered 1-20 left to right in white on each block's
+      colour bar (green 1-4, orange 5-8, blue 9-12, cyan 13-16, pink 17-20).
+  lamps:
+    confidence: photo-measured
+    note: >-
+      The per-port lamps are NOT under their ports: twenty dots in five colour strips, four
+      to a strip, running x 157-287 under blocks 2-4, each strip the colour of its block and
+      numbered with its first port (1, 5, 9, 13, 17). Dot centres measured, 1.6-2.0 mm, drawn
+      as common/led-dot@1. FAN (red), PWR A and PWR B are round lamps in a column at x 55.5;
+      FLT and STS are small lamps under blocks 1 and 2. FAN, PWR A and PWR B sit behind large
+      domed lenses, about 7.6 mm across in the rectified render (FAN's red), drawn as bezels
+      behind the 4 mm lamp part. No document says what any state means. A small printed "+"
+      at about (297, 36), under block 4, is not identified by anything held and is not drawn.
+  mgmt-plates:
+    confidence: photo-measured
+    note: >-
+      CLI and MNG each sit on a raised plate held by a screw above and below the jack (x
+      3.5-25.3 and 27-48.8). Whether these are removable modules is not documented; they are
+      drawn as panel plates with their screws.
+  mng-speed:
+    confidence: borrowed
+    note: >-
+      BORROWED, NOT STATED. No TM-8001 edition gives the MNG port's rate (all three searched
+      for 10/100, 1000, RJ-45, out-of-band and management port). 1g is taken from the
+      TM-8104's OOB port, same vendor, same BiNOX OS generation and the same CLI / OOB pair,
+      which NetBox's community entry types 1000base-t - itself unsourced. It is carried so
+      the DCIM export does not guess, and the mng-speed gap stays open until a document
+      states the real rate.
+  fan-tray:
+    confidence: estimated
+    note: >-
+      Data sheets: "Redundant hot-swappable ... fan tray" and "Fan: Load sharing, speed
+      controlled, hot-swappable". The render prints FAN TRAY between two hazard triangles
+      beside a large knurled wheel at the right, with a small screw left of it, so the tray
+      is serviced from the front. ITS OUTLINE IS NOT VISIBLE - no seam shows in the render -
+      so it is not drawn as a bay; the wheel is drawn as a fastener (see the fan-tray gap).
+  power:
+    confidence: datasheet
+    note: >-
+      "Max power consumption: 150W" in all three editions, unqualified. Supplies: "Dual
+      redundant, hot-swappable AC/DC 100-240VAC / -48VDC (-36VDC to -60VDC)", ordered as
+      TM8001-AC-x (2 x AC PSU) or TM8001-DC (2 x -48 VDC PEM). They are not on the front, so
+      they are presumably at the rear, which nothing shows.
+attrs:
+  physical:
+    weight-kg: 5.75
+    overall-mm: 482.6 x 44.45 x 508 with rack ears (data sheet)
+  performance:
+    switching-capacity: 200 Gbps, wire speed, non-blocking
+  power:
+    power-max-w: 150
+    power-envelope: unstated
+    power-envelope-note: data sheet "Max power consumption 150W", no configuration or ambient stated
+    input-voltage: 100-240 VAC, or -48 VDC (-36 to -60 VDC)
+    psu-redundancy: dual redundant, hot-swappable AC PSUs or -48 VDC PEMs
+  thermal:
+    cooling: load-sharing, speed-controlled, hot-swappable fan tray, serviced from the front
+  environmental:
+    operating-temp: 0 to 45 C; extended -5 to 55 C for up to 96 hours
+  features:
+    services: MPLS L2VPN (VPLS, H-VPLS, VPWS), MPLS L3VPN, 802.1Q, 802.1ad Q-in-Q
+    resiliency: sub-50 ms G.8032 R-APS and RSVP-TE FRR, secondary LSP, xSTP, dual-homed VPLS/H-VPLS, LAG, redundant power
+    oam: hardware Y.1564 and RFC 2544 test head, MEF 46 latching loopback, Y.1731 PM, TWAMP
+    timing: SyncE
+    sdn: NETCONF / YANG, zero-touch provisioning
+  management:
+    local: CLI console and MNG out-of-band Ethernet on RJ45
+    mgmt-protocols: Console, Telnet, SSHv2, RADIUS, TACACS+, SNMP v1/2/3, xFTP, NTP, DHCP client/server, ZTP
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 440.0
+  height: 44.0
+  depth: 508
+  ru: 1
+  weight-kg: 5.75
+  color: '#d2d6d9'
+  silk: '#5a6066'
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; hardware documentation is on a support portal
+    behind a login, whose contact is on telco.com/support. Searched: the telco.com media
+    library, every product and knowledge-centre page, and the Wayback index of telco.com PDFs.
+  wanted: the TM-8001 / T-Metro 8001 hardware installation guide, from the BATM support portal.
+- what: square-on-front
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    Every vendor image is a three-quarter render; the face is measured through a homography
+    of the best one, which is exact for the flat face and approximate for anything that
+    stands proud of it.
+  wanted: a square-on photograph of the front at 4 px/mm or better.
+- what: rear-and-supplies
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The two hot-swappable supplies (AC PSU or -48 VDC PEM) are not on the front and nothing
+    held shows the rear, so they are not modelled and the device has no supply bays.
+  wanted: a photograph of the rear, or the installation guide's rear view.
+- what: fan-tray
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The render shows the fan tray's wheel, its FAN TRAY legend and a small screw, but no
+    seam, so the tray's extent on the face is unknown and it is not modelled as a bay.
+  wanted: a square-on or close photograph of the right end of the front.
+- what: mng-speed
+  scope: [mng]
+  reason: vendor-silent
+  note: >-
+    No edition states the MNG port's rate; the data sheets list only "Console" among the
+    management interfaces. 1g is carried as a BORROWED value from the TM-8104 (see
+    provenance.mng-speed), not as a finding.
+  wanted: the installation guide's interface table.
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      twenty 1/10GE SFP+ cages in one row, five colour-coded blocks of four, numbered 1-20
+      left to right on each block's colour bar.
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      one lamp per port, gathered in five colour strips under blocks 2-4 rather than under
+      the ports; strip colour matches the block's bar.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the CLI serial console and the MNG out-of-band Ethernet port, each on its own plate.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: FAN, PWR A and PWR B beside the management jacks, and FLT and STS under the first two port blocks.
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+        - {id: plate-cli, kind: port-shell, at: [3.5, 0.6], size: [21.8, 38.8], rx: 0.4, fill: '#cfd2d4', stroke: '#9ba1a6', stroke-width: 0.3}
+        - {id: plate-mng, kind: port-shell, at: [27.0, 0.6], size: [21.8, 38.8], rx: 0.4, fill: '#cfd2d4', stroke: '#9ba1a6', stroke-width: 0.3}
+        - {id: group-bar-1, kind: label-plate, at: [75.0, 18.4], size: [51.8, 2.8], fill: '#65af63'}
+        - {id: group-bar-2, kind: label-plate, at: [136.4, 18.4], size: [52.0, 2.8], fill: '#c37c5c'}
+        - {id: group-bar-3, kind: label-plate, at: [196.4, 18.4], size: [52.2, 2.8], fill: '#0691d1'}
+        - {id: group-bar-4, kind: label-plate, at: [257.4, 18.4], size: [51.4, 2.8], fill: '#46a2b3'}
+        - {id: group-bar-5, kind: label-plate, at: [317.8, 18.4], size: [50.4, 2.8], fill: '#c580c8'}
+        - {id: lamp-strip-1, kind: label-plate, at: [157.2, 32.6], size: [25.4, 5.6], fill: '#65af63'}
+        - {id: lamp-strip-2, kind: label-plate, at: [182.6, 32.6], size: [25.4, 5.6], fill: '#c37c5c'}
+        - {id: lamp-strip-3, kind: label-plate, at: [209.0, 32.6], size: [25.4, 5.6], fill: '#0691d1'}
+        - {id: lamp-strip-4, kind: label-plate, at: [234.8, 32.6], size: [25.4, 5.6], fill: '#46a2b3'}
+        - {id: lamp-strip-5, kind: label-plate, at: [260.8, 32.6], size: [25.4, 5.6], fill: '#c580c8'}
+        - {id: sfp-block-1, kind: port-shell, at: [70.6, 21.8], size: [58.6, 11.8], rx: 0.3, fill: '#6b7075', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-block-2, kind: port-shell, at: [132.4, 21.8], size: [58.3, 11.8], rx: 0.3, fill: '#6b7075', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-block-3, kind: port-shell, at: [192.8, 21.8], size: [58.2, 11.8], rx: 0.3, fill: '#6b7075', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-block-4, kind: port-shell, at: [253.2, 21.8], size: [57.8, 11.8], rx: 0.3, fill: '#6b7075', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: sfp-block-5, kind: port-shell, at: [312.8, 21.8], size: [58.4, 11.8], rx: 0.3, fill: '#6b7075', stroke: '#9aa0a6', stroke-width: 0.3}
+        - {id: fan-tray-knob, kind: fastener, at: [390.5, 12.0], size: [24.0, 24.0], rx: 12.0, fill: '#c3c8cb', stroke: '#6d7479', stroke-width: 0.9, confidence: estimated, source: 'the wheel stands ~15 mm proud of the face, so the homography magnifies and shifts it (its rectified outline reads ~30 mm); it is bounded instead by two face-level features, the screw at x 388 and the FAN TRAY legend at x 417, so it is drawn 24 across at x 402.5'}
+        - {id: lamp-bezel-fan, kind: bezel, at: [51.7, 4.6], size: [7.6, 7.6], rx: 3.8, fill: '#7a3a36', stroke: '#5f6468', stroke-width: 0.3}
+        - {id: lamp-bezel-pwr-a, kind: bezel, at: [51.7, 17.55], size: [7.6, 7.6], rx: 3.8, fill: '#8a8f93', stroke: '#5f6468', stroke-width: 0.3}
+        - {id: lamp-bezel-pwr-b, kind: bezel, at: [51.7, 30.4], size: [7.6, 7.6], rx: 3.8, fill: '#8a8f93', stroke: '#5f6468', stroke-width: 0.3}
+      cutouts:
+        - {id: port-1, at: [71.47, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-2, at: [85.72, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-3, at: [99.97, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-4, at: [114.22, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-5, at: [132.95, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-6, at: [147.2, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-7, at: [161.45, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-8, at: [175.7, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-9, at: [193.3, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-10, at: [207.55, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-11, at: [221.8, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-12, at: [236.05, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-13, at: [253.52, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-14, at: [267.77, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-15, at: [282.02, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-16, at: [296.27, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-17, at: [313.45, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-18, at: [327.7, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-19, at: [341.95, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: port-20, at: [356.2, 22.5], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-1, at: [159.75, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-2, at: [165.75, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-3, at: [171.45, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-4, at: [177.55, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-5, at: [185.75, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-6, at: [191.75, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-7, at: [197.95, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-8, at: [203.95, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-9, at: [211.75, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-10, at: [217.25, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-11, at: [223.65, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-12, at: [229.35, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-13, at: [237.85, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-14, at: [243.45, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-15, at: [249.35, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-16, at: [255.35, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-17, at: [263.85, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-18, at: [269.35, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-19, at: [275.75, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-20, at: [281.25, 34.6], size: [2.0, 2.0], shape: circle}
+        - {id: cli, at: [6.65, 17.85], size: [15.8, 13.2], shape: rect}
+        - {id: mng, at: [30.5, 17.9], size: [15.8, 13.2], shape: rect}
+        - {id: led-fan, at: [53.5, 6.4], size: [4.0, 4.0], shape: circle}
+        - {id: led-pwr-a, at: [53.5, 19.35], size: [4.0, 4.0], shape: circle}
+        - {id: led-pwr-b, at: [53.5, 32.2], size: [4.0, 4.0], shape: circle}
+        - {id: led-flt, at: [123.0, 34.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-sts, at: [135.5, 34.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [78.6, 20.95], text: '1', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-1}
+      - {at: [92.85, 20.95], text: '2', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-2}
+      - {at: [107.1, 20.95], text: '3', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-3}
+      - {at: [121.35, 20.95], text: '4', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-4}
+      - {at: [140.07, 20.95], text: '5', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-5}
+      - {at: [154.32, 20.95], text: '6', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-6}
+      - {at: [168.57, 20.95], text: '7', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-7}
+      - {at: [182.82, 20.95], text: '8', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-8}
+      - {at: [200.42, 20.95], text: '9', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-9}
+      - {at: [214.67, 20.95], text: '10', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-10}
+      - {at: [228.92, 20.95], text: '11', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-11}
+      - {at: [243.17, 20.95], text: '12', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-12}
+      - {at: [260.65, 20.95], text: '13', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-13}
+      - {at: [274.9, 20.95], text: '14', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-14}
+      - {at: [289.15, 20.95], text: '15', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-15}
+      - {at: [303.4, 20.95], text: '16', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-16}
+      - {at: [320.57, 20.95], text: '17', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-17}
+      - {at: [334.82, 20.95], text: '18', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-18}
+      - {at: [349.07, 20.95], text: '19', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-19}
+      - {at: [363.32, 20.95], text: '20', font-size: 2.0, anchor: middle, fill: '#ffffff', for: port-20}
+      - {at: [158.4, 36.16], text: '1', font-size: 1.8, anchor: middle, fill: '#ffffff', for: led-port-1}
+      - {at: [183.8, 36.16], text: '5', font-size: 1.8, anchor: middle, fill: '#ffffff', for: led-port-5}
+      - {at: [210.2, 36.16], text: '9', font-size: 1.8, anchor: middle, fill: '#ffffff', for: led-port-9}
+      - {at: [236.0, 36.16], text: '13', font-size: 1.8, anchor: middle, fill: '#ffffff', for: led-port-13}
+      - {at: [262.0, 36.16], text: '17', font-size: 1.8, anchor: middle, fill: '#ffffff', for: led-port-17}
+      - {at: [14.55, 42.6], text: CLI, font-size: 2.0, anchor: middle, for: cli}
+      - {at: [38.4, 42.6], text: MNG, font-size: 2.0, anchor: middle, for: mng}
+      - {at: [55.5, 14.6], text: FAN, font-size: 1.8, anchor: middle, for: led-fan}
+      - {at: [55.5, 27.6], text: PWR A, font-size: 1.8, anchor: middle, for: led-pwr-a}
+      - {at: [55.5, 40.4], text: PWR B, font-size: 1.8, anchor: middle, for: led-pwr-b}
+      - {at: [124.0, 39.6], text: FLT, font-size: 1.8, anchor: middle, for: led-flt}
+      - {at: [136.5, 39.6], text: STS, font-size: 1.8, anchor: middle, for: led-sts}
+      - {at: [71.2, 11.4], text: TELCO SYSTEMS, font-size: 3.0, anchor: start, fill: '#848d92', for: chassis}
+      - {at: [315.0, 11.6], text: T-METRO 8001, font-size: 3.0, anchor: middle, fill: '#848d92', for: chassis}
+      - {at: [425.0, 19.0], text: FAN, font-size: 2.4, anchor: middle, fill: '#848d92', for: chassis}
+      - {at: [425.0, 22.8], text: TRAY, font-size: 2.4, anchor: middle, fill: '#848d92', for: chassis}
+      - {id: hazard-upper, at: [420.0, 12.8], path: M 0 0 L 5 -9 L 10 0 Z, fill: '#848d92', for: chassis}
+      - {id: hazard-lower, at: [420.0, 39.6], path: M 0 0 L 5 -9 L 10 0 Z, fill: '#848d92', for: chassis}
+    components:
+      placements:
+        - {ref: 'std/sfp-ganged@1', id: port-1, at: [71.47, 22.5], group: sfp-plus, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-2, at: [85.72, 22.5], group: sfp-plus, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-3, at: [99.97, 22.5], group: sfp-plus, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-4, at: [114.22, 22.5], group: sfp-plus, rel-pos: 4}
+        - {ref: 'std/sfp-ganged@1', id: port-5, at: [132.95, 22.5], group: sfp-plus, rel-pos: 5}
+        - {ref: 'std/sfp-ganged@1', id: port-6, at: [147.2, 22.5], group: sfp-plus, rel-pos: 6}
+        - {ref: 'std/sfp-ganged@1', id: port-7, at: [161.45, 22.5], group: sfp-plus, rel-pos: 7}
+        - {ref: 'std/sfp-ganged@1', id: port-8, at: [175.7, 22.5], group: sfp-plus, rel-pos: 8}
+        - {ref: 'std/sfp-ganged@1', id: port-9, at: [193.3, 22.5], group: sfp-plus, rel-pos: 9}
+        - {ref: 'std/sfp-ganged@1', id: port-10, at: [207.55, 22.5], group: sfp-plus, rel-pos: 10}
+        - {ref: 'std/sfp-ganged@1', id: port-11, at: [221.8, 22.5], group: sfp-plus, rel-pos: 11}
+        - {ref: 'std/sfp-ganged@1', id: port-12, at: [236.05, 22.5], group: sfp-plus, rel-pos: 12}
+        - {ref: 'std/sfp-ganged@1', id: port-13, at: [253.52, 22.5], group: sfp-plus, rel-pos: 13}
+        - {ref: 'std/sfp-ganged@1', id: port-14, at: [267.77, 22.5], group: sfp-plus, rel-pos: 14}
+        - {ref: 'std/sfp-ganged@1', id: port-15, at: [282.02, 22.5], group: sfp-plus, rel-pos: 15}
+        - {ref: 'std/sfp-ganged@1', id: port-16, at: [296.27, 22.5], group: sfp-plus, rel-pos: 16}
+        - {ref: 'std/sfp-ganged@1', id: port-17, at: [313.45, 22.5], group: sfp-plus, rel-pos: 17}
+        - {ref: 'std/sfp-ganged@1', id: port-18, at: [327.7, 22.5], group: sfp-plus, rel-pos: 18}
+        - {ref: 'std/sfp-ganged@1', id: port-19, at: [341.95, 22.5], group: sfp-plus, rel-pos: 19}
+        - {ref: 'std/sfp-ganged@1', id: port-20, at: [356.2, 22.5], group: sfp-plus, rel-pos: 20}
+        - {ref: 'common/led-dot@1', id: led-port-1, at: [159.75, 34.6], for: port-1, group: sfp-plus-leds, rel-pos: 1}
+        - {ref: 'common/led-dot@1', id: led-port-2, at: [165.75, 34.6], for: port-2, group: sfp-plus-leds, rel-pos: 2}
+        - {ref: 'common/led-dot@1', id: led-port-3, at: [171.45, 34.6], for: port-3, group: sfp-plus-leds, rel-pos: 3}
+        - {ref: 'common/led-dot@1', id: led-port-4, at: [177.55, 34.6], for: port-4, group: sfp-plus-leds, rel-pos: 4}
+        - {ref: 'common/led-dot@1', id: led-port-5, at: [185.75, 34.6], for: port-5, group: sfp-plus-leds, rel-pos: 5}
+        - {ref: 'common/led-dot@1', id: led-port-6, at: [191.75, 34.6], for: port-6, group: sfp-plus-leds, rel-pos: 6}
+        - {ref: 'common/led-dot@1', id: led-port-7, at: [197.95, 34.6], for: port-7, group: sfp-plus-leds, rel-pos: 7}
+        - {ref: 'common/led-dot@1', id: led-port-8, at: [203.95, 34.6], for: port-8, group: sfp-plus-leds, rel-pos: 8}
+        - {ref: 'common/led-dot@1', id: led-port-9, at: [211.75, 34.6], for: port-9, group: sfp-plus-leds, rel-pos: 9}
+        - {ref: 'common/led-dot@1', id: led-port-10, at: [217.25, 34.6], for: port-10, group: sfp-plus-leds, rel-pos: 10}
+        - {ref: 'common/led-dot@1', id: led-port-11, at: [223.65, 34.6], for: port-11, group: sfp-plus-leds, rel-pos: 11}
+        - {ref: 'common/led-dot@1', id: led-port-12, at: [229.35, 34.6], for: port-12, group: sfp-plus-leds, rel-pos: 12}
+        - {ref: 'common/led-dot@1', id: led-port-13, at: [237.85, 34.6], for: port-13, group: sfp-plus-leds, rel-pos: 13}
+        - {ref: 'common/led-dot@1', id: led-port-14, at: [243.45, 34.6], for: port-14, group: sfp-plus-leds, rel-pos: 14}
+        - {ref: 'common/led-dot@1', id: led-port-15, at: [249.35, 34.6], for: port-15, group: sfp-plus-leds, rel-pos: 15}
+        - {ref: 'common/led-dot@1', id: led-port-16, at: [255.35, 34.6], for: port-16, group: sfp-plus-leds, rel-pos: 16}
+        - {ref: 'common/led-dot@1', id: led-port-17, at: [263.85, 34.6], for: port-17, group: sfp-plus-leds, rel-pos: 17}
+        - {ref: 'common/led-dot@1', id: led-port-18, at: [269.35, 34.6], for: port-18, group: sfp-plus-leds, rel-pos: 18}
+        - {ref: 'common/led-dot@1', id: led-port-19, at: [275.75, 34.6], for: port-19, group: sfp-plus-leds, rel-pos: 19}
+        - {ref: 'common/led-dot@1', id: led-port-20, at: [281.25, 34.6], for: port-20, group: sfp-plus-leds, rel-pos: 20}
+        - {ref: 'common/rj45-eth@1', id: cli, at: [6.65, 17.85], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CLI - the serial console}
+        - {ref: 'common/rj45-eth@1', id: mng, at: [30.5, 17.9], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'MNG - out-of-band Ethernet management; 1g is BORROWED from the TM-8104 OOB port, not stated for this box (see provenance.mng-speed and the mng-speed gap)'}
+        - {ref: 'common/led-indicator@1', id: led-fan, at: [53.5, 6.4], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-pwr-a, at: [53.5, 19.35], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: 'common/led-indicator@1', id: led-pwr-b, at: [53.5, 32.2], for: chassis, group: status-leds, rel-pos: 3}
+        - {ref: 'common/led-dot@1', id: led-flt, at: [123.0, 34.1], for: chassis, group: status-leds, rel-pos: 4}
+        - {ref: 'common/led-dot@1', id: led-sts, at: [135.5, 34.3], for: chassis, group: status-leds, rel-pos: 5}
+        - {ref: 'common/screw-head@1', id: screw-1, at: [12.2, 3.8], group: furniture, rel-pos: 1}
+        - {ref: 'common/screw-head@1', id: screw-2, at: [12.2, 33.6], group: furniture, rel-pos: 2}
+        - {ref: 'common/screw-head@1', id: screw-3, at: [36.4, 3.8], group: furniture, rel-pos: 3}
+        - {ref: 'common/screw-head@1', id: screw-4, at: [36.4, 33.6], group: furniture, rel-pos: 4}
+        - {ref: 'common/screw-head@1', id: screw-5, at: [384.2, 22.3], group: furniture, rel-pos: 5}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    empty: >-
+      Envelope only. Nothing held shows the rear; the two hot-swappable supplies the data
+      sheets order are presumably here and are not drawn (see the rear-and-supplies gap).
+  left:
+    size: {w: 508, h: 44.0}
+    empty: >-
+      Envelope only. The renders show the left flank at a grazing angle only.
+  right:
+    size: {w: 508, h: 44.0}
+    empty: >-
+      Envelope only. The 2025 render shows a field of horizontal vent slots on the right
+      flank near the front, obliquely and unmeasurably.
+  top:
+    size: {w: 440.0, h: 508}
+    empty: >-
+      Envelope only. The renders show a plain lid obliquely.
+  bottom:
+    size: {w: 440.0, h: 508}
+    empty: >-
+      Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - TM8001-AC-x, "fixed twenty (20) 1GE/10GE ports, unpopulated SFP+, fan tray,
+      2xAC PSU" (data sheet ordering table). The supplies are not modelled (rear unseen).
+    description: The TM-8001 as ordered with two AC supplies, SFP+ cages unpopulated.
+datasheet:
+  title: 'Telco Systems TM-8001 Compact 10GE Service Demarcation Device data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-8001.pdf'
+  sha256: 0345f26849fb36d69d70c74573ff416309411b3bc27c5553fa6e28239715e6e5
+references:
+  - {title: 'T-Metro 8001 High Density Service Aggregation Platform and Cloud Gateway data sheet (2019-01-29)', url: 'https://www.telco.com/wp-content/uploads/2021/03/T-Metro_8001_29012019.pdf', sha256: d489e073eccc7f8bf0234430af8a600158caca780be813ba6533bb57f0b2aa96}

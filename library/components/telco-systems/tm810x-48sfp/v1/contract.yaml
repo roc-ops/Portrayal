@@ -1,0 +1,165 @@
+format: 1
+kind: module
+name: tm810x-48sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Telco Systems TM810x-48SFP+ - the 48 x 1/10GE SFP+ expansion module of the TM-8104 and
+  TM-8106 (formerly T-Metro 8104 / 8106), a full-width card in the chassis' upper slot:
+  three blocks of 2 x 8 stacked SFP+ cages with an up and a down arrow lamp per column in
+  the pale strip between the rows, a silver ejector handle at each end.
+size: {w: 376.7, h: 33.9}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: TM810x-48SFP+
+  power-absent: not-published
+  sfp-plus: 48
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      48 x 1/10GE SFP+ (TM-8104 and TM-8106 data sheets, "TM810x Expansion Module With
+      48x1G/10G"). Numbered 1-48 in stacked pairs, odd above and even below, the pair's
+      legend "1▲▼2" printed above the column; the card is slot 2 of the chassis, so
+      the interfaces read 1/2/1 to 1/2/48 ("1/2/x" at the card's foot).
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one arrow lamp per port in the strip between the rows, pointing at its port.
+provenance:
+  identity: >-
+    datasheet - the TM-8104 and TM-8106 data sheets (telco.com, 2025/12) order it as
+    TM810x-48SFP+ "Expansion Module With 48x1G/10G"; the 2021 T-Metro 8104 data sheets call
+    it TM8104-48SFP+ / Ext-T-Metro 8104-48SFP. The face prints "48 Port Module".
+  size: >-
+    estimated - the NetZoom stencil master TM810x-48SFP+ (Telco-TM810x-04-30-2024.VSS) is
+    142.2 x 12.95 units, 376.3 x 34.3 mm at the stencil's 1:10, and the chassis master's
+    empty slot is 376.7 x 33.9; the card is drawn at the slot's size so bay and module
+    agree. A stencil is a diagram symbol, not a mechanical drawing, but its column pitch
+    (14.36 mm) matches the vendor's 2021 render (14.34 to 14.41 on its two undistorted
+    blocks) and its 2RU face is 88.6 mm, so its scale is right to well under a percent.
+  ports: >-
+    estimated - each std/sfp-ganged@1 is centred on the stencil's own 13.91 x 9.68 cage
+    opening: upper row y 4.21, lower 20.18, three blocks of eight columns at x 14.71,
+    131.2 and 247.69 on a 14.35 pitch. The lower row is turned 180 so both rows' lips face
+    the lamp strip, which is how the 2021 render shows the latches.
+  lamps: >-
+    photo - the 2021 render (telco.com 2021/01/8104-02.png) and the stencil both show one
+    up and one down triangle per column in the strip between the rows. Their meaning is not
+    documented anywhere held; common/led-arrow@1's own states stand.
+  printing: >-
+    photo and stencil agree on "48 Port Module" and "1/2/x" at the card's foot and on the
+    per-column pair legends above it.
+  power: >-
+    NOT STATED. No data sheet held (2021 v14, 2021-04, 2025 TM-8104 and TM-8106) gives a
+    per-module figure, only the chassis' "Max power consumption: 400W".
+states: [absent]
+elements:
+  handle-left: {at: [0.0, 0.0], size: [6.8, 33.9], class: handle}
+  handle-right: {at: [369.9, 0.0], size: [6.8, 33.9], class: handle}
+parts:
+  - {ref: std/sfp-ganged@1, id: port-1, at: [14.54, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-2, at: [14.54, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-1, at: [17.46, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-2, at: [22.27, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-3, at: [28.9, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-4, at: [28.9, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-3, at: [31.82, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-4, at: [36.62, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-5, at: [43.26, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-6, at: [43.26, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-5, at: [46.18, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-6, at: [50.98, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-7, at: [57.63, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-8, at: [57.63, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-7, at: [60.55, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-8, at: [65.35, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-9, at: [71.94, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-10, at: [71.94, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-9, at: [74.87, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-10, at: [79.66, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-11, at: [86.3, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-12, at: [86.3, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-11, at: [89.23, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-12, at: [94.02, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-13, at: [100.66, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-14, at: [100.66, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-13, at: [103.59, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-14, at: [108.38, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-15, at: [115.03, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-16, at: [115.03, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-15, at: [117.96, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-16, at: [122.75, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-17, at: [131.03, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-18, at: [131.03, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-17, at: [133.96, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-18, at: [138.75, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-19, at: [145.39, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-20, at: [145.39, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-19, at: [148.32, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-20, at: [153.12, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-21, at: [159.75, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-22, at: [159.75, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-21, at: [162.68, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-22, at: [167.47, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-23, at: [174.11, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-24, at: [174.11, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-23, at: [177.04, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-24, at: [181.84, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-25, at: [188.43, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-26, at: [188.43, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-25, at: [191.36, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-26, at: [196.16, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-27, at: [202.79, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-28, at: [202.79, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-27, at: [205.72, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-28, at: [210.52, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-29, at: [217.15, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-30, at: [217.15, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-29, at: [220.08, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-30, at: [224.88, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-31, at: [231.51, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-32, at: [231.51, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-31, at: [234.44, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-32, at: [239.24, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-33, at: [247.52, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-34, at: [247.52, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-33, at: [250.45, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-34, at: [255.25, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-35, at: [261.88, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-36, at: [261.88, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-35, at: [264.8, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-36, at: [269.61, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-37, at: [276.24, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-38, at: [276.24, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-37, at: [279.16, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-38, at: [283.97, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-39, at: [290.6, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-40, at: [290.6, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-39, at: [293.52, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-40, at: [298.32, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-41, at: [304.92, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-42, at: [304.92, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-41, at: [307.84, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-42, at: [312.64, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-43, at: [319.28, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-44, at: [319.28, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-43, at: [322.2, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-44, at: [327.0, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-45, at: [333.64, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-46, at: [333.64, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-45, at: [336.56, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-46, at: [341.37, 15.44], skin: down, group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-47, at: [348.0, 3.85], group: sfp-plus}
+  - {ref: std/sfp-ganged@1, id: port-48, at: [348.0, 19.82], rotate: 180, group: sfp-plus}
+  - {ref: common/led-arrow@1, id: led-port-47, at: [350.92, 15.44], skin: up, group: port-leds}
+  - {ref: common/led-arrow@1, id: led-port-48, at: [355.73, 15.44], skin: down, group: port-leds}
+connection-points:
+  mate: {at: [188.35, 16.95], direction: rear}
+skins: [default]
