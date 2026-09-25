@@ -53,6 +53,15 @@ provenance:
     held. None of the rates a module can declare for an SFP cage is true of them, so none
     is declared, and the DCIM export's table default (10GBASE-X SFP+) is known to be wrong
     for these cages until the exporter can type a proprietary optical port.
+  cage-names: >-
+    each cage carries two of its receiver's four inputs - the upper one inputs 1 and 2
+    (legend 2-x-1), the lower one 3 and 4 (3-x-4), the second of each pair in 2-fer mode -
+    so they are named in-x-1-2 and in-x-3-4, and a DCIM listing shows all four inputs.
+  data-port: >-
+    the SFP DATA PORT is drawn and legended with TX and RX lamps, and no document held says
+    what runs in it or at what rate, so nothing is declared for it and its L96 warning
+    stands; the export types it by the table default (1000BASE-X SFP), which is a default,
+    not a reading.
   receiver-letters: >-
     the drawing letters the four receivers D, C, B, A from the left as seen from behind,
     which is front slots N to N+3 from the right - the rear view mirrors the front.
@@ -64,14 +73,14 @@ elements:
   screw-bottom-1: {at: [9.0, 120.0], size: [8.6, 8.6], class: fastener}
   screw-bottom-2: {at: [90.0, 120.0], size: [8.6, 8.6], class: fastener}
 parts:
-  - {ref: std/sfp-ganged@1, id: in-d-1, at: [25.10, 20.8], attrs: {role: optical-input, receiver: D}}
-  - {ref: std/sfp-ganged@1, id: in-c-1, at: [39.35, 20.8], attrs: {role: optical-input, receiver: C}}
-  - {ref: std/sfp-ganged@1, id: in-b-1, at: [53.60, 20.8], attrs: {role: optical-input, receiver: B}}
-  - {ref: std/sfp-ganged@1, id: in-a-1, at: [67.85, 20.8], attrs: {role: optical-input, receiver: A}}
-  - {ref: std/sfp-ganged@1, id: in-d-4, at: [25.10, 33.9], rotate: 180, attrs: {role: optical-input, receiver: D}}
-  - {ref: std/sfp-ganged@1, id: in-c-4, at: [39.35, 33.9], rotate: 180, attrs: {role: optical-input, receiver: C}}
-  - {ref: std/sfp-ganged@1, id: in-b-4, at: [53.60, 33.9], rotate: 180, attrs: {role: optical-input, receiver: B}}
-  - {ref: std/sfp-ganged@1, id: in-a-4, at: [67.85, 33.9], rotate: 180, attrs: {role: optical-input, receiver: A}}
+  - {ref: std/sfp-ganged@1, id: in-d-1-2, at: [25.10, 20.8], attrs: {role: optical-input, receiver: D}}
+  - {ref: std/sfp-ganged@1, id: in-c-1-2, at: [39.35, 20.8], attrs: {role: optical-input, receiver: C}}
+  - {ref: std/sfp-ganged@1, id: in-b-1-2, at: [53.60, 20.8], attrs: {role: optical-input, receiver: B}}
+  - {ref: std/sfp-ganged@1, id: in-a-1-2, at: [67.85, 20.8], attrs: {role: optical-input, receiver: A}}
+  - {ref: std/sfp-ganged@1, id: in-d-3-4, at: [25.10, 33.9], rotate: 180, attrs: {role: optical-input, receiver: D}}
+  - {ref: std/sfp-ganged@1, id: in-c-3-4, at: [39.35, 33.9], rotate: 180, attrs: {role: optical-input, receiver: C}}
+  - {ref: std/sfp-ganged@1, id: in-b-3-4, at: [53.60, 33.9], rotate: 180, attrs: {role: optical-input, receiver: B}}
+  - {ref: std/sfp-ganged@1, id: in-a-3-4, at: [67.85, 33.9], rotate: 180, attrs: {role: optical-input, receiver: A}}
   - {ref: std/sfp@1, id: data-port, at: [87.1, 21.0], attrs: {role: data-port}}
   - {ref: common/led-dot@1, id: led-los-d-1, at: [28.10, 16.9], attrs: {function: los}}
   - {ref: common/led-dot@1, id: led-los-d-2, at: [34.10, 16.9], attrs: {function: los}}
