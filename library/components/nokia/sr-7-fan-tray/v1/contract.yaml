@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: sr-7-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia Enhanced Fan Tray of the 7750 SR-7 / 7450 ESS-7, the chassis's single hot-swappable
+  cooling unit. It fills the large bay at the rear, right of the air filter faceplate, and
+  exhausts the air drawn in through the right-side intake. Its rear face is plain sheet metal
+  with two round honeycomb fan grilles at the right, a mounting hole either side of each, and
+  three screw flanges along the top and three along the bottom holding four captive screws a
+  side. The handles are on the tray's sides, not its face. It has no lamp: fan status shows on
+  the CPM (Fan 1-3). It supersedes the High Flow Fan tray.
+size: {w: 363.2, h: 304.8, d: 203.2}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 7750 SR-7 Enhanced Fan Tray
+  power-draw-max-w: 520
+  power-draw-typical-w: 72
+  airflow: exhaust
+  airflow-cfm: 620
+  weight-kg: 6.8
+provenance:
+  sources: >-
+    SR7 = 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03: Fig 8
+    p51 (chassis rear, the only orthographic view), Fig 21 p83 and Table 23 (isometric, keys),
+    pp83-85 (speed modes, status), Table 30 p94 (airflow), Table 38 pp98-99 (power), Table 47
+    p106 (dimensions), pp234-235 (replacement). Vector art: pdfimages -list finds only icons.
+    No photograph is staged.
+  part-number: 'NOT PRINTED - SR7 22.7 gives the Enhanced Fan Tray no ordering number (coverage grid L226)'
+  size: >-
+    datasheet - SR7 Table 47 p106: 12.0 x 14.3 x 8.0 in (30.48 x 36.32 x 20.32 cm), H x W x D.
+    Fig 8 p51 at 1200 dpi (12.188 px/mm) draws the face 364.1 x 302.8 between its edge lines;
+    features are placed in the stated size, centred.
+  depth: 'datasheet - 8.0 in (203.2 mm), SR7 Table 47 p106'
+  weight: 'datasheet - 15 lb (6.8 kg), SR7 Table 47 p106'
+  power: >-
+    datasheet - SR7 Table 38 pp98-99: Enhanced Fan Tray 72 W at low RPMs (260 CFM), 520 W at
+    high RPMs (620 CFM). Max is the high-RPM row; typical the low. The same table's first rows,
+    99 / 303 W, are the superseded High Flow Fan Tray and are not this part.
+  airflow: >-
+    datasheet - SR7 Table 30 p94: 260 CFM at half speed, 620 CFM at full; the chassis draws in
+    at the right side and exhausts at the rear (SR7 p82), through this tray.
+  layout: >-
+    drawing - SR7 Fig 8 p51 at 1200 dpi, mm from the face's top-left: screw flanges 1.1-20.4,
+    160.3-202.8 and 342.7-362.0 across, 1.0-19.7 down at the top and 285.1-303.8 at the bottom
+    (the middle one with rounded corners); captive screws at x 11.45, 169.25, 193.9 and 351.65,
+    y 12.25 and 292.55, head 7.5 (Table 23 key 1: four on the top, four on the bottom); fan
+    grilles centred (273.1, 76.35) and (273.1, 226.6), the cell field about 70 in radius to its
+    outer cell edges (64 straight up and down, 70 across; Fig 21 draws the grille as a rounded
+    octagon), honeycomb of flat-topped cells 7.3 across, column pitch 6.55 and row pitch 7.56,
+    one column through the grille centre; the cells drawn are those whose centres fall inside
+    an ellipse of semi-axes 74 across and 66.5 down, no more than 66.5 either side of the
+    centre, and more than 9.0 from the two mounting holes, 7.2 across at x 204.4 and 341.8 on
+    each grille's centre line. That rule was fitted to the figure by overlay and matches it
+    cell for cell but for six rim cells per grille (two at the top, two at the bottom, two at
+    the upper corners), which the render leaves out. The
+    fan impellers the figure draws dashed behind the grilles are hidden lines and are not
+    drawn.
+  handles: >-
+    datasheet - SR7 Table 23 key 2 "Handles; one on each side"; Fig 21 p83 shows them as grips
+    in the tray's side walls, so none is on the face.
+  lamps: >-
+    datasheet - none on the tray. SR7 p85: "The Fan Status indicator LEDs are located on the
+    front panel of the CPM5"; a fan failure turns the CPM Fan lamp solid amber.
+  colour: 'estimated - bare zinc-grey sheet metal; no photograph of an SR-7 rear is staged. A gap'
+  logo-zone: 'reserved by the family convention on the plain metal at the left; the figures print no mark on the tray'
+  relief: 'estimated - the depth to the fans is not dimensioned'
+  lifecycle: 'searched only the staged corpus - current in SR7 22.7; required with IOM3-XP, IOM4-e and IMM cards (SR7 p82 note)'
+elements:
+  grille-1: {at: [195.5, 6.65], size: [155.2, 139.4], class: vent}
+  grille-2: {at: [195.5, 156.9], size: [155.2, 139.4], class: vent}
+  screw-top-a: {at: [7.7, 8.5], size: [7.5, 7.5], class: screw}
+  screw-top-b: {at: [165.5, 8.5], size: [7.5, 7.5], class: screw}
+  screw-top-c: {at: [190.15, 8.5], size: [7.5, 7.5], class: screw}
+  screw-top-d: {at: [347.9, 8.5], size: [7.5, 7.5], class: screw}
+  screw-bottom-a: {at: [7.7, 288.8], size: [7.5, 7.5], class: screw}
+  screw-bottom-b: {at: [165.5, 288.8], size: [7.5, 7.5], class: screw}
+  screw-bottom-c: {at: [190.15, 288.8], size: [7.5, 7.5], class: screw}
+  screw-bottom-d: {at: [347.9, 288.8], size: [7.5, 7.5], class: screw}
+  logo-zone: {at: [40, 140], size: [60, 20], class: label}
+relief:
+  features:
+    - {node: grille-1-holes, vent: 30.0, confidence: estimated, source: 'the fans sit behind the grilles (Fig 8 draws them dashed); the depth is not dimensioned'}
+    - {node: grille-2-holes, vent: 30.0, confidence: estimated, source: as grille-1-holes}
+connection-points:
+  mate: {at: [181.6, 152.4], direction: rear}
+skins: [default]

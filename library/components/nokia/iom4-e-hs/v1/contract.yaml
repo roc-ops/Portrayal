@@ -1,0 +1,141 @@
+format: 1
+kind: module
+name: iom4-e-hs
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR / 7450 ESS IOM4-e-HS (3HE11351AA L3HQ, 3HE11351CA L2HQ), the high-scale-QoS
+  FP3 200 Gb/s input/output module for the SR-7 and SR-12 card slots. The IOM4-e face: a
+  full-length carrier holding two MDA-e slots, slot 1 at the left, a captive screw and an
+  ejector lever at each end, and between the two MDA plates, in their notched lower corners, a
+  tab printed IOM4-e-HS with the Stat lamp. Stat: purple on but not yet through diagnostics,
+  green blinking diagnostics passed, green booted. A separate component from nokia/iom4-e
+  only because its MDA slots do NOT take the MS-ISA2 / MS-ISA2-E (IOM4-e guide p14 Table 4
+  note 1). Authored horizontal; the SR-12 seats it at rotate 90, MDA slot 1 at the top.
+size: {w: 425.4, h: 35.4, d: 431.8}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  IOM4-e guide p15 Table 6 gives 1.4 x 16.75 x 17 in for all variants. The face is held at
+  425.4 x 35.4 so the SR-7/SR-12 slots tile on the family's 35.4 pitch; Figure 12 is the
+  Figure 10 art, 425.45 x 35.4.
+attrs:
+  model: IOM4-e-HS
+  part-number: 3HE11351AA
+  part-number-variants: 3HE11351AA, 3HE11351CA
+  cli-type: iom4-e-hs
+  chipset: FP3
+  mda-slots: 2
+  weight-kg: 5.08
+  power-draw-max-w: 481
+  power-draw-typical-w: 416
+provenance:
+  sources: >-
+    datasheet - 7450 ESS / 7750 SR IOM4-e Installation Guide 20.2, 3HE16328AAAATQZZA01 (IOM4E):
+    p12-13 Tables 2-3 (variants, queue and policer scale), p14 Table 4 and note 1 (supported
+    MDA-e; MS-ISA2 not in the -HS), p15 Tables 5-6 (power, size, weight), p37 Figure 12 /
+    Table 11 (the face).
+  size: >-
+    datasheet - IOM4E p15 Table 6: H x W x D 1.4 x 16.75 x 17 in (3.6 x 42.5 x 43.2 cm), "All
+    Variants". Held at 425.4 x 35.4, the SR-7/SR-12 slot-card face.
+  layout: >-
+    drawing - IOM4E p37 Figure 12 (art 26530), vector (pdfimages finds no raster), is the IOM4-e
+    Figure 10 art with a different tab label; rendered at 1200 dpi and read at 16.76 px/mm on
+    the tab: 'IOM4-e-HS' from x 200.8, 11.9 long, the Stat lamp centred (219.4, 31.0). Every
+    other position is nokia/iom4-e@1's, measured on Figure 10: MDA windows 19.0-212.0 and
+    213.4-406.4, screws (7.4, 22.8) and (418.0, 22.8), levers x 6.2-67.7 and 357.7-419.2 at y
+    29.8-33.6, the tab 195.4-230.0 from y 26.5.
+  bays: >-
+    drawing - mda-1 and mda-2 are drawn BEFORE the levers and the tab, because render.py inserts
+    a nested occupant at its opening's place in the draw order and both lie over the MDA band.
+  nested-default: >-
+    inferred - Figure 12 draws both MDA slots with impedance panels (Table 11 keys 2/5) and gives
+    no part number; nokia/sr-e-mda-impedance-panel (3HE10312AA) is the library's one
+    MDA-e-envelope blank and matches the drawn panel. Its use in an IOM4-e-HS is inferred.
+  accepts: >-
+    datasheet - IOM4E p14 Table 4 lists the MDA-e and MS-ISA2 modules supported in all IOM4-e
+    models, and note 1 marks MS-ISA2 (3HE10427AA) and MS-ISA2-E (3HE10428AA) "Not supported in
+    the IOM4-e-HS", so nokia/ms-isa2@1 is left out. 3HE14888AA (8-port 10/25GE MDA-e) is listed
+    but not modelled (no genuine faceplate drawing).
+  variants: >-
+    datasheet - IOM4E p12-13 Table 3: IOM4-e-HS L3HQ 3HE11351AA and L2HQ 3HE11351CA; p37: CLI
+    card-type iom4-e-hs. Table 2: 128 k ingress / 768 k egress queues, 512 k ingress / 256 k
+    egress policers.
+  power: >-
+    datasheet - IOM4E p15 Table 5: IOM4-e-HS idle 150, zero rate 376, typical (50 percent, 25C)
+    416, worst case (100 percent, 55C) 481 W; MDAs not included.
+  weight: 'datasheet - 11.20 lb (5.08 kg), IOM4E p15 Table 6 (all variants)'
+  lamps: >-
+    datasheet - IOM4E p37 Table 11 key 4: Stat purple = on, not yet through diagnostics; green
+    blinking = boot diagnostics passed; green solid = booted. Unlit is kept for no power. Purple
+    #8e44ad is the library's estimate of the hue.
+  colour: >-
+    photo, borrowed - no -HS is photographed; the colours are the photographed IOM4-e's (owner's
+    lab, 2026-09-24), the same moulding: charcoal plate, a lighter tab, white legends, black
+    perforated levers, black plastic cross-slot screw knobs.
+  logo-zone: 'none reserved - the figure shows no mark on the carrier; its only visible print is the tab label'
+  orientation: >-
+    datasheet - IOM4E p37 Table 11 key 2 "The left slot is designated as slot 1"; SR12 p46 "MDA
+    slot 1 (top slot)", so the SR-12 seats this face at rotate 90.
+  relief: >-
+    borrowed - screws and levers take nokia/iom-e@1's figures (cyl 1.6 knurled; lever out 4.2),
+    themselves borrowed from nokia/nelt-b@1. NOT MEASURED. The tab carries no `out`, which would
+    move it to the end of the instance and paint it over the Stat lamp.
+  gaps: >-
+    No photograph of an IOM4-e-HS; colour is the IOM4-e's. The tab's raised height is not stated
+    (drawn flat). Lever and screw relief are borrowed. Purple is an estimated hue.
+  lifecycle: 'searched only the staged corpus - listed in the IOM4-e guide 20.2; no end-of-sale notice searched'
+elements:
+  screw-left: {at: [2.4, 17.8], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [413.0, 17.8], size: [10.0, 10.0], class: screw}
+  lever-left: {at: [0.6, 29.8], size: [67.1, 5.4], class: latch}
+  lever-right: {at: [357.7, 29.8], size: [67.1, 5.4], class: latch}
+  tab: {at: [195.4, 26.5], size: [34.6, 8.9], class: mechanical}
+  model-label: {at: [200.6, 29.7], size: [12.2, 3.2], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/iom-e@1 captive screw, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/iom-e@1 captive screw, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom-e@1 ejector lever, borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom-e@1 ejector lever, borrowed from nokia/nelt-b@1. NOT MEASURED'}
+bays:
+  mda-1:
+    at: [19.0, 0]
+    size: [193.0, 35.4]
+    accepts:
+    - nokia/me40-1gb-csfp@1
+    - nokia/me6-10gb-sfp-plus@1
+    - nokia/me10-10gb-sfp-plus@1
+    - nokia/me12-10-1gb-sfp-plus@1
+    - nokia/me1-100gb-cfp2@1
+    - nokia/me2-100gb-cfp4@1
+    - nokia/me2-100gb-qsfp28@1
+    - nokia/me2-100gb-ms-qsfp28@1
+    - nokia/sr-e-mda-impedance-panel@1
+    default: nokia/sr-e-mda-impedance-panel@1
+  mda-2:
+    at: [213.4, 0]
+    size: [193.0, 35.4]
+    accepts:
+    - nokia/me40-1gb-csfp@1
+    - nokia/me6-10gb-sfp-plus@1
+    - nokia/me10-10gb-sfp-plus@1
+    - nokia/me12-10-1gb-sfp-plus@1
+    - nokia/me1-100gb-cfp2@1
+    - nokia/me2-100gb-cfp4@1
+    - nokia/me2-100gb-qsfp28@1
+    - nokia/me2-100gb-ms-qsfp28@1
+    - nokia/sr-e-mda-impedance-panel@1
+    default: nokia/sr-e-mda-impedance-panel@1
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one Stat lamp on the tab between the two MDA slots
+parts:
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [217.4, 29.0], attrs: {description: 'Stat - purple: on, not yet through diagnostics; green blinking: boot diagnostics passed; green: booted'}, states: {lamp: ['off', {name: diagnostics, color: '#8e44ad'}, {name: diagnostics-passed, color: '#39b54a', behavior: blinking}, {name: booted, color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [212.7, 17.7], direction: rear}
+skins: [default]

@@ -281,3 +281,30 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
     assert not unasked, (
         f"port-group media L40 never asks about: {unasked}. Either add them to "
         "PLUGGABLE_CAGES or say here why they are not cages.")
+
+
+def test_a_db9_that_is_a_console_exports_as_one():
+    """common/db9-receptacle is in the register because it is mostly an alarm
+    relay, and that silence swallowed the 7750 SF/CPM4's RS-232 Console, leaving
+    its reserved AUX jack as the card's only console port. A placement that says
+    `console` exports as `de-9`; aux, alarm, craft and monitoring D-subs do not."""
+    load = lambda n: yaml.safe_load(
+        (LIB / "components" / "nokia" / n / "v1" / "contract.yaml").read_text())
+    for card in ("sfm4-12", "sfm4-7"):
+        out = dx.build_module(load(card), "Nokia")
+        assert {"name": "console", "type": "de-9"} in out["console-ports"], card
+    cpm5 = dx.build_module(load("cpm5"), "Nokia")
+    assert not any(c["type"] == "de-9" for c in cpm5.get("console-ports") or [])
+    assert not dx.DB9_CONSOLE.search("aux mgmt"), "an AUX D-sub is not claimed"
+    assert not dx.DB9_CONSOLE.search("craft remote craft port")
+
+
+def test_a_dc_pem_exports_its_inlet():
+    """The 7750 SR-7 and SR-12 DC PEM-3 are where the -48 V feed lands. Without
+    `inlet:` they exported no power port, so a chassis assembled in a DCIM had no
+    power input. nokia/sr-e-psu-dc is the precedent."""
+    for pem in ("sr-12-pem-3", "sr-7-pem-3"):
+        d = yaml.safe_load((LIB / "components" / "nokia" / pem / "v1"
+                            / "contract.yaml").read_text())
+        out = dx.build_module(d, "Nokia")
+        assert out.get("power-ports") == [{"name": "Inlet", "type": "dc-terminal"}], pem
