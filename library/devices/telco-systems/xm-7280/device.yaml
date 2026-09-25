@@ -9,8 +9,8 @@ aliases:
 - {name: X-Metro 7280, kind: marketing, note: 'printed on the faceplate (X-METRO 7280) and on the stencil master'}
 portfolio: {line: Carrier Ethernet, family: Aggregation, series: X-Series}
 description: >-
-  Telco Systems (BATM Networks) XM-7280, the X-Metro 7280 - a 1RU Carrier Ethernet / MPLS mobile-
-  backhaul switch: 24 x 10G/1G/100M SFP+ UNI ports in two stacked 2 x 6 blocks with arrow lamps,
+  Telco Systems (BATM Networks) XM-7280, the X-Metro 7280 - a 1RU Carrier Ethernet / MPLS
+  mobile-backhaul switch: 24 x 10G/1G/100M SFP+ UNI ports in two stacked 2 x 6 blocks with arrow lamps,
   four 10G SFP+ NNI ports with LNK/ACT and SPEED lamps, a CONSOLE / SNMP RJ45 stack, a USB
   console, a reset pinhole and six status lamps; two hot-swappable AC or DC supplies, which are
   not on the front.
@@ -45,11 +45,12 @@ provenance:
       lower turned 180; the cage walls read 13.2-100.2 and 110.8-197.4 (pitches 14.5 and 14.43),
       rows 15.1 and 30.9, with the family's arrow strip between the rows. Each column is legended
       with one pair, 2/1 to 24/23; the upper cage is drawn as the first number (see the port-order
-      gap). The numerals are placed where printed, measured by glyph clusters: they read 0.75 to
-      0 mm right of their columns across each block - the XM-8102's decal drift, smaller - so L61
-      stays in the baseline for them on purpose. The four NNI ports are four separate cages on an
-      18.5 pitch (211.75, 230.2, 248.7, 267.2), std/sfp@1, printed 1-4 about 0.3 mm left of each;
-      the "1" is not resolved in the render and is placed at the same offset.
+      gap). The numerals are placed where printed, measured by glyph clusters: they drift right
+      of their columns about 0.85 to 0.35 mm across block 1 and 0.35 to 0 across block 2 - the
+      XM-8102's decal drift, smaller (L61 reports 2/1 at 0.95 because the first cell is 14.9
+      wide) - so L61 stays in the baseline for them on purpose. The four NNI ports are four separate cages on an
+      18.5 pitch (211.75, 230.2, 248.7, 267.2), std/sfp@1, printed 1-4 about 0.3 mm left of each
+      (the "1" measured at 211.2-211.7).
   snmp-jack:
     confidence: photo-measured
     note: >-
@@ -68,8 +69,11 @@ provenance:
       LNK/ACT and SPEED are two columns of four lamps (282.65 and 289.9 across; 18.4, 23.5, 28.6
       and 33.7 down) - one row per NNI port, presumably top to bottom. Six status lamps in two
       columns (416.55 and 423.7; 23.6, 28.65 and 33.75), legended PWR1 / FAN1 / SNMP and PWR2 /
-      FAN2 / SYS above them, the legends printed about 1 mm outboard of their lamps, placed as
-      measured with L61 baselined. No document says what any state means.
+      FAN2 / SYS above them. The left legends are printed staggered - PWR1 at 414.8, FAN1 415.1,
+      SNMP on its lamp (416.4 read, within a pixel) - and the right ones about 1.3 mm outboard;
+      all placed as measured, with L61 baselined for the five that are off their lamps. The USB
+      console's CONSOLE legend is printed 0.4 mm left of the jack (glyphs centre at 406.95 against
+      the jack's 407.33) and is placed as printed, one more L61. No document says what any state means.
   power:
     confidence: datasheet
     note: >-
@@ -89,7 +93,7 @@ attrs:
   performance:
     switching-capacity: 560 Gbps
   features:
-    timing: SyncE, IEEE 1588v2 (OC, BC, TC)
+    timing: SyncE, IEEE 1588v2 (OC, BC, TC), ITU-T G.8275.1 compliant
     resiliency: 1+1 supplies, LAG, MC-LAG
     optics-sfp-plus: '10GBASE, 1000BASE, 100BASE (data sheet, "4 x 10G/1G SFP+/SFP | 24 x 10G/1G/100M SFP+/SFP")'
   management:
@@ -263,16 +267,16 @@ views:
         - {id: vent-lip-42, kind: vent, at: [249.25, 42.8], size: [4.4, 1.0], rx: 0.4, fill: '#2b2e32'}
         - {id: vent-lip-43, kind: vent, at: [255.2, 42.8], size: [4.4, 1.0], rx: 0.4, fill: '#2b2e32'}
         - {id: vent-lip-44, kind: vent, at: [261.15, 42.8], size: [4.4, 1.0], rx: 0.4, fill: '#2b2e32'}
-        - {id: vent-dot-1-1, kind: vent, at: [8.25, 11.9], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-1-2, kind: vent, at: [8.25, 16.9], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-1-3, kind: vent, at: [8.25, 21.95], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-1-4, kind: vent, at: [8.25, 26.95], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-1-5, kind: vent, at: [8.25, 32.05], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-2-1, kind: vent, at: [103.25, 11.6], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-2-2, kind: vent, at: [103.25, 16.75], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-2-3, kind: vent, at: [103.25, 21.7], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-2-4, kind: vent, at: [103.25, 26.8], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
-        - {id: vent-dot-2-5, kind: vent, at: [103.25, 31.8], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-1-1, kind: vent, at: [7.75, 11.85], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-1-2, kind: vent, at: [7.75, 16.85], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-1-3, kind: vent, at: [7.75, 21.9], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-1-4, kind: vent, at: [7.75, 26.95], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-1-5, kind: vent, at: [7.75, 32.0], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-2-1, kind: vent, at: [104.32, 11.6], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-2-2, kind: vent, at: [104.32, 16.67], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-2-3, kind: vent, at: [104.32, 21.73], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-2-4, kind: vent, at: [104.32, 26.82], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
+        - {id: vent-dot-2-5, kind: vent, at: [104.32, 31.78], size: [2.5, 2.5], rx: 1.25, fill: '#2b2e32'}
         - {id: uni-block-1, kind: port-shell, at: [12.9, 9.9], size: [87.6, 26.1], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
         - {id: uni-strip-1, at: [13.2, 20.3], size: [87.0, 5.9], fill: '#cfcfcf'}
         - {id: uni-block-2, kind: port-shell, at: [110.5, 9.9], size: [87.2, 26.1], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
@@ -281,8 +285,8 @@ views:
         - {id: nni-shell-2, kind: port-shell, at: [222.1, 25.6], size: [16.2, 11.5], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
         - {id: nni-shell-3, kind: port-shell, at: [240.6, 25.6], size: [16.2, 11.5], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
         - {id: nni-shell-4, kind: port-shell, at: [259.1, 25.6], size: [16.2, 11.5], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
-        - {id: shell-rj, kind: port-shell, at: [384.4, 10.2], size: [13.0, 27.1], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
-        - {id: laser-label, kind: label-plate, at: [430.3, 6.5], size: [5.6, 31.5], rx: 0.8, fill: '#d8c890'}
+        - {id: shell-rj, kind: port-shell, at: [382.1, 10.2], size: [16.9, 27.1], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
+        - {id: laser-label, kind: label-plate, at: [432.8, 6.5], size: [4.7, 31.5], rx: 0.8, fill: '#d8c890'}
       cutouts:
         - {id: port-2, at: [13.32, 9.9], size: [14.25, 10.4], shape: rect}
         - {id: port-1, at: [13.32, 25.7], size: [14.25, 10.4], shape: rect}
@@ -370,7 +374,7 @@ views:
         - {id: led-nni-4-speed, at: [287.9, 31.7], size: [4.0, 4.0], shape: circle}
         - {id: console, at: [384.55, 10.75], size: [12.7, 11.0], shape: rect}
         - {id: snmp, at: [384.55, 25.9], size: [12.7, 11.0], shape: rect}
-        - {id: usb-console, at: [405.15, 22.9], size: [4.5, 12.0], shape: rect}
+        - {id: usb-console, at: [405.08, 23.04], size: [4.5, 12.0], shape: rect}
         - {id: btn-reset, at: [368.45, 30.2], size: [4.0, 4.0], shape: circle}
         - {id: led-pwr1, at: [414.55, 21.6], size: [4.0, 4.0], shape: circle}
         - {id: led-fan1, at: [414.55, 26.65], size: [4.0, 4.0], shape: circle}
@@ -401,15 +405,15 @@ views:
       - {at: [264.5, 18.4], text: X-METRO 7280, font-size: 2.8, anchor: end, for: chassis}
       - {at: [390.9, 8.0], text: CONSOLE, font-size: 1.7, anchor: middle, for: console}
       - {at: [390.9, 39.6], text: SNMP, font-size: 1.7, anchor: middle, for: snmp}
-      - {at: [407.4, 37.9], text: CONSOLE, font-size: 1.7, anchor: middle, for: usb-console}
+      - {at: [406.95, 37.9], text: CONSOLE, font-size: 1.7, anchor: middle, for: usb-console}
       - {at: [370.45, 36.8], text: RST, font-size: 1.7, anchor: middle, for: btn-reset}
-      - {at: [415.5, 12.1], text: PWR1, font-size: 1.6, anchor: middle, for: led-pwr1}
-      - {at: [415.5, 14.95], text: FAN1, font-size: 1.6, anchor: middle, for: led-fan1}
-      - {at: [415.5, 17.8], text: SNMP, font-size: 1.6, anchor: middle, for: led-snmp-led}
+      - {at: [414.8, 12.1], text: PWR1, font-size: 1.6, anchor: middle, for: led-pwr1}
+      - {at: [415.1, 14.95], text: FAN1, font-size: 1.6, anchor: middle, for: led-fan1}
+      - {at: [416.55, 17.8], text: SNMP, font-size: 1.6, anchor: middle, for: led-snmp-led}
       - {at: [425.0, 12.1], text: PWR2, font-size: 1.6, anchor: middle, for: led-pwr2}
       - {at: [425.0, 14.95], text: FAN2, font-size: 1.6, anchor: middle, for: led-fan2}
       - {at: [425.0, 17.8], text: SYS, font-size: 1.6, anchor: middle, for: led-sys}
-      - {at: [433.8, 22.25], text: Class 1 laser product, font-size: 2.2, anchor: middle, rotate: -90, for: chassis}
+      - {at: [435.15, 22.25], text: Class 1 laser product, font-size: 2.2, anchor: middle, rotate: -90, for: chassis}
     components:
       placements:
         - {ref: 'std/sfp-ganged@1', id: port-2, at: [13.32, 9.9], group: uni, rel-pos: 2}
@@ -498,7 +502,7 @@ views:
         - {ref: 'common/led-indicator@1', id: led-nni-4-speed, at: [287.9, 31.7], for: nni-4, group: nni-leds, rel-pos: 8}
         - {ref: 'std/rj45-ganged@2', id: console, at: [384.55, 10.75], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CONSOLE on RJ45}
         - {ref: 'std/rj45-ganged@2', id: snmp, at: [384.55, 25.9], group: mgmt, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'SNMP - the out-of-band Ethernet port, a bare shielded jack; 1g is BORROWED (see provenance.snmp-speed)'}
-        - {ref: 'std/usb-a@1', id: usb-console, at: [401.4, 26.65], rotate: 90, group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: console}, description: CONSOLE on USB}
+        - {ref: 'std/usb-a@1', id: usb-console, at: [401.33, 26.79], rotate: 90, group: mgmt, rel-pos: 3, attrs: {media: usb-a, role: console}, description: CONSOLE on USB}
         - {ref: 'common/reset-button@1', id: btn-reset, at: [368.45, 30.2], for: chassis, group: controls, rel-pos: 1}
         - {ref: 'common/led-indicator@1', id: led-pwr1, at: [414.55, 21.6], for: chassis, group: status-leds, rel-pos: 1}
         - {ref: 'common/led-indicator@1', id: led-fan1, at: [414.55, 26.65], for: chassis, group: status-leds, rel-pos: 2}
