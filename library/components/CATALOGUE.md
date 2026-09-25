@@ -410,7 +410,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `commscope/np34m05@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34M05 - 5-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -2… |
 | `commscope/np34m08@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34M08 - 8-channel CWDM multiplexer with cascade input, integrated 1310 nm combiner and -2… |
 | `commscope/np34s04@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP34S04 - scalable 4x4 optical splitter/combiner for 1310 and 1550 nm: four inputs (A1, B1,… |
-| `commscope/np35c0x@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35C0X - DWDM combiner/separator filter pair: for each of A and B, the BLUE and RED band p… |
+| `commscope/np35c0x@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35C0X - combiner/separator filter pair, modelled as the photographed NP35C01D03Z0: a red/… |
 | `commscope/np35d04@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35D04 - 4-channel DWDM demultiplexer on the 100 GHz ITU grid with a -20 dB line monitorin… |
 | `commscope/np35d08@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35D08 - 8-channel DWDM demultiplexer on the 100 GHz ITU grid: the DWDM input from the net… |
 | `commscope/np35f01@1` | module | filter | 25.76 × 130.2 × 165.1 |  | 1 | 0 | CommScope (ARRIS) NP35F01 - single-channel DWDM add/drop filter on the 100 GHz ITU grid: the channel port, th… |
