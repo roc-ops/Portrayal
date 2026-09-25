@@ -199,7 +199,9 @@ def main():
                 # the DCIM module export reads this index, not the contract - so
                 # a group published nowhere here would type every card port as
                 # if it had none, and mark no management port mgmt_only.
-                "parts": [{k: p[k] for k in ("ref", "id", "at", "attrs", "group") if k in p}
+                # AND `interfaces` (#443), for the same reader: a FELT-B cage
+                # that numbers two ports exported one while it stopped here.
+                "parts": [{k: p[k] for k in ("ref", "id", "at", "attrs", "group", "interfaces") if k in p}
                           for p in data.get("parts") or []],
                 # SPLIT OFF BELOW, not dropped. Both are carried on the entry so
                 # everything downstream of here (relief-confidence, the defect

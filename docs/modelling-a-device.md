@@ -495,6 +495,12 @@ present them (L105). Breakout is different and stays a description on one
 interface: it is a mode a port is configured into, not two ports that always
 exist.
 
+A line card says the same thing on a part. The FELT-B numbers its 18 cages'
+ports 1 to 36, with a CSFP taking both of a cage's pair and an SFP only the odd
+one, so each cage part carries `interfaces: [port-1, port-2]` and the module
+type exports 36 ports. On a component, the ids must not be another part's,
+element's or bay's id. L105 checks both.
+
 ### Power figures
 
 Every module you place or build gets its power figure, and the key says which
