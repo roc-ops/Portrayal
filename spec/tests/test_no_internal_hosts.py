@@ -94,10 +94,15 @@ def _allowed_email(m):
 # measured something says "the maintainer" (#152, and #452 when it came back).
 _LICENCE_FILES = frozenset({"LICENSE", "NOTICE",
                             "library/exports/LICENSE", "library/exports/NOTICE"})
+# THE SPONSOR CREDIT IS THE ONE PLACE THE EMPLOYER IS NAMED ON PURPOSE (#446):
+# the permission to publish came with one request, a visible "sponsored by"
+# credit with the logo and a link. The README carries it; the logo files carry
+# nothing but paths. Anywhere else the name is still a finding.
+_SPONSOR_FILES = frozenset({"README.md"})
 PRIVATE_NAMES = {
     "a2848e0afd90d6e7": frozenset(),       # a customer
-    "e0fcd351b53ffafa": frozenset(),       # the employer
-    "619e045974e6cf5d": frozenset(),       # the employer, as its domain reads
+    "e0fcd351b53ffafa": _SPONSOR_FILES,    # the employer, as the sponsor credit names it
+    "619e045974e6cf5d": _SPONSOR_FILES,    # the employer, as its domain reads
     "5b090874c87b019a": frozenset(),       # the maintainer's own domain
     "06b9a6eacd7a77b9": _LICENCE_FILES,    # the maintainer, given name
     "6f12ebf934ac8261": _LICENCE_FILES,    # the maintainer, family name
@@ -275,3 +280,16 @@ def test_the_name_table_is_live():
         text = (ROOT / rel).read_text(encoding="utf-8")
         found = {_h(w) for w in WORD.findall(text.lower())} & set(PRIVATE_NAMES)
         assert len(found) >= 2, f"{rel}: the maintainer's entries match nothing in it"
+
+
+def test_the_sponsor_credit_is_still_there():
+    """THE OTHER HALF OF THE ALLOWANCE ABOVE. Permission to publish came with a
+    single request, a visible sponsor credit (#446), so removing it is not a tidy-up.
+    This fails if the README stops carrying the credit, the link or either logo."""
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "sponsored by" in readme.lower()
+    assert "https://www.rocnetsupply.com/" in readme
+    for logo in ("docs/sponsor/RocNet-Primary-Logo.svg",
+                 "docs/sponsor/RocNet-Primary-Logo-white.svg"):
+        assert logo in readme, f"the README no longer shows {logo}"
+        assert (ROOT / logo).is_file(), f"{logo} is referenced and missing"
