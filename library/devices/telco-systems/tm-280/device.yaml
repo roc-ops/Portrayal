@@ -1,0 +1,261 @@
+format: 1
+kind: device
+name: tm-280
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: TM-280
+aliases:
+- {name: T-Marc 280, kind: superseded, note: 'the name printed on the faceplate and on the earlier data sheet'}
+- {name: TMC-280, kind: vendor, note: 'the stem of the ordering code TMC-280-z'}
+portfolio: {line: Carrier Ethernet, family: Network Interface Device, series: T-Series}
+description: >-
+  Telco Systems (BATM Networks) TM-280, the T-Marc 280 - a compact half-width desktop Carrier
+  Ethernet demarcation device: one 100FX/1000X SFP uplink (1/1), two 10/100/1000T Access ports
+  (2/1-2/2) and one combo port (3/1, an SFP or an RJ45), with a CON console, STS and PWR lamps, a
+  reset pinhole and a 5 VDC barrel inlet for its external power adaptor.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      TM-280 data sheet (telco.com 2025/12, BATM Networks); the faceplate prints T-Marc 280.
+  sources:
+    confidence: datasheet
+    note: >-
+      The data sheet (2025-12) and an earlier T-Marc 280 edition (2021), four vendor renders of the same
+      three-quarter view (the sharpest is telco.com 2025/12/TM-280.png, 1632 px), and the legacy
+      NetZoom stencil "Telco Systems" (2022), masters TMC-280-x (CF) and (R). No installation
+      guide is public.
+  chassis:
+    confidence: datasheet
+    note: >-
+      221 x 44 x 140.5 - the data sheet's "44 mm x 221 mm x 140.5 mm (1.73 in x 8.7 in x 5.51
+      in)"; the stencil master's outline is 221.6 x 44.4. The face has rounded end-caps, which
+      the rectangular panel does not draw.
+  front-layout:
+    confidence: estimated
+    note: >-
+      TWO SOURCES, EACH WHERE IT HOLDS. The only renders are three-quarter views, and the face's
+      rounded end-caps give no clean corners to rectify on, so a homography was fitted instead
+      on the corners of the 1/1 and 3/1 legend boxes, taken from the stencil master TMC-280-x
+      (CF). Inside that span the stencil and the rectified render agree to about 0.5 mm in x (the
+      1/1 lamp, both SFP cages and the 3/1 jack), so the frame is sound there; outside it the fit
+      extrapolates badly - the CON bezel comes out half as big again as the Access jacks - so it
+      is not used. POSITIONS IN THE PORT AREA (x 75-205) ARE THE RENDER'S: the Access pair is a
+      ganged 2-jack block on a 14.05 pitch (the stencil draws two separate housings 16.5 apart),
+      the RJ45s sit about 2 mm higher than the stencil has them, and the DC jack 1.7 mm left and
+      3 mm higher. THE LEFT GROUP - the wordmark plate, T-Marc 280, CON, STS, PWR, the pinhole
+      and the laser label - IS THE STENCIL'S, unchecked, and the renders show the same
+      arrangement. See the left-group gap.
+  ports:
+    confidence: estimated
+    note: >-
+      1/1 is a single SFP cage with a lamp to its left (for the port, drawn beside it as in the
+      stencil and the renders); 2/1-2/2 are a ganged pair, common/rj45-ganged-eth@1 turned 180
+      (lamp windows up, green and amber in the render); 3/1 is a COMBO PORT - "1 x Combo port
+      (10/100/1000Base-T or 100Base-FX / 1000Base-X)" - an SFP cage (port-3-1) beside an RJ45
+      (copper-3-1, common/rj45-eth@1), one or the other in use at a time. The legend boxes group
+      1/1 and 3/1 as Network and 2/1-2/2 as Access.
+  lamps:
+    confidence: estimated
+    note: >-
+      STS over PWR, the reset pinhole, and the 1/1 port lamp, at the stencil's positions. No
+      document says what any state means.
+  power:
+    confidence: datasheet
+    note: >-
+      "5VDC @3A (max) with external power adaptor (AC to DC, DC to DC)", and the faceplate prints
+      5VDC 3A with a polarity symbol over the barrel inlet. Which way round the symbol reads is not
+      legible in the renders and the stencil draws it differently, so the conventional
+      centre-positive form is drawn and nothing is claimed for it. No watts are published
+      (5 V at 3 A is 15 W at most).
+attrs:
+  physical:
+    weight-kg: 0.6
+    overall-mm: 221 x 44 x 140.5 (data sheet)
+    mounting: desktop or wall
+  power:
+    input-voltage: 5 VDC, 3 A max, from an external AC-DC or DC-DC adaptor
+    psu-redundancy: none - one external adaptor
+  environmental:
+    operating-temp: 0 to 40 C standard; -20 to 60 C extended
+    storage-temp: -25 to 80 C
+    humidity: 0 to 95 percent non-condensing
+  features:
+    resiliency: G.8031, G.8032v2 R-APS, xSTP/MSTP, Fast Ring, Resilient Link, LAG (static / LACP)
+    optics-sfp: '100BASE-FX, 1000BASE-X (data sheet, "1 x 100Base-FX / 1000Base-X uplink port")'
+  management:
+    local: CON console on RJ45
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 221.0
+  height: 44.0
+  depth: 140.5
+  ru: 1
+  weight-kg: 0.6
+  power: dc
+  color: '#d4d6d8'
+  silk: '#3a3d41'
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; hardware documentation is on a support portal
+    behind a login, whose contact is on telco.com/support. Searched: the telco.com media
+    library, every product and knowledge-centre page, and the Wayback index of telco.com PDFs.
+  wanted: the TM-280 / T-Marc 280 installation guide, from the BATM support portal.
+- what: left-group
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The left third of the face (wordmark plate, model name, CON, STS/PWR, pinhole, laser label)
+    is drawn from the stencil master alone; the three-quarter renders cannot be rectified there
+    with confidence, and the stencil was shown wrong elsewhere on this face by 2-2.5 mm.
+  wanted: a square-on photograph of the front.
+- what: rear
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The stencil master TMC-280-x (R) draws a plain rear; no photograph is held.
+  wanted: a photograph of the rear.
+groups:
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the 100Base-FX/1000Base-X SFP uplink, 1/1.
+  access:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two 10/100/1000Base-T Access ports, 2/1 and 2/2.
+  combo:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the combo port's SFP cage, 3/1.
+  combo-copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      combo port - copper-3-1 shares its number with the SFP cage port-3-1 beside it, one or the
+      other in use at a time.
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the CON console.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: STS and PWR.
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+views:
+  front:
+    size: {w: 221.0, h: 44.0}
+    panel:
+      decor:
+        - {id: wordmark-plate, kind: label-plate, at: [8.34, 4.0], size: [26.2, 9.48], rx: 2.5, fill: '#e4e6e8', stroke: '#8d9298', stroke-width: 0.35}
+        - {id: laser-label, kind: label-plate, at: [19.9, 36.3], size: [44.0, 4.8], rx: 0.6, fill: '#d9dbdd', stroke: '#555555', stroke-width: 0.3}
+        - {id: shell-access, kind: port-shell, at: [113.6, 17.6], size: [30.8, 14.4], rx: 0.3, fill: '#e2dccb', stroke: '#6d6a60', stroke-width: 0.3}
+        - {id: box-1-1, kind: outline, at: [78.2, 9.4], size: [30.8, 26.1], rx: 1.5, fill: none, stroke: '#3a3d41', stroke-width: 0.3}
+        - {id: box-access, kind: outline, at: [111.5, 9.4], size: [35.9, 26.1], rx: 1.5, fill: none, stroke: '#3a3d41', stroke-width: 0.3}
+        - {id: box-3-1, kind: outline, at: [149.9, 9.4], size: [36.0, 26.1], rx: 1.5, fill: none, stroke: '#3a3d41', stroke-width: 0.3}
+      cutouts:
+        - {id: con, at: [27.69, 18.16], size: [15.8, 13.2], shape: rect}
+        - {id: led-sts, at: [50.37, 21.59], size: [4.0, 4.0], shape: circle}
+        - {id: led-pwr, at: [50.37, 26.71], size: [4.0, 4.0], shape: circle}
+        - {id: btn-reset, at: [62.11, 27.56], size: [4.0, 4.0], shape: circle}
+        - {id: led-port-1-1, at: [81.14, 27.56], size: [4.0, 4.0], shape: circle}
+        - {id: port-1-1, at: [89.95, 22.0], size: [14.5, 10.0], shape: rect}
+        - {id: port-2-1, at: [116.17, 18.5], size: [12.7, 11.0], shape: rect}
+        - {id: port-2-2, at: [130.14, 18.5], size: [12.7, 11.0], shape: rect}
+        - {id: port-3-1, at: [152.65, 21.9], size: [14.5, 10.0], shape: rect}
+        - {id: copper-3-1, at: [168.7, 17.8], size: [15.8, 13.2], shape: rect}
+        - {id: dc-in, at: [190.5, 19.4], size: [12.0, 13.0], shape: rect}
+    silkscreen:
+      - {id: bracket-network-l, at: [93.6, 40.2], path: M 0 -3.4 L 0 0 L 30.8 0, for: [port-1-1, port-3-1, copper-3-1]}
+      - {id: bracket-network-r, at: [136.2, 40.2], path: M 0 0 L 32.8 0 L 32.8 -3.4, for: [port-1-1, port-3-1, copper-3-1]}
+      - {at: [21.44, 9.4], text: TELCO SYSTEMS, font-size: 2.2, anchor: middle, for: chassis}
+      - {at: [56.9, 10.6], text: T-Marc 280, font-size: 6.2, anchor: middle, fill: '#2f3337', for: chassis}
+      - {at: [41.9, 39.5], text: CLASS 1 LASER PRODUCT, font-size: 2.2, anchor: middle, for: chassis}
+      - {at: [35.59, 35.3], text: CON, font-size: 2.2, anchor: middle, for: con}
+      - {at: [52.37, 20.3], text: STS, font-size: 2.1, anchor: middle, for: led-sts}
+      - {at: [52.37, 34.1], text: PWR, font-size: 2.1, anchor: middle, for: led-pwr}
+      - {at: [97.2, 15.1], text: 100FX/1000X, font-size: 1.9, anchor: middle, for: port-1-1}
+      - {at: [129.5, 10.1], text: Access, font-size: 2.1, anchor: middle, for: [port-2-1, port-2-2]}
+      - {at: [129.5, 15.1], text: 10/100/1000T, font-size: 1.9, anchor: middle, for: [port-2-1, port-2-2]}
+      - {at: [159.9, 15.1], text: 100FX/1000X, font-size: 1.9, anchor: middle, for: port-3-1}
+      - {at: [176.6, 15.1], text: 10/100/1000T, font-size: 1.9, anchor: middle, for: copper-3-1}
+      - {at: [94.4, 36.2], text: 1/1, font-size: 2.1, anchor: middle, for: port-1-1}
+      - {at: [122.52, 36.2], text: 2/1, font-size: 2.1, anchor: middle, for: port-2-1}
+      - {at: [136.49, 36.2], text: 2/2, font-size: 2.1, anchor: middle, for: port-2-2}
+      - {at: [168.57, 36.2], text: 3/1, font-size: 2.1, anchor: middle, for: [port-3-1, copper-3-1]}
+      - {at: [130.4, 41.0], text: Network, font-size: 2.1, anchor: middle, for: [port-1-1, port-3-1, copper-3-1]}
+      - {at: [196.5, 14.6], text: 5VDC 3A, font-size: 2.1, anchor: middle, for: dc-in}
+      - {id: polarity, at: [190.55, 17.0], for: dc-in, path: M 3.2 0.0 L 2.986 0.8 L 2.4 1.386 L 1.6 1.6 L 0.8 1.386 L 0.214 0.8 L 0.0 0.0 L 0.214 -0.8 L 0.8 -1.386 L 1.6 -1.6 L 2.4 -1.386 L 2.986 -0.8 Z M 0.8 0 L 2.4 0 M 3.2 0 L 5.2 0 M 6.5 0.0 L 6.354 0.354 L 6.0 0.5 L 5.646 0.354 L 5.5 0.0 L 5.646 -0.354 L 6.0 -0.5 L 6.354 -0.354 Z M 6.8 0 L 8.7 0 M 11.9 0.0 L 11.686 0.8 L 11.1 1.386 L 10.3 1.6 L 9.5 1.386 L 8.914 0.8 L 8.7 0.0 L 8.914 -0.8 L 9.5 -1.386 L 10.3 -1.6 L 11.1 -1.386 L 11.686 -0.8 Z M 9.5 0 L 11.1 0 M 10.3 -0.8 L 10.3 0.8}
+    components:
+      placements:
+        - {ref: 'std/rj45@2', id: con, at: [27.69, 18.16], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CON - the console}
+        - {ref: 'common/led-indicator@1', id: led-sts, at: [50.37, 21.59], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-pwr, at: [50.37, 26.71], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: 'common/reset-button@1', id: btn-reset, at: [62.11, 27.56], for: chassis, group: controls, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-port-1-1, at: [81.14, 27.56], for: port-1-1, group: port-leds, rel-pos: 1}
+        - {ref: 'std/sfp@1', id: port-1-1, at: [89.95, 22.0], group: uplink, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: port-2-1, at: [116.17, 18.5], rotate: 180, group: access, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: port-2-2, at: [130.14, 18.5], rotate: 180, group: access, rel-pos: 2}
+        - {ref: 'std/sfp@1', id: port-3-1, at: [152.65, 21.9], group: combo, rel-pos: 1}
+        - {ref: 'common/rj45-eth@1', id: copper-3-1, at: [168.7, 17.8], rotate: 180, group: combo-copper, rel-pos: 1, attrs: {combo-with: port-3-1}}
+        - {ref: 'common/dc-barrel@1', id: dc-in, at: [190.5, 19.4], group: inlets, rel-pos: 1, description: 5 VDC 3 A from the external adaptor}
+  rear:
+    size: {w: 221.0, h: 44.0}
+    empty: >-
+      Envelope only. The stencil master TMC-280-x (R) draws the rear as a plain panel; no
+      photograph is held (see the rear gap).
+  left:
+    size: {w: 140.5, h: 44.0}
+    empty: Envelope only. The renders show the flank's vent slots at a grazing angle only.
+  right:
+    size: {w: 140.5, h: 44.0}
+    empty: Envelope only, for the same reason as the left.
+  top:
+    size: {w: 221.0, h: 140.5}
+    empty: Envelope only. The renders show a plain lid obliquely.
+  bottom:
+    size: {w: 221.0, h: 140.5}
+    empty: Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - TMC-280-z, "Managed Ethernet demarcation device with 2 x 10/100/1000Base-T ports,
+      1 x combo copper/fiber port, 1 x SFP uplink, and external power supply" (data sheet
+      ordering table).
+    description: The TM-280, fed from its external 5 VDC adaptor.
+datasheet:
+  title: 'BATM Networks TM-280 Carrier Ethernet NID data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2025/12/BATM-Networks-TM-280-Datasheet.pdf'
+  sha256: c3a18c41640a778a6b2a26ce2a824215ae182a1e8e87ae735fb23010321144ac
+references:
+  - {title: 'T-Marc 280 data sheet (2021)', url: 'https://www.telco.com/wp-content/uploads/2021/03/T-Marc-280-A4.pdf', sha256: cc38489deaa317fcba7fa9708bdd386971d4c5d7fb291899fa6ee12be92fd066}
