@@ -76,7 +76,8 @@ def test_an_xfp_cage_is_not_one_rate_either():
     exactly why the cage cannot say and the card must.
     """
     assert dx.FAMILY_ATTRS["xfp"][0] == ("oc192", "sonet-oc192")
-    assert dx.FAMILY_ATTRS["xfp"][1:] == dx.PON_ATTRS
+    assert dx.FAMILY_ATTRS["xfp"][1:-1] == dx.PON_ATTRS
+    assert dx.FAMILY_ATTRS["xfp"][-1] == dx.XFP10G_ATTR
     assert dx.cage_type("std/xfp", {}) == "10gbase-x-xfp"
     assert dx.cage_type("std/xfp", {"oc192": 1}) == "sonet-oc192"
 
@@ -257,7 +258,8 @@ def test_the_pon_rates_follow_ethernet_and_sonet():
     export changes - the SFP family ends in them and the XFP family's OC-192
     stays first."""
     assert dx.FAMILY_ATTRS["sfp"][7:] == dx.PON_ATTRS
-    assert dx.FAMILY_ATTRS["xfp"] == (("oc192", "sonet-oc192"),) + dx.PON_ATTRS
+    assert dx.FAMILY_ATTRS["xfp"] == \
+        (("oc192", "sonet-oc192"),) + dx.PON_ATTRS + (dx.XFP10G_ATTR,)
     assert dx.cage_type("std/sfp", {"sfp": 8, "gpon": 8}) == "1000base-x-sfp"
     assert dx.cage_type("std/xfp", {"oc192": 1, "10g-epon": 1}) == "sonet-oc192"
 
@@ -651,3 +653,89 @@ def test_a_device_cage_that_declares_one_exports_as_other():
     assert got["port-1"] == {"name": "port-1", "type": "other", "label": DR}
     assert got["port-2"] == {"name": "port-2", "type": "1000base-x-sfp"}
     assert got["rf-1"] == {"name": "rf-1", "type": "docsis", "label": "F"}
+
+
+# --- an Ethernet XFP card has a rate to state --------------------------------
+
+ETHERNET_XFP = {
+    # Cisco ASR 9000 Ethernet Line Card Installation Guide: "... with XFP"
+    "cisco/a9k-4t-b": 4, "cisco/a9k-4t-e": 4, "cisco/a9k-4t-l": 4,
+    "cisco/a9k-8t-4-b": 8, "cisco/a9k-8t-4-e": 8, "cisco/a9k-8t-4-l": 8,
+    "cisco/a9k-8t-b": 8, "cisco/a9k-8t-e": 8, "cisco/a9k-8t-l": 8,
+    "cisco/a9k-mpa-2x10ge": 2, "cisco/a9k-mpa-4x10ge": 4,
+    # MX Series Interface Module Reference: "10-Gigabit Ethernet ... with XFP"
+    "juniper/dpc-r-4xge-xfp": 4, "juniper/dpc-r-4xge-xfp-v": 4,
+    "juniper/dpce-2xge-xfp": 2, "juniper/dpce-2xge-xfp-v960": 2,
+    "juniper/dpce-20ge-2xge": 2, "juniper/dpce-20ge-2xge-v960": 2,
+    "juniper/mic-3d-2xge-xfp": 2, "juniper/mic-3d-2xge-xfp-v": 2,
+    "juniper/mic-3d-4xge-xfp": 4, "juniper/mic-3d-4xge-xfp-v": 4,
+}
+
+
+def test_the_ethernet_xfp_rate_is_a_type_both_targets_have():
+    """`10gbase-x-xfp` is TYPE_10GE_XFP in netbox-community/netbox
+    (netbox/dcim/choices.py at 785d0b90) and in nautobot/nautobot
+    (nautobot/dcim/choices.py at 6e55bf7c). It is the cage default too, so
+    stating it changes no export - it turns the default into a fact."""
+    assert dx.XFP10G_ATTR == ("xfp-10g", "10gbase-x-xfp")
+    assert dx.PART_IFACE["std/xfp"] == dx.XFP10G_ATTR[1]
+    assert dx.cage_type("std/xfp", {"xfp-10g": 4}) == "10gbase-x-xfp"
+    assert not dx.cage_family_needs_a_rate("std/xfp", {"xfp-10g": 4})
+
+
+def test_the_ethernet_xfp_rate_is_last_so_no_stated_rate_changes():
+    """A card stating OC-192 or a PON flavour keeps it; the new row is only
+    reached by a card that states nothing else in the family."""
+    assert dx.cage_type("std/xfp", {"oc192": 1, "xfp-10g": 1}) == "sonet-oc192"
+    assert dx.cage_type("std/xfp", {"10g-epon": 4, "xfp-10g": 4}) == "10g-epon"
+
+
+def test_the_xfp_cage_count_is_not_a_rate():
+    """`xfp: N` counts cages on every XFP card, the PON ones included, so the
+    rate attr is `xfp-10g` and not `xfp` - and there is no ("xfp", "10g")
+    PART_MEDIA row, because the FWLT-A places its XGS-PON cages as
+    `media: xfp, speed: 10g` and a placement's type outranks the card's."""
+    assert "xfp" not in {a for a, _t in dx.FAMILY_ATTRS["xfp"]}
+    assert ("xfp", "10g") not in dx.PART_MEDIA
+    assert dx.placed_type({"ref": "std/xfp@1",
+                           "attrs": {"media": "xfp", "speed": "10g"}}) is None
+
+
+def test_the_ethernet_rate_is_not_a_media_value():
+    """A card attr is a rate statement, as `qsfp-dd-800g` is."""
+    assert "xfp-10g" not in lint.PLUGGABLE_CAGES
+    assert "10g" in yaml.safe_load(
+        (ROOT / "spec/schemas/speeds.yaml").read_text())["speeds"]
+
+
+@pytest.mark.parametrize("ref,count", sorted(ETHERNET_XFP.items()))
+def test_an_ethernet_xfp_card_states_its_rate(ref, count):
+    d = _modules().get(ref)
+    if d is None:
+        pytest.skip(f"{ref} is not in this library")
+    attrs = d.get("attrs") or {}
+    assert attrs.get("xfp-10g") == count, f"{ref} lost its `xfp-10g: {count}`"
+    n = sum(1 for p in d["parts"] if isinstance(p, dict)
+            and p["ref"].split("@")[0] == "std/xfp")
+    assert n == count
+    assert dx.cage_type("std/xfp", attrs) == "10gbase-x-xfp"
+
+
+def test_no_sonet_or_pon_card_states_the_ethernet_rate():
+    """Checked against each card's source before it took the attr: a card whose
+    XFPs run OC-192 or a PON flavour must not also claim 10GbE."""
+    others = {a for a, _t in dx.FAMILY_ATTRS["xfp"]} - {"xfp-10g"}
+    both = sorted(ref for ref, d in _modules().items()
+                  if "xfp-10g" in (d.get("attrs") or {})
+                  and others & set(d.get("attrs") or {}))
+    assert not both, both
+
+
+def test_the_fwlt_a_still_exports_xgs_pon():
+    """The card whose placement attrs would have been retyped by a PART_MEDIA
+    row, read off the committed export."""
+    p = LIB / "exports/netbox/module-types/Nokia/FWLT-A.yaml"
+    if not p.exists():
+        pytest.skip("the FWLT-A export is not in this library")
+    types = {i["type"] for i in (yaml.safe_load(p.read_text()) or {}).get("interfaces") or []}
+    assert types == {"xgs-pon"}, types
