@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: m12-1gb-2-10gb-xp
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -25,8 +25,14 @@ attrs:
   part-number: 3HE07282AA
   sfp: 12
   xfp: 2
+  xfp-10g: 2
   power-draw-max-w: 34
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate of the two XFP ports, from the MDA-XP guide 9302180206 p9 and p18
+    ("2-pt 10GE XFP + 12-pt 1GE MDA-XP") and the SR-7 15.1 guide p98 ("2-port 10GE XFP +
+    12-port GE SFP"). The export already typed them 10gbase-x-xfp by default; this makes
+    that a statement. Nothing new was measured.
   sources: >-
     datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p39 Figure 10 and p39-40 Table 10
     (the face, its lamps and screws), p18 Table 2 (power, "2-pt 10GE + 12-pt 1GE MDA-XP (2+12
