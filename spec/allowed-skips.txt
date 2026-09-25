@@ -18,10 +18,11 @@
 # workflow, so that reason means the install step silently stopped working.
 multi-window lamp part not in this library
 # The third lint of a CI run. `test_lint_green` lints the whole library at ~76s
-# and is the critical path inside the suite; the `lint` job gates the job the
-# suite runs in, so on CI it is answering a question already answered. Locally
+# and is the critical path inside the suite; the `lint` job runs beside the one
+# the suite runs in and no head merges without it, so on CI it is answering a
+# question already answered. Locally
 # the variable is unset and the test runs.
-lint ran as its own CI job before this suite started
+lint runs as its own CI job, and a merge needs it green
 # Reference imagery. `working/` is never committed - it holds vendor PDFs,
 # photographs and renders that cannot be redistributed - so the measurement
 # tests that compare against a staged figure cannot run on a clean checkout and
