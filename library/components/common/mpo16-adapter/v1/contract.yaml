@@ -1,0 +1,98 @@
+format: 1
+kind: component
+name: mpo16-adapter
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  Panel-mount MTP-16 adapter - one opening in a bezel, as fitted to FS's FHD
+  12x MTP-16 adapter panel (SKU 382885). The same tile as common/mpo-adapter@2
+  in outline and opening, because US Conec states the 16-fibre MT ferrule
+  keeps the traditional MT's external footprint; what differs is sixteen fibre
+  positions on the ferrule row and a key offset from the centre, which stops
+  an MTP-16 plug mating with standard MPO hardware - so the opening it
+  composes is std/mpo16@1, presenting interface mpo16, not std/mpo@2.
+size: {w: 13.8, h: 9.4}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  BORROWED WHOLE from common/mpo-adapter@2, the MPO-8/12/24 tile on FS's 12x
+  MTP panel (35510). FS's adapter-panels datasheet draws its MTP panels as one
+  family - "Type A and Type B MTP adapter panels are of the same dimensions" -
+  and its face-on render of the MTP-16 panel (382885.p3) puts the openings on
+  the pitch it puts the 35510 openings on (13.34 against 13.33 before the
+  frame correction the MTP-12 panel's drawing supplies). US Conec's MTP-16
+  handout (SM-0022-0823) says the 16-fibre ferrule has the same external
+  footprint as the traditional MT ferrule. So nothing here is a second reading
+  of the tile; see mpo-adapter@2 for where its 13.8 x 9.4 came from.
+attrs: {media: fiber, connector: mpo}
+# WHAT THE PORT SHIPS HOLDING: FS's renders of 382885 show every opening capped
+# in the same grey cap the MTP-12 panel ships with (provenance.shipped-cap).
+default: common/mpo16-dust-cap@1
+optical:
+  # SIXTEEN FIBRES IN ONE ROW - the 1 x 16 MT ferrule FS's panel takes. US
+  # Conec also makes a 2 x 16; FS's panel is sold for MTP-16, and its cassette
+  # sibling (382895) is "MTP-16 ... 16 Fibers", one row.
+  positions: 16
+elements:
+  '1': {at: [8.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '2': {at: [8.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '3': {at: [8.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '4': {at: [7.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '5': {at: [7.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '6': {at: [7.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '7': {at: [7.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '8': {at: [6.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '9': {at: [6.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '10': {at: [6.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '11': {at: [6.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '12': {at: [5.95, 4.625], size: [0.15, 0.15], class: fibre}
+  '13': {at: [5.7, 4.625], size: [0.15, 0.15], class: fibre}
+  '14': {at: [5.45, 4.625], size: [0.15, 0.15], class: fibre}
+  '15': {at: [5.2, 4.625], size: [0.15, 0.15], class: fibre}
+  '16': {at: [4.95, 4.625], size: [0.15, 0.15], class: fibre}
+provenance:
+  size: >-
+    borrowed - see size-notes.
+  key: >-
+    NOT DRAWN, THE SAME GAP common/mpo-adapter@2 and std/mpo@2 record. The
+    MTP-16 key is OFFSET from the housing centre where an MPO-12's is
+    centred (US Conec SM-0022-0823: "a unique keying feature as opposed to the
+    centered keying feature on the traditional MPO hardware", standardised by
+    TIA 604-18 / FOCIS 18 and IEC 61754-7-3 and -7-4). That is the one visible
+    difference from the MPO tile, and no document held dimensions it. A
+    dimensioned keyway would be a further major.
+  fibre-markers: >-
+    SIXTEEN POSITIONS ON THE FERRULE ROW at the 0.25 pitch US Conec gives
+    ("Fiber pitch: 0.25mm within the row"), centred on the composed std/mpo@2
+    opening at (6.9, 4.7), exactly as mpo-adapter@2 centres its twelve. The
+    sixteen span 3.75 against the twelve's 2.75 - the reason the MTP-16 guide
+    pins sit 5.3 apart where an MT-12's sit 4.6 (the handout's ferrule
+    figure). NUMBERED AS SEEN FROM THIS SIDE WITH A KEY-UP PLUG MATED FROM THE
+    VIEWER, the same reading mpo-adapter@2 uses: fibre 1 on the RIGHT, cx
+    8.775, running leftward to 16 at cx 5.025. No ink: the fibres are behind
+    the dust sleeve.
+  shipped-cap: >-
+    FS's gallery renders of SKU 382885 (382885.p1-p5) show all twelve openings
+    holding a grey dust cap, drawn as common/mpo-dust-cap@2 - the cap the MTP-12
+    panel ships with. Whether FS's MTP-16 cap is a different moulding is not
+    visible at the renders' resolution; common/mpo16-dust-cap@1 is the MPO
+    cap's shape mating this opening's own interface.
+  connection-point: >-
+    the plain centre of the 13.8 x 9.4 face, (6.9, 4.7) - the same point, for
+    the same reasons, as mpo-adapter@2's `connection-point` provenance.
+parts:
+  - {ref: std/mpo16@1, id: bore, at: [0.45, 0.7]}
+connection-points:
+  optical: {at: [6.9, 4.7], direction: front}
+relief:
+  wall: '#22262a'
+  features:
+    - node: bezel
+      out: 1.2
+      confidence: estimated
+      source: >-
+        common/mpo-adapter@2's 1.2 stand-off, which is itself an estimate - the
+        renders show the flange slightly proud and nothing in the corpus
+        dimensions it. Carried over because the MTP-16 panel is the same
+        moulding in the same plate, not because anything measured it here.
+skins: [default]

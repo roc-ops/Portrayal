@@ -911,46 +911,32 @@ standards:
       adapters, 4 each, and nothing here ever supported 2.
   keystone-opening:
     registry: >-
-      NOT MEASURED AND NOT READ FROM A STANDARD, AND NOT EVEN A FIBRE
-      INTERFACE. A keystone clip is a generic snap-in mounting opening, not a
-      connector standard - no IEC or TIA fibre document governs it. SKU
-      143239's three-quarter shot is the one render among these five that
-      shows an actual panel rather than just a loose part, but panel_measure
-      still REFUSES it outright, its scaled plate height missing the known
-      35.05 mm by 83.9%. 14.8 x 19.3 is the de-facto snap-in keystone jack
-      cutout published across keystone-panel vendors' generic cut sheets
-      (RJ45, fibre, and blank keystone inserts all share this one opening),
-      adopted here for lack of anything FS-specific. The pitch is DERIVED the
-      same way as the other four: FS's catalogue line for 143239 lists 6
-      clips, but the render shows them in two rows of 3, not one row of 6 - a
-      3-across row spans 2 gaps. Using the same ~67 mm +/- 3% envelope
-      bracketed by 35510 (68.84 mm) and 57058 (64.99 mm), 67 / (3 - 1) = 33.5.
-    pitch: 33.5
-    pitch-confidence: estimated
+      FS's OWN FIGURES, NOT A STANDARD - a keystone opening is a mounting form
+      with no owning IEC or TIA fibre document. FS dimensions the opening of its
+      FHD multimedia modular panel (FHD-FAPM6, SKU 143239) on the face-on render
+      143239.p3 as 0.65in across and 0.59in down, and its adapter-panels
+      datasheet (p9) draws the six openings in two rows of three: on the vector
+      drawing at 25.70 px/mm, 16.54 x 14.94 each, columns at x 20.16 46.27 72.34
+      and rows at y 1.60 and 18.48 of the 109 x 35 plate. Landscape: a keystone
+      jack turned on its side. The column pitch is 26.11 and 26.07, mean 26.09;
+      the row pitch 16.88.
+    w: 16.5
+    h: 14.9
+    confidence: verified
+    pitch: 26.09
+    pitch-confidence: measured
     pitch-kind: floor
     pitch-kind-note: >-
-      There is no fibre or mechanical interface standard to be a target
-      against - a keystone opening's spacing is purely a function of whatever
-      panel it is punched into - and 33.5 is derived arithmetic from a row
-      count and an averaged envelope, same as st-adapter. Recorded as a floor:
-      FS's own panel does not sit tighter than this, nothing more is claimed.
+      A FLOOR because only one panel is measured and nothing standardises how
+      far apart a panel punches its keystone openings; a wider layout is
+      unremarkable and a narrower one is worth a question. 26.09 is the mean of
+      FS's two drawn column gaps.
     notes: >-
-      NO APERTURE DIMENSION IS HELD HERE. This entry carried w: 14.8, h: 19.3
-      at confidence: estimated until this fix, and nothing declares
-      `conforms: keystone-opening`, so L9 never checked it against anything.
-      Unlike the other four entries, that opening was not even derived from
-      FS's own hardware - it is the widely-published generic keystone
-      cutout, adopted for lack of anything FS-specific, and
-      common/keystone-clip@1's own `size: {w: 14.8, h: 19.3}` carries that
-      same generic figure, held once on the component rather than twice with
-      no comparison between the copies. At the 33.5 mm pitch this entry
-      still holds, that body leaves an 18.7 mm gap to its neighbour. What
-      settles a real aperture: a face-on photograph of SKU 143239's actual
-      panel dimensions, a caliper, or a manufacturer cut sheet for this
-      specific panel.
-      THIS ENTRY PREVIOUSLY RECORDED pitch: 17.76 (88.8 / 5), on the same two
-      mistakes as st-adapter's: the 88.8 mm envelope constant and treating
-      143239 as one row of 6. Both corrected above.
+      THIS ENTRY REPLACES AN ESTIMATE. Until the FAPM6 was modelled it held a
+      33.5 floor derived from a row count and an averaged envelope, and no
+      aperture at all (the generic portrait keystone cutout, 14.8 x 19.3, sat on
+      common/keystone-clip@1 instead). FS's drawing overturned both: the
+      openings are landscape, and 26.09 apart, closer than the floor allowed.
   lc-duplex-receptacle:
     registry: IEC 61754-20 / TIA-604-10 FOCIS 10 for the duplex pitch; the bore square
       from section A-A of the ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet and from

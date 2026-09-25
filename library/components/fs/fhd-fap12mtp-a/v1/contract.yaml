@@ -1,0 +1,250 @@
+format: 1
+kind: module
+name: fhd-fap12mtp-a
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  FS FHD-FAP12MTPHA - FHD fiber adapter panel, twelve MTP-8/12/24 key-up to
+  key-down adapters (black), Type A. FS SKU 35510.
+size: {w: 108.97, h: 35.05, d: 32.1}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: >-
+  THE FHD MODULE FACE, 4.29 x 1.38 in, which FS's adapter-panels datasheet
+  dimensions on every panel drawing (pp5-9) as 109 x 35 mm; 108.97 x 35.05 is
+  the same two inch figures unrounded, the face every FHD cassette in this
+  library already declares. THE DEPTH IS THE PANEL's, NOT A CASSETTE's: FS's
+  top views give the adapters' reach in front of and behind a plate about 1.7
+  thick, and 32.1 is the plate plus what stands behind it - see
+  provenance.depth. A panel is a plate of adapters, not a box, which is why it
+  is not class cassette.
+attrs: {media: fiber, model: FHD-FAP12MTPHA, vendor-sku: '35510'}
+body:
+  depth: 32.1
+  # THE ADAPTER BLOCK BEHIND THE PLATE, 3.46in (88) across on FS's top views
+  # and 1.37in (34.8) tall on its side views, centred behind the plate. It is
+  # what a pulled panel's box is drawn as, and what the rear face is painted on.
+  footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
+elements:
+  logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+parts:
+  - {id: mtp01, ref: common/mpo-adapter@2, at: [12.63, 20.82], rotate: 90}
+  - {id: mtp02, ref: common/mpo-adapter@2, at: [26.6, 20.82], rotate: 90}
+  - {id: mtp03, ref: common/mpo-adapter@2, at: [40.61, 20.82], rotate: 90}
+  - {id: mtp04, ref: common/mpo-adapter@2, at: [54.59, 20.82], rotate: 90}
+  - {id: mtp05, ref: common/mpo-adapter@2, at: [68.6, 20.82], rotate: 90}
+  - {id: mtp06, ref: common/mpo-adapter@2, at: [82.57, 20.82], rotate: 90}
+  - {id: mtp07, ref: common/mpo-adapter@2, at: [12.63, 4.81], rotate: 90}
+  - {id: mtp08, ref: common/mpo-adapter@2, at: [26.6, 4.81], rotate: 90}
+  - {id: mtp09, ref: common/mpo-adapter@2, at: [40.61, 4.81], rotate: 90}
+  - {id: mtp10, ref: common/mpo-adapter@2, at: [54.59, 4.81], rotate: 90}
+  - {id: mtp11, ref: common/mpo-adapter@2, at: [68.6, 4.81], rotate: 90}
+  - {id: mtp12, ref: common/mpo-adapter@2, at: [82.57, 4.81], rotate: 90}
+faces:
+  rear: {ref: fs/fhd-fap12mtp-a-rear@1}
+optical:
+  polarity: a
+  front-order:
+    [mtp01, mtp02, mtp03, mtp04, mtp05, mtp06, mtp07, mtp08, mtp09, mtp10, mtp11, mtp12]
+  paths:
+    - {from: mtp01.1, to: 'rear:b01.1'}
+    - {from: mtp01.2, to: 'rear:b01.2'}
+    - {from: mtp01.3, to: 'rear:b01.3'}
+    - {from: mtp01.4, to: 'rear:b01.4'}
+    - {from: mtp01.5, to: 'rear:b01.5'}
+    - {from: mtp01.6, to: 'rear:b01.6'}
+    - {from: mtp01.7, to: 'rear:b01.7'}
+    - {from: mtp01.8, to: 'rear:b01.8'}
+    - {from: mtp01.9, to: 'rear:b01.9'}
+    - {from: mtp01.10, to: 'rear:b01.10'}
+    - {from: mtp01.11, to: 'rear:b01.11'}
+    - {from: mtp01.12, to: 'rear:b01.12'}
+    - {from: mtp02.1, to: 'rear:b02.1'}
+    - {from: mtp02.2, to: 'rear:b02.2'}
+    - {from: mtp02.3, to: 'rear:b02.3'}
+    - {from: mtp02.4, to: 'rear:b02.4'}
+    - {from: mtp02.5, to: 'rear:b02.5'}
+    - {from: mtp02.6, to: 'rear:b02.6'}
+    - {from: mtp02.7, to: 'rear:b02.7'}
+    - {from: mtp02.8, to: 'rear:b02.8'}
+    - {from: mtp02.9, to: 'rear:b02.9'}
+    - {from: mtp02.10, to: 'rear:b02.10'}
+    - {from: mtp02.11, to: 'rear:b02.11'}
+    - {from: mtp02.12, to: 'rear:b02.12'}
+    - {from: mtp03.1, to: 'rear:b03.1'}
+    - {from: mtp03.2, to: 'rear:b03.2'}
+    - {from: mtp03.3, to: 'rear:b03.3'}
+    - {from: mtp03.4, to: 'rear:b03.4'}
+    - {from: mtp03.5, to: 'rear:b03.5'}
+    - {from: mtp03.6, to: 'rear:b03.6'}
+    - {from: mtp03.7, to: 'rear:b03.7'}
+    - {from: mtp03.8, to: 'rear:b03.8'}
+    - {from: mtp03.9, to: 'rear:b03.9'}
+    - {from: mtp03.10, to: 'rear:b03.10'}
+    - {from: mtp03.11, to: 'rear:b03.11'}
+    - {from: mtp03.12, to: 'rear:b03.12'}
+    - {from: mtp04.1, to: 'rear:b04.1'}
+    - {from: mtp04.2, to: 'rear:b04.2'}
+    - {from: mtp04.3, to: 'rear:b04.3'}
+    - {from: mtp04.4, to: 'rear:b04.4'}
+    - {from: mtp04.5, to: 'rear:b04.5'}
+    - {from: mtp04.6, to: 'rear:b04.6'}
+    - {from: mtp04.7, to: 'rear:b04.7'}
+    - {from: mtp04.8, to: 'rear:b04.8'}
+    - {from: mtp04.9, to: 'rear:b04.9'}
+    - {from: mtp04.10, to: 'rear:b04.10'}
+    - {from: mtp04.11, to: 'rear:b04.11'}
+    - {from: mtp04.12, to: 'rear:b04.12'}
+    - {from: mtp05.1, to: 'rear:b05.1'}
+    - {from: mtp05.2, to: 'rear:b05.2'}
+    - {from: mtp05.3, to: 'rear:b05.3'}
+    - {from: mtp05.4, to: 'rear:b05.4'}
+    - {from: mtp05.5, to: 'rear:b05.5'}
+    - {from: mtp05.6, to: 'rear:b05.6'}
+    - {from: mtp05.7, to: 'rear:b05.7'}
+    - {from: mtp05.8, to: 'rear:b05.8'}
+    - {from: mtp05.9, to: 'rear:b05.9'}
+    - {from: mtp05.10, to: 'rear:b05.10'}
+    - {from: mtp05.11, to: 'rear:b05.11'}
+    - {from: mtp05.12, to: 'rear:b05.12'}
+    - {from: mtp06.1, to: 'rear:b06.1'}
+    - {from: mtp06.2, to: 'rear:b06.2'}
+    - {from: mtp06.3, to: 'rear:b06.3'}
+    - {from: mtp06.4, to: 'rear:b06.4'}
+    - {from: mtp06.5, to: 'rear:b06.5'}
+    - {from: mtp06.6, to: 'rear:b06.6'}
+    - {from: mtp06.7, to: 'rear:b06.7'}
+    - {from: mtp06.8, to: 'rear:b06.8'}
+    - {from: mtp06.9, to: 'rear:b06.9'}
+    - {from: mtp06.10, to: 'rear:b06.10'}
+    - {from: mtp06.11, to: 'rear:b06.11'}
+    - {from: mtp06.12, to: 'rear:b06.12'}
+    - {from: mtp07.1, to: 'rear:b07.1'}
+    - {from: mtp07.2, to: 'rear:b07.2'}
+    - {from: mtp07.3, to: 'rear:b07.3'}
+    - {from: mtp07.4, to: 'rear:b07.4'}
+    - {from: mtp07.5, to: 'rear:b07.5'}
+    - {from: mtp07.6, to: 'rear:b07.6'}
+    - {from: mtp07.7, to: 'rear:b07.7'}
+    - {from: mtp07.8, to: 'rear:b07.8'}
+    - {from: mtp07.9, to: 'rear:b07.9'}
+    - {from: mtp07.10, to: 'rear:b07.10'}
+    - {from: mtp07.11, to: 'rear:b07.11'}
+    - {from: mtp07.12, to: 'rear:b07.12'}
+    - {from: mtp08.1, to: 'rear:b08.1'}
+    - {from: mtp08.2, to: 'rear:b08.2'}
+    - {from: mtp08.3, to: 'rear:b08.3'}
+    - {from: mtp08.4, to: 'rear:b08.4'}
+    - {from: mtp08.5, to: 'rear:b08.5'}
+    - {from: mtp08.6, to: 'rear:b08.6'}
+    - {from: mtp08.7, to: 'rear:b08.7'}
+    - {from: mtp08.8, to: 'rear:b08.8'}
+    - {from: mtp08.9, to: 'rear:b08.9'}
+    - {from: mtp08.10, to: 'rear:b08.10'}
+    - {from: mtp08.11, to: 'rear:b08.11'}
+    - {from: mtp08.12, to: 'rear:b08.12'}
+    - {from: mtp09.1, to: 'rear:b09.1'}
+    - {from: mtp09.2, to: 'rear:b09.2'}
+    - {from: mtp09.3, to: 'rear:b09.3'}
+    - {from: mtp09.4, to: 'rear:b09.4'}
+    - {from: mtp09.5, to: 'rear:b09.5'}
+    - {from: mtp09.6, to: 'rear:b09.6'}
+    - {from: mtp09.7, to: 'rear:b09.7'}
+    - {from: mtp09.8, to: 'rear:b09.8'}
+    - {from: mtp09.9, to: 'rear:b09.9'}
+    - {from: mtp09.10, to: 'rear:b09.10'}
+    - {from: mtp09.11, to: 'rear:b09.11'}
+    - {from: mtp09.12, to: 'rear:b09.12'}
+    - {from: mtp10.1, to: 'rear:b10.1'}
+    - {from: mtp10.2, to: 'rear:b10.2'}
+    - {from: mtp10.3, to: 'rear:b10.3'}
+    - {from: mtp10.4, to: 'rear:b10.4'}
+    - {from: mtp10.5, to: 'rear:b10.5'}
+    - {from: mtp10.6, to: 'rear:b10.6'}
+    - {from: mtp10.7, to: 'rear:b10.7'}
+    - {from: mtp10.8, to: 'rear:b10.8'}
+    - {from: mtp10.9, to: 'rear:b10.9'}
+    - {from: mtp10.10, to: 'rear:b10.10'}
+    - {from: mtp10.11, to: 'rear:b10.11'}
+    - {from: mtp10.12, to: 'rear:b10.12'}
+    - {from: mtp11.1, to: 'rear:b11.1'}
+    - {from: mtp11.2, to: 'rear:b11.2'}
+    - {from: mtp11.3, to: 'rear:b11.3'}
+    - {from: mtp11.4, to: 'rear:b11.4'}
+    - {from: mtp11.5, to: 'rear:b11.5'}
+    - {from: mtp11.6, to: 'rear:b11.6'}
+    - {from: mtp11.7, to: 'rear:b11.7'}
+    - {from: mtp11.8, to: 'rear:b11.8'}
+    - {from: mtp11.9, to: 'rear:b11.9'}
+    - {from: mtp11.10, to: 'rear:b11.10'}
+    - {from: mtp11.11, to: 'rear:b11.11'}
+    - {from: mtp11.12, to: 'rear:b11.12'}
+    - {from: mtp12.1, to: 'rear:b12.1'}
+    - {from: mtp12.2, to: 'rear:b12.2'}
+    - {from: mtp12.3, to: 'rear:b12.3'}
+    - {from: mtp12.4, to: 'rear:b12.4'}
+    - {from: mtp12.5, to: 'rear:b12.5'}
+    - {from: mtp12.6, to: 'rear:b12.6'}
+    - {from: mtp12.7, to: 'rear:b12.7'}
+    - {from: mtp12.8, to: 'rear:b12.8'}
+    - {from: mtp12.9, to: 'rear:b12.9'}
+    - {from: mtp12.10, to: 'rear:b12.10'}
+    - {from: mtp12.11, to: 'rear:b12.11'}
+    - {from: mtp12.12, to: 'rear:b12.12'}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    FS's vector drawing (panels datasheet p7, MTP Fiber Adapter Panel, 1200 dpi,
+    23.55 px/mm on the 109 plate; the plate then reads 35.03 against 35) draws
+    twelve PORTRAIT adapter bodies 9.77 wide and 13.25 tall, centres x 19.53
+    33.50 47.51 61.49 75.50 89.47 (13.99 pitch, spread 0.04) in rows centred at
+    y 9.51 and 25.52 (16.01 apart). The datasheet notes that Type A and Type B
+    MTP panels share these dimensions. Each tile is the library's MPO panel
+    tile, 13.8 x 9.4 drawn landscape, TURNED 90 so it stands portrait as FS
+    mounts it - 9.4 x 13.8 against the drawn 9.77 x 13.25 - and centred on a
+    drawn body (`at` is the unrotated box's corner, the turn about its centre).
+  face-legends: >-
+    read off the drawing: 7 over 1 left of the first column and 12 over 6 right
+    of the last, 3.06 mm digits (drawn at 4.1). The lower row is 1-6 and the
+    upper 7-12, each left to right.
+  knobs: >-
+    THE THUMB-KNOBS ARE DRAWN, and not at the cassettes' positions. FS's panel
+    drawings dimension the two knob centres 3.91in (99.4) apart on every panel,
+    so each sits 4.785 in from its edge; the 36F drawing (p6) draws the knob
+    face 8.47 across, r 4.24. The cassettes carry knobs at 5.10 from the edge, r
+    4.10, read off renders of a different part.
+  depth: >-
+    drawing - the top view beside each front view gives the reach in front of
+    the plate, the reach behind it and the total, in inches with millimetres:
+    24F LC 0.27 [6.9] / 1.09 [27.8] / 1.43 [36.4], MTP 0.49 [12.5] / 1.20 [30.4]
+    / 1.76 [44.6], 36F LC 0.65 [16.4] / 0.57 [14.6] / 1.27 [32.2]; the SC panel
+    is noted as the 24F LC's size. The front and rear reaches leave about 1.7
+    for the plate on the LC and MTP views, and `d` is the plate plus the rear
+    reach. The adapters' own relief does not reproduce the front reach - common
+    adapters stand 1.0 to 1.2 proud, estimated - and is not overridden here.
+  optical: >-
+    TYPE A, KEY UP TO KEY DOWN, IS FIBRE 1 TO FIBRE 1. An MTP adapter panel
+    holds no glass; the adapter aligns two plugs, and its key arrangement
+    decides which fibres meet. With the keys opposed (FS's Key Up to Key Down,
+    Type A) fibre n meets fibre n; with the keys aligned (Type B) fibre n meets
+    fibre 13 - n. The tiles number their fibres as seen from their own side with
+    a key-up plug mated from the viewer, so the rear face turns each tile to
+    where the REAR plug's key sits: a key-down plug seen from behind is the
+    front tile's turn, 90, which puts fibre 1 on the same physical sleeve as the
+    front's fibre 1. The paths are that geometry written down.
+  face: >-
+    35510.p3, the face-on render, agrees: twelve grey-capped portrait openings
+    in two rows of six, numbered 7/1 and 12/6.
+  logo-zone: >-
+    reserved, not drawn - FS prints its mark top left on every panel face
+    (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
+    read off the drawings, to about half a millimetre.
+  key-direction: >-
+    WHICH WAY EACH TILE IS TURNED IS A CONVENTION, NOT A READING. FS's drawing
+    and renders show portrait openings and do not show a key clearly enough to
+    say whether it faces left or right; the tiles are turned 90 (key to the
+    right on the front). Only the RELATIVE turn between the two faces carries
+    information - it is what the adapter type fixes - and that is what the
+    paths depend on.
+skins: [default]

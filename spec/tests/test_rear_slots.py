@@ -73,6 +73,23 @@ MPO_SLOTS = {
     "fs/fhd-3mtp18-lc-rear@1": ["mtp1", "mtp2", "mtp3"],
 }
 
+# THE FHD MTP ADAPTER PANELS (2026-09-25) publish `mpo` slots too, from a
+# different part: each opening is common/mpo-adapter@2, the panel tile, not a
+# cassette's flanged bulkhead, and an adapter panel has an opening on BOTH
+# faces - the front and the same adapters seen from behind. Their own census,
+# because the flange checks below are about bulkheads and do not apply. The
+# MTP-16 panel is not here: its tile presents `mpo16`.
+_T12 = [f"{i:02d}" for i in range(1, 13)]
+_T8 = _T12[:8]
+PANEL_MPO_SLOTS = {
+    "fs/fhd-fap12mtp-a@1": ["mtp" + i for i in _T12],
+    "fs/fhd-fap12mtp-a-rear@1": ["b" + i for i in _T12],
+    "fs/fhd-fap12mtp-b@1": ["mtp" + i for i in _T12],
+    "fs/fhd-fap12mtp-b-rear@1": ["b" + i for i in _T12],
+    "fs/fhd-fap8mtp-b@1": ["mtp" + i for i in _T8],
+    "fs/fhd-fap8mtp-b-rear@1": ["b" + i for i in _T8],
+}
+
 # what the real build test seats: the cap and both plugs, on two cassettes
 SEATS = {"bay-1/mtp1": CAP, "bay-1/mtp2": MPO12, "bay-2/mtp1": MPO24}
 
@@ -201,8 +218,13 @@ def _mpo_slots():
 def test_every_cassette_back_publishes_one_mpo_slot_per_bulkhead():
     got = _mpo_slots()
     assert len(got) > 0, "no component publishes an mpo slot - nothing was measured"
-    assert {r: [s["id"] for s in ss] for r, ss in got.items()} == MPO_SLOTS
-    for ref, slots in got.items():
+    assert {r: [s["id"] for s in ss] for r, ss in got.items()} == {**MPO_SLOTS, **PANEL_MPO_SLOTS}
+    for ref in PANEL_MPO_SLOTS:
+        parts = {q["id"]: q for q in contract(ref)["parts"]}
+        for s in got[ref]:
+            assert parts[s["id"]]["ref"] == "common/mpo-adapter@2", (ref, s["id"])
+            assert s["kind"] == "connector" and s["default"] == CAP, (ref, s["id"])
+    for ref, slots in ((r, ss) for r, ss in got.items() if r in MPO_SLOTS):
         parts = {q["id"]: q for q in contract(ref)["parts"]}
         for s in slots:
             q = parts[s["id"]]

@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: fhd-fapm6
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  FS FHD-FAPM6 - FHD 6-port multimedia modular panel with six plastic clips.
+  FS SKU 143239. Six landscape keystone openings, each taking a keystone jack,
+  an inline coupler, or (through the clip it ships with) an SC-footprint
+  fibre adapter, so one FHD slot can carry fibre and copper together.
+size: {w: 108.97, h: 35.05, d: 9.6}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: >-
+  THE FHD MODULE FACE, 4.29 x 1.38 in, as every FHD panel drawing in FS's
+  adapter-panels datasheet dimensions it (p9 for this one); 108.97 x 35.05 is
+  the same inch figures unrounded. FS's own gallery render (143239.p3)
+  labels the height 1.73in, which is the 1U enclosure's figure, not this
+  plate's; the drawing's 1.38in is taken. THE DEPTH IS THE DRAWING's 0.32in
+  [9.6] from the plate's face to the back of the clip frame behind it (read
+  as 9.8 on the vector top view, the printed figure taken).
+attrs: {media: multimedia, model: FHD-FAPM6, vendor-sku: '143239'}
+body:
+  depth: 9.6
+  # THE CLIP FRAME BEHIND THE PLATE, 3.46in (88) across on FS's top view.
+  footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
+elements:
+  logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+parts:
+  - {id: clip1, ref: common/keystone-clip@2, at: [20.145, 18.52]}
+  - {id: clip2, ref: common/keystone-clip@2, at: [20.145, 1.62]}
+  - {id: clip3, ref: common/keystone-clip@2, at: [46.235, 18.52]}
+  - {id: clip4, ref: common/keystone-clip@2, at: [46.235, 1.62]}
+  - {id: clip5, ref: common/keystone-clip@2, at: [72.325, 18.52]}
+  - {id: clip6, ref: common/keystone-clip@2, at: [72.325, 1.62]}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    DRAWN, AND CENTRED ON FS's OWN PITCH. The adapter-panels datasheet p9 draws
+    six openings (1200 dpi, 25.70 px/mm on the 109 plate, plate then 34.98
+    against 35), 16.54 x 14.94, columns at x 20.16 46.27 72.34, rows at y 1.60
+    and 18.48; FS's face-on render dimensions one 0.65in wide and 0.59in tall.
+    Each opening carries common/keystone-clip@2, the clip FS ships six of,
+    sized to fill it. The columns are placed on the drawn mean pitch 26.09
+    centred on the plate (28.395 54.485 80.575, within 0.04 of the drawing)
+    and the rows at the drawn centres 9.07 and 25.97. The openings are
+    punched through the steel, drawn as dark holes in the skin behind each
+    clip, so a clip left out shows the hole.
+  face-legends: >-
+    read off the drawing and 143239.p3: 2 over 1 left of the first column and
+    6 over 5 right of the last, numbered COLUMN BY COLUMN - 1 and 2 are the left
+    pair, 5 and 6 the right - unlike the fibre panels, which number row by
+    row. The middle pair (3, 4) carries no printed number.
+  knobs: >-
+    the adapter panels' knobs, 3.91in (99.4) apart as this drawing dimensions
+    them too; see fs/fhd-fap12lcd-os2@1.
+  logo-zone: >-
+    reserved, not drawn - FS prints its mark top left (the drawing, 143239.p3);
+    the library reproduces no vendor logo.
+  numbering-gap: >-
+    NO OPTICAL BLOCK AND NO PORT GROUP. Whatever snaps into a clip - a keystone
+    jack, a coupler, an SC adapter - carries its own interface, and none is
+    modelled yet; the panel ships with empty clips. Keystone jacks are the part
+    that would give these six openings ports.
+skins: [default]

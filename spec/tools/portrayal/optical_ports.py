@@ -20,6 +20,8 @@ FAMILY = {
     "common/mpo-adapter": "mpo",
     "common/mpo-flange-adapter": "mpo",
     "common/mpo24-flange-adapter": "mpo",
+    # DCIM has one MPO port type; the fibre count is the port's `positions`
+    "common/mpo16-adapter": "mpo",
     "common/st-simplex-adapter": "st",
     "common/fc-simplex-adapter": "fc",
     "common/lsh-simplex-adapter": "lsh",

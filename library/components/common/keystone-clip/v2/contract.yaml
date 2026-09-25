@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: keystone-clip
+version: 2.0.0
+class: mechanical
+profile: networking
+description: >-
+  The white plastic clip FS ships with its FHD multimedia modular panel
+  (FHD-FAPM6, SKU 143239), seated in one of the panel's six keystone
+  openings. A MOUNTING PART, not a connector: it holds an SC-footprint adapter
+  (without flange) in a keystone opening, and whatever it holds carries its
+  own optical or electrical properties, which is why no `optical` block is
+  declared here.
+size: {w: 16.5, h: 14.9}
+conforms: keystone-opening
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  THE OPENING THE CLIP FILLS. FS dimensions the panel's openings on its own
+  face-on render (143239.p3, 0.65in across, 0.59in down) and draws them to the
+  same size in the adapter-panels datasheet (p9, 16.54 x 14.94 measured on the
+  vector drawing at 25.70 px/mm), so 16.5 x 14.9 - landscape. A clip seated
+  flush fills its opening, which is what FS renders show from the front.
+attrs: {opening: keystone}
+elements:
+  window: {at: [2.0, 2.45], size: [12.5, 10.0], class: cutout}
+provenance:
+  size: >-
+    datasheet - see size-notes.
+  window: >-
+    ESTIMATED. The clip's own mounting hole, where an SC-footprint adapter
+    body sits, is drawn 12.5 x 10.0 centred - about the reduced-flange SC
+    simplex body the FAPM6 datasheet says the clips take. No document held
+    dimensions it; FS's render of the loose clips (143239.p1) shows a white
+    frame around a rectangular window and is three-quarter, so it gives the
+    shape and not the size.
+  history: >-
+    MAJOR 2.0.0: @1 was 14.8 x 19.3, the generic portrait keystone cutout,
+    adopted for lack of anything FS-specific and placed nowhere. FS's adapter
+    panels datasheet dimensions the FAPM6 opening 16.5 x 14.9, landscape - a
+    keystone jack turned on its side - so the size changed axis and value.
+  colour: >-
+    white, as FS's gallery renders of the loose clips show them (143239.p1);
+    not sampled to a figure, drawn a neutral off-white.
+  connection-point: >-
+    `mate.at` is the centre of the window, (8.25, 7.45) - where an adapter
+    seated in the clip lands. Keyed `mate`, not `optical`: a clip is a place
+    for something else to seat, not a fibre path of its own. The window is
+    estimated, so this point is too.
+connection-points:
+  mate: {at: [8.25, 7.45], direction: front}
+relief:
+  features:
+    - node: bezel
+      out: 0.8
+      confidence: estimated
+      source: >-
+        FS renders show the clip faces standing slightly proud of the steel;
+        nothing dimensions it.
+skins: [default]

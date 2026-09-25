@@ -204,7 +204,14 @@ def test_the_populations_split_as_the_controller_ruling_expects():
     ten media twins in OM4, OM5 and OM3 (fhd-1mtp6lcd-om4-a, -om4-u, -om5-a;
     fhd-2mtp12-lc-om4-a, -om4-u, -om5-a, -om3-a; fhd-1mtp24-lc-om4-a,
     -om5-a, -om3-a), the 36-fibre pair (fhd-3mtp18-lc-os2-a, -om4-a) - and six
-    Smartoptics PPMs with none. A future cassette that joins the library
+    Smartoptics PPMs with none.
+
+    FORTY-ONE AND THIRTY-FIVE SINCE THE FHD ADAPTER PANELS (2026-09-25):
+    thirteen fibre panels, each a pass-through with a declared rear face -
+    LC 24F in OS2 UPC and APC, OM4 and OM5 (fhd-fap12lcd-os2, -apc-os2, -om4,
+    -om5), LC 36F (fhd-fap18lcd-os2, -om4), SC (fhd-fap6scd-apc-os2, -os2,
+    -om4) and MTP (fhd-fap12mtp-a, -b, fhd-fap8mtp-b, fhd-fap12mtp16-a). The
+    modular panel and the blank carry no fibre and are in neither count. A future cassette that joins the library
     moves one of these two counts, and this is what a reviewer notices
     moving.
     """
@@ -212,8 +219,8 @@ def test_the_populations_split_as_the_controller_ruling_expects():
     all_fibre = fibre_modules(idx)
     projecting = projecting_modules(idx)
     excluded = [e["name"] for e in all_fibre if e not in projecting]
-    assert len(all_fibre) == 28, sorted(e["name"] for e in all_fibre)
-    assert len(projecting) == 22, [e["name"] for e in projecting]
+    assert len(all_fibre) == 41, sorted(e["name"] for e in all_fibre)
+    assert len(projecting) == 35, [e["name"] for e in projecting]
     assert sorted(excluded) == sorted([
         "ppm-dcm-10", "ppm-dcm-20", "ppm-dcm-40", "ppm-dcm-80",
         "ppm-ocu-50-50", "ppm-ocu-97-3",

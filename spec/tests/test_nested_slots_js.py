@@ -900,6 +900,20 @@ def test_the_build_names_the_module_a_back_is_of(world):
     assert [e for e in root.iter() if e.get("data-of-ref")] == []
 
 
+# DEVICES WHOSE MODULES' BACKS ARE SEEN FROM NOWHERE, by name and with the
+# reason. Each is a real gap in what the kit can reach, not a pass: the kit's
+# drawing-less reader would still offer a slot on a back these builds refuse.
+BACKS_NOT_SEEN = {
+    "fhd-1ufmt-n": "a closed steel back with two cable grommets (FS render "
+                   "96427.p5); the modules' backs are under the removable top "
+                   "cover, and a rear hole would be invented",
+    "fhd-1ufmt-s": "a closed tray behind a slotted cable comb (FS renders "
+                   "145167.p3/p5); the backs are inside, not seen from behind",
+    "fhd-4ufce": "its modules stand on edge (rotate 90) and a bay's `rear:` "
+                 "projection cannot turn, so a back would be drawn lying flat",
+}
+
+
 def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():
     """THE KIT'S DRAWING-LESS READER ASSUMES IT. configs.json publishes no
     bay's `rear:`, so slotResolver accepts a slot on a module's back under any
@@ -909,8 +923,10 @@ def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():
     from portrayal.manifest import view_parts
     res = _resolve()
     bays = missing = 0
+    exempt_seen = set()
     for dev in libwalk.iter_devices([str(LIB)]):
         data = yaml.safe_load(Path(dev).read_text())
+        name = Path(dev).parent.name
         for view in (data.get("views") or {}).values():
             for b in view_parts(view)["bays"]:
                 backed = [r for r in b.get("accepts") or []
@@ -918,9 +934,14 @@ def test_every_bay_that_takes_a_module_with_a_back_says_where_it_is_seen():
                 if not backed:
                     continue
                 bays += 1
+                if name in BACKS_NOT_SEEN:
+                    assert not b.get("rear"), f"{name} shows a back now - drop its exemption"
+                    exempt_seen.add(name)
+                    continue
                 if not b.get("rear"):
                     missing += 1
     assert bays > 0, "no bay in the library takes a module with a back"
+    assert exempt_seen == set(BACKS_NOT_SEEN), set(BACKS_NOT_SEEN) - exempt_seen
     assert missing == 0, missing
 
 
