@@ -40,13 +40,17 @@ provenance:
       about 0.35 mm across and 0.35 mm down. Features that stand proud of the face (the
       fan-tray wheel, the screws) are displaced by their own height and are estimated.
   chassis:
-    confidence: photo-measured
+    confidence: estimated
     note: >-
       1RU x 440 x 44 x 508 deep. Depth, weight and 1RU are the data sheets' ("1.75'H (1RU) x
-      19'W x 20'D (44.45 x 482.6 x 508 mm)"; 482.6 is the 19-inch face with ears). THE WIDTH IS
-      MEASURED BY THE RULER THAT REPEATS: at a 440 body the rectified face's in-block SFP+
-      pitch is 14.24 +/- 0.22 mm over fifteen adjacent pairs, the registry's ganged 14.25.
-      44.0 is 1RU less the usual clearance, not measured.
+      19'W x 20'D (44.45 x 482.6 x 508 mm)"; 482.6 is the 19-inch face with ears). WIDTH AND
+      HEIGHT ARE BOTH ASSUMED, NOT MEASURED. A homography fixes the face's proportions only up
+      to the rectangle it is mapped onto, and the 440 x 44 target was chosen: at 440 the
+      in-block SFP+ pitch reads 14.24 +/- 0.22 mm, which agrees with the registry's ganged
+      14.25 - but that agreement is the ASSUMPTION restated, not a check. This vendor's own
+      pitch, read off the TM810x stencil on the TM-8104, is 14.355, which would put the body at
+      about 443.6. 44.0 is 1RU less the usual clearance. Every x on this face scales with
+      the width, so all of them share this uncertainty (about 0.8%).
   stencil-is-another-build:
     confidence: photo-measured
     note: >-
@@ -63,9 +67,11 @@ provenance:
       blocks starting at x 71.6, 133.4, 193.8, 254.2 and 313.8. The raw centres scatter about
       0.2 mm, which at a 14.24 mean pitch would overlap neighbouring cages, so each block is
       drawn REGULAR - four std/sfp-ganged@1 at the registry's 14.25 pitch, centred on the
-      block's measured mean centre. MNG is common/rj45-eth@1: the render shows lamp windows
-      along the top edge of both jack openings, so MNG's lamped keyway side is turned up
-      (rotate 180). Numbered 1-20 left to right in white on each block's
+      block's measured mean centre. BOTH JACKS ARE common/rj45-eth@1, turned 180: the render
+      shows lamp windows along the top edge of both openings, CLI's as well as MNG's, so the
+      lamped keyway side is up on each. That puts the CLI console on a lamped part, which L76
+      reports; it is left in the baseline, as on the TM-8104, whose console jack shows the
+      same windows. Numbered 1-20 left to right in white on each block's
       colour bar (green 1-4, orange 5-8, blue 9-12, cyan 13-16, pink 17-20).
   lamps:
     confidence: photo-measured
@@ -367,7 +373,7 @@ views:
         - {ref: 'common/led-dot@1', id: led-port-18, at: [269.35, 34.6], for: port-18, group: sfp-plus-leds, rel-pos: 18}
         - {ref: 'common/led-dot@1', id: led-port-19, at: [275.75, 34.6], for: port-19, group: sfp-plus-leds, rel-pos: 19}
         - {ref: 'common/led-dot@1', id: led-port-20, at: [281.25, 34.6], for: port-20, group: sfp-plus-leds, rel-pos: 20}
-        - {ref: 'std/rj45@2', id: cli, at: [6.65, 17.85], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CLI - the serial console}
+        - {ref: 'common/rj45-eth@1', id: cli, at: [6.65, 17.85], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CLI - the serial console}
         - {ref: 'common/rj45-eth@1', id: mng, at: [30.5, 17.9], rotate: 180, group: mgmt, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'MNG - out-of-band Ethernet management; 1g is BORROWED from the TM-8104 OOB port, not stated for this box (see provenance.mng-speed and the mng-speed gap)'}
         - {ref: 'common/led-indicator@1', id: led-fan, at: [53.5, 6.4], for: chassis, group: status-leds, rel-pos: 1}
         - {ref: 'common/led-indicator@1', id: led-pwr-a, at: [53.5, 19.35], for: chassis, group: status-leds, rel-pos: 2}
