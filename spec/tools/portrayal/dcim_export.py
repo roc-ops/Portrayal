@@ -514,6 +514,11 @@ PART_POWER = {
     # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-pole screw-clamp plug (20.1 mm
     # against the ECS4530's 32.1), so its own part, landing the -36 to -72 V feed. The same row.
     "telco-systems/xm8424-dc-plug": "dc-terminal",
+    # AND THE XM-3352's DC SUPPLY: a three-pole screw-clamp plug, the same row.
+    "telco-systems/xm3352-dc-plug": "dc-terminal",
+    # THE XM-3352's AC SUPPLY TAKES A C5 CORD IN A CLOVERLEAF C6 INLET. `iec-60320-c6` is a
+    # PowerPortTypeChoices value in both targets, as `iec-60320-c14` is.
+    "telco-systems/xm3352-ac-inlet": "iec-60320-c6",
     # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
     # this takes `other` - the treatment PART_RF gives an SMB timing input, which
     # says "a thing this schema has no name for" instead of naming a neighbour.
