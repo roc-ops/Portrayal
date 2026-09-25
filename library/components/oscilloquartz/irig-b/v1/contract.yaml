@@ -18,7 +18,7 @@ groups:
     term: Port
     role: traffic
     index-origin: 1
-    attrs: {media: rj45-serial}
+    attrs: {media: rj45-sync}
     description: >-
       the card's time-code interfaces. Only the RS-422 output composes a library part;
       the isolated IRIG input (BNC), the IRIG optical output, the ten IRIG outputs (a
@@ -82,7 +82,7 @@ parts:
     id: led-sta
     at: [11.6, 10.8]
     states: {lamp: ['off', {name: normal, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: power-up, color: '#e0b21b'}, {name: loading, color: '#e0b21b', behavior: blinking}, {name: fail, color: '#d0342c'}]}
-  - {ref: std/rj45-ganged@2, id: rs-422-out, at: [91.5, 4.65], group: timing, attrs: {media: rj45-serial}}
+  - {ref: std/rj45-ganged@2, id: rs-422-out, at: [91.5, 4.65], group: timing, attrs: {media: rj45-sync}}
 connection-points:
   mate: {at: [56.75, 10.3], direction: rear}
 skins: [default]

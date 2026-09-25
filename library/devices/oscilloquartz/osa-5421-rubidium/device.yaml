@@ -478,7 +478,7 @@ views:
           states:
             led-b: ['off', {name: link, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]
             led-a: ['off', {name: rate-10m, color: '#e0b21b'}, {name: rate-100m, color: '#39b54a'}]
-        - {ref: std/rj45@2, id: rs-232, at: [174.15, 26.65], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial}}
+        - {ref: std/rj45@2, id: rs-232, at: [174.15, 26.65], group: mgmt, rel-pos: 2, attrs: {role: console, media: rj45-serial}}
         - ref: common/led-indicator@1
           id: led-sta
           at: [193.4, 36.1]
