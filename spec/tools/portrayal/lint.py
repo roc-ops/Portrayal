@@ -263,7 +263,7 @@ RULES = {
     "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
-    "L105": ("device",     "a placement's `interfaces:` are held by a port, named once in the view, and never the id of a placement or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
+    "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
     "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
@@ -6559,6 +6559,39 @@ def lint_device_placement_interfaces(path, data, lib_roots):
                                       f"{owner[i]} and {p.get('id')}")
                 owner.setdefault(i, p.get("id"))
 
+def lint_component_part_interfaces(path, data, lib_roots):
+    """L105 on a component: a part that presents several interfaces (#443).
+
+    The device rule's three faults, read over a contract's `parts:`. A line
+    card's cages are parts, not placements - the FELT-B numbers two ports per
+    SFP cage and says so on the part - so the same collisions are possible
+    and cost the same thing: a DCIM module type listing a name twice, or a
+    port that is not one. A part, element or bay id is the collision here,
+    since those are the names a component offers.
+    """
+    parts = [p for p in (data.get("parts") or []) if isinstance(p, dict)]
+    ids = ({p.get("id") for p in parts if p.get("id")}
+           | set((data.get("elements") or {}).keys())
+           | set((data.get("bays") or {}).keys()))
+    owner = {}
+    for p in parts:
+        ifs = p.get("interfaces")
+        if not ifs:
+            continue
+        ref = p.get("ref") or ""
+        if _contract(ref, lib_roots).get("class") != "port":
+            err(path, "L105", f"{p.get('id')} presents interfaces {', '.join(ifs)} "
+                              f"but {ref} is not a port")
+        for i in ifs:
+            if i in ids:
+                err(path, "L105", f"{p.get('id')} presents interface {i!r}, which is "
+                                  f"also the id of a part, element or bay in this component")
+            if i in owner:
+                err(path, "L105", f"interface {i!r} is presented by both "
+                                  f"{owner[i]} and {p.get('id')}")
+            owner.setdefault(i, p.get("id"))
+
+
 def lint_device_cage_media_disagreement(path, data, lib_roots):
     """L104: a port's declared media and its cage's presented interface
     (`manifest.presented_interface`, looked through a wrapper's `parts:`
@@ -9696,6 +9729,7 @@ def main():
                 lint_component_slots(f, d)
                 lint_component_rj45_lamps(f, d, args.library)
                 lint_component_groups(f, d, args.library)
+                lint_component_part_interfaces(f, d, args.library)
                 lint_quoted_prose(f, d)
             n += 1
         for f in sorted(root.glob("devices/**/device.yaml")):

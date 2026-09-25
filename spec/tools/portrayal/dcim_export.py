@@ -1539,6 +1539,14 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             dropped[ref] = dropped.get(ref, 0) + 1
         if network is not None and mgmt_only(part.get("attrs") or {}, part_role):
             network["mgmt_only"] = True
+        # ONE CAGE, SEVERAL INTERFACES - `build`'s #443 rule, on a card. A
+        # FELT-B cage numbers two ports whether a CSFP or an SFP is seated, and
+        # says so with `interfaces:`; each is exported, typed from the cage as
+        # the one row above was, and the cage itself is not. Only a network
+        # port presents interfaces (L105), so nothing else is split.
+        if network is not None and part.get("interfaces"):
+            ifaces.remove(network)
+            ifaces.extend({**network, "name": iid} for iid in part["interfaces"])
 
     # THE DECLARED INLET, when no part draws one. Second, not first: a composed
     # part knows its own id and there may be several, so it wins wherever it

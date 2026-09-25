@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: felt-c
-version: 1.1.0
+version: 1.2.0
 unplaced: >-
   seated by the LT bays of the 7360 ISAM FX shelves (NFXS-F FX-4, NFXS-E FX-8, NFXS-D FX-16,
   roc-ops/Portrayal#538); the coordinator wires it into their LT `accepts`. Delete this key
@@ -79,9 +79,9 @@ provenance:
     the same opening); group attrs say qsfp-plus 40g because 4 x 10G is the rate the table
     gives.
   interfaces: >-
-    the CSFP's two interfaces per cage cannot be declared here: `interfaces:` is a DEVICE
-    placement key (L105) and a component part admits no such key. Recorded in the group
-    description and as a gap.
+    datasheet - ETSI UDS section 33.4.2.1, ports linearly numbered 1-32, CSFP odd and even: cage n declares `interfaces: [port-{2n-1}, port-{2n}]`, the two ports it numbers
+    whether a CSFP (both) or an SFP (the odd one alone) is seated, so the DCIM module type lists
+    all 32 ports, typed from the cage, and no cage row (roc-ops/Portrayal#443).
   rate: >-
     datasheet - `sfp-plus: 16` is Table 105's SFP+ maximum (every cage); `qsfp: 2` types the
     crossLT cages as 40G QSFP+ from Table 107's 4 x 10G row. The CSFP (32 x FE/GE) and SFP (16 x
@@ -141,9 +141,8 @@ groups:
     attrs: {media: sfp-plus, speed: 10g}
     description: >-
       the 16 SFP cages, SFP 1-16 (CSFP FE/GE, SFP FE/GE/2.5G or SFP+ 10G). Cage n presents
-      ports 2n-1 and 2n with a CSFP and port 2n-1 alone with an SFP/SFP+; the two CSFP
-      interfaces are not declared per cage because a component part cannot carry
-      `interfaces:`. Port groups G1-G4 each take either SFP+ or any mix of CSFP and SFP.
+      ports 2n-1 and 2n with a CSFP and port 2n-1 alone with an SFP/SFP+; each cage declares
+      both as its `interfaces:`. Port groups G1-G4 each take either SFP+ or any mix of CSFP and SFP.
   link-leds:
     term: LED
     role: indicator
@@ -174,52 +173,52 @@ parts:
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.7, 31.2], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: yellow, color: '#f5c400'}]}}
   - {ref: common/led-dot@1, id: led-q1, group: qsfp-leds, at: [8.77, 36.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
   - {ref: common/led-dot@1, id: led-q2, group: qsfp-leds, at: [13.7, 36.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-1, group: sfp, at: [4.95, 51.42], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-1, interfaces: [port-1, port-2], group: sfp, at: [4.95, 51.42], rotate: 90}
   - {ref: common/led-dot@1, id: led-1, group: link-leds, at: [17.68, 52.77], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-2, group: link-leds, at: [17.68, 58.48], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-2, group: sfp, at: [4.95, 65.67], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-2, interfaces: [port-3, port-4], group: sfp, at: [4.95, 65.67], rotate: 90}
   - {ref: common/led-dot@1, id: led-3, group: link-leds, at: [17.68, 67.03], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-4, group: link-leds, at: [17.68, 72.72], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-3, group: sfp, at: [4.95, 84.38], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-3, interfaces: [port-5, port-6], group: sfp, at: [4.95, 84.38], rotate: 90}
   - {ref: common/led-dot@1, id: led-5, group: link-leds, at: [17.68, 85.73], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-6, group: link-leds, at: [17.68, 91.43], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-4, group: sfp, at: [4.95, 98.63], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-4, interfaces: [port-7, port-8], group: sfp, at: [4.95, 98.63], rotate: 90}
   - {ref: common/led-dot@1, id: led-7, group: link-leds, at: [17.68, 99.98], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-8, group: link-leds, at: [17.68, 105.68], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-5, group: sfp, at: [4.95, 117.33], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-5, interfaces: [port-9, port-10], group: sfp, at: [4.95, 117.33], rotate: 90}
   - {ref: common/led-dot@1, id: led-9, group: link-leds, at: [17.68, 118.69], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-10, group: link-leds, at: [17.68, 124.38], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-6, group: sfp, at: [4.95, 131.59], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-6, interfaces: [port-11, port-12], group: sfp, at: [4.95, 131.59], rotate: 90}
   - {ref: common/led-dot@1, id: led-11, group: link-leds, at: [17.68, 132.94], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-12, group: link-leds, at: [17.68, 138.63], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-7, group: sfp, at: [4.95, 150.29], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-7, interfaces: [port-13, port-14], group: sfp, at: [4.95, 150.29], rotate: 90}
   - {ref: common/led-dot@1, id: led-13, group: link-leds, at: [17.68, 151.64], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-14, group: link-leds, at: [17.68, 157.34], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-8, group: sfp, at: [4.95, 164.54], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-8, interfaces: [port-15, port-16], group: sfp, at: [4.95, 164.54], rotate: 90}
   - {ref: common/led-dot@1, id: led-15, group: link-leds, at: [17.68, 165.89], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-16, group: link-leds, at: [17.68, 171.59], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-9, group: sfp, at: [4.95, 183.24], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-9, interfaces: [port-17, port-18], group: sfp, at: [4.95, 183.24], rotate: 90}
   - {ref: common/led-dot@1, id: led-17, group: link-leds, at: [17.68, 184.59], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-18, group: link-leds, at: [17.68, 190.29], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-10, group: sfp, at: [4.95, 197.49], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-10, interfaces: [port-19, port-20], group: sfp, at: [4.95, 197.49], rotate: 90}
   - {ref: common/led-dot@1, id: led-19, group: link-leds, at: [17.68, 198.84], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-20, group: link-leds, at: [17.68, 204.54], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-11, group: sfp, at: [4.95, 216.2], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-11, interfaces: [port-21, port-22], group: sfp, at: [4.95, 216.2], rotate: 90}
   - {ref: common/led-dot@1, id: led-21, group: link-leds, at: [17.68, 217.55], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-22, group: link-leds, at: [17.68, 223.25], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-12, group: sfp, at: [4.95, 230.45], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-12, interfaces: [port-23, port-24], group: sfp, at: [4.95, 230.45], rotate: 90}
   - {ref: common/led-dot@1, id: led-23, group: link-leds, at: [17.68, 231.8], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-24, group: link-leds, at: [17.68, 237.5], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-13, group: sfp, at: [4.95, 249.27], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-13, interfaces: [port-25, port-26], group: sfp, at: [4.95, 249.27], rotate: 90}
   - {ref: common/led-dot@1, id: led-25, group: link-leds, at: [17.68, 250.62], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-26, group: link-leds, at: [17.68, 256.32], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-14, group: sfp, at: [4.95, 263.52], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-14, interfaces: [port-27, port-28], group: sfp, at: [4.95, 263.52], rotate: 90}
   - {ref: common/led-dot@1, id: led-27, group: link-leds, at: [17.68, 264.87], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-28, group: link-leds, at: [17.68, 270.57], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-15, group: sfp, at: [4.95, 282.33], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-15, interfaces: [port-29, port-30], group: sfp, at: [4.95, 282.33], rotate: 90}
   - {ref: common/led-dot@1, id: led-29, group: link-leds, at: [17.68, 283.68], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-30, group: link-leds, at: [17.68, 289.38], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
-  - {ref: std/sfp-ganged@1, id: sfp-16, group: sfp, at: [4.95, 296.58], rotate: 90}
+  - {ref: std/sfp-ganged@1, id: sfp-16, interfaces: [port-31, port-32], group: sfp, at: [4.95, 296.58], rotate: 90}
   - {ref: common/led-dot@1, id: led-31, group: link-leds, at: [17.68, 297.93], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: common/led-dot@1, id: led-32, group: link-leds, at: [17.68, 303.63], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
   - {ref: std/qsfp28@1, id: qsfp-1, group: qsfp, at: [2.16, 319.48], rotate: 90, attrs: {function: 'cross-LT link to the peer FELT-C (Nokia DAC) or 4x10G user interface'}}
