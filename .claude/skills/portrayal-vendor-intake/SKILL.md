@@ -155,11 +155,30 @@ The rules that two OOM kills and one lost evening bought:
    (`<stem>-p0001-0300.pdf` naming); reassembly is just the shared stem.
 3. **Echo an EXIT marker per file** (`PERFILE-EXIT(<file>)=$?`). Over ssh,
    `cmd | tee log` eats exit codes and a dead run looks like a quiet one.
+   `extract.py` exits 1 when any file it was given FAILed (it still carries
+   on past the failure), so the marker is trustworthy. Before that it
+   printed `FAIL` and exited 0; for a log from an older run, grep `^FAIL`.
 4. If converting on a remote box: `nohup ... &` survives the ssh dropping,
    but the launching ssh may hang holding stdout - launch, kill the ssh,
    verify by reconnecting and checking the process and the log.
 5. Finish with one `--reclassify` pass over everything: banner/icon
    detection uses a cross-document hash pool that only exists at the end.
+   Pass every PDF of the corpus in that ONE invocation - the pool is built
+   from the files named on the command line, so a per-file reclassify
+   counts only that file's repeats and keeps a banner that shows up fewer
+   than ten times per document (a two-page datasheet always). The knobs, each shaped by a
+   publisher that broke the default:
+   - `--icon-px N` - the icon size floor (default 200). Too high for small
+     module front views; the CH3000 corpus needs 80.
+   - `--banner-max-h N` - a picture at least N px tall is never a banner
+     (default off). For page-width charts drawn in the header strip colours,
+     which share its hash: CH3000 needs 200 (every true banner is under 130).
+     It cannot be a default: the Cisco cityscape banner is 370 tall and the
+     Juniper "IN THIS SECTION" boxes reach 640.
+   - `--no-banner` - the banner rule off entirely, for a publisher whose
+     every figure is drawn at page width.
+   Record the exact sort command in the intake `SOURCES.md`, so the next
+   reclassify repeats it.
 6. Watch the run with a monitor that reports **failures and completion,
    not progress** - and also reports the runner dying, because silence
    looks identical to "still working."
