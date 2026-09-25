@@ -1,0 +1,170 @@
+format: 1
+kind: module
+name: m10-1gb-hs-sfp
+version: 1.0.0
+unplaced: >-
+  seated by the classic MDA bays (mda-1, mda-2) of nokia/iom3-xp@1 (SR7 22.7 p69 Table 11: the
+  IOM3-XP-C takes "MDA, HS-MDA"); the coordinator wires it into the IOM3-XP's accepts list, which
+  is not edited in this change. Delete this key when the first bay names this part.
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 10-port 1000BASE HS SFP MDA, M10-1GB-HS-SFP, the
+  first-generation High Scale MDA: a classic half-slot MDA with ten SFP cages in two rows of five
+  at the right (1-5 across the top, 6-10 across the bottom, with a wider gap either side of the
+  middle column), a printed Lnk/Act grid with one lamp pair per port left of them, the Stat and
+  Pwr lamps at the far left, the model legend at the lower left and a cross-slotted captive screw
+  on each lower end wing. Takes Gigabit Ethernet SFPs, not copper ones. Authored horizontal; an
+  SR-12 IOM3-XP seats it on end with the carrier.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 5 is
+  fitted per axis to that face.
+attrs:
+  model: M10-1GB-HS-SFP
+  cli-type: m10-1gb-hs-sfp
+  sfp: 10
+  power-draw-max-w: 60
+provenance:
+  sources: >-
+    datasheet - 7x50 High Scale (HS) MDA Installation Guide 93-0235-02-03 (HS): p28 Figure 5 and
+    Table 7 (the face, its lamps, ports and screws), p17 Table 3 (power) and Table 5 (optics
+    power), p18-19 (the mda-type CLI example), p9 (the carriers it was written for). SR7 22.7
+    3HE18643AAAATQZZA03 p106 Table 47 (MDA size) and p69 Table 11 (IOM3-XP MDA support). SR-7
+    Chassis Installation Guide 3HE09917AAAATQZZA02 p49 Table 17 (power, a second reading).
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - HS p28 Figure 5 (art MDA0060), vector, rendered at 1200 dpi. Fitted per axis: 4618 px
+    between the plate's side lines to 190.5 (24.24 px/mm) and 847 px from the top line to the
+    bottom of the centre band to 35.4 (23.93 px/mm), 1.3 percent apart - the same numbers
+    nokia/m1-10gb-xp-xfp@1 takes off MDA-XP guide Figure 4, because this is the same MDA00xx
+    artwork family. The outline is that family's: end wings to y 28.3, notch edges at x 15.5 and
+    175.0, the centre band to the bottom edge with its inner line at y 33.3, the top lip at y
+    1.55. The small blocks outside each side line are the side guides and are not face. Cages
+    drawn 15.82 x 10.99 in two rows centred y 8.38 and 22.36, columns centred x 94.96, 111.49,
+    129.92, 148.38 and 164.91: columns 1-2 and 4-5 sit 0.7 apart and the middle one 2.6 from each
+    neighbour, so the pitch is NOT regular (16.53, 18.43, 18.46, 16.53) and each cage is placed on
+    its own drawn box. Port numerals centred under their cages, 1-5 in the gap between the rows
+    (baseline 16.1) and 6-10 below the bottom row (baseline 30.4). Stat (11.28, 6.37) and Pwr
+    (11.28, 11.55), 2.8 across, legends to their left ending x 9.2. The Lnk/Act grid is two printed
+    boxes, x 19.37-43.85, y 4.41-13.46 and 17.34-26.39, each holding two rows of five lamps drawn
+    2.8 across on a 5.10 pitch at x 21.49-41.90: Lnk at y 6.37 and Act at 11.55 for ports 1-5
+    (numerals above, baseline 4.0), Lnk 19.28 and Act 24.46 for ports 6-10 (numerals baseline
+    16.9); the words Lnk and Act printed right of each row from x 45.0. Captive screws (key 6) at
+    (7.6, 22.9) and (183.05, 22.9), cross-slotted, each over a tab in the notch, 1.55 deep on the
+    left and 3.1 on the right, as MDA-XP guide Figures 4 and 9 draw them. Model legend (key 5) at
+    the lower LEFT, bold, x 18.73-40.18, baseline 32.2.
+  bracket: >-
+    drawing - the bracket right of the grid (x 51.4, y 4.7-26.5) carries a stub to the leader of
+    callout 3 and is part of that callout, not printing on the face; it is not drawn.
+  legend: 'drawing - read at 1200 dpi: the legend prints M10-1GB-HS-SFP, bold, matching Table 7 key 5'
+  cages: >-
+    drawing + standard - separate cages on an irregular pitch, every gap wider than a ganged block
+    leaves, so each port is std/sfp@1 (SFF-8432 aperture 14.5 x 10.0) centred on its drawn box;
+    the box's remaining margin is drawn as the bezel. ORIENTATION IS NOT READ: the figure draws
+    empty boxes with no latch or tab, and no photograph of this card is held, so the rows take the
+    library's belly-to-belly default, upper 0 over lower 180 (L108).
+  lamps: >-
+    datasheet - HS p28 Table 7: Status green blinking initializing, green up, amber operationally
+    down, off administratively down; Power blue on, off no power; Port LEDs - Link green link
+    established at 1000 Mb/s, amber slow blinking no SFP installed, amber fast blinking loopback,
+    amber optics installed and no link, unlit disabled; Active green active, amber error, unlit no
+    activity. No blink rates are given, so slow and fast are both `blinking`. Every lamp is
+    composed as common/led-indicator@1 at its drawn centre; at the 5.10 grid pitch the 4.0 part
+    leaves 1.1 between neighbours.
+  power: >-
+    datasheet - HS p17 Table 3: M10-1GB-HS-SFP 60 W maximum; SR-7 guide 3HE09917AAAATQZZA02 p49
+    Table 17 gives the same 60. SFP optics 1 W each (HS p17 Table 5), not included.
+  part-number: >-
+    not held - searched every staged Nokia PDF for HS-SFP, HS-XFP, "HS MDA" and HS-MDA: the chassis
+    guides give this card a power row by model name only, and the only 3HE numbers printed beside
+    an HS card are the HS-MDA2's (3HE06432AA, 3HE06433AA). Left out.
+  cli-type: 'datasheet - HS p18 (Step 3 and the example) and p19 (show mda output) print mda-type m10-1gb-hs-sfp'
+  carrier: >-
+    datasheet - HS p9 says the HS MDA "is designed for use in" SR-7/SR-12 IOM-20Gs and IOM2s, while
+    the same guide's p19 example provisions it in an iom3-xp card and SR7 22.7 p69 Table 11 lists
+    HS-MDA among the IOM3-XP-C's MDAs. The library models only the IOM3-XP of those carriers.
+  colour: >-
+    estimated - no photograph of an HS MDA is held. Drawn in the charcoal of the SR-7/SR-12 card
+    family, printing in the family's white. A gap.
+  logo-zone: 'reserved on the plain plate between the grid and the cages; Figure 5 draws no mark'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  lifecycle: >-
+    searched only the staged corpus; the HS MDA guide dates from 2009 and the 13.0 and older
+    chassis guides carry its power row; the 14.0 and later ones list only the HS-MDA2. No
+    end-of-sale notice searched.
+  gaps: >-
+    Colour is estimated. The cage orientation is the library default, not a reading. No part
+    number is held.
+elements:
+  screw-left: {at: [2.6, 17.9], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [178.05, 17.9], size: [10.0, 10.0], class: screw}
+  model-label: {at: [18.73, 29.9], size: [21.45, 2.4], class: label}
+  logo-zone: {at: [56.0, 6.0], size: [26.0, 14.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      the 10 SFP cages, Gigabit Ethernet, 1-5 left to right across the top and 6-10 left to right
+      across the bottom, as Figure 5 numbers them
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Lnk lamp per port in the printed grid, the upper lamp of each pair
+  activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Act lamp per port in the printed grid, the lower lamp of each pair
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the far left
+parts:
+  - {ref: std/sfp@1, id: port-1, group: sfp, at: [87.71, 3.38], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-2, group: sfp, at: [104.24, 3.38], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-3, group: sfp, at: [122.67, 3.38], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-4, group: sfp, at: [141.13, 3.38], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-5, group: sfp, at: [157.66, 3.38], attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-6, group: sfp, at: [87.71, 17.36], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-7, group: sfp, at: [104.24, 17.36], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-8, group: sfp, at: [122.67, 17.36], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-9, group: sfp, at: [141.13, 17.36], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: std/sfp@1, id: port-10, group: sfp, at: [157.66, 17.36], rotate: 180, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/led-indicator@1, id: lnk-1, group: link-leds, at: [19.49, 4.37], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-2, group: link-leds, at: [24.58, 4.37], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-3, group: link-leds, at: [29.69, 4.37], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-4, group: link-leds, at: [34.80, 4.37], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-5, group: link-leds, at: [39.90, 4.37], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-6, group: link-leds, at: [19.49, 17.28], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-7, group: link-leds, at: [24.58, 17.28], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-8, group: link-leds, at: [29.69, 17.28], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-9, group: link-leds, at: [34.80, 17.28], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-10, group: link-leds, at: [39.90, 17.28], attrs: {description: 'Lnk - green: valid communications link established, 1000 Mb/s; amber slow blinking: no SFP installed; amber fast blinking: loopback; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-1, group: activity-leds, at: [19.49, 9.55], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-2, group: activity-leds, at: [24.58, 9.55], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-3, group: activity-leds, at: [29.69, 9.55], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-4, group: activity-leds, at: [34.80, 9.55], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-5, group: activity-leds, at: [39.90, 9.55], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-6, group: activity-leds, at: [19.49, 22.46], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-7, group: activity-leds, at: [24.58, 22.46], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-8, group: activity-leds, at: [29.69, 22.46], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-9, group: activity-leds, at: [34.80, 22.46], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-10, group: activity-leds, at: [39.90, 22.46], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition; unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.28, 4.37], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; off: administratively down, shut down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.28, 9.55], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
