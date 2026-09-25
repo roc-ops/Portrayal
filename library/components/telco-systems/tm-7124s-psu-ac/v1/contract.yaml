@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: tm-7124s-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable AC supply of the Telco Systems TM-7124S (T-Metro 7124S), ordered as
+  TM-7124S-ACPS: an IEC C14 inlet, a rocker switch, AC and +12V lamps and a thumbscrew
+  at each end.
+size: {w: 81.7, h: 30.97}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: TM-7124S-ACPS
+  power-absent: not-published
+  input: ac
+  inlet: c14
+  input-voltage: 100-240 VAC, 50-60 Hz, 2 A (face)
+provenance:
+  size: >-
+    estimated - the stencil master TM-7124S (F) seats this module in the upper supply bay at
+    81.86 x 30.98 (bay 81.7 x 30.97); the 2025 render shows two of them stacked at the same
+    place to within 2 mm.
+  power: >-
+    NOT STATED. The data sheets give "100-240VAC, 50/60 Hz, -48VDC, -60VDC and +24VDC nominal"
+    and no supply rating; the face prints only the input, "100-240V~50-60Hz 2A".
+  elements: >-
+    drawing - the stencil master's own vectors: inlet surround 30.85 x 21.23 at (11.61, 1.81),
+    rocker 20.14 x 14.32 at (45.17, 7.94), lamps 3.84 x 1.64 at (55.53, 4.18) and (61.49,
+    4.18), thumbscrews 6.36 across at (4.68, 17.83) and (76.61, 17.83). The render agrees on
+    every one; the inlet is upright (unrotated C14), as both draw it.
+states: [absent]
+elements:
+  thumbscrew-left: {at: [1.5, 14.65], size: [6.36, 6.36], class: fastener}
+  thumbscrew-right: {at: [73.43, 14.65], size: [6.36, 6.36], class: fastener}
+  switch: {at: [45.17, 7.94], size: [20.14, 14.32], class: button}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [13.03, 2.42]}
+  - {ref: common/led-rect-sm@1, id: led-ac, at: [56.05, 4.2]}
+  - {ref: common/led-rect-sm@1, id: led-12v, at: [62.01, 4.2]}
+skins: [default]

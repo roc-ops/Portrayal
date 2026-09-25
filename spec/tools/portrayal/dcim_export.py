@@ -403,6 +403,10 @@ PART_POWER = {
     # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
     # plug pulled out whole rather than lugs lifted off screws.
     "common/dc-terminal-plug-2": "dc-terminal",
+    # AND A FOUR-POLE ONE CARRYING TWO FEEDS: the TM-7124S lands -48 V A and B
+    # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
+    # face. It is still where a supply's wire is landed, so the same row.
+    "telco-systems/tm-7124s-dc-feed": "dc-terminal",
     # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
     # this takes `other` - the treatment PART_RF gives an SMB timing input, which
     # says "a thing this schema has no name for" instead of naming a neighbour.
