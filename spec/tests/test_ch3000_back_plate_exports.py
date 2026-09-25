@@ -91,6 +91,9 @@ HALF_DEPTH_DROPS = {
     "np34c01": (SC, 8), "np34f01d": (SC, 6), "op34f1d": (SC, 6),
     "np34m05": (SC, 9), "op34m5x": (SC, 9), "op34d5x": (SC, 9),
     "np34m08": (LC, 6), "op34m8c": (LC, 6), "op34m10c": (LC, 7), "np34b10s": (LC, 6),
+    "np33f01": (SC, 3), "op33f1x": (SC, 3), "np34s04": (SC, 8), "op34s4s": (SC, 8),
+    "np35c0x": (SC, 6), "op31m2d": (SC, 8), "op35f1": (SC, 3), "op35f1d": (SC, 6),
+    "op35f4s": (SC, 4), "op35d4x": (SC, 7), "op35d8cf": (SC, 9),
 }
 
 
