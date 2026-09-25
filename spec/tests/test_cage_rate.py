@@ -497,15 +497,15 @@ def _nokia_export(kind, model):
 
 
 def test_the_me3_cfp2_dco_card_exports_200g():
-    ifaces = _nokia_export("module-types", "3HE16555AA")
+    ifaces = _nokia_export("module-types", "ME3-200GB-CFP2-DCO")
     assert ifaces == {"c1": "200gbase-x-cfp2", "c2": "200gbase-x-cfp2",
                       "c3": "200gbase-x-cfp2"}
 
 
 def test_the_ccm_e_mgmt_and_oes_ports_are_100base_tx():
-    ifaces = _nokia_export("module-types", "3HE16502AA")
-    ethernet = {n: t for n, t in ifaces.items() if "base-" in t}
-    assert ethernet and set(ethernet.values()) == {"100base-tx"}, ethernet
+    ifaces = _nokia_export("module-types", "7750 SR-e CCM-e")
+    assert ifaces["mgmt"] == ifaces["oes"] == "100base-tx"
+    assert not {n for n, t in ifaces.items() if t == "1000base-t"}
 
 
 @pytest.mark.parametrize("model", ["7750 SR-1 AC", "7750 SR-1 DC"])
