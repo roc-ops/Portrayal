@@ -1,0 +1,411 @@
+format: 1
+kind: device
+name: xm-3352
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: XM-3352
+aliases:
+- {name: X-Marc 3352, kind: marketing, note: 'printed on the faceplate (X-MARC 3352) and on the stencil master'}
+portfolio: {line: Carrier Ethernet, family: Network Interface Device, series: X-Series}
+description: >-
+  Telco Systems (BATM Networks) XM-3352, the X-Marc 3352 - a compact half-width 1RU 10G Carrier
+  Ethernet NID: four 10G SFP+ uplinks (1/1-1/4) and twelve 1G SFP downlinks (2/1-2/12), each with
+  a bar lamp, a lamped MNG RJ45, a USB console, a reset button and SYS / PWR2 / PWR1 lamps, with
+  two swappable AC or DC supply modules stacked at the left.
+profile: networking
+stack-exceptions:
+- pairs: [[port-2-3, port-1-1], [port-2-4, port-1-2], [port-2-5, port-1-3], [port-2-6, port-1-4],
+    [port-2-7, port-2-1], [port-2-8, port-2-2]]
+  reason: >-
+    Photo-measured, in provenance.ports. These are two single rows, not a stacked pair - 20.7 mm
+    apart with a row of vent slots and the legend row between them - and the render shows the cage
+    lip at the BOTTOM of every cage in both rows, contacts at the top: both rows upright, rotate 0,
+    which is the library's upright (bail up, lip down) - not the upper 0 / lower 180 of a stack.
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      XM-3352 data sheet (telco.com 2026-08); the faceplate prints X-MARC 3352.
+  sources:
+    confidence: datasheet
+    note: >-
+      The data sheet (2026-08), the vendor render telco.com 2024/10/XM-3352@2x-1.png (1678 px, seen
+      from slightly above, about 5 px/mm on the face), and the NetZoom stencil "BATM X-Series"
+      (2025-03-07), master X-Marc 3352 (F). No installation guide is public.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Half-width 1RU, 220 x 44 x 266 - the data sheet's "22 cm x 26.6 cm x 4.4 cm" and "half-19"
+      wide" (ordering table). No weight is published. The spec table's "1U, 19-inch
+      rack-mountable" is read with the ordering table's half-width: a bracket or tray, not part of
+      the face.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      POSITIONS ARE THE RENDER'S. Its face is foreshortened vertically (201 px tall where its 1094
+      px width implies 219); rectifying the four face corners (316,369 1410,370 1410,571 318,572)
+      onto the data sheet's 220 x 44 takes that out, and every cage, lamp, jack, vent and legend
+      is placed from wall, dark-run, colour-mask, glyph-cluster and centroid scans of that 10
+      px/mm image. The stencil master is used for arrangement only.
+  ports:
+    confidence: photo-measured
+    note: >-
+      Upper row: 2/3-2/6, 2/7-2/8 and 2/9-2/12 in three ganged blocks (cage walls 56.2-114.0,
+      118.1-147.1, 151.0-209.2, a 14.45 pitch); lower row: 1/1-1/4 and 2/1-2/2 (walls 56.4-114.1
+      and 120.1-149.1). std/sfp-ganged@1, every cage upright (rotate 0): the render shows the cage
+      lip at the bottom of each cage in both rows (see stack-exceptions). Each port has one bar lamp under it, centred
+      on the cage (the render reads 0.1-0.4 mm right, about 1-2 px). Every legend sits LEFT of its
+      lamp except 2/1 and 2/2, which the face prints to the RIGHT of theirs, with "LNK/ACT" left of
+      the 2/1 lamp - drawn as printed. The ordering table's "4x10G SFP+ for uplink, 12x1G SFP for
+      downlink" makes 1/1-1/4 the SFP+ uplinks.
+  mng-jack:
+    confidence: photo-measured
+    note: >-
+      MNG is a lamped Ethernet RJ45 whose windows are at its TOP corners (green at 165.5, amber at
+      176.8, y 27.3) while its latch key is at the bottom - a combination common/rj45-eth@1 cannot
+      draw by rotation, so it is the bare std/rj45@2, key down, with the two windows placed as
+      common/led-rect-sm@1, for: mng; printed LNK/ACT and 100M above them name them - 100M printed
+      0.7 mm right of its window (glyphs centre at 177.5), placed as printed with L61 baselined.
+  mng-speed:
+    confidence: borrowed
+    note: >-
+      BORROWED, NOT STATED. The data sheet lists "CLI, SNMP, REST API" and the ordering table
+      "CONSOLE and SNMP ports for management", with no rate; the face prints "100M" over MNG's
+      right lamp, which names a lamp state rather than the port's rate. 1g is taken from the
+      TM-8104's OOB port on the maintainer's ruling; the mng-speed gap stays open.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      SYS, PWR2 and PWR1, top to bottom (206.2 across; 24.8, 30.3, 35.7 down), legends to the
+      right. No document says what any state means.
+  power:
+    confidence: datasheet
+    note: >-
+      "Dual redundant power supplies", "100-240V AC, 48-60V DC"; ordered with one AC
+      (XM-3352-AC-NA) or DC (XM-3352-DC) supply, two of either (-2AC-NA, -2DC), or one of each
+      (XM-3352-AC/DC, as the render shows it: AC above, DC below). No consumption figure is
+      published.
+attrs:
+  physical:
+    overall-mm: 220 x 44 x 266 (data sheet)
+    mounting: half 19-inch width
+  power:
+    input-voltage: 100-240 VAC, or 48-60 VDC (module face "-48V")
+    psu-redundancy: dual redundant, swappable AC or DC supply modules
+  environmental:
+    operating-temp: -20 to 65 C (extended temperature)
+  performance:
+    switching-capacity: 52 Gbps
+  features:
+    services: MEF CE 2.0; MPLS L2VPN, L3VPN
+    timing: SyncE, IEEE 1588v2 (TC)
+    resiliency: dual supplies, LACP (802.1ax), ITU-T G.8031/32, VRRP, MPLS PW redundancy
+    optics-sfp-plus: '10GBASE (data sheet, "4 x 10G SFP+")'
+    optics-sfp: '1000BASE (data sheet, "12 x 1G SFP")'
+  management:
+    local: CONSOLE on USB, MNG out-of-band Ethernet on RJ45
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 220.0
+  height: 44.0
+  depth: 266
+  ru: 1
+  power: ac
+  color: '#d5d7d9'
+  silk: '#2f3337'
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; hardware documentation is on a support portal behind a
+    login, whose contact is on telco.com/support.
+  wanted: the XM-3352 hardware installation guide, from the BATM support portal.
+- what: weight
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: The data sheet gives no weight.
+  wanted: the installation guide's physical specifications.
+- what: single-supply-blank
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The single-supply builds leave one bay without a supply; whether it ships with a blank cover,
+    and what one looks like, nothing held shows, so those configurations draw the bay empty.
+  wanted: a photograph of a single-supply unit's front.
+- what: rear
+  scope: [rear]
+  reason: needs-photo
+  note: Nothing held shows the rear.
+  wanted: a photograph of the rear.
+- what: mng-speed
+  scope: [mng]
+  reason: vendor-silent
+  note: >-
+    No rate is stated for the MNG out-of-band port; 1g is carried as a BORROWED value (see
+    provenance.mng-speed), not as a finding.
+  wanted: the installation guide's interface table.
+groups:
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four 10G SFP+ uplinks, 1/1 to 1/4.
+  downlink:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the twelve 1G SFP downlinks, 2/1 to 2/12.
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the MNG out-of-band Ethernet port and the USB console.
+  mng-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: LNK/ACT and 100M, MNG's two lamp windows.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: SYS, PWR2 and PWR1.
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: data sheet - "Dual redundant power supplies"; the ordering table offers one or two, AC or DC.
+    description: two swappable supply bays stacked at the left, AC or DC in either.
+views:
+  front:
+    size: {w: 220.0, h: 44.0}
+    panel:
+      decor:
+        - {id: vent-top-1, kind: vent, at: [62.15, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-2, kind: vent, at: [69.25, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-3, kind: vent, at: [76.35, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-4, kind: vent, at: [83.45, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-5, kind: vent, at: [90.55, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-6, kind: vent, at: [97.65, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-7, kind: vent, at: [104.75, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-8, kind: vent, at: [111.85, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-9, kind: vent, at: [118.95, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-10, kind: vent, at: [126.05, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-11, kind: vent, at: [133.15, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-12, kind: vent, at: [140.25, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-13, kind: vent, at: [147.35, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-14, kind: vent, at: [154.45, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-15, kind: vent, at: [161.55, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-16, kind: vent, at: [168.65, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-17, kind: vent, at: [175.75, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-18, kind: vent, at: [182.85, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-19, kind: vent, at: [189.95, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-20, kind: vent, at: [197.05, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-top-21, kind: vent, at: [204.15, 0.6], size: [4.6, 1.8], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-1, kind: vent, at: [59.95, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-2, kind: vent, at: [66.2, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-3, kind: vent, at: [72.45, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-4, kind: vent, at: [78.7, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-5, kind: vent, at: [84.95, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-6, kind: vent, at: [91.2, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-7, kind: vent, at: [97.45, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-8, kind: vent, at: [103.7, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-9, kind: vent, at: [109.95, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-10, kind: vent, at: [116.2, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-11, kind: vent, at: [122.45, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-12, kind: vent, at: [128.7, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-13, kind: vent, at: [134.95, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-mid-14, kind: vent, at: [141.2, 23.0], size: [4.5, 2.0], rx: 0.8, fill: '#2b2e32'}
+        - {id: vent-oval-1, kind: vent, at: [153.75, 27.95], size: [4.6, 2.3], rx: 1.15, fill: '#2b2e32'}
+        - {id: vent-oval-2, kind: vent, at: [153.75, 33.15], size: [4.6, 2.3], rx: 1.15, fill: '#2b2e32'}
+        - {id: vent-oval-3, kind: vent, at: [153.75, 38.25], size: [4.6, 2.3], rx: 1.15, fill: '#2b2e32'}
+        - {id: sfp-block-1, kind: port-shell, at: [55.9, 7.3], size: [58.4, 11.2], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
+        - {id: sfp-block-2, kind: port-shell, at: [117.8, 7.3], size: [29.6, 11.2], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
+        - {id: sfp-block-3, kind: port-shell, at: [150.7, 7.3], size: [58.8, 11.2], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
+        - {id: sfp-block-4, kind: port-shell, at: [56.1, 28.0], size: [58.3, 11.2], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
+        - {id: sfp-block-5, kind: port-shell, at: [119.8, 28.0], size: [29.6, 11.2], rx: 0.3, stroke: '#5c6167', stroke-width: 0.35}
+        - {id: laser-label, kind: label-plate, at: [214.8, 21.0], size: [3.4, 20.2], rx: 0.4, fill: '#9aa0a6'}
+      cutouts:
+        - {id: port-2-3, at: [56.3, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-3, at: [62.03, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-4, at: [70.75, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-4, at: [76.48, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-5, at: [85.2, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-5, at: [90.93, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-6, at: [99.66, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-6, at: [105.38, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-7, at: [118.22, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-7, at: [123.95, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-8, at: [132.72, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-8, at: [138.45, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-9, at: [151.16, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-9, at: [156.88, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-10, at: [165.69, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-10, at: [171.42, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-11, at: [180.25, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-11, at: [185.98, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-12, at: [194.79, 7.7], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-12, at: [200.52, 19.1], size: [2.8, 1.6], shape: rect}
+        - {id: port-1-1, at: [56.48, 28.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-1-1, at: [62.21, 39.8], size: [2.8, 1.6], shape: rect}
+        - {id: port-1-2, at: [70.92, 28.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-1-2, at: [76.64, 39.8], size: [2.8, 1.6], shape: rect}
+        - {id: port-1-3, at: [85.33, 28.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-1-3, at: [91.06, 39.8], size: [2.8, 1.6], shape: rect}
+        - {id: port-1-4, at: [99.77, 28.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-1-4, at: [105.49, 39.8], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-1, at: [120.22, 28.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-1, at: [125.95, 39.8], size: [2.8, 1.6], shape: rect}
+        - {id: port-2-2, at: [134.72, 28.4], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-2-2, at: [140.45, 39.8], size: [2.8, 1.6], shape: rect}
+        - {id: mng, at: [163.4, 24.55], size: [15.8, 13.2], shape: rect}
+        - {id: usb-console, at: [184.1, 24.6], size: [4.5, 12.0], shape: rect}
+        - {id: btn-reset, at: [195.15, 32.2], size: [4.0, 4.0], shape: circle}
+        - {id: led-sys, at: [204.2, 22.8], size: [4.0, 4.0], shape: circle}
+        - {id: led-pwr2, at: [204.2, 28.3], size: [4.0, 4.0], shape: circle}
+        - {id: led-pwr1, at: [204.2, 33.7], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [61.43, 20.6], text: 2/3, font-size: 1.9, anchor: end, for: port-2-3}
+      - {at: [75.88, 20.6], text: 2/4, font-size: 1.9, anchor: end, for: port-2-4}
+      - {at: [90.33, 20.6], text: 2/5, font-size: 1.9, anchor: end, for: port-2-5}
+      - {at: [104.78, 20.6], text: 2/6, font-size: 1.9, anchor: end, for: port-2-6}
+      - {at: [123.35, 20.6], text: 2/7, font-size: 1.9, anchor: end, for: port-2-7}
+      - {at: [137.85, 20.6], text: 2/8, font-size: 1.9, anchor: end, for: port-2-8}
+      - {at: [156.28, 20.6], text: 2/9, font-size: 1.9, anchor: end, for: port-2-9}
+      - {at: [170.82, 20.6], text: 2/10, font-size: 1.9, anchor: end, for: port-2-10}
+      - {at: [185.38, 20.6], text: 2/11, font-size: 1.9, anchor: end, for: port-2-11}
+      - {at: [199.92, 20.6], text: 2/12, font-size: 1.9, anchor: end, for: port-2-12}
+      - {at: [61.61, 41.3], text: 1/1, font-size: 1.9, anchor: end, for: port-1-1}
+      - {at: [76.04, 41.3], text: 1/2, font-size: 1.9, anchor: end, for: port-1-2}
+      - {at: [90.46, 41.3], text: 1/3, font-size: 1.9, anchor: end, for: port-1-3}
+      - {at: [104.89, 41.3], text: 1/4, font-size: 1.9, anchor: end, for: port-1-4}
+      - {at: [129.35, 41.3], text: 2/1, font-size: 1.9, anchor: start, for: port-2-1}
+      - {at: [143.85, 41.3], text: 2/2, font-size: 1.9, anchor: start, for: port-2-2}
+      - {at: [121.1, 41.19], text: LNK/ACT, font-size: 1.9, anchor: end, for: led-port-2-1}
+      - {at: [161.4, 22.5], text: LNK/ACT, font-size: 1.9, anchor: middle, for: led-mng-lnk-act}
+      - {at: [177.5, 22.5], text: 100M, font-size: 1.9, anchor: middle, for: led-mng-100m}
+      - {at: [171.3, 41.3], text: MNG, font-size: 1.9, anchor: middle, for: mng}
+      - {at: [186.35, 41.3], text: CONSOLE, font-size: 1.9, anchor: middle, for: usb-console}
+      - {at: [197.15, 41.3], text: RST, font-size: 1.9, anchor: middle, for: btn-reset}
+      - {at: [66.3, 6.3], text: TELCO SYSTEMS, font-size: 2.9, anchor: middle, for: chassis}
+      - {at: [93.2, 6.3], text: X-MARC 3352, font-size: 1.9, anchor: end, for: chassis}
+      - {at: [209.2, 25.39], text: SYS, font-size: 1.9, anchor: start, for: led-sys}
+      - {at: [209.2, 30.89], text: PWR2, font-size: 1.9, anchor: start, for: led-pwr2}
+      - {at: [209.2, 36.29], text: PWR1, font-size: 1.9, anchor: start, for: led-pwr1}
+      - {at: [216.9, 31.1], text: Class 1 laser product, font-size: 1.0, anchor: middle, rotate: -90, for: chassis}
+    components:
+      bays:
+        - {id: psu-1, at: [0.3, 0.4], size: {w: 49.8, h: 21.6}, accepts: ['telco-systems/xm3352-psu-ac@1', 'telco-systems/xm3352-psu-dc@1'], default: 'telco-systems/xm3352-psu-ac@1', group: psus, rel-pos: 1}
+        - {id: psu-2, at: [0.3, 22.4], size: {w: 49.8, h: 21.6}, accepts: ['telco-systems/xm3352-psu-ac@1', 'telco-systems/xm3352-psu-dc@1'], default: 'telco-systems/xm3352-psu-dc@1', group: psus, rel-pos: 2}
+      placements:
+        - {ref: 'std/sfp-ganged@1', id: port-2-3, at: [56.3, 7.7], group: downlink, rel-pos: 3}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-3, at: [62.03, 19.1], for: port-2-3, group: port-leds, rel-pos: 7}
+        - {ref: 'std/sfp-ganged@1', id: port-2-4, at: [70.75, 7.7], group: downlink, rel-pos: 4}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-4, at: [76.48, 19.1], for: port-2-4, group: port-leds, rel-pos: 8}
+        - {ref: 'std/sfp-ganged@1', id: port-2-5, at: [85.2, 7.7], group: downlink, rel-pos: 5}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-5, at: [90.93, 19.1], for: port-2-5, group: port-leds, rel-pos: 9}
+        - {ref: 'std/sfp-ganged@1', id: port-2-6, at: [99.66, 7.7], group: downlink, rel-pos: 6}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-6, at: [105.38, 19.1], for: port-2-6, group: port-leds, rel-pos: 10}
+        - {ref: 'std/sfp-ganged@1', id: port-2-7, at: [118.22, 7.7], group: downlink, rel-pos: 7}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-7, at: [123.95, 19.1], for: port-2-7, group: port-leds, rel-pos: 11}
+        - {ref: 'std/sfp-ganged@1', id: port-2-8, at: [132.72, 7.7], group: downlink, rel-pos: 8}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-8, at: [138.45, 19.1], for: port-2-8, group: port-leds, rel-pos: 12}
+        - {ref: 'std/sfp-ganged@1', id: port-2-9, at: [151.16, 7.7], group: downlink, rel-pos: 9}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-9, at: [156.88, 19.1], for: port-2-9, group: port-leds, rel-pos: 13}
+        - {ref: 'std/sfp-ganged@1', id: port-2-10, at: [165.69, 7.7], group: downlink, rel-pos: 10}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-10, at: [171.42, 19.1], for: port-2-10, group: port-leds, rel-pos: 14}
+        - {ref: 'std/sfp-ganged@1', id: port-2-11, at: [180.25, 7.7], group: downlink, rel-pos: 11}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-11, at: [185.98, 19.1], for: port-2-11, group: port-leds, rel-pos: 15}
+        - {ref: 'std/sfp-ganged@1', id: port-2-12, at: [194.79, 7.7], group: downlink, rel-pos: 12}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-12, at: [200.52, 19.1], for: port-2-12, group: port-leds, rel-pos: 16}
+        - {ref: 'std/sfp-ganged@1', id: port-1-1, at: [56.48, 28.4], group: uplink, rel-pos: 1}
+        - {ref: 'common/led-rect-sm@1', id: led-port-1-1, at: [62.21, 39.8], for: port-1-1, group: port-leds, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-1-2, at: [70.92, 28.4], group: uplink, rel-pos: 2}
+        - {ref: 'common/led-rect-sm@1', id: led-port-1-2, at: [76.64, 39.8], for: port-1-2, group: port-leds, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-1-3, at: [85.33, 28.4], group: uplink, rel-pos: 3}
+        - {ref: 'common/led-rect-sm@1', id: led-port-1-3, at: [91.06, 39.8], for: port-1-3, group: port-leds, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-1-4, at: [99.77, 28.4], group: uplink, rel-pos: 4}
+        - {ref: 'common/led-rect-sm@1', id: led-port-1-4, at: [105.49, 39.8], for: port-1-4, group: port-leds, rel-pos: 4}
+        - {ref: 'std/sfp-ganged@1', id: port-2-1, at: [120.22, 28.4], group: downlink, rel-pos: 1}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-1, at: [125.95, 39.8], for: port-2-1, group: port-leds, rel-pos: 5}
+        - {ref: 'std/sfp-ganged@1', id: port-2-2, at: [134.72, 28.4], group: downlink, rel-pos: 2}
+        - {ref: 'common/led-rect-sm@1', id: led-port-2-2, at: [140.45, 39.8], for: port-2-2, group: port-leds, rel-pos: 6}
+        - {ref: 'std/rj45@2', id: mng, at: [163.4, 24.55], group: mgmt, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: MNG - the out-of-band Ethernet port; 1g is BORROWED (see provenance.mng-speed)}
+        - {ref: 'common/led-rect-sm@1', id: led-mng-lnk-act, at: [164.1, 26.5], for: mng, group: mng-leds, rel-pos: 1}
+        - {ref: 'common/led-rect-sm@1', id: led-mng-100m, at: [175.4, 26.5], for: mng, group: mng-leds, rel-pos: 2}
+        - {ref: 'std/usb-a@1', id: usb-console, at: [180.35, 28.35], rotate: 90, group: mgmt, rel-pos: 2, attrs: {media: usb-a, role: console}, description: CONSOLE on USB}
+        - {ref: 'common/reset-button@1', id: btn-reset, at: [195.15, 32.2], for: chassis, group: controls, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-sys, at: [204.2, 22.8], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-pwr2, at: [204.2, 28.3], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: 'common/led-indicator@1', id: led-pwr1, at: [204.2, 33.7], for: chassis, group: status-leds, rel-pos: 3}
+  rear:
+    size: {w: 220.0, h: 44.0}
+    empty: Envelope only. Nothing held shows the rear (see the rear gap).
+  left:
+    size: {w: 266, h: 44.0}
+    empty: Envelope only. The render shows the flank at a grazing angle only.
+  right:
+    size: {w: 266, h: 44.0}
+    empty: Envelope only, for the same reason as the left.
+  top:
+    size: {w: 220.0, h: 266}
+    empty: Envelope only. The render shows a plain lid obliquely.
+  bottom:
+    size: {w: 220.0, h: 266}
+    empty: Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - XM-3352-AC-NA, "single swappable AC power supply" (data sheet ordering table).
+    description: One AC supply in the upper bay; the lower bay is drawn empty (see the single-supply-blank gap).
+    bays:
+      psu-1: telco-systems/xm3352-psu-ac@1
+      psu-2: ''
+  dc:
+    kind: orderable
+    power: dc
+    description: XM-3352-DC - one DC supply; the other bay is drawn empty.
+    bays:
+      psu-1: telco-systems/xm3352-psu-dc@1
+      psu-2: ''
+  dual-ac:
+    kind: orderable
+    description: XM-3352-2AC-NA - two hot-swappable AC supplies.
+    bays:
+      psu-1: telco-systems/xm3352-psu-ac@1
+      psu-2: telco-systems/xm3352-psu-ac@1
+  dual-dc:
+    kind: orderable
+    power: dc
+    description: XM-3352-2DC - two hot-swappable DC supplies.
+    bays:
+      psu-1: telco-systems/xm3352-psu-dc@1
+      psu-2: telco-systems/xm3352-psu-dc@1
+  ac-dc:
+    kind: orderable
+    power: [ac, dc]
+    description: XM-3352-AC/DC - one AC and one DC supply, as the render shows the XM-3352.
+    bays:
+      psu-1: telco-systems/xm3352-psu-ac@1
+      psu-2: telco-systems/xm3352-psu-dc@1
+datasheet:
+  title: 'Telco Systems XM-3352 data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2026/08/Telco-Systems-XM-3352-datasheet.pdf'
+  sha256: 86066fa2633c9c4539419d855bf79d1529d326201a5aa81bfad00f29847c257b
