@@ -332,6 +332,19 @@ RJ45_TIMING = re.compile(
     r"(^|[\s-])(gm-ptp|1588|bits|tod|pps|sync|ptp|ics|clk)([\s-]|$)", re.I)
 RJ45_CONSOLE = re.compile(r"console|aux|serial|(^|[\s-])con([\s-]|$)", re.I)
 
+# A D-SUB CONSOLE. common/db9-receptacle is mostly alarm-out and stays in
+# NOT_A_DCIM_PORT, but the 7750 SF/CPM4 cards seat one as the RS-232 Console
+# (SR12 Table 6), and dropping it left their reserved AUX jack as the only
+# console port. Narrower than RJ45_CONSOLE on purpose: `aux`, `craft` and
+# `serial` D-subs are not claimed here, only a placement that says `console`.
+DB9_CONSOLE_REF = "common/db9-receptacle"
+DB9_CONSOLE = re.compile(r"(^|[\s-])console([\s-]|$)", re.I)
+
+
+def db9_words(part):
+    a = part.get("attrs") or {}
+    return f"{part.get('id') or ''} {a.get('role') or ''} {a.get('function') or ''}"
+
 
 def rj45_words(part):
     a = part.get("attrs") or {}
@@ -565,14 +578,20 @@ NOT_A_DCIM_PORT = {
     "std/usb-c": "USB-C power input on the GL-8xEP, group `usbc-power`; power in, not a port",
 
     # --- connectors upstream has no type for ---------------------------------
-    "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
-                             "Neither library has an alarm port, and `de-9` would read as a console",
+    "common/db9-receptacle": "the placements left here are alarm relays, status and craft ports - "
+                             "a dry-contact relay or a monitoring link, not an RS-232 console. Neither "
+                             "library has an alarm port, and `de-9` would read as a console. A placement "
+                             "that IS a console (id, role or function `console`) exports as `de-9` "
+                             "through DB9_CONSOLE",
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/db25": "the 7750 SR-12 DC PEM-3 AC Supply Status port - an AC rectifier shelf's status "
                 "signalling on a female DB-25, not RS-232. `db-25` upstream is a CONSOLE type and "
                 "this is not a console; neither library has an alarm or status port",
     "std/vga": "VGA; neither library has a video port type",
+    "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
+                               "over one cable; neither library has a type for it, and one row "
+                               "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
@@ -1365,6 +1384,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
                 else:
                     network = {"name": pid, "type": t}
                     ifaces.append(network)
+        elif ref == DB9_CONSOLE_REF and DB9_CONSOLE.search(db9_words(part)):
+            consoles.append({"name": pid, "type": "de-9"})
         elif ref in PART_POWER:
             powers.append({"name": pid or "Inlet", "type": PART_POWER[ref]})
         elif ref in PART_CONSOLE:
