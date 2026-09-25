@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: xm8424-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable AC supply of the Telco Systems XM-8424H: a pull handle down its left edge, an
+  IEC C14 inlet turned on its side in a dark surround, a captive thumbscrew and a STAT lamp.
+size: {w: 50.2, h: 42.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  power-absent: not-published
+  input: ac
+  inlet: c14
+  input-voltage: 100-240 VAC 50-60 Hz 0.4 A, or 240 VDC 2 A (face)
+provenance:
+  size: >-
+    photo-measured - the XM-8424H render rectified onto 440 x 44 at 10 px/mm: the two supply
+    bays run x 0.3-50.5 and 50.7-100.9 (the AC module's warning label reaches x 49.8, the DC
+    module's handle starts at 50.5, and the fixed face panel's edge is at 101.1), y 0.8-43.4.
+  power: >-
+    NOT STATED. The data sheet gives "2 hot-swappable AC/DC power supplies provide 1+1
+    redundancy, AC:220V, 100~240VAC | DC: -48V, -36~-72V" and no supply rating; the module prints
+    only its input, "100-240V, 50-60Hz, 0.4A" over a DC-marked "240V, 2A".
+  elements: >-
+    photo-measured at the same scale (about 2.6 px/mm in the source, so good to about half a
+    millimetre): inlet surround x 18.5-44.0, y 1.8-35.0 on the face, the inlet itself upright
+    in it with its earth pin to the right (a C14 turned 90), a blue captive thumbscrew centred
+    at (45.9, 25.7), the warning triangle at (47.5, 7.8), the STAT lamp at (41.2, 38.0). The
+    stencil master X-Metro 8424H (F) draws the same arrangement.
+states: [absent]
+elements:
+  thumbscrew: {at: [43.2, 22.5], size: [4.8, 4.8], class: fastener}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [16.95, 7.6], rotate: 90}
+  - {ref: common/led-dot@1, id: led-stat, at: [39.9, 36.2]}
+skins: [default]

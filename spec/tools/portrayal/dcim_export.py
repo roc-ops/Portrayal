@@ -511,6 +511,9 @@ PART_POWER = {
     # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
     # face. It is still where a supply's wire is landed, so the same row.
     "telco-systems/tm-7124s-dc-feed": "dc-terminal",
+    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-pole screw-clamp plug (20.1 mm
+    # against the ECS4530's 32.1), so its own part, landing the -36 to -72 V feed. The same row.
+    "telco-systems/xm8424-dc-plug": "dc-terminal",
     # A BARREL JACK IS NOT A TERMINAL BLOCK, and upstream has no row for one, so
     # this takes `other` - the treatment PART_RF gives an SMB timing input, which
     # says "a thing this schema has no name for" instead of naming a neighbour.
@@ -1416,6 +1419,10 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
                 console.append({"name": "Console", "type": "rj-45"})
             elif role == "console" and p["ref"].startswith("std/usb-c"):
                 console.append({"name": "Console (USB-C)", "type": "usb-c"})
+            # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
+            # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
+            elif role == "console" and p["ref"].startswith("std/usb-a"):
+                console.append({"name": "Console (USB-A)", "type": "usb-a"})
             elif (role == "mgmt" and a.get("speed") == "10g"
                   and not (names and p["id"] in names)):
                 mgmt_sfp.append({"name": p["id"].replace("port-", ""),

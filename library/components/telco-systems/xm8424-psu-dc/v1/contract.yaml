@@ -1,0 +1,35 @@
+format: 1
+kind: module
+name: xm8424-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable DC supply of the Telco Systems XM-8424H: a pull handle down its left edge, a
+  green two-pole pluggable DC terminal, a captive thumbscrew and a STAT lamp.
+size: {w: 50.2, h: 42.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  power-absent: not-published
+  input: dc
+  input-voltage: -36 to -72 VDC, 10 A (face "36-72V,10A")
+provenance:
+  size: >-
+    photo-measured - the second of the XM-8424H's two identical supply bays, x 50.7-100.9 on the
+    render rectified onto 440 x 44 (see telco-systems/xm8424-psu-ac@1).
+  power: >-
+    NOT STATED. The data sheet gives "DC: -48V, -36~-72V" and no supply rating; the module prints
+    its input, "36-72V,10A".
+  elements: >-
+    photo-measured on the same rectified render: the green plug body x 69.4-89.5, y 27.3-36.6 on
+    the face (telco-systems/xm8424-dc-plug@1); a dark captive thumbscrew that stands proud, so
+    its face-level base is placed at about (94.8, 24.2) rather than at the centre of its shadowed
+    silhouette (89.1-97.9 x 20.9-32.9); the STAT lamp at about (89.5, 38.3).
+states: [absent]
+elements:
+  thumbscrew: {at: [40.9, 20.2], size: [6.4, 6.4], class: fastener}
+parts:
+  - {ref: telco-systems/xm8424-dc-plug@1, id: dc-in, at: [18.7, 26.5]}
+  - {ref: common/led-rect-sm@1, id: led-stat, at: [37.4, 36.7]}
+skins: [default]
