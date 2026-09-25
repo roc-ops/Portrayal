@@ -166,8 +166,11 @@ The rules that two OOM kills and one lost evening bought:
    Pass every PDF of the corpus in that ONE invocation - the pool is built
    from the files named on the command line, so a per-file reclassify
    counts only that file's repeats and keeps a banner that shows up fewer
-   than ten times per document (a two-page datasheet always). The knobs, each shaped by a
-   publisher that broke the default:
+   than ten times per document (a two-page datasheet always). Run it only
+   once every file has a `raw.json`: `--reclassify` CONVERTS any file
+   without one, in that same process, which is rule 1 broken - clear or
+   set aside the FAILs first. The knobs, each shaped by a publisher that
+   broke the default:
    - `--icon-px N` - the icon size floor (default 200). Too high for small
      module front views; the CH3000 corpus needs 80.
    - `--banner-max-h N` - a picture at least N px tall is never a banner
