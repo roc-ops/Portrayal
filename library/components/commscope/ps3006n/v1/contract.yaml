@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: ps3006n
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) PS3006N - the 300 W AC power supply and chassis controller of
+  the CH3000 headend optics platform, in the variant with status LEDs and no
+  display. Two full-depth slots wide; it mates the BP-P1 dynamic back plate, which
+  carries the AC inlet.
+size: {w: 52.52, h: 130.2, d: 330.0}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: PS3006N
+  input: ac
+  input-voltage: 100-240 VAC, 50/60 Hz
+  output-voltage: 12 VDC
+  power-output-w: 300
+  efficiency: 83% typical at 120 V, 18-25 A load
+  slots: 2
+  back-plate: BP-P1
+  inlet: none
+provenance:
+  inlet: >-
+    datasheet - the supply has no inlet of its own: "The PS3006 requires two full-depth
+    slots in the CH3000 chassis and mates with the BP-P1 dynamic back plate provided with
+    the unit", and the BP-P1 drawing carries the C14. `none` because the chassis-side
+    back plate, not the module, is where the cord goes; see commscope/bp-p1@1.
+  size: >-
+    borrowed - commscope/ps3006d@1, the same two-slot faceplate; the PS3006 data sheet
+    orders both from one table and photographs both at one aspect (PS3006N face-on,
+    362 x 852 px, within 1% of 52.5 x 130.2). See that contract for the width and height.
+  power: >-
+    datasheet - PS3006 data sheet (1511519 RevB, 2022), DC Output: "12 V DC nominal,
+    25 Amps max (300 watts)". No ambient is stated with it.
+  face-features: >-
+    photo-measured from the PS3006 data sheet's face-on photograph of the PS3006N (four
+    stitched tiles), at 6.90 px/mm across and 6.54 down. The perforation was segmented
+    hole by hole: 2.8 mm round holes on a 4.2 mm column pitch, 4.0 mm down each column,
+    alternate columns dropped 2.0 mm - six full columns from y 28.4 to 110.5, and three
+    more from y 64.5 to 99.9 under the lamp panel.
+  lamps: >-
+    photo-measured at 4x from the same photograph: three lamps in a box legended Status
+    at y 31.6, 36.4 and 40.2, one under Access at 49.8 and one under B/U PS at 59.4, all
+    on x 37.8 and about 2.2 across. The COLOURS are the data sheet's table "Indicator LEDs
+    on model PS3006N": Status "Green = OK, Yellow = Non-service-affecting alarm, Red =
+    Service-affecting alarm" (three lamps, drawn green / yellow / red top to bottom, and
+    the chassis photograph shows the top one lit green); Access "Blue = Lit during
+    communication with chassis modules"; Back-Up P/S "Green = Lit if second power supply
+    is present within chassis".
+  screws: >-
+    borrowed - commscope/ps3006d@1: the thumbscrews sit on the slot centres.
+  face-revision: >-
+    THE CURRENT FACE, with a micro-USB port and a round-hole perforation. The chassis
+    photograph on the HT3580H sheet shows an older PS3006N with vertical vent slots and a
+    3.5 mm jack legended "Serial"; the PS3006 sheet's text says micro-USB, so its
+    photograph is taken as current.
+elements:
+  screw-1: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
+  screw-2: {at: [34.74, 0.1], size: [9.8, 9.8], class: fastener}
+  vent-main: {at: [6.5, 28.4], size: [23.9, 82.1], class: vent}
+  vent-lower: {at: [31.8, 64.5], size: [11.3, 35.4], class: vent}
+  handle: {at: [7.7, 121.8], size: [32.6, 7.3], class: handle}
+parts:
+  - {ref: common/led-dot@1, id: led-status-ok, at: [36.8, 30.6], attrs: {function: status, color: green}}
+  - {ref: common/led-dot@1, id: led-status-minor, at: [36.8, 35.4], attrs: {function: status, color: yellow}}
+  - {ref: common/led-dot@1, id: led-status-major, at: [36.8, 39.2], attrs: {function: status, color: red}}
+  - {ref: common/led-dot@1, id: led-access, at: [36.8, 48.8], attrs: {function: activity, color: blue}}
+  - {ref: common/led-dot@1, id: led-backup-psu, at: [36.8, 58.4], attrs: {function: redundancy, color: green}}
+  - {ref: std/micro-usb@1, id: usb, at: [32.2, 106.7], rotate: 90, attrs: {role: console}}
+connection-points:
+  mate: {at: [26.26, 65.1], direction: front}
+skins: [default]
