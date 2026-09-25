@@ -596,6 +596,9 @@ NOT_A_DCIM_PORT = {
                              "through DB9_CONSOLE",
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
+    "std/db25": "the 7750 SR-12 DC PEM-3 AC Supply Status port - an AC rectifier shelf's status "
+                "signalling on a female DB-25, not RS-232. `db-25` upstream is a CONSOLE type and "
+                "this is not a console; neither library has an alarm or status port",
     "std/vga": "VGA; neither library has a video port type",
     "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
                                "over one cable; neither library has a type for it, and one row "
