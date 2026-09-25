@@ -1,0 +1,328 @@
+format: 1
+kind: device
+name: tm-340
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: TM-340
+aliases:
+- {name: T-Marc 340, kind: superseded, note: 'the name printed on the faceplate and used throughout the data sheet ("Telco Systems T-Marc 340 (TM-340)")'}
+- {name: TMC-340, kind: vendor, note: 'the stem of every ordering code (TMC-340-z, TMC-340-2DC, TMC-340-z-E, TMC-340-EW, TMC-340-x-F)'}
+portfolio: {line: Carrier Ethernet, family: Network Interface Device, series: T-Series}
+description: >-
+  Telco Systems (BATM Networks) TM-340, the T-Marc 340 - a half-width 1RU Carrier Ethernet 2.0
+  network interface device with six 1GE combo ports, each an SFP cage over an RJ45 jack: two
+  Network ports (1/1-1/2) and four Access ports (2/1-2/4). A CON console jack, STS, PS-I and PS-E
+  lamps and a reset pinhole; AC or dual-feed DC, for a rack, a wall or a desk.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      TM-340 data sheet (telco.com 2025/12), "Compact, Hardened, and SLA-Assured Carrier Ethernet
+      NID"; the faceplate prints T-Marc 340.
+  sources:
+    confidence: datasheet
+    note: >-
+      One data-sheet edition (2025-12), three vendor images of which telco.com
+      2025/12/340-device.png (about 3.3 px/mm across the face) is the most nearly square-on, a 2021
+      photograph of a unit (2021/03/340f.png) showing the same face, and the legacy NetZoom stencil
+      "Telco Systems" (2022), master T-Marc 340 (CF). No installation guide is public.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Half-width 1RU, 221 x 44 x 235 - the data sheet's "44 mm x 221 mm x 235 mm (1.75 in x 8.7
+      in x 9.25 in)"; the stencil master's outline is 220.6 x 44.0. "1RU (1/2 width),
+      wall/desk/rack-mountable" - the brackets are not part of the face.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      POSITIONS ARE THE RENDER'S. telco.com 2025/12/340-device.png is square-on across but seen
+      from about 22 degrees above (the lid shows), so the face is 134.5 px tall where its 730 px
+      width says 144.6; rectifying the four face corners (44.5,95.5 774.3,95.5 774.3,229.5
+      44.5,229.5) onto the data sheet's 221 x 44 takes the foreshortening out, and every cage,
+      jack, lamp, vent and legend is placed where it lands in that 10 px/mm image. The stencil
+      master is not used for positions: it puts the ports on a wider pitch and 5-8 mm left of
+      where the render has them (the same failure as its TM-3312 and TM-3348 siblings).
+  ports:
+    confidence: photo-measured
+    note: >-
+      SIX COMBO PORTS: each number names an SFP cage (port-N) and the RJ45 jack under it
+      (copper-N), one or the other in use at a time - "6 x 10/100/1000 Base-T or 100/1000Base-X
+      Combo SFP ports". The Network pair (1/1, 1/2) and the Access four (2/1-2/4) are separate
+      blocks under their own bracketed legends. The jacks are common/rj45-ganged-eth@1 turned 180
+      (lamp windows in the upper corners, green and amber in the render) on the part's 13.97
+      pitch, centred on each block as measured (57.55 and 112.6); the render's own jack pitch
+      reads 13.6-13.9 at 3.3 px/mm. The cages are std/sfp-ganged@1 at the registry's 14.25
+      pitch on the same block centres; the render's cage openings read 14.0, which a 14.25-wide
+      part cannot sit on without overlapping, so the difference is in the drawing, not hidden.
+      The printed numbers sit about 2.8 mm left of their jacks, as in the render.
+  lamps:
+    confidence: estimated
+    note: >-
+      STS beside the CON jack with a pinhole after it, and PS-I over PS-E between the two blocks,
+      placed where the rectified render has them. No document says what any state means; PS-I
+      and PS-E presumably report an internal and an external supply (see the ps-e gap).
+  power:
+    confidence: datasheet
+    note: >-
+      "AC 100-240 V, 50/60 Hz / DC -24 to -72 V (dual-feed)"; "Power Consumption Typical 25 W,
+      Max 45 W", with no configuration or ambient stated. AC (TMC-340-z, -z-E) and dual-feed DC
+      (TMC-340-2DC, -EW) builds. Nothing on the front is an inlet, so it is presumably at the
+      rear.
+attrs:
+  physical:
+    weight-kg: 1.1
+    overall-mm: 221 x 44 x 235 (data sheet)
+    mounting: 19-inch rack (half width), wall or desk
+  power:
+    power-typical-w: 25
+    power-max-w: 45
+    power-envelope: unstated
+    power-envelope-note: data sheet "Typical 25 W, Max 45 W", no configuration or ambient stated
+    input-voltage: 100-240 VAC 50/60 Hz, or -24 to -72 VDC dual feed
+  environmental:
+    operating-temp: >-
+      0 to 50 C standard; -20 to 65 C extended (ordering table - the specification table prints
+      -2 C); -40 to 65 C hardened
+    humidity: 10 to 90 percent non-condensing
+  performance:
+    switching-capacity: 10 Gbps non-blocking
+  features:
+    services: MEF CE 2.0; G.8031, G.8032v2, xSTP, LAG
+    optics-sfp: '100BASE-X, 1000BASE-X (data sheet, "100/1000Base-X Combo SFP ports")'
+  management:
+    local: CON console on RJ45
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 221.0
+  height: 44.0
+  depth: 235
+  ru: 1
+  weight-kg: 1.1
+  power: ac
+  color: '#d9dadb'
+  silk: '#3a3d41'
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; hardware documentation is on a support portal
+    behind a login, whose contact is on telco.com/support. Searched: the telco.com media
+    library, every product and knowledge-centre page, and the Wayback index of telco.com PDFs.
+  wanted: the TM-340 / T-Marc 340 hardware installation guide, from the BATM support portal.
+- what: rear
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The inlet (AC, or the DC build's dual feed) is not on the front, so it is presumably at the
+    rear, which nothing held shows.
+  wanted: a photograph of the rear of an AC and of a DC unit.
+- what: f-variant
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    TMC-340-x-F / DC-F is "2 x Copper + 4 x Fiber, Mixed port model option" - a different
+    port set from the six combo ports drawn here, whose face nothing held shows.
+  wanted: a photograph or render of the TMC-340-x-F front.
+- what: ps-e
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The face has PS-I and PS-E lamps, which read as an internal and an external supply, but the
+    data sheet names no external supply for this model (the TM-3308's is TMC-3X0-EXTPS-x, a
+    name that may cover the 340 too).
+  wanted: the installation guide's power section.
+groups:
+  network:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the Network combo ports' SFP cages, 1/1 and 1/2.
+  network-copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      combo ports - copper-1-1 and copper-1-2 share their numbers with the SFP cages port-1-1 and
+      port-1-2 above them, one or the other in use at a time.
+  access:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the Access combo ports' SFP cages, 2/1 to 2/4.
+  access-copper:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      combo ports - copper-2-1..2-4 share their numbers with the SFP cages port-2-1..2-4 above
+      them, one or the other in use at a time.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the CON RS-232 console.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: STS, PS-I and PS-E.
+  controls:
+    term: Button
+    role: management
+    index-origin: 1
+views:
+  front:
+    size: {w: 221.0, h: 44.0}
+    panel:
+      decor:
+        - {id: vent-top-1, kind: vent, at: [45.5, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-2, kind: vent, at: [60.2, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-3, kind: vent, at: [86.5, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-4, kind: vent, at: [101.05, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-5, kind: vent, at: [115.55, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-6, kind: vent, at: [130.15, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-7, kind: vent, at: [148.45, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-8, kind: vent, at: [163.25, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-9, kind: vent, at: [178.05, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-top-10, kind: vent, at: [193.15, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-1, kind: vent, at: [30.0, 3.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-2, kind: vent, at: [30.0, 6.8], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-3, kind: vent, at: [30.0, 10.05], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-4, kind: vent, at: [30.0, 13.2], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-5, kind: vent, at: [30.0, 16.5], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-6, kind: vent, at: [30.0, 19.7], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-7, kind: vent, at: [30.0, 22.9], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col1-8, kind: vent, at: [30.0, 26.1], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col2-1, kind: vent, at: [73.45, 3.8], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col2-2, kind: vent, at: [73.45, 6.9], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col2-3, kind: vent, at: [73.45, 10.15], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col2-4, kind: vent, at: [73.45, 13.35], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col2-5, kind: vent, at: [73.45, 16.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-1, kind: vent, at: [206.5, 4.0], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-2, kind: vent, at: [206.5, 7.3], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-3, kind: vent, at: [206.5, 10.45], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-4, kind: vent, at: [206.5, 13.7], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-5, kind: vent, at: [206.5, 16.95], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-6, kind: vent, at: [206.5, 20.1], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-7, kind: vent, at: [206.5, 23.4], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-8, kind: vent, at: [206.5, 26.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-9, kind: vent, at: [206.5, 29.85], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-10, kind: vent, at: [206.5, 33.1], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-11, kind: vent, at: [206.5, 36.3], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: vent-col3-12, kind: vent, at: [206.5, 39.6], size: [9.5, 1.0], rx: 0.4, fill: '#3a3d41'}
+        - {id: laser-label, kind: label-plate, at: [3.5, 2.2], size: [24.5, 2.8], rx: 0.6, fill: '#dcdcdc', stroke: '#555555', stroke-width: 0.25}
+        - {id: wordmark-plate, kind: label-plate, at: [5.3, 6.5], size: [22.2, 7.8], rx: 2.5, fill: '#f3f4f5', stroke: '#8d9298', stroke-width: 0.35}
+        - {id: shell-con, kind: port-shell, at: [6.5, 21.5], size: [18.0, 15.5], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
+        - {id: shell-network, kind: port-shell, at: [41.6, 21.5], size: [30.4, 14.3], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
+        - {id: network-cages, kind: port-shell, at: [42.82, 6.9], size: [29.45, 11.5], rx: 0.3, fill: '#8f949a', stroke: '#5c6167', stroke-width: 0.35}
+        - {id: shell-access, kind: port-shell, at: [83.5, 21.5], size: [57.8, 14.3], rx: 0.3, fill: '#e9ebec', stroke: '#3a3d41', stroke-width: 0.35}
+        - {id: access-cages, kind: port-shell, at: [83.62, 6.9], size: [57.95, 11.5], rx: 0.3, fill: '#8f949a', stroke: '#5c6167', stroke-width: 0.35}
+      cutouts:
+        - {id: con, at: [8.1, 23.55], size: [15.8, 13.2], shape: rect}
+        - {id: port-1-1, at: [43.3, 7.4], size: [14.25, 10.4], shape: rect}
+        - {id: copper-1-1, at: [44.21, 22.55], size: [12.7, 11.0], shape: rect}
+        - {id: port-1-2, at: [57.55, 7.4], size: [14.25, 10.4], shape: rect}
+        - {id: copper-1-2, at: [58.18, 22.55], size: [12.7, 11.0], shape: rect}
+        - {id: port-2-1, at: [84.09, 7.4], size: [14.25, 10.4], shape: rect}
+        - {id: copper-2-1, at: [85.29, 22.55], size: [12.7, 11.0], shape: rect}
+        - {id: port-2-2, at: [98.34, 7.4], size: [14.25, 10.4], shape: rect}
+        - {id: copper-2-2, at: [99.26, 22.55], size: [12.7, 11.0], shape: rect}
+        - {id: port-2-3, at: [112.59, 7.4], size: [14.25, 10.4], shape: rect}
+        - {id: copper-2-3, at: [113.23, 22.55], size: [12.7, 11.0], shape: rect}
+        - {id: port-2-4, at: [126.84, 7.4], size: [14.25, 10.4], shape: rect}
+        - {id: copper-2-4, at: [127.21, 22.55], size: [12.7, 11.0], shape: rect}
+        - {id: led-sts, at: [27.6, 30.6], size: [4.0, 4.0], shape: circle}
+        - {id: led-ps-i, at: [76.77, 25.8], size: [4.0, 4.0], shape: circle}
+        - {id: led-ps-e, at: [76.77, 31.4], size: [4.0, 4.0], shape: circle}
+        - {id: btn-reset, at: [34.9, 30.5], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [47.76, 39.3], text: 1/1, font-size: 1.9, anchor: middle, for: [port-1-1, copper-1-1]}
+      - {at: [61.73, 39.3], text: 1/2, font-size: 1.9, anchor: middle, for: [port-1-2, copper-1-2]}
+      - {at: [57.55, 41.4], text: Network, font-size: 2.0, anchor: middle, for: [port-1-1, port-1-2, copper-1-1, copper-1-2]}
+      - {id: legend-network-l, at: [41.9, 40.7], path: M 0 -2.8 L 0 0 L 11.05 0, for: [port-1-1, port-1-2, copper-1-1, copper-1-2]}
+      - {id: legend-network-r, at: [62.15, 40.7], path: M 0 0 L 9.55 0 L 9.55 -2.8, for: [port-1-1, port-1-2, copper-1-1, copper-1-2]}
+      - {at: [88.84, 39.3], text: 2/1, font-size: 1.9, anchor: middle, for: [port-2-1, copper-2-1]}
+      - {at: [102.81, 39.3], text: 2/2, font-size: 1.9, anchor: middle, for: [port-2-2, copper-2-2]}
+      - {at: [116.78, 39.3], text: 2/3, font-size: 1.9, anchor: middle, for: [port-2-3, copper-2-3]}
+      - {at: [130.76, 39.3], text: 2/4, font-size: 1.9, anchor: middle, for: [port-2-4, copper-2-4]}
+      - {at: [112.6, 41.4], text: Access, font-size: 2.0, anchor: middle, for: [port-2-1, port-2-2, port-2-3, port-2-4, copper-2-1, copper-2-2, copper-2-3, copper-2-4]}
+      - {id: legend-access-l, at: [83.8, 40.7], path: M 0 -2.8 L 0 0 L 24.6 0, for: [port-2-1, port-2-2, port-2-3, port-2-4, copper-2-1, copper-2-2, copper-2-3, copper-2-4]}
+      - {id: legend-access-r, at: [116.8, 40.7], path: M 0 0 L 24.2 0 L 24.2 -2.8, for: [port-2-1, port-2-2, port-2-3, port-2-4, copper-2-1, copper-2-2, copper-2-3, copper-2-4]}
+      - {at: [29.6, 38.9], text: STS, font-size: 2.2, anchor: middle, for: led-sts}
+      - {at: [78.77, 24.0], text: PS-I, font-size: 2.2, anchor: middle, for: led-ps-i}
+      - {at: [78.77, 39.1], text: PS-E, font-size: 2.2, anchor: middle, for: led-ps-e}
+      - {at: [15.75, 4.1], text: CLASS 1 LASER PRODUCT, font-size: 1.3, anchor: middle, for: chassis}
+      - {at: [16.4, 11.1], text: TELCO SYSTEMS, font-size: 2.0, anchor: middle, for: chassis}
+      - {at: [16.2, 18.8], text: T-Marc 340, font-size: 3.9, anchor: middle, fill: '#2f3337', for: chassis}
+      - {at: [16.0, 41.3], text: CON, font-size: 2.4, anchor: middle, for: con}
+    components:
+      placements:
+        - {ref: 'std/rj45@2', id: con, at: [8.1, 23.55], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CON - the RS-232 console}
+        - {ref: 'std/sfp-ganged@1', id: port-1-1, at: [43.3, 7.4], group: network, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-1-1, at: [44.21, 22.55], rotate: 180, group: network-copper, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-1-2, at: [57.55, 7.4], group: network, rel-pos: 2}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-1-2, at: [58.18, 22.55], rotate: 180, group: network-copper, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-2-1, at: [84.09, 7.4], group: access, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-1, at: [85.29, 22.55], rotate: 180, group: access-copper, rel-pos: 1}
+        - {ref: 'std/sfp-ganged@1', id: port-2-2, at: [98.34, 7.4], group: access, rel-pos: 2}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-2, at: [99.26, 22.55], rotate: 180, group: access-copper, rel-pos: 2}
+        - {ref: 'std/sfp-ganged@1', id: port-2-3, at: [112.59, 7.4], group: access, rel-pos: 3}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-3, at: [113.23, 22.55], rotate: 180, group: access-copper, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-2-4, at: [126.84, 7.4], group: access, rel-pos: 4}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-4, at: [127.21, 22.55], rotate: 180, group: access-copper, rel-pos: 4}
+        - {ref: 'common/led-indicator@1', id: led-sts, at: [27.6, 30.6], for: chassis, group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-indicator@1', id: led-ps-i, at: [76.77, 25.8], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: 'common/led-indicator@1', id: led-ps-e, at: [76.77, 31.4], for: chassis, group: status-leds, rel-pos: 3}
+        - {ref: 'common/reset-button@1', id: btn-reset, at: [34.9, 30.5], for: chassis, group: controls, rel-pos: 1}
+  rear:
+    size: {w: 221.0, h: 44.0}
+    empty: >-
+      Envelope only. Nothing held shows the rear, where the inlet presumably is (see the rear
+      gap).
+  left:
+    size: {w: 235, h: 44.0}
+    empty: Envelope only. The images show the flank at a grazing angle only.
+  right:
+    size: {w: 235, h: 44.0}
+    empty: Envelope only, for the same reason as the left.
+  top:
+    size: {w: 221.0, h: 235}
+    empty: Envelope only. The images show a plain lid obliquely.
+  bottom:
+    size: {w: 221.0, h: 235}
+    empty: Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - TMC-340-z, "6 x Fiber/Copper, AC, 0C to 50C, Standard model" (data sheet
+      ordering table).
+    description: The TM-340 standard model, AC.
+  dc-power:
+    kind: orderable
+    power: dc
+    description: >-
+      TMC-340-2DC - "Dual feed DC, 0C to 50C". The face is the same; the difference is at the
+      rear.
+  extended:
+    kind: orderable
+    description: TMC-340-z-E - AC, rated -20 to 65 C. The same face.
+  hardened:
+    kind: orderable
+    power: dc
+    description: >-
+      TMC-340-EW - dual-feed DC, -40 to 65 C, "Hardened model for outdoor use". No image of it is
+      held, so the same face is assumed.
+datasheet:
+  title: 'Telco Systems TM-340 Compact, Hardened, and SLA-Assured Carrier Ethernet NID data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-340.pdf'
+  sha256: ea0df7950be1d0ed3283dfafbdd73fec1526dde51b3bbe26742b502ff89a0cf1
