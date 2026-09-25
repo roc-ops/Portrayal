@@ -17,14 +17,10 @@ description: >-
   label and the ESD mark at the right. In the SR-12 the whole card is turned 90 degrees clockwise
   by the bay, so Card Stat is at the top. Not the FP2 12-Port 10GE SFP+ IMM (IMM12-10GB-SFP+,
   3HE05553AA), whose ports number 1-12.
-unplaced: >-
-  Seated by the 7750 SR-7 card slots (slot-1 to slot-5, rotate 0) and the SR-12 card slots
-  (slot-1 to slot-10, rotate 90), and later the SR-12e; the coordinator wires it. The owner's lab
-  SR-12 (photos 2026-09-24) appears to hold one in slot 1 - see provenance photo-match.
 size: {w: 425.4, h: 35.4, d: 431.8}
 size-confidence: {w: drawing, h: drawing, d: datasheet}
 size-notes: >-
-  w 425.4 and h 35.4 are the wave-2 SR-7/SR-12 slot-card face every card bay is built to; h is the
+  w 425.4 and h 35.4 are the SR-7/SR-12 slot-card face every card bay is built to; h is the
   measured 35.4 slot pitch, not the rounded 1.4 in (35.56) of IMM p13. d is 17 in (IMM p13).
 attrs:
   model: 'IMM-2PAC-FP3 12-port 10GE SFP+'
@@ -44,7 +40,7 @@ provenance:
   size: >-
     datasheet and drawing - IMM guide 3HE16601AAAATQZZA01 (20.2) p13: "All IMMs have the same
     dimensions (H x W x D) 1.4 x 16.75 x 17 in", the same row as SR12 p103 Table 43 and SR7 p106
-    Table 47. The face is held at the wave-2 slot-card size 425.4 x 35.4 (16.75 in; the 35.4 slot
+    Table 47. The face is held at the SR-7/SR-12 slot-card size 425.4 x 35.4 (16.75 in; the 35.4 slot
     pitch rather than 35.56) so the twelve SR-12 slots tile.
   depth: 'datasheet - 17 in (43.18 cm), IMM p13.'
   weight: 'datasheet - 12.8 lb (5.8 kg), IMM p25 Table 11 ("12-port 10GE SFP+ Multi-Core IMM (IMM-2PAC-FP3)").'
@@ -67,7 +63,7 @@ provenance:
     fold at y 1.73 and the bottom fold at 33.4 between the levers are drawn as lines.
   screws: >-
     drawing - one captive screw at each end, centres (6.86, 22.9) and (418.5, 22.9), heads 8.8 mm
-    across (Fig 20 key 9; the family figure in the wave-2 conventions is about 7.3 / 23.0 / 10).
+    across (Fig 20 key 9; the slot-card family figure is about 7.3 / 23.0 / 10).
     Drawn silver-zinc with a cross recess: the lab photo shows a silver Phillips head at the top of
     the slot-1 card, unlike the black plastic knobs on the MDA-e and IOM4-e.
   levers: >-
@@ -83,11 +79,11 @@ provenance:
   colour: >-
     photo - the owner's lab SR-12 (2026-09-24, sr12-slots-1-5-iom3-sfm4-cpm): charcoal plate,
     white legends, silver screws, black perforated levers. Warm phone light, so the plate takes the
-    family #2e3034 of the wave-2 conventions; in the photo the IMM plate reads a shade lighter than
+    SR-7/SR-12 card family #2e3034; in the photo the IMM plate reads a shade lighter than
     the SF/CPM4-12 beside it (medians about #636564 against #50504f at comparable spots), which may
     be light fall-off and is not modelled.
   photo-match: >-
-    photo - IMM-vs-IOM3-XP question (wave-2 conventions Q1, not yet confirmed by the owner). The
+    photo - IMM or IOM3-XP (not yet confirmed by the owner). The
     upper half of the slot-1 card in the lab photo matches Fig 20 item for item, with the card
     turned clockwise: silver screw and perforated lever at the top end, the lamp legends "Card Stat
     / Media Stat / Pwr" reading top-to-bottom, then six cages with "P6-10G-SFP Port" and 1/1 ...
@@ -108,7 +104,7 @@ provenance:
     datasheet - IMM p69 Table 23 keys 6/7. Lnk: green = link at 10 000 Mb/s, amber slow blink = no
     SFP+, amber fast blink = loopback, amber = optic but no link, unlit = disabled. Act: green =
     active, amber = errors, unlit = no activity. The fast-blink rate is not stated: 4 Hz is the
-    wave-1 estimate. Composed as common/led-dot@1.
+    estimate the MDA-e cards carry. Composed as common/led-dot@1.
   ports: >-
     datasheet - IMM p68: 12 physical 10GE ports that accept SFP+ optical modules, numbered 1/1-1/6
     and 2/1-2/6 (Table 23 key 5). Composed as std/sfp-ganged@1 at rotate 0 in two runs of six. The

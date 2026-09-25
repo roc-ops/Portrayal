@@ -89,15 +89,18 @@ provenance:
       (the conventions' figures), so the bays are 218.2 x 64.5 at x 4.3 and 223.6. The band
       between the cage and the filters (y 271.4-283.3) carries two round fasteners, at
       (14.0, 277.7) and (431.9, 277.7). p50 Figure 7 (the ESS-7) draws one safety panel across
-      both bays; it is modelled as the optional nokia/sr-7-psf-safety-panel@1, mounted only in
+      the whole lower front, 444.5 x 84.0 from the bottom of slot B (y 271.6) to the chassis
+      foot, covering the band and both bays; it is modelled as the optional nokia/sr-7-psf-safety-panel@1, mounted only in
       the safety-cover configuration.
   rear:
     confidence: drawing
     note: >-
-      p51 Figure 8 as seen from behind: the air filter tray faceplate at the left (x 6.9-73.9,
-      y 1.3-306.9), the Enhanced Fan Tray beside it (x 73.9-437.1, y 1.7-306.5; the tray is
-      stated 12.0 H x 14.3 W in, p106), and PEM 1 at the LEFT and PEM 2 at the right (keys 4
-      and 5) along the bottom, y 310.0-352.7, each the PEM-3's stated 219.5 x 42.7 (p107). The
+      p51 Figure 8 as seen from behind: the air filter tray faceplate at the left (x 7.55-74.55,
+      y 1.3-306.9; drawn 67.5 wide), the Enhanced Fan Tray beside it (x 75.2-438.4, y 0.9-305.7;
+      drawn 364.1 wide; the tray is stated 12.0 H x 14.3 W in, p106), and PEM 1 at the LEFT and
+      PEM 2 at the right (keys 4 and 5) along the bottom. The drawn PEM plate runs y 307.8-351.8,
+      44.0 tall against the stated 42.7 (p107), so the bays centre the stated 219.5 x 42.7 on
+      it at y 308.45-351.15 (310.0 is the terminal-block top, not the plate top). The
       "-48 / RTN / TORQUE 40 lbs-inch" text belongs to the PEM-3 plates. No rear ground point is
       drawn; the ground receptacles are on the left side and the top (p128 Figure 27).
   airflow:
@@ -111,10 +114,10 @@ provenance:
     note: >-
       Bay defaults follow Figure 6 with current-generation stand-ins: the figure draws IOM3-XP
       cards with classic MDAs in slots 1, 2 and 4 (key 5) and impedance panels in 3 and 5 (key
-      6), and SF/CPM4 in A and B. The IOM3-XP and the classic MDAs are wave 2b, so slots 1, 2
+      6), and SF/CPM4 in A and B. The IOM3-XP and the classic MDAs are not modelled yet, so slots 1, 2
       and 4 default to nokia/iom4-e@1 as a PLACEHOLDER (its MDA slots carry the MDA impedance
-      panel by the carrier's own default, key 7 draws one in slot 4) until the coordinator
-      switches them; A and B default to nokia/sfm4-7@1.
+      panel by the carrier's own default, key 7 draws one in slot 4) until nokia/iom3-xp
+      exists and takes them over; A and B default to nokia/sfm4-7@1.
   power:
     confidence: datasheet
     note: >-
@@ -156,10 +159,10 @@ attrs:
     rated-voltage-dc: '-40 to -72 VDC; PEM-3 4000 W at -40 to -72 VDC, 4600 W at -46 to -72 VDC'
     power-input-ac: 'none on the chassis; an external split rectifier shelf (OmniOn L21 3HE20676AA, Eltek HM34J) feeds the PEM-3 terminals'
   thermal:
-    operating-temp: '5 C to 40 C; short-term -5 C to 55 C'
     acoustic-dba: 77.6
-    acoustic-noise: '77.6 dBA at low fan RPM (3300), 91.7 at high (6000), 99.6 at full (7900), with PEM-3s and Enhanced Fan Trays'
   environmental:
+    operating-temp: '5 C to 40 C; short-term -5 C to 55 C'
+    acoustic-noise: '77.6 dBA at low fan RPM (3300), 91.7 at high (6000), 99.6 at full (7900), with PEM-3s and Enhanced Fan Trays'
     storage-temp: -40 C to 70 C
     humidity: '5 to 85 percent non-condensing; short-term 5 to 90'
     altitude: '60 m below to 1800 m above sea level at 40 C; 1800 to 4000 m at 30 C'
@@ -293,17 +296,17 @@ views:
         - {id: psf-2, at: [223.6, 283.6], size: {w: 218.2, h: 64.5}, accepts: [nokia/sr-7-power-filter@1], default: nokia/sr-7-power-filter@1, group: power-filters, rel-pos: 2}
       placements:
         - {id: esd, ref: common/esd-jack@1, at: [5.3, 259.1], group: grounding, rel-pos: 1}
-        - {id: psf-safety-panel, ref: nokia/sr-7-psf-safety-panel@1, at: [4.3, 283.6], only-in: [safety-cover], for: chassis}
+        - {id: psf-safety-panel, ref: nokia/sr-7-psf-safety-panel@1, at: [0, 271.6], only-in: [safety-cover], for: chassis}
     regions:
       - {id: logo-zone, at: [300.0, 3.0], size: {w: 135.0, h: 15.0}, label: 'Vendor wordmark (none drawn on the bezel in Figure 6; the filter plates carry it); not drawn'}
   rear:
     size: {w: 444.5, h: 355.6}
     components:
       bays:
-        - {id: air-filter, at: [6.9, 1.3], size: {w: 67.0, h: 305.6}, accepts: [nokia/sr-7-air-filter@1], default: nokia/sr-7-air-filter@1, group: air-filters, rel-pos: 1}
-        - {id: fan, at: [73.9, 1.7], size: {w: 363.2, h: 304.8}, accepts: [nokia/sr-7-fan-tray@1], default: nokia/sr-7-fan-tray@1, group: fans, rel-pos: 1}
-        - {id: pem-1, at: [3.3, 310.0], size: {w: 219.5, h: 42.7}, accepts: [nokia/sr-7-pem-3@1, nokia/sr-7-pem-blank@1], default: nokia/sr-7-pem-3@1, group: pems, rel-pos: 1}
-        - {id: pem-2, at: [222.8, 310.0], size: {w: 219.5, h: 42.7}, accepts: [nokia/sr-7-pem-3@1, nokia/sr-7-pem-blank@1], default: nokia/sr-7-pem-3@1, group: pems, rel-pos: 2}
+        - {id: air-filter, at: [7.55, 1.3], size: {w: 67.0, h: 305.6}, accepts: [nokia/sr-7-air-filter@1], default: nokia/sr-7-air-filter@1, group: air-filters, rel-pos: 1}
+        - {id: fan, at: [75.2, 0.9], size: {w: 363.2, h: 304.8}, accepts: [nokia/sr-7-fan-tray@1], default: nokia/sr-7-fan-tray@1, group: fans, rel-pos: 1}
+        - {id: pem-1, at: [3.3, 308.45], size: {w: 219.5, h: 42.7}, accepts: [nokia/sr-7-pem-3@1, nokia/sr-7-pem-blank@1], default: nokia/sr-7-pem-3@1, group: pems, rel-pos: 1}
+        - {id: pem-2, at: [222.8, 308.45], size: {w: 219.5, h: 42.7}, accepts: [nokia/sr-7-pem-3@1, nokia/sr-7-pem-blank@1], default: nokia/sr-7-pem-3@1, group: pems, rel-pos: 2}
   left:
     size: {w: 647.7, h: 355.6}
     empty: >-
@@ -345,7 +348,7 @@ configurations:
     kind: example
     description: >-
       The population SR-7 guide p49 Figure 6 draws, with a current-generation stand-in: IOM4-e
-      cards in slots 1, 2 and 4 where the figure draws IOM3-XP cards with classic MDAs (wave 2b),
+      cards in slots 1, 2 and 4 where the figure draws IOM3-XP cards with classic MDAs (not modelled yet),
       slot impedance panels in 3 and 5, and SF/CPM4-7 in A and B. These are the bay defaults.
   safety-cover:
     kind: example

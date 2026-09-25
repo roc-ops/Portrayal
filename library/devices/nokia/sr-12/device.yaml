@@ -165,9 +165,9 @@ provenance:
       Bay defaults follow what Figure 6 draws, with current-generation stand-ins for the
       legacy cards it shows. The figure draws IOM3-XP cards with classic MDAs in slots 1, 3,
       5, 6, 8 and 10 (keys 3 and 5), slot impedance panels in 2, 4, 7 and 9 (key 4) and SF/CPM4
-      in A and B. The IOM3-XP and the classic MDAs are wave 2b, so those six slots default to
+      in A and B. The IOM3-XP and the classic MDAs are not modelled yet, so those six slots default to
       nokia/iom4-e@1 as a PLACEHOLDER (its MDA slots carry the MDA impedance panel by the
-      carrier's own default) until the coordinator switches them to iom3-xp; A and B default
+      carrier's own default) until nokia/iom3-xp exists and takes them over; A and B default
       to nokia/sfm4-12@1, which is both the figure's card and slot A in the photograph.
   power:
     confidence: datasheet
@@ -210,10 +210,10 @@ attrs:
     rated-voltage-dc: '-40 to -72 VDC; PEM-3 6480 W at -40 to -72 VDC, up to 8837.5 W at -50.5 to -72 VDC'
     power-input-ac: 'none on the chassis; external rectifier shelves (OmniOn L20 3HE20675AA, Eltek HM1J 3HE04172AA) feed the PEM-3 terminals'
   thermal:
-    operating-temp: '5 C to 40 C; short-term -5 C to 55 C'
     acoustic-dba: 72.07
-    acoustic-noise: '72.07 dBA at low fan RPM (3300), 84.51 at high (6000), 92.07 at full (7900), with PEM-3s and Enhanced Fan Trays'
   environmental:
+    operating-temp: '5 C to 40 C; short-term -5 C to 55 C'
+    acoustic-noise: '72.07 dBA at low fan RPM (3300), 84.51 at high (6000), 92.07 at full (7900), with PEM-3s and Enhanced Fan Trays'
     storage-temp: -40 C to 70 C
     humidity: '5 to 85 percent non-condensing; short-term 5 to 90'
     altitude: '60 m below to 1800 m above sea level at 40 C; 1800 to 4000 m at 30 C'
@@ -487,7 +487,7 @@ configurations:
     description: >-
       The population SR-12 guide p47 Figure 6 draws, with a current-generation stand-in:
       IOM4-e cards in slots 1, 3, 5, 6, 8 and 10 where the figure draws IOM3-XP cards with classic
-      MDAs (wave 2b), slot impedance panels in 2, 4, 7 and 9, and SF/CPM4-12 in A and B. These are
+      MDAs (not modelled yet), slot impedance panels in 2, 4, 7 and 9, and SF/CPM4-12 in A and B. These are
       the bay defaults.
   lab-2026-09-24:
     kind: example
