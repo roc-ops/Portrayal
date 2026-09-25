@@ -34,7 +34,11 @@ provenance:
     confidence: datasheet
     note: >-
       1.5RU, 440 x 66.3 x 253. Width and depth are the data sheets' ("440mm (19' racks) x
-      67mm (2.625') x 253mm (10')"). The height is 440 divided by the rendered face's
+      67mm (2.625') x 253mm (10')"); the height is not - see chassis-height.
+  chassis-height:
+    confidence: photo-measured
+    note: >-
+      66.3, NOT the data sheet's 67. The height is 440 divided by the rendered face's
       MEASURED aspect, 6.64 - the render's four corners fix that ratio, and the stencil's
       body (441.4 x 66.2) agrees with it - against the data sheet's 67; the 0.7 mm between
       them is recorded rather than split.
@@ -136,6 +140,7 @@ attrs:
     services: MPLS L2/L3 VPN, VPWS, VPLS, H-VPLS, 802.1Q, 802.1ad
     resiliency: G.8031, sub-50 ms G.8032v2 R-APS and MSTP fast ring, sub-50 ms RSVP-TE FRR, H-VPLS dual homing, LAG
     timing: SyncE, IEEE 1588v2 PTP, BITS and phase clock
+    optics-sfp: '100BASE-FX, 1000BASE-X (data sheet, "24 x 100BaseFX/1000BaseX SFP ports")'
     multicast: IGMP snooping v1/v2/v3, IGMP proxy, MVR
   management:
     local: CON serial console and ETH out-of-band Ethernet on RJ45; DA-15 alarm inputs and outputs
@@ -193,6 +198,14 @@ gaps:
     No edition states the ETH port's rate; 1g is carried as a BORROWED value from the
     TM-8104 (see provenance.eth-speed), not as a finding.
   wanted: the installation guide's interface table.
+- what: dc-feed-a-b
+  scope: [dc-feed]
+  reason: vendor-silent
+  note: >-
+    The DC feed connector carries two feeds, A and B, but is one part and so exports one
+    power port; a DCIM cannot cable the two feeds separately. Splitting it into two parts
+    would draw one physical header as two.
+  wanted: an exporter convention for a multi-feed connector (two power rows from one part).
 - what: lamp-meanings
   scope: [sfp-leds, status-leds]
   reason: vendor-silent
