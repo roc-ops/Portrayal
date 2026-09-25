@@ -317,6 +317,23 @@ def test_sfp112_exports_as_other_because_nautobot_has_no_type_for_it():
     assert dx.placed_type(part) == "other"
 
 
+def test_an_other_port_is_labelled_with_its_own_media():
+    """`other` loses the connector, so the label carries it. It was hardcoded
+    "RJ45" (for the Casa rj45-telemetry port) and the Nokia MDA2-e-XP's SFP112
+    cages exported as copper jacks."""
+    assert dx.OTHER_LABEL["sfp112"] == "SFP112"
+    assert dx.OTHER_LABEL["rj45-telemetry"] == "RJ45"
+    assert [a for fam in dx.FAMILY_ATTRS.values() for a, t in fam
+            if t == "other"] == [dx.SFP112_ATTR[0]]
+    labelled = [media for (media, _s), t in dx.PART_MEDIA.items() if t == "other"]
+    assert labelled and all(m in dx.OTHER_LABEL for m in labelled)
+    exports = pathlib.Path(__file__).resolve().parents[2] / "library" / "exports"
+    sfp112 = list(exports.glob("*/module-types/Nokia/*SFP112*.yaml"))
+    assert sfp112, "no SFP112 card export to check"
+    for f in sfp112:
+        assert "label: RJ45" not in f.read_text(), f
+
+
 def test_an_800g_qsfp_dd_card_is_not_typed_400g():
     """`800gbase-x-qsfpdd` is in both targets (NetBox and Nautobot
     TYPE_800GE_QSFP_DD). The card attr is `qsfp-dd-800g` - a rate statement, not
