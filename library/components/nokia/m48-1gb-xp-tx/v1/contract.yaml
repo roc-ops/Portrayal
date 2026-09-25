@@ -1,0 +1,195 @@
+format: 1
+kind: module
+name: m48-1gb-xp-tx
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR / 7450 ESS 48-port 10/100/1000 copper MDA-XP, M48-1GB-XP-TX
+  (3HE05160AA; ESS 3HE05159AA), a classic half-slot MDA for the IOM3-XP: eight mini-RJ21
+  (MRJ21) connectors on end across the face, each carrying six 10/100/1000 ports (connector 1
+  ports 1-6 through connector 8 ports 43-48) to a breakout cable. It has no per-port lamps:
+  six Port LEDs at the left show the six ports of whichever connector the Push to Scroll button
+  has selected, and eight Connector LEDs at the right show which one that is. Stat and Pwr
+  lamps at the left, the ESD mark and the model legend at the lower right, and a slotted
+  captive screw on each lower end wing. The card is 2:1 oversubscribed. Authored horizontal;
+  an SR-12 IOM3-XP seats it on end with the carrier.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 13
+  is fitted per axis to that face.
+attrs:
+  model: M48-1GB-XP-TX
+  part-number: 3HE05160AA
+  part-number-variants: 3HE05160AA (7750 SR), 3HE05159AA (7450 ESS)
+  mrj21: 8
+  power-draw-max-w: 61
+  power-draw-typical-w: 57.5
+provenance:
+  sources: >-
+    datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p43 Figure 13 and Table 13,
+    continued on p44 (the face, its lamps, button, screws and connector numbering), p18 Table 2
+    (power), p61 and p62-67 Tables 17 and 18 (the breakout cables and their pinouts). SR7 22.7
+    3HE18643AAAATQZZA03 p106 Table 47 (MDA size); SR7 15.1 3HE14151AAAATQZZA02 p98 Table 32 (part
+    numbers and power, "7750 SR 48-port 10/100/1000 - mini-RJ21 MDA-XP"), its p91 note (a number
+    in brackets is the 7450 ESS part) and p99 notes 2-4.
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - MXP p43 Figure 13 (art MDA0083), vector (pdfimages finds no raster), rendered at
+    1200 dpi. The older MDA00xx drawing style of nokia/m10-1gb-xp-sfp@1 and m20-1gb-xp-tx@1:
+    NOTCHED lower corners, the end wings stopping at y 28.26 and a full-height band running
+    15.5-175.0 (measured 15.51 and 175.02). Fitted per axis: 4581 px across the plate (stroke
+    centre to stroke centre) to 190.5 (24.05 px/mm) and 840.5 px from the top line to the bottom
+    of the band to 35.4 (23.74 px/mm), 1.3 percent apart - the same spread as Figures 9 and 12,
+    drawn about 0.7 percent smaller than them. Connectors (key 4) on a 19.25 pitch (463 px, the
+    same to the pixel across all eight), centred x 27.89 + 19.254 n and y 17.80; each is drawn
+    13.3 across. Stat (4.91, 7.20) and Pwr (4.91, 11.84), drawn 2.5 across, legends Stat above
+    and Pwr below at x 2.74. The Port LED grid (key 3) beside them, drawn 2.5 across on a 3.35
+    pitch: columns x 8.28, 11.63, 14.97, rows y 7.20 (1, 3, 5, numbered above) and 11.84 (2, 4,
+    6, numbered below), "Port" to the right of the upper numerals. The Connector LEDs (key 6),
+    drawn 1.9 across on a 2.56 pitch: columns x 177.99, 180.55, 183.11, 185.66, rows y 7.71 (1,
+    3, 5, 7, numbered above, "Connector" printed before them) and 11.58 (2, 4, 6, 8, numbered
+    below). Push to Scroll (key 5), a rounded frame x 169.35-176.4, y 5.53-13.33 carrying the
+    words on three lines. ESD mark x 170.75-177.40, y 21.52-26.74. Captive screws (key 8) centred
+    (7.57, 22.95) and (183.04, 22.95), heads 8.4 in a 10.0 ring, each crossed by ONE slot 1.9
+    wide running upper left to lower right - a slotted head, not the cross of Figures 9 and 12 -
+    over a tab in the notch, x 5.16-10.07 to y 29.80 on the left and 180.6-185.5 to 30.24 on the
+    right. A thin inner line 1.8-2.0 inside the edge wraps each screw at 5.47 and runs round the
+    band at 15.95 / 174.66 / 33.63. The heavy boxes round the Port LED grid and the Connector
+    LEDs, and the bracket over the connectors, are key callouts, not panel; the small blocks
+    outside both ends of the plate are outside the 190.5 face and are not drawn, as on the
+    sibling cards.
+  connectors: >-
+    drawing + standard - std/mrj21@1 (TE's 48-position MRJ21 receptacle face, 28.92 x 13.45) on
+    end, rotate 270, centred on the drawn connectors. THE ROTATION IS READ: turned either way the
+    guide holes land at the upper right and lower left, where Figure 13 draws them, and the
+    upper blade offset right lands as the higher left blade (drawn 8.7-24.5, TE 8.85-24.25), so
+    neither of those decides. The keystone opening does: TE's concave S-curve is at its upper
+    left, and Figure 13 draws that S at the LOWER left of every connector with a straight
+    chamfer at the upper right; 270 (a quarter turn anticlockwise) is the turn that puts it
+    there, 90 would put it at the upper right. Checked against the drawing: the guide holes are
+    drawn 7.21 apart across (TE 7.20) and 23.29 down (TE 22.88), and the part's holes land at
+    (31.48, 6.36) and (24.29, 29.24) on connector 1 against drawn (31.50, 6.15) and (24.29,
+    29.44). One port part per connector: the card's 48 ports are six per connector (Table 13
+    key 4) and are only reachable through a breakout cable, so each connector is the port the
+    face presents.
+  connector-outline: >-
+    drawing - Figure 13 draws each connector's shell as a body 23.9 tall (y 5.86-29.74) with the
+    two guide-hole bosses standing out of it at the diagonal corners, leaving the other two
+    corners as bare plate; std/mrj21@1 draws its shell as the full 28.92 x 13.45 rectangle (y
+    3.34-32.26 here). The figure prints the connector numbers and the model legend in those bare
+    corners, so at their drawn positions the composed shells cover them. Moved the least that
+    clears: the connector numbers from baseline 5.33 to 3.25 (still 2.45 left of each centre,
+    as drawn), the model legend from baseline 32.98 to 34.9 (at its drawn x), and "Connector"
+    kept on its baseline but fitted into 169.55-177.2 (drawn from 168.05) to clear connector 8.
+  numbering: >-
+    datasheet - MXP p44 Table 13 key 4, "Connectors are numbered 1 through 8. Each connector
+    contains six ports", connector 1 ports 1-6 through connector 8 ports 43-48; Figure 13 numbers
+    them 1-8 left to right above the connectors. MXP p62-64 Table 17 and p65-67 Table 18 give the
+    cable pinouts for ports 1-6 of one connector.
+  lamps: >-
+    datasheet - MXP p43 Table 13: Status green blinking initializing, green up, amber
+    operationally down, unlit administratively down; Power blue on, off no power; Port LEDs
+    (key 3) green link at 1000 Mbps, green fast blinking 100 Mbps, green slow blinking 10 Mbps,
+    amber no link, unlit disabled; MXP p44 key 6, Connector LEDs green selected, off not
+    selected. Key 5: the Port LEDs show the six ports of the connector selected with Push to
+    Scroll. Fast and slow blink are both `blinking`, told apart by name. The Stat and Pwr lamps
+    are common/led-indicator@1; the grid and connector lamps common/led-dot@1 (lamp 1.4, drawn
+    2.5 and 1.9) at their drawn centres, because a 4 mm led-indicator box would overlap its
+    neighbour on either pitch.
+  button: >-
+    drawing - MXP p44 Table 13 key 5 names the Push to Scroll button and Figure 13 points key 5 at
+    the rounded frame with the words in it; no common/ part is a framed push button (power-button
+    and reset-button are a round cap and a pinhole), so it is a skin element of class button at
+    the drawn frame. Whether the frame is the cap itself or a printed surround with a smaller cap
+    is not resolvable in line art.
+  power: >-
+    datasheet - MXP p18 Table 2: M48-1GB-XP-TX 57.5 W typical (25 percent of line rate, 25 C) and
+    61 W worst case (50 percent line rate, 55 C), under a column headed Maximum; SR7 15.1 p98
+    Table 32 gives the same 57.5 typical and 61 worst case, p99 notes 3 and 4 the same
+    conditions. Note 2 (and MXP p18 note 1): 2:1 oversubscribed, 50 percent line rate on all
+    48 ports being the slot's full 24G.
+  cli-type: 'not carried - no mda-type string for this card is printed in anything held'
+  colour: >-
+    estimated - no photograph of a classic MDA is held. Drawn in the charcoal of the SR-7/SR-12
+    card family, printing and the ESD mark in the family's white. A gap.
+  logo-zone: 'none reserved - Figure 13 draws no mark, and the face is full'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  relief: >-
+    borrowed - the screws take nokia/m10-1gb-xp-sfp@1's figure, itself borrowed.
+  lifecycle: 'searched only the staged corpus; the MDA-XP guide and the SR-7 15.1 guide list it. No end-of-sale notice searched'
+  gaps: >-
+    Colour is estimated. The cli-type is not printed for this card. The connector numbers and
+    model legend are moved off their drawn positions because the connector part's shell is a
+    full rectangle (see connector-outline). The 48 ports are not listed individually: each
+    connector is one port part.
+elements:
+  screw-left: {at: [2.57, 17.95], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [178.04, 17.95], size: [10.0, 10.0], class: screw}
+  push-to-scroll: {at: [169.35, 5.53], size: [7.05, 7.8], class: button}
+  esd-mark: {at: [170.75, 21.52], size: [6.65, 5.22], class: label}
+  model-label: {at: [144.09, 32.37], size: [26.24, 2.53], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  mrj21:
+    term: Connector
+    role: traffic
+    index-origin: 1
+    attrs: {media: mrj21, speed: 1g}
+    description: >-
+      the 8 mini-RJ21 connectors, 1-8 left to right, each carrying six 10/100/1000 Ethernet ports
+      (connector 1 ports 1-6 through connector 8 ports 43-48) to a breakout cable, as Table 13
+      numbers them
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the six Port LEDs in the grid at the left, 1, 3, 5 across the top and 2, 4, 6 across the
+      bottom, showing the ports of the connector Push to Scroll has selected
+  connector-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the eight Connector LEDs at the right, 1, 3, 5, 7 across the top and 2, 4, 6, 8 across the
+      bottom; the lit one is the connector selected
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the left
+parts:
+  - {ref: std/mrj21@1, id: connector-1, group: mrj21, at: [13.43, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 1 - ports 1-6'}}
+  - {ref: std/mrj21@1, id: connector-2, group: mrj21, at: [32.68, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 2 - ports 7-12'}}
+  - {ref: std/mrj21@1, id: connector-3, group: mrj21, at: [51.94, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 3 - ports 13-18'}}
+  - {ref: std/mrj21@1, id: connector-4, group: mrj21, at: [71.19, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 4 - ports 19-24'}}
+  - {ref: std/mrj21@1, id: connector-5, group: mrj21, at: [90.45, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 5 - ports 25-30'}}
+  - {ref: std/mrj21@1, id: connector-6, group: mrj21, at: [109.70, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 6 - ports 31-36'}}
+  - {ref: std/mrj21@1, id: connector-7, group: mrj21, at: [128.95, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 7 - ports 37-42'}}
+  - {ref: std/mrj21@1, id: connector-8, group: mrj21, at: [148.21, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 8 - ports 43-48'}}
+  - {ref: common/led-dot@1, id: port-led-1, group: port-leds, at: [7.28, 6.20], attrs: {description: 'Port LED 1 - status of port 1 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: port-led-2, group: port-leds, at: [7.28, 10.84], attrs: {description: 'Port LED 2 - status of port 2 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: port-led-3, group: port-leds, at: [10.63, 6.20], attrs: {description: 'Port LED 3 - status of port 3 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: port-led-4, group: port-leds, at: [10.63, 10.84], attrs: {description: 'Port LED 4 - status of port 4 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: port-led-5, group: port-leds, at: [13.97, 6.20], attrs: {description: 'Port LED 5 - status of port 5 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: port-led-6, group: port-leds, at: [13.97, 10.84], attrs: {description: 'Port LED 6 - status of port 6 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: connector-led-1, group: connector-leds, at: [176.99, 6.71], attrs: {description: 'Connector LED 1 - green: connector 1 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-2, group: connector-leds, at: [176.99, 10.58], attrs: {description: 'Connector LED 2 - green: connector 2 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-3, group: connector-leds, at: [179.55, 6.71], attrs: {description: 'Connector LED 3 - green: connector 3 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-4, group: connector-leds, at: [179.55, 10.58], attrs: {description: 'Connector LED 4 - green: connector 4 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-5, group: connector-leds, at: [182.11, 6.71], attrs: {description: 'Connector LED 5 - green: connector 5 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-6, group: connector-leds, at: [182.11, 10.58], attrs: {description: 'Connector LED 6 - green: connector 6 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-7, group: connector-leds, at: [184.66, 6.71], attrs: {description: 'Connector LED 7 - green: connector 7 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: connector-led-8, group: connector-leds, at: [184.66, 10.58], attrs: {description: 'Connector LED 8 - green: connector 8 is selected, its six ports shown on the Port LEDs; off: not selected'}, states: {lamp: ['off', {name: selected, color: '#39b54a'}]}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [2.91, 5.20], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down, shut down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [2.91, 9.84], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
