@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: ge-4s
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Oscilloquartz OSA GE-4S - the OSA 542x four-port Gigabit Ethernet expansion card,
+  four ganged SFP cages for 100/1000 fibre carrying PTP, NTP and Sync-E, with a lamp
+  per port beside the card's PWR and STA pair and a perforated vent field.
+size: {w: 113.5, h: 20.6}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: GE-4S
+  sfp: 4
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      four 100/1000 fibre ports carrying PTP, NTP and Sync-E, and the Syncjack probes
+      (2023 data sheet, "4x 1G" line card). Numbered 1-4 left to right, the numerals
+      printed above the cages.
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  identity: >-
+    manual - OSA 5420/5421 Installation and Commissioning Manual R9.5.1 p16, "GE-4S Fiber
+    Ethernet Ports": the OSA 542x supports a 4X1G fibre Ethernet line card carrying
+    Sync-E, PTP and NTP outputs. The manual's Figure 7 for it is a CAPTION WITH NO
+    PICTURE in the copy held (pdfimages finds two images on p16, the BTOH-16's and the
+    CPOH-16's). The face lettering reads "OSA GE-4S" in both data sheet renders.
+  size: >-
+    borrowed - oscilloquartz/btoh-16@1, the same expansion bay at the same 113.5 x 20.6.
+    The GE-4S's own image (2023 data sheet p6, 329 x 140 px, and the 2016 edition's p4
+    at 375 x 154) resolves a plate of 312 x 57 px, 5.47 against the frame's 5.51.
+  elements: >-
+    photo-measured at 2.75 px/mm off the 2023 data sheet p6 image, the only picture of
+    this card held, a slight three-quarter render: thumbscrew at the frame's position;
+    a field of round vent holes at x 9.1-25.5 x y 5.1-16; six lamps in three columns at
+    x 28.4, 34.2 and 39.3 on y 7.3 and 12.7, labelled PWR over STA, then 1 over 3, then
+    2 over 4; a ganged block of four SFP cages at x 43.6-104.7 whose port numerals 1-4
+    stand above them on a 14.9 pitch; the pull tab at the right end. At under 3 px/mm
+    every figure here is good to about half a millimetre and no better.
+  lamp-states: >-
+    PWR and STA - manual Table 2, which covers the expansion card PWR lamp and the STA
+    lamp of an expansion card. THE FOUR PORT LAMPS ARE UNTABLED: the manual has no GE-4S
+    LED table and neither data sheet describes them, so they keep common/led-indicator's
+    own generic vocabulary.
+  power: >-
+    NOT STATED. The data sheets give chassis power "without LC or SFP" and the manual
+    gives only PSU ratings; no expansion card has a figure anywhere in the corpus.
+states: [absent]
+elements:
+  thumbscrew: {at: [0.1, 9.15], size: [6.4, 6.4], class: fastener}
+  vents: {at: [9.1, 5.1], size: [16.4, 10.9], class: vent}
+  handle: {at: [105.3, 0.55], size: [7.0, 19.25], class: handle}
+parts:
+  - ref: common/led-indicator@1
+    id: led-pwr
+    at: [26.4, 5.3]
+    states: {lamp: ['off', {name: power-ok, color: '#39b54a'}]}
+  - ref: common/led-indicator@1
+    id: led-sta
+    at: [26.4, 10.7]
+    states: {lamp: ['off', {name: normal, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: power-up, color: '#e0b21b'}, {name: loading, color: '#e0b21b', behavior: blinking}, {name: fail, color: '#d0342c'}]}
+  - {ref: common/led-indicator@1, id: led-port-1, at: [32.2, 5.3], group: port-leds}
+  - {ref: common/led-indicator@1, id: led-port-3, at: [32.2, 10.7], group: port-leds}
+  - {ref: common/led-indicator@1, id: led-port-2, at: [37.3, 5.3], group: port-leds}
+  - {ref: common/led-indicator@1, id: led-port-4, at: [37.3, 10.7], group: port-leds}
+  - {ref: std/sfp-ganged@1, id: port-1, at: [44.175, 5.35], group: sfp}
+  - {ref: std/sfp-ganged@1, id: port-2, at: [59.075, 5.35], group: sfp}
+  - {ref: std/sfp-ganged@1, id: port-3, at: [73.975, 5.35], group: sfp}
+  - {ref: std/sfp-ganged@1, id: port-4, at: [88.875, 5.35], group: sfp}
+connection-points:
+  mate: {at: [56.75, 10.3], direction: rear}
+skins: [default]

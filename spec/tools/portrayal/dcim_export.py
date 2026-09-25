@@ -469,6 +469,15 @@ PART_MEDIA = {
     # family fallback can tell them apart. #287.
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "1g"): "1000base-t",
+    # THE 10/100 ROW IFACE_TYPE ALREADY HAS, for a card. Without it a card's
+    # stated `speed: 100m` fell through to FAMILY_PART, whose answer for an
+    # Ethernet jack is 1000base-t - the Nokia CCM-e's mgmt and OES ports.
+    ("rj45", "100m"): "100base-tx",
+    # A CFP2 STATING 200G IS NOT THE CAGE'S 100G. With no row the Nokia
+    # ME3-200GB-CFP2-DCO's ports fell to PART_IFACE's std/cfp2 default and
+    # exported as 100gbase-x-cfp2. Unlike SFP112 the slug is in both targets:
+    # NetBox TYPE_200GE_CFP2 at 6a009845, Nautobot TYPE_200GE_CFP2 at 38953ac3.
+    ("cfp2", "200g"): "200gbase-x-cfp2",
 }
 
 
@@ -551,6 +560,8 @@ NOT_A_DCIM_PORT = {
     "common/lc-duplex-adapter": "single-faced modules have no trunk to terminate on, and the "
                                 "device pass has no fibre path; optical-paths-design.md C3",
     "std/lc-bore": "the rx/tx bore of a transceiver, not a port on anything - see PART_SKIP",
+    "std/sc-bore": "the SC/APC optical input of a single-faced CH3000 back plate (commscope/bp-a5); "
+                   "no trunk to terminate on, the same case as common/lc-duplex-adapter",
     "common/sc-apc": "PON; the connector is the same ferrule for xg-pon (10G/2.5G) and "
                      "xgs-pon (10G/10G), which upstream separates, so the ref cannot pick one",
 
@@ -570,6 +581,9 @@ NOT_A_DCIM_PORT = {
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/vga": "VGA; neither library has a video port type",
+    "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
+                               "over one cable; neither library has a type for it, and one row "
+                               "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
@@ -832,7 +846,13 @@ def iface_type(p, attrs, group_role=None):
     # is a stronger statement than a speed - it says what the jack is FOR - and the
     # AS5912-54X and CSR310 say it with no speed, so behind the guard they never
     # typed at all.
-    if fam == "rj45" and attrs.get("role") == "mgmt":
+    #
+    # BUT ONLY WHEN IT STATES NO SPEED. A stated speed is the device's own word
+    # on the rate, and returning 1G ahead of it typed the Nokia SR-1's 10/100
+    # `mgmt` jack 1000base-t while `oes-1` beside it, identical but for its
+    # role, gave 100base-tx. A mgmt jack that states one takes the path below,
+    # where the guard lets it through because it has a speed.
+    if fam == "rj45" and attrs.get("role") == "mgmt" and not attrs.get("speed"):
         return "1000base-t"                    # a copper management port is 1G
     if (fam == "rj45" and "-eth" not in ref
             and group_role != "traffic" and not attrs.get("speed")):
