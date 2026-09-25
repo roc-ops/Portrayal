@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: op35d8cf
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) OP35D8CF - 8-channel DWDM demultiplexer on the 100 GHz ITU grid for a custom channel group: the DWDM input and eight channel outputs. A passive half-depth module for the CH3000: it seats in
+  the front or the rear half of a slot.
+size: {w: 25.76, h: 130.2, d: 165.1}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+fields:
+  model:
+    label: the part number printed under the title
+    type: text
+    default: ''
+  ch1:
+    label: ITU channel printed at channel port 1
+    type: text
+    default: ''
+  ch2:
+    label: ITU channel printed at channel port 2
+    type: text
+    default: ''
+  ch3:
+    label: ITU channel printed at channel port 3
+    type: text
+    default: ''
+  ch4:
+    label: ITU channel printed at channel port 4
+    type: text
+    default: ''
+  ch5:
+    label: ITU channel printed at channel port 5
+    type: text
+    default: ''
+  ch6:
+    label: ITU channel printed at channel port 6
+    type: text
+    default: ''
+  ch7:
+    label: ITU channel printed at channel port 7
+    type: text
+    default: ''
+  ch8:
+    label: ITU channel printed at channel port 8
+    type: text
+    default: ''
+attrs:
+  model: OP35D8CF
+  role: passive
+provenance:
+  size: >-
+    borrowed - one CH3000 slot pitch less the faceplate gap (26.76 - 1.0), and the chassis
+    face's 130.2, the face every single-width module here takes; the OP35M8-CFx / OP35D8-CFx DWDM mux and demux data sheet's p1 photograph
+    of an OP35D8-CF2 (193 x 699 px) is a three-quarter view that
+    shows the module's side as well, so its pixel box does not give the face's aspect -
+    the photograph is normalised to these dimensions rather than checked against them. Depth datasheet - "6.5 D", 165.1 mm, a half-depth module.
+  face-features: >-
+    photo-measured as fractions of the face: the photograph is normalised to 25.76 x 130.2
+    and the SC/APC adapters found by colour (their green bodies and yellow laser shutters),
+    which gives each row's position to about half a millimetre; the legends are read off
+    the same photograph. The data sheet covers the OP35M8-CFx mux as well; only the demux is photographed, so only it is modelled. The face prints "ITU Channel" at the foot; channel numbers and the part number are fields.
+  seating: >-
+    datasheet - a half-depth module; accepted by a slot's front bay and its rear bay alike,
+    per the chassis data sheet's 16 front-loaded and 16 rear-loaded half-depth slots.
+  power: >-
+    passive - no power figure; the data sheet gives optical characteristics only.
+elements:
+  screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
+  adapter-inp: {at: [0.0, 18.20], size: [19.5, 10.4], class: port}
+  adapter-ch-1: {at: [0.0, 28.96], size: [19.5, 10.4], class: port}
+  adapter-ch-2: {at: [0.0, 39.72], size: [19.5, 10.4], class: port}
+  adapter-ch-3: {at: [0.0, 50.48], size: [19.5, 10.4], class: port}
+  adapter-ch-4: {at: [0.0, 61.24], size: [19.5, 10.4], class: port}
+  adapter-ch-5: {at: [0.0, 72.00], size: [19.5, 10.4], class: port}
+  adapter-ch-6: {at: [0.0, 82.76], size: [19.5, 10.4], class: port}
+  adapter-ch-7: {at: [0.0, 93.52], size: [19.5, 10.4], class: port}
+  adapter-ch-8: {at: [0.0, 104.28], size: [19.5, 10.4], class: port}
+  screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: inp, at: [6.00, 18.90], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-1, at: [6.00, 29.66], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-2, at: [6.00, 40.42], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-3, at: [6.00, 51.18], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-4, at: [6.00, 61.94], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-5, at: [6.00, 72.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-6, at: [6.00, 83.46], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-7, at: [6.00, 94.22], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: ch-8, at: [6.00, 104.98], rotate: 90, attrs: {connector: SC/APC}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
