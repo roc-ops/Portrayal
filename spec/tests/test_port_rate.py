@@ -101,6 +101,18 @@ def test_the_port_speed_answers(found):
     assert _l113(found[0] + found[1]) == []
 
 
+def test_a_cage_carrying_a_proprietary_link_has_no_speed_to_give(found):
+    """It says what runs in it, and the exporter types it `other` from that."""
+    lint.lint_device_port_rate("d.yaml", _device(
+        port={"media": "sfp", "proprietary-link": "Digital return"}, ref="std/sfp@1"),
+        LIB_ROOTS)
+    assert _l113(found[1]) == []
+    # Not a label, so not a declaration: still asked.
+    lint.lint_device_port_rate("d.yaml", _device(
+        port={"media": "sfp", "proprietary-link": ""}, ref="std/sfp@1"), LIB_ROOTS)
+    assert len(_l113(found[1])) == 1
+
+
 def test_a_group_without_a_role_is_found(found):
     lint.lint_device_port_rate("d.yaml", _device(port={"media": "rj45", "speed": "1g"}, role=None),
                                LIB_ROOTS)
