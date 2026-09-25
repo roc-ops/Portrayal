@@ -590,6 +590,13 @@ PART_MEDIA = {
     # family fallback can tell them apart. #287.
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "1g"): "1000base-t",
+    # AN MRJ21 IS SIX COPPER GIGABIT PORTS BEHIND ONE CONNECTOR. Neither library has
+    # an MRJ21 type, and needs none: an interface type names the signal, and each
+    # port is 10/100/1000 copper. The placement says `media: mrj21, speed: 1g` and
+    # lists its six ports in `interfaces:` (the Nokia 7750 M48-1GB-XP-TX's eight
+    # connectors, 48 x 1000base-t); a connector without that list would export as
+    # one port and undercount by five.
+    ("mrj21", "1g"): "1000base-t",
     # THE 10/100 ROW IFACE_TYPE ALREADY HAS, for a card. Without it a card's
     # stated `speed: 100m` fell through to FAMILY_PART, whose answer for an
     # Ethernet jack is 1000base-t - the Nokia CCM-e's mgmt and OES ports.

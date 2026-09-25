@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: lc-7124-2xfp-b
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,6 +12,7 @@ description: >-
 size: {w: 166.0, h: 30.58}
 size-confidence: {w: estimated, h: estimated}
 attrs:
+  xfp-10g: 2
   model: LC-7124-2XFP-B
   power-absent: not-published
   xfp: 2
@@ -36,6 +37,11 @@ groups:
     role: indicator
     index-origin: 1
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the TM-7124S data sheet's ordering table - "LC-7124-2XFP-B
+    Plug-in line card with 2x10GE XFP ports" - and its "2 x 10GE XFP expansion module". The
+    XFP cage cannot say: it takes a 10GbE optic and an OC-192 one. The export already typed
+    it 10gbase-x-xfp by default; this makes that a statement. Nothing new was measured.
   identity: >-
     datasheet - ordered as LC-7124-2XFP-B, "Plug-in line card with 2x10GE XFP ports, sync
     clock and phase clock"; the face prints LC-7124-2XFP-B. The stencil master is named
