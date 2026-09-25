@@ -1,0 +1,548 @@
+format: 1
+kind: device
+name: tm-8106
+version: 0.1.0
+maturity: modelled
+manufacturer: Telco Systems
+model: TM-8106
+aliases:
+- {name: T-Metro 8106, kind: superseded, note: 'the name on the metal (T-METRO 8106) and on the 2022 data sheets; the 2025 data sheet and product page call the same box TM-8106'}
+portfolio: {line: Carrier Ethernet, family: Service Demarcation Device, series: T-Series}
+description: >-
+  Telco Systems (BATM Networks) TM-8106, formerly T-Metro 8106 - a 2RU modular carrier
+  Ethernet / MPLS service demarcation device, 1.2 Tb switching: the TM-8104's chassis,
+  supplies and expansion slot with a different base board - two 40/100GE QSFP28 cages
+  between two blocks of 2 x 4 stacked 1/10GE SFP+, the CLI / OOB management stack, and no
+  timing connectors on the face. The slot takes a 48 x SFP+ or a 4 x QSFP28 module.
+profile: networking
+provenance:
+  model:
+    confidence: datasheet
+    note: >-
+      TM-8106 data sheet (telco.com 2025/12), "TM-8106 Modular 1.2Tbps Service
+      Demarcation Device (SDD)"; the 2022 editions (not held) and the stencil call it the
+      T-Metro 8106, which is what the faceplate prints.
+  sources:
+    confidence: datasheet
+    note: >-
+      The 2025 TM-8106 data sheet, the NetZoom stencil Telco-TM810x-04-30-2024.VSS
+      (masters TM8106 (CF), TM810x-48SFP+, TM810x-4QSFP28), 14 vendor renders of the 8106
+      from the telco.com media library - among them the near-square 2022 front (8106.jpg)
+      and one with the expansion slot empty (T-Metro-8106-HL-3.png) - and everything held
+      for the TM-8104, whose chassis this is. NetBox has no TM-8106 entry. NO
+      INSTALLATION GUIDE IS PUBLIC - telco.com routes hardware manuals to a support portal
+      behind a login (see the install-guide gap).
+  chassis:
+    confidence: estimated
+    note: >-
+      2RU x 436.9 x 88.5 x 350 deep. The depth is the data sheet's (13.7 in, 350 mm). The
+      face is the stencil's: its body between the ear folds is 165.1 units = 436.8 mm and
+      its height 33.5 units = 88.6 mm at the stencil's 1:10, and its outline with ears is
+      482.9 mm - the 19-inch face, which is what fixes the scale. Two readings off the
+      vendor's renders corroborate it: the TM-8104's 2021 render (8104-02.png, 3622 px) gives a
+      body of 439.5 and a face of 87.8 mm, and the 2022 TM-8106 front (8106.jpg) a face
+      aspect of 4.955, i.e. 88.8 on a 440 body. The render is yawed a little (its SFP pitch
+      slides 14.60 -> 14.41 -> 14.34 left to right), which is why its 439.5 is not
+      preferred over the stencil. Recorded as estimated because a stencil is a diagram
+      symbol and no mechanical drawing is held.
+  chassis-height-in-the-data-sheet:
+    confidence: known-wrong
+    note: >-
+      The TM-8106 data sheet prints, as every TM-8104 edition does, "2RU H x 19'W x 13.7'D (133.35 x 482 x 350mm)".
+      133.35 mm is exactly THREE rack units (3 x 44.45); 2RU is 88.9. The stencil (88.6),
+      the TM-8104's 2021 render (87.8), this box's 2022 front (88.8) and NetBox's TM-8104
+      (u_height 2.0) all say
+      2RU, so the millimetre figure is a transcription slip and 88.5 is drawn. The 482 is
+      the 19-inch face with its ears, not the body.
+  ears:
+    confidence: estimated
+    note: >-
+      Not drawn. The stencil's ear folds are at 8.8 and 173.9 units, 23.3 mm of ear either
+      side of the body. The data sheets order the brackets separately (TM810x-BRKT-19IN or
+      -23IN, "Ear Side TM810x Rack Mount Brackets").
+  front-layout:
+    confidence: estimated
+    note: >-
+      Every feature is placed from the stencil master's own vector paths, extracted to
+      chassis millimetres (x = (unit - 8.8) x 2.6458), and then checked against the 2021
+      render at matched scale - the chassis, supplies, slot, vent and CLI/OOB stack are the
+      TM-8104's and were checked on it - and this face's own base board (two SFP+ blocks of
+      4 columns, the two QSFP28 cages and their lane lamps) against the 2022 8106 front. Every feature is present in both and in the same
+      order. POSITIONS AGREE TO ABOUT 2.5 MM AND NO BETTER, and that is the render's limit,
+      not the stencil's error: the render is yawed (its lamp pitch slides 14.60 -> 14.41 ->
+      14.34 across three identical blocks), and after integrating a local scale fitted to
+      that slide its features sit within -3.0 (ToD shell) to +0.4 (base block B) of the
+      stencil with no consistent pattern, and its body comes out 434.6 against 436.85. The
+      in-block pitch, which both sources resolve well, agrees to 0.05 mm. See the
+      block-spacing gap.
+  ports:
+    confidence: estimated
+    note: >-
+      std/sfp-ganged@1 centred on each stencil cage opening (13.91 x 9.68): upper row y
+      55.58, lower 71.49, columns at x 110.08 ... 152.9 and 327.04 ... 369.86, a 14.26-14.3
+      pitch. common/qsfp-cage@3 centred on the stencil's two 20.27 x 9.68 QSFP28 openings at
+      x 213.35 and 260.24, y 71.79, each under four common/led-dot@1 on its 2.07 mm lane dots
+      at y 67.63 - the 2022 front shows the same four dots above each cage. The stencil's pitch agrees with the 2021
+      render's two undistorted blocks (14.34, 14.41) and not with the registry's touching
+      14.25, so these cages stand a tenth of a millimetre apart. Odd ports above, even
+      below; the lower row is turned 180 so both rows' lips face the lamp strip.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Legends read off the 2022 front and the stencil, which agree: the QSFP28 cages are
+      1/1/1 and 1/1/2, and the SFP+ columns print "3▲▼4" ... "9▲▼10" left and "11▲▼12" ...
+      "17▲▼18" right under their blocks, "1/1/x" at each block's foot - so the SFP+ ports
+      continue the slot-1 numbering after the two QSFP28 and run 3 to 18. The sfp-plus
+      group therefore places its ports at rel-pos 3-18, not 1-16.
+  lamps:
+    confidence: estimated
+    note: >-
+      One up and one down arrow lamp per SFP+ column in the pale strip between the rows
+      (common/led-arrow@1) and four lane dots over each QSFP28, as the 2022 front and the
+      stencil both draw. PWR, CPU1, CPU2 and FAN beside the CLI/OOB stack are
+      common/led-dot@1 on the stencil's 2.6 mm lamps - the nearest library part, 2.0 mm, is used at the measured
+      centres rather than a 4 mm lamp at a wrong pitch. The stencil colours FAN red and the
+      rest green; no document says what any lamp's states mean.
+  jack-lamps:
+    confidence: photo-measured
+    note: >-
+      L76 STANDS IN THE BASELINE ON PURPOSE, not waived (the waiver cap is for rules with no
+      device-level fix). the console jack here IS lamped, so the lamped part is the right
+      one. At 4x on the 2021 render (telco.com 2021/01/8104-02.png, 5.9 px/mm) the TM-8104's
+      two RJ45 stacks - ToD over E1/T1 and CLI over OOB - show a bright lamp window in each
+      outer corner of each jack, the top corners of the upper jack and the bottom corners of
+      the lower, set in the jack housing rather than beside it; the stencil draws the same
+      four green windows on every jack, and draws this face's CLI / OOB stack identically.
+      docs/rj45-family-design.md's rule is that a console or timing jack carries no lamps,
+      which is true of most boxes and not of this one. Revisit if a closer photograph shows
+      the CLI windows are blanks.
+  jack-orientation:
+    confidence: photo-measured
+    note: >-
+      The CLI/OOB stack puts its lamp windows on the OUTER corners - the top corners of the
+      upper jack and the bottom corners of the lower - in the stencil, and the TM-8104's
+      identical stack does in the 2021 render's highlights. common/rj45-ganged-eth@1 draws its lamps on the keyway side
+      and is keyway-down unrotated, so the upper jack is turned 180 and the lower is not.
+  shells:
+    confidence: estimated
+    note: >-
+      The silver shell around the RJ45 stack, the metal frame of each SFP+ block and the
+      bright bezel of each QSFP28 cage are panel decor at the stencil's outlines (17.14 x
+      26.98, 58.16 x 27.0, 21.61 x 10.72); the 2022 front shows all three as bright metal
+      against the black panel.
+  psu-bays:
+    confidence: estimated
+    note: >-
+      Two bays at the stencil's supply faces, 50.91 x 39.43 at y 3.9 and 45.4, labelled
+      PS1 and PS2 reading bottom to top beside them. The data sheets: "Dual redundant,
+      hot-swappable AC or DC 24/-48VDC".
+  exp-slot:
+    confidence: datasheet
+    note: >-
+      One full-width expansion slot, printed as slot 2 ("1/2/x" on the 48-port module,
+      1/2/1 ... 1/5/1 on the QSFP28 module). The data sheets list the two modules it takes,
+      TM810x-48SFP+ and TM810x-4QSFP28; its size is the stencil's empty slot.
+  vent:
+    confidence: estimated
+    note: >-
+      The perforated strip between the slot and the base board, y 41.2-48.4 across x
+      70.3-425.1 between the two chassis screws, from the stencil; the 2021 render shows it
+      as two staggered rows of hexagonal holes. Hole pitch and cavity depth are not
+      measured.
+  logos:
+    confidence: photo-measured
+    note: >-
+      THIS FACE CARRIES NO LOGO MARK: the 2022 front prints a plain TELCO SYSTEMS wordmark
+      over T-METRO 8106 at the base board's left, both drawn as text; there is no swirl to
+      reserve a zone for (the TM-8104's face carries one).
+  power:
+    confidence: datasheet
+    note: >-
+      "Max power consumption: 400W", unqualified by configuration or ambient in the TM-8106 data sheet,
+      as in all five TM-8104 editions - filed as the chassis maximum. No supply rating and no per-module figure
+      is published anywhere held.
+  fans:
+    confidence: datasheet
+    note: >-
+      Data sheets: "Fan: Load sharing, speed controlled, hot-swappable", orderable as
+      TM810x-FAN. NetBox lists four fan bays on the TM-8104,
+      whose chassis this is. Nothing held shows where they are, so no fan
+      is drawn (see the rear-and-fans gap).
+  weight:
+    confidence: datasheet
+    note: '"Weight: 9kg - 14.5kg" in every edition, by configuration.'
+attrs:
+  physical:
+    weight-kg: 14.5
+    weight-note: 9 to 14.5 kg by configuration (data sheet)
+    overall-mm: 482 x 88.9 x 350 with rack ears (the data sheet's 133.35 height is a 3RU slip)
+  performance:
+    switching-capacity: 1.2 Tbps full duplex, wire speed, non-blocking
+    port-options: 2x QSFP28 + 16x SFP+; 2x QSFP28 + 64x SFP+ (48-port module); or 6x QSFP28 + 16x SFP+ (QSFP28 module)
+  power:
+    power-max-w: 400
+    power-envelope: unstated
+    power-envelope-note: data sheet "Max power consumption 400W", no configuration or ambient stated
+    input-voltage: AC, or DC 24 / -48 V
+    psu-redundancy: dual redundant, hot-swappable
+  thermal:
+    cooling: load-sharing, speed-controlled, hot-swappable fans (TM810x-FAN)
+  environmental:
+    operating-temp: 0 to 50 C
+    humidity: up to 95 percent, non-condensing
+  platform:
+    expansion-slots: 1
+    oam-module: TM810x-OAM, full-FPGA expansion module for hardware OAM (location not documented)
+  features:
+    services: MPLS L2VPN (VPLS, H-VPLS, VPWS), MPLS L3VPN (BGP), 802.1Q, 802.1ad Q-in-Q
+    routing-protocols: IS-IS, OSPF, BGP, RSVP-TE, LDP, Segment Routing, xSTP, G.8032, LACP, MC-LAG
+    resiliency: sub-50 ms RSVP-TE FRR, secondary LSP, G.8031 1:1, G.8032, dual-homed VPLS/H-VPLS, BFD, up to 44 LAGs
+    services-ip: IPv6 PE, IPv4/IPv6 dual stack
+    oam-twamp: TWAMP; hardware 100GE service tests
+    oam: hardware IEEE 802.1ag CFM, 802.3ah EFM, Y.1731 SLM/DMM, Y.1564 and RFC 2544 test head, MEF 46/48/49
+  management:
+    local: CLI console and out-of-band Ethernet on RJ45
+    mgmt-protocols: Console, Telnet, SSHv2, RADIUS, TACACS+, SNMP v1/2/3, xFTP, NTP, DNS resolver, NETCONF
+  compliance:
+    emc: EMC Directive 2014/30/EU including EN 300386; FCC 47 CFR Part 15 Class A; ICES-003:2020 Issue 7 Class A
+    safety: LVD Directive 2014/35/EU; UL 62368-1 / CAN CSA-C22.2 No. 62368-1; Class 1 laser product IEC 60825-1
+    rohs: RoHS Directive 2011/65/EU, Directive (EU) 2015/863
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 436.9
+  height: 88.5
+  depth: 350
+  ru: 2
+  weight-kg: 14.5
+  color: '#1b1d20'
+  silk: '#e4e6e8'
+gaps:
+- what: install-guide
+  scope: [front, rear, left, right, top, bottom]
+  reason: vendor-silent
+  note: >-
+    telco.com publishes data sheets only; its support page says hardware documentation is
+    on a support portal behind a login (telco_support@telco.com). The one public Telco
+    Systems installation guide (T-Marc 3306, MN100280) is for another product. Searched:
+    the telco.com media library (120 PDFs), every product and knowledge-centre page, and
+    the Wayback index of telco.com PDFs.
+  wanted: the TM-8106 / T-Metro 8106 hardware installation guide, from the BATM support portal.
+- what: block-spacing
+  scope: [sfp-plus, qsfp28, mgmt]
+  reason: needs-drawing
+  note: >-
+    Block origins are the stencil's. The two vendor fronts disagree with it differently:
+    this face's near-square 2022 front (1.8 px/mm) spreads everything about 2% outward
+    from the left - the SFP+ blocks about 2.2 mm out on each side, the module's fourth
+    QSFP28 cage 4.8 mm right of the stencil's - while the yaw-corrected 2021 TM-8104 render disagrees with
+    its own stencil within -3.0 to +0.4 mm with no pattern. Neither resolves better than 2-3 mm, so the stencil stands.
+  wanted: a mechanical drawing, or a square-on photograph at 4 px/mm or better.
+- what: rear-and-fans
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    No image held shows the rear. The data sheets say the fans are hot-swappable and order
+    them as TM810x-FAN, and NetBox lists four fan bays, so the rear almost certainly holds
+    them; where, and whether it carries a ground point or anything else, is not known.
+  wanted: a square-on photograph of the rear, or the installation guide's rear view.
+- what: airflow
+  reason: vendor-silent
+  note: >-
+    No data sheet states the airflow direction. NetBox gives front-to-rear, which is a
+    community reading with no cited source, so chassis.airflow is left unset.
+  wanted: the installation guide's cooling section.
+- what: oam-module
+  reason: vendor-silent
+  note: >-
+    The TM810x-OAM "Full FPGA Expansion Module for Base System" (ordering tables, 2025) and
+    NetBox's "OAM Expansion Bay" have no visible opening on the front; it is presumably
+    internal. Not drawn.
+  wanted: the installation guide, or a photograph of the chassis with its lid off.
+- what: ordering-table
+  scope: [slot-2]
+  reason: sources-disagree
+  note: >-
+    The 2025 data sheet's ordering table gives TM8106-2QS-O-2XX the description "TM810x
+    Expansion Module With 48x1G/10G" - the 48-port module's own line, copied - while its
+    feature table lists the base as 2 x QSFP28 + 16 x SFP+. The configurations follow the
+    SKU names and the feature table (2QS = the bare base, 2QS-64 = with the 48-port
+    module, 6QS = with the QSFP28 module); no part number is attached while the table
+    contradicts itself.
+  wanted: a current price list or ordering guide.
+- what: psu-rating
+  scope: [psu-1, psu-2]
+  reason: vendor-silent
+  note: >-
+    No edition gives the supplies' own rating or model number; only the chassis' 400 W
+    maximum. Searched every data sheet held for "W", "PSU", "power supply" and "Power".
+  wanted: the supply's label or the installation guide's power section.
+groups:
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: data sheets - "Dual redundant, hot-swappable AC or DC"
+    description: two hot-swappable supplies, AC or DC, stacked at the front left as PS1 over PS2.
+  exp-slot:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the one full-width expansion slot, printed as slot 2 (the base board's ports are
+      slot 1), so the bay sits at rel-pos 2 and slot 1 is the fixed base board. Takes the TM810x-48SFP+ or the TM810x-4QSFP28 module.
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      the base board's two 40/100GE QSFP28 cages, 1/1/1 and 1/1/2, side by side in the
+      middle of the board.
+  qsfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: four round lane lamps above each QSFP28 cage.
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the base board's 16 x 1/10GE SFP+ cages, 1/1/3 to 1/1/18, in stacked pairs - odd
+      above, even below - in two blocks of 4 columns either side of the QSFP28 pair. They
+      sit at rel-pos 3-18 because the face numbers them after the two QSFP28 cages.
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one arrow lamp per port in the strip between the rows, pointing at its port.
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the local management stack: the CLI serial console over the OOB out-of-band Ethernet
+      port, one RJ45 stack labelled "CLI ▲▼ OOB".
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: PWR, CPU1, CPU2 and FAN beside the management stack.
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 436.9, h: 88.5}
+    panel:
+      decor:
+        - {id: psu-recess, at: [4.88, 3.01], size: [53.0, 82.75], fill: '#0b0c0d'}
+        - {id: psu-divider, at: [5.92, 43.87], size: [50.91, 1.04], fill: '#8d9298'}
+        - {id: vent-strip-base, at: [70.3, 41.2], size: [354.8, 7.2], fill: '#2a2d31'}
+        - {id: vent-strip, at: [70.3, 41.2], size: [354.8, 7.2], pattern: vent, pattern-pitch: [8.4, 4.85], vent: 20, confidence: estimated, source: extent from the stencil masters (y 41.2-48.4 between the two chassis screws); the 2021 render shows two staggered rows of hex holes there on a ~4.2 mm pitch. Hole size and the 20 mm cavity are not measured - the depth only makes the holes read as holes in 3D}
+        - {id: shell-mgmt, kind: port-shell, at: [401.15, 54.89], size: [17.14, 26.98], rx: 0.3, fill: '#b0b5bb', stroke: '#80868c', stroke-width: 0.25}
+        - {id: sfp-block-1, kind: port-shell, at: [109.39, 54.89], size: [58.16, 27.02], fill: '#5d6268', stroke: '#a9aeb4', stroke-width: 0.35}
+        - {id: sfp-strip-1, at: [109.74, 65.62], size: [57.46, 5.47], fill: '#c8c3b8'}
+        - {id: sfp-block-2, kind: port-shell, at: [326.35, 54.89], size: [58.16, 27.02], fill: '#5d6268', stroke: '#a9aeb4', stroke-width: 0.35}
+        - {id: sfp-strip-2, at: [326.7, 65.62], size: [57.46, 5.47], fill: '#c8c3b8'}
+        - {id: qsfp-bezel-1, kind: port-shell, at: [212.7, 71.29], size: [21.61, 10.72], rx: 0.3, stroke: '#c9cdd2', stroke-width: 0.45}
+        - {id: qsfp-bezel-2, kind: port-shell, at: [259.59, 71.29], size: [21.61, 10.72], rx: 0.3, stroke: '#c9cdd2', stroke-width: 0.45}
+      cutouts:
+        - {id: port-3, at: [109.91, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-4, at: [109.91, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-3, at: [112.84, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-4, at: [117.63, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-5, at: [124.17, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-6, at: [124.17, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-5, at: [127.1, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-6, at: [131.9, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-7, at: [138.47, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-8, at: [138.47, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-7, at: [141.4, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-8, at: [146.19, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-9, at: [152.73, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-10, at: [152.73, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-9, at: [155.66, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-10, at: [160.46, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-11, at: [326.87, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-12, at: [326.87, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-11, at: [329.79, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-12, at: [334.6, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-13, at: [341.13, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-14, at: [341.13, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-13, at: [344.05, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-14, at: [348.86, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-15, at: [355.43, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-16, at: [355.43, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-15, at: [358.35, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-16, at: [363.16, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-17, at: [369.69, 55.22], size: [14.25, 10.4], shape: rect}
+        - {id: port-18, at: [369.69, 71.09], size: [14.25, 10.4], shape: rect}
+        - {id: led-port-17, at: [372.61, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: led-port-18, at: [377.42, 66.76], size: [3.6, 3.2], shape: rect}
+        - {id: port-1, at: [214.23, 71.54], size: [18.5, 9.58], shape: rect}
+        - {id: led-port-1-lane-1, at: [215.4, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-1-lane-2, at: [220.0, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-1-lane-3, at: [224.76, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-1-lane-4, at: [229.3, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: port-2, at: [261.12, 71.54], size: [18.5, 9.58], shape: rect}
+        - {id: led-port-2-lane-1, at: [262.32, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-2-lane-2, at: [266.86, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-2-lane-3, at: [271.67, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-port-2-lane-4, at: [276.2, 67.64], size: [2.0, 2.0], shape: circle}
+        - {id: cli, at: [403.43, 55.39], size: [12.7, 11.0], shape: rect}
+        - {id: oob, at: [403.43, 70.22], size: [12.7, 11.0], shape: rect}
+        - {id: led-pwr, at: [421.16, 62.64], size: [2.0, 2.0], shape: circle}
+        - {id: led-cpu1, at: [421.16, 67.98], size: [2.0, 2.0], shape: circle}
+        - {id: led-cpu2, at: [421.16, 73.5], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan, at: [421.16, 78.88], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [117.03, 86.26], text: 3▲▼4, font-size: 2.1, anchor: middle, for: [port-3, port-4]}
+      - {at: [131.3, 86.26], text: 5▲▼6, font-size: 2.1, anchor: middle, for: [port-5, port-6]}
+      - {at: [145.59, 86.26], text: 7▲▼8, font-size: 2.1, anchor: middle, for: [port-7, port-8]}
+      - {at: [159.86, 86.26], text: 9▲▼10, font-size: 2.1, anchor: middle, for: [port-9, port-10]}
+      - {at: [334.0, 86.26], text: 11▲▼12, font-size: 2.1, anchor: middle, for: [port-11, port-12]}
+      - {at: [348.25, 86.26], text: 13▲▼14, font-size: 2.1, anchor: middle, for: [port-13, port-14]}
+      - {at: [362.56, 86.26], text: 15▲▼16, font-size: 2.1, anchor: middle, for: [port-15, port-16]}
+      - {at: [376.81, 86.26], text: 17▲▼18, font-size: 2.1, anchor: middle, for: [port-17, port-18]}
+      - {at: [107.99, 87.74], text: 1/1/x, font-size: 0.9, anchor: start, for: port-3}
+      - {at: [324.95, 87.74], text: 1/1/x, font-size: 0.9, anchor: start, for: port-11}
+      - {at: [223.48, 86.26], text: 1/1/1, font-size: 1.55, anchor: middle, for: port-1}
+      - {at: [270.38, 86.26], text: 1/1/2, font-size: 1.55, anchor: middle, for: port-2}
+      - {at: [60.9, 60.3], text: TELCO SYSTEMS, font-size: 2.4, anchor: start, for: chassis}
+      - {at: [65.2, 64.1], text: T-METRO 8106, font-size: 1.9, anchor: start, for: chassis}
+      - {at: [425.2, 64.11], text: PWR, font-size: 1.5, anchor: start, for: led-pwr}
+      - {at: [425.2, 69.45], text: CPU1, font-size: 1.5, anchor: start, for: led-cpu1}
+      - {at: [425.2, 74.97], text: CPU2, font-size: 1.5, anchor: start, for: led-cpu2}
+      - {at: [425.2, 80.35], text: FAN, font-size: 1.5, anchor: start, for: led-fan}
+      - {at: [401.4, 85.65], text: CLI▲▼OOB, font-size: 1.55, anchor: start, for: [cli, oob]}
+      - {at: [3.3, 10.0], text: PS1, font-size: 2.0, anchor: middle, rotate: -90, for: psu-1}
+      - {at: [3.3, 51.3], text: PS2, font-size: 2.0, anchor: middle, rotate: -90, for: psu-2}
+    components:
+      bays:
+        - {id: psu-1, at: [5.92, 3.9], size: {w: 50.91, h: 39.43}, accepts: ['telco-systems/tm810x-psu-ac@1', 'telco-systems/tm810x-psu-dc@1'], default: 'telco-systems/tm810x-psu-ac@1', group: psus, rel-pos: 1}
+        - {id: psu-2, at: [5.92, 45.4], size: {w: 50.91, h: 39.43}, accepts: ['telco-systems/tm810x-psu-ac@1', 'telco-systems/tm810x-psu-dc@1'], default: 'telco-systems/tm810x-psu-ac@1', group: psus, rel-pos: 2}
+        - {id: slot-2, at: [59.0, 3.35], size: {w: 376.7, h: 33.9}, accepts: ['telco-systems/tm810x-48sfp@1', 'telco-systems/tm810x-4qsfp28@1'], default: 'telco-systems/tm810x-4qsfp28@1', group: exp-slot, rel-pos: 2}
+      placements:
+        - {ref: 'std/sfp-ganged@1', id: port-3, at: [109.91, 55.22], group: sfp-plus, rel-pos: 3}
+        - {ref: 'std/sfp-ganged@1', id: port-4, at: [109.91, 71.09], rotate: 180, group: sfp-plus, rel-pos: 4}
+        - {ref: 'common/led-arrow@1', id: led-port-3, at: [112.84, 66.76], skin: up, for: port-3, group: sfp-plus-leds, rel-pos: 3}
+        - {ref: 'common/led-arrow@1', id: led-port-4, at: [117.63, 66.76], skin: down, for: port-4, group: sfp-plus-leds, rel-pos: 4}
+        - {ref: 'std/sfp-ganged@1', id: port-5, at: [124.17, 55.22], group: sfp-plus, rel-pos: 5}
+        - {ref: 'std/sfp-ganged@1', id: port-6, at: [124.17, 71.09], rotate: 180, group: sfp-plus, rel-pos: 6}
+        - {ref: 'common/led-arrow@1', id: led-port-5, at: [127.1, 66.76], skin: up, for: port-5, group: sfp-plus-leds, rel-pos: 5}
+        - {ref: 'common/led-arrow@1', id: led-port-6, at: [131.9, 66.76], skin: down, for: port-6, group: sfp-plus-leds, rel-pos: 6}
+        - {ref: 'std/sfp-ganged@1', id: port-7, at: [138.47, 55.22], group: sfp-plus, rel-pos: 7}
+        - {ref: 'std/sfp-ganged@1', id: port-8, at: [138.47, 71.09], rotate: 180, group: sfp-plus, rel-pos: 8}
+        - {ref: 'common/led-arrow@1', id: led-port-7, at: [141.4, 66.76], skin: up, for: port-7, group: sfp-plus-leds, rel-pos: 7}
+        - {ref: 'common/led-arrow@1', id: led-port-8, at: [146.19, 66.76], skin: down, for: port-8, group: sfp-plus-leds, rel-pos: 8}
+        - {ref: 'std/sfp-ganged@1', id: port-9, at: [152.73, 55.22], group: sfp-plus, rel-pos: 9}
+        - {ref: 'std/sfp-ganged@1', id: port-10, at: [152.73, 71.09], rotate: 180, group: sfp-plus, rel-pos: 10}
+        - {ref: 'common/led-arrow@1', id: led-port-9, at: [155.66, 66.76], skin: up, for: port-9, group: sfp-plus-leds, rel-pos: 9}
+        - {ref: 'common/led-arrow@1', id: led-port-10, at: [160.46, 66.76], skin: down, for: port-10, group: sfp-plus-leds, rel-pos: 10}
+        - {ref: 'std/sfp-ganged@1', id: port-11, at: [326.87, 55.22], group: sfp-plus, rel-pos: 11}
+        - {ref: 'std/sfp-ganged@1', id: port-12, at: [326.87, 71.09], rotate: 180, group: sfp-plus, rel-pos: 12}
+        - {ref: 'common/led-arrow@1', id: led-port-11, at: [329.79, 66.76], skin: up, for: port-11, group: sfp-plus-leds, rel-pos: 11}
+        - {ref: 'common/led-arrow@1', id: led-port-12, at: [334.6, 66.76], skin: down, for: port-12, group: sfp-plus-leds, rel-pos: 12}
+        - {ref: 'std/sfp-ganged@1', id: port-13, at: [341.13, 55.22], group: sfp-plus, rel-pos: 13}
+        - {ref: 'std/sfp-ganged@1', id: port-14, at: [341.13, 71.09], rotate: 180, group: sfp-plus, rel-pos: 14}
+        - {ref: 'common/led-arrow@1', id: led-port-13, at: [344.05, 66.76], skin: up, for: port-13, group: sfp-plus-leds, rel-pos: 13}
+        - {ref: 'common/led-arrow@1', id: led-port-14, at: [348.86, 66.76], skin: down, for: port-14, group: sfp-plus-leds, rel-pos: 14}
+        - {ref: 'std/sfp-ganged@1', id: port-15, at: [355.43, 55.22], group: sfp-plus, rel-pos: 15}
+        - {ref: 'std/sfp-ganged@1', id: port-16, at: [355.43, 71.09], rotate: 180, group: sfp-plus, rel-pos: 16}
+        - {ref: 'common/led-arrow@1', id: led-port-15, at: [358.35, 66.76], skin: up, for: port-15, group: sfp-plus-leds, rel-pos: 15}
+        - {ref: 'common/led-arrow@1', id: led-port-16, at: [363.16, 66.76], skin: down, for: port-16, group: sfp-plus-leds, rel-pos: 16}
+        - {ref: 'std/sfp-ganged@1', id: port-17, at: [369.69, 55.22], group: sfp-plus, rel-pos: 17}
+        - {ref: 'std/sfp-ganged@1', id: port-18, at: [369.69, 71.09], rotate: 180, group: sfp-plus, rel-pos: 18}
+        - {ref: 'common/led-arrow@1', id: led-port-17, at: [372.61, 66.76], skin: up, for: port-17, group: sfp-plus-leds, rel-pos: 17}
+        - {ref: 'common/led-arrow@1', id: led-port-18, at: [377.42, 66.76], skin: down, for: port-18, group: sfp-plus-leds, rel-pos: 18}
+        - {ref: 'common/qsfp-cage@3', id: port-1, at: [213.73, 71.54], group: qsfp28, rel-pos: 1}
+        - {ref: 'common/led-dot@1', id: led-port-1-lane-1, at: [215.4, 67.64], for: port-1, group: qsfp28-leds, rel-pos: 1}
+        - {ref: 'common/led-dot@1', id: led-port-1-lane-2, at: [220.0, 67.64], for: port-1, group: qsfp28-leds, rel-pos: 2}
+        - {ref: 'common/led-dot@1', id: led-port-1-lane-3, at: [224.76, 67.64], for: port-1, group: qsfp28-leds, rel-pos: 3}
+        - {ref: 'common/led-dot@1', id: led-port-1-lane-4, at: [229.3, 67.64], for: port-1, group: qsfp28-leds, rel-pos: 4}
+        - {ref: 'common/qsfp-cage@3', id: port-2, at: [260.62, 71.54], group: qsfp28, rel-pos: 2}
+        - {ref: 'common/led-dot@1', id: led-port-2-lane-1, at: [262.32, 67.64], for: port-2, group: qsfp28-leds, rel-pos: 5}
+        - {ref: 'common/led-dot@1', id: led-port-2-lane-2, at: [266.86, 67.64], for: port-2, group: qsfp28-leds, rel-pos: 6}
+        - {ref: 'common/led-dot@1', id: led-port-2-lane-3, at: [271.67, 67.64], for: port-2, group: qsfp28-leds, rel-pos: 7}
+        - {ref: 'common/led-dot@1', id: led-port-2-lane-4, at: [276.2, 67.64], for: port-2, group: qsfp28-leds, rel-pos: 8}
+        - {ref: 'common/rj45-ganged-eth@1', id: cli, at: [403.43, 55.39], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: 'CLI - the RS-232 console, the upper jack of the stack the face labels CLI'}
+        - {ref: 'common/rj45-ganged-eth@1', id: oob, at: [403.43, 70.22], group: mgmt, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: OOB - the out-of-band Ethernet management port (NetBox names it outBand0)}
+        - {ref: 'common/led-dot@1', id: led-pwr, at: [421.16, 62.64], for: [psu-1, psu-2], group: status-leds, rel-pos: 1}
+        - {ref: 'common/led-dot@1', id: led-cpu1, at: [421.16, 67.98], for: chassis, group: status-leds, rel-pos: 2}
+        - {ref: 'common/led-dot@1', id: led-cpu2, at: [421.16, 73.5], for: chassis, group: status-leds, rel-pos: 3}
+        - {ref: 'common/led-dot@1', id: led-fan, at: [421.16, 78.88], for: chassis, group: status-leds, rel-pos: 4}
+        - {ref: 'common/screw-head@1', id: screw-1, at: [64.55, 42.99], group: furniture, rel-pos: 1}
+        - {ref: 'common/screw-head@1', id: screw-2, at: [427.24, 42.99], group: furniture, rel-pos: 2}
+  rear:
+    size: {w: 436.9, h: 88.5}
+    empty: >-
+      Envelope only. No image held shows the rear: every vendor render, the stencil and the
+      NetBox elevation are front views, and no installation guide is public. The fans the
+      data sheets call hot-swappable (TM810x-FAN, four bays in NetBox) are presumably here
+      and are not drawn (see the rear-and-fans gap).
+  left:
+    size: {w: 350, h: 88.5}
+    empty: >-
+      Envelope only. The vendor's three-quarter renders show the flank only at a grazing
+      angle; nothing draws it square-on.
+  right:
+    size: {w: 350, h: 88.5}
+    empty: >-
+      Envelope only, for the same reason as the left.
+  top:
+    size: {w: 436.9, h: 350}
+    empty: >-
+      Envelope only. The renders show a plain black lid obliquely; no plan view exists in
+      anything held.
+  bottom:
+    size: {w: 436.9, h: 350}
+    empty: >-
+      Envelope only. Nothing held draws the underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      sourced - TM8106-2QS, the base SKU: the base board's 2 x QSFP28 + 16 x SFP+, fans and
+      two supplies, the expansion slot empty (data sheet feature table, "2 x 40/100Ge + 16 x
+      1/10Ge"); the vendor's own render T-Metro-8106-HL-3.png shows the slot empty.
+    description: >-
+      The TM-8106 base: two AC supplies, 2 x QSFP28 + 16 x SFP+ on the base board, the
+      expansion slot empty.
+    bays:
+      slot-2: ''
+  2qs-64:
+    kind: orderable
+    description: >-
+      TM8106-2QS-64 - 2 x 40/100GE + 64 x 1/10GE: the TM810x-48SFP+ module in slot 2, two AC
+      supplies.
+    bays:
+      slot-2: telco-systems/tm810x-48sfp@1
+  6qs:
+    kind: orderable
+    description: >-
+      TM8106-6QS - 6 x 40/100GE + 16 x 1/10GE: the TM810x-4QSFP28 module in slot 2, two AC
+      supplies. How the vendor pictures the TM-8106 in most of its renders.
+    bays:
+      slot-2: telco-systems/tm810x-4qsfp28@1
+  dc-power:
+    kind: orderable
+    description: >-
+      TM8106-6QS with two DC supplies (24 / -48 V), the XX = DC suffix - as the 2022 front
+      (telco.com 2022/05/8106.jpg) shows it.
+    bays:
+      psu-1: telco-systems/tm810x-psu-dc@1
+      psu-2: telco-systems/tm810x-psu-dc@1
+      slot-2: telco-systems/tm810x-4qsfp28@1
+datasheet:
+  title: 'Telco Systems TM-8106 Modular 1.2Tbps Service Demarcation Device (SDD) data sheet'
+  url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-8106.pdf'
+  sha256: c9ac21e932a9d16c71d91f0ff06b8e7b04cade699c99f5c7c2af9a7176a11a25
+references:
+  - {title: 'Telco Systems TM-8104 Modular 1.2Tb Multi-Service Aggregation Platform data sheet - the same TM810x chassis, supplies, fans and expansion modules', url: 'https://www.telco.com/wp-content/uploads/2025/12/Telco-Systems-TM-8104.pdf', sha256: a11c197c2917a859378d8047f14bc79d086f087bc6a2f0aae140b5c24b81518c}
