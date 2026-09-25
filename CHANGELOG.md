@@ -58,7 +58,7 @@ the *published build*, not about the hardware.
   build (the N3100-4C PCIe card, fed by its host slot, is the one without), and four more state `airflow` (AS7946-30XB and
   AS7946-74XKSB front-to-back, S9511-20CT front-to-back, S9502-12SM passive).
   Lint L119 asks any other device with supplies for a feed, as a warning
-  baselined for the 24 that do not say yet; L120 reports a build whose `power`
+  baselined for the 32 that do not say yet; L120 reports a build whose `power`
   contradicts the supply it seats (roc-ops/Portrayal#513).
 - Every device in `library/dist/devices.lock.json` carries `placement-attrs`: a
   digest of the `attrs` each placed port states for itself (`speed`, `media`,
