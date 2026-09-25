@@ -1,0 +1,462 @@
+format: 1
+kind: device
+name: sr-2e
+version: 0.1.0
+maturity: modelled
+manufacturer: Nokia
+model: 7750 SR-2e
+description: >-
+  The 10RU Nokia 7750 SR-2e service router (800 Gb/s half-duplex, 2 forwarding
+  complexes), one of the three 7750 SR-e chassis that share a midplane design, cards and
+  power supplies. Front: a horizontal card cage at the left under the PSU-shelf air intake - two CCM-e
+  slots (A, B) then 8 MDA-e slots numbered 1/1 to 2/4 - with the integrated cable-management tray
+  beside it and the hinged grill over the air filter at the right. Rear: the PSU shelf across the top
+  (8 slots), the CPM-e slots A and B and 2 IOM-e slots at the left,
+  and the chassis-specific fan tray standing in the vertical slot at the right. Every card lies
+  horizontally, as the guide draws it, so no card bay rotates; the six vertical PSU slots seat the horizontally authored supplies at rotate 90.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Written first. (1) 7750 SR-1e, SR-2e and SR-3e Chassis Installation Guide 21.10,
+      3HE17927AAAATQZZA03 (the SR-e guide): Figures 8 (p47, front) and 9 (p48, rear) are the geometry, p79-80 Tables 21-23 the
+      chassis specifications, p82 Table 25 the heat dissipation, p84-86 Tables 27-28 the module power
+      and sizes, p89 Figure 25 the rack dimensions, p122-124 the ground, p116 Figure 28 and p147 Figure
+      44 (isometric) the sides. (2) The seated fan tray's own contract. Every figure on those pages is
+      VECTOR (pdfimages -list finds no raster), so a 1200 dpi pdftocairo render is exact at any scale.
+      No photograph of any SR-e chassis is staged (PUBLIC-SOURCES lists NK/2018-11/7750_SR-2e_F.jpg and
+      the DS 189831 cut-outs, none downloaded).
+  chassis:
+    confidence: datasheet
+    note: >-
+      SR-e guide Table 22 (p79): 17.5 x 17.5 x 21.2 in (H x W x D), 10 RU; weight 32.4 kg
+      unpopulated, 68.4 kg full. The table's note 2 says the 17.5 in width "includes the
+      integrated flanges", but p89 Figure 25 dimensions it otherwise: "Chassis Width 17.5 in (444.5
+      mm)" between arrows that land on the body, and "Chassis Flange Width 19 in (482.6 mm)" over the
+      ears, with hole centres 465 mm apart. Measured on that figure at 1200 dpi (9.948 px/mm from the
+      19 in flange), the body arrows sit 18.4 mm and 20.0 mm in from the flange edges. So the face is
+      the 444.5 between the folds, the ears (about 19 mm a side, not drawn) carry the rack holes, and
+      the note is read as loose wording. Depth 538.5 excludes panel protrusions (note 3).
+  panel-scale:
+    confidence: drawing
+    note: >-
+      Gate 1. Figures 8 (p47, front): the whole front over the flanges measures 4135-4150 px across at
+      1200 dpi and 3814 px top to bottom; 8.587 px/mm across (to 482.6) and
+      8.580 down (to 444.5) - orthographic to 0.1 percent. The face frame used for every x below is
+      the body centred on the flanges (face x = (px - centre)/8.587 + 222.25), y from the top outer edge.
+      Positions were read by pixel scans along rows and columns of the render and on a millimetre grid
+      laid over it; they are good to about 0.5 mm, the figures' own stroke widths.
+  rear-scale:
+    confidence: drawing
+    note: >-
+      9 (p48, rear): the body top edge to bottom edge is 3818 px = 444.6 mm at 8.587 px/mm,
+      the flanges 4149-4158 px (483 mm) across, ears drawn beside the body.
+  card-cage:
+    confidence: drawing
+    note: >-
+      Front cage: the card plates run x 87.2-280.1 on the render (192.9, the stated 193.0 face), so
+      every CCM and MDA bay is 193.0 x 35.4 at x 87. Slot boundaries were read where one card's
+      bottom edge meets the next card's top edge along x 200; they fall at a mean pitch of
+      35.37 mm, and the stack is laid out at the family's U = 35.4 (the conventions' pitch,
+      measured 35.43 across the SR-3e's 14 slots) from y 68.5, which leaves every
+      boundary within 0.4 mm of the drawing. Top to bottom: CCM A, CCM B, then MDA 1/1 onward.
+  rear-cage:
+    confidence: drawing
+    note: >-
+      Rear cage: the CPM-e and IOM-e plates measure 43.7-300.0 across (256.3 drawn against the stated
+      259.1), so the 259.1 bays are centred on them at x 42.3. Slot boundaries read along x 150 were
+      fitted with the 35.4 unit (CPM 1U, IOM 2U, filler 2U) from y 124.5; the residuals are under
+      1.4 mm. The drawn rear pitch is a little over 35.4 (about 35.6), as the conventions recorded.
+  slot-numbering:
+    confidence: datasheet
+    note: >-
+      SR-e guide p44-51: CCM slots A and B at the top of the front cage; MDA-e slots numbered n/m, where
+      n is the IOM-e (forwarding complex) and m the MDA within it (p48). rel-pos counts the MDA slots
+      1-8 top to bottom, the "slots 1-4 / 5-8 / 9-12" of p59. The chassis prints each n/m twice: on
+      the strip right of the cage and on the cable-tray spine; CCM A/B is printed once on the spine
+      (on the CCM B row) and as CCM A, CCM B on the strip.
+  psu-shelf:
+    confidence: drawing
+    note: >-
+      p49/p53: eight PSU slots - PSU 1-6 vertical, left to right, then PSU 7-8 horizontal. The vertical slots are 42.73 apart; each bay is the 40.4 x 86.4 footprint of the horizontally authored supply seated at rotate 90 (checked on the conventions 1600 dpi crop of p48: fan to the top, LED bottom right). A bay size is the on-panel footprint and the renderer hangs the occupant at the bay centre, so the bay is NOT given the unrotated 86.4 x 40.4 size the conventions describe. PSU 7-8 are 86.4 x 40.4 at rotate 0 above the fan tray. The PSU n labels sit in cells under the vertical slots; PSU 7 and PSU 8 are printed in two small boxes under PSU 7, with the touch-current warning label below them.
+  fan-tray:
+    confidence: drawing
+    note: >-
+      The fan tray bay is the tray's stated face, 137.2 x 381, centred on the drawn tray (x 301.5-440.1,
+      y 57.8-440.4) at x 302.2, y 58.3. It seats nokia/sr-2e-fan-tray@1 only (p66: fan trays are chassis-specific).
+  ground:
+    confidence: drawing
+    note: >-
+      p122: two 10-32 ground studs "located at the back of all 7750 SR-e chassis at the bottom-left";
+      p124 Figure 33 dimensions them 0.625 in (15.86 mm) apart; the drawn studs are 15.85 apart
+      at x 16.0, y 343 and 358.85, on a plate under an earth symbol. Drawn as panel decor (a
+      stud plate is chassis metalwork with no part number; no library part draws a two-stud earth
+      point without its own symbol).
+  esd:
+    confidence: drawing
+    note: >-
+      Front ESD jack (key 4 on the front figure): measured at x 449-452 in the face frame, ON THE RIGHT
+      FLANGE outside the 444.5 body (p89 Figure 25 puts it 12.5 mm in from the flange edge, where the
+      body starts about 20 mm in), so it is not drawn - ears are not modelled. Rear ESD jack (the last
+      rear key) is on the plate under the last IOM-e at (269.4, 425.05), drawn with common/esd-jack@1.
+  cable-tray:
+    confidence: drawing
+    note: >-
+      The integrated cable-management tray (key 3; p160 Figure 52) is chassis furniture and is drawn
+      as decor: a plate x 0.8-63.6, a spine of oval links x 30.1-40.6 carrying the slot legends, fingers
+      at rows 104.7 + n x 35.45 (x 9.0-60.3) and fixing screws at x 10.2 and 52.3. The fingers
+      project toward the viewer in p116 Figure 28; the 22 mm stand-off is estimated.
+  intake-door:
+    confidence: drawing
+    note: >-
+      The hinged grill (key 6) frame x 301.6-437.7, y 71.9-426.1; opening y 83.4-414.6; louvres at y
+      102.1, 137.6, 173.2, 208.7, 244.2, 279.7, 315.2, 350.8, 386.3; handle (key 7) at y 228. p69 says the filter slot is
+      "angled slightly from left to right"; the door is drawn flat, as the conventions ask (it carries no
+      ports). The hinge brackets and two double-line runs that cross the PSU intake from the top edge
+      (one ends at the handle) straddle the flange fold or are unidentified, and are not drawn.
+  cross-branch-refs:
+    confidence: datasheet
+    note: >-
+      The accepts lists and defaults are the conventions' (SR-e guide p61 Table 14, p44-45, p62-64,
+      p72 Table 20), naming nokia/ccm-e, cpm-e, iom-e, sr-e-psu-ac, sr-e-psu-dc, the five sr-e
+      impedance panels and the nine MDA-e cards. Those contracts are built on the sibling wave-1
+      branches (SR-e modules; MDA-e SFP; MDA-e 100G), so on this branch alone they do not resolve;
+      they were checked against those branches' contracts before commit. The 8-port 10/25GE MDA-e
+      (3HE14888AA) is held out of wave 1 (no genuine faceplate drawing) and is not listed.
+  defaults:
+    confidence: drawing
+    note: >-
+      As the figures draw the chassis: both CCM-e and both CPM-e, every IOM-e, a ME10-10GB-SFP+ in
+      every MDA-e slot (the front figure's card, legible on every row),
+      DC supplies in PSU 1-6 and PSU impedance panels in PSU 7-8 (key 5),
+      and the chassis's own fan tray.
+  power:
+    confidence: datasheet
+    note: >-
+      SR-e guide p82 Table 25: worst-case total power 2762 W (9424.22 BTU/hr), "with worst-case total
+      power including optical components"; worst case is 100 percent line rate at 55 C (p83). Carried as
+      the vendor's system figure. The per-module figures (p84 Table 27) live on the module contracts; this
+      figure is not reconciled against them.
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph is staged; the charcoal chassis and grey trim are assumed. See gap photographs.
+  other-faces:
+    confidence: estimated
+    note: >-
+      Sides from isometrics only (p116 Figure 28 left, p147 Figure 44 right): LEFT view x = 0 is the
+      REAR, RIGHT view x = 0 is the FRONT. Top and bottom are not drawn in any staged figure.
+attrs:
+  physical:
+    ru: 10
+    weight-kg: 32.4
+    weight-full-kg: 68.4
+    width-over-flanges-mm: 482.6
+    mounting-centre-mm: 465
+  performance:
+    forwarding-capacity: 800 Gb/s half-duplex (2 x 400 Gb/s forwarding complexes)
+  power:
+    power-max-w: 2762
+    power-envelope: fully-configured
+    rated-voltage-dc: -48/-60 VDC, 40/30 A per source
+    rated-voltage-ac: 100-120/220-240 VAC, 50/60 Hz, 12/10 A per source
+  thermal:
+    acoustic-dba: 73.3
+  environmental:
+    operating-temp: 5 C to 40 C (short-term -5 C to 55 C)
+    storage-temp: -40 C to 70 C
+    humidity: 5 to 95 percent non-condensing
+  platform:
+    family: 7750 SR-e
+    ccm-slots: 2
+    mda-slots: 8
+    cpm-slots: 2
+    iom-slots: 2
+    psu-slots: 8
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 444.5
+  height: 444.5
+  depth: 538.5
+  ru: 10
+  weight-kg: 32.4
+  airflow: front-to-back
+  color: '#3a3d42'
+gaps:
+  - what: photographs
+    scope: [front, rear]
+    reason: needs-photo
+    note: >-
+      Every figure used is vendor line art. Colour, finish and the printing on the cable-tray links are
+      assumed; PUBLIC-SOURCES lists straight-on product photographs that are not staged.
+    wanted: NK/2018-11/7750_SR-2e_F.jpg (2880 px) and the DS 189831 chassis cut-outs, staged
+  - what: side-top-bottom
+    scope: [left, right, top, bottom]
+    reason: needs-drawing
+    note: >-
+      Only two isometrics show the sides (p116 Figure 28, p147 Figure 44); nothing draws the top or the
+      bottom. The side decor is estimated from perspective.
+    wanted: a side elevation or photographs of the sides
+groups:
+  ccm-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      front CCM-e slots A (rel-pos 1) and B (rel-pos 2), the top two rows of the front cage. CCM-e A pairs with CPM-e A and B with B across the midplane (SR-e guide p42); in a simplex system both go in A or both in B.
+  mda-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      front MDA-e slots 1/1 to 2/4 (rel-pos 1-8, top to bottom), 193.0 x 35.4 each. IOM-e 1 serves MDA-e slots 1/1-1/4. IOM-e 2 serves MDA-e slots 2/1-2/4.
+      Takes MDA-e cards and MS-ISA2 only; the MDA-e-XP and MDA2-e-XP never seat in an SR-e (SR-e guide
+      p61 Table 14; MDA-e-XP guide).
+  cpm-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      rear CPM-e slots A (rel-pos 1) and B (rel-pos 2). CCM-e A pairs with CPM-e A and B with B across the midplane (SR-e guide p42); in a simplex system both go in A or both in B.
+  iom-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      rear IOM-e slots 1-2, two units tall, separated by non-removable filler plates. IOM-e 1 serves MDA-e slots 1/1-1/4. IOM-e 2 serves MDA-e slots 2/1-2/4.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    description: >-
+      eight PSU slots across the top of the rear: PSU 1-6 vertical, left to right, then PSU 7-8 horizontal. AC and -48/-60 VDC supplies may be mixed (SR-e guide p62); installed N+1 (p49).
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'SR-e guide p49: chassis bundles include the minimum number of PSUs and do not provide N+1 power supply redundancy; at least one other PSU must be added for N+1'
+  fans:
+    term: Fan Tray
+    role: service
+    index-origin: 1
+    description: the chassis-specific fan tray in the vertical slot at the right of the rear
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: the rear ESD strap receptacle
+views:
+  front:
+    size: {w: 444.5, h: 444.5}
+    panel:
+      decor:
+        - {at: [75.5, 3.6], size: [337.1, 15.3], fill: '#474b51', rx: 1.2, kind: shelf-plate, id: psu-shelf-plate, confidence: drawing, source: 'SR-e guide p47, raised plate above the PSU-shelf intake'}
+        - {at: [3.3, 18.9], size: [409.1, 44.5], fill: '#2b2e32', rx: 1, kind: bezel, id: psu-intake-bezel, confidence: drawing, source: 'SR-e guide p47 key 5, bevelled frame of the PSU-shelf air intake'}
+        - {at: [13.3, 27.8], size: [391, 26.6], fill: '#16181b', kind: vent-backing, id: psu-intake-backing, confidence: drawing, source: the grey mesh the figure draws inside the intake frame}
+        - {at: [13.3, 27.8], size: [391, 26.6], pattern: vent, vent: 20, id: psu-intake, confidence: estimated, source: 'SR-e guide p43 and p71 Figure 23: the PSU shelf draws its own air through this intake; mesh pitch and depth not documented'}
+        - {at: [67.7, 27], size: [7.9, 28.2], fill: '#2b2e32', kind: rib, confidence: drawing, source: 'SR-e guide p47, divisions across the intake mesh'}
+        - {at: [128.6, 27], size: [5, 28.2], fill: '#2b2e32', kind: rib, confidence: drawing, source: 'SR-e guide p47, divisions across the intake mesh'}
+        - {at: [181.7, 27], size: [5, 28.2], fill: '#2b2e32', kind: rib, confidence: drawing, source: 'SR-e guide p47, divisions across the intake mesh'}
+        - {at: [234.8, 27], size: [5, 28.2], fill: '#2b2e32', kind: rib, confidence: drawing, source: 'SR-e guide p47, divisions across the intake mesh'}
+        - {at: [292.9, 27], size: [8, 28.2], fill: '#2b2e32', kind: rib, confidence: drawing, source: 'SR-e guide p47, divisions across the intake mesh'}
+        - {at: [0.8, 66.7], size: [62.8, 374.4], fill: '#43474d', rx: 1, kind: cable-tray, id: cable-tray, confidence: drawing, source: 'SR-e guide p47 key 3 "Cable management tray", p160 Figure 52'}
+        - {at: [30.1, 88.6], size: [10.5, 351], fill: '#2c2f33', rx: 4, kind: cable-tray-spine, confidence: drawing, source: 'the chain of oval links down the tray centre, each carrying a slot legend'}
+        - {at: [9, 101.7], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 137.15], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 172.6], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 208.05], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 243.5], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 278.95], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 314.4], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 349.85], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 385.3], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [9, 420.75], size: [51.3, 6], fill: '#5b6067', rx: 2, kind: cable-finger, out: 22, confidence: estimated, source: p47 fixes the finger rows at x 9.0-60.3; how far they project is read off p116 Figure 28 (isometric) by eye}
+        - {at: [7.2, 114.3], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [49.3, 114.3], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [7.2, 192.1], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [49.3, 192.1], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [7.2, 261.5], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [49.3, 261.5], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [7.2, 334], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [49.3, 334], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [7.2, 408.9], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [49.3, 408.9], size: [6, 6], fill: '#9aa0a6', rx: 3, kind: screw-head, confidence: drawing, source: 'tray fixing screws, drawn with a plus-slot head'}
+        - {at: [74.5, 66.7], size: [1.6, 374.4], fill: '#2b2e32', kind: cage-wall, confidence: drawing, source: 'the card cage outer wall, a double line at x 74.5-76.1'}
+        - {at: [282.3, 68.5], size: [11.6, 354], fill: '#474b51', kind: label-strip, id: slot-legend-strip, confidence: drawing, source: 'p47: the strip right of the cage printing CCM A/B and n/m'}
+        - {at: [301.6, 71.9], size: [136.1, 354.2], fill: '#474b51', rx: 2, kind: door, id: intake-door, confidence: drawing, source: 'SR-e guide p47 key 6, the hinged grill over the air-filter tray (p69: angled slightly; drawn flat)'}
+        - {at: [311.5, 83.4], size: [116.3, 331.2], fill: '#16181b', kind: vent-backing, id: intake-backing, confidence: drawing, source: the opening inside the door frame}
+        - {at: [311.5, 83.4], size: [116.3, 331.2], pattern: vent, vent: 40, id: intake-vent, confidence: estimated, source: air intake behind the door; the filter media depth is not documented}
+        - {at: [352.4, 83.4], size: [5.6, 331.2], fill: '#2b2e32', kind: filter-carrier-bar, confidence: drawing, source: 'the air-filter carrier frame seen through the door, x 352.4-358.0'}
+        - {at: [304, 102.1], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 137.6], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 173.2], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 208.7], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 244.2], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 279.7], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 315.2], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 350.8], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [304, 386.3], size: [131.5, 4.9], fill: '#565b62', rx: 1, kind: louvre, out: 3, confidence: estimated, source: louvre rows read off p47 at x 370; their stand-off is not documented}
+        - {at: [296.4, 217], size: [9.6, 22], fill: '#9aa0a6', rx: 4.8, kind: handle, id: door-handle, out: 12, confidence: estimated, source: p47 key 7 "Handle for opening and closing the hinged grill cover"; its stand-off is not documented}
+    silkscreen:
+      - {id: model-box, at: [88.6, 5], path: 'M 0 0 H 33.6 V 8.8 H 0 Z', fill: '#d9dde1', stroke-width: 0.3, for: chassis}
+      - {at: [90.1, 11.9], text: '7750 SR-2e', font-size: 4.6, anchor: start, fill: '#d9dde1', for: chassis}
+      - {at: [282.3, 103.9], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: ccm-a}
+      - {at: [288.1, 92.7], text: 'CCM', font-size: 2.6, anchor: middle, fill: '#d9dde1', for: ccm-a}
+      - {at: [288.1, 100.7], text: 'A', font-size: 6, anchor: middle, fill: '#d9dde1', for: ccm-a}
+      - {at: [282.3, 139.3], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: ccm-b}
+      - {at: [288.1, 128.1], text: 'CCM', font-size: 2.6, anchor: middle, fill: '#d9dde1', for: ccm-b}
+      - {at: [288.1, 136.1], text: 'B', font-size: 6, anchor: middle, fill: '#d9dde1', for: ccm-b}
+      - {at: [282.3, 174.7], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-1-1}
+      - {at: [288.1, 171.9], text: '1/1', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-1-1}
+      - {at: [282.3, 210.1], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-1-2}
+      - {at: [288.1, 207.3], text: '1/2', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-1-2}
+      - {at: [282.3, 245.5], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-1-3}
+      - {at: [288.1, 242.7], text: '1/3', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-1-3}
+      - {at: [282.3, 280.9], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-1-4}
+      - {at: [288.1, 278.1], text: '1/4', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-1-4}
+      - {at: [282.3, 316.3], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-2-1}
+      - {at: [288.1, 313.5], text: '2/1', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-2-1}
+      - {at: [282.3, 351.7], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-2-2}
+      - {at: [288.1, 348.9], text: '2/2', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-2-2}
+      - {at: [282.3, 387.1], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-2-3}
+      - {at: [288.1, 384.3], text: '2/3', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-2-3}
+      - {at: [282.3, 422.5], path: 'M 0 0 H 11.6', fill: '#2b2e32', stroke-width: 0.4, for: mda-2-4}
+      - {at: [288.1, 419.7], text: '2/4', font-size: 2.8, anchor: middle, fill: '#d9dde1', for: mda-2-4}
+      - {at: [35.35, 121], text: 'CCM', font-size: 2, anchor: middle, fill: '#d9dde1', for: [ccm-a, ccm-b]}
+      - {at: [35.35, 123.6], text: 'A/B', font-size: 2, anchor: middle, fill: '#d9dde1', for: [ccm-a, ccm-b]}
+      - {at: [35.35, 157.8], text: '1/1', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-1-1}
+      - {at: [35.35, 193.2], text: '1/2', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-1-2}
+      - {at: [35.35, 228.6], text: '1/3', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-1-3}
+      - {at: [35.35, 264], text: '1/4', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-1-4}
+      - {at: [35.35, 299.4], text: '2/1', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-2-1}
+      - {at: [35.35, 334.8], text: '2/2', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-2-2}
+      - {at: [35.35, 370.2], text: '2/3', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-2-3}
+      - {at: [35.35, 405.6], text: '2/4', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: mda-2-4}
+    components:
+      bays:
+        - {id: ccm-a, at: [87, 68.5], size: {w: 193, h: 35.4}, accepts: [nokia/ccm-e@1, nokia/sr-e-ccm-impedance-panel@1], default: nokia/ccm-e@1, group: ccm-slots, rel-pos: 1}
+        - {id: ccm-b, at: [87, 103.9], size: {w: 193, h: 35.4}, accepts: [nokia/ccm-e@1, nokia/sr-e-ccm-impedance-panel@1], default: nokia/ccm-e@1, group: ccm-slots, rel-pos: 2}
+        - {id: mda-1-1, at: [87, 139.3], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 1}
+        - {id: mda-1-2, at: [87, 174.7], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 2}
+        - {id: mda-1-3, at: [87, 210.1], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 3}
+        - {id: mda-1-4, at: [87, 245.5], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 4}
+        - {id: mda-2-1, at: [87, 280.9], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 5}
+        - {id: mda-2-2, at: [87, 316.3], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 6}
+        - {id: mda-2-3, at: [87, 351.7], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 7}
+        - {id: mda-2-4, at: [87, 387.1], size: {w: 193, h: 35.4}, accepts: [nokia/me40-1gb-csfp@1, nokia/me6-10gb-sfp-plus@1, nokia/me10-10gb-sfp-plus@1, nokia/me12-10-1gb-sfp-plus@1, nokia/me1-100gb-cfp2@1, nokia/me2-100gb-cfp4@1, nokia/me2-100gb-qsfp28@1, nokia/me2-100gb-ms-qsfp28@1, nokia/ms-isa2@1, nokia/sr-e-mda-impedance-panel@1], default: nokia/me10-10gb-sfp-plus@1, group: mda-slots, rel-pos: 8}
+  rear:
+    size: {w: 444.5, h: 444.5}
+    panel:
+      decor:
+        - {at: [0, 0], size: [444.5, 12.8], fill: '#474b51', kind: top-lip, confidence: drawing, source: 'SR-e guide p48, the band above the PSU shelf'}
+        - {at: [5.3, 101.5], size: [41.4, 20.9], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: a label cell under each vertical PSU slot'}
+        - {at: [33, 108.3], size: [3.2, 7], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p48 and p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [48, 101.5], size: [41.4, 20.9], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: a label cell under each vertical PSU slot'}
+        - {at: [75.7, 108.3], size: [3.2, 7], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p48 and p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [90.7, 101.5], size: [41.4, 20.9], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: a label cell under each vertical PSU slot'}
+        - {at: [118.4, 108.3], size: [3.2, 7], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p48 and p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [133.5, 101.5], size: [41.4, 20.9], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: a label cell under each vertical PSU slot'}
+        - {at: [161.2, 108.3], size: [3.2, 7], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p48 and p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [176.2, 101.5], size: [41.4, 20.9], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: a label cell under each vertical PSU slot'}
+        - {at: [203.9, 108.3], size: [3.2, 7], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p48 and p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [218.9, 101.5], size: [41.4, 20.9], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: a label cell under each vertical PSU slot'}
+        - {at: [246.6, 108.3], size: [3.2, 7], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p48 and p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [269.8, 59], size: [14.4, 13], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: the PSU 7 / PSU 8 label boxes, below PSU 7'}
+        - {at: [275.4, 65], size: [3.2, 6], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [284.7, 59], size: [14.4, 13], fill: '#474b51', kind: label-cell, confidence: drawing, source: 'p48: the PSU 7 / PSU 8 label boxes, below PSU 7'}
+        - {at: [290.3, 65], size: [3.2, 6], fill: '#9aa0a6', rx: 0.4, kind: auto-lock-tab, confidence: drawing, source: p203 Figure 68 "Retractable Auto-lock Tabs"}
+        - {at: [268, 78], size: [32, 22], fill: '#e4e6e8', kind: warning-label, id: touch-current-label, confidence: drawing, source: 'p48: the touch-current warning label, transcribed in silkscreen'}
+        - {at: [25, 122], size: [15.5, 75.8], fill: '#474b51', rx: 0.8, kind: label-bracket, id: cpm-legend-bracket, confidence: drawing, source: 'p48: the bracket left of the CPM slots printing CPM A / CPM B'}
+        - {at: [43.8, 266.7], size: [256.1, 69.6], fill: '#474b51', rx: 2, kind: filler-plate, id: filler-plate-1, confidence: drawing, source: 'p48 key 7 "Non-removable chassis filler plate"; p49: IOM slots are "separated from one another by a non-removable cover plate"'}
+        - {at: [43.8, 408.5], size: [256.1, 32.2], fill: '#474b51', rx: 1, kind: bottom-plate, confidence: drawing, source: 'p48: the plate under the last IOM slot carrying the ESD jack'}
+        - {at: [9.4, 313], size: [13.2, 57], fill: '#474b51', rx: 0.6, kind: ground-plate, id: ground-plate, confidence: drawing, source: 'p48 key "Chassis ground point"; p124 Figure 33: two 10-32 studs, 0.625 in (15.9 mm) apart'}
+        - {at: [13.6, 340.6], size: [4.8, 4.8], fill: '#b8a06a', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'p122: #10 (10-32) studs; stud length not documented'}
+        - {at: [13.6, 356.45], size: [4.8, 4.8], fill: '#b8a06a', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'p122: #10 (10-32) studs; stud length not documented'}
+      cutouts:
+        - {id: esd-rear, at: [266.4, 422.05], size: [6.0, 6.0], shape: circle}
+    silkscreen:
+      - {at: [22, 113.4], text: 'PSU 1', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: psu-1}
+      - {at: [64.7, 113.4], text: 'PSU 2', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: psu-2}
+      - {at: [107.4, 113.4], text: 'PSU 3', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: psu-3}
+      - {at: [150.2, 113.4], text: 'PSU 4', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: psu-4}
+      - {at: [192.9, 113.4], text: 'PSU 5', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: psu-5}
+      - {at: [235.6, 113.4], text: 'PSU 6', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: psu-6}
+      - {at: [277, 63.4], text: 'PSU 7', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: psu-7}
+      - {at: [291.9, 63.4], text: 'PSU 8', font-size: 2.2, anchor: middle, fill: '#d9dde1', for: psu-8}
+      - {at: [269, 81], text: 'WARNING:', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 83.3], text: 'High touch current', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 85.6], text: 'earth connection essential', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 87.9], text: 'before connecting supply.', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 90.2], text: 'Courant de fuite eleve.', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 92.5], text: 'Raccordement a la terre', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 94.8], text: 'indispensable avant le', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [269, 97.1], text: 'raccordement au reseau.', font-size: 1.6, anchor: start, fill: '#1c1e21', for: chassis}
+      - {at: [32.75, 150.3], text: 'CPM', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: cpm-a}
+      - {at: [32.75, 157.3], text: 'A', font-size: 6, anchor: middle, fill: '#d9dde1', for: cpm-a}
+      - {at: [27, 146.9], path: 'M 0 0 H 11.5 M 0 3.4 H 11.5 M 0 11.2 H 11.5', fill: '#d9dde1', stroke-width: 0.3, for: cpm-a}
+      - {at: [32.75, 185.7], text: 'CPM', font-size: 2.4, anchor: middle, fill: '#d9dde1', for: cpm-b}
+      - {at: [32.75, 192.7], text: 'B', font-size: 6, anchor: middle, fill: '#d9dde1', for: cpm-b}
+      - {at: [27, 182.3], path: 'M 0 0 H 11.5 M 0 3.4 H 11.5 M 0 11.2 H 11.5', fill: '#d9dde1', stroke-width: 0.3, for: cpm-b}
+      - {at: [280.9, 425.05], path: 'M -2.6 2.3 L 0 -2.3 L 2.6 2.3 Z', fill: '#d9dde1', filled: true, for: esd-rear}
+      - {at: [16, 321], path: 'M 0 -4.4 A 4.4 4.4 0 1 0 0.01 -4.4 Z M 0 -3.0 V 0.2 M -2.6 0.2 H 2.6 M -1.7 1.5 H 1.7 M -0.8 2.8 H 0.8', fill: '#d9dde1', stroke-width: 0.35, for: chassis}
+    components:
+      bays:
+        - {id: psu-1, at: [5.8, 13.7], size: {w: 40.4, h: 86.4}, rotate: 90, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-dc@1, group: psus, rel-pos: 1}
+        - {id: psu-2, at: [48.5, 13.7], size: {w: 40.4, h: 86.4}, rotate: 90, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-dc@1, group: psus, rel-pos: 2}
+        - {id: psu-3, at: [91.2, 13.7], size: {w: 40.4, h: 86.4}, rotate: 90, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-dc@1, group: psus, rel-pos: 3}
+        - {id: psu-4, at: [134, 13.7], size: {w: 40.4, h: 86.4}, rotate: 90, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-dc@1, group: psus, rel-pos: 4}
+        - {id: psu-5, at: [176.7, 13.7], size: {w: 40.4, h: 86.4}, rotate: 90, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-dc@1, group: psus, rel-pos: 5}
+        - {id: psu-6, at: [219.4, 13.7], size: {w: 40.4, h: 86.4}, rotate: 90, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-dc@1, group: psus, rel-pos: 6}
+        - {id: psu-7, at: [262.9, 13.7], size: {w: 86.4, h: 40.4}, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-impedance-panel@1, group: psus, rel-pos: 7}
+        - {id: psu-8, at: [352.3, 13.7], size: {w: 86.4, h: 40.4}, accepts: [nokia/sr-e-psu-ac@1, nokia/sr-e-psu-dc@1, nokia/sr-e-psu-impedance-panel@1], default: nokia/sr-e-psu-impedance-panel@1, group: psus, rel-pos: 8}
+        - {id: cpm-a, at: [42.3, 124.5], size: {w: 259.1, h: 35.4}, accepts: [nokia/cpm-e@1, nokia/sr-e-cpm-impedance-panel@1], default: nokia/cpm-e@1, group: cpm-slots, rel-pos: 1}
+        - {id: cpm-b, at: [42.3, 159.9], size: {w: 259.1, h: 35.4}, accepts: [nokia/cpm-e@1, nokia/sr-e-cpm-impedance-panel@1], default: nokia/cpm-e@1, group: cpm-slots, rel-pos: 2}
+        - {id: iom-1, at: [42.3, 195.3], size: {w: 259.1, h: 70.8}, accepts: [nokia/iom-e@1, nokia/sr-e-iom-impedance-panel@1], default: nokia/iom-e@1, group: iom-slots, rel-pos: 1}
+        - {id: iom-2, at: [42.3, 336.9], size: {w: 259.1, h: 70.8}, accepts: [nokia/iom-e@1, nokia/sr-e-iom-impedance-panel@1], default: nokia/iom-e@1, group: iom-slots, rel-pos: 2}
+        - {id: fan, at: [302.2, 58.3], size: {w: 137.2, h: 381}, accepts: [nokia/sr-2e-fan-tray@1], default: nokia/sr-2e-fan-tray@1, group: fans, rel-pos: 1}
+      placements:
+        - {id: esd-rear, ref: common/esd-jack@1, at: [266.4, 422.05], for: chassis, group: grounding, rel-pos: 1}
+  left:
+    size: {w: 538.5, h: 444.5}
+    panel:
+      decor:
+        - {at: [502.5, 8], size: [26, 42], pattern: holes, confidence: estimated, source: 'p116 Figure 28 (isometric, perspective) draws a small cluster of holes near the front top of the left side; extent by eye'}
+  right:
+    size: {w: 538.5, h: 444.5}
+    panel:
+      decor:
+        - {at: [520.5, 0], size: [18, 444.5], fill: '#474b51', kind: rear-bracket, confidence: estimated, source: p147 Figure 44 (isometric) draws a strip with oval holes down the rear edge of the right side; width by eye}
+        - {at: [428.5, 8], size: [70, 30], pattern: holes, confidence: estimated, source: p147 Figure 44 draws scattered holes near the top rear of the right side; extent by eye}
+  top:
+    size: {w: 444.5, h: 538.5}
+    empty: >-
+      No staged document draws the top of the 7750 SR-2e: searched every figure caption in the SR-e guide
+      21.10; p103 Figure 26 is a clearance outline and p65 Figure 18 an airflow schematic, neither with
+      any feature of the cover.
+  bottom:
+    size: {w: 444.5, h: 538.5}
+    empty: >-
+      No staged document draws the underside of the 7750 SR-2e; the SR-e guide's rack figures (p89, p116,
+      p118) show it only edge-on.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as the SR-e guide draws it - both control pairs, every IOM-e, a ME10-10GB-SFP+ in
+      every MDA-e slot, six -48/-60 VDC supplies and two PSU impedance panels,
+      and the fan tray.
+  ac:
+    kind: orderable
+    description: >-
+      The same build on AC supplies (3HE09549AA) in place of the DC ones; AC and DC may also be
+      mixed (p62).
+    bays:
+      psu-1: nokia/sr-e-psu-ac@1
+      psu-2: nokia/sr-e-psu-ac@1
+      psu-3: nokia/sr-e-psu-ac@1
+      psu-4: nokia/sr-e-psu-ac@1
+      psu-5: nokia/sr-e-psu-ac@1
+      psu-6: nokia/sr-e-psu-ac@1
+references:
+  - {title: 'Nokia 7750 SR-1e, SR-2e, and SR-3e Chassis Installation Guide 21.10, 3HE 17927 AAAA TQZZA Edition 03', sha256: 26ba13a80c5f99585d898aa7ebdc8a773647b7c88558666490b0629d7671afde}

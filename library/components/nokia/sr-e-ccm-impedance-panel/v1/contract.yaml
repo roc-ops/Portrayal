@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: sr-e-ccm-impedance-panel
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia ACC - 7750 SR-e CCM Impedance Panel (3HE10295AA), the blank for an unused CCM slot
+  (CCM A or CCM B) at the front of the SR-1e, SR-2e and SR-3e: a plain plate with notched
+  lower corners and a captive screw at each upper corner, where the CCM-e's screws are.
+  Authored horizontal.
+size: {w: 193.0, h: 35.4}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the CCM-e face (193.0 x 35.4), borrowed: the panel fills the same slot and no guide
+  dimensions it.
+attrs:
+  model: ACC - 7750 SR-e CCM Impedance Panel
+  part-number: 3HE10295AA
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - nokia/ccm-e@1's face, 193.0 x 35.4 (SRE p56 Fig 13 and the SR-1e cage on SRE
+    p44). The only drawing of this panel is the isometric SRE p73 Fig 24.
+  purpose: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p72 section 3.3.3: impedance panels are required
+    on all empty slots "to prevent excess dust accumulation, to help control airflow and
+    electromagnetic interference, and for safety reasons", and "do not have board components
+    or connector pins"; Table 20 lists the five part numbers.
+  layout: >-
+    drawing (shape only) and borrowed (positions) - SRE p73 Fig 24 is an ISOMETRIC of all
+    five panels, with nothing to scale off along the plate. It draws the CCM-e panel as a
+    plain plate with notched lower corners, like the MDA-e panel above it, and a screw high
+    on each end, where the MDA panel's are low. So the notch uses the MDA family's figures
+    (wings 27.2 tall, full band 16.0-177.0) and the screws sit at nokia/ccm-e@1's measured
+    centres, (8.5, 7.4) and (184.5, 7.4), heads 11.0, because they go into the same chassis
+    holes. Both are estimates: no flat view of this panel exists.
+  shape-gap: >-
+    the CCM-e itself (Fig 13) is a full rectangle; only the isometric says the blank is
+    notched. A photograph would settle it.
+  colour: >-
+    estimated - no photograph is staged; charcoal as the cards. A gap.
+  logo-zone: >-
+    reserved on the plain plate; Fig 24 draws no mark
+  depth: >-
+    NOT STATED - a blanking plate; no guide gives a depth or weight.
+elements:
+  screw-left: {at: [3.0, 1.9], size: [11.0, 11.0], class: screw}
+  screw-right: {at: [179.0, 1.9], size: [11.0, 11.0], class: screw}
+  logo-zone: {at: [76.5, 10.0], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]

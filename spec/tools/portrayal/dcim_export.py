@@ -218,6 +218,11 @@ PON_TYPES = frozenset(t for _a, t in PON_ATTRS)
 # and SFP28 too, so a card stating `sfp112` beside a lower rate is an SFP112
 # card. No card stated it before, so nothing that exported already changes.
 SFP112_ATTR = ("sfp112", "other")
+# WHAT AN `other` PORT IS LABELLED WITH, by media. `other` says the schema has no
+# name for the thing, so the label is the only place the connector survives -
+# and it was hardcoded "RJ45", written for the Casa rj45-telemetry port, until
+# the Nokia MDA2-e-XP exported 24 SFP112 cages as copper jacks (#558 review).
+OTHER_LABEL = {"rj45-telemetry": "RJ45", "sfp112": "SFP112"}
 # AN 800G QSFP-DD PORT IS NOT A 400G ONE, and with only the `qsfp-dd` row the
 # Nokia MDA2-e-XP's QSFP-DD800 ports would have exported as 400GBASE-X.
 # `800gbase-x-qsfpdd` is in both targets (NetBox TYPE_800GE_QSFP_DD at 6a009845;
@@ -562,6 +567,8 @@ NOT_A_DCIM_PORT = {
     # --- connectors upstream has no type for ---------------------------------
     "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
                              "Neither library has an alarm port, and `de-9` would read as a console",
+    "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
+                "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/vga": "VGA; neither library has a video port type",
     "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
                                "over one cable; neither library has a type for it, and one row "
@@ -577,6 +584,10 @@ NOT_A_DCIM_PORT = {
     # --- power entry on a chassis ---------------------------------------------
     # `common/dc-barrel` was here until #286 gave `build` a power path; it now
     # exports, and the register's stale-entry test is what says so.
+    "nokia/sr-1-dc-terminal-block": "the 7750 SR-1 DC chassis's fixed -48 V terminal block - a "
+                                    "barrier strip with its switch and cover, bolted to the rear. "
+                                    "Its feeds are the chassis power inputs, stated in the "
+                                    "device's power attrs; no connector here has a DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
 
@@ -1333,7 +1344,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         if placed:
             iface = {"name": pid, "type": placed}
             if placed == "other":
-                iface["label"] = "RJ45"
+                media = part["attrs"]["media"]
+                iface["label"] = OTHER_LABEL.get(media, media.upper())
             ifaces.append(iface)
             network = iface
         elif full_ref in FAMILY_PART:
@@ -1366,6 +1378,9 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
                 defaulted[ref] = defaulted.get(ref, 0) + 1
             network = {"name": pid, "type": cage_type(ref, attrs)}
+            # The one FAMILY_ATTRS row that writes `other` is SFP112_ATTR.
+            if network["type"] == "other":
+                network["label"] = OTHER_LABEL[SFP112_ATTR[0]]
             ifaces.append(network)
         elif dropped is not None:
             # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell
