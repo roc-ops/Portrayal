@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: sr-12-pem-3
-version: 1.0.0
+version: 1.1.0
 class: power
 behaviour: fills
 profile: networking
@@ -76,17 +76,13 @@ provenance:
     4). Neither Fig 62 nor the rear view draws it, so it is not drawn. A gap.
   switch: 'datasheet - SR12 p70 Table 12 key 4 "I / O (on/off) switch"; p91: the internal breaker is 175 A, printed "175" on the rocker in Fig 62'
   status-connector: >-
-    GAP - drawn as art, not composed. SR12 p70 Table 12 key 5: "DB-25 connector (provides
-    status if you are using AC power with Eltek Valere AC/DC rectifier equipment)"; p72
-    Table 14 names status cable 3HE04173AA to it. Fig 62 draws two rows (13 over 12) in a
-    shell 39.6 x 12.3 whose standoffs are 47.1 apart, the B shell. std/db25 is being added
-    by prerequisite P (TE 114-40010 Rev G Fig 3); until it merges the connector is the
-    `status-connector` element with the shell, insert and pins in the skin. When it lands,
-    replace the element and its skin group with `{ref: std/db25@1, id: status, at:
-    [245.9 - w/2, 43.45 - h/2]}` (plus a group for it) - centred on (245.9, 43.45) where w and h
-    are std/db25's own size (for a 41.8 x 11.4 cutout, at: [225.0, 37.75]) - and keep the
-    two standoffs at (222.35, 43.45) and (269.45, 43.45) as decor. Gender is not stated;
-    Fig 62 draws the contacts as rings.
+    datasheet + registry - SR12 p70 Table 12 key 5: "DB-25 connector (provides status if you
+    are using AC power with Eltek Valere AC/DC rectifier equipment)"; p72 Table 14 names
+    status cable 3HE04173AA to it. Fig 62 draws two rows (13 over 12) in a shell 39.6 x 12.3
+    whose standoffs are 47.1 apart, the B shell (TE 114-40010 Rev G Fig 3: 47.04). Composed
+    as std/db25@1, female per SR12 p259 section 13.1.3 ("female DB-25 connectors on the DC
+    PEM-3s"), centred where Fig 62 draws it, (245.9, 43.45); the two standoffs at
+    (222.35, 43.45) and (269.45, 43.45) stay in the skin as decor.
   lamp: >-
     datasheet - SR12 p206 Table 83, PWR PRESENT: lit = power applied and present in all
     terminal lugs; unlit = none. No colour is given; the family green #39b54a is used,
@@ -115,7 +111,6 @@ elements:
   terminal-rtn: {at: [300.0, 3.4], size: [54.0, 45.0], class: terminal}
   power-switch: {at: [137.7, 24.3], size: [32.1, 23.0], class: switch}
   handle: {at: [171.4, 5.5], size: [93.9, 17.2], class: handle}
-  status-connector: {at: [220.9, 37.3], size: [50.0, 12.3], class: connector}
   warning-marks: {at: [270.0, 4.9], size: [8.9, 21.0], class: label}
   logo-zone: {at: [280.5, 41.0], size: [9.0, 6.0], class: label}
 groups:
@@ -124,9 +119,17 @@ groups:
     role: indicator
     index-origin: 1
     description: the one PWR PRESENT lamp
+  monitoring:
+    term: Port
+    role: management
+    index-origin: 1
+    description: >-
+      the DB-25 AC Supply Status port, which takes an Eltek AC rectifier shelf's status cable
+      (SR12 p70 Table 12 key 5, p72 Table 14)
 parts:
   - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [200.67, 34.38],
      states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: std/db25@1, id: status, group: monitoring, at: [224.64, 37.75]}
 relief:
   features:
     - node: handle
