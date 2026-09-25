@@ -1,0 +1,441 @@
+format: 1
+kind: module
+name: fglt-e
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FGLT-E (3FE 76835 AA, and the AE functional variant), the 32-port GPON line
+  termination board with traffic manager of the 7360 ISAM FX and Lightspan FX: sixteen
+  cages, each taking a dual-GPON OLT pluggable, so two PON interfaces per cage. Seats in
+  any LT slot of the FX-4, FX-8 and FX-16. Authored upright, as the Unit Data Sheet
+  guides draw it: a thumbscrew and the model label at the top beside the ejector, the
+  sixteen cages one per tooth of a sawtooth, each numbered on the left strip between its
+  two PON lamps, then the ESD and hot-surface marks, the ALM and PWR lamps, a blank label
+  and the bottom thumbscrew.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), the width the shared 7360 FX LT bay is built to;
+  the faceplate's own edge-to-edge width is not stated. d is the board's depth at its
+  top, 225 mm; the UDS gives 205 mm at the bottom.
+attrs:
+  model: FGLT-E
+  part-number: 3FE 76835 AA / 3FE 76835 AE
+  gpon: 32
+  weight-kg: 2.76
+  power-draw-max-w: 85
+  power-draw-typical-w: 80
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 40.5.1
+    (p416): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm; ETSI UDS 3FE77012AAAATQZZA18 section 37.5.1 prints the same. The UDS "width" is
+    the board's depth into the shelf. Face held at the 25 mm pitch by the shared 7360 FX
+    convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 40.5.1; faceplate width not stated, taken
+    as the pitch. Figure 149's plate is 86 px across at 3.44 px/mm = 25.0 mm, within 1% of
+    the scale along the card.
+  depth: 'datasheet - 225 mm at the top, 205 mm at the bottom, section 40.5.1; 225 carried as the envelope'
+  weight: >-
+    datasheet - 2.76 kg, Lightspan UDS A23 section 40.5.1 (p416), and the ETSI Product
+    Information Guide 3HH11997AAAATCZZA42 p153 Table 103 agrees; a 1.12 kg figure the
+    coverage grid records from an earlier Product Information Manual is the FGLT-D's
+    weight and reads as a copy error.
+  power: >-
+    datasheet - Lightspan FX Safety Manual 3HH91852AAAATCZZA07 p37 Table 2 and ANSI Safety
+    Manual 3HH12894AAAATCZZA27 p25 Table 2: FGLT-E 80 W typical, 85 W maximum. Neither
+    table's notes say whether the optics are inside the figure, so that scope is open
+    (gap).
+  layout: >-
+    drawing - ETSI UDS A18 Figure 149 (p359, embedded 1435 x 1510 at 300 ppi; Lightspan
+    Figure 195 p414 is a 150 ppi JPEG of the same art), a FLAT front view with callouts.
+    The plate spans image y 46 to 1457 (3.484 px/mm along the 405) and x 1037 to 1123
+    across (3.44 px/mm on 25): aspect within 1%, so positions are taken directly. Top
+    thumbscrew at 6.3, model label 11.5-22.4, ejector handle to 29.9; cage 1 top at 38.7,
+    sixteen cages 13.8 long on a 20.59 pitch (71.73 px, measured over fifteen repeats);
+    each cage's numeral on the left strip at its top edge, between two lamp pads at -4.5
+    and +4.1; ALM and PWR at 379.1; blank label 382.6-393.2; bottom thumbscrew at 400.4.
+    Across: cages 6.0-17.2 (centred 11.6), pads at 3.0, numerals at 2.4, lamps at 8.8
+    and 13.7. About 1 mm error.
+  layout-compression: >-
+    the ESD and hot-surface marks are drawn at 361.1-368.0, which would touch cage 16
+    (to 361.6 at the measured pitch); they are moved down to 365.0-372.0, clear of the
+    cage and of the lamp legends. The recess behind the cages ends at 364.0.
+  ports: >-
+    datasheet - UDS section 40.3/40.4.2: "16 physical PON cages, each supporting
+    dual-GPON OLT pluggable modules", up to 32 GPON interfaces. Composed as std/sfp@1
+    turned 90, the cage drawn 13.8 long and about 11 across (the SFP width along the
+    card), one per cage, id cage-N. Figure 149's callouts give cage N as "Port 2N-1, 2N"
+    (Port 1, 2 ... Port 31, 32), top to bottom. The printed numerals beside the cages read
+    1, 2, 3 ... 15, 16 in the figure (set a quarter turn, reading top to bottom), one per
+    cage, although the text says the cages are
+    "labeled 1 to 32"; the figure is transcribed (gap). A component part cannot carry
+    `interfaces:`, so the two PON interfaces per cage live in the group description and
+    the lamps, not as named interfaces (gap).
+  lamps: >-
+    datasheet - Figure 197 / ETSI Figure 151 and Table 154. PWR: off, blinking green =
+    initialisation, green = power present. ALM: red = alarm. PON lamps, "one PON LED per
+    port (two PON LEDs per cage) at the side of the optical cage": off, yellow, green, red.
+    Figure 149 draws the pair as the two small pads on the left strip beside each cage's
+    numeral; the upper is taken as the odd port and the lower as the even, which is
+    ASSUMED from the callout order (gap). ALM sits left of PWR, side by side under their
+    legends, in the flat front; the close-up stacks them and is generic art.
+  labels: >-
+    drawing - a label box at the top with the model placeholder "XXXX-X" and three lines
+    of placeholder text (drawn as the model name and grey bars; no serial is transcribed),
+    and an empty label frame above the bottom thumbscrew.
+  marks: >-
+    drawing - an ESD triangle (left) and a hot-surface triangle (right) above the lamps,
+    both upright in the flat front.
+  variants: >-
+    datasheet - Table 153: 3FE 76835 AA and AE share the mnemonic; AE is a functional
+    variant with alternative components that needs newer software. No document draws the
+    two apart, so they are one component with both part numbers.
+  logo-zone: >-
+    reserved by the family convention; the flat front draws no mark, so the zone sits on
+    the empty metal between the model label and the first lamp.
+  relief: >-
+    estimated - the two ejector handles stand proud; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is used.
+    The sawtooth is carried as facets (angled-panel), not as an `out`.
+  colour: >-
+    borrowed - no photograph of an FGLT-E is known (working/intake/nokia/PUBLIC-SOURCES.md
+    section 3); the family's light silver-grey plate and dark ejectors are used, and the
+    hot-surface mark is filled yellow as the FGLT-B photographs show it (the figure is
+    black and white).
+  lifecycle: >-
+    searched only the staged corpus - current in the Lightspan UDS A23 and ETSI UDS A18;
+    no end-of-life notice was searched for on the web.
+  angled-panel: >-
+    estimated - ETSI UDS A18 p360 Figure 150, the side elevation (3.457 px/mm,
+    isotropic). It draws two sawtooths: the one the cages sit on, BEHIND the plate, and
+    a small hood per cage proud of the plate front. The rear teeth fit at 30.4-30.9
+    degrees on the long edge that carries the cage and 54.4-56.4 on the short edge, 7.6
+    mm deep, their tips touching the back of a plate 13.3 mm deep (front line 348 px,
+    back line 394 px) - the 31/56 of nokia/fglt-b@1, so the tooth changes from the 30/60
+    borrowed from nokia/fglt-d@1 before. The opening is one pocket, `well`, 33.5 to
+    367.05 and 22.1 deep, and every facet has `lift` -22.1. Section, plate front at 0:
+    tooth crest -13.3, tooth root and pocket floor -22.1. Modelled as sixteen teeth of
+    31 degrees (face-N, facing up, the cage on it) and 56 degrees (return-N, facing
+    down, below it) on the 20.59 pitch of Figure 149, face 14.65 and return 5.94 mm of
+    front view, 8.80 mm from root to crest (the figure draws 7.6 with a 2 mm flat root;
+    the flat is left out so that the cage, 12.43 mm projected, fits its face with
+    margin). Each face keeps the cage centre Figure 149 gives (45.55 + 20.59 n), its
+    lower edge 0.5 mm above the crest; since 31 + 56 is under 90 degrees each cage runs
+    back under the return below it and passes below the pocket floor before any wall
+    (0.58 mm worst clearance), so none comes out through a wall. The last return, and so
+    the pocket, runs to 367.05, over the tips of the ESD and hot-surface triangles (from
+    365) (gap). THE HOOD IS NOT MODELLED (gap): Figure 150 draws it 6.8 mm proud of the
+    plate front, 31/56 with a 4.3 mm flat between hoods, over the same stretch of card
+    as the cage face behind it. A facet footprint is either sunk in a pocket or standing
+    on the plate, so a proud hood and the sunk tooth behind it cannot share one
+    footprint, and a hood drawn over the opening would hide the cage it surrounds.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [7.5, 23.6], size: [15.5, 8.7], class: label}
+  model-label: {at: [6.7, 11.5], size: [15.1, 10.9], class: label}
+  blank-label: {at: [7.3, 382.6], size: [14.5, 10.6], class: label}
+  well: {at: [5.2, 33.5], size: [18.8, 333.553], class: mechanical}
+  face-1: {at: [5.2, 37.613], size: [18.8, 14.652], class: mechanical}
+  return-1: {at: [5.2, 52.264], size: [18.8, 5.938], class: mechanical}
+  face-2: {at: [5.2, 58.203], size: [18.8, 14.652], class: mechanical}
+  return-2: {at: [5.2, 72.854], size: [18.8, 5.938], class: mechanical}
+  face-3: {at: [5.2, 78.793], size: [18.8, 14.652], class: mechanical}
+  return-3: {at: [5.2, 93.444], size: [18.8, 5.938], class: mechanical}
+  face-4: {at: [5.2, 99.383], size: [18.8, 14.652], class: mechanical}
+  return-4: {at: [5.2, 114.034], size: [18.8, 5.938], class: mechanical}
+  face-5: {at: [5.2, 119.973], size: [18.8, 14.652], class: mechanical}
+  return-5: {at: [5.2, 134.624], size: [18.8, 5.938], class: mechanical}
+  face-6: {at: [5.2, 140.563], size: [18.8, 14.652], class: mechanical}
+  return-6: {at: [5.2, 155.214], size: [18.8, 5.938], class: mechanical}
+  face-7: {at: [5.2, 161.153], size: [18.8, 14.652], class: mechanical}
+  return-7: {at: [5.2, 175.804], size: [18.8, 5.938], class: mechanical}
+  face-8: {at: [5.2, 181.743], size: [18.8, 14.652], class: mechanical}
+  return-8: {at: [5.2, 196.394], size: [18.8, 5.938], class: mechanical}
+  face-9: {at: [5.2, 202.333], size: [18.8, 14.652], class: mechanical}
+  return-9: {at: [5.2, 216.984], size: [18.8, 5.938], class: mechanical}
+  face-10: {at: [5.2, 222.923], size: [18.8, 14.652], class: mechanical}
+  return-10: {at: [5.2, 237.574], size: [18.8, 5.938], class: mechanical}
+  face-11: {at: [5.2, 243.513], size: [18.8, 14.652], class: mechanical}
+  return-11: {at: [5.2, 258.164], size: [18.8, 5.938], class: mechanical}
+  face-12: {at: [5.2, 264.103], size: [18.8, 14.652], class: mechanical}
+  return-12: {at: [5.2, 278.754], size: [18.8, 5.938], class: mechanical}
+  face-13: {at: [5.2, 284.693], size: [18.8, 14.652], class: mechanical}
+  return-13: {at: [5.2, 299.344], size: [18.8, 5.938], class: mechanical}
+  face-14: {at: [5.2, 305.283], size: [18.8, 14.652], class: mechanical}
+  return-14: {at: [5.2, 319.934], size: [18.8, 5.938], class: mechanical}
+  face-15: {at: [5.2, 325.873], size: [18.8, 14.652], class: mechanical}
+  return-15: {at: [5.2, 340.524], size: [18.8, 5.938], class: mechanical}
+  face-16: {at: [5.2, 346.463], size: [18.8, 14.652], class: mechanical}
+  return-16: {at: [5.2, 361.114], size: [18.8, 5.938], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150: plate front 348 px to plate back 394 px = 13.3 mm (3.457 px/mm), the rear tooth tips touching the back; roots 8.80 further in'
+    - node: face-1
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-1
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-2
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-2
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-3
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-3
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-4
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-4
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-5
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-5
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-6
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-6
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-7
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-7
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-8
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-8
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-9
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-9
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-10
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-10
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-11
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-11
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-12
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-12
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-13
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-13
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-14
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-14
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-15
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-15
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: face-16
+      facet: {deg: 31, facing: up}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+    - node: return-16
+      facet: {deg: 56, facing: down}
+      lift: -22.1
+      confidence: estimated
+      source: 'ETSI UDS A18 p360 Figure 150, the rear sawtooth behind the plate: line fits give the long edge 30.4-30.9 deg and the short edge 54.4-56.4 deg (3.457 px/mm)'
+groups:
+  pon-cages:
+    term: Cage
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: >-
+      the sixteen dual-GPON cages, two PON interfaces each - cage N carries ports 2N-1
+      and 2N (GPON, 2.488 Gbps down)
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: two PON lamps per cage, one per port, on the cage's left - lamp N is port N
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: cage-1, group: pon-cages, at: [4.35, 41.264], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: cage-2, group: pon-cages, at: [4.35, 61.854], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: cage-3, group: pon-cages, at: [4.35, 82.444], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: cage-4, group: pon-cages, at: [4.35, 103.034], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: cage-5, group: pon-cages, at: [4.35, 123.624], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: cage-6, group: pon-cages, at: [4.35, 144.214], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: cage-7, group: pon-cages, at: [4.35, 164.804], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: cage-8, group: pon-cages, at: [4.35, 185.394], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: cage-9, group: pon-cages, at: [4.35, 205.984], rotate: 90, 'on': face-9}
+  - {ref: std/sfp@1, id: cage-10, group: pon-cages, at: [4.35, 226.574], rotate: 90, 'on': face-10}
+  - {ref: std/sfp@1, id: cage-11, group: pon-cages, at: [4.35, 247.164], rotate: 90, 'on': face-11}
+  - {ref: std/sfp@1, id: cage-12, group: pon-cages, at: [4.35, 267.754], rotate: 90, 'on': face-12}
+  - {ref: std/sfp@1, id: cage-13, group: pon-cages, at: [4.35, 288.344], rotate: 90, 'on': face-13}
+  - {ref: std/sfp@1, id: cage-14, group: pon-cages, at: [4.35, 308.934], rotate: 90, 'on': face-14}
+  - {ref: std/sfp@1, id: cage-15, group: pon-cages, at: [4.35, 329.524], rotate: 90, 'on': face-15}
+  - {ref: std/sfp@1, id: cage-16, group: pon-cages, at: [4.35, 350.114], rotate: 90, 'on': face-16}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2, 33], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [2, 41.6], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [2, 53.59], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [2, 62.19], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [2, 74.18], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [2, 82.78], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [2, 94.77], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [2, 103.37], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [2, 115.36], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [2, 123.96], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [2, 135.95], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [2, 144.55], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [2, 156.54], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [2, 165.14], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [2, 177.13], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [2, 185.73], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-17, group: pon-leds, at: [2, 197.72], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-18, group: pon-leds, at: [2, 206.32], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-19, group: pon-leds, at: [2, 218.31], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-20, group: pon-leds, at: [2, 226.91], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-21, group: pon-leds, at: [2, 238.9], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-22, group: pon-leds, at: [2, 247.5], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-23, group: pon-leds, at: [2, 259.49], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-24, group: pon-leds, at: [2, 268.09], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-25, group: pon-leds, at: [2, 280.08], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-26, group: pon-leds, at: [2, 288.68], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-27, group: pon-leds, at: [2, 300.67], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-28, group: pon-leds, at: [2, 309.27], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-29, group: pon-leds, at: [2, 321.26], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-30, group: pon-leds, at: [2, 329.86], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-31, group: pon-leds, at: [2, 341.85], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-32, group: pon-leds, at: [2, 350.45], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [7.8, 378.1], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [12.7, 378.1], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

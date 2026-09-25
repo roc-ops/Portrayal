@@ -411,6 +411,22 @@ Now populate. Reuse before building.
 6. **`rotate:` pivots a placement on its own pre-rotation centre**, so after
    turning a part recompute `at`; the landed box is not where the unrotated one
    sat. Look at the render. L39 compares the landed box with the hole.
+7a. **Ports on an angled surface sit `on` a facet.** Some faceplates carry
+    their connectors on a housing or sawtooth angled off the panel. Declare
+    the surface once, as a relief feature with `facet: {deg, facing}`, and
+    declare its node in `elements` at its front-view footprint. Then give
+    each part on it `on: <node>`. Keep measuring `at` in front-view
+    millimetres. The part keeps its registry size, and the renderer
+    foreshortens it and builds it along the slope in 3D. Do not declare `out`
+    or a profile on the facet; it is derived (L117). An angle read off a 3D
+    figure is `estimated`. A sawtooth is two facets per tooth: the face the
+    port sits on and the return that closes the tooth back to the panel,
+    each its own node. A port's depth runs back along the slope, so without
+    the return, or at the wrong angle, the cage comes out of the tooth in
+    3D; that is a geometry error to fix, not something to hide. A surface set
+    into the plate, such as teeth behind a window or in a recess, is a sunk
+    facet: give it a negative `lift` (its root that far below the plate) and
+    declare the recess around it as a `pocket` at least that deep (L117).
 7. **Cable-management accessories are not drawn**: cord-retainer bails, tie
    anchors, straps. They are not panel facts. Note them in provenance instead.
 8. **A row of indicators and buttons sharing one baseline on the real device is
@@ -427,6 +443,17 @@ Now populate. Reuse before building.
    the vendor requires a filler and no component exists for it, that is a
    missing component, not a missing decision: leave the default off and record
    the sentence that says the filler is required.
+9a. **An open-frame chassis says so on the face: `open-frame: true`.** A
+    mid-plane chassis whose slots are two guide rails and nothing between them -
+    the CommScope CH3000 - is seen straight through wherever a slot is empty.
+    Left to itself, every empty bay compiles to a pocket as deep as its deepest
+    occupant, walls, floor and back, and the chassis reads in 3D as a row of
+    closed tubes. Declare `open-frame` on each face whose slots open into the
+    interior (front and rear for a mid-plane box): every bay on it becomes a
+    see-through mouth with no walls, a seated module is drawn over it, a pulled
+    one leaves the frame open, and the kit lines the inside of the box. If the
+    faceplates stand a gap apart that is clearance and not metal, give each bay
+    an `opening` of the full pitch so an empty span reads as one hole.
 10. **A carrier is a module with bays of its own.** A modular line card holding
     adapters has those bays in its component contract, with `accepts` and a
     `default` exactly as a chassis bay does. Check an occupant is actually

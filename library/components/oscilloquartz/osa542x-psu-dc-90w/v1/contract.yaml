@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: osa542x-psu-dc-90w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Oscilloquartz OSA 5421 DC power supply - the 90 W hot-swappable -48/-60 VDC module
+  for the one-slot OSA 5421, a keyed three-pole "- Gnd +" header, a pull handle and a
+  status lamp, held in by a captive thumbscrew on a tab at its lower right.
+size: {w: 81.0, h: 36.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  input: dc
+  inlet: dc-terminal
+  input-voltage: -48 to -60 VDC (tolerates -36 to -72 VDC)
+  power-output-w: 90
+provenance:
+  face-art: >-
+    borrowed - oscilloquartz/osa542x-psu-dc-40w@1. NOTHING HELD SHOWS A 90 W MODULE APART
+    FROM A 40 W ONE: the manual's Figures 5 and 6 (OSA 5421 fronts) draw supplies with
+    the same outline, handle, lamp and inlet as Figures 3 and 4 (OSA 5420), at a
+    resolution that could not separate them, and p43 says only that "the part number is
+    printed on the PSU label". So the face is the 40 W module's, and a label difference
+    would not be visible at any scale the sources support.
+  power: >-
+    manual - OSA 5420/5421 Installation and Commissioning Manual R9.5.1 p43, "The OSA
+    5420 uses 40 Watt AC/DC PSUs, and the OSA 5421 requires 90 Watt AC/DC PSUs". NO
+    AMBIENT is quoted with the figure, so none is asserted. The part number is deferred
+    by the manual to the System Description, which is not held.
+  input: >-
+    data sheet - 2023 OSA 5420 Series, Power supply: "Hot-swappable, modular DC-PSU: -48
+    to -60VDC (tolerate -36 to -72VDC)". THE FACE LEGEND DIFFERS BETWEEN SOURCES: the
+    2023 render prints "Power Input 36 to 72V DC", the manual's Figure 1 line drawing
+    prints "-48 to -60V DC". Both are the same range read two ways, the tolerated
+    envelope and the nominal. The render's is drawn, because it is the later artwork.
+  size: >-
+    borrowed - oscilloquartz/osa542x-psu-ac-40w@1, the AC module of the same frame. In the
+    2023 data sheet render PSU1 is this DC module and PSU2 the AC one, and their plates
+    measure 71.8 and 71.3 wide at 3.25 px/mm with the same tab - one frame, two faces.
+  elements: >-
+    photo-measured - 2023 data sheet p1 render, PSU1: handle 21.6 x 4.8 top left,
+    status lamp at local (64.9, 6.25), "Power Input 36 to 72V DC" across the upper
+    half, the header body 13.7 x 5.5 with its key rising 4.8 above it at local 39.9-53.6
+    x 22.55-28.05, three square contacts, and "- Gnd +" beneath. The manual's p70
+    "-48 VDC Power Supply Unit Connector Pin Assignments" is the pin order.
+  lamp-states: >-
+    manual - Table 2, System LEDs, PSU-n Status: Off, no input power detected; Green,
+    input power present and operating within normal limits; Red, PSU fail or input
+    power out of spec.
+  depth: >-
+    NOT STATED in the data sheet or the manual, so no body is declared.
+states: [absent]
+elements:
+  handle: {at: [2.2, 3.95], size: [21.6, 4.8], class: handle}
+  lamp-status:
+    at: [63.3, 4.65]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off', {name: ok, color: '#39b54a'}, {name: fail, color: '#d0342c'}]
+  inlet: {at: [39.9, 17.75], size: [13.7, 10.3], class: inlet}
+  thumbscrew: {at: [72.9, 28.15], size: [7.4, 7.4], class: fastener}
+connection-points:
+  power: {at: [46.75, 25.3], direction: rear}
+skins: [default]

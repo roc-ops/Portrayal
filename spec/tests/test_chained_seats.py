@@ -15,11 +15,12 @@ while placements remain unresolved is either a dangling `mate-to` (already an er
 or a cycle (a new one).
 """
 import pathlib
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
 import yaml
+
+import warmrender
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
@@ -43,7 +44,7 @@ def _render(tmp_path, extra_placements, occupants):
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
     out = tmp_path / "o"
     out.mkdir()
-    return subprocess.run(
+    return warmrender.run(
         [sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
          "--library", str(LIB), "--out", str(out)],
         capture_output=True, text=True), out
@@ -123,7 +124,7 @@ def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
     """
     r, out = _render(
         tmp_path,
-        [{"ref": "generic/lc-plug@1", "id": "plug1",
+        [{"ref": "generic/lc-plug@2", "id": "plug1",
           "mate-to": "port-4-occupant"},
          {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}],
         {"port-4": "generic/sfp-lc-simplex@2"})
@@ -146,7 +147,7 @@ def test_a_chained_seat_inherits_the_whole_stack_of_lift(tmp_path):
     # inside the module - PLUS what the plug presents: since pluggables D the
     # plug presents `lc-plug` at its `boot` point, `on:` its body, so the boot
     # stands on the plug body's rear face, that feature's `out` further on.
-    plug_c = yaml.safe_load((LIB / "components/generic/lc-plug/v1/contract.yaml").read_text())
+    plug_c = yaml.safe_load((LIB / "components/generic/lc-plug/v2/contract.yaml").read_text())
     rear = next(f["out"] for f in plug_c["relief"]["features"] if f["node"] == "body")
     assert boot == plug + rear, (
         f"the boot's effective lift is {boot} but the plug it wraps stands at "
@@ -196,7 +197,7 @@ def test_a_hand_written_mate_to_records_its_host(tmp_path):
     """
     r, out = _render(
         tmp_path,
-        [{"ref": "generic/lc-plug@1", "id": "plug1",
+        [{"ref": "generic/lc-plug@2", "id": "plug1",
           "mate-to": "port-4-occupant"},
          {"ref": "common/lc-boot@1", "id": "boot1", "mate-to": "plug1"}],
         {"port-4": "generic/sfp-lc-simplex@2"})
@@ -222,7 +223,7 @@ def test_an_authors_own_for_wins_over_the_mate_to_default(tmp_path):
     """
     r, out = _render(
         tmp_path,
-        [{"ref": "generic/lc-plug@1", "id": "plug1",
+        [{"ref": "generic/lc-plug@2", "id": "plug1",
           "mate-to": "port-4-occupant", "for": "port-4"}],
         {"port-4": "generic/sfp-lc-simplex@2"})
     assert r.returncode == 0, r.stderr[-800:]
@@ -245,7 +246,7 @@ def test_occupants_can_chain(tmp_path):
     r, out = _render(
         tmp_path, [],
         {"port-4": "generic/sfp-lc-simplex@2",
-         "port-4-occupant": "generic/lc-plug@1",
+         "port-4-occupant": "generic/lc-plug@2",
          "port-4-occupant-occupant": "common/lc-boot@1"})
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
@@ -273,7 +274,7 @@ def test_an_occupant_for_a_host_in_another_view_is_still_skipped(tmp_path):
     r, out = _render(
         tmp_path, [],
         {"port-4": "generic/sfp-lc-simplex@2",
-         "a-host-in-no-view-at-all": "generic/lc-plug@1"})
+         "a-host-in-no-view-at-all": "generic/lc-plug@2"})
     assert r.returncode == 0, r.stderr[-800:]
     root = ET.parse(out / "s9510-28dc.dc.front.svg").getroot()
     ids = {el.get("id") for el in root.iter() if el.get("id")}

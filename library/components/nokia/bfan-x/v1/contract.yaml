@@ -1,0 +1,134 @@
+format: 1
+kind: module
+name: bfan-x
+version: 1.0.1
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia BFAN-X (3FE 66544 AA), the intelligent fan unit of the 7360 ISAM FX-4 (NFXS-F),
+  also sold as the Lightspan FX-4 fan unit. A vertical plate carrying four variable-speed
+  fans in a 2 x 2 block, which slides in at the shelf's right-hand end. Drawn is its narrow
+  front edge, 33.1 x 213.5, as the Unit Data Sheet's middle view draws it: two long
+  recessed windows at the top, the two fan clips of the upper row, a CAUTION ROTATING FAN
+  BLADES label, an ESD mark, a label window, the status lamp and the boss the fan cover's
+  captive screw threads into. In a working shelf this edge sits BEHIND the shelf's fan cover
+  (the strip printed "7360 ISAM FX-4"), which is a separate part; see gaps.
+size: {w: 33.1, h: 213.5, d: 225.36}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: BFAN-X
+  part-number: 3FE 66544 AA
+  weight-kg: 0.9
+  fans: '4'
+  power-draw-max-w: 58
+  power-draw-typical-w: 17
+  airflow-m3h: 4 x 192
+  dust-filter: 3FE 64928 EA
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 37.5.1 (p386):
+    height 213.5 mm, width 33.1 mm, depth 225.36 mm. The face is width x height, because the
+    unit stands on edge at the shelf's right end and presents its narrow side. The 2016 BFAN-X
+    data sheet 3FE66544AAAATQZZA02 section 1.5.1 prints 345 / 32,9 / 216,7 instead, which are
+    the BFAN-E's figures copied into the wrong sheet: its own Figure 2 draws a unit whose fan
+    plate is about as tall as it is deep (1110 x 1176 px), which 345 x 216.7 cannot be.
+  depth: 'datasheet - 225.36 mm, 3HH90279AAAATQZZA23 section 37.5.1 (p386)'
+  weight: 'datasheet - 0.9 kg, 3HH90279AAAATQZZA23 section 37.5.2 (p386)'
+  power: >-
+    datasheet - 3HH90279AAAATQZZA23 Table 148 (p387): 17 W +/- 5% in "classic mode" at
+    -48 Vdc, 58 W +/- 5% at full speed at -48 Vdc. The ETSI Safety Manual
+    3HH11998AAAATCZZA29 Table 2 (p26) repeats both and qualifies them: note 6, classic mode
+    "with +25 C ambient value"; note 7, full speed, with no ambient. So the 58 W maximum is
+    the fans at full speed, the ceiling the unit reaches whatever the ambient, and the 17 W
+    typical is the +25 C classic-mode figure. No higher-ambient classic-mode figure is
+    published (gap).
+  layout: >-
+    drawing - the middle (front-edge) view of Figure 2 "BFAN-X Views" in the stand-alone data
+    sheet 3FE66544AAAATQZZA02 p8, which is VECTOR art, rendered at 600 dpi. The same art is
+    Figure 175 of 3HH90279AAAATQZZA23 p385, embedded there as a 150 ppi JPEG. Gate 1: the
+    left-hand (fan plate) view measures 1176 x 1110 px against 225.36 x 213.5, 5.218 and
+    5.199 px/mm, 0.4% apart, so the views are orthographic. The front edge spans 175 x 1110 px
+    at that scale, 33.7 against 33.1 (2%, the flange lip). Heights are taken at 5.199 px/mm
+    down from the top edge and at 33.1/175 mm/px across, both by row and column edge scans
+    of the render. Front plate 0-23.8 with the fan plate's folded flange 23.8-33.1 beside
+    it; two long windows 3.8-12.7 and 13.6-22.5 x 13.1-73.1; fan clips 83.5-108; caution
+    label 3.8-22.5 x 113.7-155.4; ESD mark centre (12.7, 163.5); label window 3.8-13.4 x
+    170.6-198.3; status lamp centre (16.3, 194.5); cover-screw boss centre (16.0, 175.8),
+    3.4 across (the two identities corrected on review - see status-led). Stated to 0.1 mm because that is what the arithmetic gives; the drawing
+    resolves about 0.2 mm.
+  status-led: >-
+    datasheet - Table 145 (p385): green blinking 50/50 at power-up and start-up, green steady
+    at the inlet-temperature settle point, green blinking 90/10 in closed-loop control, red
+    steady on fan failure. WHICH ROUND IS THE LAMP was first read from Figure 174 (p383, 3D) as
+    the upper of the two, at 175.8, and corrected on review: the FX-4 fan cover
+    (nokia/fan-cover-fx4@1) carries its captive screw over 175.8 - HIM 3HH91853AAAARJZZA08 Figure
+    260 labels that screw "Captive screw fan unit and fan cover", so it threads into this unit
+    there - and prints a fan symbol beside a small window over 194.5. A lamp cannot sit behind
+    a screw, so the lamp is the round at 194.5 and the screw boss is the one at 175.8. The HW
+    Installation Manual 3HH91853AAAARJZZA08 section 21.6 (p390) calls it "a single red alarm
+    LED"; the UDS table is the fuller statement and is what the states follow.
+  fan-cover: >-
+    HW Installation Manual 3HH91853AAAARJZZA08 Procedure 80 (p392-393) and Figures 259-260:
+    the FX-4 fan area is closed by a FAN COVER, a strip carrying the printed shelf name
+    "7360 ISAM FX-4", slot legends down one edge and a captive screw near its foot, which
+    threads through into this unit ("Captive screw fan unit and fan cover", Figure 260). The
+    shelf figure 3HH90279AAAATQZZA23 p106 Figure 44 shows that cover, not this unit, so the
+    "7360 ISAM FX-4" printing is NOT on the BFAN-X and is not drawn here.
+  label: >-
+    drawing - the caution label is drawn in Figure 2 with a hazard triangle and the words
+    CAUTION / ROTATING FAN BLADES, set vertically reading bottom to top. Transcribed as
+    printed. The ESD mark is the circled hand symbol. The two tall windows and the lower
+    window carry nothing in the drawing and are left blank; what (if anything) is printed in
+    them is not stated.
+  fan-cover-gap: >-
+    NOT MODELLED. The FX-4 fan cover that stands in front of this edge (HIM
+    3HH91853AAAARJZZA08 Figures 259-260, printed "7360 ISAM FX-4") carries no part number in
+    any staged document and is a shelf part, not this unit; the shelf should draw it over the
+    fan bay.
+  power-ambient-gap: >-
+    classic-mode draw above +25 C is not published in the UDS guides or either Safety
+    Manual; only the full-speed 58 W bounds it.
+  window-gap: >-
+    what the two tall windows are (filter slots, finger recesses or blank label panels) is
+    not stated; Figure 174 draws them as plain recessed rectangles.
+  photo-gap: >-
+    no photograph of the unit is staged (PUBLIC-SOURCES.md 2c lists none for any BFAN), so
+    colour is the family's silver-grey by convention, not by observation.
+  logo-zone: 'reserved by the family convention; no mark is drawn on this edge in any figure'
+  lifecycle: >-
+    searched only the staged corpus - the 2026 Lightspan UDS guide still lists the unit as
+    current; no end-of-life notice was searched for on the web.
+elements:
+  window-left: {at: [3.8, 13.1], size: [8.9, 60.0], class: window}
+  window-right: {at: [13.6, 13.1], size: [8.9, 60.0], class: window}
+  fan-clips: {at: [11.2, 83.5], size: [13.6, 24.5], class: fastener}
+  caution-label: {at: [3.8, 113.7], size: [18.7, 41.7], class: label}
+  esd-mark: {at: [9.5, 160.3], size: [6.4, 6.4], class: label}
+  label-window: {at: [3.8, 170.6], size: [9.6, 27.7], class: label}
+  cover-screw: {at: [14.1, 173.9], size: [3.8, 3.8], class: fastener}
+  logo-zone: {at: [4.0, 200.0], size: [16.0, 8.0], class: label}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the fan unit's single status lamp
+parts:
+  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [14.3, 192.5],
+     states: {lamp: ['off', {name: starting, color: '#39b54a', behavior: blinking},
+                     {name: 'on', color: '#39b54a'},
+                     {name: closed-loop, color: '#39b54a', behavior: blinking},
+                     {name: fail, color: '#d0021b'}]}}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: fan-clips
+      out: 3.0
+      confidence: estimated
+      source: >-
+        the butterfly clips stand off the fan plate in Figure 174 (3D); no document gives a
+        figure, and they are hidden behind the fan cover in a working shelf
+connection-points:
+  mate: {at: [16.55, 106.75], direction: rear}
+skins: [default]

@@ -81,6 +81,28 @@ def test_node_is_installed_rather_than_inherited(workflow):
     assert len(users) >= 10, f"only {len(users)} modules shell out to node"
 
 
+def test_a_fork_never_reaches_the_self_hosted_pool(workflow):
+    """The runner is chosen by a repository variable so that going public is a
+    settings change - and a settings change is the kind that gets forgotten. A
+    self-hosted machine runs whatever a pull request's tree says and is not
+    thrown away afterwards, so the fork test has to come FIRST in every
+    `runs-on`, before the variable is consulted, and fall back to hosted."""
+    for name, job in workflow["jobs"].items():
+        runs_on = str(job.get("runs-on", ""))
+        assert runs_on.startswith(
+            "${{ (github.event.pull_request.head.repo.fork && 'ubuntu-latest')"
+        ), f"{name}: {runs_on}"
+        assert runs_on.rstrip(" }").endswith("'ubuntu-latest'"), f"{name}: {runs_on}"
+
+
+def test_the_suite_log_is_not_in_a_shared_tmp(workflow):
+    """Several runners on one machine share /tmp. A fixed /tmp path lets one
+    job's skip check read another job's log - green for the wrong tree."""
+    build = yaml.safe_dump(workflow["jobs"]["build"])
+    assert "/tmp/pytest.txt" not in build
+    assert "$RUNNER_TEMP/pytest.txt" in build
+
+
 def _pyproject():
     import tomllib
     return tomllib.loads((ROOT / "pyproject.toml").read_text())

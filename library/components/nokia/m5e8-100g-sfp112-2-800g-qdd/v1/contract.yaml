@@ -1,0 +1,202 @@
+format: 1
+kind: module
+name: m5e8-100g-sfp112-2-800g-qdd
+version: 1.1.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR MDA2-e-XP, 8-port 100G SFP112 + 2-port 800G QDD (3HE20979AA, CLI
+  m5e8-100g-sfp112+2-800g-qdd), an FP4 media-dependent adapter with up to 800 Gb/s of
+  line rate. Authored horizontal, as the guide draws it: a handle at each top corner and
+  a captive screw on each lower end wing; Stat and Pwr at the left; eight SFP112 ports
+  in two ganged 1x4 blocks (c1-c8) and two QSFP-DD800 cages (c9, c10) in one row, a
+  Lnk/Act lamp above each; the model label at the lower right.
+size: {w: 193.0, h: 35.4, d: 193.0}
+size-confidence: {w: drawing, h: datasheet, d: datasheet}
+size-notes: >-
+  The shared wave-1 MDA envelope (MDA-e, MDA-e-XP, MDA2-e-XP): w 193.0 measured on the figures
+  (the datasheet's 7.6 in), h 35.4 the measured slot pitch (the datasheet's 1.4 in rounded),
+  d 193.0 (7.6 in). The lower corners are notched: only x 16.1-176.9 runs the full height.
+attrs:
+  model: M5E8-100G-SFP112+2-800G-QDD
+  part-number: 3HE20979AA
+  cli-type: m5e8-100g-sfp112+2-800g-qdd
+  sfp112: 8
+  qsfp-dd-800g: 2
+  weight-kg: 1.32
+  power-draw-max-w: 185
+  power-draw-typical-w: 160
+provenance:
+  size: >-
+    datasheet - XP (3HE20985AAABTQZZA01, MDA-e-XP and MDA2-e-XP Installation Guide
+    25.10) p51 Table 27: 1.4 x 7.6 x 7.6 in (3.6 x 19.3 x 19.3 cm) for every MDA2-e-XP.
+    The face is held at the shared wave-1 MDA envelope, 193.0 x 35.4: w 193.0 as the
+    figures measure it (the 7.6 in), h 35.4 the measured slot pitch (the 1.4 in rounded
+    to 0.1 in), so stacked slots tile.
+  size-figure-height: >-
+    drawing - CONFLICT, recorded not followed. Figs 51-54 (pp103-108), rendered at 1200
+    dpi (vector, no raster; `pdfimages -list` finds none on pp103-108), draw the plate
+    4912 px wide (193.0 mm, 25.45 px/mm) but only 851 px from the plate top line to the
+    bottom of the band: 33.4 mm, against 35.3 mm on the MDA-e-XP Fig 39 (p88, 4927 x 900
+    px). The end wings measure the same in both (27.0 mm), so only the central band is
+    drawn shorter. Table 27 gives the MDA2 the same 1.4 in as the MDA-e-XP, so the
+    shared 35.4 is kept and every feature is placed isotropically from the plate top at
+    25.45 px/mm; the bottom 2 mm of the band carries nothing. Whether the MDA2 plate
+    really is 2 mm shorter is open (gap) - a photograph settles it.
+  depth: >-
+    datasheet - XP p51 Table 27: 7.6 in (19.3 cm) deep.
+  weight: >-
+    datasheet - XP p51 Table 27: 1.32 kg.
+  power: >-
+    datasheet - XP p53 Table 30 (the SR-1 guide p93 Table 35 prints the same): Idle 0 /
+    25C 160 / 40C 175 / 55C 185 W. Carried as max = the 55C rung (100% line rate IMIX,
+    the NEBS short-term maximum) and typical = the 25C rung (50% line rate IMIX). XP
+    p52: these values do not include the power consumed by optical components.
+  model: >-
+    datasheet - XP Table 3 (p19): 3HE20979AA; the printed model label on Fig 52 (p105,
+    art hw4485) and the CLI provisioning string m5e8-100g-sfp112+2-800g-qdd.
+  layout: >-
+    drawing - Fig 52 (p105) at 1200 dpi, 25.45 px/mm, origin at the plate's outer top-
+    left. Two ganged 1x4 SFP blocks, shells 15.83-75.0 and 75.6-134.6 by 9.82-21.0; the
+    dividers inside them fall at 31.16, 45.38, 59.60 and 90.76, 105.0, 119.25, a 14.22
+    pitch that is std/sfp-ganged's 14.25 within the reading, so the openings are placed
+    from 17.0 and 76.5 on 14.25 at y 10.15. QDD cage outlines 20.86 x 11.28 centred at x
+    145.71, 167.29, y 15.5. Lnk/Act lamps at y 7.27, x 22.52 ... 166.28 as Fig 52 draws
+    them (left of each port's centre, the legend to the lamp's right). Stat (13.08,
+    7.27) above Pwr (13.08, 12.0); Fig 52 prints Pwr below its lamp and the Stat legend
+    is hidden behind the handle, so only Pwr is lettered (gap). Model label right-
+    aligned at 174.1, baseline 31.3. About 0.2 mm error.
+  plate: >-
+    drawing - the plate outline is the same on all four figures: full band x 16.1-176.9
+    (measured 16.2-176.9), end wings 27.0 tall from the plate top with a rounded step
+    (about 2 mm radius) into the band, as the family plate shape in the wave-1
+    conventions gives it. The thin line at y 31.9 across the band is the lip the figures
+    draw.
+  ports: >-
+    datasheet - XP p105 section 5.9 and Table 45: eight SFP112 connectors (SFP56 50GE,
+    SFP28 25GE, SFP+ 10GE) and two QDD connectors (QSFP112-DD, QSFP56-DD, QSFP-LS,
+    QSFP112, QSFP28 incl 10x10GE, QSFP28-DD, QSFP+). Numbered c1-c10 left to right as
+    Fig 52 prints them. The SFP112 cage is mechanically the SFP envelope and the figure
+    draws it ganged at the SFP pitch, so it is composed as std/sfp-ganged@1 with port
+    attrs media sfp112, speed 100g and the card attr sfp112: 8 (the sfp112 media is
+    being added to the vocabulary by the wave-1 spec prerequisite P1). QDD as std/qsfp-
+    dd@1, media qsfp-dd, speed 800g.
+  lamps: >-
+    datasheet - XP p110 Table 49 (single-port MDA2-e-XP connectors) and pp110-111 Table
+    50 (multi-port). Pwr: blue solid = power on, unlit = no power. Stat: green solid =
+    up, green blinking = initialising, amber solid = operationally down / admin up,
+    unlit = admin down. One Lnk/Act lamp per connector, labelled c1..: green solid =
+    link, green blinking = active, amber slow blink = admin up with no optic, amber fast
+    blink = loopback, amber solid = optic but no link, amber one blink per errored
+    frame, unlit = disabled. The guide gives no blink rates, so the slow/fast pair is
+    carried as two named blinking states at the default rate (gap), and the Table 50
+    break-out blink sequence (2.75 s amber, then 0.75 s green/amber per sub-port) is not
+    modelled as a state.
+  handles: >-
+    drawing - Figs 51-54 keys 6/7 (Handles, 'used for insertion and extraction of the
+    MDA'): a tab at each top corner, measured 19.6-19.9 x 4.7-4.8 mm at x 1.0 and 172.4,
+    y 0.9. The conventions give 19.6 x 4.7 (XP p89 Table 38 key 7), used. Under each
+    handle the figure draws a U-shaped recess (x 1.2-9.6 / 183.4-191.8, y 5.6-15.6),
+    drawn as decor.
+  thumbscrews: >-
+    drawing - Figs 51-54 (captive screws): head 10.37 mm across, centres 8.33 mm from
+    the left end and 7.50 mm from the right (185.50), 20.97 mm below the plate top, the
+    same on all four figures. The family figure is about 7.8 / 20.8 / 10.3; the measured
+    values are used.
+  relief: >-
+    estimated - the two insertion/extraction handles stand proud at out 4.2 and the
+    captive screw heads at cyl 1.6. No document gives either; these are the library's
+    pooled release-hardware (edgecore/agr-psu-dc@1 latch) and captive-screw
+    (edgecore/agr-panel-screw@1) estimates.
+  colour: >-
+    estimated - no photograph is staged. Charcoal faceplate, light silkscreen, dark
+    handles, a yellow ESD mark at the top right (the family appearance recorded in the
+    wave-1 conventions from PUBLIC-SOURCES; DS 214928 is the MDA2-e-XP datasheet cut-out
+    to check against). The figure draws the ESD mark as a triangle at x 176.1-182.1, y
+    5.9-8.5. No vendor mark is drawn on any of the four figures, so no logo-zone is
+    reserved (gap: the datasheet photo may show one).
+  compatibility: >-
+    datasheet - XP p9, pp21-22, SR-1 guide p46: MDA2-e-XPs need an FP4 IOM5-e with the
+    1.5 Tb/s FD licence. They seat in the SR-1 (FP4) MDA slots only on the 1.5 Tb/s
+    chassis revisions (3HE12298xxRD and higher, 3HE12299xxRB and higher) and in an
+    IOM5-e 1.5T; XP p22 note: not supported in the SR-7 or SR-12.
+  lifecycle: >-
+    searched only the staged corpus - current in the 25.10 guide; no end-of-life notice
+    was searched for.
+relief:
+  wall: '#1f2125'
+  features:
+    - node: handle-left
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: handle-right
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: screw-left
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1 - the library's one captive-screw-head figure, whose own
+        provenance reads 'estimated - it stands proud but was not measured'
+    - node: screw-right
+      cyl: 1.6
+      confidence: estimated
+      source: >-
+        edgecore/agr-panel-screw@1 - the library's one captive-screw-head figure, whose own
+        provenance reads 'estimated - it stands proud but was not measured'
+groups:
+  sfp112:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp112, speed: 100g}
+    description: connectors c1-c8, SFP112 in two ganged 1x4 blocks (SFP56, SFP28, SFP+ optics)
+  qdd:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 800g}
+    description: connectors c9-c10, QSFP-DD800 "QDD" cages (QSFP112-DD, QSFP56-DD, QSFP112, QSFP28, QSFP28-DD, QSFP+ optics)
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Lnk/Act lamp per connector, labelled with the connector's name
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the adapter lamps Stat and Pwr
+parts:
+  - {ref: std/sfp-ganged@1, id: c1, group: sfp112, at: [17, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c2, group: sfp112, at: [31.25, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c3, group: sfp112, at: [45.5, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c4, group: sfp112, at: [59.75, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c5, group: sfp112, at: [76.5, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c6, group: sfp112, at: [90.75, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c7, group: sfp112, at: [105, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/sfp-ganged@1, id: c8, group: sfp112, at: [119.25, 10.15], attrs: {media: sfp112, speed: 100g}}
+  - {ref: std/qsfp-dd@1, id: c9, group: qdd, at: [136.21, 10.5], attrs: {media: qsfp-dd, speed: 800g}}
+  - {ref: std/qsfp-dd@1, id: c10, group: qdd, at: [157.79, 10.5], attrs: {media: qsfp-dd, speed: 800g}}
+  - {ref: common/led-dot@1, id: led-c1, group: port-leds, at: [21.52, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c2, group: port-leds, at: [35.37, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c3, group: port-leds, at: [49.85, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c4, group: port-leds, at: [64.34, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c5, group: port-leds, at: [80.61, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c6, group: port-leds, at: [94.95, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c7, group: port-leds, at: [109.6, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c8, group: port-leds, at: [123.75, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c9, group: port-leds, at: [143.95, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-c10, group: port-leds, at: [165.28, 6.27], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: active, color: '#39b54a', behavior: blinking}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}, {name: errored, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-stat, group: status-leds, at: [12.08, 6.27], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: amber, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [12.08, 11], states: {lamp: ['off', {name: blue, color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]

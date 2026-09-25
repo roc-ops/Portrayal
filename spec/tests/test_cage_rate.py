@@ -72,7 +72,8 @@ def test_an_xfp_cage_is_not_one_rate_either():
     and exported 10GbE. Both are ~10 Gb/s; the framing is what differs, which is
     exactly why the cage cannot say and the card must.
     """
-    assert dx.FAMILY_ATTRS["xfp"] == (("oc192", "sonet-oc192"),)
+    assert dx.FAMILY_ATTRS["xfp"][0] == ("oc192", "sonet-oc192")
+    assert dx.FAMILY_ATTRS["xfp"][1:] == dx.PON_ATTRS
     assert dx.cage_type("std/xfp", {}) == "10gbase-x-xfp"
     assert dx.cage_type("std/xfp", {"oc192": 1}) == "sonet-oc192"
 
@@ -159,14 +160,17 @@ SONET = {"oc3": "sonet-oc3", "oc12": "sonet-oc12", "oc48": "sonet-oc48"}
 def test_the_sonet_rates_are_types_both_targets_have():
     """One document is written to both trees, so a type either library refuses
     would be rejected on import rather than by any gate here."""
-    assert dict(dx.FAMILY_ATTRS["sfp"][2:]) == \
+    assert dict(dx.FAMILY_ATTRS["sfp"][4:7]) == \
         {"oc48": "sonet-oc48", "oc12": "sonet-oc12", "oc3": "sonet-oc3"}
 
 
 def test_an_ethernet_card_is_unaffected_by_the_sonet_rates():
-    """The Ethernet pair stays FIRST in the tuple, so nothing about a card that
-    declares `sfp` or `sfp-plus` changes."""
-    assert dx.FAMILY_ATTRS["sfp"][:2] == (("sfp-plus", "10gbase-x-sfpp"),
+    """The Ethernet pair stays FIRST in the tuple after `sfp112` - which no card
+    stated before it joined - so nothing about a card that declares `sfp` or
+    `sfp-plus` changes."""
+    assert dx.FAMILY_ATTRS["sfp"][0] == dx.SFP112_ATTR
+    assert dx.FAMILY_ATTRS["sfp"][1:4] == (("sfp-plus", "10gbase-x-sfpp"),
+                                          dx.SFP28_ATTR,
                                           ("sfp", "1000base-x-sfp"))
     assert dx.cage_type("std/sfp-ganged", {"sfp": 20}) == "1000base-x-sfp"
     assert dx.cage_type("std/sfp-ganged", {"sfp-plus": 16}) == "10gbase-x-sfpp"
@@ -224,3 +228,229 @@ def test_no_sonet_card_still_exports_ethernet():
     # NOT VACUOUS. Run before this change it names fifteen Cisco SPAs and six
     # Juniper MICs; a sweep over an empty collection passes just as quietly.
     assert checked >= 20, f"only {checked} card(s) reached the sweep"
+
+
+# --- nor is it only Ethernet or SONET: a PON OLT port is neither -------------
+#
+# The Nokia 7360 ISAM FX line cards put GPON, XGS-PON, NG-PON2 and 10G-EPON OLT
+# optics in SFP and XFP cages. With only Ethernet and SONET rates to declare,
+# 112 of those cages on ten cards fell to the cage default - a GPON OLT port
+# exported as 1000BASE-X, a 10G-EPON one as 10GBASE-X.
+
+PON = {"ng-pon2": "ng-pon2", "xgs-pon": "xgs-pon", "xg-pon": "xg-pon",
+       "10g-epon": "10g-epon", "gpon": "gpon", "epon": "epon"}
+
+
+def test_the_pon_rates_are_types_both_targets_have():
+    """One document is written to both trees. NetBox also defines `bpon`,
+    `25g-pon` and `50g-pon`; Nautobot defines none of them, so they must not
+    appear here - an import into Nautobot would refuse the whole module type."""
+    assert dict(dx.PON_ATTRS) == PON
+    assert not {"bpon", "25g-pon", "50g-pon"} & {t for _a, t in dx.PON_ATTRS}
+
+
+def test_the_pon_rates_follow_ethernet_and_sonet():
+    """AFTER everything a card could already declare, so no existing card's
+    export changes - the SFP family ends in them and the XFP family's OC-192
+    stays first."""
+    assert dx.FAMILY_ATTRS["sfp"][7:] == dx.PON_ATTRS
+    assert dx.FAMILY_ATTRS["xfp"] == (("oc192", "sonet-oc192"),) + dx.PON_ATTRS
+    assert dx.cage_type("std/sfp", {"sfp": 8, "gpon": 8}) == "1000base-x-sfp"
+    assert dx.cage_type("std/xfp", {"oc192": 1, "10g-epon": 1}) == "sonet-oc192"
+
+
+def test_a_multi_pon_card_takes_its_most_capable_flavour():
+    assert dx.cage_type("std/sfp", {"gpon": 16, "xgs-pon": 16}) == "xgs-pon"
+    assert dx.cage_type("std/xfp", {"xgs-pon": 4, "ng-pon2": 4}) == "ng-pon2"
+
+
+def test_a_pon_attr_answers_the_census():
+    assert not dx.cage_family_needs_a_rate("std/sfp", {"gpon": 16})
+    assert not dx.cage_family_needs_a_rate("std/xfp", {"10g-epon": 4})
+    # `xfp: 4` counts cages; it states no rate, so it answers nothing.
+    assert dx.cage_family_needs_a_rate("std/xfp", {"xfp": 4})
+
+
+@pytest.mark.parametrize("ref,attr,count", [
+    ("nokia/fglt-a", "gpon", 16),     # "16-ports GPON LT"
+    ("nokia/fglt-b", "gpon", 16),     # "16-ports GPON LT"
+    ("nokia/fglt-d", "gpon", 16),     # "16-ports GPON LT"
+    ("nokia/fglt-e", "gpon", 32),     # "32-ports GPON LT", two per cage
+    ("nokia/fgut-a", "xgs-pon", 16),  # "XGS-PON ... on any of the ports"
+    ("nokia/nglt-a", "gpon", 8),      # "eight GPON ports per board"
+    ("nokia/nglt-c", "gpon", 8),      # "eight GPON ports per board"
+    ("nokia/fwlt-a", "xgs-pon", 4),   # NG-PON2 named, but only XGS optics listed
+    ("nokia/fpxt-a", "10g-epon", 4),  # "4 compliant IEEE802.3av EPON XFP ports"
+    ("nokia/fpxt-b", "10g-epon", 8),  # "8p 10G EPON Line Termination unit"
+    ("nokia/fwlt-b-aa", "xgs-pon", 8),  # "G.9807 XGS-PON on any of the eight ports"
+    ("nokia/fwlt-b-ab", "xgs-pon", 8),  # NG-PON2 named, but only XGS optics listed
+    ("nokia/fwlt-c", "xgs-pon", 16),    # "XGS-PON ... on any of the 16 ports"
+])
+def test_a_pon_card_states_its_rate(ref, attr, count):
+    d = _modules().get(ref)
+    if d is None:
+        pytest.skip(f"{ref} is not in this library")
+    attrs = d.get("attrs") or {}
+    assert attrs.get(attr) == count
+    cages = {p["ref"].split("@")[0] for p in d["parts"]
+             if isinstance(p, dict) and p["ref"].split("@")[0] in dx.CAGE_FAMILY}
+    assert cages and {dx.cage_type(c, attrs) for c in cages} == {PON[attr]}
+
+
+# --- SFP112 and QSFP-DD800: two rates the Nokia MDA2-e-XP brought ------------
+
+def test_sfp112_exports_as_other_because_nautobot_has_no_type_for_it():
+    """NetBox has `100gbase-x-sfp112`; Nautobot does not (nautobot/dcim/
+    choices.py at 38953ac3). One document is written to both trees, so the slug
+    would fail a Nautobot import - the reason `25gs-pon` has no row. But a card
+    stating `sfp112` HAS stated its rate, and without a row it fell to the cage
+    default (10GBASE-X SFP+) with L96 accusing it. `other` is in both."""
+    assert dx.SFP112_ATTR == ("sfp112", "other")
+    written = ({t for fam in dx.FAMILY_ATTRS.values() for _a, t in fam}
+               | set(dx.IFACE_TYPE.values()) | set(dx.PART_IFACE.values())
+               | set(dx.PART_MEDIA.values()))
+    assert "100gbase-x-sfp112" not in written
+    assert not dx.cage_family_needs_a_rate("std/sfp-ganged", {"sfp112": 16})
+    assert dx.cage_type("std/sfp-ganged", {"sfp112": 16}) == "other"
+    assert dx.cage_type("std/sfp", {"sfp112": 8, "sfp28": 8}) == "other"
+    part = {"ref": "std/sfp@1", "attrs": {"media": "sfp112", "speed": "100g"}}
+    assert dx.placed_type(part) == "other"
+
+
+def test_an_other_port_is_labelled_with_its_own_media():
+    """`other` loses the connector, so the label carries it. It was hardcoded
+    "RJ45" (for the Casa rj45-telemetry port) and the Nokia MDA2-e-XP's SFP112
+    cages exported as copper jacks."""
+    assert dx.OTHER_LABEL["sfp112"] == "SFP112"
+    assert dx.OTHER_LABEL["rj45-telemetry"] == "RJ45"
+    assert [a for fam in dx.FAMILY_ATTRS.values() for a, t in fam
+            if t == "other"] == [dx.SFP112_ATTR[0]]
+    labelled = [media for (media, _s), t in dx.PART_MEDIA.items() if t == "other"]
+    assert labelled and all(m in dx.OTHER_LABEL for m in labelled)
+    exports = pathlib.Path(__file__).resolve().parents[2] / "library" / "exports"
+    sfp112 = list(exports.glob("*/module-types/Nokia/*SFP112*.yaml"))
+    assert sfp112, "no SFP112 card export to check"
+    for f in sfp112:
+        assert "label: RJ45" not in f.read_text(), f
+
+
+def test_an_800g_qsfp_dd_card_is_not_typed_400g():
+    """`800gbase-x-qsfpdd` is in both targets (NetBox and Nautobot
+    TYPE_800GE_QSFP_DD). The card attr is `qsfp-dd-800g` - a rate statement, not
+    a media value: the port's media stays `qsfp-dd` and `qsfp-dd800` stays out
+    of the vocabulary, as spec/schemas/pluggables.yaml rules."""
+    assert dx.FAMILY_ATTRS["qsfp-dd"] == (
+        ("qsfp-dd-800g", "800gbase-x-qsfpdd"), ("qsfp-dd", "400gbase-x-qsfpdd"))
+    assert "qsfp-dd-800g" not in lint.PLUGGABLE_CAGES
+    assert dx.cage_type("std/qsfp-dd", {"qsfp-dd-800g": 2}) == "800gbase-x-qsfpdd"
+    assert dx.cage_type("std/qsfp-dd", {"qsfp-dd-800g": 2, "qsfp-dd": 2}) == \
+        "800gbase-x-qsfpdd"
+    assert not dx.cage_family_needs_a_rate("std/qsfp-dd", {"qsfp-dd-800g": 2})
+    # Every 400G card states only `qsfp-dd`, and is unchanged.
+    assert dx.cage_type("std/qsfp-dd", {"qsfp-dd": 6}) == "400gbase-x-qsfpdd"
+    part = {"ref": "std/qsfp-dd@1", "attrs": {"media": "qsfp-dd", "speed": "800g"}}
+    assert dx.placed_type(part) == "800gbase-x-qsfpdd"
+
+
+def test_an_sfp28_card_exports_as_sfp28():
+    """`25gbase-x-sfp28` is in both targets (NetBox and Nautobot
+    TYPE_25GE_SFP28). A card stating only `sfp28` used to fall to the cage
+    default and export as 10GBASE-X SFP+."""
+    assert dx.SFP28_ATTR == ("sfp28", "25gbase-x-sfp28")
+    assert dx.cage_type("std/sfp-ganged", {"sfp28": 16}) == "25gbase-x-sfp28"
+    assert dx.cage_type("std/sfp", {"sfp28": 4, "sfp": 4}) == "25gbase-x-sfp28"
+    assert not dx.cage_family_needs_a_rate("std/sfp-ganged", {"sfp28": 16})
+
+
+@pytest.mark.parametrize("ref", ["cisco/a99-4hg-flex-se", "cisco/a99-4hg-flex-tr",
+                                 "cisco/a9k-4hg-flex-se", "cisco/a9k-4hg-flex-tr",
+                                 "cisco/a9903-8hg-pec"])
+def test_a_mixed_sfp_plus_and_sfp28_card_is_unchanged(ref):
+    """These state `sfp-plus` AND `sfp28` over one strip of std/sfp-ganged, and
+    exported SFP+ before `sfp28` had a row. The row sits AFTER `sfp-plus` so
+    they still do - one card-level attr cannot say which cage is which."""
+    d = _modules().get(ref)
+    if d is None:
+        pytest.skip(f"{ref} is not in this library")
+    attrs = d.get("attrs") or {}
+    assert attrs.get("sfp-plus") and attrs.get("sfp28")
+    assert dx.cage_type("std/sfp-ganged", attrs) == "10gbase-x-sfpp"
+
+
+def test_no_existing_card_states_the_new_rates_before_its_card_lands():
+    """Both rows sit FIRST in their families, which is only free if no card
+    already states them - else that card's export changed under this commit."""
+    stating = sorted(ref for ref, d in _modules().items()
+                     if {"sfp112", "qsfp-dd-800g"} & set(d.get("attrs") or {}))
+    nokia_mda2 = {"nokia/m5e2-100g-qsfp28-2-800g-qdd", "nokia/m5e8-100g-sfp112-2-800g-qdd",
+                  "nokia/m5e16-100g-sfp112"}
+    assert set(stating) <= nokia_mda2, stating
+
+
+def test_a_placement_that_names_its_pon_flavour_takes_it():
+    """The FGUT-A's odd ports are `media: sfp-plus, speed: 10g, pon: xgs-pon`.
+    Read by media and speed alone they exported as 10GBASE-X SFP+ even after the
+    card stated `xgs-pon: 16`, because the placement is read first."""
+    part = {"ref": "std/sfp@1", "attrs": {"media": "sfp-plus", "speed": "10g",
+                                          "pon": "xgs-pon"}}
+    assert dx.placed_type(part) == "xgs-pon"
+    # A flavour one target lacks falls through to the media, as before.
+    part["attrs"]["pon"] = "25gs-pon"
+    assert dx.placed_type(part) == "10gbase-x-sfpp"
+    # And a `pon` with no media is not a placement statement at all - the
+    # HLX-TGV's SC/APC ferrule stays in NOT_A_DCIM_PORT.
+    assert dx.placed_type({"ref": "common/sc-apc@1", "attrs": {"pon": "xgs-pon"}}) is None
+
+
+def test_a_multi_pon_card_exports_every_port_as_pon():
+    p = LIB / "exports/netbox/module-types/Nokia/FGUT-A.yaml"
+    if not p.exists():
+        pytest.skip("the FGUT-A export is not in this library")
+    d = yaml.safe_load(p.read_text()) or {}
+    assert [i["type"] for i in d["interfaces"]] == ["xgs-pon"] * 16
+
+
+@pytest.mark.parametrize("model", ["FWLT-B AA", "FWLT-B AB", "FWLT-C"])
+def test_a_former_sfp_plus_pon_card_exports_as_pon(model):
+    """These three stated `sfp-plus` for want of a PON type, and exported every
+    OLT port as 10GBASE-X SFP+. The FWLT-C's odd ports state `pon: xgs-pon`
+    and its even ports `pon: 25gs-pon`, which neither falls to Ethernet nor
+    names a type Nautobot lacks: they export as the XGS-PON they also run."""
+    p = LIB / f"exports/netbox/module-types/Nokia/{model}.yaml"
+    if not p.exists():
+        pytest.skip(f"the {model} export is not in this library")
+    d = yaml.safe_load(p.read_text()) or {}
+    assert {i["type"] for i in d["interfaces"]} == {"xgs-pon"}
+
+
+# PON CARDS THAT STILL STATE AN ETHERNET RATE, named so the sweep below is not
+# silent about them. The register is meant to shrink: FWLT-B AA, FWLT-B AB and
+# FWLT-C were here until they stated `xgs-pon` in place of `sfp-plus`. The sweep
+# fails when one is fixed and not removed from here, as well as when a new one
+# appears.
+STILL_ETHERNET = set()
+
+
+def test_no_pon_card_still_exports_ethernet():
+    """The sweep, over the committed exports. A card whose description names a
+    PON flavour must not carry a `base-` interface type unless STILL_ETHERNET
+    names it. NOT VACUOUS: `checked` counts the PON cards it read, and without
+    the PON rates every one of the ten 7360 FX cards above, and the FPLT-A,
+    exported a `base-` type."""
+    import re
+    words = re.compile(r"\b(GPON|XGS-PON|XG-PON|NG-?PON2|U-NGPON|10G[- ]?EPON|EPON|Multi-PON)\b", re.I)
+    bad, known, checked = [], set(), 0
+    for p in sorted((LIB / "exports/netbox/module-types").glob("*/*.yaml")):
+        d = yaml.safe_load(p.read_text()) or {}
+        if not words.search(str(d.get("description") or "")):
+            continue
+        checked += 1
+        eth = {i["name"] for i in (d.get("interfaces") or [])
+               if "base-" in i.get("type", "")}
+        if eth and d.get("model") in STILL_ETHERNET:
+            known.add(d.get("model"))
+        elif eth:
+            bad.append(f"{d.get('model')}: {sorted(eth)}")
+    assert not bad, "\n".join(bad)
+    assert known == STILL_ETHERNET, f"now clean, drop from STILL_ETHERNET: {STILL_ETHERNET - known}"
+    assert checked >= 10, f"only {checked} card(s) reached the sweep"

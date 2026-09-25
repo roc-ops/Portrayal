@@ -93,24 +93,35 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       (census; see docs/rj45-family-design.md)
   L89 library: a component major no device reaches carries `unplaced:` saying
       what would seat it - and a part that IS reached does not still carry one
+  L117 component: a part `on` a facet names a relief feature that declares
+      `facet`, whose node is a declared element, and its projected box lies
+      within that element; a facet does not also declare `out`, `profile` or
+      `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside a
+      `pocket` element at least `-lift` deep
 """
 import argparse
 import types
 import contextlib
+import hashlib
 import json
 import math
+import os
 import re
 import sys
+import tempfile
+import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
 
 from portrayal import attrsections as attrs_mod
+from portrayal import facets
 from portrayal import libwalk
 from portrayal import capability
 from portrayal import dcim_export
 from portrayal import devicelock
+from portrayal import manifest as _manifest
 from portrayal import optical
 from portrayal import optical_ports
 from portrayal import stacks
@@ -118,6 +129,9 @@ from portrayal.faces import DIRECTIONS, OPTICAL_FACES, face_ref
 from portrayal.manifest import (view_parts, targets, split_target, presented_interface,
                       VIEW_KEY_ORDER,
                       component_refs, load_yaml, nested_key_host, chained_occupant_ref,
+                      drawn_refs, seat_point, slot_default, spanned_slots,
+                      spanning_axis, _turn,
+                      occupant_spec,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS)
 from jsonschema import Draft202012Validator
 
@@ -152,7 +166,7 @@ RULES = {
     "L5":  ("device",     "placement refs resolve in the library, and instance ids are unique per view", "fix the `ref` (namespace/name@major) or the duplicate id"),
     "L6":  ("device",     "a bay's default appears in its accepts list", "add the default to `accepts`, or change the default"),
     "L7":  ("device",     "region members reference existing instance ids", "name ids that exist in the same view"),
-    "L8":  ("device",     "a configuration seats only what its bays accept", "add the occupant to the bay's `accepts`, or seat something the bay takes"),
+    "L8":  ("device",     "a configuration seats only what its bays accept, and only in bays that exist in it", "add the occupant to the bay's `accepts`, or seat something the bay takes; for a bay `only-in` scopes out, add the configuration to it or drop the key"),
     "L9":  ("component",  "a conforms-declared size matches spec/schemas/standards.yaml", "take the size from the registry, or drop `conforms` if the part is not the standard aperture"),
     "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4)", "fix the `parts:` refs; a part must not compose itself"),
     "L11": ("component",  "interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper"),
@@ -160,7 +174,7 @@ RULES = {
     "L13": ("device",     "two placed components do not occupy the same faceplate area", "move one, or declare `for:`/`under:` when one deliberately sits on the other"),
     "L14": ("device",     "a silkscreen `for:` target exists and is nearby", "name the placement or bay the mark annotates, and anchor the mark at it"),
     "L15": ("device",     "a device at `modelled` or above has a provenance block good enough for the level", "add provenance for every figure, or lower `maturity`"),
-    "L16": ("device",     "keys inside a view read in manufacturing order", "reorder: empty, size, panel, silkscreen, components, regions"),
+    "L16": ("device",     "keys inside a view read in manufacturing order", "reorder: empty, size, open-frame, panel, silkscreen, components, regions"),
     "L17": ("component, device", "a placement's or part's group is declared under `groups:`, and a component that declares groups puts every port part in one", "declare the group with term, role and index-origin; join the loose port to a group"),
     "L18": ("device",     "a port inherits media from its group rather than restating it", "drop the per-port media, or fix the group's `attrs.media`"),
     "L19": ("device",     "an indicator declares `for:` the thing it indicates", "add `for:` to the lamp placement"),
@@ -258,6 +272,10 @@ RULES = {
     "L111": ("library",    "an alias names one box - no two devices claim the same `aliases[].name` (case-insensitive) unless every claimant marks it `shared: true`, and no alias repeats its own or another device's `model`", "drop or rename the alias; if an OEM name really maps to either of a pair, set `shared: true` on it in EVERY claimant and say why in its `note`"),
     "L112": ("component",  "a connector draws a node 1..N for each of its optical.positions, and a cassette's rear face reuses no front id", "compose a bore with the position's number as its id, or declare an element of class fibre; rename a clashing rear id"),
     "L113": ("device",     "a device port whose effective media carries a network interface (a pluggable cage, or `rj45`) has a `speed` and a group with a `role` - warning at `modelled`, error at `verified`", "add the rate the source states, on the port or its group; a console, timing or alarm jack takes the media that says so (`rj45-serial`, `rj45-tod`, `rj48`) instead of a speed; where no document states a rate, leave it and record the search in `gaps:`"),
+    "L114": ("component",  "a `default:` - on a `parts:` entry or at a component's top level - sits on a slot (a part presenting a pluggables family or a registered connector interface) and names a part that slot accepts", "name a ref the slot's `accepts` lists (components.json `cages`), or remove the `default:` from a part that presents no slot; `\"\"` ships a slot empty"),
+    "L115": ("component, device", "a slot that SPANS others (an LC duplex adapter over its two bores) and the slots it spans are never both filled - by a configuration, or by what the parts ship", "empty the level you do not want: an empty string on the bores to seat a duplex connector, or one on the adapter's own slot to seat a simplex part in a bore"),
+    "L116": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat"),
+    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift"),
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy"),
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
@@ -366,8 +384,12 @@ AMBIGUOUS_MEDIA = {"sfp", "qsfp"}
 # four-lane QSFP, one generation past qsfp56, and the cage is mechanically the
 # same - std/qsfp-ganged@1 seats it unchanged. Left out, L22 accused every one of
 # the EXP400-32X's thirty-two ports of contradicting its own group.
+# sfp112 IS IN THE SFP FAMILY ON THE SAME ARGUMENT: the 100G single-lane SFP, one
+# generation past sfp56, in the SFP envelope - an SFP112 cage takes SFP56 and
+# SFP28 modules, so std/sfp and std/sfp-ganged serve it unchanged. The Nokia
+# MDA2-e-XP SFP112 cards (m5e8, m5e16) are the first to need it.
 MEDIA_FAMILY = {
-    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp",
+    "sfp": "sfp", "sfp-plus": "sfp", "sfp28": "sfp", "sfp56": "sfp", "sfp112": "sfp",
     "qsfp": "qsfp", "qsfp-plus": "qsfp", "qsfp28": "qsfp", "qsfp56": "qsfp",
     "qsfp112": "qsfp", "qsfp-dd": "qsfp",
 }
@@ -1029,9 +1051,9 @@ def device_dependencies(dev_path, lib_roots):
             sp = cp.parent / "skins" / f"{sk}.svg"
             if sp.exists():
                 files.add(sp)
-        for part in (spec.get("parts") or []):
-            if part.get("ref"):
-                queue.append(part["ref"].split(":")[0])
+        # a part's ref, every default it ships holding and every face it
+        # names (drawn_refs)
+        queue.extend(drawn_refs(spec))
     return files
 
 
@@ -1063,6 +1085,16 @@ def lint_component_mating(path, data, lib_roots):
     # a wrapper may re-present the interface of a receptacle it composes, but it
     # must not present a DIFFERENT one - a plug would mate with the wrapper and
     # land on the wrong geometry
+    #
+    # A SPANNING INTERFACE IS NOT A CONTRADICTION, and it is the one exception:
+    # `lc-duplex` is registered in spec/schemas/connectors.yaml as spanning two
+    # `lc` bores, so a duplex adapter presenting `lc-duplex` over two
+    # `std/lc-bore@3` is stating that registered relationship rather than
+    # changing the interface under a plug's feet (B3, "The duplex host"). What
+    # keeps it honest is L116: the bores must be at the interface pitch, and
+    # the adapter's own mate on their midpoint, or it presents nothing.
+    spans = ((_connectors().get(data.get("interface")) or {}).get("spans")
+             if data.get("interface") else None)
     for part in data.get("parts") or []:
         found = resolve_component(part["ref"], lib_roots)
         if not found:
@@ -1073,6 +1105,8 @@ def lint_component_mating(path, data, lib_roots):
             continue
         # declaring none is fine - a PSU composes an inlet without presenting one
         # at its own origin. Contradicting it is not.
+        if spans and sub_if == spans.get("interface"):
+            continue
         if data.get("interface") and data["interface"] != sub_if:
             err(path, "L11", f"declares interface {data['interface']!r} but composes "
                              f"{part['ref']} presenting {sub_if!r}")
@@ -1329,7 +1363,7 @@ PORT_SPEEDS = _load_port_speeds(Path(__file__).resolve().parents[2] / "schemas")
 def _pluggable_rates():
     """Every rate any family on the ladder claims, flattened once per call.
 
-    Cheap - nine families, at most a handful of rates each - so this is not
+    Cheap - ten families, at most a handful of rates each - so this is not
     cached the way the per-component lookups above are; caching a set this
     small would only add a place for a test's monkeypatched registry to be
     read stale from.
@@ -1626,7 +1660,7 @@ def lint_component_display(path, data, _lib_roots=None):
 GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
                            "power-draw-max-w", "power-draw-typical-w")
 GENERIC_RATE_TOKENS = re.compile(
-    r"(^|-)(sfp28|sfp56|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
+    r"(^|-)(sfp28|sfp56|sfp112|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
     r"1000base[a-z0-9-]*|"
     r"\d+g|\d+gbase[a-z0-9-]*|\d+km|\d+m)(-|$)")
 
@@ -3318,11 +3352,9 @@ def lint_component_collisions(path, data, lib_roots):
         if not size:
             continue
         w, h = size
-        x, y = q["at"]
-        if q.get("rotate") in (90, 270, -90):
-            cx, cy = x + w / 2, y + h / 2
-            x, y, w, h = cx - h / 2, cy - w / 2, h, w
-        boxes.append((q.get("id", "?"), x, y, x + w, y + h))
+        facet = facets.facet_of(data, q["on"]) if q.get("on") else None
+        x0, y0, x1, y1 = facets.projected_box(q["at"], w, h, q.get("rotate"), facet)
+        boxes.append((q.get("id", "?"), x0, y0, x1, y1))
 
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
@@ -3340,6 +3372,83 @@ def lint_component_collisions(path, data, lib_roots):
                      "one. Two parts drawn in one place is the commonest defect a "
                      "human finds and no rule saw; if the layering is deliberate, "
                      "say so in provenance")
+
+
+def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
+    """L117, recessed facets: a facet with `lift < 0` roots below the plate, so it
+    has to stand in a hole - an element that is a `pocket` feature, whose box
+    holds the facet's box (to within `tol`, as L117 measures parts) and which is
+    at least `-lift` deep. Without one, the facet's wedge is buried in a solid
+    face; in a shallow one, its root is below the pocket's floor."""
+    sunk = -float(f["lift"])
+    fx, fy = elements[node]["at"]
+    fw, fh = elements[node]["size"]
+    holding = []
+    for p in (data.get("relief") or {}).get("features") or []:
+        pel = elements.get(p.get("node")) or {}
+        if not p.get("pocket") or not pel.get("size") or not pel.get("at"):
+            continue
+        px, py = pel["at"]
+        pw, ph = pel["size"]
+        if fx >= px - tol and fy >= py - tol and fx + fw <= px + pw + tol \
+                and fy + fh <= py + ph + tol:
+            holding.append((float(p["pocket"]), p["node"]))
+    if not holding:
+        err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) but is "
+            "not inside any `pocket` element's box - a facet below the plate has to stand "
+            "in a recess, or its wedge is buried in a solid face")
+        return
+    depth, pnode = max(holding)
+    if depth < sunk:
+        err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) in pocket "
+            f"{pnode!r}, which is only {depth:g} mm deep - a pocket shallower than the facet "
+            "is sunk puts the facet's root below the pocket floor")
+
+
+def lint_component_facets(path, data, lib_roots):
+    """L117: a tilted part stands on a facet that exists and holds it.
+
+    docs/superpowers/specs/2026-09-24-tilted-facets-design.md. The facet's rectangle is
+    its front-view footprint; a part on it is measured by its PROJECTED box (true size
+    foreshortened by cos(deg)), which is what occupies the face. A facet with a
+    negative `lift` (recessed facets, the addendum to the same spec) must stand in
+    a pocket deep enough to hold it - see `_lint_sunk_facet`.
+    """
+    feats = {f.get("node"): f for f in (data.get("relief") or {}).get("features") or []}
+    elements = data.get("elements") or {}
+    for node, f in feats.items():
+        if f.get("facet"):
+            for k in ("out", "profile", "profile-y"):
+                if k in f:
+                    err(path, "L117", f"feature {node!r} declares a `facet` and also `{k}` - "
+                        "the renderer derives the slope from the facet, and two sources for "
+                        "one slope drift apart")
+            if node not in elements or not elements[node].get("size"):
+                err(path, "L117", f"facet node {node!r} is not a declared element with a "
+                    "size - the renderer needs its front-view rectangle to derive the wedge")
+            elif (f.get("lift") or 0) < 0:
+                _lint_sunk_facet(path, node, f, data, elements)
+    for q in data.get("parts") or []:
+        on = q.get("on")
+        if not on:
+            continue
+        facet = facets.facet_of(data, on)
+        if not facet:
+            err(path, "L117", f"part {q.get('id')!r} is `on: {on}`, which is not a relief "
+                "feature on this contract that declares a `facet`")
+            continue
+        el = elements.get(on) or {}
+        size = _instance_size(q.get("ref"), lib_roots)
+        if not el.get("size") or not size or not q.get("at"):
+            continue
+        x0, y0, x1, y1 = facets.projected_box(q["at"], size[0], size[1], q.get("rotate"), facet)
+        ex, ey = el["at"]
+        ew, eh = el["size"]
+        tol = 0.5
+        if x0 < ex - tol or y0 < ey - tol or x1 > ex + ew + tol or y1 > ey + eh + tol:
+            err(path, "L117", f"part {q.get('id')!r} on facet {on!r} projects to "
+                f"({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}), outside the facet's "
+                f"({ex},{ey})-({ex + ew},{ey + eh}) by more than {tol} mm")
 
 
 def lint_component_parts(path, data, lib_roots, depth=0, seen=None):
@@ -3567,17 +3676,21 @@ def lint_device_occupants(path, data, lib_roots):
         # Candidates a device-level chain can resolve against: the OTHER
         # device-level keys of this same configuration - a nested ("/") key
         # belongs to a module and is resolved by nested_key_host instead.
+        # A key whose value is "" empties its slot (P4) and produces nothing
+        # a chain could name.
         siblings = {k: (v if isinstance(v, dict) else {"ref": v})
-                    for k, v in occupants.items() if "/" not in k}
+                    for k, v in occupants.items() if "/" not in k and v != ""}
         for host_id, spec in occupants.items():
             ref = spec if isinstance(spec, str) else (spec or {}).get("ref")
             where = f"configurations/{cname}/occupants/{host_id}"
             if "/" in host_id:
                 # A CAGE ON A SEATED CARD (#484, R2), keyed by the card's
-                # module-less path. Walked down THIS configuration's bays to the
-                # module it reaches by manifest.nested_key_host - the walk the
-                # build's module_key_prefix / occupants_under answer from the
-                # other end - and a chained key to the occupant it names.
+                # module-less path, or a slot at any depth (B3): walked down
+                # THIS configuration's bays, then the parts of what they seat,
+                # or from a placement down its parts, by
+                # manifest.nested_key_host - the walk the build's
+                # slot_key_prefix / occupants_under answer from the other end -
+                # and a chained key to the occupant it names.
                 def _res(r):
                     q = resolve_component(r, lib_roots)
                     return load_yaml(q) if q else None
@@ -4119,9 +4232,13 @@ def lint_device_cutouts(path, view_name, view, lib_roots, seen_through=()):
 # generation past qsfp56 on the same cage - and adding the device without adding
 # the media would have made its port group the third to escape L40 in silence.
 # The test failed first and this line is its answer, not the other way round.
-PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp-dd", "qsfp", "qsfp28",
-                   "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp", "cfp2",
-                   "cxp"}
+# sfp112 JOINED BEFORE ITS DEVICE, the other way round from qsfp112: the Nokia
+# MDA2-e-XP SFP112 cards are known to be coming, and a cage already in the
+# vocabulary the day its first card lands is what keeps that card's groups from
+# escaping L40.
+PLUGGABLE_CAGES = {"sfp", "sfp-plus", "sfp28", "sfp56", "sfp112", "sfp-dd", "qsfp",
+                   "qsfp28", "qsfp56", "qsfp112", "qsfp-dd", "osfp", "xfp", "cfp",
+                   "cfp2", "cfp4", "cxp"}
 
 
 def _bay_pitch_is_uneven(gaps):
@@ -5162,7 +5279,7 @@ def lint_pluggable_family_interfaces(root):
     whether the registry resolves against the tree. A family whose cage no
     component declares is a family the vocabulary needs without the metal to
     back it, which is exactly `sfp-dd`'s situation today - the SFP-DD MSA
-    defines a real cage, `sfp-dd` is one of the fifteen values `media`
+    defines a real cage, `sfp-dd` is one of the sixteen values `media`
     carries, and no `std/` part for it has been modelled yet.
 
     A REGISTRY THAT LOADED NO FAMILIES IS ITSELF A FINDING HERE, reported
@@ -5892,6 +6009,489 @@ def lint_component_stack_orientation(path, data, lib_roots):
     _stack_findings(path, data, lib_roots, False)
 
 
+_SLOT_CORE = {}
+
+
+def _slot_core(lib_roots):
+    """(render module, Library, families, connectors, candidates) for
+    `lib_roots`, built once per process and only when a `default:` exists.
+
+    L114 ASKS THE BUILD'S OWN QUESTION: what does this slot accept? The answer
+    is render.slot_entry's - the one core behind components.json `cages` and a
+    device's `cages[]` - so a default lint passes is one the published accept
+    list offers. Imported here, not at module scope: render.py has never
+    imported lint, and nothing else in lint needs the renderer."""
+    key = tuple(str(r) for r in lib_roots)
+    if key not in _SLOT_CORE:
+        from portrayal import render as _render
+        _SLOT_CORE[key] = (_render, _render.Library(list(key)),
+                           _render._pluggable_families(), _render._connector_registry(),
+                           _render._pluggable_candidates(list(key)))
+    return _SLOT_CORE[key]
+
+
+def lint_component_slot_defaults(path, data, lib_roots):
+    """L114: a `default:` sits on a slot and names what that slot accepts.
+
+    A default is the shipped state of the product (B3, docs/pluggables-caps-
+    design.md, "The shipped default") and the build seats it in every
+    configuration that does not key the slot, so a wrong one is drawn
+    everywhere. Two ways to write one wrong:
+
+    ON A PART THAT IS NO SLOT. `default:` on a `parts:` entry whose component
+    presents no pluggables family and no registered connector interface - or
+    at the top level of a component that presents none - names an occupant
+    with nowhere to seat.
+
+    NOT IN THE ACCEPT LIST. The slot's `accepts`, as slot_entry derives it for
+    components.json: a cage's family ladder, a connector slot's `mates:`
+    candidates. A boot does not mate a bore; a plug of the wrong family does
+    not fit the cage.
+
+    `""` ships a slot empty: it still has to be on a slot, and accepts
+    nothing it needs checking against."""
+    own = data.get("default")
+    entries = [q for q in (data.get("parts") or [])
+               if isinstance(q, dict) and "default" in q]
+    if own is None and not entries:
+        return
+    render_mod, lib, families, connectors, candidates = _slot_core(lib_roots)
+
+    def check(where, placement, want):
+        try:
+            entry = render_mod.slot_entry(placement, lib, families, connectors,
+                                          candidates)
+        except (FileNotFoundError, ValueError, KeyError):
+            return                      # a bad ref is L5's to report
+        if entry is None:
+            err(path, "L114", f"{where}: default {want!r} - {placement['ref']} "
+                "presents no slot (no pluggables family and no registered "
+                "connector interface), so there is nowhere to seat it")
+            return
+        if want and want.split(":")[0] not in entry["accepts"]:
+            err(path, "L114", f"{where}: default {want!r} is not in this "
+                f"{entry['kind']} slot's accepts ({entry['interface']}: "
+                f"{', '.join(entry['accepts']) or 'nothing'})")
+
+    for q in entries:
+        # `ref`, `id` and `at` are required of a `parts:` entry (the schema
+        # says so); an entry missing one is L1's finding, not this rule's
+        if q.get("ref") and "at" in q:
+            check(f"parts/{q.get('id')}", q, q.get("default"))
+    if own is not None:
+        ref = (f"{path.parents[2].name}/{data.get('name')}@{path.parent.name[1:]}"
+               if len(path.parents) > 2 else None)
+        if ref:
+            check("default", {"ref": ref, "id": "default", "at": [0, 0]}, own)
+
+
+def _connectors():
+    """spec/schemas/connectors.yaml's `interfaces`, from the renderer that
+    already reads it (cached there). Lazily imported for L114's reason: lint
+    is not a consumer of render except where it must ask the build's own
+    question, and a spanning interface is the build's own question."""
+    from portrayal import render as _render
+    return _render._connector_registry()
+
+
+def _composed_mates(contract, resolve):
+    """{part id: the composed `mate` point}, in this contract's own frame, for
+    every `parts:` entry whose component carries one - through the placement's
+    own rotation, by `manifest.seat_point`, which is where the build puts it."""
+    out = {}
+    for q in contract.get("parts") or []:
+        if not q.get("id") or not q.get("at") or not q.get("ref"):
+            continue
+        core = resolve(q["ref"]) or {}
+        cm = (core.get("connection-points") or {}).get("mate")
+        if not cm or not core.get("size"):
+            continue
+        out[q["id"]] = seat_point(q["at"], core["size"], q.get("rotate"), cm["at"])
+    return out
+
+
+SPAN_TOLERANCE = 0.01
+
+
+def _spanning_part_drawn_across(path, data):
+    """L116's fifth arm: A PART THAT MATES A SPANNING INTERFACE IS DRAWN ON THE
+    CANONICAL AXIS - the pair it fills runs ACROSS, along +x from its own
+    `mate` point (manifest.CANONICAL_SPAN_AXIS).
+
+    THE HOST'S AXIS ARRIVES WITH THE SEAT, and that is why the part's own has
+    to be pinned. A duplex connector is one moulding with two ferrules and
+    cannot turn itself; the library holds two duplex adapters whose pairs run
+    at right angles to each other, and a spanning slot publishes the turn that
+    carries this canonical axis onto its own (manifest.spanning_axis). A part
+    drawn on some other axis is then wrong on EVERY host rather than right on
+    one of them, and no view of a single adapter shows it: the cap looks
+    perfectly seated on the adapter it was read off.
+
+    CHECKED AS COVERAGE, not as a shape. Where a duplex connector's own
+    ferrules sit is not in its contract - a dust cap is a blank moulding with
+    nothing inside it a key could name - so what is held is the property the
+    drawing has to have: seated on a CANONICAL host, this part lies over both
+    of the points that host's bores stand at. Those points are its own `mate`
+    displaced along x by the interface's own pitch, which is the one figure the
+    registry already carries, so the rule invents nothing.
+
+    It is a weaker rule than an equality and deliberately so: a part wide
+    enough to cover the pair on either axis passes, and it deserves to - it
+    does cover both bores. What it catches is the narrow one, which is every
+    duplex part in this library drawn the wrong way round.
+    """
+    iface = data.get("mates")
+    entry = (_connectors().get(iface) or {}) if iface else {}
+    spans = entry.get("spans")
+    if not spans:
+        return
+    own = (data.get("connection-points") or {}).get("mate")
+    size = data.get("size") or {}
+    if not own or not own.get("at") or not size.get("w") or not size.get("h"):
+        return                          # a part with no mate or no size is L11/L1's
+    # THE PITCH ARM'S OWN VACUITY GUARD, for the same reason: `STANDARDS` is
+    # empty until main() fills it, so an unloaded registry skips - but one that
+    # IS loaded and records no pitch leaves this rule nothing to measure and
+    # has to say so rather than go quiet.
+    key = entry.get("standard")
+    std = STANDARDS.get(key)
+    pitch = (std or {}).get("pitch")
+    if std is not None and not pitch:
+        err(path, "L116", f"mates {iface!r}, which spans "
+            f"{spans.get('interface')!r}, but its standard {key!r} records no "
+            "`pitch` - there is nothing to line the pair up on")
+    if not pitch:
+        return
+    n = int(spans.get("count") or 2)
+    mx, my = float(own["at"][0]), float(own["at"][1])
+    for i in range(n):
+        x = mx + (i - (n - 1) / 2) * float(pitch)
+        if -SPAN_TOLERANCE <= x <= size["w"] + SPAN_TOLERANCE and \
+                -SPAN_TOLERANCE <= my <= size["h"] + SPAN_TOLERANCE:
+            continue
+        err(path, "L116", f"mates {iface!r}, which spans {n} "
+            f"{spans.get('interface')!r} at the {pitch} pitch of {key!r}, but "
+            f"position {i + 1} of that pair falls at "
+            f"{[round(x, 4), round(my, 4)]}, outside its own "
+            f"{size['w']} x {size['h']} outline - a spanning connector is "
+            "drawn ACROSS, with the pair running in x from its own mate "
+            "point, and the host's own axis arrives with the seat")
+        return
+
+
+# WHICH WAY A SPANNED BORE'S KEYWAY FACES WHEN THE BORE IS DRAWN UNROTATED, by
+# the interface the bore presents, and which way a spanning connector's latches
+# face on the canonical axis. `lc`: std/lc-bore@3 and std/lc-bulkhead-bore@1
+# both draw their tongue DOWN (spec/tests/test_lc_seated_orientation.py holds
+# each part's outline to it), and every duplex part is drawn with its latches
+# UP (generic/lc-duplex-plug@2 turns its halves to get there). An interface
+# not named here has no keyway this rule knows, and the arm has nothing to say.
+SPANNED_KEYWAY_SIDE = {"lc": (0, 1)}
+CANONICAL_LATCH_SIDE = (0, -1)
+
+
+def _spanning_latch_sides(contract, resolve):
+    """(latch side, keyway side) for a spanning host, as unit vectors in the
+    contract's own frame, or None where the arm has nothing to measure.
+
+    THE LATCH SIDE is the canonical one turned by the axis the host derives -
+    the turn the seat will actually draw a duplex connector at. THE KEYWAY SIDE
+    is the spanned bores' own convention turned by their shared `rotate`. The
+    keyway side is None when the bores do not share one rotate, which is an
+    error of its own: a duplex connector is one moulding and cannot put its two
+    latches into keyways facing different ways."""
+    connectors = _connectors()
+    iface = (contract or {}).get("interface")
+    spans = ((connectors.get(iface) or {}).get("spans") or {}) if iface else {}
+    side = SPANNED_KEYWAY_SIDE.get(spans.get("interface"))
+    if side is None:
+        return None
+    axis = spanning_axis(contract, resolve, connectors)
+    if axis is None:
+        return None
+    places = {q.get("id"): q for q in contract.get("parts") or []}
+    rots = {float((places.get(i) or {}).get("rotate") or 0) % 360
+            for i in spanned_slots(contract, resolve, connectors)}
+
+    def snap(v):
+        return tuple(int(round(c)) for c in v)
+    latch = snap(_turn(CANONICAL_LATCH_SIDE, axis))
+    keyway = snap(_turn(side, rots.pop())) if len(rots) == 1 else None
+    return latch, keyway
+
+
+def _spanning_latch_on_keyway(path, data, resolve):
+    """L116's latch-side arm: THE AXIS A DUPLEX HOST DERIVES PUTS A DUPLEX
+    CONNECTOR'S LATCHES ON ITS BORES' KEYWAY SIDE.
+
+    The axis is derived from the ORDER of the spanned bores (manifest.
+    spanning_axis) and the keyway from their ROTATE, and nothing tied the two
+    together: compose the pair in the other order and the pitch, the midpoint
+    and the depth all still hold while every duplex plug seats with its latches
+    on the side opposite the keyway. That is exactly main's pre-#496 FS
+    adapter, whose upper bore was composed first - a polarity bug found by
+    reading FS's port numbers, which the geometry could have caught on its own.
+    """
+    got = _spanning_latch_sides(data, resolve)
+    if got is None:
+        return
+    latch, keyway = got
+    iface = data.get("interface")
+    if keyway is None:
+        err(path, "L116", f"presents {iface!r}, but the bores it spans are not "
+            "all at one `rotate`, so their keyways face different ways and no "
+            "duplex connector - one moulding - can latch into both")
+        return
+    if latch != keyway:
+        names = {(0, -1): "up", (0, 1): "down", (-1, 0): "left", (1, 0): "right"}
+        err(path, "L116", f"presents {iface!r} with a derived axis that turns a "
+            f"duplex connector's latch {names.get(latch, latch)}, but its bores' "
+            f"keyways face {names.get(keyway, keyway)} - the order the bores are "
+            "composed in runs the pair the wrong way round for the way they are "
+            "turned")
+
+
+def lint_component_spanned_geometry(path, data, lib_roots):
+    """L116: a component presenting a SPANNING connector interface really hosts
+    what it spans.
+
+    `lc-duplex` spans two `lc` bores (spec/schemas/connectors.yaml), and the
+    pitch those bores sit at is the interface itself: 6.25, which
+    standards.yaml carries on `lc-duplex-receptacle` at `pitch-confidence:
+    verified`, sourced to IEC 61754-20 / TIA-604-10 FOCIS 10. A duplex
+    connector is one moulding with two ferrules at that spacing, so an adapter
+    whose bores are not on it cannot accept one - it does not present
+    `lc-duplex`, however its contract is written (docs/pluggables-caps-
+    design.md, "The duplex host").
+
+    Four ways for the claim to be false, and all four are errors because a
+    wrong one offers the wrong part:
+      - the wrong NUMBER of spanned parts (the registry's `spans.count`);
+      - the wrong PITCH between their composed mate points;
+      - a `mate` of its own that is not their MIDPOINT, which is where a duplex
+        connector's own mate lands and so where the build seats it;
+      - a spanned bore standing at a DEPTH other than the one this slot
+        presents, which is the depth a duplex connector rests on.
+
+    THE DEPTH ARM IS THE ONE A DRAWING CANNOT SHOW. A duplex cap and a simplex
+    cap are the same distance off the panel, because they plug the same hole in
+    the same face: the adapter presents `lc-duplex` at the `out` of whatever
+    relief feature its own `mate` sits `on:`, and its bores are lifted onto
+    that same face by their placements. Let the two disagree and a duplex cap
+    floats in front of, or sinks behind, the simplex cap it replaces - by a
+    figure no view of the front reveals. Both library adapters were held to
+    this by a test naming them; a rule holds the next one too.
+
+    MEASURED ON THE COMPOSED MATE POINTS, not on `at`. A stacked pair and a
+    side-by-side pair are the same interface turned, and their placements
+    differ in axis, rotation and box; their mate points do not. L81 reads `at`
+    and says so in its own comments - it has to tell a rotated column from a
+    stacked pair - and this rule needs no such argument.
+
+    A FIFTH ARM ASKS THE MIRROR-IMAGE QUESTION of the connector rather than
+    the host - is a spanning part drawn on the canonical axis - and it is
+    called from here so one rule number covers one subject: whether a duplex
+    connector and the adapter it plugs can be put together at all.
+
+    A SIXTH, THE LATCH SIDE, joins the two: the axis the host derives from its
+    bores' order must carry the connector's latches (drawn up) onto the side
+    its bores' keyways face (drawn down, turned by their shared rotate) -
+    `_spanning_latch_on_keyway`.
+    """
+    _spanning_part_drawn_across(path, data)
+    iface = data.get("interface")
+    if not iface:
+        return
+    spans = ((_connectors().get(iface)) or {}).get("spans")
+    if not spans:
+        return
+
+    def _res(ref):
+        q = resolve_component(ref, lib_roots)
+        return load_yaml(q) if q else None
+
+    ids = spanned_slots(data, _res, _connectors())
+    want_n = spans.get("count")
+    if want_n is not None and len(ids) != want_n:
+        err(path, "L116", f"presents {iface!r}, which spans {want_n} "
+            f"{spans.get('interface')!r} slot(s), but composes {len(ids)}"
+            + (f" ({', '.join(ids)})" if ids else ""))
+        return
+    mates = _composed_mates(data, _res)
+    pts = [mates[i] for i in ids if i in mates]
+    if len(pts) != len(ids):
+        return                          # a part with no mate point is L58/L1's
+    # THE PITCH ARM MUST NOT PASS VACUOUSLY. `STANDARDS` is empty until
+    # main() fills it, so a registry that is simply not loaded is skipped -
+    # but a standard that IS loaded and carries no `pitch` leaves this rule
+    # with nothing to check and must say so rather than go quiet.
+    key = (_connectors().get(iface) or {}).get("standard")
+    std = STANDARDS.get(key)
+    want = (std or {}).get("pitch")
+    if std is not None and not want:
+        err(path, "L116", f"presents {iface!r}, which spans "
+            f"{spans.get('interface')!r}, but its standard {key!r} records no "
+            "`pitch` - there is nothing to hold the bores to")
+    if want:
+        for a, b in zip(ids, ids[1:]):
+            got = math.dist(mates[a], mates[b])
+            if abs(got - float(want)) > SPAN_TOLERANCE:
+                err(path, "L116", f"bores {a!r} and {b!r} mate "
+                    f"{round(got, 4)} apart, but {iface!r} is the "
+                    f"{want} pitch of {(_connectors().get(iface) or {}).get('standard')} "
+                    "- an adapter off the interface pitch accepts no duplex "
+                    "connector")
+    own = (data.get("connection-points") or {}).get(
+        data.get("interface-at") or "mate")
+    if not own or not own.get("at"):
+        err(path, "L116", f"presents {iface!r} but declares no "
+            f"{data.get('interface-at') or 'mate'} connection point, so "
+            "nothing says where a connector seats")
+        return
+    mid = [sum(c) / len(pts) for c in zip(*pts)]
+    if any(abs(a - b) > SPAN_TOLERANCE for a, b in zip(own["at"], mid)):
+        err(path, "L116", f"presents {iface!r} at {list(own['at'])}, but the "
+            f"midpoint of {', '.join(ids)} is {[round(c, 4) for c in mid]} - a "
+            "duplex connector seats on the midpoint of the pair it fills")
+    # AND AT THE SAME DEPTH. What this slot presents is the `out` of the
+    # feature its own point sits `on:`; what a bore stands at is its
+    # placement's `lift`. A connector spanning the pair rests on the face the
+    # pair is let into, so the two are one number.
+    presented = presented_interface(data, _res)[2]
+    places = {q.get("id"): q for q in data.get("parts") or []}
+    for bid in ids:
+        got = float((places.get(bid) or {}).get("lift") or 0.0)
+        if abs(got - presented) > SPAN_TOLERANCE:
+            err(path, "L116", f"presents {iface!r} at a lift of {presented:g}, "
+                f"but its bore {bid!r} is placed at lift {got:g} - a connector "
+                "spanning the pair rests on the same face the pair is let "
+                "into, so a simplex part in the bore and a duplex part over "
+                "both would stand at different depths")
+    # AND THE RIGHT WAY ROUND: the axis the order of the bores derives carries
+    # a duplex connector's latches onto the side their keyways face.
+    _spanning_latch_on_keyway(path, data, _res)
+
+
+def _spanned_default_overlap(path, where, placement, contract, resolve):
+    """L115's component arm for one placing entry: the slot it places ships a
+    default AND so does one of the bores that slot spans."""
+    ids = spanned_slots(contract, resolve, _connectors())
+    if not ids:
+        return
+    if not slot_default(placement, contract):
+        return
+    parts = {q.get("id"): q for q in contract.get("parts") or []}
+    for bid in ids:
+        q = parts.get(bid) or {}
+        if slot_default(q, resolve(q.get("ref")) or {}):
+            err(path, "L115", f"{where}: {placement['ref']} ships a default on "
+                f"its own slot AND on the bore {bid!r} it spans. One duplex "
+                "connector fills both bores, so a product ships one level or "
+                "the other")
+
+
+def lint_component_spanned_exclusion(path, data, lib_roots):
+    """L115, component side: nothing SHIPS both levels of a spanning slot.
+
+    The device side below catches a configuration that fills both. This
+    catches the same contradiction written into the contracts, where no
+    configuration could be blamed for it and every drawing would carry it: a
+    composer placing a duplex adapter with a `default:` of its own over an
+    adapter whose bores already ship caps, or such an adapter shipping a
+    default on its own slot as well.
+    """
+    def _res(ref):
+        q = resolve_component(ref, lib_roots)
+        return load_yaml(q) if q else None
+
+    # EACH FINDING LANDS ON THE FILE THAT WROTE THE CONTRADICTION. A composer
+    # is answerable for the `default:` it puts on its own entry; a placed
+    # component's TOP-LEVEL default against its own bores is that component's
+    # file, reported below when this rule runs over it, so an entry that
+    # declares none of its own is not reported here too.
+    for q in data.get("parts") or []:
+        if not isinstance(q, dict) or not q.get("ref") or "default" not in q:
+            continue
+        c = _res(q["ref"])
+        if c:
+            _spanned_default_overlap(path, f"parts/{q.get('id')}", q, c, _res)
+    if data.get("default") and len(path.parents) > 2:
+        ref = f"{path.parents[2].name}/{data.get('name')}@{path.parent.name[1:]}"
+        _spanned_default_overlap(path, "default", {"ref": ref, "id": "default",
+                                                   "default": data["default"]},
+                                  data, _res)
+
+
+def lint_device_spanned_exclusion(path, data, lib_roots):
+    """L115, device side: a configuration does not fill a spanning slot AND a
+    slot it spans (B3, docs/pluggables-caps-design.md, "The duplex host").
+
+    A duplex adapter holds two levels of slot for one piece of hardware: its
+    own, which a duplex cap or a duplex plug fills, and its two bores, which
+    take simplex parts. One connector fills the pair, so the levels are
+    alternatives, not a stack - and the build raises on both filled
+    (`render.refuse_spanned_overlap`). This says the same thing before the
+    build runs.
+
+    FILLED MEANS AFTER DEFAULTS RESOLVE, which is why `render`'s own helper
+    answers the bores here rather than a second reading of `occupants:`: the
+    Smartoptics adapter ships capped bores and the FS one ships a duplex cap,
+    so most of these contradictions will be a configuration naming ONE level
+    over parts that already ship the other.
+    """
+    from portrayal import render as _render
+
+    def _res(ref):
+        q = resolve_component(ref, lib_roots)
+        return load_yaml(q) if q else None
+
+    placements = {q.get("id"): q for _v, view in (data.get("views") or {}).items()
+                  for q in view_parts(view or {})["placements"]
+                  if q.get("id") and q.get("at") and q.get("ref")}
+    for cname, cfg in (data.get("configurations") or {}).items():
+        cfg = cfg or {}
+        occupants = cfg.get("occupants") or {}
+        # Every key that could name a spanning slot: one this configuration
+        # fills outright, and the PARENT of any key it fills - a bore's host,
+        # which may be filled by what it ships rather than by a key.
+        keys = set()
+        for k, v in occupants.items():
+            if v != "":
+                keys.add(k)
+            if "/" in k:
+                keys.add(k.rsplit("/", 1)[0])
+        for key in sorted(keys):
+            q = placements.get(key)
+            if q is None and "/" in key:
+                try:
+                    _href, mref, _mpath = nested_key_host(key, data, cfg, _res)
+                except ValueError:
+                    continue            # L12's finding, not this one's
+                module = _res(mref) or {}
+                q = next((e for e in module.get("parts") or []
+                          if e.get("id") == key.rsplit("/", 1)[-1]), None)
+            if q is None or not q.get("ref"):
+                continue                # a chained key names an occupant, not a part
+            contract = _res(q["ref"])
+            if not contract or not spanned_slots(contract, _res, _connectors()):
+                continue
+            if key in occupants:
+                try:
+                    filled = occupant_spec(key, occupants[key]) is not None
+                except ValueError:
+                    continue            # L12's finding
+            else:
+                filled = bool(slot_default(q, contract))
+            if not filled:
+                continue
+            for bid in _render.filled_spanned_slots(contract, _res, _connectors(),
+                                                    key, occupants):
+                err(path, "L115", f"configurations/{cname}/occupants: {key!r} "
+                    f"holds {q['ref']} filled, and so does its bore "
+                    f"{key}/{bid} - one duplex connector fills both bores, so "
+                    f"empty one level ({key}/{bid}: \"\", or {key}: \"\")")
+
+
 def lint_device_placement_interfaces(path, data, lib_roots):
     """L105: a placement that presents several interfaces (#443).
 
@@ -6549,6 +7149,316 @@ def _mark_centre(mark):
 
 _ID_VOCAB_CACHE = {}
 
+# L62'S VOCABULARY, KEPT ON DISK BETWEEN PROCESSES (#542).
+#
+# `_id_corpus` reads every contract and every device manifest in the library,
+# and build.sh renders each device in its own process - so that read was paid
+# once per device, and it was ~95% of a render (5.9 s of a 6.5 s `render.py`;
+# the drawing is 0.1 s). The answer is now written to a file named for a digest
+# of the bytes it was computed from, and the next process reads that instead.
+#
+# KEYED ON CONTENT, NEVER ON MTIMES. A stale vocabulary does not fail loudly:
+# it silently hides a real L62 finding (or invents one), and nothing downstream
+# can tell. An mtime key can go stale - a checkout that restores an old
+# timestamp, a coarse-grained filesystem, two edits inside one tick, a copy
+# that preserves times - and every one of those would serve the old answer. A
+# digest of every byte `_id_corpus` reads cannot: if any input differs, the
+# name differs and the entry is simply never found. The compute reads the SAME
+# bytes that were hashed (not a second read through load_yaml's (path, mtime)
+# cache), so what is stored under a digest is exactly what those bytes say.
+#
+# THE CODE IS AN INPUT TOO, SO THE BYTES OF THIS FILE ARE IN THE DIGEST. An
+# entry computed by older logic must never answer for newer logic, and a
+# hand-bumped version constant is exactly the guard that gets forgotten. The
+# WHOLE of lint.py is hashed rather than `_id_corpus_compute`'s source, because
+# the answer also depends on helpers and constants elsewhere in the module and a
+# whole-file hash cannot miss one. The price is one recompute per lint.py edit.
+# The bytes are read ONCE, when this module is imported, so the digest names
+# the code this process actually loaded: a long-lived process - the tests'
+# warm render server, say - whose lint.py is edited on disk behind it keeps
+# computing with the OLD code, and must keep keying its entries as the old
+# code too.
+#
+# _ID_CORPUS_CACHE_FORMAT is for the SERIALISED SHAPE only: bump it when what
+# `_id_corpus_cache_store` writes, or what `_id_corpus_cache_load` accepts,
+# changes. It is in the digest as well, so a bump turns every old entry into a
+# miss.
+#
+# ANY FAILURE ON THE CACHE PATH FALLS BACK TO COMPUTING: an unwritable or
+# missing directory, a corrupt or truncated file, a JSON error, a race. The
+# cache is an optimisation and is never allowed to be a reason to fail.
+_ID_CORPUS_CACHE_FORMAT = 1
+_ID_CORPUS_CACHE_KEEP = 50          # entries kept; the oldest by mtime go first
+
+
+def _source_sha(path):
+    """sha256 of a source file's bytes, or None if it cannot be read - in which
+    case the digest raises and the cache is simply not used."""
+    try:
+        return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    except OSError:
+        return None
+
+
+_ID_CORPUS_CODE = _source_sha(__file__)   # this module as loaded; see above
+_ID_CORPUS_TMP_MAX_AGE = 3600       # seconds before a stray temp file is an orphan
+
+
+def _id_corpus_cache_dir():
+    """$PORTRAYAL_CACHE_DIR, else $XDG_CACHE_HOME/portrayal, else
+    ~/.cache/portrayal. Never inside the checkout or dist/.
+
+    A RELATIVE value is ignored and the next option is used - the XDG spec says
+    so for XDG_CACHE_HOME, and PORTRAYAL_CACHE_DIR gets the same treatment,
+    because a relative path resolves against the cwd, which for build.sh and
+    the tests is the checkout itself."""
+    env = os.environ.get("PORTRAYAL_CACHE_DIR")
+    if env and Path(env).is_absolute():
+        return Path(env)
+    xdg = os.environ.get("XDG_CACHE_HOME")
+    if xdg and Path(xdg).is_absolute():
+        return Path(xdg) / "portrayal"
+    return Path.home() / ".cache" / "portrayal"
+
+
+def _id_corpus_roots_cacheable(lib_roots):
+    """Whether the digest determines the answer for these roots. It does only
+    when no two roots overlap. The veto in `_id_corpus_compute` counts DISTINCT
+    file paths, and the digest keys on root position and relative path, not on
+    absolute paths - so [A, A] and [A, B], with B a byte-identical copy of A,
+    hash the same and answer differently (the same two files twice, against
+    four). A repeated root, or one inside another, is computed and not cached."""
+    try:
+        rs = [Path(r).resolve() for r in lib_roots]
+    except Exception:
+        return False
+    for i, a in enumerate(rs):
+        for j, b in enumerate(rs):
+            if i != j and (a == b or a in b.parents):
+                return False
+    return True
+
+
+def _id_corpus_files(lib_roots):
+    """Every file `_id_corpus` reads, with its bytes, in the order it reads
+    them: (section, root index, path relative to root/section, path, bytes,
+    sha256 of the bytes). Bytes and hash are None for a file that vanished
+    between the walk and the read - load_yaml answered None for that too, and
+    the computation treats it as the empty document it always did."""
+    files = []
+    for section, pattern in (("components", "contract.yaml"), ("devices", "*.yaml")):
+        for n, root in enumerate(lib_roots):
+            base = Path(root) / section
+            for f in base.rglob(pattern):
+                try:
+                    data = f.read_bytes()
+                except FileNotFoundError:
+                    data = None
+                sha = hashlib.sha256(data).hexdigest() if data is not None else None
+                files.append((section, n, f.relative_to(base).as_posix(), f, data, sha))
+    return files
+
+
+def _id_corpus_section(files, section):
+    """(path, bytes, hash) for one section, roots in order - the order the two
+    loops in `_id_corpus_compute` always walked them in."""
+    return [(f, data, sha) for s, _n, _rel, f, data, sha in files if s == section]
+
+
+_ID_CORPUS_PARSES = 0              # files parsed by this process, for the trace
+
+
+def _id_corpus_parse(data):
+    """One file's document: the parser load_yaml uses, on the hashed bytes."""
+    global _ID_CORPUS_PARSES
+    _ID_CORPUS_PARSES += 1
+    return yaml.load(data, Loader=_manifest._Loader)
+
+
+def _id_corpus_trace(outcome, lib_roots, files, parsed0, t0):
+    """One JSON line per computation to $PORTRAYAL_ID_CORPUS_TRACE, if set:
+    whether the disk cache hit, how many files there were and how many had to
+    be parsed. How a slow build or suite shows which processes paid for the
+    vocabulary; never a reason to fail."""
+    path = os.environ.get("PORTRAYAL_ID_CORPUS_TRACE")
+    if not path:
+        return
+    with contextlib.suppress(Exception):
+        line = json.dumps({
+            "pid": os.getpid(), "argv0": Path(sys.argv[0]).name if sys.argv else "",
+            "roots": [str(r) for r in lib_roots], "outcome": outcome,
+            "files": len(files), "parsed": _ID_CORPUS_PARSES - parsed0,
+            "secs": round(time.monotonic() - t0, 3)}) + "\n"
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+        try:
+            os.write(fd, line.encode())
+        finally:
+            os.close(fd)
+
+
+def _id_corpus_doc(data):
+    return (_id_corpus_parse(data) if data is not None else None) or {}
+
+
+# WHAT EACH FILE CONTRIBUTES, MEMOISED BY THE HASH OF ITS BYTES. A cache miss
+# used to parse every file from bytes, including the ~860 of the real library
+# that nearly every test render shares with a tmp root beside it - where
+# before this cache existed, those came free from load_yaml's per-process
+# parse. This memo gives that back without giving up the purity the disk
+# cache rests on: its key is the content hash the digest already computes, so
+# it cannot go stale (a changed file IS a different key), and what it holds is
+# exactly what `_id_corpus_compute` reads off a document - nothing about any
+# device or rule outcome. `_id_corpus_prime` fills it, which is what the
+# tests' warm render server does once so that its forked children parse only
+# the files a test wrote.
+_ID_CORPUS_FACTS = {}
+
+
+def _id_corpus_facts(section, data, sha):
+    """What one file contributes to the vocabulary, from its bytes:
+
+      components - the values offered as connector words, in order: its
+                   `conforms`, then `attrs.media` when its class is `port`;
+      devices    - every string placement id, in order, or nothing for a
+                   document that is not a device.
+
+    Memoised in _ID_CORPUS_FACTS by (section, sha256 of the bytes)."""
+    if data is None:
+        return ()
+    key = (section, sha)
+    hit = _ID_CORPUS_FACTS.get(key)
+    if hit is not None:
+        return hit
+    doc = _id_corpus_doc(data)
+    out = []
+    if section == "components":
+        if doc.get("conforms"):
+            out.append(str(doc["conforms"]))
+        if doc.get("class") == "port":
+            media = (doc.get("attrs") or {}).get("media")
+            if media:
+                out.append(str(media))
+    elif doc.get("kind") in (None, "device"):
+        for view in (doc.get("views") or {}).values():
+            for q in (((view or {}).get("components") or {}).get("placements") or []):
+                i = q.get("id")
+                if isinstance(i, str):
+                    out.append(i)
+    facts = _ID_CORPUS_FACTS[key] = tuple(out)
+    return facts
+
+
+def _id_corpus_prime(lib_roots):
+    """Fill the per-file memo for `lib_roots` and nothing else: no answer is
+    computed, no in-process or disk entry is written."""
+    for section, _n, _rel, _f, data, sha in _id_corpus_files(lib_roots):
+        _id_corpus_facts(section, data, sha)
+
+
+def _id_corpus_digest(files):
+    """sha256 over the cache format, the bytes of the source that computes the
+    answer (_ID_CORPUS_CODE: lint.py, as imported), and for every library file its root's
+    position, its path relative to that root's section and a hash of its bytes
+    - sorted, so the directory walk's order does not matter, and without the
+    roots' absolute paths, so every checkout of the same commit shares one
+    entry. An unreadable source raises, and the caller then computes without
+    the cache."""
+    code = _ID_CORPUS_CODE
+    if code is None:
+        raise OSError("lint.py's source could not be read at import")
+    rows = []
+    for section, n, rel, _f, _data, sha in files:
+        rows.append(f"{n}\0{section}\0{rel}\0{sha or 'missing'}\n")
+    rows.sort()
+    # the parser is part of the computation too: a different PyYAML, or the
+    # pure-Python loader where libyaml is missing, could read a document
+    # differently, so neither may reuse the other's entries
+    parser = f"{yaml.__version__}\0{_manifest._Loader.__name__}"
+    top = hashlib.sha256(
+        f"portrayal-id-corpus\0{_ID_CORPUS_CACHE_FORMAT}\0code\0{code}\0"
+        f"parser\0{parser}\n".encode())
+    for r in rows:
+        top.update(r.encode("utf-8", "surrogateescape"))
+    return top.hexdigest()
+
+
+def _id_corpus_cache_load(path, digest):
+    """The cached (words, preferred, whole), rebuilt as exactly the types
+    `_id_corpus_compute` returns - or None if the entry is missing, unreadable,
+    or anything other than what `_id_corpus_cache_store` writes for `digest`."""
+    try:
+        with open(path, "rb") as fh:
+            doc = json.loads(fh.read().decode("utf-8"))
+        if (not isinstance(doc, dict) or doc.get("format") != _ID_CORPUS_CACHE_FORMAT
+                or doc.get("digest") != digest):
+            return None
+        raw_words, raw_pref, raw_whole = doc["words"], doc["preferred"], doc["whole"]
+        if not (isinstance(raw_words, list) and isinstance(raw_whole, list)
+                and isinstance(raw_pref, list)):
+            return None
+        if not all(type(w) is str for w in raw_words + raw_whole):
+            return None
+        preferred = {}
+        for row in raw_pref:
+            if not (isinstance(row, list) and len(row) == 3 and type(row[0]) is str
+                    and type(row[1]) is int and type(row[2]) is str):
+                return None
+            preferred[row[0]] = (row[1], row[2])
+        if len(preferred) != len(raw_pref):
+            return None
+        return set(raw_words), preferred, set(raw_whole)
+    except Exception:
+        return None
+
+
+def _id_corpus_cache_store(cache_dir, digest, result):
+    """Write the entry atomically - a temp file in the same directory, then
+    os.replace - so a reader sees the whole file or none. Two processes racing
+    write the same bytes under the same name, and the second replace is
+    harmless. Then prune to the newest _ID_CORPUS_CACHE_KEEP entries. Every
+    failure is swallowed: not caching is always a correct outcome."""
+    words, preferred, whole = result
+    payload = json.dumps({
+        "format": _ID_CORPUS_CACHE_FORMAT,
+        "digest": digest,
+        "words": sorted(words),
+        # a list of rows rather than an object, so the dict's key order - which
+        # is what a fresh computation would have produced - survives the trip
+        "preferred": [[k, n, lead] for k, (n, lead) in preferred.items()],
+        "whole": sorted(whole),
+    }, separators=(",", ":"))
+    tmp = None
+    try:
+        cache_dir = Path(cache_dir)
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=cache_dir, prefix=".id-corpus-", suffix=".tmp")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(payload)
+        os.replace(tmp, cache_dir / f"id-corpus-{digest}.json")
+        tmp = None
+    except Exception:
+        return
+    finally:
+        if tmp is not None:
+            with contextlib.suppress(OSError):
+                os.unlink(tmp)
+    with contextlib.suppress(Exception):
+        aged = []
+        for e in cache_dir.glob("id-corpus-*.json"):
+            with contextlib.suppress(OSError):
+                aged.append((e.stat().st_mtime, e.name, e))
+        aged.sort(reverse=True)
+        for _m, _n, e in aged[_ID_CORPUS_CACHE_KEEP:]:
+            with contextlib.suppress(OSError):
+                e.unlink()
+        # a writer killed between mkstemp and os.replace leaves its temp file;
+        # one old enough that no live writer can still own it is an orphan
+        cutoff = time.time() - _ID_CORPUS_TMP_MAX_AGE
+        for t in cache_dir.glob(".id-corpus-*.tmp"):
+            with contextlib.suppress(OSError):
+                if t.stat().st_mtime < cutoff:
+                    t.unlink()
+
 
 def _id_corpus(lib_roots):
     """What this library calls things - the two facts L62 needs, read off the
@@ -6581,6 +7491,38 @@ def _id_corpus(lib_roots):
     key = tuple(str(r) for r in lib_roots)
     if key in _ID_VOCAB_CACHE:
         return _ID_VOCAB_CACHE[key]
+    t0, parsed0 = time.monotonic(), _ID_CORPUS_PARSES
+    files = _id_corpus_files(lib_roots)
+    try:
+        if not _id_corpus_roots_cacheable(lib_roots):
+            raise ValueError("overlapping roots: the digest does not determine the answer")
+        digest = _id_corpus_digest(files)
+        cache_dir = _id_corpus_cache_dir()
+        hit = _id_corpus_cache_load(cache_dir / f"id-corpus-{digest}.json", digest)
+    except Exception:          # the cache is an optimisation, never a reason to fail
+        digest, hit = None, None
+    if hit is not None:
+        # touched, so pruning drops the least recently USED entries
+        with contextlib.suppress(OSError):
+            os.utime(cache_dir / f"id-corpus-{digest}.json")
+        _ID_VOCAB_CACHE[key] = hit
+        _id_corpus_trace("hit", lib_roots, files, parsed0, t0)
+        return hit
+    result = _id_corpus_compute(files)
+    # a file that vanished mid-walk is a tree being changed under us: answer
+    # from what was read, as before, but do not record it for anyone else
+    if digest is not None and all(data is not None for *_, data, _sha in files):
+        _id_corpus_cache_store(cache_dir, digest, result)
+    _ID_VOCAB_CACHE[key] = result
+    _id_corpus_trace("miss" if digest is not None else "uncached", lib_roots, files,
+                     parsed0, t0)
+    return result
+
+
+def _id_corpus_compute(files):
+    """L62's vocabulary from the files `_id_corpus_files` read - the logic
+    `_id_corpus` describes. A pure function of those bytes, which is what lets
+    the answer be cached under a digest of them."""
     slug = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
     words = set()
 
@@ -6592,15 +7534,9 @@ def _id_corpus(lib_roots):
             if head != v:
                 words.add(head)
 
-    for root in lib_roots:
-        for f in (Path(root) / "components").rglob("contract.yaml"):
-            c = load_yaml(f) or {}
-            if c.get("conforms"):
-                offer(c["conforms"])
-            if c.get("class") == "port":
-                media = (c.get("attrs") or {}).get("media")
-                if media:
-                    offer(media)
+    for _f, data, sha in _id_corpus_section(files, "components"):
+        for value in _id_corpus_facts("components", data, sha):
+            offer(value)
 
     # AND THEN THE CORPUS GETS A VETO. A word that devices already use as a
     # COMPLETE id is a function name in this library whatever else it is: `usb`
@@ -6609,26 +7545,18 @@ def _id_corpus(lib_roots):
     # arguing with the convention it was written to state. Three devices, so
     # that one sloppy file cannot silence a word everywhere.
     bare, tails, whole_ids = {}, {}, {}
-    for root in lib_roots:
-        for f in (Path(root) / "devices").rglob("*.yaml"):
-            d = load_yaml(f) or {}
-            if d.get("kind") not in (None, "device"):
-                continue
-            for view in (d.get("views") or {}).values():
-                for q in (((view or {}).get("components") or {}).get("placements") or []):
-                    i = q.get("id")
-                    if not isinstance(i, str):
-                        continue
-                    if i in words:
-                        bare.setdefault(i, set()).add(str(f))
-                    whole_ids[i] = whole_ids.get(i, 0) + 1
-                    # every way this id divides into <lead>-<tail>, which is how
-                    # the preferred name below is looked up
-                    t = i.split("-")
-                    for k in range(1, len(t)):
-                        c = tails.setdefault("-".join(t[k:]), {})
-                        c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
-    words -= {w for w, files in bare.items() if len(files) >= 3}
+    for f, data, sha in _id_corpus_section(files, "devices"):
+        for i in _id_corpus_facts("devices", data, sha):
+            if i in words:
+                bare.setdefault(i, set()).add(str(f))
+            whole_ids[i] = whole_ids.get(i, 0) + 1
+            # every way this id divides into <lead>-<tail>, which is how
+            # the preferred name below is looked up
+            t = i.split("-")
+            for k in range(1, len(t)):
+                c = tails.setdefault("-".join(t[k:]), {})
+                c["-".join(t[:k])] = c.get("-".join(t[:k]), 0) + 1
+    words -= {w for w, where in bare.items() if len(where) >= 3}
 
     # THE PREFERRED NAME. What does the library already call the thing on the
     # other end of `smb-10mhz-out`? It calls it `clk-10mhz-out`, on three
@@ -6672,7 +7600,6 @@ def _id_corpus(lib_roots):
     # library uses it as a whole id somewhere, which is what makes it a name
     # rather than a leftover.
     whole = {i for i, n in whole_ids.items() if n >= 2}
-    _ID_VOCAB_CACHE[key] = (words, preferred, whole)
     return words, preferred, whole
 
 
@@ -8110,11 +9037,30 @@ def lint_device_configuration_bays(path, data, lib_roots):
     a bay called slot-1 on one of the modules riser-1 accepts, and the ref must
     be in THAT bay's accepts. Which module is seated is not known here - the
     configuration may say - so any accepted module's slot counts.
+
+    A KEY MUST ALSO NAME A BAY THAT EXISTS IN ITS CONFIGURATION. `only-in`
+    removes a bay from the metal of every configuration it does not name, and
+    render.py skips the bay before it reads the configuration's `bays:`, so a
+    configuration that seats a module there asserts an occupant the drawing
+    cannot show - and the drawing drops it silently. The CH3000 declared
+    slot-15 and slot-16 `only-in: [base]`, seated a receiver in each from a
+    second configuration, and rendered 12 receivers where it meant 14. The same
+    id may be a bay on more than one view; one that exists in the configuration
+    is enough. A nested key is scoped by its head: a component's bays carry no
+    `only-in`, because a configuration varies a chassis and not a card.
     """
     bay_accepts = {}
+    bay_scopes = {}
     for view in (data.get("views") or {}).values():
         for b in view_parts(view)["bays"]:
             bay_accepts[b["id"]] = b.get("accepts") or []
+            bay_scopes.setdefault(b["id"], []).append(b.get("only-in"))
+
+    def scoped_out(bid, cname):
+        scopes = bay_scopes.get(bid.split("/")[0])
+        if not scopes or any(not s or cname in s for s in scopes):
+            return None
+        return sorted({c for s in scopes for c in s})
 
     def nested_accepts(key):
         head, *rest = key.split("/")
@@ -8135,6 +9081,15 @@ def lint_device_configuration_bays(path, data, lib_roots):
         return accepts
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
+            # an empty string seats nothing, so scoping the bay out of the
+            # configuration draws exactly what the key says: no occupant
+            only = scoped_out(bid, cname) if ref != "" else None
+            if only:
+                err(path, "L8", f"config {cname}: bay {bid} is `only-in: {only}`, so it "
+                                "does not exist in this configuration - the configuration "
+                                "seats an occupant the drawing cannot show, and the render "
+                                "drops it silently. Add the configuration to the bay's "
+                                "`only-in`, or drop the key")
             if "/" in bid:
                 acc = nested_accepts(bid)
                 if acc is None:
@@ -8676,6 +9631,9 @@ def main():
                 lint_component_forwarded_mate(f, d, args.library)
                 lint_component_seat_point(f, d)
                 lint_component_stack_orientation(f, d, args.library)
+                lint_component_slot_defaults(f, d, args.library)
+                lint_component_spanned_geometry(f, d, args.library)
+                lint_component_spanned_exclusion(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
                 lint_component_body_boxes(f, d)
                 lint_component_faces_once(f, d)
@@ -8702,6 +9660,7 @@ def main():
                 lint_component_optical_position_nodes(f, d, args.library)
                 lint_component_composed_pitch(f, d, args.library)
                 lint_component_sink_context(f, d)
+                lint_component_facets(f, d, args.library)
                 lint_component_fields(f, d)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
@@ -8734,6 +9693,7 @@ def main():
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)
+                lint_device_spanned_exclusion(f, d, args.library)
                 try:
                     dev_maturity[str(f.parent.relative_to(root / "devices"))] = \
                         d.get("maturity", "draft")

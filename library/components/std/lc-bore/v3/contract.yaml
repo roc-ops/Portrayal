@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: lc-bore
-version: 3.0.0
+version: 3.0.2
 class: port
 interface: lc
 profile: networking
@@ -31,7 +31,8 @@ provenance:
     along the latch, the whole silhouette 10.43 tall. The aperture runs 0.16 to 0.40
     larger than the plug at every tier, which is the clearance traced off SENKO's own LC
     Premium Adapter DS-LC-000010 Rev A front view at a scale checked two ways (its 18.0
-    +/-0.2 body gives 41.61 px/mm and its 9.3 height 42.10). The HEIGHTS are what fits:
+    +/-0.2 gives 41.61 px/mm and its 9.3 height 42.10; the 18.0 spans the two
+    mounting-hole centres, not the body, which is the flange's 22.0). The HEIGHTS are what fits:
     THIS PART IS THE TRANSCEIVER RECEPTACLE, not the bulkhead adapter, and 1.60 is what
     an 8.5 module face has room for once the furniture around the opening is respected -
     on sfp-lc-duplex the bail ends at 1.60 and the aperture starts at 1.75, leaving 0.45
@@ -41,7 +42,8 @@ provenance:
     so ONE number is chosen and the three follow.
   short-keyway: >-
     A KNOWN UNDERSTATEMENT, recorded rather than hidden. SENKO's bulkhead adapter carries
-    a 3.51 stack in a 9.3 face; this part's 1.60 is less than half that, because a
+    a 3.36 stack in a 9.3 face (re-measured off its vector art for
+    std/lc-bulkhead-bore@1; an earlier reading gave 3.51); this part's 1.60 is less than half that, because a
     transceiver face is 8.5 and has a bail or a receptacle housing on it. THE OPTICAL
     AXIS DID MOVE with this change - sfp-lc-duplex's optical point went from 4.25 to 5.70
     and qsfp-transceiver's from 4.25 to 4.90, because a 6.3 opening at 4.25 cut the SFP's
@@ -49,8 +51,19 @@ provenance:
     stay on the centreline. The 1.60 was first derived against the old centreline and is
     RETAINED rather than re-derived, because it is still close to the ceiling on both
     faces after the move - the room the axis freed above the bore was taken by the
-    aperture sliding down to clear the bail, not by a taller stack. common/lc-duplex-adapter
-    composes this part and so draws a shorter keyway than its own hardware has.
+    aperture sliding down to clear the bail, not by a taller stack. common/lc-duplex-adapter@4
+    and @5 composed this part and so drew a shorter keyway than its own hardware has; @6
+    composes the bulkhead aperture instead, its ferrule axis moved to hold it. A seated
+    generic/lc-plug@2 is drawn with its latch compressed to the BULKHEAD keyway's
+    end, 5.71 from the ferrule, so in this receptacle it runs 1.76 past the drawn
+    keyway; that is this understatement showing, not a fault in the plug.
+  receptacle-or-bulkhead: >-
+    THIS IS THE TRANSCEIVER RECEPTACLE. std/lc-bulkhead-bore@1 is the BULKHEAD
+    aperture: the same square, widths and mate, with the full 3.36 keyway a
+    panel adapter carries, measured off SENKO DS-LC-000010. A transceiver
+    composes this part; a panel adapter composes that one - every panel adapter
+    in the library now does, common/lc-duplex-adapter@6 since its ferrule axis
+    moved to hold the longer keyway (that part's provenance.axis).
   gap: >-
     NOT STATED BY ANYONE, and this is a fact about the corpus rather than about one book.
     Five documents draw this receptacle and none dimensions its latch slot - QSFP-DD

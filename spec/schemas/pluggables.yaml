@@ -1,7 +1,7 @@
 # Which cage family a media value belongs to, and what a cage at a given rate
 # accepts below it on the same family's ladder.
 #
-# `lint.PLUGGABLE_CAGES` is the vocabulary L40 already asks about - fifteen
+# `lint.PLUGGABLE_CAGES` is the vocabulary L40 already asks about - seventeen
 # media values that name a pluggable cage rather than a fixed jack or bare
 # fibre. That set says a value IS a cage; it says nothing about which cages
 # are the SAME cage at different rates, or which cage accepts which other
@@ -9,11 +9,12 @@
 # takes a single-row SFP, and neither fact lives anywhere until this file
 # states it.
 #
-# NINE FAMILIES, not fifteen, because the fifteen values are RATES and a
+# TEN FAMILIES, not seventeen, because the seventeen values are RATES and a
 # family is the physical envelope one cage cuts once. `sfp`, `sfp-plus`,
-# `sfp28` and `sfp56` are one cage, electrically faster each generation; a
-# device that says `media: sfp28` is naming the rate its cage was cut for; a
-# lower rate still seats and links up, which is `rates:` in ascending order.
+# `sfp28`, `sfp56` and `sfp112` are one cage, electrically faster each
+# generation; a device that says `media: sfp28` is naming the rate its cage
+# was cut for; a lower rate still seats and links up, which is `rates:` in
+# ascending order.
 #
 # THE VOCABULARY GOVERNS, NOT THE LIBRARY. `sfp-dd` is the one family here
 # with no `std/` cage behind it. It is still a family, because `sfp-dd` is a
@@ -27,8 +28,8 @@
 # that vocabulary is going. Add it the day a device needs it, not before.
 #
 # Every `source` says what the family rests on, including when that is
-# nothing held in `working/`. Five families - `osfp`, `xfp`, `cfp`, `cfp2` and
-# `cxp` - have NO CAGE-DEFINING MSA AT ALL in the corpus; their `source` says
+# nothing held in `working/`. Six families - `osfp`, `xfp`, `cfp`, `cfp2`,
+# `cfp4` and `cxp` - have NO CAGE-DEFINING MSA AT ALL in the corpus; their `source` says
 # NOT HELD and names the `std/` cage that justifies the family's existence
 # instead. `sfp` and `sfp-dd` say NOT HELD too, for the MSA their own source
 # names (SFF-8432, the SFP-DD MSA) - a held document can still be cited
@@ -40,8 +41,8 @@ format: 1
 families:
   sfp:
     interface: sfp
-    rates: [sfp, sfp-plus, sfp28, sfp56]
-    source: 'SFF-8432 - not held; one cage interface across sfp/sfp-plus/sfp28/sfp56, the rate is electrical; std/sfp exists'
+    rates: [sfp, sfp-plus, sfp28, sfp56, sfp112]
+    source: 'SFF-8432 - not held; one cage interface across sfp/sfp-plus/sfp28/sfp56, the rate is electrical; std/sfp exists. sfp112 rests on the SFP-DD MSA hardware specification (Rev 5.x, "SFP-DD/SFP-DD112/SFP112") - not held; the case for it here is that an SFP112 cage takes SFP56/SFP28 modules and is the SFP envelope'
   sfp-dd:
     interface: sfp-dd
     rates: [sfp-dd]
@@ -60,4 +61,5 @@ families:
   xfp:  {interface: xfp,  rates: [xfp],  source: 'XFP MSA - not held; std/xfp exists'}
   cfp:  {interface: cfp,  rates: [cfp],  source: 'CFP MSA - not held; std/cfp exists'}
   cfp2: {interface: cfp2, rates: [cfp2], source: 'CFP MSA - not held; std/cfp2 exists'}
+  cfp4: {interface: cfp4, rates: [cfp4], source: 'CFP MSA CFP4 Hardware Specification Rev 1.1 dimensions the module (Figure 5-7) but defines no cage; the CFP4 baseline drawing that does is not held; std/cfp4 exists'}
   cxp:  {interface: cxp,  rates: [cxp],  source: 'CXP - not held; std/cxp exists'}

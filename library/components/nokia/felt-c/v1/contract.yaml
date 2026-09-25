@@ -1,0 +1,229 @@
+format: 1
+kind: module
+name: felt-c
+version: 1.1.0
+unplaced: >-
+  seated by the LT bays of the 7360 ISAM FX shelves (NFXS-F FX-4, NFXS-E FX-8, NFXS-D FX-16,
+  roc-ops/Portrayal#538); the coordinator wires it into their LT `accepts`. Delete this key
+  when the first LT bay names this part.
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FELT-C (3FE 75669 AA), the ETSI/MII high-speed point-to-point Ethernet LT of the 7360
+  ISAM FX, supported only with the FANT-H NT: sixteen SFP cages in eight ganged 1x2 blocks,
+  grouped G1-G4, each taking a CSFP (two FE/GE ports), an SFP (FE/GE/2.5G) or an SFP+ (10G), so
+  32 or 16 ports; two QSFP cross-LT cages to a peer FELT-C; PWR(A/S), ALM, Q1 and Q2 lamps and
+  two link lamps per SFP cage. Authored upright; the ETSI UDS draws it horizontal.
+size: {w: 25.0, h: 405.0, d: 205.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), held so the LT bay built from the shared 7360 FX
+  convention seats it; the faceplate edge-to-edge width is not stated. The flat front figure
+  measures the plate plus its side rail at about 26 mm across (26.1 on the vector FELT-D
+  figure), so figure positions across the card are taken as fractions of 26.1 laid onto the
+  25 mm face. d is the first of the two board widths the UDS gives (225 top / 205 bottom),
+  as nokia/fnio-d@1 carries it.
+attrs:
+  model: FELT-C
+  part-number: 3FE 75669 AA
+  sfp-plus: 16
+  qsfp: 2
+  weight-kg: 1.5
+provenance:
+  size: >-
+    datasheet - ETSI UDS 3FE77012AAAATQZZA18 section 33.5.2 (p319): height 405 mm, width 225
+    mm (top) / 205 mm (bottom), board to board pitch 25 mm, weight 1.5 kg. Face held at the 25
+    mm pitch by the shared 7360 FX convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, section 33.5.2; faceplate width not stated, taken as the
+    pitch.
+  depth: 'datasheet - 205 mm, the bottom width of section 33.5.2; 225 at the top'
+  weight: >-
+    datasheet - 1.5 kg, UDS section 33.5.2. The ETSI Product Information Guide
+    3HH11997AAAATCZZA42 p153 (and the ETSI/MII PIMs' unit tables) give 1.28 kg; sources
+    disagree, recorded as a gap, the UDS figure carried.
+  power: >-
+    NOT STATED - FELT-C has no row in ETSI Safety Manual 3HH11998AAAATCZZA29 Table 2 (p26), in
+    the Lightspan Safety Manual 3HH91852AAAATCZZA07 p37 or in the ANSI Safety Manuals A23/A27;
+    a full-text search of every staged 7360 FX and Lightspan FX PDF for FELT-C finds only the
+    PIM unit tables (dimensions, weight, memory) and the Safety Manual fuse table (p38: F1, 125
+    V / 8 A). No figure is written; L27 stands as the record.
+  layout: >-
+    drawing - ETSI UDS A18 Figure 122, the flat front panel, embedded 1838 x 477 at 300 ppi.
+    The figure is drawn HORIZONTAL with the card's top end at the figure's LEFT (the
+    Figure-233-style 3D view shows the lamps and the top thumbscrew at the upper end, and the
+    board name, which the figure prints rotated, reads horizontally once upright), so the
+    component is that figure turned 90 degrees clockwise: y = mm along the figure from its
+    left plate end, x = 25 x (1 - fy / 26.1) where fy is mm down from the figure's upper plate
+    edge. Plate x 35..1817 px = 405 mm, 4.40 px/mm. Gate 1: the ganged SFP
+    blocks measure 30.2 along by about 10.9 across (SFF-8433 28.5 + rim by 10.4) and the QSFP
+    cages 20.5 along (SFF-8663 20.0), so the figure is orthographic to about a percent. Read
+    off it: top thumbscrew 4.55, top lever 0.5-29.5; FELT-C name at about 25; lamps in two rows
+    of two, PWR | ALM at 32.2 and Q2 | Q1 at 37.3 (PWR and Q2 on the right once upright, as
+    printed); eight cage blocks 48.64-78.86, 81.59-111.82, 114.55-144.77, 147.50-177.73,
+    180.45-210.68, 213.41-243.64, 246.36-276.82, 279.55-309.77 (a 32.96 pitch), G1-G4 two
+    blocks each; QSFP 1 at 314.1-335.0 and QSFP 2 at 336.7-357.7, legends above them; a label
+    with a small window and an arrow at 359.5-377.0; laser and ESD triangles at 380.5-393.8;
+    bottom lever 375.7-404.5 and thumbscrew at 400.0.
+  ports: >-
+    datasheet - section 33.4.2.1: 16 SFP cages for CSFP (FE/GE), SFP (FE/GE/2.5G/Smart SFP) or
+    SFP+ (10G), ports numbered 1-32 (CSFP odd and even, SFP/SFP+ odd only), port groups G1-G4
+    on the cover, a group holding either SFP+ or any mix of CSFP and SFP (33.4.2.2). Figure 124
+    numbers the cages SFP 1 / CSFP 1 ... SFP 16 / CSFP 16, so sfp-n presents ports 2n-1 and 2n.
+    Composed as std/sfp-ganged@1 turned 90.
+  qsfp: >-
+    datasheet - section 33.4.1.1 and Table 107: two front QSFP cages carry the crossLT link to a
+    peer FELT-C in the adjacent slot (a customised Nokia DAC cable), and Table 107 gives them a
+    4 x 10G status row. Composed as std/qsfp28@1 (the SFF-8663 QSFP family aperture; QSFP+ uses
+    the same opening); group attrs say qsfp-plus 40g because 4 x 10G is the rate the table
+    gives.
+  interfaces: >-
+    the CSFP's two interfaces per cage cannot be declared here: `interfaces:` is a DEVICE
+    placement key (L105) and a component part admits no such key. Recorded in the group
+    description and as a gap.
+  rate: >-
+    datasheet - `sfp-plus: 16` is Table 105's SFP+ maximum (every cage); `qsfp: 2` types the
+    crossLT cages as 40G QSFP+ from Table 107's 4 x 10G row. The CSFP (32 x FE/GE) and SFP (16 x
+    2.5G) builds are not expressed by the one per-card rate.
+  lamps: >-
+    datasheet - Tables 106 and 107 (p320-321) and Figure 124: PWR (A/S) off / green active /
+    yellow standby; ALM off / red. Two link lamps per SFP cage with FELT-B's behaviour (CSFP:
+    one per link, green / blinking green / red LOS / off; SFP: LED1 status, LED2 speed off /
+    blinking green-yellow 2.5G / yellow 10G). Q1 and Q2 each give one QSFP link's status, four
+    lanes combined: green, blinking green, red on LOS on any lane. Figure 124 draws the link
+    lamps as dual red/green, so yellow is the mix; drawn #f5c400.
+  marks: >-
+    drawing - the label at 359.5-377.0 carries an empty window and an arrow pointing toward the
+    card's front edge (upright: to the right); what it is is not stated (gap). The laser and
+    ESD triangles are drawn as outlines.
+  logo-zone: 'reserved on the empty metal beside the FELT-C name; Figure 122 draws no mark'
+  relief: >-
+    estimated - levers and thumbscrews as nokia/fant-h-aa@1 carries them; the composed cages
+    emit their own depth.
+  lifecycle: 'searched only the staged corpus - listed as current in ETSI UDS A18; no end-of-life notice searched on the web'
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  lever-top: {at: [1.72, 0.5], size: [4.98, 29.0], class: latch}
+  lever-bottom: {at: [1.72, 375.7], size: [4.89, 28.8], class: latch}
+  screw-top: {at: [13.45, 0], size: [10.5, 10.5], class: screw}
+  screw-bottom: {at: [13.45, 394.5], size: [10.5, 10.5], class: screw}
+  logo-zone: {at: [9.0, 12.5], size: [9.0, 8.0], class: label}
+  arrow-label: {at: [7.09, 359.5], size: [11.11, 17.5], class: label}
+relief:
+  wall: '#8d9298'
+  features:
+  - {node: lever-top, out: 4.2, color: '#2b2e33', confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch via nokia/fant-h-aa@1 - the library one figure for an ejector lever. NOT MEASURED; no Nokia document states it'}
+  - {node: lever-bottom, out: 4.2, color: '#2b2e33', confidence: estimated, source: 'edgecore/agr-psu-dc@1 latch via nokia/fant-h-aa@1 - the library one figure for an ejector lever. NOT MEASURED; no Nokia document states it'}
+  - {node: screw-top, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 via nokia/fant-h-aa@1 - the library one figure for a captive screw head. NOT MEASURED'}
+  - {node: screw-bottom, cyl: 1.6, knurl: true, confidence: estimated, source: 'edgecore/agr-panel-screw@1 via nokia/fant-h-aa@1 - the library one figure for a captive screw head. NOT MEASURED'}
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the 16 SFP cages, SFP 1-16 (CSFP FE/GE, SFP FE/GE/2.5G or SFP+ 10G). Cage n presents
+      ports 2n-1 and 2n with a CSFP and port 2n-1 alone with an SFP/SFP+; the two CSFP
+      interfaces are not declared per cage because a component part cannot carry
+      `interfaces:`. Port groups G1-G4 each take either SFP+ or any mix of CSFP and SFP.
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      two link lamps per SFP cage, 1-32: with a CSFP one per link; with an SFP/SFP+ the first
+      (upper) shows link status and the second (lower) the speed
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR (A/S) and ALM
+  qsfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-plus, speed: 40g}
+    description: >-
+      the two front crossLT QSFP cages (4 x 10G), cabled to a peer FELT-C in the adjacent slot
+      with a customised Nokia DAC for LT redundancy
+  qsfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: Q1 and Q2, one per QSFP cage, the four lanes combined
+parts:
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.77, 31.2], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.7, 31.2], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: yellow, color: '#f5c400'}]}}
+  - {ref: common/led-dot@1, id: led-q1, group: qsfp-leds, at: [8.77, 36.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-q2, group: qsfp-leds, at: [13.7, 36.3], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-1, group: sfp, at: [4.95, 51.42], rotate: 90}
+  - {ref: common/led-dot@1, id: led-1, group: link-leds, at: [17.68, 52.77], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-2, group: link-leds, at: [17.68, 58.48], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-2, group: sfp, at: [4.95, 65.67], rotate: 90}
+  - {ref: common/led-dot@1, id: led-3, group: link-leds, at: [17.68, 67.03], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-4, group: link-leds, at: [17.68, 72.72], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-3, group: sfp, at: [4.95, 84.38], rotate: 90}
+  - {ref: common/led-dot@1, id: led-5, group: link-leds, at: [17.68, 85.73], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-6, group: link-leds, at: [17.68, 91.43], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-4, group: sfp, at: [4.95, 98.63], rotate: 90}
+  - {ref: common/led-dot@1, id: led-7, group: link-leds, at: [17.68, 99.98], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-8, group: link-leds, at: [17.68, 105.68], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-5, group: sfp, at: [4.95, 117.33], rotate: 90}
+  - {ref: common/led-dot@1, id: led-9, group: link-leds, at: [17.68, 118.69], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-10, group: link-leds, at: [17.68, 124.38], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-6, group: sfp, at: [4.95, 131.59], rotate: 90}
+  - {ref: common/led-dot@1, id: led-11, group: link-leds, at: [17.68, 132.94], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-12, group: link-leds, at: [17.68, 138.63], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-7, group: sfp, at: [4.95, 150.29], rotate: 90}
+  - {ref: common/led-dot@1, id: led-13, group: link-leds, at: [17.68, 151.64], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-14, group: link-leds, at: [17.68, 157.34], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-8, group: sfp, at: [4.95, 164.54], rotate: 90}
+  - {ref: common/led-dot@1, id: led-15, group: link-leds, at: [17.68, 165.89], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-16, group: link-leds, at: [17.68, 171.59], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-9, group: sfp, at: [4.95, 183.24], rotate: 90}
+  - {ref: common/led-dot@1, id: led-17, group: link-leds, at: [17.68, 184.59], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-18, group: link-leds, at: [17.68, 190.29], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-10, group: sfp, at: [4.95, 197.49], rotate: 90}
+  - {ref: common/led-dot@1, id: led-19, group: link-leds, at: [17.68, 198.84], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-20, group: link-leds, at: [17.68, 204.54], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-11, group: sfp, at: [4.95, 216.2], rotate: 90}
+  - {ref: common/led-dot@1, id: led-21, group: link-leds, at: [17.68, 217.55], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-22, group: link-leds, at: [17.68, 223.25], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-12, group: sfp, at: [4.95, 230.45], rotate: 90}
+  - {ref: common/led-dot@1, id: led-23, group: link-leds, at: [17.68, 231.8], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-24, group: link-leds, at: [17.68, 237.5], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-13, group: sfp, at: [4.95, 249.27], rotate: 90}
+  - {ref: common/led-dot@1, id: led-25, group: link-leds, at: [17.68, 250.62], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-26, group: link-leds, at: [17.68, 256.32], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-14, group: sfp, at: [4.95, 263.52], rotate: 90}
+  - {ref: common/led-dot@1, id: led-27, group: link-leds, at: [17.68, 264.87], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-28, group: link-leds, at: [17.68, 270.57], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-15, group: sfp, at: [4.95, 282.33], rotate: 90}
+  - {ref: common/led-dot@1, id: led-29, group: link-leds, at: [17.68, 283.68], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-30, group: link-leds, at: [17.68, 289.38], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/sfp-ganged@1, id: sfp-16, group: sfp, at: [4.95, 296.58], rotate: 90}
+  - {ref: common/led-dot@1, id: led-31, group: link-leds, at: [17.68, 297.93], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-32, group: link-leds, at: [17.68, 303.63], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}, {name: red, color: '#d0021b'}, {name: yellow, color: '#f5c400'}, {name: speed-2g5, color: '#f5c400', behavior: blinking}]}}
+  - {ref: std/qsfp28@1, id: qsfp-1, group: qsfp, at: [2.16, 319.48], rotate: 90, attrs: {function: 'cross-LT link to the peer FELT-C (Nokia DAC) or 4x10G user interface'}}
+  - {ref: std/qsfp28@1, id: qsfp-2, group: qsfp, at: [2.16, 342.12], rotate: 90, attrs: {function: 'cross-LT link to the peer FELT-C (Nokia DAC) or 4x10G user interface'}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

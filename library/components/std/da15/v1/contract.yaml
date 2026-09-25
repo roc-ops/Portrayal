@@ -1,0 +1,88 @@
+format: 1
+kind: component
+name: da15
+version: 1.0.0
+class: port
+profile: networking
+conforms: da15
+interface: da15
+description: >-
+  D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over
+  seven, in the size A shell; the alarm connector on equipment such as the
+  Nokia 7750 SR-e CCM-e
+size: {w: 28.80, h: 11.40, d: 6.73}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+size-notes: >-
+  w and h are the 15-position panel cutout in TE 114-40010 Rev G Figure 3 (C
+  dimension 28.80; 11.40 high for every shell). d is Figure 4's mating
+  dimension for 9 and 15 position, standing in for an unmeasured setback.
+attrs: {media: da15}
+provenance:
+  size: >-
+    standard - TE application specification 114-40010 Rev G, Figure 3, mounting
+    panel cutout: C dimension 28.80 for 15 positions (the A shell), 11.40 high,
+    10 degrees +/-2 of taper on the two sloped sides and a 3.35 radius in four
+    places. The same figure puts the mounting holes at 33.32 centres (A
+    dimension), diameter 3.05 plain or 4.83 with screwlocks. The height, taper
+    and radius are drawn once for every shell, so only the width differs from
+    std/db9@1's E-shell 20.47.
+  depth: >-
+    estimated - 6.73 is the MATING DIMENSION from 114-40010 Figure 4 for 9 and 15
+    position, 'needed to ensure full mating of connectors'. As on std/db9@1, it
+    is how far the plug engages rather than a measured recess.
+  gender: >-
+    drawing - female. The Nokia SR-e guide's Figure 98 draws the CCM-e alarm
+    connector as holes in the insert and numbers the top row right to left, pins
+    1 to 8, and the bottom row right to left, 9 to 15 - the numbering of a
+    receptacle's face seen from the front. The guide calls it "DB-15", the
+    common misnomer; fifteen contacts in two rows in the wider shell is DA-15.
+  pins: >-
+    estimated - eight over seven, the lower row offset half a pitch, at 2.74
+    pitch and 2.84 row separation. Those two figures are 114-40010 Figure 6's
+    printed circuit board footprint for the 15-position right-angle part (A
+    dimension 2.74, D half-pitch 1.37, rows 2.84), whose tails mirror the
+    contact field; no document held dimensions the face itself. The socket
+    openings are drawn 1.0 across, which is not dimensioned anywhere held.
+  shell: >-
+    estimated - THE OUTLINE DRAWN IS THE SHELL, NOT THE APERTURE: 28.55 x 10.50
+    inside the 28.80 x 11.40 cutout, carrying std/db9@1's photo-measured
+    clearance (0.125 a side in x, 0.45 in y) across to the A shell rather than
+    measuring it on one.
+  insert: >-
+    estimated - a near-black insulator, flush with the shell lip as a female
+    receptacle's is (std/vga@1 the precedent), 0.90 inside the shell as on
+    std/db9@1. The colour is not taken from a photograph of the CCM-e, which is
+    not staged.
+elements:
+  opening: {at: [0.0, 0.0], size: [28.80, 11.40], class: cutout}
+relief:
+  wall: '#3a3e43'
+  features:
+  # THE SHELL STANDS PROUD - see std/db9@1, the same shell family with the same
+  # correction. Drawn as a ring so it builds as a tube.
+  - node: opening
+    out: 6.73
+    shape: true
+    color: '#5c6268'
+    confidence: estimated
+    source: >-
+      6.73 is this contract's own `d`, 114-40010 Figure 4's mating dimension for
+      9 and 15 position. THE DIRECTION IS THE SOURCED PART: a D-sub passes
+      through its cutout rather than sitting behind it.
+  # FLUSH WITH THE LIP AND PIERCED, the female half - std/vga@1's arrangement.
+  # The fifteen bores are subpaths of the insert's outline, so they build as
+  # holes through the face rather than discs standing on it.
+  - node: insert
+    out: 6.73
+    shape: true
+    color: '#2b2e33'
+    confidence: estimated
+    source: >-
+      6.73 is this contract's `d`, so the insert face lands level with the shell
+      lip. The CCM-e's alarm connector is female (SR-e guide Figure 98 draws
+      holes, pin 1 top right), and a receptacle presents its insulator at the
+      face. The flush setback is sourced from what the connector is; the
+      millimetres are not dimensioned anywhere held.
+connection-points:
+  mate: {at: [14.40, 5.70], direction: front}
+skins: [default]

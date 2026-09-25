@@ -68,6 +68,17 @@ to start a device: [modelling-a-device.md](modelling-a-device.md) is the method.
   check, and it waits for the day someone finds the missing figure. Where the
   source is silent about scope, say so and record the question; do not pick the
   safer reading and state it as the vendor's.
+- **An angled port is not face-on, and its footprint is not its size.** A cage
+  on a 30-degree housing measures about 13% shorter in a front view than its
+  registry size, and a 45-degree sawtooth cage 29% shorter. Model the surface
+  as a facet and let the renderer project the part; never shrink a `std/` part
+  to match the drawing. Read the angle from a 3D or side figure and record it
+  as `estimated` unless a document states it.
+- **If a cage shows through the back of a tooth in the 3D view, the facet
+  angle, the facet's height or its return is wrong.** The viewer does not
+  clip it, on purpose. The same holds for a sunk facet whose cage comes out
+  through the floor of its pocket: check the facet's lift and angle, and the
+  pocket's depth, against the drawing.
 
 ## Axes and views
 

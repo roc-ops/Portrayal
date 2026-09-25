@@ -1,14 +1,14 @@
 format: 1
 kind: module
 name: fhd-1mtp24-lc-os2-a
-version: 4.0.0
+version: 4.1.1
 class: cassette
 behaviour: fills
 description: >-
   FS FHD-1MTP12LCDOS2A - MTP-24 (male) to twelve LC duplex, 24 fibres, OS2,
   Type A polarity. FS SKU 57023. THE FIRST CASSETTE IN THIS LIBRARY WITH A
-  SINGLE REAR CONNECTOR WIDER THAN TWELVE - common/mpo-adapter@1 is fixed at 12
-  positions, so this rear needs common/mpo24-flange-adapter@1 instead, a
+  SINGLE REAR CONNECTOR WIDER THAN TWELVE - common/mpo-adapter@2 is fixed at 12
+  positions, so this rear needs common/mpo24-flange-adapter@2 instead, a
   sibling part rather than an edit to the twelve everything else already
   composes.
 size: {w: 108.97, h: 35.05, d: 117.86}
@@ -36,18 +36,18 @@ body:
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@5, at: [17.24, 18.66]}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@5, at: [30.13, 18.66]}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@5, at: [43.19, 18.66]}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@5, at: [56.25, 18.66]}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@5, at: [69.30, 18.66]}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@5, at: [82.19, 18.66]}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@5, at: [17.24, 3.89]}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@5, at: [30.13, 3.89]}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@5, at: [43.19, 3.89]}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@5, at: [56.25, 3.89]}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@5, at: [69.30, 3.89]}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@5, at: [82.19, 3.89]}
+  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [17.24, 18.66]}
+  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [30.13, 18.66]}
+  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [43.19, 18.66]}
+  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [56.25, 18.66]}
+  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [69.30, 18.66]}
+  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [82.19, 18.66]}
+  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [17.24, 3.89]}
+  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [30.13, 3.89]}
+  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [43.19, 3.89]}
+  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [56.25, 3.89]}
+  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [69.30, 3.89]}
+  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [82.19, 3.89]}
 faces:
   rear: {ref: fs/fhd-1mtp24-lc-rear@3}
 optical:
@@ -140,7 +140,7 @@ provenance:
     `at.x` WAS THE OPENING'S CENTRE LESS HALF THE ADAPTER UNTIL 2.0.0, AND THAT
     PUT EVERY ADAPTER 1.2 TO 1.4 mm TOO FAR RIGHT. What `openings()` finds is
     the pale DUST CAP, and the cap is not centred on the housing:
-    common/lc-duplex-v-adapter@5 records it spanning 2.92-8.77 of the 9.28 mm
+    common/lc-duplex-v-adapter@6 records it spanning 2.92-8.77 of the 9.28 mm
     body, so its centre is 1.205 right of the body's. Measured directly instead
     - the left edge of each coloured housing, the same `openings()` call with a
     saturation test in place of the pale one - the housings started at x =
@@ -177,7 +177,7 @@ provenance:
     disagrees with numeric order.
   optical: >-
     THE FRONT ARRANGEMENT IS TWO ROWS OF SIX, NOT ONE ROW OF TWELVE - see
-    provenance.parts. Twelve common/lc-duplex-v-adapter@5 parts (9.28 mm each)
+    provenance.parts. Twelve common/lc-duplex-v-adapter@6 parts (9.28 mm each)
     do not fit across a 108.97 mm face at any workable pitch, exactly as the
     task brief predicted before any image was opened, and the measurement above
     confirms it rather than assuming it.

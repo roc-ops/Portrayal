@@ -1,0 +1,292 @@
+format: 1
+kind: module
+name: nglt-a
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia NGLT-A (3FE 64279 AA), the 8-port GPON line termination board with traffic
+  manager (version A) that the 7302 ISAM, 7330 ISAM FTTN and 7360 ISAM FX shelves take.
+  Authored upright, as the Unit Data Sheet guides draw it: ejector and thumbscrew at each
+  end, a yellow laser warning label under the top lever, a lamp column PWR, A/S, ALM and
+  a 2 x 4 block of PON lamps 1-8, then eight SFP cages on a sawtooth faceplate that
+  angles each cage for fibre bend radius, a label window, and the bottom lever.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm); no faceplate width is stated, so the face is
+  held at the pitch by the shared 7360 FX convention. d is the larger of the two board
+  depths the UDS gives (225 mm top / 205 mm bottom), taken as the envelope.
+attrs:
+  model: NGLT-A
+  part-number: 3FE 64279 AA
+  gpon: 8
+  weight-kg: 0.9
+  power-draw-max-w: 76.2
+  power-draw-typical-w: 64.2
+provenance:
+  size: >-
+    datasheet - 7360 ANSI UDS R6.9 3FE77013AAAATQZZA16 section 51.5.2 (p497) and the
+    NGLT-A Unit Data Sheet 3FE64279AAAATQZZA07 section 1.7.2 (p9): height 405 mm, width
+    225 mm (top) / 205 mm (bottom), board-to-board pitch 25 mm.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 51.5.2; the faceplate edge-to-edge width
+    is not stated in either UDS and is taken as the pitch.
+  depth: >-
+    datasheet - "width 225 mm (top) / 205 mm (bottom)", the board's depth behind the
+    faceplate at its two ends; 225 carried as the envelope.
+  weight: 'datasheet - 0.9 kg (2 lb), ANSI UDS R6.9 section 51.5.2'
+  power: >-
+    datasheet - 7360 ISAM FX ANSI Safety Manual 3HH12894AAAATCZZA27 p26 Table 2 and ETSI
+    Safety Manual 3HH11998AAAATCZZA29 p26 Table 2: NGLT-A 64.2 W typical, 76.2 W maximum.
+    The ETSI table note says PON line-card figures include the optics.
+  layout: >-
+    drawing (fractions only) - NGLT-A Unit Data Sheet 3FE64279AAAATQZZA07 p9 Figure 7,
+    the 3D side-and-front view (the same art as ANSI UDS R6.9 p497 Figure 265). The
+    standalone UDS draws it as vectors, so it was rendered at 600 dpi rather than taken
+    from the 150 ppi raster in the guide. No orthographic front exists. Positions along
+    the card are fractions of 405 mm between the top of the top ejector and the bottom
+    of the bottom ejector (render y 1255 to 3876, 0.1545 mm/px): top lever tip 34.5;
+    laser label 36.6-56.0 (its top, an oval DANGER header behind the lever tip, is not
+    drawn); lamp rows 60.1 to 89.8 on a 4.95 pitch; sawtooth recess 106.9-335.3 with
+    tooth apexes 137.2 to 329.7 on a 27.58 pitch and each cage on the sloped face
+    15.9 mm above its apex; label window 337.6-362.4; bottom lever from 377. Across the
+    card the face is foreshortened (106 px for 25 mm), so x is taken as fractions of the
+    drawn face: lamp columns at 9.0 and 14.9, cages centred. About 1 mm error along the
+    card, more across it.
+  ports: >-
+    datasheet - UDS section 51.4: eight GPON ports (2.488 Gbps down, 1.244 Gbps up) for
+    SFP GPON modules. Composed as std/sfp@1 at its registry aperture, unrotated.
+    Numbering 1-8 top to bottom is ASSUMED from the lamp block's 1-8; the figure prints
+    no numeral beside any cage and no document maps cage to number (gap). The export rate is `gpon: 8`, from the
+    same section's "eight GPON ports per board" (ANSI R6.9 section 51.3), so the cages
+    export as `gpon` rather than the SFP cage default, 1000BASE-X.
+  lamps: >-
+    datasheet - NGLT-A UDS A07 Figure 8 (p10) and Table 2; ANSI R6.9 Table 148. Column
+    PWR, A/S, ALM, legends to the right; then 1 | 2, 3 | 4, 5 | 6, 7 | 8, odd legends
+    left, even right. PWR off = power off, blinking green = initialisation; the table's
+    same row reads "Initialization / Power on state" and has no steady row, so a steady
+    green 'on' is added by analogy with the FGUT-A table (inferred, gap). A/S on =
+    active, off = standby, colour not stated, drawn with the family green. ALM red =
+    alarm. PON lamp off = not active, yellow = provisioned and ranging, green = active,
+    blinking green = provisioned and active, red = transmitter failed or no SFP
+    communication.
+  marks: >-
+    drawing - the laser label is drawn with the wording Figure 7 prints on it (invisible
+    laser radiation when disconnected, avoid direct exposure to beam) and its starburst;
+    the rectangle with corner brackets below the cages is not named in any table and is
+    drawn as an empty window.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so
+    the library's pooled release-hardware estimate (4.2) is used, as on the FNIO cards.
+    The sawtooth is carried as facets (angled-panel), not as an `out`.
+  logo-zone: >-
+    reserved by the family convention; Figure 7 draws no mark, so the zone is the empty
+    metal between the lamp block and the sawtooth.
+  lifecycle: >-
+    searched only the staged corpus - listed in ANSI UDS R6.9; no end-of-life notice was
+    searched for on the web.
+  angled-panel: >-
+    estimated - NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7, the vector 3D view rendered
+    at 900 dpi. The sawtooth stands in a recess with its apexes toward the viewer; the
+    cage connectors are on the upper edge of each tooth, so the ports look up. Tracing
+    the tooth edge over eight teeth gives an image run of 154 px down to each apex,
+    114.5 px back, and a 90 px depth; with the edge of the board as the depth axis
+    (6.2-6.6 px/mm across, 1.3 px/mm down) and 9.71 px/mm along the card, that is
+    13.9-14.0 and 13.6-13.8 mm of front view and 13.7-14.6 mm deep, 44-46 degrees each
+    way. DEPTH, on the far wall of the recess: the apexes sit 12 px (about 2 mm) inside
+    its front edge and the roots about 17 mm. The recess is the pocket `well`, 106.9 to
+    335.3 as drawn, 15.79 deep, and every facet has `lift` -15.79: apexes 2.0 below the
+    plate, roots on the floor. The angles are unchanged by the depth. Section, plate
+    front at 0: apex -2.0, root and pocket floor -15.79. Modelled as eight teeth of 45
+    degrees up (face-N, the cage on it) and 45 down (return-N), 13.79 mm each on the
+    27.58 pitch, apexes at 137.2 + 27.58 n. return-0 is the leading edge Figure 7 draws
+    rising to the top of the recess. The recess ends 5 mm below the last apex, cutting
+    the last tooth, so return-8 closes it at 70 degrees in 5.02 mm, from the apex to the
+    floor at the recess end. A 45/45 cage runs back parallel to the return below it and
+    passes below the floor inside the recess; cage 8 reaches the floor just inside the
+    end wall, 0.18 mm under the closing return, so no cage comes out through a wall.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [4.0, 93.5], size: [17.0, 11.0], class: label}
+  laser-label: {at: [1.0, 36.6], size: [20.8, 19.4], class: label}
+  label-window: {at: [6.6, 337.6], size: [11.3, 24.8], class: label}
+  well: {at: [3.1, 106.9], size: [18.4, 228.4], class: mechanical}
+  return-0: {at: [3.1, 109.62], size: [18.4, 13.79], class: mechanical}
+  face-1: {at: [3.1, 123.41], size: [18.4, 13.79], class: mechanical}
+  return-1: {at: [3.1, 137.2], size: [18.4, 13.79], class: mechanical}
+  face-2: {at: [3.1, 150.99], size: [18.4, 13.79], class: mechanical}
+  return-2: {at: [3.1, 164.78], size: [18.4, 13.79], class: mechanical}
+  face-3: {at: [3.1, 178.57], size: [18.4, 13.79], class: mechanical}
+  return-3: {at: [3.1, 192.36], size: [18.4, 13.79], class: mechanical}
+  face-4: {at: [3.1, 206.15], size: [18.4, 13.79], class: mechanical}
+  return-4: {at: [3.1, 219.94], size: [18.4, 13.79], class: mechanical}
+  face-5: {at: [3.1, 233.73], size: [18.4, 13.79], class: mechanical}
+  return-5: {at: [3.1, 247.52], size: [18.4, 13.79], class: mechanical}
+  face-6: {at: [3.1, 261.31], size: [18.4, 13.79], class: mechanical}
+  return-6: {at: [3.1, 275.1], size: [18.4, 13.79], class: mechanical}
+  face-7: {at: [3.1, 288.89], size: [18.4, 13.79], class: mechanical}
+  return-7: {at: [3.1, 302.68], size: [18.4, 13.79], class: mechanical}
+  face-8: {at: [3.1, 316.47], size: [18.4, 13.79], class: mechanical}
+  return-8: {at: [3.1, 330.26], size: [18.4, 5.019], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: well
+      pocket: 15.79
+      confidence: estimated
+      source: 'NGLT-A UDS A07 p9 Figure 7 at 900 dpi: on the far recess wall the apexes sit 12 px (about 2 mm) inside the front edge and the roots 106 px (about 17 mm); the floor is taken at the roots, 15.79'
+    - node: return-0
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-1
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-1
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-2
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-2
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-3
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-3
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-4
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-4
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-5
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-5
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-6
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-6
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-7
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-7
+      facet: {deg: 45, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: face-8
+      facet: {deg: 45, facing: up}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+    - node: return-8
+      facet: {deg: 70, facing: down}
+      lift: -15.79
+      confidence: estimated
+      source: 'NGLT-A UDS 3FE64279AAAATQZZA07 p9 Figure 7 at 900 dpi: run and rise of 8 teeth, depth corrected for the oblique view (44-46 deg)'
+groups:
+  gpon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: the eight GPON SFP cages
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON state lamp per port, legends 1-8 in the lamp block
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps PWR, A/S (LT redundancy active/standby) and ALM
+parts:
+  - {ref: std/sfp@1, id: port-1, group: gpon, at: [5.25, 125.714], 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: gpon, at: [5.25, 153.294], 'on': face-2}
+  - {ref: std/sfp@1, id: port-3, group: gpon, at: [5.25, 180.874], 'on': face-3}
+  - {ref: std/sfp@1, id: port-4, group: gpon, at: [5.25, 208.454], 'on': face-4}
+  - {ref: std/sfp@1, id: port-5, group: gpon, at: [5.25, 236.034], 'on': face-5}
+  - {ref: std/sfp@1, id: port-6, group: gpon, at: [5.25, 263.614], 'on': face-6}
+  - {ref: std/sfp@1, id: port-7, group: gpon, at: [5.25, 291.194], 'on': face-7}
+  - {ref: std/sfp@1, id: port-8, group: gpon, at: [5.25, 318.774], 'on': face-8}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [8, 59.1], states: {lamp: ['off', {name: 'init', color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-as, group: status-leds, at: [8, 64.05], states: {lamp: ['off', {name: 'active', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8, 69], states: {lamp: ['off', {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [8, 73.95], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-2, group: pon-leds, at: [13.9, 73.95], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-3, group: pon-leds, at: [8, 78.9], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-4, group: pon-leds, at: [13.9, 78.9], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-5, group: pon-leds, at: [8, 83.85], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-6, group: pon-leds, at: [13.9, 83.85], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-7, group: pon-leds, at: [8, 88.8], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-8, group: pon-leds, at: [13.9, 88.8], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'active', color: '#39b54a', behavior: blinking}, {name: 'red', color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]
