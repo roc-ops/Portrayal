@@ -1,0 +1,43 @@
+format: 1
+kind: module
+name: bp-a5
+version: 1.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) BP-A5 - the single-width dynamic back plate for one AR3002E or
+  AR3002G forward receiver in a CH3000 chassis: the SC/APC optical input and the F-type
+  RF output, seated in the rear of the receiver's slot.
+size: {w: 25.76, h: 130.2}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: BP-A5
+  slots: 1
+provenance:
+  size: >-
+    borrowed - commscope/ar3002e@1's single-width plate; a back plate fills the rear of
+    the same slot. No document held draws or photographs a BP-A5.
+  connectors: >-
+    datasheet - AR3002E data sheet (2022): "Optical Connector: SC/APC (at back plates BP-A5
+    or BP-35D4x)" and "RF Output: F-type female connector (at back plates PB-A5 or
+    BP-35D4x)"; the AR3002G sheet (archived arris.com) says the same, "connector at
+    mid-plane mates to BP-A5". One optical input and one RF output.
+  layout: >-
+    estimated - NO IMAGE OF A BP-A5 EXISTS IN THE CORPUS, so the arrangement is borrowed from its
+    single-width siblings on the Aurora 2004 chassis sheet's rear photograph (p2), where
+    three BP-A1 plates show, top to bottom: a thumbscrew, the plate legend and a key
+    (square = optical, circle = RF), a fan grille, a green SC/APC adapter under a yellow
+    laser label, the F-type below it, and a second thumbscrew. The photograph is a
+    three-quarter view, so positions are fractions of the plate height and estimated.
+elements:
+  screw-top: {at: [7.98, 1.5], size: [9.8, 9.8], class: fastener}
+  fan-grille: {at: [3.0, 30.0], size: [19.76, 25.0], class: vent}
+  optical-in: {at: [6.2, 61.5], size: [13.36, 13.0], class: port}
+  screw-bottom: {at: [7.98, 118.9], size: [9.8, 9.8], class: fastener}
+parts:
+  - {ref: std/sc-bore@1, id: optical-in-bore, at: [8.69, 64.0], attrs: {role: optical-input, connector: SC/APC}}
+  - {ref: std/f-type@1, id: rf-out, at: [8.03, 78.0], attrs: {role: rf-output}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
