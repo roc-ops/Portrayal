@@ -6,7 +6,7 @@ maturity: modelled
 manufacturer: Telco Systems
 model: TM-340
 aliases:
-- {name: T-Marc 340, kind: superseded, note: 'the name printed on the faceplate and used throughout the data sheet ("Telco Systems T-Marc 340 (TM-340)")'}
+- {name: T-Marc 340, kind: marketing, note: 'the name printed on the faceplate and used throughout the only data sheet ("Telco Systems T-Marc 340 (TM-340)")'}
 - {name: TMC-340, kind: vendor, note: 'the stem of every ordering code (TMC-340-z, TMC-340-2DC, TMC-340-z-E, TMC-340-EW, TMC-340-x-F)'}
 portfolio: {line: Carrier Ethernet, family: Network Interface Device, series: T-Series}
 description: >-
@@ -89,7 +89,8 @@ attrs:
   performance:
     switching-capacity: 10 Gbps non-blocking
   features:
-    services: MEF CE 2.0; G.8031, G.8032v2, xSTP, LAG
+    services: MEF CE 2.0
+    resiliency: sub-50 ms - G.8031, G.8032v2, Fast Ring, xSTP, LAG (static/LACP), BFD, Resilient Link
     optics-sfp: '100BASE-X, 1000BASE-X (data sheet, "100/1000Base-X Combo SFP ports")'
   management:
     local: CON console on RJ45
@@ -168,7 +169,7 @@ groups:
     term: Port
     role: management
     index-origin: 1
-    description: the CON RS-232 console.
+    description: the CON console (the data sheet says only "Console").
   status-leds:
     term: LED
     role: indicator
@@ -265,19 +266,19 @@ views:
       - {at: [16.0, 41.3], text: CON, font-size: 2.4, anchor: middle, for: con}
     components:
       placements:
-        - {ref: 'std/rj45@2', id: con, at: [8.1, 23.55], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CON - the RS-232 console}
+        - {ref: 'std/rj45@2', id: con, at: [8.1, 23.55], group: mgmt, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: CON - the console}
         - {ref: 'std/sfp-ganged@1', id: port-1-1, at: [43.3, 7.4], group: network, rel-pos: 1}
-        - {ref: 'common/rj45-ganged-eth@1', id: copper-1-1, at: [44.21, 22.55], rotate: 180, group: network-copper, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-1-1, at: [44.21, 22.55], rotate: 180, group: network-copper, rel-pos: 1, attrs: {combo-with: port-1-1}}
         - {ref: 'std/sfp-ganged@1', id: port-1-2, at: [57.55, 7.4], group: network, rel-pos: 2}
-        - {ref: 'common/rj45-ganged-eth@1', id: copper-1-2, at: [58.18, 22.55], rotate: 180, group: network-copper, rel-pos: 2}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-1-2, at: [58.18, 22.55], rotate: 180, group: network-copper, rel-pos: 2, attrs: {combo-with: port-1-2}}
         - {ref: 'std/sfp-ganged@1', id: port-2-1, at: [84.09, 7.4], group: access, rel-pos: 1}
-        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-1, at: [85.29, 22.55], rotate: 180, group: access-copper, rel-pos: 1}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-1, at: [85.29, 22.55], rotate: 180, group: access-copper, rel-pos: 1, attrs: {combo-with: port-2-1}}
         - {ref: 'std/sfp-ganged@1', id: port-2-2, at: [98.34, 7.4], group: access, rel-pos: 2}
-        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-2, at: [99.26, 22.55], rotate: 180, group: access-copper, rel-pos: 2}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-2, at: [99.26, 22.55], rotate: 180, group: access-copper, rel-pos: 2, attrs: {combo-with: port-2-2}}
         - {ref: 'std/sfp-ganged@1', id: port-2-3, at: [112.59, 7.4], group: access, rel-pos: 3}
-        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-3, at: [113.23, 22.55], rotate: 180, group: access-copper, rel-pos: 3}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-3, at: [113.23, 22.55], rotate: 180, group: access-copper, rel-pos: 3, attrs: {combo-with: port-2-3}}
         - {ref: 'std/sfp-ganged@1', id: port-2-4, at: [126.84, 7.4], group: access, rel-pos: 4}
-        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-4, at: [127.21, 22.55], rotate: 180, group: access-copper, rel-pos: 4}
+        - {ref: 'common/rj45-ganged-eth@1', id: copper-2-4, at: [127.21, 22.55], rotate: 180, group: access-copper, rel-pos: 4, attrs: {combo-with: port-2-4}}
         - {ref: 'common/led-indicator@1', id: led-sts, at: [27.6, 30.6], for: chassis, group: status-leds, rel-pos: 1}
         - {ref: 'common/led-indicator@1', id: led-ps-i, at: [76.77, 25.8], for: chassis, group: status-leds, rel-pos: 2}
         - {ref: 'common/led-indicator@1', id: led-ps-e, at: [76.77, 31.4], for: chassis, group: status-leds, rel-pos: 3}
