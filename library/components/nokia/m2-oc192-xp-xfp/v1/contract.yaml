@@ -1,0 +1,154 @@
+format: 1
+kind: module
+name: m2-oc192-xp-xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia (Alcatel-Lucent) 7750 SR 2-port OC-192/STM-64 XFP MDA-XP, M2-OC192-XP-XFP (3HE05947AA), a
+  classic half-slot MDA for the IOM3-XP drawn in the guide's later style: two XFP cages for
+  OC-192c/STM-64c SONET/SDH, ports 1 and 2 left to right, each with its Lnk, Act and Laser Dis.
+  lamps printed beneath, the Stat and Pwr lamps at the upper left, an ESD mark at the upper right, a
+  Phillips captive screw at the centre of each end and an ejector lever block in each lower corner.
+  Authored horizontal; an SR-12 IOM3-XP seats it on end with the carrier.
+unplaced: >-
+  Seated by the classic MDA bays (mda-1, mda-2) of nokia/iom3-xp@1; wired by the IOM3-XP's
+  accepts list, which is not edited in this change.
+size: {w: 190.5, h: 35.4, d: 177.8}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  The chassis guides give MDAs 1.4 x 7.5 x 7.0 in (3.56 x 19.05 x 17.78 cm, SR7 p106 Table 47).
+  Held at 190.5 x 35.4 so it seats in the IOM3-XP's MDA bays on the 35.4 slot pitch; Figure 6 is
+  fitted per axis to that face, lever blocks included.
+attrs:
+  model: M2-OC192-XP-XFP
+  part-number: 3HE05947AA
+  oc192: 2
+  power-draw-max-w: 47
+provenance:
+  sources: >-
+    datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p32 Figure 6 and p32-33 Table 6
+    (the face, its lamps and screws), p18 Table 2 (power), p19 Table 3 (optics power), p9 (the
+    model list, "2-pt OC192 MDA-XP"). SR7 22.7 3HE18643AAAATQZZA03 p106 Table 47 (MDA size). SR7
+    15.1 3HE14151AAAATQZZA02 p98 Table 32 (part number, "7750 SR 2-port OC-192/STM-64 - XFP
+    MDA-XP", 3HE05947AA, no second number; the 22.7 edition no longer lists it).
+  size: 'datasheet - SR7 p106 Table 47; see size-notes'
+  layout: >-
+    drawing - MXP p32 Figure 6 (art al_0102), vector (pdfimages finds no raster), rendered at 1200
+    dpi. Fitted per axis: 3807 px across the plate to 190.5 (19.99 px/mm) and 701 px from the top
+    line to the bottom of the lever blocks to 35.4 (19.80 px/mm), 0.9 percent apart. THE OUTLINE IS
+    NOT THE MDA00xx ONE: no notches; an ejector lever block in each lower corner (x 0-31.84 and
+    158.62-190.5, from y 27.92) runs to the bottom edge and the plate between them stops at y 33.26,
+    the same outline Figures 7 and 10 draw to within 0.05 mm, and the reverse of the older MDA0077
+    drawing of nokia/m10-1gb-xp-sfp@1, whose end wings stop at y 28.25. Modelled as drawn. Stat
+    (10.51, 4.75) and Pwr (10.51, 9.95), drawn 2.9 across, legends to the left. Captive screws
+    (key 7) centred (6.76, 22.0) and (184.14, 22.0), rings 10.5 across, Phillips heads. ESD mark 8.2
+    x 7.3 at the upper right, centred x 184.84. XFP bezels 21.07 x 11.16 at x 110.48 and 146.91, y
+    1.92, each around an inner opening 19.21 x 9.65 centred (121.09, 7.50) and (157.47, 7.50);
+    port numerals 1 and 2 at their upper right; a bracket line under each bezel at y 13.77 with
+    "XFP" between them. Beneath each cage Lnk, Act and Laser Dis. (keys 4, 5 and 6), lamps drawn 2.9
+    across on y 18.63 at x 113.28, 118.44 and 128.70 for port 1 and 149.94, 155.02 and 165.37 for
+    port 2, legends above them on baseline 16.65.
+  legends-under-levers: >-
+    drawing - the model legend M2-OC192-XP-XFP is in the page's text layer (x 152.67-174.75,
+    baseline 31.36) and under the figure's right lever block, with only "M2-" showing. It sits
+    where the older MDA00xx art put its model legend (M10-1GB-XP-SFP ends at x 174.3, baseline
+    32.6), which reads as ink carried over from that template and drawn over by the lever; ink a
+    lever covers is not seen on the card, so it is not drawn and no model-label element is
+    declared. Where the real card prints its model name is a gap.
+  cages: >-
+    drawing + standard - each port is std/xfp@1 (INF-8077i aperture 19.5 x 9.7) centred on its drawn
+    opening, which the figure draws 19.21 x 9.65; the rest of the drawn box is the bezel. Figure 6
+    draws a duplex LC optic seated in each cage; the cage is modelled, not the optic. One row, so
+    both cages are rotate 0.
+  sonet-rate: >-
+    datasheet - the ports are OC-192/STM-64 (SR7 15.1 p98 "2-port OC-192/STM-64 - XFP MDA-XP"; MXP
+    p32 "2-Port M2-OC192 XFP MDA-XP"). The XFP cage cannot say this: an XFP takes a 10GbE optic and
+    an OC-192 one, both at about 10 Gb/s, and the framing is what differs. The card states `oc192:
+    2`, as cisco/spa-oc192pos-xfp@1 and juniper/mic-3d-1oc192-xfp@1 do, which the exporter reads
+    before the cage default and types each port sonet-oc192. The ports' `speed` is 10g, the rung of
+    spec/schemas/speeds.yaml that OC-192's 9.953 Gb/s line rate falls on.
+  lamps: >-
+    datasheet - MXP p32-33 Table 6: Status green blinking initializing, green up, amber
+    operationally down, unlit administratively down; Power blue on, off no power; Lnk green valid
+    link, amber slow blinking no XFP installed, amber optics installed and no link, unlit disabled;
+    Act green active, amber error condition, unlit no activity; Laser Disabled amber laser disabled,
+    off laser on. No blink rates are given. Every lamp is drawn 2.9 across and composed as
+    common/led-indicator@1 at its drawn centre.
+  power: >-
+    datasheet - SR7 15.1 p98 Table 32: 3HE05947AA 47 W worst case. MXP p18 Table 2 gives "M2-OC192
+    XFP MDA-XP (2-port)" 36 W maximum. Same measure (the card's maximum, optics excluded in both -
+    MXP p19 Table 3 lists XFP optics at 4 W each separately), same scope, different value: the
+    sources disagree (see gaps). The higher, later figure is carried, so a budget built on it is not
+    short.
+  colour: >-
+    estimated - no photograph of an MDA-XP is held. Drawn in the charcoal of the SR-7/SR-12 card
+    family; printing, including the ESD mark, in the family's white, since the figure is line art
+    and states no colour. A gap.
+  logo-zone: 'reserved on the plain plate between the status lamps and the cages; Figure 6 draws no mark'
+  depth: 'datasheet - 7.0 in (17.78 cm), SR7 p106 Table 47'
+  lifecycle: 'searched only the staged corpus - the MDA-XP guide and the 15.1 chassis guide list it; the 22.7 chassis guide does not'
+  gaps: >-
+    Power: sources-disagree - SR7 15.1 p98 Table 32 47 W worst case against MXP p18 Table 2 36 W
+    maximum; 47 is carried. Colour is estimated. The mda-type CLI string is not printed for this
+    card in anything held, nor is a 7450 ESS part number. The lever blocks carry no relief: no
+    document gives their projection. The lever blocks sit where nokia/iom3-xp@1 puts its divider
+    foot and its own ejector levers over an MDA bay's lower corners (the MDA00xx notches, 15.5 wide
+    below y 28.25), so seated in that carrier the IOM's furniture is drawn over them; the two
+    figures disagree about what occupies those corners and nothing held settles it. The model
+    legend's position is not known (provenance.legends-under-levers).
+elements:
+  screw-left: {at: [1.51, 16.75], size: [10.5, 10.5], class: screw}
+  screw-right: {at: [178.89, 16.75], size: [10.5, 10.5], class: screw}
+  lever-left: {at: [0.0, 27.92], size: [33.07, 7.48], class: latch}
+  lever-right: {at: [157.43, 27.92], size: [33.07, 7.48], class: latch}
+  esd-mark: {at: [180.74, 1.78], size: [8.2, 7.26], class: label}
+  logo-zone: {at: [40.0, 8.0], size: [55.0, 10.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw head, itself borrowed. NOT MEASURED'}
+groups:
+  oc192:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g}
+    description: >-
+      the 2 XFP cages, OC-192c/STM-64c SONET/SDH, ports 1 and 2 left to right, as Figure 6 numbers
+      them
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Lnk lamp per port, the first under each cage
+  activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Act lamp per port, the second under each cage
+  laser-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Laser Dis. lamp per port, the third under each cage
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the upper left
+parts:
+  - {ref: std/xfp@1, id: port-1, group: oc192, at: [111.30, 2.67], attrs: {media: xfp, speed: 10g}}
+  - {ref: std/xfp@1, id: port-2, group: oc192, at: [147.71, 2.67], attrs: {media: xfp, speed: 10g}}
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [8.51, 2.75], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down, shut down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [8.51, 7.95], attrs: {description: 'Pwr - blue: on; off: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+  - {ref: common/led-indicator@1, id: lnk-1, group: link-leds, at: [111.28, 16.63], attrs: {description: 'Lnk - green: valid communications link established; amber slow blinking: no XFP installed; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-1, group: activity-leds, at: [116.44, 16.63], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition (send or receive errors); unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: laser-1, group: laser-leds, at: [126.70, 16.63], attrs: {description: 'Laser Dis. - amber: laser disabled; off: laser on'}, states: {lamp: ['off', {name: laser-disabled, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: lnk-2, group: link-leds, at: [147.94, 16.63], attrs: {description: 'Lnk - green: valid communications link established; amber slow blinking: no XFP installed; amber: optics installed, no link present; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: act-2, group: activity-leds, at: [153.02, 16.63], attrs: {description: 'Act - green: port active, receiving or transmitting data; amber: error condition (send or receive errors); unlit: no activity'}, states: {lamp: ['off', {name: active, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: laser-2, group: laser-leds, at: [163.37, 16.63], attrs: {description: 'Laser Dis. - amber: laser disabled; off: laser on'}, states: {lamp: ['off', {name: laser-disabled, color: '#f5a623'}]}}
+connection-points:
+  mate: {at: [95.25, 17.7], direction: rear}
+skins: [default]
