@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: lc-7124-2xfp-b
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Telco Systems LC-7124-2XFP-B - the TM-7124S plug-in line card: two 10GE XFP cages with
+  a Link/Act lamp each, and six small coaxial clock jacks in two groups of three, "Sync
+  Clock" and "Phase" (data sheet: "2x10GE XFP ports, sync clock and phase clock").
+size: {w: 166.0, h: 30.58}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: LC-7124-2XFP-B
+  power-absent: not-published
+  xfp: 2
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g}
+    description: two 10GE XFP ports, 2/1 and 2/2 as the face prints them - slot 2 of the chassis.
+  clocks:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: coax-smb}
+    description: >-
+      the card's timing jacks, three under "Sync Clock" and three under "Phase" - the sync
+      and phase clock the data sheet names, which discipline the box's timing rather than
+      carry traffic.
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  identity: >-
+    datasheet - ordered as LC-7124-2XFP-B, "Plug-in line card with 2x10GE XFP ports, sync
+    clock and phase clock"; the face prints LC-7124-2XFP-B. The stencil master is named
+    LC-7124-2XFB-B, a typo, and draws an OLDER card - three BNC jacks where this one has six
+    small gold jacks - so it is not used for this part's layout.
+  size: >-
+    estimated - 166.0 x 30.58: the 2025 render, rectified, shows the card from x 154.1 to
+    about 319.3 on the chassis (the stencil's older card is 171.46 wide), and the slot's
+    height is the stencil's.
+  elements: >-
+    photo-measured off the rectified 2025 render at about 1.6 px/mm (good to about a
+    millimetre): XFP openings 18.1 x 7.6 centred at (34.85, 13.7) and (64.5, 13.7), Link/Act
+    lamps at (49.8, 18.8) and (79.6, 18.8), six gold jacks on a 10.4 pitch from x 90.4 at y
+    16.8, thumbscrews at x 4.7 and 162.2.
+  clocks: >-
+    THE JACK TYPE IS AN ESTIMATE. At 1.6 px/mm the six jacks read as small gold barrels about
+    5 mm across in square nut frames, which is SMB-sized; common/smb-jack@1 is used. Which
+    three are inputs and which outputs, and at what frequency, no document says.
+  power: >-
+    NOT STATED anywhere held.
+states: [absent]
+elements:
+  thumbscrew-left: {at: [1.5, 11.4], size: [6.4, 6.4], class: fastener}
+  thumbscrew-right: {at: [158.8, 11.4], size: [6.4, 6.4], class: fastener}
+parts:
+  - {ref: std/xfp@1, id: port-1, at: [25.1, 8.81], group: xfp, attrs: {speed: 10g}}
+  - {ref: std/xfp@1, id: port-2, at: [54.75, 8.81], group: xfp, attrs: {speed: 10g}}
+  - {ref: common/led-dot@1, id: led-port-1, at: [48.8, 17.8], group: port-leds}
+  - {ref: common/led-dot@1, id: led-port-2, at: [78.6, 17.8], group: port-leds}
+  - {ref: common/smb-jack@1, id: sync-clock-1, at: [86.9, 13.26], group: clocks}
+  - {ref: common/smb-jack@1, id: sync-clock-2, at: [97.6, 13.26], group: clocks}
+  - {ref: common/smb-jack@1, id: sync-clock-3, at: [108.0, 13.26], group: clocks}
+  - {ref: common/smb-jack@1, id: phase-1, at: [118.1, 13.26], group: clocks}
+  - {ref: common/smb-jack@1, id: phase-2, at: [128.5, 13.26], group: clocks}
+  - {ref: common/smb-jack@1, id: phase-3, at: [138.9, 13.26], group: clocks}
+connection-points:
+  mate: {at: [83.0, 15.29], direction: rear}
+skins: [default]
