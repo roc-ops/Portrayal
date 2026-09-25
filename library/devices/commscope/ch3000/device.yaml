@@ -142,18 +142,14 @@ groups:
     role: traffic
     index-origin: 1
     description: the full-depth module slots, identical and taking any active module from the front
-  psu-back-plates:
+  inlet-plates:
     term: Slot
     role: service
     index-origin: 1
-    attrs:
-      redundancy: '1+1'
-      redundancy-note: >-
-        PS3006 data sheet, Features - "Supports redundant power supplies", and the PS3006N's
-        B/U PS lamp is "Lit if second power supply is present within chassis". The sheet
-        names redundancy as the only reason for a second supply and never a combined
-        rating, so two are read as the same capacity twice; the form is not stated.
-    description: the BP-P1 back plate behind each power supply, carrying its AC inlet
+    description: >-
+      the BP-P1 back plate behind each power supply, carrying its AC inlet. The supplies'
+      redundancy is stated once, on the psus group; these plates are the supplies' inlets
+      and not a second set of supplies.
   back-plates:
     term: Slot
     role: traffic
@@ -194,7 +190,7 @@ views:
         - {at: [0, 131.4], size: [433.0, 1.2], fill: '#111213'}
     components:
       bays:
-        - {id: rear-1-2, at: [377.56, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: psu-back-plates, rel-pos: 2}
+        - {id: rear-1-2, at: [377.56, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: inlet-plates, rel-pos: 2}
         - {id: rear-3, at: [350.8, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 3}
         - {id: rear-4, at: [324.04, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 4}
         - {id: rear-5, at: [297.28, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 5}
@@ -209,7 +205,7 @@ views:
         - {id: rear-14, at: [56.44, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 14}
         - {id: rear-15, at: [29.68, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 15, only-in: [base, ar3002e-x14]}
         - {id: rear-16, at: [2.92, 1.2], size: {w: 25.76, h: 130.2}, opening: {w: 26.76, h: 130.2}, accepts: [commscope/bp-a5@1], group: back-plates, rel-pos: 16, only-in: [base, ar3002e-x14]}
-        - {id: rear-15-16, at: [2.92, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: psu-back-plates, rel-pos: 16, only-in: [redundant-power]}
+        - {id: rear-15-16, at: [2.92, 1.2], size: {w: 52.52, h: 130.2}, opening: {w: 53.52, h: 130.2}, accepts: [commscope/bp-p1@1], default: commscope/bp-p1@1, group: inlet-plates, rel-pos: 16, only-in: [redundant-power]}
   left:
     size: {w: 337.8, h: 132.6}
     panel:
