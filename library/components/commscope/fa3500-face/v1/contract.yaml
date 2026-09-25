@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: fa3500-face
+version: 1.0.0
+class: bezel
+profile: optical
+description: >-
+  The faceplate every CommScope (ARRIS / Aurora) FA3500-series EDFA shares, composed by
+  each model's own module: "EDFA" over the printed model number, the Status and Access
+  lamps, five vent slots, and the laser On/Off key switch with its OFF lamp. The model
+  number is the `model` field; nothing else on the face differs between models.
+size: {w: 25.76, h: 130.2}
+size-confidence: {w: photo-measured, h: photo-measured}
+fields:
+  model:
+    label: Model number printed under EDFA
+    type: text
+    default: ''
+provenance:
+  size: >-
+    photo-measured. Width is one CH3000 slot pitch less the faceplate gap (26.76 - 1.0,
+    see the ch3000 device). The FA3500 data sheet's (87-10007 Rev AA) face-on photograph
+    of an FA3524 (p1, 330 x 1088) outlines the plate at 212.5 x 1068 px, 8.25 px/mm across
+    and 8.20 down, within 0.6% of 25.76 x 130.2, so it is measured directly.
+  face-features: >-
+    photo-measured on the same photograph: "EDFA" over "FA3524" at the top; the Status box
+    7.2-18.8 across and 28.2-44.5 down with three lamps at 32.7, 36.9 and 41.1 on the
+    plate's centre line; the Access box 46.5-53.6 with one lamp at 50.9; two long vent
+    slots 2.6-4.9 and 20.8-23.1 across from 29.4 to 88.5, and three shorter ones between
+    them from 54.9, through which the circuit board shows; the legends OFF and ON either
+    side of "Laser", an OFF lamp at 4.9, 95.5, and the key switch centred 13.2, 105.6,
+    about 12.9 across.
+  model-print: >-
+    the photographed FA3524S prints "FA3524" - the model without its S suffix - so each
+    model passes the same six characters. Whether a gain-flattened FA3521F prints the F is
+    not shown on any photograph held.
+  laser-switch: >-
+    datasheet - "Front panel laser On/Off interlock switch"; the photograph shows it as a
+    keyed switch between the printed OFF and ON positions, with a lamp beside OFF.
+  lamps: >-
+    the Status lenses read green, yellow and red top to bottom and the OFF lamp red on the
+    photograph; the data sheet gives no colour or meaning for any lamp, so, as on the
+    AR3002E, they carry their legend's function and no colour.
+elements:
+  screw-top: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
+  vent-left: {at: [2.6, 29.4], size: [2.3, 59.1], class: vent}
+  vent-inner-1: {at: [7.1, 54.9], size: [2.3, 33.6], class: vent}
+  vent-inner-2: {at: [11.6, 54.9], size: [2.3, 33.6], class: vent}
+  vent-inner-3: {at: [16.2, 54.9], size: [2.3, 33.6], class: vent}
+  vent-right: {at: [20.8, 29.4], size: [2.3, 59.1], class: vent}
+  laser-key: {at: [6.75, 99.15], size: [12.9, 12.9], class: control}
+  screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
+parts:
+  - {ref: common/led-dot@1, id: led-status-1, at: [12.2, 31.7], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-2, at: [12.2, 35.9], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-3, at: [12.2, 40.1], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-access, at: [12.2, 49.9], attrs: {function: activity}}
+  - {ref: common/led-dot@1, id: led-laser-off, at: [3.9, 94.5], attrs: {function: laser}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]

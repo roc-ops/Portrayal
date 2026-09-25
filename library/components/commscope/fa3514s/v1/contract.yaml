@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: fa3514s
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (Aurora / ARRIS) FA3514S-00 - FA3500-series 1550 nm EDFA, single amplifier, 14 dBm
+  nominal output, one full-depth CH3000 slot. Its optical ports are on the back plate:
+  BP-F2 (SC/APC) or BP-F2-AL (LC/APC).
+size: {w: 25.76, h: 130.2, d: 330.2}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: FA3514S-00
+  role: amplifier
+  amplifier: single amplifier
+  output-power-nominal: 14 dBm
+  power-draw-max-w: 6
+  back-plate: BP-F2 (SC/APC) or BP-F2-AL (LC/APC)
+provenance:
+  size: >-
+    borrowed - commscope/fa3500-face@1, the face every FA3500 model shares, whose own
+    figures are photo-measured. The data sheet's "13.0 D x 5.25 H x 1.0 W" is the body
+    without connectors; its 13.0 in (330.2 mm) is taken as depth.
+  power: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Performance Parameters, "Power
+    Consumption, max (Watts)": 6 W. No ambient is given with it.
+  figures: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), Performance Parameters, the FA3514S-00
+    row: model type single amplifier, nominal output power 14 dBm, power consumption 6 W max.
+  face: >-
+    the model prints as "FA3514" on the shared face, as the photographed FA3524S prints
+    "FA3524"; see commscope/fa3500-face@1's model-print.
+parts:
+  - {ref: commscope/fa3500-face@1, id: face, at: [0, 0], attrs: {model: FA3514}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
