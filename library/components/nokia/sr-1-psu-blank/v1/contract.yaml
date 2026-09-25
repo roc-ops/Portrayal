@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: sr-1-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The AC PSU blank plate of the 7750 SR-1 (FP4) AC chassis: a box-shaped filler that closes
+  an empty PSU slot. The AC chassis ships with one PSU and this blank for PSU slot 2. Its
+  face carries two grip handles, squeezed toward each other (the printed arrows point
+  inward) to release the spring latch on each side. Nokia gives it no separate part number;
+  it ships with the chassis.
+size: {w: 73.7, h: 40.6}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  borrowed from nokia/sr-1-psu-ac@1, the supply whose slot the blank fills; no document
+  dimensions the blank
+attrs:
+  model: 7750 SR-1 AC PSU blank plate
+  role: slot-blank
+provenance:
+  sources: >-
+    datasheet - 7750 SR-1 Chassis Installation Guide 25.10, 3HE22130AAAATQZZA01 (SR1):
+    section 7.3 p163 with Figure 53 and Table 61, section 11.3.5 p226 with Figure 80 and
+    Table 83 (both isometric), and the note on p73. No photograph is staged.
+  size: >-
+    borrowed - nokia/sr-1-psu-ac@1 (SR1 Table 36 p94, 73.7 x 40.6), the supply whose slot
+    this blank fills. SR1 gives the blank no dimensions and no part number; it ships with
+    the AC chassis for PSU slot 2 when no second supply is ordered (p163), and "is mandatory
+    any time that a PSU slot is empty".
+  depth: >-
+    NOT STATED. Figures 53 and 80 draw the blank as a shallow box, a fraction of the
+    supply's depth; no figure is given, so none is written.
+  layout: >-
+    drawing (perspective, fractions only) - Figure 80 p226 draws the face with two grip
+    handles (Table 83 key 1, "Handles"), about an eighth and seven-eighths of the way
+    across, and a grey arrow between them pointing inward from each; the side latches
+    (Table 61 key 3, "Blank plate side latch; one on each side") are on the sides, not the
+    face. The positions are placed symmetric about the centre and are estimated.
+  colour: 'estimated - no photograph; drawn in the same grey as the supply'
+  lifecycle: 'searched only the staged corpus; not listed as a separately orderable item'
+elements:
+  handle-left: {at: [15.0, 10.3], size: [5.0, 20.0], class: handle}
+  handle-right: {at: [53.7, 10.3], size: [5.0, 20.0], class: handle}
+relief:
+  features:
+    - node: handle-left
+      out: 4.0
+      confidence: estimated
+      source: the grips stand off the face in Figure 80 (isometric); no document gives a figure
+    - node: handle-right
+      out: 4.0
+      confidence: estimated
+      source: the same grip as handle-left, one estimate for both
+connection-points:
+  mate: {at: [36.85, 20.3], direction: rear}
+skins: [default]

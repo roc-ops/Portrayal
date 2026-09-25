@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: cpm-e
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR-e CPM-e, the control processor module of the SR-1e, SR-2e and SR-3e, seated
+  from the rear in CPM A or CPM B: a plain plate with a captive screw on a raised tab at each
+  top corner, one Pwr/Stat lamp, the printed module label and an ejector lever at each end
+  of the bottom edge. It has no ports; its management face is the paired CCM-e at the front.
+  Authored horizontal, as the guide draws it.
+size: {w: 259.1, h: 35.4, d: 292.1}
+size-confidence: {w: datasheet, h: drawing, d: datasheet}
+size-notes: >-
+  w is SRE p86 Table 28's 10.2 in, which the rear view measures at 258.4; h is the 35.4 slot
+  pitch of the wave-1 convention (the table gives 1.4 in).
+attrs:
+  model: 7750 SR-e CPM-e
+  weight-kg: 1.5
+  power-draw-max-w: 60
+  power-draw-typical-w: 50
+provenance:
+  size: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p86 Table 28: 1.4 x 10.2 x 11.5 in (3.56 x 25.91 x
+    29.21 cm). The width measures 258.4 on the SR-1e rear view (SRE p45) and 4567 px across
+    Fig 12 at 1200 dpi; h is held at the 35.4 pitch the front and rear cages share (SRE p45
+    rear CPM pitch 35.6).
+  depth: 'datasheet - 11.5 in (292.1 mm), SRE p86 Table 28'
+  weight: 'datasheet - 1.5 kg (3.31 lb), SRE p86 Table 28'
+  power: >-
+    datasheet - SRE p84 Table 27: CPM-e idle 45, zero traffic 45, typical 50, worst case 60 W;
+    worst case is at 55C (SRE p83).
+  part-number: >-
+    NOT STATED - no table in the SR-e guide gives the CPM-e an orderable part number. Left off
+    the attrs rather than guessed.
+  layout: >-
+    drawing - SRE p55 Fig 12 (art 25560) at 1200 dpi, 17.63 px/mm, read on a 1 mm grid. The
+    drawing spans 34.0 from the top of the screw tabs to the bottom of the levers, so it is
+    centred in the 35.4 slot (0.7 either side): tabs from y 0.7, the plate's top edge at 2.3,
+    its ends' bottom edge at 31.3, the levers and the middle of the plate down to 34.7. The
+    raised tabs span 0-13.5 and 245.6-259.1. Screw centres (5.6, 8.2) and (251.3, 8.2), heads
+    11.0 (the left read 5.3 and is moved in 0.3 to keep the head on the plate; the two are
+    NOT symmetric in the figure and are left as read). Pwr/Stat lamp centre (40.4, 27.6) with
+    "Pwr" to its left and "Stat" to its right; the label "7750 SR-e CPM-e" centred at 217.1.
+    Levers 11.5-75.1 and 180.1-247.4 (Table 9 key 3: "one lever on each side ... shown in the
+    closed and locked position"). SRE p195 Fig 64 is the same art.
+  lamps: >-
+    datasheet - SRE p195 Table 69: one Pwr/Stat lamp - blue solid powered on, unlit no power,
+    green slow blink loading firmware and diagnostics (about 30 s), green solid primary, green
+    blink secondary. No RGB given; blue #1e73d8 and green #39b54a are the library's.
+  colour: >-
+    estimated - no photograph is staged (PUBLIC-SOURCES lists DS 189831, the SR-e datasheet
+    cut-out). Drawn in the charcoal of the MDA-e family with light print. A gap.
+  pairing: 'datasheet - SRE p54: each CPM-e is paired one-to-one with a CCM-e (A with A, B with B)'
+  logo-zone: 'reserved on the plain plate between the lamp and the label; Fig 12 draws no mark'
+  relief: >-
+    borrowed - screws and levers take nokia/nelt-b@1's figures (cyl 1.6 knurled; lever out
+    4.2), which are themselves borrowed library figures. NOT MEASURED.
+  lifecycle: 'searched only the staged corpus - listed in SRE 21.10; no end-of-life notice searched on the web'
+elements:
+  screw-left: {at: [0.1, 2.7], size: [11.0, 11.0], class: screw}
+  screw-right: {at: [245.8, 2.7], size: [11.0, 11.0], class: screw}
+  lever-left: {at: [11.5, 31.3], size: [63.6, 3.4], class: latch}
+  lever-right: {at: [180.1, 31.3], size: [67.3, 3.4], class: latch}
+  logo-zone: {at: [100.0, 10.3], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#5a6066', confidence: estimated, source: 'nokia/nelt-b@1 ejector lever, the library one figure for a lever. NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#5a6066', confidence: estimated, source: 'nokia/nelt-b@1 ejector lever, the library one figure for a lever. NOT MEASURED'}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one Pwr/Stat lamp
+parts:
+  - {ref: common/led-dot@1, id: led-pwr-stat, group: status-leds, at: [39.4, 26.6], states: {lamp: ['off', {name: powered, color: '#1e73d8'}, {name: loading, color: '#39b54a', behavior: blinking}, {name: primary, color: '#39b54a'}, {name: secondary, color: '#39b54a', behavior: blinking}]}}
+connection-points:
+  mate: {at: [129.55, 17.7], direction: rear}
+skins: [default]

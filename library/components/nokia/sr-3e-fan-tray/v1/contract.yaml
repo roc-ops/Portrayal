@@ -1,0 +1,145 @@
+format: 1
+kind: module
+name: sr-3e-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR-3e fan tray (3HE10306AA, "FAN - 7750 SR-3e Fan Tray (with 22 axial fans)"),
+  the single hot-swappable cooling unit of the 7750 SR-3e. It slides into the vertical slot at the
+  right of the chassis rear and pulls air from the front intake through the card cage. Drawn is
+  its rear face, upright as it sits: a label strip down the left edge carrying the PWR/STAT lamp at
+  the top, the printed chassis name and FAN TRAY, and two ESD marks at the foot; to its right a
+  honeycomb exhaust grille between two perforated handle panels, each with a U pull handle and a
+  captive screw. Fan trays are chassis-specific (SR-e guide p66 Table 17): the
+  7750 SR-1e and 7750 SR-2e trays are separate parts of the same design.
+size: {w: 137.2, h: 513.1, d: 452.1}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 7750 SR-3e FAN TRAY
+  part-number: 3HE10306AA
+  weight-kg: 8.2
+  fans: '22'
+  airflow: front-to-back
+  power-draw-max-w: 1096
+  power-draw-typical-w: 111
+provenance:
+  sources: >-
+    7750 SR-1e, SR-2e and SR-3e Chassis Installation Guide 21.10, 3HE17927AAAATQZZA03 (the SR-e
+    guide): p66 Table 17 (part number, fan count), p86 Table 28 (dimensions, weight), p84 Table 27
+    (power), p69 and p189-190 Figure 61 / Table 66 (the lamp), Figure 21 (p68) (isometric of the unit)
+    and the chassis rear view Figure 11 (p52). Every figure on those pages is vector art
+    (pdfimages -list finds no raster), so a 1200 dpi render is exact at any scale. No photograph of
+    any SR-e fan tray is staged.
+  size: >-
+    datasheet - SR-e guide p86 Table 28: 20.2 x 5.4 x 17.8 in (H x W x D). The face is
+    W x H = 137.2 x 513.1 mm, the tray standing upright in the chassis's vertical slot.
+  size-drawn: >-
+    drawing - p189 Figure 61 draws the three trays face-on side by side; this one measures
+    1179 x 4502 px at 1200 dpi = 137.2 x 524.0 mm at 8.593 px/mm - 2.1 percent TALLER than the stated 513.1, as the SR-3e rear figure is drawn too tall (device nokia/sr-3e, gap sr3e-rear-figure-height); the stated size is used. The rear view Figure 11 (p52) draws the tray about 139 wide, the
+    difference being the outline stroke.
+  depth: 'datasheet - 17.8 in = 452.1 mm, SR-e guide p86 Table 28'
+  weight: 'datasheet - 8.2 kg, SR-e guide p86 Table 28'
+  power: >-
+    datasheet - SR-e guide p84 Table 27 "System Component Power Consumption Values in Watts":
+    idle 111 / zero traffic 111 / typical 111 / worst case 1096. Worst case is
+    100 percent line rate at 55 C (p83), which for a fan tray means full speed; the typical figure
+    is at 25 C. The table excludes optics, which do not concern a fan tray.
+  layout: >-
+    drawing - p189 Figure 61 at 1200 dpi, measured on a millimetre grid laid over the render
+    (8.58-8.59 px/mm). Label strip 0-19.5 across with two rails at x 12.3 and 14.3; handle panels
+    0-52.3 and 460.8-513.1 down, the grille between. Each handle pivots on two bosses at
+    x 31.0 and 126.5, 13.0 in from the end, and its bar runs 43 in; the captive screw sits at
+    x 101.0 on the pivot line. Lamp centre (6.5, 14.2); PWR above it and STAT below. The printed
+    "7750 SR-3e" runs bottom to top centred near y 58, "FAN TRAY" near y 262, and two ESD
+    marks sit at the foot of the strip. The same layout, at the same offsets from each end, is
+    drawn for all three trays, which is why one set of numbers serves them.
+  honeycomb: >-
+    drawing - the grille and the two handle panels are drawn as grey hexagons; the cell size here
+    (5.5 mm and 2.9 mm circumradius) is matched by eye to Figure 61, not counted cell for cell.
+  status-led: >-
+    datasheet - SR-e guide p190 Table 66 (label FAN / STAT): blue solid during initial power-up;
+    unlit, no power or faulty power; green solid, operational and talking to the CCM-e; amber
+    blinking, a fault condition (an alarm is raised). p69: the LED is "located at the top-left
+    corner on the front panel of each fan tray". Figure 61 prints PWR above the lamp and STAT
+    below it; it is one lamp.
+  handles: >-
+    drawing - SR-e guide p45/p48/p52 and p189 draw a U handle at the top and at the bottom of the
+    tray; p147 Figure 44 key 2 names the knurled screw beside each one "Captive screw". How far the
+    handles stand off is not given anywhere (see relief).
+  colour: >-
+    estimated - no photograph of an SR-e fan tray is staged (working/intake/nokia/PUBLIC-SOURCES.md
+    lists chassis photographs only, none staged); a charcoal finish is assumed to match the
+    chassis.
+  logo-zone: 'reserved by the family convention; the figures print no mark on this tray'
+  airflow: >-
+    datasheet - SR-e guide p65: air enters at the front intake and "exits through the fan tray in
+    the rear of the chassis"; the tray pulls, so its airflow is front-to-back.
+  lifecycle: >-
+    not searched beyond the staged corpus; the 21.10 guide (2021-2024 copyright) still lists the
+    part.
+elements:
+  label-strip: {at: [0.6, 0.6], size: [18.3, 511.9], class: label}
+  grille: {at: [19.5, 52.3], size: [117.7, 408.5], class: vent}
+  panel-top: {at: [19.5, 0.0], size: [117.7, 52.3], class: vent}
+  panel-bottom: {at: [19.5, 460.8], size: [117.7, 52.3], class: vent}
+  handle-top: {at: [25.2, 7.2], size: [107.1, 37.5], class: latch}
+  handle-bottom: {at: [25.2, 468.4], size: [107.1, 37.5], class: latch}
+  screw-top: {at: [95.7, 7.7], size: [10.6, 10.6], class: screw}
+  screw-bottom: {at: [95.7, 494.8], size: [10.6, 10.6], class: screw}
+  esd-marks: {at: [6.5, 495.1], size: [5.8, 14.0], class: label}
+  logo-zone: {at: [2.5, 278], size: [8.5, 14.0], class: label}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the fan tray's single PWR/STAT lamp, top left of the label strip
+parts:
+  - {ref: common/led-indicator@1, id: led-stat, group: status-leds, at: [4.5, 12.2],
+     states: {lamp: ['off', {name: power-up, color: '#2f7fe0'}, {name: 'on', color: '#39b54a'},
+                     {name: fault, color: '#f0a020', behavior: blinking}]}}
+relief:
+  wall: '#2b2f33'
+  features:
+    - node: grille-holes
+      vent: 30.0
+      confidence: estimated
+      source: >-
+        the fans sit behind the grille (p67 Figure 20 isometric shows them behind the face); the
+        depth to the fan plane is not dimensioned
+    - node: panel-top-holes
+      vent: 10.0
+      confidence: estimated
+      source: as grille-holes; the handle panels are perforated over a shallower plenum by eye
+    - node: panel-bottom-holes
+      vent: 10.0
+      confidence: estimated
+      source: as panel-top-holes
+    - node: handle-top
+      uhandle: 22.0
+      dia: 3.4
+      confidence: estimated
+      source: >-
+        p67 Figure 20 and p147 Figure 44 (isometric) show the U handles standing well off the face;
+        no figure dimensions them
+    - node: handle-bottom
+      uhandle: 22.0
+      dia: 3.4
+      confidence: estimated
+      source: as handle-top
+    - node: screw-top
+      cyl: 6.0
+      knurl: true
+      confidence: estimated
+      source: >-
+        p147 Figure 44 key 2 "Captive screw", drawn knurled; its height is not dimensioned
+    - node: screw-bottom
+      cyl: 6.0
+      knurl: true
+      confidence: estimated
+      source: as screw-top
+connection-points:
+  mate: {at: [68.6, 256.55], direction: rear}
+skins: [default]
