@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: sr-7-air-filter
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: networking
+description: >-
+  The air filter assembly of the 7750 SR-7 / 7450 ESS-7: a reusable filter tray faceplate
+  with the replaceable filter tray (3HE00190AA, "FLT - 7x50 SR/ESS-7 AIR FILTER") held to it by
+  a Velcro strip. It slides in upright at the left of the chassis rear, beside the fan tray,
+  and filters the air entering at the chassis's right side. The face is the faceplate: plain
+  sheet metal with a captive screw at the top and at the bottom of its right edge and a pull
+  handle. Inspect monthly and replace the filter tray when dirty.
+size: {w: 67.0, h: 305.6}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  no document states the faceplate's size; measured on the chassis rear, SR7 Fig 8 p51
+attrs:
+  model: 7x50 SR/ESS-7 air filter tray
+  part-number: 3HE00190AA
+provenance:
+  sources: >-
+    SR7 = 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03: Fig 8
+    p51 (chassis rear, key 1 "Air Filter Tray faceplate"), p85 Table 25 (part number), Fig 22
+    p86 and Table 26 (isometric, keys), Fig 78 p237 and Figs 79-80 pp239-240 (removal). Vector
+    art; no photograph.
+  part-number: >-
+    datasheet - SR7 Table 25 p85: 3HE00190AA "FLT - 7x50 SR/ESS-7 AIR FILTER", the REPLACEABLE
+    filter tray. The faceplate it rides on is reusable (p85) and has no number of its own; the
+    face drawn here is the faceplate's.
+  size: >-
+    drawing - SR7 Fig 8 p51 at 1200 dpi (12.188 px/mm): the faceplate runs from the chassis
+    edge line to the fan tray's, 67.5 across (the conventions' 67.0, chassis x 6.9-73.9), and
+    305.6 down (y 1.3-306.9). No depth is stated.
+  layout: >-
+    drawing - same render, mm from the faceplate top-left: a fold line 0.9 in from the left
+    edge; captive screws centred (55.3, 11.9) and (55.3, 292.4), head 7.5 (Table 26 key 1:
+    "two on the filter tray faceplate").
+  handle: >-
+    drawing (isometric, placed by estimate) - Table 26 key 2 "Handle on the air filter tray
+    faceplate"; Fig 22 p86 and Fig 78 p237 draw a vertical bar handle on the face, but Fig 8
+    p51 omits it. It is drawn as a 5 mm bar from y 100 to 200 at mid-width; position and length
+    are estimates from the isometrics. A gap.
+  airflow: >-
+    datasheet - SR7 Fig 22 key 4 (air flow direction through the filter) and p82: the intake is
+    at the chassis's right side, which is this bay's side when the rear is seen from behind.
+  colour: 'estimated - zinc-grey sheet metal like the fan tray; no photograph. A gap'
+  logo-zone: 'reserved by the family convention; the figures print no mark on the faceplate'
+  lifecycle: 'searched only the staged corpus - the replaceable tray is current in SR7 22.7'
+elements:
+  handle: {at: [31.0, 100.0], size: [5.0, 100.0], class: handle}
+  screw-top: {at: [51.55, 8.15], size: [7.5, 7.5], class: screw}
+  screw-bottom: {at: [51.55, 288.65], size: [7.5, 7.5], class: screw}
+  logo-zone: {at: [8, 255], size: [20, 10], class: label}
+relief:
+  features:
+    - {node: handle, uhandle: 25.0, confidence: estimated, source: 'Fig 22 and Fig 78 draw a U bar handle standing off the faceplate; not dimensioned'}
+    - {node: screw-top, cyl: 4.0, confidence: estimated, source: 'Table 26 key 1 captive screw; height not dimensioned'}
+    - {node: screw-bottom, cyl: 4.0, confidence: estimated, source: as screw-top}
+connection-points:
+  mate: {at: [33.5, 152.8], direction: rear}
+skins: [default]

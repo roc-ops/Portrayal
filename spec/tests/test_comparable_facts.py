@@ -113,6 +113,31 @@ def test_a_group_called_furniture_does_not_match_re():
     assert F.resolve(d) .get("psu-redundancy") is None
 
 
+@pytest.mark.parametrize("slug", ["juniper/mx2008", "juniper/mx2010",
+                                  "juniper/mx2020", "juniper/mx10003"])
+def test_a_group_named_in_the_plural_is_still_a_psu_group(slug):
+    """THE MISS. These chassis call the group `psus` and the slot a `PSM`, and
+    neither is the whole word `psu` - so the redundancy they declare never
+    reached comparable-facts.json, while L66 (substring) had demanded it."""
+    assert vals(F.resolve(real(slug)), "psu-redundancy")
+
+
+def test_a_psus_group_with_a_slot_term_is_a_psu_group():
+    """The CommScope CH3000's shape: the name is the only power word, and it is
+    plural."""
+    d = dev(groups={"psus": {"term": "Slot", "attrs": {"redundancy": "1+1"}}})
+    assert vals(F.resolve(d), "psu-redundancy") == ["1+1"]
+
+
+@pytest.mark.parametrize("name,term", [("fanless", "Bay"), ("fanless-bays", "Slot"),
+                                       ("powerless", "Slot"), ("psusless", "Slot")])
+def test_dropping_a_plural_s_does_not_open_the_substring_door(name, term):
+    """One trailing `s`, no more. "fanless" ends in `s` too, and is not a fan."""
+    d = dev(groups={name: {"term": term, "attrs": {"redundancy": "1+1"}}})
+    res = F.resolve(d)
+    assert "fan-redundancy" not in res and "psu-redundancy" not in res
+
+
 # ---- rule 3: unlike facts stay unlike ---------------------------------------
 
 def test_throughput_and_switching_capacity_are_separate_facts():

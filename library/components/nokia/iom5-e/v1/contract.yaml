@@ -1,0 +1,157 @@
+format: 1
+kind: module
+name: iom5-e
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR IOM5-e (3HE12332AA/BA/CA, 3HE13727AA/BA/CA 400G, 3HE15182AA/BA/CA 800G - nine
+  licence and rate variants, one face), the FP4 input/output module for the SR-7 and SR-12 card
+  slots, which needs the -B chassis with SFM6-7/12 and CPM5. A full-length carrier holding two
+  MDA-e-XP slots, slot 1 at the left: a captive screw and an ejector lever at each end, and
+  between the two MDA plates, in their notched lower corners, a tab printed IOM5-e with the Stat
+  lamp. Stat: blue on but not yet through diagnostics, green blinking booted but not
+  provisioned, green booted, amber fault. Authored horizontal; the SR-12 seats it at rotate 90,
+  MDA slot 1 at the top. The accepts list is the SR-7/SR-12 one: the 12-port QSFP28 and 6-port
+  QSFP-DD MDA-e-XP and the MDA2-e-XP cards seat in an IOM5-e only in the SR-12e, which is not
+  this list. Limits accepts cannot express, on the SR-7/SR-12 - at most two 3-port CFP2-DCO
+  MDA-e-XP per IOM5-e, the CFP2-DCO optic only in the middle port c2, and the system derated to
+  40C with it; the QSFP-DD 400G ZR / ZR+ optics also derate to 40C, and with ZR+ port c3 stays
+  empty; on the SR-7/SR-12 even the 1.5 Tb/s variants give at most 800 Gb/s full duplex.
+size: {w: 425.4, h: 35.4, d: 431.8}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  IOM5-e guide p16 Table 6 gives 1.4 x 16.75 x 17 in. The face is held at 425.4 x 35.4 so the
+  SR-7/SR-12 slots tile on the family's 35.4 pitch; Figure 1 and SR12 p66 Figure 10 measure
+  425.45 x 35.4.
+attrs:
+  model: IOM5-e
+  part-number: 3HE12332AA
+  part-number-variants: 3HE12332AA, 3HE12332BA, 3HE12332CA, 3HE13727AA, 3HE13727BA, 3HE13727CA, 3HE15182AA, 3HE15182BA, 3HE15182CA
+  cli-type: iom5-e
+  chipset: FP4
+  mda-slots: 2
+  weight-kg: 6.12
+  power-draw-max-w: 535
+  power-draw-typical-w: 425
+provenance:
+  sources: >-
+    datasheet - 7750 SR IOM5-e Installation Guide 22.7, 3HE18647AAAATQZZA02 (IOM5E): p12-13 Tables
+    2-3 (variants, licence levels), p14 compatibility (SR-7 3HE10766AA, SR-12 3HE10768AA,
+    SFM6-7/12 + CPM5), p15-16 Table 5 (power), p16 Table 6 (size, weight), p17 Figure 1 / Table 7
+    (the face). SR12 3HE18644AAAATQZZA03 p66 Figure 10 (the same art, 27049), p94 Table 32 and
+    notes 11-13, p95 note; SR7 3HE18643AAAATQZZA03 p98.
+  size: >-
+    datasheet - IOM5E Table 6: H x W x D 1.4 x 16.75 x 17 in (3.6 x 42.5 x 43.2 cm). Held at
+    425.4 x 35.4, the SR-7/SR-12 slot-card face; SR12 p66 Figure 10 at 1200 dpi is 7122 x 593 px,
+    aspect 12.01, which is 425.45 x 35.4.
+  layout: >-
+    drawing - IOM5E p17 Figure 1 and SR12 p66 Figure 10 (art 27049), vector (pdfimages finds no
+    raster), are the IOM4-e Figure 10 art to the pixel (7122 against 7121 px) with the tab
+    label IOM5-e; the tab read at 1200 dpi, 16.76 px/mm: 'IOM5-e' from x 200.8, the Stat lamp
+    centred (219.4, 31.0). Every other position is nokia/iom4-e@1's, measured on IOM4-e Figure
+    10: MDA windows 19.0-212.0 and 213.4-406.4, screws (7.4, 22.8) and (418.0, 22.8), levers x
+    6.2-67.7 and 357.7-419.2 at y 29.8-33.6, the tab 195.4-230.0 from y 26.5.
+  bays: >-
+    drawing - mda-1 and mda-2 are drawn BEFORE the levers and the tab, because render.py inserts
+    a nested occupant at its opening's place in the draw order and both lie over the MDA band.
+  nested-default: >-
+    inferred - Figure 1 draws both MDA slots with impedance panels (Table 7 keys 2/5) and gives
+    no part number; nokia/sr-e-mda-impedance-panel (3HE10312AA) is the library's one
+    MDA-envelope blank, the same part the SR-1's MDA-e-XP slots take (SR1 p84), and matches the
+    drawn panel. Its use in an IOM5-e is inferred.
+  accepts: >-
+    datasheet - SR12 p94 Table 33 and the p95 note: on the SR-12 the IOM5-e takes the 6-port
+    QSFP28 (3HE12333AA), 3-port CFP2-DCO (3HE13955AA), 3-port QSFP-DD (3HE15764AA) and 16-port
+    SFP28 + 2-port QSFP28 (3HE15151AA / -B 3HE18361AA) MDA-e-XP; "The 12-port Universal QSFP28
+    MDA-e-XP (3HE12334AA) and the 6-port Universal QSFP-DD MDA-e-XP (3HE15152AA) are not
+    supported on the 7750 SR-12"; SR7 p98 says the same for the SR-7; the MDA2-e-XP cards are
+    "not SR-7/SR-12" (MDA-e-XP guide 3HE20985AAABTQZZA01 p53 note 1). Those six seat in an
+    IOM5-e in the SR-12e, which a carrier-level accepts cannot tell apart.
+  limits: >-
+    datasheet - SR12 p94 note 11: the 3-port CFP2-DCO MDA-e-XP restricts the system to 40C, the
+    CFP2-DCO optic (3HE13998AA) only in the middle port c2, at most two such MDA-e-XP per IOM5-e;
+    notes 12-13: QSFP-DD 400G ZR (3HE16564xx) / ZR+ (3HE16565xx) restrict the system to 40C, and
+    with ZR+ port c3 must stay empty. IOM5E p14 note: on the SR-7/SR-12 the 1.5 Tb/s variants
+    give up to 800 Gb/s FD non-redundant. IOM5E p14: the SR-7/SR-12 must carry SFM6-7/12
+    (3HE12335AA) and CPM5 (3HE08423AA) to use the IOM5-e.
+  variants: >-
+    datasheet - IOM5E p12-13 Table 2: IOM5-e CR/ER/HE 3HE12332AA/BA/CA, IOM5-e 400G CR/ER/HE
+    3HE13727AA/BA/CA, IOM5-e 800G CR/ER/HE 3HE15182AA/BA/CA. The card-type is always iom5-e; the
+    licence level is provisioned separately (p12, and p20 e.g. "card-type iom5-e level cr1200g+"). Part
+    numbers at revision RC and higher are the 1.5 Tb/s cards, RB and lower 1.2 Tb/s (p13 note).
+    One face (Figure 1 is the only drawing and prints only IOM5-e), so one component.
+  power: >-
+    datasheet - IOM5E p15-16 Table 5 (and SR12 p94 Table 32): IOM5-e CR/ER/HE idle 130, 25C 425, 40C
+    500, 55C 535 W; 400G variants 130 / 240 / 270 / 300; 800G variants 130 / 320 / 370 / 425.
+    Carried as the full-rate card: max 535 (55C, 100 percent), typical 425 (25C). MDAs not
+    included. The guide notes certain FP4 configurations in an SR-7/SR-12 could exceed the
+    chassis power capability.
+  weight: 'datasheet - 13.5 lb (6.12 kg), IOM5E p16 Table 6'
+  lamps: >-
+    datasheet - IOM5E p17 Table 7 key 4: Stat blue solid = powered, not yet through
+    diagnostics; green blinking = diagnostics passed, booted but not provisioned; green solid =
+    booted; amber solid = fault. Unlit is kept for no power.
+  colour: >-
+    photo, borrowed - no IOM5-e is photographed; the colours are the photographed IOM4-e's
+    (owner's lab, 2026-09-24), the same moulding: charcoal plate, a lighter tab, white legends,
+    black perforated levers, black plastic cross-slot screw knobs.
+  logo-zone: 'none reserved - the figure shows no mark on the carrier; its only visible print is the tab label'
+  orientation: >-
+    datasheet - IOM5E p17 Table 7 key 2 "The left slot is designated as slot 1"; SR12 p46 "MDA
+    slot 1 (top slot)", so the SR-12 seats this face at rotate 90.
+  relief: >-
+    borrowed - screws and levers take nokia/iom-e@1's figures (cyl 1.6 knurled; lever out 4.2),
+    themselves borrowed from nokia/nelt-b@1. NOT MEASURED. The tab carries no `out`, which would
+    move it to the end of the instance and paint it over the Stat lamp.
+  gaps: >-
+    No photograph of an IOM5-e; colour is the IOM4-e's. The tab's raised height is not stated
+    (drawn flat). Lever and screw relief are borrowed. The 1.2T/1.5T revisions and the licence
+    levels are one face and are recorded only in attrs and here.
+  lifecycle: 'searched only the staged corpus - listed in the IOM5-e guide 22.7 and the 22.7 chassis guides; no end-of-sale notice searched'
+elements:
+  screw-left: {at: [2.4, 17.8], size: [10.0, 10.0], class: screw}
+  screw-right: {at: [413.0, 17.8], size: [10.0, 10.0], class: screw}
+  lever-left: {at: [0.6, 29.8], size: [67.1, 5.4], class: latch}
+  lever-right: {at: [357.7, 29.8], size: [67.1, 5.4], class: latch}
+  tab: {at: [195.4, 26.5], size: [34.6, 8.9], class: mechanical}
+  model-label: {at: [200.6, 29.7], size: [9.4, 3.2], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/iom-e@1 captive screw, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/iom-e@1 captive screw, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom-e@1 ejector lever, borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom-e@1 ejector lever, borrowed from nokia/nelt-b@1. NOT MEASURED'}
+bays:
+  mda-1:
+    at: [19.0, 0]
+    size: [193.0, 35.4]
+    accepts:
+    - nokia/me6-100gb-qsfp28@1
+    - nokia/me3-200gb-cfp2-dco@1
+    - nokia/me3-400gb-qsfp-dd@1
+    - nokia/me16-25gb-sfp28-2-100gb@1
+    - nokia/sr-e-mda-impedance-panel@1
+    default: nokia/sr-e-mda-impedance-panel@1
+  mda-2:
+    at: [213.4, 0]
+    size: [193.0, 35.4]
+    accepts:
+    - nokia/me6-100gb-qsfp28@1
+    - nokia/me3-200gb-cfp2-dco@1
+    - nokia/me3-400gb-qsfp-dd@1
+    - nokia/me16-25gb-sfp28-2-100gb@1
+    - nokia/sr-e-mda-impedance-panel@1
+    default: nokia/sr-e-mda-impedance-panel@1
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one Stat lamp on the tab between the two MDA slots
+parts:
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [217.4, 29.0], attrs: {description: 'Stat - blue: powered, not yet through diagnostics; green blinking: booted, not provisioned; green: booted; amber: fault'}, states: {lamp: ['off', {name: diagnostics, color: '#2f7fe0'}, {name: not-provisioned, color: '#39b54a', behavior: blinking}, {name: booted, color: '#39b54a'}, {name: fault, color: '#f5a623'}]}}
+connection-points:
+  mate: {at: [212.7, 17.7], direction: rear}
+skins: [default]

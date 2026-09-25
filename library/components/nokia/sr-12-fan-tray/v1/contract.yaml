@@ -1,0 +1,126 @@
+format: 1
+kind: module
+name: sr-12-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR-12 Enhanced Fan Tray (3HE05106AA, "FAN - 7750 SR-12"), one of the three
+  hot-swappable, interchangeable two-fan trays that stand upright side by side across the
+  rear of the 7750 SR-12 and 7450 ESS-12 and pull air from the filtered front intake. Drawn
+  is its rear face as it sits: a flange strip at the top and at the bottom, each with two
+  captive screws; two honeycomb exhaust grilles; and between them the printed label - the
+  shutdown warning banner, the model legend, the FAN STATUS lamp with its colour key, the
+  shutdown push button inside its blue ring lamp, and the PN/SN and CLEI labels. The
+  handles are on the top and bottom surfaces, not the face.
+size: {w: 139.7, h: 447.0, d: 224.8}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 7750 SR-12 Enhanced Fan Tray
+  part-number: 3HE05106AA
+  fans: '2'
+  airflow: front-to-back
+  weight-kg: 6.30
+  power-draw-max-w: 395
+  power-draw-typical-w: 25
+provenance:
+  sources: >-
+    datasheet - SR12 (3HE18644AAAATQZZA03): p77-79 (section 3.5.2, Fig 18 isometric, Table
+    21), p49 Fig 7 (the chassis rear, all three trays face-on, vector), p209 Fig 65 / Table
+    86 and p245 Fig 78 / Table 98 (the label and its lamps), p95 Table 34 (power), p104
+    Table 43 (dimensions). No photograph of the rear is staged.
+  size: >-
+    datasheet - SR12 p104 Table 43, Enhanced Fan Tray 17.6 x 5.5 x 8.85 in (44.7 x 13.97 x
+    22.48 cm), H x W x D. The face is W x H = 139.7 x 447.0, upright.
+  size-drawn: >-
+    drawing - the rear view p49 at 600 dpi draws fan tray 1 907 px wide and 2920 px tall,
+    140.3 x 447.9 at the figure's 6.463 / 6.52 px/mm; the conventions' "about 430" is the
+    plate between the flange strips. The stated size is used.
+  depth: >-
+    datasheet - 8.85 in (224.8), p104. Footnote 16: the first units had a fixed front handle
+    and were 11.8 in (299.7) deep; the reduced-depth tray kept the part number and supersedes
+    it.
+  layout: >-
+    drawing - p49 fan tray 1, read at 6.49 px/mm across and 6.532 down from its outline
+    (x 238-1145, y 300-3220 of the 600 dpi render). Flange strips 0-17.6 and 429.4-447.0;
+    captive screws at x 26.2 / 112.8, y 7.2 / 438.3, 8.0 across; label panel 6.2-133.6 x
+    164.1-222.3. Grilles: flat-topped hexagonal holes 6.9 across the corners, 13 columns on
+    a 6.4 pitch from x 47.07, 7.35 down each column, odd columns 3.675 higher; upper grille
+    y 70.1-157.1 (11 and 12 cells per column), lower 270.4-357.2 - 149 cells each, counted.
+  label: >-
+    drawing - p209 Fig 65 at 600 dpi, scaled on the label outline (1041 px = 127.4, 8.17
+    px/mm; its aspect 2.17 agrees with the rear view's 2.19). Banner 0-7.6 down; PN/SN
+    49.8-89.5 and CLEI 94.2-123.4 across, 12.0-23.0 down; FAN STATUS lamp (26.1, 37.3);
+    button centre (63.2, 36.7), bezel 16.0 across, the ring lamp 9.8-13.4, the button 6.8;
+    text as printed. The rear view places the lamp and the button within 0.9 of these and the
+    two labels 2-4 to the right; the label figure is used.
+  status-led: >-
+    datasheet - SR12 p209 Table 86 key 1 and p245 Table 98: green solid normal operation;
+    amber solid safe to remove; red solid starting up or a fault; unlit no power. The
+    library's green #39b54a, amber #f5a623, red #d0021b.
+  power-led: >-
+    datasheet - Table 86 key 2: "A ring-shaped LED that indicates the power status" - blue
+    solid, the tray has power; unlit, none. Blue #2f7fe0, as nokia/sr-2e-fan-tray@1 uses.
+  button: 'datasheet - p245 Table 98 key 4: press and hold 3 s to stop the fans; they restart after 30 s if the tray is not removed'
+  handles: >-
+    datasheet - Table 21 key 2 "Handles. One handle on the top and one on the bottom". Fig 18
+    draws the top one as a slot in the tray's top surface behind the flange, so neither is on
+    the face and neither is drawn.
+  screws: 'datasheet - Table 21 key 1 "Captive screws. Two screws on top and two on the bottom"; torque 8-10 lbf-in (p105 Table 44)'
+  power: >-
+    datasheet - SR12 p95 Table 34, per tray: 395 W at full speed (1000 CFM for three trays,
+    "full operating potential for high temperature conditions"), 113 W high, 25 W low
+    ("under normal conditions of -10 to 40 C"). Max 395, typical 25. CONFLICT: p104
+    Table 43 gives the Enhanced Fan Tray "1000 CFM maximum" as if per tray, where Table 34
+    gives 1000 CFM for all three; no airflow figure is carried as an attribute.
+  fans: 'datasheet - SR12 p77: "Three fan trays, each with two fans"'
+  airflow: 'datasheet - SR12 p77: the fans pull air from the front-filtered intake and exhaust it through the rear'
+  colour: >-
+    estimated - no photograph of the rear is staged. The tray is drawn in the chassis
+    charcoal and the label light grey with black print, as Fig 65 prints it; a gap.
+  logo-zone: 'reserved on the label above the model legend; Fig 65 prints no mark there'
+  lifecycle: 'searched only the staged corpus; still listed in the 22.7 guide'
+elements:
+  screw-top-left: {at: [22.2, 3.2], size: [8.0, 8.0], class: screw}
+  screw-top-right: {at: [108.8, 3.2], size: [8.0, 8.0], class: screw}
+  screw-bottom-left: {at: [22.2, 434.3], size: [8.0, 8.0], class: screw}
+  screw-bottom-right: {at: [108.8, 434.3], size: [8.0, 8.0], class: screw}
+  grille-upper: {at: [43.4, 69.9], size: [84.2, 87.3], class: vent}
+  grille-lower: {at: [43.4, 270.07], size: [84.2, 87.3], class: vent}
+  label: {at: [6.2, 164.1], size: [127.4, 58.2], class: label}
+  power-led:
+    at: [62.7, 194.1]
+    size: [13.4, 13.4]
+    class: led
+    states: ['off', {name: 'on', color: '#2f7fe0'}]
+  shutdown-button: {at: [66.0, 197.4], size: [6.8, 6.8], class: button}
+  logo-zone: {at: [10.2, 176.1], size: [24.0, 4.0], class: label}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the FAN STATUS lamp on the label
+parts:
+  - {ref: common/led-indicator@1, id: led-fan-status, group: status-leds, at: [30.3, 199.4],
+     states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: ok-to-remove, color: '#f5a623'},
+                     {name: fault, color: '#d0021b'}]}}
+relief:
+  wall: '#2b2f33'
+  features:
+    - node: grille-upper-holes
+      vent: 20.0
+      confidence: estimated
+      source: the fans sit behind the grilles (Fig 18 isometric); the depth to the fan plane is not dimensioned
+    - node: grille-lower-holes
+      vent: 20.0
+      confidence: estimated
+      source: as grille-upper-holes
+    - {node: screw-top-left, cyl: 3.0, confidence: estimated, source: 'a captive screw head; its height is not stated'}
+    - {node: screw-top-right, cyl: 3.0, confidence: estimated, source: as screw-top-left}
+    - {node: screw-bottom-left, cyl: 3.0, confidence: estimated, source: as screw-top-left}
+    - {node: screw-bottom-right, cyl: 3.0, confidence: estimated, source: as screw-top-left}
+connection-points:
+  mate: {at: [69.85, 223.5], direction: rear}
+skins: [default]

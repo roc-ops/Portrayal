@@ -1,0 +1,360 @@
+format: 1
+kind: device
+name: sr-7
+version: 0.1.0
+maturity: modelled
+manufacturer: Nokia
+model: 7750 SR-7
+aliases:
+  - name: 7450 ESS-7
+    kind: vendor
+    note: >-
+      3HE10766AA boots as ESS-7 via BOF (SR-7 guide p47); the pre-2016 ESS-7 chassis 3HE00245AA
+      is the same metal; its front label reads "Ethernet Service Switch" (SR-7 guide p50 Figure 7)
+description: >-
+  The 8RU Nokia 7750 SR-7 service router (and the 7450 ESS-7, the same chassis booted as a
+  switch), a DC-only midplane chassis whose seven module slots lie HORIZONTALLY across the
+  front: IOM/IMM slots 1-5 at the top, then the two SF/CPM slots A and B, with the slot
+  numbers printed in black boxes down a strip at the left. Below slot B are two bays for the
+  DC power supply filters (an optional safety panel covers both). Rear: the vertical air
+  filter tray at the left, the single Enhanced Fan Tray beside it and two horizontal DC PEM-3
+  bays at the bottom. Air enters at the right side and leaves at the rear. Every card is
+  authored horizontal and seated at rotate 0, MDA slot 1 at the left as the guide says.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Written first. 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7,
+      3HE18643AAAATQZZA03 (the SR-7 guide; pages are the printed numbers, which are also the
+      PDF pages): p49 Figure 6 (front), p50 Figure 7 (front of the ESS-7 with the safety cover)
+      and p51 Figure 8 (rear) are the geometry, p47-48 the models and slot rules, p72-76 power,
+      p82 airflow, p93-94 Tables 28-29 the chassis and environmental specifications, p111
+      storage, p125 and p128 the rack mounting and grounding isometrics. The figures are VECTOR
+      (pdfimages -list on p49-55 finds only small icons), so a 600 dpi pdftocairo render is
+      exact. No photograph of an SR-7 is staged. The A02 edition is paginated differently and
+      is not cited.
+  chassis:
+    confidence: datasheet
+    note: >-
+      p93 Table 28: 14 x 17.5 x 25.5 in (35.56 x 44.45 x 64.77 cm) H x W x D; about 34 kg
+      empty, 41 kg with the factory-installed parts (Enhanced Fan Tray, air filter tray,
+      impedance panels, two DC PEM-3s and the power supply filters), up to 70 kg loaded; the
+      mounting brackets are factory-installed for MID-mounting (p48, p93). 8 RU. Ears are not
+      modelled: the face is the 444.5 between the folds.
+  panel-scale:
+    confidence: drawing
+    note: >-
+      Gate 1. p49 Figure 6 at 600 dpi: the body folds at px 305.5 and 3015.5, 2710 px = 444.5 mm
+      at 6.097 px/mm, and top to bottom 2166 px = 355.3 mm against the stated 355.6 (the
+      conventions measured 6.098 across and 6.097 down): orthographic to 0.1 percent. Face frame
+      x = (px - 305.5) / 6.097, y = (px - 69) / 6.097. p51 Figure 8: folds at px 264 and 2973.5,
+      6.096 px/mm, top at px 125, bottom 355.6. Positions read off row and column profiles and
+      a 5 mm grid on the renders, good to about 0.5 mm.
+  card-cage:
+    confidence: drawing
+    note: >-
+      Seven horizontal slots on the family's slot unit U = 35.4 from y 23.6: the slot tops
+      read along x 100 at 22.6-24.3, 58.2, 92.8-93.8, 129.4, 165.0, 200.7 and 236.2 and the
+      stack's bottom at 271.4, a mean pitch of 35.4 (the conventions measured the same). Every
+      bay is 425.4 x 35.4 at x 17.2; the drawn cards span x 16.3-443.5, stroke included.
+      p48: "The module slots are horizontally oriented ... MDA slot 1 (left slot)", so no bay
+      rotates.
+  slot-numbering:
+    confidence: drawing
+    note: >-
+      p48: the top slots 1 through 5 are reserved for IOMs; the two bottom module slots, A and
+      B, for the SF/CPMs. The chassis prints 1-5, A and B in white on black boxes down the strip
+      left of the cage (x 4.3-12.0, each about 7.5 tall), read on p49 at y 29.9, 64.9, 101.5,
+      136.8, 173.2, 208.5 and 244.9 - each a few millimetres below its slot's top edge, the
+      offset growing from 6.3 to 8.9 down the stack, as drawn. rel-pos is the printed number
+      for the card slots and 1 = A, 2 = B for the SF/CPM slots.
+  legend:
+    confidence: drawing
+    note: >-
+      p49: "7750 SR-7" over "Service Router" at the top left above slot 1, x 21.6, baselines
+      10.3 and 14.9, cap heights about 5.7 and 2.6 mm. The ESS-7 of p50 Figure 7 prints
+      "Ethernet Service Switch" instead. The text is set in the bezel colour's contrast, white.
+  esd:
+    confidence: drawing
+    note: >-
+      p50 Table 3 key 3, the ESD plug receptacle: a hex-faced jack at the bottom of the slot
+      strip, centre (8.3, 262.1) on p49, under the ESD awareness mark (a hand over an earth
+      symbol, y 232.9-240) printed above the B box. Drawn with common/esd-jack@1.
+  filter-bays:
+    confidence: drawing
+    note: >-
+      p48: "Below slot B are two power supply filter bays that house two DC Power Supply
+      Filters". The filter plates measure x 4.3-222.6 and 223.8-441.7, y 283.6-348.0 on p49
+      (the conventions' figures), so the bays are 218.2 x 64.5 at x 4.3 and 223.6. The band
+      between the cage and the filters (y 271.4-283.3) carries two round fasteners, at
+      (14.0, 277.7) and (431.9, 277.7). p50 Figure 7 (the ESS-7) draws one safety panel across
+      the whole lower front, 444.5 x 84.0 from the bottom of slot B (y 271.6) to the chassis
+      foot, covering the band and both bays; it is modelled as the optional nokia/sr-7-psf-safety-panel@1, mounted only in
+      the safety-cover configuration.
+  rear:
+    confidence: drawing
+    note: >-
+      p51 Figure 8 as seen from behind: the air filter tray faceplate at the left (x 7.55-74.55,
+      y 1.3-306.9; drawn 67.5 wide), the Enhanced Fan Tray beside it (x 75.2-438.4, y 0.9-305.7;
+      drawn 364.1 wide; the tray is stated 12.0 H x 14.3 W in, p106), and PEM 1 at the LEFT and
+      PEM 2 at the right (keys 4 and 5) along the bottom. The drawn PEM plate runs y 307.8-351.8,
+      44.0 tall against the stated 42.7 (p107), so the bays centre the stated 219.5 x 42.7 on
+      it at y 308.45-351.15 (310.0 is the terminal-block top, not the plate top). The
+      "-48 / RTN / TORQUE 40 lbs-inch" text belongs to the PEM-3 plates. No rear ground point is
+      drawn; the ground receptacles are on the left side and the top (p128 Figure 27).
+  airflow:
+    confidence: datasheet
+    note: >-
+      p82: "The chassis has a right-side air intake and a rear air exhaust"; air crosses the
+      line cards from the filtered right-side vent and leaves through the rear fan tray. p113
+      asks for 3 in of clearance at the right side for the intake.
+  defaults:
+    confidence: drawing
+    note: >-
+      Bay defaults follow Figure 6 with current-generation stand-ins: the figure draws IOM3-XP
+      cards with classic MDAs in slots 1, 2 and 4 (key 5) and impedance panels in 3 and 5 (key
+      6), and SF/CPM4 in A and B. The IOM3-XP and the classic MDAs are not modelled yet, so slots 1, 2
+      and 4 default to nokia/iom4-e@1 as a PLACEHOLDER (its MDA slots carry the MDA impedance
+      panel by the carrier's own default, key 7 draws one in slot 4) until nokia/iom3-xp
+      exists and takes them over; A and B default to nokia/sfm4-7@1.
+  power:
+    confidence: datasheet
+    note: >-
+      p94 Table 29: heat dissipation "with worst-case IOM and MDAs" 3750 J/s (12 795 BTU/hr),
+      carried as power-max-w with envelope fully-configured; the system safety rating maximum is
+      4000 J/s with PEM-3s (13 648 BTU/hr) and 2400 J/s with the older PEMs (8189 BTU/hr). DC
+      only: -40 to -72 VDC into two load-sharing PEM-3s, each with one -48 V / RTN terminal pair
+      behind a cover and a 100 A breaker; one PEM carries the full system, two give redundancy
+      (p72). PEM-3 100A: 4000 W at -40 to -72 V, 4600 W at -46 to -72 V (p95 Table 31). Each
+      PEM-3 connects internally to its own front power supply filter (p72 Figure 12). AC sites
+      use one split external rectifier shelf with two 5 kW outputs, the OmniOn L21 3HE20676AA or
+      the Eltek HM34J (p75-76).
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph of an SR-7 is staged. The charcoal bezel, the black numeral boxes and the
+      white print are taken from the SR-12 lab photographs (the same family and era) and from
+      the figure, whose boxes are drawn black. See gap photographs.
+  other-faces:
+    confidence: estimated
+    note: >-
+      Nothing draws a side, the top or the bottom in elevation. p125 Figure 25 and p128 Figure
+      27 are isometrics: the latter shows the ground receptacles on the left side near the
+      front and on the top, and the right side carries the air intake (p82).
+attrs:
+  physical:
+    part-number: '3HE10766AA / 3HE00186AA'
+    ru: 8
+    weight-kg: 34
+    weight-installed-kg: 41
+    weight-full-kg: 70
+    width-over-flanges-mm: 482.6
+    mounting: mid-mount, factory-installed brackets
+  power:
+    power-max-w: 3750
+    power-envelope: fully-configured
+    power-max-scope: 'heat dissipation with worst-case IOM and MDAs (SR-7 guide p94 Table 29)'
+    power-input-dc: '-40 to -72 VDC into two DC PEM-3 (100 A breaker each), one -48 V / RTN pair per PEM-3; one PEM-3 carries the system, two give redundancy'
+    rated-voltage-dc: '-40 to -72 VDC; PEM-3 4000 W at -40 to -72 VDC, 4600 W at -46 to -72 VDC'
+    power-input-ac: 'none on the chassis; an external split rectifier shelf (OmniOn L21 3HE20676AA, Eltek HM34J) feeds the PEM-3 terminals'
+  thermal:
+    acoustic-dba: 77.6
+  environmental:
+    operating-temp: '5 C to 40 C; short-term -5 C to 55 C'
+    acoustic-noise: '77.6 dBA at low fan RPM (3300), 91.7 at high (6000), 99.6 at full (7900), with PEM-3s and Enhanced Fan Trays'
+    storage-temp: -40 C to 70 C
+    humidity: '5 to 85 percent non-condensing; short-term 5 to 90'
+    altitude: '60 m below to 1800 m above sea level at 40 C; 1800 to 4000 m at 30 C'
+  platform:
+    family: 7750 SR
+    card-slots: 5
+    sfm-slots: 2
+    fan-slots: 1
+    pem-slots: 2
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 444.5
+  height: 355.6
+  depth: 647.7
+  ru: 8
+  weight-kg: 34
+  airflow: side
+  color: '#34373c'
+gaps:
+  - what: photographs
+    scope: [front, rear]
+    reason: needs-photo
+    note: >-
+      Every figure used is vendor line art and no SR-7 photograph is staged, so colour and
+      finish are estimated from the SR-12 in the owner's lab. PUBLIC-SOURCES lists a
+      straight-on NK/2018-11/7750_SR-7_f.jpg and an eBay rear shot, neither downloaded.
+    wanted: NK/2018-11/7750_SR-7_f.jpg (2880 x 2293) and a rear photograph, staged
+  - what: side-top-bottom
+    scope: [left, right, top, bottom]
+    reason: needs-drawing
+    note: >-
+      Only isometrics show the sides (p125 Figure 25, p128 Figure 27). The right side carries
+      the filtered air intake (p82) and the left side and top the ground receptacles (p128),
+      but nothing dimensions them.
+    wanted: side elevations or photographs of the sides and top
+groups:
+  card-slots:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the five horizontal IOM/IMM slots at the top of the front, 1 to 5 top to bottom (rel-pos =
+      the printed number). An IOM carries two MDAs, MDA slot 1 at the LEFT and slot 2 at the
+      right (SR-7 guide p48). IOM5-e needs fabric-speed-c, which means the -B chassis 3HE10766AA
+      with SFM6-7/12 (SR-7 guide p61-64); IOM3-XP and other FP2 cards fail at fabric-speed-b
+      and -c. Empty slots take an impedance panel.
+  sfm-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      the two bottom module slots A (rel-pos 1) and B (rel-pos 2) for the switch fabric /
+      control processor: SFM5-7 + CPM5, SFM6-7/12 + CPM5, or the integrated SF/CPM3-7 /
+      SF/CPM4-7. One is required; two give redundancy, and in a redundant system the two
+      SF/CPMs must be of the same type (p48). SFM6-7/12 needs the -B chassis 3HE10766AA.
+  power-filters:
+    term: Filter Bay
+    role: service
+    index-origin: 1
+    description: >-
+      the two DC power supply filter bays below slot B, 1 at the left (p48); each filter is
+      wired internally to its own rear PEM-3 (p72 Figure 12)
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'SR-7 guide p72: each power supply filter feeds its own PEM-3, and one PEM-3 carries the full system while two give redundancy; the filters follow their PEMs'
+  pems:
+    term: PEM
+    role: service
+    index-origin: 1
+    description: >-
+      two horizontal DC PEM-3 bays along the bottom of the rear, PEM 1 at the LEFT as seen from
+      behind (p51 keys 4 and 5)
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: 'SR-7 guide p72: one DC PEM-3 can support the full system current requirements without power redundancy; for redundancy two must be installed and powered on at all times'
+  fans:
+    term: Fan Tray
+    role: service
+    index-origin: 1
+    description: the single Enhanced Fan Tray at the rear, right of the air filter tray (p48)
+  air-filters:
+    term: Filter
+    role: service
+    index-origin: 1
+    description: the vertical air filter tray at the left of the rear (p48, p86)
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: the front ESD plug receptacle at the bottom of the slot-number strip
+views:
+  front:
+    size: {w: 444.5, h: 355.6}
+    panel:
+      decor:
+        - {at: [0.8, 0.5], size: [442.9, 21.3], fill: '#3a3d42', kind: bezel, id: model-bezel, confidence: estimated, source: 'SR-7 guide p49 Figure 6: the bezel above slot 1 carrying the model legend, y 0-21.8'}
+        - {at: [0.8, 21.8], size: [15.3, 249.6], fill: '#2b2e32', kind: label-strip, id: slot-strip, confidence: estimated, source: 'SR-7 guide p49 Figure 6: the strip left of the cage printing the slot numbers, x 0-16.1'}
+        - {at: [4.3, 29.9], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 29.9'}
+        - {at: [4.3, 64.9], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 64.9'}
+        - {at: [4.3, 101.5], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 101.5'}
+        - {at: [4.3, 136.8], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 136.8'}
+        - {at: [4.3, 173.2], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 173.2'}
+        - {at: [4.3, 208.5], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 208.5'}
+        - {at: [4.3, 244.9], size: [7.7, 7.5], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-7 guide p49 Figure 6: black numeral box, x 4.3-12.0, y 244.9'}
+        - {at: [16.3, 21.8], size: [427.2, 249.6], fill: '#16181b', kind: card-cage, id: card-cage, confidence: estimated, source: 'SR-7 guide p49 Figure 6: the card cage behind the slots'}
+        - {at: [0.8, 271.4], size: [442.9, 12.2], fill: '#3a3d42', kind: bezel, confidence: estimated, source: 'SR-7 guide p49 Figure 6: the band between slot B and the filter bays, y 271.4-283.3'}
+        - {at: [12.1, 275.8], size: [3.8, 3.8], fill: '#5b6067', rx: 1.9, kind: fastener, confidence: drawing, source: 'SR-7 guide p49 Figure 6: round fastener on the band, centre (14.0, 277.7)'}
+        - {at: [430, 275.8], size: [3.8, 3.8], fill: '#5b6067', rx: 1.9, kind: fastener, confidence: drawing, source: 'SR-7 guide p49 Figure 6: round fastener on the band, centre (431.9, 277.7)'}
+    silkscreen:
+      - {at: [21.6, 10.3], text: '7750 SR-7', font-size: 7.9, anchor: start, fill: '#e6e6e6', for: chassis}
+      - {at: [21.6, 14.9], text: 'Service Router', font-size: 3.6, anchor: start, fill: '#e6e6e6', for: chassis}
+      - {at: [8.15, 36.2], text: '1', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: slot-1}
+      - {at: [8.15, 71.2], text: '2', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: slot-2}
+      - {at: [8.15, 107.8], text: '3', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: slot-3}
+      - {at: [8.15, 143.1], text: '4', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: slot-4}
+      - {at: [8.15, 179.5], text: '5', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: slot-5}
+      - {at: [8.15, 214.8], text: 'A', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: sfm-a}
+      - {at: [8.15, 251.2], text: 'B', font-size: 7.4, anchor: middle, fill: '#e6e6e6', for: sfm-b}
+      - {id: esd-mark, at: [8.3, 234.2], path: 'M 0 0 L 0 2.2 M -2.2 2.2 L 2.2 2.2 M -1.4 3.3 L 1.4 3.3 M -0.7 4.4 L 0.7 4.4', fill: '#e6e6e6', stroke-width: 0.4, for: esd}
+    components:
+      bays:
+        - {id: slot-1, at: [17.2, 23.6], size: {w: 425.4, h: 35.4}, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 1}
+        - {id: slot-2, at: [17.2, 59], size: {w: 425.4, h: 35.4}, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 2}
+        - {id: slot-3, at: [17.2, 94.4], size: {w: 425.4, h: 35.4}, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 3}
+        - {id: slot-4, at: [17.2, 129.8], size: {w: 425.4, h: 35.4}, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 4}
+        - {id: slot-5, at: [17.2, 165.2], size: {w: 425.4, h: 35.4}, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 5}
+        - {id: sfm-a, at: [17.2, 200.6], size: {w: 425.4, h: 35.4}, accepts: [nokia/sfm5-7@1, nokia/sfm6-7-12@1, nokia/sfm4-7@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sfm4-7@1, group: sfm-slots, rel-pos: 1}
+        - {id: sfm-b, at: [17.2, 236], size: {w: 425.4, h: 35.4}, accepts: [nokia/sfm5-7@1, nokia/sfm6-7-12@1, nokia/sfm4-7@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sfm4-7@1, group: sfm-slots, rel-pos: 2}
+        - {id: psf-1, at: [4.3, 283.6], size: {w: 218.2, h: 64.5}, accepts: [nokia/sr-7-power-filter@1], default: nokia/sr-7-power-filter@1, group: power-filters, rel-pos: 1}
+        - {id: psf-2, at: [223.6, 283.6], size: {w: 218.2, h: 64.5}, accepts: [nokia/sr-7-power-filter@1], default: nokia/sr-7-power-filter@1, group: power-filters, rel-pos: 2}
+      placements:
+        - {id: esd, ref: common/esd-jack@1, at: [5.3, 259.1], group: grounding, rel-pos: 1}
+        - {id: psf-safety-panel, ref: nokia/sr-7-psf-safety-panel@1, at: [0, 271.6], only-in: [safety-cover], for: [psf-1, psf-2], group: power-filters, rel-pos: 0}
+    regions:
+      - {id: logo-zone, at: [300.0, 3.0], size: {w: 135.0, h: 15.0}, label: 'Vendor wordmark (none drawn on the bezel in Figure 6; the filter plates carry it); not drawn'}
+  rear:
+    size: {w: 444.5, h: 355.6}
+    components:
+      bays:
+        - {id: air-filter, at: [7.55, 1.3], size: {w: 67.0, h: 305.6}, accepts: [nokia/sr-7-air-filter@1], default: nokia/sr-7-air-filter@1, group: air-filters, rel-pos: 1}
+        - {id: fan, at: [75.2, 0.9], size: {w: 363.2, h: 304.8}, accepts: [nokia/sr-7-fan-tray@1], default: nokia/sr-7-fan-tray@1, group: fans, rel-pos: 1}
+        - {id: pem-1, at: [3.3, 308.45], size: {w: 219.5, h: 42.7}, accepts: [nokia/sr-7-pem-3@1, nokia/sr-7-pem-blank@1], default: nokia/sr-7-pem-3@1, group: pems, rel-pos: 1}
+        - {id: pem-2, at: [222.8, 308.45], size: {w: 219.5, h: 42.7}, accepts: [nokia/sr-7-pem-3@1, nokia/sr-7-pem-blank@1], default: nokia/sr-7-pem-3@1, group: pems, rel-pos: 2}
+  left:
+    size: {w: 647.7, h: 355.6}
+    empty: >-
+      No staged document draws the left side of the 7750 SR-7 in elevation. p128 Figure 27 (an
+      isometric) shows a grounding receptacle pair on it near the front, undimensioned.
+  right:
+    size: {w: 647.7, h: 355.6}
+    empty: >-
+      No staged document draws the right side of the 7750 SR-7, which carries the filtered air
+      intake (p82); only the isometrics show it.
+  top:
+    size: {w: 444.5, h: 647.7}
+    empty: >-
+      No staged document draws the top of the 7750 SR-7 in plan; p128 Figure 27 (isometric)
+      shows the second grounding receptacle pair on it.
+  bottom:
+    size: {w: 444.5, h: 647.7}
+    empty: >-
+      No staged document draws the underside of the 7750 SR-7.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships and powers on (SR-7 guide p93 note 8: shipped with the Enhanced
+      Fan Tray, the air filter tray, impedance panels, two DC PEM-3s and the power supply filters
+      installed): both PEM-3s and filters, the fan tray, the air filter, an SF/CPM4-7 in A and B,
+      and every IOM/IMM slot closed by a slot impedance panel.
+    part-numbers:
+      7750 SR-7: {part: 3HE10766AA}
+      7750 SR-7 (pre-2016 chassis): {part: 3HE00186AA}
+    bays:
+      slot-1: nokia/sr-7-12-slot-impedance-panel@1
+      slot-2: nokia/sr-7-12-slot-impedance-panel@1
+      slot-3: nokia/sr-7-12-slot-impedance-panel@1
+      slot-4: nokia/sr-7-12-slot-impedance-panel@1
+      slot-5: nokia/sr-7-12-slot-impedance-panel@1
+  as-drawn:
+    kind: example
+    description: >-
+      The population SR-7 guide p49 Figure 6 draws, with a current-generation stand-in: IOM4-e
+      cards in slots 1, 2 and 4 where the figure draws IOM3-XP cards with classic MDAs (not modelled yet),
+      slot impedance panels in 3 and 5, and SF/CPM4-7 in A and B. These are the bay defaults.
+  safety-cover:
+    kind: example
+    description: >-
+      The front as SR-7 guide p50 Figure 7 draws the 7450 ESS-7: the safety panel mounted over
+      both power supply filter bays.
+datasheet:
+  title: '7450 ESS-7 and 7750 SR-7 Chassis Installation Guide Release 22.7, 3HE 18643 AAAA TQZZA Edition 03'
+  sha256: f154ea25dd46acbd51f05bdd0416b378c4f4b807ce01b285e0fa2dfaf00e64fc
