@@ -297,7 +297,7 @@ def config_power(device, cfg):
     """The supply feeds one configuration is built with, as a sorted list.
 
     Resolved exactly as `config_airflow` is - the configuration's `power`, else
-    the chassis's (L117) - so the drawing's `data-power`, `configs[].power` and
+    the chassis's (L118) - so the drawing's `data-power`, `configs[].power` and
     `options.power` cannot disagree. ALWAYS A LIST, where airflow is a string,
     because a build can be fed two ways at once (a fixed box with an AC inlet and
     a DC terminal both fitted); a consumer that wants one word reads `[0]` of a

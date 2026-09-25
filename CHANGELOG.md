@@ -41,7 +41,7 @@ the *published build*, not about the hardware.
   it out of a configuration's name or description (roc-ops/Portrayal#513).
 - A device states its supply feed as `power` - `ac`, `dc` or `hvdc` - on the
   chassis where the box has one feed, and on a configuration where its build
-  differs, the way `airflow` is stated (lint L117). Every `configs[]` entry in
+  differs, the way `airflow` is stated (lint L118). Every `configs[]` entry in
   `<device>.configs.json` carries the resolved answer as `power`, always a list
   (`["ac"]`; `["ac", "dc"]` for a build fed both ways; `[]` where nothing is
   stated), and each drawing's SVG root carries it as `data-power`,
@@ -57,8 +57,8 @@ the *published build*, not about the hardware.
 - All 84 Edgecore, UfiSpace and Celestica devices state `power` on every
   build (the N3100-4C PCIe card, fed by its host slot, is the one without), and four more state `airflow` (AS7946-30XB and
   AS7946-74XKSB front-to-back, S9511-20CT front-to-back, S9502-12SM passive).
-  Lint L118 asks any other device with supplies for a feed, as a warning
-  baselined for the 24 that do not say yet; L119 reports a build whose `power`
+  Lint L119 asks any other device with supplies for a feed, as a warning
+  baselined for the 24 that do not say yet; L120 reports a build whose `power`
   contradicts the supply it seats (roc-ops/Portrayal#513).
 - Every device in `library/dist/devices.lock.json` carries `placement-attrs`: a
   digest of the `attrs` each placed port states for itself (`speed`, `media`,
