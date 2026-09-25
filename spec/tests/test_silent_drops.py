@@ -308,3 +308,19 @@ def test_a_dc_pem_exports_its_inlet():
                             / "contract.yaml").read_text())
         out = dx.build_module(d, "Nokia")
         assert out.get("power-ports") == [{"name": "Inlet", "type": "dc-terminal"}], pem
+
+
+def test_the_m48_exports_every_port_behind_its_mrj21s():
+    """An MRJ21 carries six 10/100/1000 ports. Registered as silent, it exported the
+    Nokia 7750 M48-1GB-XP-TX - a 48-port card - with no interfaces at all. Each
+    connector now lists its six in `interfaces:` (MDA-XP guide p44 key 4: connector 1
+    = ports 1-6 ... connector 8 = ports 43-48), typed by the signal, 1000base-t."""
+    assert "std/mrj21" not in dx.NOT_A_DCIM_PORT
+    d = yaml.safe_load((LIB / "components" / "nokia" / "m48-1gb-xp-tx" / "v1"
+                        / "contract.yaml").read_text())
+    ifaces = dx.build_module(d, "Nokia")["interfaces"]
+    assert [i["name"] for i in ifaces] == [f"port-{n}" for n in range(1, 49)]
+    assert {i["type"] for i in ifaces} == {"1000base-t"}
+    for target in ("netbox", "nautobot"):
+        f = LIB / "exports" / target / "module-types" / "Nokia" / "M48-1GB-XP-TX.yaml"
+        assert f.read_text().count("type: 1000base-t") == 48, target

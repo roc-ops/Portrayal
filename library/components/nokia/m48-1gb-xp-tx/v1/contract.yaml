@@ -29,6 +29,11 @@ attrs:
   power-draw-max-w: 61
   power-draw-typical-w: 57.5
 provenance:
+  interfaces: >-
+    datasheet - MDA-XP guide 9302180206 p44 Table 13 key 4: "Connectors are numbered 1 through
+    8. Each connector contains six ports", connector 1 ports 1-6 through connector 8 ports
+    43-48. Each std/mrj21@1 placement lists its six in `interfaces:`, so the card exports 48
+    x 1000base-t (10/100/1000 copper) rather than eight connectors.
   sources: >-
     datasheet - 7x50 MDA-XP Installation Guide 9302180206 (MXP): p43 Figure 13 and Table 13,
     continued on p44 (the face, its lamps, button, screws and connector numbering), p18 Table 2
@@ -166,14 +171,14 @@ groups:
     index-origin: 1
     description: the card lamps Stat and Pwr at the left
 parts:
-  - {ref: std/mrj21@1, id: connector-1, group: mrj21, at: [13.43, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 1 - ports 1-6'}}
-  - {ref: std/mrj21@1, id: connector-2, group: mrj21, at: [32.68, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 2 - ports 7-12'}}
-  - {ref: std/mrj21@1, id: connector-3, group: mrj21, at: [51.94, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 3 - ports 13-18'}}
-  - {ref: std/mrj21@1, id: connector-4, group: mrj21, at: [71.19, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 4 - ports 19-24'}}
-  - {ref: std/mrj21@1, id: connector-5, group: mrj21, at: [90.45, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 5 - ports 25-30'}}
-  - {ref: std/mrj21@1, id: connector-6, group: mrj21, at: [109.70, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 6 - ports 31-36'}}
-  - {ref: std/mrj21@1, id: connector-7, group: mrj21, at: [128.95, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 7 - ports 37-42'}}
-  - {ref: std/mrj21@1, id: connector-8, group: mrj21, at: [148.21, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 8 - ports 43-48'}}
+  - {ref: std/mrj21@1, id: connector-1, interfaces: [port-1, port-2, port-3, port-4, port-5, port-6], group: mrj21, at: [13.43, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 1 - ports 1-6'}}
+  - {ref: std/mrj21@1, id: connector-2, interfaces: [port-7, port-8, port-9, port-10, port-11, port-12], group: mrj21, at: [32.68, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 2 - ports 7-12'}}
+  - {ref: std/mrj21@1, id: connector-3, interfaces: [port-13, port-14, port-15, port-16, port-17, port-18], group: mrj21, at: [51.94, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 3 - ports 13-18'}}
+  - {ref: std/mrj21@1, id: connector-4, interfaces: [port-19, port-20, port-21, port-22, port-23, port-24], group: mrj21, at: [71.19, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 4 - ports 19-24'}}
+  - {ref: std/mrj21@1, id: connector-5, interfaces: [port-25, port-26, port-27, port-28, port-29, port-30], group: mrj21, at: [90.45, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 5 - ports 25-30'}}
+  - {ref: std/mrj21@1, id: connector-6, interfaces: [port-31, port-32, port-33, port-34, port-35, port-36], group: mrj21, at: [109.70, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 6 - ports 31-36'}}
+  - {ref: std/mrj21@1, id: connector-7, interfaces: [port-37, port-38, port-39, port-40, port-41, port-42], group: mrj21, at: [128.95, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 7 - ports 37-42'}}
+  - {ref: std/mrj21@1, id: connector-8, interfaces: [port-43, port-44, port-45, port-46, port-47, port-48], group: mrj21, at: [148.21, 11.075], rotate: 270, attrs: {media: mrj21, speed: 1g, description: 'Connector 8 - ports 43-48'}}
   - {ref: common/led-dot@1, id: port-led-1, group: port-leds, at: [7.28, 6.20], attrs: {description: 'Port LED 1 - status of port 1 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
   - {ref: common/led-dot@1, id: port-led-2, group: port-leds, at: [7.28, 10.84], attrs: {description: 'Port LED 2 - status of port 2 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}
   - {ref: common/led-dot@1, id: port-led-3, group: port-leds, at: [10.63, 6.20], attrs: {description: 'Port LED 3 - status of port 3 of the connector selected by Push to Scroll. Green: link at 1000 Mb/s; green fast blinking: link at 100 Mb/s; green slow blinking: link at 10 Mb/s; amber: no link; unlit: disabled, shut down'}, states: {lamp: ['off', {name: link-1000, color: '#39b54a'}, {name: link-100, color: '#39b54a', behavior: blinking}, {name: link-10, color: '#39b54a', behavior: blinking}, {name: no-link, color: '#f5a623'}]}}

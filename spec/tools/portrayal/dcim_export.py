@@ -590,6 +590,13 @@ PART_MEDIA = {
     # family fallback can tell them apart. #287.
     ("rj45", "10g"): "10gbase-t",
     ("rj45", "1g"): "1000base-t",
+    # AN MRJ21 IS SIX COPPER GIGABIT PORTS BEHIND ONE CONNECTOR. Neither library has
+    # an MRJ21 type, and needs none: an interface type names the signal, and each
+    # port is 10/100/1000 copper. The placement says `media: mrj21, speed: 1g` and
+    # lists its six ports in `interfaces:` (the Nokia 7750 M48-1GB-XP-TX's eight
+    # connectors, 48 x 1000base-t); a connector without that list would export as
+    # one port and undercount by five.
+    ("mrj21", "1g"): "1000base-t",
     # THE 10/100 ROW IFACE_TYPE ALREADY HAS, for a card. Without it a card's
     # stated `speed: 100m` fell through to FAMILY_PART, whose answer for an
     # Ethernet jack is 1000base-t - the Nokia CCM-e's mgmt and OES ports.
@@ -711,9 +718,6 @@ NOT_A_DCIM_PORT = {
                              "through DB9_CONSOLE",
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
-    "std/mrj21": "an MRJ21 (mini-RJ21) receptacle on the 7750 M48-1GB-XP-TX - six 10/100/1000 "
-                 "ports behind one connector, broken out to RJ-45 by cable. Neither library has an "
-                 "MRJ21 type, and one interface row per connector would count six ports as one",
     "std/db25": "the 7750 SR-12 DC PEM-3 AC Supply Status port - an AC rectifier shelf's status "
                 "signalling on a female DB-25, not RS-232. `db-25` upstream is a CONSOLE type and "
                 "this is not a console; neither library has an alarm or status port",
