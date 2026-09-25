@@ -61,3 +61,12 @@ def test_the_bp3400c_exports_every_receiver_input_cage():
     for cage in cages:
         assert by[cage]["type"] == "other", by[cage]
         assert by[cage].get("label") == "Digital return", by[cage]
+
+
+def test_the_cx3002_management_ports_export_as_10base_t():
+    """The CX3002's IN and OUT ports are 10BASE-T by its data sheet; with no `10m` row
+    they fell through to 1000base-t, as a 10/100 jack once did (#511)."""
+    doc, _ = _export("cx3002")
+    by = {i["name"]: i for i in doc["interfaces"]}
+    assert {n: by[n]["type"] for n in ("eth-in", "eth-out")} == {"eth-in": "10base-t", "eth-out": "10base-t"}
+    assert all(by[n]["mgmt_only"] for n in ("eth-in", "eth-out"))
