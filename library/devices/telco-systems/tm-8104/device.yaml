@@ -620,6 +620,7 @@ configurations:
   base:
     kind: base
     default: true
+    power: ac
     source: >-
       sourced - the 2021 data sheets order the "T-Metro 8104 Base" as the chassis with 40 x
       SFP+ ports, fans and two supplies, the expansion modules separately (the 2025 ordering
@@ -631,6 +632,7 @@ configurations:
       slot-2: ''
   88s:
     kind: orderable
+    power: ac
     description: >-
       TM8104-88S - 88 x 1/10GE: the base board's 40 x SFP+ and the TM810x-48SFP+ module in
       slot 2, two AC supplies.
@@ -638,6 +640,7 @@ configurations:
       slot-2: telco-systems/tm810x-48sfp@1
   4qs:
     kind: orderable
+    power: ac
     description: >-
       TM8104-4QS - 40 x 1/10GE + 4 x 40/100GE: the TM810x-4QSFP28 module in slot 2, two AC
       supplies.
@@ -645,6 +648,7 @@ configurations:
       slot-2: telco-systems/tm810x-4qsfp28@1
   dc-power:
     kind: orderable
+    power: dc
     description: >-
       The base with two DC supplies (24 / -48 V) - the XX = DC suffix of every TM8104 SKU.
     bays:
