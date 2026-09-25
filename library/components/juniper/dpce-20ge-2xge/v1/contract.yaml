@@ -1,18 +1,25 @@
 format: 1
 kind: module
 name: dpce-20ge-2xge
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper DPCE 20GE+2XGE (EOL) - twenty SFP in two PIC groups of ten plus two XFP uplink PICs; the X and Q variants share the faceplate. Authored as the MX240/MX480 horizontal form.
 attrs:
+  xfp-10g: 2
   sfp: 20
   model: DPCE-R-20GE-2XGE
   model-variants: DPCE-X-20GE-2XGE, DPCE-R-Q-20GE-2XGE
   power-draw-max-w: 333
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the MX Series Interface Module Reference, which files
+    DPCE-R-20GE-2XGE under Multi-Rate Ethernet Enhanced DPC with SFP and XFP; its two XFP
+    uplinks are the 10GbE ports. The XFP cage cannot say: it takes a 10GbE optic and an
+    OC-192 one, and the framing is what differs. The export already typed it 10gbase-x-xfp
+    by default; this makes that a statement. Nothing new was measured.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face
