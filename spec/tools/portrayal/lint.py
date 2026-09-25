@@ -8078,7 +8078,16 @@ def lint_component_rj45_lamps(path, data, lib_roots):
     """L76 over a component contract's `parts:` - the other half of the census.
 
     A line card's RJ45s are `parts:` entries, not view placements, and until
-    #125's final review nothing counted them. Half the library's jacks live here."""
+    #125's final review nothing counted them. Half the library's jacks live here.
+
+    A PLUGGABLE TRANSCEIVER IS NOT COUNTED. The census asks an Ethernet jack
+    whether it has lamps, and a copper SFP's jack has none of its own: the host
+    port's LEDs report the link, and the four copper SFP drawings behind
+    generic/sfp-rj45 (Finisar, FS, Cambium, Optcore) show no LED window in the
+    head. Asking a `class: transceiver` for lamps could only be answered by
+    inventing them, so the census stops here for that class."""
+    if data.get("class") == "transceiver":
+        return
     try:
         d = Path(path).parent.parent
         if (d.parent.name, d.name) in RJ45_FAMILY_DIRS:
