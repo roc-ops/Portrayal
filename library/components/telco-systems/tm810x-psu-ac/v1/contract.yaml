@@ -1,0 +1,45 @@
+format: 1
+kind: module
+name: tm810x-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable AC power supply of the Telco Systems TM-8104 and TM-8106 - a dark
+  module with a lattice fan grille at its left under a silver bail handle, an IEC C14
+  inlet turned on its side, a status lamp and a round latch at its foot.
+size: {w: 50.91, h: 39.43}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: TM810x AC PSU
+  power-absent: not-published
+  input: ac
+  inlet: c14
+provenance:
+  size: >-
+    estimated - the stencil's PSU face, 50.91 x 39.43 at x 5.92 and y 3.9 / 45.4 in the
+    TM-8104 and TM-8106 masters, which is the face the 2021 and 2025 renders show two of,
+    stacked at the chassis' front left.
+  power: >-
+    NOT STATED. The data sheets give "Dual redundant, hot-swappable AC or DC 24/-48VDC" and
+    the chassis' "Max power consumption: 400W", never the supply's own rating, and no
+    installation guide is public (support portal only; see the device gaps).
+  elements: >-
+    estimated - the stencil draws a lattice grille down the left edge, a vertical handle
+    bar beside it, the inlet and a round latch at the foot; the 2025 render
+    (2025/08/8104@2x.png) shows a silver bail handle over the lattice, which is what the
+    handle node draws.
+  inlet: >-
+    photo - the 2021 and 2025 renders show an IEC C14 inlet standing upright on each AC
+    supply; the stencil's inlet outline (21.45 x 29.97) is a C14 turned a quarter, so
+    std/c14-inlet@1 is placed at rotate 270 on the stencil outline's centre.
+states: [absent]
+elements:
+  vent-field: {at: [1.0, 1.2], size: [10.6, 37.0], class: vent}
+  handle: {at: [12.2, 1.2], size: [5.3, 37.2], class: handle}
+  latch: {at: [37.33, 33.14], size: [5.54, 5.54], class: latch}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [20.54, 7.05], rotate: 270}
+  - {ref: common/led-dot@1, id: led-status, at: [27.23, 34.91]}
+skins: [default]
