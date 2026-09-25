@@ -40,7 +40,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L31 | device | a region's label matches the group or id it frames | fix the label text or the region's members |
 | L32 | any yaml | no mapping declares the same key twice | remove the duplicate; YAML keeps the last silently |
 | L33 | device | a bay reserves room for every module it accepts | size the bay to the largest `insert`/`size` it accepts, or remove the module from `accepts` |
-| L34 | device | front and rear occupants of one slot fit around the midplane | check the two depths against chassis depth; one of them is wrong |
+| L34 | device | front and rear occupants sharing a slot column, in every configuration, fit around the midplane | check the two depths against chassis depth; one of them is wrong, or the two cannot be seated together |
 | L35 | component | a relief magnitude says where it came from | add `confidence` and `source` to each `relief.features` entry |
 | L36 | component | a `borrowed` relief magnitude names an origin that actually measured it | name a part whose own figure is `measured` or `photo-measured`, or use `estimated` |
 | L37 | component, device | a group says what it is for and has members | add `role`; delete a group nothing joins |
