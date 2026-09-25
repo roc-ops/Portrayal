@@ -1,16 +1,23 @@
 format: 1
 kind: module
 name: dpce-2xge-xfp
-version: 1.1.1
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper DPCE-R-2XGE-XFP (EOL) - two 10GbE XFP PICs. Authored as the MX240/MX480 horizontal form.
 attrs:
+  xfp-10g: 2
   model: DPCE-R-2XGE-XFP
   power-draw-max-w: 175
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the MX Series Interface Module Reference, which files
+    DPCE-R-2XGE-XFP under 10-Gigabit Ethernet Enhanced DPCs with XFP. The XFP cage cannot
+    say: it takes a 10GbE optic and an OC-192 one, and the framing is what differs. The
+    export already typed it 10gbase-x-xfp by default; this makes that a statement. Nothing
+    new was measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate

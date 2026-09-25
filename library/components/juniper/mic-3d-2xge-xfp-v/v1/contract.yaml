@@ -1,16 +1,23 @@
 format: 1
 kind: module
 name: mic-3d-2xge-xfp-v
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper 2-port 10GbE MIC with XFP. Vertical author for the vertical carriers (MX960/MX2000 MPCs stand on end, and their MICs with them).
 attrs:
+  xfp-10g: 2
   model: MIC-3D-2XGE-XFP
   power-draw-max-w: 29
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the MX Series Interface Module Reference, which files
+    MIC-3D-2XGE-XFP under 10-Gigabit Ethernet MICs with XFP. The XFP cage cannot say: it
+    takes a 10GbE optic and an OC-192 one, and the framing is what differs. The export
+    already typed it 10gbase-x-xfp by default; this makes that a statement. Nothing new was
+    measured.
   size: 'registry + layout - the face is the slot geometry of its chassis
     family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate
