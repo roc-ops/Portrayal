@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-mpa-4x10ge
-version: 1.0.1
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,6 +12,7 @@ description: >-
   carrier line cards.
 size: {w: 34.54, h: 161.8, d: 170.18}
 attrs:
+  xfp-10g: 4
   model: 'A9K-MPA-4X10GE'
   power-absent: not-published
   role: 'modular-port-adapter'
@@ -20,6 +21,12 @@ attrs:
   eol: 'none-announced'
   weight-kg: 0.87
 provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the Cisco ASR 9000 Series Ethernet Line Card Installation Guide
+    MPA table, which lists A9K-MPA-4X10GE as a 4-Port 10GE Modular Port Adapter with XFP.
+    The XFP cage cannot say: it takes a 10GbE optic and an OC-192 one, and the framing is
+    what differs. The export already typed it 10gbase-x-xfp by default; this makes that a
+    statement. Nothing new was measured.
   relief: >-
     RELIEF IS DECLARED, AND WHAT MATTERS ABOUT IT IS THAT IT IS A HANDFUL OF NUMBERS AND NOT
     A HANDFUL PER PART. This face carries: 5 panel lamps at dome 0.3 (one number, carried by

@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: tm-7124s-dc-feed
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  The four-pole green DC feed connector at the left end of the TM-7124S face, labelled for
+  two feeds (-48VA RETA / -48VB RETB): a pluggable screw-clamp header held by a screw above
+  and below.
+size: {w: 18.3, h: 42.2}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  media: dc-terminal
+  poles: 4
+provenance:
+  size: >-
+    photo-measured - the rectified 2025 render, x 1.5-19.8 and y 10.1-52.3 on the face,
+    good to about a millimetre; the stencil draws it 15.97 x 40.28 one-and-a-half
+    millimetres to the right.
+  poles: >-
+    drawing - the stencil's four screw-clamp poles and its legend, which names two
+    redundant feeds: -48VA, RETA, -48VB, RETB. The data sheet orders the DC system's supply
+    "with DC feed connector"; this is the chassis side of that feed, present on the AC
+    master too.
+  feeds: >-
+    TWO FEEDS, ONE CONNECTOR, ONE EXPORTED POWER PORT. The header lands feed A (-48VA/RETA)
+    and feed B (-48VB/RETB), but a part exports one power port, so a DCIM sees one inlet
+    where there are two cableable feeds - recorded as the dc-feed-a-b gap on the device.
+elements:
+  poles: {at: [2.3, 9.9], size: [6.8, 20.1], class: terminal}
+connection-points:
+  dc-in: {at: [5.7, 20.0], direction: front}
+skins: [default]
