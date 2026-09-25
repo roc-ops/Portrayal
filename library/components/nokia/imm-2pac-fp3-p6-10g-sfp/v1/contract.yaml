@@ -1,0 +1,218 @@
+format: 1
+kind: module
+name: imm-2pac-fp3-p6-10g-sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 12-port 10GE SFP+ Multi-Core IMM (3HE07158AA L3HQ, -BA L3BQ, -CA L2HQ - one face, three
+  licences), the FP3 integrated media module of the 7750 SR-7 / SR-12 (7450 ESS-7 / ESS-12) and
+  SR-12e card slots. CLI card-type imm-2pac-fp3 with two fixed MDAs of mda-type p6-10g-sfp. The
+  printed label IMM-2PAC-FP3 is shared by seven different IMMs (IMM p25 Table 11), so this one is named card-type plus
+  MDA-type. Authored horizontal, as IMM p68 Fig 20 draws it: a full-length dark plate with a silver
+  captive screw and a black ejector lever at each end, Card Stat / Media Stat / Pwr at the left, a
+  run of six SFP+ cages (ports 1/1-1/6) under a "P6-10G-SFP Port" legend with a Lnk and an Act lamp
+  under each cage, then the second MDA's Media Stat / Pwr and its six cages (2/1-2/6), the model
+  label and the ESD mark at the right. In the SR-12 the whole card is turned 90 degrees clockwise
+  by the bay, so Card Stat is at the top. Not the FP2 12-Port 10GE SFP+ IMM (IMM12-10GB-SFP+,
+  3HE05553AA), whose ports number 1-12.
+size: {w: 425.4, h: 35.4, d: 431.8}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  w 425.4 and h 35.4 are the SR-7/SR-12 slot-card face every card bay is built to; h is the
+  measured 35.4 slot pitch, not the rounded 1.4 in (35.56) of IMM p13. d is 17 in (IMM p13).
+attrs:
+  model: 'IMM-2PAC-FP3 12-port 10GE SFP+'
+  label: IMM-2PAC-FP3
+  part-number: 3HE07158AA
+  variants: '3HE07158AA L3HQ, 3HE07158BA L3BQ, 3HE07158CA L2HQ (IMM p16 Table 3, p21 Table 8); one face'
+  mnemonic: 'IMM - 7x50 12-PT 10GE MultiCore SFP+'
+  cli-type: imm-2pac-fp3
+  mda-type: p6-10g-sfp
+  chip-set: FP3
+  slot-throughput: 120 Gb/s full duplex
+  sfp-plus: 12
+  weight-kg: 5.8
+  power-draw-max-w: 435
+  power-draw-typical-w: 380
+provenance:
+  size: >-
+    datasheet and drawing - IMM guide 3HE16601AAAATQZZA01 (20.2) p13: "All IMMs have the same
+    dimensions (H x W x D) 1.4 x 16.75 x 17 in", the same row as SR12 p103 Table 43 and SR7 p106
+    Table 47. The face is held at the SR-7/SR-12 slot-card size 425.4 x 35.4 (16.75 in; the 35.4 slot
+    pitch rather than 35.56) so the twelve SR-12 slots tile.
+  depth: 'datasheet - 17 in (43.18 cm), IMM p13.'
+  weight: 'datasheet - 12.8 lb (5.8 kg), IMM p25 Table 11 ("12-port 10GE SFP+ Multi-Core IMM (IMM-2PAC-FP3)").'
+  layout: >-
+    drawing - IMM p68 Figure 20 (art No3329), vector (pdfimages lists no raster on the page),
+    rendered with pdftocairo at 1200 dpi. The plate outline runs px x 59.5-6514 of the crop and y
+    122.5-648 (the plate's top line, under the thin card-edge strip the figure draws above it, which
+    is not face). That is 15.17 px/mm across for 425.4 and 14.84 px/mm down for 35.4: the figure is
+    about 2 percent anisotropic (aspect 12.28 against 12.02), so each axis is fitted on its own
+    scale. Every figure below is a connected-component centroid or bbox on that render, about 0.1
+    mm. Cage blocks (each drawn as one empty rectangle) x 43.14-130.93 and 241.40-329.13, y
+    16.61-28.27; six std/sfp-ganged@1 cages each at the registry 14.25 pitch, centred on the block
+    centres 87.04 and 285.27, cage top y 17.24. Card lamps d 2.97 at (30.48, 8.12) Card Stat,
+    (30.48, 15.84) Media Stat and (30.48, 21.02) Pwr; the second MDA's Media Stat and Pwr at
+    (229.73, 15.84 / 21.02). Lnk/Act lamps d 2.1 on y 31.17: Lnk 47.46 ... 118.77 and 245.78 ...
+    317.13, Act 6.36 to the right of each, a 14.27 mean pitch that matches the cages. Legends
+    right-aligned to the left of each lamp; "P6-10G-SFP" over "Port" over a rule at y 9.94 split
+    for the word; port numerals 1/1-1/6 and 2/1-2/6 above each block (baseline 14.9; the figure
+    spaces them at 14.6, a little wider than the cages, and they are placed as printed). The top
+    fold at y 1.73 and the bottom fold at 33.4 between the levers are drawn as lines.
+  screws: >-
+    drawing - one captive screw at each end, centres (6.86, 22.9) and (418.5, 22.9), heads 8.8 mm
+    across (Fig 20 key 9; the slot-card family figure is about 7.3 / 23.0 / 10).
+    Drawn silver-zinc with a cross recess: the lab photo shows a silver Phillips head at the top of
+    the slot-1 card, unlike the black plastic knobs on the MDA-e and IOM4-e.
+  levers: >-
+    drawing - one ejector lever at each end along the bottom edge (key 1), x 0.4-32.7 and
+    392.5-425.0, y 28.4-35.2. Shorter than the IOM4-e family bars (about 6-68 on IOM4E p33): this is
+    what Fig 20 draws. IMM p14 says the levers and screws are the same for all IMMs. Black, with a
+    row of six holes: the photo shows the lever as a black perforated arm (swung open in that shot);
+    the hole count and size are estimated.
+  esd-mark: 'drawing - ESD warning triangle at the top right, 418.1-424.9 x 1.0-7.0 (Fig 20). Yellow with a black glyph, the family reading.'
+  labels: >-
+    drawing - "IMM-2PAC-FP3" in bold condensed type right-aligned at x 412.2, baseline 28.1, 19.6
+    mm long (Fig 20 key 8), just above the right lever; fitted with textLength.
+  colour: >-
+    photo - the owner's lab SR-12 (2026-09-24, sr12-slots-1-5-iom3-sfm4-cpm): charcoal plate,
+    white legends, silver screws, black perforated levers. Warm phone light, so the plate takes the
+    SR-7/SR-12 card family #2e3034; in the photo the IMM plate reads a shade lighter than
+    the SF/CPM4-12 beside it (medians about #636564 against #50504f at comparable spots), which may
+    be light fall-off and is not modelled.
+  photo-match: >-
+    photo - IMM or IOM3-XP (not yet confirmed by the owner). The
+    upper half of the slot-1 card in the lab photo matches Fig 20 item for item, with the card
+    turned clockwise: silver screw and perforated lever at the top end, the lamp legends "Card Stat
+    / Media Stat / Pwr" reading top-to-bottom, then six cages with "P6-10G-SFP Port" and 1/1 ...
+    1/6 printed beside them on the plate's (rotated) top side, all on one continuous plate with no
+    IOM tab. "P6-10G-SFP" and the n/m numbering are specific to this card: the FP2 12-port IMM
+    (IMM12-10GB-SFP+) numbers 1-12, and an IOM3-XP with an M10-1GB-XP-SFP would show ten cages
+    on a separate MDA plate. The lower half shows a second run of six cages ending in a lever, as
+    Fig 20 predicts, but its legends, the second Media Stat / Pwr and the model label are not
+    legible. The lever in the photo is swung out, so the card may be unlatched.
+  lamps-card: >-
+    datasheet - IMM p69 Table 23. Card Stat (key 2): purple = on, not yet through diagnostics;
+    green blinking = boot diagnostics passed; green = boot complete. Media Stat (key 3, one per
+    MDA): green blinking = initializing, green = up/up, amber = operationally down and
+    administratively up, unlit = administratively down. Pwr (key 4, one per MDA): blue = on,
+    unlit = no power. The purple is drawn #8e44ad (no library precedent; the guide names only
+    the hue). Composed as common/led-indicator@1.
+  lamps-ports: >-
+    datasheet - IMM p69 Table 23 keys 6/7. Lnk: green = link at 10 000 Mb/s, amber slow blink = no
+    SFP+, amber fast blink = loopback, amber = optic but no link, unlit = disabled. Act: green =
+    active, amber = errors, unlit = no activity. The fast-blink rate is not stated: 4 Hz is the
+    estimate the MDA-e cards carry. Composed as common/led-dot@1.
+  ports: >-
+    datasheet - IMM p68: 12 physical 10GE ports that accept SFP+ optical modules, numbered 1/1-1/6
+    and 2/1-2/6 (Table 23 key 5). Composed as std/sfp-ganged@1 at rotate 0 in two runs of six. The
+    figure draws each run as one empty block, so the latch orientation is not shown; the library
+    upright is used (a single row, so L108 stacking does not apply). The rate is stated on the card
+    as `sfp-plus: 12` and on each port as {media: sfp-plus, speed: 10g}.
+  power: >-
+    datasheet - IMM p21 Table 8 (and SR12 p97 Table 37): 3HE07158AA/BA/CA idle 125, zero-rate 355,
+    typical 380, worst case 435 W; max = worst case, typical = typical. Excludes optics. FP3
+    cards need PEM-3s and Enhanced Fan Trays (IMM p14).
+  relief: >-
+    borrowed - screws and levers take nokia/iom-e@1's figures (cyl 1.6 knurled; lever out 4.2),
+    themselves borrowed from nokia/nelt-b@1. NOT MEASURED.
+  logo-zone: 'reserved on bare plate between the two MDA halves; Fig 20 draws no vendor mark on the plate.'
+  lifecycle: 'searched only the staged corpus - listed in the IMM guide 20.2 (3HE16601AAAATQZZA01); no end-of-life notice searched on the web.'
+  gaps: >-
+    Q1 is unconfirmed by the owner (see photo-match). The lower half of the photographed card is not
+    legible. The purple colour, the fast-blink rate, the lever perforations and the plate and
+    screw-head relief are estimated. The cage latch orientation is not drawn by the source.
+elements:
+  screw-left: {at: [2.46, 18.5], size: [8.8, 8.8], class: screw}
+  screw-right: {at: [414.1, 18.5], size: [8.8, 8.8], class: screw}
+  lever-left: {at: [0.4, 28.4], size: [32.3, 6.8], class: latch}
+  lever-right: {at: [392.5, 28.4], size: [32.5, 6.8], class: latch}
+  model-label: {at: [392.6, 25.2], size: [19.6, 3.0], class: label}
+  esd-mark: {at: [418.1, 1.0], size: [6.8, 6.0], class: label}
+  logo-zone: {at: [160, 16], size: [40, 8], class: label}
+relief:
+  wall: '#23272a'
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/iom-e@1 captive screw head, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/iom-e@1 captive screw head, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: lever-left, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom-e@1 ejector lever, the library one figure for a lever. NOT MEASURED'}
+  - {node: lever-right, out: 4.2, color: '#1c1c1c', confidence: estimated, source: 'nokia/iom-e@1 ejector lever, the library one figure for a lever. NOT MEASURED'}
+groups:
+  mda-1-ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      MDA 1 (p6-10g-sfp): six SFP+ cages, 10GE, numbered 1/1-1/6 left to right as printed above
+      them (top to bottom in the SR-12)
+  mda-2-ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      MDA 2 (p6-10g-sfp): six SFP+ cages, 10GE, numbered 2/1-2/6 left to right as printed above
+      them
+  card-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: Card Stat for the card, and a Media Stat and Pwr pair for each MDA
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Lnk lamp per port, left of the pair under its cage
+  activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one Act lamp per port, right of the pair under its cage
+parts:
+  - {ref: std/sfp-ganged@1, id: port-1-1, group: mda-1-ports, at: [44.290, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-1-2, group: mda-1-ports, at: [58.540, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-1-3, group: mda-1-ports, at: [72.790, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-1-4, group: mda-1-ports, at: [87.040, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-1-5, group: mda-1-ports, at: [101.290, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-1-6, group: mda-1-ports, at: [115.540, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2-1, group: mda-2-ports, at: [242.520, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2-2, group: mda-2-ports, at: [256.770, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2-3, group: mda-2-ports, at: [271.020, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2-4, group: mda-2-ports, at: [285.270, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2-5, group: mda-2-ports, at: [299.520, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/sfp-ganged@1, id: port-2-6, group: mda-2-ports, at: [313.770, 17.24], attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/led-indicator@1, id: card-stat, group: card-leds, at: [28.48, 6.12], attrs: {description: 'Card Stat - purple: card is on and has not yet passed diagnostics; green blinking: boot diagnostics passed; green: boot complete'}, states: {lamp: ['off', {name: diagnostics, color: '#8e44ad'}, {name: booting, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}]}}
+  - {ref: common/led-indicator@1, id: media-stat-1, group: card-leds, at: [28.48, 13.84], attrs: {description: 'Media Stat, MDA 1 (ports 1/1-1/6) - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr-1, group: card-leds, at: [28.48, 19.02], attrs: {description: 'Pwr, MDA 1 - blue: on; unlit: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+  - {ref: common/led-indicator@1, id: media-stat-2, group: card-leds, at: [227.73, 13.84], attrs: {description: 'Media Stat, MDA 2 (ports 2/1-2/6) - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down'}, states: {lamp: ['off', {name: initializing, color: '#39b54a', behavior: blinking}, {name: up, color: '#39b54a'}, {name: down, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr-2, group: card-leds, at: [227.73, 19.02], attrs: {description: 'Pwr, MDA 2 - blue: on; unlit: no power'}, states: {lamp: ['off', {name: 'on', color: '#2f7fe0'}]}}
+  - {ref: common/led-dot@1, id: lnk-1-1, group: link-leds, at: [46.46, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1-1, group: activity-leds, at: [52.82, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-1-2, group: link-leds, at: [60.73, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1-2, group: activity-leds, at: [67.09, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-1-3, group: link-leds, at: [74.96, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1-3, group: activity-leds, at: [81.32, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-1-4, group: link-leds, at: [89.23, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1-4, group: activity-leds, at: [95.59, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-1-5, group: link-leds, at: [103.50, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1-5, group: activity-leds, at: [109.86, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-1-6, group: link-leds, at: [117.77, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-1-6, group: activity-leds, at: [124.13, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2-1, group: link-leds, at: [244.78, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2-1, group: activity-leds, at: [251.14, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2-2, group: link-leds, at: [259.05, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2-2, group: activity-leds, at: [265.41, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2-3, group: link-leds, at: [273.32, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2-3, group: activity-leds, at: [279.68, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2-4, group: link-leds, at: [287.59, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2-4, group: activity-leds, at: [293.95, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2-5, group: link-leds, at: [301.86, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2-5, group: activity-leds, at: [308.22, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: lnk-2-6, group: link-leds, at: [316.13, 30.17], states: {lamp: ['off', {name: link, color: '#39b54a'}, {name: no-optic, color: '#f5a623', behavior: blinking}, {name: loopback, color: '#f5a623', behavior: {mode: blinking, rate: 4}}, {name: no-link, color: '#f5a623'}]}}
+  - {ref: common/led-dot@1, id: act-2-6, group: activity-leds, at: [322.49, 30.17], states: {lamp: ['off', {name: activity, color: '#39b54a'}, {name: error, color: '#f5a623'}]}}
+connection-points:
+  mate: {at: [212.7, 17.7], direction: rear}
+skins: [default]

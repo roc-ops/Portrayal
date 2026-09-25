@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: cc3008
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) CC3008 - the communications control module of a CA3008 carrier,
+  seated above its eight quad-density transmitters: it carries the carrier's micro-USB
+  craft port and its Status, Access and Fan lamps.
+size: {w: 51.92, h: 19.3}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  model: CC3008
+  role: controller
+provenance:
+  size: >-
+    photo-measured on p1 of the HT3580H data sheet (2024), the face-on CH3000 front at
+    2.727 px/mm: in all six carriers the face runs from the carrier's top band (13.9 below
+    the carrier's top edge) to the first transmitter (33.2), with a curved lip along its
+    lower edge. Width is the carrier's opening, as the transmitters'. No depth is stated
+    anywhere, so none is given.
+  identity: >-
+    datasheet - HT3580H data sheet, overview: the CC3008 is stacked with up to eight
+    HT3580H transmitters inside the CA3008 module carrier; System Accessories ordering table:
+    "Communications Control Module, CC3008".
+  power: >-
+    datasheet - the CC3008 has no figure of its own: the HT3580H data sheet's per-transmitter
+    6 W is stated "including controller and back plate cooling fan", so the controller's
+    draw is inside commscope/ht358xh@1's figure and a second one here would count it twice.
+  face-features: >-
+    photo-measured on the chassis photograph and confirmed on the data sheet's close-up of
+    the module (System Accessories, a three-quarter view): "CC3008" printed upright at the
+    left, a horizontal micro-USB centred 12.9 across, five lamps on one line 11.3 down at
+    4.4 pitch from 19.9, the first three under a bracket legended Status and the last two
+    legended Access and Fan, and a captive screw on a boss at the right, centred 47.4, 5.4.
+    The legends are printed slanted, rising to the right, at about 45 degrees.
+  lamps: >-
+    the data sheet says only "Local and remote status monitoring" and gives no colour or
+    meaning for any lamp, so the three Status lamps and the Access and Fan lamps carry
+    their legend's function and no colour.
+elements:
+  screw: {at: [44.1, 2.1], size: [6.6, 6.6], class: fastener}
+parts:
+  - {ref: std/micro-usb@1, id: usb, at: [9.15, 8.03], attrs: {role: console}}
+  - {ref: common/led-dot@1, id: led-status-1, at: [18.9, 10.3], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-2, at: [23.4, 10.3], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-3, at: [27.8, 10.3], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-access, at: [32.2, 10.3], attrs: {function: activity}}
+  - {ref: common/led-dot@1, id: led-fan, at: [36.6, 10.3], attrs: {function: fan}}
+connection-points:
+  mate: {at: [25.96, 9.65], direction: front}
+skins: [default]

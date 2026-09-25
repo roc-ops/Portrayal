@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: bd31a8-h10f
+version: 1.0.0
+class: coupler
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) BD31A8-100-H10F-0-AL - the quad-density "zero-slot" back plate behind
+  a CA3008 carrier of eight HT358xH transmitters, seated in the rear of the carrier's two
+  slots: eight LC/APC optical outputs, one per transmitter, a cooling fan, and nine F-type
+  RF inputs - one common broadcast (BC) input split to all eight and eight narrowcast
+  inputs, one per transmitter.
+size: {w: 52.52, h: 130.2}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  model: BD31A8-100-H10F-0-AL
+  slots: 2
+  rf-inputs: 1 BC and 8 NC
+  optical-insertion-loss: 0.2 dB typical, 0.3 dB max
+provenance:
+  size: >-
+    borrowed - the width and height are the CA3008 carrier's two-slot face (see
+    commscope/ca3008@1), which this plate fills from the rear. The data sheet's BD31A8
+    table gives "7.2 D x 5.2 H x 2.0 W (18.2 x 13.0 x 5.4 cm)": 5.2 in is the chassis face
+    and 2.0 in the two slots, both consistent. NO DEPTH IS GIVEN: 7.2 in (182.9 mm)
+    behind a carrier the data sheet makes 11.5 in deep would need 475 mm of a 337.8 mm
+    chassis, so the 7.2 in measures the plate with its mid-plane connector and rear jacks,
+    not the room it takes inside. The BP-A5 and BP-P1 plates state no depth either.
+  connectors: >-
+    datasheet - HT3580H data sheet (Rev G, 2024), BD31A8 section: the H10F variant carries
+    one common BC input and eight separate NC RF inputs and eight separate LC/APC optical
+    outputs, with an internal RF amplifier and splitter feeding the BC input to all eight
+    transmitters; the RF connectors are F-type.
+  power: >-
+    datasheet - the BD31A8 table gives 5.5 W max (2.5 W typical) "included in power figure
+    found in HT3580H specifications", so it is not stated here as a draw: the eight
+    transmitters' 6 W each already contains it, and it is filed as a passive coupler for
+    the same reason.
+  layout: >-
+    photo-measured, AS FRACTIONS - the data sheet's p5 photograph of this plate (482 x 1000
+    px) is not orthographic: the top tab and the body behind it give widths that disagree
+    with any single scale, and the right-hand side wall is in view. Heights are therefore
+    fractions of the 955 px plate height against 130.2, and widths fractions of the 430 px
+    body against 52.52. Read that way: the tab carries the legend BD31A between the two
+    thumbscrews; four green vertical LC/APC duplex adapters, in two pairs, centred 20.5
+    down at 9.6, 19.2, 32.9 and 42.7 across (each 9.3 wide in the photograph, the
+    library adapter's 9.28); a 40 mm fan (THA0412AD, legible on its hub) centred 22.7,
+    53.4 with its harness to the right; and nine F-type jacks staggered in four columns
+    6.8, 19.7, 32.5 and 45.3 across, printed 1 and 2 in the first, 3, 4 and BC in the
+    second, 5 and 6 in the third and 7 and 8 in the fourth.
+  optical-order: >-
+    estimated - the photograph does not number the LC outputs. They are paired left to
+    right, 1-2, 3-4, 5-6 and 7-8, the order the RF jacks are numbered in.
+elements:
+  screw-top-1: {at: [8.28, 0.0], size: [9.2, 9.2], class: fastener}
+  screw-top-2: {at: [35.04, 0.0], size: [9.2, 9.2], class: fastener}
+  fan: {at: [2.7, 33.4], size: [40.0, 40.0], class: vent}
+  screw-bottom-1: {at: [8.28, 121.0], size: [9.2, 9.2], class: fastener}
+  screw-bottom-2: {at: [35.04, 121.0], size: [9.2, 9.2], class: fastener}
+parts:
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-1-2, at: [4.96, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-3-4, at: [14.56, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-5-6, at: [28.26, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-7-8, at: [38.06, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: std/f-type@1, id: rf-nc-1, at: [1.95, 89.35], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-2, at: [1.95, 107.05], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-3, at: [14.85, 81.15], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-4, at: [14.85, 97.45], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-bc, at: [14.85, 114.55], attrs: {role: rf-input-broadcast}}
+  - {ref: std/f-type@1, id: rf-nc-5, at: [27.65, 87.95], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-6, at: [27.65, 104.95], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-7, at: [40.45, 79.05], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-8, at: [40.45, 95.45], attrs: {role: rf-input-narrowcast}}
+connection-points:
+  mate: {at: [26.26, 65.1], direction: front}
+skins: [default]

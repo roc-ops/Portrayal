@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: sr-7-12-slot-impedance-panel
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR-7 / SR-12 (7450 ESS-7 / ESS-12) card-slot impedance panel, the factory-fitted
+  blank for an empty full-length card slot - an IOM or IMM slot, and an empty SF/CPM slot A or
+  B. A plain plate the length of a card, its two short end tabs inset top and bottom, each
+  carrying a flat-blade captive screw. The guides give it no part number. Authored horizontal,
+  like the cards it replaces: the SR-7 seats it at rotate 0 and the SR-12 at rotate 90.
+size: {w: 425.4, h: 35.4}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  the SR-7/SR-12 card-slot face (425.4 x 35.4), borrowed from the cards the panel replaces: no
+  guide dimensions the panel. The SR-7 front figure draws it 425.1 long over the same slot the
+  IOMs fill.
+attrs:
+  model: SR-7/SR-12 Card Slot Impedance Panel
+  role: slot-blank
+provenance:
+  sources: >-
+    datasheet - 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03
+    (SR7): p49 Figure 6 and p50 Table 3 key 6 "Impedance panel installed in an empty IOM slot",
+    p86 section 3.6.4, p108 (torque), p226 section 12.4. 7450 ESS-12 and 7750 SR-12 Chassis
+    Installation Guide 22.7, 3HE18644AAAATQZZA03 (SR12): p47 Figure 6 and p48 Table 3 key 4, p83
+    section 3.5.4, p105 (torque), p165 Figure 47 / Table 68 (removing), p233 section 12.4.
+  part-number: >-
+    NOT STATED - neither 22.7 chassis guide nor the IOM4-e, IOM5-e or IMM guides give the panel
+    a part number or an ordering line (coverage grid rows L301, L303). A gap.
+  size: >-
+    borrowed - the SR-7/SR-12 card face, 425.4 x 35.4 (SR12 p103 Table 43, SR7 p106 Table 47:
+    IOMs and IMMs 1.4 x 16.75 x 17 in, held at the 35.4 slot unit). SR7 p49 Figure 6 at 600 dpi
+    (6.098 px/mm) draws the slot-3 panel 425.1 long; its face height is the slot's.
+  purpose: >-
+    datasheet - SR12 p83 / SR7 p86: impedance panels are factory-installed in all component
+    slots, "do not have board components or connector pins", and every empty slot must be
+    covered "for safety reasons, to help control airflow, to prevent excess dust accumulation,
+    and to reduce electromagnetic interference". SR12 p165 Figure 47 draws it as a flat sheet
+    with a flanged edge, freed by two captive screws and a flat blade screwdriver (Table 68).
+  sfm-slots: >-
+    datasheet - coverage grid row L303: "SF/CPM slot also takes a blank panel when empty"; SR12
+    p83 puts impedance panels in "all component slots". That the SF/CPM-slot blank is this same
+    panel is inferred from the equal slot size; no figure draws an empty SF/CPM slot.
+  layout: >-
+    drawing - SR7 p49 Figure 6, slot 3 (key 6), vector, at 600 dpi (6.098 px/mm), the plate from
+    column 408 to 3000 and its top line at row 637: the end tabs run 15.1 in from each end
+    (right 15.6) and stop 2.6 short of the plate's top and bottom lines, with rounded outer
+    corners; the flat-blade screws are centred 6.4 / 7.1 in from the ends and 21.8 / 23.4
+    below the top (the figure is slightly skewed), carried symmetric at 6.8 and 22.6, heads 9.8
+    across. The SR-12 figure (SR12 p47, 6.487 px/mm) agrees: the screw 22.6 from the plate top.
+  colour: >-
+    estimated - line art only; no photograph shows an installed panel (the lab photo's slots
+    2-4 are open). Drawn in the charcoal of the card family, the screw heads plain zinc, which is
+    a guess (the guides call for a flat blade screwdriver). A gap.
+  depth: >-
+    NOT STATED - a flat blanking plate (SR12 p165 Figure 47); no guide gives a depth or weight,
+    so none is carried.
+  logo-zone: 'reserved on the plain plate; no figure draws a mark on it'
+  relief: >-
+    borrowed - screws take nokia/sr-e-mda-impedance-panel@1's figure (cyl 1.6, itself borrowed
+    from nokia/nelt-b@1). NOT MEASURED.
+  lifecycle: 'searched only the staged corpus - drawn in the 22.7 chassis guides; no part number, so no end-of-sale notice to search'
+elements:
+  screw-left: {at: [1.9, 17.7], size: [9.8, 9.8], class: screw}
+  screw-right: {at: [413.7, 17.7], size: [9.8, 9.8], class: screw}
+  logo-zone: {at: [192.7, 13.7], size: [40.0, 8.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'nokia/sr-e-mda-impedance-panel@1 captive screw, itself borrowed from nokia/nelt-b@1. NOT MEASURED'}
+connection-points:
+  mate: {at: [212.7, 17.7], direction: rear}
+skins: [default]

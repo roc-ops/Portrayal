@@ -1,0 +1,131 @@
+---
+manufacturer: Nokia
+model: 7750 SR-7
+slug: nokia-7750-sr-7
+u_height: 8.0
+is_full_depth: true
+part_number: 3HE10766AA
+weight: 34.0
+weight_unit: kg
+description: 'The 8RU Nokia 7750 SR-7 service router (and the 7450 ESS-7, the same chassis booted as a
+  switch), a DC-only midplane chassis whose seven module slots lie HORIZONTALLY across the front: IOM/IMM...'
+front_image: true
+rear_image: true
+module-bays:
+  - name: air-filter
+    position: filter
+    description: 'Accepts: sr-7-air-filter'
+  - name: fan
+    position: fan
+    description: 'Accepts: sr-7-fan-tray'
+  - name: pem-1
+    position: '1'
+    description: 'Accepts: sr-7-pem-3, sr-7-pem-blank'
+  - name: pem-2
+    position: '2'
+    description: 'Accepts: sr-7-pem-3, sr-7-pem-blank'
+  - name: psf-1
+    position: '1'
+    description: 'Accepts: sr-7-power-filter'
+  - name: psf-2
+    position: '2'
+    description: 'Accepts: sr-7-power-filter'
+  - name: sfm-a
+    position: a
+    description: 'Accepts: sfm5-7, sfm6-7-12, sfm4-7, sr-7-12-slot-impedance-panel'
+  - name: sfm-b
+    position: b
+    description: 'Accepts: sfm5-7, sfm6-7-12, sfm4-7, sr-7-12-slot-impedance-panel'
+  - name: slot-1
+    position: '1'
+    description: 'Accepts: iom4-e, iom4-e-hs, iom5-e, imm-2pac-fp3-p6-10g-sfp, sr-7-12-slot-impedance-panel'
+  - name: slot-2
+    position: '2'
+    description: 'Accepts: iom4-e, iom4-e-hs, iom5-e, imm-2pac-fp3-p6-10g-sfp, sr-7-12-slot-impedance-panel'
+  - name: slot-3
+    position: '3'
+    description: 'Accepts: iom4-e, iom4-e-hs, iom5-e, imm-2pac-fp3-p6-10g-sfp, sr-7-12-slot-impedance-panel'
+  - name: slot-4
+    position: '4'
+    description: 'Accepts: iom4-e, iom4-e-hs, iom5-e, imm-2pac-fp3-p6-10g-sfp, sr-7-12-slot-impedance-panel'
+  - name: slot-5
+    position: '5'
+    description: 'Accepts: iom4-e, iom4-e-hs, iom5-e, imm-2pac-fp3-p6-10g-sfp, sr-7-12-slot-impedance-panel'
+comments: 'The 8RU Nokia 7750 SR-7 service router (and the 7450 ESS-7, the same chassis booted as a switch),
+  a DC-only midplane chassis whose seven module slots lie HORIZONTALLY across the front: IOM/IMM slots
+  1-5 at the top, then the two SF/CPM slots A and B, with the slot numbers printed in black boxes down
+  a strip at the left. Below slot B are two bays for the DC power supply filters (an optional safety panel
+  covers both). Rear: the vertical air filter tray at the left, the single Enhanced Fan Tray beside it
+  and two horizontal DC PEM-3 bays at the bottom. Air enters at the right side and leaves at the rear.
+  Every card is authored horizontal and seated at rotate 0, MDA slot 1 at the left as the guide says.
+
+
+  Configuration `base`: The chassis as it ships and powers on (SR-7 guide p93 note 8: shipped with the
+  Enhanced Fan Tray, the air filter tray, impedance panels, two DC PEM-3s and the power supply filters
+  installed): both PEM-3s and filters, the fan tray, the air filter, an SF/CPM4-7 in A and B, and every
+  IOM/IMM slot closed by a slot impedance panel.
+
+
+  Also sold or listed as: 7450 ESS-7
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - environmental.acoustic-noise: 77.6 dBA at low fan RPM (3300), 91.7 at high (6000), 99.6 at full (7900),
+  with PEM-3s and Enhanced Fan Trays
+
+  - environmental.altitude: 60 m below to 1800 m above sea level at 40 C; 1800 to 4000 m at 30 C
+
+  - environmental.humidity: 5 to 85 percent non-condensing; short-term 5 to 90
+
+  - environmental.operating-temp: 5 C to 40 C; short-term -5 C to 55 C
+
+  - environmental.storage-temp: -40 C to 70 C
+
+  - lifecycle.eol: none-announced
+
+  - physical.mounting: mid-mount, factory-installed brackets
+
+  - physical.part-number: 3HE10766AA / 3HE00186AA
+
+  - physical.ru: 8
+
+  - physical.weight-full-kg: 70
+
+  - physical.weight-installed-kg: 41
+
+  - physical.weight-kg: 34
+
+  - physical.width-over-flanges-mm: 482.6
+
+  - platform.card-slots: 5
+
+  - platform.family: 7750 SR
+
+  - platform.fan-slots: 1
+
+  - platform.pem-slots: 2
+
+  - platform.sfm-slots: 2
+
+  - power.power-envelope: fully-configured
+
+  - power.power-input-ac: none on the chassis; an external split rectifier shelf (OmniOn L21 3HE20676AA,
+  Eltek HM34J) feeds the PEM-3 terminals
+
+  - power.power-input-dc: -40 to -72 VDC into two DC PEM-3 (100 A breaker each), one -48 V / RTN pair
+  per PEM-3; one PEM-3 carries the system, two give redundancy
+
+  - power.power-max-scope: heat dissipation with worst-case IOM and MDAs (SR-7 guide p94 Table 29)
+
+  - power.power-max-w: 3750
+
+  - power.rated-voltage-dc: -40 to -72 VDC; PEM-3 4000 W at -40 to -72 VDC, 4600 W at -46 to -72 VDC
+
+  - thermal.acoustic-dba: 77.6
+
+
+  Drawing version 0.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  an earlier export may no longer line up.
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'

@@ -1,0 +1,519 @@
+format: 1
+kind: device
+name: sr-12
+version: 0.1.1
+maturity: modelled
+manufacturer: Nokia
+model: 7750 SR-12
+aliases:
+  - name: 7450 ESS-12
+    kind: vendor
+    note: >-
+      3HE10768AA boots as ESS-12 (SR-12 guide p45); the pre-2016 ESS-12 3HE02036AA is the same
+      metal (p44: "same dimensions and footprint")
+description: >-
+  The 14RU Nokia 7750 SR-12 service router (and the 7450 ESS-12, the same chassis booted
+  as a switch), a DC-only midplane chassis with twelve VERTICAL module slots across the
+  front, printed 1 2 3 4 5 A B 6 7 8 9 10: ten IOM/IMM slots with the two SF/CPM slots A and B
+  in the middle. Cable-management trays with covers run above and below the card cage, each
+  under a strip printing the slot numbers, and the filtered air-intake vent faceplate closes
+  the bottom of the front. Rear: a grounding plate across the top carrying two studs, three
+  vertical Enhanced Fan Trays and two horizontal DC PEM-3s at the bottom. Every card is
+  authored horizontal and seated here at rotate 90 (clockwise), which puts MDA slot 1 at the
+  top as the guide says.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Written first. (1) 7450 ESS-12 and 7750 SR-12 Chassis Installation Guide 22.7,
+      3HE18644AAAATQZZA03 (the SR-12 guide; pages are the printed numbers, which are also the
+      PDF pages): p47 Figure 6 (front) and p49 Figure 7 (rear) are the geometry, p44-46 the
+      models and slot rules, p90-91 Tables 25-27 the chassis, environmental and PEM
+      specifications, p102 Table 42 the example power budget, p108 Table 45 storage, p128
+      Figure 23 the cable-management trays. Both figures are VECTOR: pdfimages -list on p47
+      and p49 finds only 16-95 px icons, so a 600 dpi pdftocairo render is exact. (2) The
+      owner's lab photographs of an installed SR-12, 2026-09-24
+      (working/intake/nokia/7750-sr/photos/lab-2026-09-24, four 1126 x 2000 phone shots in
+      perspective; read for ratios, legends and colour only). The A02 edition of the guide is
+      paginated differently and is not cited.
+  chassis:
+    confidence: datasheet
+    note: >-
+      p90 Table 25: 24.5 x 17.5 x 25.4 in (62.23 x 44.45 x 64.51 cm) H x W x D without the
+      cable-management unit, 30.1 in (764.5 mm) deep with it; 56.37 kg empty, about 155.4 kg
+      loaded; bracket ears factory-installed to front-mount in a 19 in rack (p46). 14 RU.
+      Ears are not modelled: the face is the 444.5 between the folds.
+  panel-scale:
+    confidence: drawing
+    note: >-
+      Gate 1, front. p47 Figure 6 at 600 dpi: the flanges measure 3130 px across = 482.5 mm at
+      6.487 px/mm, and the body top to bottom 4042 px = 623.1 mm against the stated 622.3, so
+      the figure is orthographic to 0.1 percent. Face frame: x = (px - 186.2) / 6.487 from the
+      body's left fold (the body centred on the flanges), y = (px - 66) / 6.487 from the top
+      edge. Positions were read off column and row profiles and a 5 mm grid laid over the
+      render, good to about 0.5 mm.
+  rear-scale:
+    confidence: drawing
+    note: >-
+      Gate 1, rear. p49 Figure 7 at 600 dpi measures 6.463 px/mm across (flanges 3119 px =
+      482.6) and 6.52 down (4058 px top to bottom for 622.3): the rear figure is drawn about
+      1 percent tall, so y was read on its own scale, y = (px - 218) / 6.52, and x = (px -
+      168.1) / 6.463.
+  card-cage:
+    confidence: drawing
+    note: >-
+      Twelve vertical slots on the family's slot unit U = 35.4 (the IOM4-e and IOM5-e figures
+      are 425.45 x 35.4 exactly; the conventions' pitch). The 12 slots measure 424.2 across on
+      p47, a pitch of 35.35; the boundaries read at 10.1, 45.3, 80.8, 115.4, 151.8, 186.3,
+      222.8, 258.2, 293.2, 329.3, 363.9, 400.3 and 434.4, all within 0.7 mm of 9.9 + 35.4k, so
+      the bays sit at x = 9.9 + 35.4k from slot 1 to slot 10 in the printed order. Card tops
+      read at y 76.1 along a blank slot and bottoms at 500-501.6, so the bays are 35.4 x 425.4
+      from y 75.9 (to 501.3).
+  rotation:
+    confidence: datasheet
+    note: >-
+      p46: "Module slots are vertically oriented in the front of the chassis ... MDA slot 1
+      (top slot) or MDA slot 2 (bottom slot)". Cards are authored horizontal (MDA slot 1 at
+      the left, the Card Stat or 7750 SR CPM5 end at the left) and every card bay is rotate
+      90, clockwise: the left end goes to the TOP and the top edge to the RIGHT. The lab
+      photographs agree five ways (the conventions' section 4): the IOM4-e's MDA slot 1 is on
+      top; ME1-100GB-CFP2 and the IOM4-e tab legend read top to bottom; the lower MDA's Pwr is
+      left of its Stat; the MDA-e screw lies near the column's right edge; 7750 SR CPM5 and
+      Card Stat are at the top of their columns. A rotated bay's size is the ON-PANEL
+      footprint and `at` its top-left corner; the renderer hangs the occupant at the bay
+      centre.
+  slot-numbering:
+    confidence: datasheet
+    note: >-
+      p46: IOM slots are numbered 1 through 10 and "the two center module slots, labeled A
+      and B, are reserved for the SF/CPMs". The chassis prints the order 1 2 3 4 5 A B 6 7 8 9
+      10 twice, on a strip above the cage (y 63.1-71.6) and again below it on the lower tray
+      cover (y 512.1-520.4), each numeral centred on its slot. rel-pos is the printed number
+      for the card slots and 1 = A, 2 = B for the SF/CPM slots.
+  slot-strip:
+    confidence: photo-measured
+    note: >-
+      Figure 6 draws the strip grey with white numerals and, over the SF/CPM slots, a dark
+      box printing A (x 197.0-205.1) and B (232.4-240.6) each followed by a white box printing
+      SFM (205.1-220.4, 240.6-255.9); the strip itself stops at x 19.7 and 426.2. The lab
+      photograph shows a dark strip with white numerals, an ORANGE A box and a light grey SFM
+      box with dark lettering. The B box is not in frame: an orange edge at the photograph's
+      right border, at the height of the A box and about one slot further on, is read as the
+      B box and drawn orange too (a reading, not a sighting).
+  cable-management:
+    confidence: drawing
+    note: >-
+      Key 1 (twice): the cable-management trays above and below the cage (p128 Figure 23,
+      "integral mounting brackets align with mounting holes ... above and below the module
+      cage"). Drawn as decor, flat: the top cover x 2.0-442.5, y 8.5-62.0 and the bottom cover
+      y 511.5-565.6, corners rounded; a label band shaded on each (x 10.2-434.3, y 19.9-42.4
+      and 532.0-554.5); twelve cable slots along the rear edge of each cover, 16.3 wide at a
+      32.6 pitch from x 35.2 (profiles at y 11.5 and 562.5 agree to 0.1 mm); and two round
+      fasteners on each cover, at (64.7, 47.6) and (379.6, 47.6) on the top one, (64.8, 526.2)
+      and (379.9, 506.5) as drawn on the bottom one. The trays stand proud of the chassis
+      (Table 25: 30.1 in deep with them against 25.4 without, so up to 119 mm), but how that
+      depth divides between tray and cover is not drawn, so no stand-off is modelled. See gap
+      cable-tray-depth.
+  legend:
+    confidence: photo-measured
+    note: >-
+      "7750 SR-12" over "Service Router" at the upper left of the top cover: Figure 6 sets it at
+      x 18.2, baselines 30.7 and 35.0, cap heights 4.9 and 2.8 mm; the photograph prints it in
+      white on the charcoal bezel at the same place.
+  logo-zone:
+    confidence: photo-measured
+    note: >-
+      The photographed bezel carries an Alcatel-Lucent wordmark and glyph at the upper right
+      of the top cover; the current -B chassis prints NOKIA. No vendor logo is drawn; the
+      region is reserved.
+  ground:
+    confidence: drawing
+    note: >-
+      p49 key 1, "Grounding studs": two hex-nut studs on the plate across the top of the rear,
+      centres (22.5, 27.9) and (37.6, 27.9), the nuts 12.4 across corners, with an earth
+      symbol in a black box at x 48.5-55.9, y 23.8-31.1. The plate is y 0-49.1, x 4.4-440.1.
+      Drawn as decor (chassis metalwork with no part number). Stud length is not documented.
+  esd:
+    confidence: drawing
+    note: >-
+      The front ESD plug (p47 key 9) sits in a grey box at x 413.3-438.7, y 603.0-621.5, jack
+      centre (420.2, 609.5), which lies on the air-filter vent faceplate (x 3.6-440.6, y
+      565.6-622.6 as drawn). The nokia/sr-12-air-filter part draws the plate and leaves its
+      honeycomb clear there (x 411.6-434.8, y 37.6-55.5 in the plate's own frame, 415.3-438.5
+      and 603.2-621.1 here); the chassis places common/esd-jack@1 on it, centred on the drawn
+      jack. Figure 7 draws no rear ESD jack.
+  fans:
+    confidence: drawing
+    note: >-
+      Three vertical Enhanced Fan Tray slots across the rear, left to right as seen from behind,
+      "The left slot is designated as fan tray #1" (p78). Bays are the tray's stated face,
+      139.7 x 447.0 (p104: 17.6 x 5.5 x 8.85 in), at x 9.9 / 151.6 / 293.4 (pitch 141.7),
+      y 50.1; the figure draws the plates about 430 between the handle zones and 449.4 of free
+      height between the ground plate and PEM 1, which the stated 447.0 fits. p78: trays are
+      interchangeable in any fan slot.
+  pems:
+    confidence: drawing
+    note: >-
+      Two horizontal DC PEM-3 slots at the bottom of the rear, "The top slot is designated slot
+      1" (p46). Bays are the PEM-3's stated face, 425.7 x 51.6 (p104: 2.03 x 16.76 x 9.38 in),
+      at x 11.1, y 498.6 and 551.2; drawn about 49 tall between y 500.4 and 551, the second
+      ending at 602.7. The stated size is used. The plate below, y 602.8-622.3, is plain.
+  defaults:
+    confidence: drawing
+    note: >-
+      Bay defaults follow what Figure 6 draws, with current-generation stand-ins for the
+      legacy cards it shows. The figure draws IOM3-XP cards with classic MDAs in slots 1, 3,
+      5, 6, 8 and 10 (keys 3 and 5), slot impedance panels in 2, 4, 7 and 9 (key 4) and SF/CPM4
+      in A and B. The IOM3-XP and the classic MDAs are not modelled yet, so those six slots default to
+      nokia/iom4-e@1 as a PLACEHOLDER (its MDA slots carry the MDA impedance panel by the
+      carrier's own default) until nokia/iom3-xp exists and takes them over; A and B default
+      to nokia/sfm4-12@1, which is both the figure's card and slot A in the photograph.
+  power:
+    confidence: datasheet
+    note: >-
+      No system maximum is stated. p102 Table 42 is an EXAMPLE budget, not an envelope: 6645 W
+      worst case for the chassis at high fan RPM with PEM-3s and three fan trays (1185 W), ten
+      1-port 100GE CFP IMMs (4250 W), ten CFP optics (240 W) and two SFM5-12 + CPM5 (970 W).
+      It is recorded here with that scope and power-max-w is not set from it; p93 notes that
+      some FP4 configurations "could exceed the maximum power capability of the chassis".
+      Input: DC only, -40 to -72 VDC into two load-sharing PEM-3s, each with two feeds; one
+      PEM-3 carries the whole system and two give 1+1 (p77). PEM-3 ratings (p91 Table 27):
+      6480 W at -40 to -72 VDC (162 A), 8050 / 8575 / 8837.5 W on narrower ranges (175 A); the
+      internal breaker is 175 A. AC sites use two external rectifier shelves, one per PEM: the
+      OmniOn L20 3HE20675AA with four 2725 W CP2725AC54TE rectifiers, or the legacy Eltek HM1J
+      3HE04172AA with four 2500 W rectifiers (p71-72; p92 Tables 28-29); a shelf's status
+      cable 3HE04173AA plugs into the PEM-3's DB-25 (p72).
+  colour:
+    confidence: photo-measured
+    note: >-
+      From the lab photographs (warm LED light, so hue relationships, not absolute values):
+      a charcoal bezel and tray covers, drawn #34373c; a darker slot strip with white numerals;
+      an orange A tag #e8742a and a light grey SFM tag #c8cacc; mid-grey side sheet metal. The
+      rear is not photographed, so its colour is the front's, estimated.
+  other-faces:
+    confidence: estimated
+    note: >-
+      No staged figure draws a side, the top or the bottom in elevation: p128 Figure 23 is an
+      isometric of the rack with the trays, and the clearance figure is a plan outline.
+attrs:
+  physical:
+    part-number: '3HE10768AA / 3HE00104AA'
+    ru: 14
+    weight-kg: 56.37
+    weight-full-kg: 155.4
+    width-over-flanges-mm: 482.6
+    depth-with-cable-management-mm: 764.5
+  power:
+    power-envelope: unstated
+    power-input-dc: '-40 to -72 VDC into two DC PEM-3 (175 A breaker each), two feeds per PEM-3; one PEM-3 carries the system, two give 1+1'
+    rated-voltage-dc: '-40 to -72 VDC; PEM-3 6480 W at -40 to -72 VDC, up to 8837.5 W at -50.5 to -72 VDC'
+    power-input-ac: 'none on the chassis; external rectifier shelves (OmniOn L20 3HE20675AA, Eltek HM1J 3HE04172AA) feed the PEM-3 terminals'
+  thermal:
+    acoustic-dba: 72.07
+  environmental:
+    operating-temp: '5 C to 40 C; short-term -5 C to 55 C'
+    acoustic-noise: '72.07 dBA at low fan RPM (3300), 84.51 at high (6000), 92.07 at full (7900), with PEM-3s and Enhanced Fan Trays'
+    storage-temp: -40 C to 70 C
+    humidity: '5 to 85 percent non-condensing; short-term 5 to 90'
+    altitude: '60 m below to 1800 m above sea level at 40 C; 1800 to 4000 m at 30 C'
+  platform:
+    family: 7750 SR
+    card-slots: 10
+    sfm-slots: 2
+    fan-slots: 3
+    pem-slots: 2
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 444.5
+  height: 622.3
+  depth: 645.2
+  ru: 14
+  weight-kg: 56.37
+  airflow: front-to-back
+  color: '#34373c'
+gaps:
+  - what: rear-photographs
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      The lab photographs show the front only (slots 1-5, A, B and 6). The rear colour and
+      finish, and the ground plate, are read off vendor line art.
+    wanted: one straight-on photograph of the SR-12 rear
+  - what: cable-tray-depth
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      p90 Table 25 gives the chassis 25.4 in deep without the cable-management unit and 30.1
+      in with it, but no figure dimensions how far the trays or their covers stand proud of the
+      card cage, so the covers are drawn flat on the face.
+    wanted: a side elevation of the chassis with the cable-management trays fitted
+  - what: side-top-bottom
+    scope: [left, right, top, bottom]
+    reason: needs-drawing
+    note: >-
+      Only isometrics (p125 rack mounting, p128 Figure 23) show the sides; nothing draws the
+      top or the underside.
+    wanted: side elevations or photographs of the sides
+  - what: unseen-lab-slots
+    scope: [slot-5, slot-7, slot-8, slot-9, slot-10]
+    reason: needs-photo
+    note: >-
+      The lab photographs cover slots 1 to 6 and A/B; slot 5 is hidden behind cabling and slots
+      7-10 are out of frame, so the lab-2026-09-24 configuration does not record them and they
+      show the bay defaults.
+    wanted: a photograph of the lab chassis's slots 5 and 7-10, and the label of slot 6's MDA 2
+groups:
+  card-slots:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      the ten vertical IOM/IMM slots, printed 1-5 left of the SF/CPMs and 6-10 right of them
+      (rel-pos = the printed number). An IOM carries two MDAs, MDA slot 1 at the TOP and slot
+      2 at the bottom (SR-12 guide p46). IOM5-e needs fabric-speed-c, which means the -B
+      chassis 3HE10768AA with SFM6-7/12 (p61-63); IOM3-XP and other FP2 cards fail at
+      fabric-speed-b and -c (p57, p63). Empty slots take an impedance panel (p81).
+  sfm-slots:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: >-
+      the two centre slots A (rel-pos 1) and B (rel-pos 2) for the switch fabric / control
+      processor: SFM5-12 + CPM5, SFM6-7/12 + CPM5, or the integrated SF/CPM3-12 / SF/CPM4-12.
+      One is required; two give redundancy, and in a redundant system the two SF/CPMs must be
+      of the same type (p46). SFM6-7/12 needs the -B chassis 3HE10768AA (p44). An empty slot
+      takes an impedance panel.
+  fans:
+    term: Fan Tray
+    role: service
+    index-origin: 1
+    description: >-
+      three vertical Enhanced Fan Tray slots across the rear, 1 at the left as seen from
+      behind (p78); the trays are interchangeable and hot-swappable, two fans in each
+    attrs:
+      redundancy: '3+0'
+      redundancy-note: >-
+        SR-12 guide p84: "Three fan trays are required for normal operation"; p80: a single fan
+        failure raises a Critical Fan Failed alarm and the whole tray must be replaced at once,
+        and the chassis runs safely without a tray for up to 2 min at 35 C. Three trays, all
+        needed and none spare, is 3+0
+  pems:
+    term: PEM
+    role: service
+    index-origin: 1
+    description: >-
+      two horizontal DC PEM-3 slots at the bottom of the rear, 1 at the top (p46). Each PEM-3
+      takes two -48 V feeds; the pair load-share and either carries the chassis (1+1, p77).
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        SR-12 guide p77: "One PEM -3 can support the full system's electrical current requirements
+        if you are operating the chassis without power redundancy", at least one must be fitted,
+        and "For redundancy, you must install two PEM-3s." p69 calls them hot-swappable,
+        load-sharing PEM-3s.
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 1
+    description: the front ESD plug receptacle at the bottom right, on the air-filter vent faceplate (p47 key 9)
+  air-filters:
+    term: Filter
+    role: service
+    index-origin: 1
+    description: the air-filter tray at the bottom of the front, whose vent faceplate is the air intake (p81)
+views:
+  front:
+    size: {w: 444.5, h: 622.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [444.5, 8.5], fill: '#26282c', kind: cable-tray, id: cable-tray-top, confidence: drawing, source: 'SR-12 guide p47 Figure 6 key 1: the top tray body behind its cover, y 0-8.5'}
+        - {at: [2, 8.5], size: [440.5, 53.5], fill: '#34373c', rx: 7, kind: cable-tray-cover, id: cable-cover-top, confidence: drawing, source: 'SR-12 guide p47 Figure 6 key 1: the top cover, x 2.0-442.5, y 8.5-62.0'}
+        - {at: [10.2, 19.9], size: [424.1, 22.5], fill: '#3b3e44', kind: label-band, confidence: drawing, source: 'SR-12 guide p47 Figure 6: the label band shaded on the top cover, carrying the model legend'}
+        - {at: [35.2, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [67.8, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [100.4, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [133, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [165.6, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [198.2, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [230.8, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [263.4, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [296, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [328.6, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [361.2, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [393.8, 8.5], size: [16.3, 6.8], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the top cover edge, 16.3 wide at a 32.6 pitch from x 35.2'}
+        - {at: [61.75, 44.65], size: [5.9, 5.9], fill: '#5b6067', rx: 2.95, kind: fastener, confidence: drawing, source: 'SR-12 guide p47 Figure 6: round fastener on the top cover, centre (64.7, 47.6)'}
+        - {at: [376.65, 44.65], size: [5.9, 5.9], fill: '#5b6067', rx: 2.95, kind: fastener, confidence: drawing, source: 'SR-12 guide p47 Figure 6: round fastener on the top cover, centre (379.6, 47.6)'}
+        - {at: [19.7, 63.1], size: [406.5, 8.5], fill: '#1f2124', kind: label-strip, id: slot-strip-top, confidence: drawing, source: 'SR-12 guide p47 Figure 6 key 2: the slot-number strip above the cage, x 19.7-426.2; dark in the lab photograph'}
+        - {at: [197, 63.1], size: [8.1, 8.5], fill: '#e8742a', kind: slot-tag, confidence: photo-measured, source: 'the A box over slot A; orange in the lab photograph'}
+        - {at: [205.1, 63.1], size: [15.3, 8.5], fill: '#c8cacc', kind: slot-tag, confidence: photo-measured, source: 'the SFM box after A; light grey with dark lettering in the lab photograph'}
+        - {at: [232.4, 63.1], size: [8.2, 8.5], fill: '#e8742a', kind: slot-tag, confidence: estimated, source: 'the B box over slot B; out of frame in the photograph but for an orange edge, drawn as the A box'}
+        - {at: [240.6, 63.1], size: [15.3, 8.5], fill: '#c8cacc', kind: slot-tag, confidence: estimated, source: 'the SFM box after B, drawn as the one after A'}
+        - {at: [9.9, 72], size: [424.8, 429.3], fill: '#16181b', kind: card-cage, id: card-cage, confidence: drawing, source: 'SR-12 guide p47 Figure 6: the card cage behind the slots, seen through an open slot (backplane connectors in the lab photograph)'}
+        - {at: [2, 511.5], size: [440.5, 54.1], fill: '#34373c', rx: 7, kind: cable-tray-cover, id: cable-cover-bottom, confidence: drawing, source: 'SR-12 guide p47 Figure 6 key 1: the bottom cover, y 511.5-565.6'}
+        - {at: [10.2, 532], size: [424.1, 22.5], fill: '#3b3e44', kind: label-band, confidence: drawing, source: 'SR-12 guide p47 Figure 6: the label band shaded on the bottom cover'}
+        - {at: [19.7, 512.1], size: [406.5, 8.3], fill: '#1f2124', kind: label-strip, id: slot-strip-bottom, confidence: drawing, source: 'SR-12 guide p47 Figure 6 key 2: the slot-number strip repeated on the bottom cover, x 19.7-426.2; dark in the lab photograph'}
+        - {at: [197, 512.1], size: [8.1, 8.3], fill: '#e8742a', kind: slot-tag, confidence: photo-measured, source: 'the A box over slot A; orange in the lab photograph'}
+        - {at: [205.1, 512.1], size: [15.3, 8.3], fill: '#c8cacc', kind: slot-tag, confidence: photo-measured, source: 'the SFM box after A; light grey with dark lettering in the lab photograph'}
+        - {at: [232.4, 512.1], size: [8.2, 8.3], fill: '#e8742a', kind: slot-tag, confidence: estimated, source: 'the B box over slot B; out of frame in the photograph but for an orange edge, drawn as the A box'}
+        - {at: [240.6, 512.1], size: [15.3, 8.3], fill: '#c8cacc', kind: slot-tag, confidence: estimated, source: 'the SFM box after B, drawn as the one after A'}
+        - {at: [35.2, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [67.8, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [100.4, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [133, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [165.6, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [198.2, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [230.8, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [263.4, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [296, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [328.6, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [361.2, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [393.8, 558.9], size: [16.3, 6.7], fill: '#16181b', kind: cable-slot, confidence: drawing, source: 'SR-12 guide p47 Figure 6: cable slots along the bottom cover edge, as on the top one'}
+        - {at: [61.85, 523.25], size: [5.9, 5.9], fill: '#5b6067', rx: 2.95, kind: fastener, confidence: drawing, source: 'SR-12 guide p47 Figure 6: round fastener drawn at (64.8, 526.2)'}
+        - {at: [376.95, 503.55], size: [5.9, 5.9], fill: '#5b6067', rx: 2.95, kind: fastener, confidence: drawing, source: 'SR-12 guide p47 Figure 6: round fastener drawn at (379.9, 506.5)'}
+    silkscreen:
+      - {at: [18.2, 30.7], text: '7750 SR-12', font-size: 6.8, anchor: start, fill: '#e6e6e6', for: chassis}
+      - {at: [18.2, 35.0], text: 'Service Router', font-size: 3.9, anchor: start, fill: '#e6e6e6', for: chassis}
+      - {at: [27.6, 70.4], text: '1', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-1}
+      - {at: [63, 70.4], text: '2', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-2}
+      - {at: [98.4, 70.4], text: '3', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-3}
+      - {at: [133.8, 70.4], text: '4', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-4}
+      - {at: [169.2, 70.4], text: '5', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-5}
+      - {at: [201.05, 70.4], text: 'A', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: sfm-a}
+      - {at: [212.75, 69.5], text: 'SFM', font-size: 6.0, anchor: middle, fill: '#1c1e21', for: sfm-a}
+      - {at: [236.5, 70.4], text: 'B', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: sfm-b}
+      - {at: [248.25, 69.5], text: 'SFM', font-size: 6.0, anchor: middle, fill: '#1c1e21', for: sfm-b}
+      - {at: [275.4, 70.4], text: '6', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-6}
+      - {at: [310.8, 70.4], text: '7', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-7}
+      - {at: [346.2, 70.4], text: '8', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-8}
+      - {at: [381.6, 70.4], text: '9', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-9}
+      - {at: [417, 70.4], text: '10', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-10}
+      - {at: [27.6, 519.3], text: '1', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-1}
+      - {at: [63, 519.3], text: '2', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-2}
+      - {at: [98.4, 519.3], text: '3', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-3}
+      - {at: [133.8, 519.3], text: '4', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-4}
+      - {at: [169.2, 519.3], text: '5', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-5}
+      - {at: [201.05, 519.3], text: 'A', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: sfm-a}
+      - {at: [212.75, 518.4], text: 'SFM', font-size: 6.0, anchor: middle, fill: '#1c1e21', for: sfm-a}
+      - {at: [236.5, 519.3], text: 'B', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: sfm-b}
+      - {at: [248.25, 518.4], text: 'SFM', font-size: 6.0, anchor: middle, fill: '#1c1e21', for: sfm-b}
+      - {at: [275.4, 519.3], text: '6', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-6}
+      - {at: [310.8, 519.3], text: '7', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-7}
+      - {at: [346.2, 519.3], text: '8', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-8}
+      - {at: [381.6, 519.3], text: '9', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-9}
+      - {at: [417, 519.3], text: '10', font-size: 8.2, anchor: middle, fill: '#e6e6e6', for: slot-10}
+    components:
+      bays:
+        - {id: slot-1, at: [9.9, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 1}
+        - {id: slot-2, at: [45.3, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 2}
+        - {id: slot-3, at: [80.7, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 3}
+        - {id: slot-4, at: [116.1, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 4}
+        - {id: slot-5, at: [151.5, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 5}
+        - {id: sfm-a, at: [186.9, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/sfm5-12@1, nokia/sfm6-7-12@1, nokia/sfm4-12@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sfm4-12@1, group: sfm-slots, rel-pos: 1}
+        - {id: sfm-b, at: [222.3, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/sfm5-12@1, nokia/sfm6-7-12@1, nokia/sfm4-12@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sfm4-12@1, group: sfm-slots, rel-pos: 2}
+        - {id: slot-6, at: [257.7, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 6}
+        - {id: slot-7, at: [293.1, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 7}
+        - {id: slot-8, at: [328.5, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 8}
+        - {id: slot-9, at: [363.9, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/sr-7-12-slot-impedance-panel@1, group: card-slots, rel-pos: 9}
+        - {id: slot-10, at: [399.3, 75.9], size: {w: 35.4, h: 425.4}, rotate: 90, accepts: [nokia/iom4-e@1, nokia/iom4-e-hs@1, nokia/iom5-e@1, nokia/imm-2pac-fp3-p6-10g-sfp@1, nokia/sr-7-12-slot-impedance-panel@1], default: nokia/iom4-e@1, group: card-slots, rel-pos: 10}
+        - {id: air-filter, at: [3.7, 565.6], size: {w: 437.1, h: 56.7}, accepts: [nokia/sr-12-air-filter@1], default: nokia/sr-12-air-filter@1, group: air-filters, rel-pos: 1}
+      placements:
+        - {id: esd, ref: common/esd-jack@1, at: [417.2, 606.5], group: grounding, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [250.0, 22.5], size: {w: 175.0, h: 17.0}, label: 'Vendor wordmark (Alcatel-Lucent on the photographed chassis, NOKIA on the -B); not drawn'}
+  rear:
+    size: {w: 444.5, h: 622.3}
+    panel:
+      decor:
+        - {at: [4.4, 0.5], size: [435.7, 48.6], fill: '#3a3d42', kind: ground-plate, id: ground-plate, confidence: drawing, source: 'SR-12 guide p49 Figure 7 key 1: the plate across the top of the rear carrying the grounding studs, y 0-49.1'}
+        - {at: [17.1, 22.5], size: [10.8, 10.8], fill: '#b9bcc0', kind: ground-nut, confidence: drawing, source: 'SR-12 guide p49 Figure 7 key 1: grounding stud nut, centre (22.5, 27.9), 12.4 across corners', shape: octagon}
+        - {at: [20.1, 25.5], size: [4.8, 4.8], fill: '#d2d5d8', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'SR-12 guide p49 Figure 7 key 1: the stud through the nut; its length is not documented'}
+        - {at: [32.2, 22.5], size: [10.8, 10.8], fill: '#b9bcc0', kind: ground-nut, confidence: drawing, source: 'SR-12 guide p49 Figure 7 key 1: grounding stud nut, centre (37.6, 27.9), 12.4 across corners', shape: octagon}
+        - {at: [35.2, 25.5], size: [4.8, 4.8], fill: '#d2d5d8', rx: 2.4, kind: ground-stud, out: 12, confidence: estimated, source: 'SR-12 guide p49 Figure 7 key 1: the stud through the nut; its length is not documented'}
+        - {at: [48.5, 23.8], size: [7.4, 7.3], fill: '#1c1c1c', rx: 0.8, kind: label-plate, confidence: drawing, source: 'SR-12 guide p49 Figure 7: the black box printing the earth symbol beside the studs'}
+    silkscreen:
+      - {at: [52.2, 24.9], path: 'M 0 0 L 0 2.4 M -2.4 2.4 L 2.4 2.4 M -1.6 3.6 L 1.6 3.6 M -0.8 4.8 L 0.8 4.8', fill: '#e6e6e6', stroke-width: 0.5, for: chassis}
+    components:
+      bays:
+        - {id: fan-1, at: [9.9, 50.1], size: {w: 139.7, h: 447.0}, accepts: [nokia/sr-12-fan-tray@1], default: nokia/sr-12-fan-tray@1, group: fans, rel-pos: 1}
+        - {id: fan-2, at: [151.6, 50.1], size: {w: 139.7, h: 447.0}, accepts: [nokia/sr-12-fan-tray@1], default: nokia/sr-12-fan-tray@1, group: fans, rel-pos: 2}
+        - {id: fan-3, at: [293.4, 50.1], size: {w: 139.7, h: 447.0}, accepts: [nokia/sr-12-fan-tray@1], default: nokia/sr-12-fan-tray@1, group: fans, rel-pos: 3}
+        - {id: pem-1, at: [11.1, 498.6], size: {w: 425.7, h: 51.6}, accepts: [nokia/sr-12-pem-3@1, nokia/sr-12-pem-blank@1], default: nokia/sr-12-pem-3@1, group: pems, rel-pos: 1}
+        - {id: pem-2, at: [11.1, 551.2], size: {w: 425.7, h: 51.6}, accepts: [nokia/sr-12-pem-3@1, nokia/sr-12-pem-blank@1], default: nokia/sr-12-pem-3@1, group: pems, rel-pos: 2}
+  left:
+    size: {w: 645.2, h: 622.3}
+    empty: >-
+      No staged document draws the left side of the 7750 SR-12 in elevation: the SR-12 guide's
+      p125 rack figure and p128 Figure 23 are isometrics that show only the tray brackets and a
+      few mounting holes near the front edge.
+  right:
+    size: {w: 645.2, h: 622.3}
+    empty: >-
+      No staged document draws the right side of the 7750 SR-12 in elevation (see left).
+  top:
+    size: {w: 444.5, h: 645.2}
+    empty: >-
+      No staged document draws the top of the 7750 SR-12; the clearance figure is a plan
+      outline with no feature of the cover.
+  bottom:
+    size: {w: 444.5, h: 645.2}
+    empty: >-
+      No staged document draws the underside of the 7750 SR-12.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships and powers on (SR-12 guide p90 note 8: shipped with the Enhanced
+      Fan Trays, the air filter tray, impedance panels and the DC PEM-3s installed): both PEM-3s,
+      three fan trays, the filter, an SF/CPM4-12 in A and B, and every IOM/IMM slot closed by a
+      slot impedance panel.
+    part-numbers:
+      7750 SR-12: {part: 3HE10768AA}
+      7750 SR-12 (pre-2016 chassis): {part: 3HE00104AA}
+    bays:
+      slot-1: nokia/sr-7-12-slot-impedance-panel@1
+      slot-2: nokia/sr-7-12-slot-impedance-panel@1
+      slot-3: nokia/sr-7-12-slot-impedance-panel@1
+      slot-4: nokia/sr-7-12-slot-impedance-panel@1
+      slot-5: nokia/sr-7-12-slot-impedance-panel@1
+      slot-6: nokia/sr-7-12-slot-impedance-panel@1
+      slot-7: nokia/sr-7-12-slot-impedance-panel@1
+      slot-8: nokia/sr-7-12-slot-impedance-panel@1
+      slot-9: nokia/sr-7-12-slot-impedance-panel@1
+      slot-10: nokia/sr-7-12-slot-impedance-panel@1
+  as-drawn:
+    kind: example
+    description: >-
+      The population SR-12 guide p47 Figure 6 draws, with a current-generation stand-in:
+      IOM4-e cards in slots 1, 3, 5, 6, 8 and 10 where the figure draws IOM3-XP cards with classic
+      MDAs (not modelled yet), slot impedance panels in 2, 4, 7 and 9, and SF/CPM4-12 in A and B. These are
+      the bay defaults.
+  lab-2026-09-24:
+    kind: example
+    source: owner lab photographs, working/intake/nokia/7750-sr/photos/lab-2026-09-24
+    description: >-
+      The owner's installed SR-12 as photographed on 2026-09-24, recording only what the
+      photographs show: the 12-port 10GE SFP+ Multi-Core IMM (IMM-2PAC-FP3, 3HE07158) in slot 1;
+      slots 2, 3 and 4 open, backplane visible; an SF/CPM4-12 in A and an SFM5-12 carrying a CPM5
+      in B (two SF/CPM types, which Nokia does not support as a redundant pair, p46 - recorded as
+      observed); and an IOM4-e in slot 6 with an ME1-100GB-CFP2 in MDA slot 1. Its MDA slot 2
+      holds an MDA-e whose label is not legible; it is drawn as a second ME1-100GB-CFP2, which is
+      a guess. Slots 5 and 7-10 are not in the photographs and show the bay defaults (gap
+      unseen-lab-slots). The chassis is the legacy Alcatel-Lucent one, bezel printed 7750 SR-12
+      Service Router.
+    bays:
+      slot-1: nokia/imm-2pac-fp3-p6-10g-sfp@1
+      slot-2: ''
+      slot-3: ''
+      slot-4: ''
+      sfm-a: nokia/sfm4-12@1
+      sfm-b: nokia/sfm5-12@1
+      sfm-b/cpm: nokia/cpm5@1
+      slot-6: nokia/iom4-e@1
+      slot-6/mda-1: nokia/me1-100gb-cfp2@1
+      slot-6/mda-2: nokia/me1-100gb-cfp2@1
+datasheet:
+  title: '7450 ESS-12 and 7750 SR-12 Chassis Installation Guide Release 22.7, 3HE 18644 AAAA TQZZA Edition 03'
+  sha256: 583b58e9d478cf2d16b5724f376b56907526b4124f8ef0953d8bdee42f1e6524

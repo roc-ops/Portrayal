@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: sr-7-power-filter
+version: 1.0.0
+class: filter
+behaviour: fills
+profile: networking
+description: >-
+  Nokia DC 100A Power Supply Filter (3HE04498AA; the 7450 ESS-7 orders it as 3HE04500AA), the
+  EMI filter that sits in a front filter bay of the 7750 SR-7 and is wired inside the chassis
+  to the DC PEM-3 in the rear power bay of the same number (nokia/sr-7-pem-3). Two are
+  factory-installed, one per PEM-3. The plate carries a long handle slot, a DE-9 power-supply
+  monitoring port (for the Eltek AC shelf's Y status cable), two hazard triangles, two label
+  plates, four panel screws and a large captive screw at each lower corner. The ESS-7 can
+  close both bays behind nokia/sr-7-psf-safety-panel.
+size: {w: 218.2, h: 64.5}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  no document states the filter's size; measured on the chassis front, SR7 Fig 6 p49
+attrs:
+  model: DC 100A Power Supply Filter
+  part-number: 3HE04498AA
+  role: dc-emi-filter
+  input: dc
+provenance:
+  sources: >-
+    SR7 = 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03: Fig 6
+    p49 (chassis front, both filters fitted; the only orthographic view), Fig 14 p74 and Table
+    14 (isometric, keys), Fig 12 p72 and Table 12 (pairing), p146 section 6.4 (the DE-9). Vector
+    art throughout: pdfimages -list on p49 finds two 20 px icons only. No photograph.
+  part-number: >-
+    datasheet - 3HE04498AA (7750 SR-7) and 3HE04500AA (7450 ESS-7), coverage grid L243, the
+    conventions' unit list. The two numbers are one face; the ESS number is recorded here
+    rather than as a second part.
+  size: >-
+    drawing - SR7 Fig 6 p49 at 1200 dpi, 12.196 px/mm (the conventions' Gate 1: 6.098 across,
+    6.097 down at 600 dpi): the left filter plate runs 0-218.3 across (165-2827 px) and from
+    the plate's top line to its bottom edge 64.5 down (px 191-978; the outer rim line sits
+    0.9 higher). Neither the filter's size nor its depth is stated anywhere in SR7 (grid L243);
+    no depth is written.
+  layout: >-
+    drawing - same render, mm from the plate top-left: a fold line at y 2.45; handle slot
+    54.9-167.3 x 22.1-30.2, round-ended; DE-9 shell 101.2-121.5 x 37.5-49.6 with jackscrew
+    posts at x 98.8 and 123.8 (25.0 apart, the DE-9 mounting centres), so
+    common/db9-receptacle@1 is seated centred at (111.3, 43.6); hazard triangles centred at x
+    164.8 and 176.6, y 4.2-11.8; label plates 178.8-215.9 x 26.7-37.8 and 188.3-215.9 x
+    39.6-49.9; panel screws at x 31.1 / 81.1 / 137.1 / 187.1, y 56.4, head 7.6; captive screws
+    centred (6.6, 57.2) and (211.6, 57.2), head about 13 (the head crosses the plate's own
+    edge in the figure). The "Alcatel-Lucent" wordmark and mark at 5.7-39.8 x 3-12 are not
+    reproduced; that area is the logo-zone. The right filter in Fig 6 is the same face.
+  captive-screws: 'datasheet - SR7 Table 14 key 1 "Captive screws"'
+  handle: 'datasheet - SR7 Table 14 key 2 "Handle used for installation and removal"; drawn as a recessed slot'
+  monitoring-port: >-
+    datasheet - SR7 p146 section 6.4: a power supply monitoring (Y-type) cable runs from the
+    Alarm connector of an Eltek Valere AC shelf to a DB-9 on the DC PEM filter, and carries
+    supply presence, fault and over-temperature to the active SF/CPM, whose power supply lamps
+    it lights. Eltek equipment only; the pinout is SR7 Tables 106/107.
+  power: >-
+    passive, by class - a passive EMI filter in series with its PEM-3 (SR7 p74: the filters
+    "provide EMI filtering and are required for each DC PEM-3"). It neither draws a figure of
+    its own nor converts; the input capacity of the feed is stated once, on the PEM-3
+    (nokia/sr-7-pem-3@1, 4000 W at 100 A). CLASS: the obvious model is class
+    `power` with `power-absent: not-applicable` (the cisco/a9k-dc-pem-v3 precedent), but L65
+    refuses that answer for a DC part that holds nothing, and the only answer it accepts, a
+    pass-through ceiling, would state the PEM-3's 4000 W a second time on the same feed and
+    double a chassis's input capacity. So the filter is class `filter`, which power-roles.yaml
+    counts as passive. Searched: SR7 Tables 29-47 pp94-107, which give the filter no figure.
+  pairing: 'datasheet - SR7 Table 12 p72: each PEM-3 is connected inside the chassis to a dedicated Power Supply Filter'
+  colour: >-
+    estimated - the figure is line art and no SR-7 photograph is staged; drawn in the charcoal
+    of the lab photographs' SR-12 front, legends white. A gap.
+  lifecycle: 'searched only the staged corpus - current in SR7 22.7; the 60 A-era filter (3HE09917 p35) is its predecessor'
+  relief: 'estimated - no standoff is dimensioned'
+elements:
+  handle-slot: {at: [54.9, 22.1], size: [112.4, 8.1], class: handle}
+  captive-screw-left: {at: [0.15, 50.75], size: [12.9, 12.9], class: screw}
+  captive-screw-right: {at: [205.15, 50.75], size: [12.9, 12.9], class: screw}
+  label-upper: {at: [178.8, 26.7], size: [37.0, 11.1], class: label}
+  label-lower: {at: [188.3, 39.6], size: [27.6, 10.3], class: label}
+  logo-zone: {at: [5.0, 3.5], size: [36.0, 10.0], class: label}
+groups:
+  monitoring:
+    term: Port
+    role: management
+    index-origin: 1
+    description: >-
+      the DE-9 power-supply monitoring port, which takes the Eltek AC shelf's status cable
+      (SR7 p146)
+parts:
+  - {ref: common/db9-receptacle@1, id: monitor, group: monitoring, at: [95.9, 37.35]}
+relief:
+  features:
+    - {node: handle-slot, pocket: 8.0, confidence: estimated, source: 'Fig 14 p74 key 2 draws the handle as a slot through the plate; its depth is not dimensioned'}
+    - {node: captive-screw-left, cyl: 5.0, confidence: estimated, source: 'Table 14 key 1 captive screw; head height not dimensioned'}
+    - {node: captive-screw-right, cyl: 5.0, confidence: estimated, source: as captive-screw-left}
+connection-points:
+  mate: {at: [109.1, 32.25], direction: rear}
+skins: [default]

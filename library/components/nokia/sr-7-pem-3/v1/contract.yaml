@@ -1,0 +1,132 @@
+format: 1
+kind: module
+name: sr-7-pem-3
+version: 1.0.0
+class: power
+behaviour: fills
+profile: networking
+description: >-
+  Nokia DC PEM-3 100A, the power entry module of the 7750 SR-7 and 7450 ESS-7. Two are
+  factory-installed in rear power bays 1 and 2 and share the load; one carries the whole
+  chassis, two give 1+1. Each PEM-3 connects inside the chassis to its own DC 100A power
+  supply filter in the front filter bay of the same number (nokia/sr-7-power-filter). Its rear
+  face carries a single-feed -48 VDC / RTN terminal block (two studs per pole, for a two-hole
+  lug) under a clear safety cover with a U notch round the left captive screw, the ON/OFF
+  circuit breaker, a pull handle, the second captive screw, and the printed "Model 7750 SR-7 /
+  100A PEM-3" with two hazard triangles. It has no lamp: its status shows on the CPM (Pwr
+  1-2). Authored as drawn in power bay 1 (terminal block at the left).
+size: {w: 219.5, h: 42.7, d: 195.6}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 7750 SR-7 100A PEM-3
+  power-output-w: 4000
+  role: dc-power-entry
+  input: dc
+  inlet: dc-terminal
+  voltage: '-48v'
+  input-voltage: '-40 to -72 VDC'
+  breaker-a: 100
+  feeds: 1
+  weight-kg: 1.5
+provenance:
+  sources: >-
+    SR7 = 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide 22.7, 3HE18643AAAATQZZA03: Fig 8
+    p51 (chassis rear, the only orthographic view of this face), Fig 13 p73 and Table 13
+    (isometric, keys), Fig 12 p72 (overhead view of the PEM-3 and filter pairing), Table 31
+    p95 (electrical), Table 47 p107 (dimensions, weight), pp228-231 (removal, the safety
+    cover and lug). Every figure is vector art; pdfimages -list finds only 16-95 px icons on
+    pp49-51 and pp72-73, so a 1200 dpi pdftocairo render is exact. No photograph is staged.
+  size: >-
+    datasheet - SR7 Table 47 p107: DC PEM-3 1.68 x 8.64 x 7.7 in (4.27 x 21.95 x 19.56 cm),
+    H x W x D. Fig 8 p51 at 1200 dpi (12.188 px/mm, the conventions' 6.094 at 600) draws the
+    plate 220.3 wide and 44.0 tall between its edge lines, 3 percent taller than stated; the
+    stated size is used and every drawn position is mapped onto it per axis (x times
+    219.5/220.3, y times 42.7/44.0). NOTE for the chassis: the drawn plate's top edge is at
+    chassis y 307.8, not 310.0 (310.0 is the terminal block's top); centred on the drawn
+    plate, a 42.7 bay sits at y 308.45.
+  depth: 'datasheet - 7.7 in (195.6 mm), SR7 Table 47 p107'
+  weight: 'datasheet - 3.3 lb (1.5 kg), SR7 Table 47 p107'
+  part-number: >-
+    NOT PRINTED - SR7 22.7 names the DC PEM-3 in Tables 12, 13, 31 and 47 without an
+    ordering number (coverage grid L250). No part-number attribute is written.
+  power: >-
+    datasheet - SR7 Table 31 p95: 100 A at -40 to -72 VDC, power safety rating 4000 W; 4600 W
+    at -46 to -72 VDC. Above a 4000 W chassis draw the guide requires the narrower input
+    range, so that the 100 A maximum is not exceeded (4.2.3.1). power-output-w carries the full-range 4000 W; the 4600 W rung is the narrow-range
+    rating. The internal breaker is 100 A (SR7 p95, 4.2.3.1.1). SR7 Table 29 p94 gives the
+    system safety maximum with PEM-3 as 4000 W, which agrees.
+  layout: >-
+    drawing - SR7 Fig 8 p51 at 1200 dpi, PEM in bay 1, positions in mm from the plate's
+    top-left after the per-axis mapping in `size`: terminal block and its clear cover
+    1.8-107.3 x 2.9-39.6 with rails at y 5.7 and 36.5 and a U notch 1.8-14.0 x 14.5-26.7
+    round the left captive screw (centre 8.1, 20.8, head about 9.9); -48 studs at (48.3, 12.1)
+    and (64.9, 12.1), RTN studs at (48.3, 30.8) and (64.9, 30.8), each drawn as a 13.0 washer
+    ring round the stud; "-48", "TORQUE: 40 lbs-inch (4.5 N-m)" and "RTN" at x 26 with leaders
+    34.4-41.0; cover screws at (103.7, 14.5) and (103.7, 30.8), a further screw (89.6, 22.6)
+    and a round post (96.4, 22.6); hazard triangles 117.2-126.8 and 128.3-138.4 x 3.0-10.5;
+    "Model 7750 SR-7" and "100A PEM-3" from x 142.3; handle bar 110.6-195.7 x 17.3-24.2;
+    breaker frame 135.5-169.3 x 12.0-30.3 with the OFF/ON rocker 138.4-166.1 x 15.6-26.8
+    split at 152.3; right captive screw (212.0, 21.3). The stud pitch of 16.5 matches the
+    two-hole lug on 0.63 in (16.0) centres that p231 step 6 requires.
+  mirrored-in-bay-2: >-
+    CONFLICT, NOT RESOLVED. Fig 8 p51 draws the PEM-3 in bay 2 as a MIRROR IMAGE of bay 1:
+    terminal block at the right, captive screw at the left, the hazard triangles reversed, yet
+    every legend upright and OFF still left of ON. Fig 12 p72 (overhead) puts both terminal
+    blocks at the outer ends too. A mirror image is not a part one can build from the same
+    PEM, and a 180 degree rotation would turn the printing upside down, which Fig 8 does not
+    show. This contract is the bay-1 face (Fig 13 p73, the only standalone view, is also the
+    terminals-left build). Either the bay-2 unit is installed inverted and the illustrator
+    redrew the text upright, or the chassis takes a handed pair with one part number; a
+    photograph of an SR-7 rear settles it. Until then the chassis seats this one face in both
+    bays. A gap.
+  terminals: >-
+    datasheet - SR7 Table 13 p73: key 2 "-48 VDC power cable", key 3 "RTN power cable", key 4
+    "Protective cover"; Table 12 p72 key 5 "-48 VDC and RTN terminals, with protective
+    cover"; p231 steps 5-7: two cover screws, lugs torqued to 40 lbf-in on a 7/16 in nut.
+    Single feed: one -48 V pole and one RTN pole, each on two studs.
+  cover: >-
+    drawing - the figures shade the safety cover as a clear moulding over the studs (Fig 8,
+    Fig 13 key 4, Fig 75 p231). It is drawn as a light tint with the studs showing through
+    and is NOT raised in 3D: a raised node is a solid box and would bury the studs it covers.
+  breaker: 'datasheet - SR7 Table 13 key 6 "Circuit breaker (ON/OFF)"; p229 step 2 sets it to OFF (O)'
+  handle: 'datasheet - SR7 Table 13 key 5 "Handle used for installation and removal"; Fig 13 draws a bent tube'
+  captive-screws: 'datasheet - SR7 Table 12 key 3 "Captive screws, two for each PEM-3"; Table 13 key 7'
+  lamps: >-
+    datasheet - none on the unit. SR7 p229 step 3: "Verify that the appropriate Power Supply
+    LED on the SF/CPM is amber"; the CPM5's Pwr lamps report the PEMs (coverage grid L250).
+  pairing: 'datasheet - SR7 Table 12 key 1: each PEM-3 "is connected inside the chassis ... to a dedicated Power Supply Filter"'
+  colour: >-
+    estimated - no photograph of an SR-7 rear is staged (PUBLIC-SOURCES lists an eBay rear,
+    not fetched). Drawn as bare zinc-grey sheet metal with a clear cover; a gap.
+  logo-zone: 'reserved by the family convention at the free metal right of the model legend; the figures print no mark on the PEM-3'
+  relief: 'estimated - no figure dimensions any standoff; the heights below are by eye from Fig 13'
+  lifecycle: 'searched only the staged corpus - current in SR7 22.7, where it supersedes the 60 A DC PEM (grid L251)'
+  ac-sites: >-
+    datasheet - SR7 pp75-76 and 144: AC sites feed these terminals from an external OmniOn
+    L21 (3HE20676AA) or Eltek HM34J split shelf, two 5 kW outputs; the shelves are separate
+    devices.
+elements:
+  terminal-cover: {at: [1.8, 2.9], size: [105.5, 36.7], class: cover}
+  terminal-neg: {at: [41.82, 5.63], size: [29.54, 13.0], class: terminal}
+  terminal-rtn: {at: [41.82, 24.26], size: [29.54, 13.0], class: terminal}
+  cover-screw-top: {at: [100.82, 11.56], size: [5.8, 5.8], class: screw}
+  cover-screw-bottom: {at: [100.82, 27.86], size: [5.8, 5.8], class: screw}
+  captive-screw-left: {at: [3.12, 15.82], size: [9.9, 9.9], class: screw}
+  captive-screw-right: {at: [207.08, 16.3], size: [9.9, 9.9], class: screw}
+  handle: {at: [110.6, 17.27], size: [85.1, 6.89], class: handle}
+  breaker: {at: [135.5, 12.03], size: [33.8, 18.25], class: button}
+  logo-zone: {at: [175, 3], size: [28, 7], class: label}
+relief:
+  features:
+    - {node: terminal-neg-stud-1, cyl: 8.0, confidence: estimated, source: 'a stud with its nut and washer (p231, 7/16 in nut); height not dimensioned'}
+    - {node: terminal-neg-stud-2, cyl: 8.0, confidence: estimated, source: as terminal-neg-stud-1}
+    - {node: terminal-rtn-stud-1, cyl: 8.0, confidence: estimated, source: as terminal-neg-stud-1}
+    - {node: terminal-rtn-stud-2, cyl: 8.0, confidence: estimated, source: as terminal-neg-stud-1}
+    - {node: captive-screw-left, cyl: 4.0, confidence: estimated, source: 'Table 13 key 7 captive screw; head height not dimensioned'}
+    - {node: captive-screw-right, cyl: 4.0, confidence: estimated, source: as captive-screw-left}
+    - {node: handle, uhandle: 18.0, confidence: estimated, source: 'Fig 13 p73 draws a bent tube handle standing well off the face; not dimensioned'}
+    - {node: breaker, out: 4.0, confidence: estimated, source: 'the breaker frame stands proud of the plate in Fig 13; not dimensioned'}
+connection-points:
+  mate: {at: [109.75, 21.35], direction: rear}
+  feed: {at: [56.59, 21.45], direction: down}
+skins: [default]
