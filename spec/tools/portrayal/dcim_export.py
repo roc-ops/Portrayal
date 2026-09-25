@@ -572,6 +572,9 @@ NOT_A_DCIM_PORT = {
     "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
                 "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/vga": "VGA; neither library has a video port type",
+    "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
+                               "over one cable; neither library has a type for it, and one row "
+                               "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",

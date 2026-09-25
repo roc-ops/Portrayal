@@ -1,0 +1,37 @@
+format: 1
+kind: module
+name: osa542x-lc-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Oscilloquartz OSA 542x expansion-slot blank plate - the plain cover that keeps dust
+  and foreign objects out of an unused LC slot, held by a captive thumbscrew at its
+  right-hand end.
+size: {w: 113.5, h: 20.6}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  role: slot-blank
+provenance:
+  size: >-
+    borrowed - oscilloquartz/btoh-16@1, the expansion bay's own measured opening. A blank
+    fills the same slot a card does, and the library should not hold two answers for one
+    aperture.
+  purpose: >-
+    manual - OSA 5420/5421 Installation and Commissioning Manual R9.5.1 p46, "Install or
+    Remove Blank Plates": blank plates must be installed in unused PSU or expansion
+    slots, and the unit should not run for long with a module out and no blank in its
+    place, to keep dust and foreign objects out. Blank plates ship with the unit ("the
+    supplied Blank Plates", p44). No part number is given.
+  appearance: >-
+    estimated - NO IMAGE OF THE BLANK IS HELD. The manual's text is the only source:
+    the plate slides into the card guides with "the thumb screw oriented to the
+    right" and is secured by tightening "the captive thumbscrew on the front panel"
+    (p46-47). So this is the card frame's plate in the chassis grey with a thumbscrew
+    at the right-hand end, at the same height as the cards' own. The screw's size is
+    the cards' thumbscrew. Replace it when a photograph of a blanked slot turns up.
+states: [absent]
+elements:
+  thumbscrew: {at: [106.9, 7.1], size: [6.4, 6.4], class: fastener}
+skins: [default]
