@@ -1,0 +1,408 @@
+format: 1
+kind: module
+name: fglt-d
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FGLT-D (3FE 75833 AA), the 16-port GPON line termination board with traffic
+  manager (version D) of the 7360 ISAM FX and Lightspan FX. Seats in any LT slot of the
+  FX-4, FX-8 and FX-16. Authored upright, as the Unit Data Sheet guides draw it: a
+  thumbscrew and the model label at the top beside the ejector, sixteen SFP cages one
+  per tooth of a sawtooth, each numbered on the left strip with its PON lamp beside the
+  numeral, then the ESD and hot-surface marks, the ALM and PWR lamps, a blank label and
+  the bottom thumbscrew.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), the width the shared 7360 FX LT bay is built to;
+  the faceplate's own edge-to-edge width is not stated. d is the board's depth at its
+  top, 225 mm; the UDS gives 205 mm at the bottom.
+attrs:
+  model: FGLT-D AA
+  part-number: 3FE 75833 AA
+  gpon: 16
+  weight-kg: 1.12
+  power-draw-max-w: 41
+  power-draw-typical-w: 38
+provenance:
+  size: >-
+    datasheet - Lightspan FX Unit Data Sheet guide 3HH90279AAAATQZZA23 section 39.5.2
+    (p405): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm; ETSI UDS 3FE77012AAAATQZZA18 section 36.5.2 prints the same. The UDS "width" is
+    the board's depth into the shelf. Face held at the 25 mm pitch by the shared 7360 FX
+    convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 39.5.2; faceplate width not stated, taken
+    as the pitch.
+  depth: 'datasheet - 225 mm at the top, 205 mm at the bottom, section 39.5.2; 225 carried as the envelope'
+  weight: 'datasheet - 1.12 kg, Lightspan UDS A23 section 39.5.2 (p405)'
+  power: >-
+    datasheet - Lightspan FX Safety Manual 3HH91852AAAATCZZA07 p37 Table 2 and ANSI Safety
+    Manual 3HH12894AAAATCZZA27 p25 Table 2: FGLT-D 38 W typical, 41 W maximum. Neither
+    table's notes say whether the SFP optics are inside the figure, so that scope is open
+    (gap).
+  layout: >-
+    drawing - ETSI UDS A18 Figure 143 (p349, embedded 1837 x 1438 at 300 ppi; Lightspan
+    Figure 189 p405 is a 150 ppi JPEG of the same art) carries, beside two side
+    elevations, a FLAT front of the board at its right edge. That front spans image y 60
+    to 1333 (3.143 px/mm along the 405) and x 1723 to 1800 across the plate (3.08 px/mm
+    on 25), so its aspect is within 2% and positions are taken off it directly. Top
+    thumbscrew at 4.6, model label 11.0-22.1, ejector handle to 31.8; cage 1 top at 38.3,
+    sixteen cages 13.7 long on a 20.66 pitch (measured 64.92 px over thirteen repeats);
+    the numeral of each cage at its top edge on the left strip, between two small pads at
+    -4.7 and +3.1; ALM and PWR lamps at 379.6; blank label 383.1-394.1; bottom thumbscrew
+    at 399.5. Across: cages 5.8-17.2 (centred 11.5), pads and numerals at about 3, lamps
+    at 9.0 and 14.4. About 1 mm error.
+  layout-compression: >-
+    the figure's last cage is truncated where the plate below it begins, and the ESD and
+    hot-surface marks drawn at 359.9-368.8 would overlap cage 16 at the measured pitch. The
+    pitch is carried (it is measured over thirteen repeats) and the two marks are moved
+    down to 365.0-373.0, clear of both cage 16 and the lamp legends. The recess behind the
+    cages ends at 364.0 for the same reason.
+  ports: >-
+    datasheet for the count - UDS section 39.4: 16 GPON ports. Composed as std/sfp@1 turned
+    90: the flat front draws each cage 13.7 mm along the card and about 11 across, the SFP
+    width along. Numbered 1-16 from the top, as the numerals printed beside the cages in
+    Figure 143 read (1, 2, 3 at the top, 15, 16 at the bottom, each set a quarter turn
+    so it reads top to bottom; the rest are too small to read but sit on the same
+    pitch).
+  lamps: >-
+    datasheet - Figure 190 / ETSI Figure 144 and Table 152. PWR: off = power off, blinking
+    green = initialisation; no steady state is listed and none is drawn. ALM: red = alarm.
+    PON lamp (one per port, in the side of its socket, "on the left of the corresponding
+    PON interface"): off, yellow, green, red. The flat front draws TWO small pads per cage
+    on the left strip, but Table 152 counts 18 lamps, so one pad per cage is a lamp: the
+    lower one, level with the cage's top, is taken; the upper one is drawn as a plain pad
+    and is unidentified (gap). The flat front sets ALM left of PWR, side by side, under
+    their legends; the LED close-up stacks PWR above ALM, and is the same pixel-for-pixel
+    art the FGLT-B and FGLT-E sections use, so the flat front is followed.
+  labels: >-
+    drawing - a label box at the top printed with the model placeholder "XXXX-X" and three
+    lines of placeholder text (drawn as the model name and grey bars; no serial is
+    transcribed), and an empty label frame above the bottom thumbscrew.
+  marks: >-
+    drawing - an ESD triangle (left) and a hot-surface triangle (right) above the lamps,
+    both drawn upright in the flat front.
+  logo-zone: >-
+    reserved by the family convention; the flat front draws no mark, so the zone sits on
+    the empty metal between the model label and the first cage.
+  relief: >-
+    estimated - the two ejector handles stand proud; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2, as nokia/fnio-a@1 carries) is used.
+    The sawtooth is carried as facets (angled-panel), not as an `out`.
+  colour: >-
+    borrowed - no photograph of an FGLT-D is known (working/intake/nokia/PUBLIC-SOURCES.md
+    section 3); the family's light silver-grey plate and dark ejectors are used, and the
+    hot-surface mark is filled yellow as the FGLT-B photographs show it (the figure is
+    black and white).
+  lifecycle: >-
+    searched only the staged corpus - current in the Lightspan UDS A23 and ETSI UDS A18;
+    no end-of-life notice was searched for on the web.
+  angled-panel: >-
+    estimated - ETSI UDS A18 p349 Figure 143, the two side elevations (3.14 px/mm,
+    isotropic). Line fits on the tooth outline of the left elevation give the long edge
+    that carries the cage at 29.5-29.7 degrees to the plate and the short edge at
+    59.8-60.0 degrees, on the 20.66 pitch. DEPTH: the sawtooth stands BEHIND the plate:
+    the left elevation draws the plate 14.0 mm deep (front line 68-70 px, back line
+    111-113 px) and nothing proud of it, and the tooth tips touch the back. The opening
+    the cages look through is one pocket, `well`, 33.0 to 366.99 and 22.95 deep; every
+    facet has `lift` -22.95. The angles are unchanged by the depth. Section, plate front
+    at 0: tooth crest -14.0, tooth root and pocket floor -22.95. Modelled as sixteen
+    teeth of 30 degrees (face-N, facing up, the cage on it) and 60 degrees (return-N,
+    facing down, below it): face 15.50 and return 5.17 mm of front view. Each face keeps
+    the cage centre the flat front of Figure 143 gives (45.15 + 20.66 n), its lower edge
+    0.5 mm above the crest, so the cage runs back parallel to the return below it, 0.58
+    mm inside it, and passes below the pocket floor before any wall. The last return,
+    and so the pocket, runs to 366.99, over the tips of the ESD and hot-surface
+    triangles (from 365) (gap); ending the pocket sooner would put cage 16 through its
+    wall.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [7.5, 23.3], size: [15.5, 8.5], class: label}
+  model-label: {at: [7.5, 11.0], size: [15.6, 11.1], class: label}
+  blank-label: {at: [7.6, 383.1], size: [14.8, 11.0], class: label}
+  well: {at: [5, 33], size: [19, 333.994], class: mechanical}
+  face-1: {at: [5, 36.434], size: [19, 15.495], class: mechanical}
+  return-1: {at: [5, 51.929], size: [19, 5.165], class: mechanical}
+  face-2: {at: [5, 57.094], size: [19, 15.495], class: mechanical}
+  return-2: {at: [5, 72.589], size: [19, 5.165], class: mechanical}
+  face-3: {at: [5, 77.754], size: [19, 15.495], class: mechanical}
+  return-3: {at: [5, 93.249], size: [19, 5.165], class: mechanical}
+  face-4: {at: [5, 98.414], size: [19, 15.495], class: mechanical}
+  return-4: {at: [5, 113.909], size: [19, 5.165], class: mechanical}
+  face-5: {at: [5, 119.074], size: [19, 15.495], class: mechanical}
+  return-5: {at: [5, 134.569], size: [19, 5.165], class: mechanical}
+  face-6: {at: [5, 139.734], size: [19, 15.495], class: mechanical}
+  return-6: {at: [5, 155.229], size: [19, 5.165], class: mechanical}
+  face-7: {at: [5, 160.394], size: [19, 15.495], class: mechanical}
+  return-7: {at: [5, 175.889], size: [19, 5.165], class: mechanical}
+  face-8: {at: [5, 181.054], size: [19, 15.495], class: mechanical}
+  return-8: {at: [5, 196.549], size: [19, 5.165], class: mechanical}
+  face-9: {at: [5, 201.714], size: [19, 15.495], class: mechanical}
+  return-9: {at: [5, 217.209], size: [19, 5.165], class: mechanical}
+  face-10: {at: [5, 222.374], size: [19, 15.495], class: mechanical}
+  return-10: {at: [5, 237.869], size: [19, 5.165], class: mechanical}
+  face-11: {at: [5, 243.034], size: [19, 15.495], class: mechanical}
+  return-11: {at: [5, 258.529], size: [19, 5.165], class: mechanical}
+  face-12: {at: [5, 263.694], size: [19, 15.495], class: mechanical}
+  return-12: {at: [5, 279.189], size: [19, 5.165], class: mechanical}
+  face-13: {at: [5, 284.354], size: [19, 15.495], class: mechanical}
+  return-13: {at: [5, 299.849], size: [19, 5.165], class: mechanical}
+  face-14: {at: [5, 305.014], size: [19, 15.495], class: mechanical}
+  return-14: {at: [5, 320.509], size: [19, 5.165], class: mechanical}
+  face-15: {at: [5, 325.674], size: [19, 15.495], class: mechanical}
+  return-15: {at: [5, 341.169], size: [19, 5.165], class: mechanical}
+  face-16: {at: [5, 346.334], size: [19, 15.495], class: mechanical}
+  return-16: {at: [5, 361.829], size: [19, 5.165], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 left elevation: plate front 68-70 px to plate back 111-113 px = 14.0 mm (3.143 px/mm), the tooth tips touching the back'
+    - node: face-1
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-1
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-2
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-2
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-3
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-3
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-4
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-4
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-5
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-5
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-6
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-6
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-7
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-7
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-8
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-8
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-9
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-9
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-10
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-10
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-11
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-11
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-12
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-12
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-13
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-13
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-14
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-14
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-15
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-15
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: face-16
+      facet: {deg: 30, facing: up}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+    - node: return-16
+      facet: {deg: 60, facing: down}
+      lift: -22.95
+      confidence: estimated
+      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
+groups:
+  pon:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 2.5g, pon: gpon}
+    description: the sixteen GPON ports, SFP GPON optics, numbered 1-16 from the top
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON lamp per port, on the port's left
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: port-1, group: pon, at: [4.25, 40.82], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: pon, at: [4.25, 61.48], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: port-3, group: pon, at: [4.25, 82.14], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: port-4, group: pon, at: [4.25, 102.8], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: port-5, group: pon, at: [4.25, 123.46], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: port-6, group: pon, at: [4.25, 144.12], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: port-7, group: pon, at: [4.25, 164.78], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: port-8, group: pon, at: [4.25, 185.44], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: port-9, group: pon, at: [4.25, 206.1], rotate: 90, 'on': face-9}
+  - {ref: std/sfp@1, id: port-10, group: pon, at: [4.25, 226.76], rotate: 90, 'on': face-10}
+  - {ref: std/sfp@1, id: port-11, group: pon, at: [4.25, 247.42], rotate: 90, 'on': face-11}
+  - {ref: std/sfp@1, id: port-12, group: pon, at: [4.25, 268.08], rotate: 90, 'on': face-12}
+  - {ref: std/sfp@1, id: port-13, group: pon, at: [4.25, 288.74], rotate: 90, 'on': face-13}
+  - {ref: std/sfp@1, id: port-14, group: pon, at: [4.25, 309.4], rotate: 90, 'on': face-14}
+  - {ref: std/sfp@1, id: port-15, group: pon, at: [4.25, 330.06], rotate: 90, 'on': face-15}
+  - {ref: std/sfp@1, id: port-16, group: pon, at: [4.25, 350.72], rotate: 90, 'on': face-16}
+  - {ref: common/led-dot@1, id: led-1, group: pon-leds, at: [2.2, 40.2], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-2, group: pon-leds, at: [2.2, 60.86], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-3, group: pon-leds, at: [2.2, 81.52], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-4, group: pon-leds, at: [2.2, 102.18], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-5, group: pon-leds, at: [2.2, 122.84], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-6, group: pon-leds, at: [2.2, 143.5], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-7, group: pon-leds, at: [2.2, 164.16], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-8, group: pon-leds, at: [2.2, 184.82], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-9, group: pon-leds, at: [2.2, 205.48], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-10, group: pon-leds, at: [2.2, 226.14], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-11, group: pon-leds, at: [2.2, 246.8], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-12, group: pon-leds, at: [2.2, 267.46], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-13, group: pon-leds, at: [2.2, 288.12], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-14, group: pon-leds, at: [2.2, 308.78], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-15, group: pon-leds, at: [2.2, 329.44], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-16, group: pon-leds, at: [2.2, 350.1], states: {lamp: ['off', {name: yellow, color: '#f2c200'}, {name: green, color: '#39b54a'}, {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8, 378.6], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [13.4, 378.6], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

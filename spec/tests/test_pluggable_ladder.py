@@ -69,11 +69,11 @@ def test_every_rate_is_in_the_vocabulary():
 # duplicating that assignment would not be the drift the docstring warns
 # about; it would just be redundant with it.
 _GENERATION = {
-    "sfp": 1, "sfp-plus": 2, "sfp28": 3, "sfp56": 4,
+    "sfp": 1, "sfp-plus": 2, "sfp28": 3, "sfp56": 4, "sfp112": 5,
     "sfp-dd": 1,
     "qsfp": 1, "qsfp28": 2, "qsfp56": 3, "qsfp112": 4,
     "qsfp-dd": 1,
-    "osfp": 1, "xfp": 1, "cfp": 1, "cfp2": 1, "cxp": 1,
+    "osfp": 1, "xfp": 1, "cfp": 1, "cfp2": 1, "cfp4": 1, "cxp": 1,
 }
 
 

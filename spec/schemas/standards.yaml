@@ -344,6 +344,50 @@ standards:
       between the two parts is the insert and the gender, and on equipment VGA
       is a female receptacle where the alarm and serial DE-9s are usually male.
       Neither changes the hole.
+  da15:
+    registry: TE 114-40010 Rev G, D-subminiature shell size A (DA-15)
+    w: 28.80
+    h: 11.40
+    radius: 3.35
+    confidence: verified
+    depth: 6.73
+    depth-confidence: estimated
+    notes: >-
+      The fifteen-pin, two-row D-sub in the A shell - the connector `hd15`
+      warns is not VGA. Nokia's 7750 SR-e CCM-e carries one for its alarms and
+      calls it "DB-15", the usual misnomer.
+
+      TE 114-40010 Rev G Figure 3 tabulates the panel cutout by position count:
+      for 15 positions the C dimension (the cutout width) is 28.80 and the A
+      dimension (the mounting-hole centres) is 33.32. Height 11.40, the 10
+      degrees +/-2 taper and the 3.35 radius in four places are drawn once for
+      every shell, so this is `db9` with only the width changed - 8.33 wider,
+      the same figure the two A dimensions differ by.
+
+      Depth 6.73 is Figure 4's mating dimension for 9 and 15 position, standing
+      in for a setback nobody has measured, exactly as on `db9`.
+  db25:
+    registry: TE 114-40010 Rev G, D-subminiature shell size B (DB-25)
+    w: 42.52
+    h: 11.40
+    radius: 3.35
+    confidence: verified
+    depth: 6.50
+    depth-confidence: estimated
+    notes: >-
+      The twenty-five-pin, two-row D-sub in the B shell. Nokia's 7750 SR-12 DC
+      PEM-3 carries a female one for the status cable from an AC rectifier
+      shelf (SR-12 guide 22.7 p70 Figure 11 key 5; p259 Table 110).
+
+      TE 114-40010 Rev G Figure 3 tabulates the panel cutout by position count:
+      for 25 positions the C dimension (the cutout width) is 42.52 and the A
+      dimension (the mounting-hole centres) is 47.04. Height 11.40, the 10
+      degrees +/-2 taper and the 3.35 radius in four places are drawn once for
+      every shell, so this is `db9` and `da15` with only the width changed.
+
+      Depth 6.50 is Figure 4's mating dimension for 25 and 37 position (6.73
+      for 9 and 15), standing in for a setback nobody has measured, exactly as
+      on `db9` and `da15`.
   crps-1u:
     registry: CRPS (Common Redundant Power Supply) 1U module envelope
     w: 73.5
@@ -500,12 +544,15 @@ standards:
   mpo-adapter:
     registry: >-
       IEC 61754-7 / TIA-604-5 FOCIS 5 governs the MPO mating interface and is not
-      held here. w/h are MEASURED, NOT READ FROM A STANDARD: the pitch and the
-      aperture come from FS's own face-on render of SKU 35510 (FHD 12x
-      MTP-8/12/24 adapter panel), scaled on the 108.97 mm FHD module width and
-      validated against the 35.05 mm height to 1.7%.
-    w: 7.8
-    h: 5.6
+      held here (the publisher's preview of IEC 61754-7-1 stops before its
+      adaptor table). w/h are DERIVED, NOT READ: the `mpo-plug` envelope
+      printed on US Conec C20044 rev B and C20851 rev D, plus the clearance
+      measured on SENKO's LC pair (DS-LC-000010 Rev A against DS-LC-000004 Rev
+      A). The PITCH is MEASURED off FS's own face-on render of SKU 35510 (FHD
+      12x MTP-8/12/24 adapter panel), scaled on the 108.97 mm FHD module width
+      and validated against the 35.05 mm height to 1.7%.
+    w: 12.9
+    h: 8.0
     confidence: estimated
     pitch: 13.8
     pitch-confidence: measured
@@ -528,10 +575,24 @@ standards:
       opening and why the pitch lands near an SC's.
       THE PITCH IS THE STRONG HALF AND THE APERTURE IS THE WEAK ONE. Two rows of
       six on 35510 give 13.77 and 13.80 with spreads of 1.11 and 0.60, so 13.8 is
-      a measurement. The 7.8 x 5.6 opening is not: the detection catches a
-      bevelled interior and reads 5.4 to 8.5 across the rows, so the aperture is
-      an estimate sitting inside a measured pitch. A caliper on one adapter, or
-      IEC 61754-7, settles it.
+      a measurement. THE APERTURE IS AN ESTIMATE, AND SINCE std/mpo@2 A DERIVED
+      ONE: no adapter drawing held here - US Conec C10783, C10784, C12697,
+      C9299, C16920; SENKO DS-MPO-000004, DS-MPO-000005 - puts a callout on
+      the mouth, so the printed plug (12.5 x 7.6) has 0.40 added on each axis,
+      the upper end of the 0.16-0.40 the LC opening runs over its plug per
+      tier. The undimensioned readings held do NOT sit on one side of it, and
+      none is adopted as a figure. LONG AXIS, both BELOW 12.9: FS 35510's
+      capped content 12.82 and SENKO's drawn cap collar 12.87 (clearances 0.32
+      and 0.37, inside the LC range). SHORT AXIS, every one ABOVE 8.0: FS
+      35510's 8.09 and the drawn outer outlines 8.21 on C10783 and 8.22 on
+      DS-MPO-000004. So the short axis may be too small, by 0.09 to 0.22, and
+      the true mouth is probably a little narrower and taller than 12.9 x
+      8.0. It admits IEC
+      61754-7-1's largest plug (12.59 x 7.7). A caliper on one adapter, or IEC
+      61754-7-1 Table 5, settles it.
+      THE 7.8 x 5.6 THIS ENTRY HELD UNTIL std/mpo@2 is withdrawn: the detection
+      that produced it caught a bevelled interior and read 5.4 to 8.5 across
+      the rows, and the printed connector cannot enter it.
       Fibre count is a property of the FERRULE, not the adapter: MPO-8, -12, -16
       and -24 share this opening. The component carries the count in
       `optical.positions`.
@@ -545,7 +606,7 @@ standards:
       "read these as the body outline rather than the punched hole" - because
       the file's header defines w/h as the FACEPLATE APERTURE and no cutout
       spec had been obtained. That body/depth reading is not discarded, only
-      moved: common/mpo-adapter@1's provenance now carries it as a DIFFERENT
+      moved: common/mpo-adapter@2's provenance now carries it as a DIFFERENT
       PART's body dimension - a generic flanged bulkhead adapter, not FS's
       one-piece panel - kept because it is the only adapter-body figure held
       anywhere in this corpus, and explicitly not in tension with this task's
@@ -811,7 +872,7 @@ standards:
       `conforms: mdc-adapter`, so L9 never checked either against anything.
       w=6.6 is A PROPORTION OF A KNOWN PART, not an independent guess: MDC is
       marketed by US Conec and Senko as roughly twice the density of LC
-      duplex in the same panel space, and common/lc-duplex-adapter@5's own
+      duplex in the same panel space, and common/lc-duplex-adapter@6's own
       measured body is 13.2 mm wide for a two-fibre duplex adapter, so half
       of that - 6.6 - is why common/mdc-adapter@1's own `size-confidence`
       marks that axis `borrowed` from lc-duplex-adapter's measured figure
@@ -994,6 +1055,25 @@ standards:
       CFP2 MSA Hardware Specification - module 41.5 wide x 12.4 high x 107.5 long; opening drawn at the module envelope as std/cfp. Pitch is a layout floor read from vendor faceplates, not an
       MSA figure.
 
+  cfp4:
+    registry: CFP MSA CFP4 Hardware Specification Rev 1.1, Figure 5-7
+    w: 21.5
+    h: 9.5
+    confidence: verified
+    depth: 92.0
+    depth-confidence: verified
+    notes: >-
+      CFP MSA CFP4 Hardware Specification Rev 1.1 (18 Mar 2015), Figure 5-7 "CFP4
+      Module Dimension Overview" - module body 21.50 wide x 9.50 high, 92.00 long
+      overall and 76.00 min behind the header; the header stands up to 3.40 above
+      and 1.60 below the body. The bezel opening is drawn at the module body, as
+      cfp and cfp2 are, because section 5.3 dimensions the module only and calls
+      its figures reference, deferring normative dimensions to the CFP4 baseline
+      drawing, and section 5.4 puts the host system and board layout in a
+      separate document; neither is held. No radius, because no corner figure is
+      sourced. No pitch either - Figures 5-1 and 5-2 draw a quad-port
+      host cage but dimension no spacing, and no vendor faceplate has been read for one.
+
   cxp:
     registry: CXP (InfiniBand Vol 2 Annex A6 / SFF-8642 class)
     w: 27.0
@@ -1101,7 +1181,7 @@ standards:
       it. `lc-duplex-receptacle` records 6.25 mm, which is the spacing of the two
       BORES INSIDE one duplex adapter; this is the spacing BETWEEN adapters on a
       cassette face. The parts are different too: FS's cassette adapter is 9.28
-      wide with its ports stacked vertically, where common/lc-duplex-adapter@5 is
+      wide with its ports stacked vertically, where common/lc-duplex-adapter@6 is
       13.2 wide with its bores side by side. This entry closes the open question
       at docs/optical-paths-design.md:287, which read 12.90 against our 13.2 as
       though one part had been measured two ways.
@@ -1178,7 +1258,7 @@ standards:
       +/-0.1 (tip), then 4.3 +/-0.1 (shoulder, proud of both its neighbours),
       then 3.3 +0.05 -0.10 (stem) onto the body. The side view gives body
       height 5.65 and latch length 8.6 +/-0.1, and that 5.65 is what pins the
-      body tier of generic/lc-plug@1 - see its provenance.keyway for the
+      body tier of generic/lc-plug@2 - see its provenance.free-state for the
       600 dpi re-measurement that established the order and the tier heights.
     notes: >-
       NO DEPTH, DELIBERATELY. An LC plug has no class-wide overall length. Three
@@ -1225,3 +1305,96 @@ standards:
       8 and 9, "APPROXIMATE ... ONLY APPLIES TO PARTS X-557972-X / X-554720-X"),
       not the dimensioned side view the 2.77/5.89 latch figures come from - no
       angle is given for the latch itself.
+  sc-plug:
+    registry: Hirose HSC series catalogue, SC Type Fiber Optic Connectors, simplex
+      plug housing front view (HSC-PH2/PH3/PH0.9). JIS C 5973 (F04) and IEC 61754-4
+      govern the interface and neither is held here.
+    w: 8.3
+    h: 9.0
+    confidence: drawing
+    tiers:
+      - {name: body, w: 7.4, h: 9.0}
+      - {name: key, w: 0.9, h: 1.8}
+    source: >-
+      Hirose's HSC catalogue page draws the simplex plug end-on and dimensions
+      four figures on that one view: 9 (the housing height), 7.4 (the housing
+      width, excluding the key), 0.9 (how far the key stands off the housing's
+      long wall) and 1.8 (the key's own height). w here is the bounding box,
+      7.4 + 0.9, the way `sc-simplex-receptacle`'s 8.39 is 7.5 + 0.89 and
+      `lc-duplex-receptacle`'s w/h include its latch tiers.
+      MEASURED FROM THE VECTOR PATH AS A CHECK, not read off a raster. The front
+      view is vector art; on the ruler the printed 9 fixes (22.66 pt, 2.5178
+      pt/mm) the housing comes out 7.399 wide, the key 0.902 by 1.803, and the
+      drawn centreline sits at the housing's own centre to half a pixel - three
+      printed figures read back to 0.01 mm from a scale fixed by the fourth.
+      The key is centred on the housing's long wall, not offset.
+    notes: >-
+      THE PLUG AND THE OPENING ARE TWO ENTRIES AND THEY DISAGREE BY THE
+      CLEARANCE, which is the point of holding both. `sc-simplex-receptacle`
+      is 7.5 -0.0/-0.1 by 9 +0.1/-0.0 with a 0.89 slot; this plug is 7.4 by 9
+      with a 0.9 key. The 0.1 of width is the fit, and the plus-only tolerance
+      on the opening's 9 is what lets a 9 plug pass a 9 hole. A component
+      drawing the plug therefore cannot `conforms:` to the receptacle entry -
+      L9 allows 0.05 and the width is out by 0.09 - which is why this entry
+      exists rather than the plug borrowing the hole's figures.
+      THE KEY IS SHORTER THAN ITS SLOT: 1.8 against the receptacle's 2.1,
+      0.3 of clearance along the same wall. Neither document tolerances either
+      figure; TIA-604-3 (FOCIS 3) or IEC 61754-4 would.
+      NO DEPTH. The same catalogue prints 25 from the plug's front face to
+      where the boot begins and 36.5 overall, both on one product's side view,
+      and they differ across the family (25/33, 25/36.5, 25/55 for the four
+      variants on that page) because the length behind the housing is the
+      cable assembly's, not the interface's - the same reason `lc-plug` above
+      carries no depth. The 25 is used by generic/sc-plug@1 for how far the
+      plug stands out of a panel, where it is bracketed and marked estimated.
+      HOUSING CORNERS ARE CHAMFERED about 0.5 on the drawn front view and no
+      callout dimensions them; a component drawing this profile as a plain
+      rectangle is not in conflict with this entry, which holds the envelope.
+  mpo-plug:
+    registry: US Conec customer drawings C20044 rev B and C20851 rev D, KIT, MTP
+      CONNECTOR, UNIVERSAL - front view and plan view of the connector housing.
+      IEC 61754-7 / TIA-604-5 FOCIS 5 govern the interface and are not held here.
+    w: 12.5
+    h: 7.6
+    confidence: drawing
+    source: >-
+      Both drawings print the same pair for the standard MTP connector
+      housing: 7.6 on the front (end-on) view, 12.5 on the plan view, whose
+      extension lines land on the connector's own outline. Two US Conec
+      drawings of the same connector in two cable variants, one figure each
+      way, no disagreement.
+      CHECKED ON A SECOND QUANTITY. On C20044 the front view's drawn
+      silhouette, evaluated from the Bezier path rather than from its control
+      points, measures 12.404 wide on the ruler the printed 7.6 fixes (9.9237
+      pt/mm) - 0.8% from the printed 12.5, on a sheet marked N.T.S. The plan
+      view's own scale, taken from its printed 12.5 over the extension lines
+      it dimensions, is 9.950 pt/mm, 0.27% from the front view's: the two
+      views are at one scale, so the printed pair and the drawn outline are
+      the same object measured twice.
+    notes: >-
+      THIS IS THE STANDARD MTP CONNECTOR HOUSING, NOT AN AVERAGE OF THE
+      FAMILY, and the variants are recorded rather than blended - the rule
+      `rj45-plug` states for its shielded sibling. US Conec's MTP PRO
+      (C18712 rev B, C21024 rev B) prints 12.8 x 8.0 for the same two axes,
+      and SENKO's MPO-PLUS 702 series datasheet dimensions 8.20 across its own
+      front view. Three products, three outer shells; what they share is the
+      ferrule and the opening, not the moulding a hand grips. A part needing
+      the PRO or the SENKO shell is its own part.
+      FIBRE COUNT IS A PROPERTY OF THE FERRULE, not of the housing: MPO-8,
+      -12 and -24 share this outline and are told apart by
+      `optical.positions`. MPO-16 and -32 are keyed differently and are not
+      this entry.
+      NO DEPTH. C20044 prints 25.6 for the connector body and 1.9 for the
+      guide pins standing off its face; C20851 prints 60.3 overall for the
+      same connector on round cable. The 25.6 is the connector, the rest is
+      the cable assembly's, so no class depth is stated here - the same
+      reading `lc-plug` and `sc-plug` above take.
+      THIS ENTRY IS NOT `mpo-adapter`, AND THE TWO NOW AGREE BY
+      CONSTRUCTION. That entry once held the aperture at 7.8 x 5.6, read off
+      an FS render, which a 12.5 x 7.6 connector cannot enter; it was the
+      weaker reading and it was the one corrected. `mpo-adapter` is now this
+      entry plus a clearance measured on SENKO's LC adapter/plug pair (see its
+      own notes), so the plug fits the opening by 0.2 a side. IEC 61754-7-1
+      Tables 1 and 4, in the publisher's free preview, bound the plug at
+      12.19-12.59 on the long axis and 7.7 maximum on the short: these
+      printed figures sit inside that.

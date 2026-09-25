@@ -112,7 +112,8 @@ def test_the_3d_pass_seats_a_card_cage():
 
 def test_the_3d_pass_reads_cages_off_the_card_it_just_seated():
     s = run("face")["carrierSwapped"]
-    assert s["modules"] == 1 and s["freshCard"] == "casa/card@1"
+    # with its version, as render.py writes a seated module's ref (B3 Task 10c)
+    assert s["modules"] == 1 and s["freshCard"] == "casa/card@1:1.2.0"
     assert s["xg0"] == [True], "the optic is in the NEW card"
     assert s["xg1"] == 0, "the build's optic went with the card it sat in"
     assert s["applied"] == 2

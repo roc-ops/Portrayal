@@ -1,0 +1,101 @@
+format: 1
+kind: module
+name: sr-e-psu-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Nokia PSU - 7750 SR-e AC (3HE09549AA), the hot-swap universal-AC supply of the SR-1e, SR-2e
+  and SR-3e rear PSU shelf: the integrated exhaust fan at the left behind a red horizontal
+  handle, the Pwr/Stat lamp above the handle's end, an IEC 60320 C14 inlet turned on its side
+  inside a wire cord retainer, and the spring latch at the lower right. Authored horizontal
+  as the guide draws it; the SR-2e and SR-3e seat it upright in PSU 1-6 with `rotate: 90`.
+size: {w: 86.4, h: 40.4, d: 197.6}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  SRE p85 Table 28 prints "H x W x D 3.4 x 7.78 x 1.59 in" - transposed: the face is 3.4 in
+  (86.4) wide and 1.59 in (40.4) tall, and 7.78 in (197.6) is the depth.
+attrs:
+  model: PSU - 7750 SR-e AC
+  part-number: 3HE09549AA
+  power-output-w: 1600
+  input: ac
+  inlet: c14
+  airflow: exhaust
+  weight-kg: 1.06
+provenance:
+  size: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p85 Table 28: AC PSU "3.4 x 7.78 x 1.59 in. (8.64 x
+    19.77 x 4.05 cm)" under an H x W x D heading. CONFLICT: the order is transposed - the
+    SR-1e rear view (SRE p45) measures the face 86.4 x 40.2, so 3.4 in is the width and
+    1.59 in the height. The DC PSU is 1.57 in tall; both are held at 40.4 so one bay fits both.
+  depth: 'datasheet - 7.78 in (197.6 mm), SRE p85 Table 28, read as the depth'
+  weight: 'datasheet - 1.06 kg (2.33 lb), SRE p85 Table 28'
+  power: >-
+    datasheet - SRE p62 section 3.3.1: each PSU is rated 1600 W on DC and on high-line AC,
+    and the AC PSU 1000 W on low-line AC. power-output-w carries the high-line 1600.
+  power-output: 'datasheet - 1600 W high-line, 1000 W low-line (SRE p62)'
+  layout: >-
+    drawing - SRE p63 Fig 16 (art 24450) at 1200 dpi. The outline is 2553 x 1229 px, aspect
+    2.08 against the stated 2.14, so positions are per-axis fractions (29.55 px/mm across,
+    30.42 down). Fan housing 3.6-43.1 x 0.6-39.8, fan centre (23.4, 20.1), about 35.5
+    across; handle 1.0-50.4 x 14.6-25.4; lamp centre (47.0, 9.7), bezel about 5 across; cord
+    retainer housing 54.9-78.1 x 6.7-35.2; the inlet's coupler about 57.8-74.7 x 9.5-30.0,
+    centre (66.3, 20.3), with the retainer's wire bail looping below it; latch 79.2-84.5 x
+    25.0-40.0. SRE p185 Fig 59 is the same art with key numbers.
+  inlet: >-
+    datasheet - SRE p186 Table 64 key 5: "AC inlet (IEC 60320-C14)". Composed as
+    std/c14-inlet@1 centred on the drawn coupler and turned 270 (earth to the left): Fig 16
+    draws the coupler portrait with its chamfered corners on the left, and a C14's chamfers
+    are on its earth side. The turn is read off the drawing's chamfers; nothing states it.
+  retainer: >-
+    datasheet - Table 64 key 4: "AC power/ground connector retainer - secures the AC power
+    cable in place". Drawn as the housing outline and a wire bail; not a part.
+  handle: >-
+    datasheet - Table 64 key 1: "Handle (colored red)"; SRE p198: the SR-e PSUs have red
+    handles and the SR-a PSUs, "which have a similar form factor", blue. The red is
+    #c8102e, estimated; no photograph is staged.
+  latch: 'datasheet - Table 64 key 6: latch lock, "Press the latch lock to the left to unlock the PSU"'
+  lamps: >-
+    datasheet - SRE p186 Table 64 key 3, one LED: unlit input below minimum; green slow
+    blink standby; green solid delivering power; amber slow blink warning; amber solid fault;
+    red solid wrong PSU in the shelf. No RGB given; the library's green #39b54a, amber
+    #f5a623, red #d0021b.
+  airflow: >-
+    datasheet - SRE p72 Table 19: the PSU shelf draws air in at the chassis front and "hot air
+    is exhausted from the PSU shelf by the integrated fan in each PSU" at the rear, so the fan
+    on this face blows out.
+  colour: >-
+    estimated - the body is drawn in a mid metal grey with a black fan; no photograph is
+    staged (PUBLIC-SOURCES DS 189831). The red handle is stated; its shade is not. A gap.
+  not-interchangeable: 'datasheet - SRE p63: the SR-e PSUs "are not interchangeable with other 7750 SR products"'
+  logo-zone: >-
+    none reserved - Fig 16 draws no free metal on this face: the fan, the handle, the lamp
+    strip, the inlet retainer and the latch fill it.
+  relief: >-
+    estimated - the fan is pocketed behind the face as smartoptics/dcp-2-psu-dc@1's is; the
+    handle stands off as a U; the latch is a short tab. None is dimensioned.
+  lifecycle: 'searched only the staged corpus - listed in SRE 21.10; no end-of-life notice searched on the web'
+elements:
+  fan: {at: [5.65, 2.35], size: [35.5, 35.5], class: vent}
+  handle: {at: [1.0, 14.6], size: [49.4, 10.8], class: handle}
+  cord-retainer: {at: [54.9, 6.7], size: [23.2, 28.5], class: mechanical}
+  latch: {at: [79.2, 25.0], size: [5.3, 15.0], class: latch}
+relief:
+  features:
+  - {node: fan, pocket: 6.0, confidence: estimated, source: 'borrowed - smartoptics/dcp-2-psu-dc@1 fan aperture, a fan read as behind the plate. Not dimensioned'}
+  - {node: handle, uhandle: 15.0, color: '#c8102e', confidence: estimated, source: 'a pull handle standing off the fan; SRE p73 Fig 24 draws the PSU pull standing proud. The depth is not dimensioned'}
+  - {node: latch, out: 2.0, color: '#b8bcc1', confidence: estimated, source: 'a thumb latch tab; not dimensioned'}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one PSU status lamp
+parts:
+  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [45.0, 7.7], states: {lamp: ['off', {name: standby, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}, {name: warning, color: '#f5a623', behavior: blinking}, {name: fault, color: '#f5a623'}, {name: wrong-psu, color: '#d0021b'}]}}
+  - {ref: std/c14-inlet@1, id: inlet, at: [52.3, 10.3], rotate: 270}
+connection-points:
+  mate: {at: [43.2, 20.2], direction: rear}
+skins: [default]

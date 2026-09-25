@@ -1,0 +1,427 @@
+format: 1
+kind: module
+name: fgut-a
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FGUT-A (3FE 76986 AA, AD and CD), the 16-port Multi-PON line termination board
+  of the 7360 ISAM FX and Lightspan FX: GPON, XGS-PON or Multi-PON (MPM) on any port,
+  25GS-PON on the even ports, with a traffic manager. Authored upright, as the Unit Data
+  Sheet guides draw it: thumbscrew and unit label at the top, sixteen optical cages down
+  the face each with its PON lamp and printed numeral on the left, then an ESD and a
+  hot-surface mark, the ALM and PWR lamps, a label and the bottom thumbscrew. AA, AD and
+  CD are functional variants with one faceplate, so they are one component and the part
+  number is a field.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm); the faceplate width is not stated. The
+  orthographic front view (Figure 163) measures 26.4 mm across against its 405 mm
+  height, which agrees with the 26 mm the UDS states for the sibling FNIO cards and is
+  wider than the pitch; the face is held at 25.0 so the LT bay built from the shared
+  family convention seats it. d is the larger of the two board depths the UDS gives
+  (225 mm top / 205 mm bottom, i.e. the stepped board edge), taken as the envelope.
+attrs:
+  model: FGUT-A
+  part-number: 3FE 76986 AA
+  xgs-pon: 16
+  weight-kg: 2.76
+  power-draw-max-w: 150
+  power-draw-typical-w: 100
+provenance:
+  size: >-
+    datasheet - Lightspan UDS 3HH90279AAAATQZZA23 section 44.5.1 (p460) and ETSI UDS
+    3FE77012AAAATQZZA18 (p380, the CD variant): height 405 mm, width 225 mm (top) / 205
+    mm (bottom), board-to-board pitch 25 mm. Face held at the 25 mm pitch by the shared
+    7360 FX convention.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 44.5.1; the faceplate edge-to-edge width
+    is not stated and is taken as the pitch. The front view measures 26.4 mm (92 px at
+    3.479 px/mm), so the real plate may be about 1 mm wider than drawn; not stated in any
+    document searched (the FGUT-A sections of the Lightspan A23 and ETSI A18 UDS).
+  depth: >-
+    datasheet - "width 225 mm (top) / 205 mm (bottom)" in the UDS, which is the board's
+    depth behind the faceplate at its two ends; 225 carried as the envelope.
+  weight: 'datasheet - 2.76 kg (6.08 lb), Lightspan UDS A23 section 44.5.1; ETSI UDS A18 p380 agrees'
+  power: >-
+    datasheet - Lightspan FX Safety Manual 3HH91852AAAATCZZA07 p37 Table 2 and 7360 ISAM
+    FX ANSI Safety Manual 3HH12894AAAATCZZA27 p25 Table 2: FGUT-A 100 W typical, 150 W
+    maximum. The same tables (and the ETSI Safety Manual 3HH11998AAAATCZZA29 p26, which
+    has only these rows) also give per-mode rows shared with FWLT-C: GPON 66/71 W, XGS-PON
+    84/89 W, MPM XGS/GPON 90/95 W. The 150 W row is the only one covering the 25GS-PON
+    ports and is the highest figure, so it is carried as the maximum; the manuals do not
+    say what load the unqualified row assumes. The ETSI note says PON line-card figures
+    include their optics.
+  layout: >-
+    drawing - ETSI UDS A18 p379 Figure 163 "FGUT-A CD front view", an orthographic front
+    embedded at 300 ppi (1425 x 1516, pdfimages); the Lightspan A23 p459 Figure 223 is
+    the same art for AA/AD at 150 ppi, and the 3D views (A18 Figure 164, A23 Figure 224)
+    are identical between the two, so the faces are the same. Gate 1: the face measures
+    92 x 1409 px, 26.4 x 405 mm at 3.479 px/mm, consistent with the ~26 mm plate the
+    family states, so the figure is taken as orthographic. y is measured from the plate
+    top (image y 42, 0.2874 mm/px); x is scaled so the 92 px face spans the 25 mm pitch.
+    Sixteen cage openings centred 45.4 to 352.8 on a 20.49 pitch (fitted to cages 1 and
+    16, +/- 0.3); each opening draws 10.9 wide by 13.4 tall at x 12.0, so the SFP cage is
+    composed rotated 90 (its 14.5 side along the card), which the 3D view's sawtooth of
+    angled cages is consistent with. Unit label 14.4-25.9, hazard marks 360-369, ALM and
+    PWR at 379.4, label 383.2-394.1, thumbscrews at 4.3 and 400.4, the left-hand ejector
+    levers at 1.4-31.0 and 373.1-402.7.
+  ports: >-
+    datasheet - UDS section 44.4.2: sixteen cages labelled PORT1 to PORT16, top to
+    bottom in Figure 163, each numeral printed left of its cage and turned to read top
+    to bottom (at 8x the two-digit 13 and 16 put the 1 above the second digit). GPON, XGS-PON and MPM
+    on any port; 25GS-PON on the even ports (section 44.4), so the even ports are
+    grouped apart with the 25G rate. The cage is composed as std/sfp@1; the form factor
+    of the MPM (Multi-PON module) is not stated in the UDS. The export rate is
+    `xgs-pon: 16`: XGS-PON is the most capable flavour every port runs ("GPON (ITU-T
+    G.984), XGS-PON (ITU-T G.9807.1) and Multi-PON ... on any of the 16 ports", section
+    44.4). The board ships licensed for GPON only, which is software, not the port.
+    25GS-PON on the even ports has no type in both DCIM targets (NetBox has `25g-pon`,
+    Nautobot does not), so those export as XGS-PON too.
+  lamps: >-
+    datasheet - Table 162 (Lightspan A23 p461) / Table 119 (ETSI A18 p381). PWR off =
+    power off, blinking green = initialisation, green = power present; ALM red = alarm;
+    PON lamp off = not provisioned or admin down, yellow = provisioned with no ONT in
+    service, green = active without errors, red = PON loss or transmitter failure. The
+    PON lamps sit "on the left of the corresponding PON interface" (note 1); placed on
+    the small square Figure 163 draws left of each cage (2.9 mm above its centre). The
+    flat LED close-up (Figure 165 / 225) stacks PWR over ALM, but the upright front view
+    prints ALM and PWR side by side; the front view is followed.
+  marks: >-
+    drawing - Figure 163: an ESD triangle and a hot-surface triangle side by side above
+    the status lamps, drawn as outlines; a second small square above each PON lamp is
+    not named in any table and is not drawn. The unit label prints XXXX-X placeholders in
+    the figure; the mnemonic and part number are drawn in its place, and the lower label
+    is a placeholder barcode, never a real serial.
+  relief: >-
+    estimated - the ejector levers stand proud of the plate; no document gives a
+    figure, so the library's pooled release-hardware estimate (4.2) is used, as on the
+    FNIO cards.
+  logo-zone: >-
+    reserved by the family convention; Figure 163 draws no mark, so the zone is the
+    strip of metal between the unit label and the first cage.
+  lifecycle: >-
+    searched only the staged corpus - listed as current in the Lightspan A23 and ETSI
+    A18 UDS; no end-of-life notice was searched for on the web.
+  variants: >-
+    datasheet - Table 161: 3FE 76986 AA and AD share one row, AD a functional variant
+    that needs newer software; ETSI A18 chapter 39 lists 3FE 76986 CD. Figures 163 and 223
+    (and 164 and 224) are the same art, so one faceplate; the part number is a field.
+  angled-panel: >-
+    estimated - the tooth of nokia/fglt-d@1: ETSI UDS A18 p380 Figure 164 draws the same
+    sixteen-tooth sheet, too busy with cage detail for a clean angle fit. DEPTH, read
+    off the left elevation of Figure 164 (3.304 px/mm): the plate is 13.9 mm deep (front
+    line 110 px, back line 156 px) with nothing proud of it, and the tooth tips touch
+    its back. The opening is one pocket, `well`, 36.4 to 364.65 and 22.77 deep; every
+    facet has `lift` -22.77. Section, plate front at 0: tooth crest -13.9, tooth root
+    and pocket floor -22.77. Faces of 30 degrees (face-N, facing up, the cage on it) and
+    returns of 60 degrees (return-N, facing down) on the 20.49 pitch: face 15.37 and
+    return 5.12 mm of front view. Each face keeps the cage centre Figure 163 gives (45.4
+    + 20.49 n), its lower edge 0.5 mm above the crest, so the cage runs back parallel to
+    the return below it and passes below the pocket floor before any wall (0.58 mm worst
+    clearance). The PON lamps stay on the flat strip left of the pocket (x 6.2 on). The
+    last return, and so the pocket, runs to 364.65, over the tops of the ESD and hot-
+    surface triangles (from 361.8) (gap).
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [8.7, 26.6], size: [15.3, 3.8], class: label}
+  label-unit: {at: [8.7, 14.4], size: [15.3, 11.5], class: label}
+  label-serial: {at: [8.7, 383.2], size: [14.1, 10.9], class: label}
+  well: {at: [6.2, 36.4], size: [17.2, 328.252], class: mechanical}
+  face-1: {at: [6.2, 36.811], size: [17.2, 15.367], class: mechanical}
+  return-1: {at: [6.2, 52.178], size: [17.2, 5.124], class: mechanical}
+  face-2: {at: [6.2, 57.301], size: [17.2, 15.367], class: mechanical}
+  return-2: {at: [6.2, 72.668], size: [17.2, 5.124], class: mechanical}
+  face-3: {at: [6.2, 77.791], size: [17.2, 15.367], class: mechanical}
+  return-3: {at: [6.2, 93.158], size: [17.2, 5.124], class: mechanical}
+  face-4: {at: [6.2, 98.281], size: [17.2, 15.367], class: mechanical}
+  return-4: {at: [6.2, 113.648], size: [17.2, 5.124], class: mechanical}
+  face-5: {at: [6.2, 118.771], size: [17.2, 15.367], class: mechanical}
+  return-5: {at: [6.2, 134.138], size: [17.2, 5.124], class: mechanical}
+  face-6: {at: [6.2, 139.261], size: [17.2, 15.368], class: mechanical}
+  return-6: {at: [6.2, 154.629], size: [17.2, 5.123], class: mechanical}
+  face-7: {at: [6.2, 159.751], size: [17.2, 15.368], class: mechanical}
+  return-7: {at: [6.2, 175.119], size: [17.2, 5.123], class: mechanical}
+  face-8: {at: [6.2, 180.241], size: [17.2, 15.368], class: mechanical}
+  return-8: {at: [6.2, 195.609], size: [17.2, 5.123], class: mechanical}
+  face-9: {at: [6.2, 200.731], size: [17.2, 15.368], class: mechanical}
+  return-9: {at: [6.2, 216.099], size: [17.2, 5.123], class: mechanical}
+  face-10: {at: [6.2, 221.221], size: [17.2, 15.368], class: mechanical}
+  return-10: {at: [6.2, 236.589], size: [17.2, 5.123], class: mechanical}
+  face-11: {at: [6.2, 241.711], size: [17.2, 15.368], class: mechanical}
+  return-11: {at: [6.2, 257.079], size: [17.2, 5.123], class: mechanical}
+  face-12: {at: [6.2, 262.201], size: [17.2, 15.368], class: mechanical}
+  return-12: {at: [6.2, 277.569], size: [17.2, 5.123], class: mechanical}
+  face-13: {at: [6.2, 282.691], size: [17.2, 15.368], class: mechanical}
+  return-13: {at: [6.2, 298.059], size: [17.2, 5.123], class: mechanical}
+  face-14: {at: [6.2, 303.181], size: [17.2, 15.368], class: mechanical}
+  return-14: {at: [6.2, 318.549], size: [17.2, 5.123], class: mechanical}
+  face-15: {at: [6.2, 323.671], size: [17.2, 15.368], class: mechanical}
+  return-15: {at: [6.2, 339.039], size: [17.2, 5.123], class: mechanical}
+  face-16: {at: [6.2, 344.161], size: [17.2, 15.368], class: mechanical}
+  return-16: {at: [6.2, 359.529], size: [17.2, 5.123], class: mechanical}
+fields:
+  part-number:
+    label: Part number
+    type: choice
+    default: 3FE 76986 AA
+    options: [3FE 76986 AA, 3FE 76986 AD, 3FE 76986 CD]
+    description: the functional variant; all three share this faceplate
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: well
+      pocket: 22.77
+      confidence: estimated
+      source: 'ETSI UDS A18 p380 Figure 164 left elevation: plate front 110 px to plate back 156 px = 13.9 mm (3.304 px/mm), the tooth tips touching the back'
+    - node: face-1
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-1
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-2
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-2
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-3
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-3
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-4
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-4
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-5
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-5
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-6
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-6
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-7
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-7
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-8
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-8
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-9
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-9
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-10
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-10
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-11
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-11
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-12
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-12
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-13
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-13
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-14
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-14
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-15
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-15
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: face-16
+      facet: {deg: 30, facing: up}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+    - node: return-16
+      facet: {deg: 60, facing: down}
+      lift: -22.77
+      confidence: estimated
+      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
+groups:
+  pon-xgs:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g, pon: xgs-pon}
+    description: the odd PON ports (1, 3 ... 15) - GPON, XGS-PON or Multi-PON (MPM)
+  pon-25gs:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g, pon: 25gs-pon}
+    description: the even PON ports (2, 4 ... 16) - GPON, XGS-PON, MPM, and 25GS-PON
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON state lamp left of each cage
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/sfp@1, id: port-1, group: pon-xgs, at: [4.75, 41.07], rotate: 90, 'on': face-1}
+  - {ref: std/sfp@1, id: port-2, group: pon-25gs, at: [4.75, 61.56], rotate: 90, 'on': face-2}
+  - {ref: std/sfp@1, id: port-3, group: pon-xgs, at: [4.75, 82.05], rotate: 90, 'on': face-3}
+  - {ref: std/sfp@1, id: port-4, group: pon-25gs, at: [4.75, 102.54], rotate: 90, 'on': face-4}
+  - {ref: std/sfp@1, id: port-5, group: pon-xgs, at: [4.75, 123.03], rotate: 90, 'on': face-5}
+  - {ref: std/sfp@1, id: port-6, group: pon-25gs, at: [4.75, 143.52], rotate: 90, 'on': face-6}
+  - {ref: std/sfp@1, id: port-7, group: pon-xgs, at: [4.75, 164.01], rotate: 90, 'on': face-7}
+  - {ref: std/sfp@1, id: port-8, group: pon-25gs, at: [4.75, 184.5], rotate: 90, 'on': face-8}
+  - {ref: std/sfp@1, id: port-9, group: pon-xgs, at: [4.75, 204.99], rotate: 90, 'on': face-9}
+  - {ref: std/sfp@1, id: port-10, group: pon-25gs, at: [4.75, 225.48], rotate: 90, 'on': face-10}
+  - {ref: std/sfp@1, id: port-11, group: pon-xgs, at: [4.75, 245.97], rotate: 90, 'on': face-11}
+  - {ref: std/sfp@1, id: port-12, group: pon-25gs, at: [4.75, 266.46], rotate: 90, 'on': face-12}
+  - {ref: std/sfp@1, id: port-13, group: pon-xgs, at: [4.75, 286.95], rotate: 90, 'on': face-13}
+  - {ref: std/sfp@1, id: port-14, group: pon-25gs, at: [4.75, 307.44], rotate: 90, 'on': face-14}
+  - {ref: std/sfp@1, id: port-15, group: pon-xgs, at: [4.75, 327.93], rotate: 90, 'on': face-15}
+  - {ref: std/sfp@1, id: port-16, group: pon-25gs, at: [4.75, 348.42], rotate: 90, 'on': face-16}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [9.3, 378.4], states: {lamp: ['off', {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.2, 378.4], states: {lamp: ['off', {name: 'init', color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-pon-1, group: pon-leds, at: [3.9, 41.5], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-2, group: pon-leds, at: [3.9, 61.99], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-3, group: pon-leds, at: [3.9, 82.48], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-4, group: pon-leds, at: [3.9, 102.97], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-5, group: pon-leds, at: [3.9, 123.46], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-6, group: pon-leds, at: [3.9, 143.95], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-7, group: pon-leds, at: [3.9, 164.44], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-8, group: pon-leds, at: [3.9, 184.93], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-9, group: pon-leds, at: [3.9, 205.42], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-10, group: pon-leds, at: [3.9, 225.91], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-11, group: pon-leds, at: [3.9, 246.4], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-12, group: pon-leds, at: [3.9, 266.89], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-13, group: pon-leds, at: [3.9, 287.38], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-14, group: pon-leds, at: [3.9, 307.87], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-15, group: pon-leds, at: [3.9, 328.36], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pon-16, group: pon-leds, at: [3.9, 348.85], states: {lamp: ['off', {name: 'yellow', color: '#f5c400'}, {name: 'green', color: '#39b54a'}, {name: 'red', color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

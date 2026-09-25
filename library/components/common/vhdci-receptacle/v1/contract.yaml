@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: vhdci-receptacle
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it -
+  the flattened 0.8 mm-pitch shell with its long contact slot, the metal flange it
+  stands on, and a thumbscrew lock either side. The fan-out connector of a
+  high-density output card, cabled to a patch panel rather than to a device.
+size: {w: 40.4, h: 5.2}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {media: vhdci}
+provenance:
+  size: >-
+    photo-measured - OSA 5420/5421 Installation and Commissioning Manual R9.5.1, the
+    BTOH-16 card image embedded on p16 (Figure 8, 1476 x 298 px). The card plate in
+    that image is 1457 x 262 px against 113.5 x 20.6 mm measured independently off the
+    2023 data sheet's front render, an aspect agreement of 1%, so the image carries
+    geometry at 12.8 px/mm. Screw centres 37.2 apart (the data sheet render gives the
+    same 37.2 at a quarter of the resolution), shell 30.9 wide, slot 28.2 x 1.3,
+    flange 35.6 x 1.5. NO STANDARD IS HELD for the VHDCI mating face, which is why
+    this part is common/ and states no `conforms`: the figures are one vendor's
+    rendering of the connector, not a specification of it.
+  depth: >-
+    NOT STATED. Nothing held dimensions how far the shell stands proud or how deep
+    the slot runs, so the part carries no depth rather than a guess at one.
+  latches: >-
+    photo-measured - three short bright marks along the top of the shell in the same
+    image, at the quarter points. Read as the shell's latch windows; drawn as marks,
+    not as openings.
+elements:
+  opening: {at: [6.2, 1.7], size: [28.2, 1.3], class: opening}
+  screw-l: {at: [0.2, 0.95], size: [2.8, 2.8], class: fastener}
+  screw-r: {at: [37.4, 0.95], size: [2.8, 2.8], class: fastener}
+connection-points:
+  mate: {at: [20.2, 2.35], direction: front}
+skins: [default]

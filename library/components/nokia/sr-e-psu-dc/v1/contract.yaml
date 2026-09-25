@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: sr-e-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Nokia PSU - 7750 SR-e DC -48V (3HE09548AA), the hot-swap -48/-60 VDC supply of the SR-1e,
+  SR-2e and SR-3e rear PSU shelf: the integrated exhaust fan at the left under a red handle
+  running corner to corner, an M4 ground screw, the Pwr/Stat lamp at the top right, a
+  two-stud barrier terminal block (Batt and RTN) and the spring latch at the lower right.
+  Authored horizontal as the guide draws it; the SR-2e and SR-3e seat it upright in PSU 1-6
+  with `rotate: 90`.
+size: {w: 86.4, h: 40.4, d: 197.6}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  SRE p85 Table 28 prints "H x W x D 3.4 x 7.78 x 1.57 in" - transposed: the face is 3.4 in
+  wide and 1.57 in (39.9) tall. h is held at the AC supply's 40.4 so one PSU bay fits both.
+attrs:
+  model: PSU - 7750 SR-e DC -48V
+  part-number: 3HE09548AA
+  power-output-w: 1600
+  input: dc
+  voltage: '-48v'
+  inlet: dc-terminal
+  airflow: exhaust
+  weight-kg: 1.108
+provenance:
+  size: >-
+    datasheet - SRE (3HE17927AAAATQZZA03) p85 Table 28: -48/-60 VDC PSU "3.4 x 7.78 x 1.57 in.
+    (8.6 x 19.77 x 3.99 cm)" under an H x W x D heading, transposed as for the AC supply (the
+    SR-1e rear view, SRE p45, measures the face 86.4 wide). The 1.57 in (39.9) height is
+    held at 40.4, the AC supply's, so the shared bay seats both; 0.5 mm.
+  depth: 'datasheet - 7.78 in (197.6 mm), SRE p85 Table 28, read as the depth'
+  weight: 'datasheet - 1.108 kg (2.44 lb), SRE p85 Table 28'
+  power: 'datasheet - SRE p62: "Each PSU is rated at 1600 W when operating from DC power"'
+  voltage: 'datasheet - SRE p62 Table 15 "PSU - 7750 SR-e DC -48V"; section 3.3.1.2 titles it -48/-60 VDC'
+  layout: >-
+    drawing - SRE p63 Fig 17 (art 24451) at 1200 dpi, the same 2553 x 1230 px outline as the
+    AC supply's, read with the same per-axis scales (29.55 / 30.42 px/mm). Fan housing
+    3.6-42.5 x 0.6-39.7, fan centre (23.1, 20.0); the handle a bar about 5.5 wide from
+    (5.9, 35.3) to (40.8, 3.0); ground screw centre (48.2, 10.5) in a washer about 10 across,
+    the earth symbol beside it at (57.2, 10.5); lamp centre (78.6, 8.5) with "Pwr" over
+    "Stat" to its left; terminal block 45.3-75.5 x 16.2-33.7, three barriers, the studs at
+    (53.8, 25.5) and (67.0, 25.5); latch 79.4-84.8 x 25.5-39.0. The SR-1e rear view (SRE p45)
+    draws the same face in PSU 1 and 2.
+  terminals: >-
+    datasheet - SRE p187 Table 65: key 4 "Left terminal stud (Batt terminal) for connection
+    to -48/-60 VDC battery cable", key 5 "Right terminal stud (RTN terminal) for connection
+    to 0 VDC return cable"; key 3 the ground terminal, M4 screw. CONFLICT: Fig 17 and the
+    SR-1e rear view print "+" under the LEFT stud and "-" under the right, where the table
+    makes the left stud the -48 V battery feed. The print is drawn as the figures show it.
+    Not resolved without a photograph.
+  terminal-block: >-
+    drawing - a two-pole barrier block with screw studs; the library's dc-terminal parts are
+    three-pole or pluggable and none is this size, so it is the `dc-terminal` element with
+    the barriers and studs in the skin.
+  handle: >-
+    datasheet - SRE p187 Table 65 key 1: "Handle (colored red)"; SRE p198. Fig 17 draws it
+    diagonal across the fan, where the AC supply's (Fig 16) runs level - the two faces
+    differ, as drawn. The red is #c8102e, estimated.
+  latch: 'datasheet - Table 65 key 7: latch lock, pressed to the left to unlock'
+  lamps: >-
+    datasheet - SRE p187 Table 65 key 6: unlit input below minimum; green slow blink standby;
+    green solid operating; amber slow blink warning; amber solid fault; red solid wrong PSU.
+    No RGB given; the library's green #39b54a, amber #f5a623, red #d0021b.
+  airflow: 'datasheet - SRE p72 Table 19: the integrated PSU fan exhausts at the rear'
+  colour: 'estimated - metal grey body, black fan; no photograph staged (DS 189831 listed, not staged). A gap'
+  not-interchangeable: 'datasheet - SRE p63: not interchangeable with other 7750 SR products'
+  logo-zone: 'none reserved - Fig 17 leaves no free metal: fan, lamp, ground, terminal block and latch fill the face'
+  relief: >-
+    estimated - the fan pocketed as smartoptics/dcp-2-psu-dc@1's; the diagonal handle is NOT
+    raised, because relief builds a raised node from its bounding box and this handle's box
+    is the whole fan (a slab over the grille). A gap in 3D, not in 2D.
+  lifecycle: 'searched only the staged corpus - listed in SRE 21.10; no end-of-life notice searched on the web'
+elements:
+  fan: {at: [5.35, 2.25], size: [35.5, 35.5], class: vent}
+  handle: {at: [3.4, 0.5], size: [39.9, 37.3], class: handle}
+  ground: {at: [45.2, 7.5], size: [6.0, 6.0], class: terminal}
+  dc-terminal: {at: [45.3, 16.2], size: [30.2, 17.5], class: terminal}
+  latch: {at: [79.4, 25.5], size: [5.4, 13.5], class: latch}
+relief:
+  features:
+  - {node: fan, pocket: 6.0, confidence: estimated, source: 'borrowed - smartoptics/dcp-2-psu-dc@1 fan aperture. Not dimensioned'}
+  - {node: ground, cyl: 1.6, confidence: estimated, source: 'an M4 screw head (Table 65 key 3); the head height is not stated'}
+  - {node: dc-terminal, out: 6.0, color: '#2b2e33', confidence: estimated, source: 'a barrier block standing off the face; not dimensioned'}
+  - {node: latch, out: 2.0, color: '#b8bcc1', confidence: estimated, source: 'a thumb latch tab; not dimensioned'}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one Pwr/Stat lamp
+parts:
+  - {ref: common/led-indicator@1, id: led-status, group: status-leds, at: [76.6, 6.5], states: {lamp: ['off', {name: standby, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}, {name: warning, color: '#f5a623', behavior: blinking}, {name: fault, color: '#f5a623'}, {name: wrong-psu, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [43.2, 20.2], direction: rear}
+  power: {at: [60.4, 25.5], direction: front}
+skins: [default]

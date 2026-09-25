@@ -22,7 +22,8 @@ from portrayal.manifest import load_yaml
 from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule, component_cages,
-                    _pluggable_families, _pluggable_candidates)
+                    _pluggable_families, _pluggable_candidates,
+                    _connector_registry)
 from portrayal import libwalk  # noqa: E402
 from portrayal import optical, optical_ports  # noqa: E402
 
@@ -83,6 +84,16 @@ def _confidence_counts(data):
     return counts
 
 
+def named_as_faces(roots):
+    """Every part some module draws as one of its FACES - a cassette's back -
+    which component_cages publishes whole (its `face` note): nothing places a
+    face, so a slot it forwarded would be published nowhere."""
+    return {r for root in roots
+            for cf in Path(root).glob("components/*/*/v*/contract.yaml")
+            for k in DIRECTIONS
+            if (r := face_ref(load_yaml(cf) or {}, k))}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -95,9 +106,11 @@ def main():
     # never from a device's rendered configs.json: __main__.py runs this
     # indexer alongside the renderers, so nothing they write exists yet.
     families = _pluggable_families()
+    connectors = _connector_registry()
     candidates = _pluggable_candidates(args.library)
     load_ref = lambda ref: libwalk.load_contract(ref, args.library)  # noqa: E731
     index = []
+    faces_named = named_as_faces(args.library)
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
             data = load_yaml(cf)
@@ -196,15 +209,17 @@ def main():
                             "relief": data.get("relief") or {}},
             }
             # ITS OWN CAGES, in its own frame (#484): one per part that
-            # presents a pluggable interface, by the same core as a device
-            # view's `cages[]` (render.cage_entry), with the same keys. A card
+            # presents a pluggable interface or a connector interface (B3,
+            # `kind: cage|connector`), by the same core as a device
+            # view's `cages[]` (render.slot_entry), with the same keys. A card
             # swapped into a bay at runtime brings them with it; no
             # configuration of the chassis can say where a card's cages are
             # when it is not the card that configuration seats. `occupant` is
             # dropped - a contract seats nothing - and `occupant-attrs` is the
             # card group's side for a cage in one of the card's own `groups:`
             # (#511), empty otherwise. Omitted when there are none.
-            cages = component_cages(data, lib, families, candidates)
+            cages = component_cages(data, lib, families, candidates, connectors,
+                                    face=ref in faces_named)
             if cages:
                 entry["cages"] = cages
             # THE CARD'S OWN PORT GROUPS (#511), in the device `groups:` shape.

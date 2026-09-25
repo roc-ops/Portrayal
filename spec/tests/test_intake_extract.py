@@ -175,6 +175,78 @@ def test_a_near_miss_hash_still_clusters():
     assert not kept
 
 
+def commscope_corpus():
+    """Records shaped like the CH3000 index.json rejects: the header logo strip,
+    repeated past the cluster threshold, and the ordering-code chart drawn at
+    page width in the same white and orange, so the same ahash."""
+    strip = [pic(302, 110, ahash="f0f0f0f0f8ffffef")
+             for _ in range(extract.BANNER_CLUSTER)]
+    chart = pic(1597, 541, ahash="f0f0f0f0f8ffffef")
+    return strip, chart
+
+
+def test_the_banner_height_ceiling_keeps_a_page_width_chart():
+    """THE COMMSCOPE CASE. The BP-35M4-CFx compatibility chart shares its hash
+    with the CH3000 header strip, so without the knob it goes with the strips."""
+    strip, chart = commscope_corpus()
+    kept, rejected = extract.classify(strip + [chart])
+    assert not kept and len(rejected) == len(strip) + 1, (
+        "the chart survives the default, so this test is no longer about "
+        "anything - check whether the rule changed")
+
+    kept, rejected = extract.classify(strip + [chart], banner_max_h=200)
+    assert kept == [chart], "the chart was dropped under the ceiling"
+    assert len(rejected) == len(strip)
+    assert {r["drop_reason"] for r in rejected} == {"banner"}, (
+        "the ceiling switched the rule off for the strips it exists to drop")
+
+
+def test_the_banner_height_ceiling_is_off_by_default():
+    """THE CISCO CITYSCAPE is 1302x370. A default ceiling of 200 - the number
+    that is right for CommScope - would hand it back on every chapter."""
+    assert extract.BANNER_MAX_H is None
+    pics = [pic(1302, 370, ahash="ffffffffffffffff")
+            for _ in range(extract.BANNER_CLUSTER)]
+    kept, rejected = extract.classify(pics)
+    assert not kept and {r["drop_reason"] for r in rejected} == {"banner"}
+
+
+def test_the_banner_height_ceiling_leaves_the_icon_rule_alone():
+    kept, rejected = extract.classify([pic(60, 60)], banner_max_h=200)
+    assert not kept and rejected[0]["drop_reason"] == "icon"
+
+
+# ---- the command line -------------------------------------------------------
+
+def test_a_failed_file_fails_the_run(tmp_path, monkeypatch, capsys):
+    """The runbook reads one exit status per file. A truncated PDF printed FAIL
+    and exited 0, which is what a successful conversion looks like."""
+    def run(pdf, *a, **k):
+        if pdf.name == "bad.pdf":
+            raise RuntimeError("Data format error")
+        return "ok", 3
+    monkeypatch.setattr(extract, "run", run)
+    out = ["--out", str(tmp_path)]
+    assert extract.main(["good.pdf"] + out) == 0
+    assert extract.main(["bad.pdf"] + out) == 1
+    assert extract.main(["good.pdf", "bad.pdf", "good2.pdf"] + out) == 1, (
+        "one failure among successes has to fail the run")
+    printed = capsys.readouterr().out
+    assert "FAIL bad.pdf: RuntimeError: Data format error" in printed
+    assert "good2.pdf: 3 figures" in printed, "a failure stopped the batch"
+
+
+def test_the_script_exits_with_mains_status(tmp_path):
+    """main() returning 1 is nothing if the entry point drops it."""
+    import subprocess
+    r = subprocess.run(
+        [sys.executable, str(ROOT / "spec/tools/intake/extract.py"),
+         str(tmp_path / "missing.pdf"), "--out", str(tmp_path), "--reclassify"],
+        capture_output=True, text=True)
+    assert "FAIL missing.pdf" in r.stdout, r.stdout + r.stderr
+    assert r.returncode == 1
+
+
 # ---- sectioning and the index ----------------------------------------------
 
 def test_a_record_is_tagged_with_the_heading_above_its_caption():

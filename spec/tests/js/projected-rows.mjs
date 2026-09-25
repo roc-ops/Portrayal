@@ -41,7 +41,7 @@ const skin = {t: 'svg', c: [{a: {id: 'rear-2', 'data-path': 'rear-2', 'data-clas
   {a: {id: 'rear-2--mtp1', 'data-path': 'rear-2/mtp1', 'data-class': 'port', 'data-ref': 'common/mpo@1'}},
   {a: {id: 'rear-2--mtp2', 'data-path': 'rear-2/mtp2', 'data-class': 'port', 'data-z-out': '3'}},
 ]}]};
-const applied = await applyRearOverrides(swapped, {'bay-1': 'fs/cassette@1'},
+const {applied} = await applyRearOverrides(swapped, {'bay-1': 'fs/cassette@1'},
   async () => ({text: JSON.stringify(skin), comp: {name: 'rear-2'}}),
   () => ({faces: {rear: 'fs/rear-2@1'}}));
 const wrap = [...swapped.descendants()].find(n => n.getAttribute('data-projection'));

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcp-f-a22
-version: 2.0.0
+version: 2.1.1
 class: line-card
 behaviour: fills
 profile: optical
@@ -95,7 +95,13 @@ provenance:
     from the library's real parts, NOT from the master. The master draws its optical
     adapters at ~10mm pitch and 7.4mm wide, which is SC-like and contradicts the
     datasheet's LC. Positions come from the drawing; sizes come from
-    common/lc-duplex-adapter@5, itself measured off the Smartoptics DCP-R stencil.
+    common/lc-duplex-adapter@6, itself measured off the Smartoptics DCP-R stencil.
+    ADAPTER BODIES MOVED, FIBRES DID NOT (common/lc-duplex-adapter@6, B3): that
+    adapter's ferrule axis sits 5.82 from its latch-side edge where @5's sat at 5.5,
+    so the `edfa` and `ocm` placements moved 0.32 toward their own latch side, y 23.8
+    to 23.48, and each fibre stays where the drawing put it. Those two `at`s are
+    therefore 0.32 off the drawing's adapter positions: what is the drawing's is the
+    fibre, not the body.
   markings: >-
     stencil master - smartoptics wordmark and DCP-F-A22 top left, a laser hazard
     triangle over a general warning triangle beneath them, and Power / Status captions
@@ -239,8 +245,8 @@ parts:
   - {ref: common/led-rect@1, id: led-status, at: [15.49, 35.1], lift: 44.0, attrs: {function: status}}
   - {ref: common/rj45-eth@1, id: eth1, at: [29.9, 23.8], lift: 44.0, attrs: {role: mgmt, speed: 1g}}
   - {ref: common/rj45-eth@1, id: eth2, at: [52.3, 23.8], lift: 44.0, attrs: {role: mgmt, speed: 1g}}
-  - {ref: common/lc-duplex-adapter@5, id: edfa, at: [88.08, 23.8], lift: 44.0, attrs: {role: edfa}}
-  - {ref: common/lc-duplex-adapter@5, id: ocm, at: [113.98, 23.8], lift: 44.0, attrs: {role: monitor}}
+  - {ref: common/lc-duplex-adapter@6, id: edfa, at: [88.08, 23.48], lift: 44.0, attrs: {role: edfa}}
+  - {ref: common/lc-duplex-adapter@6, id: ocm, at: [113.98, 23.48], lift: 44.0, attrs: {role: monitor}}
   - {ref: std/sfp@1, id: sfp-1, at: [130.75, 10.0], lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 1g}}
   - {ref: std/sfp@1, id: sfp-2, at: [130.75, 24.0], rotate: 180, lift: 44.0, attrs: {role: mgmt, media: sfp, speed: 1g}}
 relief:

@@ -6,7 +6,7 @@ relief.js reads `data-z-out` as an ABSOLUTE distance from the panel and SUMS
 the features inside it - which are absolute - and must NOT fold it into their
 `lift` values, which the ancestor already supplies.
 
-It folded it into both. Composing common/lc-duplex-adapter@5 onto
+It folded it into both. Composing common/lc-duplex-adapter@6 onto
 smartoptics/dcp-f-a22's plate at `lift: 44` put 44 on the adapter's group AND
 rewrote each dust cap's own 3.175 lift to 47.175, so relief.js summed 91.175
 against an `out` of 50.35 and built each cap as a box whose front face was 40mm
@@ -34,6 +34,8 @@ import pathlib
 import xml.etree.ElementTree as ET
 
 import pytest
+
+from libdata import built_component
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DIST = ROOT / "library" / "dist"
@@ -98,10 +100,10 @@ def test_the_a22s_adapters_stand_the_same_height_as_they_do_alone():
     caps until they left the adapter to become occupants of the bores; the
     bezel is the same kind of raised feature on the same composed part.)
     """
-    a22 = DIST / "components" / "smartoptics--dcp-f-a22--v2--default.svg"
-    lone = DIST / "components" / "common--lc-duplex-adapter--v5--default.svg"
-    if not (a22.exists() and lone.exists()):
-        pytest.skip("components not built")
+    # each at its CURRENT major (libdata.built_component): skipped with no
+    # build, FAILED when a build is present without them
+    a22 = built_component("smartoptics/dcp-f-a22")
+    lone = built_component("common/lc-duplex-adapter")
 
     def extents(path, want):
         root = ET.parse(path).getroot()

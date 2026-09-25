@@ -29,7 +29,7 @@
 // module takes its lamps with it.
 
 import * as THREE from 'three';
-import { nodeTools, rasterize, canvasTex } from './relief.js';
+import { nodeTools, rasterize, canvasTex, tiltOf, tiltTools, tiltGroupIn, unproject } from './relief.js';
 
 // SOMETHING UNDER THE LIVE ART. A blink is opacity 1 <-> 0 on the lamp, so a
 // frame sampled in the off half is transparent - and a transparent dome cap or
@@ -197,6 +197,17 @@ export function createLamps() {
       const doc = openDoc(rec.svgText);
       try {
         const T = nodeTools(doc.svg);
+        // A LAMP ON A PART ON A FACET is placed in that part's tilt frame
+        // (relief.js tiltTools), at its true size, whether its owner is the
+        // optic (a FRU) or the card. Built only when a tilted lamp is met.
+        let TT = null;
+        const tiltRec = el => {
+          const t = tiltOf(el);
+          if (!t) return null;
+          TT = TT || tiltTools(doc.svg, {mmRect: T.mmRect, liftOf: T.liftOf,
+                                         ctmOf: n => T.inv.multiply(n.getScreenCTM())});
+          return TT.tiltRec(t);
+        };
         const lit = [...doc.svg.querySelectorAll('[data-path][class*="state-"]')]
           .filter(el => !el.closest('[data-projection]'));
         const seen = new Set();
@@ -222,17 +233,24 @@ export function createLamps() {
           // a module's face art rides 0.3 over the face in its own group; a lamp
           // painted on a cavity floor sits that cavity's depth in
           const cav = fg ? null : a.el.closest('[data-depth]');
-          const z = T.liftOf(a.el) + (fg ? 0.3 : 0) - (cav ? +cav.dataset.depth || 0 : 0) + 0.06;
+          const tr = tiltRec(a.el);
+          // `at` is where the quad goes: the true rect in the tilt frame, and a
+          // lift measured from the facet (its `base`); `rect` stays the drawn
+          // one, which the frames are rasterised from
+          const at = tr ? unproject(rect, tr.tilt) : rect;
+          const z = T.liftOf(a.el) - (tr ? tr.base : 0) + (fg ? 0.3 : 0)
+            - (cav ? +cav.dataset.depth || 0 : 0) + 0.06;
           const [fx, fy] = faceFlip[rec.key] || [false, false];
-          const x = (fx ? -1 : 1) * (rect.x + rect.w / 2 - rec.wmm / 2);
-          const y = (fy ? -1 : 1) * (rec.hmm / 2 - (rect.y + rect.h / 2));
+          const x = (fx ? -1 : 1) * (at.x + at.w / 2 - rec.wmm / 2);
+          const y = (fy ? -1 : 1) * (rec.hmm / 2 - (at.y + at.h / 2));
           const mat = new THREE.MeshBasicMaterial({transparent: true, alphaTest: 0.1, alphaToCoverage: true});
           mat.color.setScalar(tint(rec));
-          const mesh = new THREE.Mesh(new THREE.PlaneGeometry(rect.w, rect.h), mat);
+          const mesh = new THREE.Mesh(new THREE.PlaneGeometry(at.w, at.h), mat);
           mesh.position.set(x, y, z);
           mesh.userData.portrayalPath = path;
           mesh.visible = !isOff(path);
-          (fg || grp).add(mesh);
+          (tr ? tiltGroupIn(fg || grp, tr.tilt, {fw: rec.wmm, fh: rec.hmm, flipLX: fx, flipLY: fy})
+              : fg || grp).add(mesh);
           await add(key, {text, mat, w: rect.w, h: rect.h, stops, dur: a.dur, mesh, view: rec.key}, pxmm);
           keep.add(key);
         }

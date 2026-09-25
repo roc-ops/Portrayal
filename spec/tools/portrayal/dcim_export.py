@@ -133,6 +133,7 @@ PART_IFACE = {
     # slugs are in netbox-community/netbox and nautobot/nautobot alike.
     "std/cfp": "100gbase-x-cfp",
     "std/cfp2": "100gbase-x-cfp2",
+    "std/cfp4": "100gbase-x-cfp4",
     "std/cxp": "100gbase-x-cxp",
 }
 # What a cage RUNS AT is a property of the card, not of the cage. So the cage ref
@@ -175,18 +176,94 @@ CAGE_FAMILY = {
 # reach for - and there should not be. `type` names the PHYSICAL interface; ATM
 # is the framing that runs over it, the way POS and channelized DS0 are. An
 # OC-3 ATM port is an OC-3 port.
+#
+# NOR IS AN SFP OR XFP CAGE ONLY ETHERNET OR SONET: A PON OLT PORT IS NEITHER.
+# The Nokia 7360 ISAM FX line cards put GPON, XGS-PON, NG-PON2 and 10G-EPON OLT
+# optics in SFP and XFP cages - 112 cages on ten cards - and with only Ethernet
+# and SONET rates here every one fell to the cage default: a GPON OLT port
+# exported as 1000BASE-X, a 10G-EPON one as 10GBASE-X. The attr is named for the
+# PON flavour and carries the port count, as `sfp: 40` does.
+#
+# ONLY THE FLAVOURS BOTH TARGETS DEFINE. One document is written to both trees,
+# so a type either library refuses fails on import. InterfaceTypeChoices has all
+# six below in netbox-community/netbox (netbox/dcim/choices.py, TYPE_EPON ..
+# TYPE_NG_PON2, at 64ce9e2d) and in nautobot/nautobot (nautobot/dcim/choices.py,
+# the "PON" group, at 3edb1fca). NetBox also has `bpon`, `25g-pon` and `50g-pon`;
+# Nautobot has none of the three, so they are NOT here - an FGUT-A's even ports
+# run 25GS-PON as well, and export as the XGS-PON every one of its ports runs.
+#
+# AFTER THE ETHERNET PAIR AND THE SONET RATES, so no card that already declares
+# a rate changes. Among themselves, most capable first: a Multi-PON card that
+# states both `xgs-pon` and `gpon` is an XGS-PON port that also runs GPON, and a
+# U-NGPON card that states `ng-pon2` runs XGS-PON too.
+PON_ATTRS = (("ng-pon2", "ng-pon2"), ("xgs-pon", "xgs-pon"), ("xg-pon", "xg-pon"),
+             ("10g-epon", "10g-epon"), ("gpon", "gpon"), ("epon", "epon"))
+PON_TYPES = frozenset(t for _a, t in PON_ATTRS)
+# AN SFP112 PORT IS `other`, BECAUSE ONLY ONE TARGET NAMES IT. `sfp112` is a
+# rung of the SFP ladder (spec/schemas/pluggables.yaml), and NetBox has
+# TYPE_100GE_SFP112 = '100gbase-x-sfp112' (netbox-community/netbox
+# netbox/dcim/choices.py at 6a009845) - but Nautobot does not: nautobot/nautobot
+# nautobot/dcim/choices.py at 38953ac3 has 400gbase-x-qsfp112 and no SFP112.
+# One document is written to both trees, so that slug would fail every Nautobot
+# import of a card carrying it - the reason `25gs-pon` has no row either.
+#
+# BUT A CARD THAT STATES `sfp112` HAS STATED ITS RATE, and leaving the row out
+# sent it to the cage default: sixteen 100G ports exported as 10GBASE-X SFP+,
+# the #267 defect, with L96 accusing the card of a silence it did not keep.
+# `other` is valid in both and says "a thing this schema has no name for",
+# which for Nautobot is exactly true - the treatment PART_MEDIA already gives
+# rj45-telemetry. When Nautobot adds 100gbase-x-sfp112 this becomes that slug.
+#
+# FIRST IN THE SFP FAMILY, as the most capable rate: an SFP112 cage takes SFP56
+# and SFP28 too, so a card stating `sfp112` beside a lower rate is an SFP112
+# card. No card stated it before, so nothing that exported already changes.
+SFP112_ATTR = ("sfp112", "other")
+# WHAT AN `other` PORT IS LABELLED WITH, by media. `other` says the schema has no
+# name for the thing, so the label is the only place the connector survives -
+# and it was hardcoded "RJ45", written for the Casa rj45-telemetry port, until
+# the Nokia MDA2-e-XP exported 24 SFP112 cages as copper jacks (#558 review).
+OTHER_LABEL = {"rj45-telemetry": "RJ45", "sfp112": "SFP112"}
+# AN 800G QSFP-DD PORT IS NOT A 400G ONE, and with only the `qsfp-dd` row the
+# Nokia MDA2-e-XP's QSFP-DD800 ports would have exported as 400GBASE-X.
+# `800gbase-x-qsfpdd` is in both targets (NetBox TYPE_800GE_QSFP_DD at 6a009845;
+# Nautobot TYPE_800GE_QSFP_DD at 38953ac3), and IFACE_TYPE already writes it for
+# a device's 800G QSFP-DD groups. The card attr is `qsfp-dd-800g`, NOT
+# `qsfp-dd800`: the port's media stays `qsfp-dd` with `speed: 800g` (QSFP-DD
+# HW 6.3 covers QSFP-DD800 in the same cage), and `qsfp-dd800` is kept out of
+# the media vocabulary on purpose - see spec/schemas/pluggables.yaml. A card
+# attr is a rate statement, as `oc48` and `xgs-pon` are, not a media value.
+# FIRST, so a card stating it wins; every 400G card states only `qsfp-dd` and
+# is unchanged.
+QDD800_ATTR = ("qsfp-dd-800g", "800gbase-x-qsfpdd")
+# AN SFP28 CARD WAS EXPORTING AS SFP+, because the family knew no 25G rate: a
+# card stating only `sfp28` fell to the cage default. `25gbase-x-sfp28` is in
+# both targets (NetBox TYPE_25GE_SFP28 at 6a009845, Nautobot at 38953ac3) and
+# IFACE_TYPE already writes it for a device's 25G SFP groups.
+# AFTER `sfp-plus`, NOT BEFORE IT, and that is deliberate. Five Cisco cards -
+# the four A9K/A99-4HG-FLEX and the A9903-8HG-PEC - state `sfp-plus` AND
+# `sfp28` on one strip of std/sfp-ganged cages, and one card-level attr cannot
+# say which cage is which; placed first, this row would retype all of their
+# SFP+ ports as SFP28. Placed here they keep exporting exactly what they did.
+SFP28_ATTR = ("sfp28", "25gbase-x-sfp28")
 FAMILY_ATTRS = {
-    "sfp": (("sfp-plus", "10gbase-x-sfpp"), ("sfp", "1000base-x-sfp"),
-            ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3")),
+    "sfp": (SFP112_ATTR,
+            ("sfp-plus", "10gbase-x-sfpp"), SFP28_ATTR, ("sfp", "1000base-x-sfp"),
+            ("oc48", "sonet-oc48"), ("oc12", "sonet-oc12"), ("oc3", "sonet-oc3"))
+           + PON_ATTRS,
     "qsfp": (("qsfp28", "100gbase-x-qsfp28"), ("qsfp", "40gbase-x-qsfpp")),
-    "qsfp-dd": (("qsfp-dd", "400gbase-x-qsfpdd"),),
+    "qsfp-dd": (QDD800_ATTR, ("qsfp-dd", "400gbase-x-qsfpdd")),
     # AN XFP CAGE IS NOT ONE RATE EITHER, and this entry said it was - the empty
     # tuple meant "nothing to declare", so L96 never asked and the cards below
     # were not even in #296's census. The sweep over the committed exports found
     # them: SPA-OC192POS-XFP and MIC-3D-1OC192-XFP put an OC-192 port behind an
     # XFP, exporting as 10GbE. Both are ~10 Gb/s and the framing is what differs,
     # which is exactly why the cage cannot say.
-    "xfp": (("oc192", "sonet-oc192"),),
+    #
+    # Still no Ethernet row: an XFP card that states nothing takes the 10GbE
+    # default as before, and an `xfp` row placed first would read a PON card's
+    # `xfp: 4` as 10GbE - the FWLT-A (NG-PON2) and FPXT-A/B (10G-EPON) state
+    # their flavour instead.
+    "xfp": (("oc192", "sonet-oc192"),) + PON_ATTRS,
 }
 
 
@@ -380,6 +457,10 @@ PART_MEDIA = {
     ("qsfp", "40g"): "40gbase-x-qsfpp",
     ("qsfp28", "100g"): "100gbase-x-qsfp28",
     ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    # A PLACEMENT'S OWN 800G, so a QSFP-DD800 port that says so types from
+    # itself; the card's `qsfp-dd-800g` gives the same answer (QDD800_ATTR).
+    ("qsfp-dd", "800g"): "800gbase-x-qsfpdd",
+    ("sfp112", "100g"): "other",
     ("rj45-telemetry", None): "other",
     # COPPER ETHERNET AT A STATED RATE. An 8P8C shell says nothing about speed,
     # so these only ever apply where the PLACEMENT declares one - which is the
@@ -397,6 +478,13 @@ def placed_type(part):
     media = a.get("media")
     if not media:
         return None
+    # A PON PORT'S FLAVOUR IS `pon`, BESIDE ITS MEDIA AND LINE RATE (the rule
+    # spec/schemas/speeds.yaml states), and it outranks them: the FGUT-A's odd
+    # ports are `media: sfp-plus, speed: 10g, pon: xgs-pon`, and reading only
+    # the first two exported eight XGS-PON OLT ports as 10GBASE-X SFP+. A flavour
+    # neither target defines (`25gs-pon`) falls through to the media as before.
+    if a.get("pon") in PON_TYPES:
+        return a["pon"]
     speed = a.get("speed")
     return PART_MEDIA.get((media, speed)) or PART_MEDIA.get((media, None))
 
@@ -479,7 +567,12 @@ NOT_A_DCIM_PORT = {
     # --- connectors upstream has no type for ---------------------------------
     "common/db9-receptacle": "all 55 placements are `alarm-out` - a dry-contact relay, not RS-232. "
                              "Neither library has an alarm port, and `de-9` would read as a console",
+    "std/da15": "the 7750 SR-e CCM-e alarm connector - dry-contact relays and alarm inputs on a "
+                "DA-15, not RS-232. Neither library has an alarm port, and no console type is a DA-15",
     "std/vga": "VGA; neither library has a video port type",
+    "common/vhdci-receptacle": "a VHDCI fan-out carrying sixteen timing outputs to a patch panel "
+                               "over one cable; neither library has a type for it, and one row "
+                               "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
@@ -491,6 +584,10 @@ NOT_A_DCIM_PORT = {
     # --- power entry on a chassis ---------------------------------------------
     # `common/dc-barrel` was here until #286 gave `build` a power path; it now
     # exports, and the register's stale-entry test is what says so.
+    "nokia/sr-1-dc-terminal-block": "the 7750 SR-1 DC chassis's fixed -48 V terminal block - a "
+                                    "barrier strip with its switch and cover, bolted to the rear. "
+                                    "Its feeds are the chassis power inputs, stated in the "
+                                    "device's power attrs; no connector here has a DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
 
@@ -1247,7 +1344,8 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
         if placed:
             iface = {"name": pid, "type": placed}
             if placed == "other":
-                iface["label"] = "RJ45"
+                media = part["attrs"]["media"]
+                iface["label"] = OTHER_LABEL.get(media, media.upper())
             ifaces.append(iface)
             network = iface
         elif full_ref in FAMILY_PART:
@@ -1280,6 +1378,9 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
             if defaulted is not None and cage_family_needs_a_rate(ref, attrs):
                 defaulted[ref] = defaulted.get(ref, 0) + 1
             network = {"name": pid, "type": cage_type(ref, attrs)}
+            # The one FAMILY_ATTRS row that writes `other` is SFP112_ATTR.
+            if network["type"] == "other":
+                network["label"] = OTHER_LABEL[SFP112_ATTR[0]]
             ifaces.append(network)
         elif dropped is not None:
             # THE else THIS CHAIN DID NOT HAVE. A part matching no branch fell

@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: osa542x-psu-ac-40w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Oscilloquartz OSA 5420 AC power supply - the 40 W hot-swappable 100-240 VAC module
+  for the two-slot OSA 5420, an IEC C14 inlet in a black moulded flange, a pull handle
+  and a status lamp, held in by a captive thumbscrew on a tab at its lower right.
+size: {w: 81.0, h: 36.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  input: ac
+  input-voltage: 100-240 VAC, 47-63 Hz
+  power-output-w: 40
+provenance:
+  power: >-
+    manual - OSA 5420/5421 Installation and Commissioning Manual R9.5.1 p43, "The OSA
+    5420 uses 40 Watt AC/DC PSUs, and the OSA 5421 requires 90 Watt AC/DC PSUs", with
+    the instruction that both supplies in one chassis match. NO AMBIENT is quoted with
+    the figure, so none is asserted. The part number is not in any document held here -
+    the manual defers it to the OSA 5420/5421 System Description, which is not held.
+  input: >-
+    data sheet - 2023 OSA 5420 Series, Power supply: "Hot-swappable, modular AC-PSU:
+    100 to 240VAC (47 to 63Hz) with over-voltage and over-current protection". The
+    face prints "100- 240V AC" beside the inlet.
+  size: >-
+    photo-measured - 2023 OSA 5420 Series data sheet p1 front render, 1462 x 226 px,
+    whose face measures 1440.5 x 142.5 px against the 443 x 44 front (0.4% aspect
+    agreement; see the device's `chassis` provenance). The plate is 71.8 x 35.0 at
+    3.25 px/mm, the same on both supplies in the render to 0.5 mm; the thumbscrew tab
+    runs on to 81.0 and 1.0 below the plate. THE PART IS L-SHAPED AND THE LIBRARY HAS NO
+    L-SHAPED BAY, so the module takes its whole 81 x 36 envelope and the skin paints
+    the notch above the tab in the chassis' own grey. The notch is chassis metal, not
+    module: on PSU2 it carries the chassis ESD sticker, which the device places over
+    this part for that reason.
+  shape: >-
+    manual - p45-46, Figures 1 and 2, the "PSU Locking Mechanism" line drawings: the
+    same outline, a plate with a tab stepping down at its lower right carrying the
+    captive thumbscrew. The procedure (p44) says the thumbscrew is "oriented to the
+    right".
+  elements: >-
+    photo-measured, same render: handle 21.6 x 4.8 at the top left, the status lamp at
+    local (64.9, 6.25) in a dark bezel, "Status" printed to its left, the flanged C14 at
+    local 26.5-60.1 x 7.35-31.15 with a flange screw either side at x 23.9 and 63.7, and
+    "100- 240V AC" to the left of it low down. The same features sit within 0.5 mm of
+    each other on the two supplies in the render, which are an AC and a DC module of the
+    same frame.
+  inlet: >-
+    standard (IEC 60320-1) via std/c14-inlet@1, unrotated - earth pin up, which is how
+    the render and the manual's Figure 2 both draw it. The black flange around it is
+    this part's own moulding and is drawn here.
+  lamp-states: >-
+    manual - Table 2, System LEDs, PSU-n Status: Off, no input power detected; Green,
+    input power present and the PSU operating within normal limits; Red, PSU fail or
+    input power out of spec.
+  depth: >-
+    NOT STATED in the data sheet or the manual, so no body is declared.
+states: [absent]
+elements:
+  handle: {at: [2.2, 3.95], size: [21.6, 4.8], class: handle}
+  lamp-status:
+    at: [63.3, 4.65]
+    size: [3.2, 3.2]
+    class: led
+    states: ['off', {name: ok, color: '#39b54a'}, {name: fail, color: '#d0342c'}]
+  screw-flange-l: {at: [22.4, 17.25], size: [3.0, 3.0], class: fastener}
+  screw-flange-r: {at: [62.2, 17.25], size: [3.0, 3.0], class: fastener}
+  thumbscrew: {at: [72.9, 28.15], size: [7.4, 7.4], class: fastener}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [29.3, 9.25]}
+connection-points:
+  power: {at: [43.3, 19.25], direction: rear}
+skins: [default]

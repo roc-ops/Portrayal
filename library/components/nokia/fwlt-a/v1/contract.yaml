@@ -1,0 +1,208 @@
+format: 1
+kind: module
+name: fwlt-a
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FWLT-A (3FE 56399 AB), the 4-port U-NGPON line termination card of the 7360 ISAM
+  FX: NG-PON2 TWDM or XGS-PON on four XFP cages labelled PORT1 to PORT4. Authored upright,
+  as the Unit Data Sheet guide draws it: thumbscrew and ejector at each end, the model name
+  and the ALM / PWR lamps under the top screw, four XFP cages in raised housings on an
+  80 mm pitch, each with its PON lamp on the left, then a label area and the laser and ESD
+  marks above the bottom ejector. 7360 ISAM FX only; not in any Lightspan FX guide.
+size: {w: 25.0, h: 405.0, d: 225.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), held so the shared FX LT bay seats the card. In
+  Figure 134 the plate itself measures 23.3 mm and the side rail beside it takes the overall
+  to 26.2 mm; the plate is drawn centred in the 25 mm face with the rail as a strip on the
+  left edge. d is the larger of the two board widths the UDS gives (225 mm at the top,
+  205 mm at the bottom: the board is tapered).
+attrs:
+  model: FWLT-A
+  part-number: 3FE 56399 AB
+  xfp: 4
+  xgs-pon: 4
+  weight-kg: 1.4
+  power-draw-max-w: 123
+  power-draw-typical-w: 108
+  power-scope: includes the XFP optics, per the Safety Manual note that PON line-card figures include their optics
+provenance:
+  size: >-
+    datasheet - 7360 ISAM FX ANSI Unit Data Sheet guide R6.9 3FE77013AAAATQZZA16 section
+    35.5.1 (p305): height 405 mm, width 225 mm (top) / 205 mm (bottom), board-to-board pitch
+    25 mm, weight 1.4 kg.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 35.5.1; faceplate width not stated, taken as
+    the pitch. Figure 134 measures the plate at 112 px (23.3 mm) plus a 14 px side rail,
+    26.2 mm overall.
+  depth: >-
+    datasheet - "width: 225 mm (top) / 205 mm (bottom)" in section 35.5.1 is the board's
+    extent behind the faceplate; 225 carried as the envelope.
+  power: >-
+    datasheet - ANSI Safety Manual 3HH12894AAAATCZZA27 p26 and ETSI Safety Manual
+    3HH11998AAAATCZZA29 p26 Table 2, "FWLT-A" 108 W typical, 123 W maximum (the two agree).
+    The ETSI table's note: "The power consumption values of the PON line cards include the
+    power consumption of the optics".
+  layout: >-
+    drawing - ANSI UDS R6.9 p303 Figure 134 "FWLT-A front view", an ORTHOGRAPHIC front
+    embedded as an 888 x 1960 image at 300 ppi (pdfimages -list). Gate 1: the card runs from
+    row 8 to row 1953, 1945 px for 405 mm = 4.8025 px/mm; its width including the side rail,
+    126 px, gives 15.44 against the 405/26 = 15.58 the UDS's own 26 mm overall width
+    implies (0.9 %), so the figure is measured, not fractioned. x is taken from the plate
+    centre (px 432 = 12.5 mm) at the same scale. Housing frames (outer) at rows 178.5 /
+    563 / 947 / 1331, a regular 384.3 px = 80.02 mm pitch, each 178 px = 37.1 mm tall and
+    x 2.5 to 20.4; the cage flange inside each at +1.4 to +27.0 mm, x 4.0 to 18.4;
+    status lamps (circles 3.5 mm) centred at x 8.1 and 13.4, y 31.1; model name at y 25;
+    label area 5.0 to 19.2 x 338.4 to 356.5 inside corner brackets; laser mark 378.3 to
+    384.4, ESD mark 384.6 to 391.5; thumbscrews centred at (17.9, 4.6) and (17.5, 400.2);
+    ejector blocks x 0.4 to 4.8 at y 12.5 to 31.0 and 373.8 to 392.3.
+  ports: >-
+    datasheet - UDS section 35.4.2: "four physical XFP module ports for the four U-NGPON
+    links, labeled PORT1 until PORT4", and section 35.4: "XFP optical modules can be plugged
+    in". Composed as std/xfp@1 turned 90 degrees (the card stands upright, so the cage lies
+    on its side, as on every vertical card in the library): the drawn opening is 9.5 mm
+    across, which is the XFP's 9.7 and not its 19.5. Centred at x 11.0 (the flange centre
+    11.1, the drawn plug 10.5) and, along the card, on the opening Figure 134 draws: the
+    flange, +1.4 to +27.0 mm below each housing top, centre +14.2 (49.70 / 129.76 / 209.72 /
+    289.68). Version 1.0.0 centred them 20.0 mm below the housing top (at.y 50.65 / 130.71
+    / 210.67 / 290.63, now 44.85 / 124.91 / 204.87 / 284.83), reading the plain upper part
+    of the flange as the cage's top face seen past an angled opening. The side profile of
+    the same housing (ANSI Figure 142, p314) shows the opening flush in the plate: the cage
+    is tilted about 40 degrees BEHIND the plate (19.5 / cos 40 = 25.5, the flange's 25.6),
+    so the whole flange is the opening, and the old position ran the cage 2.75 mm into the
+    lip below it. The cage's tilt behind the plate is not representable (gap).
+  relief: >-
+    drawing - the wedge lip under each opening (Figure 142's profile: 4.9 mm proud, over
+    the housing below the flange) is one part-less facet per housing, lip-1 to lip-4, 26
+    degrees looking down: its proud edge at the opening's lower edge (+27.0), its root on
+    the plate at the housing's foot (+37.1). Figure 134's line across the lip at +32.9 is
+    not modelled as a ridge.
+  lamps: >-
+    datasheet - Figure 136 and Table 93 (p305-306). ALM (left, the label partly hidden
+    behind the top ejector in the figure) and PWR: PWR off / blinking green (initialisation)
+    / on green; ALM on red = alarm. The PON lamp, "one per port worked in into the side of
+    the XFP socket", "located on the left of the corresponding PON interface" (note 1):
+    off / yellow (provisioned, one of the ONUs ranges) / green (active) / blinking green
+    (provisioned and active) / red (transmitter failed). Placed at x 3.44 and 9.2 mm below
+    each housing top, where Figure 134's "PON LEDs" arrows land; the housing draws a second
+    small square lower down, taken to be the cage latch (gap). The yellow is drawn #f2c200;
+    Nokia gives no shade.
+  logo-zone: >-
+    Figure 134 prints the Alcatel-Lucent mark and wordmark between the top screw and the
+    model name; neither is drawn (no vendor logos), the zone is reserved there.
+  lifecycle: >-
+    searched only the staged corpus - listed as current in ANSI UDS R6.9 and the ETSI PIG
+    3HH11997AAAATCZZA42; no end-of-life notice was searched for on the web.
+  gaps: >-
+    (1) the cage's tilt behind the plate (about 40 degrees, read off the FWLT-B AA profile
+    of the same housing), which the format cannot draw behind a flush opening; (2) whether
+    the
+    lower square beside each housing is a second lamp or the cage latch; (3) the PON lamp's
+    and the laser mark's colours are not stated; (4) the part-label content is a
+    placeholder; (5) the export rate is `xgs-pon: 4`. Section 35.3 names both G.989 NG-PON2 TWDM and
+    G.9807 XGS-PON on any of the four ports, but the ETSI PIG optics table (Table 126) lists
+    only XGS dual-rate XFP optics for this card, so XGS-PON is the flavour every port runs
+    in hardware - the rule FWLT-B AB and FGUT-A follow.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [4, 11.5], size: [17, 10], class: label}
+  part-label: {at: [5, 338.4], size: [14.2, 18.1], class: label}
+  lip-1: {at: [2.6, 62.5], size: [17.9, 10.1], class: mechanical}
+  lip-2: {at: [2.6, 142.56], size: [17.9, 10.1], class: mechanical}
+  lip-3: {at: [2.6, 222.52], size: [17.9, 10.1], class: mechanical}
+  lip-4: {at: [2.6, 302.48], size: [17.9, 10.1], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: screw-top
+      cyl: 6.0
+      confidence: estimated
+      source: >-
+        a knurled thumbscrew head standing off the plate; nothing dimensions it. The same
+        6.0 as nokia/dummy-lt@1, which is the same estimate, not a second reading
+    - node: screw-bottom
+      cyl: 6.0
+      confidence: estimated
+      source: as screw-top
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, as
+        nokia/fnio-d@1 uses; itself sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: as ejector-top
+    - node: lip-1
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: >-
+        drawing - the wedge lip under each cage opening, ANSI UDS R6.9 p314 Figure 142's
+        right-hand orthographic profile: about 17 px (4.9 mm) proud at 3.444 px/mm, spanning
+        the housing below the flange (+27.0 to +37.1 mm below the housing top). One
+        part-less facet looking down, its proud edge at the opening's lower edge and its
+        root on the plate at the housing's foot: atan(4.9 / 10.1) = 26 degrees, 4.93 mm
+        proud
+    - node: lip-2
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: as lip-1
+    - node: lip-3
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: as lip-1
+    - node: lip-4
+      facet: {deg: 26, facing: down}
+      confidence: estimated
+      source: as lip-1
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: xfp, speed: 10g}
+    description: the four U-NGPON ports, XFP cages for NG-PON2 TWDM or XGS-PON optics, PORT1 to PORT4 top to bottom
+  pon-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one PON lamp per port, on the left of its cage (led-port-N serves port-N)
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/xfp@1, id: port-1, group: xfp, at: [1.25, 44.85], rotate: 90}
+  - {ref: std/xfp@1, id: port-2, group: xfp, at: [1.25, 124.91], rotate: 90}
+  - {ref: std/xfp@1, id: port-3, group: xfp, at: [1.25, 204.87], rotate: 90}
+  - {ref: std/xfp@1, id: port-4, group: xfp, at: [1.25, 284.83], rotate: 90}
+  - {ref: common/led-indicator@1, id: led-alm, group: status-leds, at: [6.1, 29.1], states: {lamp: ['off', {name: alarm, color: '#d0021b'}]}}
+  - {ref: common/led-indicator@1, id: led-pwr, group: status-leds, at: [11.4, 29.1], states: {lamp: ['off', {name: init, color: '#39b54a', behavior: blinking}, {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-port-1, group: pon-leds, at: [2.44, 43.7], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: active-ranging, color: '#39b54a', behavior: blinking}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-2, group: pon-leds, at: [2.44, 123.76], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: active-ranging, color: '#39b54a', behavior: blinking}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-3, group: pon-leds, at: [2.44, 203.72], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: active-ranging, color: '#39b54a', behavior: blinking}, {name: fault, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-port-4, group: pon-leds, at: [2.44, 283.68], states: {lamp: ['off', {name: provisioned, color: '#f2c200'}, {name: active, color: '#39b54a'}, {name: active-ranging, color: '#39b54a', behavior: blinking}, {name: fault, color: '#d0021b'}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

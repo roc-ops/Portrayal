@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: cfp4
+version: 1.0.0
+class: port
+profile: networking
+conforms: cfp4
+interface: cfp4
+description: CFP4 cage cutout - the module envelope of the
+  CFP4 MSA, the aperture the module seats through
+size: {w: 21.5, h: 9.5, d: 92.0}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: >-
+  CFP MSA CFP4 Hardware Specification Rev 1.1 (18 Mar 2015), Figure 5-7 "CFP4
+  Module Dimension Overview" - body 21.50 wide by 9.50 high, 92.00 long overall.
+  The specification calls these dimensions reference only and defers the
+  normative figures, and the host board and cage, to a separate baseline
+  drawing that is not held. No bezel opening is dimensioned anywhere held, so
+  the opening is the module body, as std/cfp and std/cfp2 draw theirs.
+attrs: {media: cfp4}
+provenance:
+  size: 'standard - CFP MSA CFP4 Hardware Specification Rev 1.1, Figure 5-7 - module body 21.50 wide x 9.50 high x 92.00 long; the bezel opening is drawn at the module envelope because the specification dimensions the module, not a recommended bezel'
+  depth: 'standard - module length 92.00 overall per the same figure (76.00 min behind the header)'
+elements:
+  opening: {at: [0.0, 0.0], size: [21.5, 9.5], class: cutout}
+relief:
+  wall: '#aab0b7'
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's one cage-lip figure, shared by
+        every std/ cage; no MSA dimensions how far the lip stands proud.
+connection-points:
+  mate: {at: [10.75, 4.75], direction: front}
+skins: [default]

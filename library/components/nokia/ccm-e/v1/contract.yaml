@@ -1,0 +1,200 @@
+format: 1
+kind: module
+name: ccm-e
+version: 1.1.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Nokia 7750 SR-e CCM-e, the Control Connector Module that carries the management face of
+  the paired CPM-e in the SR-1e, SR-2e and SR-3e: captive screws at both top corners, Stat
+  and Pwr lamps, the DTE/DCE switch over the RJ-45 console, a 2x2 RJ-45 block (OES and BITS
+  above, Mgmt and SyncE/1588 below, each with Lnk and Flt lamps), the Critical/Major/Minor
+  alarm lamps over the 15-pin Alarms D-sub, the ACO/LT button, the 1PPS SMB jack and the
+  external Compact Flash slot (cf1). Authored horizontal, as the guide draws it; the SR-e
+  front cage seats it in CCM A and CCM B with no rotation.
+size: {w: 193.0, h: 35.4, d: 188.0}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  w 193.0 is the faceplate measured on SRE p56 Fig 13 and in the cage (SRE p44), the same
+  width as an MDA-e; the 7.3 in (185.4) of SRE p85 Table 28 is the board, not the face. h is
+  the 35.4 slot pitch of the wave-1 convention, not the 1.4 in (35.56) of Table 28.
+attrs:
+  model: 7750 SR-e CCM-e
+  weight-kg: 0.7
+  power-draw-max-w: 16
+  power-draw-typical-w: 14
+provenance:
+  size: >-
+    drawing - SRE (3HE17927AAAATQZZA03) p56 Fig 13, a vector drawing rendered at 1200 dpi: the
+    plate from its top line under the card-edge strip measures 4537 x 836 px, aspect 5.43,
+    which is 193.0 x 35.5; in the SR-1e cage (SRE p44) the CCM-e and the MDA-e are the same
+    1656 px wide at 8.58 px/mm. CONFLICT: SRE p85 Table 28 gives 1.4 x 7.3 x 7.4 in
+    (3.56 x 18.54 x 18.80 cm) - the 7.3 in (185.4) is taken to be the board width, not the
+    face. h is held at the 35.4 slot pitch (SRE p50, 304.0 px at 8.580 px/mm) so stacked bays
+    tile; the table's 1.4 in is rounded to 0.1 in.
+  depth: 'datasheet - 7.4 in (188.0 mm), SRE p85 Table 28'
+  weight: 'datasheet - 0.7 kg (1.54 lb), SRE p85 Table 28'
+  power: >-
+    datasheet - SRE p84 Table 27, System Component Power Consumption Values in Watts: CCM-e
+    idle 11, zero traffic 11, typical 14, worst case 16. Worst case is at 55C (SRE p83);
+    typical is the table's typical column.
+  part-number: >-
+    NOT STATED - the SR-e guide names the CCM-e but gives it no orderable part number in any
+    table (Table 12 lists only the IOM-e variants, Table 15 the PSUs, Table 20 the impedance
+    panels). Left off the attrs rather than guessed.
+  layout: >-
+    drawing - SRE p56 Fig 13 (art 25561) at 1200 dpi, 23.51 px/mm across and 23.62 down from
+    the plate's top-left corner, read on a 1 mm grid overlay to about 0.3 mm. Screw centres
+    (8.5, 7.4) and (184.5, 7.4), heads 11.0 across (the right read 185.3; taken symmetric);
+    Stat and Pwr at (11.8, 19.7) and (11.8, 24.7); DTE/DCE slide 21.9-29.6 x 4.4-9.6;
+    Console housing 17.6-34.2 x 17.5-31.5, centre (25.9, 24.5); the 2x2 block's shell
+    39.0-69.4 x 7.5-31.4, jack centres x 46.75 / 61.4, y 13.25 / 25.0; alarm lamps at
+    x 84.5 / 93.1 / 102.2, y 8.3; the D-sub shell 79.8-107.8 x 15.2-26.0 with hex standoffs
+    at x 76.3 and 109.8 (33.5 centres), y 20.6; ACO/LT centre (120.8, 22.0), 6.2 across;
+    1PPS centre (143.7, 9.6), the jack's nut 7.0 across; CF slot 129.8-175.9 x 18.2-25.7
+    with its eject button 176.4-182.1 x 18.0-22.7; model label centred (162.5, 30.3); ESD
+    mark 183.4-190.8 x 25.0-31.5. SRE p191 Fig 62 and p192 Fig 63 repeat the same art.
+  ports: >-
+    datasheet - SRE p57 Table 10: Console RJ-45 (no lamps, SRE p192 Table 68 key 1); OES,
+    10/100 Mb/s Ethernet RJ-45 for a GMPLS-UNI IP control channel; Mgmt, 10/100 Mb/s
+    Ethernet RJ-45; BITS, RJ-45 for DS1/E1 timing; SyncE/1588, 10/100 Mb/s Ethernet RJ-45;
+    Alarms, "a D-type 15-pin connector"; 1PPS, SMB 50 ohm (Table 10 key 14); Compact Flash
+    cf1, Type I/II (key 13).
+  jacks: >-
+    drawing - the four lamped jacks are separate housings in a shared metal shell (Fig 13
+    draws a gap between them), 13.1 wide on a 14.65 pitch across and 11.75 down, so
+    common/rj45-ganged-eth@1 cells (12.7 x 11.0) are used, centred on the measured jacks. The
+    upper row is drawn lamps-up and the lower row lamps-down, so the upper two are turned
+    180 as the ganged part's own description asks. OES and Mgmt are Ethernet and take the
+    lamped part; BITS and SyncE/1588 are timing jacks, which the RJ45 family (L76,
+    docs/rj45-family-design.md) puts on the bare std/rj45-ganged@2 with their two lamps as
+    separate common/led-dot@1 parts beside the jack - the juniper/mx204 BITS pattern. A
+    component part cannot carry `for:` (L1), and a dot sat IN the housing's lamp window is a
+    91% collision to L46, so each dot is moved out past the jack's latch edge until it
+    overlaps the cell by under a quarter: the BITS pair 1.6 higher than the windows Fig 13
+    draws, the SyncE/1588 pair 1.4 lower. Same x as the windows. A compromise in position,
+    not in count or colour. The console is a bare std/rj45@2, latch down. Jack finish is
+    left at the parts' default.
+  lamps: >-
+    datasheet - SRE p191 Table 67: Stat unlit for the first minute of boot, green rapid blink
+    loading firmware, green solid primary, green blinking secondary; Pwr blue solid on, unlit
+    off; Critical red, Major red, Minor amber, unlit when clear (p192). Table 68 (pp193-194):
+    Lnk top-left and Flt top-right on OES and BITS, bottom-left and bottom-right on Mgmt and
+    SyncE/1588; Ethernet Lnk green solid 100 FD, green blink 100 HD, amber solid 10 FD, amber
+    blink 10 HD; Flt green blink activity, amber blink errors; BITS Lnk green solid selected
+    reference, green blink standby reference; BITS Flt amber solid LOS, amber blink errors.
+    The guide gives no RGB values; green #39b54a, amber #f5a623, red #d0021b, blue #1e73d8
+    are the library's lamp colours. "Rapid" and "slow" blink are both `blinking`, told apart
+    by name.
+  lamp-mapping: >-
+    convention - common/rj45-ganged-eth@1 puts led-a at the left window and led-b at the
+    right when unrotated; rotate 180 swaps them. So on Mgmt (lower row) Lnk is led-a, and on
+    OES (upper, turned) Lnk, which Table 68 puts top-left, is led-b. The BITS and SyncE lamps
+    are separate dots on the ganged cell's window centres across (2.2 and 10.5 in from the
+    cell's left), Lnk left and Flt right, as Table 68 places them.
+  alarms-connector: >-
+    datasheet + registry - SRE p57 Table 10 key 11 calls it "a D-type 15-pin connector" (and
+    "DB-15" in the same row); Fig 13 draws two rows of 8 and 7 in a shell 28.0 x 10.8 on 33.5
+    standoff centres, the A shell. Composed as std/da15@1 (female, TE 114-40010 Rev G) centred
+    where Fig 13 draws it, (93.05, 20.6).
+  controls: >-
+    datasheet - SRE p57-58 Table 10: the DTE/DCE slide switch (key 4) sets the console's
+    sense; ACO/LT (key 12) cuts off the alarm relays and lamp-tests on a long press; the CF
+    slot (key 13) has an eject button. Drawn as elements; none has a library part.
+  internal-cf: >-
+    datasheet - SRE p58 Fig 14 and p59 Table 11: a second CF card (cf3) sits on the board
+    under a wire bail and is not on the face.
+  colour: >-
+    estimated - no photograph is staged. PUBLIC-SOURCES lists the NK/2024-11 SR-2e crop, which
+    shows the CCM-e with orange A/B tags; until it is staged the plate is the charcoal the
+    MDA-e family is known to wear, with light print. Recorded as a gap.
+  marks: >-
+    drawing - the ESD triangle at the lower right, drawn as an outline; the model label
+    "7750 SR-e CCM-e" as printed (Table 10 key 15).
+  logo-zone: 'reserved on the plain metal under the Alarms connector; Fig 13 draws no mark there'
+  relief: >-
+    borrowed - the captive screws take nokia/nelt-b@1's thumbscrew figure (cyl 1.6, knurled);
+    the composed jacks and the SMB emit their own depth.
+  pairing: 'datasheet - SRE p55: each CCM-e is paired one-to-one with a CPM-e (A with A, B with B)'
+  lifecycle: 'searched only the staged corpus - listed in SRE 21.10; no end-of-life notice searched on the web'
+elements:
+  screw-left: {at: [3.0, 1.9], size: [11.0, 11.0], class: screw}
+  screw-right: {at: [179.0, 1.9], size: [11.0, 11.0], class: screw}
+  dte-dce: {at: [21.9, 4.4], size: [7.7, 5.2], class: control}
+  aco-lt: {at: [117.7, 18.9], size: [6.2, 6.2], class: control}
+  cf-slot: {at: [129.8, 18.2], size: [46.1, 7.5], class: slot}
+  cf-eject: {at: [176.4, 18.0], size: [5.7, 4.7], class: control}
+  logo-zone: {at: [76.0, 28.0], size: [30.0, 5.0], class: label}
+relief:
+  features:
+  - {node: screw-left, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: screw-right, cyl: 1.6, knurl: true, confidence: estimated, source: 'nokia/nelt-b@1 captive screw head, itself borrowed from edgecore/agr-panel-screw@1. NOT MEASURED'}
+  - {node: aco-lt, cyl: 0.8, confidence: estimated, source: 'a short round push button standing just proud; nothing dimensions it'}
+  - {node: cf-slot, pocket: 3.0, confidence: estimated, source: 'the CF card mouth, recessed; 3 is enough to read as a slot. Not dimensioned'}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      reaching the router locally - the RJ-45 console (serial, with the DTE/DCE switch), the
+      10/100 Mgmt Ethernet port and the 10/100 OES Ethernet port (the GMPLS-UNI control
+      channel)
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the timing ports - BITS (DS1/E1 on RJ-45), SyncE/1588 (10/100 Ethernet on RJ-45) and
+      the 1PPS output on SMB
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the module lamps Stat and Pwr
+  timing-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the Lnk and Flt lamps of the BITS and SyncE/1588 jacks, drawn as dots at the jacks' latch edges
+  alarm-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the office alarm lamps Critical, Major and Minor
+parts:
+  - {ref: std/da15@1, id: alarms, group: mgmt, at: [78.65, 14.9]}
+  - {ref: common/led-dot@1, id: led-stat, group: status-leds, at: [10.8, 18.7], states: {lamp: ['off', {name: loading, color: '#39b54a', behavior: blinking}, {name: primary, color: '#39b54a'}, {name: secondary, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [10.8, 23.7], states: {lamp: ['off', {name: 'on', color: '#1e73d8'}]}}
+  - {ref: std/rj45@2, id: console, group: mgmt, at: [18.0, 17.9], attrs: {media: rj45-serial}}
+  - ref: common/rj45-ganged-eth@1
+    id: oes
+    group: mgmt
+    at: [40.4, 7.75]
+    rotate: 180
+    attrs: {media: rj45, speed: 100m}
+    states:
+      led-b: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}]
+      led-a: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]
+  - {ref: std/rj45-ganged@2, id: bits, group: timing, at: [55.05, 7.75], rotate: 180, attrs: {media: rj48}}
+  - {ref: common/led-dot@1, id: led-bits-lnk, group: timing-leds, at: [56.25, 6.0], states: {lamp: ['off', {name: selected, color: '#39b54a'}, {name: standby, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-bits-flt, group: timing-leds, at: [64.55, 6.0], states: {lamp: ['off', {name: los, color: '#f5a623'}, {name: error, color: '#f5a623', behavior: blinking}]}}
+  - ref: common/rj45-ganged-eth@1
+    id: mgmt
+    group: mgmt
+    at: [40.4, 19.5]
+    attrs: {media: rj45, speed: 100m}
+    states:
+      led-a: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}]
+      led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]
+  - {ref: std/rj45-ganged@2, id: synce-1588, group: timing, at: [55.05, 19.5], attrs: {media: rj45-sync}}
+  - {ref: common/led-dot@1, id: led-synce-lnk, group: timing-leds, at: [56.25, 30.1], states: {lamp: ['off', {name: link-100-fd, color: '#39b54a'}, {name: link-100-hd, color: '#39b54a', behavior: blinking}, {name: link-10-fd, color: '#f5a623'}, {name: link-10-hd, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-synce-flt, group: timing-leds, at: [64.55, 30.1], states: {lamp: ['off', {name: activity, color: '#39b54a', behavior: blinking}, {name: error, color: '#f5a623', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-critical, group: alarm-leds, at: [83.5, 7.3], states: {lamp: ['off', {name: critical, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-major, group: alarm-leds, at: [92.1, 7.3], states: {lamp: ['off', {name: major, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-minor, group: alarm-leds, at: [101.2, 7.3], states: {lamp: ['off', {name: minor, color: '#f5a623'}]}}
+  - {ref: common/smb-jack@1, id: pps-1, group: timing, at: [140.2, 6.1]}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]

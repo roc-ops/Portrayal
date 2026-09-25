@@ -1,0 +1,290 @@
+format: 1
+kind: module
+name: fnio-d
+version: 1.4.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia FNIO-D (3FE 74928 AA), the 400G (4 x 100G/40G/4x10G) NT I/O applique of the 7360
+  ISAM FX, with SyncE. Seats in the NTIO slot between the two NT boards and gives the
+  shelf four QSFP28/QSFP+ uplinks. Authored upright, as the Unit Data Sheet guides draw
+  it: ejector and thumbscrew at each end, a 2 x 9 lamp block (ALM, PWR and sixteen lane
+  lamps, four per port) under the top ejector, two small marks, then four QSFP cages on a
+  sawtooth faceplate that angles each cage 45 degrees for fibre bend radius, and two
+  hazard marks beside the bottom lever. Not in any Lightspan FX guide.
+size: {w: 25.0, h: 405.0, d: 205.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  w is the board-to-board PITCH (25 mm), not the faceplate: the same UDS section states
+  the width as 26 mm, which is wider than the pitch and so is taken to be the widest
+  point (the ejector or the sawtooth), not the plate between neighbours. Held at 25.0 so
+  the NTIO bay built from the shared family convention seats it. d is the first of the
+  two depths the UDS gives (205 / 225 mm); which one applies to which shelf is not stated.
+attrs:
+  model: FNIO-D
+  qsfp28: 4
+  part-number: 3FE 74928 AA
+  weight-kg: 1.2
+  power-draw-max-w: 104
+  power-draw-typical-w: 83.5
+provenance:
+  size: >-
+    datasheet - 7360 ANSI Unit Data Sheet guide R6.9 3FE77013AAAATQZZA16 p294 and ETSI UDS
+    3FE77012AAAATQZZA18 section 42.5.1 (p406): height 405 mm, width 26 mm, depth 205 mm /
+    225 mm, board-to-board pitch 25 mm. Face held at the 25 mm pitch by the shared 7360 FX
+    convention; the 26 mm width is recorded in size-notes and gaps.
+  size-width: >-
+    datasheet - slot pitch 25 mm, UDS section 42.5.1; the faceplate edge-to-edge width
+    is stated only as 26 mm overall, which exceeds the pitch, so the plate width itself is
+    not stated and is taken as the pitch.
+  depth: >-
+    datasheet - 205 mm / 225 mm, section 42.5.1; 205 carried. Neither figure is tied to a
+    shelf in the text.
+  weight: 'datasheet - 1.2 kg, ETSI UDS A18 section 42.5.2 (p407); ANSI R6.9 p295 agrees'
+  power: >-
+    datasheet - ETSI Safety Manual 3HH11998AAAATCZZA29 p26, Table 2 "Power consumption
+    per component for 7360 ISAM FX": FNIO-D 83.5 W typical, 104 W maximum. The manual does
+    not say whether the QSFP modules are inside the NTIO figure (it says so only for PON
+    line cards, which include their optics, and NT cards, which exclude NTIO and SFPs), so
+    that scope is open (gap).
+  layout: >-
+    drawing (fractions only) - ETSI UDS A18 p406 Figure 183 / ANSI R6.9 p294 Figure 128,
+    the same 3D side-and-front board view, taken from the embedded 1425 x 1576 image at
+    300 ppi. No orthographic front exists in any guide. This view is close to frontal.
+    Positions along the card are fractions of 405 mm between the top of the top ejector
+    and the bottom of the bottom ejector (image y 63 to 1498, 0.282 mm/px). Top lever tip
+    31.6; lamp rows 37.3 to 78.0 on a 5.09 pitch; two small dark marks at 115 and 164;
+    four teeth 174.1 to 317.8, cage openings (the drawn connector on each upper face)
+    centred at 189.1, 225.2, 261.1, 297.2 - a 36.0 pitch; hazard marks at 326.5 and 340.6;
+    the bottom lever is drawn OPEN in the figure and is modelled closed, its hook at 323.7.
+    Across the card the cages are centred and the lamp columns spaced 6.6 mm from the
+    column/row pitch ratio 1.31 of the flat LED close-up (Figure 184). About 1 mm error.
+  ports: >-
+    datasheet - UDS section 42.4.2.1: four uplink ports, each for a 100G, 40G or 4x10G
+    QSFP28/QSFP+ module, placed under a 45 degree angle for fibre bend radius. Composed as
+    std/qsfp28@1 at its registry aperture, rotate 90: in Figure 183 at 4x each cage
+    opening's long side runs down its facet, ALONG the card, so the 20 mm side of the
+    aperture lies along the 405 mm and the 10.15 mm side across it (the cages open up
+    and down the card, not left and right). Each cage sits `on` its tooth's face facet,
+    so the drawing foreshortens it to 20 x cos 45 = 14.14 mm along the card. The centres
+    are 185.04, 221.04, 257.04 and 293.04, 7.2 mm of face below each cage and 3.6 above:
+    about 4 mm up the face from the 189.1, 225.2, 261.1, 297.2 read off Figure 183, which
+    is what keeps each cage inside its tooth (provenance.angled-panel). `at` is each centre
+    less 10.15/2 x cos 45, the projected half of the unrotated height, at the true size 20
+    x 10.15 (L9). Latch
+    direction is not resolved; rotate 90 is the library's
+    vertical-card convention, not a reading. Numbered 1-4 top to bottom, which is ASSUMED
+    from the lamp block's PORT1-PORT4 brackets reading top to bottom; each cage has a
+    small printed strip beside it in Figure 183 that the 300 ppi image cannot resolve
+    (gap).
+  lamps: >-
+    datasheet - Figure 184 (ETSI p407, embedded 1425 x 657 at 300 ppi; identical as ANSI
+    Figure 129 p295) and Table 126. Rows: ALM | PWR, then 2 | 1, 4 | 3 ... 16 | 15 - EVEN
+    on the LEFT, ODD on the RIGHT, the reverse of the FNIO-A, transcribed as printed.
+    Brackets PORT1 (lamps 1-4), PORT2 (5-8), PORT3 (9-12), PORT4 (13-16) on the right:
+    four lane lamps per QSFP, for 4x10G breakout. Table 126: PWR on = power on; ALM red =
+    alarm; QSFP lamp off = no link, green = link up, blinking = traffic. PWR colour and the
+    blinking colour are not stated; drawn with the family green.
+  marks: >-
+    drawing - two small dark rectangles on the plate between the lamps and the cages, at
+    115 and 164 mm, about 4.5 x 5 mm; at 300 ppi they hold unreadable glyphs. Drawn as
+    dark blocks and not named as anything (gap). The two hazard triangles near the bottom
+    are likewise drawn as outlines; one appears to be a laser warning, neither is resolved.
+  relief: >-
+    estimated - the ejectors stand proud of the plate; no document gives a figure, so the
+    library's pooled release-hardware estimate (4.2) is used. The sawtooth is eight facets
+    (provenance.angled-panel), not an `out`: a facet is the sloped surface itself and the
+    cages on it are cut into it.
+  angled-panel: >-
+    datasheet and drawing - UDS section 42.4.2.1 places each uplink 'under a 45 degree
+    angle'. Figure 183 draws four teeth, each a long face carrying the cage (174.1-199.0,
+    209.1-235.4, 245.3-271.8, 281.4-307.3) and a short return below it. Measured on the
+    near-side edges of tooth 1 (image px; the oblique's depth axis runs 3 px down per 100
+    across on the board's top edge, about 2.9 px/mm over the 205 mm depth): the apex
+    stands 28.5 px = 9.8 mm out; the face edge meets the plate at image y 737.5 and
+    rises 32.5 px to the apex, 9.2 mm front-view, so about 47 degrees; the return falls
+    36.7 px to the next valley, 10.6 mm, about 43 degrees. So the face is at 45 degrees,
+    but its upper part is SUNK: the plate has an opening from the top of each long face
+    (174.1) down to where the face plane crosses the plate (about 189.6), and the face's
+    root sits behind the plate by the face's front-view extent less the apex height,
+    24.9 - 9.8 = about 15 mm. Modelled as recessed facets in one pocket,
+    `sawtooth-window`, 174.4 to 318.4 and 15.0 deep, the four teeth on a 36.0 pitch. The
+    section, from the plate at 0 (out of the panel positive): pocket floor -15.0; each
+    face roots at lift -15.0 at the top of its window (174.4, 210.4, 246.4, 282.4) and
+    rises at 45 degrees over 24.91 mm front-view to an apex +9.91 at 199.31, 235.31,
+    271.31, 307.31 (the figure's 199.0, 235.4, 271.8, 307.3); each return shares the
+    lift and falls from the apex back to -15.0 at the next face's root over 11.09 mm
+    front-view, so it is 66 degrees. The face keeps the 45 degrees measured; the return
+    does not keep its 43: in the figure it falls at about 43 degrees to the plate and a
+    vertical wall at the top of the next window drops the rest of the 15 mm, and one
+    facet per slope cannot carry that knee, so the return is the straight line from the
+    apex to the next root, 11.09 front-view where the drawing's return reaches the plate
+    in 10.6. The window's top edge is the figure's vertical wall at 174.4. The pocket
+    floor is never seen: the facets cover the window from end to end. WHY NO CAGE LEAVES
+    ITS TOOTH: a cage's depth runs back along the face normal, 45 degrees down the card,
+    and the 66 degree return falls faster than that, so the cage's lower wall must reach
+    the pocket floor (where the kit lets it run on into the card) before it meets the
+    return; that needs at least (24.91 - 11.09)/2 = 6.91 mm of face below the cage,
+    front-view. 7.2 is used, so the lower wall reaches -15.0 at 1.3 mm under the return
+    (tooth 4: at y 317.83, where the return is at -13.72), and the upper wall is under
+    the floor within 3.6 mm of the root. The cages therefore sit about 4 mm further up
+    their faces than the figure draws them; with them where drawn, the lower wall would
+    leave the back of the return about 1 mm below the plate, into the open valley.
+  gaps: >-
+    The knee in each return (about 43 degrees to the plate, then a vertical wall to the
+    window floor) is one straight 66 degree facet. The cages sit about 4 mm up their faces
+    from where Figure 183 draws them, so that each stays inside its tooth.
+    Faceplate edge-to-edge width (26 mm stated overall, held at the 25 mm pitch).
+    Whether the QSFP modules are inside the 104 W figure. The printed strip beside each
+    cage and the two marks and hazard icons (unresolved at 300 ppi). Cage latch
+    direction.
+  logo-zone: >-
+    reserved by the family convention; Figure 183 draws no mark there, so the zone sits
+    on the empty metal between the lamp block and the first mark.
+  lifecycle: >-
+    searched only the staged corpus - listed as current in ANSI R6.9 and ETSI A18; no
+    end-of-life notice was searched for on the web.
+  thumbscrews: >-
+    photo - owner's lab photos of an installed FX-8, 2026-09-24; flush-with-end per the owner.
+    One family figure for every NT, NTIO and LT card and blank, because every screw goes into
+    the fixed rails of the shelf: head 10.5 mm across, centred 18.7 mm from the left edge on
+    this 25 mm plate, the top head touching the top end (y 0) and the bottom head the bottom
+    end (y 394.5). Measured as ratios within one card on perspective phone photos, the
+    plate-plane screw centre read from the recessed seat (concentric with the shank) rather
+    than the projecting head: 30 mm NT (FANT-H top 0.640, bottom 0.651; FANT-F top 0.64-0.67,
+    bottom about 0.64) -> 19.4 (ratio 0.647); 25 mm NTIO blank 3FE65651BA (top 0.733, bottom
+    0.754) -> 18.7 (ratio 0.748). Head diameter against plate width: the back edge of the
+    knurl 0.36 of the FANT-H plate and 0.42 of the NTIO plate at the bottom, the front faces
+    0.39-0.48 (magnified by their projection), so an upper bound of 10.6-10.8 mm; 10.5 taken
+    (0.35 of 30, 0.42 of 25), inside the 10-11.5 mm the Nokia flat FANT-H view draws. The
+    screw sits on the side AWAY from the grey ejector lever (lever at the left edge, screw
+    right of centre) at both ends. Same centre at both ends: the photos differ by under 1 mm,
+    within the reading error. This replaces the per-figure screw positions and sizes read off
+    the oblique guide drawings, which had drifted 17.2-21.0 across and 6.4-10.0 in size.
+elements:
+  logo-zone: {at: [4.0, 86.0], size: [17.0, 20.0], class: label}
+  mark-upper: {at: [9.25, 112.6], size: [4.5, 5.0], class: label}
+  mark-lower: {at: [9.25, 161.8], size: [4.5, 5.0], class: label}
+  sawtooth-window: {at: [0.6, 174.4], size: [23.8, 144], class: cutout}
+  tooth-1-face: {at: [0.6, 174.4], size: [23.8, 24.91], class: mechanical}
+  tooth-1-return: {at: [0.6, 199.31], size: [23.8, 11.09], class: mechanical}
+  tooth-2-face: {at: [0.6, 210.4], size: [23.8, 24.91], class: mechanical}
+  tooth-2-return: {at: [0.6, 235.31], size: [23.8, 11.09], class: mechanical}
+  tooth-3-face: {at: [0.6, 246.4], size: [23.8, 24.91], class: mechanical}
+  tooth-3-return: {at: [0.6, 271.31], size: [23.8, 11.09], class: mechanical}
+  tooth-4-face: {at: [0.6, 282.4], size: [23.8, 24.91], class: mechanical}
+  tooth-4-return: {at: [0.6, 307.31], size: [23.8, 11.09], class: mechanical}
+relief:
+  wall: '#8d9298'
+  features:
+    - node: ejector-top
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: ejector-bottom
+      out: 4.2
+      confidence: estimated
+      source: >-
+        edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
+        sourced for arrangement and not proudness
+    - node: sawtooth-window
+      pocket: 15.0
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, the sunk face root (provenance.angled-panel)
+    - node: tooth-1-face
+      facet: {deg: 45, facing: up}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-1-return
+      facet: {deg: 66, facing: down}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-2-face
+      facet: {deg: 45, facing: up}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-2-return
+      facet: {deg: 66, facing: down}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-3-face
+      facet: {deg: 45, facing: up}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-3-return
+      facet: {deg: 66, facing: down}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-4-face
+      facet: {deg: 45, facing: up}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+    - node: tooth-4-return
+      facet: {deg: 66, facing: down}
+      lift: -15
+      confidence: estimated
+      source: >-
+        ETSI UDS A18 p406 Figure 183, a face edge run and rise (provenance.angled-panel)
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: the four uplink QSFP28/QSFP+ cages (100G, 40G or 4x10G breakout), SyncE capable
+  lane-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      sixteen QSFP lamps, four per port (PORT1 = 1-4 ... PORT4 = 13-16), printed even on
+      the left and odd on the right
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the board lamps ALM and PWR
+parts:
+  - {ref: std/qsfp28@1, id: port-1, group: qsfp28, at: [2.5, 181.45], rotate: 90, 'on': tooth-1-face}
+  - {ref: std/qsfp28@1, id: port-2, group: qsfp28, at: [2.5, 217.45], rotate: 90, 'on': tooth-2-face}
+  - {ref: std/qsfp28@1, id: port-3, group: qsfp28, at: [2.5, 253.45], rotate: 90, 'on': tooth-3-face}
+  - {ref: std/qsfp28@1, id: port-4, group: qsfp28, at: [2.5, 289.45], rotate: 90, 'on': tooth-4-face}
+  - {ref: common/led-dot@1, id: led-alm, group: status-leds, at: [8.2, 36.3], states: {lamp: ['off', {name: red, color: '#d0021b'}]}}
+  - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [14.8, 36.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}]}}
+  - {ref: common/led-dot@1, id: led-1, group: lane-leds, at: [14.8, 41.39], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-2, group: lane-leds, at: [8.2, 41.39], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-3, group: lane-leds, at: [14.8, 46.48], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-4, group: lane-leds, at: [8.2, 46.48], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-5, group: lane-leds, at: [14.8, 51.57], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-6, group: lane-leds, at: [8.2, 51.57], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-7, group: lane-leds, at: [14.8, 56.66], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-8, group: lane-leds, at: [8.2, 56.66], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-9, group: lane-leds, at: [14.8, 61.75], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-10, group: lane-leds, at: [8.2, 61.75], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-11, group: lane-leds, at: [14.8, 66.84], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-12, group: lane-leds, at: [8.2, 66.84], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-13, group: lane-leds, at: [14.8, 71.93], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-14, group: lane-leds, at: [8.2, 71.93], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-15, group: lane-leds, at: [14.8, 77.02], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+  - {ref: common/led-dot@1, id: led-16, group: lane-leds, at: [8.2, 77.02], states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: activity, color: '#39b54a', behavior: blinking}]}}
+connection-points:
+  mate: {at: [12.5, 202.5], direction: rear}
+skins: [default]

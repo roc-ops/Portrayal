@@ -230,6 +230,7 @@ def test_the_census_is_not_vacuous():
 @pytest.mark.parametrize("ref,expected", [
     ("std/cfp", "100gbase-x-cfp"),
     ("std/cfp2", "100gbase-x-cfp2"),
+    ("std/cfp4", "100gbase-x-cfp4"),
     ("std/cxp", "100gbase-x-cxp"),
 ])
 def test_the_100g_form_factors_that_are_nobodys_substring(ref, expected):
@@ -266,6 +267,7 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "fiber",        # bare glass in an adapter, not a cage
         "coax-smb",     # a timing connector
         "usb-c",        # power in, on the GL-8xEP
+        "db9",          # a D-sub alarm or serial connector (the 7750 SR-1 alarm port) takes no module
     }
     used = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):

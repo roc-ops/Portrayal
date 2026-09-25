@@ -10,7 +10,7 @@ happened to use, and a name says nothing about a device whose only build is
 called `base`.
 
 `power` now has airflow's shape: `chassis.power` where the box has one feed, a
-configuration's own `power` where its build differs (L117). It resolves through
+configuration's own `power` where its build differs (L118). It resolves through
 `manifest.config_power`, beside `config_airflow`, into the drawing's
 `data-power`, `configs[].power` and `options.power` in configs.json, and
 `options` in devices.json, so none of them can disagree.
@@ -45,7 +45,7 @@ BOTH = LIB / "devices/edgecore/ecs4120-28fv2-i/device.yaml"
 
 WHITEBOX = ("edgecore", "ufispace", "celestica")
 # A PCIe add-in card, powered from its host's slot. It has no supply and no
-# feed a buyer chooses, which is why L118 does not ask it for one.
+# feed a buyer chooses, which is why L119 does not ask it for one.
 NO_FEED = {"ufispace/n3100-4c"}
 
 POWER_ATTR = re.compile(r'<svg\b[^>]*?\sdata-power="([^"]*)"')
@@ -100,17 +100,17 @@ def findings(fn, doc, code):
     return [m for m in found.errors + found.warnings if f"[{code}]" in m]
 
 
-def test_L117_a_configuration_restating_the_chassis_is_refused():
+def test_L118_a_configuration_restating_the_chassis_is_refused():
     doc = {"chassis": {"power": "dc"},
            "configurations": {"base": {"kind": "base", "power": "dc"}}}
-    assert findings(lint.lint_device_power_home, doc, "L117")
+    assert findings(lint.lint_device_power_home, doc, "L118")
 
 
-def test_L117_one_feed_on_every_build_belongs_on_the_chassis():
+def test_L118_one_feed_on_every_build_belongs_on_the_chassis():
     doc = {"chassis": {}, "configurations": {"a": {"power": "ac"}, "b": {"power": "ac"}}}
-    assert findings(lint.lint_device_power_home, doc, "L117")
+    assert findings(lint.lint_device_power_home, doc, "L118")
     doc["configurations"]["b"]["power"] = "dc"
-    assert not findings(lint.lint_device_power_home, doc, "L117")
+    assert not findings(lint.lint_device_power_home, doc, "L118")
 
 
 def _with_psu_bay(configs, default):
@@ -120,30 +120,30 @@ def _with_psu_bay(configs, default):
             "configurations": configs}
 
 
-def test_L118_a_device_with_supplies_and_no_feed_is_asked_for_one():
+def test_L119_a_device_with_supplies_and_no_feed_is_asked_for_one():
     doc = _with_psu_bay({"base": {"kind": "base"}}, "common/psu-ac-650@3")
-    assert findings(lint.lint_device_power_stated, doc, "L118")
+    assert findings(lint.lint_device_power_stated, doc, "L119")
     doc["chassis"] = {"power": "ac"}
-    assert not findings(lint.lint_device_power_stated, doc, "L118")
-
-
-def test_L118_a_device_without_supplies_is_not_asked():
-    assert not findings(lint.lint_device_power_stated,
-                        {"configurations": {"base": {"kind": "base"}}}, "L118")
-
-
-def test_L119_a_feed_that_contradicts_the_seated_supply_is_reported():
-    doc = _with_psu_bay({"ac": {"kind": "orderable", "power": "ac"},
-                         "dc": {"kind": "orderable", "power": "dc"}},
-                        "common/psu-ac-650@3")
-    got = findings(lint.lint_device_power_stated, doc, "L119")
-    assert len(got) == 1 and "'dc'" in got[0]
-    # the DC build seating its own supply is consistent
-    doc["configurations"]["dc"]["bays"] = {"psu-0": "common/psu-dc-650@2"}
     assert not findings(lint.lint_device_power_stated, doc, "L119")
 
 
-def test_L119_reads_the_feed_off_supply_names_the_library_uses():
+def test_L119_a_device_without_supplies_is_not_asked():
+    assert not findings(lint.lint_device_power_stated,
+                        {"configurations": {"base": {"kind": "base"}}}, "L119")
+
+
+def test_L120_a_feed_that_contradicts_the_seated_supply_is_reported():
+    doc = _with_psu_bay({"ac": {"kind": "orderable", "power": "ac"},
+                         "dc": {"kind": "orderable", "power": "dc"}},
+                        "common/psu-ac-650@3")
+    got = findings(lint.lint_device_power_stated, doc, "L120")
+    assert len(got) == 1 and "'dc'" in got[0]
+    # the DC build seating its own supply is consistent
+    doc["configurations"]["dc"]["bays"] = {"psu-0": "common/psu-dc-650@2"}
+    assert not findings(lint.lint_device_power_stated, doc, "L120")
+
+
+def test_L120_reads_the_feed_off_supply_names_the_library_uses():
     feed = lint._supply_feed
     assert feed("common/psu-ac-650@3") == "ac"
     assert feed("ufispace/psu-132-crps-dc@1") == "dc"

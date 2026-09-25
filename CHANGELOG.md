@@ -41,7 +41,7 @@ the *published build*, not about the hardware.
   it out of a configuration's name or description (roc-ops/Portrayal#513).
 - A device states its supply feed as `power` - `ac`, `dc` or `hvdc` - on the
   chassis where the box has one feed, and on a configuration where its build
-  differs, the way `airflow` is stated (lint L117). Every `configs[]` entry in
+  differs, the way `airflow` is stated (lint L118). Every `configs[]` entry in
   `<device>.configs.json` carries the resolved answer as `power`, always a list
   (`["ac"]`; `["ac", "dc"]` for a build fed both ways; `[]` where nothing is
   stated), and each drawing's SVG root carries it as `data-power`,
@@ -57,8 +57,8 @@ the *published build*, not about the hardware.
 - All 84 Edgecore, UfiSpace and Celestica devices state `power` on every
   build (the N3100-4C PCIe card, fed by its host slot, is the one without), and four more state `airflow` (AS7946-30XB and
   AS7946-74XKSB front-to-back, S9511-20CT front-to-back, S9502-12SM passive).
-  Lint L118 asks any other device with supplies for a feed, as a warning
-  baselined for the 24 that do not say yet; L119 reports a build whose `power`
+  Lint L119 asks any other device with supplies for a feed, as a warning
+  baselined for the 32 that do not say yet; L120 reports a build whose `power`
   contradicts the supply it seats (roc-ops/Portrayal#513).
 - Back-to-front builds (`ac-b2f`, `dc-b2f`) on the UfiSpace S9300-32D, S9301-32D,
   S9301-32DB, S9311-64D and S6301-56ST, which each sold both directions but modelled
@@ -126,6 +126,46 @@ the *published build*, not about the hardware.
   now also hit the rear cutouts. In the explorer, a fibre's row says where it
   goes, selecting a fibre marks its far end on every loaded face, and a rear
   row reads as the slot it is, not the panel hole (roc-ops/Portrayal#535).
+- Connector slots. A placement presenting a connector interface - `lc`,
+  `lc-duplex`, `sc` or `mpo`, the new registry in
+  `spec/schemas/connectors.yaml` - is now published where cages are: in each
+  view's `cages[]` in `<device>.configs.json` and in each component's own
+  `cages` in `components.json`, as an entry with `kind: connector` and
+  `media: null`. Its `accepts` is every part whose `mates:` is the slot's
+  interface, dust caps and plugs alike. Every entry, cage or connector, now
+  carries `kind` (`cage` or `connector`), `default` (the ref the slot ships
+  holding, or `null`) and `bores` (the ids of the slots a connector seated
+  here takes the place of, `[]` where it spans nothing: `["1", "2"]` on a
+  duplex LC adapter). A cage entry is otherwise unchanged; a reader that
+  wants cages only filters on `kind: cage`. A configuration's `occupants:`
+  now keys a slot at any depth, with every `module` step left out
+  (`bay-1/lc01/1`, a bore of an adapter on a cassette in a bay), and lint
+  L114, L115 and L116 hold the shipped default, the exclusion between a
+  duplex slot and its two bores, and the duplex geometry.
+- Every LC, SC and MPO port that ships capped now DRAWS ITS DUST CAP AS AN
+  OCCUPANT: a group with `data-behaviour="occupies"`, `data-for` naming the
+  slot and the id `<slot>-occupant` (`port-1510/1-occupant`), seated in every
+  configuration that does not key the slot. The caps are
+  `common/lc-dust-cap@1` (each bore of the Smartoptics
+  `common/lc-duplex-adapter@6`, 72 on a DCP-R-34D-CS front),
+  `common/lc-duplex-dust-cap@2` (the FS stacked adapter's own slot),
+  `common/sc-dust-cap@1` (each opening of `common/sc-duplex-adapter@5`) and
+  `common/mpo-dust-cap@2` (the FHD cassette rears' MPO bulkheads); the
+  shuttered adapter ships none. AN AUDIT COUNTING OCCUPIED PORTS BY
+  `data-for` / `data-behaviour="occupies"` NOW COUNTS CAPS: a capped port is
+  occupied, by its cap. `configs[].occupants` still lists only what a
+  configuration keys, and a slot's shipped cap is its `default`.
+- New parts: the plugs `generic/lc-duplex-plug@2`, `generic/sc-plug@1`,
+  `generic/mpo12-plug@1` and `generic/mpo24-plug@1`, which a connector slot
+  offers beside its cap, and `std/lc-bulkhead-bore@1`, the panel adapter's
+  keyed aperture, whose keyway runs 5.71 from the ferrule where the
+  transceiver receptacle `std/lc-bore@3` stops short.
+- The explorer swaps connector slots as it swaps cages - a cap, a plug or
+  empty, one level of a duplex slot or the other - on a cassette's rear face
+  as well as its front, and in 3D each seated cap and plug is its own part
+  that pulls out. A device's lock now follows the components a module draws
+  on its other `faces:`, so a change to a cassette's rear asks for a bump
+  where it used to ask for nothing.
 
 ### Changed
 - `ufispace/psu-132-ac` and `psu-132-dc` (1.1.0) describe and default to the
@@ -171,6 +211,27 @@ the *published build*, not about the hardware.
   `1..24`), numbered as the plug numbers them rather than as a viewer sees
   them. Both adapters took a minor bump, 1.1.1 to 1.2.0
   (roc-ops/Portrayal#533).
+- A SPANNING SLOT'S `cages[].rotate` IS THE SUMMED TURN, not the
+  placement's own. A duplex connector is one moulding and cannot turn
+  itself, and the two LC duplex adapters run their pairs on different axes,
+  so a slot that spans two bores publishes its placement's `rotate` plus the
+  turn carrying the canonical across-axis onto its own bores: an unturned FS
+  stacked adapter's slot publishes `270`. That is the turn the build seats
+  its occupant at. Every other entry's `rotate` is its placement's as
+  before, `null` included. `mate` is still taken through the placement's
+  own `rotate` alone.
+- Majors, each a new directory with the old one removed:
+  `common/lc-duplex-adapter` and `common/lc-duplex-v-adapter` @5 to @6 (they
+  compose `std/lc-bulkhead-bore@1`, and the Smartoptics adapter's ferrule
+  axis moved 0.32 within its body, with its placements moved to keep every
+  fibre where it was); `std/mpo` @1 to @2 (its opening corrected to what an
+  MPO plug can enter), with `common/mpo-adapter`, which composes it, and
+  `common/mpo-flange-adapter` and `common/mpo24-flange-adapter`, which take
+  its opening and are now `mpo` slots, @1 to @2;
+  `common/lc-duplex-shuttered-adapter` @1 to @2 (now a slot, with two
+  bores); `generic/lc-plug` @1 to @2 (drawn latch down, in its bore's
+  convention). A ref naming an old major resolves to nothing. The dist
+  `contract` number is unchanged, as it was for roc-ops/Portrayal#533.
 - Ten routing-engine, control-board and sled modules now group their ports:
   `juniper/jnp10k-re1@2`, `re-s-1300@1`, `re-s-1300-v@1`,
   `mx2000-cb-re-v@1`, `mx2008-rcb-v@1`, `jnp10003-rcb@1`, `jnp304-re@1`,

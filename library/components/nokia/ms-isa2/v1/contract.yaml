@@ -1,0 +1,128 @@
+format: 1
+kind: module
+name: ms-isa2
+version: 1.1.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Nokia MS-ISA2 (3HE10427AA) and MS-ISA2-E (3HE10428AA), the multiservice integrated service
+  adapter in the MDA-e form factor, for the 7750 SR-e and the IOM4-e and IOM4-e-B. Authored
+  horizontal, as the guide draws it: a plain dark plate notched at both lower corners, a captive
+  screw on each end wing, Stat and Pwr at the upper left, the ESD mark at the top right and the
+  model label (ME-ISA2-MS or ME-ISA2-MS-E, a field) at the lower right. It has no ports.
+size: {w: 193.0, h: 35.4, d: 195.6}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  w 193.0 (7.6 in) and h 35.4 are the shared wave-1 MDA envelope the SR-e bays are built to; h is the
+  measured slot pitch, not the rounded 1.4 in (35.56) of Table 4. The lower corners are notched
+  (provenance plate-shape). d is 7.7 in, MDAE Table 4.
+attrs:
+  model: 'ME-ISA2-MS'
+  part-number: 3HE10427AA
+  part-number-e: '3HE10428AA (MS-ISA2-E, label ME-ISA2-MS-E)'
+  weight-kg: 1.3
+  power-draw-max-w: 82
+  power-draw-typical-w: 56
+fields:
+  model-label:
+    label: Model label
+    type: choice
+    options: [ME-ISA2-MS, ME-ISA2-MS-E]
+    default: ME-ISA2-MS
+    description: the printed label - ME-ISA2-MS on the MS-ISA2 (3HE10427AA), ME-ISA2-MS-E on the MS-ISA2-E (3HE10428AA)
+provenance:
+  screw-colour: "photo - the captive screw heads are BLACK, per the owner's lab photos of an installed IOM4-e with an ME1-100GB-CFP2 (2026-09-24); positions stay the drawing's"
+  size: >-
+    datasheet and drawing - the face is the shared wave-1 MDA envelope, 193.0 x 35.4 mm. MDA-e
+    Installation Guide 3HE16330AAAATQZZA02 (20.2) p17-18 Table 4 gives every MDA-e and the MS-ISA2
+    as 1.4 x 7.6 x 7.7 in (3.6 x 19.3 x 19.6 cm). 35.4 rather than 35.56 is the measured slot pitch
+    (SR-3e front, SR-e guide 3HE17927AAAATQZZA03 p50 Fig 10, 304 px at 8.58 px/mm), used so stacked
+    bays tile; the width 193.0 is 7.6 in and measured on SRE p44/p50. MDAE p61 Figure 16 agrees: the
+    plate measures about 4015 x 732 px (193.0 wide at 20.80 px/mm), the same template as Figure 10.
+  depth: >-
+    datasheet - 7.7 in (19.6 cm), MDAE p17-18 Table 4, the board's depth behind the plate.
+  plate-shape: >-
+    drawing - the plate is not a full rectangle. On MDAE p61 Figure 16 the full-height band runs
+    16.2 to 176.8 mm and the two end wings stop 27.3 mm below the plate top (the lower corners are
+    notched, with a small radius where the wing meets the band). The notches are left unpainted in
+    the skin; the part stays inside 193.0 x 35.4. The same outline, to within 0.1 mm, is drawn on
+    every MDA-e faceplate figure in the guide (Figs 7, 8, 10, 11, 16 measured). The thin strip the
+    figures draw above the plate is the card's top edge in slight perspective and is not part of the
+    face; the face is measured from the plate's top line under it, and the second line 1.6 mm below
+    that line is drawn as the plate's top fold.
+  screws: >-
+    drawing - two captive screws, one on each end wing, heads 10.2 mm across, centres 8.0 mm in from
+    each end and 21.05 mm below the plate top (MDAE p61 Figure 16; the wave-1 family figure is 7.8 /
+    20.8 / 10.3, and XP p88 Fig 39 reads 8.0 / 21.1 / 10.6). Drawn with the cross the figure draws
+    on the head. MDA-e plates have no insertion/extraction handle: the figure's table lists only
+    captive screws, unlike the MDA-e-XP.
+  weight: >-
+    datasheet - 2.86 lb (1.3 kg), MDAE p17-18 Table 4.
+  colour: >-
+    estimated - no photograph of this card is staged. A dark charcoal plate with light legends and a
+    yellow ESD mark at the top right is the wave-1 family reading (the public-source list for the
+    7750 names datasheet cut-outs that are not yet staged); the screw heads are drawn a mid metallic
+    grey. Gap.
+  relief: >-
+    estimated - the two captive screw heads stand proud (cyl 1.6, knurl false): the library's one
+    captive-screw figure, edgecore/agr-panel-screw@1, which is itself estimated and not measured.
+    The lamps carry their own dome from common/led-indicator@1 and common/led-dot@1. Nothing else on
+    the plate is raised in the figure.
+  esd-mark: >-
+    drawing - the ESD warning triangle at the top right (MDAE p61 Figure 16), about 184.0-189.8 x
+    3.0-7.9 mm. Its colour is the family reading (yellow), estimated.
+  logo-zone: >-
+    reserved by the library convention; the figure draws no vendor mark on this plate, so the zone
+    sits on bare metal clear of every drawn feature.
+  lamps-status: >-
+    datasheet - Stat and Pwr at the upper left, legends to their left (Stat above Pwr), centres
+    (11.61, 7.62) and (11.61, 11.7) mm, drawn 2.3 mm across (MDAE p61 Figure 16). Stat: green
+    blinking = initializing, green = operationally up and administratively up, amber = operationally
+    down and administratively up, unlit = administratively down. Pwr: blue = power on, unlit = no
+    power at the board. Composed as common/led-indicator@1 (lamp 2.0 mm).
+  lifecycle: >-
+    searched only the staged corpus - listed in the MDA-e Installation Guide 20.2
+    (3HE16330AAAATQZZA02); no end-of-life notice was searched for on the web.
+  power: >-
+    datasheet - MDAE p16 Table 3 (and SR-e guide p84 Table 27): MS-ISA2 and MS-ISA2-E alike, idle 0,
+    zero rate 35, typical (50% line rate, 25C) 56, worst case (100% line rate, 55C) 82 W. max =
+    worst case, typical = typical.
+  layout: >-
+    drawing - MDAE p61 Figure 16 (art 25605), the flat front view, vector, rendered at 1200 dpi.
+    Plate outline px x 4135-8150, top line y 9565, 20.80 px/mm across and 20.68 down. The plate
+    carries only Stat and Pwr at the upper left (centres 11.61, 7.62 and 11.61, 11.70), the two
+    captive screws, the ESD mark at the top right and the model label right-aligned at the lower
+    right of the centre band (x 157.6-176.8, baseline 32). No ports.
+  variants: >-
+    datasheet - MDAE p15 Table 2 and p61: the MS-ISA2 (3HE10427AA) and MS-ISA2-E (3HE10428AA) have
+    "the same faceplate features and LEDs"; Table 19 key 4 gives the model label as ME-ISA2-MS or
+    ME-ISA2-MS-E. One component; the printed label is the field `model-label`. Both are FP3-based
+    service cards (AA, NAT, WLAN-GW; the plain MS-ISA2 also IPSec and IP tunnels), up to 40 Gb/s,
+    not supported in the IOM4-e-HS.
+  name: >-
+    the component is named ms-isa2 after the product name the guides use; the printed label reads
+    ME-ISA2-MS, which is `attrs.model`.
+  gaps: >-
+    No photograph is staged, so the colours are estimated.
+elements:
+  model-label: {at: [157.6, 29.4], size: [18.4, 3.2], class: label}
+  esd-mark: {at: [184.0, 3.0], size: [5.8, 4.9], class: label}
+  logo-zone: {at: [80, 10], size: [30, 10], class: label}
+relief:
+  wall: '#23272a'
+  features:
+    - {node: screw-left, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head, itself estimated and not measured'}
+    - {node: screw-right, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head, itself estimated and not measured'}
+groups:
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the card lamps Stat and Pwr at the upper left
+parts:
+  - {ref: common/led-indicator@1, id: stat, group: status-leds, at: [9.61, 5.62], attrs: {description: 'Stat - green blinking: initializing; green: operationally up, administratively up; amber: operationally down, administratively up; unlit: administratively down, shut down'}, states: {lamp: ['off', {name: green, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: amber, color: '#f5a623'}]}}
+  - {ref: common/led-indicator@1, id: pwr, group: status-leds, at: [9.61, 9.7], attrs: {description: 'Pwr - blue: power is on; unlit: no power at the board'}, states: {lamp: ['off', {name: blue, color: '#2f7fe0'}]}}
+connection-points:
+  mate: {at: [96.5, 17.7], direction: rear}
+skins: [default]

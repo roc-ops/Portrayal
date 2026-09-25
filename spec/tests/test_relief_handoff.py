@@ -108,7 +108,7 @@ def test_the_restyle_path_composes_the_same_thing_the_initial_build_does():
     """
     src = RELIEF.read_text()
 
-    outs = src[src.index("for (const o of outs) {"):]
+    outs = src[src.index("for (const o of outs) {   // protrusions:"):]
     outs = outs[:outs.index("\n    }\n")]
 
     assert "const compose = async" in outs, (

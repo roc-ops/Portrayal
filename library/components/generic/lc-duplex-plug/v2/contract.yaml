@@ -1,0 +1,112 @@
+format: 1
+kind: component
+name: lc-duplex-plug
+version: 2.1.0
+class: port
+mates: lc-duplex
+optical: {positions: 2}
+profile: networking
+description: >-
+  An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a
+  duplex LC adapter at once. Two generic/lc-plug@2 bodies held SIDE BY SIDE at
+  the 6.25 duplex pitch by a clip, each turned latch UP, so the pair is drawn
+  on the canonical spanning axis and each half keeps the plug's own compressed
+  latch, rear point and relief. Occupies the `lc-duplex` slot a duplex adapter
+  presents on itself, which is mutually exclusive with its two bore slots.
+size: {w: 11.83, h: 8.535}
+size-confidence: {w: drawing, h: borrowed}
+attrs: {media: fiber, connector: lc}
+unplaced: >-
+  seated by a device that places or composes a duplex LC adapter - none
+  declares one yet. spec/tests/test_fibre_plugs.py and
+  spec/tests/test_lc_seated_orientation.py seat it as a configured occupant on
+  copies of smartoptics/dcp-r-34d-cs (common/lc-duplex-adapter@6, placed
+  directly) and fs/fhd-1ufce with an FHD LC cassette in a bay (which reaches
+  common/lc-duplex-v-adapter@6 three levels down).
+provenance:
+  halves: >-
+    TWO WHOLE generic/lc-plug@2, EACH AT `rotate: 180`, and the turn is the
+    point of this major. @2 of the simplex plug is drawn latch DOWN, in its
+    bore's own convention (its provenance.orientation). A duplex part is drawn
+    on the CANONICAL spanning axis - across, pair running in +x - with its
+    latches UP, because that is what each duplex host's derived axis
+    (manifest.spanning_axis) carries onto its bores' keyway side: 0 on the
+    Smartoptics adapter, whose bores are turned tongue-up, and 270 on the FS
+    stacked adapter, whose bores are turned tongue-left. Lint L116's latch-side
+    arm holds that pairing on every duplex host. So each half is turned 180 in
+    place - `at` is its unrotated box corner and the turn is about its own
+    centre, so the box does not move - and its latch rises to the top edge.
+    Everything else a half brings is generic/lc-plug@2's and is not restated:
+    the four keyed tiers with the latch compressed, the `lc-plug` interface at
+    its `boot` point, and its relief. A boot seats behind either half at
+    `<plug seat>-occupant/a` or `/b`, as on @1.
+  standard: >-
+    NO `conforms:`, as on @1 and for the same reason: no registry entry
+    describes a duplex plug's outline, and the halves carry the envelope. The
+    one figure the clip contributes is the pitch.
+  pitch: >-
+    6.25, THE STANDARD'S: spec/schemas/standards.yaml's `lc-duplex-receptacle`
+    `pitch`, at `pitch-confidence: verified`. The two halves are placed 6.25
+    apart from that figure, and both library duplex adapters sit their bores on
+    it (L116's pitch arm holds them to it).
+  size: >-
+    DERIVED: 6.25 + 5.58 = 11.83 across (the pitch plus generic/lc-plug@2's
+    drawing-confidence body width), and generic/lc-plug@2's own 8.535 height,
+    because the halves sit level. `h: borrowed` for the reason that part gives -
+    the compressed latch is drawn to std/lc-bulkhead-bore@1's keyway reach.
+    The two 5.58 bodies leave 0.67 between them, which the clip fills. No
+    depth, as on the simplex plug.
+  clip: >-
+    A MODELLING CHOICE, AND NO SOURCE HERE DIMENSIONS IT - carried from @1. No
+    document in this corpus draws a duplex LC clip (the SENKO LC intake is
+    simplex plug and adapter drawings). What is drawn is the least that makes
+    the pair read as one part: the 0.67 web between the two bodies, at the
+    bodies' own height - which after the turn is y 2.885 to 8.535, below the
+    latches - with the bodies' own `out`. It adds nothing to `size`. A real clip
+    wraps both bodies and carries a trigger bar across the two latches; neither
+    is drawn, for want of a source.
+  axis: >-
+    the `mate` at (5.915, 5.71) is the MIDPOINT OF THE TWO HALVES' OWN MATE
+    POINTS, computed: generic/lc-plug@2 puts its mate at (2.79, 2.825) in its
+    own 5.58 x 8.535 box, and turned 180 about the box centre that lands at
+    (2.79, 5.71); half `b` 6.25 to the right lands at (9.04, 5.71). Seated on
+    either adapter each half's mate lands on its bore's, which
+    spec/tests/test_fibre_plugs.py checks in the device frame to 1e-6.
+  optical: >-
+    `positions: 2` - one fibre per half, the count
+    spec/tests/test_connector_sweep.py requires of every fibre connector.
+  fibre-positions: >-
+    ELEMENTS `1` AND `2` ARE THE TWO FIBRE POSITIONS, as L112 asks, so fibre n
+    of a seated duplex plug is at `<part>/n` whatever its halves are called:
+    `1` is half `a`, composed first, and `2` half `b`, the order positions
+    follow on every duplex part. Each is the box of that half's own ferrule
+    ring - generic/lc-plug@2's element `1`, r 1.6 - turned with the half: the
+    axis at 2.825 of an 8.535 half stands at 5.71 once turned 180, so the rings
+    centre on (2.79, 5.71) and (9.04, 5.71), either side of the `mate` at
+    their midpoint. Drawn with zero ink; the halves draw the ferrules.
+parts:
+  # SIDE BY SIDE AT THE 6.25 DUPLEX PITCH, each half TURNED 180 so its latch -
+  # drawn down on generic/lc-plug@2 - stands UP, the canonical spanning axis
+  # (provenance.halves). 6.25 leaves 0.67 between the 5.58 bodies: the clip web.
+  - {id: a, ref: generic/lc-plug@2, at: [0.0, 0.0], rotate: 180}
+  - {id: b, ref: generic/lc-plug@2, at: [6.25, 0.0], rotate: 180}
+elements:
+  clip: {at: [5.58, 2.885], size: [0.67, 5.65], class: latch}
+  '1': {at: [1.19, 4.11], size: [3.2, 3.2], class: fibre}
+  '2': {at: [7.44, 4.11], size: [3.2, 3.2], class: fibre}
+connection-points:
+  mate: {at: [5.915, 5.71], direction: front}
+relief:
+  features:
+    - node: clip
+      out: 12.5
+      confidence: estimated
+      source: >-
+        THE SAME FIGURE THE TWO HALVES CARRY, and it is theirs, not a new
+        reading: generic/lc-plug@2's `body` feature stands `out: 12.5` at
+        `confidence: estimated`, bracketed 11.6 to 13.4 in generic/lc-plug@2's
+        `provenance.standoff`. The web is the same moulding as the bodies it
+        joins seen end-on, so it stands to the same face. Inherits that
+        estimate and is no better than it. ABSOLUTE from this part's own face,
+        like every `out`: the lift onto a bezel arrives with the seat.
+skins: [default]

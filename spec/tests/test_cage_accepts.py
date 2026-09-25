@@ -39,7 +39,6 @@ above.
 """
 import json
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -50,6 +49,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 RENDER = SPEC / "tools/portrayal/render.py"
 
+import warmrender
 from portrayal import libwalk
 from portrayal import render as render_mod
 
@@ -59,7 +59,7 @@ AIS800_32O = LIB / "devices/edgecore/ais800-32o/device.yaml"
 
 
 def _build(device_yaml, tmp_path):
-    r = subprocess.run([sys.executable, str(RENDER), str(device_yaml),
+    r = warmrender.run([sys.executable, str(RENDER), str(device_yaml),
                         "--library", str(LIB), "--out", str(tmp_path)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
@@ -102,7 +102,7 @@ def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(t
 
 
 def test_an_osfp_cage_accepts_nothing_but_says_so_explicitly(tmp_path):
-    """Four families - osfp, xfp, cfp, cfp2 - have a cage in the library and
+    """Five families - osfp, xfp, cfp, cfp2, cfp4 - have a cage in the library and
     no component that mates one. `[]`, EMPTY, NOT ABSENT: a consumer has to
     be able to tell "the library offers nothing here" from "this placement
     is not a cage at all", and those are different facts only if the key is
@@ -119,7 +119,16 @@ def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     cage = _cage(idx, "front", "m1-0")
     assert set(cage) == {"id", "at", "interface", "media", "group", "rel-pos",
                           "rotate", "accepts", "occupant",
-                          "mate", "lift", "occupant-attrs", "mirror", "group-states"}
+                          "mate", "lift", "occupant-attrs", "mirror", "group-states",
+                          "kind", "default", "bores"}
+    assert cage["kind"] == "cage"
+    # WHAT THE SLOT SHIPS HOLDING (B3), null where it ships empty - present on
+    # every entry for the same reason `accepts` is: "nothing" and "not a
+    # question this entry answers" have to be told apart.
+    assert cage["default"] is None
+    # THE SLOTS THIS ONE TAKES THE PLACE OF (B3, "The duplex host"), empty on
+    # every slot but a duplex adapter's own - published for the same reason.
+    assert cage["bores"] == []
     assert cage["rel-pos"] == 0
     assert cage["rotate"] is None
     # AFTER SPEC A NO SHIPPED DEVICE SEATS ONE - this is the honest value for
@@ -489,26 +498,59 @@ def test_a_group_description_reaches_the_occupant(tmp_path):
     assert grouped["data-description"] == want
 
 
+def _ref(device, view_name, placement_id):
+    """The ref of the placement `cage_entries` made an entry for."""
+    return next(q["ref"] for q in
+                render_mod.view_parts(device["views"][view_name] or {})["placements"]
+                if q.get("id") == placement_id)
+
+
 def test_the_lift_census():
-    """RECORDS the published lift across every cage in the library, computed
-    by the same `cage_entries` main() writes. 3,326 cages at this writing, and
-    NONE presents a lift: no cage wrapper composes its aperture with a `lift`
-    today. The day one does, this count moves and the kit's data-z-lift path
-    stops being dead code - which is the point of pinning it."""
+    """RECORDS the published lift across every slot in the library, computed
+    by the same `cage_entries` main() writes. No PLUGGABLES CAGE presents a
+    lift: no cage wrapper composes its aperture with a `lift` today.
+
+    THE DUPLEX ADAPTERS DO, and they are the first (B3, "The duplex host").
+    An LC duplex adapter presents `lc-duplex` at the midpoint of its two
+    bores, and its `mate` sits `on:` the raised bezel those bores recess
+    from - so the slot's lift is that bezel's `out`, the same figure each
+    bore is lifted by. A duplex connector and a simplex one on the same
+    piece of hardware stand at the same depth, which is the whole reason the
+    figure is carried.
+
+    So the pin is no longer a bare zero: every lifted slot must be a duplex
+    adapter's own, and its lift must equal the bezel `out` its contract
+    states. A pluggables cage growing a lift still moves this - and the day
+    it does, the kit's data-z-lift path stops being dead code, which is the
+    point of pinning it. The kit refuses a lifted slot today (spec B3 tasks
+    8/10 own that), so these slots are not swappable there yet."""
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()
     candidates = render_mod._pluggable_candidates([LIB])
-    total = nonzero = mirrored = stated = 0
+    total = nonzero = mirrored = stated = cages = lifted_cages = 0
     for man in libwalk.iter_devices([LIB]):
         d = render_mod.load_yaml(man)
         for v in d.get("views") or {}:
             for c in render_mod.cage_entries(d, v, lib, families, candidates, {}):
                 total += 1
-                nonzero += bool(c["lift"])
+                cages += c["kind"] == "cage"
+                if c["lift"]:
+                    nonzero += 1
+                    lifted_cages += c["kind"] == "cage"
+                    assert c["interface"] == "lc-duplex", (c["id"], c["lift"])
+                    bezel = {f["node"]: f.get("out") for f in
+                             (lib.resolve(_ref(d, v, c["id"]))[0].get("relief")
+                              or {}).get("features") or []}
+                    assert c["lift"] == bezel["bezel"], (c["id"], c["lift"])
                 mirrored += c["mirror"]
                 stated += c["group-states"]
     assert total >= 3000, total
-    assert nonzero == 0, nonzero
+    assert cages >= 3000, cages
+    # NO PLUGGABLES CAGE IS LIFTED - the original pin, unchanged.
+    assert lifted_cages == 0, lifted_cages
+    # and the duplex slots that are lifted really were measured, rather than
+    # this census finding none and passing
+    assert nonzero > 0, "the duplex adapters are no longer placed anywhere"
     # THE SAME PIN FOR THE OTHER TWO REFUSALS. The kit declines a mirrored
     # cage (the build raises for one) and a cage whose group carries `states`
     # (the build applies them to the seated optic; kit/swap.js does not, and

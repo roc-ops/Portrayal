@@ -1,7 +1,13 @@
 """generic/lc-plug: the four-tier LC plug silhouette, front view, standing for
-every LC plug - a body holding the ferrule, and above it a latch column that
-is NOT a simple taper: a 3.3 stem off the body, a 4.3 shoulder proud of it,
-then the 2.3 tab (docs/pluggables-connectors-design.md).
+every LC plug - a body holding the ferrule, and a latch column that is NOT a
+simple taper: a 3.3 stem off the body, a 4.3 shoulder proud of it, then the
+2.3 tab (docs/pluggables-connectors-design.md).
+
+SINCE @2 THE PLUG IS DRAWN SEATED: latch DOWN, in its bore's own unrotated
+convention, and compressed so the tab ends at the bulkhead keyway's end, 5.71
+from the ferrule axis (docs/pluggables-caps-design.md, "Seated plugs"). The
+tier WIDTHS are SENKO's dimensioned ones; the tier HEIGHTS are SENKO's free
+ones scaled in proportion, a modelling choice the contract declares.
 
 It occupies an `lc` receptacle at its own `mate` point (behaviour: occupies,
 mates: lc) and presents `lc-plug` so common/lc-boot@1 can seat on its `boot`
@@ -20,13 +26,14 @@ import json
 import pathlib
 
 import jsonschema
+import pytest
 import yaml
 
 from portrayal import lint
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
-P = LIB / "components/generic/lc-plug/v1/contract.yaml"
+P = LIB / "components/generic/lc-plug/v2/contract.yaml"
 
 COMPONENT_SCHEMA = json.loads((ROOT / "spec/schemas/component.schema.json").read_text())
 
@@ -64,10 +71,12 @@ def test_shape():
     assert d["class"] == "port"
     assert d["mates"] == "lc"
     assert d["interface"] == "lc-plug"
-    assert d["conforms"] == "lc-plug"
     assert d["kind"] == "component"
     assert d["optical"]["positions"] == 1
-
+    # NO `conforms:` since @2: `lc-plug` is SENKO's FREE 10.43 silhouette and
+    # this part is drawn seated, so L9 would rightly refuse it
+    assert "conforms" not in d
+    assert "NO `conforms:`" in d["provenance"]["standard"]
 
 def test_no_behaviour_despite_the_plan_table():
     """The plan's Task 4 table says `behaviour: occupies`, but this class is
@@ -85,11 +94,11 @@ def test_no_behaviour_despite_the_plan_table():
 
 def test_size_has_no_depth():
     d = contract()
-    assert d["size"] == {"w": 5.58, "h": 10.43}
+    assert d["size"] == {"w": 5.58, "h": 8.535}
+    assert d["size-confidence"] == {"w": "drawing", "h": "borrowed"}
     assert "d" not in d["size"], (
         "an LC plug has no class-wide overall length - see the contract's "
         "provenance.size and spec/tests/test_plug_envelopes.py")
-
 
 def test_size_says_why_there_is_no_depth():
     """provenance.size must be actionable for a future reader, not just an
@@ -116,6 +125,10 @@ def test_size_says_h_includes_the_latch_unlike_rj45_plug():
     assert "exclud" in reg["rj45-plug"]["notes"].lower()
 
 
+FREE = {"tip": 2.66, "shoulder": 0.79, "stem": 1.33}      # SENKO, the free latch
+SEATED_REACH = 5.71     # std/lc-bulkhead-bore@1's keyway end, from the ferrule
+
+
 def test_the_four_tiers_are_the_part():
     d = contract()
     elems = tiers(d)
@@ -123,98 +136,77 @@ def test_the_four_tiers_are_the_part():
     widths = {k: v["size"][0] for k, v in elems.items()}
     assert widths == {"tip": 2.3, "shoulder": 4.3, "stem": 3.3, "body": 5.58}
     heights = sum(v["size"][1] for v in elems.values())
-    assert abs(heights - 10.43) < 0.01, "the four tiers must sum to the drawn 10.43"
+    assert abs(heights - d["size"]["h"]) < 1e-9
 
+
+def test_the_latch_tiers_are_the_free_ones_scaled_in_proportion():
+    """THE DECLARED MODELLING CHOICE, held to its own arithmetic: the seated
+    latch is 5.71 - 5.65/2 = 2.885 long against the free 4.78, and each tier
+    is its free height scaled by the same ratio - so the three cannot be
+    re-split without the contract's prose going stale."""
+    elems = contract()["elements"]
+    k = (SEATED_REACH - 5.65 / 2) / sum(FREE.values())
+    for tier, free in FREE.items():
+        assert elems[tier]["size"][1] == pytest.approx(free * k, abs=0.001), tier
+    assert "NOT A READING" in contract()["provenance"]["keyway"]
 
 def test_the_tiers_run_down_the_page_in_the_drawn_order():
-    """THE ORDER IS A FACT ABOUT THE DRAWING, not a taper anyone chose.
+    """THE ORDER IS A FACT ABOUT THE DRAWING, not a taper anyone chose - and
+    since @2 it reads from the BODY down, because the latch is drawn below it.
 
-    The first cut of this contract put the 3.3 tier ABOVE the 4.3 one and
-    described a monotonic narrowing toward the tab. The drawing shows the 4.3
-    shoulder standing proud of BOTH its neighbours: reading down from the tab
-    it is 2.3, then 4.3, then 3.3, then the 5.58 body. Each width's extension
-    lines land on a different tier and the three figures are far enough apart
-    that the assignment cannot be mistaken - see provenance.keyway.
+    Reading out along the latch it is the 5.58 body, then 3.3, then 4.3, then
+    the 2.3 tab: the 4.3 shoulder stands proud of BOTH its neighbours (see
+    provenance.free-state for how the drawing fixed that).
     """
     elems = tiers()
     order = sorted(elems, key=lambda k: elems[k]["at"][1])
-    assert order == ["tip", "shoulder", "stem", "body"]
+    assert order == ["body", "stem", "shoulder", "tip"]
     # tiers stack with no gap and no overlap
     y = 0.0
     for k in order:
         assert abs(elems[k]["at"][1] - y) < 1e-9, f"{k} does not start where the tier above ends"
         y += elems[k]["size"][1]
-    assert abs(y - 10.43) < 1e-9
+    assert abs(y - 8.535) < 1e-9
     # every tier is centred on the body's centreline
     for k, e in elems.items():
         assert abs(e["at"][0] + e["size"][0] / 2 - 5.58 / 2) < 1e-9, k
-    # NOT a taper: the shoulder is wider than the tier below it as well as above
+    # NOT a taper: the shoulder is wider than the tier on either side of it
     assert elems["shoulder"]["size"][0] > elems["stem"]["size"][0]
-
+    assert elems["shoulder"]["size"][0] > elems["tip"]["size"][0]
 
 def test_the_body_tier_is_the_dimensioned_5_65():
-    """Summing to 10.43 does not pin a SPLIT - any four numbers can do that.
-
-    This is the assertion the first cut was missing: it checked only the sum,
-    so a body of 4.48 (1.17 short) satisfied it. The body is the one tier the
-    drawing DIMENSIONS - 5.65 on the side view, the same figure
-    common/lc-boot@1 cites for the body it wraps - so it is the one tier that
-    can be pinned against a callout rather than against a proportion.
+    """The body is the one tier the drawing DIMENSIONS - 5.65 on the side
+    view, the figure common/lc-boot@1 cites for the body it wraps - so it is
+    pinned against the callout, and the latch is what the seated reach leaves.
     """
     d = contract()
     body = d["elements"]["body"]
-    assert body["size"][1] == 5.65, (
-        "the body tier must be the drawing's dimensioned body height, not a "
-        "share of the overall silhouette")
-    assert abs(body["at"][1] - (10.43 - 5.65)) < 1e-9
-    # and the latch column is what is left of the dimensioned overall
+    assert body["size"][1] == 5.65
+    assert body["at"][1] == 0.0
     latch = sum(v["size"][1] for k, v in tiers(d).items() if k != "body")
-    assert abs(latch - (10.43 - 5.65)) < 1e-9
+    assert abs(latch - (SEATED_REACH - 5.65 / 2)) < 1e-9
 
-    # THE AXIS IS THE BODY TIER'S CENTRE, and that is a DERIVED relation the
-    # contract holds exactly - see provenance.axis. The drawn centreline
-    # measures 7.617, which corroborates it to 0.007 but is NOT the stated
-    # figure: at 45.686 px/mm half a pixel is 0.011, so the artwork cannot
-    # resolve the 0.012 between them, and the tier centre is the one the
-    # geometry fixes. The tolerance here is tight enough to tell the two
-    # apart - swap in the measured 7.617 and this fails - because the whole
-    # point is that the point and the tier it stands in cannot drift.
+    # THE AXIS IS THE BODY TIER'S CENTRE, a DERIVED relation the contract
+    # holds exactly - see provenance.axis.
     axis = d["connection-points"]["mate"]["at"][1]
-    assert abs(axis - (body["at"][1] + 5.65 / 2)) <= 0.005, (
-        f"the mate point sits at {axis}, but the centre of the body tier the "
-        f"ferrule stands in is {body['at'][1] + 5.65 / 2}")
+    assert axis == pytest.approx(body["at"][1] + 5.65 / 2, abs=1e-9)
+    # and the tab ends at the seated reach below it
+    assert d["size"]["h"] - axis == pytest.approx(SEATED_REACH, abs=1e-9)
 
     prov = " ".join(str(v) for v in d["provenance"].values())
     assert "5.65" in prov, "provenance must cite the dimension the body is pinned to"
 
-
 def test_the_axis_provenance_does_not_claim_a_reading_for_a_derived_figure():
-    """The heading and the body must agree about what 7.61 IS.
-
-    An earlier draft opened "drawing - MEASURED, not derived" over prose that
-    then did the arithmetic honestly: the stated value is the body tier's
-    centre, 4.78 + 5.65/2 = 7.605, and the drawn centreline measures 7.617.
-    Presenting a derived figure as a measurement is the one mislabel this
-    library treats as cardinal, and a heading is where a reader stops.
-    """
+    """The heading and the body must agree about what 2.825 IS: the body
+    tier's centre, derived, corroborated against SENKO's drawn centreline (on
+    the free plug, where @1 measured it) - not a reading of its own."""
     d = contract()
     axis_prov = d["provenance"]["axis"]
-    head = axis_prov.lstrip().split(".")[0]
-    assert head.upper().startswith("DERIVED"), (
-        f"the heading must say what the number is before the prose explains "
-        f"it; it opens {head!r}")
-    assert "measured" not in head.lower(), (
-        f"the heading must not claim a reading for a derived figure; it opens "
-        f"{head!r}")
-    assert "It is NOT the measured figure" in axis_prov, (
-        "say outright that the stated value is not the measurement - the "
-        "earlier draft's prose was honest and its heading was not, and a "
-        "reader who stops at the heading is the one this protects")
-    # both figures named, so a reader can check the claim either way round
-    assert "7.605" in axis_prov and "7.617" in axis_prov
-    # and the stated value is the derived one, not the measured one
-    assert d["connection-points"]["mate"]["at"][1] == 7.61
-
+    head = axis_prov.lstrip().split(":")[0].split(".")[0]
+    assert head.upper().startswith("DERIVED"), head
+    assert "measured" not in head.lower(), head
+    assert "2.825" in axis_prov and "0.012" in axis_prov
+    assert d["connection-points"]["mate"]["at"][1] == 2.825
 
 def test_connection_points_share_the_optical_axis():
     cps = contract()["connection-points"]

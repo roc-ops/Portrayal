@@ -416,7 +416,7 @@
      ]
     },
     "power": {
-     "description": "WHAT THE BOX IS FED WITH, stated the way `airflow` is: the chassis is the home, and a configuration states `power` only when its build DIFFERS - which, unlike airflow, is the usual case, because most switches are sold as an AC and a DC build of one chassis. So a box with one feed says it here once (`power: dc` on a fixed -48 V router), and a box with an AC and a DC build says it on each configuration and not here. `<device>.configs.json` publishes each build's resolved answer as `configs[].power`, and `options.power` there and in devices.json is the union across the builds a buyer can order - what a tool filtering by feed reads instead of parsing `ac`/`dc` out of a configuration name or `input-dc` out of attrs (#513). L117 checks the division; L118 asks for it where a device has supplies and says nothing.",
+     "description": "WHAT THE BOX IS FED WITH, stated the way `airflow` is: the chassis is the home, and a configuration states `power` only when its build DIFFERS - which, unlike airflow, is the usual case, because most switches are sold as an AC and a DC build of one chassis. So a box with one feed says it here once (`power: dc` on a fixed -48 V router), and a box with an AC and a DC build says it on each configuration and not here. `<device>.configs.json` publishes each build's resolved answer as `configs[].power`, and `options.power` there and in devices.json is the union across the builds a buyer can order - what a tool filtering by feed reads instead of parsing `ac`/`dc` out of a configuration name or `input-dc` out of attrs (#513). L118 checks the division; L119 asks for it where a device has supplies and says nothing.",
      "$ref": "#/$defs/power-feed"
     },
     "color": {
@@ -458,7 +458,7 @@
       ]
      },
      "power": {
-      "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS - see `chassis.power`. An AC and a DC build of one switch are two configurations of one chassis, and each says which it is here; a box with one feed states it once on the chassis instead, and restating it here is what L117 reports. It must agree with the supplies the build seats: `dc` over a bay holding an `-ac` supply is L119.",
+      "description": "ONLY WHEN THIS BUILD DIFFERS FROM THE CHASSIS - see `chassis.power`. An AC and a DC build of one switch are two configurations of one chassis, and each says which it is here; a box with one feed states it once on the chassis instead, and restating it here is what L118 reports. It must agree with the supplies the build seats: `dc` over a bay holding an `-ac` supply is L120.",
       "$ref": "#/$defs/power-feed"
      },
      "occupants": {
@@ -673,7 +673,7 @@
    "additionalProperties": {
     "type": "object",
     "additionalProperties": false,
-    "description": "one face of the device, written in the order the part is made: size the panel, punch it, print it, populate it. Key order is linted (L16).",
+    "description": "one face of the device, written in the order the part is made: size the panel, say whether it is an open frame, punch it, print it, populate it. Key order is linted (L16).",
     "properties": {
      "empty": {
       "type": "string",
@@ -696,6 +696,10 @@
         "type": "number"
        }
       }
+     },
+     "open-frame": {
+      "type": "boolean",
+      "description": "THIS FACE'S BAYS OPEN INTO ONE SHARED INTERIOR, not into a pocket each. An open-frame chassis - card-guide rails top and bottom, a mid-plane, and nothing between the slots, as on the CommScope CH3000 - is seen straight through wherever a slot is empty, front to rear. Without this every empty bay compiles to a pocket as deep as its deepest occupant, with four walls, a floor and a back, and the chassis reads in 3D as a row of closed tubes. With it EVERY bay on the face, occupied or not, compiles to a see-through mouth flagged `data-open-frame` - the kit punches it and builds no walls, floor or back round it - and the face's root carries `data-open-frame`, which tells the kit to line the inside of the box so the interior reads as the chassis's. A seated module is drawn over its mouth as usual, and pulling it leaves the frame open rather than a dark box. Declare it on every face whose slots open into the interior (a mid-plane chassis: front and rear)."
      },
      "panel": {
       "type": "object",
