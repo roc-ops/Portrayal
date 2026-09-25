@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: dr3600n
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) DR3600N - quad digital return receiver (modes up to 5-204 MHz) for the CH3000 headend
+  optics platform: four digital return receivers in one full-depth slot, terminating the
+  node's digital return links. Its optical inputs (RR36x0 or RR40x0 SFP receivers) and RF outputs are
+  on the BP3400C back plate it shares with three neighbours; the face carries the Status and
+  Access lamps, a micro-USB craft port, a -20 dB G-type test point and the button and four
+  lamps that pick which input the test point samples.
+size: {w: 25.76, h: 130.2, d: 330.2}
+size-confidence: {w: photo-measured, h: photo-measured, d: datasheet}
+attrs:
+  model: DR3600N
+  role: receiver
+  receivers: 4
+  power-draw-max-w: 27
+  back-plate: BP3400C, shared by four adjacent receivers
+provenance:
+  size: >-
+    photo-measured. Width is one CH3000 slot pitch less the faceplate gap (26.76 - 1.0,
+    see the ch3000 device). The DR3600N data sheet's face-on photograph (p1, 500 x 1200, a slightly angled view; its features are read at the DR3450N's positions, which it matches feature for feature. The data
+    sheet's "13.0 D x 4.3 H x 1.0 W" is the body; its 13.0 in (330.2 mm) is taken as depth.
+  power: >-
+    datasheet - DR3600N data sheet, "Module Power Consumption, max: 24.6 W at 50 C (or 27 W at 65 C) (includes 1/4 of fully loaded BP3400C-00 with all SFPs)". The 65 C figure is filed as the maximum. The figure includes a quarter of the shared
+    BP3400C back plate, which therefore carries none of its own.
+  face-features: >-
+    photo-measured on the DR3450N data sheet's photograph: the Status box 7.1-18.7 across and
+    28.7-44.8 down with three lamps on the centre line at 32.7, 37.0 and 41.4; the Access box
+    46.7-53.4 with one lamp at 50.7; a vertical micro-USB centred 11.5, 61.1, legended
+    microUSB; four vent columns of oval holes on a 2.6 pitch; the select button at 13.1, 83.2;
+    four lamps at 19.9 across on a 4.5 pitch from 77.0, numbered 1 to 4 and joined to the
+    button by a printed bracket; and the test point centred 13.1, 104.4, about 15.6 across.
+  test-point: >-
+    datasheet - "RF Output Test Point (selectable for each input port): G-type connector
+    (front panel, -20 dB)". No registry entry exists for a G-type connector, so it is drawn
+    as an element, as on the AR3002E and AR3044H.
+  lamps: >-
+    the Status lenses read green, yellow and red on the photograph; the data sheet gives no
+    colour or meaning for any lamp, so they carry their legend's function and no colour.
+elements:
+  screw-top: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
+  vent-left: {at: [3.7, 29.8], size: [2.70, 65.30], class: vent}
+  vent-right: {at: [20.7, 29.8], size: [2.40, 39.80], class: vent}
+  vent-right-inner: {at: [15.9, 54.9], size: [2.60, 14.70], class: vent}
+  vent-lower-left: {at: [7.4, 70.8], size: [2.60, 24.30], class: vent}
+  vent-lower-mid-top: {at: [11.7, 70.8], size: [2.50, 5.80], class: vent}
+  vent-lower-mid-bottom: {at: [11.7, 86.6], size: [2.50, 8.50], class: vent}
+  select-button: {at: [11.6, 81.7], size: [3.0, 3.0], class: button}
+  test-point: {at: [5.3, 96.6], size: [15.6, 15.6], class: port}
+  screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
+parts:
+  - {ref: common/led-dot@1, id: led-status-1, at: [11.88, 31.70], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-2, at: [11.88, 36.00], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-status-3, at: [11.88, 40.40], attrs: {function: status}}
+  - {ref: common/led-dot@1, id: led-access, at: [11.88, 49.7], attrs: {function: activity}}
+  - {ref: std/micro-usb@1, id: usb, at: [7.75, 59.72], rotate: 90, attrs: {role: console}}
+  - {ref: common/led-dot@1, id: led-tp-1, at: [18.9, 76.00], attrs: {function: test-point-select}}
+  - {ref: common/led-dot@1, id: led-tp-2, at: [18.9, 80.50], attrs: {function: test-point-select}}
+  - {ref: common/led-dot@1, id: led-tp-3, at: [18.9, 85.00], attrs: {function: test-point-select}}
+  - {ref: common/led-dot@1, id: led-tp-4, at: [18.9, 89.50], attrs: {function: test-point-select}}
+connection-points:
+  mate: {at: [12.88, 65.1], direction: front}
+skins: [default]
