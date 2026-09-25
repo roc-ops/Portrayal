@@ -1,0 +1,60 @@
+format: 1
+kind: module
+name: ps3248n
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: optical
+description: >-
+  CommScope (ARRIS) PS3248N - the 300 W -48 VDC power supply and chassis controller of
+  the CH3000 headend optics platform, in the variant with status LEDs and no display. Two full-depth
+  slots wide; it mates the BP-P2 dynamic back plate, which carries the -48 VDC input
+  terminal block.
+size: {w: 52.52, h: 130.2, d: 330.2}
+size-confidence: {w: borrowed, h: borrowed, d: datasheet}
+attrs:
+  model: PS3248N
+  input: dc
+  input-voltage: -36 to -60 VDC
+  output-voltage: 12 VDC
+  power-output-w: 300
+  efficiency: 93% typical at 48 V input, 18-25 A load
+  slots: 2
+  back-plate: BP-P2
+  inlet: none
+provenance:
+  inlet: >-
+    datasheet - the supply has no input of its own: the PS3248 "ships with a model BP-P2
+    dynamic back plate" and its -48 VDC input is the BP-P2's terminal block; see
+    commscope/bp-p2@1.
+  size: >-
+    borrowed - commscope/ps3006n@1, the same two-slot faceplate. The PS3248 data sheet's
+    "13.0 D x 4.3 H x 2.0 W" is the PS3006's figure again, and its p1 photograph of the
+    PS3248N (four stitched tiles) shows the PS3006N's face feature for feature with
+    only the model legend changed; its 13.0 in (330.2 mm) is taken as depth.
+  power: >-
+    datasheet - PS3248 data sheet: "300 Watts", DC output current "25 Amps max (300
+    watts)". No ambient is stated with it.
+  face-features: >-
+    borrowed - commscope/ps3006n@1's measured face, checked against the PS3248 data sheet's
+    photograph at matched scale; every feature lands on the photograph's, and the legend
+    reads PS3248N.
+  lamps: >-
+    datasheet - PS3248 data sheet, Status LEDs: green = OK, yellow = non-service-affecting
+    alarm, red = service-affecting alarm.
+elements:
+  screw-1: {at: [7.98, 0.1], size: [9.8, 9.8], class: fastener}
+  screw-2: {at: [34.74, 0.1], size: [9.8, 9.8], class: fastener}
+  vent-main: {at: [6.5, 28.4], size: [23.9, 82.1], class: vent}
+  vent-lower: {at: [31.8, 64.5], size: [11.3, 35.4], class: vent}
+  handle: {at: [7.7, 121.8], size: [32.6, 7.3], class: handle}
+parts:
+  - {ref: common/led-dot@1, id: led-status-ok, at: [36.8, 30.6], attrs: {function: status, color: green}}
+  - {ref: common/led-dot@1, id: led-status-minor, at: [36.8, 35.4], attrs: {function: status, color: yellow}}
+  - {ref: common/led-dot@1, id: led-status-major, at: [36.8, 39.2], attrs: {function: status, color: red}}
+  - {ref: common/led-dot@1, id: led-access, at: [36.8, 48.8], attrs: {function: activity, color: blue}}
+  - {ref: common/led-dot@1, id: led-backup-psu, at: [36.8, 58.4], attrs: {function: redundancy, color: green}}
+  - {ref: std/micro-usb@1, id: usb, at: [32.2, 106.7], rotate: 90, attrs: {role: console}}
+connection-points:
+  mate: {at: [26.26, 65.1], direction: front}
+skins: [default]

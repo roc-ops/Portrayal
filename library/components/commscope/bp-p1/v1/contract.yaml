@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bp-p1
-version: 1.0.0
+version: 1.1.0
 class: inlet
 behaviour: fills
 profile: optical
@@ -33,11 +33,16 @@ provenance:
     standard (IEC 60320-1) via std/c14-inlet@1, composed unrotated: the drawing puts the
     earth pin up and centred, line and neutral below, which is that part's own orientation.
   comms-position: >-
-    the blank rectangle is where a communications module mounts. The CX3003C data sheet
-    (p3 photograph) shows the module seated at the top of a PSU back plate, above the fan
-    and the inlet, and its text says it "mounts in the BP-P1 or BP-P2 back plate". Drawn
-    as the blank cover here; a nested bay for CX3002 / CX3003C is left for when those
-    modules are modelled.
+    the top of the plate is where a communications module mounts. The CX data sheets say
+    the module is installed in the BP-P1 or BP-P2 back plate, needs no chassis slot, and is
+    8.1 D x 1.7 H x 2.0 W; the CX3003C data sheet's p3 photograph shows one seated at the
+    top of a PSU back plate, above the fan grille. So the top 43.2 is the `comms` bay,
+    accepting the CX3002, CX3003C and CX3033N, and its default is
+    commscope/bp-p1-comms-cover@1 - this plate's own drawn top band (the two top
+    thumbscrews, the BP-P1 legend, the blank 14.3-35.8) - which a fitted module replaces.
+    The drawing's lower panel starts at 37.0, so a fitted module stands over the top 6 mm
+    of it and of the grille; the drawing shows the plate without a module and does not say
+    otherwise.
   fan: >-
     the grille is over a fan: the CX3003C photograph of a populated BP-P2 shows a fan
     behind the same position. It is fed from the mid-plane; no document held gives it a
@@ -51,6 +56,12 @@ elements:
   flange-screw-2: {at: [45.0, 92.5], size: [3.8, 3.8], class: fastener}
   screw-3: {at: [8.5, 119.6], size: [9.8, 9.8], class: fastener}
   screw-4: {at: [34.7, 119.6], size: [9.8, 9.8], class: fastener}
+bays:
+  comms:
+    at: [0, 0]
+    size: [52.52, 43.2]
+    accepts: [commscope/bp-p1-comms-cover@1, commscope/cx3002@1, commscope/cx3003c@1, commscope/cx3033n@1]
+    default: commscope/bp-p1-comms-cover@1
 parts:
   - {ref: std/c14-inlet@1, id: inlet, at: [12.9, 82.0]}
 connection-points:
