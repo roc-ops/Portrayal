@@ -1,0 +1,170 @@
+format: 1
+kind: component
+name: qsfp-lc
+version: 2.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+conforms: qsfp-module
+profile: networking
+description: >-
+  A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and
+  QSFP56 optic with two LC bores has, standing for all of them. Two keyed
+  bores with the ferrules standing in them, and a pull tab standing proud of
+  the body because the module is seated. Which module it is - rate, reach,
+  wavelength, watts - is a fact about a vendor's product and lives on the
+  wrapper that composes this (docs/pluggables-design.md, decision 5), never
+  here.
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, 0.0]
+  size: {w: 18.35, h: 8.5, d: 20.0}
+  size-confidence: {w: registry, h: registry, d: drawing}
+  node: body
+attrs: {power-absent: not-applicable, form-factor: qsfp, face: lc-duplex, media: fiber}
+fields:
+  latch-color:
+    label: Latch colour
+    type: text
+    default: '#6f6f6f'
+  label:
+    label: Module label
+    type: text
+    default: ''
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-module, which is SFF-8661 Rev 2.5 Figure 5-1 Basic Views
+    (18.35 +/-0.10 wide, 8.50 +/-0.10 high, 52.4 REF deep). THE DEPTH IS THE
+    INSERTED LENGTH, NOT THE OVERALL ONE: 52.4 REF runs from the BACK of the
+    20 MAX nose to the REAR END of the module, not from the module's front tip,
+    and not to datum D. D is the hard stop and sits 4.20 +/-0.15 forward of that
+    rear end - 48.2 MIN is the nose-back-to-D span, and 48.2 + 4.20 = 52.4. The
+    20 MAX nose forward of this span is relief.body.out (see
+    provenance.head) and is NOT inside d, so d + out is the whole module
+    and double counts nothing. common/qsfp-transceiver@1 carried the same
+    18.35 x 8.5 from a vendor drawing (ProLabs PAN-QSFP28-100GBASE-CWDM4-C)
+    but its depth 83.2 measured a DIFFERENT quantity - the drawing's 118 REF
+    overall less the 34.80 MAX tab reach, two figures off one vendor drawing
+    - not the registry's own 52.4. L9 requires the registry's exact figures;
+    the vendor drawing stays the corroborating measurement, not the source
+    (the same move generic/sfp-lc@1 made for sfp-module).
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC and not a part. It is a shape that
+    stands in for every module of its kind, so there is no one figure to state: a 40GBASE-SR4
+    is about 1.5 W and a 400G ZR about 20 W, and this single drawing is both of them. Any
+    wattage written here would be a fiction dressed as a fact rather than a missing one. The
+    figure belongs on the PLACEMENT, where a device that knows which module it ships can
+    source it - the same division of labour L18 already draws for `media`, where a port
+    inheriting a family from its cage must declare the real media on the placement. L27 has
+    always exempted this contract in code; this records the reason in the data, so that a
+    consumer totalling a chassis can tell a deliberate silence from an unanswered question.
+    The chassis-level hole stays visible in L29, which is the right place for it.
+  face-lc: >-
+    drawing - ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet, Mechanical Specifications,
+    section A-A. Bore centres 6.25 +/-0.05 apart, each opening 4.7 +/-0.05 square, T left
+    and R right as that section labels them. The 6.25 is the IEC 61754-20 duplex pitch and
+    is corroborated by the Smartoptics QSFP-LC stencil master, which places its two optical
+    connection points at Width/3 and 2*Width/3 - 6.12 on an 18.35 face, within 2 percent.
+    Same drawing independently confirms five figures already in this contract (18.35, 8.50,
+    29.60, 4.20, 2.00)
+  optical-axis: >-
+    derived, and it is NOT the module's vertical centreline. The bores sat at 4.25, half
+    of 8.5, which no source gives and which only ever suited a bore drawn as a plain
+    square. std/lc-bore@3's opening is keyed and 6.3 tall (#126), and the receptacle
+    housing it sits in was 5.30 - too short to contain it at any position, so the latch
+    tongues rendered out on bare face. The housing is now 6.90 (0.65 to 7.55, clear of
+    the T/R silkscreen), the aperture sits at 0.95 to 7.25 with a 0.30 frame, and the
+    axis follows to 4.90. sfp-lc-duplex made the same move for the same reason and
+    landed at 5.70; the two differ because their faces carry different furniture - a
+    bail across the top there, silkscreen along the bottom here - and neither number is
+    a callout. The figure that would settle both is in IEC 61754-20, which is paywalled;
+    see `gap` on std/lc-bore@3
+  silkscreen: >-
+    the T and R positions are the ProLabs section A-A labelling. Their COLOUR was
+    #8d949c on a #8d949c face and so had never rendered at all; #126 found it only
+    because the taller housing put half of each letter over dark. Now the shell's own
+    stroke colour, which is a silkscreen rather than an invisible one
+  receptacle-housing: >-
+    the 11.55 width and the 3.40 left edge are as drawn against the ProLabs section A-A
+    bore centres. THE HEIGHT IS NOT SOURCED and never was - it was 5.30 and is now 6.90,
+    grown to contain the keyed opening it frames rather than measured off anything
+  face-mpo: >-
+    the MPO faces are their own parts - generic/qsfp-mpo12 - because a face is in the
+    name (docs/pluggables-design.md decision 4).
+  head: >-
+    registry - qsfp-module's `head` (19 MAX wide, 3.4 MAX above, 1.6 MAX below,
+    20 MAX long), which L121 checks this key against. The head is the 18.35 x
+    8.5 face itself, drawn by the skin's `body` rect. The protrusion is SFF-8661
+    Rev 2.5 Figure 5-1's 20 MAX, read as follows.
+    SFF-8661 Rev 2.5 Figure 5-1 draws the module in two lengthwise sections: a 20mm MAX
+    nose at the front (hatched in both the top and side basic views, with matching 19 MAX
+    width and 3.4 MAX / 1.6 MAX thickness callouts on the same nose) and a 52.4 REF body
+    running from the back of that nose to datum D, the hard stop on the module. Note 1,
+    attached to all four of the nose's dimensions, reads "INDICATED DIMENSIONS DEFINE
+    ENLARGED SECTION OF TRANSCEIVER THAT EXTENDS OUTSIDE OF CAGE TO ACCOMODATE [sic] MATING
+    PLUG AND ACTUATOR MECHANISM" - a direct callout for how far the module stands proud
+    of the cage once seated, the role SFF-8432's designator A plays for sfp-module. This
+    is Figure 5-1's OWN figure for the protrusion, not the subtraction
+    spec/schemas/standards.yaml's qsfp-module entry assumed before this figure was read
+    closely enough to find it (52.4 REF less SFF-8663 Fig 4-1's 37 REF bezel-to-connector
+    depth = 15.4); that entry's `depth-notes` is corrected alongside this contract. 20.0
+    is used as `body.out` at drawing confidence, the same way generic/sfp-lc@1 used
+    SFF-8432's 10.0mm Recommended Maximum directly rather than deriving one.
+  tab: >-
+    composed - common/qsfp-pull-tab@2; see that part's provenance for the reach
+    and the measurements (the U-loop as photographed, arms out 38.6 and grip out
+    49.8 on its own plane). This host's `lift: 20.0` stands it on the nose front,
+    so the tab runs from 20 to 69.8 forward of the cage face. The ProLabs 34.80
+    MAX that @1 carried is a different, shorter tab and does not apply. The tab is
+    composed again rather than painted in this skin because a composed part now
+    takes its host's fields at build time (docs/pluggables-heads-design.md,
+    decision 4), so the tab still wears this generic's `latch-color`. At
+    `at: [-0.325, -1.07]` the grip's top sits 1.07 above the module top, as
+    measured, and the grip straddles the face's top edge (y -1.07 to 1.83).
+  tab-colour: >-
+    A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
+    every chromatic default is a claim. SFF-8661 Rev 2.5, this module's own
+    MSA, gives no colour code at all; the one pull-tab code the corpus holds
+    is QSFP-DD HW Rev 6.3 section 6.3, the sibling form factor's, which
+    recommends colour-coding the tab by wavelength - beige for 850 nm, blue
+    for 1310 nm, white for 1550 nm - with "should", and the list is not
+    exhaustive. The near-white this default used to carry (the ProLabs
+    drawing's PULL LATCH COLOR WHITE, a fact about that one part) therefore
+    read as 1550 nm under that code on every generic drawn with it, a
+    per-SKU fact a generic must not carry (L99). The grey is in no code
+    table: not beige, not blue, not white. A vendor wrapper, which
+    knows which module it is, sets `latch-color` to the colour its wavelength
+    calls for. Decided 2026-09-21. Both documents are held locally in the
+    maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The composed tab's nodes carry
+    `data-stroke-derive: latch-color`, so their stroke is a fixed darker shade of
+    whatever colour the field is given - each channel x 61/100, rounded half
+    up (render.py `stroke_shade`) - and #444444 for this default, the shade
+    of #6f6f6f. It was a literal (#9a9a9a) that no field moved, so any
+    `latch-color` but the default was drawn with the default's edge (#482).
+parts:
+  - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.95], rotate: 180, lift: 20.0}
+  - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}
+  # THE TAB IS COMPOSED AGAIN. It was painted here only because a composed part
+  # could not take latch-color at build time; since pluggables-heads decision 4 it
+  # can. lift 20.0 stands it on the nose front. At y -1.07 the grip's top sits
+  # 1.07 above the module top, as measured: the grip straddles the face's top edge
+  # (y -1.07 to 1.83) and in the front view hides about 0.9 of the bores' tops,
+  # which is what the real part does.
+  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.07], lift: 20.0}
+relief:
+  features:
+    - node: body
+      out: 20.0
+      color: '#8d949c'
+      confidence: drawing
+      source: >-
+        SFF-8661 Rev 2.5 Figure 5-1, Note 1 - "enlarged section of transceiver that
+        extends outside of cage to accomodate [sic] mating plug and actuator mechanism",
+        the 20mm MAX nose dimension - see provenance.head
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  optical-tx: {at: [6.05, 4.9], direction: front}
+  optical-rx: {at: [12.30, 4.9], direction: front}
+skins: [default]

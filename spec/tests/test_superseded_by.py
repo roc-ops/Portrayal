@@ -74,9 +74,20 @@ def test_no_generic_part_carries_superseded_by():
     """A generic stands for every module of its kind (L99's territory) and is
     seated downstream by design - it is never itself a retired part. If one
     ever gained `superseded-by`, that would mean a whole shape was being
-    retired, which is a different, much louder change than this field is for."""
-    offenders = [ref for ref, _path, doc in libdata.components()
-                 if ref.startswith("generic/") and doc.get("superseded-by")]
+    retired, which is a different, much louder change than this field is for.
+
+    A GENERIC'S OWN NEXT MAJOR IS NOT A RETIREMENT. generic/qsfp-lc@1 and
+    generic/qsfp-dd-lc@1 name their @2 (the composed pull tab moved the tab's
+    geometry): the same shape, one major on, which is what `superseded-by`
+    says about any part. Only a generic handing over to a DIFFERENT name is
+    the loud change this guards against."""
+    def next_major_of_itself(ref, path, doc):
+        succ = str(doc.get("superseded-by"))
+        name, _, major = succ.partition("@")
+        return name == ref and major.isdigit() and int(major) > int(path.parent.name[1:])
+    offenders = [ref for ref, path, doc in libdata.components()
+                 if ref.startswith("generic/") and doc.get("superseded-by")
+                 and not next_major_of_itself(ref, path, doc)]
     assert offenders == [], offenders
 
 

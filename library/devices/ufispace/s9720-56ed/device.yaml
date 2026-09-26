@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9720-56ed
-version: 2.0.3
+version: 3.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9720-56ED
@@ -543,7 +543,7 @@ gaps:
     not move - is taken from the fabric patches, which nothing covers.
   wanted: an unannotated front elevation, or a straight-on photograph of a real faceplate.
 groups:
-  qsfpdd-service:
+  qsfpdd-800g-service:
     term: Port
     role: traffic
     index-origin: 0
@@ -553,7 +553,7 @@ groups:
       the lower one; the even port of each column is the upper one. The vendor pairs them
       in the NOS - each pair runs as one 800G port or as two 400G ports - which is why the
       datasheet says '18 x 800G or 36 x 400G' for the same 36 cages
-  qsfpdd-fabric:
+  qsfpdd-800g-fabric:
     term: Port
     role: fabric
     index-origin: 0
@@ -986,117 +986,117 @@ views:
         - {ref: common/led-dot@1, id: led-mgmt-sfp-1, at: [51.80, 47.90], for: mgmt-sfp-1, group: port-leds, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-36, at: [60.30, 47.90], for: port-36, group: port-leds, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-port-37, at: [66.00, 47.90], for: port-37, group: port-leds, rel-pos: 4}
-        - {ref: std/qsfp-dd@1, id: port-0, at: [24.53, 9.51], group: qsfpdd-service, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: port-0, at: [24.53, 9.51], group: qsfpdd-800g-service, rel-pos: 0}
         - {ref: common/led-dot@1, id: led-port-0, at: [21.58, 14.10], for: port-0, group: port-leds, rel-pos: 5}
-        - {ref: std/qsfp-dd@1, id: port-1, at: [24.53, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: port-1, at: [24.53, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-port-1, at: [21.58, 27.00], for: port-1, group: port-leds, rel-pos: 6}
-        - {ref: std/qsfp-dd@1, id: port-2, at: [51.35, 9.51], group: qsfpdd-service, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: port-2, at: [51.35, 9.51], group: qsfpdd-800g-service, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-port-2, at: [48.40, 14.10], for: port-2, group: port-leds, rel-pos: 7}
-        - {ref: std/qsfp-dd@1, id: port-3, at: [51.35, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: port-3, at: [51.35, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-port-3, at: [48.40, 27.00], for: port-3, group: port-leds, rel-pos: 8}
-        - {ref: std/qsfp-dd@1, id: port-4, at: [78.17, 9.51], group: qsfpdd-service, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: port-4, at: [78.17, 9.51], group: qsfpdd-800g-service, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-port-4, at: [75.22, 14.10], for: port-4, group: port-leds, rel-pos: 9}
-        - {ref: std/qsfp-dd@1, id: port-5, at: [78.17, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: port-5, at: [78.17, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-port-5, at: [75.22, 27.00], for: port-5, group: port-leds, rel-pos: 10}
-        - {ref: std/qsfp-dd@1, id: port-6, at: [104.99, 9.51], group: qsfpdd-service, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: port-6, at: [104.99, 9.51], group: qsfpdd-800g-service, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-port-6, at: [102.04, 14.10], for: port-6, group: port-leds, rel-pos: 11}
-        - {ref: std/qsfp-dd@1, id: port-7, at: [104.99, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: port-7, at: [104.99, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 7}
         - {ref: common/led-dot@1, id: led-port-7, at: [102.04, 27.00], for: port-7, group: port-leds, rel-pos: 12}
-        - {ref: std/qsfp-dd@1, id: port-8, at: [131.81, 9.51], group: qsfpdd-service, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: port-8, at: [131.81, 9.51], group: qsfpdd-800g-service, rel-pos: 8}
         - {ref: common/led-dot@1, id: led-port-8, at: [128.86, 14.10], for: port-8, group: port-leds, rel-pos: 13}
-        - {ref: std/qsfp-dd@1, id: port-9, at: [131.81, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: port-9, at: [131.81, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 9}
         - {ref: common/led-dot@1, id: led-port-9, at: [128.86, 27.00], for: port-9, group: port-leds, rel-pos: 14}
-        - {ref: std/qsfp-dd@1, id: port-10, at: [158.62, 9.51], group: qsfpdd-service, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: port-10, at: [158.62, 9.51], group: qsfpdd-800g-service, rel-pos: 10}
         - {ref: common/led-dot@1, id: led-port-10, at: [155.68, 14.10], for: port-10, group: port-leds, rel-pos: 15}
-        - {ref: std/qsfp-dd@1, id: port-11, at: [158.62, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: port-11, at: [158.62, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 11}
         - {ref: common/led-dot@1, id: led-port-11, at: [155.68, 27.00], for: port-11, group: port-leds, rel-pos: 16}
-        - {ref: std/qsfp-dd@1, id: port-12, at: [185.44, 9.51], group: qsfpdd-service, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: port-12, at: [185.44, 9.51], group: qsfpdd-800g-service, rel-pos: 12}
         - {ref: common/led-dot@1, id: led-port-12, at: [182.49, 14.10], for: port-12, group: port-leds, rel-pos: 17}
-        - {ref: std/qsfp-dd@1, id: port-13, at: [185.44, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: port-13, at: [185.44, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 13}
         - {ref: common/led-dot@1, id: led-port-13, at: [182.49, 27.00], for: port-13, group: port-leds, rel-pos: 18}
-        - {ref: std/qsfp-dd@1, id: port-14, at: [212.26, 9.51], group: qsfpdd-service, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: port-14, at: [212.26, 9.51], group: qsfpdd-800g-service, rel-pos: 14}
         - {ref: common/led-dot@1, id: led-port-14, at: [209.31, 14.10], for: port-14, group: port-leds, rel-pos: 19}
-        - {ref: std/qsfp-dd@1, id: port-15, at: [212.26, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: port-15, at: [212.26, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 15}
         - {ref: common/led-dot@1, id: led-port-15, at: [209.31, 27.00], for: port-15, group: port-leds, rel-pos: 20}
-        - {ref: std/qsfp-dd@1, id: port-16, at: [239.08, 9.51], group: qsfpdd-service, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: port-16, at: [239.08, 9.51], group: qsfpdd-800g-service, rel-pos: 16}
         - {ref: common/led-dot@1, id: led-port-16, at: [236.13, 14.10], for: port-16, group: port-leds, rel-pos: 21}
-        - {ref: std/qsfp-dd@1, id: port-17, at: [239.08, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: port-17, at: [239.08, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 17}
         - {ref: common/led-dot@1, id: led-port-17, at: [236.13, 27.00], for: port-17, group: port-leds, rel-pos: 22}
-        - {ref: std/qsfp-dd@1, id: port-18, at: [265.90, 9.51], group: qsfpdd-service, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: port-18, at: [265.90, 9.51], group: qsfpdd-800g-service, rel-pos: 18}
         - {ref: common/led-dot@1, id: led-port-18, at: [262.95, 14.10], for: port-18, group: port-leds, rel-pos: 23}
-        - {ref: std/qsfp-dd@1, id: port-19, at: [265.90, 22.37], rotate: 180, group: qsfpdd-service, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: port-19, at: [265.90, 22.37], rotate: 180, group: qsfpdd-800g-service, rel-pos: 19}
         - {ref: common/led-dot@1, id: led-port-19, at: [262.95, 27.00], for: port-19, group: port-leds, rel-pos: 24}
-        - {ref: std/qsfp-dd@1, id: fabric-0, at: [293.43, 9.51], group: qsfpdd-fabric, rel-pos: 0}
+        - {ref: std/qsfp-dd@1, id: fabric-0, at: [293.43, 9.51], group: qsfpdd-800g-fabric, rel-pos: 0}
         - {ref: common/led-dot@1, id: led-fabric-0, at: [290.48, 14.10], for: fabric-0, group: port-leds, rel-pos: 25}
-        - {ref: std/qsfp-dd@1, id: fabric-1, at: [293.43, 22.37], rotate: 180, group: qsfpdd-fabric, rel-pos: 1}
+        - {ref: std/qsfp-dd@1, id: fabric-1, at: [293.43, 22.37], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 1}
         - {ref: common/led-dot@1, id: led-fabric-1, at: [290.48, 27.00], for: fabric-1, group: port-leds, rel-pos: 26}
-        - {ref: std/qsfp-dd@1, id: fabric-2, at: [321.41, 9.51], group: qsfpdd-fabric, rel-pos: 2}
+        - {ref: std/qsfp-dd@1, id: fabric-2, at: [321.41, 9.51], group: qsfpdd-800g-fabric, rel-pos: 2}
         - {ref: common/led-dot@1, id: led-fabric-2, at: [318.46, 14.10], for: fabric-2, group: port-leds, rel-pos: 27}
-        - {ref: std/qsfp-dd@1, id: fabric-3, at: [321.41, 22.37], rotate: 180, group: qsfpdd-fabric, rel-pos: 3}
+        - {ref: std/qsfp-dd@1, id: fabric-3, at: [321.41, 22.37], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 3}
         - {ref: common/led-dot@1, id: led-fabric-3, at: [318.46, 27.00], for: fabric-3, group: port-leds, rel-pos: 28}
-        - {ref: std/qsfp-dd@1, id: fabric-4, at: [349.39, 9.51], group: qsfpdd-fabric, rel-pos: 4}
+        - {ref: std/qsfp-dd@1, id: fabric-4, at: [349.39, 9.51], group: qsfpdd-800g-fabric, rel-pos: 4}
         - {ref: common/led-dot@1, id: led-fabric-4, at: [346.44, 14.10], for: fabric-4, group: port-leds, rel-pos: 29}
-        - {ref: std/qsfp-dd@1, id: fabric-5, at: [349.39, 22.37], rotate: 180, group: qsfpdd-fabric, rel-pos: 5}
+        - {ref: std/qsfp-dd@1, id: fabric-5, at: [349.39, 22.37], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 5}
         - {ref: common/led-dot@1, id: led-fabric-5, at: [346.44, 27.00], for: fabric-5, group: port-leds, rel-pos: 30}
-        - {ref: std/qsfp-dd@1, id: fabric-6, at: [377.37, 9.51], group: qsfpdd-fabric, rel-pos: 6}
+        - {ref: std/qsfp-dd@1, id: fabric-6, at: [377.37, 9.51], group: qsfpdd-800g-fabric, rel-pos: 6}
         - {ref: common/led-dot@1, id: led-fabric-6, at: [374.42, 14.10], for: fabric-6, group: port-leds, rel-pos: 31}
-        - {ref: std/qsfp-dd@1, id: fabric-7, at: [377.37, 22.37], rotate: 180, group: qsfpdd-fabric, rel-pos: 7}
+        - {ref: std/qsfp-dd@1, id: fabric-7, at: [377.37, 22.37], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 7}
         - {ref: common/led-dot@1, id: led-fabric-7, at: [374.42, 27.00], for: fabric-7, group: port-leds, rel-pos: 32}
-        - {ref: std/qsfp-dd@1, id: fabric-8, at: [405.35, 9.51], group: qsfpdd-fabric, rel-pos: 8}
+        - {ref: std/qsfp-dd@1, id: fabric-8, at: [405.35, 9.51], group: qsfpdd-800g-fabric, rel-pos: 8}
         - {ref: common/led-dot@1, id: led-fabric-8, at: [402.40, 14.10], for: fabric-8, group: port-leds, rel-pos: 33}
-        - {ref: std/qsfp-dd@1, id: fabric-9, at: [405.35, 22.37], rotate: 180, group: qsfpdd-fabric, rel-pos: 9}
+        - {ref: std/qsfp-dd@1, id: fabric-9, at: [405.35, 22.37], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 9}
         - {ref: common/led-dot@1, id: led-fabric-9, at: [402.40, 27.00], for: fabric-9, group: port-leds, rel-pos: 34}
-        - {ref: std/qsfp-dd@1, id: port-20, at: [78.17, 51.38], group: qsfpdd-service, rel-pos: 20}
+        - {ref: std/qsfp-dd@1, id: port-20, at: [78.17, 51.38], group: qsfpdd-800g-service, rel-pos: 20}
         - {ref: common/led-dot@1, id: led-port-20, at: [75.22, 56.00], for: port-20, group: port-leds, rel-pos: 35}
-        - {ref: std/qsfp-dd@1, id: port-21, at: [78.17, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 21}
+        - {ref: std/qsfp-dd@1, id: port-21, at: [78.17, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 21}
         - {ref: common/led-dot@1, id: led-port-21, at: [75.22, 70.80], for: port-21, group: port-leds, rel-pos: 36}
-        - {ref: std/qsfp-dd@1, id: port-22, at: [104.99, 51.38], group: qsfpdd-service, rel-pos: 22}
+        - {ref: std/qsfp-dd@1, id: port-22, at: [104.99, 51.38], group: qsfpdd-800g-service, rel-pos: 22}
         - {ref: common/led-dot@1, id: led-port-22, at: [102.04, 56.00], for: port-22, group: port-leds, rel-pos: 37}
-        - {ref: std/qsfp-dd@1, id: port-23, at: [104.99, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 23}
+        - {ref: std/qsfp-dd@1, id: port-23, at: [104.99, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 23}
         - {ref: common/led-dot@1, id: led-port-23, at: [102.04, 70.80], for: port-23, group: port-leds, rel-pos: 38}
-        - {ref: std/qsfp-dd@1, id: port-24, at: [131.81, 51.38], group: qsfpdd-service, rel-pos: 24}
+        - {ref: std/qsfp-dd@1, id: port-24, at: [131.81, 51.38], group: qsfpdd-800g-service, rel-pos: 24}
         - {ref: common/led-dot@1, id: led-port-24, at: [128.86, 56.00], for: port-24, group: port-leds, rel-pos: 39}
-        - {ref: std/qsfp-dd@1, id: port-25, at: [131.81, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 25}
+        - {ref: std/qsfp-dd@1, id: port-25, at: [131.81, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 25}
         - {ref: common/led-dot@1, id: led-port-25, at: [128.86, 70.80], for: port-25, group: port-leds, rel-pos: 40}
-        - {ref: std/qsfp-dd@1, id: port-26, at: [158.62, 51.38], group: qsfpdd-service, rel-pos: 26}
+        - {ref: std/qsfp-dd@1, id: port-26, at: [158.62, 51.38], group: qsfpdd-800g-service, rel-pos: 26}
         - {ref: common/led-dot@1, id: led-port-26, at: [155.68, 56.00], for: port-26, group: port-leds, rel-pos: 41}
-        - {ref: std/qsfp-dd@1, id: port-27, at: [158.62, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 27}
+        - {ref: std/qsfp-dd@1, id: port-27, at: [158.62, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 27}
         - {ref: common/led-dot@1, id: led-port-27, at: [155.68, 70.80], for: port-27, group: port-leds, rel-pos: 42}
-        - {ref: std/qsfp-dd@1, id: port-28, at: [185.44, 51.38], group: qsfpdd-service, rel-pos: 28}
+        - {ref: std/qsfp-dd@1, id: port-28, at: [185.44, 51.38], group: qsfpdd-800g-service, rel-pos: 28}
         - {ref: common/led-dot@1, id: led-port-28, at: [182.49, 56.00], for: port-28, group: port-leds, rel-pos: 43}
-        - {ref: std/qsfp-dd@1, id: port-29, at: [185.44, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 29}
+        - {ref: std/qsfp-dd@1, id: port-29, at: [185.44, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 29}
         - {ref: common/led-dot@1, id: led-port-29, at: [182.49, 70.80], for: port-29, group: port-leds, rel-pos: 44}
-        - {ref: std/qsfp-dd@1, id: port-30, at: [212.26, 51.38], group: qsfpdd-service, rel-pos: 30}
+        - {ref: std/qsfp-dd@1, id: port-30, at: [212.26, 51.38], group: qsfpdd-800g-service, rel-pos: 30}
         - {ref: common/led-dot@1, id: led-port-30, at: [209.31, 56.00], for: port-30, group: port-leds, rel-pos: 45}
-        - {ref: std/qsfp-dd@1, id: port-31, at: [212.26, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 31}
+        - {ref: std/qsfp-dd@1, id: port-31, at: [212.26, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 31}
         - {ref: common/led-dot@1, id: led-port-31, at: [209.31, 70.80], for: port-31, group: port-leds, rel-pos: 46}
-        - {ref: std/qsfp-dd@1, id: port-32, at: [239.08, 51.38], group: qsfpdd-service, rel-pos: 32}
+        - {ref: std/qsfp-dd@1, id: port-32, at: [239.08, 51.38], group: qsfpdd-800g-service, rel-pos: 32}
         - {ref: common/led-dot@1, id: led-port-32, at: [236.13, 56.00], for: port-32, group: port-leds, rel-pos: 47}
-        - {ref: std/qsfp-dd@1, id: port-33, at: [239.08, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 33}
+        - {ref: std/qsfp-dd@1, id: port-33, at: [239.08, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 33}
         - {ref: common/led-dot@1, id: led-port-33, at: [236.13, 70.80], for: port-33, group: port-leds, rel-pos: 48}
-        - {ref: std/qsfp-dd@1, id: port-34, at: [265.90, 51.38], group: qsfpdd-service, rel-pos: 34}
+        - {ref: std/qsfp-dd@1, id: port-34, at: [265.90, 51.38], group: qsfpdd-800g-service, rel-pos: 34}
         - {ref: common/led-dot@1, id: led-port-34, at: [262.95, 56.00], for: port-34, group: port-leds, rel-pos: 49}
-        - {ref: std/qsfp-dd@1, id: port-35, at: [265.90, 66.22], rotate: 180, group: qsfpdd-service, rel-pos: 35}
+        - {ref: std/qsfp-dd@1, id: port-35, at: [265.90, 66.22], rotate: 180, group: qsfpdd-800g-service, rel-pos: 35}
         - {ref: common/led-dot@1, id: led-port-35, at: [262.95, 70.80], for: port-35, group: port-leds, rel-pos: 50}
-        - {ref: std/qsfp-dd@1, id: fabric-10, at: [293.43, 51.38], group: qsfpdd-fabric, rel-pos: 10}
+        - {ref: std/qsfp-dd@1, id: fabric-10, at: [293.43, 51.38], group: qsfpdd-800g-fabric, rel-pos: 10}
         - {ref: common/led-dot@1, id: led-fabric-10, at: [290.48, 56.00], for: fabric-10, group: port-leds, rel-pos: 51}
-        - {ref: std/qsfp-dd@1, id: fabric-11, at: [293.43, 66.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 11}
+        - {ref: std/qsfp-dd@1, id: fabric-11, at: [293.43, 66.22], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 11}
         - {ref: common/led-dot@1, id: led-fabric-11, at: [290.48, 70.80], for: fabric-11, group: port-leds, rel-pos: 52}
-        - {ref: std/qsfp-dd@1, id: fabric-12, at: [321.41, 51.38], group: qsfpdd-fabric, rel-pos: 12}
+        - {ref: std/qsfp-dd@1, id: fabric-12, at: [321.41, 51.38], group: qsfpdd-800g-fabric, rel-pos: 12}
         - {ref: common/led-dot@1, id: led-fabric-12, at: [318.46, 56.00], for: fabric-12, group: port-leds, rel-pos: 53}
-        - {ref: std/qsfp-dd@1, id: fabric-13, at: [321.41, 66.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 13}
+        - {ref: std/qsfp-dd@1, id: fabric-13, at: [321.41, 66.22], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 13}
         - {ref: common/led-dot@1, id: led-fabric-13, at: [318.46, 70.80], for: fabric-13, group: port-leds, rel-pos: 54}
-        - {ref: std/qsfp-dd@1, id: fabric-14, at: [349.39, 51.38], group: qsfpdd-fabric, rel-pos: 14}
+        - {ref: std/qsfp-dd@1, id: fabric-14, at: [349.39, 51.38], group: qsfpdd-800g-fabric, rel-pos: 14}
         - {ref: common/led-dot@1, id: led-fabric-14, at: [346.44, 56.00], for: fabric-14, group: port-leds, rel-pos: 55}
-        - {ref: std/qsfp-dd@1, id: fabric-15, at: [349.39, 66.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 15}
+        - {ref: std/qsfp-dd@1, id: fabric-15, at: [349.39, 66.22], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 15}
         - {ref: common/led-dot@1, id: led-fabric-15, at: [346.44, 70.80], for: fabric-15, group: port-leds, rel-pos: 56}
-        - {ref: std/qsfp-dd@1, id: fabric-16, at: [377.37, 51.38], group: qsfpdd-fabric, rel-pos: 16}
+        - {ref: std/qsfp-dd@1, id: fabric-16, at: [377.37, 51.38], group: qsfpdd-800g-fabric, rel-pos: 16}
         - {ref: common/led-dot@1, id: led-fabric-16, at: [374.42, 56.00], for: fabric-16, group: port-leds, rel-pos: 57}
-        - {ref: std/qsfp-dd@1, id: fabric-17, at: [377.37, 66.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 17}
+        - {ref: std/qsfp-dd@1, id: fabric-17, at: [377.37, 66.22], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 17}
         - {ref: common/led-dot@1, id: led-fabric-17, at: [374.42, 70.80], for: fabric-17, group: port-leds, rel-pos: 58}
-        - {ref: std/qsfp-dd@1, id: fabric-18, at: [405.35, 51.38], group: qsfpdd-fabric, rel-pos: 18}
+        - {ref: std/qsfp-dd@1, id: fabric-18, at: [405.35, 51.38], group: qsfpdd-800g-fabric, rel-pos: 18}
         - {ref: common/led-dot@1, id: led-fabric-18, at: [402.40, 56.00], for: fabric-18, group: port-leds, rel-pos: 59}
-        - {ref: std/qsfp-dd@1, id: fabric-19, at: [405.35, 66.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 19}
+        - {ref: std/qsfp-dd@1, id: fabric-19, at: [405.35, 66.22], rotate: 180, group: qsfpdd-800g-fabric, rel-pos: 19}
         - {ref: common/led-dot@1, id: led-fabric-19, at: [402.40, 70.80], for: fabric-19, group: port-leds, rel-pos: 60}
     regions:
       - {id: timing-block, at: [2.0, 33.0], size: {w: 15, h: 30}, label: Timing bulkheads,

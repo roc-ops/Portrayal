@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cor550
-version: 2.1.0
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: COR550
@@ -363,7 +363,7 @@ groups:
     role: traffic
     index-origin: 0
     attrs: {media: qsfp28, speed: 100g}
-  qsfpdd-fabric:
+  qsfpdd-400g-fabric:
     term: Port
     role: fabric
     index-origin: 0
@@ -935,19 +935,21 @@ views:
         rel-pos: 38}
       - {ref: edgecore/cor550-lane-leds@1, id: led-port-39, at: [365.2, 61.19], for: port-39, group: port-lamps,
         rel-pos: 39}
-      - {ref: std/qsfp-dd@1, id: fab-0, at: [135.3, 35.52], group: qsfpdd-fabric, rel-pos: 0}
-      - {ref: std/qsfp-dd@1, id: fab-1, at: [135.3, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 1}
-      - {ref: std/qsfp-dd@1, id: fab-2, at: [154.3, 35.52], group: qsfpdd-fabric, rel-pos: 2}
-      - {ref: std/qsfp-dd@1, id: fab-3, at: [154.3, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 3}
-      - {ref: std/qsfp-dd@1, id: fab-4, at: [180.43, 35.52], group: qsfpdd-fabric, rel-pos: 4}
-      - {ref: std/qsfp-dd@1, id: fab-5, at: [180.43, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 5}
-      - {ref: std/qsfp-dd@1, id: fab-6, at: [199.43, 35.52], group: qsfpdd-fabric, rel-pos: 6}
-      - {ref: std/qsfp-dd@1, id: fab-7, at: [199.43, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 7}
-      - {ref: std/qsfp-dd@1, id: fab-8, at: [225.56, 35.52], group: qsfpdd-fabric, rel-pos: 8}
-      - {ref: std/qsfp-dd@1, id: fab-9, at: [225.56, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 9}
-      - {ref: std/qsfp-dd@1, id: fab-10, at: [244.56, 35.52], group: qsfpdd-fabric, rel-pos: 10}
-      - {ref: std/qsfp-dd@1, id: fab-11, at: [244.56, 50.22], rotate: 180, group: qsfpdd-fabric, rel-pos: 11}
-      - {ref: std/qsfp-dd@1, id: fab-12, at: [269.58, 35.52], rotate: 180, group: qsfpdd-fabric, rel-pos: 12}
+      - {ref: std/qsfp-dd@1, id: fab-0, at: [135.3, 35.52], group: qsfpdd-400g-fabric, rel-pos: 0}
+      - {ref: std/qsfp-dd@1, id: fab-1, at: [135.3, 50.22], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 1}
+      - {ref: std/qsfp-dd@1, id: fab-2, at: [154.3, 35.52], group: qsfpdd-400g-fabric, rel-pos: 2}
+      - {ref: std/qsfp-dd@1, id: fab-3, at: [154.3, 50.22], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 3}
+      - {ref: std/qsfp-dd@1, id: fab-4, at: [180.43, 35.52], group: qsfpdd-400g-fabric, rel-pos: 4}
+      - {ref: std/qsfp-dd@1, id: fab-5, at: [180.43, 50.22], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 5}
+      - {ref: std/qsfp-dd@1, id: fab-6, at: [199.43, 35.52], group: qsfpdd-400g-fabric, rel-pos: 6}
+      - {ref: std/qsfp-dd@1, id: fab-7, at: [199.43, 50.22], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 7}
+      - {ref: std/qsfp-dd@1, id: fab-8, at: [225.56, 35.52], group: qsfpdd-400g-fabric, rel-pos: 8}
+      - {ref: std/qsfp-dd@1, id: fab-9, at: [225.56, 50.22], rotate: 180, group: qsfpdd-400g-fabric, rel-pos: 9}
+      - {ref: std/qsfp-dd@1, id: fab-10, at: [244.56, 35.52], group: qsfpdd-400g-fabric, rel-pos: 10}
+      - {ref: std/qsfp-dd@1, id: fab-11, at: [244.56, 50.22], rotate: 180, group: qsfpdd-400g-fabric,
+        rel-pos: 11}
+      - {ref: std/qsfp-dd@1, id: fab-12, at: [269.58, 35.52], rotate: 180, group: qsfpdd-400g-fabric,
+        rel-pos: 12}
       - {ref: common/led-dot@1, id: led-fab-a, at: [132.1, 37.96], group: port-lamps, rel-pos: 40, for: [
           fab-0, fab-2]}
       - {ref: common/led-dot@1, id: led-fab-b, at: [132.1, 41.08], group: port-lamps, rel-pos: 41, for: [

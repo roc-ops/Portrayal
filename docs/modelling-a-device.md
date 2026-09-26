@@ -384,7 +384,11 @@ Now populate. Reuse before building.
 
    Declare a group when you populate it, not before. One group per port
    family, named for the family: `sfp28`, `qsfp28`, `qsfpdd-400g`, with the
-   speed appended where the media token alone does not fix it. The block then
+   speed appended where the media token alone does not fix it. Where one
+   family serves two roles on the same face, the role follows the speed:
+   `qsfpdd-400g-service` and `qsfpdd-400g-fabric`. Fabric port groups take the
+   suffix on every distributed-chassis box, even where nothing else on the face
+   shares the family, so the name reads the same wherever it appears. The block then
    declares `attrs: {media, speed}` once (L22 checks that promise against the
    members). A speed is the highest native rate the port runs at, spelled from
    the closed set in `spec/schemas/speeds.yaml` (L110): a 10/100/1000 jack is

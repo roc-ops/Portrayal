@@ -26,6 +26,40 @@ from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noq
                     _connector_registry)
 from portrayal import libwalk  # noqa: E402
 from portrayal import optical, optical_ports  # noqa: E402
+from portrayal import facets as _facets  # noqa: E402
+
+
+def preview_box(data, lib):
+    """THE STANDALONE PREVIEW HOLDS THE HEAD. A part that declares `head:`
+    overhangs its face box on purpose (docs/pluggables-heads-design.md 4.2):
+    the copper SFP head stands 2.50 above and 2.15 below it, and the QSFP
+    generics' composed pull tab 1.07 above and 0.325 each side. The module
+    preview under dist/components had the part's own `size` as its root
+    viewBox, so it clipped all of it. For such a part the box is the union of
+    the size box, the head box and every composed part's box (its `at` plus
+    that part's size, turned as `rotate` and foreshortened as `on` say, by
+    facets.projected_box, the rule render.py draws by), in the part's own
+    coordinates, so its origin and every coordinate inside are unchanged.
+
+    None for a part without `head:`. It, and a part whose union is its size
+    box, keep `0 0 w h` byte for byte. The kit's 3D module view reads the
+    preview's viewBox as its face, so it crops back to the size box
+    (kit/relief.js toSizeBox)."""
+    head = data.get("head")
+    if not head:
+        return None
+    size = data["size"]
+    boxes = [(0.0, 0.0, float(size["w"]), float(size["h"]))]
+    hx, hy = head.get("at") or (0.0, 0.0)
+    boxes.append((float(hx), float(hy), float(hx) + float(head["size"]["w"]),
+                  float(hy) + float(head["size"]["h"])))
+    for part in data.get("parts") or []:
+        pc, _ = lib.resolve(part["ref"])
+        facet = _facets.facet_of(data, part["on"]) if part.get("on") else None
+        boxes.append(_facets.projected_box(part["at"], pc["size"]["w"], pc["size"]["h"],
+                                           part.get("rotate"), facet))
+    return (round(min(b[0] for b in boxes), 6), round(min(b[1] for b in boxes), 6),
+            round(max(b[2] for b in boxes), 6), round(max(b[3] for b in boxes), 6))
 
 
 def fibre_ends(data, load_ref):
@@ -228,6 +262,12 @@ def main():
             # Omitted when the contract declares none, like `cages`.
             if data.get("groups"):
                 entry["groups"] = data["groups"]
+            # THE HEAD (docs/pluggables-heads-design.md 4.2), verbatim from the
+            # contract: the box a pluggable occupies outside its cage, which a
+            # downstream tool that never builds 3D still needs. Omitted when
+            # the contract declares none, like `groups`.
+            if data.get("head"):
+                entry["head"] = data["head"]
             # WHERE IT MATES, in its own frame - the contract's own `mate.at`,
             # never a forwarded one: an occupant mates with its own point
             # (L11). A consumer seating it in a cage solves its `at` from this
@@ -242,8 +282,15 @@ def main():
                     continue
                 w, h = data["size"]["w"], data["size"]["h"]
                 svg = ET.Element(f"{{{SVG_NS}}}svg")
-                svg.set("width", f"{w}mm"); svg.set("height", f"{h}mm")
-                svg.set("viewBox", f"0 0 {w} {h}")
+                box = preview_box(data, lib)
+                if box is None or box == (0.0, 0.0, float(w), float(h)):
+                    svg.set("width", f"{w}mm"); svg.set("height", f"{h}mm")
+                    svg.set("viewBox", f"0 0 {w} {h}")
+                else:
+                    x0, y0, x1, y1 = box
+                    vw, vh = round(x1 - x0, 6), round(y1 - y0, 6)
+                    svg.set("width", f"{vw:g}mm"); svg.set("height", f"{vh:g}mm")
+                    svg.set("viewBox", f"{x0:g} {y0:g} {vw:g} {vh:g}")
                 style = ET.SubElement(svg, f"{{{SVG_NS}}}style")
                 palette = {}
                 g, _ = instance_group(lib, ref, data["name"], [0, 0], None, None,

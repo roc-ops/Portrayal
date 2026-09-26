@@ -93,7 +93,9 @@ DCIM its numbering. Freezing the vocabulary across devices is still open (#12).
 
 **One group per port family, named for the family.** `sfp28`, `qsfp28`,
 `qsfpdd-400g` - the media token, with the speed appended where the media alone does
-not fix it or where the device carries the family at two speeds. Not `sfp-ports`,
+not fix it or where the device carries the family at two speeds, and the role after
+that where one family serves two roles: `qsfpdd-400g-service` beside `qsfpdd-400g-fabric`.
+Every fabric port group carries the `-fabric` suffix. Not `sfp-ports`,
 which says only the cage; not `row-top`, which says only where it sits; and not
 `ports`, which says nothing. The name is what the tree folds under and what a marks
 selector reaches for, so it has to name the thing.

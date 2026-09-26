@@ -1303,7 +1303,7 @@ def _seat_nested_occupants(lib, contract, g, inst_id, path, mirror, occupants,
         pending.update(chained)
 
 
-def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None):
+def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_name="default", rotate=None, mirror=False, palette=None, skin_overrides=None, attr_overrides=None, path=None, resolved=None, depth=0, centre=None, inst_palette=None, z_inset=0.0, z_group_lift=0.0, seated=None, bay_attrs=None, occupants=None, occ_used=None, in_port=False, tilt=None, inherited_fields=None):
     contract, skins = lib.resolve(ref)
     comp_name = ref.split("/")[-1].split("@")[0]
     if skin_overrides and comp_name in skin_overrides:
@@ -1421,6 +1421,12 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
             g.set("data-round", "1")
     merged = {}
     merged.update(contract.get("attrs") or {})
+    # A HOST'S FIELD REACHES A COMPOSED PART THAT DECLARES THE SAME FIELD.
+    # kit/fields.js already paints every matching node inside a part's group at
+    # runtime, composed children included; the build now agrees, so a generic can
+    # compose a coloured part instead of redrawing it (pluggables-heads decision 4).
+    own_fields = contract.get("fields") or {}
+    merged.update({k: v for k, v in (inherited_fields or {}).items() if k in own_fields})
     merged.update(extra_attrs or {})
     merged.update(attrs or {})
     for k, v in data_attrs(merged).items():
@@ -1580,6 +1586,8 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                                part["at"], None,
                                group_merged_attrs(pgrp, part.get("attrs")), None, None,
                                skin_name=part.get("skin", "default"),
+                               inherited_fields={k: merged[k] for k in (contract.get("fields") or {})
+                                                 if k in merged},
                                rotate=part.get("rotate"), mirror=bool(part.get("mirror")),
                                # A LIFTED PART'S FEATURES ARE STILL MEASURED
                                # FROM THE PANEL. `lift` raises where a composed

@@ -73,7 +73,7 @@ def _cage(idx, view, cage_id):
 
 # --- the three real cages ------------------------------------------------
 
-def test_an_sfp28_cage_accepts_exactly_the_two_sfp_generics(tmp_path):
+def test_an_sfp28_cage_accepts_exactly_the_three_sfp_generics(tmp_path):
     idx = _build(CSR310, tmp_path)
     cage = _cage(idx, "front", "m1-0")
     assert cage["interface"] == "sfp"
@@ -82,15 +82,15 @@ def test_an_sfp28_cage_accepts_exactly_the_two_sfp_generics(tmp_path):
     # ORDER IS PART OF THE CONTRACT - generics first, alphabetical - so a
     # wrong-but-nonempty list (the failure mode an unordered `set()` compare
     # would hide) fails loudly here.
-    assert cage["accepts"] == ["generic/sfp-lc-simplex@2", "generic/sfp-lc@1"]
+    assert cage["accepts"] == ["generic/sfp-lc-simplex@2", "generic/sfp-lc@1", "generic/sfp-rj45@1"]
 
 
 def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(tmp_path):
     """The ONLY case in this library exercising `also-accepts`:
-    `generic/qsfp-lc@1` (`mates: qsfp`) reaches this cage through
+    `generic/qsfp-lc@2` (`mates: qsfp`) reaches this cage through
     `qsfp-dd`'s `also-accepts: [qsfp]`, not through its own family. If
     `also-accepts` were silently dropped, this list would still be
-    non-empty (`generic/qsfp-dd-lc@1` alone) - an easy defect to miss without
+    non-empty (`generic/qsfp-dd-lc@2` alone) - an easy defect to miss without
     an exact-list assertion, which is why this checks both members and the
     order together rather than membership alone."""
     idx = _build(DCS510, tmp_path)
@@ -98,7 +98,7 @@ def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(t
     assert cage["interface"] == "qsfp-dd"
     assert cage["media"] == "qsfp-dd"
     assert cage["group"] == "qsfpdd-400g"
-    assert cage["accepts"] == ["generic/qsfp-dd-lc@1", "generic/qsfp-lc@1"]
+    assert cage["accepts"] == ["generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
 
 
 def test_an_osfp_cage_accepts_nothing_but_says_so_explicitly(tmp_path):
@@ -157,7 +157,7 @@ def test_a_group_with_no_media_has_no_ceiling(tmp_path):
     cage = _cage(idx, "front", "m1-0")
     assert cage["group"] == "sfp28"
     assert cage["media"] is None
-    assert cage["accepts"] == ["generic/sfp-lc-simplex@2", "generic/sfp-lc@1"]
+    assert cage["accepts"] == ["generic/sfp-lc-simplex@2", "generic/sfp-lc@1", "generic/sfp-rj45@1"]
 
 
 # --- the configured occupant, read from the manifest, not hardcoded ------
@@ -254,7 +254,7 @@ def test_superseded_parts_are_real_but_excluded_from_every_candidate_pool():
     # interfaces ARE in the pool, so the exclusion is `superseded-by` at work
     # and not an empty table passing every check by having nothing to check.
     assert any(ref == "generic/sfp-lc@1" for ref, _c in candidates.get("sfp", []))
-    assert any(ref == "generic/qsfp-lc@1" for ref, _c in candidates.get("qsfp", []))
+    assert any(ref == "generic/qsfp-lc@2" for ref, _c in candidates.get("qsfp", []))
 
 
 def test_a_boot_never_reaches_an_accept_list():
@@ -325,11 +325,11 @@ def test_a_qsfp_shaped_cage_with_qsfp_dd_media_offers_the_qsfp_dd_optic(tmp_path
     assert cage["media"] == "qsfp-dd"
     assert cage["group"] == "qsfp-dd"
     # THE ACCEPT LIST FOLLOWS THE MEDIA, NOT THE APERTURE: the qsfp-dd
-    # family's own generic, plus generic/qsfp-lc@1 through qsfp-dd's
+    # family's own generic, plus generic/qsfp-lc@2 through qsfp-dd's
     # `also-accepts: [qsfp]` - exactly what a genuine std/qsfp-dd@1 cage with
     # this same media would offer (test_a_qsfp_dd_cage_accepts_its_own_generic_
     # and_the_also_accepted_qsfp_one, above, on edgecore/dcs510).
-    assert cage["accepts"] == ["generic/qsfp-dd-lc@1", "generic/qsfp-lc@1"]
+    assert cage["accepts"] == ["generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
 
 
 # --- final review F1: the media is read from the PLACEMENT first, then its --
@@ -367,7 +367,7 @@ def test_a_placement_declared_media_governs_when_the_group_declares_none(tmp_pat
     # READ FROM THE PLACEMENT. `null` here - the value a group-only read
     # published - is the defect this pins.
     assert cage["media"] == "qsfp-dd"
-    assert cage["accepts"] == ["generic/qsfp-dd-lc@1", "generic/qsfp-lc@1"]
+    assert cage["accepts"] == ["generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
 
 
 def test_the_probe_group_itself_declares_no_media(tmp_path):
@@ -391,7 +391,7 @@ def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
     cage = _cage(idx, "front", "port-1")
     assert cage["interface"] == "qsfp"
     assert cage["media"] == "qsfp28"
-    assert cage["accepts"] == ["generic/qsfp-lc@1"]
+    assert cage["accepts"] == ["generic/qsfp-lc@2"]
 
 
 # --- C2 Task 1: where an occupant mates, published --------------------------

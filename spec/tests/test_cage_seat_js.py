@@ -39,7 +39,7 @@ DIST = LIB / "dist"
 RENDER = SPEC / "tools/portrayal/render.py"
 SCRIPT = SPEC / "tests/js/cage-seat.mjs"
 
-QSFP, SFP = "generic/qsfp-lc@1", "generic/sfp-lc@1"
+QSFP, SFP = "generic/qsfp-lc@2", "generic/sfp-lc@1"
 
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 

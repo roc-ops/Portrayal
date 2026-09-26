@@ -1273,6 +1273,19 @@ export function squareFaceplate(text) {
     m => m.replace(/\s(?:rx|ry|stroke|stroke-width)="[^"]*"/g, ''));
 }
 
+// The root viewBox, width and height set to the box 0 0 w h (mm), when they
+// say anything else; the drawing inside is untouched.
+export function toSizeBox(text, w, h) {
+  return text.replace(/<svg\b[^>]*>/, tag => {
+    const vb = /\sviewBox="([^"]*)"/.exec(tag);
+    const n = vb ? vb[1].trim().split(/[\s,]+/).map(Number) : null;
+    if (n && n.length === 4 && n[0] === 0 && n[1] === 0 && n[2] === w && n[3] === h) return tag;
+    return tag.replace(/\sviewBox="[^"]*"/, ` viewBox="0 0 ${w} ${h}"`)
+              .replace(/\swidth="[^"]*"/, ` width="${w}mm"`)
+              .replace(/\sheight="[^"]*"/, ` height="${h}mm"`);
+  });
+}
+
 export async function svgCanvas(url, wmm, hmm, flipX = false, flipYax = false, scope) {
   const text = await svgSource(url, scope);
   const img = new Image();
@@ -2122,7 +2135,15 @@ export async function buildFaceRelief(F, ctx) {
     }
     const {cavities, outs, domes, vents, frus, subBodies = [], flatLifted = [],
            cleanText} = await extractRelief(src, ctx.scope, {back: !!ctx.back});
-    const faceText = squareFaceplate(cleanText);
+    // A MODULE PREVIEW IS THE PART'S SIZE BOX HERE. A part that declares
+    // `head:` publishes a preview whose viewBox also holds the head and its
+    // composed parts (components_index.preview_box), so the 2D module view
+    // shows the overhang. Every coordinate below reads the drawing from an
+    // origin of 0 0 and the face is the part's own w x h, so the 3D module
+    // view crops the drawing back to that box, as it was before the preview
+    // grew; the head's own relief is built from its node either way.
+    const faceText = F.sizeBox ? toSizeBox(squareFaceplate(cleanText), fw, fh)
+                               : squareFaceplate(cleanText);
     // THE DRAWING'S OWN SIZE WINS, because the face is not obliged to match the
     // plane it sits on. The R740xd's front is the 482.6 mm rack face - Dell
     // builds the flanges into the faceplate and puts the VGA, the power button

@@ -797,6 +797,26 @@
     "default"
    ]
   },
+  "head": {
+   "type": "object",
+   "additionalProperties": false,
+   "description": "the box a pluggable occupies OUTSIDE its cage - the section the MSAs call the enlarged section outside the cage. `at` is the top-left of its front outline in face coordinates (may be negative), `size.d` its length outside the cage. Checked by L121 against the registry entry the part `conforms:` to. docs/pluggables-heads-design.md",
+   "required": ["at", "size"],
+   "properties": {
+    "at": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+    "size": {"type": "object", "additionalProperties": false, "required": ["w", "h", "d"],
+             "properties": {"w": {"type": "number", "exclusiveMinimum": 0},
+                            "h": {"type": "number", "exclusiveMinimum": 0},
+                            "d": {"type": "number", "exclusiveMinimum": 0}}},
+    "size-confidence": {"$ref": "#/properties/size-confidence"},
+    "node": {"type": "string", "description": "the skin node that draws the head's front outline"},
+    "type": {"type": "integer", "enum": [1, 2], "description": "QSFP-DD module type; selects the registry's length-max"},
+    "exceeds": {"type": "array", "items": {"type": "object", "additionalProperties": false,
+                "required": ["dimension", "source"],
+                "properties": {"dimension": {"enum": ["width", "above", "below", "length"]},
+                               "source": {"type": "string", "minLength": 1}}}}
+   }
+  },
   "faces": {
    "type": "object",
    "additionalProperties": false,

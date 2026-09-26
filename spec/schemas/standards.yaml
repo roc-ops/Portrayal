@@ -1203,6 +1203,18 @@ standards:
       Table 4-3 with tolerances; docs/pluggables-generics-design.md section 2.
       Shared by SFP, SFP+ and SFP28 - the rate is electrical and never in this
       entry. SFF-8402 (SFP28) is not held and not needed: it inherits this envelope.
+    head:
+      w-max: 14.00
+      above-max: 2.10
+      below-max: 1.40
+      length-max: 10.00
+      length-kind: recommended
+      source: >-
+        SFF-8432 Rev 5.2a Table 4-3 and Note 4 ("maximum envelope outside of cage"):
+        D 14.00 MAX module width outside the cage, L 2.10 MAX top height outside, AK
+        1.40 MAX bottom height outside, A 10.00 RECOMMENDED MAX length outside, other
+        lengths application specific. Above and below are measured from the 8.55
+        module body (S).
   qsfp-module:
     registry: 'SFF-8661 Rev 2.5, Figure 5-1 Basic Views'
     w: 18.35
@@ -1230,6 +1242,15 @@ standards:
       Shared by QSFP+, QSFP28, QSFP56 and QSFP112 - one envelope, one cage
       interface (qsfp), the rate never in this entry. common/qsfp-transceiver@1's
       18.35 x 8.5 came from a vendor drawing; this is the MSA that drawing follows.
+    head:
+      w-max: 19.0
+      above-max: 3.4
+      below-max: 1.6
+      length-max: 20.0
+      source: >-
+        SFF-8661 Rev 2.5 Figure 5-1, Note 1 (the enlarged section of the transceiver
+        that extends outside the cage): 19 MAX wide, 3.4 MAX above the module top
+        (Note 6, including bail travel), 1.6 MAX below, 20 MAX long.
   qsfp-dd-module:
     registry: 'QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3, section 7.3, Figure 47 (Type 1 module) dimensioned per Figure 52 (Drawing of the QSFP-DD module) and Figure 53 (module end face)'
     w: 18.35
@@ -1249,6 +1270,16 @@ standards:
       the longer paddle card behind the same front cross-section. Figure 47
       itself is only an isometric outline with no callouts; the numbers are
       Figure 52/53's.
+    head:
+      w-max: 19.0
+      above-max: 3.4
+      below-max: 1.6
+      length-max: {type-1: 20.0, type-2: 35.0}
+      source: >-
+        QSFP-DD HW Rev 6.3 Figure 52 and Note 4 (dimensions controlling the module
+        outside the cage are maximums): 19 MAX wide, 3.4 MAX above, 1.6 MAX below,
+        20 MAX long for a Type 1 module and 35 MAX for Type 2 (section 7.1: Type 2
+        allows an additional extension outside the cage).
   lc-plug:
     registry: SENKO DS-LC-000004 Rev A, LC Plug Connector Drawing
     w: 5.58
