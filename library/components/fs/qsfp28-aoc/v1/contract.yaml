@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: qsfp28-aoc
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+profile: networking
+description: >-
+  FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode
+  ribbon fibre, up to 100 m over OM4. It composes generic/qsfp-cable@1 with the
+  generic's default fields; FS's own head is smaller than the generic's, which
+  provenance records as a known difference.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: Q28-AO
+  cable-kind: aoc
+  media: qsfp28
+  speed: 100g
+  power-draw-max-w: 3.5
+parts:
+  - {ref: generic/qsfp-cable@1, id: body, at: [0, 0]}
+provenance:
+  size: >-
+    borrowed - generic/qsfp-cable@1, the generic this wraps, whose own figures
+    are the qsfp-module registry entry's (SFF-8661 Rev 2.5 Figure 5-1). These are
+    the generic's numbers restated, not a new reading; the FS drawing gives the
+    same 18.35 wide and 8.50 high in the cage.
+  model: >-
+    datasheet - FS 100G QSFP28 Active Optical Cable (AOC) data sheet (2022),
+    Order Information, page 12: part numbers Q28-AO005 to Q28-AO30 by length.
+    One cable end stands for every length.
+  cable-kind: >-
+    datasheet - the data sheet's title and Description, page 2: an active
+    optical cable, VCSEL array over multimode ribbon fibre.
+  speed: >-
+    datasheet - page 1 Application (100G Ethernet) and page 3, 25.78125 Gb/s
+    per lane over four lanes.
+  media: >-
+    datasheet - page 1 and the Order Information table, QSFP28 to QSFP28.
+  head-difference: >-
+    KNOWN DIFFERENCE FROM THE GENERIC'S SHAPE. The data sheet's section VII
+    Mechanical Drawing, page 8, a 93 ppi raster read to about +/-0.5, draws a
+    SMALLER head than generic/qsfp-cable@1's: 16.3 outside the cage and 12.30
+    tall (end view), against the generic's 19.8 and 13.10; a slim boot about 33
+    long and 4.8 across, against the generic's 15 by 11.0; and a paddle pull tab
+    with no ring, where the generic draws a lanyard ending in a ring. The 68.70
+    on the top view runs from the plug front to the start of the boot. This
+    wrapper still composes the generic, by ruling, so it draws the generic's
+    head, boot and ringed strap, not FS's. None of these FS figures is carried
+    into the drawing.
+  cable-od: >-
+    NOT STATED - the data sheet gives no cable diameter (the Order Information
+    table names the jacket rating only), so the wrapper does not set cable-od
+    and generic/qsfp-cable@1's 6.9 default stands. That default is another
+    vendor's copper cable, not this fibre cable.
+  jacket-color: >-
+    NOT STATED - the Order Information table gives the cable jacket as OFNP, a
+    fire rating, and names no colour, so the generic's neutral #1c1c1c default
+    stands.
+  latch-color: >-
+    NOT STATED - no colour is given for the pull tab, so the generic's neutral
+    #6f6f6f default stands.
+  power: >-
+    datasheet - page 1 Features, "Maximum power consumption 3.5W", and page 3
+    Electrical Characteristics, Power Consumption each terminal, max 3.5 W. One
+    end of the cable, so one terminal. No ambient is given beyond the 0 to 70 C
+    operating case range.
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
