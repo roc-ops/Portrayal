@@ -4,8 +4,9 @@
 // components.json) and its skin is wired to: a `data-from` node whose TEXT is the
 // value, a `data-fill-from` node whose FILL is, a `data-stroke-from` node whose
 // STROKE is, a `data-stroke-derive` node whose stroke is a darker shade of it
-// (below). render.py's `fill_from_attrs` applies all four when a drawing is
-// built; this applies the same rule when a viewer changes one afterwards.
+// (below), a `data-r-from` node whose RADIUS is half of it (a diameter field).
+// render.py's `fill_from_attrs` applies all five when a drawing is built; this
+// applies the same rule when a viewer changes one afterwards.
 //
 // ONE HELPER FOR BOTH HALVES. shell.js paints the 2D drawing the page shows and
 // relief.js the documents the 3D scene rasterises; they were near-copies that
@@ -20,6 +21,8 @@
 //   colour   a value sets `fill` / `stroke`; an EMPTY value leaves what was
 //            drawn. A shape with no fill is not a quieter drawing, it is an
 //            invisible one (render.py says it the same way).
+//   size     a number sets `r` to half of it; empty or not a number leaves
+//            what was drawn, as colour does.
 //
 // AND AN EMPTY VALUE HAS TO PUT IT BACK, which the build never has to do. A build
 // paints once; a viewer sets red, then blue, then clears it, and "leave what was
@@ -55,7 +58,8 @@ export function strokeShade(colour) {
 }
 
 const esc = s => (typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : String(s));
-const STASH = {fill: 'data-portrayal-fill', stroke: 'data-portrayal-stroke'};
+const STASH = {fill: 'data-portrayal-fill', stroke: 'data-portrayal-stroke',
+               r: 'data-portrayal-r'};
 
 /** Set a colour attribute, remembering what was drawn the first time. */
 function paint(node, attr, value) {
@@ -97,18 +101,25 @@ export function paintFields(el, vals) {
     const shade = strokeShade(colour);
     for (const n of el.querySelectorAll(`[data-stroke-derive="${key}"]`))
       if (shade) paint(n, 'stroke', shade); else restore(n, 'stroke');
+    // A SIZE: `data-r-from` is a DIAMETER field and the circle takes half of it
+    // (docs/pluggables-cables-design.md section 4). Digits and a point only -
+    // render.py's R_FROM_NUMBER, so "1e1" or "inf" is junk in both - and junk,
+    // zero or empty puts back the radius the skin was drawn with.
+    const d = /^\s*[\d.]+\s*$/.test(val) ? Number(val) : NaN;
+    for (const n of el.querySelectorAll(`[data-r-from="${key}"]`))
+      if (Number.isFinite(d) && d > 0) paint(n, 'r', String(d / 2)); else restore(n, 'r');
   }
   return el;
 }
 
 /**
- * Put every colour this helper changed under `root` back to what was drawn.
+ * Put every colour and radius this helper changed under `root` back to what was drawn.
  * Text is not touched: a text node has no drawn value to return to that the
  * document does not already hold, and a part whose fields are cleared keeps
  * whatever its label last said, as it always has.
  */
 export function unpaintFields(root) {
-  for (const attr of ['fill', 'stroke']) {
+  for (const attr of ['fill', 'stroke', 'r']) {
     if (root.hasAttribute && root.hasAttribute(STASH[attr])) restore(root, attr);
     for (const n of root.querySelectorAll(`[${STASH[attr]}]`)) restore(n, attr);
   }
