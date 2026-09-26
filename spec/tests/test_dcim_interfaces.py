@@ -537,3 +537,70 @@ def test_no_device_type_names_one_port_twice():
             if dupes:
                 bad.append(f"{model}: {key} {sorted(dupes)}")
     assert not bad, "\n".join(bad)
+
+
+# --- a card's ports are named per bay ----------------------------------------
+#
+# Two identical cards in one chassis both exported `p0`, and a component name is
+# unique on its device in both targets, so the second install was rejected. A
+# card's names now carry `{module}` and a bay's position is its whole id; the
+# three tests below are the three halves of that, and the last one installs two
+# cards the way NetBox would and reads the answer against the drawing.
+
+def _module_exports():
+    for p in sorted((LIB / "exports").glob("*/module-types/*/*.yaml")):
+        yield p, yaml.safe_load(p.read_text()) or {}
+
+
+def _resolve(name, position):
+    """NetBox's rule for one bay level (dcim/utils.py resolve_module_placeholder
+    at 9bcfd739): a single `{module}` is the position of the bay the card is in.
+    Nautobot's `{module}` is the same (Module.render_component_names, f9cdca3d)."""
+    assert name.count(dx.MODULE_TOKEN) == 1, name
+    return name.replace(dx.MODULE_TOKEN, position)
+
+
+def test_every_module_port_name_is_bay_scoped():
+    bad, seen = [], 0
+    for p, d in _module_exports():
+        for key in dx.MODULE_PORT_KEYS:
+            for row in d.get(key) or []:
+                seen += 1
+                if not str(row["name"]).startswith(dx.module_scoped("")):
+                    bad.append(f"{p.parent.name}/{p.stem}: {key} {row['name']!r}")
+    assert seen, "no module-type port was read - run ./publish.sh --no-images"
+    assert not bad, "\n".join(bad[:20])
+
+
+def test_no_device_type_puts_two_bays_at_one_position():
+    """The position IS the `{module}` value. The trailing number alone put Fan 1,
+    PSU 1 and slot-1 all at `1` on 167 of 205 bayed devices."""
+    bad, seen = [], 0
+    for p in sorted((LIB / "exports").glob("*/device-types/*/*.yaml")):
+        bays = (yaml.safe_load(p.read_text()) or {}).get("module-bays") or []
+        seen += len(bays)
+        pos = [b["position"] for b in bays]
+        dupes = {x for x in pos if pos.count(x) > 1}
+        if dupes:
+            bad.append(f"{p.parent.parent.name}/{p.stem}: {sorted(dupes)}")
+    assert seen, "no module bay was read - run ./publish.sh --no-images"
+    assert not bad, "\n".join(bad)
+
+
+def test_two_identical_cards_install_as_the_drawing_names_them():
+    """The DCP-2 as drawn with a DCP-404 in each traffic slot - the chassis the
+    bug was worst on, its fan, first PSU and first slot all at position `1`.
+
+    Installed as NetBox would install them, the two cards' ports do not collide,
+    and every name is the drawing's path to that port with `/module/` taken out.
+    """
+    dev = yaml.safe_load((LIB / "exports/netbox/device-types/Smartoptics/DCP-2.yaml").read_text())
+    card = yaml.safe_load((LIB / "exports/netbox/module-types/Smartoptics/DCP-404.yaml").read_text())
+    face = (LIB / "dist/dcp-2.dcp-404-x2.front.svg").read_text()
+    positions = {b["name"]: b["position"] for b in dev["module-bays"]}
+    names = [_resolve(i["name"], positions[bay])
+             for bay in ("slot-1", "slot-2") for i in card["interfaces"]]
+    assert len(names) == len(set(names)) == 2 * len(card["interfaces"]) > 0
+    for n in names:
+        bay, port = n.split("/", 1)
+        assert f'data-path="{bay}/module/{port}"' in face, n

@@ -1438,7 +1438,11 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         for b in scoped(parts["bays"], cfg_name):
             name = (b["id"].replace("psu-", "PSU ").replace("fan-", "Fan ")
                     .replace("front-", "Front ").replace("rear-", "Rear "))
-            bay = {"name": name, "position": b["id"].rsplit("-", 1)[-1]}
+            # THE POSITION IS THE BAY'S WHOLE ID, because it is what a card's
+            # `{module}` token becomes (MODULE_TOKEN). The trailing number alone
+            # was one per KIND - Fan 1, PSU 1 and slot-1 all at `1` on 167 of
+            # 205 bayed devices - so two cards resolved to one port name.
+            bay = {"name": name, "position": b["id"]}
             # Neither library can express what a bay accepts as data yet, so it
             # goes where a person will still see it. Truncated to the 200 the
             # NetBox schema allows on a bay description.
@@ -1547,7 +1551,8 @@ def build(dev, cfg_name, cfg, overlay, dist=None, frus=None, label=None):
         out["power-ports"] = [powers[k] for k in sorted(powers)]
     if bays:
         out["module-bays"] = sorted(
-            bays, key=lambda b: (b["name"].split()[0], _num(b["position"])))
+            bays, key=lambda b: (b["name"].split()[0],
+                                 _num(b["position"].rsplit("-", 1)[-1])))
 
     body = comments_for(dev, cfg_name, cfg)
     if body:
@@ -1728,6 +1733,44 @@ def build_module(contract, manufacturer, load_ref=None, dropped=None,
     if body:
         out["comments"] = "\n".join(body).strip()
     return out
+
+
+# ONE CARD, ONE SET OF NAMES PER BAY. A module type named its ports by their ids
+# on the card - `p0` - so two identical cards in one chassis both made a `p0`,
+# and NetBox rejects the second install outright (a component name is unique on
+# its device). Both targets fill `{module}` with the position of the bay the card
+# sits in (NetBox dcim/utils.py resolve_module_placeholder at 9bcfd739; Nautobot
+# Module.render_component_names at f9cdca3d), and `build` makes that position the
+# bay id, so `slot-1`'s `p0` installs as `slot-1/p0` - the drawing's own path to
+# that port with `/module/` taken out, the spelling a configuration key uses.
+#
+# Applied where the document is WRITTEN, not in build_module: the token is a
+# fact about installing a type, and every reader of a built document - the
+# collision check, the tests - still sees the card's own ids.
+MODULE_TOKEN = "{module}"
+MODULE_PORT_KEYS = ("interfaces", "console-ports", "power-ports",
+                    "front-ports", "rear-ports")
+
+
+def module_scoped(name):
+    return f"{MODULE_TOKEN}/{name}"
+
+
+def tokenize_module(doc):
+    """`doc` with every component name bay-scoped. The fibre map is the other
+    document that names these ports, and `tokenize_fibre_map` keeps it in step."""
+    for key in MODULE_PORT_KEYS:
+        for row in doc.get(key) or []:
+            row["name"] = module_scoped(row["name"])
+    return doc
+
+
+def tokenize_fibre_map(m):
+    for row in m.get("rows") or []:
+        for key in ("front", "rear"):
+            if row.get(key) is not None:
+                row[key] = module_scoped(row[key])
+    return m
 
 
 def _num(s):
@@ -1961,6 +2004,7 @@ def export_modules(dist, root, images=None):
                                + ", ".join(stamps) + ".").strip()
         doc.pop("_stamp", None)
 
+        tokenize_module(doc)
         body_text = "---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False,
                                         width=100, default_flow_style=False)
         # `major` ARRIVES PREFIXED. It is the version directory's own name, so
@@ -1993,7 +2037,8 @@ def export_modules(dist, root, images=None):
         # model too, so it collided in exactly the same silence.
         view = contract_view(contract)
         if face_ref(view, "rear") and (contract.get("optical") or {}).get("paths"):
-            m = optical_ports.fibre_map(view, dist.component_by_ref, model)
+            m = tokenize_fibre_map(
+                optical_ports.fibre_map(view, dist.component_by_ref, model))
             d = Path(root) / "fibre-maps" / man
             d.mkdir(parents=True, exist_ok=True)
             (d / (model.replace("/", "-") + ".yaml")).write_text(

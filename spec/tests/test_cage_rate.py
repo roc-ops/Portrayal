@@ -497,7 +497,9 @@ def _nokia_export(kind, model):
     for p in sorted((LIB / f"exports/netbox/{kind}").glob("*/*.yaml")):
         d = yaml.safe_load(p.read_text()) or {}
         if d.get("model") == model:
-            return {i["name"]: i["type"] for i in d.get("interfaces") or []}
+            # A card's names are bay-scoped in the file; the test reads the card's.
+            return {i["name"].removeprefix(dx.module_scoped("")): i["type"]
+                    for i in d.get("interfaces") or []}
     pytest.fail(f"no {kind} export with model {model!r}")
 
 

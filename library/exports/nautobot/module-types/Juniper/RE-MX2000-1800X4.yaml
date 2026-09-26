@@ -4,19 +4,19 @@ model: RE-MX2000-1800X4
 description: Juniper MX2000 Control Board and Routing Engine (CB-RE) - a combined vertical FRU, one at
   each end of the upper cage
 console-ports:
-  - name: aux
+  - name: '{module}/aux'
     type: rj-45
-  - name: console
+  - name: '{module}/console'
     type: rj-45
-  - name: usb
+  - name: '{module}/usb'
     type: usb-a
 interfaces:
-  - name: bits
+  - name: '{module}/bits'
     type: other
     label: BITS
-  - name: mgmt
+  - name: '{module}/mgmt'
     type: 1000base-t
-  - name: sfp-mgmt
+  - name: '{module}/sfp-mgmt'
     type: 1000base-x-sfp
 comments: 'Juniper MX2000 Control Board and Routing Engine (CB-RE) - a combined vertical FRU, one at each
   end of the upper cage. Console, management and timing jacks run down the faceplate with the routing-engine
