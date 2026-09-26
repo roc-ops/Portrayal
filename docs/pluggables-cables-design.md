@@ -46,8 +46,8 @@ So there is ONE generic per form, and the kind lives on the vendor wrapper (deci
    which two ends belong together, and the run between them, are downstream data (umbrella
    decision 2).
 3. **The stub's diameter and colour are FIELDS**: `cable-od` (mm) and `jacket-color`, with
-   the strap's colour on `latch-color` as it is on the optics. A vendor wrapper sets them; a
-   placement may override them.
+   the strap's colour on `latch-color` as it is on the optics. A wrapper sets them; a
+   placement will override them once occupants take attrs (section 4).
 4. **A field may set a size, not only a colour.** A new skin binding, `data-r-from`, sets a
    circle's radius to half a field's value at build time. The kit applies it at runtime in 2D;
    3D takes the new size at the next load.
@@ -60,8 +60,9 @@ So there is ONE generic per form, and the kind lives on the vendor wrapper (deci
    2026-09-25).
 7. **The pull strap is drawn in each generic**, not as a shared part. It is not the optic's
    U-loop: a cable's strap lies on top of the cable and ends in a ring, where an optic's loop
-   straddles the face. Its length and width follow the form (about 43, 44, 40 and 50 past the
-   head), and one shared part could not carry three lengths without a second
+   straddles the face. Its length and width follow the form (about 43 for SFP, 61.5 for QSFP,
+   40 for QSFP-DD Type 2 and 50 for Type 1 past the head, each to the far end of its ring or
+   grip; section 3), and one shared part could not carry three lengths without a second
    geometry-from-field mechanism. It takes `latch-color` as the optics' latch does (decided
    2026-09-25; the draft planned a `common/cable-pull-strap` part).
 8. **Breakout cables are ends.** A QSFP-DD to 8 x SFP56 breakout is one `qsfp-dd-cable` end and
@@ -107,8 +108,10 @@ QSFP-DD bend figures show the resulting 45 is conservative.
 - **Relief:** the stub is a `cyl` feature. It stands off the strain relief's end (`lift`) for
   the stub length (`cyl`), and its radius comes from the node's box, which the binding has
   already sized.
-- **Lint:** a `cable-od` value in a component's `parts` attrs (a wrapper) is a number from 2
-  to 15 (L122). A device placement cannot set it yet: a configuration's occupants carry refs,
+- **Lint:** a `cable-od` value, on a field's default or in a component's `parts` attrs (a
+  wrapper), is a number from 2 to 15 (L122), written as plain ASCII digits and a point: the
+  one pattern the build, the kit and L122 all ask, so lint passes nothing the drawing would
+  leave undrawn. A device placement cannot set it yet: a configuration's occupants carry refs,
   not attrs, so the rule is component-scoped until occupants take attrs. A
   `data-r-from` names a declared field, which the existing field-wiring rule L73 is extended to
   check.
@@ -125,7 +128,7 @@ wrapper leaves the default and says so.
 | Molex 74752 SFP+ passive | `sfp-cable` | dac | de-latch pull BLACK; 10G; OD not stated (default kept, said) |
 | Amphenol NDAAFR QSFP28 passive | `qsfp-cable` | dac | 32AWG; lanyard Pantone 347C green; 100G |
 | Amphenol NJAAF3 QSFP56 linear active | `qsfp-cable` | acc | 30AWG, PVC black; lanyard Pantone 2718 blue; 200G |
-| FS 100G QSFP28 AOC | `qsfp-cable` | aoc | head per its own drawing if it differs; OD and jacket from the data sheet where stated |
+| FS 100G QSFP28 AOC | `qsfp-cable` | aoc | the generic's head; FS's smaller head, slim boot and ringless tab recorded in provenance; OD and jacket from the data sheet where stated |
 | Volex 400G QSFP-DD passive | `qsfp-dd-cable-type2` | dac | 30AWG OD 9.0 (26AWG 11.6 noted); 400G |
 | Credo HiWire SHIFT (QSFP-DD end) | `qsfp-dd-cable-type2` | aec | purple PVC jacket; 4P 30AWG 5.3 typical; "QSFP-DD type 2" |
 | Siemon QSFP28 100G AOC | `qsfp-cable` | aoc | OD 3.0 +/-0.15; 1.78 W per end; 850 nm |

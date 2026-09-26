@@ -209,8 +209,9 @@ the *published build*, not about the hardware.
 - A `cable-od` field (mm) on the cable ends, and a skin binding
   `data-r-from="<field>"` that sets a circle's radius to half a numeric field
   value, at build time and in the kit at runtime. Empty or absent leaves the
-  drawn radius. Lint L122 keeps a `cable-od` in a component's `parts` attrs
-  between 2 and 15.
+  drawn radius. Lint L122 keeps a `cable-od` (a field default or a composing
+  part's attrs) between 2 and 15, and accepts only the plain decimal number
+  the build and the kit read. Lint L73 counts `data-r-from` as wiring a field.
 - A `cable` connection point may sit `on` a `cyl` relief feature; it leaves
   from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
 
@@ -226,8 +227,9 @@ the *published build*, not about the hardware.
 - A component preview now also takes in the part's own relief features and
   the preview of each part it composes, so a wrapper's preview shows its
   generic's head, strap and ring.
-- `common/qsfp-pull-tab@2` (2.0.3) labels its photograph readings
-  `photo-measured`, not `measured`.
+- `common/qsfp-pull-tab@2` (2.0.3, 2.0.4) labels its photograph readings
+  `photo-measured`, not `measured`: the arm features and `size-confidence.h`
+  in 2.0.3, the `shape` provenance in 2.0.4.
 - The three component previews whose part declares an overhanging `head:`
   (`generic/sfp-rj45`, `generic/qsfp-lc`, `generic/qsfp-dd-lc`) are framed to
   include it, instead of clipping to the part's size box.
