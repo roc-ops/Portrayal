@@ -67,8 +67,8 @@ def _card_slot(comps, ref, cage):
 @pytest.mark.parametrize("ref,cage", [
     ("dell/ndc-4x-rj45-14g@1", "port-1"),
     ("dell/ndc-4x-rj45-14g@1", "port-4"),
-    ("cisco/a9k-rsp880-se@1", "mgt-lan-0"),
-    ("cisco/a9k-rsp880-se@1", "mgt-lan-1"),
+    ("cisco/a9k-rsp880-se@2", "mgt-lan-0"),
+    ("cisco/a9k-rsp880-se@2", "mgt-lan-1"),
 ])
 def test_a_named_card_port_accepts_the_plug(comps, ref, cage):
     slot = _card_slot(comps, ref, cage)

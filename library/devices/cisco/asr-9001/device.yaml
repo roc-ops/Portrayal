@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 2.0.2
+version: 3.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -91,43 +91,50 @@ provenance:
       asr-9001-rear is a plain louvred panel
   mpa-bays:
     note: >-
-      NOW BAYS - they were panel cutouts until cisco/a9k-mpa-blank@1 and cisco/a9k-mpa-20x1ge@1
-      landed, because device.schema.json requires accepts with minItems 1 and there was nothing
-      legal to accept. The conversion was mechanical, as the placeholder note promised: the
-      measurements did not move. THE BAYS ARE SIZED TO THE DRAWN OPENING, NOT TO THE MODULE, AND
-      THAT IS WHY THEY SURVIVED THE MODULE CHANGING. I measured these openings at 163.0 x 35.6 off
-      the front master. The module envelope they accept has since moved twice: first 33.81 x
-      160.02, read off the stencil shapesheet under the belief that no document dimensioned an
-      MPA, and now 34.54 x 161.80 x 170.18 from Cisco data sheet c78-735809 Table 3, which lists
-      every MPA by part number at 6.37 W x 1.36 H x 6.70 L and turns out to have been in the
-      intake the whole time. A 5 percent change in the part, and nothing here needed editing,
-      because a bay measured from the hole is not a restatement of the card. Had these bays been
-      set to the shapesheet figure they would now be 0.73 and 1.78 mm UNDER the module they
-      accept. Clearance against the sourced envelope is 1.20 along and 1.06 across - tighter than
-      against the old figure and more plausible for a module in a bay. NOTE THE CORROBORATION THIS
-      ENTRY USED TO CITE HAS BEEN RETRACTED. It claimed two independently derived figures
-      agreeing, one of them the shapesheet reading, and that reading was wrong. The check is now
-      stronger rather than weaker - a measured opening against a VENDOR-STATED envelope beats two
-      derivations - but the sentence had to be rewritten, and a provenance entry citing a number
-      that has since been withdrawn is exactly the stale-words failure this file spent the night
-      finding in other people's files. THE OPENING DISAGREEMENT IS RESOLVED AND THE GEOMETRY
-      DELIBERATELY DID NOT MOVE. asr9k-cards read these openings at 162.56 x 37.80 against my
-      163.0 x 35.6, and re-measured from scratch at an ear-inclusive 482.6 x 88.19 anchor that
-      passes gate 1 on aspect to 0.7 percent, getting 163.66 x 37.79. WE WERE EACH RIGHT ON ONE
-      AXIS: my along-card figure is 0.4 percent out against theirs at 0.7, and their across-card
-      figure is the better one against my 5.8. THE REASON IS A PROPERTY OF THE STENCIL AND IS THE
-      USEFUL PART. asr9k-cards measured this stencil against known standards across eight cards:
-      ALONG-card readings carry a mean absolute error of 3.2 percent and always run slightly
-      under, while ACROSS-card readings carry 14.7 percent with the sign scattering both ways -
-      the same SFP opening is drawn at 8.96, 9.24, 10.72 and 12.04 mm on four different masters.
-      IT IS A GOOD RULER ALONG A CARD AND A BAD ONE ACROSS IT, by a factor of four and a half. So
-      a 6 percent disagreement across and 0.4 percent along is exactly what its accuracy predicts,
-      and neither reading was careless. CITE THAT 14.7 PERCENT WITH ITS CAVEAT, WHICH asr9k-cards
-      RAISED AGAINST THEIR OWN STUDY. All seven samples are apertures of essentially ONE SIZE,
-      nominal 10.00 to 10.15 mm. Their absolute errors spread 0.72 to 2.06 mm and their percentage
-      errors spread 7.2 to 20.4 - the same 2.9-fold scatter expressed two ways - so with no size
-      leverage in the sample there is no way to tell whether the error SCALES with the feature or
-      is a fixed drawing tolerance. The honest quotation is '14.7 percent mean, measured on ~10 mm
+      SIZE IS THE MODULE AND OPENING IS THE HOLE, SINCE THE ASR 9000 CARD STANDARD. Each bay now
+      reserves 34.54 x 161.80, the envelope data sheet c78-735809 gives every MPA, and carries the
+      measured 163.0 x 35.6 as its `opening` - the split the ASR 9006 introduced for exactly this,
+      one field no longer doing two jobs. The reason is interchangeability: the eight A9K-MOD
+      carriers reserve 34.54 x 161.80 for the same MPAs, and a module that seats in bays of two
+      sizes draws larger in one host than in another (lint L123). Both bays keep their centres.
+      The measurement below is unchanged and still what the hole is drawn from. NOW BAYS - they
+      were panel cutouts until cisco/a9k-mpa-blank@1 and cisco/a9k-mpa-20x1ge@1 landed, because
+      device.schema.json requires accepts with minItems 1 and there was nothing legal to accept.
+      The conversion was mechanical, as the placeholder note promised: the measurements did not
+      move. THE BAYS WERE SIZED TO THE DRAWN OPENING, NOT TO THE MODULE, AND THAT IS WHY THEY
+      SURVIVED THE MODULE CHANGING. I measured these openings at 163.0 x 35.6 off the front
+      master. The module envelope they accept has since moved twice: first 33.81 x 160.02, read
+      off the stencil shapesheet under the belief that no document dimensioned an MPA, and now
+      34.54 x 161.80 x 170.18 from Cisco data sheet c78-735809 Table 3, which lists every MPA by
+      part number at 6.37 W x 1.36 H x 6.70 L and turns out to have been in the intake the whole
+      time. A 5 percent change in the part, and nothing here needed editing, because a bay
+      measured from the hole is not a restatement of the card. Had these bays been set to the
+      shapesheet figure they would now be 0.73 and 1.78 mm UNDER the module they accept. Clearance
+      against the sourced envelope is 1.20 along and 1.06 across - tighter than against the old
+      figure and more plausible for a module in a bay. NOTE THE CORROBORATION THIS ENTRY USED TO
+      CITE HAS BEEN RETRACTED. It claimed two independently derived figures agreeing, one of them
+      the shapesheet reading, and that reading was wrong. The check is now stronger rather than
+      weaker - a measured opening against a VENDOR-STATED envelope beats two derivations - but the
+      sentence had to be rewritten, and a provenance entry citing a number that has since been
+      withdrawn is exactly the stale-words failure this file spent the night finding in other
+      people's files. THE OPENING DISAGREEMENT IS RESOLVED AND THE GEOMETRY DELIBERATELY DID NOT
+      MOVE. asr9k-cards read these openings at 162.56 x 37.80 against my 163.0 x 35.6, and
+      re-measured from scratch at an ear-inclusive 482.6 x 88.19 anchor that passes gate 1 on
+      aspect to 0.7 percent, getting 163.66 x 37.79. WE WERE EACH RIGHT ON ONE AXIS: my along-card
+      figure is 0.4 percent out against theirs at 0.7, and their across-card figure is the better
+      one against my 5.8. THE REASON IS A PROPERTY OF THE STENCIL AND IS THE USEFUL PART.
+      asr9k-cards measured this stencil against known standards across eight cards: ALONG-card
+      readings carry a mean absolute error of 3.2 percent and always run slightly under, while
+      ACROSS-card readings carry 14.7 percent with the sign scattering both ways - the same SFP
+      opening is drawn at 8.96, 9.24, 10.72 and 12.04 mm on four different masters. IT IS A GOOD
+      RULER ALONG A CARD AND A BAD ONE ACROSS IT, by a factor of four and a half. So a 6 percent
+      disagreement across and 0.4 percent along is exactly what its accuracy predicts, and neither
+      reading was careless. CITE THAT 14.7 PERCENT WITH ITS CAVEAT, WHICH asr9k-cards RAISED
+      AGAINST THEIR OWN STUDY. All seven samples are apertures of essentially ONE SIZE, nominal
+      10.00 to 10.15 mm. Their absolute errors spread 0.72 to 2.06 mm and their percentage errors
+      spread 7.2 to 20.4 - the same 2.9-fold scatter expressed two ways - so with no size leverage
+      in the sample there is no way to tell whether the error SCALES with the feature or is a
+      fixed drawing tolerance. The honest quotation is '14.7 percent mean, measured on ~10 mm
       apertures', and it must not be carried onto a 37 mm opening in either direction: not as 14.7
       percent, which may be far too harsh, and not as the ~4 percent a fixed-tolerance reading
       would imply, which is unsupported. An earlier version of this entry quoted the bare 14.7 as
@@ -444,8 +451,8 @@ views:
       - {at: [310.7, 67.68], text: 'SYNC', for: led-sync}
     components:
       bays:
-        - {id: mpa-0, at: [20.0, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-1x40ge@1, cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-2x10ge@1, cisco/a9k-mpa-4x10ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 0, default: cisco/a9k-mpa-blank@1}
-        - {id: mpa-1, at: [208.9, 2.6], size: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-1x40ge@1, cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-2x10ge@1, cisco/a9k-mpa-4x10ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 1, default: cisco/a9k-mpa-blank@1}
+        - {id: mpa-0, at: [20.6, 3.13], size: {w: 161.8, h: 34.54}, opening: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-1x40ge@1, cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-2x10ge@1, cisco/a9k-mpa-4x10ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 0, default: cisco/a9k-mpa-blank@1}
+        - {id: mpa-1, at: [209.5, 3.13], size: {w: 161.8, h: 34.54}, opening: {w: 163.0, h: 35.6}, rotate: 90, accepts: [cisco/a9k-mpa-1x40ge@1, cisco/a9k-mpa-20x1ge@1, cisco/a9k-mpa-2x10ge@1, cisco/a9k-mpa-4x10ge@1, cisco/a9k-mpa-blank@1], group: mpa-bays, rel-pos: 1, default: cisco/a9k-mpa-blank@1}
         - {id: psu-0, at: [10.3, 45.0], size: {w: 56.6, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 0, default: cisco/a9k-750w-ac@1}
         - {id: psu-1, at: [72.0, 45.0], size: {w: 56.8, h: 41.0}, accepts: [cisco/a9k-750w-ac@1, cisco/a9k-750w-dc@1], group: power-modules, rel-pos: 1, default: cisco/a9k-750w-ac@1}
         - {id: fan-0, at: [387.1, 0.0], size: {w: 54.86, h: 88.2}, accepts: [cisco/asr-9001-fan@1], group: cooling, rel-pos: 0, default: cisco/asr-9001-fan@1}
