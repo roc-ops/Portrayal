@@ -97,7 +97,7 @@ def test_every_riser_slot_says_what_it_is():
     """A card feature reads `slot:`: connector, lanes, height, length. Every
     wired slot on every R740xd riser carries it, agreeing with its prose."""
     wired = 0
-    for p in sorted(LIB.glob("components/dell/riser-[123][a-f]-14g/v1/contract.yaml")):
+    for p in sorted(LIB.glob("components/dell/riser-[123][a-f]-14g/v*/contract.yaml")):
         c = yaml.safe_load(p.read_text())
         for bid, b in c["bays"].items():
             prose = c["attrs"].get(bid, "")

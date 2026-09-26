@@ -3559,10 +3559,15 @@ def lint_component_collisions(path, data, lib_roots):
         w, h = size
         facet = facets.facet_of(data, q["on"]) if q.get("on") else None
         x0, y0, x1, y1 = facets.projected_box(q["at"], w, h, q.get("rotate"), facet)
-        boxes.append((q.get("id", "?"), x0, y0, x1, y1))
+        boxes.append((q.get("id", "?"), x0, y0, x1, y1, bool(q.get("behind"))))
 
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
+            # A PART COMPOSED `behind` IS A BACKING, and what is drawn over it
+            # is layering the key declares: a PCIe card's cages sit wholly on
+            # its bracket. Two backings on each other are still a collision.
+            if a[5] != b[5]:
+                continue
             ox = min(a[3], b[3]) - max(a[1], b[1])
             oy = min(a[4], b[4]) - max(a[2], b[2])
             if ox <= 0 or oy <= 0:
