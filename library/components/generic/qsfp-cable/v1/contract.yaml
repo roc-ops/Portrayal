@@ -1,0 +1,143 @@
+format: 1
+kind: component
+name: qsfp-cable
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp
+conforms: qsfp-module
+profile: networking
+description: >-
+  A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct
+  attach, active copper and active optical cable end has, standing for all of
+  them. The body in the cage is the QSFP envelope; outside it stand the diecast
+  head, a strain relief, a short straight stub of cable and a pull strap lying
+  on the cable and ending in a ring. The cable diameter and the jacket and
+  strap colours are fields. The kind of cable, its rate and its length belong
+  on the vendor wrapper (docs/pluggables-cables-design.md).
+size: {w: 18.35, h: 8.5, d: 52.4}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, -3.2]
+  size: {w: 18.35, h: 13.10, d: 19.8}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: head
+attrs: {power-absent: not-applicable, form-factor: qsfp, face: cable}
+fields:
+  cable-od:
+    label: Cable outside diameter
+    type: number
+    unit: mm
+    default: 6.9
+  jacket-color:
+    label: Jacket colour
+    type: text
+    default: '#1c1c1c'
+  latch-color:
+    label: Strap colour
+    type: text
+    default: '#6f6f6f'
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-module, SFF-8661 Rev 2.5 Figure 5-1 (18.35 wide, 8.50 high,
+    52.4 REF inserted length). FCI 10121178 rev J sheet 1 gives the datum-D
+    offset 2X 4.20 from the plug rear end, and 48.2 + 4.20 = 52.4 agrees.
+  head: >-
+    drawing - FCI 10121178 rev J sheet 1 and Amphenol C-NDAAFR-0099 and
+    C-NDAAXF-0099. WIDTH 18.35: FCI (2X 18.35) plan view and Amphenol 18.35
+    REF, along the whole head. HEIGHT 13.10: FCI 2X (13.10), from the top of
+    the latch-release block (the zinc slider at the rear of the head) down to
+    the backshell bottom face. The FCI (12.76) is the same bottom face to the
+    pull tab outer face, and is not the head. LENGTH 19.8: 72.20 (FCI) and
+    72.2 REF (Amphenol) both run from the plug rear end to the diecast rear
+    face, and 72.2 less the 52.4 REF in-cage body is 19.8, inside SFF-8661
+    20 MAX. THE SPLIT is estimated: 3.2 above the body on the tab side and 1.4
+    below, scaled in the FCI P2 side view on (13.10) and (8.40), which agree
+    within 0.7 percent. The Amphenol side views corroborate (3.18 to 3.26
+    above, 1.2 to 1.27 below). Both are inside the SFF-8661 head envelope
+    (3.4 MAX above, 1.6 MAX below, 19 MAX wide), so nothing is exceeded.
+  relief-boot: >-
+    estimated - the FCI 10121178 strain relief (a brass collar and a ribbed
+    boot), scaled on 72.20 in both side views: 14.9 long from the diecast
+    rear, 11.1 across at the head end tapering to 10.0. Taken as a cylinder 15
+    long and 11.0 across. The Amphenol C-NDAAFR boot scales 16.7 long and 10.3
+    across; C-NDAAXF draws no ribbed boot. Centred on the body axis: FCI
+    offsets it 0.2, below the reading error, and the drawings disagree.
+  stub: >-
+    drawing - the straight run of cable before the first allowed bend. The
+    Amphenol C-NDAAFR-0099 view RADIUS FROM END OF DIECAST gives 45 MIN
+    required to bend the cable, measured from the diecast rear (the head back)
+    and including the boot. The stub therefore starts at the boot end (19.8 +
+    15 = 34.8 from the cage face) and runs 30, ending 45 behind the head back.
+    The END is the drawing's; its 30 is that 45 less the estimated 15 boot, so
+    the stub's start (lift 34.8) and length carry the boot's estimate. The bend
+    dimensions in that view are not to scale, and no length was scaled off
+    them.
+  cable-od: >-
+    datasheet - the Mellanox (NVIDIA) MCP1600-Cxxx 100GbE QSFP28 direct
+    attach copper cable product brief (53993PB Rev 1.72), Table 4 (Cable
+    Mechanical Specifications): 6.9 +/-0.3 for 30AWG PVC. Another product's
+    figure, taken as the generic's default; a wrapper sets the diameter its own
+    product document states.
+  strap: >-
+    drawing and estimated - the Amphenol lanyard on C-NDAAFR-0099 and
+    C-NJAAF3-0099: a strap 7.75 wide and 0.8 thick (estimated, scaled on 18.35
+    and 8.5) lying on top of the cable on the tab side, ending in a closed
+    ring about 17.8 across with a 12.7 hole, 1.65 thick (estimated, scaled on
+    18.35). The reach is 61.5 REF from the diecast rear to the ring far edge
+    (drawing), so the ring spans 43.7 to 61.5 behind the head back. Its
+    underside lies on the boot top. C-NDAAXF-0099 gives a 75 REF lanyard in
+    the same frame, which a wrapper may carry. The strap's height departs
+    from the scaled Amphenol 0.6 to 1.4 above the body top: it is raised to
+    1.25 to 2.05, its underside on the boot's top, so the boot does not pierce
+    it (estimated). The FCI
+    10121178 pull tab is a
+    ringless blade and carries no dimension; its 50mm +/-15mm callout is the
+    label position (sheet 4 note 5), not the tab.
+  strap-colour: >-
+    a FIELD, with the neutral grey default decided for the optic pull tabs in
+    #473. A wrapper sets the colour its own lanyard has. The outline follows
+    the fill through data-stroke-derive.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC: a passive direct
+    attach end draws almost nothing and an active optical end a few watts, and
+    one drawing is both. The figure belongs on the wrapper. L27 exempts by
+    `power-absent` and this sentence is why.
+elements: {}
+relief:
+  features:
+    - node: head
+      out: 19.8
+      color: '#9aa0a6'
+      confidence: drawing
+      source: FCI 10121178 rev J 72.20 and Amphenol C-NDAAFR-0099 72.2 REF, less the 52.4 REF in-cage body
+    - node: relief-boot
+      lift: 19.8
+      cyl: 15
+      color: '#2b2b2b'
+      confidence: estimated
+      source: FCI 10121178 rev J strain relief, 14.9 long and 11.1 to 10.0 across, scaled on 72.20
+    - node: stub
+      lift: 34.8
+      cyl: 30
+      color: '#1c1c1c'
+      confidence: drawing
+      source: Amphenol C-NDAAFR-0099, 45 MIN required to bend, measured from the diecast rear; the stub runs from the boot end to that line
+    - node: strap
+      lift: 19.8
+      out: 63.5
+      color: '#6f6f6f'
+      confidence: estimated
+      source: Amphenol C-NDAAFR-0099 lanyard, 61.5 REF from the diecast rear to the ring far edge, less the ring 17.8 scaled on 18.35
+    - node: strap-ring
+      lift: 63.5
+      out: 81.3
+      color: '#6f6f6f'
+      confidence: estimated
+      source: Amphenol C-NDAAFR-0099 lanyard ring, far edge at 61.5 REF behind the diecast rear; 17.8 across scaled on 18.35
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  cable: {at: [9.175, 4.25], direction: front, 'on': stub}
+skins: [default]

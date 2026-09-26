@@ -490,6 +490,16 @@ def stroke_shade(colour):
         for i in (0, 2, 4))
 
 
+# WHAT `data-r-from` ACCEPTS AS A NUMBER: ASCII digits and a point, with ASCII
+# blanks around them. kit/fields.js holds the same pattern character for
+# character, and lint L122 asks it before its range check, so the three accept
+# one set. It is spelled out rather than `\s` and `\d` because those differ
+# between the two languages: Python's are Unicode (it read Arabic-Indic digits
+# as a number and took the \x1c separator as blank), JS's `\d` is ASCII
+# (spec/tests/test_r_from_binding.py holds all three to one answer).
+R_FROM_NUMBER = re.compile(r"[ \t\n\r]*[0-9.]+[ \t\n\r]*")
+
+
 def fill_from_attrs(root, attrs):
     """Fill skin nodes marked `data-from` or `data-fill-from` from this
     instance's merged attrs.
@@ -582,6 +592,33 @@ def fill_from_attrs(root, attrs):
         p = parents.get(target)
         if p is not None:
             p.remove(target)
+
+    # A FIELD MAY SET A SIZE. `data-r-from` names a numeric field whose value is a
+    # DIAMETER; the circle takes half of it as its radius. Empty, absent or not a
+    # number leaves the radius the skin was drawn with - the same rule colour
+    # follows - so the skin stays a valid standalone drawing
+    # (docs/pluggables-cables-design.md section 4).
+    #
+    # A NUMBER IS DIGITS AND A POINT, and kit/fields.js asks the same question the
+    # same way: float() alone would take "1e1", "inf" and "1_0", which the kit
+    # reads differently, and a stub sized in one view and not the other is the
+    # drift one rule exists to prevent. The radius is written the way JS's
+    # String() writes a number - shortest round trip, no trailing ".0" - so both
+    # halves put the same text in `r` (spec/tests/test_r_from_binding.py).
+    for node in root.iter():
+        key = node.get("data-r-from")
+        if key is None:
+            continue
+        v = attrs.get(key)
+        if v is None or isinstance(v, bool) or not R_FROM_NUMBER.fullmatch(str(v)):
+            continue
+        try:
+            d = float(str(v).strip())
+        except ValueError:
+            continue
+        if math.isfinite(d) and d > 0:
+            r = d / 2
+            node.set("r", str(int(r)) if r.is_integer() else repr(r))
 
 
 def _inset_feature(feat, back, group_lift=0.0):
@@ -1930,9 +1967,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # relief.js's liftOf resolves a feature - sum data-z-lift up the ancestor
     # chain and apply the group transforms - and finds nothing to add for
     # protrusion on that walk. A point that sits `on:` a relief feature says so
-    # with `data-cp-on` instead, naming the node whose absolute data-z-out is
-    # its z - the different mechanism kit/relief.js's note on
-    # resolveCablePoint asked for.
+    # with `data-cp-on` instead, naming the node whose rear is its z - the
+    # node's absolute data-z-out, or for a `cyl` feature its far end, the
+    # node's summed data-z-lift plus its data-z-cyl - the different mechanism
+    # kit/relief.js's note on resolveCablePoint asked for.
     #
     # EMITTED LAST, DELIBERATELY, AFTER EVERY `behind_at` INSERTION ABOVE HAS
     # RUN. The `behind_at = 1` initialisation above, with its "after the
@@ -1956,9 +1994,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # THE FEATURE THE POINT SITS ON, BY ITS COMPILED ID (pluggables D). A
         # point `on:` a relief feature is on that feature's far face, not on
         # this part's own face - a cable leaves a boot at the boot's rear end.
-        # The feature's data-z-out is where relief.js builds that face, so
-        # naming the node lets cablePoints read the one number the box is
-        # built from rather than re-deriving it. Not a data-z-* key: the
+        # The feature's data-z-out is where relief.js builds that face (for a
+        # `cyl`, its summed data-z-lift plus data-z-cyl), so naming the node
+        # lets cablePoints read the numbers the solid is built from rather
+        # than re-deriving them. Not a data-z-* key: the
         # marker must stay invisible to every relief query (see above).
         if cp.get("on"):
             mk.set("data-cp-on", f"{inst_id}--{cp['on']}")
@@ -4050,6 +4089,62 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
 COMPONENT_CAGE_DROPS = ("occupant", "group", "rel-pos")
 
 
+def component_presents(ref, lib, families, candidates, connectors=None):
+    """WHAT A COMPONENT OFFERS THE NEXT TIER WHEN IT IS ITSELF SEATED (#611),
+    in its own frame, or None.
+
+    A seated occupant that presents an interface is a slot at its OWN key: a
+    generic/lc-plug@2 in `port-4` presents `lc-plug` at its boot point, and
+    the build seats common/lc-boot@1 there under the chained key
+    `port-4-occupant`; a generic/sfp-lc-simplex@2 forwards its one bore and
+    takes a plug under `xg0-occupant` (manifest.slot_in_slot_at - its bore is
+    not a second slot). The build resolves that through `presented_interface`
+    on the host (the `mate-to` path), for ANY interface something mates -
+    `lc-plug` is registered as neither a cage family nor a connector slot,
+    because an LC bore takes a plug and never a boot. A consumer seating
+    through slots had nothing to read it from, so the chained tier was
+    build-only.
+
+    ONLY A PART THAT MATES INTO SOMETHING is ever a seat, so only one carries
+    this: a card in a bay or a port wrapper on a face presents its jack as a
+    slot of whatever places it, which component_cages and cage_entries
+    already publish.
+
+    THE SLOT ENTRY'S OWN SHAPE (`_slot_dict`), for a placement at the origin
+    unturned: `mate` is the presented point in the component's frame and
+    `lift` its presented `out` - the two numbers the build's mate-to
+    resolution seats on - and `accepts` every part that mates the interface.
+    A consumer carries `mate` through the seat's own placement and adds the
+    seat's lift, as the build stacks a chain.
+    """
+    contract, _skins = lib.resolve(ref)
+    if not contract.get("mates"):
+        return None
+
+    def _resolve(r):
+        try:
+            return lib.resolve(r)[0]
+        except Exception:
+            return None
+
+    interface, mate_at, lift = presented_interface(contract, _resolve)
+    if not interface or mate_at is None:
+        return None
+    if connectors is None:
+        connectors = _connector_registry()
+    kind = "cage" if _family_by_interface(families, interface) else "connector"
+    refs = sorted({r for r, _c in candidates.get(interface, [])})
+    if not refs:
+        return None        # a slot nothing in the library can fill offers nothing
+    entry = _slot_dict({"id": "", "at": [0.0, 0.0]}, contract, interface, None, refs,
+                       None, mate_at, lift, 0.0, None, kind,
+                       spanned_slots(contract, _resolve, connectors),
+                       spanning_axis(contract, _resolve, connectors))
+    for k in ("id", "at", "group", "rel-pos", "occupant", "occupant-attrs"):
+        entry.pop(k, None)
+    return entry
+
+
 def _forwarded_part(contract, lib):
     """(part, interface) for the `parts:` entry whose aperture `contract`
     presents AS ITS OWN, or None when it presents its own interface or
@@ -4075,7 +4170,8 @@ def _forwarded_part(contract, lib):
     return cores[0] if len(cores) == 1 else None
 
 
-def component_cages(contract, lib, families, candidates, connectors=None, face=False):
+def component_cages(contract, lib, families, candidates, connectors=None, face=False,
+                    module=False):
     """A component's OWN cages, in its own frame: one entry per `parts:` entry
     that presents a pluggable interface, by the same core as a device view's
     `cages[]` (cage_entry). components_index.py publishes it on the
@@ -4135,11 +4231,19 @@ def component_cages(contract, lib, families, candidates, connectors=None, face=F
     else - would publish its only slot nowhere, while the two- and three-MTP
     backs published theirs. On a face the bulkhead is published as its own
     slot, under the id the build keys it by (`bay-1/mtp`).
+
+    A MODULE IN A BAY FORWARDS NOTHING EITHER (#610). `module` is True for a
+    component some bay can hold. The build never treats a module in a bay as a
+    placed slot (manifest.slot_in_slot_at), so a card composing exactly one
+    interface-bearing part - a supervisor's lone console jack - keeps it as its
+    own slot, keyed `front-6/console` as the build keys it. An OCCUPANT still
+    forwards: an optic with one bore is a slot at its own key, and its bore is
+    not a second one.
     """
     if connectors is None:
         connectors = _connector_registry()
     fwd = _forwarded_part(contract, lib)
-    forwarded = (fwd[0] if not face and fwd and fwd[1] in (connectors or {})
+    forwarded = (fwd[0] if not face and not module and fwd and fwd[1] in (connectors or {})
                  and _family_by_interface(families, fwd[1]) is None else None)
     out = []
     groups = contract.get("groups") or {}

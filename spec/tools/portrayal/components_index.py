@@ -12,6 +12,7 @@ TWO index files come out of here, not one:
 """
 import argparse
 import json
+import math
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -21,7 +22,7 @@ from portrayal.manifest import load_yaml
 
 from portrayal.faces import DIRECTIONS, face_ref  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
-                    seq_css_name, state_rule, component_cages,
+                    seq_css_name, state_rule, component_cages, component_presents,
                     _pluggable_families, _pluggable_candidates,
                     _connector_registry)
 from portrayal import libwalk  # noqa: E402
@@ -29,37 +30,126 @@ from portrayal import optical, optical_ports  # noqa: E402
 from portrayal import facets as _facets  # noqa: E402
 
 
-def preview_box(data, lib):
+def preview_box(data, lib, skin="default", skin_dir=None, _seen=()):
     """THE STANDALONE PREVIEW HOLDS THE HEAD. A part that declares `head:`
     overhangs its face box on purpose (docs/pluggables-heads-design.md 4.2):
     the copper SFP head stands 2.50 above and 2.15 below it, and the QSFP
     generics' composed pull tab 1.07 above and 0.325 each side. The module
     preview under dist/components had the part's own `size` as its root
     viewBox, so it clipped all of it. For such a part the box is the union of
-    the size box, the head box and every composed part's box (its `at` plus
-    that part's size, turned as `rotate` and foreshortened as `on` say, by
-    facets.projected_box, the rule render.py draws by), in the part's own
-    coordinates, so its origin and every coordinate inside are unchanged.
+    the size box, the head box, the art box of every one of its OWN relief
+    features' skin nodes (a cable end's strap ring can stand above its head),
+    and every composed part's box, in the part's own coordinates, so its origin
+    and every coordinate inside are unchanged.
 
-    None for a part without `head:`. It, and a part whose union is its size
-    box, keep `0 0 w h` byte for byte. The kit's 3D module view reads the
-    preview's viewBox as its face, so it crops back to the size box
-    (kit/relief.js toSizeBox)."""
-    head = data.get("head")
-    if not head:
-        return None
+    A COMPOSED PART CONTRIBUTES ITS OWN PREVIEW BOX, not its bare size: the
+    same union, recursively, placed as render.py places it (its `at`, turned
+    about its size centre as `rotate` says, mirrored as `mirror` says, and
+    foreshortened as `on` says, the order facets.projected_box states). A
+    part with no preview box of its own contributes its size box, exactly as
+    before. So a vendor wrapper, which composes its generic whole and declares
+    no `head:` itself, holds the generic's overhangs too.
+
+    None for a part that neither declares `head:` nor composes a part with a
+    preview box. It, and a part whose union is its size box, keep `0 0 w h`
+    byte for byte. The kit's 3D module view reads the preview's viewBox as its
+    face, so it crops back to the size box (kit/relief.js toSizeBox).
+
+    `skin_dir` is the part's own skins folder; without it the own-feature
+    boxes are not read (a composed part's comes from lib.resolve)."""
     size = data["size"]
-    boxes = [(0.0, 0.0, float(size["w"]), float(size["h"]))]
-    hx, hy = head.get("at") or (0.0, 0.0)
-    boxes.append((float(hx), float(hy), float(hx) + float(head["size"]["w"]),
-                  float(hy) + float(head["size"]["h"])))
+    sw, sh = float(size["w"]), float(size["h"])
+    boxes = [(0.0, 0.0, sw, sh)]
+    head = data.get("head")
+    if head:
+        hx, hy = head.get("at") or (0.0, 0.0)
+        boxes.append((float(hx), float(hy), float(hx) + float(head["size"]["w"]),
+                      float(hy) + float(head["size"]["h"])))
+        boxes.extend(_feature_boxes(data, skin, skin_dir))
+    composed = False
     for part in data.get("parts") or []:
-        pc, _ = lib.resolve(part["ref"])
+        if part["ref"] in _seen:
+            raise ValueError(f"preview_box: {part['ref']} composes itself")
+        pc, pdir = lib.resolve(part["ref"])
+        inner = preview_box(pc, lib, part.get("skin", "default"), pdir,
+                            _seen + (part["ref"],))
+        composed = composed or inner is not None
         facet = _facets.facet_of(data, part["on"]) if part.get("on") else None
-        boxes.append(_facets.projected_box(part["at"], pc["size"]["w"], pc["size"]["h"],
-                                           part.get("rotate"), facet))
+        boxes.append(_placed_box(part["at"], pc["size"], inner, part.get("rotate"),
+                                 part.get("mirror"), facet))
+    if not head and not composed:
+        return None
     return (round(min(b[0] for b in boxes), 6), round(min(b[1] for b in boxes), 6),
             round(max(b[2] for b in boxes), 6), round(max(b[3] for b in boxes), 6))
+
+
+def _placed_box(at, size, inner, rotate, mirror, facet):
+    """The box a composed part occupies in its parent's frame. With no preview
+    box of its own this is facets.projected_box, the rule render.py draws by.
+    With one, its corners go through the same chain render.py writes -
+    translate(at) scale(facet) rotate(deg, w/2, h/2) [translate(w,0) scale(-1,1)]
+    - innermost first."""
+    w, h = float(size["w"]), float(size["h"])
+    if inner is None:
+        return _facets.projected_box(at, w, h, rotate, facet)
+    x0, y0, x1, y1 = inner
+    pts = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
+    if mirror:
+        pts = [(w - x, y) for x, y in pts]
+    if rotate:
+        t = math.radians(float(rotate))
+        c, s = round(math.cos(t), 12), round(math.sin(t), 12)
+        cx, cy = w / 2, h / 2
+        pts = [(cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c)
+               for x, y in pts]
+    if facet:
+        k = _facets.cos_of(facet)
+        if _facets.axis_of(facet) == "y":
+            pts = [(x, y * k) for x, y in pts]
+        else:
+            pts = [(x * k, y) for x, y in pts]
+    xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+    return (at[0] + min(xs), at[1] + min(ys), at[0] + max(xs), at[1] + max(ys))
+
+
+def _feature_boxes(data, skin, skin_dir):
+    """The art box of each of the part's own relief features' skin nodes, read
+    off the skin: a rect's x/y/width/height, a circle's centre and radius. Any
+    other node (a path, a group) is left to the head and size boxes. A node
+    under a `transform` is refused rather than measured in the wrong frame."""
+    feats = (data.get("relief") or {}).get("features") or []
+    if not feats or skin_dir is None:
+        return []
+    f = Path(skin_dir) / f"{skin}.svg"
+    declared = data.get("skins") or []
+    if not f.exists() and skin == "default" and len(declared) == 1:
+        f = Path(skin_dir) / f"{declared[0]}.svg"     # render.py's one-skin rule
+    if not f.exists():
+        return []
+    root = ET.parse(f).getroot()
+    parents = {c: p for p in root.iter() for c in p}
+    byid = {e.get("id"): e for e in root.iter() if e.get("id")}
+    out = []
+    for feat in feats:
+        el = byid.get(feat.get("node"))
+        if el is None:
+            continue
+        tag = el.tag.rsplit("}", 1)[-1]
+        if tag not in ("rect", "circle"):
+            continue
+        n = el
+        while n is not None:
+            if n.get("transform"):
+                raise ValueError(f"preview_box: {data.get('name')} node {feat['node']!r} "
+                                 f"sits under a transform; its box is not measured")
+            n = parents.get(n)
+        if tag == "rect":
+            x, y = float(el.get("x") or 0), float(el.get("y") or 0)
+            out.append((x, y, x + float(el.get("width")), y + float(el.get("height"))))
+        else:
+            cx, cy, r = (float(el.get(k) or 0) for k in ("cx", "cy", "r"))
+            out.append((cx - r, cy - r, cx + r, cy + r))
+    return out
 
 
 def fibre_ends(data, load_ref):
@@ -128,6 +218,42 @@ def named_as_faces(roots):
             if (r := face_ref(load_yaml(cf) or {}, k))}
 
 
+def seated_in_bays(roots):
+    """Every part some BAY can hold - named in a bay's `accepts` or `default`,
+    or seated in one by a configuration - on a device or on a card.
+
+    A MODULE IN A BAY IS NEVER A PLACED SLOT, which is the build's own rule
+    (manifest.slot_in_slot_at). A card that happens to compose exactly one
+    interface-bearing part - casa/smm-8x10g@1's console, the IRIG-B card's
+    RS-422 jack - does not forward it: the build seats a plug at
+    `front-6/console` like any other card port. component_cages could not see
+    that from the contract alone and hid the jack as a wrapper's aperture, so
+    the kit had no slot where the build had one (#610). This is the set it is
+    told instead, gathered the way named_as_faces gathers faces.
+    """
+    found = set()
+
+    def walk(o, key=None):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                walk(v, k)
+        elif isinstance(o, list):
+            for v in o:
+                if key == "bays" and isinstance(v, dict):
+                    found.update(r for r in v.get("accepts") or [] if isinstance(r, str))
+                    if isinstance(v.get("default"), str):
+                        found.add(v["default"])
+                walk(v, key)
+
+    for f in libwalk.iter_devices(roots) + libwalk.iter_components(roots):
+        doc = load_yaml(f) or {}
+        walk(doc)
+        for cfg in (doc.get("configurations") or {}).values():
+            found.update(r for r in ((cfg or {}).get("bays") or {}).values()
+                         if isinstance(r, str))
+    return found
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--library", action="append", required=True)
@@ -145,6 +271,7 @@ def main():
     load_ref = lambda ref: libwalk.load_contract(ref, args.library)  # noqa: E731
     index = []
     faces_named = named_as_faces(args.library)
+    in_bays = seated_in_bays(args.library)
     for root in args.library:
         for cf in sorted(Path(root).glob("components/*/*/v*/contract.yaml")):
             data = load_yaml(cf)
@@ -255,9 +382,15 @@ def main():
             # card group's side for a cage in one of the card's own `groups:`
             # (#511), empty otherwise. Omitted when there are none.
             cages = component_cages(data, lib, families, candidates, connectors,
-                                    face=ref in faces_named)
+                                    face=ref in faces_named, module=ref in in_bays)
             if cages:
                 entry["cages"] = cages
+            # WHAT IT PRESENTS WHEN SEATED (#611): a plug's boot point, a
+            # single-bore optic's bore - the slot at its own key that the build
+            # seats a chained tier in. Omitted when it presents nothing.
+            presents = component_presents(ref, lib, families, candidates, connectors)
+            if presents:
+                entry["presents"] = presents
             # THE CARD'S OWN PORT GROUPS (#511), in the device `groups:` shape.
             # Omitted when the contract declares none, like `cages`.
             if data.get("groups"):
@@ -282,7 +415,7 @@ def main():
                     continue
                 w, h = data["size"]["w"], data["size"]["h"]
                 svg = ET.Element(f"{{{SVG_NS}}}svg")
-                box = preview_box(data, lib)
+                box = preview_box(data, lib, skin, cf.parent / "skins")
                 if box is None or box == (0.0, 0.0, float(w), float(h)):
                     svg.set("width", f"{w}mm"); svg.set("height", f"{h}mm")
                     svg.set("viewBox", f"0 0 {w} {h}")

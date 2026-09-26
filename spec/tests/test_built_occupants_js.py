@@ -37,12 +37,17 @@ def test_a_mapping_value_is_read_as_its_ref(out):
     assert out["built"]["port-4"] == "generic/sfp-lc@1"
 
 
-def test_a_chained_key_is_not_a_cage(out):
-    assert out["built"] == {"port-4": "generic/sfp-lc@1", "port-5": "generic/rj45-plug@1"}, (
-        "a chained tier (port-5-occupant, or a custom id like uplink-optic) or a key "
-        "naming no cage must not reach the kit's cage state")
-    assert out["collision"] == {"port-4": "a"}, (
-        "a key another entry seats as its occupant is a tier even if a cage shares its id")
+def test_a_chained_key_at_the_builds_name_is_a_slot_and_nothing_else_is(out):
+    """Since #611 the chained tier IS a slot: the boot on the plug in `port-5`
+    is keyed `port-5-occupant`, which the kit publishes on the seated plug
+    (swap.js chainedSlots), so the boot the build put there is that slot's
+    built answer. A tier chained on a CUSTOM id (`uplink-optic`) still is not -
+    no slot is drawn at a name the kit cannot derive - and neither is a key
+    naming no cage."""
+    assert out["built"] == {"port-4": "generic/sfp-lc@1", "port-5": "generic/rj45-plug@1",
+                            "port-5-occupant": "generic/boot@1"}
+    assert out["collision"] == {"port-4": "a", "port-4-occupant": "b"}, (
+        "a tier at the default name is kept whether or not a cage shares its id")
     assert out["noOccupants"] == [{}, {}, {}]
 
 
@@ -76,9 +81,11 @@ def test_a_configuration_seated_nested_bay_is_what_the_build_put_there(out):
 
 
 def test_a_configuration_seated_card_optic_is_keyed_by_the_drawing(out):
-    # front-6/xg0 in the manifest is front-6/module/xg0 on the face; the
-    # chained tiers (the <key>-occupant form and a custom id) are not cages
+    # front-6/xg0 in the manifest is front-6/module/xg0 on the face, and so is
+    # the tier chained on it at the default name (#611); the one chained on a
+    # custom id is not a slot
     assert out["cardBuilt"] == {"front-6/module/xg0": "generic/sfp-lc@1",
+                                "front-6/module/xg0-occupant": "generic/boot@1",
                                 "front-6/module/cg0": "generic/qsfp-lc@1",
                                 "port-4": "generic/sfp-lc@1"}
 
@@ -90,9 +97,16 @@ def test_an_untouched_page_with_a_card_optic_writes_no_swap(out):
 
 def test_a_card_optic_is_a_swap_only_when_it_differs_from_the_build(out):
     assert out["cardAway"] == {"front-6/module/xg0": "generic/sfp-lc-simplex@2"}
-    assert out["cardBack"] == {}, "the configured optic, chosen again, is not a swap"
+    # the configured optic, chosen again, is not a swap - but it is a FRESH
+    # seat, and the boot the build chained on the old one went with it
+    # (swap.js removeSeat, #611), so the state records that tier emptied
+    assert out["cardBack"] == {"front-6/module/xg0-occupant": None}
     assert out["cardEmptied"] == {"front-6/module/xg0": None}
     assert out["cardFilled"] == {"front-6/module/xg1": "generic/sfp-lc@1"}
+    # a boot left in the state on an optic it was not built on is asked for;
+    # the shell's dropOnSlot prunes it, which is why cardAway is one key
+    assert out["cardAwayUnpruned"] == {"front-6/module/xg0": "generic/sfp-lc-simplex@2",
+                                       "front-6/module/xg0-occupant": "generic/boot@1"}
 
 
 def test_an_optic_on_a_swapped_card_is_always_a_swap(out):

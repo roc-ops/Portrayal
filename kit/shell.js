@@ -1158,6 +1158,19 @@ export function createShell(opts = {}) {
               + `its drawing did not load, so the cage keeps `
               + `${cur ? esc(cur) : 'nothing'}</div>`;
     }
+    // WHAT IS CHAINED ON IT (#611). A plug in this slot that takes a boot is
+    // a slot at its own path (swap.js chainedSlots), offered here beside the
+    // slot it sits in - a click on the plug still names the bore, and the
+    // boot is chosen without having to find it first. Its current value is
+    // the state's, else what the build seated, as the slot's own is.
+    const chain = cage ? cagesOnFace().find(c => c.chained && c.id === `${cage.id}-occupant`) : null;
+    if (chain) {
+      const cur = Object.prototype.hasOwnProperty.call(state.cfgOccupants || {}, chain.id)
+        ? state.cfgOccupants[chain.id] ?? '' : occupantRef(state.svg, chain) ?? chain.default ?? '';
+      const opts = slotOptions(chain, cur).map(o =>
+        `<option value="${esc(o.value)}"${o.selected ? ' selected' : ''}>${esc(o.label)}</option>`);
+      html += `<div class="row"><span>on it</span><select id="chain" data-cage="${esc(chain.id)}">${opts.join('')}</select></div>`;
+    }
     if (ref) {
       const c = compByRef(ref.split(':')[0].split('@')[0] + '@' + ref.split('@')[1].split(':')[0]);
       if (c) html += `<div class="row"><button id="open">Open module ↗</button></div>`;
@@ -1168,6 +1181,8 @@ export function createShell(opts = {}) {
     if (occ) occ.onchange = () => swapBay(path, occ.value);
     const optic = box.querySelector('#optic');
     if (optic) optic.onchange = () => swapCage(optic.dataset.cage, optic.value);
+    const onIt = box.querySelector('#chain');
+    if (onIt) onIt.onchange = () => swapCage(onIt.dataset.cage, onIt.value);
     const open = box.querySelector('#open');
     if (open) open.onclick = () => openModule(ref.split(':')[0]);
     for (const a of box.querySelectorAll('[data-go]'))

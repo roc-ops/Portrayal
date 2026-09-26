@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-950 component majors in 17 namespaces.
+961 component majors in 22 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -155,7 +155,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (13)
+## generic/ (17)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -163,15 +163,26 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 8 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 5 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
+| `generic/qsfp-cable@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct attach, active copper and active o… |
+| `generic/qsfp-dd-cable@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD cable end with the Type 1 head - the shape a direct-attach, active copper, active electrica… |
+| `generic/qsfp-dd-cable-type2@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 2 | A generic QSFP-DD cable end with the longer Type 2 head - the shape a direct-attach, active copper, active el… |
 | `generic/qsfp-dd-lc@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
 | `generic/qsfp-dd-lc@2` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
 | `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 3 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 3 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
+| `generic/sfp-cable@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP+ cable end - the shape every direct-attach, active copper, active electrical and active optical… |
 | `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 5 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |
 | `generic/sfp-lc-simplex@2` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic SFP with one LC bore on its optical axis - the shape every bidirectional (BiDi) SFP, SFP+ and SFP28… |
 | `generic/sfp-rj45@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic copper SFP - the shape every 1000BASE-T, 10GBASE-T and NBASE-T SFP with an RJ45 jack has, standing … |
+
+## amphenol/ (2)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `amphenol/qsfp28-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NDAAFR QSFP28 to QSFP28 100G passive direct-attach copper cable, one end - 32 AWG eight-pair PVC-jac… |
+| `amphenol/qsfp56-linear-active@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Amphenol NJAAF3 QSFP56 to QSFP56 200G active copper cable, one end - 30 AWG eight-pair dual-drain cable in a … |
 
 ## casa/ (39)
 
@@ -443,6 +454,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `commscope/ps3248d@1` | module | psu | 52.52 × 130.2 × 330.2 |  | 1 | 1 | CommScope (ARRIS) PS3248D - the 300 W -48 VDC power supply and chassis controller of the CH3000 headend optic… |
 | `commscope/ps3248n@1` | module | psu | 52.52 × 130.2 × 330.2 |  | 1 | 0 | CommScope (ARRIS) PS3248N - the 300 W -48 VDC power supply and chassis controller of the CH3000 headend optic… |
 
+## credo/ (1)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
+
 ## dell/ (57)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
@@ -567,7 +584,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `edgecore/filter-slot-5915@1` | module | filter | 27.6 × 43.2 |  | 1 | 1 | The air-filter slot cover on the AS5915 cell-site gateways - the blanking plate that ships in the filter bay … |
 | `edgecore/filter-slot-5915-16x@1` | module | filter | 19 × 42.5 |  | 1 | 0 | The air-filter slot cover on the AS5915-16X - the blanking plate in the filter bay at the left-hand end of th… |
 
-## fs/ (61)
+## fs/ (62)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -632,6 +649,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `fs/fhd-fapm6@1` | module | adapter-panel | 108.97 × 35.05 × 9.6 |  | 7 | 0 | FS FHD-FAPM6 - FHD 6-port multimedia modular panel with six plastic clips |
 | `fs/fhd-splice-12-lc@3` | module | cassette | 108.97 × 35.05 × 117.86 |  | 7 | 0 | FS FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers |
 | `fs/fhd-splice-12-lc-rear@2` | component | cassette | 99 × 31 |  | 0 | 1 | The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the cassette body seen from behind, ca… |
+| `fs/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | FS 100G QSFP28 active optical cable, one end - four 25G lanes over multimode ribbon fibre, up to 100 m over O… |
 
 ## juniper/ (170)
 
@@ -823,6 +841,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `maiaedge/port-extender-lane-leds@1` | component | led | 14.6 × 2.45 |  | 1 | 0 | The MaiaEdge Port Extender's per-uplink lamp group - FOUR round lamps in a row on a 4.05 mm pitch, centred on… |
 | `maiaedge/psu-550w@1` | module | psu | 73.5 × 40 × 185 | crps-1u | 2 | 0 | The 550 W CRPS supply MaiaEdge fits to the PBC-2000 and the Port Extender - a fan behind a four-spoke silver … |
 
+## molex/ (1)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `molex/sfp-plus-passive-dac@1` | module | transceiver | 13.55 × 8.55 × 47.5 | sfp | 0 | 0 | Molex 74752 SFP+ to SFP+ 10G passive direct-attach copper cable, one end - a plunger-latch cable end with a b… |
+
 ## nokia/ (115)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
@@ -958,6 +982,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `oscilloquartz/osa542x-psu-dc-90w@1` | module | psu | 81 × 36 |  | 2 | 0 | Oscilloquartz OSA 5421 DC power supply - the 90 W hot-swappable -48/-60 VDC module for the one-slot OSA 5421,… |
 | `oscilloquartz/ptoh-16@1` | module | line-card | 113.5 × 20.6 |  | 4 | 0 | Oscilloquartz PTOH-16 - the OSA 542x PPS+ToD HD expansion card, sixteen 1PPS plus time-of-day outputs (G.8271… |
 
+## siemon/ (1)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `siemon/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Siemon 100G QSFP28 active optical cable, one end - four 25G lanes at 850 nm over a 3.0 mm multimode fibre cab… |
+
 ## smartoptics/ (16)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
@@ -1049,4 +1079,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `ufispace/seg7-beacon-s9611@1` | component | display | 12.8 × 7 |  | 3 | 0 | Two-digit seven-segment beacon readout in a dark bezel, each digit with its own decimal point - the numeric d… |
 | `ufispace/seg7-status-2@1` | component | display | 17.2 × 9.5 |  | 5 | 2 | Two-digit seven-segment status display in a dark bezel - the numeric readout UfiSpace prints at the right of … |
 | `ufispace/seg7-status-2-sm@1` | component | display | 12.8 × 6.8 |  | 3 | 0 | Two-digit seven-segment status display in a dark bezel, the small 12.8 x 6.8 mm size UfiSpace prints under th… |
+
+## volex/ (1)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `volex/qsfp-dd-passive-dac@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Volex 400G QSFP-DD passive direct-attach copper cable, one end - the 30 AWG build, 16-pair twinax under a bla… |
 

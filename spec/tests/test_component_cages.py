@@ -26,6 +26,7 @@ from pathlib import Path
 import pytest
 
 import warmrender
+from portrayal import libwalk
 from portrayal import render as render_mod
 from portrayal.manifest import load_yaml, presented_interface, seat_point
 
@@ -100,6 +101,32 @@ def _faces(index):
     contracts, not off the indexer's own helper."""
     return {((_contract(ref).get("faces") or {}).get(k) or {}).get("ref")
             for ref in index for k in ("plan", "rear")} - {None}
+
+
+def _bay_modules():
+    """Every ref a bay can hold - a bay's `accepts` or `default`, or a
+    configuration's `bays:` value - read off the device manifests and the
+    contracts here, not off the indexer's own helper. A module in a bay
+    forwards nothing (#610): the build never treats one as a placed slot."""
+    found = set()
+
+    def walk(o, key=None):
+        if isinstance(o, dict):
+            for k, v in o.items():
+                walk(v, k)
+        elif isinstance(o, list):
+            for v in o:
+                if key == "bays" and isinstance(v, dict):
+                    found.update(v.get("accepts") or [])
+                    found.add(v.get("default"))
+                walk(v, key)
+
+    for f in libwalk.iter_devices(LIB) + libwalk.iter_components(LIB):
+        doc = load_yaml(f) or {}
+        walk(doc)
+        for cfg in (doc.get("configurations") or {}).values():
+            found.update(((cfg or {}).get("bays") or {}).values())
+    return {r for r in found if isinstance(r, str)}
 
 
 def _forwarded_connector(lib, contract, face=False):
@@ -304,10 +331,11 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     asserted, and that it is not zero."""
     want_components, want_cages, forwarded = 0, 0, 0
     faces = _faces(index)
+    bays = _bay_modules()
     # the six single-MTP FHD backs, each ONE bulkhead a wrapper would forward
     assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 6
     for ref, entry in index.items():
-        skip = _forwarded_connector(lib, _contract(ref), face=ref in faces)
+        skip = _forwarded_connector(lib, _contract(ref), face=ref in faces or ref in bays)
         forwarded += skip is not None
         n = sum(1 for p in _contract(ref).get("parts") or []
                 if p["id"] != skip and _presents(lib, families, p))

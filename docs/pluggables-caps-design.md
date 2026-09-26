@@ -62,7 +62,7 @@ Taken 2026-09-22, before the first step.
 |---|---|
 | P1 | THE SLOT KEY is the path of part ids from the device placement (or bay) to the slot part, with every `module` segment dropped: `bay-1/lc01/1`. A drawing path restores them: `bay-1/module/lc01/1`. One helper, `manifest.slot_key_prefix`, strips every `/module` segment from any instance path, and a device placement's path is its own key |
 | P2 | A WRAPPER'S APERTURE IS THE WRAPPER'S SLOT. A component that presents an interface by looking through to its one composed aperture is itself the slot, and the aperture is not published as a second one. So a cassette's placement of `mpo-adapter` is a slot, and the tile's own `bore` is not. This holds for connector slots only. Applied to cages it would have dropped the only published cage of 19 components, so cages publish as they did (ruled 2026-09-22, in the first step) |
-| P3 | OCCUPANTS OF OCCUPANTS STAY CHAINED KEYS. No slot is walked inside a seated occupant, a group carrying `data-for`, so a plug in a seated optic's bore keeps B's chained key (`port-4-occupant`). Narrowed 2026-09-22 so that a boot can address one half of a duplex plug (`port-1510-occupant/a`). Amended 2026-09-24 for the kit: a seated occupant's own slots are slots, at the chained path the build already seats (`nt-a/qsfp-2-occupant/tx`, a plug in the tx bore of the optic in a card's cage); see "Slots on an occupant" |
+| P3 | OCCUPANTS OF OCCUPANTS STAY CHAINED KEYS. No slot is walked inside a seated occupant, a group carrying `data-for`, so a plug in a seated optic's bore keeps B's chained key (`port-4-occupant`). Narrowed 2026-09-22 so that a boot can address one half of a duplex plug (`port-1510-occupant/a`). Amended 2026-09-24 for the kit: a seated occupant's own slots are slots, at the chained path the build already seats (`nt-a/qsfp-2-occupant/tx`, a plug in the tx bore of the optic in a card's cage); see "Slots on an occupant". Amended again for the kit: a seated occupant that presents something is a slot at its OWN key (`port-4-occupant`, a boot on the plug in `port-4`); see "The chained tier" |
 | P4 | EMPTY IS THE EMPTY STRING, as it is for bays: `occupants: {bay-1/lc01/1: ""}` empties a slot and overrides its default |
 | P5 | DEFAULT PRECEDENCE, lowest first: the slot part's own declaration; a composer's `parts:` entry, which overrides only the placed component's top-level default; a configuration's `occupants:`; the explorer. A composer cannot reach a grandchild's default, and a configuration can (see "The shipped default") |
 | P6 | `kind`. Every entry in a view's `cages[]` and in a component's `cages` carries `kind: cage` or `kind: connector`. Every cage entry was byte-identical before and after, once `kind` is removed |
@@ -583,6 +583,30 @@ transform above it and nothing is solved twice.
     the foreshortened mates, and carrying `data-tilt-on`, `data-tilt` and
     `data-tilt-facing`, which 3D reads to stand it on the facet. Plugs sit in
     the optic's own frame and need nothing more.
+- **The chained tier.** A boot goes on a plug, and a plug goes in a
+  single-bore optic, under the key of the part it goes on: `port-4-occupant`
+  for a boot on the plug in `port-4`, `xg0-occupant` for a plug in the optic in
+  `xg0` (whose bore is refused as a key of its own, P2). The build has always
+  seated these through `mate-to` on what the host presents. The kit swapped
+  slots only, so a plug chosen in the explorer cabled from its face and had no
+  boot. Now:
+  - `components.json` publishes, on each part that mates into something, what
+    it `presents` when seated: the interface, the point and its `out` in the
+    part's own frame, and every part that mates it. A plug nothing in the
+    library mates publishes nothing.
+  - A seat whose part presents something is a slot at its own path. Its mate is
+    the presented point carried through the seat's placement; it takes the
+    seat's turn; its lift is the seat's slot's plus the presented `out`, which
+    is how the build stacks a chain; and it carries the host group's side, as
+    the seat does.
+  - A chained occupant is a sibling of the part it sits on, as the build draws
+    it, so taking that part out takes everything chained on it too.
+  - A click on a seat still names the slot the seat is in; the explorer offers
+    the chained slot beside it.
+  - A tier chained at the build's default name is part of the configuration's
+    built state, so an untouched page writes no swap for a boot the build put
+    there. A tier chained on an occupant a configuration names with its own
+    `id` is not, because no slot is drawn at a name the kit cannot derive.
 - One home: all of it lives in `kit/swap.js`.
 
 ## 3D
