@@ -46,14 +46,17 @@ provenance:
   the-face-is-derived-from-the-board: >-
     EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
     their distance above datum W on the dimensioned board drawing - port 1
-    49.60, port 2 24.60 - with W at x' 15.16 on this bracket (PCIe CEM 5.0:
-    120.02 - 104.86, fig 11-3). Vents, light-pipe slots and numerals keep
-    their measured offset from their nearest cage, read off NVIDIA's bracket
-    drawings; the short bracket's drawing gave the cage windows within 0.5
-    of this reading. The full-height face is the low-profile one moved 4.05
-    along the bracket and 3.17 across it, which is where the two brackets
-    put W and the board, plus the vent columns only the taller metal has
-    room for.
+    49.75, port 2 25.31 - with W at x' 15.16 on this bracket (PCIe CEM 5.0:
+    120.02 - 104.86, fig 11-3). Vents, light-pipe slots, lamps and numerals
+    keep their measured offset from their nearest cage (or from W), read off
+    NVIDIA's bracket drawings. The board was re-read on the cage bodies'
+    full extent (5.196 px/mm): port 2 lands 0.03 from the short bracket's
+    own window, where a first reading at 24.60 put it 0.68 off. The Dual-
+    Port SFP28/SFP56 bracket is shared with the MCX621102A and MCX621202A
+    and its features are that bracket's readings (short 7.18, tall 6.31
+    px/mm). The full-height face is the low-profile one moved 4.05 along the
+    bracket and 3.17 across it, plus the vent columns only the taller metal
+    has room for.
   orientation: >-
     drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
     cages and lamps are placed `rotate: 180` and the numerals read upside
@@ -66,7 +69,7 @@ provenance:
     not drawn, so lamp-1 is LED1 by assumption.
   body: >-
     the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
-    at the board drawing's length; the heatsink is the board drawing's 22.5
+    at the board drawing's size; the heatsink is the board drawing's 22.5
     square at its drawn position, 10.0 tall by estimate.
   power: >-
     datasheet - CX-6 Dx UM p55 (spec table): 14.94 W typical at Gen3 and
@@ -74,9 +77,6 @@ provenance:
     load, for the -GDAT (SFP56) builds; the -ADAT (SFP28) builds are 14.87 /
     15.68 W typical and 18.92 / 19.74 W maximum. The largest of each is
     carried. p55 adds ActiveModuleW x modules x 1.1 for active optics.
-  lifecycle: >-
-    not tracked per layout: the member part numbers' status is in the user
-    manual's OPN tables.
 body:
   depth: 142.00
   color: '#2f7d3a'
@@ -106,17 +106,17 @@ faces:
     ref: common/pcie-card-plan@1
 parts:
   - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
-  - {ref: std/sfp@1, id: port-1, at: [57.51, 6.41], rotate: 180, group: sfp56}
-  - {ref: std/sfp@1, id: port-2, at: [32.51, 6.41], rotate: 180, group: sfp56}
+  - {ref: std/sfp@1, id: port-1, at: [57.66, 6.56], rotate: 180, group: sfp56}
+  - {ref: std/sfp@1, id: port-2, at: [33.22, 6.56], rotate: 180, group: sfp56}
   - ref: common/led-slot-pair@1
     id: led-port-1
-    at: [75.70, 6.21]
+    at: [76.12, 6.39]
     rotate: 180
     group: port-leds
     states: {lamp-1: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}], lamp-2: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
   - ref: common/led-slot-pair@1
     id: led-port-2
-    at: [25.13, 6.21]
+    at: [25.64, 6.39]
     rotate: 180
     group: port-leds
     states: {lamp-1: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}], lamp-2: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}

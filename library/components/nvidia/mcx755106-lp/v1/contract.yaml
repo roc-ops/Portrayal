@@ -1,0 +1,143 @@
+format: 1
+kind: module
+name: mcx755106-lp
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter,
+  Socket Direct ready, PCIe Gen5 x16, on its short (low-profile) bracket. The
+  same board ships with both brackets; nvidia/mcx755106-fh@1 is the other.
+size: {w: 79.2, h: 18.42, d: 167.65}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'MCX755106A short bracket'
+  part-numbers: 'MCX755106AS-HEAT, MCX755106AC-HEAT'
+  role: nic
+  power-draw-typical-w: 25.9
+  power-input: host PCIe slot
+  pcie-connector: x16
+  pcie-generation: 5
+  pcie-height: low
+groups:
+  qsfp112:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp112, speed: 200g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    CX-7 user manual: p72-73 spec table, p80 board mechanical drawing Dual-
+    port x16 QSFP112 Socket-Direct Ready (167.65 x 68.90), p82 bracket
+    mechanical drawings Dual-port QSFP112 (the same bracket as MCX713106),
+    p17 and p20 Cabline CA-II Plus, p19-20 LED scheme 2
+  size: >-
+    registry - the face is std/pcie-bracket-lp@1, 79.2 x 18.42, composed
+    behind a punched plate; `d` is the board drawing's 167.65, the card's
+    length back from its bracket.
+  depth: >-
+    drawing - 167.65, the board mechanical drawing's length.
+  the-face-is-derived-from-the-board: >-
+    EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
+    their distance above datum W on the dimensioned board drawing - port 1
+    48.63, port 2 27.39 - with W at x' 11.11 on this bracket (PCIe CEM 5.0:
+    79.20 - 68.09, fig 11-8). Vents, light-pipe slots, lamps and numerals
+    keep their measured offset from their nearest cage (or from W), read off
+    NVIDIA's bracket drawings. The cage windows agree with the board drawing
+    to 0.10 or better on both brackets (notes_cx7.md). The full-height face
+    adds the vent columns only the taller metal has room for (seven beyond
+    port 1, one beyond port 2). The cages are std/qsfp56@1 standing in for
+    QSFP112. The bracket is the MCX713106 one (the p82 table lists both
+    families on one row).
+  orientation: >-
+    drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
+    cages and lamps are placed `rotate: 180` and the numerals read upside
+    down. In a turned bay - Dell riser 3 - the card lands as NVIDIA draws
+    it.
+  lamps: >-
+    drawing - two round light-pipe holes per port on the bracket's keyed
+    side, about 1.4 across (drawn 1.3-1.5), carried as common/led-dot@1
+    (2.0, so 0.6 larger than drawn), holding LED scheme 2 of UM p19-20: LED1
+    bi-colour yellow/green (green solid at full speed, yellow solid below
+    it, green blinking on activity, yellow 1 Hz beacon, yellow 4 Hz error)
+    and LED2 green (on at link up and on error, blinking on activity, off
+    for beacon). Which hole is which is not drawn, so LED1 is the one nearer
+    the cage by assumption.
+  body: >-
+    the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
+    at the board drawing's size; the ASIC is the drawn package lid only. UM
+    p17 says TWO Cabline CA-II Plus connectors are populated; the p80
+    drawing shows ONE, on the component side near the tail, and only that
+    one is a box (the other is presumably on the far side and is not
+    modelled). The cages' riding heatsink is not a box.
+  power: >-
+    datasheet - CX-7 UM p72-73 (spec table): typical power with passive
+    cables in a PCIe Gen5 x16 host is 25.9 W for MCX755106AC-HEAT and 24.9 W
+    for -AS-HEAT; the largest is carried. The manual gives NO maximum: it
+    refers to the NVOnline 'NVIDIA ConnectX-7 Electrical and Thermal
+    Specifications' document, which is not held, so power-draw-max-w is left
+    out rather than estimated.
+body:
+  depth: 167.65
+  color: '#2f7d3a'
+  # the slab stops where the bracket stops being a rectangle
+  plate: {at: [11.85, 0.00], size: [56.18, 18.42]}
+  boxes:
+  - {id: board, at: [19.51, 1.27], size: [60.50, 1.57], from: 0.00, depth: 167.65,
+     color: '#2f7d3a', confidence: drawing,
+     source: 'the board drawing''s 167.65 x 68.90; CEM 5.0 fig 6-5 shoulder 8.40 above W'}
+  - {id: edge-tab-short, at: [11.11, 1.27], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [11.11, 1.27], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [13.71, 1.22], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [13.71, 1.22], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: asic, at: [38.91, 2.84], size: [26.40, 3.00], from: 78.50, depth: 26.70,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'UM p80 board drawing: the ConnectX-7 package lid at its drawn position (z registered on the PCIe key); no ASIC heatsink is drawn, the 3.0 height is an estimate'}
+  - {id: cabline-1, at: [27.78, 2.84], size: [4.90, 2.50], from: 135.50, depth: 28.80,
+     color: '#9aa0a6', confidence: estimated,
+     source: 'UM p80 board drawing: the one Cabline CA-II Plus connector drawn, near the tail at the edge-tab side, 28.8 x 4.9 at its drawn position; its height is an estimate'}
+faces:
+  plan:
+    ref: common/pcie-card-plan-lp@1
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/qsfp56@1, id: port-1, at: [49.74, 2.62], rotate: 180, group: qsfp112}
+  - {ref: std/qsfp56@1, id: port-2, at: [28.50, 2.62], rotate: 180, group: qsfp112}
+  - ref: common/led-dot@1
+    id: led-port-1-1
+    at: [71.27, 2.80]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-1-2
+    at: [74.26, 2.80]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#22c55e'}]}
+  - ref: common/led-dot@1
+    id: led-port-2-1
+    at: [25.06, 2.80]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-2-2
+    at: [22.03, 2.80]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#22c55e'}]}
+skins: [default]
