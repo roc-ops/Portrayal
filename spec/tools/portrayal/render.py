@@ -490,6 +490,16 @@ def stroke_shade(colour):
         for i in (0, 2, 4))
 
 
+# WHAT `data-r-from` ACCEPTS AS A NUMBER: ASCII digits and a point, with ASCII
+# blanks around them. kit/fields.js holds the same pattern character for
+# character, and lint L122 asks it before its range check, so the three accept
+# one set. It is spelled out rather than `\s` and `\d` because those differ
+# between the two languages: Python's are Unicode (it read Arabic-Indic digits
+# as a number and took the \x1c separator as blank), JS's `\d` is ASCII
+# (spec/tests/test_r_from_binding.py holds all three to one answer).
+R_FROM_NUMBER = re.compile(r"[ \t\n\r]*[0-9.]+[ \t\n\r]*")
+
+
 def fill_from_attrs(root, attrs):
     """Fill skin nodes marked `data-from` or `data-fill-from` from this
     instance's merged attrs.
@@ -609,10 +619,6 @@ def fill_from_attrs(root, attrs):
         if math.isfinite(d) and d > 0:
             r = d / 2
             node.set("r", str(int(r)) if r.is_integer() else repr(r))
-
-
-# what `data-r-from` accepts as a number; kit/fields.js holds the same pattern
-R_FROM_NUMBER = re.compile(r"\s*[\d.]+\s*")
 
 
 def _inset_feature(feat, back, group_lift=0.0):

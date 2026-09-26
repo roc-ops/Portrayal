@@ -281,7 +281,7 @@ RULES = {
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
     "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
-    "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs", "give the cable's outside diameter in mm as a number, from the product's own document"),
+    "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3225,18 +3225,18 @@ def lint_component_fields(path, data, _lib_roots=None):
         seen[skin] = keys
         for k in fields:
             if k not in keys and k not in composed:
-                err(path, "L73", f"field {k} has no data-from, data-fill-from or "
-                                 f"data-stroke-from node in skin {skin}")
+                err(path, "L73", f"field {k} has no data-from, data-fill-from, "
+                                 f"data-stroke-from, data-stroke-derive or data-r-from "
+                                 f"node in skin {skin}")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
-        warn(path, "L73", f"skin fills {', '.join(sorted(undeclared))} from attrs but the "
+        warn(path, "L73", f"skin reads {', '.join(sorted(undeclared))} from attrs but the "
                           f"contract declares no such field - a form cannot offer them")
     for k, f in fields.items():
         if (f or {}).get("type") == "choice" and not (f or {}).get("options"):
             err(path, "L73", f"field {k} is a choice with no options")
         if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
             err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
-
 
 
 CABLE_OD_RANGE = (2.0, 15.0)
@@ -3258,10 +3258,17 @@ def lint_component_cable_od(path, data, _lib_roots=None):
         a = (p.get("attrs") or {}) if isinstance(p, dict) else {}
         if "cable-od" in a:
             vals.append((f"parts[{p.get('id')}].attrs.cable-od", a["cable-od"]))
+    # THE BUILD'S OWN QUESTION FIRST. float() alone takes "1e1", "1_0" and
+    # non-ASCII digits, which render and the kit leave undrawn, so a value
+    # lint passed could draw nothing. R_FROM_NUMBER is the one pattern all
+    # three ask (render.py).
+    from portrayal.render import R_FROM_NUMBER
     lo, hi = CABLE_OD_RANGE
     for where, v in vals:
         try:
-            d = float(v)
+            if isinstance(v, bool) or not R_FROM_NUMBER.fullmatch(str(v)):
+                raise ValueError(v)
+            d = float(str(v).strip())
         except (TypeError, ValueError):
             err(path, "L122", f"{data.get('name')}: {where} is {v!r}, not a number of mm")
             continue

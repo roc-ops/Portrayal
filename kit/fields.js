@@ -58,6 +58,8 @@ export function strokeShade(colour) {
 }
 
 const esc = s => (typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(s) : String(s));
+// what `data-r-from` accepts as a number; render.py's R_FROM_NUMBER, spelled alike
+const R_FROM_NUMBER = /^[ \t\n\r]*[0-9.]+[ \t\n\r]*$/;
 const STASH = {fill: 'data-portrayal-fill', stroke: 'data-portrayal-stroke',
                r: 'data-portrayal-r'};
 
@@ -102,10 +104,12 @@ export function paintFields(el, vals) {
     for (const n of el.querySelectorAll(`[data-stroke-derive="${key}"]`))
       if (shade) paint(n, 'stroke', shade); else restore(n, 'stroke');
     // A SIZE: `data-r-from` is a DIAMETER field and the circle takes half of it
-    // (docs/pluggables-cables-design.md section 4). Digits and a point only -
-    // render.py's R_FROM_NUMBER, so "1e1" or "inf" is junk in both - and junk,
-    // zero or empty puts back the radius the skin was drawn with.
-    const d = /^\s*[\d.]+\s*$/.test(val) ? Number(val) : NaN;
+    // (docs/pluggables-cables-design.md section 4). ASCII digits and a point
+    // only, with ASCII blanks around them - render.py's R_FROM_NUMBER, which
+    // lint L122 also asks, so "1e1", "1_0", "inf" and non-ASCII digits are junk
+    // in all three - and junk, zero or empty puts back the radius the skin was
+    // drawn with. Not \s: it takes Unicode blanks, which Python's pattern does not.
+    const d = R_FROM_NUMBER.test(val) ? Number(val) : NaN;
     for (const n of el.querySelectorAll(`[data-r-from="${key}"]`))
       if (Number.isFinite(d) && d > 0) paint(n, 'r', String(d / 2)); else restore(n, 'r');
   }
