@@ -131,7 +131,7 @@ wrapper leaves the default and says so.
 | FS 100G QSFP28 AOC | `qsfp-cable` | aoc | the generic's head; FS's smaller head, slim boot and ringless tab recorded in provenance; OD and jacket from the data sheet where stated |
 | Volex 400G QSFP-DD passive | `qsfp-dd-cable-type2` | dac | 30AWG OD 9.0 (26AWG 11.6 noted); 400G |
 | Credo HiWire SHIFT (QSFP-DD end) | `qsfp-dd-cable-type2` | aec | purple PVC jacket; 4P 30AWG 5.3 typical; "QSFP-DD type 2" |
-| Siemon QSFP28 100G AOC | `qsfp-cable` | aoc | OD 3.0 +/-0.15; 1.78 W per end; 850 nm |
+| Siemon QSFP28 100G AOC | `qsfp-cable` | aoc | OD 3.0 +/-0.15; 1.78 W per end; 850 nm; aqua jacket read off its photograph (photo-measured) |
 
 The FS AOC's data sheet states no cable diameter, so it keeps the 6.9 default; the Siemon
 wrapper is the thin AOC, added at review for that reason. The FS drawing shows a smaller head

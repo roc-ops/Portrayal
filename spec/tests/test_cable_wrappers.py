@@ -56,7 +56,7 @@ FIELDS = {
     "fs/qsfp28-aoc@1": {},
     "volex/qsfp-dd-passive-dac@1": {"cable-od": 9.0, "jacket-color": "#1c1c1c"},
     "credo/hiwire-shift-qsfp-dd@1": {"cable-od": 5.3, "jacket-color": "#6b3fa0"},
-    "siemon/qsfp28-aoc@1": {"cable-od": 3.0},
+    "siemon/qsfp28-aoc@1": {"cable-od": 3.0, "jacket-color": "#49eaf8"},
 }
 EACH = pytest.mark.parametrize("ref", sorted(WRAPPERS))
 

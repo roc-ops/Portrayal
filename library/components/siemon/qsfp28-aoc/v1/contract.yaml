@@ -22,7 +22,7 @@ attrs:
   power-draw-max-w: 1.78
 parts:
   - {ref: generic/qsfp-cable@1, id: body, at: [0, 0],
-     attrs: {cable-od: 3.0}}
+     attrs: {cable-od: 3.0, jacket-color: '#49eaf8'}}
 provenance:
   size: >-
     borrowed - generic/qsfp-cable@1, the generic this wraps, whose own figures
@@ -61,10 +61,14 @@ provenance:
     generic's 6.9 default, which every wrapper that states no diameter
     keeps.
   jacket-color: >-
-    NOT STATED - the sheet names the jacket material only (PVC or LS0H, by part
-    number) and gives no colour in its text, so the generic's neutral #1c1c1c
-    default stands. The page 1 product photograph shows an aqua cable; a
-    photograph is not a stated colour and is not carried into the drawing.
+    photo-measured - the page 1 product photograph (the embedded 1535 x 738
+    image at 300 ppi): #49eaf8 is the per-channel median of the 164,214 pixels
+    of hue 0.45-0.55, saturation over 0.35 and value over 0.4, which are the
+    jacket (the heads are grey and the pull tabs black); the middle half by
+    value gives the same colour. The text states no colour and names only the
+    jacket material (PVC or LS0H, by part number); aqua is the usual jacket for
+    the OM3 and OM4 fibre the sheet specifies. A studio photograph lit bright,
+    so a real jacket may read darker.
   latch-color: >-
     NOT STATED - page 1 describes "a high-strength pull tab latching system"
     and gives no colour, so the generic's neutral #6f6f6f default stands.
