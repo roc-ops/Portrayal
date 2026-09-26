@@ -1,0 +1,37 @@
+"""The three module envelopes carry the MSAs' OUTSIDE-the-cage envelope
+(docs/pluggables-heads-design.md section 2 and 4.1)."""
+import pathlib
+
+import pytest
+
+from portrayal import lint
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+REG = lint.load_yaml(ROOT / "spec/schemas/standards.yaml")["standards"]
+
+EXPECT = {
+    "sfp-module": {"w-max": 14.00, "above-max": 2.10, "below-max": 1.40, "length-max": 10.00},
+    "qsfp-module": {"w-max": 19.0, "above-max": 3.4, "below-max": 1.6, "length-max": 20.0},
+    "qsfp-dd-module": {"w-max": 19.0, "above-max": 3.4, "below-max": 1.6,
+                       "length-max": {"type-1": 20.0, "type-2": 35.0}},
+}
+
+
+@pytest.mark.parametrize("key", sorted(EXPECT))
+def test_each_module_envelope_states_its_outside_envelope(key):
+    head = REG[key].get("head")
+    assert head, f"{key} has no head envelope"
+    for k, v in EXPECT[key].items():
+        assert head[k] == v, (key, k, head[k], v)
+    assert head.get("source", "").strip(), f"{key}.head has no source"
+
+
+def test_only_the_sfp_length_is_a_recommendation():
+    assert REG["sfp-module"]["head"].get("length-kind") == "recommended"
+    assert "length-kind" not in REG["qsfp-module"]["head"]
+    assert "length-kind" not in REG["qsfp-dd-module"]["head"]
+
+
+def test_the_head_is_wider_than_the_module_it_stands_in_front_of():
+    for key in EXPECT:
+        assert REG[key]["head"]["w-max"] > REG[key]["w"], key

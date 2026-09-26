@@ -172,8 +172,40 @@ the *published build*, not about the hardware.
   that pulls out. A device's lock now follows the components a module draws
   on its other `faces:`, so a change to a cassette's rear asks for a bump
   where it used to ask for nothing.
+- A pluggable that `conforms:` to a module envelope declares `head:`, the box
+  it occupies OUTSIDE its cage (contract key, plus the matching registry
+  envelope on `sfp-module`, `qsfp-module` and `qsfp-dd-module`), and a `head`
+  that exceeds its registry envelope may say so with `exceeds:` and a source.
+  Lint L121 checks it. `components.json` carries a part's `head`, verbatim
+  from its contract. See
+  [pluggables-heads-design.md](docs/pluggables-heads-design.md).
+- `generic/sfp-rj45@1`, the copper SFP generic, composing `std/rj45-ganged@2`
+  in its head so a plug and boot can seat in it.
+- `common/qsfp-pull-tab@2`: a real U-loop tab (two arms and a grip, measured
+  off photographs and QSFP-DD HW 6.3 Appendix B) in place of the `@1` solid
+  brick, composed again by the QSFP generics.
+- `generic/qsfp-lc@2` and `generic/qsfp-dd-lc@2`, composing
+  `common/qsfp-pull-tab@2` and declaring `head:`.
+- A composed part now takes a field value from its host at build time when
+  both declare the same field key (`render.py`'s `fill_from_attrs`); a part's
+  own `parts:` entry `attrs` still win.
+- Lint L73 counts a field as used when a composed part declares the same key
+  as its host, matching the build-time rule above.
+- Lint L76 (RJ45 jack lamps) skips a contract whose class is `transceiver`:
+  a copper SFP's jack carries no link LEDs, so it is not asked for one.
 
 ### Changed
+- `generic/qsfp-lc@1` and `generic/qsfp-dd-lc@1` are superseded by `@2`
+  (above); `@1` is kept for fixtures pinned to it.
+- `common/qsfp-pull-tab@1` is superseded by `@2` (above); `@1` is kept, with
+  its `white` and `blue` skins, for `common/qsfp-transceiver@1`, which still
+  composes it.
+- The three component previews whose part declares an overhanging `head:`
+  (`generic/sfp-rj45`, `generic/qsfp-lc`, `generic/qsfp-dd-lc`) are framed to
+  include it, instead of clipping to the part's size box.
+- The S8901-54XC management jack now renders its declared black finish
+  (`#2b2f33`) on the composed `std/rj45@2` housing it seats, instead of the
+  housing's own default; this is what the kit already painted at runtime.
 - `ufispace/psu-132-ac` and `psu-132-dc` (1.1.0) describe and default to the
   EXHAUST units, PSU-132-AESR and PSU-132-DESR, which are front-to-back for a
   rear-mounted supply. They claimed the intake AISB1/DISB1 were front-to-back.
@@ -326,6 +358,12 @@ the *published build*, not about the hardware.
   `components.json` and in the NetBox and Nautobot module-type exports, so a
   consumer matching on an old name finds nothing where it used to find a module
   type (roc-ops/Portrayal#426).
+
+The dist `contract:` number does not move for the pluggable-heads entries in
+this section (the superseded QSFP generics and pull tab, the wider head
+previews and the S8901-54XC finish correction): each is additive (a new key,
+a new part, a superseded-not-removed part, a wider preview frame, a colour
+correction), per this file's own rule.
 
 ### Fixed
 - `devices_index` fails when two devices share a name. Dist filenames carry no

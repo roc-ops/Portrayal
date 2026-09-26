@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-913 component majors in 17 namespaces.
+917 component majors in 17 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -33,7 +33,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
 | `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 9 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
-| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 14 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
+| `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 2 | 16 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 8 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 6 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
 | `std/micro-usb@1` | component | port | 7.5 × 2.75 × 5.9 | micro-usb-b | 35 | 18 | Micro-USB Type-B receptacle, as used for a console port |
@@ -46,8 +46,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 47 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 42 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 67 | 52 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
-| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 61 | 24 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 67 | 53 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 61 | 25 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 30 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
 | `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 26 | 61 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
@@ -59,7 +59,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (87)
+## common/ (88)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -122,7 +122,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/qsfp-lane-leds@1` | component | led | 19.5 × 3.4 |  | 2 | 3 | QSFP port lane LED strip - four triangles, one per lane (no separate link/activity LEDs on this platform) |
 | `common/qsfp-lane-leds-column@1` | component | led | 1.8 × 11.4 |  | 4 | 0 | QSFP port lane LED column - four round lamps stacked VERTICALLY, one per 100G lane, for faceplates that stand… |
 | `common/qsfp-pull-tab@1` | component | latch | 19 × 3.4 |  | 0 | 4 | QSFP / QSFP-DD pull tab - the flat paddle bail that wraps the module and extends forward, with an elongated o… |
-| `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 1 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
+| `common/qsfp-pull-tab@2` | component | latch | 19 × 3.4 |  | 0 | 2 | QSFP / QSFP-DD pull tab, as the part is: a flat U-loop whose two thin arms run forward along the module's sid… |
+| `common/qsfp-transceiver@1` | module | transceiver | 18.35 × 8.5 × 83.2 | qsfp | 0 | 2 | QSFP transceiver with a white pull-latch bail, drawn from a vendor mechanical drawing |
 | `common/qsfp28-cage@3` | component | port | 19 × 14.5 × 37 |  | 2 | 0 | QSFP28 cage at the measured 19.0mm ganged pitch, four round per-lane LEDs (v3 = composed - cage bezel wraps a… |
 | `common/rack-ear@1` | component | ear | 14 × 43.5 |  | 33 | 1 | Generic 1U rack mounting ear (decorative; place outside the chassis with optional tag 'ears'; skins left/righ… |
 | `common/reset-button@1` | component | button | 4 × 4 × 2.5 |  | 95 | 7 | Recessed pinhole reset button |
@@ -130,7 +131,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/rj11-jack@1` | component | port | 14 × 13.5 |  | 1 | 0 | RJ11 telephone jack (FXS) |
 | `common/rj45-boot@1` | component | boot | 14.5 × 10 | rj45-plug | 0 | 1 | A strain-relief boot for an RJ45 (8P8C) copper plug - PVC, moulded around the plug it wraps |
 | `common/rj45-eth@1` | component | port | 15.8 × 13.2 × 18.6 |  | 55 | 35 | An Ethernet RJ45 - the std/rj45@2 housing with the two link and activity lamps nearly every Ethernet jack car… |
-| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 64 | 24 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
+| `common/rj45-ganged-eth@1` | component | port | 12.7 × 11 × 18.6 |  | 64 | 25 | An Ethernet RJ45 in a ganged 2xN block - the std/rj45-ganged@2 cell with the two lamps in its keyway-side cor… |
 | `common/sc-apc@1` | component | port | 24 × 26 |  | 1 | 0 | SC/APC fiber adapter in a molded bay (PON WAN) |
 | `common/sc-duplex-adapter@5` | component | port | 9.4 × 25.4 | sc-duplex-adapter | 0 | 3 | Panel-mount SC duplex adapter, as fitted to an FS FHD SC panel - one body carrying two SC ports STACKED verti… |
 | `common/sc-dust-cap@1` | component | cap | 8.8 × 11.45 | sc | 0 | 1 | The black dust cap FS ships in an FHD SC port - 8.8 x 11.45, with a lighter raised grip across its middle for… |
@@ -151,7 +152,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (10)
+## generic/ (13)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -160,11 +161,14 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 4 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
 | `generic/qsfp-dd-lc@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
-| `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 1 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
+| `generic/qsfp-dd-lc@2` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
+| `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
+| `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 3 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 2 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
-| `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 3 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |
+| `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 5 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |
 | `generic/sfp-lc-simplex@2` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic SFP with one LC bore on its optical axis - the shape every bidirectional (BiDi) SFP, SFP+ and SFP28… |
+| `generic/sfp-rj45@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic copper SFP - the shape every 1000BASE-T, 10GBASE-T and NBASE-T SFP with an RJ45 jack has, standing … |
 
 ## casa/ (39)
 

@@ -33,7 +33,7 @@ from test_lifted_seat_js import mismatches
 
 SCRIPT = SPEC / "tests/js/chained-slots.mjs"
 DEVICE = "nokia/nfxs-d-ba"
-OPTIC, PLUG, CAP = "generic/qsfp-lc@1", "generic/lc-plug@2", "common/lc-dust-cap@1"
+OPTIC, PLUG, CAP = "generic/qsfp-lc@2", "generic/lc-plug@2", "common/lc-dust-cap@1"
 FANT = "nokia/fant-h-bb@2"
 NTS = ("nt-a", "nt-b")
 BAYS = {"nt-b": FANT}
@@ -202,7 +202,7 @@ def test_an_optic_the_kit_seats_in_a_tilted_cage_is_the_builds(world):
 @needs_node
 def test_a_plug_for_a_replacement_optic_lands_in_the_replacement(world):
     s = scenario(world, "replaceUnderPlugs")
-    assert s == {"applied": 2, "optic": ["generic/qsfp-lc-twin@1:1.0.3"], "tx": 1, "rx": 0, "ntb": 1}, s
+    assert s == {"applied": 2, "optic": ["generic/qsfp-lc-twin@1:2.0.0"], "tx": 1, "rx": 0, "ntb": 1}, s
 
 
 @needs_node

@@ -1,6 +1,6 @@
 // Slots on a seated occupant (P3 as amended 2026-09-24), run against REAL
 // compiled faces of the nokia/nfxs-d-ba. test_chained_slots_js.py renders a
-// tmp copy with configurations that put generic/qsfp-lc@1 in each FANT-H's
+// tmp copy with configurations that put generic/qsfp-lc@2 in each FANT-H's
 // `qsfp-2` and, in one of them, a generic/lc-plug@2 in each optic's `tx` and
 // `rx` - the cabled 100G uplink - and hands this script the faces (fake-dom
 // form), the index and the skins. What the kit does to a face here is
@@ -54,7 +54,7 @@ async function scenario(name, fn) {
   try { out[name] = await fn(); } catch (e) { out[name] = {error: String(e && e.stack || e)}; }
 }
 
-const OPTIC = 'generic/qsfp-lc@1', PLUG = 'generic/lc-plug@2', CAP = 'common/lc-dust-cap@1';
+const OPTIC = 'generic/qsfp-lc@2', PLUG = 'generic/lc-plug@2', CAP = 'common/lc-dust-cap@1';
 const FANT = 'nokia/fant-h-bb@2';
 const NTS = ['nt-a', 'nt-b'];
 const cage = nt => `${nt}/module/qsfp-2`;
