@@ -278,7 +278,17 @@ SPA_JACKS = {
     "cisco/spa-2xt3e3@1": {
         "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
     },
+    # Fix round 1: the two channelized T3 cards the guide also gives 1.0/2.3
+    # (Siemax / DIN 1.0/2.3) jacks.
+    "cisco/spa-4xct3-ds0@1": {
+        "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
+        "p2-tx": 96.24, "p2-rx": 108.0, "p3-tx": 138.85, "p3-rx": 151.34,
+    },
+    "cisco/spa-2cht3-ce-atm@1": {
+        "p0-tx": 15.43, "p0-rx": 27.92, "p1-tx": 49.59, "p1-rx": 61.34,
+    },
 }
+SPA_JACK_X = {"cisco/spa-2cht3-ce-atm@1": 8.64}  # every other card: 9.88
 DIN_PLUG = LIB / "components/generic/din-1-0-2-3-plug/v1/contract.yaml"
 
 
@@ -297,7 +307,8 @@ def test_each_t3e3_spa_jack_is_a_placed_din_bezel_at_the_drawn_centre(ref, comps
         assert p["ref"] == "common/din-1-0-2-3-jack@1", p
         assert p["attrs"] == {"impedance": 75, "media": "coax-din-1-0-2-3"}, p
         # the bezel box is the 7.01 nut, so its centre is at + 3.505
-        assert abs(p["at"][0] + 3.505 - 9.88) < 1e-6 and abs(p["at"][1] + 3.505 - cy) < 1e-6, p
+        cx = SPA_JACK_X.get(ref, 9.88)
+        assert abs(p["at"][0] + 3.505 - cx) < 1e-6 and abs(p["at"][1] + 3.505 - cy) < 1e-6, p
         slot = _card_slot(comps, ref, pid)
         assert (slot["kind"], slot["interface"]) == ("connector", "din-1-0-2-3"), slot
 
@@ -338,7 +349,7 @@ def test_no_device_or_card_places_a_bare_bnc_or_din_core():
     its D-flat, and neither draws the flange or nut a panel shows), so every
     placement goes through the common/*-jack bezel. Walks every device.yaml and
     every contract in the real library, not a list."""
-    seen, bad, bezel_places = 0, [], set()
+    seen, bad, bezel_places, din_placers = 0, [], set(), set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
         seen += 1
         bad += [(str(f.relative_to(LIB)), r) for r in _refs(yaml.safe_load(f.read_text()), [])
@@ -348,6 +359,8 @@ def test_no_device_or_card_places_a_bare_bnc_or_din_core():
         doc = yaml.safe_load(f.read_text())
         me = f"{f.parts[-4]}/{f.parts[-3]}@{f.parts[-2][1:]}"
         for r in _refs(doc.get("parts") or [], []) + _refs(doc.get("bays") or {}, []):
+            if r == "common/din-1-0-2-3-jack@1":
+                din_placers.add(me)
             if r in CORE_BEZEL:
                 if CORE_BEZEL[r] == me:
                     bezel_places.add(me)
@@ -355,4 +368,6 @@ def test_no_device_or_card_places_a_bare_bnc_or_din_core():
                     bad.append((str(f.relative_to(LIB)), r))
     assert seen > 1000, f"walked only {seen} files"
     assert bezel_places == set(CORE_BEZEL.values()), bezel_places  # the walk sees the cores
+    # and it reaches every moved card, each through the bezel
+    assert set(SPA_JACKS) <= din_placers, set(SPA_JACKS) - din_placers
     assert not bad, bad
