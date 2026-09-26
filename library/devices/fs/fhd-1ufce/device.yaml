@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 4.0.2
+version: 5.0.0
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -91,7 +91,10 @@ provenance:
       right because the back is seen from behind; their real outline, and whether it is one
       hole or four, is still open (the `envelope-face-detail` gap). Each runs 431.8 in - the
       432.8 drawer less a 1.0 front plate, which is ESTIMATED - so the slot is a passage the
-      cassette's own 117.86 mm body stands in, open front to back when it is out.
+      cassette's own 117.86 mm body stands in, open front to back when it is out. WHERE IN
+      THE HOLE a back is drawn is the seated module's: its `body.footprint`, mirrored across
+      the bay - a cassette's 99 x 31 body and an adapter panel's 88 x 34.8 one both centre in
+      the hole, from two different offsets - so no bay states it.
 
 chassis:
   width: 448.0
@@ -201,6 +204,10 @@ gaps:
       RE-READ when each rear MPO adapter gained its fibre elements, 1 to 12
       or 1 to 24: they sit on the cassette rear, and the rear opening the
       trunks leave through is as undimensioned as it was - the gap stands.
+      RE-READ when the bays stopped saying where a back lands (`rear.at`)
+      and each back began landing where its own module's body stands,
+      mirrored in the hole: the holes and the opening are unchanged, and
+      nothing held shows them any better - the gap stands.
     wanted: >-
       a rear photograph (the cassettes seat from the front but the trunk
       cables leave from the back of the drawer) and a lid/side photograph,
@@ -253,7 +260,7 @@ views:
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
           rel-pos: 1
-          rear: {view: rear, at: [337.955, 6.5], cutout: back-1}
+          rear: {view: rear, cutout: back-1}
         - id: bay-2
           at: [115.03, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -282,7 +289,7 @@ views:
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
           rel-pos: 2
-          rear: {view: rear, at: [228.985, 6.5], cutout: back-2}
+          rear: {view: rear, cutout: back-2}
         - id: bay-3
           at: [224.00, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -311,7 +318,7 @@ views:
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
           rel-pos: 3
-          rear: {view: rear, at: [120.015, 6.5], cutout: back-3}
+          rear: {view: rear, cutout: back-3}
         - id: bay-4
           at: [332.97, 4.475]
           size: {w: 108.97, h: 35.05}
@@ -340,7 +347,7 @@ views:
             - fs/fhd-3mtp18-lc-om4-a@1
           group: slots
           rel-pos: 4
-          rear: {view: rear, at: [11.045, 6.5], cutout: back-4}
+          rear: {view: rear, cutout: back-4}
       placements:
         - {ref: common/rack-ear@1, id: ear-left, at: [-14, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
         - {ref: common/rack-ear@1, id: ear-right, at: [448.0, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
