@@ -97,3 +97,24 @@ def test_a_superseded_by_pointer_does_not_count_as_a_use(tmp_path):
         "superseded-by: generic/sfp-lc@1\n")
     composed = cat.composed_by(tmp_path)
     assert composed.get("generic/sfp-lc@1", set()) == set(), composed.get("generic/sfp-lc@1")
+
+
+def test_a_device_that_only_names_a_part_in_prose_does_not_seat_it():
+    """#348: the `devices` column counted a ref anywhere in a manifest's text,
+    so a device explaining why it does NOT use a part counted as seating it.
+    common/usb-a-bezel@1 was "seated by 9"; four of those only name it in
+    provenance - three of them to say a bare std/usb-a fits where it does not."""
+    seats = cat.seated_by(LIB)["common/usb-a-bezel@1"]
+    for prose_only in ("ufispace/s9500-30xs", "ufispace/s9510-30xc",
+                       "ufispace/s9705-48d", "maiaedge/pbc-2000"):
+        assert prose_only not in seats, prose_only
+    for placed in ("ufispace/s9510-28dc", "ufispace/s9600-64x"):
+        assert placed in seats, placed
+
+
+def test_a_part_a_bay_only_accepts_is_still_seated():
+    """Accepting a part is a seat the configuration can fill, so a card no
+    configuration puts in still counts for every chassis whose bay accepts it -
+    the count is structural, not a census of shipped builds."""
+    seats = cat.seated_by(LIB)
+    assert "cisco/asr-9006" in seats["cisco/a9k-rsp880-se@1"]
