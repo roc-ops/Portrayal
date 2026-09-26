@@ -10,6 +10,7 @@ SPEC = Path(__file__).resolve().parents[1]
 LIB = SPEC.parent / "library"
 
 from portrayal import capability
+from portrayal import libwalk
 
 PROFILES = capability.load_profiles(SPEC / "schemas")
 
@@ -394,3 +395,40 @@ def test_an_empty_sentence_does_not_satisfy_it():
     dev = load("cisco/asr-9910")
     dev["views"]["bottom"]["empty"] = "   "
     assert assess(dev)["level"] < 3
+
+
+# ---------------------------------------------------------------- templated
+
+def _templated(dev):
+    return capability._templated(dev)[0]
+
+
+def test_templated_is_true_where_the_device_type_carries_interfaces():
+    """#129: the flag imported `nautobot_export`, which no longer exists, so it
+    was false for EVERY device and nothing noticed - no test asserted it was
+    ever true. It now asks dcim_export.device_port_type, the exporter's own
+    per-placement question. A fixed switch's ports type as interfaces."""
+    assert _templated(load("edgecore/eps201")) is True
+    assert _templated(load("edgecore/as7726-32x")) is True
+
+
+def test_templated_is_false_where_the_ports_are_all_on_modules():
+    """A modular chassis's device type carries no interfaces of its own - its
+    cards' do, as module types - so the strict flag is false, and the gap
+    register does NOT file that as a missing export (derived_gaps)."""
+    dev = load("cisco/asr-9906")
+    assert _templated(dev) is False
+    ok = capability._templated(dev)
+    gaps = capability.derived_gaps(LIB / "devices/cisco/asr-9906/device.yaml", dev, [str(LIB)], {},
+                                   {"specified": (True, "", None), "wired": (True, "", None),
+                                    "templated": ok})
+    assert not [g for g in gaps if "templated" in g.get("blocks", [])], gaps
+
+
+def test_templated_is_not_dead_across_the_library():
+    """A check that is false for every device fails here, loudly, instead of
+    reporting False politely - the failure #129 was."""
+    got = [_templated(yaml.safe_load(f.read_text()))
+           for f in libwalk.iter_devices(LIB)]
+    assert len(got) > 100
+    assert sum(got) > len(got) // 2, f"templated is true for only {sum(got)} of {len(got)} devices"

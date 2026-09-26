@@ -44,7 +44,9 @@ python3 tools/serve.py 8931                   # then open http://localhost:8931/
 ```
 
 `kit/index.html` is the explorer: every device in the build, any face, in 2D or
-3D, with a tree you can click into. It is what the visual gate in
+3D, with a tree you can click into. The 3D view loads three.js from unpkg.com, so
+it needs internet access; the 2D view does not. `tools/serve.py` listens on this
+machine only; set `PORTRAYAL_SERVE_HOST=0.0.0.0` to open it to the network. It is what the visual gate in
 `docs/modelling-a-device.md` is run in. The raw compiled files are under
 `http://localhost:8931/library/dist/` if you want them directly.
 

@@ -128,6 +128,13 @@ PART_IFACE = {
     "std/xfp": "10gbase-x-xfp",
     "std/qsfp-ganged": "40gbase-x-qsfpp",
     "std/qsfp28": "100gbase-x-qsfp28",
+    # THE NEWER CAGES HAD NO DEFAULT, so a card that did not type one dropped it
+    # from the export entirely - sixteen ConnectX QSFP56 ports did (the
+    # silent-drops census). Each default is the cage's own top rate; a card or
+    # placement that runs it lower says so. Slugs in both targets (NetBox
+    # 9bcfd739, Nautobot f9cdca3d).
+    "std/qsfp56": "200gbase-x-qsfp56",
+    "std/osfp": "400gbase-x-osfp",
     "std/qsfp-dd": "400gbase-x-qsfpdd",
     # CFP, CFP2 AND CXP ARE NOBODY'S SUBSTRING, exactly as XFP was not, and for
     # the same reason they were absent here: the family test in `iface_type`
@@ -163,6 +170,7 @@ CAGE_FAMILY = {
     "std/sfp": "sfp",
     "std/qsfp-ganged": "qsfp",
     "std/qsfp28": "qsfp",
+    "std/qsfp56": "qsfp",
     "std/qsfp-dd": "qsfp-dd",
     "std/xfp": "xfp",
 }
@@ -384,6 +392,12 @@ def cage_family_needs_a_rate(ref, attrs, part_attrs=None):
     before the table is ever reached.
     """
     if proprietary_link(part_attrs):
+        return False
+    # NOR A CAGE ITS OWN PLACEMENT TYPES. `route_part` asks `placed_type` before
+    # the table, so a cage whose effective attrs name a PART_MEDIA row - a
+    # ConnectX card's SFP56 group, `media: sfp56, speed: 50g` - never reaches the
+    # default this question is about.
+    if part_attrs and placed_type({"ref": ref, "attrs": part_attrs}):
         return False
     wants = FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ())
     return bool(wants) and not any(attrs.get(a) for a, _t in wants)
@@ -615,6 +629,32 @@ PART_MEDIA = {
     # exported as 100gbase-x-cfp2. Unlike SFP112 the slug is in both targets:
     # NetBox TYPE_200GE_CFP2 at 6a009845, Nautobot TYPE_200GE_CFP2 at 38953ac3.
     ("cfp2", "200g"): "200gbase-x-cfp2",
+    # A CARD'S NEWER CAGES TYPE FROM ITS GROUP. An NVIDIA ConnectX card states
+    # `media: sfp56, speed: 50g` (or qsfp56 / qsfp112 / osfp) on the group its
+    # cages join, and with no row here they fell to the cage default - an SFP56
+    # port exported as 1000base-x-sfp. The card-level attrs in FAMILY_ATTRS name
+    # rates by the older cage generations only. Every slug below is in both
+    # targets: NetBox dcim/choices.py at 9bcfd739, Nautobot at f9cdca3d.
+    # NO ("sfp28", "25g") ROW, on purpose: a PON port whose flavour has no type
+    # (the FGUT-A's and FWLT-C's `pon: 25gs-pon` on `media: sfp28`) falls through
+    # to its media, and that row would export it as 25G Ethernet where the card's
+    # own `xgs-pon` now answers. An SFP28 card states the card attr `sfp28: N`.
+    ("sfp56", "50g"): "50gbase-x-sfp56",
+    ("qsfp56", "200g"): "200gbase-x-qsfp56",
+    ("qsfp112", "400g"): "400gbase-x-qsfp112",
+    ("osfp", "400g"): "400gbase-x-osfp",
+    ("osfp", "800g"): "800gbase-x-osfp",
+    # A CAGE RUN BELOW ITS TOP RATE TYPES BY THE MODULES IT TAKES. Neither
+    # target has a 100G-QSFP56 or a 200G-QSFP112 type; a QSFP56 cage at 100GbE
+    # runs QSFP28 modules (MCX623106A) and a QSFP112 cage at 200GbE QSFP56 ones
+    # (MCX713106A, MCX755106A), and those are the types that exist.
+    ("qsfp56", "100g"): "100gbase-x-qsfp28",
+    ("qsfp112", "200g"): "200gbase-x-qsfp56",
+    # A 50GbE QSFP28 PORT - the MCX4131A, a 40/50GbE card in a QSFP28 cage - is
+    # TYPE_50GE_QSFP28, "QSFP28 (50GE)", in both targets; its slug really is
+    # spelled `50gbase-x-sfp28` (NetBox 9bcfd739, Nautobot f9cdca3d). Without the
+    # row the card fell to the QSFP family's 100G.
+    ("qsfp28", "50g"): "50gbase-x-sfp28",
 }
 
 
