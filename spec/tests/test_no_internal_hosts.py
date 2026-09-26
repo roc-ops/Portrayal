@@ -95,6 +95,10 @@ def _allowed_email(m):
 # measured something says "the maintainer" (#152, and #452 when it came back).
 _LICENCE_FILES = frozenset({"LICENSE", "NOTICE",
                             "library/exports/LICENSE", "library/exports/NOTICE"})
+# THE PACKAGE'S AUTHOR is the same kind of place (#463): `authors` in
+# pyproject.toml is the name and address PyPI shows once the package is
+# published, and a metadata field that names nobody says nothing.
+_AUTHOR_FILES = _LICENCE_FILES | {"pyproject.toml"}
 # THE SPONSOR CREDIT IS THE ONE PLACE THE EMPLOYER IS NAMED ON PURPOSE (#446):
 # the permission to publish came with one request, a visible "sponsored by"
 # credit with the logo and a link. The README carries it; the logo files carry
@@ -105,8 +109,8 @@ PRIVATE_NAMES = {
     "e0fcd351b53ffafa": _SPONSOR_FILES,    # the employer, as the sponsor credit names it
     "619e045974e6cf5d": _SPONSOR_FILES,    # the employer, as its domain reads
     "5b090874c87b019a": frozenset(),       # the maintainer's own domain
-    "06b9a6eacd7a77b9": _LICENCE_FILES,    # the maintainer, given name
-    "6f12ebf934ac8261": _LICENCE_FILES,    # the maintainer, family name
+    "06b9a6eacd7a77b9": _AUTHOR_FILES,     # the maintainer, given name
+    "6f12ebf934ac8261": _AUTHOR_FILES,     # the maintainer, family name
 }
 WORD = re.compile(r"[a-z0-9]+")
 
