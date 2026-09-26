@@ -102,7 +102,8 @@ module in the same kind of cage.
   reach either - its bail-travel note is Note 6, "3.4 MAX".
 - **D3 - seating depth by naming the feature**: a connection point may carry
   `on: <relief node>`; a boot seated there lifts by that feature's `out`
-  (`interface-at`, `on:`, L106).
+  (`interface-at`, `on:`, L106). A `cyl` feature has no `out`, and its rear is
+  its far end, `lift + cyl`, so a cable point on a round stub lands there.
 - **D4 - out of scope**: 2D side views showing a seated module's protrusion
   (see Open questions below); XFP/CFP/CFP2 (no generics exist); the OSFP MSA
   fetch (no OSFP generic exists); changing the generics' default latch

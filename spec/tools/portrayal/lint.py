@@ -265,7 +265,7 @@ RULES = {
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
-    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
+    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
@@ -280,7 +280,8 @@ RULES = {
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy"),
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
-    "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own stands past the head, and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
+    "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
+    "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1738,7 +1739,8 @@ def lint_component_display(path, data, _lib_roots=None):
 
 
 GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
-                           "power-draw-max-w", "power-draw-typical-w")
+                           "power-draw-max-w", "power-draw-typical-w",
+                           "cable-kind")
 GENERIC_RATE_TOKENS = re.compile(
     r"(^|-)(sfp28|sfp56|sfp112|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
     r"1000base[a-z0-9-]*|"
@@ -1798,7 +1800,10 @@ def lint_component_head(path, data, _lib_roots=None):
     outside envelope; this holds each part to it, and makes an overhang a
     stated, sourced fact rather than a silent one. A composed part's relief
     (the QSFP pull tab's) is out of its reach: the part's own contract answers
-    for it. docs/pluggables-heads-design.md section 4.3.
+    for it. So is a feature whose `lift` is at or past `head.size.d`: it starts
+    behind the head, on the cable (a strap or ring lying along it), and the
+    head's envelope does not bound the cable. docs/pluggables-heads-design.md
+    section 4.3.
     """
     if not isinstance(data, dict) or data.get("behaviour") != "occupies":
         return
@@ -1844,6 +1849,13 @@ def lint_component_head(path, data, _lib_roots=None):
                               f"within {limit[dim]:g} - a stale waiver")
     for f in (data.get("relief") or {}).get("features") or []:
         out = f.get("out")
+        # THE CABLE'S FURNITURE IS NOT THE HEAD'S. A feature whose `lift` is
+        # at or past the head's rear face starts where the head ends - a strap
+        # or ring lying along the cable behind it - and the head envelope says
+        # nothing about the cable. Anything that starts inside the head is
+        # still held to it exactly.
+        if (f.get("lift") or 0) >= hs["d"]:
+            continue
         if out is not None and out > hs["d"] + HEAD_TOL:
             err(path, "L121", f"{name}: relief feature {f.get('node')!r} stands {out:g} "
                               f"out, past the head's {hs['d']:g}")
@@ -3181,6 +3193,8 @@ def lint_component_fields(path, data, _lib_roots=None):
     would have produced blue handles wearing dark red edges. `data-stroke-derive`
     (#482), an outline drawn as a shade of a colour field, is read the same way:
     a skin deriving from a key no contract declares is deriving from nothing.
+    `data-r-from`, a circle whose radius is half a diameter field (a cable
+    stub sized by `cable-od`), is wiring too, and counts both ways.
 
     A COMPOSED PART THAT DECLARES THE SAME KEY KEEPS THE PROMISE TOO. The build
     hands a host's field value to every composed part that declares that key
@@ -3207,21 +3221,59 @@ def lint_component_fields(path, data, _lib_roots=None):
         if not sp.exists():
             continue
         text = sp.read_text(errors="replace")
-        keys = set(re.findall(r'data-(?:(?:fill-|stroke-)?from|stroke-derive)="([^"]+)"', text))
+        keys = set(re.findall(r'data-(?:(?:fill-|stroke-|r-)?from|stroke-derive)="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys and k not in composed:
-                err(path, "L73", f"field {k} has no data-from, data-fill-from or "
-                                 f"data-stroke-from node in skin {skin}")
+                err(path, "L73", f"field {k} has no data-from, data-fill-from, "
+                                 f"data-stroke-from, data-stroke-derive or data-r-from "
+                                 f"node in skin {skin}")
     undeclared = set().union(*seen.values()) - set(fields) if seen else set()
     if undeclared:
-        warn(path, "L73", f"skin fills {', '.join(sorted(undeclared))} from attrs but the "
+        warn(path, "L73", f"skin reads {', '.join(sorted(undeclared))} from attrs but the "
                           f"contract declares no such field - a form cannot offer them")
     for k, f in fields.items():
         if (f or {}).get("type") == "choice" and not (f or {}).get("options"):
             err(path, "L73", f"field {k} is a choice with no options")
         if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
             err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
+
+
+CABLE_OD_RANGE = (2.0, 15.0)
+
+
+def lint_component_cable_od(path, data, _lib_roots=None):
+    """L122: a cable's outside diameter is a number of millimetres a real
+    cable can have. The corpus runs from 3.0 (an AOC) to 11.6 (a 26AWG
+    QSFP-DD DAC); 2 to 15 brackets every held document with room, and a
+    value outside it is a unit error or a typo that would draw a stub the
+    size of a fan (docs/pluggables-cables-design.md section 4)."""
+    if not isinstance(data, dict):
+        return
+    vals = []
+    f = (data.get("fields") or {}).get("cable-od")
+    if isinstance(f, dict) and "default" in f:
+        vals.append(("fields.cable-od.default", f["default"]))
+    for p in data.get("parts") or []:
+        a = (p.get("attrs") or {}) if isinstance(p, dict) else {}
+        if "cable-od" in a:
+            vals.append((f"parts[{p.get('id')}].attrs.cable-od", a["cable-od"]))
+    # THE BUILD'S OWN QUESTION FIRST. float() alone takes "1e1", "1_0" and
+    # non-ASCII digits, which render and the kit leave undrawn, so a value
+    # lint passed could draw nothing. R_FROM_NUMBER is the one pattern all
+    # three ask (render.py).
+    from portrayal.render import R_FROM_NUMBER
+    lo, hi = CABLE_OD_RANGE
+    for where, v in vals:
+        try:
+            if isinstance(v, bool) or not R_FROM_NUMBER.fullmatch(str(v)):
+                raise ValueError(v)
+            d = float(str(v).strip())
+        except (TypeError, ValueError):
+            err(path, "L122", f"{data.get('name')}: {where} is {v!r}, not a number of mm")
+            continue
+        if not lo <= d <= hi:
+            err(path, "L122", f"{data.get('name')}: {where} is {d:g} mm, outside {lo:g}-{hi:g}")
 
 
 def lint_component_lamp_colour(path, data, _lib_roots=None):
@@ -4831,8 +4883,9 @@ def lint_component_seat_point(path, data, _lib_roots=None):
     Either way a boot is drawn inside the plug it wraps and nothing says so.
 
     ERRORS, not warnings: there is no reading of a dangling name that is right.
-    A feature with no `out` does not stand proud, so it has no rear face to
-    seat on; `sink`, `top` and `lift` answer other questions.
+    A feature with neither `out` nor `cyl` does not stand proud, so it has no
+    rear face to seat on; `sink`, `top` and `lift` answer other questions. A
+    `cyl`'s rear is its far end, `lift + cyl` - a cable leaving a round stub.
     """
     cps = data.get("connection-points") or {}
     at = data.get("interface-at")
@@ -4860,10 +4913,10 @@ def lint_component_seat_point(path, data, _lib_roots=None):
         if f is None:
             err(path, "L106", f"connection-point {name!r} is on: {on!r}, which is "
                               "no relief.features[] node of this part")
-        elif f.get("out") is None:
+        elif f.get("out") is None and f.get("cyl") is None:
             err(path, "L106", f"connection-point {name!r} is on: {on!r}, which has "
-                              "no `out` - a part seated there needs the depth of "
-                              "the feature's rear face to stand on")
+                              "no `out` or `cyl` - a part seated there needs the "
+                              "depth of the feature's rear face to stand on")
 
 
 def lint_device_power_redundancy(path, data):
@@ -9944,6 +9997,7 @@ def main():
                 lint_component_sink_context(f, d)
                 lint_component_facets(f, d, args.library)
                 lint_component_fields(f, d, args.library)
+                lint_component_cable_od(f, d)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
                 lint_component_rj45_lamps(f, d, args.library)

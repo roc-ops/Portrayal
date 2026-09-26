@@ -1,0 +1,161 @@
+format: 1
+kind: component
+name: qsfp-dd-cable
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp-dd
+conforms: qsfp-dd-module
+profile: networking
+description: >-
+  A generic QSFP-DD cable end with the Type 1 head - the shape a direct-attach,
+  active copper, active electrical or active optical QSFP-DD cable has when its
+  backshell stays within the Type 1 20 MAX outside the cage. Inside the cage it
+  is the QSFP-DD module envelope. Outside it: the closed head, a strain-relief
+  boot, a flat pull strap lying on top of the cable and ending in a ring, and a
+  short stub of cable whose diameter and colour are fields. The longer Type 2
+  head is its own part, generic/qsfp-dd-cable-type2. Which cable it is - its
+  kind, rate and gauge - is a fact about a vendor's product and lives on the
+  wrapper that composes this (docs/pluggables-cables-design.md decisions 1 and
+  5), never here.
+size: {w: 18.35, h: 8.5, d: 58.26}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, -3.4]
+  size: {w: 18.35, h: 13.5, d: 20.0}
+  size-confidence: {w: registry, h: registry, d: registry}
+  node: head
+  type: 1
+attrs: {power-absent: not-applicable, form-factor: qsfp-dd}
+fields:
+  cable-od:
+    label: Cable outside diameter
+    type: number
+    unit: mm
+    default: 9.0
+  jacket-color:
+    label: Jacket colour
+    type: text
+    default: '#1c1c1c'
+  latch-color:
+    label: Pull strap colour
+    type: text
+    default: '#6f6f6f'
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-dd-module, QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification
+    Rev 6.3 Figure 52: 18.35 +/-0.1 wide, 8.5 +/-0.1 high, 58.26 REF from the back
+    of the part outside the cage to the rear end of the housing. The head below
+    is NOT inside that depth; d + head.size.d is the whole plug.
+  head: >-
+    registry - the MSA maximum. No held drawing dimensions a Type 1 cable head:
+    the one QSFP-DD cable drawing that prints a head length (the Volex 400G
+    QSFP-DD passive DAC data sheet) is a Type 2, and is generic/qsfp-dd-cable-type2.
+    So every figure here is QSFP-DD HW Rev 6.3 Figure 52's, which dimensions the
+    part outside the cage directly: 20 MAX long for Type 1 (Note 4), 3.4 MAX
+    above and 1.6 MAX below the 8.5 body, 13.5 REF tall, and 18.35 +/-0.1 wide
+    (inside the 19 MAX). A real Type 1 head may be smaller in every direction.
+    ONE IS DEPICTED, NOT DIMENSIONED: the FS 400G QSFP-DD DAC data sheet's
+    Figure 1 draws a head whose back, scaled on its own 18.35, falls about 20.0
+    past the 58.26 nose line (about 22 on its bend figure), 2.8 above and 1.4
+    below the body (12.75 tall, scaled on its 8.50) - a Type 1-length head,
+    inside every maximum here. Its dimensioned 24.40 is measured from the
+    bezel, not the cage face, so it is not a head length to set against the 20
+    MAX. The registry figures are kept, not FS's scaled ones.
+  relief-boot: >-
+    estimated (borrowed in substance from generic/qsfp-cable@1, FCI 10121178 /
+    Amphenol C-NDAAFR-0099; L36 takes `borrowed` only from a measured origin) -
+    no held QSFP-DD drawing shows a strain relief outside the head:
+    the FS drawing puts its ribbed collar inside the head outline, and Volex runs
+    the braid straight up to the head's back. A cable end without a boot
+    misrepresents the part, so the boot is the QSFP generic's: 15 long and 11 in
+    diameter, borrowed from generic/qsfp-cable@1 (FCI 10121178 / Amphenol
+    C-NDAAFR-0099). Centred on the body axis.
+  stub: >-
+    estimated (borrowed in substance from generic/qsfp-cable@1, Amphenol
+    C-NDAAFR-0099; L36 takes `borrowed` only from a measured origin) - the
+    straight run before the first allowed bend: 30 past the boot's end, so
+    it ends 45 past the head's back - borrowed from generic/qsfp-cable@1, whose
+    45 is Amphenol C-NDAAFR-0099's 45 MIN to bend the cable. QSFP-DD HW Rev 6.3
+    gives no bend figure at all. The only QSFP-DD bend figures held are a
+    vendor's own: the FS 400G QSFP-DD DAC data sheet's bend figure (30AWG, OD
+    6.7: minimum bend radius 33.5, minimum bend space 72 horizontal and 65
+    vertical, measured from the bezel) and Credo HiWire SHIFT's 54.5 radius for
+    4P 30AWG. Both leave the borrowed 45 conservative, not short. The stub is
+    drawn centred on the body axis; its diameter is `cable-od` and its colour
+    `jacket-color`.
+  strap: >-
+    estimated - the strap solid runs from the head's back to where the ring
+    begins, 33.5 past it (estimated, as the ring is); the ring carries the
+    strap on to the strap-and-ring REACH of 50, so the two solids share no
+    front face. The REACH is drawing (an informative appendix of the MSA):
+    QSFP-DD HW Rev 6.3 Appendix B (informative, Figures 102-103) puts the
+    handle's end at 118 REF from datum D, "approximately 50mm" for Type 1, and
+    118 - 48.2 - 20 = 49.8; the FS drawing's ring ends at 52.3, scaled. The
+    section is estimated, the FS drawing's strap scaled on its 18.35 and 8.50:
+    11.4 wide and 0.7 thick, centred. It lies on top of the cable; drawn as a
+    flat box whose underside sits on the boot's top, so the boot does not
+    pierce it, 1.25 to 1.95 above the body top (FS runs it level at about its
+    head-top height, 2.8 above).
+  strap-ring: >-
+    estimated - the FS drawing's round ring, about 16.5 outside diameter and 2.3
+    thick, scaled on its 18.35 and 8.50, built as a box: 16.5 square, centred
+    across the strap, ending at the strap's 50 reach (33.5 to 50 past the head's
+    back; FS scales it 34.8 to 52.3). It sits on the strap's underside line and
+    stands 2.3 above it.
+  cable-od: >-
+    drawing - the Volex 400G QSFP-DD passive DAC data sheet's OD table, 9.0
+    for 30AWG (the Type 2 generic's source), kept as the Type 1 default too (FS
+    gives 6.7 for its own 30AWG). A default: a vendor wrapper sets its own
+    cable's figure.
+  colour: >-
+    FIELDS, not facts, with neutral defaults: the jacket #1c1c1c and the strap
+    #6f6f6f, the grey the optics' pull tabs use (#473). The strap's outline is a
+    fixed shade of the strap colour (`data-stroke-derive`). The head is drawn in
+    the diecast grey of the other generic heads, and the boot near-black: the FS
+    and NADDOD part lists name a black PVC strain relief.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC: a passive DAC draws
+    almost nothing and an active optical cable end several watts, and one
+    drawing is all of them. The figure belongs on the wrapper. L27 exempts by
+    `power-absent` and this sentence is why.
+elements: {}
+relief:
+  features:
+    - node: head
+      out: 20.0
+      color: '#9aa0a6'
+      confidence: registry
+      source: QSFP-DD HW Rev 6.3 Figure 52 Note 4, 20 MAX Type 1
+    - node: relief-boot
+      cyl: 15.0
+      lift: 20.0
+      confidence: estimated
+      source: >-
+        the QSFP cable generic's boot, 15 long x 11 diameter, borrowed from generic/qsfp-cable@1
+        (FCI 10121178 / Amphenol C-NDAAFR-0099); no QSFP-DD drawing shows one. Labelled
+        estimated, not borrowed: L36 keeps `borrowed` for a figure the origin measured, and
+        the origin did not measure this one
+    - node: stub
+      cyl: 30.0
+      lift: 35.0
+      confidence: estimated
+      source: >-
+        30 past the boot, ending 45 past the head's back, borrowed from generic/qsfp-cable@1's
+        stub (Amphenol C-NDAAFR-0099, 45 MIN to bend); QSFP-DD HW Rev 6.3 gives no bend figure.
+        Labelled estimated for the same L36 reason as the boot
+    - node: strap
+      out: 53.5
+      lift: 20.0
+      confidence: estimated
+      source: ends where the ring begins, 33.5 past the head's back; the ring carries the strap on to its 50 reach, QSFP-DD HW Rev 6.3 Appendix B (informative), handle end 118 REF from datum D, 118 - 48.2 - 20 = 49.8, "approximately 50mm" for Type 1
+    - node: strap-ring
+      out: 70.0
+      lift: 53.5
+      confidence: estimated
+      source: FS 400G QSFP-DD DAC data sheet Figure 1, a round ring about 16.5 across, scaled on the drawing's 18.35; ends at the strap's 50 reach
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  cable: {at: [9.175, 4.25], direction: front, 'on': stub}
+skins: [default]

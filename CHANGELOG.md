@@ -203,6 +203,27 @@ the *published build*, not about the hardware.
   as its host, matching the build-time rule above.
 - Lint L76 (RJ45 jack lamps) skips a contract whose class is `transceiver`:
   a copper SFP's jack carries no link LEDs, so it is not asked for one.
+- Cable ends: `generic/sfp-cable@1`, `generic/qsfp-cable@1`,
+  `generic/qsfp-dd-cable@1` (Type 1, at the MSA maximum) and
+  `generic/qsfp-dd-cable-type2@1`. Each is a module in the cage and a head,
+  pull strap, strain relief and a short straight stub of cable outside it. The
+  `cable` connection point sits at the stub's far end, so a downstream tool
+  continues the run from there. The cage accept lists offer them beside the
+  optics. See [pluggables-cables-design.md](docs/pluggables-cables-design.md).
+- Vendor cable ends wrapping those generics, each with `cable-kind` (`dac`,
+  `acc`, `aec` or `aoc`) and its own document's values:
+  `molex/sfp-plus-passive-dac`, `amphenol/qsfp28-passive-dac`,
+  `amphenol/qsfp56-linear-active`, `fs/qsfp28-aoc`, `siemon/qsfp28-aoc`,
+  `volex/qsfp-dd-passive-dac` and `credo/hiwire-shift-qsfp-dd`, and the
+  vendors `molex`, `amphenol`, `volex`, `credo` and `siemon`.
+- A `cable-od` field (mm) on the cable ends, and a skin binding
+  `data-r-from="<field>"` that sets a circle's radius to half a numeric field
+  value, at build time and in the kit at runtime. Empty or absent leaves the
+  drawn radius. Lint L122 keeps a `cable-od` (a field default or a composing
+  part's attrs) between 2 and 15, and accepts only the plain decimal number
+  the build and the kit read. Lint L73 counts `data-r-from` as wiring a field.
+- A `cable` connection point may sit `on` a `cyl` relief feature; it leaves
+  from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
 
 ### Changed
 - `generic/qsfp-lc@1` and `generic/qsfp-dd-lc@1` are superseded by `@2`
@@ -210,6 +231,15 @@ the *published build*, not about the hardware.
 - `common/qsfp-pull-tab@1` is superseded by `@2` (above); `@1` is kept, with
   its `white` and `blue` skins, for `common/qsfp-transceiver@1`, which still
   composes it.
+- Lint L121 no longer holds a feature that starts at or behind the back of
+  a part's `head:` (a cable end's strap and ring) to the head envelope.
+- Lint L99 refuses `cable-kind` on a generic, as it refuses rate and reach.
+- A component preview now also takes in the part's own relief features and
+  the preview of each part it composes, so a wrapper's preview shows its
+  generic's head, strap and ring.
+- `common/qsfp-pull-tab@2` (2.0.3) labels its photograph readings
+  `photo-measured`, not `measured`: the arm features, `size-confidence.h` and
+  the `shape` provenance.
 - The three component previews whose part declares an overhanging `head:`
   (`generic/sfp-rj45`, `generic/qsfp-lc`, `generic/qsfp-dd-lc`) are framed to
   include it, instead of clipping to the part's size box.

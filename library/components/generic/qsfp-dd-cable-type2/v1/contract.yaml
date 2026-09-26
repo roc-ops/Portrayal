@@ -1,0 +1,159 @@
+format: 1
+kind: component
+name: qsfp-dd-cable-type2
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: qsfp-dd
+conforms: qsfp-dd-module
+profile: networking
+description: >-
+  A generic QSFP-DD cable end with the longer Type 2 head - the shape a
+  direct-attach, active copper, active electrical or active optical QSFP-DD
+  cable has when its backshell stands more than the Type 1 20 MAX out of the
+  cage. Inside the cage it is the QSFP-DD module envelope. Outside it: the
+  closed head, a strain-relief boot, a flat pull strap lying on top of the
+  cable and ending in a grip, and a short stub of cable whose diameter and
+  colour are fields. Which cable it is - its kind, rate and gauge - is a fact
+  about a vendor's product and lives on the wrapper that composes this
+  (docs/pluggables-cables-design.md decisions 1 and 5), never here.
+size: {w: 18.35, h: 8.5, d: 58.26}
+size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, -3.4]
+  size: {w: 18.35, h: 13.5, d: 28.3}
+  size-confidence: {w: drawing, h: estimated, d: drawing}
+  node: head
+  type: 2
+attrs: {power-absent: not-applicable, form-factor: qsfp-dd}
+fields:
+  cable-od:
+    label: Cable outside diameter
+    type: number
+    unit: mm
+    default: 9.0
+  jacket-color:
+    label: Jacket colour
+    type: text
+    default: '#1c1c1c'
+  latch-color:
+    label: Pull strap colour
+    type: text
+    default: '#6f6f6f'
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    registry - qsfp-dd-module, QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification
+    Rev 6.3 Figure 52: 18.35 +/-0.1 wide, 8.5 +/-0.1 high, 58.26 REF from the back
+    of the part outside the cage to the rear end of the housing. The head below
+    is NOT inside that depth; d + head.size.d is the whole plug.
+  head: >-
+    drawing - the Volex 400G QSFP-DD passive DAC data sheet, page 2, the only held
+    drawing that dimensions a QSFP-DD cable head. Its 86.56 +/-0.15 leader runs
+    from the plug front to the head's back, where the braid and the pull tab
+    begin; less Figure 52's 58.26 REF in-cage length that is 28.3 outside the
+    cage, and a line scaled off the same top view at 58.1 from the front is the
+    58.26 nose line to within 0.2. 28.3 is over Type 1's 20 MAX and inside Type
+    2's 35 MAX (QSFP-DD HW Rev 6.3 Figure 52 Note 4), so this is a Type 2 head.
+    WIDTH 18.35: the drawing's 18.35 +/-0.1, with the head drawn flush with the
+    body (inside the 19 MAX). HEIGHT estimated on the drawing's own 8.50 +/-0.1
+    as the scale: the side view puts the head 3.4 above and 1.6 below the body,
+    13.5 tall - exactly Figure 52's 3.4 MAX above, 1.6 MAX below and 13.5 REF, so
+    the Volex head fills the MSA's outside envelope. The drawing is one 96 ppi
+    raster (one pixel is about 0.8 mm), so the split is good to about 0.85. The
+    chamfered step from the body up to the head, about 5 mm long, is not drawn.
+  relief-boot: >-
+    estimated (borrowed in substance from generic/qsfp-cable@1, FCI 10121178 /
+    Amphenol C-NDAAFR-0099; L36 takes `borrowed` only from a measured origin) -
+    no held QSFP-DD drawing shows a strain relief outside the head:
+    Volex runs the braid straight up to the head's back, and the FS 400G QSFP-DD
+    DAC drawing (Figure 1) puts its ribbed collar inside the head outline. A
+    cable end without a boot misrepresents the part, so the boot is the QSFP
+    generic's: 15 long and 11 in diameter, borrowed from generic/qsfp-cable@1
+    (FCI 10121178 / Amphenol C-NDAAFR-0099). Centred on the body axis.
+  stub: >-
+    estimated (borrowed in substance from generic/qsfp-cable@1, Amphenol
+    C-NDAAFR-0099; L36 takes `borrowed` only from a measured origin) - the
+    straight run before the first allowed bend: 30 past the boot's end, so
+    it ends 45 past the head's back - borrowed from generic/qsfp-cable@1, whose
+    45 is Amphenol C-NDAAFR-0099's 45 MIN to bend the cable. QSFP-DD HW Rev 6.3
+    gives no bend figure at all. The only QSFP-DD bend figures held are a
+    vendor's own: the FS 400G QSFP-DD DAC data sheet's bend figure (30AWG, OD
+    6.7: minimum bend radius 33.5, minimum bend space 72 horizontal and 65
+    vertical, measured from the bezel) and Credo HiWire SHIFT's 54.5 radius for
+    4P 30AWG. Both leave the borrowed 45 conservative, not short. The stub is
+    drawn centred on the body axis; its diameter is `cable-od` and its colour
+    `jacket-color`.
+  strap: >-
+    estimated - the Volex pull tab, scaled on the drawing's 86.56 (horizontal)
+    and 8.50 (vertical). A closed loop as wide as the head (18.35, drawn flush)
+    with two side rails over the cable, ending in a ridged grip bar. Its end is
+    40 past the head's back (39.2 in the side view, 40.7 in the top view);
+    QSFP-DD HW Rev 6.3 Appendix B (informative) corroborates it, its handle end
+    at 118 REF from datum D giving 118 - 48.2 - 28.3 = 41.5. The strap is about
+    1.0 thick, which is one native pixel. It lies on top of the cable, as the
+    drawing shows; drawn as a flat box whose underside sits on the boot's top,
+    so the boot does not pierce it, 1.25 to 2.25 above the body top (the drawing
+    has it leave the head 0.3 to 1.5 above the body top and rise to the grip).
+    NOT the 150 +/-10 on the same drawing: its far extension line lands on the
+    cable label, so it locates the label, not the tab. The rails' solid ends where
+    the grip bar's begins, 30 past the head's back, and the bar carries the tab on
+    to 40, so the two solids share no front face.
+  strap-ring: >-
+    estimated - the Volex grip bar, the ridged end of the tab: from 30 to 40
+    past the head's back (10 long), the head's full 18.35 wide. Its top is 4.5
+    above the body top (1.1 above the head's top), scaled on the 8.50; it is
+    drawn down to the strap's underside, 3.25 tall.
+  cable-od: >-
+    drawing - the Volex OD table, 9.0 for 30AWG (10.4 and 11.6 for the heavier
+    gauges). A default: a vendor wrapper sets its own cable's figure.
+  colour: >-
+    FIELDS, not facts, with neutral defaults: the jacket #1c1c1c and the strap
+    #6f6f6f, the grey the optics' pull tabs use (#473). The strap's outline is a
+    fixed shade of the strap colour (`data-stroke-derive`). The head is drawn in
+    the diecast grey of the other generic heads, and the boot near-black: the FS
+    and NADDOD part lists name a black PVC strain relief.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC: a passive DAC draws
+    almost nothing and an active optical cable end several watts, and one
+    drawing is all of them. The figure belongs on the wrapper. L27 exempts by
+    `power-absent` and this sentence is why.
+elements: {}
+relief:
+  features:
+    - node: head
+      out: 28.3
+      color: '#9aa0a6'
+      confidence: drawing
+      source: Volex 400G QSFP-DD passive DAC data sheet p2, 86.56 +/-0.15 less QSFP-DD HW Rev 6.3 Figure 52's 58.26 REF
+    - node: relief-boot
+      cyl: 15.0
+      lift: 28.3
+      confidence: estimated
+      source: >-
+        the QSFP cable generic's boot, 15 long x 11 diameter, borrowed from generic/qsfp-cable@1
+        (FCI 10121178 / Amphenol C-NDAAFR-0099); no QSFP-DD drawing shows one. Labelled
+        estimated, not borrowed: L36 keeps `borrowed` for a figure the origin measured, and
+        the origin did not measure this one
+    - node: stub
+      cyl: 30.0
+      lift: 43.3
+      confidence: estimated
+      source: >-
+        30 past the boot, ending 45 past the head's back, borrowed from generic/qsfp-cable@1's
+        stub (Amphenol C-NDAAFR-0099, 45 MIN to bend); QSFP-DD HW Rev 6.3 gives no bend figure.
+        Labelled estimated for the same L36 reason as the boot
+    - node: strap
+      out: 58.3
+      lift: 28.3
+      confidence: estimated
+      source: Volex p2 pull tab, scaled on the drawing's 86.56 - its rails end where the grip bar begins, 30 past the head's back; the bar carries the tab on to its 40 end (QSFP-DD HW Rev 6.3 Appendix B gives 41.5)
+    - node: strap-ring
+      out: 68.3
+      lift: 58.3
+      confidence: estimated
+      source: Volex p2 ridged grip bar, 30 to 40 past the head's back, scaled on the drawing's 86.56 and 8.50
+connection-points:
+  mate: {at: [9.175, 4.25], direction: front}
+  cable: {at: [9.175, 4.25], direction: front, 'on': stub}
+skins: [default]

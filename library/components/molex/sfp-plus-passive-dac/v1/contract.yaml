@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: sfp-plus-passive-dac
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+profile: networking
+description: >-
+  Molex 74752 SFP+ to SFP+ 10G passive direct-attach copper cable, one end - a
+  plunger-latch cable end with a black de-latch pull, in 30, 28, 26 and 24 AWG
+  by length. It composes generic/sfp-cable@1 and sets the pull's colour; the
+  shape is the generic's.
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs:
+  model: '74752'
+  cable-kind: dac
+  media: sfp-plus
+  speed: 10g
+  power-absent: not-published
+parts:
+  - {ref: generic/sfp-cable@1, id: body, at: [0, 0],
+     attrs: {latch-color: '#1c1c1c'}}
+provenance:
+  size: >-
+    borrowed - generic/sfp-cable@1, the generic this wraps, whose own figures are
+    the sfp-module registry entry's (SFF-8432 Rev 5.2a Table 4-3). These are the
+    generic's numbers restated, not a new reading; the Molex drawing this
+    wrapper cites draws the same 13.55 +/-0.25 and 8.55 +/-0.15.
+  model: >-
+    datasheet - Molex product customer drawing 747520001 rev V1, title block:
+    series 74752, part numbers per the sheet 3 table (74752-XXXX on the cable
+    label). One cable end stands for every length and gauge in that table.
+  cable-kind: >-
+    datasheet - 747520001 rev V1 sheet 1 title "SFP+ TO SFP+ 10G PASSIVE CABLE
+    ASSEMBLY" and note 2, "100 OHMS DIFFERENTIAL, PASSIVE".
+  speed: >-
+    datasheet - 747520001 rev V1 sheet 1 title (10G) and note 5, 11.09 Gbps
+    backwards compatible to 1.0625 Gbps.
+  media: >-
+    datasheet - 747520001 rev V1 title, SFP+ (sfp-plus on the sfp ladder).
+  latch-color: >-
+    datasheet - 747520001 rev V1 sheet 1, callout "DE-LATCH PULL COLOR: BLACK"
+    (note 1: the de-latch is plastic). Black is written as the library's
+    near-black #1c1c1c, the same value the jacket default uses.
+  cable-od: >-
+    NOT STATED - 747520001 rev V1 gives no cable outside diameter on any of its
+    three sheets (the sheet 3 table lists length and AWG only, 30 to 24 AWG), so
+    the wrapper does not set cable-od and generic/sfp-cable@1's 4.8 default
+    stands - the generic's default (another vendor's figure), not Molex's.
+  jacket-color: >-
+    NOT STATED - the drawing names no jacket colour, so the generic's neutral
+    #1c1c1c default stands.
+  power: >-
+    not-published - 747520001 rev V1 (all three sheets) states no power figure;
+    it is a passive assembly (note 2) whose only active part is the serial ID
+    EEPROM (note 4). No other Molex document for this series is held.
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}

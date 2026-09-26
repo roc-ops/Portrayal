@@ -1,0 +1,131 @@
+format: 1
+kind: component
+name: sfp-cable
+version: 1.0.0
+class: transceiver
+behaviour: occupies
+mates: sfp
+conforms: sfp-module
+profile: networking
+description: >-
+  A generic SFP+ cable end - the shape every direct-attach, active copper,
+  active electrical and active optical SFP cable end has, standing for all of
+  them. The body in the cage is the SFP envelope; outside it are a closed
+  backshell, a pull strap lying along the top of the strain relief and ending in
+  a ring, the strain relief, and a short stub of cable whose diameter and colour
+  are fields. The kind of cable, its rate and its reach belong on the vendor
+  wrapper.
+size: {w: 13.55, h: 8.55, d: 47.50}
+size-confidence: {w: registry, h: registry, d: registry}
+attrs: {power-absent: not-applicable, form-factor: sfp}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 4.8}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+  latch-color: {label: Latch colour, type: text, default: '#6f6f6f'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+head:
+  at: [0.0, -1.40]
+  size: {w: 13.55, h: 11.50, d: 10.8}
+  size-confidence: {w: drawing, h: drawing, d: drawing}
+  node: head
+  exceeds:
+    - dimension: below
+      source: >-
+        Molex customer drawing 747520001 rev V1 sheet 1, side view: the backshell is
+        11.50 REF tall against the 8.55 +/-0.15 body and stands 1.40 above it, so 1.55
+        below the 8.55 registry body (1.60 as drawn); 10Gtek SFP+ passive DAC
+        specification V1.3 page 9 draws about 1.7 below (11.65 +/-0.1 against 8.55)
+    - dimension: length
+      source: >-
+        Molex customer drawing 747520001 rev V1: 58.30 REF front to backshell back,
+        less the 47.50 in-cage body, is 10.8 outside the cage; 10Gtek SFP+ passive DAC
+        specification V1.3 gives 58.4 +/-0.2. SFF-8432 A is a recommended 10.00 and
+        calls other lengths application specific
+provenance:
+  size: registry - sfp-module, SFF-8432 Rev 5.2a Table 4-3 (E 13.55, S 8.55, T 47.50); Molex 747520001 rev V1 draws the same 13.55 +/-0.25 and 8.55 +/-0.15
+  head: >-
+    drawing - Molex customer drawing 747520001 rev V1 sheet 1 (SFP+ to SFP+ passive,
+    scale 2:1). Width 13.55 +/-0.25: the extension lines come off the body front and
+    the backshell sides together, so the backshell is the body's width and at.x is 0.
+    Height 11.50 REF: its extension lines come off the backshell's top and bottom. d
+    10.8 is 58.30 REF, which lands on the backshell's back edge, less the 47.50
+    in-cage body; the backshell is drawn 10.8 long and starts at the 47.50 line.
+    10Gtek SFP+ passive DAC specification V1.3 page 9 agrees (58.4 +/-0.2, 11.65
+    +/-0.1). THE ABOVE/BELOW SPLIT IS ESTIMATED: scaled off the Molex side view on the
+    drawing's own 8.55 body and cross-checked on its 11.50 REF, 1.40 above and 1.60
+    below as drawn (the body is drawn 8.51); placed on the 8.55 registry body that is
+    1.40 above and 1.55 below. 10Gtek's native 170 ppi view reads 1.6 above and 1.7
+    below (+/-0.4 each), an even-to-slightly-low split that agrees.
+  relief-boot: >-
+    estimated - Molex 747520001 rev V1 side view, scaled on the drawing's own 11.50
+    REF and 8.55: a ribbed boot 27.9 long from the backshell back, 8.8 across at the
+    head end tapering to about 6.0. One cylinder of its largest section, which is what
+    the end-on view outlines; the taper is not modelled. Molex draws its axis 1.0
+    above the body centre and Amphenol C-NJDDGN-0099 rev 5.0 offsets it 1.6 the other
+    way in a view whose up is not labelled, so the boot is placed on the body axis.
+    Amphenol's boot is shorter (16.2 ribbed plus a 5.9 ferrule, 22.0) and 8.3-8.5
+    across; the head, boot and strap are all taken from the one Molex drawing so they
+    agree with each other.
+  strap: >-
+    estimated - Molex 747520001 rev V1 ("DE-LATCH PULL", a rigid moulded plunger-latch
+    pull), top view scaled on the 11.50 REF / 8.55: a neck 5.75 wide and 0.5 thick
+    from a hinge at the backshell back, ending in a ring 14.97 long and 13.43 wide
+    whose far end is 43.1 past the backshell back (53.9 from the cage face). The strap
+    lies on the top of the strain relief and runs along the cable; Molex draws the
+    unloaded moulding riding about 3.5 clear of the cable with its ring kinked up, and
+    10Gtek's flexible pull tab hangs below the cable, so where it lies is a free
+    position, not a dimension. The ring is a solid box of the ring's outline, 1.5
+    thick (the ring's drawn section), centred on the strap's plane. Molex's 103 +/-10
+    is measured to the cable label and Amphenol's 50 APPROX to the end of the braid;
+    neither is the strap's reach and neither is used. The neck's solid ends where the
+    ring's begins, 28.2 past the backshell back (39.0 from the cage face), and the ring
+    carries the pull on to 53.9, so the two solids share no front face.
+  stub: >-
+    estimated - a straight 30 of cable past the strain relief, ending at the `cable`
+    point, 68.7 from the cage face. The 30 is Amphenol C-NJDDGN-0099 rev 5.0's bend
+    distance "(30mm)", a reference figure measured from the diecast back edge to the
+    outer edge of the cable after an R25 minimum bend - a bend clearance, not a
+    straight run. Taken from the boot's end instead, so that the stub is a length of
+    cable and not the 2.1 the Molex boot would leave of it. The diameter is the
+    cable-od field.
+  cable-od: >-
+    drawing - Amphenol C-NJDDGN-0099 rev 5.0 Table 2 item 1, 25 AWG dual-drain
+    two-pair cable, phi 4.8; its bend view draws the cable 4.8 to scale. Molex draws
+    its cable about 4.2, undimensioned. A wrapper sets its own product's diameter.
+  power: >-
+    NOT APPLICABLE, because this contract is a GENERIC: a passive cable end draws
+    almost nothing and an active optical one about a watt, and one drawing is all of
+    them. The figure belongs on the wrapper. L27 exempts by `power-absent` and this
+    sentence is why.
+elements: {}
+relief:
+  features:
+    - node: head
+      out: 10.8
+      color: '#9aa0a6'
+      confidence: drawing
+      source: Molex 747520001 rev V1, 58.30 REF less the 47.50 in-cage body - the backshell's length outside the cage
+    - node: relief-boot
+      cyl: 27.9
+      lift: 10.8
+      confidence: estimated
+      source: Molex 747520001 rev V1 side view, scaled on its 11.50 REF and 8.55 - the boot from the backshell back
+    - node: strap
+      out: 39.0
+      lift: 10.8
+      confidence: estimated
+      source: Molex 747520001 rev V1 top view, scaled on its 11.50 REF and 8.55 - the de-latch pull from its hinge at the backshell back to where the ring begins; the ring carries it on to its far end
+    - node: strap-ring
+      out: 53.9
+      lift: 39.0
+      confidence: estimated
+      source: Molex 747520001 rev V1 top view, scaled on its 11.50 REF and 8.55 - the ring, 28.2 to 43.1 past the backshell back
+    - node: stub
+      cyl: 30.0
+      lift: 38.7
+      confidence: estimated
+      source: Amphenol C-NJDDGN-0099 rev 5.0 bend distance (30mm), a reference figure from the diecast edge, taken as a straight run past the boot
+connection-points:
+  mate: {at: [6.775, 4.275], direction: front}
+  cable: {at: [6.775, 4.275], direction: front, 'on': stub}
+skins: [default]
