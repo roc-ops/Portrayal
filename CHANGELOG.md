@@ -227,9 +227,9 @@ the *published build*, not about the hardware.
 - A component preview now also takes in the part's own relief features and
   the preview of each part it composes, so a wrapper's preview shows its
   generic's head, strap and ring.
-- `common/qsfp-pull-tab@2` (2.0.3, 2.0.4) labels its photograph readings
-  `photo-measured`, not `measured`: the arm features and `size-confidence.h`
-  in 2.0.3, the `shape` provenance in 2.0.4.
+- `common/qsfp-pull-tab@2` (2.0.3) labels its photograph readings
+  `photo-measured`, not `measured`: the arm features, `size-confidence.h` and
+  the `shape` provenance.
 - The three component previews whose part declares an overhanging `head:`
   (`generic/sfp-rj45`, `generic/qsfp-lc`, `generic/qsfp-dd-lc`) are framed to
   include it, instead of clipping to the part's size box.
