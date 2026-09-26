@@ -73,7 +73,7 @@ def _cage(idx, view, cage_id):
 
 # --- the three real cages ------------------------------------------------
 
-def test_an_sfp28_cage_accepts_exactly_the_three_sfp_generics(tmp_path):
+def test_an_sfp28_cage_accepts_exactly_the_sfp_generics(tmp_path):
     idx = _build(CSR310, tmp_path)
     cage = _cage(idx, "front", "m1-0")
     assert cage["interface"] == "sfp"
@@ -82,7 +82,8 @@ def test_an_sfp28_cage_accepts_exactly_the_three_sfp_generics(tmp_path):
     # ORDER IS PART OF THE CONTRACT - generics first, alphabetical - so a
     # wrong-but-nonempty list (the failure mode an unordered `set()` compare
     # would hide) fails loudly here.
-    assert cage["accepts"] == ["generic/sfp-lc-simplex@2", "generic/sfp-lc@1", "generic/sfp-rj45@1"]
+    assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
+                               "generic/sfp-rj45@1"]
 
 
 def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(tmp_path):
@@ -157,7 +158,8 @@ def test_a_group_with_no_media_has_no_ceiling(tmp_path):
     cage = _cage(idx, "front", "m1-0")
     assert cage["group"] == "sfp28"
     assert cage["media"] is None
-    assert cage["accepts"] == ["generic/sfp-lc-simplex@2", "generic/sfp-lc@1", "generic/sfp-rj45@1"]
+    assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
+                               "generic/sfp-rj45@1"]
 
 
 # --- the configured occupant, read from the manifest, not hardcoded ------
