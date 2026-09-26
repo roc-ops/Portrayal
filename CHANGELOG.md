@@ -15,6 +15,12 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- `data-rear-rotate` on a rear cutout a turned bay is seen through: how far
+  a back drawn in it is turned, the bay's own `rotate` negated (a clockwise
+  turn seen from the front reads anticlockwise from behind). The back's
+  projection in that hole carries the same turn about its own centre, and
+  `data-rear-at` is then its unturned top-left, as a placement's `at` is.
+  Unturned holes are unchanged.
 - Component groups: a component declares `groups:` in the device shape and a
   part joins one with `group:`. A port on a module seated in a bay, at any
   depth, now carries `data-group`, `data-group-role` and its group's attrs
