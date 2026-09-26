@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: pcie-card-fh
+version: 2.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  A generic full-height PCI Express
+  add-in card, half-length - the standard bracket at the chassis wall and a
+  PCB slab running into the chassis behind it. What is fitted stands in for
+  any card until the card itself is modelled.
+size: {w: 120.02, h: 21.59, d: 167.65}
+attrs:
+  role: expansion-card
+  power-absent: not-published
+provenance:
+  size: >-
+    standard - the face is the pcie-bracket-fh bracket, 120.02 x 21.59, and the length is
+    the PCI Express CEM 5.0 half-length card, 167.65 from the bracket.
+  the-body-is-the-card: >-
+    THE BRACKET IS THE FACE AND THE PCB IS THE BODY. A card is changed from
+    the rear - its bracket is what you see, its slot is a bay on the rear
+    face - and the rest of it lies inside the chassis on the riser's shelf.
+    `body.boxes` is that PCB: a slab 1.6 thick lying in the plane of the
+    slot, from inside the riser's connector to the card's top edge, the
+    card's length deep. It ejects with its riser, as the hardware does.
+  the-pcb-box: >-
+    THE BOARD AND ITS EDGE ARE THE SPECIFICATION'S, NOT A GUESS. PCIe CEM 5.0
+    figure 6-5 gives the x16 edge: a tab 8.40 deep (MIN, to the board's
+    shoulder), pads 3.00 long from 2.60 to 5.60 up it on a 1.00 pitch, a key
+    notch 1.90 wide at full radius, 12.15 from the key's centre to the tab's
+    bracket end and 72.15 (DIM B, x16) to the other. Figure 11-3 puts the key
+    centre (datum X) 59.05 behind the bracket and fixes a standard-height card
+    at 111.15 from the tab's edge, so the tab runs 46.90..131.20 back from the
+    bracket and the board's top edge is at x' 126.35. THE TAB'S EDGE IS AT
+    x' 15.20: Dell's service model draws its generic card starting at 15.5,
+    and the UfiSpace N3100-4C's datasheet width (126.35, its top edge) less
+    111.15 gives 15.20. The board is 1.57, its solder face 1.27 inside the
+    bracket's keyed edge (figure 11-5), which centres it in Dell's measured
+    riser connector to within a millimetre. Length is the half-length card's
+    167.65; a real card uses its own.
+    THE SILVER RECTANGLE IS A PLACEHOLDER, estimated: something to look at on
+    the component side of a card nothing yet describes, inside the volume the
+    specification allows.
+  power: >-
+    NOT PUBLISHED per card, and could not be: this is a placeholder for
+    whatever card is fitted. A real card's draw belongs to the contract that
+    models that card.
+  lifecycle: >-
+    not applicable - a placeholder.
+body:
+  depth: 167.65
+  color: '#2f7a4e'
+  # THE SLAB STOPS WHERE THE BRACKET STOPS BEING A RECTANGLE. A plate defaults
+  # to the whole face, and the bracket is not a rectangle: the face's
+  # transparent corners round the tip tab and the keyed flange showed the
+  # slab's sides as L-shaped fins in the card's colour. Trimmed to the body
+  # band between the tip's and the flange's chamfers, 11.38..114.28 by
+  # 3.17..21.59; the tab and the key still draw, from the face itself.
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  # A CARD YOU CAN SEE IN 3D, BUILT FROM PCIe CEM 5.0: a green board, the x16
+  # edge tab either side of its key with gold pads 0.05 proud on both faces,
+  # and one silver rectangle standing on the component side for whatever the
+  # card carries. x along the bracket from its tip, y across it from the
+  # keyed edge, `from` back from the bracket. A real card copies these and
+  # replaces the rectangle and the length with its own.
+  boxes:
+  - {id: board, at: [23.60, 4.44], size: [102.75, 1.57], from: 0.0, depth: 167.65,
+     color: '#2f7a4e', confidence: registry,
+     source: 'CEM 5.0 fig 11-3: 111.15 card height from the tab edge, half length 167.65; fig 6-5 shoulder 8.40 up the tab; 1.57 board 1.27 inside the bracket'}
+  - {id: edge-tab-short, at: [15.20, 4.44], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7a4e', confidence: registry,
+     source: 'CEM 5.0 fig 6-5 and 11-3: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90 wide'}
+  - {id: edge-tab-long, at: [15.20, 4.44], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7a4e', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [17.80, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch, 1.50 from the key'}
+  - {id: edge-pads-long, at: [17.80, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pins 12-82, N = 70 spaces on 1.00 pitch'}
+  - {id: shield, at: [40.00, 6.01], size: [70.00, 8.00], from: 20.0, depth: 120.0,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'a placeholder for the card''s components, inside the CEM component-side volume'}
+faces:
+  plan:
+    ref: common/pcie-card-plan@1
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+elements:
+  pcb-edge: {at: [19.96, 12.97], size: [89.9, 1.2], class: bezel}
+skins: [default]

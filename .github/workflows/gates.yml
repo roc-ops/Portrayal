@@ -184,12 +184,25 @@ jobs:
       # NOTHING HERE SHARES MUTABLE STATE: the only test that writes outside a
       # tmp fixture makes its own tempfile.mkdtemp(), and the library the rest
       # read is read-only by libdata's own contract.
+      #
+      # EVERY TEMPORARY FILE LIVES AND DIES WITH THIS JOB. pytest's default
+      # basetemp is /tmp/pytest-of-<user>, and it KEEPS the last few runs'
+      # trees: on the self-hosted pool three runners share one user and one
+      # /tmp, a suite leaves gigabytes there, and on 2026-09-26 13 GB of them
+      # filled the box's /tmp and failed three unrelated PRs with ENOSPC.
+      # `--basetemp` under RUNNER_TEMP gives each job its own tree, which pytest
+      # empties at start and the runner deletes after the job - cancelled jobs
+      # included. TMPDIR does the same for mkdtemp() and for the subprocesses
+      # the suite shells out to. A hosted runner is unaffected.
       - name: tests
         env:
           PORTRAYAL_LINT_ALREADY_RAN: '1'
         run: |
           set -o pipefail
-          python3 -m pytest spec/tests -q -rs -n auto | tee "$RUNNER_TEMP/pytest.txt"
+          export TMPDIR="$RUNNER_TEMP/tmp"
+          mkdir -p "$TMPDIR"
+          python3 -m pytest spec/tests -q -rs -n auto \
+            --basetemp "$RUNNER_TEMP/pytest" | tee "$RUNNER_TEMP/pytest.txt"
 
       # The guard for the failure above, and it checks WHICH test stopped running
       # rather than how many.

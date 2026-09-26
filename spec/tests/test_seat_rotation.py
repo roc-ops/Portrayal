@@ -202,7 +202,7 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
     rotate-180 cage (csr310 `m1-1`). The optic's seated dict carries the turn,
     `hosts` hands that dict to the plug, and the plug's to the boot - so each
     link must land its own mate on its host's TURNED mate point, and each must
-    be drawn at 180 too. `generic/sfp-lc-simplex@2` is the optic because it
+    be drawn at the turn of the aperture it is in. `generic/sfp-lc-simplex@2` is the optic because it
     composes ONE `std/lc-bore@3`, so it presents a single `lc-plug` mate for
     the plug to seat in (the duplex generics present none)."""
     dev = tmp_path / "csr310" / "device.yaml"
@@ -224,8 +224,19 @@ def test_a_chained_seat_turns_with_the_whole_stack(tmp_path):
 
     chain = [("m1-1", cage["ref"]), ("m1-1-occupant", "generic/sfp-lc-simplex@2"),
              ("plug1", "generic/lc-plug@2"), ("boot1", "common/lc-boot@1")]
+    # EACH LINK TURNS WITH THE APERTURE IT IS IN (#548). The optic takes the
+    # cage's 180. The plug is in the optic's one bore, which the optic
+    # composes at 180, so it turns 180 + 180 = upright - drawn at the optic's
+    # 180 alone it was 180 out, its latch off the side opposite the keyway.
+    # The boot is on the plug, so it turns with the plug.
+    turn = {"m1-1-occupant": 180, "plug1": 0, "boot1": 0}
+
+    def drawn_turn(occ):
+        parsed = parse_transform(transform_of(svg, occ))[2]
+        return (parsed[0] if parsed else 0) % 360
+
     for (host, host_ref), (occ, occ_ref) in zip(chain, chain[1:]):
-        assert parse_transform(transform_of(svg, occ))[2][0] == 180, occ
+        assert drawn_turn(occ) == turn[occ], (occ, drawn_turn(occ))
         _, hm, _ = presented_interface(contract(host_ref), lambda r: contract(r))
         om = contract(occ_ref)["connection-points"]["mate"]["at"]
         hp = apply(transform_of(svg, host), hm)

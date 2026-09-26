@@ -66,7 +66,7 @@ def test_the_index_carries_a_modules_paths():
 def test_an_entry_with_no_optical_omits_the_key():
     """700-odd entries are not fibre; an empty dict on each is bytes for nothing."""
     idx = index()
-    assert "optical" not in idx["std/pcie-bracket-fh@1"]
+    assert "optical" not in idx["std/pcie-bracket-fh@2"]
 
 
 def test_capacities_answers_from_the_built_index():
