@@ -1,4 +1,4 @@
-# Portrayal Design Decisions (v0)
+# Portrayal Design Decisions (format 1)
 
 "Portrayal" is the name; the repository is `roc-ops/Portrayal`.
 
