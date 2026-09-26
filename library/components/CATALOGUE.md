@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-927 component majors in 21 namespaces.
+928 component majors in 22 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -160,7 +160,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 8 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 4 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
-| `generic/qsfp-cable@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 5 | A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct attach, active copper and active o… |
+| `generic/qsfp-cable@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 6 | A generic QSFP cable end - the shape every QSFP+, QSFP28 and QSFP56 direct attach, active copper and active o… |
 | `generic/qsfp-dd-cable@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD cable end with the Type 1 head - the shape a direct-attach, active copper, active electrica… |
 | `generic/qsfp-dd-cable-type2@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 2 | A generic QSFP-DD cable end with the longer Type 2 head - the shape a direct-attach, active copper, active el… |
 | `generic/qsfp-dd-lc@1` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
@@ -950,6 +950,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `oscilloquartz/osa542x-psu-dc-40w@1` | module | psu | 81 × 36 |  | 2 | 1 | Oscilloquartz OSA 5420 DC power supply - the 40 W hot-swappable -48/-60 VDC module for the two-slot OSA 5420,… |
 | `oscilloquartz/osa542x-psu-dc-90w@1` | module | psu | 81 × 36 |  | 2 | 0 | Oscilloquartz OSA 5421 DC power supply - the 90 W hot-swappable -48/-60 VDC module for the one-slot OSA 5421,… |
 | `oscilloquartz/ptoh-16@1` | module | line-card | 113.5 × 20.6 |  | 4 | 0 | Oscilloquartz PTOH-16 - the OSA 542x PPS+ToD HD expansion card, sixteen 1PPS plus time-of-day outputs (G.8271… |
+
+## siemon/ (1)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `siemon/qsfp28-aoc@1` | module | transceiver | 18.35 × 8.5 × 52.4 | qsfp | 0 | 0 | Siemon 100G QSFP28 active optical cable, one end - four 25G lanes at 850 nm over a 3.0 mm multimode fibre cab… |
 
 ## smartoptics/ (16)
 

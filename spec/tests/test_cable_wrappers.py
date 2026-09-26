@@ -45,6 +45,7 @@ WRAPPERS = {
     "fs/qsfp28-aoc@1": (QSFP, "aoc", "100g", "qsfp28", "qsfp28-2"),
     "volex/qsfp-dd-passive-dac@1": (DD2, "dac", "400g", "qsfp-dd", "qsfpdd-0"),
     "credo/hiwire-shift-qsfp-dd@1": (DD2, "aec", "400g", "qsfp-dd", "qsfpdd-1"),
+    "siemon/qsfp28-aoc@1": (QSFP, "aoc", "100g", "qsfp28", "qsfp28-4"),
 }
 # the field values each wrapper's own document gives it; a field absent here is
 # one its document does not state, so the generic's default stands
@@ -55,6 +56,7 @@ FIELDS = {
     "fs/qsfp28-aoc@1": {},
     "volex/qsfp-dd-passive-dac@1": {"cable-od": 9.0, "jacket-color": "#1c1c1c"},
     "credo/hiwire-shift-qsfp-dd@1": {"cable-od": 5.3, "jacket-color": "#6b3fa0"},
+    "siemon/qsfp28-aoc@1": {"cable-od": 3.0},
 }
 EACH = pytest.mark.parametrize("ref", sorted(WRAPPERS))
 
@@ -205,7 +207,7 @@ def test_the_accept_lists_offer_the_generics_and_the_wrappers(seated):
     assert "generic/sfp-cable@1" in sfp and "molex/sfp-plus-passive-dac@1" in sfp
     assert "generic/qsfp-cable@1" in qsfp
     for ref in ("amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
-                "fs/qsfp28-aoc@1"):
+                "fs/qsfp28-aoc@1", "siemon/qsfp28-aoc@1"):
         assert ref in qsfp and ref in dd          # a QSFP-DD cage also accepts QSFP
         assert ref not in sfp
     for ref in GENERICS[1:]:
@@ -217,3 +219,23 @@ def test_the_accept_lists_offer_the_generics_and_the_wrappers(seated):
     for lst in (sfp, qsfp, dd):
         ns = [r.split("/")[0] == "generic" for r in lst]
         assert ns == sorted(ns, reverse=True)
+
+
+def test_the_thin_aoc_is_visibly_thinner_than_a_default_sized_cable(seated):
+    """The reason the Siemon end exists: a 3.0 mm fibre cable has to LOOK thin
+    beside a copper one. Read from the compiled drawing, not the contracts, so
+    it fails if the field stops reaching the stub. The Amphenol ACC states no
+    diameter and keeps the generic's 6.9 default; the AOC's stub diameter must
+    be less than half of that."""
+    root, _, _ = seated
+
+    def stub_d(ref):
+        occ = by_path(root, f"{WRAPPERS[ref][4]}-occupant")
+        assert occ.get("data-ref", "").startswith(ref)
+        stub = next(e for e in occ.iter() if e.get("id") == f"{occ.get('id')}--body--stub")
+        return 2 * float(stub.get("r"))
+
+    thin, acc = stub_d("siemon/qsfp28-aoc@1"), stub_d("amphenol/qsfp56-linear-active@1")
+    assert thin == pytest.approx(3.0)
+    assert acc == pytest.approx(doc(QSFP)["fields"]["cable-od"]["default"])
+    assert thin < acc / 2

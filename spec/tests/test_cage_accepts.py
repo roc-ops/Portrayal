@@ -103,7 +103,7 @@ def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(t
                                "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
                                "credo/hiwire-shift-qsfp-dd@1", "fs/qsfp28-aoc@1",
-                               "volex/qsfp-dd-passive-dac@1"]
+                               "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
 
 
 def test_an_osfp_cage_accepts_nothing_but_says_so_explicitly(tmp_path):
@@ -339,7 +339,7 @@ def test_a_qsfp_shaped_cage_with_qsfp_dd_media_offers_the_qsfp_dd_optic(tmp_path
                                "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
                                "credo/hiwire-shift-qsfp-dd@1", "fs/qsfp28-aoc@1",
-                               "volex/qsfp-dd-passive-dac@1"]
+                               "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
 
 
 # --- final review F1: the media is read from the PLACEMENT first, then its --
@@ -381,7 +381,7 @@ def test_a_placement_declared_media_governs_when_the_group_declares_none(tmp_pat
                                "generic/qsfp-dd-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
                                "credo/hiwire-shift-qsfp-dd@1", "fs/qsfp28-aoc@1",
-                               "volex/qsfp-dd-passive-dac@1"]
+                               "siemon/qsfp28-aoc@1", "volex/qsfp-dd-passive-dac@1"]
 
 
 def test_the_probe_group_itself_declares_no_media(tmp_path):
@@ -407,7 +407,7 @@ def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
     assert cage["media"] == "qsfp28"
     assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-lc@2",
                                "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
-                               "fs/qsfp28-aoc@1"]
+                               "fs/qsfp28-aoc@1", "siemon/qsfp28-aoc@1"]
 
 
 # --- C2 Task 1: where an occupant mates, published --------------------------
