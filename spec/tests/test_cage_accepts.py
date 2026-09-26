@@ -86,6 +86,31 @@ def test_an_sfp28_cage_accepts_exactly_the_sfp_generics(tmp_path):
                                "generic/sfp-rj45@1", "molex/sfp-plus-passive-dac@1"]
 
 
+CSR180 = LIB / "devices/edgecore/csr180/device.yaml"
+
+
+def test_the_rate_ceiling_keeps_a_10g_dac_out_of_a_1g_sfp_cage(tmp_path):
+    """The CSR180's SFP group is `media: sfp, speed: 1g`. The Molex SFP+ DAC
+    states `rate: sfp-plus`, a rung above, so it is not offered; the generics
+    state no rate and fit every rung. Before the wrappers stated `rate` (they
+    said `media`) this cage offered the 10G DAC."""
+    idx = _build(CSR180, tmp_path)
+    cage = _cage(idx, "front", "port-5")
+    assert cage["interface"] == "sfp"
+    assert cage["media"] == "sfp"
+    assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
+                               "generic/sfp-rj45@1"]
+
+
+def test_the_rate_ceiling_offers_a_10g_dac_in_a_10g_sfp_cage(tmp_path):
+    """The other side of the ceiling: the AGR560's SFP+ quad (`media:
+    sfp-plus`) offers the Molex DAC at exactly its own rung."""
+    idx = _build(LIB / "devices/edgecore/agr560/device.yaml", tmp_path)
+    cage = _cage(idx, "front", "port-0")
+    assert cage["media"] == "sfp-plus"
+    assert "molex/sfp-plus-passive-dac@1" in cage["accepts"]
+
+
 def test_a_qsfp_dd_cage_accepts_its_own_family_and_the_also_accepted_qsfp_parts(tmp_path):
     """The ONLY case in this library exercising `also-accepts`: the
     `mates: qsfp` parts - `generic/qsfp-lc@2`, `generic/qsfp-cable@1` and the
@@ -406,8 +431,10 @@ def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
     cage = _cage(idx, "front", "port-1")
     assert cage["interface"] == "qsfp"
     assert cage["media"] == "qsfp28"
+    # no amphenol/qsfp56-linear-active@1: its `rate: qsfp56` is above this
+    # cage's qsfp28 rung (test_the_rate_ceiling_* below)
     assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-lc@2",
-                               "amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
+                               "amphenol/qsfp28-passive-dac@1",
                                "fs/qsfp28-aoc@1", "siemon/qsfp28-aoc@1"]
 
 

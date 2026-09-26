@@ -202,3 +202,38 @@ def test_a_chain_cycling_back_on_itself_is_an_error(tmp_path):
 def test_the_library_is_clean():
     for man in libwalk.iter_devices([LIB]):
         assert not errors_for(man, yaml.safe_load(man.read_text())), man
+
+
+# --- the rate ceiling, asked of a seat (L12) ---------------------------------
+#
+# The build keeps a rated part out of a slower cage's accept list; a
+# configuration must not be able to seat it there anyway. Lint reads the
+# cage's media as the build does (placement, then group) and compares rungs
+# only on the part's own family ladder.
+
+def _seat(device, cage, ref):
+    data = yaml.safe_load((LIB / f"devices/{device}/device.yaml").read_text())
+    cname = next(iter(data["configurations"]))
+    data["configurations"][cname]["occupants"] = {cage: ref}
+    return errors_for(f"{device}/device.yaml", data)
+
+
+def test_a_10g_dac_seated_in_a_1g_sfp_cage_is_an_error():
+    got = _seat("edgecore/csr180", "port-5", "molex/sfp-plus-passive-dac@1")
+    assert len(got) == 1, got
+    assert "'sfp-plus'" in got[0] and "'sfp'" in got[0]
+
+
+def test_a_10g_dac_seated_in_a_10g_sfp_cage_is_clean():
+    assert _seat("edgecore/agr560", "port-0", "molex/sfp-plus-passive-dac@1") == []
+
+
+def test_a_generic_states_no_rate_and_fits_a_1g_cage():
+    assert _seat("edgecore/csr180", "port-5", "generic/sfp-cable@1") == []
+
+
+def test_a_200g_qsfp_cable_in_a_100g_qsfp28_cage_is_an_error():
+    got = _seat("edgecore/agr560", "qsfp28-0", "amphenol/qsfp56-linear-active@1")
+    assert len(got) == 1, got
+    assert "'qsfp56'" in got[0] and "'qsfp28'" in got[0]
+

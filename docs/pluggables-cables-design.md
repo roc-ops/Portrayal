@@ -183,4 +183,7 @@ the merge queue.
 - 2026-09-25: L121 exempts features that start at or behind the head's back (strap, ring);
   a `cable` point may sit on a `cyl` feature and leaves from its far end.
 - 2026-09-26: add the Siemon QSFP28 AOC wrapper so a thin AOC cable is shown (section 5).
-- Follow-up: the wrappers carry no rate ceiling, so a 200G cable is offered in a 100G cage.
+- 2026-09-26: the wrappers state their rung as `rate`, not `media`, so the build's rate
+  ceiling applies: a 10G DAC is no longer offered in a 1G SFP cage, nor a 200G cable in a
+  100G QSFP28 cage. L102 refuses a rung written as `media`, and L12 refuses a configuration
+  that seats a part above its cage's rung.

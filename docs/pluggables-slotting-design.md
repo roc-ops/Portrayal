@@ -77,7 +77,7 @@ pluggable interface (directly or through a wrapper):
 
 `accepts` is computed at build time from the components index: every part with
 `behaviour: occupies` whose `mates` equals the cage's presented interface, and whose
-own rate (its `media` attr, or none for a generic) is at or below the cage's `media`
+own rate (its `rate` attr, or none for a generic; L102 refuses a rung written as `media`) is at or below the cage's `media`
 on the family's ladder, plus the `also-accepts` families. Vendor-blind by
 construction.
 
