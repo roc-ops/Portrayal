@@ -25,6 +25,17 @@ import sys
 # a FileNotFoundError three frames down.
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 
+
+
+def checkout_of(path):
+    """The Portrayal checkout `path` is in - the nearest directory at or above
+    it holding both `library/` and `spec/tools/portrayal/` - or None."""
+    for d in [path, *path.parents]:
+        if (d / "library").is_dir() and (d / "spec/tools/portrayal").is_dir():
+            return d
+    return None
+
+
 GATES = {
     "lint": ("python", ["-m", "portrayal.lint", "--schemas", "spec/schemas",
                         "--library", "library"]),
@@ -50,6 +61,24 @@ def main(argv=None):
                 "and this looks like an installed copy without one. Clone the "
                 "repository and `pip install -e .` from inside it.")
 
+    # THE CHECKOUT YOU ARE IN IS THE ONE THAT ANSWERS, OR NONE DOES (#346).
+    # ROOT is where the imported package lives: an editable install points at
+    # whichever checkout ran `pip install -e .`, often another worktree, and
+    # `lint`, `lock` and `test` then reported on that tree - "no change
+    # against the baseline" about a change they never read. Run from inside a
+    # different checkout, this stops and says which is which. Run from outside
+    # any checkout, ROOT is the only answer and is used, as before.
+    here = checkout_of(pathlib.Path.cwd().resolve())
+    if here is not None and here != ROOT:
+        print(f"python -m portrayal: refusing to run {args.gate!r}.\n"
+              f"  you are in the checkout  {here}\n"
+              f"  but portrayal imports from {ROOT}\n"
+              f"so the gate would report on the other tree. Run it with this "
+              f"checkout's tools first on the path:\n"
+              f"  PYTHONPATH={here / 'spec/tools'} python -m portrayal {args.gate}",
+              file=sys.stderr)
+        return 2
+
     kind, cmd = GATES[args.gate]
     if kind == "script":
         if os.name == "nt":
@@ -61,7 +90,12 @@ def main(argv=None):
         argv_ = ["bash", *cmd]
     else:
         argv_ = [sys.executable, *cmd]
-    return subprocess.call([*argv_, *args.rest], cwd=ROOT)
+    # and the gate's own processes import the same tree, whatever else is
+    # installed: a child that re-resolved `portrayal` could drift again
+    env = {**os.environ,
+           "PYTHONPATH": os.pathsep.join(filter(None, [str(ROOT / "spec/tools"),
+                                                       os.environ.get("PYTHONPATH")]))}
+    return subprocess.call([*argv_, *args.rest], cwd=ROOT, env=env)
 
 
 if __name__ == "__main__":
