@@ -241,6 +241,56 @@ standards:
       panel drawing for the mounting style a chassis faceplate uses, not a
       figure the F standard fixes, and a card documented to a different hole
       should say so rather than be forced onto this key.
+  bnc:
+    registry: >-
+      BNC (IEC 61169-8, MIL-STD-348) - bulkhead FRONT-MOUNT jack, D-hole. The
+      panel hole is the mounting style of one sourced part, not a figure the
+      interface fixes; what the interface fixes is the collar and its lugs.
+    w: 9.70
+    h: 8.85
+    radius: 4.85
+    depth: 0.0
+    confidence: drawing
+    notes: >-
+      Read off the PANEL CUT OUT table of the Radiall technical data sheet
+      R141.557.000 (bulkhead jack receptacle, front mounting, solder pot
+      contact; issue 0431 E, p.1): a D-hole, dimension A the bore 9.65-9.75
+      and dimension B across the single flat 8.81-8.89. w is the midpoint of
+      A and h the midpoint of B, so w is the full bore and h the flat-to-arc
+      height, the same reading as mcx. The drawing is a 1181 x 1181 CCITT
+      stencil at 194 ppi, and both figures are dimensioned on it, not scaled.
+      The interface in front of the panel is MIL-STD-348B with CHANGE 3,
+      Figure 301-2 (series BNC, socket contact): collar 9.60-9.70 (B), two
+      bayonet lugs at 180 degrees, 10.97-11.07 over their tips (A). Both the
+      12.7 front flange and the lug tips are wider than this hole; they stand
+      in front of the panel and are the bezel common/bnc-jack, whose size box
+      is the flange. The collar, 9.65, fits the bore but not the flat. depth 0.0 - like sma and mcx this is a hole through
+      sheet metal with the jack standing proud of it, not a recess.
+      Impedance is not in the hole: 50 and 75 ohm BNC intermate.
+  din-1-0-2-3:
+    registry: >-
+      1.0/2.3 (DIN 41626/2; IEC 61169-29) - bulkhead REAR-MOUNT jack, round
+      hole, M5.5 x 0.5 mounting thread, the nut in FRONT of the panel. The key
+      is spelled with hyphens because an interface, like a component name, may
+      not contain a dot.
+    w: 5.59
+    h: 5.59
+    radius: 2.795
+    depth: 0.0
+    confidence: drawing
+    notes: >-
+      The round .220 inch [5.59] hole named in the title of the Pasternack
+      drawing PE44259 REV 1.1 (1.0/2.3 jack bulkhead mount, solder attachment,
+      thru hole PCB), for the M5.5 x 0.5 mounting thread that PE44259,
+      Pasternack PE44254 and L-com RFPCB-1.0/2.3FS-4G72 rev A all dimension.
+      PE44254 offers a double-D alternative, 5.5 across and 4.5 across the
+      flats; the round hole is registered here because it is the one a title
+      states. The interface figures are from the HUBER+SUHNER general
+      catalogue 2020 (3628 78Z034, p.239, jack table), which says its
+      interface dimensions conform to DIN 41626/2 and names no other standard.
+      IEC 61169-29 is the international part for the series; it was not held
+      or consulted. depth 0.0: the nut and barrel stand proud of a through hole.
+      50 and 75 ohm variants share the interface, so impedance is an attr.
   drive-25:
     w: 15.0
     h: 69.85
