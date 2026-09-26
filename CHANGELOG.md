@@ -15,6 +15,16 @@ the *published build*, not about the hardware.
 ## Unreleased
 
 ### Added
+- `presents` on a `components.json` entry for a part that mates into something:
+  what it offers the next tier when it is itself seated - `interface`, `mate`
+  and `lift` in its own frame (the point a boot or a plug stands on, and that
+  point's `out`), `accepts`, `kind`, `rotate`, `bores` and `default`, in a slot
+  entry's shape. A generic LC or RJ45 plug presents its boot point, and a
+  single-bore optic its one bore. A consumer seating through slots can now
+  seat the chained tier the build seats under `<key>-occupant`: carry `mate`
+  through the seat's placement, take its turn, and add its lift to the lift of
+  the slot it sits in. Omitted for a part that presents nothing, and for one
+  whose presented interface nothing in the library mates (roc-ops/Portrayal#611).
 - `data-rear-rotate` on a rear cutout a turned bay is seen through: how far
   a back drawn in it is turned, the bay's own `rotate` negated (a clockwise
   turn seen from the front reads anticlockwise from behind). The back's

@@ -274,7 +274,9 @@ def test_emptying_the_adapter_offers_its_bores_and_a_simplex_plug_is_the_builds(
     s = scenario(world, "fhdSimplex")
     assert s["before"] == ["bay-1/module/lc1"]
     assert sorted(s["emptied"]) == ["bay-1/module/lc1", "bay-1/module/lc1/1", "bay-1/module/lc1/2"]
-    assert sorted(s["after"]) == ["bay-1/module/lc1/1", "bay-1/module/lc1/2"]
+    # the plug now in bore 1 takes a boot at its own path (#611, chainedSlots)
+    assert sorted(s["after"]) == ["bay-1/module/lc1/1", "bay-1/module/lc1/1-occupant",
+                                  "bay-1/module/lc1/2"]
     assert s["res"] == {"applied": 1, "refused": [], "failed": []}
     assert s["lc1"] == 0
     assert s["tx"]["count"] == 1, "a second simplex swap stacked"
@@ -347,7 +349,9 @@ def test_a_shuttered_cassette_offers_plugs_and_empty_and_ships_nothing(world):
     assert s["options"][0] == {"value": "", "label": "— empty —", "selected": True}
     assert [o["value"] for o in s["boreOptions"][1:]] == [CAP, SIMPLEX]
     assert s["res"] == {"applied": 1, "refused": [], "failed": []}
-    assert sorted(s["after"]) == ["bay-3/module/lc01/1", "bay-3/module/lc01/2"]
+    # the plug now in bore 1 takes a boot at its own path (#611, chainedSlots)
+    assert sorted(s["after"]) == ["bay-3/module/lc01/1", "bay-3/module/lc01/1-occupant",
+                                  "bay-3/module/lc01/2"]
     bad, _ = parity(world, "fhd:shutplug", "bay-3/module/lc01/1", s["tx"])
     assert not bad, "\n".join(bad[:8])
 
