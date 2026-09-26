@@ -281,6 +281,7 @@ RULES = {
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
     "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own stands past the head, and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
+    "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs", "give the cable's outside diameter in mm as a number, from the product's own document"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3181,6 +3182,8 @@ def lint_component_fields(path, data, _lib_roots=None):
     would have produced blue handles wearing dark red edges. `data-stroke-derive`
     (#482), an outline drawn as a shade of a colour field, is read the same way:
     a skin deriving from a key no contract declares is deriving from nothing.
+    `data-r-from`, a circle whose radius is half a diameter field (a cable
+    stub sized by `cable-od`), is wiring too, and counts both ways.
 
     A COMPOSED PART THAT DECLARES THE SAME KEY KEEPS THE PROMISE TOO. The build
     hands a host's field value to every composed part that declares that key
@@ -3207,7 +3210,7 @@ def lint_component_fields(path, data, _lib_roots=None):
         if not sp.exists():
             continue
         text = sp.read_text(errors="replace")
-        keys = set(re.findall(r'data-(?:(?:fill-|stroke-)?from|stroke-derive)="([^"]+)"', text))
+        keys = set(re.findall(r'data-(?:(?:fill-|stroke-|r-)?from|stroke-derive)="([^"]+)"', text))
         seen[skin] = keys
         for k in fields:
             if k not in keys and k not in composed:
@@ -3222,6 +3225,37 @@ def lint_component_fields(path, data, _lib_roots=None):
             err(path, "L73", f"field {k} is a choice with no options")
         if (f or {}).get("options") and f.get("default") is not None and f["default"] not in f["options"]:
             err(path, "L73", f"field {k}: default {f['default']!r} is not one of its options")
+
+
+
+CABLE_OD_RANGE = (2.0, 15.0)
+
+
+def lint_component_cable_od(path, data, _lib_roots=None):
+    """L122: a cable's outside diameter is a number of millimetres a real
+    cable can have. The corpus runs from 3.0 (an AOC) to 11.6 (a 26AWG
+    QSFP-DD DAC); 2 to 15 brackets every held document with room, and a
+    value outside it is a unit error or a typo that would draw a stub the
+    size of a fan (docs/pluggables-cables-design.md section 4)."""
+    if not isinstance(data, dict):
+        return
+    vals = []
+    f = (data.get("fields") or {}).get("cable-od")
+    if isinstance(f, dict) and "default" in f:
+        vals.append(("fields.cable-od.default", f["default"]))
+    for p in data.get("parts") or []:
+        a = (p.get("attrs") or {}) if isinstance(p, dict) else {}
+        if "cable-od" in a:
+            vals.append((f"parts[{p.get('id')}].attrs.cable-od", a["cable-od"]))
+    lo, hi = CABLE_OD_RANGE
+    for where, v in vals:
+        try:
+            d = float(v)
+        except (TypeError, ValueError):
+            err(path, "L122", f"{data.get('name')}: {where} is {v!r}, not a number of mm")
+            continue
+        if not lo <= d <= hi:
+            err(path, "L122", f"{data.get('name')}: {where} is {d:g} mm, outside {lo:g}-{hi:g}")
 
 
 def lint_component_lamp_colour(path, data, _lib_roots=None):
@@ -9944,6 +9978,7 @@ def main():
                 lint_component_sink_context(f, d)
                 lint_component_facets(f, d, args.library)
                 lint_component_fields(f, d, args.library)
+                lint_component_cable_od(f, d)
                 lint_component_lamp_colour(f, d)
                 lint_component_slots(f, d)
                 lint_component_rj45_lamps(f, d, args.library)

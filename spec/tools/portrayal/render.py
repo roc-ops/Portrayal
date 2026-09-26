@@ -583,6 +583,37 @@ def fill_from_attrs(root, attrs):
         if p is not None:
             p.remove(target)
 
+    # A FIELD MAY SET A SIZE. `data-r-from` names a numeric field whose value is a
+    # DIAMETER; the circle takes half of it as its radius. Empty, absent or not a
+    # number leaves the radius the skin was drawn with - the same rule colour
+    # follows - so the skin stays a valid standalone drawing
+    # (docs/pluggables-cables-design.md section 4).
+    #
+    # A NUMBER IS DIGITS AND A POINT, and kit/fields.js asks the same question the
+    # same way: float() alone would take "1e1", "inf" and "1_0", which the kit
+    # reads differently, and a stub sized in one view and not the other is the
+    # drift one rule exists to prevent. The radius is written the way JS's
+    # String() writes a number - shortest round trip, no trailing ".0" - so both
+    # halves put the same text in `r` (spec/tests/test_r_from_binding.py).
+    for node in root.iter():
+        key = node.get("data-r-from")
+        if key is None:
+            continue
+        v = attrs.get(key)
+        if v is None or isinstance(v, bool) or not R_FROM_NUMBER.fullmatch(str(v)):
+            continue
+        try:
+            d = float(str(v).strip())
+        except ValueError:
+            continue
+        if math.isfinite(d) and d > 0:
+            r = d / 2
+            node.set("r", str(int(r)) if r.is_integer() else repr(r))
+
+
+# what `data-r-from` accepts as a number; kit/fields.js holds the same pattern
+R_FROM_NUMBER = re.compile(r"\s*[\d.]+\s*")
+
 
 def _inset_feature(feat, back, group_lift=0.0):
     """A feature on an instance mounted `back` mm behind the panel face.
