@@ -1,0 +1,131 @@
+format: 1
+kind: module
+name: mcx621202-fh
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active
+  cooling (onboard fan), PCIe Gen4 x8, on its tall (full-height) bracket. The
+  same board ships with both brackets; nvidia/mcx621202-lp@1 is the other.
+size: {w: 120.02, h: 21.59, d: 152.86}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'MCX621202A tall bracket'
+  part-numbers: 'MCX621202AS-ADAT, MCX621202AC-ADAT'
+  role: nic
+  power-draw-max-w: 14.0
+  power-draw-typical-w: 9.9
+  power-input: host PCIe slot
+  pcie-connector: x8
+  pcie-generation: 4
+  pcie-height: full
+  sfp28: 2
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    CX-6 Dx EN user manual: p5 and p10 OPN tables (152.90 x 68.90), p57 spec
+    table, p64 board mechanical drawing Dual-Port SFP28 x8 with Active
+    Cooling (152.86 x 68.90, embedded image p64-002), p65 bracket drawing
+    Dual-Port SFP28/SFP56 Cards (short p65-002, tall p65-010), p16-17 LED
+    scheme 1
+  size: >-
+    registry - the face is std/pcie-bracket-fh@2, 120.02 x 21.59, composed
+    behind a punched plate; `d` is the board drawing's 152.86, the card's
+    length back from its bracket.
+  depth: >-
+    drawing - 152.86, the board mechanical drawing's length.
+  the-face-is-derived-from-the-board: >-
+    EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
+    their distance above datum W on the dimensioned board drawing - port 1
+    49.41, port 2 24.86 - with W at x' 15.16 on this bracket (PCIe CEM 5.0:
+    120.02 - 104.86, fig 11-3). Vents, light-pipe slots, lamps and numerals
+    keep their measured offset from their nearest cage (or from W), read off
+    NVIDIA's bracket drawings. The manual does not say which bracket the fan
+    card takes; the generic Dual-Port SFP28/SFP56 bracket is used because
+    this board's cages land within 0.34 (short) and 0.17 (tall) of that
+    bracket's windows - inferred, not stated. The full-height face adds the
+    tall bracket's extra vent columns.
+  orientation: >-
+    drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
+    cages and lamps are placed `rotate: 180` and the numerals read upside
+    down. In a turned bay - Dell riser 3 - the card lands as NVIDIA draws
+    it.
+  lamps: >-
+    drawing - the shared Dual-Port SFP28/SFP56 bracket punches one light-
+    pipe slot per port on the keyed side, 4.0 x 0.7 in both drawings; this
+    card runs LED scheme 1 (UM p16-17), one bi-colour yellow/green LED per
+    port, so the lamp is common/led-rect-sm@1 (2.8 x 1.6): 1.2 shorter and
+    0.9 taller than the slot. led-slot-pair would draw two lamps where the
+    card has one.
+  body: >-
+    the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
+    at the board drawing's size; the board is 152.86 to the apex of its
+    curved tail (the drawing's 68.90, its x8 fingers and that length agree
+    on 6.18 px/mm only when the length runs to the apex, although the
+    dimension line is drawn at the top corner). The cooling assembly is one
+    54.0 x 104.8 box, 12.0 tall by estimate; fan and heatsink are not
+    separated because the drawing does not separate them.
+  power: >-
+    datasheet - CX-6 Dx UM p57 (spec table): 9.6 W typical at Gen3 and 9.9 W
+    at Gen4, 13.7 / 14 W maximum, with passive cables; the Gen4 figures are
+    carried. p57 also gives the fan's acoustics (20 dBA idle, 47 dBA at TDP
+    max).
+  doubts: >-
+    The p64 drawing colours the whole board blue; the shroud box is an
+    interpretation of the outline (a line across the board 48.1 behind the
+    bracket, four pads at its corners, the tail overhang), not a drawn body.
+body:
+  depth: 152.86
+  color: '#2f7d3a'
+  # the slab stops where the bracket stops being a rectangle
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  boxes:
+  - {id: board, at: [23.56, 4.44], size: [60.50, 1.57], from: 0.00, depth: 152.86,
+     color: '#2f7d3a', confidence: drawing,
+     source: 'the board drawing''s 152.86 x 68.90; CEM 5.0 fig 6-5 shoulder 8.40 above W'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [8.40, 1.57], from: 60.00, depth: 38.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x8 DIM B 39.15 from the key centre'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 37.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x8 pad run on 1.00 pitch'}
+  - {id: fan-shroud, at: [28.76, 6.01], size: [54.00, 12.00], from: 48.10, depth: 104.80,
+     color: '#1f2328', confidence: estimated,
+     source: 'the board drawing''s cooling assembly: the region bounded by the line 48.1 behind the bracket and the curved tail that bulges past the rectangle, 13.6 to 67.6 above W, clipped at the board end; read as the fan shroud over heatsink and fan (the manual shows no photo); height estimated'}
+faces:
+  plan:
+    ref: common/pcie-card-plan@1
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/sfp@1, id: port-1, at: [57.32, 6.58], rotate: 180, group: sfp28}
+  - {ref: std/sfp@1, id: port-2, at: [32.77, 6.58], rotate: 180, group: sfp28}
+  - ref: common/led-rect-sm@1
+    id: led-port-1
+    at: [76.23, 6.19]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-rect-sm@1
+    id: led-port-2
+    at: [25.64, 6.19]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+skins: [default]
