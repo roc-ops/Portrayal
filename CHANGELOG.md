@@ -420,7 +420,7 @@ the *published build*, not about the hardware.
   type (roc-ops/Portrayal#426).
 - `dell/riser-lower-trim-14g@1` is retired and leaves `components.json`, and
   the R740xd's rear placement `riser-1-trim` (`rear/placements/riser-1-trim`)
-  is gone from every configuration; the R740xd takes a major, 23.0.0. The
+  is gone from every configuration; the R740xd takes a major, 24.0.0. The
   strip hid the bottom riser-1 card's keyed flange, which
   `std/pcie-bracket-fh@1` drew stepping down past the plate; `@2` steps it up,
   and Dell's service model has no metal there in front of the rear sheet
