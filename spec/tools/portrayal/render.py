@@ -3825,17 +3825,18 @@ def _cage_accepts(candidates, families, family, media):
     they are not a general rule about foreign ladders and are not leaned on
     as one.
 
-    THE DAY A VENDOR OPTIC DECLARES A `rate` this becomes a real question,
-    and the fix is a `rates:` cutoff on `also-accepts` in
-    spec/schemas/pluggables.yaml - a per-family statement of how far the
-    foreign ladder actually reaches, sourced the way every other entry in
-    that file is - read here exactly as `rates` already is. Until then every
-    candidate is a generic and no list can be wrong for lack of it.
+    RATED PARTS NOW EXIST (the cable-end wrappers state `attrs.rate`), and a
+    rated QSFP part reaches a QSFP-DD cage through `also-accepts` unfiltered.
+    That is right for every rung the library carries: QSFP-DD HW 6.3 section 1
+    makes a QSFP-DD cage compatible with QSFP28 and QSFP112, so no rung of the
+    foreign ladder is too fast for it. The day that stops being true, the fix
+    is a `rates:` cutoff on `also-accepts` in spec/schemas/pluggables.yaml,
+    sourced the way every other entry in that file is.
 
     A CANDIDATE THAT DECLARES NO `attrs.rate` FITS EVERY RUNG of whichever
     family matched it - that is what a GENERIC is (docs/pluggables-design.md
-    decision 5), and every part in the library today is one, so this can only
-    be exercised once a vendor optic declares a rate.
+    decision 5). A vendor part states its rung as `rate`, never `media`; L102
+    holds it to that, because a rung written as `media` is invisible here.
     """
     rates = family.get("rates") or []
     ceiling = rates.index(media) if media in rates else None

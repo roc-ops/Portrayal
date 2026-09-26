@@ -97,14 +97,57 @@ def test_sectioned_attrs_are_flattened_the_same_way():
     assert len(got) == 1, got
 
 
-def test_no_component_in_the_library_declares_rate_yet():
-    """The brief's own premise: this check fires on nothing today because
-    nothing has been built to fire on. Confirms the rule is exercised only by
-    synthetic data above, and that the corpus run below finding zero L102
-    component errors is not a coincidence of an untested code path."""
-    with_rate = [ref for ref, _path, doc in libdata.components()
-                 if "rate" in (doc.get("attrs") or {})]
-    assert with_rate == [], with_rate
+def test_the_rated_parts_are_the_cable_end_wrappers():
+    """The corpus run below finding zero L102 component errors must not be a
+    coincidence of nothing being rated: the seven cable-end wrappers state a
+    `rate`, so the rule and the build's rate ceiling both have real parts to
+    act on. Every one of them is a vendor part - a generic states no rate."""
+    with_rate = sorted(ref for ref, _path, doc in libdata.components()
+                       if "rate" in (doc.get("attrs") or {}))
+    assert with_rate == sorted([
+        "amphenol/qsfp28-passive-dac", "amphenol/qsfp56-linear-active",
+        "credo/hiwire-shift-qsfp-dd", "fs/qsfp28-aoc",
+        "molex/sfp-plus-passive-dac", "siemon/qsfp28-aoc",
+        "volex/qsfp-dd-passive-dac"]), with_rate
+
+
+def test_a_rung_written_as_media_is_an_error():
+    """The defect the cable wrappers shipped with: `media: sfp-plus` and no
+    `rate`. The build's rate ceiling reads only `rate`, so the part was
+    offered in every SFP cage, a 1G one included."""
+    got = run_component({"class": "transceiver", "mates": "sfp",
+                          "attrs": {"media": "sfp-plus"}})
+    assert len(got) == 1, got
+    assert "attrs.rate" in got[0] and "sfp-plus" in got[0]
+
+
+def test_a_medium_is_not_a_rung():
+    # `fiber` is what the generics say `media` means: not on any ladder
+    got = run_component({"class": "transceiver", "mates": "sfp",
+                          "attrs": {"media": "fiber"}})
+    assert got == [], got
+
+
+def test_a_rung_of_another_family_as_media_is_not_this_rule():
+    # qsfp28 is no rung of `sfp`, so this part is not naming its own rate
+    got = run_component({"class": "transceiver", "mates": "sfp",
+                          "attrs": {"media": "qsfp28"}})
+    assert got == [], got
+
+
+def test_a_retired_part_keeps_its_media():
+    """The two retired parts (L101) carry `media: sfp`/`media: qsfp`; they
+    are offered nowhere, so there is no ceiling for the word to miss."""
+    got = run_component({"class": "transceiver", "mates": "sfp",
+                          "superseded-by": "generic/sfp-lc@1",
+                          "attrs": {"media": "sfp"}})
+    assert got == [], got
+
+
+def test_a_stated_rate_leaves_media_alone():
+    got = run_component({"class": "transceiver", "mates": "sfp",
+                          "attrs": {"rate": "sfp-plus", "media": "sfp-plus"}})
+    assert got == [], got
 
 
 def test_every_real_component_is_clean():
