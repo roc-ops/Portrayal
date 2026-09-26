@@ -4050,6 +4050,62 @@ def cage_entries(device, view_name, lib, families, candidates, default_occupants
 COMPONENT_CAGE_DROPS = ("occupant", "group", "rel-pos")
 
 
+def component_presents(ref, lib, families, candidates, connectors=None):
+    """WHAT A COMPONENT OFFERS THE NEXT TIER WHEN IT IS ITSELF SEATED (#611),
+    in its own frame, or None.
+
+    A seated occupant that presents an interface is a slot at its OWN key: a
+    generic/lc-plug@2 in `port-4` presents `lc-plug` at its boot point, and
+    the build seats common/lc-boot@1 there under the chained key
+    `port-4-occupant`; a generic/sfp-lc-simplex@2 forwards its one bore and
+    takes a plug under `xg0-occupant` (manifest.slot_in_slot_at - its bore is
+    not a second slot). The build resolves that through `presented_interface`
+    on the host (the `mate-to` path), for ANY interface something mates -
+    `lc-plug` is registered as neither a cage family nor a connector slot,
+    because an LC bore takes a plug and never a boot. A consumer seating
+    through slots had nothing to read it from, so the chained tier was
+    build-only.
+
+    ONLY A PART THAT MATES INTO SOMETHING is ever a seat, so only one carries
+    this: a card in a bay or a port wrapper on a face presents its jack as a
+    slot of whatever places it, which component_cages and cage_entries
+    already publish.
+
+    THE SLOT ENTRY'S OWN SHAPE (`_slot_dict`), for a placement at the origin
+    unturned: `mate` is the presented point in the component's frame and
+    `lift` its presented `out` - the two numbers the build's mate-to
+    resolution seats on - and `accepts` every part that mates the interface.
+    A consumer carries `mate` through the seat's own placement and adds the
+    seat's lift, as the build stacks a chain.
+    """
+    contract, _skins = lib.resolve(ref)
+    if not contract.get("mates"):
+        return None
+
+    def _resolve(r):
+        try:
+            return lib.resolve(r)[0]
+        except Exception:
+            return None
+
+    interface, mate_at, lift = presented_interface(contract, _resolve)
+    if not interface or mate_at is None:
+        return None
+    if connectors is None:
+        connectors = _connector_registry()
+    kind = "cage" if _family_by_interface(families, interface) else "connector"
+    refs = sorted({r for r, _c in candidates.get(interface, [])})
+    if not refs:
+        return None        # a slot nothing in the library can fill offers nothing
+    entry = _slot_dict({"id": "", "at": [0.0, 0.0]}, contract, interface, None, refs,
+                       None, mate_at, lift, 0.0, None, kind,
+                       spanned_slots(contract, _resolve, connectors),
+                       spanning_axis(contract, _resolve, connectors))
+    for k in ("id", "at", "group", "rel-pos", "occupant", "occupant-attrs"):
+        entry.pop(k, None)
+    return entry
+
+
 def _forwarded_part(contract, lib):
     """(part, interface) for the `parts:` entry whose aperture `contract`
     presents AS ITS OWN, or None when it presents its own interface or

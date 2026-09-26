@@ -781,7 +781,7 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     const loaded = ref && !refuse ? await loadSkin(ref) : null;
     if (!isCurrent(cage.id)) continue;        // a newer swap owns this cage
     if (ref && !refuse && !loaded) { failed.push(cage.id); continue; }
-    for (const old of occupantsOf(rootEl, cage)) old.remove();
+    for (const old of occupantsOf(rootEl, cage)) removeSeat(rootEl, old);
     applied++;
     if (refuse) { refused.push(cage.id); continue; }
     if (!ref) continue;                       // deliberately empty
@@ -800,6 +800,19 @@ export async function applyOccupantOverrides(rootEl, cages, overrides, loadSkin,
     else host.after(occ);
   }
   return {applied, refused, failed};
+}
+
+// AN OCCUPANT GOES WITH WHAT IS CHAINED ON IT (#611). A boot is a sibling of
+// the plug it sits on, `data-for` the plug's own path, as the build draws a
+// chained tier - so taking the plug out leaves the boot standing in the air
+// unless it goes too. The chain is followed as far as it runs: whatever is
+// seated at `<path>-occupant`, `data-for` <path>, and on that in turn.
+function removeSeat(rootEl, el) {
+  const path = el.getAttribute('data-path');
+  el.remove();
+  if (!path) return;
+  for (const n of [...rootEl.querySelectorAll(`[data-for="${CSS.escape(path)}"]`)])
+    if (n.getAttribute('data-path') === `${path}${OCC}`) removeSeat(rootEl, n);
 }
 
 // WHAT A SLOT HOLDS, KNOWN BY WHAT NAMES IT AND WHAT IT IS - not by how it
@@ -895,6 +908,66 @@ export function nestedBays(rootEl, compByRef) {
   return out;
 }
 
+// THE CHAINED TIER (#611): a seated occupant that PRESENTS something is a slot
+// at its own path. A generic/lc-plug@2 in `port-4` is drawn at
+// `port-4-occupant` and presents `lc-plug` at its boot point; render.py seats
+// common/lc-boot@1 there under the chained key `port-4-occupant` and draws it
+// at `port-4-occupant-occupant`, `data-for` the plug. A single-bore optic is
+// the same case one level down: it takes a plug at its own key, never at its
+// bore (manifest.slot_in_slot_at). Before this the kit swapped cages only, so
+// a boot was the build's alone and a swapped plug cabled from its face.
+//
+// WHAT THE ENTRY IS, from the seat and the slot it sits in (`parent`): the
+// component's published `presents` (render.component_presents - its own
+// frame, placed at the origin), carried through the seat's own placement.
+// The seat stands where occupantAt put it, turned with its host, so the
+// presented point lands by seat_point from there; the chained occupant takes
+// the same turn and stands on the SUM of the lifts, which is how the build
+// stacks a chain (a plug at 10, its boot at 10 + 12.5). A seat on a facet
+// carries the facet: `at` is the seat's own (foreshortened) translate and
+// `mate` the flat point, as occupantAt reads a tilted cage. It is drawn where
+// its seat is - a sibling in the same group - so it inherits the parent
+// slot's card.
+function chainedSlots(rootEl, compByRef, parents) {
+  const out = [];
+  const queue = [...parents];
+  const seen = new Set(parents.map(s => s.id));
+  while (queue.length) {
+    const s = queue.shift();
+    const id = `${s.id}${OCC}`;
+    if (seen.has(id)) continue;
+    const seat = occupantsOf(rootEl, s).find(n => n.getAttribute('data-path') === id);
+    const ref = (seat?.getAttribute('data-ref') || '').split(':')[0];
+    let comp = null;
+    try { comp = ref ? compByRef(ref) : null; } catch (e) { comp = null; }
+    const p = comp?.presents;
+    if (!p || !comp.size || !comp.mate) continue;
+    const at = occupantAt(s, comp);
+    const cx = comp.size.w / 2, cy = comp.size.h / 2;
+    const [dx, dy] = turn([p.mate[0] - cx, p.mate[1] - cy], s.rotate);
+    const r4 = v => Math.round(v * 1e4) / 1e4;
+    const rot = (s.rotate == null && p.rotate == null) ? null
+      : ((((+s.rotate || 0) + (+p.rotate || 0)) % 360) + 360) % 360;
+    const e = {
+      ...p, id, key: slotKey(id), cage: id.split('/').pop(), chained: true, host: s.id,
+      at, mate: [r4(at[0] + cx + dx), r4(at[1] + cy + dy)], rotate: rot,
+      lift: (+s.lift || 0) + (+p.lift || 0), 'seat-depth': s['seat-depth'] || 0,
+      tilt: s.tilt || null, mirror: !!s.mirror, 'group-states': false, bores: [],
+      // the host group's side rides the chain: the build draws each tier in
+      // its host's group, so a boot carries the port's data-group and rate as
+      // the plug under it does
+      'occupant-attrs': s['occupant-attrs'],
+      module: s.module, modulePath: s.modulePath, moduleId: s.moduleId,
+      carrier: s.carrier, projection: s.projection,
+    };
+    for (const k of Object.keys(e)) if (e[k] === undefined) delete e[k];
+    seen.add(id);
+    out.push(e);
+    queue.push(e);
+  }
+  return out;
+}
+
 // EVERY SLOT ON THE FACE, read off the drawing (B3 Task 10a; #484 began it
 // with the cages on seated cards). Which slots exist on a modular chassis is
 // a property of what its bays hold, so they are in no device manifest: every
@@ -984,6 +1057,7 @@ export function nestedSlots(rootEl, compByRef, {deviceCages = [], all = false} =
     const host = hosts.get(e.modulePath);
     return !host || (host.bores || []).includes(e.cage);
   });
+  out.push(...chainedSlots(rootEl, compByRef, [...(deviceCages || []), ...out]));
   if (all) return out;
   const hidden = freeLevel(rootEl, [...(deviceCages || []), ...out]);
   return out.filter(e => !hidden.has(e.id));
@@ -1114,7 +1188,12 @@ export function faceCages(rootEl, deviceCages = [], compByRef, {offered = false}
 export function cageAt(rootEl, path, deviceCages = [], compByRef) {
   if (path == null || !rootEl) return null;
   const cages = faceCages(rootEl, deviceCages, compByRef, {offered: true});
-  const byId = id => cages.find(c => c.id === id) || null;
+  // A CHAINED SLOT IS NAMED ONLY BY WHAT IT HOLDS (#611). Its id is its
+  // seat's path, so a click on the plug would otherwise find the boot's slot
+  // and no longer the bore the plug is in; the boot, `data-for` the plug,
+  // still finds it below. The inspector offers it beside the seat's own.
+  const byId = id => cages.find(c => c.id === id && !c.chained) || null;
+  const byFor = id => cages.find(c => c.id === id) || null;
   const own = byId(path);
   if (own) return own;
   // a part of a back is drawn `data-of` its path (B3 Task 10b): on the face
@@ -1124,7 +1203,7 @@ export function cageAt(rootEl, path, deviceCages = [], compByRef) {
        n = n.parentNode) {
     const hit = byId(n.getAttribute('data-path') ?? n.getAttribute('data-of'));
     if (hit) return hit;
-    const host = byId(n.getAttribute('data-for'));
+    const host = byFor(n.getAttribute('data-for'));
     if (host && isOccupantOf(n, host)) return host;
   }
   return null;
@@ -1867,9 +1946,13 @@ export function slotResolver({bays = [], cages = [], bayRef = (p, b) => b.defaul
 // warned about it on every reload.
 //
 // So: a value is reduced to its ref, and a key is kept only when it is a cage
-// of this device (`cages`, every view, flattened) and not an occupant another
-// entry seats (its `id`, or the build's default `<host>-occupant`). A chained
-// tier is the build's business; the kit swaps cages.
+// of this device (`cages`, every view, flattened), nested, or - since #611 -
+// the CHAINED TIER at the build's default name: `port-4-occupant` is the slot
+// nestedSlots publishes on the plug seated in `port-4` (chainedSlots), so the
+// boot the build put there is this slot's built answer and an untouched page
+// writes no swap for it. An occupant a configuration names with its own `id`
+// is still dropped, with anything keyed on that id: its seat is not drawn at
+// `<host>-occupant`, so no slot is published for what sits on it.
 //
 // A KEY ON A SEATED CARD (#484) is the manifest's module-less path,
 // `front-6/xg0`, and is returned at the DRAWING's, `front-6/module/xg0` -
@@ -1903,9 +1986,15 @@ export function builtOccupants(cfg, cages, ctx = null) {
     const local = (v && typeof v === 'object' && v.id) || `${k.slice(cut + 1)}-occupant`;
     return cut < 0 ? local : `${k.slice(0, cut)}/${local}`;
   }));
+  // a chained key at the build's default name: `<host key>-occupant`, its host
+  // a key of this map whose occupant carries no `id` of its own
+  const chained = k => k.endsWith(OCC) && Object.prototype.hasOwnProperty.call(occ, k.slice(0, -OCC.length))
+    && !(occ[k.slice(0, -OCC.length)] && typeof occ[k.slice(0, -OCC.length)] === 'object'
+         && occ[k.slice(0, -OCC.length)].id);
   for (const [k, v] of Object.entries(occ)) {
     const nested = k.includes('/');
-    if (!(nested || cageIds.has(k)) || occIds.has(k)) continue;
+    if (occIds.has(k) && !chained(k)) continue;
+    if (!(nested || cageIds.has(k) || chained(k))) continue;
     out[nested ? toPath(k) : k] = refOf(v) || null;
   }
   return out;
@@ -2003,9 +2092,11 @@ export function swapOverrides({cfg, bays = [], cages = [], cfgBays = {}, cfgOccu
     if ((ref || null) !== built(id)) out[id] = ref || null;
   // an occupant key is measured as a slot, whatever its path looks like - a
   // card's cage and a nested bay share a shape, and the state knows which.
-  // A slot before the slots on what it holds (`-occupant/` steps), so a plug
-  // in an optic the state swapped is measured against the fresh optic.
-  const chain = id => id.split(`${OCC}/`).length;
+  // A slot before the slots on what it holds (every `-occupant` step, the
+  // chained tier's included - #611), so a plug in an optic the state swapped
+  // is measured against the fresh optic, and a boot on a swapped plug against
+  // the fresh plug, which holds none.
+  const chain = id => id.split(OCC).length;
   const occEntries = Object.entries(cfgOccupants || {}).sort(([a], [b]) => chain(a) - chain(b));
   for (const [id, ref] of occEntries)
     if ((ref || null) !== builtOcc(id)) out[id] = ref || null;
@@ -2078,8 +2169,12 @@ export function freshBaysUnder(cfg, carrier, ref, compByRef) {
 // One rule serves both because neither suffix can follow the other kind: a
 // bay holds a `module`, and a slot holds an `-occupant`.
 export function underCarrier(key, carrier) {
-  const k = String(key);
-  return k.startsWith(`${carrier}/module/`) || k.startsWith(`${carrier}${OCC}/`);
+  const k = String(key), c = String(carrier);
+  if (k.startsWith(`${c}/module/`)) return true;
+  // what the slot holds, and anything on or in it: `<slot>-occupant/...`, and
+  // since #611 the chained tier itself - `<slot>-occupant` is the key a boot
+  // on the plug in `<slot>` is seated at, and a boot on that `-occupant` again
+  return k.startsWith(c) && /^(-occupant)+(\/|$)/.test(k.slice(c.length));
 }
 const OCC = '-occupant';
 
