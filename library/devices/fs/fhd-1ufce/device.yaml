@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufce
-version: 5.0.0
+version: 5.1.0
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFCE
@@ -64,6 +64,13 @@ provenance:
       shares this one envelope by definition of the format (the format's own name for it). The
       four bays sit contiguous across the panel: (448.0 - 4 x 108.97) / 2 = 6.06mm margin each
       side, centred top-to-bottom in the 44.0mm face: (44.0 - 35.05) / 2 = 4.475mm.
+      THE ADAPTER PANELS JOINED IN 5.1.0: fifteen FHD panels (LC 24F in OS2 UPC and APC, OM4
+      and OM5; LC 36F in OS2 and OM4; SC in OS2 UPC and APC and OM4; three MTP and one MTP-16;
+      the multimedia modular panel and the blank) are in every bay's `accepts`.
+      They are class adapter-panel, not cassette, so the cassette-envelope rule does not reach
+      them; FS states the compatibility itself - every FHD enclosure datasheet (1UFMT-N, 1UFMT-S,
+      1UME, the slide-out family) says it takes all FHD cassettes and panels, and each prints the
+      same loading list with the panels on it.
   front-panel-detail:
     confidence: estimated
     note: >-
@@ -142,6 +149,10 @@ gaps:
       composing them took a major:
       an addressing change inside the bay occupants, not on the front panel
       around them, so the gap stands unchanged.
+      RE-READ when the fifteen FHD adapter panels joined every bay's `accepts`:
+      a panel is a plate of adapters seated in the same 108.97 x 35.05 bay,
+      so it changes what fills a bay, not the enclosure's own front around
+      it - the gap stands.
     wanted: >-
       a square-on, face-on photograph of the closed FHD-1UFCE front, the same
       kind of image that let the cassettes' own faceplates be measured.
@@ -208,6 +219,10 @@ gaps:
       and each back began landing where its own module's body stands,
       mirrored in the hole: the holes and the opening are unchanged, and
       nothing held shows them any better - the gap stands.
+      RE-READ when the fifteen FHD adapter panels joined every bay's `accepts`:
+      a panel's rear is its adapters' far ends, 16 to 32 deep instead of a
+      117.86 cassette body, and the cords reach them through the same
+      undimensioned opening - the gap stands.
     wanted: >-
       a rear photograph (the cassettes seat from the front but the trunk
       cables leave from the back of the drawer) and a lid/side photograph,
@@ -258,6 +273,21 @@ views:
             - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 1
           rear: {view: rear, cutout: back-1}
@@ -287,6 +317,21 @@ views:
             - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 2
           rear: {view: rear, cutout: back-2}
@@ -316,6 +361,21 @@ views:
             - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 3
           rear: {view: rear, cutout: back-3}
@@ -345,6 +405,21 @@ views:
             - fs/fhd-1mtp24-lc-om3-a@2
             - fs/fhd-3mtp18-lc-os2-a@1
             - fs/fhd-3mtp18-lc-om4-a@1
+            - fs/fhd-fap12lcd-os2@1
+            - fs/fhd-fap18lcd-os2@1
+            - fs/fhd-fap6scd-apc-os2@1
+            - fs/fhd-fap12mtp-a@1
+            - fs/fhd-fap12mtp-b@1
+            - fs/fhd-fap8mtp-b@1
+            - fs/fhd-fap12mtp16-a@1
+            - fs/fhd-fapm6@1
+            - fs/fhd-fapb@1
+            - fs/fhd-fap12lcd-apc-os2@1
+            - fs/fhd-fap12lcd-om4@1
+            - fs/fhd-fap12lcd-om5@1
+            - fs/fhd-fap18lcd-om4@1
+            - fs/fhd-fap6scd-os2@1
+            - fs/fhd-fap6scd-om4@1
           group: slots
           rel-pos: 4
           rear: {view: rear, cutout: back-4}
@@ -426,6 +501,18 @@ configurations:
       bay-2: fs/fhd-1mtp6lcd-os2-a@4
       bay-3: fs/fhd-1mtp6lcd-os2-a@4
       bay-4: fs/fhd-1mtp6lcd-os2-a@4
+  panels:
+    kind: example
+    description: >-
+      Four FHD adapter panels instead of cassettes - 24-fibre LC, 12x MTP Type
+      A, 12-fibre SC APC and the multimedia modular panel - the four faces FS
+      draws in its adapter-panels datasheet. Illustrative, like every
+      `example`: the panels are ordered separately from the enclosure.
+    bays:
+      bay-1: fs/fhd-fap12lcd-os2@1
+      bay-2: fs/fhd-fap12mtp-a@1
+      bay-3: fs/fhd-fap6scd-apc-os2@1
+      bay-4: fs/fhd-fapm6@1
 datasheet:
   title: 'FS FHD 1U Rack Mount Fiber Enclosure datasheet'
   sha256: 6459020299a17a9326a3d867ef1ec082b10b874d46cf02ee19dc0acaa29a94b2

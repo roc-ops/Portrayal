@@ -1,0 +1,147 @@
+format: 1
+kind: module
+name: fhd-fap18lcd-os2
+version: 1.0.0
+class: adapter-panel
+behaviour: fills
+description: >-
+  FS FHD-FAP18LCDXSMF - FHD fiber adapter panel, eighteen shuttered LC UPC
+  duplex adapters (blue), 36 fibres, OS2. FS SKU 133613.
+size: {w: 108.97, h: 35.05, d: 15.8}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+size-notes: >-
+  THE FHD MODULE FACE, 4.29 x 1.38 in, which FS's adapter-panels datasheet
+  dimensions on every panel drawing (pp5-9) as 109 x 35 mm; 108.97 x 35.05 is
+  the same two inch figures unrounded, the face every FHD cassette in this
+  library already declares. THE DEPTH IS THE PANEL's, NOT A CASSETTE's: FS's
+  top views give the adapters' reach in front of and behind a plate about 1.7
+  thick, and 15.8 is the plate plus what stands behind it - see
+  provenance.depth. A panel is a plate of adapters, not a box, which is why it
+  is not class cassette.
+attrs: {media: fiber, model: FHD-FAP18LCDXSMF, vendor-sku: '133613'}
+body:
+  depth: 15.8
+  # THE ADAPTER BLOCK BEHIND THE PLATE, 3.46in (88) across on FS's top views
+  # and 1.37in (34.8) tall on its side views, centred behind the plate. It is
+  # what a pulled panel's box is drawn as, and what the rear face is painted on.
+  footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
+elements:
+  logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+parts:
+  - {id: lc01, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 23.2]}
+  - {id: lc02, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 23.2]}
+  - {id: lc03, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 23.2]}
+  - {id: lc04, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 23.2]}
+  - {id: lc05, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 23.2]}
+  - {id: lc06, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 23.2]}
+  - {id: lc07, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 11.6]}
+  - {id: lc08, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 11.6]}
+  - {id: lc09, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 11.6]}
+  - {id: lc10, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 11.6]}
+  - {id: lc11, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 11.6]}
+  - {id: lc12, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 11.6]}
+  - {id: lc13, ref: common/lc-duplex-shuttered-adapter@2, at: [13.635, 0.0]}
+  - {id: lc14, ref: common/lc-duplex-shuttered-adapter@2, at: [26.735, 0.0]}
+  - {id: lc15, ref: common/lc-duplex-shuttered-adapter@2, at: [41.41, 0.0]}
+  - {id: lc16, ref: common/lc-duplex-shuttered-adapter@2, at: [54.51, 0.0]}
+  - {id: lc17, ref: common/lc-duplex-shuttered-adapter@2, at: [69.185, 0.0]}
+  - {id: lc18, ref: common/lc-duplex-shuttered-adapter@2, at: [82.285, 0.0]}
+faces:
+  rear: {ref: fs/fhd-fap18lcd-os2-rear@1}
+optical:
+  media: os2
+  polish: upc
+  front-order:
+    [lc01, lc02, lc03, lc04, lc05, lc06, lc07, lc08, lc09, lc10, lc11, lc12, lc13, lc14, lc15, lc16, lc17, lc18]
+  paths:
+    - {from: lc01.1, to: 'rear:b01.2'}
+    - {from: lc01.2, to: 'rear:b01.1'}
+    - {from: lc02.1, to: 'rear:b02.2'}
+    - {from: lc02.2, to: 'rear:b02.1'}
+    - {from: lc03.1, to: 'rear:b03.2'}
+    - {from: lc03.2, to: 'rear:b03.1'}
+    - {from: lc04.1, to: 'rear:b04.2'}
+    - {from: lc04.2, to: 'rear:b04.1'}
+    - {from: lc05.1, to: 'rear:b05.2'}
+    - {from: lc05.2, to: 'rear:b05.1'}
+    - {from: lc06.1, to: 'rear:b06.2'}
+    - {from: lc06.2, to: 'rear:b06.1'}
+    - {from: lc07.1, to: 'rear:b07.2'}
+    - {from: lc07.2, to: 'rear:b07.1'}
+    - {from: lc08.1, to: 'rear:b08.2'}
+    - {from: lc08.2, to: 'rear:b08.1'}
+    - {from: lc09.1, to: 'rear:b09.2'}
+    - {from: lc09.2, to: 'rear:b09.1'}
+    - {from: lc10.1, to: 'rear:b10.2'}
+    - {from: lc10.2, to: 'rear:b10.1'}
+    - {from: lc11.1, to: 'rear:b11.2'}
+    - {from: lc11.2, to: 'rear:b11.1'}
+    - {from: lc12.1, to: 'rear:b12.2'}
+    - {from: lc12.2, to: 'rear:b12.1'}
+    - {from: lc13.1, to: 'rear:b13.2'}
+    - {from: lc13.2, to: 'rear:b13.1'}
+    - {from: lc14.1, to: 'rear:b14.2'}
+    - {from: lc14.2, to: 'rear:b14.1'}
+    - {from: lc15.1, to: 'rear:b15.2'}
+    - {from: lc15.2, to: 'rear:b15.1'}
+    - {from: lc16.1, to: 'rear:b16.2'}
+    - {from: lc16.2, to: 'rear:b16.1'}
+    - {from: lc17.1, to: 'rear:b17.2'}
+    - {from: lc17.2, to: 'rear:b17.1'}
+    - {from: lc18.1, to: 'rear:b18.2'}
+    - {from: lc18.2, to: 'rear:b18.1'}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    DRAWN POSITIONS, CARRIED BY THE LIBRARY's ADAPTER. FS's vector drawing
+    (panels datasheet p6, 36F LC Adapter Panel, 1200 dpi, 23.39 px/mm on the 109
+    plate, plate height 35.06 against 35) puts eighteen horizontal duplex
+    adapters in three rows of three abutting PAIRS: bore centres 17.19/23.43,
+    30.04/36.28 | 44.96/51.21, 57.79/64.06 | 72.74/78.98, 85.59/91.83 (the 6.24
+    LC pitch inside each adapter), so pair centres 26.735, 54.51, 82.285, and
+    bore rows at y 7.03, 18.54, 30.05 - an 11.51 row pitch, the block flush with
+    the plate's top edge. common/lc-duplex-shuttered-adapter@2 is 13.1 x 11.6
+    (photo-measured on the 36-fibre cassette 105333); the drawing's bodies read
+    about 12.8 x 11.4. Each pair is centred where FS draws it and the two
+    adapters abut at the part's own 13.1, so each adapter sits 0.125 outboard of
+    its drawn centre; the rows abut at the part's 11.6 from the plate's top
+    edge, so the lowest row lands 0.18 below the drawn one. Both differences are
+    the adapter's size disagreeing with FS's drawing of it, recorded here and
+    not split: the two 36-fibre cassettes compose the same @2, and a re-measured
+    adapter moves all three together.
+  face-legends: >-
+    read off the same drawing: 25 / 13 / 1 left of the first column and 36 / 24
+    / 12 right of the last, one number per row end - the lower row is 1-12, the
+    middle 13-24, the upper 25-36, each left to right, the odd port the LEFT
+    bore of its adapter.
+  knobs: >-
+    THE THUMB-KNOBS ARE DRAWN, and not at the cassettes' positions. FS's panel
+    drawings dimension the two knob centres 3.91in (99.4) apart on every panel,
+    so each sits 4.785 in from its edge; the 36F drawing (p6) draws the knob
+    face 8.47 across, r 4.24. The cassettes carry knobs at 5.10 from the edge, r
+    4.10, read off renders of a different part.
+  depth: >-
+    drawing - the top view beside each front view gives the reach in front of
+    the plate, the reach behind it and the total, in inches with millimetres:
+    24F LC 0.27 [6.9] / 1.09 [27.8] / 1.43 [36.4], MTP 0.49 [12.5] / 1.20 [30.4]
+    / 1.76 [44.6], 36F LC 0.65 [16.4] / 0.57 [14.6] / 1.27 [32.2]; the SC panel
+    is noted as the 24F LC's size. The front and rear reaches leave about 1.7
+    for the plate on the LC and MTP views, and `d` is the plate plus the rear
+    reach. The adapters' own relief does not reproduce the front reach - common
+    adapters stand 1.0 to 1.2 proud, estimated - and is not overridden here.
+  optical: >-
+    EVERY PATH IS ONE MATING SLEEVE, NOT A STRAND. An adapter panel holds no
+    glass: a fibre in a front bore leaves through the same sleeve at the back.
+    These adapters put their bores side by side, so seen from behind the LEFT
+    front bore is on the RIGHT: the rear face composes each adapter unmirrored
+    at the mirrored column, where its position 1 (left as seen from behind) is
+    the front's position 2 - and the paths say so, `lcNN.1` to `bNN.2`.
+  face: >-
+    the face-on render 133613.p3 agrees: three rows of blue shuttered adapters
+    in pairs, no dust caps (the shutters are the dust protection).
+  logo-zone: >-
+    reserved, not drawn - FS prints its mark top left on every panel face
+    (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
+    read off the drawings, to about half a millimetre.
+skins: [default]

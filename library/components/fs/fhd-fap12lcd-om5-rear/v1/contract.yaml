@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: fhd-fap12lcd-om5-rear
+version: 1.0.0
+class: adapter-panel
+description: >-
+  The back of FS SKU 203945 (FHD adapter panel): the adapter block seen from
+  behind, the same adapters that face forward, whose far ends take the trunk
+  or patch cords that reach this panel from the rear.
+size: {w: 88.0, h: 34.8}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  FS's top views dimension the adapter block 3.46in (88) across and its side
+  views 1.37in (34.8) tall; this face is that block seen from behind. NO DEPTH
+  IS DECLARED: a face is a drawing of a back, and render.py turns a `size.d`
+  on a fixed component into a pit as big as the face (the cassette rears
+  record the same reading). The depth belongs to the panel, as `body.depth`.
+attrs: {media: fiber}
+parts:
+  - {id: b01, ref: common/lc-duplex-v-adapter@6, at: [74.295, 18.49], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b02, ref: common/lc-duplex-v-adapter@6, at: [60.315, 18.49], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b03, ref: common/lc-duplex-v-adapter@6, at: [46.335, 18.49], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b04, ref: common/lc-duplex-v-adapter@6, at: [32.355, 18.49], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b05, ref: common/lc-duplex-v-adapter@6, at: [18.355, 18.49], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b06, ref: common/lc-duplex-v-adapter@6, at: [4.375, 18.49], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b07, ref: common/lc-duplex-v-adapter@6, at: [74.295, 2.51], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b08, ref: common/lc-duplex-v-adapter@6, at: [60.315, 2.51], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b09, ref: common/lc-duplex-v-adapter@6, at: [46.335, 2.51], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b10, ref: common/lc-duplex-v-adapter@6, at: [32.355, 2.51], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b11, ref: common/lc-duplex-v-adapter@6, at: [18.355, 2.51], attrs: {housing-finish: '#a0ae61'}}
+  - {id: b12, ref: common/lc-duplex-v-adapter@6, at: [4.375, 2.51], attrs: {housing-finish: '#a0ae61'}}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  parts: >-
+    THE FRONT's ADAPTERS, SEEN FROM BEHIND. Each front part has one entry here,
+    `bNN` behind `lcNN`/`scNN`/`mtpNN`, at the front column mirrored across the
+    88 block (seen from behind, the first column is on the right) and at the
+    same height less the block's 0.125 inset. How each is turned or mirrored is
+    what makes a sleeve meet its own far end - the panel's provenance.optical
+    says why, per adapter type.
+  face-detail-gap: >-
+    FS's renders of the panel backs (the three-quarter gallery shots) show the
+    adapter bodies and their caps and no printing; nothing is printed here. The
+    steel behind the adapters is painted as one dark field.
+skins: [default]
