@@ -80,3 +80,12 @@ def test_a_directory_called_generic_above_the_checkout_is_not_the_namespace():
     outside = pathlib.Path(
         "/home/me/generic/Portrayal/library/components/cisco/sfp-10g-lr/v1/contract.yaml")
     assert run(outside, base(speed="10g", reach="10km")) == []
+
+
+def test_a_cable_kind_on_a_generic_is_an_error():
+    errs = run(GEN, base(**{"cable-kind": "dac"}))
+    assert errs and "cable-kind" in errs[0]
+
+
+def test_a_cable_kind_on_a_vendor_wrapper_is_fine():
+    assert run(VEN, base(**{"cable-kind": "aoc"})) == []

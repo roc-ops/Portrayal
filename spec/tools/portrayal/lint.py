@@ -1739,7 +1739,8 @@ def lint_component_display(path, data, _lib_roots=None):
 
 
 GENERIC_FORBIDDEN_ATTRS = ("speed", "reach", "wavelength", "mode",
-                           "power-draw-max-w", "power-draw-typical-w")
+                           "power-draw-max-w", "power-draw-typical-w",
+                           "cable-kind")
 GENERIC_RATE_TOKENS = re.compile(
     r"(^|-)(sfp28|sfp56|sfp112|sfp-plus|qsfp28|qsfp56|qsfp112|qsfp-dd800|"
     r"1000base[a-z0-9-]*|"
