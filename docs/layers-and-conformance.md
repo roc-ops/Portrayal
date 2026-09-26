@@ -159,7 +159,8 @@ The punched panel with every component installed and nothing printed on any of i
 C100G that is 569 geometry nodes with and without, and 100 text nodes down to 0.
 
 The sweep removes `<g id="silkscreen">` groups *and* any remaining `<text>` in a skin. The
-group is the convention and lint will come to require it; the text sweep is the backstop,
+group is the convention, and L38 requires it as an error: printed text in a skin sits in
+`<g id="silkscreen">` unless the part is applied over the panel. The text sweep is the backstop,
 and it is sound rather than a shortcut, because printed text on a faceplate **is**
 silkscreen whether or not its author put it in the right group.
 
