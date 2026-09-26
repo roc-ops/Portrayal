@@ -406,6 +406,14 @@ a new part, a superseded-not-removed part, a wider preview frame, a colour
 correction), per this file's own rule.
 
 ### Fixed
+- A seated part turns with the aperture it is in when its host FORWARDS that
+  aperture from a composed part (roc-ops/Portrayal#548). The composed part's
+  own `rotate` was left out, so a plug seated in generic/sfp-lc-simplex@2 or
+  generic/sfp-rj45@1 (each composes its one aperture at 180) was drawn 180
+  degrees out, and an optic `mate-to` a card whose cage is a part at 90 was
+  drawn crosswise. The drawn `rotate()` of such a seat changes, and so do
+  those two parts' `presents.rotate` in `components.json` (now 180). No
+  device in the library seats either case today, so no compiled face changes.
 - `devices_index` fails when two devices share a name. Dist filenames carry no
   vendor, so they would otherwise render over each other in silence (roc-ops/Portrayal#185).
 
