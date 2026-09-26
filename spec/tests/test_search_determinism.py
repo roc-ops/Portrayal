@@ -30,8 +30,13 @@ SNIPPET = textwrap.dedent(f"""
 
 def _blob(seed):
     """One fresh interpreter with a chosen hash seed, which is what decides set order."""
+    # THIS CHECKOUT'S TOOLS, not the editable install's (#346): the child's
+    # environment is replaced to pin the hash seed, and replacing it dropped
+    # PYTHONPATH, so the child imported whichever checkout ran `pip install
+    # -e .` and this test measured that tree's search_blob.
     return subprocess.run([sys.executable, "-c", SNIPPET], capture_output=True, text=True,
-                          env={"PYTHONHASHSEED": seed, "PATH": "/usr/bin:/bin"},
+                          env={"PYTHONHASHSEED": seed, "PATH": "/usr/bin:/bin",
+                               "PYTHONPATH": str(SPEC / "tools")},
                           check=True).stdout.strip()
 
 
