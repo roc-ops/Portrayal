@@ -12,7 +12,22 @@ The library itself is versioned per device (`device.lock.json` beside each
 manifest) and per component (`version:` in each contract). This file is about
 the *published build*, not about the hardware.
 
-## Unreleased
+## 0.1.0 (unreleased) - the first public release
+
+What 0.1.0 promises, as [docs/format-stability.md](docs/format-stability.md)
+states it in full:
+
+- Manifests are **`format: 1`**, which schema **v1** names. The schemas were
+  labelled `v0` until this release, which was the same format under a second
+  name.
+- The published build is **`contract: 1`**.
+- At 0.x the tools read the current format only. Every change that raises
+  `format` or `contract` is listed here, with what to change to move across,
+  and it raises the package's minor version.
+- From 1.0, such a change is a major version, and the previous format stays
+  readable for one release.
+
+The entries below are what 0.1.0 ships.
 
 ### Added
 - Lint L123, library-wide: one module, one bay size. Every bay that accepts a
