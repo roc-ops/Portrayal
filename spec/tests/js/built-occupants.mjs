@@ -90,9 +90,24 @@ const cUntouched = {cfg: cCfg, bays: cBays, cages, cfgBays: m.builtBays(cCfg),
 out.cardUntouched = m.swapOverrides(cUntouched);
 out.cardUntouchedSearch = m.searchWith('?device=c100g&config=fitted',
   {device: 'c100g', config: 'fitted', swap: m.encodeSwaps(out.cardUntouched)});
-// the built optic, chosen away and back, is no swap; emptied, it is one
-const withCard = occ => m.swapOverrides({...cUntouched,
-  cfgOccupants: {...cUntouched.cfgOccupants, ...occ}});
+// the built optic, chosen away and back, is no swap; emptied, it is one.
+// EACH CHOICE GOES THROUGH WHAT THE SHELL'S dropOnSlot DOES FIRST (#611): the
+// state under the slot is pruned (pruneCarrier) - since the chained tier is
+// a slot, that includes the boot the build put on the old optic - and put
+// back as built only when the choice IS what the build seated there.
+const withCard = occ => {
+  let st = {cfgBays: cUntouched.cfgBays, cfgOccupants: cUntouched.cfgOccupants};
+  for (const [key, ref] of Object.entries(occ)) {
+    const builtRef = cUntouched.cfgOccupants[key] ?? null;
+    st = m.pruneCarrier(st, key, ref && ref === builtRef ? cUntouched.cfgOccupants : {});
+    st = {...st, cfgOccupants: {...st.cfgOccupants, [key]: ref}};
+  }
+  return m.swapOverrides({...cUntouched, cfgBays: st.cfgBays, cfgOccupants: st.cfgOccupants});
+};
+// and without that step, a boot left in the state on an optic it was not
+// built on IS asked for - so it is measured, and reported, as a swap
+out.cardAwayUnpruned = m.swapOverrides({...cUntouched,
+  cfgOccupants: {...cUntouched.cfgOccupants, 'front-6/module/xg0': 'generic/sfp-lc-simplex@2'}});
 out.cardAway = withCard({'front-6/module/xg0': 'generic/sfp-lc-simplex@2'});
 out.cardBack = withCard({'front-6/module/xg0': 'generic/sfp-lc@1'});
 out.cardEmptied = withCard({'front-6/module/xg0': null});
