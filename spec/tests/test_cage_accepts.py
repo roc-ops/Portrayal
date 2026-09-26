@@ -98,7 +98,7 @@ def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(t
     assert cage["interface"] == "qsfp-dd"
     assert cage["media"] == "qsfp-dd"
     assert cage["group"] == "qsfpdd-400g"
-    assert cage["accepts"] == ["generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
+    assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
 
 
 def test_an_osfp_cage_accepts_nothing_but_says_so_explicitly(tmp_path):
@@ -329,7 +329,7 @@ def test_a_qsfp_shaped_cage_with_qsfp_dd_media_offers_the_qsfp_dd_optic(tmp_path
     # `also-accepts: [qsfp]` - exactly what a genuine std/qsfp-dd@1 cage with
     # this same media would offer (test_a_qsfp_dd_cage_accepts_its_own_generic_
     # and_the_also_accepted_qsfp_one, above, on edgecore/dcs510).
-    assert cage["accepts"] == ["generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
+    assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
 
 
 # --- final review F1: the media is read from the PLACEMENT first, then its --
@@ -367,7 +367,7 @@ def test_a_placement_declared_media_governs_when_the_group_declares_none(tmp_pat
     # READ FROM THE PLACEMENT. `null` here - the value a group-only read
     # published - is the defect this pins.
     assert cage["media"] == "qsfp-dd"
-    assert cage["accepts"] == ["generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
+    assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-dd-lc@2", "generic/qsfp-lc@2"]
 
 
 def test_the_probe_group_itself_declares_no_media(tmp_path):
@@ -391,7 +391,7 @@ def test_a_qsfp_shaped_cage_with_agreeing_media_is_unaffected(tmp_path):
     cage = _cage(idx, "front", "port-1")
     assert cage["interface"] == "qsfp"
     assert cage["media"] == "qsfp28"
-    assert cage["accepts"] == ["generic/qsfp-lc@2"]
+    assert cage["accepts"] == ["generic/qsfp-cable@1", "generic/qsfp-lc@2"]
 
 
 # --- C2 Task 1: where an occupant mates, published --------------------------
