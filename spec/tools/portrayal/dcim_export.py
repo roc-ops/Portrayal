@@ -685,6 +685,10 @@ PART_RF = {
     "std/mcx": ("docsis", "MCX"),
     "std/smb": ("other", "SMB"),
     "std/sma": ("other", "SMA"),
+    # BNC and 1.0/2.3 carry T3/E3 and timing, not DOCSIS, so they are `other`
+    # like SMB and SMA; the label keeps the connector.
+    "std/bnc": ("other", "BNC"),
+    "std/din-1-0-2-3": ("other", "1.0/2.3"),
     # THE PANEL-MOUNT SIBLINGS, WHICH ARE LISTED AND NOT DERIVED. Each is a
     # bezel around a core that is already here - `common/smb-jack` is "a gold nut
     # around a std/smb core" in its own words - and following composition to
@@ -697,6 +701,8 @@ PART_RF = {
     # composes FOUR inlets and would inherit one.
     "common/smb-jack": ("other", "SMB"),
     "common/sma-jack": ("other", "SMA"),
+    "common/bnc-jack": ("other", "BNC"),
+    "common/din-1-0-2-3-jack": ("other", "1.0/2.3"),
 }
 
 # std/lc-bore is the rx/tx bore of a QSFP transceiver, not a port on a device:
