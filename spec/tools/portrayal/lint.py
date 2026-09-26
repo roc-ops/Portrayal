@@ -3905,9 +3905,21 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
     if not want:
         err(path, "L12", f"{where}: host {host_ref} presents no "
                          "'interface', so nothing can mate into it")
-    if want and have and want != have:
+    if want and have and want != have and not _also_accepted(want, have):
         err(path, "L12", f"{where}: {occ_ref} mates {have!r} but "
                          f"{host_ref} presents {want!r}")
+
+
+def _also_accepted(want, have):
+    """Does a cage presenting `want` take a part that mates `have` through
+    its family's `also-accepts` (spec/schemas/pluggables.yaml)? The build
+    offers exactly these parts (render.py `_cage_accepts`): every `mates:
+    qsfp` part in a QSFP-DD cage. A seat and an offer must answer alike, or
+    lint fails a configuration seating what the explorer offered (#630). One
+    direction only: a QSFP cage does not take a QSFP-DD part.
+    """
+    host, occ = _family_mated_by(want), _family_mated_by(have)
+    return bool(host and occ and occ[0] in (host[1].get("also-accepts") or []))
 
 
 def _rate_check(path, where, occ_ref, host, data, lib_roots):
@@ -3917,7 +3929,9 @@ def _rate_check(path, where, occ_ref, host, data, lib_roots):
     cannot seat what its cage would never offer (a 10G DAC in a 1G SFP cage).
 
     The cage's media is read as the build reads it: the placement's own
-    `attrs.media` first, then its port group's (L18's precedence). Only a
+    `attrs.media` first, then its port group's (L18's precedence). `data` is
+    the frame the placement sits in - the device, or for a cage on a seated
+    card the card's contract, whose `groups:` have the device shape (#511). Only a
     DIRECT match is ceilinged, exactly as the build does: a rung of a foreign
     family (a QSFP part in a QSFP-DD cage, through `also-accepts`) has no
     place on this ladder to compare. A cage or a part with no rung - a generic
@@ -3998,12 +4012,25 @@ def lint_device_occupants(path, data, lib_roots):
                     q = resolve_component(r, lib_roots)
                     return load_yaml(q) if q else None
                 try:
-                    host_ref, _mref, _mpath = nested_key_host(host_id, data, cfg, _res)
+                    host_ref, mref, _mpath = nested_key_host(host_id, data, cfg, _res)
                 except ValueError as e:
                     err(path, "L12", f"configurations/{cname}/{e}")
                     continue
                 if ref:
                     _mate_check(path, where, ref, host_ref, lib_roots)
+                    # A CAGE ON A SEATED CARD takes the same rate check as a
+                    # device cage (#630), framed by the card: its media is the
+                    # part's own attrs, then the card's component group (#511)
+                    # - the frame `component_cages` publishes the card's offers
+                    # in. A host that is no part of that contract (an occupant
+                    # reached by a chained key: a plug on an optic) is no cage
+                    # on a ladder, so there is nothing to ceiling.
+                    card = _res(mref) or {}
+                    leaf = host_id.split("/")[-1]
+                    part = next((q for q in card.get("parts") or []
+                                 if q.get("id") == leaf), None)
+                    if part is not None:
+                        _rate_check(path, where, ref, part, card, lib_roots)
                 continue
             if host_id in hosts:
                 vname, host = hosts[host_id]
