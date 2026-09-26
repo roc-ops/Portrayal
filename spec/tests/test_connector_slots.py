@@ -46,7 +46,8 @@ def _entries(comps):
 def test_the_connector_registry_is_not_vacuous():
     reg = render_mod._connector_registry()
     # mpo16: the MTP-16 opening, keyed apart from mpo (std/mpo16@1)
-    assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16"}
+    # rj45: the copper jack, so generic/rj45-plug@1 has somewhere to go (#610)
+    assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -56,7 +57,7 @@ def test_the_connector_registry_is_not_vacuous():
 def test_every_connector_presenting_part_is_a_connector_slot(comps):
     entries = [c for c in _entries(comps) if c.get("kind") == "connector"]
     assert len(entries) > 0, "measured no connector slot at all"
-    assert all(c["interface"] in {"lc", "lc-duplex", "sc", "mpo", "mpo16"} for c in entries)
+    assert all(c["interface"] in {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45"} for c in entries)
     # a slot has no rate ladder, so no media ceiling
     assert all(c["media"] is None for c in entries)
 

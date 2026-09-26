@@ -47,7 +47,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 47 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 42 | QSFP28 cage cutout (100G, 4 lanes) |
 | `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
-| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 67 | 53 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
+| `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 67 | 54 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 61 | 25 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 30 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
@@ -167,7 +167,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/qsfp-dd-lc@2` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
 | `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 3 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
-| `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 2 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
+| `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 3 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
 | `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 5 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |
 | `generic/sfp-lc-simplex@2` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic SFP with one LC bore on its optical axis - the shape every bidirectional (BiDi) SFP, SFP+ and SFP28… |
@@ -499,7 +499,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-card-lp-14g@1` | component | riser | 27.4 × 211.4 |  | 0 | 2 | The low-profile riser card of a 2U 14G PowerEdge seen from above - the short card that carries riser 2's sing… |
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
 | `dell/riser-lower-trim-14g@1` | component | mechanical | 121.06 × 1.81 × 2 |  | 1 | 0 | The strip of chassis metal below riser 1 on a 14G PowerEdge, covering the bottom card's keyed end |
-| `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 |  | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
+| `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
 | `dell/system-id-button-14g@1` | component | button | 7 × 7 |  | 1 | 0 | The system identification button on the rear of a 14th-generation PowerEdge - pressed to make the machine ann… |

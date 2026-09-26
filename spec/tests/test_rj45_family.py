@@ -205,7 +205,12 @@ def test_common_rj45_ganged_eth_composes_the_cell_and_adds_two_lamps():
 
 def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():
     c = contract("dell/rj45-port-14g@1")
-    assert c["version"] == "1.2.0"
+    assert c["version"] == "1.3.0"
+    # 1.3.0 (#610): the carrier presents the jack itself - it wraps a wrapper,
+    # so the slot code could not reach std/rj45@2 through it - at the housing's
+    # own centre, which the 180 turn leaves in place.
+    assert c["interface"] == "rj45"
+    assert c["connection-points"]["mate"] == {"at": [7.9, 6.6], "direction": "front"}
     part = c["parts"][0]
     assert part["ref"] == "common/rj45-eth@1"
     assert set(part["states"]) == {"led-a", "led-b"}, "the carrier names the new part's lamps"
