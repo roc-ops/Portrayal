@@ -174,7 +174,14 @@ def _seat_out(contract, point):
     nothing, or a feature with neither `out` nor `cyl`, also answers 0.0 here -
     lint L106 refuses both, and a renderer that guessed a depth would hide the
     error L106 exists to report.
+
+    A point may instead carry a numeric `seat-out`: the plane itself, absolute
+    from the part's face, where no drawn feature has its rear there (a coax
+    jack's mated plane lies partway along a plain barrel). L106 refuses a
+    point with both it and `on:`.
     """
+    if point.get("seat-out") is not None:
+        return float(point["seat-out"])
     node = point.get("on")
     if not node:
         return 0.0

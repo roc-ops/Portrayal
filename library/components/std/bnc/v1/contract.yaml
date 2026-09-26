@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: bnc
-version: 1.0.0
+version: 1.0.1
 class: port
 profile: networking
 conforms: bnc
@@ -61,6 +61,17 @@ provenance:
     the flat is drawn at the BOTTOM of the aperture, the same clocking the MCX
     jack uses. Nothing in the Radiall sheet fixes it; a panel that shows
     another places the part with rotate.
+  mated-plane: >-
+    drawing (derived) - THE MATE CARRIES `seat-out: 3.7`, the plane a mated
+    plug's coupling front sits on, absolute from this part's face. The collar
+    front is 12.2 in front of the panel (Radiall R141.557.000, issue 0431 E,
+    p.1; the `collar` feature, 1.4 + 10.8), and a mated plug's sleeve runs
+    8.5 over the jack from that face (MIL-STD-348B with CHANGE 3, Figure 301-2
+    dim G 8.31-8.51 plus Figure 301-1 dim F 0.15 min, so 8.46 min; S 10.52 min
+    bounds it from above): 12.2 - 8.5 = 3.7. No drawn face stands there - the
+    plane lies along the plain collar, and the plug's real stop is its inner
+    face against the jack's front face - so the figure is stated, not an
+    `on:`. common/bnc-jack forwards it with the core.
 elements:
   opening: {at: [0.0, 0.0], size: [9.70, 8.85], class: cutout}
 relief:
@@ -75,5 +86,5 @@ relief:
         9.60-9.70; Radiall R141.557.000 puts the front face 12.2 in front of the panel,
         so the collar runs from the flange front at 1.4 for 12.2 - 1.4 = 10.8.
 connection-points:
-  mate: {at: [4.85, 4.85], direction: front}
+  mate: {at: [4.85, 4.85], direction: front, seat-out: 3.7}
 skins: [default]

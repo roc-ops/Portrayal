@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: f-type-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: f-type
 conforms: f-type-plug
@@ -42,22 +42,23 @@ provenance:
     THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
     generic/sma-plug@1, generic/rj45-plug@1 and generic/lc-plug@2 use: each
     seats at its jack's presented lift by `mate`, and its features run from
-    there toward the viewer. std/f-type@1 presents at its own face, the panel
-    plane, with its nut and threaded neck standing 13.0 proud of it (2.4 +
-    10.6). So the coupling nut's front face sits AT the presented lift (the
-    coupling has no lift), and the jack's whole neck lies inside the plug's
-    nut and ferrule.
+    there toward the viewer. std/f-type@1 presents at its mated plane, 7.8 in
+    front of the panel (provenance.engagement), with its nut and threaded
+    neck standing 13.0 proud (2.4 + 10.6). So the coupling nut's front face
+    sits AT the presented lift (the coupling has no lift), and the last 5.2
+    of the neck lies inside the plug's nut.
   engagement: >-
     drawing - the mated nut runs 4.29 to 6.10 past the port's reference
     plane: ANSI/SCTE 123 2021 Table 1 dim D, "Mandrel face depth to nut
-    leading edge". On std/f-type@1's 13.0 neck a real plug's nut front would
-    therefore stand about 7 to 9 in front of the panel, where this model puts
-    it at the panel. That is the frame's choice, not a figure: the plug does
-    not know which jack it is in (ANSI/SCTE 02 2021 Table 1 dim D gives the
-    port only a MINIMUM thread, 8.26), and the host's presented lift is the
-    one thing the seat supplies. The drawn plug is therefore about 7 to 9
-    nearer the panel than a real seated one; a jack that presents at its
-    neck's front face would carry the plug out with it.
+    leading edge". On std/f-type@1's 13.0 neck a real plug's nut front
+    therefore stands 6.90 to 8.71 in front of the panel. THE JACK PRESENTS AT
+    THAT MATED PLANE: std/f-type@1's mate carries `seat-out: 7.8`, the
+    midpoint of that range (its provenance.mated-plane), so the nut's front
+    face, at the presented lift, stands where a real seated nut's does and
+    the nut runs over the neck rather than swallowing it. The plug itself
+    still does not know which jack it is in (ANSI/SCTE 02 2021 Table 1 dim D
+    gives the port only a MINIMUM thread, 8.26); the plane is the jack's
+    statement.
   coupling: >-
     drawing - PE44312 p.3 side view, scaled at 120.4 px/mm on the
     dimensioned 19.8 overall and checked on the hex (12.59 against the

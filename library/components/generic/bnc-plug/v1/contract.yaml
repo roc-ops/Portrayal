@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: bnc-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: bnc
 conforms: bnc-plug
@@ -38,10 +38,11 @@ provenance:
     generic/sma-plug@1, generic/rj45-plug@1 and generic/lc-plug@2 use: each
     seats at its jack's presented lift by `mate`, and its features run from
     there toward the viewer. std/bnc@1 (and the bezel common/bnc-jack@1 that
-    composes it) presents at the panel plane, with its flange and collar
-    standing 12.2 proud of it. So the sleeve's front face sits AT the
-    presented lift (the coupling has no lift), and the jack's flange, collar
-    and lugs lie inside the sleeve.
+    composes it) presents at its mated plane, 3.7 in front of the panel
+    (provenance.engagement), with its flange and collar standing 12.2 proud.
+    So the sleeve's front face sits AT the presented lift (the coupling has
+    no lift), and the front 8.5 of the collar, with its lugs, lies inside
+    the sleeve.
   engagement: >-
     drawing (derived) - the mated sleeve runs about 8.5 (8.46 min) over the
     jack's collar, measured from the jack's front face: MIL-STD-348B
@@ -49,11 +50,13 @@ provenance:
     reference plane) plus Figure 301-1 dim F (plug sleeve front 0.15 min past
     it); Figure 301-2 dim S (10.52 min clearance for the mating nut) bounds it
     from above. On the Radiall R141.557.000 front-mount jack (collar front
-    12.2 in front of the panel) a real sleeve's front would stand about 3.7
-    in front of the panel, where this model puts it at the panel: the plug
-    does not know which jack it is in, and the host's presented lift is the
-    one thing the seat supplies. The drawn plug is about 3.7 nearer the panel
-    than a real seated one.
+    12.2 in front of the panel) a real sleeve's front stands about 3.7 in
+    front of the panel. THE JACK PRESENTS AT THAT MATED PLANE: std/bnc@1's
+    mate carries `seat-out: 3.7` (12.2 - 8.5, its provenance.mated-plane),
+    and common/bnc-jack@1 forwards it, so the sleeve's front face, at the
+    presented lift, stands where a real seated sleeve's does. The plug itself
+    still does not know which jack it is in; the plane is the jack's
+    statement.
   bayonet-slots: >-
     NOT DRAWN, ON PURPOSE. The two bayonet slots (MIL-STD-348B Figure 301-1
     dims K and U: 2.31-2.46 wide, at 180 degrees) are cut in the sleeve's

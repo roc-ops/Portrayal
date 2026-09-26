@@ -35,10 +35,11 @@ EACH = pytest.mark.parametrize("ref", sorted(PLUGS))
 # with `/module` dropped (a card port is keyed `<bay>/<port>`); the occupant is
 # drawn at `<host path>-occupant`. SMA and SMB seat in a device placement; MCX
 # has no device-level port in the library, so it seats in a card port through
-# the card's nested occupant key; so does F (casa/rfd@1). No device places a
-# BNC or a 1.0/2.3 jack yet, so those two seat in a device copy whose placement
-# at the host path is REPLACED by the bezel named in SWAPS (the part a device
-# places; its composed core is the jack in PLUGS).
+# the card's nested occupant key; so does F (casa/rfd@1). 1.0/2.3 seats in a
+# real Cisco T3/E3 SPA port (a common/din-1-0-2-3-jack@1 placement), two bays
+# deep: an A9K-SIP-700 in slot-0 and the SPA in its bay-2. No device or card
+# places a BNC jack, so BNC seats in a device copy whose placement at the host
+# path is REPLACED by the bezel named in SWAPS.
 SEATS = {
     "generic/sma-plug@1": ("ufispace/s9500-30xs", "base", "front", {}, "pps-in"),
     "generic/smb-plug@1": ("juniper/mx304", "base", "rear", {}, "clk-1pps-in"),
@@ -47,13 +48,19 @@ SEATS = {
     "generic/f-type-plug@1": ("casa/c100g", "base", "rear", {"rear-1": "casa/rfd@1"},
                               "rear-1/module/p0"),
     "generic/bnc-plug@1": ("cisco/asr-9901", "base", "front", {}, "gps-1pps"),
-    "generic/din-1-0-2-3-plug@1": ("edgecore/as7946-30xb", "ac-psu", "front", {}, "mhz-10-in"),
+    "generic/din-1-0-2-3-plug@1": ("cisco/asr-9010", "base", "front",
+                                   {"slot-0": "cisco/a9k-sip-700@2",
+                                    "slot-0/bay-2": "cisco/spa-4xt3e3@1"},
+                                   "slot-0/module/bay-2/module/p0-tx"),
 }
-# plug -> the bezel that replaces the placement at its host path (see SEATS).
-SWAPS = {
+# plug -> the bezel its host places (its composed core is the jack in PLUGS).
+BEZELS = {
     "generic/bnc-plug@1": "common/bnc-jack@1",
     "generic/din-1-0-2-3-plug@1": "common/din-1-0-2-3-jack@1",
 }
+# plug -> the bezel that REPLACES the placement at its host path in a tmp
+# device copy, because nothing in the library places that jack (see SEATS).
+SWAPS = {"generic/bnc-plug@1": BEZELS["generic/bnc-plug@1"]}
 NODES = ("coupling", "relief-boot", "stub")
 
 
@@ -180,9 +187,9 @@ def test_it_renders_seated_on_its_jack(seated, ref):
     host = by_path(root, host_path)
     occ = by_path(root, f"{host_path}-occupant")
     assert occ.get("data-ref", "").startswith(ref)
-    jack = SWAPS.get(ref, PLUGS[ref][2])
+    jack = BEZELS.get(ref, PLUGS[ref][2])
     assert host.get("data-ref", "").startswith(jack)
-    if ref in SWAPS:
+    if ref in BEZELS:
         assert [p["ref"] for p in doc(jack)["parts"]] == [PLUGS[ref][2]]
     hx, hy = device_point(parents, host, cage_mate(host))
     ox, oy = device_point(parents, occ, own_mate(occ))
@@ -204,10 +211,19 @@ def test_it_renders_seated_on_its_jack(seated, ref):
 #   MCX 2.0: nothing overlaps; the plug shoulder stops at the jack's front
 #     face, which is the front of std/mcx's 2.0 barrel (Radiall D1C004XEe
 #     p.4-14 item 1), and the jack's mate sits `on:` that barrel.
+#   F 7.8: the 13.0 thread front less SCTE 123 D 4.29-6.10, the midpoint of
+#     6.90-8.71; std/f-type states it as `seat-out`.
+#   BNC 3.7: the 12.2 collar front less the 8.5 engagement (MIL-STD-348B G +
+#     F); std/bnc states it as `seat-out`, and common/bnc-jack forwards it.
+#   1.0/2.3 3.85: the 9.4 front less H+S plug A 5.40-5.70, the midpoint of
+#     3.70-4.00; std/din-1-0-2-3 states it, and its bezel forwards it.
 MATED_PLANE = {
     "generic/sma-plug@1": 0.0,
     "generic/smb-plug@1": 0.0,
     "generic/mcx-plug@1": 2.0,
+    "generic/f-type-plug@1": 7.8,
+    "generic/bnc-plug@1": 3.7,
+    "generic/din-1-0-2-3-plug@1": 3.85,
 }
 # plug -> the jack node whose compiled front IS the mated plane, where the jack
 # draws a face there (a plane of 0 is the jack's own face).

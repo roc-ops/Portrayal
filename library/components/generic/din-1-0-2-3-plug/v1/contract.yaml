@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: din-1-0-2-3-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: din-1-0-2-3
 conforms: din-1-0-2-3-plug
@@ -38,21 +38,24 @@ provenance:
     generic/sma-plug@1, generic/rj45-plug@1 and generic/lc-plug@2 use: each
     seats at its jack's presented lift by `mate`, and its features run from
     there toward the viewer. std/din-1-0-2-3@1 (and the bezel
-    common/din-1-0-2-3-jack@1 that composes it) presents at the panel plane,
-    with its spanner nut and barrel standing 9.4 proud of it. So the
-    sleeve's front face sits AT the presented lift (the coupling has no
-    lift), and the jack's nut and barrel lie inside the sleeve.
+    common/din-1-0-2-3-jack@1 that composes it) presents at its mated plane,
+    3.85 in front of the panel (provenance.engagement), with its spanner nut
+    and barrel standing 9.4 proud. So the sleeve's front face sits AT the
+    presented lift (the coupling has no lift), and the front 5.55 of the
+    jack's barrel lies inside the sleeve.
   engagement: >-
     drawing - the mated interface sleeve runs 5.40 to 5.70 over the jack
     tube, measured from the jack's front face: HUBER+SUHNER "RF coaxial
     connectors general catalogue" 2020, 3628 78Z034, p.239, "Series 1.0/2.3
     inserts according to DIN 41626/2", plug table A; jack C 5.80-5.90 leaves
     clearance to the jack's collar. On the 9.4 of common/din-1-0-2-3-jack@1 a
-    real sleeve's front would stand about 3.7 to 4.0 in front of the panel,
-    just clear of the 2.41 spanner nut, where this model puts it at the
-    panel: the plug does not know which jack it is in, and the host's
-    presented lift is the one thing the seat supplies. The drawn plug is
-    about 3.7 to 4.0 nearer the panel than a real seated one.
+    real sleeve's front stands about 3.70 to 4.00 in front of the panel, just
+    clear of the 2.41 spanner nut. THE JACK PRESENTS AT THAT MATED PLANE:
+    std/din-1-0-2-3@1's mate carries `seat-out: 3.85`, the midpoint of that
+    range (its provenance.mated-plane), and common/din-1-0-2-3-jack@1
+    forwards it, so the sleeve's front face, at the presented lift, stands
+    where a real seated sleeve's does. The plug itself still does not know
+    which jack it is in; the plane is the jack's statement.
   sleeve-front: >-
     estimated - the OUTER push-pull latch sleeve's front is taken as flush
     with the interface sleeve's front, the plane the 5.40-5.70 above is

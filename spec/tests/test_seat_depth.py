@@ -181,6 +181,44 @@ def test_an_unquoted_on_is_an_error(tmp_path):
     assert len(errs) == 1 and "boolean" in errs[0], errs
 
 
+def _seat_out_jack(**cp):
+    """A synthetic coax jack: a 10.8 collar from 1.4, and a mate point."""
+    return {
+        "interface": "bnc",
+        "connection-points": {"mate": {"at": [4.85, 4.85], "direction": "front", **cp}},
+        "relief": {"features": [{"node": "collar", "lift": 1.4, "cyl": 10.8}]},
+    }
+
+
+def test_a_seat_out_presents_its_own_plane():
+    """A numeric `seat-out` is the plane itself, absolute from the face - for
+    a jack whose mated plane lies partway along a plain collar."""
+    assert presented_interface(_seat_out_jack(**{"seat-out": 3.7}), _res({}))[2] == 3.7
+
+
+def test_the_schema_accepts_a_seat_out_and_refuses_a_negative_one():
+    assert _validate(_seat_out_jack(**{"seat-out": 3.7})) == []
+    assert _validate(_seat_out_jack(**{"seat-out": -1})) != []
+
+
+def test_a_seat_out_lints_clean(tmp_path):
+    errs, warns = _l105(tmp_path, _seat_out_jack(**{"seat-out": 3.7}))
+    assert errs == [] and warns == []
+    errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": 0}))
+    assert errs == []
+
+
+@pytest.mark.parametrize("bad", [-0.5, "3.7", True])
+def test_a_seat_out_that_is_no_depth_is_an_error(tmp_path, bad):
+    errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": bad}))
+    assert len(errs) == 1 and "seat-out" in errs[0], errs
+
+
+def test_a_seat_out_beside_on_is_an_error(tmp_path):
+    errs, _ = _l105(tmp_path, _seat_out_jack(**{"seat-out": 3.7, "on": "collar"}))
+    assert len(errs) == 1 and "both seat-out and on" in errs[0], errs
+
+
 def test_an_integer_key_is_not_an_unquoted_on(tmp_path):
     """`True in cp` is also true for a key of 1 or 1.0 (True == 1 in Python), so
     the check names the key's type exactly (final review M2)."""

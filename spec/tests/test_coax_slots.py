@@ -89,6 +89,9 @@ KNOWN_DEVICE = {
 KNOWN_CARD = {
     "f-type": ("casa/rfd@1", "p0"),
     "mcx": ("casa/ups-32x4@1", "p0"),
+    # a Cisco T3/E3 SPA port, a common/din-1-0-2-3-jack@1 placement (Task 6,
+    # "THE STAND-IN MOVES" below)
+    "din-1-0-2-3": ("cisco/spa-4xt3e3@1", "p0-tx"),
 }
 
 
@@ -108,7 +111,8 @@ def test_a_known_coax_port_publishes_a_connector_slot(iface, comps, tmp_path):
 # is reached the same way the slot test above reaches it - a device placement
 # for sma/smb, the indexer's card entry for mcx.
 PLUG_FOR = {"sma": "generic/sma-plug@1", "smb": "generic/smb-plug@1",
-            "mcx": "generic/mcx-plug@1", "f-type": "generic/f-type-plug@1"}
+            "mcx": "generic/mcx-plug@1", "f-type": "generic/f-type-plug@1",
+            "din-1-0-2-3": "generic/din-1-0-2-3-plug@1"}
 
 
 @pytest.mark.parametrize("iface,plug", sorted(PLUG_FOR.items()))
@@ -122,16 +126,15 @@ def test_a_known_port_offers_its_plug(iface, plug, comps, tmp_path):
     assert plug in slot["accepts"], slot
 
 
-# THE BNC AND 1.0/2.3 PLUGS (#650 Task 5). No device or card places either
-# jack yet (Task 6 does), and the bezel's own components.json entry carries
-# neither `cages` (it is not a card) nor `presents` (it mates nothing), so the
-# accept list is read where the build publishes it: the configs.json slot of a
-# device copy whose coax placement is REPLACED by the bezel a device places.
+# THE BNC PLUG (#650 Task 5). No device or card places a BNC jack, and the
+# bezel's own components.json entry carries neither `cages` (it is not a card)
+# nor `presents` (it mates nothing), so the accept list is read where the
+# build publishes it: the configs.json slot of a device copy whose coax
+# placement is REPLACED by the bezel a device places. The 1.0/2.3 plug is read
+# off a real SPA port instead (KNOWN_CARD, PLUG_FOR).
 SWAPPED = {
     "bnc": ("cisco/asr-9901", "front", "gps-1pps", "common/bnc-jack@1",
             "generic/bnc-plug@1"),
-    "din-1-0-2-3": ("edgecore/as7946-30xb", "front", "mhz-10-in",
-                    "common/din-1-0-2-3-jack@1", "generic/din-1-0-2-3-plug@1"),
 }
 
 
@@ -302,8 +305,6 @@ def test_the_bnc_lugs_sit_where_mil_std_348_puts_them():
 # now place common/din-1-0-2-3-jack@1 (the bezel, never the bare core) at the
 # centres the skin drew. The Juniper DS3/E3 MIC does not move: its faceplate
 # jack is 75-ohm mini-SMB, which no modelled interface fits.
-KNOWN_CARD["din-1-0-2-3"] = ("cisco/spa-4xt3e3@1", "p0-tx")
-
 SPA_JACKS = {
     "cisco/spa-4xt3e3@1": {
         "p0-tx": 10.29, "p0-rx": 22.77, "p1-tx": 53.26, "p1-rx": 65.38,
@@ -323,7 +324,6 @@ SPA_JACKS = {
     },
 }
 SPA_JACK_X = {"cisco/spa-2cht3-ce-atm@1": 8.64}  # every other card: 9.88
-DIN_PLUG = LIB / "components/generic/din-1-0-2-3-plug/v1/contract.yaml"
 
 
 def test_the_known_din_card_port_publishes_a_connector_slot(comps):
@@ -347,7 +347,6 @@ def test_each_t3e3_spa_jack_is_a_placed_din_bezel_at_the_drawn_centre(ref, comps
         assert (slot["kind"], slot["interface"]) == ("connector", "din-1-0-2-3"), slot
 
 
-@pytest.mark.skipif(not DIN_PLUG.exists(), reason="the 1.0/2.3 plug lands in Task 5")
 @pytest.mark.parametrize("ref", sorted(SPA_JACKS))
 def test_each_t3e3_spa_jack_accepts_the_din_plug(ref, comps):
     for pid in SPA_JACKS[ref]:
