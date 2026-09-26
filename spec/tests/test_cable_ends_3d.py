@@ -242,8 +242,8 @@ def test_the_standalone_preview_holds_every_overhang(ref):
     vb = _viewbox(root)
     # it grew: the head overhangs the size box, so the preview cannot be 0 0 w h
     assert vb != (0.0, 0.0, size["w"], size["h"]), vb
-    if root.get("overflow") == "visible":
-        return
+    # no preview sets overflow (it would hide a clipped overhang, not frame it)
+    assert root.get("overflow") != "visible", ref
     el = nodes(root)
     for n, e in el.items():
         assert _inside(face_box(parents, e), vb), (ref, n, face_box(parents, e), vb)
@@ -268,6 +268,21 @@ def test_a_composed_preview_box_is_placed_as_render_places_it(rotate, mirror):
         assert got == pytest.approx(want[rotate])
     else:           # a quarter turn: 8.5 + 3.4 wide, 18.35 tall, about the centre
         assert got[2] - got[0] == pytest.approx(11.9) and got[3] - got[1] == pytest.approx(18.35)
+    # AN X-ASYMMETRIC BOX, so the mirror shows: the full-width box above is its
+    # own mirror image. Mirrored first (x -> w - x), the box 2.0 to 18.35 lies at
+    # 0 to 16.35; a half turn reflects it back; a quarter turn carries the
+    # x-extent onto y (90: y = x - 4.925; 270 / -90: y = 13.425 - x).
+    asym = ci._placed_box([0, 0], size, (2.0, -3.4, 18.35, 8.5), rotate, mirror, None)
+    left, right = (0.0, 16.35), (2.0, 18.35)
+    x_want = {None: right, 0: right, 180: left}
+    y_want = {90: (-2.925, 13.425), 270: (-4.925, 11.425), -90: (-4.925, 11.425)}
+    if rotate in x_want:
+        want_x = x_want[rotate] if not mirror else (left if x_want[rotate] == right else right)
+        assert (asym[0], asym[2]) == pytest.approx(want_x), (rotate, mirror, asym)
+    else:
+        a, b = y_want[rotate]
+        want_y = (a, b) if not mirror else (a - 2.0, b - 2.0) if rotate == 90 else (a + 2.0, b + 2.0)
+        assert (asym[1], asym[3]) == pytest.approx(want_y), (rotate, mirror, asym)
 
 
 # --- (e) end-on paint order -----------------------------------------------------

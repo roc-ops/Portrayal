@@ -86,14 +86,15 @@ def test_an_sfp28_cage_accepts_exactly_the_sfp_generics(tmp_path):
                                "generic/sfp-rj45@1", "molex/sfp-plus-passive-dac@1"]
 
 
-def test_a_qsfp_dd_cage_accepts_its_own_generic_and_the_also_accepted_qsfp_one(tmp_path):
-    """The ONLY case in this library exercising `also-accepts`:
-    `generic/qsfp-lc@2` (`mates: qsfp`) reaches this cage through
-    `qsfp-dd`'s `also-accepts: [qsfp]`, not through its own family. If
-    `also-accepts` were silently dropped, this list would still be
-    non-empty (`generic/qsfp-dd-lc@2` alone) - an easy defect to miss without
-    an exact-list assertion, which is why this checks both members and the
-    order together rather than membership alone."""
+def test_a_qsfp_dd_cage_accepts_its_own_family_and_the_also_accepted_qsfp_parts(tmp_path):
+    """The ONLY case in this library exercising `also-accepts`: the
+    `mates: qsfp` parts - `generic/qsfp-lc@2`, `generic/qsfp-cable@1` and the
+    four QSFP cable wrappers - reach this cage through `qsfp-dd`'s
+    `also-accepts: [qsfp]`, not through their own family. If `also-accepts`
+    were silently dropped, this list would still be non-empty (the five
+    QSFP-DD parts alone) - an easy defect to miss without an exact-list
+    assertion, which is why this checks all eleven members and their order
+    together rather than membership alone."""
     idx = _build(DCS510, tmp_path)
     cage = _cage(idx, "front", "port-1")
     assert cage["interface"] == "qsfp-dd"

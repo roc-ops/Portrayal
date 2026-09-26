@@ -173,9 +173,7 @@ def seated(tmp_path_factory):
     out = tmp / "o"
     r = run(dev, out)
     assert r.returncode == 0, r.stderr[-800:]
-    svg = out / "agr560.front.svg"
-    if not svg.exists():
-        svg = out / "agr560.base.front.svg"
+    svg = out / "agr560.base.front.svg"
     root = ET.parse(svg).getroot()
     return root, {c: p for p in root.iter() for c in p}
 

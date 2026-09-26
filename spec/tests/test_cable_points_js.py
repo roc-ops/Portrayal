@@ -53,6 +53,7 @@ def test_the_resolver_sums_the_ancestor_chain():
     assert out["onCylLifted"]["z"] == pytest.approx(64.8)
     assert out["onCylLifted"]["lift"] == 10
     assert out["junkCyl"]["z"] == 10, "an unreadable cyl keeps the part's face"
+    assert out["outOverCyl"]["z"] == 37.6, "a readable rear wins over a cyl"
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")

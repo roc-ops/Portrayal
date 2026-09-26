@@ -67,6 +67,9 @@ const pure = {
   onCylLifted: m.resolveCablePoint({...marker, cyl: '30', cylLift: '24.8'}, [{lift: 10}]),
   // an unreadable cyl keeps the part's face, like an unreadable rear
   junkCyl: m.resolveCablePoint({...marker, cyl: 'x', cylLift: '34.8'}, [{lift: 10}]),
+  // BOTH ON ONE MARKER, `out` WINS: an absolute rear is the feature's front
+  // face as built, so a stray cyl beside it is not added on
+  outOverCyl: m.resolveCablePoint({...marker, rear: '37.6', cyl: '30', cylLift: '1'}, []),
 };
 
 // ---------------------------------------------------------------------------
