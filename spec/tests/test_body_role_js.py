@@ -42,6 +42,16 @@ def test_an_optic_on_a_card_is_its_own_fru(out):
                                     "nested": True}
 
 
+def test_the_rj45_chain_boot_is_its_own_fru_three_deep(out):
+    """generic/sfp-rj45@1 -> generic/rj45-plug@1 -> common/rj45-boot@1, the
+    copper SFP chain (docs/pluggables-heads-design.md section 6 item 3):
+    the same `occupant-occupant` reading cardChained already holds, one link
+    further - the boot must still be picked out as its own removable part,
+    not absorbed into the plug it wraps."""
+    assert out["cardRj45Boot"] == {"fru": "front-6/module/xg0-occupant-occupant-occupant",
+                                   "nested": True}
+
+
 def test_an_occupant_two_segments_down_is_its_own_fru(out):
     """B3 Task 10c: `xc01/1-occupant` was keyed `xc01` - both bore caps of
     an adapter, and the adapter's own art, came out as one part."""

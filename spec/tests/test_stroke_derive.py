@@ -24,7 +24,13 @@ from portrayal.render import fill_from_attrs, stroke_shade
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "spec/tests/js/stroke-derive.mjs"
-GENERICS = ["sfp-lc/v1", "sfp-lc-simplex/v2", "qsfp-lc/v1", "qsfp-dd-lc/v1"]
+# (the live generic, the skin its latch is drawn in, that latch's node id). A
+# QSFP generic's latch is its composed common/qsfp-pull-tab@2, so the art is
+# that part's skin and the node its grip, compiled as `tab--grip`.
+GENERICS = [("generic/sfp-lc/v1", "generic/sfp-lc/v1", "bail"),
+            ("generic/sfp-lc-simplex/v2", "generic/sfp-lc-simplex/v2", "bail"),
+            ("generic/qsfp-lc/v2", "common/qsfp-pull-tab/v2", "grip"),
+            ("generic/qsfp-dd-lc/v2", "common/qsfp-pull-tab/v2", "grip")]
 
 INPUTS = ["#000000", "#ffffff", "#6f6f6f", "#c22f2f", "#2255aa", "#3d7bd6",
           "#abc", "#ABC", "#FfEe00", " #6f6f6f ", "#010101", "#808080",
@@ -117,12 +123,13 @@ def test_a_colour_with_no_shade_leaves_the_stroke():
     assert (n.get("fill"), n.get("stroke")) == ("red", "#123456")
 
 
-@pytest.mark.parametrize("c", GENERICS)
-def test_the_generic_latch_follows_its_fill(c):
+@pytest.mark.parametrize("c,skin,node", GENERICS, ids=[g[0] for g in GENERICS])
+def test_the_generic_latch_follows_its_fill(c, skin, node):
     """And the standalone skin is already right: its literal outline is the shade
     of its literal fill, so a skin opened on its own draws what the build does."""
-    art = (ROOT / "library/components/generic" / c / "skins/default.svg").read_text()
-    tags = re.findall(r'<rect\b[^>]*data-fill-from="latch-color"[^>]*>', art)
+    art = (ROOT / "library/components" / skin / "skins/default.svg").read_text()
+    tags = [t for t in re.findall(r'<rect\b[^>]*data-fill-from="latch-color"[^>]*>', art)
+            if re.search(rf'\bid="{node}"', t)]
     assert len(tags) == 1, c
     tag = tags[0]
     assert 'data-stroke-derive="latch-color"' in tag, f"{c}: the outline does not follow the fill"

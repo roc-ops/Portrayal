@@ -87,3 +87,13 @@ def test_the_bores_are_lifted_to_the_module_face():
     out = next(f for f in d["relief"]["features"] if f["node"] == "body")["out"]
     for p in d["parts"]:
         assert abs(p["lift"] - out) < 0.01, p
+
+
+def test_both_sfp_generics_declare_a_head_inside_the_envelope():
+    for p in (LIB / "components/generic/sfp-lc/v1/contract.yaml",
+              LIB / "components/generic/sfp-lc-simplex/v2/contract.yaml"):
+        d = yaml.safe_load(p.read_text())
+        assert d["head"]["size"] == {"w": 13.55, "h": 8.55, "d": 10.0}, p
+        with lint.collecting() as got:
+            lint.lint_component_head(p, d)
+        assert not [e for e in got.errors if "[L121]" in e], p

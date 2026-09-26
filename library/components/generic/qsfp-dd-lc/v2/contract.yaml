@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-lc
-version: 1.0.4
+version: 2.0.0
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -14,11 +14,17 @@ description: >-
   the body because the module is seated. Which module it is - rate, reach,
   wavelength, watts - is a fact about a vendor's product and lives on the
   wrapper that composes this (docs/pluggables-design.md, decision 5), never
-  here. Copies generic/qsfp-lc@1 and changes the family: same width and
+  here. Copies generic/qsfp-lc@2 and changes the family: same width and
   height by design (QSFP-DD HW Rev 6.3 section 1 - the QSFP-DD cage accepts a
   QSFP module), a longer paddle card behind the same front cross-section.
 size: {w: 18.35, h: 8.5, d: 58.26}
 size-confidence: {w: registry, h: registry, d: registry}
+head:
+  at: [0.0, 0.0]
+  size: {w: 18.35, h: 8.5, d: 20.0}
+  size-confidence: {w: registry, h: registry, d: drawing}
+  node: body
+  type: 1
 attrs: {power-absent: not-applicable, form-factor: qsfp-dd, face: lc-duplex, media: fiber}
 fields:
   latch-color:
@@ -29,8 +35,7 @@ fields:
     label: Module label
     type: text
     default: ''
-unplaced: superseded by generic/qsfp-dd-lc@2, which composes the pull tab; kept so existing references and the seating tests resolve
-superseded-by: generic/qsfp-dd-lc@2
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
 provenance:
   size: >-
     registry - qsfp-dd-module, which is QSFP-DD/QSFP-DD800/QSFP112 Hardware Specification Rev 6.3,
@@ -43,7 +48,7 @@ provenance:
     length endpoint at all: Table 25 defines it as the TOP SURFACE of the module housing. The
     paddle-card fingers extend a little further than the rear end but are not part of the housing
     envelope, and the 20 MAX nose forward of this span is relief.body.out (see
-    provenance.protrusion), NOT inside d, so d + out is the whole module and double counts
+    provenance.head), NOT inside d, so d + out is the whole module and double counts
     nothing. Width and height are IDENTICAL to qsfp-module's 18.35 x 8.5 by design, not coincidence -
     HW 6.3 section 1 states the QSFP-DD cage accepts a QSFP module, and Figure 52 confirms it: datum E
     reads 18.35 +/-0.1 here too. Only the overall length differs: 58.26 REF here against qsfp-module's
@@ -88,7 +93,12 @@ provenance:
     the MPO face is its own part - generic/qsfp-dd-mpo12 - because a face is in the name
     (docs/pluggables-design.md decision 4). Gated, not built: it is the MPO sibling this LC face has
     no bearing on.
-  protrusion: >-
+  head: >-
+    registry - qsfp-dd-module's `head` (19 MAX wide, 3.4 MAX above, 1.6 MAX below,
+    20 MAX long for Type 1), which L121 checks this key against. The head is the
+    18.35 x 8.5 face itself, `type: 1` selecting the 20 MAX length, drawn by the
+    skin's `body` rect. The protrusion is QSFP-DD HW Rev 6.3 Figure 52's 20 MAX
+    (Type 1), read as follows.
     QSFP-DD HW Rev 6.3 section 7.3 (page 84) states in text: "The dimensions that control the size of
     the module that extends outside of the cage are listed as maximum dimensions per Note 4." Figure
     52's Note 4 callout, attached to the dimension pair on that drawing, reads "20 MAX / TYPE 1" and
@@ -115,16 +125,16 @@ provenance:
     estimated figure would trade a drawing figure for a guess. 20.0 comes from section 7.3's own text
     and Note 4's own callout, nothing derived.
   tab: >-
-    common/qsfp-pull-tab@1's own provenance carried verbatim, exactly as generic/qsfp-lc@1 carries it:
-    "drawing - 19.00 MAX across the bail, 3.40 MAX thick" (size) and "drawing - 34.80 MAX forward of
-    the module body" (reach), both read off the same ProLabs mechanical drawing this component's bores
-    and face come from (see provenance.face-lc, provenance.optical-axis). NOT composed here: render
-    passes only a `parts:` entry's own static `attrs` into a composed part, so a composed
-    common/qsfp-pull-tab@1 could never take this generic's `latch-color` field - the whole point of
-    drawing a tab on a GENERIC transceiver rather than a specific one. The tab is drawn directly in
-    skins/default.svg instead, at the position generic/qsfp-lc@1 draws it at (`at: [-0.325, 2.55]`),
-    carrying the same 19.00 x 3.40 envelope and 34.80 reach as a relief feature rather than a composed
-    part's own.
+    composed - common/qsfp-pull-tab@2; see that part's provenance for the reach
+    and the measurements (the U-loop as photographed, arms out 38.6 and grip out
+    49.8 on its own plane). This host's `lift: 20.0` stands it on the nose front,
+    so the tab runs from 20 to 69.8 forward of the cage face. The ProLabs 34.80
+    MAX that @1 carried is a different, shorter tab and does not apply. The tab is
+    composed again rather than painted in this skin because a composed part now
+    takes its host's fields at build time (docs/pluggables-heads-design.md,
+    decision 4), so the tab still wears this generic's `latch-color`. At
+    `at: [-0.325, -1.07]` the grip's top sits 1.07 above the module top, as
+    measured, and the grip straddles the face's top edge (y -1.07 to 1.83).
   tab-colour: >-
     A FIELD, not a fact, and the default is a NEUTRAL GREY (#6f6f6f) because
     every chromatic default is a claim. QSFP-DD HW Rev 6.3 section 6.3
@@ -137,8 +147,8 @@ provenance:
     in no code table: not beige, not blue, not white. A vendor wrapper, which
     knows which module it is, sets `latch-color` to the colour its wavelength
     calls for. Decided 2026-09-21. Both documents are held locally in the
-    maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The tab node carries
-    `data-stroke-derive: latch-color`, so its stroke is a fixed darker shade of
+    maintainer's gitignored corpus. THE OUTLINE FOLLOWS THE FILL. The composed tab's nodes carry
+    `data-stroke-derive: latch-color`, so their stroke is a fixed darker shade of
     whatever colour the field is given - each channel x 61/100, rounded half
     up (render.py `stroke_shade`) - and #444444 for this default, the shade
     of #6f6f6f. It was a literal (#9a9a9a) that no field moved, so any
@@ -146,6 +156,13 @@ provenance:
 parts:
   - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.95], rotate: 180, lift: 20.0}
   - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}
+  # THE TAB IS COMPOSED AGAIN. It was painted here only because a composed part
+  # could not take latch-color at build time; since pluggables-heads decision 4 it
+  # can. lift 20.0 stands it on the nose front. At y -1.07 the grip's top sits
+  # 1.07 above the module top, as measured: the grip straddles the face's top edge
+  # (y -1.07 to 1.83) and in the front view hides about 0.9 of the bores' tops,
+  # which is what the real part does.
+  - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.07], lift: 20.0}
 relief:
   features:
     - node: body
@@ -154,28 +171,6 @@ relief:
       confidence: drawing
       source: >-
         QSFP-DD HW Rev 6.3 section 7.3 and Figure 52 Note 4, 20 MAX Type 1
-    - node: tab
-      lift: 20.0
-      out: 34.80
-      confidence: drawing
-      source: >-
-        common/qsfp-pull-tab@1 provenance - ProLabs drawing 34.80 MAX reach.
-        SFF-8661 Rev 2.5 was checked directly and gives only latch STRENGTH
-        (Table 5-1, 125N MIN pull to separate, latch engaged) and one note
-        touching the bail at all: Figure 5-1's side-view "3.4 MAX" nose
-        thickness carries Note 6 ("indicated dimension to include bail
-        travel"), so that 3.4 MAX cross-section already allows room for the
-        bail's own travel - a THICKNESS bound, not a forward-reach dimension
-        for the tab. Note 7 ("indicated dimensions apply to openings in
-        housing") is unrelated and was misread as the bail note in an
-        earlier pass of this sentence; corrected after a 300dpi render of the
-        page matched every note number against the dimension its leader line
-        actually points to. Neither Figure 5-1 nor Table 5-1 gives a
-        forward-reach dimension for the tab. QSFP-DD HW Rev 6.3 Figure 52
-        dimensions the 20/35 MAX nose (see provenance.protrusion) and nothing
-        past it - the tab is not on that drawing at all. So the 34.80 stays
-        `drawing` confidence - it IS read off a drawing - but the drawing is
-        one vendor's (ProLabs), a vendor MAX, not either MSA's.
 connection-points:
   mate: {at: [9.175, 4.25], direction: front}
   optical-tx: {at: [6.05, 4.9], direction: front}

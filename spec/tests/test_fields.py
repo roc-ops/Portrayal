@@ -194,3 +194,24 @@ def test_a_field_wired_by_fill_satisfies_l73(tmp_path):
                                   "default": "#b0b5bb"}}}
     assert _caught("L73", lint.lint_component_fields,
                    tmp_path / "contract.yaml", data) == []
+
+
+def test_a_field_a_composed_part_declares_satisfies_l73(tmp_path):
+    """A composed part inherits a field value from its host when both declare
+    the same key (pluggables-heads decision 4), so a host whose own skin paints
+    nothing from the field still keeps the promise through the part. A composed
+    part that does NOT declare the key keeps nothing."""
+    lib = tmp_path / "library"
+    tab = lib / "components/t/tab/v1"; (tab / "skins").mkdir(parents=True)
+    (tab / "contract.yaml").write_text(
+        "name: tab\nfields:\n  latch-color: {label: L, type: text, default: '#6f6f6f'}\n")
+    (tab / "skins/default.svg").write_text('<svg><rect data-fill-from="latch-color"/></svg>')
+    host = lib / "components/t/host/v1"; (host / "skins").mkdir(parents=True)
+    (host / "skins/default.svg").write_text('<svg><rect id="body"/></svg>')
+    fields = {"latch-color": {"label": "L", "type": "text", "default": "#6f6f6f"}}
+    kept = {"skins": ["default"], "fields": fields, "parts": [{"ref": "t/tab@1", "id": "tab"}]}
+    assert _caught("L73", lint.lint_component_fields, host / "contract.yaml", kept) == []
+    assert _caught("L73", lint.lint_component_fields, host / "contract.yaml", kept, [str(lib)]) == []
+    bare = {"skins": ["default"], "fields": fields, "parts": [{"ref": "t/nope@1", "id": "x"}]}
+    hits = _caught("L73", lint.lint_component_fields, host / "contract.yaml", bare)
+    assert any("latch-color has no data-from" in h for h in hits), hits
