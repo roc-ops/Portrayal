@@ -78,7 +78,7 @@ Named form x face. A generic's name never carries a rate.
 | `generic/sfp-lc` | LC duplex | migrates `common/sfp-lc-duplex` |
 | `generic/sfp-lc-simplex` | one LC (bidi) | |
 | `generic/sfp-sc` | SC simplex | gated: needs `std/sc-bore`, which has no free dimensions - see section 4 |
-| `generic/sfp-rj45` | RJ45 | gated: no free document dimensions the RJ45 opening cut into a copper SFP's face, and every panel jack in the library (12.7 x 11.0 and larger) is taller than the 8.55 envelope the part conforms to - an outline the envelope excludes is worse than a missing part; a 10GBASE-T SFP+ mechanical drawing would settle it |
+| `generic/sfp-rj45` | RJ45 | gated: no free document dimensions the RJ45 opening cut into a copper SFP's face, and every panel jack in the library (12.7 x 11.0 and larger) is taller than the 8.55 envelope the part conforms to - an outline the envelope excludes is worse than a missing part; a 10GBASE-T SFP+ mechanical drawing would settle it; ungated by the head; see pluggables-heads-design.md |
 | `generic/qsfp-lc` | LC duplex | migrates `common/qsfp-transceiver`'s `lc` skin |
 | `generic/qsfp-mpo12` | MPO-12, one row, pinned | gated: needs a dimensioned MPO receptacle |
 | `generic/qsfp-dd-lc` | LC duplex | |
