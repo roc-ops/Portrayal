@@ -60,11 +60,10 @@ an individual is officially representing the community in public spaces.
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behaviour may be
-reported to the maintainer through the channel `SECURITY.md` describes: while
-the repository is private, an issue, which only collaborators can read; once it
-is public, the private vulnerability-reporting form. A dedicated conduct
-address will replace this channel once one exists. All complaints will be reviewed and investigated
-promptly and fairly. All community leaders are
+reported by email to conduct@portrayal.dev. Only the maintainer reads that
+mailbox, so a report can name anyone, including a maintainer, and carry
+details that should not sit in an issue or pull request. All complaints will
+be reviewed and investigated promptly and fairly. All community leaders are
 obligated to respect the privacy and security of the reporter of any incident.
 
 ## Enforcement guidelines
