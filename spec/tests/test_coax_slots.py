@@ -102,3 +102,21 @@ def test_a_known_coax_port_publishes_a_connector_slot(iface, comps, tmp_path):
         slot = _card_slot(comps, ref, cage_id)
     assert slot["kind"] == "connector"
     assert slot["interface"] == iface
+
+
+# THE PLUGS (#650 Task 4). Each known port offers its generic plug; the port
+# is reached the same way the slot test above reaches it - a device placement
+# for sma/smb, the indexer's card entry for mcx.
+PLUG_FOR = {"sma": "generic/sma-plug@1", "smb": "generic/smb-plug@1",
+            "mcx": "generic/mcx-plug@1"}
+
+
+@pytest.mark.parametrize("iface,plug", sorted(PLUG_FOR.items()))
+def test_a_known_port_offers_its_plug(iface, plug, comps, tmp_path):
+    if iface in KNOWN_DEVICE:
+        device, view, pid = KNOWN_DEVICE[iface]
+        slot = _device_slot(device, view, pid, tmp_path)
+    else:
+        ref, cage_id = KNOWN_CARD[iface]
+        slot = _card_slot(comps, ref, cage_id)
+    assert plug in slot["accepts"], slot
