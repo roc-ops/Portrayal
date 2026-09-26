@@ -223,11 +223,13 @@ model: FHD-1MTP6LCDOS2A
 media: os2
 polarity: A
 rows:
-  - {front: '1', front_position: 1, rear: MTP-1, rear_position: 1}
-  - {front: '2', front_position: 1, rear: MTP-1, rear_position: 2}
+  - {front: '{module}/1', front_position: 1, rear: '{module}/MTP-1', rear_position: 1}
+  - {front: '{module}/2', front_position: 1, rear: '{module}/MTP-1', rear_position: 2}
 ```
 
-with a `ratio` column where a path splits.
+with a `ratio` column where a path splits. The names are the module type's own,
+`{module}` included, so a row is resolved against an installed module exactly as
+its ports were: `{module}` becomes the position of the bay it sits in.
 
 **There is no upstream schema for this artefact, so we are defining it.** It is
 therefore GENERATED ONLY and never hand-edited, so the contracts stay the single

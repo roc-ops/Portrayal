@@ -138,7 +138,7 @@ def test_ports_are_ordered_by_name_not_by_where_they_are_drawn():
     if not p.exists():
         pytest.skip("the DPCE-R-20GE-2XGE export is not in this library")
     names = [i["name"] for i in (yaml.safe_load(p.read_text()) or {}).get("interfaces") or []]
-    assert names[:4] == ["port-0-0", "port-0-1", "port-0-2", "port-0-3"], names[:4]
+    assert names[:4] == [dx.module_scoped(f"port-0-{i}") for i in range(4)], names[:4]
     assert names == sorted(names, key=dx._natural)
 
 

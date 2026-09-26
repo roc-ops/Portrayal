@@ -387,8 +387,9 @@ def test_the_exported_module_files_carry_the_ports_the_graph_implies():
         model = str((e.get("attrs") or {}).get("model") or e["name"])
         view = D.contract_view(e)
         expected = P.ports(view, idx.get)
-        exp_front = {p["name"] for p in expected["front"]}
-        exp_rear = {p["name"] for p in expected["rear"]}
+        # The file carries the names bay-scoped (dcim_export.tokenize_module).
+        exp_front = {D.module_scoped(p["name"]) for p in expected["front"]}
+        exp_rear = {D.module_scoped(p["name"]) for p in expected["rear"]}
         assert exp_front and exp_rear, \
             f"{model}: the graph itself carries no ports - this guard is vacuous"
         for target in D.TARGETS:
