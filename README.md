@@ -26,7 +26,7 @@ The core is domain-neutral. Networking is the first profile, not the only one.
 ```
 spec/          schemas, compiler, linter, tests
 library/       component contracts + skins, device manifests, NOS overlays
-kit/           portrayal-kit: the JS consumer — draw, inspect, export
+kit/           @portrayal/kit: the JS consumer — draw, inspect, export
 docs/          how the model works
 ```
 
