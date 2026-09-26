@@ -46,6 +46,14 @@ def test_the_resolver_sums_the_ancestor_chain():
     assert out["onRear"]["lift"] == 22.5
     assert out["junkRear"]["z"] == 22.5, "an unreadable rear keeps the part's face"
 
+    # A POINT ON A CYLINDER lands on its far end, lift + cyl, the lift summed
+    # (ancestors and the feature's own) and the cyl added to it.
+    assert out["onCyl"]["z"] == pytest.approx(64.8)
+    assert out["onCyl"]["lift"] == 0
+    assert out["onCylLifted"]["z"] == pytest.approx(64.8)
+    assert out["onCylLifted"]["lift"] == 10
+    assert out["junkCyl"]["z"] == 10, "an unreadable cyl keeps the part's face"
+
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
 def test_cable_points_resolves_the_fake_drawing():
@@ -63,7 +71,7 @@ def test_cable_points_resolves_the_fake_drawing():
         "cage-g/plug/boot", "wrap/a", "wrap/b", "cage-j",
         "cage-plug-boot", "cage-l", "cycle-self",
         "/rear/x", "plug-o",
-        "p-plug-boot", "q-plug", "r-part",
+        "p-plug-boot", "q-plug", "r-part", "s-part",
     }
     # the seated chain's boot wins and its cable leaves the boot's rear; a
     # bare plug's leaves the plug body's rear; a point on a node with no
@@ -71,6 +79,10 @@ def test_cable_points_resolves_the_fake_drawing():
     assert (points["p-plug-boot"]["z"], points["p-plug-boot"]["lift"]) == (37.6, 22.5)
     assert (points["q-plug"]["z"], points["q-plug"]["lift"]) == (22.5, 10.0)
     assert points["r-part"]["z"] == 4.0
+    # a point on a cyl stub leaves from the stub's far end, 10 + 24.8 + 30
+    assert points["s-part"]["z"] == pytest.approx(64.8)
+    assert points["s-part"]["lift"] == 10.0
+    assert not any("s-part" in w for w in out["warnings"]), out["warnings"]
     assert any("r-part" in w and "data-z-out" in w for w in out["warnings"]), out["warnings"]
     assert "out" not in points["cage-a"]
 

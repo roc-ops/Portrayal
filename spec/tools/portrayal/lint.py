@@ -265,7 +265,7 @@ RULES = {
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
-    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`", "fix the name, or give the feature the `out` a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
+    "L106": ("component",  "`interface-at` names a declared connection point, and a connection point's `on:` names a `relief.features[]` node that carries an `out`, or a `cyl` whose far end (`lift + cyl`) is its rear", "fix the name, or give the feature the `out` (or `cyl`) a part seated on it stands off by; a point on the part's own face needs no `on:`; quote the key (`'on':`) - a bare `on` is YAML boolean true"),
     "L107": ("component, device", "no quoted run in a contract or manifest is longer than 25 words - a vendor's facts are transcribed, its prose is not reproduced", "paraphrase and cite the section (\"the ASR 9903 guide, Power Supply LEDs, says a flashing green lamp means...\"); a state table becomes `state = meaning` pairs, not a quotation"),
     "L109": ("component",  "a declared `optical.polarity` is what the paths actually wire - A straight, AF pair-flipped (and its rows exchanged at 24 fibres), universal", "fix the paths or the polarity; the paths are the evidence, `polarity` is only the claim"),
     "L110": ("component, device", "a port's `speed` is one of the closed set in spec/schemas/speeds.yaml - the highest native rate the port runs at, and nothing else", "spell the rate from the set (a 10/100/1000 jack is `1g`); media goes in `media`, a USB generation in `usb`, a PON flavour in `pon`, a caveat in the placement's `description`"),
@@ -280,7 +280,7 @@ RULES = {
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy"),
     "L119": ("device",     "a device with supplies says what feeds each build - `power` on the chassis or on every orderable configuration", "state `chassis.power` (one feed) or `power` on each configuration (`ac`, `dc`, `hvdc`) from the supplies it seats and the datasheet's input rows"),
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
-    "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own stands past the head, and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
+    "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
     "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs", "give the cable's outside diameter in mm as a number, from the product's own document"),
 }
 
@@ -1800,7 +1800,10 @@ def lint_component_head(path, data, _lib_roots=None):
     outside envelope; this holds each part to it, and makes an overhang a
     stated, sourced fact rather than a silent one. A composed part's relief
     (the QSFP pull tab's) is out of its reach: the part's own contract answers
-    for it. docs/pluggables-heads-design.md section 4.3.
+    for it. So is a feature whose `lift` is at or past `head.size.d`: it starts
+    behind the head, on the cable (a strap or ring lying along it), and the
+    head's envelope does not bound the cable. docs/pluggables-heads-design.md
+    section 4.3.
     """
     if not isinstance(data, dict) or data.get("behaviour") != "occupies":
         return
@@ -1846,6 +1849,13 @@ def lint_component_head(path, data, _lib_roots=None):
                               f"within {limit[dim]:g} - a stale waiver")
     for f in (data.get("relief") or {}).get("features") or []:
         out = f.get("out")
+        # THE CABLE'S FURNITURE IS NOT THE HEAD'S. A feature whose `lift` is
+        # at or past the head's rear face starts where the head ends - a strap
+        # or ring lying along the cable behind it - and the head envelope says
+        # nothing about the cable. Anything that starts inside the head is
+        # still held to it exactly.
+        if (f.get("lift") or 0) >= hs["d"]:
+            continue
         if out is not None and out > hs["d"] + HEAD_TOL:
             err(path, "L121", f"{name}: relief feature {f.get('node')!r} stands {out:g} "
                               f"out, past the head's {hs['d']:g}")
@@ -4866,8 +4876,9 @@ def lint_component_seat_point(path, data, _lib_roots=None):
     Either way a boot is drawn inside the plug it wraps and nothing says so.
 
     ERRORS, not warnings: there is no reading of a dangling name that is right.
-    A feature with no `out` does not stand proud, so it has no rear face to
-    seat on; `sink`, `top` and `lift` answer other questions.
+    A feature with neither `out` nor `cyl` does not stand proud, so it has no
+    rear face to seat on; `sink`, `top` and `lift` answer other questions. A
+    `cyl`'s rear is its far end, `lift + cyl` - a cable leaving a round stub.
     """
     cps = data.get("connection-points") or {}
     at = data.get("interface-at")
@@ -4895,10 +4906,10 @@ def lint_component_seat_point(path, data, _lib_roots=None):
         if f is None:
             err(path, "L106", f"connection-point {name!r} is on: {on!r}, which is "
                               "no relief.features[] node of this part")
-        elif f.get("out") is None:
+        elif f.get("out") is None and f.get("cyl") is None:
             err(path, "L106", f"connection-point {name!r} is on: {on!r}, which has "
-                              "no `out` - a part seated there needs the depth of "
-                              "the feature's rear face to stand on")
+                              "no `out` or `cyl` - a part seated there needs the "
+                              "depth of the feature's rear face to stand on")
 
 
 def lint_device_power_redundancy(path, data):

@@ -1961,9 +1961,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
     # relief.js's liftOf resolves a feature - sum data-z-lift up the ancestor
     # chain and apply the group transforms - and finds nothing to add for
     # protrusion on that walk. A point that sits `on:` a relief feature says so
-    # with `data-cp-on` instead, naming the node whose absolute data-z-out is
-    # its z - the different mechanism kit/relief.js's note on
-    # resolveCablePoint asked for.
+    # with `data-cp-on` instead, naming the node whose rear is its z - the
+    # node's absolute data-z-out, or for a `cyl` feature its far end, the
+    # node's summed data-z-lift plus its data-z-cyl - the different mechanism
+    # kit/relief.js's note on resolveCablePoint asked for.
     #
     # EMITTED LAST, DELIBERATELY, AFTER EVERY `behind_at` INSERTION ABOVE HAS
     # RUN. The `behind_at = 1` initialisation above, with its "after the
@@ -1987,9 +1988,10 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
         # THE FEATURE THE POINT SITS ON, BY ITS COMPILED ID (pluggables D). A
         # point `on:` a relief feature is on that feature's far face, not on
         # this part's own face - a cable leaves a boot at the boot's rear end.
-        # The feature's data-z-out is where relief.js builds that face, so
-        # naming the node lets cablePoints read the one number the box is
-        # built from rather than re-deriving it. Not a data-z-* key: the
+        # The feature's data-z-out is where relief.js builds that face (for a
+        # `cyl`, its summed data-z-lift plus data-z-cyl), so naming the node
+        # lets cablePoints read the numbers the solid is built from rather
+        # than re-deriving them. Not a data-z-* key: the
         # marker must stay invisible to every relief query (see above).
         if cp.get("on"):
             mk.set("data-cp-on", f"{inst_id}--{cp['on']}")

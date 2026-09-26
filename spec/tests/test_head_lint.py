@@ -108,3 +108,27 @@ def test_the_head_node_must_draw_the_head(tmp_path):
         {"dimension": "below", "source": "x"}]
     errs, _ = run(doc, comp / "contract.yaml")
     assert any("does not draw" in e for e in errs)
+
+
+def _long_head():
+    """A head 19.8 deep, its body standing to the head's rear face."""
+    doc = sfp(size={"w": 13.55, "h": 8.55, "d": 19.8})
+    doc["relief"]["features"][0]["out"] = 19.8
+    return doc
+
+
+def test_cable_furniture_behind_the_head_is_not_held_to_it():
+    """A feature that STARTS at or past the head's rear - a strap or ring
+    lying along the cable behind the head - is the cable's, not the head's.
+    Clause 4 limits what the head builds; this starts where the head ends."""
+    doc = _long_head()
+    doc["relief"]["features"].append({"node": "strap", "lift": 19.8, "out": 63.5})
+    errs, _ = run(doc)
+    assert not any("strap" in e for e in errs), errs
+
+
+def test_a_feature_starting_inside_the_head_is_still_held_to_it():
+    doc = _long_head()
+    doc["relief"]["features"].append({"node": "strap", "lift": 10, "out": 63.5})
+    errs, _ = run(doc)
+    assert len(errs) == 1 and "strap" in errs[0] and "63.5" in errs[0], errs

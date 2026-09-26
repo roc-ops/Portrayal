@@ -57,6 +57,16 @@ const pure = {
   onRear: m.resolveCablePoint({...marker, rear: '37.6'}, [{lift: 22.5}]),
   // an unreadable `rear` keeps the part's face, like a junk lift keeps 0
   junkRear: m.resolveCablePoint({...marker, rear: 'x'}, [{lift: 22.5}]),
+  // A POINT ON A CYLINDER: a cyl has no `out`, and its rear is its far end,
+  // lift + cyl. The lift is SUMMED like any other - the ancestors' and the
+  // feature's own (`cylLift`, from the feature up to the marker's parent) -
+  // and the cyl runs from there. A stub at lift 34.8, 30 long: 64.8.
+  onCyl: m.resolveCablePoint({...marker, cyl: '30', cylLift: '34.8'}, []),
+  // the same stub on a part whose group stands 10 off: the feature's own
+  // lift is 24.8 (render.py's _inset_feature takes the group's 10 off it)
+  onCylLifted: m.resolveCablePoint({...marker, cyl: '30', cylLift: '24.8'}, [{lift: 10}]),
+  // an unreadable cyl keeps the part's face, like an unreadable rear
+  junkCyl: m.resolveCablePoint({...marker, cyl: 'x', cylLift: '34.8'}, [{lift: 10}]),
 };
 
 // ---------------------------------------------------------------------------
@@ -265,8 +275,8 @@ const markerPlugO = el({'data-cp': 'cable', 'data-cp-at': '1 1.5'}, plugO);
 // connector Q: the same plug, bare - its cable leaves the plug body's rear.
 // connector R: a point `on:` a node that carries no data-z-out - it keeps its
 // face and says so.
-function withFeature(owner, id, zOut) {
-  const f = el(zOut === undefined ? {} : {'data-z-out': zOut}, owner);
+function withFeature(owner, id, zOut, attrs = {}) {
+  const f = el(zOut === undefined ? attrs : {'data-z-out': zOut, ...attrs}, owner);
   f.id = id;
   owner.children = (owner.children || []).concat([f]);
   return f;
@@ -284,8 +294,16 @@ const partR = el({'data-path': 'r-part', 'data-z-lift': '4'}, svg);
 withFeature(partR, 'r-part--flat');
 const markerR = el({'data-cp': 'cable', 'data-cp-at': '1 1', 'data-cp-on': 'r-part--flat'}, partR);
 
+// connector S: a point `on:` a CYLINDER - a stub at lift 24.8 in a part whose
+// group stands 10 off, 30 long, so its far end is 10 + 24.8 + 30 = 64.8. The
+// group's lift comes from the marker's ancestor walk and the stub's own from
+// the feature node, exactly as relief.js's liftOf sums both.
+const partS = el({'data-path': 's-part', 'data-z-lift': '10'}, svg);
+withFeature(partS, 's-part--stub', undefined, {'data-z-lift': '24.8', 'data-z-cyl': '30'});
+const markerS = el({'data-cp': 'cable', 'data-cp-at': '5 5', 'data-cp-on': 's-part--stub'}, partS);
+
 const markers = [
-  markerPlugP, markerBootP, markerPlugQ, markerR,
+  markerPlugP, markerBootP, markerPlugQ, markerR, markerS,
   markerA1, markerB1, markerPlug, markerBoot,
   markerTx, markerRx, markerSfp1, markerSfp10,
   markerPlugG, markerBootG,
