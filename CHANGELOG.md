@@ -228,28 +228,28 @@ the *published build*, not about the hardware.
   from the cylinder's far end (`lift` + `cyl`), in the build and in the kit.
 
 ### Changed
-- **BREAKING for DCIM data already imported.** A module type names its ports
-  per bay. Every interface, console, power, front and rear port name on a card
-  starts with `{module}/`, which NetBox and Nautobot both fill with the
-  position of the bay the card is installed in, and a device type's bay `position` is now the bay's whole id (`slot-1`, `psu-2`,
-  `fan-1`) where it was the trailing number (`1`, `2`, `1`). A DCP-404 in the
-  DCP-2's `slot-1` installs its client port as `slot-1/c1`: the drawing's path
-  to that port (`slot-1/module/c1`) with `/module/` taken out. Before this, two
-  identical cards in one chassis both made `c1`, and since a port name is unique
-  on its device the second install was refused; and 167 of the 205 bayed device
-  types put two bays at one position (Fan 1, PSU 1 and slot-1 all at `1`), so the
-  token alone would not have been enough. The fibre maps name ports the same
-  way.
+- **BREAKING for DCIM data already imported.** A module type names its ports per
+  bay. Every interface, console, power, front and rear port name on a card
+  starts with `{module}/`, which NetBox and Nautobot both fill with the position
+  of the bay the card is installed in, and a device type's bay `position` is now
+  the bay's whole id (`slot-1`, `psu-2`, `fan-1`) where it was the trailing
+  number (`1`, `2`, `1`). A DCP-404 in the DCP-2's `slot-1` installs its client
+  port as `slot-1/c1`: the drawing's path to that port (`slot-1/module/c1`) with
+  `/module/` taken out. Before this, two identical cards in one chassis both
+  made `c1`, and since a port name is unique on its device the second install
+  was refused; and 167 of the 205 bayed device types put two bays at one
+  position (Fan 1, PSU 1 and slot-1 all at `1`), so the token alone would not
+  have been enough. The fibre maps name ports the same way.
 
-  Re-importing the types does not update what a DCIM has already made from
-  them. A DEVICE created before this keeps its old bay positions, because both
-  DCIMs copy a device type's module bays onto the device when it is created: a
-  card installed afterwards into that device's `slot-1` resolves to `1/c1`,
-  not `slot-1/c1`, which still does not match the drawing, and it can still
-  collide wherever Fan 1, PSU 1 and slot-1 all sit at `1`. On an existing
-  device, edit each module bay's position to the bay's id (the `position` in
-  the device type) before installing cards. A MODULE installed before this
-  keeps its old port names until it is removed and installed again.
+  Re-importing the types does not update what a DCIM has already made from them.
+  A DEVICE created before this keeps its old bay positions, because both DCIMs
+  copy a device type's module bays onto the device when it is created: a card
+  installed afterwards into that device's `slot-1` resolves to `1/c1`, not
+  `slot-1/c1`, which still does not match the drawing, and it can still collide
+  wherever Fan 1, PSU 1 and slot-1 all sit at `1`. On an existing device, edit
+  each module bay's position to the bay's id (the `position` in the device type)
+  before installing cards. A MODULE installed before this keeps its old port
+  names until it is removed and installed again.
 - `generic/qsfp-lc@1` and `generic/qsfp-dd-lc@1` are superseded by `@2`
   (above); `@1` is kept for fixtures pinned to it.
 - `common/qsfp-pull-tab@1` is superseded by `@2` (above); `@1` is kept, with
