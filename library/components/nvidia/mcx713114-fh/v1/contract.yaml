@@ -1,0 +1,156 @@
+format: 1
+kind: module
+name: mcx713114-fh
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS
+  in/out SMA jacks (one ganged 1x4 cage), full-height, PCIe Gen4 x16, on its
+  tall (full-height) bracket. It is a full-height board and ships with the
+  tall bracket only.
+size: {w: 120.02, h: 21.59, d: 167.15}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'MCX713114T tall bracket'
+  part-numbers: 'MCX713114TC-GEAT'
+  role: nic
+  power-draw-typical-w: 15.8
+  power-input: host PCIe slot
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+groups:
+  sfp56:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp56, speed: 50g}
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: coax-sma}
+    description: PPS in and PPS out, SMA jacks
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    CX-7 user manual: p79-80 spec table, p81 board mechanical drawing Quad-
+    port SFP56 with PPS IN/OUT (dimensioned 167.15 x 111.15), p82 bracket
+    mechanical drawing Quad-port SFP56 with PPS IN/OUT (tall 121.05 x 21.59;
+    short N/A), p19-20 LED schemes, p20 PPS IN/OUT
+  size: >-
+    registry - the face is std/pcie-bracket-fh@2, 120.02 x 21.59, composed
+    behind a punched plate; `d` is the board drawing's 167.15, the card's
+    length back from its bracket.
+  depth: >-
+    drawing - 167.15, the board mechanical drawing's length.
+  the-face-is-derived-from-the-board: >-
+    EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
+    their distance above datum W on the dimensioned board drawing - port 1
+    68.99, port 2 54.76, port 3 40.52, port 4 26.29, port pps-in 84.96, port
+    pps-out 10.78 - with W at x' 15.16 on this bracket (PCIe CEM 5.0: 120.02
+    - 104.86, fig 11-3). Vents, light-pipe slots, lamps and numerals keep
+    their measured offset from their nearest cage (or from W), read off
+    NVIDIA's bracket drawings. One ganged 1x4 SFP56 cage in a single 58.2 x
+    10.2 window, the ports on the drawing's latch pitch (14.24 on the board,
+    14.23 between the bracket's LED notches), each port a std/sfp-ganged@1
+    share (14.25) of the shared-wall row. Port centres agree with the board
+    drawing to 0.04, the SMA holes to 0.16 (IN) and 0.03 (OUT). The PPS IN
+    and PPS OUT SMA jacks sit either side of the cage row, labelled IN and
+    OUT on the bracket; the board's MMCX clock connectors do not reach the
+    bracket and are not drawn.
+  orientation: >-
+    drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
+    cages and lamps are placed `rotate: 180` and the numerals read upside
+    down. In a turned bay - Dell riser 3 - the card lands as NVIDIA draws
+    it.
+  lamps: >-
+    drawing - one round-topped notch per port over the cage window (2.44
+    wide, 2.51 tall), 3.19 toward the flange from the port centre, the same
+    as the scheme-1 MCX713104. UM p19 puts this SKU under 'All cards: scheme
+    2' (two LEDs per port), but the bracket shows one light pipe per port,
+    so ONE lamp is modelled per notch (common/led-dot@1) with LED1's
+    scheme-2 states: green solid at full speed, yellow solid below it, green
+    blinking activity, yellow 1 Hz beacon, yellow 4 Hz error. LED2 is not
+    modelled.
+  body: >-
+    the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
+    at the board drawing's size; a full-height board, 167.15 x 111.15 as the
+    p81 drawing dimensions it. The ASIC is the drawn package lid only; the
+    board's other parts are not boxes.
+  power: >-
+    datasheet - CX-7 UM p79-80 (spec table): 15.8 W typical with passive
+    cables in a PCIe Gen4 x16 host. The manual gives NO maximum: it refers
+    to the NVOnline 'NVIDIA ConnectX-7 Electrical and Thermal
+    Specifications' document, which is not held, so power-draw-max-w is left
+    out rather than estimated.
+  board-size: >-
+    three sizes are published: the p81 drawing dimensions 167.15 x 111.15
+    (used), the p79 spec table 111.15 x 167.65, and the p6 OPN table 115.15
+    x 167.65. The p80 caption calls the card HHHL and the p10 overview calls
+    it dual-port; the drawing, spec and OPN table say quad-port full-height.
+body:
+  depth: 167.15
+  color: '#2f7d3a'
+  # the slab stops where the bracket stops being a rectangle
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  boxes:
+  - {id: board, at: [23.56, 4.44], size: [102.75, 1.57], from: 0.00, depth: 167.15,
+     color: '#2f7d3a', confidence: drawing,
+     source: 'the board drawing''s 167.15 x 111.15; CEM 5.0 fig 6-5 shoulder 8.40 above W'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: asic, at: [46.91, 6.01], size: [26.30, 3.00], from: 79.75, depth: 26.70,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'UM p81 board drawing: the ConnectX-7 package lid at its drawn position (z registered on the PCIe key); no ASIC heatsink is drawn, the 3.0 height is an estimate'}
+faces:
+  plan:
+    ref: common/pcie-card-plan@1
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/sfp-ganged@1, id: port-1, at: [77.02, 5.59], rotate: 180, group: sfp56}
+  - {ref: std/sfp-ganged@1, id: port-2, at: [62.80, 5.59], rotate: 180, group: sfp56}
+  - {ref: std/sfp-ganged@1, id: port-3, at: [48.56, 5.59], rotate: 180, group: sfp56}
+  - {ref: std/sfp-ganged@1, id: port-4, at: [34.33, 5.59], rotate: 180, group: sfp56}
+  - {ref: common/sma-jack@1, id: port-pps-in, at: [95.37, 7.42], rotate: 180, group: timing}
+  - {ref: common/sma-jack@1, id: port-pps-out, at: [21.19, 7.42], rotate: 180, group: timing}
+  - ref: common/led-dot@1
+    id: led-port-1
+    at: [86.34, 16.15]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-2
+    at: [72.11, 16.15]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-3
+    at: [57.87, 16.15]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-4
+    at: [43.64, 16.15]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+skins: [default]
