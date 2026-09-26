@@ -40,7 +40,17 @@ def test_the_colour_is_the_field_and_no_rate_is_drawn():
     assert "".join(SVG.itertext()).strip() == "", "a generic tab carries no lettering"
 
 
+def test_photograph_readings_say_photo_measured():
+    """The vocabulary keeps `measured` for readings off the part itself; a
+    photograph is `photo-measured` (component.schema.json $defs.confidence)."""
+    for f in C2["relief"]["features"]:
+        if "photograph" in f.get("source", "").lower():
+            assert f["confidence"] == "photo-measured", f["node"]
+    sc = C2.get("size-confidence") or {}
+    assert sc.get("h") == "photo-measured"
+
+
 def test_every_relief_figure_says_where_it_came_from():
     for f in C2["relief"]["features"]:
-        assert f.get("confidence") in {"drawing", "measured", "estimated"}, f
+        assert f.get("confidence") in {"drawing", "measured", "photo-measured", "estimated"}, f
         assert f.get("source", "").strip(), f
