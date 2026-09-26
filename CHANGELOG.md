@@ -71,7 +71,9 @@ the *published build*, not about the hardware.
   configurations before any attrs prose (it read only attrs, so a device
   stating airflow properly compared as silent), and gains `power-feed`.
 - All 84 Edgecore, UfiSpace and Celestica devices state `power` on every
-  build (the N3100-4C PCIe card, fed by its host slot, is the one without), and four more state `airflow` (AS7946-30XB and
+  build. There were 85 when this landed, and the one without was the N3100-4C, a
+  PCIe card fed by its host slot; it has since become a module (below), so the
+  census has no exception. Four more state `airflow` (AS7946-30XB and
   AS7946-74XKSB front-to-back, S9511-20CT front-to-back, S9502-12SM passive).
   Lint L119 asks any other device with supplies for a feed, as a warning
   baselined for the 32 that do not say yet; L120 reports a build whose `power`
@@ -310,6 +312,24 @@ the *published build*, not about the hardware.
   bores); `generic/lc-plug` @1 to @2 (drawn latch down, in its bore's
   convention). A ref naming an old major resolves to nothing. The dist
   `contract` number is unchanged, as it was for roc-ops/Portrayal#533.
+- `ufispace/n3100-4c` IS NO LONGER A DEVICE. The UfiSpace N3100-4C timing card
+  left `devices.json`, and its `device-types/UfiSpace/N3100-4C.yaml` exports with
+  it. It is now `ufispace/n3100-4c@1`, a full-height PCIe card module, exported as
+  `module-types/UfiSpace/N3100-4C.yaml` with four 25G SFP28 interfaces and its
+  SMB/SMA timing jacks, and accepted by every full-height slot of the Dell R740xd's
+  risers (roc-ops/Portrayal#625).
+- Majors, each a new directory with the old one removed, because the full-height
+  PCIe bracket was drawn mirrored (its keyed flange steps up, seen from outside
+  with the tip at the left): `std/pcie-bracket-fh` @1 to @2 (its body moved 3.17
+  down inside an unchanged box, so its `opening` element is at y 6.35),
+  `dell/pcie-filler-fh-14g` @1 to @2 and `common/pcie-card-fh` @1 to @2 (drawn in
+  the bracket's frame, so they moved with it; the generic card also gained a body
+  built from PCIe CEM 5.0), and the ten Dell risers whose bays seat it -
+  `dell/riser-1-none-14g`, `riser-1a-14g`, `riser-1b-14g`, `riser-1d-14g`,
+  `riser-2a-14g`, `riser-2d-14g`, `riser-2e-14g`, `riser-2f-14g`, `riser-3a-14g`
+  and `riser-3b-14g` @1 to @2, their full-height bays moved to keep every opening
+  where it was. A ref naming an old major resolves to nothing. The dist
+  `contract` number is unchanged (roc-ops/Portrayal#625).
 - Ten routing-engine, control-board and sled modules now group their ports:
   `juniper/jnp10k-re1@2`, `re-s-1300@1`, `re-s-1300-v@1`,
   `mx2000-cb-re-v@1`, `mx2008-rcb-v@1`, `jnp10003-rcb@1`, `jnp304-re@1`,
