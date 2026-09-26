@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps112
-version: 1.0.5
+version: 1.0.6
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-30P
@@ -273,7 +273,7 @@ attrs:
     input-ac: '100-240 VAC, 50/60 Hz, 8.5 A max'
     poe-budget: '450 W with one PSU, 1000 W with two PSUs'
   features:
-    optics-sfp: >-
+    optics-sfp-plus: >-
       Six 1G/10G SFP+ uplinks, ports 25-30. The guide's Install step lists what goes in
       them - "10GBASE-SR, LR, CR, T" and "1000BASE-SX, LX, T" - and the datasheet adds
       "1G BIDI up to 40 KM", "10G BIDI up to 10KM" and "10G tunable laser DWDM up to
@@ -349,7 +349,7 @@ groups:
       numbered 25-30 into the same sequence as the RJ-45 ports. `index-origin` is 1
       because the schema allows 0 or 1 and nothing else; the 25 the panel prints is carried
       by each port's own `rel-pos`.
-    attrs: {media: sfp, speed: 10g}
+    attrs: {media: sfp-plus, speed: 10g}
   port-leds:
     term: LED
     role: indicator

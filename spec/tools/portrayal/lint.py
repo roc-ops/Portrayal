@@ -171,7 +171,7 @@ RULES = {
     "L9":  ("component",  "a conforms-declared size matches spec/schemas/standards.yaml", "take the size from the registry, or drop `conforms` if the part is not the standard aperture"),
     "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4)", "fix the `parts:` refs; a part must not compose itself"),
     "L11": ("component",  "interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper"),
-    "L12": ("device",     "mate-to resolves to a receptacle whose interface the occupant mates", "point `mate-to` at the receptacle id; check `interface` and `mates` agree"),
+    "L12": ("device",     "mate-to resolves to a receptacle whose interface the occupant mates; a seated part's `rate` is at or below its cage's media", "point `mate-to` at the receptacle id; check `interface` and `mates` agree; seat a part the cage offers"),
     "L13": ("device",     "two placed components do not occupy the same faceplate area", "move one, or declare `for:`/`under:` when one deliberately sits on the other"),
     "L14": ("device",     "a silkscreen `for:` target exists and is nearby", "name the placement or bay the mark annotates, and anchor the mark at it"),
     "L15": ("device",     "a device at `modelled` or above has a provenance block good enough for the level", "add provenance for every figure, or lower `maturity`"),
@@ -261,7 +261,7 @@ RULES = {
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
     "L100": ("component, device", "no key in an `attrs:` map has a null value", "add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null"),
     "L101": ("component",  "a `superseded-by` names a component major that exists and is not the part itself", "fix the ref, or add the successor if it has not landed yet"),
-    "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
+    "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries; a part states its rung as `rate`, never as `media`", "fix the media/rate, move a rung from media to rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
@@ -3137,12 +3137,8 @@ def lint_component_pluggable_rate(path, data, _lib_roots=None):
     rate and fits every rung of its family's ladder while a VENDOR OPTIC
     declares one. `attrs.rate` is where a vendor optic would say so.
 
-    NOTHING IN THE LIBRARY DECLARES `rate` YET - every generic composes a cage
-    and states nothing, which is correct, and no vendor wrapper has been built
-    on top of one. This rule ships anyway: it is what makes R1 a fact the tree
-    can be held to rather than a sentence in a design doc, and it needs to be
-    in place before the first vendor optic lands with a rate outside its own
-    family, not added after. Its test drives it with synthetic contracts.
+    The seven cable-end wrappers are the first parts to declare `rate`; every
+    generic states none, which is correct.
 
     Why `rate` and not `media` or `speed`: `media` is overloaded - the two
     retired parts (`superseded-by`, L101) carry `media: sfp`/`media: qsfp`, a
@@ -3151,11 +3147,29 @@ def lint_component_pluggable_rate(path, data, _lib_roots=None):
     nothing. `speed` is a bitrate (`10G`, `25G`) that `GENERIC_FORBIDDEN_ATTRS`
     already reserves for vendor parts and is a different fact from the cage
     generation - an SFP-10G-LR has `speed: 10G` AND needs an `sfp-plus` cage.
+
+    A RUNG WRITTEN AS `media` IS AN ERROR TOO. The first seven rated parts
+    (the cable-end wrappers) stated `media: sfp-plus` and no `rate`, and the
+    build's rate ceiling (render.py `_cage_accepts`) reads only `rate`, so
+    every one of them was offered in every cage of its family - a 10G DAC in
+    a 1G SFP cage. A part that mates a family and names one of that family's
+    rungs as its `media` means `rate`; a retired part (`superseded-by`) is
+    offered nowhere and is left alone.
     """
     if not isinstance(data, dict):
         return
-    rate = attrs_mod.flatten(data.get("attrs")).get("rate")
+    flat = attrs_mod.flatten(data.get("attrs"))
+    rate = flat.get("rate")
     if not rate:
+        media = flat.get("media")
+        mates = data.get("mates")
+        found = _family_mated_by(mates) if mates and media else None
+        if (found and not data.get("superseded-by")
+                and media in (found[1].get("rates") or [])):
+            err(path, "L102", f"attrs.media: {media!r} is a rate of the "
+                f"{found[0]!r} family, not a medium - state it as attrs.rate, "
+                "which is what a cage's rate ceiling reads; as `media` the part "
+                "is offered in every cage of its family, slower ones included")
         return
     mates = data.get("mates")
     found = _family_mated_by(mates) if mates else None
@@ -3901,6 +3915,38 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
                          f"{host_ref} presents {want!r}")
 
 
+def _rate_check(path, where, occ_ref, host, data, lib_roots):
+    """A seated occupant's `rate` is at or below its cage's media on the
+    family ladder - the build's rate ceiling (render.py `_cage_accepts`),
+    asked of a configuration's seat instead of a cage's offer, so a device
+    cannot seat what its cage would never offer (a 10G DAC in a 1G SFP cage).
+
+    The cage's media is read as the build reads it: the placement's own
+    `attrs.media` first, then its port group's (L18's precedence). Only a
+    DIRECT match is ceilinged, exactly as the build does: a rung of a foreign
+    family (a QSFP part in a QSFP-DD cage, through `also-accepts`) has no
+    place on this ladder to compare. A cage or a part with no rung - a generic
+    states no rate - fits every rung.
+    """
+    op = resolve_component(occ_ref, lib_roots)
+    if not op:
+        return
+    oc = load_yaml(op) or {}
+    rate = attrs_mod.flatten(oc.get("attrs")).get("rate")
+    if not rate:
+        return
+    gattrs = ((data.get("groups") or {}).get(host.get("group")) or {}).get("attrs") or {}
+    media = (host.get("attrs") or {}).get("media") or gattrs.get("media")
+    found = _family_mated_by(oc.get("mates")) if oc.get("mates") else None
+    if not media or not found:
+        return
+    rates = found[1].get("rates") or []
+    if rate in rates and media in rates and rates.index(rate) > rates.index(media):
+        err(path, "L12", f"{where}: {occ_ref} runs at {rate!r}, above the "
+                         f"cage's {media!r} on the {found[0]!r} ladder - the "
+                         "cage does not offer it")
+
+
 def lint_device_occupants(path, data, lib_roots):
     """L12 for `occupants:`, which the per-view pass cannot see.
 
@@ -3971,6 +4017,7 @@ def lint_device_occupants(path, data, lib_roots):
                     continue
                 if ref:
                     _mate_check(path, where, ref, host["ref"], lib_roots)
+                    _rate_check(path, where, ref, host, data, lib_roots)
                 continue
             try:
                 host_ref = chained_occupant_ref(host_id, siblings, terminal)
