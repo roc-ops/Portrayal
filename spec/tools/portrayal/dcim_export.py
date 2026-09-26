@@ -650,6 +650,11 @@ PART_MEDIA = {
     # (MCX713106A, MCX755106A), and those are the types that exist.
     ("qsfp56", "100g"): "100gbase-x-qsfp28",
     ("qsfp112", "200g"): "200gbase-x-qsfp56",
+    # A 50GbE QSFP28 PORT - the MCX4131A, a 40/50GbE card in a QSFP28 cage - is
+    # TYPE_50GE_QSFP28, "QSFP28 (50GE)", in both targets; its slug really is
+    # spelled `50gbase-x-sfp28` (NetBox 9bcfd739, Nautobot f9cdca3d). Without the
+    # row the card fell to the QSFP family's 100G.
+    ("qsfp28", "50g"): "50gbase-x-sfp28",
 }
 
 

@@ -794,3 +794,17 @@ def test_newer_cages_have_a_family_and_a_default():
     assert dx.PART_IFACE["std/qsfp56"] == "200gbase-x-qsfp56"
     assert dx.PART_IFACE["std/osfp"] == "400gbase-x-osfp"
     assert dx.CAGE_FAMILY["std/qsfp56"] == "qsfp"
+
+
+def test_a_50g_qsfp28_card_is_not_typed_100g():
+    """MCX4131A is a 40/50GbE card in a QSFP28 cage. Its group states
+    `media: qsfp28, speed: 50g`; with no row the card attr `qsfp28` typed it at
+    the family's 100G."""
+    part = {"ref": "std/qsfp28@1", "attrs": {"media": "qsfp28", "speed": "50g"}}
+    assert dx.placed_type(part) == "50gbase-x-sfp28"
+    for bracket in ("tall", "short"):
+        p = LIB / f"exports/netbox/module-types/NVIDIA/MCX4131A {bracket} bracket.yaml"
+        if not p.exists():
+            pytest.skip("the MCX4131A export is not in this library")
+        d = yaml.safe_load(p.read_text()) or {}
+        assert [i["type"] for i in d["interfaces"]] == ["50gbase-x-sfp28"], bracket
