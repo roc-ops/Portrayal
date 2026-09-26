@@ -42,12 +42,17 @@ def test_the_colour_is_the_field_and_no_rate_is_drawn():
 
 def test_photograph_readings_say_photo_measured():
     """The vocabulary keeps `measured` for readings off the part itself; a
-    photograph is `photo-measured` (component.schema.json $defs.confidence)."""
-    for f in C2["relief"]["features"]:
-        if "photograph" in f.get("source", "").lower():
-            assert f["confidence"] == "photo-measured", f["node"]
-    sc = C2.get("size-confidence") or {}
-    assert sc.get("h") == "photo-measured"
+    photograph is `photo-measured` (component.schema.json $defs.confidence).
+    Drawing-sourced features remain drawing, even when corroborated by photos."""
+    feats = {f["node"]: f for f in C2["relief"]["features"]}
+    # Photo-measured arms
+    assert feats["arm-l"]["confidence"] == "photo-measured"
+    assert feats["arm-r"]["confidence"] == "photo-measured"
+    # Size from photos
+    assert C2["size-confidence"]["h"] == "photo-measured"
+    # Grip sourced to drawing, despite photograph corroboration
+    assert feats["grip"]["confidence"] == "drawing"
+    assert "photographs" in feats["grip"]["source"].lower()
 
 
 def test_every_relief_figure_says_where_it_came_from():
