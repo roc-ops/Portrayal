@@ -1,7 +1,7 @@
 """The 3D module view keeps the part's size box as its face.
 
 A part that declares `head:` publishes a standalone preview whose viewBox also
-holds the head and its composed parts (Task 9b, components_index.preview_box),
+holds the head and its composed parts (components_index.preview_box),
 so the 2D module view shows the overhang. kit/relief.js reads a face drawing
 from an origin of 0 0 at the face's own w x h, so the comp face crops the
 preview back to the size box (`toSizeBox`), which is what it drew before the

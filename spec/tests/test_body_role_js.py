@@ -43,7 +43,8 @@ def test_an_optic_on_a_card_is_its_own_fru(out):
 
 
 def test_the_rj45_chain_boot_is_its_own_fru_three_deep(out):
-    """generic/sfp-rj45@1 -> generic/rj45-plug@1 -> common/rj45-boot@1 (#8):
+    """generic/sfp-rj45@1 -> generic/rj45-plug@1 -> common/rj45-boot@1, the
+    copper SFP chain (docs/pluggables-heads-design.md section 6 item 3):
     the same `occupant-occupant` reading cardChained already holds, one link
     further - the boot must still be picked out as its own removable part,
     not absorbed into the plug it wraps."""

@@ -41,18 +41,28 @@ LIB = SPEC.parent / "library"
 
 from portrayal import render
 
-# (ref, the node the pull latch is drawn as, the body's `out`, substrings the
-# body's `source` sentence must cite verbatim - the MSA designator the plan's
-# D2 reading rests on)
+# The live generic pluggables. (ref, the node the pull latch is drawn as, the
+# body's `out`, substrings the body's `source` sentence must cite verbatim - the
+# MSA designator the D2 reading rests on). A QSFP generic's latch is its
+# composed common/qsfp-pull-tab@2, so the node is that part's grip, compiled as
+# `tab--grip`.
 GENERICS = [
     ("generic/sfp-lc@1", "bail", 10.0,
      ["SFF-8432", "Table 4-3 designator A"]),
     ("generic/sfp-lc-simplex@2", "bail", 10.0,
      ["SFF-8432", "Table 4-3 designator A"]),
-    ("generic/qsfp-lc@1", "tab", 20.0,
+    ("generic/qsfp-lc@2", "tab--grip", 20.0,
      ["SFF-8661", "Figure 5-1"]),
-    ("generic/qsfp-dd-lc@1", "tab", 20.0,
+    ("generic/qsfp-dd-lc@2", "tab--grip", 20.0,
      ["QSFP-DD HW", "Figure 52"]),
+]
+
+# (ref, the node that stands the module proud, its `out`, substrings its
+# `source` must cite). The four above by their `body`, and generic/sfp-rj45@1
+# by its `head`: it draws no latch (its bail pivot is vendor-specific), so it
+# joins only this table, and its protrusion is Finisar's X.
+BODIES = [(ref, "body", out, markers) for ref, _latch, out, markers in GENERICS] + [
+    ("generic/sfp-rj45@1", "head", 22.70, ["Finisar", "X 22.70"]),
 ]
 
 
@@ -91,14 +101,14 @@ def _compiled_nodes(ref, attrs=None):
     return {n.get("id"): n for n in g.iter() if n.get("id")}
 
 
-@pytest.mark.parametrize("ref,latch_node,body_out,markers", GENERICS,
-                          ids=[g[0] for g in GENERICS])
-def test_body_out_and_source_cite_the_msa_designator(ref, latch_node, body_out, markers):
+@pytest.mark.parametrize("ref,body_node,body_out,markers", BODIES,
+                          ids=[g[0] for g in BODIES])
+def test_body_out_and_source_cite_the_msa_designator(ref, body_node, body_out, markers):
     nodes = _compiled_nodes(ref)
-    body = nodes["t--body"]
+    body = nodes[f"t--{body_node}"]
     assert float(body.get("data-z-out")) == body_out, \
-        f"{ref} body data-z-out: {body.get('data-z-out')!r}"
-    src = _relief_feature(ref, "body")["source"]
+        f"{ref} {body_node} data-z-out: {body.get('data-z-out')!r}"
+    src = _relief_feature(ref, body_node)["source"]
     for marker in markers:
         assert marker in src, f"{ref} body source is missing {marker!r}: {src!r}"
 

@@ -27,7 +27,7 @@ def test_it_validates_and_conforms_to_the_sfp_envelope():
     jsonschema.validate(D, schema)
     assert D["conforms"] == "sfp-module" and D["mates"] == "sfp"
     assert D["size"] == {"w": 13.55, "h": 8.55, "d": 47.50}
-    # L9 (size against the registry) is proven by the full lint run in Step 5
+    # L9 (size against the registry) is checked by the library-wide lint run, not here
 
 
 def test_the_head_is_finisars_and_says_what_it_exceeds():

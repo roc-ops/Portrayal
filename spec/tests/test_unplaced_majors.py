@@ -226,15 +226,16 @@ def test_an_older_major_is_only_superseded_by_a_LIVE_one(tmp_path):
 
 def test_the_live_library_keeps_no_retired_major(tmp_path):
     """The corpus side of the two tests above: #172's deletions happened, and
-    nothing survives them. A name with two majors on disk means the old one is
-    still reachable or still argued from; there is currently neither."""
+    nothing survives them. A name keeps two majors on disk only while the old
+    one is still reachable or still argued from; three names do today, each
+    for the reason given in `kept` below, and no other name may."""
     import collections
     majors = collections.defaultdict(list)
     for c in LIB.glob("components/*/*/v*/contract.yaml"):
         majors[f"{c.parts[-4]}/{c.parts[-3]}"].append(int(c.parts[-2][1:]))
     multi = {n: sorted(v) for n, v in majors.items() if len(v) > 1}
     # KEPT ON PURPOSE, each while something still argues from it (the rule
-    # below, as written). The QSFP generics' @1 are the seating fixtures of the
+    # in the docstring above). The QSFP generics' @1 are the seating fixtures of the
     # mechanism tests (a superseded part still resolves, so a fixture need not
     # move with the accept lists); common/qsfp-pull-tab@1 is what the retired
     # common/qsfp-transceiver@1 composes. Each @1 carries `superseded-by`.
