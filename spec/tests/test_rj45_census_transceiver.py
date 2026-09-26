@@ -1,7 +1,8 @@
 """L76's RJ45 census does not ask a pluggable transceiver's jack for lamps.
 
-A copper SFP carries no link LEDs of its own - the Finisar, FS, Cambium and
-Optcore drawings show none - and the host port's lamps report the link. The
+A pluggable transceiver's jack carries no lamps of its own; the host port's
+LEDs report the link. generic/sfp-rj45 is the example here: the Finisar and
+Cambium front views behind it were checked and show no LED window. The
 exemption is keyed on `class: transceiver`; the second test proves it is the
 class that exempts, and not something else about the contract."""
 import copy

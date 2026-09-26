@@ -84,7 +84,7 @@ and end views; QSFP-DD HW Rev 6.3 Appendix B, Type 1, for the reach) is:
    field key. That is already true at runtime (`kit/fields.js` repaints every matching
    node in the part's group, composed children included); this makes the build agree.
 5. **The QSFP generics compose the pull tab again**, a revised `common/qsfp-pull-tab`
-   measured against the photographs: arms at the side edges, grip above the body top,
+   measured against the photographs: arms at the side edges, grip straddling the body top,
    colour from `latch-color`. The speed lettering on the grip (`100G`) is dropped from the
    default, because a generic carries no rate (L99).
 6. **`generic/sfp-rj45@1` composes `std/rj45-ganged@2` in its head** (11.91 x 10.5
@@ -163,25 +163,27 @@ that has `head:`:
    insets its outline by half a stroke, and 0.05 would fail every real part. The head's own
    figures (in the registry and the contract) stay at 0.05.
 
-Next free rule number on main at the time of writing is L121; the plan confirms it.
+The rule is L121, the next free rule number on main when it was written.
 
 ### 4.4 Build: fields reach composed parts
 
-`render.py`'s `fill_from_attrs` gets the host's merged field values for a composed part
-whose contract declares the same field key. A part's own `parts:` entry `attrs` still win,
-so a host that pins a colour on a composed part keeps doing so. Tests: the existing
-`test_colour_is_a_field.py` and `test_stroke_derive.py` gain a composed case, built
-against the defect first.
+`render.py`'s `instance_group` passes the host's merged field values to a composed part
+(its `inherited_fields=` argument), keeping only the keys the part's contract declares, and
+they feed that part's `fill_from_attrs`. A part's own `parts:` entry `attrs` still win,
+so a host that pins a colour on a composed part keeps doing so. Test:
+`spec/tests/test_fields_reach_composed_parts.py`, built against the defect first.
 
 ### 4.5 `common/qsfp-pull-tab@2`
 
 - Arms `arm-l`, `arm-r`: thin, at the module's side edges, from the nose front forward.
-- Grip `grip`: at the far end, spanning the 19.0 MAX width, positioned so it rises ABOVE
-  the body top, inside the 3.4 above allowance.
+- Grip `grip`: at the far end, spanning the 19.0 MAX width, positioned where it was
+  measured: it straddles the body's top edge (y -1.07 to 1.83 in the face), its top 1.07
+  above the body top, inside the 3.4 above allowance.
 - A two-step approximation of the S-bend: arms low, grip high. Relief builds boxes; no new
   primitive. The round `uhandle` primitive is wrong for a flat strap and is not used.
-- `reach: 34.80` (ProLabs, drawing); arm width, grip length and grip height are MEASURED
-  off the top and side photographs against the known 18.35 module width, and say so.
+- Reach 49.8 from the nose front (QSFP-DD HW 6.3 Appendix B, Type 1; drawing), corroborated
+  by the photographs; arm width, grip length and grip height are MEASURED off the top and
+  side photographs against the known 18.35 module width, and say so.
 - A `default` skin whose fill follows `latch-color` (`data-fill-from`, `data-stroke-derive`),
   default the neutral grey `#6f6f6f` (decision taken in #473).
 - No speed lettering. `@1` keeps its `white` and `blue` skins and its `100G` cut, and is
@@ -211,8 +213,8 @@ against the defect first.
 - Composes `std/rj45-ganged@2` in the head face, so it PRESENTS `rj45` and a configuration
   can seat `generic/rj45-plug@1` + `common/rj45-boot@1` in it (the iterative `mate-to` chain
   from spec B).
-- The latch (bail or delatch tab) and the jack's orientation (latch slot up or down) are
-  read off photographs at modelling time; the stacked-cage 180 turn already exists.
+- The jack is composed at rotate 180, keyway up (the Finisar and FS front views agree; see
+  Decisions taken). No latch is drawn: the bail's pivot is vendor-specific (next item).
 - No `latch-color` field: no bail is drawn (the pivot is vendor-specific — Finisar draws a
   top-front bail, Cambium and Optcore pivot at the bottom-front), so there is no colour for
   a field to paint (L73 is right to not require one).
@@ -256,10 +258,12 @@ Parked follow-ups, not built this piece of work:
 1. Unit: L121 each clause, with a passing and failing fixture per clause; the stale-waiver
    case; the `recommended` note.
 2. Build: a composed part takes its host's field (runs RED against today's render first).
-3. Seating: SFP cage -> `generic/sfp-rj45` -> `generic/rj45-plug` -> `common/rj45-boot`, in
-   2D and in the kit (`test_cage_seat_js` family), and the plug's `cable` point lands at the
-   boot's rear.
-4. 3D: GLB mesh bboxes for the copper SFP head (its top at the settled `above`, section 8) and for the
+3. Seating: SFP cage -> `generic/sfp-rj45` -> `generic/rj45-plug` -> `common/rj45-boot`,
+   tested in the build (`test_copper_sfp_chain.py`). The kit's coverage is the `bodyRole`
+   case in `test_body_role_js.py` (the boot is its own removable part, three deep); a kit
+   coordinate check of the chain is a parked follow-up (section 5).
+4. 3D: checks that read the compiled SVG's relief attributes (`data-z-out`, `data-z-lift`,
+   the cavities) for the copper SFP head (its top at the settled `above`, section 8) and for the
    pull tab (two arms, one grip, no solid between the arms), per
    [pluggables-3d-design.md](pluggables-3d-design.md). The composed tab's `out` must not be
    double-lifted (the `out`-absolute, `lift`-summed rule).
@@ -283,15 +287,15 @@ as fields, and DAC/ACC/AEC/AOC on the vendor wrapper. Their heads are already so
 Amphenol C-NDAAFR-0099, C-NDAAXF-0099, C-NJAAF3-0099; QSFP-DD DAC: Volex; QSFP28 AOC: FS),
 except the AEC head, which is known only as a QSFP-DD Type 2 extension.
 
-## 8. Open questions for the plan
+## 8. Open questions, all settled
 
 - ~~The exact `above` and `below` split of the copper SFP head.~~ Resolved: 2.50 above,
   2.15 below (see Decisions taken).
 - ~~Whether the QSFP generics' bump is a minor or a major (section 4.6).~~ Resolved: major
   (see Decisions taken).
-- Whether `head:` belongs in the component JSON schema as a new top-level key or under
-  `relief:`. This note assumes top level, because a downstream tool that never builds 3D
-  still needs it.
+- ~~Whether `head:` belongs in the component JSON schema as a new top-level key or under
+  `relief:`.~~ Resolved: top level, because a downstream tool that never builds 3D still
+  needs it; `components.json` publishes it.
 
 ## Decisions taken
 
@@ -324,6 +328,12 @@ except the AEC head, which is known only as a QSFP-DD Type 2 extension.
 - 2026-09-25: `generic/qsfp-lc` and `generic/qsfp-dd-lc` bump to `@2` (major, per
   CONTRIBUTING's versioning rule) because the tab's geometry moved, not just its address;
   `@1` is kept, marked `superseded-by`, so fixtures pinned to it keep working.
+- 2026-09-25: the pull tab is placed where it was MEASURED, straddling the body's top edge
+  (its grip at y -1.07 to 1.83, its top 1.07 above the body top), not wholly above the face
+  as first specified. In 2D it therefore hides about 0.9 mm of the bore housing's top.
+- 2026-09-25: the pull tab's grip length is the orthographic top view's 11.2 alone; the
+  other top view failed the orthography check and is a cross-check only. The arms run out
+  49.8 - 11.2 = 38.6, and the grip from 38.6 to 49.8.
 - 2026-09-25: the S8901-54XC management jack's finish correction (the black plastic finish
   now reaches the composed `std/rj45@2` housing, matching what the kit already painted at
   runtime) is an intended fix, not a regression, and its changed front-view render is

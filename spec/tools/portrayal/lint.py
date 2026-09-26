@@ -1796,8 +1796,9 @@ def lint_component_head(path, data, _lib_roots=None):
     refused for being taller than the in-cage body - the wrong box - and the
     QSFP generics' pull tab could stand anywhere. The registry now carries the
     outside envelope; this holds each part to it, and makes an overhang a
-    stated, sourced fact rather than a silent one.
-    docs/pluggables-heads-design.md section 4.3.
+    stated, sourced fact rather than a silent one. A composed part's relief
+    (the QSFP pull tab's) is out of its reach: the part's own contract answers
+    for it. docs/pluggables-heads-design.md section 4.3.
     """
     if not isinstance(data, dict) or data.get("behaviour") != "occupies":
         return
@@ -8081,11 +8082,12 @@ def lint_component_rj45_lamps(path, data, lib_roots):
     #125's final review nothing counted them. Half the library's jacks live here.
 
     A PLUGGABLE TRANSCEIVER IS NOT COUNTED. The census asks an Ethernet jack
-    whether it has lamps, and a copper SFP's jack has none of its own: the host
-    port's LEDs report the link, and the four copper SFP drawings behind
-    generic/sfp-rj45 (Finisar, FS, Cambium, Optcore) show no LED window in the
-    head. Asking a `class: transceiver` for lamps could only be answered by
-    inventing them, so the census stops here for that class."""
+    whether it has lamps, and a pluggable transceiver's jack has none of its
+    own: the host port's LEDs report the link. generic/sfp-rj45 is the example,
+    not the reason; of the drawings behind it, the Finisar and Cambium front
+    views were checked and show no LED window in the head. Asking a
+    `class: transceiver` for lamps could only be answered by inventing them, so
+    the census stops here for that class."""
     if data.get("class") == "transceiver":
         return
     try:
