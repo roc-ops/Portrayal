@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18.35mm" height="8.5mm" viewBox="0 0 18.35 8.5">
+  <!-- Drawn end-on, as a front elevation sees a seated cable end. The head is
+       the part furthest from the viewer, so it is drawn FIRST: the boot, the
+       stub and the strap all stand in front of its face. It overhangs the
+       8.5 face the cage accepts by 3.4 above and 1.6 below (head.at). -->
+  <rect id="head" x="0" y="-3.4" width="18.35" height="13.5" rx="0.6"
+        fill="#9aa0a6" stroke="#5f656b" stroke-width="0.18"/>
+  <!-- The strain relief, 11 in diameter, centred on the body axis. -->
+  <circle id="relief-boot" cx="9.175" cy="4.25" r="5.5"
+          fill="#2b2e31" stroke="#15171a" stroke-width="0.15"/>
+  <!-- The cable. r is half the 9.0 cable-od default; the build and the kit
+       set it from the field. -->
+  <circle id="stub" cx="9.175" cy="4.25" r="4.5" fill="#1c1c1c"
+          data-r-from="cable-od" data-fill-from="jacket-color"/>
+  <!-- The pull strap's end-on section: head-wide, 1.0 thick, its underside on
+       the boot's top (4.25 - 5.5 = -1.25). -->
+  <rect id="strap" x="0" y="-2.25" width="18.35" height="1.0"
+        fill="#6f6f6f" stroke="#444444" stroke-width="0.12"
+        data-fill-from="latch-color" data-stroke-derive="latch-color"/>
+  <!-- The grip bar at the strap's far end, 4.5 above the body top. -->
+  <rect id="strap-ring" x="0" y="-4.5" width="18.35" height="3.25" rx="0.4"
+        fill="#6f6f6f" stroke="#444444" stroke-width="0.12"
+        data-fill-from="latch-color" data-stroke-derive="latch-color"/>
+</svg>
