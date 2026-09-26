@@ -98,6 +98,8 @@ Checks (per FritzingCheckPart lesson — ID sync fails without a linter):
       within that element; a facet does not also declare `out`, `profile` or
       `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside a
       `pocket` element at least `-lift` deep
+  L123 library: one module, one bay size - every bay that accepts a module
+      reserves the same size for it, across every device and carrier
 """
 import argparse
 import types
@@ -171,7 +173,7 @@ RULES = {
     "L9":  ("component",  "a conforms-declared size matches spec/schemas/standards.yaml", "take the size from the registry, or drop `conforms` if the part is not the standard aperture"),
     "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4)", "fix the `parts:` refs; a part must not compose itself"),
     "L11": ("component",  "interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper"),
-    "L12": ("device",     "mate-to resolves to a receptacle whose interface the occupant mates", "point `mate-to` at the receptacle id; check `interface` and `mates` agree"),
+    "L12": ("device",     "mate-to resolves to a receptacle whose interface the occupant mates; a seated part's `rate` is at or below its cage's media", "point `mate-to` at the receptacle id; check `interface` and `mates` agree; seat a part the cage offers"),
     "L13": ("device",     "two placed components do not occupy the same faceplate area", "move one, or declare `for:`/`under:` when one deliberately sits on the other"),
     "L14": ("device",     "a silkscreen `for:` target exists and is nearby", "name the placement or bay the mark annotates, and anchor the mark at it"),
     "L15": ("device",     "a device at `modelled` or above has a provenance block good enough for the level", "add provenance for every figure, or lower `maturity`"),
@@ -261,7 +263,7 @@ RULES = {
     "L99": ("component",  "a generic stays generic - no rate, reach, wavelength or wattage under generic/", "move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind"),
     "L100": ("component, device", "no key in an `attrs:` map has a null value", "add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null"),
     "L101": ("component",  "a `superseded-by` names a component major that exists and is not the part itself", "fix the ref, or add the successor if it has not landed yet"),
-    "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries", "fix the media/rate, or add the missing rate to the family in pluggables.yaml"),
+    "L102": ("component, device", "a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries; a part states its rung as `rate`, never as `media`", "fix the media/rate, move a rung from media to rate, or add the missing rate to the family in pluggables.yaml"),
     "L103": ("library",    "a pluggable family's `interface` matches at least one component's `interface`", "model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today)"),
     "L104": ("device",     "a port's declared media and its cage's presented interface name the same pluggable family", "the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong"),
     "L105": ("component, device", "a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay", "rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them"),
@@ -282,6 +284,7 @@ RULES = {
     "L120": ("device",     "a configuration's `power` agrees with the supplies it seats - `dc` over an `-ac` supply is a contradiction - warning at `modelled`, error at `verified`", "correct `power`, or seat the supply the build actually ships with"),
     "L121": ("component",  "a pluggable that conforms to a module envelope declares its `head:` - the box it occupies outside the cage - and the head fits the MSA's outside envelope, or lists each dimension it exceeds with a source; no relief feature of its own that starts inside the head stands past it (one lifted to the head's rear or beyond is the cable's, not the head's), and the head's node draws it", "add `head:` from the part's drawing, list a real overhang under `head.exceeds` with the document that shows it, drop a waiver that no longer applies, or shorten the feature that stands past the head"),
     "L122": ("component",  "a `cable-od` value is a diameter in millimetres from 2 to 15 - on a field's default and on a composing part's attrs - written as plain ASCII digits and a point, the only number the build and the kit draw", "give the cable's outside diameter in mm as a number, from the product's own document"),
+    "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)"),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -3137,12 +3140,8 @@ def lint_component_pluggable_rate(path, data, _lib_roots=None):
     rate and fits every rung of its family's ladder while a VENDOR OPTIC
     declares one. `attrs.rate` is where a vendor optic would say so.
 
-    NOTHING IN THE LIBRARY DECLARES `rate` YET - every generic composes a cage
-    and states nothing, which is correct, and no vendor wrapper has been built
-    on top of one. This rule ships anyway: it is what makes R1 a fact the tree
-    can be held to rather than a sentence in a design doc, and it needs to be
-    in place before the first vendor optic lands with a rate outside its own
-    family, not added after. Its test drives it with synthetic contracts.
+    The seven cable-end wrappers are the first parts to declare `rate`; every
+    generic states none, which is correct.
 
     Why `rate` and not `media` or `speed`: `media` is overloaded - the two
     retired parts (`superseded-by`, L101) carry `media: sfp`/`media: qsfp`, a
@@ -3151,11 +3150,29 @@ def lint_component_pluggable_rate(path, data, _lib_roots=None):
     nothing. `speed` is a bitrate (`10G`, `25G`) that `GENERIC_FORBIDDEN_ATTRS`
     already reserves for vendor parts and is a different fact from the cage
     generation - an SFP-10G-LR has `speed: 10G` AND needs an `sfp-plus` cage.
+
+    A RUNG WRITTEN AS `media` IS AN ERROR TOO. The first seven rated parts
+    (the cable-end wrappers) stated `media: sfp-plus` and no `rate`, and the
+    build's rate ceiling (render.py `_cage_accepts`) reads only `rate`, so
+    every one of them was offered in every cage of its family - a 10G DAC in
+    a 1G SFP cage. A part that mates a family and names one of that family's
+    rungs as its `media` means `rate`; a retired part (`superseded-by`) is
+    offered nowhere and is left alone.
     """
     if not isinstance(data, dict):
         return
-    rate = attrs_mod.flatten(data.get("attrs")).get("rate")
+    flat = attrs_mod.flatten(data.get("attrs"))
+    rate = flat.get("rate")
     if not rate:
+        media = flat.get("media")
+        mates = data.get("mates")
+        found = _family_mated_by(mates) if mates and media else None
+        if (found and not data.get("superseded-by")
+                and media in (found[1].get("rates") or [])):
+            err(path, "L102", f"attrs.media: {media!r} is a rate of the "
+                f"{found[0]!r} family, not a medium - state it as attrs.rate, "
+                "which is what a cage's rate ceiling reads; as `media` the part "
+                "is offered in every cage of its family, slower ones included")
         return
     mates = data.get("mates")
     found = _family_mated_by(mates) if mates else None
@@ -3901,6 +3918,38 @@ def _mate_check(path, where, occ_ref, host_ref, lib_roots):
                          f"{host_ref} presents {want!r}")
 
 
+def _rate_check(path, where, occ_ref, host, data, lib_roots):
+    """A seated occupant's `rate` is at or below its cage's media on the
+    family ladder - the build's rate ceiling (render.py `_cage_accepts`),
+    asked of a configuration's seat instead of a cage's offer, so a device
+    cannot seat what its cage would never offer (a 10G DAC in a 1G SFP cage).
+
+    The cage's media is read as the build reads it: the placement's own
+    `attrs.media` first, then its port group's (L18's precedence). Only a
+    DIRECT match is ceilinged, exactly as the build does: a rung of a foreign
+    family (a QSFP part in a QSFP-DD cage, through `also-accepts`) has no
+    place on this ladder to compare. A cage or a part with no rung - a generic
+    states no rate - fits every rung.
+    """
+    op = resolve_component(occ_ref, lib_roots)
+    if not op:
+        return
+    oc = load_yaml(op) or {}
+    rate = attrs_mod.flatten(oc.get("attrs")).get("rate")
+    if not rate:
+        return
+    gattrs = ((data.get("groups") or {}).get(host.get("group")) or {}).get("attrs") or {}
+    media = (host.get("attrs") or {}).get("media") or gattrs.get("media")
+    found = _family_mated_by(oc.get("mates")) if oc.get("mates") else None
+    if not media or not found:
+        return
+    rates = found[1].get("rates") or []
+    if rate in rates and media in rates and rates.index(rate) > rates.index(media):
+        err(path, "L12", f"{where}: {occ_ref} runs at {rate!r}, above the "
+                         f"cage's {media!r} on the {found[0]!r} ladder - the "
+                         "cage does not offer it")
+
+
 def lint_device_occupants(path, data, lib_roots):
     """L12 for `occupants:`, which the per-view pass cannot see.
 
@@ -3971,6 +4020,7 @@ def lint_device_occupants(path, data, lib_roots):
                     continue
                 if ref:
                     _mate_check(path, where, ref, host["ref"], lib_roots)
+                    _rate_check(path, where, ref, host, data, lib_roots)
                 continue
             try:
                 host_ref = chained_occupant_ref(host_id, siblings, terminal)
@@ -9593,6 +9643,143 @@ def lint_device_bay_fit(path, data, lib_roots):
                      f"meet the other unless you measured it")
 
 
+# ---------------------------------------------------------------- L123
+BAY_SIZE_TOL = 1.0      # two drawings of one slot agree to about a millimetre
+
+
+def _bays_of(doc):
+    """(bay id, bay) for every bay a device or a component declares."""
+    if doc.get("kind") == "device":
+        for view in (doc.get("views") or {}).values():
+            for b in view_parts(view)["bays"]:
+                yield b.get("id"), b
+        return
+    bays = doc.get("bays") or []
+    if isinstance(bays, dict):
+        bays = [dict(v, id=k) for k, v in bays.items() if isinstance(v, dict)]
+    for b in bays:
+        yield b.get("id"), b
+
+
+def _envelope(ref, lib_roots, cache):
+    """(w, h) a module needs - its `insert` where stated, else its `size` - or
+    None when the ref does not resolve (L5 reports that)."""
+    if ref not in cache:
+        found = resolve_component(ref, lib_roots)
+        doc = (load_yaml(found) or {}) if found else {}
+        ext = doc.get("insert") or doc.get("size") or {}
+        w, h = ext.get("w"), ext.get("h")
+        cache[ref] = (float(w), float(h)) if w is not None and h is not None else None
+    return cache[ref]
+
+
+def bay_sizes_by_module(docs, lib_roots=None):
+    """{module ref: [((w, h), owner, bay id, path), ...]} - each bay's size in
+    the MODULE's frame, so a bay turned 90 on a horizontal chassis compares with
+    an upright one on a vertical chassis.
+
+    A BAY SPEAKS ONLY FOR ITS LARGEST OCCUPANTS. L33 asks a bay to be sized to
+    the largest thing it accepts, so a double-width bay that also takes a
+    single-width card is right to be wider than that card - and counting it
+    against the card would make the two rules contradict each other. So where a
+    bay accepts modules of different envelopes, it is recorded only against the
+    ones whose envelope is the largest. With `lib_roots` None every accepted ref
+    counts, which is what the synthetic tests use."""
+    seen, cache = {}, {}
+    for path, doc in docs:
+        if not isinstance(doc, dict):
+            continue
+        owner = doc.get("name") or Path(path).parent.name
+        for bid, b in _bays_of(doc):
+            sz = b.get("size")
+            if isinstance(sz, dict):
+                w, h = sz.get("w"), sz.get("h")
+            elif isinstance(sz, (list, tuple)) and len(sz) >= 2:
+                w, h = sz[0], sz[1]
+            else:
+                continue
+            if w is None or h is None:
+                continue
+            if (b.get("rotate") or 0) % 180 == 90:
+                w, h = h, w
+            refs = list(b.get("accepts") or [])
+            if lib_roots is not None:
+                env = {r: _envelope(r, lib_roots, cache) for r in refs}
+                known = [e for e in env.values() if e]
+                if known:
+                    big = max(known, key=lambda e: e[0] * e[1])
+                    refs = [r for r in refs if env[r] is None
+                            or (abs(env[r][0] - big[0]) <= BAY_SIZE_TOL
+                                and abs(env[r][1] - big[1]) <= BAY_SIZE_TOL)]
+            for ref in refs:
+                seen.setdefault(ref, []).append(((float(w), float(h)), owner, bid, path))
+    return seen
+
+
+def _spread(entries):
+    """The largest disagreement between two bays for one module, per axis."""
+    ws = [s[0] for s, *_ in entries]
+    hs = [s[1] for s, *_ in entries]
+    return max(ws) - min(ws), max(hs) - min(hs)
+
+
+def lint_library_bay_size_per_module(docs, lib_roots):
+    """L123 - one module, one bay size: every bay that accepts a module, in any
+    device or carrier, reserves the same size for it.
+
+    A MODULE IS INTERCHANGEABLE OR IT IS NOT A MODULE. The same card seated in two
+    chassis is the same piece of metal, so the space each chassis reserves for it
+    must agree - and when it does not, one chassis draws the card bigger than the
+    other, which is what a viewer sees as a card that does not sit in its slot.
+    L33 cannot see this: it reads ONE device and asks whether each module fits,
+    and a card fits a 403.4 slot and a 395.7 slot alike. Only the library-wide
+    view shows that the two slots disagree about the same card.
+
+    FOUND ON THE ASR 9000, and not a Cisco rule. Seven chassis took the same
+    cards and reserved 395.7, 403.1, 403.4 and 406.4 mm for them, because each
+    slot had been sized to whichever card data sheet was read while modelling
+    that chassis, and those sheets quote one form factor at a 33 mm spread. 58
+    modules seated in bays of more than one size; the family now shares one
+    envelope and this holds it there. The same shape turned up elsewhere at
+    smaller spreads - a power supply reserved 91.0, 93.5 and 97.0 mm across three
+    sibling chassis - which is why it is a library rule and not a family one.
+
+    A WARNING WITH A MILLIMETRE OF SLACK, measured as the SPREAD - the widest
+    disagreement between any two bays on either axis - so the answer does not
+    depend on which bay is read first. Two drawings of one slot measured off two
+    vendor figures agree to about a millimetre and no better. Past that, the fix
+    is to pick ONE figure - the module's own `insert` or `size` where it states
+    one - and reserve it everywhere. The warning is filed on the module's own
+    contract (or, when that does not resolve, on the host of the odd size out),
+    so a chassis `lint.waive` cannot clear it: a difference that is real stays
+    in the baseline, with the reason in the provenance of the chassis.
+    """
+    for ref, entries in sorted(bay_sizes_by_module(docs, lib_roots).items()):
+        dw, dh = _spread(entries)
+        if dw <= BAY_SIZE_TOL and dh <= BAY_SIZE_TOL:
+            continue
+        by_size = {}
+        for (w, h), owner, _bid, path in entries:
+            by_size.setdefault((w, h), []).append((owner, path))
+        groups = sorted(by_size.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+        # the module's own contract, or the host of the odd one out
+        where = resolve_component(ref, lib_roots) or groups[-1][1][0][1]
+        parts = []
+        for (w, h), hosts in groups:
+            names = sorted({o for o, _ in hosts})
+            shown = ", ".join(names[:4]) + (f" and {len(names) - 4} more" if len(names) > 4 else "")
+            parts.append(f"{w:g} x {h:g} ({shown})")
+        warn(where, "L123",
+             f"{ref} seats in bays of {len(groups)} different sizes, "
+             f"{max(dw, dh):.2f} mm apart - {'; '.join(parts)}. One module is one "
+             f"piece of metal, so every bay that takes it should reserve the "
+             f"same space; otherwise the same card draws larger in one chassis "
+             f"than in another. Reserve one figure everywhere - the module's own "
+             f"`insert` or `size`. A difference that is real stays in the "
+             f"baseline, with the reason in the provenance of the chassis that "
+             f"reserves more")
+
+
 # ---------------------------------------------------------------- L34
 # A front card and a rear card in the same slot position MAY overlap in depth,
 # because the rear I/O card is an L: its body sits against the midplane and a
@@ -9927,6 +10114,7 @@ def main():
 
     n = 0
     matrix = []
+    comp_matrix = []
     dev_maturity = {}
     # With --device, check only the components those devices actually reach.
     # Linting all 254 was most of a filtered run - and a component no selected
@@ -9948,6 +10136,7 @@ def main():
             # a file that would not parse has already been reported; running the
             # rest against None just buries that message under a traceback
             if d is not None:
+                comp_matrix.append((f, d))
                 lint_attrs_null(f, d)
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
@@ -10062,6 +10251,7 @@ def main():
     if not args.device:
         lint_library_comparable_facts([Path(r) for r in args.library], matrix)
         lint_library_aliases(matrix)
+        lint_library_bay_size_per_module(matrix + comp_matrix, args.library)
         for root in [Path(r) for r in args.library]:
             lint_vendor_registry(root)
             lint_unplaced_majors(root)
