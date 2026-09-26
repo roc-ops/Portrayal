@@ -24,6 +24,9 @@ PLUGS = {
     "generic/sma-plug@1": ("sma", 2.49, "std/sma@1"),
     "generic/smb-plug@1": ("smb", 2.49, "std/smb@1"),
     "generic/mcx-plug@1": ("mcx", 2.49, "std/mcx@1"),
+    "generic/f-type-plug@1": ("f-type", 6.96, "std/f-type@1"),
+    "generic/bnc-plug@1": ("bnc", 4.90, "std/bnc@1"),
+    "generic/din-1-0-2-3-plug@1": ("din-1-0-2-3", 2.54, "std/din-1-0-2-3@1"),
 }
 EACH = pytest.mark.parametrize("ref", sorted(PLUGS))
 
@@ -32,12 +35,24 @@ EACH = pytest.mark.parametrize("ref", sorted(PLUGS))
 # with `/module` dropped (a card port is keyed `<bay>/<port>`); the occupant is
 # drawn at `<host path>-occupant`. SMA and SMB seat in a device placement; MCX
 # has no device-level port in the library, so it seats in a card port through
-# the card's nested occupant key. Task 5 adds its rows here.
+# the card's nested occupant key; so does F (casa/rfd@1). No device places a
+# BNC or a 1.0/2.3 jack yet, so those two seat in a device copy whose placement
+# at the host path is REPLACED by the bezel named in SWAPS (the part a device
+# places; its composed core is the jack in PLUGS).
 SEATS = {
     "generic/sma-plug@1": ("ufispace/s9500-30xs", "base", "front", {}, "pps-in"),
     "generic/smb-plug@1": ("juniper/mx304", "base", "rear", {}, "clk-1pps-in"),
     "generic/mcx-plug@1": ("casa/c100g", "base", "rear", {"rear-0": "casa/ups-32x4@1"},
                            "rear-0/module/p0"),
+    "generic/f-type-plug@1": ("casa/c100g", "base", "rear", {"rear-1": "casa/rfd@1"},
+                              "rear-1/module/p0"),
+    "generic/bnc-plug@1": ("cisco/asr-9901", "base", "front", {}, "gps-1pps"),
+    "generic/din-1-0-2-3-plug@1": ("edgecore/as7946-30xb", "ac-psu", "front", {}, "mhz-10-in"),
+}
+# plug -> the bezel that replaces the placement at its host path (see SEATS).
+SWAPS = {
+    "generic/bnc-plug@1": "common/bnc-jack@1",
+    "generic/din-1-0-2-3-plug@1": "common/din-1-0-2-3-jack@1",
 }
 NODES = ("coupling", "relief-boot", "stub")
 
@@ -136,6 +151,12 @@ def seated(tmp_path_factory):
         cfg = d["configurations"][config]
         for _ref, _view, bays, _host in seats:
             cfg["bays"] = {**(cfg.get("bays") or {}), **bays}
+        for ref, view, _bays, host in seats:
+            if ref in SWAPS:
+                hits = [p for p in d["views"][view]["components"]["placements"]
+                        if p.get("id") == host]
+                assert len(hits) == 1, (device, view, host)
+                hits[0]["ref"] = SWAPS[ref]
         cfg["occupants"] = {host.replace("/module/", "/"): ref
                             for ref, _view, _bays, host in seats}
         dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
@@ -159,7 +180,10 @@ def test_it_renders_seated_on_its_jack(seated, ref):
     host = by_path(root, host_path)
     occ = by_path(root, f"{host_path}-occupant")
     assert occ.get("data-ref", "").startswith(ref)
-    assert host.get("data-ref", "").startswith(PLUGS[ref][2])
+    jack = SWAPS.get(ref, PLUGS[ref][2])
+    assert host.get("data-ref", "").startswith(jack)
+    if ref in SWAPS:
+        assert [p["ref"] for p in doc(jack)["parts"]] == [PLUGS[ref][2]]
     hx, hy = device_point(parents, host, cage_mate(host))
     ox, oy = device_point(parents, occ, own_mate(occ))
     assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6

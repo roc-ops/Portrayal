@@ -1,0 +1,127 @@
+format: 1
+kind: component
+name: din-1-0-2-3-plug
+version: 1.0.0
+class: port
+mates: din-1-0-2-3
+conforms: din-1-0-2-3-plug
+profile: networking
+description: >-
+  A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the
+  push-pull latch sleeve, the crimp ferrule and a short straight stub of
+  cable whose diameter is the cable-od field. Seats in a `din-1-0-2-3` jack
+  at its own mate point; the cable leaves from the stub's far end.
+size: {w: 7.7, h: 7.7}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: coax-din-1-0-2-3, connector: din-1-0-2-3}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 2.54}
+  jacket-color: {label: Jacket colour, type: text, default: '#1c1c1c'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    drawing - registry `din-1-0-2-3-plug`. Pasternack "1.0/2.3 Plug
+    Connector Crimp/Solder Attachment for RG174, RG316, RG188, LMR-100",
+    PE44244 REV 1.2, p.3 CAD drawing: the push-pull sleeve is dimensioned
+    0.30 [7.7] across, the widest thing on the plug.
+  no-depth: >-
+    NO `size.d`, DELIBERATELY, as on generic/sma-plug@1. The overall length
+    (0.96 [24.5] REF) is in the registry entry and in the relief below, but
+    a `size.d` on a component with no `behaviour` compiles to `data-depth`,
+    and the kit builds that as a pit behind the part's whole box (render.py,
+    the `size.d` block of the placement writer). This plug's 7.7 box is wider
+    than the 5.59 jack hole it sits over, so the pit would widen the hole in
+    the panel around every seated plug. The depth is carried by the three
+    relief features instead.
+  frame: >-
+    THE PLUG'S RELIEF IS MEASURED FROM THE HOST'S PRESENTED LIFT, the frame
+    generic/sma-plug@1, generic/rj45-plug@1 and generic/lc-plug@2 use: each
+    seats at its jack's presented lift by `mate`, and its features run from
+    there toward the viewer. std/din-1-0-2-3@1 (and the bezel
+    common/din-1-0-2-3-jack@1 that composes it) presents at the panel plane,
+    with its spanner nut and barrel standing 9.4 proud of it. So the
+    sleeve's front face sits AT the presented lift (the coupling has no
+    lift), and the jack's nut and barrel lie inside the sleeve.
+  engagement: >-
+    drawing - the mated interface sleeve runs 5.40 to 5.70 over the jack
+    tube, measured from the jack's front face: HUBER+SUHNER "RF coaxial
+    connectors general catalogue" 2020, 3628 78Z034, p.239, "Series 1.0/2.3
+    inserts according to DIN 41626/2", plug table A; jack C 5.80-5.90 leaves
+    clearance to the jack's collar. On the 9.4 of common/din-1-0-2-3-jack@1 a
+    real sleeve's front would stand about 3.7 to 4.0 in front of the panel,
+    just clear of the 2.41 spanner nut, where this model puts it at the
+    panel: the plug does not know which jack it is in, and the host's
+    presented lift is the one thing the seat supplies. The drawn plug is
+    about 3.7 to 4.0 nearer the panel than a real seated one.
+  sleeve-front: >-
+    estimated - the OUTER push-pull latch sleeve's front is taken as flush
+    with the interface sleeve's front, the plane the 5.40-5.70 above is
+    measured from. HUBER+SUHNER's p.239 figures are for the DIN 41626/2
+    insert, which has no push-pull latch, and PE44244 does not dimension the
+    latch sleeve against the interface; no held drawing states the offset.
+  coupling: >-
+    drawing, scaled - PE44244 p.3 side view (vector, SCALE N/A), scaled at
+    97.0 px/mm on the 24.5 REF overall and checked on the dimensioned 7.7
+    (reads 7.75): the sleeve's front ring (7.7 across) 0 to 2.0, a groove
+    (6.7) to 3.0, the knurled grip (7.7) to 10.3, then the body (6.35 across)
+    10.6 to 15.9 and the crimp ferrule from 16.0. The coupling feature is all
+    of that as ONE cylinder at the sleeve's 7.7, 0 to 16.0: the solid
+    overstates the groove, and the body by 0.675 on the radius over its 5.7
+    of length (10.3 to 16.0).
+  relief-boot: >-
+    drawing, scaled and cross-checked - the crimp ferrule on PE44244 p.3,
+    4.0 across (scaled 4.04; the sister jack PE44254 dimensions its ferrule
+    for the same cable group 0.156 [4.0]) and 8.5 long (16.0 to the 24.5
+    end).
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a
+    straight run of cable 30 long starting where the strain relief ends
+    (24.5). The cable's bend is the installation's, not the plug's.
+  cable-od: >-
+    datasheet - RG-179, the 75 ohm cable of the .100 inch class PE44244 is
+    made for. Belden 179DT technical data sheet, revision 0.477, 2026-05-27,
+    p.1, Overall Cable Diameter (Nominal) 0.1 in, 2.54 mm (Belden prints 2.5
+    mm). A placement or a wrapper sets the cable it actually carries.
+  jacket-colour: a FIELD; the neutral near-black default is no product in particular
+  impedance: >-
+    NOT STATED. 50 and 75 ohm 1.0/2.3 share the interface, and a generic
+    states no impedance (docs/connectors-coax-design.md decision 2); a vendor
+    wrapper would.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/rj45-plug@1 - every class port
+    contract states none (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the sleeve
+    (3.85, 3.85): the cable runs straight through the plug, so its front and
+    its rear are one axis seen from two directions, as on
+    generic/sma-plug@1.
+elements: {}
+relief:
+  features:
+    - node: coupling
+      cyl: 16.0
+      color: '#c9ccd0'
+      confidence: drawing
+      source: >-
+        Pasternack PE44244 REV 1.2 p.3 side view, scaled on the 24.5 REF
+        overall and checked on the dimensioned 7.7: the push-pull sleeve and
+        the body behind it, front face to the crimp ferrule at 16.0. The front
+        sits at the host's presented lift (provenance.frame,
+        provenance.engagement); that the latch sleeve's front is flush with
+        the interface is estimated (provenance.sleeve-front).
+    - node: relief-boot
+      lift: 16.0
+      cyl: 8.5
+      color: '#b8bcc0'
+      confidence: drawing
+      source: Pasternack PE44244 REV 1.2 p.3 side view, the crimp ferrule, 16.0 to the 24.5 REF end and 4.0 across (scaled 4.04, the sister jack PE44254 dimensions 4.0)
+    - node: stub
+      lift: 24.5
+      cyl: 30
+      color: '#1c1c1c'
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [3.85, 3.85], direction: front}
+  cable: {at: [3.85, 3.85], direction: front, 'on': stub}
+skins: [default]

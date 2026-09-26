@@ -108,7 +108,7 @@ def test_a_known_coax_port_publishes_a_connector_slot(iface, comps, tmp_path):
 # is reached the same way the slot test above reaches it - a device placement
 # for sma/smb, the indexer's card entry for mcx.
 PLUG_FOR = {"sma": "generic/sma-plug@1", "smb": "generic/smb-plug@1",
-            "mcx": "generic/mcx-plug@1"}
+            "mcx": "generic/mcx-plug@1", "f-type": "generic/f-type-plug@1"}
 
 
 @pytest.mark.parametrize("iface,plug", sorted(PLUG_FOR.items()))
@@ -119,6 +119,40 @@ def test_a_known_port_offers_its_plug(iface, plug, comps, tmp_path):
     else:
         ref, cage_id = KNOWN_CARD[iface]
         slot = _card_slot(comps, ref, cage_id)
+    assert plug in slot["accepts"], slot
+
+
+# THE BNC AND 1.0/2.3 PLUGS (#650 Task 5). No device or card places either
+# jack yet (Task 6 does), and the bezel's own components.json entry carries
+# neither `cages` (it is not a card) nor `presents` (it mates nothing), so the
+# accept list is read where the build publishes it: the configs.json slot of a
+# device copy whose coax placement is REPLACED by the bezel a device places.
+SWAPPED = {
+    "bnc": ("cisco/asr-9901", "front", "gps-1pps", "common/bnc-jack@1",
+            "generic/bnc-plug@1"),
+    "din-1-0-2-3": ("edgecore/as7946-30xb", "front", "mhz-10-in",
+                    "common/din-1-0-2-3-jack@1", "generic/din-1-0-2-3-plug@1"),
+}
+
+
+@pytest.mark.parametrize("iface", sorted(SWAPPED))
+def test_a_bezel_placement_offers_its_plug(iface, tmp_path):
+    import shutil
+    device, view, pid, bezel, plug = SWAPPED[iface]
+    dev = tmp_path / device.split("/")[1] / "device.yaml"
+    shutil.copytree(LIB / "devices" / device, dev.parent)
+    d = yaml.safe_load(dev.read_text())
+    hits = [p for p in d["views"][view]["components"]["placements"] if p.get("id") == pid]
+    assert len(hits) == 1
+    hits[0]["ref"] = bezel
+    dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
+    out = tmp_path / "o"
+    r = warmrender.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
+                        "--out", str(out)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-800:]
+    cfg = json.loads((out / f"{dev.parent.name}.configs.json").read_text())
+    slot = next(c for c in cfg["cages"][view] if c["id"] == pid)
+    assert slot["kind"] == "connector" and slot["interface"] == iface, slot
     assert plug in slot["accepts"], slot
 
 

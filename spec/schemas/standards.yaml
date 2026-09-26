@@ -1452,6 +1452,68 @@ standards:
       jack's presented lift, so its depth follows the jack: std/mcx@1's barrel
       stands 2.0 proud but presents at 0, so until the jack presents at its
       barrel front the grip is drawn overlapping that 2.0.
+  f-type-plug:
+    registry: Pasternack PE44312 (75 ohm F male, crimp/crimp, for RG6), REV 1.2; envelope per ANSI/SCTE 123 2021
+    w: 12.83
+    h: 11.11
+    confidence: drawing
+    depth: 19.8
+    depth-confidence: drawing
+    source: >-
+      Pasternack "75 Ohm F Male Connector Crimp/Crimp Attachment for RG6",
+      PE44312 REV 1.2, p.3 CAD drawing: the coupling nut is a 7/16 HEX, 11.11
+      across the flats, which is h; w is the same hex across its corners,
+      11.11 / cos 30 = 12.83, inside the 12.95 maximum envelope of ANSI/SCTE
+      123 2021 "Specification for F Connector, Male, Feed-Through", Table 1
+      dim H, p.8. depth is the dimensioned 0.78 [19.8] overall, nut front to
+      crimp ferrule end.
+    notes: >-
+      THE END-ON BOX OF THE HEX, turned corners left and right the way
+      std/f-type@1 draws its nut. The crimp ferrule behind it (11.0 over its
+      ribs, scaled) falls inside the corners. The only coax plug here that
+      states an impedance: F is a 75 ohm interface and nothing else, so
+      attrs.impedance 75 is the interface's own figure, not a vendor's.
+  bnc-plug:
+    registry: Radiall R141.082.000 (straight BNC plug, crimp, cable 5/50 S), issue 0619 D; interface per MIL-STD-348B Figure 301-1
+    w: 14.3
+    h: 14.3
+    confidence: drawing
+    depth: 27.28
+    depth-confidence: drawing
+    source: >-
+      Radiall technical data sheet "Straight plug crimp type cable 5/50 S",
+      R141.082.000, issue 0619 D, p.1: the coupling sleeve's knurled ring is
+      dimensioned 14,3 across (diamond knurl) and the overall length 27,28.
+      Both are dimensioned; the sleeve's profile behind them is scaled (a 200
+      ppi scan, ruler the 27,28, checked on the 14,3).
+    notes: >-
+      THE END-ON BOX OF THE KNURLED RING, the widest and rearmost section of
+      the bayonet sleeve. The sleeve's front lip (13.8) and its slotted section
+      (11.1-11.3, where the two bayonet slots are) are narrower and in front
+      of it, so a front elevation of a seated plug, which looks at the cable
+      end, does not see the slots. A generic BNC plug: 50 and 75 ohm BNC
+      intermate, so no impedance is stated.
+  din-1-0-2-3-plug:
+    registry: Pasternack PE44244 (1.0/2.3 plug, crimp/solder, .100 inch cable), REV 1.2; interface per HUBER+SUHNER DIN 41626/2 table
+    w: 7.7
+    h: 7.7
+    confidence: drawing
+    depth: 24.5
+    depth-confidence: drawing
+    source: >-
+      Pasternack "1.0/2.3 Plug Connector Crimp/Solder Attachment for RG174,
+      RG316, RG188, LMR-100", PE44244 REV 1.2, p.3 CAD drawing: the push-pull
+      sleeve is dimensioned 0.30 [7.7] across and the overall length 0.96
+      [24.5] REF. The profile behind the sleeve is scaled (vector, SCALE N/A;
+      ruler the 24.5, checked on the 7.7, which reads 7.75).
+    notes: >-
+      The key is spelled with hyphens because an interface, like a component
+      name, may not contain a dot. The mated engagement, 5.40-5.70 (HUBER+SUHNER
+      general catalogue 2020, p.239, plug A), is the INTERFACE sleeve's; the
+      outer push-pull sleeve's front is estimated flush with it, because no
+      held drawing dimensions the one against the other. A generic 1.0/2.3
+      plug: 50 and 75 ohm variants share the interface, so no impedance is
+      stated.
   sc-plug:
     registry: Hirose HSC series catalogue, SC Type Fiber Optic Connectors, simplex
       plug housing front view (HSC-PH2/PH3/PH0.9). JIS C 5973 (F04) and IEC 61754-4

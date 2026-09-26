@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices seat it and
 how many other components compose it. A device seats a part when a placement or
 bay places it, a bay accepts it or a configuration puts it in one; naming it in
 prose does not count. Search this page before drawing a part;
-1004 component majors in 23 namespaces.
+1007 component majors in 23 namespaces.
 
 the [components README](README.md) says which namespace a new one belongs in.
 
@@ -21,7 +21,7 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 1 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
+| `std/bnc@1` | component | port | 9.7 × 8.85 | bnc | 0 | 2 | BNC bayonet coaxial panel jack core (IEC 61169-8) - the D-hole and the collar with its bore, insulator and ce… |
 | `std/c14-inlet@1` | component | inlet | 28 × 20 × 13 | c14-inlet | 3 | 45 | IEC C14 appliance inlet (mates C13 cords) - panel cutout with the keyed coupler shroud recessed behind it, ea… |
 | `std/c20-inlet@1` | component | inlet | 32.4 × 24.4 × 15 | c20-inlet | 1 | 10 | IEC C20 appliance inlet (mates C19 cords) - panel cutout with the rounded-rectangle coupler recess behind it,… |
 | `std/cfp@1` | component | port | 82 × 13.6 × 144.8 | cfp | 0 | 5 | CFP cage cutout - the module envelope of the CFP MSA, the aperture the module seats through |
@@ -31,12 +31,12 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/da15@1` | component | port | 28.8 × 11.4 × 6.73 | da15 | 1 | 2 | D-subminiature DA-15 receptacle - fifteen contacts in two rows, eight over seven, in the size A shell; the al… |
 | `std/db25@1` | component | port | 42.52 × 11.4 × 6.5 | db25 | 0 | 1 | D-subminiature DB-25 receptacle - twenty-five contacts in two rows, thirteen over twelve, in the size B shell… |
 | `std/db9@1` | component | port | 20.47 × 11.4 × 6.73 | db9 | 0 | 18 | D-subminiature DE-9 receptacle - the nine-pin shell used for RS-232 serial ports and for the dry-contact ALAR… |
-| `std/din-1-0-2-3@1` | component | port | 5.59 × 5.59 | din-1-0-2-3 | 0 | 1 | 1.0/2.3 push-pull coaxial panel jack core (DIN 41626/2) - the round hole and the plain barrel with its collar… |
+| `std/din-1-0-2-3@1` | component | port | 5.59 × 5.59 | din-1-0-2-3 | 0 | 2 | 1.0/2.3 push-pull coaxial panel jack core (DIN 41626/2) - the round hole and the plain barrel with its collar… |
 | `std/drive-25@1` | component | drive | 15 × 69.85 × 100.45 | drive-25 | 1 | 2 | 2.5 inch form factor drive per SFF-8201 - the drive itself, not a carrier: 69.85 wide by 15.00 thick, drawn s… |
 | `std/drive-25-plan@1` | module | drive | 69.85 × 100.45 × 15 | drive-25 | 1 | 1 | A 2.5 inch drive lying flat, seen from above - the same body std/drive-25@1 draws standing on edge, in the pr… |
 | `std/drive-35@1` | component | drive | 101.6 × 26.1 × 147 | drive-35 | 1 | 2 | 3.5 inch form factor drive per SFF-8301 - the drive itself, not a carrier: 101.60 wide by 26.10 high, present… |
 | `std/drive-35-plan@1` | module | drive | 101.6 × 147 × 26.1 | drive-35 | 1 | 2 | A 3.5 inch drive seen from above - the same body std/drive-35@1 draws from the front, in the projection a mid… |
-| `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 10 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
+| `std/f-type@1` | component | port | 9.7 × 7.9 | f-type | 0 | 11 | F-type 75-ohm coaxial panel jack (3/8-32 UNEF-2A) - the CATV drop connector |
 | `std/lc-bore@3` | component | port | 4.7 × 6.3 × 4.5 | lc-duplex-receptacle | 0 | 17 | One LC receptacle bore - the KEYED opening an LC plug enters, not a square hole |
 | `std/lc-bulkhead-bore@1` | component | port | 4.7 × 8.06 × 4.5 | lc | 0 | 9 | One LC bore of a BULKHEAD (panel-mount) adapter - the keyed opening an LC plug enters, with the full-length k… |
 | `std/mcx@1` | component | port | 4.95 × 4.5 | mcx | 0 | 7 | MCX coaxial panel jack (IEC 61169-36) - snap-on micro coax, the 75-ohm RF drop connector on cable headend I/O… |
@@ -68,7 +68,7 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 0 | 0 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
+| `common/bnc-jack@1` | component | port | 12.7 × 12.7 |  | 0 | 1 | Front-mount BNC bulkhead jack - the 12.7 flange and the two bayonet lugs (bezel) around a std/bnc core, which… |
 | `common/compliance-sticker@1` | component | sticker | 219 × 206 |  | 45 | 0 | Bottom-cover compliance/spec label (placeholder art until a real bottom photo is available) |
 | `common/db9-receptacle@1` | component | port | 30.8 × 12.5 × 6.73 |  | 4 | 22 | DE-9 receptacle as a faceplate sees it - the shell with a jackscrew standoff either side of it, which is what… |
 | `common/dc-barrel@1` | component | inlet | 12 × 13 |  | 2 | 0 | DC barrel power inlet |
@@ -77,7 +77,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/dc-terminal-plug-2@1` | component | inlet | 32.1 × 17.6 × 15 |  | 2 | 1 | Two-pole PLUGGABLE DC terminal block - a green header on the faceplate with a matching two-way screw-clamp pl… |
 | `common/device-label@1` | component | sticker | 80 × 40 |  | 5 | 0 | Bottom identity label in oval recess (placeholder art - never reproduce serials/MACs/credentials) |
 | `common/dimm-plan@1` | module | memory | 3.8 × 133.4 × 31.3 |  | 1 | 1 | A DIMM seen from above, standing in its socket - the thin edge of the module with its latches at either end, … |
-| `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 0 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
+| `common/din-1-0-2-3-jack@1` | component | port | 7.01 × 7.01 |  | 0 | 1 | Rear-mount 1.0/2.3 bulkhead jack - the round spanner nut in front of the panel (bezel) around a std/din-1-0-2… |
 | `common/drive-blank-25@1` | module | blank | 17.868 × 79.4 × 25 |  | 1 | 0 | Filler for a 2.5 inch SFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-blank-35@1` | module | blank | 105.5 × 26.9 × 25 |  | 1 | 0 | Filler for a 3.5 inch LFF drive bay - the carrier moulding without the drive: same release with its orange ri… |
 | `common/drive-carrier-25@1` | module | drive | 17.868 × 79.4 × 123.7 |  | 1 | 1 | Hot-plug carrier for a 2.5 inch SFF drive, stood on edge as a rack server's front bays present them - two ill… |
@@ -162,12 +162,15 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/vhdci-receptacle@1` | component | port | 40.4 × 5.2 |  | 0 | 3 | VHDCI (very-high-density cable interconnect) receptacle as a faceplate sees it - the flattened 0.8 mm-pitch s… |
 | `common/warning-triangle@1` | component | marking | 5.4 × 4.8 |  | 5 | 3 | General warning triangle - a black exclamation mark in a yellow triangle, ISO 7010 W001 |
 
-## generic/ (20)
+## generic/ (23)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
+| `generic/bnc-plug@1` | component | port | 14.3 × 14.3 | bnc-plug | 0 | 0 | A straight BNC crimp plug on a coax cable, seen from the face: the knurled bayonet coupling sleeve, the crimp… |
+| `generic/din-1-0-2-3-plug@1` | component | port | 7.7 × 7.7 | din-1-0-2-3-plug | 0 | 0 | A straight 1.0/2.3 crimp plug on a coax cable, seen from the face: the push-pull latch sleeve, the crimp ferr… |
+| `generic/f-type-plug@1` | component | port | 12.83 × 11.11 | f-type-plug | 0 | 0 | A straight F crimp plug on a 75 ohm coax cable, seen from the face: the 7/16 hex coupling nut, the ribbed cri… |
 | `generic/lc-duplex-plug@2` | component | port | 11.83 × 8.535 | lc-duplex | 0 | 0 | An LC duplex plug as it is SEATED - the cable end that fills BOTH ports of a duplex LC adapter at once |
-| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 11 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
+| `generic/lc-plug@2` | component | port | 5.58 × 8.535 | lc-plug | 0 | 14 | An LC fibre plug as it is SEATED, front view - the four-tier keyed silhouette of the free plug (provenance.fr… |
 | `generic/mcx-plug@1` | component | port | 5 × 5 | mcx-plug | 0 | 0 | A straight MCX crimp plug on a coax cable, seen from the face: the ribbed snap-on grip, the crimp ferrule and… |
 | `generic/mpo12-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 5 | A 12-fibre MPO/MTP plug, front view - the 12.5 x 7.6 barrel-ended housing with the MT ferrule standing in its… |
 | `generic/mpo24-plug@1` | component | port | 12.5 × 7.6 | mpo-plug | 0 | 3 | A 24-fibre MPO/MTP plug, front view - the SAME 12.5 x 7.6 barrel-ended housing generic/mpo12-plug@1 draws, wi… |
@@ -178,13 +181,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `generic/qsfp-dd-lc@2` | component | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd-module | 0 | 0 | A generic QSFP-DD with an LC duplex face - the shape every QSFP-DD, QSFP-DD800 and QSFP112 optic with two LC … |
 | `generic/qsfp-lc@1` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 2 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
 | `generic/qsfp-lc@2` | component | transceiver | 18.35 × 8.5 × 52.4 | qsfp-module | 0 | 3 | A generic QSFP with an LC duplex face - the shape every QSFP+, QSFP28 and QSFP56 optic with two LC bores has,… |
-| `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 6 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
+| `generic/rj45-plug@1` | component | port | 11.68 × 7.93 × 22.48 | rj45-plug | 0 | 9 | An RJ45 (8P8C) copper plug, the UNSHIELDED variant - a rectangular body with a spring latch on its underside … |
 | `generic/sc-plug@1` | component | port | 8.3 × 9 | sc-plug | 0 | 0 | An SC fibre plug, front view - the square keyed silhouette an SC connector presents end-on: a 7.4 x 9.0 housi… |
 | `generic/sfp-cable@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 1 | A generic SFP+ cable end - the shape every direct-attach, active copper, active electrical and active optical… |
 | `generic/sfp-lc@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 5 | A generic SFP with an LC duplex face - the shape every SFP, SFP+ and SFP28 optic with two LC bores has, stand… |
 | `generic/sfp-lc-simplex@2` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic SFP with one LC bore on its optical axis - the shape every bidirectional (BiDi) SFP, SFP+ and SFP28… |
 | `generic/sfp-rj45@1` | component | transceiver | 13.55 × 8.55 × 47.5 | sfp-module | 0 | 0 | A generic copper SFP - the shape every 1000BASE-T, 10GBASE-T and NBASE-T SFP with an RJ45 jack has, standing … |
-| `generic/sma-plug@1` | component | port | 9.17 × 7.94 | sma-plug | 0 | 0 | A straight SMA crimp plug on a coax cable, seen from the face: the hex coupling nut, the crimp ferrule and a … |
+| `generic/sma-plug@1` | component | port | 9.17 × 7.94 | sma-plug | 0 | 3 | A straight SMA crimp plug on a coax cable, seen from the face: the hex coupling nut, the crimp ferrule and a … |
 | `generic/smb-plug@1` | component | port | 6.2 × 6.2 | smb-plug | 0 | 0 | A straight SMB crimp plug on a coax cable, seen from the face: the plain snap-on body, the crimp ferrule and … |
 
 ## amphenol/ (2)
