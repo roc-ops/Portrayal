@@ -67,3 +67,25 @@ def face_ref(contract, name):
     if legacy:
         return ((contract.get(legacy) or {}).get("ref")) or None
     return None
+
+
+def rear_at(bay, cutout, contract):
+    """Where `contract`'s back lands in a rear view, seated in `bay` and seen
+    through `cutout`: the top-left of its `faces.rear` drawing, in that view's mm.
+
+    THE BACK OF A MODULE IS THE BACK OF ITS BODY, and the body is the
+    occupant's own: `body.footprint` says where it stands behind the faceplate
+    (a cassette's 99 x 31 centred behind its 108.97 x 35.05 plate, an adapter
+    panel's 88 x 34.8 hard against the plate's top). So the bay cannot say
+    where the back lands - two modules the same bay accepts put theirs in two
+    places - and the answer is read from whichever one is seated. Seen from
+    behind, left and right swap, so the footprint is MIRRORED across the bay:
+    the cutout is the bay's own hole from the other side. A body with no
+    footprint fills the face, as the 3D viewer builds it.
+    """
+    size = contract.get("size") or {}
+    fp = (contract.get("body") or {}).get("footprint") or {
+        "at": [0, 0], "size": [float(size.get("w") or 0), float(size.get("h") or 0)]}
+    cx, cy = cutout["at"]
+    bw = float(bay["size"]["w"])
+    return [round(cx + (bw - fp["at"][0] - fp["size"][0]), 4), round(cy + fp["at"][1], 4)]

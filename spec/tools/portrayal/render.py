@@ -22,7 +22,7 @@ import yaml
 APPLIED_CLASSES = {"sticker", "label", "marking"}
 
 from portrayal import attrsections as attrs_mod
-from portrayal.faces import face_ref
+from portrayal.faces import face_ref, rear_at
 from portrayal import libwalk
 from portrayal.manifest import (back_hosts, back_parts, key_on_back, slot_in_slot_at, slot_in_slot_error,
                                 view_parts, targets, split_target, component_refs,
@@ -2247,8 +2247,9 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     #
     # `rear:` IS THE SAME PROJECTION FROM THE OTHER END. A drawer whose back is
     # open shows the backs of the cassettes it holds; the occupant's contract
-    # names what draws its back (`faces.rear`), and the bay says where that
-    # lands in the rear view and which panel `cutout` it is seen through. The
+    # names what draws its back (`faces.rear`) and where its body stands
+    # (`body.footprint`, which places it in the hole), and the bay says which
+    # rear view and which panel `cutout` it is seen through. The
     # projection is drawn INSIDE that cutout, for the 2D rear. In 3D the cutout
     # is a passage the length of the chassis and the module's own body - its
     # back painted with this same face - stands in it at its real depth, so
@@ -2278,8 +2279,12 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 # where the panel is drawn), and the projection is that hole's
                 # direct child. The explorer finds the slots on a back (its MTP
                 # bulkheads) through that module's `faces.rear` (B3, Task 10b).
+                # WHERE IT LANDS is the seated module's, not the bay's: its
+                # body's footprint, mirrored in the hole (faces.rear_at).
+                cut = next(c for c in ((view.get("panel") or {}).get("cutouts") or [])
+                           if c.get("id") == pl["cutout"])
                 parts["placements"].append({
-                    "ref": pref, "id": f"{b['id']}-rear", "at": list(pl["at"]),
+                    "ref": pref, "id": f"{b['id']}-rear", "at": rear_at(b, cut, oc or {}),
                     "projection-of": f"{b['id']}/module",
                     "cutout": pl["cutout"]})
                 continue
@@ -2614,13 +2619,21 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                                  and b["rear"].get("cutout") == c["id"]), None)
                 if rear_bay:
                     e.set("data-rear-of", rear_bay["id"])
-                    e.set("data-rear-at", f"{rear_bay['rear']['at'][0]:g},{rear_bay['rear']['at'][1]:g}")
+                    # WHERE A BACK GOES DEPENDS ON WHOSE BACK IT IS. The hole
+                    # carries the bay as seen from behind - its own origin,
+                    # the bay's size - and `data-rear-at`, where the SEATED
+                    # module's back was drawn in it (faces.rear_at). A swap
+                    # reads the first and rewrites the second.
+                    e.set("data-rear-bay", f"{x:g},{y:g},{float(rear_bay['size']['w']):g},"
+                                           f"{float(rear_bay['size']['h']):g}")
                     # A HOLE A SLOT IS SEEN THROUGH IS THAT SLOT, FROM BEHIND.
                     # The tree rows it as the bay, in the bay's group and order,
                     # named for what sits in it; the path stays cutout:<id>.
                     occ = (config.get("bays") or {}).get(rear_bay["id"], rear_bay.get("default"))
                     if occ:
                         e.set("data-rear-ref", occ)
+                        rx_, ry_ = rear_at(rear_bay, c, lib.resolve(occ)[0] or {})
+                        e.set("data-rear-at", f"{rx_:g},{ry_:g}")
                     grp_name = rear_bay.get("group")
                     if grp_name:
                         # ONLY data-group AND data-group-role COME ACROSS. The

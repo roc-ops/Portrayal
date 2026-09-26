@@ -25,10 +25,14 @@ install();
 
 const A = 'fs/cas-a@2', B = 'fs/cas-b@1';
 const COMP = {
-  [A]: {name: 'cas-a', size: {w: 108.97, h: 35.05}, faces: {rear: 'fs/cas-a-rear@1'}},
-  [B]: {name: 'cas-b', size: {w: 108.97, h: 35.05}, faces: {rear: 'fs/cas-b-rear@1'}},
-  'fs/cas-a-rear@1': {name: 'cas-a-rear', size: {w: 108.97, h: 35.05}},
-  'fs/cas-b-rear@1': {name: 'cas-b-rear', size: {w: 108.97, h: 35.05}},
+  // A's body is an FHD cassette's, B's an FHD adapter panel's: two backs that
+  // land in two places in the same hole
+  [A]: {name: 'cas-a', size: {w: 108.97, h: 35.05}, faces: {rear: 'fs/cas-a-rear@1'},
+        body: {footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}}},
+  [B]: {name: 'cas-b', size: {w: 108.97, h: 35.05}, faces: {rear: 'fs/cas-b-rear@1'},
+        body: {footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}}},
+  'fs/cas-a-rear@1': {name: 'cas-a-rear', size: {w: 99.0, h: 31.0}},
+  'fs/cas-b-rear@1': {name: 'cas-b-rear', size: {w: 88.0, h: 34.8}},
 };
 const compByRef = ref => COMP[ref.split(':')[0]] || null;
 const skin = name => JSON.stringify({a: {}, c: [
@@ -54,7 +58,7 @@ const front = (seated = {}) => new Node({}, BAYS.map(b => new Node(
 // the rear: no bays, one hole per front bay, holding the back the build seated
 const rear = (seated = {}) => new Node({}, BAYS.map((b, i) => new Node(
   {id: `cutout--back-${i + 1}`, 'data-path': `cutout:back-${i + 1}`, 'data-class': 'cutout',
-   'data-rear-of': b.id, 'data-rear-at': `${337.955 - 109 * i},6.5`},
+   'data-rear-of': b.id, 'data-rear-bay': `${[332.97, 224, 115.03, 6.06][i]},4.475,108.97,35.05`},
   seated[b.id] ? [new Node({id: `${b.id}-rear`, 'data-projection': '1',
                             'data-of': `${b.id}/module`})] : [])));
 
@@ -170,5 +174,20 @@ if (mode === 'queue') {
   calls.length = 0;
   await q.swap({'bay-1': B}, {live: () => true, held: () => [['front', fresh]]});
   out.unrecorded = calls.map(c => c.join(':'));
+}
+if (mode === 'positions') {
+  // each module's back where ITS body stands, mirrored in the hole - and the
+  // hole's `data-rear-at` rewritten to say so, or cleared when emptied
+  const r = rear();
+  const hole = () => r.querySelector('[data-rear-of="bay-1"]');
+  const back = () => hole().querySelector(':scope > [data-projection]');
+  out.positions = {};
+  for (const [k, ref] of [['a', A], ['b', B]]) {
+    await seat(r, 'rear', {'bay-1': ref});
+    out.positions[k] = {transform: back().getAttribute('transform'),
+                        at: hole().getAttribute('data-rear-at')};
+  }
+  await seat(r, 'rear', {'bay-1': null});
+  out.positions.emptied = hole().getAttribute('data-rear-at');
 }
 console.log(JSON.stringify(out));

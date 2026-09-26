@@ -33,7 +33,7 @@ const root = entries.find(e => e.path === 'bay-1/module');
 // A SWAP builds the same projection in the kit: the back of the cassette swapped
 // in, from its components.json entry and published skin.
 const swapped = build({t: 'svg', c: [
-  {a: {'data-path': 'cutout:back-1', 'data-rear-of': 'bay-1', 'data-rear-at': '337.955,6.5'}},
+  {a: {'data-path': 'cutout:back-1', 'data-rear-of': 'bay-1', 'data-rear-bay': '332.97,4.475,108.97,35.05'}},
 ]});
 const skin = {t: 'svg', c: [{a: {id: 'rear-2', 'data-path': 'rear-2', 'data-class': 'cassette',
   'data-media': 'fiber', 'data-ref': 'fs/rear-2@1:1.0.0', transform: 'translate(0,0)'}, c: [
@@ -43,7 +43,8 @@ const skin = {t: 'svg', c: [{a: {id: 'rear-2', 'data-path': 'rear-2', 'data-clas
 ]}]};
 const {applied} = await applyRearOverrides(swapped, {'bay-1': 'fs/cassette@1'},
   async () => ({text: JSON.stringify(skin), comp: {name: 'rear-2'}}),
-  () => ({faces: {rear: 'fs/rear-2@1'}}));
+  () => ({faces: {rear: 'fs/rear-2@1'}, size: {w: 108.97, h: 35.05},
+         body: {footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}}}));
 const wrap = [...swapped.descendants()].find(n => n.getAttribute('data-projection'));
 const swapEntries = faceEntries(swapped);
 const rearRef = swapped.children[0].getAttribute('data-rear-ref');
@@ -52,7 +53,8 @@ const rearRef = swapped.children[0].getAttribute('data-rear-ref');
 // naming an occupant that is no longer there.
 await applyRearOverrides(swapped, {'bay-1': null},
   async () => ({text: JSON.stringify(skin), comp: {name: 'rear-2'}}),
-  () => ({faces: {rear: 'fs/rear-2@1'}}));
+  () => ({faces: {rear: 'fs/rear-2@1'}, size: {w: 108.97, h: 35.05},
+         body: {footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}}}));
 const rearRefEmpty = swapped.children[0].getAttribute('data-rear-ref');
 
 console.log(JSON.stringify({
