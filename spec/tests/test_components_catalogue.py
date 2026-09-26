@@ -117,4 +117,4 @@ def test_a_part_a_bay_only_accepts_is_still_seated():
     configuration puts in still counts for every chassis whose bay accepts it -
     the count is structural, not a census of shipped builds."""
     seats = cat.seated_by(LIB)
-    assert "cisco/asr-9006" in seats["cisco/a9k-rsp880-se@1"]
+    assert "cisco/asr-9006" in seats["cisco/a9k-rsp880-se@2"]
