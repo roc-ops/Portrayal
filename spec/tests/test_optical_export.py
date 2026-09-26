@@ -266,7 +266,10 @@ def test_every_fibre_module_exports_ports_matching_its_graph():
         got = P.ports(view, idx.get)
         front_fibres = sum(n for k, n in caps.items() if ":" not in k)
         rear_fibres = sum(n for k, n in caps.items() if ":" in k)
-        assert len(got["front"]) == front_fibres, e["name"]
+        # POSITIONS, not ports, on both faces: a front LC bore is one port of
+        # one position, but a front MPO adapter (the FHD MTP panels) is one
+        # port of twelve or sixteen, as a rear connector always was
+        assert sum(p["positions"] for p in got["front"]) == front_fibres, e["name"]
         assert sum(p["positions"] for p in got["rear"]) == rear_fibres, e["name"]
 
 

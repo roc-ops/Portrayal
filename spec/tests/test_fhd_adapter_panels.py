@@ -98,3 +98,26 @@ def test_every_panel_draws_the_same_mirrored_thumb_knobs():
         knobs.setdefault((l, r), []).append(ref)
     assert not bad, "\n".join(bad)
     assert len(knobs) == 1, {k: v for k, v in knobs.items()}
+
+
+# THE FIRST MPO-FRONTED MODULES. A front MPO adapter is ONE DCIM port carrying
+# a position per fibre - twelve one-fibre "mpo" ports named 1..12 would be a
+# trunk nobody can cable (the #616 merge-queue review). Pinned per panel: the
+# port count, the positions on each, and a fibre-map row for every position of
+# every front port, landing on a port that exists.
+MPO_FRONTS = {"fs/fhd-fap12mtp-a@1": (12, 12), "fs/fhd-fap12mtp-b@1": (12, 12),
+              "fs/fhd-fap8mtp-b@1": (8, 12), "fs/fhd-fap12mtp16-a@1": (12, 16)}
+
+
+def test_an_mpo_front_is_one_port_per_adapter():
+    from portrayal import optical_ports as P
+    for ref, (count, positions) in MPO_FRONTS.items():
+        doc = _load(ref)
+        got = P.ports(doc, _load)
+        assert [p["type"] for p in got["front"]] == ["mpo"] * count, ref
+        assert [p["positions"] for p in got["front"]] == [positions] * count, ref
+        names = {p["name"] for p in got["front"]}
+        rows = P.fibre_map(doc, _load, ref)["rows"]
+        assert len(rows) == count * positions, (ref, len(rows))
+        seen = {(r["front"], r["front_position"]) for r in rows}
+        assert seen == {(n, i) for n in names for i in range(1, positions + 1)}, ref
