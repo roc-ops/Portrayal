@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 22.0.0
+version: 23.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
@@ -258,6 +258,11 @@ gaps:
       cannot settle a single body's width. Re-cutting it would move the slot
       column and the clip recess, both photo-measured off ISM figure 8 and both
       currently agreeing with the render, so it is recorded rather than guessed.
+      RE-READ WHEN THE STRIP UNDER RISER 1 WAS RETIRED, and still open. The
+      same model was cut across face y 66.24..68.05 under the riser, and
+      nothing there stands in front of the rear sheet (Body_8_6, z 708.88 at
+      most, behind fillers whose fronts reach 718.03). That settles the band
+      below the plate and says nothing new about the rib above it.
     wanted: >-
       a mechanical drawing of the riser-1 shroud, or a clean section of
       R740XD_GPU_Brackets_01-1 above the shelf, to settle the raised rib's width
@@ -1418,12 +1423,12 @@ views:
         # own, which drew the inside of the assembly.
         - {ref: dell/riser-1-shroud-14g@1, id: riser-1-shroud,
            at: [111.7, 1.81], group: furniture, rel-pos: 18}
-        # THE TRIM UNDER RISER 1, covering the bottom card's keyed end. A
-        # full-height bracket is 21.59 tall on a 20.32 pitch, so each overlaps
-        # its neighbour by the 1.27 key - and the bottom one has no neighbour,
-        # so 2.05 of its key ran past the plate and showed beside the rivet.
-        - {ref: dell/riser-lower-trim-14g@1, id: riser-1-trim, at: [-0.5, 66.24],
-           group: furniture, rel-pos: 21}
+        # NOTHING STANDS UNDER RISER 1. A strip was placed here to hide the
+        # bottom card's key, which std/pcie-bracket-fh@1 drew stepping down
+        # past the plate. The key steps up (@2), and Dell's service model has
+        # nothing in front of the rear sheet across face y 66.24..68.05 - its
+        # three slot fillers end at 65.21 - so the strip went with it. The
+        # rivets of the 68.85 row stand on the panel itself, as figure 8 shows.
         # THE SLOT-NUMBER STRIP, between the clips and the riser plate and
         # IN FRONT of the cards. Its numerals were chassis silkscreen and never
         # rendered: silkscreen prints before components, correctly, but these
