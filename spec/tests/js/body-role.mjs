@@ -9,6 +9,10 @@ const cases = {
   bayModule: ['front-6/module', 'fills'],
   cardOptic: ['front-6/module/xg0-occupant', 'occupies'],
   cardChained: ['front-6/module/xg0-occupant-occupant', 'occupies'],
+  // spec B's copper SFP chain (#8): a cage, an rj45 plug seated on the
+  // cage's sfp-rj45, and a boot seated on the plug - THREE deep, one more
+  // than cardChained above.
+  cardRj45Boot: ['front-6/module/xg0-occupant-occupant-occupant', 'occupies'],
   cardPart: ['front-6/module/xg0', 'fills'],
   nestedBayModule: ['slot-1/module/ppm-1/module', 'fills'],
   deepCardOptic: ['slot-1/module/ppm-1/module/p0-occupant', 'occupies'],
