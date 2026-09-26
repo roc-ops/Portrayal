@@ -102,3 +102,22 @@ def test_a_known_coax_port_publishes_a_connector_slot(iface, comps, tmp_path):
         slot = _card_slot(comps, ref, cage_id)
     assert slot["kind"] == "connector"
     assert slot["interface"] == iface
+
+
+# The two new jacks (#650, Task 3). The 1.0/2.3 interface is spelled
+# `din-1-0-2-3`: component.schema.json's segment pattern refuses a dot in an
+# interface, the same as in a component name (L2).
+NEW = {"bnc": "std/bnc", "din-1-0-2-3": "std/din-1-0-2-3"}
+
+
+@pytest.mark.parametrize("iface", sorted(NEW))
+def test_each_new_jack_exists_presents_and_conforms(iface):
+    part = NEW[iface]
+    doc = yaml.safe_load((LIB / f"components/{part}/v1/contract.yaml").read_text())
+    std = yaml.safe_load((ROOT / "spec/schemas/standards.yaml").read_text())["standards"]
+    assert doc["interface"] == iface
+    assert doc["class"] == "port" and "behaviour" not in doc
+    assert doc["conforms"] in std
+    assert "mate" in doc["connection-points"]
+    reg = render_mod._connector_registry()
+    assert reg[iface]["standard"] == doc["conforms"]

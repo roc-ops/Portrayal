@@ -1,0 +1,109 @@
+format: 1
+kind: component
+name: bnc
+version: 1.0.0
+class: port
+profile: networking
+conforms: bnc
+interface: bnc
+description: BNC bayonet coaxial panel jack (IEC 61169-8) - a front-mount
+  bulkhead, so the flange and the bayonet collar with its two lugs stand in
+  front of the panel and the hex nut is behind it. The aperture is a D-hole.
+  The T1/E1/T3/E3 and video jack; 50 and 75 ohm intermate, so a placement that
+  knows says attrs.impedance.
+unplaced: placed by the stand-in moves of docs/connectors-coax-design.md section 6, which land after this part; until then no device names a BNC jack
+size: {w: 9.70, h: 8.85}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  The PANEL CUT OUT table of the Radiall technical data sheet R141.557.000
+  (issue 0431 E, p.1), midpoints of A (bore 9.65-9.75) and B (across the flat
+  8.81-8.89). See the registry key bnc.
+attrs: {media: coax-bnc}
+provenance:
+  size: >-
+    drawing - registry key bnc, the D-hole of the Radiall R141.557.000 data
+    sheet (bulkhead jack receptacle, front mounting, solder pot contact; issue
+    0431 E, p.1), PANEL CUT OUT dimensions A 9.65-9.75 and B 8.81-8.89. The
+    sheet is a 1181 x 1181 CCITT stencil at 194 ppi; both figures are
+    dimensioned, not scaled.
+  front-mount: >-
+    The part this contract draws is a FRONT-MOUNT bulkhead: the 12.7 flange
+    sits on the front of the panel and the hex nut (12.7 across flats, max
+    panel 3.5) clamps it from behind, Radiall R141.557.000 p.1. So the flange,
+    the collar and the lugs are drawn, and the nut is not. Both the flange and
+    the lug tips are wider than the D-hole, and the art overhangs the viewBox
+    on purpose, because that is what stands in front of the panel. A
+    rear-mount BNC, whose nut is in front, would be another part.
+  flange: >-
+    drawing - Radiall R141.557.000 side view: dia 12.7, 1.4 thick, in front
+    of the panel.
+  collar: >-
+    drawing - MIL-STD-348B with CHANGE 3, Figure 301-2 (series BNC, socket
+    contact), p.36-37, dimension B 9.60-9.70; drawn at 9.65. It stands 12.2 in
+    front of the panel, the Radiall R141.557.000 figure from the front face to
+    the rear face of the flange, which is the panel front. So the collar runs
+    from the flange front at 1.4 to 12.2.
+  lugs: >-
+    drawing - MIL-STD-348B with CHANGE 3, Figure 301-2: two lugs at 180
+    degrees (end view), stud diameter H 1.91-2.06 (drawn 1.985), 10.97-11.07
+    over the tips A (drawn 11.02, so each stands about 0.69 proud of the
+    collar), and F 5.18-5.28 from the front face to the far side of a lug. The
+    lug centre, 5.23 less half the stud, is 4.24 behind the front face, so
+    7.96 in front of the panel (drawing, derived from F and H). Face on a
+    radial stud reads as a rectangle, stud-diameter tall. The figure does not
+    fix the clocking against the panel: drawn at 3 and 9 o clock, a device
+    that shows another turns the part with rotate.
+  bore-and-insulator: >-
+    drawing - MIL-STD-348B with CHANGE 3, Figure 301-2: mouth bore C 8.31-8.46
+    (drawn 8.38, the dark ring inside the collar wall), dielectric step at the
+    reference plane P 6.50 max (drawn 6.50, dimmed because it sits 8.4 behind
+    the front face), insulator boss E 4.72 max (drawn 4.72), whose face is
+    about 3.1-3.7 behind the front face (G less T). Face-on art on the collar
+    cap, not solids.
+  centre-contact: >-
+    estimated - the socket contact circle, 1.1 across with a 0.44 socket hole,
+    is art only; neither source used here dimensions the contact face on.
+  flat: >-
+    the flat is drawn at the BOTTOM of the aperture, as the MCX jack draws its
+    own. Nothing in the Radiall sheet fixes its clocking; a panel that shows
+    another places the part with rotate.
+elements:
+  opening: {at: [0.0, 0.0], size: [9.70, 8.85], class: cutout}
+relief:
+  features:
+    - node: flange
+      cyl: 1.4
+      color: '#c0c4c8'
+      confidence: drawing
+      source: >-
+        std/bnc@1 flange key - Radiall R141.557.000 (issue 0431 E) side view, a 12.7
+        flange 1.4 thick sitting on the front of the panel.
+    - node: collar
+      cyl: 10.8
+      lift: 1.4
+      color: '#d7dade'
+      confidence: drawing
+      source: >-
+        std/bnc@1 collar key - MIL-STD-348B with CHANGE 3, Figure 301-2, dimension B
+        9.60-9.70; Radiall R141.557.000 puts the front face 12.2 in front of the panel,
+        so the collar runs from the flange front at 1.4 for 12.2 - 1.4 = 10.8.
+    - node: lug-l
+      lift: 6.97
+      out: 8.96
+      color: '#d7dade'
+      confidence: drawing
+      source: >-
+        std/bnc@1 lugs key - MIL-STD-348B with CHANGE 3, Figure 301-2: stud H 1.985
+        centred 4.24 behind the front face (F 5.23 less half of H), so 7.96 in front of
+        the panel and 6.97 to 8.96 absolute. Derived from two drawn figures.
+    - node: lug-r
+      lift: 6.97
+      out: 8.96
+      color: '#d7dade'
+      confidence: drawing
+      source: >-
+        std/bnc@1 lugs key - the same figures as lug-l; the second lug is 180 degrees
+        round, per the end view of Figure 301-2.
+connection-points:
+  mate: {at: [4.85, 4.85], direction: front}
+skins: [default]
