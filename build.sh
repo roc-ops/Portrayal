@@ -3,6 +3,10 @@
 # and the JSON indexes. NOT the DCIM exports - see publish.sh.
 set -euo pipefail
 cd "$(dirname "$0")"
+# Every stage below runs a tool by path, and by path the tools import whichever
+# checkout was pip-installed, not this one. This pins them here and stops the
+# build if anything still resolves elsewhere (#561).
+. spec/tools/toolchain.sh
 # `--fast` renders only what changed. FULL IS THE DEFAULT and stays that way:
 # a staleness check that is wrong produces a drawing that looks fresh and is
 # believed, which is worse than a slow build, so the gate does not depend on it.
