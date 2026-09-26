@@ -204,18 +204,18 @@ def test_the_latch_slot_is_in_the_upper_half_of_the_head(built):
 
 # --- the tab's absolute extent ------------------------------------------------
 
-def test_the_tab_arms_span_20_to_59_and_the_grip_59_to_69_8(built):
-    """From the cage face. The tab is composed at lift 20.0; its arms are out 39.0
-    and its grip lift 39.0 out 49.8 in its own frame. render.py writes `out`
-    absolute (39 + 20 = 59, 49.8 + 20 = 69.8) and leaves `lift` to be summed, so
-    a lift counted twice would put the grip's base at 79 - past its own front."""
+def test_the_tab_arms_span_20_to_58_6_and_the_grip_58_6_to_69_8(built):
+    """From the cage face. The tab is composed at lift 20.0; its arms are out 38.6
+    and its grip lift 38.6 out 49.8 in its own frame. render.py writes `out`
+    absolute (38.6 + 20 = 58.6, 49.8 + 20 = 69.8) and leaves `lift` to be summed,
+    so a lift counted twice would put the grip's base at 78.6 - past its own front."""
     root, parents = built
     for n in ("--tab--arm-l", "--tab--arm-r"):
         arm = by_suffix(root, f"cg0-occupant{n}")
         assert lift_of(parents, arm) == pytest.approx(20.0, abs=1e-6), n
-        assert float(arm.get("data-z-out")) == pytest.approx(59.0, abs=1e-6), n
+        assert float(arm.get("data-z-out")) == pytest.approx(58.6, abs=1e-6), n
     grip = by_suffix(root, "cg0-occupant--tab--grip")
-    assert lift_of(parents, grip) == pytest.approx(59.0, abs=1e-6)
+    assert lift_of(parents, grip) == pytest.approx(58.6, abs=1e-6)
     assert float(grip.get("data-z-out")) == pytest.approx(69.8, abs=1e-6)
 
 
