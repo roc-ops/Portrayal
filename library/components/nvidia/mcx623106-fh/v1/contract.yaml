@@ -1,0 +1,138 @@
+format: 1
+kind: module
+name: mcx623106-fh
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4
+  x16, on its tall (full-height) bracket. The same board ships with both
+  brackets; nvidia/mcx623106-lp@1 is the other.
+size: {w: 120.02, h: 21.59, d: 142.00}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'MCX623106A tall bracket'
+  part-numbers: 'MCX623106AC-CDAT, MCX623106AN-CDAT, MCX623106AS-CDAT, MCX623106AE-CDAT'
+  role: nic
+  power-draw-max-w: 26.64
+  power-draw-typical-w: 19.52
+  power-input: host PCIe slot
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+groups:
+  qsfp56:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp56, speed: 100g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    CX-6 Dx EN user manual: p60 spec table, p65 board mechanical drawing
+    Dual-Port QSFP56 x16 (142.00 x 68.90, embedded image p65-000), p65
+    bracket mechanical drawing Dual-Port QSFP56 Cards (short p65-012
+    dimensioned 80.29 x 22.83, tall p65-008 dimensioned 121.05 x 21.59),
+    p16-17 LED scheme 2
+  size: >-
+    registry - the face is std/pcie-bracket-fh@2, 120.02 x 21.59, composed
+    behind a punched plate; `d` is the board drawing's 142.00, the card's
+    length back from its bracket.
+  depth: >-
+    drawing - 142.00, the board mechanical drawing's length.
+  the-face-is-derived-from-the-board: >-
+    EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
+    their distance above datum W on the dimensioned board drawing - port 1
+    47.76, port 2 26.53 - with W at x' 15.16 on this bracket (PCIe CEM 5.0:
+    120.02 - 104.86, fig 11-3). Vents, light-pipe slots, lamps and numerals
+    keep their measured offset from their nearest cage (or from W), read off
+    NVIDIA's bracket drawings. This card's bracket drawings are dimensioned
+    80.29 x 22.83 and 121.05 x 21.59, over the flange's outer face and
+    (short) the flange lip to the mounting feet; scaled on those figures
+    both drawings are isotropic and their QSFP windows read 20.0 and 19.9.
+    The windows sit within 0.45 (short) and 0.20 (tall) of the board
+    drawing's cages. The full-height face adds seven vent columns, the last
+    cut narrow by the flange step.
+  orientation: >-
+    drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
+    cages and lamps are placed `rotate: 180` and the numerals read upside
+    down. In a turned bay - Dell riser 3 - the card lands as NVIDIA draws
+    it.
+  lamps: >-
+    drawing - both brackets punch two round holes per port, about 1.3
+    across, on the keyed side at the window's outer corner; LED scheme 2
+    (LED1 bi-colour yellow/green, LED2 green) is drawn as two common/led-
+    dot@1 (2.0 round, 0.7 over the hole). Which hole is LED1 is not drawn;
+    LED1 is assumed nearer the cage.
+  body: >-
+    the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
+    at the board drawing's size; the heatsink is the board drawing's plate
+    outline at its drawn position, 10.0 tall by estimate.
+  power: >-
+    datasheet - CX-6 Dx UM p60 (spec table): 18.7 W typical at Gen3 and
+    19.52 W at Gen4, 25.28 / 26.64 W maximum, with passive cables under ATIS
+    load; the Gen4 figures are carried. p55 adds ActiveModuleW x modules x
+    1.1 for active optics.
+  rate: >-
+    all four OPNs are 100GbE per port (UM p5, p60) although the cages are
+    QSFP56.
+body:
+  depth: 142.00
+  color: '#2f7d3a'
+  # the slab stops where the bracket stops being a rectangle
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  boxes:
+  - {id: board, at: [23.56, 4.44], size: [60.50, 1.57], from: 0.00, depth: 142.00,
+     color: '#2f7d3a', confidence: drawing,
+     source: 'the board drawing''s 142.00 x 68.90; CEM 5.0 fig 6-5 shoulder 8.40 above W'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: heatsink, at: [29.26, 6.01], size: [53.20, 10.00], from: 65.25, depth: 62.10,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'the board drawing''s heatsink plate outline (53.2 x 62.1, four mounting holes at its corners, the IC square at its centre); its height is not drawn'}
+faces:
+  plan:
+    ref: common/pcie-card-plan@1
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/qsfp56@1, id: port-1, at: [52.92, 6.50], rotate: 180, group: qsfp56}
+  - {ref: std/qsfp56@1, id: port-2, at: [31.69, 6.50], rotate: 180, group: qsfp56}
+  - ref: common/led-dot@1
+    id: led-port-1-1
+    at: [74.52, 5.96]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-1-2
+    at: [77.53, 5.96]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-2-1
+    at: [28.17, 5.96]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-2-2
+    at: [25.12, 5.96]
+    rotate: 180
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+skins: [default]

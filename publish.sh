@@ -31,6 +31,15 @@ IMAGES=(--images)
 if [ "${1:-}" = "--no-images" ]; then IMAGES=(--images --no-raster); shift; fi
 OUT="${1:-library/dist}"
 
+# PICTURES WITHOUT CAIROSVG FAIL HERE, ONCE (#462), rather than once per device
+# inside the parallel export below, and before the build is spent. The exporter
+# refuses the same way when it is run on its own.
+if [ "${IMAGES[*]}" = "--images" ] && ! python3 -c "import cairosvg" 2>/dev/null; then
+  echo "publish.sh: the pictures need cairosvg - pip install -e \".[render]\", or run" >&2
+  echo "  ./publish.sh --no-images to write the exports without them" >&2
+  exit 1
+fi
+
 ./build.sh "$OUT"
 
 # From an empty directory, so a file the exporter no longer produces cannot
