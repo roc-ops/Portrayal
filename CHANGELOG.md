@@ -250,6 +250,24 @@ the *published build*, not about the hardware.
 - The ASR 9001 MPA bays reserve the MPA envelope, 34.54 x 161.8, with the
   measured hole as their `opening`, matching the A9K-MOD carriers; both SIP-700
   cards reserve 167.87 for all four SPA subslots.
+- Pluggable cage accept lists (`cages[].accepts`) now apply the rate ceiling
+  to the vendor cable ends: a part is offered only in a cage at or above its
+  rung. The seven cable-end wrappers (1.1.0) state that rung as `attrs.rate`;
+  they said `media`, which the ceiling does not read, so every one was offered
+  in every cage of its family - the 10G SFP+ DAC in 1G SFP cages, the 200G
+  QSFP56 cable in 100G QSFP28 cages. Their exports list `rate:` where they
+  listed `media:`.
+- Ten SFP-class ports stated `media: sfp` (the 1G rung) for 10G SFP+ or 25G
+  SFP28 ports their own descriptions name: the SFP groups of `edgecore/agr560`,
+  `eps112`, `eps121`, `eps122` (now `sfp-plus`) and `eps201`, `eps202`,
+  `eps203` (now `sfp28`), the `edgecore/dcs520` management SFP+ ports and the
+  `juniper/mx304` PTP port (`sfp-plus`). Their `optics-sfp` prose follows the
+  media to `optics-sfp-plus` / `optics-sfp28`. Exported interface types do not
+  change.
+- Lint L102 refuses a part that mates a pluggable family and names one of
+  that family's rungs as `media` instead of `rate`. Lint L12 refuses a
+  configuration that seats a part whose `rate` is above its cage's media on
+  the part's own family ladder.
 - `generic/qsfp-lc@1` and `generic/qsfp-dd-lc@1` are superseded by `@2`
   (above); `@1` is kept for fixtures pinned to it.
 - `common/qsfp-pull-tab@1` is superseded by `@2` (above); `@1` is kept, with

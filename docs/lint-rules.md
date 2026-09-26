@@ -18,7 +18,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L9 | component | a conforms-declared size matches spec/schemas/standards.yaml | take the size from the registry, or drop `conforms` if the part is not the standard aperture |
 | L10 | component | composed parts resolve, ids are unique, composition does not cycle (depth <= 4) | fix the `parts:` refs; a part must not compose itself |
 | L11 | component | interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes | add `connection-points.mate`; do not change the interface in a wrapper |
-| L12 | device | mate-to resolves to a receptacle whose interface the occupant mates | point `mate-to` at the receptacle id; check `interface` and `mates` agree |
+| L12 | device | mate-to resolves to a receptacle whose interface the occupant mates; a seated part's `rate` is at or below its cage's media | point `mate-to` at the receptacle id; check `interface` and `mates` agree; seat a part the cage offers |
 | L13 | device | two placed components do not occupy the same faceplate area | move one, or declare `for:`/`under:` when one deliberately sits on the other |
 | L14 | device | a silkscreen `for:` target exists and is nearby | name the placement or bay the mark annotates, and anchor the mark at it |
 | L15 | device | a device at `modelled` or above has a provenance block good enough for the level | add provenance for every figure, or lower `maturity` |
@@ -108,7 +108,7 @@ a test fails when this page and the linter disagree. A finding prints as
 | L99 | component | a generic stays generic - no rate, reach, wavelength or wattage under generic/ | move the figure to the vendor wrapper's attrs; a generic/ part stands for every module of its kind |
 | L100 | component, device | no key in an `attrs:` map has a null value | add the missing colon and a value; in flow style `{a: 1, b}` is TWO keys, the second null |
 | L101 | component | a `superseded-by` names a component major that exists and is not the part itself | fix the ref, or add the successor if it has not landed yet |
-| L102 | component, device | a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries | fix the media/rate, or add the missing rate to the family in pluggables.yaml |
+| L102 | component, device | a device's pluggable media, and a part's `rate` attr, each name a rate spec/schemas/pluggables.yaml actually carries; a part states its rung as `rate`, never as `media` | fix the media/rate, move a rung from media to rate, or add the missing rate to the family in pluggables.yaml |
 | L103 | library | a pluggable family's `interface` matches at least one component's `interface` | model the cage, or leave the family as-is if the vocabulary needs it ahead of the metal (sfp-dd today) |
 | L104 | device | a port's declared media and its cage's presented interface name the same pluggable family | the declared media governs the accept list render.py's cages[] builds - check the source and fix whichever of the drawing's aperture or the declared media is wrong |
 | L105 | component, device | a placement's or part's `interfaces:` are held by a port the export files as a switch interface, named once in the view or component, and never the id of a placement, part, element or bay | rename the colliding placement or interface - both are real and a DCIM needs a name for each - or move `interfaces:` onto the cage that presents them |

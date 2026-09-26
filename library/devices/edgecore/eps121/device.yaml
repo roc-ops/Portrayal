@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: eps121
-version: 2.0.3
+version: 2.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS4625-54T
@@ -116,7 +116,7 @@ attrs:
   power: {power-consumption: 'AS4625-54T: 150 W max at 25 C', input-ac: 100-120 VAC
       4 A max; 200-240 VAC 2 A max}
   features:
-    optics-sfp: >-
+    optics-sfp-plus: >-
       Six 1G/10G SFP+ uplinks, ports 49-54, which both documents call uplinks. The guide's lamp legend
       gives them two rates - "SFP+ Port LEDs: Green (10G), Amber (1G)" - and no breakout table is published,
       so none is stated here.
@@ -174,7 +174,7 @@ groups:
       the same sequence as the RJ-45 ports. `index-origin` is 1 because the schema allows 0 or 1 and nothing
       else; the 49 the panel prints is carried by each port's own `rel-pos`, which is where the panel's
       numbering belongs.
-    attrs: {media: sfp, speed: 10g}
+    attrs: {media: sfp-plus, speed: 10g}
   mgmt:
     term: Port
     role: management
