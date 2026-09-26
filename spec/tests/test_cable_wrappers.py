@@ -37,11 +37,11 @@ SFP, QSFP, DD2 = "generic/sfp-cable@1", "generic/qsfp-cable@1", "generic/qsfp-dd
 GENERICS = ["generic/sfp-cable@1", "generic/qsfp-cable@1",
             "generic/qsfp-dd-cable@1", "generic/qsfp-dd-cable-type2@1"]
 
-# wrapper -> (the generic it wraps, cable-kind, speed, media, the agr560 cage it seats in)
+# wrapper -> (the generic it wraps, cable-kind, speed, rate, the agr560 cage it seats in)
 WRAPPERS = {
     "molex/sfp-plus-passive-dac@1": (SFP, "dac", "10g", "sfp-plus", "port-0"),
     "amphenol/qsfp28-passive-dac@1": (QSFP, "dac", "100g", "qsfp28", "qsfp28-0"),
-    "amphenol/qsfp56-linear-active@1": (QSFP, "acc", "200g", "qsfp56", "qsfp28-1"),
+    "amphenol/qsfp56-linear-active@1": (QSFP, "acc", "200g", "qsfp56", "qsfpdd-4"),
     "fs/qsfp28-aoc@1": (QSFP, "aoc", "100g", "qsfp28", "qsfp28-2"),
     "volex/qsfp-dd-passive-dac@1": (DD2, "dac", "400g", "qsfp-dd", "qsfpdd-0"),
     "credo/hiwire-shift-qsfp-dd@1": (DD2, "aec", "400g", "qsfp-dd", "qsfpdd-1"),
@@ -102,9 +102,11 @@ def test_it_is_a_wrapper_of_its_generic(ref):
 
 @EACH
 def test_its_attrs_are_the_products(ref):
-    _generic, kind, speed, media, _cage = WRAPPERS[ref]
+    _generic, kind, speed, rate, _cage = WRAPPERS[ref]
     a = doc(ref)["attrs"]
-    assert a["cable-kind"] == kind and a["speed"] == speed and a["media"] == media
+    assert a["cable-kind"] == kind and a["speed"] == speed and a["rate"] == rate
+    # the rung is `rate`, which the cage's rate ceiling reads; never `media`
+    assert "media" not in a
     assert a.get("model")
     # a power figure, or a sourced statement that there is none
     assert a.get("power-draw-max-w") or a.get("power-draw-typical-w") or a.get("power-absent")
@@ -216,10 +218,13 @@ def test_the_accept_lists_offer_the_generics_and_the_wrappers(seated):
     sfp, qsfp, dd = accepts["port-0"], accepts["qsfp28-0"], accepts["qsfpdd-0"]
     assert "generic/sfp-cable@1" in sfp and "molex/sfp-plus-passive-dac@1" in sfp
     assert "generic/qsfp-cable@1" in qsfp
-    for ref in ("amphenol/qsfp28-passive-dac@1", "amphenol/qsfp56-linear-active@1",
-                "fs/qsfp28-aoc@1", "siemon/qsfp28-aoc@1"):
+    for ref in ("amphenol/qsfp28-passive-dac@1", "fs/qsfp28-aoc@1", "siemon/qsfp28-aoc@1"):
         assert ref in qsfp and ref in dd          # a QSFP-DD cage also accepts QSFP
         assert ref not in sfp
+    # THE RATE CEILING: a 200G QSFP56 cable is not offered in a 100G QSFP28
+    # cage, and is in a QSFP-DD one (QSFP-DD HW 6.3 section 1)
+    acc = "amphenol/qsfp56-linear-active@1"
+    assert acc not in qsfp and acc in dd and acc not in sfp
     for ref in GENERICS[1:]:
         assert ref in dd
     for ref in ("volex/qsfp-dd-passive-dac@1", "credo/hiwire-shift-qsfp-dd@1"):

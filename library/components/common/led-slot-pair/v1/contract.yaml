@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: led-slot-pair
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a
+  bracket punches for a port's pair of indicators, as NVIDIA ConnectX cards
+  carry one per port
+size: {w: 3.7, h: 1.2}
+size-confidence: {w: drawing, h: estimated}
+provenance:
+  size: >-
+    drawing - NVIDIA ConnectX-6 Dx EN user manual p65, the short and tall
+    bracket drawings for the dual-port SFP28/SFP56 cards: one slot per port,
+    3.71 and 3.66 long on the two drawings. Its height reads 0.41 and 0.46,
+    which is the drawing's line weight and not the metal, so 1.2 is estimated
+    - a round window that height is what a light pipe needs.
+  lamps: >-
+    TWO LAMPS BECAUSE THE CARD HAS TWO. The same manual's LED scheme 2 gives
+    each port LED1, bi-colour yellow and green, and LED2, green; the drawing
+    shows one window for both. Which lamp sits at which end is not drawn, so
+    lamp-1 is on the left by convention and the composing card says what
+    each one means (`states` on its part).
+elements:
+  lamp-1:
+    at: [0.20, 0.20]
+    size: [1.55, 0.80]
+    class: led
+    states: ['off', {name: 'on', color: '#22c55e'}]
+  lamp-2:
+    at: [1.95, 0.20]
+    size: [1.55, 0.80]
+    class: led
+    states: ['off', {name: 'on', color: '#22c55e'}]
+skins: [default]

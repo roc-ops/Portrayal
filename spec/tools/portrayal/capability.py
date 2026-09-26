@@ -409,25 +409,42 @@ def _wired(data):
 
 
 def _templated(data):
-    """The Nautobot exporter resolves at least one interface under some NOS.
+    """The DCIM device-type export types at least one of this device's own
+    placements as an interface.
 
-    Asked of the exporter rather than re-derived here, because "would this
-    export" and "does this export" have to be the same question. The exporter
-    can raise on a manifest it was not written for; that is a false answer, not
-    a crash worth propagating into every build.
+    ASKED OF THE EXPORTER, not re-derived: `dcim_export.device_port_type` is
+    the question `build` asks of every device placement, the same one lint's
+    L105 asks of a raw manifest (no overlay - the hardware's own document).
+    This used to import `nautobot_export`, which stopped existing when the
+    NetBox and Nautobot exporters merged into `dcim_export` (#129); the import
+    always failed, so the flag was false for every device and the gap register
+    listed "NetBox / Nautobot device-type export" as missing for all of them.
+
+    WHAT IT MEASURES NOW. The export reads a published build, which does not
+    exist yet where this runs (lint, render, the index pass), so this asks the
+    per-placement half of it: whether some placement in a port-role group has
+    media and speed the exporter types. That is what decides whether the
+    device type carries interfaces - a card's ports go in its module type, and
+    a device with none of its own (a passive panel, a server whose NICs are
+    cards) is correctly false. The exporter can raise on a placement it was
+    not written for; that is a false answer, not a crash in every build.
     """
-    try:
-        import nautobot_export
-    except ImportError:                        # pragma: no cover
-        return False, "the Nautobot exporter is not importable", None
-    for nos in ("arcos", "sonic"):
-        try:
-            if nautobot_export.build(data, nos).get("interfaces"):
+    from portrayal import dcim_export        # here: dcim_export imports render
+    groups = data.get("groups") or {}
+    for view in (data.get("views") or {}).values():
+        for p in ((view or {}).get("components") or {}).get("placements") or []:
+            if not p.get("ref"):
+                continue
+            g = groups.get(p.get("group")) or {}
+            a = {**(g.get("attrs") or {}), **(p.get("attrs") or {})}
+            try:
+                t, _label, _why = dcim_export.device_port_type(p, a, g.get("role"))
+            except Exception:
+                continue
+            if t:
                 return True, "", None
-        except Exception:
-            continue
-    return False, ("ports the Nautobot exporter recognises - each port placement "
-                   "needs `attrs.media` and `attrs.speed` in a combination it maps"), None
+    return False, ("a port the DCIM export types as an interface - a placement in a "
+                   "group whose role is a port role, with media and speed it maps"), None
 
 
 # ---------------------------------------------------------------- assembly
@@ -533,7 +550,7 @@ RULE_GAPS = {
 CAP_GAPS = {
     "specified": "the About panel, and comparison against other devices",
     "wired": "ENTITY-MIB / Redfish correlation and monitoring overlays",
-    "templated": "NetBox / Nautobot device-type export",
+    "templated": "interfaces on the NetBox / Nautobot device type",
 }
 
 
@@ -561,6 +578,14 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
         ok, needs, blocker = flag_results[flag]
         if ok is True:
             continue
+        # A MODULAR DEVICE'S INTERFACES ARE ON ITS MODULES (#129). `templated`
+        # asks whether the device type ITSELF carries interfaces; a chassis
+        # whose ports are all on the cards its bays seat does not, and is
+        # exported whole anyway - the cards as module types. Filing that as
+        # an export the device lacks would be the same false gap the dead
+        # import filed for every device.
+        if flag == "templated" and _has_bays(data):
+            continue
         # An unevaluable flag files its gap against the thing that is actually
         # missing. `specified: no` on a device with twenty-four datasheet attrs
         # reads as a broken predicate; `profile-undeclared` reads as one line of
@@ -586,6 +611,11 @@ def derived_gaps(path, data, lib_roots, capability, flag_results):
                     "blocks": [flag],
                     "wanted": f"{needs} - unlocks {CAP_GAPS[flag]}"})
     return out
+
+
+def _has_bays(data):
+    return any(((v or {}).get("components") or {}).get("bays")
+               for v in (data.get("views") or {}).values())
 
 
 def _rule_warnings(path, data, lib_roots):

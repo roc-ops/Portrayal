@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-961 component majors in 22 namespaces.
+997 component majors in 23 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -40,19 +40,19 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/mpo@2` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 9 | One MPO/MTP adapter opening - the mouth an MPO plug enters, not the adapter around it |
 | `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 2 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
-| `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 0 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
-| `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 12 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
-| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
+| `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 4 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
+| `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 31 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
+| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 26 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 30 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 47 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
-| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 42 | QSFP28 cage cutout (100G, 4 lanes) |
-| `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 5 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
+| `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 48 | QSFP28 cage cutout (100G, 4 lanes) |
+| `std/qsfp56@1` | component | port | 20 × 10.15 × 37 | qsfp56 | 1 | 15 | QSFP56 cage cutout (200G, shares SFF-8661 profile) |
 | `std/rj45@2` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 67 | 54 | RJ45 modular jack HOUSING - the 15.8 x 13.2 plastic face a plug enters, with the 8P8C interface recessed into… |
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 61 | 25 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 30 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 25 | 61 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
-| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 86 | 85 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 25 | 75 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 86 | 87 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 17 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
 | `std/usb-a@1` | component | port | 12 × 4.5 × 13.7 | usb-a | 84 | 27 | USB Type-A receptacle opening - sharp corners |
@@ -60,7 +60,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (90)
+## common/ (91)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -96,10 +96,11 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/lc-dust-cap@1` | component | cap | 4.7 × 4.7 | lc | 0 | 3 | The white dust cap an idle LC port ships with - a 4.7 square lump plugging the bore square, with a rounded-sq… |
 | `common/led-arrow@1` | component | led | 3.6 × 3.2 |  | 22 | 1 | Single triangle port LED - up skin for top-row ports, down for bottom |
 | `common/led-arrow-sm@1` | component | led | 2.25 × 2 |  | 29 | 0 | Compact triangle port LED for tight inter-port gaps - up skin for top-row ports, down for bottom |
-| `common/led-dot@1` | component | led | 2 × 2 |  | 89 | 240 | Tiny round port LED (2mm) |
+| `common/led-dot@1` | component | led | 2 × 2 |  | 89 | 256 | Tiny round port LED (2mm) |
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 21 | 46 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
-| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 24 | 4 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 24 | 22 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 4 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@2` | component | port | 13.8 × 9.4 |  | 0 | 15 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
@@ -109,10 +110,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/mpo16-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo16 | 0 | 1 | The grey dust cap FS ships in each opening of its FHD 12x MTP-16 adapter panel (SKU 382885) - common/mpo-dust… |
 | `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 4 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 0 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
-| `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 9 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
+| `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 6 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
-| `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 2 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
-| `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 1 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
+| `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 21 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
+| `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 18 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 3 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
@@ -144,7 +145,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/sfp-lc-duplex@1` | component | transceiver | 13.5 × 8.5 | sfp | 0 | 1 | SFP transceiver with an LC duplex face - two recessed bores with the fiber ferrules standing in them, and a b… |
 | `common/sfp-led-pair@1` | component | led | 12 × 4 |  | 4 | 0 | Stacked-SFP indicator pair — left lamp = upper port, right lamp = lower port, up/down triangles between |
 | `common/sfp-plus-cage@2` | component | port | 16 × 10 × 41 |  | 5 | 2 | SFP+ cage (v2 = composed - bezel wraps a std/sfp cutout core) |
-| `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 22 | 11 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
+| `common/sma-jack@1` | component | port | 9.5 × 9.5 |  | 22 | 12 | Panel-mount SMA jack with gold jam nut (bezel) around a std/sma core |
 | `common/smb-jack@1` | component | port | 7 × 7 |  | 28 | 4 | Panel-mount SMB jack with gold nut (bezel) around a std/smb core |
 | `common/st-simplex-adapter@1` | component | port | 10 × 10 | st-adapter | 0 | 1 | Panel-mount ST (BFOC) simplex adapter, one bayonet-coupled opening, as fitted to an FS FHD ST panel |
 | `common/usb-a@2` | component | port | 17 × 7 × 13.7 |  | 3 | 0 | USB Type-A receptacle with trident silkscreen - a shell bezel wrapping a std/usb-a opening core |
@@ -238,19 +239,19 @@ aperture when it is a bare opening - never both at one position. The README's
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
-| `cisco/a99-10x400ge-x-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco ASR 9900 Series 4T Service Edge Line Card, 5th generation |
-| `cisco/a99-10x400ge-x-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation |
+| `cisco/a99-10x400ge-x-se@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco ASR 9900 Series 4T Service Edge Line Card, 5th generation |
+| `cisco/a99-10x400ge-x-tr@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco ASR 9900 Series 4T Packet Transport Line Card, 5th generation |
 | `cisco/a99-12x100ge@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 4 | 0 | Cisco ASR 9000 Series 12-Port 100 Gigabit Ethernet Line Card |
 | `cisco/a99-32x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
 | `cisco/a99-32x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 32-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
 | `cisco/a99-32x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Service Edge Line Card, 5th generation |
 | `cisco/a99-32x100ge-x-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 5 | 0 | Cisco ASR 9900 Series 3.2T Packet Transport Line Card, 5th generation |
-| `cisco/a99-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Service Edge Line Card, 5th generation |
-| `cisco/a99-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
+| `cisco/a99-4hg-flex-se@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Service Edge Line Card, 5th generation |
+| `cisco/a99-4hg-flex-tr@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 4 | 0 | Cisco A99 400GE Combo Packet Transport Line Card, 5th generation |
 | `cisco/a99-rp-f@1` | module | supervisor | 221.84 × 39.52 |  | 3 | 0 | Cisco ASR 9900 Fixed Chassis Route Processor |
-| `cisco/a99-rp3-se@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Service Edge optimised, for the ASR 9912 and ASR 9922 |
-| `cisco/a99-rp3-tr@1` | module | supervisor | 41.4 × 428.2 × 626.6 |  | 2 | 2 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
-| `cisco/a99-rsp-se@1` | module | supervisor | 44.2 × 403.4 × 625.6 |  | 2 | 0 | Cisco ASR 9910 and ASR 9906 Route Switch Processor, Service Edge optimised - the card Cisco's guides call the… |
+| `cisco/a99-rp3-se@2` | module | supervisor | 41.4 × 395.7 × 626.6 |  | 2 | 0 | Cisco ASR 9900 Series Route Processor 3, Service Edge optimised, for the ASR 9912 and ASR 9922 |
+| `cisco/a99-rp3-tr@2` | module | supervisor | 41.4 × 395.7 × 626.6 |  | 2 | 2 | Cisco ASR 9900 Series Route Processor 3, Packet Transport optimised, for the ASR 9912 and ASR 9922 |
+| `cisco/a99-rsp-se@2` | module | supervisor | 41.4 × 395.7 × 625.6 |  | 2 | 0 | Cisco ASR 9910 and ASR 9906 Route Switch Processor, Service Edge optimised - the card Cisco's guides call the… |
 | `cisco/a99-sfc-s@1` | module | fabric | 76.2 × 492.1 |  | 1 | 0 | Cisco ASR 9900 switch fabric card for the ASR 9910, the generation the A99-SFC3-S replaced |
 | `cisco/a99-sfc3@1` | module | fabric | 41.4 × 395.7 |  | 2 | 0 | Cisco ASR 9900 Series Third Generation Switch Fabric Card |
 | `cisco/a99-sfc3-s@1` | module | fabric | 76.2 × 492.1 |  | 1 | 0 | Cisco ASR 9900 Series Third Generation Switch Fabric Card for the ASR 9910 |
@@ -259,37 +260,37 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9903-8hg-pec@1` | module | line-card | 436.58 × 38.73 × 383.28 |  | 1 | 0 | Cisco ASR 9903 Series 800G (0.8T) Port Expansion Card |
 | `cisco/a9k-1600w-ac@1` | module | psu | 71.21 × 39.21 |  | 1 | 1 | Cisco ASR 9901 1600 W AC power module |
 | `cisco/a9k-1600w-dc@1` | module | psu | 71.21 × 39.21 |  | 1 | 0 | Cisco ASR 9901 1600 W DC power module |
-| `cisco/a9k-16t-8-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 16-Port 10 Gigabit Ethernet Oversubscribed Line Card |
+| `cisco/a9k-16t-8-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 16-Port 10 Gigabit Ethernet Oversubscribed Line Card |
 | `cisco/a9k-16x100ge-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Service Edge Line Card, 4th generation |
 | `cisco/a9k-16x100ge-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 16-Port 100 Gigabit Ethernet Packet Transport Line Card, 4th generation |
 | `cisco/a9k-20hg-flex-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 2T Service Edge Combo Line Card, 5th generation |
 | `cisco/a9k-20hg-flex-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 2T Packet Transport Combo Line Card, 5th generation |
 | `cisco/a9k-24x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 7 | 0 | Cisco ASR 9000 Series 24-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
-| `cisco/a9k-24x10ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 24-Port 10 Gigabit Ethernet Line Card, original generation |
-| `cisco/a9k-2x100ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 2-Port 100 Gigabit Ethernet DX Line Card with CFP |
-| `cisco/a9k-36x10ge-se@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 36-Port 10 Gigabit Ethernet Line Card, original generation |
-| `cisco/a9k-400g-dwdm-tr@1` | module | line-card | 43.7 × 395.7 × 569 |  | 1 | 0 | Cisco ASR 9000 400-Gbps IPoDWDM Line Card |
-| `cisco/a9k-40ge-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
-| `cisco/a9k-40ge-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
-| `cisco/a9k-40ge-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
+| `cisco/a9k-24x10ge-se@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 24-Port 10 Gigabit Ethernet Line Card, original generation |
+| `cisco/a9k-2x100ge-se@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 3 | 0 | Cisco ASR 9000 Series 2-Port 100 Gigabit Ethernet DX Line Card with CFP |
+| `cisco/a9k-36x10ge-se@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 36-Port 10 Gigabit Ethernet Line Card, original generation |
+| `cisco/a9k-400g-dwdm-tr@2` | module | line-card | 41.4 × 395.7 × 569 |  | 5 | 0 | Cisco ASR 9000 400-Gbps IPoDWDM Line Card |
+| `cisco/a9k-40ge-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
+| `cisco/a9k-40ge-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
+| `cisco/a9k-40ge-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 40-Port Gigabit Ethernet Line Card with SFP, original generation |
 | `cisco/a9k-48x10ge-1g-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 7 | 0 | Cisco ASR 9000 Series 48-Port Dual-Rate 10GE/1GE Line Card, Service Edge optimised |
-| `cisco/a9k-4hg-flex-se@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Service Edge Line Card, 5th generation |
-| `cisco/a9k-4hg-flex-tr@1` | module | line-card | 42.67 × 403.1 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Packet Transport Line Card, 5th generation |
-| `cisco/a9k-4t-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
-| `cisco/a9k-4t-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
-| `cisco/a9k-4t-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
+| `cisco/a9k-4hg-flex-se@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Service Edge Line Card, 5th generation |
+| `cisco/a9k-4hg-flex-tr@2` | module | line-card | 41.4 × 395.7 × 609.6 |  | 5 | 0 | Cisco A9K 400GE Combo Packet Transport Line Card, 5th generation |
+| `cisco/a9k-4t-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
+| `cisco/a9k-4t-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
+| `cisco/a9k-4t-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 4-Port 10 Gigabit Ethernet Line Card with XFP, original generation |
 | `cisco/a9k-4x100ge@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet LAN Line Card |
 | `cisco/a9k-4x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 4-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-750w-ac@1` | module | psu | 55.2 × 39.9 |  | 1 | 0 | Cisco ASR 9001 and ASR 9001-S AC power entry module, 750 W |
 | `cisco/a9k-750w-dc@1` | module | psu | 55.2 × 39.9 |  | 1 | 0 | Cisco ASR 9001 and ASR 9001-S DC power entry module, 750 W |
 | `cisco/a9k-8hg-flex-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 800G Service Edge Combo Line Card, 5th generation |
 | `cisco/a9k-8hg-flex-tr@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 7 | 0 | Cisco ASR 9000 Series 800G Packet Transport Combo Line Card, 5th generation |
-| `cisco/a9k-8t-4-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
-| `cisco/a9k-8t-4-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
-| `cisco/a9k-8t-4-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
-| `cisco/a9k-8t-b@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
-| `cisco/a9k-8t-e@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
-| `cisco/a9k-8t-l@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
+| `cisco/a9k-8t-4-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
+| `cisco/a9k-8t-4-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
+| `cisco/a9k-8t-4-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 2:1 oversubscribed, original generation |
+| `cisco/a9k-8t-b@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
+| `cisco/a9k-8t-e@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
+| `cisco/a9k-8t-l@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 Series 8-Port 10 Gigabit Ethernet Line Card with XFP, 80 Gbps line rate, original generation |
 | `cisco/a9k-8x100g-lb-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-8x100ge-se@1` | module | line-card | 41.4 × 395.7 × 559.3 |  | 5 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet Line Card with CPAK |
 | `cisco/a9k-8x100ge-x-se@1` | module | line-card | 41.4 × 395.7 × 604.5 |  | 0 | 0 | Cisco ASR 9000 Series 8-Port 100 Gigabit Ethernet QSFP SE Line Card, 4th generation |
@@ -298,15 +299,15 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-cable-manager@1` | module | mechanical | 444.5 × 149.63 |  | 0 | 0 | Horizontal cable management bracket for an ASR 9000 rack |
 | `cisco/a9k-dc-pem-v3@1` | module | power | 468.12 × 48.03 |  | 0 | 0 | Cisco ASR 9000 version 3 DC power entry module - a power TRAY, not a supply |
 | `cisco/a9k-fan-tray-door@1` | module | blank | 444.5 × 70.97 × 20 |  | 1 | 0 | Hinged fan tray door for the Cisco ASR 9006 Router |
-| `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 9 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
-| `cisco/a9k-mod160-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod160-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Packet Transport Optimized |
-| `cisco/a9k-mod200-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod200-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Packet Transport Optimized |
-| `cisco/a9k-mod400-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod400-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Packet Transport Optimized |
-| `cisco/a9k-mod80-se@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Service Edge Optimized |
-| `cisco/a9k-mod80-tr@1` | module | line-card | 43.7 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-ground-pad@1` | component | ground | 46 × 20 |  | 10 | 0 | Cisco ASR 9000 NEBS bonding and grounding pad - the two-hole lug landing every chassis in the family cuts, wi… |
+| `cisco/a9k-mod160-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod160-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 160 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod200-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod200-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 200 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod400-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod400-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 400 Gigabyte Modular Line Card, Packet Transport Optimized |
+| `cisco/a9k-mod80-se@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Service Edge Optimized |
+| `cisco/a9k-mod80-tr@2` | module | line-card | 41.4 × 395.7 × 616 |  | 1 | 0 | Cisco ASR 9000 Series 80 Gigabyte Modular Line Card, Packet Transport Optimized |
 | `cisco/a9k-mpa-1x100ge@1` | module | line-card | 34.54 × 161.8 × 170.18 |  | 0 | 0 | Cisco 1-Port 100 Gigabit Ethernet Modular Port Adapter with CFP2 |
 | `cisco/a9k-mpa-1x40ge@1` | module | line-card | 34.54 × 161.8 × 170.18 |  | 1 | 8 | Cisco 1-Port 40 Gigabit Ethernet Modular Port Adapter with QSFP+ |
 | `cisco/a9k-mpa-20x10ge@1` | module | line-card | 34.54 × 161.8 × 170.18 |  | 0 | 8 | Cisco 20-Port 10 Gigabit Ethernet Modular Port Adapter with SFP+ |
@@ -323,18 +324,18 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/a9k-pwr-1p5kw-dc@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
 | `cisco/a9k-pwr-2kw-dc@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
 | `cisco/a9k-pwr-3kw-ac@1` | module | psu | 139.12 × 44.45 |  | 2 | 0 | Cisco ASR 9000 version 1 power module for a modular-chassis power tray |
-| `cisco/a9k-rsp@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 1 | 1 | Cisco ASR 9000 Series Route Switch Processor with 4 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
-| `cisco/a9k-rsp-8g@1` | module | supervisor | 41.9 × 406.4 × 673.8 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor with 8 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
-| `cisco/a9k-rsp440-se@1` | module | supervisor | 42 × 406 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Service Edge optimised |
-| `cisco/a9k-rsp440-tr@1` | module | supervisor | 42 × 406 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised |
-| `cisco/a9k-rsp5-se@1` | module | supervisor | 41 × 402.8 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Service Edge optimised |
-| `cisco/a9k-rsp5-tr@1` | module | supervisor | 41 × 402.8 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Packet Transport optimised |
-| `cisco/a9k-rsp880-lt-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised - four cores at 2.4 GHz and two 128 GB S… |
-| `cisco/a9k-rsp880-lt-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Packet Transport optimised - four cores at 2.4 GHz and two 128 … |
-| `cisco/a9k-rsp880-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Service Edge optimised, with eight cores at 1.9 GHz and four 10-GE… |
-| `cisco/a9k-rsp880-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Packet Transport optimised, with eight cores at 1.9 GHz and four 1… |
-| `cisco/a9k-sip-700@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory |
-| `cisco/a9k-sip-700-8g@1` | module | line-card | 43.7 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 8 GB of memory |
+| `cisco/a9k-rsp@2` | module | supervisor | 41.4 × 395.7 × 673.8 |  | 1 | 1 | Cisco ASR 9000 Series Route Switch Processor with 4 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
+| `cisco/a9k-rsp-8g@2` | module | supervisor | 41.4 × 395.7 × 673.8 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor with 8 GB of DRAM, the ORIGINAL generation - the card the ASR 90… |
+| `cisco/a9k-rsp440-se@2` | module | supervisor | 41.4 × 395.7 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Service Edge optimised |
+| `cisco/a9k-rsp440-tr@2` | module | supervisor | 41.4 × 395.7 × 674 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 440, Packet Transport optimised |
+| `cisco/a9k-rsp5-se@2` | module | supervisor | 41.4 × 395.7 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Service Edge optimised |
+| `cisco/a9k-rsp5-tr@2` | module | supervisor | 41.4 × 395.7 × 625.3 |  | 0 | 0 | Cisco ASR 9000 Series Route Switch Processor 5, Packet Transport optimised |
+| `cisco/a9k-rsp880-lt-se@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Service Edge optimised - four cores at 2.4 GHz and two 128 GB S… |
+| `cisco/a9k-rsp880-lt-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 5 | 0 | Cisco ASR 9000 Route Switch Processor 880-LT, Packet Transport optimised - four cores at 2.4 GHz and two 128 … |
+| `cisco/a9k-rsp880-se@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Service Edge optimised, with eight cores at 1.9 GHz and four 10-GE… |
+| `cisco/a9k-rsp880-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 3 | 0 | Cisco ASR 9000 Route Switch Processor 880, Packet Transport optimised, with eight cores at 1.9 GHz and four 1… |
+| `cisco/a9k-sip-700@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 4 GB of memory |
+| `cisco/a9k-sip-700-8g@2` | module | line-card | 41.4 × 395.7 × 520.7 |  | 1 | 0 | Cisco ASR 9000 SIP-700 SPA Interface Processor with 8 GB of memory |
 | `cisco/a9k-slot-cover@1` | module | blank | 41.4 × 395.7 × 25 |  | 7 | 0 | Line card and RSP/RP blank filler for a Cisco ASR 9000 modular chassis |
 | `cisco/asr-9001-fan@1` | module | fan | 54.76 × 88.19 |  | 1 | 0 | Cisco ASR 9001 fan module |
 | `cisco/asr-9006-fan@1` | module | fan | 175.65 × 70.97 |  | 1 | 0 | Cisco ASR 9006 Router fan tray |
@@ -345,8 +346,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `cisco/asr-9910-fan@1` | module | fan | 447.09 × 41.07 |  | 1 | 0 | Cisco ASR 9910 Router fan tray |
 | `cisco/asr-9912-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9912 Router Switch Fabric Card, first generation |
 | `cisco/asr-9922-fan-v3@1` | module | fan | 475.95 × 38.1 × 584.2 |  | 1 | 3 | Cisco ASR 9922 Router fan tray, version 3 |
-| `cisco/asr-9922-rp-se@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
-| `cisco/asr-9922-rp-tr@1` | module | supervisor | 46 × 428.5 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
+| `cisco/asr-9922-rp-se@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Service Edge optimised, for the ASR 9922 and ASR 9912 |
+| `cisco/asr-9922-rp-tr@2` | module | supervisor | 41.4 × 395.7 × 628.9 |  | 2 | 0 | Cisco ASR 9900 Route Processor, Packet Transport optimised, for the ASR 9922 and ASR 9912 |
 | `cisco/asr-9922-sfc110@1` | module | fabric | 41.4 × 395.7 |  | 1 | 0 | Cisco ASR 9922 Router Switch Fabric Card, first generation |
 | `cisco/led-matrix-4@1` | component | display | 14 × 25 |  | 1 | 1 | The four-character LED matrix a Cisco ASR 9000 route processor shows its boot stage on, as the ASR 9901 carri… |
 | `cisco/pwr-1p6kw-ac@1` | module | psu | 74.69 × 40.2 |  | 2 | 2 | Cisco ASR 9900 fixed-chassis 1.6 kW AC power module |
@@ -460,7 +461,7 @@ aperture when it is a bare opening - never both at one position. The README's
 |---|---|---|---|---|---|---|---|
 | `credo/hiwire-shift-qsfp-dd@1` | module | transceiver | 18.35 × 8.5 × 58.26 | qsfp-dd | 0 | 0 | Credo HiWire SHIFT active electrical cable, the 400G QSFP-DD end of a 400G to four 100G QSFP28 breakout - a Q… |
 
-## dell/ (57)
+## dell/ (56)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -493,7 +494,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/rear-handle-14g@1` | component | mechanical | 111.69 × 41.85 × 49.59 |  | 1 | 0 | The moulded rear grab handle of a 14G PowerEdge - a block on the left, a rail running right and a leg falling… |
 | `dell/riser-1-none-14g@2` | module | riser | 107.59 × 62 |  | 1 | 0 | Dell riser none - no card; the three openings take fillers only |
 | `dell/riser-1-plate-14g@1` | component | riser | 107.59 × 62 |  | 0 | 4 | the riser 1 plate on a 14th-generation PowerEdge - one pressing with three windows, shared by every riser 1 a… |
-| `dell/riser-1-shroud-14g@1` | component | mechanical | 25.62 × 64.43 × 17.76 |  | 1 | 4 | The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the PCIe retention bracket, and the… |
+| `dell/riser-1-shroud-14g@1` | component | mechanical | 25.62 × 64.43 × 17.76 |  | 1 | 3 | The sheet metal right of riser 1 on a 14G PowerEdge - the outer skin over the PCIe retention bracket, and the… |
 | `dell/riser-1-top-shelf-14g@1` | component | mechanical | 41.5 × 14.75 × 14.68 |  | 1 | 1 | The shelf of chassis metal closing the top of riser 1's bay on a 14G PowerEdge, between the riser shroud and … |
 | `dell/riser-1a-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 0 | Dell riser 1A - two x16 full-height slots on the three-window riser 1 plate; the middle opening has no connec… |
 | `dell/riser-1b-14g@2` | module | riser | 107.59 × 62 × 184.8 |  | 1 | 8 | Dell riser 1B - 3 wired slots on the shared riser 1 plate |
@@ -515,7 +516,6 @@ aperture when it is a bare opening - never both at one position. The README's
 | `dell/riser-card-clip-14g@1` | component | mechanical | 8.4 × 16.4 |  | 0 | 3 | The blue card-retention clip at the end of a riser's slots on a 14G PowerEdge, where the L of a PCIe bracket … |
 | `dell/riser-card-lp-14g@1` | component | riser | 27.4 × 211.4 |  | 0 | 2 | The low-profile riser card of a 2U 14G PowerEdge seen from above - the short card that carries riser 2's sing… |
 | `dell/riser-divider-plate-14g@1` | component | mechanical | 11.32 × 40.61 |  | 1 | 0 | The sheet metal either side of the rear-bay divider on a 14G PowerEdge - the plate right of riser 2 and the p… |
-| `dell/riser-lower-trim-14g@1` | component | mechanical | 121.06 × 1.81 × 2 |  | 1 | 0 | The strip of chassis metal below riser 1 on a 14G PowerEdge, covering the bottom card's keyed end |
 | `dell/rj45-port-14g@1` | component | port | 15.8 × 13.2 × 18.6 | rj45 | 0 | 3 | A 14G PowerEdge network port - common/rj45-eth@1 carrying the link and activity states ISM table 11 gives it |
 | `dell/system-board-14g@1` | component | mechanical | 422.8 × 456.5 × 79.9 |  | 1 | 2 | The system board of a 14G PowerEdge seen from above - the floor of the chassis, visible between the fan cage,… |
 | `dell/system-cover-14g@1` | component | mechanical | 434 × 540.6 |  | 1 | 0 | The system cover of a 14G PowerEdge - the lid over the mid-drive tray, the risers and the processor tray, rel… |
@@ -966,6 +966,47 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/sr-e-psu-ac@1` | module | psu | 86.4 × 40.4 × 197.6 |  | 3 | 1 | Nokia PSU - 7750 SR-e AC (3HE09549AA), the hot-swap universal-AC supply of the SR-1e, SR-2e and SR-3e rear PS… |
 | `nokia/sr-e-psu-dc@1` | module | psu | 86.4 × 40.4 × 197.6 |  | 3 | 0 | Nokia PSU - 7750 SR-e DC -48V (3HE09548AA), the hot-swap -48/-60 VDC supply of the SR-1e, SR-2e and SR-3e rea… |
 | `nokia/sr-e-psu-impedance-panel@1` | module | blank | 86.4 × 40.4 |  | 3 | 0 | Nokia ACC - 7750 SR-e PSU Impedance Panel (3HE09419AA), the blank for an unused PSU slot of the SR-1e, SR-2e … |
+
+## nvidia/ (36)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `nvidia/mcx4111a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) bra… |
+| `nvidia/mcx4111a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-4 Lx MCX4111A single-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) br… |
+| `nvidia/mcx4121a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its tall (full-height) brack… |
+| `nvidia/mcx4121a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-4 Lx MCX4121A dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x8, on its short (low-profile) brac… |
+| `nvidia/mcx4131a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its tall (full-height) br… |
+| `nvidia/mcx4131a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-4 Lx MCX4131A single-port 40/50GbE QSFP28 adapter, PCIe Gen3 x8, on its short (low-profile) b… |
+| `nvidia/mcx512a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its tall (full-height) bracket |
+| `nvidia/mcx512a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-5 MCX512A dual-port 10/25GbE SFP28 adapter, PCIe x8, on its short (low-profile) bracket |
+| `nvidia/mcx512f-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its tall (full-height) bracket |
+| `nvidia/mcx512f-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-5 MCX512F dual-port 10/25GbE SFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bracket |
+| `nvidia/mcx515a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its tall (full-height) brac… |
+| `nvidia/mcx515a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-5 MCX515A single-port 50/100GbE QSFP28 adapter, PCIe Gen3 x16, on its short (low-profile) bra… |
+| `nvidia/mcx516a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142.24 |  | 0 | 10 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its tall (full-height) bracket |
+| `nvidia/mcx516a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142.24 |  | 0 | 7 | NVIDIA ConnectX-5 MCX516A dual-port 40/50/100GbE QSFP28 adapter, PCIe x16, on its short (low-profile) bracket |
+| `nvidia/mcx621102-fh@1` | module | expansion-card | 120.02 × 21.59 × 124.22 |  | 0 | 10 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its tall (full-height) bra… |
+| `nvidia/mcx621102-lp@1` | module | expansion-card | 79.2 × 18.42 × 124.22 |  | 0 | 7 | NVIDIA ConnectX-6 Dx MCX621102A dual-port 10/25GbE SFP28 adapter, PCIe Gen4 x8, on its short (low-profile) br… |
+| `nvidia/mcx621202-fh@1` | module | expansion-card | 120.02 × 21.59 × 152.86 |  | 0 | 10 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
+| `nvidia/mcx621202-lp@1` | module | expansion-card | 79.2 × 18.42 × 152.86 |  | 0 | 7 | NVIDIA ConnectX-6 Dx MCX621202A dual-port 10/25GbE SFP28 adapter with active cooling (onboard fan), PCIe Gen4… |
+| `nvidia/mcx623102a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 10 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its tall (full-height) br… |
+| `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 7 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
+| `nvidia/mcx623105-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 10 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-heigh… |
+| `nvidia/mcx623105-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 7 | NVIDIA ConnectX-6 Dx MCX623105A single-port 100/200GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profi… |
+| `nvidia/mcx623106-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 0 | 10 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its tall (full-height) bra… |
+| `nvidia/mcx623106-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 0 | 7 | NVIDIA ConnectX-6 Dx MCX623106A dual-port 100GbE QSFP56 adapter, PCIe Gen4 x16, on its short (low-profile) br… |
+| `nvidia/mcx713104-fh@1` | module | expansion-card | 120.02 × 21.59 × 143.5 |  | 0 | 9 | NVIDIA ConnectX-7 MCX713104A quad-port 25/50GbE SFP56 adapter (one ganged 1x4 cage), PCIe Gen4 x16, on its ta… |
+| `nvidia/mcx713106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its tall (full-height) b… |
+| `nvidia/mcx713106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 7 | NVIDIA ConnectX-7 MCX713106A dual-port 100/200GbE QSFP112 adapter, PCIe Gen5 x16, on its short (low-profile) … |
+| `nvidia/mcx713114-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.15 |  | 0 | 9 | NVIDIA ConnectX-7 MCX713114T quad-port 25/50GbE SFP56 adapter with PPS in/out SMA jacks (one ganged 1x4 cage)… |
+| `nvidia/mcx715105-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
+| `nvidia/mcx715105-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 7 | NVIDIA ConnectX-7 MCX715105A single-port NDR 400Gb/s InfiniBand / 400GbE QSFP112 adapter, Socket Direct ready… |
+| `nvidia/mcx75310-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its t… |
+| `nvidia/mcx75310-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 7 | NVIDIA ConnectX-7 MCX75310A single-port NDR 400Gb/s InfiniBand / 400GbE OSFP adapter, PCIe Gen5 x16, on its s… |
+| `nvidia/mcx75510-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
+| `nvidia/mcx75510-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 7 | NVIDIA ConnectX-7 MCX75510A single-port NDR 400Gb/s InfiniBand OSFP adapter, Socket Direct ready, PCIe Gen5 x… |
+| `nvidia/mcx755106-fh@1` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
+| `nvidia/mcx755106-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 7 | NVIDIA ConnectX-7 MCX755106A dual-port NDR200 / 200GbE QSFP112 adapter, Socket Direct ready, PCIe Gen5 x16, o… |
 
 ## oscilloquartz/ (10)
 

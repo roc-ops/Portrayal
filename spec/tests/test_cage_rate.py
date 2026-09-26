@@ -741,3 +741,72 @@ def test_the_fwlt_a_still_exports_xgs_pon():
         pytest.skip("the FWLT-A export is not in this library")
     types = {i["type"] for i in (yaml.safe_load(p.read_text()) or {}).get("interfaces") or []}
     assert types == {"xgs-pon"}, types
+
+
+@pytest.mark.parametrize("media,speed,expected", [
+    ("sfp56", "50g", "50gbase-x-sfp56"),
+    ("qsfp56", "200g", "200gbase-x-qsfp56"),
+    ("qsfp112", "400g", "400gbase-x-qsfp112"),
+    ("osfp", "400g", "400gbase-x-osfp"),
+    ("osfp", "800g", "800gbase-x-osfp"),
+])
+def test_a_card_cage_that_states_its_media_types_from_it(media, speed, expected):
+    """A ConnectX card's cages join a group stating `media` and `speed`, the way a
+    device's placements do. The newer generations had no PART_MEDIA row, so an
+    SFP56 port fell to the cage default and exported 1000base-x-sfp."""
+    part = {"ref": "std/sfp@1", "attrs": {"media": media, "speed": speed}}
+    assert dx.placed_type(part) == expected
+
+
+def test_a_cage_its_placement_types_is_not_asked_for_a_rate():
+    """L96 asks for a rate the export would otherwise take from the table. A cage
+    whose effective attrs already type it - which route_part reads FIRST - has
+    said what runs in it, as a proprietary link has; one whose media names no
+    row is still asked."""
+    assert not dx.cage_family_needs_a_rate("std/sfp", {}, {"media": "sfp56", "speed": "50g"})
+    assert dx.cage_family_needs_a_rate("std/sfp", {}, {"media": "sfp56"})
+    assert dx.cage_family_needs_a_rate("std/sfp", {}, {})
+
+
+def test_no_sfp28_media_row_so_a_pon_port_stays_pon():
+    """A 25GS-PON port on `media: sfp28, speed: 25g` must not type as Ethernet
+    from its media; with no row the card's `xgs-pon` decides (FGUT-A, FWLT-C)."""
+    assert ("sfp28", "25g") not in dx.PART_MEDIA
+    part = {"ref": "std/sfp@1", "attrs": {"media": "sfp28", "speed": "25g", "pon": "25gs-pon"}}
+    assert dx.placed_type(part) is None
+
+
+@pytest.mark.parametrize("media,speed,expected", [
+    # the rate names the modules the port takes; neither target has a
+    # 100G-QSFP56 or a 200G-QSFP112 type
+    ("qsfp56", "100g", "100gbase-x-qsfp28"),
+    ("qsfp112", "200g", "200gbase-x-qsfp56"),
+])
+def test_a_cage_run_below_its_top_rate_types_by_the_modules_it_takes(media, speed, expected):
+    """MCX623106A runs 100GbE in QSFP56 cages and MCX713106A 200GbE in QSFP112
+    ones; with no row, and no std/qsfp56 default, their ports exported as
+    nothing at all (test_silent_drops caught sixteen)."""
+    part = {"ref": "std/qsfp56@1", "attrs": {"media": media, "speed": speed}}
+    assert dx.placed_type(part) == expected
+
+
+def test_newer_cages_have_a_family_and_a_default():
+    """A QSFP56 or OSFP cage the card does not type falls to a default instead
+    of out of the export, and a QSFP56 cage is asked L96's question."""
+    assert dx.PART_IFACE["std/qsfp56"] == "200gbase-x-qsfp56"
+    assert dx.PART_IFACE["std/osfp"] == "400gbase-x-osfp"
+    assert dx.CAGE_FAMILY["std/qsfp56"] == "qsfp"
+
+
+def test_a_50g_qsfp28_card_is_not_typed_100g():
+    """MCX4131A is a 40/50GbE card in a QSFP28 cage. Its group states
+    `media: qsfp28, speed: 50g`; with no row the card attr `qsfp28` typed it at
+    the family's 100G."""
+    part = {"ref": "std/qsfp28@1", "attrs": {"media": "qsfp28", "speed": "50g"}}
+    assert dx.placed_type(part) == "50gbase-x-sfp28"
+    for bracket in ("tall", "short"):
+        p = LIB / f"exports/netbox/module-types/NVIDIA/MCX4131A {bracket} bracket.yaml"
+        if not p.exists():
+            pytest.skip("the MCX4131A export is not in this library")
+        d = yaml.safe_load(p.read_text()) or {}
+        assert [i["type"] for i in d["interfaces"]] == ["50gbase-x-sfp28"], bracket
