@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9906
-version: 0.5.3
+version: 0.6.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9906
@@ -295,10 +295,25 @@ provenance:
       Located underneath the card cage", removed "by simply sliding it out of the chassis".
       Different again from the 9006 and 9904, whose filters are on the right side
   grounding:
-    confidence: datasheet
+    confidence: borrowed
     note: >-
-      datasheet - "Bottom rear and left side of the chassis",
-      b-asr9k-hardware-installation-guide.pdf p125, illustrated by Figure 135
+      TWO RECEPTACLES, and until now the model drew neither. Table 12 'Grounding Receptacle
+      Locations' (b-asr9k-hardware-installation-guide p125) reads 'Cisco ASR 9906 Router |
+      Bottom rear and left side of the chassis', and Figure 61 (p50) shows both: two two-hole
+      lug pads with an earth symbol beside each, on a strip near the bottom of the chassis,
+      one either side of the rear-left corner.
+      POSITIONS ARE THE FAMILY CONVENTION, NOT MEASURED. Figure 61 is an isometric cutaway and
+      carries no scale, so nothing absolute can come off it. Every other ASR 9000 chassis in
+      this library insets cisco/a9k-ground-pad@1 by 26.0 mm from the rear-view edge nearest
+      the named side and 32 to 34 mm from the bottom (asr-9010 33.45, asr-9910 32.18,
+      asr-9912 33.50), or 14.0 mm from the edge on a side view with 26.0 mm from the rear
+      (asr-9006 both). Applied here: the rear pad at x 375.0, which is 26.0 from the rear
+      view's RIGHT edge because walking round the chassis puts its left side there - the same
+      mirror asr-9904 uses for its own left-side pad at x 385.0 - and the left-side pad at
+      x 26.0 from the rear edge of the left view.
+      WHAT WOULD SETTLE IT: a dimensioned rear elevation, or a photograph of the rear-left
+      corner with something of known size in frame. The two pads are in the right corner of
+      the right faces; their offsets are borrowed from siblings and could be a centimetre out.
   fabric-cards:
     confidence: datasheet
     note: >-
@@ -489,7 +504,11 @@ gaps:
     weight for a chassis "Configured with two fan trays, two RSPs, five fabric cards, and one PEM",
     so five, and the sibling ASR 9910's Figure 22 shows fabric slots numbered from 0. Nothing
     states their width, their height, or where the PEM sits. The rear is therefore sized and
-    carries regions naming what is there, with no cutouts invented to fill it.
+    carries regions naming what is there. ONE CUTOUT NOW EXISTS ON THIS FACE and it is not
+    an exception to that: the NEBS grounding receptacle, which Table 12 states and Figure 61
+    shows, on an offset borrowed from the sibling chassis rather than measured - see
+    provenance/grounding. The fabric card cage is still not drawn and is no better sourced
+    than it was.
   wanted: an ASR 9906 rear elevation, or a rear photograph
 - what: bottom-face-is-undocumented-family-wide
   scope: [bottom]
@@ -558,6 +577,12 @@ views:
       - {id: front-air-intake, label: Front air intake - inlet at the bottom front}
   rear:
     size: {w: 447.0, h: 619.51}
+    panel:
+      cutouts:
+        - {id: ground-pad-rear, at: [375.0, 566.01], size: [46.0, 20.0], shape: rect}
+    components:
+      placements:
+        - {ref: cisco/a9k-ground-pad@1, id: ground-pad-rear, at: [375.0, 566.01], group: grounding, rel-pos: 1}
     regions:
       - {id: fabric-cards, label: 'Fabric card cage - five fabric cards, numbering restarts at Slot 0'}
       - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear and left side'}
@@ -590,9 +615,15 @@ views:
       decor:
         - {at: [483.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
         - {at: [596.8, 40.0], size: [14.0, 540.0], fill: '#b0b2b4'}
+      cutouts:
+        - {id: ground-pad-left, at: [26.0, 585.51], size: [46.0, 20.0], shape: rect}
+    components:
+      placements:
+        - {ref: cisco/a9k-ground-pad@1, id: ground-pad-left, at: [26.0, 585.51], group: grounding, rel-pos: 2}
     regions:
       - {id: rack-rails, label: 'Vertical rack rail locations - 5.00 in (127.0 mm) and 9.45 in (240.0 mm) from the front'}
       - {id: lift-handles, label: 'Chassis lift handles - two per side, drawn in HIG Figure 17 but not dimensioned'}
+      - {id: nebs-ground, label: 'NEBS bonding and grounding - the left-side receptacle of the pair, at the bottom rear corner'}
   right:
     size: {w: 730.8, h: 619.51}
     panel:
