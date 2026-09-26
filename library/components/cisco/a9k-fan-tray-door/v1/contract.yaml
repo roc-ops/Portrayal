@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-fan-tray-door
-version: 1.0.0
+version: 1.0.1
 class: blank
 behaviour: fills
 profile: networking
@@ -10,7 +10,7 @@ description: >-
   the top of the chassis front, covering both fan trays FT0 and FT1, hinged at one
   side and held by a single captive screw. THIS IS THE PART THAT CARRIES THE CHASSIS
   BRANDING: the cisco bridge, the wordmark and the "Cisco ASR 9000 Series" legend are
-  printed on the door face, not on the chassis, which is why they belong here and are
+  printed on the door face (the bridge is a logo and is not drawn - see logo-zone), not on the chassis, which is why they belong here and are
   deliberately absent from the ASR 9006 device manifest. Open the door and the
   branding swings away with it.
 size: {w: 444.5, h: 70.97, d: 20.0}
@@ -85,16 +85,17 @@ provenance:
     independently derived scales agreeing to 0.64 percent, which is the cross-check
     that the art box really is the chassis face. Coordinates are then shifted by the
     19.05 mm ear at the left and the 33.66 mm shroud at the top to land in the door's
-    own frame. The bridge is nine teal (#005568) bars in the familiar
-    5.4 / 9.0 / 16.5 / 9.0 / 5.4 mm pattern spanning x 48.96 to 108.82, the wordmark is
-    its five red (#c41230) glyph shapes at y 44.60 plus the two dots of the registered
-    mark, and the legend "Cisco ASR 9000 Series" is live text in the master at 7.66 mm.
+    own frame. The master's bridge spans x 48.96 to 108.82 and y 23.69 to 40.21; it is
+    NOT DRAWN, because vendor logos are not reproduced in this library, and that box is
+    reserved as `logo-zone` and left empty. 1.0.0 traced it as nine teal bars, which was
+    a mistake. The wordmark is its five red (#c41230) glyph shapes at y 44.60 plus the
+    two dots of the registered mark, and the legend "Cisco ASR 9000 Series" is live
+    text in the master at 7.66 mm.
     The wordmark is SET AS TEXT and not traced, which is the one place this drawing
     departs from the master: the extractor yields each glyph's bounding box, so
     carrying it verbatim would put five red blocks on the door, and five blocks are a
     worse likeness of the mark than five letters standing at the measured origin,
-    x-height and span. The bridge is traced, because there the shapes ARE the artwork.
-    That the whole of that artwork falls inside y 0 to 70.97 - the door face computed
+    x-height and span. That the whole of that artwork falls inside y 0 to 70.97 - the door face computed
     from a completely different measurement, asr9k-chassis's fan band - is a second
     cross-check, and it is the one that says the branding really is on the door.
   screw: >-
@@ -109,6 +110,7 @@ provenance:
     fan power for this chassis belongs to cisco/asr-9006-fan, which is the FRU behind
     this door and states 375 W.
 elements:
+  logo-zone: {at: [48.96, 23.69], size: [59.86, 16.52], class: logo-zone}
   screw:
     at: [428.5, 32.09]
     size: [8.0, 8.0]
