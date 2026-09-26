@@ -47,7 +47,8 @@ HEAD = {
 }
 BOOT_CYL, BOOT_DIA, STUB_CYL = 15.0, 11.0, 30.0
 # (lift, out), absolute from the cage face
-STRAP = {T1: (20.0, 70.0), T2: (28.3, 68.3)}
+# the strap ends where its ring begins, so the two share no front face
+STRAP = {T1: (20.0, 53.5), T2: (28.3, 58.3)}
 RING = {T1: (53.5, 70.0), T2: (58.3, 68.3)}
 
 

@@ -108,7 +108,8 @@ def test_the_relief_chains_head_boot_stub_and_the_strap_starts_at_the_head_back(
     assert f["head"]["out"] == HEAD_D and "lift" not in f["head"]
     assert f["relief-boot"]["cyl"] == BOOT and f["relief-boot"]["lift"] == HEAD_D
     assert f["stub"]["cyl"] == STUB and f["stub"]["lift"] == pytest.approx(HEAD_D + BOOT)
-    assert f["strap"]["lift"] == HEAD_D and f["strap"]["out"] == 53.9
+    # the neck ends where the ring begins: no shared front face to z-fight
+    assert f["strap"]["lift"] == HEAD_D and f["strap"]["out"] == 39.0
     assert f["strap-ring"]["lift"] == 39.0 and f["strap-ring"]["out"] == 53.9
     for node, feat in f.items():
         assert feat["confidence"] and feat["source"].strip(), node
