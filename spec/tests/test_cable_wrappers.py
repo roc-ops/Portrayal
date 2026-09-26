@@ -144,6 +144,16 @@ def test_a_cable_od_is_a_number_or_absent_never_empty(ref):
         assert "NOT STATED" in doc(ref)["provenance"]["cable-od"]
 
 
+@pytest.mark.parametrize("ref", GENERICS)
+def test_no_generic_provenance_line_opens_borrowed(ref):
+    """`borrowed` is kept for a figure its origin part measured (L36). The
+    generics' figures come from drawings and data sheets, so no provenance line
+    opens with it; `borrowed` there would claim a measurement nobody made."""
+    prov = doc(ref)["provenance"]
+    assert prov, ref
+    assert [k for k, v in prov.items() if str(v).lstrip().startswith("borrowed")] == []
+
+
 def test_a_restated_cable_point_is_refused_and_is_not_needed():
     ref = "volex/qsfp-dd-passive-dac@1"
     d = doc(ref)
