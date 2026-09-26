@@ -594,9 +594,15 @@ def test_two_identical_cards_install_as_the_drawing_names_them():
     Installed as NetBox would install them, the two cards' ports do not collide,
     and every name is the drawing's path to that port with `/module/` taken out.
     """
-    dev = yaml.safe_load((LIB / "exports/netbox/device-types/Smartoptics/DCP-2.yaml").read_text())
-    card = yaml.safe_load((LIB / "exports/netbox/module-types/Smartoptics/DCP-404.yaml").read_text())
-    face = (LIB / "dist/dcp-2.dcp-404-x2.front.svg").read_text()
+    dev_p = LIB / "exports/netbox/device-types/Smartoptics/DCP-2.yaml"
+    card_p = LIB / "exports/netbox/module-types/Smartoptics/DCP-404.yaml"
+    face_p = LIB / "dist/dcp-2.dcp-404-x2.front.svg"
+    missing = [p.name for p in (dev_p, card_p, face_p) if not p.exists()]
+    if missing:
+        pytest.skip(f"not built: {', '.join(missing)} - run ./publish.sh --no-images")
+    dev = yaml.safe_load(dev_p.read_text())
+    card = yaml.safe_load(card_p.read_text())
+    face = face_p.read_text()
     positions = {b["name"]: b["position"] for b in dev["module-bays"]}
     names = [_resolve(i["name"], positions[bay])
              for bay in ("slot-1", "slot-2") for i in card["interfaces"]]
