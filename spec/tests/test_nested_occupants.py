@@ -235,7 +235,14 @@ def test_a_chained_seat_on_a_nested_optic(tmp_path):
         hx, hy = device_point(parents, host, hm)
         ox, oy = device_point(parents, occ, own_mate(occ))
         assert abs(hx - ox) < 1e-6 and abs(hy - oy) < 1e-6, (host_p, (hx, hy), (ox, oy))
-        assert_same_turn(parents, occ, host)
+        # A SEATED PART TURNS WITH THE APERTURE IT IS IN (#548). The optic
+        # forwards its one bore, composed at rotate 180, so the plug turns
+        # with the BORE - not with the optic, which left it 180 out, its
+        # latch off the side opposite the keyway. The boot on the plug is
+        # in the plug itself, so it turns with the plug.
+        aperture = by_path(root, f"{host_p}/bore") if host_p.endswith("xg0-occupant") else host
+        assert aperture is not None, host_p
+        assert_same_turn(parents, occ, aperture)
     # the chain carries the stack of lifts, as a device-level chain does: the
     # plug stands on what the optic presents, the boot on the plug body AND on
     # what the plug already stands at. Both non-zero, so neither passes by
