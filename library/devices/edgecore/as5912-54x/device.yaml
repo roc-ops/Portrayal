@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 3.0.3
+version: 3.0.4
 maturity: modelled
 manufacturer: Edgecore
 model: AS5912-54X
@@ -123,6 +123,23 @@ chassis:
   depth: 548
   ru: 1
   weight-kg: 9.34
+gaps:
+- what: chassis-depth-sources-disagree
+  reason: sources-disagree
+  note: >-
+    TWO EDGECORE DOCUMENTS GIVE THIS CHASSIS TWO DEPTHS, 61 mm apart. The data sheet
+    (Edgecore AGR100 (AS5912-54X) Data Sheet R20) states 440 x 548 x 44 mm (W x D x
+    H). The quick start guide (AGR100 AS5912-54X Quick Start Guide R02) states
+    438.4 x 609.0 x 43.25 mm. The difference is not rounding and not a unit
+    conversion: 609.0 mm is 24 inches, and 548.0 is near no round figure in
+    either unit. The model carries the data sheet's 440 x 548 x 44, as
+    `provenance.chassis` says, and rules out the 438.4 x 43.5 of the AS7726 and
+    AS7326 line on purpose. The QSG's 609 mm depth was never recorded until
+    now, so a reader holding the QSG could not tell that the choice was made
+    with it in view.
+  wanted: >-
+    a measured depth, rail to rear, off a real unit - a tape measure settles it, as
+    edgecore/as7946-30xb settled its own 480-versus-524 depth by measuring hardware.
 groups:
   grounding:
     term: Point
