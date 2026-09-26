@@ -1,0 +1,123 @@
+format: 1
+kind: module
+name: mcx623102a-lp
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4
+  x16, on its short (low-profile) bracket. The same board ships with both
+  brackets; nvidia/mcx623102a-fh@1 is the other.
+size: {w: 79.2, h: 18.42, d: 142.00}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'MCX623102A short bracket'
+  part-numbers: 'MCX623102AC-ADAT, MCX623102AN-ADAT, MCX623102AS-ADAT, MCX623102AC-GDAT, MCX623102AN-GDAT, MCX623102AE-GDAT, MCX623102AS-GDAT'
+  role: nic
+  power-draw-max-w: 20.98
+  power-draw-typical-w: 15.76
+  power-input: host PCIe slot
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: low
+groups:
+  sfp56:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp56, speed: 50g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    CX-6 Dx EN user manual: p55 spec table, p64 board mechanical drawing
+    Dual-Port SFP28/SFP56 x16 (142.00 x 68.90), p65 bracket mechanical
+    drawing (short and tall, Dual-Port SFP28/SFP56 Cards), p16-17 LED scheme
+    2
+  size: >-
+    registry - the face is std/pcie-bracket-lp@1, 79.2 x 18.42, composed
+    behind a punched plate; `d` is the board drawing's 142.00, the card's
+    length back from its bracket.
+  depth: >-
+    drawing - 142.00, the board mechanical drawing's length.
+  the-face-is-derived-from-the-board: >-
+    EVERY POSITION IS THE CARD'S, NOT THE BRACKET'S. The cages are placed at
+    their distance above datum W on the dimensioned board drawing - port 1
+    49.60, port 2 24.60 - with W at x' 11.11 on this bracket (PCIe CEM 5.0:
+    79.20 - 68.09, fig 11-8). Vents, light-pipe slots and numerals keep
+    their measured offset from their nearest cage, read off NVIDIA's bracket
+    drawings; the short bracket's drawing gave the cage windows within 0.5
+    of this reading. The full-height face is the low-profile one moved 4.05
+    along the bracket and 3.17 across it, which is where the two brackets
+    put W and the board, plus the vent columns only the taller metal has
+    room for.
+  orientation: >-
+    drawn TIP-LEFT, so NVIDIA's tip-right figures are turned a half-turn:
+    cages and lamps are placed `rotate: 180` and the numerals read upside
+    down. In a turned bay - Dell riser 3 - the card lands as NVIDIA draws
+    it.
+  lamps: >-
+    drawing - one light-pipe slot per port on the bracket's keyed side, 3.7
+    x 1.2, holding the two lamps of LED scheme 2 (LED1 bi-colour
+    yellow/green, LED2 green); which of the two sits where in the slot is
+    not drawn, so lamp-1 is LED1 by assumption.
+  body: >-
+    the board, edge tab and pads are PCIe CEM 5.0's (figs 6-5, 11-3, 11-8)
+    at the board drawing's length; the heatsink is the board drawing's 22.5
+    square at its drawn position, 10.0 tall by estimate.
+  power: >-
+    datasheet - CX-6 Dx UM p55 (spec table): 14.94 W typical at Gen3 and
+    15.76 W at Gen4, 20.16 / 20.98 W maximum, with passive cables under ATIS
+    load, for the -GDAT (SFP56) builds; the -ADAT (SFP28) builds are 14.87 /
+    15.68 W typical and 18.92 / 19.74 W maximum. The largest of each is
+    carried. p55 adds ActiveModuleW x modules x 1.1 for active optics.
+  lifecycle: >-
+    not tracked per layout: the member part numbers' status is in the user
+    manual's OPN tables.
+body:
+  depth: 142.00
+  color: '#2f7d3a'
+  # the slab stops where the bracket stops being a rectangle
+  plate: {at: [11.85, 0.00], size: [56.18, 18.42]}
+  boxes:
+  - {id: board, at: [19.51, 1.27], size: [60.50, 1.57], from: 0.00, depth: 142.00,
+     color: '#2f7d3a', confidence: drawing,
+     source: 'the board drawing''s 142.00 x 68.90; CEM 5.0 fig 6-5 shoulder 8.40 above W'}
+  - {id: edge-tab-short, at: [11.11, 1.27], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [11.11, 1.27], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7d3a', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [13.71, 1.22], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [13.71, 1.22], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: heatsink, at: [40.66, 2.84], size: [22.50, 10.00], from: 84.75, depth: 22.50,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'the board drawing heatsink footprint and position; its height is not drawn'}
+faces:
+  plan:
+    ref: common/pcie-card-plan-lp@1
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+  - {ref: std/sfp@1, id: port-1, at: [53.46, 3.24], rotate: 180, group: sfp56}
+  - {ref: std/sfp@1, id: port-2, at: [28.46, 3.24], rotate: 180, group: sfp56}
+  - ref: common/led-slot-pair@1
+    id: led-port-1
+    at: [71.65, 3.04]
+    rotate: 180
+    group: port-leds
+    states: {lamp-1: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}], lamp-2: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  - ref: common/led-slot-pair@1
+    id: led-port-2
+    at: [21.08, 3.04]
+    rotate: 180
+    group: port-leds
+    states: {lamp-1: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}], lamp-2: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+skins: [default]

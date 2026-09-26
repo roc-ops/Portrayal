@@ -385,6 +385,12 @@ def cage_family_needs_a_rate(ref, attrs, part_attrs=None):
     """
     if proprietary_link(part_attrs):
         return False
+    # NOR A CAGE ITS OWN PLACEMENT TYPES. `route_part` asks `placed_type` before
+    # the table, so a cage whose effective attrs name a PART_MEDIA row - a
+    # ConnectX card's SFP56 group, `media: sfp56, speed: 50g` - never reaches the
+    # default this question is about.
+    if part_attrs and placed_type({"ref": ref, "attrs": part_attrs}):
+        return False
     wants = FAMILY_ATTRS.get(CAGE_FAMILY.get(ref, ""), ())
     return bool(wants) and not any(attrs.get(a) for a, _t in wants)
 
@@ -615,6 +621,21 @@ PART_MEDIA = {
     # exported as 100gbase-x-cfp2. Unlike SFP112 the slug is in both targets:
     # NetBox TYPE_200GE_CFP2 at 6a009845, Nautobot TYPE_200GE_CFP2 at 38953ac3.
     ("cfp2", "200g"): "200gbase-x-cfp2",
+    # A CARD'S NEWER CAGES TYPE FROM ITS GROUP. An NVIDIA ConnectX card states
+    # `media: sfp56, speed: 50g` (or qsfp56 / qsfp112 / osfp) on the group its
+    # cages join, and with no row here they fell to the cage default - an SFP56
+    # port exported as 1000base-x-sfp. The card-level attrs in FAMILY_ATTRS name
+    # rates by the older cage generations only. Every slug below is in both
+    # targets: NetBox dcim/choices.py at 9bcfd739, Nautobot at f9cdca3d.
+    # NO ("sfp28", "25g") ROW, on purpose: a PON port whose flavour has no type
+    # (the FGUT-A's and FWLT-C's `pon: 25gs-pon` on `media: sfp28`) falls through
+    # to its media, and that row would export it as 25G Ethernet where the card's
+    # own `xgs-pon` now answers. An SFP28 card states the card attr `sfp28: N`.
+    ("sfp56", "50g"): "50gbase-x-sfp56",
+    ("qsfp56", "200g"): "200gbase-x-qsfp56",
+    ("qsfp112", "400g"): "400gbase-x-qsfp112",
+    ("osfp", "400g"): "400gbase-x-osfp",
+    ("osfp", "800g"): "800gbase-x-osfp",
 }
 
 

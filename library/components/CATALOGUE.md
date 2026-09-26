@@ -7,7 +7,7 @@ conforms to or the interface it presents or mates, how many devices name it and
 how many other components compose it. Search this page before drawing a part;
 the [components README](README.md) says which namespace a new one belongs in.
 
-961 component majors in 22 namespaces.
+964 component majors in 23 namespaces.
 
 A `std/x` and a `common/x` with the same name are two layers rather than two
 copies: `std/` is the aperture, `common/` is the bezel, shell or nut around it and
@@ -41,8 +41,8 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/mpo16@1` | component | port | 12.9 × 8 × 9 | mpo-adapter | 0 | 2 | One MTP-16 adapter opening - the mouth an MTP-16 plug enters |
 | `std/mrj21@1` | component | port | 28.92 × 13.45 | mrj21 | 0 | 2 | MRJ21 ("mini-RJ21") 48-position shielded receptacle - two stepped blades with twelve contacts on each face, c… |
 | `std/osfp@1` | component | port | 23.1 × 13.5 × 47 | osfp | 4 | 0 | OSFP cage cutout (800G, one port per opening; the belly-to-belly rows of a 2RU face are two of these, not one… |
-| `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 12 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
-| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 9 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
+| `std/pcie-bracket-fh@2` | component | bracket | 120.02 × 21.59 | pcie-bracket-fh | 0 | 13 | Standard (full height) PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the ch… |
+| `std/pcie-bracket-lp@1` | component | bracket | 79.2 × 18.42 | pcie-bracket-lp | 0 | 10 | Low profile PCI Express add-in card I/O bracket - the faceplate every PCIe card presents at the chassis wall,… |
 | `std/qsfp-dd@1` | component | port | 19 × 10 × 37 | qsfp-dd | 30 | 19 | QSFP-DD cage cutout (400G, backward-compatible faceplate) |
 | `std/qsfp-ganged@1` | component | port | 18.5 × 9.58 × 37 | qsfp-ganged | 47 | 25 | QSFP family per-port opening inside a ganged cage block - the cage aperture, with the SFF-8661 module envelop… |
 | `std/qsfp28@1` | component | port | 20 × 10.15 × 37 | qsfp28 | 2 | 42 | QSFP28 cage cutout (100G, 4 lanes) |
@@ -51,7 +51,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/rj45-ganged@2` | component | port | 12.7 × 11 × 18.6 | rj45-ganged | 61 | 25 | One cell of a shared-wall 2xN RJ45 block - the 12.7 x 11.0 face between neighbouring ports on a 13.97 pitch, … |
 | `std/saf-d-grid@1` | component | inlet | 26.8 × 19.9 × 17 | saf-d-grid | 1 | 3 | Anderson Saf-D-Grid appliance inlet - the panel cutout with the keyed coupler recessed behind it, a first-mat… |
 | `std/sc-bore@1` | component | port | 8.39 × 9 × 6 | sc-simplex-receptacle | 0 | 30 | One SC opening - the rectangular hole an SC plug's housing enters, with the key slot cut into one long wall a… |
-| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 25 | 61 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
+| `std/sfp@1` | component | port | 14.5 × 10 × 41 | sfp | 25 | 63 | SFP/SFP+/SFP28 cage cutout (1G/10G/25G) |
 | `std/sfp-ganged@1` | component | port | 14.25 × 10.4 × 41 | sfp-ganged | 86 | 85 | Per-port opening inside a ganged SFP+/SFP28 block - the port's share of a continuous 1xN bezel slot, so adjac… |
 | `std/sma@1` | component | port | 6.35 × 6.35 | sma | 17 | 7 | SMA coaxial panel jack (1/4-36UNS-2B) - threaded barrel protrudes; GNSS/RF antenna input |
 | `std/smb@1` | component | port | 4.83 × 4.83 | smb | 24 | 19 | SMB coaxial panel jack (10-32UNF-2A) - snap-on timing coax (1PPS/10MHz) |
@@ -60,7 +60,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `std/vga@1` | component | port | 20.47 × 11.4 × 6.73 | hd15 | 1 | 6 | VGA video receptacle - a female high-density DE-15, fifteen contacts in three rows inside the D-subminiature … |
 | `std/xfp@1` | component | port | 19.5 × 9.7 × 61.7 | xfp | 1 | 40 | XFP cage cutout (10G pluggable) - the recommended bezel opening of the XFP MSA, the aperture an XFP cage prot… |
 
-## common/ (90)
+## common/ (91)
 
 | ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
 |---|---|---|---|---|---|---|---|
@@ -100,6 +100,7 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/led-indicator@1` | component | led | 4 × 4 |  | 21 | 46 | Single chassis status LED |
 | `common/led-rect@1` | component | led | 4.6 × 2.6 |  | 30 | 3 | Rectangular system LED (cell-site style green bar) |
 | `common/led-rect-sm@1` | component | led | 2.8 × 1.6 |  | 24 | 4 | Small rectangular per-port LED - the rounded bar a dense port row carries one of beside each cage, at roughly… |
+| `common/led-slot-pair@1` | component | led | 3.7 × 1.2 |  | 0 | 2 | Two lamps behind one light-pipe slot - the rounded 3.7 x 1.2 window a bracket punches for a port's pair of in… |
 | `common/lsh-simplex-adapter@1` | component | port | 7 × 8 | lsh-adapter | 0 | 0 | Panel-mount LSH/E2000 simplex adapter, one spring-shutter opening, as fitted to an FS FHD LSH panel |
 | `common/mdc-adapter@1` | component | port | 6.6 × 8 | mdc-adapter | 0 | 0 | Panel-mount MDC adapter, one small-form-factor body carrying FOUR fibre positions across its two ports (a "2-… |
 | `common/mpo-adapter@2` | component | port | 13.8 × 9.4 |  | 0 | 15 | Panel-mount MPO/MTP adapter - one opening in a bezel, as fitted to an FS FHD adapter panel |
@@ -109,10 +110,10 @@ aperture when it is a bare opening - never both at one position. The README's
 | `common/mpo16-dust-cap@1` | component | cap | 12.8 × 8.1 | mpo16 | 0 | 1 | The grey dust cap FS ships in each opening of its FHD 12x MTP-16 adapter panel (SKU 382885) - common/mpo-dust… |
 | `common/mpo24-flange-adapter@2` | component | port | 30 × 11 | mpo | 0 | 4 | Flanged MPO/MTP bulkhead adapter carrying 24 fibres - a black flange held by two screws, a raised housing, an… |
 | `common/nic-symbol@1` | component | silkscreen | 5.4 × 4.6 |  | 0 | 0 | The network mark printed beside an Ethernet port - a node above three nodes on a bus, which is the figure ven… |
-| `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 9 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
+| `common/pcie-card-fh@2` | module | expansion-card | 120.02 × 21.59 × 167.65 |  | 0 | 10 | A generic full-height PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
 | `common/pcie-card-lp@1` | module | expansion-card | 79.2 × 18.42 × 167.65 |  | 0 | 6 | A generic low-profile PCI Express add-in card, half-length - the standard bracket at the chassis wall and a P… |
-| `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 2 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
-| `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 1 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
+| `common/pcie-card-plan@1` | module | expansion-card | 120.9 × 173.8 × 21.6 |  | 0 | 3 | A full-height PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
+| `common/pcie-card-plan-lp@1` | module | expansion-card | 79.2 × 173.8 × 21.6 |  | 0 | 2 | A low-profile PCIe expansion card seen from above, lying in a riser slot - its bracket at the rear, its lengt… |
 | `common/power-button@1` | component | button | 12 × 12 |  | 3 | 0 | Round ON/OFF push button |
 | `common/power-switch-slide@1` | component | button | 30.74 × 13.53 |  | 2 | 0 | Panel slide power switch under a hazard tag - the recessed two-position slider a chassis carries where a rock… |
 | `common/psu-550w@2` | module | psu | 73.5 × 40 × 185 | crps-1u | 4 | 6 | 550W CRPS hot-swap PSU module - axial fan, pull handle, latch and a panel-mounted C14 inlet turned portrait |
@@ -966,6 +967,13 @@ aperture when it is a bare opening - never both at one position. The README's
 | `nokia/sr-e-psu-ac@1` | module | psu | 86.4 × 40.4 × 197.6 |  | 3 | 1 | Nokia PSU - 7750 SR-e AC (3HE09549AA), the hot-swap universal-AC supply of the SR-1e, SR-2e and SR-3e rear PS… |
 | `nokia/sr-e-psu-dc@1` | module | psu | 86.4 × 40.4 × 197.6 |  | 3 | 0 | Nokia PSU - 7750 SR-e DC -48V (3HE09548AA), the hot-swap -48/-60 VDC supply of the SR-1e, SR-2e and SR-3e rea… |
 | `nokia/sr-e-psu-impedance-panel@1` | module | blank | 86.4 × 40.4 |  | 3 | 0 | Nokia ACC - 7750 SR-e PSU Impedance Panel (3HE09419AA), the blank for an unused PSU slot of the SR-1e, SR-2e … |
+
+## nvidia/ (2)
+
+| ref | kind | class | size (mm) | conforms / interface | devices | in parts | what it is |
+|---|---|---|---|---|---|---|---|
+| `nvidia/mcx623102a-fh@1` | module | expansion-card | 120.02 × 21.59 × 142 |  | 1 | 10 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its tall (full-height) br… |
+| `nvidia/mcx623102a-lp@1` | module | expansion-card | 79.2 × 18.42 × 142 |  | 1 | 7 | NVIDIA ConnectX-6 Dx MCX623102A dual-port 25/50GbE SFP56 adapter, PCIe Gen4 x16, on its short (low-profile) b… |
 
 ## oscilloquartz/ (10)
 

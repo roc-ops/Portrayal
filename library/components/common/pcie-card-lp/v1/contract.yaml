@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pcie-card-lp
-version: 1.1.0
+version: 1.2.0
 class: expansion-card
 behaviour: fills
 profile: server
@@ -26,14 +26,19 @@ provenance:
     slot, from inside the riser's connector to the card's top edge, the
     card's length deep. It ejects with its riser, as the hardware does.
   the-pcb-box: >-
-    estimated. The bracket's TIP (x 0) goes into the chassis card guide and
-    the flange end (x 79.2) is inboard, under the riser's latch; the riser's
-    slot connector stands 14.3..25.6 along the bracket from the tip, so the
-    PCB's edge fingers are in it and the board starts at 15.5 and runs to
-    82.5, which is the CEM's 68.09 maximum card height
-    less the fingers, and where Dell's service model draws its generic card
-    ending. Its plane is 3.0 from the bracket's top edge, the middle of the
-    connector's 10.8. Thickness 1.6 is the CEM nominal 1.57.
+    THE BOARD AND ITS EDGE ARE THE SPECIFICATION'S. PCIe CEM 5.0 figure 11-8
+    dimensions the low-profile card from datum W, the edge tab's bottom:
+    68.09 to the bracket's flange end, so W is at x' 79.20 - 68.09 = 11.11
+    (the full-height figure's 104.86 gives 15.16 the same way, which the
+    UfiSpace N3100-4C's datasheet corroborates at 15.20). The key centre is
+    59.05 behind the bracket, as on the full-height card, and the edge is
+    figure 6-5's x16 tab: 8.40 deep, pads 2.60..5.60 up it, key notch 1.90,
+    12.15 / 72.15 either side. The board runs to 68.90 above W, the
+    low-profile maximum height. It is 1.57 thick, its solder face 1.27
+    inside the bracket's keyed edge, which puts it within a millimetre of the
+    middle of Dell's low-profile riser connector. Length is the half-length
+    card's 167.65.
+    THE SILVER RECTANGLE IS A PLACEHOLDER, estimated.
   power: >-
     NOT PUBLISHED per card, and could not be: this is a placeholder for
     whatever card is fitted. A real card's draw belongs to the contract that
@@ -43,10 +48,34 @@ provenance:
 body:
   depth: 167.65
   color: '#2f7a4e'
+  # THE SLAB STOPS WHERE THE BRACKET STOPS BEING A RECTANGLE - between the
+  # tip's chamfers and the flange's step, 11.85..68.03 - or its sides show as
+  # fins round the tab and the flange in the component viewer.
+  plate: {at: [11.85, 0.0], size: [56.18, 18.42]}
+  # THE CARD FROM PCIe CEM 5.0, as common/pcie-card-fh@2 builds it: a green
+  # board, the x16 edge tab either side of its key with gold pads 0.05 proud
+  # on both faces, and a silver placeholder on the component side. x along
+  # the bracket from its tip, y across it from the keyed edge, `from` back
+  # from the bracket.
   boxes:
-  - {id: pcb, at: [15.50, 3.00], size: [67, 1.6], from: 0.0, depth: 167.65,
-     color: '#2f7a4e', confidence: estimated,
-     source: 'PCIe CEM 5.0 half-length and 68.09 card height; the plane from the riser connector''s middle'}
+  - {id: board, at: [19.51, 1.27], size: [60.50, 1.57], from: 0.0, depth: 167.65,
+     color: '#2f7a4e', confidence: registry,
+     source: 'CEM 5.0 fig 11-8: tab edge 68.09 below the flange end, low-profile height 68.90; fig 6-5 shoulder 8.40 up the tab; 1.57 board 1.27 inside the bracket'}
+  - {id: edge-tab-short, at: [11.11, 1.27], size: [8.40, 1.57], from: 46.90, depth: 11.20,
+     color: '#2f7a4e', confidence: registry,
+     source: 'CEM 5.0 fig 6-5 and 11-8: key centre 59.05 behind the bracket, 12.15 to the tab end, notch 1.90 wide'}
+  - {id: edge-tab-long, at: [11.11, 1.27], size: [8.40, 1.57], from: 60.00, depth: 71.20,
+     color: '#2f7a4e', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: x16 DIM B 72.15 from the key centre'}
+  - {id: edge-pads-short, at: [13.71, 1.22], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch, 1.50 from the key'}
+  - {id: edge-pads-long, at: [13.71, 1.22], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pins 12-82, N = 70 spaces on 1.00 pitch'}
+  - {id: shield, at: [25.00, 2.84], size: [45.00, 8.00], from: 20.0, depth: 120.0,
+     color: '#b8bcc0', confidence: estimated,
+     source: 'a placeholder for the card''s components, inside the CEM component-side volume'}
 faces:
   plan:
     ref: common/pcie-card-plan-lp@1
