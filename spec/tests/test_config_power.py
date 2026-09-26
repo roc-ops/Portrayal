@@ -44,9 +44,9 @@ FIXED = LIB / "devices/edgecore/csr180/device.yaml"
 BOTH = LIB / "devices/edgecore/ecs4120-28fv2-i/device.yaml"
 
 WHITEBOX = ("edgecore", "ufispace", "celestica")
-# A PCIe add-in card, powered from its host's slot. It has no supply and no
-# feed a buyer chooses, which is why L119 does not ask it for one.
-NO_FEED = {"ufispace/n3100-4c"}
+# NO EXEMPTIONS. The one whitebox part without a feed was the N3100-4C, a PCIe
+# card powered from its host's slot - and a card is a module in a host's bay
+# (ufispace/n3100-4c@1), not a device, so it is not in this census at all.
 
 POWER_ATTR = re.compile(r'<svg\b[^>]*?\sdata-power="([^"]*)"')
 SVG_ROOT = re.compile(r"<svg\b[^>]*>")
@@ -160,8 +160,6 @@ def test_every_whitebox_build_states_its_feed():
     n = 0
     silent = []
     for slug, f in whitebox():
-        if slug in NO_FEED:
-            continue
         d = load(f)
         cfgs = d.get("configurations") or {"default": {}}
         for name, c in cfgs.items():
@@ -179,8 +177,6 @@ def test_every_whitebox_device_states_airflow_or_says_why_not():
     and each records that search as an `airflow-direction` gap."""
     missing = []
     for slug, f in whitebox():
-        if slug in NO_FEED:
-            continue
         d = load(f)
         if device_options(d)["airflow"]:
             continue
